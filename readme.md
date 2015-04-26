@@ -1,6 +1,6 @@
 A work in progress.
 
-To get this run:
+To get this running locally:
 * `pod install`
 * Open `mapboxGlReactnative.xcworkspace`
 * Link Binary With Libraries: `MapboxGL.framework`
@@ -13,7 +13,7 @@ Adding a mapboxGLView:
    rotateEnabled={true}
    showsUserLocation={true}
    accessToken={'Your-Mapox.com-accessToken'}
-   styleURL={'https://www.mapbox.com/mapbox-gl-styles/styles/light-v7.json'}
+   styleURL={'https://www.mapbox.com/mapbox-gl-styles/styles/light-v7.json'} //Optional. Defaults to Mapbox Streets
    zoomLevel={1}
  />
  ```
