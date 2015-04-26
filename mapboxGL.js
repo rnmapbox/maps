@@ -21,10 +21,10 @@ var MapView = React.createClass({
   },
 
   render: function() {
-    return <CustomMapView {...this.props} />;
+    return <MapboxGLView {...this.props} />;
   }
 });
 
-var CustomMapView = requireNativeComponent('mapboxGLView', MapView);
+var MapboxGLView = requireNativeComponent('mapboxGLView', MapView);
 
 module.exports = MapView;
