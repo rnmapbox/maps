@@ -1,11 +1,23 @@
 {
-  "name": "mapboxGLReactNative",
+  "name": "react-native-mapbox-gl",
   "version": "0.0.1",
-  "private": true,
+  "keywords": [
+    "react-component",
+    "react-native",
+    "ios",
+    "mapbox",
+    "gl"
+   ],
+  "private": false,
   "scripts": {
     "start": "node_modules/react-native/packager/packager.sh"
   },
   "dependencies": {
     "react-native": "^0.4.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bsudekum/react-native-mapbox-gl"
+  },
+  "author": "Bobby Sudekum"
 }
