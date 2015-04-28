@@ -9,16 +9,16 @@
 #import "mapboxGLView.h"
 #import "RCTMapManager.h"
 
+#import "RCTBridge.h"
+#import "RCTConvert+CoreLocation.h"
+#import "RCTConvert+MapKit.h"
+#import "RCTEventDispatcher.h"
+#import "RCTMap.h"
+#import "UIView+React.h"
+
 @implementation mapboxGLViewManager
 
 RCT_EXPORT_MODULE();
-
-RCT_EXPORT_VIEW_PROPERTY(accessToken, NSString)
-RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL)
-RCT_EXPORT_VIEW_PROPERTY(zoomLevel, double)
-RCT_EXPORT_VIEW_PROPERTY(styleURL, NSURL)
-RCT_EXPORT_VIEW_PROPERTY(clipsToBounds, BOOL)
 
 - (UIView *)view
 {
@@ -30,6 +30,17 @@ RCT_EXPORT_VIEW_PROPERTY(clipsToBounds, BOOL)
   map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
   map.clipsToBounds = YES;
   return map;
+}
+
+RCT_EXPORT_VIEW_PROPERTY(accessToken, NSString)
+RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(zoomLevel, double)
+RCT_EXPORT_VIEW_PROPERTY(styleURL, NSURL)
+RCT_EXPORT_VIEW_PROPERTY(clipsToBounds, BOOL)
+RCT_CUSTOM_VIEW_PROPERTY(centerCoordinate, MKCoordinateRegion, MGLMapView)
+{
+  view.centerCoordinate =  [RCTConvert CLLocationCoordinate2D:json];
 }
 
 @end

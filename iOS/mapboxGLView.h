@@ -10,6 +10,5 @@
 
 @interface mapboxGLView : MGLMapView
 
-
 @end
 
