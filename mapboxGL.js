@@ -17,7 +17,11 @@ var MapView = React.createClass({
     accessToken: React.PropTypes.string.isRequired,
     zoomLevel: React.PropTypes.number,
     styleURL: React.PropTypes.string,
-    clipsToBounds: React.PropTypes.bool
+    clipsToBounds: React.PropTypes.bool,
+    centerCoordinate: React.PropTypes.shape({
+      latitude: React.PropTypes.number.isRequired,
+      longitude: React.PropTypes.number.isRequired,
+    }),
     style: View.propTypes.style
   },
 
