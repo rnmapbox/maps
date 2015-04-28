@@ -31,3 +31,12 @@ npm-debug.log
 
 # project specific
 libMapboxGL.a
+MapboxGL.bundle
+MapboxGL.h
+MGLAnnotation.h
+MGLMapboxEvents.h
+MGLMapView+IBAdditions.h
+MGLMapView.h
+MGLMetricsLocationManager.h
+MGLTypes.h
+MGLUserLocation.h
