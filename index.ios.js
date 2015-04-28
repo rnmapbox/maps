@@ -11,7 +11,7 @@ var {
 
 var map = React.createClass({
   render: function() {
-    var region = {
+    var center = {
      latitude: 40.7223,
      longitude: -73.9878
    };
@@ -25,7 +25,7 @@ var map = React.createClass({
            accessToken={'pk.eyJ1IjoiYm9iYnlzdWQiLCJhIjoiTi16MElIUSJ9.Clrqck--7WmHeqqvtFdYig'}
            styleURL={'https://www.mapbox.com/mapbox-gl-styles/styles/mapbox-streets-v7.json'}
            zoomLevel={13}
-           centerCoordinate={region}
+           centerCoordinate={center}
          />
       </View>
     );
