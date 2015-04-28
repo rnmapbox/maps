@@ -10,7 +10,8 @@
    ],
   "private": false,
   "scripts": {
-    "start": "node_modules/react-native/packager/packager.sh"
+    "start": "node_modules/react-native/packager/packager.sh",
+    "preinstall": "./scripts/download-mapbox-gl-native-ios.sh 0.2.16"
   },
   "dependencies": {
     "react-native": "^0.4.1"

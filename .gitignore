@@ -28,3 +28,6 @@ Pods/
 #
 node_modules/
 npm-debug.log
+
+# project specific
+libMapboxGL.a
