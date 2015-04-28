@@ -22,11 +22,20 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
-		2CC49F1B1044FA158C8870FC /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B9F9B3682C9286B030C2B18 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
-		C53163151AED79AC0053F550 /* mapboxGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = C53163141AED79AC0053F550 /* mapboxGLView.m */; };
-		C53163221AED79BD0053F550 /* mapboxGLViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C53163211AED79BD0053F550 /* mapboxGLViewManager.m */; };
-		C53163361AED7BB90053F550 /* MapboxGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C53163351AED7BB90053F550 /* MapboxGL.framework */; };
+		C56510A31AEFF33200A79E27 /* MapboxGL.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C56510A21AEFF33200A79E27 /* MapboxGL.bundle */; };
+		C56510AF1AEFF33700A79E27 /* libMapboxGL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C56510AE1AEFF33700A79E27 /* libMapboxGL.a */; };
+		C56510B91AEFF36300A79E27 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C56510B81AEFF36300A79E27 /* CoreTelephony.framework */; };
+		C56510BB1AEFF36C00A79E27 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C56510BA1AEFF36C00A79E27 /* GLKit.framework */; };
+		C56510BD1AEFF37500A79E27 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C56510BC1AEFF37500A79E27 /* ImageIO.framework */; };
+		C56510BF1AEFF37C00A79E27 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C56510BE1AEFF37C00A79E27 /* MobileCoreServices.framework */; };
+		C56510C11AEFF38100A79E27 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C56510C01AEFF38100A79E27 /* QuartzCore.framework */; };
+		C56510C31AEFF38700A79E27 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C56510C21AEFF38700A79E27 /* SystemConfiguration.framework */; };
+		C56510C51AEFF39200A79E27 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C56510C41AEFF39200A79E27 /* libc++.dylib */; };
+		C56510C71AEFF39900A79E27 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C56510C61AEFF39900A79E27 /* libsqlite3.dylib */; };
+		C56510C91AEFF39F00A79E27 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C56510C81AEFF39F00A79E27 /* libz.dylib */; };
+		C56510CC1AEFF3EA00A79E27 /* RCTMapboxGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = C56510CB1AEFF3EA00A79E27 /* RCTMapboxGLView.m */; };
+		C56510CF1AEFF40C00A79E27 /* RCTMapboxGLViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C56510CE1AEFF40C00A79E27 /* RCTMapboxGLViewManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -130,24 +139,30 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = iOS/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
-		7B9F9B3682C9286B030C2B18 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
-		90E95684A143C4D978D53D37 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		C53163131AED79AC0053F550 /* mapboxGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mapboxGLView.h; path = iOS/mapboxGLView.h; sourceTree = "<group>"; };
-		C53163141AED79AC0053F550 /* mapboxGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = mapboxGLView.m; path = iOS/mapboxGLView.m; sourceTree = "<group>"; };
-		C53163201AED79BD0053F550 /* mapboxGLViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mapboxGLViewManager.h; path = iOS/mapboxGLViewManager.h; sourceTree = "<group>"; };
-		C53163211AED79BD0053F550 /* mapboxGLViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = mapboxGLViewManager.m; path = iOS/mapboxGLViewManager.m; sourceTree = "<group>"; };
-		C53163231AED7AFF0053F550 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		C53163251AED7B070053F550 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
-		C53163271AED7B0E0053F550 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
-		C53163291AED7B160053F550 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		C531632B1AED7B1D0053F550 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		C531632D1AED7B240053F550 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		C531632F1AED7B2F0053F550 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
-		C53163311AED7B360053F550 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		C53163331AED7B400053F550 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		C53163351AED7BB90053F550 /* MapboxGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapboxGL.framework; path = "Pods/../build/Debug-iphoneos/Pods/MapboxGL.framework"; sourceTree = "<group>"; };
-		C7A666B3A3030AE99E4D0B37 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		C56510A21AEFF33200A79E27 /* MapboxGL.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MapboxGL.bundle; sourceTree = "<group>"; };
+		C56510AE1AEFF33700A79E27 /* libMapboxGL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMapboxGL.a; sourceTree = "<group>"; };
+		C56510B01AEFF33E00A79E27 /* MapboxGL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapboxGL.h; sourceTree = "<group>"; };
+		C56510B11AEFF33E00A79E27 /* MGLAnnotation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGLAnnotation.h; sourceTree = "<group>"; };
+		C56510B21AEFF33E00A79E27 /* MGLMapboxEvents.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGLMapboxEvents.h; sourceTree = "<group>"; };
+		C56510B31AEFF33E00A79E27 /* MGLMapView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGLMapView.h; sourceTree = "<group>"; };
+		C56510B41AEFF33E00A79E27 /* MGLMapView+IBAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MGLMapView+IBAdditions.h"; sourceTree = "<group>"; };
+		C56510B51AEFF33E00A79E27 /* MGLMetricsLocationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGLMetricsLocationManager.h; sourceTree = "<group>"; };
+		C56510B61AEFF33E00A79E27 /* MGLTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGLTypes.h; sourceTree = "<group>"; };
+		C56510B71AEFF33E00A79E27 /* MGLUserLocation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGLUserLocation.h; sourceTree = "<group>"; };
+		C56510B81AEFF36300A79E27 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		C56510BA1AEFF36C00A79E27 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		C56510BC1AEFF37500A79E27 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		C56510BE1AEFF37C00A79E27 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		C56510C01AEFF38100A79E27 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C56510C21AEFF38700A79E27 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		C56510C41AEFF39200A79E27 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		C56510C61AEFF39900A79E27 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		C56510C81AEFF39F00A79E27 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		C56510CA1AEFF3EA00A79E27 /* RCTMapboxGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMapboxGLView.h; sourceTree = "<group>"; };
+		C56510CB1AEFF3EA00A79E27 /* RCTMapboxGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMapboxGLView.m; sourceTree = "<group>"; };
+		C56510CD1AEFF40C00A79E27 /* RCTMapboxGLViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMapboxGLViewManager.h; sourceTree = "<group>"; };
+		C56510CE1AEFF40C00A79E27 /* RCTMapboxGLViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMapboxGLViewManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,8 +177,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C53163361AED7BB90053F550 /* MapboxGL.framework in Frameworks */,
+				C56510C91AEFF39F00A79E27 /* libz.dylib in Frameworks */,
+				C56510C71AEFF39900A79E27 /* libsqlite3.dylib in Frameworks */,
+				C56510C51AEFF39200A79E27 /* libc++.dylib in Frameworks */,
+				C56510C31AEFF38700A79E27 /* SystemConfiguration.framework in Frameworks */,
+				C56510C11AEFF38100A79E27 /* QuartzCore.framework in Frameworks */,
+				C56510BF1AEFF37C00A79E27 /* MobileCoreServices.framework in Frameworks */,
+				C56510BD1AEFF37500A79E27 /* ImageIO.framework in Frameworks */,
+				C56510BB1AEFF36C00A79E27 /* GLKit.framework in Frameworks */,
+				C56510B91AEFF36300A79E27 /* CoreTelephony.framework in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
+				C56510AF1AEFF33700A79E27 /* libMapboxGL.a in Frameworks */,
 				00481BE81AC0C86700671115 /* libRCTWebSocketDebugger.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				00C302E61ABCBA2D00DB3ED1 /* libRCTAdSupport.a in Frameworks */,
@@ -173,7 +197,6 @@
 				00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
-				2CC49F1B1044FA158C8870FC /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,15 +281,25 @@
 			children = (
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
+				C56510B01AEFF33E00A79E27 /* MapboxGL.h */,
+				C56510B11AEFF33E00A79E27 /* MGLAnnotation.h */,
+				C56510B21AEFF33E00A79E27 /* MGLMapboxEvents.h */,
+				C56510B31AEFF33E00A79E27 /* MGLMapView.h */,
+				C56510B41AEFF33E00A79E27 /* MGLMapView+IBAdditions.h */,
+				C56510B51AEFF33E00A79E27 /* MGLMetricsLocationManager.h */,
+				C56510B61AEFF33E00A79E27 /* MGLTypes.h */,
+				C56510B71AEFF33E00A79E27 /* MGLUserLocation.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				C56510AE1AEFF33700A79E27 /* libMapboxGL.a */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
+				C56510A21AEFF33200A79E27 /* MapboxGL.bundle */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				C53163131AED79AC0053F550 /* mapboxGLView.h */,
-				C53163141AED79AC0053F550 /* mapboxGLView.m */,
-				C53163201AED79BD0053F550 /* mapboxGLViewManager.h */,
-				C53163211AED79BD0053F550 /* mapboxGLViewManager.m */,
+				C56510CA1AEFF3EA00A79E27 /* RCTMapboxGLView.h */,
+				C56510CB1AEFF3EA00A79E27 /* RCTMapboxGLView.m */,
+				C56510CD1AEFF40C00A79E27 /* RCTMapboxGLViewManager.h */,
+				C56510CE1AEFF40C00A79E27 /* RCTMapboxGLViewManager.m */,
 			);
 			name = mapboxGLReactNative;
 			sourceTree = "<group>";
@@ -277,33 +310,6 @@
 				146834041AC3E56700842450 /* libReact.a */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		1514B32DB6D71A1051C6542B /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				90E95684A143C4D978D53D37 /* Pods.debug.xcconfig */,
-				C7A666B3A3030AE99E4D0B37 /* Pods.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		25A9086EA1ADDBAB93C4D76B /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				C53163351AED7BB90053F550 /* MapboxGL.framework */,
-				C53163331AED7B400053F550 /* libz.dylib */,
-				C53163311AED7B360053F550 /* libsqlite3.dylib */,
-				C531632F1AED7B2F0053F550 /* libc++.dylib */,
-				C531632D1AED7B240053F550 /* SystemConfiguration.framework */,
-				C531632B1AED7B1D0053F550 /* QuartzCore.framework */,
-				C53163291AED7B160053F550 /* MobileCoreServices.framework */,
-				C53163271AED7B0E0053F550 /* ImageIO.framework */,
-				C53163251AED7B070053F550 /* GLKit.framework */,
-				C53163231AED7AFF0053F550 /* CoreTelephony.framework */,
-				7B9F9B3682C9286B030C2B18 /* Pods.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		78C398B11ACF4ADC00677621 /* Products */ = {
@@ -342,12 +348,19 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				C56510C81AEFF39F00A79E27 /* libz.dylib */,
+				C56510C61AEFF39900A79E27 /* libsqlite3.dylib */,
+				C56510C41AEFF39200A79E27 /* libc++.dylib */,
+				C56510C21AEFF38700A79E27 /* SystemConfiguration.framework */,
+				C56510C01AEFF38100A79E27 /* QuartzCore.framework */,
+				C56510BE1AEFF37C00A79E27 /* MobileCoreServices.framework */,
+				C56510BC1AEFF37500A79E27 /* ImageIO.framework */,
+				C56510BA1AEFF36C00A79E27 /* GLKit.framework */,
+				C56510B81AEFF36300A79E27 /* CoreTelephony.framework */,
 				13B07FAE1A68108700A75B9A /* mapboxGLReactNative */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* mapboxGLReactNativeTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
-				1514B32DB6D71A1051C6542B /* Pods */,
-				25A9086EA1ADDBAB93C4D76B /* Frameworks */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -387,12 +400,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "mapboxGLReactNative" */;
 			buildPhases = (
-				13E255C3CDC0860AC064EA36 /* Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
-				6026ED128D12B2442E2EAF92 /* Embed Pods Frameworks */,
-				A7022C95E0AF7FECC9AB5F37 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -565,60 +575,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				008F07F31AC5B25A0029DE68 /* main.jsbundle in Resources */,
+				C56510A31AEFF33200A79E27 /* MapboxGL.bundle in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		13E255C3CDC0860AC064EA36 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		6026ED128D12B2442E2EAF92 /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A7022C95E0AF7FECC9AB5F37 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		00E356EA1AD99517003FC87E /* Sources */ = {
@@ -633,9 +596,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C53163221AED79BD0053F550 /* mapboxGLViewManager.m in Sources */,
+				C56510CF1AEFF40C00A79E27 /* RCTMapboxGLViewManager.m in Sources */,
+				C56510CC1AEFF3EA00A79E27 /* RCTMapboxGLView.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
-				C53163151AED79AC0053F550 /* mapboxGLView.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -702,13 +665,8 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 90E95684A143C4D978D53D37 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/build/Debug-iphoneos/Pods",
-				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -716,6 +674,10 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = mapboxGLReactNative;
 			};
@@ -723,13 +685,8 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C7A666B3A3030AE99E4D0B37 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/build/Debug-iphoneos/Pods",
-				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -737,6 +694,10 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = mapboxGLReactNative;
 			};

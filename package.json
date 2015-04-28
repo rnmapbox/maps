@@ -13,7 +13,7 @@
     "start": "node_modules/react-native/packager/packager.sh"
   },
   "dependencies": {
-    "react-native": "^0.4.0"
+    "react-native": "^0.4.1"
   },
   "repository": {
     "type": "git",

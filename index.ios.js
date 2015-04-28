@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react-native');
-var MapboxGLView = require('./mapboxGL.js')
+var MapboxGLView = require('./RCTMapboxGL.js')
 var {
   AppRegistry,
   StyleSheet,
