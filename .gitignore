@@ -31,7 +31,7 @@ npm-debug.log
 
 # project specific
 libMapboxGL.a
-MapboxGL.bundle
+MapboxGL.bundle/
 MapboxGL.h
 MGLAnnotation.h
 MGLMapboxEvents.h
