@@ -9,30 +9,6 @@
 #import "mapboxGLView.h"
 
 @implementation mapboxGLView
-{
-  CLLocationManager *_locationManager;
-}
-
-- (void)reactSetFrame:(CGRect)frame
-{
-  self.frame = frame;
-}
-
-
-#pragma mark Accessors
-
-- (void)setShowsUserLocation:(BOOL)showsUserLocation
-{
-  if (self.showsUserLocation != showsUserLocation) {
-    if (showsUserLocation && !_locationManager) {
-      _locationManager = [[CLLocationManager alloc] init];
-      if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [_locationManager requestWhenInUseAuthorization];
-      }
-    }
-    super.showsUserLocation = showsUserLocation;
-    
-  }
-}
 
 @end
+

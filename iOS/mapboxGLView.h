@@ -6,13 +6,10 @@
 //  Copyright (c) 2015 Facebook. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <CoreLocation/CLError.h>
-#import <CoreLocation/CLLocationManager.h>
 #import "MapboxGL.h"
-#import <CoreLocation/CLLocationManagerDelegate.h>
 
 @interface mapboxGLView : MGLMapView
 
 
 @end
+
