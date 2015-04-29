@@ -3,7 +3,6 @@ A work in progress.
 To get this running locally:
 * `npm install`
 * Open `mapboxGlReactnative.xcodeproj`
-* Link Binary With Libraries: `MapboxGL.framework`
 * Run
 
 _[Info on installing Mapbox GL normally](https://github.com/mapbox/mapbox-gl-native/wiki/Installing-Mapbox-GL-for-iOS)_
