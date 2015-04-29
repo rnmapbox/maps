@@ -1,20 +1,15 @@
 //
-//  mapboxGLViewManager.m
+//  RCTMapboxGLViewManager.m
 //  mapboxGLReactNative
 //
-//  Created by Bobby Sudekum on 4/26/15.
+//  Created by Bobby Sudekum on 4/28/15.
 //  Copyright (c) 2015 Facebook. All rights reserved.
 //
-#import "mapboxGLViewManager.h"
-#import "mapboxGLView.h"
-#import "RCTMapManager.h"
 
-#import "RCTBridge.h"
+#import "RCTMapboxGLViewManager.h"
+#import "RCTMapboxGLView.h"
+#import "RCTMapManager.h"
 #import "RCTConvert+CoreLocation.h"
-#import "RCTConvert+MapKit.h"
-#import "RCTEventDispatcher.h"
-#import "RCTMap.h"
-#import "UIView+React.h"
 
 @implementation mapboxGLViewManager
 
