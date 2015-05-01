@@ -1,4 +1,4 @@
-## react native mapbox gl
+## React Native Mapbox GL
 
 _A react native component for accessing [Mapbox GL](https://www.mapbox.com/mapbox-gl/)_
 
