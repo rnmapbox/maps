@@ -30,6 +30,6 @@ var MapView = React.createClass({
   }
 });
 
-var MapboxGLView = requireNativeComponent('mapboxGLView', MapView);
+var MapboxGLView = requireNativeComponent('RCTMapboxGL', MapView);
 
 module.exports = MapView;

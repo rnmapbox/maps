@@ -11,11 +11,12 @@
   "private": false,
   "scripts": {
     "start": "node_modules/react-native/packager/packager.sh",
-    "preinstall": "./scripts/download-mapbox-gl-native-ios.sh 0.2.16"
+    "preinstall": "./scripts/download-mapbox-gl-native-ios.sh 0.2.18"
   },
   "dependencies": {
     "react-native": "^0.4.1"
   },
+  "main": "RCTMapboxGL.ios.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/bsudekum/react-native-mapbox-gl"
