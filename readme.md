@@ -4,7 +4,7 @@ _A react native component for accessing [Mapbox GL](https://www.mapbox.com/mapbo
 
 To get this running locally:
 
-1. `npm install react-native-mapbox-gl --save` (Not yet published)
+1. `npm install react-native-mapbox-gl --save`
 2. In the XCode's `Project navigator`, right click on project's name ➜ `Add Files to <...>`
 3. Add `node_modules/react-native-mapbox-gl/RCTMapboxGL.xcodeproj`
 4. Also add `node_modules/react-native-mapbox-gl/RCTMapboxGL/MapboxGL.bundle`
