@@ -1,5 +1,7 @@
 #!/bin/sh
 
+echo "Downloading Mapbox GL iOS $VERSION, this may take a minute."
+
 VERSION=$1
 
 if ! which curl > /dev/null; then echo "curl command not found. Please install curl"; exit 1; fi;
