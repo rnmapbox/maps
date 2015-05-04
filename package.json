@@ -1,5 +1,6 @@
 {
   "name": "react-native-mapbox-gl",
+  "description": "A Mapbox GL react native module for creating custom maps",
   "version": "0.0.4",
   "keywords": [
     "react-component",
