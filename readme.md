@@ -1,14 +1,14 @@
-## React Native Mapbox GL
+# React Native Mapbox GL
 
 _A react native component for accessing [Mapbox GL](https://www.mapbox.com/mapbox-gl/)_
 
-### Installation Process
+## Installation Process
 
 1. `npm install react-native-mapbox-gl --save`
-2. In the XCode's `Project navigator`, right click on project's name ➜ `Add Files to <...>`
-3. Add `node_modules/react-native-mapbox-gl/RCTMapboxGL.xcodeproj`
-4. Also add `node_modules/react-native-mapbox-gl/RCTMapboxGL/MapboxGL.bundle`
-5. Select your project in the `Project navigator`. Add `libRCTMapboxGL.a` to your project's Build Phases ➜ Link Binary With Libraries
+2. In the XCode's `Project navigator`, right click on project's name ➜ `Add Files to <...>` ![](https://cldup.com/k0oJwOUKPN.png)
+3. Add `node_modules/react-native-mapbox-gl/RCTMapboxGL.xcodeproj` ![](https://cldup.com/bnJWwtaACM.png)
+4. Select your project in the `Project navigator`. Click `Build Phases` then `Link Binary With Libraries`. Add `node_modules/react-native-mapbox-gl/RCTMapboxGL/libRCTMapboxGL.a` ![](https://cldup.com/QWhL_SjobN.png)
+5. Select your project in the `Project navigator`. Click `Build Phases` then `Copy Bundle Resources`. Click the `+` button. When the modal appears, click `Add other`. Add `node_modules/react-native-mapbox-gl/RCTMapboxGL/MapboxGL.bundle`. ![](https://cldup.com/Oi7uHxc1Fd.png)
 6. Add the following Cocoa framework dependencies to your target's Link Binary With Libraries build phase:
   * `CoreTelephony.framework`
   * `GLKit.framework`
@@ -19,11 +19,13 @@ _A react native component for accessing [Mapbox GL](https://www.mapbox.com/mapbo
   * `libc++.dylib`
   * `libsqlite3.dylib`
   * `libz.dylib`
-7. Cross your fingers and build!
+  * ![](https://cldup.com/KuSEgMQQSy.gif)
+7. Click on the `RCTMapboxGL` project. Under the `Build Settings` tab, search for `header_search_path`. Make sure `$(SRCROOT)/../../React` and `$(SRCROOT)/../react-native/React` are added and set to `recursive`. ![](https://cldup.com/81zUEHaKoX.png)
+8. You can now `require(react-native-mapbox-gl)` and build.
 
 _[Information on installing Mapbox GL for iOS normally](https://github.com/mapbox/mapbox-gl-native/wiki/Installing-Mapbox-GL-for-iOS)_
 
-### Options
+## Options
 
 * `style` - Normal `view` flexbox styling
 * `rotateEnabled` - `bool` - `optional` - Whether the map can rotate
@@ -39,11 +41,11 @@ var center = { // NYC
 };
 ```
 
-### Events
+## Events
 
 Coming soon.
 
-### Example `MapboxGLMap`:
+## Example `MapboxGLMap`:
 ```jsx
 'use strict';
 
