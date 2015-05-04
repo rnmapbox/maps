@@ -21,6 +21,5 @@
     "type": "git",
     "url": "https://github.com/bsudekum/react-native-mapbox-gl"
   },
-  "author": "Bobby Sudekum",
-  "license": "BSD"
+  "author": "Bobby Sudekum"
 }
