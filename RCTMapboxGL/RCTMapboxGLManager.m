@@ -12,7 +12,7 @@
 #import "RCTConvert+MapKit.h"
 
 @implementation RCTMapboxGLManager {
-    NSMutableDictionary *pinAnnotations;
+    NSMutableDictionary *annotations;
 }
 
 RCT_EXPORT_MODULE();
@@ -58,10 +58,10 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, MGLMapView){
             }
         }
         if (pins.count){
-            if (!pinAnnotations){
-                pinAnnotations = [NSMutableDictionary dictionary];
+            if (!annotations){
+                annotations = [NSMutableDictionary dictionary];
             }
-            NSArray *oldKeys = [pinAnnotations allKeys];
+            NSArray *oldKeys = [annotations allKeys];
             NSArray *newKeys = [pins allKeys];
             // Remove objects from dictionary if new set has no same coordinates
             // and also remove from Map view
@@ -73,16 +73,16 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, MGLMapView){
                     }
                 }
                 // remove keys that are already existing and added onto maps
-                [pins removeObjectsForKeys:[pinAnnotations allKeys]];
+                [pins removeObjectsForKeys:[annotations allKeys]];
                 if (removeableKeys.count){
-                    NSArray *removed = [pinAnnotations objectsForKeys:removeableKeys notFoundMarker:[NSNull null]];
+                    NSArray *removed = [annotations objectsForKeys:removeableKeys notFoundMarker:[NSNull null]];
                     [view removeAnnotations: removed];
                     [pins removeObjectsForKeys:removeableKeys];
-                    [pinAnnotations removeObjectsForKeys:removeableKeys];
+                    [annotations removeObjectsForKeys:removeableKeys];
                 }
             }
-            [pinAnnotations addEntriesFromDictionary:pins];
-            [view addAnnotations:[pinAnnotations allValues]];
+            [annotations addEntriesFromDictionary:pins];
+            [view addAnnotations:[annotations allValues]];
         }
     }
 }
