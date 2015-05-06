@@ -34,7 +34,7 @@ _[Information on installing Mapbox GL for iOS normally](https://github.com/mapbo
 * `styleURL` - `string` - `required` - A Mapbox GL style sheet. Defaults to `mapbox-streets`. More styles [can be viewed here](https://www.mapbox.com/mapbox-gl-styles).
 * `zoomLevel` - `double` - `optional` - Initial zoom level the map will load at. 0 is the entire world, 18 is rooftop level. Defaults to 0.
 * `annotations` - `array` - `optional` - An array of annotation objects. `latitude`/`longitude` are required, both `title` and `subtitle` are optional.  Example:
-* ```js
+```js
 var annotations = [{
   latitude: 40.720526315318594,
   longitude:  -73.97686958312988,
@@ -48,7 +48,7 @@ var annotations = [{
 }];
 ```
 * `centerCoordinate` - `object` - `optional` - Initial `latitude`/`longitude` the map will load at, defaults to `0,0`. Object can be represented as follows:
-* ```js
+```js
 var center = { // NYC
   latitude: 40.7223,
   longitude: -73.9878
