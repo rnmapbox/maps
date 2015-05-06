@@ -7,26 +7,15 @@
 //
 
 #import "RCTMapboxGLManager.h"
-#import "RCTMapboxGL.h"
 #import "MapboxGL.h"
-#import "RCTMapManager.h"
 #import "RCTConvert+CoreLocation.h"
+#import "RCTConvert+MapKit.h"
 
-@implementation RCTMapboxGLManager
+@implementation RCTMapboxGLManager {
+    NSMutableDictionary *pinAnnotations;
+}
 
 RCT_EXPORT_MODULE();
-
-- (UIView *)view
-{
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
-    CGFloat height = [UIScreen mainScreen].bounds.size.height;
-    CGRect windowFrame = CGRectMake(0, 0, width, height);
-    
-    MGLMapView *map = [[MGLMapView alloc] initWithFrame:windowFrame accessToken:@"placeHolder"];
-    map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    map.clipsToBounds = YES;
-    return map;
-}
 
 RCT_EXPORT_VIEW_PROPERTY(accessToken, NSString)
 RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL)
@@ -37,6 +26,78 @@ RCT_EXPORT_VIEW_PROPERTY(clipsToBounds, BOOL)
 RCT_CUSTOM_VIEW_PROPERTY(centerCoordinate, MKCoordinateRegion, MGLMapView)
 {
     view.centerCoordinate =  [RCTConvert CLLocationCoordinate2D:json];
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, MGLMapView){
+    if ([json isKindOfClass:[NSArray class]]){
+        NSMutableDictionary *pins = [NSMutableDictionary dictionary];
+        id anObject;
+        NSEnumerator *enumerator = [json objectEnumerator];
+        while (anObject = [enumerator nextObject]){
+            CLLocationCoordinate2D coordinate = [RCTConvert CLLocationCoordinate2D:anObject];
+            if (CLLocationCoordinate2DIsValid(coordinate)){
+                NSString *title = @"";
+                if ([anObject objectForKey:@"title"]){
+                    title = [RCTConvert NSString:[anObject valueForKey:@"title"]];
+                }
+                NSString *subtitle = @"";
+                if ([anObject objectForKey:@"subtitle"]){
+                    title = [RCTConvert NSString:[anObject valueForKey:@"subtitle"]];
+                }
+                MKPointAnnotation *pin = [[MKPointAnnotation alloc]init];
+                pin.coordinate = coordinate;
+                if (title.length){
+                    pin.title = title;
+                }
+                if (subtitle.length){
+                    pin.subtitle = subtitle;
+                }
+
+                NSValue *key = [NSValue valueWithMKCoordinate:pin.coordinate];
+                [pins setObject:pin forKey:key];
+            }
+        }
+        if (pins.count){
+            if (!pinAnnotations){
+                pinAnnotations = [NSMutableDictionary dictionary];
+            }
+            NSArray *oldKeys = [pinAnnotations allKeys];
+            NSArray *newKeys = [pins allKeys];
+            // Remove objects from dictionary if new set has no same coordinates
+            // and also remove from Map view
+            if (oldKeys.count){
+                NSMutableArray *removeableKeys = [NSMutableArray array];
+                for (NSValue *oldKey in oldKeys){
+                    if (![newKeys containsObject:oldKey]){
+                        [removeableKeys addObject:oldKey];
+                    }
+                }
+                // remove keys that are already existing and added onto maps
+                [pins removeObjectsForKeys:[pinAnnotations allKeys]];
+                if (removeableKeys.count){
+                    NSArray *removed = [pinAnnotations objectsForKeys:removeableKeys notFoundMarker:[NSNull null]];
+                    [view removeAnnotations: removed];
+                    [pins removeObjectsForKeys:removeableKeys];
+                    [pinAnnotations removeObjectsForKeys:removeableKeys];
+                }
+            }
+            [pinAnnotations addEntriesFromDictionary:pins];
+            [view addAnnotations:[pinAnnotations allValues]];
+        }
+    }
+}
+
+- (UIView *)view
+{
+    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    CGFloat height = [UIScreen mainScreen].bounds.size.height;
+    CGRect windowFrame = CGRectMake(0, 0, width, height);
+
+    MGLMapView *map = [[MGLMapView alloc] initWithFrame:windowFrame accessToken:@"placeHolder"];
+    map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    map.clipsToBounds = YES;
+
+    return map;
 }
 
 @end

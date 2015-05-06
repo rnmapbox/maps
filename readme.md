@@ -59,6 +59,17 @@ var {
 
 var map = React.createClass({
   render: function() {
+    var annotations = [{
+      latitude: 40.720526315318594,
+      longitude:  -73.97686958312988,
+      title: 'This is marker 1',
+      subtitle: 'Hi mom!'
+    },{
+      latitude: 40.714541341726175,
+      longitude:  -74.00579452514648,
+      title: 'This is marker 2',
+      subtitle: 'Cool'
+    }];
     var center = {
       latitude: 40.7223,
       longitude: -73.9878
@@ -71,7 +82,8 @@ var map = React.createClass({
         accessToken={'your-mapbox.com-access-token'}
         styleURL={'https://www.mapbox.com/mapbox-gl-styles/styles/mapbox-streets-v7.json'}
         zoomLevel={13}
-        centerCoordinate={center} />
+        centerCoordinate={center}
+        annotations={annotations} />
     );
   }
 });
