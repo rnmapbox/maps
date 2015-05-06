@@ -22,7 +22,13 @@ var MapView = React.createClass({
       latitude: React.PropTypes.number.isRequired,
       longitude: React.PropTypes.number.isRequired
     }),
-    style: View.propTypes.style
+    style: View.propTypes.style,
+    annotations: React.PropTypes.arrayOf(React.PropTypes.shape({
+      latitude: React.PropTypes.number.isRequired,
+      longitude: React.PropTypes.number.isRequired,
+      title: React.PropTypes.string,
+      subtitle: React.PropTypes.string,
+    })),
   },
 
   render: function() {
