@@ -7,11 +7,18 @@
 //
 
 #import "RCTMapboxGLManager.h"
+#import "RCTMapboxGL.h"
 #import "MapboxGL.h"
 #import "RCTConvert+CoreLocation.h"
 #import "RCTConvert+MapKit.h"
+#import "RCTBridge.h"
+#import "RCTEventDispatcher.h"
+#import "UIView+React.h"
 
-@implementation RCTMapboxGLManager {
+@interface RCTMapboxGLManager() <MGLMapViewDelegate>
+@end
+
+@implementation RCTMapboxGLManager{
     NSMutableDictionary *annotations;
 }
 
@@ -96,8 +103,22 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, MGLMapView){
     MGLMapView *map = [[MGLMapView alloc] initWithFrame:windowFrame accessToken:@"placeHolder"];
     map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     map.clipsToBounds = YES;
+    map.delegate = self;
 
     return map;
+}
+
+- (void)mapView:(RCTMapboxGL *)mapView regionDidChangeAnimated:(BOOL)animated
+{
+    CLLocationCoordinate2D region = mapView.centerCoordinate;
+    NSDictionary *event = @{
+                            @"target": mapView.reactTag,
+                            @"region": @{
+                                    @"latitude": @(region.latitude),
+                                    @"longitude": @(region.longitude)
+                                    }
+                            };
+    [self.bridge.eventDispatcher sendInputEventWithName:@"topChange" body:event];
 }
 
 @end

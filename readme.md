@@ -70,10 +70,27 @@ var MapboxGLMap = require('react-native-mapbox-gl');
 var {
   AppRegistry,
   StyleSheet,
+  View,
+  Text
 } = React;
 
 var map = React.createClass({
+  getInitialState: function() {
+    return {
+      location: {
+        latitude: 0,
+        longitude: 0
+      }
+    }
+  },
+  onChange: function(e) {
+    this.setState({ location: e });
+  },
   render: function() {
+    var center = {
+      latitude: 40.72345355209305,
+      longitude: -73.99343490600586
+    };
     var annotations = [{
       latitude: 40.720526315318594,
       longitude:  -73.97686958312988,
@@ -85,28 +102,35 @@ var map = React.createClass({
       title: 'This is marker 2',
       subtitle: 'Cool'
     }];
-    var center = {
-      latitude: 40.7223,
-      longitude: -73.9878
-    };
     return (
-      <MapboxGLMap
-        style={styles.map}
-        rotateEnabled={true}
-        showsUserLocation={true}
-        accessToken={'your-mapbox.com-access-token'}
-        styleURL={'https://www.mapbox.com/mapbox-gl-styles/styles/mapbox-streets-v7.json'}
-        zoomLevel={13}
-        centerCoordinate={center}
-        annotations={annotations} />
+      <View>
+        <MapboxGLMap
+          style={styles.map}
+          rotateEnabled={true}
+          showsUserLocation={true}
+          accessToken={'your-mapbox-access-token'}
+          styleURL={'https://www.mapbox.com/mapbox-gl-styles/styles/mapbox-streets-v7.json'}
+          zoomLevel={12}
+          centerCoordinate={center}
+          onResetNorth={this.onResetNorth}
+          annotations={annotations}
+          onRegionChange={this.onChange} />
+        <View style={styles.text}>
+          <Text>Latitude: {this.state.location.latitude}</Text>
+          <Text>Longitude: {this.state.location.longitude}</Text>
+        </View>
+      </View>
     );
   }
 });
 
 var styles = StyleSheet.create({
   map: {
-    height: 667,
-    width: 375
+    height: 500
+  },
+  text: {
+    padding: 20,
+    flex: 1
   }
 });
 
