@@ -2,6 +2,8 @@
 
 _A react native component for accessing [Mapbox GL](https://www.mapbox.com/mapbox-gl/)_
 
+![](https://cldup.com/tHcY8bkKHK.gif)
+
 ## Installation Process
 
 1. `npm install react-native-mapbox-gl --save`
