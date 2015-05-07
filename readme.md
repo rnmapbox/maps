@@ -62,6 +62,18 @@ Coming soon.
 
 ## Example `MapboxGLMap`:
 ```jsx
+'use strict';
+
+var React = require('react-native');
+var MapboxGLMap = require('react-native-mapbox-gl');
+
+var {
+  AppRegistry,
+  StyleSheet,
+  View,
+  Text
+} = React;
+
 var map = React.createClass({
   getInitialState: function() {
     return {
