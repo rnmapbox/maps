@@ -27,38 +27,24 @@ _[Information on installing Mapbox GL for iOS normally](https://github.com/mapbo
 
 ## Options
 
-* `style` - Normal `view` flexbox styling
-* `rotateEnabled` - `bool` - `optional` - Whether the map can rotate
-* `showsUserLocation` - `bool` - `optional` - Whether the users location is shown on the map. Note - the map will not zoom to their location.
-* `accessToken` - `string` - `required` - Mapbox access token. Sign up for a [Mapbox account here](mapbox.com/signup).
-* `styleURL` - `string` - `required` - A Mapbox GL style sheet. Defaults to `mapbox-streets`. More styles [can be viewed here](https://www.mapbox.com/mapbox-gl-styles).
-* `zoomLevel` - `double` - `optional` - Initial zoom level the map will load at. 0 is the entire world, 18 is rooftop level. Defaults to 0.
-* `annotations` - `array` - `optional` - An array of annotation objects. `latitude`/`longitude` are required, both `title` and `subtitle` are optional.  Example:
-```js
-var annotations = [{
-  latitude: 40.720526315318594,
-  longitude:  -73.97686958312988,
-  title: 'This is marker 1',
-  subtitle: 'Hi mom!'
-},{
-  latitude: 40.714541341726175,
-  longitude:  -74.00579452514648,
-  title: 'This is marker 2',
-  subtitle: 'Cool'
-}];
-```
-* `centerCoordinate` - `object` - `optional` - Initial `latitude`/`longitude` the map will load at, defaults to `0,0`. Object can be represented as follows:
-```js
-var center = { // NYC
-  latitude: 40.7223,
-  longitude: -73.9878
-};
-```
+
+| Option | Type | Opt/Required | Default | Note |
+|---|---|---|---|---|
+| `accessToken` | `string` | Required | NA |Mapbox access token. Sign up for a [Mapbox account here](mapbox.com/signup).
+| `centerCoordinate` | `object` | Optional | `0,0`| Initial `latitude`/`longitude` the map will load at, defaults to `0,0`.
+| `zoomLevel` | `double` | Optional | `0` | Initial zoom level the map will load at. 0 is the entire world, 18 is rooftop level. Defaults to 0.
+| `rotateEnabled` | `bool`  |  Optional | `true`  | Whether the map can rotate |
+|`showsUserLocation` | `bool` | Optional | `false` | Whether the users location is shown on the map. Note - the map will |
+| `styleURL` | `string` | Optional | Mapbox Streets |  A Mapbox GL style sheet. Defaults to `mapbox-streets`. More styles [can be viewed here](https://www.mapbox.com/mapbox-gl-styles).
+| `annotations` | `array` | Optional | NA |  An array of annotation objects. `latitude`/`longitude` are required, both `title` and `subtitle` are optional.  
+| `style`  | flexbox `view` | Optional | NA | Styles the actual map view container |
 
 
 ## Events
 
-Coming soon.
+| Event Name | Returns | Notes
+|---|---|---|
+| `onRegionChange` | `{latitude: 0, longitude: 0}` | Triggered by panning the map. Returns once the map has finished panning.
 
 ## Example `MapboxGLMap`:
 ```jsx
