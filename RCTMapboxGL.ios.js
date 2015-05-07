@@ -5,12 +5,17 @@ var Platform = require('Platform');
 var React = require('React');
 var ReactIOSViewAttributes = require('ReactIOSViewAttributes');
 var View = require('View');
-
 var createReactIOSNativeComponentClass = require('createReactIOSNativeComponentClass');
 var requireNativeComponent = require('requireNativeComponent');
 
 var MapView = React.createClass({
   mixins: [NativeMethodsMixin],
+  _onChange(event: Event) {
+    if (!this.props.onRegionChange) {
+      return;
+    }
+    this.props.onRegionChange(event.nativeEvent.region);
+  },
   propTypes: {
     showsUserLocation: React.PropTypes.bool,
     rotateEnabled: React.PropTypes.bool,
@@ -29,10 +34,11 @@ var MapView = React.createClass({
       title: React.PropTypes.string,
       subtitle: React.PropTypes.string,
     })),
+    onRegionChange: React.PropTypes.func,
   },
 
   render: function() {
-    return <MapboxGLView {...this.props} />;
+    return <MapboxGLView {...this.props} onChange={this._onChange} />;
   }
 });
 
