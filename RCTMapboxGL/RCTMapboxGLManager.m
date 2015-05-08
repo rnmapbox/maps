@@ -22,6 +22,7 @@
     NSMutableDictionary *annotations;
 }
 
+
 RCT_EXPORT_MODULE();
 
 RCT_EXPORT_VIEW_PROPERTY(accessToken, NSString)
@@ -50,10 +51,10 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, MGLMapView){
                 }
                 NSString *subtitle = @"";
                 if ([anObject objectForKey:@"subtitle"]){
-                    title = [RCTConvert NSString:[anObject valueForKey:@"subtitle"]];
+                    subtitle = [RCTConvert NSString:[anObject valueForKey:@"subtitle"]];
                 }
 
-                MGLAnnotation *pin = [[MGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle];
+                addGLAnnotation *pin = [[addGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle];
 
                 NSValue *key = [NSValue valueWithMKCoordinate:pin.coordinate];
                 [pins setObject:pin forKey:key];
@@ -95,7 +96,7 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, MGLMapView){
     CGFloat height = [UIScreen mainScreen].bounds.size.height;
     CGRect windowFrame = CGRectMake(0, 0, width, height);
 
-    MGLMapView *map = [[MGLMapView alloc] initWithFrame:windowFrame accessToken:@"placeHolder"];
+    MGLMapView *map = [[RCTMapboxGL alloc] initWithFrame:windowFrame accessToken:@"placeHolder"];
     map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     map.clipsToBounds = YES;
     map.delegate = self;
@@ -103,6 +104,9 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, MGLMapView){
     return map;
 }
 
+- (BOOL)mapView:(RCTMapboxGL *)mapView annotationCanShowCallout:(id <MGLAnnotation>)annotation {
+    return YES;
+}
 
 - (void)mapView:(RCTMapboxGL *)mapView regionDidChangeAnimated:(BOOL)animated
 {

@@ -12,7 +12,7 @@
 
 @end
 
-@interface MGLAnnotation : NSObject <MGLAnnotation>
+@interface addGLAnnotation : NSObject <MGLAnnotation>
 
 + (instancetype)annotationWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle;
 
