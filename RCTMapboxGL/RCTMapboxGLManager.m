@@ -36,7 +36,7 @@ RCT_CUSTOM_VIEW_PROPERTY(centerCoordinate, MKCoordinateRegion, MGLMapView)
 {
     view.centerCoordinate =  [RCTConvert CLLocationCoordinate2D:json];
 }
-RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL){
+RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, MGLMapView){
     if ([json isKindOfClass:[NSArray class]]){
         NSMutableDictionary *pins = [NSMutableDictionary dictionary];
         id anObject;

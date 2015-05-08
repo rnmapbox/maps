@@ -2,6 +2,7 @@
 
 _A react native component for accessing [Mapbox GL](https://www.mapbox.com/mapbox-gl/)_
 
+
 ## Installation Process
 
 1. `npm install react-native-mapbox-gl --save`
@@ -27,7 +28,6 @@ _[Information on installing Mapbox GL for iOS normally](https://github.com/mapbo
 
 ## Options
 
-
 | Option | Type | Opt/Required | Default | Note |
 |---|---|---|---|---|
 | `accessToken` | `string` | Required | NA |Mapbox access token. Sign up for a [Mapbox account here](mapbox.com/signup).
@@ -37,8 +37,23 @@ _[Information on installing Mapbox GL for iOS normally](https://github.com/mapbo
 |`showsUserLocation` | `bool` | Optional | `false` | Whether the users location is shown on the map. Note - the map will |
 | `styleURL` | `string` | Optional | Mapbox Streets |  A Mapbox GL style sheet. Defaults to `mapbox-streets`. More styles [can be viewed here](https://www.mapbox.com/mapbox-gl-styles).
 | `annotations` | `array` | Optional | NA |  An array of annotation objects. `latitude`/`longitude` are required, both `title` and `subtitle` are optional.  
+| `direction`  | `double` | Optional | `0` | Heading of the map in degrees where 0 is north and 180 is south |
+| `debugActive`  | `bool` | Optional | `false` | Turns on debug mode. |
 | `style`  | flexbox `view` | Optional | NA | Styles the actual map view container |
 
+## GL Styles
+
+You can change the `styleURL` to any valid GL stylesheet, here are a few:
+
+* `https://www.mapbox.com/mapbox-gl-styles/styles/basic-v7.json`
+* `https://www.mapbox.com/mapbox-gl-styles/styles/bright-v7.json`
+* `https://www.mapbox.com/mapbox-gl-styles/styles/dark-v7.json`
+* `https://www.mapbox.com/mapbox-gl-styles/styles/emerald-v7.json`
+* `https://www.mapbox.com/mapbox-gl-styles/styles/light-v7.json`
+* `https://www.mapbox.com/mapbox-gl-styles/styles/mapbox-streets-v7.json`
+* `https://www.mapbox.com/mapbox-gl-styles/styles/outdoors-v7.json`
+* `https://www.mapbox.com/mapbox-gl-styles/styles/pencil-v7.json`
+* `https://www.mapbox.com/mapbox-gl-styles/styles/satellite-v7.json`
 
 ## Events
 
@@ -63,14 +78,16 @@ var {
 var map = React.createClass({
   getInitialState: function() {
     return {
-      location: {
+      regionLocation: {
         latitude: 0,
         longitude: 0
-      }
+      },
+      zoom: 11,
+      direction: 0
     }
   },
   onChange: function(e) {
-    this.setState({ location: e });
+    this.setState({ regionLocation: e });
   },
   render: function() {
     var center = {
@@ -85,8 +102,7 @@ var map = React.createClass({
     },{
       latitude: 40.714541341726175,
       longitude:  -74.00579452514648,
-      title: 'This is marker 2',
-      subtitle: 'Cool'
+      title: 'This is marker 2'
     }];
     return (
       <View>
@@ -95,16 +111,18 @@ var map = React.createClass({
           rotateEnabled={true}
           showsUserLocation={true}
           accessToken={'your-mapbox-access-token'}
+          zoomLevel={this.state.zoom}
           styleURL={'https://www.mapbox.com/mapbox-gl-styles/styles/mapbox-streets-v7.json'}
-          zoomLevel={12}
           centerCoordinate={center}
           onResetNorth={this.onResetNorth}
           annotations={annotations}
+          debugActive={false}
+          direction={this.state.direction}
           onRegionChange={this.onChange} />
         <View style={styles.text}>
-          <Text>Latitude: {this.state.location.latitude}</Text>
-          <Text>Longitude: {this.state.location.longitude}</Text>
-          <Text>Zoom Level: {this.state.location.zoom}</Text>
+          <Text>Latitude: {this.state.regionLocation.latitude}</Text>
+          <Text>Longitude: {this.state.regionLocation.longitude}</Text>
+          <Text>zoom level: {this.state.regionLocation.zoom}</Text>
         </View>
       </View>
     );
@@ -116,8 +134,7 @@ var styles = StyleSheet.create({
     height: 500
   },
   text: {
-    padding: 20,
-    flex: 1
+    padding: 20
   }
 });
 
