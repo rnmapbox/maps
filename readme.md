@@ -45,7 +45,7 @@ _[Information on installing Mapbox GL for iOS normally](https://github.com/mapbo
 
 | Event Name | Returns | Notes
 |---|---|---|
-| `onRegionChange` | `{latitude: 0, longitude: 0}` | Triggered by panning the map. Returns once the map has finished panning.
+| `onRegionChange` | `{latitude: 0, longitude: 0, zoom: 0}` | Triggered by panning or zooming the map.
 
 ## Example `MapboxGLMap`:
 ```jsx
@@ -105,6 +105,7 @@ var map = React.createClass({
         <View style={styles.text}>
           <Text>Latitude: {this.state.location.latitude}</Text>
           <Text>Longitude: {this.state.location.longitude}</Text>
+          <Text>Zoom Level: {this.state.location.zoom}</Text>
         </View>
       </View>
     );

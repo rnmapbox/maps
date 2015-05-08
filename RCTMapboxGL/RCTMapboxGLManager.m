@@ -111,11 +111,13 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, MGLMapView){
 - (void)mapView:(RCTMapboxGL *)mapView regionDidChangeAnimated:(BOOL)animated
 {
     CLLocationCoordinate2D region = mapView.centerCoordinate;
+
     NSDictionary *event = @{
                             @"target": mapView.reactTag,
                             @"region": @{
                                     @"latitude": @(region.latitude),
-                                    @"longitude": @(region.longitude)
+                                    @"longitude": @(region.longitude),
+                                    @"zoom": [NSNumber numberWithDouble:mapView.zoomLevel]
                                     }
                             };
     [self.bridge.eventDispatcher sendInputEventWithName:@"topChange" body:event];
