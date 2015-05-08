@@ -12,7 +12,7 @@
 
 @end
 
-@interface MGLAnnotation ()
+@interface addGLAnnotation ()
 
 @property (nonatomic) CLLocationCoordinate2D coordinate;
 @property (nonatomic) NSString *title;
@@ -20,7 +20,7 @@
 
 @end
 
-@implementation MGLAnnotation
+@implementation addGLAnnotation
 
 + (instancetype)annotationWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle
 {
