@@ -28,14 +28,15 @@ RCT_EXPORT_VIEW_PROPERTY(accessToken, NSString)
 RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(zoomLevel, double)
+RCT_EXPORT_VIEW_PROPERTY(debugActive, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(styleURL, NSURL)
+RCT_EXPORT_VIEW_PROPERTY(direction, double)
 RCT_EXPORT_VIEW_PROPERTY(clipsToBounds, BOOL)
 RCT_CUSTOM_VIEW_PROPERTY(centerCoordinate, MKCoordinateRegion, MGLMapView)
 {
     view.centerCoordinate =  [RCTConvert CLLocationCoordinate2D:json];
 }
-
-RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, MGLMapView){
+RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL){
     if ([json isKindOfClass:[NSArray class]]){
         NSMutableDictionary *pins = [NSMutableDictionary dictionary];
         id anObject;
@@ -51,14 +52,8 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, MGLMapView){
                 if ([anObject objectForKey:@"subtitle"]){
                     title = [RCTConvert NSString:[anObject valueForKey:@"subtitle"]];
                 }
-                MKPointAnnotation *pin = [[MKPointAnnotation alloc]init];
-                pin.coordinate = coordinate;
-                if (title.length){
-                    pin.title = title;
-                }
-                if (subtitle.length){
-                    pin.subtitle = subtitle;
-                }
+
+                MGLAnnotation *pin = [[MGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle];
 
                 NSValue *key = [NSValue valueWithMKCoordinate:pin.coordinate];
                 [pins setObject:pin forKey:key];
@@ -107,6 +102,7 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, MGLMapView){
 
     return map;
 }
+
 
 - (void)mapView:(RCTMapboxGL *)mapView regionDidChangeAnimated:(BOOL)animated
 {

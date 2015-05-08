@@ -11,3 +11,11 @@
 @interface RCTMapboxGL : MGLMapView
 
 @end
+
+@interface MGLAnnotation : NSObject <MGLAnnotation>
+
++ (instancetype)annotationWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle;
+
+- (instancetype)initWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle;
+
+@end
