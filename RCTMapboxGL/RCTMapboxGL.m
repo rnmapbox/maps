@@ -192,11 +192,15 @@
   [_eventDispatcher sendInputEventWithName:@"topChange" body:event];
 }
 
+- (BOOL)mapView:(RCTMapboxGL *)mapView annotationCanShowCallout:(id <MGLAnnotation>)annotation {
+    return YES;
+}
+
 @end
 
-/* MGLAnnotation */
+/* RCTMGLAnntation */
 
-@interface MGLAnnotation ()
+@interface RCTMGLAnntation ()
 
 @property (nonatomic) CLLocationCoordinate2D coordinate;
 @property (nonatomic) NSString *title;
@@ -204,7 +208,7 @@
 
 @end
 
-@implementation MGLAnnotation
+@implementation RCTMGLAnntation
 
 + (instancetype)annotationWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle
 {
