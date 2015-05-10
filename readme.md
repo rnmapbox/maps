@@ -30,7 +30,7 @@ _[Information on installing Mapbox GL for iOS normally](https://github.com/mapbo
 
 | Option | Type | Opt/Required | Default | Note |
 |---|---|---|---|---|
-| `accessToken` | `string` | Required | NA |Mapbox access token. Sign up for a [Mapbox account here](mapbox.com/signup).
+| `accessToken` | `string` | Required | NA |Mapbox access token. Sign up for a [Mapbox account here](https://www.mapbox.com/signup).
 | `centerCoordinate` | `object` | Optional | `0,0`| Initial `latitude`/`longitude` the map will load at, defaults to `0,0`.
 | `zoomLevel` | `double` | Optional | `0` | Initial zoom level the map will load at. 0 is the entire world, 18 is rooftop level. Defaults to 0.
 | `rotateEnabled` | `bool`  |  Optional | `true`  | Whether the map can rotate |
