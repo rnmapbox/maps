@@ -40,7 +40,13 @@ var MapView = React.createClass({
   },
 
   render: function() {
-    return <MapboxGLView {...this.props} onChange={this._onChange} />;
+    var props = this.props;
+
+    if (!this.props.styleURL) {
+      props.styleURL = "https://www.mapbox.com/mapbox-gl-styles/styles/mapbox-streets-v7.json";
+    }
+
+    return <MapboxGLView {...props} onChange={this._onChange} />;
   }
 });
 
