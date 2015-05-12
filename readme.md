@@ -59,7 +59,7 @@ You can change the `styleURL` to any valid GL stylesheet, here are a few:
 | Event Name | Returns | Notes
 |---|---|---|
 | `onRegionChange` | `{latitude: 0, longitude: 0, zoom: 0}` | Triggered by panning or zooming the map.
-| `onOpenAnnotation` | `{title: null, subtitle: null}` | Fired when focusing a an annotation.
+| `onOpenAnnotation` | `{title: null, subtitle: null, latitude: 0, longitude: 0}` | Fired when focusing a an annotation.
 
 ## Example `MapboxGLMap`:
 ```jsx

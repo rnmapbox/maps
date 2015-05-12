@@ -181,10 +181,11 @@
 
 -(void)mapView:(MGLMapView *)mapView didSelectAnnotation:(id<MGLAnnotation>)annotation
 {
-    
     NSDictionary *event = @{ @"target": self.reactTag,
                              @"annotation": @{ @"title": annotation.title,
-                                            @"subtitle": annotation.subtitle} };
+                                            @"subtitle": annotation.subtitle,
+                                            @"latitude": @(annotation.coordinate.latitude),
+                                            @"longitude": @(annotation.coordinate.longitude)} };
     
     [_eventDispatcher sendInputEventWithName:@"topBlur" body:event];
 }
