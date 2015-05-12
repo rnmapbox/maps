@@ -179,6 +179,17 @@
   [self updateMap];
 }
 
+-(void)mapView:(MGLMapView *)mapView didSelectAnnotation:(id<MGLAnnotation>)annotation
+{
+    
+    NSDictionary *event = @{ @"target": self.reactTag,
+                             @"annotation": @{ @"title": annotation.title,
+                                            @"subtitle": annotation.subtitle} };
+    
+    [_eventDispatcher sendInputEventWithName:@"topBlur" body:event];
+}
+
+
 - (void)mapView:(RCTMapboxGL *)mapView regionDidChangeAnimated:(BOOL)animated
 {
 

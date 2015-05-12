@@ -59,6 +59,7 @@ You can change the `styleURL` to any valid GL stylesheet, here are a few:
 | Event Name | Returns | Notes
 |---|---|---|
 | `onRegionChange` | `{latitude: 0, longitude: 0, zoom: 0}` | Triggered by panning or zooming the map.
+| `onOpenAnnotation` | `{title: null, subtitle: null}` | Fired when focusing a an annotation.
 
 ## Example `MapboxGLMap`:
 ```jsx
@@ -87,6 +88,9 @@ var map = React.createClass({
   },
   onChange: function(e) {
     this.setState({ regionLocation: e });
+  },
+  onOpenAnnotation: function(annotation) {
+    console.log(annotation);
   },
   render: function() {
     var center = {
@@ -118,7 +122,8 @@ var map = React.createClass({
           debugActive={false}
           direction={this.state.direction}
           annotations={annotations}
-          onRegionChange={this.onChange}/>
+          onRegionChange={this.onChange}
+          onOpenAnnotation={this.onOpenAnnotation} />
         <View style={styles.text}>
           <Text>Latitude: {this.state.regionLocation.latitude}</Text>
           <Text>Longitude: {this.state.regionLocation.longitude}</Text>
