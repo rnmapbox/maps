@@ -16,6 +16,12 @@ var MapView = React.createClass({
     }
     this.props.onRegionChange(event.nativeEvent.region);
   },
+  _onOpenAnnotation(event: Event) {
+    if (!this.props.onOpenAnnotation) {
+      return;
+    }
+    this.props.onOpenAnnotation(event.nativeEvent.annotation);
+  },
   propTypes: {
     showsUserLocation: React.PropTypes.bool,
     rotateEnabled: React.PropTypes.bool,
@@ -37,6 +43,7 @@ var MapView = React.createClass({
       subtitle: React.PropTypes.string,
     })),
     onRegionChange: React.PropTypes.func,
+    onOpenAnnotation: React.PropTypes.func
   },
 
   render: function() {
@@ -46,7 +53,7 @@ var MapView = React.createClass({
       props.styleURL = "https://www.mapbox.com/mapbox-gl-styles/styles/mapbox-streets-v7.json";
     }
 
-    return <MapboxGLView {...props} onChange={this._onChange} />;
+    return <MapboxGLView {...props} onChange={this._onChange} onBlur={this._onOpenAnnotation} />;
   }
 });
 
