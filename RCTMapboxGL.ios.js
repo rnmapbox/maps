@@ -1,11 +1,7 @@
 'use strict';
 
-var NativeMethodsMixin = require('NativeMethodsMixin');
-var Platform = require('Platform');
 var React = require('React');
-var ReactIOSViewAttributes = require('ReactIOSViewAttributes');
-var View = require('View');
-var createReactIOSNativeComponentClass = require('createReactIOSNativeComponentClass');
+var NativeMethodsMixin = require('NativeMethodsMixin');
 var requireNativeComponent = require('requireNativeComponent');
 
 var MapView = React.createClass({
@@ -22,6 +18,12 @@ var MapView = React.createClass({
     }
     this.props.onOpenAnnotation(event.nativeEvent.annotation);
   },
+  _onUpdateUserLocation(event: Event) {
+    if (!this.props.onUpdateUserLocation) {
+      return;
+    }
+    this.props.onUpdateUserLocation(event.nativeEvent.userLocation);
+  },
   propTypes: {
     showsUserLocation: React.PropTypes.bool,
     rotateEnabled: React.PropTypes.bool,
@@ -35,7 +37,6 @@ var MapView = React.createClass({
       latitude: React.PropTypes.number.isRequired,
       longitude: React.PropTypes.number.isRequired
     }),
-    style: View.propTypes.style,
     annotations: React.PropTypes.arrayOf(React.PropTypes.shape({
       latitude: React.PropTypes.number.isRequired,
       longitude: React.PropTypes.number.isRequired,
@@ -43,17 +44,23 @@ var MapView = React.createClass({
       subtitle: React.PropTypes.string,
     })),
     onRegionChange: React.PropTypes.func,
-    onOpenAnnotation: React.PropTypes.func
+    onOpenAnnotation: React.PropTypes.func,
+    onUpdateUserLocation: React.PropTypes.func
+
   },
 
   render: function() {
     var props = this.props;
 
     if (!this.props.styleURL) {
-      props.styleURL = "https://www.mapbox.com/mapbox-gl-styles/styles/mapbox-streets-v7.json";
+      props.styleURL = 'asset://styles/mapbox-streets-v7.json';
     }
 
-    return <MapboxGLView {...props} onChange={this._onChange} onBlur={this._onOpenAnnotation} />;
+    return <MapboxGLView
+      {...props}
+      onChange={this._onChange}
+      onBlur={this._onOpenAnnotation}
+      onLoadingFinish={this._onUpdateUserLocation} />;
   }
 });
 

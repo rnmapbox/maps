@@ -75,6 +75,7 @@
 
 - (void)createMap
 {
+  [MGLAccountManager setMapboxMetricsEnabledSettingShownInApp:YES];
   _map = [[MGLMapView alloc] initWithFrame:self.bounds accessToken:_accessToken styleURL:_styleURL];
   _map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
   _map.delegate = self;
@@ -178,6 +179,20 @@
   _styleURL = styleURL;
   [self updateMap];
 }
+
+- (void)mapView:(MGLMapView *)mapView didUpdateUserLocation:(MGLUserLocation *)userLocation;
+{
+  NSDictionary *event = @{ @"target": self.reactTag,
+                           @"userLocation": @{ @"latitude": @(userLocation.coordinate.latitude),
+                                               @"longitude": @(userLocation.coordinate.longitude),
+                                               @"headingAccuracy": @(userLocation.heading.headingAccuracy),
+                                               @"magneticHeading": @(userLocation.heading.magneticHeading),
+                                               @"trueHeading": @(userLocation.heading.trueHeading),
+                                               @"isUpdating": [NSNumber numberWithBool:userLocation.isUpdating]} };
+  
+  [_eventDispatcher sendInputEventWithName:@"topLoadingFinish" body:event];
+}
+
 
 -(void)mapView:(MGLMapView *)mapView didSelectAnnotation:(id<MGLAnnotation>)annotation
 {
