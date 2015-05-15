@@ -56,7 +56,11 @@ var MapView = React.createClass({
       props.styleURL = 'asset://styles/mapbox-streets-v7.json';
     }
 
-    return <MapboxGLView {...props} onChange={this._onChange} onBlur={this._onOpenAnnotation} onLoadingFinish={this._onUpdateUserLocation} />;
+    return <MapboxGLView
+      {...props}
+      onChange={this._onChange}
+      onBlur={this._onOpenAnnotation}
+      onLoadingFinish={this._onUpdateUserLocation} />;
   }
 });
 
