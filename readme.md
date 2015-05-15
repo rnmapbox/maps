@@ -60,54 +60,46 @@ You can change the `styleURL` to any valid GL stylesheet, here are a few:
 |---|---|---|
 | `onRegionChange` | `{latitude: 0, longitude: 0, zoom: 0}` | Triggered by panning or zooming the map.
 | `onOpenAnnotation` | `{title: null, subtitle: null, latitude: 0, longitude: 0}` | Fired when focusing a an annotation.
+| `onUpdateUserLocation` | `{latitude: 0, longitude: 0, headingAccuracy: 0, magneticHeading: 0, trueHeading: 0, isUpdating: false}` | Fired when the users location updates.
 
 ## Example `MapboxGLMap`:
 ```jsx
-'use strict';
-
-var React = require('react-native');
-var MapboxGLMap = require('react-native-mapbox-gl');
-
-var {
-  AppRegistry,
-  StyleSheet,
-  View,
-  Text
-} = React;
-
 var map = React.createClass({
   getInitialState: function() {
     return {
-      regionLocation: {
+      mapLocation: {
         latitude: 0,
         longitude: 0
-      },
-      zoom: 12,
-      direction: 0
-    }
+       },
+       center: {
+         latitude: 40.72345355209305,
+         longitude: -73.99343490600586
+       },
+       annotations: [{
+         latitude: 40.72052634,
+         longitude:  -73.97686958312988,
+         title: 'This is marker 1',
+         subtitle: 'Hi mom!'
+       },{
+         latitude: 40.714541341726175,
+         longitude:  -74.00579452514648,
+         title: 'This is marker 2',
+         subtitle: 'Neat, this is a subtitle'
+       }],
+       zoom: 12,
+       direction: 0
+     }
   },
   onChange: function(e) {
-    this.setState({ regionLocation: e });
+    this.setState({ mapLocation: e });
   },
   onOpenAnnotation: function(annotation) {
-    console.log(annotation);
+    console.log(annotation)
+  },
+  onUpdateUserLocation: function(location) {
+    console.log(location)
   },
   render: function() {
-    var center = {
-      latitude: 40.72345355209305,
-      longitude: -73.99343490600586
-    };
-    var annotations = [{
-      latitude: 40.72052634,
-      longitude:  -73.97686958312988,
-      title: 'This is marker 1',
-      subtitle: 'Hi mom!'
-    },{
-      latitude: 40.714541341726175,
-      longitude:  -74.00579452514648,
-      title: 'This is marker 2',
-      subtitle: 'Neat, this is a subtitle'
-    }];
     return (
       <View style={styles.container}>
         <MapboxGLMap
@@ -116,18 +108,19 @@ var map = React.createClass({
           showsUserLocation={true}
           accessToken={'your-mapbox.com-access-token'}
           styleURL={'asset://styles/mapbox-streets-v7.json'}
-          centerCoordinate={center}
+          centerCoordinate={this.state.center}
+          userLocationVisible={true}
           zoomLevel={this.state.zoom}
-          onResetNorth={this.onResetNorth}
           debugActive={false}
           direction={this.state.direction}
-          annotations={annotations}
+          annotations={this.state.annotations}
           onRegionChange={this.onChange}
-          onOpenAnnotation={this.onOpenAnnotation} />
+          onOpenAnnotation={this.onOpenAnnotation}
+          onUpdateUserLocation={this.onUpdateUserLocation}/>
         <View style={styles.text}>
-          <Text>Latitude: {this.state.regionLocation.latitude}</Text>
-          <Text>Longitude: {this.state.regionLocation.longitude}</Text>
-          <Text>zoom level: {this.state.regionLocation.zoom}</Text>
+          <Text>Latitude: {this.state.mapLocation.latitude}</Text>
+          <Text>Longitude: {this.state.mapLocation.longitude}</Text>
+          <Text>zoom level: {this.state.mapLocation.zoom}</Text>
         </View>
       </View>
     );
