@@ -180,6 +180,20 @@
   [self updateMap];
 }
 
+- (void)mapView:(MGLMapView *)mapView didUpdateUserLocation:(MGLUserLocation *)userLocation;
+{
+  NSDictionary *event = @{ @"target": self.reactTag,
+                           @"userLocation": @{ @"latitude": @(userLocation.coordinate.latitude),
+                                               @"longitude": @(userLocation.coordinate.longitude),
+                                               @"headingAccuracy": @(userLocation.heading.headingAccuracy),
+                                               @"magneticHeading": @(userLocation.heading.magneticHeading),
+                                               @"trueHeading": @(userLocation.heading.trueHeading),
+                                               @"isUpdating": [NSNumber numberWithBool:userLocation.isUpdating]} };
+  
+  [_eventDispatcher sendInputEventWithName:@"topLoadingFinish" body:event];
+}
+
+
 -(void)mapView:(MGLMapView *)mapView didSelectAnnotation:(id<MGLAnnotation>)annotation
 {
     NSDictionary *event = @{ @"target": self.reactTag,
