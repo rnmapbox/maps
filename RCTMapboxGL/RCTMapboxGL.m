@@ -75,6 +75,7 @@
 
 - (void)createMap
 {
+  [MGLAccountManager setMapboxMetricsEnabledSettingShownInApp:YES];
   _map = [[MGLMapView alloc] initWithFrame:self.bounds accessToken:_accessToken styleURL:_styleURL];
   _map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
   _map.delegate = self;
