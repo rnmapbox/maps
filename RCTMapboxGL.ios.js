@@ -1,11 +1,13 @@
 'use strict';
 
-var React = require('React');
-var NativeMethodsMixin = require('NativeMethodsMixin');
+var React = require('react-native');
 var requireNativeComponent = require('requireNativeComponent');
+var { NativeModules, Text } = React;
 
 var MapView = React.createClass({
-  mixins: [NativeMethodsMixin],
+  componentDidMount() {
+    NativeModules.MapboxGL.resetNorth();
+  },
   _onChange(event: Event) {
     if (!this.props.onRegionChange) {
       return;
@@ -50,6 +52,7 @@ var MapView = React.createClass({
   },
 
   render: function() {
+
     var props = this.props;
 
     if (!this.props.styleURL) {

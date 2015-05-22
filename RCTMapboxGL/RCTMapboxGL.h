@@ -10,8 +10,9 @@
 #import "MGLMapView.h"
 #import "RCTView.h"
 #import "RCTEventDispatcher.h"
+#import "RCTBridgeModule.h"
 
-@interface RCTMapboxGL : RCTView <MGLMapViewDelegate>
+@interface RCTMapboxGL : RCTView <MGLMapViewDelegate, RCTBridgeModule>
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher;
 

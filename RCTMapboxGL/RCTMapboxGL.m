@@ -33,6 +33,8 @@
   double _zoomLevel;
 }
 
+RCT_EXPORT_MODULE();
+
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
 {
   if (self = [super init]) {
@@ -82,6 +84,13 @@
   [self updateMap];
   [self addSubview:_map];
   [self layoutSubviews];
+}
+
+RCT_EXPORT_METHOD(resetNorth)
+{
+  [self updateMap];
+  NSLog(@"%@", _map);
+  [_map resetNorth];
 }
 
 - (void)layoutSubviews
