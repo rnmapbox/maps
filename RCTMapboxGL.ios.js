@@ -3,13 +3,21 @@
 var React = require('react-native');
 var requireNativeComponent = require('requireNativeComponent');
 var { NativeModules, Text } = React;
-var AnimationUtils = require('AnimationUtils');
+
+var INNERVIEW = 'InnerScrollView';
+
+var MapMixins = {
+  resetNorth(mapRef) {
+    NativeModules.MapboxGLManager.resetNorth(React.findNodeHandle(this.refs[mapRef]));
+  },
+  setCenterCoordinateAnimated(mapRef, latitude, longitude, zoom) {
+    NativeModules.MapboxGLManager.setCenterCoordinateAnimated(React.findNodeHandle(this.refs[mapRef]), 0,0,0);
+  },
+};
 
 var MapView = React.createClass({
-  componentDidMount() {
-    var nodeHandle = React.findNodeHandle(this);
-    NativeModules.MapboxGLManager.resetNorth(nodeHandle);
-    NativeModules.MapboxGLManager.setCenterCoordinateAnimated(nodeHandle, 0,0,0);
+  statics: {
+    Mixin: MapMixins
   },
   _onChange(event: Event) {
     if (!this.props.onRegionChange) {
