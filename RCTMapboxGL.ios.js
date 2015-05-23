@@ -10,7 +10,7 @@ var MapMixins = {
   },
   setCenterCoordinateAnimated(mapRef, latitude, longitude, zoom) {
     NativeModules.MapboxGLManager.setCenterCoordinateAnimated(React.findNodeHandle(this.refs[mapRef]), 0,0,0);
-  },
+  }
 };
 
 var MapView = React.createClass({
