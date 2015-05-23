@@ -3,10 +3,13 @@
 var React = require('react-native');
 var requireNativeComponent = require('requireNativeComponent');
 var { NativeModules, Text } = React;
+var AnimationUtils = require('AnimationUtils');
 
 var MapView = React.createClass({
   componentDidMount() {
-    NativeModules.MapboxGL.resetNorth();
+    var nodeHandle = React.findNodeHandle(this);
+    NativeModules.MapboxGLManager.resetNorth(nodeHandle);
+    NativeModules.MapboxGLManager.setCenterCoordinateAnimated(nodeHandle, 0,0,0);
   },
   _onChange(event: Event) {
     if (!this.props.onRegionChange) {
@@ -48,7 +51,6 @@ var MapView = React.createClass({
     onRegionChange: React.PropTypes.func,
     onOpenAnnotation: React.PropTypes.func,
     onUpdateUserLocation: React.PropTypes.func
-
   },
 
   render: function() {

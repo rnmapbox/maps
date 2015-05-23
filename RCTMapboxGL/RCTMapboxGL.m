@@ -81,17 +81,12 @@ RCT_EXPORT_MODULE();
   _map = [[MGLMapView alloc] initWithFrame:self.bounds accessToken:_accessToken styleURL:_styleURL];
   _map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
   _map.delegate = self;
+  _map.userTrackingMode = MGLUserTrackingModeFollow;
   [self updateMap];
   [self addSubview:_map];
   [self layoutSubviews];
 }
 
-RCT_EXPORT_METHOD(resetNorth)
-{
-  [self updateMap];
-  NSLog(@"%@", _map);
-  [_map resetNorth];
-}
 
 - (void)layoutSubviews
 {
@@ -187,6 +182,15 @@ RCT_EXPORT_METHOD(resetNorth)
 {
   _styleURL = styleURL;
   [self updateMap];
+}
+
+-(void)resetNorth
+{
+  [_map setDirection:0 animated:YES];
+}
+-(void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)location zoom:(double)zoom
+{
+  [_map setCenterCoordinate:CLLocationCoordinate2DMake(0,0) zoomLevel:0 animated:YES];
 }
 
 - (void)mapView:(MGLMapView *)mapView didUpdateUserLocation:(MGLUserLocation *)userLocation;
