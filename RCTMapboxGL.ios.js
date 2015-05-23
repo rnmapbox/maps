@@ -4,8 +4,6 @@ var React = require('react-native');
 var requireNativeComponent = require('requireNativeComponent');
 var { NativeModules, Text } = React;
 
-var INNERVIEW = 'InnerScrollView';
-
 var MapMixins = {
   resetNorth(mapRef) {
     NativeModules.MapboxGLManager.resetNorth(React.findNodeHandle(this.refs[mapRef]));
