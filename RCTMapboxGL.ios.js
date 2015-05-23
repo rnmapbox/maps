@@ -8,6 +8,9 @@ var MapMixins = {
   setDirectionAnimated(mapRef, heading) {
     NativeModules.MapboxGLManager.setDirectionAnimated(React.findNodeHandle(this.refs[mapRef]), heading);
   },
+  setZoomLevelAnimated(mapRef, zoomLevel) {
+    NativeModules.MapboxGLManager.setZoomLevelAnimated(React.findNodeHandle(this.refs[mapRef]), zoomLevel);
+  },
   setCenterCoordinateAnimated(mapRef, latitude, longitude, zoom) {
     NativeModules.MapboxGLManager.setCenterCoordinateAnimated(React.findNodeHandle(this.refs[mapRef]), 0,0,0);
   }

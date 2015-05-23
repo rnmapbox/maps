@@ -41,6 +41,14 @@ RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(styleURL, NSURL);
 RCT_EXPORT_VIEW_PROPERTY(zoomLevel, double);
+RCT_EXPORT_METHOD(setZoomLevelAnimated:(NSNumber *)reactTag
+                  zoomLevel:(double)zoomLevel)
+{
+  [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+    RCTMapboxGL *mapView = viewRegistry[reactTag];
+    [mapView setZoomLevelAnimated:zoomLevel];
+  }];
+}
 RCT_EXPORT_METHOD(setDirectionAnimated:(NSNumber *)reactTag
                   heading:(int)heading)
 {
@@ -52,12 +60,12 @@ RCT_EXPORT_METHOD(setDirectionAnimated:(NSNumber *)reactTag
 RCT_EXPORT_METHOD(setCenterCoordinateAnimated:(NSNumber *)reactTag
                   latitude:(int) latitude
                   longitude:(int) longitude
-                  zoom:(double)zoom)
+                  zoomLevel:(double)zoomLevel)
 {
   [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
     RCTMapboxGL *mapView = viewRegistry[reactTag];
     if([mapView isKindOfClass:[RCTMapboxGL class]]) {
-      [mapView setCenterCoordinateAnimated:CLLocationCoordinate2DMake(latitude, longitude) zoom:zoom];
+      [mapView setCenterCoordinateAnimated:CLLocationCoordinate2DMake(latitude, longitude) zoomLevel:zoomLevel];
       }
   }];
 }
