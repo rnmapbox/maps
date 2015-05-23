@@ -5,8 +5,8 @@ var requireNativeComponent = require('requireNativeComponent');
 var { NativeModules, Text } = React;
 
 var MapMixins = {
-  resetNorth(mapRef) {
-    NativeModules.MapboxGLManager.resetNorth(React.findNodeHandle(this.refs[mapRef]));
+  setDirectionAnimated(mapRef, heading) {
+    NativeModules.MapboxGLManager.setDirectionAnimated(React.findNodeHandle(this.refs[mapRef]), heading);
   },
   setCenterCoordinateAnimated(mapRef, latitude, longitude, zoom) {
     NativeModules.MapboxGLManager.setCenterCoordinateAnimated(React.findNodeHandle(this.refs[mapRef]), 0,0,0);

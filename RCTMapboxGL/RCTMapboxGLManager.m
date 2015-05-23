@@ -41,11 +41,12 @@ RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(styleURL, NSURL);
 RCT_EXPORT_VIEW_PROPERTY(zoomLevel, double);
-RCT_EXPORT_METHOD(resetNorth:(NSNumber *)reactTag)
+RCT_EXPORT_METHOD(setDirectionAnimated:(NSNumber *)reactTag
+                  heading:(int)heading)
 {
   [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
     RCTMapboxGL *mapView = viewRegistry[reactTag];
-    [mapView resetNorth];
+    [mapView setDirectionAnimated:heading];
   }];
 }
 RCT_EXPORT_METHOD(setCenterCoordinateAnimated:(NSNumber *)reactTag

@@ -26,7 +26,7 @@
 - (void)setShowsUserLocation:(BOOL)showsUserLocation;
 - (void)setStyleURL:(NSURL *)styleURL;
 - (void)setZoomLevel:(double)zoomLevel;
-- (void)resetNorth;
+- (void)setDirectionAnimated:(int)heading;
 - (void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)location zoom:(double)zoom;
 
 @end

@@ -184,9 +184,9 @@ RCT_EXPORT_MODULE();
   [self updateMap];
 }
 
--(void)resetNorth
+-(void)setDirectionAnimated:(int)heading
 {
-  [_map setDirection:0 animated:YES];
+  [_map setDirection:heading animated:YES];
 }
 -(void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)location zoom:(double)zoom
 {
