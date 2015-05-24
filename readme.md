@@ -6,7 +6,7 @@ _A react native component for building maps with [Mapbox GL](https://www.mapbox.
 npm install react-native-mapbox-gl --save
 ```
 
-![](https://www.mapbox.com/mapbox-gl-ios/images/marker.png)
+![](https://cldup.com/A8S_7rLg1L.png)
 
 # [Installation](https://github.com/bsudekum/react-native-mapbox-gl/blob/master/install.md)
 
