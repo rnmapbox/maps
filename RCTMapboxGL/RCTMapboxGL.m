@@ -33,6 +33,8 @@
   double _zoomLevel;
 }
 
+RCT_EXPORT_MODULE();
+
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
 {
   if (self = [super init]) {
@@ -79,10 +81,12 @@
   _map = [[MGLMapView alloc] initWithFrame:self.bounds accessToken:_accessToken styleURL:_styleURL];
   _map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
   _map.delegate = self;
+  _map.userTrackingMode = MGLUserTrackingModeFollow;
   [self updateMap];
   [self addSubview:_map];
   [self layoutSubviews];
 }
+
 
 - (void)layoutSubviews
 {
@@ -178,6 +182,26 @@
 {
   _styleURL = styleURL;
   [self updateMap];
+}
+
+-(void)setDirectionAnimated:(int)heading
+{
+  [_map setDirection:heading animated:YES];
+}
+
+-(void)setZoomLevelAnimated:(double)zoomLevel
+{
+  [_map setZoomLevel:zoomLevel animated:YES];
+}
+
+-(void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)coordinates
+{
+  [_map setCenterCoordinate:coordinates animated:YES];
+}
+
+-(void)setCenterCoordinateZoomLevelAnimated:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel
+{
+  [_map setCenterCoordinate:coordinates zoomLevel:zoomLevel animated:YES];
 }
 
 - (void)mapView:(MGLMapView *)mapView didUpdateUserLocation:(MGLUserLocation *)userLocation;

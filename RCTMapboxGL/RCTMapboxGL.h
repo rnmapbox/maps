@@ -10,8 +10,9 @@
 #import "MGLMapView.h"
 #import "RCTView.h"
 #import "RCTEventDispatcher.h"
+#import "RCTBridgeModule.h"
 
-@interface RCTMapboxGL : RCTView <MGLMapViewDelegate>
+@interface RCTMapboxGL : RCTView <MGLMapViewDelegate, RCTBridgeModule>
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher;
 
@@ -25,6 +26,10 @@
 - (void)setShowsUserLocation:(BOOL)showsUserLocation;
 - (void)setStyleURL:(NSURL *)styleURL;
 - (void)setZoomLevel:(double)zoomLevel;
+- (void)setZoomLevelAnimated:(double)zoomLevel;
+- (void)setDirectionAnimated:(int)heading;
+- (void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)coordinates;
+- (void)setCenterCoordinateZoomLevelAnimated:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel;
 
 @end
 

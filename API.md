@@ -13,6 +13,25 @@
 | `debugActive`  | `bool` | Optional | `false` | Turns on debug mode. |
 | `style`  | flexbox `view` | Optional | NA | Styles the actual map view container |
 
+## Events
+
+| Event Name | Returns | Notes
+|---|---|---|
+| `onRegionChange` | `{latitude: 0, longitude: 0, zoom: 0}` | Triggered by panning or zooming the map.
+| `onOpenAnnotation` | `{title: null, subtitle: null, latitude: 0, longitude: 0}` | Fired when focusing a an annotation.
+| `onUpdateUserLocation` | `{latitude: 0, longitude: 0, headingAccuracy: 0, magneticHeading: 0, trueHeading: 0, isUpdating: false}` | Fired when the users location updates.
+
+## Methods for Modifying the Map State
+
+These methods require you to use `MapboxGLMap.Mixin` to access the methods. Each method also requires you to pass in a string as the first argument which is equal to the `ref` on the map view you wish to modify. See the [example](https://github.com/bsudekum/react-native-mapbox-gl/blob/master/example.md) on how this is implemented.
+
+| Method Name | Arguments | Notes
+|---|---|---|
+| `setDirectionAnimated` | `mapViewRef`, `heading` | Rotates the map to a new heading
+| `setZoomLevelAnimated` | `mapViewRef`, `zoomLevel` | Zooms the map to a new zoom level
+| `setCenterCoordinateAnimated` | `mapViewRef`, `latitude`, `longitude` | Moves the map to a new coordinate. Note, the zoom level stay at the current zoom level
+| `setCenterCoordinateZoomLevelAnimated` | `mapViewRef`, `latitude`, `longitude`, `zoomLevel` | Moves the map to a new coordinate and zoom level
+
 ## GL Styles
 
 You can change the `styleURL` to any valid GL stylesheet, here are a few:
@@ -25,11 +44,3 @@ You can change the `styleURL` to any valid GL stylesheet, here are a few:
 * `asset://styles/mapbox-streets-v7.json`
 * `asset://styles/outdoors-v7.json`
 * `asset://styles/satellite-v7.json`
-
-## Events
-
-| Event Name | Returns | Notes
-|---|---|---|
-| `onRegionChange` | `{latitude: 0, longitude: 0, zoom: 0}` | Triggered by panning or zooming the map.
-| `onOpenAnnotation` | `{title: null, subtitle: null, latitude: 0, longitude: 0}` | Fired when focusing a an annotation.
-| `onUpdateUserLocation` | `{latitude: 0, longitude: 0, headingAccuracy: 0, magneticHeading: 0, trueHeading: 0, isUpdating: false}` | Fired when the users location updates.

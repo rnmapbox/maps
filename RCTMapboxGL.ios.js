@@ -1,11 +1,28 @@
 'use strict';
 
-var React = require('React');
-var NativeMethodsMixin = require('NativeMethodsMixin');
+var React = require('react-native');
 var requireNativeComponent = require('requireNativeComponent');
+var { NativeModules, Text } = React;
+
+var MapMixins = {
+  setDirectionAnimated(mapRef, heading) {
+    NativeModules.MapboxGLManager.setDirectionAnimated(React.findNodeHandle(this.refs[mapRef]), heading);
+  },
+  setZoomLevelAnimated(mapRef, zoomLevel) {
+    NativeModules.MapboxGLManager.setZoomLevelAnimated(React.findNodeHandle(this.refs[mapRef]), zoomLevel);
+  },
+  setCenterCoordinateAnimated(mapRef, latitude, longitude) {
+    NativeModules.MapboxGLManager.setCenterCoordinateAnimated(React.findNodeHandle(this.refs[mapRef]), latitude, longitude);
+  },
+  setCenterCoordinateZoomLevelAnimated(mapRef, latitude, longitude, zoomLevel) {
+    NativeModules.MapboxGLManager.setCenterCoordinateZoomLevelAnimated(React.findNodeHandle(this.refs[mapRef]), latitude, longitude, zoomLevel);
+  }
+};
 
 var MapView = React.createClass({
-  mixins: [NativeMethodsMixin],
+  statics: {
+    Mixin: MapMixins
+  },
   _onChange(event: Event) {
     if (!this.props.onRegionChange) {
       return;
@@ -46,10 +63,10 @@ var MapView = React.createClass({
     onRegionChange: React.PropTypes.func,
     onOpenAnnotation: React.PropTypes.func,
     onUpdateUserLocation: React.PropTypes.func
-
   },
 
   render: function() {
+
     var props = this.props;
 
     if (!this.props.styleURL) {
