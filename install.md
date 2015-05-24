@@ -1,5 +1,8 @@
 # Installation Process
 
+Notes:
+* `react-native ^v0.4.3` is required
+
 1. `npm install react-native-mapbox-gl --save`
 2. In the XCode's `Project navigator`, right click on project's name ➜ `Add Files to <...>` ![](https://cldup.com/k0oJwOUKPN.png)
 3. Add `node_modules/react-native-mapbox-gl/RCTMapboxGL.xcodeproj` ![](https://cldup.com/bnJWwtaACM.png)
