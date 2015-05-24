@@ -188,13 +188,20 @@ RCT_EXPORT_MODULE();
 {
   [_map setDirection:heading animated:YES];
 }
+
 -(void)setZoomLevelAnimated:(double)zoomLevel
 {
   [_map setZoomLevel:zoomLevel animated:YES];
 }
--(void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel
+
+-(void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)coordinates
 {
-  [_map setCenterCoordinate:coordinates zoomLevel:0 animated:YES];
+  [_map setCenterCoordinate:coordinates animated:YES];
+}
+
+-(void)setCenterCoordinateZoomLevelAnimated:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel
+{
+  [_map setCenterCoordinate:coordinates zoomLevel:zoomLevel animated:YES];
 }
 
 - (void)mapView:(MGLMapView *)mapView didUpdateUserLocation:(MGLUserLocation *)userLocation;

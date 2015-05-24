@@ -46,27 +46,44 @@ RCT_EXPORT_METHOD(setZoomLevelAnimated:(NSNumber *)reactTag
 {
   [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
     RCTMapboxGL *mapView = viewRegistry[reactTag];
-    [mapView setZoomLevelAnimated:zoomLevel];
+    if([mapView isKindOfClass:[RCTMapboxGL class]]) {
+      [mapView setZoomLevelAnimated:zoomLevel];
+    }
   }];
 }
 RCT_EXPORT_METHOD(setDirectionAnimated:(NSNumber *)reactTag
-                  heading:(int)heading)
+                  heading:(float)heading)
 {
   [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
     RCTMapboxGL *mapView = viewRegistry[reactTag];
-    [mapView setDirectionAnimated:heading];
+    if([mapView isKindOfClass:[RCTMapboxGL class]]) {
+      [mapView setDirectionAnimated:heading];
+    }
   }];
 }
+
 RCT_EXPORT_METHOD(setCenterCoordinateAnimated:(NSNumber *)reactTag
-                  latitude:(int) latitude
-                  longitude:(int) longitude
+                  latitude:(float) latitude
+                  longitude:(float) longitude)
+{
+  [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+    RCTMapboxGL *mapView = viewRegistry[reactTag];
+    if([mapView isKindOfClass:[RCTMapboxGL class]]) {
+      [mapView setCenterCoordinateAnimated:CLLocationCoordinate2DMake(latitude, longitude)];
+      }
+  }];
+}
+
+RCT_EXPORT_METHOD(setCenterCoordinateZoomLevelAnimated:(NSNumber *)reactTag
+                  latitude:(float) latitude
+                  longitude:(float) longitude
                   zoomLevel:(double)zoomLevel)
 {
   [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
     RCTMapboxGL *mapView = viewRegistry[reactTag];
     if([mapView isKindOfClass:[RCTMapboxGL class]]) {
-      [mapView setCenterCoordinateAnimated:CLLocationCoordinate2DMake(latitude, longitude) zoomLevel:zoomLevel];
-      }
+      [mapView setCenterCoordinateZoomLevelAnimated:CLLocationCoordinate2DMake(latitude, longitude) zoomLevel:zoomLevel];
+    }
   }];
 }
 

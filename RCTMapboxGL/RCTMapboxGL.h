@@ -28,7 +28,8 @@
 - (void)setZoomLevel:(double)zoomLevel;
 - (void)setZoomLevelAnimated:(double)zoomLevel;
 - (void)setDirectionAnimated:(int)heading;
-- (void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel;
+- (void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)coordinates;
+- (void)setCenterCoordinateZoomLevelAnimated:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel;
 
 @end
 

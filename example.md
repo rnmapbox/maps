@@ -2,7 +2,8 @@
 
 ```jsx
 var map = React.createClass({
-  getInitialState: function() {
+  mixins: [MapboxGLMap.Mixin],
+  getInitialState() {
     return {
       mapLocation: {
         latitude: 0,
@@ -12,6 +13,8 @@ var map = React.createClass({
          latitude: 40.72345355209305,
          longitude: -73.99343490600586
        },
+       zoom: 12,
+       direction: 40,
        annotations: [{
          latitude: 40.72052634,
          longitude:  -73.97686958312988,
@@ -22,43 +25,50 @@ var map = React.createClass({
          longitude:  -74.00579452514648,
          title: 'This is marker 2',
          subtitle: 'Neat, this is a subtitle'
-       }],
-       zoom: 12,
-       direction: 0
+       }]
      }
   },
-  onChange: function(e) {
-    this.setState({ mapLocation: e });
+  onChange(e) {
+    this.setState({ currentZoom: e.zoom });
   },
-  onOpenAnnotation: function(annotation) {
-    console.log(annotation)
-  },
-  onUpdateUserLocation: function(location) {
+  onUpdateUserLocation(location) {
     console.log(location)
   },
+  onOpenAnnotation(annotation) {
+    console.log(annotation)
+  },
   render: function() {
+    StatusBarIOS.setHidden(true);
+    var mapRef = 'mapRef';
     return (
       <View style={styles.container}>
-        <MapboxGLMap
-          style={styles.map}
-          rotateEnabled={true}
-          showsUserLocation={true}
-          accessToken={'your-mapbox.com-access-token'}
-          styleURL={'asset://styles/mapbox-streets-v7.json'}
-          centerCoordinate={this.state.center}
-          userLocationVisible={true}
-          zoomLevel={this.state.zoom}
-          debugActive={false}
-          direction={this.state.direction}
-          annotations={this.state.annotations}
-          onRegionChange={this.onChange}
-          onOpenAnnotation={this.onOpenAnnotation}
-          onUpdateUserLocation={this.onUpdateUserLocation}/>
-        <View style={styles.text}>
-          <Text>Latitude: {this.state.mapLocation.latitude}</Text>
-          <Text>Longitude: {this.state.mapLocation.longitude}</Text>
-          <Text>zoom level: {this.state.mapLocation.zoom}</Text>
-        </View>
+       <Text style={styles.text} onPress={() => this.setDirectionAnimated(mapRef, 0)}>
+         Set direction to 0
+       </Text>
+       <Text style={styles.text} onPress={() => this.setZoomLevelAnimated(mapRef, 6)}>
+        Zoom out to zoom level 6
+      </Text>
+       <Text style={styles.text} onPress={() => this.setCenterCoordinateAnimated(mapRef, 48.8589, 2.3447)}>
+        Go to Paris at current zoom level {parseInt(this.state.currentZoom)}
+      </Text>
+      <Text style={styles.text} onPress={() => this.setCenterCoordinateZoomLevelAnimated(mapRef, 35.68829, 139.77492, 14)}>
+       Go to Tokyo at fixed zoom level 14
+     </Text>
+       <MapboxGLMap
+         style={styles.map}
+         direction={40}
+         rotateEnabled={true}
+         showsUserLocation={true}
+         ref={mapRef}
+         accessToken={'your-mapbox.com-access-token'}
+         styleURL={'asset://styles/mapbox-streets-v7.json'}
+         centerCoordinate={this.state.center}
+         userLocationVisible={true}
+         zoomLevel={this.state.zoom}
+         onRegionChange={this.onChange}
+         annotations={this.state.annotations}
+         onOpenAnnotation={this.onOpenAnnotation}
+         onUpdateUserLocation={this.onUpdateUserLocation}/>
       </View>
     );
   }
@@ -73,7 +83,7 @@ var styles = StyleSheet.create({
     flex:5,
   },
   text: {
-    padding: 20
+    padding: 2
   }
 });
 
