@@ -54,7 +54,6 @@
 		C5DBB3901AF3361700E611A9 /* MGLMapboxEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGLMapboxEvents.h; sourceTree = "<group>"; };
 		C5DBB3911AF3361700E611A9 /* MGLMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGLMapView.h; sourceTree = "<group>"; };
 		C5DBB3921AF3361700E611A9 /* MGLMapView+IBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MGLMapView+IBAdditions.h"; sourceTree = "<group>"; };
-		C5DBB3931AF3361700E611A9 /* MGLMetricsLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGLMetricsLocationManager.h; sourceTree = "<group>"; };
 		C5DBB3941AF3361700E611A9 /* MGLTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGLTypes.h; sourceTree = "<group>"; };
 		C5DBB3951AF3361700E611A9 /* MGLUserLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGLUserLocation.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -107,7 +106,6 @@
 				C5DBB3901AF3361700E611A9 /* MGLMapboxEvents.h */,
 				C5DBB3911AF3361700E611A9 /* MGLMapView.h */,
 				C5DBB3921AF3361700E611A9 /* MGLMapView+IBAdditions.h */,
-				C5DBB3931AF3361700E611A9 /* MGLMetricsLocationManager.h */,
 				C5DBB3941AF3361700E611A9 /* MGLTypes.h */,
 				C5DBB3951AF3361700E611A9 /* MGLUserLocation.h */,
 				C5DBB3431AF2EF2B00E611A9 /* RCTMapboxGL.h */,
