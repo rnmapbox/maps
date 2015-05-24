@@ -33,7 +33,7 @@
 
 @end
 
-@interface RCTMGLAnntation : NSObject <MGLAnnotation>
+@interface RCTMGLAnnotation : NSObject <MGLAnnotation>
 
 + (instancetype)annotationWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle;
 

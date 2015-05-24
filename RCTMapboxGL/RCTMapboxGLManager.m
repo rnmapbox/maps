@@ -106,7 +106,7 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
           subtitle = [RCTConvert NSString:[anObject valueForKey:@"subtitle"]];
         }
 
-        RCTMGLAnntation *pin = [[RCTMGLAnntation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle];
+        RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle];
 
         NSValue *key = [NSValue valueWithMKCoordinate:pin.coordinate];
         [pins setObject:pin forKey:key];

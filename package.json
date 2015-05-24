@@ -14,7 +14,7 @@
     "start": "node_modules/react-native/packager/packager.sh",
     "preinstall": "./scripts/download-mapbox-gl-native-ios.sh 0.3.0"
   },
-  "dependencies": {
+  "peerDependencies": {
     "react-native": "^0.4.3"
   },
   "main": "RCTMapboxGL.ios.js",

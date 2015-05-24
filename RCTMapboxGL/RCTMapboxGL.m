@@ -251,9 +251,9 @@ RCT_EXPORT_MODULE();
 
 @end
 
-/* RCTMGLAnntation */
+/* RCTMGLAnnotation */
 
-@interface RCTMGLAnntation ()
+@interface RCTMGLAnnotation ()
 
 @property (nonatomic) CLLocationCoordinate2D coordinate;
 @property (nonatomic) NSString *title;
@@ -261,7 +261,7 @@ RCT_EXPORT_MODULE();
 
 @end
 
-@implementation RCTMGLAnntation
+@implementation RCTMGLAnnotation
 
 + (instancetype)annotationWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle
 {

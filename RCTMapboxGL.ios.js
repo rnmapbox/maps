@@ -2,7 +2,7 @@
 
 var React = require('react-native');
 var requireNativeComponent = require('requireNativeComponent');
-var { NativeModules, Text } = React;
+var { NativeModules } = React;
 
 var MapMixins = {
   setDirectionAnimated(mapRef, heading) {
