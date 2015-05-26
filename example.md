@@ -32,10 +32,10 @@ var map = React.createClass({
     this.setState({ currentZoom: e.zoom });
   },
   onUpdateUserLocation(location) {
-    console.log(location)
+    console.log(location);
   },
   onOpenAnnotation(annotation) {
-    console.log(annotation)
+    console.log(annotation);
   },
   render: function() {
     StatusBarIOS.setHidden(true);
