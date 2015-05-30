@@ -16,6 +16,9 @@ var MapMixins = {
   },
   setCenterCoordinateZoomLevelAnimated(mapRef, latitude, longitude, zoomLevel) {
     NativeModules.MapboxGLManager.setCenterCoordinateZoomLevelAnimated(React.findNodeHandle(this.refs[mapRef]), latitude, longitude, zoomLevel);
+  },
+  addAnnotation(mapRef, annotations) {
+    NativeModules.MapboxGLManager.addAnnotation(React.findNodeHandle(this.refs[mapRef]), annotations);
   }
 };
 
