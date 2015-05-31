@@ -87,7 +87,7 @@ RCT_EXPORT_METHOD(setCenterCoordinateZoomLevelAnimated:(NSNumber *)reactTag
     }];
 }
 
-RCT_EXPORT_METHOD(addAnnotation:(NSNumber *)reactTag
+RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
                   annotations:(NSArray*) annotations)
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
