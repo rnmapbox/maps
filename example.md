@@ -1,6 +1,20 @@
 ## Example `MapboxGLMap`:
 
 ```jsx
+'use strict';
+
+var React = require('react-native');
+var MapboxGLMap = require('react-native-mapbox-gl');
+var mapRef = 'mapRef';
+
+var {
+  AppRegistry,
+  StyleSheet,
+  View,
+  Text,
+  StatusBarIOS,
+} = React;
+
 var map = React.createClass({
   mixins: [MapboxGLMap.Mixin],
   getInitialState() {
@@ -10,20 +24,18 @@ var map = React.createClass({
         longitude: 0
        },
        center: {
-         latitude: 40.72345355209305,
-         longitude: -73.99343490600586
+         latitude: 40.72052634,
+         longitude: -73.97686958312988
        },
-       zoom: 12,
+       zoom: 11,
        direction: 40,
        annotations: [{
          latitude: 40.72052634,
          longitude:  -73.97686958312988,
          title: 'This is marker 1',
-         subtitle: 'Hi mom!'
        },{
          latitude: 40.714541341726175,
          longitude:  -74.00579452514648,
-         title: 'This is marker 2',
          subtitle: 'Neat, this is a subtitle'
        }]
      }
@@ -32,14 +44,13 @@ var map = React.createClass({
     this.setState({ currentZoom: e.zoom });
   },
   onUpdateUserLocation(location) {
-    console.log(location);
+    console.log(location)
   },
   onOpenAnnotation(annotation) {
-    console.log(annotation);
+    console.log(annotation)
   },
   render: function() {
     StatusBarIOS.setHidden(true);
-    var mapRef = 'mapRef';
     return (
       <View style={styles.container}>
        <Text style={styles.text} onPress={() => this.setDirectionAnimated(mapRef, 0)}>
@@ -54,9 +65,16 @@ var map = React.createClass({
       <Text style={styles.text} onPress={() => this.setCenterCoordinateZoomLevelAnimated(mapRef, 35.68829, 139.77492, 14)}>
        Go to Tokyo at fixed zoom level 14
      </Text>
+     <Text style={styles.text} onPress={() => this.addAnnotations(mapRef, [{
+       latitude: 40.73312,
+       longitude:  -73.989,
+       title: 'This is a new marker',
+     }])}>
+      Add new marker
+    </Text>
        <MapboxGLMap
          style={styles.map}
-         direction={40}
+         direction={10}
          rotateEnabled={true}
          showsUserLocation={true}
          ref={mapRef}
