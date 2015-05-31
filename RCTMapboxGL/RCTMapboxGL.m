@@ -12,209 +12,207 @@
 #import "UIView+React.h"
 
 @implementation RCTMapboxGL {
-  /* Required to publish events */
-  RCTEventDispatcher *_eventDispatcher;
+    /* Required to publish events */
+    RCTEventDispatcher *_eventDispatcher;
 
-  /* Our map subview instance */
-  MGLMapView *_map;
+    /* Our map subview instance */
+    MGLMapView *_map;
 
-  /* Map properties */
-  NSString *_accessToken;
-  NSMutableDictionary *_annotations;
-  NSMutableDictionary *_newAnnotations;
-  CLLocationCoordinate2D _centerCoordinate;
-  BOOL _clipsToBounds;
-  BOOL _debugActive;
-  double _direction;
-  BOOL _finishedLoading;
-  BOOL _rotateEnabled;
-  BOOL _showsUserLocation;
-  NSURL *_styleURL;
-  double _zoomLevel;
+    /* Map properties */
+    NSString *_accessToken;
+    NSMutableDictionary *_annotations;
+    NSMutableDictionary *_newAnnotations;
+    CLLocationCoordinate2D _centerCoordinate;
+    BOOL _clipsToBounds;
+    BOOL _debugActive;
+    double _direction;
+    BOOL _finishedLoading;
+    BOOL _rotateEnabled;
+    BOOL _showsUserLocation;
+    NSURL *_styleURL;
+    double _zoomLevel;
 }
 
 RCT_EXPORT_MODULE();
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
 {
-  if (self = [super init]) {
-    _eventDispatcher = eventDispatcher;
-    _clipsToBounds = YES;
-    _finishedLoading = NO;
-    _annotations = [NSMutableDictionary dictionary];
-  }
+    if (self = [super init]) {
+      _eventDispatcher = eventDispatcher;
+      _clipsToBounds = YES;
+      _finishedLoading = NO;
+      _annotations = [NSMutableDictionary dictionary];
+    }
 
-  return self;
+    return self;
 }
 
 - (void)setAccessToken:(NSString *)accessToken
 {
-  _accessToken = accessToken;
-  [self updateMap];
+    _accessToken = accessToken;
+    [self updateMap];
 }
 
 - (void)updateMap
 {
-  if (_map) {
-    _map.centerCoordinate = _centerCoordinate;
-    _map.clipsToBounds = _clipsToBounds;
-    _map.debugActive = _debugActive;
-    _map.direction = _direction;
-    _map.rotateEnabled = _rotateEnabled;
-    _map.showsUserLocation = _showsUserLocation;
-    _map.styleURL = _styleURL;
-    _map.zoomLevel = _zoomLevel;
-
-    /* A bit of a hack because hooking into the fully rendered event didn't seem to work */
-    [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:1];
-  } else {
-    /* We need to have a height/width specified in order to render */
-    if (_accessToken && _styleURL && self.bounds.size.height > 0 && self.bounds.size.width > 0) {
-      [self createMap];
+    if (_map) {
+        _map.centerCoordinate = _centerCoordinate;
+        _map.clipsToBounds = _clipsToBounds;
+        _map.debugActive = _debugActive;
+        _map.direction = _direction;
+        _map.rotateEnabled = _rotateEnabled;
+        _map.showsUserLocation = _showsUserLocation;
+        _map.styleURL = _styleURL;
+        _map.zoomLevel = _zoomLevel;
+    } else {
+        /* A bit of a hack because hooking into the fully rendered event didn't seem to work */
+        [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:1];
+        /* We need to have a height/width specified in order to render */
+        if (_accessToken && _styleURL && self.bounds.size.height > 0 && self.bounds.size.width > 0) {
+            [self createMap];
+        }
     }
-  }
 }
 
 - (void)createMap
 {
-  [MGLAccountManager setMapboxMetricsEnabledSettingShownInApp:YES];
-  _map = [[MGLMapView alloc] initWithFrame:self.bounds accessToken:_accessToken styleURL:_styleURL];
-  _map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-  _map.delegate = self;
-  _map.userTrackingMode = MGLUserTrackingModeFollow;
-  [self updateMap];
-  [self addSubview:_map];
-  [self layoutSubviews];
+    [MGLAccountManager setMapboxMetricsEnabledSettingShownInApp: YES];
+    _map = [[MGLMapView alloc] initWithFrame:self.bounds accessToken:_accessToken styleURL:_styleURL];
+    _map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _map.delegate = self;
+    _map.userTrackingMode = MGLUserTrackingModeFollow;
+    [self updateMap];
+    [self addSubview:_map];
+    [self layoutSubviews];
 }
 
 
 - (void)layoutSubviews
 {
-  [self updateMap];
-  _map.frame = self.bounds;
+    [self updateMap];
+    _map.frame = self.bounds;
 }
 
 - (void)setAnnotations:(NSMutableDictionary *)annotations
 {
-  _newAnnotations = annotations;
-  [self updateMap];
+    _newAnnotations = annotations;
+    [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:0.1];
 }
 
 - (void)updateAnnotations
 {
-  if (_newAnnotations) {
-    NSArray *oldKeys = [_annotations allKeys];
-    NSArray *newKeys = [_newAnnotations allKeys];
+    if (_newAnnotations) {
+        NSArray *oldKeys = [_annotations allKeys];
+        NSArray *newKeys = [_newAnnotations allKeys];
 
-    // Take into account any already placed pins
-    if (oldKeys.count) {
-      NSMutableArray *removeableKeys = [NSMutableArray array];
-      for (NSValue *oldKey in oldKeys){
-        // Collect all keys that existed in "oldKeys" but not in "newKeys"
-        // anymore, so they can be removed
-        if (![newKeys containsObject:oldKey]){
-          [removeableKeys addObject:oldKey];
+        // Take into account any already placed pins
+        if (oldKeys.count) {
+            NSMutableArray *removeableKeys = [NSMutableArray array];
+            for (NSValue *oldKey in oldKeys){
+                // Collect all keys that existed in "oldKeys" but not in "newKeys"
+                // anymore, so they can be removed
+                if (![newKeys containsObject:oldKey]){
+                    [removeableKeys addObject:oldKey];
+                }
+            }
+
+            // Remove each of the "removableKeys" from the map
+            if (removeableKeys.count){
+                NSArray *removed = [_annotations objectsForKeys:removeableKeys notFoundMarker:[NSNull null]];
+                [_map removeAnnotations: removed];
+            }
+
+            // Remove any annotations that exist in both new and old from
+            // newAnnotations, so we don't create duplicates
+            [_newAnnotations removeObjectsForKeys:[_annotations allKeys]];
         }
-      }
 
-      // Remove each of the "removableKeys" from the map
-      if (removeableKeys.count){
-        NSArray *removed = [_annotations objectsForKeys:removeableKeys notFoundMarker:[NSNull null]];
-        [_map removeAnnotations: removed];
-      }
+        [_annotations addEntriesFromDictionary:_newAnnotations];
+        [_map addAnnotations:[_newAnnotations allValues]];
 
-      // Remove any annotations that exist in both new and old from
-      // newAnnotations, so we don't create duplicates
-      [_newAnnotations removeObjectsForKeys:[_annotations allKeys]];
-    }
-
-    [_annotations addEntriesFromDictionary:_newAnnotations];
-    [_map addAnnotations:[_newAnnotations allValues]];
-
-    /* [_map updateUserLocationAnnotationView]; */
-    _newAnnotations = nil;
+        _newAnnotations = nil;
   }
 }
 
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate
 {
-  _centerCoordinate = centerCoordinate;
-  [self updateMap];
+    _centerCoordinate = centerCoordinate;
+    [self updateMap];
 }
 
 - (void)setDebugActive:(BOOL)debugActive
 {
-  _debugActive = debugActive;
-  [self updateMap];
+    _debugActive = debugActive;
+    [self updateMap];
 }
 
 - (void)setRotateEnabled:(BOOL)rotateEnabled
 {
-  _rotateEnabled = rotateEnabled;
-  [self updateMap];
+    _rotateEnabled = rotateEnabled;
+    [self updateMap];
 }
 
 - (void)setShowsUserLocation:(BOOL)showsUserLocation
 {
-  _showsUserLocation = showsUserLocation;
-  [self updateMap];
+    _showsUserLocation = showsUserLocation;
+    [self updateMap];
 }
 
 - (void)setClipsToBounds:(BOOL)clipsToBounds
 {
-  _clipsToBounds = clipsToBounds;
-  [self updateMap];
+    _clipsToBounds = clipsToBounds;
+    [self updateMap];
 }
 
 - (void)setDirection:(double)direction
 {
-  _direction = direction;
-  [self updateMap];
+    _direction = direction;
+    [self updateMap];
 }
 
 - (void)setZoomLevel:(double)zoomLevel
 {
-  _zoomLevel = zoomLevel;
-  [self updateMap];
+    _zoomLevel = zoomLevel;
+    [self updateMap];
 }
 
 - (void)setStyleURL:(NSURL*)styleURL
 {
-  _styleURL = styleURL;
-  [self updateMap];
+    _styleURL = styleURL;
+    [self updateMap];
 }
 
 -(void)setDirectionAnimated:(int)heading
 {
-  [_map setDirection:heading animated:YES];
+    [_map setDirection:heading animated:YES];
 }
 
 -(void)setZoomLevelAnimated:(double)zoomLevel
 {
-  [_map setZoomLevel:zoomLevel animated:YES];
+    [_map setZoomLevel:zoomLevel animated:YES];
 }
 
 -(void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)coordinates
 {
-  [_map setCenterCoordinate:coordinates animated:YES];
+    [_map setCenterCoordinate:coordinates animated:YES];
 }
 
 -(void)setCenterCoordinateZoomLevelAnimated:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel
 {
-  [_map setCenterCoordinate:coordinates zoomLevel:zoomLevel animated:YES];
+    [_map setCenterCoordinate:coordinates zoomLevel:zoomLevel animated:YES];
 }
 
 - (void)mapView:(MGLMapView *)mapView didUpdateUserLocation:(MGLUserLocation *)userLocation;
 {
-  NSDictionary *event = @{ @"target": self.reactTag,
-                           @"userLocation": @{ @"latitude": @(userLocation.coordinate.latitude),
-                                               @"longitude": @(userLocation.coordinate.longitude),
-                                               @"headingAccuracy": @(userLocation.heading.headingAccuracy),
-                                               @"magneticHeading": @(userLocation.heading.magneticHeading),
-                                               @"trueHeading": @(userLocation.heading.trueHeading),
-                                               @"isUpdating": [NSNumber numberWithBool:userLocation.isUpdating]} };
+    NSDictionary *event = @{ @"target": self.reactTag,
+                             @"userLocation": @{ @"latitude": @(userLocation.coordinate.latitude),
+                                                 @"longitude": @(userLocation.coordinate.longitude),
+                                                 @"headingAccuracy": @(userLocation.heading.headingAccuracy),
+                                                 @"magneticHeading": @(userLocation.heading.magneticHeading),
+                                                 @"trueHeading": @(userLocation.heading.trueHeading),
+                                                 @"isUpdating": [NSNumber numberWithBool:userLocation.isUpdating]} };
   
-  [_eventDispatcher sendInputEventWithName:@"topLoadingFinish" body:event];
+    [_eventDispatcher sendInputEventWithName:@"topLoadingFinish" body:event];
 }
 
 
@@ -235,14 +233,14 @@ RCT_EXPORT_MODULE();
 - (void)mapView:(RCTMapboxGL *)mapView regionDidChangeAnimated:(BOOL)animated
 {
 
-  CLLocationCoordinate2D region = _map.centerCoordinate;
+    CLLocationCoordinate2D region = _map.centerCoordinate;
 
-  NSDictionary *event = @{ @"target": self.reactTag,
-                           @"region": @{ @"latitude": @(region.latitude),
-                                         @"longitude": @(region.longitude),
-                                         @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } };
+    NSDictionary *event = @{ @"target": self.reactTag,
+                             @"region": @{ @"latitude": @(region.latitude),
+                                           @"longitude": @(region.longitude),
+                                           @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } };
 
-  [_eventDispatcher sendInputEventWithName:@"topChange" body:event];
+    [_eventDispatcher sendInputEventWithName:@"topChange" body:event];
 }
 
 - (BOOL)mapView:(RCTMapboxGL *)mapView annotationCanShowCallout:(id <MGLAnnotation>)annotation {
@@ -271,9 +269,9 @@ RCT_EXPORT_MODULE();
 - (instancetype)initWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle
 {
     if (self = [super init]) {
-      _coordinate = coordinate;
-      _title = title;
-      _subtitle = subtitle;
+        _coordinate = coordinate;
+        _title = title;
+        _subtitle = subtitle;
     }
 
     return self;

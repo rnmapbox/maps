@@ -24,12 +24,12 @@ RCT_EXPORT_MODULE();
 
 - (UIView *)view
 {
-  return [[RCTMapboxGL alloc] initWithEventDispatcher:self.bridge.eventDispatcher];
+    return [[RCTMapboxGL alloc] initWithEventDispatcher:self.bridge.eventDispatcher];
 }
 
 - (dispatch_queue_t)methodQueue
 {
-  return _bridge.uiManager.methodQueue;
+    return _bridge.uiManager.methodQueue;
 }
 
 RCT_EXPORT_VIEW_PROPERTY(accessToken, NSString);
@@ -44,34 +44,34 @@ RCT_EXPORT_VIEW_PROPERTY(zoomLevel, double);
 RCT_EXPORT_METHOD(setZoomLevelAnimated:(NSNumber *)reactTag
                   zoomLevel:(double)zoomLevel)
 {
-  [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
-    RCTMapboxGL *mapView = viewRegistry[reactTag];
-    if([mapView isKindOfClass:[RCTMapboxGL class]]) {
-      [mapView setZoomLevelAnimated:zoomLevel];
-    }
-  }];
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+        RCTMapboxGL *mapView = viewRegistry[reactTag];
+        if([mapView isKindOfClass:[RCTMapboxGL class]]) {
+            [mapView setZoomLevelAnimated:zoomLevel];
+        }
+    }];
 }
 RCT_EXPORT_METHOD(setDirectionAnimated:(NSNumber *)reactTag
                   heading:(float)heading)
 {
-  [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
-    RCTMapboxGL *mapView = viewRegistry[reactTag];
-    if([mapView isKindOfClass:[RCTMapboxGL class]]) {
-      [mapView setDirectionAnimated:heading];
-    }
-  }];
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+        RCTMapboxGL *mapView = viewRegistry[reactTag];
+        if([mapView isKindOfClass:[RCTMapboxGL class]]) {
+            [mapView setDirectionAnimated:heading];
+        }
+    }];
 }
 
 RCT_EXPORT_METHOD(setCenterCoordinateAnimated:(NSNumber *)reactTag
                   latitude:(float) latitude
                   longitude:(float) longitude)
 {
-  [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
-    RCTMapboxGL *mapView = viewRegistry[reactTag];
-    if([mapView isKindOfClass:[RCTMapboxGL class]]) {
-      [mapView setCenterCoordinateAnimated:CLLocationCoordinate2DMake(latitude, longitude)];
-      }
-  }];
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+        RCTMapboxGL *mapView = viewRegistry[reactTag];
+        if([mapView isKindOfClass:[RCTMapboxGL class]]) {
+            [mapView setCenterCoordinateAnimated:CLLocationCoordinate2DMake(latitude, longitude)];
+        }
+    }];
 }
 
 RCT_EXPORT_METHOD(setCenterCoordinateZoomLevelAnimated:(NSNumber *)reactTag
@@ -79,42 +79,78 @@ RCT_EXPORT_METHOD(setCenterCoordinateZoomLevelAnimated:(NSNumber *)reactTag
                   longitude:(float) longitude
                   zoomLevel:(double)zoomLevel)
 {
-  [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
-    RCTMapboxGL *mapView = viewRegistry[reactTag];
-    if([mapView isKindOfClass:[RCTMapboxGL class]]) {
-      [mapView setCenterCoordinateZoomLevelAnimated:CLLocationCoordinate2DMake(latitude, longitude) zoomLevel:zoomLevel];
-    }
-  }];
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+        RCTMapboxGL *mapView = viewRegistry[reactTag];
+        if([mapView isKindOfClass:[RCTMapboxGL class]]) {
+            [mapView setCenterCoordinateZoomLevelAnimated:CLLocationCoordinate2DMake(latitude, longitude) zoomLevel:zoomLevel];
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
+                  annotations:(NSArray*) annotations)
+{
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+        RCTMapboxGL *mapView = viewRegistry[reactTag];
+        if([mapView isKindOfClass:[RCTMapboxGL class]]) {
+            if ([annotations isKindOfClass:[NSArray class]]) {
+                NSMutableDictionary *pins = [NSMutableDictionary dictionary];
+                id anObject;
+                NSEnumerator *enumerator = [annotations objectEnumerator];
+                
+                while (anObject = [enumerator nextObject]) {
+                    CLLocationCoordinate2D coordinate = [RCTConvert CLLocationCoordinate2D:anObject];
+                    if (CLLocationCoordinate2DIsValid(coordinate)){
+                        NSString *title = @"";
+                        if ([anObject objectForKey:@"title"]){
+                            title = [RCTConvert NSString:[anObject valueForKey:@"title"]];
+                        }
+                        
+                        NSString *subtitle = @"";
+                        if ([anObject objectForKey:@"subtitle"]){
+                            subtitle = [RCTConvert NSString:[anObject valueForKey:@"subtitle"]];
+                        }
+                        
+                        RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle];
+                        
+                        NSValue *key = [NSValue valueWithMKCoordinate:pin.coordinate];
+                        [pins setObject:pin forKey:key];
+                    }
+                }
+                mapView.annotations = pins;
+            }
+
+        }
+    }];
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
-  if ([json isKindOfClass:[NSArray class]]) {
-    NSMutableDictionary *pins = [NSMutableDictionary dictionary];
-    id anObject;
-    NSEnumerator *enumerator = [json objectEnumerator];
+    if ([json isKindOfClass:[NSArray class]]) {
+        NSMutableDictionary *pins = [NSMutableDictionary dictionary];
+        id anObject;
+        NSEnumerator *enumerator = [json objectEnumerator];
 
-    while (anObject = [enumerator nextObject]) {
-      CLLocationCoordinate2D coordinate = [RCTConvert CLLocationCoordinate2D:anObject];
-      if (CLLocationCoordinate2DIsValid(coordinate)){
-        NSString *title = @"";
-        if ([anObject objectForKey:@"title"]){
-          title = [RCTConvert NSString:[anObject valueForKey:@"title"]];
+        while (anObject = [enumerator nextObject]) {
+            CLLocationCoordinate2D coordinate = [RCTConvert CLLocationCoordinate2D:anObject];
+            if (CLLocationCoordinate2DIsValid(coordinate)){
+                NSString *title = @"";
+                if ([anObject objectForKey:@"title"]){
+                    title = [RCTConvert NSString:[anObject valueForKey:@"title"]];
+                }
+
+                NSString *subtitle = @"";
+                if ([anObject objectForKey:@"subtitle"]){
+                    subtitle = [RCTConvert NSString:[anObject valueForKey:@"subtitle"]];
+                }
+
+                RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle];
+
+                NSValue *key = [NSValue valueWithMKCoordinate:pin.coordinate];
+                [pins setObject:pin forKey:key];
+            }
         }
-
-        NSString *subtitle = @"";
-        if ([anObject objectForKey:@"subtitle"]){
-          subtitle = [RCTConvert NSString:[anObject valueForKey:@"subtitle"]];
-        }
-
-        RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle];
-
-        NSValue *key = [NSValue valueWithMKCoordinate:pin.coordinate];
-        [pins setObject:pin forKey:key];
-     }
-   }
-
-    view.annotations = pins;
-  }
+        view.annotations = pins;
+    }
 }
 
 @end
