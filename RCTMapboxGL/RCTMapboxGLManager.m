@@ -87,6 +87,17 @@ RCT_EXPORT_METHOD(setCenterCoordinateZoomLevelAnimated:(NSNumber *)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(selectAnnotationAnimated:(NSNumber *) reactTag
+                  annotationInArray:(NSUInteger)annotationInArray)
+{
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+        RCTMapboxGL *mapView = viewRegistry[reactTag];
+        if([mapView isKindOfClass:[RCTMapboxGL class]]) {
+            [mapView selectAnnotationAnimated:annotationInArray];
+        }
+    }];
+}
+
 RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
                   annotations:(NSArray*) annotations)
 {
@@ -94,7 +105,7 @@ RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if([mapView isKindOfClass:[RCTMapboxGL class]]) {
             if ([annotations isKindOfClass:[NSArray class]]) {
-                NSMutableDictionary *pins = [NSMutableDictionary dictionary];
+                NSMutableArray* pins = [[NSMutableArray alloc] init];
                 id anObject;
                 NSEnumerator *enumerator = [annotations objectEnumerator];
                 
@@ -112,9 +123,7 @@ RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
                         }
                         
                         RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle];
-                        
-                        NSValue *key = [NSValue valueWithMKCoordinate:pin.coordinate];
-                        [pins setObject:pin forKey:key];
+                        [pins addObject:pin];
                     }
                 }
                 mapView.annotations = pins;
@@ -126,7 +135,7 @@ RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
 
 RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
     if ([json isKindOfClass:[NSArray class]]) {
-        NSMutableDictionary *pins = [NSMutableDictionary dictionary];
+        NSMutableArray* pins = [[NSMutableArray alloc] init];
         id anObject;
         NSEnumerator *enumerator = [json objectEnumerator];
 
@@ -144,11 +153,10 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
                 }
 
                 RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle];
-
-                NSValue *key = [NSValue valueWithMKCoordinate:pin.coordinate];
-                [pins setObject:pin forKey:key];
+                [pins addObject:pin];
             }
         }
+
         view.annotations = pins;
     }
 }
