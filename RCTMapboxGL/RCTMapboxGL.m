@@ -103,11 +103,8 @@ RCT_EXPORT_MODULE();
     if (_newAnnotations) {
         // Take into account any already placed pins
         if (_annotations.count) {
-            NSMutableArray *removeableKeys = [NSMutableArray array];
-            for (RCTMGLAnnotation *oldKey in _annotations){
-                [removeableKeys addObject:oldKey];
-                [_map removeAnnotation: oldKey];
-            }
+            [_map removeAnnotations: _annotations];
+            _annotations = nil;
         }
 
         _annotations = _newAnnotations;
@@ -192,7 +189,7 @@ RCT_EXPORT_MODULE();
                                                  @"magneticHeading": @(userLocation.heading.magneticHeading),
                                                  @"trueHeading": @(userLocation.heading.trueHeading),
                                                  @"isUpdating": [NSNumber numberWithBool:userLocation.isUpdating]} };
-  
+    
     [_eventDispatcher sendInputEventWithName:@"topLoadingFinish" body:event];
 }
 
@@ -213,14 +210,14 @@ RCT_EXPORT_MODULE();
 
 - (void)mapView:(RCTMapboxGL *)mapView regionDidChangeAnimated:(BOOL)animated
 {
-
+    
     CLLocationCoordinate2D region = _map.centerCoordinate;
-
+    
     NSDictionary *event = @{ @"target": self.reactTag,
                              @"region": @{ @"latitude": @(region.latitude),
                                            @"longitude": @(region.longitude),
                                            @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } };
-
+    
     [_eventDispatcher sendInputEventWithName:@"topChange" body:event];
 }
 
@@ -230,12 +227,10 @@ RCT_EXPORT_MODULE();
 
 - (void)selectAnnotationAnimated:(NSUInteger)annotationInArray
 {
-    if (_annotations) {
-        if ([_annotations count] <= annotationInArray) return NSLog(@"%s", "Annotation not found in annotations array");
-        if ([_annotations count] != 0)
-        {
-            [_map selectAnnotation:_annotations[annotationInArray] animated:YES];
-        }
+    if ([_annotations count] <= annotationInArray) NSAssert(NO, @"Could not find annotation in array.");
+    if ([_annotations count] != 0)
+    {
+        [_map selectAnnotation:_annotations[annotationInArray] animated:YES];
     }
 }
 
@@ -265,7 +260,7 @@ RCT_EXPORT_MODULE();
         _title = title;
         _subtitle = subtitle;
     }
-
+    
     return self;
 }
 

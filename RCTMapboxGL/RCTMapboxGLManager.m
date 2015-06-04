@@ -105,7 +105,7 @@ RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if([mapView isKindOfClass:[RCTMapboxGL class]]) {
             if ([annotations isKindOfClass:[NSArray class]]) {
-                NSMutableArray* pins = [[NSMutableArray alloc] init];
+                NSMutableArray* pins = [NSMutableArray array];
                 id anObject;
                 NSEnumerator *enumerator = [annotations objectEnumerator];
                 
@@ -135,7 +135,7 @@ RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
 
 RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
     if ([json isKindOfClass:[NSArray class]]) {
-        NSMutableArray* pins = [[NSMutableArray alloc] init];
+        NSMutableArray* pins = [NSMutableArray array];
         id anObject;
         NSEnumerator *enumerator = [json objectEnumerator];
 
