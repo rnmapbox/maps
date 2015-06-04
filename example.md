@@ -72,6 +72,9 @@ var map = React.createClass({
      }])}>
       Add new marker
     </Text>
+    <Text style={styles.text} onPress={() => this.selectAnnotationAnimated(mapRef, 0)}>
+     Open first popup
+   </Text>
        <MapboxGLMap
          style={styles.map}
          direction={10}

@@ -14,14 +14,14 @@
 @implementation RCTMapboxGL {
     /* Required to publish events */
     RCTEventDispatcher *_eventDispatcher;
-
+    
     /* Our map subview instance */
     MGLMapView *_map;
-
+    
     /* Map properties */
     NSString *_accessToken;
-    NSMutableDictionary *_annotations;
-    NSMutableDictionary *_newAnnotations;
+    NSArray *_annotations;
+    NSArray *_newAnnotations;
     CLLocationCoordinate2D _centerCoordinate;
     BOOL _clipsToBounds;
     BOOL _debugActive;
@@ -38,12 +38,11 @@ RCT_EXPORT_MODULE();
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
 {
     if (self = [super init]) {
-      _eventDispatcher = eventDispatcher;
-      _clipsToBounds = YES;
-      _finishedLoading = NO;
-      _annotations = [NSMutableDictionary dictionary];
+        _eventDispatcher = eventDispatcher;
+        _clipsToBounds = YES;
+        _finishedLoading = NO;
     }
-
+    
     return self;
 }
 
@@ -64,9 +63,9 @@ RCT_EXPORT_MODULE();
         _map.showsUserLocation = _showsUserLocation;
         _map.styleURL = _styleURL;
         _map.zoomLevel = _zoomLevel;
-    } else {
         /* A bit of a hack because hooking into the fully rendered event didn't seem to work */
         [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:1];
+    } else {
         /* We need to have a height/width specified in order to render */
         if (_accessToken && _styleURL && self.bounds.size.height > 0 && self.bounds.size.width > 0) {
             [self createMap];
@@ -93,7 +92,7 @@ RCT_EXPORT_MODULE();
     _map.frame = self.bounds;
 }
 
-- (void)setAnnotations:(NSMutableDictionary *)annotations
+- (void)setAnnotations:(NSArray *)annotations
 {
     _newAnnotations = annotations;
     [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:0.1];
@@ -102,36 +101,15 @@ RCT_EXPORT_MODULE();
 - (void)updateAnnotations
 {
     if (_newAnnotations) {
-        NSArray *oldKeys = [_annotations allKeys];
-        NSArray *newKeys = [_newAnnotations allKeys];
-
         // Take into account any already placed pins
-        if (oldKeys.count) {
-            NSMutableArray *removeableKeys = [NSMutableArray array];
-            for (NSValue *oldKey in oldKeys){
-                // Collect all keys that existed in "oldKeys" but not in "newKeys"
-                // anymore, so they can be removed
-                if (![newKeys containsObject:oldKey]){
-                    [removeableKeys addObject:oldKey];
-                }
-            }
-
-            // Remove each of the "removableKeys" from the map
-            if (removeableKeys.count){
-                NSArray *removed = [_annotations objectsForKeys:removeableKeys notFoundMarker:[NSNull null]];
-                [_map removeAnnotations: removed];
-            }
-
-            // Remove any annotations that exist in both new and old from
-            // newAnnotations, so we don't create duplicates
-            [_newAnnotations removeObjectsForKeys:[_annotations allKeys]];
+        if (_annotations.count) {
+            [_map removeAnnotations: _annotations];
+            _annotations = nil;
         }
 
-        [_annotations addEntriesFromDictionary:_newAnnotations];
-        [_map addAnnotations:[_newAnnotations allValues]];
-
-        _newAnnotations = nil;
-  }
+        _annotations = _newAnnotations;
+        [_map addAnnotations:_newAnnotations];
+    }
 }
 
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate
@@ -211,7 +189,7 @@ RCT_EXPORT_MODULE();
                                                  @"magneticHeading": @(userLocation.heading.magneticHeading),
                                                  @"trueHeading": @(userLocation.heading.trueHeading),
                                                  @"isUpdating": [NSNumber numberWithBool:userLocation.isUpdating]} };
-  
+    
     [_eventDispatcher sendInputEventWithName:@"topLoadingFinish" body:event];
 }
 
@@ -221,9 +199,9 @@ RCT_EXPORT_MODULE();
     if (annotation.title && annotation.subtitle) {
         NSDictionary *event = @{ @"target": self.reactTag,
                                  @"annotation": @{ @"title": annotation.title,
-                                                @"subtitle": annotation.subtitle,
-                                                @"latitude": @(annotation.coordinate.latitude),
-                                                @"longitude": @(annotation.coordinate.longitude)} };
+                                                   @"subtitle": annotation.subtitle,
+                                                   @"latitude": @(annotation.coordinate.latitude),
+                                                   @"longitude": @(annotation.coordinate.longitude)} };
         
         [_eventDispatcher sendInputEventWithName:@"topBlur" body:event];
     }
@@ -232,19 +210,28 @@ RCT_EXPORT_MODULE();
 
 - (void)mapView:(RCTMapboxGL *)mapView regionDidChangeAnimated:(BOOL)animated
 {
-
+    
     CLLocationCoordinate2D region = _map.centerCoordinate;
-
+    
     NSDictionary *event = @{ @"target": self.reactTag,
                              @"region": @{ @"latitude": @(region.latitude),
                                            @"longitude": @(region.longitude),
                                            @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } };
-
+    
     [_eventDispatcher sendInputEventWithName:@"topChange" body:event];
 }
 
 - (BOOL)mapView:(RCTMapboxGL *)mapView annotationCanShowCallout:(id <MGLAnnotation>)annotation {
     return YES;
+}
+
+- (void)selectAnnotationAnimated:(NSUInteger)annotationInArray
+{
+    if ([_annotations count] <= annotationInArray) NSAssert(NO, @"Could not find annotation in array.");
+    if ([_annotations count] != 0)
+    {
+        [_map selectAnnotation:_annotations[annotationInArray] animated:YES];
+    }
 }
 
 @end
@@ -273,7 +260,7 @@ RCT_EXPORT_MODULE();
         _title = title;
         _subtitle = subtitle;
     }
-
+    
     return self;
 }
 
