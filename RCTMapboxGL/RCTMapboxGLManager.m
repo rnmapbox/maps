@@ -98,6 +98,17 @@ RCT_EXPORT_METHOD(selectAnnotationAnimated:(NSNumber *) reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(removeAnnotation:(NSNumber *) reactTag
+                  annotationInArray:(NSUInteger)annotationInArray)
+{
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+        RCTMapboxGL *mapView = viewRegistry[reactTag];
+        if([mapView isKindOfClass:[RCTMapboxGL class]]) {
+            [mapView removeAnnotation:annotationInArray];
+        }
+    }];
+}
+
 RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
                   annotations:(NSArray*) annotations)
 {

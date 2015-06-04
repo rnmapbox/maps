@@ -20,8 +20,8 @@
     
     /* Map properties */
     NSString *_accessToken;
-    NSArray *_annotations;
-    NSArray *_newAnnotations;
+    NSMutableArray *_annotations;
+    NSMutableArray *_newAnnotations;
     CLLocationCoordinate2D _centerCoordinate;
     BOOL _clipsToBounds;
     BOOL _debugActive;
@@ -231,6 +231,16 @@ RCT_EXPORT_MODULE();
     if ([_annotations count] != 0)
     {
         [_map selectAnnotation:_annotations[annotationInArray] animated:YES];
+    }
+}
+
+- (void)removeAnnotation:(NSUInteger)annotationInArray
+{
+    if ([_annotations count] <= annotationInArray) NSAssert(NO, @"Could not find annotation in array.");
+    if ([_annotations count] != 0)
+    {
+        [_map removeAnnotation:_annotations[annotationInArray]];
+        [_annotations removeObjectAtIndex:annotationInArray];
     }
 }
 
