@@ -22,6 +22,9 @@ var MapMixins = {
   },
   selectAnnotationAnimated(mapRef, annotationInArray) {
     NativeModules.MapboxGLManager.selectAnnotationAnimated(React.findNodeHandle(this.refs[mapRef]), annotationInArray);
+  },
+  removeAnnotation(mapRef, annotationInArray) {
+    NativeModules.MapboxGLManager.removeAnnotation(React.findNodeHandle(this.refs[mapRef]), annotationInArray);
   }
 };
 
