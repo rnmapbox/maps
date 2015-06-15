@@ -221,6 +221,19 @@ RCT_EXPORT_MODULE();
     [_eventDispatcher sendInputEventWithName:@"topChange" body:event];
 }
 
+- (void)mapView:(RCTMapboxGL *)mapView regionWillChangeAnimated:(BOOL)animated
+{
+    
+    CLLocationCoordinate2D region = _map.centerCoordinate;
+    
+    NSDictionary *event = @{ @"target": self.reactTag,
+                             @"region": @{ @"latitude": @(region.latitude),
+                                           @"longitude": @(region.longitude),
+                                           @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } };
+    
+    [_eventDispatcher sendInputEventWithName:@"topChange" body:event];
+}
+
 - (BOOL)mapView:(RCTMapboxGL *)mapView annotationCanShowCallout:(id <MGLAnnotation>)annotation {
     return YES;
 }
