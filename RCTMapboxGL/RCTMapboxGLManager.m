@@ -132,9 +132,15 @@ RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
                         if ([anObject objectForKey:@"subtitle"]){
                             subtitle = [RCTConvert NSString:[anObject valueForKey:@"subtitle"]];
                         }
+                    
                         
-                        RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle];
-                        [pins addObject:pin];
+                        UIView *rightCalloutAccessory;
+                            rightCalloutAccessory = [RCTConvert NSString:[anObject valueForKey:@"rightCalloutAccessory"]];
+                            
+                            RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocationRightCallout:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle rightCalloutAccessory:rightCalloutAccessory];
+                        
+                            [pins addObject:pin];
+                        
                     }
                 }
                 mapView.annotations = pins;
@@ -162,14 +168,60 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
                 if ([anObject objectForKey:@"subtitle"]){
                     subtitle = [RCTConvert NSString:[anObject valueForKey:@"subtitle"]];
                 }
+                
+                if ([anObject objectForKey:@"rightCalloutAccessory"]){
+                    NSObject *rightCalloutAccessory = [anObject valueForKey:@"rightCalloutAccessory"];
+                    NSString *url = [rightCalloutAccessory valueForKey:@"url"];
+                    //CGFloat *height = [[rightCalloutAccessory valueForKey:@"height"] integerValue];
+                    //CGFloat *width = [[rightCalloutAccessory valueForKey:@"width"] integerValue];
+                    CGFloat height = 50;
+                    CGFloat width = 50;
+                    NSLog(@"%@", rightCalloutAccessory);
+                
+                    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]];
+                    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+                        [imageView setImage:image];
+                    imageView.userInteractionEnabled = YES;
+                    imageView.frame = CGRectMake(0, 0, width, height);
+                    
+                    UIButton *imageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                    imageButton.frame = CGRectMake(0, 0, 100, 100);
+                    [imageButton setImage:image forState:UIControlStateNormal];
+                    [self.view addSubview:imageButton];
+                    [imageButton addTarget:self action:@selector(buttonPushed:) forControlEvents:UIControlEventTouchUpInside];
 
-                RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle];
-                [pins addObject:pin];
+                    
+                    
+                    RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocationRightCallout:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle rightCalloutAccessory:imageButton];
+                    [pins addObject:pin];
+                    
+                } else {
+                    RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle];
+                    [pins addObject:pin];
+                }
+            
             }
         }
 
         view.annotations = pins;
+        NSLog(@"%@", pins);
     }
+}
+
+//RCT_EXPORT_METHOD(rightCalloutAccessory:(NSNumber *)reactTag
+//                  rightCalloutAccessory:(UIView *)rightCalloutAccessory)
+//{
+//    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+//        RCTMapboxGL *mapView = viewRegistry[reactTag];
+//        if([mapView isKindOfClass:[RCTMapboxGL class]]) {
+//            [mapView setRightCalloutAccessory:rightCalloutAccessory];
+//        }
+//    }];
+//}
+
+- (void) buttonPushed:(id)sender
+{
+    NSLog(@"you clicked on button %@", sender);
 }
 
 @end

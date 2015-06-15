@@ -68,10 +68,16 @@ var MapView = React.createClass({
       longitude: React.PropTypes.number.isRequired,
       title: React.PropTypes.string,
       subtitle: React.PropTypes.string,
+      rightCalloutAccessory: React.PropTypes.object({
+        height: React.PropTypes.number,
+        width: React.PropTypes.number,
+        url: React.PropTypes.string,
+      })
     })),
     onRegionChange: React.PropTypes.func,
     onOpenAnnotation: React.PropTypes.func,
-    onUpdateUserLocation: React.PropTypes.func
+    onUpdateUserLocation: React.PropTypes.func,
+    rightCalloutAccessory: React.PropTypes.string
   },
 
   render: function() {

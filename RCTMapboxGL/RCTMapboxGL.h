@@ -17,7 +17,7 @@
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher;
 
 - (void)setAccessToken:(NSString *)accessToken;
-- (void)setAnnotations:(NSMutableDictionary *)annotations;
+- (void)setAnnotations:(NSArray *)annotations;
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate;
 - (void)setClipsToBounds:(BOOL)clipsToBounds;
 - (void)setDebugActive:(BOOL)debugActive;
@@ -33,14 +33,22 @@
 - (void)addAnnotation:(NSArray *)annotation;
 - (void)selectAnnotationAnimated:(NSUInteger)annotationInArray;
 - (void)removeAnnotation:(NSUInteger)annotationInArray;
+- (void)buttonPushed;
 
 @end
 
 @interface RCTMGLAnnotation : NSObject <MGLAnnotation>
 
+@property (nonatomic, strong) UIButton *rightCalloutAccessory;
+
 + (instancetype)annotationWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle;
 
++ (instancetype)annotationWithLocationRightCallout:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle rightCalloutAccessory:(UIButton *) rightCalloutAccessory;
+
 - (instancetype)initWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle;
+
+- (instancetype)initWithLocationRightCallout:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle rightCalloutAccessory:(UIButton *) rightCalloutAccessory;
+
 
 
 @end
