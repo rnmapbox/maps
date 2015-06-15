@@ -63,9 +63,9 @@ RCT_EXPORT_MODULE();
         _map.showsUserLocation = _showsUserLocation;
         _map.styleURL = _styleURL;
         _map.zoomLevel = _zoomLevel;
+    } else {
         /* A bit of a hack because hooking into the fully rendered event didn't seem to work */
         [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:1];
-    } else {
         /* We need to have a height/width specified in order to render */
         if (_accessToken && _styleURL && self.bounds.size.height > 0 && self.bounds.size.width > 0) {
             [self createMap];
@@ -92,7 +92,7 @@ RCT_EXPORT_MODULE();
     _map.frame = self.bounds;
 }
 
-- (void)setAnnotations:(NSArray *)annotations
+- (void)setAnnotations:(NSMutableArray *)annotations
 {
     _newAnnotations = annotations;
     [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:0.1];
@@ -106,7 +106,7 @@ RCT_EXPORT_MODULE();
             [_map removeAnnotations: _annotations];
             _annotations = nil;
         }
-
+        
         _annotations = _newAnnotations;
         [_map addAnnotations:_newAnnotations];
     }
@@ -209,6 +209,19 @@ RCT_EXPORT_MODULE();
 
 
 - (void)mapView:(RCTMapboxGL *)mapView regionDidChangeAnimated:(BOOL)animated
+{
+    
+    CLLocationCoordinate2D region = _map.centerCoordinate;
+    
+    NSDictionary *event = @{ @"target": self.reactTag,
+                             @"region": @{ @"latitude": @(region.latitude),
+                                           @"longitude": @(region.longitude),
+                                           @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } };
+    
+    [_eventDispatcher sendInputEventWithName:@"topChange" body:event];
+}
+
+- (void)mapView:(RCTMapboxGL *)mapView regionWillChangeAnimated:(BOOL)animated
 {
     
     CLLocationCoordinate2D region = _map.centerCoordinate;

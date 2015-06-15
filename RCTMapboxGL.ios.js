@@ -37,6 +37,7 @@ var MapView = React.createClass({
       return;
     }
     this.props.onRegionChange(event.nativeEvent.region);
+    this.props.onRegionWillChange(event.nativeEvent.region);
   },
   _onOpenAnnotation(event: Event) {
     if (!this.props.onOpenAnnotation) {
@@ -70,6 +71,7 @@ var MapView = React.createClass({
       subtitle: React.PropTypes.string,
     })),
     onRegionChange: React.PropTypes.func,
+    onRegionWillChange: React.PropTypes.func,
     onOpenAnnotation: React.PropTypes.func,
     onUpdateUserLocation: React.PropTypes.func
   },

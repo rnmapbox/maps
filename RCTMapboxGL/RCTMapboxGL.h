@@ -30,7 +30,6 @@
 - (void)setDirectionAnimated:(int)heading;
 - (void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)coordinates;
 - (void)setCenterCoordinateZoomLevelAnimated:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel;
-- (void)addAnnotation:(NSArray *)annotation;
 - (void)selectAnnotationAnimated:(NSUInteger)annotationInArray;
 - (void)removeAnnotation:(NSUInteger)annotationInArray;
 
