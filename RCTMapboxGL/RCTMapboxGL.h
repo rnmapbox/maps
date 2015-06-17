@@ -30,25 +30,23 @@
 - (void)setDirectionAnimated:(int)heading;
 - (void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)coordinates;
 - (void)setCenterCoordinateZoomLevelAnimated:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel;
-- (void)addAnnotation:(NSArray *)annotation;
 - (void)selectAnnotationAnimated:(NSUInteger)annotationInArray;
 - (void)removeAnnotation:(NSUInteger)annotationInArray;
-- (void)buttonPushed;
 
 @end
 
 @interface RCTMGLAnnotation : NSObject <MGLAnnotation>
 
 @property (nonatomic, strong) UIButton *rightCalloutAccessory;
+@property (nonatomic) NSString *id;
 
-+ (instancetype)annotationWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle;
++ (instancetype)annotationWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle id:(NSString *)id;
 
-+ (instancetype)annotationWithLocationRightCallout:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle rightCalloutAccessory:(UIButton *) rightCalloutAccessory;
++ (instancetype)annotationWithLocationRightCallout:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle id:(NSString *)id rightCalloutAccessory:(UIButton *)rightCalloutAccessory;
 
-- (instancetype)initWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle;
+- (instancetype)initWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle id:(NSString *)id;
 
-- (instancetype)initWithLocationRightCallout:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle rightCalloutAccessory:(UIButton *) rightCalloutAccessory;
-
+- (instancetype)initWithLocationRightCallout:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle id:(NSString *)id rightCalloutAccessory:(UIButton *)rightCalloutAccessory;
 
 
 @end

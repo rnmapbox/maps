@@ -115,6 +115,7 @@ RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if([mapView isKindOfClass:[RCTMapboxGL class]]) {
+            
             if ([annotations isKindOfClass:[NSArray class]]) {
                 NSMutableArray* pins = [NSMutableArray array];
                 id anObject;
@@ -132,14 +133,40 @@ RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
                         if ([anObject objectForKey:@"subtitle"]){
                             subtitle = [RCTConvert NSString:[anObject valueForKey:@"subtitle"]];
                         }
+                        
+                        NSString *id = @"";
+                        if ([anObject objectForKey:@"id"]) {
+                            id = [RCTConvert NSString:[anObject valueForKey:@"id"]];
+                        }
                     
-                        
-                        UIView *rightCalloutAccessory;
-                            rightCalloutAccessory = [RCTConvert NSString:[anObject valueForKey:@"rightCalloutAccessory"]];
+                        if ([anObject objectForKey:@"rightCalloutAccessory"]) {
+                            NSObject *rightCalloutAccessory = [anObject valueForKey:@"rightCalloutAccessory"];
+                            NSString *url = [rightCalloutAccessory valueForKey:@"url"];
+                            CGFloat height = (CGFloat)[[rightCalloutAccessory valueForKey:@"height"] floatValue];
+                            CGFloat width = (CGFloat)[[rightCalloutAccessory valueForKey:@"width"] floatValue];
                             
-                            RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocationRightCallout:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle rightCalloutAccessory:rightCalloutAccessory];
-                        
+                            UIImage *image = nil;
+                            
+                            if ([url hasPrefix:@"image!"]) {
+                                NSString* localImagePath = [url substringFromIndex:6];
+                                image = [UIImage imageNamed:localImagePath];
+                            }
+                            
+                            NSURL* checkURL = [NSURL URLWithString:url];
+                            if (checkURL && checkURL.scheme && checkURL.host) {
+                                image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]];
+                            }
+                            
+                            UIButton *imageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                            imageButton.frame = CGRectMake(0, 0, height, width);
+                            [imageButton setImage:image forState:UIControlStateNormal];
+                            
+                            RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocationRightCallout:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle id:id rightCalloutAccessory:imageButton];
                             [pins addObject:pin];
+                        } else {
+                            RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle id:id];
+                            [pins addObject:pin];
+                        }
                         
                     }
                 }
@@ -160,43 +187,46 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
             CLLocationCoordinate2D coordinate = [RCTConvert CLLocationCoordinate2D:anObject];
             if (CLLocationCoordinate2DIsValid(coordinate)){
                 NSString *title = @"";
-                if ([anObject objectForKey:@"title"]){
+                if ([anObject objectForKey:@"title"]) {
                     title = [RCTConvert NSString:[anObject valueForKey:@"title"]];
                 }
 
                 NSString *subtitle = @"";
-                if ([anObject objectForKey:@"subtitle"]){
+                if ([anObject objectForKey:@"subtitle"]) {
                     subtitle = [RCTConvert NSString:[anObject valueForKey:@"subtitle"]];
                 }
                 
-                if ([anObject objectForKey:@"rightCalloutAccessory"]){
+                NSString *id = @"";
+                if ([anObject objectForKey:@"id"]) {
+                    id = [RCTConvert NSString:[anObject valueForKey:@"id"]];
+                }
+                
+                if ([anObject objectForKey:@"rightCalloutAccessory"]) {
                     NSObject *rightCalloutAccessory = [anObject valueForKey:@"rightCalloutAccessory"];
                     NSString *url = [rightCalloutAccessory valueForKey:@"url"];
-                    //CGFloat *height = [[rightCalloutAccessory valueForKey:@"height"] integerValue];
-                    //CGFloat *width = [[rightCalloutAccessory valueForKey:@"width"] integerValue];
-                    CGFloat height = 50;
-                    CGFloat width = 50;
-                    NSLog(@"%@", rightCalloutAccessory);
-                
-                    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]];
-                    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-                        [imageView setImage:image];
-                    imageView.userInteractionEnabled = YES;
-                    imageView.frame = CGRectMake(0, 0, width, height);
+                    CGFloat height = (CGFloat)[[rightCalloutAccessory valueForKey:@"height"] floatValue];
+                    CGFloat width = (CGFloat)[[rightCalloutAccessory valueForKey:@"width"] floatValue];
+                    
+                    UIImage *image = nil;
+                    
+                    if ([url hasPrefix:@"image!"]) {
+                        NSString* localImagePath = [url substringFromIndex:6];
+                        image = [UIImage imageNamed:localImagePath];
+                    }
+
+                    NSURL* checkURL = [NSURL URLWithString:url];
+                    if (checkURL && checkURL.scheme && checkURL.host) {
+                        image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]];
+                    }
                     
                     UIButton *imageButton = [UIButton buttonWithType:UIButtonTypeCustom];
-                    imageButton.frame = CGRectMake(0, 0, 100, 100);
+                    imageButton.frame = CGRectMake(0, 0, height, width);
                     [imageButton setImage:image forState:UIControlStateNormal];
-                    [self.view addSubview:imageButton];
-                    [imageButton addTarget:self action:@selector(buttonPushed:) forControlEvents:UIControlEventTouchUpInside];
-
-                    
-                    
-                    RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocationRightCallout:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle rightCalloutAccessory:imageButton];
+        
+                    RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocationRightCallout:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle id:id rightCalloutAccessory:imageButton];
                     [pins addObject:pin];
-                    
                 } else {
-                    RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle];
+                    RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle id:id];
                     [pins addObject:pin];
                 }
             
@@ -204,24 +234,8 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
         }
 
         view.annotations = pins;
-        NSLog(@"%@", pins);
     }
 }
 
-//RCT_EXPORT_METHOD(rightCalloutAccessory:(NSNumber *)reactTag
-//                  rightCalloutAccessory:(UIView *)rightCalloutAccessory)
-//{
-//    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
-//        RCTMapboxGL *mapView = viewRegistry[reactTag];
-//        if([mapView isKindOfClass:[RCTMapboxGL class]]) {
-//            [mapView setRightCalloutAccessory:rightCalloutAccessory];
-//        }
-//    }];
-//}
-
-- (void) buttonPushed:(id)sender
-{
-    NSLog(@"you clicked on button %@", sender);
-}
 
 @end

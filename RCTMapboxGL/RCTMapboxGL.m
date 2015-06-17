@@ -10,6 +10,7 @@
 #import "RCTBridgeModule.h"
 #import "RCTEventDispatcher.h"
 #import "UIView+React.h"
+#import "RCTLog.h"
 
 @implementation RCTMapboxGL {
     /* Required to publish events */
@@ -76,8 +77,8 @@ RCT_EXPORT_MODULE();
 
 - (void)createMap
 {
-    [MGLAccountManager setAccessToken:_accessToken];
-    _map = [[MGLMapView alloc] initWithFrame:self.bounds styleURL:_styleURL];
+    [MGLAccountManager setMapboxMetricsEnabledSettingShownInApp: YES];
+    _map = [[MGLMapView alloc] initWithFrame:self.bounds accessToken:_accessToken styleURL:_styleURL];
     _map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _map.delegate = self;
     _map.userTrackingMode = MGLUserTrackingModeFollow;
@@ -164,7 +165,6 @@ RCT_EXPORT_MODULE();
 - (void)setRightCalloutAccessory:(UIButton *)rightCalloutAccessory
 {
     _rightCalloutAccessory = rightCalloutAccessory;
-    [_rightCalloutAccessory addTarget:self action:@selector(buttonPushed:) forControlEvents:UIControlEventTouchUpInside];
     [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:0.1];
 }
 
@@ -205,9 +205,13 @@ RCT_EXPORT_MODULE();
 -(void)mapView:(MGLMapView *)mapView didSelectAnnotation:(id<MGLAnnotation>)annotation
 {
     if (annotation.title && annotation.subtitle) {
+        
+        NSString *id = [(RCTMGLAnnotation *) annotation id];
+        
         NSDictionary *event = @{ @"target": self.reactTag,
                                  @"annotation": @{ @"title": annotation.title,
                                                    @"subtitle": annotation.subtitle,
+                                                   @"id": id,
                                                    @"latitude": @(annotation.coordinate.latitude),
                                                    @"longitude": @(annotation.coordinate.longitude)} };
         
@@ -234,20 +238,24 @@ RCT_EXPORT_MODULE();
     return YES;
 }
 
-- (void):(NSUInteger)annotationInArray
+- (void)selectAnnotationAnimated:(NSUInteger)annotationInArray
 {
-    if ([_annotations count] <= annotationInArray) NSAssert(NO, @"Could not find annotation in array.");
-    if ([_annotations count] != 0)
-    {
+    if (annotationInArray >= [_annotations count]) {
+        RCTLogError(@"Could not find annotation in array");
+        return;
+    }
+    if ([_annotations count] != 0) {
         [_map selectAnnotation:_annotations[annotationInArray] animated:YES];
     }
 }
 
 - (void)removeAnnotation:(NSUInteger)annotationInArray
 {
-    if ([_annotations count] <= annotationInArray) NSAssert(NO, @"Could not find annotation in array.");
-    if ([_annotations count] != 0)
-    {
+    if (annotationInArray >= [_annotations count]) {
+        RCTLogError(@"Could not find annotation in array");
+        return;
+    }
+    if ([_annotations count] != 0) {
         [_map removeAnnotation:_annotations[annotationInArray]];
         [_annotations removeObjectAtIndex:annotationInArray];
     }
@@ -255,26 +263,29 @@ RCT_EXPORT_MODULE();
 
 - (UIButton *)mapView:(MGLMapView *)mapView rightCalloutAccessoryViewForAnnotation:(id <MGLAnnotation>)annotation;
 {
-    UIView *view;
-    for (int i = 0; i < _annotations.count; i++)
-    {
-        if(annotation == _annotations[i])
-        {
-            view = _annotations[i];
-        }
+    if ([annotation isKindOfClass:[RCTMGLAnnotation class]]) {
+        UIButton *accessoryButton = [(RCTMGLAnnotation *) annotation rightCalloutAccessory];
+        return accessoryButton;
     }
-    UIButton *button = [view valueForKey:@"rightCalloutAccessory"];
-    NSLog(@"%@", button);
-    [button addTarget:self action:@selector(buttonPushed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    return [view valueForKey:@"rightCalloutAccessory"];
+    return nil;
 }
 
-- (void)buttonPushed:(id)sender
+- (void)mapView:(MGLMapView *)mapView annotation:(id<MGLAnnotation>)annotation calloutAccessoryControlTapped:(UIControl *)control
 {
-    NSAssert(NO, @"Could not find annotation in array.");
-}
+    if (annotation.title && annotation.subtitle) {
 
+        NSString *id = [(RCTMGLAnnotation *) annotation id];
+        
+        NSDictionary *event = @{ @"target": self.reactTag,
+                                 @"annotation": @{ @"title": annotation.title,
+                                                   @"subtitle": annotation.subtitle,
+                                                   @"id": id,
+                                                   @"latitude": @(annotation.coordinate.latitude),
+                                                   @"longitude": @(annotation.coordinate.longitude)} };
+        
+        [_eventDispatcher sendInputEventWithName:@"topBlur" body:event];
+    }
+}
 @end
 
 /* RCTMGLAnnotation */
@@ -284,43 +295,43 @@ RCT_EXPORT_MODULE();
 @property (nonatomic) CLLocationCoordinate2D coordinate;
 @property (nonatomic) NSString *title;
 @property (nonatomic) NSString *subtitle;
-//@property (nonatomic) UIImageView *rightCalloutAccessory;
 
 @end
 
 @implementation RCTMGLAnnotation
 
-+ (instancetype)annotationWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle
++ (instancetype)annotationWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle id:(NSString *)id
 {
-    return [[self alloc] initWithLocation:coordinate title:title subtitle:subtitle];
+    return [[self alloc] initWithLocation:coordinate title:title subtitle:subtitle id:id];
+}
+
++ (instancetype)annotationWithLocationRightCallout:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle id:(NSString *)id rightCalloutAccessory:(UIButton *)rightCalloutAccessory
+{
+    return [[self alloc] initWithLocationRightCallout:coordinate title:title subtitle:subtitle id:id rightCalloutAccessory:rightCalloutAccessory];
 }
 
 
-+ (instancetype)annotationWithLocationRightCallout:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle rightCalloutAccessory:(UIView *)rightCalloutAccessory
-{
-    return [[self alloc] initWithLocationRightCallout:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle rightCalloutAccessory:(UIButton *)rightCalloutAccessory];
-}
-
-
-- (instancetype)initWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle
+- (instancetype)initWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle id:(NSString *)id
 {
     if (self = [super init]) {
         _coordinate = coordinate;
         _title = title;
         _subtitle = subtitle;
+        _id = id;
     }
     
     return self;
 }
 
 
-- (instancetype)initWithLocationRightCallout:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle rightCalloutAccessory:(UIButton *)rightCalloutAccessory
+- (instancetype)initWithLocationRightCallout:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle id:(NSString *)id rightCalloutAccessory:(UIButton *)rightCalloutAccessory
 {
     if (self = [super init]) {
         _rightCalloutAccessory = rightCalloutAccessory;
         _coordinate = coordinate;
         _title = title;
         _subtitle = subtitle;
+        _id = id;
     }
     
     return self;

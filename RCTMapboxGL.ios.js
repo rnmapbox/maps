@@ -44,6 +44,12 @@ var MapView = React.createClass({
     }
     this.props.onOpenAnnotation(event.nativeEvent.annotation);
   },
+  _onRightAnnotationTapped(event: Event) {
+    if (!this.props.onRightAnnotationTapped) {
+      return;
+    }
+    this.props.onRightAnnotationTapped(event.nativeEvent.annotation);
+  },
   _onUpdateUserLocation(event: Event) {
     if (!this.props.onUpdateUserLocation) {
       return;
@@ -68,6 +74,7 @@ var MapView = React.createClass({
       longitude: React.PropTypes.number.isRequired,
       title: React.PropTypes.string,
       subtitle: React.PropTypes.string,
+      id: React.PropTypes.string,
       rightCalloutAccessory: React.PropTypes.object({
         height: React.PropTypes.number,
         width: React.PropTypes.number,
@@ -77,7 +84,7 @@ var MapView = React.createClass({
     onRegionChange: React.PropTypes.func,
     onOpenAnnotation: React.PropTypes.func,
     onUpdateUserLocation: React.PropTypes.func,
-    rightCalloutAccessory: React.PropTypes.string
+    onRightAnnotationTapped: React.PropTypes.func
   },
 
   render: function() {
@@ -92,6 +99,7 @@ var MapView = React.createClass({
       {...props}
       onChange={this._onChange}
       onBlur={this._onOpenAnnotation}
+      topTap={this._onRightAnnotationTapped}
       onLoadingFinish={this._onUpdateUserLocation} />;
   }
 });
