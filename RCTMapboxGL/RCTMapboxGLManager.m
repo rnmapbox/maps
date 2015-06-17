@@ -110,7 +110,7 @@ RCT_EXPORT_METHOD(removeAnnotation:(NSNumber *) reactTag
 }
 
 RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
-                  annotations:(NSArray*) annotations)
+                  annotations:(NSMutableArray *) annotations)
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
