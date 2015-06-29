@@ -12,6 +12,12 @@
 #import "UIView+React.h"
 #import "RCTLog.h"
 
+NSString *const RCTMGLOnRegionChange = @"mapMoved";
+NSString *const RCTMGLOnRegionWillChange = @"onRegionWillChange";
+NSString *const RCTMGLOnOpenAnnotation = @"onOpenAnnotation";
+NSString *const RCTMGLOnRightAnnotationTapped = @"onRightAnnotationTapped";
+NSString *const RCTMGLOnUpdateUserLocation = @"onUpdateUserLocation";
+
 @implementation RCTMapboxGL {
     /* Required to publish events */
     RCTEventDispatcher *_eventDispatcher;
@@ -77,8 +83,8 @@ RCT_EXPORT_MODULE();
 
 - (void)createMap
 {
-    [MGLAccountManager setMapboxMetricsEnabledSettingShownInApp: YES];
-    _map = [[MGLMapView alloc] initWithFrame:self.bounds accessToken:_accessToken styleURL:_styleURL];
+    _map = [[MGLMapView alloc] initWithFrame:self.bounds styleURL:_styleURL];
+    [MGLAccountManager setAccessToken:_accessToken];
     _map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _map.delegate = self;
     _map.userTrackingMode = MGLUserTrackingModeFollow;
@@ -191,14 +197,14 @@ RCT_EXPORT_MODULE();
 - (void)mapView:(MGLMapView *)mapView didUpdateUserLocation:(MGLUserLocation *)userLocation;
 {
     NSDictionary *event = @{ @"target": self.reactTag,
-                             @"userLocation": @{ @"latitude": @(userLocation.coordinate.latitude),
-                                                 @"longitude": @(userLocation.coordinate.longitude),
-                                                 @"headingAccuracy": @(userLocation.heading.headingAccuracy),
-                                                 @"magneticHeading": @(userLocation.heading.magneticHeading),
-                                                 @"trueHeading": @(userLocation.heading.trueHeading),
-                                                 @"isUpdating": [NSNumber numberWithBool:userLocation.isUpdating]} };
+                             @"src": @{ @"latitude": @(userLocation.coordinate.latitude),
+                                        @"longitude": @(userLocation.coordinate.longitude),
+                                        @"headingAccuracy": @(userLocation.heading.headingAccuracy),
+                                        @"magneticHeading": @(userLocation.heading.magneticHeading),
+                                        @"trueHeading": @(userLocation.heading.trueHeading),
+                                        @"isUpdating": [NSNumber numberWithBool:userLocation.isUpdating]} };
     
-    [_eventDispatcher sendInputEventWithName:@"topLoadingFinish" body:event];
+    [_eventDispatcher sendInputEventWithName:RCTMGLOnUpdateUserLocation body:event];
 }
 
 
@@ -209,13 +215,13 @@ RCT_EXPORT_MODULE();
         NSString *id = [(RCTMGLAnnotation *) annotation id];
         
         NSDictionary *event = @{ @"target": self.reactTag,
-                                 @"annotation": @{ @"title": annotation.title,
-                                                   @"subtitle": annotation.subtitle,
-                                                   @"id": id,
-                                                   @"latitude": @(annotation.coordinate.latitude),
-                                                   @"longitude": @(annotation.coordinate.longitude)} };
+                                 @"src": @{ @"title": annotation.title,
+                                            @"subtitle": annotation.subtitle,
+                                            @"id": id,
+                                            @"latitude": @(annotation.coordinate.latitude),
+                                            @"longitude": @(annotation.coordinate.longitude)} };
         
-        [_eventDispatcher sendInputEventWithName:@"topBlur" body:event];
+        [_eventDispatcher sendInputEventWithName:RCTMGLOnOpenAnnotation body:event];
     }
 }
 
@@ -226,11 +232,11 @@ RCT_EXPORT_MODULE();
     CLLocationCoordinate2D region = _map.centerCoordinate;
     
     NSDictionary *event = @{ @"target": self.reactTag,
-                             @"region": @{ @"latitude": @(region.latitude),
-                                           @"longitude": @(region.longitude),
-                                           @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } };
+                             @"src": @{ @"latitude": @(region.latitude),
+                                        @"longitude": @(region.longitude),
+                                        @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } };
     
-    [_eventDispatcher sendInputEventWithName:@"topChange" body:event];
+    [_eventDispatcher sendInputEventWithName:RCTMGLOnRegionChange body:event];
 }
 
 
@@ -240,11 +246,11 @@ RCT_EXPORT_MODULE();
     CLLocationCoordinate2D region = _map.centerCoordinate;
     
     NSDictionary *event = @{ @"target": self.reactTag,
-                             @"region": @{ @"latitude": @(region.latitude),
-                                           @"longitude": @(region.longitude),
-                                           @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } };
+                             @"src": @{ @"latitude": @(region.latitude),
+                                        @"longitude": @(region.longitude),
+                                        @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } };
     
-    [_eventDispatcher sendInputEventWithName:@"topChange" body:event];
+    [_eventDispatcher sendInputEventWithName:RCTMGLOnRegionWillChange body:event];
 }
 
 - (BOOL)mapView:(RCTMapboxGL *)mapView annotationCanShowCallout:(id <MGLAnnotation>)annotation {
@@ -286,17 +292,17 @@ RCT_EXPORT_MODULE();
 - (void)mapView:(MGLMapView *)mapView annotation:(id<MGLAnnotation>)annotation calloutAccessoryControlTapped:(UIControl *)control
 {
     if (annotation.title && annotation.subtitle) {
-
+        
         NSString *id = [(RCTMGLAnnotation *) annotation id];
         
         NSDictionary *event = @{ @"target": self.reactTag,
-                                 @"annotation": @{ @"title": annotation.title,
-                                                   @"subtitle": annotation.subtitle,
-                                                   @"id": id,
-                                                   @"latitude": @(annotation.coordinate.latitude),
-                                                   @"longitude": @(annotation.coordinate.longitude)} };
+                                 @"src": @{ @"title": annotation.title,
+                                            @"subtitle": annotation.subtitle,
+                                            @"id": id,
+                                            @"latitude": @(annotation.coordinate.latitude),
+                                            @"longitude": @(annotation.coordinate.longitude)} };
         
-        [_eventDispatcher sendInputEventWithName:@"topBlur" body:event];
+        [_eventDispatcher sendInputEventWithName:RCTMGLOnRightAnnotationTapped body:event];
     }
 }
 @end
