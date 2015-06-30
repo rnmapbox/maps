@@ -21,11 +21,12 @@
 | `onRegionWillChange` | `{latitude: 0, longitude: 0, zoom: 0}` | Fired when the map begins panning or zooming.
 | `onOpenAnnotation` | `{title: null, subtitle: null, latitude: 0, longitude: 0}` | Fired when focusing a an annotation.
 | `onUpdateUserLocation` | `{latitude: 0, longitude: 0, headingAccuracy: 0, magneticHeading: 0, trueHeading: 0, isUpdating: false}` | Fired when the users location updates.
+| `onRightAnnotationTapped` | `{title: null, subtitle: null, latitude: 0, longitude: 0}` | Fired when user taps `rightCalloutAccessory`
 
 
 ## Methods for Modifying the Map State
 
-These methods require you to use `MapboxGLMap.Mixin` to access the methods. Each method also requires you to pass in a string as the first argument which is equal to the `ref` on the map view you wish to modify. See the [example](https://github.com/bsudekum/react-native-mapbox-gl/blob/master/example.md) on how this is implemented.
+These methods require you to use `MapboxGLMap.Mixin` to access the methods. Each method also requires you to pass in a string as the first argument which is equal to the `ref` on the map view you wish to modify. See the [example](https://github.com/bsudekum/react-native-mapbox-gl/blob/master/example.jsx) on how this is implemented.
 
 | Method Name | Arguments | Notes
 |---|---|---|
@@ -41,14 +42,10 @@ These methods require you to use `MapboxGLMap.Mixin` to access the methods. Each
 
 You can change the `styleURL` to any valid GL stylesheet, here are a few:
 
-* `asset://styles/basic-v7.json`
-* `asset://styles/bright-v7.json`
 * `asset://styles/dark-v7.json`
-* `asset://styles/emerald-v7.json`
 * `asset://styles/light-v7.json`
+* `asset://styles/emerald-v7.json`
 * `asset://styles/mapbox-streets-v7.json`
-* `asset://styles/outdoors-v7.json`
-* `asset://styles/satellite-v7.json`
 
 ## Annotations
 ```json

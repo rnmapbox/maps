@@ -49,14 +49,14 @@ var map = React.createClass({
   onRegionWillChange(e) {
     console.log(e);
   },
-  onRightAnnotationTapped(e) {
-    console.log(e);
-  },
   onUpdateUserLocation(location) {
     console.log(location)
   },
   onOpenAnnotation(annotation) {
     console.log(annotation)
+  },
+  onRightAnnotationTapped(e) {
+    console.log(e);
   },
   render: function() {
     StatusBarIOS.setHidden(true);
@@ -122,4 +122,4 @@ var styles = StyleSheet.create({
   }
 });
 
-AppRegistry.registerComponent('testbedfour', () => map);
+AppRegistry.registerComponent('your-app-name', () => map);
