@@ -51,7 +51,6 @@
 		C5DBB38D1AF3361700E611A9 /* MapboxGL.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MapboxGL.bundle; sourceTree = "<group>"; };
 		C5DBB38E1AF3361700E611A9 /* MapboxGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapboxGL.h; sourceTree = "<group>"; };
 		C5DBB38F1AF3361700E611A9 /* MGLAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGLAnnotation.h; sourceTree = "<group>"; };
-		C5DBB3901AF3361700E611A9 /* MGLMapboxEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGLMapboxEvents.h; sourceTree = "<group>"; };
 		C5DBB3911AF3361700E611A9 /* MGLMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGLMapView.h; sourceTree = "<group>"; };
 		C5DBB3921AF3361700E611A9 /* MGLMapView+IBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MGLMapView+IBAdditions.h"; sourceTree = "<group>"; };
 		C5DBB3941AF3361700E611A9 /* MGLTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGLTypes.h; sourceTree = "<group>"; };
@@ -103,7 +102,6 @@
 				C5DBB38D1AF3361700E611A9 /* MapboxGL.bundle */,
 				C5DBB38E1AF3361700E611A9 /* MapboxGL.h */,
 				C5DBB38F1AF3361700E611A9 /* MGLAnnotation.h */,
-				C5DBB3901AF3361700E611A9 /* MGLMapboxEvents.h */,
 				C5DBB3911AF3361700E611A9 /* MGLMapView.h */,
 				C5DBB3921AF3361700E611A9 /* MGLMapView+IBAdditions.h */,
 				C5DBB3941AF3361700E611A9 /* MGLTypes.h */,
