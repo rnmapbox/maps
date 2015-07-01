@@ -7,10 +7,7 @@
   "plugins": [
     "react"
   ],
-  "globals": {
-    "analytics": true,
-    "Stripe": true
-  },
+  "globals": { },
   "rules": {
     "camelcase": [0],
     "comma-spacing": [0],

@@ -21,4 +21,4 @@ Notes:
   * `libz.dylib`
   * ![](https://cldup.com/KuSEgMQQSy.gif)
 1. Click on the `RCTMapboxGL` project. Under the `Build Settings` tab, search for `header_search_path`. Make sure `$(SRCROOT)/../../React` and `$(SRCROOT)/../react-native/React` are added and set to `recursive`. ![](https://cldup.com/81zUEHaKoX.png)
-1. You can now `require(react-native-mapbox-gl)` and build.
+1. You can now `require('react-native-mapbox-gl')` and build.
