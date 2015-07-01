@@ -1,8 +1,7 @@
 'use strict';
 
 var React = require('react-native');
-var requireNativeComponent = require('requireNativeComponent');
-var { NativeModules } = React;
+var { NativeModules, requireNativeComponent, } = React;
 
 var MapMixins = {
   setDirectionAnimated(mapRef, heading) {
