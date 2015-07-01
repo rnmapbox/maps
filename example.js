@@ -15,16 +15,11 @@ var map = React.createClass({
   mixins: [MapboxGLMap.Mixin],
   getInitialState() {
     return {
-      mapLocation: {
-        latitude: 0,
-        longitude: 0
-       },
        center: {
          latitude: 40.72052634,
          longitude: -73.97686958312988
        },
        zoom: 11,
-       direction: 40,
        annotations: [{
          latitude: 40.72052634,
          longitude:  -73.97686958312988,
@@ -43,17 +38,17 @@ var map = React.createClass({
        }]
      }
   },
-  onRegionChange(e) {
-    this.setState({ currentZoom: e.zoom });
+  onRegionChange(location) {
+    this.setState({ currentZoom: location.zoom });
   },
-  onRegionWillChange(e) {
-    console.log(e);
+  onRegionWillChange(location) {
+    console.log(location);
   },
   onUpdateUserLocation(location) {
-    console.log(location)
+    console.log(location);
   },
   onOpenAnnotation(annotation) {
-    console.log(annotation)
+    console.log(annotation);
   },
   onRightAnnotationTapped(e) {
     console.log(e);

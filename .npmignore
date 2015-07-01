@@ -40,3 +40,5 @@ MGLMapView.h
 MGLMetricsLocationManager.h
 MGLTypes.h
 MGLUserLocation.h
+MGLAccountManager.h
+MGLMapView_Private.h
