@@ -32,19 +32,19 @@ var MapView = React.createClass({
     Mixin: MapMixins
   },
   _onRegionChange(event: Event) {
-    this.props.onRegionChange && this.props.onRegionChange(event.nativeEvent.src);
+    if (this.props.onRegionChange) this.props.onRegionChange(event.nativeEvent.src);
   },
   _onRegionWillChange(event: Event) {
-    this.props.onRegionWillChange && this.props.onRegionWillChange(event.nativeEvent.src);
+    if (this.props.onRegionWillChange) this.props.onRegionWillChange(event.nativeEvent.src);
   },
   _onOpenAnnotation(event: Event) {
-    this.props.onOpenAnnotation && this.props.onOpenAnnotation(event.nativeEvent.src);
+    if (this.props.onOpenAnnotation) this.props.onOpenAnnotation(event.nativeEvent.src);
   },
   _onRightAnnotationTapped(event: Event) {
-    this.props.onRightAnnotationTapped && this.props.onRightAnnotationTapped(event.nativeEvent.src);
+    if (this.props.onRightAnnotationTapped) this.props.onRightAnnotationTapped(event.nativeEvent.src);
   },
   _onUpdateUserLocation(event: Event) {
-    this.props.onUpdateUserLocation && this.props.onUpdateUserLocation(event.nativeEvent.src);
+    if (this.props.onUpdateUserLocation) this.props.onUpdateUserLocation(event.nativeEvent.src);
   },
   propTypes: {
     showsUserLocation: React.PropTypes.bool,
@@ -72,7 +72,7 @@ var MapView = React.createClass({
       rightCalloutAccessory: React.PropTypes.object({
         height: React.PropTypes.number,
         width: React.PropTypes.number,
-        url: React.PropTypes.string,
+        url: React.PropTypes.string
       })
     })),
     onRegionChange: React.PropTypes.func,
@@ -87,13 +87,13 @@ var MapView = React.createClass({
 
     if (!this.props.styleURL) props.styleURL = 'asset://styles/mapbox-streets-v7.json';
 
-    return <MapboxGLView
+    return (<MapboxGLView
       {...props}
       onRegionChange={this._onRegionChange}
       onRegionWillChange={this._onRegionWillChange}
       onOpenAnnotation={this._onOpenAnnotation}
       onRightAnnotationTapped={this._onRightAnnotationTapped}
-      onUpdateUserLocation={this._onUpdateUserLocation} />;
+      onUpdateUserLocation={this._onUpdateUserLocation} />);
   }
 });
 

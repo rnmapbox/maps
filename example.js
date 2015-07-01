@@ -11,7 +11,7 @@ var {
   View,
 } = React;
 
-var map = React.createClass({
+var Example = React.createClass({
   mixins: [MapboxGLMap.Mixin],
   getInitialState() {
     return {
@@ -36,7 +36,7 @@ var map = React.createClass({
          title: 'Important!',
          subtitle: 'Neat, this is a subtitle'
        }]
-     }
+     };
   },
   onRegionChange(location) {
     this.setState({ currentZoom: location.zoom });
@@ -72,14 +72,14 @@ var map = React.createClass({
         <Text style={styles.text} onPress={() => this.addAnnotations(mapRef, [{
           latitude: 40.73312,
           longitude:  -73.989,
-          title: 'This is a new marker',
+          title: 'This is a new marker'
           }])}>
           Add new marker
         </Text>
         <Text style={styles.text} onPress={() => this.selectAnnotationAnimated(mapRef, 0)}>
           Open first popup
         </Text>
-        <Text style={styles.text} onPress={() => this.removeAnnotation(mapRef,  0)}>
+        <Text style={styles.text} onPress={() => this.removeAnnotation(mapRef, 0)}>
           Remove first annotation
         </Text>
         <MapboxGLMap
@@ -110,11 +110,11 @@ var styles = StyleSheet.create({
     flex: 1
   },
   map: {
-    flex:5,
+    flex: 5
   },
   text: {
     padding: 2
   }
 });
 
-AppRegistry.registerComponent('your-app-name', () => map);
+AppRegistry.registerComponent('your-app-name', () => Example);

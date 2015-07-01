@@ -26,6 +26,12 @@
   },
   "scripts": {
     "preinstall": "./scripts/download-mapbox-gl-native-ios.sh 0.4.0",
+    "test": "eslint example.js RCTMapboxGL.ios.js",
     "start": "node_modules/react-native/packager/packager.sh"
+  },
+  "devDependencies": {
+    "babel-eslint": "^3.1.20",
+    "eslint": "^0.24.0",
+    "eslint-plugin-react": "^2.6.4"
   }
 }
