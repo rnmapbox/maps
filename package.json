@@ -2,12 +2,13 @@
   "name": "react-native-mapbox-gl",
   "description": "A Mapbox GL react native module for creating custom maps",
   "version": "0.3.0",
+  "author": "Bobby Sudekum",
   "keywords": [
-    "react-component",
-    "react-native",
+    "gl",
     "ios",
     "mapbox",
-    "gl"
+    "react-component",
+    "react-native"
   ],
   "licenses": [
     {
@@ -15,18 +16,16 @@
       "url": "https://github.com/mapbox/react-native-mapbox-gl/blob/master/LICENSE.md"
     }
   ],
-  "private": false,
-  "scripts": {
-    "start": "node_modules/react-native/packager/packager.sh",
-    "preinstall": "./scripts/download-mapbox-gl-native-ios.sh 0.4.0"
-  },
+  "main": "RCTMapboxGL.ios.js",
   "peerDependencies": {
     "react-native": ">=0.4.3 <0.8.0"
   },
-  "main": "RCTMapboxGL.ios.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/mapbox/react-native-mapbox-gl"
   },
-  "author": "Bobby Sudekum"
+  "scripts": {
+    "preinstall": "./scripts/download-mapbox-gl-native-ios.sh 0.4.0",
+    "start": "node_modules/react-native/packager/packager.sh"
+  }
 }
