@@ -20,7 +20,7 @@
   "main": "RCTMapboxGL.ios.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bsudekum/react-native-mapbox-gl"
+    "url": "https://github.com/mapbox/react-native-mapbox-gl"
   },
   "author": "Bobby Sudekum"
 }
