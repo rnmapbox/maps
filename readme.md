@@ -12,4 +12,4 @@ npm install react-native-mapbox-gl --save
 
 # [API](https://github.com/bsudekum/react-native-mapbox-gl/blob/master/API.md)
 
-# [Example](https://github.com/bsudekum/react-native-mapbox-gl/blob/master/example.md)
+# [Example](https://github.com/bsudekum/react-native-mapbox-gl/blob/master/example.js)

@@ -31,30 +31,20 @@ var MapView = React.createClass({
   statics: {
     Mixin: MapMixins
   },
-  _onChange(event: Event) {
-    if (!this.props.onRegionChange) {
-      return;
-    }
-    this.props.onRegionChange(event.nativeEvent.region);
-    this.props.onRegionWillChange(event.nativeEvent.region);
+  _onRegionChange(event: Event) {
+    this.props.onRegionChange && this.props.onRegionChange(event.nativeEvent.src);
+  },
+  _onRegionWillChange(event: Event) {
+    this.props.onRegionWillChange && this.props.onRegionWillChange(event.nativeEvent.src);
   },
   _onOpenAnnotation(event: Event) {
-    if (!this.props.onOpenAnnotation) {
-      return;
-    }
-    this.props.onOpenAnnotation(event.nativeEvent.annotation);
+    this.props.onOpenAnnotation && this.props.onOpenAnnotation(event.nativeEvent.src);
   },
   _onRightAnnotationTapped(event: Event) {
-    if (!this.props.onRightAnnotationTapped) {
-      return;
-    }
-    this.props.onRightAnnotationTapped(event.nativeEvent.annotation);
+    this.props.onRightAnnotationTapped && this.props.onRightAnnotationTapped(event.nativeEvent.src);
   },
   _onUpdateUserLocation(event: Event) {
-    if (!this.props.onUpdateUserLocation) {
-      return;
-    }
-    this.props.onUpdateUserLocation(event.nativeEvent.userLocation);
+    this.props.onUpdateUserLocation && this.props.onUpdateUserLocation(event.nativeEvent.src);
   },
   propTypes: {
     showsUserLocation: React.PropTypes.bool,
@@ -70,11 +60,15 @@ var MapView = React.createClass({
       longitude: React.PropTypes.number.isRequired
     }),
     annotations: React.PropTypes.arrayOf(React.PropTypes.shape({
-      latitude: React.PropTypes.number.isRequired,
-      longitude: React.PropTypes.number.isRequired,
       title: React.PropTypes.string,
       subtitle: React.PropTypes.string,
       id: React.PropTypes.string,
+      coordinates: React.PropTypes.arrayOf(),
+      fillColor: React.PropTypes.sting,
+      strokeColor: React.PropTypes.sting,
+      strokeWidth: React.PropTypes.number,
+      alpha: React.PropTypes.number,
+      type: React.PropTypes.string,
       rightCalloutAccessory: React.PropTypes.object({
         height: React.PropTypes.number,
         width: React.PropTypes.number,
@@ -89,19 +83,17 @@ var MapView = React.createClass({
   },
 
   render: function() {
-
     var props = this.props;
 
-    if (!this.props.styleURL) {
-      props.styleURL = 'asset://styles/mapbox-streets-v7.json';
-    }
+    if (!this.props.styleURL) props.styleURL = 'asset://styles/mapbox-streets-v7.json';
 
     return <MapboxGLView
       {...props}
-      onChange={this._onChange}
-      onBlur={this._onOpenAnnotation}
-      topTap={this._onRightAnnotationTapped}
-      onLoadingFinish={this._onUpdateUserLocation} />;
+      onRegionChange={this._onRegionChange}
+      onRegionWillChange={this._onRegionWillChange}
+      onOpenAnnotation={this._onOpenAnnotation}
+      onRightAnnotationTapped={this._onRightAnnotationTapped}
+      onUpdateUserLocation={this._onUpdateUserLocation} />;
   }
 });
 
