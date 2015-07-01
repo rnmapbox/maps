@@ -15,7 +15,7 @@
     "preinstall": "./scripts/download-mapbox-gl-native-ios.sh 0.4.0"
   },
   "peerDependencies": {
-    "react-native": ">=0.4.3 <=0.7.9"
+    "react-native": ">=0.4.3 <0.8.0"
   },
   "main": "RCTMapboxGL.ios.js",
   "repository": {
