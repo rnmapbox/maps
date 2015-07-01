@@ -9,6 +9,12 @@
     "mapbox",
     "gl"
   ],
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "https://github.com/mapbox/react-native-mapbox-gl/blob/master/LICENSE.md"
+    }
+  ],
   "private": false,
   "scripts": {
     "start": "node_modules/react-native/packager/packager.sh",
