@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react-native');
-var { NativeModules, requireNativeComponent, } = React;
+var { NativeModules, requireNativeComponent } = React;
 
 var MapMixins = {
   setDirectionAnimated(mapRef, heading) {
@@ -81,14 +81,15 @@ var MapView = React.createClass({
     onUpdateUserLocation: React.PropTypes.func,
     onRightAnnotationTapped: React.PropTypes.func
   },
+  getDefaultProps(props) {
+    return {
+      styleURL: 'asset://styles/mapbox-streets-v7.json'
+    }
+  },
 
   render: function() {
-    var props = this.props;
-
-    if (!this.props.styleURL) props.styleURL = 'asset://styles/mapbox-streets-v7.json';
-
     return (<MapboxGLView
-      {...props}
+      {...this.props}
       onRegionChange={this._onRegionChange}
       onRegionWillChange={this._onRegionWillChange}
       onOpenAnnotation={this._onOpenAnnotation}

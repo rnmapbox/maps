@@ -56,8 +56,12 @@ RCT_EXPORT_MODULE();
 
 - (void)setAccessToken:(NSString *)accessToken
 {
-    _accessToken = accessToken;
-    [self updateMap];
+    if ([accessToken isEqualToString:@"your-mapbox.com-access-token"] || [accessToken length] == 0) {
+        RCTLogError(@"No access token specified. Go to mapbox.com to signup and get an access token.");
+    } else {
+        _accessToken = accessToken;
+        [self updateMap];
+    }
 }
 
 - (void)updateMap

@@ -17,7 +17,7 @@ fi
 
 mkdir RCTMapboxGL/MapboxGL.bundle
 
-curl -sS http://mapbox.s3.amazonaws.com/mapbox-gl-native/ios/builds/mapbox-gl-ios-$VERSION.zip > temp.zip
+curl -sS https://mapbox.s3.amazonaws.com/mapbox-gl-native/ios/builds/mapbox-gl-ios-$VERSION.zip > temp.zip
 unzip -o temp.zip -d temp
 mv temp/libMapboxGL.a ./RCTMapboxGL
 mv temp/Headers/* ./RCTMapboxGL
