@@ -81,10 +81,10 @@ var MapView = React.createClass({
     onUpdateUserLocation: React.PropTypes.func,
     onRightAnnotationTapped: React.PropTypes.func
   },
-  getDefaultProps(props) {
+  getDefaultProps() {
     return {
       styleURL: 'asset://styles/mapbox-streets-v7.json'
-    }
+    };
   },
 
   render: function() {
