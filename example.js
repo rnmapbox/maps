@@ -86,6 +86,7 @@ var Example = React.createClass({
           style={styles.map}
           direction={0}
           rotateEnabled={true}
+          scrollEnabled={true}
           showsUserLocation={true}
           ref={mapRef}
           accessToken={'your-mapbox.com-access-token'}

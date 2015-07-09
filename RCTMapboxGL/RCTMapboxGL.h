@@ -29,6 +29,7 @@ extern NSString *const RCTMGLOnUpdateUserLocation;
 - (void)setDebugActive:(BOOL)debugActive;
 - (void)setDirection:(double)direction;
 - (void)setRotateEnabled:(BOOL)rotateEnabled;
+- (void)setScrollEnabled:(BOOL)scrollEnabled;
 - (void)setShowsUserLocation:(BOOL)showsUserLocation;
 - (void)setStyleURL:(NSURL *)styleURL;
 - (void)setZoomLevel:(double)zoomLevel;
