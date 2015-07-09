@@ -21,10 +21,10 @@ NSString *const RCTMGLOnUpdateUserLocation = @"onUpdateUserLocation";
 @implementation RCTMapboxGL {
     /* Required to publish events */
     RCTEventDispatcher *_eventDispatcher;
-
+    
     /* Our map subview instance */
     MGLMapView *_map;
-
+    
     /* Map properties */
     NSString *_accessToken;
     NSMutableArray *_annotations;
@@ -36,6 +36,7 @@ NSString *const RCTMGLOnUpdateUserLocation = @"onUpdateUserLocation";
     BOOL _finishedLoading;
     BOOL _rotateEnabled;
     BOOL _scrollEnabled;
+    BOOL _zoomEnabled;
     BOOL _showsUserLocation;
     NSURL *_styleURL;
     double _zoomLevel;
@@ -51,7 +52,7 @@ RCT_EXPORT_MODULE();
         _clipsToBounds = YES;
         _finishedLoading = NO;
     }
-
+    
     return self;
 }
 
@@ -74,6 +75,7 @@ RCT_EXPORT_MODULE();
         _map.direction = _direction;
         _map.rotateEnabled = _rotateEnabled;
         _map.scrollEnabled = _scrollEnabled;
+        _map.zoomEnabled = _zoomEnabled;
         _map.showsUserLocation = _showsUserLocation;
         _map.styleURL = _styleURL;
         _map.zoomLevel = _zoomLevel;
@@ -120,7 +122,7 @@ RCT_EXPORT_MODULE();
             [_map removeAnnotations: _annotations];
             _annotations = nil;
         }
-
+        
         _annotations = _newAnnotations;
         [_map addAnnotations:_newAnnotations];
     }
@@ -147,6 +149,12 @@ RCT_EXPORT_MODULE();
 - (void)setScrollEnabled:(BOOL)scrollEnabled
 {
     _scrollEnabled = scrollEnabled;
+    [self updateMap];
+}
+
+- (void)setZoomEnabled:(BOOL)zoomEnabled
+{
+    _zoomEnabled = zoomEnabled;
     [self updateMap];
 }
 
@@ -215,7 +223,7 @@ RCT_EXPORT_MODULE();
                                         @"magneticHeading": @(userLocation.heading.magneticHeading),
                                         @"trueHeading": @(userLocation.heading.trueHeading),
                                         @"isUpdating": [NSNumber numberWithBool:userLocation.isUpdating]} };
-
+    
     [_eventDispatcher sendInputEventWithName:RCTMGLOnUpdateUserLocation body:event];
 }
 
@@ -223,16 +231,16 @@ RCT_EXPORT_MODULE();
 -(void)mapView:(MGLMapView *)mapView didSelectAnnotation:(id<MGLAnnotation>)annotation
 {
     if (annotation.title && annotation.subtitle) {
-
+        
         NSString *id = [(RCTMGLAnnotation *) annotation id];
-
+        
         NSDictionary *event = @{ @"target": self.reactTag,
                                  @"src": @{ @"title": annotation.title,
                                             @"subtitle": annotation.subtitle,
                                             @"id": id,
                                             @"latitude": @(annotation.coordinate.latitude),
                                             @"longitude": @(annotation.coordinate.longitude)} };
-
+        
         [_eventDispatcher sendInputEventWithName:RCTMGLOnOpenAnnotation body:event];
     }
 }
@@ -240,28 +248,28 @@ RCT_EXPORT_MODULE();
 
 - (void)mapView:(RCTMapboxGL *)mapView regionDidChangeAnimated:(BOOL)animated
 {
-
+    
     CLLocationCoordinate2D region = _map.centerCoordinate;
-
+    
     NSDictionary *event = @{ @"target": self.reactTag,
                              @"src": @{ @"latitude": @(region.latitude),
                                         @"longitude": @(region.longitude),
                                         @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } };
-
+    
     [_eventDispatcher sendInputEventWithName:RCTMGLOnRegionChange body:event];
 }
 
 
 - (void)mapView:(RCTMapboxGL *)mapView regionWillChangeAnimated:(BOOL)animated
 {
-
+    
     CLLocationCoordinate2D region = _map.centerCoordinate;
-
+    
     NSDictionary *event = @{ @"target": self.reactTag,
                              @"src": @{ @"latitude": @(region.latitude),
                                         @"longitude": @(region.longitude),
                                         @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } };
-
+    
     [_eventDispatcher sendInputEventWithName:RCTMGLOnRegionWillChange body:event];
 }
 
@@ -304,16 +312,16 @@ RCT_EXPORT_MODULE();
 - (void)mapView:(MGLMapView *)mapView annotation:(id<MGLAnnotation>)annotation calloutAccessoryControlTapped:(UIControl *)control
 {
     if (annotation.title && annotation.subtitle) {
-
+        
         NSString *id = [(RCTMGLAnnotation *) annotation id];
-
+        
         NSDictionary *event = @{ @"target": self.reactTag,
                                  @"src": @{ @"title": annotation.title,
                                             @"subtitle": annotation.subtitle,
                                             @"id": id,
                                             @"latitude": @(annotation.coordinate.latitude),
                                             @"longitude": @(annotation.coordinate.longitude)} };
-
+        
         [_eventDispatcher sendInputEventWithName:RCTMGLOnRightAnnotationTapped body:event];
     }
 }
@@ -350,7 +358,7 @@ RCT_EXPORT_MODULE();
         _subtitle = subtitle;
         _id = id;
     }
-
+    
     return self;
 }
 
@@ -364,7 +372,7 @@ RCT_EXPORT_MODULE();
         _subtitle = subtitle;
         _id = id;
     }
-
+    
     return self;
 }
 
