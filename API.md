@@ -6,6 +6,8 @@
 | `centerCoordinate` | `object` | Optional | `0,0`| Initial `latitude`/`longitude` the map will load at, defaults to `0,0`.
 | `zoomLevel` | `double` | Optional | `0` | Initial zoom level the map will load at. 0 is the entire world, 18 is rooftop level. Defaults to 0.
 | `rotateEnabled` | `bool`  |  Optional | `true`  | Whether the map can rotate |
+| `scrollEnabled` | `bool`  |  Optional | `true`  | Whether the map can be scrolled |
+| `zoomEnabled` | `bool`  |  Optional | `true`  | Whether the map zoom level can be changed |
 |`showsUserLocation` | `bool` | Optional | `false` | Whether the user's location is shown on the map. Note - the map will not zoom to their location.|
 | `styleURL` | `string` | Optional | Mapbox Streets |  A Mapbox GL style sheet. Defaults to `mapbox-streets`. More styles [can be viewed here](https://www.mapbox.com/mapbox-gl-styles).
 | `annotations` | `array` | Optional | NA |  An array of annotation objects. See [annotation detail](https://github.com/bsudekum/react-native-mapbox-gl/blob/master/API.md#annotations)

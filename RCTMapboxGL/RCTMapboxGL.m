@@ -35,6 +35,8 @@ NSString *const RCTMGLOnUpdateUserLocation = @"onUpdateUserLocation";
     double _direction;
     BOOL _finishedLoading;
     BOOL _rotateEnabled;
+    BOOL _scrollEnabled;
+    BOOL _zoomEnabled;
     BOOL _showsUserLocation;
     NSURL *_styleURL;
     double _zoomLevel;
@@ -72,6 +74,8 @@ RCT_EXPORT_MODULE();
         _map.debugActive = _debugActive;
         _map.direction = _direction;
         _map.rotateEnabled = _rotateEnabled;
+        _map.scrollEnabled = _scrollEnabled;
+        _map.zoomEnabled = _zoomEnabled;
         _map.showsUserLocation = _showsUserLocation;
         _map.styleURL = _styleURL;
         _map.zoomLevel = _zoomLevel;
@@ -139,6 +143,18 @@ RCT_EXPORT_MODULE();
 - (void)setRotateEnabled:(BOOL)rotateEnabled
 {
     _rotateEnabled = rotateEnabled;
+    [self updateMap];
+}
+
+- (void)setScrollEnabled:(BOOL)scrollEnabled
+{
+    _scrollEnabled = scrollEnabled;
+    [self updateMap];
+}
+
+- (void)setZoomEnabled:(BOOL)zoomEnabled
+{
+    _zoomEnabled = zoomEnabled;
     [self updateMap];
 }
 

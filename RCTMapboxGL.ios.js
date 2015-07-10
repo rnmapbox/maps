@@ -49,6 +49,8 @@ var MapView = React.createClass({
   propTypes: {
     showsUserLocation: React.PropTypes.bool,
     rotateEnabled: React.PropTypes.bool,
+    scrollEnabled: React.PropTypes.bool,
+    zoomEnabled: React.PropTypes.bool,
     accessToken: React.PropTypes.string.isRequired,
     zoomLevel: React.PropTypes.number,
     direction: React.PropTypes.number,
@@ -83,7 +85,9 @@ var MapView = React.createClass({
   },
   getDefaultProps() {
     return {
-      styleURL: 'asset://styles/mapbox-streets-v7.json'
+      styleURL: 'asset://styles/mapbox-streets-v7.json',
+      scrollEnabled: true,
+      zoomEnabled: true
     };
   },
 
