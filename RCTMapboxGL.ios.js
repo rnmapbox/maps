@@ -85,7 +85,9 @@ var MapView = React.createClass({
   },
   getDefaultProps() {
     return {
-      styleURL: 'asset://styles/mapbox-streets-v7.json'
+      styleURL: 'asset://styles/mapbox-streets-v7.json',
+      scrollEnabled: true,
+      zoomEnabled: true
     };
   },
 
