@@ -194,7 +194,7 @@ RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
                                 CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] floatValue];
                                 CGSize annotationImageSize =  CGSizeMake(height, width);
                                 pin.annotationImageURL = annotationImageURL;
-                                pin.annotationImageSize = &(annotationImageSize);
+                                pin.annotationImageSize = annotationImageSize;
                             }
                             
                         } else {
@@ -209,7 +209,7 @@ RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
                                 CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] floatValue];
                                 CGSize annotationImageSize =  CGSizeMake(height, width);
                                 pin.annotationImageURL = annotationImageURL;
-                                pin.annotationImageSize = &(annotationImageSize);
+                                pin.annotationImageSize = annotationImageSize;
                             }
                         }
                         
@@ -279,7 +279,7 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
                         CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] floatValue];
                         CGSize annotationImageSize =  CGSizeMake(height, width);
                         pin.annotationImageURL = annotationImageURL;
-                        pin.annotationImageSize = &(annotationImageSize);
+                        pin.annotationImageSize = annotationImageSize;
                     }
                     
                 } else {
@@ -293,7 +293,7 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
                         CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] floatValue];
                         CGSize annotationImageSize =  CGSizeMake(height, width);
                         pin.annotationImageURL = annotationImageURL;
-                        pin.annotationImageSize = &(annotationImageSize);
+                        pin.annotationImageSize = annotationImageSize;
                     }
 
                     [pins addObject:pin];

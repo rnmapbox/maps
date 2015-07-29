@@ -331,7 +331,7 @@ RCT_EXPORT_MODULE();
 {
     NSString *id = [(RCTMGLAnnotation *) annotation id];
     NSString *url = [(RCTMGLAnnotation *) annotation annotationImageURL];
-    CGSize imageSize = *[(RCTMGLAnnotation *) annotation annotationImageSize];
+    CGSize imageSize = [(RCTMGLAnnotation *) annotation annotationImageSize];
     MGLAnnotationImage *annotationImage = [mapView dequeueReusableAnnotationImageWithIdentifier:id];
     
     if (!annotationImage) {
