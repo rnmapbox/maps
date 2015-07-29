@@ -338,12 +338,11 @@ RCT_EXPORT_MODULE();
         
         UIImage *image = nil;
         if ([url hasPrefix:@"image!"]) {
-            NSString* localImagePath = [url substringFromIndex:6]; //image!myImage.jpg
+            NSString* localImagePath = [url substringFromIndex:6];
             image = [UIImage imageNamed:localImagePath];
         } else {
             image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]];
         }
-
         
         UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
         [image drawInRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];

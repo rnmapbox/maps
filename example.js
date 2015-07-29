@@ -26,20 +26,27 @@ var Example = React.createClass({
          title: 'This is marker 1',
          subtitle: 'It has a rightCalloutAccessory too',
          rightCalloutAccessory: {
-             url: 'http://png-3.findicons.com/files/icons/2799/flat_icons/256/gear.png',
+             url: 'https://cldup.com/9Lp0EaBw5s.png',
              height: 25,
              width: 25
-         }
+         },
+         annotationImage: {
+           url: 'https://cldup.com/CnRLZem9k9.png',
+           height: 25,
+           width: 25
+         },
+         id: 'marker1'
        },{
          latitude: 40.714541341726175,
          longitude:  -74.00579452514648,
          title: 'Important!',
-         subtitle: 'Neat, this is a custon annotation image',
+         subtitle: 'Neat, this is a custom annotation image',
          annotationImage: {
-           url: 'https://avatars3.githubusercontent.com/u/600935?v=3&s=84',
+           url: 'https://cldup.com/7NLZklp8zS.png',
            height: 25,
            width: 25
-         }
+         },
+         id: 'marker2'
        }]
      };
   },
