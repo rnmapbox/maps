@@ -335,7 +335,15 @@ RCT_EXPORT_MODULE();
     MGLAnnotationImage *annotationImage = [mapView dequeueReusableAnnotationImageWithIdentifier:id];
     
     if (!annotationImage) {
-        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]];
+        
+        UIImage *image = nil;
+        if ([url hasPrefix:@"image!"]) {
+            NSString* localImagePath = [url substringFromIndex:6]; //image!myImage.jpg
+            image = [UIImage imageNamed:localImagePath];
+        } else {
+            image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]];
+        }
+
         
         UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
         [image drawInRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];

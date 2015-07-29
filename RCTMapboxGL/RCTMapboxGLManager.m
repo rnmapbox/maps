@@ -192,6 +192,10 @@ RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
                                 NSString *annotationImageURL = [annotationImage valueForKey:@"url"];
                                 CGFloat height = (CGFloat)[[annotationImage valueForKey:@"height"] floatValue];
                                 CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] floatValue];
+                                if (!height || !width) {
+                                    RCTLogError(@"Height and width for image required");
+                                    return;
+                                }
                                 CGSize annotationImageSize =  CGSizeMake(height, width);
                                 pin.annotationImageURL = annotationImageURL;
                                 pin.annotationImageSize = annotationImageSize;
@@ -208,6 +212,10 @@ RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
                                 CGFloat height = (CGFloat)[[annotationImage valueForKey:@"height"] floatValue];
                                 CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] floatValue];
                                 CGSize annotationImageSize =  CGSizeMake(height, width);
+                                if (!height || !width) {
+                                    RCTLogError(@"Height and width for image required");
+                                    return;
+                                }
                                 pin.annotationImageURL = annotationImageURL;
                                 pin.annotationImageSize = annotationImageSize;
                             }
@@ -277,6 +285,10 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
                         NSString *annotationImageURL = [annotationImage valueForKey:@"url"];
                         CGFloat height = (CGFloat)[[annotationImage valueForKey:@"height"] floatValue];
                         CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] floatValue];
+                        if (!height || !width) {
+                            RCTLogError(@"Height and width for image required");
+                            return;
+                        }
                         CGSize annotationImageSize =  CGSizeMake(height, width);
                         pin.annotationImageURL = annotationImageURL;
                         pin.annotationImageSize = annotationImageSize;
@@ -291,6 +303,10 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
                         NSString *annotationImageURL = [annotationImage valueForKey:@"url"];
                         CGFloat height = (CGFloat)[[annotationImage valueForKey:@"height"] floatValue];
                         CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] floatValue];
+                        if (!height || !width) {
+                            RCTLogError(@"Height and width for image required");
+                            return;
+                        }
                         CGSize annotationImageSize =  CGSizeMake(height, width);
                         pin.annotationImageURL = annotationImageURL;
                         pin.annotationImageSize = annotationImageSize;
