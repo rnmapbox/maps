@@ -18,7 +18,7 @@
   ],
   "main": "RCTMapboxGL.ios.js",
   "peerDependencies": {
-    "react-native": ">=0.4.3 <0.8.0"
+    "react-native": ">=0.4.3 <0.9.0"
   },
   "repository": {
     "type": "git",
