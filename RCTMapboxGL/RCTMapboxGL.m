@@ -91,8 +91,8 @@ RCT_EXPORT_MODULE();
 
 - (void)createMap
 {
-    _map = [[MGLMapView alloc] initWithFrame:self.bounds styleURL:_styleURL];
     [MGLAccountManager setAccessToken:_accessToken];
+    _map = [[MGLMapView alloc] initWithFrame:self.bounds styleURL:_styleURL];
     _map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _map.delegate = self;
     _map.userTrackingMode = MGLUserTrackingModeFollow;
@@ -187,6 +187,7 @@ RCT_EXPORT_MODULE();
     _styleURL = styleURL;
     [self updateMap];
 }
+
 
 - (void)setRightCalloutAccessory:(UIButton *)rightCalloutAccessory
 {
@@ -325,6 +326,27 @@ RCT_EXPORT_MODULE();
         [_eventDispatcher sendInputEventWithName:RCTMGLOnRightAnnotationTapped body:event];
     }
 }
+
+- (MGLAnnotationImage *)mapView:(MGLMapView *)mapView imageForAnnotation:(id<MGLAnnotation>)annotation
+{
+    NSString *id = [(RCTMGLAnnotation *) annotation id];
+    NSString *url = [(RCTMGLAnnotation *) annotation annotationImageURL];
+    CGSize imageSize = *[(RCTMGLAnnotation *) annotation annotationImageSize];
+    MGLAnnotationImage *annotationImage = [mapView dequeueReusableAnnotationImageWithIdentifier:id];
+    
+    if (!annotationImage) {
+        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]];
+        
+        UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
+        [image drawInRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
+        UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        annotationImage = [MGLAnnotationImage annotationImageWithImage:newImage reuseIdentifier:id];
+    }
+    
+    return annotationImage;
+}
+
 @end
 
 /* RCTMGLAnnotation */

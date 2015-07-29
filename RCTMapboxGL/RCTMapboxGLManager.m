@@ -186,9 +186,31 @@ RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
                             
                             RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocationRightCallout:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle id:id rightCalloutAccessory:imageButton];
                             [pins addObject:pin];
+                            
+                            if ([anObject objectForKey:@"annotationImage"]) {
+                                NSObject *annotationImage = [anObject valueForKey:@"annotationImage"];
+                                NSString *annotationImageURL = [annotationImage valueForKey:@"url"];
+                                CGFloat height = (CGFloat)[[annotationImage valueForKey:@"height"] floatValue];
+                                CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] floatValue];
+                                CGSize annotationImageSize =  CGSizeMake(height, width);
+                                pin.annotationImageURL = annotationImageURL;
+                                pin.annotationImageSize = &(annotationImageSize);
+                            }
+                            
                         } else {
+
                             RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle id:id];
                             [pins addObject:pin];
+                            
+                            if ([anObject objectForKey:@"annotationImage"]) {
+                                NSObject *annotationImage = [anObject valueForKey:@"annotationImage"];
+                                NSString *annotationImageURL = [annotationImage valueForKey:@"url"];
+                                CGFloat height = (CGFloat)[[annotationImage valueForKey:@"height"] floatValue];
+                                CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] floatValue];
+                                CGSize annotationImageSize =  CGSizeMake(height, width);
+                                pin.annotationImageURL = annotationImageURL;
+                                pin.annotationImageSize = &(annotationImageSize);
+                            }
                         }
                         
                     }
@@ -248,8 +270,32 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
                     
                     RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocationRightCallout:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle id:id rightCalloutAccessory:imageButton];
                     [pins addObject:pin];
+
+
+                    if ([anObject objectForKey:@"annotationImage"]) {
+                        NSObject *annotationImage = [anObject valueForKey:@"annotationImage"];
+                        NSString *annotationImageURL = [annotationImage valueForKey:@"url"];
+                        CGFloat height = (CGFloat)[[annotationImage valueForKey:@"height"] floatValue];
+                        CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] floatValue];
+                        CGSize annotationImageSize =  CGSizeMake(height, width);
+                        pin.annotationImageURL = annotationImageURL;
+                        pin.annotationImageSize = &(annotationImageSize);
+                    }
+                    
                 } else {
+
                     RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle id:id];
+
+                    if ([anObject objectForKey:@"annotationImage"]) {
+                        NSObject *annotationImage = [anObject valueForKey:@"annotationImage"];
+                        NSString *annotationImageURL = [annotationImage valueForKey:@"url"];
+                        CGFloat height = (CGFloat)[[annotationImage valueForKey:@"height"] floatValue];
+                        CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] floatValue];
+                        CGSize annotationImageSize =  CGSizeMake(height, width);
+                        pin.annotationImageURL = annotationImageURL;
+                        pin.annotationImageSize = &(annotationImageSize);
+                    }
+
                     [pins addObject:pin];
                 }
                 

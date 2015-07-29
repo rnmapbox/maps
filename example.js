@@ -34,7 +34,12 @@ var Example = React.createClass({
          latitude: 40.714541341726175,
          longitude:  -74.00579452514648,
          title: 'Important!',
-         subtitle: 'Neat, this is a subtitle'
+         subtitle: 'Neat, this is a custon annotation image',
+         annotationImage: {
+           url: 'https://avatars3.githubusercontent.com/u/600935?v=3&s=84',
+           height: 25,
+           width: 25
+         }
        }]
      };
   },
