@@ -48,6 +48,7 @@ You can change the `styleURL` to any valid GL stylesheet, here are a few:
 * `asset://styles/light-v7.json`
 * `asset://styles/emerald-v7.json`
 * `asset://styles/mapbox-streets-v7.json`
+* `asset://styles/satellite-v7.json`
 
 ## Annotations
 ```json
@@ -60,8 +61,13 @@ You can change the `styleURL` to any valid GL stylesheet, here are a few:
   "rightCalloutAccessory": {
     "url": "Optional. Either remote image or specify via 'image!yourImage.png'",
     "height": "required if url specified",
-    "width": "required if url specified",
-  }
+    "width": "required if url specified"
+  },
+  "annotationImage": {
+    "url": "Optional. Either remote image or specify via 'image!yourImage.png'",
+    "height": "required if url specified",
+    "width": "required if url specified"
+  },
 }]
 ```
 **For adding local images via `image!yourImage.png` see [adding static resources to your app using Images.xcassets  docs](https://facebook.github.io/react-native/docs/image.html#adding-static-resources-to-your-app-using-images-xcassets)**.
@@ -89,6 +95,11 @@ annotations: [{
     "url": "http://png-3.findicons.com/files/icons/2799/flat_icons/256/gear.png",
     "height": 30,
     "width": 30
+  },
+  "annotationImage": {
+    "url": "https://avatars3.githubusercontent.com/u/600935?v=3&s=84",
+    "height": 25,
+    "width": 25
   }
 }, {
   "latitude": 40.82052634,

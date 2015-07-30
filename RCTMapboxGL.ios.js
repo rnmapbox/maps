@@ -75,6 +75,11 @@ var MapView = React.createClass({
         height: React.PropTypes.number,
         width: React.PropTypes.number,
         url: React.PropTypes.string
+      }),
+      annotationImage: React.PropTypes.object({
+        height: React.PropTypes.number,
+        width: React.PropTypes.number,
+        url: React.PropTypes.string
       })
     })),
     onRegionChange: React.PropTypes.func,

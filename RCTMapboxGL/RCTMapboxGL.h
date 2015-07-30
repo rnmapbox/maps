@@ -47,6 +47,8 @@ extern NSString *const RCTMGLOnUpdateUserLocation;
 
 @property (nonatomic, strong) UIButton *rightCalloutAccessory;
 @property (nonatomic) NSString *id;
+@property (nonatomic) NSString *annotationImageURL;
+@property (nonatomic) CGSize annotationImageSize;
 
 + (instancetype)annotationWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle id:(NSString *)id;
 
