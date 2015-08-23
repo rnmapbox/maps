@@ -32,25 +32,15 @@ RCT_EXPORT_MODULE();
     return _bridge.uiManager.methodQueue;
 }
 
-- (NSDictionary *)customDirectEventTypes
+- (NSArray *)customDirectEventTypes
 {
-    return @{
-             RCTMGLOnRegionChange: @{
-                     @"registrationName": @"onRegionChange"
-                     },
-             RCTMGLOnRegionWillChange: @{
-                     @"registrationName": @"onRegionWillChange"
-                     },
-             RCTMGLOnOpenAnnotation: @{
-                     @"registrationName": @"onOpenAnnotation"
-                     },
-             RCTMGLOnRightAnnotationTapped: @{
-                     @"registrationName": @"onRightAnnotationTapped"
-                     },
-             RCTMGLOnUpdateUserLocation: @{
-                     @"registrationName": @"onUpdateUserLocation"
-                     }
-             };
+    return @[
+      @"onRegionChange",
+      @"onRegionWillChange",
+      @"onOpenAnnotation",
+      @"onRightAnnotationTapped",
+      @"onUpdateUserLocation"
+    ];
 }
 
 RCT_EXPORT_VIEW_PROPERTY(accessToken, NSString);
@@ -64,7 +54,7 @@ RCT_EXPORT_VIEW_PROPERTY(zoomEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(styleURL, NSURL);
 RCT_EXPORT_VIEW_PROPERTY(zoomLevel, double);
-RCT_EXPORT_METHOD(setZoomLevelAnimated:(NSNumber *)reactTag
+RCT_EXPORT_METHOD(setZoomLevelAnimated:(nonnull NSNumber *)reactTag
                   zoomLevel:(double)zoomLevel)
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
@@ -74,7 +64,7 @@ RCT_EXPORT_METHOD(setZoomLevelAnimated:(NSNumber *)reactTag
         }
     }];
 }
-RCT_EXPORT_METHOD(setDirectionAnimated:(NSNumber *)reactTag
+RCT_EXPORT_METHOD(setDirectionAnimated:(nonnull NSNumber *)reactTag
                   heading:(float)heading)
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
@@ -85,7 +75,7 @@ RCT_EXPORT_METHOD(setDirectionAnimated:(NSNumber *)reactTag
     }];
 }
 
-RCT_EXPORT_METHOD(setCenterCoordinateAnimated:(NSNumber *)reactTag
+RCT_EXPORT_METHOD(setCenterCoordinateAnimated:(nonnull NSNumber *)reactTag
                   latitude:(float) latitude
                   longitude:(float) longitude)
 {
@@ -97,7 +87,7 @@ RCT_EXPORT_METHOD(setCenterCoordinateAnimated:(NSNumber *)reactTag
     }];
 }
 
-RCT_EXPORT_METHOD(setCenterCoordinateZoomLevelAnimated:(NSNumber *)reactTag
+RCT_EXPORT_METHOD(setCenterCoordinateZoomLevelAnimated:(nonnull NSNumber *)reactTag
                   latitude:(float) latitude
                   longitude:(float) longitude
                   zoomLevel:(double)zoomLevel)
@@ -110,7 +100,7 @@ RCT_EXPORT_METHOD(setCenterCoordinateZoomLevelAnimated:(NSNumber *)reactTag
     }];
 }
 
-RCT_EXPORT_METHOD(selectAnnotationAnimated:(NSNumber *) reactTag
+RCT_EXPORT_METHOD(selectAnnotationAnimated:(nonnull NSNumber *) reactTag
                   annotationInArray:(NSUInteger)annotationInArray)
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
@@ -121,7 +111,7 @@ RCT_EXPORT_METHOD(selectAnnotationAnimated:(NSNumber *) reactTag
     }];
 }
 
-RCT_EXPORT_METHOD(removeAnnotation:(NSNumber *) reactTag
+RCT_EXPORT_METHOD(removeAnnotation:(nonnull NSNumber *) reactTag
                   annotationInArray:(NSUInteger)annotationInArray)
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
@@ -132,18 +122,18 @@ RCT_EXPORT_METHOD(removeAnnotation:(NSNumber *) reactTag
     }];
 }
 
-RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
+RCT_EXPORT_METHOD(addAnnotations:(nonnull NSNumber *)reactTag
                   annotations:(NSArray *) annotations)
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if([mapView isKindOfClass:[RCTMapboxGL class]]) {
-            
+
             if ([annotations isKindOfClass:[NSArray class]]) {
                 NSMutableArray* pins = [NSMutableArray array];
                 id anObject;
                 NSEnumerator *enumerator = [annotations objectEnumerator];
-                
+
                 while (anObject = [enumerator nextObject]) {
                     CLLocationCoordinate2D coordinate = [RCTConvert CLLocationCoordinate2D:anObject];
                     if (CLLocationCoordinate2DIsValid(coordinate)){
@@ -151,42 +141,42 @@ RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
                         if ([anObject objectForKey:@"title"]){
                             title = [RCTConvert NSString:[anObject valueForKey:@"title"]];
                         }
-                        
+
                         NSString *subtitle = @"";
                         if ([anObject objectForKey:@"subtitle"]){
                             subtitle = [RCTConvert NSString:[anObject valueForKey:@"subtitle"]];
                         }
-                        
+
                         NSString *id = @"";
                         if ([anObject objectForKey:@"id"]) {
                             id = [RCTConvert NSString:[anObject valueForKey:@"id"]];
                         }
-                        
+
                         if ([anObject objectForKey:@"rightCalloutAccessory"]) {
                             NSObject *rightCalloutAccessory = [anObject valueForKey:@"rightCalloutAccessory"];
                             NSString *url = [rightCalloutAccessory valueForKey:@"url"];
                             CGFloat height = (CGFloat)[[rightCalloutAccessory valueForKey:@"height"] floatValue];
                             CGFloat width = (CGFloat)[[rightCalloutAccessory valueForKey:@"width"] floatValue];
-                            
+
                             UIImage *image = nil;
-                            
+
                             if ([url hasPrefix:@"image!"]) {
                                 NSString* localImagePath = [url substringFromIndex:6];
                                 image = [UIImage imageNamed:localImagePath];
                             }
-                            
+
                             NSURL* checkURL = [NSURL URLWithString:url];
                             if (checkURL && checkURL.scheme && checkURL.host) {
                                 image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]];
                             }
-                            
+
                             UIButton *imageButton = [UIButton buttonWithType:UIButtonTypeCustom];
                             imageButton.frame = CGRectMake(0, 0, height, width);
                             [imageButton setImage:image forState:UIControlStateNormal];
-                            
+
                             RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocationRightCallout:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle id:id rightCalloutAccessory:imageButton];
                             [pins addObject:pin];
-                            
+
                             if ([anObject objectForKey:@"annotationImage"]) {
                                 NSObject *annotationImage = [anObject valueForKey:@"annotationImage"];
                                 NSString *annotationImageURL = [annotationImage valueForKey:@"url"];
@@ -200,12 +190,12 @@ RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
                                 pin.annotationImageURL = annotationImageURL;
                                 pin.annotationImageSize = annotationImageSize;
                             }
-                            
+
                         } else {
 
                             RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle id:id];
                             [pins addObject:pin];
-                            
+
                             if ([anObject objectForKey:@"annotationImage"]) {
                                 NSObject *annotationImage = [anObject valueForKey:@"annotationImage"];
                                 NSString *annotationImageURL = [annotationImage valueForKey:@"url"];
@@ -220,12 +210,12 @@ RCT_EXPORT_METHOD(addAnnotations:(NSNumber *)reactTag
                                 pin.annotationImageSize = annotationImageSize;
                             }
                         }
-                        
+
                     }
                 }
                 mapView.annotations = pins;
             }
-            
+
         }
     }];
 }
@@ -235,7 +225,7 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
         NSMutableArray* pins = [NSMutableArray array];
         id anObject;
         NSEnumerator *enumerator = [json objectEnumerator];
-        
+
         while (anObject = [enumerator nextObject]) {
             CLLocationCoordinate2D coordinate = [RCTConvert CLLocationCoordinate2D:anObject];
             if (CLLocationCoordinate2DIsValid(coordinate)){
@@ -243,39 +233,39 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
                 if ([anObject objectForKey:@"title"]) {
                     title = [RCTConvert NSString:[anObject valueForKey:@"title"]];
                 }
-                
+
                 NSString *subtitle = @"";
                 if ([anObject objectForKey:@"subtitle"]) {
                     subtitle = [RCTConvert NSString:[anObject valueForKey:@"subtitle"]];
                 }
-                
+
                 NSString *id = @"";
                 if ([anObject objectForKey:@"id"]) {
                     id = [RCTConvert NSString:[anObject valueForKey:@"id"]];
                 }
-                
+
                 if ([anObject objectForKey:@"rightCalloutAccessory"]) {
                     NSObject *rightCalloutAccessory = [anObject valueForKey:@"rightCalloutAccessory"];
                     NSString *url = [rightCalloutAccessory valueForKey:@"url"];
                     CGFloat height = (CGFloat)[[rightCalloutAccessory valueForKey:@"height"] floatValue];
                     CGFloat width = (CGFloat)[[rightCalloutAccessory valueForKey:@"width"] floatValue];
-                    
+
                     UIImage *image = nil;
-                    
+
                     if ([url hasPrefix:@"image!"]) {
                         NSString* localImagePath = [url substringFromIndex:6];
                         image = [UIImage imageNamed:localImagePath];
                     }
-                    
+
                     NSURL* checkURL = [NSURL URLWithString:url];
                     if (checkURL && checkURL.scheme && checkURL.host) {
                         image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]];
                     }
-                    
+
                     UIButton *imageButton = [UIButton buttonWithType:UIButtonTypeCustom];
                     imageButton.frame = CGRectMake(0, 0, height, width);
                     [imageButton setImage:image forState:UIControlStateNormal];
-                    
+
                     RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocationRightCallout:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle id:id rightCalloutAccessory:imageButton];
                     [pins addObject:pin];
 
@@ -293,7 +283,7 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
                         pin.annotationImageURL = annotationImageURL;
                         pin.annotationImageSize = annotationImageSize;
                     }
-                    
+
                 } else {
 
                     RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude) title:title subtitle:subtitle id:id];
@@ -314,10 +304,10 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
 
                     [pins addObject:pin];
                 }
-                
+
             }
         }
-        
+
         view.annotations = pins;
     }
 }

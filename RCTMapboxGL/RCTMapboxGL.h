@@ -12,12 +12,6 @@
 #import "RCTEventDispatcher.h"
 #import "RCTBridgeModule.h"
 
-extern NSString *const RCTMGLOnRegionChange;
-extern NSString *const RCTMGLOnRegionWillChange;
-extern NSString *const RCTMGLOnOpenAnnotation;
-extern NSString *const RCTMGLOnRightAnnotationTapped;
-extern NSString *const RCTMGLOnUpdateUserLocation;
-
 @interface RCTMapboxGL : RCTView <MGLMapViewDelegate, RCTBridgeModule>
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher;

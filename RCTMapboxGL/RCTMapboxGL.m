@@ -12,19 +12,13 @@
 #import "UIView+React.h"
 #import "RCTLog.h"
 
-NSString *const RCTMGLOnRegionChange = @"mapMoved";
-NSString *const RCTMGLOnRegionWillChange = @"onRegionWillChange";
-NSString *const RCTMGLOnOpenAnnotation = @"onOpenAnnotation";
-NSString *const RCTMGLOnRightAnnotationTapped = @"onRightAnnotationTapped";
-NSString *const RCTMGLOnUpdateUserLocation = @"onUpdateUserLocation";
-
 @implementation RCTMapboxGL {
     /* Required to publish events */
     RCTEventDispatcher *_eventDispatcher;
-    
+
     /* Our map subview instance */
     MGLMapView *_map;
-    
+
     /* Map properties */
     NSString *_accessToken;
     NSMutableArray *_annotations;
@@ -52,7 +46,7 @@ RCT_EXPORT_MODULE();
         _clipsToBounds = YES;
         _finishedLoading = NO;
     }
-    
+
     return self;
 }
 
@@ -122,7 +116,7 @@ RCT_EXPORT_MODULE();
             [_map removeAnnotations: _annotations];
             _annotations = nil;
         }
-        
+
         _annotations = _newAnnotations;
         [_map addAnnotations:_newAnnotations];
     }
@@ -224,54 +218,54 @@ RCT_EXPORT_MODULE();
                                         @"magneticHeading": @(userLocation.heading.magneticHeading),
                                         @"trueHeading": @(userLocation.heading.trueHeading),
                                         @"isUpdating": [NSNumber numberWithBool:userLocation.isUpdating]} };
-    
-    [_eventDispatcher sendInputEventWithName:RCTMGLOnUpdateUserLocation body:event];
+
+    [_eventDispatcher sendInputEventWithName:@"onUpdateUserLocation" body:event];
 }
 
 
 -(void)mapView:(MGLMapView *)mapView didSelectAnnotation:(id<MGLAnnotation>)annotation
 {
     if (annotation.title && annotation.subtitle) {
-        
+
         NSString *id = [(RCTMGLAnnotation *) annotation id];
-        
+
         NSDictionary *event = @{ @"target": self.reactTag,
                                  @"src": @{ @"title": annotation.title,
                                             @"subtitle": annotation.subtitle,
                                             @"id": id,
                                             @"latitude": @(annotation.coordinate.latitude),
                                             @"longitude": @(annotation.coordinate.longitude)} };
-        
-        [_eventDispatcher sendInputEventWithName:RCTMGLOnOpenAnnotation body:event];
+
+        [_eventDispatcher sendInputEventWithName:@"onOpenAnnotation" body:event];
     }
 }
 
 
 - (void)mapView:(RCTMapboxGL *)mapView regionDidChangeAnimated:(BOOL)animated
 {
-    
+
     CLLocationCoordinate2D region = _map.centerCoordinate;
-    
+
     NSDictionary *event = @{ @"target": self.reactTag,
                              @"src": @{ @"latitude": @(region.latitude),
                                         @"longitude": @(region.longitude),
                                         @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } };
-    
-    [_eventDispatcher sendInputEventWithName:RCTMGLOnRegionChange body:event];
+
+    [_eventDispatcher sendInputEventWithName:@"onRegionChange" body:event];
 }
 
 
 - (void)mapView:(RCTMapboxGL *)mapView regionWillChangeAnimated:(BOOL)animated
 {
-    
+
     CLLocationCoordinate2D region = _map.centerCoordinate;
-    
+
     NSDictionary *event = @{ @"target": self.reactTag,
                              @"src": @{ @"latitude": @(region.latitude),
                                         @"longitude": @(region.longitude),
                                         @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } };
-    
-    [_eventDispatcher sendInputEventWithName:RCTMGLOnRegionWillChange body:event];
+
+    [_eventDispatcher sendInputEventWithName:@"onRegionWillChange" body:event];
 }
 
 - (BOOL)mapView:(RCTMapboxGL *)mapView annotationCanShowCallout:(id <MGLAnnotation>)annotation {
@@ -313,17 +307,17 @@ RCT_EXPORT_MODULE();
 - (void)mapView:(MGLMapView *)mapView annotation:(id<MGLAnnotation>)annotation calloutAccessoryControlTapped:(UIControl *)control
 {
     if (annotation.title && annotation.subtitle) {
-        
+
         NSString *id = [(RCTMGLAnnotation *) annotation id];
-        
+
         NSDictionary *event = @{ @"target": self.reactTag,
                                  @"src": @{ @"title": annotation.title,
                                             @"subtitle": annotation.subtitle,
                                             @"id": id,
                                             @"latitude": @(annotation.coordinate.latitude),
                                             @"longitude": @(annotation.coordinate.longitude)} };
-        
-        [_eventDispatcher sendInputEventWithName:RCTMGLOnRightAnnotationTapped body:event];
+
+        [_eventDispatcher sendInputEventWithName:@"onRightAnnotationTapped" body:event];
     }
 }
 
@@ -333,9 +327,9 @@ RCT_EXPORT_MODULE();
     NSString *url = [(RCTMGLAnnotation *) annotation annotationImageURL];
     CGSize imageSize = [(RCTMGLAnnotation *) annotation annotationImageSize];
     MGLAnnotationImage *annotationImage = [mapView dequeueReusableAnnotationImageWithIdentifier:id];
-    
+
     if (!annotationImage) {
-        
+
         UIImage *image = nil;
         if ([url hasPrefix:@"image!"]) {
             NSString* localImagePath = [url substringFromIndex:6];
@@ -343,14 +337,14 @@ RCT_EXPORT_MODULE();
         } else {
             image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]];
         }
-        
+
         UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
         [image drawInRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
         UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         annotationImage = [MGLAnnotationImage annotationImageWithImage:newImage reuseIdentifier:id];
     }
-    
+
     return annotationImage;
 }
 
@@ -387,7 +381,7 @@ RCT_EXPORT_MODULE();
         _subtitle = subtitle;
         _id = id;
     }
-    
+
     return self;
 }
 
@@ -401,7 +395,7 @@ RCT_EXPORT_MODULE();
         _subtitle = subtitle;
         _id = id;
     }
-    
+
     return self;
 }
 
