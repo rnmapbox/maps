@@ -75,7 +75,7 @@ RCT_EXPORT_MODULE();
         _map.zoomLevel = _zoomLevel;
     } else {
         /* A bit of a hack because hooking into the fully rendered event didn't seem to work */
-        [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:1];
+        [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:0.1];
         /* We need to have a height/width specified in order to render */
         if (_accessToken && _styleURL && self.bounds.size.height > 0 && self.bounds.size.width > 0) {
             [self createMap];
@@ -325,6 +325,7 @@ RCT_EXPORT_MODULE();
 {
     NSString *id = [(RCTMGLAnnotation *) annotation id];
     NSString *url = [(RCTMGLAnnotation *) annotation annotationImageURL];
+    if (!url) { return nil; }
     CGSize imageSize = [(RCTMGLAnnotation *) annotation annotationImageSize];
     MGLAnnotationImage *annotationImage = [mapView dequeueReusableAnnotationImageWithIdentifier:id];
 

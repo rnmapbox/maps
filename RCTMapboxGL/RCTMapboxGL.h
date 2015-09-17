@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Mapbox. All rights reserved.
 //
 
-#import "MapboxGL.h"
+#import "Mapbox.h"
 #import "MGLMapView.h"
 #import "RCTView.h"
 #import "RCTEventDispatcher.h"

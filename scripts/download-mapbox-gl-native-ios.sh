@@ -11,16 +11,16 @@ if [ ! -d temp ]; then
     mkdir temp
 fi
 
-if [ -d ./RCTMapboxGL/MapboxGL.bundle ]; then
-    rm -r RCTMapboxGL/MapboxGL.bundle
+if [ -d ./RCTMapboxGL/Mapbox.bundle ]; then
+    rm -r RCTMapboxGL/Mapbox.bundle
 fi
 
-mkdir RCTMapboxGL/MapboxGL.bundle
+mkdir RCTMapboxGL/Mapbox.bundle
 
-curl -sS https://mapbox.s3.amazonaws.com/mapbox-gl-native/ios/builds/mapbox-gl-ios-$VERSION.zip > temp.zip
+curl -sS https://mapbox.s3.amazonaws.com/mapbox-gl-native/ios/builds/mapbox-ios-sdk-$VERSION.zip > temp.zip
 unzip -o temp.zip -d temp
-mv temp/libMapboxGL.a ./RCTMapboxGL
+mv temp/libMapbox.a ./RCTMapboxGL
 mv temp/Headers/* ./RCTMapboxGL
-mv temp/MapboxGL.bundle/* ./RCTMapboxGL/MapboxGL.bundle
+mv temp/Mapbox.bundle/* ./RCTMapboxGL/Mapbox.bundle
 rm -r temp
 rm temp.zip
