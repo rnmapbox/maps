@@ -44,11 +44,11 @@ These methods require you to use `MapboxGLMap.Mixin` to access the methods. Each
 
 You can change the `styleURL` to any valid GL stylesheet, here are a few:
 
-* `asset://styles/dark-v7.json`
-* `asset://styles/light-v7.json`
-* `asset://styles/emerald-v7.json`
-* `asset://styles/mapbox-streets-v7.json`
-* `asset://styles/satellite-v7.json`
+* `asset://styles/dark-v8.json`
+* `asset://styles/light-v8.json`
+* `asset://styles/emerald-v8.json`
+* `asset://styles/streets-v8.json`
+* `asset://styles/satellite-v8.json`
 
 ## Annotations
 ```json
