@@ -8,7 +8,7 @@
 
 #import "RCTMapboxGLManager.h"
 #import "RCTMapboxGL.h"
-#import "MapboxGL.h"
+#import "Mapbox.h"
 #import "RCTConvert+CoreLocation.h"
 #import "RCTConvert+MapKit.h"
 #import "RCTBridge.h"

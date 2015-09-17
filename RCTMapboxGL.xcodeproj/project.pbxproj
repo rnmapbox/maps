@@ -11,8 +11,8 @@
 		C5DBB3461AF2EF2B00E611A9 /* RCTMapboxGL.m in Sources */ = {isa = PBXBuildFile; fileRef = C5DBB3451AF2EF2B00E611A9 /* RCTMapboxGL.m */; };
 		C5DBB34C1AF2EF2B00E611A9 /* libRCTMapboxGL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5DBB3401AF2EF2B00E611A9 /* libRCTMapboxGL.a */; };
 		C5DBB3661AF2EFB500E611A9 /* RCTMapboxGLManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C5DBB3651AF2EFB500E611A9 /* RCTMapboxGLManager.m */; };
-		C5DBB3961AF3361700E611A9 /* libMapboxGL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5DBB38C1AF3361700E611A9 /* libMapboxGL.a */; };
-		C5DBB3A61AF338ED00E611A9 /* MapboxGL.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = C5DBB38D1AF3361700E611A9 /* MapboxGL.bundle */; };
+		C5DBB3961AF3361700E611A9 /* libMapbox.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5DBB38C1AF3361700E611A9 /* libMapbox.a */; };
+		C5DBB3A61AF338ED00E611A9 /* Mapbox.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = C5DBB38D1AF3361700E611A9 /* Mapbox.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,7 +32,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				C5DBB3A61AF338ED00E611A9 /* MapboxGL.bundle in CopyFiles */,
+				C5DBB3A61AF338ED00E611A9 /* Mapbox.bundle in CopyFiles */,
 				C5DBB3441AF2EF2B00E611A9 /* RCTMapboxGL.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
@@ -47,9 +47,9 @@
 		C5DBB3511AF2EF2B00E611A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C5DBB3641AF2EFB500E611A9 /* RCTMapboxGLManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMapboxGLManager.h; sourceTree = "<group>"; };
 		C5DBB3651AF2EFB500E611A9 /* RCTMapboxGLManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMapboxGLManager.m; sourceTree = "<group>"; };
-		C5DBB38C1AF3361700E611A9 /* libMapboxGL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMapboxGL.a; sourceTree = "<group>"; };
-		C5DBB38D1AF3361700E611A9 /* MapboxGL.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MapboxGL.bundle; sourceTree = "<group>"; };
-		C5DBB38E1AF3361700E611A9 /* MapboxGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapboxGL.h; sourceTree = "<group>"; };
+		C5DBB38C1AF3361700E611A9 /* libMapbox.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMapbox.a; sourceTree = "<group>"; };
+		C5DBB38D1AF3361700E611A9 /* Mapbox.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Mapbox.bundle; sourceTree = "<group>"; };
+		C5DBB38E1AF3361700E611A9 /* Mapbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mapbox.h; sourceTree = "<group>"; };
 		C5DBB38F1AF3361700E611A9 /* MGLAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGLAnnotation.h; sourceTree = "<group>"; };
 		C5DBB3911AF3361700E611A9 /* MGLMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGLMapView.h; sourceTree = "<group>"; };
 		C5DBB3921AF3361700E611A9 /* MGLMapView+IBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MGLMapView+IBAdditions.h"; sourceTree = "<group>"; };
@@ -62,7 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C5DBB3961AF3361700E611A9 /* libMapboxGL.a in Frameworks */,
+				C5DBB3961AF3361700E611A9 /* libMapbox.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,9 +98,9 @@
 		C5DBB3421AF2EF2B00E611A9 /* RCTMapboxGL */ = {
 			isa = PBXGroup;
 			children = (
-				C5DBB38C1AF3361700E611A9 /* libMapboxGL.a */,
-				C5DBB38D1AF3361700E611A9 /* MapboxGL.bundle */,
-				C5DBB38E1AF3361700E611A9 /* MapboxGL.h */,
+				C5DBB38C1AF3361700E611A9 /* libMapbox.a */,
+				C5DBB38D1AF3361700E611A9 /* Mapbox.bundle */,
+				C5DBB38E1AF3361700E611A9 /* Mapbox.h */,
 				C5DBB38F1AF3361700E611A9 /* MGLAnnotation.h */,
 				C5DBB3911AF3361700E611A9 /* MGLMapView.h */,
 				C5DBB3921AF3361700E611A9 /* MGLMapView+IBAdditions.h */,
