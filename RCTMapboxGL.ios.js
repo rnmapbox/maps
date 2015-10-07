@@ -66,6 +66,7 @@ var MapView = React.createClass({
       coordinates: React.PropTypes.arrayOf().isRequired,
       title: React.PropTypes.string,
       subtitle: React.PropTypes.string,
+      fillAlpha: React.PropTypes.number,
       fillColor: React.PropTypes.sting,
       strokeAlpha: React.PropTypes.number,
       strokeColor: React.PropTypes.sting,

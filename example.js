@@ -8,46 +8,60 @@ var {
   StyleSheet,
   Text,
   StatusBarIOS,
-  View,
+  View
 } = React;
 
 var Example = React.createClass({
   mixins: [MapboxGLMap.Mixin],
   getInitialState() {
     return {
-       center: {
-         latitude: 40.72052634,
-         longitude: -73.97686958312988
-       },
-       zoom: 11,
-       annotations: [{
-         latitude: 40.72052634,
-         longitude:  -73.97686958312988,
-         title: 'This is marker 1',
-         subtitle: 'It has a rightCalloutAccessory too',
-         rightCalloutAccessory: {
-             url: 'https://cldup.com/9Lp0EaBw5s.png',
-             height: 25,
-             width: 25
-         },
-         annotationImage: {
-           url: 'https://cldup.com/CnRLZem9k9.png',
-           height: 25,
-           width: 25
-         },
-         id: 'marker1'
-       },{
-         latitude: 40.714541341726175,
-         longitude:  -74.00579452514648,
-         title: 'Important!',
-         subtitle: 'Neat, this is a custom annotation image',
-         annotationImage: {
-           url: 'https://cldup.com/7NLZklp8zS.png',
-           height: 25,
-           width: 25
-         },
-         id: 'marker2'
-       }]
+      center: {
+        latitude: 40.72052634,
+        longitude: -73.97686958312988
+      },
+      zoom: 11,
+      annotations: [{
+        coordinates: [40.72052634, -73.97686958312988],
+        "type": "point",
+        title: 'This is marker 1',
+        subtitle: 'It has a rightCalloutAccessory too',
+        rightCalloutAccessory: {
+          url: 'https://cldup.com/9Lp0EaBw5s.png',
+          height: 25,
+          width: 25
+        },
+        annotationImage: {
+          url: 'https://cldup.com/CnRLZem9k9.png',
+          height: 25,
+          width: 25
+        },
+        id: 'marker1'
+      }, {
+        coordinates: [40.714541341726175,-74.00579452514648],
+        "type": "point",
+        title: 'Important!',
+        subtitle: 'Neat, this is a custom annotation image',
+        annotationImage: {
+          url: 'https://cldup.com/7NLZklp8zS.png',
+          height: 25,
+          width: 25
+        },
+        id: 'marker2'
+      }, {
+        "coordinates": [[40.76572150042782,-73.99429321289062],[40.743485405490695, -74.00218963623047],[40.728266950429735,-74.00218963623047],[40.728266950429735,-73.99154663085938],[40.73633186448861,-73.98983001708984],[40.74465591168391,-73.98914337158203],[40.749337730454826,-73.9870834350586]],
+        "type": "polyline",
+        "strokeColor": "#00FB00",
+        "strokeWidth": 4,
+        "strokeAlpha": .5,
+        "id": "foobar"
+      }, {
+        "coordinates": [[40.749857912194386, -73.96820068359375], [40.741924698522055,-73.9735221862793], [40.735681504432264,-73.97523880004883], [40.7315190495212,-73.97438049316406], [40.729177554196376,-73.97180557250975], [40.72345355209305,-73.97438049316406], [40.719290332250544,-73.97455215454102], [40.71369559554873,-73.97729873657227], [40.71200407096382,-73.97850036621094], [40.71031250340588,-73.98691177368163], [40.71031250340588,-73.99154663085938]],
+        "type": "polygon",
+        "fillAlpha":1,
+        "strokeColor": "#fffff",
+        "fillColor": "blue",
+        "id": "zap"
+      }]
      };
   },
   onRegionChange(location) {
@@ -82,10 +96,18 @@ var Example = React.createClass({
           Go to Tokyo at fixed zoom level 14
         </Text>
         <Text style={styles.text} onPress={() => this.addAnnotations(mapRef, [{
-          latitude: 40.73312,
-          longitude:  -73.989,
-          title: 'This is a new marker'
-          }])}>
+          coordinates: [40.73312,-73.989],
+          type: 'point',
+          title: 'This is a new marker',
+          id: 'foo'
+        }, {
+          "coordinates": [[40.749857912194386, -73.96820068359375], [40.741924698522055,-73.9735221862793], [40.735681504432264,-73.97523880004883], [40.7315190495212,-73.97438049316406], [40.729177554196376,-73.97180557250975], [40.72345355209305,-73.97438049316406], [40.719290332250544,-73.97455215454102], [40.71369559554873,-73.97729873657227], [40.71200407096382,-73.97850036621094], [40.71031250340588,-73.98691177368163], [40.71031250340588,-73.99154663085938]],
+          "type": "polygon",
+          "fillAlpha": 1,
+          "fillColor": "#000",
+          "strokeAlpha": 1,
+          "id": "new-black-polygon"
+        }])}>
           Add new marker
         </Text>
         <Text style={styles.text} onPress={() => this.selectAnnotationAnimated(mapRef, 0)}>
@@ -120,14 +142,13 @@ var Example = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    flexDirection: 'column',
     flex: 1
   },
   map: {
-    flex: 5
+    flex: 1
   },
   text: {
-    padding: 2
+    padding: 3
   }
 });
 

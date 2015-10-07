@@ -136,7 +136,13 @@ RCT_EXPORT_MODULE();
 
 - (UIColor *)mapView:(MGLMapView *)mapView strokeColorForShapeAnnotation:(RCTMGLAnnotationPolyline *)shape
 {
-    return [self getUIColorObjectFromHexString:shape.strokeColor alpha:1];
+    if ([shape isKindOfClass:[RCTMGLAnnotationPolyline class]]) {
+        return [self getUIColorObjectFromHexString:shape.strokeColor alpha:1];
+    } else if ([shape isKindOfClass:[RCTMGLAnnotationPolygon class]]) {
+        return [self getUIColorObjectFromHexString:[(RCTMGLAnnotationPolygon *) shape strokeColor] alpha:1];
+    } else {
+        return [UIColor blueColor];
+    }
 }
 
 - (CGFloat)mapView:(MGLMapView *)mapView lineWidthForPolylineAnnotation:(RCTMGLAnnotationPolyline *)shape
