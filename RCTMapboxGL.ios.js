@@ -57,12 +57,13 @@ var MapView = React.createClass({
     styleURL: React.PropTypes.string,
     clipsToBounds: React.PropTypes.bool,
     debugActive: React.PropTypes.bool,
+    attributionButton: React.PropTypes.bool,
     centerCoordinate: React.PropTypes.shape({
       latitude: React.PropTypes.number.isRequired,
       longitude: React.PropTypes.number.isRequired
     }),
     annotations: React.PropTypes.arrayOf(React.PropTypes.shape({
-      coordinates: React.PropTypes.arrayOf(),
+      coordinates: React.PropTypes.arrayOf().isRequired,
       title: React.PropTypes.string,
       subtitle: React.PropTypes.string,
       fillColor: React.PropTypes.sting,
@@ -70,7 +71,7 @@ var MapView = React.createClass({
       strokeColor: React.PropTypes.sting,
       strokeWidth: React.PropTypes.number,
       id: React.PropTypes.string,
-      type: React.PropTypes.string,
+      type: React.PropTypes.stringisRequired,
       rightCalloutAccessory: React.PropTypes.object({
         height: React.PropTypes.number,
         width: React.PropTypes.number,

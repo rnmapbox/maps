@@ -23,8 +23,6 @@
     NSString *_accessToken;
     NSMutableArray *_annotations;
     NSMutableArray *_newAnnotations;
-    NSMutableArray *_newPolyline;
-    NSMutableArray *_newPolygon;
     CLLocationCoordinate2D _centerCoordinate;
     BOOL _clipsToBounds;
     BOOL _debugActive;
@@ -77,8 +75,6 @@ RCT_EXPORT_MODULE();
         _map.styleURL = _styleURL;
         _map.zoomLevel = _zoomLevel;
     } else {
-        /* A bit of a hack because hooking into the fully rendered event didn't seem to work */
-        [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:0.1];
         /* We need to have a height/width specified in order to render */
         if (_accessToken && _styleURL && self.bounds.size.height > 0 && self.bounds.size.width > 0) {
             [self createMap];
@@ -107,10 +103,8 @@ RCT_EXPORT_MODULE();
 
 - (void)setAnnotations:(NSMutableArray *)annotations
 {
-    for (int i = 0; i < [annotations count]; i++) {
-        [_newAnnotations addObject:annotations[i]];
-    }
-    [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:0];
+    _newAnnotations = annotations;
+    [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:0.5];
 }
 
 - (void)updateAnnotations {
@@ -131,8 +125,20 @@ RCT_EXPORT_MODULE();
 
 - (CGFloat)mapView:(MGLMapView *)mapView alphaForShapeAnnotation:(RCTMGLAnnotationPolyline *)shape
 {
-    return shape.strokeAlpha;
+    if ([shape isKindOfClass:[RCTMGLAnnotationPolyline class]]) {
+        return shape.strokeAlpha;
+    } else if ([shape isKindOfClass:[RCTMGLAnnotationPolygon class]]) {
+        return [(RCTMGLAnnotationPolygon *) shape fillAlpha];
+    } else {
+        return 1.0;
+    }
 }
+
+- (UIColor *)mapView:(MGLMapView *)mapView strokeColorForShapeAnnotation:(RCTMGLAnnotationPolyline *)shape
+{
+    return [self getUIColorObjectFromHexString:shape.strokeColor alpha:1];
+}
+
 - (CGFloat)mapView:(MGLMapView *)mapView lineWidthForPolylineAnnotation:(RCTMGLAnnotationPolyline *)shape
 {
     return shape.strokeWidth;
@@ -140,14 +146,8 @@ RCT_EXPORT_MODULE();
 
 - (UIColor *)mapView:(MGLMapView *)mapView fillColorForPolygonAnnotation:(RCTMGLAnnotationPolygon *)shape
 {
-    return [self getUIColorObjectFromHexString:shape.fillColor alpha:shape.fillAlpha];
+    return [self getUIColorObjectFromHexString:shape.fillColor alpha:1];
 }
-
-- (UIColor *)mapView:(MGLMapView *)mapView strokeColorForShapeAnnotation:(RCTMGLAnnotationPolyline *)shape
-{
-    return [self getUIColorObjectFromHexString:shape.strokeColor alpha:shape.strokeAlpha];
-}
-
 
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate
 {
@@ -350,9 +350,9 @@ RCT_EXPORT_MODULE();
 
 - (MGLAnnotationImage *)mapView:(MGLMapView *)mapView imageForAnnotation:(id<MGLAnnotation>)annotation
 {
-    NSString *id = [(RCTMGLAnnotation *) annotation id];
     NSString *url = [(RCTMGLAnnotation *) annotation annotationImageURL];
     if (!url) { return nil; }
+    NSString *id = [(RCTMGLAnnotation *) annotation id];
     CGSize imageSize = [(RCTMGLAnnotation *) annotation annotationImageSize];
     MGLAnnotationImage *annotationImage = [mapView dequeueReusableAnnotationImageWithIdentifier:id];
 

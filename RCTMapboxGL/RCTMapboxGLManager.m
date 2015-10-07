@@ -59,7 +59,7 @@ RCT_EXPORT_METHOD(setZoomLevelAnimated:(nonnull NSNumber *)reactTag
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
-        if([mapView isKindOfClass:[RCTMapboxGL class]]) {
+        if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             [mapView setZoomLevelAnimated:zoomLevel];
         }
     }];
@@ -69,7 +69,7 @@ RCT_EXPORT_METHOD(setDirectionAnimated:(nonnull NSNumber *)reactTag
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
-        if([mapView isKindOfClass:[RCTMapboxGL class]]) {
+        if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             [mapView setDirectionAnimated:heading];
         }
     }];
@@ -81,7 +81,7 @@ RCT_EXPORT_METHOD(setCenterCoordinateAnimated:(nonnull NSNumber *)reactTag
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
-        if([mapView isKindOfClass:[RCTMapboxGL class]]) {
+        if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             [mapView setCenterCoordinateAnimated:CLLocationCoordinate2DMake(latitude, longitude)];
         }
     }];
@@ -94,7 +94,7 @@ RCT_EXPORT_METHOD(setCenterCoordinateZoomLevelAnimated:(nonnull NSNumber *)react
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
-        if([mapView isKindOfClass:[RCTMapboxGL class]]) {
+        if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             [mapView setCenterCoordinateZoomLevelAnimated:CLLocationCoordinate2DMake(latitude, longitude) zoomLevel:zoomLevel];
         }
     }];
@@ -105,7 +105,7 @@ RCT_EXPORT_METHOD(selectAnnotationAnimated:(nonnull NSNumber *) reactTag
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
-        if([mapView isKindOfClass:[RCTMapboxGL class]]) {
+        if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             [mapView selectAnnotationAnimated:annotationInArray];
         }
     }];
@@ -116,7 +116,7 @@ RCT_EXPORT_METHOD(removeAnnotation:(nonnull NSNumber *) reactTag
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
-        if([mapView isKindOfClass:[RCTMapboxGL class]]) {
+        if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             [mapView removeAnnotation:annotationInArray];
         }
     }];
@@ -129,61 +129,68 @@ RCT_EXPORT_METHOD(addAnnotations:(nonnull NSNumber *)reactTag
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if([mapView isKindOfClass:[RCTMapboxGL class]]) {
             
-            if ([annotations isKindOfClass:[NSArray class]]) {
-                NSMutableArray* pins = [NSMutableArray array];
-                id anObject;
-                NSEnumerator *enumerator = [annotations objectEnumerator];
-                
-                while (anObject = [enumerator nextObject]) {
-                    CLLocationCoordinate2D coordinate = [RCTConvert CLLocationCoordinate2D:anObject];
-                    if (CLLocationCoordinate2DIsValid(coordinate)){
+            NSMutableArray* annotationsArray = [NSMutableArray array];
+            id annotationObject;
+            NSEnumerator *enumerator = [annotations objectEnumerator];
+            
+            while (annotationObject = [enumerator nextObject]) {
+                CLLocationCoordinate2D coordinate = [RCTConvert CLLocationCoordinate2D:annotationObject];
+                if (CLLocationCoordinate2DIsValid(coordinate)){
+                    if (![annotationObject objectForKey:@"type"]) {
+                        RCTLogError(@"type point, polyline or polygon required");
+                        return;
+                    }
+                    
+                    NSString *type = [RCTConvert NSString:[annotationObject valueForKey:@"type"]];
+                    
+                    if ([type  isEqual: @"point"]) {
                         NSString *title = @"";
-                        if ([anObject objectForKey:@"title"]){
-                            title = [RCTConvert NSString:[anObject valueForKey:@"title"]];
+                        if ([annotationObject objectForKey:@"title"]) {
+                            title = [RCTConvert NSString:[annotationObject valueForKey:@"title"]];
                         }
-
+                        
                         NSString *subtitle = @"";
-                        if ([anObject objectForKey:@"subtitle"]){
-                            subtitle = [RCTConvert NSString:[anObject valueForKey:@"subtitle"]];
+                        if ([annotationObject objectForKey:@"subtitle"]) {
+                            subtitle = [RCTConvert NSString:[annotationObject valueForKey:@"subtitle"]];
                         }
-
+                        
                         NSString *id = @"";
-                        if ([anObject objectForKey:@"id"]) {
-                            id = [RCTConvert NSString:[anObject valueForKey:@"id"]];
+                        if ([annotationObject objectForKey:@"id"]) {
+                            id = [RCTConvert NSString:[annotationObject valueForKey:@"id"]];
                         }
-
-                        if ([anObject objectForKey:@"rightCalloutAccessory"]) {
-                            NSObject *rightCalloutAccessory = [anObject valueForKey:@"rightCalloutAccessory"];
+                        
+                        if ([annotationObject objectForKey:@"rightCalloutAccessory"]) {
+                            NSObject *rightCalloutAccessory = [annotationObject valueForKey:@"rightCalloutAccessory"];
                             NSString *url = [rightCalloutAccessory valueForKey:@"url"];
                             CGFloat height = (CGFloat)[[rightCalloutAccessory valueForKey:@"height"] floatValue];
                             CGFloat width = (CGFloat)[[rightCalloutAccessory valueForKey:@"width"] floatValue];
-
+                            
                             UIImage *image = nil;
-
+                            
                             if ([url hasPrefix:@"image!"]) {
                                 NSString* localImagePath = [url substringFromIndex:6];
                                 image = [UIImage imageNamed:localImagePath];
                             }
-
+                            
                             NSURL* checkURL = [NSURL URLWithString:url];
                             if (checkURL && checkURL.scheme && checkURL.host) {
                                 image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]];
                             }
-
+                            
                             UIButton *imageButton = [UIButton buttonWithType:UIButtonTypeCustom];
                             imageButton.frame = CGRectMake(0, 0, height, width);
                             [imageButton setImage:image forState:UIControlStateNormal];
                             
-                            NSArray *coordinate = [RCTConvert NSArray:[anObject valueForKey:@"coordinates"]];
+                            NSArray *coordinate = [RCTConvert NSArray:[annotationObject valueForKey:@"coordinates"]];
                             CLLocationDegrees lat = [coordinate[0] doubleValue];
                             CLLocationDegrees lng = [coordinate[1] doubleValue];
-
-                            RCTMGLAnnotation *annotation = [[RCTMGLAnnotation alloc] initWithLocationRightCallout:CLLocationCoordinate2DMake(lat, lng) title:title subtitle:subtitle id:id rightCalloutAccessory:imageButton];
-
-                            [pins addObject:annotation];
-
-                            if ([anObject objectForKey:@"annotationImage"]) {
-                                NSObject *annotationImage = [anObject valueForKey:@"annotationImage"];
+                            
+                            RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocationRightCallout:CLLocationCoordinate2DMake(lat, lng) title:title subtitle:subtitle id:id rightCalloutAccessory:imageButton];
+                            [annotationsArray addObject:pin];
+                            
+                            
+                            if ([annotationObject objectForKey:@"annotationImage"]) {
+                                NSObject *annotationImage = [annotationObject valueForKey:@"annotationImage"];
                                 NSString *annotationImageURL = [annotationImage valueForKey:@"url"];
                                 CGFloat height = (CGFloat)[[annotationImage valueForKey:@"height"] floatValue];
                                 CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] floatValue];
@@ -192,38 +199,153 @@ RCT_EXPORT_METHOD(addAnnotations:(nonnull NSNumber *)reactTag
                                     return;
                                 }
                                 CGSize annotationImageSize =  CGSizeMake(height, width);
-                                annotation.annotationImageURL = annotationImageURL;
-                                annotation.annotationImageSize = annotationImageSize;
+                                pin.annotationImageURL = annotationImageURL;
+                                pin.annotationImageSize = annotationImageSize;
                             }
-
+                            
                         } else {
                             
-                            NSArray *coordinate = [RCTConvert NSArray:[anObject valueForKey:@"coordinates"]];
+                            NSArray *coordinate = [RCTConvert NSArray:[annotationObject valueForKey:@"coordinates"]];
                             CLLocationDegrees lat = [coordinate[0] doubleValue];
                             CLLocationDegrees lng = [coordinate[1] doubleValue];
-
-                            RCTMGLAnnotation *annotation = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(lat, lng) title:title subtitle:subtitle id:id];
-                            [pins addObject:annotation];
-
-                            if ([anObject objectForKey:@"annotationImage"]) {
-                                NSObject *annotationImage = [anObject valueForKey:@"annotationImage"];
+                            
+                            RCTMGLAnnotation *point = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(lat, lng) title:title subtitle:subtitle id:id];
+                            
+                            if ([annotationObject objectForKey:@"annotationImage"]) {
+                                NSObject *annotationImage = [annotationObject valueForKey:@"annotationImage"];
                                 NSString *annotationImageURL = [annotationImage valueForKey:@"url"];
                                 CGFloat height = (CGFloat)[[annotationImage valueForKey:@"height"] floatValue];
                                 CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] floatValue];
-                                CGSize annotationImageSize =  CGSizeMake(height, width);
                                 if (!height || !width) {
                                     RCTLogError(@"Height and width for image required");
                                     return;
                                 }
-                                annotation.annotationImageURL = annotationImageURL;
-                                annotation.annotationImageSize = annotationImageSize;
+                                CGSize annotationImageSize =  CGSizeMake(height, width);
+                                point.annotationImageURL = annotationImageURL;
+                                point.annotationImageSize = annotationImageSize;
+                            }
+                            
+                            [annotationsArray addObject:point];
+                        }
+                        
+                    } else if ([type  isEqual: @"polyline"]) {
+                        
+                        NSString *title = @"";
+                        if ([annotationObject objectForKey:@"title"]) {
+                            title = [RCTConvert NSString:[annotationObject valueForKey:@"title"]];
+                        }
+                        
+                        NSString *subtitle = @"";
+                        if ([annotationObject objectForKey:@"subtitle"]) {
+                            subtitle = [RCTConvert NSString:[annotationObject valueForKey:@"subtitle"]];
+                        }
+                        
+                        NSString *id = @"";
+                        if ([annotationObject objectForKey:@"id"]) {
+                            id = [RCTConvert NSString:[annotationObject valueForKey:@"id"]];
+                        }
+                        
+                        NSString *type = @"";
+                        if ([annotationObject objectForKey:@"type"]) {
+                            type = [RCTConvert NSString:[annotationObject valueForKey:@"type"]];
+                        }
+                        
+                        CGFloat strokeAlpha = 1.0;
+                        if ([annotationObject objectForKey:@"strokeAlpha"]) {
+                            strokeAlpha = [RCTConvert CGFloat:[annotationObject valueForKey:@"strokeAlpha"]];
+                        }
+                        
+                        NSString *strokeColor = nil;
+                        if ([annotationObject objectForKey:@"strokeColor"]) {
+                            strokeColor = [RCTConvert NSString:[annotationObject valueForKey:@"strokeColor"]];
+                        }
+                        
+                        double strokeWidth = 3;
+                        if ([annotationObject objectForKey:@"strokeWidth"]) {
+                            strokeWidth = [RCTConvert double:[annotationObject valueForKey:@"strokeWidth"]];
+                        }
+                        
+                        NSArray *coordinates = [RCTConvert NSArray:[annotationObject valueForKey:@"coordinates"]];
+                        NSUInteger numberOfPoints = coordinates.count;
+                        int count = 0;
+                        CLLocationCoordinate2D *coord = malloc(sizeof(CLLocationCoordinate2D) * numberOfPoints);
+                        
+                        if ([annotationObject objectForKey:@"coordinates"]) {
+                            for (int i = 0; i < [coordinates count]; i++) {
+                                CLLocationDegrees lat = [coordinates[i][0] doubleValue];
+                                CLLocationDegrees lng = [coordinates[i][1] doubleValue];
+                                coord[count] = CLLocationCoordinate2DMake(lat, lng);
+                                count++;
                             }
                         }
-
+                        
+                        [annotationsArray addObject:[RCTMGLAnnotationPolyline polylineAnnotation:coord strokeAlpha:strokeAlpha strokeColor:strokeColor strokeWidth:strokeWidth id:id type:@"polyline" count:count]];
+                        
+                    } else if ([type  isEqual: @"polygon"]) {
+                        
+                        NSString *title = @"";
+                        if ([annotationObject objectForKey:@"title"]) {
+                            title = [RCTConvert NSString:[annotationObject valueForKey:@"title"]];
+                        }
+                        
+                        NSString *subtitle = @"";
+                        if ([annotationObject objectForKey:@"subtitle"]) {
+                            subtitle = [RCTConvert NSString:[annotationObject valueForKey:@"subtitle"]];
+                        }
+                        
+                        NSString *id = @"";
+                        if ([annotationObject objectForKey:@"id"]) {
+                            id = [RCTConvert NSString:[annotationObject valueForKey:@"id"]];
+                        }
+                        
+                        NSString *type = @"";
+                        if ([annotationObject objectForKey:@"type"]) {
+                            type = [RCTConvert NSString:[annotationObject valueForKey:@"type"]];
+                        }
+                        
+                        CGFloat fillAlpha = 1.0;
+                        if ([annotationObject objectForKey:@"fillAlpha"]) {
+                            fillAlpha = [RCTConvert CGFloat:[annotationObject valueForKey:@"fillAlpha"]];
+                        }
+                        
+                        NSString *fillColor = @"";
+                        if ([annotationObject objectForKey:@"fillColor"]) {
+                            fillColor = [RCTConvert NSString:[annotationObject valueForKey:@"fillColor"]];
+                        }
+                        
+                        CGFloat strokeAlpha = 1.0;
+                        if ([annotationObject objectForKey:@"strokeAlpha"]) {
+                            strokeAlpha = [RCTConvert CGFloat:[annotationObject valueForKey:@"strokeAlpha"]];
+                        }
+                        
+                        NSString *strokeColor = @"";
+                        if ([annotationObject objectForKey:@"strokeColor"]) {
+                            strokeColor = [RCTConvert NSString:[annotationObject valueForKey:@"strokeColor"]];
+                        }
+                        
+                        NSArray *coordinates = [RCTConvert NSArray:[annotationObject valueForKey:@"coordinates"]];
+                        NSUInteger numberOfPoints = coordinates.count;
+                        int count = 0;
+                        CLLocationCoordinate2D *coord = malloc(sizeof(CLLocationCoordinate2D) * numberOfPoints);
+                        
+                        if ([annotationObject objectForKey:@"coordinates"]) {
+                            for (int i = 0; i < [coordinates count]; i++) {
+                                CLLocationDegrees lat = [coordinates[i][0] doubleValue];
+                                CLLocationDegrees lng = [coordinates[i][1] doubleValue];
+                                coord[count] = CLLocationCoordinate2DMake(lat, lng);
+                                count++;
+                            }
+                        }
+                        
+                        [annotationsArray addObject:[RCTMGLAnnotationPolygon polygonAnnotation:coord fillAlpha:fillAlpha fillColor:fillColor strokeColor:strokeColor strokeAlpha:strokeAlpha id:id type:@"polygon" count:count]];
+                        
+                    } else {
+                        RCTLogError(@"type point, polyline or polygon required");
+                        return;
                     }
                 }
-                mapView.annotations = pins;
             }
+            mapView.annotations = annotationsArray;
         }
     }];
 }
