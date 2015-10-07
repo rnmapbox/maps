@@ -23,6 +23,8 @@
     NSString *_accessToken;
     NSMutableArray *_annotations;
     NSMutableArray *_newAnnotations;
+    NSMutableArray *_newPolyline;
+    NSMutableArray *_newPolygon;
     CLLocationCoordinate2D _centerCoordinate;
     BOOL _clipsToBounds;
     BOOL _debugActive;
@@ -45,6 +47,7 @@ RCT_EXPORT_MODULE();
         _eventDispatcher = eventDispatcher;
         _clipsToBounds = YES;
         _finishedLoading = NO;
+        _newAnnotations = [NSMutableArray array];
     }
 
     return self;
@@ -104,29 +107,54 @@ RCT_EXPORT_MODULE();
 
 - (void)setAnnotations:(NSMutableArray *)annotations
 {
-    _newAnnotations = annotations;
-    [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:0.1];
+    for (int i = 0; i < [annotations count]; i++) {
+        [_newAnnotations addObject:annotations[i]];
+    }
+    [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:0];
 }
 
-- (void)updateAnnotations
-{
+- (void)updateAnnotations {
     if (_newAnnotations) {
-        // Take into account any already placed pins
         if (_annotations.count) {
-            [_map removeAnnotations: _annotations];
+            for (int i = 0; i < [_annotations count]; i++) {
+                [_map removeAnnotations: _annotations];
+            }
             _annotations = nil;
         }
-
+        
         _annotations = _newAnnotations;
-        [_map addAnnotations:_newAnnotations];
+        for (int i = 0; i < [_newAnnotations count]; i++) {
+            [_map addAnnotation:_newAnnotations[i]];
+        }
     }
 }
+
+- (CGFloat)mapView:(MGLMapView *)mapView alphaForShapeAnnotation:(RCTMGLAnnotationPolyline *)shape
+{
+    return shape.strokeAlpha;
+}
+- (CGFloat)mapView:(MGLMapView *)mapView lineWidthForPolylineAnnotation:(RCTMGLAnnotationPolyline *)shape
+{
+    return shape.strokeWidth;
+}
+
+- (UIColor *)mapView:(MGLMapView *)mapView fillColorForPolygonAnnotation:(RCTMGLAnnotationPolygon *)shape
+{
+    return [self getUIColorObjectFromHexString:shape.fillColor alpha:shape.fillAlpha];
+}
+
+- (UIColor *)mapView:(MGLMapView *)mapView strokeColorForShapeAnnotation:(RCTMGLAnnotationPolyline *)shape
+{
+    return [self getUIColorObjectFromHexString:shape.strokeColor alpha:shape.strokeAlpha];
+}
+
 
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate
 {
     _centerCoordinate = centerCoordinate;
     [self updateMap];
 }
+
 
 - (void)setDebugActive:(BOOL)debugActive
 {
@@ -181,7 +209,6 @@ RCT_EXPORT_MODULE();
     _styleURL = styleURL;
     [self updateMap];
 }
-
 
 - (void)setRightCalloutAccessory:(UIButton *)rightCalloutAccessory
 {
@@ -349,9 +376,40 @@ RCT_EXPORT_MODULE();
     return annotationImage;
 }
 
+- (unsigned int)intFromHexString:(NSString *)hexStr
+{
+    unsigned int hexInt = 0;
+    
+    // Create scanner
+    NSScanner *scanner = [NSScanner scannerWithString:hexStr];
+    
+    // Tell scanner to skip the # character
+    [scanner setCharactersToBeSkipped:[NSCharacterSet characterSetWithCharactersInString:@"#"]];
+    
+    // Scan hex value
+    [scanner scanHexInt:&hexInt];
+    
+    return hexInt;
+}
+
+
+- (UIColor *)getUIColorObjectFromHexString:(NSString *)hexStr alpha:(CGFloat)alpha
+{
+    // Convert hex string to an integer
+    unsigned int hexint = [self intFromHexString:hexStr];
+    
+    // Create color object, specifying alpha as well
+    UIColor *color =
+    [UIColor colorWithRed:((CGFloat) ((hexint & 0xFF0000) >> 16))/255
+                    green:((CGFloat) ((hexint & 0xFF00) >> 8))/255
+                     blue:((CGFloat) (hexint & 0xFF))/255
+                    alpha:alpha];
+    
+    return color;
+}
+
 @end
 
-/* RCTMGLAnnotation */
 
 @interface RCTMGLAnnotation ()
 
@@ -399,5 +457,37 @@ RCT_EXPORT_MODULE();
 
     return self;
 }
+@end
+
+@interface RCTMGLAnnotationPolyline ()
+@end
+
+@implementation RCTMGLAnnotationPolyline
+
++ (instancetype)polylineAnnotation:(CLLocationCoordinate2D *)coordinates strokeAlpha:(double)strokeAlpha strokeColor:(NSString *)strokeColor strokeWidth:(double)strokeWidth id:(NSString *)id type:(NSString *)type count:(NSUInteger)count
+{
+    RCTMGLAnnotationPolyline *polyline = [self polylineWithCoordinates:coordinates count:count];
+    polyline.strokeAlpha = strokeAlpha;
+    polyline.strokeColor = strokeColor;
+    polyline.strokeWidth = strokeWidth;
+    return polyline;
+}
+@end
+
+@interface RCTMGLAnnotationPolygon ()
+@end
+
+@implementation RCTMGLAnnotationPolygon
+
++ (instancetype)polygonAnnotation:(CLLocationCoordinate2D *)coordinates fillAlpha:(double)fillAlpha fillColor:(NSString *)fillColor strokeColor:(NSString *)strokeColor strokeAlpha:(double)strokeAlpha id:(NSString *)id type:(NSString *)type count:(NSUInteger)count
+{
+    RCTMGLAnnotationPolygon *polygon = [self polygonWithCoordinates:coordinates count:count];
+    polygon.fillAlpha = fillAlpha;
+    polygon.fillColor = fillColor;
+    polygon.strokeAlpha = strokeAlpha;
+    polygon.strokeColor = strokeColor;
+    return polygon;
+}
+
 
 @end
