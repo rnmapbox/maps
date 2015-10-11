@@ -1,13 +1,11 @@
 # React Native Mapbox GL
 
-_A React Native component for building maps with [Mapbox GL](https://www.mapbox.com/mapbox-gl/)_
+_A React Native component for building maps with [Mapbox GL](https://www.mapbox.com/mapbox-gl/) for iOS and Android_
 
 
 ```
 npm install react-native-mapbox-gl --save
 ```
-
-![](https://cldup.com/A8S_7rLg1L.png)
 
 # Installation
 * [iOS](/ios/install.md)
@@ -20,3 +18,6 @@ npm install react-native-mapbox-gl --save
 # Example
 * [iOS](/ios//example.js)
 * [Android](/ios//example.js)
+
+![](https://cldup.com/A8S_7rLg1L.png)
+![](http://i.imgur.com/I8XkXcS.jpg)
