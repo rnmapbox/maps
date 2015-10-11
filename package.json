@@ -6,6 +6,7 @@
   "keywords": [
     "gl",
     "ios",
+    "android",
     "mapbox",
     "react-component",
     "react-native"
@@ -16,7 +17,6 @@
       "url": "https://github.com/mapbox/react-native-mapbox-gl/blob/master/LICENSE.md"
     }
   ],
-  "main": "RCTMapboxGL.ios.js",
   "peerDependencies": {
     "react-native": ">=0.4.3"
   },
@@ -26,7 +26,7 @@
   },
   "scripts": {
     "preinstall": "./scripts/download-mapbox-gl-native-ios.sh 2.1.2",
-    "test": "eslint example.js RCTMapboxGL.ios.js",
+    "test": "eslint example.js index.ios.js index.android.js",
     "start": "node_modules/react-native/packager/packager.sh"
   },
   "devDependencies": {

@@ -95,7 +95,6 @@ var MapView = React.createClass({
       zoomEnabled: true
     };
   },
-
   render: function() {
     return (<MapboxGLView
       {...this.props}
