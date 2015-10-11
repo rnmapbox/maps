@@ -54,3 +54,32 @@
 
 
 @end
+
+@interface RCTMGLAnnotationPolyline : MGLPolyline
+
+@property (nonatomic) NSString *id;
+@property (nonatomic) double strokeAlpha;
+@property (nonatomic) NSString *strokeColor;
+@property (nonatomic) double strokeWidth;
+@property (nonatomic) NSString *type;
+@property (nonatomic) NSUInteger count;
+@property (nonatomic) CLLocationCoordinate2D *coordinates;
+
++ (instancetype)polylineAnnotation:(CLLocationCoordinate2D *)coordinates strokeAlpha:(double)strokeAlpha strokeColor:(NSString *)strokeColor strokeWidth:(double)strokeWidth id:(NSString *)id type:(NSString *)type count:(NSUInteger)count;
+
+@end
+
+@interface RCTMGLAnnotationPolygon : MGLPolygon
+
+@property (nonatomic) NSString *id;
+@property (nonatomic) double fillAlpha;
+@property (nonatomic) NSString *fillColor;
+@property (nonatomic) double strokeAlpha;
+@property (nonatomic) NSString *strokeColor;
+@property (nonatomic) NSString *type;
+@property (nonatomic) NSUInteger count;
+@property (nonatomic) CLLocationCoordinate2D *coordinates;
+
++ (instancetype)polygonAnnotation:(CLLocationCoordinate2D *)coordinates fillAlpha:(double)fillAlpha fillColor:(NSString *)fillColor  strokeColor:(NSString *)strokeColor strokeAlpha:(double)strokeAlpha id:(NSString *)id type:(NSString *)type count:(NSUInteger)count;
+
+@end
