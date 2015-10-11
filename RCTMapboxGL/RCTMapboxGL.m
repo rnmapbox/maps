@@ -45,6 +45,7 @@ RCT_EXPORT_MODULE();
         _eventDispatcher = eventDispatcher;
         _clipsToBounds = YES;
         _finishedLoading = NO;
+        _newAnnotations = [NSMutableArray array];
     }
 
     return self;
@@ -74,8 +75,6 @@ RCT_EXPORT_MODULE();
         _map.styleURL = _styleURL;
         _map.zoomLevel = _zoomLevel;
     } else {
-        /* A bit of a hack because hooking into the fully rendered event didn't seem to work */
-        [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:0.1];
         /* We need to have a height/width specified in order to render */
         if (_accessToken && _styleURL && self.bounds.size.height > 0 && self.bounds.size.width > 0) {
             [self createMap];
@@ -105,21 +104,55 @@ RCT_EXPORT_MODULE();
 - (void)setAnnotations:(NSMutableArray *)annotations
 {
     _newAnnotations = annotations;
-    [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:0.1];
+    [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:0.5];
 }
 
-- (void)updateAnnotations
-{
+- (void)updateAnnotations {
     if (_newAnnotations) {
-        // Take into account any already placed pins
         if (_annotations.count) {
-            [_map removeAnnotations: _annotations];
+            for (int i = 0; i < [_annotations count]; i++) {
+                [_map removeAnnotations: _annotations];
+            }
             _annotations = nil;
         }
-
+        
         _annotations = _newAnnotations;
-        [_map addAnnotations:_newAnnotations];
+        for (int i = 0; i < [_newAnnotations count]; i++) {
+            [_map addAnnotation:_newAnnotations[i]];
+        }
     }
+}
+
+- (CGFloat)mapView:(MGLMapView *)mapView alphaForShapeAnnotation:(RCTMGLAnnotationPolyline *)shape
+{
+    if ([shape isKindOfClass:[RCTMGLAnnotationPolyline class]]) {
+        return shape.strokeAlpha;
+    } else if ([shape isKindOfClass:[RCTMGLAnnotationPolygon class]]) {
+        return [(RCTMGLAnnotationPolygon *) shape fillAlpha];
+    } else {
+        return 1.0;
+    }
+}
+
+- (UIColor *)mapView:(MGLMapView *)mapView strokeColorForShapeAnnotation:(RCTMGLAnnotationPolyline *)shape
+{
+    if ([shape isKindOfClass:[RCTMGLAnnotationPolyline class]]) {
+        return [self getUIColorObjectFromHexString:shape.strokeColor alpha:1];
+    } else if ([shape isKindOfClass:[RCTMGLAnnotationPolygon class]]) {
+        return [self getUIColorObjectFromHexString:[(RCTMGLAnnotationPolygon *) shape strokeColor] alpha:1];
+    } else {
+        return [UIColor blueColor];
+    }
+}
+
+- (CGFloat)mapView:(MGLMapView *)mapView lineWidthForPolylineAnnotation:(RCTMGLAnnotationPolyline *)shape
+{
+    return shape.strokeWidth;
+}
+
+- (UIColor *)mapView:(MGLMapView *)mapView fillColorForPolygonAnnotation:(RCTMGLAnnotationPolygon *)shape
+{
+    return [self getUIColorObjectFromHexString:shape.fillColor alpha:1];
 }
 
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate
@@ -127,6 +160,7 @@ RCT_EXPORT_MODULE();
     _centerCoordinate = centerCoordinate;
     [self updateMap];
 }
+
 
 - (void)setDebugActive:(BOOL)debugActive
 {
@@ -181,7 +215,6 @@ RCT_EXPORT_MODULE();
     _styleURL = styleURL;
     [self updateMap];
 }
-
 
 - (void)setRightCalloutAccessory:(UIButton *)rightCalloutAccessory
 {
@@ -323,9 +356,9 @@ RCT_EXPORT_MODULE();
 
 - (MGLAnnotationImage *)mapView:(MGLMapView *)mapView imageForAnnotation:(id<MGLAnnotation>)annotation
 {
-    NSString *id = [(RCTMGLAnnotation *) annotation id];
     NSString *url = [(RCTMGLAnnotation *) annotation annotationImageURL];
     if (!url) { return nil; }
+    NSString *id = [(RCTMGLAnnotation *) annotation id];
     CGSize imageSize = [(RCTMGLAnnotation *) annotation annotationImageSize];
     MGLAnnotationImage *annotationImage = [mapView dequeueReusableAnnotationImageWithIdentifier:id];
 
@@ -349,9 +382,40 @@ RCT_EXPORT_MODULE();
     return annotationImage;
 }
 
+- (unsigned int)intFromHexString:(NSString *)hexStr
+{
+    unsigned int hexInt = 0;
+    
+    // Create scanner
+    NSScanner *scanner = [NSScanner scannerWithString:hexStr];
+    
+    // Tell scanner to skip the # character
+    [scanner setCharactersToBeSkipped:[NSCharacterSet characterSetWithCharactersInString:@"#"]];
+    
+    // Scan hex value
+    [scanner scanHexInt:&hexInt];
+    
+    return hexInt;
+}
+
+
+- (UIColor *)getUIColorObjectFromHexString:(NSString *)hexStr alpha:(CGFloat)alpha
+{
+    // Convert hex string to an integer
+    unsigned int hexint = [self intFromHexString:hexStr];
+    
+    // Create color object, specifying alpha as well
+    UIColor *color =
+    [UIColor colorWithRed:((CGFloat) ((hexint & 0xFF0000) >> 16))/255
+                    green:((CGFloat) ((hexint & 0xFF00) >> 8))/255
+                     blue:((CGFloat) (hexint & 0xFF))/255
+                    alpha:alpha];
+    
+    return color;
+}
+
 @end
 
-/* RCTMGLAnnotation */
 
 @interface RCTMGLAnnotation ()
 
@@ -399,5 +463,37 @@ RCT_EXPORT_MODULE();
 
     return self;
 }
+@end
+
+@interface RCTMGLAnnotationPolyline ()
+@end
+
+@implementation RCTMGLAnnotationPolyline
+
++ (instancetype)polylineAnnotation:(CLLocationCoordinate2D *)coordinates strokeAlpha:(double)strokeAlpha strokeColor:(NSString *)strokeColor strokeWidth:(double)strokeWidth id:(NSString *)id type:(NSString *)type count:(NSUInteger)count
+{
+    RCTMGLAnnotationPolyline *polyline = [self polylineWithCoordinates:coordinates count:count];
+    polyline.strokeAlpha = strokeAlpha;
+    polyline.strokeColor = strokeColor;
+    polyline.strokeWidth = strokeWidth;
+    return polyline;
+}
+@end
+
+@interface RCTMGLAnnotationPolygon ()
+@end
+
+@implementation RCTMGLAnnotationPolygon
+
++ (instancetype)polygonAnnotation:(CLLocationCoordinate2D *)coordinates fillAlpha:(double)fillAlpha fillColor:(NSString *)fillColor strokeColor:(NSString *)strokeColor strokeAlpha:(double)strokeAlpha id:(NSString *)id type:(NSString *)type count:(NSUInteger)count
+{
+    RCTMGLAnnotationPolygon *polygon = [self polygonWithCoordinates:coordinates count:count];
+    polygon.fillAlpha = fillAlpha;
+    polygon.fillColor = fillColor;
+    polygon.strokeAlpha = strokeAlpha;
+    polygon.strokeColor = strokeColor;
+    return polygon;
+}
+
 
 @end
