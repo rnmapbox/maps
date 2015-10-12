@@ -1,30 +1,20 @@
 package com.mapbox.reactnativemapboxgl;
 
-
 import android.graphics.Color;
 import android.util.Log;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.uimanager.BaseViewPropertyApplicator;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.CatalystStylesDiffMap;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIProp;
-import com.facebook.react.uimanager.ViewManager;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.annotations.PolygonOptions;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.ReadableMap;
-import android.graphics.Color;
-
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.List;
 
 public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public static final String REACT_CLASS = "RCTMapbox";
@@ -43,8 +33,12 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public static final String PROP_ROTATION_ENABLED = "rotationEnabled";
     @UIProp(UIProp.Type.STRING)
     public static final String PROP_SCROLL_ENABLED = "scrollEnabled";
+    @UIProp(UIProp.Type.BOOLEAN)
+    public static final String PROP_USER_LOCATON = "showsUserLocation";
     @UIProp(UIProp.Type.STRING)
     public static final String PROP_STYLE_URL = "styleUrl";
+    @UIProp(UIProp.Type.STRING)
+    public static final String PROP_USER_TRACKING_MODE = "UserLocationTrackingMode";
     @UIProp(UIProp.Type.BOOLEAN)
     public static final String PROP_ZOOM_ENABLED = "zoomEnabled";
     @UIProp(UIProp.Type.NUMBER)
@@ -69,9 +63,21 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public void updateView(final MapView view,
                            final CatalystStylesDiffMap props) {
 
-        BaseViewPropertyApplicator.applyCommonViewProperties(view, props);
         if (props.hasKey(PROP_ACCESS_TOKEN)) {
             view.setAccessToken(props.getString(PROP_ACCESS_TOKEN));
+        }
+        if (props.hasKey(PROP_USER_TRACKING_MODE)) {
+            String mode = props.getString(PROP_USER_TRACKING_MODE);
+            if (mode.equals("NONE")) {
+                view.setUserLocationTrackingMode(MapView.UserLocationTrackingMode.NONE);
+            } else if (mode.equals("FOLLOW")) {
+                view.setUserLocationTrackingMode(MapView.UserLocationTrackingMode.FOLLOW);
+            } else if (mode.equals("FOLLOW_BEARING")) {
+                view.setUserLocationTrackingMode(MapView.UserLocationTrackingMode.FOLLOW_BEARING);
+            } else {
+                view.setUserLocationTrackingMode(MapView.UserLocationTrackingMode.NONE);
+                Log.w("Error", "Tracking mode not found. Setting to NONE.");
+            }
         }
         if (props.hasKey(PROP_ANNOTATIONS)) {
             int size = props.getArray(PROP_ANNOTATIONS).size();
@@ -81,14 +87,17 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
                 if (type.equals("point")) {
                     double latitude = annotation.getArray("coordinates").getDouble(0);
                     double longitude = annotation.getArray("coordinates").getDouble(1);
-                    String title = annotation.getString("title");
-                    String subtitle = annotation.getString("title");
                     LatLng markerCenter = new LatLng(latitude, longitude);
                     MarkerOptions marker = new MarkerOptions();
                     marker.position(markerCenter);
-                    marker.title(title);
-                    marker.snippet(subtitle);
-                    marker.isDraggable();
+                    if (annotation.hasKey("title")) {
+                        String title = annotation.getString("title");
+                        marker.title(title);
+                    }
+                    if (annotation.hasKey("title")) {
+                        String subtitle = annotation.getString("title");
+                        marker.snippet(subtitle);
+                    }
                     view.addMarker(marker);
                 } else if (type.equals("polyline")) {
                     int coordSize = annotation.getArray("coordinates").size();
@@ -98,12 +107,18 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
                         double longitude = annotation.getArray("coordinates").getArray(p).getDouble(1);
                         polyline.add(new LatLng(latitude, longitude));
                     }
-                    double strokeAlpha = annotation.getDouble("alpha");
-                    int strokeColor = Color.parseColor(annotation.getString("strokeColor"));
-                    float strokeWidth = annotation.getInt("strokeWidth");
-                    polyline.alpha((float) strokeAlpha);
-                    polyline.color(strokeColor);
-                    polyline.width(strokeWidth);
+                    if (annotation.hasKey("alpha")) {
+                        double strokeAlpha = annotation.getDouble("alpha");
+                        polyline.alpha((float) strokeAlpha);
+                    }
+                    if (annotation.hasKey("strokeColor")) {
+                        int strokeColor = Color.parseColor(annotation.getString("strokeColor"));
+                        polyline.color(strokeColor);
+                    }
+                    if (annotation.hasKey("strokeWidth")) {
+                        float strokeWidth = annotation.getInt("strokeWidth");
+                        polyline.width(strokeWidth);
+                    }
                     view.addPolyline(polyline);
                 } else if (type.equals("polygon")) {
                     int coordSize = annotation.getArray("coordinates").size();
@@ -113,14 +128,22 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
                         double longitude = annotation.getArray("coordinates").getArray(p).getDouble(1);
                         polygon.add(new LatLng(latitude, longitude));
                     }
-                    double fillAlpha = annotation.getDouble("alpha");
-                    int fillColor = Color.parseColor(annotation.getString("fillColor"));
-                    int strokeColor = Color.parseColor(annotation.getString("strokeColor"));
-                    float strokeWidth = annotation.getInt("strokeWidth");
-                    polygon.alpha((float) fillAlpha);
-                    polygon.fillColor(fillColor);
-                    polygon.strokeColor(strokeColor);
-                    polygon.strokeWidth(strokeWidth);
+                    if (annotation.hasKey("alpha")) {
+                        double fillAlpha = annotation.getDouble("alpha");
+                        polygon.alpha((float) fillAlpha);
+                    }
+                    if (annotation.hasKey("fillColor")) {
+                        int fillColor = Color.parseColor(annotation.getString("fillColor"));
+                        polygon.fillColor(fillColor);
+                    }
+                    if (annotation.hasKey("strokeColor")) {
+                        int strokeColor = Color.parseColor(annotation.getString("strokeColor"));
+                        polygon.strokeColor(strokeColor);
+                    }
+                    if (annotation.hasKey("strokeWidth")) {
+                        float strokeWidth = annotation.getInt("strokeWidth");
+                        polygon.strokeWidth(strokeWidth);
+                    }
                     view.addPolygon(polygon);
                 }
             }
@@ -140,8 +163,8 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         if (props.hasKey(PROP_ROTATION_ENABLED)) {
             view.setRotateEnabled(props.getBoolean(PROP_ROTATION_ENABLED, true));
         }
-        if (props.hasKey(PROP_SCROLL_ENABLED)) {
-            view.setScrollEnabled(props.getBoolean(PROP_SCROLL_ENABLED, true));
+        if (props.hasKey(PROP_USER_LOCATON)) {
+            view.setMyLocationEnabled(props.getBoolean(PROP_USER_LOCATON, true));
         }
         if (props.hasKey(PROP_STYLE_URL)) {
             view.setStyleUrl(props.getString(PROP_STYLE_URL));
@@ -154,5 +177,5 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         }
 
         super.updateView(view, props);
-        }
+    }
 }

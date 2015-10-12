@@ -23,7 +23,9 @@ var MapView = React.createClass({
     direction: React.PropTypes.number,
     rotationEnabled: React.PropTypes.bool,
     scrollEnabled: React.PropTypes.bool,
+    showsUserLocation: React.PropTypes.bool,
     styleUrl: React.PropTypes.string,
+    UserLocationTrackingMode: React.PropTypes.string,
     zoomEnabled: React.PropTypes.bool,
     zoomLevel: React.PropTypes.number
   },
@@ -37,14 +39,14 @@ var MapView = React.createClass({
       direction: 0,
       rotationEnabled: true,
       scrollEnabled: true,
+      showsUserLocation: false,
       styleUrl: 'asset://styles/streets-v8.json',
+      UserLocationTrackingMode: 'NONE',
       zoomEnabled: true
     };
   },
   render: function() {
-    return (<Mapbox
-      {...this.props}
-      />);
+    return (<Mapbox {...this.props} />);
   }
 });
 
