@@ -94,8 +94,8 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
                         String title = annotation.getString("title");
                         marker.title(title);
                     }
-                    if (annotation.hasKey("title")) {
-                        String subtitle = annotation.getString("title");
+                    if (annotation.hasKey("subtitle")) {
+                        String subtitle = annotation.getString("subtitle");
                         marker.snippet(subtitle);
                     }
                     view.addMarker(marker);

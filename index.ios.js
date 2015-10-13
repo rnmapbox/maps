@@ -92,9 +92,18 @@ var MapView = React.createClass({
   },
   getDefaultProps() {
     return {
-      styleURL: 'asset://styles/mapbox-streets-v7.json',
+      centerCoordinate: {
+        latitude: 0,
+        longitude: 0
+      },
+      debugActive: false,
+      direction: 0,
+      rotationEnabled: true,
       scrollEnabled: true,
-      zoomEnabled: true
+      showsUserLocation: false,
+      styleUrl: 'asset://styles/streets-v8.json',
+      zoomEnabled: true,
+      zoomLevel: 0
     };
   },
   render: function() {

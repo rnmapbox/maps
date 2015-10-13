@@ -2,6 +2,7 @@
 
 _A React Native component for building maps with [Mapbox GL](https://www.mapbox.com/mapbox-gl/) for iOS and Android_
 
+[![npm version](https://badge.fury.io/js/react-native-mapbox-gl.svg)](https://badge.fury.io/js/react-native-mapbox-gl)
 
 ```
 npm install react-native-mapbox-gl --save

@@ -42,7 +42,8 @@ var MapView = React.createClass({
       showsUserLocation: false,
       styleUrl: 'asset://styles/streets-v8.json',
       UserLocationTrackingMode: 'NONE',
-      zoomEnabled: true
+      zoomEnabled: true,
+      zoomLevel: 0
     };
   },
   render: function() {
