@@ -3,9 +3,8 @@ var { NativeModules, requireNativeComponent } = React;
 
 
 var MapView = React.createClass({
-  name: 'RCTMapbox',
   propTypes: {
-    accessToken: React.PropTypes.string,
+    accessToken: React.PropTypes.string.isRequired,
     annotations: React.PropTypes.arrayOf(React.PropTypes.shape({
       title: React.PropTypes.string,
       subtitle: React.PropTypes.string,

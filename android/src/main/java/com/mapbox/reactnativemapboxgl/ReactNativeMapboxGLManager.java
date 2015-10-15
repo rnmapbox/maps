@@ -3,7 +3,6 @@ package com.mapbox.reactnativemapboxgl;
 import android.graphics.Color;
 import android.util.Log;
 
-import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.CatalystStylesDiffMap;
@@ -52,10 +51,8 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     @Override
     public MapView createViewInstance(ThemedReactContext context) {
         MapView mv = new MapView(context);
-        mv.setAccessToken("pk.eyJ1IjoiYm9iYnlzdWQiLCJhIjoiTi16MElIUSJ9.Clrqck--7WmHeqqvtFdYig");
-        mv.setStyleUrl("asset://styles/dark-v8.json");
+        mv.setAccessToken("pk.foobar"); // Placeholder access token
         mv.onCreate(null);
-        mv.onStart();
         return mv;
     }
 
@@ -63,7 +60,9 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public void updateView(final MapView view,
                            final CatalystStylesDiffMap props) {
 
-        if (props.hasKey(PROP_ACCESS_TOKEN)) {
+        if (!props.hasKey(PROP_ACCESS_TOKEN)) {
+            Log.e("Error", "No access token provided");
+        } else {
             view.setAccessToken(props.getString(PROP_ACCESS_TOKEN));
         }
         if (props.hasKey(PROP_USER_TRACKING_MODE)) {
