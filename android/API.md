@@ -43,13 +43,15 @@ You can change the `styleURL` to any valid GL stylesheet, here are a few:
   "title": "optional string",
   "subtitle": "optional string",
   "fillAlpha": "optional, only used for type=polygon. Controls the opacity of polygon",
-  "fillColor": "optional string hex color including #, only used for type=polygon",
+  "fillColor": "optional string hex color including #, only used for type=polygon*",
   "strokeAlpha": "optional number from 0-1. Only used for type=poyline. Controls opacity of line",
-  "strokeColor": "optional string hex color including #, used for type=polygon and type=polyline",
+  "strokeColor": "optional string hex color including #, used for type=polygon and type=polyline*",
   "strokeWidth": "optional number. Only used for type=poyline. Controls line width",
   "id": "optional string, unique identifier.",
 }]
 ```
+_*[Valid colors can be seen here](http://developer.android.com/reference/android/graphics/Color.html#parseColor%28java.lang.String%29)_
+
 **For adding local images via `image!yourImage.png` see [adding static resources to your app using Images.xcassets  docs](https://facebook.github.io/react-native/docs/image.html#adding-static-resources-to-your-app-using-images-xcassets)**.
 
 #### Example
