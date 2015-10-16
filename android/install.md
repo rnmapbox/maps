@@ -56,4 +56,4 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
 
 ```
 
-#### Step 5 - Add to project, [see example](/example.js)
+#### Step 5 - Add to project, [see example](./example.js)
