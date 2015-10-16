@@ -42,3 +42,17 @@ MGLTypes.h
 MGLUserLocation.h
 MGLAccountManager.h
 MGLMapView_Private.h
+ios/RCTMapboxGL/MGLAnnotationImage.h
+ios/RCTMapboxGL/MGLGeometry.h
+ios/RCTMapboxGL/MGLMapCamera.h
+ios/RCTMapboxGL/MGLMultiPoint.h
+ios/RCTMapboxGL/MGLOverlay.h
+ios/RCTMapboxGL/MGLPointAnnotation.h
+ios/RCTMapboxGL/MGLPolygon.h
+ios/RCTMapboxGL/MGLPolyline.h
+ios/RCTMapboxGL/MGLShape.h
+ios/RCTMapboxGL/Mapbox.bundle/
+ios/RCTMapboxGL/Mapbox.h
+ios/RCTMapboxGL/libMapbox.a
+./android/build/
+reactnativemapboxgl.iml
