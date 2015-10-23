@@ -100,6 +100,22 @@ RCT_EXPORT_METHOD(setCenterCoordinateZoomLevelAnimated:(nonnull NSNumber *)react
     }];
 }
 
+RCT_EXPORT_METHOD(setVisibleCoordinateBoundsAnimated:(nonnull NSNumber *)reactTag
+                  latitudeSW:(float) latitudeSW
+                  longitudeSW:(float) longitudeSW
+                  latitudeNE:(float) latitudeNE
+                  longitudeNE:(float) longitudeNE
+                  edgePadding:(double) edgePadding)
+{
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+        RCTMapboxGL *mapView = viewRegistry[reactTag];
+        if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
+            MGLCoordinateBounds coordinatesBounds = MGLCoordinateBoundsMake(CLLocationCoordinate2DMake(latitudeSW, longitudeSW), CLLocationCoordinate2DMake(latitudeNE, longitudeNE));
+            [mapView setVisibleCoordinateBounds:coordinatesBounds edgePadding:UIEdgeInsetsMake(edgePadding, edgePadding, edgePadding, edgePadding) animated:YES];
+        }
+    }];
+}
+
 RCT_EXPORT_METHOD(selectAnnotationAnimated:(nonnull NSNumber *) reactTag
                   annotationInArray:(NSUInteger)annotationInArray)
 {
