@@ -3,8 +3,10 @@ package com.mapbox.reactnativemapboxgl;
 import android.graphics.Color;
 import android.util.Log;
 
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.uimanager.CatalystStylesDiffMap;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -14,6 +16,7 @@ import com.mapbox.mapboxsdk.annotations.PolygonOptions;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public static final String REACT_CLASS = "RCTMapbox";
@@ -28,6 +31,8 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public static final String PROP_DEBUG_ACTIVE = "debugActive";
     @UIProp(UIProp.Type.NUMBER)
     public static final String PROP_DIRECTION = "direction";
+    @UIProp(UIProp.Type.MAP)
+    public static final String PROP_ONREGIONCHANGE = "onRegionChange";
     @UIProp(UIProp.Type.BOOLEAN)
     public static final String PROP_ROTATION_ENABLED = "rotationEnabled";
     @UIProp(UIProp.Type.STRING)
@@ -50,8 +55,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
 
     @Override
     public MapView createViewInstance(ThemedReactContext context) {
-        MapView mv = new MapView(context);
-        mv.setAccessToken("pk.foobar"); // Placeholder access token
+        MapView mv = new MapView(context, "pk.foo");
         mv.onCreate(null);
         return mv;
     }
@@ -64,19 +68,6 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
             Log.e("Error", "No access token provided");
         } else {
             view.setAccessToken(props.getString(PROP_ACCESS_TOKEN));
-        }
-        if (props.hasKey(PROP_USER_TRACKING_MODE)) {
-            String mode = props.getString(PROP_USER_TRACKING_MODE);
-            if (mode.equals("NONE")) {
-                view.setUserLocationTrackingMode(MapView.UserLocationTrackingMode.NONE);
-            } else if (mode.equals("FOLLOW")) {
-                view.setUserLocationTrackingMode(MapView.UserLocationTrackingMode.FOLLOW);
-            } else if (mode.equals("FOLLOW_BEARING")) {
-                view.setUserLocationTrackingMode(MapView.UserLocationTrackingMode.FOLLOW_BEARING);
-            } else {
-                view.setUserLocationTrackingMode(MapView.UserLocationTrackingMode.NONE);
-                Log.w("Error", "Tracking mode not found. Setting to NONE.");
-            }
         }
         if (props.hasKey(PROP_ANNOTATIONS)) {
             int size = props.getArray(PROP_ANNOTATIONS).size();
@@ -139,10 +130,6 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
                         int strokeColor = Color.parseColor(annotation.getString("strokeColor"));
                         polygon.strokeColor(strokeColor);
                     }
-                    if (annotation.hasKey("strokeWidth")) {
-                        float strokeWidth = annotation.getInt("strokeWidth");
-                        polygon.strokeWidth(strokeWidth);
-                    }
                     view.addPolygon(polygon);
                 }
             }
@@ -152,6 +139,23 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         }
         if (props.hasKey(PROP_DIRECTION)) {
             view.setDirection(props.getFloat(PROP_DIRECTION, 0));
+        }
+        if (props.hasKey(PROP_ONREGIONCHANGE)) {
+            view.addOnMapChangedListener(new MapView.OnMapChangedListener() {
+                @Override
+                public void onMapChanged(int change) {
+                    if (change == MapView.REGION_DID_CHANGE) {
+                        WritableMap event = Arguments.createMap();
+                        WritableMap location = Arguments.createMap();
+                        location.putDouble("latitude", view.getCenterCoordinate().getLatitude());
+                        location.putDouble("longitude", view.getCenterCoordinate().getLongitude());
+                        location.putDouble("zoom", view.getZoomLevel());
+                        event.putMap("src", location);
+                        ReactContext reactContext = (ReactContext) view.getContext();
+                        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "topChange", event);
+                    }
+                }
+            });
         }
         if (props.hasKey(PROP_CENTER_COORDINATE)) {
             ReadableMap center = props.getMap(PROP_CENTER_COORDINATE);
@@ -168,11 +172,34 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         if (props.hasKey(PROP_STYLE_URL)) {
             view.setStyleUrl(props.getString(PROP_STYLE_URL));
         }
-        if (props.hasKey(PROP_STYLE_URL)) {
+
+        /*
+
+        This was removed in v2.1.0 and will be added back in the next release
+
+        if (props.hasKey(PROP_USER_TRACKING_MODE)) {
+            String mode = props.getString(PROP_USER_TRACKING_MODE);
+            if (mode.equals("NONE")) {
+                view.setUserLocationTrackingMode(MapView.UserLocationTrackingMode.NONE);
+            } else if (mode.equals("FOLLOW")) {
+                view.setUserLocationTrackingMode(MapView.UserLocationTrackingMode.FOLLOW);
+            } else if (mode.equals("FOLLOW_BEARING")) {
+                view.setUserLocationTrackingMode(MapView.UserLocationTrackingMode.FOLLOW_BEARING);
+            } else {
+                view.setUserLocationTrackingMode(MapView.UserLocationTrackingMode.NONE);
+                Log.w("Error", "Tracking mode not found. Setting to NONE.");
+            }
+        }*/
+
+        if (props.hasKey(PROP_ZOOM_ENABLED)) {
             view.setZoomEnabled(props.getBoolean(PROP_ZOOM_ENABLED, true));
         }
         if (props.hasKey(PROP_ZOOM_LEVEL)) {
             view.setZoomLevel(props.getFloat(PROP_ZOOM_LEVEL, 0));
+        }
+
+        if (props.hasKey(PROP_SCROLL_ENABLED)) {
+            view.setScrollEnabled(props.getBoolean(PROP_SCROLL_ENABLED, true));
         }
 
         super.updateView(view, props);

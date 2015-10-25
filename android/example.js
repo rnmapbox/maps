@@ -20,23 +20,12 @@ var MapExample = React.createClass({
         type: 'point',
         title: 'Important!',
         subtitle: 'Neat, this is a custom annotation image',
-        annotationImage: {
-          url: 'https://cldup.com/7NLZklp8zS.png',
-          height: 25,
-          width: 25
-        },
         id: 'marker2'
       }, {
         coordinates: [40.7923, -73.9178],
         type: 'point',
         title: 'Important!',
-        subtitle: 'Neat, this is a custom annotation image',
-        annotationImage: {
-          url: 'https://cldup.com/7NLZklp8zS.png',
-          height: 25,
-          width: 25
-        },
-        id: 'marker2'
+        subtitle: 'Neat, this is a custom annotation image'
       }, {
         "coordinates": [[40.76572150042782,-73.99429321289062],[40.743485405490695, -74.00218963623047],[40.728266950429735,-74.00218963623047],[40.728266950429735,-73.99154663085938],[40.73633186448861,-73.98983001708984],[40.74465591168391,-73.98914337158203],[40.749337730454826,-73.9870834350586]],
         "type": "polyline",
@@ -55,6 +44,9 @@ var MapExample = React.createClass({
       }]
     }
   },
+  onRegionChange(location) {
+    console.log(location);
+  },
   render: function() {
     return (
       <View style={styles.container}>
@@ -64,9 +56,11 @@ var MapExample = React.createClass({
           centerCoordinate={this.state.center}
           debugActive={false}
           direction={0}
+          onRegionChange={this.onRegionChange}
           rotationEnabled={true}
           scrollEnabled={true}
           style={styles.map}
+          showsUserLocation={true}
           styleUrl={'asset://styles/streets-v8.json'}
           zoomEnabled={true}
           zoomLevel={12}
