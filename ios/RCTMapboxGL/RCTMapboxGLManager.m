@@ -198,7 +198,7 @@ RCT_EXPORT_METHOD(addAnnotations:(nonnull NSNumber *)reactTag
                                     RCTLogError(@"Height and width for image required");
                                     return;
                                 }
-                                CGSize annotationImageSize =  CGSizeMake(height, width);
+                                CGSize annotationImageSize =  CGSizeMake(width, height);
                                 pin.annotationImageURL = annotationImageURL;
                                 pin.annotationImageSize = annotationImageSize;
                             }
@@ -220,7 +220,7 @@ RCT_EXPORT_METHOD(addAnnotations:(nonnull NSNumber *)reactTag
                                     RCTLogError(@"Height and width for image required");
                                     return;
                                 }
-                                CGSize annotationImageSize =  CGSizeMake(height, width);
+                                CGSize annotationImageSize =  CGSizeMake(width, height);
                                 point.annotationImageURL = annotationImageURL;
                                 point.annotationImageSize = annotationImageSize;
                             }
@@ -422,7 +422,7 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
                                 RCTLogError(@"Height and width for image required");
                                 return;
                             }
-                            CGSize annotationImageSize =  CGSizeMake(height, width);
+                            CGSize annotationImageSize =  CGSizeMake(width, height);
                             pin.annotationImageURL = annotationImageURL;
                             pin.annotationImageSize = annotationImageSize;
                         }
@@ -444,7 +444,7 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
                                 RCTLogError(@"Height and width for image required");
                                 return;
                             }
-                            CGSize annotationImageSize =  CGSizeMake(height, width);
+                            CGSize annotationImageSize =  CGSizeMake(width, height);
                             point.annotationImageURL = annotationImageURL;
                             point.annotationImageSize = annotationImageSize;
                         }
