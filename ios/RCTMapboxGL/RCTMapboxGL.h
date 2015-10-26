@@ -34,6 +34,7 @@
 - (void)setCenterCoordinateZoomLevelAnimated:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel;
 - (void)selectAnnotationAnimated:(NSUInteger)annotationInArray;
 - (void)removeAnnotation:(NSUInteger)annotationInArray;
+- (void)setVisibleCoordinateBounds:(MGLCoordinateBounds)bounds edgePadding:(UIEdgeInsets)padding animated:(BOOL)animated;
 
 @end
 
