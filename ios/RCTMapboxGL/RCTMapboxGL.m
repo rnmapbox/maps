@@ -242,6 +242,11 @@ RCT_EXPORT_MODULE();
     [_map setCenterCoordinate:coordinates zoomLevel:zoomLevel animated:YES];
 }
 
+- (void)setVisibleCoordinateBounds:(MGLCoordinateBounds)bounds edgePadding:(UIEdgeInsets)padding animated:(BOOL)animated
+{
+    [_map setVisibleCoordinateBounds:bounds edgePadding:padding animated:animated];
+}
+
 - (void)mapView:(MGLMapView *)mapView didUpdateUserLocation:(MGLUserLocation *)userLocation;
 {
     NSDictionary *event = @{ @"target": self.reactTag,
