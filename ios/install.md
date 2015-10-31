@@ -1,7 +1,20 @@
 # Installation Process
 
 Notes:
+
 * `react-native ^v0.4.3` is required
+
+## Use CocoaPods
+
+If you already use [CocoaPods](https://cocoapods.org/) in your react-native project you add the native
+part of Mapbox GL with just one line of code:
+
+1. `npm install react-native-mapbox-gl --save`
+1. Add `pod 'RCTMapboxGL', :path => 'node_modules/react-native-mapbox-gl/ios'` to your `Podspec` file and re-run `pod install`.
+
+See also the react-native [0.13 release notes](https://github.com/facebook/react-native/releases/tag/v0.13.0)
+
+## Manually
 
 1. `npm install react-native-mapbox-gl --save`
 1. In the XCode's `Project navigator`, right click on project's name ➜ `Add Files to <...>` ![](https://cldup.com/k0oJwOUKPN.png)
