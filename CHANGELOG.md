@@ -1,3 +1,10 @@
+# v1.1.0
+
+* Fixed a regression in the `Header Search Paths`
+* [iOS] added new function `setVisibleCoordinateBoundsAnimated()`
+* [Android] `showsUserLocation` properly shows the users correct location
+* Updates Android to `mapbox-gl-naitve@v2.2.0`
+
 # v1.0.0
 
 * Adds support for Android [#97](https://github.com/mapbox/react-native-mapbox-gl/pull/97)
