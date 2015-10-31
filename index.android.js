@@ -26,10 +26,16 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
       scrollEnabled: React.PropTypes.bool,
       showsUserLocation: React.PropTypes.bool,
       styleUrl: React.PropTypes.string,
-      UserLocationTrackingMode: React.PropTypes.oneOf(['NONE', 'FOLLOW', 'FOLLOW_BEARING']),
+      UserLocationTrackingMode: React.PropTypes.oneOf(['NONE', 'FOLLOW']),
       zoomEnabled: React.PropTypes.bool,
       zoomLevel: React.PropTypes.number,
-      onRegionChange: React.PropTypes.func
+      onRegionChange: React.PropTypes.func,
+      // Fix for https://github.com/mapbox/react-native-mapbox-gl/issues/118
+      scaleY: React.PropTypes.number,
+      scaleX: React.PropTypes.number,
+      translateY: React.PropTypes.number,
+      translateX: React.PropTypes.number,
+      rotation: React.PropTypes.number
     },
     defaultProps() {
       return {

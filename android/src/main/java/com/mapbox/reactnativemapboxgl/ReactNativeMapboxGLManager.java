@@ -13,10 +13,13 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIProp;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.annotations.PolygonOptions;
+import com.mapbox.mapboxsdk.constants.MyLocationTracking;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+
+import java.util.Map;
 
 public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public static final String REACT_CLASS = "RCTMapbox";
@@ -144,7 +147,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
             view.addOnMapChangedListener(new MapView.OnMapChangedListener() {
                 @Override
                 public void onMapChanged(int change) {
-                    if (change == MapView.REGION_DID_CHANGE) {
+                    if (change == MapView.REGION_DID_CHANGE || change == MapView.REGION_DID_CHANGE_ANIMATED) {
                         WritableMap event = Arguments.createMap();
                         WritableMap location = Arguments.createMap();
                         location.putDouble("latitude", view.getCenterCoordinate().getLatitude());
@@ -172,25 +175,17 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         if (props.hasKey(PROP_STYLE_URL)) {
             view.setStyleUrl(props.getString(PROP_STYLE_URL));
         }
-
-        /*
-
-        This was removed in v2.1.0 and will be added back in the next release
-
         if (props.hasKey(PROP_USER_TRACKING_MODE)) {
             String mode = props.getString(PROP_USER_TRACKING_MODE);
             if (mode.equals("NONE")) {
-                view.setUserLocationTrackingMode(MapView.UserLocationTrackingMode.NONE);
+                view.setMyLocationTrackingMode(MyLocationTracking.TRACKING_NONE);
             } else if (mode.equals("FOLLOW")) {
-                view.setUserLocationTrackingMode(MapView.UserLocationTrackingMode.FOLLOW);
-            } else if (mode.equals("FOLLOW_BEARING")) {
-                view.setUserLocationTrackingMode(MapView.UserLocationTrackingMode.FOLLOW_BEARING);
+                view.setMyLocationTrackingMode(MyLocationTracking.TRACKING_FOLLOW);
             } else {
-                view.setUserLocationTrackingMode(MapView.UserLocationTrackingMode.NONE);
+                view.setMyLocationTrackingMode(MyLocationTracking.TRACKING_NONE);
                 Log.w("Error", "Tracking mode not found. Setting to NONE.");
             }
-        }*/
-
+        }
         if (props.hasKey(PROP_ZOOM_ENABLED)) {
             view.setZoomEnabled(props.getBoolean(PROP_ZOOM_ENABLED, true));
         }

@@ -62,8 +62,9 @@ var MapExample = React.createClass({
           style={styles.map}
           showsUserLocation={true}
           styleUrl={'asset://styles/streets-v8.json'}
+          UserLocationTrackingMode={'FOLLOW'}
           zoomEnabled={true}
-          zoomLevel={12}
+          zoomLevel={10}
         />
       </View>
     );
