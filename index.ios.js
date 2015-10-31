@@ -109,14 +109,14 @@ var MapView = React.createClass({
       zoomLevel: 0
     };
   },
-  render: function() {
-    return (<MapboxGLView
+  render() {
+    return <MapboxGLView
       {...this.props}
       onRegionChange={this._onRegionChange}
       onRegionWillChange={this._onRegionWillChange}
       onOpenAnnotation={this._onOpenAnnotation}
       onRightAnnotationTapped={this._onRightAnnotationTapped}
-      onUpdateUserLocation={this._onUpdateUserLocation} />);
+      onUpdateUserLocation={this._onUpdateUserLocation} />;
   }
 });
 

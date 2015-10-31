@@ -19,7 +19,9 @@
 
 ## Events
 
-_Not yet implemented_
+| Event Name | Returns | Notes
+|---|---|---|
+| `onRegionChange` | `{latitude: 0, longitude: 0, zoom: 0}` | Fired when the map is panning or zooming.
 
 ## Methods for Modifying the Map State
 

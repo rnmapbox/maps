@@ -17,9 +17,6 @@
       "url": "https://github.com/mapbox/react-native-mapbox-gl/blob/master/LICENSE.md"
     }
   ],
-  "peerDependencies": {
-    "react-native": ">=0.4.3"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/mapbox/react-native-mapbox-gl"
