@@ -22,6 +22,7 @@ Pod::Spec.new do |s|
   # following attributes to use the local files...
   # I keep this it it makes development easier of fix somes "troubles" later.
 
+#  s.source_files        = "RCTMapboxGL/*.{h,m}"
 #  s.resources           = "RCTMapboxGL/Mapbox.bundle", "RCTMapboxGL/Settings.bundle"
 #  s.vendored_libraries  = "RCTMapboxGL/libMapbox.a"
 #  s.framework           = "CoreTelephony", "GLKit", "ImageIO", "MobileCoreServices", "QuartzCore", "SystemConfiguration"
