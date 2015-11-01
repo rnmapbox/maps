@@ -13,6 +13,7 @@ Pod::Spec.new do |s|
   s.platform            = :ios, "7.0"
 
   s.source_files        = "RCTMapboxGL/RCTMapboxGL.{h,m}", "RCTMapboxGL/RCTMapboxGLManager.{h,m}"
+  s.resources           = "RCTMapboxGL/Settings.bundle"
   s.dependency            "Mapbox-iOS-SDK", "2.1.2"
 
   # These resources, library, frameworks and libraries spec is already part of
