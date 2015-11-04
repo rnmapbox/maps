@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react-native');
-var MapboxGLMap = require('react-native-mapbox-gl');
+var Mapbox = require('react-native-mapbox-gl');
 var mapRef = 'mapRef';
 var {
   AppRegistry,
@@ -11,8 +11,8 @@ var {
   View
 } = React;
 
-var Example = React.createClass({
-  mixins: [MapboxGLMap.Mixin],
+var MapExample = React.createClass({
+  mixins: [Mapbox.Mixin],
   getInitialState() {
     return {
       center: {
@@ -22,7 +22,7 @@ var Example = React.createClass({
       zoom: 11,
       annotations: [{
         coordinates: [40.72052634, -73.97686958312988],
-        "type": "point",
+        'type': 'point',
         title: 'This is marker 1',
         subtitle: 'It has a rightCalloutAccessory too',
         rightCalloutAccessory: {
@@ -38,7 +38,7 @@ var Example = React.createClass({
         id: 'marker1'
       }, {
         coordinates: [40.714541341726175,-74.00579452514648],
-        "type": "point",
+        'type': 'point',
         title: 'Important!',
         subtitle: 'Neat, this is a custom annotation image',
         annotationImage: {
@@ -48,19 +48,19 @@ var Example = React.createClass({
         },
         id: 'marker2'
       }, {
-        "coordinates": [[40.76572150042782,-73.99429321289062],[40.743485405490695, -74.00218963623047],[40.728266950429735,-74.00218963623047],[40.728266950429735,-73.99154663085938],[40.73633186448861,-73.98983001708984],[40.74465591168391,-73.98914337158203],[40.749337730454826,-73.9870834350586]],
-        "type": "polyline",
-        "strokeColor": "#00FB00",
-        "strokeWidth": 4,
-        "strokeAlpha": .5,
-        "id": "foobar"
+        'coordinates': [[40.76572150042782,-73.99429321289062],[40.743485405490695, -74.00218963623047],[40.728266950429735,-74.00218963623047],[40.728266950429735,-73.99154663085938],[40.73633186448861,-73.98983001708984],[40.74465591168391,-73.98914337158203],[40.749337730454826,-73.9870834350586]],
+        'type': 'polyline',
+        'strokeColor': '#00FB00',
+        'strokeWidth': 4,
+        'strokeAlpha': .5,
+        'id': 'foobar'
       }, {
-        "coordinates": [[40.749857912194386, -73.96820068359375], [40.741924698522055,-73.9735221862793], [40.735681504432264,-73.97523880004883], [40.7315190495212,-73.97438049316406], [40.729177554196376,-73.97180557250975], [40.72345355209305,-73.97438049316406], [40.719290332250544,-73.97455215454102], [40.71369559554873,-73.97729873657227], [40.71200407096382,-73.97850036621094], [40.71031250340588,-73.98691177368163], [40.71031250340588,-73.99154663085938]],
-        "type": "polygon",
-        "fillAlpha":1,
-        "strokeColor": "#fffff",
-        "fillColor": "blue",
-        "id": "zap"
+        'coordinates': [[40.749857912194386, -73.96820068359375], [40.741924698522055,-73.9735221862793], [40.735681504432264,-73.97523880004883], [40.7315190495212,-73.97438049316406], [40.729177554196376,-73.97180557250975], [40.72345355209305,-73.97438049316406], [40.719290332250544,-73.97455215454102], [40.71369559554873,-73.97729873657227], [40.71200407096382,-73.97850036621094], [40.71031250340588,-73.98691177368163], [40.71031250340588,-73.99154663085938]],
+        'type': 'polygon',
+        'fillAlpha':1,
+        'strokeColor': '#fffff',
+        'fillColor': 'blue',
+        'id': 'zap'
       }]
      };
   },
@@ -101,12 +101,12 @@ var Example = React.createClass({
           title: 'This is a new marker',
           id: 'foo'
         }, {
-          "coordinates": [[40.749857912194386, -73.96820068359375], [40.741924698522055,-73.9735221862793], [40.735681504432264,-73.97523880004883], [40.7315190495212,-73.97438049316406], [40.729177554196376,-73.97180557250975], [40.72345355209305,-73.97438049316406], [40.719290332250544,-73.97455215454102], [40.71369559554873,-73.97729873657227], [40.71200407096382,-73.97850036621094], [40.71031250340588,-73.98691177368163], [40.71031250340588,-73.99154663085938]],
-          "type": "polygon",
-          "fillAlpha": 1,
-          "fillColor": "#000",
-          "strokeAlpha": 1,
-          "id": "new-black-polygon"
+          'coordinates': [[40.749857912194386, -73.96820068359375], [40.741924698522055,-73.9735221862793], [40.735681504432264,-73.97523880004883], [40.7315190495212,-73.97438049316406], [40.729177554196376,-73.97180557250975], [40.72345355209305,-73.97438049316406], [40.719290332250544,-73.97455215454102], [40.71369559554873,-73.97729873657227], [40.71200407096382,-73.97850036621094], [40.71031250340588,-73.98691177368163], [40.71031250340588,-73.99154663085938]],
+          'type': 'polygon',
+          'fillAlpha': 1,
+          'fillColor': '#000',
+          'strokeAlpha': 1,
+          'id': 'new-black-polygon'
         }])}>
           Add new marker
         </Text>
@@ -116,7 +116,10 @@ var Example = React.createClass({
         <Text style={styles.text} onPress={() => this.removeAnnotation(mapRef, 0)}>
           Remove first annotation
         </Text>
-        <MapboxGLMap
+        <Text style={styles.text} onPress={() => this.setVisibleCoordinateBoundsAnimated(mapRef, 40.712, -74.227, 40.774, -74.125, 0)}>
+          Set visible bounds to 40.7, -74.2, 40.7, -74.1
+        </Text>
+        <Mapbox
           style={styles.map}
           direction={0}
           rotateEnabled={true}
@@ -152,4 +155,4 @@ var styles = StyleSheet.create({
   }
 });
 
-AppRegistry.registerComponent('your-app-name', () => Example);
+AppRegistry.registerComponent('your-app-name', () => MapExample);
