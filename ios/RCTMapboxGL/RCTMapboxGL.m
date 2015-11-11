@@ -307,7 +307,13 @@ RCT_EXPORT_MODULE();
 }
 
 - (BOOL)mapView:(RCTMapboxGL *)mapView annotationCanShowCallout:(id <MGLAnnotation>)annotation {
-    return YES;
+    NSString *title = [(RCTMGLAnnotation *) annotation title];
+    NSString *subtitle = [(RCTMGLAnnotation *) annotation subtitle];
+    if ([title length] != 0 || [subtitle length] != 0 ) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 - (void)selectAnnotationAnimated:(NSUInteger)annotationInArray
