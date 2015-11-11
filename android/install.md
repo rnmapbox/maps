@@ -1,7 +1,9 @@
 #### Step 1 - NPM Install
 
+Run with ```--ignore-scripts``` to disable ios startup script
+
 ```shell
-npm install --save react-native-mapbox-gl
+npm install --save react-native-mapbox-gl --ignore-scripts
 ```
 #### Step 2 - Update Gradle Settings
 
