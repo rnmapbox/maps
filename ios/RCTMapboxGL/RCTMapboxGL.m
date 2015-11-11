@@ -115,7 +115,7 @@ RCT_EXPORT_MODULE();
             }
             _annotations = nil;
         }
-        
+
         _annotations = _newAnnotations;
         for (int i = 0; i < [_newAnnotations count]; i++) {
             [_map addAnnotation:_newAnnotations[i]];
@@ -363,12 +363,11 @@ RCT_EXPORT_MODULE();
 {
     NSString *url = [(RCTMGLAnnotation *) annotation annotationImageURL];
     if (!url) { return nil; }
-    NSString *id = [(RCTMGLAnnotation *) annotation id];
+
     CGSize imageSize = [(RCTMGLAnnotation *) annotation annotationImageSize];
-    MGLAnnotationImage *annotationImage = [mapView dequeueReusableAnnotationImageWithIdentifier:id];
+    MGLAnnotationImage *annotationImage = [mapView dequeueReusableAnnotationImageWithIdentifier:url];
 
     if (!annotationImage) {
-
         UIImage *image = nil;
         if ([url hasPrefix:@"image!"]) {
             NSString* localImagePath = [url substringFromIndex:6];
@@ -376,12 +375,11 @@ RCT_EXPORT_MODULE();
         } else {
             image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]];
         }
-
         UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
         [image drawInRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
         UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
-        annotationImage = [MGLAnnotationImage annotationImageWithImage:newImage reuseIdentifier:id];
+        annotationImage = [MGLAnnotationImage annotationImageWithImage:newImage reuseIdentifier:url];
     }
 
     return annotationImage;
