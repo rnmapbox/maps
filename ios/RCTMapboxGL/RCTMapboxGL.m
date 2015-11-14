@@ -97,7 +97,9 @@ RCT_EXPORT_MODULE();
 
 - (void)layoutSubviews
 {
-    [self updateMap];
+    if (_annotations.count == 0) {
+        [self updateMap];
+    }
     _map.frame = self.bounds;
 }
 
