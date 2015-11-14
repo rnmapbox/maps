@@ -130,7 +130,6 @@ var MapExample = React.createClass({
           accessToken={'your-mapbox.com-access-token'}
           styleURL={'asset://styles/streets-v8.json'}
           centerCoordinate={this.state.center}
-          userLocationVisible={true}
           zoomLevel={this.state.zoom}
           onRegionChange={this.onRegionChange}
           onRegionWillChange={this.onRegionWillChange}
