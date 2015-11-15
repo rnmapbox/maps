@@ -63,3 +63,4 @@ android/gradlew
 android/gradlew.bat
 android/local.properties
 reactnativemapboxgl.iml
+.idea
