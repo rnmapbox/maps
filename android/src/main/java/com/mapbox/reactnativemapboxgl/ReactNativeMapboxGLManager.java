@@ -3,14 +3,14 @@ package com.mapbox.reactnativemapboxgl;
 import android.graphics.Color;
 import android.util.Log;
 
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.Arguments;
-import com.facebook.react.uimanager.CatalystStylesDiffMap;
+import com.facebook.react.uimanager.ReactProp;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.UIProp;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.annotations.PolygonOptions;
 import com.mapbox.mapboxsdk.constants.MyLocationTracking;
@@ -19,36 +19,23 @@ import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 
-import java.util.Map;
+import javax.annotation.Nullable;
 
 public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public static final String REACT_CLASS = "RCTMapbox";
 
-    @UIProp(UIProp.Type.STRING)
     public static final String PROP_ACCESS_TOKEN = "accessToken";
-    @UIProp(UIProp.Type.ARRAY)
     public static final String PROP_ANNOTATIONS = "annotations";
-    @UIProp(UIProp.Type.MAP)
     public static final String PROP_CENTER_COORDINATE = "centerCoordinate";
-    @UIProp(UIProp.Type.BOOLEAN)
     public static final String PROP_DEBUG_ACTIVE = "debugActive";
-    @UIProp(UIProp.Type.NUMBER)
     public static final String PROP_DIRECTION = "direction";
-    @UIProp(UIProp.Type.MAP)
     public static final String PROP_ONREGIONCHANGE = "onRegionChange";
-    @UIProp(UIProp.Type.BOOLEAN)
     public static final String PROP_ROTATION_ENABLED = "rotationEnabled";
-    @UIProp(UIProp.Type.STRING)
     public static final String PROP_SCROLL_ENABLED = "scrollEnabled";
-    @UIProp(UIProp.Type.BOOLEAN)
     public static final String PROP_USER_LOCATON = "showsUserLocation";
-    @UIProp(UIProp.Type.STRING)
     public static final String PROP_STYLE_URL = "styleUrl";
-    @UIProp(UIProp.Type.STRING)
     public static final String PROP_USER_TRACKING_MODE = "UserLocationTrackingMode";
-    @UIProp(UIProp.Type.BOOLEAN)
     public static final String PROP_ZOOM_ENABLED = "zoomEnabled";
-    @UIProp(UIProp.Type.NUMBER)
     public static final String PROP_ZOOM_LEVEL = "zoomLevel";
 
     @Override
@@ -63,19 +50,23 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         return mv;
     }
 
-    @Override
-    public void updateView(final MapView view,
-                           final CatalystStylesDiffMap props) {
-
-        if (!props.hasKey(PROP_ACCESS_TOKEN)) {
-            Log.e("Error", "No access token provided");
+    @ReactProp(name = PROP_ACCESS_TOKEN)
+    public void setAccessToken(MapView view, @Nullable String value) {
+        if (value == null || value.isEmpty()) {
+            Log.e(REACT_CLASS, "Error: No access token provided");
         } else {
-            view.setAccessToken(props.getString(PROP_ACCESS_TOKEN));
+            view.setAccessToken(value);
         }
-        if (props.hasKey(PROP_ANNOTATIONS)) {
-            int size = props.getArray(PROP_ANNOTATIONS).size();
+    }
+
+    @ReactProp(name = PROP_ANNOTATIONS)
+    public void setAnnotations(MapView view, @Nullable ReadableArray value) {
+        if (value == null || value.size() < 1) {
+            Log.e(REACT_CLASS, "Error: No annotations");
+        } else {
+            int size = value.size();
             for (int i = 0; i < size; i++) {
-                ReadableMap annotation = props.getArray(PROP_ANNOTATIONS).getMap(i);
+                ReadableMap annotation = value.getMap(i);
                 String type = annotation.getString("type");
                 if (type.equals("point")) {
                     double latitude = annotation.getArray("coordinates").getDouble(0);
@@ -137,66 +128,93 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
                 }
             }
         }
-        if (props.hasKey(PROP_DEBUG_ACTIVE)) {
-            view.setDebugActive(props.getBoolean(PROP_DEBUG_ACTIVE, false));
-        }
-        if (props.hasKey(PROP_DIRECTION)) {
-            view.setDirection(props.getFloat(PROP_DIRECTION, 0));
-        }
-        if (props.hasKey(PROP_ONREGIONCHANGE)) {
-            view.addOnMapChangedListener(new MapView.OnMapChangedListener() {
-                @Override
-                public void onMapChanged(int change) {
-                    if (change == MapView.REGION_DID_CHANGE || change == MapView.REGION_DID_CHANGE_ANIMATED) {
-                        WritableMap event = Arguments.createMap();
-                        WritableMap location = Arguments.createMap();
-                        location.putDouble("latitude", view.getCenterCoordinate().getLatitude());
-                        location.putDouble("longitude", view.getCenterCoordinate().getLongitude());
-                        location.putDouble("zoom", view.getZoomLevel());
-                        event.putMap("src", location);
-                        ReactContext reactContext = (ReactContext) view.getContext();
-                        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "topChange", event);
-                    }
+    }
+
+    @ReactProp(name = PROP_DEBUG_ACTIVE, defaultBoolean = false)
+    public void setDebugActive(MapView view, Boolean value) {
+        view.setDebugActive(value);
+    }
+
+    @ReactProp(name = PROP_DIRECTION, defaultFloat = 0f)
+    public void setDirection(MapView view, float value) {
+        view.setDirection(value);
+    }
+
+    @ReactProp(name = PROP_ONREGIONCHANGE, defaultBoolean=true)
+    public void onMapChanged(final MapView view, Boolean value) {
+        view.addOnMapChangedListener(new MapView.OnMapChangedListener() {
+            @Override
+            public void onMapChanged(int change) {
+                if (change == MapView.REGION_DID_CHANGE || change == MapView.REGION_DID_CHANGE_ANIMATED) {
+                    WritableMap event = Arguments.createMap();
+                    WritableMap location = Arguments.createMap();
+                    location.putDouble("latitude", view.getCenterCoordinate().getLatitude());
+                    location.putDouble("longitude", view.getCenterCoordinate().getLongitude());
+                    location.putDouble("zoom", view.getZoomLevel());
+                    event.putMap("src", location);
+                    ReactContext reactContext = (ReactContext) view.getContext();
+                    reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "topChange", event);
                 }
-            });
-        }
-        if (props.hasKey(PROP_CENTER_COORDINATE)) {
-            ReadableMap center = props.getMap(PROP_CENTER_COORDINATE);
+            }
+        });
+    }
+
+    @ReactProp(name = PROP_CENTER_COORDINATE)
+    public void setCenterCoordinate(MapView view, @Nullable ReadableMap center) {
+        if (center != null) {
             double latitude = center.getDouble("latitude");
             double longitude = center.getDouble("longitude");
             view.setCenterCoordinate(new LatLng(latitude, longitude));
+        }else{
+            Log.w(REACT_CLASS, "No CenterCoordinate provided");
         }
-        if (props.hasKey(PROP_ROTATION_ENABLED)) {
-            view.setRotateEnabled(props.getBoolean(PROP_ROTATION_ENABLED, true));
+    }
+
+    @ReactProp(name = PROP_ROTATION_ENABLED, defaultBoolean = true)
+    public void setRotateEnabled(MapView view, Boolean value) {
+        view.setRotateEnabled(value);
+    }
+
+    @ReactProp(name = PROP_USER_LOCATON, defaultBoolean = true)
+    public void setMyLocationEnabled(MapView view, Boolean value) {
+        view.setMyLocationEnabled(value);
+    }
+
+    @ReactProp(name = PROP_STYLE_URL)
+    public void setStyleUrl(MapView view, @Nullable String value) {
+        if (value != null && !value.isEmpty()) {
+            view.setStyleUrl(value);
+        }else{
+            Log.w(REACT_CLASS, "No StyleUrl provided");
         }
-        if (props.hasKey(PROP_USER_LOCATON)) {
-            view.setMyLocationEnabled(props.getBoolean(PROP_USER_LOCATON, true));
-        }
-        if (props.hasKey(PROP_STYLE_URL)) {
-            view.setStyleUrl(props.getString(PROP_STYLE_URL));
-        }
-        if (props.hasKey(PROP_USER_TRACKING_MODE)) {
-            String mode = props.getString(PROP_USER_TRACKING_MODE);
+    }
+
+    @ReactProp(name = PROP_USER_TRACKING_MODE)
+    public void setMyLocationTrackingMode(MapView view, @Nullable String mode) {
+        if (mode != null && !mode.isEmpty()) {
             if (mode.equals("NONE")) {
                 view.setMyLocationTrackingMode(MyLocationTracking.TRACKING_NONE);
             } else if (mode.equals("FOLLOW")) {
                 view.setMyLocationTrackingMode(MyLocationTracking.TRACKING_FOLLOW);
-            } else {
-                view.setMyLocationTrackingMode(MyLocationTracking.TRACKING_NONE);
-                Log.w("Error", "Tracking mode not found. Setting to NONE.");
             }
+        } else {
+            view.setMyLocationTrackingMode(MyLocationTracking.TRACKING_NONE);
+            Log.w(REACT_CLASS, "ErrorTracking mode not found. Setting to NONE.");
         }
-        if (props.hasKey(PROP_ZOOM_ENABLED)) {
-            view.setZoomEnabled(props.getBoolean(PROP_ZOOM_ENABLED, true));
-        }
-        if (props.hasKey(PROP_ZOOM_LEVEL)) {
-            view.setZoomLevel(props.getFloat(PROP_ZOOM_LEVEL, 0));
-        }
+    }
 
-        if (props.hasKey(PROP_SCROLL_ENABLED)) {
-            view.setScrollEnabled(props.getBoolean(PROP_SCROLL_ENABLED, true));
-        }
+    @ReactProp(name = PROP_ZOOM_ENABLED, defaultBoolean = true)
+    public void setZoomEnabled(MapView view, Boolean value) {
+        view.setZoomEnabled(value);
+    }
 
-        super.updateView(view, props);
+    @ReactProp(name = PROP_ZOOM_LEVEL, defaultFloat = 0f)
+    public void setZoomLevel(MapView view, float value) {
+        view.setZoomLevel(value);
+    }
+
+    @ReactProp(name = PROP_SCROLL_ENABLED, defaultBoolean = true)
+    public void setScrollEnabled(MapView view, Boolean value) {
+        view.setScrollEnabled(value);
     }
 }
