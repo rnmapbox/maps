@@ -88,7 +88,6 @@ RCT_EXPORT_MODULE();
     _map = [[MGLMapView alloc] initWithFrame:self.bounds styleURL:_styleURL];
     _map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _map.delegate = self;
-    _map.userTrackingMode = MGLUserTrackingModeFollow;
     [self updateMap];
     [self addSubview:_map];
     [self layoutSubviews];
