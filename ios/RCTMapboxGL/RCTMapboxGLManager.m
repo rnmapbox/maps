@@ -43,6 +43,20 @@ RCT_EXPORT_MODULE();
     ];
 }
 
+- (NSDictionary *)constantsToExport
+{
+    return @{
+             @"styles": @{
+                 @"light": [[MGLStyle lightStyleURL] absoluteString],
+                 @"dark": [[MGLStyle darkStyleURL] absoluteString],
+                 @"streets": [[MGLStyle streetsStyleURL] absoluteString],
+                 @"emerald": [[MGLStyle emeraldStyleURL] absoluteString],
+                 @"satellite": [[MGLStyle satelliteStyleURL] absoluteString],
+                 @"hybrid": [[MGLStyle hybridStyleURL] absoluteString],
+            }
+    };
+}
+
 RCT_EXPORT_VIEW_PROPERTY(accessToken, NSString);
 RCT_EXPORT_VIEW_PROPERTY(centerCoordinate, CLLocationCoordinate2D);
 RCT_EXPORT_VIEW_PROPERTY(clipsToBounds, BOOL);

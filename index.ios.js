@@ -2,7 +2,6 @@
 
 var React = require('react-native');
 var { NativeModules, requireNativeComponent } = React;
-
 var MapMixins = {
   setDirectionAnimated(mapRef, heading) {
     NativeModules.MapboxGLManager.setDirectionAnimated(React.findNodeHandle(this.refs[mapRef]), heading);
@@ -27,7 +26,8 @@ var MapMixins = {
   },
   setVisibleCoordinateBoundsAnimated(mapRef, latitudeSW, longitudeSW, latitudeNE, longitudeNE, edge) {
     NativeModules.MapboxGLManager.setVisibleCoordinateBoundsAnimated(React.findNodeHandle(this.refs[mapRef]), latitudeSW, longitudeSW, latitudeNE, longitudeNE, edge);
-  }
+  },
+  styles: NativeModules.MapboxGLManager.styles
 };
 
 var MapView = React.createClass({
@@ -104,7 +104,7 @@ var MapView = React.createClass({
       rotationEnabled: true,
       scrollEnabled: true,
       showsUserLocation: false,
-      styleUrl: 'asset://styles/streets-v8.json',
+      styleUrl: this.Mixin.styles.streets,
       zoomEnabled: true,
       zoomLevel: 0
     };

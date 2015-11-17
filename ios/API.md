@@ -11,7 +11,7 @@
 | `scrollEnabled` | `bool`  |  Optional | `true`  | Whether the map can be scrolled |
 | `zoomEnabled` | `bool`  |  Optional | `true`  | Whether the map zoom level can be changed |
 |`showsUserLocation` | `bool` | Optional | `false` | Whether the user's location is shown on the map. Note - the map will not zoom to their location.|
-| `styleURL` | `string` | required | Mapbox Streets |  A Mapbox GL style sheet. Defaults to `streets-v8`.
+| `styleURL` | `string` | required | Mapbox Streets |  A Mapbox style. Defaults to `streets`.
 | `annotations` | `array` | Optional | NA |  An array of annotation objects. See [annotation detail](https://github.com/bsudekum/react-native-mapbox-gl/blob/master/ios/API.md#annotations)
 | `direction`  | `double` | Optional | `0` | Heading of the map in degrees where 0 is north and 180 is south |
 | `debugActive`  | `bool` | Optional | `false` | Turns on debug mode. |
@@ -43,15 +43,36 @@ These methods require you to use `MapboxGLMap.Mixin` to access the methods. Each
 | `removeAnnotation`  | `mapViewRef`, `annotationPlaceInArray` | Removes the selected annotation from the map. This method works with the current annotations on the map. `annotationPlaceInArray` starts at 0 and refers to the first annotation.
 | `setVisibleCoordinateBoundsAnimated`  | `mapViewRef`, `latitude1`, `longitude1`, `latitude2`, `longitude2`, `edgePadding`  | Changes the viewport to fit the given coordinate bounds and some additional padding on each side.
 
-## GL Styles
+## Styles
 
-You can change the `styleURL` to any valid GL stylesheet, here are a few:
+This ships with 6 styles included:
 
-* `asset://styles/dark-v8.json`
-* `asset://styles/light-v8.json`
-* `asset://styles/emerald-v8.json`
-* `asset://styles/streets-v8.json`
-* `asset://styles/satellite-v8.json`
+* `streets`
+* `emerald`
+* `dark`
+* `light`
+* `satellite`
+* `hybrid`
+
+To use one of these, make you add mixins:
+
+```js
+mixins: [Mapbox.Mixin]
+```
+
+Then you can access each style by:
+
+```jsx
+styleURL={this.styles.emerald}
+```
+
+## Custom styles
+
+You can also create a custom style in [Mapbox Studio](https://www.mapbox.com/studio/) and add it your map. Simply grab the style url. It should look something like:
+
+```
+mapbox://styles/bobbysud/cigtw1pzy0000aam2346f7ex0
+```
 
 ## Annotations
 ```json
