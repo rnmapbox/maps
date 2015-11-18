@@ -85,7 +85,7 @@ RCT_EXPORT_MODULE();
 - (void)createMap
 {
     [MGLAccountManager setAccessToken:_accessToken];
-    _map = [[MGLMapView alloc] initWithFrame:self.bounds styleURL:_styleURL];
+    _map = [[MGLMapView alloc] initWithFrame:self.bounds];
     _map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _map.delegate = self;
     [self updateMap];
@@ -211,7 +211,7 @@ RCT_EXPORT_MODULE();
     [self updateMap];
 }
 
-- (void)setStyleURL:(NSURL*)styleURL
+- (void)setStyleURL:(NSURL *)styleURL
 {
     _styleURL = styleURL;
     [self updateMap];
@@ -220,7 +220,7 @@ RCT_EXPORT_MODULE();
 - (void)setRightCalloutAccessory:(UIButton *)rightCalloutAccessory
 {
     _rightCalloutAccessory = rightCalloutAccessory;
-    [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:0.1];
+    [self updateAnnotations];
 }
 
 -(void)setDirectionAnimated:(int)heading
