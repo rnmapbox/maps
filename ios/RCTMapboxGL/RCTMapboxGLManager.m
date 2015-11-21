@@ -46,16 +46,24 @@ RCT_EXPORT_MODULE();
 - (NSDictionary *)constantsToExport
 {
     return @{
-             @"styles": @{
+             @"mapStyles": @{
                  @"light": [[MGLStyle lightStyleURL] absoluteString],
                  @"dark": [[MGLStyle darkStyleURL] absoluteString],
                  @"streets": [[MGLStyle streetsStyleURL] absoluteString],
                  @"emerald": [[MGLStyle emeraldStyleURL] absoluteString],
                  @"satellite": [[MGLStyle satelliteStyleURL] absoluteString],
                  @"hybrid": [[MGLStyle hybridStyleURL] absoluteString],
+            },
+             @"userTrackingMode": @{
+                     @"none": [NSNumber numberWithUnsignedInt:MGLUserTrackingModeNone],
+                     @"follow": [NSNumber numberWithUnsignedInt:MGLUserTrackingModeFollow],
+                     @"followWithCourse": [NSNumber numberWithUnsignedInt:MGLUserTrackingModeFollowWithCourse],
+                     @"followWithHeading": [NSNumber numberWithUnsignedInt:MGLUserTrackingModeFollowWithHeading]
             }
     };
-}
+
+};
+
 
 RCT_EXPORT_VIEW_PROPERTY(accessToken, NSString);
 RCT_EXPORT_VIEW_PROPERTY(centerCoordinate, CLLocationCoordinate2D);
@@ -67,6 +75,7 @@ RCT_EXPORT_VIEW_PROPERTY(scrollEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(zoomEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(styleURL, NSURL);
+RCT_EXPORT_VIEW_PROPERTY(userTrackingMode, int);
 RCT_EXPORT_VIEW_PROPERTY(zoomLevel, double);
 RCT_EXPORT_METHOD(setZoomLevelAnimated:(nonnull NSNumber *)reactTag
                   zoomLevel:(double)zoomLevel)
@@ -158,7 +167,6 @@ RCT_EXPORT_METHOD(addAnnotations:(nonnull NSNumber *)reactTag
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if([mapView isKindOfClass:[RCTMapboxGL class]]) {
-            
             NSMutableArray* annotationsArray = [NSMutableArray array];
             id annotationObject;
             NSEnumerator *enumerator = [annotations objectEnumerator];

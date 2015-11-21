@@ -2,6 +2,7 @@
 
 var React = require('react-native');
 var { NativeModules, requireNativeComponent } = React;
+
 var MapMixins = {
   setDirectionAnimated(mapRef, heading) {
     NativeModules.MapboxGLManager.setDirectionAnimated(React.findNodeHandle(this.refs[mapRef]), heading);
@@ -27,7 +28,8 @@ var MapMixins = {
   setVisibleCoordinateBoundsAnimated(mapRef, latitudeSW, longitudeSW, latitudeNE, longitudeNE, edge) {
     NativeModules.MapboxGLManager.setVisibleCoordinateBoundsAnimated(React.findNodeHandle(this.refs[mapRef]), latitudeSW, longitudeSW, latitudeNE, longitudeNE, edge);
   },
-  styles: NativeModules.MapboxGLManager.styles
+  mapStyles: NativeModules.MapboxGLManager.mapStyles,
+  userTrackingMode: NativeModules.MapboxGLManager.userTrackingMode
 };
 
 var MapView = React.createClass({
@@ -60,6 +62,7 @@ var MapView = React.createClass({
     styleURL: React.PropTypes.string,
     clipsToBounds: React.PropTypes.bool,
     debugActive: React.PropTypes.bool,
+    userTrackingMode: React.PropTypes.number,
     attributionButton: React.PropTypes.bool,
     centerCoordinate: React.PropTypes.shape({
       latitude: React.PropTypes.number.isRequired,
@@ -104,7 +107,7 @@ var MapView = React.createClass({
       rotationEnabled: true,
       scrollEnabled: true,
       showsUserLocation: false,
-      styleUrl: this.Mixin.styles.streets,
+      styleUrl: this.Mixin.mapStyles.streets,
       zoomEnabled: true,
       zoomLevel: 0
     };

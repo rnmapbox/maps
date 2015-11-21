@@ -28,6 +28,7 @@
 - (void)setShowsUserLocation:(BOOL)showsUserLocation;
 - (void)setStyleURL:(NSURL *)styleURL;
 - (void)setZoomLevel:(double)zoomLevel;
+- (void)setUserTrackingMode:(int)userTrackingMode;
 - (void)setZoomLevelAnimated:(double)zoomLevel;
 - (void)setDirectionAnimated:(int)heading;
 - (void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)coordinates;
