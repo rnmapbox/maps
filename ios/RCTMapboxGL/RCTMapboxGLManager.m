@@ -161,6 +161,17 @@ RCT_EXPORT_METHOD(removeAnnotation:(nonnull NSNumber *) reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(setUserTrackingMode:(nonnull NSNumber *) reactTag
+                  userTrackingMode:(int)userTrackingMode)
+{
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+        RCTMapboxGL *mapView = viewRegistry[reactTag];
+        if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
+            [mapView setUserTrackingMode:userTrackingMode];
+        }
+    }];
+}
+
 RCT_EXPORT_METHOD(addAnnotations:(nonnull NSNumber *)reactTag
                   annotations:(NSArray *) annotations)
 {

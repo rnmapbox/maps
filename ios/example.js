@@ -119,6 +119,9 @@ var MapExample = React.createClass({
         <Text style={styles.text} onPress={() => this.setVisibleCoordinateBoundsAnimated(mapRef, 40.712, -74.227, 40.774, -74.125, 0)}>
           Set visible bounds to 40.7, -74.2, 40.7, -74.1
         </Text>
+        <Text style={styles.text} onPress={() => this.setUserTrackingMode(mapRef, this.userTrackingMode.follow)}>
+          Set userTrackingMode to follow
+        </Text>
         <Mapbox
           style={styles.map}
           direction={0}
