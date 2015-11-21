@@ -16,6 +16,7 @@
 | `direction`  | `double` | Optional | `0` | Heading of the map in degrees where 0 is north and 180 is south |
 | `debugActive`  | `bool` | Optional | `false` | Turns on debug mode. |
 | `style`  | flexbox `view` | Optional | NA | Styles the actual map view container |
+| `userTrackingMode` | `int` | Optional | `this.userTrackingMode.none` | Must add `mixins` to use. Valid values are `this.userTrackingMode.none`, `this.userTrackingMode.follow`, `this.userTrackingMode.followWithCourse`, `this.userTrackingMode.followWithHeading` |
 
 ## Events
 
@@ -63,7 +64,7 @@ mixins: [Mapbox.Mixin]
 Then you can access each style by:
 
 ```jsx
-styleURL={this.styles.emerald}
+styleURL={this.mapStyles.emerald}
 ```
 
 ## Custom styles
