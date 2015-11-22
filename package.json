@@ -22,7 +22,7 @@
     "url": "https://github.com/mapbox/react-native-mapbox-gl"
   },
   "scripts": {
-    "preinstall": "./scripts/download-mapbox-gl-native-ios.sh 3.0.0-pre.7",
+    "preinstall": "./scripts/download-mapbox-gl-native-ios.sh 3.0.0-pre.10",
     "test": "eslint example.js index.ios.js index.android.js",
     "start": "node_modules/react-native/packager/packager.sh"
   },

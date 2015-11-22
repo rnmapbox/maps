@@ -35,6 +35,7 @@
     NSURL *_styleURL;
     double _zoomLevel;
     UIButton *_rightCalloutAccessory;
+    int _userTrackingMode;
 }
 
 RCT_EXPORT_MODULE();
@@ -74,6 +75,7 @@ RCT_EXPORT_MODULE();
         _map.showsUserLocation = _showsUserLocation;
         _map.styleURL = _styleURL;
         _map.zoomLevel = _zoomLevel;
+        _map.userTrackingMode = _userTrackingMode;
     } else {
         /* We need to have a height/width specified in order to render */
         if (_accessToken && _styleURL && self.bounds.size.height > 0 && self.bounds.size.width > 0) {
@@ -215,6 +217,16 @@ RCT_EXPORT_MODULE();
 {
     _styleURL = styleURL;
     [self updateMap];
+}
+
+- (void)setUserTrackingMode:(int)userTrackingMode
+{
+    if (userTrackingMode > 3 || userTrackingMode < 0) {
+        _userTrackingMode = 0;
+    } else {
+        _userTrackingMode = userTrackingMode;
+    }
+    [self performSelector:@selector(updateMap) withObject:nil afterDelay:0.2];
 }
 
 - (void)setRightCalloutAccessory:(UIButton *)rightCalloutAccessory
