@@ -226,7 +226,7 @@ RCT_EXPORT_MODULE();
     } else {
         _userTrackingMode = userTrackingMode;
     }
-    [self updateMap];
+    [self performSelector:@selector(updateMap) withObject:nil afterDelay:0.2];
 }
 
 - (void)setRightCalloutAccessory:(UIButton *)rightCalloutAccessory
