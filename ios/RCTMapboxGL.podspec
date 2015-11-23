@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name                = "RCTMapboxGL"
-  s.version             = "1.1.0"
+  s.version             = "2.0.0"
   s.summary             = "A Mapbox GL react native module for creating custom maps."
   s.homepage            = "https://github.com/mapbox/react-native-mapbox-gl#readme"
   s.license             = "BSD"
