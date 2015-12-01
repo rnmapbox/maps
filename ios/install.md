@@ -20,7 +20,7 @@ See also the react-native [0.13 release notes](https://github.com/facebook/react
 1. In the XCode's `Project navigator`, right click on project's name ➜ `Add Files to <...>` ![](https://cldup.com/k0oJwOUKPN.png)
 1. Add `node_modules/react-native-mapbox-gl/ios/RCTMapboxGL.xcodeproj` ![](https://cldup.com/bnJWwtaACM.png)
 1. Select your project in the `Project navigator`. Click `Build Phases` then `Link Binary With Libraries`. Add `node_modules/react-native-mapbox-gl/ios/RCTMapboxGL/libRCTMapboxGL.a` ![](https://cldup.com/QWhL_SjobN.png)
-1. Select your project in the `Project navigator`. Click `Build Phases` then `Copy Bundle Resources`. Click the `+` button. When the modal appears, click `Add other`. Add `node_modules/ios/react-native-mapbox-gl/RCTMapboxGL/Mapbox.bundle`. ![](https://cldup.com/Oi7uHxc1Fd.png)
+1. Select your project in the `Project navigator`. Click `Build Phases` then `Copy Bundle Resources`. Click the `+` button. When the modal appears, click `Add other`. Add `node_modules/react-native-mapbox-gl/ios/RCTMapboxGL/Mapbox.bundle`. ![](https://cldup.com/Oi7uHxc1Fd.png)
 1. Just like in the last step, select your project in the `Project navigator`. Click `Build Phases` then `Copy Bundle Resources`. Click the `+` button. When the modal appears, click `Add other`. Add `node_modules/react-native-mapbox-gl/ios/RCTMapboxGL/Settings.bundle`. [More information on location metrics can be found here](https://www.mapbox.com/mapbox-gl-ios/#metrics_opt_out).
 1. Add the following Cocoa framework dependencies to your target's Link Binary With Libraries build phase:
   * `CoreTelephony.framework`
