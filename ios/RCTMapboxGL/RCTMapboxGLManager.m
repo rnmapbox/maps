@@ -15,7 +15,6 @@
 #import "RCTEventDispatcher.h"
 #import "UIView+React.h"
 #import "RCTUIManager.h"
-#import "RCTSparseArray.h"
 
 @implementation RCTMapboxGLManager
 
@@ -80,7 +79,7 @@ RCT_EXPORT_VIEW_PROPERTY(zoomLevel, double);
 RCT_EXPORT_METHOD(setZoomLevelAnimated:(nonnull NSNumber *)reactTag
                   zoomLevel:(double)zoomLevel)
 {
-    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             [mapView setZoomLevelAnimated:zoomLevel];
@@ -90,7 +89,7 @@ RCT_EXPORT_METHOD(setZoomLevelAnimated:(nonnull NSNumber *)reactTag
 RCT_EXPORT_METHOD(setDirectionAnimated:(nonnull NSNumber *)reactTag
                   heading:(float)heading)
 {
-    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             [mapView setDirectionAnimated:heading];
@@ -102,7 +101,7 @@ RCT_EXPORT_METHOD(setCenterCoordinateAnimated:(nonnull NSNumber *)reactTag
                   latitude:(float) latitude
                   longitude:(float) longitude)
 {
-    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             [mapView setCenterCoordinateAnimated:CLLocationCoordinate2DMake(latitude, longitude)];
@@ -115,7 +114,7 @@ RCT_EXPORT_METHOD(setCenterCoordinateZoomLevelAnimated:(nonnull NSNumber *)react
                   longitude:(float) longitude
                   zoomLevel:(double)zoomLevel)
 {
-    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             [mapView setCenterCoordinateZoomLevelAnimated:CLLocationCoordinate2DMake(latitude, longitude) zoomLevel:zoomLevel];
@@ -130,7 +129,7 @@ RCT_EXPORT_METHOD(setVisibleCoordinateBoundsAnimated:(nonnull NSNumber *)reactTa
                   longitudeNE:(float) longitudeNE
                   edgePadding:(double) edgePadding)
 {
-    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             MGLCoordinateBounds coordinatesBounds = MGLCoordinateBoundsMake(CLLocationCoordinate2DMake(latitudeSW, longitudeSW), CLLocationCoordinate2DMake(latitudeNE, longitudeNE));
@@ -142,7 +141,7 @@ RCT_EXPORT_METHOD(setVisibleCoordinateBoundsAnimated:(nonnull NSNumber *)reactTa
 RCT_EXPORT_METHOD(selectAnnotationAnimated:(nonnull NSNumber *) reactTag
                   annotationInArray:(NSUInteger)annotationInArray)
 {
-    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             [mapView selectAnnotationAnimated:annotationInArray];
@@ -153,7 +152,7 @@ RCT_EXPORT_METHOD(selectAnnotationAnimated:(nonnull NSNumber *) reactTag
 RCT_EXPORT_METHOD(removeAnnotation:(nonnull NSNumber *) reactTag
                   annotationInArray:(NSUInteger)annotationInArray)
 {
-    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             [mapView removeAnnotation:annotationInArray];
@@ -164,7 +163,7 @@ RCT_EXPORT_METHOD(removeAnnotation:(nonnull NSNumber *) reactTag
 RCT_EXPORT_METHOD(setUserTrackingMode:(nonnull NSNumber *) reactTag
                   userTrackingMode:(int)userTrackingMode)
 {
-    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             [mapView setUserTrackingMode:userTrackingMode];
@@ -175,7 +174,7 @@ RCT_EXPORT_METHOD(setUserTrackingMode:(nonnull NSNumber *) reactTag
 RCT_EXPORT_METHOD(addAnnotations:(nonnull NSNumber *)reactTag
                   annotations:(NSArray *) annotations)
 {
-    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, RCTSparseArray *viewRegistry) {
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if([mapView isKindOfClass:[RCTMapboxGL class]]) {
             NSMutableArray* annotationsArray = [NSMutableArray array];
