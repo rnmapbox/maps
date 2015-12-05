@@ -231,11 +231,6 @@ RCT_EXPORT_MODULE();
     _styleURL = styleURL;
     [self updateMap];
 }
-- (void)setAttributionButtonVisibility:(BOOL)isVisible
-{
-    _attributionButtonVisibility = isVisible;
-    [self updateMap];
-}
 
 - (void)setUserTrackingMode:(int)userTrackingMode
 {
@@ -418,18 +413,21 @@ RCT_EXPORT_MODULE();
         UIGraphicsEndImageContext();
         annotationImage = [MGLAnnotationImage annotationImageWithImage:newImage reuseIdentifier:url];
     }
-
+    
     return annotationImage;
 }
 
-- (void)handleSingleTap:(UITapGestureRecognizer *)tap
+- (void)handleSingleTap:(UITapGestureRecognizer *)sender
 {
-    CLLocationCoordinate2D location = [_map convertPoint:[tap locationInView:_map] toCoordinateFromView:_map];
+    CLLocationCoordinate2D location = [_map convertPoint:[sender locationInView:_map] toCoordinateFromView:_map];
+    CGPoint screenCoord = [sender locationInView:_map];
     
     NSDictionary *event = @{ @"target": self.reactTag,
                              @"src": @{
                                      @"latitude": @(location.latitude),
                                      @"longitude": @(location.longitude),
+                                     @"screenCoordY": @(screenCoord.y),
+                                     @"screenCoordX": @(screenCoord.x)
                                      }
                              };
     
@@ -440,11 +438,14 @@ RCT_EXPORT_MODULE();
 {
     if (sender.state == UIGestureRecognizerStateBegan) {
         CLLocationCoordinate2D location = [_map convertPoint:[sender locationInView:_map] toCoordinateFromView:_map];
+        CGPoint screenCoord = [sender locationInView:_map];
         
         NSDictionary *event = @{ @"target": self.reactTag,
                                  @"src": @{
                                          @"latitude": @(location.latitude),
                                          @"longitude": @(location.longitude),
+                                         @"screenCoordY": @(screenCoord.y),
+                                         @"screenCoordX": @(screenCoord.x)
                                          }
                                  };
         
