@@ -54,9 +54,6 @@ var MapView = React.createClass({
   _onUpdateUserLocation(event: Event) {
     if (this.props.onUpdateUserLocation) this.props.onUpdateUserLocation(event.nativeEvent.src);
   },
-  _onTap(event: Event) {
-    if (this.props.onTap) this.props.onTap(event.nativeEvent.src);
-  },
   _onLongPress(event: Event) {
     if (this.props.onLongPress) this.props.onLongPress(event.nativeEvent.src);
   },
@@ -129,7 +126,6 @@ var MapView = React.createClass({
       onOpenAnnotation={this._onOpenAnnotation}
       onRightAnnotationTapped={this._onRightAnnotationTapped}
       onUpdateUserLocation={this._onUpdateUserLocation}
-      onTap={this._onTap}
       onLongPress={this._onLongPress} />;
   }
 });

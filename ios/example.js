@@ -79,9 +79,6 @@ var MapExample = React.createClass({
   onRightAnnotationTapped(e) {
     console.log(e);
   },
-  onTap(location) {
-    console.log('tapped', location);
-  },
   onLongPress(location) {
     console.log('long pressed', location);
   },
@@ -147,7 +144,6 @@ var MapExample = React.createClass({
           onOpenAnnotation={this.onOpenAnnotation}
           onRightAnnotationTapped={this.onRightAnnotationTapped}
           onUpdateUserLocation={this.onUpdateUserLocation}
-          onTap={this.onTap}
           onLongPress={this.onLongPress} />
       </View>
     );
