@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
 
   s.source_files        = "RCTMapboxGL/RCTMapboxGL.{h,m}", "RCTMapboxGL/RCTMapboxGLManager.{h,m}"
   s.resources           = "RCTMapboxGL/Settings.bundle"
-  s.dependency            "Mapbox-iOS-SDK", "2.1.2"
+  s.dependency            "Mapbox-iOS-SDK", "3.0.0"
 
   # These resources, library, frameworks and libraries spec is already part of
   # the Mapbox-iOS-SDK dependency above. The npm `preinstall` hock download
