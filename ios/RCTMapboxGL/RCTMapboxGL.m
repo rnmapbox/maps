@@ -91,14 +91,6 @@ RCT_EXPORT_MODULE();
     _map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _map.delegate = self;
     
-    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
-    doubleTap.numberOfTapsRequired = 2;
-    [_map addGestureRecognizer:doubleTap];
-    
-    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
-    [singleTap requireGestureRecognizerToFail:doubleTap];
-    [_map addGestureRecognizer:singleTap];
-    
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     [longPress setMinimumPressDuration:1];
     [self addGestureRecognizer:longPress];
