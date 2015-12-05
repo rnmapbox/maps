@@ -38,7 +38,9 @@ RCT_EXPORT_MODULE();
       @"onRegionWillChange",
       @"onOpenAnnotation",
       @"onRightAnnotationTapped",
-      @"onUpdateUserLocation"
+      @"onUpdateUserLocation",
+      @"onTap",
+      @"onLongPress"
     ];
 }
 
