@@ -54,6 +54,12 @@ var MapView = React.createClass({
   _onUpdateUserLocation(event: Event) {
     if (this.props.onUpdateUserLocation) this.props.onUpdateUserLocation(event.nativeEvent.src);
   },
+  _onTap(event: Event) {
+    if (this.props.onTap) this.props.onTap(event.nativeEvent.src);
+  },
+  _onLongPress(event: Event) {
+    if (this.props.onLongPress) this.props.onLongPress(event.nativeEvent.src);
+  },
   propTypes: {
     showsUserLocation: React.PropTypes.bool,
     rotateEnabled: React.PropTypes.bool,
@@ -122,7 +128,9 @@ var MapView = React.createClass({
       onRegionWillChange={this._onRegionWillChange}
       onOpenAnnotation={this._onOpenAnnotation}
       onRightAnnotationTapped={this._onRightAnnotationTapped}
-      onUpdateUserLocation={this._onUpdateUserLocation} />;
+      onUpdateUserLocation={this._onUpdateUserLocation}
+      onTap={this._onTap}
+      onLongPress={this._onLongPress} />;
   }
 });
 

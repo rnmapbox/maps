@@ -90,6 +90,19 @@ RCT_EXPORT_MODULE();
     _map = [[MGLMapView alloc] initWithFrame:self.bounds];
     _map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _map.delegate = self;
+    
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
+    doubleTap.numberOfTapsRequired = 2;
+    [_map addGestureRecognizer:doubleTap];
+    
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+    [singleTap requireGestureRecognizerToFail:doubleTap];
+    [_map addGestureRecognizer:singleTap];
+    
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+    [longPress setMinimumPressDuration:1];
+    [self addGestureRecognizer:longPress];
+    
     [self updateMap];
     [self addSubview:_map];
     [self layoutSubviews];
@@ -216,6 +229,11 @@ RCT_EXPORT_MODULE();
 - (void)setStyleURL:(NSURL *)styleURL
 {
     _styleURL = styleURL;
+    [self updateMap];
+}
+- (void)setAttributionButtonVisibility:(BOOL)isVisible
+{
+    _attributionButtonVisibility = isVisible;
     [self updateMap];
 }
 
@@ -402,6 +420,36 @@ RCT_EXPORT_MODULE();
     }
 
     return annotationImage;
+}
+
+- (void)handleSingleTap:(UITapGestureRecognizer *)tap
+{
+    CLLocationCoordinate2D location = [_map convertPoint:[tap locationInView:_map] toCoordinateFromView:_map];
+    
+    NSDictionary *event = @{ @"target": self.reactTag,
+                             @"src": @{
+                                     @"latitude": @(location.latitude),
+                                     @"longitude": @(location.longitude),
+                                     }
+                             };
+    
+    [_eventDispatcher sendInputEventWithName:@"onTap" body:event];
+}
+
+- (void)handleLongPress:(UITapGestureRecognizer *)sender
+{
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        CLLocationCoordinate2D location = [_map convertPoint:[sender locationInView:_map] toCoordinateFromView:_map];
+        
+        NSDictionary *event = @{ @"target": self.reactTag,
+                                 @"src": @{
+                                         @"latitude": @(location.latitude),
+                                         @"longitude": @(location.longitude),
+                                         }
+                                 };
+        
+        [_eventDispatcher sendInputEventWithName:@"onLongPress" body:event];
+    }
 }
 
 - (unsigned int)intFromHexString:(NSString *)hexStr
