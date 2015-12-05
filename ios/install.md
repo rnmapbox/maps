@@ -1,9 +1,5 @@
 # Installation Process
 
-Notes:
-
-* `react-native ^v0.4.3` is required
-
 ## Use CocoaPods
 
 If you already use [CocoaPods](https://cocoapods.org/) in your react-native project you add the native

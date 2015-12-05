@@ -1,3 +1,9 @@
+#v2.1.0
+
+* Adds support for `react-native@0.16.0`
+* [iOS] Adds event handler `onTap`. Fired when user taps screen. Returns lat,lng and xy screen coordinates
+* [iOS] Adds event handler `onLongPress`. Fired when user taps and holds screen for 1 second. Returns lat,lng and xy screen coordinates
+
 # v2.0.0
 
 * [iOS] Adds optional pod installation
