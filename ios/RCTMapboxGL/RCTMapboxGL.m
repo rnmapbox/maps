@@ -90,6 +90,19 @@ RCT_EXPORT_MODULE();
     _map = [[MGLMapView alloc] initWithFrame:self.bounds];
     _map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _map.delegate = self;
+    
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
+    doubleTap.numberOfTapsRequired = 2;
+    [_map addGestureRecognizer:doubleTap];
+    
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+    [singleTap requireGestureRecognizerToFail:doubleTap];
+    [_map addGestureRecognizer:singleTap];
+    
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+    [longPress setMinimumPressDuration:1];
+    [self addGestureRecognizer:longPress];
+    
     [self updateMap];
     [self addSubview:_map];
     [self layoutSubviews];
@@ -400,8 +413,44 @@ RCT_EXPORT_MODULE();
         UIGraphicsEndImageContext();
         annotationImage = [MGLAnnotationImage annotationImageWithImage:newImage reuseIdentifier:url];
     }
-
+    
     return annotationImage;
+}
+
+- (void)handleSingleTap:(UITapGestureRecognizer *)sender
+{
+    CLLocationCoordinate2D location = [_map convertPoint:[sender locationInView:_map] toCoordinateFromView:_map];
+    CGPoint screenCoord = [sender locationInView:_map];
+    
+    NSDictionary *event = @{ @"target": self.reactTag,
+                             @"src": @{
+                                     @"latitude": @(location.latitude),
+                                     @"longitude": @(location.longitude),
+                                     @"screenCoordY": @(screenCoord.y),
+                                     @"screenCoordX": @(screenCoord.x)
+                                     }
+                             };
+    
+    [_eventDispatcher sendInputEventWithName:@"onTap" body:event];
+}
+
+- (void)handleLongPress:(UITapGestureRecognizer *)sender
+{
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        CLLocationCoordinate2D location = [_map convertPoint:[sender locationInView:_map] toCoordinateFromView:_map];
+        CGPoint screenCoord = [sender locationInView:_map];
+        
+        NSDictionary *event = @{ @"target": self.reactTag,
+                                 @"src": @{
+                                         @"latitude": @(location.latitude),
+                                         @"longitude": @(location.longitude),
+                                         @"screenCoordY": @(screenCoord.y),
+                                         @"screenCoordX": @(screenCoord.x)
+                                         }
+                                 };
+        
+        [_eventDispatcher sendInputEventWithName:@"onLongPress" body:event];
+    }
 }
 
 - (unsigned int)intFromHexString:(NSString *)hexStr

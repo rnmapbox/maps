@@ -79,6 +79,12 @@ var MapExample = React.createClass({
   onRightAnnotationTapped(e) {
     console.log(e);
   },
+  onTap(location) {
+    console.log('tapped', location);
+  },
+  onLongPress(location) {
+    console.log('long pressed', location);
+  },
   render: function() {
     StatusBarIOS.setHidden(true);
     return (
@@ -140,7 +146,9 @@ var MapExample = React.createClass({
           annotations={this.state.annotations}
           onOpenAnnotation={this.onOpenAnnotation}
           onRightAnnotationTapped={this.onRightAnnotationTapped}
-          onUpdateUserLocation={this.onUpdateUserLocation} />
+          onUpdateUserLocation={this.onUpdateUserLocation}
+          onTap={this.onTap}
+          onLongPress={this.onLongPress} />
       </View>
     );
   }
