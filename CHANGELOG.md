@@ -1,3 +1,7 @@
+#v2.1.3
+
+* [iOS] Adds props `attributionButtonIsHidden`, `logoIsHidden` and `compassIsHidden` for showing and hiding their respective view.
+
 #v2.1.2
 
 * [Android] fixes a missing prop type bug [#175](https://github.com/mapbox/react-native-mapbox-gl/issues/175)
