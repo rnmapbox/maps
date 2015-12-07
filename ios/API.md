@@ -17,6 +17,9 @@
 | `debugActive`  | `bool` | Optional | `false` | Turns on debug mode. |
 | `style`  | flexbox `view` | Optional | NA | Styles the actual map view container |
 | `userTrackingMode` | `int` | Optional | `this.userTrackingMode.none` | Must add `mixins` to use. Valid values are `this.userTrackingMode.none`, `this.userTrackingMode.follow`, `this.userTrackingMode.followWithCourse`, `this.userTrackingMode.followWithHeading` |
+| `attributionButtonIsHidden`  | `bool` | Optional | `false` | Whether attribution button is visible in lower right corner. *If true you must still attribute OpenStreetMap in your app. [Ref](https://www.mapbox.com/about/maps/)* |
+| `logoIsHidden`  | `bool` | Optional | `false` | Whether logo is visible in lower left corner. |
+| `compassIsHidden`  | `bool` | Optional | `false` | Whether compass is visible when map is rotated. |
 
 ## Events
 
