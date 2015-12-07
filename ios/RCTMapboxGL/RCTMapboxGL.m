@@ -36,6 +36,9 @@
     double _zoomLevel;
     UIButton *_rightCalloutAccessory;
     int _userTrackingMode;
+    BOOL _attributionButton;
+    BOOL _logo;
+    BOOL _compass;
 }
 
 RCT_EXPORT_MODULE();
@@ -76,6 +79,9 @@ RCT_EXPORT_MODULE();
         _map.styleURL = _styleURL;
         _map.zoomLevel = _zoomLevel;
         _map.userTrackingMode = _userTrackingMode;
+        [_map.attributionButton setHidden:_attributionButton];
+        [_map.logoView setHidden:_logo];
+        [_map.compassView setHidden:_compass];
     } else {
         /* We need to have a height/width specified in order to render */
         if (_accessToken && _styleURL && self.bounds.size.height > 0 && self.bounds.size.width > 0) {
@@ -221,6 +227,24 @@ RCT_EXPORT_MODULE();
 - (void)setStyleURL:(NSURL *)styleURL
 {
     _styleURL = styleURL;
+    [self updateMap];
+}
+
+- (void)setAttributionButtonVisibility:(BOOL)isVisible
+{
+    _attributionButton = isVisible;
+    [self updateMap];
+}
+
+- (void)setLogoVisibility:(BOOL)isVisible
+{
+    _logo = isVisible;
+    [self updateMap];
+}
+
+- (void)setCompassVisibility:(BOOL)isVisible
+{
+    _compass = isVisible;
     [self updateMap];
 }
 

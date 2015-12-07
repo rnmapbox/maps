@@ -96,6 +96,9 @@ var MapView = React.createClass({
         url: React.PropTypes.string
       })
     })),
+    attributionButtonIsHidden: React.PropTypes.bool,
+    logoIsHidden: React.PropTypes.bool,
+    compassIsHidden: React.PropTypes.bool,
     onRegionChange: React.PropTypes.func,
     onRegionWillChange: React.PropTypes.func,
     onOpenAnnotation: React.PropTypes.func,
@@ -115,7 +118,10 @@ var MapView = React.createClass({
       showsUserLocation: false,
       styleUrl: this.Mixin.mapStyles.streets,
       zoomEnabled: true,
-      zoomLevel: 0
+      zoomLevel: 0,
+      attributionButtonIsHidden: false,
+      logoIsHidden: false,
+      compassIsHidden: false
     };
   },
   render() {

@@ -36,6 +36,9 @@
 - (void)selectAnnotationAnimated:(NSUInteger)annotationInArray;
 - (void)removeAnnotation:(NSUInteger)annotationInArray;
 - (void)setVisibleCoordinateBounds:(MGLCoordinateBounds)bounds edgePadding:(UIEdgeInsets)padding animated:(BOOL)animated;
+- (void)setAttributionButtonVisibility:(BOOL)isVisible;
+- (void)setLogoVisibility:(BOOL)isVisible;
+- (void)setCompassVisibility:(BOOL)isVisible;
 
 @end
 

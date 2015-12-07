@@ -78,6 +78,25 @@ RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(styleURL, NSURL);
 RCT_EXPORT_VIEW_PROPERTY(userTrackingMode, int);
 RCT_EXPORT_VIEW_PROPERTY(zoomLevel, double);
+
+RCT_CUSTOM_VIEW_PROPERTY(attributionButtonIsHidden, BOOL, RCTMapboxGL)
+{
+    BOOL value = [json boolValue];
+    [view setAttributionButtonVisibility:value ? true : false];
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(logoIsHidden, BOOL, RCTMapboxGL)
+{
+    BOOL value = [json boolValue];
+    [view setLogoVisibility:value ? true : false];
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(compassIsHidden, BOOL, RCTMapboxGL)
+{
+    BOOL value = [json boolValue];
+    [view setCompassVisibility:value ? true : false];
+}
+
 RCT_EXPORT_METHOD(setZoomLevelAnimated:(nonnull NSNumber *)reactTag
                   zoomLevel:(double)zoomLevel)
 {
