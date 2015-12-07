@@ -1,3 +1,7 @@
+#v2.1.2
+
+* [Android] fixes a missing prop type bug [#175](https://github.com/mapbox/react-native-mapbox-gl/issues/175)
+
 #v2.1.0
 
 * Adds support for `react-native@0.16.0`
