@@ -33,7 +33,7 @@
 | `onLongPress` | `{latitude: 0, longitude: 0, screenCoordY, screenCoordX}` | Fired when the user taps and holds screen for 1 second.
 | `onFinishLoadingMap` | does not return an object | Fired once the map has loaded the style |
 | `onStartLoadingMap` | does not return an object | Fired once the map begins loading the style |
-| `onLocateUserFailed` | `{message: message}` | Fired when there is an error getting the users location |
+| `onLocateUserFailed` | `{message: message}` | Fired when there is an error getting the users location. Do not rely on the string that is returned for determining what kind of error it is. |
 
 
 
