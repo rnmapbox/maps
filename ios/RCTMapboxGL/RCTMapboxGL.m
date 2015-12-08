@@ -471,21 +471,13 @@ RCT_EXPORT_MODULE();
 
 - (void)mapViewDidFinishLoadingMap:(MGLMapView *)mapView
 {
-    NSDictionary *event = @{ @"target": self.reactTag,
-                             @"src": @{
-                                     @"loaded": @YES
-                                     }
-                             };
+    NSDictionary *event = @{ @"target": self.reactTag };
     
     [_eventDispatcher sendInputEventWithName:@"onFinishLoadingMap" body:event];
 }
 - (void)mapViewWillStartLoadingMap:(MGLMapView *)mapView
 {
-    NSDictionary *event = @{ @"target": self.reactTag,
-                             @"src": @{
-                                     @"loading": @YES
-                                     }
-                             };
+    NSDictionary *event = @{ @"target": self.reactTag };
     
     [_eventDispatcher sendInputEventWithName:@"onStartLoadingMap" body:event];
 }
@@ -494,8 +486,7 @@ RCT_EXPORT_MODULE();
 {
     NSDictionary *event = @{ @"target": mapView.reactTag,
                              @"src": @{
-                                     @"code": @(error.code),
-                                     @"message": error.description
+                                     @"message":  [error localizedDescription]
                                      }
                              };
     
