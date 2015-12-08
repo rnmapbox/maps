@@ -1,3 +1,11 @@
+#v2.1.4
+
+[iOS] Adds event listeners:
+
+* `onFinishLoadingMap`
+* `onStartLoadingMap`
+* `onLocateUserFailed`
+
 #v2.1.3
 
 * [iOS] Adds props `attributionButtonIsHidden`, `logoIsHidden` and `compassIsHidden` for showing and hiding their respective view.
