@@ -469,6 +469,39 @@ RCT_EXPORT_MODULE();
     }
 }
 
+- (void)mapViewDidFinishLoadingMap:(MGLMapView *)mapView
+{
+    NSDictionary *event = @{ @"target": self.reactTag,
+                             @"src": @{
+                                     @"loaded": @YES
+                                     }
+                             };
+    
+    [_eventDispatcher sendInputEventWithName:@"onFinishLoadingMap" body:event];
+}
+- (void)mapViewWillStartLoadingMap:(MGLMapView *)mapView
+{
+    NSDictionary *event = @{ @"target": self.reactTag,
+                             @"src": @{
+                                     @"loading": @YES
+                                     }
+                             };
+    
+    [_eventDispatcher sendInputEventWithName:@"onStartLoadingMap" body:event];
+}
+
+- (void)mapView:(MGLMapView *)mapView didFailToLocateUserWithError:(NSError *)error
+{
+    NSDictionary *event = @{ @"target": mapView.reactTag,
+                             @"src": @{
+                                     @"code": @(error.code),
+                                     @"message": error.description
+                                     }
+                             };
+    
+    [_eventDispatcher sendInputEventWithName:@"onLocateUserFailed" body:event];
+}
+
 - (unsigned int)intFromHexString:(NSString *)hexStr
 {
     unsigned int hexInt = 0;

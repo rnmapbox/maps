@@ -34,35 +34,38 @@ RCT_EXPORT_MODULE();
 - (NSArray *)customDirectEventTypes
 {
     return @[
-      @"onRegionChange",
-      @"onRegionWillChange",
-      @"onOpenAnnotation",
-      @"onRightAnnotationTapped",
-      @"onUpdateUserLocation",
-      @"onTap",
-      @"onLongPress"
-    ];
+             @"onRegionChange",
+             @"onRegionWillChange",
+             @"onOpenAnnotation",
+             @"onRightAnnotationTapped",
+             @"onUpdateUserLocation",
+             @"onTap",
+             @"onLongPress",
+             @"onFinishLoadingMap",
+             @"onStartLoadingMap",
+             @"onLocateUserFailed"
+             ];
 }
 
 - (NSDictionary *)constantsToExport
 {
     return @{
              @"mapStyles": @{
-                 @"light": [[MGLStyle lightStyleURL] absoluteString],
-                 @"dark": [[MGLStyle darkStyleURL] absoluteString],
-                 @"streets": [[MGLStyle streetsStyleURL] absoluteString],
-                 @"emerald": [[MGLStyle emeraldStyleURL] absoluteString],
-                 @"satellite": [[MGLStyle satelliteStyleURL] absoluteString],
-                 @"hybrid": [[MGLStyle hybridStyleURL] absoluteString],
-            },
+                     @"light": [[MGLStyle lightStyleURL] absoluteString],
+                     @"dark": [[MGLStyle darkStyleURL] absoluteString],
+                     @"streets": [[MGLStyle streetsStyleURL] absoluteString],
+                     @"emerald": [[MGLStyle emeraldStyleURL] absoluteString],
+                     @"satellite": [[MGLStyle satelliteStyleURL] absoluteString],
+                     @"hybrid": [[MGLStyle hybridStyleURL] absoluteString],
+                     },
              @"userTrackingMode": @{
                      @"none": [NSNumber numberWithUnsignedInt:MGLUserTrackingModeNone],
                      @"follow": [NSNumber numberWithUnsignedInt:MGLUserTrackingModeFollow],
                      @"followWithCourse": [NSNumber numberWithUnsignedInt:MGLUserTrackingModeFollowWithCourse],
                      @"followWithHeading": [NSNumber numberWithUnsignedInt:MGLUserTrackingModeFollowWithHeading]
-            }
-    };
-
+                     }
+             };
+    
 };
 
 
