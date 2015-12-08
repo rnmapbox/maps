@@ -21,7 +21,7 @@
 | `logoIsHidden`  | `bool` | Optional | `false` | Whether logo is visible in lower left corner. |
 | `compassIsHidden`  | `bool` | Optional | `false` | Whether compass is visible when map is rotated. |
 
-## Events
+## Event listeners
 
 | Event Name | Returns | Notes
 |---|---|---|
@@ -31,6 +31,10 @@
 | `onUpdateUserLocation` | `{latitude: 0, longitude: 0, headingAccuracy: 0, magneticHeading: 0, trueHeading: 0, isUpdating: false}` | Fired when the users location updates.
 | `onRightAnnotationTapped` | `{title: null, subtitle: null, latitude: 0, longitude: 0}` | Fired when user taps `rightCalloutAccessory`
 | `onLongPress` | `{latitude: 0, longitude: 0, screenCoordY, screenCoordX}` | Fired when the user taps and holds screen for 1 second.
+| `onFinishLoadingMap` | does not return an object | Fired once the map has loaded the style |
+| `onStartLoadingMap` | does not return an object | Fired once the map begins loading the style |
+| `onLocateUserFailed` | `{message: message}` | Fired when there is an error getting the users location. Do not rely on the string that is returned for determining what kind of error it is. |
+
 
 
 ## Methods for Modifying the Map State
