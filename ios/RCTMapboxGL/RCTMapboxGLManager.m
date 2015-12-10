@@ -151,13 +151,16 @@ RCT_EXPORT_METHOD(setVisibleCoordinateBoundsAnimated:(nonnull NSNumber *)reactTa
                   longitudeSW:(float) longitudeSW
                   latitudeNE:(float) latitudeNE
                   longitudeNE:(float) longitudeNE
-                  edgePadding:(double) edgePadding)
+                  paddingTop:(double) paddingTop
+                  paddingRight:(double) paddingRight
+                  paddingBottom:(double) paddingBottom
+                  paddingLeft:(double) paddingLeft)
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             MGLCoordinateBounds coordinatesBounds = MGLCoordinateBoundsMake(CLLocationCoordinate2DMake(latitudeSW, longitudeSW), CLLocationCoordinate2DMake(latitudeNE, longitudeNE));
-            [mapView setVisibleCoordinateBounds:coordinatesBounds edgePadding:UIEdgeInsetsMake(edgePadding, edgePadding, edgePadding, edgePadding) animated:YES];
+            [mapView setVisibleCoordinateBounds:coordinatesBounds edgePadding:UIEdgeInsetsMake(paddingTop, paddingLeft, paddingBottom, paddingRight) animated:YES];
         }
     }];
 }
