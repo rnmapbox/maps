@@ -1,3 +1,7 @@
+#v2.2.0
+
+* [iOS] Breaking change: `setVisibleCoordinateBoundsAnimated` now takes padding for top, right, bottom, left
+
 #v2.1.4
 
 [iOS] Adds event listeners:
