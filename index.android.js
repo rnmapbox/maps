@@ -20,6 +20,7 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
         latitude: React.PropTypes.number.isRequired,
         longitude: React.PropTypes.number.isRequired
       }),
+      centerCoordinateZoom: React.PropTypes.shape(), 
       debugActive: React.PropTypes.bool,
       direction: React.PropTypes.number,
       rotationEnabled: React.PropTypes.bool,
@@ -29,7 +30,9 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
       UserLocationTrackingMode: React.PropTypes.oneOf(['NONE', 'FOLLOW']),
       zoomEnabled: React.PropTypes.bool,
       zoomLevel: React.PropTypes.number,
+      tilt: React.PropTypes.number,
       onRegionChange: React.PropTypes.func,
+      removeAllAnnotations: React.PropTypes.bool,
       // Fix for https://github.com/mapbox/react-native-mapbox-gl/issues/118
       scaleY: React.PropTypes.number,
       scaleX: React.PropTypes.number,
@@ -56,15 +59,19 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
         rotationEnabled: true,
         scrollEnabled: true,
         showsUserLocation: false,
-        styleUrl: 'asset://styles/streets-v8.json',
+        styleUrl: 'mapbox://styles/mapbox/streets-v8',
         UserLocationTrackingMode: 'NONE',
         zoomEnabled: true,
-        zoomLevel: 0
+        zoomLevel: 0,
+        tilt: 0
       };
     }
 });
 
 var ReactMapViewWrapper = React.createClass({
+  statics: {
+    Mixin: NativeModules.Mapbox
+  },
   handleOnChange(event) {
     if (this.props.onRegionChange) this.props.onRegionChange(event.nativeEvent.src);
   },

@@ -5,10 +5,12 @@ var Mapbox = require('react-native-mapbox-gl');
 var {
   AppRegistry,
   StyleSheet,
-  View
+  View,
+  Text
 } = React;
 
 var MapExample = React.createClass({
+  mixins: [Mapbox.Mixin],
   getInitialState() {
     return {
       center: {
@@ -44,15 +46,41 @@ var MapExample = React.createClass({
       }]
     }
   },
-  onRegionChange(location) {
-    console.log(location);
-  },
-  render: function() {
+  render() {
     return (
       <View style={styles.container}>
+        <Text style={styles.text} onPress={() => this.setDirectionAnimated(0)}>
+          Set direction to 0
+        </Text>
+        <Text style={styles.text} onPress={() => this.setCenterCoordinateAnimated(40.68454331694491, -73.93592834472656)}>
+          Go to New York at current zoom level
+        </Text>
+        <Text style={styles.text} onPress={() => this.setCenterCoordinateZoomLevelAnimated(35.68829, 139.77492, 14)}>
+          Go to Tokyo at fixed zoom level 14
+        </Text>
+        <Text style={styles.text} onPress={() => this.addAnnotation([{
+          coordinates: [40.73312,-73.989],
+          type: 'point',
+          title: 'This is a new marker',
+          id: 'foo'
+        }, {
+          'coordinates': [[40.75974059207392, -74.02484893798828], [40.68454331694491, -73.93592834472656]],
+          'type': 'polyline'
+        }])}>
+          Add new marker
+        </Text>
+        <Text style={styles.text} onPress={() => this.setUserTrackingMode('FOLLOW')}>
+          Set userTrackingMode to follow
+        </Text>
+        <Text style={styles.text} onPress={() => this.removeAllAnnotations()}>
+          Remove all annotations
+        </Text>
+        <Text style={styles.text} onPress={() => this.setTilt(50)}>
+          Set tilt to 50
+        </Text>
         <Mapbox
           annotations={this.state.annotations}
-          accessToken={'mapbox-access-token'}
+          accessToken={'your-mapbox.com-access-token'}
           centerCoordinate={this.state.center}
           debugActive={false}
           direction={0}
@@ -61,8 +89,8 @@ var MapExample = React.createClass({
           scrollEnabled={true}
           style={styles.map}
           showsUserLocation={true}
-          styleUrl={'asset://styles/streets-v8.json'}
-          UserLocationTrackingMode={'FOLLOW'}
+          styleUrl={'mapbox://styles/mapbox/streets-v8'}
+          UserLocationTrackingMode={'NONE'}
           zoomEnabled={true}
           zoomLevel={10}
         />
@@ -75,8 +103,11 @@ var styles = StyleSheet.create({
   container: {
     flex: 1
   },
+  text: {
+    padding: 3,
+    marginLeft: 5
+  },
   map: {
-    width: require('Dimensions').get('window').width,
     flex: 1
   }
 });
