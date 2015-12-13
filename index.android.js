@@ -32,6 +32,7 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
       zoomLevel: React.PropTypes.number,
       tilt: React.PropTypes.number,
       onRegionChange: React.PropTypes.func,
+      onUserLocationChange: React.PropTypes.func,
       removeAllAnnotations: React.PropTypes.bool,
       // Fix for https://github.com/mapbox/react-native-mapbox-gl/issues/118
       scaleY: React.PropTypes.number,
@@ -75,10 +76,14 @@ var ReactMapViewWrapper = React.createClass({
   handleOnChange(event) {
     if (this.props.onRegionChange) this.props.onRegionChange(event.nativeEvent.src);
   },
+  handleUserLocation(event) {
+    if (this.props.onUserLocationChange) this.props.onUserLocationChange(event.nativeEvent.src);
+  },
   render() {
     return <ReactMapView
       {...this.props}
-      onChange={this.handleOnChange} />
+      onChange={this.handleOnChange}
+      onSelect={this.handleUserLocation} />
   }
 });
 

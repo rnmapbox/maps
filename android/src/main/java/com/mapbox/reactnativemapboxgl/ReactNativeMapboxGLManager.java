@@ -3,6 +3,8 @@ package com.mapbox.reactnativemapboxgl;
 
 import android.graphics.Color;
 import android.util.Log;
+import android.location.Location;
+
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
@@ -177,15 +179,26 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         });
     }
 
-//    @ReactProp(name = PROP_ONUSER_LOCATION_CHANGE, defaultBoolean = true)
-//    public void onUserLocationChange(final MapView view, Boolean value) {
-//        view.setOnMyLocationChangeListener(new MapView.OnMyLocationChangeListener() {
-//            @Override
-//            public void onUserLocationChange(int location) {
-//
-//            }
-//        });
-//    }
+    @ReactProp(name = PROP_ONUSER_LOCATION_CHANGE, defaultBoolean = true)
+    public void onMyLocationChange(final MapView view, Boolean value) {
+        view.setOnMyLocationChangeListener(new MapView.OnMyLocationChangeListener() {
+            @Override
+            public void onMyLocationChange(@Nullable Location location) {
+                WritableMap event = Arguments.createMap();
+                WritableMap locationMap = Arguments.createMap();
+                locationMap.putDouble("latitude", location.getLatitude());
+                locationMap.putDouble("longitude", location.getLongitude());
+                locationMap.putDouble("accuracy", location.getAccuracy());
+                locationMap.putDouble("altitude", location.getAltitude());
+                locationMap.putDouble("bearing", location.getBearing());
+                locationMap.putDouble("speed", location.getSpeed());
+                locationMap.putString("provider", location.getProvider());
+                event.putMap("src", locationMap);
+                ReactContext reactContext = (ReactContext) view.getContext();
+                reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "topSelect", event);
+            }
+        });
+    }
 
     @ReactProp(name = PROP_CENTER_COORDINATE)
     public void setCenterCoordinate(MapView view, @Nullable ReadableMap center) {
