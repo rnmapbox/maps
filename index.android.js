@@ -31,8 +31,6 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
       zoomEnabled: React.PropTypes.bool,
       zoomLevel: React.PropTypes.number,
       tilt: React.PropTypes.number,
-      logoIsHidden: React.PropTypes.bool,
-      attributionButtonIsHidden: React.PropTypes.bool,
       compassIsHidden: React.PropTypes.bool,
       onRegionChange: React.PropTypes.func,
       onUserLocationChange: React.PropTypes.func,
@@ -67,8 +65,6 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
         zoomEnabled: true,
         zoomLevel: 0,
         tilt: 0,
-        attributionButtonIsHidden: false,
-        logoIsHidden: false,
         compassIsHidden: false
       };
     }
@@ -76,7 +72,7 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
 
 var ReactMapViewWrapper = React.createClass({
   statics: {
-    Mixin: NativeModules.Mapbox
+    Mixin: NativeModules.MapboxGLManager
   },
   handleOnChange(event) {
     if (this.props.onRegionChange) this.props.onRegionChange(event.nativeEvent.src);

@@ -259,25 +259,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
 
     @ReactProp(name = PROP_COMPASS_IS_HIDDEN)
     public void setCompassIsHidden(MapView view, Boolean value) {
-        view.setCompassEnabled(value);
-    }
-
-    @ReactProp(name = PROP_LOGO_IS_HIDDEN)
-    public void setLogoIsHidden(MapView view, Boolean value) {
-        if (value) {
-            view.setLogoVisibility(0);
-        } else {
-            view.setLogoVisibility(1);
-        }
-    }
-
-    @ReactProp(name = PROP_ATTRIBUTION_IS_HIDDEN)
-    public void setAttributionIsHidden(MapView view, Boolean value) {
-        if (value) {
-            view.setAttributionVisibility(0);
-        } else {
-            view.setAttributionVisibility(1);
-        }
+        view.setCompassEnabled(!value);
     }
 
     public void setCenterCoordinateZoomLevel(MapView view, @Nullable ReadableMap center) {

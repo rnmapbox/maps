@@ -36,12 +36,12 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setDirectionAnimated(double mapRef, int direction) {
+    public void setDirectionAnimated(String mapRef, int direction) {
         aPackage.getManager().setDirection(aPackage.getManager().getMapView(), direction);
     }
 
     @ReactMethod
-    public void setCenterCoordinateAnimated(double mapRef, double latitude, double longitude) {
+    public void setCenterCoordinateAnimated(String mapRef, double latitude, double longitude) {
         WritableMap location = Arguments.createMap();
         location.putDouble("latitude", latitude);
         location.putDouble("longitude", longitude);
@@ -49,7 +49,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setCenterCoordinateZoomLevelAnimated(double mapRef, double latitude, double longitude, double zoom) {
+    public void setCenterCoordinateZoomLevelAnimated(String mapRef, double latitude, double longitude, double zoom) {
         WritableMap location = Arguments.createMap();
         location.putDouble("latitude", latitude);
         location.putDouble("longitude", longitude);
@@ -58,27 +58,27 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void addAnnotations(double mapRef, ReadableArray value) {
+    public void addAnnotations(String mapRef, ReadableArray value) {
         aPackage.getManager().setAnnotations(aPackage.getManager().getMapView(), value);
     }
 
     @ReactMethod
-    public void setUserTrackingMode(double mapRef, String mode) {
+    public void setUserTrackingMode(String mapRef, String mode) {
         aPackage.getManager().setMyLocationTrackingMode(aPackage.getManager().getMapView(), mode);
     }
 
     @ReactMethod
-    public void removeAllAnnotations(double mapRef) {
+    public void removeAllAnnotations(String mapRef) {
         aPackage.getManager().removeAllAnnotations(aPackage.getManager().getMapView(), true);
     }
 
     @ReactMethod
-    public void setTilt(double mapRef, double pitch) {
+    public void setTilt(String mapRef, double pitch) {
         aPackage.getManager().setTilt(aPackage.getManager().getMapView(), pitch);
     }
 
     @ReactMethod
-    public void setVisibleCoordinateBoundsAnimated(double mapRef, double latSW, double lngSW,double latNE, double lngNE, float paddingTop, float paddingRight, float paddingBottom, float paddingLeft) {
+    public void setVisibleCoordinateBoundsAnimated(String mapRef, double latSW, double lngSW,double latNE, double lngNE, float paddingTop, float paddingRight, float paddingBottom, float paddingLeft) {
         WritableMap info = Arguments.createMap();
         info.putDouble("latSW", latSW);
         info.putDouble("lngSW", lngSW);
