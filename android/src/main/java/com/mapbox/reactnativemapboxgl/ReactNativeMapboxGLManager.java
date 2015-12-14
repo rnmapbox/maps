@@ -33,7 +33,6 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public static final String PROP_ACCESS_TOKEN = "accessToken";
     public static final String PROP_ANNOTATIONS = "annotations";
     public static final String PROP_CENTER_COORDINATE = "centerCoordinate";
-    public static final String PROP_CENTER_COORDINATE_ZOOM = "centerCoordinateZoom";
     public static final String PROP_DEBUG_ACTIVE = "debugActive";
     public static final String PROP_DIRECTION = "direction";
     public static final String PROP_ONREGIONCHANGE = "onRegionChange";
@@ -45,9 +44,10 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public static final String PROP_USER_TRACKING_MODE = "UserLocationTrackingMode";
     public static final String PROP_ZOOM_ENABLED = "zoomEnabled";
     public static final String PROP_ZOOM_LEVEL = "zoomLevel";
-    public static final String PROP_REMOVE_ALL_ANNOTATIONS = "removeAllAnnotations";
     public static final String PROP_SET_TILT = "tilt";
-    public static final String PROP_VISIBLE_COORDINATE_BOUNDS = "visibleCoordinateBounds";
+    public static final String PROP_COMPASS_IS_HIDDEN = "compassIsHidden";
+    public static final String PROP_LOGO_IS_HIDDEN = "logoIsHidden";
+    public static final String PROP_ATTRIBUTION_IS_HIDDEN = "attributionButtonIsHidden";
     private MapView mapView;
 
 
@@ -70,11 +70,6 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         } else {
             view.setAccessToken(value);
         }
-    }
-
-    @ReactProp(name = PROP_REMOVE_ALL_ANNOTATIONS)
-    public void removeAllAnnotations(MapView view, @Nullable Boolean placeHolder) {
-        view.removeAllAnnotations();
     }
 
     @ReactProp(name = PROP_SET_TILT)
@@ -214,25 +209,6 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         }
     }
 
-    @ReactProp(name = PROP_CENTER_COORDINATE_ZOOM)
-    public void setCenterCoordinateZoomLevel(MapView view, @Nullable ReadableMap center) {
-        if (center != null) {
-            double latitude = center.getDouble("latitude");
-            double longitude = center.getDouble("longitude");
-            double zoom = center.getDouble("zoom");
-            view.setCenterCoordinate(new LatLng(latitude, longitude, zoom), true);
-        }else{
-            Log.w(REACT_CLASS, "No CenterCoordinate provided");
-        }
-    }
-
-    @ReactProp(name = PROP_VISIBLE_COORDINATE_BOUNDS)
-    public void setVisibleCoordinateBounds(MapView view, @Nullable ReadableMap info) {
-        final LatLng sw = new LatLng(info.getDouble("latSW"), info.getDouble("lngSW"));
-        final LatLng ne = new LatLng(info.getDouble("latNE"), info.getDouble("lngNE"));
-        view.setVisibleCoordinateBounds(new CoordinateBounds(sw, ne), new RectF((float)info.getDouble("paddingLeft"), (float)info.getDouble("paddingTop"), (float)info.getDouble("paddingRight"), (float)info.getDouble("paddingBottom")), true);
-    }
-
     @ReactProp(name = PROP_ROTATION_ENABLED, defaultBoolean = true)
     public void setRotateEnabled(MapView view, Boolean value) {
         view.setRotateEnabled(value);
@@ -281,6 +257,49 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         view.setScrollEnabled(value);
     }
 
+    @ReactProp(name = PROP_COMPASS_IS_HIDDEN)
+    public void setCompassIsHidden(MapView view, Boolean value) {
+        view.setCompassEnabled(value);
+    }
+
+    @ReactProp(name = PROP_LOGO_IS_HIDDEN)
+    public void setLogoIsHidden(MapView view, Boolean value) {
+        if (value) {
+            view.setLogoVisibility(0);
+        } else {
+            view.setLogoVisibility(1);
+        }
+    }
+
+    @ReactProp(name = PROP_ATTRIBUTION_IS_HIDDEN)
+    public void setAttributionIsHidden(MapView view, Boolean value) {
+        if (value) {
+            view.setAttributionVisibility(0);
+        } else {
+            view.setAttributionVisibility(1);
+        }
+    }
+
+    public void setCenterCoordinateZoomLevel(MapView view, @Nullable ReadableMap center) {
+        if (center != null) {
+            double latitude = center.getDouble("latitude");
+            double longitude = center.getDouble("longitude");
+            double zoom = center.getDouble("zoom");
+            view.setCenterCoordinate(new LatLng(latitude, longitude, zoom), true);
+        }else{
+            Log.w(REACT_CLASS, "No CenterCoordinate provided");
+        }
+    }
+
+    public void setVisibleCoordinateBounds(MapView view, @Nullable ReadableMap info) {
+        final LatLng sw = new LatLng(info.getDouble("latSW"), info.getDouble("lngSW"));
+        final LatLng ne = new LatLng(info.getDouble("latNE"), info.getDouble("lngNE"));
+        view.setVisibleCoordinateBounds(new CoordinateBounds(sw, ne), new RectF((float) info.getDouble("paddingLeft"), (float) info.getDouble("paddingTop"), (float) info.getDouble("paddingRight"), (float) info.getDouble("paddingBottom")), true);
+    }
+
+    public void removeAllAnnotations(MapView view, @Nullable Boolean placeHolder) {
+        view.removeAllAnnotations();
+    }
 
     public MapView getMapView() {
         return mapView;

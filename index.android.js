@@ -31,10 +31,11 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
       zoomEnabled: React.PropTypes.bool,
       zoomLevel: React.PropTypes.number,
       tilt: React.PropTypes.number,
+      logoIsHidden: React.PropTypes.bool,
+      attributionButtonIsHidden: React.PropTypes.bool,
+      compassIsHidden: React.PropTypes.bool,
       onRegionChange: React.PropTypes.func,
       onUserLocationChange: React.PropTypes.func,
-      removeAllAnnotations: React.PropTypes.func,
-      visibleCoordinateBounds: React.PropTypes.func,
       // Fix for https://github.com/mapbox/react-native-mapbox-gl/issues/118
       scaleY: React.PropTypes.number,
       scaleX: React.PropTypes.number,
@@ -65,7 +66,10 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
         UserLocationTrackingMode: 'NONE',
         zoomEnabled: true,
         zoomLevel: 0,
-        tilt: 0
+        tilt: 0,
+        attributionButtonIsHidden: false,
+        logoIsHidden: false,
+        compassIsHidden: false
       };
     }
 });
@@ -81,10 +85,12 @@ var ReactMapViewWrapper = React.createClass({
     if (this.props.onUserLocationChange) this.props.onUserLocationChange(event.nativeEvent.src);
   },
   render() {
-    return <ReactMapView
-      {...this.props}
-      onChange={this.handleOnChange}
-      onSelect={this.handleUserLocation} />
+    return (
+      <ReactMapView
+        {...this.props}
+        onChange={this.handleOnChange}
+        onSelect={this.handleUserLocation} />
+    );
   }
 });
 
