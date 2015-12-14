@@ -8,6 +8,7 @@ var {
   View,
   Text
 } = React;
+var mapRef = 'map';
 
 var MapExample = React.createClass({
   mixins: [Mapbox.Mixin],
@@ -46,19 +47,23 @@ var MapExample = React.createClass({
       }]
     }
   },
+  onUserLocationChange(location) {
+    console.log(location);
+  },
   render() {
+    console.log(this);
     return (
       <View style={styles.container}>
-        <Text style={styles.text} onPress={() => this.setDirectionAnimated(0)}>
+        <Text style={styles.text} onPress={() => this.setDirectionAnimated(mapRef, 0)}>
           Set direction to 0
         </Text>
-        <Text style={styles.text} onPress={() => this.setCenterCoordinateAnimated(40.68454331694491, -73.93592834472656)}>
+        <Text style={styles.text} onPress={() => this.setCenterCoordinateAnimated(mapRef, 40.68454331694491, -73.93592834472656)}>
           Go to New York at current zoom level
         </Text>
-        <Text style={styles.text} onPress={() => this.setCenterCoordinateZoomLevelAnimated(35.68829, 139.77492, 14)}>
+        <Text style={styles.text} onPress={() => this.setCenterCoordinateZoomLevelAnimated(mapRef, 35.68829, 139.77492, 14)}>
           Go to Tokyo at fixed zoom level 14
         </Text>
-        <Text style={styles.text} onPress={() => this.addAnnotation([{
+        <Text style={styles.text} onPress={() => this.addAnnotations(mapRef, [{
           coordinates: [40.73312,-73.989],
           type: 'point',
           title: 'This is a new marker',
@@ -69,14 +74,17 @@ var MapExample = React.createClass({
         }])}>
           Add new marker
         </Text>
-        <Text style={styles.text} onPress={() => this.setUserTrackingMode('FOLLOW')}>
+        <Text style={styles.text} onPress={() => this.setUserTrackingMode(mapRef, 'FOLLOW')}>
           Set userTrackingMode to follow
         </Text>
-        <Text style={styles.text} onPress={() => this.removeAllAnnotations()}>
+        <Text style={styles.text} onPress={() => this.removeAllAnnotations(mapRef)}>
           Remove all annotations
         </Text>
-        <Text style={styles.text} onPress={() => this.setTilt(50)}>
+        <Text style={styles.text} onPress={() => this.setTilt(mapRef, 50)}>
           Set tilt to 50
+        </Text>
+        <Text style={styles.text} onPress={() => this.setVisibleCoordinateBoundsAnimated(mapRef, 40.712, -74.227, 40.774, -74.125, 100, 100, 100, 100)}>
+          Set visible bounds to 40.7, -74.2, 40.7, -74.1
         </Text>
         <Mapbox
           annotations={this.state.annotations}
@@ -84,6 +92,7 @@ var MapExample = React.createClass({
           centerCoordinate={this.state.center}
           debugActive={false}
           direction={0}
+          ref={mapRef}
           onRegionChange={this.onRegionChange}
           rotationEnabled={true}
           scrollEnabled={true}
@@ -93,6 +102,8 @@ var MapExample = React.createClass({
           UserLocationTrackingMode={'NONE'}
           zoomEnabled={true}
           zoomLevel={10}
+          compassIsHidden={true}
+          onUserLocationChange={this.onUserLocationChange}
         />
       </View>
     );
