@@ -39,7 +39,7 @@
 
 ## Methods for Modifying the Map State
 
-These methods require you to use `MapboxGLMap.Mixin` to access the methods. Each method also requires you to pass in a string as the first argument which is equal to the `ref` on the map view you wish to modify. See the [example](https://github.com/bsudekum/react-native-mapbox-gl/blob/master/example.js) on how this is implemented.
+These methods require you to use `MapboxGLMap.Mixin` to access the methods. Each method also requires you to pass in a string as the first argument which is equal to the `ref` on the map view you wish to modify. See the [example](https://github.com/mapbox/react-native-mapbox-gl/blob/master/ios/example.js) on how this is implemented.
 
 | Method Name | Arguments | Notes
 |---|---|---|
