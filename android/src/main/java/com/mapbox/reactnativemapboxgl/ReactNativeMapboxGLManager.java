@@ -13,6 +13,8 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ReactProp;
 import com.mapbox.mapboxsdk.constants.Style;
+import android.graphics.RectF;
+import com.mapbox.mapboxsdk.geometry.CoordinateBounds;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
@@ -45,6 +47,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public static final String PROP_ZOOM_LEVEL = "zoomLevel";
     public static final String PROP_REMOVE_ALL_ANNOTATIONS = "removeAllAnnotations";
     public static final String PROP_SET_TILT = "tilt";
+    public static final String PROP_VISIBLE_COORDINATE_BOUNDS = "visibleCoordinateBounds";
     private MapView mapView;
 
 
@@ -221,6 +224,13 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         }else{
             Log.w(REACT_CLASS, "No CenterCoordinate provided");
         }
+    }
+
+    @ReactProp(name = PROP_VISIBLE_COORDINATE_BOUNDS)
+    public void setVisibleCoordinateBounds(MapView view, @Nullable ReadableMap info) {
+        final LatLng sw = new LatLng(info.getDouble("latSW"), info.getDouble("lngSW"));
+        final LatLng ne = new LatLng(info.getDouble("latNE"), info.getDouble("lngNE"));
+        view.setVisibleCoordinateBounds(new CoordinateBounds(sw, ne), new RectF((float)info.getDouble("paddingLeft"), (float)info.getDouble("paddingTop"), (float)info.getDouble("paddingRight"), (float)info.getDouble("paddingBottom")), true);
     }
 
     @ReactProp(name = PROP_ROTATION_ENABLED, defaultBoolean = true)

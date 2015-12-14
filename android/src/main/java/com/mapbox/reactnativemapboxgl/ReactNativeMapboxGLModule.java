@@ -77,6 +77,20 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         aPackage.getManager().setTilt(aPackage.getManager().getMapView(), pitch);
     }
 
+    @ReactMethod
+    public void setVisibleCoordinateBounds(double latSW, double lngSW,double latNE, double lngNE, float paddingTop, float paddingRight, float paddingBottom, float paddingLeft) {
+        WritableMap info = Arguments.createMap();
+        info.putDouble("latSW", latSW);
+        info.putDouble("lngSW", lngSW);
+        info.putDouble("latNE", latNE);
+        info.putDouble("lngNE", lngNE);
+        info.putDouble("paddingTop", paddingTop);
+        info.putDouble("paddingRight", paddingRight);
+        info.putDouble("paddingBottom", paddingBottom);
+        info.putDouble("paddingLeft", paddingLeft);
+        aPackage.getManager().setVisibleCoordinateBounds(aPackage.getManager().getMapView(), info);
+    }
+
     public void setPackage(ReactNativeMapboxGLPackage aPackage) {
         this.aPackage = aPackage;
     }

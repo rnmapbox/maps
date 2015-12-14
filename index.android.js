@@ -33,7 +33,8 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
       tilt: React.PropTypes.number,
       onRegionChange: React.PropTypes.func,
       onUserLocationChange: React.PropTypes.func,
-      removeAllAnnotations: React.PropTypes.bool,
+      removeAllAnnotations: React.PropTypes.func,
+      visibleCoordinateBounds: React.PropTypes.func,
       // Fix for https://github.com/mapbox/react-native-mapbox-gl/issues/118
       scaleY: React.PropTypes.number,
       scaleX: React.PropTypes.number,
