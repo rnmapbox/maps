@@ -32,7 +32,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
 
     @Override
     public String getName() {
-        return "Mapbox";
+        return "MapboxGLManager";
     }
 
     @ReactMethod
@@ -58,7 +58,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void addAnnotation(ReadableArray value) {
+    public void addAnnotations(ReadableArray value) {
         aPackage.getManager().setAnnotations(aPackage.getManager().getMapView(), value);
     }
 
@@ -78,7 +78,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setVisibleCoordinateBounds(double latSW, double lngSW,double latNE, double lngNE, float paddingTop, float paddingRight, float paddingBottom, float paddingLeft) {
+    public void setVisibleCoordinateBoundsAnimated(double latSW, double lngSW,double latNE, double lngNE, float paddingTop, float paddingRight, float paddingBottom, float paddingLeft) {
         WritableMap info = Arguments.createMap();
         info.putDouble("latSW", latSW);
         info.putDouble("lngSW", lngSW);

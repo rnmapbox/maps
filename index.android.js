@@ -20,7 +20,7 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
         latitude: React.PropTypes.number.isRequired,
         longitude: React.PropTypes.number.isRequired
       }),
-      centerCoordinateZoom: React.PropTypes.shape(), 
+      centerCoordinateZoom: React.PropTypes.shape(),
       debugActive: React.PropTypes.bool,
       direction: React.PropTypes.number,
       rotationEnabled: React.PropTypes.bool,
