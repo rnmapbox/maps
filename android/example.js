@@ -23,7 +23,12 @@ var MapExample = React.createClass({
         type: 'point',
         title: 'Important!',
         subtitle: 'Neat, this is a custom annotation image',
-        id: 'marker2'
+        id: 'marker2',
+        annotationImage: {
+          url: 'https://cldup.com/7NLZklp8zS.png',
+          height: 25,
+          width: 25
+        }
       }, {
         coordinates: [40.7923, -73.9178],
         type: 'point',
@@ -51,7 +56,6 @@ var MapExample = React.createClass({
     console.log(location);
   },
   render() {
-    console.log(this);
     return (
       <View style={styles.container}>
         <Text style={styles.text} onPress={() => this.setDirectionAnimated(mapRef, 0)}>
@@ -74,7 +78,7 @@ var MapExample = React.createClass({
         }])}>
           Add new marker
         </Text>
-        <Text style={styles.text} onPress={() => this.setUserTrackingMode(mapRef, 'FOLLOW')}>
+        <Text style={styles.text} onPress={() => this.setUserTrackingMode(mapRef, this.userTrackingMode.follow)}>
           Set userTrackingMode to follow
         </Text>
         <Text style={styles.text} onPress={() => this.removeAllAnnotations(mapRef)}>
@@ -91,15 +95,15 @@ var MapExample = React.createClass({
           accessToken={'your-mapbox.com-access-token'}
           centerCoordinate={this.state.center}
           debugActive={false}
-          direction={0}
+          direction={10}
           ref={mapRef}
           onRegionChange={this.onRegionChange}
           rotationEnabled={true}
           scrollEnabled={true}
           style={styles.map}
           showsUserLocation={true}
-          styleUrl={'mapbox://styles/mapbox/streets-v8'}
-          UserLocationTrackingMode={'NONE'}
+          styleUrl={this.mapStyles.emerald}
+          userTrackingMode={this.userTrackingMode.none}
           zoomEnabled={true}
           zoomLevel={10}
           compassIsHidden={true}

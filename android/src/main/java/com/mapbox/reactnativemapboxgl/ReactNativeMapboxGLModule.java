@@ -3,7 +3,10 @@ package com.mapbox.reactnativemapboxgl;
 
 import android.content.Context;
 import android.util.Log;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.mapbox.mapboxsdk.constants.Style;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -11,6 +14,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
+import com.mapbox.mapboxsdk.constants.MyLocationTracking;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.views.MapView;
 
@@ -33,6 +37,31 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
     @Override
     public String getName() {
         return "MapboxGLManager";
+    }
+
+    @Override
+    public @Nullable Map<String, Object> getConstants() {
+        HashMap<String, Object> constants = new HashMap<String, Object>();
+
+        HashMap<String, Object> userTrackingMode = new HashMap<String, Object>();
+        HashMap<String, Object> mapStyles = new HashMap<String, Object>();
+
+        // User tracking constants
+        userTrackingMode.put("none", MyLocationTracking.TRACKING_NONE);
+        userTrackingMode.put("follow", MyLocationTracking.TRACKING_FOLLOW);
+
+        // Style constants
+        mapStyles.put("light", Style.LIGHT);
+        mapStyles.put("dark", Style.DARK);
+        mapStyles.put("streets", Style.MAPBOX_STREETS);
+        mapStyles.put("emerald", Style.EMERALD);
+        mapStyles.put("satellite", Style.SATELLITE);
+        mapStyles.put("hybrid", Style.SATELLITE_STREETS);
+
+        constants.put("userTrackingMode", userTrackingMode);
+        constants.put("mapStyles", mapStyles);
+
+        return constants;
     }
 
     @ReactMethod
@@ -63,7 +92,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setUserTrackingMode(String mapRef, String mode) {
+    public void setUserTrackingMode(String mapRef, int mode) {
         aPackage.getManager().setMyLocationTrackingMode(aPackage.getManager().getMapView(), mode);
     }
 

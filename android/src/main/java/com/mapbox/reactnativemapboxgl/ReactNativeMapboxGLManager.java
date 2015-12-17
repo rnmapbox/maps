@@ -3,6 +3,7 @@ package com.mapbox.reactnativemapboxgl;
 
 import android.graphics.Color;
 import android.util.Log;
+import android.os.StrictMode;
 import android.location.Location;
 
 
@@ -24,10 +25,25 @@ import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.constants.MyLocationTracking;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.views.MapView;
+import com.mapbox.mapboxsdk.annotations.Sprite;
+import com.mapbox.mapboxsdk.annotations.SpriteFactory;
+import android.support.v4.content.ContextCompat;
+import android.graphics.drawable.Drawable;
+import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
+import java.io.InputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import android.graphics.drawable.BitmapDrawable;
 
 import javax.annotation.Nullable;
 
+
+
 public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
+
     public static final String REACT_CLASS = "RCTMapbox";
 
     public static final String PROP_ACCESS_TOKEN = "accessToken";
@@ -41,13 +57,11 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public static final String PROP_SCROLL_ENABLED = "scrollEnabled";
     public static final String PROP_USER_LOCATON = "showsUserLocation";
     public static final String PROP_STYLE_URL = "styleUrl";
-    public static final String PROP_USER_TRACKING_MODE = "UserLocationTrackingMode";
+    public static final String PROP_USER_TRACKING_MODE = "userTrackingMode";
     public static final String PROP_ZOOM_ENABLED = "zoomEnabled";
     public static final String PROP_ZOOM_LEVEL = "zoomLevel";
     public static final String PROP_SET_TILT = "tilt";
     public static final String PROP_COMPASS_IS_HIDDEN = "compassIsHidden";
-    public static final String PROP_LOGO_IS_HIDDEN = "logoIsHidden";
-    public static final String PROP_ATTRIBUTION_IS_HIDDEN = "attributionButtonIsHidden";
     private MapView mapView;
 
 
@@ -60,6 +74,8 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public MapView createViewInstance(ThemedReactContext context) {
         mapView = new MapView(context, "pk.foo");
         mapView.onCreate(null);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         return mapView;
     }
 
@@ -75,6 +91,17 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     @ReactProp(name = PROP_SET_TILT)
     public void setTilt(MapView view, @Nullable double pitch) {
         mapView.setTilt(pitch, 1L);
+    }
+
+    public static Drawable drawableFromUrl(String url) throws IOException {
+        Bitmap x;
+
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.connect();
+        InputStream input = connection.getInputStream();
+
+        x = BitmapFactory.decodeStream(input);
+        return new BitmapDrawable(x);
     }
 
     @ReactProp(name = PROP_ANNOTATIONS)
@@ -99,6 +126,19 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
                     if (annotation.hasKey("subtitle")) {
                         String subtitle = annotation.getString("subtitle");
                         marker.snippet(subtitle);
+                    }
+                    if (annotation.hasKey("annotationImage")) {
+                        ReadableMap annotationImage = annotation.getMap("annotationImage");
+                        String annotationURL = annotationImage.getString("url");
+                        try {
+                            Drawable image = drawableFromUrl(annotationURL);
+                            image.setBounds(0, 0, 100, 100);
+                            SpriteFactory spriteFactory = new SpriteFactory(view);
+                            Sprite icon = spriteFactory.fromDrawable(image);
+                            marker.icon(icon);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     view.addMarker(marker);
                 } else if (type.equals("polyline")) {
@@ -228,18 +268,9 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         }
     }
 
-    @ReactProp(name = PROP_USER_TRACKING_MODE)
-    public void setMyLocationTrackingMode(MapView view, @Nullable String mode) {
-        if (mode != null && !mode.isEmpty()) {
-            if (mode.equals("NONE")) {
-                view.setMyLocationTrackingMode(MyLocationTracking.TRACKING_NONE);
-            } else if (mode.equals("FOLLOW")) {
-                view.setMyLocationTrackingMode(MyLocationTracking.TRACKING_FOLLOW);
-            }
-        } else {
-            view.setMyLocationTrackingMode(MyLocationTracking.TRACKING_NONE);
-            Log.w(REACT_CLASS, "ErrorTracking mode not found. Setting to NONE.");
-        }
+    @ReactProp(name = PROP_USER_TRACKING_MODE, defaultInt = 0)
+    public void setMyLocationTrackingMode(MapView view, @Nullable int mode) {
+        view.setMyLocationTrackingMode(mode);
     }
 
     @ReactProp(name = PROP_ZOOM_ENABLED, defaultBoolean = true)
