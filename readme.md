@@ -24,3 +24,5 @@ npm install react-native-mapbox-gl --save
 
 ![](https://cldup.com/A8S_7rLg1L.png)
 ![](http://i.imgur.com/I8XkXcS.jpg)
+
+*Need help? [Join the Discord channel](https://discord.gg/0iAWSG9X4zDK8ptn)*
