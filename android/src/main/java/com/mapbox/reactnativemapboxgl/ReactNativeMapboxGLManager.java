@@ -93,7 +93,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         mapView.setTilt(pitch, 1L);
     }
 
-    public static Drawable drawableFromUrl(String url) throws IOException {
+    public static Drawable drawableFromUrl(MapView view, String url) throws IOException {
         Bitmap x;
 
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
@@ -101,7 +101,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         InputStream input = connection.getInputStream();
 
         x = BitmapFactory.decodeStream(input);
-        return new BitmapDrawable(x);
+        return new BitmapDrawable(view.getResources(), x);
     }
 
     @ReactProp(name = PROP_ANNOTATIONS)
@@ -131,8 +131,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
                         ReadableMap annotationImage = annotation.getMap("annotationImage");
                         String annotationURL = annotationImage.getString("url");
                         try {
-                            Drawable image = drawableFromUrl(annotationURL);
-                            image.setBounds(0, 0, 100, 100);
+                            Drawable image = drawableFromUrl(mapView, annotationURL);
                             SpriteFactory spriteFactory = view.getSpriteFactory();
                             Sprite icon = spriteFactory.fromDrawable(image);
                             marker.icon(icon);
