@@ -133,7 +133,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
                         try {
                             Drawable image = drawableFromUrl(annotationURL);
                             image.setBounds(0, 0, 100, 100);
-                            SpriteFactory spriteFactory = new SpriteFactory(view);
+                            SpriteFactory spriteFactory = view.getSpriteFactory();
                             Sprite icon = spriteFactory.fromDrawable(image);
                             marker.icon(icon);
                         } catch (Exception e) {
