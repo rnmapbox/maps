@@ -11,7 +11,7 @@ npm install --save react-native-mapbox-gl --ignore-scripts
 // file: android/settings.gradle
 ...
 
-include ':reactnativemapboxgl', ':app'
+include ':reactnativemapboxgl'
 project(':reactnativemapboxgl').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-mapbox-gl/android')
 ```
 

@@ -25,17 +25,27 @@
 
 ## Methods for Modifying the Map State
 
-_Not yet implemented_
+Each method also requires you to pass in a string as the first argument which is equal to the `ref` on the map view you wish to modify. See the [example](https://github.com/mapbox/react-native-mapbox-gl/blob/master/android/example.js) on how this is implemented.
+
+| Method Name | Arguments | Notes
+|---|---|---|
+| `setDirectionAnimated` | `mapViewRef`, `heading` | Rotates the map to a new heading
+| `setCenterCoordinateAnimated` | `mapViewRef`, `latitude`, `longitude` | Moves the map to a new coordinate. Note, the zoom level stay at the current zoom level
+| `setCenterCoordinateZoomLevelAnimated` | `mapViewRef`, `latitude`, `longitude`, `zoomLevel` | Moves the map to a new coordinate and zoom level
+| `addAnnotations` | `mapViewRef`, `` (array of annotation objects, see [#annotations](https://github.com/bsudekum/react-native-mapbox-gl/blob/master/android/API.md#annotations)) | Adds annotation(s) to the map without redrawing the map. Note, this will remove all previous annotations from the map.
+| `removeAllAnnotations`  | `mapViewRef` | Removes all annotations on map.
+| `setVisibleCoordinateBoundsAnimated`  | `mapViewRef`, `latitude1`, `longitude1`, `latitude2`, `longitude2`, `padding top`, `padding right`, `padding bottom`, `padding left`  | Changes the viewport to fit the given coordinate bounds and some additional padding on each side.
+| `setUserTrackingMode` | `mapViewRef`, `NONE` or `FOLLOW` | Modifies the tracking mode.
 
 ## GL Styles
 
 You can change the `styleURL` to any valid GL stylesheet, here are a few:
 
-* `asset://styles/dark-v8.json`
-* `asset://styles/light-v8.json`
-* `asset://styles/emerald-v8.json`
-* `asset://styles/streets-v8.json`
-* `asset://styles/satellite-v8.json`
+* `mapbox://styles/dark-v8.json`
+* `mapbox://styles/light-v8.json`
+* `mapbox://styles/emerald-v8.json`
+* `mapbox://styles/streets-v8.json`
+* `mapbox://styles/satellite-v8.json`
 
 ## Annotations
 ```json

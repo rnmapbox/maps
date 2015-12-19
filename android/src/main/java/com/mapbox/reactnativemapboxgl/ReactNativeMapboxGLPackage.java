@@ -6,16 +6,22 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import android.util.Log;
-
 public class ReactNativeMapboxGLPackage implements ReactPackage {
+
+    private ReactNativeMapboxGLManager glManager;
+
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-        return Collections.emptyList();
+        List<NativeModule> modules = new ArrayList<>();
+        ReactNativeMapboxGLModule module = new ReactNativeMapboxGLModule(reactContext);
+        module.setPackage(this);
+        modules.add(module);
+        return modules;
     }
 
     @Override
@@ -25,8 +31,13 @@ public class ReactNativeMapboxGLPackage implements ReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
+        glManager = new ReactNativeMapboxGLManager();
         return Arrays.<ViewManager>asList(
-                new ReactNativeMapboxGLManager()
+                glManager
         );
+    }
+
+    public ReactNativeMapboxGLManager getManager() {
+        return glManager;
     }
 }

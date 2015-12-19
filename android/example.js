@@ -5,10 +5,13 @@ var Mapbox = require('react-native-mapbox-gl');
 var {
   AppRegistry,
   StyleSheet,
-  View
+  View,
+  Text
 } = React;
+var mapRef = 'map';
 
 var MapExample = React.createClass({
+  mixins: [Mapbox.Mixin],
   getInitialState() {
     return {
       center: {
@@ -20,7 +23,12 @@ var MapExample = React.createClass({
         type: 'point',
         title: 'Important!',
         subtitle: 'Neat, this is a custom annotation image',
-        id: 'marker2'
+        id: 'marker2',
+        annotationImage: {
+          url: 'https://cldup.com/7NLZklp8zS.png',
+          height: 25,
+          width: 25
+        }
       }, {
         coordinates: [40.7923, -73.9178],
         type: 'point',
@@ -44,27 +52,62 @@ var MapExample = React.createClass({
       }]
     }
   },
-  onRegionChange(location) {
+  onUserLocationChange(location) {
     console.log(location);
   },
-  render: function() {
+  render() {
     return (
       <View style={styles.container}>
+        <Text style={styles.text} onPress={() => this.setDirectionAnimated(mapRef, 0)}>
+          Set direction to 0
+        </Text>
+        <Text style={styles.text} onPress={() => this.setCenterCoordinateAnimated(mapRef, 40.68454331694491, -73.93592834472656)}>
+          Go to New York at current zoom level
+        </Text>
+        <Text style={styles.text} onPress={() => this.setCenterCoordinateZoomLevelAnimated(mapRef, 35.68829, 139.77492, 14)}>
+          Go to Tokyo at fixed zoom level 14
+        </Text>
+        <Text style={styles.text} onPress={() => this.addAnnotations(mapRef, [{
+          coordinates: [40.73312,-73.989],
+          type: 'point',
+          title: 'This is a new marker',
+          id: 'foo'
+        }, {
+          'coordinates': [[40.75974059207392, -74.02484893798828], [40.68454331694491, -73.93592834472656]],
+          'type': 'polyline'
+        }])}>
+          Add new marker
+        </Text>
+        <Text style={styles.text} onPress={() => this.setUserTrackingMode(mapRef, this.userTrackingMode.follow)}>
+          Set userTrackingMode to follow
+        </Text>
+        <Text style={styles.text} onPress={() => this.removeAllAnnotations(mapRef)}>
+          Remove all annotations
+        </Text>
+        <Text style={styles.text} onPress={() => this.setTilt(mapRef, 50)}>
+          Set tilt to 50
+        </Text>
+        <Text style={styles.text} onPress={() => this.setVisibleCoordinateBoundsAnimated(mapRef, 40.712, -74.227, 40.774, -74.125, 100, 100, 100, 100)}>
+          Set visible bounds to 40.7, -74.2, 40.7, -74.1
+        </Text>
         <Mapbox
           annotations={this.state.annotations}
-          accessToken={'mapbox-access-token'}
+          accessToken={'your-mapbox.com-access-token'}
           centerCoordinate={this.state.center}
           debugActive={false}
-          direction={0}
+          direction={10}
+          ref={mapRef}
           onRegionChange={this.onRegionChange}
           rotationEnabled={true}
           scrollEnabled={true}
           style={styles.map}
           showsUserLocation={true}
-          styleUrl={'asset://styles/streets-v8.json'}
-          UserLocationTrackingMode={'FOLLOW'}
+          styleUrl={this.mapStyles.emerald}
+          userTrackingMode={this.userTrackingMode.none}
           zoomEnabled={true}
           zoomLevel={10}
+          compassIsHidden={true}
+          onUserLocationChange={this.onUserLocationChange}
         />
       </View>
     );
@@ -75,8 +118,11 @@ var styles = StyleSheet.create({
   container: {
     flex: 1
   },
+  text: {
+    padding: 3,
+    marginLeft: 5
+  },
   map: {
-    width: require('Dimensions').get('window').width,
     flex: 1
   }
 });

@@ -20,16 +20,20 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
         latitude: React.PropTypes.number.isRequired,
         longitude: React.PropTypes.number.isRequired
       }),
+      centerCoordinateZoom: React.PropTypes.shape(),
       debugActive: React.PropTypes.bool,
       direction: React.PropTypes.number,
       rotationEnabled: React.PropTypes.bool,
       scrollEnabled: React.PropTypes.bool,
       showsUserLocation: React.PropTypes.bool,
       styleUrl: React.PropTypes.string,
-      UserLocationTrackingMode: React.PropTypes.oneOf(['NONE', 'FOLLOW']),
+      userTrackingMode: React.PropTypes.number,
       zoomEnabled: React.PropTypes.bool,
       zoomLevel: React.PropTypes.number,
+      tilt: React.PropTypes.number,
+      compassIsHidden: React.PropTypes.bool,
       onRegionChange: React.PropTypes.func,
+      onUserLocationChange: React.PropTypes.func,
       // Fix for https://github.com/mapbox/react-native-mapbox-gl/issues/118
       scaleY: React.PropTypes.number,
       scaleX: React.PropTypes.number,
@@ -56,22 +60,33 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
         rotationEnabled: true,
         scrollEnabled: true,
         showsUserLocation: false,
-        styleUrl: 'asset://styles/streets-v8.json',
-        UserLocationTrackingMode: 'NONE',
+        styleUrl: NativeModules.MapboxGLManager.mapStyles.streets,
+        userTrackingMode: NativeModules.MapboxGLManager.userTrackingMode.none,
         zoomEnabled: true,
-        zoomLevel: 0
+        zoomLevel: 0,
+        tilt: 0,
+        compassIsHidden: false
       };
     }
 });
 
 var ReactMapViewWrapper = React.createClass({
+  statics: {
+    Mixin: NativeModules.MapboxGLManager
+  },
   handleOnChange(event) {
     if (this.props.onRegionChange) this.props.onRegionChange(event.nativeEvent.src);
   },
+  handleUserLocation(event) {
+    if (this.props.onUserLocationChange) this.props.onUserLocationChange(event.nativeEvent.src);
+  },
   render() {
-    return <ReactMapView
-      {...this.props}
-      onChange={this.handleOnChange} />
+    return (
+      <ReactMapView
+        {...this.props}
+        onChange={this.handleOnChange}
+        onSelect={this.handleUserLocation} />
+    );
   }
 });
 
