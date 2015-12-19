@@ -166,23 +166,33 @@ RCT_EXPORT_METHOD(setVisibleCoordinateBoundsAnimated:(nonnull NSNumber *)reactTa
 }
 
 RCT_EXPORT_METHOD(selectAnnotationAnimated:(nonnull NSNumber *) reactTag
-                  annotationInArray:(NSUInteger)annotationInArray)
+                  selectedId:(NSString*)selectedId)
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
-            [mapView selectAnnotationAnimated:annotationInArray];
+            [mapView selectAnnotationAnimated:selectedId];
         }
     }];
 }
 
 RCT_EXPORT_METHOD(removeAnnotation:(nonnull NSNumber *) reactTag
-                  annotationInArray:(NSUInteger)annotationInArray)
+                  selectedId:(NSString*)selectedId)
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
-            [mapView removeAnnotation:annotationInArray];
+            [mapView removeAnnotation:selectedId];
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(removeAllAnnotations:(nonnull NSNumber *) reactTag)
+{
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
+        RCTMapboxGL *mapView = viewRegistry[reactTag];
+        if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
+            [mapView removeAllAnnotations];
         }
     }];
 }
