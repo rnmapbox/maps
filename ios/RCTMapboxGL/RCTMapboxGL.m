@@ -372,7 +372,7 @@ RCT_EXPORT_MODULE();
     for (int i = 0; i < [_annotations count]; i++) {
         [_map removeAnnotation:_annotations[i]];
     }
-    _annotations = nil;
+    [_annotations removeAllObjects];
 }
 
 - (UIButton *)mapView:(MGLMapView *)mapView rightCalloutAccessoryViewForAnnotation:(id <MGLAnnotation>)annotation;
