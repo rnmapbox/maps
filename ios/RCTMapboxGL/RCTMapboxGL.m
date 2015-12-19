@@ -22,7 +22,6 @@
     /* Map properties */
     NSString *_accessToken;
     NSMutableArray *_annotations;
-    NSMutableArray *_newAnnotations;
     CLLocationCoordinate2D _centerCoordinate;
     BOOL _clipsToBounds;
     BOOL _debugActive;
@@ -49,7 +48,7 @@ RCT_EXPORT_MODULE();
         _eventDispatcher = eventDispatcher;
         _clipsToBounds = YES;
         _finishedLoading = NO;
-        _newAnnotations = [NSMutableArray array];
+        _annotations = [NSMutableArray array];
     }
 
     return self;
@@ -117,23 +116,13 @@ RCT_EXPORT_MODULE();
 
 - (void)setAnnotations:(NSMutableArray *)annotations
 {
-    _newAnnotations = annotations;
-    [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:0.5];
+    [self performSelector:@selector(updateAnnotations:) withObject:annotations afterDelay:0.5];
 }
 
-- (void)updateAnnotations {
-    if (_newAnnotations) {
-        if (_annotations.count) {
-            for (int i = 0; i < [_annotations count]; i++) {
-                [_map removeAnnotations: _annotations];
-            }
-            _annotations = nil;
-        }
-
-        _annotations = _newAnnotations;
-        for (int i = 0; i < [_newAnnotations count]; i++) {
-            [_map addAnnotation:_newAnnotations[i]];
-        }
+- (void)updateAnnotations:(NSMutableArray *) annotations {
+    for (int i = 0; i < [annotations count]; i++) {
+        [_annotations addObject:annotations[i]];
+        [_map addAnnotation:annotations[i]];
     }
 }
 
@@ -261,7 +250,6 @@ RCT_EXPORT_MODULE();
 - (void)setRightCalloutAccessory:(UIButton *)rightCalloutAccessory
 {
     _rightCalloutAccessory = rightCalloutAccessory;
-    [self updateAnnotations];
 }
 
 -(void)setDirectionAnimated:(int)heading
