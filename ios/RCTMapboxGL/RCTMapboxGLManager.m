@@ -355,6 +355,7 @@ RCT_EXPORT_METHOD(addAnnotations:(nonnull NSNumber *)reactTag
                         }
                         
                         [annotationsArray addObject:[RCTMGLAnnotationPolyline polylineAnnotation:coord strokeAlpha:strokeAlpha strokeColor:strokeColor strokeWidth:strokeWidth id:id type:@"polyline" count:count]];
+                        free(coord);
                         
                     } else if ([type  isEqual: @"polygon"]) {
                         
@@ -413,6 +414,7 @@ RCT_EXPORT_METHOD(addAnnotations:(nonnull NSNumber *)reactTag
                         }
                         
                         [annotationsArray addObject:[RCTMGLAnnotationPolygon polygonAnnotation:coord fillAlpha:fillAlpha fillColor:fillColor strokeColor:strokeColor strokeAlpha:strokeAlpha id:id type:@"polygon" count:count]];
+                        free(coord);
                         
                     } else {
                         RCTLogError(@"type point, polyline or polygon required");
@@ -579,6 +581,7 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
                     }
                     
                     [annotations addObject:[RCTMGLAnnotationPolyline polylineAnnotation:coord strokeAlpha:strokeAlpha strokeColor:strokeColor strokeWidth:strokeWidth id:id type:@"polyline" count:count]];
+                    free(coord);
                     
                 } else if ([type  isEqual: @"polygon"]) {
                     
@@ -637,6 +640,7 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
                     }
                     
                     [annotations addObject:[RCTMGLAnnotationPolygon polygonAnnotation:coord fillAlpha:fillAlpha fillColor:fillColor strokeColor:strokeColor strokeAlpha:strokeAlpha id:id type:@"polygon" count:count]];
+                    free(coord);
 
                 } else {
                     RCTLogError(@"type point, polyline or polygon required");
