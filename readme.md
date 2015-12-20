@@ -1,6 +1,6 @@
 # React Native Mapbox GL
 
-_A React Native component for building maps with [Mapbox GL](https://www.mapbox.com/mapbox-gl/) for iOS and Android_
+_A React Native component for building maps with the [Mapbox iOS SDK](https://www.mapbox.com/ios-sdk/) and [Mapbox Android SDK](https://www.mapbox.com/android-sdk/)_
 
 [![npm version](https://badge.fury.io/js/react-native-mapbox-gl.svg)](https://badge.fury.io/js/react-native-mapbox-gl)
 
