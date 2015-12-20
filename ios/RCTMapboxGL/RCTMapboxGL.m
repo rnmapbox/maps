@@ -346,21 +346,21 @@ RCT_EXPORT_MODULE();
     }
 }
 
-- (void)selectAnnotationAnimated:(NSString*)selectedId
+- (void)selectAnnotationAnimated:(NSString*)selectedIdentifier
 {
     for (int i = 0; i < [_annotations count]; i++) {
         NSString *currentId = [(RCTMGLAnnotation *) _annotations[i] id];
-        if (selectedId == currentId) {
+        if (selectedIdentifier == currentId) {
             [_map selectAnnotation:_annotations[i] animated:YES];
         }
     }
 }
 
-- (void)removeAnnotation:(NSString*)selectedId
+- (void)removeAnnotation:(NSString*)selectedIdentifier
 {
     for (int i = 0; i < [_annotations count]; i++) {
         NSString *currentId = [(RCTMGLAnnotation *) _annotations[i] id];
-        if (selectedId == currentId) {
+        if (selectedIdentifier == currentId) {
             [_map removeAnnotation:_annotations[i]];
             [_annotations removeObject:_annotations[i]];
         }

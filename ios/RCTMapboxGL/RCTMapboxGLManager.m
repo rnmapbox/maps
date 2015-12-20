@@ -166,23 +166,23 @@ RCT_EXPORT_METHOD(setVisibleCoordinateBoundsAnimated:(nonnull NSNumber *)reactTa
 }
 
 RCT_EXPORT_METHOD(selectAnnotationAnimated:(nonnull NSNumber *) reactTag
-                  selectedId:(NSString*)selectedId)
+                  selectedIdentifier:(NSString*)selectedIdentifier)
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
-            [mapView selectAnnotationAnimated:selectedId];
+            [mapView selectAnnotationAnimated:selectedIdentifier];
         }
     }];
 }
 
 RCT_EXPORT_METHOD(removeAnnotation:(nonnull NSNumber *) reactTag
-                  selectedId:(NSString*)selectedId)
+                  selectedIdentifier:(NSString*)selectedIdentifier)
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
-            [mapView removeAnnotation:selectedId];
+            [mapView removeAnnotation:selectedIdentifier];
         }
     }];
 }
