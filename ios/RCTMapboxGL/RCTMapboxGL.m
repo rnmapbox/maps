@@ -48,7 +48,7 @@ RCT_EXPORT_MODULE();
         _eventDispatcher = eventDispatcher;
         _clipsToBounds = YES;
         _finishedLoading = NO;
-        _annotations = [NSMutableArray array];
+        _annotations = [NSMutableDictionary dictionary];
     }
 
     return self;
@@ -119,11 +119,13 @@ RCT_EXPORT_MODULE();
     [self performSelector:@selector(updateAnnotations:) withObject:annotations afterDelay:0.5];
 }
 
-- (void)updateAnnotations:(NSArray *) annotations {
+- (void)updateAnnotations:(NSMutableArray *) annotations {
     for (int i = 0; i < [annotations count]; i++) {
-        NSString *id = [(RCTMGLAnnotation *) annotations[i] id];
+        NSString *id = [annotations[i] id];
         if ([id length] != 0) {
             [_annotations setObject:[annotations objectAtIndex:i] forKey:id];
+        } else {
+            [_annotations setObject:[annotations objectAtIndex:i] forKey:[NSString stringWithFormat:@"id-%d", i]];
         }
     }
     [_map addAnnotations:annotations];
@@ -351,29 +353,19 @@ RCT_EXPORT_MODULE();
 
 - (void)selectAnnotationAnimated:(NSString*)selectedIdentifier
 {
-    for (int i = 0; i < [_annotations count]; i++) {
-        NSString *currentId = [(RCTMGLAnnotation *) _annotations[i] id];
-        if (selectedIdentifier == currentId) {
-            [_map selectAnnotation:_annotations[i] animated:YES];
-        }
-    }
+    [_map selectAnnotation:[_annotations objectForKey:selectedIdentifier] animated:YES];
 }
 
 - (void)removeAnnotation:(NSString*)selectedIdentifier
 {
-    for (int i = 0; i < [_annotations count]; i++) {
-        NSString *currentId = [(RCTMGLAnnotation *) _annotations[i] id];
-        if (selectedIdentifier == currentId) {
-            [_map removeAnnotation:_annotations[i]];
-            [_annotations removeObject:_annotations[i]];
-        }
-    }
+    [_map removeAnnotation:[_annotations objectForKey:selectedIdentifier]];
+    [_annotations removeObjectForKey:[_annotations objectForKey:selectedIdentifier]];
 }
 
 - (void)removeAllAnnotations
 {
-    for (int i = 0; i < [_annotations count]; i++) {
-        [_map removeAnnotation:_annotations[i]];
+    for(id key in _annotations) {
+        [_map removeAnnotation:[_annotations objectForKey:key]];
     }
     [_annotations removeAllObjects];
 }
