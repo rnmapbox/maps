@@ -21,7 +21,7 @@
 
     /* Map properties */
     NSString *_accessToken;
-    NSMutableArray *_annotations;
+    NSMutableDictionary *_annotations;
     CLLocationCoordinate2D _centerCoordinate;
     BOOL _clipsToBounds;
     BOOL _debugActive;
@@ -119,11 +119,14 @@ RCT_EXPORT_MODULE();
     [self performSelector:@selector(updateAnnotations:) withObject:annotations afterDelay:0.5];
 }
 
-- (void)updateAnnotations:(NSMutableArray *) annotations {
+- (void)updateAnnotations:(NSArray *) annotations {
     for (int i = 0; i < [annotations count]; i++) {
-        [_annotations addObject:annotations[i]];
-        [_map addAnnotation:annotations[i]];
+        NSString *id = [(RCTMGLAnnotation *) annotations[i] id];
+        if ([id length] != 0) {
+            [_annotations setObject:[annotations objectAtIndex:i] forKey:id];
+        }
     }
+    [_map addAnnotations:annotations];
 }
 
 - (CGFloat)mapView:(MGLMapView *)mapView alphaForShapeAnnotation:(RCTMGLAnnotationPolyline *)shape
