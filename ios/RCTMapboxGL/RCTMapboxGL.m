@@ -98,7 +98,6 @@ RCT_EXPORT_MODULE();
     _map.delegate = self;
     
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-    [longPress setMinimumPressDuration:1];
     [self addGestureRecognizer:longPress];
     
     [self updateMap];
