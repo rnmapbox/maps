@@ -357,14 +357,20 @@ RCT_EXPORT_MODULE();
 
 - (void)removeAnnotation:(NSString*)selectedIdentifier
 {
-    [_map removeAnnotation:[_annotations objectForKey:selectedIdentifier]];
-    [_annotations removeObjectForKey:[_annotations objectForKey:selectedIdentifier]];
+    NSUInteger keyCount = [_annotations count];
+    if (keyCount > 0) {
+        [_map removeAnnotation:[_annotations objectForKey:selectedIdentifier]];
+        [_annotations removeObjectForKey:[_annotations objectForKey:selectedIdentifier]];
+    }
 }
 
 - (void)removeAllAnnotations
 {
-    [_map removeAnnotations:_map.annotations];
-    [_annotations removeAllObjects];
+    NSUInteger keyCount = [_annotations count];
+    if (keyCount > 0) {
+        [_map removeAnnotations:_map.annotations];
+        [_annotations removeAllObjects];
+    }
 }
 
 - (UIButton *)mapView:(MGLMapView *)mapView rightCalloutAccessoryViewForAnnotation:(id <MGLAnnotation>)annotation;
