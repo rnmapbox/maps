@@ -19,11 +19,11 @@ var MapMixins = {
   addAnnotations(mapRef, annotations) {
     NativeModules.MapboxGLManager.addAnnotations(React.findNodeHandle(this.refs[mapRef]), annotations);
   },
-  selectAnnotationAnimated(mapRef, selectedId) {
-    NativeModules.MapboxGLManager.selectAnnotationAnimated(React.findNodeHandle(this.refs[mapRef]), selectedId);
+  selectAnnotationAnimated(mapRef, selectedIdentifier) {
+    NativeModules.MapboxGLManager.selectAnnotationAnimated(React.findNodeHandle(this.refs[mapRef]), selectedIdentifier);
   },
-  removeAnnotation(mapRef, selectedId) {
-    NativeModules.MapboxGLManager.removeAnnotation(React.findNodeHandle(this.refs[mapRef]), selectedId);
+  removeAnnotation(mapRef, selectedIdentifier) {
+    NativeModules.MapboxGLManager.removeAnnotation(React.findNodeHandle(this.refs[mapRef]), selectedIdentifier);
   },
   removeAllAnnotations(mapRef) {
     NativeModules.MapboxGLManager.removeAllAnnotations(React.findNodeHandle(this.refs[mapRef]));

@@ -120,15 +120,17 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)updateAnnotations:(NSMutableArray *) annotations {
-    for (int i = 0; i < [annotations count]; i++) {
-        NSString *id = [annotations[i] id];
+    NSUInteger count = 0;
+    for (RCTMGLAnnotation *annotation in annotations) {
+        NSString *id = [annotation id];
         if ([id length] != 0) {
-            [_annotations setObject:[annotations objectAtIndex:i] forKey:id];
+            [_annotations setObject:annotation forKey:id];
         } else {
-            [_annotations setObject:[annotations objectAtIndex:i] forKey:[NSString stringWithFormat:@"id-%d", i]];
+            [_annotations setObject:annotation forKey:@(count)];
         }
+        [_map addAnnotation:annotation];
+        count++;
     }
-    [_map addAnnotations:annotations];
 }
 
 - (CGFloat)mapView:(MGLMapView *)mapView alphaForShapeAnnotation:(RCTMGLAnnotationPolyline *)shape
@@ -364,9 +366,7 @@ RCT_EXPORT_MODULE();
 
 - (void)removeAllAnnotations
 {
-    for(id key in _annotations) {
-        [_map removeAnnotation:[_annotations objectForKey:key]];
-    }
+    [_map removeAnnotations:_map.annotations];
     [_annotations removeAllObjects];
 }
 
