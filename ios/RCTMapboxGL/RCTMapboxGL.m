@@ -21,8 +21,7 @@
 
     /* Map properties */
     NSString *_accessToken;
-    NSMutableArray *_annotations;
-    NSMutableArray *_newAnnotations;
+    NSMutableDictionary *_annotations;
     CLLocationCoordinate2D _centerCoordinate;
     BOOL _clipsToBounds;
     BOOL _debugActive;
@@ -49,7 +48,7 @@ RCT_EXPORT_MODULE();
         _eventDispatcher = eventDispatcher;
         _clipsToBounds = YES;
         _finishedLoading = NO;
-        _newAnnotations = [NSMutableArray array];
+        _annotations = [NSMutableDictionary dictionary];
     }
 
     return self;
@@ -116,23 +115,20 @@ RCT_EXPORT_MODULE();
 
 - (void)setAnnotations:(NSMutableArray *)annotations
 {
-    _newAnnotations = annotations;
-    [self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:0.5];
+    [self performSelector:@selector(updateAnnotations:) withObject:annotations afterDelay:0.5];
 }
 
-- (void)updateAnnotations {
-    if (_newAnnotations) {
-        if (_annotations.count) {
-            for (int i = 0; i < [_annotations count]; i++) {
-                [_map removeAnnotations: _annotations];
-            }
-            _annotations = nil;
+- (void)updateAnnotations:(NSMutableArray *) annotations {
+    NSUInteger count = 0;
+    for (RCTMGLAnnotation *annotation in annotations) {
+        NSString *id = [annotation id];
+        if ([id length] != 0) {
+            [_annotations setObject:annotation forKey:id];
+        } else {
+            [_annotations setObject:annotation forKey:@(count)];
         }
-
-        _annotations = _newAnnotations;
-        for (int i = 0; i < [_newAnnotations count]; i++) {
-            [_map addAnnotation:_newAnnotations[i]];
-        }
+        [_map addAnnotation:annotation];
+        count++;
     }
 }
 
@@ -260,7 +256,6 @@ RCT_EXPORT_MODULE();
 - (void)setRightCalloutAccessory:(UIButton *)rightCalloutAccessory
 {
     _rightCalloutAccessory = rightCalloutAccessory;
-    [self updateAnnotations];
 }
 
 -(void)setDirectionAnimated:(int)heading
@@ -357,27 +352,21 @@ RCT_EXPORT_MODULE();
     }
 }
 
-- (void)selectAnnotationAnimated:(NSUInteger)annotationInArray
+- (void)selectAnnotationAnimated:(NSString*)selectedIdentifier
 {
-    if (annotationInArray >= [_annotations count]) {
-        RCTLogError(@"Could not find annotation in array");
-        return;
-    }
-    if ([_annotations count] != 0) {
-        [_map selectAnnotation:_annotations[annotationInArray] animated:YES];
-    }
+    [_map selectAnnotation:[_annotations objectForKey:selectedIdentifier] animated:YES];
 }
 
-- (void)removeAnnotation:(NSUInteger)annotationInArray
+- (void)removeAnnotation:(NSString*)selectedIdentifier
 {
-    if (annotationInArray >= [_annotations count]) {
-        RCTLogError(@"Could not find annotation in array");
-        return;
-    }
-    if ([_annotations count] != 0) {
-        [_map removeAnnotation:_annotations[annotationInArray]];
-        [_annotations removeObjectAtIndex:annotationInArray];
-    }
+    [_map removeAnnotation:[_annotations objectForKey:selectedIdentifier]];
+    [_annotations removeObjectForKey:[_annotations objectForKey:selectedIdentifier]];
+}
+
+- (void)removeAllAnnotations
+{
+    [_map removeAnnotations:_map.annotations];
+    [_annotations removeAllObjects];
 }
 
 - (UIButton *)mapView:(MGLMapView *)mapView rightCalloutAccessoryViewForAnnotation:(id <MGLAnnotation>)annotation;

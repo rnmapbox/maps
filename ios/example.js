@@ -113,11 +113,14 @@ var MapExample = React.createClass({
         }])}>
           Add new marker
         </Text>
-        <Text style={styles.text} onPress={() => this.selectAnnotationAnimated(mapRef, 0)}>
-          Open first popup
+        <Text style={styles.text} onPress={() => this.selectAnnotationAnimated(mapRef, 'marker1')}>
+          Open marker1 popup
         </Text>
-        <Text style={styles.text} onPress={() => this.removeAnnotation(mapRef, 0)}>
-          Remove first annotation
+        <Text style={styles.text} onPress={() => this.removeAnnotation(mapRef, 'marker2')}>
+          Remove marker2 annotation
+        </Text>
+        <Text style={styles.text} onPress={() => this.removeAllAnnotations(mapRef)}>
+          Remove all annotations
         </Text>
         <Text style={styles.text} onPress={() => this.setVisibleCoordinateBoundsAnimated(mapRef, 40.712, -74.227, 40.774, -74.125, 100, 0, 0, 0)}>
           Set visible bounds to 40.7, -74.2, 40.7, -74.1

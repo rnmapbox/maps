@@ -33,8 +33,9 @@
 - (void)setDirectionAnimated:(int)heading;
 - (void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)coordinates;
 - (void)setCenterCoordinateZoomLevelAnimated:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel;
-- (void)selectAnnotationAnimated:(NSUInteger)annotationInArray;
-- (void)removeAnnotation:(NSUInteger)annotationInArray;
+- (void)selectAnnotationAnimated:(NSString*)selectedId;
+- (void)removeAnnotation:(NSString*)selectedIdentifier;
+- (void)removeAllAnnotations;
 - (void)setVisibleCoordinateBounds:(MGLCoordinateBounds)bounds edgePadding:(UIEdgeInsets)padding animated:(BOOL)animated;
 - (void)setAttributionButtonVisibility:(BOOL)isVisible;
 - (void)setLogoVisibility:(BOOL)isVisible;
