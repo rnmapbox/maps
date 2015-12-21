@@ -119,16 +119,14 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)updateAnnotations:(NSMutableArray *) annotations {
-    NSUInteger count = 0;
     for (RCTMGLAnnotation *annotation in annotations) {
         NSString *id = [annotation id];
         if ([id length] != 0) {
             [_annotations setObject:annotation forKey:id];
         } else {
-            [_annotations setObject:annotation forKey:@(count)];
+            RCTLogError(@"field `id` is required on all annotation");
         }
         [_map addAnnotation:annotation];
-        count++;
     }
 }
 
@@ -575,6 +573,7 @@ RCT_EXPORT_MODULE();
     polyline.strokeAlpha = strokeAlpha;
     polyline.strokeColor = strokeColor;
     polyline.strokeWidth = strokeWidth;
+    polyline.id = id;
     return polyline;
 }
 @end
@@ -591,6 +590,7 @@ RCT_EXPORT_MODULE();
     polygon.fillColor = fillColor;
     polygon.strokeAlpha = strokeAlpha;
     polygon.strokeColor = strokeColor;
+    polygon.id = id;
     return polygon;
 }
 
