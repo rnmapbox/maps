@@ -3,6 +3,44 @@
 var React = require('react-native');
 var { NativeModules, requireNativeComponent } = React;
 
+var MapMixins = {
+  setDirectionAnimated(mapRef, heading) {
+    NativeModules.MapboxGLManager.setDirectionAnimated(React.findNodeHandle(this.refs[mapRef]), heading);
+  },
+  setZoomLevelAnimated(mapRef, zoomLevel) {
+    NativeModules.MapboxGLManager.setZoomLevelAnimated(React.findNodeHandle(this.refs[mapRef]), zoomLevel);
+  },
+  setCenterCoordinateAnimated(mapRef, latitude, longitude) {
+    NativeModules.MapboxGLManager.setCenterCoordinateAnimated(React.findNodeHandle(this.refs[mapRef]), latitude, longitude);
+  },
+  setCenterCoordinateZoomLevelAnimated(mapRef, latitude, longitude, zoomLevel) {
+    NativeModules.MapboxGLManager.setCenterCoordinateZoomLevelAnimated(React.findNodeHandle(this.refs[mapRef]), latitude, longitude, zoomLevel);
+  },
+  addAnnotations(mapRef, annotations) {
+    NativeModules.MapboxGLManager.addAnnotations(React.findNodeHandle(this.refs[mapRef]), annotations);
+  },
+  selectAnnotationAnimated(mapRef, selectedIdentifier) {
+    NativeModules.MapboxGLManager.selectAnnotationAnimated(React.findNodeHandle(this.refs[mapRef]), selectedIdentifier);
+  },
+  removeAnnotation(mapRef, selectedIdentifier) {
+    NativeModules.MapboxGLManager.removeAnnotation(React.findNodeHandle(this.refs[mapRef]), selectedIdentifier);
+  },
+  removeAllAnnotations(mapRef) {
+    NativeModules.MapboxGLManager.removeAllAnnotations(React.findNodeHandle(this.refs[mapRef]));
+  },
+  setVisibleCoordinateBoundsAnimated(mapRef, latitudeSW, longitudeSW, latitudeNE, longitudeNE, paddingTop, paddingRight, paddingBottom, paddingLeft) {
+    NativeModules.MapboxGLManager.setVisibleCoordinateBoundsAnimated(React.findNodeHandle(this.refs[mapRef]), latitudeSW, longitudeSW, latitudeNE, longitudeNE, paddingTop, paddingRight, paddingBottom, paddingLeft);
+  },
+  setUserTrackingMode(mapRef, userTrackingMode) {
+    NativeModules.MapboxGLManager.setUserTrackingMode(React.findNodeHandle(this.refs[mapRef]), userTrackingMode);
+  },
+  setTilt(mapRef, tilt) {
+    NativeModules.MapboxGLManager.setTilt(React.findNodeHandle(this.refs[mapRef]), tilt);
+  },
+  mapStyles: NativeModules.MapboxGLManager.mapStyles,
+  userTrackingMode: NativeModules.MapboxGLManager.userTrackingMode
+};
+
 var ReactMapView = requireNativeComponent('RCTMapbox', {
     name: 'RCTMapbox',
     propTypes: {
@@ -72,7 +110,7 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
 
 var ReactMapViewWrapper = React.createClass({
   statics: {
-    Mixin: NativeModules.MapboxGLManager
+    Mixin: MapMixins
   },
   handleOnChange(event) {
     if (this.props.onRegionChange) this.props.onRegionChange(event.nativeEvent.src);
