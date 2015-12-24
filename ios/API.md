@@ -97,7 +97,7 @@ mapbox://styles/bobbysud/cigtw1pzy0000aam2346f7ex0
   "strokeAlpha": "optional number from 0-1. Only used for type=poyline. Controls opacity of line",
   "strokeColor": "optional string hex color including #, used for type=polygon and type=polyline",
   "strokeWidth": "optional number. Only used for type=poyline. Controls line width",
-  "id": "optional string, unique identifier.",
+  "id": "required string, unique identifier. Used for adding or selecting an annotation.",
   "rightCalloutAccessory": {
     "url": "Optional. Either remote image or specify via 'image!yourImage.png'",
     "height": "required if url specified",
@@ -147,13 +147,13 @@ annotations: [{
   "strokeColor": "#00FB00",
   "strokeWidth": 3,
   "strokeAlpha": 0.5,
-  "id": "foobar"
+  "id": "line"
 }, {
   "coordinates": [[40.749857912194386, -73.96820068359375], [40.741924698522055,-73.9735221862793], [40.735681504432264,-73.97523880004883], [40.7315190495212,-73.97438049316406], [40.729177554196376,-73.97180557250975], [40.72345355209305,-73.97438049316406], [40.719290332250544,-73.97455215454102], [40.71369559554873,-73.97729873657227], [40.71200407096382,-73.97850036621094], [40.71031250340588,-73.98691177368163], [40.71031250340588,-73.99154663085938]],
   "type": "polygon",
   "fillAlpha":1,
   "fillColor": "#C32C2C",
   "strokeColor": "#DDDDD",
-  "id": "zap"
+  "id": "route"
 }]
 ```

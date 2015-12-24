@@ -1,3 +1,24 @@
+#v3.0.0
+
+With `v3.0.0` most breaking changes are around annotations. Now, to remove or select an annotation, you must provide the `id` of the annotation. On all annotations added to the map, an `id` is now required.
+
+Example:
+
+```js
+this.selectAnnotationAnimated('the-map-ref', 'storeLocation1');
+```
+
+This will open the point annotation with `id` `storeLocation1`. The same concept is applied to removing specific annotations:
+
+```js
+this.removeAnnotation('the-map-ref', 'marker2');
+```
+
+Changes:
+* [iOS & Android] Adds method `removeAllAnnotations`
+* [Android] `userTrackingMode` is now configured like iOS with constants. Example: `userTrackingMode={this.userTrackingMode.none}`
+* [Android] `styleURL` is now configured like iOS with constants. Example: `styleURL={this.mapStyles.emerald}`
+
 #v2.2.0
 
 * [iOS] Breaking change: `setVisibleCoordinateBoundsAnimated` now takes padding for top, right, bottom, left
