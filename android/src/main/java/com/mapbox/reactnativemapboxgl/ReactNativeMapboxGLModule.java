@@ -97,7 +97,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void removeAllAnnotations(String mapRef) {
+    public void removeAllAnnotations(int mapRef) {
         aPackage.getManager().removeAllAnnotations(aPackage.getManager().getMapView(), true);
     }
 
