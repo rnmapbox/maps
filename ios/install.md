@@ -2,16 +2,20 @@
 
 ## Use CocoaPods
 
-If you use already [CocoaPods](https://cocoapods.org/)
-in your react-native project, you can also add the react-native-mapbox-gl project
-to your Podfile.
+If you use already [CocoaPods](https://cocoapods.org/) in your react-native
+project, you can also add the react-native-mapbox-gl project to your Podfile.
 
 1. Run `npm install --save react-native-mapbox-gl`
-2. Add `pod 'RCTMapboxGL', :path => 'node_modules/react-native-mapbox-gl/ios'` to your `Podfile` file.  
-   (The path dependence on your Podfile location.)
-3. Open your Xcode project and ensure that the "Build Settings" parameter "Other linker flags" (`OTHER_LDFLAGS`) contains the CocoaPods generated linker options!
-   * If you have used `react-natve init` to setup your project you can just remove this paramter. Just select the line and press the delete (backspace) key.
-   * Alternative, if you setup your Xcode project yourself, ensure that the parent configuration was included with a `$(inherited)` variable.
+2. Add `pod 'RCTMapboxGL', :path => 'node_modules/react-native-mapbox-gl/ios'`
+   to your `Podfile` file.  
+(The path dependence on your Podfile location.)
+3. Open your Xcode project and ensure that the "Build Settings" parameter
+   "Other linker flags" (`OTHER_LDFLAGS`) contains the CocoaPods generated
+   linker options!
+   * If you have used `react-natve init` to setup your project you can just
+     remove this parameter. Just select the line and press the backspace key.
+   * Alternative, if you setup your Xcode project yourself, ensure that the
+     parent configuration was included with a `$(inherited)` variable.
 4. Install the new CocoaPods dependency with `pod install`.  
    This command must not have output any warning. ;)
 
@@ -19,8 +23,15 @@ to your Podfile.
 
 #### RCTView.h file not found
 
-Because react-native is only available as npm module (and not as "regular" CocoaPods
-dependency, see RN [v0.13 release notes](https://github.com/facebook/react-native/releases/tag/v0.13.0) for more informations), it is required that you import react-native also from a local path. Ensure that you include at least this RN dependencies before you include `react-native-mapbox-gl` in your `Podfile`. Here is a complete working example if you want add your Podfile in the project root while your generated Xcode project is still in the `ios` folder:
+Because react-native is only available as npm module (and not as "regular"
+CocoaPods dependency, see [v0.13 release notes](https://github.com/facebook/react-native/releases/tag/v0.13.0)
+for more informations).
+
+So it is required that you import react-native also from a local path.
+Ensure that you include `React` before you include `react-native-mapbox-gl` in
+your `Podfile`. Here is a complete working example if you want add your Podfile
+in the project root while your generated Xcode project is still in the `ios`
+folder:
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
