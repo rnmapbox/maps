@@ -1,4 +1,4 @@
-# Installation Process with CocoaPods
+# Installation process with CocoaPods
 
 If you use already [CocoaPods](https://cocoapods.org/) in your react-native
 project, you can also add the react-native-mapbox-gl project to your Podfile.
@@ -17,7 +17,7 @@ project, you can also add the react-native-mapbox-gl project to your Podfile.
 4. Install the new CocoaPods dependency with `pod install`.  
    This command must not have output any warning. ;)
 
-## Troubleshooting CocoaPods install
+## Troubleshooting with CocoaPods
 
 ### RCTView.h file not found
 

@@ -1,4 +1,4 @@
-# Manual Installation Process
+# Manual installation process
 
 1. `npm install react-native-mapbox-gl --save`
 2. In the XCode's `Project navigator`, right click on project's name ➜ `Add Files to <...>` ![](https://cldup.com/k0oJwOUKPN.png)
