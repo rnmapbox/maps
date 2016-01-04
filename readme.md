@@ -11,7 +11,7 @@ npm install react-native-mapbox-gl --save
 ```
 
 # Installation
-* [iOS](/ios/install.md)
+* [iOS manually](/ios/install.md), or with [CocoaPods](/ios/install-cocoapods.md)
 * [Android](/android/install.md)
 
 # API
