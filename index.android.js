@@ -48,7 +48,7 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
       annotations: React.PropTypes.arrayOf(React.PropTypes.shape({
         title: React.PropTypes.string,
         subtitle: React.PropTypes.string,
-        coordinates: React.PropTypes.array,
+        coordinates: React.PropTypes.array.isRequired,
         alpha: React.PropTypes.number,
         fillColor: React.PropTypes.string,
         strokeColor: React.PropTypes.string,
