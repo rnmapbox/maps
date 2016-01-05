@@ -87,7 +87,7 @@ var MapView = React.createClass({
       longitude: React.PropTypes.number.isRequired
     }),
     annotations: React.PropTypes.arrayOf(React.PropTypes.shape({
-      coordinates: React.PropTypes.arrayOf().isRequired,
+      coordinates: React.PropTypes.array.isRequired,
       title: React.PropTypes.string,
       subtitle: React.PropTypes.string,
       fillAlpha: React.PropTypes.number,
