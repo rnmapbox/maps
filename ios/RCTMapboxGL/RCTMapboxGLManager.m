@@ -442,6 +442,7 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
         NSMutableArray* annotations = [NSMutableArray array];
         id annotationObject;
         NSEnumerator *enumerator = [json objectEnumerator];
+        [view removeAllAnnotations];
 
         while (annotationObject = [enumerator nextObject]) {
             CLLocationCoordinate2D coordinate = [RCTConvert CLLocationCoordinate2D:annotationObject];
