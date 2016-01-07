@@ -28,6 +28,9 @@ var MapMixins = {
   removeAllAnnotations(mapRef) {
     NativeModules.MapboxGLManager.removeAllAnnotations(React.findNodeHandle(this.refs[mapRef]));
   },
+  updateAnnotation(mapRef, annotation) {
+    NativeModules.MapboxGLManager.updateAnnotation(React.findNodeHandle(this.refs[mapRef]), annotation);
+  },
   setVisibleCoordinateBoundsAnimated(mapRef, latitudeSW, longitudeSW, latitudeNE, longitudeNE, paddingTop, paddingRight, paddingBottom, paddingLeft) {
     NativeModules.MapboxGLManager.setVisibleCoordinateBoundsAnimated(React.findNodeHandle(this.refs[mapRef]), latitudeSW, longitudeSW, latitudeNE, longitudeNE, paddingTop, paddingRight, paddingBottom, paddingLeft);
   },

@@ -197,6 +197,26 @@ RCT_EXPORT_METHOD(removeAllAnnotations:(nonnull NSNumber *) reactTag)
     }];
 }
 
+RCT_EXPORT_METHOD(updateAnnotation:(nonnull NSNumber *) reactTag
+                  annotation:(NSDictionary *) annotation)
+{
+    NSLog(@"Updating Annotation %@", convertObjectToPoint(annotation));
+    NSString *id = [annotation valueForKey:@"id"];
+
+    if ([id length] != 0) {
+        [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
+            RCTMapboxGL *mapView = viewRegistry[reactTag];
+            if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
+                NSLog(@"REMOVING %@", id);
+                [mapView removeAnnotation:id];
+                [mapView addAnnotation:convertObjectToPoint(annotation)];
+            }
+        }];
+    } else {
+        RCTLogError(@"field `id` is required on all annotation");
+    }
+}
+
 RCT_EXPORT_METHOD(setUserTrackingMode:(nonnull NSNumber *) reactTag
                   userTrackingMode:(int)userTrackingMode)
 {
