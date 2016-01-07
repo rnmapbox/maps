@@ -68,7 +68,6 @@ RCT_EXPORT_MODULE();
 
 };
 
-
 RCT_EXPORT_VIEW_PROPERTY(accessToken, NSString);
 RCT_EXPORT_VIEW_PROPERTY(centerCoordinate, CLLocationCoordinate2D);
 RCT_EXPORT_VIEW_PROPERTY(clipsToBounds, BOOL);
@@ -76,11 +75,30 @@ RCT_EXPORT_VIEW_PROPERTY(debugActive, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(direction, double);
 RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(scrollEnabled, BOOL);
-RCT_EXPORT_VIEW_PROPERTY(zoomEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(styleURL, NSURL);
 RCT_EXPORT_VIEW_PROPERTY(userTrackingMode, int);
+RCT_EXPORT_VIEW_PROPERTY(zoomEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(zoomLevel, double);
+
+
+RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
+    if ([json isKindOfClass:[NSArray class]]) {
+        NSMutableArray* annotations = [NSMutableArray array];
+        id annotationObject;
+        NSEnumerator *enumerator = [json objectEnumerator];
+        [view removeAllAnnotations];
+
+        while (annotationObject = [enumerator nextObject]) {
+            CLLocationCoordinate2D coordinate = [RCTConvert CLLocationCoordinate2D:annotationObject];
+            if (CLLocationCoordinate2DIsValid(coordinate)){
+                [annotations addObject:convertToMGLAnnotation(annotationObject)];
+            }
+        }
+
+        view.annotations = annotations;
+    }
+}
 
 RCT_CUSTOM_VIEW_PROPERTY(attributionButtonIsHidden, BOOL, RCTMapboxGL)
 {
@@ -200,16 +218,14 @@ RCT_EXPORT_METHOD(removeAllAnnotations:(nonnull NSNumber *) reactTag)
 RCT_EXPORT_METHOD(updateAnnotation:(nonnull NSNumber *) reactTag
                   annotation:(NSDictionary *) annotation)
 {
-    NSLog(@"Updating Annotation %@", convertObjectToPoint(annotation));
     NSString *id = [annotation valueForKey:@"id"];
 
     if ([id length] != 0) {
         [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
             RCTMapboxGL *mapView = viewRegistry[reactTag];
             if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
-                NSLog(@"REMOVING %@", id);
                 [mapView removeAnnotation:id];
-                [mapView addAnnotation:convertObjectToPoint(annotation)];
+                [mapView addAnnotation:convertToMGLAnnotation(annotation)];
             }
         }];
     } else {
@@ -241,28 +257,7 @@ RCT_EXPORT_METHOD(addAnnotations:(nonnull NSNumber *)reactTag
             while (annotationObject = [enumerator nextObject]) {
                 CLLocationCoordinate2D coordinate = [RCTConvert CLLocationCoordinate2D:annotationObject];
                 if (CLLocationCoordinate2DIsValid(coordinate)){
-
-                    if (![annotationObject objectForKey:@"type"]) {
-                        RCTLogError(@"type point, polyline or polygon required");
-                        return;
-                    }
-
-                    NSString *type = [RCTConvert NSString:[annotationObject valueForKey:@"type"]];
-
-                    if ([type  isEqual: @"point"]) {
-                        [annotationsArray addObject:convertObjectToPoint(annotationObject)];
-
-                    } else if ([type  isEqual: @"polyline"]) {
-                        [annotationsArray addObject:convertObjectToPolyline(annotationObject)];
-
-
-                    } else if ([type  isEqual: @"polygon"]) {
-                        [annotationsArray addObject:convertObjectToPolygon(annotationObject)];
-
-                    } else {
-                        RCTLogError(@"type point, polyline or polygon required");
-                        return;
-                    }
+                    [annotationsArray addObject:convertToMGLAnnotation(annotationObject)];
                 }
             }
             mapView.annotations = annotationsArray;
@@ -270,43 +265,30 @@ RCT_EXPORT_METHOD(addAnnotations:(nonnull NSNumber *)reactTag
     }];
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
-    if ([json isKindOfClass:[NSArray class]]) {
-        NSMutableArray* annotations = [NSMutableArray array];
-        id annotationObject;
-        NSEnumerator *enumerator = [json objectEnumerator];
-        [view removeAllAnnotations];
-
-        while (annotationObject = [enumerator nextObject]) {
-            CLLocationCoordinate2D coordinate = [RCTConvert CLLocationCoordinate2D:annotationObject];
-            if (CLLocationCoordinate2DIsValid(coordinate)){
-
-                if (![annotationObject objectForKey:@"type"]) {
-                    RCTLogError(@"type point, polyline or polygon required");
-                    return;
-                }
-
-                NSString *type = [RCTConvert NSString:[annotationObject valueForKey:@"type"]];
-
-                if ([type  isEqual: @"point"]) {
-                    [annotations addObject:convertObjectToPoint(annotationObject)];
-
-                } else if ([type  isEqual: @"polyline"]) {
-                    [annotations addObject:convertObjectToPolyline(annotationObject)];
-
-
-                } else if ([type  isEqual: @"polygon"]) {
-                    [annotations addObject:convertObjectToPolygon(annotationObject)];
-
-                } else {
-                    RCTLogError(@"type point, polyline or polygon required");
-                    return;
-                }
-            }
-        }
-
-        view.annotations = annotations;
+NSObject *convertToMGLAnnotation (NSObject *annotationObject)
+{
+    if (![annotationObject valueForKey:@"type"]) {
+        RCTLogError(@"type point, polyline or polygon required");
+        return nil;
     }
+
+    NSString *type = [RCTConvert NSString:[annotationObject valueForKey:@"type"]];
+
+    if ([type  isEqual: @"point"]) {
+        return convertObjectToPoint(annotationObject);
+
+    } else if ([type  isEqual: @"polyline"]) {
+        return convertObjectToPolyline(annotationObject);
+
+
+    } else if ([type  isEqual: @"polygon"]) {
+        return convertObjectToPolygon(annotationObject);
+
+    } else {
+        RCTLogError(@"type point, polyline or polygon required");
+        return nil;
+    }
+
 }
 
 NSObject *convertObjectToPoint (NSObject *annotationObject)
@@ -454,7 +436,6 @@ NSObject *convertObjectToPolyline (NSObject *annotationObject)
 
 NSObject *convertObjectToPolygon (NSObject *annotationObject)
 {
-
     NSString *title = @"";
     if ([annotationObject valueForKey:@"title"]) {
         title = [RCTConvert NSString:[annotationObject valueForKey:@"title"]];

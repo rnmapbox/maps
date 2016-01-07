@@ -366,7 +366,6 @@ RCT_EXPORT_MODULE();
     if (keyCount > 0) {
         [_map removeAnnotation:[_annotations objectForKey:selectedIdentifier]];
         [_annotations removeObjectForKey:selectedIdentifier];
-
     }
 }
 
