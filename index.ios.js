@@ -128,7 +128,7 @@ var MapView = React.createClass({
       },
       debugActive: false,
       direction: 0,
-      rotationEnabled: true,
+      rotateEnabled: true,
       scrollEnabled: true,
       showsUserLocation: false,
       styleUrl: this.Mixin.mapStyles.streets,
