@@ -53,7 +53,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public static final String PROP_DIRECTION = "direction";
     public static final String PROP_ONREGIONCHANGE = "onRegionChange";
     public static final String PROP_ONUSER_LOCATION_CHANGE = "onUserLocationChange";
-    public static final String PROP_ROTATION_ENABLED = "rotationEnabled";
+    public static final String PROP_ROTATION_ENABLED = "rotateEnabled";
     public static final String PROP_SCROLL_ENABLED = "scrollEnabled";
     public static final String PROP_USER_LOCATON = "showsUserLocation";
     public static final String PROP_STYLE_URL = "styleUrl";
