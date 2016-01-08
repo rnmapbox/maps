@@ -19,6 +19,9 @@ var MapMixins = {
   addAnnotations(mapRef, annotations) {
     NativeModules.MapboxGLManager.addAnnotations(React.findNodeHandle(this.refs[mapRef]), annotations);
   },
+  updateAnnotation(mapRef, annotation) {
+    NativeModules.MapboxGLManager.updateAnnotation(React.findNodeHandle(this.refs[mapRef]), annotation);
+  },
   selectAnnotationAnimated(mapRef, selectedIdentifier) {
     NativeModules.MapboxGLManager.selectAnnotationAnimated(React.findNodeHandle(this.refs[mapRef]), selectedIdentifier);
   },

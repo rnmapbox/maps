@@ -95,10 +95,10 @@ RCT_EXPORT_MODULE();
     _map = [[MGLMapView alloc] initWithFrame:self.bounds];
     _map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _map.delegate = self;
-    
+
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     [self addGestureRecognizer:longPress];
-    
+
     [self updateMap];
     [self addSubview:_map];
     [self layoutSubviews];
@@ -128,6 +128,11 @@ RCT_EXPORT_MODULE();
         }
         [_map addAnnotation:annotation];
     }
+}
+
+- (void)addAnnotation:(RCTMGLAnnotation *) annotation {
+    [_annotations setObject:annotation forKey:[annotation id]];
+    [_map addAnnotation:annotation];
 }
 
 - (CGFloat)mapView:(MGLMapView *)mapView alphaForShapeAnnotation:(RCTMGLAnnotationPolyline *)shape
@@ -360,7 +365,7 @@ RCT_EXPORT_MODULE();
     NSUInteger keyCount = [_annotations count];
     if (keyCount > 0) {
         [_map removeAnnotation:[_annotations objectForKey:selectedIdentifier]];
-        [_annotations removeObjectForKey:[_annotations objectForKey:selectedIdentifier]];
+        [_annotations removeObjectForKey:selectedIdentifier];
     }
 }
 
@@ -421,7 +426,7 @@ RCT_EXPORT_MODULE();
         UIGraphicsEndImageContext();
         annotationImage = [MGLAnnotationImage annotationImageWithImage:newImage reuseIdentifier:url];
     }
-    
+
     return annotationImage;
 }
 
@@ -429,7 +434,7 @@ RCT_EXPORT_MODULE();
 {
     CLLocationCoordinate2D location = [_map convertPoint:[sender locationInView:_map] toCoordinateFromView:_map];
     CGPoint screenCoord = [sender locationInView:_map];
-    
+
     NSDictionary *event = @{ @"target": self.reactTag,
                              @"src": @{
                                      @"latitude": @(location.latitude),
@@ -438,7 +443,7 @@ RCT_EXPORT_MODULE();
                                      @"screenCoordX": @(screenCoord.x)
                                      }
                              };
-    
+
     [_eventDispatcher sendInputEventWithName:@"onTap" body:event];
 }
 
@@ -447,7 +452,7 @@ RCT_EXPORT_MODULE();
     if (sender.state == UIGestureRecognizerStateBegan) {
         CLLocationCoordinate2D location = [_map convertPoint:[sender locationInView:_map] toCoordinateFromView:_map];
         CGPoint screenCoord = [sender locationInView:_map];
-        
+
         NSDictionary *event = @{ @"target": self.reactTag,
                                  @"src": @{
                                          @"latitude": @(location.latitude),
@@ -456,7 +461,7 @@ RCT_EXPORT_MODULE();
                                          @"screenCoordX": @(screenCoord.x)
                                          }
                                  };
-        
+
         [_eventDispatcher sendInputEventWithName:@"onLongPress" body:event];
     }
 }
@@ -464,13 +469,13 @@ RCT_EXPORT_MODULE();
 - (void)mapViewDidFinishLoadingMap:(MGLMapView *)mapView
 {
     NSDictionary *event = @{ @"target": self.reactTag };
-    
+
     [_eventDispatcher sendInputEventWithName:@"onFinishLoadingMap" body:event];
 }
 - (void)mapViewWillStartLoadingMap:(MGLMapView *)mapView
 {
     NSDictionary *event = @{ @"target": self.reactTag };
-    
+
     [_eventDispatcher sendInputEventWithName:@"onStartLoadingMap" body:event];
 }
 
@@ -481,23 +486,23 @@ RCT_EXPORT_MODULE();
                                      @"message":  [error localizedDescription]
                                      }
                              };
-    
+
     [_eventDispatcher sendInputEventWithName:@"onLocateUserFailed" body:event];
 }
 
 - (unsigned int)intFromHexString:(NSString *)hexStr
 {
     unsigned int hexInt = 0;
-    
+
     // Create scanner
     NSScanner *scanner = [NSScanner scannerWithString:hexStr];
-    
+
     // Tell scanner to skip the # character
     [scanner setCharactersToBeSkipped:[NSCharacterSet characterSetWithCharactersInString:@"#"]];
-    
+
     // Scan hex value
     [scanner scanHexInt:&hexInt];
-    
+
     return hexInt;
 }
 
@@ -506,14 +511,14 @@ RCT_EXPORT_MODULE();
 {
     // Convert hex string to an integer
     unsigned int hexint = [self intFromHexString:hexStr];
-    
+
     // Create color object, specifying alpha as well
     UIColor *color =
     [UIColor colorWithRed:((CGFloat) ((hexint & 0xFF0000) >> 16))/255
                     green:((CGFloat) ((hexint & 0xFF00) >> 8))/255
                      blue:((CGFloat) (hexint & 0xFF))/255
                     alpha:alpha];
-    
+
     return color;
 }
 
