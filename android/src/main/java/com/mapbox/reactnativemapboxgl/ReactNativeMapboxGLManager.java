@@ -135,7 +135,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
                             SpriteFactory spriteFactory = view.getSpriteFactory();
                             Sprite icon;
 
-                            if (annotationImage.hasKey("height")) {
+                            if (annotationImage.hasKey("height") && annotationImage.hasKey("width")) {
                                 int height = annotationImage.getInt("height");
                                 int width = annotationImage.getInt("width");
                                 icon = spriteFactory.fromDrawable(image, width, height);
