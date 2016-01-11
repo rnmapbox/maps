@@ -1,3 +1,9 @@
+#v3.1.0
+ - [iOS] Adds methods `getDirection` and `getCenterCoordinateZoomLevel`
+ - [iOS] Properly removes annotations when annotation props are updated
+ - [iOS] Adds method `updateAnnotation` for updating annotations
+ - [Android] Fixes an issue where sprite images were not properly resized
+
 #v3.0.0
 
 With `v3.0.0` most breaking changes are around annotations. Now, to remove or select an annotation, you must provide the `id` of the annotation. On all annotations added to the map, an `id` is now required.
