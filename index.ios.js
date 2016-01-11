@@ -37,6 +37,12 @@ var MapMixins = {
   setUserTrackingMode(mapRef, userTrackingMode) {
     NativeModules.MapboxGLManager.setUserTrackingMode(React.findNodeHandle(this.refs[mapRef]), userTrackingMode);
   },
+  getCenterCoordinateZoomLevel(mapRef, callback) {
+    NativeModules.MapboxGLManager.getCenterCoordinateZoomLevel(React.findNodeHandle(this.refs[mapRef]), callback);
+  },
+  getDirection(mapRef, callback) {
+    NativeModules.MapboxGLManager.getDirection(React.findNodeHandle(this.refs[mapRef]), callback);
+  },
   mapStyles: NativeModules.MapboxGLManager.mapStyles,
   userTrackingMode: NativeModules.MapboxGLManager.userTrackingMode
 };

@@ -41,6 +41,9 @@
 - (void)setAttributionButtonVisibility:(BOOL)isVisible;
 - (void)setLogoVisibility:(BOOL)isVisible;
 - (void)setCompassVisibility:(BOOL)isVisible;
+- (double)zoomLevel;
+- (double)direction;
+- (CLLocationCoordinate2D)centerCoordinate;
 
 @end
 
