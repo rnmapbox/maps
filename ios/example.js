@@ -86,19 +86,19 @@ var MapExample = React.createClass({
     StatusBarIOS.setHidden(true);
     return (
       <View style={styles.container}>
-        <Text style={styles.text} onPress={() => this.setDirectionAnimated(mapRef, 0)}>
+        <Text onPress={() => this.setDirectionAnimated(mapRef, 0)}>
           Set direction to 0
         </Text>
-        <Text style={styles.text} onPress={() => this.setZoomLevelAnimated(mapRef, 6)}>
+        <Text onPress={() => this.setZoomLevelAnimated(mapRef, 6)}>
           Zoom out to zoom level 6
         </Text>
-        <Text style={styles.text} onPress={() => this.setCenterCoordinateAnimated(mapRef, 48.8589, 2.3447)}>
+        <Text onPress={() => this.setCenterCoordinateAnimated(mapRef, 48.8589, 2.3447)}>
           Go to Paris at current zoom level {parseInt(this.state.currentZoom)}
         </Text>
-        <Text style={styles.text} onPress={() => this.setCenterCoordinateZoomLevelAnimated(mapRef, 35.68829, 139.77492, 14)}>
+        <Text onPress={() => this.setCenterCoordinateZoomLevelAnimated(mapRef, 35.68829, 139.77492, 14)}>
           Go to Tokyo at fixed zoom level 14
         </Text>
-        <Text style={styles.text} onPress={() => this.addAnnotations(mapRef, [{
+        <Text onPress={() => this.addAnnotations(mapRef, [{
           coordinates: [40.73312,-73.989],
           type: 'point',
           title: 'This is a new marker',
@@ -113,7 +113,7 @@ var MapExample = React.createClass({
         }])}>
           Add new marker
         </Text>
-        <Text style={styles.text} onPress={() => this.updateAnnotation(mapRef, {
+        <Text onPress={() => this.updateAnnotation(mapRef, {
           coordinates: [40.714541341726175,-74.00579452514648],
           'type': 'point',
           title: 'New Title!',
@@ -127,23 +127,35 @@ var MapExample = React.createClass({
         })}>
           Update marker2
         </Text>
-        <Text style={styles.text} onPress={() => this.selectAnnotationAnimated(mapRef, 'marker1')}>
+        <Text onPress={() => this.selectAnnotationAnimated(mapRef, 'marker1')}>
           Open marker1 popup
         </Text>
-        <Text style={styles.text} onPress={() => this.removeAnnotation(mapRef, 'marker2')}>
+        <Text onPress={() => this.removeAnnotation(mapRef, 'marker2')}>
           Remove marker2 annotation
         </Text>
-        <Text style={styles.text} onPress={() => this.removeAllAnnotations(mapRef)}>
+        <Text onPress={() => this.removeAllAnnotations(mapRef)}>
           Remove all annotations
         </Text>
-        <Text style={styles.text} onPress={() => this.setVisibleCoordinateBoundsAnimated(mapRef, 40.712, -74.227, 40.774, -74.125, 100, 0, 0, 0)}>
+        <Text onPress={() => this.setVisibleCoordinateBoundsAnimated(mapRef, 40.712, -74.227, 40.774, -74.125, 100, 0, 0, 0)}>
           Set visible bounds to 40.7, -74.2, 40.7, -74.1
         </Text>
-        <Text style={styles.text} onPress={() => this.setUserTrackingMode(mapRef, this.userTrackingMode.follow)}>
+        <Text onPress={() => this.setUserTrackingMode(mapRef, this.userTrackingMode.follow)}>
           Set userTrackingMode to follow
         </Text>
+        <Text onPress={() => this.getCenterCoordinateZoomLevel(mapRef, (err, location)=> {
+            if (err) console.log(err);
+            console.log(location);
+          })}>
+          Get location
+        </Text>
+        <Text onPress={() => this.getDirection(mapRef, (err, direction)=> {
+            if (err) console.log(err);
+            console.log(direction);
+          })}>
+          Get direction
+        </Text>
         <Mapbox
-          style={styles.map}
+          style={styles.container}
           direction={0}
           rotateEnabled={true}
           scrollEnabled={true}
@@ -170,12 +182,6 @@ var MapExample = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1
-  },
-  map: {
-    flex: 1
-  },
-  text: {
-    padding: 3
   }
 });
 

@@ -81,6 +81,39 @@ RCT_EXPORT_VIEW_PROPERTY(userTrackingMode, int);
 RCT_EXPORT_VIEW_PROPERTY(zoomEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(zoomLevel, double);
 
+RCT_EXPORT_METHOD(getCenterCoordinateZoomLevel:(nonnull NSNumber *)reactTag
+                  findEvents:(RCTResponseSenderBlock)callback)
+{
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
+        RCTMapboxGL *mapView = viewRegistry[reactTag];
+        NSMutableDictionary* callbackDict = [NSMutableDictionary new];
+        CLLocationCoordinate2D region = [mapView centerCoordinate];
+        double zoom = [mapView zoomLevel];
+        
+        [callbackDict setValue:@(region.latitude) forKey:@"latitude"];
+        [callbackDict setValue:@(region.longitude) forKey:@"longitude"];
+        [callbackDict setValue:@(region.longitude) forKey:@"longitude"];
+        [callbackDict setValue:@(zoom) forKey:@"zoom"];
+        
+        callback(@[[NSNull null], callbackDict]);
+    }];
+}
+
+RCT_EXPORT_METHOD(getDirection:(nonnull NSNumber *)reactTag
+                  findEvents:(RCTResponseSenderBlock)callback)
+{
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
+        RCTMapboxGL *mapView = viewRegistry[reactTag];
+        NSMutableDictionary* callbackDict = [NSMutableDictionary new];
+        double direction = [mapView direction];
+        
+        [callbackDict setValue:@(direction) forKey:@"direction"];
+        
+        callback(@[[NSNull null], callbackDict]);
+    }];
+}
+
+
 
 RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
     if ([json isKindOfClass:[NSArray class]]) {

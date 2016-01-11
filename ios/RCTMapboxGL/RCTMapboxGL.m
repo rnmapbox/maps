@@ -355,6 +355,18 @@ RCT_EXPORT_MODULE();
     }
 }
 
+-(CLLocationCoordinate2D)centerCoordinate {
+    return _map.centerCoordinate;
+}
+
+-(double)direction {
+    return _map.direction;
+}
+
+-(double)zoomLevel {
+    return _map.zoomLevel;
+}
+
 - (void)selectAnnotationAnimated:(NSString*)selectedIdentifier
 {
     [_map selectAnnotation:[_annotations objectForKey:selectedIdentifier] animated:YES];
