@@ -106,6 +106,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
 
     @ReactProp(name = PROP_ANNOTATIONS)
     public void setAnnotations(MapView view, @Nullable ReadableArray value) {
+        view.removieAllAnnotations();
         if (value == null || value.size() < 1) {
             Log.e(REACT_CLASS, "Error: No annotations");
         } else {
