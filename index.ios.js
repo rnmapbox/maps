@@ -121,7 +121,8 @@ var MapView = React.createClass({
     onRightAnnotationTapped: React.PropTypes.func,
     onFinishLoadingMap: React.PropTypes.func,
     onStartLoadingMap: React.PropTypes.func,
-    onLocateUserFailed: React.PropTypes.func
+    onLocateUserFailed: React.PropTypes.func,
+    onLongPress: React.PropTypes.func
   },
   getDefaultProps() {
     return {
@@ -143,17 +144,19 @@ var MapView = React.createClass({
     };
   },
   render() {
-    return <MapboxGLView
-      {...this.props}
-      onRegionChange={this._onRegionChange}
-      onRegionWillChange={this._onRegionWillChange}
-      onOpenAnnotation={this._onOpenAnnotation}
-      onRightAnnotationTapped={this._onRightAnnotationTapped}
-      onUpdateUserLocation={this._onUpdateUserLocation}
-      onLongPress={this._onLongPress}
-      onFinishLoadingMap={this._onFinishLoadingMap}
-      onStartLoadingMap={this._onStartLoadingMap}
-      onLocateUserFailed={this._onLocateUserFailed} />;
+    return (
+      <MapboxGLView
+        {...this.props}
+        onRegionChange={this._onRegionChange}
+        onRegionWillChange={this._onRegionWillChange}
+        onOpenAnnotation={this._onOpenAnnotation}
+        onRightAnnotationTapped={this._onRightAnnotationTapped}
+        onUpdateUserLocation={this._onUpdateUserLocation}
+        onLongPress={this._onLongPress}
+        onFinishLoadingMap={this._onFinishLoadingMap}
+        onStartLoadingMap={this._onStartLoadingMap}
+        onLocateUserFailed={this._onLocateUserFailed} />
+    );
   }
 });
 
