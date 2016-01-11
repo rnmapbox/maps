@@ -115,7 +115,6 @@ RCT_EXPORT_MODULE();
 
 - (void)setAnnotations:(NSMutableArray *)annotations
 {
-		[self removeAllAnnotations];
     [self performSelector:@selector(updateAnnotations:) withObject:annotations afterDelay:0.5];
 }
 
