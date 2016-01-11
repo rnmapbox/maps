@@ -25,8 +25,8 @@ import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.constants.MyLocationTracking;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.views.MapView;
-import com.mapbox.mapboxsdk.annotations.Sprite;
-import com.mapbox.mapboxsdk.annotations.SpriteFactory;
+import com.mapbox.mapboxsdk.annotations.Icon;
+import com.mapbox.mapboxsdk.annotations.IconFactory;
 import android.support.v4.content.ContextCompat;
 import android.graphics.drawable.Drawable;
 import android.graphics.BitmapFactory;
@@ -62,6 +62,8 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public static final String PROP_ZOOM_LEVEL = "zoomLevel";
     public static final String PROP_SET_TILT = "tilt";
     public static final String PROP_COMPASS_IS_HIDDEN = "compassIsHidden";
+    public static final String PROP_LOGO_IS_HIDDEN = "logoIsHidden";
+    public static final String PROP_ATTRIBUTION_BUTTON_IS_HIDDEN = "attributionButtonIsHidden";
     private MapView mapView;
 
 
@@ -105,10 +107,17 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     }
 
     @ReactProp(name = PROP_ANNOTATIONS)
-    public void setAnnotations(MapView view, @Nullable ReadableArray value) {
+    public void setAnnotationClear(MapView view, @Nullable ReadableArray value) {
+        setAnnotations(view, value, true);
+    }
+
+    public void setAnnotations(MapView view, @Nullable ReadableArray value, boolean clearMap) {
         if (value == null || value.size() < 1) {
             Log.e(REACT_CLASS, "Error: No annotations");
         } else {
+            if (clearMap) {
+                view.removeAllAnnotations();
+            }
             int size = value.size();
             for (int i = 0; i < size; i++) {
                 ReadableMap annotation = value.getMap(i);
@@ -132,17 +141,8 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
                         String annotationURL = annotationImage.getString("url");
                         try {
                             Drawable image = drawableFromUrl(mapView, annotationURL);
-                            SpriteFactory spriteFactory = view.getSpriteFactory();
-                            Sprite icon;
-
-                            if (annotationImage.hasKey("height") && annotationImage.hasKey("width")) {
-                                int height = annotationImage.getInt("height");
-                                int width = annotationImage.getInt("width");
-                                icon = spriteFactory.fromDrawable(image, width, height);
-                            } else {
-                                icon = spriteFactory.fromDrawable(image);
-                            }
-
+                            IconFactory iconFactory = view.getIconFactory();
+                            Icon icon = iconFactory.fromDrawable(image);
                             marker.icon(icon);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -299,6 +299,18 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     @ReactProp(name = PROP_COMPASS_IS_HIDDEN)
     public void setCompassIsHidden(MapView view, Boolean value) {
         view.setCompassEnabled(!value);
+    }
+
+    @ReactProp(name = PROP_LOGO_IS_HIDDEN)
+    public void setLogoIsHidden(MapView view, Boolean value) {
+        int visibility = (value ? android.view.View.INVISIBLE : android.view.View.VISIBLE);
+        view.setLogoVisibility(visibility);
+    }
+
+    @ReactProp(name = PROP_ATTRIBUTION_BUTTON_IS_HIDDEN)
+    public void setAttributionButtonIsHidden(MapView view, Boolean value) {
+        int visibility = (value ? android.view.View.INVISIBLE : android.view.View.VISIBLE);
+        view.setAttributionVisibility(visibility);
     }
 
     public void setCenterCoordinateZoomLevel(MapView view, @Nullable ReadableMap center) {

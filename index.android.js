@@ -45,6 +45,8 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
     name: 'RCTMapbox',
     propTypes: {
       accessToken: React.PropTypes.string.isRequired,
+      attributionButtonIsHidden: React.PropTypes.bool,
+      logoIsHidden: React.PropTypes.bool,
       annotations: React.PropTypes.arrayOf(React.PropTypes.shape({
         title: React.PropTypes.string,
         subtitle: React.PropTypes.string,

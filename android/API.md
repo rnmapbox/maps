@@ -16,6 +16,8 @@
 | `direction`  | `double` | Optional | `0` | Heading of the map in degrees where 0 is north and 180 is south |
 | `debugActive`  | `bool` | Optional | `false` | Turns on debug mode. |
 | `style`  | flexbox `view` | Optional | NA | Styles the actual map view container |
+| `attributionButtonIsHidden`  | `bool` | Optional | `false` | Whether attribution button is visible in lower left corner. *If true you must still attribute OpenStreetMap in your app. [Ref](https://www.mapbox.com/about/maps/)* |
+| `logoIsHidden`  | `bool` | Optional | `false` | Whether logo is visible in lower left corner. |
 
 ## Events
 
