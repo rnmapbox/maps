@@ -23,12 +23,17 @@
   },
   "scripts": {
     "preinstall": "./scripts/download-mapbox-gl-native-ios.sh 3.0.0",
-    "test": "eslint example.js index.ios.js index.android.js",
+    "test": "npm run lint",
+    "lint": "eslint --no-eslintrc -c .eslintrc index.ios.js index.android.js ios/example.js android/example.js",
     "start": "node_modules/react-native/packager/packager.sh"
   },
   "devDependencies": {
-    "babel-eslint": "^3.1.20",
-    "eslint": "^0.24.0",
-    "eslint-plugin-react": "^2.6.4"
+    "babel-eslint": "^4.1.6",
+    "eslint": "^1.10.3",
+    "eslint-config-strict-react": "^4.0.0",
+    "eslint-plugin-react": "^3.11.3"
+  },
+  "dependencies": {
+    "babel-eslint": "^4.1.6"
   }
 }

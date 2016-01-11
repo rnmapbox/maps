@@ -112,6 +112,10 @@ var ReactMapViewWrapper = React.createClass({
   statics: {
     Mixin: MapMixins
   },
+  propTypes: {
+    onRegionChange: React.PropTypes.func,
+    onUserLocationChange: React.PropTypes.func
+  },
   handleOnChange(event) {
     if (this.props.onRegionChange) this.props.onRegionChange(event.nativeEvent.src);
   },
