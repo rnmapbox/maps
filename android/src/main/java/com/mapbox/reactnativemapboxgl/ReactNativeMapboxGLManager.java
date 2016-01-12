@@ -25,8 +25,8 @@ import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.constants.MyLocationTracking;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.views.MapView;
-import com.mapbox.mapboxsdk.annotations.Icon;
-import com.mapbox.mapboxsdk.annotations.IconFactory;
+import com.mapbox.mapboxsdk.annotations.Sprite;
+import com.mapbox.mapboxsdk.annotations.SpriteFactory;
 import android.support.v4.content.ContextCompat;
 import android.graphics.drawable.Drawable;
 import android.graphics.BitmapFactory;
@@ -141,8 +141,8 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
                         String annotationURL = annotationImage.getString("url");
                         try {
                             Drawable image = drawableFromUrl(mapView, annotationURL);
-                            IconFactory iconFactory = view.getIconFactory();
-                            Icon icon = iconFactory.fromDrawable(image);
+                            SpriteFactory iconFactory = view.getSpriteFactory();
+                            Sprite icon = iconFactory.fromDrawable(image);
                             marker.icon(icon);
                         } catch (Exception e) {
                             e.printStackTrace();
