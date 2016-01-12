@@ -37,6 +37,14 @@ var MapMixins = {
   setTilt(mapRef, tilt) {
     NativeModules.MapboxGLManager.setTilt(React.findNodeHandle(this.refs[mapRef]), tilt);
   },
+  getCenterCoordinateZoomLevel(mapRef, callback) {
+    NativeModules.MapboxGLManager.getCenterCoordinateZoomLevel(React.findNodeHandle(this.refs[mapRef]), callback);
+  },
+  getDirection(mapRef, callback) {;
+    NativeModules.MapboxGLManager.getDirection(React.findNodeHandle(this.refs[mapRef]), function(err){
+      console.log(err);
+    });
+  },
   mapStyles: NativeModules.MapboxGLManager.mapStyles,
   userTrackingMode: NativeModules.MapboxGLManager.userTrackingMode
 };

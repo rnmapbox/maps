@@ -34,6 +34,9 @@
 | `onFinishLoadingMap` | does not return an object | Fired once the map has loaded the style |
 | `onStartLoadingMap` | does not return an object | Fired once the map begins loading the style |
 | `onLocateUserFailed` | `{message: message}` | Fired when there is an error getting the users location. Do not rely on the string that is returned for determining what kind of error it is. |
+| `getCenterCoordinateZoomLevel` | `mapViewRef`, `callback` | Gets the current center location and zoom level. Returns a single callback object. |
+| `getDirection` | `mapViewRef`, `callback` | Gets the current direction. Returns a single callback object. |
+
 
 
 
@@ -54,8 +57,6 @@ These methods require you to use `MapboxGLMap.Mixin` to access the methods. Each
 | `removeAllAnnotations`  | `mapViewRef`| Removes all annotations from the map.
 | `setVisibleCoordinateBoundsAnimated`  | `mapViewRef`, `latitude1`, `longitude1`, `latitude2`, `longitude2`, `padding top`, `padding right`, `padding bottom`, `padding left`  | Changes the viewport to fit the given coordinate bounds and some additional padding on each side.
 | `setUserTrackingMode` | `mapViewRef`, `userTrackingMode` | Modifies the tracking mode. Valid args: `this.userTrackingMode.none`, `this.userTrackingMode.follow`, `this.userTrackingMode.followWithCourse`, `this.userTrackingMode.followWithHeading`
-| `getCenterCoordinateZoomLevel` | `mapViewRef`, `callback` | Gets the current center location and zoom level. Returns a callback with 2 arguments `error` and `location`.
-| `getDirection` | `mapViewRef`, `callback` | Gets the current direction. Returns a callback with 2 arguments `error` and `direction`.
 
 ## Styles
 

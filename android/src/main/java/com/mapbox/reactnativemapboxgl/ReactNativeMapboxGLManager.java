@@ -201,8 +201,8 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         view.setDebugActive(value);
     }
 
-    @ReactProp(name = PROP_DIRECTION, defaultFloat = 0f)
-    public void setDirection(MapView view, float value) {
+    @ReactProp(name = PROP_DIRECTION, defaultDouble = 0)
+    public void setDirection(MapView view, double value) {
         view.setDirection(value, true);
     }
 
@@ -332,6 +332,23 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
 
     public void removeAllAnnotations(MapView view, @Nullable Boolean placeHolder) {
         view.removeAllAnnotations();
+    }
+
+    public WritableMap getDirection(MapView view) {
+        WritableMap callbackDict = Arguments.createMap();
+        callbackDict.putDouble("direction", view.getDirection());
+        return callbackDict;
+    }
+
+    public WritableMap getCenterCoordinateZoomLevel(MapView view) {
+        WritableMap callbackDict = Arguments.createMap();
+        LatLng center = view.getCenterCoordinate();
+        double zoom = view.getZoomLevel();
+        callbackDict.putDouble("latitude", center.getLatitude());
+        callbackDict.putDouble("longitude", center.getLongitude());
+        callbackDict.putDouble("zoomLevel", zoom);
+
+        return callbackDict;
     }
 
     public MapView getMapView() {

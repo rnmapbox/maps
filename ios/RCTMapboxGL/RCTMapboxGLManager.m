@@ -95,7 +95,7 @@ RCT_EXPORT_METHOD(getCenterCoordinateZoomLevel:(nonnull NSNumber *)reactTag
         [callbackDict setValue:@(region.longitude) forKey:@"longitude"];
         [callbackDict setValue:@(zoom) forKey:@"zoom"];
         
-        callback(@[[NSNull null], callbackDict]);
+        callback(@[callbackDict]);
     }];
 }
 
@@ -109,7 +109,7 @@ RCT_EXPORT_METHOD(getDirection:(nonnull NSNumber *)reactTag
         
         [callbackDict setValue:@(direction) forKey:@"direction"];
         
-        callback(@[[NSNull null], callbackDict]);
+        callback(@[callbackDict]);
     }];
 }
 

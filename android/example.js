@@ -90,6 +90,20 @@ var MapExample = React.createClass({
         <Text style={styles.text} onPress={() => this.setVisibleCoordinateBoundsAnimated(mapRef, 40.712, -74.227, 40.774, -74.125, 100, 100, 100, 100)}>
           Set visible bounds to 40.7, -74.2, 40.7, -74.1
         </Text>
+        <Text style={styles.text} onPress={() => {
+            this.getDirection(mapRef, (direction)=>{
+             console.log(direction);
+           })
+          }}>
+          Get direction
+        </Text>
+        <Text style={styles.text} onPress={() => {
+            this.getCenterCoordinateZoomLevel(mapRef, (location)=>{
+             console.log(location);
+           })
+          }}>
+          Get location
+        </Text>
         <Mapbox
           annotations={this.state.annotations}
           accessToken={'your-mapbox.com-access-token'}

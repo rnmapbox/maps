@@ -13,6 +13,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.WritableMap;
 import com.mapbox.mapboxsdk.constants.MyLocationTracking;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -118,6 +119,18 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         info.putDouble("paddingBottom", paddingBottom);
         info.putDouble("paddingLeft", paddingLeft);
         aPackage.getManager().setVisibleCoordinateBounds(aPackage.getManager().getMapView(), info);
+    }
+
+    @ReactMethod
+    public void getDirection(int mapRef, Callback successCallback) {
+        WritableMap direction = aPackage.getManager().getDirection(aPackage.getManager().getMapView());
+        successCallback.invoke(direction);
+    }
+
+    @ReactMethod
+    public void getCenterCoordinateZoomLevel(int mapRef, Callback successCallback) {
+        WritableMap location = aPackage.getManager().getCenterCoordinateZoomLevel(aPackage.getManager().getMapView());
+        successCallback.invoke(location);
     }
 
     public void setPackage(ReactNativeMapboxGLPackage aPackage) {

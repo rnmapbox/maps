@@ -18,12 +18,15 @@
 | `style`  | flexbox `view` | Optional | NA | Styles the actual map view container |
 | `attributionButtonIsHidden`  | `bool` | Optional | `false` | Whether attribution button is visible in lower left corner. *If true you must still attribute OpenStreetMap in your app. [Ref](https://www.mapbox.com/about/maps/)* |
 | `logoIsHidden`  | `bool` | Optional | `false` | Whether logo is visible in lower left corner. |
+| `compassIsHidden`  | `bool` | Optional | `false` | Whether compass is visible when map is rotated. |
 
 ## Events
 
 | Event Name | Returns | Notes
 |---|---|---|
 | `onRegionChange` | `{latitude: 0, longitude: 0, zoom: 0}` | Fired when the map is panning or zooming.
+| `getCenterCoordinateZoomLevel` | `mapViewRef`, `callback` | Gets the current center location and zoom level. Returns a single callback object. |
+| `getDirection` | `mapViewRef`, `callback` | Gets the current direction. Returns a single callback object. |
 
 ## Methods for Modifying the Map State
 
