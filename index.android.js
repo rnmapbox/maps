@@ -41,9 +41,7 @@ var MapMixins = {
     NativeModules.MapboxGLManager.getCenterCoordinateZoomLevel(React.findNodeHandle(this.refs[mapRef]), callback);
   },
   getDirection(mapRef, callback) {;
-    NativeModules.MapboxGLManager.getDirection(React.findNodeHandle(this.refs[mapRef]), function(err){
-      console.log(err);
-    });
+    NativeModules.MapboxGLManager.getDirection(React.findNodeHandle(this.refs[mapRef]), callback);
   },
   mapStyles: NativeModules.MapboxGLManager.mapStyles,
   userTrackingMode: NativeModules.MapboxGLManager.userTrackingMode
