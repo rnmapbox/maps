@@ -55,19 +55,25 @@ var MapExample = React.createClass({
   onUserLocationChange(location) {
     console.log(location);
   },
+  onLongPress(location) {
+    console.log(location);
+  },
+  onOpenAnnotation(annotation) {
+    console.log(annotation);
+  },
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.text} onPress={() => this.setDirectionAnimated(mapRef, 0)}>
+        <Text onPress={() => this.setDirectionAnimated(mapRef, 0)}>
           Set direction to 0
         </Text>
-        <Text style={styles.text} onPress={() => this.setCenterCoordinateAnimated(mapRef, 40.68454331694491, -73.93592834472656)}>
+        <Text onPress={() => this.setCenterCoordinateAnimated(mapRef, 40.68454331694491, -73.93592834472656)}>
           Go to New York at current zoom level
         </Text>
-        <Text style={styles.text} onPress={() => this.setCenterCoordinateZoomLevelAnimated(mapRef, 35.68829, 139.77492, 14)}>
+        <Text onPress={() => this.setCenterCoordinateZoomLevelAnimated(mapRef, 35.68829, 139.77492, 14)}>
           Go to Tokyo at fixed zoom level 14
         </Text>
-        <Text style={styles.text} onPress={() => this.addAnnotations(mapRef, [{
+        <Text onPress={() => this.addAnnotations(mapRef, [{
           coordinates: [40.73312,-73.989],
           type: 'point',
           title: 'This is a new marker',
@@ -78,29 +84,29 @@ var MapExample = React.createClass({
         }])}>
           Add new marker
         </Text>
-        <Text style={styles.text} onPress={() => this.setUserTrackingMode(mapRef, this.userTrackingMode.follow)}>
+        <Text onPress={() => this.setUserTrackingMode(mapRef, this.userTrackingMode.follow)}>
           Set userTrackingMode to follow
         </Text>
-        <Text style={styles.text} onPress={() => this.removeAllAnnotations(mapRef)}>
+        <Text onPress={() => this.removeAllAnnotations(mapRef)}>
           Remove all annotations
         </Text>
-        <Text style={styles.text} onPress={() => this.setTilt(mapRef, 50)}>
+        <Text onPress={() => this.setTilt(mapRef, 50)}>
           Set tilt to 50
         </Text>
-        <Text style={styles.text} onPress={() => this.setVisibleCoordinateBoundsAnimated(mapRef, 40.712, -74.227, 40.774, -74.125, 100, 100, 100, 100)}>
+        <Text onPress={() => this.setVisibleCoordinateBoundsAnimated(mapRef, 40.712, -74.227, 40.774, -74.125, 100, 100, 100, 100)}>
           Set visible bounds to 40.7, -74.2, 40.7, -74.1
         </Text>
-        <Text style={styles.text} onPress={() => {
-            this.getDirection(mapRef, (direction)=>{
+        <Text onPress={() => {
+            this.getDirection(mapRef, (direction) => {
              console.log(direction);
-           })
+            });
           }}>
           Get direction
         </Text>
-        <Text style={styles.text} onPress={() => {
-            this.getCenterCoordinateZoomLevel(mapRef, (location)=>{
+        <Text onPress={() => {
+            this.getCenterCoordinateZoomLevel(mapRef, (location) => {
              console.log(location);
-           })
+            });
           }}>
           Get location
         </Text>
@@ -114,7 +120,7 @@ var MapExample = React.createClass({
           onRegionChange={this.onRegionChange}
           rotateEnabled={true}
           scrollEnabled={true}
-          style={styles.map}
+          style={styles.container}
           showsUserLocation={true}
           styleUrl={this.mapStyles.emerald}
           userTrackingMode={this.userTrackingMode.none}
@@ -122,6 +128,8 @@ var MapExample = React.createClass({
           zoomLevel={10}
           compassIsHidden={true}
           onUserLocationChange={this.onUserLocationChange}
+          onLongPress={this.onLongPress}
+          onOpenAnnotation={this.onOpenAnnotation}
         />
       </View>
     );
@@ -130,13 +138,6 @@ var MapExample = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    flex: 1
-  },
-  text: {
-    padding: 3,
-    marginLeft: 5
-  },
-  map: {
     flex: 1
   }
 });

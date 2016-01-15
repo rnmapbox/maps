@@ -1,7 +1,8 @@
 'use strict'
 
 var React = require('react-native');
-var { NativeModules, requireNativeComponent } = React;
+var { NativeModules, requireNativeComponent, DeviceEventEmitter } = React;
+var Subscribable = require('Subscribable');
 
 var MapMixins = {
   setDirectionAnimated(mapRef, heading) {
@@ -79,6 +80,8 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
       tilt: React.PropTypes.number,
       compassIsHidden: React.PropTypes.bool,
       onRegionChange: React.PropTypes.func,
+      onOpenAnnotation: React.PropTypes.func,
+      onLongPress: React.PropTypes.func,
       onUserLocationChange: React.PropTypes.func,
       // Fix for https://github.com/mapbox/react-native-mapbox-gl/issues/118
       scaleY: React.PropTypes.number,
@@ -117,25 +120,38 @@ var ReactMapView = requireNativeComponent('RCTMapbox', {
 });
 
 var ReactMapViewWrapper = React.createClass({
+  mixins: [Subscribable.Mixin],
   statics: {
     Mixin: MapMixins
   },
   propTypes: {
     onRegionChange: React.PropTypes.func,
-    onUserLocationChange: React.PropTypes.func
+    onUserLocationChange: React.PropTypes.func,
+    onOpenAnnotation: React.PropTypes.func,
+    onLongPress: React.PropTypes.func
+  },
+  componentWillMount: function() {
+    this.addListenerOn(DeviceEventEmitter,'onRegionChange', this.handleOnChange);
+    this.addListenerOn(DeviceEventEmitter,'onUserLocationChange', this.handleUserLocation);
+    this.addListenerOn(DeviceEventEmitter,'onOpenAnnotation', this.handleOnOpenAnnotation);
+    this.addListenerOn(DeviceEventEmitter,'onLongPress', this.handleOnLongPress);
   },
   handleOnChange(event) {
-    if (this.props.onRegionChange) this.props.onRegionChange(event.nativeEvent.src);
+    if (this.props.onRegionChange) this.props.onRegionChange(event);
   },
   handleUserLocation(event) {
-    if (this.props.onUserLocationChange) this.props.onUserLocationChange(event.nativeEvent.src);
+    if (this.props.onUserLocationChange) this.props.onUserLocationChange(event);
+  },
+  handleOnOpenAnnotation(event) {
+    if (this.props.onOpenAnnotation) this.props.onOpenAnnotation(event);
+  },
+  handleOnLongPress(event) {
+    if (this.props.onLongPress) this.props.onLongPress(event);
   },
   render() {
     return (
       <ReactMapView
-        {...this.props}
-        onChange={this.handleOnChange}
-        onSelect={this.handleUserLocation} />
+        {...this.props} />
     );
   }
 });
