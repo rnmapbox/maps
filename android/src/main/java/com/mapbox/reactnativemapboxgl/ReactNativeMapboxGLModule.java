@@ -84,7 +84,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         location.putDouble("latitude", latitude);
         location.putDouble("longitude", longitude);
         location.putDouble("zoom", zoom);
-        aPackage.getManager().setCenterCoordinate(aPackage.getManager().getMapView(), location);
+        aPackage.getManager().setCenterCoordinateZoomLevel(aPackage.getManager().getMapView(), location);
     }
 
     @ReactMethod

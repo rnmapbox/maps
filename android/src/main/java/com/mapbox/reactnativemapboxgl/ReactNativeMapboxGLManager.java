@@ -24,6 +24,7 @@ import com.mapbox.mapboxsdk.annotations.PolygonOptions;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.constants.MyLocationTracking;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.geometry.LatLngZoom;
 import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.annotations.Sprite;
 import com.mapbox.mapboxsdk.annotations.SpriteFactory;
@@ -318,7 +319,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
             double latitude = center.getDouble("latitude");
             double longitude = center.getDouble("longitude");
             double zoom = center.getDouble("zoom");
-            view.setCenterCoordinate(new LatLng(latitude, longitude, zoom), true);
+            view.setCenterCoordinate(new LatLngZoom(latitude, longitude, zoom), true);
         }else{
             Log.w(REACT_CLASS, "No CenterCoordinate provided");
         }
