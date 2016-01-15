@@ -124,6 +124,12 @@ var ReactMapViewWrapper = React.createClass({
   statics: {
     Mixin: MapMixins
   },
+  propTypes: {
+    onRegionChange: React.PropTypes.func,
+    onUserLocationChange: React.PropTypes.func,
+    onOpenAnnotation: React.PropTypes.func,
+    onLongPress: React.PropTypes.func
+  },
   componentWillMount: function() {
     this.addListenerOn(DeviceEventEmitter,'onRegionChange', this.handleOnChange);
     this.addListenerOn(DeviceEventEmitter,'onUserLocationChange', this.handleUserLocation);
