@@ -13,7 +13,10 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ReactProp;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.constants.Style;
+import com.facebook.react.bridge.LifecycleEventListener;
 import android.graphics.RectF;
 import com.mapbox.mapboxsdk.geometry.CoordinateBounds;
 import com.facebook.react.uimanager.SimpleViewManager;
@@ -51,6 +54,8 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public static final String PROP_CENTER_COORDINATE = "centerCoordinate";
     public static final String PROP_DEBUG_ACTIVE = "debugActive";
     public static final String PROP_DIRECTION = "direction";
+    public static final String PROP_ONOPENANNOTATION = "onOpenAnnotation";
+    public static final String PROP_ONLONGPRESS = "onLongPress";
     public static final String PROP_ONREGIONCHANGE = "onRegionChange";
     public static final String PROP_ONUSER_LOCATION_CHANGE = "onUserLocationChange";
     public static final String PROP_ROTATION_ENABLED = "rotateEnabled";
@@ -219,7 +224,9 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
                     location.putDouble("zoom", view.getZoomLevel());
                     event.putMap("src", location);
                     ReactContext reactContext = (ReactContext) view.getContext();
-                    reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "topChange", event);
+                    reactContext
+                            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                            .emit("onRegionChange", event);
                 }
             }
         });
@@ -241,7 +248,49 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
                 locationMap.putString("provider", location.getProvider());
                 event.putMap("src", locationMap);
                 ReactContext reactContext = (ReactContext) view.getContext();
-                reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "topSelect", event);
+                reactContext
+                        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                        .emit("onUserLocationChange", event);
+            }
+        });
+    }
+
+    @ReactProp(name = PROP_ONOPENANNOTATION, defaultBoolean = true)
+    public void onMarkerClick(final MapView view, Boolean value) {
+        view.setOnMarkerClickListener(new MapView.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(@Nonnull Marker marker) {
+                WritableMap event = Arguments.createMap();
+                WritableMap markerObject = Arguments.createMap();
+                markerObject.putString("title", marker.getTitle());
+                markerObject.putString("subtitle", marker.getSnippet());
+                markerObject.putDouble("latitude", marker.getPosition().getLatitude());
+                markerObject.putDouble("longitude", marker.getPosition().getLongitude());
+                markerObject.putDouble("id", marker.getId());
+                event.putMap("src", markerObject);
+                ReactContext reactContext = (ReactContext) view.getContext();
+                reactContext
+                        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                        .emit("onOpenAnnotation", event);
+                return false;
+            }
+        });
+    }
+
+    @ReactProp(name = PROP_ONLONGPRESS, defaultBoolean = true)
+    public void onMapLongClick(final MapView view, Boolean value) {
+        view.setOnMapLongClickListener(new MapView.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(@Nonnull LatLng location) {
+                WritableMap event = Arguments.createMap();
+                WritableMap loc = Arguments.createMap();
+                loc.putDouble("latitude", view.getCenterCoordinate().getLatitude());
+                loc.putDouble("longitude", view.getCenterCoordinate().getLongitude());
+                event.putMap("src", loc);
+                ReactContext reactContext = (ReactContext) view.getContext();
+                reactContext
+                        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                        .emit("onLongPress", event);
             }
         });
     }
