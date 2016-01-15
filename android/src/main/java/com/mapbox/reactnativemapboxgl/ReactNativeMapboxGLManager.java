@@ -259,14 +259,13 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public void onMarkerClick(final MapView view, Boolean value) {
         view.setOnMarkerClickListener(new MapView.OnMarkerClickListener() {
             @Override
-            public boolean onMarkerClick(@Nonnull Marker marker) {
+            public boolean onMarkerClick(@Nullable Marker marker) {
                 WritableMap event = Arguments.createMap();
                 WritableMap markerObject = Arguments.createMap();
                 markerObject.putString("title", marker.getTitle());
                 markerObject.putString("subtitle", marker.getSnippet());
                 markerObject.putDouble("latitude", marker.getPosition().getLatitude());
                 markerObject.putDouble("longitude", marker.getPosition().getLongitude());
-                markerObject.putDouble("id", marker.getId());
                 event.putMap("src", markerObject);
                 ReactContext reactContext = (ReactContext) view.getContext();
                 reactContext
@@ -281,7 +280,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public void onMapLongClick(final MapView view, Boolean value) {
         view.setOnMapLongClickListener(new MapView.OnMapLongClickListener() {
             @Override
-            public void onMapLongClick(@Nonnull LatLng location) {
+            public void onMapLongClick(@Nullable LatLng location) {
                 WritableMap event = Arguments.createMap();
                 WritableMap loc = Arguments.createMap();
                 loc.putDouble("latitude", view.getCenterCoordinate().getLatitude());

@@ -27,6 +27,8 @@
 | `onRegionChange` | `{latitude: 0, longitude: 0, zoom: 0}` | Fired when the map is panning or zooming.
 | `getCenterCoordinateZoomLevel` | `mapViewRef`, `callback` | Gets the current center location and zoom level. Returns a single callback object. |
 | `getDirection` | `mapViewRef`, `callback` | Gets the current direction. Returns a single callback object. |
+| `onOpenAnnotation` | `{title: null, subtitle: null, latitude: 0, longitude: 0}` | Fired when focusing a an annotation. If the annotation is opened already, the event will not fire.
+| `onLongPress` | `{latitude: 0, longitude: 0}` | Fired when the user taps and holds the map.
 
 ## Methods for Modifying the Map State
 
