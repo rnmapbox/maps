@@ -6,7 +6,6 @@ import android.util.Log;
 import android.os.StrictMode;
 import android.location.Location;
 
-
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
@@ -15,23 +14,19 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ReactProp;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.mapbox.mapboxsdk.annotations.Marker;
-import com.mapbox.mapboxsdk.constants.Style;
-import com.facebook.react.bridge.LifecycleEventListener;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import android.graphics.RectF;
 import com.mapbox.mapboxsdk.geometry.CoordinateBounds;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.annotations.PolygonOptions;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
-import com.mapbox.mapboxsdk.constants.MyLocationTracking;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.geometry.LatLngZoom;
 import com.mapbox.mapboxsdk.views.MapView;
-import com.mapbox.mapboxsdk.annotations.Sprite;
-import com.mapbox.mapboxsdk.annotations.SpriteFactory;
-import android.support.v4.content.ContextCompat;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.annotations.Icon;
+import com.mapbox.mapboxsdk.annotations.IconFactory;
 import android.graphics.drawable.Drawable;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
@@ -39,12 +34,8 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import android.graphics.drawable.BitmapDrawable;
-
 import javax.annotation.Nullable;
-
-
 
 public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
 
@@ -147,8 +138,8 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
                         String annotationURL = annotationImage.getString("url");
                         try {
                             Drawable image = drawableFromUrl(mapView, annotationURL);
-                            SpriteFactory iconFactory = view.getSpriteFactory();
-                            Sprite icon = iconFactory.fromDrawable(image);
+                            IconFactory iconFactory = view.getIconFactory();
+                            Icon icon = iconFactory.fromDrawable(image);
                             marker.icon(icon);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -300,7 +291,10 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         if (center != null) {
             double latitude = center.getDouble("latitude");
             double longitude = center.getDouble("longitude");
-            view.setCenterCoordinate(new LatLng(latitude, longitude));
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(latitude, longitude))
+                    .build();
+            view.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }else{
             Log.w(REACT_CLASS, "No CenterCoordinate provided");
         }
@@ -366,8 +360,12 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         if (center != null) {
             double latitude = center.getDouble("latitude");
             double longitude = center.getDouble("longitude");
-            double zoom = center.getDouble("zoom");
-            view.setCenterCoordinate(new LatLngZoom(latitude, longitude, zoom), true);
+            float zoom = (float)center.getDouble("zoom");
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(latitude, longitude))
+                    .zoom(zoom)
+                    .build();
+            view.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }else{
             Log.w(REACT_CLASS, "No CenterCoordinate provided");
         }
@@ -391,11 +389,10 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
 
     public WritableMap getCenterCoordinateZoomLevel(MapView view) {
         WritableMap callbackDict = Arguments.createMap();
-        LatLng center = view.getCenterCoordinate();
-        double zoom = view.getZoomLevel();
-        callbackDict.putDouble("latitude", center.getLatitude());
-        callbackDict.putDouble("longitude", center.getLongitude());
-        callbackDict.putDouble("zoomLevel", zoom);
+        CameraPosition center = view.getCameraPosition();
+        callbackDict.putDouble("latitude", center.target.getLatitude());
+        callbackDict.putDouble("longitude", center.target.getLongitude());
+        callbackDict.putDouble("zoomLevel", center.zoom);
 
         return callbackDict;
     }
