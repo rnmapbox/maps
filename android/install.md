@@ -29,9 +29,12 @@ dependencies {
 
 #### Step 4 - Register React Package
 
+##### react-native < v0.18.0
+
 ```java
 ...
 import com.mapbox.reactnativemapboxgl.ReactNativeMapboxGLPackage; // <-- import
+...
 
 public class MainActivity extends FragmentActivity implements DefaultHardwareBackBtnHandler {
 
@@ -55,7 +58,23 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
         setContentView(mReactRootView);
     }
 ...
+```
 
+##### react-native >= v0.18.0
+
+```java
+import com.mapbox.reactnativemapboxgl.ReactNativeMapboxGLPackage; // <-- import
+...
+/**
+   * A list of packages used by the app. If the app uses additional views
+   * or modules besides the default ones, add more packages here.
+   */
+    @Override
+    protected List<ReactPackage> getPackages() {
+      return Arrays.<ReactPackage>asList(
+        new MainReactPackage(),
+        new ReactNativeMapboxGLPackage());  // <-- Register package here
+    }
 ```
 
 #### Step 5 - Add to project, [see example](./example.js)
