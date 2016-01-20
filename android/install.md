@@ -73,7 +73,7 @@ import com.mapbox.reactnativemapboxgl.ReactNativeMapboxGLPackage; // <-- import
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
         new MainReactPackage(),
-        new MainReactPackage());  // <-- Register package here
+        new ReactNativeMapboxGLPackage());  // <-- Register package here
     }
 ```
 
