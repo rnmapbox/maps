@@ -12,7 +12,6 @@ npm install react-native-mapbox-gl --save
 1. In the `Build Phases` tab, click the plus sign and then `New Run Script Phase` ![](https://cldup.com/jgt8p_dHjD.png)
 1. Open the newly added `Run Script` and paste (Only necessary when submitting to the app store, but a good idea to add this now):
 ```bash
-bash
  "${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mapbox.framework/strip-frameworks.sh"
 ```
 ![](https://cldup.com/SGt3NdX-yy.png)
