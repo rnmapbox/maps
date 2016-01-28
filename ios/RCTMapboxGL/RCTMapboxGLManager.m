@@ -135,12 +135,12 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
 
 RCT_CUSTOM_VIEW_PROPERTY(contentInset, UIEdgeInsetsMake, RCTMapboxGL)
 {
-    int top = [json[0] intValue];
-    int left = [json[3] intValue];
-    int bottom = [json[2] intValue];
-    int right = [json[1] intValue];
-    UIEdgeInsets inset = UIEdgeInsetsMake((CGFloat)top, (CGFloat)left, (CGFloat)bottom, (CGFloat)right);
-    [view setContentInset:inset];
+    int top = [json[0] doubleValue];
+    int left = [json[3] doubleValue];
+    int bottom = [json[2] doubleValue];
+    int right = [json[1] doubleValue];
+    UIEdgeInsets inset = UIEdgeInsetsMake(top, left, bottom, right);
+    view.contentInset = inset;
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(attributionButtonIsHidden, BOOL, RCTMapboxGL)

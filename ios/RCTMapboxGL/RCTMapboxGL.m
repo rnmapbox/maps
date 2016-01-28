@@ -78,11 +78,11 @@ RCT_EXPORT_MODULE();
         _map.showsUserLocation = _showsUserLocation;
         _map.styleURL = _styleURL;
         _map.zoomLevel = _zoomLevel;
-        _map.userTrackingMode = _userTrackingMode;
+        _map.contentInset = _inset;
         [_map.attributionButton setHidden:_attributionButton];
         [_map.logoView setHidden:_logo];
         [_map.compassView setHidden:_compass];
-        _map.contentInset = _inset;
+        _map.userTrackingMode = _userTrackingMode;
     } else {
         /* We need to have a height/width specified in order to render */
         if (_accessToken && _styleURL && self.bounds.size.height > 0 && self.bounds.size.width > 0) {

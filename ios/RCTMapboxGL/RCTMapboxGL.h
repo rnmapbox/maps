@@ -43,7 +43,7 @@
 - (double)zoomLevel;
 - (double)direction;
 - (CLLocationCoordinate2D)centerCoordinate;
-- (void)setContentInset:(UIEdgeInsets)inset;
+@property (nonatomic) UIEdgeInsets contentInset;
 
 @end
 
