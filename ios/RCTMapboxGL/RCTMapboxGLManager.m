@@ -8,7 +8,7 @@
 
 #import "RCTMapboxGLManager.h"
 #import "RCTMapboxGL.h"
-#import "Mapbox.h"
+#import <Mapbox/Mapbox.h>
 #import "RCTConvert+CoreLocation.h"
 #import "RCTConvert+MapKit.h"
 #import "RCTBridge.h"
@@ -131,6 +131,16 @@ RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
 
         view.annotations = annotations;
     }
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(contentInset, UIEdgeInsetsMake, RCTMapboxGL)
+{
+    int top = [json[0] intValue];
+    int left = [json[3] intValue];
+    int bottom = [json[2] intValue];
+    int right = [json[1] intValue];
+    UIEdgeInsets inset = UIEdgeInsetsMake((CGFloat)top, (CGFloat)left, (CGFloat)bottom, (CGFloat)right);
+    [view setContentInset:inset];
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(attributionButtonIsHidden, BOOL, RCTMapboxGL)

@@ -6,8 +6,7 @@
 //  Copyright (c) 2015 Mapbox. All rights reserved.
 //
 
-#import "Mapbox.h"
-#import "MGLMapView.h"
+#import <Mapbox/Mapbox.h>
 #import "RCTView.h"
 #import "RCTEventDispatcher.h"
 #import "RCTBridgeModule.h"
@@ -44,6 +43,7 @@
 - (double)zoomLevel;
 - (double)direction;
 - (CLLocationCoordinate2D)centerCoordinate;
+- (void)setContentInset:(UIEdgeInsets)inset;
 
 @end
 

@@ -128,7 +128,8 @@ var MapView = React.createClass({
     onFinishLoadingMap: React.PropTypes.func,
     onStartLoadingMap: React.PropTypes.func,
     onLocateUserFailed: React.PropTypes.func,
-    onLongPress: React.PropTypes.func
+    onLongPress: React.PropTypes.func,
+    contentInset: React.PropTypes.array
   },
   getDefaultProps() {
     return {
