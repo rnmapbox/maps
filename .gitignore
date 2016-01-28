@@ -30,30 +30,7 @@ node_modules/
 npm-debug.log
 
 # project specific
-libMapboxGL.a
-MapboxGL.bundle/
-MapboxGL.h
-MGLAnnotation.h
-MGLMapboxEvents.h
-MGLMapView+IBAdditions.h
-MGLMapView.h
-MGLMetricsLocationManager.h
-MGLTypes.h
-MGLUserLocation.h
-MGLAccountManager.h
-MGLMapView_Private.h
-ios/RCTMapboxGL/MGLAnnotationImage.h
-ios/RCTMapboxGL/MGLGeometry.h
-ios/RCTMapboxGL/MGLMapCamera.h
-ios/RCTMapboxGL/MGLMultiPoint.h
-ios/RCTMapboxGL/MGLOverlay.h
-ios/RCTMapboxGL/MGLPointAnnotation.h
-ios/RCTMapboxGL/MGLPolygon.h
-ios/RCTMapboxGL/MGLPolyline.h
-ios/RCTMapboxGL/MGLShape.h
-ios/RCTMapboxGL/Mapbox.bundle/
-ios/RCTMapboxGL/Mapbox.h
-ios/RCTMapboxGL/libMapbox.a
+ios/Mapbox.framework
 android/build/
 android/.gradle/
 android/.idea/

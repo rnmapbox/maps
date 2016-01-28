@@ -20,6 +20,7 @@
 | `attributionButtonIsHidden`  | `bool` | Optional | `false` | Whether attribution button is visible in lower right corner. *If true you must still attribute OpenStreetMap in your app. [Ref](https://www.mapbox.com/about/maps/)* |
 | `logoIsHidden`  | `bool` | Optional | `false` | Whether logo is visible in lower left corner. |
 | `compassIsHidden`  | `bool` | Optional | `false` | Whether compass is visible when map is rotated. |
+| `contentInset` | `array` | Optional | `[0, 0, 0, 0]` | Change the center point of the map. Offset is in pixels. `[top, right, bottom, left]`
 
 ## Event listeners
 

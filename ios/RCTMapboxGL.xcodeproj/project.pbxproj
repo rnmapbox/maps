@@ -7,12 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C5AF3B8C1C5A8C3D0003BF64 /* Mapbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5AF3B8B1C5A8C3D0003BF64 /* Mapbox.framework */; };
 		C5DBB3441AF2EF2B00E611A9 /* RCTMapboxGL.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C5DBB3431AF2EF2B00E611A9 /* RCTMapboxGL.h */; };
 		C5DBB3461AF2EF2B00E611A9 /* RCTMapboxGL.m in Sources */ = {isa = PBXBuildFile; fileRef = C5DBB3451AF2EF2B00E611A9 /* RCTMapboxGL.m */; };
 		C5DBB34C1AF2EF2B00E611A9 /* libRCTMapboxGL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5DBB3401AF2EF2B00E611A9 /* libRCTMapboxGL.a */; };
 		C5DBB3661AF2EFB500E611A9 /* RCTMapboxGLManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C5DBB3651AF2EFB500E611A9 /* RCTMapboxGLManager.m */; };
-		C5DBB3961AF3361700E611A9 /* libMapbox.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5DBB38C1AF3361700E611A9 /* libMapbox.a */; };
-		C5DBB3A61AF338ED00E611A9 /* Mapbox.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = C5DBB38D1AF3361700E611A9 /* Mapbox.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,7 +31,6 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				C5DBB3A61AF338ED00E611A9 /* Mapbox.bundle in CopyFiles */,
 				C5DBB3441AF2EF2B00E611A9 /* RCTMapboxGL.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
@@ -40,6 +38,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C5AF3B8B1C5A8C3D0003BF64 /* Mapbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mapbox.framework; sourceTree = "<group>"; };
 		C5DBB3401AF2EF2B00E611A9 /* libRCTMapboxGL.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTMapboxGL.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5DBB3431AF2EF2B00E611A9 /* RCTMapboxGL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMapboxGL.h; sourceTree = "<group>"; };
 		C5DBB3451AF2EF2B00E611A9 /* RCTMapboxGL.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMapboxGL.m; sourceTree = "<group>"; };
@@ -47,14 +46,6 @@
 		C5DBB3511AF2EF2B00E611A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C5DBB3641AF2EFB500E611A9 /* RCTMapboxGLManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMapboxGLManager.h; sourceTree = "<group>"; };
 		C5DBB3651AF2EFB500E611A9 /* RCTMapboxGLManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMapboxGLManager.m; sourceTree = "<group>"; };
-		C5DBB38C1AF3361700E611A9 /* libMapbox.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMapbox.a; sourceTree = "<group>"; };
-		C5DBB38D1AF3361700E611A9 /* Mapbox.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Mapbox.bundle; sourceTree = "<group>"; };
-		C5DBB38E1AF3361700E611A9 /* Mapbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mapbox.h; sourceTree = "<group>"; };
-		C5DBB38F1AF3361700E611A9 /* MGLAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGLAnnotation.h; sourceTree = "<group>"; };
-		C5DBB3911AF3361700E611A9 /* MGLMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGLMapView.h; sourceTree = "<group>"; };
-		C5DBB3921AF3361700E611A9 /* MGLMapView+IBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MGLMapView+IBAdditions.h"; sourceTree = "<group>"; };
-		C5DBB3941AF3361700E611A9 /* MGLTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGLTypes.h; sourceTree = "<group>"; };
-		C5DBB3951AF3361700E611A9 /* MGLUserLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGLUserLocation.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C5DBB3961AF3361700E611A9 /* libMapbox.a in Frameworks */,
+				C5AF3B8C1C5A8C3D0003BF64 /* Mapbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +71,7 @@
 		C5DBB3371AF2EF2B00E611A9 = {
 			isa = PBXGroup;
 			children = (
+				C5AF3B8B1C5A8C3D0003BF64 /* Mapbox.framework */,
 				C5DBB3421AF2EF2B00E611A9 /* RCTMapboxGL */,
 				C5DBB34F1AF2EF2B00E611A9 /* RCTMapboxGLTests */,
 				C5DBB3411AF2EF2B00E611A9 /* Products */,
@@ -98,14 +90,6 @@
 		C5DBB3421AF2EF2B00E611A9 /* RCTMapboxGL */ = {
 			isa = PBXGroup;
 			children = (
-				C5DBB38C1AF3361700E611A9 /* libMapbox.a */,
-				C5DBB38D1AF3361700E611A9 /* Mapbox.bundle */,
-				C5DBB38E1AF3361700E611A9 /* Mapbox.h */,
-				C5DBB38F1AF3361700E611A9 /* MGLAnnotation.h */,
-				C5DBB3911AF3361700E611A9 /* MGLMapView.h */,
-				C5DBB3921AF3361700E611A9 /* MGLMapView+IBAdditions.h */,
-				C5DBB3941AF3361700E611A9 /* MGLTypes.h */,
-				C5DBB3951AF3361700E611A9 /* MGLUserLocation.h */,
 				C5DBB3431AF2EF2B00E611A9 /* RCTMapboxGL.h */,
 				C5DBB3451AF2EF2B00E611A9 /* RCTMapboxGL.m */,
 				C5DBB3641AF2EFB500E611A9 /* RCTMapboxGLManager.h */,
@@ -277,7 +261,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -314,7 +298,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -325,6 +309,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_BITCODE = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				HEADER_SEARCH_PATHS = (
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
@@ -346,6 +334,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_BITCODE = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				HEADER_SEARCH_PATHS = (
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
