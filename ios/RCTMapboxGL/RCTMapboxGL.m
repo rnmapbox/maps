@@ -38,7 +38,6 @@
     BOOL _attributionButton;
     BOOL _logo;
     BOOL _compass;
-    UIEdgeInsets _inset;
 }
 
 RCT_EXPORT_MODULE();
@@ -78,7 +77,7 @@ RCT_EXPORT_MODULE();
         _map.showsUserLocation = _showsUserLocation;
         _map.styleURL = _styleURL;
         _map.zoomLevel = _zoomLevel;
-        _map.contentInset = _inset;
+        _map.contentInset = _contentInset;
         [_map.attributionButton setHidden:_attributionButton];
         [_map.logoView setHidden:_logo];
         [_map.compassView setHidden:_compass];
@@ -385,7 +384,7 @@ RCT_EXPORT_MODULE();
 
 - (void) setContentInset:(UIEdgeInsets)inset
 {
-    _inset = inset;
+    _contentInset = inset;
     [self updateMap];
 }
 
