@@ -4,17 +4,18 @@ If you use already [CocoaPods](https://cocoapods.org/) in your react-native
 project, you can also add the react-native-mapbox-gl project to your Podfile.
 
 1. Run `npm install --save react-native-mapbox-gl`
-2. Add `pod 'RCTMapboxGL', :path => 'node_modules/react-native-mapbox-gl/ios'`
+2. In your `podfile`, make sure that `platform :ios, '8.0'` is set to `8.0`
+3. Add `pod 'RCTMapboxGL', :path => 'node_modules/react-native-mapbox-gl/ios'`
    to your `Podfile` file.  
    (The path dependence on your Podfile location.)
-3. Open your Xcode project and ensure that the "Build Settings" parameter
+4. Open your Xcode project and ensure that the "Build Settings" parameter
    "Other linker flags" (`OTHER_LDFLAGS`) contains the CocoaPods generated
    linker options!
    * If you have used `react-natve init` to setup your project you can just
      remove this parameter. Just select the line and press the backspace key.
    * Alternative, if you setup your Xcode project yourself, ensure that the
      parent configuration was included with a `$(inherited)` variable.
-4. Install the new CocoaPods dependency with `pod install`.  
+5. Install the new CocoaPods dependency with `pod install`.  
    This command must not have output any warning. ;)
 
 ## Troubleshooting with CocoaPods
