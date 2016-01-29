@@ -63,9 +63,13 @@ RCT_EXPORT_MODULE();
                      @"follow": [NSNumber numberWithUnsignedInt:MGLUserTrackingModeFollow],
                      @"followWithCourse": [NSNumber numberWithUnsignedInt:MGLUserTrackingModeFollowWithCourse],
                      @"followWithHeading": [NSNumber numberWithUnsignedInt:MGLUserTrackingModeFollowWithHeading]
+                     },
+             @"userLocationVerticalAlignment" : @{
+                     @"top": @(MGLAnnotationVerticalAlignmentTop),
+                     @"center": @(MGLAnnotationVerticalAlignmentCenter),
+                     @"bottom": @(MGLAnnotationVerticalAlignmentBottom)
                      }
              };
-
 };
 
 RCT_EXPORT_VIEW_PROPERTY(accessToken, NSString);
@@ -80,6 +84,7 @@ RCT_EXPORT_VIEW_PROPERTY(styleURL, NSURL);
 RCT_EXPORT_VIEW_PROPERTY(userTrackingMode, int);
 RCT_EXPORT_VIEW_PROPERTY(zoomEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(zoomLevel, double);
+RCT_EXPORT_VIEW_PROPERTY(userLocationVerticalAlignment, int);
 
 RCT_EXPORT_METHOD(getCenterCoordinateZoomLevel:(nonnull NSNumber *)reactTag
                   findEvents:(RCTResponseSenderBlock)callback)

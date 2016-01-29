@@ -81,6 +81,7 @@ RCT_EXPORT_MODULE();
         [_map.attributionButton setHidden:_attributionButton];
         [_map.logoView setHidden:_logo];
         [_map.compassView setHidden:_compass];
+        _map.userLocationVerticalAlignment = _userLocationVerticalAlignment;
         _map.userTrackingMode = _userTrackingMode;
     } else {
         /* We need to have a height/width specified in order to render */
