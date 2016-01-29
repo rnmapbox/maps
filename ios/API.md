@@ -21,6 +21,7 @@
 | `logoIsHidden`  | `bool` | Optional | `false` | Whether logo is visible in lower left corner. |
 | `compassIsHidden`  | `bool` | Optional | `false` | Whether compass is visible when map is rotated. |
 | `contentInset` | `array` | Optional | `[0, 0, 0, 0]` | Change the center point of the map. Offset is in pixels. `[top, right, bottom, left]`
+| `userLocationVerticalAlignment` | `enum` | Optional | `userLocationVerticalAlignment.center` | Change the alignment of where the user location shows on the screen. Valid values: `userLocationVerticalAlignment.top`, `userLocationVerticalAlignment.center`, `userLocationVerticalAlignment.bottom`
 
 ## Event listeners
 

@@ -43,6 +43,7 @@
 - (double)zoomLevel;
 - (double)direction;
 - (CLLocationCoordinate2D)centerCoordinate;
+@property (nonatomic) MGLAnnotationVerticalAlignment userLocationVerticalAlignment;
 @property (nonatomic) UIEdgeInsets contentInset;
 
 @end
