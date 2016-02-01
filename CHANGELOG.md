@@ -1,10 +1,20 @@
+#v3.2.0
+
+#### *Note, there is a new (easier) install process for iOS. See updated [install.md](https://github.com/mapbox/react-native-mapbox-gl/blob/71298a88bba3f7b5d79e6bf1011dc8fe913b0750/ios/install.md)*
+
+- [Android] Upgrades internally to use [Mapbox Android SDK v3.2.0](https://github.com/mapbox/mapbox-gl-native/blob/b738087080b924061c4e6ce4c8b60ae4573f4f10/CHANGELOG.md#320).
+- [Android] Adds event handler `onLongPress`
+- [iOS] Upgrades internally to use Mapbox iOS SDK [v3.1.0](https://github.com/mapbox/mapbox-gl-native/releases/tag/ios-v3.1.0-pre.3)
+- [iOS] Adds `contentInset` option
+- [iOS] Adds `userLocationVerticalAlignment`  option
+
 #v3.1.0
  - [iOS & Android] Adds methods `getDirection` and `getCenterCoordinateZoomLevel`
  - [iOS & Android] Properly removes annotations when annotation props are updated
  - [iOS] Adds method `updateAnnotation` for updating annotations
  - [Android] The prop `rotateEnabled` has been made more consistent across both platforms.
  - [Android] Adds props `logoIsHidden` and `attributionButtonIsHidden`
- 
+
 #v3.0.0
 
 With `v3.0.0` most breaking changes are around annotations. Now, to remove or select an annotation, you must provide the `id` of the annotation. On all annotations added to the map, an `id` is now required.
