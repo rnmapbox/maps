@@ -477,9 +477,9 @@ NSObject *convertObjectToPolyline (NSObject *annotationObject)
             count++;
         }
     }
-
+    RCTMGLAnnotationPolyline *polyline = [RCTMGLAnnotationPolyline polylineAnnotation:coord strokeAlpha:strokeAlpha strokeColor:strokeColor strokeWidth:strokeWidth id:id type:@"polyline" count:count];
     free(coord);
-    return [RCTMGLAnnotationPolyline polylineAnnotation:coord strokeAlpha:strokeAlpha strokeColor:strokeColor strokeWidth:strokeWidth id:id type:@"polyline" count:count];
+    return polyline;
 }
 
 NSObject *convertObjectToPolygon (NSObject *annotationObject)
@@ -537,8 +537,8 @@ NSObject *convertObjectToPolygon (NSObject *annotationObject)
             count++;
         }
     }
-
+    RCTMGLAnnotationPolygon *polygon = [RCTMGLAnnotationPolygon polygonAnnotation:coord fillAlpha:fillAlpha fillColor:fillColor strokeColor:strokeColor strokeAlpha:strokeAlpha id:id type:@"polygon" count:count];
     free(coord);
-    return [RCTMGLAnnotationPolygon polygonAnnotation:coord fillAlpha:fillAlpha fillColor:fillColor strokeColor:strokeColor strokeAlpha:strokeAlpha id:id type:@"polygon" count:count];
+    return polygon;
 }
 @end
