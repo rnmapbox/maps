@@ -1,3 +1,8 @@
+#v3.2.1
+
+- [Android] Fixed an issue in react-native v0.19.0 that caused the map to be blank on startup
+- [iOS] Fixed an issue which caused a polyline to add a point at `0,0`
+
 #v3.2.0
 
 #### *Note, there is a new (easier) install process for iOS. See updated [install.md](https://github.com/mapbox/react-native-mapbox-gl/blob/71298a88bba3f7b5d79e6bf1011dc8fe913b0750/ios/install.md)*
