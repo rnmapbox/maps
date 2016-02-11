@@ -1,3 +1,7 @@
+#v3.2.2
+
+- [iOS] Upgrades to [v3.1.1-pre.1 Mapbox iOS SDK](https://github.com/mapbox/mapbox-gl-native/releases/tag/ios-v3.1.1-pre.1) internally
+
 #v3.2.1
 
 - [Android] Fixed an issue in react-native v0.19.0 that caused the map to be blank on startup
