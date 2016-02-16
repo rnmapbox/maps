@@ -1,3 +1,8 @@
+#v3.2.3
+
+- [iOS] Upgrades to [v3.1.1 Mapbox iOS SDK](https://github.com/mapbox/mapbox-gl-native/releases/tag/ios-v3.1.1) internally
+
+
 #v3.2.2
 
 - [iOS] Upgrades to [v3.1.1-pre.1 Mapbox iOS SDK](https://github.com/mapbox/mapbox-gl-native/releases/tag/ios-v3.1.1-pre.1) internally
