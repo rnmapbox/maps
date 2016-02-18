@@ -2,7 +2,7 @@
 
 _A React Native component for building maps with the [Mapbox iOS SDK](https://www.mapbox.com/ios-sdk/) and [Mapbox Android SDK](https://www.mapbox.com/android-sdk/)_
 
-[![npm version](https://badge.fury.io/js/react-native-mapbox-gl.svg)](https://badge.fury.io/js/react-native-mapbox-gl)
+[![npm version](https://badge.fury.io/js/react-native-mapbox-gl.svg)](https://badge.fury.io/js/react-native-mapbox-gl) [![Circle CI](https://circleci.com/gh/mapbox/react-native-mapbox-gl/tree/master.svg?style=svg)](https://circleci.com/gh/mapbox/react-native-mapbox-gl/tree/master)
 
 ```
 npm install react-native-mapbox-gl --save
