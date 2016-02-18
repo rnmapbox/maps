@@ -1,6 +1,7 @@
-#3.2.4
+#4.0.0
 
 - [iOS] Fixes installation issues [#270](https://github.com/mapbox/react-native-mapbox-gl/issues/270)
+- `styleUrl` is now `styleURL`
 
 #v3.2.3
 
