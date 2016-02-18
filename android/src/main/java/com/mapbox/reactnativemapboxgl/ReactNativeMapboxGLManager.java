@@ -52,7 +52,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
     public static final String PROP_ONUSER_LOCATION_CHANGE = "onUserLocationChange";
     public static final String PROP_ROTATION_ENABLED = "rotateEnabled";
     public static final String PROP_SCROLL_ENABLED = "scrollEnabled";
-    public static final String PROP_USER_LOCATON = "showsUserLocation";
+    public static final String PROP_USER_LOCATION = "showsUserLocation";
     public static final String PROP_STYLE_URL = "styleUrl";
     public static final String PROP_USER_TRACKING_MODE = "userTrackingMode";
     public static final String PROP_ZOOM_ENABLED = "zoomEnabled";
@@ -305,7 +305,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         view.setRotateEnabled(value);
     }
 
-    @ReactProp(name = PROP_USER_LOCATON, defaultBoolean = true)
+    @ReactProp(name = PROP_USER_LOCATION, defaultBoolean = true)
     public void setMyLocationEnabled(MapView view, Boolean value) {
         view.setMyLocationEnabled(value);
     }

@@ -126,7 +126,7 @@ RCT_EXPORT_MODULE();
         if ([id length] != 0) {
             [_annotations setObject:annotation forKey:id];
         } else {
-            RCTLogError(@"field `id` is required on all annotation");
+            RCTLogError(@"field `id` is required on all annotations");
         }
         [_map addAnnotation:annotation];
     }
