@@ -30,18 +30,6 @@ node_modules/
 npm-debug.log
 
 # project specific
-libMapboxGL.a
-MapboxGL.bundle/
-MapboxGL.h
-MGLAnnotation.h
-MGLMapboxEvents.h
-MGLMapView+IBAdditions.h
-MGLMapView.h
-MGLMetricsLocationManager.h
-MGLTypes.h
-MGLUserLocation.h
-MGLAccountManager.h
-MGLMapView_Private.h
 android/.gradle/
 android/.idea/
 android/android.iml
