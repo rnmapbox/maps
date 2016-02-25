@@ -8,7 +8,7 @@ npm install react-native-mapbox-gl --save
 ```
 
 1. In the Xcode's `Project navigator`, right click on project's name ➜ `Add Files to <...>`. Add `node_modules/react-native-mapbox-gl/ios/RCTMapboxGL.xcodeproj` ![](https://cldup.com/DTD2UZMYu5.png)
-1. Select your project in the `Project navigator`. Click `General` tab then add `node_modules/react-native-mapbox-gl/ios/Mapbox.framework` to `Embedded Libraries`. :collision: **Important, make sure you're adding it to general -> `Embedded Libraries` :collision:** ![](https://cldup.com/s4U3JfS_-l.png)
+1. Select your project in the `Project navigator`. Click `General` tab then add `node_modules/react-native-mapbox-gl/ios/Mapbox.framework` to `Embedded Binaries`. :collision: **Important, make sure you're adding it to general -> `Embedded Binaries` :collision:** ![](https://cldup.com/s4U3JfS_-l.png)
 1. In the `Build Phases` tab, click the plus sign and then `New Run Script Phase` ![](https://cldup.com/jgt8p_dHjD.png)
 1. Open the newly added `Run Script` and paste (Only necessary when submitting to the app store, but a good idea to add this now):
 ```bash
