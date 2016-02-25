@@ -52,6 +52,7 @@ These methods require you to use `MapboxGLMap.Mixin` to access the methods. Each
 | `setZoomLevelAnimated` | `mapViewRef`, `zoomLevel` | Zooms the map to a new zoom level
 | `setCenterCoordinateAnimated` | `mapViewRef`, `latitude`, `longitude` | Moves the map to a new coordinate. Note, the zoom level stay at the current zoom level
 | `setCenterCoordinateZoomLevelAnimated` | `mapViewRef`, `latitude`, `longitude`, `zoomLevel` | Moves the map to a new coordinate and zoom level
+| `setCameraAnimated` | `mapViewRef`, `latitude`, `longitude`, `fromDistance`, `pitch`, `heading`, `duration` | Sets viewing angle on the map
 | `addAnnotations` | `mapViewRef`, `` (array of annotation objects, see [#annotations](https://github.com/bsudekum/react-native-mapbox-gl/blob/master/API.md#annotations)) | Adds annotation(s) to the map without redrawing the map. Note, this will remove all previous annotations from the map.
 | `selectAnnotationAnimated` | `mapViewRef`, `marker id` | Open the callout of the selected annotation. This method requires that you supply an id to an annotation when creating. If 2 annotations have the same id, only the first annotation will be selected. Only works on annotation `type = 'point'``.
 | `updateAnnotation`  | `mapViewRef`, `annotation object` | Replace annotation if it  exists on the map. This check happens based on the `id` of the object being passed in. The annotation will still be added if no previous one exists.

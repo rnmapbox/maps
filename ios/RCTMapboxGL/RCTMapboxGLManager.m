@@ -94,12 +94,12 @@ RCT_EXPORT_METHOD(getCenterCoordinateZoomLevel:(nonnull NSNumber *)reactTag
         NSMutableDictionary* callbackDict = [NSMutableDictionary new];
         CLLocationCoordinate2D region = [mapView centerCoordinate];
         double zoom = [mapView zoomLevel];
-        
+
         [callbackDict setValue:@(region.latitude) forKey:@"latitude"];
         [callbackDict setValue:@(region.longitude) forKey:@"longitude"];
         [callbackDict setValue:@(region.longitude) forKey:@"longitude"];
         [callbackDict setValue:@(zoom) forKey:@"zoom"];
-        
+
         callback(@[callbackDict]);
     }];
 }
@@ -111,16 +111,15 @@ RCT_EXPORT_METHOD(getDirection:(nonnull NSNumber *)reactTag
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         NSMutableDictionary* callbackDict = [NSMutableDictionary new];
         double direction = [mapView direction];
-        
+
         [callbackDict setValue:@(direction) forKey:@"direction"];
-        
+
         callback(@[callbackDict]);
     }];
 }
 
-
-
-RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL) {
+RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL)
+{
     if ([json isKindOfClass:[NSArray class]]) {
         NSMutableArray* annotations = [NSMutableArray array];
         id annotationObject;
@@ -208,6 +207,25 @@ RCT_EXPORT_METHOD(setCenterCoordinateZoomLevelAnimated:(nonnull NSNumber *)react
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             [mapView setCenterCoordinateZoomLevelAnimated:CLLocationCoordinate2DMake(latitude, longitude) zoomLevel:zoomLevel];
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(setCameraAnimated:(nonnull NSNumber *)reactTag
+                  latitude:(float) latitude
+                  longitude:(float) longitude
+                  fromDistance:(int) fromDistance
+                  pitch:(int) pitch
+                  heading:(int) heading
+                  duration:(int) duration)
+{
+    CLLocationCoordinate2D center = CLLocationCoordinate2DMake(latitude, longitude);
+    MGLMapCamera *camera = [MGLMapCamera cameraLookingAtCenterCoordinate:center fromDistance:fromDistance pitch:pitch heading:heading];
+
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
+        RCTMapboxGL *mapView = viewRegistry[reactTag];
+        if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
+            [mapView setCameraAnimated:camera withDuration:duration animationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
         }
     }];
 }
