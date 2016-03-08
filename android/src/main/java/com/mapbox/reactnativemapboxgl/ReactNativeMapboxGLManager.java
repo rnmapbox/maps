@@ -275,8 +275,8 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
             public void onMapLongClick(@Nullable LatLng location) {
                 WritableMap event = Arguments.createMap();
                 WritableMap loc = Arguments.createMap();
-                loc.putDouble("latitude", view.getCenterCoordinate().getLatitude());
-                loc.putDouble("longitude", view.getCenterCoordinate().getLongitude());
+                loc.putDouble("latitude", location.getLatitude());
+                loc.putDouble("longitude", location.getLongitude());
                 event.putMap("src", loc);
                 ReactContext reactContext = (ReactContext) view.getContext();
                 reactContext
