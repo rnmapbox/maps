@@ -44,6 +44,9 @@ var MapMixins = {
   getDirection(mapRef, callback) {;
     NativeModules.MapboxGLManager.getDirection(React.findNodeHandle(this.refs[mapRef]), callback);
   },
+  getBounds(mapRef, callback) {
+    NativeModules.MapboxGLManager.getBounds(React.findNodeHandle(this.refs[mapRef]), callback);
+  },
   mapStyles: NativeModules.MapboxGLManager.mapStyles,
   userTrackingMode: NativeModules.MapboxGLManager.userTrackingMode
 };

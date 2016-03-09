@@ -36,6 +36,7 @@ import java.net.URL;
 import java.net.HttpURLConnection;
 import android.graphics.drawable.BitmapDrawable;
 import javax.annotation.Nullable;
+import android.graphics.PointF;
 
 public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
 
@@ -395,6 +396,21 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
         callbackDict.putDouble("zoomLevel", center.zoom);
 
         return callbackDict;
+    }
+
+    public WritableMap getBounds(MapView view) {
+      WritableMap callbackDict = Arguments.createMap();
+      int viewportWidth = view.getWidth();
+      int viewportHeight = view.getHeight();
+      if (viewportWidth > 0 && viewportHeight > 0) {
+        LatLng ne = view.fromScreenLocation(new PointF(viewportWidth, 0));
+        LatLng sw = view.fromScreenLocation(new PointF(0, viewportHeight));
+        callbackDict.putDouble("latNE", ne.getLatitude());
+        callbackDict.putDouble("lngNE", ne.getLongitude());
+        callbackDict.putDouble("latSW", sw.getLatitude());
+        callbackDict.putDouble("lngSW", sw.getLongitude());
+      }
+      return callbackDict;
     }
 
     public MapView getMapView() {

@@ -133,6 +133,12 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         successCallback.invoke(location);
     }
 
+    @ReactMethod
+    public void getBounds(int mapRef, Callback successCallback) {
+      WritableMap bounds = aPackage.getManager().getBounds(aPackage.getManager().getMapView());
+      successCallback.invoke(bounds);
+    }
+
     public void setPackage(ReactNativeMapboxGLPackage aPackage) {
         this.aPackage = aPackage;
     }
