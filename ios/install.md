@@ -15,6 +15,10 @@ npm install react-native-mapbox-gl --save
 
 2: Select your project in the `Project navigator`. Click `General` tab then add `node_modules/react-native-mapbox-gl/ios/Mapbox.framework` to `Embedded Binaries`. :collision: **Important, make sure you're adding it to general -> `Embedded Binaries` :collision:**
 
+You'll need to click 'Add other' to open the file browser and select Mapbox.framework.
+
+![](https://dl.dropboxusercontent.com/s/7bjl6hul1q955o0/2016-03-14%20at%2012.57%20PM.png)
+
 ![](https://cldup.com/s4U3JfS_-l.png)
 
 3: In the `Build Phases` tab, click the plus sign and then `New Run Script Phase`
