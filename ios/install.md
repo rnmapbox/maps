@@ -49,4 +49,12 @@ In `Build Phases` tab, click `Link Binaries With Libraries` and add `libRCTMapbo
 
 ![](https://cldup.com/FuOlGOwAli.png)
 
-### 5: Add to project, [see example](./example.js)
+### 5: Update minimum iOS version to 8.0
+
+React Native Mapbox GL doesn't support iOS version less than 8.0. Under **Targets** ⇢ **Deployment Info**, set the minimum version to 8.0.
+
+![](https://dl.dropboxusercontent.com/s/yu3zyjy59p44cxb/2016-03-14%20at%201.15%20PM.png)
+
+### 6: Add to project, [see example](./example.js)
+
+If you already have an iOS Simulator running from before you followed these steps, you'll need to rebuild the project from XCode - automatic refresh won't bring in the changes you made to this build process.
