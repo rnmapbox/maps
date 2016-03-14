@@ -10,6 +10,12 @@ This project is **experimental**. Mapbox does not officially support React Nativ
 
 ## Installation
 
+**Dependencies**
+
+* node
+* npm
+* [React Native](https://facebook.github.io/react-native/) >= 0.15.0
+
 ```
 npm install react-native-mapbox-gl --save
 ```
