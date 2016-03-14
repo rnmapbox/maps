@@ -355,11 +355,7 @@ RCT_EXPORT_MODULE();
 - (BOOL)mapView:(RCTMapboxGL *)mapView annotationCanShowCallout:(id <MGLAnnotation>)annotation {
     NSString *title = [(RCTMGLAnnotation *) annotation title];
     NSString *subtitle = [(RCTMGLAnnotation *) annotation subtitle];
-    if ([title length] != 0 || [subtitle length] != 0 ) {
-        return YES;
-    } else {
-        return NO;
-    }
+    return ([title length] != 0 || [subtitle length] != 0);
 }
 
 -(CLLocationCoordinate2D)centerCoordinate {
