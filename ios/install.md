@@ -33,4 +33,4 @@ npm install react-native-mapbox-gl --save
 
 ![](https://cldup.com/FuOlGOwAli.png)
 
-6. Add to project, [see example](./example.js)
+6: Add to project, [see example](./example.js)
