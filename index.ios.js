@@ -73,6 +73,9 @@ var MapView = React.createClass({
   _onLongPress(event: Event) {
     if (this.props.onLongPress) this.props.onLongPress(event.nativeEvent.src);
   },
+  _onTap(event: Event) {
+    if (this.props.onTap) this.props.onTap(event.nativeEvent.src);
+  },
   _onFinishLoadingMap(event: Event) {
     if (this.props.onFinishLoadingMap) this.props.onFinishLoadingMap(event.nativeEvent.src);
   },
@@ -133,6 +136,7 @@ var MapView = React.createClass({
     onStartLoadingMap: React.PropTypes.func,
     onLocateUserFailed: React.PropTypes.func,
     onLongPress: React.PropTypes.func,
+    onTap: React.PropTypes.func,
     contentInset: React.PropTypes.array,
     userLocationVerticalAlignment: React.PropTypes.number
   },
@@ -165,6 +169,7 @@ var MapView = React.createClass({
         onRightAnnotationTapped={this._onRightAnnotationTapped}
         onUpdateUserLocation={this._onUpdateUserLocation}
         onLongPress={this._onLongPress}
+        onTap={this._onTap}
         onFinishLoadingMap={this._onFinishLoadingMap}
         onStartLoadingMap={this._onStartLoadingMap}
         onLocateUserFailed={this._onLocateUserFailed} />

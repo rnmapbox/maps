@@ -101,11 +101,19 @@ RCT_EXPORT_MODULE();
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     [self addGestureRecognizer:longPress];
 
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+    singleTap.delegate = self;
+    [_map addGestureRecognizer:singleTap];
+
     [self updateMap];
     [self addSubview:_map];
     [self layoutSubviews];
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
+}
 
 - (void)layoutSubviews
 {
