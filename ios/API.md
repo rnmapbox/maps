@@ -169,3 +169,44 @@ annotations: [{
   "id": "route"
 }]
 ```
+
+
+### Offline
+
+There are 3 main methods for interacting with the offline API:
+* `addPackForRegion` - creates an offline pack
+* `getPacks` - returns an array of all offline packs on the device
+* `removePack` - removes a single pack
+
+To create a pack:
+
+```js
+this.addPackForRegion(mapRef, {
+    name: 'test', //required
+    type: 'bbox', // required, only type currently supported`
+    metadata: { // required. You can put any information in here that may be useful to you. Can be empty if no metadata is needed
+        date: new Date(),
+        foo: 'bar'
+    },
+    bounds: bounds, // latitudeSW, longitudeSW, latitudeNE, longitudeNE
+    minZoomLevel: 10,
+    maxZoomLevel: 13,
+    styleURL: this.mapStyles.emerald // valid styleURL
+});
+```
+
+You can view the progress of a pack that is downloading by listening on `onOfflineProgressDidChange`.
+
+To delete a pack, provide the `name` of the pack to delete
+```js
+this.removePack(mapRef, 'test', (err, info)=> {
+    if (err) console.log(err);
+    if (info) {
+        console.log('Deleted', info.deleted);
+    } else {
+        console.log('No packs to delete'); // There are no packs on the device
+    }
+});
+```
+
+Check out our [help page](https://www.mapbox.com/help/mobile-offline/) for more information on offline.

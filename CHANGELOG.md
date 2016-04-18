@@ -1,3 +1,15 @@
+#4.1.0
+
+## Offline!
+
+Offline if iOS is here! The API allows developers to specify a bounding box, min/max zoom level which will be used to download all assets to the device in the background. Once downloaded, the user can go fully offline and move their map within the boundaries specified without loading tiles from the internet.
+
+**Be sure to check out the offline [API documentation](/ios/API.md), [walkthrough](/ios/API.md#offline) and [example](/ios/example.js#L166-L191) before starting.**
+
+- [iOS] Adds `getBounds`
+- [iOS] Adds `onTap` event handler
+- [Android] Adds support for local images
+
 #4.0.0
 
 - [iOS] Fixes installation issues [#270](https://github.com/mapbox/react-native-mapbox-gl/issues/270)
