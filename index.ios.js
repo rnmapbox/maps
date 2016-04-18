@@ -4,6 +4,15 @@ var React = require('react-native');
 var { NativeModules, requireNativeComponent } = React;
 
 var MapMixins = {
+  addPackForRegion(mapRef, options) {
+    NativeModules.MapboxGLManager.addPackForRegion(React.findNodeHandle(this.refs[mapRef]), options);
+  },
+  getPacks(mapRef, callback) {
+    NativeModules.MapboxGLManager.getPacks(React.findNodeHandle(this.refs[mapRef]), callback);
+  },
+  removePack(mapRef, packName, callback) {
+    NativeModules.MapboxGLManager.removePack(React.findNodeHandle(this.refs[mapRef]), packName, callback);
+  },
   setDirectionAnimated(mapRef, heading) {
     NativeModules.MapboxGLManager.setDirectionAnimated(React.findNodeHandle(this.refs[mapRef]), heading);
   },
@@ -46,9 +55,13 @@ var MapMixins = {
   getDirection(mapRef, callback) {
     NativeModules.MapboxGLManager.getDirection(React.findNodeHandle(this.refs[mapRef]), callback);
   },
+  getBounds(mapRef, callback) {
+    NativeModules.MapboxGLManager.getBounds(React.findNodeHandle(this.refs[mapRef]), callback);
+  },
   mapStyles: NativeModules.MapboxGLManager.mapStyles,
   userTrackingMode: NativeModules.MapboxGLManager.userTrackingMode,
-  userLocationVerticalAlignment: NativeModules.MapboxGLManager.userLocationVerticalAlignment
+  userLocationVerticalAlignment: NativeModules.MapboxGLManager.userLocationVerticalAlignment,
+  unknownResourceCount: NativeModules.MapboxGLManager.unknownResourceCount
 };
 
 var MapView = React.createClass({
@@ -84,6 +97,15 @@ var MapView = React.createClass({
   },
   _onLocateUserFailed(event: Event) {
     if (this.props.onLocateUserFailed) this.props.onLocateUserFailed(event.nativeEvent.src);
+  },
+  _onOfflineProgressDidChange(event: Event) {
+    if (this.props.onOfflineProgressDidChange) this.props.onOfflineProgressDidChange(event.nativeEvent.src);
+  },
+  _onOfflineMaxAllowedMapboxTiles(event: Event) {
+    if (this.props.onOfflineMaxAllowedMapboxTiles) this.props.onOfflineMaxAllowedMapboxTiles(event.nativeEvent.src);
+  },
+  _onOfflineDidRecieveError(event: Event) {
+    if (this.props.onOfflineDidRecieveError) this.props.onOfflineDidRecieveError(event.nativeEvent.src);
   },
   propTypes: {
     showsUserLocation: React.PropTypes.bool,
@@ -138,7 +160,10 @@ var MapView = React.createClass({
     onLongPress: React.PropTypes.func,
     onTap: React.PropTypes.func,
     contentInset: React.PropTypes.array,
-    userLocationVerticalAlignment: React.PropTypes.number
+    userLocationVerticalAlignment: React.PropTypes.number,
+    onOfflineProgressDidChange: React.PropTypes.func,
+    onOfflineMaxAllowedMapboxTiles: React.PropTypes.func,
+    onOfflineDidRecieveError: React.PropTypes.func
   },
   getDefaultProps() {
     return {
@@ -172,7 +197,10 @@ var MapView = React.createClass({
         onTap={this._onTap}
         onFinishLoadingMap={this._onFinishLoadingMap}
         onStartLoadingMap={this._onStartLoadingMap}
-        onLocateUserFailed={this._onLocateUserFailed} />
+        onLocateUserFailed={this._onLocateUserFailed}
+        onOfflineProgressDidChange={this._onOfflineProgressDidChange}
+        onOfflineMaxAllowedMapboxTiles={this._onOfflineMaxAllowedMapboxTiles}
+        onOfflineDidRecieveError={this._onOfflineDidRecieveError} />
     );
   }
 });

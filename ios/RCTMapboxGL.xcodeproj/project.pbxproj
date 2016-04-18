@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C5AF3B8C1C5A8C3D0003BF64 /* Mapbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5AF3B8B1C5A8C3D0003BF64 /* Mapbox.framework */; };
 		C5DBB3441AF2EF2B00E611A9 /* RCTMapboxGL.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C5DBB3431AF2EF2B00E611A9 /* RCTMapboxGL.h */; };
 		C5DBB3461AF2EF2B00E611A9 /* RCTMapboxGL.m in Sources */ = {isa = PBXBuildFile; fileRef = C5DBB3451AF2EF2B00E611A9 /* RCTMapboxGL.m */; };
 		C5DBB34C1AF2EF2B00E611A9 /* libRCTMapboxGL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5DBB3401AF2EF2B00E611A9 /* libRCTMapboxGL.a */; };
@@ -38,7 +37,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		C5AF3B8B1C5A8C3D0003BF64 /* Mapbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mapbox.framework; sourceTree = "<group>"; };
 		C5DBB3401AF2EF2B00E611A9 /* libRCTMapboxGL.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTMapboxGL.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5DBB3431AF2EF2B00E611A9 /* RCTMapboxGL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMapboxGL.h; sourceTree = "<group>"; };
 		C5DBB3451AF2EF2B00E611A9 /* RCTMapboxGL.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMapboxGL.m; sourceTree = "<group>"; };
@@ -53,7 +51,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C5AF3B8C1C5A8C3D0003BF64 /* Mapbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,7 +68,6 @@
 		C5DBB3371AF2EF2B00E611A9 = {
 			isa = PBXGroup;
 			children = (
-				C5AF3B8B1C5A8C3D0003BF64 /* Mapbox.framework */,
 				C5DBB3421AF2EF2B00E611A9 /* RCTMapboxGL */,
 				C5DBB34F1AF2EF2B00E611A9 /* RCTMapboxGLTests */,
 				C5DBB3411AF2EF2B00E611A9 /* Products */,
