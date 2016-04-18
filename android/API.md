@@ -69,15 +69,13 @@ You can change the `styleURL` to any valid GL stylesheet, here are a few:
   "strokeWidth": "optional number. Only used for type=poyline. Controls line width",
   "id": "optional string, unique identifier.",
   "annotationImage": {
-    "url": "Optional. Either remote image or specify via 'image!yourImage.png'",
+    "url": "Optional. Either remote image or specify via 'image!yourImage'",
     "height": "required if url specified",
     "width": "required if url specified"
   },
 }]
 ```
 _*[Valid colors can be seen here](http://developer.android.com/reference/android/graphics/Color.html#parseColor%28java.lang.String%29)_
-
-**For adding local images via `image!yourImage.png` see [adding static resources to your app using Images.xcassets  docs](https://facebook.github.io/react-native/docs/image.html#adding-static-resources-to-your-app-using-images-xcassets)**.
 
 #### Example
 ```json
