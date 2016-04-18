@@ -68,6 +68,11 @@ You can change the `styleURL` to any valid GL stylesheet, here are a few:
   "strokeColor": "optional string hex color including #, used for type=polygon and type=polyline*",
   "strokeWidth": "optional number. Only used for type=poyline. Controls line width",
   "id": "optional string, unique identifier.",
+  "annotationImage": {
+    "url": "Optional. Either remote image or specify via 'image!yourImage.png'",
+    "height": "required if url specified",
+    "width": "required if url specified"
+  },
 }]
 ```
 _*[Valid colors can be seen here](http://developer.android.com/reference/android/graphics/Color.html#parseColor%28java.lang.String%29)_
