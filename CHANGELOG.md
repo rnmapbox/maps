@@ -2,7 +2,7 @@
 
 ## Offline!
 
-Offline if iOS is here! The API allows developers to specify a bounding box, min/max zoom level which will be used to download all assets to the device in the background. Once downloaded, the user can go fully offline and move their map within the boundaries specified without loading tiles from the internet.
+Offline for iOS is here! The API allows developers to specify a bounding box, min/max zoom level which will be used to download all assets to the device in the background. Once downloaded, the user can go fully offline and move their map within the boundaries specified without loading tiles from the internet.
 
 **Be sure to check out the offline [API documentation](/ios/API.md), [walkthrough](/ios/API.md#offline) and [example](/ios/example.js#L166-L191) before starting.**
 
