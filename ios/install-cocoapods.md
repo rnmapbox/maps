@@ -11,7 +11,7 @@ project, you can also add the react-native-mapbox-gl project to your Podfile.
 4. Open your Xcode project and ensure that the "Build Settings" parameter
    "Other linker flags" (`OTHER_LDFLAGS`) contains the CocoaPods generated
    linker options!
-   * If you have used `react-natve init` to setup your project you can just
+   * If you have used `react-native init` to setup your project you can just
      remove this parameter. Just select the line and press the backspace key.
    * Alternative, if you setup your Xcode project yourself, ensure that the
      parent configuration was included with a `$(inherited)` variable.
