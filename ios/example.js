@@ -169,6 +169,7 @@ var MapExample = React.createClass({
             bounds: [0, 0, 0, 0],
             minZoomLevel: 0,
             maxZoomLevel: 0,
+            metadata: {},
             styleURL: this.mapStyles.emerald
           })}>
           Create offline pack
