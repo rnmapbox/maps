@@ -153,7 +153,15 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
                                 image = drawableFromUrl(mapView, annotationURL);
                             }
                             IconFactory iconFactory = view.getIconFactory();
-                            Icon icon = iconFactory.fromDrawable(image);
+                            Icon icon;
+                            if (annotationImage.hasKey("height") && annotationImage.hasKey("width")) {
+                                float scale = view.getResources().getDisplayMetrics().density;
+                                int height = Math.round((float)annotationImage.getInt("height") * scale);
+                                int width = Math.round((float)annotationImage.getInt("width") * scale);
+                                icon = iconFactory.fromDrawable(image, width, height);
+                            } else {
+                                icon = iconFactory.fromDrawable(image);
+                            }
                             marker.icon(icon);
                         } catch (Exception e) {
                             e.printStackTrace();
