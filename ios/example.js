@@ -1,15 +1,15 @@
 'use strict';
 
-var React = require('react-native');
+import React, { Component } from 'react';
 var Mapbox = require('react-native-mapbox-gl');
 var mapRef = 'mapRef';
-var {
+import {
   AppRegistry,
   StyleSheet,
   Text,
   StatusBar,
   View
-} = React;
+} from 'react-native';
 
 var MapExample = React.createClass({
   mixins: [Mapbox.Mixin],
@@ -87,6 +87,9 @@ var MapExample = React.createClass({
   },
   onOfflineProgressDidChange(progress) {
     console.log(progress);
+  },
+  onOfflineMaxAllowedMapboxTiles(hitLimit) {
+    console.log(hitLimit);
   },
   render() {
     StatusBar.setHidden(true);
@@ -210,7 +213,9 @@ var MapExample = React.createClass({
           onRightAnnotationTapped={this.onRightAnnotationTapped}
           onUpdateUserLocation={this.onUpdateUserLocation}
           onLongPress={this.onLongPress}
-          onTap={this.onTap} />
+          onTap={this.onTap}
+          onOfflineProgressDidChange={this.onOfflineProgressDidChange}
+          onOfflineMaxAllowedMapboxTiles={this.onOfflineMaxAllowedMapboxTiles} />
       </View>
     );
   }

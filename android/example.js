@@ -1,14 +1,14 @@
-'use strict';
 
-var React = require('react-native');
+import React, { Component } from 'react';
 var Mapbox = require('react-native-mapbox-gl');
-var {
+var mapRef = 'mapRef';
+import {
   AppRegistry,
   StyleSheet,
-  View,
-  Text
-} = React;
-var mapRef = 'map';
+  Text,
+  StatusBar,
+  View
+} from 'react-native';
 
 var MapExample = React.createClass({
   mixins: [Mapbox.Mixin],
