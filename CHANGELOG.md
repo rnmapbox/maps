@@ -1,3 +1,9 @@
+#v4.1.1
+
+* [Android] Fixes `Scrollable` error
+* [Android] You can now properly set the size of an annotation image
+* [Android & iOS] Allows for compatibility with react native v0.25+
+
 #4.1.0
 
 ## Offline!
