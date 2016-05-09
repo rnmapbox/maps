@@ -116,12 +116,12 @@ RCT_EXPORT_METHOD(getBounds:(nonnull NSNumber *)reactTag
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         MGLCoordinateBounds bounds = [mapView visibleCoordinateBounds];
         NSMutableArray *callbackArray = [[NSMutableArray alloc] init];
-        
+
         [callbackArray addObject:@(bounds.sw.latitude)];
         [callbackArray addObject:@(bounds.sw.longitude)];
         [callbackArray addObject:@(bounds.ne.latitude)];
         [callbackArray addObject:@(bounds.ne.longitude)];
-        
+
         callback(@[callbackArray]);
     }];
 }
@@ -194,7 +194,7 @@ RCT_EXPORT_METHOD(addPackForRegion:(nonnull NSNumber *)reactTag
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
-            
+
             if ([options objectForKey:@"name"] == nil) {
                 return RCTLogError(@"Name is required.");
             }
@@ -216,7 +216,7 @@ RCT_EXPORT_METHOD(addPackForRegion:(nonnull NSNumber *)reactTag
             if (!([[options objectForKey:@"type"] isEqualToString:@"bbox"])) {
                 return RCTLogError(@"Offline type %@ not supported. Only type `bbox` supported.", [options valueForKey:@"type"]);
             }
-            
+
             NSArray *b = [options valueForKey:@"bounds"];
             MGLCoordinateBounds bounds = MGLCoordinateBoundsMake(CLLocationCoordinate2DMake([b[0] floatValue], [b[1] floatValue]), CLLocationCoordinate2DMake([b[2] floatValue], [b[3] floatValue]));
             [mapView createOfflinePack:bounds styleURL:[NSURL URLWithString:[options valueForKey:@"styleURL"]] fromZoomLevel:[[options valueForKey:@"minZoomLevel"] floatValue] toZoomLevel:[[options valueForKey:@"maxZoomLevel"] floatValue] name:[options valueForKey:@"name"] type:[options valueForKey:@"type"] metadata:[options valueForKey:@"metadata"]];
@@ -232,9 +232,9 @@ RCT_EXPORT_METHOD(getPacks:(nonnull NSNumber *)reactTag
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             RCTMapboxGL *mapView = viewRegistry[reactTag];
             NSMutableArray* callbackArray = [NSMutableArray new];
-            
+
             MGLOfflinePack *packs = [MGLOfflineStorage sharedOfflineStorage].packs;
-            
+
             for (MGLOfflinePack *pack in packs) {
                 NSMutableDictionary *packDict = [NSMutableDictionary new];
                 NSMutableDictionary *userInfo = [[NSKeyedUnarchiver unarchiveObjectWithData:pack.context] mutableCopy];
@@ -259,10 +259,10 @@ RCT_EXPORT_METHOD(removePack:(nonnull NSNumber *)reactTag
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             RCTMapboxGL *mapView = viewRegistry[reactTag];
-            
+
             MGLOfflinePack *packs = [MGLOfflineStorage sharedOfflineStorage].packs;
             MGLOfflinePack *tempPack;
-            
+
             for (MGLOfflinePack *pack in packs) {
                 NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
                 if (userInfo[@"name"] == packName) {
@@ -270,13 +270,13 @@ RCT_EXPORT_METHOD(removePack:(nonnull NSNumber *)reactTag
                     break;
                 }
             }
-        
+
             if (tempPack == nil) {
                 return callback(@[[NSNull null]]);
             }
-            
+
             NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:tempPack.context];
-            
+
             [[MGLOfflineStorage sharedOfflineStorage] removePack:tempPack withCompletionHandler:^(NSError * _Nullable error) {
                 if (error != nil) {
                     RCTLogError(@"Error: %@", error.localizedFailureReason);
@@ -315,12 +315,13 @@ RCT_EXPORT_METHOD(setDirectionAnimated:(nonnull NSNumber *)reactTag
 
 RCT_EXPORT_METHOD(setCenterCoordinateAnimated:(nonnull NSNumber *)reactTag
                   latitude:(float) latitude
-                  longitude:(float) longitude)
+                  longitude:(float) longitude
+                  resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
-            [mapView setCenterCoordinateAnimated:CLLocationCoordinate2DMake(latitude, longitude)];
+            [mapView setCenterCoordinateAnimated:CLLocationCoordinate2DMake(latitude, longitude) resolver:resolve rejecter:reject];
         }
     }];
 }

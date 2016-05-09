@@ -25,7 +25,7 @@ var MapMixins = {
     MapboxGLManager.setZoomLevelAnimated(findNodeHandle(this.refs[mapRef]), zoomLevel);
   },
   setCenterCoordinateAnimated(mapRef, latitude, longitude) {
-    MapboxGLManager.setCenterCoordinateAnimated(findNodeHandle(this.refs[mapRef]), latitude, longitude);
+    return MapboxGLManager.setCenterCoordinateAnimated(findNodeHandle(this.refs[mapRef]), latitude, longitude);
   },
   setCenterCoordinateZoomLevelAnimated(mapRef, latitude, longitude, zoomLevel) {
     MapboxGLManager.setCenterCoordinateZoomLevelAnimated(findNodeHandle(this.refs[mapRef]), latitude, longitude, zoomLevel);

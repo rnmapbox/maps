@@ -109,7 +109,7 @@ RCT_EXPORT_MODULE();
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     singleTap.delegate = self;
     [_map addGestureRecognizer:singleTap];
-    
+
     // Setup offline pack notification handlers.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackProgressDidChange:) name:MGLOfflinePackProgressChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackDidReceiveError:) name:MGLOfflinePackErrorNotification object:nil];
@@ -122,13 +122,13 @@ RCT_EXPORT_MODULE();
 
 -(void)createOfflinePack:(MGLCoordinateBounds)bounds styleURL:(NSURL*)styleURL fromZoomLevel:(double)fromZoomLevel toZoomLevel:(double)toZoomLevel name:(NSString*)name type:(NSString*)type metadata:(NSDictionary *)metadata
 {
-    
+
     id <MGLOfflineRegion> region = [[MGLTilePyramidOfflineRegion alloc] initWithStyleURL:styleURL bounds:bounds fromZoomLevel:fromZoomLevel toZoomLevel:toZoomLevel];
-    
+
     NSMutableDictionary *userInfo = [metadata mutableCopy];
     userInfo[@"name"] = name;
     NSData *context = [NSKeyedArchiver archivedDataWithRootObject:userInfo];
-    
+
     [[MGLOfflineStorage sharedOfflineStorage] addPackForRegion:region withContext:context completionHandler:^(MGLOfflinePack *pack, NSError *error) {
         if (error != nil) {
             RCTLogError(@"Error: %@", error.localizedFailureReason);
@@ -314,9 +314,11 @@ RCT_EXPORT_MODULE();
     [_map setZoomLevel:zoomLevel animated:YES];
 }
 
--(void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)coordinates
+-(void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)coordinates resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject
 {
-    [_map setCenterCoordinate:coordinates animated:YES];
+    [_map setCenterCoordinate:coordinates zoomLevel:_map.zoomLevel direction:_map.direction animated:YES completionHandler:^{
+        resolve(@"DONE");
+    }];
 }
 
 -(void)setCenterCoordinateZoomLevelAnimated:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel
@@ -536,11 +538,11 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)offlinePackProgressDidChange:(NSNotification *)notification {
-    
+
     MGLOfflinePack *pack = notification.object;
     NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
     MGLOfflinePackProgress progress = pack.progress;
-    
+
     NSDictionary *event = @{ @"target": self.reactTag,
                              @"src": @{
                                      @"name": userInfo[@"name"],
@@ -550,7 +552,7 @@ RCT_EXPORT_MODULE();
                                      @"maximumResourcesExpected": @(progress.maximumResourcesExpected)
                                      }
                              };
-    
+
     [_eventDispatcher sendInputEventWithName:@"onOfflineProgressDidChange" body:event];
 }
 
@@ -558,7 +560,7 @@ RCT_EXPORT_MODULE();
     MGLOfflinePack *pack = notification.object;
     NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
     uint64_t maximumCount = [notification.userInfo[MGLOfflinePackMaximumCountUserInfoKey] unsignedLongLongValue];
-    
+
     NSDictionary *event = @{ @"target": self.reactTag,
                              @"src": @{
                                      @"name": userInfo[@"name"],
@@ -572,7 +574,7 @@ RCT_EXPORT_MODULE();
     MGLOfflinePack *pack = notification.object;
     NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
     NSError *error = notification.userInfo[MGLOfflinePackErrorUserInfoKey];
-    
+
     NSDictionary *event = @{ @"target": self.reactTag,
                              @"src": @{
                                      @"name": userInfo[@"name"],

@@ -30,7 +30,7 @@
 - (void)setUserTrackingMode:(int)userTrackingMode;
 - (void)setZoomLevelAnimated:(double)zoomLevel;
 - (void)setDirectionAnimated:(int)heading;
-- (void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)coordinates;
+- (void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)coordinates resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject;
 - (void)setCenterCoordinateZoomLevelAnimated:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel;
 - (void)setCameraAnimated:(MGLMapCamera*)camera withDuration:(int)duration animationTimingFunction:(CAMediaTimingFunction*)function;
 - (void)selectAnnotationAnimated:(NSString*)selectedId;
