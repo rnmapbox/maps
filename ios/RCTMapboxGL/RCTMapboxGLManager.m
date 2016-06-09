@@ -265,7 +265,7 @@ RCT_EXPORT_METHOD(removePack:(nonnull NSNumber *)reactTag
 
             for (MGLOfflinePack *pack in packs) {
                 NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
-                if (userInfo[@"name"] == packName) {
+                if ([packName isEqualToString:userInfo[@"name"]]) {
                     tempPack = pack;
                     break;
                 }
