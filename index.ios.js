@@ -71,7 +71,12 @@ var MapMixins = {
 
 var MapView = React.createClass({
   statics: {
-    Mixin: MapMixins
+    Mixin: MapMixins,
+    metricsEnabled: MapboxGLManager.metricsEnabled,
+    setMetricsEnabled(enabled: boolean) {
+      MapView.metricsEnabled = enabled;
+      MapboxGLManager.setMetricsEnabled(enabled);
+    }
   },
   _onRegionChange(event: Event) {
     if (this.props.onRegionChange) this.props.onRegionChange(event.nativeEvent.src);

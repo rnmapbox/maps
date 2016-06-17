@@ -51,6 +51,21 @@ RCT_EXPORT_MODULE();
              ];
 }
 
++ (BOOL)metricsEnabled
+{
+    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+    NSNumber * nr = [ud valueForKey:@"MGLMapboxMetricsEnabled"];
+    if (!nr || ![nr isKindOfClass:[NSNumber class]]) {
+        return YES;
+    }
+    return nr.boolValue;
+}
+
+RCT_EXPORT_METHOD(setMetricsEnabled:(BOOL)enabled)
+{
+    [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:@"MGLMapboxMetricsEnabled"];
+}
+
 - (NSDictionary *)constantsToExport
 {
     return @{
@@ -73,7 +88,8 @@ RCT_EXPORT_MODULE();
                      @"center": @(MGLAnnotationVerticalAlignmentCenter),
                      @"bottom": @(MGLAnnotationVerticalAlignmentBottom)
                      },
-             @"unknownResourceCount": @(UINT64_MAX)
+             @"unknownResourceCount": @(UINT64_MAX),
+             @"metricsEnabled": @([RCTMapboxGLManager metricsEnabled])
              };
 };
 
