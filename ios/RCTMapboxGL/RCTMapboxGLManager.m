@@ -37,6 +37,7 @@ RCT_EXPORT_MODULE();
     return @[
              @"onRegionChange",
              @"onRegionWillChange",
+             @"onChangeUserTrackingMode",
              @"onOpenAnnotation",
              @"onRightAnnotationTapped",
              @"onUpdateUserLocation",

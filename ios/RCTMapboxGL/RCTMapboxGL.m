@@ -296,7 +296,7 @@ RCT_EXPORT_MODULE();
     } else {
         _userTrackingMode = userTrackingMode;
     }
-    [self performSelector:@selector(updateMap) withObject:nil afterDelay:0.2];
+    _map.userTrackingMode = _userTrackingMode;
 }
 
 - (void)setRightCalloutAccessory:(UIButton *)rightCalloutAccessory
@@ -347,6 +347,16 @@ RCT_EXPORT_MODULE();
                                         @"isUpdating": [NSNumber numberWithBool:userLocation.isUpdating]} };
 
     [_eventDispatcher sendInputEventWithName:@"onUpdateUserLocation" body:event];
+}
+
+-(void)mapView:(MGLMapView *)mapView didChangeUserTrackingMode:(MGLUserTrackingMode)mode animated:(BOOL)animated
+{
+    NSDictionary *event = @{ @"target": self.reactTag,
+                             @"src": @{ @"mode": @(mode),
+                                        @"animated": @(animated)
+                                        } };
+    
+    [_eventDispatcher sendInputEventWithName:@"onChangeUserTrackingMode" body:event];
 }
 
 

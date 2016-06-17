@@ -90,6 +90,9 @@ var MapView = React.createClass({
   _onRightAnnotationTapped(event: Event) {
     if (this.props.onRightAnnotationTapped) this.props.onRightAnnotationTapped(event.nativeEvent.src);
   },
+  _onChangeUserTrackingMode(event: Event) {
+    if (this.props.onChangeUserTrackingMode) this.props.onChangeUserTrackingMode(event.nativeEvent.src);
+  },
   _onUpdateUserLocation(event: Event) {
     if (this.props.onUpdateUserLocation) this.props.onUpdateUserLocation(event.nativeEvent.src);
   },
@@ -173,7 +176,8 @@ var MapView = React.createClass({
     userLocationVerticalAlignment: PropTypes.number,
     onOfflineProgressDidChange: PropTypes.func,
     onOfflineMaxAllowedMapboxTiles: PropTypes.func,
-    onOfflineDidRecieveError: PropTypes.func
+    onOfflineDidRecieveError: PropTypes.func,
+    onChangeUserTrackingMode: PropTypes.func
   },
   getDefaultProps() {
     return {
@@ -210,7 +214,8 @@ var MapView = React.createClass({
         onLocateUserFailed={this._onLocateUserFailed}
         onOfflineProgressDidChange={this._onOfflineProgressDidChange}
         onOfflineMaxAllowedMapboxTiles={this._onOfflineMaxAllowedMapboxTiles}
-        onOfflineDidRecieveError={this._onOfflineDidRecieveError} />
+        onOfflineDidRecieveError={this._onOfflineDidRecieveError}
+        onChangeUserTrackingMode={this._onChangeUserTrackingMode} />
     );
   }
 });
