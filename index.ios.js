@@ -4,22 +4,28 @@ import React,  { Component, PropTypes } from 'react';
 import { NativeModules, requireNativeComponent, findNodeHandle } from 'react-native';
 const MapboxGLManager = NativeModules.MapboxGLModuleManager;
 
-class Mapbox extends Component {
-  static mapStyles = MapboxGLManager.mapStyles;
-  static userTrackingMode = MapboxGLManager.userTrackingMode;
-  static userLocationVerticalAlignment = MapboxGLManager.userLocationVerticalAlignment;
-  static unknownResourceCount = MapboxGLManager.unknownResourceCount;
+const { mapStyles, userTrackingMode, userLocationVerticalAlignment, unknownResourceCount } = MapboxGLManager;
 
-  static metricsEnabled = MapboxGLManager.metricsEnabled;
-  static setMetricsEnabled(enabled: boolean) {
-    Mapbox.metricsEnabled = enabled;
-    MapboxGLManager.setMetricsEnabled(enabled);
-  }
+// Metrics
 
-  static setAccessToken(token: string) {
-    MapboxGLManager.setAccessToken(token);
-  }
+let _metricsEnabled = MapboxGLManager.metricsEnabled;
 
+function setMetricsEnabled(enabled: boolean) {
+  _metricsEnabled = enabled;
+  MapboxGLManager.setMetricsEnabled(enabled);
+}
+
+function getMetricsEnabled() {
+  return _metricsEnabled;
+}
+
+// Access token
+
+function setAccessToken(token: string) {
+  MapboxGLManager.setAccessToken(token);
+}
+
+class MapView extends Component {
   // Offline
 
   addPackForRegion(options) {
@@ -239,5 +245,13 @@ class Mapbox extends Component {
   }
 }
 
-const MapboxGLView = requireNativeComponent('RCTMapboxGL', Mapbox);
+const MapboxGLView = requireNativeComponent('RCTMapboxGL', MapView);
+
+const Mapbox = {
+  MapView,
+  mapStyles, userTrackingMode, userLocationVerticalAlignment, unknownResourceCount,
+  getMetricsEnabled, setMetricsEnabled,
+  setAccessToken
+};
+
 module.exports = Mapbox;
