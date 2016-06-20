@@ -138,15 +138,66 @@ RCT_EXPORT_METHOD(setMetricsEnabled:(BOOL)enabled)
 
 // Access token
 
-
 RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (!accessToken || ![accessToken length] || [accessToken isEqual:@"your-mapbox.com-access-token"]) {
+            return;
+        }
         [MGLAccountManager setAccessToken:accessToken];
+        [self initHandlersIfNeeded];
     });
 }
 
 // Offline
+
+- (void)initHandlersIfNeeded
+{
+    if (_hasInitialized) { return; }
+    _hasInitialized = YES;
+    
+    // Setup offline pack notification handlers.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackProgressDidChange:) name:MGLOfflinePackProgressChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackDidReceiveError:) name:MGLOfflinePackErrorNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackDidReceiveMaximumAllowedMapboxTiles:) name:MGLOfflinePackMaximumMapboxTilesReachedNotification object:nil];
+}
+
+- (void)offlinePackProgressDidChange:(NSNotification *)notification {
+    
+    MGLOfflinePack *pack = notification.object;
+    NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
+    MGLOfflinePackProgress progress = pack.progress;
+    
+    NSDictionary *event = @{ @"name": userInfo[@"name"],
+                             @"countOfResourcesCompleted": @(progress.countOfResourcesCompleted),
+                             @"countOfResourcesExpected": @(progress.countOfResourcesExpected),
+                             @"countOfBytesCompleted": @(progress.countOfBytesCompleted),
+                             @"maximumResourcesExpected": @(progress.maximumResourcesExpected) };
+    
+    [_bridge.eventDispatcher sendAppEventWithName:@"MapboxOfflineProgressDidChange" body:event];
+}
+
+- (void)offlinePackDidReceiveMaximumAllowedMapboxTiles:(NSNotification *)notification {
+    MGLOfflinePack *pack = notification.object;
+    NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
+    uint64_t maximumCount = [notification.userInfo[MGLOfflinePackMaximumCountUserInfoKey] unsignedLongLongValue];
+    
+    NSDictionary *event = @{ @"name": userInfo[@"name"],
+                             @"maxTiles": @(maximumCount) };
+    
+    [_bridge.eventDispatcher sendAppEventWithName:@"MapboxOfflineMaxAllowedTiles" body:event];
+}
+
+- (void)offlinePackDidReceiveError:(NSNotification *)notification {
+    MGLOfflinePack *pack = notification.object;
+    NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
+    NSError *error = notification.userInfo[MGLOfflinePackErrorUserInfoKey];
+    
+    NSDictionary *event = @{ @"name": userInfo[@"name"],
+                             @"error": [error localizedDescription] };
+
+    [_bridge.eventDispatcher sendAppEventWithName:@"MapboxOfflineError" body:event];
+}
 
 RCT_EXPORT_METHOD(addPackForRegion:(NSDictionary*)options
                   callback:(RCTResponseSenderBlock)callback)
@@ -216,6 +267,8 @@ RCT_EXPORT_METHOD(getPacks:(RCTResponseSenderBlock)callback)
             [packDict setObject:userInfo forKey:@"metadata"];
             [packDict setObject:@(pack.progress.countOfBytesCompleted) forKey:@"countOfBytesCompleted"];
             [packDict setObject:@(pack.progress.countOfResourcesCompleted) forKey:@"countOfResourcesCompleted"];
+            [packDict setObject:@(pack.progress.countOfResourcesExpected) forKey:@"countOfResourcesExpected"];
+            [packDict setObject:@(pack.progress.maximumResourcesExpected) forKey:@"maximumResourcesExpected"];
             [callbackArray addObject:packDict];
         }
         

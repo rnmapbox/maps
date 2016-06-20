@@ -1,9 +1,14 @@
 'use strict';
 
 import React,  { Component, PropTypes } from 'react';
-import { NativeModules, requireNativeComponent, findNodeHandle } from 'react-native';
-const { MapboxGLManager } = NativeModules;
+import {
+  NativeModules,
+  NativeAppEventEmitter,
+  requireNativeComponent,
+  findNodeHandle
+} from 'react-native';
 
+const { MapboxGLManager } = NativeModules;
 const { mapStyles, userTrackingMode, userLocationVerticalAlignment, unknownResourceCount } = MapboxGLManager;
 
 // Metrics
@@ -20,22 +25,36 @@ function getMetricsEnabled() {
 }
 
 // Access token
-
 function setAccessToken(token: string) {
   MapboxGLManager.setAccessToken(token);
 }
 
+// Offline
+function addPackForRegion(options, callback = () => {}) {
+  MapboxGLManager.addPackForRegion(options, callback);
+}
+
+function getPacks(callback) {
+  MapboxGLManager.getPacks(callback);
+}
+
+function removePack(packName, callback = () => {}) {
+  MapboxGLManager.removePack(packName, callback);
+}
+
+function addOfflinePackProgressListener(handler) {
+  return NativeAppEventEmitter.addListener('MapboxOfflineProgressDidChange', handler);
+}
+
+function addOfflineMaxAllowedTilesListener(handler) {
+  return NativeAppEventEmitter.addListener('MapboxOfflineMaxAllowedTiles', handler);
+}
+
+function addOfflineErrorListener(handler) {
+  return NativeAppEventEmitter.addListener('MapboxOfflineError', handler);
+}
+
 class MapView extends Component {
-  // Offline
-  addPackForRegion(options) {
-    MapboxGLManager.addPackForRegion(findNodeHandle(this), options);
-  }
-  getPacks(callback) {
-    MapboxGLManager.getPacks(findNodeHandle(this), callback);
-  }
-  removePack(packName, callback) {
-    MapboxGLManager.removePack(findNodeHandle(this), packName, callback);
-  }
 
   // Viewport setters
   setDirection(direction, animated = true, callback) {
@@ -194,18 +213,18 @@ class MapView extends Component {
   };
 
   static defaultProps = {
-    centerCoordinate: {
+    initialCenterCoordinate: {
       latitude: 0,
       longitude: 0
     },
+    initialDirection: 0,
+    initialZoomLevel: 0,
     debugActive: false,
-    direction: 0,
     rotateEnabled: true,
     scrollEnabled: true,
     showsUserLocation: false,
     styleURL: MapboxGLManager.mapStyles.streets,
     zoomEnabled: true,
-    zoomLevel: 0,
     attributionButtonIsHidden: false,
     logoIsHidden: false,
     compassIsHidden: false
@@ -239,7 +258,11 @@ const Mapbox = {
   MapView,
   mapStyles, userTrackingMode, userLocationVerticalAlignment, unknownResourceCount,
   getMetricsEnabled, setMetricsEnabled,
-  setAccessToken
+  setAccessToken,
+  addPackForRegion, getPacks, removePack,
+  addOfflinePackProgressListener,
+  addOfflineMaxAllowedTilesListener,
+  addOfflineErrorListener
 };
 
 module.exports = Mapbox;

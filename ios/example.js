@@ -86,12 +86,24 @@ class MapExample extends Component {
   onTap = (location) => {
     console.log('tapped', location);
   };
-  onOfflineProgressDidChange = (progress) => {
-    console.log(progress);
+
+  componentWillMount() {
+    this._offlineProgressSubscription = Mapbox.addOfflinePackProgressListener(progress => {
+      console.log('offline pack progress', progress);
+    });
+    this._offlineMaxTilesSubscription = Mapbox.addOfflineMaxAllowedTilesListener(tiles => {
+      console.log('offline max allowed tiles', tiles);
+    });
+    this._offlineErrorSubscription = Mapbox.addOfflineErrorListener(error => {
+      console.log('offline error', error);
+    });
   };
-  onOfflineMaxAllowedMapboxTiles = (hitLimit) => {
-    console.log(hitLimit);
-  };
+
+  componentWillUnmount() {
+    this._offlineProgressSubscription.remove();
+    this._offlineMaxTilesSubscription.remove();
+    this._offlineErrorSubscription.remove();
+  }
 
   addNewMarkers = () => {
     this.setState({
@@ -189,7 +201,7 @@ class MapExample extends Component {
           })}>
           Get bounds
         </Text>
-        <Text onPress={() => this._map && this._map.addPackForRegion({
+        <Text onPress={() => Mapbox.addPackForRegion({
             name: 'test',
             type: 'bbox',
             bounds: [0, 0, 0, 0],
@@ -200,13 +212,13 @@ class MapExample extends Component {
           })}>
           Create offline pack
         </Text>
-        <Text onPress={() => this._map && this._map.getPacks((err, packs)=> {
+        <Text onPress={() => Mapbox.getPacks((err, packs)=> {
             if (err) console.log(err);
             console.log(packs);
           })}>
           Get offline packs
         </Text>
-        <Text onPress={() => this._map && this._map.removePack('test', (err, info)=> {
+        <Text onPress={() => Mapbox.removePack('test', (err, info)=> {
             if (err) console.log(err);
             if (info) {
               console.log('Deleted', info.deleted);
@@ -217,12 +229,12 @@ class MapExample extends Component {
           Remove pack with name 'test'
         </Text>
         <Text>User tracking mode is {this.state.userTrackingMode}</Text>
-        <Mapbox
+        <Mapbox.MapView
           ref={map => { this._map = map; }}
           style={styles.container}
-          centerCoordinate={this.state.center}
-          zoomLevel={this.state.zoom}
-          direction={0}
+          initialCenterCoordinate={this.state.center}
+          initialZoomLevel={this.state.zoom}
+          initialDirection={0}
           rotateEnabled={true}
           scrollEnabled={true}
           zoomEnabled={true}
@@ -238,8 +250,7 @@ class MapExample extends Component {
           onUpdateUserLocation={this.onUpdateUserLocation}
           onLongPress={this.onLongPress}
           onTap={this.onTap}
-          onOfflineProgressDidChange={this.onOfflineProgressDidChange}
-          onOfflineMaxAllowedMapboxTiles={this.onOfflineMaxAllowedMapboxTiles} />
+        />
       </View>
     );
   }

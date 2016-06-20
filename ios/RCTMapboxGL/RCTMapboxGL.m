@@ -62,9 +62,13 @@
     CGRect bounds = self.bounds;
     if (_map ||
         !_styleURL ||
-        bounds.size.width <= 0 || bounds.size.height <= 0 ||
-        ![MGLAccountManager accessToken]
+        bounds.size.width <= 0 || bounds.size.height <= 0
     ) {
+        return;
+    }
+    
+    if (![MGLAccountManager accessToken]) {
+        RCTLogError(@"You need an access token to use Mapbox. Register to mapbox.com to obtain one, then run Mapbox.setAccessToken(yourToken) before mounting this component");
         return;
     }
     

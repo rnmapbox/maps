@@ -8,6 +8,7 @@
 
 #import "RCTViewManager.h"
 
-@interface RCTMapboxGLManager : RCTViewManager
-
+@interface RCTMapboxGLManager : RCTViewManager {
+    BOOL _hasInitialized;
+}
 @end
