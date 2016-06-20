@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 const accessToken = 'your-mapbox.com-access-token';
+Mapbox.setAccessToken(accessToken);
 
 class MapExample extends Component {
   state = {
@@ -19,6 +20,7 @@ class MapExample extends Component {
       longitude: -73.97686958312988
     },
     zoom: 11,
+    userTrackingMode: Mapbox.userTrackingMode.none,
     annotations: [{
       coordinates: [40.72052634, -73.97686958312988],
       'type': 'point',
@@ -91,38 +93,29 @@ class MapExample extends Component {
     console.log(hitLimit);
   };
 
-  render() {
-    StatusBar.setHidden(true);
-    return (
-      <View style={styles.container}>
-        <Text onPress={() => this._map && this._map.setDirectionAnimated(0)}>
-          Set direction to 0
-        </Text>
-        <Text onPress={() => this._map && this._map.setZoomLevelAnimated(6)}>
-          Zoom out to zoom level 6
-        </Text>
-        <Text onPress={() => this._map && this._map.setCenterCoordinateAnimated(48.8589, 2.3447)}>
-          Go to Paris at current zoom level {parseInt(this.state.currentZoom)}
-        </Text>
-        <Text onPress={() => this._map && this._map.setCenterCoordinateZoomLevelAnimated(35.68829, 139.77492, 14)}>
-          Go to Tokyo at fixed zoom level 14
-        </Text>
-        <Text onPress={() => this._map && this._map.addAnnotations([{
-          coordinates: [40.73312,-73.989],
-          type: 'point',
-          title: 'This is a new marker',
-          id: 'foo'
-        }, {
-          'coordinates': [[40.749857912194386, -73.96820068359375], [40.741924698522055,-73.9735221862793], [40.735681504432264,-73.97523880004883], [40.7315190495212,-73.97438049316406], [40.729177554196376,-73.97180557250975], [40.72345355209305,-73.97438049316406], [40.719290332250544,-73.97455215454102], [40.71369559554873,-73.97729873657227], [40.71200407096382,-73.97850036621094], [40.71031250340588,-73.98691177368163], [40.71031250340588,-73.99154663085938]],
-          'type': 'polygon',
-          'fillAlpha': 1,
-          'fillColor': '#000',
-          'strokeAlpha': 1,
-          'id': 'new-black-polygon'
-        }])}>
-          Add new marker
-        </Text>
-        <Text onPress={() => this._map && this._map.updateAnnotation({
+  addNewMarkers = () => {
+    this.setState({
+      annotations: [ ...this.state.annotations, {
+        coordinates: [40.73312,-73.989],
+        type: 'point',
+        title: 'This is a new marker',
+        id: 'foo'
+      }, {
+        'coordinates': [[40.749857912194386, -73.96820068359375], [40.741924698522055,-73.9735221862793], [40.735681504432264,-73.97523880004883], [40.7315190495212,-73.97438049316406], [40.729177554196376,-73.97180557250975], [40.72345355209305,-73.97438049316406], [40.719290332250544,-73.97455215454102], [40.71369559554873,-73.97729873657227], [40.71200407096382,-73.97850036621094], [40.71031250340588,-73.98691177368163], [40.71031250340588,-73.99154663085938]],
+        'type': 'polygon',
+        'fillAlpha': 1,
+        'fillColor': '#000',
+        'strokeAlpha': 1,
+        'id': 'new-black-polygon'
+      }]
+    });
+  };
+
+  updateMarker2 = () => {
+    this.setState({
+      annotations: this.state.annotations.map(annotation => {
+        if (annotation.name !== 'marker2') { return annotation; }
+        return {
           coordinates: [40.714541341726175,-74.00579452514648],
           'type': 'point',
           title: 'New Title!',
@@ -133,22 +126,52 @@ class MapExample extends Component {
             width: 25
           },
           id: 'marker2'
-        })}>
+        };
+      })
+    });
+  };
+
+  removeMarker2 = () => {
+    this.setState({
+      annotations: this.state.annotations.filter(a => a.name !== 'marker2')
+    });
+  };
+
+  render() {
+    StatusBar.setHidden(true);
+    return (
+      <View style={styles.container}>
+        <Text onPress={() => this._map && this._map.setDirection(0)}>
+          Set direction to 0
+        </Text>
+        <Text onPress={() => this._map && this._map.setZoomLevel(6)}>
+          Zoom out to zoom level 6
+        </Text>
+        <Text onPress={() => this._map && this._map.setCenterCoordinate(48.8589, 2.3447)}>
+          Go to Paris at current zoom level {parseInt(this.state.currentZoom)}
+        </Text>
+        <Text onPress={() => this._map && this._map.setCenterCoordinateZoomLevel(35.68829, 139.77492, 14)}>
+          Go to Tokyo at fixed zoom level 14
+        </Text>
+        <Text onPress={this.addNewMarkers}>
+          Add new marker
+        </Text>
+        <Text onPress={this.updateMarker2}>
           Update marker2
         </Text>
         <Text onPress={() => this._map && this._map.selectAnnotationAnimated('marker1')}>
           Open marker1 popup
         </Text>
-        <Text onPress={() => this._map && this._map.removeAnnotation('marker2')}>
+        <Text onPress={this.removeMarker2}>
           Remove marker2 annotation
         </Text>
-        <Text onPress={() => this.removeAllAnnotations(mapRef)}>
+        <Text onPress={() => this.setState({ annotations: [] })}>
           Remove all annotations
         </Text>
-        <Text onPress={() => this._map && this._map.setVisibleCoordinateBoundsAnimated(40.712, -74.227, 40.774, -74.125, 100, 0, 0, 0)}>
+        <Text onPress={() => this._map && this._map.setVisibleCoordinateBounds(40.712, -74.227, 40.774, -74.125, 100, 0, 0, 0)}>
           Set visible bounds to 40.7, -74.2, 40.7, -74.1
         </Text>
-        <Text onPress={() => this._map && this._map.setUserTrackingMode(Mapbox.userTrackingMode.follow)}>
+        <Text onPress={() => this.setState({ userTrackingMode: Mapbox.userTrackingMode.follow })}>
           Set userTrackingMode to follow
         </Text>
         <Text onPress={() => this._map && this._map.getCenterCoordinateZoomLevel((location)=> {
@@ -193,22 +216,23 @@ class MapExample extends Component {
           })}>
           Remove pack with name 'test'
         </Text>
+        <Text>User tracking mode is {this.state.userTrackingMode}</Text>
         <Mapbox
           ref={map => { this._map = map; }}
           style={styles.container}
+          centerCoordinate={this.state.center}
+          zoomLevel={this.state.zoom}
           direction={0}
           rotateEnabled={true}
           scrollEnabled={true}
           zoomEnabled={true}
           showsUserLocation={true}
-          accessToken={accessToken}
           styleURL={Mapbox.mapStyles.emerald}
-          userTrackingMode={Mapbox.userTrackingMode.none}
-          centerCoordinate={this.state.center}
-          zoomLevel={this.state.zoom}
+          userTrackingMode={this.state.userTrackingMode}
+          annotations={this.state.annotations}
+          onChangeUserTrackingMode={userTrackingMode => this.setState({ userTrackingMode })}
           onRegionChange={this.onRegionChange}
           onRegionWillChange={this.onRegionWillChange}
-          annotations={this.state.annotations}
           onOpenAnnotation={this.onOpenAnnotation}
           onRightAnnotationTapped={this.onRightAnnotationTapped}
           onUpdateUserLocation={this.onUpdateUserLocation}

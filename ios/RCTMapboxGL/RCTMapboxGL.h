@@ -11,43 +11,44 @@
 #import "RCTEventDispatcher.h"
 #import "RCTBridgeModule.h"
 
-@interface RCTMapboxGL : RCTView <MGLMapViewDelegate, RCTBridgeModule>
+@interface RCTMapboxGL : RCTView <MGLMapViewDelegate>
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher;
 
-- (void)setAccessToken:(NSString *)accessToken;
-- (void)setAnnotations:(NSArray *)annotations;
+// React props
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate;
+- (void)setZoomLevel:(double)zoomLevel;
+- (void)setDirection:(double)direction;
 - (void)setClipsToBounds:(BOOL)clipsToBounds;
 - (void)setDebugActive:(BOOL)debugActive;
-- (void)setDirection:(double)direction;
 - (void)setRotateEnabled:(BOOL)rotateEnabled;
 - (void)setScrollEnabled:(BOOL)scrollEnabled;
 - (void)setZoomEnabled:(BOOL)zoomEnabled;
 - (void)setShowsUserLocation:(BOOL)showsUserLocation;
 - (void)setStyleURL:(NSURL *)styleURL;
-- (void)setZoomLevel:(double)zoomLevel;
 - (void)setUserTrackingMode:(int)userTrackingMode;
-- (void)setZoomLevelAnimated:(double)zoomLevel;
-- (void)setDirectionAnimated:(int)heading;
-- (void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)coordinates resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject;
-- (void)setCenterCoordinateZoomLevelAnimated:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel;
-- (void)setCameraAnimated:(MGLMapCamera*)camera withDuration:(int)duration animationTimingFunction:(CAMediaTimingFunction*)function;
-- (void)selectAnnotationAnimated:(NSString*)selectedId;
+- (void)setAttributionButtonIsHidden:(BOOL)isHidden;
+- (void)setLogoIsHidden:(BOOL)isHidden;
+- (void)setCompassIsHidden:(BOOL)isHidden;
+- (void)setUserLocationVerticalAlignment:(MGLAnnotationVerticalAlignment) aligment;
+- (void)setContentInset:(UIEdgeInsets)contentInset;
+
+// Imperative methods
+- (void)setCenterCoordinate:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel direction:(double)direction animated:(BOOL)animated completionHandler:(void (^)())callback;
+- (void)setCamera:(MGLMapCamera*)camera withDuration:(int)duration animationTimingFunction:(CAMediaTimingFunction*)function;
+- (void)setVisibleCoordinateBounds:(MGLCoordinateBounds)bounds edgePadding:(UIEdgeInsets)padding animated:(BOOL)animated;
+- (void)selectAnnotation:(NSString*)selectedId animated:(BOOL)animated;
+
+// Annotation management
 - (void)addAnnotation:(NSObject *)annotation;
 - (void)removeAnnotation:(NSString*)selectedIdentifier;
 - (void)removeAllAnnotations;
+
+// Getters
 - (MGLCoordinateBounds)visibleCoordinateBounds;
-- (void)setVisibleCoordinateBounds:(MGLCoordinateBounds)bounds edgePadding:(UIEdgeInsets)padding animated:(BOOL)animated;
-- (void)setAttributionButtonVisibility:(BOOL)isVisible;
-- (void)setLogoVisibility:(BOOL)isVisible;
-- (void)setCompassVisibility:(BOOL)isVisible;
 - (double)zoomLevel;
 - (double)direction;
-- (void) createOfflinePack:(MGLCoordinateBounds)bounds styleURL:(NSURL*)styleURL fromZoomLevel:(double)fromZoomLevel toZoomLevel:(double)toZoomLevel name:(NSString*)name type:(NSString*)type metadata:(NSDictionary*)metadata;
 - (CLLocationCoordinate2D)centerCoordinate;
-@property (nonatomic) MGLAnnotationVerticalAlignment userLocationVerticalAlignment;
-@property (nonatomic) UIEdgeInsets contentInset;
 
 @end
 

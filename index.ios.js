@@ -2,7 +2,7 @@
 
 import React,  { Component, PropTypes } from 'react';
 import { NativeModules, requireNativeComponent, findNodeHandle } from 'react-native';
-const { MapboxGLManager } = NativeModules;
+const MapboxGLManager = NativeModules.MapboxGLModuleManager;
 
 class Mapbox extends Component {
   static mapStyles = MapboxGLManager.mapStyles;
@@ -16,6 +16,12 @@ class Mapbox extends Component {
     MapboxGLManager.setMetricsEnabled(enabled);
   }
 
+  static setAccessToken(token: string) {
+    MapboxGLManager.setAccessToken(token);
+  }
+
+  // Offline
+
   addPackForRegion(options) {
     MapboxGLManager.addPackForRegion(findNodeHandle(this), options);
   }
@@ -25,42 +31,55 @@ class Mapbox extends Component {
   removePack(packName, callback) {
     MapboxGLManager.removePack(findNodeHandle(this), packName, callback);
   }
-  setDirectionAnimated(heading) {
-    MapboxGLManager.setDirectionAnimated(findNodeHandle(this), heading);
+
+  // Viewport setters
+
+  setDirection(direction, animated = true, callback) {
+    let _resolve;
+    const promise = new Promise(resolve => _resolve = resolve);
+    MapboxGLManager.setCenterZoomDirection(findNodeHandle(this), { direction }, animated, () => {
+      callback && callback();
+      _resolve();
+    });
+    return promise;
   }
-  setZoomLevelAnimated(zoomLevel) {
-    MapboxGLManager.setZoomLevelAnimated(findNodeHandle(this), zoomLevel);
+  setZoomLevel(zoomLevel, animated = true, callback) {
+    let _resolve;
+    const promise = new Promise(resolve => _resolve = resolve);
+    MapboxGLManager.setCenterZoomDirection(findNodeHandle(this), { zoomLevel }, animated, () => {
+      callback && callback();
+      _resolve();
+    });
+    return promise;
   }
-  setCenterCoordinateAnimated(latitude, longitude) {
-    return MapboxGLManager.setCenterCoordinateAnimated(findNodeHandle(this), latitude, longitude);
+  setCenterCoordinate(latitude, longitude, animated = true, callback) {
+    let _resolve;
+    const promise = new Promise(resolve => _resolve = resolve);
+    MapboxGLManager.setCenterZoomDirection(findNodeHandle(this), { latitude, longitude }, animated, () => {
+      callback && callback();
+      _resolve();
+    });
+    return promise;
   }
-  setCenterCoordinateZoomLevelAnimated(latitude, longitude, zoomLevel) {
-    MapboxGLManager.setCenterCoordinateZoomLevelAnimated(findNodeHandle(this), latitude, longitude, zoomLevel);
+  setCenterCoordinateZoomLevel(latitude, longitude, zoomLevel, animated = true, callback) {
+    let _resolve;
+    const promise = new Promise(resolve => _resolve = resolve);
+    MapboxGLManager.setCenterZoomDirection(findNodeHandle(this), { latitude, longitude, zoomLevel }, animated, () => {
+      callback && callback();
+      _resolve();
+    });
+    return promise;
   }
-  setCameraAnimated(latitude, longitude, fromDistance, pitch, heading, duration) {
-    MapboxGLManager.setCameraAnimated(findNodeHandle(this), latitude, longitude, fromDistance, pitch, heading, duration);
+
+  setCamera(latitude, longitude, fromDistance, pitch, direction, duration = 1.0) {
+    MapboxGLManager.setCamera(findNodeHandle(this), latitude, longitude, fromDistance, pitch, direction, duration);
   }
-  addAnnotations(annotations) {
-    MapboxGLManager.addAnnotations(findNodeHandle(this), annotations);
+
+  setVisibleCoordinateBounds(latitudeSW, longitudeSW, latitudeNE, longitudeNE, paddingTop, paddingRight, paddingBottom, paddingLeft, animated = true) {
+    MapboxGLManager.setVisibleCoordinateBounds(findNodeHandle(this), latitudeSW, longitudeSW, latitudeNE, longitudeNE, paddingTop, paddingRight, paddingBottom, paddingLeft, animated);
   }
-  updateAnnotation(annotation) {
-    MapboxGLManager.updateAnnotation(findNodeHandle(this), annotation);
-  }
-  selectAnnotationAnimated(selectedIdentifier) {
-    MapboxGLManager.selectAnnotationAnimated(findNodeHandle(this), selectedIdentifier);
-  }
-  removeAnnotation(selectedIdentifier) {
-    MapboxGLManager.removeAnnotation(findNodeHandle(this), selectedIdentifier);
-  }
-  removeAllAnnotations(mapRef) {
-    MapboxGLManager.removeAllAnnotations(findNodeHandle(this));
-  }
-  setVisibleCoordinateBoundsAnimated(latitudeSW, longitudeSW, latitudeNE, longitudeNE, paddingTop, paddingRight, paddingBottom, paddingLeft) {
-    MapboxGLManager.setVisibleCoordinateBoundsAnimated(findNodeHandle(this), latitudeSW, longitudeSW, latitudeNE, longitudeNE, paddingTop, paddingRight, paddingBottom, paddingLeft);
-  }
-  setUserTrackingMode(userTrackingMode) {
-    MapboxGLManager.setUserTrackingMode(findNodeHandle(this), userTrackingMode);
-  }
+
+  // Getters
   getCenterCoordinateZoomLevel(callback) {
     MapboxGLManager.getCenterCoordinateZoomLevel(findNodeHandle(this), callback);
   }
@@ -70,6 +89,13 @@ class Mapbox extends Component {
   getBounds(callback) {
     MapboxGLManager.getBounds(findNodeHandle(this), callback);
   }
+
+  // Others
+
+  selectAnnotation(selectedIdentifier, animated = true) {
+    MapboxGLManager.selectAnnotationAnimated(findNodeHandle(this), selectedIdentifier, animated);
+  }
+
 
   _onRegionChange = (event: Event) => {
     if (this.props.onRegionChange) this.props.onRegionChange(event.nativeEvent.src);
@@ -119,7 +145,6 @@ class Mapbox extends Component {
     rotateEnabled: PropTypes.bool,
     scrollEnabled: PropTypes.bool,
     zoomEnabled: PropTypes.bool,
-    accessToken: PropTypes.string.isRequired,
     zoomLevel: PropTypes.number,
     direction: PropTypes.number,
     styleURL: PropTypes.string,
