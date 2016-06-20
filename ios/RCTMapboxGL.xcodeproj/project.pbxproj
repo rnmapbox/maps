@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C167F8981D18074B007C7A42 /* RCTMapboxGLModuleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C167F8971D18074B007C7A42 /* RCTMapboxGLModuleManager.m */; };
 		C167F89C1D18112B007C7A42 /* RCTMapboxGLConversions.m in Sources */ = {isa = PBXBuildFile; fileRef = C167F89B1D18112B007C7A42 /* RCTMapboxGLConversions.m */; };
 		C5DBB3441AF2EF2B00E611A9 /* RCTMapboxGL.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C5DBB3431AF2EF2B00E611A9 /* RCTMapboxGL.h */; };
 		C5DBB3461AF2EF2B00E611A9 /* RCTMapboxGL.m in Sources */ = {isa = PBXBuildFile; fileRef = C5DBB3451AF2EF2B00E611A9 /* RCTMapboxGL.m */; };
@@ -39,8 +38,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		C167F8971D18074B007C7A42 /* RCTMapboxGLModuleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMapboxGLModuleManager.m; sourceTree = "<group>"; };
-		C167F8991D18075B007C7A42 /* RCTMapboxGLModuleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMapboxGLModuleManager.h; sourceTree = "<group>"; };
 		C167F89A1D18111F007C7A42 /* RCTMapboxGLConversions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMapboxGLConversions.h; sourceTree = "<group>"; };
 		C167F89B1D18112B007C7A42 /* RCTMapboxGLConversions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMapboxGLConversions.m; sourceTree = "<group>"; };
 		C5DBB3401AF2EF2B00E611A9 /* libRCTMapboxGL.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTMapboxGL.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,8 +93,6 @@
 				C5DBB3451AF2EF2B00E611A9 /* RCTMapboxGL.m */,
 				C5DBB3641AF2EFB500E611A9 /* RCTMapboxGLManager.h */,
 				C5DBB3651AF2EFB500E611A9 /* RCTMapboxGLManager.m */,
-				C167F8971D18074B007C7A42 /* RCTMapboxGLModuleManager.m */,
-				C167F8991D18075B007C7A42 /* RCTMapboxGLModuleManager.h */,
 				C167F89A1D18111F007C7A42 /* RCTMapboxGLConversions.h */,
 				C167F89B1D18112B007C7A42 /* RCTMapboxGLConversions.m */,
 			);
@@ -208,7 +203,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C167F8981D18074B007C7A42 /* RCTMapboxGLModuleManager.m in Sources */,
 				C5DBB3461AF2EF2B00E611A9 /* RCTMapboxGL.m in Sources */,
 				C5DBB3661AF2EFB500E611A9 /* RCTMapboxGLManager.m in Sources */,
 				C167F89C1D18112B007C7A42 /* RCTMapboxGLConversions.m in Sources */,

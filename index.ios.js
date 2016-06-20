@@ -2,7 +2,7 @@
 
 import React,  { Component, PropTypes } from 'react';
 import { NativeModules, requireNativeComponent, findNodeHandle } from 'react-native';
-const MapboxGLManager = NativeModules.MapboxGLModuleManager;
+const { MapboxGLManager } = NativeModules;
 
 const { mapStyles, userTrackingMode, userLocationVerticalAlignment, unknownResourceCount } = MapboxGLManager;
 
