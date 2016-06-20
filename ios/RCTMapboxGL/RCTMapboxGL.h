@@ -16,9 +16,9 @@
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher;
 
 // React props
-- (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate;
-- (void)setZoomLevel:(double)zoomLevel;
-- (void)setDirection:(double)direction;
+- (void)setInitialCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate;
+- (void)setInitialZoomLevel:(double)zoomLevel;
+- (void)setInitialDirection:(double)direction;
 - (void)setClipsToBounds:(BOOL)clipsToBounds;
 - (void)setDebugActive:(BOOL)debugActive;
 - (void)setRotateEnabled:(BOOL)rotateEnabled;

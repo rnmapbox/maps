@@ -46,9 +46,9 @@
 
 RCT_EXPORT_MODULE();
 
-RCT_EXPORT_VIEW_PROPERTY(centerCoordinate, CLLocationCoordinate2D);
-RCT_EXPORT_VIEW_PROPERTY(zoomLevel, double);
-RCT_EXPORT_VIEW_PROPERTY(direction, double);
+RCT_EXPORT_VIEW_PROPERTY(initialCenterCoordinate, CLLocationCoordinate2D);
+RCT_EXPORT_VIEW_PROPERTY(initialZoomLevel, double);
+RCT_EXPORT_VIEW_PROPERTY(initialDirection, double);
 RCT_EXPORT_VIEW_PROPERTY(clipsToBounds, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(debugActive, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL);

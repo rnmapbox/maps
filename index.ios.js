@@ -147,21 +147,21 @@ class MapView extends Component {
   };
 
   static propTypes = {
+    initialZoomLevel: PropTypes.number,
+    initialDirection: PropTypes.number,
+    initialCenterCoordinate: PropTypes.shape({
+      latitude: PropTypes.number.isRequired,
+      longitude: PropTypes.number.isRequired
+    }),
     showsUserLocation: PropTypes.bool,
     rotateEnabled: PropTypes.bool,
     scrollEnabled: PropTypes.bool,
     zoomEnabled: PropTypes.bool,
-    zoomLevel: PropTypes.number,
-    direction: PropTypes.number,
     styleURL: PropTypes.string,
     clipsToBounds: PropTypes.bool,
     debugActive: PropTypes.bool,
     userTrackingMode: PropTypes.number,
     attributionButton: PropTypes.bool,
-    centerCoordinate: PropTypes.shape({
-      latitude: PropTypes.number.isRequired,
-      longitude: PropTypes.number.isRequired
-    }),
     annotations: PropTypes.arrayOf(PropTypes.shape({
       coordinates: PropTypes.array.isRequired,
       title: PropTypes.string,

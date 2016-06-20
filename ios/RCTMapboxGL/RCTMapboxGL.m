@@ -21,17 +21,17 @@
 
     /* Map properties */
     NSMutableDictionary *_annotations;
-    CLLocationCoordinate2D _centerCoordinate;
+    CLLocationCoordinate2D _initialCenterCoordinate;
+    double _initialDirection;
+    double _initialZoomLevel;
+    BOOL _zoomEnabled;
     BOOL _clipsToBounds;
     BOOL _debugActive;
-    double _direction;
     BOOL _finishedLoading;
     BOOL _rotateEnabled;
     BOOL _scrollEnabled;
-    BOOL _zoomEnabled;
     BOOL _showsUserLocation;
     NSURL *_styleURL;
-    double _zoomLevel;
     int _userTrackingMode;
     BOOL _attributionButton;
     BOOL _logo;
@@ -79,21 +79,16 @@
     singleTap.delegate = self;
     [_map addGestureRecognizer:singleTap];
 
-    // Setup offline pack notification handlers.
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackProgressDidChange:) name:MGLOfflinePackProgressChangedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackDidReceiveError:) name:MGLOfflinePackErrorNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackDidReceiveMaximumAllowedMapboxTiles:) name:MGLOfflinePackMaximumMapboxTilesReachedNotification object:nil];
-
-    _map.centerCoordinate = _centerCoordinate;
+    _map.centerCoordinate = _initialCenterCoordinate;
     _map.clipsToBounds = _clipsToBounds;
     _map.debugActive = _debugActive;
-    _map.direction = _direction;
+    _map.direction = _initialDirection;
     _map.rotateEnabled = _rotateEnabled;
     _map.scrollEnabled = _scrollEnabled;
     _map.zoomEnabled = _zoomEnabled;
     _map.showsUserLocation = _showsUserLocation;
     _map.styleURL = _styleURL;
-    _map.zoomLevel = _zoomLevel;
+    _map.zoomLevel = _initialZoomLevel;
     _map.contentInset = _contentInset;
     [_map.attributionButton setHidden:_attributionButton];
     [_map.logoView setHidden:_logo];
@@ -238,19 +233,19 @@
 
 // React props
 
-- (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate
+- (void)setInitialCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate
 {
-    _centerCoordinate = centerCoordinate;
+    _initialCenterCoordinate = centerCoordinate;
 }
 
-- (void)setZoomLevel:(double)zoomLevel
+- (void)setInitialZoomLevel:(double)zoomLevel
 {
-    _zoomLevel = zoomLevel;
+    _initialZoomLevel = zoomLevel;
 }
 
-- (void)setDirection:(double)direction
+- (void)setInitialDirection:(double)direction
 {
-    _direction = direction;
+    _initialDirection = direction;
 }
 
 
@@ -364,17 +359,17 @@
 }
 
 -(CLLocationCoordinate2D)centerCoordinate {
-    if (!_map) { return _centerCoordinate; }
+    if (!_map) { return _initialCenterCoordinate; }
     return _map.centerCoordinate;
 }
 
 -(double)direction {
-    if (!_map) { return _direction; }
+    if (!_map) { return _initialDirection; }
     return _map.direction;
 }
 
 -(double)zoomLevel {
-    if (!_map) { return _zoomLevel; }
+    if (!_map) { return _initialZoomLevel; }
     return _map.zoomLevel;
 }
 
@@ -383,9 +378,9 @@
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)coordinate zoomLevel:(double)zoomLevel direction:(double)direction animated:(BOOL)animated completionHandler:(void (^)())callback
 {
     if (!_map) {
-        _centerCoordinate = coordinate;
-        _zoomLevel = zoomLevel;
-        _direction = _direction;
+        _initialCenterCoordinate = coordinate;
+        _initialZoomLevel = zoomLevel;
+        _initialDirection = direction;
         callback();
         return;
     }
