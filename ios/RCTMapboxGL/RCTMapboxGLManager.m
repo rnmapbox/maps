@@ -24,26 +24,6 @@
     return [[RCTMapboxGL alloc] initWithEventDispatcher:self.bridge.eventDispatcher];
 }
 
-- (NSArray *)customDirectEventTypes
-{
-    return @[
-             @"onRegionChange",
-             @"onRegionWillChange",
-             @"onChangeUserTrackingMode",
-             @"onOpenAnnotation",
-             @"onRightAnnotationTapped",
-             @"onUpdateUserLocation",
-             @"onTap",
-             @"onLongPress",
-             @"onFinishLoadingMap",
-             @"onStartLoadingMap",
-             @"onLocateUserFailed",
-             @"onOfflineProgressDidChange",
-             @"onOfflineMaxAllowedMapboxTiles",
-             @"onOfflineDidRecieveError"
-             ];
-}
-
 RCT_EXPORT_MODULE();
 
 RCT_EXPORT_VIEW_PROPERTY(initialCenterCoordinate, CLLocationCoordinate2D);
@@ -61,6 +41,18 @@ RCT_EXPORT_VIEW_PROPERTY(attributionButtonIsHidden, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(logoIsHidden, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(compassIsHidden, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(userLocationVerticalAlignment, int);
+
+RCT_EXPORT_VIEW_PROPERTY(onRegionChange, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onRegionWillChange, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onChangeUserTrackingMode, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onOpenAnnotation, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onRightAnnotationTapped, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onUpdateUserLocation, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onTap, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onFinishLoadingMap, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onStartLoadingMap, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onLocateUserFailed, RCTDirectEventBlock);
 
 RCT_CUSTOM_VIEW_PROPERTY(contentInset, UIEdgeInsetsMake, RCTMapboxGL)
 {

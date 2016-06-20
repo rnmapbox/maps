@@ -50,6 +50,19 @@
 - (double)direction;
 - (CLLocationCoordinate2D)centerCoordinate;
 
+// Events
+@property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
+@property (nonatomic, copy) RCTDirectEventBlock onRegionWillChange;
+@property (nonatomic, copy) RCTDirectEventBlock onChangeUserTrackingMode;
+@property (nonatomic, copy) RCTDirectEventBlock onOpenAnnotation;
+@property (nonatomic, copy) RCTDirectEventBlock onRightAnnotationTapped;
+@property (nonatomic, copy) RCTDirectEventBlock onUpdateUserLocation;
+@property (nonatomic, copy) RCTDirectEventBlock onTap;
+@property (nonatomic, copy) RCTDirectEventBlock onLongPress;
+@property (nonatomic, copy) RCTDirectEventBlock onFinishLoadingMap;
+@property (nonatomic, copy) RCTDirectEventBlock onStartLoadingMap;
+@property (nonatomic, copy) RCTDirectEventBlock onLocateUserFailed;
+
 @end
 
 @interface RCTMGLAnnotation : NSObject <MGLAnnotation>

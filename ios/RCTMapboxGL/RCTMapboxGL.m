@@ -414,130 +414,106 @@
 -(void)mapView:(MGLMapView *)mapView didChangeUserTrackingMode:(MGLUserTrackingMode)mode animated:(BOOL)animated
 {
     if (_isChangingUserTracking) { return; }
+    if (!_onChangeUserTrackingMode) { return; }
     
-    NSDictionary *event = @{ @"target": self.reactTag,
-                             @"src": @(mode) };
-    
-    [_eventDispatcher sendInputEventWithName:@"onChangeUserTrackingMode" body:event];
+    _onChangeUserTrackingMode(@{ @"target": self.reactTag,
+                                 @"src": @(mode) });
 }
 
 - (void)mapView:(MGLMapView *)mapView didUpdateUserLocation:(MGLUserLocation *)userLocation;
 {
-    NSDictionary *event = @{ @"target": self.reactTag,
+    if (!_onUpdateUserLocation) { return; }
+    _onUpdateUserLocation(@{ @"target": self.reactTag,
                              @"src": @{ @"latitude": @(userLocation.coordinate.latitude),
                                         @"longitude": @(userLocation.coordinate.longitude),
                                         @"headingAccuracy": @(userLocation.heading.headingAccuracy),
                                         @"magneticHeading": @(userLocation.heading.magneticHeading),
                                         @"trueHeading": @(userLocation.heading.trueHeading),
-                                        @"isUpdating": [NSNumber numberWithBool:userLocation.isUpdating]} };
-
-    [_eventDispatcher sendInputEventWithName:@"onUpdateUserLocation" body:event];
+                                        @"isUpdating": [NSNumber numberWithBool:userLocation.isUpdating]} });
 }
 
 - (void)mapView:(MGLMapView *)mapView didFailToLocateUserWithError:(NSError *)error
 {
-    NSDictionary *event = @{ @"target": mapView.reactTag,
-                             @"src": @{
-                                     @"message":  [error localizedDescription]
-                                     }
-                             };
-    
-    [_eventDispatcher sendInputEventWithName:@"onLocateUserFailed" body:event];
+    if (!_onLocateUserFailed) { return; }
+    _onLocateUserFailed(@{ @"target": mapView.reactTag,
+                             @"src": @{ @"message":  [error localizedDescription] } });
 }
 
 -(void)mapView:(MGLMapView *)mapView didSelectAnnotation:(id<MGLAnnotation>)annotation
 {
-    if (annotation.title && annotation.subtitle) {
-
-        NSString *id = [(RCTMGLAnnotation *) annotation id];
-
-        NSDictionary *event = @{ @"target": self.reactTag,
-                                 @"src": @{ @"title": annotation.title,
-                                            @"subtitle": annotation.subtitle,
-                                            @"id": id,
-                                            @"latitude": @(annotation.coordinate.latitude),
-                                            @"longitude": @(annotation.coordinate.longitude)} };
-
-        [_eventDispatcher sendInputEventWithName:@"onOpenAnnotation" body:event];
-    }
+    if (!annotation.title || !annotation.subtitle) { return; }
+    if (!_onOpenAnnotation) { return; }
+    _onOpenAnnotation(@{ @"target": self.reactTag,
+                            @"src": @{ @"title": annotation.title,
+                                       @"subtitle": annotation.subtitle,
+                                       @"id": [(RCTMGLAnnotation *) annotation id],
+                                       @"latitude": @(annotation.coordinate.latitude),
+                                       @"longitude": @(annotation.coordinate.longitude)} });
 }
 
 
 - (void)mapView:(RCTMapboxGL *)mapView regionDidChangeAnimated:(BOOL)animated
 {
+    if (!_onRegionChange) { return; }
 
     CLLocationCoordinate2D region = _map.centerCoordinate;
-
-    NSDictionary *event = @{ @"target": self.reactTag,
-                             @"src": @{ @"latitude": @(region.latitude),
-                                        @"longitude": @(region.longitude),
-                                        @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } };
-
-    [_eventDispatcher sendInputEventWithName:@"onRegionChange" body:event];
+    _onRegionChange(@{ @"target": self.reactTag,
+                       @"src": @{ @"latitude": @(region.latitude),
+                                  @"longitude": @(region.longitude),
+                                  @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } });
 }
 
 
 - (void)mapView:(RCTMapboxGL *)mapView regionWillChangeAnimated:(BOOL)animated
 {
+    if (!_onRegionWillChange) { return; }
 
     CLLocationCoordinate2D region = _map.centerCoordinate;
-
-    NSDictionary *event = @{ @"target": self.reactTag,
-                             @"src": @{ @"latitude": @(region.latitude),
-                                        @"longitude": @(region.longitude),
-                                        @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } };
-
-    [_eventDispatcher sendInputEventWithName:@"onRegionWillChange" body:event];
+    _onRegionWillChange(@{ @"target": self.reactTag,
+                           @"src": @{ @"latitude": @(region.latitude),
+                                      @"longitude": @(region.longitude),
+                                      @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } });
 }
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)sender
 {
+    if (!_onTap) { return; }
+    
     CLLocationCoordinate2D location = [_map convertPoint:[sender locationInView:_map] toCoordinateFromView:_map];
     CGPoint screenCoord = [sender locationInView:_map];
 
-    NSDictionary *event = @{ @"target": self.reactTag,
-                             @"src": @{
-                                     @"latitude": @(location.latitude),
-                                     @"longitude": @(location.longitude),
-                                     @"screenCoordY": @(screenCoord.y),
-                                     @"screenCoordX": @(screenCoord.x)
-                                     }
-                             };
-
-    [_eventDispatcher sendInputEventWithName:@"onTap" body:event];
+    _onTap(@{ @"target": self.reactTag,
+              @"src": @{ @"latitude": @(location.latitude),
+                         @"longitude": @(location.longitude),
+                         @"screenCoordY": @(screenCoord.y),
+                         @"screenCoordX": @(screenCoord.x) } });
 }
 
 - (void)handleLongPress:(UITapGestureRecognizer *)sender
 {
-    if (sender.state == UIGestureRecognizerStateBegan) {
-        CLLocationCoordinate2D location = [_map convertPoint:[sender locationInView:_map] toCoordinateFromView:_map];
-        CGPoint screenCoord = [sender locationInView:_map];
+    if (!_onLongPress) { return; }
+    if (sender.state != UIGestureRecognizerStateBegan) { return; }
+    
+    CLLocationCoordinate2D location = [_map convertPoint:[sender locationInView:_map] toCoordinateFromView:_map];
+    CGPoint screenCoord = [sender locationInView:_map];
 
-        NSDictionary *event = @{ @"target": self.reactTag,
-                                 @"src": @{
-                                         @"latitude": @(location.latitude),
-                                         @"longitude": @(location.longitude),
-                                         @"screenCoordY": @(screenCoord.y),
-                                         @"screenCoordX": @(screenCoord.x)
-                                         }
-                                 };
-
-        [_eventDispatcher sendInputEventWithName:@"onLongPress" body:event];
-    }
+    _onLongPress(@{ @"target": self.reactTag,
+                    @"src": @{ @"latitude": @(location.latitude),
+                               @"longitude": @(location.longitude),
+                               @"screenCoordY": @(screenCoord.y),
+                               @"screenCoordX": @(screenCoord.x) } });
 }
 
 - (void)mapViewDidFinishLoadingMap:(MGLMapView *)mapView
 {
-    NSDictionary *event = @{ @"target": self.reactTag };
-
-    [_eventDispatcher sendInputEventWithName:@"onFinishLoadingMap" body:event];
+    if (!_onFinishLoadingMap) { return; }
+    _onFinishLoadingMap(@{ @"target": self.reactTag });
 }
 
 - (void)mapViewWillStartLoadingMap:(MGLMapView *)mapView
 {
-    NSDictionary *event = @{ @"target": self.reactTag };
-
-    [_eventDispatcher sendInputEventWithName:@"onStartLoadingMap" body:event];
+    if (!_onStartLoadingMap) { return; }
+    _onStartLoadingMap(@{ @"target": self.reactTag });
 }
 
 // Utils

@@ -27,7 +27,6 @@ function setAccessToken(token: string) {
 
 class MapView extends Component {
   // Offline
-
   addPackForRegion(options) {
     MapboxGLManager.addPackForRegion(findNodeHandle(this), options);
   }
@@ -39,7 +38,6 @@ class MapView extends Component {
   }
 
   // Viewport setters
-
   setDirection(direction, animated = true, callback) {
     let _resolve;
     const promise = new Promise(resolve => _resolve = resolve);
@@ -97,12 +95,11 @@ class MapView extends Component {
   }
 
   // Others
-
   selectAnnotation(selectedIdentifier, animated = true) {
     MapboxGLManager.selectAnnotationAnimated(findNodeHandle(this), selectedIdentifier, animated);
   }
 
-
+  // Events
   _onRegionChange = (event: Event) => {
     if (this.props.onRegionChange) this.props.onRegionChange(event.nativeEvent.src);
   };
@@ -135,15 +132,6 @@ class MapView extends Component {
   };
   _onLocateUserFailed = (event: Event) => {
     if (this.props.onLocateUserFailed) this.props.onLocateUserFailed(event.nativeEvent.src);
-  };
-  _onOfflineProgressDidChange = (event: Event) => {
-    if (this.props.onOfflineProgressDidChange) this.props.onOfflineProgressDidChange(event.nativeEvent.src);
-  };
-  _onOfflineMaxAllowedMapboxTiles = (event: Event) => {
-    if (this.props.onOfflineMaxAllowedMapboxTiles) this.props.onOfflineMaxAllowedMapboxTiles(event.nativeEvent.src);
-  };
-  _onOfflineDidRecieveError = (event: Event) => {
-    if (this.props.onOfflineDidRecieveError) this.props.onOfflineDidRecieveError(event.nativeEvent.src);
   };
 
   static propTypes = {
