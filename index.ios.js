@@ -1,126 +1,120 @@
 'use strict';
 
-var React = require('react');
-var { PropTypes } = React;
+import React,  { Component, PropTypes } from 'react';
+import { NativeModules, requireNativeComponent, findNodeHandle } from 'react-native';
+const { MapboxGLManager } = NativeModules;
 
-var ReactNative = require('react-native');
-var { NativeModules, requireNativeComponent, findNodeHandle } = ReactNative;
+class Mapbox extends Component {
+  static mapStyles = MapboxGLManager.mapStyles;
+  static userTrackingMode = MapboxGLManager.userTrackingMode;
+  static userLocationVerticalAlignment = MapboxGLManager.userLocationVerticalAlignment;
+  static unknownResourceCount = MapboxGLManager.unknownResourceCount;
 
-var { MapboxGLManager } = NativeModules;
-
-var Mapbox = React.createClass({
-  statics: {
-    metricsEnabled: MapboxGLManager.metricsEnabled,
-    setMetricsEnabled(enabled: boolean) {
-      Mapbox.metricsEnabled = enabled;
-      MapboxGLManager.setMetricsEnabled(enabled);
-    },
-
-    mapStyles: MapboxGLManager.mapStyles,
-    userTrackingMode: MapboxGLManager.userTrackingMode,
-    userLocationVerticalAlignment: MapboxGLManager.userLocationVerticalAlignment,
-    unknownResourceCount: MapboxGLManager.unknownResourceCount
-  },
+  static metricsEnabled = MapboxGLManager.metricsEnabled;
+  static setMetricsEnabled(enabled: boolean) {
+    Mapbox.metricsEnabled = enabled;
+    MapboxGLManager.setMetricsEnabled(enabled);
+  }
 
   addPackForRegion(options) {
     MapboxGLManager.addPackForRegion(findNodeHandle(this), options);
-  },
+  }
   getPacks(callback) {
     MapboxGLManager.getPacks(findNodeHandle(this), callback);
-  },
+  }
   removePack(packName, callback) {
     MapboxGLManager.removePack(findNodeHandle(this), packName, callback);
-  },
+  }
   setDirectionAnimated(heading) {
     MapboxGLManager.setDirectionAnimated(findNodeHandle(this), heading);
-  },
+  }
   setZoomLevelAnimated(zoomLevel) {
     MapboxGLManager.setZoomLevelAnimated(findNodeHandle(this), zoomLevel);
-  },
+  }
   setCenterCoordinateAnimated(latitude, longitude) {
     return MapboxGLManager.setCenterCoordinateAnimated(findNodeHandle(this), latitude, longitude);
-  },
+  }
   setCenterCoordinateZoomLevelAnimated(latitude, longitude, zoomLevel) {
     MapboxGLManager.setCenterCoordinateZoomLevelAnimated(findNodeHandle(this), latitude, longitude, zoomLevel);
-  },
+  }
   setCameraAnimated(latitude, longitude, fromDistance, pitch, heading, duration) {
     MapboxGLManager.setCameraAnimated(findNodeHandle(this), latitude, longitude, fromDistance, pitch, heading, duration);
-  },
+  }
   addAnnotations(annotations) {
     MapboxGLManager.addAnnotations(findNodeHandle(this), annotations);
-  },
+  }
   updateAnnotation(annotation) {
     MapboxGLManager.updateAnnotation(findNodeHandle(this), annotation);
-  },
+  }
   selectAnnotationAnimated(selectedIdentifier) {
     MapboxGLManager.selectAnnotationAnimated(findNodeHandle(this), selectedIdentifier);
-  },
+  }
   removeAnnotation(selectedIdentifier) {
     MapboxGLManager.removeAnnotation(findNodeHandle(this), selectedIdentifier);
-  },
+  }
   removeAllAnnotations(mapRef) {
     MapboxGLManager.removeAllAnnotations(findNodeHandle(this));
-  },
+  }
   setVisibleCoordinateBoundsAnimated(latitudeSW, longitudeSW, latitudeNE, longitudeNE, paddingTop, paddingRight, paddingBottom, paddingLeft) {
     MapboxGLManager.setVisibleCoordinateBoundsAnimated(findNodeHandle(this), latitudeSW, longitudeSW, latitudeNE, longitudeNE, paddingTop, paddingRight, paddingBottom, paddingLeft);
-  },
+  }
   setUserTrackingMode(userTrackingMode) {
     MapboxGLManager.setUserTrackingMode(findNodeHandle(this), userTrackingMode);
-  },
+  }
   getCenterCoordinateZoomLevel(callback) {
     MapboxGLManager.getCenterCoordinateZoomLevel(findNodeHandle(this), callback);
-  },
+  }
   getDirection(callback) {
     MapboxGLManager.getDirection(findNodeHandle(this), callback);
-  },
+  }
   getBounds(callback) {
     MapboxGLManager.getBounds(findNodeHandle(this), callback);
-  },
+  }
 
-  _onRegionChange(event: Event) {
+  _onRegionChange = (event: Event) => {
     if (this.props.onRegionChange) this.props.onRegionChange(event.nativeEvent.src);
-  },
-  _onRegionWillChange(event: Event) {
+  };
+  _onRegionWillChange = (event: Event) => {
     if (this.props.onRegionWillChange) this.props.onRegionWillChange(event.nativeEvent.src);
-  },
-  _onOpenAnnotation(event: Event) {
+  };
+  _onOpenAnnotation = (event: Event) => {
     if (this.props.onOpenAnnotation) this.props.onOpenAnnotation(event.nativeEvent.src);
-  },
-  _onRightAnnotationTapped(event: Event) {
+  };
+  _onRightAnnotationTapped = (event: Event) => {
     if (this.props.onRightAnnotationTapped) this.props.onRightAnnotationTapped(event.nativeEvent.src);
-  },
-  _onChangeUserTrackingMode(event: Event) {
+  };
+  _onChangeUserTrackingMode = (event: Event) => {
     if (this.props.onChangeUserTrackingMode) this.props.onChangeUserTrackingMode(event.nativeEvent.src);
-  },
-  _onUpdateUserLocation(event: Event) {
+  };
+  _onUpdateUserLocation = (event: Event) => {
     if (this.props.onUpdateUserLocation) this.props.onUpdateUserLocation(event.nativeEvent.src);
-  },
-  _onLongPress(event: Event) {
+  };
+  _onLongPress = (event: Event) => {
     if (this.props.onLongPress) this.props.onLongPress(event.nativeEvent.src);
-  },
-  _onTap(event: Event) {
+  };
+  _onTap = (event: Event) => {
     if (this.props.onTap) this.props.onTap(event.nativeEvent.src);
-  },
-  _onFinishLoadingMap(event: Event) {
+  };
+  _onFinishLoadingMap = (event: Event) => {
     if (this.props.onFinishLoadingMap) this.props.onFinishLoadingMap(event.nativeEvent.src);
-  },
-  _onStartLoadingMap(event: Event) {
+  };
+  _onStartLoadingMap = (event: Event) => {
     if (this.props.onStartLoadingMap) this.props.onStartLoadingMap(event.nativeEvent.src);
-  },
-  _onLocateUserFailed(event: Event) {
+  };
+  _onLocateUserFailed = (event: Event) => {
     if (this.props.onLocateUserFailed) this.props.onLocateUserFailed(event.nativeEvent.src);
-  },
-  _onOfflineProgressDidChange(event: Event) {
+  };
+  _onOfflineProgressDidChange = (event: Event) => {
     if (this.props.onOfflineProgressDidChange) this.props.onOfflineProgressDidChange(event.nativeEvent.src);
-  },
-  _onOfflineMaxAllowedMapboxTiles(event: Event) {
+  };
+  _onOfflineMaxAllowedMapboxTiles = (event: Event) => {
     if (this.props.onOfflineMaxAllowedMapboxTiles) this.props.onOfflineMaxAllowedMapboxTiles(event.nativeEvent.src);
-  },
-  _onOfflineDidRecieveError(event: Event) {
+  };
+  _onOfflineDidRecieveError = (event: Event) => {
     if (this.props.onOfflineDidRecieveError) this.props.onOfflineDidRecieveError(event.nativeEvent.src);
-  },
+  };
 
-  propTypes: {
+  static propTypes = {
     showsUserLocation: PropTypes.bool,
     rotateEnabled: PropTypes.bool,
     scrollEnabled: PropTypes.bool,
@@ -178,27 +172,25 @@ var Mapbox = React.createClass({
     onOfflineMaxAllowedMapboxTiles: PropTypes.func,
     onOfflineDidRecieveError: PropTypes.func,
     onChangeUserTrackingMode: PropTypes.func
-  },
+  };
 
-  getDefaultProps() {
-    return {
-      centerCoordinate: {
-        latitude: 0,
-        longitude: 0
-      },
-      debugActive: false,
-      direction: 0,
-      rotateEnabled: true,
-      scrollEnabled: true,
-      showsUserLocation: false,
-      styleURL: MapboxGLManager.mapStyles.streets,
-      zoomEnabled: true,
-      zoomLevel: 0,
-      attributionButtonIsHidden: false,
-      logoIsHidden: false,
-      compassIsHidden: false
-    };
-  },
+  static defaultProps = {
+    centerCoordinate: {
+      latitude: 0,
+      longitude: 0
+    },
+    debugActive: false,
+    direction: 0,
+    rotateEnabled: true,
+    scrollEnabled: true,
+    showsUserLocation: false,
+    styleURL: MapboxGLManager.mapStyles.streets,
+    zoomEnabled: true,
+    zoomLevel: 0,
+    attributionButtonIsHidden: false,
+    logoIsHidden: false,
+    compassIsHidden: false
+  };
 
   render() {
     return (
@@ -220,8 +212,7 @@ var Mapbox = React.createClass({
         onChangeUserTrackingMode={this._onChangeUserTrackingMode} />
     );
   }
-});
+}
 
-var MapboxGLView = requireNativeComponent('RCTMapboxGL', Mapbox);
-
+const MapboxGLView = requireNativeComponent('RCTMapboxGL', Mapbox);
 module.exports = Mapbox;
