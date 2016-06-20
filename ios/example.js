@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 var Mapbox = require('react-native-mapbox-gl');
-var mapRef = 'mapRef';
 import {
   AppRegistry,
   StyleSheet,
@@ -11,8 +10,9 @@ import {
   View
 } from 'react-native';
 
+const accessToken = 'your-mapbox.com-access-token';
+
 var MapExample = React.createClass({
-  mixins: [Mapbox.Mixin],
   getInitialState() {
     return {
       center: {
@@ -95,19 +95,19 @@ var MapExample = React.createClass({
     StatusBar.setHidden(true);
     return (
       <View style={styles.container}>
-        <Text onPress={() => this.setDirectionAnimated(mapRef, 0)}>
+        <Text onPress={() => this._map && this._map.setDirectionAnimated(0)}>
           Set direction to 0
         </Text>
-        <Text onPress={() => this.setZoomLevelAnimated(mapRef, 6)}>
+        <Text onPress={() => this._map && this._map.setZoomLevelAnimated(6)}>
           Zoom out to zoom level 6
         </Text>
-        <Text onPress={() => this.setCenterCoordinateAnimated(mapRef, 48.8589, 2.3447)}>
+        <Text onPress={() => this._map && this._map.setCenterCoordinateAnimated(48.8589, 2.3447)}>
           Go to Paris at current zoom level {parseInt(this.state.currentZoom)}
         </Text>
-        <Text onPress={() => this.setCenterCoordinateZoomLevelAnimated(mapRef, 35.68829, 139.77492, 14)}>
+        <Text onPress={() => this._map && this._map.setCenterCoordinateZoomLevelAnimated(35.68829, 139.77492, 14)}>
           Go to Tokyo at fixed zoom level 14
         </Text>
-        <Text onPress={() => this.addAnnotations(mapRef, [{
+        <Text onPress={() => this._map && this._map.addAnnotations([{
           coordinates: [40.73312,-73.989],
           type: 'point',
           title: 'This is a new marker',
@@ -122,7 +122,7 @@ var MapExample = React.createClass({
         }])}>
           Add new marker
         </Text>
-        <Text onPress={() => this.updateAnnotation(mapRef, {
+        <Text onPress={() => this._map && this._map.updateAnnotation({
           coordinates: [40.714541341726175,-74.00579452514648],
           'type': 'point',
           title: 'New Title!',
@@ -136,54 +136,54 @@ var MapExample = React.createClass({
         })}>
           Update marker2
         </Text>
-        <Text onPress={() => this.selectAnnotationAnimated(mapRef, 'marker1')}>
+        <Text onPress={() => this._map && this._map.selectAnnotationAnimated('marker1')}>
           Open marker1 popup
         </Text>
-        <Text onPress={() => this.removeAnnotation(mapRef, 'marker2')}>
+        <Text onPress={() => this._map && this._map.removeAnnotation('marker2')}>
           Remove marker2 annotation
         </Text>
         <Text onPress={() => this.removeAllAnnotations(mapRef)}>
           Remove all annotations
         </Text>
-        <Text onPress={() => this.setVisibleCoordinateBoundsAnimated(mapRef, 40.712, -74.227, 40.774, -74.125, 100, 0, 0, 0)}>
+        <Text onPress={() => this._map && this._map.setVisibleCoordinateBoundsAnimated(40.712, -74.227, 40.774, -74.125, 100, 0, 0, 0)}>
           Set visible bounds to 40.7, -74.2, 40.7, -74.1
         </Text>
-        <Text onPress={() => this.setUserTrackingMode(mapRef, this.userTrackingMode.follow)}>
+        <Text onPress={() => this._map && this._map.setUserTrackingMode(Mapbox.userTrackingMode.follow)}>
           Set userTrackingMode to follow
         </Text>
-        <Text onPress={() => this.getCenterCoordinateZoomLevel(mapRef, (location)=> {
+        <Text onPress={() => this._map && this._map.getCenterCoordinateZoomLevel((location)=> {
             console.log(location);
           })}>
           Get location
         </Text>
-        <Text onPress={() => this.getDirection(mapRef, (direction)=> {
+        <Text onPress={() => this._map && this._map.getDirection((direction)=> {
             console.log(direction);
           })}>
           Get direction
         </Text>
-        <Text onPress={() => this.getBounds(mapRef, (bounds)=> {
+        <Text onPress={() => this._map && this._map.getBounds((bounds)=> {
             console.log(bounds);
           })}>
           Get bounds
         </Text>
-        <Text onPress={() => this.addPackForRegion(mapRef, {
+        <Text onPress={() => this._map && this._map.addPackForRegion({
             name: 'test',
             type: 'bbox',
             bounds: [0, 0, 0, 0],
             minZoomLevel: 0,
             maxZoomLevel: 0,
             metadata: {},
-            styleURL: this.mapStyles.emerald
+            styleURL: Mapbox.mapStyles.emerald
           })}>
           Create offline pack
         </Text>
-        <Text onPress={() => this.getPacks(mapRef, (err, packs)=> {
+        <Text onPress={() => this._map && this._map.getPacks((err, packs)=> {
             if (err) console.log(err);
             console.log(packs);
           })}>
           Get offline packs
         </Text>
-        <Text onPress={() => this.removePack(mapRef, 'test', (err, info)=> {
+        <Text onPress={() => this._map && this._map.removePack('test', (err, info)=> {
             if (err) console.log(err);
             if (info) {
               console.log('Deleted', info.deleted);
@@ -194,16 +194,16 @@ var MapExample = React.createClass({
           Remove pack with name 'test'
         </Text>
         <Mapbox
+          ref={map => { this._map = map; }}
           style={styles.container}
           direction={0}
           rotateEnabled={true}
           scrollEnabled={true}
           zoomEnabled={true}
           showsUserLocation={true}
-          ref={mapRef}
-          accessToken={'your-mapbox.com-access-token'}
-          styleURL={this.mapStyles.emerald}
-          userTrackingMode={this.userTrackingMode.none}
+          accessToken={accessToken}
+          styleURL={Mapbox.mapStyles.emerald}
+          userTrackingMode={Mapbox.userTrackingMode.none}
           centerCoordinate={this.state.center}
           zoomLevel={this.state.zoom}
           onRegionChange={this.onRegionChange}
@@ -227,4 +227,4 @@ var styles = StyleSheet.create({
   }
 });
 
-AppRegistry.registerComponent('your-app-name', () => MapExample);
+AppRegistry.registerComponent('YourAppName', () => MapExample);
