@@ -101,6 +101,7 @@
     _isChangingUserTracking = YES;
     _map.userTrackingMode = _userTrackingMode;
     _isChangingUserTracking = NO;
+    [_map addAnnotations:[_annotations allValues]];
     
     [self addSubview:_map];
     [self layoutSubviews];

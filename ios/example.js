@@ -126,7 +126,7 @@ class MapExample extends Component {
   updateMarker2 = () => {
     this.setState({
       annotations: this.state.annotations.map(annotation => {
-        if (annotation.name !== 'marker2') { return annotation; }
+        if (annotation.id !== 'marker2') { return annotation; }
         return {
           coordinates: [40.714541341726175,-74.00579452514648],
           'type': 'point',
@@ -145,7 +145,7 @@ class MapExample extends Component {
 
   removeMarker2 = () => {
     this.setState({
-      annotations: this.state.annotations.filter(a => a.name !== 'marker2')
+      annotations: this.state.annotations.filter(a => a.id !== 'marker2')
     });
   };
 
