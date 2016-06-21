@@ -34,6 +34,7 @@ import { MapView } from 'react-native-mapbox-gl';
 | `userLocationVerticalAlignment` | `enum` | Optional | `Mapbox.userLocationVerticalAlignment.center` | Change the alignment of where the user location shows on the screen. One of `Mapbox.userLocationVerticalAlignment.top`, `Mapbox.userLocationVerticalAlignment.center`, `Mapbox.userLocationVerticalAlignment.bottom` |
 | `styleURL` | `string` | Required | `Mapbox.mapStyles.streets` |  A Mapbox style. See [Styles](#styles) for valid values. |
 | `annotations` | `array` | Optional | `[]` |  An array of annotation objects. See [annotation detail](#annotations) |
+| `annotationsAreImmutable`  | `boolean` | Optional | `false` | Set this to `true` if you don't ever mutate the `annotations` array or the annotations themselves. This enables optimizations when props change. |
 | `attributionButtonIsHidden`  | `boolean` | Optional | `false` | Whether attribution button is visible in lower right corner. *[If true you must still attribute OpenStreetMap in your app.](https://www.mapbox.com/about/maps/)* |
 | `logoIsHidden`  | `boolean` | Optional | `false` | Whether logo is visible in lower left corner. |
 | `compassIsHidden`  | `boolean` | Optional | `false` | Whether compass is visible when map is rotated. |
@@ -255,6 +256,16 @@ annotations: [{
   "id": "route"
 }]
 ```
+
+#### Immutability
+
+When adding new annotations or modifying existing ones, it's recommended not
+to mutate the annotations array, but rather treat it as immutable and create
+a new one with the same objects plus your modifications.
+
+If your `annotations` array is immutable and you enable `annotationsAreImmutable`,
+this enables important performance optimizations when this component is
+re-rendered.
 
 ## Mapbox Telemetry (metrics)
 

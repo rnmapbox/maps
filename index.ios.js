@@ -195,6 +195,7 @@ class MapView extends Component {
         url: PropTypes.string
       })
     })),
+    annotationsAreImmutable: PropTypes.bool,
     attributionButtonIsHidden: PropTypes.bool,
     logoIsHidden: PropTypes.bool,
     compassIsHidden: PropTypes.bool,
@@ -210,7 +211,7 @@ class MapView extends Component {
     onTap: PropTypes.func,
     contentInset: PropTypes.array,
     userLocationVerticalAlignment: PropTypes.number,
-    onChangeUserTrackingMode: PropTypes.func
+    onChangeUserTrackingMode: PropTypes.func,
   };
 
   static defaultProps = {
@@ -229,7 +230,8 @@ class MapView extends Component {
     zoomEnabled: true,
     attributionButtonIsHidden: false,
     logoIsHidden: false,
-    compassIsHidden: false
+    compassIsHidden: false,
+    annotationsAreImmutable: false
   };
 
   componentWillReceiveProps(newProps) {
@@ -237,10 +239,15 @@ class MapView extends Component {
     const itemsToAdd = [];
     const itemsToRemove = [];
 
+    const isImmutable = newProps.annotationsAreImmutable;
+    if (isImmutable && this.props.annotations === newProps.annotations) {
+      return;
+    }
+
     newProps.annotations.forEach(annotation => {
       const id = annotation.id;
       if (!isEqual(this._annotations[id], annotation)) {
-        this._annotations[id] = cloneDeep(annotation);
+        this._annotations[id] = isImmutable ? annotation : cloneDeep(annotation);
         itemsToAdd.push(annotation);
       }
       oldKeys[id] = null;
@@ -264,8 +271,10 @@ class MapView extends Component {
 
     MapboxGLManager.spliceAnnotations(findNodeHandle(this), true, [], this.props.annotations);
 
+    const isImmutable = this.props.annotationsAreImmutable;
+
     this._annotations = this.props.annotations.reduce((acc, annotation) => {
-      acc[annotation.id] = cloneDeep(annotation);
+      acc[annotation.id] = isImmutable ? annotation : cloneDeep(annotation);
       return acc;
     }, {});
   };
