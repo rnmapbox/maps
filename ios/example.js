@@ -176,7 +176,7 @@ class MapExample extends Component {
         <Text onPress={this.updateMarker2}>
           Update marker2
         </Text>
-        <Text onPress={() => this._map && this._map.selectAnnotationAnimated('marker1')}>
+        <Text onPress={() => this._map && this._map.selectAnnotation('marker1')}>
           Open marker1 popup
         </Text>
         <Text onPress={this.removeMarker2}>
@@ -212,7 +212,7 @@ class MapExample extends Component {
             bounds: [0, 0, 0, 0],
             minZoomLevel: 0,
             maxZoomLevel: 0,
-            metadata: {},
+            metadata: { anyValue: 'you wish' },
             styleURL: Mapbox.mapStyles.emerald
           })}>
           Create offline pack

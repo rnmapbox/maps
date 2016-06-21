@@ -329,7 +329,7 @@ A progress object has the following shape:
 ```javascript
 {
   name: 'test', // The name this pack was registered with
-  metadata, // The object that was previously passed as metadata
+  metadata, // The value that was previously passed as metadata
   countOfBytesCompleted: 0, // The number of bytes downloaded for this pack
   countOfResourcesCompleted: 0, // The number of tiles that have been downloaded for this pack
   countOfResourcesExpected: 0, // The estimated minimum number of total tiles in this pack

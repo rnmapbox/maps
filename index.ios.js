@@ -114,8 +114,8 @@ class MapView extends Component {
   }
 
   // Others
-  selectAnnotation(selectedIdentifier, animated = true) {
-    MapboxGLManager.selectAnnotationAnimated(findNodeHandle(this), selectedIdentifier, animated);
+  selectAnnotation(annotationId, animated = true) {
+    MapboxGLManager.selectAnnotation(findNodeHandle(this), annotationId, animated);
   }
 
   // Events
@@ -260,7 +260,7 @@ const Mapbox = {
   mapStyles, userTrackingMode, userLocationVerticalAlignment, unknownResourceCount,
   getMetricsEnabled, setMetricsEnabled,
   setAccessToken,
-  addPackForRegion, getPacks, removePack,
+  addOfflinePack, getOfflinePacks, removeOfflinePack,
   addOfflinePackProgressListener,
   addOfflineMaxAllowedTilesListener,
   addOfflineErrorListener
