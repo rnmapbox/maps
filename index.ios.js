@@ -231,7 +231,8 @@ class MapView extends Component {
     attributionButtonIsHidden: false,
     logoIsHidden: false,
     compassIsHidden: false,
-    annotationsAreImmutable: false
+    annotationsAreImmutable: false,
+    annotations: []
   };
 
   componentWillReceiveProps(newProps) {

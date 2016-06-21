@@ -72,7 +72,7 @@ You first need to get a ref to your `MapView` component:
 <MapView ref={map => { this._map = map; }} />
 ```
 
-Then call them as `this._map.methodName()`.
+Then call methods as `this._map.methodName()`.
 
 ```javascript
 this._map.setDirection(direction, animated = true, callback);
