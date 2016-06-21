@@ -16,7 +16,7 @@ Mapbox.setAccessToken('your-mapbox.com-access-token');
 
 Import the component to use it:
 
-```javascript
+```jsx
 import { MapView } from 'react-native-mapbox-gl';
 <MapView />
 ```
@@ -33,7 +33,7 @@ import { MapView } from 'react-native-mapbox-gl';
 | `userTrackingMode` | `enum` | Optional | Wether the map is zoomed to and follows the user's location. One of `Mapbox.userTrackingMode.none`, `Mapbox.userTrackingMode.follow`, `Mapbox.userTrackingMode.followWithCourse`, `Mapbox.userTrackingMode.followWithHeading` | `Mapbox.userTrackingMode.none` |
 | `userLocationVerticalAlignment` | `enum` | Optional | Change the alignment of where the user location shows on the screen. One of `Mapbox.userLocationVerticalAlignment.top`, `Mapbox.userLocationVerticalAlignment.center`, `Mapbox.userLocationVerticalAlignment.bottom` | `Mapbox.userLocationVerticalAlignment.center` |
 | `styleURL` | `string` | Required |  A Mapbox style. See [Styles](#styles) for valid values. | `Mapbox.mapStyles.streets` |
-| `annotations` | `array` | Optional |  An array of annotation objects. See [annotation detail](#annotations) | `[]` |
+| `annotations` | `array` | Optional |  An array of annotation objects. See [Annotations](#annotations) | `[]` |
 | `annotationsAreImmutable`  | `boolean` | Optional | Set this to `true` if you don't ever mutate the `annotations` array or the annotations themselves. This enables optimizations when props change. | `false` |
 | `attributionButtonIsHidden`  | `boolean` | Optional | Whether attribution button is visible in lower right corner. *[If true you must still attribute OpenStreetMap in your app.](https://www.mapbox.com/about/maps/)* | `false` |
 | `logoIsHidden`  | `boolean` | Optional | Whether logo is visible in lower left corner. | `false` |
@@ -68,7 +68,7 @@ import { MapView } from 'react-native-mapbox-gl';
 
 You first need to get a ref to your `MapView` component:
 
-```javascript
+```jsx
 <MapView ref={map => { this._map = map; }} />
 ```
 
@@ -155,6 +155,8 @@ this._map.selectAnnotation(id, animated = true);
 
 ## Styles
 
+#### Default styles
+
 Mapbox GL ships with 6 included styles:
 
 * `Mapbox.mapStyles.streets`
@@ -166,13 +168,13 @@ Mapbox GL ships with 6 included styles:
 
 To use one of these, just pass it as a prop to `MapView`:
 
-```javascript
+```jsx
 <MapView
   styleURL={Mapbox.mapStyles.emerald}
 />
 ```
 
-## Custom styles
+#### Custom styles
 
 You can also create a custom style in [Mapbox Studio](https://www.mapbox.com/studio/) and add it your map. Simply grab the style url. It should look something like:
 
@@ -266,6 +268,8 @@ a new one with the same objects plus your modifications.
 If your `annotations` array is immutable and you enable `annotationsAreImmutable`,
 this enables important performance optimizations when this component is
 re-rendered.
+
+See [the example](./example.js#L116) for an illustration of this.
 
 ## Mapbox Telemetry (metrics)
 

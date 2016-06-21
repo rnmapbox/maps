@@ -111,6 +111,7 @@ class MapExample extends Component {
   }
 
   addNewMarkers = () => {
+    // Treat annotations as immutable and create a new one instead of using .push()
     this.setState({
       annotations: [ ...this.state.annotations, {
         coordinates: [40.73312,-73.989],
@@ -129,6 +130,7 @@ class MapExample extends Component {
   };
 
   updateMarker2 = () => {
+    // Treat annotations as immutable and use .map() instead of changing the array
     this.setState({
       annotations: this.state.annotations.map(annotation => {
         if (annotation.id !== 'marker2') { return annotation; }
@@ -247,6 +249,7 @@ class MapExample extends Component {
           styleURL={Mapbox.mapStyles.emerald}
           userTrackingMode={this.state.userTrackingMode}
           annotations={this.state.annotations}
+          annotationsAreImmutable
           onChangeUserTrackingMode={this.onChangeUserTrackingMode}
           onRegionChange={this.onRegionChange}
           onRegionWillChange={this.onRegionWillChange}
