@@ -101,7 +101,9 @@
     _isChangingUserTracking = YES;
     _map.userTrackingMode = _userTrackingMode;
     _isChangingUserTracking = NO;
-    [_map addAnnotations:[_annotations allValues]];
+    for (NSString * annotationId in _annotations) {
+        [_map addAnnotation:_annotations[annotationId]];
+    }
     
     [self addSubview:_map];
     [self layoutSubviews];
@@ -122,14 +124,19 @@
 
 // Annotation management
 
-- (void)addAnnotation:(RCTMGLAnnotation *) annotation {
+- (void)upsertAnnotation:(RCTMGLAnnotation *) annotation {
     NSString * identifier = [annotation id];
     if (!identifier || [identifier length] == 0) {
         RCTLogError(@"field `id` is required on all annotations");
         return;
     }
+    
+    RCTMGLAnnotation * oldAnnotation = [_annotations objectForKey:identifier];
     [_annotations setObject:annotation forKey:identifier];
     [_map addAnnotation:annotation];
+    if (oldAnnotation) {
+        [_map removeAnnotation:oldAnnotation];
+    }
 }
 
 - (void)removeAnnotation:(NSString*)selectedIdentifier

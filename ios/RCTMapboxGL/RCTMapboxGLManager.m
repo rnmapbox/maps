@@ -73,23 +73,6 @@ RCT_CUSTOM_VIEW_PROPERTY(contentInset, UIEdgeInsetsMake, RCTMapboxGL)
     view.contentInset = inset;
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(annotations, CLLocationCoordinate2D, RCTMapboxGL)
-{
-    if ([json isKindOfClass:[NSArray class]]) {
-        [view removeAllAnnotations];
-        
-        id annotationObject;
-        NSEnumerator *enumerator = [json objectEnumerator];
-        
-        while (annotationObject = [enumerator nextObject]) {
-            CLLocationCoordinate2D coordinate = [RCTConvert CLLocationCoordinate2D:annotationObject];
-            if (CLLocationCoordinate2DIsValid(coordinate)){
-                [view addAnnotation:convertToMGLAnnotation(annotationObject)];
-            }
-        }
-    }
-}
-
 // Constants
 
 - (NSDictionary *)constantsToExport
@@ -305,6 +288,28 @@ RCT_EXPORT_METHOD(removePack:(NSString*)packName
 }
 
 // View methods
+
+RCT_EXPORT_METHOD(spliceAnnotations:(nonnull NSNumber *)reactTag
+                  deleteAll:(BOOL)deleteAll
+                  toDelete:(nonnull NSArray<NSString *> *)toDelete
+                  toAdd:(nonnull NSArray *)toAdd)
+{
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
+        RCTMapboxGL *mapView = viewRegistry[reactTag];
+        
+        if (deleteAll) {
+            [mapView removeAllAnnotations];
+        } else {
+            for (NSString * key in toDelete) {
+                [mapView removeAnnotation:key];
+            }
+        }
+        
+        for (NSObject * annotationObject in toAdd) {
+            [mapView upsertAnnotation:convertToMGLAnnotation(annotationObject)];
+        }
+    }];
+}
 
 RCT_EXPORT_METHOD(getCenterCoordinateZoomLevel:(nonnull NSNumber *)reactTag
                   callback:(RCTResponseSenderBlock)callback)

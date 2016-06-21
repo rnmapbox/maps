@@ -40,7 +40,7 @@
 - (void)selectAnnotation:(NSString*)selectedId animated:(BOOL)animated;
 
 // Annotation management
-- (void)addAnnotation:(NSObject *)annotation;
+- (void)upsertAnnotation:(NSObject *)annotation;
 - (void)removeAnnotation:(NSString*)selectedIdentifier;
 - (void)removeAllAnnotations;
 

@@ -33,6 +33,7 @@
     "eslint-plugin-react": "^3.11.3"
   },
   "dependencies": {
-    "babel-eslint": "^4.1.6"
+    "babel-eslint": "^4.1.6",
+    "lodash": "^4.13.1"
   }
 }

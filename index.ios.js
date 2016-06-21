@@ -8,6 +8,10 @@ import {
   findNodeHandle
 } from 'react-native';
 
+import cloneDeep from 'lodash/cloneDeep';
+import clone from 'lodash/clone';
+import isEqual from 'lodash/isEqual';
+
 const { MapboxGLManager } = NativeModules;
 const { mapStyles, userTrackingMode, userLocationVerticalAlignment, unknownResourceCount } = MapboxGLManager;
 
@@ -206,9 +210,6 @@ class MapView extends Component {
     onTap: PropTypes.func,
     contentInset: PropTypes.array,
     userLocationVerticalAlignment: PropTypes.number,
-    onOfflineProgressDidChange: PropTypes.func,
-    onOfflineMaxAllowedMapboxTiles: PropTypes.func,
-    onOfflineDidRecieveError: PropTypes.func,
     onChangeUserTrackingMode: PropTypes.func
   };
 
@@ -231,10 +232,59 @@ class MapView extends Component {
     compassIsHidden: false
   };
 
+  componentWillReceiveProps(newProps) {
+    const oldKeys = clone(this._annotations);
+    const itemsToAdd = [];
+    const itemsToRemove = [];
+
+    newProps.annotations.forEach(annotation => {
+      const id = annotation.id;
+      if (!isEqual(this._annotations[id], annotation)) {
+        this._annotations[id] = cloneDeep(annotation);
+        itemsToAdd.push(annotation);
+      }
+      oldKeys[id] = null;
+    });
+
+    for (let key in oldKeys) {
+      if (oldKeys[key]) {
+        delete this._annotations[key];
+        itemsToRemove.push(key);
+      }
+    }
+
+    MapboxGLManager.spliceAnnotations(findNodeHandle(this), false, itemsToRemove, itemsToAdd);
+  }
+
+  _native = null;
+
+  onNativeComponentMount = (ref) => {
+    if (this._native === ref) { return; }
+    this._native = ref;
+
+    MapboxGLManager.spliceAnnotations(findNodeHandle(this), true, [], this.props.annotations);
+
+    let annotations = this.props.annotations.reduce((acc, annotation) => {
+      acc[annotation.id] = cloneDeep(annotation);
+      return acc;
+    }, {});
+
+    this._annotations = annotations;
+  };
+
+  setNativeProps(nativeProps) {
+    this._native && this._native.setNativeProps(nativeProps);
+  }
+
+  componentWillUnmount() {
+    this._native = null;
+  }
+
   render() {
     return (
       <MapboxGLView
         {...this.props}
+        ref={this.onNativeComponentMount}
         onRegionChange={this._onRegionChange}
         onRegionWillChange={this._onRegionWillChange}
         onOpenAnnotation={this._onOpenAnnotation}
@@ -245,10 +295,8 @@ class MapView extends Component {
         onFinishLoadingMap={this._onFinishLoadingMap}
         onStartLoadingMap={this._onStartLoadingMap}
         onLocateUserFailed={this._onLocateUserFailed}
-        onOfflineProgressDidChange={this._onOfflineProgressDidChange}
-        onOfflineMaxAllowedMapboxTiles={this._onOfflineMaxAllowedMapboxTiles}
-        onOfflineDidRecieveError={this._onOfflineDidRecieveError}
-        onChangeUserTrackingMode={this._onChangeUserTrackingMode} />
+        onChangeUserTrackingMode={this._onChangeUserTrackingMode}
+      />
     );
   }
 }
