@@ -74,6 +74,8 @@ You first need to get a ref to your `MapView` component:
 
 Then call methods as `this._map.methodName()`.
 
+---
+
 ```javascript
 this._map.setDirection(direction, animated = true, callback);
 this._map.setZoomLevel(zoomLevel, animated = true, callback);
@@ -81,38 +83,44 @@ this._map.setCenterCoordinate(latitude, longitude, animated = true, callback);
 this._map.setCenterCoordinateZoomLevel(latitude, longitude, zoomLevel, animated = true, callback);
 ```
 
-> This set of methods sets the location the map is centered on, the zoom level and
+This set of methods sets the location the map is centered on, the zoom level and
 the heading of the map.
->
-> The transition to the desired location is animated by default, but can be made
-> instantaneous by passing `animated` as `false`.
->
-> The methods accept an optional `callback` that will get fired when the animation
-> has ended. Additionally, the return value is a promise that gets resolved when the
-> animation has ended.
+
+The transition to the desired location is animated by default, but can be made
+instantaneous by passing `animated` as `false`.
+
+The methods accept an optional `callback` that will get fired when the animation
+has ended. Additionally, the return value is a promise that gets resolved when the
+animation has ended.
+
+---
 
 ```javascript
 this._map.setVisibleCoordinateBounds(latitudeSW, longitudeSW, latitudeNE, longitudeNE, paddingTop = 0, paddingRight = 0, paddingBottom = 0, paddingLeft = 0, animated = true);
 ```
 
-> This method adjusts the center location and the zoomLevel of the map so that
-> the rectangle determined by `latitudeSW`, `longitudeSW`, `latitudeNE`,
-> `longitudeNE` fits inside the viewport.
->
-> You can optionally pass a minimum padding (in screen points) that will be
-> visible around the given coordinate bounds.
->
-> The transition is animated unless you pass `animated` as `false`.
+This method adjusts the center location and the zoomLevel of the map so that
+the rectangle determined by `latitudeSW`, `longitudeSW`, `latitudeNE`,
+`longitudeNE` fits inside the viewport.
+
+You can optionally pass a minimum padding (in screen points) that will be
+visible around the given coordinate bounds.
+
+The transition is animated unless you pass `animated` as `false`.
+
+---
 
 ```javascript
 this._map.setCamera(latitude, longitude, fromDistance, pitch, direction, animationDuration = 1.0);
 ```
 
-> Sets the map pitched at an angle (`pitch`, measured in
-> degrees, 0 is from straight above), looking towards `latitude` and `longitude`
-> from `fromDistance` meters away, pointing towards heading `direction`.
->
-> Use `animationDuration` to adjust the speed of the transition.
+Sets the map pitched at an angle (`pitch`, measured in
+degrees, 0 is from straight above), looking towards `latitude` and `longitude`
+from `fromDistance` meters away, pointing towards heading `direction`.
+
+Use `animationDuration` to adjust the speed of the transition.
+
+---
 
 ```javascript
 this._map.getCenterCoordinateZoomLevel(data => {
@@ -120,9 +128,11 @@ this._map.getCenterCoordinateZoomLevel(data => {
 });
 ```
 
-> Gets the current coordinates and zoom level of the map.
->
-> `data` is an object of the form `{ latitude, longitude, zoomLevel }`
+Gets the current coordinates and zoom level of the map.
+
+`data` is an object of the form `{ latitude, longitude, zoomLevel }`
+
+---
 
 ```javascript
 this._map.getDirection(direction => {
@@ -130,9 +140,11 @@ this._map.getDirection(direction => {
 });
 ```
 
-> Gets the current heading of the map.
->
-> `direction` is the heading in degrees.
+Gets the current heading of the map.
+
+`direction` is the heading in degrees.
+
+---
 
 ```javascript
 this._map.getBounds(bounds => {
@@ -140,18 +152,20 @@ this._map.getBounds(bounds => {
 });
 ```
 
-> Gets the bounding rectangle in GPS coordinates that is currently visible on
-> within the map's viewport.
->
-> `bounds` is an array representing `[ latitudeSW, longitudeSW, latitudeNE, longitudeNE ]`
+Gets the bounding rectangle in GPS coordinates that is currently visible on
+within the map's viewport.
+
+`bounds` is an array representing `[ latitudeSW, longitudeSW, latitudeNE, longitudeNE ]`
+
+---
 
 ```javascript
 this._map.selectAnnotation(id, animated = true);
 ```
 
-> Selects the annotation tagged with `id`, as if it would be tapped by the user.
->
-> The transition is animated unless you pass `animated` as `false`.
+Selects the annotation tagged with `id`, as if it would be tapped by the user.
+
+The transition is animated unless you pass `animated` as `false`.
 
 ## Styles
 
