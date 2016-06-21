@@ -57,7 +57,7 @@ var ReactMapViewWrapper = React.createClass({
   statics: {
     Mixin: MapMixins
   },
-  defaultProps() {
+  getDefaultProps() {
     return {
       centerCoordinate: {
         latitude: 0,
