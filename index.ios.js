@@ -264,12 +264,10 @@ class MapView extends Component {
 
     MapboxGLManager.spliceAnnotations(findNodeHandle(this), true, [], this.props.annotations);
 
-    let annotations = this.props.annotations.reduce((acc, annotation) => {
+    this._annotations = this.props.annotations.reduce((acc, annotation) => {
       acc[annotation.id] = cloneDeep(annotation);
       return acc;
     }, {});
-
-    this._annotations = annotations;
   };
 
   setNativeProps(nativeProps) {
