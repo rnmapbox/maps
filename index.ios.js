@@ -30,15 +30,15 @@ function setAccessToken(token: string) {
 }
 
 // Offline
-function addPackForRegion(options, callback = () => {}) {
+function addOfflinePack(options, callback = () => {}) {
   MapboxGLManager.addPackForRegion(options, callback);
 }
 
-function getPacks(callback) {
+function getOfflinePacks(callback) {
   MapboxGLManager.getPacks(callback);
 }
 
-function removePack(packName, callback = () => {}) {
+function removeOfflinePack(packName, callback = () => {}) {
   MapboxGLManager.removePack(packName, callback);
 }
 
@@ -98,7 +98,7 @@ class MapView extends Component {
     MapboxGLManager.setCamera(findNodeHandle(this), latitude, longitude, fromDistance, pitch, direction, duration);
   }
 
-  setVisibleCoordinateBounds(latitudeSW, longitudeSW, latitudeNE, longitudeNE, paddingTop, paddingRight, paddingBottom, paddingLeft, animated = true) {
+  setVisibleCoordinateBounds(latitudeSW, longitudeSW, latitudeNE, longitudeNE, paddingTop = 0, paddingRight = 0, paddingBottom = 0, paddingLeft = 0, animated = true) {
     MapboxGLManager.setVisibleCoordinateBounds(findNodeHandle(this), latitudeSW, longitudeSW, latitudeNE, longitudeNE, paddingTop, paddingRight, paddingBottom, paddingLeft, animated);
   }
 

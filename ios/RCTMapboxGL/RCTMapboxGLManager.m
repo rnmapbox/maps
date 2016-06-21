@@ -169,6 +169,7 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     MGLOfflinePackProgress progress = pack.progress;
     
     NSDictionary *event = @{ @"name": userInfo[@"name"],
+                             @"metadata": userInfo[@"metadata"],
                              @"countOfResourcesCompleted": @(progress.countOfResourcesCompleted),
                              @"countOfResourcesExpected": @(progress.countOfResourcesExpected),
                              @"countOfBytesCompleted": @(progress.countOfBytesCompleted),
@@ -217,9 +218,6 @@ RCT_EXPORT_METHOD(addPackForRegion:(NSDictionary*)options
     if ([options objectForKey:@"styleURL"] == nil) {
         return RCTLogError(@"styleURL is required.");
     }
-    if ([options objectForKey:@"metadata"] == nil) {
-        return RCTLogError(@"metadata is required.");
-    }
     if (!([[options objectForKey:@"type"] isEqualToString:@"bbox"])) {
         return RCTLogError(@"Offline type %@ not supported. Only type `bbox` supported.", [options valueForKey:@"type"]);
     }
@@ -237,8 +235,8 @@ RCT_EXPORT_METHOD(addPackForRegion:(NSDictionary*)options
     dispatch_async(dispatch_get_main_queue(), ^{
         id <MGLOfflineRegion> region = [[MGLTilePyramidOfflineRegion alloc] initWithStyleURL:styleURL bounds:bounds fromZoomLevel:fromZoomLevel toZoomLevel:toZoomLevel];
         
-        NSMutableDictionary *userInfo = [metadata mutableCopy];
-        userInfo[@"name"] = name;
+        NSMutableDictionary *userInfo = @{ @"name": name,
+                                           @"metadata": metadata ? metadata : [NSNull null] };
         NSData *context = [NSKeyedArchiver archivedDataWithRootObject:userInfo];
         
         [[MGLOfflineStorage sharedOfflineStorage] addPackForRegion:region withContext:context completionHandler:^(MGLOfflinePack *pack, NSError *error) {
@@ -260,16 +258,13 @@ RCT_EXPORT_METHOD(getPacks:(RCTResponseSenderBlock)callback)
         MGLOfflinePack *packs = [MGLOfflineStorage sharedOfflineStorage].packs;
         
         for (MGLOfflinePack *pack in packs) {
-            NSMutableDictionary *packDict = [NSMutableDictionary new];
-            NSMutableDictionary *userInfo = [[NSKeyedUnarchiver unarchiveObjectWithData:pack.context] mutableCopy];
-            [packDict setObject:userInfo[@"name"] forKey:@"name"];
-            [userInfo removeObjectForKey:@"name"];
-            [packDict setObject:userInfo forKey:@"metadata"];
-            [packDict setObject:@(pack.progress.countOfBytesCompleted) forKey:@"countOfBytesCompleted"];
-            [packDict setObject:@(pack.progress.countOfResourcesCompleted) forKey:@"countOfResourcesCompleted"];
-            [packDict setObject:@(pack.progress.countOfResourcesExpected) forKey:@"countOfResourcesExpected"];
-            [packDict setObject:@(pack.progress.maximumResourcesExpected) forKey:@"maximumResourcesExpected"];
-            [callbackArray addObject:packDict];
+            NSMutableDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
+            [callbackArray addObject:@{ @"name": userInfo[@"name"],
+                                        @"metadata": userInfo[@"metadata"],
+                                        @"countOfBytesCompleted": @(pack.progress.countOfBytesCompleted),
+                                        @"countOfResourcesCompleted": @(pack.progress.countOfResourcesCompleted),
+                                        @"countOfResourcesExpected": @(pack.progress.countOfResourcesExpected),
+                                        @"maximumResourcesExpected": @(pack.progress.maximumResourcesExpected) }];
         }
         
         callback(@[[NSNull null], callbackArray]);
@@ -299,7 +294,7 @@ RCT_EXPORT_METHOD(removePack:(NSString*)packName
         
         [[MGLOfflineStorage sharedOfflineStorage] removePack:tempPack withCompletionHandler:^(NSError * _Nullable error) {
             if (error != nil) {
-                RCTLogError(@"Error: %@", error.localizedFailureReason);
+                callback(@[@{ @"message": error.localizedFailureReason }]);
             } else {
                 NSMutableDictionary *deletedObject = [NSMutableDictionary new];
                 [deletedObject setObject:userInfo[@"name"] forKey:@"deleted"];
@@ -316,16 +311,12 @@ RCT_EXPORT_METHOD(getCenterCoordinateZoomLevel:(nonnull NSNumber *)reactTag
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
-        NSMutableDictionary* callbackDict = [NSMutableDictionary new];
         CLLocationCoordinate2D region = [mapView centerCoordinate];
         double zoom = [mapView zoomLevel];
         
-        [callbackDict setValue:@(region.latitude) forKey:@"latitude"];
-        [callbackDict setValue:@(region.longitude) forKey:@"longitude"];
-        [callbackDict setValue:@(region.longitude) forKey:@"longitude"];
-        [callbackDict setValue:@(zoom) forKey:@"zoom"];
-        
-        callback(@[callbackDict]);
+        callback(@[ @{ @"latitude": @(region.latitude),
+                       @"longitude": @(region.longitude),
+                       @"zoomLevel": @(zoom) } ]);
     }];
 }
 
@@ -351,12 +342,9 @@ RCT_EXPORT_METHOD(getDirection:(nonnull NSNumber *)reactTag
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
-        NSMutableDictionary* callbackDict = [NSMutableDictionary new];
         double direction = [mapView direction];
         
-        [callbackDict setValue:@(direction) forKey:@"direction"];
-        
-        callback(@[callbackDict]);
+        callback(@[ @(direction) ]);
     }];
 }
 

@@ -1,93 +1,174 @@
 # iOS API Docs
 
-## Options
+## Access token
 
-| Option | Type | Opt/Required | Default | Note |
+The first thing you need to do before using the map is getting a Mapbox access
+token by [signing up to a Mapbox account](https://www.mapbox.com/signup).
+
+Then, make sure you run this before mounting any `MapView`s:
+
+```javascript
+import Mapbox from 'react-native-mapbox-gl';
+Mapbox.setAccessToken('your-mapbox.com-access-token');
+```
+
+## Props
+
+Import the component to use it:
+
+```javascript
+import { MapView } from 'react-native-mapbox-gl';
+<MapView />
+```
+
+| Prop | Type | Opt/Required | Default | Note |
 |---|---|---|---|---|
-| `accessToken` | `string` | Required | NA |Mapbox access token. Sign up for a [Mapbox account here](https://www.mapbox.com/signup).
-| `centerCoordinate` | `object` | Optional | `0,0`| Initial `latitude`/`longitude` the map will load at, defaults to `0,0`.
-| `zoomLevel` | `double` | Optional | `0` | Initial zoom level the map will load at. 0 is the entire world, 18 is rooftop level. Defaults to 0.
-| `rotateEnabled` | `bool`  |  Optional | `true`  | Whether the map can rotate |
-| `scrollEnabled` | `bool`  |  Optional | `true`  | Whether the map can be scrolled |
-| `zoomEnabled` | `bool`  |  Optional | `true`  | Whether the map zoom level can be changed |
-|`showsUserLocation` | `bool` | Optional | `false` | Whether the user's location is shown on the map. Note - the map will not zoom to their location.|
-| `styleURL` | `string` | required | Mapbox Streets |  A Mapbox style. Defaults to `streets`.
-| `annotations` | `array` | Optional | NA |  An array of annotation objects. See [annotation detail](https://github.com/bsudekum/react-native-mapbox-gl/blob/master/ios/API.md#annotations)
-| `direction`  | `double` | Optional | `0` | Heading of the map in degrees where 0 is north and 180 is south |
+| `initialCenterCoordinate` | `object` | Optional | `{ latitude:0, longitude: 0 }` | Initial `latitude`/`longitude` the map will load at. |
+| `initialZoomLevel` | `number` | Optional | `0` | Initial zoom level the map will load at. 0 is the entire world, 18 is rooftop level. |
+| `initialDirection`  | `double` | Optional | `0` | Initial heading of the map in degrees, where 0 is north and 180 is south |
+| `rotateEnabled` | `boolean`  |  Optional | `true`  | Whether the map can rotate. |
+| `scrollEnabled` | `boolean`  |  Optional | `true`  | Whether the map can be scrolled. |
+| `zoomEnabled` | `boolean`  |  Optional | `true`  | Whether the map zoom level can be changed. |
+| `showsUserLocation` | `boolean` | Optional | `false` | Whether the user's location is shown on the map. Note: The map will not zoom to their location. |
+| `userTrackingMode` | `enum` | Optional | `Mapbox.userTrackingMode.none` | Wether the map is zoomed to and follows the user's location. One of `Mapbox.userTrackingMode.none`, `Mapbox.userTrackingMode.follow`, `Mapbox.userTrackingMode.followWithCourse`, `Mapbox.userTrackingMode.followWithHeading` |
+| `userLocationVerticalAlignment` | `enum` | Optional | `Mapbox.userLocationVerticalAlignment.center` | Change the alignment of where the user location shows on the screen. One of `Mapbox.userLocationVerticalAlignment.top`, `Mapbox.userLocationVerticalAlignment.center`, `Mapbox.userLocationVerticalAlignment.bottom` |
+| `styleURL` | `string` | Required | `Mapbox.mapStyles.streets` |  A Mapbox style. See [Styles](#styles) for valid values. |
+| `annotations` | `array` | Optional | `[]` |  An array of annotation objects. See [annotation detail](#annotations) |
+| `attributionButtonIsHidden`  | `boolean` | Optional | `false` | Whether attribution button is visible in lower right corner. *[If true you must still attribute OpenStreetMap in your app.](https://www.mapbox.com/about/maps/)* |
+| `logoIsHidden`  | `boolean` | Optional | `false` | Whether logo is visible in lower left corner. |
+| `compassIsHidden`  | `boolean` | Optional | `false` | Whether compass is visible when map is rotated. |
+| `contentInset` | `array` | Optional | `[0, 0, 0, 0]` | Change the padding of the viewport of the map. Offset is in pixels. `[top, right, bottom, left]`
+| `style`  | React styles | Optional | N/A | Styles the actual map view container |
 | `debugActive`  | `bool` | Optional | `false` | Turns on debug mode. |
-| `style`  | flexbox `view` | Optional | NA | Styles the actual map view container |
-| `userTrackingMode` | `int` | Optional | `this.userTrackingMode.none` | Must add `mixins` to use. Valid values are `this.userTrackingMode.none`, `this.userTrackingMode.follow`, `this.userTrackingMode.followWithCourse`, `this.userTrackingMode.followWithHeading` |
-| `attributionButtonIsHidden`  | `bool` | Optional | `false` | Whether attribution button is visible in lower right corner. *If true you must still attribute OpenStreetMap in your app. [Ref](https://www.mapbox.com/about/maps/)* |
-| `logoIsHidden`  | `bool` | Optional | `false` | Whether logo is visible in lower left corner. |
-| `compassIsHidden`  | `bool` | Optional | `false` | Whether compass is visible when map is rotated. |
-| `contentInset` | `array` | Optional | `[0, 0, 0, 0]` | Change the center point of the map. Offset is in pixels. `[top, right, bottom, left]`
-| `userLocationVerticalAlignment` | `enum` | Optional | `userLocationVerticalAlignment.center` | Change the alignment of where the user location shows on the screen. Valid values: `userLocationVerticalAlignment.top`, `userLocationVerticalAlignment.center`, `userLocationVerticalAlignment.bottom`
 
-## Event listeners
+## Callback props
 
-| Event Name | Returns | Notes
+```javascript
+<MapView onSomethingHappened={payload => {
+  //...
+}}/>
+```
+
+| Prop | Payload shape | Notes
 |---|---|---|
-| `onRegionChange` | `{latitude: 0, longitude: 0, zoom: 0}` | Fired when the map ends panning or zooming.
 | `onRegionWillChange` | `{latitude: 0, longitude: 0, zoom: 0}` | Fired when the map begins panning or zooming.
-| `onOpenAnnotation` | `{title: null, subtitle: null, latitude: 0, longitude: 0}` | Fired when focusing a an annotation.
-| `onChangeUserTrackingMode` | `{mode: 0, animated: false}` | Fired when the user tracking mode gets changed by an user pan or rotate.
-| `onUpdateUserLocation` | `{latitude: 0, longitude: 0, headingAccuracy: 0, magneticHeading: 0, trueHeading: 0, isUpdating: false}` | Fired when the users location updates.
-| `onRightAnnotationTapped` | `{title: null, subtitle: null, latitude: 0, longitude: 0}` | Fired when user taps `rightCalloutAccessory`
-| `onTap` | `{latitude: 0, longitude: 0}` | Fired when the users taps the screen.
-| `onLongPress` | `{latitude: 0, longitude: 0, screenCoordY, screenCoordX}` | Fired when the user taps and holds screen for 1 second.
-| `onFinishLoadingMap` | does not return an object | Fired once the map has loaded the style |
-| `onStartLoadingMap` | does not return an object | Fired once the map begins loading the style |
-| `onLocateUserFailed` | `{message: message}` | Fired when there is an error getting the users location. Do not rely on the string that is returned for determining what kind of error it is. |
-| `getCenterCoordinateZoomLevel` | `mapViewRef`, `callback` | Gets the current center location and zoom level. Returns a single callback object. |
-| `getDirection` | `mapViewRef`, `callback` | Gets the current direction. Returns a single callback object. |
-| `getBounds` | `mapViewRef`, `callback` | Gets the bounds of the current view. Returns array [latitudeSW, longitudeSW, latitudeNE, longitudeNE]. |
-| `onOfflineProgressDidChange` | `{countOfResourcesCompleted: 7, countOfResourcesExpected: 1284, name: "test", countOfBytesCompleted: 306543, maximumResourcesExpected: 1284}` | Event fired when the progress of an offline pack changes while downloading. |
-| `onOfflineMaxAllowedMapboxTiles` | `{maximumCount: number}` | Event fired when the maximum number of tiles has been hit. |
-| `onOfflineDidRecieveError` | `{error: error}` | Event fired when there is an error while downloading a pack. |
+| `onRegionChange` | `{latitude: 0, longitude: 0, zoom: 0}` | Fired when the map ends panning or zooming.
+| `onOpenAnnotation` | `{id: 'marker_id', title: null, subtitle: null, latitude: 0, longitude: 0}` | Fired when tapping an annotation.
+| `onRightAnnotationTapped` | `{id: 'marker_id', title: null, subtitle: null, latitude: 0, longitude: 0}` | Fired when user taps the `rightCalloutAccessory` of an annotation.
+| `onChangeUserTrackingMode` | `Mapbox.userTrackingMode.none` | Fired when the user tracking mode gets changed by an user pan or rotate.
+| `onUpdateUserLocation` | `{latitude: 0, longitude: 0, headingAccuracy: 0, magneticHeading: 0, trueHeading: 0, isUpdating: false}` | Fired when the user's location updates.
+| `onLocateUserFailed` | `{message: 'Error message'}` | Fired when there is an error getting the user's location. Do not rely on the string that is returned for determining what kind of error it is.
+| `onTap` | `{latitude: 0, longitude: 0, screenCoordX: 0, screenCoordY: 0}` | Fired when the users taps the screen.
+| `onLongPress` | `{latitude: 0, longitude: 0, screenCoordX: 0, screenCoordX: 0}` | Fired when the user taps and holds screen for 1 second.
+| `onStartLoadingMap` | `undefined` | Fired once the map begins loading the style. |
+| `onFinishLoadingMap` | `undefined` | Fired once the map has loaded the style. |
 
-## Methods for Modifying the Map State
+## Methods
 
-These methods require you to use `MapboxGLMap.Mixin` to access the methods. Each method also requires you to pass in a string as the first argument which is equal to the `ref` on the map view you wish to modify. See the [example](https://github.com/mapbox/react-native-mapbox-gl/blob/master/ios/example.js) on how this is implemented.
+You first need to get a ref to your `MapView` component:
 
-| Method Name | Arguments | Notes
-|---|---|---|
-| `setDirectionAnimated` | `mapViewRef`, `heading` | Rotates the map to a new heading
-| `setZoomLevelAnimated` | `mapViewRef`, `zoomLevel` | Zooms the map to a new zoom level
-| `setCenterCoordinateAnimated` | `mapViewRef`, `latitude`, `longitude` | Moves the map to a new coordinate. Note, the zoom level stay at the current zoom level. Returns a promise for handling completion.
-| `setCenterCoordinateZoomLevelAnimated` | `mapViewRef`, `latitude`, `longitude`, `zoomLevel` | Moves the map to a new coordinate and zoom level
-| `setCameraAnimated` | `mapViewRef`, `latitude`, `longitude`, `fromDistance`, `pitch`, `heading`, `duration` | Sets viewing angle on the map
-| `addAnnotations` | `mapViewRef`, `` (array of annotation objects, see [#annotations](https://github.com/bsudekum/react-native-mapbox-gl/blob/master/API.md#annotations)) | Adds annotation(s) to the map without redrawing the map. Note, this will remove all previous annotations from the map.
-| `selectAnnotationAnimated` | `mapViewRef`, `marker id` | Open the callout of the selected annotation. This method requires that you supply an id to an annotation when creating. If 2 annotations have the same id, only the first annotation will be selected. Only works on annotation `type = 'point'``.
-| `updateAnnotation`  | `mapViewRef`, `annotation object` | Replace annotation if it  exists on the map. This check happens based on the `id` of the object being passed in. The annotation will still be added if no previous one exists.
-| `removeAnnotation`  | `mapViewRef`, `marker id` | Removes annotation from map. This method requires that you supply an id to an annotation when creating. If 2 annotations have the same id, only the first will be removed.
-| `removeAllAnnotations`  | `mapViewRef`| Removes all annotations from the map.
-| `setVisibleCoordinateBoundsAnimated`  | `mapViewRef`, `latitude1`, `longitude1`, `latitude2`, `longitude2`, `padding top`, `padding right`, `padding bottom`, `padding left`  | Changes the viewport to fit the given coordinate bounds and some additional padding on each side.
-| `setUserTrackingMode` | `mapViewRef`, `userTrackingMode` | Modifies the tracking mode. Valid args: `this.userTrackingMode.none`, `this.userTrackingMode.follow`, `this.userTrackingMode.followWithCourse`, `this.userTrackingMode.followWithHeading`
-| `addPackForRegion` | `mapRef` `{name, type, bounds, minZoomLevel, maxZoomLevel, style}` | Adds an offline region for a given bounding box. `name` is a string to represent an offline pack. `type` must be of type `bbox`. `bounds` is an array.  `minZoomLevel` is an number representing the minimum zoom level of the offline pack. `maxZoomLevel` is an number representing the maximum zoom level of the offline pack. `style` is a style url to download. `metadata` is an object you can use metadata about the pack.
-| `getPacks` | `mapRef` `callback` | Returns a callback with an array of all offline packs on device. If the downloaded pack was not downloaded during the current session, the size will be 0.
-| `removePack` | `mapRef` `name-of-pack` `callback` | Removes a pack from the device. The name corresponds to the `name` of the pack used when calling `addPackForRegion`
+```javascript
+<MapView ref={map => { this._map = map; }} />
+```
+
+Then call them as `this._map.methodName()`.
+
+```javascript
+this._map.setDirection(direction, animated = true, callback);
+this._map.setZoomLevel(zoomLevel, animated = true, callback);
+this._map.setCenterCoordinate(latitude, longitude, animated = true, callback);
+this._map.setCenterCoordinateZoomLevel(latitude, longitude, zoomLevel, animated = true, callback);
+```
+
+> This set of methods sets the location the map is centered on, the zoom level and
+the heading of the map.
+>
+> The transition to the desired location is animated by default, but can be made
+> instantaneous by passing `animated` as `false`.
+>
+> The methods accept an optional `callback` that will get fired when the animation
+> has ended. Additionally, the return value is a promise that gets resolved when the
+> animation has ended.
+
+```javascript
+this._map.setVisibleCoordinateBounds(latitudeSW, longitudeSW, latitudeNE, longitudeNE, paddingTop = 0, paddingRight = 0, paddingBottom = 0, paddingLeft = 0, animated = true);
+```
+
+> This method adjusts the center location and the zoomLevel of the map so that
+> the rectangle determined by `latitudeSW`, `longitudeSW`, `latitudeNE`,
+> `longitudeNE` fits inside the viewport.
+>
+> You can optionally pass a minimum padding (in screen points) that will be
+> visible around the given coordinate bounds.
+>
+> The transition is animated unless you pass `animated` as `false`.
+
+```javascript
+this._map.setCamera(latitude, longitude, fromDistance, pitch, direction, animationDuration = 1.0);
+```
+
+> Sets the map pitched at an angle (`pitch`, measured in
+> degrees, 0 is from straight above), looking towards `latitude` and `longitude`
+> from `fromDistance` meters away, pointing towards heading `direction`.
+>
+> Use `animationDuration` to adjust the speed of the transition.
+
+```javascript
+this._map.getCenterCoordinateZoomLevel(data => {
+  // ...
+});
+```
+
+> Gets the current coordinates and zoom level of the map.
+>
+> `data` is an object of the form `{ latitude, longitude, zoomLevel }`
+
+```javascript
+this._map.getDirection(direction => {
+  // ...
+});
+```
+
+> Gets the current heading of the map.
+>
+> `direction` is the heading in degrees.
+
+```javascript
+this._map.getBounds(bounds => {
+  // ...
+});
+```
+
+> Gets the bounding rectangle in GPS coordinates that is currently visible on
+> within the map's viewport.
+>
+> `bounds` is an array representing `[ latitudeSW, longitudeSW, latitudeNE, longitudeNE ]`
+
+```javascript
+this._map.selectAnnotation(id, animated = true);
+```
+
+> Selects the annotation tagged with `id`, as if it would be tapped by the user.
+>
+> The transition is animated unless you pass `animated` as `false`.
 
 ## Styles
 
-This ships with 6 styles included:
+Mapbox GL ships with 6 included styles:
 
-* `streets`
-* `emerald`
-* `dark`
-* `light`
-* `satellite`
-* `hybrid`
+* `Mapbox.mapStyles.streets`
+* `Mapbox.mapStyles.emerald`
+* `Mapbox.mapStyles.dark`
+* `Mapbox.mapStyles.light`
+* `Mapbox.mapStyles.satellite`
+* `Mapbox.mapStyles.hybrid`
 
-To use one of these, make you add mixins:
+To use one of these, just pass it as a prop to `MapView`:
 
-```js
-mixins: [Mapbox.Mixin]
-```
-
-Then you can access each style by:
-
-```jsx
-styleURL={this.mapStyles.emerald}
+```javascript
+<MapView
+  styleURL={Mapbox.mapStyles.emerald}
+/>
 ```
 
 ## Custom styles
@@ -99,6 +180,9 @@ mapbox://styles/bobbysud/cigtw1pzy0000aam2346f7ex0
 ```
 
 ## Annotations
+
+#### Object shape
+
 ```json
 [{
   "coordinates": "required. For type polyline and polygon must be an array of arrays. For type point, single array",
@@ -126,6 +210,7 @@ mapbox://styles/bobbysud/cigtw1pzy0000aam2346f7ex0
 **For adding local images via `image!yourImage.png` see [adding static resources to your app using Images.xcassets  docs](https://facebook.github.io/react-native/docs/image.html#adding-static-resources-to-your-app-using-images-xcassets)**.
 
 #### Example
+
 ```json
 annotations: [{
   "coordinates": [40.72052634, -73.97686958312988],
@@ -171,52 +256,116 @@ annotations: [{
 }]
 ```
 
-### Mapbox Telemetry (metrics)
+## Mapbox Telemetry (metrics)
 
 If you hide the attribution button, you need to provide the user with a way to
 opt-out of telemetry. For this, you need to add `MGLMapboxMetricsEnabledSettingShownInApp`
 as `YES` in `Info.plist`, then create a switch that toggles metrics.
 
-To get the current state of metrics, use `Mapbox.metricsEnabled`.
+To get the current state of metrics, use `Mapbox.getMetricsEnabled()`.
 
 To enable or disable metrics, use `Mapbox.setMetricsEnabled(enabled: boolean)`.
 
-### Offline
+## Offline
 
 There are 3 main methods for interacting with the offline API:
-* `addPackForRegion` - creates an offline pack
-* `getPacks` - returns an array of all offline packs on the device
-* `removePack` - removes a single pack
+* `Mapbox.addOfflinePackForRegion`: Creates an offline pack
+* `Mapbox.getOfflinePacks`: Returns an array of all offline packs on the device
+* `Mapbox.removeOfflinePack`: Removes a single pack
 
-To create a pack:
+Before using them, don't forget to set an access token with `Mapbox.setAccessToken(accessToken)`
 
-```js
-this.addPackForRegion(mapRef, {
-    name: 'test', //required
+#### Creating a pack
+
+```javascript
+Mapbox.addOfflinePack({
+    name: 'test', // required
     type: 'bbox', // required, only type currently supported`
-    metadata: { // required. You can put any information in here that may be useful to you. Can be empty if no metadata is needed
+    metadata: { // optional. You can put any information in here that may be useful to you
         date: new Date(),
         foo: 'bar'
     },
-    bounds: bounds, // latitudeSW, longitudeSW, latitudeNE, longitudeNE
-    minZoomLevel: 10,
-    maxZoomLevel: 13,
-    styleURL: this.mapStyles.emerald // valid styleURL
+    bounds: [ // required. The corners of the bounded rectangle region being saved offline
+      latitudeSW, longitudeSW, latitudeNE, longitudeNE
+    ],
+    minZoomLevel: 10, // required
+    maxZoomLevel: 13, // required
+    styleURL: Mapbox.mapStyles.emerald // required. Valid styleURL
 });
 ```
 
-You can view the progress of a pack that is downloading by listening on `onOfflineProgressDidChange`.
+#### Deleting a pack
 
-To delete a pack, provide the `name` of the pack to delete
-```js
-this.removePack(mapRef, 'test', (err, info)=> {
-    if (err) console.log(err);
+To delete a pack, provide the `name` of the pack to delete.
+
+```javascript
+Mapbox.removeOfflinePack('test', (err, info)=> {
+    if (err) {
+      console.error(err.message);
+      return;
+    }
     if (info) {
         console.log('Deleted', info.deleted);
     } else {
-        console.log('No packs to delete'); // There are no packs on the device
+        console.log('No packs to delete'); // There are no packs named 'test'
     }
 });
+```
+
+#### Querying progress
+
+```javascript
+Mapbox.getOfflinePacks((err, packs) => {
+  if (err) {
+    console.error(err.message);
+    return;
+  }
+  // packs is an array of progress objects
+});
+```
+
+A progress object has the following shape:
+
+```javascript
+{
+  name: 'test', // The name this pack was registered with
+  metadata, // The object that was previously passed as metadata
+  countOfBytesCompleted: 0, // The number of bytes downloaded for this pack
+  countOfResourcesCompleted: 0, // The number of tiles that have been downloaded for this pack
+  countOfResourcesExpected: 0, // The estimated minimum number of total tiles in this pack
+  maximumResourcesExpected: 0 // The estimated maximum number of total tiles in this pack
+}
+```
+
+#### Subscribing to progress notifications
+
+```javascript
+const subscription = Mapbox.addOfflinePackProgressListener(progressObject => {
+  // progressObject has the same format as above
+});
+
+// Remove the listener when it is not needed anymore
+subscription.remove();
+```
+
+#### Subscribing to error events
+
+```javascript
+const subscription = Mapbox.addOfflineErrorListener(payload => {
+  console.log(`Offline pack named ${payload.name} experienced an error: ${payload.error}`);
+});
+
+// Remove the listener when it is not needed anymore
+subscription.remove();
+```
+
+```javascript
+const subscription = Mapbox.addOfflineMaxAllowedTilesListener(payload => {
+  console.log(`Offline pack named ${payload.name} reached max tiles quota of ${payload.maxTiles} tiles`);
+});
+
+// Remove the listener when it is not needed anymore
+subscription.remove();
 ```
 
 Check out our [help page](https://www.mapbox.com/help/mobile-offline/) for more information on offline.

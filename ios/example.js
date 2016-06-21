@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import Mapbox from 'react-native-mapbox-gl';
+import Mapbox, { MapView } from 'react-native-mapbox-gl';
 import {
   AppRegistry,
   StyleSheet,
@@ -67,24 +67,29 @@ class MapExample extends Component {
 
   onRegionChange = (location) => {
     this.setState({ currentZoom: location.zoom });
+    console.log('onRegionChange', location);
   };
   onRegionWillChange = (location) => {
-    console.log(location);
+    console.log('onRegionWillChange', location);
   };
   onUpdateUserLocation = (location) => {
-    console.log(location);
+    console.log('onUpdateUserLocation', location);
   };
   onOpenAnnotation = (annotation) => {
-    console.log(annotation);
+    console.log('onOpenAnnotation', annotation);
   };
   onRightAnnotationTapped = (e) => {
-    console.log(e);
+    console.log('onRightAnnotationTapped', e);
   };
   onLongPress = (location) => {
-    console.log('long pressed', location);
+    console.log('onLongPress', location);
   };
   onTap = (location) => {
-    console.log('tapped', location);
+    console.log('onTap', location);
+  };
+  onChangeUserTrackingMode = (userTrackingMode) => {
+    this.setState({ userTrackingMode });
+    console.log('onChangeUserTrackingMode', userTrackingMode);
   };
 
   componentWillMount() {
@@ -201,7 +206,7 @@ class MapExample extends Component {
           })}>
           Get bounds
         </Text>
-        <Text onPress={() => Mapbox.addPackForRegion({
+        <Text onPress={() => Mapbox.addOfflinePack({
             name: 'test',
             type: 'bbox',
             bounds: [0, 0, 0, 0],
@@ -212,13 +217,13 @@ class MapExample extends Component {
           })}>
           Create offline pack
         </Text>
-        <Text onPress={() => Mapbox.getPacks((err, packs)=> {
+        <Text onPress={() => Mapbox.getOfflinePacks((err, packs)=> {
             if (err) console.log(err);
             console.log(packs);
           })}>
           Get offline packs
         </Text>
-        <Text onPress={() => Mapbox.removePack('test', (err, info)=> {
+        <Text onPress={() => Mapbox.removeOfflinePack('test', (err, info)=> {
             if (err) console.log(err);
             if (info) {
               console.log('Deleted', info.deleted);
@@ -229,7 +234,7 @@ class MapExample extends Component {
           Remove pack with name 'test'
         </Text>
         <Text>User tracking mode is {this.state.userTrackingMode}</Text>
-        <Mapbox.MapView
+        <MapView
           ref={map => { this._map = map; }}
           style={styles.container}
           initialCenterCoordinate={this.state.center}
@@ -242,7 +247,7 @@ class MapExample extends Component {
           styleURL={Mapbox.mapStyles.emerald}
           userTrackingMode={this.state.userTrackingMode}
           annotations={this.state.annotations}
-          onChangeUserTrackingMode={userTrackingMode => this.setState({ userTrackingMode })}
+          onChangeUserTrackingMode={this.onChangeUserTrackingMode}
           onRegionChange={this.onRegionChange}
           onRegionWillChange={this.onRegionWillChange}
           onOpenAnnotation={this.onOpenAnnotation}
