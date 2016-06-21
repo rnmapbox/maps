@@ -21,26 +21,26 @@ import { MapView } from 'react-native-mapbox-gl';
 <MapView />
 ```
 
-| Prop | Type | Opt/Required | Default | Note |
+| Prop | Type | Required | Description | Default |
 |---|---|---|---|---|
-| `initialCenterCoordinate` | `object` | Optional | `{ latitude:0, longitude: 0 }` | Initial `latitude`/`longitude` the map will load at. |
-| `initialZoomLevel` | `number` | Optional | `0` | Initial zoom level the map will load at. 0 is the entire world, 18 is rooftop level. |
-| `initialDirection`  | `double` | Optional | `0` | Initial heading of the map in degrees, where 0 is north and 180 is south |
-| `rotateEnabled` | `boolean`  |  Optional | `true`  | Whether the map can rotate. |
-| `scrollEnabled` | `boolean`  |  Optional | `true`  | Whether the map can be scrolled. |
-| `zoomEnabled` | `boolean`  |  Optional | `true`  | Whether the map zoom level can be changed. |
-| `showsUserLocation` | `boolean` | Optional | `false` | Whether the user's location is shown on the map. Note: The map will not zoom to their location. |
-| `userTrackingMode` | `enum` | Optional | `Mapbox.userTrackingMode.none` | Wether the map is zoomed to and follows the user's location. One of `Mapbox.userTrackingMode.none`, `Mapbox.userTrackingMode.follow`, `Mapbox.userTrackingMode.followWithCourse`, `Mapbox.userTrackingMode.followWithHeading` |
-| `userLocationVerticalAlignment` | `enum` | Optional | `Mapbox.userLocationVerticalAlignment.center` | Change the alignment of where the user location shows on the screen. One of `Mapbox.userLocationVerticalAlignment.top`, `Mapbox.userLocationVerticalAlignment.center`, `Mapbox.userLocationVerticalAlignment.bottom` |
-| `styleURL` | `string` | Required | `Mapbox.mapStyles.streets` |  A Mapbox style. See [Styles](#styles) for valid values. |
-| `annotations` | `array` | Optional | `[]` |  An array of annotation objects. See [annotation detail](#annotations) |
-| `annotationsAreImmutable`  | `boolean` | Optional | `false` | Set this to `true` if you don't ever mutate the `annotations` array or the annotations themselves. This enables optimizations when props change. |
-| `attributionButtonIsHidden`  | `boolean` | Optional | `false` | Whether attribution button is visible in lower right corner. *[If true you must still attribute OpenStreetMap in your app.](https://www.mapbox.com/about/maps/)* |
-| `logoIsHidden`  | `boolean` | Optional | `false` | Whether logo is visible in lower left corner. |
-| `compassIsHidden`  | `boolean` | Optional | `false` | Whether compass is visible when map is rotated. |
-| `contentInset` | `array` | Optional | `[0, 0, 0, 0]` | Change the padding of the viewport of the map. Offset is in pixels. `[top, right, bottom, left]`
-| `style`  | React styles | Optional | N/A | Styles the actual map view container |
-| `debugActive`  | `bool` | Optional | `false` | Turns on debug mode. |
+| `initialCenterCoordinate` | `object` | Optional | Initial `latitude`/`longitude` the map will load at. | `{ latitude:0, longitude: 0 }` |
+| `initialZoomLevel` | `number` | Optional | Initial zoom level the map will load at. 0 is the entire world, 18 is rooftop level. | `0` |
+| `initialDirection`  | `number` | Optional | Initial heading of the map in degrees, where 0 is north and 180 is south | `0` |
+| `rotateEnabled` | `boolean`  |  Optional | Whether the map can rotate. | `true`  |
+| `scrollEnabled` | `boolean`  |  Optional | Whether the map can be scrolled. | `true`  |
+| `zoomEnabled` | `boolean`  |  Optional | Whether the map zoom level can be changed. | `true`  |
+| `showsUserLocation` | `boolean` | Optional | Whether the user's location is shown on the map. Note: The map will not zoom to their location. | `false` |
+| `userTrackingMode` | `enum` | Optional | Wether the map is zoomed to and follows the user's location. One of `Mapbox.userTrackingMode.none`, `Mapbox.userTrackingMode.follow`, `Mapbox.userTrackingMode.followWithCourse`, `Mapbox.userTrackingMode.followWithHeading` | `Mapbox.userTrackingMode.none` |
+| `userLocationVerticalAlignment` | `enum` | Optional | Change the alignment of where the user location shows on the screen. One of `Mapbox.userLocationVerticalAlignment.top`, `Mapbox.userLocationVerticalAlignment.center`, `Mapbox.userLocationVerticalAlignment.bottom` | `Mapbox.userLocationVerticalAlignment.center` |
+| `styleURL` | `string` | Required |  A Mapbox style. See [Styles](#styles) for valid values. | `Mapbox.mapStyles.streets` |
+| `annotations` | `array` | Optional |  An array of annotation objects. See [annotation detail](#annotations) | `[]` |
+| `annotationsAreImmutable`  | `boolean` | Optional | Set this to `true` if you don't ever mutate the `annotations` array or the annotations themselves. This enables optimizations when props change. | `false` |
+| `attributionButtonIsHidden`  | `boolean` | Optional | Whether attribution button is visible in lower right corner. *[If true you must still attribute OpenStreetMap in your app.](https://www.mapbox.com/about/maps/)* | `false` |
+| `logoIsHidden`  | `boolean` | Optional | Whether logo is visible in lower left corner. | `false` |
+| `compassIsHidden`  | `boolean` | Optional | Whether compass is visible when map is rotated. | `false` |
+| `contentInset` | `array` | Optional | Change the padding of the viewport of the map. Offset is in pixels. `[top, right, bottom, left]` `[0, 0, 0, 0]` |
+| `style`  | React styles | Optional | Styles the actual map view container | N/A |
+| `debugActive`  | `boolean` | Optional | Turns on debug mode. | `false` |
 
 ## Callback props
 
@@ -50,7 +50,7 @@ import { MapView } from 'react-native-mapbox-gl';
 }}/>
 ```
 
-| Prop | Payload shape | Notes
+| Prop | Payload shape | Description
 |---|---|---|
 | `onRegionWillChange` | `{latitude: 0, longitude: 0, zoom: 0}` | Fired when the map begins panning or zooming.
 | `onRegionChange` | `{latitude: 0, longitude: 0, zoom: 0}` | Fired when the map ends panning or zooming.
