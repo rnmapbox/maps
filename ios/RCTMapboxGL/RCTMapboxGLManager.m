@@ -139,15 +139,16 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     if (_hasInitialized) { return; }
     _hasInitialized = YES;
     
+    _recentPacks = [NSMutableSet new];
+    _throttledPacks = [NSMutableSet new];
+    
     // Setup offline pack notification handlers.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackProgressDidChange:) name:MGLOfflinePackProgressChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackDidReceiveError:) name:MGLOfflinePackErrorNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackDidReceiveMaximumAllowedMapboxTiles:) name:MGLOfflinePackMaximumMapboxTilesReachedNotification object:nil];
 }
 
-- (void)offlinePackProgressDidChange:(NSNotification *)notification {
-    
-    MGLOfflinePack *pack = notification.object;
+- (void)firePackProgress:(MGLOfflinePack*)pack {
     NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
     MGLOfflinePackProgress progress = pack.progress;
     
@@ -159,6 +160,32 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
                              @"maximumResourcesExpected": @(progress.maximumResourcesExpected) };
     
     [_bridge.eventDispatcher sendAppEventWithName:@"MapboxOfflineProgressDidChange" body:event];
+}
+
+- (void)offlinePackProgressDidChange:(NSNotification *)notification {
+    MGLOfflinePack *pack = notification.object;
+    
+    if ([_recentPacks containsObject:pack]) {
+        [_throttledPacks addObject:pack];
+        return;
+    }
+    
+    [_recentPacks addObject:pack];
+    [self firePackProgress:pack];
+    
+    NSBlockOperation * timerCallback = [NSBlockOperation blockOperationWithBlock:^{
+        if ([_throttledPacks containsObject:pack]) {
+            [self firePackProgress:pack];
+        }
+        [_throttledPacks removeObject:pack];
+        [_recentPacks removeObject:pack];
+    }];
+    
+    [NSTimer scheduledTimerWithTimeInterval:0.1
+                                     target:timerCallback
+                                   selector:@selector(main)
+                                   userInfo:nil
+                                    repeats:NO];
 }
 
 - (void)offlinePackDidReceiveMaximumAllowedMapboxTiles:(NSNotification *)notification {
