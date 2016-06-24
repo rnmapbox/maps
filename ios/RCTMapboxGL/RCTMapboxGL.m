@@ -447,7 +447,7 @@
 - (void)mapView:(MGLMapView *)mapView didFailToLocateUserWithError:(NSError *)error
 {
     if (!_onLocateUserFailed) { return; }
-    _onLocateUserFailed(@{ @"target": mapView.reactTag,
+    _onLocateUserFailed(@{ @"target": self.reactTag,
                              @"src": @{ @"message":  [error localizedDescription] } });
 }
 
