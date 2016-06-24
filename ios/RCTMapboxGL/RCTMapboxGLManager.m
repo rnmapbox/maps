@@ -162,6 +162,13 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     [_bridge.eventDispatcher sendAppEventWithName:@"MapboxOfflineProgressDidChange" body:event];
 }
 
+- (void)flushThrottleForPack:(MGLOfflinePack*)pack {
+    if ([_throttledPacks containsObject:pack]) {
+        [self firePackProgress:pack];
+        [_throttledPacks removeObject:pack];
+    }
+}
+
 - (void)offlinePackProgressDidChange:(NSNotification *)notification {
     MGLOfflinePack *pack = notification.object;
     
@@ -190,6 +197,7 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
 
 - (void)offlinePackDidReceiveMaximumAllowedMapboxTiles:(NSNotification *)notification {
     MGLOfflinePack *pack = notification.object;
+    [self flushThrottleForPack:pack];
     NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
     uint64_t maximumCount = [notification.userInfo[MGLOfflinePackMaximumCountUserInfoKey] unsignedLongLongValue];
     
@@ -201,6 +209,7 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
 
 - (void)offlinePackDidReceiveError:(NSNotification *)notification {
     MGLOfflinePack *pack = notification.object;
+    [self flushThrottleForPack:pack];
     NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
     NSError *error = notification.userInfo[MGLOfflinePackErrorUserInfoKey];
     
