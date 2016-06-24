@@ -12,5 +12,6 @@
     BOOL _hasInitialized;
     NSMutableSet * _recentPacks;
     NSMutableSet * _throttledPacks;
+    NSMutableArray * _packRequests;
 }
 @end

@@ -142,10 +142,32 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     _recentPacks = [NSMutableSet new];
     _throttledPacks = [NSMutableSet new];
     
+    // Setup pack array loading notifications
+    [[MGLOfflineStorage sharedOfflineStorage] addObserver:self forKeyPath:@"path" options:0 context:NULL];
+    _packRequests = [NSMutableArray new];
+    
     // Setup offline pack notification handlers.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackProgressDidChange:) name:MGLOfflinePackProgressChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackDidReceiveError:) name:MGLOfflinePackErrorNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackDidReceiveMaximumAllowedMapboxTiles:) name:MGLOfflinePackMaximumMapboxTilesReachedNotification object:nil];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
+{
+    NSArray * packs;
+    if (change[NSKeyValueChangeKindKey] == NSKeyValueChangeSetting &&
+        [_packRequests count] &&
+        (packs = [[MGLOfflineStorage sharedOfflineStorage] packs])
+    ) {
+        NSArray * callbackArray = [self serializePacksArray:packs];
+        for (RCTResponseSenderBlock callback in _packRequests) {
+            callback(@[[NSNull null], callbackArray]);
+        }
+        [_packRequests removeAllObjects];
+    }
 }
 
 - (void)firePackProgress:(MGLOfflinePack*)pack {
@@ -269,6 +291,23 @@ RCT_EXPORT_METHOD(addPackForRegion:(NSDictionary*)options
     });
 }
 
+- (NSArray*)serializePacksArray:(NSArray<MGLOfflinePack*>*)packs
+{
+    NSMutableArray* callbackArray = [NSMutableArray new];
+    
+    for (MGLOfflinePack *pack in packs) {
+        NSMutableDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
+        [callbackArray addObject:@{ @"name": userInfo[@"name"],
+                                    @"metadata": userInfo[@"metadata"],
+                                    @"countOfBytesCompleted": @(pack.progress.countOfBytesCompleted),
+                                    @"countOfResourcesCompleted": @(pack.progress.countOfResourcesCompleted),
+                                    @"countOfResourcesExpected": @(pack.progress.countOfResourcesExpected),
+                                    @"maximumResourcesExpected": @(pack.progress.maximumResourcesExpected) }];
+    }
+
+    return callbackArray;
+}
+
 RCT_EXPORT_METHOD(getPacks:(RCTResponseSenderBlock)callback)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -276,17 +315,11 @@ RCT_EXPORT_METHOD(getPacks:(RCTResponseSenderBlock)callback)
         
         MGLOfflinePack *packs = [MGLOfflineStorage sharedOfflineStorage].packs;
         
-        for (MGLOfflinePack *pack in packs) {
-            NSMutableDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
-            [callbackArray addObject:@{ @"name": userInfo[@"name"],
-                                        @"metadata": userInfo[@"metadata"],
-                                        @"countOfBytesCompleted": @(pack.progress.countOfBytesCompleted),
-                                        @"countOfResourcesCompleted": @(pack.progress.countOfResourcesCompleted),
-                                        @"countOfResourcesExpected": @(pack.progress.countOfResourcesExpected),
-                                        @"maximumResourcesExpected": @(pack.progress.maximumResourcesExpected) }];
+        if (!packs) {
+            [_packRequests addObject:callback];
+        } else {
+            callback(@[[NSNull null], [self serializePacksArray:packs]]);
         }
-        
-        callback(@[[NSNull null], callbackArray]);
     });
 }
 
