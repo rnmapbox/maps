@@ -143,7 +143,7 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     _throttledPacks = [NSMutableSet new];
     
     // Setup pack array loading notifications
-    [[MGLOfflineStorage sharedOfflineStorage] addObserver:self forKeyPath:@"path" options:0 context:NULL];
+    [[MGLOfflineStorage sharedOfflineStorage] addObserver:self forKeyPath:@"packs" options:0 context:NULL];
     _packRequests = [NSMutableArray new];
     
     // Setup offline pack notification handlers.
@@ -152,16 +152,31 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackDidReceiveMaximumAllowedMapboxTiles:) name:MGLOfflinePackMaximumMapboxTilesReachedNotification object:nil];
 }
 
+- (void)dealloc
+{
+    [[MGLOfflineStorage sharedOfflineStorage] removeObserver:self forKeyPath:@"packs"];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-    NSArray * packs;
-    if (change[NSKeyValueChangeKindKey] == NSKeyValueChangeSetting &&
-        [_packRequests count] &&
-        (packs = [[MGLOfflineStorage sharedOfflineStorage] packs])
-    ) {
+    NSNumber * changeKind = change[NSKeyValueChangeKindKey];
+    if (changeKind == [NSNull null]) { return; }
+    if ([changeKind integerValue] != NSKeyValueChangeSetting) { return; }
+    
+    NSArray * packs = [[MGLOfflineStorage sharedOfflineStorage] packs];
+    
+    if (!packs) { return; }
+    
+    for (MGLOfflinePack * pack in packs) {
+        [pack requestProgress];
+        [pack resume];
+    }
+    
+    if ([_packRequests count]) {
         NSArray * callbackArray = [self serializePacksArray:packs];
         for (RCTResponseSenderBlock callback in _packRequests) {
             callback(@[[NSNull null], callbackArray]);
