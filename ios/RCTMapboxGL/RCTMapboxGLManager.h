@@ -9,7 +9,6 @@
 #import "RCTViewManager.h"
 
 @interface RCTMapboxGLManager : RCTViewManager {
-    BOOL _hasInitialized;
     NSMutableSet * _recentPacks;
     NSMutableSet * _throttledPacks;
     NSMutableArray * _packRequests;

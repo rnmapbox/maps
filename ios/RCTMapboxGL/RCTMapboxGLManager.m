@@ -128,16 +128,14 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
             return;
         }
         [MGLAccountManager setAccessToken:accessToken];
-        [self initHandlersIfNeeded];
     });
 }
 
 // Offline
 
-- (void)initHandlersIfNeeded
+- (id)init
 {
-    if (_hasInitialized) { return; }
-    _hasInitialized = YES;
+    if (!(self = [super init])) { return nil; }
     
     _recentPacks = [NSMutableSet new];
     _throttledPacks = [NSMutableSet new];
@@ -150,6 +148,8 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackProgressDidChange:) name:MGLOfflinePackProgressChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackDidReceiveError:) name:MGLOfflinePackErrorNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackDidReceiveMaximumAllowedMapboxTiles:) name:MGLOfflinePackMaximumMapboxTilesReachedNotification object:nil];
+    
+    return self;
 }
 
 - (void)dealloc
