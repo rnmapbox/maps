@@ -206,6 +206,12 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     }
 }
 
+- (void)discardThrottleForPack:(MGLOfflinePack*)pack {
+    if ([_throttledPacks containsObject:pack]) {
+        [_throttledPacks removeObject:pack];
+    }
+}
+
 - (void)offlinePackProgressDidChange:(NSNotification *)notification {
     MGLOfflinePack *pack = notification.object;
     
@@ -358,6 +364,8 @@ RCT_EXPORT_METHOD(removePack:(NSString*)packName
         }
         
         NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:tempPack.context];
+        
+        [self discardThrottleForPack:tempPack];
         
         [[MGLOfflineStorage sharedOfflineStorage] removePack:tempPack withCompletionHandler:^(NSError * _Nullable error) {
             if (error != nil) {
