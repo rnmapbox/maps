@@ -228,19 +228,13 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     [_recentPacks addObject:pack];
     [self firePackProgress:pack];
     
-    NSBlockOperation * timerCallback = [NSBlockOperation blockOperationWithBlock:^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
         [_recentPacks removeObject:pack];
         if ([_throttledPacks containsObject:pack]) {
             [_throttledPacks removeObject:pack];
             [self firePackProgress:pack];
         }
-    }];
-    
-    [NSTimer scheduledTimerWithTimeInterval:0.1
-                                     target:timerCallback
-                                   selector:@selector(main)
-                                   userInfo:nil
-                                    repeats:NO];
+    });
 }
 
 - (void)offlinePackDidReceiveMaximumAllowedMapboxTiles:(NSNotification *)notification {
@@ -370,11 +364,14 @@ RCT_EXPORT_METHOD(removePack:(NSString*)packName
         
         NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:tempPack.context];
         
+        
+        // Workaround for https://github.com/mapbox/mapbox-gl-native/issues/5508
+        
         [_removedPacks addObject:tempPack];
         [self discardThrottleForPack:tempPack];
         [tempPack suspend];
         
-        void (^removePack)(void) = ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
             [_removedPacks removeObject:tempPack];
             [[MGLOfflineStorage sharedOfflineStorage] removePack:tempPack withCompletionHandler:^(NSError * _Nullable error) {
                 if (error != nil) {
@@ -385,10 +382,7 @@ RCT_EXPORT_METHOD(removePack:(NSString*)packName
                     callback(@[[NSNull null], deletedObject]);
                 }
             }];
-        };
-        
-        // Workaround for https://github.com/mapbox/mapbox-gl-native/issues/5508
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_main_queue(), removePack);
+        });
     });
 }
 
