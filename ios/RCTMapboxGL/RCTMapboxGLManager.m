@@ -366,6 +366,7 @@ RCT_EXPORT_METHOD(removePack:(NSString*)packName
         NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:tempPack.context];
         
         [self discardThrottleForPack:tempPack];
+        [tempPack suspend];
         
         [[MGLOfflineStorage sharedOfflineStorage] removePack:tempPack withCompletionHandler:^(NSError * _Nullable error) {
             if (error != nil) {
