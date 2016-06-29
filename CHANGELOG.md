@@ -1,3 +1,9 @@
+#v5.0.0
+
+* Major breaking API changes. See the [API documentation](/API.md) for details.
+* Unifies Android & iOS APIs.
+* Adds support for telemetry opt-out.
+
 #v4.1.1
 
 * [Android] Fixes `Scrollable` error

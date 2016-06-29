@@ -1,7 +1,7 @@
 {
   "name": "react-native-mapbox-gl",
   "description": "A Mapbox GL react native module for creating custom maps",
-  "version": "4.1.1",
+  "version": "5.0.0",
   "author": "Bobby Sudekum",
   "keywords": [
     "gl",
@@ -24,7 +24,7 @@
   "scripts": {
     "preinstall": "./scripts/download-mapbox-gl-native-ios.sh 3.2.0",
     "test": "npm run lint",
-    "lint": "eslint --no-eslintrc -c .eslintrc index.ios.js index.android.js ios/example.js android/example.js"
+    "lint": "eslint --no-eslintrc -c .eslintrc index.js example.js"
   },
   "devDependencies": {
     "babel-eslint": "^4.1.6",
