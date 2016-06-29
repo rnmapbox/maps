@@ -12,5 +12,6 @@
     NSMutableSet * _recentPacks;
     NSMutableSet * _throttledPacks;
     NSMutableArray * _packRequests;
+    NSMutableSet * _removedPacks;
 }
 @end

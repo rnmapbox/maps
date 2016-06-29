@@ -139,6 +139,7 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     
     _recentPacks = [NSMutableSet new];
     _throttledPacks = [NSMutableSet new];
+    _removedPacks = [NSMutableSet new];
     
     // Setup pack array loading notifications
     [[MGLOfflineStorage sharedOfflineStorage] addObserver:self forKeyPath:@"packs" options:0 context:NULL];
@@ -201,8 +202,8 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
 
 - (void)flushThrottleForPack:(MGLOfflinePack*)pack {
     if ([_throttledPacks containsObject:pack]) {
-        [self firePackProgress:pack];
         [_throttledPacks removeObject:pack];
+        [self firePackProgress:pack];
     }
 }
 
@@ -215,6 +216,10 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
 - (void)offlinePackProgressDidChange:(NSNotification *)notification {
     MGLOfflinePack *pack = notification.object;
     
+    if ([_removedPacks containsObject:pack]) {
+        return;
+    }
+    
     if ([_recentPacks containsObject:pack]) {
         [_throttledPacks addObject:pack];
         return;
@@ -224,11 +229,11 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     [self firePackProgress:pack];
     
     NSBlockOperation * timerCallback = [NSBlockOperation blockOperationWithBlock:^{
+        [_recentPacks removeObject:pack];
         if ([_throttledPacks containsObject:pack]) {
+            [_throttledPacks removeObject:pack];
             [self firePackProgress:pack];
         }
-        [_throttledPacks removeObject:pack];
-        [_recentPacks removeObject:pack];
     }];
     
     [NSTimer scheduledTimerWithTimeInterval:0.1
@@ -365,18 +370,25 @@ RCT_EXPORT_METHOD(removePack:(NSString*)packName
         
         NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:tempPack.context];
         
+        [_removedPacks addObject:tempPack];
         [self discardThrottleForPack:tempPack];
         [tempPack suspend];
         
-        [[MGLOfflineStorage sharedOfflineStorage] removePack:tempPack withCompletionHandler:^(NSError * _Nullable error) {
-            if (error != nil) {
-                callback(@[@{ @"message": error.localizedFailureReason }]);
-            } else {
-                NSMutableDictionary *deletedObject = [NSMutableDictionary new];
-                [deletedObject setObject:userInfo[@"name"] forKey:@"deleted"];
-                callback(@[[NSNull null], deletedObject]);
-            }
-        }];
+        void (^removePack)(void) = ^{
+            [_removedPacks removeObject:tempPack];
+            [[MGLOfflineStorage sharedOfflineStorage] removePack:tempPack withCompletionHandler:^(NSError * _Nullable error) {
+                if (error != nil) {
+                    callback(@[@{ @"message": error.localizedFailureReason }]);
+                } else {
+                    NSMutableDictionary *deletedObject = [NSMutableDictionary new];
+                    [deletedObject setObject:userInfo[@"name"] forKey:@"deleted"];
+                    callback(@[[NSNull null], deletedObject]);
+                }
+            }];
+        };
+        
+        // Workaround for https://github.com/mapbox/mapbox-gl-native/issues/5508
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_main_queue(), removePack);
     });
 }
 
