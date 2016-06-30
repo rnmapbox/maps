@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -20,6 +22,7 @@ import com.mapbox.mapboxsdk.MapboxAccountManager;
 import com.mapbox.mapboxsdk.constants.MyLocationTracking;
 import com.mapbox.mapboxsdk.constants.MyBearingTracking;
 import com.mapbox.mapboxsdk.constants.Style;
+import com.mapbox.mapboxsdk.telemetry.MapboxEventManager;
 
 import javax.annotation.Nullable;
 
@@ -71,6 +74,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
 
         HashMap<String, Object> userTrackingMode = new HashMap<String, Object>();
         HashMap<String, Object> mapStyles = new HashMap<String, Object>();
+        HashMap<String, Object> userLocationVerticalAlignment = new HashMap<String, Object>();
 
         // User tracking constants
         userTrackingMode.put("none", 0);
@@ -86,26 +90,40 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         mapStyles.put("satellite", Style.SATELLITE);
         mapStyles.put("hybrid", Style.SATELLITE_STREETS);
 
+        // These need to be here for compatibility, even if they're not supported on Android
+        userLocationVerticalAlignment.put("center", 0);
+        userLocationVerticalAlignment.put("top", 1);
+        userLocationVerticalAlignment.put("bottom", 2);
+
+        // Other constants
+        constants.put("unknownResourceCount", Long.MAX_VALUE);
+        constants.put("metricsEnabled", MapboxEventManager.getMapboxEventManager().isTelemetryEnabled());
+
         constants.put("userTrackingMode", userTrackingMode);
         constants.put("mapStyles", mapStyles);
+        constants.put("userLocationVerticalAlignment", userLocationVerticalAlignment);
 
         return constants;
     }
 
     @ReactMethod
     public void setAccessToken(String accessToken) {
-        if (accessToken == null || accessToken.length() == 0 || accessToken == "your-mapbox.com-access-token") {
-            Log.e(TAG, "Invalid access token. Register to mapbox.com and request an access token, then pass it to setAccessToken()");
-            return;
+        if (accessToken == null || accessToken.length() == 0 || accessToken.equals("your-mapbox.com-access-token")) {
+            throw new JSApplicationIllegalArgumentException("Invalid access token. Register to mapbox.com and request an access token, then pass it to setAccessToken()");
         }
         if (initialized) {
-            if (MapboxAccountManager.getInstance().getAccessToken() != accessToken) {
-                Log.e(TAG, "Access token cannot be initialized twice with different values");
+            String oldToken = MapboxAccountManager.getInstance().getAccessToken();
+            if (!oldToken.equals(accessToken)) {
+                throw new JSApplicationIllegalArgumentException("Mapbox access token cannot be initialized twice with different values");
             }
-            return;
         }
         initialized = true;
         MapboxAccountManager.start(context, accessToken);
+    }
+
+    @ReactMethod
+    public void setMetricsEnabled(boolean value) {
+        MapboxEventManager.getMapboxEventManager().setTelemetryEnabled(value);
     }
 
     @ReactMethod

@@ -1,9 +1,9 @@
 package com.mapbox.reactnativemapboxgl;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.LinearLayout;
 
+import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -102,9 +102,10 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
 
     // Utils
 
-    private void assertNotChangeable(String propName) {
+    private void assertPropNotChangeable(String propName) {
         if (_mapView != null) {
-            Log.e(getContext().getPackageName(), "Changing MapView." + propName + " after component has been mounted is not currently supported");
+            throw new JSApplicationIllegalArgumentException("Changing prop MapView." + propName +
+                    " after component has been mounted is not currently supported");
         }
     }
 
@@ -131,19 +132,19 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
     public void setRotateEnabled(boolean value) {
         if (_mapOptions.getRotateGesturesEnabled() == value) { return; }
         _mapOptions.rotateGesturesEnabled(value);
-        assertNotChangeable("rotateEnabled");
+        assertPropNotChangeable("rotateEnabled");
     }
 
     public void setScrollEnabled(boolean value) {
         if (_mapOptions.getScrollGesturesEnabled() == value) { return; }
         _mapOptions.scrollGesturesEnabled(value);
-        assertNotChangeable("scrollEnabled");
+        assertPropNotChangeable("scrollEnabled");
     }
 
     public void setZoomEnabled(boolean value) {
         if (_mapOptions.getZoomGesturesEnabled() == value) { return; }
         _mapOptions.zoomGesturesEnabled(value);
-        assertNotChangeable("zoomEnabled");
+        assertPropNotChangeable("zoomEnabled");
     }
 
     public void setStyleURL(String styleURL) {
@@ -173,19 +174,19 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
     public void setAttributionButtonIsHidden(boolean value) {
         if (_mapOptions.getAttributionEnabled() == !value) { return; }
         _mapOptions.attributionEnabled(!value);
-        assertNotChangeable("attributionButtonIsHidden");
+        assertPropNotChangeable("attributionButtonIsHidden");
     }
 
     public void setLogoIsHidden(boolean value) {
         if (_mapOptions.getLogoEnabled() == !value) { return; }
         _mapOptions.logoEnabled(!value);
-        assertNotChangeable("logoIsHidden");
+        assertPropNotChangeable("logoIsHidden");
     }
 
     public void setCompassIsHidden(boolean value) {
         if (_mapOptions.getCompassEnabled() == !value) { return; }
         _mapOptions.compassEnabled(!value);
-        assertNotChangeable("compassIsHidden");
+        assertPropNotChangeable("compassIsHidden");
     }
 
     public void setContentInset(int top, int right, int bottom, int left) {
