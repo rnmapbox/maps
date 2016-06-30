@@ -3,6 +3,8 @@ package com.mapbox.reactnativemapboxgl;
 
 import android.content.Context;
 import android.util.Log;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,12 +44,26 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         return "MapboxGLManager";
     }
 
-    static private WritableArray serializeTracking(int locationTracking, int bearingTracking) {
-        WritableArray result = Arguments.createArray();
-        result.pushInt(locationTracking);
-        result.pushInt(bearingTracking);
+    static private ArrayList<Integer> serializeTracking(int locationTracking, int bearingTracking) {
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        result.add(locationTracking);
+        result.add(bearingTracking);
         return result;
     }
+
+    public static final int[] locationTrackingModes = new int[] {
+            MyLocationTracking.TRACKING_NONE,
+            MyLocationTracking.TRACKING_FOLLOW,
+            MyLocationTracking.TRACKING_FOLLOW,
+            MyLocationTracking.TRACKING_FOLLOW
+    };
+
+    public static final int[] bearingTrackingModes = new int[] {
+            MyBearingTracking.NONE,
+            MyBearingTracking.NONE,
+            MyBearingTracking.GPS,
+            MyBearingTracking.COMPASS
+    };
 
     @Override
     public @Nullable Map<String, Object> getConstants() {
@@ -56,11 +72,11 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         HashMap<String, Object> userTrackingMode = new HashMap<String, Object>();
         HashMap<String, Object> mapStyles = new HashMap<String, Object>();
 
-//        // User tracking constants
-//        userTrackingMode.put("none", serializeTracking(MyLocationTracking.TRACKING_NONE, MyBearingTracking.NONE));
-//        userTrackingMode.put("follow", serializeTracking(MyLocationTracking.TRACKING_FOLLOW, MyBearingTracking.NONE));
-//        userTrackingMode.put("followWithCourse", serializeTracking(MyLocationTracking.TRACKING_FOLLOW, MyBearingTracking.GPS));
-//        userTrackingMode.put("followWithHeading", serializeTracking(MyLocationTracking.TRACKING_FOLLOW, MyBearingTracking.COMPASS));
+        // User tracking constants
+        userTrackingMode.put("none", 0);
+        userTrackingMode.put("follow", 1);
+        userTrackingMode.put("followWithCourse", 2);
+        userTrackingMode.put("followWithHeading", 3);
 
         // Style constants
         mapStyles.put("light", Style.LIGHT);

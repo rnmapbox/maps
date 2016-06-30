@@ -1,21 +1,11 @@
 
 package com.mapbox.reactnativemapboxgl;
 
-import android.os.StrictMode;
-import android.support.annotation.Keep;
-import android.util.Log;
-
-import com.facebook.common.internal.DoNotStrip;
-import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.uimanager.annotations.ReactPropGroup;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.SimpleViewManager;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 
 import javax.annotation.Nonnull;
 
@@ -42,14 +32,74 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
         return new ReactNativeMapboxGLView(context, this);
     }
 
-    @ReactProp(name = "styleURL")
-    public void setStyleUrl(ReactNativeMapboxGLView view, @Nonnull String styleURL) {
-        view.setStyleURL(styleURL);
+    // Props
+
+    @ReactProp(name = "initialZoomLevel")
+    public void setInitialZoomLevel(ReactNativeMapboxGLView view, double value) {
+        view.setInitialZoomLevel(value);
+    }
+
+    @ReactProp(name = "initialDirection")
+    public void setInitialDirection(ReactNativeMapboxGLView view, double value) {
+        view.setInitialDirection(value);
+    }
+
+    @ReactProp(name = "initialCenterCoordinate")
+    public void setInitialCenterCoordinate(ReactNativeMapboxGLView view, ReadableMap coord) {
+        double lat = coord.getDouble("latitude");
+        double lon = coord.getDouble("longitude");
+        view.setInitialCenterCoordinate(lat, lon);
+    }
+
+    @ReactProp(name = "debugActive")
+    public void setDebugActive(ReactNativeMapboxGLView view, boolean value) {
+        view.setDebugActive(value);
+    }
+
+    @ReactProp(name = "rotateEnabled")
+    public void setRotateEnabled(ReactNativeMapboxGLView view, boolean value) {
+        view.setRotateEnabled(value);
+    }
+
+    @ReactProp(name = "scrollEnabled")
+    public void setScrollEnabled(ReactNativeMapboxGLView view, boolean value) {
+        view.setScrollEnabled(value);
+    }
+
+    @ReactProp(name = "zoomEnabled")
+    public void setZoomEnabled(ReactNativeMapboxGLView view, boolean value) {
+        view.setZoomEnabled(value);
     }
 
     @ReactProp(name = "showsUserLocation")
     public void setShowsUserLocation(ReactNativeMapboxGLView view, boolean value) {
         view.setShowsUserLocation(value);
+    }
+
+    @ReactProp(name = "styleURL")
+    public void setStyleUrl(ReactNativeMapboxGLView view, @Nonnull String styleURL) {
+        view.setStyleURL(styleURL);
+    }
+
+    @ReactProp(name = "userTrackingMode")
+    public void setUserTrackingMode(ReactNativeMapboxGLView view, int mode) {
+        view.setLocationTracking(ReactNativeMapboxGLModule.locationTrackingModes[mode]);
+        view.setBearingTracking(ReactNativeMapboxGLModule.bearingTrackingModes[mode]);
+    }
+
+    @ReactProp(name = "attributionButtonIsHidden")
+    public void setAttributionButtonIsHidden(ReactNativeMapboxGLView view, boolean value) {
+        view.setAttributionButtonIsHidden(value);
+    }
+
+    @ReactProp(name = "logoIsHidden")
+    public void setLogoIsHidden(ReactNativeMapboxGLView view, boolean value) {
+        view.setLogoIsHidden(value);
+    }
+
+    @ReactProp(name = "compassIsHidden")
+    public void setCompassIsHidden(ReactNativeMapboxGLView view, boolean value) {
+        view.setCompassIsHidden(value);
     }
 
     /*

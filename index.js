@@ -167,15 +167,19 @@ class MapView extends Component {
       latitude: PropTypes.number.isRequired,
       longitude: PropTypes.number.isRequired
     }),
-    showsUserLocation: PropTypes.bool,
+    clipsToBounds: PropTypes.bool,
+    debugActive: PropTypes.bool,
     rotateEnabled: PropTypes.bool,
     scrollEnabled: PropTypes.bool,
     zoomEnabled: PropTypes.bool,
+    showsUserLocation: PropTypes.bool,
     styleURL: PropTypes.string.isRequired,
-    clipsToBounds: PropTypes.bool,
-    debugActive: PropTypes.bool,
     userTrackingMode: PropTypes.number,
-    attributionButton: PropTypes.bool,
+    attributionButtonIsHidden: PropTypes.bool,
+    logoIsHidden: PropTypes.bool,
+    compassIsHidden: PropTypes.bool,
+    userLocationVerticalAlignment: PropTypes.number,
+
     annotations: PropTypes.arrayOf(PropTypes.shape({
       coordinates: PropTypes.array.isRequired,
       title: PropTypes.string,
@@ -199,9 +203,7 @@ class MapView extends Component {
       })
     })),
     annotationsAreImmutable: PropTypes.bool,
-    attributionButtonIsHidden: PropTypes.bool,
-    logoIsHidden: PropTypes.bool,
-    compassIsHidden: PropTypes.bool,
+
     onRegionChange: PropTypes.func,
     onRegionWillChange: PropTypes.func,
     onOpenAnnotation: PropTypes.func,
@@ -213,7 +215,6 @@ class MapView extends Component {
     onLongPress: PropTypes.func,
     onTap: PropTypes.func,
     contentInset: PropTypes.array,
-    userLocationVerticalAlignment: PropTypes.number,
     onChangeUserTrackingMode: PropTypes.func,
   };
 
