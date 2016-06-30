@@ -1,7 +1,8 @@
 'use strict';
 
-import React,  { Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
+  View,
   NativeModules,
   NativeAppEventEmitter,
   requireNativeComponent,
@@ -158,6 +159,8 @@ class MapView extends Component {
   };
 
   static propTypes = {
+    ...View.propTypes,
+
     initialZoomLevel: PropTypes.number,
     initialDirection: PropTypes.number,
     initialCenterCoordinate: PropTypes.shape({
@@ -168,7 +171,7 @@ class MapView extends Component {
     rotateEnabled: PropTypes.bool,
     scrollEnabled: PropTypes.bool,
     zoomEnabled: PropTypes.bool,
-    styleURL: PropTypes.string,
+    styleURL: PropTypes.string.isRequired,
     clipsToBounds: PropTypes.bool,
     debugActive: PropTypes.bool,
     userTrackingMode: PropTypes.number,
@@ -266,7 +269,7 @@ class MapView extends Component {
 
   _native = null;
 
-  onNativeComponentMount = (ref) => {
+  _onNativeComponentMount = (ref) => {
     if (this._native === ref) { return; }
     this._native = ref;
 
@@ -292,7 +295,7 @@ class MapView extends Component {
     return (
       <MapboxGLView
         {...this.props}
-        ref={this.onNativeComponentMount}
+        ref={this._onNativeComponentMount}
         onRegionChange={this._onRegionChange}
         onRegionWillChange={this._onRegionWillChange}
         onOpenAnnotation={this._onOpenAnnotation}

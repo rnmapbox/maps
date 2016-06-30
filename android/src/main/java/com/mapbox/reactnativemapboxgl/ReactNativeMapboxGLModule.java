@@ -6,18 +6,18 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mapbox.mapboxsdk.constants.Style;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.Callback;
-import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.WritableNativeArray;
+import com.mapbox.mapboxsdk.MapboxAccountManager;
 import com.mapbox.mapboxsdk.constants.MyLocationTracking;
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.views.MapView;
+import com.mapbox.mapboxsdk.constants.MyBearingTracking;
+import com.mapbox.mapboxsdk.constants.Style;
 
 import javax.annotation.Nullable;
 
@@ -27,10 +27,12 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
 
     private Context context;
     private ReactNativeMapboxGLPackage aPackage;
+    private static boolean initialized = false;
 
-    public ReactNativeMapboxGLModule(ReactApplicationContext reactContext) {
+    public ReactNativeMapboxGLModule(ReactApplicationContext reactContext, ReactNativeMapboxGLPackage thePackage) {
         super(reactContext);
         this.context = reactContext;
+        this.aPackage = thePackage;
         Log.d(TAG, "Context " + context);
         Log.d(TAG, "reactContext " + reactContext);
     }
@@ -40,6 +42,13 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         return "MapboxGLManager";
     }
 
+    static private WritableArray serializeTracking(int locationTracking, int bearingTracking) {
+        WritableArray result = Arguments.createArray();
+        result.pushInt(locationTracking);
+        result.pushInt(bearingTracking);
+        return result;
+    }
+
     @Override
     public @Nullable Map<String, Object> getConstants() {
         HashMap<String, Object> constants = new HashMap<String, Object>();
@@ -47,9 +56,11 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         HashMap<String, Object> userTrackingMode = new HashMap<String, Object>();
         HashMap<String, Object> mapStyles = new HashMap<String, Object>();
 
-        // User tracking constants
-        userTrackingMode.put("none", MyLocationTracking.TRACKING_NONE);
-        userTrackingMode.put("follow", MyLocationTracking.TRACKING_FOLLOW);
+//        // User tracking constants
+//        userTrackingMode.put("none", serializeTracking(MyLocationTracking.TRACKING_NONE, MyBearingTracking.NONE));
+//        userTrackingMode.put("follow", serializeTracking(MyLocationTracking.TRACKING_FOLLOW, MyBearingTracking.NONE));
+//        userTrackingMode.put("followWithCourse", serializeTracking(MyLocationTracking.TRACKING_FOLLOW, MyBearingTracking.GPS));
+//        userTrackingMode.put("followWithHeading", serializeTracking(MyLocationTracking.TRACKING_FOLLOW, MyBearingTracking.COMPASS));
 
         // Style constants
         mapStyles.put("light", Style.LIGHT);
@@ -65,6 +76,28 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         return constants;
     }
 
+    @ReactMethod
+    public void setAccessToken(String accessToken) {
+        if (accessToken == null || accessToken.length() == 0 || accessToken == "your-mapbox.com-access-token") {
+            Log.e(TAG, "Invalid access token. Register to mapbox.com and request an access token, then pass it to setAccessToken()");
+            return;
+        }
+        if (initialized) {
+            if (MapboxAccountManager.getInstance().getAccessToken() != accessToken) {
+                Log.e(TAG, "Access token cannot be initialized twice with different values");
+            }
+            return;
+        }
+        initialized = true;
+        MapboxAccountManager.start(context, accessToken);
+    }
+
+    @ReactMethod
+    public void spliceAnnotations(int mapRef, boolean removeAll, ReadableArray itemsToRemove, ReadableArray itemsToAdd) {
+        // TODO
+    }
+
+    /*
     @ReactMethod
     public void setDirectionAnimated(int mapRef, int direction) {
         aPackage.getManager().setDirection(aPackage.getManager().getMapView(), direction);
@@ -129,7 +162,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getCenterCoordinateZoomLevel(int mapRef, Callback successCallback) {
-        WritableMap location = aPackage.getManager().getCenterCoordinateZoomLevel(aPackage.getManager().getMapView());
+        WritableMap location =aPackage.getManager().getCenterCoordinateZoomLevel(aPackage.getManager().getMapView());
         successCallback.invoke(location);
     }
 
@@ -139,7 +172,5 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
       successCallback.invoke(bounds);
     }
 
-    public void setPackage(ReactNativeMapboxGLPackage aPackage) {
-        this.aPackage = aPackage;
-    }
+    */
 }

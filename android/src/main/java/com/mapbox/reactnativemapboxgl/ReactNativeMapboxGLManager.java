@@ -1,84 +1,58 @@
 
 package com.mapbox.reactnativemapboxgl;
 
-import android.graphics.Color;
-import android.util.Log;
 import android.os.StrictMode;
-import android.location.Location;
+import android.support.annotation.Keep;
+import android.util.Log;
 
-import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.ReadableArray;
+import com.facebook.common.internal.DoNotStrip;
+import com.facebook.react.bridge.LifecycleEventListener;
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.mapbox.mapboxsdk.annotations.Marker;
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
-import android.graphics.RectF;
-import com.mapbox.mapboxsdk.geometry.CoordinateBounds;
-import com.facebook.react.uimanager.SimpleViewManager;
+import com.facebook.react.uimanager.annotations.ReactPropGroup;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.annotations.PolygonOptions;
-import com.mapbox.mapboxsdk.annotations.PolylineOptions;
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.views.MapView;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.annotations.Icon;
-import com.mapbox.mapboxsdk.annotations.IconFactory;
-import android.graphics.drawable.Drawable;
-import android.graphics.BitmapFactory;
-import android.graphics.Bitmap;
-import java.io.InputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.net.HttpURLConnection;
-import android.graphics.drawable.BitmapDrawable;
-import javax.annotation.Nullable;
-import android.graphics.PointF;
+import com.facebook.react.uimanager.SimpleViewManager;
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 
-public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
+import javax.annotation.Nonnull;
 
-    public static final String REACT_CLASS = "RCTMapbox";
+public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMapboxGLView> {
 
-    public static final String PROP_ACCESS_TOKEN = "accessToken";
-    public static final String PROP_ANNOTATIONS = "annotations";
-    public static final String PROP_CENTER_COORDINATE = "centerCoordinate";
-    public static final String PROP_DEBUG_ACTIVE = "debugActive";
-    public static final String PROP_DIRECTION = "direction";
-    public static final String PROP_ONOPENANNOTATION = "onOpenAnnotation";
-    public static final String PROP_ONLONGPRESS = "onLongPress";
-    public static final String PROP_ONREGIONCHANGE = "onRegionChange";
-    public static final String PROP_ONUSER_LOCATION_CHANGE = "onUserLocationChange";
-    public static final String PROP_ROTATION_ENABLED = "rotateEnabled";
-    public static final String PROP_SCROLL_ENABLED = "scrollEnabled";
-    public static final String PROP_USER_LOCATION = "showsUserLocation";
-    public static final String PROP_STYLE_URL = "styleURL";
-    public static final String PROP_USER_TRACKING_MODE = "userTrackingMode";
-    public static final String PROP_ZOOM_ENABLED = "zoomEnabled";
-    public static final String PROP_ZOOM_LEVEL = "zoomLevel";
-    public static final String PROP_SET_TILT = "tilt";
-    public static final String PROP_COMPASS_IS_HIDDEN = "compassIsHidden";
-    public static final String PROP_LOGO_IS_HIDDEN = "logoIsHidden";
-    public static final String PROP_ATTRIBUTION_BUTTON_IS_HIDDEN = "attributionButtonIsHidden";
+    private static final String REACT_CLASS = "RCTMapboxGL";
     private static String APPLICATION_ID;
-    private MapView mapView;
 
-    @Override
-    public String getName() {
-        return REACT_CLASS;
-    }
+    private ReactApplicationContext _context;
 
-    @Override
-    public MapView createViewInstance(ThemedReactContext context) {
-        mapView = new MapView(context, "pk.foo");
-        mapView.onCreate(null);
+    public ReactNativeMapboxGLManager(ReactApplicationContext context) {
+        super();
+        _context = context;
         APPLICATION_ID = context.getPackageName();
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        return mapView;
     }
+
+    @Override
+    public String getName() { return REACT_CLASS; }
+
+    public ReactApplicationContext getContext() { return _context; }
+
+    @Override
+    public ReactNativeMapboxGLView createViewInstance(ThemedReactContext context) {
+        return new ReactNativeMapboxGLView(context, this);
+    }
+
+    @ReactProp(name = "styleURL")
+    public void setStyleUrl(ReactNativeMapboxGLView view, @Nonnull String styleURL) {
+        view.setStyleURL(styleURL);
+    }
+
+    @ReactProp(name = "showsUserLocation")
+    public void setShowsUserLocation(ReactNativeMapboxGLView view, boolean value) {
+        view.setShowsUserLocation(value);
+    }
+
+    /*
 
     @ReactProp(name = PROP_ACCESS_TOKEN)
     public void setAccessToken(MapView view, @Nullable String value) {
@@ -434,7 +408,5 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<MapView> {
       return callbackDict;
     }
 
-    public MapView getMapView() {
-        return mapView;
-    }
+    */
 }
