@@ -15,6 +15,7 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.maps.UiSettings;
 
 import java.util.Map;
 
@@ -91,7 +92,6 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
     private void setupMapView() {
         _mapOptions.camera(_initialCamera.build());
         _mapView = new MapView(this.getContext(), _mapOptions);
-        _mapView.
         _mapView.getMapAsync(this);
         this.addView(_mapView);
     }
@@ -105,11 +105,34 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
         _map.setPadding(_paddingLeft, _paddingTop, _paddingRight, _paddingBottom);
 
         // If these settings changed between setupMapView() and onMapReady(), coerce them to their right values
+        // This doesn't happen in the current implementation of MapView, but let's be future proof
         if (_map.isDebugActive() != _mapOptions.getDebugActive()) {
             _map.setDebugActive(_mapOptions.getDebugActive());
         }
         if (!_map.getStyleUrl().equals(_mapOptions.getStyle())) {
             _map.setStyleUrl(_mapOptions.getStyle());
+        }
+        UiSettings uiSettings = _map.getUiSettings();
+        if (uiSettings.isRotateGesturesEnabled() != _mapOptions.getRotateGesturesEnabled()) {
+            uiSettings.setRotateGesturesEnabled(_mapOptions.getRotateGesturesEnabled());
+        }
+        if (uiSettings.isScrollGesturesEnabled() != _mapOptions.getScrollGesturesEnabled()) {
+            uiSettings.setScrollGesturesEnabled(_mapOptions.getScrollGesturesEnabled());
+        }
+        if (uiSettings.isZoomGesturesEnabled() != _mapOptions.getZoomGesturesEnabled()) {
+            uiSettings.setZoomGesturesEnabled(_mapOptions.getZoomGesturesEnabled());
+        }
+        if (uiSettings.isZoomControlsEnabled() != _mapOptions.getZoomControlsEnabled()) {
+            uiSettings.setZoomControlsEnabled(_mapOptions.getZoomControlsEnabled());
+        }
+        if (uiSettings.isLogoEnabled() != _mapOptions.getLogoEnabled()) {
+            uiSettings.setLogoEnabled(_mapOptions.getLogoEnabled());
+        }
+        if (uiSettings.isAttributionEnabled() != _mapOptions.getAttributionEnabled()) {
+            uiSettings.setAttributionEnabled(_mapOptions.getAttributionEnabled());
+        }
+        if (uiSettings.isCompassEnabled() != _mapOptions.getCompassEnabled()) {
+            uiSettings.setCompassEnabled(_mapOptions.getCompassEnabled());
         }
     }
 
@@ -219,6 +242,8 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
         if (_map != null) { _map.setPadding(left, top, right, bottom); }
     }
 
+    // Getters
+
     public CameraPosition getCameraPosition() {
         if (_map == null) { return _initialCamera.build(); }
         return _map.getCameraPosition();
@@ -228,6 +253,8 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
         if (_map == null) { return new LatLngBounds.Builder().build(); };
         return _map.getProjection().getVisibleRegion().latLngBounds;
     }
+
+    // Camera setters
 
     public void setCameraPosition(CameraPosition position, int duration, @Nullable Runnable callback) {
         if (_map == null) {
