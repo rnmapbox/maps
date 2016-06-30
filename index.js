@@ -1,12 +1,13 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import {
+import ReactNative, {
   View,
   NativeModules,
   NativeAppEventEmitter,
   requireNativeComponent,
-  findNodeHandle
+  findNodeHandle,
+  Platform
 } from 'react-native';
 
 import cloneDeep from 'lodash/cloneDeep';
@@ -15,6 +16,40 @@ import isEqual from 'lodash/isEqual';
 
 const { MapboxGLManager } = NativeModules;
 const { mapStyles, userTrackingMode, userLocationVerticalAlignment, unknownResourceCount } = MapboxGLManager;
+
+// Monkeypatch Android commands
+
+if (Platform.OS === 'android') {
+  const RCTUIManager = NativeModules.UIManager;
+  const commands = RCTUIManager.RCTMapboxGL.Commands;
+
+  // Since we cannot pass functions to dispatchViewManagerCommand, we keep a
+  // map of callbacks and send an int instead
+  const callbackMap = new Map();
+  let nextCallbackId = 0;
+
+  Object.keys(commands).forEach(command => {
+    MapboxGLManager[command] = (handle, ...rawArgs) => {
+      const args = rawArgs.map(arg => {
+        if (typeof arg === 'function') {
+          callbackMap.set(nextCallbackId, arg);
+          return nextCallbackId++;
+        }
+        return arg;
+      });
+      RCTUIManager.dispatchViewManagerCommand(handle, commands[command], args);
+    };
+  });
+
+  NativeAppEventEmitter.addListener('MapboxAndroidCallback', ([ callbackId, args ]) => {
+    const callback = callbackMap.get(callbackId);
+    if (!callback) {
+      throw new Error(`Native is calling a callbackId ${callbackId}, which is not registered`);
+    }
+    callbackMap.delete(callbackId);
+    callback.apply(null, args);
+  });
+}
 
 // Metrics
 
@@ -99,7 +134,7 @@ class MapView extends Component {
     return promise;
   }
 
-  setCamera(latitude, longitude, fromDistance, pitch, direction, duration = 1.0) {
+  setCamera(latitude, longitude, fromDistance, pitch, direction, duration = 0.3) {
     MapboxGLManager.setCamera(findNodeHandle(this), latitude, longitude, fromDistance, pitch, direction, duration);
   }
 

@@ -5,12 +5,20 @@ import android.widget.LinearLayout;
 
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.LifecycleEventListener;
+import com.facebook.react.common.MapBuilder;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdate;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+
+import java.util.Map;
+
+import javax.annotation.Nullable;
 
 public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyCallback, LifecycleEventListener {
 
@@ -48,13 +56,15 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
 
     @Override
     public void onDetachedFromWindow () {
-        super.onDetachedFromWindow();
-        if (!_paused) {
-            _paused = true;
-            _mapView.onPause();
+        if (_mapView != null) {
+            if (!_paused) {
+                _paused = true;
+                _mapView.onPause();
+            }
+            _mapView.onDestroy();
         }
-        _mapView.onDestroy();
         _manager.getContext().removeLifecycleEventListener(this);
+        super.onDetachedFromWindow();
     }
 
     @Override
@@ -72,6 +82,8 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
     @Override
     public void onHostDestroy() {
         _mapView.onDestroy();
+        _mapView = null;
+        _map = null;
     }
 
     // Initialization
@@ -144,6 +156,7 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
     public void setZoomEnabled(boolean value) {
         if (_mapOptions.getZoomGesturesEnabled() == value) { return; }
         _mapOptions.zoomGesturesEnabled(value);
+        _mapOptions.zoomControlsEnabled(value);
         assertPropNotChangeable("zoomEnabled");
     }
 
@@ -199,5 +212,56 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
         _paddingBottom = bottom;
         _paddingLeft = left;
         if (_map != null) { _map.setPadding(left, top, right, bottom); }
+    }
+
+    public CameraPosition getCameraPosition() {
+        if (_map == null) { return _initialCamera.build(); }
+        return _map.getCameraPosition();
+    }
+
+    public LatLngBounds getBounds() {
+        if (_map == null) { return new LatLngBounds.Builder().build(); };
+        return _map.getProjection().getVisibleRegion().latLngBounds;
+    }
+
+    public void setCameraPosition(CameraPosition position, int duration, @Nullable Runnable callback) {
+        if (_map == null) {
+            _initialCamera = new CameraPosition.Builder(position);
+            if (callback != null) { callback.run(); }
+            return;
+        }
+
+        CameraUpdate update = CameraUpdateFactory.newCameraPosition(position);
+        setCameraUpdate(update, duration, callback);
+    }
+
+    public void setCameraUpdate(CameraUpdate update, int duration, @Nullable Runnable callback) {
+        if (_map == null) {
+            return;
+        }
+
+        if (duration == 0) {
+            _map.moveCamera(update);
+            if (callback != null) { callback.run(); }
+        } else {
+            // Ugh... Java callbacks suck
+            class CameraCallback implements MapboxMap.CancelableCallback {
+                Runnable callback;
+                CameraCallback(Runnable callback) {
+                    this.callback = callback;
+                }
+                @Override
+                public void onCancel() {
+                    if (callback != null) { callback.run(); }
+                }
+
+                @Override
+                public void onFinish() {
+                    if (callback != null) { callback.run(); }
+                }
+            }
+
+            _map.animateCamera(update, duration, new CameraCallback(callback));
+        }
     }
 }

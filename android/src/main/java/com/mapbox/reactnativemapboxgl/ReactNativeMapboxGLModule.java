@@ -2,6 +2,7 @@
 package com.mapbox.reactnativemapboxgl;
 
 import android.content.Context;
+import android.support.annotation.UiThread;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.Map;
 
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -30,7 +32,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
 
     private static final String TAG = ReactNativeMapboxGLModule.class.getSimpleName();
 
-    private Context context;
+    private ReactApplicationContext context;
     private ReactNativeMapboxGLPackage aPackage;
     private static boolean initialized = false;
 
@@ -125,86 +127,4 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
     public void setMetricsEnabled(boolean value) {
         MapboxEventManager.getMapboxEventManager().setTelemetryEnabled(value);
     }
-
-    @ReactMethod
-    public void spliceAnnotations(int mapRef, boolean removeAll, ReadableArray itemsToRemove, ReadableArray itemsToAdd) {
-        // TODO
-    }
-
-    /*
-    @ReactMethod
-    public void setDirectionAnimated(int mapRef, int direction) {
-        aPackage.getManager().setDirection(aPackage.getManager().getMapView(), direction);
-    }
-
-    @ReactMethod
-    public void setCenterCoordinateAnimated(int mapRef, double latitude, double longitude) {
-        WritableMap location = Arguments.createMap();
-        location.putDouble("latitude", latitude);
-        location.putDouble("longitude", longitude);
-        aPackage.getManager().setCenterCoordinate(aPackage.getManager().getMapView(), location);
-    }
-
-    @ReactMethod
-    public void setCenterCoordinateZoomLevelAnimated(int mapRef, double latitude, double longitude, double zoom) {
-        WritableMap location = Arguments.createMap();
-        location.putDouble("latitude", latitude);
-        location.putDouble("longitude", longitude);
-        location.putDouble("zoom", zoom);
-        aPackage.getManager().setCenterCoordinateZoomLevel(aPackage.getManager().getMapView(), location);
-    }
-
-    @ReactMethod
-    public void addAnnotations(int mapRef, ReadableArray value) {
-        aPackage.getManager().setAnnotations(aPackage.getManager().getMapView(), value, false);
-    }
-
-    @ReactMethod
-    public void setUserTrackingMode(int mapRef, int mode) {
-        aPackage.getManager().setMyLocationTrackingMode(aPackage.getManager().getMapView(), mode);
-    }
-
-    @ReactMethod
-    public void removeAllAnnotations(int mapRef) {
-        aPackage.getManager().removeAllAnnotations(aPackage.getManager().getMapView(), true);
-    }
-
-    @ReactMethod
-    public void setTilt(int mapRef, double pitch) {
-        aPackage.getManager().setTilt(aPackage.getManager().getMapView(), pitch);
-    }
-
-    @ReactMethod
-    public void setVisibleCoordinateBoundsAnimated(int mapRef, double latSW, double lngSW,double latNE, double lngNE, float paddingTop, float paddingRight, float paddingBottom, float paddingLeft) {
-        WritableMap info = Arguments.createMap();
-        info.putDouble("latSW", latSW);
-        info.putDouble("lngSW", lngSW);
-        info.putDouble("latNE", latNE);
-        info.putDouble("lngNE", lngNE);
-        info.putDouble("paddingTop", paddingTop);
-        info.putDouble("paddingRight", paddingRight);
-        info.putDouble("paddingBottom", paddingBottom);
-        info.putDouble("paddingLeft", paddingLeft);
-        aPackage.getManager().setVisibleCoordinateBounds(aPackage.getManager().getMapView(), info);
-    }
-
-    @ReactMethod
-    public void getDirection(int mapRef, Callback successCallback) {
-        WritableMap direction = aPackage.getManager().getDirection(aPackage.getManager().getMapView());
-        successCallback.invoke(direction);
-    }
-
-    @ReactMethod
-    public void getCenterCoordinateZoomLevel(int mapRef, Callback successCallback) {
-        WritableMap location =aPackage.getManager().getCenterCoordinateZoomLevel(aPackage.getManager().getMapView());
-        successCallback.invoke(location);
-    }
-
-    @ReactMethod
-    public void getBounds(int mapRef, Callback successCallback) {
-      WritableMap bounds = aPackage.getManager().getBounds(aPackage.getManager().getMapView());
-      successCallback.invoke(bounds);
-    }
-
-    */
 }
