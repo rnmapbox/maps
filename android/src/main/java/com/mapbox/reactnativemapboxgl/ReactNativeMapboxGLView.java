@@ -91,6 +91,7 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
     private void setupMapView() {
         _mapOptions.camera(_initialCamera.build());
         _mapView = new MapView(this.getContext(), _mapOptions);
+        _mapView.
         _mapView.getMapAsync(this);
         this.addView(_mapView);
     }
@@ -109,15 +110,6 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
         }
         if (!_map.getStyleUrl().equals(_mapOptions.getStyle())) {
             _map.setStyleUrl(_mapOptions.getStyle());
-        }
-    }
-
-    // Utils
-
-    private void assertPropNotChangeable(String propName) {
-        if (_mapView != null) {
-            throw new JSApplicationIllegalArgumentException("Changing prop MapView." + propName +
-                    " after component has been mounted is not currently supported");
         }
     }
 
@@ -144,20 +136,27 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
     public void setRotateEnabled(boolean value) {
         if (_mapOptions.getRotateGesturesEnabled() == value) { return; }
         _mapOptions.rotateGesturesEnabled(value);
-        assertPropNotChangeable("rotateEnabled");
+        if (_map != null) {
+            _map.getUiSettings().setRotateGesturesEnabled(value);
+        }
     }
 
     public void setScrollEnabled(boolean value) {
         if (_mapOptions.getScrollGesturesEnabled() == value) { return; }
         _mapOptions.scrollGesturesEnabled(value);
-        assertPropNotChangeable("scrollEnabled");
+        if (_map != null) {
+            _map.getUiSettings().setScrollGesturesEnabled(value);
+        }
     }
 
     public void setZoomEnabled(boolean value) {
         if (_mapOptions.getZoomGesturesEnabled() == value) { return; }
         _mapOptions.zoomGesturesEnabled(value);
         _mapOptions.zoomControlsEnabled(value);
-        assertPropNotChangeable("zoomEnabled");
+        if (_map != null) {
+            _map.getUiSettings().setZoomControlsEnabled(value);
+            _map.getUiSettings().setZoomGesturesEnabled(value);
+        }
     }
 
     public void setStyleURL(String styleURL) {
@@ -187,19 +186,25 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
     public void setAttributionButtonIsHidden(boolean value) {
         if (_mapOptions.getAttributionEnabled() == !value) { return; }
         _mapOptions.attributionEnabled(!value);
-        assertPropNotChangeable("attributionButtonIsHidden");
+        if (_map != null) {
+            _map.getUiSettings().setAttributionEnabled(!value);
+        }
     }
 
     public void setLogoIsHidden(boolean value) {
         if (_mapOptions.getLogoEnabled() == !value) { return; }
         _mapOptions.logoEnabled(!value);
-        assertPropNotChangeable("logoIsHidden");
+        if (_map != null) {
+            _map.getUiSettings().setLogoEnabled(!value);
+        }
     }
 
     public void setCompassIsHidden(boolean value) {
         if (_mapOptions.getCompassEnabled() == !value) { return; }
         _mapOptions.compassEnabled(!value);
-        assertPropNotChangeable("compassIsHidden");
+        if (_map != null) {
+            _map.getUiSettings().setCompassEnabled(!value);
+        }
     }
 
     public void setContentInset(int top, int right, int bottom, int left) {
