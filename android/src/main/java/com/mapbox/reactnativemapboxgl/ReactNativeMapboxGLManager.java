@@ -2,7 +2,10 @@
 package com.mapbox.reactnativemapboxgl;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.ReactNative;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.SimpleViewManager;
@@ -100,6 +103,11 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
     @ReactProp(name = "compassIsHidden")
     public void setCompassIsHidden(ReactNativeMapboxGLView view, boolean value) {
         view.setCompassIsHidden(value);
+    }
+
+    @ReactProp(name = "contentInset")
+    public void setContentInset(ReactNativeMapboxGLView view, ReadableArray inset) {
+        view.setContentInset(inset.getInt(0), inset.getInt(1), inset.getInt(2), inset.getInt(3));
     }
 
     /*

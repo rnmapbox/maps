@@ -24,6 +24,7 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
     private int _locationTrackingMode;
     private int _bearingTrackingMode;
     private boolean _showsUserLocation;
+    private int _paddingTop, _paddingRight, _paddingBottom, _paddingLeft;
 
     public ReactNativeMapboxGLView(Context context, ReactNativeMapboxGLManager manager) {
         super(context);
@@ -88,6 +89,7 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
         _map.setMyLocationEnabled(_showsUserLocation);
         _map.getTrackingSettings().setMyLocationTrackingMode(_locationTrackingMode);
         _map.getTrackingSettings().setMyBearingTrackingMode(_bearingTrackingMode);
+        _map.setPadding(_paddingLeft, _paddingTop, _paddingRight, _paddingBottom);
 
         // If these settings changed between setupMapView() and onMapReady(), coerce them to their right values
         if (_map.isDebugActive() != _mapOptions.getDebugActive()) {
@@ -184,5 +186,17 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
         if (_mapOptions.getCompassEnabled() == !value) { return; }
         _mapOptions.compassEnabled(!value);
         assertNotChangeable("compassIsHidden");
+    }
+
+    public void setContentInset(int top, int right, int bottom, int left) {
+        if (top == _paddingTop &&
+            bottom == _paddingBottom &&
+            left == _paddingLeft &&
+            right == _paddingRight) { return; }
+        _paddingTop = top;
+        _paddingRight = right;
+        _paddingBottom = bottom;
+        _paddingLeft = left;
+        if (_map != null) { _map.setPadding(left, top, right, bottom); }
     }
 }

@@ -179,6 +179,7 @@ class MapView extends Component {
     logoIsHidden: PropTypes.bool,
     compassIsHidden: PropTypes.bool,
     userLocationVerticalAlignment: PropTypes.number,
+    contentInset: PropTypes.arrayOf(PropTypes.number),
 
     annotations: PropTypes.arrayOf(PropTypes.shape({
       coordinates: PropTypes.array.isRequired,
@@ -214,7 +215,6 @@ class MapView extends Component {
     onLocateUserFailed: PropTypes.func,
     onLongPress: PropTypes.func,
     onTap: PropTypes.func,
-    contentInset: PropTypes.array,
     onChangeUserTrackingMode: PropTypes.func,
   };
 
@@ -236,7 +236,8 @@ class MapView extends Component {
     logoIsHidden: false,
     compassIsHidden: false,
     annotationsAreImmutable: false,
-    annotations: []
+    annotations: [],
+    contentInset: [0, 0, 0, 0]
   };
 
   componentWillReceiveProps(newProps) {
