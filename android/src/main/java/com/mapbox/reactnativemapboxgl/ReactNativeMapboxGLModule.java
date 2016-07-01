@@ -136,18 +136,18 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
     // Offline packs
 
     @ReactMethod
-    public void getPacks(Promise promise) {
+    public void getOfflinePacks(Promise promise) {
         WritableArray result = Arguments.createArray();
         promise.resolve(result);
     }
 
     @ReactMethod
-    public void addPackForRegion(ReadableMap options, Promise promise) {
+    public void addOfflinePack(ReadableMap options, Promise promise) {
         promise.reject(new JSApplicationIllegalArgumentException("Mapbox.addOfflinePackForRegion not implemented on Android yet"));
     }
 
     @ReactMethod
-    public void removePack(String packName, Promise promise) {
+    public void removeOfflinePack(String packName, Promise promise) {
         promise.reject(new JSApplicationIllegalArgumentException("Mapbox.removeOfflinePack not implemented on Android yet"));
     }
 }

@@ -81,19 +81,19 @@ function bindCallbackToPromise(callback, promise) {
 }
 
 function addOfflinePack(options, callback) {
-  const promise = MapboxGLManager.addPackForRegion(options);
+  const promise = MapboxGLManager.addOfflinePack(options);
   bindCallbackToPromise(callback, promise);
   return promise;
 }
 
 function getOfflinePacks(callback) {
-  const promise = MapboxGLManager.getPacks();
+  const promise = MapboxGLManager.getOfflinePacks();
   bindCallbackToPromise(callback, promise);
   return promise;
 }
 
 function removeOfflinePack(packName, callback) {
-  const promise = MapboxGLManager.removePack(packName);
+  const promise = MapboxGLManager.removeOfflinePack(packName);
   bindCallbackToPromise(callback, promise);
   return promise;
 }

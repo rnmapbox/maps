@@ -261,7 +261,7 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     [_bridge.eventDispatcher sendAppEventWithName:@"MapboxOfflineError" body:event];
 }
 
-RCT_REMAP_METHOD(addPackForRegion,
+RCT_REMAP_METHOD(addOfflinePack,
                  pack:(NSDictionary*)options
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
@@ -330,7 +330,7 @@ RCT_REMAP_METHOD(addPackForRegion,
     return callbackArray;
 }
 
-RCT_REMAP_METHOD(getPacks,
+RCT_REMAP_METHOD(getOfflinePacks,
                 resolver:(RCTPromiseResolveBlock)resolve
                 rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -347,7 +347,7 @@ RCT_REMAP_METHOD(getPacks,
     });
 }
 
-RCT_REMAP_METHOD(removePack,
+RCT_REMAP_METHOD(removeOfflinePack,
                  name:(NSString*)packName
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
