@@ -452,7 +452,13 @@ RCT_EXPORT_METHOD(getDirection:(nonnull NSNumber *)reactTag
     }];
 }
 
-RCT_EXPORT_METHOD(setCenterZoomDirection:(nonnull NSNumber *)reactTag
+RCT_EXPORT_METHOD(getPitch:(nonnull NSNumber *)reactTag
+                  callback:(RCTResponseSenderBlock)callback)
+{
+    RCTLogError(@"MapView.getPitch() is not supported on iOS");
+}
+
+RCT_EXPORT_METHOD(easeTo:(nonnull NSNumber *)reactTag
                   options:(NSDictionary *)options
                   animated:(BOOL)animated
                   callback:(RCTResponseSenderBlock)callback)
@@ -465,6 +471,10 @@ RCT_EXPORT_METHOD(setCenterZoomDirection:(nonnull NSNumber *)reactTag
             NSNumber * longitude = [options objectForKey:@"longitude"];
             NSNumber * zoom = [options objectForKey:@"zoomLevel"];
             NSNumber * direction = [options objectForKey:@"direction"];
+            
+            if ([options objectForKey:@"pitch"]) {
+                RCTLogWarn(@"Pitch is not supported for MapView.easeTo() on iOS. Use MapView.setCamera() instead.");
+            }
             
             CLLocationCoordinate2D _center = (latitude && longitude)
             ? CLLocationCoordinate2DMake([latitude doubleValue], [longitude doubleValue])

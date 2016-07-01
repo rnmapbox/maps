@@ -98,44 +98,35 @@ class MapView extends Component {
 
   // Viewport setters
   setDirection(direction, animated = true, callback) {
-    let _resolve;
-    const promise = new Promise(resolve => _resolve = resolve);
-    MapboxGLManager.setCenterZoomDirection(findNodeHandle(this), { direction }, animated, () => {
-      callback && callback();
-      _resolve();
-    });
-    return promise;
+    return this.easeTo({ direction }, animated, callback);
   }
   setZoomLevel(zoomLevel, animated = true, callback) {
-    let _resolve;
-    const promise = new Promise(resolve => _resolve = resolve);
-    MapboxGLManager.setCenterZoomDirection(findNodeHandle(this), { zoomLevel }, animated, () => {
-      callback && callback();
-      _resolve();
-    });
-    return promise;
+    return this.easeTo({ zoomLevel }, animated, callback);
   }
   setCenterCoordinate(latitude, longitude, animated = true, callback) {
-    let _resolve;
-    const promise = new Promise(resolve => _resolve = resolve);
-    MapboxGLManager.setCenterZoomDirection(findNodeHandle(this), { latitude, longitude }, animated, () => {
-      callback && callback();
-      _resolve();
-    });
-    return promise;
+    return this.easeTo({ latitude, longitude }, animated, callback);
   }
   setCenterCoordinateZoomLevel(latitude, longitude, zoomLevel, animated = true, callback) {
+    return this.easeTo({ latitude, longitude, zoomLevel }, animated, callback);
+  }
+  setCenterCoordinateZoomLevelPitch(latitude, longitude, zoomLevel, pitch, animated = true, callback) {
+    return this.easeTo({ latitude, longitude, zoomLevel, pitch }, animated, callback);
+  }
+  setPitch(pitch, animated = true, callback) {
+    return this.easeTo({ pitch }, animated, callback);
+  }
+  easeTo(options, animated = true, callback) {
     let _resolve;
     const promise = new Promise(resolve => _resolve = resolve);
-    MapboxGLManager.setCenterZoomDirection(findNodeHandle(this), { latitude, longitude, zoomLevel }, animated, () => {
+    MapboxGLManager.easeTo(findNodeHandle(this), options, animated, () => {
       callback && callback();
       _resolve();
     });
     return promise;
   }
 
-  setCamera(latitude, longitude, fromDistance, pitch, direction, duration = 0.3) {
-    MapboxGLManager.setCamera(findNodeHandle(this), latitude, longitude, fromDistance, pitch, direction, duration);
+  setCamera(latitude, longitude, zoomLevel, pitch, direction, duration = 0.3) {
+    MapboxGLManager.setCamera(findNodeHandle(this), latitude, longitude, zoomLevel, pitch, direction, duration);
   }
 
   setVisibleCoordinateBounds(latitudeSW, longitudeSW, latitudeNE, longitudeNE, paddingTop = 0, paddingRight = 0, paddingBottom = 0, paddingLeft = 0, animated = true) {
@@ -151,6 +142,9 @@ class MapView extends Component {
   }
   getBounds(callback) {
     MapboxGLManager.getBounds(findNodeHandle(this), callback);
+  }
+  getBounds(callback) {
+    MapboxGLManager.getPitch(findNodeHandle(this), callback);
   }
 
   // Others

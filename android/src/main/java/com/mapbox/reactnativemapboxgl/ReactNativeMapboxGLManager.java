@@ -5,15 +5,12 @@ import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
-import com.facebook.react.uimanager.ReactNative;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.SimpleViewManager;
@@ -23,7 +20,6 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
-import com.mapbox.mapboxsdk.maps.Projection;
 
 import java.util.Map;
 
@@ -135,13 +131,14 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
     // Commands
 
     public static final int COMMAND_GET_DIRECTION = 0;
-    public static final int COMMAND_GET_CENTER_COORDINATE_ZOOM_LEVEL = 1;
-    public static final int COMMAND_GET_BOUNDS = 2;
-    public static final int COMMAND_SET_CENTER_ZOOM_DIRECTION = 3;
-    public static final int COMMAND_SET_CAMERA = 4;
-    public static final int COMMAND_SET_VISIBLE_COORDINATE_BOUNDS = 5;
-    public static final int COMMAND_SELECT_ANNOTATION = 6;
-    public static final int COMMAND_SPLICE_ANNOTATIONS = 7;
+    public static final int COMMAND_GET_PITCH = 1;
+    public static final int COMMAND_GET_CENTER_COORDINATE_ZOOM_LEVEL = 2;
+    public static final int COMMAND_GET_BOUNDS = 3;
+    public static final int COMMAND_EASE_TO = 4;
+    public static final int COMMAND_SET_CAMERA = 5;
+    public static final int COMMAND_SET_VISIBLE_COORDINATE_BOUNDS = 6;
+    public static final int COMMAND_SELECT_ANNOTATION = 7;
+    public static final int COMMAND_SPLICE_ANNOTATIONS = 8;
 
     @Override
     public
@@ -149,9 +146,10 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
     Map<String, Integer> getCommandsMap() {
         return MapBuilder.<String, Integer>builder()
                 .put("getDirection", COMMAND_GET_DIRECTION)
+                .put("getPitch", COMMAND_GET_PITCH)
                 .put("getCenterCoordinateZoomLevel", COMMAND_GET_CENTER_COORDINATE_ZOOM_LEVEL)
                 .put("getBounds", COMMAND_GET_BOUNDS)
-                .put("setCenterZoomDirection", COMMAND_SET_CENTER_ZOOM_DIRECTION)
+                .put("easeTo", COMMAND_EASE_TO)
                 .put("setCamera", COMMAND_SET_CAMERA)
                 .put("setVisibleCoordinateBounds", COMMAND_SET_VISIBLE_COORDINATE_BOUNDS)
                 .put("selectAnnotation", COMMAND_SELECT_ANNOTATION)
@@ -175,14 +173,17 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
             case COMMAND_GET_DIRECTION:
                 getDirection(view, args.getInt(0));
                 break;
+            case COMMAND_GET_PITCH:
+                getPitch(view, args.getInt(0));
+                break;
             case COMMAND_GET_CENTER_COORDINATE_ZOOM_LEVEL:
                 getCenterCoordinateZoomLevel(view, args.getInt(0));
                 break;
             case COMMAND_GET_BOUNDS:
                 getBounds(view, args.getInt(0));
                 break;
-            case COMMAND_SET_CENTER_ZOOM_DIRECTION:
-                setCenterZoomDirection(view, args.getMap(0), args.getBoolean(1), args.getInt(2));
+            case COMMAND_EASE_TO:
+                easeTo(view, args.getMap(0), args.getBoolean(1), args.getInt(2));
                 break;
             case COMMAND_SET_CAMERA:
                 setCamera(view, args.getDouble(0),
@@ -216,6 +217,12 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
         fireCallback(callbackId, result);
     }
 
+    private void getPitch(ReactNativeMapboxGLView view, int callbackId) {
+        WritableArray result = Arguments.createArray();
+        result.pushDouble(view.getCameraPosition().tilt);
+        fireCallback(callbackId, result);
+    }
+
     private void getCenterCoordinateZoomLevel(ReactNativeMapboxGLView view, int callbackId) {
         CameraPosition camera = view.getCameraPosition();
 
@@ -245,7 +252,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
 
     // Setters
 
-    private void setCenterZoomDirection(ReactNativeMapboxGLView view, ReadableMap updates, boolean animated, int callbackId) {
+    private void easeTo(ReactNativeMapboxGLView view, ReadableMap updates, boolean animated, int callbackId) {
         CameraPosition.Builder cameraBuilder = new CameraPosition.Builder(view.getCameraPosition());
         if (updates.hasKey("latitude") && updates.hasKey("longitude")) {
             cameraBuilder.target(new LatLng(updates.getDouble("latitude"), updates.getDouble("longitude")));
@@ -255,6 +262,9 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
         }
         if (updates.hasKey("direction")) {
             cameraBuilder.bearing(updates.getDouble("direction"));
+        }
+        if (updates.hasKey("pitch")) {
+            cameraBuilder.tilt(updates.getDouble("pitch"));
         }
 
         // I want lambdas :(
@@ -280,8 +290,9 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
     public void setCamera(
             ReactNativeMapboxGLView view,
             double latitude, double longitude,
-            double fromDistance, double pitch, double direction,
+            double altitude, double pitch, double direction,
             double duration) {
+        throw new JSApplicationIllegalArgumentException("MapView.setCamera() is not supported on Android. If you're trying to change pitch, use MapView.easeTo()");
     }
 
     public void setVisibleCoordinateBounds(
@@ -294,10 +305,10 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
                         .include(new LatLng(latS, lonW))
                         .include(new LatLng(latN, lonE))
                         .build(),
-                (int)paddingLeft,
-                (int)paddingTop,
-                (int)paddingRight,
-                (int)paddingBottom
+                (int) paddingLeft,
+                (int) paddingTop,
+                (int) paddingRight,
+                (int) paddingBottom
         );
         view.setCameraUpdate(update, animated ? MapboxConstants.ANIMATION_DURATION : 0, null);
     }

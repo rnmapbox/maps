@@ -33,12 +33,19 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
     private int _locationTrackingMode;
     private int _bearingTrackingMode;
     private boolean _showsUserLocation;
+    private boolean _zoomEnabled = true;
+    private boolean _scrollEnabled = true;
+    private boolean _rotateEnabled = true;
     private int _paddingTop, _paddingRight, _paddingBottom, _paddingLeft;
 
     public ReactNativeMapboxGLView(Context context, ReactNativeMapboxGLManager manager) {
         super(context);
         _manager = manager;
         _mapOptions = MapboxMapOptions.createFromAttributes(context, null);
+        _mapOptions.zoomGesturesEnabled(true);
+        _mapOptions.rotateGesturesEnabled(true);
+        _mapOptions.scrollGesturesEnabled(true);
+        _mapOptions.tiltGesturesEnabled(true);
     }
 
     // Lifecycle methods
@@ -103,6 +110,10 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
         _map.getTrackingSettings().setMyLocationTrackingMode(_locationTrackingMode);
         _map.getTrackingSettings().setMyBearingTrackingMode(_bearingTrackingMode);
         _map.setPadding(_paddingLeft, _paddingTop, _paddingRight, _paddingBottom);
+        UiSettings uiSettings = _map.getUiSettings();
+        uiSettings.setZoomGesturesEnabled(_zoomEnabled);
+        uiSettings.setScrollGesturesEnabled(_scrollEnabled);
+        uiSettings.setRotateGesturesEnabled(_rotateEnabled);
 
         // If these settings changed between setupMapView() and onMapReady(), coerce them to their right values
         // This doesn't happen in the current implementation of MapView, but let's be future proof
@@ -111,19 +122,6 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
         }
         if (!_map.getStyleUrl().equals(_mapOptions.getStyle())) {
             _map.setStyleUrl(_mapOptions.getStyle());
-        }
-        UiSettings uiSettings = _map.getUiSettings();
-        if (uiSettings.isRotateGesturesEnabled() != _mapOptions.getRotateGesturesEnabled()) {
-            uiSettings.setRotateGesturesEnabled(_mapOptions.getRotateGesturesEnabled());
-        }
-        if (uiSettings.isScrollGesturesEnabled() != _mapOptions.getScrollGesturesEnabled()) {
-            uiSettings.setScrollGesturesEnabled(_mapOptions.getScrollGesturesEnabled());
-        }
-        if (uiSettings.isZoomGesturesEnabled() != _mapOptions.getZoomGesturesEnabled()) {
-            uiSettings.setZoomGesturesEnabled(_mapOptions.getZoomGesturesEnabled());
-        }
-        if (uiSettings.isZoomControlsEnabled() != _mapOptions.getZoomControlsEnabled()) {
-            uiSettings.setZoomControlsEnabled(_mapOptions.getZoomControlsEnabled());
         }
         if (uiSettings.isLogoEnabled() != _mapOptions.getLogoEnabled()) {
             uiSettings.setLogoEnabled(_mapOptions.getLogoEnabled());
@@ -157,27 +155,25 @@ public class ReactNativeMapboxGLView extends LinearLayout implements OnMapReadyC
     }
 
     public void setRotateEnabled(boolean value) {
-        if (_mapOptions.getRotateGesturesEnabled() == value) { return; }
-        _mapOptions.rotateGesturesEnabled(value);
+        if (_rotateEnabled == value) { return; }
+        _rotateEnabled = value;
         if (_map != null) {
             _map.getUiSettings().setRotateGesturesEnabled(value);
         }
     }
 
     public void setScrollEnabled(boolean value) {
-        if (_mapOptions.getScrollGesturesEnabled() == value) { return; }
-        _mapOptions.scrollGesturesEnabled(value);
+        if (_scrollEnabled == value) { return; }
+        _scrollEnabled = value;
         if (_map != null) {
             _map.getUiSettings().setScrollGesturesEnabled(value);
         }
     }
 
     public void setZoomEnabled(boolean value) {
-        if (_mapOptions.getZoomGesturesEnabled() == value) { return; }
-        _mapOptions.zoomGesturesEnabled(value);
-        _mapOptions.zoomControlsEnabled(value);
+        if (_zoomEnabled == value) { return; }
+        _zoomEnabled = value;
         if (_map != null) {
-            _map.getUiSettings().setZoomControlsEnabled(value);
             _map.getUiSettings().setZoomGesturesEnabled(value);
         }
     }
