@@ -13,6 +13,7 @@ import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -108,6 +109,8 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         return constants;
     }
 
+    // Access Token
+
     @ReactMethod
     public void setAccessToken(String accessToken) {
         if (accessToken == null || accessToken.length() == 0 || accessToken.equals("your-mapbox.com-access-token")) {
@@ -123,8 +126,28 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         MapboxAccountManager.start(context, accessToken);
     }
 
+    // Metrics
+
     @ReactMethod
     public void setMetricsEnabled(boolean value) {
         MapboxEventManager.getMapboxEventManager().setTelemetryEnabled(value);
+    }
+
+    // Offline packs
+
+    @ReactMethod
+    public void getPacks(Promise promise) {
+        WritableArray result = Arguments.createArray();
+        promise.resolve(result);
+    }
+
+    @ReactMethod
+    public void addPackForRegion(ReadableMap options, Promise promise) {
+        promise.reject(new JSApplicationIllegalArgumentException("Mapbox.addOfflinePackForRegion not implemented on Android yet"));
+    }
+
+    @ReactMethod
+    public void removePack(String packName, Promise promise) {
+        promise.reject(new JSApplicationIllegalArgumentException("Mapbox.removeOfflinePack not implemented on Android yet"));
     }
 }

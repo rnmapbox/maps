@@ -179,8 +179,8 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     
     if ([_packRequests count]) {
         NSArray * callbackArray = [self serializePacksArray:packs];
-        for (RCTResponseSenderBlock callback in _packRequests) {
-            callback(@[[NSNull null], callbackArray]);
+        for (RCTPromiseResolveBlock callback in _packRequests) {
+            callback(callbackArray);
         }
         [_packRequests removeAllObjects];
     }
@@ -261,8 +261,10 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     [_bridge.eventDispatcher sendAppEventWithName:@"MapboxOfflineError" body:event];
 }
 
-RCT_EXPORT_METHOD(addPackForRegion:(NSDictionary*)options
-                  callback:(RCTResponseSenderBlock)callback)
+RCT_REMAP_METHOD(addPackForRegion,
+                 pack:(NSDictionary*)options
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
 {
     if ([options objectForKey:@"name"] == nil) {
         return RCTLogError(@"Name is required.");
@@ -302,10 +304,10 @@ RCT_EXPORT_METHOD(addPackForRegion:(NSDictionary*)options
         
         [[MGLOfflineStorage sharedOfflineStorage] addPackForRegion:region withContext:context completionHandler:^(MGLOfflinePack *pack, NSError *error) {
             if (error != nil) {
-                RCTLogError(@"Error: %@", error.localizedFailureReason);
+                reject(@"add_pack_failed", error.localizedFailureReason, error);
             } else {
                 [pack resume];
-                callback(@[[NSNull null]]);
+                resolve([NSNull null]);
             }
         }];
     });
@@ -328,7 +330,9 @@ RCT_EXPORT_METHOD(addPackForRegion:(NSDictionary*)options
     return callbackArray;
 }
 
-RCT_EXPORT_METHOD(getPacks:(RCTResponseSenderBlock)callback)
+RCT_REMAP_METHOD(getPacks,
+                resolver:(RCTPromiseResolveBlock)resolve
+                rejecter:(RCTPromiseRejectBlock)reject)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSMutableArray* callbackArray = [NSMutableArray new];
@@ -336,15 +340,17 @@ RCT_EXPORT_METHOD(getPacks:(RCTResponseSenderBlock)callback)
         MGLOfflinePack *packs = [MGLOfflineStorage sharedOfflineStorage].packs;
         
         if (!packs) {
-            [_packRequests addObject:callback];
+            [_packRequests addObject:resolve];
         } else {
-            callback(@[[NSNull null], [self serializePacksArray:packs]]);
+            resolve([self serializePacksArray:packs]);
         }
     });
 }
 
-RCT_EXPORT_METHOD(removePack:(NSString*)packName
-                  callback:(RCTResponseSenderBlock)callback)
+RCT_REMAP_METHOD(removePack,
+                 name:(NSString*)packName
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         MGLOfflinePack *packs = [MGLOfflineStorage sharedOfflineStorage].packs;
@@ -359,7 +365,7 @@ RCT_EXPORT_METHOD(removePack:(NSString*)packName
         }
         
         if (tempPack == nil) {
-            return callback(@[[NSNull null]]);
+            return resolve(@{});
         }
         
         NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:tempPack.context];
@@ -375,11 +381,9 @@ RCT_EXPORT_METHOD(removePack:(NSString*)packName
             [_removedPacks removeObject:tempPack];
             [[MGLOfflineStorage sharedOfflineStorage] removePack:tempPack withCompletionHandler:^(NSError * _Nullable error) {
                 if (error != nil) {
-                    callback(@[@{ @"message": error.localizedFailureReason }]);
+                    reject(@"remove_pack_failed", error.localizedFailureReason, error);
                 } else {
-                    NSMutableDictionary *deletedObject = [NSMutableDictionary new];
-                    [deletedObject setObject:userInfo[@"name"] forKey:@"deleted"];
-                    callback(@[[NSNull null], deletedObject]);
+                    resolve(@{ @"deleted": userInfo[@"name"] });
                 }
             }];
         });

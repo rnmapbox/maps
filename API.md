@@ -325,6 +325,9 @@ There are 3 main methods for interacting with the offline API:
 
 Before using them, don't forget to set an access token with `Mapbox.setAccessToken(accessToken)`
 
+These methods return a promise, but they also accept a callback as the last
+argument with the signature `(err, value) => {}`.
+
 #### Creating a pack
 
 ```javascript
@@ -341,6 +344,10 @@ Mapbox.addOfflinePack({
     minZoomLevel: 10, // required
     maxZoomLevel: 13, // required
     styleURL: Mapbox.mapStyles.emerald // required. Valid styleURL
+}).then(() => {
+  // Called after the pack has been added successfully
+}).catch(err => {
+  console.error(err); // Handle error
 });
 ```
 
@@ -349,29 +356,29 @@ Mapbox.addOfflinePack({
 To delete a pack, provide the `name` of the pack to delete.
 
 ```javascript
-Mapbox.removeOfflinePack('test', (err, info)=> {
-    if (err) {
-      console.error(err.message);
-      return;
-    }
-    if (info) {
-        console.log('Deleted', info.deleted);
+Mapbox.removeOfflinePack('test')
+  .then(info => {
+    if (info.deleted) {
+      console.log(`Deleted pack named ${info.deleted}`); // The pack has been deleted successfully
     } else {
-        console.log('No packs to delete'); // There are no packs named 'test'
+      console.log('No packs to delete'); // There are no packs named 'test'
     }
-});
+  })
+  .catch(err => {
+    console.error(err); // Handle error
+  });
 ```
 
 #### Querying progress
 
 ```javascript
-Mapbox.getOfflinePacks((err, packs) => {
-  if (err) {
-    console.error(err.message);
-    return;
-  }
-  // packs is an array of progress objects
-});
+Mapbox.getOfflinePacks()
+  .then(packs => {
+    // packs is an array of progress objects
+  })
+  .catch(err => {
+    console.log(err); // Handle error
+  })
 ```
 
 A progress object has the following shape:

@@ -190,8 +190,8 @@ class MapExample extends Component {
         <Text onPress={() => this._map && this._map.setVisibleCoordinateBounds(40.712, -74.227, 40.774, -74.125, 100, 0, 0, 0)}>
           Set visible bounds to 40.7, -74.2, 40.7, -74.1
         </Text>
-        <Text onPress={() => this.setState({ userTrackingMode: Mapbox.userTrackingMode.follow })}>
-          Set userTrackingMode to follow
+        <Text onPress={() => this.setState({ userTrackingMode: Mapbox.userTrackingMode.followWithHeading })}>
+          Set userTrackingMode to followWithHeading
         </Text>
         <Text onPress={() => this._map && this._map.getCenterCoordinateZoomLevel((location)=> {
             console.log(location);
@@ -208,31 +208,47 @@ class MapExample extends Component {
           })}>
           Get bounds
         </Text>
-        <Text onPress={() => Mapbox.addOfflinePack({
-            name: 'test',
-            type: 'bbox',
-            bounds: [0, 0, 0, 0],
-            minZoomLevel: 0,
-            maxZoomLevel: 0,
-            metadata: { anyValue: 'you wish' },
-            styleURL: Mapbox.mapStyles.emerald
-          })}>
+        <Text onPress={() => {
+            Mapbox.addOfflinePack({
+              name: 'test',
+              type: 'bbox',
+              bounds: [0, 0, 0, 0],
+              minZoomLevel: 0,
+              maxZoomLevel: 0,
+              metadata: { anyValue: 'you wish' },
+              styleURL: Mapbox.mapStyles.emerald
+            }).then(() => {
+              console.log('Offline pack added');
+            }).catch(err => {
+              console.log(err);
+            });
+        }}>
           Create offline pack
         </Text>
-        <Text onPress={() => Mapbox.getOfflinePacks((err, packs)=> {
-            if (err) console.log(err);
-            console.log(packs);
-          })}>
+        <Text onPress={() => {
+            Mapbox.getOfflinePacks()
+              .then(packs => {
+                console.log(packs);
+              })
+              .catch(err => {
+                console.log(err);
+              });
+        }}>
           Get offline packs
         </Text>
-        <Text onPress={() => Mapbox.removeOfflinePack('test', (err, info)=> {
-            if (err) console.log(err);
-            if (info) {
-              console.log('Deleted', info.deleted);
-            } else {
-              console.log('No packs to delete');
-            }
-          })}>
+        <Text onPress={() => {
+            Mapbox.removeOfflinePack('test')
+              .then(info => {
+                if (info.deleted) {
+                  console.log('Deleted', info.deleted);
+                } else {
+                  console.log('No packs to delete');
+                }
+              })
+              .catch(err => {
+                console.log(err);
+              });
+        }}>
           Remove pack with name 'test'
         </Text>
         <Text>User tracking mode is {this.state.userTrackingMode}</Text>
@@ -245,7 +261,7 @@ class MapExample extends Component {
           rotateEnabled={true}
           scrollEnabled={true}
           zoomEnabled={true}
-          showsUserLocation={true}
+          showsUserLocation={false}
           styleURL={Mapbox.mapStyles.emerald}
           userTrackingMode={this.state.userTrackingMode}
           annotations={this.state.annotations}

@@ -70,16 +70,32 @@ function setAccessToken(token: string) {
 }
 
 // Offline
-function addOfflinePack(options, callback = () => {}) {
-  MapboxGLManager.addPackForRegion(options, callback);
+function bindCallbackToPromise(callback, promise) {
+  if (callback) {
+    promise.then(value => {
+      callback(null, value);
+    }).catch(err => {
+      callback(err);
+    })
+  }
+}
+
+function addOfflinePack(options, callback) {
+  const promise = MapboxGLManager.addPackForRegion(options);
+  bindCallbackToPromise(callback, promise);
+  return promise;
 }
 
 function getOfflinePacks(callback) {
-  MapboxGLManager.getPacks(callback);
+  const promise = MapboxGLManager.getPacks();
+  bindCallbackToPromise(callback, promise);
+  return promise;
 }
 
-function removeOfflinePack(packName, callback = () => {}) {
-  MapboxGLManager.removePack(packName, callback);
+function removeOfflinePack(packName, callback) {
+  const promise = MapboxGLManager.removePack(packName);
+  bindCallbackToPromise(callback, promise);
+  return promise;
 }
 
 function addOfflinePackProgressListener(handler) {
