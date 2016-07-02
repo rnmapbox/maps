@@ -51,7 +51,7 @@
 - (CLLocationCoordinate2D)centerCoordinate;
 
 // Events
-@property (nonatomic, copy) RCTDirectEventBlock onRegionChange;
+@property (nonatomic, copy) RCTDirectEventBlock onRegionDidChange;
 @property (nonatomic, copy) RCTDirectEventBlock onRegionWillChange;
 @property (nonatomic, copy) RCTDirectEventBlock onChangeUserTrackingMode;
 @property (nonatomic, copy) RCTDirectEventBlock onOpenAnnotation;

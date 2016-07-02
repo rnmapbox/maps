@@ -466,10 +466,10 @@
 
 - (void)mapView:(RCTMapboxGL *)mapView regionDidChangeAnimated:(BOOL)animated
 {
-    if (!_onRegionChange) { return; }
+    if (!_onRegionDidChange) { return; }
 
     CLLocationCoordinate2D region = _map.centerCoordinate;
-    _onRegionChange(@{ @"target": self.reactTag,
+    _onRegionDidChange(@{ @"target": self.reactTag,
                        @"src": @{ @"latitude": @(region.latitude),
                                   @"longitude": @(region.longitude),
                                   @"zoomLevel": @(_map.zoomLevel),

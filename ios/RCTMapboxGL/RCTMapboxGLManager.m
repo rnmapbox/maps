@@ -51,7 +51,7 @@ RCT_EXPORT_VIEW_PROPERTY(logoIsHidden, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(compassIsHidden, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(userLocationVerticalAlignment, int);
 
-RCT_EXPORT_VIEW_PROPERTY(onRegionChange, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onRegionDidChange, RCTDirectEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onRegionWillChange, RCTDirectEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onChangeUserTrackingMode, RCTDirectEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onOpenAnnotation, RCTDirectEventBlock);

@@ -65,9 +65,9 @@ class MapExample extends Component {
     }]
   };
 
-  onRegionChange = (location) => {
-    this.setState({ currentZoom: location.zoom });
-    console.log('onRegionChange', location);
+  onRegionDidChange = (location) => {
+    this.setState({ currentZoom: location.zoomLevel });
+    console.log('onRegionDidChange', location);
   };
   onRegionWillChange = (location) => {
     console.log('onRegionWillChange', location);
@@ -267,7 +267,7 @@ class MapExample extends Component {
           annotations={this.state.annotations}
           annotationsAreImmutable
           onChangeUserTrackingMode={this.onChangeUserTrackingMode}
-          onRegionChange={this.onRegionChange}
+          onRegionDidChange={this.onRegionDidChange}
           onRegionWillChange={this.onRegionWillChange}
           onOpenAnnotation={this.onOpenAnnotation}
           onRightAnnotationTapped={this.onRightAnnotationTapped}

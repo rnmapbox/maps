@@ -411,7 +411,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
                 break;
             case MapView.REGION_DID_CHANGE:
             case MapView.REGION_DID_CHANGE_ANIMATED:
-                emitEvent("onRegionChange", serializeCurrentRegion());
+                emitEvent("onRegionDidChange", serializeCurrentRegion());
                 break;
             case MapView.WILL_START_LOADING_MAP:
                 emitEvent("onStartLoadingMap", null);

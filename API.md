@@ -53,7 +53,7 @@ import { MapView } from 'react-native-mapbox-gl';
 | Prop | Payload shape | Description
 |---|---|---|
 | `onRegionWillChange` | `{latitude: 0, longitude: 0, zoomLevel: 0, direction: 0, pitch: 0}` | Fired when the map begins panning or zooming.
-| `onRegionChange` | `{latitude: 0, longitude: 0, zoomLevel: 0, direction: 0, pitch: 0}` | Fired when the map ends panning or zooming.
+| `onRegionDidChange` | `{latitude: 0, longitude: 0, zoomLevel: 0, direction: 0, pitch: 0}` | Fired when the map ends panning or zooming.
 | `onOpenAnnotation` | `{id: 'marker_id', title: null, subtitle: null, latitude: 0, longitude: 0}` | Fired when tapping an annotation.
 | `onRightAnnotationTapped` | `{id: 'marker_id', title: null, subtitle: null, latitude: 0, longitude: 0}` | Fired when user taps the `rightCalloutAccessory` of an annotation.
 | `onChangeUserTrackingMode` | `Mapbox.userTrackingMode.none` | Fired when the user tracking mode gets changed by an user pan or rotate.

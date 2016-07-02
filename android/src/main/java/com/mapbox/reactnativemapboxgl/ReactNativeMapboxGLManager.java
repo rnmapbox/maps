@@ -69,7 +69,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
 
     public @Nullable Map<String, Object> getExportedCustomDirectEventTypeConstants() {
         return MapBuilder.<String,Object>builder()
-                .put("onRegionChange", MapBuilder.of("registrationName", "onRegionChange"))
+                .put("onRegionDidChange", MapBuilder.of("registrationName", "onRegionDidChange"))
                 .put("onRegionWillChange", MapBuilder.of("registrationName", "onRegionWillChange"))
                 .put("onOpenAnnotation", MapBuilder.of("registrationName", "onOpenAnnotation"))
                 .put("onRightAnnotationTapped", MapBuilder.of("registrationName", "onRightAnnotationTapped"))

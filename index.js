@@ -169,8 +169,8 @@ class MapView extends Component {
   }
 
   // Events
-  _onRegionChange = (event: Event) => {
-    if (this.props.onRegionChange) this.props.onRegionChange(event.nativeEvent.src);
+  _onRegionDidChange = (event: Event) => {
+    if (this.props.onRegionDidChange) this.props.onRegionDidChange(event.nativeEvent.src);
   };
   _onRegionWillChange = (event: Event) => {
     if (this.props.onRegionWillChange) this.props.onRegionWillChange(event.nativeEvent.src);
@@ -250,7 +250,7 @@ class MapView extends Component {
     })),
     annotationsAreImmutable: PropTypes.bool,
 
-    onRegionChange: PropTypes.func,
+    onRegionDidChange: PropTypes.func,
     onRegionWillChange: PropTypes.func,
     onOpenAnnotation: PropTypes.func,
     onUpdateUserLocation: PropTypes.func,
@@ -343,7 +343,7 @@ class MapView extends Component {
       <MapboxGLView
         {...this.props}
         ref={this._onNativeComponentMount}
-        onRegionChange={this._onRegionChange}
+        onRegionDidChange={this._onRegionDidChange}
         onRegionWillChange={this._onRegionWillChange}
         onOpenAnnotation={this._onOpenAnnotation}
         onRightAnnotationTapped={this._onRightAnnotationTapped}
