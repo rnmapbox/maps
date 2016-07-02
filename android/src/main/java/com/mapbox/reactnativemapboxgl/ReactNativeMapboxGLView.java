@@ -60,18 +60,22 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
     private boolean _enableOnRegionDidChange = false;
     private int _paddingTop, _paddingRight, _paddingBottom, _paddingLeft;
 
+    private boolean _recentlyChanged = false;
+    private boolean _willChangeThrottled = false;
+    private boolean _didChangeThrottled = false;
+
     private Map<String, Annotation> _annotations = new HashMap();
     private Map<Long, String> _annotationIdsToName = new HashMap();
     private Map<String, MarkerOptions> _markerOptions = new HashMap();
     private Map<String, PolylineOptions> _polylineOptions = new HashMap();
     private Map<String, PolygonOptions> _polygonOptions = new HashMap();
 
-    private android.os.Handler _trackingModeHandler;
+    private android.os.Handler _handler;
 
     @UiThread
     public ReactNativeMapboxGLView(Context context, ReactNativeMapboxGLManager manager) {
         super(context);
-        _trackingModeHandler = new android.os.Handler();
+        _handler = new android.os.Handler();
         _manager = manager;
         _mapOptions = MapboxMapOptions.createFromAttributes(context, null);
         _mapOptions.zoomGesturesEnabled(true);
@@ -407,7 +411,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         if (_bearingTrackingMode == myBearingTrackingMode) { return; }
         _bearingTrackingMode = myBearingTrackingMode;
         _trackingModeUpdateScheduled = true;
-        _trackingModeHandler.post(new TrackingModeChangeRunnable(this));
+        _handler.post(new TrackingModeChangeRunnable(this));
 
     }
 
@@ -417,7 +421,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         if (_locationTrackingMode == myLocationTrackingMode) { return; }
         _locationTrackingMode = myLocationTrackingMode;
         _trackingModeUpdateScheduled = true;
-        _trackingModeHandler.post(new TrackingModeChangeRunnable(this));
+        _handler.post(new TrackingModeChangeRunnable(this));
     }
 
     WritableMap serializeCurrentRegion() {
@@ -436,19 +440,73 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         return event;
     }
 
+    class RegionChangedThrottleRunnable implements Runnable {
+        ReactNativeMapboxGLView target;
+        RegionChangedThrottleRunnable(ReactNativeMapboxGLView target) {
+            this.target = target;
+        }
+        @Override
+        public void run() {
+            target.flushRegionChangedThrottle(true);
+        }
+    }
+
+    private void flushRegionChangedThrottle(boolean fireAgain) {
+        _recentlyChanged = false;
+        if (_willChangeThrottled) {
+            emitEvent("onRegionWillChange", serializeCurrentRegion());
+        }
+        if (_didChangeThrottled) {
+            emitEvent("onRegionDidChange", serializeCurrentRegion());
+        }
+
+        if (fireAgain && _didChangeThrottled) {
+            _recentlyChanged = true;
+            _handler.postDelayed(new RegionChangedThrottleRunnable(this), 100);
+        }
+        _willChangeThrottled = false;
+        _didChangeThrottled = false;
+    }
+
+    private void onRegionWillChange(boolean animated) {
+        if (animated) {
+            flushRegionChangedThrottle(false);
+        }
+
+        if (_recentlyChanged) {
+            _willChangeThrottled = true;
+        } else {
+            emitEvent("onRegionWillChange", serializeCurrentRegion());
+        }
+    }
+
+    private void onRegionDidChange(boolean animated) {
+        if (animated) {
+            flushRegionChangedThrottle(false);
+        }
+
+        if (_recentlyChanged) {
+            _didChangeThrottled = true;
+        } else {
+            emitEvent("onRegionDidChange", serializeCurrentRegion());
+            _recentlyChanged = true;
+            _handler.postDelayed(new RegionChangedThrottleRunnable(this), 100);
+        }
+    }
+
     @Override
     public void onMapChanged(int change) {
         switch (change) {
             case MapView.REGION_WILL_CHANGE:
             case MapView.REGION_WILL_CHANGE_ANIMATED:
                 if (_enableOnRegionWillChange) {
-                    emitEvent("onRegionWillChange", serializeCurrentRegion()); // TODO: These should be throttled
+                    onRegionWillChange(change == MapView.REGION_WILL_CHANGE_ANIMATED);
                 }
                 break;
             case MapView.REGION_DID_CHANGE:
             case MapView.REGION_DID_CHANGE_ANIMATED:
                 if (_enableOnRegionDidChange) {
-                    emitEvent("onRegionDidChange", serializeCurrentRegion());
+                    onRegionDidChange(change == MapView.REGION_DID_CHANGE_ANIMATED);
                 }
                 break;
             case MapView.WILL_START_LOADING_MAP:
