@@ -283,7 +283,9 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
     // Setters
 
     private void easeTo(ReactNativeMapboxGLView view, ReadableMap updates, boolean animated, int callbackId) {
-        CameraPosition.Builder cameraBuilder = new CameraPosition.Builder(view.getCameraPosition());
+        CameraPosition oldPosition = view.getCameraPosition();
+        CameraPosition.Builder cameraBuilder = new CameraPosition.Builder(oldPosition);
+
         if (updates.hasKey("latitude") && updates.hasKey("longitude")) {
             cameraBuilder.target(new LatLng(updates.getDouble("latitude"), updates.getDouble("longitude")));
         }
