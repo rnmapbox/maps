@@ -63,6 +63,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
     private boolean _recentlyChanged = false;
     private boolean _willChangeThrottled = false;
     private boolean _didChangeThrottled = false;
+    private boolean _changeWasAnimated = false;
 
     private Map<String, Annotation> _annotations = new HashMap();
     private Map<Long, String> _annotationIdsToName = new HashMap();
@@ -424,7 +425,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         _handler.post(new TrackingModeChangeRunnable(this));
     }
 
-    WritableMap serializeCurrentRegion() {
+    WritableMap serializeCurrentRegion(boolean animated) {
         CameraPosition camera = _map == null
                 ? _initialCamera.build()
                 : _map.getCameraPosition();
@@ -436,6 +437,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         src.putDouble("zoomLevel", camera.zoom);
         src.putDouble("direction", camera.bearing);
         src.putDouble("pitch", camera.tilt);
+        src.putBoolean("animated", animated);
         event.putMap("src", src);
         return event;
     }
@@ -454,10 +456,10 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
     private void flushRegionChangedThrottle(boolean fireAgain) {
         _recentlyChanged = false;
         if (_willChangeThrottled) {
-            emitEvent("onRegionWillChange", serializeCurrentRegion());
+            emitEvent("onRegionWillChange", serializeCurrentRegion(_changeWasAnimated));
         }
         if (_didChangeThrottled) {
-            emitEvent("onRegionDidChange", serializeCurrentRegion());
+            emitEvent("onRegionDidChange", serializeCurrentRegion(_changeWasAnimated));
         }
 
         if (fireAgain && _didChangeThrottled) {
@@ -475,8 +477,9 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
 
         if (_recentlyChanged) {
             _willChangeThrottled = true;
+            _changeWasAnimated = animated;
         } else {
-            emitEvent("onRegionWillChange", serializeCurrentRegion());
+            emitEvent("onRegionWillChange", serializeCurrentRegion(animated));
         }
     }
 
@@ -487,8 +490,9 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
 
         if (_recentlyChanged) {
             _didChangeThrottled = true;
+            _changeWasAnimated = animated;
         } else {
-            emitEvent("onRegionDidChange", serializeCurrentRegion());
+            emitEvent("onRegionDidChange", serializeCurrentRegion(animated));
             _recentlyChanged = true;
             _handler.postDelayed(new RegionChangedThrottleRunnable(this), 100);
         }

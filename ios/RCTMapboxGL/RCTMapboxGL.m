@@ -474,7 +474,8 @@
                                   @"longitude": @(region.longitude),
                                   @"zoomLevel": @(_map.zoomLevel),
                                   @"direction": @(_map.direction),
-                                  @"pitch": @(0) } });
+                                  @"pitch": @(0),
+                                  @"animated": @(animated) } });
 }
 
 
@@ -488,7 +489,8 @@
                                       @"longitude": @(region.longitude),
                                       @"zoomLevel": @(_map.zoomLevel),
                                       @"direction": @(_map.direction),
-                                      @"pitch": @(0) } });
+                                      @"pitch": @(0),
+                                      @"animated": @(animated) } });
 }
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)sender
