@@ -5,17 +5,12 @@ import android.graphics.PointF;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.common.MapBuilder;
-import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.mapbox.mapboxsdk.annotations.Annotation;
 import com.mapbox.mapboxsdk.annotations.Marker;
@@ -35,7 +30,6 @@ import com.mapbox.mapboxsdk.maps.UiSettings;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Handler;
 
 import javax.annotation.Nullable;
 
@@ -44,6 +38,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener,
         MapboxMap.OnMyBearingTrackingModeChangeListener, MapboxMap.OnMyLocationTrackingModeChangeListener,
         MapboxMap.OnMyLocationChangeListener,
+        MapboxMap.OnMarkerClickListener, MapboxMap.OnInfoWindowClickListener,
         MapView.OnMapChangedListener
 {
 
@@ -66,6 +61,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
     private int _paddingTop, _paddingRight, _paddingBottom, _paddingLeft;
 
     private Map<String, Annotation> _annotations = new HashMap();
+    private Map<Long, String> _annotationIdsToName = new HashMap();
     private Map<String, MarkerOptions> _markerOptions = new HashMap();
     private Map<String, PolylineOptions> _polylineOptions = new HashMap();
     private Map<String, PolygonOptions> _polygonOptions = new HashMap();
@@ -172,18 +168,26 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         _map.setOnMyLocationTrackingModeChangeListener(this);
         _map.setOnMyBearingTrackingModeChangeListener(this);
         _map.setOnMyLocationChangeListener(this);
+        _map.setOnMarkerClickListener(this);
+        _map.setOnInfoWindowClickListener(this);
 
         // Create annotations
         for (Map.Entry<String, MarkerOptions> entry : _markerOptions.entrySet()) {
-            _annotations.put(entry.getKey(), _map.addMarker(entry.getValue()));
+            Annotation annotation = _map.addMarker(entry.getValue());
+            _annotations.put(entry.getKey(), annotation);
+            _annotationIdsToName.put(annotation.getId(), entry.getKey());
         }
         _markerOptions.clear();
         for (Map.Entry<String, PolylineOptions> entry : _polylineOptions.entrySet()) {
-            _annotations.put(entry.getKey(), _map.addPolyline(entry.getValue()));
+            Annotation annotation = _map.addPolyline(entry.getValue());
+            _annotations.put(entry.getKey(), annotation);
+            _annotationIdsToName.put(annotation.getId(), entry.getKey());
         }
         _polylineOptions.clear();
         for (Map.Entry<String, PolygonOptions> entry : _polygonOptions.entrySet()) {
-            _annotations.put(entry.getKey(), _map.addPolygon(entry.getValue()));
+            Annotation annotation = _map.addPolygon(entry.getValue());
+            _annotations.put(entry.getKey(), annotation);
+            _annotationIdsToName.put(annotation.getId(), entry.getKey());
         }
         _polygonOptions.clear();
     }
@@ -196,6 +200,8 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
             _map.setOnMyLocationTrackingModeChangeListener(null);
             _map.setOnMyBearingTrackingModeChangeListener(null);
             _map.setOnMyLocationChangeListener(null);
+            _map.setOnMarkerClickListener(this);
+            _map.setOnInfoWindowClickListener(this);
             _map = null;
         }
         _mapView.onDestroy();
@@ -324,8 +330,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
                 .receiveEvent(getId(), name, event);
     }
 
-    @Override
-    public void onMapClick(LatLng point) {
+    WritableMap serializePoint(LatLng point) {
         PointF screenCoords = _map.getProjection().toScreenLocation(point);
 
         WritableMap event = Arguments.createMap();
@@ -335,23 +340,17 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         src.putDouble("screenCoordX", screenCoords.x);
         src.putDouble("screenCoordY", screenCoords.y);
         event.putMap("src", src);
+        return event;
+    }
 
-        emitEvent("onTap", event);
+    @Override
+    public void onMapClick(LatLng point) {
+        emitEvent("onTap", serializePoint(point));
     }
 
     @Override
     public void onMapLongClick(@NonNull LatLng point) {
-        PointF screenCoords = _map.getProjection().toScreenLocation(point);
-
-        WritableMap event = Arguments.createMap();
-        WritableMap src = Arguments.createMap();
-        src.putDouble("latitude", point.getLatitude());
-        src.putDouble("longitude", point.getLongitude());
-        src.putDouble("screenCoordX", screenCoords.x);
-        src.putDouble("screenCoordY", screenCoords.y);
-        event.putMap("src", src);
-
-        emitEvent("onLongPress", event);
+        emitEvent("onLongPress", serializePoint(point));
     }
 
     @Override
@@ -461,6 +460,32 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         }
     }
 
+    WritableMap serializeMarker(Marker marker) {
+        WritableMap event = Arguments.createMap();
+        WritableMap src = Arguments.createMap();
+
+        src.putString("id", _annotationIdsToName.get(marker.getId()));
+        src.putDouble("longitude", marker.getPosition().getLongitude());
+        src.putDouble("latitude", marker.getPosition().getLatitude());
+        src.putString("title", marker.getTitle());
+        src.putString("subtitle", marker.getSnippet());
+
+        event.putMap("src", src);
+        return event;
+    }
+
+    @Override
+    public boolean onInfoWindowClick(@NonNull Marker marker) {
+        emitEvent("onRightAnnotationTapped", serializeMarker(marker));
+        return false;
+    }
+
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        emitEvent("onOpenAnnotation", serializeMarker(marker));
+        return false;
+    }
+
     // Getters
 
     public CameraPosition getCameraPosition() {
@@ -527,6 +552,8 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         }
         Annotation annotation = _annotations.remove(name);
         if (annotation == null) { return null; }
+        _annotationIdsToName.remove(annotation.getId());
+
         if (keep) { return annotation; }
         _map.removeAnnotation(annotation);
         return null;
@@ -541,6 +568,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         _polygonOptions.clear();
         _polygonOptions.clear();
         _annotations.clear();
+        _annotationIdsToName.clear();
         if (_map != null) {
             _map.removeAnnotations();
         }
@@ -554,6 +582,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         } else {
             Annotation annotation = _map.addMarker(options);
             _annotations.put(name, annotation);
+            _annotationIdsToName.put(annotation.getId(), name);
         }
 
         if (removed != null) { _map.removeAnnotation(removed); }
@@ -567,6 +596,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         } else {
             Annotation annotation = _map.addPolyline(options);
             _annotations.put(name, annotation);
+            _annotationIdsToName.put(annotation.getId(), name);
         }
 
         if (removed != null) { _map.removeAnnotation(removed); }
@@ -580,6 +610,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         } else {
             Annotation annotation = _map.addPolygon(options);
             _annotations.put(name, annotation);
+            _annotationIdsToName.put(annotation.getId(), name);
         }
 
         if (removed != null) { _map.removeAnnotation(removed); }
