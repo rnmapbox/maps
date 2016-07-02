@@ -1,5 +1,6 @@
 package com.mapbox.reactnativemapboxgl;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -23,17 +24,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ReactNativeMapboxGLAnnotationFactory {
 
-    static Drawable drawableFromDrawableName(View view, String drawableName) {
-        Bitmap x;
-        int resID = view.getResources().getIdentifier(drawableName, "drawable", view.getContext().getApplicationContext().getPackageName());
-        x = BitmapFactory.decodeResource(view.getResources(), resID);
-        return new BitmapDrawable(view.getResources(), x);
+    static Drawable drawableFromDrawableName(Context context, String drawableName) {
+        int resID = context.getResources().getIdentifier(drawableName, "drawable", context.getApplicationContext().getPackageName());
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resID);
+        return new BitmapDrawable(context.getResources(), bitmap);
     }
 
-    public static Drawable drawableFromUrl(View view, String url) throws IOException {
+    public static Drawable drawableFromUrl(Context context, String url) throws IOException {
         Bitmap x;
 
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
@@ -41,7 +43,23 @@ public class ReactNativeMapboxGLAnnotationFactory {
         InputStream input = connection.getInputStream();
 
         x = BitmapFactory.decodeStream(input);
-        return new BitmapDrawable(view.getResources(), x);
+        return new BitmapDrawable(context.getResources(), x);
+    }
+
+    static Map<String, Drawable> drawableCache = new HashMap();
+
+    public static Drawable drawableFromPath(Context context, String path) throws IOException {
+        Drawable drawable = drawableCache.get(path);
+        if (drawable != null) { return drawable; }
+
+        if (path.startsWith("image!")) {
+            drawable = drawableFromDrawableName(context, path.replace("image!", ""));
+        } else {
+            drawable = drawableFromUrl(context, path);
+        }
+
+        drawableCache.put(path, drawable);
+        return drawable;
     }
 
     public static MarkerOptions markerFromJS(ReadableMap annotation, View view) {
@@ -66,12 +84,7 @@ public class ReactNativeMapboxGLAnnotationFactory {
             ReadableMap annotationImage = annotation.getMap("annotationImage");
             String annotationURL = annotationImage.getString("url");
             try {
-                Drawable image;
-                if (annotationURL.startsWith("image!")) {
-                    image = drawableFromDrawableName(view, annotationURL.replace("image!", ""));
-                } else {
-                    image = drawableFromUrl(view, annotationURL);
-                }
+                Drawable image = drawableFromPath(view.getContext(), annotationURL);
 
                 IconFactory iconFactory = IconFactory.getInstance(view.getContext());
                 Icon icon;
