@@ -17,6 +17,11 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.mapbox.mapboxsdk.annotations.Annotation;
+import com.mapbox.mapboxsdk.annotations.Marker;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.annotations.PolygonOptions;
+import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -28,6 +33,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.UiSettings;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Handler;
 
@@ -58,6 +64,11 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
     private boolean _enableOnRegionWillChange = false;
     private boolean _enableOnRegionDidChange = false;
     private int _paddingTop, _paddingRight, _paddingBottom, _paddingLeft;
+
+    private Map<String, Annotation> _annotations = new HashMap();
+    private Map<String, MarkerOptions> _markerOptions = new HashMap();
+    private Map<String, PolylineOptions> _polylineOptions = new HashMap();
+    private Map<String, PolygonOptions> _polygonOptions = new HashMap();
 
     private android.os.Handler _trackingModeHandler;
 
@@ -161,6 +172,20 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         _map.setOnMyLocationTrackingModeChangeListener(this);
         _map.setOnMyBearingTrackingModeChangeListener(this);
         _map.setOnMyLocationChangeListener(this);
+
+        // Create annotations
+        for (Map.Entry<String, MarkerOptions> entry : _markerOptions.entrySet()) {
+            _annotations.put(entry.getKey(), _map.addMarker(entry.getValue()));
+        }
+        _markerOptions.clear();
+        for (Map.Entry<String, PolylineOptions> entry : _polylineOptions.entrySet()) {
+            _annotations.put(entry.getKey(), _map.addPolyline(entry.getValue()));
+        }
+        _polylineOptions.clear();
+        for (Map.Entry<String, PolygonOptions> entry : _polygonOptions.entrySet()) {
+            _annotations.put(entry.getKey(), _map.addPolygon(entry.getValue()));
+        }
+        _polygonOptions.clear();
     }
 
     private void destroyMapView() {
@@ -489,5 +514,83 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
 
             _map.animateCamera(update, duration, new CameraCallback(callback));
         }
+    }
+
+    // Annotations
+
+    @Nullable Annotation _removeAnnotation(String name, boolean keep) {
+        if (_map == null) {
+            _markerOptions.remove(name);
+            _polylineOptions.remove(name);
+            _polygonOptions.remove(name);
+            return null;
+        }
+        Annotation annotation = _annotations.remove(name);
+        if (annotation == null) { return null; }
+        if (keep) { return annotation; }
+        _map.removeAnnotation(annotation);
+        return null;
+    }
+
+    public void removeAnnotation(String name) {
+        _removeAnnotation(name, false);
+    }
+
+    public void removeAllAnnotations() {
+        _markerOptions.clear();
+        _polygonOptions.clear();
+        _polygonOptions.clear();
+        _annotations.clear();
+        if (_map != null) {
+            _map.removeAnnotations();
+        }
+    }
+
+    public void setMarker(String name, MarkerOptions options) {
+        Annotation removed = _removeAnnotation(name, true);
+
+        if (_map == null) {
+            _markerOptions.put(name, options);
+        } else {
+            Annotation annotation = _map.addMarker(options);
+            _annotations.put(name, annotation);
+        }
+
+        if (removed != null) { _map.removeAnnotation(removed); }
+    }
+
+    public void setPolyline(String name, PolylineOptions options) {
+        Annotation removed = _removeAnnotation(name, true);
+
+        if (_map == null) {
+            _polylineOptions.put(name, options);
+        } else {
+            Annotation annotation = _map.addPolyline(options);
+            _annotations.put(name, annotation);
+        }
+
+        if (removed != null) { _map.removeAnnotation(removed); }
+    }
+
+    public void setPolygon(String name, PolygonOptions options) {
+        Annotation removed = _removeAnnotation(name, true);
+
+        if (_map == null) {
+            _polygonOptions.put(name, options);
+        } else {
+            Annotation annotation = _map.addPolygon(options);
+            _annotations.put(name, annotation);
+        }
+
+        if (removed != null) { _map.removeAnnotation(removed); }
+    }
+
+    public void selectAnnotation(String name, boolean animated) {
+        if (_map == null) { return; }
+        Annotation annotation = _annotations.get(name);
+        if (annotation == null) { return; }
+        if (!(annotation instanceof Marker)) { return; }
+        Marker marker = (Marker)annotation;
+        _map.selectMarker(marker);
     }
 }

@@ -358,10 +358,32 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
     // Annotations
 
     public void spliceAnnotations(ReactNativeMapboxGLView view, boolean removeAll, ReadableArray itemsToRemove, ReadableArray itemsToAdd) {
-        // TODO
+        if (removeAll) {
+            view.removeAllAnnotations();
+        } else {
+            int removeCount = itemsToRemove.size();
+            for (int i = 0; i < removeCount; i++) {
+                view.removeAnnotation(itemsToRemove.getString(i));
+            }
+        }
+
+        int addCount = itemsToAdd.size();
+        for (int i = 0; i < addCount; i++) {
+            ReadableMap annotation = itemsToAdd.getMap(i);
+            String type = annotation.getString("type");
+            String name = annotation.getString("id");
+
+            if (type.equals("point")) {
+                view.setMarker(name, ReactNativeMapboxGLAnnotationFactory.markerFromJS(annotation, view));
+            } else if (type.equals("polyline")) {
+                view.setPolyline(name, ReactNativeMapboxGLAnnotationFactory.polylineFromJS(annotation));
+            } else if (type.equals("polygon")) {
+                view.setPolygon(name, ReactNativeMapboxGLAnnotationFactory.polygonFromJS(annotation));
+            }
+        }
     }
 
     public void selectAnnotation(ReactNativeMapboxGLView view, String annotationId, boolean animated) {
-        // TODO
+        view.selectAnnotation(annotationId, animated);
     }
 }

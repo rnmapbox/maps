@@ -362,7 +362,11 @@ class MapView extends Component {
 }
 
 const MapboxGLView = requireNativeComponent('RCTMapboxGL', MapView, {
-  nativeOnly: { onChange: true }
+  nativeOnly: {
+    onChange: true,
+    enableOnRegionDidChange: true,
+    enableOnRegionWillChange: true
+  }
 });
 
 const Mapbox = {
