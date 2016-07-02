@@ -7,7 +7,8 @@ import {
   StyleSheet,
   Text,
   StatusBar,
-  View
+  View,
+  ScrollView
 } from 'react-native';
 
 const accessToken = 'your-mapbox.com-access-token';
@@ -160,6 +161,39 @@ class MapExample extends Component {
     StatusBar.setHidden(true);
     return (
       <View style={styles.container}>
+        <MapView
+          ref={map => { this._map = map; }}
+          style={styles.map}
+          initialCenterCoordinate={this.state.center}
+          initialZoomLevel={this.state.zoom}
+          initialDirection={0}
+          rotateEnabled={true}
+          scrollEnabled={true}
+          zoomEnabled={true}
+          showsUserLocation={false}
+          styleURL={Mapbox.mapStyles.emerald}
+          userTrackingMode={this.state.userTrackingMode}
+          annotations={this.state.annotations}
+          annotationsAreImmutable
+          onChangeUserTrackingMode={this.onChangeUserTrackingMode}
+          onRegionDidChange={this.onRegionDidChange}
+          onRegionWillChange={this.onRegionWillChange}
+          onOpenAnnotation={this.onOpenAnnotation}
+          onRightAnnotationTapped={this.onRightAnnotationTapped}
+          onUpdateUserLocation={this.onUpdateUserLocation}
+          onLongPress={this.onLongPress}
+          onTap={this.onTap}
+        />
+      <ScrollView style={styles.scrollView}>
+        {this._renderButtons()}
+      </ScrollView>
+      </View>
+    );
+  }
+
+  _renderButtons() {
+    return (
+      <View>
         <Text onPress={() => this._map && this._map.setDirection(0)}>
           Set direction to 0
         </Text>
@@ -252,29 +286,6 @@ class MapExample extends Component {
           Remove pack with name 'test'
         </Text>
         <Text>User tracking mode is {this.state.userTrackingMode}</Text>
-        <MapView
-          ref={map => { this._map = map; }}
-          style={styles.container}
-          initialCenterCoordinate={this.state.center}
-          initialZoomLevel={this.state.zoom}
-          initialDirection={0}
-          rotateEnabled={true}
-          scrollEnabled={true}
-          zoomEnabled={true}
-          showsUserLocation={false}
-          styleURL={Mapbox.mapStyles.emerald}
-          userTrackingMode={this.state.userTrackingMode}
-          annotations={this.state.annotations}
-          annotationsAreImmutable
-          onChangeUserTrackingMode={this.onChangeUserTrackingMode}
-          onRegionDidChange={this.onRegionDidChange}
-          onRegionWillChange={this.onRegionWillChange}
-          onOpenAnnotation={this.onOpenAnnotation}
-          onRightAnnotationTapped={this.onRightAnnotationTapped}
-          onUpdateUserLocation={this.onUpdateUserLocation}
-          onLongPress={this.onLongPress}
-          onTap={this.onTap}
-        />
       </View>
     );
   }
@@ -282,6 +293,13 @@ class MapExample extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    alignItems: 'stretch'
+  },
+  map: {
+    flex: 1
+  },
+  scrollView: {
     flex: 1
   }
 });
