@@ -51,6 +51,17 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
         return new ReactNativeMapboxGLView(context, this);
     }
 
+    @Override
+    protected void onAfterUpdateTransaction(ReactNativeMapboxGLView view) {
+        super.onAfterUpdateTransaction(view);
+        view.onAfterUpdateTransaction();
+    }
+
+    @Override
+    public void onDropViewInstance(ReactNativeMapboxGLView view) {
+        view.onDrop();
+    }
+
     // Props
 
     @ReactProp(name = "initialZoomLevel")
