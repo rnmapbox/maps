@@ -168,12 +168,6 @@ class MapView extends Component {
     MapboxGLManager.selectAnnotation(findNodeHandle(this), annotationId, animated);
   }
 
-  // Android event dispatch
-  _onChange = (event: Event) => {
-    const { name, src } = event.nativeEvent;
-    if (this.props[name]) { this.props[name](src); }
-  };
-
   // Events
   _onRegionChange = (event: Event) => {
     if (this.props.onRegionChange) this.props.onRegionChange(event.nativeEvent.src);
@@ -349,7 +343,6 @@ class MapView extends Component {
       <MapboxGLView
         {...this.props}
         ref={this._onNativeComponentMount}
-        onChange={this._onChange}
         onRegionChange={this._onRegionChange}
         onRegionWillChange={this._onRegionWillChange}
         onOpenAnnotation={this._onOpenAnnotation}

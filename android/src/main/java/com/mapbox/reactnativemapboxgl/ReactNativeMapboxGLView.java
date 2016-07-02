@@ -284,10 +284,9 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         if (event == null) {
             event = Arguments.createMap();
         }
-        event.putString("name", name);
         ((ReactContext)getContext())
                 .getJSModule(RCTEventEmitter.class)
-                .receiveEvent(getId(), "topChange", event);
+                .receiveEvent(getId(), name, event);
     }
 
     @Override

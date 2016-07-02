@@ -14,6 +14,7 @@ import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.SimpleViewManager;
+import com.facebook.react.views.scroll.ScrollEventType;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -46,6 +47,8 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
         return _context;
     }
 
+    // Lifecycle methods
+
     @Override
     public ReactNativeMapboxGLView createViewInstance(ThemedReactContext context) {
         return new ReactNativeMapboxGLView(context, this);
@@ -60,6 +63,24 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
     @Override
     public void onDropViewInstance(ReactNativeMapboxGLView view) {
         view.onDrop();
+    }
+
+    // Event types
+
+    public @Nullable Map<String, Object> getExportedCustomDirectEventTypeConstants() {
+        return MapBuilder.<String,Object>builder()
+                .put("onRegionChange", MapBuilder.of("registrationName", "onRegionChange"))
+                .put("onRegionWillChange", MapBuilder.of("registrationName", "onRegionWillChange"))
+                .put("onOpenAnnotation", MapBuilder.of("registrationName", "onOpenAnnotation"))
+                .put("onRightAnnotationTapped", MapBuilder.of("registrationName", "onRightAnnotationTapped"))
+                .put("onChangeUserTrackingMode", MapBuilder.of("registrationName", "onChangeUserTrackingMode"))
+                .put("onUpdateUserLocation", MapBuilder.of("registrationName", "onUpdateUserLocation"))
+                .put("onLongPress", MapBuilder.of("registrationName", "onLongPress"))
+                .put("onTap", MapBuilder.of("registrationName", "onTap"))
+                .put("onFinishLoadingMap", MapBuilder.of("registrationName", "onFinishLoadingMap"))
+                .put("onStartLoadingMap", MapBuilder.of("registrationName", "onStartLoadingMap"))
+                .put("onLocateUserFailed", MapBuilder.of("registrationName", "onLocateUserFailed"))
+                .build();
     }
 
     // Props
