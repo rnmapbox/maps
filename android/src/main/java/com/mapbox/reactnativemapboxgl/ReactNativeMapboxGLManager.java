@@ -102,6 +102,16 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
         view.setInitialCenterCoordinate(lat, lon);
     }
 
+    @ReactProp(name = "enableOnRegionDidChange")
+    public void setEnableOnRegionDidChange(ReactNativeMapboxGLView view, boolean value) {
+        view.setEnableOnRegionDidChange(value);
+    }
+
+    @ReactProp(name = "enableOnRegionWillChange")
+    public void setEnableOnRegionWillChange(ReactNativeMapboxGLView view, boolean value) {
+        view.setEnableOnRegionWillChange(value);
+    }
+
     @ReactProp(name = "debugActive")
     public void setDebugActive(ReactNativeMapboxGLView view, boolean value) {
         view.setDebugActive(value);

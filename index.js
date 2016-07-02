@@ -345,6 +345,8 @@ class MapView extends Component {
         ref={this._onNativeComponentMount}
         onRegionDidChange={this._onRegionDidChange}
         onRegionWillChange={this._onRegionWillChange}
+        enableOnRegionDidChange={!!this.props.onRegionDidChange}
+        enableOnRegionWillChange={!!this.props.onRegionWillChange}
         onOpenAnnotation={this._onOpenAnnotation}
         onRightAnnotationTapped={this._onRightAnnotationTapped}
         onUpdateUserLocation={this._onUpdateUserLocation}

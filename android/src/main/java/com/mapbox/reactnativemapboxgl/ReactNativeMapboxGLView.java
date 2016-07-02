@@ -55,6 +55,8 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
     private boolean _zoomEnabled = true;
     private boolean _scrollEnabled = true;
     private boolean _rotateEnabled = true;
+    private boolean _enableOnRegionWillChange = false;
+    private boolean _enableOnRegionDidChange = false;
     private int _paddingTop, _paddingRight, _paddingBottom, _paddingLeft;
 
     private android.os.Handler _trackingModeHandler;
@@ -186,6 +188,14 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
 
     public void setInitialCenterCoordinate(double lat, double lon) {
         _initialCamera.target(new LatLng(lat, lon));
+    }
+
+    public void setEnableOnRegionDidChange(boolean value) {
+        _enableOnRegionDidChange = value;
+    }
+
+    public void setEnableOnRegionWillChange(boolean value) {
+        _enableOnRegionWillChange = value;
     }
 
     public void setShowsUserLocation(boolean value) {
@@ -407,11 +417,15 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         switch (change) {
             case MapView.REGION_WILL_CHANGE:
             case MapView.REGION_WILL_CHANGE_ANIMATED:
-                emitEvent("onRegionWillChange", serializeCurrentRegion()); // TODO: These should be throttled
+                if (_enableOnRegionWillChange) {
+                    emitEvent("onRegionWillChange", serializeCurrentRegion()); // TODO: These should be throttled
+                }
                 break;
             case MapView.REGION_DID_CHANGE:
             case MapView.REGION_DID_CHANGE_ANIMATED:
-                emitEvent("onRegionDidChange", serializeCurrentRegion());
+                if (_enableOnRegionDidChange) {
+                    emitEvent("onRegionDidChange", serializeCurrentRegion());
+                }
                 break;
             case MapView.WILL_START_LOADING_MAP:
                 emitEvent("onStartLoadingMap", null);
