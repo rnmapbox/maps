@@ -472,7 +472,9 @@
     _onRegionChange(@{ @"target": self.reactTag,
                        @"src": @{ @"latitude": @(region.latitude),
                                   @"longitude": @(region.longitude),
-                                  @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } });
+                                  @"zoomLevel": @(_map.zoomLevel),
+                                  @"direction": @(_map.direction),
+                                  @"pitch": @(0) } });
 }
 
 
@@ -484,7 +486,9 @@
     _onRegionWillChange(@{ @"target": self.reactTag,
                            @"src": @{ @"latitude": @(region.latitude),
                                       @"longitude": @(region.longitude),
-                                      @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } });
+                                      @"zoomLevel": @(_map.zoomLevel),
+                                      @"direction": @(_map.direction),
+                                      @"pitch": @(0) } });
 }
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)sender

@@ -29,14 +29,12 @@ import javax.annotation.Nullable;
 public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMapboxGLView> {
 
     private static final String REACT_CLASS = "RCTMapboxGL";
-    private static String APPLICATION_ID;
 
     private ReactApplicationContext _context;
 
     public ReactNativeMapboxGLManager(ReactApplicationContext context) {
         super();
         _context = context;
-        APPLICATION_ID = context.getPackageName();
     }
 
     @Override

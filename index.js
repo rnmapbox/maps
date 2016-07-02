@@ -159,7 +159,7 @@ class MapView extends Component {
   getBounds(callback) {
     MapboxGLManager.getBounds(findNodeHandle(this), callback);
   }
-  getBounds(callback) {
+  getPitch(callback) {
     MapboxGLManager.getPitch(findNodeHandle(this), callback);
   }
 
@@ -167,6 +167,12 @@ class MapView extends Component {
   selectAnnotation(annotationId, animated = true) {
     MapboxGLManager.selectAnnotation(findNodeHandle(this), annotationId, animated);
   }
+
+  // Android event dispatch
+  _onChange = (event: Event) => {
+    const { name, src } = event.nativeEvent;
+    if (this.props[name]) { this.props[name](src); }
+  };
 
   // Events
   _onRegionChange = (event: Event) => {
@@ -343,6 +349,7 @@ class MapView extends Component {
       <MapboxGLView
         {...this.props}
         ref={this._onNativeComponentMount}
+        onChange={this._onChange}
         onRegionChange={this._onRegionChange}
         onRegionWillChange={this._onRegionWillChange}
         onOpenAnnotation={this._onOpenAnnotation}
@@ -359,7 +366,9 @@ class MapView extends Component {
   }
 }
 
-const MapboxGLView = requireNativeComponent('RCTMapboxGL', MapView);
+const MapboxGLView = requireNativeComponent('RCTMapboxGL', MapView, {
+  nativeOnly: { onChange: true }
+});
 
 const Mapbox = {
   MapView,
