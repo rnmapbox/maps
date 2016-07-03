@@ -160,21 +160,30 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
 
     // Offline packs
 
-    // Offline pack events
+    // Offline pack events and initialization
 
     class OfflineRegionProgressObserver implements OfflineRegion.OfflineRegionObserver {
         ReactNativeMapboxGLModule module;
         OfflineRegion region;
         OfflineRegionStatus status;
+        String name;
         boolean recentlyUpdated = false;
         boolean throttled = true;
+        boolean invalid = false;
 
-        OfflineRegionProgressObserver(ReactNativeMapboxGLModule module, OfflineRegion region) {
+        OfflineRegionProgressObserver(ReactNativeMapboxGLModule module, OfflineRegion region, String name) {
             this.module = module;
             this.region = region;
+            if (name == null) {
+                this.name = getOfflineRegionName(region);
+            } else {
+                this.name = name;
+            }
         }
 
         void fireUpdateEvent() {
+            if (invalid) { return; }
+
             recentlyUpdated = true;
             WritableMap event = serializeOfflineRegionStatus(region, this.status);
             module.getReactApplicationContext().getJSModule(RCTNativeAppEventEmitter.class)
@@ -194,6 +203,8 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
 
         @Override
         public void onStatusChanged(OfflineRegionStatus status) {
+            if (invalid) { return; }
+
             this.status = status;
 
             if (!recentlyUpdated) {
@@ -205,6 +216,8 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
 
         @Override
         public void onError(OfflineRegionError error) {
+            if (invalid) { return; }
+
             WritableMap event = Arguments.createMap();
             event.putString("name", getOfflineRegionName(region));
             event.putString("error", error.toString());
@@ -215,6 +228,8 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
 
         @Override
         public void mapboxTileCountLimitExceeded(long limit) {
+            if (invalid) { return; }
+
             WritableMap event = Arguments.createMap();
             event.putString("name", getOfflineRegionName(region));
             event.putDouble("maxTiles", limit);
@@ -222,6 +237,22 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
             module.getReactApplicationContext().getJSModule(RCTNativeAppEventEmitter.class)
                     .emit("MapboxOfflineMaxAllowedTiles", event);
         }
+
+        public void invalidate() {
+            invalid = true;
+        }
+    }
+
+    private int uninitializedObserverCount = -1;
+    private ArrayList<OfflineRegionProgressObserver> offlinePackObservers = new ArrayList<>();
+    private ArrayList<Promise> offlinePackListingRequests = new ArrayList<>();
+
+    void flushListingRequests() {
+        WritableArray result = _getOfflinePacks();
+        for (Promise promise : offlinePackListingRequests) {
+            promise.resolve(result);
+        }
+        offlinePackListingRequests.clear();
     }
 
     class OfflineRegionsInitialRequest implements OfflineManager.ListOfflineRegionsCallback {
@@ -233,9 +264,26 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
 
         @Override
         public void onList(OfflineRegion[] offlineRegions) {
+            uninitializedObserverCount = offlineRegions.length;
             for (OfflineRegion region : offlineRegions) {
-                region.setObserver(new OfflineRegionProgressObserver(module, region));
+                final OfflineRegionProgressObserver observer = new OfflineRegionProgressObserver(module, region, null);
+                offlinePackObservers.add(observer);
+                region.setObserver(observer);
                 region.setDownloadState(OfflineRegion.STATE_ACTIVE);
+                region.getStatus(new OfflineRegion.OfflineRegionStatusCallback() {
+                    @Override
+                    public void onStatus(OfflineRegionStatus status) {
+                        observer.onStatusChanged(status);
+                        uninitializedObserverCount--;
+                        if (uninitializedObserverCount == 0) {
+                            flushListingRequests();
+                        }
+                    }
+                    @Override
+                    public void onError(String error) {
+                        Log.e(context.getApplicationContext().getPackageName(), error);
+                    }
+                });
             }
         }
 
@@ -258,7 +306,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
 
     }
 
-    // Offline pack listing
+    // Offline pack utils
 
     static WritableMap serializeOfflineRegionStatus(OfflineRegion region, OfflineRegionStatus status) {
         WritableMap result = Arguments.createMap();
@@ -296,55 +344,14 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         }
     }
 
-    class OfflineRegionsRequest implements OfflineManager.ListOfflineRegionsCallback {
-        Promise promise;
-        int pendingCount;
-        WritableArray responses;
+    // Offline pack listing
 
-        OfflineRegionsRequest(Promise promise) {
-            this.promise = promise;
+    WritableArray _getOfflinePacks() {
+        WritableArray result = Arguments.createArray();
+        for (OfflineRegionProgressObserver observer : offlinePackObservers) {
+            result.pushMap(serializeOfflineRegionStatus(observer.region, observer.status));
         }
-
-        @Override
-        public void onList(OfflineRegion[] offlineRegions) {
-            pendingCount = offlineRegions.length;
-            responses = Arguments.createArray();
-
-            if (pendingCount == 0) {
-                promise.resolve(responses);
-                return;
-            }
-
-            for (OfflineRegion region : offlineRegions) {
-                final OfflineRegion _region = region;
-                final OfflineRegionsRequest _this = this;
-                region.getStatus(new OfflineRegion.OfflineRegionStatusCallback() {
-                    @Override
-                    public void onStatus(OfflineRegionStatus status) {
-                        _this.onStatus(_region, status);
-                    }
-                    @Override
-                    public void onError(String error) {
-                        _this.onError(error);
-                    }
-                });
-            }
-        }
-
-        public void onStatus(OfflineRegion region, OfflineRegionStatus status) {
-            WritableMap res = serializeOfflineRegionStatus(region, status);
-            responses.pushMap(res);
-
-            pendingCount--;
-            if (pendingCount == 0) {
-                promise.resolve(responses);
-            }
-        }
-
-        @Override
-        public void onError(String error) {
-            promise.reject(new JSApplicationIllegalArgumentException(error));
-        }
+        return result;
     }
 
     @ReactMethod
@@ -352,9 +359,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         mainHandler.post(new Runnable() {
             @Override
             public void run() {
-                OfflineManager.getInstance(context.getApplicationContext()).listOfflineRegions(
-                        new OfflineRegionsRequest(promise)
-                );
+                promise.resolve(_getOfflinePacks());
             }
         });
     }
@@ -436,7 +441,9 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
                         new OfflineManager.CreateOfflineRegionCallback() {
                             @Override
                             public void onCreate(OfflineRegion offlineRegion) {
-                                offlineRegion.setObserver(new OfflineRegionProgressObserver(_this, offlineRegion));
+                                OfflineRegionProgressObserver observer = new OfflineRegionProgressObserver(_this, offlineRegion, null);
+                                offlinePackObservers.add(observer);
+                                offlineRegion.setObserver(observer);
                                 offlineRegion.setDownloadState(OfflineRegion.STATE_ACTIVE);
                                 promise.resolve(null);
                             }
@@ -471,59 +478,44 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         }
     }
 
-    class OfflineRegionsDeleteRequest implements OfflineManager.ListOfflineRegionsCallback {
-        Promise promise;
-        String name;
-
-        OfflineRegionsDeleteRequest(Promise promise, String name) {
-            this.promise = promise;
-            this.name = name;
-        }
-
-        @Override
-        public void onList(OfflineRegion[] offlineRegions) {
-            for (OfflineRegion region : offlineRegions) {
-                String packName = getOfflineRegionName(region);
-
-                if (packName != null && packName.equals(name)) {
-                    region.setObserver(new OfflineRegionDummyObserver());
-                    region.setDownloadState(OfflineRegion.STATE_INACTIVE);
-
-                    final OfflineRegionsDeleteRequest _this = this;
-                    region.delete(new OfflineRegion.OfflineRegionDeleteCallback() {
-                        @Override
-                        public void onDelete() {
-                            WritableMap result = Arguments.createMap();
-                            result.putString("deleted", _this.name);
-                            _this.promise.resolve(result);
-                        }
-
-                        @Override
-                        public void onError(String error) {
-                            _this.onError(error);
-                        }
-                    });
-                    return;
-                }
-            }
-
-            promise.resolve(Arguments.createMap());
-        }
-
-        @Override
-        public void onError(String error) {
-            promise.reject(new JSApplicationIllegalArgumentException(error));
-        }
-    }
-
     @ReactMethod
     public void removeOfflinePack(final String packName, final Promise promise) {
         mainHandler.post(new Runnable() {
             @Override
             public void run() {
-                OfflineManager.getInstance(context.getApplicationContext()).listOfflineRegions(
-                        new OfflineRegionsDeleteRequest(promise, packName)
-                );
+                OfflineRegionProgressObserver foundObserver = null;
+
+                for (OfflineRegionProgressObserver observer : offlinePackObservers) {
+                    if (packName.equals(observer.name)) {
+                        foundObserver = observer;
+                        break;
+                    }
+                }
+
+                if (foundObserver == null) {
+                    promise.resolve(Arguments.createMap());
+                    return;
+                }
+
+                offlinePackObservers.remove(foundObserver);
+                foundObserver.invalidate();
+                foundObserver.region.setObserver(new OfflineRegionDummyObserver());
+                foundObserver.region.setDownloadState(OfflineRegion.STATE_INACTIVE);
+
+                final OfflineRegionProgressObserver _foundObserver = foundObserver;
+                foundObserver.region.delete(new OfflineRegion.OfflineRegionDeleteCallback() {
+                    @Override
+                    public void onDelete() {
+                        WritableMap result = Arguments.createMap();
+                        result.putString("deleted", _foundObserver.name);
+                        promise.resolve(result);
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        promise.reject(new JSApplicationIllegalArgumentException(error));
+                    }
+                });
             }
         });
     }
