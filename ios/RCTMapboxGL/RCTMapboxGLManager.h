@@ -13,5 +13,6 @@
     NSMutableSet * _throttledPacks;
     NSMutableArray * _packRequests;
     NSMutableSet * _removedPacks;
+    int _throttleInterval;
 }
 @end

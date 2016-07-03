@@ -140,6 +140,7 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     _recentPacks = [NSMutableSet new];
     _throttledPacks = [NSMutableSet new];
     _removedPacks = [NSMutableSet new];
+    _throttleInterval = 300;
     
     // Setup pack array loading notifications
     [[MGLOfflineStorage sharedOfflineStorage] addObserver:self forKeyPath:@"packs" options:0 context:NULL];
@@ -198,6 +199,16 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
                              @"maximumResourcesExpected": @(progress.maximumResourcesExpected) };
     
     [_bridge.eventDispatcher sendAppEventWithName:@"MapboxOfflineProgressDidChange" body:event];
+    
+    [_recentPacks addObject:pack];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, _throttleInterval * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
+        [_recentPacks removeObject:pack];
+        if ([_throttledPacks containsObject:pack]) {
+            [_throttledPacks removeObject:pack];
+            [self firePackProgress:pack];
+        }
+    });
 }
 
 - (void)flushThrottleForPack:(MGLOfflinePack*)pack {
@@ -225,16 +236,7 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
         return;
     }
     
-    [_recentPacks addObject:pack];
     [self firePackProgress:pack];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
-        [_recentPacks removeObject:pack];
-        if ([_throttledPacks containsObject:pack]) {
-            [_throttledPacks removeObject:pack];
-            [self firePackProgress:pack];
-        }
-    });
 }
 
 - (void)offlinePackDidReceiveMaximumAllowedMapboxTiles:(NSNotification *)notification {
@@ -257,7 +259,7 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     
     NSDictionary *event = @{ @"name": userInfo[@"name"],
                              @"error": [error localizedDescription] };
-
+    
     [_bridge.eventDispatcher sendAppEventWithName:@"MapboxOfflineError" body:event];
 }
 
@@ -334,13 +336,13 @@ RCT_REMAP_METHOD(addOfflinePack,
                                     @"countOfResourcesExpected": @(pack.progress.countOfResourcesExpected),
                                     @"maximumResourcesExpected": @(pack.progress.maximumResourcesExpected) }];
     }
-
+    
     return callbackArray;
 }
 
 RCT_REMAP_METHOD(getOfflinePacks,
-                resolver:(RCTPromiseResolveBlock)resolve
-                rejecter:(RCTPromiseRejectBlock)reject)
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSMutableArray* callbackArray = [NSMutableArray new];
@@ -396,6 +398,11 @@ RCT_REMAP_METHOD(removeOfflinePack,
             }];
         });
     });
+}
+
+RCT_EXPORT_METHOD(setOfflinePackProgressThrottleInterval:(nonnull NSNumber *)milis)
+{
+    _throttleInterval = [milis intValue];
 }
 
 // View methods

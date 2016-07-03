@@ -34,6 +34,7 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
+import com.facebook.react.uimanager.annotations.ReactProp;
 import com.mapbox.mapboxsdk.MapboxAccountManager;
 import com.mapbox.mapboxsdk.constants.MyLocationTracking;
 import com.mapbox.mapboxsdk.constants.MyBearingTracking;
@@ -57,6 +58,8 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
     private ReactApplicationContext context;
     private ReactNativeMapboxGLPackage aPackage;
     Handler mainHandler;
+    private int throttleInterval = 300;
+
     private static boolean initialized = false;
 
     public ReactNativeMapboxGLModule(ReactApplicationContext reactContext, ReactNativeMapboxGLPackage thePackage) {
@@ -198,7 +201,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
                         fireUpdateEvent();
                     }
                 }
-            }, 100);
+            }, throttleInterval);
         }
 
         @Override
@@ -518,5 +521,12 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
                 });
             }
         });
+    }
+
+    // Offline throttle control
+
+    @ReactMethod
+    public void setOfflinePackProgressThrottleInterval(int milis) {
+        throttleInterval = milis;
     }
 }

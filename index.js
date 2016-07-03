@@ -116,6 +116,10 @@ function removeOfflinePack(packName, callback) {
   return promise;
 }
 
+function setOfflinePackProgressThrottleInterval(milis) {
+  MapboxGLManager.setOfflinePackProgressThrottleInterval(milis);
+}
+
 function addOfflinePackProgressListener(handler) {
   let _handler = handler;
   if (Platform.OS === 'android') {
@@ -404,7 +408,8 @@ const Mapbox = {
   addOfflinePack, getOfflinePacks, removeOfflinePack,
   addOfflinePackProgressListener,
   addOfflineMaxAllowedTilesListener,
-  addOfflineErrorListener
+  addOfflineErrorListener,
+  setOfflinePackProgressThrottleInterval
 };
 
 module.exports = Mapbox;

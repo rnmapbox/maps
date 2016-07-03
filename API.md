@@ -405,6 +405,17 @@ const subscription = Mapbox.addOfflinePackProgressListener(progressObject => {
 subscription.remove();
 ```
 
+Due to high volume, progress notifications are throttled so as not to starve the
+run loop and make the JS thread unresponsive.
+
+By default, you'll get at most one progress notification per pack each 300 ms.
+
+You can configure this interval with:
+
+```javascript
+Mapbox.setOfflinePackProgressThrottleInterval(milis);
+```
+
 #### Subscribing to error events
 
 ```javascript
