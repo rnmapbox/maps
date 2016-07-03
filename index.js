@@ -81,13 +81,31 @@ function bindCallbackToPromise(callback, promise) {
 }
 
 function addOfflinePack(options, callback) {
-  const promise = MapboxGLManager.addOfflinePack(options);
+  let _options = options;
+  // Workaround the fact that RN Android can't serialize JSON correctly
+  if (Platform.OS === 'android') {
+    _options = {
+      ...options,
+      metadata: JSON.stringify({ v: options.metadata })
+    };
+  }
+  const promise = MapboxGLManager.addOfflinePack(_options);
   bindCallbackToPromise(callback, promise);
   return promise;
 }
 
 function getOfflinePacks(callback) {
-  const promise = MapboxGLManager.getOfflinePacks();
+  let promise = MapboxGLManager.getOfflinePacks();
+  if (Platform.OS === 'android') {
+    promise = promise.then(packs => {
+      packs.forEach(progress => {
+        if (progress.metadata) {
+          progress.metadata = JSON.parse(progress.metadata).v;
+        }
+      });
+      return packs;
+    });
+  }
   bindCallbackToPromise(callback, promise);
   return promise;
 }
@@ -99,7 +117,16 @@ function removeOfflinePack(packName, callback) {
 }
 
 function addOfflinePackProgressListener(handler) {
-  return NativeAppEventEmitter.addListener('MapboxOfflineProgressDidChange', handler);
+  let _handler = handler;
+  if (Platform.OS === 'android') {
+    _handler = (progress) => {
+      if (progress.metadata) {
+        progress.metadata = JSON.parse(progress.metadata).v;
+      }
+      handler(progress);
+    };
+  }
+  return NativeAppEventEmitter.addListener('MapboxOfflineProgressDidChange', _handler);
 }
 
 function addOfflineMaxAllowedTilesListener(handler) {
