@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.mapbox.mapboxsdk.annotations.Annotation;
@@ -81,35 +82,50 @@ public class RNMGLAnnotationOptionsFactory {
 
     static Drawable drawableFromDrawableName(Context context, String drawableName) {
         int resID = context.getResources().getIdentifier(drawableName, "drawable", context.getApplicationContext().getPackageName());
-        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resID);
-        return new BitmapDrawable(context.getResources(), bitmap);
+        return ContextCompat.getDrawable(context, resID);
     }
 
     static Drawable drawableFromUrl(Context context, String url) throws IOException {
-        Bitmap x;
-
+        // This doesn't currently work, as it throws NetworkOnMainThreadException
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.connect();
         InputStream input = connection.getInputStream();
 
-        x = BitmapFactory.decodeStream(input);
-        return new BitmapDrawable(context.getResources(), x);
+        Bitmap bitmap = BitmapFactory.decodeStream(input);
+        return new BitmapDrawable(context.getResources(), bitmap);
     }
 
-    static Map<String, Drawable> drawableCache = new HashMap();
+    static Map<String, Icon> iconCache = new HashMap();
 
-    static Drawable drawableFromPath(Context context, String path) throws IOException {
-        Drawable drawable = drawableCache.get(path);
-        if (drawable != null) { return drawable; }
+    static Icon iconFromPathAndSize(Context context, String path, int width, int height) throws IOException {
+        String cacheKey = path + "||" + width + "||" + height;
+        Icon icon = iconCache.get(cacheKey);
+        if (icon != null) { return icon; }
 
+        Drawable drawable;
         if (path.startsWith("image!")) {
             drawable = drawableFromDrawableName(context, path.replace("image!", ""));
         } else {
             drawable = drawableFromUrl(context, path);
         }
 
-        drawableCache.put(path, drawable);
-        return drawable;
+        IconFactory iconFactory = IconFactory.getInstance(context);
+
+        int intrinsicWidth = drawable.getIntrinsicWidth();
+        int intrinsicHeight = drawable.getIntrinsicHeight();
+
+        if (width < 0) { width = intrinsicWidth; }
+        if (height < 0) { height = intrinsicHeight; }
+
+        // Check if a rescale would be superfluous
+        if ((drawable instanceof BitmapDrawable) && width == intrinsicWidth && height == intrinsicHeight) {
+            icon = iconFactory.fromBitmap(((BitmapDrawable)drawable).getBitmap());
+        } else {
+            icon = iconFactory.fromDrawable(drawable, width, height);
+        }
+
+        iconCache.put(cacheKey, icon);
+        return icon;
     }
 
     static RNMGLAnnotationOptions markerOptionsFromJS(ReadableMap annotation, Context context) {
@@ -134,20 +150,16 @@ public class RNMGLAnnotationOptionsFactory {
             ReadableMap annotationImage = annotation.getMap("annotationImage");
             String annotationURL = annotationImage.getString("url");
             try {
-                Drawable image = drawableFromPath(context, annotationURL);
+                int width = -1;
+                int height = -1;
 
-                IconFactory iconFactory = IconFactory.getInstance(context);
-                Icon icon;
                 if (annotationImage.hasKey("height") && annotationImage.hasKey("width")) {
                     float scale = context.getResources().getDisplayMetrics().density;
-                    int height = Math.round((float)annotationImage.getInt("height") * scale);
-                    int width = Math.round((float)annotationImage.getInt("width") * scale);
-                    icon = iconFactory.fromDrawable(image, width, height);
-                } else {
-                    icon = iconFactory.fromDrawable(image);
+                    height = Math.round((float)annotationImage.getInt("height") * scale);
+                    width = Math.round((float)annotationImage.getInt("width") * scale);
                 }
 
-                marker.icon(icon);
+                marker.icon(iconFromPathAndSize(context, annotationURL, width, height));
             } catch (Exception e) {
                 e.printStackTrace();
             }
