@@ -67,9 +67,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
 
     private Map<String, Annotation> _annotations = new HashMap();
     private Map<Long, String> _annotationIdsToName = new HashMap();
-    private Map<String, MarkerOptions> _markerOptions = new HashMap();
-    private Map<String, PolylineOptions> _polylineOptions = new HashMap();
-    private Map<String, PolygonOptions> _polygonOptions = new HashMap();
+    private Map<String, RNMGLAnnotationOptions> _annotationOptions = new HashMap();
 
     private android.os.Handler _handler;
 
@@ -177,24 +175,12 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         _map.setOnInfoWindowClickListener(this);
 
         // Create annotations
-        for (Map.Entry<String, MarkerOptions> entry : _markerOptions.entrySet()) {
-            Annotation annotation = _map.addMarker(entry.getValue());
+        for (Map.Entry<String, RNMGLAnnotationOptions> entry : _annotationOptions.entrySet()) {
+            Annotation annotation = entry.getValue().addToMap(_map);
             _annotations.put(entry.getKey(), annotation);
             _annotationIdsToName.put(annotation.getId(), entry.getKey());
         }
-        _markerOptions.clear();
-        for (Map.Entry<String, PolylineOptions> entry : _polylineOptions.entrySet()) {
-            Annotation annotation = _map.addPolyline(entry.getValue());
-            _annotations.put(entry.getKey(), annotation);
-            _annotationIdsToName.put(annotation.getId(), entry.getKey());
-        }
-        _polylineOptions.clear();
-        for (Map.Entry<String, PolygonOptions> entry : _polygonOptions.entrySet()) {
-            Annotation annotation = _map.addPolygon(entry.getValue());
-            _annotations.put(entry.getKey(), annotation);
-            _annotationIdsToName.put(annotation.getId(), entry.getKey());
-        }
-        _polygonOptions.clear();
+        _annotationOptions.clear();
     }
 
     private void destroyMapView() {
@@ -607,9 +593,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
 
     @Nullable Annotation _removeAnnotation(String name, boolean keep) {
         if (_map == null) {
-            _markerOptions.remove(name);
-            _polylineOptions.remove(name);
-            _polygonOptions.remove(name);
+            _annotationOptions.remove(name);
             return null;
         }
         Annotation annotation = _annotations.remove(name);
@@ -626,9 +610,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
     }
 
     public void removeAllAnnotations() {
-        _markerOptions.clear();
-        _polygonOptions.clear();
-        _polygonOptions.clear();
+        _annotationOptions.clear();
         _annotations.clear();
         _annotationIdsToName.clear();
         if (_map != null) {
@@ -636,41 +618,13 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         }
     }
 
-    public void setMarker(String name, MarkerOptions options) {
+    public void setAnnotation(String name, RNMGLAnnotationOptions options) {
         Annotation removed = _removeAnnotation(name, true);
 
         if (_map == null) {
-            _markerOptions.put(name, options);
+            _annotationOptions.put(name, options);
         } else {
-            Annotation annotation = _map.addMarker(options);
-            _annotations.put(name, annotation);
-            _annotationIdsToName.put(annotation.getId(), name);
-        }
-
-        if (removed != null) { _map.removeAnnotation(removed); }
-    }
-
-    public void setPolyline(String name, PolylineOptions options) {
-        Annotation removed = _removeAnnotation(name, true);
-
-        if (_map == null) {
-            _polylineOptions.put(name, options);
-        } else {
-            Annotation annotation = _map.addPolyline(options);
-            _annotations.put(name, annotation);
-            _annotationIdsToName.put(annotation.getId(), name);
-        }
-
-        if (removed != null) { _map.removeAnnotation(removed); }
-    }
-
-    public void setPolygon(String name, PolygonOptions options) {
-        Annotation removed = _removeAnnotation(name, true);
-
-        if (_map == null) {
-            _polygonOptions.put(name, options);
-        } else {
-            Annotation annotation = _map.addPolygon(options);
+            Annotation annotation = options.addToMap(_map);
             _annotations.put(name, annotation);
             _annotationIdsToName.put(annotation.getId(), name);
         }

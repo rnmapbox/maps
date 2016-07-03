@@ -6,19 +6,16 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.RequiresPermission;
-import android.view.View;
 
 import com.facebook.react.bridge.ReadableMap;
+import com.mapbox.mapboxsdk.annotations.Annotation;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
-import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.annotations.Polygon;
 import com.mapbox.mapboxsdk.annotations.PolygonOptions;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +24,60 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ReactNativeMapboxGLAnnotationFactory {
+class RNMGLMarkerOptions implements RNMGLAnnotationOptions {
+    protected MarkerOptions _options;
+
+    public RNMGLMarkerOptions(MarkerOptions options) {
+        _options = options;
+    }
+
+    @Override
+    public Annotation addToMap(MapboxMap map) {
+        return map.addMarker(_options);
+    }
+}
+
+class RNMGLPolylineOptions implements RNMGLAnnotationOptions {
+    protected PolylineOptions _options;
+
+    public RNMGLPolylineOptions(PolylineOptions options) {
+        _options = options;
+    }
+
+    @Override
+    public Annotation addToMap(MapboxMap map) {
+        return map.addPolyline(_options);
+    }
+}
+
+class RNMGLPolygonOptions implements RNMGLAnnotationOptions {
+    protected PolygonOptions _options;
+
+    public RNMGLPolygonOptions(PolygonOptions options) {
+        _options = options;
+    }
+
+    @Override
+    public Annotation addToMap(MapboxMap map) {
+        return map.addPolygon(_options);
+    }
+}
+
+public class RNMGLAnnotationOptionsFactory {
+
+    public static RNMGLAnnotationOptions annotationOptionsFromJS(ReadableMap annotation, Context context) {
+        String type = annotation.getString("type");
+
+        if (type.equals("point")) {
+            return markerOptionsFromJS(annotation, context);
+        } else if (type.equals("polyline")) {
+            return polylineOptionsFromJS(annotation);
+        } else if (type.equals("polygon")) {
+            return polygonOptionsFromJS(annotation);
+        }
+
+        return null;
+    }
 
     static Drawable drawableFromDrawableName(Context context, String drawableName) {
         int resID = context.getResources().getIdentifier(drawableName, "drawable", context.getApplicationContext().getPackageName());
@@ -35,7 +85,7 @@ public class ReactNativeMapboxGLAnnotationFactory {
         return new BitmapDrawable(context.getResources(), bitmap);
     }
 
-    public static Drawable drawableFromUrl(Context context, String url) throws IOException {
+    static Drawable drawableFromUrl(Context context, String url) throws IOException {
         Bitmap x;
 
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
@@ -48,7 +98,7 @@ public class ReactNativeMapboxGLAnnotationFactory {
 
     static Map<String, Drawable> drawableCache = new HashMap();
 
-    public static Drawable drawableFromPath(Context context, String path) throws IOException {
+    static Drawable drawableFromPath(Context context, String path) throws IOException {
         Drawable drawable = drawableCache.get(path);
         if (drawable != null) { return drawable; }
 
@@ -62,7 +112,7 @@ public class ReactNativeMapboxGLAnnotationFactory {
         return drawable;
     }
 
-    public static MarkerOptions markerFromJS(ReadableMap annotation, View view) {
+    static RNMGLAnnotationOptions markerOptionsFromJS(ReadableMap annotation, Context context) {
         MarkerOptions marker = new MarkerOptions();
 
         double latitude = annotation.getArray("coordinates").getDouble(0);
@@ -84,12 +134,12 @@ public class ReactNativeMapboxGLAnnotationFactory {
             ReadableMap annotationImage = annotation.getMap("annotationImage");
             String annotationURL = annotationImage.getString("url");
             try {
-                Drawable image = drawableFromPath(view.getContext(), annotationURL);
+                Drawable image = drawableFromPath(context, annotationURL);
 
-                IconFactory iconFactory = IconFactory.getInstance(view.getContext());
+                IconFactory iconFactory = IconFactory.getInstance(context);
                 Icon icon;
                 if (annotationImage.hasKey("height") && annotationImage.hasKey("width")) {
-                    float scale = view.getResources().getDisplayMetrics().density;
+                    float scale = context.getResources().getDisplayMetrics().density;
                     int height = Math.round((float)annotationImage.getInt("height") * scale);
                     int width = Math.round((float)annotationImage.getInt("width") * scale);
                     icon = iconFactory.fromDrawable(image, width, height);
@@ -102,10 +152,10 @@ public class ReactNativeMapboxGLAnnotationFactory {
                 e.printStackTrace();
             }
         }
-        return marker;
+        return new RNMGLMarkerOptions(marker);
     }
 
-    static PolylineOptions polylineFromJS(ReadableMap annotation) {
+    static RNMGLAnnotationOptions polylineOptionsFromJS(ReadableMap annotation) {
         PolylineOptions polyline = new PolylineOptions();
 
         int coordSize = annotation.getArray("coordinates").size();
@@ -130,10 +180,10 @@ public class ReactNativeMapboxGLAnnotationFactory {
             polyline.width(strokeWidth);
         }
 
-        return polyline;
+        return new RNMGLPolylineOptions(polyline);
     }
 
-    static PolygonOptions polygonFromJS(ReadableMap annotation) {
+    static RNMGLAnnotationOptions polygonOptionsFromJS(ReadableMap annotation) {
         PolygonOptions polygon = new PolygonOptions();
 
         int coordSize = annotation.getArray("coordinates").size();
@@ -158,6 +208,6 @@ public class ReactNativeMapboxGLAnnotationFactory {
             polygon.strokeColor(strokeColor);
         }
 
-        return polygon;
+        return new RNMGLPolygonOptions(polygon);
     }
 }

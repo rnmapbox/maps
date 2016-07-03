@@ -14,7 +14,6 @@ import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.SimpleViewManager;
-import com.facebook.react.views.scroll.ScrollEventType;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -370,16 +369,10 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
         int addCount = itemsToAdd.size();
         for (int i = 0; i < addCount; i++) {
             ReadableMap annotation = itemsToAdd.getMap(i);
-            String type = annotation.getString("type");
-            String name = annotation.getString("id");
+            RNMGLAnnotationOptions annotationOptions = RNMGLAnnotationOptionsFactory.annotationOptionsFromJS(annotation, view.getContext());
 
-            if (type.equals("point")) {
-                view.setMarker(name, ReactNativeMapboxGLAnnotationFactory.markerFromJS(annotation, view));
-            } else if (type.equals("polyline")) {
-                view.setPolyline(name, ReactNativeMapboxGLAnnotationFactory.polylineFromJS(annotation));
-            } else if (type.equals("polygon")) {
-                view.setPolygon(name, ReactNativeMapboxGLAnnotationFactory.polygonFromJS(annotation));
-            }
+            String name = annotation.getString("id");
+            view.setAnnotation(name, annotationOptions);
         }
     }
 
