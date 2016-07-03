@@ -191,8 +191,8 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
             _map.setOnMyLocationTrackingModeChangeListener(null);
             _map.setOnMyBearingTrackingModeChangeListener(null);
             _map.setOnMyLocationChangeListener(null);
-            _map.setOnMarkerClickListener(this);
-            _map.setOnInfoWindowClickListener(this);
+            _map.setOnMarkerClickListener(null);
+            _map.setOnInfoWindowClickListener(null);
             _map = null;
         }
         _mapView.onDestroy();
