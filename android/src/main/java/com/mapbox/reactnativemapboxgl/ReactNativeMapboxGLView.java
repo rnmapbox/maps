@@ -5,6 +5,7 @@ import android.graphics.PointF;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.facebook.react.bridge.Arguments;
@@ -531,6 +532,18 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
         emitEvent("onOpenAnnotation", serializeMarker(marker));
+
+        // Due to a bug, we need to force a relayout on the _mapView
+        _handler.post(new Runnable() {
+            @Override
+            public void run() {
+                _mapView.measure(
+                        View.MeasureSpec.makeMeasureSpec(_mapView.getMeasuredWidth(), View.MeasureSpec.EXACTLY),
+                        View.MeasureSpec.makeMeasureSpec(_mapView.getMeasuredHeight(), View.MeasureSpec.EXACTLY));
+                _mapView.layout(_mapView.getLeft(), _mapView.getTop(), _mapView.getRight(), _mapView.getBottom());
+            }
+        });
+
         return false;
     }
 
