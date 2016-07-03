@@ -266,23 +266,31 @@ RCT_REMAP_METHOD(addOfflinePack,
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
-    if ([options objectForKey:@"name"] == nil) {
-        return RCTLogError(@"Name is required.");
+    if (options[@"name"] == nil) {
+        reject(@"invalid_arguments", @"addOfflinePack(): name is required.", nil);
+        return;
     }
-    if ([options objectForKey:@"minZoomLevel"] == nil) {
-        return RCTLogError(@"minZoomLevel is required.");
+    if (options[@"minZoomLevel"] == nil) {
+        reject(@"invalid_arguments", @"addOfflinePack(): minZoomLevel is required.", nil);
+        return;
     }
-    if ([options objectForKey:@"maxZoomLevel"] == nil) {
-        return RCTLogError(@"maxZoomLevel is required.");
+    if (options[@"maxZoomLevel"] == nil) {
+        reject(@"invalid_arguments", @"addOfflinePack(): maxZoomLevel is required.", nil);
+        return;
     }
-    if ([options objectForKey:@"bounds"] == nil) {
-        return RCTLogError(@"bounds is required.");
+    if (options[@"bounds"] == nil) {
+        reject(@"invalid_arguments", @"addOfflinePack(): bounds is required.", nil);
+        return;
     }
-    if ([options objectForKey:@"styleURL"] == nil) {
-        return RCTLogError(@"styleURL is required.");
+    if (options[@"styleURL"] == nil) {
+        reject(@"invalid_arguments", @"addOfflinePack(): styleURL is required.", nil);
+        return;
     }
-    if (!([[options objectForKey:@"type"] isEqualToString:@"bbox"])) {
-        return RCTLogError(@"Offline type %@ not supported. Only type `bbox` supported.", [options valueForKey:@"type"]);
+    if (!([options[@"type"] isEqualToString:@"bbox"])) {
+        reject(@"invalid_arguments",
+               [NSString stringWithFormat:@"addOfflinePack(): Offline type %@ not supported. Only type \"bbox\" supported.", options[@"type"]]
+               , nil);
+        return;
     }
     
     NSArray *b = [options valueForKey:@"bounds"];
@@ -471,12 +479,12 @@ RCT_EXPORT_METHOD(easeTo:(nonnull NSNumber *)reactTag
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             
-            NSNumber * latitude = [options objectForKey:@"latitude"];
-            NSNumber * longitude = [options objectForKey:@"longitude"];
-            NSNumber * zoom = [options objectForKey:@"zoomLevel"];
-            NSNumber * direction = [options objectForKey:@"direction"];
+            NSNumber * latitude = options[@"latitude"];
+            NSNumber * longitude = options[@"longitude"];
+            NSNumber * zoom = options[@"zoomLevel"];
+            NSNumber * direction = options[@"direction"];
             
-            if ([options objectForKey:@"pitch"]) {
+            if (options[@"pitch"]) {
                 RCTLogWarn(@"Pitch is not supported for MapView.easeTo() on iOS. Use MapView.setCamera() instead.");
             }
             
