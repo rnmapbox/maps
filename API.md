@@ -221,76 +221,77 @@ mapbox://styles/bobbysud/cigtw1pzy0000aam2346f7ex0
 
 #### Object shape
 
-```json
+```javascript
 [{
-  "coordinates": "required. For type polyline and polygon must be an array of arrays. For type point, single array",
-  "type": "required: point, polyline or polygon",
-  "title": "optional string",
-  "subtitle": "optional string",
-  "fillAlpha": "optional, only used for type=polygon. Controls the opacity of polygon",
-  "fillColor": "optional string hex color including #, only used for type=polygon",
-  "strokeAlpha": "optional number from 0-1. Only used for type=poyline. Controls opacity of line",
-  "strokeColor": "optional string hex color including #, used for type=polygon and type=polyline",
-  "strokeWidth": "optional number. Only used for type=poyline. Controls line width",
-  "id": "required string, unique identifier. Used for adding or selecting an annotation.",
-  "rightCalloutAccessory": {
-    "url": "Optional. Either remote image or specify via 'image!yourImage.png'",
-    "height": "required if url specified",
-    "width": "required if url specified"
+  coordinates, // required. For type polyline and polygon must be an array of arrays. For type point, single array with 2 coordinates
+  type, // required. One of 'point', 'polyline' or 'polygon'
+  title, // optional. Title string. Appears when marker pressed
+  subtitle, // optional. Subtitle string. Appears when marker pressed
+  fillAlpha, // optional. number. Only for type=polygon. Controls the opacity of the polygon
+  fillColor, // optional. string. Only for type=polygon. CSS color (#rrggbb). Controls the fill color of the polygon
+  strokeAlpha, // optional. number. Only for type=polygon or type=polyline. Controls the opacity of the line
+  strokeColor, // optional. string. Only for type=polygon or type=polyline. CSS color (#rrggbb). Controls line color.
+  strokeWidth, // optional. number. Only for type=polygon or type=polyline. Controls line width.
+  id, // required. string. Unique identifier used for adding or selecting an annotation.
+  annotationImage, { // optional. Marker image for type=point
+    url, // required. string. Either remote image URL or 'image!yourImage'
+    height, // required. number. Image height
+    width, // required. number. Image width
   },
-  "annotationImage": {
-    "url": "Optional. Either remote image or specify via 'image!yourImage.png'",
-    "height": "required if url specified",
-    "width": "required if url specified"
+  rightCalloutAccessory, { // optional. iOS only. Clickable image that appears when type=point marker pressed
+    url, // required. string. Either remote image URL or 'image!yourImage'
+    height, // required. number. Image height
+    width, // required. number. Image width
   },
 }]
 ```
-**For adding local images via `image!yourImage.png` see [adding static resources to your app using Images.xcassets  docs](https://facebook.github.io/react-native/docs/image.html#adding-static-resources-to-your-app-using-images-xcassets)**.
+**For adding local images via `image!yourImage`, on iOS see [adding static resources to your app using Images.xcassets  docs](https://facebook.github.io/react-native/docs/image.html#adding-static-resources-to-your-app-using-images-xcassets)
+and on Android, put images in `android/app/src/main/res/drawable/yourImage.png`**.
 
 #### Example
 
-```json
+```javascript
 annotations: [{
-  "coordinates": [40.72052634, -73.97686958312988],
-  "type": "point",
-  "title": "This is marker 1",
-  "subtitle": "It has a rightCalloutAccessory too",
-  "rightCalloutAccessory": {
-    "url": "https://cldup.com/9Lp0EaBw5s.png",
-    "height": 25,
-    "width": 25
+  coordinates: [40.72052634, -73.97686958312988],
+  type: 'point',
+  title: 'This is marker 1',
+  subtitle: 'It has a rightCalloutAccessory too',
+  rightCalloutAccessory: {
+    url: 'https://cldup.com/9Lp0EaBw5s.png',
+    height: 25,
+    width: 25
   },
-  "annotationImage": {
-    "url": "https://cldup.com/CnRLZem9k9.png",
-    "height": 25,
-    "width": 25
+  annotationImage: {
+    url: 'https://cldup.com/CnRLZem9k9.png',
+    height: 25,
+    width: 25
   },
-  "id": "marker1"
+  id: 'marker1'
 }, {
-  "coordinates": [40.714541341726175,-74.00579452514648],
-  "type": "point",
-  "title": "Important",
-  "subtitle": "Neat, this is a custom annotation image",
-  "annotationImage": {
-    "url": "https://cldup.com/7NLZklp8zS.png",
-    "height": 25,
-    "width": 25
+  coordinates: [40.714541341726175,-74.00579452514648],
+  type: 'point',
+  title: 'Important',
+  subtitle: 'Neat, this is a custom annotation image',
+  annotationImage: {
+    url: 'https://cldup.com/7NLZklp8zS.png',
+    height: 25,
+    width: 25
   },
-  "id": "marker2"
+  id: 'marker2'
 }, {
-  "coordinates": [[40.76572150042782,-73.99429321289062],[40.743485405490695, -74.00218963623047],[40.728266950429735,-74.00218963623047],[40.728266950429735,-73.99154663085938],[40.73633186448861,-73.98983001708984],[40.74465591168391,-73.98914337158203],[40.749337730454826,-73.9870834350586]],
-  "type": "polyline",
-  "strokeColor": "#00FB00",
-  "strokeWidth": 3,
-  "strokeAlpha": 0.5,
-  "id": "line"
+  coordinates: [[40.76572150042782,-73.99429321289062],[40.743485405490695, -74.00218963623047],[40.728266950429735,-74.00218963623047],[40.728266950429735,-73.99154663085938],[40.73633186448861,-73.98983001708984],[40.74465591168391,-73.98914337158203],[40.749337730454826,-73.9870834350586]],
+  type: 'polyline',
+  strokeColor: '#00FB00',
+  strokeWidth: 3,
+  strokeAlpha: 0.5,
+  id: 'line'
 }, {
-  "coordinates": [[40.749857912194386, -73.96820068359375], [40.741924698522055,-73.9735221862793], [40.735681504432264,-73.97523880004883], [40.7315190495212,-73.97438049316406], [40.729177554196376,-73.97180557250975], [40.72345355209305,-73.97438049316406], [40.719290332250544,-73.97455215454102], [40.71369559554873,-73.97729873657227], [40.71200407096382,-73.97850036621094], [40.71031250340588,-73.98691177368163], [40.71031250340588,-73.99154663085938]],
-  "type": "polygon",
-  "fillAlpha":1,
-  "fillColor": "#C32C2C",
-  "strokeColor": "#DDDDD",
-  "id": "route"
+  coordinates: [[40.749857912194386, -73.96820068359375], [40.741924698522055,-73.9735221862793], [40.735681504432264,-73.97523880004883], [40.7315190495212,-73.97438049316406], [40.729177554196376,-73.97180557250975], [40.72345355209305,-73.97438049316406], [40.719290332250544,-73.97455215454102], [40.71369559554873,-73.97729873657227], [40.71200407096382,-73.97850036621094], [40.71031250340588,-73.98691177368163], [40.71031250340588,-73.99154663085938]],
+  type: 'polygon',
+  fillAlpha:1,
+  fillColor: '#C32C2C',
+  strokeColor: '#DDDDD',
+  id: 'route'
 }]
 ```
 
@@ -377,7 +378,7 @@ Mapbox.getOfflinePacks()
     // packs is an array of progress objects
   })
   .catch(err => {
-    console.log(err); // Handle error
+    console.error(err); // Handle error
   })
 ```
 

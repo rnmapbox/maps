@@ -55,6 +55,6 @@ React Native Mapbox GL doesn't support iOS version less than 8.0. Under **Target
 
 ![](https://dl.dropboxusercontent.com/s/yu3zyjy59p44cxb/2016-03-14%20at%201.15%20PM.png)
 
-### 6: Add to project, [see example](./example.js)
+### 6: Add to project, [see example](../example.js)
 
 If you already have an iOS Simulator running from before you followed these steps, you'll need to rebuild the project from XCode - automatic refresh won't bring in the changes you made to this build process.

@@ -14,7 +14,7 @@ This project is **experimental**. Mapbox does not officially support React Nativ
 
 * node
 * npm
-* [React Native](https://facebook.github.io/react-native/) >= 0.15.0
+* [React Native](https://facebook.github.io/react-native/) >= 0.19.0
 
 ```
 npm install react-native-mapbox-gl --save
@@ -25,12 +25,10 @@ npm install react-native-mapbox-gl --save
   or with [CocoaPods](/ios/install-cocoapods.md)
 
 ## API
-* [Android](/android/API.md)
-* [iOS](/ios/API.md)
+* [API Documentation](/API.md)
 
 ## Example
-* [Android](/android/example.js)
-* [iOS](/ios//example.js)
+* [See example](/example.js)
 
 ![](http://i.imgur.com/I8XkXcS.jpg)
 ![](https://cldup.com/A8S_7rLg1L.png)
