@@ -171,7 +171,7 @@ class MapExample extends Component {
           scrollEnabled={true}
           zoomEnabled={true}
           showsUserLocation={false}
-          styleURL={Mapbox.mapStyles.emerald}
+          styleURL={Mapbox.mapStyles.dark}
           userTrackingMode={this.state.userTrackingMode}
           annotations={this.state.annotations}
           annotationsAreImmutable
@@ -250,7 +250,7 @@ class MapExample extends Component {
               minZoomLevel: 0,
               maxZoomLevel: 0,
               metadata: { anyValue: 'you wish' },
-              styleURL: Mapbox.mapStyles.emerald
+              styleURL: Mapbox.mapStyles.dark
             }).then(() => {
               console.log('Offline pack added');
             }).catch(err => {

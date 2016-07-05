@@ -17,6 +17,24 @@ import isEqual from 'lodash/isEqual';
 const { MapboxGLManager } = NativeModules;
 const { mapStyles, userTrackingMode, userLocationVerticalAlignment, unknownResourceCount } = MapboxGLManager;
 
+// Deprecation
+
+function deprecated(obj, key) {
+  const value = obj[key];
+  let warned = false;
+  Object.defineProperty(obj, key, {
+    get() {
+      if (!warned) {
+        console.warn(`${key} is deprecated`);
+        warned = true;
+      }
+      return value;
+    }
+  });
+}
+
+deprecated(mapStyles, 'emerald');
+
 // Monkeypatch Android commands
 
 if (Platform.OS === 'android') {

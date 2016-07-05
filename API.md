@@ -195,11 +195,11 @@ The transition is animated unless you pass `animated` as `false`.
 Mapbox GL ships with 6 included styles:
 
 * `Mapbox.mapStyles.streets`
-* `Mapbox.mapStyles.emerald`
 * `Mapbox.mapStyles.dark`
 * `Mapbox.mapStyles.light`
 * `Mapbox.mapStyles.satellite`
 * `Mapbox.mapStyles.hybrid`
+* `Mapbox.mapStyles.emerald` (deprecated)
 
 To use one of these, just pass it as a prop to `MapView`:
 
