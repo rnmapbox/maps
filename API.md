@@ -156,7 +156,7 @@ Gets the current heading of the map.
 ---
 
 ```javascript
-this._map.getPitch(pitch => { // Android only
+this._map.getPitch(pitch => {
   // ...
 });
 ```

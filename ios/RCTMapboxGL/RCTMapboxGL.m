@@ -380,6 +380,11 @@
     return _map.direction;
 }
 
+-(double)pitch {
+    if (!_map) { return 0; }
+    return _map.camera.pitch;
+}
+
 -(double)zoomLevel {
     if (!_map) { return _initialZoomLevel; }
     return _map.zoomLevel;
@@ -474,7 +479,7 @@
                                   @"longitude": @(region.longitude),
                                   @"zoomLevel": @(_map.zoomLevel),
                                   @"direction": @(_map.direction),
-                                  @"pitch": @(0),
+                                  @"pitch": @(_map.camera.pitch),
                                   @"animated": @(animated) } });
 }
 
@@ -489,7 +494,7 @@
                                       @"longitude": @(region.longitude),
                                       @"zoomLevel": @(_map.zoomLevel),
                                       @"direction": @(_map.direction),
-                                      @"pitch": @(0),
+                                      @"pitch": @(_map.camera.pitch),
                                       @"animated": @(animated) } });
 }
 

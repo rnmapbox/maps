@@ -48,6 +48,7 @@
 - (MGLCoordinateBounds)visibleCoordinateBounds;
 - (double)zoomLevel;
 - (double)direction;
+- (double)pitch;
 - (CLLocationCoordinate2D)centerCoordinate;
 
 // Events

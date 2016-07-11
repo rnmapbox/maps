@@ -474,7 +474,12 @@ RCT_EXPORT_METHOD(getDirection:(nonnull NSNumber *)reactTag
 RCT_EXPORT_METHOD(getPitch:(nonnull NSNumber *)reactTag
                   callback:(RCTResponseSenderBlock)callback)
 {
-    RCTLogError(@"MapView.getPitch() is not supported on iOS");
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
+        RCTMapboxGL *mapView = viewRegistry[reactTag];
+        double pitch = [mapView pitch];
+        
+        callback(@[ @(pitch) ]);
+    }];
 }
 
 RCT_EXPORT_METHOD(easeTo:(nonnull NSNumber *)reactTag
