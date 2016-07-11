@@ -463,24 +463,6 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
 
     // Offline pack removal
 
-    class OfflineRegionDummyObserver implements OfflineRegion.OfflineRegionObserver {
-
-        @Override
-        public void onStatusChanged(OfflineRegionStatus status) {
-
-        }
-
-        @Override
-        public void onError(OfflineRegionError error) {
-
-        }
-
-        @Override
-        public void mapboxTileCountLimitExceeded(long limit) {
-
-        }
-    }
-
     @ReactMethod
     public void removeOfflinePack(final String packName, final Promise promise) {
         mainHandler.post(new Runnable() {
@@ -502,7 +484,6 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
 
                 offlinePackObservers.remove(foundObserver);
                 foundObserver.invalidate();
-                foundObserver.region.setObserver(new OfflineRegionDummyObserver());
                 foundObserver.region.setDownloadState(OfflineRegion.STATE_INACTIVE);
 
                 final OfflineRegionProgressObserver _foundObserver = foundObserver;
