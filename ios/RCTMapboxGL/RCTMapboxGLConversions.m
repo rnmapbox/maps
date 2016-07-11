@@ -47,8 +47,8 @@ NSObject *convertObjectToPoint (NSObject *annotationObject)
     if ([annotationObject valueForKey:@"rightCalloutAccessory"]) {
         NSDictionary *rightCalloutAccessory = [annotationObject valueForKey:@"rightCalloutAccessory"];
         NSDictionary *imageSource = (NSDictionary*)rightCalloutAccessory[@"source"];
-        CGFloat height = (CGFloat)[[rightCalloutAccessory valueForKey:@"height"] floatValue];
-        CGFloat width = (CGFloat)[[rightCalloutAccessory valueForKey:@"width"] floatValue];
+        CGFloat height = (CGFloat)[[rightCalloutAccessory valueForKey:@"height"] doubleValue];
+        CGFloat width = (CGFloat)[[rightCalloutAccessory valueForKey:@"width"] doubleValue];
         
         UIImage *image = imageFromSource(imageSource);
         
@@ -74,8 +74,8 @@ NSObject *convertObjectToPoint (NSObject *annotationObject)
     if ([annotationObject valueForKey:@"annotationImage"]) {
         NSDictionary *annotationImage = [annotationObject valueForKey:@"annotationImage"];
         NSDictionary *imageSource = (NSDictionary*)annotationImage[@"source"];
-        CGFloat height = (CGFloat)[[annotationImage valueForKey:@"height"] floatValue];
-        CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] floatValue];
+        CGFloat height = (CGFloat)[[annotationImage valueForKey:@"height"] doubleValue];
+        CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] doubleValue];
         if (!height || !width) {
             RCTLogError(@"Height and width for image required");
             return nil;
