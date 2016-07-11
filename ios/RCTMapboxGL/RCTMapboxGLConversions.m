@@ -11,6 +11,20 @@
 #import "RCTConvert+MapKit.h"
 #import "RCTMapboxGL.h"
 
+UIImage *imageFromSource (NSDictionary *source)
+{
+    if (!source) { return nil; }
+    NSString *uri = source[@"uri"];
+    if (!uri) { return nil; }
+    
+    NSURL* checkURL = [NSURL URLWithString:uri];
+    if (checkURL && checkURL.scheme && checkURL.host) {
+        return [UIImage imageWithData:[NSData dataWithContentsOfURL:checkURL]];
+    }
+    
+    return [UIImage imageNamed:uri];
+}
+
 NSObject *convertObjectToPoint (NSObject *annotationObject)
 {
     NSString *title = @"";
@@ -28,23 +42,15 @@ NSObject *convertObjectToPoint (NSObject *annotationObject)
         id = [RCTConvert NSString:[annotationObject valueForKey:@"id"]];
     }
     
+    RCTMGLAnnotation *point;
+    
     if ([annotationObject valueForKey:@"rightCalloutAccessory"]) {
-        NSObject *rightCalloutAccessory = [annotationObject valueForKey:@"rightCalloutAccessory"];
-        NSString *url = [rightCalloutAccessory valueForKey:@"url"];
+        NSDictionary *rightCalloutAccessory = [annotationObject valueForKey:@"rightCalloutAccessory"];
+        NSDictionary *imageSource = (NSDictionary*)rightCalloutAccessory[@"source"];
         CGFloat height = (CGFloat)[[rightCalloutAccessory valueForKey:@"height"] floatValue];
         CGFloat width = (CGFloat)[[rightCalloutAccessory valueForKey:@"width"] floatValue];
         
-        UIImage *image = nil;
-        
-        if ([url hasPrefix:@"image!"]) {
-            NSString* localImagePath = [url substringFromIndex:6];
-            image = [UIImage imageNamed:localImagePath];
-        }
-        
-        NSURL* checkURL = [NSURL URLWithString:url];
-        if (checkURL && checkURL.scheme && checkURL.host) {
-            image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]];
-        }
+        UIImage *image = imageFromSource(imageSource);
         
         UIButton *imageButton = [UIButton buttonWithType:UIButtonTypeCustom];
         imageButton.frame = CGRectMake(0, 0, height, width);
@@ -54,23 +60,7 @@ NSObject *convertObjectToPoint (NSObject *annotationObject)
         CLLocationDegrees lat = [coordinate[0] doubleValue];
         CLLocationDegrees lng = [coordinate[1] doubleValue];
         
-        RCTMGLAnnotation *pin = [[RCTMGLAnnotation alloc] initWithLocationRightCallout:CLLocationCoordinate2DMake(lat, lng) title:title subtitle:subtitle id:id rightCalloutAccessory:imageButton];
-        
-        if ([annotationObject valueForKey:@"annotationImage"]) {
-            NSObject *annotationImage = [annotationObject valueForKey:@"annotationImage"];
-            NSString *annotationImageURL = [annotationImage valueForKey:@"url"];
-            CGFloat height = (CGFloat)[[annotationImage valueForKey:@"height"] floatValue];
-            CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] floatValue];
-            if (!height || !width) {
-                RCTLogError(@"Height and width for image required");
-                return nil;
-            }
-            CGSize annotationImageSize =  CGSizeMake(width, height);
-            pin.annotationImageURL = annotationImageURL;
-            pin.annotationImageSize = annotationImageSize;
-        }
-        
-        return pin;
+        point = [[RCTMGLAnnotation alloc] initWithLocationRightCallout:CLLocationCoordinate2DMake(lat, lng) title:title subtitle:subtitle id:id rightCalloutAccessory:imageButton];
         
     } else {
         
@@ -78,24 +68,24 @@ NSObject *convertObjectToPoint (NSObject *annotationObject)
         CLLocationDegrees lat = [coordinate[0] doubleValue];
         CLLocationDegrees lng = [coordinate[1] doubleValue];
         
-        RCTMGLAnnotation *point = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(lat, lng) title:title subtitle:subtitle id:id];
-        
-        if ([annotationObject valueForKey:@"annotationImage"]) {
-            NSObject *annotationImage = [annotationObject valueForKey:@"annotationImage"];
-            NSString *annotationImageURL = [annotationImage valueForKey:@"url"];
-            CGFloat height = (CGFloat)[[annotationImage valueForKey:@"height"] floatValue];
-            CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] floatValue];
-            if (!height || !width) {
-                RCTLogError(@"Height and width for image required");
-                return nil;
-            }
-            CGSize annotationImageSize =  CGSizeMake(width, height);
-            point.annotationImageURL = annotationImageURL;
-            point.annotationImageSize = annotationImageSize;
-        }
-        
-        return point;
+        point = [[RCTMGLAnnotation alloc] initWithLocation:CLLocationCoordinate2DMake(lat, lng) title:title subtitle:subtitle id:id];
     }
+    
+    if ([annotationObject valueForKey:@"annotationImage"]) {
+        NSDictionary *annotationImage = [annotationObject valueForKey:@"annotationImage"];
+        NSDictionary *imageSource = (NSDictionary*)annotationImage[@"source"];
+        CGFloat height = (CGFloat)[[annotationImage valueForKey:@"height"] floatValue];
+        CGFloat width = (CGFloat)[[annotationImage valueForKey:@"width"] floatValue];
+        if (!height || !width) {
+            RCTLogError(@"Height and width for image required");
+            return nil;
+        }
+        CGSize annotationImageSize =  CGSizeMake(width, height);
+        point.annotationImageSource = imageSource;
+        point.annotationImageSize = annotationImageSize;
+    }
+    
+    return point;
 }
 
 NSObject *convertObjectToPolyline (NSObject *annotationObject)

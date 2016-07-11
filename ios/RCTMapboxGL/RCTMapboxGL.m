@@ -11,6 +11,7 @@
 #import "RCTEventDispatcher.h"
 #import "UIView+React.h"
 #import "RCTLog.h"
+#import "RCTMapboxGLConversions.h"
 
 @implementation RCTMapboxGL {
     /* Required to publish events */
@@ -219,25 +220,20 @@
 
 - (MGLAnnotationImage *)mapView:(MGLMapView *)mapView imageForAnnotation:(id<MGLAnnotation>)annotation
 {
-    NSString *url = [(RCTMGLAnnotation *) annotation annotationImageURL];
-    if (!url) { return nil; }
+    NSDictionary *source = [(RCTMGLAnnotation *) annotation annotationImageSource];
+    if (!source) { return nil; }
     
     CGSize imageSize = [(RCTMGLAnnotation *) annotation annotationImageSize];
-    MGLAnnotationImage *annotationImage = [mapView dequeueReusableAnnotationImageWithIdentifier:url];
+    NSString *reuseIdentifier = source[@"uri"];
+    MGLAnnotationImage *annotationImage = [mapView dequeueReusableAnnotationImageWithIdentifier:reuseIdentifier];
     
     if (!annotationImage) {
-        UIImage *image = nil;
-        if ([url hasPrefix:@"image!"]) {
-            NSString* localImagePath = [url substringFromIndex:6];
-            image = [UIImage imageNamed:localImagePath];
-        } else {
-            image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]];
-        }
+        UIImage *image = imageFromSource(source);
         UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
         [image drawInRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
         UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
-        annotationImage = [MGLAnnotationImage annotationImageWithImage:newImage reuseIdentifier:url];
+        annotationImage = [MGLAnnotationImage annotationImageWithImage:newImage reuseIdentifier:reuseIdentifier];
     }
     
     return annotationImage;

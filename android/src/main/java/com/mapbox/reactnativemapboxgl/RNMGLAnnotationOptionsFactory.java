@@ -21,6 +21,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -97,16 +98,17 @@ public class RNMGLAnnotationOptionsFactory {
 
     static Map<String, Icon> iconCache = new HashMap();
 
-    static Icon iconFromPathAndSize(Context context, String path, int width, int height) throws IOException {
+    static Icon iconFromSourceAndSize(Context context, ReadableMap source, int width, int height) throws IOException {
+        String path = source.getString("uri");
         String cacheKey = path + "||" + width + "||" + height;
         Icon icon = iconCache.get(cacheKey);
         if (icon != null) { return icon; }
 
         Drawable drawable;
-        if (path.startsWith("image!")) {
-            drawable = drawableFromDrawableName(context, path.replace("image!", ""));
-        } else {
+        try {
             drawable = drawableFromUrl(context, path);
+        } catch (MalformedURLException ex) {
+            drawable = drawableFromDrawableName(context, path);
         }
 
         IconFactory iconFactory = IconFactory.getInstance(context);
@@ -148,7 +150,7 @@ public class RNMGLAnnotationOptionsFactory {
 
         if (annotation.hasKey("annotationImage")) {
             ReadableMap annotationImage = annotation.getMap("annotationImage");
-            String annotationURL = annotationImage.getString("url");
+            ReadableMap annotationSource = annotationImage.getMap("source");
             try {
                 int width = -1;
                 int height = -1;
@@ -159,7 +161,7 @@ public class RNMGLAnnotationOptionsFactory {
                     width = Math.round((float)annotationImage.getInt("width") * scale);
                 }
 
-                marker.icon(iconFromPathAndSize(context, annotationURL, width, height));
+                marker.icon(iconFromSourceAndSize(context, annotationSource, width, height));
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -6,6 +6,7 @@
 //  Copyright © 2016 Mapbox. All rights reserved.
 //
 
+UIImage *imageFromSource (NSDictionary *source);
 NSObject *convertObjectToPoint (NSObject *annotationObject);
 NSObject *convertObjectToPolyline (NSObject *annotationObject);
 NSObject *convertObjectToPolygon (NSObject *annotationObject);

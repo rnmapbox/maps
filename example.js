@@ -28,12 +28,12 @@ class MapExample extends Component {
       title: 'This is marker 1',
       subtitle: 'It has a rightCalloutAccessory too',
       rightCalloutAccessory: {
-        url: 'https://cldup.com/9Lp0EaBw5s.png',
+        source: { uri: 'https://cldup.com/9Lp0EaBw5s.png' },
         height: 25,
         width: 25
       },
       annotationImage: {
-        url: 'https://cldup.com/CnRLZem9k9.png',
+        source: { uri: 'https://cldup.com/CnRLZem9k9.png' },
         height: 25,
         width: 25
       },
@@ -44,7 +44,7 @@ class MapExample extends Component {
       title: 'Important!',
       subtitle: 'Neat, this is a custom annotation image',
       annotationImage: {
-        url: 'https://cldup.com/7NLZklp8zS.png',
+        source: { uri: 'https://cldup.com/7NLZklp8zS.png' },
         height: 25,
         width: 25
       },
@@ -141,7 +141,7 @@ class MapExample extends Component {
           title: 'New Title!',
           subtitle: 'New Subtitle',
           annotationImage: {
-            url: 'https://cldup.com/7NLZklp8zS.png',
+            source: { uri: 'https://cldup.com/7NLZklp8zS.png' },
             height: 25,
             width: 25
           },

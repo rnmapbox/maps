@@ -234,18 +234,22 @@ mapbox://styles/bobbysud/cigtw1pzy0000aam2346f7ex0
   strokeWidth, // optional. number. Only for type=polygon or type=polyline. Controls line width.
   id, // required. string. Unique identifier used for adding or selecting an annotation.
   annotationImage, { // optional. Marker image for type=point
-    url, // required. string. Either remote image URL or 'image!yourImage'
+    source: {
+      uri // required. string. Either remote image URL or the name (without extension) of a bundled image
+    },
     height, // required. number. Image height
     width, // required. number. Image width
   },
   rightCalloutAccessory, { // optional. iOS only. Clickable image that appears when type=point marker pressed
-    url, // required. string. Either remote image URL or 'image!yourImage'
+    source: {
+      uri // required. string. Either remote image URL or the name (without extension) of a bundled image
+    },
     height, // required. number. Image height
     width, // required. number. Image width
   },
 }]
 ```
-**For adding local images via `image!yourImage`, on iOS see [adding static resources to your app using Images.xcassets  docs](https://facebook.github.io/react-native/docs/image.html#adding-static-resources-to-your-app-using-images-xcassets)
+**For using locally bundled images, on iOS see [adding static resources to your app using Images.xcassets  docs](https://facebook.github.io/react-native/docs/image.html#adding-static-resources-to-your-app-using-images-xcassets)
 and on Android, put images in `android/app/src/main/res/drawable/yourImage.png`**.
 
 #### Example
