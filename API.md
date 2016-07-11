@@ -81,20 +81,28 @@ this._map.setDirection(direction, animated = true, callback);
 this._map.setZoomLevel(zoomLevel, animated = true, callback);
 this._map.setCenterCoordinate(latitude, longitude, animated = true, callback);
 this._map.setCenterCoordinateZoomLevel(latitude, longitude, zoomLevel, animated = true, callback);
-this._map.setCenterCoordinateZoomLevelPitch(latitude, longitude, zoomLevel, pitch, animated = true, callback); // Android only
-this._map.setPitch(pitch, animated = true, callback); // Android only
-this._map.easeTo({ latitude, longitude, zoomLevel, direction, pitch }, animated = true, callback);
+this._map.setCenterCoordinateZoomLevelPitch(latitude, longitude, zoomLevel, pitch, animated = true, callback);
+this._map.setPitch(pitch, animated = true, callback);
+this._map.easeTo({ latitude, longitude, zoomLevel, altitude, direction, pitch }, animated = true, callback);
 ```
 
 This set of methods sets the location the map is centered on, the zoom level,
-the heading and the pitch (Android only) of the map.
+the heading and the pitch of the map.
 
 The transition to the desired location is animated by default, but can be made
 instantaneous by passing `animated` as `false`.
 
 For `easeTo`, all arguments inside the options object are optional. You can specify
-any combination of center coords, zoomLevel, direction and pitch. What is not
+any combination of center coords, zoomLevel, altitude, direction and pitch. What is not
 specified stays at their current values.
+
+The `altitude` refers to the viewing altitude of the camera. It's a replacement for `zoomLevel`,
+hence `zoomLevel` and `altitude` must not be specified at the same time.
+
+On iOS, `pitch` can't be specified at the same time as `zoomLevel`. `altitude` must
+be used instead.
+
+`altitude` is not available on Android.
 
 The methods accept an optional `callback` that will get fired when the animation
 has ended. Additionally, the return value is a promise that gets resolved when the
@@ -114,20 +122,6 @@ You can optionally pass a minimum padding (in screen points) that will be
 visible around the given coordinate bounds.
 
 The transition is animated unless you pass `animated` as `false`.
-
----
-
-```javascript
-this._map.setCamera(latitude, longitude, fromDistance, pitch, direction, animationDuration = 0.3); // iOS Only
-```
-
-This method only works on iOS.
-
-Sets the map pitched at an angle (`pitch`, measured in
-degrees, 0 is from straight above), looking towards `latitude` and `longitude`
-from `fromDistance` meters away, pointing towards heading `direction`.
-
-Use `animationDuration` to adjust the speed of the transition.
 
 ---
 

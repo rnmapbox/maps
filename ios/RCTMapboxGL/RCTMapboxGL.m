@@ -386,6 +386,11 @@
     return _map.zoomLevel;
 }
 
+-(MGLMapCamera*)camera {
+    if (!_map) { return nil; }
+    return _map.camera;
+}
+
 // Imperative methods
 
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)coordinate zoomLevel:(double)zoomLevel direction:(double)direction animated:(BOOL)animated completionHandler:(void (^)())callback
@@ -404,9 +409,9 @@
             completionHandler:callback];
 }
 
-- (void)setCamera:(MGLMapCamera*)camera withDuration:(int)duration animationTimingFunction:(CAMediaTimingFunction*)function
+- (void)setCamera:(MGLMapCamera *)camera withDuration:(NSTimeInterval)duration animationTimingFunction:(nullable CAMediaTimingFunction *)function completionHandler:(nullable void (^)(void))handler
 {
-    [_map setCamera: camera withDuration:duration animationTimingFunction:function];
+    [_map setCamera: camera withDuration:duration animationTimingFunction:function completionHandler:handler];
 }
 
 - (void)setVisibleCoordinateBounds:(MGLCoordinateBounds)bounds edgePadding:(UIEdgeInsets)padding animated:(BOOL)animated

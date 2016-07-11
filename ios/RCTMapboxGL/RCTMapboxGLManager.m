@@ -495,9 +495,17 @@ RCT_EXPORT_METHOD(easeTo:(nonnull NSNumber *)reactTag
             NSNumber * longitude = options[@"longitude"];
             NSNumber * zoom = options[@"zoomLevel"];
             NSNumber * direction = options[@"direction"];
+            NSNumber * pitch = options[@"pitch"];
+            NSNumber * altitude = options[@"altitude"];
             
-            if (options[@"pitch"]) {
-                RCTLogWarn(@"Pitch is not supported for MapView.easeTo() on iOS. Use MapView.setCamera() instead.");
+            if (pitch && zoom) {
+                RCTLogError(@"Pitch and zoomLevel can't be set together with MapView.easeTo() on iOS. Use altitude instead of zoomLevel");
+                return;
+            }
+            
+            if (zoom && altitude) {
+                RCTLogError(@"Altitude and zoomLevel are mutually exclusive with MapView.easeTo()");
+                return;
             }
             
             CLLocationCoordinate2D _center = (latitude && longitude)
@@ -505,34 +513,35 @@ RCT_EXPORT_METHOD(easeTo:(nonnull NSNumber *)reactTag
             : mapView.centerCoordinate;
             
             double _direction = direction ? [direction doubleValue] : mapView.direction;
-            double _zoomLevel = zoom ? [zoom doubleValue] : mapView.zoomLevel;
             
-            [mapView setCenterCoordinate: _center
-                               zoomLevel: _zoomLevel
-                               direction: _direction
-                                animated: animated
-                       completionHandler: ^{
-                           callback(@[[NSNull null]]);
-                       }];
-        }
-    }];
-}
-
-RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber *)reactTag
-                  latitude:(float) latitude
-                  longitude:(float) longitude
-                  fromDistance:(int) fromDistance
-                  pitch:(int) pitch
-                  heading:(int) heading
-                  duration:(int) duration)
-{
-    CLLocationCoordinate2D center = CLLocationCoordinate2DMake(latitude, longitude);
-    MGLMapCamera *camera = [MGLMapCamera cameraLookingAtCenterCoordinate:center fromDistance:fromDistance pitch:pitch heading:heading];
-    
-    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
-        RCTMapboxGL *mapView = viewRegistry[reactTag];
-        if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
-            [mapView setCamera:camera withDuration:duration animationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+            if (pitch || altitude) {
+                MGLMapCamera * oldCamera = (!pitch || !altitude) ? mapView.camera : nil;
+                double _altitude = altitude ? [altitude doubleValue] : oldCamera ? oldCamera.altitude : 0;
+                double _pitch = pitch ? [pitch doubleValue] : oldCamera ? oldCamera.pitch : 0;
+                
+                MGLMapCamera *camera = [MGLMapCamera cameraLookingAtCenterCoordinate:_center
+                                                                        fromDistance:_altitude
+                                                                               pitch:_pitch
+                                                                             heading:_direction];
+                
+                [mapView setCamera: camera
+                      withDuration: 0.3
+           animationTimingFunction: [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]
+                 completionHandler: ^{
+                     callback(@[[NSNull null]]);
+                 }];
+                
+            } else {
+                double _zoomLevel = zoom ? [zoom doubleValue] : mapView.zoomLevel;
+                
+                [mapView setCenterCoordinate: _center
+                                   zoomLevel: _zoomLevel
+                                   direction: _direction
+                                    animated: animated
+                           completionHandler: ^{
+                               callback(@[[NSNull null]]);
+                           }];
+            }
         }
     }];
 }

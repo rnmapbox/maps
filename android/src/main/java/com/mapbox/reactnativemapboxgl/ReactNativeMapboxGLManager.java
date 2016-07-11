@@ -174,7 +174,6 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
     public static final int COMMAND_GET_CENTER_COORDINATE_ZOOM_LEVEL = 2;
     public static final int COMMAND_GET_BOUNDS = 3;
     public static final int COMMAND_EASE_TO = 4;
-    public static final int COMMAND_SET_CAMERA = 5;
     public static final int COMMAND_SET_VISIBLE_COORDINATE_BOUNDS = 6;
     public static final int COMMAND_SELECT_ANNOTATION = 7;
     public static final int COMMAND_SPLICE_ANNOTATIONS = 8;
@@ -189,7 +188,6 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
                 .put("getCenterCoordinateZoomLevel", COMMAND_GET_CENTER_COORDINATE_ZOOM_LEVEL)
                 .put("getBounds", COMMAND_GET_BOUNDS)
                 .put("easeTo", COMMAND_EASE_TO)
-                .put("setCamera", COMMAND_SET_CAMERA)
                 .put("setVisibleCoordinateBounds", COMMAND_SET_VISIBLE_COORDINATE_BOUNDS)
                 .put("selectAnnotation", COMMAND_SELECT_ANNOTATION)
                 .put("spliceAnnotations", COMMAND_SPLICE_ANNOTATIONS)
@@ -223,12 +221,6 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
                 break;
             case COMMAND_EASE_TO:
                 easeTo(view, args.getMap(0), args.getBoolean(1), args.getInt(2));
-                break;
-            case COMMAND_SET_CAMERA:
-                setCamera(view, args.getDouble(0),
-                        args.getDouble(1), args.getDouble(2), args.getDouble(3), args.getDouble(4),
-                        args.getDouble(5)
-                );
                 break;
             case COMMAND_SET_VISIBLE_COORDINATE_BOUNDS:
                 setVisibleCoordinateBounds(view,

@@ -35,7 +35,7 @@
 
 // Imperative methods
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel direction:(double)direction animated:(BOOL)animated completionHandler:(void (^)())callback;
-- (void)setCamera:(MGLMapCamera*)camera withDuration:(int)duration animationTimingFunction:(CAMediaTimingFunction*)function;
+- (void)setCamera:(MGLMapCamera *)camera withDuration:(NSTimeInterval)duration animationTimingFunction:(nullable CAMediaTimingFunction *)function completionHandler:(nullable void (^)(void))handler;
 - (void)setVisibleCoordinateBounds:(MGLCoordinateBounds)bounds edgePadding:(UIEdgeInsets)padding animated:(BOOL)animated;
 - (void)selectAnnotation:(NSString*)selectedId animated:(BOOL)animated;
 
@@ -49,6 +49,7 @@
 - (double)zoomLevel;
 - (double)direction;
 - (double)pitch;
+- (MGLMapCamera*)camera;
 - (CLLocationCoordinate2D)centerCoordinate;
 
 // Events

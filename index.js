@@ -190,10 +190,6 @@ class MapView extends Component {
     return promise;
   }
 
-  setCamera(latitude, longitude, zoomLevel, pitch, direction, duration = 0.3) {
-    MapboxGLManager.setCamera(findNodeHandle(this), latitude, longitude, zoomLevel, pitch, direction, duration);
-  }
-
   setVisibleCoordinateBounds(latitudeSW, longitudeSW, latitudeNE, longitudeNE, paddingTop = 0, paddingRight = 0, paddingBottom = 0, paddingLeft = 0, animated = true) {
     MapboxGLManager.setVisibleCoordinateBounds(findNodeHandle(this), latitudeSW, longitudeSW, latitudeNE, longitudeNE, paddingTop, paddingRight, paddingBottom, paddingLeft, animated);
   }

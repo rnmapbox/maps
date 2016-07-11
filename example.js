@@ -206,6 +206,9 @@ class MapExample extends Component {
         <Text onPress={() => this._map && this._map.setCenterCoordinateZoomLevel(35.68829, 139.77492, 14)}>
           Go to Tokyo at fixed zoom level 14
         </Text>
+        <Text onPress={() => this._map && this._map.easeTo({ pitch: 30 })}>
+          Set pitch to 30 degrees
+        </Text>
         <Text onPress={this.addNewMarkers}>
           Add new marker
         </Text>
