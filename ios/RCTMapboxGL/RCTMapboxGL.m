@@ -443,6 +443,8 @@
     _onUpdateUserLocation(@{ @"target": self.reactTag,
                              @"src": @{ @"latitude": @(userLocation.coordinate.latitude),
                                         @"longitude": @(userLocation.coordinate.longitude),
+                                        @"verticalAccuracy": @(userLocation.location.verticalAccuracy),
+                                        @"horizontalAccuracy": @(userLocation.location.horizontalAccuracy),
                                         @"headingAccuracy": @(userLocation.heading.headingAccuracy),
                                         @"magneticHeading": @(userLocation.heading.magneticHeading),
                                         @"trueHeading": @(userLocation.heading.trueHeading),

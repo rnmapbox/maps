@@ -2,6 +2,7 @@ package com.mapbox.reactnativemapboxgl;
 
 import android.content.Context;
 import android.graphics.PointF;
+import android.hardware.GeomagneticField;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
@@ -359,10 +360,22 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
 
         src.putDouble("latitude", location.getLatitude());
         src.putDouble("longitude", location.getLongitude());
+
+        if (location.hasAccuracy()) {
+            src.putDouble("verticalAccuracy", location.getAccuracy());
+            src.putDouble("horizontalAccuracy", location.getAccuracy());
+        }
+
+        GeomagneticField geoField = new GeomagneticField(
+                (float)location.getLatitude(),
+                (float)location.getLongitude(),
+                location.hasAltitude() ? (float)location.getAltitude() : 0.0f,
+                System.currentTimeMillis()
+        );
+
         src.putDouble("magneticHeading", location.getBearing());
-        src.putDouble("trueHeading", location.getBearing());
-        src.putDouble("headingAccuracy", 10.0);
-        src.putBoolean("isUpdating", true);
+        src.putDouble("trueHeading", location.getBearing() + geoField.getDeclination());
+
         event.putMap("src", src);
         emitEvent("onUpdateUserLocation", event);
     }

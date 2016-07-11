@@ -57,7 +57,7 @@ import { MapView } from 'react-native-mapbox-gl';
 | `onOpenAnnotation` | `{id: 'marker_id', title: null, subtitle: null, latitude: 0, longitude: 0}` | Fired when tapping an annotation.
 | `onRightAnnotationTapped` | `{id: 'marker_id', title: null, subtitle: null, latitude: 0, longitude: 0}` | Fired when user taps the `rightCalloutAccessory` of an annotation.
 | `onChangeUserTrackingMode` | `Mapbox.userTrackingMode.none` | Fired when the user tracking mode gets changed by an user pan or rotate.
-| `onUpdateUserLocation` | `{latitude: 0, longitude: 0, headingAccuracy: 0, magneticHeading: 0, trueHeading: 0, isUpdating: false}` | Fired when the user's location updates.
+| `onUpdateUserLocation` | `{latitude: 0, longitude: 0, verticalAccuracy: 0, horizontalAccuracy: 0, headingAccuracy: 0, magneticHeading: 0, trueHeading: 0, isUpdating: false}` | Fired when the user's location updates. `headingAccuracy` and `isUpdating` are only supported on iOS. `verticalAccuracy` and `horizontalAccuracy` will be the same on Android, or might not exist in some circumstances.
 | `onLocateUserFailed` | `{message: 'Error message'}` | Fired when there is an error getting the user's location. Do not rely on the string that is returned for determining what kind of error it is.
 | `onTap` | `{latitude: 0, longitude: 0, screenCoordX: 0, screenCoordY: 0}` | Fired when the users taps the screen.
 | `onLongPress` | `{latitude: 0, longitude: 0, screenCoordX: 0, screenCoordX: 0}` | Fired when the user taps and holds screen for 1 second.
