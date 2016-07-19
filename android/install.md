@@ -60,12 +60,33 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
 ...
 ```
 
-##### react-native >= v0.18.0
+##### react-native >= v0.18.0, <0.29.0
 
 ```java
 import com.mapbox.reactnativemapboxgl.ReactNativeMapboxGLPackage; // <-- import
 ...
-/**
+  /**
+   * A list of packages used by the app. If the app uses additional views
+   * or modules besides the default ones, add more packages here.
+   */
+    @Override
+    protected List<ReactPackage> getPackages() {
+      return Arrays.<ReactPackage>asList(
+        new MainReactPackage(),
+        new ReactNativeMapboxGLPackage());  // <-- Register package here
+    }
+```
+
+##### react-native >= v0.29.0
+
+```java
+// file: android/app/src/main/java/com/<YOURAPP>/MainApplication.java
+...
+import com.mapbox.reactnativemapboxgl.ReactNativeMapboxGLPackage; // <-- import
+...
+public class MainApplication extends Application implements ReactApplication {
+...
+  /**
    * A list of packages used by the app. If the app uses additional views
    * or modules besides the default ones, add more packages here.
    */
