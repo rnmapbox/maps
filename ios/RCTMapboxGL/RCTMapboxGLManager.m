@@ -142,6 +142,9 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     _removedPacks = [NSMutableSet new];
     _throttleInterval = 300;
     
+    _loadingPacks = [NSMutableSet new];
+    _loadedPacks = NO;
+    
     // Setup pack array loading notifications
     [[MGLOfflineStorage sharedOfflineStorage] addObserver:self forKeyPath:@"packs" options:0 context:NULL];
     _packRequests = [NSMutableArray new];
@@ -160,6 +163,25 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void)offlinePacksDidFinishLoading
+{
+    _loadedPacks = YES;
+    
+    NSArray * packs = [MGLOfflineStorage sharedOfflineStorage].packs;
+    
+    if ([_packRequests count]) {
+        NSArray * callbackArray = [self serializePacksArray:packs];
+        for (RCTPromiseResolveBlock callback in _packRequests) {
+            callback(callbackArray);
+        }
+        [_packRequests removeAllObjects];
+    }
+    
+    for (MGLOfflinePack * pack in packs) {
+        [pack resume];
+    }
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
@@ -172,18 +194,16 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     NSArray * packs = [[MGLOfflineStorage sharedOfflineStorage] packs];
     
     if (!packs) { return; }
+    if (_loadedPacks) { return; }
+    
+    [_loadingPacks addObjectsFromArray:packs];
     
     for (MGLOfflinePack * pack in packs) {
         [pack requestProgress];
-        [pack resume];
     }
     
-    if ([_packRequests count]) {
-        NSArray * callbackArray = [self serializePacksArray:packs];
-        for (RCTPromiseResolveBlock callback in _packRequests) {
-            callback(callbackArray);
-        }
-        [_packRequests removeAllObjects];
+    if (!packs.count) {
+        [self offlinePacksDidFinishLoading];
     }
 }
 
@@ -226,6 +246,13 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
 
 - (void)offlinePackProgressDidChange:(NSNotification *)notification {
     MGLOfflinePack *pack = notification.object;
+    
+    if (!_loadedPacks && [_loadingPacks containsObject:pack]) {
+        [_loadingPacks removeObject:pack];
+        if ([_loadingPacks count] == 0) {
+            [self offlinePacksDidFinishLoading];
+        }
+    }
     
     if ([_removedPacks containsObject:pack]) {
         return;
@@ -347,11 +374,10 @@ RCT_REMAP_METHOD(getOfflinePacks,
     dispatch_async(dispatch_get_main_queue(), ^{
         NSMutableArray* callbackArray = [NSMutableArray new];
         
-        MGLOfflinePack *packs = [MGLOfflineStorage sharedOfflineStorage].packs;
-        
-        if (!packs) {
+        if (!_loadedPacks) {
             [_packRequests addObject:resolve];
         } else {
+            MGLOfflinePack *packs = [MGLOfflineStorage sharedOfflineStorage].packs;
             resolve([self serializePacksArray:packs]);
         }
     });

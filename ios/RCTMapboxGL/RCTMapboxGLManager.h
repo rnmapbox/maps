@@ -14,5 +14,7 @@
     NSMutableArray * _packRequests;
     NSMutableSet * _removedPacks;
     int _throttleInterval;
+    BOOL _loadedPacks;
+    NSMutableSet * _loadingPacks;
 }
 @end
