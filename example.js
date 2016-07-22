@@ -1,4 +1,5 @@
 'use strict';
+/* eslint no-console: 0 */
 
 import React, { Component } from 'react';
 import Mapbox, { MapView } from 'react-native-mapbox-gl';
@@ -103,7 +104,7 @@ class MapExample extends Component {
     this._offlineErrorSubscription = Mapbox.addOfflineErrorListener(error => {
       console.log('offline error', error);
     });
-  };
+  }
 
   componentWillUnmount() {
     this._offlineProgressSubscription.remove();

@@ -1,12 +1,14 @@
 {
   "parser": "babel-eslint",
+  "extends": "eslint:recommended",
   "env": {
     "browser": true,
     "node": true,
     "es6": true
   },
   "plugins": [
-    "react"
+    "react",
+    "react-native"
   ],
   "globals": { },
   "rules": {
@@ -22,7 +24,8 @@
     "no-underscore-dangle": [0],
     "no-use-before-define": [0],
     "quotes": [2, "single"],
-    "react/jsx-quotes": [2, "single", "avoid-escape"],
+    "react/jsx-uses-react": [2],
+    "react/jsx-uses-vars": [2],
     "react/no-multi-comp": 2,
     "react/no-unknown-property": [2],
     "react/prop-types": 2,

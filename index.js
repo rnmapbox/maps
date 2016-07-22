@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { Component, PropTypes } from 'react';
-import ReactNative, {
+import {
   View,
   NativeModules,
   NativeAppEventEmitter,
@@ -25,7 +25,7 @@ function deprecated(obj, key) {
   Object.defineProperty(obj, key, {
     get() {
       if (!warned) {
-        console.warn(`${key} is deprecated`);
+        console.warn(`${key} is deprecated`); // eslint-disable-line
         warned = true;
       }
       return value;

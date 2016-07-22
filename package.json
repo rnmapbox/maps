@@ -27,13 +27,13 @@
     "lint": "eslint --no-eslintrc -c .eslintrc index.js example.js"
   },
   "devDependencies": {
-    "babel-eslint": "^4.1.6",
-    "eslint": "^1.10.3",
-    "eslint-config-strict-react": "^4.0.0",
-    "eslint-plugin-react": "^3.11.3"
+    "babel-eslint": "^6.1.2",
+    "eslint": "^3.1.1",
+    "eslint-config-strict-react": "^8.0.1",
+    "eslint-plugin-react": "^5.2.2"
   },
   "dependencies": {
-    "babel-eslint": "^4.1.6",
+    "babel-eslint": "^6.1.2",
     "lodash": "^4.13.1"
   }
 }
