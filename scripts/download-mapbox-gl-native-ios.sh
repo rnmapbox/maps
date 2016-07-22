@@ -18,3 +18,7 @@ unzip -o temp.zip -d temp
 mv temp/dynamic/Mapbox.framework ./Mapbox.framework
 rm -r temp
 rm temp.zip
+
+if ! [ -d ./Mapbox.framework ]; then
+  echo "Mapbox.framework not found. Please reinstall react-native-mapbox-gl"; exit 1;
+fi;
