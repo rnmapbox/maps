@@ -13,13 +13,10 @@ import java.util.List;
 
 public class ReactNativeMapboxGLPackage implements ReactPackage {
 
-    private ReactNativeMapboxGLManager glManager;
-
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-        ReactNativeMapboxGLModule module = new ReactNativeMapboxGLModule(reactContext);
-        module.setPackage(this);
+        ReactNativeMapboxGLModule module = new ReactNativeMapboxGLModule(reactContext, this);
         modules.add(module);
         return modules;
     }
@@ -31,13 +28,8 @@ public class ReactNativeMapboxGLPackage implements ReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        glManager = new ReactNativeMapboxGLManager();
         return Arrays.<ViewManager>asList(
-                glManager
+                new ReactNativeMapboxGLManager(reactContext)
         );
-    }
-
-    public ReactNativeMapboxGLManager getManager() {
-        return glManager;
     }
 }

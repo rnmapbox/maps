@@ -11,43 +11,59 @@
 #import "RCTEventDispatcher.h"
 #import "RCTBridgeModule.h"
 
-@interface RCTMapboxGL : RCTView <MGLMapViewDelegate, RCTBridgeModule>
+@interface RCTMapboxGL : RCTView <MGLMapViewDelegate>
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher;
 
-- (void)setAccessToken:(NSString *)accessToken;
-- (void)setAnnotations:(NSArray *)annotations;
-- (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate;
+// React props
+- (void)setInitialCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate;
+- (void)setInitialZoomLevel:(double)zoomLevel;
+- (void)setInitialDirection:(double)direction;
 - (void)setClipsToBounds:(BOOL)clipsToBounds;
 - (void)setDebugActive:(BOOL)debugActive;
-- (void)setDirection:(double)direction;
 - (void)setRotateEnabled:(BOOL)rotateEnabled;
 - (void)setScrollEnabled:(BOOL)scrollEnabled;
 - (void)setZoomEnabled:(BOOL)zoomEnabled;
 - (void)setShowsUserLocation:(BOOL)showsUserLocation;
 - (void)setStyleURL:(NSURL *)styleURL;
-- (void)setZoomLevel:(double)zoomLevel;
 - (void)setUserTrackingMode:(int)userTrackingMode;
-- (void)setZoomLevelAnimated:(double)zoomLevel;
-- (void)setDirectionAnimated:(int)heading;
-- (void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)coordinates resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject;
-- (void)setCenterCoordinateZoomLevelAnimated:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel;
-- (void)setCameraAnimated:(MGLMapCamera*)camera withDuration:(int)duration animationTimingFunction:(CAMediaTimingFunction*)function;
-- (void)selectAnnotationAnimated:(NSString*)selectedId;
-- (void)addAnnotation:(NSObject *)annotation;
+- (void)setAttributionButtonIsHidden:(BOOL)isHidden;
+- (void)setLogoIsHidden:(BOOL)isHidden;
+- (void)setCompassIsHidden:(BOOL)isHidden;
+- (void)setUserLocationVerticalAlignment:(MGLAnnotationVerticalAlignment) aligment;
+- (void)setContentInset:(UIEdgeInsets)contentInset;
+
+// Imperative methods
+- (void)setCenterCoordinate:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel direction:(double)direction animated:(BOOL)animated completionHandler:(void (^)())callback;
+- (void)setCamera:(MGLMapCamera *)camera withDuration:(NSTimeInterval)duration animationTimingFunction:(nullable CAMediaTimingFunction *)function completionHandler:(nullable void (^)(void))handler;
+- (void)setVisibleCoordinateBounds:(MGLCoordinateBounds)bounds edgePadding:(UIEdgeInsets)padding animated:(BOOL)animated;
+- (void)selectAnnotation:(NSString*)selectedId animated:(BOOL)animated;
+
+// Annotation management
+- (void)upsertAnnotation:(NSObject *)annotation;
 - (void)removeAnnotation:(NSString*)selectedIdentifier;
 - (void)removeAllAnnotations;
+
+// Getters
 - (MGLCoordinateBounds)visibleCoordinateBounds;
-- (void)setVisibleCoordinateBounds:(MGLCoordinateBounds)bounds edgePadding:(UIEdgeInsets)padding animated:(BOOL)animated;
-- (void)setAttributionButtonVisibility:(BOOL)isVisible;
-- (void)setLogoVisibility:(BOOL)isVisible;
-- (void)setCompassVisibility:(BOOL)isVisible;
 - (double)zoomLevel;
 - (double)direction;
-- (void) createOfflinePack:(MGLCoordinateBounds)bounds styleURL:(NSURL*)styleURL fromZoomLevel:(double)fromZoomLevel toZoomLevel:(double)toZoomLevel name:(NSString*)name type:(NSString*)type metadata:(NSDictionary*)metadata;
+- (double)pitch;
+- (MGLMapCamera*)camera;
 - (CLLocationCoordinate2D)centerCoordinate;
-@property (nonatomic) MGLAnnotationVerticalAlignment userLocationVerticalAlignment;
-@property (nonatomic) UIEdgeInsets contentInset;
+
+// Events
+@property (nonatomic, copy) RCTDirectEventBlock onRegionDidChange;
+@property (nonatomic, copy) RCTDirectEventBlock onRegionWillChange;
+@property (nonatomic, copy) RCTDirectEventBlock onChangeUserTrackingMode;
+@property (nonatomic, copy) RCTDirectEventBlock onOpenAnnotation;
+@property (nonatomic, copy) RCTDirectEventBlock onRightAnnotationTapped;
+@property (nonatomic, copy) RCTDirectEventBlock onUpdateUserLocation;
+@property (nonatomic, copy) RCTDirectEventBlock onTap;
+@property (nonatomic, copy) RCTDirectEventBlock onLongPress;
+@property (nonatomic, copy) RCTDirectEventBlock onFinishLoadingMap;
+@property (nonatomic, copy) RCTDirectEventBlock onStartLoadingMap;
+@property (nonatomic, copy) RCTDirectEventBlock onLocateUserFailed;
 
 @end
 
@@ -55,7 +71,7 @@
 
 @property (nonatomic, strong) UIButton *rightCalloutAccessory;
 @property (nonatomic) NSString *id;
-@property (nonatomic) NSString *annotationImageURL;
+@property (nonatomic) NSDictionary *annotationImageSource;
 @property (nonatomic) CGSize annotationImageSize;
 
 + (instancetype)annotationWithLocation:(CLLocationCoordinate2D)coordinate title:(NSString *)title subtitle:(NSString *)subtitle id:(NSString *)id;

@@ -5,7 +5,18 @@ Run with ```--ignore-scripts``` to disable ios startup script
 ```shell
 npm install --save react-native-mapbox-gl --ignore-scripts
 ```
-#### Step 2 - Update Gradle Settings
+
+#### Step 2 - Use with Gradle
+
+##### Option A - With [rnpm](https://github.com/rnpm/rnpm)
+
+```shell
+rnpm link
+```
+
+##### Option B - Manually
+
+Edit the following files:
 
 ```gradle
 // file: android/settings.gradle
@@ -14,8 +25,6 @@ npm install --save react-native-mapbox-gl --ignore-scripts
 include ':reactnativemapboxgl'
 project(':reactnativemapboxgl').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-mapbox-gl/android')
 ```
-
-#### Step 3 - Update app Gradle Build
 
 ```gradle
 // file: android/app/build.gradle
@@ -27,45 +36,11 @@ dependencies {
 }
 ```
 
-#### Step 4 - Register React Package
-
-##### react-native < v0.18.0
-
 ```java
-...
+// file: android/app/src/main/java/com/yourcompany/yourapp/MainActivity.java
 import com.mapbox.reactnativemapboxgl.ReactNativeMapboxGLPackage; // <-- import
 ...
-
-public class MainActivity extends FragmentActivity implements DefaultHardwareBackBtnHandler {
-
-    private ReactInstanceManager mReactInstanceManager;
-    private ReactRootView mReactRootView;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mReactRootView = new ReactRootView(this);
-        mReactInstanceManager = ReactInstanceManager.builder()
-                .setApplication(getApplication())
-                .setBundleAssetName("index.android.bundle")
-                .setJSMainModuleName("index.android")
-                .addPackage(new MainReactPackage())
-                .addPackage(new ReactNativeMapboxGLPackage()) // <-- Register package here
-                .setUseDeveloperSupport(BuildConfig.DEBUG)
-                .setInitialLifecycleState(LifecycleState.RESUMED)
-                .build();
-        mReactRootView.startReactApplication(mReactInstanceManager, "AwesomeProject", null);
-        setContentView(mReactRootView);
-    }
-...
-```
-
-##### react-native >= v0.18.0, <0.29.0
-
-```java
-import com.mapbox.reactnativemapboxgl.ReactNativeMapboxGLPackage; // <-- import
-...
-  /**
+/**
    * A list of packages used by the app. If the app uses additional views
    * or modules besides the default ones, add more packages here.
    */
@@ -77,25 +52,21 @@ import com.mapbox.reactnativemapboxgl.ReactNativeMapboxGLPackage; // <-- import
     }
 ```
 
-##### react-native >= v0.29.0
+#### Step 3 - Add Mapbox to AndroidManifest.xml
 
-```java
-// file: android/app/src/main/java/com/<YOURAPP>/MainApplication.java
-...
-import com.mapbox.reactnativemapboxgl.ReactNativeMapboxGLPackage; // <-- import
-...
-public class MainApplication extends Application implements ReactApplication {
-...
-  /**
-   * A list of packages used by the app. If the app uses additional views
-   * or modules besides the default ones, add more packages here.
-   */
-    @Override
-    protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-        new MainReactPackage(),
-        new ReactNativeMapboxGLPackage());  // <-- Register package here
-    }
+Add the following permissions to your `AndroidManifest.xml`:
+
+```xml
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.INTERNET" />
 ```
 
-#### Step 5 - Add to project, [see example](./example.js)
+Also, add the Mapbox analytics service:
+
+```xml
+<service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService"/>
+```
+
+#### Step 4 - Add to project, [see example](../example.js)

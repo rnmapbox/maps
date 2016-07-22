@@ -11,10 +11,7 @@
 #import "RCTEventDispatcher.h"
 #import "UIView+React.h"
 #import "RCTLog.h"
-
-@interface RCTMapboxGL ()
-@property (nonatomic) MGLOfflinePack *pack;
-@end
+#import "RCTMapboxGLConversions.h"
 
 @implementation RCTMapboxGL {
     /* Required to publish events */
@@ -24,27 +21,30 @@
     MGLMapView *_map;
 
     /* Map properties */
-    NSString *_accessToken;
     NSMutableDictionary *_annotations;
-    CLLocationCoordinate2D _centerCoordinate;
+    CLLocationCoordinate2D _initialCenterCoordinate;
+    double _initialDirection;
+    double _initialZoomLevel;
+    BOOL _zoomEnabled;
     BOOL _clipsToBounds;
     BOOL _debugActive;
-    double _direction;
     BOOL _finishedLoading;
     BOOL _rotateEnabled;
     BOOL _scrollEnabled;
-    BOOL _zoomEnabled;
     BOOL _showsUserLocation;
     NSURL *_styleURL;
-    double _zoomLevel;
-    UIButton *_rightCalloutAccessory;
     int _userTrackingMode;
     BOOL _attributionButton;
     BOOL _logo;
     BOOL _compass;
+    UIEdgeInsets _contentInset;
+    MGLAnnotationVerticalAlignment _userLocationVerticalAlignment;
+    
+    /* So we don't fire onChangeUserTracking mode when triggered by props */
+    BOOL _isChangingUserTracking;
 }
 
-RCT_EXPORT_MODULE();
+// View creation
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
 {
@@ -58,47 +58,21 @@ RCT_EXPORT_MODULE();
     return self;
 }
 
-- (void)setAccessToken:(NSString *)accessToken
+- (void)createMapIfNeeded
 {
-    if ([accessToken isEqualToString:@"your-mapbox.com-access-token"] || [accessToken length] == 0) {
-        RCTLogError(@"No access token specified. Go to mapbox.com to signup and get an access token.");
-    } else {
-        _accessToken = accessToken;
-        [self updateMap];
+    CGRect bounds = self.bounds;
+    if (_map ||
+        !_styleURL ||
+        bounds.size.width <= 0 || bounds.size.height <= 0
+    ) {
+        return;
     }
-}
-
-- (void)updateMap
-{
-    if (_map) {
-        _map.centerCoordinate = _centerCoordinate;
-        _map.clipsToBounds = _clipsToBounds;
-        _map.debugActive = _debugActive;
-        _map.direction = _direction;
-        _map.rotateEnabled = _rotateEnabled;
-        _map.scrollEnabled = _scrollEnabled;
-        _map.zoomEnabled = _zoomEnabled;
-        _map.showsUserLocation = _showsUserLocation;
-        _map.styleURL = _styleURL;
-        _map.zoomLevel = _zoomLevel;
-        _map.contentInset = _contentInset;
-        [_map.attributionButton setHidden:_attributionButton];
-        [_map.logoView setHidden:_logo];
-        [_map.compassView setHidden:_compass];
-        _map.userLocationVerticalAlignment = _userLocationVerticalAlignment;
-        _map.userTrackingMode = _userTrackingMode;
-    } else {
-        /* We need to have a height/width specified in order to render */
-        if (_accessToken && _styleURL && self.bounds.size.height > 0 && self.bounds.size.width > 0) {
-            [self createMap];
-        }
+    
+    if (![MGLAccountManager accessToken]) {
+        RCTLogError(@"You need an access token to use Mapbox. Register to mapbox.com to obtain one, then run Mapbox.setAccessToken(yourToken) before mounting this component");
+        return;
     }
-}
-
-
-- (void)createMap
-{
-    [MGLAccountManager setAccessToken:_accessToken];
+    
     _map = [[MGLMapView alloc] initWithFrame:self.bounds];
     _map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _map.delegate = self;
@@ -110,32 +84,30 @@ RCT_EXPORT_MODULE();
     singleTap.delegate = self;
     [_map addGestureRecognizer:singleTap];
 
-    // Setup offline pack notification handlers.
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackProgressDidChange:) name:MGLOfflinePackProgressChangedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackDidReceiveError:) name:MGLOfflinePackErrorNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(offlinePackDidReceiveMaximumAllowedMapboxTiles:) name:MGLOfflinePackMaximumMapboxTilesReachedNotification object:nil];
-
-    [self updateMap];
+    _map.centerCoordinate = _initialCenterCoordinate;
+    _map.clipsToBounds = _clipsToBounds;
+    _map.debugActive = _debugActive;
+    _map.direction = _initialDirection;
+    _map.rotateEnabled = _rotateEnabled;
+    _map.scrollEnabled = _scrollEnabled;
+    _map.zoomEnabled = _zoomEnabled;
+    _map.showsUserLocation = _showsUserLocation;
+    _map.styleURL = _styleURL;
+    _map.zoomLevel = _initialZoomLevel;
+    _map.contentInset = _contentInset;
+    [_map.attributionButton setHidden:_attributionButton];
+    [_map.logoView setHidden:_logo];
+    [_map.compassView setHidden:_compass];
+    _map.userLocationVerticalAlignment = _userLocationVerticalAlignment;
+    _isChangingUserTracking = YES;
+    _map.userTrackingMode = _userTrackingMode;
+    _isChangingUserTracking = NO;
+    for (NSString * annotationId in _annotations) {
+        [_map addAnnotation:_annotations[annotationId]];
+    }
+    
     [self addSubview:_map];
     [self layoutSubviews];
-}
-
--(void)createOfflinePack:(MGLCoordinateBounds)bounds styleURL:(NSURL*)styleURL fromZoomLevel:(double)fromZoomLevel toZoomLevel:(double)toZoomLevel name:(NSString*)name type:(NSString*)type metadata:(NSDictionary *)metadata
-{
-
-    id <MGLOfflineRegion> region = [[MGLTilePyramidOfflineRegion alloc] initWithStyleURL:styleURL bounds:bounds fromZoomLevel:fromZoomLevel toZoomLevel:toZoomLevel];
-
-    NSMutableDictionary *userInfo = [metadata mutableCopy];
-    userInfo[@"name"] = name;
-    NSData *context = [NSKeyedArchiver archivedDataWithRootObject:userInfo];
-
-    [[MGLOfflineStorage sharedOfflineStorage] addPackForRegion:region withContext:context completionHandler:^(MGLOfflinePack *pack, NSError *error) {
-        if (error != nil) {
-            RCTLogError(@"Error: %@", error.localizedFailureReason);
-        } else {
-            [pack resume];
-        }
-    }];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
@@ -145,32 +117,41 @@ RCT_EXPORT_MODULE();
 
 - (void)layoutSubviews
 {
-    if (_annotations.count == 0) {
-        [self updateMap];
+    if (!_map) {
+        [self createMapIfNeeded];
     }
     _map.frame = self.bounds;
 }
 
-- (void)setAnnotations:(NSMutableArray *)annotations
-{
-    [self performSelector:@selector(updateAnnotations:) withObject:annotations afterDelay:0.5];
-}
+// Annotation management
 
-- (void)updateAnnotations:(NSMutableArray *) annotations {
-    for (RCTMGLAnnotation *annotation in annotations) {
-        NSString *id = [annotation id];
-        if ([id length] != 0) {
-            [_annotations setObject:annotation forKey:id];
-        } else {
-            RCTLogError(@"field `id` is required on all annotations");
-        }
-        [_map addAnnotation:annotation];
+- (void)upsertAnnotation:(RCTMGLAnnotation *) annotation {
+    NSString * identifier = [annotation id];
+    if (!identifier || [identifier length] == 0) {
+        RCTLogError(@"field `id` is required on all annotations");
+        return;
+    }
+    
+    RCTMGLAnnotation * oldAnnotation = [_annotations objectForKey:identifier];
+    [_annotations setObject:annotation forKey:identifier];
+    [_map addAnnotation:annotation];
+    if (oldAnnotation) {
+        [_map removeAnnotation:oldAnnotation];
     }
 }
 
-- (void)addAnnotation:(RCTMGLAnnotation *) annotation {
-    [_annotations setObject:annotation forKey:[annotation id]];
-    [_map addAnnotation:annotation];
+- (void)removeAnnotation:(NSString*)selectedIdentifier
+{
+    RCTMGLAnnotation * annotation = [_annotations objectForKey:selectedIdentifier];
+    if (!annotation) { return; }
+    [_map removeAnnotation:annotation];
+    [_annotations removeObjectForKey:selectedIdentifier];
+}
+
+- (void)removeAllAnnotations
+{
+    [_map removeAnnotations:_map.annotations];
+    [_annotations removeAllObjects];
 }
 
 - (CGFloat)mapView:(MGLMapView *)mapView alphaForShapeAnnotation:(RCTMGLAnnotationPolyline *)shape
@@ -205,235 +186,10 @@ RCT_EXPORT_MODULE();
     return [self getUIColorObjectFromHexString:shape.fillColor alpha:1];
 }
 
-- (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate
-{
-    _centerCoordinate = centerCoordinate;
-    [self updateMap];
-}
-
-
-- (void)setDebugActive:(BOOL)debugActive
-{
-    _debugActive = debugActive;
-    [self updateMap];
-}
-
-- (void)setRotateEnabled:(BOOL)rotateEnabled
-{
-    _rotateEnabled = rotateEnabled;
-    [self updateMap];
-}
-
-- (void)setScrollEnabled:(BOOL)scrollEnabled
-{
-    _scrollEnabled = scrollEnabled;
-    [self updateMap];
-}
-
-- (void)setZoomEnabled:(BOOL)zoomEnabled
-{
-    _zoomEnabled = zoomEnabled;
-    [self updateMap];
-}
-
-- (void)setShowsUserLocation:(BOOL)showsUserLocation
-{
-    _showsUserLocation = showsUserLocation;
-    [self updateMap];
-}
-
-- (void)setClipsToBounds:(BOOL)clipsToBounds
-{
-    _clipsToBounds = clipsToBounds;
-    [self updateMap];
-}
-
-- (void)setDirection:(double)direction
-{
-    _direction = direction;
-    [self updateMap];
-}
-
-- (void)setZoomLevel:(double)zoomLevel
-{
-    _zoomLevel = zoomLevel;
-    [self updateMap];
-}
-
-- (void)setStyleURL:(NSURL *)styleURL
-{
-    _styleURL = styleURL;
-    [self updateMap];
-}
-
-- (void)setAttributionButtonVisibility:(BOOL)isVisible
-{
-    _attributionButton = isVisible;
-    [self updateMap];
-}
-
-- (void)setLogoVisibility:(BOOL)isVisible
-{
-    _logo = isVisible;
-    [self updateMap];
-}
-
-- (void)setCompassVisibility:(BOOL)isVisible
-{
-    _compass = isVisible;
-    [self updateMap];
-}
-
-- (MGLCoordinateBounds) visibleCoordinateBounds
-{
-    return [_map visibleCoordinateBounds];
-}
-
-- (void)setUserTrackingMode:(int)userTrackingMode
-{
-    if (userTrackingMode > 3 || userTrackingMode < 0) {
-        _userTrackingMode = 0;
-    } else {
-        _userTrackingMode = userTrackingMode;
-    }
-    [self performSelector:@selector(updateMap) withObject:nil afterDelay:0.2];
-}
-
-- (void)setRightCalloutAccessory:(UIButton *)rightCalloutAccessory
-{
-    _rightCalloutAccessory = rightCalloutAccessory;
-}
-
--(void)setDirectionAnimated:(int)heading
-{
-    [_map setDirection:heading animated:YES];
-}
-
--(void)setZoomLevelAnimated:(double)zoomLevel
-{
-    [_map setZoomLevel:zoomLevel animated:YES];
-}
-
--(void)setCenterCoordinateAnimated:(CLLocationCoordinate2D)coordinates resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject
-{
-    [_map setCenterCoordinate:coordinates zoomLevel:_map.zoomLevel direction:_map.direction animated:YES completionHandler:^{
-        resolve(@"DONE");
-    }];
-}
-
--(void)setCenterCoordinateZoomLevelAnimated:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel
-{
-    [_map setCenterCoordinate:coordinates zoomLevel:zoomLevel animated:YES];
-}
-
--(void)setCameraAnimated:(MGLMapCamera *)camera withDuration:(int)duration animationTimingFunction:(CAMediaTimingFunction *)function
-{
-    [_map setCamera:camera withDuration:duration animationTimingFunction:function];
-}
-
-- (void)setVisibleCoordinateBounds:(MGLCoordinateBounds)bounds edgePadding:(UIEdgeInsets)padding animated:(BOOL)animated
-{
-    [_map setVisibleCoordinateBounds:bounds edgePadding:padding animated:animated];
-}
-
-- (void)mapView:(MGLMapView *)mapView didUpdateUserLocation:(MGLUserLocation *)userLocation;
-{
-    NSDictionary *event = @{ @"target": self.reactTag,
-                             @"src": @{ @"latitude": @(userLocation.coordinate.latitude),
-                                        @"longitude": @(userLocation.coordinate.longitude),
-                                        @"headingAccuracy": @(userLocation.heading.headingAccuracy),
-                                        @"magneticHeading": @(userLocation.heading.magneticHeading),
-                                        @"trueHeading": @(userLocation.heading.trueHeading),
-                                        @"isUpdating": [NSNumber numberWithBool:userLocation.isUpdating]} };
-
-    [_eventDispatcher sendInputEventWithName:@"onUpdateUserLocation" body:event];
-}
-
-
--(void)mapView:(MGLMapView *)mapView didSelectAnnotation:(id<MGLAnnotation>)annotation
-{
-    if (annotation.title && annotation.subtitle) {
-
-        NSString *id = [(RCTMGLAnnotation *) annotation id];
-
-        NSDictionary *event = @{ @"target": self.reactTag,
-                                 @"src": @{ @"title": annotation.title,
-                                            @"subtitle": annotation.subtitle,
-                                            @"id": id,
-                                            @"latitude": @(annotation.coordinate.latitude),
-                                            @"longitude": @(annotation.coordinate.longitude)} };
-
-        [_eventDispatcher sendInputEventWithName:@"onOpenAnnotation" body:event];
-    }
-}
-
-
-- (void)mapView:(RCTMapboxGL *)mapView regionDidChangeAnimated:(BOOL)animated
-{
-
-    CLLocationCoordinate2D region = _map.centerCoordinate;
-
-    NSDictionary *event = @{ @"target": self.reactTag,
-                             @"src": @{ @"latitude": @(region.latitude),
-                                        @"longitude": @(region.longitude),
-                                        @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } };
-
-    [_eventDispatcher sendInputEventWithName:@"onRegionChange" body:event];
-}
-
-
-- (void)mapView:(RCTMapboxGL *)mapView regionWillChangeAnimated:(BOOL)animated
-{
-
-    CLLocationCoordinate2D region = _map.centerCoordinate;
-
-    NSDictionary *event = @{ @"target": self.reactTag,
-                             @"src": @{ @"latitude": @(region.latitude),
-                                        @"longitude": @(region.longitude),
-                                        @"zoom": [NSNumber numberWithDouble:_map.zoomLevel] } };
-
-    [_eventDispatcher sendInputEventWithName:@"onRegionWillChange" body:event];
-}
-
 - (BOOL)mapView:(RCTMapboxGL *)mapView annotationCanShowCallout:(id <MGLAnnotation>)annotation {
     NSString *title = [(RCTMGLAnnotation *) annotation title];
     NSString *subtitle = [(RCTMGLAnnotation *) annotation subtitle];
     return ([title length] != 0 || [subtitle length] != 0);
-}
-
--(CLLocationCoordinate2D)centerCoordinate {
-    return _map.centerCoordinate;
-}
-
--(double)direction {
-    return _map.direction;
-}
-
--(double)zoomLevel {
-    return _map.zoomLevel;
-}
-
-- (void)selectAnnotationAnimated:(NSString*)selectedIdentifier
-{
-    [_map selectAnnotation:[_annotations objectForKey:selectedIdentifier] animated:YES];
-}
-
-- (void)removeAnnotation:(NSString*)selectedIdentifier
-{
-    [_map removeAnnotation:[_annotations objectForKey:selectedIdentifier]];
-    [_annotations removeObjectForKey:selectedIdentifier];
-}
-
-- (void) setContentInset:(UIEdgeInsets)inset
-{
-    _contentInset = inset;
-    [self updateMap];
-}
-
-- (void)removeAllAnnotations
-{
-    [_map removeAnnotations:_map.annotations];
-    [_annotations removeAllObjects];
 }
 
 - (UIButton *)mapView:(MGLMapView *)mapView rightCalloutAccessoryViewForAnnotation:(id <MGLAnnotation>)annotation;
@@ -448,153 +204,345 @@ RCT_EXPORT_MODULE();
 - (void)mapView:(MGLMapView *)mapView annotation:(id<MGLAnnotation>)annotation calloutAccessoryControlTapped:(UIControl *)control
 {
     if (annotation.title && annotation.subtitle) {
-
+        
         NSString *id = [(RCTMGLAnnotation *) annotation id];
-
+        
         NSDictionary *event = @{ @"target": self.reactTag,
                                  @"src": @{ @"title": annotation.title,
                                             @"subtitle": annotation.subtitle,
                                             @"id": id,
                                             @"latitude": @(annotation.coordinate.latitude),
                                             @"longitude": @(annotation.coordinate.longitude)} };
-
+        
         [_eventDispatcher sendInputEventWithName:@"onRightAnnotationTapped" body:event];
     }
 }
 
 - (MGLAnnotationImage *)mapView:(MGLMapView *)mapView imageForAnnotation:(id<MGLAnnotation>)annotation
 {
-    NSString *url = [(RCTMGLAnnotation *) annotation annotationImageURL];
-    if (!url) { return nil; }
-
+    NSDictionary *source = [(RCTMGLAnnotation *) annotation annotationImageSource];
+    if (!source) { return nil; }
+    
     CGSize imageSize = [(RCTMGLAnnotation *) annotation annotationImageSize];
-    MGLAnnotationImage *annotationImage = [mapView dequeueReusableAnnotationImageWithIdentifier:url];
-
+    NSString *reuseIdentifier = source[@"uri"];
+    MGLAnnotationImage *annotationImage = [mapView dequeueReusableAnnotationImageWithIdentifier:reuseIdentifier];
+    
     if (!annotationImage) {
-        UIImage *image = nil;
-        if ([url hasPrefix:@"image!"]) {
-            NSString* localImagePath = [url substringFromIndex:6];
-            image = [UIImage imageNamed:localImagePath];
-        } else {
-            image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:url]]];
-        }
+        UIImage *image = imageFromSource(source);
         UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
         [image drawInRect:CGRectMake(0, 0, imageSize.width, imageSize.height)];
         UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
-        annotationImage = [MGLAnnotationImage annotationImageWithImage:newImage reuseIdentifier:url];
+        annotationImage = [MGLAnnotationImage annotationImageWithImage:newImage reuseIdentifier:reuseIdentifier];
     }
-
+    
     return annotationImage;
+}
+
+// React props
+
+- (void)setInitialCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate
+{
+    _initialCenterCoordinate = centerCoordinate;
+}
+
+- (void)setInitialZoomLevel:(double)zoomLevel
+{
+    _initialZoomLevel = zoomLevel;
+}
+
+- (void)setInitialDirection:(double)direction
+{
+    _initialDirection = direction;
+}
+
+
+- (void)setClipsToBounds:(BOOL)clipsToBounds
+{
+    if (_clipsToBounds == clipsToBounds) { return; }
+    _clipsToBounds = clipsToBounds;
+    if (_map) { _map.clipsToBounds = clipsToBounds; }
+}
+
+- (void)setDebugActive:(BOOL)debugActive
+{
+    if (_debugActive == debugActive) { return; }
+    _debugActive = debugActive;
+    if (_map) { _map.debugActive = debugActive; }
+}
+
+- (void)setRotateEnabled:(BOOL)rotateEnabled
+{
+    if (_rotateEnabled == rotateEnabled) { return; }
+    _rotateEnabled = rotateEnabled;
+    if (_map) { _map.rotateEnabled = rotateEnabled; }
+}
+
+- (void)setScrollEnabled:(BOOL)scrollEnabled
+{
+    if (_scrollEnabled == scrollEnabled) { return; }
+    _scrollEnabled = scrollEnabled;
+    if (_map) { _map.scrollEnabled; }
+}
+
+- (void)setZoomEnabled:(BOOL)zoomEnabled
+{
+    if (_zoomEnabled == zoomEnabled) { return; }
+    _zoomEnabled = zoomEnabled;
+    if (_map) { _map.zoomEnabled; }
+}
+
+- (void)setShowsUserLocation:(BOOL)showsUserLocation
+{
+    if (_showsUserLocation == showsUserLocation) { return; }
+    _showsUserLocation = showsUserLocation;
+    if (_map) { _map.showsUserLocation = showsUserLocation; }
+}
+
+- (void)setStyleURL:(NSURL *)styleURL
+{
+    if (_styleURL && [styleURL isEqual:_styleURL]) { return; }
+    _styleURL = styleURL;
+    if (_map) {
+        _map.styleURL = styleURL;
+    } else {
+        [self createMapIfNeeded];
+    }
+}
+
+- (void)setUserTrackingMode:(int)userTrackingMode
+{
+    if (_userTrackingMode == userTrackingMode) { return; }
+    if (userTrackingMode > 3 || userTrackingMode < 0) {
+        _userTrackingMode = 0;
+    } else {
+        _userTrackingMode = userTrackingMode;
+    }
+    if (_map) {
+        _isChangingUserTracking = YES;
+        _map.userTrackingMode = _userTrackingMode;
+        _isChangingUserTracking = NO;
+    }
+}
+
+- (void)setAttributionButtonIsHidden:(BOOL)isHidden
+{
+    if (_attributionButton == isHidden) { return; }
+    _attributionButton = isHidden;
+    if (_map) { _map.attributionButton.hidden = isHidden; }
+}
+
+- (void)setLogoIsHidden:(BOOL)isHidden
+{
+    if (_logo == isHidden) { return; }
+    _logo = isHidden;
+    if (_map) { _map.logoView.hidden = isHidden; }
+}
+
+- (void)setCompassIsHidden:(BOOL)isHidden
+{
+    if (_compass == isHidden) { return; }
+    _compass = isHidden;
+    if (_map) { _map.compassView.hidden = isHidden; }
+}
+
+- (void)setContentInset:(UIEdgeInsets)inset
+{
+    _contentInset = inset;
+    if (_map) { _map.contentInset = inset; }
+}
+
+- (void)setUserLocationVerticalAlignment:(MGLAnnotationVerticalAlignment)alignment
+{
+    if (_userLocationVerticalAlignment == alignment) { return; }
+    _userLocationVerticalAlignment = alignment;
+    if (_map) { _map.userLocationVerticalAlignment = alignment; }
+}
+
+// Getters
+
+- (MGLCoordinateBounds) visibleCoordinateBounds
+{
+    return [_map visibleCoordinateBounds];
+}
+
+-(CLLocationCoordinate2D)centerCoordinate {
+    if (!_map) { return _initialCenterCoordinate; }
+    return _map.centerCoordinate;
+}
+
+-(double)direction {
+    if (!_map) { return _initialDirection; }
+    return _map.direction;
+}
+
+-(double)pitch {
+    if (!_map) { return 0; }
+    return _map.camera.pitch;
+}
+
+-(double)zoomLevel {
+    if (!_map) { return _initialZoomLevel; }
+    return _map.zoomLevel;
+}
+
+-(MGLMapCamera*)camera {
+    if (!_map) { return nil; }
+    return _map.camera;
+}
+
+// Imperative methods
+
+- (void)setCenterCoordinate:(CLLocationCoordinate2D)coordinate zoomLevel:(double)zoomLevel direction:(double)direction animated:(BOOL)animated completionHandler:(void (^)())callback
+{
+    if (!_map) {
+        _initialCenterCoordinate = coordinate;
+        _initialZoomLevel = zoomLevel;
+        _initialDirection = direction;
+        callback();
+        return;
+    }
+    [_map setCenterCoordinate:coordinate
+                    zoomLevel:zoomLevel
+                    direction:direction
+                     animated:animated
+            completionHandler:callback];
+}
+
+- (void)setCamera:(MGLMapCamera *)camera withDuration:(NSTimeInterval)duration animationTimingFunction:(nullable CAMediaTimingFunction *)function completionHandler:(nullable void (^)(void))handler
+{
+    [_map setCamera: camera withDuration:duration animationTimingFunction:function completionHandler:handler];
+}
+
+- (void)setVisibleCoordinateBounds:(MGLCoordinateBounds)bounds edgePadding:(UIEdgeInsets)padding animated:(BOOL)animated
+{
+    [_map setVisibleCoordinateBounds:bounds edgePadding:padding animated:animated];
+}
+
+- (void)selectAnnotation:(NSString*)selectedId animated:(BOOL)animated;
+{
+    RCTMGLAnnotation * annotation = [_annotations objectForKey:selectedId];
+    if (!annotation) { return; }
+    [_map selectAnnotation:annotation animated:animated];
+}
+
+
+// Events
+
+-(void)mapView:(MGLMapView *)mapView didChangeUserTrackingMode:(MGLUserTrackingMode)mode animated:(BOOL)animated
+{
+    if (_isChangingUserTracking) { return; }
+    if (!_onChangeUserTrackingMode) { return; }
+    
+    _onChangeUserTrackingMode(@{ @"target": self.reactTag,
+                                 @"src": @(mode) });
+}
+
+- (void)mapView:(MGLMapView *)mapView didUpdateUserLocation:(MGLUserLocation *)userLocation;
+{
+    if (!_onUpdateUserLocation) { return; }
+    _onUpdateUserLocation(@{ @"target": self.reactTag,
+                             @"src": @{ @"latitude": @(userLocation.coordinate.latitude),
+                                        @"longitude": @(userLocation.coordinate.longitude),
+                                        @"verticalAccuracy": @(userLocation.location.verticalAccuracy),
+                                        @"horizontalAccuracy": @(userLocation.location.horizontalAccuracy),
+                                        @"headingAccuracy": @(userLocation.heading.headingAccuracy),
+                                        @"magneticHeading": @(userLocation.heading.magneticHeading),
+                                        @"trueHeading": @(userLocation.heading.trueHeading),
+                                        @"isUpdating": [NSNumber numberWithBool:userLocation.isUpdating]} });
+}
+
+- (void)mapView:(MGLMapView *)mapView didFailToLocateUserWithError:(NSError *)error
+{
+    if (!_onLocateUserFailed) { return; }
+    _onLocateUserFailed(@{ @"target": self.reactTag,
+                             @"src": @{ @"message":  [error localizedDescription] } });
+}
+
+-(void)mapView:(MGLMapView *)mapView didSelectAnnotation:(id<MGLAnnotation>)annotation
+{
+    if (!annotation.title || !annotation.subtitle) { return; }
+    if (!_onOpenAnnotation) { return; }
+    _onOpenAnnotation(@{ @"target": self.reactTag,
+                            @"src": @{ @"title": annotation.title,
+                                       @"subtitle": annotation.subtitle,
+                                       @"id": [(RCTMGLAnnotation *) annotation id],
+                                       @"latitude": @(annotation.coordinate.latitude),
+                                       @"longitude": @(annotation.coordinate.longitude)} });
+}
+
+
+- (void)mapView:(RCTMapboxGL *)mapView regionDidChangeAnimated:(BOOL)animated
+{
+    if (!_onRegionDidChange) { return; }
+
+    CLLocationCoordinate2D region = _map.centerCoordinate;
+    _onRegionDidChange(@{ @"target": self.reactTag,
+                       @"src": @{ @"latitude": @(region.latitude),
+                                  @"longitude": @(region.longitude),
+                                  @"zoomLevel": @(_map.zoomLevel),
+                                  @"direction": @(_map.direction),
+                                  @"pitch": @(_map.camera.pitch),
+                                  @"animated": @(animated) } });
+}
+
+
+- (void)mapView:(RCTMapboxGL *)mapView regionWillChangeAnimated:(BOOL)animated
+{
+    if (!_onRegionWillChange) { return; }
+
+    CLLocationCoordinate2D region = _map.centerCoordinate;
+    _onRegionWillChange(@{ @"target": self.reactTag,
+                           @"src": @{ @"latitude": @(region.latitude),
+                                      @"longitude": @(region.longitude),
+                                      @"zoomLevel": @(_map.zoomLevel),
+                                      @"direction": @(_map.direction),
+                                      @"pitch": @(_map.camera.pitch),
+                                      @"animated": @(animated) } });
 }
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)sender
 {
+    if (!_onTap) { return; }
+    
     CLLocationCoordinate2D location = [_map convertPoint:[sender locationInView:_map] toCoordinateFromView:_map];
     CGPoint screenCoord = [sender locationInView:_map];
 
-    NSDictionary *event = @{ @"target": self.reactTag,
-                             @"src": @{
-                                     @"latitude": @(location.latitude),
-                                     @"longitude": @(location.longitude),
-                                     @"screenCoordY": @(screenCoord.y),
-                                     @"screenCoordX": @(screenCoord.x)
-                                     }
-                             };
-
-    [_eventDispatcher sendInputEventWithName:@"onTap" body:event];
+    _onTap(@{ @"target": self.reactTag,
+              @"src": @{ @"latitude": @(location.latitude),
+                         @"longitude": @(location.longitude),
+                         @"screenCoordY": @(screenCoord.y),
+                         @"screenCoordX": @(screenCoord.x) } });
 }
 
 - (void)handleLongPress:(UITapGestureRecognizer *)sender
 {
-    if (sender.state == UIGestureRecognizerStateBegan) {
-        CLLocationCoordinate2D location = [_map convertPoint:[sender locationInView:_map] toCoordinateFromView:_map];
-        CGPoint screenCoord = [sender locationInView:_map];
+    if (!_onLongPress) { return; }
+    if (sender.state != UIGestureRecognizerStateBegan) { return; }
+    
+    CLLocationCoordinate2D location = [_map convertPoint:[sender locationInView:_map] toCoordinateFromView:_map];
+    CGPoint screenCoord = [sender locationInView:_map];
 
-        NSDictionary *event = @{ @"target": self.reactTag,
-                                 @"src": @{
-                                         @"latitude": @(location.latitude),
-                                         @"longitude": @(location.longitude),
-                                         @"screenCoordY": @(screenCoord.y),
-                                         @"screenCoordX": @(screenCoord.x)
-                                         }
-                                 };
-
-        [_eventDispatcher sendInputEventWithName:@"onLongPress" body:event];
-    }
+    _onLongPress(@{ @"target": self.reactTag,
+                    @"src": @{ @"latitude": @(location.latitude),
+                               @"longitude": @(location.longitude),
+                               @"screenCoordY": @(screenCoord.y),
+                               @"screenCoordX": @(screenCoord.x) } });
 }
 
 - (void)mapViewDidFinishLoadingMap:(MGLMapView *)mapView
 {
-    NSDictionary *event = @{ @"target": self.reactTag };
-
-    [_eventDispatcher sendInputEventWithName:@"onFinishLoadingMap" body:event];
+    if (!_onFinishLoadingMap) { return; }
+    _onFinishLoadingMap(@{ @"target": self.reactTag });
 }
+
 - (void)mapViewWillStartLoadingMap:(MGLMapView *)mapView
 {
-    NSDictionary *event = @{ @"target": self.reactTag };
-
-    [_eventDispatcher sendInputEventWithName:@"onStartLoadingMap" body:event];
+    if (!_onStartLoadingMap) { return; }
+    _onStartLoadingMap(@{ @"target": self.reactTag });
 }
 
-- (void)offlinePackProgressDidChange:(NSNotification *)notification {
-
-    MGLOfflinePack *pack = notification.object;
-    NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
-    MGLOfflinePackProgress progress = pack.progress;
-
-    NSDictionary *event = @{ @"target": self.reactTag,
-                             @"src": @{
-                                     @"name": userInfo[@"name"],
-                                     @"countOfResourcesCompleted": @(progress.countOfResourcesCompleted),
-                                     @"countOfResourcesExpected": @(progress.countOfResourcesExpected),
-                                     @"countOfBytesCompleted": @(progress.countOfBytesCompleted),
-                                     @"maximumResourcesExpected": @(progress.maximumResourcesExpected)
-                                     }
-                             };
-
-    [_eventDispatcher sendInputEventWithName:@"onOfflineProgressDidChange" body:event];
-}
-
-- (void)offlinePackDidReceiveMaximumAllowedMapboxTiles:(NSNotification *)notification {
-    MGLOfflinePack *pack = notification.object;
-    NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
-    uint64_t maximumCount = [notification.userInfo[MGLOfflinePackMaximumCountUserInfoKey] unsignedLongLongValue];
-
-    NSDictionary *event = @{ @"target": self.reactTag,
-                             @"src": @{
-                                     @"name": userInfo[@"name"],
-                                     @"maxTiles": @(maximumCount)
-                                     }
-                             };
-    [_eventDispatcher sendInputEventWithName:@"onOfflineMaxAllowedMapboxTiles" body:event];
-}
-
-- (void)offlinePackDidReceiveError:(NSNotification *)notification {
-    MGLOfflinePack *pack = notification.object;
-    NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
-    NSError *error = notification.userInfo[MGLOfflinePackErrorUserInfoKey];
-
-    NSDictionary *event = @{ @"target": self.reactTag,
-                             @"src": @{
-                                     @"name": userInfo[@"name"],
-                                     @"error": [error localizedDescription]
-                                     }
-                             };
-    [_eventDispatcher sendInputEventWithName:@"onOfflineDidRecieveError" body:event];
-}
-
-
-- (void)mapView:(MGLMapView *)mapView didFailToLocateUserWithError:(NSError *)error
-{
-    NSDictionary *event = @{ @"target": mapView.reactTag,
-                             @"src": @{
-                                     @"message":  [error localizedDescription]
-                                     }
-                             };
-
-    [_eventDispatcher sendInputEventWithName:@"onLocateUserFailed" body:event];
-}
+// Utils
 
 - (unsigned int)intFromHexString:(NSString *)hexStr
 {
