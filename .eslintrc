@@ -7,7 +7,8 @@
     "es6": true
   },
   "plugins": [
-    "react"
+    "react",
+    "react-native"
   ],
   "globals": { },
   "rules": {
@@ -30,6 +31,10 @@
     "react/prop-types": 2,
     "react/require-extension": [2, { "extensions": [".js", ".jsx"] }],
     "react/wrap-multilines": [2],
+    "react-native/no-unused-styles": 2,
+    "react-native/split-platform-components": 2,
+    "react-native/no-inline-styles": 2,
+    "react-native/no-color-literals": 2,
     "strict": [0],
     "valid-typeof": 2
   }
