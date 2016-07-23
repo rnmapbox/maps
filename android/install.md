@@ -1,6 +1,6 @@
 #### Step 1 - NPM Install
 
-Run with ```--ignore-scripts``` to disable ios startup script
+Run with ```--ignore-scripts``` if you don't want to download the iOS SDK, as well.
 
 ```shell
 npm install --save react-native-mapbox-gl --ignore-scripts
