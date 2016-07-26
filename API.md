@@ -29,6 +29,7 @@ import { MapView } from 'react-native-mapbox-gl';
 | `rotateEnabled` | `boolean`  |  Optional | Whether the map can rotate. | `true`  |
 | `scrollEnabled` | `boolean`  |  Optional | Whether the map can be scrolled. | `true`  |
 | `zoomEnabled` | `boolean`  |  Optional | Whether the map zoom level can be changed. | `true`  |
+| `annotationsPopUpEnabled` | `boolean`  |  Optional | Whether annotations popups can be shown. | `true`  |
 | `showsUserLocation` | `boolean` | Optional | Whether the user's location is shown on the map. Note: The map will not zoom to their location. | `false` |
 | `userTrackingMode` | `enum` | Optional | Wether the map is zoomed to and follows the user's location. One of `Mapbox.userTrackingMode.none`, `Mapbox.userTrackingMode.follow`, `Mapbox.userTrackingMode.followWithCourse`, `Mapbox.userTrackingMode.followWithHeading` | `Mapbox.userTrackingMode.none` |
 | `userLocationVerticalAlignment` | `enum` | Optional | Change the alignment of where the user location shows on the screen. One of `Mapbox.userLocationVerticalAlignment.top`, `Mapbox.userLocationVerticalAlignment.center`, `Mapbox.userLocationVerticalAlignment.bottom` | `Mapbox.userLocationVerticalAlignment.center` |
@@ -181,6 +182,14 @@ this._map.selectAnnotation(id, animated = true);
 Selects the annotation tagged with `id`, as if it would be tapped by the user.
 
 The transition is animated unless you pass `animated` as `false`.
+
+---
+
+```javascript
+this._map.deselectAnnotation();
+```
+
+Deselects the previously selected annotation.
 
 ## Styles
 
