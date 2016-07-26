@@ -68,12 +68,12 @@
     ) {
         return;
     }
-    
+
     if (![MGLAccountManager accessToken]) {
         RCTLogError(@"You need an access token to use Mapbox. Register to mapbox.com to obtain one, then run Mapbox.setAccessToken(yourToken) before mounting this component");
         return;
     }
-    
+
     _map = [[MGLMapView alloc] initWithFrame:self.bounds];
     _map.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _map.delegate = self;
@@ -106,7 +106,7 @@
     for (NSString * annotationId in _annotations) {
         [_map addAnnotation:_annotations[annotationId]];
     }
-    
+
     [self addSubview:_map];
     [self layoutSubviews];
 }
@@ -132,7 +132,7 @@
         RCTLogError(@"field `id` is required on all annotations");
         return;
     }
-    
+
     RCTMGLAnnotation * oldAnnotation = [_annotations objectForKey:identifier];
     [_annotations setObject:annotation forKey:identifier];
     [_map addAnnotation:annotation];
@@ -157,8 +157,7 @@
 
 - (void)deselectAnnotation
 {
-    NSLog(@"in deselect Annotation");
-    [self upsertAnnotation:_selectedAnnotation];
+    [_map deselectAnnotation:_selectedAnnotation animated:YES];
 }
 
 - (CGFloat)mapView:(MGLMapView *)mapView alphaForShapeAnnotation:(RCTMGLAnnotationPolyline *)shape
@@ -194,11 +193,9 @@
 }
 
 - (BOOL)mapView:(RCTMapboxGL *)mapView annotationCanShowCallout:(id <MGLAnnotation>)annotation {
+    if (!_annotationsPopUpEnabled) { return NO; }
     NSString *title = [(RCTMGLAnnotation *) annotation title];
     NSString *subtitle = [(RCTMGLAnnotation *) annotation subtitle];
-    if (_annotationsPopUpEnabled == NO)
-        return NO;
-    else
     return ([title length] != 0 || [subtitle length] != 0);
 }
 
@@ -214,16 +211,16 @@
 - (void)mapView:(MGLMapView *)mapView annotation:(id<MGLAnnotation>)annotation calloutAccessoryControlTapped:(UIControl *)control
 {
     if (annotation.title && annotation.subtitle) {
-        
+
         NSString *id = [(RCTMGLAnnotation *) annotation id];
-        
+
         NSDictionary *event = @{ @"target": self.reactTag,
                                  @"src": @{ @"title": annotation.title,
                                             @"subtitle": annotation.subtitle,
                                             @"id": id,
                                             @"latitude": @(annotation.coordinate.latitude),
                                             @"longitude": @(annotation.coordinate.longitude)} };
-        
+
         [_eventDispatcher sendInputEventWithName:@"onRightAnnotationTapped" body:event];
     }
 }
@@ -232,11 +229,11 @@
 {
     NSDictionary *source = [(RCTMGLAnnotation *) annotation annotationImageSource];
     if (!source) { return nil; }
-    
+
     CGSize imageSize = [(RCTMGLAnnotation *) annotation annotationImageSize];
     NSString *reuseIdentifier = source[@"uri"];
     MGLAnnotationImage *annotationImage = [mapView dequeueReusableAnnotationImageWithIdentifier:reuseIdentifier];
-    
+
     if (!annotationImage) {
         UIImage *image = imageFromSource(source);
         UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);
@@ -245,7 +242,7 @@
         UIGraphicsEndImageContext();
         annotationImage = [MGLAnnotationImage annotationImageWithImage:newImage reuseIdentifier:reuseIdentifier];
     }
-    
+
     return annotationImage;
 }
 
@@ -304,7 +301,6 @@
 
 - (void)setAnnotationsPopUpEnabled:(BOOL)annotationsPopUpEnabled
 {
-    if (_annotationsPopUpEnabled == annotationsPopUpEnabled) { return; }
     _annotationsPopUpEnabled = annotationsPopUpEnabled;
 }
 
@@ -438,10 +434,8 @@
 - (void)selectAnnotation:(NSString*)selectedId animated:(BOOL)animated;
 {
     RCTMGLAnnotation * annotation = [_annotations objectForKey:selectedId];
-    if (!annotation) {
-        _selectedAnnotation=nil;
-        return; }
-   _selectedAnnotation=annotation;
+    if (!annotation) { return; }
+    _selectedAnnotation = annotation;
     [_map selectAnnotation:annotation animated:animated];
 }
 
@@ -452,7 +446,7 @@
 {
     if (_isChangingUserTracking) { return; }
     if (!_onChangeUserTrackingMode) { return; }
-    
+
     _onChangeUserTrackingMode(@{ @"target": self.reactTag,
                                  @"src": @(mode) });
 }
@@ -480,9 +474,12 @@
 
 -(void)mapView:(MGLMapView *)mapView didSelectAnnotation:(id<MGLAnnotation>)annotation
 {
-    if (!annotation.title || !annotation.subtitle) { _selectedAnnotation=nil; return; }
+    if (!annotation.title || !annotation.subtitle) {
+        _selectedAnnotation = nil;
+        return;
+    }
+    _selectedAnnotation = annotation;
     if (!_onOpenAnnotation) { return; }
-    _selectedAnnotation=annotation;
     _onOpenAnnotation(@{ @"target": self.reactTag,
                             @"src": @{ @"title": annotation.title,
                                        @"subtitle": annotation.subtitle,
@@ -524,7 +521,7 @@
 - (void)handleSingleTap:(UITapGestureRecognizer *)sender
 {
     if (!_onTap) { return; }
-    
+
     CLLocationCoordinate2D location = [_map convertPoint:[sender locationInView:_map] toCoordinateFromView:_map];
     CGPoint screenCoord = [sender locationInView:_map];
 
@@ -539,7 +536,7 @@
 {
     if (!_onLongPress) { return; }
     if (sender.state != UIGestureRecognizerStateBegan) { return; }
-    
+
     CLLocationCoordinate2D location = [_map convertPoint:[sender locationInView:_map] toCoordinateFromView:_map];
     CGPoint screenCoord = [sender locationInView:_map];
 
