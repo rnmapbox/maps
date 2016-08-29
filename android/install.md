@@ -54,7 +54,7 @@ import com.mapbox.reactnativemapboxgl.ReactNativeMapboxGLPackage; // <-- import
 
 #### Step 3 - Add Mapbox to AndroidManifest.xml
 
-Add the following permissions to your `AndroidManifest.xml`:
+Add the following permissions to the `<manifest>` root node of your `AndroidManifest.xml`:
 
 ```xml
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -63,7 +63,7 @@ Add the following permissions to your `AndroidManifest.xml`:
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 
-Also, add the Mapbox analytics service:
+Also, add the Mapbox analytics service to the `<application>` node:
 
 ```xml
 <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService"/>
