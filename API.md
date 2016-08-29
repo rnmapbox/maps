@@ -29,6 +29,7 @@ import { MapView } from 'react-native-mapbox-gl';
 | `rotateEnabled` | `boolean`  |  Optional | Whether the map can rotate. | `true`  |
 | `scrollEnabled` | `boolean`  |  Optional | Whether the map can be scrolled. | `true`  |
 | `zoomEnabled` | `boolean`  |  Optional | Whether the map zoom level can be changed. | `true`  |
+| `pitchEnabled` | `boolean`  |  Optional | Whether the map pitch (tilt) level can be changed via a two-finger drag (iOS) or three-finger drag (Android). | `true`  |
 | `showsUserLocation` | `boolean` | Optional | Whether the user's location is shown on the map. Note: The map will not zoom to their location. | `false` |
 | `userTrackingMode` | `enum` | Optional | Wether the map is zoomed to and follows the user's location. One of `Mapbox.userTrackingMode.none`, `Mapbox.userTrackingMode.follow`, `Mapbox.userTrackingMode.followWithCourse`, `Mapbox.userTrackingMode.followWithHeading` | `Mapbox.userTrackingMode.none` |
 | `userLocationVerticalAlignment` | `enum` | Optional | Change the alignment of where the user location shows on the screen. One of `Mapbox.userLocationVerticalAlignment.top`, `Mapbox.userLocationVerticalAlignment.center`, `Mapbox.userLocationVerticalAlignment.bottom` | `Mapbox.userLocationVerticalAlignment.center` |

@@ -131,6 +131,11 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
         view.setZoomEnabled(value);
     }
 
+    @ReactProp(name = "pitchEnabled")
+    public void setPitchEnabled(ReactNativeMapboxGLView view, boolean value) {
+        view.setPitchEnabled(value);
+    }
+
     @ReactProp(name = "showsUserLocation")
     public void setShowsUserLocation(ReactNativeMapboxGLView view, boolean value) {
         view.setShowsUserLocation(value);

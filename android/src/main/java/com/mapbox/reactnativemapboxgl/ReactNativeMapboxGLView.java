@@ -56,6 +56,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
     private boolean _trackingModeUpdateScheduled = false;
     private boolean _showsUserLocation;
     private boolean _zoomEnabled = true;
+    private boolean _pitchEnabled = true;
     private boolean _scrollEnabled = true;
     private boolean _rotateEnabled = true;
     private boolean _enableOnRegionWillChange = false;
@@ -148,6 +149,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         uiSettings.setZoomGesturesEnabled(_zoomEnabled);
         uiSettings.setScrollGesturesEnabled(_scrollEnabled);
         uiSettings.setRotateGesturesEnabled(_rotateEnabled);
+        uiSettings.setTiltGesturesEnabled(_pitchEnabled);
 
         // If these settings changed between setupMapView() and onMapReady(), coerce them to their right values
         // This doesn't happen in the current implementation of MapView, but let's be future proof
@@ -249,6 +251,14 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         _zoomEnabled = value;
         if (_map != null) {
             _map.getUiSettings().setZoomGesturesEnabled(value);
+        }
+    }
+
+    public void setPitchEnabled(boolean value) {
+        if (_pitchEnabled == value) { return; }
+        _pitchEnabled = value;
+        if (_map != null) {
+            _map.getUiSettings().setTiltGesturesEnabled(value);
         }
     }
 
