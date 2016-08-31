@@ -1,4 +1,4 @@
-# iOS API Docs
+# API Docs
 
 ## Access token
 
