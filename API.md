@@ -228,14 +228,14 @@ mapbox://styles/bobbysud/cigtw1pzy0000aam2346f7ex0
   strokeColor, // optional. string. Only for type=polygon or type=polyline. CSS color (#rrggbb). Controls line color.
   strokeWidth, // optional. number. Only for type=polygon or type=polyline. Controls line width.
   id, // required. string. Unique identifier used for adding or selecting an annotation.
-  annotationImage, { // optional. Marker image for type=point
+  annotationImage: { // optional. Marker image for type=point
     source: {
       uri // required. string. Either remote image URL or the name (without extension) of a bundled image
     },
     height, // required. number. Image height
     width, // required. number. Image width
   },
-  rightCalloutAccessory, { // optional. iOS only. Clickable image that appears when type=point marker pressed
+  rightCalloutAccessory: { // optional. iOS only. Clickable image that appears when type=point marker pressed
     source: {
       uri // required. string. Either remote image URL or the name (without extension) of a bundled image
     },
