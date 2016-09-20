@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableArray;
 import com.mapbox.mapboxsdk.annotations.Annotation;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
@@ -172,11 +173,19 @@ public class RNMGLAnnotationOptionsFactory {
     static RNMGLAnnotationOptions polylineOptionsFromJS(ReadableMap annotation) {
         PolylineOptions polyline = new PolylineOptions();
 
-        int coordSize = annotation.getArray("coordinates").size();
-        for (int p = 0; p < coordSize; p++) {
-            double latitude = annotation.getArray("coordinates").getArray(p).getDouble(0);
-            double longitude = annotation.getArray("coordinates").getArray(p).getDouble(1);
-            polyline.add(new LatLng(latitude, longitude));
+        ReadableArray coordinates = annotation.getArray("coordinates");
+        int coordinatesSize = coordinates.size();
+        if (coordinatesSize > 0) {
+            LatLng[] points = new LatLng[coordinatesSize];
+            ReadableArray coordinate;
+            for (int p = 0; p < coordinatesSize; p++) {
+                coordinate = coordinates.getArray(p);
+                points[p] = new LatLng(
+                    coordinate.getDouble(0),
+                    coordinate.getDouble(1)
+                );
+            }
+            polyline.add(points);
         }
 
         if (annotation.hasKey("alpha")) {

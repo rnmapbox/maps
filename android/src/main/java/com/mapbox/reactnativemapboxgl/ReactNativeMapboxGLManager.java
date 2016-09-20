@@ -131,6 +131,11 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
         view.setZoomEnabled(value);
     }
 
+    @ReactProp(name = "pitchEnabled")
+    public void setPitchEnabled(ReactNativeMapboxGLView view, boolean value) {
+        view.setPitchEnabled(value);
+    }
+
     @ReactProp(name = "annotationsPopUpEnabled")
     public void setAnnotationsPopUpEnabled(ReactNativeMapboxGLView view, boolean value) {
         view.setAnnotationsPopUpEnabled(value);
@@ -381,7 +386,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
     public void selectAnnotation(ReactNativeMapboxGLView view, String annotationId, boolean animated) {
         view.selectAnnotation(annotationId, animated);
     }
-    
+
     public void deselectAnnotation(ReactNativeMapboxGLView view) {
         view.deselectAnnotation();
     }

@@ -31,6 +31,7 @@
     BOOL _finishedLoading;
     BOOL _rotateEnabled;
     BOOL _scrollEnabled;
+    BOOL _pitchEnabled;
     BOOL _showsUserLocation;
     NSURL *_styleURL;
     int _userTrackingMode;
@@ -92,6 +93,7 @@
     _map.rotateEnabled = _rotateEnabled;
     _map.scrollEnabled = _scrollEnabled;
     _map.zoomEnabled = _zoomEnabled;
+    _map.pitchEnabled = _pitchEnabled;
     _map.showsUserLocation = _showsUserLocation;
     _map.styleURL = _styleURL;
     _map.zoomLevel = _initialZoomLevel;
@@ -289,14 +291,21 @@
 {
     if (_scrollEnabled == scrollEnabled) { return; }
     _scrollEnabled = scrollEnabled;
-    if (_map) { _map.scrollEnabled; }
+    if (_map) { _map.scrollEnabled = scrollEnabled; }
 }
 
 - (void)setZoomEnabled:(BOOL)zoomEnabled
 {
     if (_zoomEnabled == zoomEnabled) { return; }
     _zoomEnabled = zoomEnabled;
-    if (_map) { _map.zoomEnabled; }
+    if (_map) { _map.zoomEnabled = zoomEnabled; }
+}
+
+- (void)setPitchEnabled:(BOOL)pitchEnabled
+{
+    if (_pitchEnabled == pitchEnabled) { return; }
+    _pitchEnabled = pitchEnabled;
+    if (_map) { _map.pitchEnabled = pitchEnabled; }
 }
 
 - (void)setAnnotationsPopUpEnabled:(BOOL)annotationsPopUpEnabled

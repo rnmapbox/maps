@@ -1,4 +1,4 @@
-# iOS API Docs
+# API Docs
 
 ## Access token
 
@@ -29,6 +29,7 @@ import { MapView } from 'react-native-mapbox-gl';
 | `rotateEnabled` | `boolean`  |  Optional | Whether the map can rotate. | `true`  |
 | `scrollEnabled` | `boolean`  |  Optional | Whether the map can be scrolled. | `true`  |
 | `zoomEnabled` | `boolean`  |  Optional | Whether the map zoom level can be changed. | `true`  |
+| `pitchEnabled` | `boolean`  |  Optional | Whether the map pitch (tilt) level can be changed via a two-finger drag (iOS) or three-finger drag (Android). | `true`  |
 | `annotationsPopUpEnabled` | `boolean`  |  Optional | Whether annotations popups can be shown. | `true`  |
 | `showsUserLocation` | `boolean` | Optional | Whether the user's location is shown on the map. Note: The map will not zoom to their location. | `false` |
 | `userTrackingMode` | `enum` | Optional | Wether the map is zoomed to and follows the user's location. One of `Mapbox.userTrackingMode.none`, `Mapbox.userTrackingMode.follow`, `Mapbox.userTrackingMode.followWithCourse`, `Mapbox.userTrackingMode.followWithHeading` | `Mapbox.userTrackingMode.none` |
@@ -236,14 +237,14 @@ mapbox://styles/bobbysud/cigtw1pzy0000aam2346f7ex0
   strokeColor, // optional. string. Only for type=polygon or type=polyline. CSS color (#rrggbb). Controls line color.
   strokeWidth, // optional. number. Only for type=polygon or type=polyline. Controls line width.
   id, // required. string. Unique identifier used for adding or selecting an annotation.
-  annotationImage, { // optional. Marker image for type=point
+  annotationImage: { // optional. Marker image for type=point
     source: {
       uri // required. string. Either remote image URL or the name (without extension) of a bundled image
     },
     height, // required. number. Image height
     width, // required. number. Image width
   },
-  rightCalloutAccessory, { // optional. iOS only. Clickable image that appears when type=point marker pressed
+  rightCalloutAccessory: { // optional. iOS only. Clickable image that appears when type=point marker pressed
     source: {
       uri // required. string. Either remote image URL or the name (without extension) of a bundled image
     },
