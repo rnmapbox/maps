@@ -160,6 +160,22 @@ function addOfflineErrorListener(handler) {
 }
 
 class MapView extends Component {
+  constructor(props) {
+    super(props);
+
+    this._onRegionDidChange = this._onRegionDidChange.bind(this);
+    this._onRegionWillChange = this._onRegionWillChange.bind(this);
+    this._onOpenAnnotation = this._onOpenAnnotation.bind(this);
+    this._onRightAnnotationTapped = this._onRightAnnotationTapped.bind(this);
+    this._onChangeUserTrackingMode = this._onChangeUserTrackingMode.bind(this);
+    this._onUpdateUserLocation = this._onUpdateUserLocation.bind(this);
+    this._onLongPress = this._onLongPress.bind(this);
+    this._onTap = this._onTap.bind(this);
+    this._onFinishLoadingMap = this._onFinishLoadingMap.bind(this);
+    this._onStartLoadingMap = this._onStartLoadingMap.bind(this);
+    this._onLocateUserFailed = this._onLocateUserFailed.bind(this);
+    this._onNativeComponentMount = this._onNativeComponentMount.bind(this);
+  }
 
   // Viewport setters
   setDirection(direction, animated = true, callback) {
@@ -214,39 +230,39 @@ class MapView extends Component {
   }
 
   // Events
-  _onRegionDidChange = (event: Event) => {
+  _onRegionDidChange(event: Event) {
     if (this.props.onRegionDidChange) this.props.onRegionDidChange(event.nativeEvent.src);
-  };
-  _onRegionWillChange = (event: Event) => {
+  }
+  _onRegionWillChange(event: Event) {
     if (this.props.onRegionWillChange) this.props.onRegionWillChange(event.nativeEvent.src);
-  };
-  _onOpenAnnotation = (event: Event) => {
+  }
+  _onOpenAnnotation(event: Event) {
     if (this.props.onOpenAnnotation) this.props.onOpenAnnotation(event.nativeEvent.src);
-  };
-  _onRightAnnotationTapped = (event: Event) => {
+  }
+  _onRightAnnotationTapped(event: Event) {
     if (this.props.onRightAnnotationTapped) this.props.onRightAnnotationTapped(event.nativeEvent.src);
-  };
-  _onChangeUserTrackingMode = (event: Event) => {
+  }
+  _onChangeUserTrackingMode(event: Event) {
     if (this.props.onChangeUserTrackingMode) this.props.onChangeUserTrackingMode(event.nativeEvent.src);
-  };
-  _onUpdateUserLocation = (event: Event) => {
+  }
+  _onUpdateUserLocation(event: Event) {
     if (this.props.onUpdateUserLocation) this.props.onUpdateUserLocation(event.nativeEvent.src);
-  };
-  _onLongPress = (event: Event) => {
+  }
+  _onLongPress(event: Event) {
     if (this.props.onLongPress) this.props.onLongPress(event.nativeEvent.src);
-  };
-  _onTap = (event: Event) => {
+  }
+  _onTap(event: Event) {
     if (this.props.onTap) this.props.onTap(event.nativeEvent.src);
-  };
-  _onFinishLoadingMap = (event: Event) => {
+  }
+  _onFinishLoadingMap(event: Event) {
     if (this.props.onFinishLoadingMap) this.props.onFinishLoadingMap(event.nativeEvent.src);
-  };
-  _onStartLoadingMap = (event: Event) => {
+  }
+  _onStartLoadingMap(event: Event) {
     if (this.props.onStartLoadingMap) this.props.onStartLoadingMap(event.nativeEvent.src);
-  };
-  _onLocateUserFailed = (event: Event) => {
+  }
+  _onLocateUserFailed(event: Event) {
     if (this.props.onLocateUserFailed) this.props.onLocateUserFailed(event.nativeEvent.src);
-  };
+  }
 
   static propTypes = {
     ...View.propTypes,
@@ -363,7 +379,7 @@ class MapView extends Component {
 
   _native = null;
 
-  _onNativeComponentMount = (ref) => {
+  _onNativeComponentMount(ref) {
     if (this._native === ref) { return; }
     this._native = ref;
 
@@ -375,7 +391,7 @@ class MapView extends Component {
       acc[annotation.id] = isImmutable ? annotation : cloneDeep(annotation);
       return acc;
     }, {});
-  };
+  }
 
   setNativeProps(nativeProps) {
     this._native && this._native.setNativeProps(nativeProps);
