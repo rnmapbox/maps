@@ -605,4 +605,31 @@ RCT_EXPORT_METHOD(selectAnnotation:(nonnull NSNumber *) reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(queryRenderedFeatures:(nonnull NSNumber *)reactTag
+                  options:(NSDictionary *)options
+                  callback:(RCTResponseSenderBlock)callback)
+{
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
+        RCTMapboxGL *mapView = viewRegistry[reactTag];
+        if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
+            NSNumber *screenCoordX = options[@"screenCoordX"];
+            NSNumber *screenCoordY = options[@"screenCoordY"];
+            if (!screenCoordX || !screenCoordY) {
+                // TODO: figure out best way to error this. Should we be using RCTPromise rather than a callback?
+//                reject(@"invalid_arguments", @"queryRenderedFeatures(): screenCoordX and screenCoordY are required.", nil);
+                return;
+            }
+            CGPoint point = CGPointMake(screenCoordX.floatValue, screenCoordY.floatValue);
+
+            NSArray * features = [mapView visibleFeaturesAtPoint:point];
+
+            // TODO: also accept Rect to use [mapView visibleFeaturesInRect:]
+
+            // TODO: convert features to JS friendly objects
+
+            callback(features);
+        }
+    }];
+}
+
 @end

@@ -539,6 +539,14 @@
                                @"screenCoordX": @(screenCoord.x) } });
 }
 
+ - (NSArray *)visibleFeaturesAtPoint:(CGPoint)point
+ {
+     // This is failing with:
+     // Exception thrown while executing UI block: -[MGLMapView visibleFeaturesAtPoint:]:
+     // unrecognized selector sent to instance
+     return [_map visibleFeaturesAtPoint:point];
+ }
+
 - (void)mapViewDidFinishLoadingMap:(MGLMapView *)mapView
 {
     if (!_onFinishLoadingMap) { return; }
