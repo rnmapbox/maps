@@ -35,13 +35,11 @@
     BOOL _showsUserLocation;
     NSURL *_styleURL;
     int _userTrackingMode;
-    RCTMGLAnnotation *_selectedAnnotation;
     BOOL _attributionButton;
     BOOL _logo;
     BOOL _compass;
     UIEdgeInsets _contentInset;
     MGLAnnotationVerticalAlignment _userLocationVerticalAlignment;
-    BOOL _annotationsPopUpEnabled;
     /* So we don't fire onChangeUserTracking mode when triggered by props */
     BOOL _isChangingUserTracking;
 }
@@ -159,7 +157,11 @@
 
 - (void)deselectAnnotation
 {
-    [_map deselectAnnotation:_selectedAnnotation animated:YES];
+    NSArray * annotations = [_map selectedAnnotations];
+    if (!annotations) { return; }
+    for (id annotation in annotations) {
+        [_map deselectAnnotation:annotation animated:YES];
+    }
 }
 
 - (CGFloat)mapView:(MGLMapView *)mapView alphaForShapeAnnotation:(RCTMGLAnnotationPolyline *)shape
@@ -308,11 +310,6 @@
     if (_map) { _map.pitchEnabled = pitchEnabled; }
 }
 
-- (void)setAnnotationsPopUpEnabled:(BOOL)annotationsPopUpEnabled
-{
-    _annotationsPopUpEnabled = annotationsPopUpEnabled;
-}
-
 - (void)setShowsUserLocation:(BOOL)showsUserLocation
 {
     if (_showsUserLocation == showsUserLocation) { return; }
@@ -444,7 +441,6 @@
 {
     RCTMGLAnnotation * annotation = [_annotations objectForKey:selectedId];
     if (!annotation) { return; }
-    _selectedAnnotation = annotation;
     [_map selectAnnotation:annotation animated:animated];
 }
 
@@ -483,11 +479,7 @@
 
 -(void)mapView:(MGLMapView *)mapView didSelectAnnotation:(id<MGLAnnotation>)annotation
 {
-    if (!annotation.title || !annotation.subtitle) {
-        _selectedAnnotation = nil;
-        return;
-    }
-    _selectedAnnotation = annotation;
+    if (!annotation.title || !annotation.subtitle) { return; }
     if (!_onOpenAnnotation) { return; }
     _onOpenAnnotation(@{ @"target": self.reactTag,
                             @"src": @{ @"title": annotation.title,

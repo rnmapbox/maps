@@ -32,7 +32,7 @@
 - (void)setCompassIsHidden:(BOOL)isHidden;
 - (void)setUserLocationVerticalAlignment:(MGLAnnotationVerticalAlignment) aligment;
 - (void)setContentInset:(UIEdgeInsets)contentInset;
-- (void)setAnnotationsPopUpEnabled:(BOOL)annotationsPopUpEnabled;
+@property (nonatomic) BOOL annotationsPopUpEnabled;
 
 // Imperative methods
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)coordinates zoomLevel:(double)zoomLevel direction:(double)direction animated:(BOOL)animated completionHandler:(void (^)())callback;
