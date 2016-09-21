@@ -219,6 +219,9 @@ class MapExample extends Component {
         <Text onPress={() => this._map && this._map.selectAnnotation('marker1')}>
           Open marker1 popup
         </Text>
+        <Text onPress={() => this._map && this._map.deselectAnnotation()}>
+          Deselect annotation
+        </Text>
         <Text onPress={this.removeMarker2}>
           Remove marker2 annotation
         </Text>

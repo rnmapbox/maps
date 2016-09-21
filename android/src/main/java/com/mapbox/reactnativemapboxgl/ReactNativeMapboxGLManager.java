@@ -136,6 +136,11 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
         view.setPitchEnabled(value);
     }
 
+    @ReactProp(name = "annotationsPopUpEnabled")
+    public void setAnnotationsPopUpEnabled(ReactNativeMapboxGLView view, boolean value) {
+        view.setAnnotationsPopUpEnabled(value);
+    }
+
     @ReactProp(name = "showsUserLocation")
     public void setShowsUserLocation(ReactNativeMapboxGLView view, boolean value) {
         view.setShowsUserLocation(value);
@@ -182,6 +187,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
     public static final int COMMAND_SET_VISIBLE_COORDINATE_BOUNDS = 6;
     public static final int COMMAND_SELECT_ANNOTATION = 7;
     public static final int COMMAND_SPLICE_ANNOTATIONS = 8;
+    public static final int COMMAND_DESELECT_ANNOTATION = 9;
 
     @Override
     public
@@ -196,6 +202,7 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
                 .put("setVisibleCoordinateBounds", COMMAND_SET_VISIBLE_COORDINATE_BOUNDS)
                 .put("selectAnnotation", COMMAND_SELECT_ANNOTATION)
                 .put("spliceAnnotations", COMMAND_SPLICE_ANNOTATIONS)
+                .put("deselectAnnotation", COMMAND_DESELECT_ANNOTATION)
                 .build();
     }
 
@@ -239,6 +246,9 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
                 break;
             case COMMAND_SPLICE_ANNOTATIONS:
                 spliceAnnotations(view, args.getBoolean(0), args.getArray(1), args.getArray(2));
+                break;
+            case COMMAND_DESELECT_ANNOTATION:
+                deselectAnnotation(view);
                 break;
             default:
                 throw new JSApplicationIllegalArgumentException("Invalid commandId " + commandId + " sent to " + getClass().getSimpleName());
@@ -375,5 +385,9 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
 
     public void selectAnnotation(ReactNativeMapboxGLView view, String annotationId, boolean animated) {
         view.selectAnnotation(annotationId, animated);
+    }
+
+    public void deselectAnnotation(ReactNativeMapboxGLView view) {
+        view.deselectAnnotation();
     }
 }

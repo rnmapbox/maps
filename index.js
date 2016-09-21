@@ -228,7 +228,9 @@ class MapView extends Component {
   selectAnnotation(annotationId, animated = true) {
     MapboxGLManager.selectAnnotation(findNodeHandle(this), annotationId, animated);
   }
-
+  deselectAnnotation() {
+    MapboxGLManager.deselectAnnotation(findNodeHandle(this));
+  }
   // Events
   _onRegionDidChange(event: Event) {
     if (this.props.onRegionDidChange) this.props.onRegionDidChange(event.nativeEvent.src);
@@ -279,6 +281,7 @@ class MapView extends Component {
     scrollEnabled: PropTypes.bool,
     zoomEnabled: PropTypes.bool,
     pitchEnabled: PropTypes.bool,
+    annotationsPopUpEnabled: PropTypes.bool,
     showsUserLocation: PropTypes.bool,
     styleURL: PropTypes.string.isRequired,
     userTrackingMode: PropTypes.number,
@@ -340,6 +343,7 @@ class MapView extends Component {
     styleURL: mapStyles.streets,
     userTrackingMode: userTrackingMode.none,
     zoomEnabled: true,
+    annotationsPopUpEnabled: true,
     attributionButtonIsHidden: false,
     logoIsHidden: false,
     compassIsHidden: false,

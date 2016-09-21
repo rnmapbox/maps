@@ -51,6 +51,7 @@ RCT_EXPORT_VIEW_PROPERTY(attributionButtonIsHidden, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(logoIsHidden, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(compassIsHidden, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(userLocationVerticalAlignment, int);
+RCT_EXPORT_VIEW_PROPERTY(annotationsPopUpEnabled, BOOL);
 
 RCT_EXPORT_VIEW_PROPERTY(onRegionDidChange, RCTDirectEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onRegionWillChange, RCTDirectEventBlock);
@@ -605,4 +606,14 @@ RCT_EXPORT_METHOD(selectAnnotation:(nonnull NSNumber *) reactTag
     }];
 }
 
+
+RCT_EXPORT_METHOD(deselectAnnotation:(nonnull NSNumber *) reactTag)
+{
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
+        RCTMapboxGL *mapView = viewRegistry[reactTag];
+        if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
+            [mapView deselectAnnotation];
+        }
+    }];
+}
 @end
