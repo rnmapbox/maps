@@ -24,7 +24,7 @@ RCT_EXPORT_MODULE()
 
 - (UIView *)view
 {
-    RCTMapboxAnnotation *marker = [RCTMapboxAnnotation new];
+    RCTMapboxAnnotation *marker = [[RCTMapboxAnnotation alloc] init];
 //    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_handleTap:)];
 //    // setting this to NO allows the parent MapView to continue receiving marker selection events
 //    tapGestureRecognizer.cancelsTouchesInView = NO;
