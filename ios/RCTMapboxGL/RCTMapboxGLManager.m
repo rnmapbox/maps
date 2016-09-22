@@ -612,22 +612,76 @@ RCT_EXPORT_METHOD(queryRenderedFeatures:(nonnull NSNumber *)reactTag
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
-            NSNumber *screenCoordX = options[@"screenCoordX"];
-            NSNumber *screenCoordY = options[@"screenCoordY"];
-            if (!screenCoordX || !screenCoordY) {
+            NSDictionary *pointDict = options[@"point"];
+            NSDictionary *rect = options[@"rect"];
+            if (!pointDict) {
                 // TODO: figure out best way to error this. Should we be using RCTPromise rather than a callback?
 //                reject(@"invalid_arguments", @"queryRenderedFeatures(): screenCoordX and screenCoordY are required.", nil);
                 return;
             }
+            NSNumber *screenCoordX = pointDict[@"screenCoordX"];
+            NSNumber *screenCoordY = pointDict[@"screenCoordY"];
+            NSSet<NSString *> *styleLayerIdentifiers = options[@"layers"];
+
+            CLLocationCoordinate2D location = [_map convertPoint:[sender locationInView:_map] toCoordinateFromView:_map];
+            CGPoint screenCoord = [sender locationInView:_map];
+
+
             CGPoint point = CGPointMake(screenCoordX.floatValue, screenCoordY.floatValue);
 
-            NSArray * features = [mapView visibleFeaturesAtPoint:point];
+            NSArray *features;
+            if (!styleLayerIdentifiers) {
+                features = [mapView visibleFeaturesAtPoint:point];
+            } else {
+                features = [mapView visibleFeaturesAtPoint:point inStyleLayersWithIdentifiers:styleLayerIdentifiers];
+            }
+
+            NSDictionary *geoJSONTypesByMGLClassName = @{
+                    @"MGLPointFeature": @"Point",
+                    @"MGLPolylineFeature": @"LineString",
+                    @"MGLPolygonFeature": @"Polygon"
+            };
 
             // TODO: also accept Rect to use [mapView visibleFeaturesInRect:]
 
-            // TODO: convert features to JS friendly objects
+            // TODO: switch to using MGLFeature's geoJSONFeature method if implemented - https://github.com/mapbox/mapbox-gl-native/issues/6302
+            NSMutableArray *geoJSONFeatures = [[NSMutableArray alloc] init];
+            for (id <MGLFeature> feature in features) {
+//                NSString *geometryType = geoJSONTypesByMGLClassName[NSStringFromClass([feature class])];
+                NSString *geometryType;
+                NSMutableArray *coordinates = [[NSMutableArray alloc] init];
+                if ([feature isKindOfClass:[MGLPointFeature class]]) {
+                    geometryType = @"Point";
+                    coordinates = (NSMutableArray *) @[@(feature.coordinate.longitude), @(feature.coordinate.latitude)];
+                } else if ([feature isKindOfClass:[MGLPolyline class]]) {
+                    MGLMultiPoint *multiPoint = (MGLMultiPoint *)feature;
+                    for (int index = 0; index < multiPoint.pointCount; index++) {
+                        CLLocationCoordinate2D coord = multiPoint.coordinates[index];
+                        [coordinates addObject:@[@(coord.longitude), @(coord.latitude)]];
+                    }
+                    geometryType = @"LineString";
+                } else if ([feature isKindOfClass:[MGLPolygon class]]) {
+                    MGLMultiPoint *multiPoint = (MGLMultiPoint *)feature;
+                    for (int index = 0; index < multiPoint.pointCount; index++) {
+                        CLLocationCoordinate2D coord = multiPoint.coordinates[index];
+                        [coordinates addObject:@[@(coord.longitude), @(coord.latitude)]];
+                    }
+                    geometryType = @"Polygon";
+                }
+                // TODO: checks for MGLMultiPolyline and MGLMultiPolygon
 
-            callback(features);
+                NSDictionary *geoJSON = @{
+                        @"type": @"Feature",
+                        @"properties": feature.attributes,
+                        @"geometry": @{
+                                @"type": geometryType,
+                                @"coordinates": coordinates
+                        }
+                };
+                [geoJSONFeatures addObject:geoJSON];
+            }
+
+            callback(@[geoJSONFeatures]);
         }
     }];
 }

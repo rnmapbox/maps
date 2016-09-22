@@ -539,13 +539,16 @@
                                @"screenCoordX": @(screenCoord.x) } });
 }
 
- - (NSArray *)visibleFeaturesAtPoint:(CGPoint)point
+ - (nonnull NSArray<id<MGLFeature>> *)visibleFeaturesAtPoint:(CGPoint)point
  {
-     // This is failing with:
-     // Exception thrown while executing UI block: -[MGLMapView visibleFeaturesAtPoint:]:
-     // unrecognized selector sent to instance
      return [_map visibleFeaturesAtPoint:point];
  }
+
+- (nonnull NSArray<id<MGLFeature>> *)visibleFeaturesAtPoint:(CGPoint)point
+                               inStyleLayersWithIdentifiers:(nullable NSSet<NSString *> *)styleLayerIdentifiers
+{
+    return [_map visibleFeaturesAtPoint:point inStyleLayersWithIdentifiers:styleLayerIdentifiers];
+}
 
 - (void)mapViewDidFinishLoadingMap:(MGLMapView *)mapView
 {
