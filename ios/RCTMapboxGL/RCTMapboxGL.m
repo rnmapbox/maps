@@ -12,6 +12,7 @@
 #import "UIView+React.h"
 #import "RCTLog.h"
 #import "RCTMapboxGLConversions.h"
+#import "RCTMapboxAnnotation.h"
 
 @implementation RCTMapboxGL {
     /* Required to publish events */
@@ -42,6 +43,16 @@
     MGLAnnotationVerticalAlignment _userLocationVerticalAlignment;
     /* So we don't fire onChangeUserTracking mode when triggered by props */
     BOOL _isChangingUserTracking;
+    // Array to manually track RN subviews
+    //
+    // AIRMap implicitly creates subviews that aren't regular RN children
+    // (SMCalloutView injects an overlay subview), which otherwise confuses RN
+    // during component re-renders:
+    // https://github.com/facebook/react-native/blob/v0.16.0/React/Modules/RCTUIManager.m#L657
+    //
+    // Implementation based on RCTTextField, another component with indirect children
+    // https://github.com/facebook/react-native/blob/v0.16.0/Libraries/Text/RCTTextField.m#L20
+    NSMutableArray<UIView *> *_reactSubviews;
 }
 
 // View creation
@@ -122,7 +133,34 @@
         [self createMapIfNeeded];
     }
     _map.frame = self.bounds;
+    [_map layoutIfNeeded];
 }
+
+// React subviews for custom annotation management
+- (void)insertReactSubview:(id<RCTComponent>)subview atIndex:(NSInteger)atIndex {
+    // Our desired API is to pass up markers/overlays as children to the mapview component.
+    // This is where we intercept them and do the appropriate underlying mapview action.
+    if ([subview isKindOfClass:[RCTMapboxAnnotation class]]) {
+        ((RCTMapboxAnnotation *) subview).map = self;
+        [_map addAnnotation:(id <MGLAnnotation>) subview];
+    }
+    [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
+}
+
+- (void)removeReactSubview:(id<RCTComponent>)subview {
+    // similarly, when the children are being removed we have to do the appropriate
+    // underlying mapview action here.
+    if ([subview isKindOfClass:[RCTMapboxAnnotation class]]) {
+        [self removeAnnotation:(id<MGLAnnotation>)subview];
+    }
+    [_reactSubviews removeObject:(UIView *)subview];
+}
+
+- (NSArray<id<RCTComponent>> *)reactSubviews {
+    return _reactSubviews;
+}
+
+
 
 // Annotation management
 
@@ -201,6 +239,13 @@
     NSString *title = [(RCTMGLAnnotation *) annotation title];
     NSString *subtitle = [(RCTMGLAnnotation *) annotation subtitle];
     return ([title length] != 0 || [subtitle length] != 0);
+}
+
+- (nullable MGLAnnotationView *)mapView:(MGLMapView *)mapView viewForAnnotation:(id <MGLAnnotation>)annotation {
+    if ([annotation isKindOfClass:[RCTMapboxAnnotation class]]){
+        return annotation;
+    }
+    return nil;
 }
 
 - (UIButton *)mapView:(MGLMapView *)mapView rightCalloutAccessoryViewForAnnotation:(id <MGLAnnotation>)annotation;
