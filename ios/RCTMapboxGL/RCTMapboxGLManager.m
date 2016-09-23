@@ -650,7 +650,7 @@ RCT_EXPORT_METHOD(queryRenderedFeatures:(nonnull NSNumber *)reactTag
                     coordinates = (NSMutableArray *) @[@(feature.coordinate.longitude), @(feature.coordinate.latitude)];
                 } else if ([feature isKindOfClass:[MGLPolylineFeature class]]) {
                     geometryType = @"LineString";
-                    MGLPolyline *polyline = (MGLPolyline *)feature;
+                    MGLPolylineFeature *polyline = (MGLPolylineFeature *)feature;
                     for (int index = 0; index < polyline.pointCount; index++) {
                         CLLocationCoordinate2D coord = polyline.coordinates[index];
                         [coordinates addObject:@[@(coord.longitude), @(coord.latitude)]];
@@ -675,6 +675,12 @@ RCT_EXPORT_METHOD(queryRenderedFeatures:(nonnull NSNumber *)reactTag
                             [interiorRingCoordinates addObject:@[@(coord.longitude), @(coord.latitude)]];
                         }
                         [coordinates addObject:interiorRingCoordinates];
+                    }
+                } else if ([feature isKindOfClass:[MGLMultiPointFeature class]]) {
+                    MGLMultiPointFeature *multiPoint = (MGLMultiPointFeature *)feature;
+                    for (int index = 0; index < multiPoint.pointCount; index++) {
+                        CLLocationCoordinate2D coord = multiPoint.coordinates[index];
+                        [coordinates addObject:@[@(coord.longitude), @(coord.latitude)]];
                     }
                 }
                 // TODO: checks for MGLMultiPolyline and MGLMultiPolygon
