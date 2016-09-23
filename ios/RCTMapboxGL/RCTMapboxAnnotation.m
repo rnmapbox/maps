@@ -18,7 +18,7 @@
 }
 -(void)layoutSubviews {
     [super layoutSubviews];
-    [self.map layoutIfNeeded];
+    [self.map layoutSubviews];
 }
 
 @end
