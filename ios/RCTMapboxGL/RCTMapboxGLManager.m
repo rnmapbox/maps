@@ -648,20 +648,34 @@ RCT_EXPORT_METHOD(queryRenderedFeatures:(nonnull NSNumber *)reactTag
                 if ([feature isKindOfClass:[MGLPointFeature class]]) {
                     geometryType = @"Point";
                     coordinates = (NSMutableArray *) @[@(feature.coordinate.longitude), @(feature.coordinate.latitude)];
-                } else if ([feature isKindOfClass:[MGLPolyline class]]) {
-                    MGLMultiPoint *multiPoint = (MGLMultiPoint *)feature;
-                    for (int index = 0; index < multiPoint.pointCount; index++) {
-                        CLLocationCoordinate2D coord = multiPoint.coordinates[index];
-                        [coordinates addObject:@[@(coord.longitude), @(coord.latitude)]];
-                    }
+                } else if ([feature isKindOfClass:[MGLPolylineFeature class]]) {
                     geometryType = @"LineString";
-                } else if ([feature isKindOfClass:[MGLPolygon class]]) {
-                    MGLMultiPoint *multiPoint = (MGLMultiPoint *)feature;
-                    for (int index = 0; index < multiPoint.pointCount; index++) {
-                        CLLocationCoordinate2D coord = multiPoint.coordinates[index];
+                    MGLPolyline *polyline = (MGLPolyline *)feature;
+                    for (int index = 0; index < polyline.pointCount; index++) {
+                        CLLocationCoordinate2D coord = polyline.coordinates[index];
                         [coordinates addObject:@[@(coord.longitude), @(coord.latitude)]];
                     }
+                } else if ([feature isKindOfClass:[MGLPolygonFeature class]]) {
                     geometryType = @"Polygon";
+                    MGLPolygonFeature *polygon = (MGLPolygonFeature *)feature;
+
+                    // first add outer polygon ring coordinate array
+                    NSMutableArray *outerRingCoordinates = [[NSMutableArray alloc] init];
+                    for (int index = 0; index < polygon.pointCount; index++) {
+                        CLLocationCoordinate2D coord = polygon.coordinates[index];
+                        [outerRingCoordinates addObject:@[@(coord.longitude), @(coord.latitude)]];
+                    }
+                    [coordinates addObject:outerRingCoordinates];
+
+                    // then add any interior rings
+                    for (MGLPolygon *interiorRing in polygon.interiorPolygons) {
+                        NSMutableArray *interiorRingCoordinates = [[NSMutableArray alloc] init];
+                        for (int index = 0; index < interiorRing.pointCount; index++) {
+                            CLLocationCoordinate2D coord = interiorRing.coordinates[index];
+                            [interiorRingCoordinates addObject:@[@(coord.longitude), @(coord.latitude)]];
+                        }
+                        [coordinates addObject:interiorRingCoordinates];
+                    }
                 }
                 // TODO: checks for MGLMultiPolyline and MGLMultiPolygon
 
