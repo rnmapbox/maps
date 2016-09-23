@@ -621,20 +621,15 @@ RCT_EXPORT_METHOD(queryRenderedFeatures:(nonnull NSNumber *)reactTag
             }
             NSNumber *screenCoordX = pointDict[@"screenCoordX"];
             NSNumber *screenCoordY = pointDict[@"screenCoordY"];
-            NSSet<NSString *> *styleLayerIdentifiers = options[@"layers"];
-
-            CLLocationCoordinate2D location = [_map convertPoint:[sender locationInView:_map] toCoordinateFromView:_map];
-            CGPoint screenCoord = [sender locationInView:_map];
-
+            NSArray<NSString *> *styleLayerIdentifiersArray = options[@"layers"];
+            NSSet<NSString *> *styleLayerIdentifiers;
+            if (styleLayerIdentifiersArray) {
+                styleLayerIdentifiers = [NSSet setWithArray:styleLayerIdentifiersArray];
+            }
 
             CGPoint point = CGPointMake(screenCoordX.floatValue, screenCoordY.floatValue);
 
-            NSArray *features;
-            if (!styleLayerIdentifiers) {
-                features = [mapView visibleFeaturesAtPoint:point];
-            } else {
-                features = [mapView visibleFeaturesAtPoint:point inStyleLayersWithIdentifiers:styleLayerIdentifiers];
-            }
+            NSArray *features = [mapView visibleFeaturesAtPoint:point inStyleLayersWithIdentifiers:styleLayerIdentifiers];
 
             NSDictionary *geoJSONTypesByMGLClassName = @{
                     @"MGLPointFeature": @"Point",
