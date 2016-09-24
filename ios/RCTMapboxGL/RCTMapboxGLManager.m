@@ -639,59 +639,14 @@ RCT_EXPORT_METHOD(queryRenderedFeatures:(nonnull NSNumber *)reactTag
 
             // TODO: also accept Rect to use [mapView visibleFeaturesInRect:]
 
-            // TODO: switch to using MGLFeature's geoJSONFeature method if implemented - https://github.com/mapbox/mapbox-gl-native/issues/6302
             NSMutableArray *geoJSONFeatures = [[NSMutableArray alloc] init];
             for (id <MGLFeature> feature in features) {
-//                NSString *geometryType = geoJSONTypesByMGLClassName[NSStringFromClass([feature class])];
-                NSString *geometryType;
-                NSMutableArray *coordinates = [[NSMutableArray alloc] init];
-                if ([feature isKindOfClass:[MGLPointFeature class]]) {
-                    geometryType = @"Point";
-                    coordinates = (NSMutableArray *) @[@(feature.coordinate.longitude), @(feature.coordinate.latitude)];
-                } else if ([feature isKindOfClass:[MGLPolylineFeature class]]) {
-                    geometryType = @"LineString";
-                    MGLPolylineFeature *polyline = (MGLPolylineFeature *)feature;
-                    for (int index = 0; index < polyline.pointCount; index++) {
-                        CLLocationCoordinate2D coord = polyline.coordinates[index];
-                        [coordinates addObject:@[@(coord.longitude), @(coord.latitude)]];
-                    }
-                } else if ([feature isKindOfClass:[MGLPolygonFeature class]]) {
-                    geometryType = @"Polygon";
-                    MGLPolygonFeature *polygon = (MGLPolygonFeature *)feature;
-
-                    // first add outer polygon ring coordinate array
-                    NSMutableArray *outerRingCoordinates = [[NSMutableArray alloc] init];
-                    for (int index = 0; index < polygon.pointCount; index++) {
-                        CLLocationCoordinate2D coord = polygon.coordinates[index];
-                        [outerRingCoordinates addObject:@[@(coord.longitude), @(coord.latitude)]];
-                    }
-                    [coordinates addObject:outerRingCoordinates];
-
-                    // then add any interior rings
-                    for (MGLPolygon *interiorRing in polygon.interiorPolygons) {
-                        NSMutableArray *interiorRingCoordinates = [[NSMutableArray alloc] init];
-                        for (int index = 0; index < interiorRing.pointCount; index++) {
-                            CLLocationCoordinate2D coord = interiorRing.coordinates[index];
-                            [interiorRingCoordinates addObject:@[@(coord.longitude), @(coord.latitude)]];
-                        }
-                        [coordinates addObject:interiorRingCoordinates];
-                    }
-                } else if ([feature isKindOfClass:[MGLMultiPointFeature class]]) {
-                    MGLMultiPointFeature *multiPoint = (MGLMultiPointFeature *)feature;
-                    for (int index = 0; index < multiPoint.pointCount; index++) {
-                        CLLocationCoordinate2D coord = multiPoint.coordinates[index];
-                        [coordinates addObject:@[@(coord.longitude), @(coord.latitude)]];
-                    }
-                }
-                // TODO: checks for MGLMultiPolyline and MGLMultiPolygon
+                NSDictionary *geoJSONGeometry = [self geoJSONGeometryFromMGLFeature:feature];
 
                 NSDictionary *geoJSON = @{
                         @"type": @"Feature",
                         @"properties": feature.attributes,
-                        @"geometry": @{
-                                @"type": geometryType,
-                                @"coordinates": coordinates
-                        }
+                        @"geometry": geoJSONGeometry
                 };
                 [geoJSONFeatures addObject:geoJSON];
             }
@@ -699,6 +654,96 @@ RCT_EXPORT_METHOD(queryRenderedFeatures:(nonnull NSNumber *)reactTag
             callback(@[geoJSONFeatures]);
         }
     }];
+}
+
+- (NSDictionary*)geoJSONGeometryFromMGLFeature:(id <MGLFeature>)feature
+{
+    NSString *geometryType;
+
+    if ([feature isKindOfClass:[MGLShapeCollectionFeature class]]) {
+        geometryType = @"GeometryCollection";
+        MGLShapeCollectionFeature *shapeCollection = (MGLShapeCollectionFeature *) feature;
+        NSMutableArray *geometries = [[NSMutableArray alloc] init];
+        for (MGLShape <MGLFeature> *shape in shapeCollection.shapes) {
+            [geometries addObject:[self geoJSONGeometryFromMGLFeature:shape]];
+        }
+        return @{
+                @"type": geometryType,
+                @"geometries": geometries
+        };
+    }
+
+    NSMutableArray *coordinates = [[NSMutableArray alloc] init];
+
+    if ([feature isKindOfClass:[MGLPointFeature class]]) {
+        geometryType = @"Point";
+        coordinates = (NSMutableArray *) @[@(feature.coordinate.longitude), @(feature.coordinate.latitude)];
+    } else if ([feature isKindOfClass:[MGLPolylineFeature class]]) {
+        geometryType = @"LineString";
+        MGLPolylineFeature *polyline = (MGLPolylineFeature *)feature;
+        coordinates = [self getMGLPolylineCoordinates:polyline];
+    } else if ([feature isKindOfClass:[MGLPolygonFeature class]]) {
+        geometryType = @"Polygon";
+        MGLPolygonFeature *polygon = (MGLPolygonFeature *)feature;
+        coordinates = [self getMGLPolygonCoordinates:polygon];
+    } else if ([feature isKindOfClass:[MGLMultiPolylineFeature class]]) {
+        geometryType = @"MultiLineString";
+        MGLMultiPolylineFeature *multiPolyline = (MGLMultiPolylineFeature *)feature;
+        for (MGLPolyline *polyline in multiPolyline.polylines) {
+            [coordinates addObject:[self getMGLPolylineCoordinates:polyline]];
+        }
+    } else if ([feature isKindOfClass:[MGLMultiPolygonFeature class]]) {
+        geometryType = @"MultiPolygon";
+        MGLMultiPolygonFeature *multiPolygon = (MGLMultiPolygonFeature *)feature;
+        for (MGLPolygonFeature *polygon in multiPolygon.polygons) {
+            [coordinates addObject:[self getMGLPolygonCoordinates:polygon]];
+        }
+    } else if ([feature isKindOfClass:[MGLMultiPointFeature class]]) {
+        // this is checked last since MGLPolyline and MGLPolygon inherit from MGLMultiPoint
+        geometryType = @"MultiPoint";
+        MGLMultiPointFeature *multiPoint = (MGLMultiPointFeature *)feature;
+        for (int index = 0; index < multiPoint.pointCount; index++) {
+            CLLocationCoordinate2D coord = multiPoint.coordinates[index];
+            [coordinates addObject:@[@(coord.longitude), @(coord.latitude)]];
+        }
+    }
+
+    return @{
+            @"type": geometryType,
+            @"coordinates": coordinates
+    };
+}
+
+- (NSMutableArray *)getMGLPolylineCoordinates:(MGLPolylineFeature *)polyline
+{
+    NSMutableArray *coordinates = [[NSMutableArray alloc] init];
+    for (int index = 0; index < polyline.pointCount; index++) {
+        CLLocationCoordinate2D coord = polyline.coordinates[index];
+        [coordinates addObject:@[@(coord.longitude), @(coord.latitude)]];
+    }
+    return coordinates;
+}
+
+- (NSMutableArray *)getMGLPolygonCoordinates:(MGLPolygonFeature *)polygon
+{
+    NSMutableArray *coordinates = [[NSMutableArray alloc] init];
+
+    NSMutableArray *outerRingCoordinates = [[NSMutableArray alloc] init];
+    for (int index = 0; index < polygon.pointCount; index++) {
+        CLLocationCoordinate2D coord = polygon.coordinates[index];
+        [outerRingCoordinates addObject:@[@(coord.longitude), @(coord.latitude)]];
+    }
+    [coordinates addObject:outerRingCoordinates];
+
+    for (MGLPolygonFeature *interiorRing in polygon.interiorPolygons) {
+        NSMutableArray *interiorRingCoordinates = [[NSMutableArray alloc] init];
+        for (int index = 0; index < interiorRing.pointCount; index++) {
+            CLLocationCoordinate2D coord = interiorRing.coordinates[index];
+            [interiorRingCoordinates addObject:@[@(coord.longitude), @(coord.latitude)]];
+        }
+        [coordinates addObject:interiorRingCoordinates];
+    }
+    return coordinates;
 }
 
 @end
