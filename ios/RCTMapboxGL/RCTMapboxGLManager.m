@@ -607,16 +607,17 @@ RCT_EXPORT_METHOD(selectAnnotation:(nonnull NSNumber *) reactTag
 
 RCT_EXPORT_METHOD(queryRenderedFeatures:(nonnull NSNumber *)reactTag
                   options:(NSDictionary *)options
-                  callback:(RCTResponseSenderBlock)callback)
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             NSDictionary *pointDict = options[@"point"];
+            // TODO: also accept Rect to use [mapView visibleFeaturesInRect:]
             NSDictionary *rect = options[@"rect"];
-            if (!pointDict) {
-                // TODO: figure out best way to error this. Should we be using RCTPromise rather than a callback?
-//                reject(@"invalid_arguments", @"queryRenderedFeatures(): screenCoordX and screenCoordY are required.", nil);
+            if (!pointDict && !rect) {
+                reject(@"invalid_arguments", @"queryRenderedFeatures(): one of 'point' or 'rect' is required.", nil);
                 return;
             }
             NSNumber *screenCoordX = pointDict[@"screenCoordX"];
@@ -631,14 +632,6 @@ RCT_EXPORT_METHOD(queryRenderedFeatures:(nonnull NSNumber *)reactTag
 
             NSArray *features = [mapView visibleFeaturesAtPoint:point inStyleLayersWithIdentifiers:styleLayerIdentifiers];
 
-            NSDictionary *geoJSONTypesByMGLClassName = @{
-                    @"MGLPointFeature": @"Point",
-                    @"MGLPolylineFeature": @"LineString",
-                    @"MGLPolygonFeature": @"Polygon"
-            };
-
-            // TODO: also accept Rect to use [mapView visibleFeaturesInRect:]
-
             NSMutableArray *geoJSONFeatures = [[NSMutableArray alloc] init];
             for (id <MGLFeature> feature in features) {
                 NSDictionary *geoJSONGeometry = [self geoJSONGeometryFromMGLFeature:feature];
@@ -652,7 +645,7 @@ RCT_EXPORT_METHOD(queryRenderedFeatures:(nonnull NSNumber *)reactTag
                 [geoJSONFeatures addObject:geoJSON];
             }
 
-            callback(@[geoJSONFeatures]);
+            resolve(geoJSONFeatures);
         }
     }];
 }

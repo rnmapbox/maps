@@ -212,8 +212,8 @@ class MapView extends Component {
   selectAnnotation(annotationId, animated = true) {
     MapboxGLManager.selectAnnotation(findNodeHandle(this), annotationId, animated);
   }
-  queryRenderedFeatures(options, callback) {
-    MapboxGLManager.queryRenderedFeatures(findNodeHandle(this), options, callback);
+  queryRenderedFeatures(options) {
+    return MapboxGLManager.queryRenderedFeatures(findNodeHandle(this), options);
   }
 
   // Events
