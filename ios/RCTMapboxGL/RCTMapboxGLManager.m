@@ -645,6 +645,7 @@ RCT_EXPORT_METHOD(queryRenderedFeatures:(nonnull NSNumber *)reactTag
 
                 NSDictionary *geoJSON = @{
                         @"type": @"Feature",
+                        @"id": feature.identifier ? feature.identifier : [NSNull null],
                         @"properties": feature.attributes,
                         @"geometry": geoJSONGeometry
                 };
