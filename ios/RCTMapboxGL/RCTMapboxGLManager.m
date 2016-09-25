@@ -614,34 +614,42 @@ RCT_EXPORT_METHOD(queryRenderedFeatures:(nonnull NSNumber *)reactTag
         RCTMapboxGL *mapView = viewRegistry[reactTag];
         if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
             NSDictionary *pointDict = options[@"point"];
-            // TODO: also accept Rect to use [mapView visibleFeaturesInRect:]
-            NSDictionary *rect = options[@"rect"];
-            if (!pointDict && !rect) {
+            NSDictionary *rectDict = options[@"rect"];
+            if ((!pointDict && !rectDict) || (pointDict && rectDict)) {
                 reject(@"invalid_arguments", @"queryRenderedFeatures(): one of 'point' or 'rect' is required.", nil);
                 return;
             }
-            NSNumber *screenCoordX = pointDict[@"screenCoordX"];
-            NSNumber *screenCoordY = pointDict[@"screenCoordY"];
+
+            NSArray<id<MGLFeature>> *features;
             NSArray<NSString *> *styleLayerIdentifiersArray = options[@"layers"];
             NSSet<NSString *> *styleLayerIdentifiers;
             if (styleLayerIdentifiersArray) {
                 styleLayerIdentifiers = [NSSet setWithArray:styleLayerIdentifiersArray];
             }
 
-            CGPoint point = CGPointMake(screenCoordX.floatValue, screenCoordY.floatValue);
-
-            NSArray *features = [mapView visibleFeaturesAtPoint:point inStyleLayersWithIdentifiers:styleLayerIdentifiers];
+            if (pointDict) {
+                NSNumber *screenCoordX = pointDict[@"screenCoordX"];
+                NSNumber *screenCoordY = pointDict[@"screenCoordY"];
+                CGPoint point = CGPointMake(screenCoordX.floatValue, screenCoordY.floatValue);
+                features = [mapView visibleFeaturesAtPoint:point inStyleLayersWithIdentifiers:styleLayerIdentifiers];
+            } else {
+                NSNumber *left = rectDict[@"left"];
+                NSNumber *top = rectDict[@"top"];
+                NSNumber *right = rectDict[@"right"];
+                NSNumber *bottom = rectDict[@"bottom"];
+                CGFloat width = right.floatValue - left.floatValue;
+                CGFloat height = bottom.floatValue - top.floatValue;
+                CGRect rect = CGRectMake(left.floatValue, top.floatValue, width, height);
+                features = [mapView visibleFeaturesInRect:rect inStyleLayersWithIdentifiers:styleLayerIdentifiers];
+            }
 
             NSMutableArray *geoJSONFeatures = [[NSMutableArray alloc] init];
             for (id <MGLFeature> feature in features) {
                 NSDictionary *geoJSONGeometry = [self geoJSONGeometryFromMGLFeature:feature];
-
-                NSDictionary *geoJSON = @{
-                        @"type": @"Feature",
-                        @"id": feature.identifier ? feature.identifier : [NSNull null],
-                        @"properties": feature.attributes,
-                        @"geometry": geoJSONGeometry
-                };
+                NSDictionary *geoJSON = @{ @"type": @"Feature",
+                                           @"id": feature.identifier ? feature.identifier : [NSNull null],
+                                           @"properties": feature.attributes,
+                                           @"geometry": geoJSONGeometry };
                 [geoJSONFeatures addObject:geoJSON];
             }
 
@@ -661,10 +669,8 @@ RCT_EXPORT_METHOD(queryRenderedFeatures:(nonnull NSNumber *)reactTag
         for (MGLShape <MGLFeature> *shape in shapeCollection.shapes) {
             [geometries addObject:[self geoJSONGeometryFromMGLFeature:shape]];
         }
-        return @{
-                @"type": geometryType,
-                @"geometries": geometries
-        };
+        return @{ @"type": geometryType,
+                  @"geometries": geometries };
     }
 
     NSMutableArray *coordinates = [[NSMutableArray alloc] init];
@@ -683,7 +689,7 @@ RCT_EXPORT_METHOD(queryRenderedFeatures:(nonnull NSNumber *)reactTag
     } else if ([feature isKindOfClass:[MGLMultiPolylineFeature class]]) {
         geometryType = @"MultiLineString";
         MGLMultiPolylineFeature *multiPolyline = (MGLMultiPolylineFeature *)feature;
-        for (MGLPolyline *polyline in multiPolyline.polylines) {
+        for (MGLPolylineFeature *polyline in multiPolyline.polylines) {
             [coordinates addObject:[self getMGLPolylineCoordinates:polyline]];
         }
     } else if ([feature isKindOfClass:[MGLMultiPolygonFeature class]]) {
@@ -702,10 +708,8 @@ RCT_EXPORT_METHOD(queryRenderedFeatures:(nonnull NSNumber *)reactTag
         }
     }
 
-    return @{
-            @"type": geometryType,
-            @"coordinates": coordinates
-    };
+    return @{ @"type": geometryType,
+              @"coordinates": coordinates };
 }
 
 - (NSMutableArray *)getMGLPolylineCoordinates:(MGLPolylineFeature *)polyline
