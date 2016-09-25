@@ -212,8 +212,15 @@ class MapView extends Component {
   selectAnnotation(annotationId, animated = true) {
     MapboxGLManager.selectAnnotation(findNodeHandle(this), annotationId, animated);
   }
-  queryRenderedFeatures(options) {
-    return MapboxGLManager.queryRenderedFeatures(findNodeHandle(this), options);
+  queryRenderedFeatures(options, callback) {
+    let promise;
+    if (Platform.OS === 'android') {
+      promise = Promise.reject('queryRenderedFeatures() is not yet implemented on Android');
+    } else {
+      promise = MapboxGLManager.queryRenderedFeatures(findNodeHandle(this), options);
+    }
+    bindCallbackToPromise(callback, promise);
+    return promise;
   }
 
   // Events
