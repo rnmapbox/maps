@@ -183,6 +183,32 @@ Selects the annotation tagged with `id`, as if it would be tapped by the user.
 
 The transition is animated unless you pass `animated` as `false`.
 
+---
+
+```javascript
+this._map.queryRenderedFeatures({
+  point: { // required if rect not defined. Point on screen
+    screenCoordX: 287,
+    screenCoordY: 493
+  },
+  rect: { // required if point not defined. Dimensions of rectangle on screen
+    left: 267,
+    top: 473,
+    right: 307,
+    bottom: 513
+  },
+  layers: ['building'] // optional. Array of layer names
+},
+callback // optional. Alternative to returned promise
+);
+```
+
+Queries the features in the vector tiles at given `point` or `rect`. (iOS only - Android SDK's `queryRenderedFeatures` is in beta)
+
+All layers are queried unless you pass an array of layer names into `layers`.
+
+This method returns a promise that resolves with an array of GeoJSON features. It also optionally takes a `callback` as a second parameter with the signature `(err, features) => {}`.
+
 ## Styles
 
 #### Default styles
