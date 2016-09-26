@@ -12,6 +12,8 @@
 		C5DBB3461AF2EF2B00E611A9 /* RCTMapboxGL.m in Sources */ = {isa = PBXBuildFile; fileRef = C5DBB3451AF2EF2B00E611A9 /* RCTMapboxGL.m */; };
 		C5DBB34C1AF2EF2B00E611A9 /* libRCTMapboxGL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5DBB3401AF2EF2B00E611A9 /* libRCTMapboxGL.a */; };
 		C5DBB3661AF2EFB500E611A9 /* RCTMapboxGLManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C5DBB3651AF2EFB500E611A9 /* RCTMapboxGLManager.m */; };
+		CB7CB11F1F5092CD30562E07 /* MGLPolyline+RCTAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = CB7CBE434C8597B1509C3FCA /* MGLPolyline+RCTAdditions.m */; };
+		CB7CB49F42C4A55593F71A37 /* MGLPolygon+RCTAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = CB7CBC07803C0F5C28ECB201 /* MGLPolygon+RCTAdditions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,10 @@
 		C5DBB3511AF2EF2B00E611A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C5DBB3641AF2EFB500E611A9 /* RCTMapboxGLManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMapboxGLManager.h; sourceTree = "<group>"; };
 		C5DBB3651AF2EFB500E611A9 /* RCTMapboxGLManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMapboxGLManager.m; sourceTree = "<group>"; };
+		CB7CB655DADBFA72D7B5EB33 /* MGLPolygon+RCTAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MGLPolygon+RCTAdditions.h"; sourceTree = "<group>"; };
+		CB7CBC07803C0F5C28ECB201 /* MGLPolygon+RCTAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MGLPolygon+RCTAdditions.m"; sourceTree = "<group>"; };
+		CB7CBC3A586F235841D94946 /* MGLPolyline+RCTAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MGLPolyline+RCTAdditions.h"; sourceTree = "<group>"; };
+		CB7CBE434C8597B1509C3FCA /* MGLPolyline+RCTAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MGLPolyline+RCTAdditions.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +101,10 @@
 				C5DBB3651AF2EFB500E611A9 /* RCTMapboxGLManager.m */,
 				C167F89A1D18111F007C7A42 /* RCTMapboxGLConversions.h */,
 				C167F89B1D18112B007C7A42 /* RCTMapboxGLConversions.m */,
+				CB7CBE434C8597B1509C3FCA /* MGLPolyline+RCTAdditions.m */,
+				CB7CBC3A586F235841D94946 /* MGLPolyline+RCTAdditions.h */,
+				CB7CBC07803C0F5C28ECB201 /* MGLPolygon+RCTAdditions.m */,
+				CB7CB655DADBFA72D7B5EB33 /* MGLPolygon+RCTAdditions.h */,
 			);
 			path = RCTMapboxGL;
 			sourceTree = "<group>";
@@ -206,6 +216,8 @@
 				C5DBB3461AF2EF2B00E611A9 /* RCTMapboxGL.m in Sources */,
 				C5DBB3661AF2EFB500E611A9 /* RCTMapboxGLManager.m in Sources */,
 				C167F89C1D18112B007C7A42 /* RCTMapboxGLConversions.m in Sources */,
+				CB7CB11F1F5092CD30562E07 /* MGLPolyline+RCTAdditions.m in Sources */,
+				CB7CB49F42C4A55593F71A37 /* MGLPolygon+RCTAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
