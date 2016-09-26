@@ -16,9 +16,5 @@
 
 @implementation RCTMapboxAnnotation {
 }
--(void)layoutSubviews {
-    [super layoutSubviews];
-    [self.map layoutSubviews];
-}
 
 @end

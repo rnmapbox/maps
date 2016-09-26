@@ -64,6 +64,7 @@
         _clipsToBounds = YES;
         _finishedLoading = NO;
         _annotations = [NSMutableDictionary dictionary];
+        _reactSubviews = [NSMutableArray array];
     }
 
     return self;
@@ -119,6 +120,10 @@
     }
 
     [self addSubview:_map];
+    for (UIView *annotations in _reactSubviews) {
+        [_map addAnnotation:annotations];
+    }
+    
     [self layoutSubviews];
 }
 
@@ -133,7 +138,7 @@
         [self createMapIfNeeded];
     }
     _map.frame = self.bounds;
-    [_map layoutIfNeeded];
+    [_map layoutSubviews];
 }
 
 // React subviews for custom annotation management
@@ -151,7 +156,7 @@
     // similarly, when the children are being removed we have to do the appropriate
     // underlying mapview action here.
     if ([subview isKindOfClass:[RCTMapboxAnnotation class]]) {
-        [self removeAnnotation:(id<MGLAnnotation>)subview];
+        [_map removeAnnotation:(id<MGLAnnotation>)subview];
     }
     [_reactSubviews removeObject:(UIView *)subview];
 }
@@ -242,7 +247,7 @@
 }
 
 - (nullable MGLAnnotationView *)mapView:(MGLMapView *)mapView viewForAnnotation:(id <MGLAnnotation>)annotation {
-    if ([annotation isKindOfClass:[RCTMapboxAnnotation class]]){
+    if (![annotation isKindOfClass:[RCTMGLAnnotation class]] ){
         return annotation;
     }
     return nil;
