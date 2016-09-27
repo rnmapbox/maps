@@ -20,7 +20,7 @@ const viewConfig = {
 
 const propTypes = {
   ...View.propTypes,
-  
+  id: PropTypes.string.isRequired,
   title: PropTypes.string,
   subtitle: PropTypes.string,
   coordinate: PropTypes.shape({
@@ -31,13 +31,15 @@ const propTypes = {
 };
 
 class MapboxAnnotation extends React.Component {
-   
+  setNativeProps(nativeProps) {
+    this.marker.setNativeProps(nativeProps);
+  }
+  
   render() {
     return (
       <RCTMapboxAnnotation
         ref={ref => { this.marker = ref; }}
         {...this.props}
-        style={[styles.marker, this.props.style]}
       />
     );
   }
@@ -45,13 +47,6 @@ class MapboxAnnotation extends React.Component {
 
 MapboxAnnotation.propTypes = propTypes;
 MapboxAnnotation.viewConfig = viewConfig;
-
-const styles = StyleSheet.create({
-  marker: {
-    position: 'absolute',
-    backgroundColor: 'transparent',
-  },
-});
 
 const RCTMapboxAnnotation = requireNativeComponent('RCTMapboxAnnotation', MapboxAnnotation);
 module.exports = MapboxAnnotation;
