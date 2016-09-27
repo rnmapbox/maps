@@ -232,6 +232,17 @@ class MapView extends Component {
   deselectAnnotation() {
     MapboxGLManager.deselectAnnotation(findNodeHandle(this));
   }
+  queryRenderedFeatures(options, callback) {
+    let promise;
+    if (Platform.OS === 'android') {
+      promise = Promise.reject('queryRenderedFeatures() is not yet implemented on Android');
+    } else {
+      promise = MapboxGLManager.queryRenderedFeatures(findNodeHandle(this), options);
+    }
+    bindCallbackToPromise(callback, promise);
+    return promise;
+  }
+
   // Events
   _onRegionDidChange(event: Event) {
     if (this.props.onRegionDidChange) this.props.onRegionDidChange(event.nativeEvent.src);

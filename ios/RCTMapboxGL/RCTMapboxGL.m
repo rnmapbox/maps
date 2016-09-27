@@ -598,6 +598,17 @@
                                @"screenCoordX": @(screenCoord.x) } });
 }
 
+- (nonnull NSArray<id<MGLFeature>> *)visibleFeaturesAtPoint:(CGPoint)point
+                               inStyleLayersWithIdentifiers:(nullable NSSet<NSString *> *)styleLayerIdentifiers
+{
+    return [_map visibleFeaturesAtPoint:point inStyleLayersWithIdentifiers:styleLayerIdentifiers];
+}
+
+- (nonnull NSArray<id<MGLFeature>> *)visibleFeaturesInRect:(CGRect)rect inStyleLayersWithIdentifiers:(NSSet<NSString *> *)identifiers
+{
+    return [_map visibleFeaturesInRect:rect inStyleLayersWithIdentifiers:identifiers];
+}
+
 - (void)mapViewDidFinishLoadingMap:(MGLMapView *)mapView
 {
     if (!_onFinishLoadingMap) { return; }

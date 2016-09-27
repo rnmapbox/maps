@@ -16,6 +16,8 @@
 #import "UIView+React.h"
 #import "RCTUIManager.h"
 #import "RCTMapboxGLConversions.h"
+#import "MGLPolygon+RCTAdditions.h"
+#import "MGLPolyline+RCTAdditions.h"
 
 @implementation RCTMapboxGLManager
 
@@ -616,4 +618,113 @@ RCT_EXPORT_METHOD(deselectAnnotation:(nonnull NSNumber *) reactTag)
         }
     }];
 }
+
+RCT_EXPORT_METHOD(queryRenderedFeatures:(nonnull NSNumber *)reactTag
+                  options:(NSDictionary *)options
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, RCTMapboxGL *> *viewRegistry) {
+        RCTMapboxGL *mapView = viewRegistry[reactTag];
+        if ([mapView isKindOfClass:[RCTMapboxGL class]]) {
+            NSDictionary *pointDict = options[@"point"];
+            NSDictionary *rectDict = options[@"rect"];
+            if ((!pointDict && !rectDict) || (pointDict && rectDict)) {
+                reject(@"invalid_arguments", @"queryRenderedFeatures(): one of 'point' or 'rect' is required.", nil);
+                return;
+            }
+
+            NSArray<id<MGLFeature>> *features;
+            NSArray<NSString *> *styleLayerIdentifiersArray = options[@"layers"];
+            NSSet<NSString *> *styleLayerIdentifiers;
+            if (styleLayerIdentifiersArray) {
+                styleLayerIdentifiers = [NSSet setWithArray:styleLayerIdentifiersArray];
+            }
+
+            if (pointDict) {
+                NSNumber *screenCoordX = pointDict[@"screenCoordX"];
+                NSNumber *screenCoordY = pointDict[@"screenCoordY"];
+                CGPoint point = CGPointMake(screenCoordX.floatValue, screenCoordY.floatValue);
+                features = [mapView visibleFeaturesAtPoint:point inStyleLayersWithIdentifiers:styleLayerIdentifiers];
+            } else {
+                NSNumber *left = rectDict[@"left"];
+                NSNumber *top = rectDict[@"top"];
+                NSNumber *right = rectDict[@"right"];
+                NSNumber *bottom = rectDict[@"bottom"];
+                CGFloat width = right.floatValue - left.floatValue;
+                CGFloat height = bottom.floatValue - top.floatValue;
+                CGRect rect = CGRectMake(left.floatValue, top.floatValue, width, height);
+                features = [mapView visibleFeaturesInRect:rect inStyleLayersWithIdentifiers:styleLayerIdentifiers];
+            }
+
+            NSMutableArray *geoJSONFeatures = [NSMutableArray arrayWithCapacity:features.count];
+            for (id <MGLFeature> feature in features) {
+                NSDictionary *geoJSONGeometry = [self geoJSONGeometryFromMGLFeature:feature];
+                NSDictionary *geoJSON = @{ @"type": @"Feature",
+                                           @"id": feature.identifier ? feature.identifier : [NSNull null],
+                                           @"properties": feature.attributes,
+                                           @"geometry": geoJSONGeometry };
+                [geoJSONFeatures addObject:geoJSON];
+            }
+
+            resolve(geoJSONFeatures);
+        }
+    }];
+}
+
+- (NSDictionary*)geoJSONGeometryFromMGLFeature:(id <MGLFeature>)feature
+{
+    NSString *geometryType;
+
+    if ([feature isKindOfClass:[MGLShapeCollectionFeature class]]) {
+        geometryType = @"GeometryCollection";
+        MGLShapeCollectionFeature *shapeCollection = (MGLShapeCollectionFeature *) feature;
+        NSMutableArray *geometries = [[NSMutableArray alloc] init];
+        for (MGLShape <MGLFeature> *shape in shapeCollection.shapes) {
+            [geometries addObject:[self geoJSONGeometryFromMGLFeature:shape]];
+        }
+        return @{ @"type": geometryType,
+                  @"geometries": geometries };
+    }
+
+    NSMutableArray *coordinates = [[NSMutableArray alloc] init];
+
+    if ([feature isKindOfClass:[MGLPointFeature class]]) {
+        geometryType = @"Point";
+        coordinates = [[NSMutableArray alloc] initWithArray:@[@(feature.coordinate.longitude), @(feature.coordinate.latitude)]];
+    } else if ([feature isKindOfClass:[MGLPolylineFeature class]]) {
+        geometryType = @"LineString";
+        MGLPolylineFeature *polyline = (MGLPolylineFeature *)feature;
+        coordinates = polyline.coordinateArray;
+    } else if ([feature isKindOfClass:[MGLPolygonFeature class]]) {
+        geometryType = @"Polygon";
+        MGLPolygonFeature *polygon = (MGLPolygonFeature *)feature;
+        coordinates = polygon.coordinateArray;
+    } else if ([feature isKindOfClass:[MGLMultiPolylineFeature class]]) {
+        geometryType = @"MultiLineString";
+        MGLMultiPolylineFeature *multiPolyline = (MGLMultiPolylineFeature *)feature;
+        for (MGLPolyline *polyline in multiPolyline.polylines) {
+            [coordinates addObject:polyline.coordinateArray];
+        }
+    } else if ([feature isKindOfClass:[MGLMultiPolygonFeature class]]) {
+        geometryType = @"MultiPolygon";
+        MGLMultiPolygonFeature *multiPolygon = (MGLMultiPolygonFeature *)feature;
+        for (MGLPolygon *polygon in multiPolygon.polygons) {
+            [coordinates addObject:polygon.coordinateArray];
+        }
+    } else if ([feature isKindOfClass:[MGLMultiPointFeature class]]) {
+        // this is checked last since MGLPolyline and MGLPolygon inherit from MGLMultiPoint
+        geometryType = @"MultiPoint";
+        MGLMultiPointFeature *multiPoint = (MGLMultiPointFeature *)feature;
+        for (int index = 0; index < multiPoint.pointCount; index++) {
+            CLLocationCoordinate2D coord = multiPoint.coordinates[index];
+            [coordinates addObject:[[NSMutableArray alloc] initWithArray:@[@(coord.longitude), @(coord.latitude)]]];
+        }
+    }
+
+    return @{ @"type": geometryType,
+              @"coordinates": coordinates };
+}
+
+>>>>>>> alseageo/queryRenderedFeatures
 @end
