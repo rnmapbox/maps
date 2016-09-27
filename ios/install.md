@@ -9,7 +9,7 @@ npm install react-native-mapbox-gl --save
 
 ### 1: Adding RCTMapboxGL.xcodeproj
 
-In the Xcode's `Project navigator`, right click on project's name ➜ `Add Files to <...>`. Add `node_modules/react-native-mapbox-gl/ios/RCTMapboxGL.xcodeproj`
+In the Xcode's `Project navigator`, right click on the `Libraries` folder ➜ `Add Files to <...>`. Add `node_modules/react-native-mapbox-gl/ios/RCTMapboxGL.xcodeproj`
 
 ![](https://dl.dropboxusercontent.com/s/6trwtezp3009eot/2016-03-14%20at%2012.52%20PM.png)
 
