@@ -13,6 +13,7 @@ import {
 import cloneDeep from 'lodash/cloneDeep';
 import clone from 'lodash/clone';
 import isEqual from 'lodash/isEqual';
+import Annotation from './Annotation';
 
 const { MapboxGLManager } = NativeModules;
 const { mapStyles, userTrackingMode, userLocationVerticalAlignment, unknownResourceCount } = MapboxGLManager;
@@ -438,6 +439,7 @@ const MapboxGLView = requireNativeComponent('RCTMapboxGL', MapView, {
 
 const Mapbox = {
   MapView,
+  Annotation,
   mapStyles, userTrackingMode, userLocationVerticalAlignment, unknownResourceCount,
   getMetricsEnabled, setMetricsEnabled,
   setAccessToken,
