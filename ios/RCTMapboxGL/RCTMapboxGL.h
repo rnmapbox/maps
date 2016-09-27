@@ -66,7 +66,6 @@
 @property (nonatomic, copy) RCTDirectEventBlock onFinishLoadingMap;
 @property (nonatomic, copy) RCTDirectEventBlock onStartLoadingMap;
 @property (nonatomic, copy) RCTDirectEventBlock onLocateUserFailed;
-@property (nonatomic, copy) NSArray *custom;
 
 @end
 
