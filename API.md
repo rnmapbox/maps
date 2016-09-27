@@ -43,7 +43,7 @@ import { MapView } from 'react-native-mapbox-gl';
 | `contentInset` | `array` | Optional | Change the padding of the viewport of the map. Offset is in pixels. `[top, right, bottom, left]` `[0, 0, 0, 0]` |
 | `style`  | React styles | Optional | Styles the actual map view container | N/A |
 | `debugActive`  | `boolean` | Optional | Turns on debug mode. | `false` |
-| `children` | `array` | Optional |  An array of custom Annotation views (iOS only). You must import Annotation view from the component and put your custom React Native view inside | null |
+| `children` | `array` | Optional |  An array of custom Annotation views (iOS only). You must import Annotation view from the component and put your custom React Native view inside. Annotation view must have unique id prop defined as well as coordinate | null |
 
 
 ## Callback props

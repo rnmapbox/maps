@@ -17,4 +17,14 @@
 @implementation RCTMapboxAnnotation {
 }
 
+-(NSString *)reuseIdentifier {
+    return self.id;
+}
+
+-(void)layoutSubviews {
+    [super layoutSubviews];
+    [self.map layoutSubviews];
+}
+
+
 @end

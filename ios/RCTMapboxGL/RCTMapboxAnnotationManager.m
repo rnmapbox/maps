@@ -33,7 +33,7 @@ RCT_EXPORT_MODULE()
     return marker;
 }
 
-
+RCT_EXPORT_VIEW_PROPERTY(id, NSString)
 RCT_EXPORT_VIEW_PROPERTY(title, NSString)
 RCT_EXPORT_VIEW_PROPERTY(subtitle, NSString)
 RCT_EXPORT_VIEW_PROPERTY(coordinate, CLLocationCoordinate2D)
