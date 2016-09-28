@@ -45,6 +45,7 @@
 - (void)upsertAnnotation:(NSObject *)annotation;
 - (void)removeAnnotation:(NSString*)selectedIdentifier;
 - (void)removeAllAnnotations;
+- (void)restoreAnnotationPosition:(NSString *)annotationId;
 
 // Getters
 - (MGLCoordinateBounds)visibleCoordinateBounds;

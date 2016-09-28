@@ -23,7 +23,7 @@
 
 -(void)layoutSubviews {
     [super layoutSubviews];
-    [self.map layoutSubviews];
+    [self.map restoreAnnotationPosition:self.id];
 }
 
 

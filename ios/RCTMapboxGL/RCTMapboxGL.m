@@ -43,15 +43,6 @@
     MGLAnnotationVerticalAlignment _userLocationVerticalAlignment;
     /* So we don't fire onChangeUserTracking mode when triggered by props */
     BOOL _isChangingUserTracking;
-    // Array to manually track RN subviews
-    //
-    // AIRMap implicitly creates subviews that aren't regular RN children
-    // (SMCalloutView injects an overlay subview), which otherwise confuses RN
-    // during component re-renders:
-    // https://github.com/facebook/react-native/blob/v0.16.0/React/Modules/RCTUIManager.m#L657
-    //
-    // Implementation based on RCTTextField, another component with indirect children
-    // https://github.com/facebook/react-native/blob/v0.16.0/Libraries/Text/RCTTextField.m#L20
     NSMutableDictionary<NSString *, UIView *> *_reactSubviews;
 }
 
@@ -209,6 +200,13 @@
     }
 }
 
+- (void)restoreAnnotationPosition:(NSString *)annotationId {
+    if (_reactSubviews[annotationId] && [_reactSubviews[annotationId] isKindOfClass:[RCTMapboxAnnotation class]]){
+        RCTMapboxAnnotation *annotation = (RCTMapboxAnnotation *)_reactSubviews[annotationId];
+        CGPoint point = [_map convertCoordinate:annotation.coordinate toPointToView:_map];
+        annotation.center = point;
+    }
+}
 - (CGFloat)mapView:(MGLMapView *)mapView alphaForShapeAnnotation:(RCTMGLAnnotationPolyline *)shape
 {
     if ([shape isKindOfClass:[RCTMGLAnnotationPolyline class]]) {
