@@ -43,16 +43,7 @@
     MGLAnnotationVerticalAlignment _userLocationVerticalAlignment;
     /* So we don't fire onChangeUserTracking mode when triggered by props */
     BOOL _isChangingUserTracking;
-    // Array to manually track RN subviews
-    //
-    // AIRMap implicitly creates subviews that aren't regular RN children
-    // (SMCalloutView injects an overlay subview), which otherwise confuses RN
-    // during component re-renders:
-    // https://github.com/facebook/react-native/blob/v0.16.0/React/Modules/RCTUIManager.m#L657
-    //
-    // Implementation based on RCTTextField, another component with indirect children
-    // https://github.com/facebook/react-native/blob/v0.16.0/Libraries/Text/RCTTextField.m#L20
-    NSMutableArray<UIView *> *_reactSubviews;
+    NSMutableDictionary<NSString *, UIView *> *_reactSubviews;
 }
 
 // View creation
@@ -64,7 +55,7 @@
         _clipsToBounds = YES;
         _finishedLoading = NO;
         _annotations = [NSMutableDictionary dictionary];
-        _reactSubviews = [NSMutableArray array];
+        _reactSubviews = [NSMutableDictionary dictionary];
     }
 
     return self;
@@ -120,8 +111,8 @@
     }
 
     [self addSubview:_map];
-    for (UIView *annotations in _reactSubviews) {
-        [_map addAnnotation:annotations];
+    for (NSString *key in [_reactSubviews allKeys]) {
+        [_map addAnnotation:_reactSubviews[key]];
     }
     
     [self layoutSubviews];
@@ -146,23 +137,25 @@
     // Our desired API is to pass up markers/overlays as children to the mapview component.
     // This is where we intercept them and do the appropriate underlying mapview action.
     if ([subview isKindOfClass:[RCTMapboxAnnotation class]]) {
-        ((RCTMapboxAnnotation *) subview).map = self;
-        [_map addAnnotation:(id <MGLAnnotation>) subview];
+        RCTMapboxAnnotation * annotation = (RCTMapboxAnnotation *) subview;
+        annotation.map = self;
+        [_map addAnnotation:annotation];
+        NSString *key = annotation.reuseIdentifier;
+        _reactSubviews[key] = annotation;
     }
-    [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
 }
 
 - (void)removeReactSubview:(id<RCTComponent>)subview {
     // similarly, when the children are being removed we have to do the appropriate
     // underlying mapview action here.
     if ([subview isKindOfClass:[RCTMapboxAnnotation class]]) {
-        [_map removeAnnotation:(id<MGLAnnotation>)subview];
+        RCTMapboxAnnotation * annotation = (RCTMapboxAnnotation *) subview;
+        [_reactSubviews removeObjectForKey:annotation.reuseIdentifier];
     }
-    [_reactSubviews removeObject:(UIView *)subview];
 }
 
 - (NSArray<id<RCTComponent>> *)reactSubviews {
-    return _reactSubviews;
+    return nil;
 }
 
 
@@ -207,6 +200,13 @@
     }
 }
 
+- (void)restoreAnnotationPosition:(NSString *)annotationId {
+    if (_reactSubviews[annotationId] && [_reactSubviews[annotationId] isKindOfClass:[RCTMapboxAnnotation class]]){
+        RCTMapboxAnnotation *annotation = (RCTMapboxAnnotation *)_reactSubviews[annotationId];
+        CGPoint point = [_map convertCoordinate:annotation.coordinate toPointToView:_map];
+        annotation.center = point;
+    }
+}
 - (CGFloat)mapView:(MGLMapView *)mapView alphaForShapeAnnotation:(RCTMGLAnnotationPolyline *)shape
 {
     if ([shape isKindOfClass:[RCTMGLAnnotationPolyline class]]) {
@@ -247,8 +247,13 @@
 }
 
 - (nullable MGLAnnotationView *)mapView:(MGLMapView *)mapView viewForAnnotation:(id <MGLAnnotation>)annotation {
-    if (![annotation isKindOfClass:[RCTMGLAnnotation class]] ){
-        return annotation;
+    if ([annotation isKindOfClass:[RCTMapboxAnnotation class]] ){
+        RCTMapboxAnnotation *customAnnotation = (RCTMapboxAnnotation *)annotation;
+        MGLAnnotationView *annotationView = [mapView dequeueReusableAnnotationViewWithIdentifier:customAnnotation.reuseIdentifier];
+        if (!annotationView){
+            annotationView = _reactSubviews[customAnnotation.reuseIdentifier];
+        }
+        return annotationView;
     }
     return nil;
 }
