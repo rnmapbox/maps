@@ -27,6 +27,8 @@
     double _initialDirection;
     double _initialZoomLevel;
     BOOL _zoomEnabled;
+    double _minimumZoomLevel;
+    double _maximumZoomLevel;
     BOOL _clipsToBounds;
     BOOL _debugActive;
     BOOL _finishedLoading;
@@ -95,6 +97,8 @@
     _map.scrollEnabled = _scrollEnabled;
     _map.zoomEnabled = _zoomEnabled;
     _map.pitchEnabled = _pitchEnabled;
+    _map.minimumZoomLevel = _minimumZoomLevel;
+    _map.maximumZoomLevel = _maximumZoomLevel;
     _map.showsUserLocation = _showsUserLocation;
     _map.styleURL = _styleURL;
     _map.zoomLevel = _initialZoomLevel;
@@ -356,6 +360,20 @@
     if (_zoomEnabled == zoomEnabled) { return; }
     _zoomEnabled = zoomEnabled;
     if (_map) { _map.zoomEnabled = zoomEnabled; }
+}
+
+- (void)setMinimumZoomLevel:(double)minimumZoomLevel
+{
+    if (_minimumZoomLevel == minimumZoomLevel) { return; }
+    _minimumZoomLevel = minimumZoomLevel;
+    if (_map) { _map.minimumZoomLevel = minimumZoomLevel; }
+}
+
+- (void)setMaximumZoomLevel:(double)maximumZoomLevel
+{
+    if (_maximumZoomLevel == maximumZoomLevel) { return; }
+    _maximumZoomLevel = maximumZoomLevel;
+    if (_map) { _map.maximumZoomLevel = maximumZoomLevel; }
 }
 
 - (void)setPitchEnabled:(BOOL)pitchEnabled

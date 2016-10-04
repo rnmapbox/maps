@@ -292,6 +292,8 @@ class MapView extends Component {
     rotateEnabled: PropTypes.bool,
     scrollEnabled: PropTypes.bool,
     zoomEnabled: PropTypes.bool,
+    minimumZoomLevel: PropTypes.number,
+    maximumZoomLevel: PropTypes.number,
     pitchEnabled: PropTypes.bool,
     annotationsPopUpEnabled: PropTypes.bool,
     showsUserLocation: PropTypes.bool,
@@ -347,6 +349,8 @@ class MapView extends Component {
     },
     initialDirection: 0,
     initialZoomLevel: 0,
+    minimumZoomLevel: 0,
+    maximumZoomLevel: 20, // default in native map view
     debugActive: false,
     rotateEnabled: true,
     scrollEnabled: true,
