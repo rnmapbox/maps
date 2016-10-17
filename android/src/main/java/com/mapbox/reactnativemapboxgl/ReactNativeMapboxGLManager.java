@@ -89,6 +89,16 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
         view.setInitialZoomLevel(value);
     }
 
+    @ReactProp(name = "minimumZoomLevel")
+    public void setMinumumZoomLevel(ReactNativeMapboxGLView view, double value) {
+        view.setMinimumZoomLevel(value);
+    }
+
+    @ReactProp(name = "maximumZoomLevel")
+    public void setMaxumumZoomLevel(ReactNativeMapboxGLView view, double value) {
+        view.setMaximumZoomLevel(value);
+    }
+
     @ReactProp(name = "initialDirection")
     public void setInitialDirection(ReactNativeMapboxGLView view, double value) {
         view.setInitialDirection(value);

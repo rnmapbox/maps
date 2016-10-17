@@ -45,6 +45,8 @@ RCT_EXPORT_VIEW_PROPERTY(debugActive, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(rotateEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(scrollEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(zoomEnabled, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(minimumZoomLevel, double);
+RCT_EXPORT_VIEW_PROPERTY(maximumZoomLevel, double);
 RCT_EXPORT_VIEW_PROPERTY(pitchEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(showsUserLocation, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(styleURL, NSURL);
@@ -726,5 +728,4 @@ RCT_EXPORT_METHOD(queryRenderedFeatures:(nonnull NSNumber *)reactTag
               @"coordinates": coordinates };
 }
 
->>>>>>> alseageo/queryRenderedFeatures
 @end

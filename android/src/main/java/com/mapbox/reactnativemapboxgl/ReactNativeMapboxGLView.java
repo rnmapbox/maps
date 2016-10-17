@@ -57,6 +57,8 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
     private boolean _showsUserLocation;
     private boolean _annotationsPopUpEnabled = true;
     private boolean _zoomEnabled = true;
+    private double _minimumZoomLevel = 0;
+    private double _maximumZoomLevel = 20;
     private boolean _pitchEnabled = true;
     private boolean _scrollEnabled = true;
     private boolean _rotateEnabled = true;
@@ -145,6 +147,9 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         _map.getTrackingSettings().setMyLocationTrackingMode(_locationTrackingMode);
         _map.getTrackingSettings().setMyBearingTrackingMode(_bearingTrackingMode);
         _map.setPadding(_paddingLeft, _paddingTop, _paddingRight, _paddingBottom);
+        _map.setMinZoom(_minimumZoomLevel);
+        _map.setMaxZoom(_maximumZoomLevel);
+
         UiSettings uiSettings = _map.getUiSettings();
         uiSettings.setZoomGesturesEnabled(_zoomEnabled);
         uiSettings.setScrollGesturesEnabled(_scrollEnabled);
@@ -251,6 +256,22 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         _zoomEnabled = value;
         if (_map != null) {
             _map.getUiSettings().setZoomGesturesEnabled(value);
+        }
+    }
+
+    public void setMinimumZoomLevel(double value) {
+        if (_minimumZoomLevel == value) { return; }
+        _minimumZoomLevel = value;
+        if (_map != null) {
+            _map.setMinZoom(value);
+        }
+    }
+
+    public void setMaximumZoomLevel(double value) {
+        if (_maximumZoomLevel == value) { return; }
+        _maximumZoomLevel = value;
+        if (_map != null) {
+            _map.setMaxZoom(value);
         }
     }
 
