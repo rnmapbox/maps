@@ -316,12 +316,12 @@ class MapView extends Component {
       strokeWidth: PropTypes.number,
       id: PropTypes.string,
       type: PropTypes.string.isRequired,
-      rightCalloutAccessory: PropTypes.object({
+      rightCalloutAccessory: PropTypes.shape({
         height: PropTypes.number,
         width: PropTypes.number,
         url: PropTypes.string
       }),
-      annotationImage: PropTypes.object({
+      annotationImage: PropTypes.shape({
         height: PropTypes.number,
         width: PropTypes.number,
         url: PropTypes.string
