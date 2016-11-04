@@ -5,7 +5,7 @@ project, you can also add the react-native-mapbox-gl project to your Podfile.
 
 1. Run `npm install --save react-native-mapbox-gl`
 2. In your `podfile`, make sure that `platform :ios, '8.0'` is set to `8.0`
-3. Add `pod 'RCTMapboxGL', :path => 'node_modules/react-native-mapbox-gl/ios'`
+3. Add `pod 'RCTMapboxGL', :path => '../node_modules/react-native-mapbox-gl/ios'`
    to your `Podfile` file.  
    (The path depends on your Podfile location.)
 4. Open your Xcode project and ensure that the "Build Settings" parameter
