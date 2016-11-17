@@ -1,3 +1,13 @@
+#v5.1.0
+
+* Adds prop `annotationsPopUpEnabled` and method `deselectAnnotation` [#418](https://github.com/mapbox/react-native-mapbox-gl/pull/418)
+* Adds prop `pitchEnabled` [#407](https://github.com/mapbox/react-native-mapbox-gl/pull/407)
+* Fixed an issue on Android where large polylines would crash the app [#412](https://github.com/mapbox/react-native-mapbox-gl/commit/353063eefce8b7529daab0b29a56884d940aef36)
+* Adds methods `queryRenderedFeatures` and `visibleFeaturesAtPoint` on iOS [#419](https://github.com/mapbox/react-native-mapbox-gl/pull/419)
+* Adds prop `reuseIdentifier` for custom images on iOS [#426](https://github.com/mapbox/react-native-mapbox-gl/pull/426)
+* A few Cocoapod installation fixes [#450](https://github.com/mapbox/react-native-mapbox-gl/commit/abeb8b6bab288a70f8588298668998b31732ab43) [#455](https://github.com/mapbox/react-native-mapbox-gl/commit/728a1ce8f311a76eac6da60ddd32f0997a1c78f7)
+* The module no longer checks for an access token on iOS since the SDK handles this [#456](https://github.com/mapbox/react-native-mapbox-gl/pull/456)
+
 #v5.0.0
 
 * Major breaking API changes. See the [API documentation](/API.md) for details.
