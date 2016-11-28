@@ -62,6 +62,7 @@
 @property (nonatomic, copy) RCTDirectEventBlock onRegionWillChange;
 @property (nonatomic, copy) RCTDirectEventBlock onChangeUserTrackingMode;
 @property (nonatomic, copy) RCTDirectEventBlock onOpenAnnotation;
+@property (nonatomic, copy) RCTDirectEventBlock onCloseAnnotation;
 @property (nonatomic, copy) RCTDirectEventBlock onRightAnnotationTapped;
 @property (nonatomic, copy) RCTDirectEventBlock onUpdateUserLocation;
 @property (nonatomic, copy) RCTDirectEventBlock onTap;

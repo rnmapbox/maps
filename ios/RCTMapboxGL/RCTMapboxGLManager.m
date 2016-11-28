@@ -61,6 +61,7 @@ RCT_EXPORT_VIEW_PROPERTY(onRegionDidChange, RCTDirectEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onRegionWillChange, RCTDirectEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onChangeUserTrackingMode, RCTDirectEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onOpenAnnotation, RCTDirectEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onCloseAnnotation, RCTDirectEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onRightAnnotationTapped, RCTDirectEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onUpdateUserLocation, RCTDirectEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onTap, RCTDirectEventBlock);

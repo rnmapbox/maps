@@ -557,6 +557,17 @@
                                        @"longitude": @(annotation.coordinate.longitude)} });
 }
 
+-(void)mapView:(MGLMapView *)mapView didDeselectAnnotation:(nonnull id<MGLAnnotation>)annotation
+{
+    if (!annotation.title || !annotation.subtitle) { return; }
+    if (!_onCloseAnnotation) { return; }
+    _onCloseAnnotation(@{ @"target": self.reactTag,
+                            @"src": @{ @"title": annotation.title,
+                                       @"subtitle": annotation.subtitle,
+                                       @"id": [(RCTMGLAnnotation *) annotation id],
+                                       @"latitude": @(annotation.coordinate.latitude),
+                                       @"longitude": @(annotation.coordinate.longitude)} });
+}
 
 - (void)mapView:(RCTMapboxGL *)mapView regionDidChangeAnimated:(BOOL)animated
 {

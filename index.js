@@ -167,6 +167,7 @@ class MapView extends Component {
     this._onRegionDidChange = this._onRegionDidChange.bind(this);
     this._onRegionWillChange = this._onRegionWillChange.bind(this);
     this._onOpenAnnotation = this._onOpenAnnotation.bind(this);
+    this._onCloseAnnotation = this._onCloseAnnotation.bind(this);
     this._onRightAnnotationTapped = this._onRightAnnotationTapped.bind(this);
     this._onChangeUserTrackingMode = this._onChangeUserTrackingMode.bind(this);
     this._onUpdateUserLocation = this._onUpdateUserLocation.bind(this);
@@ -253,6 +254,9 @@ class MapView extends Component {
   _onOpenAnnotation(event: Event) {
     if (this.props.onOpenAnnotation) this.props.onOpenAnnotation(event.nativeEvent.src);
   }
+  _onCloseAnnotation(event: Event) {
+    if (this.props.onCloseAnnotation) this.props.onCloseAnnotation(event.nativeEvent.src);
+  }
   _onRightAnnotationTapped(event: Event) {
     if (this.props.onRightAnnotationTapped) this.props.onRightAnnotationTapped(event.nativeEvent.src);
   }
@@ -332,6 +336,7 @@ class MapView extends Component {
     onRegionDidChange: PropTypes.func,
     onRegionWillChange: PropTypes.func,
     onOpenAnnotation: PropTypes.func,
+    onCloseAnnotation: PropTypes.func,
     onUpdateUserLocation: PropTypes.func,
     onRightAnnotationTapped: PropTypes.func,
     onFinishLoadingMap: PropTypes.func,
@@ -431,6 +436,7 @@ class MapView extends Component {
         enableOnRegionDidChange={!!this.props.onRegionDidChange}
         enableOnRegionWillChange={!!this.props.onRegionWillChange}
         onOpenAnnotation={this._onOpenAnnotation}
+        onCloseAnnotation={this._onCloseAnnotation}
         onRightAnnotationTapped={this._onRightAnnotationTapped}
         onUpdateUserLocation={this._onUpdateUserLocation}
         onLongPress={this._onLongPress}
