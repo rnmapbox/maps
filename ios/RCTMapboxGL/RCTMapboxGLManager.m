@@ -153,7 +153,7 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     _loadedPacks = NO;
     
     // Setup pack array loading notifications
-    [[MGLOfflineStorage sharedOfflineStorage] addObserver:self forKeyPath:@"packs" options:0 context:NULL];
+    [[MGLOfflineStorage sharedOfflineStorage] addObserver:self forKeyPath:@"packs" options:NSKeyValueObservingOptionInitial context:NULL];
     _packRequests = [NSMutableArray new];
     
     // Setup offline pack notification handlers.
