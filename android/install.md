@@ -8,10 +8,10 @@ npm install --save react-native-mapbox-gl --ignore-scripts
 
 #### Step 2 - Use with Gradle
 
-##### Option A - With [rnpm](https://github.com/rnpm/rnpm)
+##### Option A - Automatically
 
 ```shell
-rnpm link
+react-native link
 ```
 
 ##### Option B - Manually
