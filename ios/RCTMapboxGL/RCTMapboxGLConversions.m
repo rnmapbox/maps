@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RCTConvert+CoreLocation.h"
-#import "RCTConvert+MapKit.h"
+#import <React/RCTConvert+CoreLocation.h>
+#import <React/RCTConvert+MapKit.h>
 #import "RCTMapboxGL.h"
 
 UIImage *imageFromSource (NSDictionary *source)

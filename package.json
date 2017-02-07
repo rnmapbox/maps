@@ -1,7 +1,7 @@
 {
   "name": "react-native-mapbox-gl",
   "description": "A Mapbox GL react native module for creating custom maps",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "author": "Bobby Sudekum",
   "keywords": [
     "gl",
@@ -36,5 +36,9 @@
   "dependencies": {
     "babel-eslint": "^6.1.2",
     "lodash": "^4.13.1"
+  },
+  "peerDependencies": {
+    "react": ">=15.4.0",
+    "react-native": ">=0.40"
   }
 }
