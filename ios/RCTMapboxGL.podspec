@@ -14,6 +14,6 @@ Pod::Spec.new do |s|
 
   s.vendored_frameworks = 'Mapbox.framework'
   s.module_name = 'Mapbox'
-  s.source_files = "RCTMapboxGL/RCTMapboxGL.{h,m}", "RCTMapboxGL/RCTMapboxGLManager.{h,m}", "RCTMapboxGL/RCTMapboxGLConversions.{h,m}"
+  s.source_files = "RCTMapboxGL/*.{h,m}"
 
 end
