@@ -29,7 +29,8 @@ public class ReactNativeMapboxGLPackage implements ReactPackage {
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
-                new ReactNativeMapboxGLManager(reactContext)
+                new ReactNativeMapboxGLManager(reactContext),
+                new RNMGLAnnotationViewManager()
         );
     }
 }
