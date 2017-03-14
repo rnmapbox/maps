@@ -138,7 +138,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
     // Access Token
 
     @ReactMethod
-    public void setAccessToken(String accessToken) {
+    public void setAccessToken(final String accessToken) {
         if (accessToken == null || accessToken.length() == 0 || accessToken.equals("your-mapbox.com-access-token")) {
             throw new JSApplicationIllegalArgumentException("Invalid access token. Register to mapbox.com and request an access token, then pass it to setAccessToken()");
         }
@@ -150,7 +150,12 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
             return;
         }
         initialized = true;
-        MapboxAccountManager.start(context.getApplicationContext(), accessToken);
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                MapboxAccountManager.start(context.getApplicationContext(), accessToken);
+            }
+        });
         initializeOfflinePacks();
     }
 
