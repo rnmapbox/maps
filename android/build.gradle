@@ -31,7 +31,7 @@ repositories {
 
 dependencies {
     compile 'com.facebook.react:react-native:0.19.+'
-    compile('com.mapbox.mapboxsdk:mapbox-android-sdk:4.2.1@aar') {
+    compile('com.mapbox.mapboxsdk:mapbox-android-sdk:4.2.2@aar') {
         transitive = true
     }
 }
