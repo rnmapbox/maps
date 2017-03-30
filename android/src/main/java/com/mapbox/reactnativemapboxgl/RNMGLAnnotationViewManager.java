@@ -1,7 +1,5 @@
 package com.mapbox.reactnativemapboxgl;
 
-import android.util.Log;
-
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -9,11 +7,6 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
-import java.util.Map;
-
-/**
- * Created by gcole on 2/17/17.
- */
 public class RNMGLAnnotationViewManager extends ViewGroupManager<RNMGLAnnotationView> {
     private LayoutShadowNode _shadowNode;
 

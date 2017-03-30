@@ -801,6 +801,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
             if (convertView == null) {
                 RNMGLAnnotationView reactView = _customAnnotationViewMap.get(marker.getAnnotationId());
                 ViewGroup.LayoutParams shadowNodeMeasurements = reactView.getShadowNodeMeasurements();
+                reactView.setLayoutParams(shadowNodeMeasurements);
 
                 FrameLayout layout = new FrameLayout(getContext());
                 layout.setLayoutParams(shadowNodeMeasurements);
