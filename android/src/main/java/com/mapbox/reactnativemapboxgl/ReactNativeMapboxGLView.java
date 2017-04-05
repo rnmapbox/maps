@@ -1,22 +1,40 @@
 package com.mapbox.reactnativemapboxgl;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.PointF;
+import android.graphics.drawable.GradientDrawable;
 import android.hardware.GeomagneticField;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Transformation;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.facebook.react.views.view.ReactViewGroup;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.mapbox.mapboxsdk.annotations.Annotation;
+import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.annotations.MarkerView;
+import com.mapbox.mapboxsdk.annotations.MarkerViewOptions;
 import com.mapbox.mapboxsdk.annotations.PolygonOptions;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -30,8 +48,14 @@ import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.UiSettings;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -41,7 +65,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
         MapboxMap.OnMyBearingTrackingModeChangeListener, MapboxMap.OnMyLocationTrackingModeChangeListener,
         MapboxMap.OnMyLocationChangeListener,
         MapboxMap.OnMarkerClickListener, MapboxMap.OnInfoWindowClickListener,
-        MapView.OnMapChangedListener
+        MapView.OnMapChangedListener, ReactNativeMapboxGLManager.ChildListener
 {
 
     private MapboxMap _map = null;
@@ -70,9 +94,11 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
     private boolean _didChangeThrottled = false;
     private boolean _changeWasAnimated = false;
 
-    private Map<String, Annotation> _annotations = new HashMap();
-    private Map<Long, String> _annotationIdsToName = new HashMap();
-    private Map<String, RNMGLAnnotationOptions> _annotationOptions = new HashMap();
+    private Map<String, Annotation> _annotations = new HashMap<>();
+    private Map<Long, String> _annotationIdsToName = new HashMap<>();
+    private Map<String, RNMGLAnnotationOptions> _annotationOptions = new HashMap<>();
+    private Map<String, MarkerView> _customAnnodationIds = new HashMap<>();
+    private Map<String, RNMGLAnnotationView> _customAnnotationViewMap = new HashMap<>();
 
     private android.os.Handler _handler;
 
@@ -101,6 +127,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
     public void onDrop() {
         if (_mapView == null) { return; }
         _manager.getContext().removeLifecycleEventListener(this);
+        _manager.removeChildListener(this);
         if (!_paused) {
             _paused = true;
             _mapView.onPause();
@@ -131,7 +158,7 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
     private void setupMapView() {
         _mapOptions.camera(_initialCamera.build());
         _mapView = new MapView(this.getContext(), _mapOptions);
-        this.addView(_mapView);
+        _manager.addView(this, _mapView, 0);
         _mapView.addOnMapChangedListener(this);
         _mapView.onCreate(null);
         _mapView.getMapAsync(this);
@@ -189,7 +216,14 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
             _annotations.put(entry.getKey(), annotation);
             _annotationIdsToName.put(annotation.getId(), entry.getKey());
         }
+
         _annotationOptions.clear();
+
+        computeMarkerAnnotations();
+        _manager.addChildListener(this);
+
+        _map.getMarkerViewManager().addMarkerViewAdapter(
+                new RNMGLCustomMarkerViewAdapter(getContext()));
     }
 
     private void destroyMapView() {
@@ -205,6 +239,52 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
             _map = null;
         }
         _mapView.onDestroy();
+    }
+
+    // Children
+
+    @Override
+    public void childAdded(View child) {
+        computeMarkerAnnotations();
+    }
+
+    @Override
+    public void childRemoved(View child) {
+        computeMarkerAnnotations();
+    }
+
+    private void computeMarkerAnnotations() {
+        Set<RNMGLAnnotationView> newAnnotationViews = new HashSet<>(_manager.getAnnotationViews());
+        Set<RNMGLAnnotationView> currentViews = new HashSet<>(_customAnnotationViewMap.values());
+        Collection<RNMGLAnnotationView> addedChildren = Sets.difference(newAnnotationViews, currentViews);
+        Collection<RNMGLAnnotationView> removedChildren = Sets.difference(currentViews, newAnnotationViews);
+
+        for (RNMGLAnnotationView annotationView : removedChildren) {
+            _customAnnotationViewMap.remove(annotationView.getAnnotationId());
+            MarkerView markerView = _customAnnodationIds.remove(annotationView.getAnnotationId());
+            _map.removeMarker(markerView);
+        }
+
+        for (RNMGLAnnotationView annotationView : addedChildren) {
+            _customAnnotationViewMap.put(annotationView.getAnnotationId(), annotationView);
+            RNMGLCustomMarkerViewOptions options = new RNMGLCustomMarkerViewOptions()
+                    .annotationId(annotationView.getAnnotationId())
+                    .position(annotationView.getCoordinate())
+                    .flat(true);
+            MarkerView markerView = _map.addMarker(options);
+            _customAnnodationIds.put(annotationView.getAnnotationId(), markerView);
+        }
+
+        // Need a relayout to show custom marker views
+        _handler.post(new Runnable() {
+            @Override
+            public void run() {
+                _mapView.measure(
+                        View.MeasureSpec.makeMeasureSpec(_mapView.getMeasuredWidth(), View.MeasureSpec.EXACTLY),
+                        View.MeasureSpec.makeMeasureSpec(_mapView.getMeasuredHeight(), View.MeasureSpec.EXACTLY));
+                _mapView.layout(_mapView.getLeft(), _mapView.getTop(), _mapView.getRight(), _mapView.getBottom());
+            }
+        });
     }
 
     // Props
@@ -705,5 +785,31 @@ public class ReactNativeMapboxGLView extends RelativeLayout implements
     public void deselectAnnotation() {
         if (_map == null) { return; }
         _map.deselectMarkers();
+    }
+
+    // Custom Marker View Adapter - Adapts a MarkerView to display an custom react native view.
+
+    private class RNMGLCustomMarkerViewAdapter extends MapboxMap.MarkerViewAdapter<RNMGLCustomMarkerView> {
+
+        RNMGLCustomMarkerViewAdapter(@NonNull Context context) {
+            super(context);
+        }
+
+        @Nullable
+        @Override
+        public View getView(@NonNull RNMGLCustomMarkerView marker, @Nullable View convertView, @NonNull ViewGroup parent) {
+            if (convertView == null) {
+                RNMGLAnnotationView reactView = _customAnnotationViewMap.get(marker.getAnnotationId());
+                ViewGroup.LayoutParams shadowNodeMeasurements = reactView.getShadowNodeMeasurements();
+                reactView.setLayoutParams(shadowNodeMeasurements);
+
+                FrameLayout layout = new FrameLayout(getContext());
+                layout.setLayoutParams(shadowNodeMeasurements);
+                layout.addView(reactView);
+
+                convertView = layout;
+            }
+            return convertView;
+        }
     }
 }

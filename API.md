@@ -43,7 +43,7 @@ import { MapView } from 'react-native-mapbox-gl';
 | `contentInset` | `array` | Optional | Change the padding of the viewport of the map. Offset is in pixels. `[top, right, bottom, left]` `[0, 0, 0, 0]` |
 | `style`  | React styles | Optional | Styles the actual map view container | N/A |
 | `debugActive`  | `boolean` | Optional | Turns on debug mode. | `false` |
-| `children` | `array` | Optional |  An array of custom Annotation views (iOS only). You must import Annotation view from the component and put your custom React Native view inside. Annotation view must have unique id prop defined as well as coordinate | null |
+| `children` | `array` | Optional |  An array of custom Annotation views. See [Custom Annotations](#custom-annotations). | null |
 
 
 ## Callback props
@@ -342,6 +342,58 @@ this enables important performance optimizations when this component is
 re-rendered.
 
 See [the example](./example.js#L116) for an illustration of this.
+
+#### Custom Annotations
+
+If the default annotations do not offer enough options, you can embed react native
+view directly onto the map as a custom marker view.
+
+The children of the `MapView` must be `Annotation` views: `import {Annotation} from 'mapbox-react-native-gl'`.
+The `Annotation` view has the following required props:
+
+| Prop | Type | Description |
+|---|---|---|---|---|
+| `id`| `string` | Unique identifier for the annotation. |
+| `coordinate` | ```{latitude: number, longitude: number}``` | Location of the annotation. |
+
+###### Known Bugs
+
+1. `Annotation` views do not position correctly unless they have the following style props:
+  `style={{alignItems: 'center', justifyContent: 'center', position: 'absolute'}}`.
+
+2. React Native views do not work with the regular `onAnnotationTapped` on need to
+   add their own tap handling (e.g. by using a `TouchableHighlight`).
+
+3. (*Android only*) Adding a view with style `flex: 1` and no `width` or `height` set can cause
+   views to behave a little strangely. It is recommended to add them.
+
+###### Example
+
+```
+<MapView {...MapView props}>
+  <Annotation
+    id="annotation1"
+    coordinate={{latitude: 37.5, longitude: -122.2}}
+    style={{alignItems: 'center', justifyContent: 'center', position: 'absolute'}}
+  >
+    <View style={{width: 100, height: 100, borderWidth: 4, borderColor: 'blue', borderRadius: 50, backgroundColor: 'white', flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Text>React View</Text>
+    </View>
+  </Annotation>
+  <Annotation
+    id="annotation2"
+    coordinate={{latitude: 37.55, longitude: -122.25}}
+    style={{alignItems: 'center', justifyContent: 'center', position: 'absolute'}}
+  >
+    <View style={{width: 200, height: 200, borderWidth: 1, borderColor: 'red', borderRadius: 50, backgroundColor: 'white', flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Image
+        style={{width: 100, height: 100}}
+        source={{uri: 'some-image-uri'}}
+      />
+    </View>
+  </Annotation>
+</MapView>
+```
 
 ## Mapbox Telemetry (metrics)
 
