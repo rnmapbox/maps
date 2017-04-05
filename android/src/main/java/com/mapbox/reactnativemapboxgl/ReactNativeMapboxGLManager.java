@@ -1,6 +1,8 @@
 
 package com.mapbox.reactnativemapboxgl;
 
+import android.view.View;
+
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
@@ -11,9 +13,9 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
+import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.SimpleViewManager;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -21,20 +23,28 @@ import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMapboxGLView> {
+public class ReactNativeMapboxGLManager extends ViewGroupManager<ReactNativeMapboxGLView> {
 
     private static final String REACT_CLASS = "RCTMapboxGL";
 
     private ReactApplicationContext _context;
+    private List<View> _childViews;
+    private Set<ChildListener> _childListeners;
 
     public ReactNativeMapboxGLManager(ReactApplicationContext context) {
         super();
         _context = context;
+        _childViews = new ArrayList<>();
+        _childListeners = new HashSet<>();
     }
 
     @Override
@@ -44,6 +54,16 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
 
     public ReactApplicationContext getContext() {
         return _context;
+    }
+
+    public List<RNMGLAnnotationView> getAnnotationViews() {
+        List<RNMGLAnnotationView> annotationViews = new ArrayList<>();
+        for (View view : _childViews) {
+            if (RNMGLAnnotationView.class.equals(view.getClass())) {
+                annotationViews.add((RNMGLAnnotationView) view);
+            }
+        }
+        return annotationViews;
     }
 
     // Lifecycle methods
@@ -80,6 +100,63 @@ public class ReactNativeMapboxGLManager extends SimpleViewManager<ReactNativeMap
                 .put("onStartLoadingMap", MapBuilder.of("registrationName", "onStartLoadingMap"))
                 .put("onLocateUserFailed", MapBuilder.of("registrationName", "onLocateUserFailed"))
                 .build();
+    }
+
+    // Children
+
+    public interface ChildListener {
+        void childAdded(View child);
+        void childRemoved(View child);
+    }
+
+    public void addChildListener(ChildListener listener) {
+        _childListeners.add(listener);
+    }
+
+    public void removeChildListener(ChildListener listener) {
+        _childListeners.remove(listener);
+    }
+
+    @Override
+    public void addView(ReactNativeMapboxGLView parent, View child, int index) {
+        _childViews.add(index, child);
+        if (!RNMGLAnnotationView.class.equals(child.getClass())) {
+            super.addView(parent, child, getRealIndex(parent, index));
+        }
+        for (ChildListener listener : _childListeners) {
+            listener.childAdded(child);
+        }
+    }
+
+    @Override
+    public int getChildCount(ReactNativeMapboxGLView parent) {
+        return _childViews.size();
+    }
+
+    @Override
+    public View getChildAt(ReactNativeMapboxGLView parent, int index) {
+        return _childViews.get(index);
+    }
+
+    @Override
+    public void removeViewAt(ReactNativeMapboxGLView parent, int index) {
+        View child = _childViews.remove(index);
+        if (!RNMGLAnnotationView.class.equals(child.getClass())) {
+            super.removeViewAt(parent, getRealIndex(parent, index));
+        }
+        for (ChildListener listener : _childListeners) {
+            listener.childRemoved(child);
+        }
+    }
+
+    private int getRealIndex(ReactNativeMapboxGLView parent, int index) {
+        int annotationViews = 0;
+        for (int i = 0; i < index; i++) {
+            if (RNMGLAnnotationView.class.equals(getChildAt(parent, i).getClass())) {
+                annotationViews++;
+            }
+        }
+        return index - annotationViews;
     }
 
     // Props
