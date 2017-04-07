@@ -364,9 +364,6 @@ The `Annotation` view has the following required props:
 2. React Native views do not work with the regular `onAnnotationTapped` on need to
    add their own tap handling (e.g. by using a `TouchableHighlight`).
 
-3. (*Android only*) Adding a view with style `flex: 1` and no `width` or `height` set can cause
-   views to behave a little strangely. It is recommended to add them.
-
 ###### Example
 
 ```
