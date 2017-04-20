@@ -348,7 +348,7 @@ See [the example](./example.js#L116) for an illustration of this.
 If the default annotations do not offer enough options, you can embed react native
 view directly onto the map as a custom marker view.
 
-The children of the `MapView` must be `Annotation` views: `import {Annotation} from 'mapbox-react-native-gl'`.
+The children of the `MapView` must be `Annotation` views: `import {Annotation} from 'react-native-mapbox-gl'`.
 The `Annotation` view has the following required props:
 
 | Prop | Type | Description |
