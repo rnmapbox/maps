@@ -1,30 +1,27 @@
 package com.mapbox.reactnativemapboxgl;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.views.view.ReactViewGroup;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class RNMGLAnnotationView extends ReactViewGroup {
 
-    private final RNMGLAnnotationViewManager _manager;
+    private Set<PropertyListener> propertyListeners;
     private String annotationId;
     private LatLng coordinate;
+    private float layoutWidth;
+    private float layoutHeight;
 
-    public RNMGLAnnotationView(Context context, RNMGLAnnotationViewManager manager) {
+    public RNMGLAnnotationView(Context context) {
         super(context);
-        this._manager = manager;
+        this.propertyListeners = new HashSet<>();
     }
 
-    public LayoutParams getShadowNodeMeasurements() {
-        LayoutShadowNode shadowNode = _manager.getShadowNode();
-        return new LayoutParams(
-                (int)shadowNode.getLayoutWidth(),
-                (int)shadowNode.getLayoutHeight()
-        );
-    }
+    // Properties
 
     public String getAnnotationId() {
         return annotationId;
@@ -40,5 +37,41 @@ public class RNMGLAnnotationView extends ReactViewGroup {
 
     public void setCoordinate(LatLng coordinate) {
         this.coordinate = coordinate;
+        fireUpdateEvent();
+    }
+
+    // React layout
+
+    public void setLayoutDimensions(float layoutWidth, float layoutHeight) {
+        this.layoutWidth = layoutWidth;
+        this.layoutHeight = layoutHeight;
+    }
+
+    public float getLayoutWidth() {
+        return layoutWidth;
+    }
+
+    public float getLayoutHeight() {
+        return layoutHeight;
+    }
+
+    // Listeners
+
+    public void addPropertyListener(PropertyListener propertyListener) {
+        propertyListeners.add(propertyListener);
+    }
+
+    public void removePropertyListener(PropertyListener propertyListener) {
+        propertyListeners.remove(propertyListener);
+    }
+
+    private void fireUpdateEvent() {
+        for (PropertyListener listener : propertyListeners) {
+            listener.propertiesUpdated(this);
+        }
+    }
+
+    public interface PropertyListener {
+        void propertiesUpdated(RNMGLAnnotationView view);
     }
 }

@@ -7,8 +7,9 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
+import java.util.HashMap;
+
 public class RNMGLAnnotationViewManager extends ViewGroupManager<RNMGLAnnotationView> {
-    private LayoutShadowNode _shadowNode;
 
     private static final String NAME = "RCTMapboxAnnotation";
 
@@ -19,17 +20,17 @@ public class RNMGLAnnotationViewManager extends ViewGroupManager<RNMGLAnnotation
 
     @Override
     protected RNMGLAnnotationView createViewInstance(ThemedReactContext reactContext) {
-        return new RNMGLAnnotationView(reactContext, this);
+        return new RNMGLAnnotationView(reactContext);
+    }
+
+    @Override
+    public Class<? extends LayoutShadowNode> getShadowNodeClass() {
+        return SizeReportingShadowNode.class;
     }
 
     @Override
     public LayoutShadowNode createShadowNodeInstance() {
-        _shadowNode = super.createShadowNodeInstance();
-        return _shadowNode;
-    }
-
-    public LayoutShadowNode getShadowNode() {
-        return _shadowNode;
+        return new SizeReportingShadowNode();
     }
 
     // Props
@@ -45,5 +46,16 @@ public class RNMGLAnnotationViewManager extends ViewGroupManager<RNMGLAnnotation
         coordinate.setLatitude(map.getDouble("latitude"));
         coordinate.setLongitude(map.getDouble("longitude"));
         view.setCoordinate(coordinate);
+    }
+
+    @Override
+    public void updateExtraData(RNMGLAnnotationView view, Object extraData) {
+        // This is called from the {@link SizeReportingShadowNode}. We cache
+        // the width and height so that we can set the correct size on the marker
+        // view annotations in ReactNativeMapboxGLView RNMGLCustomMarkerViewAdapter.
+        HashMap<String, Float> data = (HashMap<String, Float>) extraData;
+        float width = data.get("width");
+        float height = data.get("height");
+        view.setLayoutDimensions(width, height);
     }
 }
