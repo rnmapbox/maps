@@ -37,7 +37,7 @@ dependencies {
 ```
 
 ```java
-// file: android/app/src/main/java/com/yourcompany/yourapp/MainActivity.java
+// file: android/app/src/main/java/com/yourcompany/yourapp/MainApplication.java
 import com.mapbox.reactnativemapboxgl.ReactNativeMapboxGLPackage; // <-- import
 ...
 /**
