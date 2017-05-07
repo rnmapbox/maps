@@ -352,9 +352,9 @@ The children of the `MapView` must be `Annotation` views: `import {Annotation} f
 The `Annotation` view has the following required props:
 
 | Prop | Type | Description |
-|---|---|---|---|---|
-| `id`| `string` | Unique identifier for the annotation. |
-| `coordinate` | ```{latitude: number, longitude: number}``` | Location of the annotation. |
+| --- | --- | --- |
+| `id` | `string` | Unique identifier for the annotation. |
+| `coordinate` | `{latitude: number, longitude: number}` | Location of the annotation. |
 
 ###### Known Bugs
 
