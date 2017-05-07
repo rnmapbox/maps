@@ -255,7 +255,7 @@ mapbox://styles/bobbysud/cigtw1pzy0000aam2346f7ex0
 
 ```javascript
 [{
-  coordinates, // required. For type polyline and polygon must be an array of arrays. For type point, array as [longitude latitude]
+  coordinates, // required. For type polyline and polygon must be an array of arrays. For type point, array as [latitude longitude]
   type, // required. One of 'point', 'polyline' or 'polygon'
   title, // optional. Title string. Appears when marker pressed
   subtitle, // optional. Subtitle string. Appears when marker pressed
