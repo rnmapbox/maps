@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.JSApplicationCausedNativeException;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -130,8 +131,6 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
 
         // Other constants
         constants.put("unknownResourceCount", Long.MAX_VALUE);
-        // FIXME you cannot get telemetry enabled status before you set access token
-//        constants.put("metricsEnabled", MapboxTelemetry.getInstance().isTelemetryEnabled());
 
         constants.put("userTrackingMode", userTrackingMode);
         constants.put("mapStyles", mapStyles);
@@ -176,6 +175,15 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
     }
 
     // Metrics
+
+    @ReactMethod
+    public void getMetricsEnabled(final Promise promise) {
+        try {
+            promise.resolve(MapboxTelemetry.getInstance().isTelemetryEnabled());
+        } catch (NullPointerException e) {
+            promise.reject(new JSApplicationCausedNativeException("You should call getMetricsEnabled after setAccessToken"));
+        }
+    }
 
     @ReactMethod
     public void setMetricsEnabled(boolean value) {

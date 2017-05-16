@@ -399,7 +399,7 @@ If you hide the attribution button, you need to provide the user with a way to
 opt-out of telemetry. For this, you need to add `MGLMapboxMetricsEnabledSettingShownInApp`
 as `YES` in `Info.plist`, then create a switch that toggles metrics.
 
-To get the current state of metrics, use `Mapbox.getMetricsEnabled()`.
+To get the current state of metrics, use `Mapbox.getMetricsEnabled()`. It will return a promise. Before using it, don't forget to set an access token with `Mapbox.setAccessToken(accessToken)`.
 
 To enable or disable metrics, use `Mapbox.setMetricsEnabled(enabled: boolean)`.
 
