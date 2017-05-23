@@ -255,7 +255,7 @@ mapbox://styles/bobbysud/cigtw1pzy0000aam2346f7ex0
 
 ```javascript
 [{
-  coordinates, // required. For type polyline and polygon must be an array of arrays. For type point, single array with 2 coordinates
+  coordinates, // required. For type polyline and polygon must be an array of arrays. For type point, array as [latitude longitude]
   type, // required. One of 'point', 'polyline' or 'polygon'
   title, // optional. Title string. Appears when marker pressed
   subtitle, // optional. Subtitle string. Appears when marker pressed
@@ -352,9 +352,9 @@ The children of the `MapView` must be `Annotation` views: `import {Annotation} f
 The `Annotation` view has the following required props:
 
 | Prop | Type | Description |
-|---|---|---|---|---|
-| `id`| `string` | Unique identifier for the annotation. |
-| `coordinate` | ```{latitude: number, longitude: number}``` | Location of the annotation. |
+| --- | --- | --- |
+| `id` | `string` | Unique identifier for the annotation. |
+| `coordinate` | `{latitude: number, longitude: number}` | Location of the annotation. |
 
 ###### Known Bugs
 
