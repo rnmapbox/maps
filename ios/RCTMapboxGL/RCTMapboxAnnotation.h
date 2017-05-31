@@ -3,7 +3,7 @@
 #import <Mapbox/Mapbox.h>
 #import <UIKit/UIKit.h>
 
-#import <React/RCTConvert+MapKit.h>
+#import <React/RCTConvert.h>
 #import <React/RCTComponent.h>
 #import "RCTMapboxGL.h"
 

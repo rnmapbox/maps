@@ -10,7 +10,7 @@
 #import "RCTMapboxGL.h"
 #import <Mapbox/Mapbox.h>
 #import <React/RCTConvert+CoreLocation.h>
-#import <React/RCTConvert+MapKit.h>
+#import <React/RCTConvert.h>
 #import <React/RCTBridge.h>
 #import <React/RCTEventDispatcher.h>
 #import <React/UIView+React.h>
