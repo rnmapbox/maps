@@ -473,12 +473,21 @@ A progress object has the following shape:
 {
   name: 'test', // The name this pack was registered with
   metadata, // The value that was previously passed as metadata
+  state: 0, // The current state of the offline pack. 0 = Unknown, 1 = Inactive, 2 = Active, 3 = Complete, 4 = Invalid (iOS Only)
   countOfBytesCompleted: 0, // The number of bytes downloaded for this pack
   countOfResourcesCompleted: 0, // The number of tiles that have been downloaded for this pack
   countOfResourcesExpected: 0, // The estimated minimum number of total tiles in this pack
   maximumResourcesExpected: 0 // The estimated maximum number of total tiles in this pack
 }
 ```
+
+The offline pack progress object's `state` property can be compared against the following constants:
+
+* `Mapbox.offlinePackState.unknown`
+* `Mapbox.offlinePackState.inactive`
+* `Mapbox.offlinePackState.active`
+* `Mapbox.offlinePackState.complete`
+* `Mapbox.offlinePackState.invalid`
 
 #### Subscribing to progress notifications
 

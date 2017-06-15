@@ -16,7 +16,7 @@ import isEqual from 'lodash/isEqual';
 import Annotation from './Annotation';
 
 const { MapboxGLManager } = NativeModules;
-const { mapStyles, userTrackingMode, userLocationVerticalAlignment, unknownResourceCount } = MapboxGLManager;
+const { mapStyles, userTrackingMode, userLocationVerticalAlignment, offlinePackState, unknownResourceCount } = MapboxGLManager;
 
 // Deprecation
 
@@ -461,7 +461,7 @@ const MapboxGLView = requireNativeComponent('RCTMapboxGL', MapView, {
 const Mapbox = {
   MapView,
   Annotation,
-  mapStyles, userTrackingMode, userLocationVerticalAlignment, unknownResourceCount,
+  mapStyles, userTrackingMode, userLocationVerticalAlignment, offlinePackState, unknownResourceCount,
   getMetricsEnabled, setMetricsEnabled,
   setAccessToken,
   addOfflinePack, getOfflinePacks, removeOfflinePack,

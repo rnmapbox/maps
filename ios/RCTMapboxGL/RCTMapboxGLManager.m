@@ -104,6 +104,13 @@ RCT_CUSTOM_VIEW_PROPERTY(contentInset, UIEdgeInsetsMake, RCTMapboxGL)
                      @"center": @(MGLAnnotationVerticalAlignmentCenter),
                      @"bottom": @(MGLAnnotationVerticalAlignmentBottom)
                      },
+             @"offlinePackState": @{
+                     @"unknown": [NSNumber numberWithUnsignedInt:MGLOfflinePackStateUnknown],
+                     @"inactive": [NSNumber numberWithUnsignedInt:MGLOfflinePackStateInactive],
+                     @"active": [NSNumber numberWithUnsignedInt:MGLOfflinePackStateActive],
+                     @"complete": [NSNumber numberWithUnsignedInt:MGLOfflinePackStateComplete],
+                     @"invalid": [NSNumber numberWithUnsignedInt:MGLOfflinePackStateInvalid]
+                     },
              @"unknownResourceCount": @(UINT64_MAX),
              @"metricsEnabled": @([RCTMapboxGLManager metricsEnabled])
              };
@@ -220,6 +227,7 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken)
     
     NSDictionary *event = @{ @"name": userInfo[@"name"],
                              @"metadata": userInfo[@"metadata"],
+                             @"state": @(pack.state),
                              @"countOfResourcesCompleted": @(progress.countOfResourcesCompleted),
                              @"countOfResourcesExpected": @(progress.countOfResourcesExpected),
                              @"countOfBytesCompleted": @(progress.countOfBytesCompleted),
@@ -365,6 +373,7 @@ RCT_REMAP_METHOD(addOfflinePack,
         NSMutableDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
         [callbackArray addObject:@{ @"name": userInfo[@"name"],
                                     @"metadata": userInfo[@"metadata"],
+                                    @"state": @(pack.state),
                                     @"countOfBytesCompleted": @(pack.progress.countOfBytesCompleted),
                                     @"countOfResourcesCompleted": @(pack.progress.countOfResourcesCompleted),
                                     @"countOfResourcesExpected": @(pack.progress.countOfResourcesExpected),
