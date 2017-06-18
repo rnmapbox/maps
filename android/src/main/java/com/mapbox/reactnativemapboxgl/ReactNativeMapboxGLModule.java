@@ -372,6 +372,8 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
             case 0:
                 if (isComplete) {
                     state = 3;
+                } else {
+                    state = 1;
                 }
                 break;
             case 1:
@@ -547,6 +549,86 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
 
                     @Override
                     public void onError(String error) {
+                        promise.reject(new JSApplicationIllegalArgumentException(error));
+                    }
+                });
+            }
+        });
+    }
+
+    @ReactMethod
+    public void suspendOfflinePack(final String packName, final Promise promise) {
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                OfflineRegionProgressObserver foundObserver = null;
+
+                for (OfflineRegionProgressObserver observer : offlinePackObservers) {
+                    if (packName.equals(observer.name)) {
+                        foundObserver = observer;
+                        break;
+                    }
+                }
+
+                if (foundObserver == null) {
+                    promise.resolve(Arguments.createMap());
+                    return;
+                }
+
+                foundObserver.region.setDownloadState(OfflineRegion.STATE_INACTIVE);
+                final OfflineRegionProgressObserver _foundObserver = foundObserver;
+                foundObserver.region.getStatus(new OfflineRegion.OfflineRegionStatusCallback() {
+                    @Override
+                    public void onStatus(OfflineRegionStatus status) {
+                        //_foundObserver.fireUpdateEvent();
+                        _foundObserver.onStatusChanged(status);
+                        WritableMap result = Arguments.createMap();
+                        result.putString("suspended", _foundObserver.name);
+                        promise.resolve(result);
+                    }
+                    @Override
+                    public void onError(String error) {
+                        Log.e(context.getApplicationContext().getPackageName(), error);
+                        promise.reject(new JSApplicationIllegalArgumentException(error));
+                    }
+                });
+            }
+        });
+    }
+
+    @ReactMethod
+    public void resumeOfflinePack(final String packName, final Promise promise) {
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                OfflineRegionProgressObserver foundObserver = null;
+
+                for (OfflineRegionProgressObserver observer : offlinePackObservers) {
+                    if (packName.equals(observer.name)) {
+                        foundObserver = observer;
+                        break;
+                    }
+                }
+
+                if (foundObserver == null) {
+                    promise.resolve(Arguments.createMap());
+                    return;
+                }
+
+                foundObserver.region.setDownloadState(OfflineRegion.STATE_ACTIVE);
+                final OfflineRegionProgressObserver _foundObserver = foundObserver;
+                foundObserver.region.getStatus(new OfflineRegion.OfflineRegionStatusCallback() {
+                    @Override
+                    public void onStatus(OfflineRegionStatus status) {
+                        //_foundObserver.fireUpdateEvent();
+                        _foundObserver.onStatusChanged(status);
+                        WritableMap result = Arguments.createMap();
+                        result.putString("resumed", _foundObserver.name);
+                        promise.resolve(result);
+                    }
+                    @Override
+                    public void onError(String error) {
+                        Log.e(context.getApplicationContext().getPackageName(), error);
                         promise.reject(new JSApplicationIllegalArgumentException(error));
                     }
                 });

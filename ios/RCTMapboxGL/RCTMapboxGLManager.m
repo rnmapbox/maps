@@ -383,6 +383,62 @@ RCT_REMAP_METHOD(addOfflinePack,
     return callbackArray;
 }
 
+RCT_REMAP_METHOD(suspendOfflinePack,
+                 suspendName:(NSString*)packName
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        MGLOfflinePack *packs = [MGLOfflineStorage sharedOfflineStorage].packs;
+        MGLOfflinePack *tempPack;
+        
+        for (MGLOfflinePack *pack in packs) {
+            NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
+            if ([packName isEqualToString:userInfo[@"name"]]) {
+                tempPack = pack;
+                break;
+            }
+        }
+        
+        if (tempPack == nil) {
+            return resolve(@{});
+        }
+        
+        NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:tempPack.context];
+        [tempPack suspend];
+        
+        resolve(@{ @"suspended": userInfo[@"name"] });
+    });
+}
+
+RCT_REMAP_METHOD(resumeOfflinePack,
+                 resumeName:(NSString*)packName
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        MGLOfflinePack *packs = [MGLOfflineStorage sharedOfflineStorage].packs;
+        MGLOfflinePack *tempPack;
+        
+        for (MGLOfflinePack *pack in packs) {
+            NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
+            if ([packName isEqualToString:userInfo[@"name"]]) {
+                tempPack = pack;
+                break;
+            }
+        }
+        
+        if (tempPack == nil) {
+            return resolve(@{});
+        }
+        
+        NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:tempPack.context];
+        [tempPack resume];
+        
+        resolve(@{ @"resumed": userInfo[@"name"] });
+    });
+}
+
 RCT_REMAP_METHOD(getOfflinePacks,
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
