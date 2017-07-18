@@ -1,6 +1,8 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import {
   View,
+  ViewPropTypes,
   requireNativeComponent,
   StyleSheet,
   Platform,
@@ -19,7 +21,7 @@ const viewConfig = {
 };
 
 const propTypes = {
-  ...View.propTypes,
+  ...ViewPropTypes,
   id: PropTypes.string.isRequired,
   title: PropTypes.string,
   subtitle: PropTypes.string,

@@ -1,8 +1,9 @@
 'use strict';
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import {
-  View,
+  ViewPropTypes,
   NativeModules,
   NativeAppEventEmitter,
   requireNativeComponent,
@@ -283,7 +284,7 @@ class MapView extends Component {
   }
 
   static propTypes = {
-    ...View.propTypes,
+    ...ViewPropTypes,
 
     initialZoomLevel: PropTypes.number,
     initialDirection: PropTypes.number,
