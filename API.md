@@ -404,12 +404,13 @@ To enable or disable metrics, use `Mapbox.setMetricsEnabled(enabled: boolean)`.
 
 ## Offline
 
-There are 3 main methods for interacting with the offline API:
+There are 4 main methods for interacting with the offline API:
+* `Mapbox.initializeOfflinePacks()`: Initializes the offline packs handlers.
 * `Mapbox.addOfflinePack`: Creates an offline pack
 * `Mapbox.getOfflinePacks`: Returns an array of all offline packs on the device
 * `Mapbox.removeOfflinePack`: Removes a single pack
 
-Before using them, don't forget to set an access token with `Mapbox.setAccessToken(accessToken)`
+Before using offline packs, you must call `Mapbox.initializeOfflinePacks()`.
 
 These methods return a promise, but they also accept a callback as the last
 argument with the signature `(err, value) => {}`.
