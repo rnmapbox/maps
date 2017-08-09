@@ -172,7 +172,9 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken
     }
     
     for (MGLOfflinePack * pack in packs) {
-        [pack resume];
+        if (pack.state != MGLOfflinePackStateComplete) {
+            [pack resume];
+        }
     }
     [_bridge.eventDispatcher sendAppEventWithName:@"MapboxOfflinePacksLoaded" body:@{}];
 }
@@ -203,6 +205,9 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken
 }
 
 - (void)firePackProgress:(MGLOfflinePack*)pack {
+    if (pack.state == MGLOfflinePackStateInvalid) {
+        return;
+    }
     NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
     MGLOfflinePackProgress progress = pack.progress;
     
