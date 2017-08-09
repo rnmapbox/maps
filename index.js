@@ -107,7 +107,7 @@ function bindCallbackToPromise(callback, promise) {
 }
 
 function initializeOfflinePacks() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     NativeAppEventEmitter.addListener('MapboxOfflinePacksLoaded', () => {
       resolve();
     });
