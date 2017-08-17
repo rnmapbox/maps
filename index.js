@@ -85,8 +85,15 @@ function getMetricsEnabled() {
 
 // Access token
 function setAccessToken(token: string) {
-  MapboxGLManager.setAccessToken(token);
+  const promise = MapboxGLManager.setAccessToken(token);
+  return promise;
 }
+
+// Connected
+function setConnected(connected: boolean) {
+  MapboxGLManager.setConnected(connected);
+}
+
 
 // Offline
 function bindCallbackToPromise(callback, promise) {
@@ -97,6 +104,15 @@ function bindCallbackToPromise(callback, promise) {
       callback(err);
     })
   }
+}
+
+function initializeOfflinePacks() {
+  return new Promise((resolve) => {
+    NativeAppEventEmitter.addListener('MapboxOfflinePacksLoaded', () => {
+      resolve();
+    });
+    MapboxGLManager.initializeOfflinePacks();
+  });
 }
 
 function addOfflinePack(options, callback) {
@@ -476,7 +492,13 @@ const Mapbox = {
   mapStyles, userTrackingMode, userLocationVerticalAlignment, offlinePackState, unknownResourceCount,
   getMetricsEnabled, setMetricsEnabled,
   setAccessToken,
-  addOfflinePack, resumeOfflinePack, suspendOfflinePack, getOfflinePacks, removeOfflinePack,
+  setConnected,
+  initializeOfflinePacks,
+  addOfflinePack,
+  getOfflinePacks,
+  removeOfflinePack,
+  resumeOfflinePack, 
+  suspendOfflinePack,
   addOfflinePackProgressListener,
   addOfflineMaxAllowedTilesListener,
   addOfflineErrorListener,
