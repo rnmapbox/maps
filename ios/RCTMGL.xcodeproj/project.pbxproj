@@ -1,0 +1,317 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C4D144421F4E16F600396F26 /* RCTMGL.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D144411F4E16F600396F26 /* RCTMGL.m */; };
+		C4D144431F4E16F600396F26 /* RCTMGL.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C4D144401F4E16F600396F26 /* RCTMGL.h */; };
+		C4D1444C1F4E178100396F26 /* RCTMGLMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D1444B1F4E178100396F26 /* RCTMGLMapView.m */; };
+		C4D1444F1F4E181100396F26 /* RCTMGLMapViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D1444E1F4E181100396F26 /* RCTMGLMapViewManager.m */; };
+		C4D144531F4E190C00396F26 /* MGLModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D144521F4E190C00396F26 /* MGLModule.m */; };
+		C4D144971F4E2F1100396F26 /* RCTConvert+Mapbox.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D144961F4E2F1100396F26 /* RCTConvert+Mapbox.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C4D1443B1F4E16F600396F26 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				C4D144431F4E16F600396F26 /* RCTMGL.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		C4D1443D1F4E16F600396F26 /* libRCTMGL.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTMGL.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C4D144401F4E16F600396F26 /* RCTMGL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGL.h; sourceTree = "<group>"; };
+		C4D144411F4E16F600396F26 /* RCTMGL.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGL.m; sourceTree = "<group>"; };
+		C4D1444A1F4E178100396F26 /* RCTMGLMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLMapView.h; sourceTree = "<group>"; };
+		C4D1444B1F4E178100396F26 /* RCTMGLMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLMapView.m; sourceTree = "<group>"; };
+		C4D1444D1F4E181100396F26 /* RCTMGLMapViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLMapViewManager.h; sourceTree = "<group>"; };
+		C4D1444E1F4E181100396F26 /* RCTMGLMapViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLMapViewManager.m; sourceTree = "<group>"; };
+		C4D144511F4E190C00396F26 /* MGLModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGLModule.h; sourceTree = "<group>"; };
+		C4D144521F4E190C00396F26 /* MGLModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGLModule.m; sourceTree = "<group>"; };
+		C4D144951F4E2F1100396F26 /* RCTConvert+Mapbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCTConvert+Mapbox.h"; sourceTree = "<group>"; };
+		C4D144961F4E2F1100396F26 /* RCTConvert+Mapbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCTConvert+Mapbox.m"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C4D1443A1F4E16F600396F26 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C4D144341F4E16F600396F26 = {
+			isa = PBXGroup;
+			children = (
+				C4D1443F1F4E16F600396F26 /* RCTMGL */,
+				C4D1443E1F4E16F600396F26 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C4D1443E1F4E16F600396F26 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C4D1443D1F4E16F600396F26 /* libRCTMGL.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C4D1443F1F4E16F600396F26 /* RCTMGL */ = {
+			isa = PBXGroup;
+			children = (
+				C4D144941F4E2EC800396F26 /* Utils */,
+				C4D144501F4E188F00396F26 /* MGLModule */,
+				C4D144491F4E176300396F26 /* MapView */,
+				C4D144401F4E16F600396F26 /* RCTMGL.h */,
+				C4D144411F4E16F600396F26 /* RCTMGL.m */,
+			);
+			path = RCTMGL;
+			sourceTree = "<group>";
+		};
+		C4D144491F4E176300396F26 /* MapView */ = {
+			isa = PBXGroup;
+			children = (
+				C4D1444A1F4E178100396F26 /* RCTMGLMapView.h */,
+				C4D1444B1F4E178100396F26 /* RCTMGLMapView.m */,
+				C4D1444D1F4E181100396F26 /* RCTMGLMapViewManager.h */,
+				C4D1444E1F4E181100396F26 /* RCTMGLMapViewManager.m */,
+			);
+			name = MapView;
+			sourceTree = "<group>";
+		};
+		C4D144501F4E188F00396F26 /* MGLModule */ = {
+			isa = PBXGroup;
+			children = (
+				C4D144511F4E190C00396F26 /* MGLModule.h */,
+				C4D144521F4E190C00396F26 /* MGLModule.m */,
+			);
+			name = MGLModule;
+			sourceTree = "<group>";
+		};
+		C4D144941F4E2EC800396F26 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				C4D144951F4E2F1100396F26 /* RCTConvert+Mapbox.h */,
+				C4D144961F4E2F1100396F26 /* RCTConvert+Mapbox.m */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C4D1443C1F4E16F600396F26 /* RCTMGL */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C4D144461F4E16F600396F26 /* Build configuration list for PBXNativeTarget "RCTMGL" */;
+			buildPhases = (
+				C4D144391F4E16F600396F26 /* Sources */,
+				C4D1443A1F4E16F600396F26 /* Frameworks */,
+				C4D1443B1F4E16F600396F26 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RCTMGL;
+			productName = RCTMGL;
+			productReference = C4D1443D1F4E16F600396F26 /* libRCTMGL.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C4D144351F4E16F600396F26 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = "Mapbox Inc";
+				TargetAttributes = {
+					C4D1443C1F4E16F600396F26 = {
+						CreatedOnToolsVersion = 8.3.3;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = C4D144381F4E16F600396F26 /* Build configuration list for PBXProject "RCTMGL" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C4D144341F4E16F600396F26;
+			productRefGroup = C4D1443E1F4E16F600396F26 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C4D1443C1F4E16F600396F26 /* RCTMGL */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C4D144391F4E16F600396F26 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C4D144531F4E190C00396F26 /* MGLModule.m in Sources */,
+				C4D1444C1F4E178100396F26 /* RCTMGLMapView.m in Sources */,
+				C4D1444F1F4E181100396F26 /* RCTMGLMapViewManager.m in Sources */,
+				C4D144971F4E2F1100396F26 /* RCTConvert+Mapbox.m in Sources */,
+				C4D144421F4E16F600396F26 /* RCTMGL.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C4D144441F4E16F600396F26 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C4D144451F4E16F600396F26 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C4D144471F4E16F600396F26 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../react-native/React/**";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		C4D144481F4E16F600396F26 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../react-native/React/**";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C4D144381F4E16F600396F26 /* Build configuration list for PBXProject "RCTMGL" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C4D144441F4E16F600396F26 /* Debug */,
+				C4D144451F4E16F600396F26 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C4D144461F4E16F600396F26 /* Build configuration list for PBXNativeTarget "RCTMGL" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C4D144471F4E16F600396F26 /* Debug */,
+				C4D144481F4E16F600396F26 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C4D144351F4E16F600396F26 /* Project object */;
+}
