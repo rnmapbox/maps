@@ -28,6 +28,7 @@ Pods/
 #
 node_modules/
 npm-debug.log
+package-lock.json
 *.tgz
 
 # project specific
