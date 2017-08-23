@@ -28,6 +28,7 @@ Pods/
 #
 node_modules/
 npm-debug.log
+*.tgz
 
 # project specific
 ios/Mapbox.framework
