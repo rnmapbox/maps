@@ -10,4 +10,7 @@
 
 @interface RCTMGLMapViewManager : RCTViewManager
 
+- (void)didTapMap:(UITapGestureRecognizer *)recognizer;
+- (void)didLongPressMap:(UILongPressGestureRecognizer *)recognizer;
+
 @end
