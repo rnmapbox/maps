@@ -24,6 +24,9 @@
   },
   "scripts": {
     "fetch:ios:sdk": "node ./scripts/download-mapbox-gl-native-ios-if-on-mac.js 3.6.1",
+    "docs:parse": "react-docgen ./javascript/components --pretty -o ./docs/docs.json",
+    "docs:build:md": "node ./scripts/buildMarkdown.js",
+    "docs:generate": "npm run docs:parse && npm run docs:build:md",
     "preinstall": "npm run fetch:ios:sdk",
     "test": "npm run lint",
     "lint": "eslint --no-eslintrc -c .eslintrc index.js example.js"
