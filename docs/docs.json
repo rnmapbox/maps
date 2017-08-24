@@ -1,7 +1,32 @@
 {
   "javascript/components/MapView.js": {
     "description": "MapView backed by Mapbox Native GL",
-    "methods": [],
+    "methods": [
+      {
+        "name": "onPress",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "e",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "onLongPress",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "e",
+            "type": null
+          }
+        ],
+        "returns": null
+      }
+    ],
     "props": {
       "animated": {
         "type": {
@@ -21,7 +46,7 @@
         "required": false,
         "description": "Initial center coordinate on map",
         "defaultValue": {
-          "value": "{\n  type: 'Point',\n  coordinates: [-77.036086, 38.910233]\n}",
+          "value": "{\n  type: 'Point',\n  coordinates: [-77.036086, 38.910233],\n}",
           "computed": false
         }
       },
@@ -56,9 +81,7 @@
       },
       "styleURL": {
         "type": {
-          "name": "enum",
-          "computed": true,
-          "value": "Object.values(MapView.StyleURL)"
+          "name": "string"
         },
         "required": false,
         "description": "Style URL for map",
@@ -77,6 +100,20 @@
           "value": "16",
           "computed": false
         }
+      },
+      "onPress": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "Map press listener, gets called when a user presses the map"
+      },
+      "onLongPress": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "Map long press listener, gets called when a user long presses the map"
       }
     }
   }
