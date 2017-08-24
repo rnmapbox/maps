@@ -1,0 +1,83 @@
+{
+  "javascript/components/MapView.js": {
+    "description": "MapView backed by Mapbox Native GL",
+    "methods": [],
+    "props": {
+      "animated": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "Animates changes between pitch and bearing",
+        "defaultValue": {
+          "value": "true",
+          "computed": false
+        }
+      },
+      "centerCoordinate": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "Initial center coordinate on map",
+        "defaultValue": {
+          "value": "{\n  type: 'Point',\n  coordinates: [-77.036086, 38.910233]\n}",
+          "computed": false
+        }
+      },
+      "heading": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "Initial heading on map",
+        "defaultValue": {
+          "value": "0",
+          "computed": false
+        }
+      },
+      "pitch": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "Initial pitch on map",
+        "defaultValue": {
+          "value": "0",
+          "computed": false
+        }
+      },
+      "style": {
+        "type": {
+          "name": "any"
+        },
+        "required": false,
+        "description": "Style for wrapping React Native View"
+      },
+      "styleURL": {
+        "type": {
+          "name": "enum",
+          "computed": true,
+          "value": "Object.values(MapView.StyleURL)"
+        },
+        "required": false,
+        "description": "Style URL for map",
+        "defaultValue": {
+          "value": "MapView.StyleURL.Street",
+          "computed": true
+        }
+      },
+      "zoomLevel": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "Initial zoom level of map",
+        "defaultValue": {
+          "value": "16",
+          "computed": false
+        }
+      }
+    }
+  }
+}
