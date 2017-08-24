@@ -2,19 +2,15 @@ import {
   NativeModules,
   findNodeHandle,
   Platform,
-  requireNativeComponent,
 } from 'react-native';
-
-const LOG_TAG = '[ReactNativeMapboxNavigationUtils]';
 
 export const IS_ANDROID = Platform.OS === 'android';
 
-export function runNativeCommand(module, name, nativeRef, args = []) {
+export function runNativeCommand (module, name, nativeRef, args = []) {
   // android native command
-  const managerInstance = getManagerInstance(module)
+  const managerInstance = getManagerInstance(module);
   if (!managerInstance) {
-    console.log(LOG_TAG, `Could not find ${module}`);
-    return;
+    throw new Error(`Could not find ${module}`);
   }
 
   // get react tag so we can find, this component on the otherside
@@ -31,16 +27,15 @@ export function runNativeCommand(module, name, nativeRef, args = []) {
   }
 
   // ios native command
-  const method = managerInstance[name]
+  const method = managerInstance[name];
   if (!method) {
-    console.log(LOG_TAG, `Could not find method ${name} on module ${module}`);
-    return;
+    throw new Error(`Could not find method ${name} on module ${module}`);
   }
 
   method(handle, ...args);
 }
 
-function getManagerInstance(module) {
+function getManagerInstance (module) {
   const obj = IS_ANDROID ? NativeModules.UIManager : NativeModules;
   return obj[module];
 }
