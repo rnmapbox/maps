@@ -19,4 +19,7 @@
 @property (nonatomic, assign) double pitch;
 @property (nonatomic, assign) double reactZoomLevel;
 
+@property (nonatomic, copy) RCTBubblingEventBlock onPress;
+@property (nonatomic, copy) RCTBubblingEventBlock onLongPress;
+
 @end

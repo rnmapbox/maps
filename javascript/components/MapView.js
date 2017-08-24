@@ -56,6 +56,16 @@ class MapView extends React.Component {
      * Initial zoom level of map
      */
     zoomLevel: PropTypes.number,
+
+    /**
+     * Map press listener, gets called when a user presses the map
+     */
+     onPress: PropTypes.func,
+
+     /**
+      * Map long press listener, gets called when a user long presses the map
+      */
+      onLongPress: PropTypes.func,
   };
 
   static defaultProps = {
@@ -67,8 +77,32 @@ class MapView extends React.Component {
     styleURL: MapView.StyleURL.Street,
   };
 
+  constructor (props) {
+    super(props);
+
+    this.onPress = this.onPress.bind(this);
+    this.onLongPress = this.onLongPress.bind(this);
+  }
+
+  onPress (e) {
+    if (typeof this.props.onPress === 'function') {
+      this.props.onPress(e.nativeEvent);
+    }
+  }
+
+  onLongPress (e) {
+    if (typeof this.props.onLongPress === 'function') {
+      this.props.onLongPress(e.nativeEvent);
+    }
+  }
+
   render () {
-    return <RCTMGLMapView {...this.props} />;
+    return (
+      <RCTMGLMapView
+        {...this.props}
+        onPress={this.onPress}
+        onLongPress={this.onLongPress} />
+    );
   }
 }
 

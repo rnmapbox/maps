@@ -68,7 +68,17 @@
     self.zoomLevel = reactZoomLevel;
 }
 
-- (NSURL*) getStyleURLFromKey:(NSString *)styleKey
+- (void)setOnPress:(RCTBubblingEventBlock)onPress
+{
+    _onPress = onPress;
+}
+
+- (void)setOnLongPress:(RCTBubblingEventBlock)onLongPress
+{
+    _onLongPress = onLongPress;
+}
+
+- (NSURL*)getStyleURLFromKey:(NSString *)styleKey
 {
     NSString *styleURL = [_mapStyleURLS objectForKey:styleKey];
     

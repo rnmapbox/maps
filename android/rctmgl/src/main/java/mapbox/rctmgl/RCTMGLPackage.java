@@ -7,9 +7,11 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import mapbox.rctmgl.components.RCTMGLMapViewManager;
+import mapbox.rctmgl.modules.RCTMGLModule;
 
 /**
  * Created by nickitaliano on 8/18/17.
