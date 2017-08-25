@@ -13,6 +13,7 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.maps.UiSettings;
 import com.mapbox.services.commons.geojson.Point;
 
 import mapbox.rctmgl.utils.MGLGeoUtils;
@@ -32,10 +33,17 @@ public class RCTMGLMapView extends RelativeLayout implements OnMapReadyCallback 
     private MapView mMapView;
 
     private String mStyleURL;
+
     private boolean mAnimated;
+    private boolean mScrollEnabled;
+    private boolean mPitchEnabled;
+
     private double mHeading;
     private double mPitch;
     private double mZoomLevel;
+    private double mMinZoomLevel;
+    private double mMaxZoomLevel;
+
     private Point mCenterCoordinate;
 
     public RCTMGLMapView(Context context, RCTMGLMapViewManager manager) {
@@ -50,6 +58,7 @@ public class RCTMGLMapView extends RelativeLayout implements OnMapReadyCallback 
             return;
         }
         mMap = mapboxMap;
+        updateUISettings();
         setOnClickListener();
         setOnLongClickListener();
     }
@@ -67,6 +76,16 @@ public class RCTMGLMapView extends RelativeLayout implements OnMapReadyCallback 
         updateCameraPositionIfNeeded(false);
     }
 
+    public void setScrollEnabled(boolean scrollEnabled) {
+        mScrollEnabled = scrollEnabled;
+        updateUISettings();
+    }
+
+    public void setPitchEnabled(boolean pitchEnabled) {
+        mPitchEnabled = pitchEnabled;
+        updateUISettings();
+    }
+
     public void setHeading(double heading) {
         mHeading = heading;
         updateCameraPositionIfNeeded(false);
@@ -80,6 +99,16 @@ public class RCTMGLMapView extends RelativeLayout implements OnMapReadyCallback 
     public void setZoomLevel(double zoomLevel) {
         mZoomLevel = zoomLevel;
         updateCameraPositionIfNeeded(false);
+    }
+
+    public void setMinZoomLevel(double minZoomLevel) {
+        mMinZoomLevel = minZoomLevel;
+        mMap.setMinZoomPreference(mMinZoomLevel);
+    }
+
+    public void setMaxZoomLevel(double maxZoomLevel) {
+        mMaxZoomLevel = maxZoomLevel;
+        mMap.setMaxZoomPreference(mMaxZoomLevel);
     }
 
     public void setCenterCoordinate(Point centerCoordinate) {
@@ -159,5 +188,14 @@ public class RCTMGLMapView extends RelativeLayout implements OnMapReadyCallback 
                 mManager.handleEvent(event);
             }
         });
+    }
+
+    private void updateUISettings() {
+        if (mMap == null) {
+            return;
+        }
+        UiSettings uiSettings = mMap.getUiSettings();
+        uiSettings.setScrollGesturesEnabled(mScrollEnabled);
+        uiSettings.setTiltGesturesEnabled(mPitchEnabled);
     }
 }

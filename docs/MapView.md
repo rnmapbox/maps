@@ -12,6 +12,10 @@
 | style | `any` | `none` | `false` | Style for wrapping React Native View |
 | styleURL | `string` | `MapView.StyleURL.Street` | `false` | Style URL for map |
 | zoomLevel | `number` | `16` | `false` | Initial zoom level of map |
+| minZoomLevel | `number` | `none` | `false` | Min zoom level of map |
+| maxZoomLevel | `number` | `none` | `false` | Max zoom level of map |
+| scrollEnabled | `bool` | `none` | `false` | Enable/Disable scroll on the map |
+| pitchEnabled | `bool` | `none` | `false` | Enable/Disable pitch on map |
 | onPress | `func` | `none` | `false` | Map press listener, gets called when a user presses the map |
 | onLongPress | `func` | `none` | `false` | Map long press listener, gets called when a user long presses the map |
 

@@ -34,6 +34,18 @@
     _animated = animated;
 }
 
+- (void)setReactScrollEnabled:(BOOL)reactScrollEnabled
+{
+    _reactScrollEnabled = reactScrollEnabled;
+    self.scrollEnabled = _reactScrollEnabled;
+}
+
+- (void)setReactPitchEnabled:(BOOL)reactPitchEnabled
+{
+    _reactPitchEnabled = reactPitchEnabled;
+    self.pitchEnabled = _reactPitchEnabled;
+}
+
 - (void)setReactCenterCoordinate:(NSDictionary *)reactCenterCoordinate
 {
     _reactCenterCoordinate = reactCenterCoordinate;
@@ -66,6 +78,18 @@
 {
     _reactZoomLevel = reactZoomLevel;
     self.zoomLevel = reactZoomLevel;
+}
+
+- (void)setReactMinZoomLevel:(double)reactMinZoomLevel
+{
+    _reactMinZoomLevel = reactMinZoomLevel;
+    self.minimumZoomLevel = _reactMinZoomLevel;
+}
+
+- (void)setReactMaxZoomLevel:(double)reactMaxZoomLevel
+{
+    _reactMaxZoomLevel = reactMaxZoomLevel;
+    self.maximumZoomLevel = reactMaxZoomLevel;
 }
 
 - (void)setOnPress:(RCTBubblingEventBlock)onPress

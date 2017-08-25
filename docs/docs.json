@@ -101,6 +101,34 @@
           "computed": false
         }
       },
+      "minZoomLevel": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "Min zoom level of map"
+      },
+      "maxZoomLevel": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "Max zoom level of map"
+      },
+      "scrollEnabled": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "Enable/Disable scroll on the map"
+      },
+      "pitchEnabled": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "Enable/Disable pitch on map"
+      },
       "onPress": {
         "type": {
           "name": "func"

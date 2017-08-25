@@ -57,6 +57,16 @@ public class RCTMGLMapViewManager extends RCTAbstractEventEmitter<RCTMGLMapView>
         mapView.setAnimated(isAnimated);
     }
 
+    @ReactProp(name="scrollEnabled")
+    public void setScrollEnabled(RCTMGLMapView mapView, boolean scrollEnabled) {
+        mapView.setScrollEnabled(scrollEnabled);
+    }
+
+    @ReactProp(name="pitchEnabled")
+    public void setPitchEnabled(RCTMGLMapView mapView, boolean pitchEnabled) {
+        mapView.setPitchEnabled(pitchEnabled);
+    }
+
     @ReactProp(name="heading")
     public void setHeading(RCTMGLMapView mapView, double heading) {
         mapView.setHeading(heading);
@@ -70,6 +80,16 @@ public class RCTMGLMapViewManager extends RCTAbstractEventEmitter<RCTMGLMapView>
     @ReactProp(name="zoomLevel")
     public void setZoomLevel(RCTMGLMapView mapView, double zoomLevel) {
         mapView.setZoomLevel(zoomLevel);
+    }
+
+    @ReactProp(name="minZoomLevel")
+    public void setMinZoomLevel(RCTMGLMapView mapView, double minZoomLevel) {
+        mapView.setMinZoomLevel(minZoomLevel);
+    }
+
+    @ReactProp(name="maxZoomLevel")
+    public void setMaxZoomLevel(RCTMGLMapView mapView, double maxZoomLevel) {
+        mapView.setMaxZoomLevel(maxZoomLevel);
     }
 
     @ReactProp(name="centerCoordinate")
