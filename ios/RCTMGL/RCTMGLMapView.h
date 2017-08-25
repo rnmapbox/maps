@@ -12,12 +12,18 @@
 @interface RCTMGLMapView : MGLMapView
 
 @property (nonatomic, assign) BOOL animated;
+@property (nonatomic, assign) BOOL reactScrollEnabled;
+@property (nonatomic, assign) BOOL reactPitchEnabled;
+
 @property (nonatomic, assign) NSDictionary *reactCenterCoordinate;
 @property (nonatomic, assign) NSString *reactStyleURL;
 
 @property (nonatomic, assign) double heading;
 @property (nonatomic, assign) double pitch;
 @property (nonatomic, assign) double reactZoomLevel;
+@property (nonatomic, assign) double reactMinZoomLevel;
+@property (nonatomic, assign) double reactMaxZoomLevel;
+
 
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;

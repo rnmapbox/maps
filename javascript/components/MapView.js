@@ -58,6 +58,26 @@ class MapView extends React.Component {
     zoomLevel: PropTypes.number,
 
     /**
+     * Min zoom level of map
+     */
+    minZoomLevel: PropTypes.number,
+
+    /**
+     * Max zoom level of map
+     */
+    maxZoomLevel: PropTypes.number,
+
+    /**
+     * Enable/Disable scroll on the map
+     */
+    scrollEnabled: PropTypes.bool,
+
+    /**
+     * Enable/Disable pitch on map
+     */
+    pitchEnabled: PropTypes.bool,
+
+    /**
      * Map press listener, gets called when a user presses the map
      */
      onPress: PropTypes.func,
@@ -65,7 +85,7 @@ class MapView extends React.Component {
      /**
       * Map long press listener, gets called when a user long presses the map
       */
-      onLongPress: PropTypes.func,
+     onLongPress: PropTypes.func,
   };
 
   static defaultProps = {
@@ -100,6 +120,8 @@ class MapView extends React.Component {
     return (
       <RCTMGLMapView
         {...this.props}
+        scrollEnabled={false}
+        pitchEnabled={false}
         onPress={this.onPress}
         onLongPress={this.onLongPress} />
     );

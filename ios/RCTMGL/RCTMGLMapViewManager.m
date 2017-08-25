@@ -32,11 +32,17 @@ RCT_EXPORT_MODULE()
 }
 
 RCT_EXPORT_VIEW_PROPERTY(animated, BOOL)
+RCT_REMAP_VIEW_PROPERTY(scrollEnabled, reactScrollEnabled, BOOL)
+RCT_REMAP_VIEW_PROPERTY(pitchEnabled, reactPitchEnabled, BOOL)
+
 RCT_REMAP_VIEW_PROPERTY(centerCoordinate, reactCenterCoordinate, NSDictionary)
 RCT_REMAP_VIEW_PROPERTY(styleURL, reactStyleURL, NSString)
+
 RCT_EXPORT_VIEW_PROPERTY(heading, double)
 RCT_EXPORT_VIEW_PROPERTY(pitch, double)
 RCT_REMAP_VIEW_PROPERTY(zoomLevel, reactZoomLevel, double)
+RCT_REMAP_VIEW_PROPERTY(minZoomLevel, reactMinZoomLevel, double)
+RCT_REMAP_VIEW_PROPERTY(maxZoomLevel, reactMaxZoomLevel, double)
 
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
@@ -48,7 +54,7 @@ RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
     if (mapView == nil || mapView.onPress == nil) {
         return;
     }
-    
+
     mapView.onPress([self convertXYPointToGeoJSONPoint:mapView atPoint:[recognizer locationInView:mapView]]);
 }
 
