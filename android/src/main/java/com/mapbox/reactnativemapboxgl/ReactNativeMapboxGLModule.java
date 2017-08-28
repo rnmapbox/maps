@@ -56,6 +56,14 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
 
     private static final String TAG = ReactNativeMapboxGLModule.class.getSimpleName();
 
+    private static final int ANDROID_SDK_OFFLINE_PACK_STATE_INACTIVE = 0;
+    private static final int ANDROID_SDK_OFFLINE_PACK_STATE_ACTIVE = 1;
+
+    private static final int OFFLINE_PACK_STATE_UNKNOWN = 0;
+    private static final int OFFLINE_PACK_STATE_INACTIVE = 1;
+    private static final int OFFLINE_PACK_STATE_ACTIVE = 2;
+    private static final int OFFLINE_PACK_STATE_COMPLETE = 3;
+
     private ReactApplicationContext context;
     private ReactNativeMapboxGLPackage aPackage;
     Handler mainHandler;
@@ -385,18 +393,18 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         boolean isComplete = (boolean)status.isComplete();
 
         switch (state) {
-            case 0:
+            case ANDROID_SDK_OFFLINE_PACK_STATE_INACTIVE:
                 if (isComplete) {
-                    state = 3;
+                    state = OFFLINE_PACK_STATE_COMPLETE;
                 } else {
-                    state = 1;
+                    state = OFFLINE_PACK_STATE_INACTIVE;
                 }
                 break;
-            case 1:
-                state = 2;
+            case ANDROID_SDK_OFFLINE_PACK_STATE_ACTIVE:
+                state = OFFLINE_PACK_STATE_ACTIVE;
                 break;
             default:
-                state = 0;
+                state = OFFLINE_PACK_STATE_UNKNOWN;
         }
 
         return state;
@@ -536,14 +544,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         mainHandler.post(new Runnable() {
             @Override
             public void run() {
-                OfflineRegionProgressObserver foundObserver = null;
-
-                for (OfflineRegionProgressObserver observer : offlinePackObservers) {
-                    if (packName.equals(observer.name)) {
-                        foundObserver = observer;
-                        break;
-                    }
-                }
+                final OfflineRegionProgressObserver foundObserver = getObserver(packName);
 
                 if (foundObserver == null) {
                     promise.resolve(Arguments.createMap());
@@ -553,13 +554,11 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
                 offlinePackObservers.remove(foundObserver);
                 foundObserver.invalidate();
                 foundObserver.region.setDownloadState(OfflineRegion.STATE_INACTIVE);
-
-                final OfflineRegionProgressObserver _foundObserver = foundObserver;
                 foundObserver.region.delete(new OfflineRegion.OfflineRegionDeleteCallback() {
                     @Override
                     public void onDelete() {
                         WritableMap result = Arguments.createMap();
-                        result.putString("deleted", _foundObserver.name);
+                        result.putString("deleted", foundObserver.name);
                         promise.resolve(result);
                     }
 
@@ -577,14 +576,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         mainHandler.post(new Runnable() {
             @Override
             public void run() {
-                OfflineRegionProgressObserver foundObserver = null;
-
-                for (OfflineRegionProgressObserver observer : offlinePackObservers) {
-                    if (packName.equals(observer.name)) {
-                        foundObserver = observer;
-                        break;
-                    }
-                }
+                final OfflineRegionProgressObserver foundObserver = getObserver(packName);
 
                 if (foundObserver == null) {
                     promise.resolve(Arguments.createMap());
@@ -592,14 +584,12 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
                 }
 
                 foundObserver.region.setDownloadState(OfflineRegion.STATE_INACTIVE);
-                final OfflineRegionProgressObserver _foundObserver = foundObserver;
                 foundObserver.region.getStatus(new OfflineRegion.OfflineRegionStatusCallback() {
                     @Override
                     public void onStatus(OfflineRegionStatus status) {
-                        //_foundObserver.fireUpdateEvent();
-                        _foundObserver.onStatusChanged(status);
+                        foundObserver.onStatusChanged(status);
                         WritableMap result = Arguments.createMap();
-                        result.putString("suspended", _foundObserver.name);
+                        result.putString("suspended", foundObserver.name);
                         promise.resolve(result);
                     }
                     @Override
@@ -617,14 +607,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         mainHandler.post(new Runnable() {
             @Override
             public void run() {
-                OfflineRegionProgressObserver foundObserver = null;
-
-                for (OfflineRegionProgressObserver observer : offlinePackObservers) {
-                    if (packName.equals(observer.name)) {
-                        foundObserver = observer;
-                        break;
-                    }
-                }
+                final OfflineRegionProgressObserver foundObserver = getObserver(packName);
 
                 if (foundObserver == null) {
                     promise.resolve(Arguments.createMap());
@@ -632,14 +615,12 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
                 }
 
                 foundObserver.region.setDownloadState(OfflineRegion.STATE_ACTIVE);
-                final OfflineRegionProgressObserver _foundObserver = foundObserver;
                 foundObserver.region.getStatus(new OfflineRegion.OfflineRegionStatusCallback() {
                     @Override
                     public void onStatus(OfflineRegionStatus status) {
-                        //_foundObserver.fireUpdateEvent();
-                        _foundObserver.onStatusChanged(status);
+                        foundObserver.onStatusChanged(status);
                         WritableMap result = Arguments.createMap();
-                        result.putString("resumed", _foundObserver.name);
+                        result.putString("resumed", foundObserver.name);
                         promise.resolve(result);
                     }
                     @Override
@@ -650,6 +631,19 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
                 });
             }
         });
+    }
+
+    OfflineRegionProgressObserver getObserver(String name) {
+        OfflineRegionProgressObserver foundObserver = null;
+
+        for (OfflineRegionProgressObserver observer : offlinePackObservers) {
+            if (name.equals(observer.name)) {
+                foundObserver = observer;
+                break;
+            }
+        }
+
+        return foundObserver;
     }
 
     // Offline throttle control
