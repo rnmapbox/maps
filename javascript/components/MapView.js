@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { requireNativeComponent } from 'react-native';
-import { isFunction, runNativeCommand } from '../utils';
+import { isFunction, runNativeCommand, noop } from '../utils';
 
 const DEFAULT_CENTER_COORDINATE = {
   type: 'Point',
@@ -27,8 +27,11 @@ class MapView extends React.Component {
   };
 
   static EventTypes = {
+    // UI Interaction events
     Press: 'press',
     LongPress: 'longpress',
+
+    // Map change events
     RegionWillChange: 'regionwillchange',
     RegionIsChanging: 'regionischanging',
     RegionDidChange: 'regiondidchange',
@@ -42,6 +45,9 @@ class MapView extends React.Component {
     DidFinishRenderingMap: 'didfinishrenderingmap',
     DidFinishRenderingMapFully: 'didfinishrenderingmapfully',
     DidFinishLoadingStyle: 'didfinishloadingstyle',
+
+    // Animation completion events
+    FlyToComplete: 'flytocomplete',
   };
 
   static propTypes = {
@@ -174,6 +180,11 @@ class MapView extends React.Component {
       * This event is triggered when a style has finished loading.
       */
      onDidFinishLoadingStyle: PropTypes.func,
+
+     /**
+      * This event is triggered when a fly to animation is cancelled or completed
+      */
+     onFlyToComplete: PropTypes.func,
   };
 
   static defaultProps = {
@@ -260,6 +271,9 @@ class MapView extends React.Component {
         break;
       case MapView.EventTypes.DidFinishLoadingStyle:
         propName = 'onDidFinishLoadingStyle';
+        break;
+      case MapView.EventTypes.FlyToComplete:
+        propName = 'onFlyToComplete';
         break;
     }
 

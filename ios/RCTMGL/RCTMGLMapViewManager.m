@@ -78,7 +78,10 @@ RCT_EXPORT_METHOD(flyTo:(nonnull NSNumber*)reactTag
         MGLMapCamera *camera = [reactMapView.camera copy];
         camera.centerCoordinate = [RCTMGLUtils GeoJSONPoint:point];
         CGFloat durationS = [durationMS doubleValue] * 0.001;
-        [reactMapView flyToCamera:camera withDuration:durationS completionHandler:nil];
+
+        [reactMapView flyToCamera:camera withDuration:durationS completionHandler:^{
+            [self reactMapDidChange:reactMapView eventType:RCT_MAPBOX_FLY_TO_COMPLETE];
+        }];
     }];
 }
 

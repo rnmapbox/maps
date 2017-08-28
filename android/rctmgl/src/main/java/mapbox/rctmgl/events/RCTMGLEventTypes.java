@@ -25,4 +25,6 @@ public class RCTMGLEventTypes {
     public static final String DID_FINISH_RENDERING_MAP_FULLY = "didfinishrenderingmapfully";
 
     public static final String DID_FINISH_LOADING_STYLE = "didfinishloadingstyle";
+
+    public static final String FLY_TO_COMPLETE = "flytocomplete";
 }
