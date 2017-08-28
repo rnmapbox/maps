@@ -1,4 +1,4 @@
-package mapbox.rctmgl.components;
+package mapbox.rctmgl.components.mapview;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -16,15 +16,20 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.UiSettings;
 import com.mapbox.services.commons.geojson.Point;
 
+import mapbox.rctmgl.events.IRCTMGLEvent;
+import mapbox.rctmgl.events.RCTMGLEventTypes;
+import mapbox.rctmgl.events.RCTMGLMapChangeEvent;
 import mapbox.rctmgl.utils.MGLGeoUtils;
 import mapbox.rctmgl.events.RCTMGLMapClickEvent;
-import mapbox.rctmgl.events.RCTMGLMapLongClickEvent;
 
 /**
  * Created by nickitaliano on 8/18/17.
  */
 
-public class RCTMGLMapView extends RelativeLayout implements OnMapReadyCallback {
+public class RCTMGLMapView extends RelativeLayout implements
+        OnMapReadyCallback, MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener,
+        MapView.OnMapChangedListener
+{
     public static final String LOG_TAG = RCTMGLMapView.class.getSimpleName();
 
     private RCTMGLMapViewManager mManager;
@@ -41,8 +46,9 @@ public class RCTMGLMapView extends RelativeLayout implements OnMapReadyCallback 
     private double mHeading;
     private double mPitch;
     private double mZoomLevel;
-    private double mMinZoomLevel;
-    private double mMaxZoomLevel;
+
+    private Double mMinZoomLevel;
+    private Double mMaxZoomLevel;
 
     private Point mCenterCoordinate;
 
@@ -51,6 +57,8 @@ public class RCTMGLMapView extends RelativeLayout implements OnMapReadyCallback 
         mManager = manager;
     }
 
+    //region Map Callbacks
+
     @Override
     public void onMapReady(MapboxMap mapboxMap) {
         if (mMapView == null) {
@@ -58,10 +66,85 @@ public class RCTMGLMapView extends RelativeLayout implements OnMapReadyCallback 
             return;
         }
         mMap = mapboxMap;
+        mMap.setOnMapClickListener(this);
+        mMap.setOnMapLongClickListener(this);
+        mMapView.addOnMapChangedListener(this);
+
+        // in case props were set before the map was ready lets set them
         updateUISettings();
-        setOnClickListener();
-        setOnLongClickListener();
+        setMinMaxZoomLevels();
     }
+
+    @Override
+    public void onMapClick(@NonNull LatLng point) {
+        RCTMGLMapClickEvent event = new RCTMGLMapClickEvent(this);
+        event.setLatLng(point);
+        mManager.handleEvent(event);
+    }
+
+    @Override
+    public void onMapLongClick(@NonNull LatLng point) {
+        RCTMGLMapClickEvent event = new RCTMGLMapClickEvent(this, RCTMGLEventTypes.MAP_LONG_CLICK);
+        event.setLatLng(point);
+        mManager.handleEvent(event);
+    }
+
+    @Override
+    public void onMapChanged(int changed) {
+        IRCTMGLEvent event = null;
+
+        switch (changed) {
+            case MapView.REGION_WILL_CHANGE:
+            case MapView.REGION_WILL_CHANGE_ANIMATED:
+                event = new RCTMGLMapChangeEvent(this, RCTMGLEventTypes.REGION_WILL_CHANGE);
+                break;
+            case MapView.REGION_IS_CHANGING:
+                event = new RCTMGLMapChangeEvent(this, RCTMGLEventTypes.REGION_IS_CHANGING);
+                break;
+            case MapView.REGION_DID_CHANGE:
+            case MapView.REGION_DID_CHANGE_ANIMATED:
+                event = new RCTMGLMapChangeEvent(this, RCTMGLEventTypes.REGION_DID_CHANGE);
+                break;
+            case MapView.WILL_START_LOADING_MAP:
+                 event = new RCTMGLMapChangeEvent(this, RCTMGLEventTypes.WILL_START_LOADING_MAP);
+                break;
+            case MapView.DID_FAIL_LOADING_MAP:
+                event = new RCTMGLMapChangeEvent(this, RCTMGLEventTypes.DID_FAIL_LOADING_MAP);
+                break;
+            case MapView.DID_FINISH_LOADING_MAP:
+                event = new RCTMGLMapChangeEvent(this, RCTMGLEventTypes.DID_FINISH_LOADING_MAP);
+                break;
+            case MapView.WILL_START_RENDERING_FRAME:
+                event = new RCTMGLMapChangeEvent(this, RCTMGLEventTypes.WILL_START_RENDERING_FRAME);
+                break;
+            case MapView.DID_FINISH_RENDERING_FRAME:
+                event = new RCTMGLMapChangeEvent(this, RCTMGLEventTypes.DID_FINISH_RENDERING_FRAME);
+                break;
+            case MapView.DID_FINISH_RENDERING_FRAME_FULLY_RENDERED:
+                event = new RCTMGLMapChangeEvent(this, RCTMGLEventTypes.DID_FINISH_RENDERING_FRAME_FULLY);
+                break;
+            case MapView.WILL_START_RENDERING_MAP:
+                event = new RCTMGLMapChangeEvent(this, RCTMGLEventTypes.WILL_START_RENDERING_MAP);
+                break;
+            case MapView.DID_FINISH_RENDERING_MAP:
+                event = new RCTMGLMapChangeEvent(this, RCTMGLEventTypes.DID_FINISH_RENDERING_MAP);
+                break;
+            case MapView.DID_FINISH_RENDERING_MAP_FULLY_RENDERED:
+                event = new RCTMGLMapChangeEvent(this, RCTMGLEventTypes.DID_FINISH_RENDERING_MAP_FULLY);
+                break;
+            case MapView.DID_FINISH_LOADING_STYLE:
+                event = new RCTMGLMapChangeEvent(this, RCTMGLEventTypes.DID_FINISH_LOADING_STYLE);
+                break;
+        }
+
+        if (event != null) {
+            mManager.handleEvent(event);
+        }
+    }
+
+    //endregion
+
+    //region Property getter/setters
 
     public void setStyleURL(String styleURL) {
         mStyleURL = styleURL;
@@ -103,18 +186,32 @@ public class RCTMGLMapView extends RelativeLayout implements OnMapReadyCallback 
 
     public void setMinZoomLevel(double minZoomLevel) {
         mMinZoomLevel = minZoomLevel;
-        mMap.setMinZoomPreference(mMinZoomLevel);
+        setMinMaxZoomLevels();
     }
 
     public void setMaxZoomLevel(double maxZoomLevel) {
         mMaxZoomLevel = maxZoomLevel;
-        mMap.setMaxZoomPreference(mMaxZoomLevel);
+        setMinMaxZoomLevels();
     }
 
     public void setCenterCoordinate(Point centerCoordinate) {
         mCenterCoordinate = centerCoordinate;
         updateCameraPositionIfNeeded(true);
     }
+
+    //endregion
+
+    //region Methods
+
+    public void flyTo(Point flyToPoint, int durationMS) {
+        CameraPosition nextPosition = new CameraPosition.Builder(mMap.getCameraPosition())
+                .target(MGLGeoUtils.pointToLatLng(flyToPoint))
+                .build();
+        CameraUpdate flyToUpdate = CameraUpdateFactory.newCameraPosition(nextPosition);
+        mMap.animateCamera(flyToUpdate, durationMS);
+    }
+
+    //endregion
 
     public void makeView() {
         if (mMapView != null) {
@@ -164,32 +261,6 @@ public class RCTMGLMapView extends RelativeLayout implements OnMapReadyCallback 
         return builder.build();
     }
 
-    private void setOnClickListener() {
-        final RCTMGLMapView view = this;
-
-        mMap.setOnMapClickListener(new MapboxMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(@NonNull LatLng point) {
-                RCTMGLMapClickEvent event = new RCTMGLMapClickEvent(view);
-                event.setLatLng(point);
-                mManager.handleEvent(event);
-            }
-        });
-    }
-
-    private void setOnLongClickListener() {
-        final RCTMGLMapView view = this;
-
-        mMap.setOnMapLongClickListener(new MapboxMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(@NonNull LatLng point) {
-                RCTMGLMapLongClickEvent event = new RCTMGLMapLongClickEvent(view);
-                event.setLatLng(point);
-                mManager.handleEvent(event);
-            }
-        });
-    }
-
     private void updateUISettings() {
         if (mMap == null) {
             return;
@@ -197,5 +268,19 @@ public class RCTMGLMapView extends RelativeLayout implements OnMapReadyCallback 
         UiSettings uiSettings = mMap.getUiSettings();
         uiSettings.setScrollGesturesEnabled(mScrollEnabled);
         uiSettings.setTiltGesturesEnabled(mPitchEnabled);
+    }
+
+    private void setMinMaxZoomLevels() {
+        if (mMap == null) {
+            return;
+        }
+
+        if (mMinZoomLevel != null) {
+            mMap.setMinZoomPreference(mMinZoomLevel.doubleValue());
+        }
+
+        if (mMaxZoomLevel != null) {
+            mMap.setMaxZoomPreference(mMaxZoomLevel.doubleValue());
+        }
     }
 }

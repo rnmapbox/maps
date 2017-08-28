@@ -8,6 +8,8 @@ import com.facebook.react.bridge.WritableMap;
 
 public interface IRCTMGLEvent {
     int getID();
-    String getName();
-    WritableMap toWritableMap();
+    String getKey();
+    String getType();
+    WritableMap getPayload();
+    WritableMap toJSON();
 }

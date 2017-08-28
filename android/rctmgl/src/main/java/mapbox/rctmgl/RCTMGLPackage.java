@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import mapbox.rctmgl.components.RCTMGLMapViewManager;
+import mapbox.rctmgl.components.mapview.RCTMGLMapViewManager;
 import mapbox.rctmgl.modules.RCTMGLModule;
 
 /**

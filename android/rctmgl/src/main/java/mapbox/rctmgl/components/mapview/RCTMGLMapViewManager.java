@@ -1,6 +1,8 @@
-package mapbox.rctmgl.components;
+package mapbox.rctmgl.components.mapview;
 
+import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -9,15 +11,19 @@ import com.mapbox.services.commons.geojson.Point;
 
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
+import mapbox.rctmgl.components.AbstractEventEmitter;
+import mapbox.rctmgl.events.RCTMGLEventKeys;
 import mapbox.rctmgl.utils.MGLGeoUtils;
 import mapbox.rctmgl.utils.RCTMGLMapStyleURL;
-import mapbox.rctmgl.events.RCTMGLEventNames;
+import mapbox.rctmgl.events.RCTMGLEventTypes;
 
 /**
  * Created by nickitaliano on 8/18/17.
  */
 
-public class RCTMGLMapViewManager extends RCTAbstractEventEmitter<RCTMGLMapView> {
+public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     public static final String REACT_CLASS = RCTMGLMapView.class.getSimpleName();
 
     public RCTMGLMapViewManager(ReactApplicationContext context) {
@@ -39,6 +45,8 @@ public class RCTMGLMapViewManager extends RCTAbstractEventEmitter<RCTMGLMapView>
     protected RCTMGLMapView createViewInstance(ThemedReactContext themedReactContext) {
         return new RCTMGLMapView(themedReactContext, this);
     }
+
+    //region React Props
 
     @ReactProp(name="styleURL")
     public void setStyleURL(RCTMGLMapView mapView, String styleURL) {
@@ -101,11 +109,52 @@ public class RCTMGLMapViewManager extends RCTAbstractEventEmitter<RCTMGLMapView>
         }
     }
 
+    //endregion
+
+    //region Custom Events
+
     @Override
     public Map<String, String> customEvents() {
         return MapBuilder.<String, String>builder()
-                .put(RCTMGLEventNames.MAP_CLICK, "onPress")
-                .put(RCTMGLEventNames.MAP_LONG_CLICK,"onLongPress")
+                .put(RCTMGLEventKeys.MAP_CLICK, "onPress")
+                .put(RCTMGLEventKeys.MAP_LONG_CLICK,"onLongPress")
+                .put(RCTMGLEventKeys.MAP_ONCHANGE, "onMapChange")
                 .build();
     }
+
+    //endregion
+
+    //region React Methods
+
+    public static final int METHOD_FLY_TO = 1;
+
+
+    @Nullable
+    @Override
+    public Map<String, Integer> getCommandsMap() {
+        return MapBuilder.<String, Integer>builder()
+                .put("flyTo", METHOD_FLY_TO)
+                .build();
+    }
+
+    @Override
+    public void receiveCommand(RCTMGLMapView mapView, int commandID, @Nullable ReadableArray args) {
+        Assertions.assertNotNull(args);
+
+        switch (commandID) {
+            case METHOD_FLY_TO:
+                flyTo(mapView, args.getMap(0), args.getInt(1));
+                break;
+        }
+    }
+
+    private void flyTo(RCTMGLMapView mapView, ReadableMap flyToMap, int durationMS) {
+        Point flyToPoint = MGLGeoUtils.readableMapToPoint(flyToMap);
+
+        if (flyToPoint != null) {
+            mapView.flyTo(flyToPoint, durationMS);
+        }
+    }
+
+    //endregion
 }
