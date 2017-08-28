@@ -11,23 +11,30 @@ import mapbox.rctmgl.utils.MGLGeoUtils;
  * Created by nickitaliano on 8/23/17.
  */
 
-public class RCTMGLMapClickEvent implements IRCTMGLEvent {
-    private int mTagID;
+public class RCTMGLMapClickEvent extends AbstractRCTMGLEvent {
     private LatLng mTouchedLatLng;
 
     public RCTMGLMapClickEvent(View view) {
-        mTagID = view.getId();
+        this(view, RCTMGLEventTypes.MAP_CLICK);
     }
 
-    public String getName() {
-        return RCTMGLEventNames.MAP_CLICK;
+    public RCTMGLMapClickEvent(View view, String eventType) {
+        super(view, eventType);
     }
 
-    public int getID() {
-        return mTagID;
+    @Override
+    public String getKey() {
+        String eventType = getType();
+
+        if (eventType.equals(RCTMGLEventTypes.MAP_LONG_CLICK)) {
+            return RCTMGLEventKeys.MAP_LONG_CLICK;
+        }
+
+        return RCTMGLEventKeys.MAP_CLICK;
     }
 
-    public WritableMap toWritableMap() {
+    @Override
+    public WritableMap getPayload() {
         return MGLGeoUtils.latLngToWritableMap(mTouchedLatLng);
     }
 

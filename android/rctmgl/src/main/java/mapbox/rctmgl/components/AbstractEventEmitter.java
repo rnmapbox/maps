@@ -2,7 +2,6 @@ package mapbox.rctmgl.components;
 
 import android.view.ViewGroup;
 
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
@@ -20,15 +19,15 @@ import mapbox.rctmgl.events.IRCTMGLEvent;
  * Created by nickitaliano on 8/23/17.
  */
 
-abstract public class RCTAbstractEventEmitter<T extends ViewGroup> extends ViewGroupManager<T> {
+abstract public class AbstractEventEmitter<T extends ViewGroup> extends ViewGroupManager<T> {
     private ReactApplicationContext mRCTAppContext;
 
-    public RCTAbstractEventEmitter(ReactApplicationContext reactApplicationContext) {
+    public AbstractEventEmitter(ReactApplicationContext reactApplicationContext) {
         mRCTAppContext = reactApplicationContext;
     }
 
     public void handleEvent(IRCTMGLEvent event) {
-        getEventEmitter().receiveEvent(event.getID(), event.getName(), event.toWritableMap());
+        getEventEmitter().receiveEvent(event.getID(), event.getKey(), event.toJSON());
     }
 
     @Nullable

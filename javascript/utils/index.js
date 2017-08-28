@@ -6,23 +6,27 @@ import {
 
 export const IS_ANDROID = Platform.OS === 'android';
 
+export function isFunction (fn) {
+  return typeof fn === 'function';
+}
+
 export function runNativeCommand (module, name, nativeRef, args = []) {
   // android native command
-  const managerInstance = getManagerInstance(module);
+  const managerInstance = NativeModules.UIManager[module];
   if (!managerInstance) {
     throw new Error(`Could not find ${module}`);
   }
 
   // get react tag so we can find, this component on the otherside
   const handle = findNodeHandle(nativeRef);
-
+  NativeModules.UIManager.dispatchViewManagerCommand(
+    handle,
+    managerInstance.Commands[name],
+    args,
+  );
+  return;
   // android native command
   if (IS_ANDROID) {
-    NativeModules.UIManager.dispatchViewManagerCommand(
-      handle,
-      managerInstance.Commands[name],
-      args,
-    );
     return;
   }
 

@@ -7,16 +7,17 @@
 //
 
 #import "RCTMGLMapView.h"
-#import "RCTConvert+Mapbox.h"
+#import "RCTMGLUtils.h"
+#import "UIView+React.h"
 
 @implementation RCTMGLMapView
 {
     NSDictionary *_mapStyleURLS;
 }
 
-- (instancetype)init
+- (instancetype)initWithFrame:(CGRect)frame
 {
-    if (self = [super init]) {
+    if (self = [super initWithFrame:frame]) {
         _mapStyleURLS = @{
                           @"mapbox-streets": MGLStyle.streetsStyleURL,
                           @"mapbox-dark": MGLStyle.darkStyleURL,
@@ -27,11 +28,6 @@
     }
     
     return self;
-}
-
-- (void)setAnimated:(BOOL)animated
-{
-    _animated = animated;
 }
 
 - (void)setReactScrollEnabled:(BOOL)reactScrollEnabled
@@ -49,35 +45,31 @@
 - (void)setReactCenterCoordinate:(NSDictionary *)reactCenterCoordinate
 {
     _reactCenterCoordinate = reactCenterCoordinate;
-    [self setCenterCoordinate:[RCTConvert GeoJSONPoint:_reactCenterCoordinate] animated:_animated];
+    [self _updateCameraIfNeeded:YES];
 }
 
 - (void)setReactStyleURL:(NSString *)reactStyleURL
 {
     _reactStyleURL = reactStyleURL;
-    self.styleURL = [self getStyleURLFromKey:_reactStyleURL];
+    self.styleURL = [self _getStyleURLFromKey:_reactStyleURL];
 }
 
 - (void)setHeading:(double)heading
 {
     _heading = heading;
-    MGLMapCamera *camera = [self.camera copy];
-    camera.heading = _heading;
-    [self setCamera:camera animated: _animated];
+    [self _updateCameraIfNeeded:NO];
 }
 
 - (void)setPitch:(double)pitch
 {
     _pitch = pitch;
-    MGLMapCamera *camera = [self.camera copy];
-    camera.pitch = _pitch;
-    [self setCamera:camera animated:_animated];
+    [self _updateCameraIfNeeded:NO];
 }
 
 - (void)setReactZoomLevel:(double)reactZoomLevel
 {
     _reactZoomLevel = reactZoomLevel;
-    self.zoomLevel = reactZoomLevel;
+    self.zoomLevel = _reactZoomLevel;
 }
 
 - (void)setReactMinZoomLevel:(double)reactMinZoomLevel
@@ -92,17 +84,7 @@
     self.maximumZoomLevel = reactMaxZoomLevel;
 }
 
-- (void)setOnPress:(RCTBubblingEventBlock)onPress
-{
-    _onPress = onPress;
-}
-
-- (void)setOnLongPress:(RCTBubblingEventBlock)onLongPress
-{
-    _onLongPress = onLongPress;
-}
-
-- (NSURL*)getStyleURLFromKey:(NSString *)styleKey
+- (NSURL*)_getStyleURLFromKey:(NSString *)styleKey
 {
     NSString *styleURL = [_mapStyleURLS objectForKey:styleKey];
     
@@ -113,6 +95,18 @@
     
     // custom style url
     return [NSURL URLWithString:styleKey];
+}
+
+- (void)_updateCameraIfNeeded:(BOOL)shouldUpdateCenterCoord
+{
+    if (shouldUpdateCenterCoord) {
+        [self setCenterCoordinate:[RCTMGLUtils GeoJSONPoint:_reactCenterCoordinate] animated:NO];
+    } else {
+        MGLMapCamera *camera = [self.camera copy];
+        camera.pitch = _pitch;
+        camera.heading = _heading;
+        [self setCamera:camera animated:NO];
+    }
 }
 
 @end
