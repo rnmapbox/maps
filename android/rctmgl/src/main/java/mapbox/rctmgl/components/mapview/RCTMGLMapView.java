@@ -3,6 +3,7 @@ package mapbox.rctmgl.components.mapview;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -204,11 +205,24 @@ public class RCTMGLMapView extends RelativeLayout implements
     //region Methods
 
     public void flyTo(Point flyToPoint, int durationMS) {
+        final IRCTMGLEvent event = new RCTMGLMapChangeEvent(this, RCTMGLEventTypes.FLY_TO_COMPLETE);
+
         CameraPosition nextPosition = new CameraPosition.Builder(mMap.getCameraPosition())
                 .target(MGLGeoUtils.pointToLatLng(flyToPoint))
                 .build();
+
         CameraUpdate flyToUpdate = CameraUpdateFactory.newCameraPosition(nextPosition);
-        mMap.animateCamera(flyToUpdate, durationMS);
+        mMap.animateCamera(flyToUpdate, durationMS, new MapboxMap.CancelableCallback() {
+            @Override
+            public void onCancel() {
+                mManager.handleEvent(event);
+            }
+
+            @Override
+            public void onFinish() {
+                mManager.handleEvent(event);
+            }
+        });
     }
 
     //endregion
@@ -276,11 +290,11 @@ public class RCTMGLMapView extends RelativeLayout implements
         }
 
         if (mMinZoomLevel != null) {
-            mMap.setMinZoomPreference(mMinZoomLevel.doubleValue());
+            mMap.setMinZoomPreference(mMinZoomLevel);
         }
 
         if (mMaxZoomLevel != null) {
-            mMap.setMaxZoomPreference(mMaxZoomLevel.doubleValue());
+            mMap.setMaxZoomPreference(mMaxZoomLevel);
         }
     }
 }
