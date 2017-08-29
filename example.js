@@ -278,6 +278,36 @@ class MapExample extends Component {
           Get offline packs
         </Text>
         <Text onPress={() => {
+            Mapbox.suspendOfflinePack('test')
+              .then(info => {
+                if (info.suspended) {
+                  console.log('Suspended', info.suspended);
+                } else {
+                  console.log('No packs to suspend');
+                }
+              })
+              .catch(err => {
+                console.log(err);
+              });
+        }}>
+          Pause/Suspend pack with name 'test'
+        </Text>
+        <Text onPress={() => {
+            Mapbox.resumeOfflinePack('test')
+              .then(info => {
+                if (info.resumed) {
+                  console.log('Resumed', info.resumed);
+                } else {
+                  console.log('No packs to resume');
+                }
+              })
+              .catch(err => {
+                console.log(err);
+              });
+        }}>
+          Resume pack with name 'test'
+        </Text>
+        <Text onPress={() => {
             Mapbox.removeOfflinePack('test')
               .then(info => {
                 if (info.deleted) {

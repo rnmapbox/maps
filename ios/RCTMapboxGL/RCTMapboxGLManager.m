@@ -104,6 +104,13 @@ RCT_CUSTOM_VIEW_PROPERTY(contentInset, UIEdgeInsetsMake, RCTMapboxGL)
                      @"center": @(MGLAnnotationVerticalAlignmentCenter),
                      @"bottom": @(MGLAnnotationVerticalAlignmentBottom)
                      },
+             @"offlinePackState": @{
+                     @"unknown": [NSNumber numberWithUnsignedInt:MGLOfflinePackStateUnknown],
+                     @"inactive": [NSNumber numberWithUnsignedInt:MGLOfflinePackStateInactive],
+                     @"active": [NSNumber numberWithUnsignedInt:MGLOfflinePackStateActive],
+                     @"complete": [NSNumber numberWithUnsignedInt:MGLOfflinePackStateComplete],
+                     @"invalid": [NSNumber numberWithUnsignedInt:MGLOfflinePackStateInvalid]
+                     },
              @"unknownResourceCount": @(UINT64_MAX),
              @"metricsEnabled": @([RCTMapboxGLManager metricsEnabled])
              };
@@ -213,6 +220,7 @@ RCT_EXPORT_METHOD(setAccessToken:(nonnull NSString *)accessToken
     
     NSDictionary *event = @{ @"name": userInfo[@"name"],
                              @"metadata": userInfo[@"metadata"],
+                             @"state": @(pack.state),
                              @"countOfResourcesCompleted": @(progress.countOfResourcesCompleted),
                              @"countOfResourcesExpected": @(progress.countOfResourcesExpected),
                              @"countOfBytesCompleted": @(progress.countOfBytesCompleted),
@@ -378,6 +386,7 @@ RCT_REMAP_METHOD(addOfflinePack,
         NSMutableDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
         [callbackArray addObject:@{ @"name": userInfo[@"name"],
                                     @"metadata": userInfo[@"metadata"],
+                                    @"state": @(pack.state),
                                     @"countOfBytesCompleted": @(pack.progress.countOfBytesCompleted),
                                     @"countOfResourcesCompleted": @(pack.progress.countOfResourcesCompleted),
                                     @"countOfResourcesExpected": @(pack.progress.countOfResourcesExpected),
@@ -385,6 +394,62 @@ RCT_REMAP_METHOD(addOfflinePack,
     }
     
     return callbackArray;
+}
+
+RCT_REMAP_METHOD(suspendOfflinePack,
+                 suspendName:(NSString*)packName
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        MGLOfflinePack *packs = [MGLOfflineStorage sharedOfflineStorage].packs;
+        MGLOfflinePack *tempPack;
+        
+        for (MGLOfflinePack *pack in packs) {
+            NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
+            if ([packName isEqualToString:userInfo[@"name"]]) {
+                tempPack = pack;
+                break;
+            }
+        }
+        
+        if (tempPack == nil) {
+            return resolve(@{});
+        }
+        
+        NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:tempPack.context];
+        [tempPack suspend];
+        
+        resolve(@{ @"suspended": userInfo[@"name"] });
+    });
+}
+
+RCT_REMAP_METHOD(resumeOfflinePack,
+                 resumeName:(NSString*)packName
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        MGLOfflinePack *packs = [MGLOfflineStorage sharedOfflineStorage].packs;
+        MGLOfflinePack *tempPack;
+        
+        for (MGLOfflinePack *pack in packs) {
+            NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
+            if ([packName isEqualToString:userInfo[@"name"]]) {
+                tempPack = pack;
+                break;
+            }
+        }
+        
+        if (tempPack == nil) {
+            return resolve(@{});
+        }
+        
+        NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:tempPack.context];
+        [tempPack resume];
+        
+        resolve(@{ @"resumed": userInfo[@"name"] });
+    });
 }
 
 RCT_REMAP_METHOD(getOfflinePacks,

@@ -17,7 +17,7 @@ import isEqual from 'lodash/isEqual';
 import Annotation from './Annotation';
 
 const { MapboxGLManager } = NativeModules;
-const { mapStyles, userTrackingMode, userLocationVerticalAlignment, unknownResourceCount } = MapboxGLManager;
+const { mapStyles, userTrackingMode, userLocationVerticalAlignment, offlinePackState, unknownResourceCount } = MapboxGLManager;
 
 // Deprecation
 
@@ -130,6 +130,18 @@ function addOfflinePack(options, callback) {
   return promise;
 }
 
+function suspendOfflinePack(packName, callback) {
+  const promise = MapboxGLManager.suspendOfflinePack(packName);
+  bindCallbackToPromise(callback, promise);
+  return promise;
+}
+
+function resumeOfflinePack(packName, callback) {
+  const promise = MapboxGLManager.resumeOfflinePack(packName);
+  bindCallbackToPromise(callback, promise);
+  return promise;
+}
+
 function getOfflinePacks(callback) {
   let promise = MapboxGLManager.getOfflinePacks();
   if (Platform.OS === 'android') {
@@ -160,7 +172,7 @@ function addOfflinePackProgressListener(handler) {
   let _handler = handler;
   if (Platform.OS === 'android') {
     _handler = (progress) => {
-      if (progress.metadata) {
+      if (progress.metadata && typeof progress.metadata !== 'object') {
         progress.metadata = JSON.parse(progress.metadata).v;
       }
       handler(progress);
@@ -478,7 +490,7 @@ const MapboxGLView = requireNativeComponent('RCTMapboxGL', MapView, {
 const Mapbox = {
   MapView,
   Annotation,
-  mapStyles, userTrackingMode, userLocationVerticalAlignment, unknownResourceCount,
+  mapStyles, userTrackingMode, userLocationVerticalAlignment, offlinePackState, unknownResourceCount,
   getMetricsEnabled, setMetricsEnabled,
   setAccessToken,
   setConnected,
@@ -486,6 +498,8 @@ const Mapbox = {
   addOfflinePack,
   getOfflinePacks,
   removeOfflinePack,
+  resumeOfflinePack, 
+  suspendOfflinePack,
   addOfflinePackProgressListener,
   addOfflineMaxAllowedTilesListener,
   addOfflineErrorListener,

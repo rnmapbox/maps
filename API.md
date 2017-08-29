@@ -404,11 +404,13 @@ To enable or disable metrics, use `Mapbox.setMetricsEnabled(enabled: boolean)`.
 
 ## Offline
 
-There are 4 main methods for interacting with the offline API:
+There are 6 main methods for interacting with the offline API:
 * `Mapbox.initializeOfflinePacks()`: Initializes the offline packs handlers.
 * `Mapbox.addOfflinePack`: Creates an offline pack
 * `Mapbox.getOfflinePacks`: Returns an array of all offline packs on the device
 * `Mapbox.removeOfflinePack`: Removes a single pack
+* `Mapbox.suspendOfflinePack`: Pauses a single pack's download
+* `Mapbox.resumeOfflinePack`: Resumes download of a single pack
 
 Before using offline packs, you must call `Mapbox.initializeOfflinePacks()`.
 
@@ -474,11 +476,56 @@ A progress object has the following shape:
 {
   name: 'test', // The name this pack was registered with
   metadata, // The value that was previously passed as metadata
+  state: 0, // The current state of the offline pack. 0 = Unknown, 1 = Inactive, 2 = Active, 3 = Complete, 4 = Invalid (iOS Only)
   countOfBytesCompleted: 0, // The number of bytes downloaded for this pack
   countOfResourcesCompleted: 0, // The number of tiles that have been downloaded for this pack
   countOfResourcesExpected: 0, // The estimated minimum number of total tiles in this pack
   maximumResourcesExpected: 0 // The estimated maximum number of total tiles in this pack
 }
+```
+
+The offline pack progress object's `state` property can be compared against the following constants:
+
+* `Mapbox.offlinePackState.unknown`
+* `Mapbox.offlinePackState.inactive`
+* `Mapbox.offlinePackState.active`
+* `Mapbox.offlinePackState.complete`
+* `Mapbox.offlinePackState.invalid`
+
+#### Suspending a pack's download
+
+To suspend or pause a pack's download, provide the `name` of the pack to suspend.
+
+```javascript
+Mapbox.suspendOfflinePack('test')
+  .then(info => {
+    if (info.suspended) {
+      console.log(`Suspended pack named ${info.suspended}`); // The pack has been suspended successfully
+    } else {
+      console.log('No packs to suspend'); // There are no packs named 'test'
+    }
+  })
+  .catch(err => {
+    console.error(err); // Handle error
+  });
+```
+
+#### Resuming a pack's download
+
+To resume a pack's download, provide the `name` of the pack to resume.
+
+```javascript
+Mapbox.resumeOfflinePack('test')
+  .then(info => {
+    if (info.resumed) {
+      console.log(`Resumed pack named ${info.resumed}`); // The pack has been resumed successfully
+    } else {
+      console.log('No packs to resume'); // There are no packs named 'test'
+    }
+  })
+  .catch(err => {
+    console.error(err); // Handle error
+  });
 ```
 
 #### Subscribing to progress notifications
