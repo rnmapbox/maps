@@ -259,11 +259,12 @@ mapbox://styles/bobbysud/cigtw1pzy0000aam2346f7ex0
   type, // required. One of 'point', 'polyline' or 'polygon'
   title, // optional. Title string. Appears when marker pressed
   subtitle, // optional. Subtitle string. Appears when marker pressed
-  fillAlpha, // optional. number. Only for type=polygon. Controls the opacity of the polygon
+  fillAlpha, // optional. number. Only for type=polygon. iOS only. Controls the opacity of the polygon fill color
   fillColor, // optional. string. Only for type=polygon. CSS color (#rrggbb). Controls the fill color of the polygon
-  strokeAlpha, // optional. number. Only for type=polygon or type=polyline. Controls the opacity of the line
+  strokeAlpha, // optional. number. Only for type=polygon or type=polyline. iOS only. Controls the opacity of the line
   strokeColor, // optional. string. Only for type=polygon or type=polyline. CSS color (#rrggbb). Controls line color.
   strokeWidth, // optional. number. Only for type=polygon or type=polyline. Controls line width.
+  alpha, // optional. number. Android only. Controls the opacity of the annotation, including fill and stroke.
   id, // required. string. Unique identifier used for adding or selecting an annotation.
   annotationImage: { // optional. Marker image for type=point
     source: {
