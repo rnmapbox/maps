@@ -9,6 +9,9 @@ _An experimental React Native component for building maps with the [Mapbox iOS S
 
 This project is **experimental**. Mapbox does not officially support React Native Mapbox GL to the same extent as the [iOS](https://www.mapbox.com/ios-sdk/) or [Android](https://www.mapbox.com/android-sdk/) SDKs it depends on. Bug reports and pull requests are very welcome.
 
+## Future Official Support
+Moving forward a `v6` branch has been created and a rewrite of the library is underway.  This will move the repo out of an experimental state into a stable officially supported state. I've created a Github project called `6.0.0` right now it just has high level tasks, but I plan to break them up into smaller tasks moving forward. Once the base of `v6` is in a good state feature branches will be created off `v6` and PRs will be made against it. If you would like to be involved with the rewrite in any way just let me know! I also created a [gitter channel](https://gitter.im/react-native-mapbox-gl/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link) as a place to ask any questions at all about the repo.
+
 ## Installation
 
 **Dependencies**
