@@ -33,6 +33,7 @@ package-lock.json
 
 # project specific
 ios/Mapbox.framework
+ios/temp.zip
 android/build/
 android/.gradle/
 android/.idea/
