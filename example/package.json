@@ -7,8 +7,7 @@
 		"copy:changes": "node ./scripts/watch_rngl.js",
 		"pack:gl": "./scripts/npm_pack_rngl.sh",
 		"clean:node:modules": "./scripts/clean_node_modules.sh",
-		"preinstall": "npm run pack:gl",
-		"postinstall": "sed -i '' 's/#import <RCTAnimation\\/RCTValueAnimatedNode.h>/#import \"RCTValueAnimatedNode.h\"/' ./node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedNodesManager.h"
+		"preinstall": "npm run pack:gl"
 	},
 	"dependencies": {
 		"@turf/helpers": "^4.6.0",
@@ -16,9 +15,9 @@
 		"npm": "^5.3.0",
 		"prop-types": "^15.5.10",
 		"react": "16.0.0-alpha.12",
-		"react-native": "0.47.1",
+		"react-native": "^0.47.2",
 		"react-native-elements": "^0.16.0",
-		"react-native-mapbox-gl": "file:../react-native-mapbox-gl-5.2.0.tgz",
+		"react-native-mapbox-gl": "file:../react-native-mapbox-gl-6.0.0.tgz",
 		"react-native-vector-icons": "^4.3.0"
 	},
 	"devDependencies": {
