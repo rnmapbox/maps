@@ -10,6 +10,14 @@
 
 @implementation RCTMGLEvent
 
+- (instancetype)init
+{
+    if (self = [super init]) {
+        _timestamp = [[NSDate date] timeIntervalSince1970];
+    }
+    return self;
+}
+
 - (NSDictionary*)payload
 {
     if (_payload == nil) {

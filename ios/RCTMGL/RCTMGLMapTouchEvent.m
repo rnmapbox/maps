@@ -14,7 +14,13 @@
 
 - (NSDictionary*)payload
 {
-    return @{ @"type": @"Point", @"coordinates": _coordinates };
+    MGLPointFeature *feature = [[MGLPointFeature alloc] init];
+    feature.coordinate = _coordinate;
+    feature.attributes = @{
+                            @"screenPointX": [NSNumber numberWithDouble:_screenPoint.x],
+                            @"screenPointY":[NSNumber numberWithDouble:_screenPoint.y]
+                         };
+    return [feature geoJSONDictionary];
 }
 
 + (RCTMGLMapTouchEvent*)makeTapEvent:(MGLMapView*)mapView withPoint:(CGPoint)point
@@ -29,10 +35,10 @@
 
 + (RCTMGLMapTouchEvent*)_fromPoint:(CGPoint)point withMapView:(MGLMapView *)mapView andEventType:(NSString*)eventType
 {
-    CLLocationCoordinate2D coord = [mapView convertPoint:point toCoordinateFromView:mapView];
     RCTMGLMapTouchEvent *event = [[RCTMGLMapTouchEvent alloc] init];
     event.type = eventType;
-    event.coordinates = @[@(coord.longitude), @(coord.latitude)];
+    event.coordinate =[mapView convertPoint:point toCoordinateFromView:mapView];
+    event.screenPoint = point;
     return event;
 }
 

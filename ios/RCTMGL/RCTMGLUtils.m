@@ -7,26 +7,33 @@
 //
 
 #import "RCTMGLUtils.h"
+@import Mapbox;
 
 @implementation RCTMGLUtils
 
-+ (CLLocationCoordinate2D)GeoJSONPoint:(NSDictionary*)json
-{
-    NSDictionary *point = json;
-    
-    if (![[point objectForKey:@"type"]  isEqual: @"Point"]) {
-        return CLLocationCoordinate2DMake(0, 0);
-    }
-    
-    NSArray *coords = (NSArray*)[point objectForKey:@"coordinates"];
-    if (coords == nil || coords.count < 2) {
-        return CLLocationCoordinate2DMake(0, 0);
-    }
+static double const MS_TO_S = 0.001;
 
-    double lat = [[coords objectAtIndex:1] doubleValue];
-    double lng = [[coords objectAtIndex:0] doubleValue];
++ (CLLocationCoordinate2D)fromFeature:(NSString*)jsonStr
+{
+    NSData* data = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
+    MGLPointFeature *feature = (MGLPointFeature*)[MGLShape shapeWithData:data encoding:NSUTF8StringEncoding error:nil];
+    return feature.coordinate;
+}
+
++ (MGLCoordinateBounds)fromFeatureCollection:(NSString*)jsonStr
+{
+    NSData* data = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
+    MGLShapeCollectionFeature *featureCollection = (MGLShapeCollectionFeature*)[MGLShapeCollectionFeature shapeWithData:data encoding:NSUTF8StringEncoding error:nil];
     
-    return CLLocationCoordinate2DMake(lat, lng);
+    CLLocationCoordinate2D ne = featureCollection.shapes[0].coordinate;
+    CLLocationCoordinate2D sw = featureCollection.shapes[1].coordinate;
+    
+    return MGLCoordinateBoundsMake(sw, ne);
+}
+
++ (NSTimeInterval)fromMS:(NSNumber *)number
+{
+    return [number doubleValue] * MS_TO_S;
 }
 
 @end

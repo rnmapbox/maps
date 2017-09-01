@@ -13,6 +13,7 @@
 
 @property (nonatomic, copy) NSString *type;
 @property (nonatomic, strong) NSDictionary *payload;
+@property (nonatomic, readonly) NSTimeInterval timestamp;
 
 + (RCTMGLEvent*)makeEvent:(NSString*)eventType;
 + (RCTMGLEvent*)makeEvent:(NSString*)eventType withPayload:(NSDictionary*)payload;

@@ -46,9 +46,12 @@ RCT_EXPORT_MODULE()
 RCT_EXPORT_VIEW_PROPERTY(animated, BOOL)
 RCT_REMAP_VIEW_PROPERTY(scrollEnabled, reactScrollEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(pitchEnabled, reactPitchEnabled, BOOL)
+RCT_REMAP_VIEW_PROPERTY(showUserLocation, reactShowUserLocation, BOOL)
 
-RCT_REMAP_VIEW_PROPERTY(centerCoordinate, reactCenterCoordinate, NSDictionary)
+RCT_REMAP_VIEW_PROPERTY(centerCoordinate, reactCenterCoordinate, NSString)
 RCT_REMAP_VIEW_PROPERTY(styleURL, reactStyleURL, NSString)
+
+RCT_REMAP_VIEW_PROPERTY(userTrackingMode, reactUserTrackingMode, int)
 
 RCT_EXPORT_VIEW_PROPERTY(heading, double)
 RCT_EXPORT_VIEW_PROPERTY(pitch, double)
@@ -59,11 +62,12 @@ RCT_REMAP_VIEW_PROPERTY(maxZoomLevel, reactMaxZoomLevel, double)
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMapChange, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onUserLocationChange, RCTBubblingEventBlock)
 
 #pragma mark - React Methods
 
 RCT_EXPORT_METHOD(flyTo:(nonnull NSNumber*)reactTag
-                  withPoint:(nonnull NSDictionary*)point
+                  withFeature:(nonnull NSString*)featureJSONStr
                   withDuration:(nonnull NSNumber*)durationMS)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
@@ -74,14 +78,72 @@ RCT_EXPORT_METHOD(flyTo:(nonnull NSNumber*)reactTag
             return;
         }
         
-        RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
+        __weak RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
         MGLMapCamera *camera = [reactMapView.camera copy];
-        camera.centerCoordinate = [RCTMGLUtils GeoJSONPoint:point];
-        CGFloat durationS = [durationMS doubleValue] * 0.001;
+        camera.centerCoordinate = [RCTMGLUtils fromFeature:featureJSONStr];
+        CGFloat durationS = [RCTMGLUtils fromMS:durationMS];
 
         [reactMapView flyToCamera:camera withDuration:durationS completionHandler:^{
             [self reactMapDidChange:reactMapView eventType:RCT_MAPBOX_FLY_TO_COMPLETE];
         }];
+    }];
+}
+
+RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
+                  withConfiguration:(nonnull NSDictionary*)config)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        
+        if (![view isKindOfClass:[RCTMGLMapView class]]) {
+            RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
+            return;
+        }
+        
+        __weak RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
+        MGLMapCamera *camera = [reactMapView.camera copy];
+        
+        if (config[@"pitch"]) {
+            camera.pitch = [config[@"pitch"] doubleValue];
+        }
+        
+        if (config[@"heading"]) {
+            camera.heading = [config[@"heading"] doubleValue];
+        }
+        
+        if (config[@"centerCoordinate"]) {
+            camera.centerCoordinate = [RCTMGLUtils fromFeature:config[@"centerCoordinate"]];
+        }
+        
+        NSTimeInterval durationS = 2.0;
+        if (config[@"duration"]) {
+            durationS = [RCTMGLUtils fromMS:config[@"duration"]];
+        }
+        
+        [reactMapView setCamera:camera withDuration:durationS animationTimingFunction:0 completionHandler:^{
+            [self reactMapDidChange:reactMapView eventType:RCT_MAPBOX_SET_CAMERA_COMPLETE];
+        }];
+    }];
+}
+
+RCT_EXPORT_METHOD(fitBounds:(nonnull NSNumber*)reactTag
+                  withFeatureCollection:(NSString*)featureCollectionJSONStr
+                  withPadding:(nonnull NSNumber*)insetPadding
+                  withDuration:(nonnull NSNumber*)durationMS)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        
+        if (![view isKindOfClass:[RCTMGLMapView class]]) {
+            RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
+            return;
+        }
+        
+        CGFloat padding = [insetPadding floatValue];
+        RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
+        [reactMapView setVisibleCoordinateBounds:[RCTMGLUtils fromFeatureCollection:featureCollectionJSONStr]
+                      edgePadding:UIEdgeInsetsMake(padding, padding, padding, padding)
+                      animated:durationMS != 0];
     }];
 }
 
@@ -96,7 +158,7 @@ RCT_EXPORT_METHOD(flyTo:(nonnull NSNumber*)reactTag
     }
 
     RCTMGLMapTouchEvent *event = [RCTMGLMapTouchEvent makeTapEvent:mapView withPoint:[recognizer locationInView:mapView]];
-    mapView.onPress([event toJSON]);
+    [self fireEvent:event withCallback:mapView.onPress];
 }
 
 - (void)didLongPressMap:(UILongPressGestureRecognizer *)recognizer
@@ -108,14 +170,15 @@ RCT_EXPORT_METHOD(flyTo:(nonnull NSNumber*)reactTag
     }
     
     RCTMGLMapTouchEvent *event = [RCTMGLMapTouchEvent makeLongPressEvent:mapView withPoint:[recognizer locationInView:mapView]];
-    mapView.onLongPress([event toJSON]);
+    [self fireEvent:event withCallback:mapView.onLongPress];
 }
 
 #pragma mark - MGLMapViewDelegate
 
 - (void)mapView:(MGLMapView *)mapView regionWillChangeAnimated:(BOOL)animated
 {
-    [self reactMapDidChange:mapView eventType:RCT_MAPBOX_REGION_WILL_CHANGE_EVENT];
+    NSDictionary *payload = [self _makeRegionPayload:mapView animated:animated];
+    [self reactMapDidChange:mapView eventType:RCT_MAPBOX_REGION_WILL_CHANGE_EVENT andPayload:payload];
 }
 
 - (void)mapViewRegionIsChanging:(MGLMapView *)mapView
@@ -125,7 +188,8 @@ RCT_EXPORT_METHOD(flyTo:(nonnull NSNumber*)reactTag
 
 - (void)mapView:(MGLMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
-    [self reactMapDidChange:mapView eventType:RCT_MAPBOX_REGION_DID_CHANGE];
+    NSDictionary *payload = [self _makeRegionPayload:mapView animated:animated];
+    [self reactMapDidChange:mapView eventType:RCT_MAPBOX_REGION_DID_CHANGE andPayload:payload];
 }
 
 - (void)mapViewWillStartLoadingMap:(MGLMapView *)mapView
@@ -177,14 +241,47 @@ RCT_EXPORT_METHOD(flyTo:(nonnull NSNumber*)reactTag
     [self reactMapDidChange:mapView eventType:RCT_MAPBOX_DID_FINISH_LOADING_STYLE];
 }
 
+- (void)mapView:(MGLMapView *)mapView didUpdateUserLocation:(MGLUserLocation *)userLocation
+{
+    NSDictionary *properties = @{
+                              @"accuracy": [NSNumber numberWithDouble:userLocation.location.horizontalAccuracy],
+                              @"heading": [NSNumber numberWithDouble:userLocation.heading.magneticHeading],
+                              @"altitude": [NSNumber numberWithDouble:userLocation.location.altitude],
+                              @"speed": [NSNumber numberWithDouble:userLocation.location.speed]
+                            };
+    
+    MGLPointFeature *feature = [[MGLPointFeature alloc] init];
+    feature.coordinate = userLocation.coordinate;
+    feature.attributes = properties;
+    
+    RCTMGLMapView *reactMapView = (RCTMGLMapView*)mapView;
+    [self fireEvent:[RCTMGLEvent makeEvent:RCT_MAPBOX_USER_LOCATION_UPDATE withPayload:feature.geoJSONDictionary]
+                                 withCallback:reactMapView.onUserLocationChange];
+}
+
 - (void)reactMapDidChange:(MGLMapView*)mapView eventType:(NSString*)type
 {
+    [self reactMapDidChange:mapView eventType:type andPayload:nil];
+}
+
+- (void)reactMapDidChange:(MGLMapView*)mapView eventType:(NSString*)type andPayload:(NSDictionary*)payload
+{
     RCTMGLMapView *reactMapView = (RCTMGLMapView*)mapView;
-    RCTMGLEvent *event = [RCTMGLEvent makeEvent:type];
-    
-    if (reactMapView.onMapChange != nil) {
-        reactMapView.onMapChange([event toJSON]);
-    }
+    RCTMGLEvent *event = [RCTMGLEvent makeEvent:type withPayload:payload];
+    [self fireEvent:event withCallback:reactMapView.onMapChange];
+}
+
+- (NSDictionary*)_makeRegionPayload:(MGLMapView*)mapView animated:(BOOL)animated
+{
+    MGLPointFeature *feature = [[MGLPointFeature alloc] init];
+    feature.coordinate = mapView.centerCoordinate;
+    feature.attributes = @{
+                            @"zoomLevel": [NSNumber numberWithDouble:mapView.zoomLevel],
+                            @"heading": [NSNumber numberWithDouble:mapView.camera.heading],
+                            @"pitch": [NSNumber numberWithDouble:mapView.camera.pitch],
+                            @"animated": [NSNumber numberWithBool:animated]
+                         };
+    return feature.geoJSONDictionary;
 }
 
 @end

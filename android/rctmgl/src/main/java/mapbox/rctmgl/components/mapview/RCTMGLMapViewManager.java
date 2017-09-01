@@ -1,12 +1,11 @@
 package mapbox.rctmgl.components.mapview;
 
-import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Point;
 
 import java.util.Map;
@@ -14,10 +13,8 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import mapbox.rctmgl.components.AbstractEventEmitter;
-import mapbox.rctmgl.events.RCTMGLEventKeys;
-import mapbox.rctmgl.utils.MGLGeoUtils;
-import mapbox.rctmgl.utils.RCTMGLMapStyleURL;
-import mapbox.rctmgl.events.RCTMGLEventTypes;
+import mapbox.rctmgl.events.constants.EventKeys;
+import mapbox.rctmgl.utils.ConvertUtils;
 
 /**
  * Created by nickitaliano on 8/18/17.
@@ -46,17 +43,15 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         return new RCTMGLMapView(themedReactContext, this);
     }
 
+    @Override
+    public void onDropViewInstance(RCTMGLMapView mapView) {
+        mapView.dispose();
+    }
+
     //region React Props
 
     @ReactProp(name="styleURL")
     public void setStyleURL(RCTMGLMapView mapView, String styleURL) {
-        RCTMGLMapStyleURL mapStyle = RCTMGLMapStyleURL.fromKey(styleURL);
-
-        if (mapStyle != null) {
-            mapView.setStyleURL(mapStyle.getURL());
-            return;
-        }
-
         mapView.setStyleURL(styleURL);
     }
 
@@ -101,12 +96,21 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     }
 
     @ReactProp(name="centerCoordinate")
-    public void setCenterCoordinate(RCTMGLMapView mapView, ReadableMap map) {
-        Point centerCoordinate = MGLGeoUtils.readableMapToPoint(map);
-
+    public void setCenterCoordinate(RCTMGLMapView mapView, String featureJSONStr) {
+        Point centerCoordinate = ConvertUtils.toPointGemetry(featureJSONStr);
         if (centerCoordinate != null) {
             mapView.setCenterCoordinate(centerCoordinate);
         }
+    }
+
+    @ReactProp(name="showUserLocation")
+    public void setShowUserLocation(RCTMGLMapView mapView, boolean showUserLocation) {
+        mapView.setShowUserLocation(showUserLocation);
+    }
+
+    @ReactProp(name="userTrackingMode")
+    public void setUserTrackingMode(RCTMGLMapView mapView, int userTrackingMode) {
+        mapView.setUserTrackingMode(userTrackingMode);
     }
 
     //endregion
@@ -116,9 +120,10 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     @Override
     public Map<String, String> customEvents() {
         return MapBuilder.<String, String>builder()
-                .put(RCTMGLEventKeys.MAP_CLICK, "onPress")
-                .put(RCTMGLEventKeys.MAP_LONG_CLICK,"onLongPress")
-                .put(RCTMGLEventKeys.MAP_ONCHANGE, "onMapChange")
+                .put(EventKeys.MAP_CLICK, "onPress")
+                .put(EventKeys.MAP_LONG_CLICK,"onLongPress")
+                .put(EventKeys.MAP_ONCHANGE, "onMapChange")
+                .put(EventKeys.USER_LOCATION_CHANGE, "onUserLocationChange")
                 .build();
     }
 
@@ -127,32 +132,47 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     //region React Methods
 
     public static final int METHOD_FLY_TO = 1;
-
+    public static final int METHOD_SET_CAMERA = 2;
+    public static final int METHOD_FIT_BOUNDS = 3;
 
     @Nullable
     @Override
     public Map<String, Integer> getCommandsMap() {
         return MapBuilder.<String, Integer>builder()
                 .put("flyTo", METHOD_FLY_TO)
+                .put("setCamera", METHOD_SET_CAMERA)
+                .put("fitBounds", METHOD_FIT_BOUNDS)
                 .build();
     }
 
     @Override
     public void receiveCommand(RCTMGLMapView mapView, int commandID, @Nullable ReadableArray args) {
-        Assertions.assertNotNull(args);
-
         switch (commandID) {
             case METHOD_FLY_TO:
-                flyTo(mapView, args.getMap(0), args.getInt(1));
+                flyTo(mapView, args.getString(0), args.getInt(1));
+                break;
+            case METHOD_SET_CAMERA:
+                mapView.setCamera(args.getMap(0));
+                break;
+            case METHOD_FIT_BOUNDS:
+                fitBounds(mapView, args.getString(0), args.getInt(1), args.getInt(2));
                 break;
         }
     }
 
-    private void flyTo(RCTMGLMapView mapView, ReadableMap flyToMap, int durationMS) {
-        Point flyToPoint = MGLGeoUtils.readableMapToPoint(flyToMap);
+    private void flyTo(RCTMGLMapView mapView, String featureJSONStr, int durationMS) {
+        Point flyToPoint = ConvertUtils.toPointGemetry(featureJSONStr);
 
         if (flyToPoint != null) {
             mapView.flyTo(flyToPoint, durationMS);
+        }
+    }
+
+    private void fitBounds(RCTMGLMapView mapView, String boundsJSONStr, int padding, int durationMS) {
+        FeatureCollection featureCollection = FeatureCollection.fromJson(boundsJSONStr);
+
+        if (featureCollection != null) {
+            mapView.fitBounds(featureCollection, padding, durationMS);
         }
     }
 
