@@ -14,9 +14,12 @@
 @property (nonatomic, assign) BOOL animated;
 @property (nonatomic, assign) BOOL reactScrollEnabled;
 @property (nonatomic, assign) BOOL reactPitchEnabled;
+@property (nonatomic, assign) BOOL reactShowUserLocation;
 
-@property (nonatomic, strong) NSDictionary *reactCenterCoordinate;
+@property (nonatomic, copy) NSString *reactCenterCoordinate;
 @property (nonatomic, copy) NSString *reactStyleURL;
+
+@property (nonatomic, assign) int reactUserTrackingMode;
 
 @property (nonatomic, assign) double heading;
 @property (nonatomic, assign) double pitch;
@@ -27,5 +30,6 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onMapChange;
+@property (nonatomic, copy) RCTBubblingEventBlock onUserLocationChange;
 
 @end

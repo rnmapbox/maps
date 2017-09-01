@@ -1,10 +1,10 @@
-package mapbox.rctmgl.events;
+package mapbox.rctmgl.events.constants;
 
 /**
  * Created by nickitaliano on 8/24/17.
  */
 
-public class RCTMGLEventTypes {
+public class EventTypes {
     public static final String MAP_CLICK = "press";
     public static final String MAP_LONG_CLICK = "longpress";
 
@@ -27,4 +27,6 @@ public class RCTMGLEventTypes {
     public static final String DID_FINISH_LOADING_STYLE = "didfinishloadingstyle";
 
     public static final String FLY_TO_COMPLETE = "flytocomplete";
+    public static final String SET_CAMERA_COMPLETE = "setcameracomplete";
+    public static final String USER_LOCATION_CHANGE = "userlocationchange";
 }

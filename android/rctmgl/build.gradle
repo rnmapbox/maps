@@ -22,10 +22,16 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    // deps
+    // React Native
     provided "com.facebook.react:react-native:+"
+
+    // Mapbox SDK
+    compile 'com.mapbox.mapboxsdk:mapbox-android-services:2.2.2'
 
     compile('com.mapbox.mapboxsdk:mapbox-android-sdk:5.1.3@aar') {
         transitive=true
     }
+
+    // Mapbox plugins
+    compile 'com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.1.0'
 }

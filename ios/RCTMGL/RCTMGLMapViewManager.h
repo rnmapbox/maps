@@ -6,9 +6,9 @@
 //  Copyright © 2017 Mapbox Inc. All rights reserved.
 //
 
-#import <React/RCTViewManager.h>
+#import "ViewManager.h"
 
-@interface RCTMGLMapViewManager : RCTViewManager
+@interface RCTMGLMapViewManager : ViewManager
 
 - (void)didTapMap:(UITapGestureRecognizer *)recognizer;
 - (void)didLongPressMap:(UILongPressGestureRecognizer *)recognizer;

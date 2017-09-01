@@ -11,24 +11,6 @@
 #import "UIView+React.h"
 
 @implementation RCTMGLMapView
-{
-    NSDictionary *_mapStyleURLS;
-}
-
-- (instancetype)initWithFrame:(CGRect)frame
-{
-    if (self = [super initWithFrame:frame]) {
-        _mapStyleURLS = @{
-                          @"mapbox-streets": MGLStyle.streetsStyleURL,
-                          @"mapbox-dark": MGLStyle.darkStyleURL,
-                          @"mapbox-light": MGLStyle.lightStyleURL,
-                          @"mapbox-outdoors": MGLStyle.outdoorsStyleURL,
-                          @"mapbox-satellite": MGLStyle.satelliteStyleURL
-                          };
-    }
-    
-    return self;
-}
 
 - (void)setReactScrollEnabled:(BOOL)reactScrollEnabled
 {
@@ -42,7 +24,13 @@
     self.pitchEnabled = _reactPitchEnabled;
 }
 
-- (void)setReactCenterCoordinate:(NSDictionary *)reactCenterCoordinate
+- (void)setReactShowUserLocation:(BOOL)reactShowUserLocation
+{
+    _reactShowUserLocation = reactShowUserLocation;
+    self.showsUserLocation = _reactShowUserLocation;
+}
+
+- (void)setReactCenterCoordinate:(NSString *)reactCenterCoordinate
 {
     _reactCenterCoordinate = reactCenterCoordinate;
     [self _updateCameraIfNeeded:YES];
@@ -84,28 +72,26 @@
     self.maximumZoomLevel = reactMaxZoomLevel;
 }
 
-- (NSURL*)_getStyleURLFromKey:(NSString *)styleKey
+- (void)setReactUserTrackingMode:(int)reactUserTrackingMode
 {
-    NSString *styleURL = [_mapStyleURLS objectForKey:styleKey];
-    
-    // mapbox base style urls
-    if (styleURL != nil) {
-        return (NSURL*)styleURL;
-    }
-    
-    // custom style url
-    return [NSURL URLWithString:styleKey];
+    _reactUserTrackingMode = reactUserTrackingMode;
+    [self setUserTrackingMode:(NSUInteger)_reactUserTrackingMode animated:_animated];
+}
+
+- (NSURL*)_getStyleURLFromKey:(NSString *)styleURL
+{
+    return [NSURL URLWithString:styleURL];
 }
 
 - (void)_updateCameraIfNeeded:(BOOL)shouldUpdateCenterCoord
 {
     if (shouldUpdateCenterCoord) {
-        [self setCenterCoordinate:[RCTMGLUtils GeoJSONPoint:_reactCenterCoordinate] animated:NO];
+        [self setCenterCoordinate:[RCTMGLUtils fromFeature:_reactCenterCoordinate] animated:_animated];
     } else {
         MGLMapCamera *camera = [self.camera copy];
         camera.pitch = _pitch;
         camera.heading = _heading;
-        [self setCamera:camera animated:NO];
+        [self setCamera:camera animated:_animated];
     }
 }
 

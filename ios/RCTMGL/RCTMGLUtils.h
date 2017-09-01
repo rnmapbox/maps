@@ -7,9 +7,12 @@
 //
 
 #import <MapKit/MapKit.h>
+@import Mapbox;
 
 @interface RCTMGLUtils: NSObject
 
-+ (CLLocationCoordinate2D)GeoJSONPoint:(id)json;
++ (CLLocationCoordinate2D)fromFeature:(NSString*)json;
++ (MGLCoordinateBounds)fromFeatureCollection:(NSString*)json;
++ (NSTimeInterval)fromMS:(NSNumber*)number;
 
 @end
