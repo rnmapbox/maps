@@ -3,7 +3,59 @@
     "description": "MapView backed by Mapbox Native GL",
     "methods": [
       {
-        "name": "onPress",
+        "name": "fitBounds",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "northEastCoordinates",
+            "type": null
+          },
+          {
+            "name": "southWestCoordinates",
+            "type": null
+          },
+          {
+            "name": "padding",
+            "type": null
+          },
+          {
+            "name": "duration",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "flyTo",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "coordinates",
+            "type": null
+          },
+          {
+            "name": "duration",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "setCamera",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "config",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "_onPress",
         "docblock": null,
         "modifiers": [],
         "params": [
@@ -15,12 +67,71 @@
         "returns": null
       },
       {
-        "name": "onLongPress",
+        "name": "_onLongPress",
         "docblock": null,
         "modifiers": [],
         "params": [
           {
             "name": "e",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "_onUserLocationChange",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "e",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "_onChange",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "e",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "_handleOnChange",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "propName",
+            "type": null
+          },
+          {
+            "name": "payload",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "_getCenterCoordinate",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "_packGeoJSON",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "geoJSON",
             "type": null
           }
         ],
@@ -35,19 +146,36 @@
         "required": false,
         "description": "Animates changes between pitch and bearing",
         "defaultValue": {
-          "value": "true",
+          "value": "false",
           "computed": false
         }
       },
       "centerCoordinate": {
         "type": {
-          "name": "object"
+          "name": "arrayOf",
+          "value": {
+            "name": "number"
+          }
         },
         "required": false,
-        "description": "Initial center coordinate on map",
+        "description": "Initial center coordinate on map [lng, lat]"
+      },
+      "showUserLocation": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "Shows the users location on the map"
+      },
+      "userTrackingMode": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "The mode used to track the user location on the map",
         "defaultValue": {
-          "value": "{\n  type: 'Point',\n  coordinates: [-77.036086, 38.910233],\n}",
-          "computed": false
+          "value": "MapboxGL.UserTrackingModes.None",
+          "computed": true
         }
       },
       "heading": {
@@ -86,7 +214,7 @@
         "required": false,
         "description": "Style URL for map",
         "defaultValue": {
-          "value": "MapView.StyleURL.Street",
+          "value": "MapboxGL.StyleURL.Street",
           "computed": true
         }
       },
@@ -120,14 +248,22 @@
           "name": "bool"
         },
         "required": false,
-        "description": "Enable/Disable scroll on the map"
+        "description": "Enable/Disable scroll on the map",
+        "defaultValue": {
+          "value": "true",
+          "computed": false
+        }
       },
       "pitchEnabled": {
         "type": {
           "name": "bool"
         },
         "required": false,
-        "description": "Enable/Disable pitch on map"
+        "description": "Enable/Disable pitch on map",
+        "defaultValue": {
+          "value": "true",
+          "computed": false
+        }
       },
       "onPress": {
         "type": {
@@ -142,6 +278,118 @@
         },
         "required": false,
         "description": "Map long press listener, gets called when a user long presses the map"
+      },
+      "onRegionWillChange": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "This event is triggered whenever the currently displayed map region is about to change."
+      },
+      "onRegionIsChanging": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "This event is triggered whenever the currently displayed map region is changing."
+      },
+      "onRegionDidChange": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "This event is triggered whenever the currently displayed map region finished changing"
+      },
+      "onWillStartLoadingMap": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "This event is triggered when the map is about to start loading a new map style."
+      },
+      "onDidFinishLoadingMap": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "This is triggered when the map has successfully loaded a new map style."
+      },
+      "onDidFailLoadingMap": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "This event is triggered when the map has failed to load a new map style."
+      },
+      "onWillStartRenderingFrame": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "This event is triggered when the map will start rendering a frame."
+      },
+      "onDidFinishRenderingFrame": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "This event is triggered when the map finished rendering a frame."
+      },
+      "onDidFinishRenderingFrameFully": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "This event is triggered when the map fully finished rendering a frame."
+      },
+      "onWillStartRenderingMap": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "This event is triggered when the map will start rendering the map."
+      },
+      "onDidFinishRenderingMap": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "This event is triggered when the map finished rendering the map."
+      },
+      "onDidFinishRenderingMapFully": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "This event is triggered when the map fully finished rendering the map."
+      },
+      "onDidFinishLoadingStyle": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "This event is triggered when a style has finished loading."
+      },
+      "onFlyToComplete": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "This event is triggered when a fly to animation is cancelled or completed after calling flyTo"
+      },
+      "onSetCameraComplete": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "This event is triggered once the camera is finished after calling setCamera"
+      },
+      "onUserLocationChange": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "This event is triggered when the users location changes depands on showUserLocation"
       }
     }
   }
