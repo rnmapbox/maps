@@ -7,7 +7,8 @@
 		"copy:changes": "node ./scripts/watch_rngl.js",
 		"pack:gl": "./scripts/npm_pack_rngl.sh",
 		"clean:node:modules": "./scripts/clean_node_modules.sh",
-		"preinstall": "npm run pack:gl"
+		"preinstall": "npm run pack:gl",
+		"postinstall": "node ./scripts/set_access_token.js"
 	},
 	"dependencies": {
 		"@turf/helpers": "^4.6.0",

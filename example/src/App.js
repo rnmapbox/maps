@@ -23,6 +23,7 @@ import colors from './styles/colors';
 
 // utils
 import { IS_ANDROID } from './utils';
+import config from './utils/config';
 
 // examples
 import ShowMap from './components/ShowMap';
@@ -97,7 +98,7 @@ class App extends React.Component {
     if (IS_ANDROID) {
       await MapboxGL.requestPermissions();
     }
-    MapboxGL.setAccessToken('pk.eyJ1Ijoibmlja2l0YWxpYW5vIiwiYSI6ImNqNjVtemx3dzAyeHkyd3IwOHJ3b3JsNmMifQ.QSvBB90og-7PW68dZPDAIg');
+    MapboxGL.setAccessToken(config.get('accessToken'));
   }
 
   getActiveItem () {

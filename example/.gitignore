@@ -43,3 +43,5 @@ android/gradlew.bat
 android/local.properties
 reactnativemapboxgl.iml
 .idea
+accesstoken
+env.json
