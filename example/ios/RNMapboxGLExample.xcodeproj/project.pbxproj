@@ -487,7 +487,11 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< HEAD
 				C4EAF11B1F5FC03F0016DEE8 /* Mapbox.framework */,
+=======
+				C4DA80E81F59D63C00DE53BC /* Mapbox.framework */,
+>>>>>>> Version bump to 6.0.0
 				13B07FAE1A68108700A75B9A /* RNMapboxGLExample */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* RNMapboxGLExampleTests */,
@@ -586,7 +590,11 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+<<<<<<< HEAD
 				C4EAF0ED1F5FAD080016DEE8 /* Embed Frameworks */,
+=======
+				C4DA80DA1F59D4D300DE53BC /* Embed Frameworks */,
+>>>>>>> Version bump to 6.0.0
 			);
 			buildRules = (
 			);
