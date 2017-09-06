@@ -24,7 +24,7 @@ class Page extends React.Component {
           label={this.props.label}
           onBack={this.props.onDismissExample} />
       </View>
-    )
+    );
   }
 }
 

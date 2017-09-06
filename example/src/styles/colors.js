@@ -11,7 +11,7 @@ const colors = {
     pinkDark: '#b43b71',
     pink: '#ee4e8b',
     pinkLight: '#f8c8da',
-    pinkFaint: '#fbe5ee'
+    pinkFaint: '#fbe5ee',
   },
 
   secondary: {
@@ -42,7 +42,7 @@ const colors = {
 
     white: '#ffffff',
     black: '#000000',
-  }
-}
+  },
+};
 
 export default colors;

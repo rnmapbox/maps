@@ -32,6 +32,6 @@ export function runNativeCommand (module, name, nativeRef, args = []) {
   );
 }
 
-export function toJSONString(json = '') {
+export function toJSONString (json = '') {
   return JSON.stringify(json);
 }

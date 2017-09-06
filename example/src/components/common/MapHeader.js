@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import { Icon, Header } from 'react-native-elements';
 import colors from '../../styles/colors';
 
@@ -60,7 +60,7 @@ class MapHeader extends React.PureComponent {
   render () {
     const statusBarProps = {
       barStyle: this.props.statusBarTextTheme,
-      backgroundColor: this.props.statusBarColor
+      backgroundColor: this.props.statusBarColor,
     };
 
     return (

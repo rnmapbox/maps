@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
-  }
+  },
 });
 
 class Bubble extends React.PureComponent {
@@ -22,7 +22,7 @@ class Bubble extends React.PureComponent {
       <View style={styles.containter}>
         {this.props.children}
       </View>
-    )
+    );
   }
 }
 
