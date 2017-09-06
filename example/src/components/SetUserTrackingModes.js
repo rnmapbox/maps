@@ -36,7 +36,7 @@ class SetUserTrackingModes extends React.Component {
 
   render () {
     return (
-      <TabBarPage {...this.props} options={this._trackingOptions} onOptionPress={this.onTrackingChange}>
+      <TabBarPage {...this.props} scrollable options={this._trackingOptions} onOptionPress={this.onTrackingChange}>
         <MapboxGL.MapView
             showUserLocation={true}
             userTrackingMode={this.state.userTrackingMode}
