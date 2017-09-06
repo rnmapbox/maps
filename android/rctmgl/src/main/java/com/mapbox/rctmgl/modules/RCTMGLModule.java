@@ -56,6 +56,9 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         styleURLS.put("Light", Style.LIGHT);
         styleURLS.put("Outdoors", Style.OUTDOORS);
         styleURLS.put("Satellite", Style.SATELLITE);
+        styleURLS.put("SatelliteStreet", Style.SATELLITE_STREETS);
+        styleURLS.put("TrafficDay", Style.TRAFFIC_DAY);
+        styleURLS.put("TrafficNight", Style.TRAFFIC_NIGHT);
 
         // events
         Map<String, String> eventTypes = new HashMap<>();
