@@ -29,7 +29,7 @@
     "docs:generate": "npm run docs:parse && npm run docs:build:md",
     "preinstall": "npm run fetch:ios:sdk",
     "test": "npm run lint",
-    "lint": "./node_modules/eslint/bin/eslint.js ./javascript/**",
+    "lint": "./node_modules/eslint/bin/eslint.js ./javascript/** ./example/src/**",
     "lint:fix": "npm run lint -- --fix"
   },
   "devDependencies": {
