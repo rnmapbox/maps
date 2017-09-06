@@ -13,6 +13,7 @@ import com.facebook.react.common.MapBuilder;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerMode;
+import com.mapbox.rctmgl.components.camera.constants.CameraMode;
 import com.mapbox.services.android.telemetry.permissions.PermissionsListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
@@ -73,7 +74,6 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         eventTypes.put("DidFinishRenderingMap", EventTypes.DID_FINISH_RENDERING_MAP);
         eventTypes.put("DidFinishRenderingMapFully", EventTypes.DID_FINISH_RENDERING_MAP_FULLY);
         eventTypes.put("DidFinishLoadingStyle", EventTypes.DID_FINISH_LOADING_STYLE);
-        eventTypes.put("FlyToComplete", EventTypes.FLY_TO_COMPLETE);
         eventTypes.put("SetCameraComplete", EventTypes.SET_CAMERA_COMPLETE);
 
         // user tracking modes
@@ -83,10 +83,17 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         userTrackingModes.put("Navigation", LocationLayerMode.NAVIGATION);
         userTrackingModes.put("Compass", LocationLayerMode.COMPASS);
 
+        // camera modes
+        Map<String, Integer> cameraModes = new HashMap<>();
+        cameraModes.put("Flight", CameraMode.FLIGHT);
+        cameraModes.put("Ease", CameraMode.EASE);
+        cameraModes.put("None", CameraMode.NONE);
+
         return MapBuilder.<String, Object>builder()
                 .put("StyleURL", styleURLS)
                 .put("EventTypes", eventTypes)
                 .put("UserTrackingModes", userTrackingModes)
+                .put("CameraModes", cameraModes)
                 .build();
     }
 

@@ -2,7 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
 import { makePoint, makeLatLngBounds } from '../utils/geoUtils';
-import { isFunction, runNativeCommand } from '../utils';
+
+import {
+  isFunction,
+  isNumber,
+  runNativeCommand,
+  toJSONString
+} from '../utils';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -197,21 +203,26 @@ class MapView extends React.Component {
     if (!this._nativeRef) {
       return;
     }
-    runNativeCommand(NATIVE_MODULE_NAME, 'fitBounds', this._nativeRef, [
-       this._packGeoJSON(makeLatLngBounds(northEastCoordinates, southWestCoordinates)),
-       padding,
-       duration,
-    ]);
+    this.setCamera({
+      bounds: {
+        ne: northEastCoordinates,
+        sw: southWestCoordinates,
+        padding: padding,
+      },
+      duration: duration,
+      mode: MapboxGL.CameraModes.Flight,
+    });
   }
 
   flyTo (coordinates, duration = 2000) {
     if (!this._nativeRef) {
       return;
     }
-    runNativeCommand(NATIVE_MODULE_NAME, 'flyTo', this._nativeRef, [
-      this._packGeoJSON(makePoint(coordinates)),
-      duration,
-    ]);
+    this.setCamera({
+      centerCoordinate: coordinates,
+      duration: duration,
+      mode: MapboxGL.CameraModes.Flight,
+    });
   }
 
   setCamera (config = {}) {
@@ -219,19 +230,41 @@ class MapView extends React.Component {
       return;
     }
 
-    let centerCoordFeature;
-    if (config.centerCoordinate) {
-      centerCoordFeature = this._packGeoJSON(makePoint(config.centerCoordinate));
+    let cameraConfig = {};
+
+    if (config.stops) {
+      cameraConfig.stops = [];
+
+      for (let stop of config.stops) {
+        cameraConfig.stops.push(this._createStopConfig(stop));
+      }
+    } else {
+      cameraConfig = this._createStopConfig(config);
     }
 
-    const cameraConfig = {
-      centerCoordinate: centerCoordFeature,
+    runNativeCommand(NATIVE_MODULE_NAME, 'setCamera', this._nativeRef, [cameraConfig]);
+  }
+
+  _createStopConfig (config = {}) {
+    let stopConfig = {
+      mode: isNumber(config.mode) ? config.mode : MapboxGL.CameraModes.Ease,
       pitch: config.pitch,
       heading: config.heading,
       duration: config.duration || 2000,
+      zoom: config.zoom,
     };
 
-    runNativeCommand(NATIVE_MODULE_NAME, 'setCamera', this._nativeRef, [cameraConfig]);
+    if (config.centerCoordinate) {
+      stopConfig.centerCoordinate = toJSONString(makePoint(config.centerCoordinate));
+    }
+
+    if (config.bounds && config.bounds.ne && config.bounds.sw) {
+      const { ne, sw, padding } = config.bounds;
+      stopConfig.bounds = toJSONString(makeLatLngBounds(ne, sw));
+      stopConfig.boundsPadding = padding;
+    }
+
+    return stopConfig;
   }
 
   _onPress (e) {
@@ -296,9 +329,6 @@ class MapView extends React.Component {
       case MapboxGL.EventTypes.DidFinishLoadingStyle:
         propName = 'onDidFinishLoadingStyle';
         break;
-      case MapboxGL.EventTypes.FlyToComplete:
-        propName = 'onFlyToComplete';
-        break;
       case MapboxGL.EventTypes.SetCameraComplete:
         propName = 'onSetCameraComplete';
         break;
@@ -319,11 +349,7 @@ class MapView extends React.Component {
     if (!this.props.centerCoordinate) {
       return;
     }
-    return this._packGeoJSON((makePoint(this.props.centerCoordinate)));
-  }
-
-  _packGeoJSON (geoJSON) {
-    return JSON.stringify(geoJSON);
+    return toJSONString((makePoint(this.props.centerCoordinate)));
   }
 
   render () {
@@ -344,6 +370,7 @@ class MapView extends React.Component {
     };
 
     const callbacks = {
+      ref: (nativeRef) => this._nativeRef = nativeRef,
       onPress: this._onPress,
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
@@ -351,10 +378,9 @@ class MapView extends React.Component {
     };
 
     return (
-      <RCTMGLMapView
-        {...props}
-        {...callbacks}
-        ref={(nativeRef) => this._nativeRef = nativeRef} />
+      <RCTMGLMapView {...props} {...callbacks}>
+        {this.props.children}
+      </RCTMGLMapView>
     );
   }
 }

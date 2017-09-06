@@ -10,6 +10,10 @@ export function isFunction (fn) {
   return typeof fn === 'function';
 }
 
+export function isNumber (num) {
+  return typeof num === 'number' && !Number.isNaN(num);
+}
+
 export function runNativeCommand (module, name, nativeRef, args = []) {
   const managerInstance = NativeModules.UIManager[module];
   if (!managerInstance) {
@@ -26,4 +30,8 @@ export function runNativeCommand (module, name, nativeRef, args = []) {
     managerInstance.Commands[name],
     args,
   );
+}
+
+export function toJSONString(json = '') {
+  return JSON.stringify(json);
 }

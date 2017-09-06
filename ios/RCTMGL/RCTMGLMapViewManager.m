@@ -14,18 +14,32 @@
 #import "RCTMGLEvent.h"
 #import "RCTMGLMapTouchEvent.h"
 #import "RCTMGLUtils.h"
+#import "CameraStop.h"
+#import "CameraUpdateQueue.h"
 
 @interface RCTMGLMapViewManager() <MGLMapViewDelegate>
 @end
 
 
 @implementation RCTMGLMapViewManager
+{
+    CameraUpdateQueue *cameraUpdateQueue;
+}
 
 // prevents SDK from crashing and cluttering logs
 // since we don't have access to the frame right away
 static CGRect const RCT_MAPBOX_MIN_MAP_FRAME = { { 0.0f, 0.0f }, { 64.0f, 64.0f } };
 
 RCT_EXPORT_MODULE()
+
+- (instancetype)init
+{
+    if (self = [super init]) {
+        cameraUpdateQueue = [[CameraUpdateQueue alloc] init];
+    }
+    
+    return self;
+}
 
 - (UIView *)view
 {
@@ -66,29 +80,6 @@ RCT_EXPORT_VIEW_PROPERTY(onUserLocationChange, RCTBubblingEventBlock)
 
 #pragma mark - React Methods
 
-RCT_EXPORT_METHOD(flyTo:(nonnull NSNumber*)reactTag
-                  withFeature:(nonnull NSString*)featureJSONStr
-                  withDuration:(nonnull NSNumber*)durationMS)
-{
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
-        id view = viewRegistry[reactTag];
-        
-        if (![view isKindOfClass:[RCTMGLMapView class]]) {
-            RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
-            return;
-        }
-        
-        __weak RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
-        MGLMapCamera *camera = [reactMapView.camera copy];
-        camera.centerCoordinate = [RCTMGLUtils fromFeature:featureJSONStr];
-        CGFloat durationS = [RCTMGLUtils fromMS:durationMS];
-
-        [reactMapView flyToCamera:camera withDuration:durationS completionHandler:^{
-            [self reactMapDidChange:reactMapView eventType:RCT_MAPBOX_FLY_TO_COMPLETE];
-        }];
-    }];
-}
-
 RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
                   withConfiguration:(nonnull NSDictionary*)config)
 {
@@ -101,49 +92,20 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
         }
         
         __weak RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
-        MGLMapCamera *camera = [reactMapView.camera copy];
         
-        if (config[@"pitch"]) {
-            camera.pitch = [config[@"pitch"] doubleValue];
+        if (config[@"stops"]) {
+            NSArray *stops = (NSArray<NSDictionary*>*)config[@"stops"];
+            
+            for (int i = 0; i < stops.count; i++) {
+                [cameraUpdateQueue enqueue:[CameraStop fromDictionary:stops[i]]];
+            }
+        } else {
+            [cameraUpdateQueue enqueue:[CameraStop fromDictionary:config]];
         }
-        
-        if (config[@"heading"]) {
-            camera.heading = [config[@"heading"] doubleValue];
-        }
-        
-        if (config[@"centerCoordinate"]) {
-            camera.centerCoordinate = [RCTMGLUtils fromFeature:config[@"centerCoordinate"]];
-        }
-        
-        NSTimeInterval durationS = 2.0;
-        if (config[@"duration"]) {
-            durationS = [RCTMGLUtils fromMS:config[@"duration"]];
-        }
-        
-        [reactMapView setCamera:camera withDuration:durationS animationTimingFunction:0 completionHandler:^{
+
+        [cameraUpdateQueue execute:reactMapView withCompletionHandler:^{
             [self reactMapDidChange:reactMapView eventType:RCT_MAPBOX_SET_CAMERA_COMPLETE];
         }];
-    }];
-}
-
-RCT_EXPORT_METHOD(fitBounds:(nonnull NSNumber*)reactTag
-                  withFeatureCollection:(NSString*)featureCollectionJSONStr
-                  withPadding:(nonnull NSNumber*)insetPadding
-                  withDuration:(nonnull NSNumber*)durationMS)
-{
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
-        id view = viewRegistry[reactTag];
-        
-        if (![view isKindOfClass:[RCTMGLMapView class]]) {
-            RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
-            return;
-        }
-        
-        CGFloat padding = [insetPadding floatValue];
-        RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
-        [reactMapView setVisibleCoordinateBounds:[RCTMGLUtils fromFeatureCollection:featureCollectionJSONStr]
-                      edgePadding:UIEdgeInsetsMake(padding, padding, padding, padding)
-                      animated:durationMS != 0];
     }];
 }
 

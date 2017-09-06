@@ -134,48 +134,22 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
 
     //region React Methods
 
-    public static final int METHOD_FLY_TO = 1;
-    public static final int METHOD_SET_CAMERA = 2;
-    public static final int METHOD_FIT_BOUNDS = 3;
+    public static final int METHOD_SET_CAMERA = 1;
 
     @Nullable
     @Override
     public Map<String, Integer> getCommandsMap() {
         return MapBuilder.<String, Integer>builder()
-                .put("flyTo", METHOD_FLY_TO)
                 .put("setCamera", METHOD_SET_CAMERA)
-                .put("fitBounds", METHOD_FIT_BOUNDS)
                 .build();
     }
 
     @Override
     public void receiveCommand(RCTMGLMapView mapView, int commandID, @Nullable ReadableArray args) {
         switch (commandID) {
-            case METHOD_FLY_TO:
-                flyTo(mapView, args.getString(0), args.getInt(1));
-                break;
             case METHOD_SET_CAMERA:
                 mapView.setCamera(args.getMap(0));
                 break;
-            case METHOD_FIT_BOUNDS:
-                fitBounds(mapView, args.getString(0), args.getInt(1), args.getInt(2));
-                break;
-        }
-    }
-
-    private void flyTo(RCTMGLMapView mapView, String featureJSONStr, int durationMS) {
-        Point flyToPoint = ConvertUtils.toPointGemetry(featureJSONStr);
-
-        if (flyToPoint != null) {
-            mapView.flyTo(flyToPoint, durationMS);
-        }
-    }
-
-    private void fitBounds(RCTMGLMapView mapView, String boundsJSONStr, int padding, int durationMS) {
-        FeatureCollection featureCollection = FeatureCollection.fromJson(boundsJSONStr);
-
-        if (featureCollection != null) {
-            mapView.fitBounds(featureCollection, padding, durationMS);
         }
     }
 
