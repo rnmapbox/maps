@@ -1,4 +1,4 @@
-package mapbox.rctmgl.events;
+package com.mapbox.rctmgl.events;
 
 import android.view.View;
 

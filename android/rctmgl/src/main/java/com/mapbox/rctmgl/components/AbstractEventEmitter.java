@@ -1,4 +1,4 @@
-package mapbox.rctmgl.components;
+package com.mapbox.rctmgl.components;
 
 import android.view.ViewGroup;
 
@@ -12,7 +12,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import mapbox.rctmgl.events.IEvent;
+import com.mapbox.rctmgl.events.IEvent;
 
 /**
  * Created by nickitaliano on 8/23/17.

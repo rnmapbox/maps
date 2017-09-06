@@ -1,4 +1,4 @@
-package mapbox.rctmgl.events;
+package com.mapbox.rctmgl.events;
 
 import android.location.Location;
 import android.view.View;
@@ -7,9 +7,9 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
-import mapbox.rctmgl.events.constants.EventKeys;
-import mapbox.rctmgl.events.constants.EventTypes;
-import mapbox.rctmgl.utils.ConvertUtils;
+import com.mapbox.rctmgl.events.constants.EventKeys;
+import com.mapbox.rctmgl.events.constants.EventTypes;
+import com.mapbox.rctmgl.utils.ConvertUtils;
 
 /**
  * Created by nickitaliano on 8/31/17.

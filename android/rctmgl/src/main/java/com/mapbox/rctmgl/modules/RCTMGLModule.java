@@ -1,4 +1,4 @@
-package mapbox.rctmgl.modules;
+package com.mapbox.rctmgl.modules;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -22,7 +22,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import mapbox.rctmgl.events.constants.EventTypes;
+import com.mapbox.rctmgl.events.constants.EventTypes;
 
 /**
  * Created by nickitaliano on 8/18/17.
