@@ -33,7 +33,7 @@
     "react/no-direct-mutation-state": ["error"],
     "react/no-unknown-property": ["error"],
     "react/prefer-es6-class": ["error", "always"],
-    "react/prop-types": ["error"],
+    "react/prop-types": ["error", { ignore: ["children"] }],
     "react/react-in-jsx-scope": ["error"],
     "react/require-render-return": ["error"],
 
