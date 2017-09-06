@@ -8,6 +8,7 @@
 
 #import "MGLModule.h"
 #import "RCTMGLEventTypes.h"
+#import "CameraMode.h"
 @import Mapbox;
 
 @implementation MGLModule
@@ -51,10 +52,17 @@ RCT_EXPORT_MODULE();
     [userTrackingModes setObject:[NSNumber numberWithInt:MGLUserTrackingModeFollowWithHeading] forKey:@"Compass"];
     [userTrackingModes setObject:[NSNumber numberWithInt:MGLUserTrackingModeFollowWithCourse] forKey:@"Navigation"];
     
+    // camera modes
+    NSMutableDictionary *cameraModes = [[NSMutableDictionary alloc] init];
+    [cameraModes setObject:[NSNumber numberWithInt:RCT_MAPBOX_CAMERA_MODE_FLIGHT] forKey:@"Flight"];
+    [cameraModes setObject:[NSNumber numberWithInt:RCT_MAPBOX_CAMERA_MODE_EASE] forKey:@"Ease"];
+    [cameraModes setObject:[NSNumber numberWithInt:RCT_MAPBOX_CAMERA_MODE_NONE] forKey:@"None"];
+    
     return @{
              @"StyleURL": styleURLS,
              @"EventTypes": eventTypes,
-             @"UserTrackingModes": userTrackingModes
+             @"UserTrackingModes": userTrackingModes,
+             @"CameraModes": cameraModes
              };
 }
 

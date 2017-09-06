@@ -17,6 +17,10 @@
 		C4D1444F1F4E181100396F26 /* RCTMGLMapViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D1444E1F4E181100396F26 /* RCTMGLMapViewManager.m */; };
 		C4D144531F4E190C00396F26 /* MGLModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D144521F4E190C00396F26 /* MGLModule.m */; };
 		C4D144971F4E2F1100396F26 /* RCTMGLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D144961F4E2F1100396F26 /* RCTMGLUtils.m */; };
+		C4EAF1201F5FC07E0016DEE8 /* CameraStop.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF11F1F5FC07E0016DEE8 /* CameraStop.m */; };
+		C4EAF1241F606F7C0016DEE8 /* CameraMode.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF1231F606F7C0016DEE8 /* CameraMode.m */; };
+		C4EAF1271F6083C70016DEE8 /* CameraUpdateItem.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF1261F6083C70016DEE8 /* CameraUpdateItem.m */; };
+		C4EAF12A1F6084920016DEE8 /* CameraUpdateQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF1291F6084920016DEE8 /* CameraUpdateQueue.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -53,6 +57,14 @@
 		C4D144521F4E190C00396F26 /* MGLModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGLModule.m; sourceTree = "<group>"; };
 		C4D144951F4E2F1100396F26 /* RCTMGLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLUtils.h; sourceTree = "<group>"; };
 		C4D144961F4E2F1100396F26 /* RCTMGLUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLUtils.m; sourceTree = "<group>"; };
+		C4EAF11E1F5FC07E0016DEE8 /* CameraStop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraStop.h; sourceTree = "<group>"; };
+		C4EAF11F1F5FC07E0016DEE8 /* CameraStop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraStop.m; sourceTree = "<group>"; };
+		C4EAF1221F606F7C0016DEE8 /* CameraMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraMode.h; sourceTree = "<group>"; };
+		C4EAF1231F606F7C0016DEE8 /* CameraMode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraMode.m; sourceTree = "<group>"; };
+		C4EAF1251F6083C70016DEE8 /* CameraUpdateItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraUpdateItem.h; sourceTree = "<group>"; };
+		C4EAF1261F6083C70016DEE8 /* CameraUpdateItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraUpdateItem.m; sourceTree = "<group>"; };
+		C4EAF1281F6084920016DEE8 /* CameraUpdateQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraUpdateQueue.h; sourceTree = "<group>"; };
+		C4EAF1291F6084920016DEE8 /* CameraUpdateQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraUpdateQueue.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +81,7 @@
 		C43773B91F56024900AF6D71 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				C4EAF0EE1F5FAEB50016DEE8 /* Camera */,
 				C43773BA1F56025800AF6D71 /* MapView */,
 				C435A5F51F587D9100824A30 /* ViewManager.h */,
 				C435A5F61F587D9100824A30 /* ViewManager.m */,
@@ -156,6 +169,29 @@
 			name = Utils;
 			sourceTree = "<group>";
 		};
+		C4EAF0EE1F5FAEB50016DEE8 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				C4EAF1211F606F610016DEE8 /* Constants */,
+				C4EAF11E1F5FC07E0016DEE8 /* CameraStop.h */,
+				C4EAF11F1F5FC07E0016DEE8 /* CameraStop.m */,
+				C4EAF1251F6083C70016DEE8 /* CameraUpdateItem.h */,
+				C4EAF1261F6083C70016DEE8 /* CameraUpdateItem.m */,
+				C4EAF1281F6084920016DEE8 /* CameraUpdateQueue.h */,
+				C4EAF1291F6084920016DEE8 /* CameraUpdateQueue.m */,
+			);
+			name = Camera;
+			sourceTree = "<group>";
+		};
+		C4EAF1211F606F610016DEE8 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				C4EAF1221F606F7C0016DEE8 /* CameraMode.h */,
+				C4EAF1231F606F7C0016DEE8 /* CameraMode.m */,
+			);
+			name = Constants;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -213,14 +249,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4EAF1271F6083C70016DEE8 /* CameraUpdateItem.m in Sources */,
 				C4D144531F4E190C00396F26 /* MGLModule.m in Sources */,
 				C43CA50A1F50C145000B9CB7 /* RCTMGLEvent.m in Sources */,
 				C4D1444C1F4E178100396F26 /* RCTMGLMapView.m in Sources */,
 				C4D1444F1F4E181100396F26 /* RCTMGLMapViewManager.m in Sources */,
 				C4D144971F4E2F1100396F26 /* RCTMGLUtils.m in Sources */,
 				C43CA50D1F53A4EF000B9CB7 /* RCTMGLEventTypes.m in Sources */,
+				C4EAF1201F5FC07E0016DEE8 /* CameraStop.m in Sources */,
+				C4EAF1241F606F7C0016DEE8 /* CameraMode.m in Sources */,
 				C4D144421F4E16F600396F26 /* RCTMGL.m in Sources */,
 				C43CA5061F507BCC000B9CB7 /* RCTMGLMapTouchEvent.m in Sources */,
+				C4EAF12A1F6084920016DEE8 /* CameraUpdateQueue.m in Sources */,
 				C435A5F71F587D9100824A30 /* ViewManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

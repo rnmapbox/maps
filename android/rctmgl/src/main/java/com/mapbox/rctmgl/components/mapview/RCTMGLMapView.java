@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.RelativeLayout;
 
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -21,6 +22,8 @@ import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.UiSettings;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
+import com.mapbox.rctmgl.components.camera.CameraStop;
+import com.mapbox.rctmgl.components.camera.CameraUpdateQueue;
 import com.mapbox.services.android.location.LostLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
@@ -49,6 +52,8 @@ public class RCTMGLMapView extends MapView implements
 
     private RCTMGLMapViewManager mManager;
     private Context mContext;
+
+    private CameraUpdateQueue mCameraUpdateQueue;
 
     private MapboxMap mMap;
     private LocationEngine mLocationEngine;
@@ -80,6 +85,7 @@ public class RCTMGLMapView extends MapView implements
 
         mContext = context;
         mManager = manager;
+        mCameraUpdateQueue = new CameraUpdateQueue();
     }
 
     public void dispose() {
@@ -112,6 +118,10 @@ public class RCTMGLMapView extends MapView implements
             enableLocationLayer();
         } else {
             mMap.moveCamera(CameraUpdateFactory.newCameraPosition(buildCamera()));
+        }
+
+        if (!mCameraUpdateQueue.isEmpty()) {
+            mCameraUpdateQueue.execute(mMap);
         }
     }
 
@@ -271,50 +281,33 @@ public class RCTMGLMapView extends MapView implements
 
     //region Methods
 
-    public void flyTo(Point flyToPoint, int durationMS) {
-        final IEvent event = new MapChangeEvent(this, EventTypes.FLY_TO_COMPLETE);
-
-        CameraPosition nextPosition = new CameraPosition.Builder(mMap.getCameraPosition())
-                .target(ConvertUtils.toLatLng(flyToPoint))
-                .build();
-
-        CameraUpdate flyToUpdate = CameraUpdateFactory.newCameraPosition(nextPosition);
-        mMap.animateCamera(flyToUpdate, durationMS, new SimpleEventCallback(mManager, event));
-    }
-
-    public void setCamera(ReadableMap map) {
+    public void setCamera(ReadableMap args) {
         final IEvent event = new MapChangeEvent(this, EventTypes.SET_CAMERA_COMPLETE);
-        CameraPosition.Builder builder = new CameraPosition.Builder(mMap.getCameraPosition());
+        final SimpleEventCallback callback = new SimpleEventCallback(mManager, event);
 
-        if (map.hasKey("pitch")) {
-            builder.tilt(map.getDouble("pitch"));
+        if (args.hasKey("stops")) {
+            ReadableArray stops = args.getArray("stops");
+
+            for (int i = 0; i < stops.size(); i++) {
+                CameraStop stop = CameraStop.fromReadableMap(stops.getMap(i), null);
+                mCameraUpdateQueue.offer(stop);
+            }
+
+            mCameraUpdateQueue.setOnCompleteAllListener(new CameraUpdateQueue.OnCompleteAllListener() {
+                @Override
+                public void onCompleteAll() {
+                    callback.onFinish();
+                }
+            });
+        } else {
+            CameraStop stop = CameraStop.fromReadableMap(args, callback);
+            mCameraUpdateQueue.offer(stop);
         }
 
-        if (map.hasKey("heading")) {
-            builder.bearing(map.getDouble("heading"));
+        // if map is already ready start executing on the queue
+        if (mMap != null) {
+            mCameraUpdateQueue.execute(mMap);
         }
-
-        if (map.hasKey("centerCoordinate")) {
-            Point target = ConvertUtils.toPointGemetry(map.getString("centerCoordinate"));
-            builder.target(ConvertUtils.toLatLng(target));
-        }
-
-        int durationMS = 2000;
-        if (map.hasKey("duration")) {
-            durationMS = map.getInt("duration");
-        }
-
-        CameraUpdate update = CameraUpdateFactory.newCameraPosition(builder.build());
-        mMap.easeCamera(update, durationMS);
-        mMap.easeCamera(update, durationMS, new SimpleEventCallback(mManager, event));
-    }
-
-    public void fitBounds(FeatureCollection featureCollection, int padding, int durationMS) {
-        LatLngBounds bounds = ConvertUtils.toLatLngBounds(featureCollection);
-        if (bounds == null) {
-            return;
-        }
-        mMap.easeCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding), durationMS);
     }
 
     //endregion

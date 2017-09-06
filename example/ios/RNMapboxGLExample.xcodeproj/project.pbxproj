@@ -37,8 +37,8 @@
 		C4DA80D41F59D47400DE53BC /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C41240E91F4D470B0008C81E /* libRNVectorIcons.a */; };
 		C4DA80D51F59D47400DE53BC /* libthird-party.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C412413D1F4D4CF80008C81E /* libthird-party.a */; };
 		C4DA80D61F59D47400DE53BC /* libyoga.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C41241311F4D4CF80008C81E /* libyoga.a */; };
-		C4DA80E91F59D63C00DE53BC /* Mapbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4DA80E81F59D63C00DE53BC /* Mapbox.framework */; };
-		C4DA80EA1F59D63C00DE53BC /* Mapbox.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C4DA80E81F59D63C00DE53BC /* Mapbox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C4EAF11C1F5FC03F0016DEE8 /* Mapbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4EAF11B1F5FC03F0016DEE8 /* Mapbox.framework */; };
+		C4EAF11D1F5FC03F0016DEE8 /* Mapbox.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C4EAF11B1F5FC03F0016DEE8 /* Mapbox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D92E3EE6B3C940BC8595A323 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5F45B26128214909AA0DEFAA /* Foundation.ttf */; };
 		E320ADEE14184949B69DB229 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 402F162FF13A4AFC90C5503F /* MaterialIcons.ttf */; };
 		F6DE750A44A146158CFD916C /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CA1A8AC8F4AF482F90E36B0B /* Octicons.ttf */; };
@@ -265,13 +265,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		C4DA80DA1F59D4D300DE53BC /* Embed Frameworks */ = {
+		C4EAF0ED1F5FAD080016DEE8 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				C4DA80EA1F59D63C00DE53BC /* Mapbox.framework in Embed Frameworks */,
+				C4EAF11D1F5FC03F0016DEE8 /* Mapbox.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -308,7 +308,7 @@
 		A8D5D55CB55C40BAB62CA25C /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		C412411D1F4D4CF80008C81E /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		C4D144801F4E1CD300396F26 /* RCTMGL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTMGL.xcodeproj; path = "../node_modules/react-native-mapbox-gl/ios/RCTMGL.xcodeproj"; sourceTree = "<group>"; };
-		C4DA80E81F59D63C00DE53BC /* Mapbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mapbox.framework; sourceTree = "<group>"; };
+		C4EAF11B1F5FC03F0016DEE8 /* Mapbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mapbox.framework; sourceTree = "<group>"; };
 		CA1A8AC8F4AF482F90E36B0B /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		D3E21CD19A744D8E8BED77B5 /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
 		D75A4A58713849B7A7FF505E /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
@@ -339,7 +339,7 @@
 				C4DA80D41F59D47400DE53BC /* libRNVectorIcons.a in Frameworks */,
 				C4DA80D51F59D47400DE53BC /* libthird-party.a in Frameworks */,
 				C4DA80D61F59D47400DE53BC /* libyoga.a in Frameworks */,
-				C4DA80E91F59D63C00DE53BC /* Mapbox.framework in Frameworks */,
+				C4EAF11C1F5FC03F0016DEE8 /* Mapbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -487,7 +487,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				C4DA80E81F59D63C00DE53BC /* Mapbox.framework */,
+				C4EAF11B1F5FC03F0016DEE8 /* Mapbox.framework */,
 				13B07FAE1A68108700A75B9A /* RNMapboxGLExample */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* RNMapboxGLExampleTests */,
@@ -586,7 +586,7 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				C4DA80DA1F59D4D300DE53BC /* Embed Frameworks */,
+				C4EAF0ED1F5FAD080016DEE8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
