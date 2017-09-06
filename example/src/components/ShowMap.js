@@ -36,7 +36,7 @@ class ShowMap extends React.Component {
 
   render () {
     return (
-      <TabBarPage {...this.props} options={this._mapOptions} onOptionPress={this.onMapChange}>
+      <TabBarPage {...this.props} scrollable options={this._mapOptions} onOptionPress={this.onMapChange}>
         <MapboxGL.MapView
             showUserLocation={true}
             userTrackingMode={MapboxGL.UserTrackingModes.Tracking}

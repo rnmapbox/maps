@@ -24,6 +24,9 @@ RCT_EXPORT_MODULE();
     [styleURLS setObject:[MGLStyle.lightStyleURL absoluteString] forKey:@"Light"];
     [styleURLS setObject:[MGLStyle.outdoorsStyleURL absoluteString] forKey:@"Outdoors"];
     [styleURLS setObject:[MGLStyle.satelliteStyleURL absoluteString] forKey:@"Satellite"];
+    [styleURLS setObject:[MGLStyle.satelliteStreetsStyleURL absoluteString] forKey:@"SatelliteStreet"];
+    [styleURLS setObject:[MGLStyle.trafficDayStyleURL absoluteString] forKey:@"TrafficDay"];
+    [styleURLS setObject:[MGLStyle.trafficNightStyleURL absoluteString] forKey:@"TrafficNight"];
     
     // event types
     NSMutableDictionary *eventTypes = [[NSMutableDictionary alloc] init];
