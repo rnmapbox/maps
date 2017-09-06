@@ -5,7 +5,6 @@ import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import TabBarPage from './common/TabBarPage';
 
 import sheet from '../styles/sheet';
-import colors from '../styles/colors';
 import { onSortOptions } from '../utils';
 
 class SetUserTrackingModes extends React.Component {

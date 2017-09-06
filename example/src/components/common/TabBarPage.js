@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { View, StyleSheet, ScrollView, Text } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import { ButtonGroup } from 'react-native-elements';
 
 import BaseExamplePropTypes from './BaseExamplePropTypes';
 import Page from './Page';
 
-import sheet from '../../styles/sheet';
 import colors from '../../styles/colors';
 
 const TAB_BAR_HEIGHT = 70;

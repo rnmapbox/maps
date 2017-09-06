@@ -7,9 +7,7 @@ import {
   FlatList,
   StyleSheet,
   Modal,
-  Platform,
   TouchableOpacity,
-  NativeModules
 } from 'react-native';
 
 import { Icon } from 'react-native-elements';
@@ -43,7 +41,7 @@ const styles = StyleSheet.create({
   },
   exampleList: {
     flex: 1,
-    marginTop: 60 + 12 // header + list padding,
+    marginTop: 60 + 12, // header + list padding,
   },
   exampleListItemBorder: {
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -62,7 +60,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.primary.pinkFaint,
   },
-})
+});
 
 class ExampleItem {
   constructor (label, Component) {
@@ -127,7 +125,7 @@ class App extends React.Component {
           </View>
         </TouchableOpacity>
       </View>
-    )
+    );
   }
 
   renderActiveExample () {
@@ -137,7 +135,7 @@ class App extends React.Component {
       visible: !!item,
       transparent: true,
       animationType: 'slide',
-      onRequestClose: this.onCloseExample
+      onRequestClose: this.onCloseExample,
     };
 
     return (

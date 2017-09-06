@@ -7,7 +7,7 @@ import {
   isFunction,
   isNumber,
   runNativeCommand,
-  toJSONString
+  toJSONString,
 } from '../utils';
 
 const MapboxGL = NativeModules.MGLModule;
