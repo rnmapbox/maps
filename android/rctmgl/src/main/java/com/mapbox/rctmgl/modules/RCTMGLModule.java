@@ -82,9 +82,9 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         // user tracking modes
         Map<String, Integer> userTrackingModes = new HashMap<>();
         userTrackingModes.put("None", LocationLayerMode.NONE);
-        userTrackingModes.put("Tracking", LocationLayerMode.TRACKING);
-        userTrackingModes.put("Navigation", LocationLayerMode.NAVIGATION);
-        userTrackingModes.put("Compass", LocationLayerMode.COMPASS);
+        userTrackingModes.put("Follow", LocationLayerMode.TRACKING);
+        userTrackingModes.put("FollowWithCourse", LocationLayerMode.NAVIGATION);
+        userTrackingModes.put("FollowWithHeading", LocationLayerMode.COMPASS);
 
         // camera modes
         Map<String, Integer> cameraModes = new HashMap<>();
