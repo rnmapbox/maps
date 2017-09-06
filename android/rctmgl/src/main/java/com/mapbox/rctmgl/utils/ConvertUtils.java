@@ -1,4 +1,4 @@
-package mapbox.rctmgl.utils;
+package com.mapbox.rctmgl.utils;
 
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;

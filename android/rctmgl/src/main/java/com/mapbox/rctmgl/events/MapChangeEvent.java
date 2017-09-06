@@ -1,11 +1,11 @@
-package mapbox.rctmgl.events;
+package com.mapbox.rctmgl.events;
 
 import android.view.View;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 
-import mapbox.rctmgl.events.constants.EventKeys;
+import com.mapbox.rctmgl.events.constants.EventKeys;
 
 /**
  * Created by nickitaliano on 8/27/17.

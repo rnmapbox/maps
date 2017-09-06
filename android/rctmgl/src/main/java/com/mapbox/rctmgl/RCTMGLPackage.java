@@ -1,4 +1,4 @@
-package mapbox.rctmgl;
+package com.mapbox.rctmgl;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import mapbox.rctmgl.components.mapview.RCTMGLMapViewManager;
-import mapbox.rctmgl.modules.RCTMGLModule;
+import com.mapbox.rctmgl.components.mapview.RCTMGLMapViewManager;
+import com.mapbox.rctmgl.modules.RCTMGLModule;
 
 /**
  * Created by nickitaliano on 8/18/17.

@@ -1,4 +1,4 @@
-package mapbox.rctmgl.components.mapview;
+package com.mapbox.rctmgl.components.mapview;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
@@ -12,9 +12,9 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import mapbox.rctmgl.components.AbstractEventEmitter;
-import mapbox.rctmgl.events.constants.EventKeys;
-import mapbox.rctmgl.utils.ConvertUtils;
+import com.mapbox.rctmgl.components.AbstractEventEmitter;
+import com.mapbox.rctmgl.events.constants.EventKeys;
+import com.mapbox.rctmgl.utils.ConvertUtils;
 
 /**
  * Created by nickitaliano on 8/18/17.
@@ -35,7 +35,10 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     @Override
     protected void onAfterUpdateTransaction(RCTMGLMapView mapView) {
         super.onAfterUpdateTransaction(mapView);
-        mapView.makeView();
+
+        if (mapView.getMapboxMap() == null) {
+            mapView.init();
+        }
     }
 
     @Override
@@ -52,65 +55,65 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
 
     @ReactProp(name="styleURL")
     public void setStyleURL(RCTMGLMapView mapView, String styleURL) {
-        mapView.setStyleURL(styleURL);
+        mapView.setReactStyleURL(styleURL);
     }
 
     @ReactProp(name="animated")
     public void setAnimated(RCTMGLMapView mapView, boolean isAnimated) {
-        mapView.setAnimated(isAnimated);
+        mapView.setReactAnimated(isAnimated);
     }
 
     @ReactProp(name="scrollEnabled")
     public void setScrollEnabled(RCTMGLMapView mapView, boolean scrollEnabled) {
-        mapView.setScrollEnabled(scrollEnabled);
+        mapView.setReactScrollEnabled(scrollEnabled);
     }
 
     @ReactProp(name="pitchEnabled")
     public void setPitchEnabled(RCTMGLMapView mapView, boolean pitchEnabled) {
-        mapView.setPitchEnabled(pitchEnabled);
+        mapView.setReactPitchEnabled(pitchEnabled);
     }
 
     @ReactProp(name="heading")
     public void setHeading(RCTMGLMapView mapView, double heading) {
-        mapView.setHeading(heading);
+        mapView.setReactHeading(heading);
     }
 
     @ReactProp(name="pitch")
     public void setPitch(RCTMGLMapView mapView, double pitch) {
-        mapView.setPitch(pitch);
+        mapView.setReactPitch(pitch);
     }
 
     @ReactProp(name="zoomLevel")
     public void setZoomLevel(RCTMGLMapView mapView, double zoomLevel) {
-        mapView.setZoomLevel(zoomLevel);
+        mapView.setReactZoomLevel(zoomLevel);
     }
 
     @ReactProp(name="minZoomLevel")
     public void setMinZoomLevel(RCTMGLMapView mapView, double minZoomLevel) {
-        mapView.setMinZoomLevel(minZoomLevel);
+        mapView.setReactMinZoomLevel(minZoomLevel);
     }
 
     @ReactProp(name="maxZoomLevel")
     public void setMaxZoomLevel(RCTMGLMapView mapView, double maxZoomLevel) {
-        mapView.setMaxZoomLevel(maxZoomLevel);
+        mapView.setReactMaxZoomLevel(maxZoomLevel);
     }
 
     @ReactProp(name="centerCoordinate")
     public void setCenterCoordinate(RCTMGLMapView mapView, String featureJSONStr) {
         Point centerCoordinate = ConvertUtils.toPointGemetry(featureJSONStr);
         if (centerCoordinate != null) {
-            mapView.setCenterCoordinate(centerCoordinate);
+            mapView.setReactCenterCoordinate(centerCoordinate);
         }
     }
 
     @ReactProp(name="showUserLocation")
     public void setShowUserLocation(RCTMGLMapView mapView, boolean showUserLocation) {
-        mapView.setShowUserLocation(showUserLocation);
+        mapView.setReactShowUserLocation(showUserLocation);
     }
 
     @ReactProp(name="userTrackingMode")
     public void setUserTrackingMode(RCTMGLMapView mapView, int userTrackingMode) {
-        mapView.setUserTrackingMode(userTrackingMode);
+        mapView.setReactUserTrackingMode(userTrackingMode);
     }
 
     //endregion

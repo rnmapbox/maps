@@ -1,4 +1,4 @@
-package mapbox.rctmgl.components.mapview;
+package com.mapbox.rctmgl.components.mapview;
 
 import android.content.Context;
 import android.graphics.PointF;
@@ -28,20 +28,20 @@ import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Point;
 
-import mapbox.rctmgl.events.IEvent;
-import mapbox.rctmgl.events.MapChangeEvent;
-import mapbox.rctmgl.events.MapClickEvent;
-import mapbox.rctmgl.events.UserLocationChangeEvent;
-import mapbox.rctmgl.events.constants.EventTypes;
-import mapbox.rctmgl.utils.ConvertUtils;
-import mapbox.rctmgl.utils.SimpleEventCallback;
+import com.mapbox.rctmgl.events.IEvent;
+import com.mapbox.rctmgl.events.MapChangeEvent;
+import com.mapbox.rctmgl.events.MapClickEvent;
+import com.mapbox.rctmgl.events.UserLocationChangeEvent;
+import com.mapbox.rctmgl.events.constants.EventTypes;
+import com.mapbox.rctmgl.utils.ConvertUtils;
+import com.mapbox.rctmgl.utils.SimpleEventCallback;
 
 /**
  * Created by nickitaliano on 8/18/17.
  */
 
 @SuppressWarnings({"MissingPermission"})
-public class RCTMGLMapView extends RelativeLayout implements
+public class RCTMGLMapView extends MapView implements
         OnMapReadyCallback, MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener,
         MapView.OnMapChangedListener, LocationEngineListener
 {
@@ -51,7 +51,6 @@ public class RCTMGLMapView extends RelativeLayout implements
     private Context mContext;
 
     private MapboxMap mMap;
-    private MapView mMapView;
     private LocationEngine mLocationEngine;
     private LocationLayerPlugin mLocationLayer;
 
@@ -75,6 +74,10 @@ public class RCTMGLMapView extends RelativeLayout implements
 
     public RCTMGLMapView(Context context, RCTMGLMapViewManager manager) {
         super(context);
+
+        super.onCreate(null);
+        super.getMapAsync(this);
+
         mContext = context;
         mManager = manager;
     }
@@ -86,26 +89,29 @@ public class RCTMGLMapView extends RelativeLayout implements
         }
     }
 
+    public MapboxMap getMapboxMap() {
+        return mMap;
+    }
+
     //region Map Callbacks
 
     @Override
     public void onMapReady(MapboxMap mapboxMap) {
-        if (mMapView == null) {
-            Log.d(LOG_TAG, "Mapbox map is ready before our mapview is initialized!!!");
-            return;
-        }
         mMap = mapboxMap;
 
         mMap.setOnMapClickListener(this);
         mMap.setOnMapLongClickListener(this);
-        mMapView.addOnMapChangedListener(this);
+        addOnMapChangedListener(this);
 
         // in case props were set before the map was ready lets set them
         updateUISettings();
         setMinMaxZoomLevels();
 
         if (mShowUserLocation) {
+            mMap.moveCamera(CameraUpdateFactory.zoomTo(mZoomLevel));
             enableLocationLayer();
+        } else {
+            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(buildCamera()));
         }
     }
 
@@ -128,49 +134,49 @@ public class RCTMGLMapView extends RelativeLayout implements
         IEvent event = null;
 
         switch (changed) {
-            case MapView.REGION_WILL_CHANGE:
+            case REGION_WILL_CHANGE:
                 event = new MapChangeEvent(this, makeRegionPayload(false), EventTypes.REGION_WILL_CHANGE);
                 break;
-            case MapView.REGION_WILL_CHANGE_ANIMATED:
+            case REGION_WILL_CHANGE_ANIMATED:
                 event = new MapChangeEvent(this, makeRegionPayload(true), EventTypes.REGION_WILL_CHANGE);
                 break;
-            case MapView.REGION_IS_CHANGING:
+            case REGION_IS_CHANGING:
                 event = new MapChangeEvent(this, EventTypes.REGION_IS_CHANGING);
                 break;
-            case MapView.REGION_DID_CHANGE:
+            case REGION_DID_CHANGE:
                 event = new MapChangeEvent(this, makeRegionPayload(false), EventTypes.REGION_WILL_CHANGE);
                 break;
-            case MapView.REGION_DID_CHANGE_ANIMATED:
+            case REGION_DID_CHANGE_ANIMATED:
                 event = new MapChangeEvent(this, makeRegionPayload(true), EventTypes.REGION_DID_CHANGE);
                 break;
-            case MapView.WILL_START_LOADING_MAP:
+            case WILL_START_LOADING_MAP:
                  event = new MapChangeEvent(this, EventTypes.WILL_START_LOADING_MAP);
                 break;
-            case MapView.DID_FAIL_LOADING_MAP:
+            case DID_FAIL_LOADING_MAP:
                 event = new MapChangeEvent(this, EventTypes.DID_FAIL_LOADING_MAP);
                 break;
-            case MapView.DID_FINISH_LOADING_MAP:
+            case DID_FINISH_LOADING_MAP:
                 event = new MapChangeEvent(this, EventTypes.DID_FINISH_LOADING_MAP);
                 break;
-            case MapView.WILL_START_RENDERING_FRAME:
+            case WILL_START_RENDERING_FRAME:
                 event = new MapChangeEvent(this, EventTypes.WILL_START_RENDERING_FRAME);
                 break;
-            case MapView.DID_FINISH_RENDERING_FRAME:
+            case DID_FINISH_RENDERING_FRAME:
                 event = new MapChangeEvent(this, EventTypes.DID_FINISH_RENDERING_FRAME);
                 break;
-            case MapView.DID_FINISH_RENDERING_FRAME_FULLY_RENDERED:
+            case DID_FINISH_RENDERING_FRAME_FULLY_RENDERED:
                 event = new MapChangeEvent(this, EventTypes.DID_FINISH_RENDERING_FRAME_FULLY);
                 break;
-            case MapView.WILL_START_RENDERING_MAP:
+            case WILL_START_RENDERING_MAP:
                 event = new MapChangeEvent(this, EventTypes.WILL_START_RENDERING_MAP);
                 break;
-            case MapView.DID_FINISH_RENDERING_MAP:
+            case DID_FINISH_RENDERING_MAP:
                 event = new MapChangeEvent(this, EventTypes.DID_FINISH_RENDERING_MAP);
                 break;
-            case MapView.DID_FINISH_RENDERING_MAP_FULLY_RENDERED:
+            case DID_FINISH_RENDERING_MAP_FULLY_RENDERED:
                 event = new MapChangeEvent(this, EventTypes.DID_FINISH_RENDERING_MAP_FULLY);
                 break;
-            case MapView.DID_FINISH_LOADING_STYLE:
+            case DID_FINISH_LOADING_STYLE:
                 event = new MapChangeEvent(this, EventTypes.DID_FINISH_LOADING_STYLE);
                 break;
         }
@@ -184,7 +190,7 @@ public class RCTMGLMapView extends RelativeLayout implements
 
     //region Property getter/setters
 
-    public void setStyleURL(String styleURL) {
+    public void setReactStyleURL(String styleURL) {
         mStyleURL = styleURL;
 
         if (mMap != null) {
@@ -192,52 +198,52 @@ public class RCTMGLMapView extends RelativeLayout implements
         }
     }
 
-    public void setAnimated(boolean animated) {
+    public void setReactAnimated(boolean animated) {
         mAnimated = animated;
         updateCameraPositionIfNeeded(false);
     }
 
-    public void setScrollEnabled(boolean scrollEnabled) {
+    public void setReactScrollEnabled(boolean scrollEnabled) {
         mScrollEnabled = scrollEnabled;
         updateUISettings();
     }
 
-    public void setPitchEnabled(boolean pitchEnabled) {
+    public void setReactPitchEnabled(boolean pitchEnabled) {
         mPitchEnabled = pitchEnabled;
         updateUISettings();
     }
 
-    public void setHeading(double heading) {
+    public void setReactHeading(double heading) {
         mHeading = heading;
         updateCameraPositionIfNeeded(false);
     }
 
-    public void setPitch(double pitch) {
+    public void setReactPitch(double pitch) {
         mPitch = pitch;
         updateCameraPositionIfNeeded(false);
     }
 
-    public void setZoomLevel(double zoomLevel) {
+    public void setReactZoomLevel(double zoomLevel) {
         mZoomLevel = zoomLevel;
         updateCameraPositionIfNeeded(false);
     }
 
-    public void setMinZoomLevel(double minZoomLevel) {
+    public void setReactMinZoomLevel(double minZoomLevel) {
         mMinZoomLevel = minZoomLevel;
         setMinMaxZoomLevels();
     }
 
-    public void setMaxZoomLevel(double maxZoomLevel) {
+    public void setReactMaxZoomLevel(double maxZoomLevel) {
         mMaxZoomLevel = maxZoomLevel;
         setMinMaxZoomLevels();
     }
 
-    public void setCenterCoordinate(Point centerCoordinate) {
+    public void setReactCenterCoordinate(Point centerCoordinate) {
         mCenterCoordinate = centerCoordinate;
         updateCameraPositionIfNeeded(true);
     }
 
-    public void setShowUserLocation(boolean showUserLocation) {
+    public void setReactShowUserLocation(boolean showUserLocation) {
         mShowUserLocation = showUserLocation;
 
         if (mLocationEngine != null) {
@@ -253,7 +259,7 @@ public class RCTMGLMapView extends RelativeLayout implements
         }
     }
 
-    public void setUserTrackingMode(int userTrackingMode) {
+    public void setReactUserTrackingMode(int userTrackingMode) {
         mUserTrackingMode = userTrackingMode;
 
         if (mLocationLayer != null) {
@@ -333,22 +339,8 @@ public class RCTMGLMapView extends RelativeLayout implements
         mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
-    public void makeView() {
-        if (mMapView != null) {
-            return;
-        }
-        buildMapView();
-    }
-
-    private void buildMapView() {
-        MapboxMapOptions options = new MapboxMapOptions();
-        options.camera(buildCamera());
-
-        mMapView = new MapView(getContext(), options);
-        mManager.addView(this, mMapView, 0);
-        mMapView.setStyleUrl(mStyleURL);
-        mMapView.onCreate(null);
-        mMapView.getMapAsync(this);
+    public void init() {
+        setStyleUrl(mStyleURL);
     }
 
     private void updateCameraPositionIfNeeded(boolean shouldUpdateTarget) {
@@ -414,7 +406,7 @@ public class RCTMGLMapView extends RelativeLayout implements
         }
 
         if (mLocationLayer == null) {
-            mLocationLayer = new LocationLayerPlugin(mMapView, mMap, mLocationEngine);
+            mLocationLayer = new LocationLayerPlugin(this, mMap, mLocationEngine);
 
         }
 

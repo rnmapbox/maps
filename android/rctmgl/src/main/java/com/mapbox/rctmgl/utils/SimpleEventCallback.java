@@ -1,9 +1,9 @@
-package mapbox.rctmgl.utils;
+package com.mapbox.rctmgl.utils;
 
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 
-import mapbox.rctmgl.components.AbstractEventEmitter;
-import mapbox.rctmgl.events.IEvent;
+import com.mapbox.rctmgl.components.AbstractEventEmitter;
+import com.mapbox.rctmgl.events.IEvent;
 
 /**
  * Created by nickitaliano on 8/31/17.

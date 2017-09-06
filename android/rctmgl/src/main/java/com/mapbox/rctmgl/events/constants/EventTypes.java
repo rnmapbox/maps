@@ -1,4 +1,4 @@
-package mapbox.rctmgl.events.constants;
+package com.mapbox.rctmgl.events.constants;
 
 /**
  * Created by nickitaliano on 8/24/17.
