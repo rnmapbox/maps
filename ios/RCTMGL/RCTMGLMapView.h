@@ -9,7 +9,10 @@
 #import <React/RCTComponent.h>
 @import Mapbox;
 
+@class CameraUpdateQueue;
 @interface RCTMGLMapView : MGLMapView
+
+@property (nonatomic, strong) CameraUpdateQueue *cameraUpdateQueue;
 
 @property (nonatomic, assign) BOOL animated;
 @property (nonatomic, assign) BOOL reactScrollEnabled;
@@ -31,5 +34,8 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onMapChange;
 @property (nonatomic, copy) RCTBubblingEventBlock onUserLocationChange;
+
+- (CLLocationDistance)getMetersPerPixelAtLatitude:(double)latitude withZoom:(double)zoomLevel;
+- (CLLocationDistance)altitudeFromZoom:(double)zoomLevel;
 
 @end

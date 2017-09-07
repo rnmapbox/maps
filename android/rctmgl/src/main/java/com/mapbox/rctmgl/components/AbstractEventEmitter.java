@@ -19,7 +19,7 @@ import com.mapbox.rctmgl.events.IEvent;
  */
 
 abstract public class AbstractEventEmitter<T extends ViewGroup> extends ViewGroupManager<T> {
-    private static final double BRIDGE_TIMEOUT_MS = 100;
+    private static final double BRIDGE_TIMEOUT_MS = 10;
     private Map<String, Long> mRateLimitedEvents;
     private ReactApplicationContext mRCTAppContext;
 

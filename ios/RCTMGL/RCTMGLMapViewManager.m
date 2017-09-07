@@ -22,24 +22,12 @@
 
 
 @implementation RCTMGLMapViewManager
-{
-    CameraUpdateQueue *cameraUpdateQueue;
-}
 
 // prevents SDK from crashing and cluttering logs
 // since we don't have access to the frame right away
 static CGRect const RCT_MAPBOX_MIN_MAP_FRAME = { { 0.0f, 0.0f }, { 64.0f, 64.0f } };
 
 RCT_EXPORT_MODULE()
-
-- (instancetype)init
-{
-    if (self = [super init]) {
-        cameraUpdateQueue = [[CameraUpdateQueue alloc] init];
-    }
-    
-    return self;
-}
 
 - (UIView *)view
 {
@@ -92,18 +80,19 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
         }
         
         __weak RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
+        [reactMapView.cameraUpdateQueue flush]; // remove any curreny camera updates
         
         if (config[@"stops"]) {
             NSArray *stops = (NSArray<NSDictionary*>*)config[@"stops"];
             
             for (int i = 0; i < stops.count; i++) {
-                [cameraUpdateQueue enqueue:[CameraStop fromDictionary:stops[i]]];
+                [reactMapView.cameraUpdateQueue enqueue:[CameraStop fromDictionary:stops[i]]];
             }
         } else {
-            [cameraUpdateQueue enqueue:[CameraStop fromDictionary:config]];
+            [reactMapView.cameraUpdateQueue enqueue:[CameraStop fromDictionary:config]];
         }
 
-        [cameraUpdateQueue execute:reactMapView withCompletionHandler:^{
+        [reactMapView.cameraUpdateQueue execute:reactMapView withCompletionHandler:^{
             [self reactMapDidChange:reactMapView eventType:RCT_MAPBOX_SET_CAMERA_COMPLETE];
         }];
     }];

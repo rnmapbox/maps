@@ -51,7 +51,6 @@ public class CameraUpdateItem {
         }
     }
 
-
     private void handleCallbackResponse(OnCameraCompleteListener listener, boolean isCancel) {
         listener.onComplete();
 

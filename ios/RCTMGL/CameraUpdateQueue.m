@@ -37,6 +37,11 @@
     return stop;
 }
 
+- (void)flush
+{
+    [queue removeAllObjects];
+}
+
 - (BOOL)isEmpty
 {
     return queue.count == 0;
