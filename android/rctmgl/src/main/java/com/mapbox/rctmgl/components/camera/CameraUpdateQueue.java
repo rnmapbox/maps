@@ -2,6 +2,7 @@ package com.mapbox.rctmgl.components.camera;
 
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -31,6 +32,12 @@ public class CameraUpdateQueue {
 
     public boolean isEmpty() {
         return mQueue.isEmpty();
+    }
+
+    public void flush() {
+        while (!mQueue.isEmpty()) {
+            mQueue.remove();
+        }
     }
 
     public void setOnCompleteAllListener(OnCompleteAllListener listener) {

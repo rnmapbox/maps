@@ -13,7 +13,7 @@
     NSMutableDictionary<NSString*, NSNumber*> *eventTimestampCache;
 }
 
-static NSTimeInterval EVENT_THROTTLE_S = 0.1;
+static NSTimeInterval EVENT_THROTTLE_S = 0.01;
 
 - (instancetype)init
 {
@@ -26,7 +26,7 @@ static NSTimeInterval EVENT_THROTTLE_S = 0.1;
 
 - (void)fireEvent:(RCTMGLEvent*)event withCallback:(RCTBubblingEventBlock)callback
 {
-    if (![self _shouldDropEvent:event]) {
+    if (YES || ![self _shouldDropEvent:event]) {
         NSString *cacheKey = [self _getCacheKey:event];
         NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
         [eventTimestampCache setObject:[NSNumber numberWithDouble:now] forKey:cacheKey];

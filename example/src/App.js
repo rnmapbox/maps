@@ -32,6 +32,7 @@ import FlyTo from './components/FlyTo';
 import FitBounds from './components/FitBounds';
 import SetUserTrackingModes from './components/SetUserTrackingModes';
 import ShowRegionDidChange from './components/ShowRegionDidChange';
+import YoYo from './components/YoYo';
 
 const styles = StyleSheet.create({
   header: {
@@ -78,6 +79,7 @@ const Examples = [
   new ExampleItem('Fit Bounds', FitBounds),
   new ExampleItem('Set User Tracking Modes', SetUserTrackingModes),
   new ExampleItem('Show Region Did Change', ShowRegionDidChange),
+  new ExampleItem('Yo Yo Camera', YoYo),
 ];
 
 class App extends React.Component {

@@ -225,6 +225,17 @@ class MapView extends React.Component {
     });
   }
 
+  zoomTo (zoomLevel, duration = 2000) {
+    if (!this._nativeRef) {
+      return;
+    }
+    this.setCamera({
+      zoom: zoomLevel,
+      duration: duration,
+      mode: MapboxGL.CameraModes.Flight,
+    });
+  }
+
   setCamera (config = {}) {
     if (!this._nativeRef) {
       return;

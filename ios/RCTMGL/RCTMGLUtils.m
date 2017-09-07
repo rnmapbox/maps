@@ -36,4 +36,9 @@ static double const MS_TO_S = 0.001;
     return [number doubleValue] * MS_TO_S;
 }
 
++ (NSNumber*)clamp:(NSNumber *)value min:(NSNumber *)min max:(NSNumber *)max
+{
+    return MAX(MIN(value, max), min);
+}
+
 @end

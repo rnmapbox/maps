@@ -13,7 +13,8 @@
 @interface CameraUpdateQueue : NSObject
 
 - (void)enqueue:(CameraStop* _Nonnull)cameraUpdateItem;
-- (CameraStop* _Nonnull)pop;
+- (CameraStop* _Nonnull)dequeue;
+- (void)flush;
 - (BOOL)isEmpty;
 - (void)execute:(RCTMGLMapView* _Nonnull)mapView withCompletionHandler:(nullable void (^)(void))completionHandler;
 

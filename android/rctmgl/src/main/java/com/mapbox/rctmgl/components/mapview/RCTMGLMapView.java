@@ -285,6 +285,9 @@ public class RCTMGLMapView extends MapView implements
         final IEvent event = new MapChangeEvent(this, EventTypes.SET_CAMERA_COMPLETE);
         final SimpleEventCallback callback = new SimpleEventCallback(mManager, event);
 
+        // remove any current camera updates
+        mCameraUpdateQueue.flush();
+
         if (args.hasKey("stops")) {
             ReadableArray stops = args.getArray("stops");
 
