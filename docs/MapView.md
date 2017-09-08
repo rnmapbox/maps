@@ -2,9 +2,9 @@
 ### MapView backed by Mapbox Native GL
     
 
-#### props
+### props
 | Prop | Type | Default | Required | Description |
-| ---- | :--: | :-----: | :------: | ----------: |
+| ---- | :--: | :-----: | :------: | :----------: |
 | animated | `bool` | `false` | `false` | Animates changes between pitch and bearing |
 | centerCoordinate | `arrayOf` | `none` | `false` | Initial center coordinate on map [lng, lat] |
 | showUserLocation | `bool` | `none` | `false` | Shows the users location on the map |
@@ -35,6 +35,89 @@
 | onDidFinishLoadingStyle | `func` | `none` | `false` | This event is triggered when a style has finished loading. |
 | onFlyToComplete | `func` | `none` | `false` | This event is triggered when a fly to animation is cancelled or completed after calling flyTo |
 | onSetCameraComplete | `func` | `none` | `false` | This event is triggered once the camera is finished after calling setCamera |
-| onUserLocationChange | `func` | `none` | `false` | This event is triggered when the users location changes depands on showUserLocation |
 
     
+### methods
+
+
+#### fitBounds(northEastCoordinates, southWestCoordinates[, padding][, duration])
+
+##### arguments
+
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `northEastCoordinates` | `Array` | `Yes` | North east coordinate of bound |
+| `southWestCoordinates` | `Array` | `Yes` | South west coordinate of bound |
+| `padding` | `Number` | `No` | Camera padding for bound |
+| `duration` | `Number` | `No` | Duration of camera animation |
+
+
+
+```javascript
+this.map.fitBounds([lng, lat], [lng, lat])
+this.map.fitBounds([lng, lat], [lng, lat], 20, 1000)
+```
+
+
+
+#### flyTo(coordinates[, duration])
+
+##### arguments
+
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `coordinates` | `Array` | `Yes` | Coordinates that map camera will jump too |
+| `duration` | `Number` | `No` | Duration of camera animation |
+
+
+
+```javascript
+this.map.flyTo([lng, lat])
+this.map.flyTo([lng, lat], 12000)
+```
+
+
+
+#### zoomTo(zoomLevel[, duration])
+
+##### arguments
+
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `zoomLevel` | `Number` | `Yes` | Zoom level that the map camera will animate too |
+| `duration` | `Number` | `No` | Duration of camera animation |
+
+
+
+```javascript
+this.map.zoomTo(16)
+this.map.zoomTo(16, 100)
+```
+
+
+
+#### setCamera(config)
+
+##### arguments
+
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `config` | `Object` | `Yes` | Camera configuration |
+
+
+
+```javascript
+this.map.setCamera({
+  centerCoordinate: [lng, lat],
+  zoomLevel: 16,
+  duration: 2000,
+})
+
+this.map.setCamera({
+  stops: [
+    { pitch: 45, duration: 200 },
+    { heading: 180, duration: 300 },
+  ]
+})
+```
+

@@ -1,141 +1,136 @@
 {
-  "javascript/components/MapView.js": {
+  "MapView": {
     "description": "MapView backed by Mapbox Native GL",
     "methods": [
       {
         "name": "fitBounds",
-        "docblock": null,
+        "docblock": "Map camera transitions to fit provided bounds\n\n@example\nthis.map.fitBounds([lng, lat], [lng, lat])\nthis.map.fitBounds([lng, lat], [lng, lat], 20, 1000)\n\n@param {Array<Number>} northEastCoordinates - North east coordinate of bound\n@param {Array<Number>} southWestCoordinates - South west coordinate of bound\n@param {Number=} padding - Camera padding for bound\n@param {Number=} duration - Duration of camera animation\n@return {void}",
         "modifiers": [],
         "params": [
           {
             "name": "northEastCoordinates",
-            "type": null
+            "description": "North east coordinate of bound",
+            "type": {
+              "name": "Array"
+            }
           },
           {
             "name": "southWestCoordinates",
-            "type": null
+            "description": "South west coordinate of bound",
+            "type": {
+              "name": "Array"
+            }
           },
           {
             "name": "padding",
-            "type": null
+            "description": "Camera padding for bound",
+            "type": {
+              "name": "Number"
+            },
+            "optional": true
           },
           {
             "name": "duration",
-            "type": null
+            "description": "Duration of camera animation",
+            "type": {
+              "name": "Number"
+            },
+            "optional": true
           }
         ],
-        "returns": null
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "void"
+          }
+        },
+        "description": "Map camera transitions to fit provided bounds",
+        "examples": [
+          "\nthis.map.fitBounds([lng, lat], [lng, lat])\nthis.map.fitBounds([lng, lat], [lng, lat], 20, 1000)\n\n"
+        ]
       },
       {
         "name": "flyTo",
-        "docblock": null,
+        "docblock": "Map camera will fly to new coordinate\n\n@example\nthis.map.flyTo([lng, lat])\nthis.map.flyTo([lng, lat], 12000)\n\n @param {Array<Number>} coordinates - Coordinates that map camera will jump too\n @param {Number=} duration - Duration of camera animation\n @return {void}",
         "modifiers": [],
         "params": [
           {
             "name": "coordinates",
-            "type": null
+            "description": "Coordinates that map camera will jump too",
+            "type": {
+              "name": "Array"
+            }
           },
           {
             "name": "duration",
-            "type": null
+            "description": "Duration of camera animation",
+            "type": {
+              "name": "Number"
+            },
+            "optional": true
           }
         ],
-        "returns": null
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "void"
+          }
+        },
+        "description": "Map camera will fly to new coordinate",
+        "examples": [
+          "\nthis.map.flyTo([lng, lat])\nthis.map.flyTo([lng, lat], 12000)\n\n "
+        ]
+      },
+      {
+        "name": "zoomTo",
+        "docblock": "Map camera will zoom to specified level\n\n@example\nthis.map.zoomTo(16)\nthis.map.zoomTo(16, 100)\n\n@param {Number} zoomLevel - Zoom level that the map camera will animate too\n@param {Number=} duration - Duration of camera animation\n@return {void}",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "zoomLevel",
+            "description": "Zoom level that the map camera will animate too",
+            "type": {
+              "name": "Number"
+            }
+          },
+          {
+            "name": "duration",
+            "description": "Duration of camera animation",
+            "type": {
+              "name": "Number"
+            },
+            "optional": true
+          }
+        ],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "void"
+          }
+        },
+        "description": "Map camera will zoom to specified level",
+        "examples": [
+          "\nthis.map.zoomTo(16)\nthis.map.zoomTo(16, 100)\n\n"
+        ]
       },
       {
         "name": "setCamera",
-        "docblock": null,
+        "docblock": "Map camera will perform updates based on provided config. Advanced use only!\n\n@example\nthis.map.setCamera({\n  centerCoordinate: [lng, lat],\n  zoomLevel: 16,\n  duration: 2000,\n})\n\nthis.map.setCamera({\n  stops: [\n    { pitch: 45, duration: 200 },\n    { heading: 180, duration: 300 },\n  ]\n})\n\n @param {Object} config - Camera configuration",
         "modifiers": [],
         "params": [
           {
             "name": "config",
-            "type": null
+            "description": "Camera configuration",
+            "type": {
+              "name": "Object"
+            }
           }
         ],
-        "returns": null
-      },
-      {
-        "name": "_onPress",
-        "docblock": null,
-        "modifiers": [],
-        "params": [
-          {
-            "name": "e",
-            "type": null
-          }
-        ],
-        "returns": null
-      },
-      {
-        "name": "_onLongPress",
-        "docblock": null,
-        "modifiers": [],
-        "params": [
-          {
-            "name": "e",
-            "type": null
-          }
-        ],
-        "returns": null
-      },
-      {
-        "name": "_onUserLocationChange",
-        "docblock": null,
-        "modifiers": [],
-        "params": [
-          {
-            "name": "e",
-            "type": null
-          }
-        ],
-        "returns": null
-      },
-      {
-        "name": "_onChange",
-        "docblock": null,
-        "modifiers": [],
-        "params": [
-          {
-            "name": "e",
-            "type": null
-          }
-        ],
-        "returns": null
-      },
-      {
-        "name": "_handleOnChange",
-        "docblock": null,
-        "modifiers": [],
-        "params": [
-          {
-            "name": "propName",
-            "type": null
-          },
-          {
-            "name": "payload",
-            "type": null
-          }
-        ],
-        "returns": null
-      },
-      {
-        "name": "_getCenterCoordinate",
-        "docblock": null,
-        "modifiers": [],
-        "params": [],
-        "returns": null
-      },
-      {
-        "name": "_packGeoJSON",
-        "docblock": null,
-        "modifiers": [],
-        "params": [
-          {
-            "name": "geoJSON",
-            "type": null
-          }
-        ],
-        "returns": null
+        "returns": null,
+        "description": "Map camera will perform updates based on provided config. Advanced use only!",
+        "examples": [
+          "\nthis.map.setCamera({\n  centerCoordinate: [lng, lat],\n  zoomLevel: 16,\n  duration: 2000,\n})\n\nthis.map.setCamera({\n  stops: [\n    { pitch: 45, duration: 200 },\n    { heading: 180, duration: 300 },\n  ]\n})\n\n "
+        ]
       }
     ],
     "props": {
@@ -383,13 +378,6 @@
         },
         "required": false,
         "description": "This event is triggered once the camera is finished after calling setCamera"
-      },
-      "onUserLocationChange": {
-        "type": {
-          "name": "func"
-        },
-        "required": false,
-        "description": "This event is triggered when the users location changes depands on showUserLocation"
       }
     }
   }
