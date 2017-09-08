@@ -34,7 +34,7 @@ class SetPitch extends React.Component {
           ref={(ref) => this.map = ref}
           pitch={15}
           showUserLocation={true}
-          userTrackingMode={MapboxGL.UserTrackingModes.Tracking}
+          userTrackingMode={MapboxGL.UserTrackingModes.Follow}
           style={sheet.matchParent} />
       </TabBarPage>
     );

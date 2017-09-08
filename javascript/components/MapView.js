@@ -172,11 +172,6 @@ class MapView extends React.Component {
      * This event is triggered once the camera is finished after calling setCamera
      */
     onSetCameraComplete: PropTypes.func,
-
-    /**
-     * This event is triggered when the users location changes depands on showUserLocation
-     */
-    onUserLocationChange: PropTypes.func,
   };
 
   static defaultProps = {
@@ -196,9 +191,21 @@ class MapView extends React.Component {
     this._onPress = this._onPress.bind(this);
     this._onLongPress = this._onLongPress.bind(this);
     this._onChange = this._onChange.bind(this);
-    this._onUserLocationChange = this._onUserLocationChange.bind(this);
   }
 
+  /**
+   * Map camera transitions to fit provided bounds
+   *
+   * @example
+   * this.map.fitBounds([lng, lat], [lng, lat])
+   * this.map.fitBounds([lng, lat], [lng, lat], 20, 1000)
+   *
+   * @param {Array<Number>} northEastCoordinates - North east coordinate of bound
+   * @param {Array<Number>} southWestCoordinates - South west coordinate of bound
+   * @param {Number=} padding - Camera padding for bound
+   * @param {Number=} duration - Duration of camera animation
+   * @return {void}
+   */
   fitBounds (northEastCoordinates, southWestCoordinates, padding = 0, duration = 2000) {
     if (!this._nativeRef) {
       return;
@@ -214,6 +221,17 @@ class MapView extends React.Component {
     });
   }
 
+  /**
+   * Map camera will fly to new coordinate
+   *
+   * @example
+   * this.map.flyTo([lng, lat])
+   * this.map.flyTo([lng, lat], 12000)
+   *
+   *  @param {Array<Number>} coordinates - Coordinates that map camera will jump too
+   *  @param {Number=} duration - Duration of camera animation
+   *  @return {void}
+   */
   flyTo (coordinates, duration = 2000) {
     if (!this._nativeRef) {
       return;
@@ -225,6 +243,17 @@ class MapView extends React.Component {
     });
   }
 
+  /**
+   * Map camera will zoom to specified level
+   *
+   * @example
+   * this.map.zoomTo(16)
+   * this.map.zoomTo(16, 100)
+   *
+   * @param {Number} zoomLevel - Zoom level that the map camera will animate too
+   * @param {Number=} duration - Duration of camera animation
+   * @return {void}
+   */
   zoomTo (zoomLevel, duration = 2000) {
     if (!this._nativeRef) {
       return;
@@ -236,6 +265,25 @@ class MapView extends React.Component {
     });
   }
 
+  /**
+   * Map camera will perform updates based on provided config. Advanced use only!
+   *
+   * @example
+   * this.map.setCamera({
+   *   centerCoordinate: [lng, lat],
+   *   zoomLevel: 16,
+   *   duration: 2000,
+   * })
+   *
+   * this.map.setCamera({
+   *   stops: [
+   *     { pitch: 45, duration: 200 },
+   *     { heading: 180, duration: 300 },
+   *   ]
+   * })
+   *
+   *  @param {Object} config - Camera configuration
+   */
   setCamera (config = {}) {
     if (!this._nativeRef) {
       return;
@@ -287,12 +335,6 @@ class MapView extends React.Component {
   _onLongPress (e) {
     if (isFunction(this.props.onLongPress)) {
       this.props.onLongPress(e.nativeEvent.payload);
-    }
-  }
-
-  _onUserLocationChange (e) {
-    if (isFunction(this.props.onUserLocationChange)) {
-      this.props.onUserLocationChange(e.nativeEvent);
     }
   }
 
@@ -385,7 +427,6 @@ class MapView extends React.Component {
       onPress: this._onPress,
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
-      onUserLocationChange: this._onUserLocationChange,
     };
 
     return (

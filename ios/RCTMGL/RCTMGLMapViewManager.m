@@ -64,7 +64,6 @@ RCT_REMAP_VIEW_PROPERTY(maxZoomLevel, reactMaxZoomLevel, double)
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMapChange, RCTBubblingEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onUserLocationChange, RCTBubblingEventBlock)
 
 #pragma mark - React Methods
 
@@ -190,24 +189,6 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
 - (void)mapView:(MGLMapView *)mapView didFinishLoadingStyle:(MGLStyle *)style
 {
     [self reactMapDidChange:mapView eventType:RCT_MAPBOX_DID_FINISH_LOADING_STYLE];
-}
-
-- (void)mapView:(MGLMapView *)mapView didUpdateUserLocation:(MGLUserLocation *)userLocation
-{
-    NSDictionary *properties = @{
-                              @"accuracy": [NSNumber numberWithDouble:userLocation.location.horizontalAccuracy],
-                              @"heading": [NSNumber numberWithDouble:userLocation.heading.magneticHeading],
-                              @"altitude": [NSNumber numberWithDouble:userLocation.location.altitude],
-                              @"speed": [NSNumber numberWithDouble:userLocation.location.speed]
-                            };
-    
-    MGLPointFeature *feature = [[MGLPointFeature alloc] init];
-    feature.coordinate = userLocation.coordinate;
-    feature.attributes = properties;
-    
-    RCTMGLMapView *reactMapView = (RCTMGLMapView*)mapView;
-    [self fireEvent:[RCTMGLEvent makeEvent:RCT_MAPBOX_USER_LOCATION_UPDATE withPayload:feature.geoJSONDictionary]
-                                 withCallback:reactMapView.onUserLocationChange];
 }
 
 - (void)reactMapDidChange:(MGLMapView*)mapView eventType:(NSString*)type

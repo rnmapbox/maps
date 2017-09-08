@@ -11,8 +11,6 @@ public class EventKeys {
     public static final String MAP_LONG_CLICK = ns("map.longpress");
     public static final String MAP_ONCHANGE = ns("map.change");
 
-    public static final String USER_LOCATION_CHANGE = ns("userlocation.change");
-
     private static String ns(String name) {
         return String.format("%s.%s", NAMESPACE, name);
     }

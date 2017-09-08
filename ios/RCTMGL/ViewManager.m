@@ -26,7 +26,7 @@ static NSTimeInterval EVENT_THROTTLE_S = 0.01;
 
 - (void)fireEvent:(RCTMGLEvent*)event withCallback:(RCTBubblingEventBlock)callback
 {
-    if (YES || ![self _shouldDropEvent:event]) {
+    if (![self _shouldDropEvent:event]) {
         NSString *cacheKey = [self _getCacheKey:event];
         NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
         [eventTimestampCache setObject:[NSNumber numberWithDouble:now] forKey:cacheKey];

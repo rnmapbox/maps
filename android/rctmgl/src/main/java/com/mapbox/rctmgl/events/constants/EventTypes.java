@@ -27,5 +27,4 @@ public class EventTypes {
     public static final String DID_FINISH_LOADING_STYLE = "didfinishloadingstyle";
 
     public static final String SET_CAMERA_COMPLETE = "setcameracomplete";
-    public static final String USER_LOCATION_CHANGE = "userlocationchange";
 }
