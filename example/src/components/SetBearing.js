@@ -34,7 +34,7 @@ class SetBearing extends React.Component {
             ref={(ref) => this.map = ref}
             heading={0}
             showUserLocation={true}
-            userTrackingMode={MapboxGL.UserTrackingModes.Tracking}
+            userTrackingMode={MapboxGL.UserTrackingModes.Follow}
             style={sheet.matchParent} />
       </TabBarPage>
     );

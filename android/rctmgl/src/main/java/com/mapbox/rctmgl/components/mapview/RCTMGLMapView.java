@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.PointF;
 import android.location.Location;
 import android.support.annotation.NonNull;
-import android.util.Log;
-import android.widget.RelativeLayout;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -15,10 +13,8 @@ import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.UiSettings;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
@@ -28,13 +24,11 @@ import com.mapbox.services.android.location.LostLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
-import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Point;
 
 import com.mapbox.rctmgl.events.IEvent;
 import com.mapbox.rctmgl.events.MapChangeEvent;
 import com.mapbox.rctmgl.events.MapClickEvent;
-import com.mapbox.rctmgl.events.UserLocationChangeEvent;
 import com.mapbox.rctmgl.events.constants.EventTypes;
 import com.mapbox.rctmgl.utils.ConvertUtils;
 import com.mapbox.rctmgl.utils.SimpleEventCallback;
@@ -328,9 +322,6 @@ public class RCTMGLMapView extends MapView implements
 
     @Override
     public void onLocationChanged(Location location) {
-        IEvent event = new UserLocationChangeEvent(this, location);
-        mManager.handleEvent(event);
-
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
     }

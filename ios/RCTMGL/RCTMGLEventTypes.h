@@ -34,6 +34,4 @@ extern NSString *const RCT_MAPBOX_DID_FINISH_LOADING_STYLE;
 extern NSString *const RCT_MAPBOX_FLY_TO_COMPLETE;
 extern NSString *const RCT_MAPBOX_SET_CAMERA_COMPLETE;
 
-extern NSString *const RCT_MAPBOX_USER_LOCATION_UPDATE;
-
 @end

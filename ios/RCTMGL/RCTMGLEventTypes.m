@@ -34,6 +34,4 @@ NSString *const RCT_MAPBOX_DID_FINISH_LOADING_STYLE = @"didfinishloadingstyle";
 NSString *const RCT_MAPBOX_FLY_TO_COMPLETE = @"flytocomplete";
 NSString *const RCT_MAPBOX_SET_CAMERA_COMPLETE = @"@setcameracomplete";
 
-NSString *const RCT_MAPBOX_USER_LOCATION_UPDATE = @"@userlocationchange";
-
 @end
