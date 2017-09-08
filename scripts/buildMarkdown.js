@@ -11,9 +11,46 @@ class MarkdownBuilder {
     return Object.keys(this.json);
   }
 
-  getComponentName (componenPath) {
-    // Example: javascript/components/MapView.js
-    return `${componenPath.split('/').pop()}`.replace('.js', '');
+  getComponentName (fileName) {
+    return `${fileName}`.replace('.js', '');
+  }
+
+  getMethodSignature (method) {
+    const params = method.params.map((param, i) => {
+      const isOptional = param.optional;
+
+      let name = '';
+
+      if (i !== 0) {
+        name += ', ';
+      }
+
+      name += param.name;
+      return isOptional ? `[${name}]` : name;
+    }).join('');
+
+    return `${method.name}(${params})`;
+  }
+
+  getMethodExamples (method) {
+    return method.examples.map((example) => {
+      return `
+
+\`\`\`javascript
+${example.trim()}
+\`\`\`
+
+`;
+    }).join('');
+  }
+
+  getMethodArguments (method) {
+return `
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+${method.params.map((param) => {
+  return `| \`${param.name}\` | \`${param.type.name}\` | \`${param.optional ? 'No' : 'Yes'}\` | ${param.description} |`;
+}).join('\n')}`;
   }
 
   generateComponentHeaderMarkdown (componentJSON, componentName) {
@@ -37,23 +74,45 @@ class MarkdownBuilder {
 
     return `
 
-#### props
+### props
 | Prop | Type | Default | Required | Description |
-| ---- | :--: | :-----: | :------: | ----------: |
+| ---- | :--: | :-----: | :------: | :----------: |
 ${props.map((prop) => {
   return `| ${prop.name} | \`${prop.type}\` | \`${prop.default}\` | \`${prop.required}\` | ${prop.description} |`
 }).join('\n')}
 
-    `
+    `;
   }
 
-  generateComponentFile (componentPath) {
+  generateComponentMethodsMarkdown (componentJSON) {
+    const methods = componentJSON.methods;
+
+    if (!Array.isArray(methods) || !methods.length) {
+      return '';
+    }
+
+    return `
+### methods
+
+${methods.map((method) => {
+  return `
+#### ${this.getMethodSignature(method)}
+
+##### arguments
+${this.getMethodArguments(method)}
+
+${this.getMethodExamples(method)}`
+}).join('\n')}`;
+
+  }
+
+  generateComponentFile (componentName) {
     let fileContents = '';
-    const componentJSON = this.json[componentPath];
-    const componentName = this.getComponentName(componentPath);
+    const componentJSON = this.json[componentName];
 
     fileContents += this.generateComponentHeaderMarkdown(componentJSON, componentName);
     fileContents += this.generateComponentPropsMarkdown(componentJSON);
+    fileContents += this.generateComponentMethodsMarkdown(componentJSON);
 
     fs.writeFileSync(path.join(__dirname, '..', 'docs',  `${componentName}.md`), fileContents);
   }

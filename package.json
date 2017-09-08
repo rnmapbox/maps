@@ -24,7 +24,7 @@
   },
   "scripts": {
     "fetch:ios:sdk": "node ./scripts/download-mapbox-gl-native-ios-if-on-mac.js 3.6.1",
-    "docs:parse": "react-docgen ./javascript/components --pretty -o ./docs/docs.json",
+    "docs:parse": "node ./scripts/generateDocJSON.js",
     "docs:build:md": "node ./scripts/buildMarkdown.js",
     "docs:generate": "npm run docs:parse && npm run docs:build:md",
     "preinstall": "npm run fetch:ios:sdk",
@@ -37,7 +37,9 @@
     "eslint": "^3.19.0",
     "eslint-config-strict-react": "^8.0.1",
     "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-react": "^5.2.2"
+    "eslint-plugin-react": "^5.2.2",
+    "node-dir": "^0.1.17",
+    "react-docgen": "^2.18.0"
   },
   "dependencies": {
     "@turf/helpers": "^4.6.0"
