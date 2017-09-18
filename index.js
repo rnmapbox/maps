@@ -73,15 +73,12 @@ if (Platform.OS === 'android') {
 
 // Metrics
 
-let _metricsEnabled = MapboxGLManager.metricsEnabled;
-
 function setMetricsEnabled(enabled: boolean) {
-  _metricsEnabled = enabled;
   MapboxGLManager.setMetricsEnabled(enabled);
 }
 
 function getMetricsEnabled() {
-  return _metricsEnabled;
+  return MapboxGLManager.getMetricsEnabled();
 }
 
 // Access token

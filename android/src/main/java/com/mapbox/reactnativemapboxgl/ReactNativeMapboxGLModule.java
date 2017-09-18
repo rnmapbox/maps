@@ -1,27 +1,11 @@
 
 package com.mapbox.reactnativemapboxgl;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcel;
-import android.support.annotation.MainThread;
-import android.support.annotation.UiThread;
 import android.util.Log;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.JSApplicationCausedNativeException;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -29,26 +13,30 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.WritableNativeArray;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
-import com.facebook.react.uimanager.annotations.ReactProp;
-import com.mapbox.mapboxsdk.MapboxAccountManager;
-import com.mapbox.mapboxsdk.constants.MyLocationTracking;
+import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.constants.MyBearingTracking;
+import com.mapbox.mapboxsdk.constants.MyLocationTracking;
 import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.offline.OfflineManager;
 import com.mapbox.mapboxsdk.offline.OfflineRegion;
-import com.mapbox.mapboxsdk.offline.OfflineRegionDefinition;
 import com.mapbox.mapboxsdk.offline.OfflineRegionError;
 import com.mapbox.mapboxsdk.offline.OfflineRegionStatus;
 import com.mapbox.mapboxsdk.offline.OfflineTilePyramidRegionDefinition;
-import com.mapbox.mapboxsdk.telemetry.MapboxEventManager;
+import com.mapbox.services.android.telemetry.MapboxTelemetry;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -125,7 +113,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         mapStyles.put("light", Style.LIGHT);
         mapStyles.put("dark", Style.DARK);
         mapStyles.put("streets", Style.MAPBOX_STREETS);
-        mapStyles.put("emerald", Style.EMERALD);
+        mapStyles.put("outdoors", Style.OUTDOORS);
         mapStyles.put("satellite", Style.SATELLITE);
         mapStyles.put("hybrid", Style.SATELLITE_STREETS);
 
@@ -143,7 +131,6 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
 
         // Other constants
         constants.put("unknownResourceCount", Long.MAX_VALUE);
-        constants.put("metricsEnabled", MapboxEventManager.getMapboxEventManager().isTelemetryEnabled());
 
         constants.put("userTrackingMode", userTrackingMode);
         constants.put("mapStyles", mapStyles);
@@ -161,7 +148,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
             throw new JSApplicationIllegalArgumentException("Invalid access token. Register to mapbox.com and request an access token, then pass it to setAccessToken()");
         }
         if (initialized) {
-            String oldToken = MapboxAccountManager.getInstance().getAccessToken();
+            String oldToken = Mapbox.getAccessToken();
             if (!oldToken.equals(accessToken)) {
                 JSApplicationIllegalArgumentException error =
                         new JSApplicationIllegalArgumentException("Mapbox access token cannot be initialized twice with different values");
@@ -175,7 +162,7 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
         mainHandler.post(new Runnable() {
             @Override
             public void run() {
-                MapboxAccountManager.start(context.getApplicationContext(), accessToken);
+                Mapbox.getInstance(context.getApplicationContext(), accessToken);
                 promise.resolve(null);
             }
         });
@@ -184,14 +171,23 @@ public class ReactNativeMapboxGLModule extends ReactContextBaseJavaModule {
     // Connected
     @ReactMethod
     public void setConnected(boolean connected) {
-        MapboxAccountManager.getInstance().setConnected(connected);
+        Mapbox.getInstance(context.getApplicationContext(), Mapbox.getAccessToken()).setConnected(connected);
     }
 
     // Metrics
 
     @ReactMethod
+    public void getMetricsEnabled(final Promise promise) {
+        try {
+            promise.resolve(MapboxTelemetry.getInstance().isTelemetryEnabled());
+        } catch (NullPointerException e) {
+            promise.reject(new JSApplicationCausedNativeException("You should call getMetricsEnabled after setAccessToken"));
+        }
+    }
+
+    @ReactMethod
     public void setMetricsEnabled(boolean value) {
-        MapboxEventManager.getMapboxEventManager().setTelemetryEnabled(value);
+        MapboxTelemetry.getInstance().setTelemetryEnabled(value);
     }
 
     // Offline packs

@@ -70,3 +70,19 @@ Also, add the Mapbox analytics service to the `<application>` node:
 ```
 
 #### Step 4 - Add to project, [see example](../example.js)
+
+#### Troubleshoot
+
+You may get `com.android.dex.DexException: Multiple dex files define Lokhttp3/internal/ws/WebSocketReader$FrameCallback`
+error when building the android app. You can solve it by adding this.
+```gradle
+// file: android/app/build.gradle
+...
+
+configurations.all {
+    resolutionStrategy {
+        force "com.squareup.okhttp3:okhttp:3.4.2"
+        force "com.squareup.okhttp3:okhttp-ws:3.4.2"
+    }
+}
+```

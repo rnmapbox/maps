@@ -111,21 +111,23 @@ RCT_CUSTOM_VIEW_PROPERTY(contentInset, UIEdgeInsetsMake, RCTMapboxGL)
                      @"complete": [NSNumber numberWithUnsignedInt:MGLOfflinePackStateComplete],
                      @"invalid": [NSNumber numberWithUnsignedInt:MGLOfflinePackStateInvalid]
                      },
-             @"unknownResourceCount": @(UINT64_MAX),
-             @"metricsEnabled": @([RCTMapboxGLManager metricsEnabled])
+             @"unknownResourceCount": @(UINT64_MAX)
              };
 };
 
 // Metrics
 
-+ (BOOL)metricsEnabled
+RCT_EXPORT_METHOD(getMetricsEnabled:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
     NSNumber * nr = [ud valueForKey:@"MGLMapboxMetricsEnabled"];
     if (!nr || ![nr isKindOfClass:[NSNumber class]]) {
-        return YES;
+        resolve(@YES);
+        return;
     }
-    return nr.boolValue;
+    
+    resolve([NSNumber numberWithBool:nr.boolValue]);
 }
 
 RCT_EXPORT_METHOD(setMetricsEnabled:(BOOL)enabled)
