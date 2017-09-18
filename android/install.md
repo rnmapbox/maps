@@ -1,9 +1,14 @@
+#### Note
+
+If you were using react-native-mapbox-gl before we moved it into the mapbox npm org.
+You will need to unlink react-native-mapbox-gl and link @mapbox/react-native-mapbox-gl
+
 #### Step 1 - NPM Install
 
 Run with ```--ignore-scripts``` if you don't want to download the iOS SDK, as well.
 
 ```shell
-npm install --save react-native-mapbox-gl --ignore-scripts
+npm install --save @mapbox/react-native-mapbox-gl --ignore-scripts
 ```
 
 #### Step 2 - Use with Gradle
@@ -11,7 +16,7 @@ npm install --save react-native-mapbox-gl --ignore-scripts
 ##### Option A - Automatically
 
 ```shell
-react-native link
+react-native link @mapbox/react-native-mapbox-gl
 ```
 
 ##### Option B - Manually
@@ -22,8 +27,8 @@ Edit the following files:
 // file: android/settings.gradle
 ...
 
-include ':reactnativemapboxgl'
-project(':reactnativemapboxgl').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-mapbox-gl/android')
+include ':@mapbox/reactnativemapboxgl'
+project(':@mapbox/reactnativemapboxgl').projectDir = new File(rootProject.projectDir, '../node_modules/@mapbox/react-native-mapbox-gl/android')
 ```
 
 ```gradle
@@ -32,7 +37,7 @@ project(':reactnativemapboxgl').projectDir = new File(rootProject.projectDir, '.
 
 dependencies {
     ...
-    compile project(':reactnativemapboxgl')
+    compile project(':@mapbox/reactnativemapboxgl')
 }
 ```
 
