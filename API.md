@@ -8,7 +8,7 @@ token by [signing up to a Mapbox account](https://www.mapbox.com/signup).
 Then, make sure you run this before mounting any `MapView`s:
 
 ```javascript
-import Mapbox from 'react-native-mapbox-gl';
+import Mapbox from '@mapbox/react-native-mapbox-gl';
 Mapbox.setAccessToken('your-mapbox.com-access-token');
 ```
 
@@ -17,7 +17,7 @@ Mapbox.setAccessToken('your-mapbox.com-access-token');
 Import the component to use it:
 
 ```jsx
-import { MapView } from 'react-native-mapbox-gl';
+import { MapView } from '@mapbox/react-native-mapbox-gl';
 <MapView />
 ```
 
@@ -349,7 +349,7 @@ See [the example](./example.js#L116) for an illustration of this.
 If the default annotations do not offer enough options, you can embed react native
 view directly onto the map as a custom marker view.
 
-The children of the `MapView` must be `Annotation` views: `import {Annotation} from 'react-native-mapbox-gl'`.
+The children of the `MapView` must be `Annotation` views: `import {Annotation} from '@mapbox/react-native-mapbox-gl'`.
 The `Annotation` view has the following required props:
 
 | Prop | Type | Description |
