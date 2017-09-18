@@ -2,7 +2,7 @@
 /* eslint no-console: 0 */
 
 import React, { Component } from 'react';
-import Mapbox, { MapView } from 'react-native-mapbox-gl';
+import Mapbox, { MapView } from '@mapbox/react-native-mapbox-gl';
 import {
   AppRegistry,
   StyleSheet,
