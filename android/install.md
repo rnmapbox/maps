@@ -32,7 +32,7 @@ project(':reactnativemapboxgl').projectDir = new File(rootProject.projectDir, '.
 
 dependencies {
     ...
-    compile project(':reactnativemapboxgl')
+    compile project(':react-native-mapbox-gl')
 }
 ```
 
