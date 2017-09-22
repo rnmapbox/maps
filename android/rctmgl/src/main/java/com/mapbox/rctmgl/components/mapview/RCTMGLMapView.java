@@ -4,6 +4,9 @@ import android.content.Context;
 import android.graphics.PointF;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.util.SparseArray;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -18,8 +21,10 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.UiSettings;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
+import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.camera.CameraStop;
 import com.mapbox.rctmgl.components.camera.CameraUpdateQueue;
+import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 import com.mapbox.services.android.location.LostLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
@@ -46,6 +51,10 @@ public class RCTMGLMapView extends MapView implements
 
     private RCTMGLMapViewManager mManager;
     private Context mContext;
+
+    private SparseArray<RCTSource> mSources;
+    private SparseArray<AbstractMapFeature> mQueuedFeatures;
+    private SparseArray<AbstractMapFeature> mFeatures;
 
     private CameraUpdateQueue mCameraUpdateQueue;
 
@@ -80,6 +89,57 @@ public class RCTMGLMapView extends MapView implements
         mContext = context;
         mManager = manager;
         mCameraUpdateQueue = new CameraUpdateQueue();
+
+        mSources = new SparseArray<>();
+        mQueuedFeatures = new SparseArray<>();
+        mFeatures = new SparseArray<>();
+    }
+
+    public void addFeature(View childView, int childPosition) {
+        AbstractMapFeature feature = null;
+
+        if (childView instanceof RCTSource) {
+            mSources.put(childPosition, (RCTSource) childView);
+            feature = (AbstractMapFeature) childView;
+        } else {
+            ViewGroup children = (ViewGroup) childView;
+
+            for (int i = 0; i < children.getChildCount(); i++) {
+                addFeature(children.getChildAt(i), childPosition);
+            }
+        }
+
+        if (feature != null) {
+            if (mMap != null) {
+                feature.addToMap(this);
+                mFeatures.put(childPosition, feature);
+            } else {
+                mQueuedFeatures.put(childPosition, feature);
+            }
+        }
+    }
+
+    public void removeFeature(int childPosition) {
+        AbstractMapFeature feature = mFeatures.get(childPosition);
+
+        if (feature == null) {
+            return;
+        }
+
+        if (feature instanceof RCTSource) {
+            mSources.remove(childPosition);
+        }
+
+        feature.removeFromMap(this);
+        mFeatures.remove(childPosition);
+    }
+
+    public int getFeatureCount () {
+        return mFeatures.size();
+    }
+
+    public AbstractMapFeature getFeatureAt(int i) {
+        return mFeatures.get(mFeatures.keyAt(i));
     }
 
     public void dispose() {
@@ -116,6 +176,16 @@ public class RCTMGLMapView extends MapView implements
 
         if (!mCameraUpdateQueue.isEmpty()) {
             mCameraUpdateQueue.execute(mMap);
+        }
+
+        if (mQueuedFeatures.size() > 0) {
+            for (int i = 0; i < mQueuedFeatures.size(); i++) {
+                int childPosition = mQueuedFeatures.keyAt(i);
+                AbstractMapFeature feature = mQueuedFeatures.get(childPosition);
+                feature.addToMap(this);
+                mFeatures.put(childPosition, feature);
+            }
+            mQueuedFeatures = null;
         }
     }
 

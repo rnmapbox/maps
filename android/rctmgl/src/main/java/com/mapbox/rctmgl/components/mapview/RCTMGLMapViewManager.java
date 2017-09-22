@@ -1,5 +1,8 @@
 package com.mapbox.rctmgl.components.mapview;
 
+import android.util.Log;
+import android.view.View;
+
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
@@ -21,6 +24,7 @@ import com.mapbox.rctmgl.utils.ConvertUtils;
  */
 
 public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
+    public static final String LOG_TAG = RCTMGLMapViewManager.class.getSimpleName();
     public static final String REACT_CLASS = RCTMGLMapView.class.getSimpleName();
 
     public RCTMGLMapViewManager(ReactApplicationContext context) {
@@ -42,13 +46,37 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     }
 
     @Override
+    public void addView(RCTMGLMapView mapView, View childView, int childPosition) {
+        mapView.addFeature(childView, childPosition);
+    }
+
+    @Override
+    public int getChildCount(RCTMGLMapView mapView) {
+        return mapView.getFeatureCount();
+    }
+
+    @Override
+    public View getChildAt(RCTMGLMapView mapView, int index) {
+        return mapView.getFeatureAt(index);
+    }
+
+    @Override
+    public void removeViewAt(RCTMGLMapView mapView, int index) {
+        mapView.removeFeature(index);
+    }
+
+    @Override
     protected RCTMGLMapView createViewInstance(ThemedReactContext themedReactContext) {
         return new RCTMGLMapView(themedReactContext, this);
     }
 
     @Override
     public void onDropViewInstance(RCTMGLMapView mapView) {
-        mapView.dispose();
+        try {
+            mapView.dispose();
+        } catch (Exception e) {
+            Log.w(LOG_TAG, e.getLocalizedMessage());
+        }
     }
 
     //region React Props

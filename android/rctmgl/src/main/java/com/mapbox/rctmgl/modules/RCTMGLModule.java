@@ -13,7 +13,11 @@ import com.facebook.react.common.MapBuilder;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerMode;
+import com.mapbox.mapboxsdk.style.layers.LineLayer;
+import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.rctmgl.components.camera.constants.CameraMode;
+import com.mapbox.rctmgl.components.styles.RCTMGLStyleValue;
+import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 import com.mapbox.services.android.telemetry.permissions.PermissionsListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
@@ -92,11 +96,37 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         cameraModes.put("Ease", CameraMode.EASE);
         cameraModes.put("None", CameraMode.NONE);
 
+        // style source constants
+        Map<String, String> styleSourceConsts = new HashMap<>();
+        styleSourceConsts.put("DefaultSourceID", RCTSource.DEFAULT_ID);
+
+        // interpolation modes
+        Map<String, Integer> interpolationModes = new HashMap<>();
+        interpolationModes.put("Exponential", RCTMGLStyleValue.InterpolationModeExponential);
+        interpolationModes.put("Categorical", RCTMGLStyleValue.InterpolationModeCategorical);
+        interpolationModes.put("Interval", RCTMGLStyleValue.InterpolationModeInterval);
+        interpolationModes.put("Identity", RCTMGLStyleValue.InterpolationModeIdentity);
+
+        // line layer constants
+        Map<String, String> lineJoin = new HashMap<>();
+        lineJoin.put("Bevel", Property.LINE_JOIN_BEVEL);
+        lineJoin.put("Round", Property.LINE_JOIN_ROUND);
+        lineJoin.put("Miter", Property.LINE_JOIN_MITER);
+
+        Map<String, String> lineCap = new HashMap<>();
+        lineCap.put("Butt", Property.LINE_CAP_BUTT);
+        lineCap.put("Round", Property.LINE_CAP_ROUND);
+        lineCap.put("Square", Property.LINE_CAP_SQUARE);
+
         return MapBuilder.<String, Object>builder()
                 .put("StyleURL", styleURLS)
                 .put("EventTypes", eventTypes)
                 .put("UserTrackingModes", userTrackingModes)
                 .put("CameraModes", cameraModes)
+                .put("StyleSource", styleSourceConsts)
+                .put("InterpolationMode", interpolationModes)
+                .put("LineJoin", lineJoin)
+                .put("LineCap", lineCap)
                 .build();
     }
 
