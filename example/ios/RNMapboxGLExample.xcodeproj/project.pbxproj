@@ -18,7 +18,6 @@
 		6CE3B4A3F4E04D28BA3D1686 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D75A4A58713849B7A7FF505E /* Zocial.ttf */; };
 		711C6F70A56F41AAAF54C17E /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4BC914580E7645F4907F8A32 /* FontAwesome.ttf */; };
 		9F398B7A7129435B923D55DD /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 185B11D7852F4121A504A72B /* EvilIcons.ttf */; };
-		C43773261F55176300AF6D71 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		C4DA80C51F59D47400DE53BC /* libcxxreact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C41241351F4D4CF80008C81E /* libcxxreact.a */; };
 		C4DA80C61F59D47400DE53BC /* libdouble-conversion.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C41241411F4D4CF80008C81E /* libdouble-conversion.a */; };
 		C4DA80C71F59D47400DE53BC /* libjschelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C41241391F4D4CF80008C81E /* libjschelpers.a */; };
@@ -37,8 +36,9 @@
 		C4DA80D41F59D47400DE53BC /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C41240E91F4D470B0008C81E /* libRNVectorIcons.a */; };
 		C4DA80D51F59D47400DE53BC /* libthird-party.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C412413D1F4D4CF80008C81E /* libthird-party.a */; };
 		C4DA80D61F59D47400DE53BC /* libyoga.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C41241311F4D4CF80008C81E /* libyoga.a */; };
-		C4EAF11C1F5FC03F0016DEE8 /* Mapbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4EAF11B1F5FC03F0016DEE8 /* Mapbox.framework */; };
-		C4EAF11D1F5FC03F0016DEE8 /* Mapbox.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C4EAF11B1F5FC03F0016DEE8 /* Mapbox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C4EAF1751F6246670016DEE8 /* Mapbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4EAF1741F6246670016DEE8 /* Mapbox.framework */; };
+		C4EAF1761F6246670016DEE8 /* Mapbox.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C4EAF1741F6246670016DEE8 /* Mapbox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C4FB10FB1F7063E20055AE1F /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = C4FB10FA1F7063E20055AE1F /* main.jsbundle */; };
 		D92E3EE6B3C940BC8595A323 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5F45B26128214909AA0DEFAA /* Foundation.ttf */; };
 		E320ADEE14184949B69DB229 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 402F162FF13A4AFC90C5503F /* MaterialIcons.ttf */; };
 		F6DE750A44A146158CFD916C /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CA1A8AC8F4AF482F90E36B0B /* Octicons.ttf */; };
@@ -265,13 +265,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		C4EAF0ED1F5FAD080016DEE8 /* Embed Frameworks */ = {
+		C4EAF1771F6246680016DEE8 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				C4EAF11D1F5FC03F0016DEE8 /* Mapbox.framework in Embed Frameworks */,
+				C4EAF1761F6246670016DEE8 /* Mapbox.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -309,6 +309,9 @@
 		C412411D1F4D4CF80008C81E /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		C4D144801F4E1CD300396F26 /* RCTMGL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTMGL.xcodeproj; path = "../node_modules/react-native-mapbox-gl/ios/RCTMGL.xcodeproj"; sourceTree = "<group>"; };
 		C4EAF11B1F5FC03F0016DEE8 /* Mapbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mapbox.framework; sourceTree = "<group>"; };
+		C4EAF1741F6246670016DEE8 /* Mapbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mapbox.framework; sourceTree = "<group>"; };
+		C4EAF1941F634D7D0016DEE8 /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; name = main.jsbundle; path = RNMapboxGLExample/main.jsbundle; sourceTree = "<group>"; };
+		C4FB10FA1F7063E20055AE1F /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; name = main.jsbundle; path = RNMapboxGLExample/main.jsbundle; sourceTree = "<group>"; };
 		CA1A8AC8F4AF482F90E36B0B /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		D3E21CD19A744D8E8BED77B5 /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
 		D75A4A58713849B7A7FF505E /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
@@ -339,7 +342,7 @@
 				C4DA80D41F59D47400DE53BC /* libRNVectorIcons.a in Frameworks */,
 				C4DA80D51F59D47400DE53BC /* libthird-party.a in Frameworks */,
 				C4DA80D61F59D47400DE53BC /* libyoga.a in Frameworks */,
-				C4EAF11C1F5FC03F0016DEE8 /* Mapbox.framework in Frameworks */,
+				C4EAF1751F6246670016DEE8 /* Mapbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -487,11 +490,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD
 				C4EAF11B1F5FC03F0016DEE8 /* Mapbox.framework */,
-=======
-				C4DA80E81F59D63C00DE53BC /* Mapbox.framework */,
->>>>>>> Version bump to 6.0.0
 				13B07FAE1A68108700A75B9A /* RNMapboxGLExample */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* RNMapboxGLExampleTests */,
@@ -590,11 +589,7 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-<<<<<<< HEAD
-				C4EAF0ED1F5FAD080016DEE8 /* Embed Frameworks */,
-=======
-				C4DA80DA1F59D4D300DE53BC /* Embed Frameworks */,
->>>>>>> Version bump to 6.0.0
+				C4EAF1771F6246680016DEE8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -916,7 +911,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C43773261F55176300AF6D71 /* main.jsbundle in Resources */,
+				C4FB10FB1F7063E20055AE1F /* main.jsbundle in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				31DAEE13787E4DFCA98C5500 /* Entypo.ttf in Resources */,
@@ -984,6 +979,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1016,6 +1012,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
