@@ -1,15 +1,20 @@
+#### Note
+
+If you were using react-native-mapbox-gl before we moved it into the mapbox npm org.
+You will need to unlink react-native-mapbox-gl and link @mapbox/react-native-mapbox-gl
+
 # Manual installation process
 
 _Make sure to follow these directions carefully._
 
 First,
 ```bash
-npm install react-native-mapbox-gl --save
+npm install @mapbox/react-native-mapbox-gl --save
 ```
 
 ### 1: Adding RCTMapboxGL.xcodeproj
 
-In the Xcode's `Project navigator`, right click on the `Libraries` folder ➜ `Add Files to <...>`. Add `node_modules/react-native-mapbox-gl/ios/RCTMapboxGL.xcodeproj`
+In the Xcode's `Project navigator`, right click on the `Libraries` folder ➜ `Add Files to <...>`. Add `node_modules/@mapbox/react-native-mapbox-gl/ios/RCTMapboxGL.xcodeproj`
 
 ![](https://dl.dropboxusercontent.com/s/6trwtezp3009eot/2016-03-14%20at%2012.52%20PM.png)
 
@@ -17,7 +22,7 @@ In the Xcode's `Project navigator`, right click on the `Libraries` folder ➜ `A
 
 ### 2: Adding Mapbox.framework
 
-Select your project in the `Project navigator`. Click `General` tab then add `node_modules/react-native-mapbox-gl/ios/Mapbox.framework` to `Embedded Binaries`. :collision: **Important, make sure you're adding it to general -> `Embedded Binaries` :collision:**
+Select your project in the `Project navigator`. Click `General` tab then add `node_modules/@mapbox/react-native-mapbox-gl/ios/Mapbox.framework` to `Embedded Binaries`. :collision: **Important, make sure you're adding it to general -> `Embedded Binaries` :collision:**
 
 Click 'Add other' to open the file browser and select Mapbox.framework.
 

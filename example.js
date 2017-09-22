@@ -2,7 +2,7 @@
 /* eslint no-console: 0 */
 
 import React, { Component } from 'react';
-import Mapbox, { MapView } from 'react-native-mapbox-gl';
+import Mapbox, { MapView } from '@mapbox/react-native-mapbox-gl';
 import {
   AppRegistry,
   StyleSheet,
@@ -249,20 +249,24 @@ class MapExample extends Component {
           })}>
           Get bounds
         </Text>
-        <Text onPress={() => {
-            Mapbox.addOfflinePack({
+        <Text onPress={async () => {
+          try {
+            await Mapbox.initializeOfflinePacks();
+
+            await Mapbox.addOfflinePack({
               name: 'test',
               type: 'bbox',
-              bounds: [0, 0, 0, 0],
-              minZoomLevel: 0,
-              maxZoomLevel: 0,
+              bounds: [42.00273287349021, 12.635713745117073, 41.74068098333959, 12.153523284912126],
+              minZoomLevel: 4,
+              maxZoomLevel: 15,
               metadata: { anyValue: 'you wish' },
               styleURL: Mapbox.mapStyles.dark
-            }).then(() => {
-              console.log('Offline pack added');
-            }).catch(err => {
-              console.log(err);
             });
+
+            console.log('Offline pack added');
+          } catch (e) {
+            console.log(e);
+          }
         }}>
           Create offline pack
         </Text>

@@ -1,9 +1,21 @@
+<a href="https://www.mapbox.com">
+  <img src="/assets/mapbox_logo.png" width="500"/>
+</a>
+
 # React Native Mapbox GL
 
 _An experimental React Native component for building maps with the [Mapbox iOS SDK](https://www.mapbox.com/ios-sdk/) and [Mapbox Android SDK](https://www.mapbox.com/android-sdk/)_
 
 [![npm version](https://badge.fury.io/js/react-native-mapbox-gl.svg)](https://badge.fury.io/js/react-native-mapbox-gl) [![Circle CI](https://circleci.com/gh/mapbox/react-native-mapbox-gl/tree/master.svg?style=svg)](https://circleci.com/gh/mapbox/react-native-mapbox-gl/tree/master)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmapbox%2Freact-native-mapbox-gl.svg?type=shield)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmapbox%2Freact-native-mapbox-gl?ref=badge_shield)
+
+## What is Mapbox?
+
+Mapbox is the location data platform for mobile and web applications. We provide [building blocks](https://www.mapbox.com/products/) to add location features like maps, search, and navigation into any experience you create. Use our simple and powerful APIs & SDKs and our open source libraries for interactivity and control.
+
+## Sign up for Mapbox
+
+Not a Mapbox user yet? [Sign up for an account here](https://www.mapbox.com/signup/). Once you’re signed in, all you need to start building is a Mapbox access token. Use this same short code with all of our interactive mapping libraries, Python and JavaScript SDKs, and directly against our REST APIs. You can [create and manage your access tokens in Mapbox Studio](https://www.mapbox.com/studio/account/tokens/).
 
 ## Support
 
