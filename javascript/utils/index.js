@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   NativeModules,
   findNodeHandle,
@@ -12,6 +14,22 @@ export function isFunction (fn) {
 
 export function isNumber (num) {
   return typeof num === 'number' && !Number.isNaN(num);
+}
+
+export function isUndefined (obj) {
+  return typeof obj === 'undefined';
+}
+
+export function isString (str) {
+  return typeof str === 'string';
+}
+
+export function isBoolean (bool) {
+  return typeof bool === 'boolean';
+}
+
+export function isPrimitive (value) {
+  return isString(value) || isNumber(value) || isBoolean(value);
 }
 
 export function runNativeCommand (module, name, nativeRef, args = []) {
@@ -30,6 +48,10 @@ export function runNativeCommand (module, name, nativeRef, args = []) {
     managerInstance.Commands[name],
     args,
   );
+}
+
+export function cloneReactChildrenWithProps (children, propsToAdd = {}) {
+  return React.Children.map(children, (child) => React.cloneElement(child, propsToAdd));
 }
 
 export function toJSONString (json = '') {
