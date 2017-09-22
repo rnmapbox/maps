@@ -310,7 +310,6 @@
 		C4D144801F4E1CD300396F26 /* RCTMGL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTMGL.xcodeproj; path = "../node_modules/react-native-mapbox-gl/ios/RCTMGL.xcodeproj"; sourceTree = "<group>"; };
 		C4EAF11B1F5FC03F0016DEE8 /* Mapbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mapbox.framework; sourceTree = "<group>"; };
 		C4EAF1741F6246670016DEE8 /* Mapbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Mapbox.framework; sourceTree = "<group>"; };
-		C4EAF1941F634D7D0016DEE8 /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; name = main.jsbundle; path = RNMapboxGLExample/main.jsbundle; sourceTree = "<group>"; };
 		C4FB10FA1F7063E20055AE1F /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; name = main.jsbundle; path = RNMapboxGLExample/main.jsbundle; sourceTree = "<group>"; };
 		CA1A8AC8F4AF482F90E36B0B /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		D3E21CD19A744D8E8BED77B5 /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
@@ -566,6 +565,8 @@
 			isa = PBXGroup;
 			children = (
 				D3E21CD19A744D8E8BED77B5 /* libRNVectorIcons.a */,
+				C4EAF1741F6246670016DEE8 /* Mapbox.framework */,
+				C4FB10FA1F7063E20055AE1F /* main.jsbundle */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
