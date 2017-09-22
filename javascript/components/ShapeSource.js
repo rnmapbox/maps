@@ -76,7 +76,7 @@ class ShapeSource extends React.Component {
     id: MapboxGL.StyleSource.DefaultSourceID,
   };
 
-  _getShape() {
+  _getShape () {
     if (!this.props.shape) {
       return;
     }

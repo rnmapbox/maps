@@ -5,7 +5,6 @@ import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
 
 import sheet from '../styles/sheet';
-import { SF_OFFICE_COORDINATE } from '../utils';
 import smileyFaceGeoJSON from '../assets/smiley_face.json';
 
 const layerStyles = MapboxGL.StyleSheet.create({
