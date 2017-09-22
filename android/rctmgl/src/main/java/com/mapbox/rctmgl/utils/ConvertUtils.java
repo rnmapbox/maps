@@ -11,6 +11,8 @@ import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -74,5 +76,17 @@ public class ConvertUtils {
 
         return LatLngBounds.from(neLatLng.getLatitude(), neLatLng.getLongitude(),
                 swLatLng.getLatitude(), swLatLng.getLongitude());
+    }
+
+    public static Object getObjectFromString(String str) {
+        NumberFormat numberFormat = NumberFormat.getNumberInstance();
+
+        try {
+            return numberFormat.parse(str);
+        } catch (ParseException e) {
+            // ignore we're just figuring out what type this is
+        }
+
+        return str;
     }
 }
