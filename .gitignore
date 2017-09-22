@@ -30,6 +30,7 @@ node_modules/
 npm-debug.log
 package-lock.json
 *.tgz
+yarn.lock
 
 # project specific
 ios/Mapbox.framework
@@ -44,3 +45,4 @@ android/gradlew.bat
 android/local.properties
 reactnativemapboxgl.iml
 .idea
+coverage

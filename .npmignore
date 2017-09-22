@@ -40,3 +40,5 @@ android/local.properties
 
 # react-native-mapbox-gl
 example
+__tests__
+coverage

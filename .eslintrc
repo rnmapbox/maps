@@ -15,7 +15,10 @@
   "plugins": ["react", "import"],
   "settings": {
     "import/core-modules": [
-      "react", "react-native", "prop-types"
+      "react",
+      "react-native",
+      "react-native/Libraries/Image/resolveAssetSource",
+      "prop-types"
     ]
   },
   "rules": {
