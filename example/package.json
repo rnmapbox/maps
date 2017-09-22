@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"start": "node node_modules/react-native/local-cli/cli.js start",
+		"build:ios": "node node_modules/react-native/local-cli/cli.js bundle --entry-file='index.ios.js' --bundle-output='./ios/RNMapboxGLExample/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'",
 		"copy:changes": "node ./scripts/watch_rngl.js",
 		"pack:gl": "./scripts/npm_pack_rngl.sh",
 		"clean:node:modules": "./scripts/clean_node_modules.sh",

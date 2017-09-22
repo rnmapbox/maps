@@ -7,6 +7,28 @@ import TabBarPage from './common/TabBarPage';
 
 import sheet from '../styles/sheet';
 
+const layerStyles = MapboxGL.StyleSheet.create({
+  building: {
+    fillExtrusionOpacity: 1,
+    fillExtrusionHeight: MapboxGL.StyleSheet.identity('height'),
+    fillExtrusionBase: MapboxGL.StyleSheet.identity('min_height'),
+    fillExtrusionColor: MapboxGL.StyleSheet.source({
+      0: 'white',
+      50: 'blue',
+      100: 'red',
+    }, 'height', MapboxGL.InterpolationMode.Exponential),
+    fillExtrusionColorTransition: { duration: 2000, delay: 0 },
+  },
+  streets: {
+    lineColor: 'blue',
+    lineWidth: 2,
+    lineOpacity: 0.50,
+    lineJoin: MapboxGL.LineJoin.Round,
+    lineCap: MapboxGL.LineCap.Round,
+    lineDasharray: [2, 2],
+  },
+});
+
 class FlyTo extends React.Component {
   static SF_OFFICE_LOCATION = [-122.400021, 37.789085];
   static DC_OFFICE_LOCATION = [-77.036086, 38.910233];
@@ -39,11 +61,27 @@ class FlyTo extends React.Component {
     return (
       <TabBarPage {...this.props} options={this._flyToOptions} onOptionPress={this.onFlyToPress}>
         <MapboxGL.MapView
-            zoomLevel={18}
-            onFlyToComplete={this.onFlyToComplete}
+            zoomLevel={16}
+            pitch={45}
+            onSetCameraComplete={this.onFlyToComplete}
             centerCoordinate={FlyTo.SF_OFFICE_LOCATION}
             ref={(ref) => this.map = ref}
-            style={sheet.matchParent} />
+            style={sheet.matchParent}>
+
+            <MapboxGL.VectorSource>
+              <MapboxGL.FillExtrusionLayer
+                id='building3d'
+                sourceLayerID='building'
+                style={layerStyles.building} />
+
+              <MapboxGL.LineLayer
+                id='streetLineColor'
+                sourceLayerID='road'
+                minZoomLevel={14}
+                belowLayerID='building3d'
+                style={layerStyles.streets} />
+            </MapboxGL.VectorSource>
+        </MapboxGL.MapView>
       </TabBarPage>
     );
   }

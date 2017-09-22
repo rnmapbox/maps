@@ -33,6 +33,8 @@ import FitBounds from './components/FitBounds';
 import SetUserTrackingModes from './components/SetUserTrackingModes';
 import ShowRegionDidChange from './components/ShowRegionDidChange';
 import YoYo from './components/YoYo';
+import EarthQuakes from './components/EarthQuakes';
+import GeoJSONSource from './components/GeoJSONSource';
 
 const styles = StyleSheet.create({
   header: {
@@ -80,6 +82,8 @@ const Examples = [
   new ExampleItem('Set User Tracking Modes', SetUserTrackingModes),
   new ExampleItem('Show Region Did Change', ShowRegionDidChange),
   new ExampleItem('Yo Yo Camera', YoYo),
+  new ExampleItem('Clustering Earthquakes', EarthQuakes),
+  new ExampleItem('GeoJSON Source', GeoJSONSource),
 ];
 
 class App extends React.Component {
