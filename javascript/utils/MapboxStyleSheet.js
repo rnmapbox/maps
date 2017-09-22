@@ -23,7 +23,7 @@ class MapStyleTransitionItem extends MapStyleItem {
         duration: duration,
         delay: delay,
       },
-      ...extras
+      ...extras,
     });
   }
 }
@@ -32,7 +32,7 @@ class MapStyleTranslationItem extends MapStyleItem {
   constructor (x, y, extras = {}) {
     super(StyleTypes.Translation, {
       value: [x, y],
-      ...extras
+      ...extras,
     });
   }
 }
