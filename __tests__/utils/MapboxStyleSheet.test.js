@@ -25,9 +25,9 @@ describe('MapboxStyleSheet', () => {
   });
 
   it('should create translate item', () => {
-    verifyStyleSheetsMatch({ fillTranslation: { x: 1, y: 2 } }, {
+    verifyStyleSheetsMatch({ fillTranslate: { x: 1, y: 2 } }, {
       __MAPBOX_STYLESHEET__: true,
-      fillTranslation: {
+      fillTranslate: {
         type: 'translation',
         payload: { value: [1, 2] },
       },
