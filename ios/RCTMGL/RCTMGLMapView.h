@@ -7,12 +7,16 @@
 //
 
 #import <React/RCTComponent.h>
+#import "RCTSource.h"
 @import Mapbox;
 
 @class CameraUpdateQueue;
+
 @interface RCTMGLMapView : MGLMapView
 
 @property (nonatomic, strong) CameraUpdateQueue *cameraUpdateQueue;
+@property (nonatomic, strong) NSMutableArray<id<RCTComponent>> *reactSubviews;
+@property (nonatomic, strong) NSMutableArray<RCTSource*> *sources;
 
 @property (nonatomic, assign) BOOL animated;
 @property (nonatomic, assign) BOOL reactScrollEnabled;

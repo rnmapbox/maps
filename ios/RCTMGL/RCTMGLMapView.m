@@ -23,9 +23,67 @@ static double const M2PI = M_PI * 2;
 {
     if (self = [super initWithFrame:frame]) {
         _cameraUpdateQueue = [[CameraUpdateQueue alloc] init];
+        _sources = [[NSMutableArray alloc] init];
+        _reactSubviews = [[NSMutableArray alloc] init];
     }
     return self;
 }
+
+- (void) addToMap:(id<RCTComponent>)subview
+{
+    if ([subview isKindOfClass:[RCTSource class]]) {
+        RCTSource *source = (RCTSource*)subview;
+        source.map = self;
+        [_sources addObject:(RCTSource*)subview];
+    } else {
+        NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
+
+        for (int i = 0; i < childSubviews.count; i++) {
+            [self addToMap:childSubviews[i]];
+        }
+    }
+}
+
+- (void) removeFromMap:(id<RCTComponent>)subview
+{
+    if ([subview isKindOfClass:[RCTSource class]]) {
+        RCTSource *source = (RCTSource*)subview;
+        source.map = nil;
+        [_sources removeObject:source];
+    } else {
+        NSArray<id<RCTComponent>> *childSubViews = [subview reactSubviews];
+        
+        for (int i = 0; i < childSubViews.count; i++) {
+            [self removeFromMap:childSubViews[i]];
+        }
+    }
+}
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-missing-super-calls"
+- (void)insertReactSubview:(id<RCTComponent>)subview atIndex:(NSInteger)atIndex {
+    [self addToMap:subview];
+    [_reactSubviews insertObject:(UIView *)subview atIndex:(NSUInteger) atIndex];
+}
+#pragma clang diagnostic pop
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-missing-super-calls"
+- (void)removeReactSubview:(id<RCTComponent>)subview {
+    // similarly, when the children are being removed we have to do the appropriate
+    // underlying mapview action here.
+    [self removeFromMap:subview];
+    [_reactSubviews removeObject:(UIView *)subview];
+}
+#pragma clang diagnostic pop
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-missing-super-calls"
+- (NSArray<id<RCTComponent>> *)reactSubviews {
+    return _reactSubviews;
+}
+#pragma clang diagnostic pop
+
 
 - (void)setReactScrollEnabled:(BOOL)reactScrollEnabled
 {

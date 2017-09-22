@@ -9,6 +9,7 @@
 #import "MGLModule.h"
 #import "RCTMGLEventTypes.h"
 #import "CameraMode.h"
+#import "RCTSource.h"
 @import Mapbox;
 
 @implementation MGLModule
@@ -61,12 +62,38 @@ RCT_EXPORT_MODULE();
     [cameraModes setObject:[NSNumber numberWithInt:RCT_MAPBOX_CAMERA_MODE_EASE] forKey:@"Ease"];
     [cameraModes setObject:[NSNumber numberWithInt:RCT_MAPBOX_CAMERA_MODE_NONE] forKey:@"None"];
     
+    // style sources
+    NSMutableDictionary *styleSourceConsts = [[NSMutableDictionary alloc] init];
+    [styleSourceConsts setObject:DEFAULT_SOURCE_ID forKey:@"DefaultSourceID"];
+
+    // interpolation modes
+    NSMutableDictionary *interpolationModes = [[NSMutableDictionary alloc] init];
+    [interpolationModes setObject:@(MGLInterpolationModeExponential) forKey:@"Exponential"];
+    [interpolationModes setObject:@(MGLInterpolationModeCategorical) forKey:@"Categorial"];
+    [interpolationModes setObject:@(MGLInterpolationModeInterval) forKey:@"Interval"];
+    [interpolationModes setObject:@(MGLInterpolationModeIdentity) forKey:@"Identity"];
+    
+    // line layer constants
+    NSMutableDictionary *lineJoin = [[NSMutableDictionary alloc] init];
+    [lineJoin setObject:@(MGLLineJoinBevel) forKey:@"Bevel"];
+    [lineJoin setObject:@(MGLLineJoinRound) forKey:@"Round"];
+    [lineJoin setObject:@(MGLLineJoinMiter) forKey:@"Miter"];
+    
+    NSMutableDictionary *lineCap = [[NSMutableDictionary alloc] init];
+    [lineCap setObject:@(MGLLineCapButt) forKey:@"Butt"];
+    [lineCap setObject:@(MGLLineCapRound) forKey:@"Round"];
+    [lineCap setObject:@(MGLLineCapSquare) forKey:@"Square"];
+    
     return @{
-             @"StyleURL": styleURLS,
-             @"EventTypes": eventTypes,
-             @"UserTrackingModes": userTrackingModes,
-             @"CameraModes": cameraModes
-             };
+         @"StyleURL": styleURLS,
+         @"EventTypes": eventTypes,
+         @"UserTrackingModes": userTrackingModes,
+         @"CameraModes": cameraModes,
+         @"StyleSource": styleSourceConsts,
+         @"InterpolationMode": interpolationModes,
+         @"LineJoin": lineJoin,
+         @"LineCap": lineCap
+    };
 }
 
 RCT_EXPORT_METHOD(setAccessToken:(NSString *)accessToken)
