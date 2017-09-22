@@ -20,7 +20,6 @@
 @interface RCTMGLMapViewManager() <MGLMapViewDelegate>
 @end
 
-
 @implementation RCTMGLMapViewManager
 
 // prevents SDK from crashing and cluttering logs
@@ -188,7 +187,16 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
 
 - (void)mapView:(MGLMapView *)mapView didFinishLoadingStyle:(MGLStyle *)style
 {
-    [self reactMapDidChange:mapView eventType:RCT_MAPBOX_DID_FINISH_LOADING_STYLE];
+    RCTMGLMapView *reactMapView = (RCTMGLMapView*)mapView;
+    
+    if (reactMapView.sources.count > 0) {
+        for (int i = 0; i < reactMapView.sources.count; i++) {
+            RCTSource *source = reactMapView.sources[i];
+            source.map = reactMapView;
+        }
+    }
+    
+    [self reactMapDidChange:reactMapView eventType:RCT_MAPBOX_DID_FINISH_LOADING_STYLE];
 }
 
 - (void)reactMapDidChange:(MGLMapView*)mapView eventType:(NSString*)type

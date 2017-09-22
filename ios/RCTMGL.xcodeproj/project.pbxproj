@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C42236A41F6B012000FA9C1C /* RCTMGLStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = C42236A31F6B012000FA9C1C /* RCTMGLStyle.m */; };
+		C42236A71F6C7F4E00FA9C1C /* RCTMGLFillExtrusionLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C42236A61F6C7F4E00FA9C1C /* RCTMGLFillExtrusionLayer.m */; };
+		C42236AA1F6C7F6200FA9C1C /* RCTMGLFillExtrusionLayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C42236A91F6C7F6200FA9C1C /* RCTMGLFillExtrusionLayerManager.m */; };
 		C435A5F71F587D9100824A30 /* ViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C435A5F61F587D9100824A30 /* ViewManager.m */; };
 		C43CA5061F507BCC000B9CB7 /* RCTMGLMapTouchEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = C43CA5051F507BCC000B9CB7 /* RCTMGLMapTouchEvent.m */; };
 		C43CA50A1F50C145000B9CB7 /* RCTMGLEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = C43CA5091F50C145000B9CB7 /* RCTMGLEvent.m */; };
@@ -17,10 +20,25 @@
 		C4D1444F1F4E181100396F26 /* RCTMGLMapViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D1444E1F4E181100396F26 /* RCTMGLMapViewManager.m */; };
 		C4D144531F4E190C00396F26 /* MGLModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D144521F4E190C00396F26 /* MGLModule.m */; };
 		C4D144971F4E2F1100396F26 /* RCTMGLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D144961F4E2F1100396F26 /* RCTMGLUtils.m */; };
+		C4EA22191F675ACE00EF2500 /* RCTMGLStyleValue.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EA22181F675ACE00EF2500 /* RCTMGLStyleValue.m */; };
 		C4EAF1201F5FC07E0016DEE8 /* CameraStop.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF11F1F5FC07E0016DEE8 /* CameraStop.m */; };
 		C4EAF1241F606F7C0016DEE8 /* CameraMode.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF1231F606F7C0016DEE8 /* CameraMode.m */; };
 		C4EAF1271F6083C70016DEE8 /* CameraUpdateItem.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF1261F6083C70016DEE8 /* CameraUpdateItem.m */; };
 		C4EAF12A1F6084920016DEE8 /* CameraUpdateQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF1291F6084920016DEE8 /* CameraUpdateQueue.m */; };
+		C4EAF17D1F6324970016DEE8 /* RCTSource.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF17C1F6324970016DEE8 /* RCTSource.m */; };
+		C4EAF1801F6324A80016DEE8 /* RCTLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF17F1F6324A80016DEE8 /* RCTLayer.m */; };
+		C4EAF1831F6336E20016DEE8 /* RCTMGLVectorSource.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF1821F6336E20016DEE8 /* RCTMGLVectorSource.m */; };
+		C4EAF1891F633C010016DEE8 /* RCTMGLVectorSourceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF1881F633C010016DEE8 /* RCTMGLVectorSourceManager.m */; };
+		C4EAF18F1F633E020016DEE8 /* RCTMGLFillLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF18E1F633E020016DEE8 /* RCTMGLFillLayer.m */; };
+		C4EAF1921F6341520016DEE8 /* RCTMGLFillLayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF1911F6341520016DEE8 /* RCTMGLFillLayerManager.m */; };
+		C4FB10FE1F707A140055AE1F /* RCTMGLLineLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FB10FD1F707A140055AE1F /* RCTMGLLineLayer.m */; };
+		C4FB11011F707A280055AE1F /* RCTMGLLineLayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FB11001F707A280055AE1F /* RCTMGLLineLayerManager.m */; };
+		C4FB11041F709CDC0055AE1F /* RCTMGLCircleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FB11031F709CDC0055AE1F /* RCTMGLCircleLayer.m */; };
+		C4FB11071F709CEF0055AE1F /* RCTMGLCircleLayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FB11061F709CEF0055AE1F /* RCTMGLCircleLayerManager.m */; };
+		C4FB110A1F71D09E0055AE1F /* RCTMGLShapeSource.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FB11091F71D09E0055AE1F /* RCTMGLShapeSource.m */; };
+		C4FB110D1F71D0B10055AE1F /* RCTMGLShapeSourceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FB110C1F71D0B10055AE1F /* RCTMGLShapeSourceManager.m */; };
+		C4FB11101F71EC8D0055AE1F /* RCTMGLSymbolLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FB110F1F71EC8D0055AE1F /* RCTMGLSymbolLayer.m */; };
+		C4FB11131F71EC9F0055AE1F /* RCTMGLSymbolLayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FB11121F71EC9F0055AE1F /* RCTMGLSymbolLayerManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,6 +55,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C42236A21F6B012000FA9C1C /* RCTMGLStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLStyle.h; sourceTree = "<group>"; };
+		C42236A31F6B012000FA9C1C /* RCTMGLStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLStyle.m; sourceTree = "<group>"; };
+		C42236A51F6C7F4E00FA9C1C /* RCTMGLFillExtrusionLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLFillExtrusionLayer.h; sourceTree = "<group>"; };
+		C42236A61F6C7F4E00FA9C1C /* RCTMGLFillExtrusionLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLFillExtrusionLayer.m; sourceTree = "<group>"; };
+		C42236A81F6C7F6200FA9C1C /* RCTMGLFillExtrusionLayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLFillExtrusionLayerManager.h; sourceTree = "<group>"; };
+		C42236A91F6C7F6200FA9C1C /* RCTMGLFillExtrusionLayerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLFillExtrusionLayerManager.m; sourceTree = "<group>"; };
 		C435A5F51F587D9100824A30 /* ViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewManager.h; sourceTree = "<group>"; };
 		C435A5F61F587D9100824A30 /* ViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewManager.m; sourceTree = "<group>"; };
 		C43CA5041F507BCC000B9CB7 /* RCTMGLMapTouchEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLMapTouchEvent.h; sourceTree = "<group>"; };
@@ -57,6 +81,8 @@
 		C4D144521F4E190C00396F26 /* MGLModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGLModule.m; sourceTree = "<group>"; };
 		C4D144951F4E2F1100396F26 /* RCTMGLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLUtils.h; sourceTree = "<group>"; };
 		C4D144961F4E2F1100396F26 /* RCTMGLUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLUtils.m; sourceTree = "<group>"; };
+		C4EA22171F675ACE00EF2500 /* RCTMGLStyleValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLStyleValue.h; sourceTree = "<group>"; };
+		C4EA22181F675ACE00EF2500 /* RCTMGLStyleValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLStyleValue.m; sourceTree = "<group>"; };
 		C4EAF11E1F5FC07E0016DEE8 /* CameraStop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraStop.h; sourceTree = "<group>"; };
 		C4EAF11F1F5FC07E0016DEE8 /* CameraStop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraStop.m; sourceTree = "<group>"; };
 		C4EAF1221F606F7C0016DEE8 /* CameraMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraMode.h; sourceTree = "<group>"; };
@@ -65,6 +91,34 @@
 		C4EAF1261F6083C70016DEE8 /* CameraUpdateItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraUpdateItem.m; sourceTree = "<group>"; };
 		C4EAF1281F6084920016DEE8 /* CameraUpdateQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraUpdateQueue.h; sourceTree = "<group>"; };
 		C4EAF1291F6084920016DEE8 /* CameraUpdateQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraUpdateQueue.m; sourceTree = "<group>"; };
+		C4EAF17B1F6324970016DEE8 /* RCTSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTSource.h; sourceTree = "<group>"; };
+		C4EAF17C1F6324970016DEE8 /* RCTSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTSource.m; sourceTree = "<group>"; };
+		C4EAF17E1F6324A80016DEE8 /* RCTLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTLayer.h; sourceTree = "<group>"; };
+		C4EAF17F1F6324A80016DEE8 /* RCTLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTLayer.m; sourceTree = "<group>"; };
+		C4EAF1811F6336E20016DEE8 /* RCTMGLVectorSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLVectorSource.h; sourceTree = "<group>"; };
+		C4EAF1821F6336E20016DEE8 /* RCTMGLVectorSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLVectorSource.m; sourceTree = "<group>"; };
+		C4EAF1871F633C010016DEE8 /* RCTMGLVectorSourceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLVectorSourceManager.h; sourceTree = "<group>"; };
+		C4EAF1881F633C010016DEE8 /* RCTMGLVectorSourceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLVectorSourceManager.m; sourceTree = "<group>"; };
+		C4EAF18D1F633E020016DEE8 /* RCTMGLFillLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLFillLayer.h; sourceTree = "<group>"; };
+		C4EAF18E1F633E020016DEE8 /* RCTMGLFillLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLFillLayer.m; sourceTree = "<group>"; };
+		C4EAF1901F6341520016DEE8 /* RCTMGLFillLayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLFillLayerManager.h; sourceTree = "<group>"; };
+		C4EAF1911F6341520016DEE8 /* RCTMGLFillLayerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLFillLayerManager.m; sourceTree = "<group>"; };
+		C4FB10FC1F707A140055AE1F /* RCTMGLLineLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLLineLayer.h; sourceTree = "<group>"; };
+		C4FB10FD1F707A140055AE1F /* RCTMGLLineLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLLineLayer.m; sourceTree = "<group>"; };
+		C4FB10FF1F707A280055AE1F /* RCTMGLLineLayerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLLineLayerManager.h; sourceTree = "<group>"; };
+		C4FB11001F707A280055AE1F /* RCTMGLLineLayerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLLineLayerManager.m; sourceTree = "<group>"; };
+		C4FB11021F709CDC0055AE1F /* RCTMGLCircleLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLCircleLayer.h; sourceTree = "<group>"; };
+		C4FB11031F709CDC0055AE1F /* RCTMGLCircleLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLCircleLayer.m; sourceTree = "<group>"; };
+		C4FB11051F709CEF0055AE1F /* RCTMGLCircleLayerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLCircleLayerManager.h; sourceTree = "<group>"; };
+		C4FB11061F709CEF0055AE1F /* RCTMGLCircleLayerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLCircleLayerManager.m; sourceTree = "<group>"; };
+		C4FB11081F71D09E0055AE1F /* RCTMGLShapeSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLShapeSource.h; sourceTree = "<group>"; };
+		C4FB11091F71D09E0055AE1F /* RCTMGLShapeSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLShapeSource.m; sourceTree = "<group>"; };
+		C4FB110B1F71D0B10055AE1F /* RCTMGLShapeSourceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLShapeSourceManager.h; sourceTree = "<group>"; };
+		C4FB110C1F71D0B10055AE1F /* RCTMGLShapeSourceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLShapeSourceManager.m; sourceTree = "<group>"; };
+		C4FB110E1F71EC8D0055AE1F /* RCTMGLSymbolLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLSymbolLayer.h; sourceTree = "<group>"; };
+		C4FB110F1F71EC8D0055AE1F /* RCTMGLSymbolLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLSymbolLayer.m; sourceTree = "<group>"; };
+		C4FB11111F71EC9F0055AE1F /* RCTMGLSymbolLayerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLSymbolLayerManager.h; sourceTree = "<group>"; };
+		C4FB11121F71EC9F0055AE1F /* RCTMGLSymbolLayerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLSymbolLayerManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +135,7 @@
 		C43773B91F56024900AF6D71 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				C4EAF1781F6320A40016DEE8 /* Styles */,
 				C4EAF0EE1F5FAEB50016DEE8 /* Camera */,
 				C43773BA1F56025800AF6D71 /* MapView */,
 				C435A5F51F587D9100824A30 /* ViewManager.h */,
@@ -192,6 +247,65 @@
 			name = Constants;
 			sourceTree = "<group>";
 		};
+		C4EAF1781F6320A40016DEE8 /* Styles */ = {
+			isa = PBXGroup;
+			children = (
+				C42236A21F6B012000FA9C1C /* RCTMGLStyle.h */,
+				C42236A31F6B012000FA9C1C /* RCTMGLStyle.m */,
+				C4EAF17A1F6320B10016DEE8 /* Layers */,
+				C4EAF1791F6320AA0016DEE8 /* Sources */,
+				C4EA22171F675ACE00EF2500 /* RCTMGLStyleValue.h */,
+				C4EA22181F675ACE00EF2500 /* RCTMGLStyleValue.m */,
+			);
+			name = Styles;
+			sourceTree = "<group>";
+		};
+		C4EAF1791F6320AA0016DEE8 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				C4EAF17B1F6324970016DEE8 /* RCTSource.h */,
+				C4EAF17C1F6324970016DEE8 /* RCTSource.m */,
+				C4EAF1811F6336E20016DEE8 /* RCTMGLVectorSource.h */,
+				C4EAF1821F6336E20016DEE8 /* RCTMGLVectorSource.m */,
+				C4EAF1871F633C010016DEE8 /* RCTMGLVectorSourceManager.h */,
+				C4EAF1881F633C010016DEE8 /* RCTMGLVectorSourceManager.m */,
+				C4FB11081F71D09E0055AE1F /* RCTMGLShapeSource.h */,
+				C4FB11091F71D09E0055AE1F /* RCTMGLShapeSource.m */,
+				C4FB110B1F71D0B10055AE1F /* RCTMGLShapeSourceManager.h */,
+				C4FB110C1F71D0B10055AE1F /* RCTMGLShapeSourceManager.m */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		C4EAF17A1F6320B10016DEE8 /* Layers */ = {
+			isa = PBXGroup;
+			children = (
+				C4EAF17E1F6324A80016DEE8 /* RCTLayer.h */,
+				C4EAF17F1F6324A80016DEE8 /* RCTLayer.m */,
+				C4EAF18D1F633E020016DEE8 /* RCTMGLFillLayer.h */,
+				C4EAF18E1F633E020016DEE8 /* RCTMGLFillLayer.m */,
+				C4EAF1901F6341520016DEE8 /* RCTMGLFillLayerManager.h */,
+				C4EAF1911F6341520016DEE8 /* RCTMGLFillLayerManager.m */,
+				C42236A51F6C7F4E00FA9C1C /* RCTMGLFillExtrusionLayer.h */,
+				C42236A61F6C7F4E00FA9C1C /* RCTMGLFillExtrusionLayer.m */,
+				C42236A81F6C7F6200FA9C1C /* RCTMGLFillExtrusionLayerManager.h */,
+				C42236A91F6C7F6200FA9C1C /* RCTMGLFillExtrusionLayerManager.m */,
+				C4FB10FC1F707A140055AE1F /* RCTMGLLineLayer.h */,
+				C4FB10FD1F707A140055AE1F /* RCTMGLLineLayer.m */,
+				C4FB10FF1F707A280055AE1F /* RCTMGLLineLayerManager.h */,
+				C4FB11001F707A280055AE1F /* RCTMGLLineLayerManager.m */,
+				C4FB11021F709CDC0055AE1F /* RCTMGLCircleLayer.h */,
+				C4FB11031F709CDC0055AE1F /* RCTMGLCircleLayer.m */,
+				C4FB11051F709CEF0055AE1F /* RCTMGLCircleLayerManager.h */,
+				C4FB11061F709CEF0055AE1F /* RCTMGLCircleLayerManager.m */,
+				C4FB110E1F71EC8D0055AE1F /* RCTMGLSymbolLayer.h */,
+				C4FB110F1F71EC8D0055AE1F /* RCTMGLSymbolLayer.m */,
+				C4FB11111F71EC9F0055AE1F /* RCTMGLSymbolLayerManager.h */,
+				C4FB11121F71EC9F0055AE1F /* RCTMGLSymbolLayerManager.m */,
+			);
+			name = Layers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -249,18 +363,36 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4EAF1801F6324A80016DEE8 /* RCTLayer.m in Sources */,
 				C4EAF1271F6083C70016DEE8 /* CameraUpdateItem.m in Sources */,
 				C4D144531F4E190C00396F26 /* MGLModule.m in Sources */,
 				C43CA50A1F50C145000B9CB7 /* RCTMGLEvent.m in Sources */,
+				C4EA22191F675ACE00EF2500 /* RCTMGLStyleValue.m in Sources */,
+				C4FB110A1F71D09E0055AE1F /* RCTMGLShapeSource.m in Sources */,
+				C4FB11101F71EC8D0055AE1F /* RCTMGLSymbolLayer.m in Sources */,
+				C4EAF18F1F633E020016DEE8 /* RCTMGLFillLayer.m in Sources */,
+				C42236AA1F6C7F6200FA9C1C /* RCTMGLFillExtrusionLayerManager.m in Sources */,
 				C4D1444C1F4E178100396F26 /* RCTMGLMapView.m in Sources */,
+				C42236A41F6B012000FA9C1C /* RCTMGLStyle.m in Sources */,
 				C4D1444F1F4E181100396F26 /* RCTMGLMapViewManager.m in Sources */,
+				C4FB110D1F71D0B10055AE1F /* RCTMGLShapeSourceManager.m in Sources */,
+				C4EAF1921F6341520016DEE8 /* RCTMGLFillLayerManager.m in Sources */,
 				C4D144971F4E2F1100396F26 /* RCTMGLUtils.m in Sources */,
 				C43CA50D1F53A4EF000B9CB7 /* RCTMGLEventTypes.m in Sources */,
 				C4EAF1201F5FC07E0016DEE8 /* CameraStop.m in Sources */,
+				C4FB11071F709CEF0055AE1F /* RCTMGLCircleLayerManager.m in Sources */,
 				C4EAF1241F606F7C0016DEE8 /* CameraMode.m in Sources */,
 				C4D144421F4E16F600396F26 /* RCTMGL.m in Sources */,
+				C42236A71F6C7F4E00FA9C1C /* RCTMGLFillExtrusionLayer.m in Sources */,
+				C4FB11011F707A280055AE1F /* RCTMGLLineLayerManager.m in Sources */,
 				C43CA5061F507BCC000B9CB7 /* RCTMGLMapTouchEvent.m in Sources */,
+				C4FB10FE1F707A140055AE1F /* RCTMGLLineLayer.m in Sources */,
+				C4EAF1831F6336E20016DEE8 /* RCTMGLVectorSource.m in Sources */,
+				C4EAF1891F633C010016DEE8 /* RCTMGLVectorSourceManager.m in Sources */,
+				C4EAF17D1F6324970016DEE8 /* RCTSource.m in Sources */,
+				C4FB11131F71EC9F0055AE1F /* RCTMGLSymbolLayerManager.m in Sources */,
 				C4EAF12A1F6084920016DEE8 /* CameraUpdateQueue.m in Sources */,
+				C4FB11041F709CDC0055AE1F /* RCTMGLCircleLayer.m in Sources */,
 				C435A5F71F587D9100824A30 /* ViewManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

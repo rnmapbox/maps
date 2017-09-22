@@ -7,6 +7,7 @@
 //
 
 #import "RCTMGLUtils.h"
+
 @import Mapbox;
 
 @implementation RCTMGLUtils
@@ -18,6 +19,12 @@ static double const MS_TO_S = 0.001;
     NSData* data = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
     MGLPointFeature *feature = (MGLPointFeature*)[MGLShape shapeWithData:data encoding:NSUTF8StringEncoding error:nil];
     return feature.coordinate;
+}
+
++ (MGLShape*)shapeFromGeoJSON:(NSString*)jsonStr
+{
+    NSData* data = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
+    return [MGLShape shapeWithData:data encoding:NSUTF8StringEncoding error:nil];
 }
 
 + (MGLCoordinateBounds)fromFeatureCollection:(NSString*)jsonStr
@@ -39,6 +46,21 @@ static double const MS_TO_S = 0.001;
 + (NSNumber*)clamp:(NSNumber *)value min:(NSNumber *)min max:(NSNumber *)max
 {
     return MAX(MIN(value, max), min);
+}
+
++ (UIColor*)toColor:(id)value
+{
+    return [RCTConvert UIColor:value];
+}
+
++ (CGVector)toCGVector:(NSArray<NSNumber *> *)arr
+{
+    return CGVectorMake([arr[0] floatValue], [arr[1] floatValue]);
+}
+
++ (void)fetchImage:(RCTBridge*)bridge url:(NSString *)url callback:(RCTImageLoaderCompletionBlock)callback
+{
+    [bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:url] callback:callback];
 }
 
 @end
