@@ -1,6 +1,5 @@
 ## <MapboxGL.MapView />
 ### MapView backed by Mapbox Native GL
-    
 
 ### props
 | Prop | Type | Default | Required | Description |
@@ -36,14 +35,9 @@
 | onFlyToComplete | `func` | `none` | `false` | This event is triggered when a fly to animation is cancelled or completed after calling flyTo |
 | onSetCameraComplete | `func` | `none` | `false` | This event is triggered once the camera is finished after calling setCamera |
 
-    
 ### methods
-
-
 #### fitBounds(northEastCoordinates, southWestCoordinates[, padding][, duration])
-
 ##### arguments
-
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `northEastCoordinates` | `Array` | `Yes` | North east coordinate of bound |
@@ -59,11 +53,8 @@ this.map.fitBounds([lng, lat], [lng, lat], 20, 1000)
 ```
 
 
-
 #### flyTo(coordinates[, duration])
-
 ##### arguments
-
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `coordinates` | `Array` | `Yes` | Coordinates that map camera will jump too |
@@ -77,11 +68,8 @@ this.map.flyTo([lng, lat], 12000)
 ```
 
 
-
 #### zoomTo(zoomLevel[, duration])
-
 ##### arguments
-
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `zoomLevel` | `Number` | `Yes` | Zoom level that the map camera will animate too |
@@ -95,11 +83,8 @@ this.map.zoomTo(16, 100)
 ```
 
 
-
 #### setCamera(config)
-
 ##### arguments
-
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `config` | `Object` | `Yes` | Camera configuration |
@@ -120,4 +105,6 @@ this.map.setCamera({
   ]
 })
 ```
+
+
 

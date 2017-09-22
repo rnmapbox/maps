@@ -1,4 +1,627 @@
 {
+  "CircleLayer": {
+    "description": "CircleLayer is a style layer that renders one or more filled circles on the map.",
+    "methods": [],
+    "props": [
+      {
+        "name": "id",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "A string that uniquely identifies the source in the style to which it is added."
+      },
+      {
+        "name": "sourceID",
+        "required": false,
+        "type": "string",
+        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "description": "The source from which to obtain the data to style.\nIf the source has not yet been added to the current style, the behavior is undefined."
+      },
+      {
+        "name": "sourceLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Identifier of the layer within the source identified by the sourceID property\nfrom which the receiver obtains the data to style."
+      },
+      {
+        "name": "aboveLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer above aboveLayerID."
+      },
+      {
+        "name": "belowLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer below belowLayerID"
+      },
+      {
+        "name": "layerIndex",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Inserts a layer at a specified index"
+      },
+      {
+        "name": "filter",
+        "required": false,
+        "type": "array",
+        "default": "none",
+        "description": "Filter only the features in the source layer that satisfy a condition that you define"
+      },
+      {
+        "name": "minZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The minimum zoom level at which the layer gets parsed and appears."
+      },
+      {
+        "name": "maxZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The maximum zoom level at which the layer gets parsed and appears."
+      },
+      {
+        "name": "style",
+        "required": false,
+        "type": "custom",
+        "default": "none",
+        "description": "Customizable style attributes"
+      }
+    ],
+    "name": "CircleLayer",
+    "styles": [
+      {
+        "name": "visibility",
+        "type": "enum",
+        "description": "Whether this layer is displayed.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "circleRadius",
+        "type": "number",
+        "description": "Circle radius.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "circleColor",
+        "type": "color",
+        "description": "The fill color of the circle.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "circleBlur",
+        "type": "number",
+        "description": "Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "circleOpacity",
+        "type": "number",
+        "description": "The opacity at which the circle will be drawn.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "circleTranslate",
+        "type": "array",
+        "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "circleTranslateAnchor",
+        "type": "enum",
+        "description": "Controls the translation reference point.",
+        "requires": [
+          "circle-translate"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "circlePitchScale",
+        "type": "enum",
+        "description": "Controls the scaling behavior of the circle when the map is pitched.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "circleStrokeWidth",
+        "type": "number",
+        "description": "The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "circleStrokeColor",
+        "type": "color",
+        "description": "The stroke color of the circle.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "circleStrokeOpacity",
+        "type": "number",
+        "description": "The opacity of the circle's stroke.",
+        "requires": [],
+        "disabledBy": []
+      }
+    ]
+  },
+  "FillExtrusionLayer": {
+    "description": "FillExtrusionLayer is a style layer that renders one or more 3D extruded polygons on the map.",
+    "methods": [],
+    "props": [
+      {
+        "name": "id",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "A string that uniquely identifies the source in the style to which it is added."
+      },
+      {
+        "name": "sourceID",
+        "required": false,
+        "type": "string",
+        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "description": "The source from which to obtain the data to style. If the source has not yet been added to the current style, the behavior is undefined."
+      },
+      {
+        "name": "sourceLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Identifier of the layer within the source identified by the sourceID property from which the receiver obtains the data to style."
+      },
+      {
+        "name": "aboveLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer above aboveLayerID."
+      },
+      {
+        "name": "belowLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer below belowLayerID"
+      },
+      {
+        "name": "layerIndex",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Inserts a layer at a specified index"
+      },
+      {
+        "name": "filter",
+        "required": false,
+        "type": "array",
+        "default": "none",
+        "description": "Filter only the features in the source layer that satisfy a condition that you define"
+      },
+      {
+        "name": "minZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The minimum zoom level at which the layer gets parsed and appears."
+      },
+      {
+        "name": "maxZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The maximum zoom level at which the layer gets parsed and appears."
+      },
+      {
+        "name": "style",
+        "required": false,
+        "type": "custom",
+        "default": "none",
+        "description": "Customizable style attributes"
+      }
+    ],
+    "name": "FillExtrusionLayer",
+    "styles": [
+      {
+        "name": "visibility",
+        "type": "enum",
+        "description": "Whether this layer is displayed.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "fillExtrusionOpacity",
+        "type": "number",
+        "description": "The opacity of the entire fill extrusion layer. This is rendered on a per-layer, not per-feature, basis, and data-driven styling is not available.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "fillExtrusionColor",
+        "type": "color",
+        "description": "The base color of the extruded fill. The extrusion's surfaces will be shaded differently based on this color in combination with the root `light` settings. If this color is specified as `rgba` with an alpha component, the alpha component will be ignored; use `fill-extrusion-opacity` to set layer opacity.",
+        "requires": [],
+        "disabledBy": [
+          "fill-extrusion-pattern"
+        ]
+      },
+      {
+        "name": "fillExtrusionTranslate",
+        "type": "array",
+        "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "fillExtrusionTranslateAnchor",
+        "type": "enum",
+        "description": "Controls the translation reference point.",
+        "requires": [
+          "fill-extrusion-translate"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "fillExtrusionPattern",
+        "type": "string",
+        "description": "Name of image in sprite to use for drawing images on extruded fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "fillExtrusionHeight",
+        "type": "number",
+        "description": "The height with which to extrude this layer.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "fillExtrusionBase",
+        "type": "number",
+        "description": "The height with which to extrude the base of this layer. Must be less than or equal to `fill-extrusion-height`.",
+        "requires": [
+          "fill-extrusion-height"
+        ],
+        "disabledBy": []
+      }
+    ]
+  },
+  "FillLayer": {
+    "description": "FillLayer is a style layer that renders one or more filled (and optionally stroked) polygons on the map.",
+    "methods": [],
+    "props": [
+      {
+        "name": "id",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "A string that uniquely identifies the source in the style to which it is added."
+      },
+      {
+        "name": "sourceID",
+        "required": false,
+        "type": "string",
+        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "description": "The source from which to obtain the data to style. If the source has not yet been added to the current style, the behavior is undefined."
+      },
+      {
+        "name": "aboveLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer above aboveLayerID."
+      },
+      {
+        "name": "belowLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer below belowLayerID"
+      },
+      {
+        "name": "layerIndex",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Inserts a layer at a specified index"
+      },
+      {
+        "name": "filter",
+        "required": false,
+        "type": "array",
+        "default": "none",
+        "description": "Filter only the features in the source layer that satisfy a condition that you define"
+      },
+      {
+        "name": "minZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The minimum zoom level at which the layer gets parsed and appears."
+      },
+      {
+        "name": "maxZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The maximum zoom level at which the layer gets parsed and appears."
+      },
+      {
+        "name": "style",
+        "required": false,
+        "type": "custom",
+        "default": "none",
+        "description": "Customizable style attributes"
+      }
+    ],
+    "name": "FillLayer",
+    "styles": [
+      {
+        "name": "visibility",
+        "type": "enum",
+        "description": "Whether this layer is displayed.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "fillAntialias",
+        "type": "boolean",
+        "description": "Whether or not the fill should be antialiased.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "fillOpacity",
+        "type": "number",
+        "description": "The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "fillColor",
+        "type": "color",
+        "description": "The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.",
+        "requires": [],
+        "disabledBy": [
+          "fill-pattern"
+        ]
+      },
+      {
+        "name": "fillOutlineColor",
+        "type": "color",
+        "description": "The outline color of the fill. Matches the value of `fill-color` if unspecified.",
+        "requires": [],
+        "disabledBy": [
+          "fill-pattern"
+        ]
+      },
+      {
+        "name": "fillTranslate",
+        "type": "array",
+        "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "fillTranslateAnchor",
+        "type": "enum",
+        "description": "Controls the translation reference point.",
+        "requires": [
+          "fill-translate"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "fillPattern",
+        "type": "string",
+        "description": "Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).",
+        "requires": [],
+        "disabledBy": []
+      }
+    ]
+  },
+  "LineLayer": {
+    "description": "LineLayer is a style layer that renders one or more stroked polylines on the map.",
+    "methods": [],
+    "props": [
+      {
+        "name": "id",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "A string that uniquely identifies the source in the style to which it is added."
+      },
+      {
+        "name": "sourceID",
+        "required": false,
+        "type": "string",
+        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "description": "The source from which to obtain the data to style.\nIf the source has not yet been added to the current style, the behavior is undefined."
+      },
+      {
+        "name": "sourceLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Identifier of the layer within the source identified by the sourceID property from which the receiver obtains the data to style."
+      },
+      {
+        "name": "aboveLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer above aboveLayerID."
+      },
+      {
+        "name": "belowLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer below belowLayerID"
+      },
+      {
+        "name": "layerIndex",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Inserts a layer at a specified index"
+      },
+      {
+        "name": "filter",
+        "required": false,
+        "type": "array",
+        "default": "none",
+        "description": "Filter only the features in the source layer that satisfy a condition that you define"
+      },
+      {
+        "name": "minZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The minimum zoom level at which the layer gets parsed and appears."
+      },
+      {
+        "name": "maxZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The maximum zoom level at which the layer gets parsed and appears."
+      },
+      {
+        "name": "style",
+        "required": false,
+        "type": "custom",
+        "default": "none",
+        "description": "Customizable style attributes"
+      }
+    ],
+    "name": "LineLayer",
+    "styles": [
+      {
+        "name": "lineCap",
+        "type": "enum",
+        "description": "The display of line endings.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "lineJoin",
+        "type": "enum",
+        "description": "The display of lines when joining.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "lineMiterLimit",
+        "type": "number",
+        "description": "Used to automatically convert miter joins to bevel joins for sharp angles.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "lineRoundLimit",
+        "type": "number",
+        "description": "Used to automatically convert round joins to miter joins for shallow angles.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "visibility",
+        "type": "enum",
+        "description": "Whether this layer is displayed.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "lineOpacity",
+        "type": "number",
+        "description": "The opacity at which the line will be drawn.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "lineColor",
+        "type": "color",
+        "description": "The color with which the line will be drawn.",
+        "requires": [],
+        "disabledBy": [
+          "line-pattern"
+        ]
+      },
+      {
+        "name": "lineTranslate",
+        "type": "array",
+        "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "lineTranslateAnchor",
+        "type": "enum",
+        "description": "Controls the translation reference point.",
+        "requires": [
+          "line-translate"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "lineWidth",
+        "type": "number",
+        "description": "Stroke thickness.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "lineGapWidth",
+        "type": "number",
+        "description": "Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "lineOffset",
+        "type": "number",
+        "description": "The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "lineBlur",
+        "type": "number",
+        "description": "Blur applied to the line, in pixels.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "lineDasharray",
+        "type": "array",
+        "description": "Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width.",
+        "requires": [],
+        "disabledBy": [
+          "line-pattern"
+        ]
+      },
+      {
+        "name": "linePattern",
+        "type": "string",
+        "description": "Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512).",
+        "requires": [],
+        "disabledBy": []
+      }
+    ]
+  },
   "MapView": {
     "description": "MapView backed by Mapbox Native GL",
     "methods": [
@@ -133,252 +756,823 @@
         ]
       }
     ],
-    "props": {
-      "animated": {
-        "type": {
-          "name": "bool"
-        },
+    "props": [
+      {
+        "name": "animated",
         "required": false,
-        "description": "Animates changes between pitch and bearing",
-        "defaultValue": {
-          "value": "false",
-          "computed": false
-        }
+        "type": "bool",
+        "default": "false",
+        "description": "Animates changes between pitch and bearing"
       },
-      "centerCoordinate": {
-        "type": {
-          "name": "arrayOf",
-          "value": {
-            "name": "number"
-          }
-        },
+      {
+        "name": "centerCoordinate",
         "required": false,
+        "type": "arrayOf",
+        "default": "none",
         "description": "Initial center coordinate on map [lng, lat]"
       },
-      "showUserLocation": {
-        "type": {
-          "name": "bool"
-        },
+      {
+        "name": "showUserLocation",
         "required": false,
+        "type": "bool",
+        "default": "none",
         "description": "Shows the users location on the map"
       },
-      "userTrackingMode": {
-        "type": {
-          "name": "number"
-        },
+      {
+        "name": "userTrackingMode",
         "required": false,
-        "description": "The mode used to track the user location on the map",
-        "defaultValue": {
-          "value": "MapboxGL.UserTrackingModes.None",
-          "computed": true
-        }
+        "type": "number",
+        "default": "MapboxGL.UserTrackingModes.None",
+        "description": "The mode used to track the user location on the map"
       },
-      "heading": {
-        "type": {
-          "name": "number"
-        },
+      {
+        "name": "heading",
         "required": false,
-        "description": "Initial heading on map",
-        "defaultValue": {
-          "value": "0",
-          "computed": false
-        }
+        "type": "number",
+        "default": "0",
+        "description": "Initial heading on map"
       },
-      "pitch": {
-        "type": {
-          "name": "number"
-        },
+      {
+        "name": "pitch",
         "required": false,
-        "description": "Initial pitch on map",
-        "defaultValue": {
-          "value": "0",
-          "computed": false
-        }
+        "type": "number",
+        "default": "0",
+        "description": "Initial pitch on map"
       },
-      "style": {
-        "type": {
-          "name": "any"
-        },
+      {
+        "name": "style",
         "required": false,
+        "type": "any",
+        "default": "none",
         "description": "Style for wrapping React Native View"
       },
-      "styleURL": {
-        "type": {
-          "name": "string"
-        },
+      {
+        "name": "styleURL",
         "required": false,
-        "description": "Style URL for map",
-        "defaultValue": {
-          "value": "MapboxGL.StyleURL.Street",
-          "computed": true
-        }
+        "type": "string",
+        "default": "MapboxGL.StyleURL.Street",
+        "description": "Style URL for map"
       },
-      "zoomLevel": {
-        "type": {
-          "name": "number"
-        },
+      {
+        "name": "zoomLevel",
         "required": false,
-        "description": "Initial zoom level of map",
-        "defaultValue": {
-          "value": "16",
-          "computed": false
-        }
+        "type": "number",
+        "default": "16",
+        "description": "Initial zoom level of map"
       },
-      "minZoomLevel": {
-        "type": {
-          "name": "number"
-        },
+      {
+        "name": "minZoomLevel",
         "required": false,
+        "type": "number",
+        "default": "none",
         "description": "Min zoom level of map"
       },
-      "maxZoomLevel": {
-        "type": {
-          "name": "number"
-        },
+      {
+        "name": "maxZoomLevel",
         "required": false,
+        "type": "number",
+        "default": "none",
         "description": "Max zoom level of map"
       },
-      "scrollEnabled": {
-        "type": {
-          "name": "bool"
-        },
+      {
+        "name": "scrollEnabled",
         "required": false,
-        "description": "Enable/Disable scroll on the map",
-        "defaultValue": {
-          "value": "true",
-          "computed": false
-        }
+        "type": "bool",
+        "default": "true",
+        "description": "Enable/Disable scroll on the map"
       },
-      "pitchEnabled": {
-        "type": {
-          "name": "bool"
-        },
+      {
+        "name": "pitchEnabled",
         "required": false,
-        "description": "Enable/Disable pitch on map",
-        "defaultValue": {
-          "value": "true",
-          "computed": false
-        }
+        "type": "bool",
+        "default": "true",
+        "description": "Enable/Disable pitch on map"
       },
-      "onPress": {
-        "type": {
-          "name": "func"
-        },
+      {
+        "name": "onPress",
         "required": false,
+        "type": "func",
+        "default": "none",
         "description": "Map press listener, gets called when a user presses the map"
       },
-      "onLongPress": {
-        "type": {
-          "name": "func"
-        },
+      {
+        "name": "onLongPress",
         "required": false,
+        "type": "func",
+        "default": "none",
         "description": "Map long press listener, gets called when a user long presses the map"
       },
-      "onRegionWillChange": {
-        "type": {
-          "name": "func"
-        },
+      {
+        "name": "onRegionWillChange",
         "required": false,
+        "type": "func",
+        "default": "none",
         "description": "This event is triggered whenever the currently displayed map region is about to change."
       },
-      "onRegionIsChanging": {
-        "type": {
-          "name": "func"
-        },
+      {
+        "name": "onRegionIsChanging",
         "required": false,
+        "type": "func",
+        "default": "none",
         "description": "This event is triggered whenever the currently displayed map region is changing."
       },
-      "onRegionDidChange": {
-        "type": {
-          "name": "func"
-        },
+      {
+        "name": "onRegionDidChange",
         "required": false,
+        "type": "func",
+        "default": "none",
         "description": "This event is triggered whenever the currently displayed map region finished changing"
       },
-      "onWillStartLoadingMap": {
-        "type": {
-          "name": "func"
-        },
+      {
+        "name": "onWillStartLoadingMap",
         "required": false,
+        "type": "func",
+        "default": "none",
         "description": "This event is triggered when the map is about to start loading a new map style."
       },
-      "onDidFinishLoadingMap": {
-        "type": {
-          "name": "func"
-        },
+      {
+        "name": "onDidFinishLoadingMap",
         "required": false,
+        "type": "func",
+        "default": "none",
         "description": "This is triggered when the map has successfully loaded a new map style."
       },
-      "onDidFailLoadingMap": {
-        "type": {
-          "name": "func"
-        },
+      {
+        "name": "onDidFailLoadingMap",
         "required": false,
+        "type": "func",
+        "default": "none",
         "description": "This event is triggered when the map has failed to load a new map style."
       },
-      "onWillStartRenderingFrame": {
-        "type": {
-          "name": "func"
-        },
+      {
+        "name": "onWillStartRenderingFrame",
         "required": false,
+        "type": "func",
+        "default": "none",
         "description": "This event is triggered when the map will start rendering a frame."
       },
-      "onDidFinishRenderingFrame": {
-        "type": {
-          "name": "func"
-        },
+      {
+        "name": "onDidFinishRenderingFrame",
         "required": false,
+        "type": "func",
+        "default": "none",
         "description": "This event is triggered when the map finished rendering a frame."
       },
-      "onDidFinishRenderingFrameFully": {
-        "type": {
-          "name": "func"
-        },
+      {
+        "name": "onDidFinishRenderingFrameFully",
         "required": false,
+        "type": "func",
+        "default": "none",
         "description": "This event is triggered when the map fully finished rendering a frame."
       },
-      "onWillStartRenderingMap": {
-        "type": {
-          "name": "func"
-        },
+      {
+        "name": "onWillStartRenderingMap",
         "required": false,
+        "type": "func",
+        "default": "none",
         "description": "This event is triggered when the map will start rendering the map."
       },
-      "onDidFinishRenderingMap": {
-        "type": {
-          "name": "func"
-        },
+      {
+        "name": "onDidFinishRenderingMap",
         "required": false,
+        "type": "func",
+        "default": "none",
         "description": "This event is triggered when the map finished rendering the map."
       },
-      "onDidFinishRenderingMapFully": {
-        "type": {
-          "name": "func"
-        },
+      {
+        "name": "onDidFinishRenderingMapFully",
         "required": false,
+        "type": "func",
+        "default": "none",
         "description": "This event is triggered when the map fully finished rendering the map."
       },
-      "onDidFinishLoadingStyle": {
-        "type": {
-          "name": "func"
-        },
+      {
+        "name": "onDidFinishLoadingStyle",
         "required": false,
+        "type": "func",
+        "default": "none",
         "description": "This event is triggered when a style has finished loading."
       },
-      "onFlyToComplete": {
-        "type": {
-          "name": "func"
-        },
+      {
+        "name": "onFlyToComplete",
         "required": false,
+        "type": "func",
+        "default": "none",
         "description": "This event is triggered when a fly to animation is cancelled or completed after calling flyTo"
       },
-      "onSetCameraComplete": {
-        "type": {
-          "name": "func"
-        },
+      {
+        "name": "onSetCameraComplete",
         "required": false,
+        "type": "func",
+        "default": "none",
         "description": "This event is triggered once the camera is finished after calling setCamera"
       }
-    }
+    ],
+    "name": "MapView"
+  },
+  "ShapeSource": {
+    "description": "ShapeSource is a map content source that supplies vector shapes to be shown on the map.\nThe shape may be a url or a GeoJSON object",
+    "methods": [],
+    "props": [
+      {
+        "name": "id",
+        "required": false,
+        "type": "string",
+        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "description": "A string that uniquely identifies the source."
+      },
+      {
+        "name": "url",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "An HTTP(S) URL, absolute file URL, or local file URL relative to the current application’s resource bundle."
+      },
+      {
+        "name": "shape",
+        "required": false,
+        "type": "object",
+        "default": "none",
+        "description": "The contents of the source. A shape can represent a GeoJSON geometry, a feature, or a feature colllection."
+      },
+      {
+        "name": "cluster",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "Enables clustering on the source for point shapes."
+      },
+      {
+        "name": "clusterRadius",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Specifies the radius of each cluster if clustering is enabled.\nA value of 512 produces a radius equal to the width of a tile.\nThe default value is 50."
+      },
+      {
+        "name": "clusterMaxZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Specifies the maximum zoom level at which to cluster points if clustering is enabled.\nDefaults to one zoom level less than the value of maxZoomLevel so that, at the maximum zoom level,\nthe shapes are not clustered."
+      },
+      {
+        "name": "maxZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Specifies the maximum zoom level at which to create vector tiles.\nA greater value produces greater detail at high zoom levels.\nThe default value is 18."
+      },
+      {
+        "name": "buffer",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Specifies the size of the tile buffer on each side.\nA value of 0 produces no buffer. A value of 512 produces a buffer as wide as the tile itself.\nLarger values produce fewer rendering artifacts near tile edges and slower performance.\nThe default value is 128."
+      },
+      {
+        "name": "tolerance",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Specifies the Douglas-Peucker simplification tolerance.\nA greater value produces simpler geometries and improves performance.\nThe default value is 0.375."
+      }
+    ],
+    "name": "ShapeSource"
+  },
+  "SymbolLayer": {
+    "description": "SymbolLayer is a style layer that renders icon and text labels at points or along lines on the map.",
+    "methods": [],
+    "props": [
+      {
+        "name": "id",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "A string that uniquely identifies the source in the style to which it is added."
+      },
+      {
+        "name": "sourceID",
+        "required": false,
+        "type": "string",
+        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "description": "The source from which to obtain the data to style. If the source has not yet been added to the current style, the behavior is undefined."
+      },
+      {
+        "name": "sourceLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Identifier of the layer within the source identified by the sourceID property from which the receiver obtains the data to style."
+      },
+      {
+        "name": "aboveLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer above aboveLayerID."
+      },
+      {
+        "name": "belowLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer below belowLayerID"
+      },
+      {
+        "name": "layerIndex",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Inserts a layer at a specified index"
+      },
+      {
+        "name": "filter",
+        "required": false,
+        "type": "array",
+        "default": "none",
+        "description": "Filter only the features in the source layer that satisfy a condition that you define"
+      },
+      {
+        "name": "minZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The minimum zoom level at which the layer gets parsed and appears."
+      },
+      {
+        "name": "maxZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The maximum zoom level at which the layer gets parsed and appears."
+      },
+      {
+        "name": "style",
+        "required": false,
+        "type": "custom",
+        "default": "none",
+        "description": "Customizable style attributes"
+      }
+    ],
+    "name": "SymbolLayer",
+    "styles": [
+      {
+        "name": "symbolPlacement",
+        "type": "enum",
+        "description": "Label placement relative to its geometry.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "symbolSpacing",
+        "type": "number",
+        "description": "Distance between two symbol anchors.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "symbolAvoidEdges",
+        "type": "boolean",
+        "description": "If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "iconAllowOverlap",
+        "type": "boolean",
+        "description": "If true, the icon will be visible even if it collides with other previously drawn symbols.",
+        "requires": [
+          "icon-image"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "iconIgnorePlacement",
+        "type": "boolean",
+        "description": "If true, other symbols can be visible even if they collide with the icon.",
+        "requires": [
+          "icon-image"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "iconOptional",
+        "type": "boolean",
+        "description": "If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not.",
+        "requires": [
+          "icon-image",
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "iconRotationAlignment",
+        "type": "enum",
+        "description": "In combination with `symbol-placement`, determines the rotation behavior of icons.",
+        "requires": [
+          "icon-image"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "iconSize",
+        "type": "number",
+        "description": "Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.",
+        "requires": [
+          "icon-image"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "iconTextFit",
+        "type": "enum",
+        "description": "Scales the icon to fit around the associated text.",
+        "requires": [
+          "icon-image",
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "iconTextFitPadding",
+        "type": "array",
+        "description": "Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.",
+        "requires": [
+          "icon-image",
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "iconImage",
+        "type": "string",
+        "description": "Name of image in sprite to use for drawing an image background. A string with {tokens} replaced, referencing the data property to pull from.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "iconRotate",
+        "type": "number",
+        "description": "Rotates the icon clockwise.",
+        "requires": [
+          "icon-image"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "iconPadding",
+        "type": "number",
+        "description": "Size of the additional area around the icon bounding box used for detecting symbol collisions.",
+        "requires": [
+          "icon-image"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "iconKeepUpright",
+        "type": "boolean",
+        "description": "If true, the icon may be flipped to prevent it from being rendered upside-down.",
+        "requires": [
+          "icon-image"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "iconOffset",
+        "type": "array",
+        "description": "Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. When combined with `icon-rotate` the offset will be as if the rotated direction was up.",
+        "requires": [
+          "icon-image"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textPitchAlignment",
+        "type": "enum",
+        "description": "Orientation of text when map is pitched.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textRotationAlignment",
+        "type": "enum",
+        "description": "In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textField",
+        "type": "string",
+        "description": "Value to use for a text label. Feature properties are specified using tokens like {field_name}.  (Token replacement is only supported for literal `text-field` values--not for property functions.)",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "textFont",
+        "type": "array",
+        "description": "Font stack to use for displaying text.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textSize",
+        "type": "number",
+        "description": "Font size.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textMaxWidth",
+        "type": "number",
+        "description": "The maximum line width for text wrapping.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textLineHeight",
+        "type": "number",
+        "description": "Text leading value for multi-line text.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textLetterSpacing",
+        "type": "number",
+        "description": "Text tracking amount.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textJustify",
+        "type": "enum",
+        "description": "Text justification options.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textAnchor",
+        "type": "enum",
+        "description": "Part of the text placed closest to the anchor.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textMaxAngle",
+        "type": "number",
+        "description": "Maximum angle change between adjacent characters.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textRotate",
+        "type": "number",
+        "description": "Rotates the text clockwise.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textPadding",
+        "type": "number",
+        "description": "Size of the additional area around the text bounding box used for detecting symbol collisions.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textKeepUpright",
+        "type": "boolean",
+        "description": "If true, the text may be flipped vertically to prevent it from being rendered upside-down.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textTransform",
+        "type": "enum",
+        "description": "Specifies how to capitalize text, similar to the CSS `text-transform` property.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textOffset",
+        "type": "array",
+        "description": "Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textAllowOverlap",
+        "type": "boolean",
+        "description": "If true, the text will be visible even if it collides with other previously drawn symbols.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textIgnorePlacement",
+        "type": "boolean",
+        "description": "If true, other symbols can be visible even if they collide with the text.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textOptional",
+        "type": "boolean",
+        "description": "If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not.",
+        "requires": [
+          "text-field",
+          "icon-image"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "visibility",
+        "type": "enum",
+        "description": "Whether this layer is displayed.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "iconOpacity",
+        "type": "number",
+        "description": "The opacity at which the icon will be drawn.",
+        "requires": [
+          "icon-image"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "iconColor",
+        "type": "color",
+        "description": "The color of the icon. This can only be used with sdf icons.",
+        "requires": [
+          "icon-image"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "iconHaloColor",
+        "type": "color",
+        "description": "The color of the icon's halo. Icon halos can only be used with SDF icons.",
+        "requires": [
+          "icon-image"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "iconHaloWidth",
+        "type": "number",
+        "description": "Distance of halo to the icon outline.",
+        "requires": [
+          "icon-image"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "iconHaloBlur",
+        "type": "number",
+        "description": "Fade out the halo towards the outside.",
+        "requires": [
+          "icon-image"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "iconTranslate",
+        "type": "array",
+        "description": "Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.",
+        "requires": [
+          "icon-image"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "iconTranslateAnchor",
+        "type": "enum",
+        "description": "Controls the translation reference point.",
+        "requires": [
+          "icon-image",
+          "icon-translate"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textOpacity",
+        "type": "number",
+        "description": "The opacity at which the text will be drawn.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textColor",
+        "type": "color",
+        "description": "The color with which the text will be drawn.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textHaloColor",
+        "type": "color",
+        "description": "The color of the text's halo, which helps it stand out from backgrounds.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textHaloWidth",
+        "type": "number",
+        "description": "Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textHaloBlur",
+        "type": "number",
+        "description": "The halo's fadeout distance towards the outside.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textTranslate",
+        "type": "array",
+        "description": "Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.",
+        "requires": [
+          "text-field"
+        ],
+        "disabledBy": []
+      },
+      {
+        "name": "textTranslateAnchor",
+        "type": "enum",
+        "description": "Controls the translation reference point.",
+        "requires": [
+          "text-field",
+          "text-translate"
+        ],
+        "disabledBy": []
+      }
+    ]
+  },
+  "VectorSource": {
+    "description": "VectorSource is a map content source that supplies tiled vector data in Mapbox Vector Tile format to be shown on the map.\nThe location of and metadata about the tiles are defined either by an option dictionary or by an external file that conforms to the TileJSON specification.",
+    "methods": [],
+    "props": [
+      {
+        "name": "id",
+        "required": false,
+        "type": "string",
+        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "description": "A string that uniquely identifies the source."
+      },
+      {
+        "name": "url",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "A URL to a TileJSON configuration file describing the source’s contents and other metadata."
+      }
+    ],
+    "name": "VectorSource"
   }
 }
