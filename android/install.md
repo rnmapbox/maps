@@ -27,8 +27,8 @@ Edit the following files:
 // file: android/settings.gradle
 ...
 
-include ':@mapbox/reactnativemapboxgl'
-project(':@mapbox/reactnativemapboxgl').projectDir = new File(rootProject.projectDir, '../node_modules/@mapbox/react-native-mapbox-gl/android')
+include ':@mapbox/react-native-mapbox-gl'
+project(':@mapbox/react-native-mapbox-gl').projectDir = new File(rootProject.projectDir, '../node_modules/@mapbox/react-native-mapbox-gl/android')
 ```
 
 ```gradle
