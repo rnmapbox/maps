@@ -35,6 +35,9 @@ import ShowRegionDidChange from './components/ShowRegionDidChange';
 import YoYo from './components/YoYo';
 import EarthQuakes from './components/EarthQuakes';
 import GeoJSONSource from './components/GeoJSONSource';
+import WatercolorRasterTiles from './components/WatercolorRasterTiles';
+import TwoByTwo from './components/TwoByTwo';
+import IndoorBuilding from './components/IndoorBuilding';
 
 const styles = StyleSheet.create({
   header: {
@@ -84,6 +87,9 @@ const Examples = [
   new ExampleItem('Yo Yo Camera', YoYo),
   new ExampleItem('Clustering Earthquakes', EarthQuakes),
   new ExampleItem('GeoJSON Source', GeoJSONSource),
+  new ExampleItem('Watercolor Raster Tiles', WatercolorRasterTiles),
+  new ExampleItem('Two Map Views', TwoByTwo),
+  new ExampleItem('Indoor Building Map', IndoorBuilding),
 ];
 
 class App extends React.Component {

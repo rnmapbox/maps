@@ -5,15 +5,20 @@ import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
 
 import sheet from '../styles/sheet';
+import colors from '../styles/colors';
+
 import { SF_OFFICE_COORDINATE } from '../utils';
 
 const layerStyles = MapboxGL.StyleSheet.create({
+  background: {
+    backgroundColor: colors.primary.blue,
+  },
    water: {
     fillColor: MapboxGL.StyleSheet.camera({
-        1: 'green',
-        8: 'blue',
-        10: 'red',
-        18: 'yellow',
+        1: colors.secondary.green,
+        8: colors.secondary.orange,
+        10: colors.secondary.red,
+        18: colors.secondary.yellow,
     }, MapboxGL.InterpolationMode.Exponential),
   },
 });
@@ -55,6 +60,7 @@ class YoYo extends React.Component {
             styleURL={MapboxGL.StyleURL.Dark}>
 
             <MapboxGL.VectorSource>
+              <MapboxGL.BackgroundLayer id='background' style={layerStyles.background} />
               <MapboxGL.FillLayer id='water' style={layerStyles.water} />
             </MapboxGL.VectorSource>
         </MapboxGL.MapView>
