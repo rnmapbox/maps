@@ -80,6 +80,8 @@ global.getLayerType = function (layer, platform) {
       return isIOS ? 'MGLBackgroundStyleLayer' : 'BackgroundLayer';
     case 'raster':
       return isIOS ? 'MGLRasterStyleLayer' : 'RasterLayer';
+    case 'light':
+      return isIOS ? 'MGLLight' : 'Light';
     default:
       throw new Error(`Is ${layer.name} a new layer? We should add support for it!`);
   }

@@ -16,6 +16,8 @@ import com.mapbox.mapboxsdk.style.layers.PropertyValue;
 import com.mapbox.mapboxsdk.style.layers.RasterLayer;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
+import com.mapbox.mapboxsdk.style.light.Light;
+import com.mapbox.mapboxsdk.style.light.Position;
 
 import java.util.List;
 
@@ -78,7 +80,14 @@ public class RCTMGLStyleFactory {
         layer.setProperties(PropertyFactory.<%= prop.name %>(<%- androidGetConfigType(androidInputType(prop.type, prop.value)) -%>));
       }
       <%_ } else { _%>
+        <%_ if (layer.name === 'light' && prop.name === 'position') { _%>
+        Float[] values = styleValue.getFloatArray(VALUE_KEY);
+        layer.set<%- pascelCase(prop.name) -%>(Position.fromPosition(values[0], values[1], values[2]));
+        <%_ } else if (layer.name === 'light') { _%>
+        layer.set<%- pascelCase(prop.name) -%>(<%- androidGetConfigType(androidInputType(prop.type, prop.value)) -%>);
+        <%_ } else { _%>
         layer.setProperties(PropertyFactory.<%= prop.name %>(<%- androidGetConfigType(androidInputType(prop.type, prop.value)) -%>));
+        <%_ } _%>
       <%_ } _%>
     }
 

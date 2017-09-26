@@ -1221,6 +1221,44 @@ export const BackgroundLayerStyleProp = PropTypes.shape({
   backgroundOpacityTransition: TransitionPropType,
 });
 
+export const LightLayerStyleProp = PropTypes.shape({
+
+  /**
+   * Whether extruded geometries are lit relative to the map or viewport.
+   */
+  anchor: PropTypes.any,
+
+  /**
+   * Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0° (0° when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0° when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0°, directly above, to 180°, directly below).
+   */
+  position: PropTypes.arrayOf(PropTypes.number),
+
+  /**
+   * The transition affecting any changes to this layer’s position property.
+   */
+  positionTransition: TransitionPropType,
+
+  /**
+   * Color tint for lighting extruded geometries.
+   */
+  color: PropTypes.string,
+
+  /**
+   * The transition affecting any changes to this layer’s color property.
+   */
+  colorTransition: TransitionPropType,
+
+  /**
+   * Intensity of lighting (on a scale from 0 to 1). Higher numbers will present as more extreme contrast.
+   */
+  intensity: PropTypes.number,
+
+  /**
+   * The transition affecting any changes to this layer’s intensity property.
+   */
+  intensityTransition: TransitionPropType,
+});
+
 
 const styleMap = {
   fillAntialias: StyleTypes.Constant,
@@ -1375,6 +1413,14 @@ const styleMap = {
   backgroundPatternTransition: StyleTypes.Transition,
   backgroundOpacity: StyleTypes.Constant,
   backgroundOpacityTransition: StyleTypes.Transition,
+
+  anchor: StyleTypes.Constant,
+  position: StyleTypes.Constant,
+  positionTransition: StyleTypes.Transition,
+  color: StyleTypes.Color,
+  colorTransition: StyleTypes.Transition,
+  intensity: StyleTypes.Constant,
+  intensityTransition: StyleTypes.Transition,
 
   visibility: StyleTypes.Constant,
 };

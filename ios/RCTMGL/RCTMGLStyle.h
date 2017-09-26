@@ -21,6 +21,7 @@
 - (void)fillExtrusionLayer:(MGLFillExtrusionStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
 - (void)rasterLayer:(MGLRasterStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
 - (void)backgroundLayer:(MGLBackgroundStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
+- (void)lightLayer:(MGLLight *)layer withReactStyle:(NSDictionary *)reactStyle;
 
 - (void)setFillStyleLayerVisibility:(MGLFillStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setFillAntialias:(MGLFillStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
@@ -175,6 +176,13 @@
 - (void)setBackgroundPatternTransition:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setBackgroundOpacity:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setBackgroundOpacityTransition:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setAnchor:(MGLLight *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setPosition:(MGLLight *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setPositionTransition:(MGLLight *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setColor:(MGLLight *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setColorTransition:(MGLLight *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setIntensity:(MGLLight *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setIntensityTransition:(MGLLight *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 
 
 @end

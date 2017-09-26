@@ -29,68 +29,71 @@ Object.keys(styleSpecJSON.layer.type.values).forEach((layerName) => {
   });
 });
 
+// add light as a layer
+layers.push({ name: 'light', properties: getPropertiesForLight() })
+
+function getPropertiesForLight () {
+  const lightAttributes = styleSpecJSON.light;
+
+  const lightProps = getSupportedProperties(lightAttributes).map((attrName) => {
+    return Object.assign({}, buildProperties(lightAttributes, attrName), {
+      allowedFunctionTypes: [],
+    });
+  });
+
+  return lightProps;
+}
+
 function getPropertiesForLayer (layerName) {
   const paintAttributes = styleSpecJSON[`paint_${layerName}`];
   const layoutAttributes = styleSpecJSON[`layout_${layerName}`];
 
-  const paintProps = Object.keys(paintAttributes)
-    .filter((attrName) => isAttrSupported(paintAttributes[attrName]))
-    .map((attrName) => {
-      let prop = {
-        name: camelCase(attrName),
-        doc: {
-          description: paintAttributes[attrName].doc,
-          requires: getRequires(paintAttributes[attrName].requires),
-          disabledBy: getDisables(paintAttributes[attrName].requires),
-          values: paintAttributes[attrName].values,
-        },
-        type: paintAttributes[attrName].type,
-        value: paintAttributes[attrName].value,
-        image: isImage(attrName),
-        translate: isTranslate(attrName),
-        transition: paintAttributes[attrName].transition,
-        support: getAttributeSupport(paintAttributes[attrName]['sdk-support']),
-        allowedFunctionTypes: getAllowedFunctionTypes(paintAttributes[attrName]),
-      };
+  const paintProps = getSupportedProperties(paintAttributes).map((attrName) => {
+    let prop = buildProperties(paintAttributes, attrName);
 
-      // overrides
-      if (['line-width'].includes(attrName)) {
-        prop.allowedFunctionTypes = ['camera'];
-      }
+    // overrides
+    if (['line-width'].includes(attrName)) {
+      prop.allowedFunctionTypes = ['camera'];
+    }
 
-      return prop;
+    return prop;
   });
 
-  const layoutProps = Object.keys(layoutAttributes)
-    .filter((attrName) => isAttrSupported(layoutAttributes[attrName]))
-    .map((attrName) => {
-      let prop = {
-        name: camelCase(attrName),
-        doc: {
-          description: layoutAttributes[attrName].doc,
-          requires: getRequires(layoutAttributes[attrName].requires),
-          disabledBy: getDisables(layoutAttributes[attrName].requires),
-          values: layoutAttributes[attrName].values,
-        },
-        type: layoutAttributes[attrName].type,
-        value: layoutAttributes[attrName].value,
-        image: isImage(attrName),
-        translate: isTranslate(attrName),
-        support: getAttributeSupport(layoutAttributes[attrName]['sdk-support']),
-        allowedFunctionTypes: getAllowedFunctionTypes(layoutAttributes[attrName]),
-      };
+  const layoutProps = getSupportedProperties(layoutAttributes).map((attrName) => {
+    let prop = buildProperties(layoutAttributes, attrName);
 
-      // overrides
-      if (['line-join', 'text-max-width', 'text-letter-spacing', 'text-anchor', 'text-justify'].includes(attrName)) {
-        prop.allowedFunctionTypes = ['camera'];
-      }
+    // overrides
+    if (['line-join', 'text-max-width', 'text-letter-spacing', 'text-anchor', 'text-justify'].includes(attrName)) {
+      prop.allowedFunctionTypes = ['camera'];
+    }
 
-      return prop;
-    })
-
-
+    return prop;
+  });
 
   return layoutProps.concat(paintProps);
+}
+
+function getSupportedProperties (attributes) {
+  return Object.keys(attributes).filter((attrName) => isAttrSupported(attributes[attrName]));
+}
+
+function buildProperties (attributes, attrName) {
+  return {
+    name: camelCase(attrName),
+    doc: {
+      description: attributes[attrName].doc,
+      requires: getRequires(attributes[attrName].requires),
+      disabledBy: getDisables(attributes[attrName].requires),
+      values: attributes[attrName].values,
+    },
+    type: attributes[attrName].type,
+    value: attributes[attrName].value,
+    image: isImage(attrName),
+    translate: isTranslate(attrName),
+    transition: attributes[attrName].transition,
+    support: getAttributeSupport(attributes[attrName]['sdk-support']),
+    allowedFunctionTypes: getAllowedFunctionTypes(attributes[attrName]),
+  };
 }
 
 function getRequires (requiredItems) {

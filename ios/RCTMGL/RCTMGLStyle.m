@@ -16,6 +16,10 @@
 
   NSArray<NSString*> *styleProps = [reactStyle allKeys];
   for (NSString *prop in styleProps) {
+    if ([prop isEqualToString:@"__MAPBOX_STYLESHEET__"]) {
+      continue;
+    }
+
     RCTMGLStyleValue *styleValue = [RCTMGLStyleValue make:reactStyle[prop]];
 
     if ([prop isEqualToString:@"visibility"]) {
@@ -64,6 +68,10 @@
 
   NSArray<NSString*> *styleProps = [reactStyle allKeys];
   for (NSString *prop in styleProps) {
+    if ([prop isEqualToString:@"__MAPBOX_STYLESHEET__"]) {
+      continue;
+    }
+
     RCTMGLStyleValue *styleValue = [RCTMGLStyleValue make:reactStyle[prop]];
 
     if ([prop isEqualToString:@"lineCap"]) {
@@ -134,6 +142,10 @@
 
   NSArray<NSString*> *styleProps = [reactStyle allKeys];
   for (NSString *prop in styleProps) {
+    if ([prop isEqualToString:@"__MAPBOX_STYLESHEET__"]) {
+      continue;
+    }
+
     RCTMGLStyleValue *styleValue = [RCTMGLStyleValue make:reactStyle[prop]];
 
     if ([prop isEqualToString:@"symbolPlacement"]) {
@@ -278,6 +290,10 @@
 
   NSArray<NSString*> *styleProps = [reactStyle allKeys];
   for (NSString *prop in styleProps) {
+    if ([prop isEqualToString:@"__MAPBOX_STYLESHEET__"]) {
+      continue;
+    }
+
     RCTMGLStyleValue *styleValue = [RCTMGLStyleValue make:reactStyle[prop]];
 
     if ([prop isEqualToString:@"visibility"]) {
@@ -333,6 +349,10 @@
 
   NSArray<NSString*> *styleProps = [reactStyle allKeys];
   for (NSString *prop in styleProps) {
+    if ([prop isEqualToString:@"__MAPBOX_STYLESHEET__"]) {
+      continue;
+    }
+
     RCTMGLStyleValue *styleValue = [RCTMGLStyleValue make:reactStyle[prop]];
 
     if ([prop isEqualToString:@"visibility"]) {
@@ -383,6 +403,10 @@
 
   NSArray<NSString*> *styleProps = [reactStyle allKeys];
   for (NSString *prop in styleProps) {
+    if ([prop isEqualToString:@"__MAPBOX_STYLESHEET__"]) {
+      continue;
+    }
+
     RCTMGLStyleValue *styleValue = [RCTMGLStyleValue make:reactStyle[prop]];
 
     if ([prop isEqualToString:@"visibility"]) {
@@ -430,6 +454,10 @@
 
   NSArray<NSString*> *styleProps = [reactStyle allKeys];
   for (NSString *prop in styleProps) {
+    if ([prop isEqualToString:@"__MAPBOX_STYLESHEET__"]) {
+      continue;
+    }
+
     RCTMGLStyleValue *styleValue = [RCTMGLStyleValue make:reactStyle[prop]];
 
     if ([prop isEqualToString:@"visibility"]) {
@@ -451,6 +479,41 @@
       [self setBackgroundOpacity:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"backgroundOpacityTransition"]) {
       [self setBackgroundOpacityTransition:layer withReactStyleValue:styleValue];
+    } else {
+      // TODO throw exception
+    }
+  }
+}
+
+- (void)lightLayer:(MGLLight *)layer withReactStyle:(NSDictionary *)reactStyle
+{
+  if (reactStyle == nil) {
+    // TODO throw exception
+    return;
+  }
+
+  NSArray<NSString*> *styleProps = [reactStyle allKeys];
+  for (NSString *prop in styleProps) {
+    if ([prop isEqualToString:@"__MAPBOX_STYLESHEET__"]) {
+      continue;
+    }
+
+    RCTMGLStyleValue *styleValue = [RCTMGLStyleValue make:reactStyle[prop]];
+
+    if ([prop isEqualToString:@"anchor"]) {
+      [self setAnchor:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"position"]) {
+      [self setPosition:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"positionTransition"]) {
+      [self setPositionTransition:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"color"]) {
+      [self setColor:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"colorTransition"]) {
+      [self setColorTransition:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"intensity"]) {
+      [self setIntensity:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"intensityTransition"]) {
+      [self setIntensityTransition:layer withReactStyleValue:styleValue];
     } else {
       // TODO throw exception
     }
@@ -1715,6 +1778,43 @@
 - (void)setBackgroundOpacityTransition:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
     layer.backgroundOpacityTransition = [styleValue getTransition];
+}
+
+
+
+- (void)setAnchor:(MGLLight *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.anchor = styleValue.mglStyleValue;
+}
+
+- (void)setPosition:(MGLLight *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.position = [styleValue getSphericalPosition];
+}
+
+- (void)setPositionTransition:(MGLLight *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.positionTransition = [styleValue getTransition];
+}
+
+- (void)setColor:(MGLLight *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.color = styleValue.mglStyleValue;
+}
+
+- (void)setColorTransition:(MGLLight *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.colorTransition = [styleValue getTransition];
+}
+
+- (void)setIntensity:(MGLLight *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.intensity = styleValue.mglStyleValue;
+}
+
+- (void)setIntensityTransition:(MGLLight *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.intensityTransition = [styleValue getTransition];
 }
 
 

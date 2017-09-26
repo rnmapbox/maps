@@ -13,7 +13,8 @@ class DocJSONBuilder {
     this._styledLayers = {};
 
     for (let styleLayer of styledLayers) {
-      this._styledLayers[pascelCase(styleLayer.name) + 'Layer'] = styleLayer;
+      const ComponentName = pascelCase(styleLayer.name);
+      this._styledLayers[ComponentName + (ComponentName === 'Light' ? '' : 'Layer')] = styleLayer;
     }
 
     this._filePath = INPUT_PATH;
