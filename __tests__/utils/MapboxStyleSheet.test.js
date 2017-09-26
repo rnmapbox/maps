@@ -154,10 +154,12 @@ describe('MapboxStyleSheet', () => {
     verifyStyleSheetsMatch(styles, {
       __MAPBOX_STYLESHEET__: true,
       water: {
+        __MAPBOX_STYLESHEET__: true,
         fillColor: { type: 'color', payload: { value: GREEN_INT } },
         fillOpacity: { type: 'constant', payload: { value: 0.40 } },
       },
       building: {
+        __MAPBOX_STYLESHEET__: true,
         fillColor: { type: 'color', payload: { value: BLUE_INT } },
         fillOpacity: { type: 'constant', payload: { value: 0.84 } },
       },

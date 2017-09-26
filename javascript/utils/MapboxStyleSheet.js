@@ -23,7 +23,7 @@ class MapStyleTransitionItem extends MapStyleItem {
         duration: duration,
         delay: delay,
       },
-      ...extras
+      ...extras,
     });
   }
 }
@@ -32,7 +32,7 @@ class MapStyleTranslationItem extends MapStyleItem {
   constructor (x, y, extras = {}) {
     super(StyleTypes.Translation, {
       value: [x, y],
-      ...extras
+      ...extras,
     });
   }
 }
@@ -81,7 +81,6 @@ function makeStyleValue (prop, value, extras = {}) {
   let item;
 
   if (!isUndefined(value.type) && !isUndefined(value.payload)) { // function
-    console.log(prop, value);
     item = value;
     item.processStops(prop);
   } else if (styleMap[prop] === StyleTypes.Transition) {

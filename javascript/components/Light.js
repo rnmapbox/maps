@@ -1,10 +1,8 @@
 import React from 'react';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { requireNativeComponent } from 'react-native';
 
 import { LightLayerStyleProp } from '../utils/styleMap';
 import AbstractLayer from './AbstractLayer';
-
-const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLLight';
 

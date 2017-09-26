@@ -6,7 +6,7 @@ import Page from './common/Page';
 
 import sheet from '../styles/sheet';
 
-import gridPattern from '../assets/grid_pattern.png'
+import gridPattern from '../assets/grid_pattern.png';
 import smileyFaceGeoJSON from '../assets/smiley_face.json';
 
 const layerStyles = MapboxGL.StyleSheet.create({
