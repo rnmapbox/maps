@@ -17,12 +17,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     maxHeight: 60,
     paddingHorizontal: 24,
-  }
-});
-
-const layerStyles = MapboxGL.StyleSheet.create({
-  watercolors: {
-    rasterOpacity: 1,
   },
 });
 
@@ -36,7 +30,7 @@ class WatercolorRasterTiles extends React.Component {
 
     this.state = {
       opacity: 1,
-    }
+    };
 
     this.onOpacityChange = this.onOpacityChange.bind(this);
   }

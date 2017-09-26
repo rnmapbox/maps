@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     maxHeight: 60,
     paddingHorizontal: 24,
-  }
+  },
 });
 
 const layerStyles = MapboxGL.StyleSheet.create({

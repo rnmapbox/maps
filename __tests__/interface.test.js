@@ -7,6 +7,7 @@ describe('Public Interface', () => {
       // components
       'MapView',
       'StyleSheet',
+      'Light',
 
       // layers
       'FillLayer',
@@ -14,10 +15,13 @@ describe('Public Interface', () => {
       'CircleLayer',
       'LineLayer',
       'SymbolLayer',
+      'BackgroundLayer',
+      'RasterLayer',
 
       // sources
       'VectorSource',
       'ShapeSource',
+      'RasterSource',
 
       // constants
       'UserTrackingModes',
