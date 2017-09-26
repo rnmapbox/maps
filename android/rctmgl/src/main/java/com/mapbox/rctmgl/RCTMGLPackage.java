@@ -11,11 +11,15 @@ import java.util.Collections;
 import java.util.List;
 
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapViewManager;
+import com.mapbox.rctmgl.components.styles.layers.RCTMGLBackgroundLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLCircleLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLFillExtrusionLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLFillLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLLineLayerManager;
+import com.mapbox.rctmgl.components.styles.layers.RCTMGLRasterLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLSymbolLayerManager;
+import com.mapbox.rctmgl.components.styles.light.RCTMGLLightManager;
+import com.mapbox.rctmgl.components.styles.sources.RCTMGLRasterSourceManager;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLShapeSourceManager;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLVectorSourceManager;
 import com.mapbox.rctmgl.modules.RCTMGLModule;
@@ -46,10 +50,12 @@ public class RCTMGLPackage implements ReactPackage {
 
         // components
         managers.add(new RCTMGLMapViewManager(reactApplicationContext));
+        managers.add(new RCTMGLLightManager());
 
         // sources
         managers.add(new RCTMGLVectorSourceManager(reactApplicationContext));
         managers.add(new RCTMGLShapeSourceManager());
+        managers.add(new RCTMGLRasterSourceManager());
 
         // layers
         managers.add(new RCTMGLFillLayerManager());
@@ -57,6 +63,8 @@ public class RCTMGLPackage implements ReactPackage {
         managers.add(new RCTMGLLineLayerManager());
         managers.add(new RCTMGLCircleLayerManager());
         managers.add(new RCTMGLSymbolLayerManager());
+        managers.add(new RCTMGLRasterLayerManager());
+        managers.add(new RCTMGLBackgroundLayerManager());
 
         return managers;
     }

@@ -24,6 +24,7 @@ import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.camera.CameraStop;
 import com.mapbox.rctmgl.components.camera.CameraUpdateQueue;
+import com.mapbox.rctmgl.components.styles.light.RCTMGLLight;
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 import com.mapbox.services.android.location.LostLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
@@ -100,6 +101,8 @@ public class RCTMGLMapView extends MapView implements
 
         if (childView instanceof RCTSource) {
             mSources.put(childPosition, (RCTSource) childView);
+            feature = (AbstractMapFeature) childView;
+        } else if (childView instanceof RCTMGLLight) {
             feature = (AbstractMapFeature) childView;
         } else {
             ViewGroup children = (ViewGroup) childView;

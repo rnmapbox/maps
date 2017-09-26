@@ -196,6 +196,10 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
         }
     }
     
+    if (reactMapView.light != nil) {
+        reactMapView.light.map = reactMapView;
+    }
+    
     [self reactMapDidChange:reactMapView eventType:RCT_MAPBOX_DID_FINISH_LOADING_STYLE];
 }
 

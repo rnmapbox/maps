@@ -1,6 +1,7 @@
 package com.mapbox.rctmgl.components.styles;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.StringDef;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
@@ -32,7 +33,11 @@ public class RCTMGLStyle {
         List<String> keys = new ArrayList<>();
 
         while (it.hasNextKey()) {
-            keys.add(it.nextKey());
+            String key = it.nextKey();
+
+            if (!key.equals("__MAPBOX_STYLESHEET__")) {
+                keys.add(key);
+            }
         }
 
         return keys;

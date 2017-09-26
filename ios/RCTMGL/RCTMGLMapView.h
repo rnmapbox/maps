@@ -8,6 +8,8 @@
 
 #import <React/RCTComponent.h>
 #import "RCTSource.h"
+#import "RCTMGLLight.h"
+
 @import Mapbox;
 
 @class CameraUpdateQueue;
@@ -17,6 +19,7 @@
 @property (nonatomic, strong) CameraUpdateQueue *cameraUpdateQueue;
 @property (nonatomic, strong) NSMutableArray<id<RCTComponent>> *reactSubviews;
 @property (nonatomic, strong) NSMutableArray<RCTSource*> *sources;
+@property (nonatomic, strong) RCTMGLLight *light;
 
 @property (nonatomic, assign) BOOL animated;
 @property (nonatomic, assign) BOOL reactScrollEnabled;

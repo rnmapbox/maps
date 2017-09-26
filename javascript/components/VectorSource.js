@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
+import { cloneReactChildrenWithProps } from '../utils';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -36,7 +37,7 @@ class VectorSource extends React.Component {
     };
     return (
       <RCTMGLVectorSource {...props}>
-        {this.props.children}
+        {cloneReactChildrenWithProps(this.props.children, { sourceID: this.props.id })}
       </RCTMGLVectorSource>
     );
   }
