@@ -46,7 +46,7 @@
     } else if ([self.type isEqualToString:@"translate"]) {
         rawValue = [NSValue valueWithCGVector:[RCTMGLUtils toCGVector:rawValue]];
     }
-    
+
     id propertyValue = self.payload[@"propertyValue"];
     if (propertyValue != nil) {
         return @{ propertyValue: [MGLStyleValue valueWithRawValue:rawValue] };
@@ -130,6 +130,18 @@
     NSNumber *delay = config[@"delay"];
     
     return MGLTransitionMake([duration doubleValue], [delay doubleValue]);
+}
+
+- (MGLStyleValue*)getSphericalPosition
+{
+    NSArray<NSNumber*> *values = self.payload[@"value"];
+    
+    CGFloat radial = [values[0] floatValue];
+    CLLocationDistance azimuthal = [values[1] doubleValue];
+    CLLocationDistance polar = [values[2] doubleValue];
+    
+    MGLSphericalPosition pos = MGLSphericalPositionMake(radial, azimuthal, polar);
+    return [MGLStyleValue valueWithRawValue:[NSValue valueWithMGLSphericalPosition:pos]];
 }
 
 - (id)_getStopKey:(id)key

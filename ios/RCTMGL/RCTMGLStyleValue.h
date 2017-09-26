@@ -20,6 +20,7 @@
 - (BOOL)isFunction;
 - (BOOL)isFunctionTypeSupported:(NSArray<NSString*>*)allowedFunctionTypes;
 - (MGLTransition)getTransition;
+- (MGLStyleValue*)getSphericalPosition;
 
 + (RCTMGLStyleValue*)make:(NSDictionary*)config;
 

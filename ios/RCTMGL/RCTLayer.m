@@ -94,6 +94,10 @@ const int COMPOUND_FILTER_NONE = 1;
 -(void)setReactStyle:(NSDictionary *)reactStyle
 {
     _reactStyle = reactStyle;
+    
+    if (_styleLayer != nil) {
+        [self addStyles];
+    }
 }
 
 - (void)addToMap:(MGLStyle *)style

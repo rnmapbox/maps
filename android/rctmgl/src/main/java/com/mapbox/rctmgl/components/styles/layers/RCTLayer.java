@@ -142,6 +142,10 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
 
     public void setReactStyle(ReadableMap reactStyle) {
         mReactStyle = reactStyle;
+
+        if (mLayer != null) {
+            addStyles();
+        }
     }
 
     public void setFilter(String[] filter) {

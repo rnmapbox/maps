@@ -35,6 +35,10 @@ static double const M2PI = M_PI * 2;
         RCTSource *source = (RCTSource*)subview;
         source.map = self;
         [_sources addObject:(RCTSource*)subview];
+    } else if ([subview isKindOfClass:[RCTMGLLight class]]) {
+        RCTMGLLight *light = (RCTMGLLight*)subview;
+        _light = light;
+        _light.map = self;
     } else {
         NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
 

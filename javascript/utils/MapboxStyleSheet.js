@@ -23,7 +23,7 @@ class MapStyleTransitionItem extends MapStyleItem {
         duration: duration,
         delay: delay,
       },
-      ...extras,
+      ...extras
     });
   }
 }
@@ -32,7 +32,7 @@ class MapStyleTranslationItem extends MapStyleItem {
   constructor (x, y, extras = {}) {
     super(StyleTypes.Translation, {
       value: [x, y],
-      ...extras,
+      ...extras
     });
   }
 }
@@ -80,7 +80,8 @@ class MapStyleFunctionItem extends MapStyleItem {
 function makeStyleValue (prop, value, extras = {}) {
   let item;
 
-  if (!isUndefined(value.type), !isUndefined(value.payload)) { // function
+  if (!isUndefined(value.type) && !isUndefined(value.payload)) { // function
+    console.log(prop, value);
     item = value;
     item.processStops(prop);
   } else if (styleMap[prop] === StyleTypes.Transition) {
@@ -123,10 +124,7 @@ class MapboxStyleSheet {
       style[styleProp] = makeStyleValue(styleProp, userStyle);
     }
 
-    if (depth === 0) {
-      style.__MAPBOX_STYLESHEET__ = true;
-    }
-
+    style.__MAPBOX_STYLESHEET__ = true;
     return style;
   }
 
@@ -159,6 +157,10 @@ class MapboxStyleSheet {
       return false;
     }
     return stylesheet.__MAPBOX_STYLESHEET__ || false;
+  }
+
+  static isStyleItem (item) {
+    return item instanceof MapStyleItem;
   }
 
   // helpers
