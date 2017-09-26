@@ -1,4 +1,113 @@
 {
+  "BackgroundLayer": {
+    "description": "",
+    "methods": [],
+    "props": [
+      {
+        "name": "id",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "A string that uniquely identifies the source in the style to which it is added."
+      },
+      {
+        "name": "sourceID",
+        "required": false,
+        "type": "string",
+        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "description": "The source from which to obtain the data to style. If the source has not yet been added to the current style, the behavior is undefined."
+      },
+      {
+        "name": "sourceLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Identifier of the layer within the source identified by the sourceID property from which the receiver obtains the data to style."
+      },
+      {
+        "name": "aboveLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer above aboveLayerID."
+      },
+      {
+        "name": "belowLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer below belowLayerID"
+      },
+      {
+        "name": "layerIndex",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Inserts a layer at a specified index"
+      },
+      {
+        "name": "filter",
+        "required": false,
+        "type": "array",
+        "default": "none",
+        "description": "Filter only the features in the source layer that satisfy a condition that you define"
+      },
+      {
+        "name": "minZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The minimum zoom level at which the layer gets parsed and appears."
+      },
+      {
+        "name": "maxZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The maximum zoom level at which the layer gets parsed and appears."
+      },
+      {
+        "name": "style",
+        "required": false,
+        "type": "custom",
+        "default": "none",
+        "description": "Customizable style attributes"
+      }
+    ],
+    "name": "BackgroundLayer",
+    "styles": [
+      {
+        "name": "visibility",
+        "type": "enum",
+        "description": "Whether this layer is displayed.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "backgroundColor",
+        "type": "color",
+        "description": "The color with which the background will be drawn.",
+        "requires": [],
+        "disabledBy": [
+          "background-pattern"
+        ]
+      },
+      {
+        "name": "backgroundPattern",
+        "type": "string",
+        "description": "Name of image in sprite to use for drawing an image background. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "backgroundOpacity",
+        "type": "number",
+        "description": "The opacity at which the background will be drawn.",
+        "requires": [],
+        "disabledBy": []
+      }
+    ]
+  },
   "CircleLayer": {
     "description": "CircleLayer is a style layer that renders one or more filled circles on the map.",
     "methods": [],
@@ -427,6 +536,50 @@
         "name": "fillPattern",
         "type": "string",
         "description": "Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).",
+        "requires": [],
+        "disabledBy": []
+      }
+    ]
+  },
+  "Light": {
+    "description": "Light represents the light source for extruded geometries",
+    "methods": [],
+    "props": [
+      {
+        "name": "style",
+        "required": false,
+        "type": "custom",
+        "default": "none",
+        "description": "Customizable style attributes"
+      }
+    ],
+    "name": "Light",
+    "styles": [
+      {
+        "name": "anchor",
+        "type": "enum",
+        "description": "Whether extruded geometries are lit relative to the map or viewport.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "position",
+        "type": "array",
+        "description": "Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0° (0° when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0° when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0°, directly above, to 180°, directly below).",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "color",
+        "type": "color",
+        "description": "Color tint for lighting extruded geometries.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "intensity",
+        "type": "number",
+        "description": "Intensity of lighting (on a scale from 0 to 1). Higher numbers will present as more extreme contrast.",
         "requires": [],
         "disabledBy": []
       }
@@ -969,6 +1122,197 @@
       }
     ],
     "name": "MapView"
+  },
+  "RasterLayer": {
+    "description": "",
+    "methods": [],
+    "props": [
+      {
+        "name": "id",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "A string that uniquely identifies the source in the style to which it is added."
+      },
+      {
+        "name": "sourceID",
+        "required": false,
+        "type": "string",
+        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "description": "The source from which to obtain the data to style. If the source has not yet been added to the current style, the behavior is undefined."
+      },
+      {
+        "name": "sourceLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Identifier of the layer within the source identified by the sourceID property from which the receiver obtains the data to style."
+      },
+      {
+        "name": "aboveLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer above aboveLayerID."
+      },
+      {
+        "name": "belowLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer below belowLayerID"
+      },
+      {
+        "name": "layerIndex",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Inserts a layer at a specified index"
+      },
+      {
+        "name": "filter",
+        "required": false,
+        "type": "array",
+        "default": "none",
+        "description": "Filter only the features in the source layer that satisfy a condition that you define"
+      },
+      {
+        "name": "minZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The minimum zoom level at which the layer gets parsed and appears."
+      },
+      {
+        "name": "maxZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The maximum zoom level at which the layer gets parsed and appears."
+      },
+      {
+        "name": "style",
+        "required": false,
+        "type": "custom",
+        "default": "none",
+        "description": "Customizable style attributes"
+      }
+    ],
+    "name": "RasterLayer",
+    "styles": [
+      {
+        "name": "visibility",
+        "type": "enum",
+        "description": "Whether this layer is displayed.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "rasterOpacity",
+        "type": "number",
+        "description": "The opacity at which the image will be drawn.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "rasterHueRotate",
+        "type": "number",
+        "description": "Rotates hues around the color wheel.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "rasterBrightnessMin",
+        "type": "number",
+        "description": "Increase or reduce the brightness of the image. The value is the minimum brightness.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "rasterBrightnessMax",
+        "type": "number",
+        "description": "Increase or reduce the brightness of the image. The value is the maximum brightness.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "rasterSaturation",
+        "type": "number",
+        "description": "Increase or reduce the saturation of the image.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "rasterContrast",
+        "type": "number",
+        "description": "Increase or reduce the contrast of the image.",
+        "requires": [],
+        "disabledBy": []
+      },
+      {
+        "name": "rasterFadeDuration",
+        "type": "number",
+        "description": "Fade duration when a new tile is added.",
+        "requires": [],
+        "disabledBy": []
+      }
+    ]
+  },
+  "RasterSource": {
+    "description": "RasterSource is a map content source that supplies raster image tiles to be shown on the map.\nThe location of and metadata about the tiles are defined either by an option dictionary\nor by an external file that conforms to the TileJSON specification.",
+    "methods": [],
+    "props": [
+      {
+        "name": "id",
+        "required": false,
+        "type": "string",
+        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "description": "A string that uniquely identifies the source."
+      },
+      {
+        "name": "url",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "A URL to a TileJSON configuration file describing the source’s contents and other metadata."
+      },
+      {
+        "name": "minZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "An unsigned integer that specifies the minimum zoom level at which to display tiles from the source.\nThe value should be between 0 and 22, inclusive, and less than\nmaxZoomLevel, if specified. The default value for this option is 0."
+      },
+      {
+        "name": "maxZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "An unsigned integer that specifies the maximum zoom level at which to display tiles from the source.\nThe value should be between 0 and 22, inclusive, and less than\nminZoomLevel, if specified. The default value for this option is 22."
+      },
+      {
+        "name": "tileSize",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Size of the map tiles.\nMapbox urls default to 256, all others default to 512."
+      },
+      {
+        "name": "tms",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "Influences the y direction of the tile coordinates. (tms inverts y axis)"
+      },
+      {
+        "name": "attribution",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "An HTML or literal text string defining the buttons to be displayed in an action sheet when the\nsource is part of a map view’s style and the map view’s attribution button is pressed."
+      }
+    ],
+    "name": "RasterSource"
   },
   "ShapeSource": {
     "description": "ShapeSource is a map content source that supplies vector shapes to be shown on the map.\nThe shape may be a url or a GeoJSON object",
