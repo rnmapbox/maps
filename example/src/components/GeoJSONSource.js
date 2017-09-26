@@ -5,9 +5,14 @@ import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
 
 import sheet from '../styles/sheet';
+
+import gridPattern from '../assets/grid_pattern.png'
 import smileyFaceGeoJSON from '../assets/smiley_face.json';
 
 const layerStyles = MapboxGL.StyleSheet.create({
+  background: {
+    backgroundPattern: gridPattern,
+  },
   smileyFace: {
     fillAntialias: true,
     fillColor: 'white',
@@ -30,6 +35,10 @@ class GeoJSONSource extends React.Component {
             ref={(ref) => this.map = ref}
             style={sheet.matchParent}
             styleURL={MapboxGL.StyleURL.Dark}>
+
+            <MapboxGL.VectorSource>
+              <MapboxGL.BackgroundLayer id='background' style={layerStyles.background} />
+            </MapboxGL.VectorSource>
 
             <MapboxGL.ShapeSource id='smileyFaceSource' shape={smileyFaceGeoJSON}>
               <MapboxGL.FillLayer id='smileyFaceFill' style={layerStyles.smileyFace} />
