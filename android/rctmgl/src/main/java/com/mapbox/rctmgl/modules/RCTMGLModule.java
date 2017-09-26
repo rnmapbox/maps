@@ -118,6 +118,89 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         lineCap.put("Round", Property.LINE_CAP_ROUND);
         lineCap.put("Square", Property.LINE_CAP_SQUARE);
 
+        Map<String, String> lineTranslateAnchor = new HashMap<>();
+        lineTranslateAnchor.put("Map", Property.LINE_TRANSLATE_ANCHOR_MAP);
+        lineTranslateAnchor.put("Viewport", Property.LINE_TRANSLATE_ANCHOR_VIEWPORT);
+
+        // circle layer constants
+        Map<String, String> circlePitchScale = new HashMap<>();
+        circlePitchScale.put("Map", Property.CIRCLE_PITCH_SCALE_MAP);
+        circlePitchScale.put("Viewport", Property.CIRCLE_PITCH_SCALE_VIEWPORT);
+
+        Map<String, String> circleTranslateAnchor = new HashMap<>();
+        circleTranslateAnchor.put("Map", Property.CIRCLE_TRANSLATE_ANCHOR_MAP);
+        circleTranslateAnchor.put("Viewport", Property.CIRCLE_TRANSLATE_ANCHOR_VIEWPORT);
+
+        // fill extrusion layer constants
+        Map<String, String> fillExtrusionTranslateAnchor = new HashMap<>();
+        fillExtrusionTranslateAnchor.put("Map", Property.FILL_EXTRUSION_TRANSLATE_ANCHOR_MAP);
+        fillExtrusionTranslateAnchor.put("Viewport", Property.FILL_EXTRUSION_TRANSLATE_ANCHOR_VIEWPORT);
+
+        // fill layer constants
+        Map<String, String> fillTranslateAnchor = new HashMap<>();
+        fillTranslateAnchor.put("Map", Property.FILL_TRANSLATE_ANCHOR_MAP);
+        fillTranslateAnchor.put("Viewport", Property.FILL_TRANSLATE_ANCHOR_VIEWPORT);
+
+        // symbol layer constants
+        Map<String, String> iconRotationAlignment = new HashMap<>();
+        iconRotationAlignment.put("Auto", Property.ICON_ROTATION_ALIGNMENT_AUTO);
+        iconRotationAlignment.put("Map", Property.ICON_ROTATION_ALIGNMENT_MAP);
+        iconRotationAlignment.put("Viewport", Property.ICON_ROTATION_ALIGNMENT_VIEWPORT);
+
+        Map<String, String> iconTextFit = new HashMap<>();
+        iconTextFit.put("None", Property.ICON_TEXT_FIT_NONE);
+        iconTextFit.put("Width", Property.ICON_TEXT_FIT_WIDTH);
+        iconTextFit.put("Height", Property.ICON_TEXT_FIT_HEIGHT);
+        iconTextFit.put("Both", Property.ICON_TEXT_FIT_BOTH);
+
+        Map<String, String> iconTranslateAnchor = new HashMap<>();
+        iconTranslateAnchor.put("Map", Property.ICON_TRANSLATE_ANCHOR_MAP);
+        iconTranslateAnchor.put("Viewport", Property.ICON_TRANSLATE_ANCHOR_VIEWPORT);
+
+        Map<String, String> symbolPlacement = new HashMap<>();
+        symbolPlacement.put("Line", Property.SYMBOL_PLACEMENT_LINE);
+        symbolPlacement.put("Point", Property.SYMBOL_PLACEMENT_POINT);
+
+        Map<String, String> textAnchor = new HashMap<>();
+        textAnchor.put("Center", Property.TEXT_ANCHOR_CENTER);
+        textAnchor.put("Left", Property.TEXT_ANCHOR_LEFT);
+        textAnchor.put("Right", Property.TEXT_ANCHOR_RIGHT);
+        textAnchor.put("Top", Property.TEXT_ANCHOR_TOP);
+        textAnchor.put("Bottom", Property.TEXT_ANCHOR_BOTTOM);
+        textAnchor.put("TopLeft", Property.TEXT_ANCHOR_TOP_LEFT);
+        textAnchor.put("TopRight", Property.TEXT_ANCHOR_TOP_RIGHT);
+        textAnchor.put("BottomLeft", Property.TEXT_ANCHOR_BOTTOM_LEFT);
+        textAnchor.put("BottomRight", Property.TEXT_ANCHOR_BOTTOM_RIGHT);
+
+        Map<String, String> textJustify = new HashMap<>();
+        textJustify.put("Center", Property.TEXT_JUSTIFY_CENTER);
+        textJustify.put("Left", Property.TEXT_JUSTIFY_LEFT);
+        textJustify.put("Right", Property.TEXT_JUSTIFY_RIGHT);
+
+        Map<String, String> textPitchAlignment = new HashMap<>();
+        textPitchAlignment.put("Auto", Property.TEXT_PITCH_ALIGNMENT_AUTO);
+        textPitchAlignment.put("Map", Property.TEXT_PITCH_ALIGNMENT_MAP);
+        textPitchAlignment.put("Viewport", Property.TEXT_PITCH_ALIGNMENT_VIEWPORT);
+
+        Map<String, String> textRotationAlignment = new HashMap<>();
+        textRotationAlignment.put("Auto", Property.TEXT_ROTATION_ALIGNMENT_AUTO);
+        textRotationAlignment.put("Map", Property.TEXT_ROTATION_ALIGNMENT_MAP);
+        textRotationAlignment.put("Viewport", Property.TEXT_ROTATION_ALIGNMENT_VIEWPORT);
+
+        Map<String, String> textTransform = new HashMap<>();
+        textTransform.put("None", Property.TEXT_TRANSFORM_NONE);
+        textTransform.put("Lowercase", Property.TEXT_TRANSFORM_LOWERCASE);
+        textTransform.put("Uppercase", Property.TEXT_TRANSFORM_UPPERCASE);
+
+        Map<String, String> textTranslateAnchor = new HashMap<>();
+        textTranslateAnchor.put("Map", Property.TEXT_TRANSLATE_ANCHOR_MAP);
+        textTranslateAnchor.put("Viewport", Property.TEXT_TRANSLATE_ANCHOR_VIEWPORT);
+
+        // light constants
+        Map<String, String> lightAnchor = new HashMap<>();
+        lightAnchor.put("Map", Property.ANCHOR_MAP);
+        lightAnchor.put("Viewport", Property.ANCHOR_VIEWPORT);
+
         return MapBuilder.<String, Object>builder()
                 .put("StyleURL", styleURLS)
                 .put("EventTypes", eventTypes)
@@ -127,6 +210,22 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
                 .put("InterpolationMode", interpolationModes)
                 .put("LineJoin", lineJoin)
                 .put("LineCap", lineCap)
+                .put("LineTranslateAnchor", lineTranslateAnchor)
+                .put("CirclePitchScale", circlePitchScale)
+                .put("CircleTranslateAnchor", circleTranslateAnchor)
+                .put("FillExtrusionTranslateAnchor", fillExtrusionTranslateAnchor)
+                .put("FillTranslateAnchor", fillTranslateAnchor)
+                .put("IconRotationAlignment", iconRotationAlignment)
+                .put("IconTextFit", iconTextFit)
+                .put("IconTranslateAnchor", iconTranslateAnchor)
+                .put("SymbolPlacement", symbolPlacement)
+                .put("TextAnchor", textAnchor)
+                .put("TextJustify", textJustify)
+                .put("TextPitchAlignment", textPitchAlignment)
+                .put("TextRotationAlignment", textRotationAlignment)
+                .put("TextTransform", textTransform)
+                .put("TextTranslateAnchor", textTranslateAnchor)
+                .put("LightAnchor", lightAnchor)
                 .build();
     }
 

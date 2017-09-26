@@ -84,6 +84,89 @@ RCT_EXPORT_MODULE();
     [lineCap setObject:@(MGLLineCapRound) forKey:@"Round"];
     [lineCap setObject:@(MGLLineCapSquare) forKey:@"Square"];
     
+    NSMutableDictionary *lineTranslateAnchor = [[NSMutableDictionary alloc] init];
+    [lineTranslateAnchor setObject:@(MGLLineTranslationAnchorMap) forKey:@"Map"];
+    [lineTranslateAnchor setObject:@(MGLLineTranslationAnchorViewport) forKey:@"Viewport"];
+    
+    // circle layer constants
+    NSMutableDictionary *circlePitchScale = [[NSMutableDictionary alloc] init];
+    [circlePitchScale setObject:@(MGLCircleScaleAlignmentMap) forKey:@"Map"];
+    [circlePitchScale setObject:@(MGLCircleScaleAlignmentViewport) forKey:@"Viewport"];
+    
+    NSMutableDictionary *circleTranslateAnchor = [[NSMutableDictionary alloc] init];
+    [circleTranslateAnchor setObject:@(MGLCircleTranslationAnchorMap) forKey:@"Map"];
+    [circleTranslateAnchor setObject:@(MGLCircleTranslationAnchorViewport) forKey:@"Viewport"];
+    
+    // fill extrusion layer constants
+    NSMutableDictionary *fillExtrusionTranslateAnchor = [[NSMutableDictionary alloc] init];
+    [fillExtrusionTranslateAnchor setObject:@(MGLFillExtrusionTranslationAnchorMap) forKey:@"Map"];
+    [fillExtrusionTranslateAnchor setObject:@(MGLFillExtrusionTranslationAnchorViewport) forKey:@"Viewport"];
+    
+    // fill layer constants
+    NSMutableDictionary *fillTranslateAnchor = [[NSMutableDictionary alloc] init];
+    [fillTranslateAnchor setObject:@(MGLFillTranslationAnchorMap) forKey:@"Map"];
+    [fillTranslateAnchor setObject:@(MGLFillTranslationAnchorViewport) forKey:@"Viewport"];
+    
+    // symbol layer constants
+    NSMutableDictionary *iconRotationAlignment = [[NSMutableDictionary alloc] init];
+    [iconRotationAlignment setObject:@(MGLIconRotationAlignmentAuto) forKey:@"Auto"];
+    [iconRotationAlignment setObject:@(MGLIconRotationAlignmentMap) forKey:@"Map"];
+    [iconRotationAlignment setObject:@(MGLIconRotationAlignmentViewport) forKey:@"Viewport"];
+    
+    NSMutableDictionary *iconTextFit = [[NSMutableDictionary alloc] init];
+    [iconTextFit setObject:@(MGLIconTextFitNone) forKey:@"None"];
+    [iconTextFit setObject:@(MGLIconTextFitWidth) forKey:@"Width"];
+    [iconTextFit setObject:@(MGLIconTextFitHeight) forKey:@"Height"];
+    [iconTextFit setObject:@(MGLIconTextFitBoth) forKey:@"Both"];
+    
+    NSMutableDictionary *iconTranslateAnchor = [[NSMutableDictionary alloc] init];
+    [iconTranslateAnchor setObject:@(MGLIconTranslationAnchorMap) forKey:@"Map"];
+    [iconTranslateAnchor setObject:@(MGLIconTranslationAnchorViewport) forKey:@"Viewport"];
+    
+    NSMutableDictionary *symbolPlacement = [[NSMutableDictionary alloc] init];
+    [symbolPlacement setObject:@(MGLSymbolPlacementLine) forKey:@"Line"];
+    [symbolPlacement setObject:@(MGLSymbolPlacementPoint) forKey:@"Point"];
+    
+    NSMutableDictionary *textAnchor = [[NSMutableDictionary alloc] init];
+    [textAnchor setObject:@(MGLTextAnchorCenter) forKey:@"Center"];
+    [textAnchor setObject:@(MGLTextAnchorLeft) forKey:@"Left"];
+    [textAnchor setObject:@(MGLTextAnchorRight) forKey:@"Right"];
+    [textAnchor setObject:@(MGLTextAnchorTop) forKey:@"Top"];
+    [textAnchor setObject:@(MGLTextAnchorBottom) forKey:@"Bottom"];
+    [textAnchor setObject:@(MGLTextAnchorTopLeft) forKey:@"TopLeft"];
+    [textAnchor setObject:@(MGLTextAnchorTopRight) forKey:@"TopRight"];
+    [textAnchor setObject:@(MGLTextAnchorBottomLeft) forKey:@"BottomLeft"];
+    [textAnchor setObject:@(MGLTextAnchorBottomRight) forKey:@"BottomRight"];
+    
+    NSMutableDictionary *textJustify = [[NSMutableDictionary alloc] init];
+    [textJustify setObject:@(MGLTextJustificationCenter) forKey:@"Center"];
+    [textJustify setObject:@(MGLTextJustificationLeft) forKey:@"Left"];
+    [textJustify setObject:@(MGLTextJustificationRight) forKey:@"Right"];
+    
+    NSMutableDictionary *textPitchAlignment = [[NSMutableDictionary alloc] init];
+    [textPitchAlignment setObject:@(MGLTextPitchAlignmentAuto) forKey:@"Auto"];
+    [textPitchAlignment setObject:@(MGLTextPitchAlignmentMap) forKey:@"Map"];
+    [textPitchAlignment setObject:@(MGLTextPitchAlignmentViewport) forKey:@"Viewport"];
+    
+    NSMutableDictionary *textRotationAlignment = [[NSMutableDictionary alloc] init];
+    [textRotationAlignment setObject:@(MGLTextRotationAlignmentAuto) forKey:@"Auto"];
+    [textRotationAlignment setObject:@(MGLTextRotationAlignmentMap) forKey:@"Map"];
+    [textRotationAlignment setObject:@(MGLTextRotationAlignmentViewport) forKey:@"Viewport"];
+    
+    NSMutableDictionary *textTransform = [[NSMutableDictionary alloc] init];
+    [textTransform setObject:@(MGLTextTransformNone) forKey:@"None"];
+    [textTransform setObject:@(MGLTextTransformLowercase) forKey:@"Lowercase"];
+    [textTransform setObject:@(MGLTextTransformUppercase) forKey:@"Uppercase"];
+    
+    NSMutableDictionary *textTranslateAnchor = [[NSMutableDictionary alloc] init];
+    [textTranslateAnchor setObject:@(MGLTextTranslationAnchorMap) forKey:@"Map"];
+    [textTranslateAnchor setObject:@(MGLTextTranslationAnchorViewport) forKey:@"Viewport"];
+    
+    // light constants
+    NSMutableDictionary *lightAnchor = [[NSMutableDictionary alloc] init];
+    [lightAnchor setObject:@(MGLLightAnchorMap) forKey:@"Map"];
+    [lightAnchor setObject:@(MGLLightAnchorViewport) forKey:@"Viewport"];
+    
     return @{
          @"StyleURL": styleURLS,
          @"EventTypes": eventTypes,
@@ -92,7 +175,23 @@ RCT_EXPORT_MODULE();
          @"StyleSource": styleSourceConsts,
          @"InterpolationMode": interpolationModes,
          @"LineJoin": lineJoin,
-         @"LineCap": lineCap
+         @"LineCap": lineCap,
+         @"LineTranslateAnchor": lineTranslateAnchor,
+         @"CirclePitchScale": circlePitchScale,
+         @"CircleTranslateAnchor": circleTranslateAnchor,
+         @"FillExtrusionTranslateAnchor": fillExtrusionTranslateAnchor,
+         @"FillTranslateAnchor": fillTranslateAnchor,
+         @"IconRotationAlignment": iconRotationAlignment,
+         @"IconTextFit": iconTextFit,
+         @"IconTranslateAnchor": iconTranslateAnchor,
+         @"SymbolPlacement": symbolPlacement,
+         @"TextAnchor": textAnchor,
+         @"TextJustify": textJustify,
+         @"TextPitchAlignment": textPitchAlignment,
+         @"TextRotationAlignment": textRotationAlignment,
+         @"TextTransform": textTransform,
+         @"TextTranslateAnchor": textTranslateAnchor,
+         @"LightAnchor": lightAnchor
     };
 }
 
