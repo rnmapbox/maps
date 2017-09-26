@@ -13,6 +13,8 @@ import com.mapbox.mapboxsdk.style.layers.PropertyValue;
 import com.mapbox.mapboxsdk.style.layers.RasterLayer;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
+import com.mapbox.mapboxsdk.style.light.Light;
+import com.mapbox.mapboxsdk.style.light.Position;
 
 import java.util.List;
 
@@ -577,6 +579,41 @@ public class RCTMGLStyleFactory {
               break;
             case "backgroundOpacityTransition":
               RCTMGLStyleFactory.setBackgroundOpacityTransition(layer, styleValue);
+              break;
+        }
+      }
+    }
+    public static void setLightLayerStyle(Light layer, RCTMGLStyle style) {
+      List<String> styleKeys = style.getAllStyleKeys();
+
+      if (styleKeys.size() == 0) {
+        return;
+      }
+
+      for (String styleKey : styleKeys) {
+        RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
+
+        switch (styleKey) {
+            case "anchor":
+              RCTMGLStyleFactory.setAnchor(layer, styleValue);
+              break;
+            case "position":
+              RCTMGLStyleFactory.setPosition(layer, styleValue);
+              break;
+            case "positionTransition":
+              RCTMGLStyleFactory.setPositionTransition(layer, styleValue);
+              break;
+            case "color":
+              RCTMGLStyleFactory.setColor(layer, styleValue);
+              break;
+            case "colorTransition":
+              RCTMGLStyleFactory.setColorTransition(layer, styleValue);
+              break;
+            case "intensity":
+              RCTMGLStyleFactory.setIntensity(layer, styleValue);
+              break;
+            case "intensityTransition":
+              RCTMGLStyleFactory.setIntensityTransition(layer, styleValue);
               break;
         }
       }
@@ -2927,6 +2964,47 @@ public class RCTMGLStyleFactory {
       TransitionOptions transition = styleValue.getTransition();
       if (transition != null) {
         layer.setBackgroundOpacityTransition(transition);
+      }
+    }
+
+    public static void setAnchor(Light layer, RCTMGLStyleValue styleValue) {
+        layer.setAnchor(styleValue.getString(VALUE_KEY));
+    }
+
+    public static void setPosition(Light layer, RCTMGLStyleValue styleValue) {
+        Float[] values = styleValue.getFloatArray(VALUE_KEY);
+        layer.setPosition(Position.fromPosition(values[0], values[1], values[2]));
+    }
+
+
+    public static void setPositionTransition(Light layer, RCTMGLStyleValue styleValue) {
+      TransitionOptions transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.setPositionTransition(transition);
+      }
+    }
+
+    public static void setColor(Light layer, RCTMGLStyleValue styleValue) {
+        layer.setColor(styleValue.getInt(VALUE_KEY));
+    }
+
+
+    public static void setColorTransition(Light layer, RCTMGLStyleValue styleValue) {
+      TransitionOptions transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.setColorTransition(transition);
+      }
+    }
+
+    public static void setIntensity(Light layer, RCTMGLStyleValue styleValue) {
+        layer.setIntensity(styleValue.getFloat(VALUE_KEY));
+    }
+
+
+    public static void setIntensityTransition(Light layer, RCTMGLStyleValue styleValue) {
+      TransitionOptions transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.setIntensityTransition(transition);
       }
     }
 

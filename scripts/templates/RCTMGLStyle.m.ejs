@@ -19,6 +19,10 @@
 
   NSArray<NSString*> *styleProps = [reactStyle allKeys];
   for (NSString *prop in styleProps) {
+    if ([prop isEqualToString:@"__MAPBOX_STYLESHEET__"]) {
+      continue;
+    }
+
     RCTMGLStyleValue *styleValue = [RCTMGLStyleValue make:reactStyle[prop]];
 
   <% for (let i = 0; i < layer.properties.length; i++) { -%>
@@ -56,7 +60,11 @@
         return;
     }
     <%_ } _%>
+    <%_ if (layer.name === 'light' && prop.name === 'position') { _%>
+    layer.position = [styleValue getSphericalPosition];
+    <%_ } else { _%>
     layer.<%- iosPropName(prop.name) -%> = styleValue.mglStyleValue;
+    <%_ } _%>
 }
 <%_ if (prop.transition) { _%>
 
