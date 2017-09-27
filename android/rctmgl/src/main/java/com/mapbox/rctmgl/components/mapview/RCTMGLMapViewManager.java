@@ -101,6 +101,11 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         mapView.setReactPitchEnabled(pitchEnabled);
     }
 
+    @ReactProp(name="attributionEnabled")
+    public void setAttributionEnabled(RCTMGLMapView mapView, boolean attributionEnabled) {
+        mapView.setReactAttributionEnabled(attributionEnabled);
+    }
+
     @ReactProp(name="heading")
     public void setHeading(RCTMGLMapView mapView, double heading) {
         mapView.setReactHeading(heading);

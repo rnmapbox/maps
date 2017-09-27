@@ -68,6 +68,9 @@ public class RCTMGLMapView extends MapView implements
     private boolean mAnimated;
     private boolean mScrollEnabled;
     private boolean mPitchEnabled;
+    private boolean mRotateEnabled;
+    private boolean mAttributionEnabled;
+    private boolean mLogoEnabled;
     private boolean mShowUserLocation;
 
     private int mUserTrackingMode;
@@ -290,6 +293,21 @@ public class RCTMGLMapView extends MapView implements
         updateUISettings();
     }
 
+    public void setReactRotateEnabled(boolean rotateEnabled) {
+        mRotateEnabled = rotateEnabled;
+        updateUISettings();
+    }
+
+    public void setReactLogoEnabled(boolean logoEnabled) {
+        mLogoEnabled = logoEnabled;
+        updateUISettings();
+    }
+
+    public void setReactAttributionEnabled(boolean attributionEnabled) {
+        mAttributionEnabled = attributionEnabled;
+        updateUISettings();
+    }
+
     public void setReactHeading(double heading) {
         mHeading = heading;
         updateCameraPositionIfNeeded(false);
@@ -441,6 +459,9 @@ public class RCTMGLMapView extends MapView implements
         UiSettings uiSettings = mMap.getUiSettings();
         uiSettings.setScrollGesturesEnabled(mScrollEnabled);
         uiSettings.setTiltGesturesEnabled(mPitchEnabled);
+        uiSettings.setRotateGesturesEnabled(mRotateEnabled);
+        uiSettings.setAttributionEnabled(mAttributionEnabled);
+        uiSettings.setLogoEnabled(mLogoEnabled);
     }
 
     private void setMinMaxZoomLevels() {
@@ -459,7 +480,7 @@ public class RCTMGLMapView extends MapView implements
 
     private void enableLocationLayer() {
         if (mLocationEngine == null) {
-            mLocationEngine = LostLocationEngine.getLocationEngine(mContext);
+            mLocationEngine = new LostLocationEngine(mContext);
             mLocationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
             mLocationEngine.addLocationEngineListener(this);
             mLocationEngine.activate();

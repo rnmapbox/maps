@@ -89,6 +89,22 @@ class MapView extends React.Component {
     pitchEnabled: PropTypes.bool,
 
     /**
+     * Enable/Disable rotation on map
+     */
+    rotateEnabled: PropTypes.bool,
+
+    /**
+     * Enable/Disable attribution on map. For iOS you need to add MGLMapboxMetricsEnabledSettingShownInApp=YES
+     * to your Info.plist
+     */
+    attributionEnabled: PropTypes.bool,
+
+    /**
+     * Enable/Disable the logo on the map.
+     */
+    logoEnabled: PropTypes.bool,
+
+    /**
      * Map press listener, gets called when a user presses the map
      */
     onPress: PropTypes.func,
@@ -180,6 +196,9 @@ class MapView extends React.Component {
     pitch: 0,
     scrollEnabled: true,
     pitchEnabled: true,
+    rotateEnabled: true,
+    attributionEnabled: true,
+    logoEnabled: true,
     zoomLevel: 16,
     userTrackingMode: MapboxGL.UserTrackingModes.None,
     styleURL: MapboxGL.StyleURL.Street,
@@ -420,6 +439,9 @@ class MapView extends React.Component {
       maxZoomLevel: this.props.maxZoomLevel,
       scrollEnabled: this.props.scrollEnabled,
       pitchEnabled: this.props.pitchEnabled,
+      rotateEnabled: this.props.rotateEnabled,
+      attributionEnabled: this.props.attributionEnabled,
+      logoEnabled: this.props.logoEnabled,
     };
 
     const callbacks = {

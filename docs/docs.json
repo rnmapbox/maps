@@ -1002,6 +1002,27 @@
         "description": "Enable/Disable pitch on map"
       },
       {
+        "name": "rotateEnabled",
+        "required": false,
+        "type": "bool",
+        "default": "true",
+        "description": "Enable/Disable rotation on map"
+      },
+      {
+        "name": "attributionEnabled",
+        "required": false,
+        "type": "bool",
+        "default": "true",
+        "description": "Enable/Disable attribution on map. For iOS you need to add MGLMapboxMetricsEnabledSettingShownInApp=YES\nto your Info.plist"
+      },
+      {
+        "name": "logoEnabled",
+        "required": false,
+        "type": "bool",
+        "default": "true",
+        "description": "Enable/Disable the logo on the map."
+      },
+      {
         "name": "onPress",
         "required": false,
         "type": "func",

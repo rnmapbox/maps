@@ -101,6 +101,25 @@ static double const M2PI = M_PI * 2;
     self.pitchEnabled = _reactPitchEnabled;
 }
 
+- (void)setReactRotateEnabled:(BOOL)reactRotateEnabled
+{
+    _reactRotateEnabled = reactRotateEnabled;
+    self.rotateEnabled = _reactRotateEnabled;
+}
+
+- (void)setReactAttributionEnabled:(BOOL)reactAttributionEnabled
+{
+    _reactAttributionEnabled = reactAttributionEnabled;
+    self.attributionButton.hidden = !_reactAttributionEnabled;
+    
+}
+
+- (void)setReactLogoEnabled:(BOOL)reactLogoEnabled
+{
+    _reactLogoEnabled = reactLogoEnabled;
+    self.logoView.hidden = !_reactLogoEnabled;
+}
+
 - (void)setReactShowUserLocation:(BOOL)reactShowUserLocation
 {
     _reactShowUserLocation = reactShowUserLocation;
