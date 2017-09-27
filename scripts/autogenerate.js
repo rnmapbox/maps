@@ -18,9 +18,9 @@ const androidVersion = "5.1.3";
 const iosVersion = "3.6.1";
 
 const TMPL_PATH = path.join(__dirname, 'templates');
-const IOS_OUTPUT_PATH = path.join(__dirname, '..', 'example', 'node_modules', 'react-native-mapbox-gl', 'ios', 'RCTMGL');
-const ANDROID_OUTPUT_PATH = path.join(__dirname, '..', 'example', 'node_modules', 'react-native-mapbox-gl', 'android', 'rctmgl', 'src', 'main', 'java', 'com', 'mapbox', 'rctmgl', 'components', 'styles');
-const JS_OUTPUT_PATH = path.join(__dirname, '..', 'example', 'node_modules', 'react-native-mapbox-gl', 'javascript', 'utils');
+const IOS_OUTPUT_PATH = path.join(__dirname, '..', 'example', 'node_modules', '@mapbox', 'react-native-mapbox-gl', 'ios', 'RCTMGL');
+const ANDROID_OUTPUT_PATH = path.join(__dirname, '..', 'example', 'node_modules', '@mapbox', 'react-native-mapbox-gl', 'android', 'rctmgl', 'src', 'main', 'java', 'com', 'mapbox', 'rctmgl', 'components', 'styles');
+const JS_OUTPUT_PATH = path.join(__dirname, '..', 'example', 'node_modules', '@mapbox', 'react-native-mapbox-gl', 'javascript', 'utils');
 
 Object.keys(styleSpecJSON.layer.type.values).forEach((layerName) => {
   layers.push({

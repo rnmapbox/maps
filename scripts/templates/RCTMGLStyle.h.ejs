@@ -10,12 +10,12 @@
 
 @import Mapbox;
 
-@import Mapbox;
-
 @interface RCTMGLStyle : NSObject
 
 @property (nonatomic, weak) RCTBridge *bridge;
 @property (nonatomic, strong) MGLStyle *style;
+
+- (id)initWithMGLStyle:(MGLStyle*)mglStyle;
 
 <%_ for (const layer of layers) { _%>
 - (void)<%- setLayerMethodName(layer, 'ios') -%>:(<%- getLayerType(layer, 'ios') -%> *)layer withReactStyle:(NSDictionary *)reactStyle;

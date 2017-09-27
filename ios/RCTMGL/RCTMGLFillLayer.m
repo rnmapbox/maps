@@ -21,7 +21,7 @@
 
 - (void)addStyles
 {
-    RCTMGLStyle *style = [[RCTMGLStyle alloc] init];
+    RCTMGLStyle *style = [[RCTMGLStyle alloc] initWithMGLStyle:self.style];
     style.bridge = self.bridge;
     [style fillLayer:(MGLFillStyleLayer*)self.styleLayer withReactStyle:self.reactStyle];
 }

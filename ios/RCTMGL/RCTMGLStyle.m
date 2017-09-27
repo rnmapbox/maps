@@ -6,6 +6,14 @@
 
 @implementation RCTMGLStyle
 
+- (id)initWithMGLStyle:(MGLStyle*)mglStyle
+{
+    if (self = [super init]) {
+        _style = mglStyle;
+    }
+    return self;
+}
+
 
 - (void)fillLayer:(MGLFillStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
 {
