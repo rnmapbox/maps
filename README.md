@@ -36,12 +36,12 @@ git checkout
 
 **Yarn**
 ```
-yarn add react-native-mapbox-gl@6.0.0.alpha1
+yarn add react-native-mapbox-gl@6.0.0-alpha1
 ```
 
 **Npm**
 ```
-npm install react-native-mapbox-gl@6.0.0.alpha1 --save
+npm install react-native-mapbox-gl@6.0.0-alpha1 --save
 ```
 
 ## Installation Guides
