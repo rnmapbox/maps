@@ -19,7 +19,7 @@
 		"react": "16.0.0-alpha.12",
 		"react-native": "^0.47.2",
 		"react-native-elements": "^0.16.0",
-		"react-native-mapbox-gl": "file:../react-native-mapbox-gl-6.0.0.tgz",
+		"@mapbox/react-native-mapbox-gl": "file:../mapbox-react-native-mapbox-gl-6.0.0.tgz",
 		"react-native-vector-icons": "^4.3.0"
 	},
 	"devDependencies": {
