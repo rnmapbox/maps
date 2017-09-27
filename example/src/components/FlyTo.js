@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert } from 'react-native';
-import MapboxGL from 'react-native-mapbox-gl';
+import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import TabBarPage from './common/TabBarPage';

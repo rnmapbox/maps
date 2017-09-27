@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import MapboxGL from 'react-native-mapbox-gl';
+import MapboxGL from '@mapbox/react-native-mapbox-gl';
 import { Slider } from 'react-native-elements';
 
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
