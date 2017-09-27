@@ -31,6 +31,11 @@ dependencies {
 }
 ```
 
+Update Android SDK version if you did `react-native init`, we want to be on `25` or higher.
+* `compileSdkVersion 25`
+* `buildToolsVersion "25.0.1"`
+* `targetSdkVersion 25`
+
 ### settings.gradle
 
 Include project, so gradle knows where to find the project
@@ -40,5 +45,56 @@ include ':mapbox-react-native-mapbox-gl'
 project(':mapbox-react-native-mapbox-gl').projectDir = new File(rootProject.projectDir, '../node_modules/@mapbox/react-native-mapbox-gl/android/rctmgl')
 ```
 
+### MainApplication.java
 
+We need to register our package
+
+Add `import com.mapbox.rctmgl.RCTMGLPackage;` as an import statement and
+`new RCTMGLPackage()` in `getPackages()`
+
+Here is an example
+```
+package com.rngltest;
+
+import android.app.Application;
+
+import com.facebook.react.ReactApplication;
+import com.facebook.react.ReactNativeHost;
+import com.facebook.react.ReactPackage;
+import com.facebook.react.shell.MainReactPackage;
+import com.facebook.soloader.SoLoader;
+import com.mapbox.rctmgl.RCTMGLPackage;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class MainApplication extends Application implements ReactApplication {
+
+  private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+    @Override
+    public boolean getUseDeveloperSupport() {
+      return BuildConfig.DEBUG;
+    }
+
+    @Override
+    protected List<ReactPackage> getPackages() {
+      return Arrays.<ReactPackage>asList(
+          new MainReactPackage(),
+          new RCTMGLPackage()
+      );
+    }
+  };
+
+  @Override
+  public ReactNativeHost getReactNativeHost() {
+    return mReactNativeHost;
+  }
+
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    SoLoader.init(this, /* native exopackage */ false);
+  }
+}
+```
 Checkout the [example application](../example/README.md) to see how it's configured for an example.
