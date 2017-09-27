@@ -9,6 +9,14 @@
 
 @implementation RCTMGLStyle
 
+- (id)initWithMGLStyle:(MGLStyle*)mglStyle
+{
+    if (self = [super init]) {
+        _style = mglStyle;
+    }
+    return self;
+}
+
 <% for (const layer of layers) { %>
 - (void)<%- setLayerMethodName(layer, 'ios') -%>:(<%- getLayerType(layer, 'ios') -%> *)layer withReactStyle:(NSDictionary *)reactStyle
 {

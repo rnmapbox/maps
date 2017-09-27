@@ -7,12 +7,12 @@
 
 @import Mapbox;
 
-@import Mapbox;
-
 @interface RCTMGLStyle : NSObject
 
 @property (nonatomic, weak) RCTBridge *bridge;
 @property (nonatomic, strong) MGLStyle *style;
+
+- (id)initWithMGLStyle:(MGLStyle*)mglStyle;
 
 - (void)fillLayer:(MGLFillStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
 - (void)lineLayer:(MGLLineStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
