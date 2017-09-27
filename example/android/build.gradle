@@ -14,11 +14,9 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenLocal()
         jcenter()
         maven { url "$rootDir/../node_modules/react-native/android" }
         maven { url "https://jitpack.io" }
-        maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://maven.google.com" }
     }
 }
