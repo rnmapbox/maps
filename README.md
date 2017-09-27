@@ -31,7 +31,7 @@ Not a Mapbox user yet? [Sign up for an account here](https://www.mapbox.com/sign
 **Git**
 ```
 git clone git@github.com:mapbox/react-native-mapbox-gl.git
-git checkout
+git checkout v6
 ```
 
 **Yarn**
