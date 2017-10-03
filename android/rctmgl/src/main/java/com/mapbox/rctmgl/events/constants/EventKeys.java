@@ -10,6 +10,7 @@ public class EventKeys {
     public static final String MAP_CLICK = ns("map.press");
     public static final String MAP_LONG_CLICK = ns("map.longpress");
     public static final String MAP_ONCHANGE = ns("map.change");
+    public static final String MAP_ANDROID_CALLBACK = ns("map.androidcallback");
 
     private static String ns(String name) {
         return String.format("%s.%s", NAMESPACE, name);

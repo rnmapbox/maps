@@ -11,6 +11,16 @@
 
 @implementation RCTMGLShapeSource
 
+- (void)setShape:(NSString *)shape
+{
+    _shape = shape;
+    
+    if (self.source != nil) {
+        MGLShapeSource *source = (MGLShapeSource *)self.source;
+        [source setShape:[RCTMGLUtils shapeFromGeoJSON:_shape]];
+    }
+}
+
 - (MGLSource*)makeSource
 {
     NSDictionary<MGLShapeSourceOption, id> *options = [self _getOptions];

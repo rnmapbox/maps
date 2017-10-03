@@ -26,7 +26,7 @@
 // since we don't have access to the frame right away
 static CGRect const RCT_MAPBOX_MIN_MAP_FRAME = { { 0.0f, 0.0f }, { 64.0f, 64.0f } };
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RCTMGLMapView)
 
 - (UIView *)view
 {
@@ -70,7 +70,9 @@ RCT_EXPORT_VIEW_PROPERTY(onMapChange, RCTBubblingEventBlock)
 #pragma mark - React Methods
 
 RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
-                  withConfiguration:(nonnull NSDictionary*)config)
+                  withConfiguration:(nonnull NSDictionary*)config
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
         id view = viewRegistry[reactTag];
@@ -94,7 +96,7 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
         }
 
         [reactMapView.cameraUpdateQueue execute:reactMapView withCompletionHandler:^{
-            [self reactMapDidChange:reactMapView eventType:RCT_MAPBOX_SET_CAMERA_COMPLETE];
+            resolve(nil);
         }];
     }];
 }

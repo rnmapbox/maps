@@ -8,6 +8,7 @@ import {
   isNumber,
   runNativeCommand,
   toJSONString,
+  IS_ANDROID,
 } from '../utils';
 
 const MapboxGL = NativeModules.MGLModule;
@@ -15,7 +16,7 @@ const MapboxGL = NativeModules.MGLModule;
 export const NATIVE_MODULE_NAME = 'RCTMGLMapView';
 
 const RCTMGLMapView = requireNativeComponent(NATIVE_MODULE_NAME, MapView, {
-  nativeOnly: { onMapChange: true },
+  nativeOnly: { onMapChange: true, onAndroidCallback: true },
 });
 
 /**
@@ -210,6 +211,39 @@ class MapView extends React.Component {
     this._onPress = this._onPress.bind(this);
     this._onLongPress = this._onLongPress.bind(this);
     this._onChange = this._onChange.bind(this);
+    this._onAndroidCallback = this._onAndroidCallback.bind(this);
+
+    this._callbackMap = new Map();
+  }
+
+  /**
+   * [queryMapFeatures description]
+   * @return {[type]} [description]
+   */
+  queryMapFeatures (geometry, filters, layerIDs) {
+    let args = [
+      geometry,
+      filters || [],
+      layerIDs || [],
+    ];
+
+    if (IS_ANDROID) {
+      return new Promise ((resolve, reject) => {
+        const callbackID = Date.now();
+
+        const callbacks = {
+          success: (features) => resolve(features),
+          failure: (err) => reject(err),
+        };
+
+        this._callbackMap.set(callbackID, callbacks);
+
+        args.unshift(callbackID);
+        runNativeCommand(NATIVE_MODULE_NAME, 'queryMapFeatures', args);
+      });
+    }
+
+    return runNativeCommand(NATIVE_MODULE_NAME, 'queryMapFeatures', args);
   }
 
   /**
@@ -229,7 +263,7 @@ class MapView extends React.Component {
     if (!this._nativeRef) {
       return;
     }
-    this.setCamera({
+    return this.setCamera({
       bounds: {
         ne: northEastCoordinates,
         sw: southWestCoordinates,
@@ -253,9 +287,9 @@ class MapView extends React.Component {
    */
   flyTo (coordinates, duration = 2000) {
     if (!this._nativeRef) {
-      return;
+      return Promise.reject('No native reference found');
     }
-    this.setCamera({
+    return this.setCamera({
       centerCoordinate: coordinates,
       duration: duration,
       mode: MapboxGL.CameraModes.Flight,
@@ -275,9 +309,9 @@ class MapView extends React.Component {
    */
   zoomTo (zoomLevel, duration = 2000) {
     if (!this._nativeRef) {
-      return;
+      return Promise.reject('No native reference found');
     }
-    this.setCamera({
+    return this.setCamera({
       zoom: zoomLevel,
       duration: duration,
       mode: MapboxGL.CameraModes.Flight,
@@ -320,7 +354,18 @@ class MapView extends React.Component {
       cameraConfig = this._createStopConfig(config);
     }
 
-    runNativeCommand(NATIVE_MODULE_NAME, 'setCamera', this._nativeRef, [cameraConfig]);
+    let args = [cameraConfig];
+
+    if (IS_ANDROID) {
+      return new Promise((resolve) => {
+        const callbackID = '' + Date.now();
+        this._addAddAndroidCallback(callbackID, resolve);
+        args.unshift(callbackID);
+        runNativeCommand(NATIVE_MODULE_NAME, 'setCamera', this._nativeRef, args);
+      });
+    }
+
+    return runNativeCommand(NATIVE_MODULE_NAME, 'setCamera', this._nativeRef, args);
   }
 
   _createStopConfig (config = {}) {
@@ -343,6 +388,26 @@ class MapView extends React.Component {
     }
 
     return stopConfig;
+  }
+
+  _addAddAndroidCallback (id, callback) {
+    this._callbackMap.set(id, callback);
+  }
+
+  _removeAndroidCallback (id) {
+    this._callbackMap.remove(id);
+  }
+
+  _onAndroidCallback (e) {
+    const callbackID = e.type;
+    const callback = this._callbackMap.get(callbackID);
+
+    if (!callback) {
+      return;
+    }
+
+    this._callbackMap.delete(callbackID);
+    callback.apply(null, e.payload);
   }
 
   _onPress (e) {
@@ -401,9 +466,6 @@ class MapView extends React.Component {
       case MapboxGL.EventTypes.DidFinishLoadingStyle:
         propName = 'onDidFinishLoadingStyle';
         break;
-      case MapboxGL.EventTypes.SetCameraComplete:
-        propName = 'onSetCameraComplete';
-        break;
     }
 
     if (propName.length) {
@@ -449,6 +511,7 @@ class MapView extends React.Component {
       onPress: this._onPress,
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
+      onAndroidCallback: IS_ANDROID ? this._onAndroidCallback : undefined,
     };
 
     return (

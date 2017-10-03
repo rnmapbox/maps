@@ -46,8 +46,6 @@ RCT_EXPORT_MODULE();
     [eventTypes setObject:RCT_MAPBOX_DID_FINISH_RENDERING_MAP forKey:@"DidFinishRenderingMap"];
     [eventTypes setObject:RCT_MAPBOX_DID_FINISH_RENDERING_MAP_FULLY forKey:@"DidFinishRenderingMapFully"];
     [eventTypes setObject:RCT_MAPBOX_DID_FINISH_LOADING_STYLE forKey:@"DidFinishLoadingStyle"];
-    [eventTypes setObject:RCT_MAPBOX_FLY_TO_COMPLETE forKey:@"FlyToComplete"];
-    [eventTypes setObject:RCT_MAPBOX_SET_CAMERA_COMPLETE forKey:@"SetCameraComplete"];
     
     // user tracking modes
     NSMutableDictionary *userTrackingModes = [[NSMutableDictionary alloc] init];

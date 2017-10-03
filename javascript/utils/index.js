@@ -33,25 +33,36 @@ export function isPrimitive (value) {
 }
 
 export function runNativeCommand (module, name, nativeRef, args = []) {
-  const managerInstance = NativeModules.UIManager[module];
-  if (!managerInstance) {
-    throw new Error(`Could not find ${module}`);
-  }
-
   const handle = findNodeHandle(nativeRef);
   if (!handle) {
     throw new Error(`Could not find handle for native ref ${module}.${name}`);
   }
 
-  NativeModules.UIManager.dispatchViewManagerCommand(
-    handle,
-    managerInstance.Commands[name],
-    args,
-  );
+  const managerInstance = IS_ANDROID ? NativeModules.UIManager[module] : NativeModules[getIOSModuleName(module)];
+  if (!managerInstance) {
+    throw new Error(`Could not find ${module}`);
+  }
+
+  if (IS_ANDROID) {
+    return NativeModules.UIManager.dispatchViewManagerCommand(
+      handle,
+      managerInstance.Commands[name],
+      args,
+    );
+  }
+
+  return managerInstance[name](handle, ...args);
 }
 
 export function cloneReactChildrenWithProps (children, propsToAdd = {}) {
   return React.Children.map(children, (child) => React.cloneElement(child, propsToAdd));
+}
+
+export function getIOSModuleName (moduleName) {
+  if (moduleName.startsWith('RCT')) {
+    return moduleName.substring(3);
+  }
+  return moduleName;
 }
 
 export function toJSONString (json = '') {

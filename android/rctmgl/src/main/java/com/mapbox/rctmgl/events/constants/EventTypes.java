@@ -25,6 +25,4 @@ public class EventTypes {
     public static final String DID_FINISH_RENDERING_MAP_FULLY = "didfinishrenderingmapfully";
 
     public static final String DID_FINISH_LOADING_STYLE = "didfinishloadingstyle";
-
-    public static final String SET_CAMERA_COMPLETE = "setcameracomplete";
 }

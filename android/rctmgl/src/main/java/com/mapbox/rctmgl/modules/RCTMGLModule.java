@@ -81,7 +81,6 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         eventTypes.put("DidFinishRenderingMap", EventTypes.DID_FINISH_RENDERING_MAP);
         eventTypes.put("DidFinishRenderingMapFully", EventTypes.DID_FINISH_RENDERING_MAP_FULLY);
         eventTypes.put("DidFinishLoadingStyle", EventTypes.DID_FINISH_LOADING_STYLE);
-        eventTypes.put("SetCameraComplete", EventTypes.SET_CAMERA_COMPLETE);
 
         // user tracking modes
         Map<String, Integer> userTrackingModes = new HashMap<>();
