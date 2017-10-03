@@ -1,17 +1,25 @@
 package com.mapbox.rctmgl.components.mapview;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.PointF;
+import android.graphics.drawable.Icon;
 import android.location.Location;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
+import com.mapbox.mapboxsdk.annotations.IconFactory;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.annotations.MarkerViewOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -26,6 +34,8 @@ import com.mapbox.rctmgl.components.camera.CameraStop;
 import com.mapbox.rctmgl.components.camera.CameraUpdateQueue;
 import com.mapbox.rctmgl.components.styles.light.RCTMGLLight;
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
+import com.mapbox.rctmgl.events.AndroidCallbackEvent;
+import com.mapbox.rctmgl.events.constants.EventKeys;
 import com.mapbox.services.android.location.LostLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
@@ -366,8 +376,8 @@ public class RCTMGLMapView extends MapView implements
 
     //region Methods
 
-    public void setCamera(ReadableMap args) {
-        final IEvent event = new MapChangeEvent(this, EventTypes.SET_CAMERA_COMPLETE);
+    public void setCamera(String callbackID, ReadableMap args) {
+        IEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
         final SimpleEventCallback callback = new SimpleEventCallback(mManager, event);
 
         // remove any current camera updates
@@ -457,11 +467,26 @@ public class RCTMGLMapView extends MapView implements
         }
         // Gesture settings
         UiSettings uiSettings = mMap.getUiSettings();
-        uiSettings.setScrollGesturesEnabled(mScrollEnabled);
-        uiSettings.setTiltGesturesEnabled(mPitchEnabled);
-        uiSettings.setRotateGesturesEnabled(mRotateEnabled);
-        uiSettings.setAttributionEnabled(mAttributionEnabled);
-        uiSettings.setLogoEnabled(mLogoEnabled);
+
+        if (uiSettings.isRotateGesturesEnabled() != mScrollEnabled) {
+            uiSettings.setScrollGesturesEnabled(mScrollEnabled);
+        }
+
+        if (uiSettings.isTiltGesturesEnabled() != mPitchEnabled) {
+            uiSettings.setTiltGesturesEnabled(mPitchEnabled);
+        }
+
+        if (uiSettings.isRotateGesturesEnabled() != mRotateEnabled) {
+            uiSettings.setRotateGesturesEnabled(mRotateEnabled);
+        }
+
+        if (uiSettings.isAttributionEnabled() != mAttributionEnabled) {
+            uiSettings.setAttributionEnabled(mAttributionEnabled);
+        }
+
+        if (uiSettings.isLogoEnabled() != mLogoEnabled) {
+            uiSettings.setLogoEnabled(mLogoEnabled);
+        }
     }
 
     private void setMinMaxZoomLevels() {

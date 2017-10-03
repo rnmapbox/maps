@@ -44,10 +44,18 @@ public class RCTMGLShapeSource extends  RCTSource<GeoJsonSource> {
 
     public void setURL(URL url) {
         mURL = url;
+
+        if (mSource != null) {
+            ((GeoJsonSource) mSource).setUrl(mURL);
+        }
     }
 
     public void setShape(String geoJSONStr) {
         mShape = geoJSONStr;
+
+        if (mSource != null) {
+            ((GeoJsonSource) mSource).setGeoJson(mShape);
+        }
     }
 
     public void setCluster(boolean cluster) {

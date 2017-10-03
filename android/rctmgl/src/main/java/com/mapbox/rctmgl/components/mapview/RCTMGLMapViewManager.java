@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -101,9 +102,19 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         mapView.setReactPitchEnabled(pitchEnabled);
     }
 
+    @ReactProp(name="rotateEnabled")
+    public void setRotateEnabled(RCTMGLMapView mapView, boolean rotateEnabled) {
+        mapView.setReactRotateEnabled(rotateEnabled);
+    }
+
     @ReactProp(name="attributionEnabled")
     public void setAttributionEnabled(RCTMGLMapView mapView, boolean attributionEnabled) {
         mapView.setReactAttributionEnabled(attributionEnabled);
+    }
+
+    @ReactProp(name="logoEnabled")
+    public void setLogoEnabled(RCTMGLMapView mapView, boolean logoEnabled) {
+        mapView.setReactLogoEnabled(logoEnabled);
     }
 
     @ReactProp(name="heading")
@@ -159,6 +170,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                 .put(EventKeys.MAP_CLICK, "onPress")
                 .put(EventKeys.MAP_LONG_CLICK,"onLongPress")
                 .put(EventKeys.MAP_ONCHANGE, "onMapChange")
+                .put(EventKeys.MAP_ANDROID_CALLBACK, "onAndroidCallback")
                 .build();
     }
 
@@ -180,7 +192,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     public void receiveCommand(RCTMGLMapView mapView, int commandID, @Nullable ReadableArray args) {
         switch (commandID) {
             case METHOD_SET_CAMERA:
-                mapView.setCamera(args.getMap(0));
+                mapView.setCamera(args.getString(0), args.getMap(1));
                 break;
         }
     }
