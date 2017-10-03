@@ -49,8 +49,9 @@ class FlyTo extends React.Component {
     this.onFlyToComplete = this.onFlyToComplete.bind(this);
   }
 
-  onFlyToPress (i, coordinates) {
-    this.map.flyTo(coordinates, 6000);
+  async onFlyToPress (i, coordinates) {
+    await this.map.flyTo(coordinates, 6000);
+    this.onFlyToComplete();
   }
 
   onFlyToComplete () {
@@ -63,7 +64,6 @@ class FlyTo extends React.Component {
         <MapboxGL.MapView
             zoomLevel={16}
             pitch={45}
-            onSetCameraComplete={this.onFlyToComplete}
             centerCoordinate={FlyTo.SF_OFFICE_LOCATION}
             ref={(ref) => this.map = ref}
             style={sheet.matchParent}>
