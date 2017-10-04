@@ -30,8 +30,6 @@
 @property (nonatomic, copy) NSNumber *maxZoomLevel;
 @property (nonatomic, copy) NSNumber *minZoomLevel;
 
-+ (NSSet<NSString*>*)FILTER_OPS;
-
 - (void)addToMap:(MGLStyle*)style;
 - (void)removeFromMap:(MGLStyle*)style;
 - (T)makeLayer:(MGLStyle*)style;

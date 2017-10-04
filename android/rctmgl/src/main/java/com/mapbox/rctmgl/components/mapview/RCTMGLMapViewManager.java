@@ -12,6 +12,8 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Point;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -179,12 +181,16 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     //region React Methods
 
     public static final int METHOD_SET_CAMERA = 1;
+    public static final int METHOD_QUERY_FEATURES_POINT = 2;
+    public static final int METHOD_QUERY_FEATURES_RECT = 3;
 
     @Nullable
     @Override
     public Map<String, Integer> getCommandsMap() {
         return MapBuilder.<String, Integer>builder()
                 .put("setCamera", METHOD_SET_CAMERA)
+                .put("queryRenderedFeaturesAtPoint", METHOD_QUERY_FEATURES_POINT)
+                .put("queryRenderedFeaturesInRect", METHOD_QUERY_FEATURES_RECT)
                 .build();
     }
 
@@ -193,6 +199,20 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         switch (commandID) {
             case METHOD_SET_CAMERA:
                 mapView.setCamera(args.getString(0), args.getMap(1));
+                break;
+            case METHOD_QUERY_FEATURES_POINT:
+                mapView.queryRenderedFeaturesAtPoint(
+                        args.getString(0),
+                        ConvertUtils.toPointF(args.getArray(1)),
+                        Arrays.asList(args.getString(2).split(";")),
+                        ConvertUtils.toStringList(args.getArray(3)));
+                break;
+            case METHOD_QUERY_FEATURES_RECT:
+                mapView.queryRenderedFeaturesInRect(
+                        args.getString(0),
+                        ConvertUtils.toRectF(args.getArray(1)),
+                        Arrays.asList(args.getString(2).split(";")),
+                        ConvertUtils.toStringList(args.getArray(3)));
                 break;
         }
     }

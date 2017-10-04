@@ -1,6 +1,7 @@
 /* eslint react/prop-types:0  */
 import React from 'react';
 import MapboxStyleSheet from '../utils/MapboxStyleSheet';
+import { getFilter } from '../utils';
 
 class AbstractLayer extends React.Component {
   get baseProps () {
@@ -13,27 +14,8 @@ class AbstractLayer extends React.Component {
       aboveLayerID: this.props.aboveLayerID,
       belowLayerID: this.props.belowLayerID,
       layerIndex: this.props.layerIndex,
-      filter: this.getFilter(),
+      filter: getFilter(this.props.filter),
     };
-  }
-
-  getFilter () {
-    if (!this.props.filter) {
-      return;
-    }
-
-    let flattenedFilter = [];
-    for (let i = 0; i < this.props.filter.length; i++) {
-      const item = this.props.filter[i];
-
-      if (Array.isArray(item)) {
-        flattenedFilter = flattenedFilter.concat(item);
-      } else {
-        flattenedFilter.push(item);
-      }
-    }
-
-    return flattenedFilter.join(';');
   }
 
   getStyle () {

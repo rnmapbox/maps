@@ -1,11 +1,16 @@
 package com.mapbox.rctmgl.utils;
 
+import android.graphics.PointF;
+import android.graphics.RectF;
+
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+import com.mapbox.mapboxsdk.style.layers.Filter;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Point;
@@ -13,6 +18,7 @@ import com.mapbox.services.commons.models.Position;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -88,5 +94,41 @@ public class ConvertUtils {
         }
 
         return str;
+    }
+
+    public static List<String> toStringList(ReadableArray array) {
+        List<String> list = new ArrayList<>();
+
+        if (array == null) {
+            return list;
+        }
+
+        for (int i = 0; i < array.size(); i++) {
+            list.add(array.getString(i));
+        }
+
+        return list;
+    }
+
+    public static PointF toPointF(ReadableArray array) {
+        PointF pointF = new PointF();
+
+        if (array == null) {
+            return pointF;
+        }
+
+        pointF.set((float)array.getDouble(0), (float)array.getDouble(1));
+        return pointF;
+    }
+
+    public static RectF toRectF(ReadableArray array) {
+        RectF rectF = new RectF();
+
+        if (array == null) {
+            return rectF;
+        }
+
+        rectF.set((float)array.getDouble(3), (float)array.getDouble(0), (float)array.getDouble(1), (float)array.getDouble(2));
+        return rectF;
     }
 }

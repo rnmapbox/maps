@@ -68,3 +68,22 @@ export function getIOSModuleName (moduleName) {
 export function toJSONString (json = '') {
   return JSON.stringify(json);
 }
+
+export function getFilter (filter) {
+  if (!filter) {
+    return '';
+  }
+
+  let flattenedFilter = [];
+  for (let i = 0; i < filter.length; i++) {
+    const item = filter[i];
+
+    if (Array.isArray(item)) {
+      flattenedFilter = flattenedFilter.concat(item);
+    } else {
+      flattenedFilter.push(item);
+    }
+  }
+
+  return flattenedFilter.join(';');
+}

@@ -63,6 +63,12 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
 
     @Override
     public void removeFromMap(RCTMGLMapView mapView) {
+        if (mLayers.size() > 0) {
+            for (int i = 0; i < mLayers.size(); i++) {
+                RCTLayer layer = mLayers.get(mLayers.keyAt(i));
+                layer.removeFromMap(mMapView);
+            }
+        }
         mMap.removeSource(mSource);
     }
 

@@ -7,6 +7,7 @@
 //
 
 #import "ViewManager.h"
+@import Mapbox;
 
 @interface RCTMGLMapViewManager : ViewManager
 
