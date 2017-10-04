@@ -8,6 +8,7 @@ import {
   isNumber,
   runNativeCommand,
   toJSONString,
+  getFilter,
   IS_ANDROID,
 } from '../utils';
 
@@ -217,33 +218,52 @@ class MapView extends React.Component {
   }
 
   /**
-   * [queryMapFeatures description]
-   * @return {[type]} [description]
+   * [queryRenderedFeaturesAtPoint description]
+   * @param  {Array<Number>} coordinate - coordinate
+   * @param  {Array<String>} filter - filter
+   * @param  {Array<String>} layerIDs - layerIDs
+   * @return {FeatureCollection}
    */
-  queryMapFeatures (geometry, filters, layerIDs) {
-    let args = [
-      geometry,
-      filters || [],
-      layerIDs || [],
-    ];
-
-    if (IS_ANDROID) {
-      return new Promise ((resolve, reject) => {
-        const callbackID = Date.now();
-
-        const callbacks = {
-          success: (features) => resolve(features),
-          failure: (err) => reject(err),
-        };
-
-        this._callbackMap.set(callbackID, callbacks);
-
-        args.unshift(callbackID);
-        runNativeCommand(NATIVE_MODULE_NAME, 'queryMapFeatures', args);
-      });
+  async queryRenderedFeaturesAtPoint (coordinate, filter = [], layerIDs = []) {
+    if (!coordinate || coordinate.length < 2) {
+      throw new Error('Must pass in valid coordinate[lng, lat]');
     }
 
-    return runNativeCommand(NATIVE_MODULE_NAME, 'queryMapFeatures', args);
+    const res = await this._runNativeCommand('queryRenderedFeaturesAtPoint', [
+      coordinate,
+      getFilter(filter),
+      layerIDs,
+    ]);
+
+    if (IS_ANDROID) {
+      return JSON.parse(res.data);
+    }
+
+    return res.data;
+  }
+
+  /**
+   * [queryRenderedFeaturesInRect description]
+   * @param  {Array<Number>} bbox     [description]
+   * @param  {Array<String>} filters  [description]
+   * @param  {Array<String>} layerIDs [description]
+   * @return {FeatureCollection}
+   */
+  async queryRenderedFeaturesInRect (bbox, filter = [], layerIDs = []) {
+    if (!bbox || bbox.length !== 4) {
+      throw new Error('Must pass in a valid bounding box[top, right, bottom, left]');
+    }
+    const res = await this._runNativeCommand('queryRenderedFeaturesInRect', [
+      bbox,
+      getFilter(filter),
+      layerIDs,
+    ]);
+
+    if (IS_ANDROID) {
+      return JSON.parse(res.data);
+    }
+
+    return res.data;
   }
 
   /**
@@ -354,18 +374,19 @@ class MapView extends React.Component {
       cameraConfig = this._createStopConfig(config);
     }
 
-    let args = [cameraConfig];
+    return this._runNativeCommand('setCamera', [cameraConfig]);
+  }
 
+  _runNativeCommand (methodName, args) {
     if (IS_ANDROID) {
-      return new Promise((resolve) => {
+      return new Promise ((resolve) => {
         const callbackID = '' + Date.now();
         this._addAddAndroidCallback(callbackID, resolve);
         args.unshift(callbackID);
-        runNativeCommand(NATIVE_MODULE_NAME, 'setCamera', this._nativeRef, args);
+        runNativeCommand(NATIVE_MODULE_NAME, methodName, this._nativeRef, args);
       });
     }
-
-    return runNativeCommand(NATIVE_MODULE_NAME, 'setCamera', this._nativeRef, args);
+    return runNativeCommand(NATIVE_MODULE_NAME, methodName, this._nativeRef, args);
   }
 
   _createStopConfig (config = {}) {
@@ -399,7 +420,7 @@ class MapView extends React.Component {
   }
 
   _onAndroidCallback (e) {
-    const callbackID = e.type;
+    const callbackID = e.nativeEvent.type;
     const callback = this._callbackMap.get(callbackID);
 
     if (!callback) {
@@ -407,7 +428,7 @@ class MapView extends React.Component {
     }
 
     this._callbackMap.delete(callbackID);
-    callback.apply(null, e.payload);
+    callback.call(null, e.nativeEvent.payload);
   }
 
   _onPress (e) {

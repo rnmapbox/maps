@@ -16,6 +16,7 @@
 #import "RCTMGLUtils.h"
 #import "CameraStop.h"
 #import "CameraUpdateQueue.h"
+#import "FilterParser.h"
 
 @interface RCTMGLMapViewManager() <MGLMapViewDelegate>
 @end
@@ -68,6 +69,72 @@ RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMapChange, RCTBubblingEventBlock)
 
 #pragma mark - React Methods
+
+RCT_EXPORT_METHOD(queryRenderedFeaturesAtPoint:(nonnull NSNumber*)reactTag
+                  atPoint:(NSArray<NSNumber*>*)point
+                  withFilter:(NSString*)filter
+                  withLayerIDs:(NSArray<NSString*>*)layerIDs
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        
+        if (![view isKindOfClass:[RCTMGLMapView class]]) {
+            RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
+            return;
+        }
+        
+        RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
+        NSArray<id<MGLFeature>> *shapes = [reactMapView visibleFeaturesAtPoint:CGPointMake([point[0] floatValue], [point[1] floatValue])
+                                                       inStyleLayersWithIdentifiers:[NSSet setWithArray:layerIDs]
+                                                       predicate:[FilterParser parse:filter]];
+        
+        NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] init];
+        for (int i = 0; i < shapes.count; i++) {
+            [features addObject:shapes[i].geoJSONDictionary];
+        }
+
+        resolve(@{
+          @"data": @{ @"type": @"FeatureCollection", @"features": features }
+        });
+    }];
+}
+
+RCT_EXPORT_METHOD(queryRenderedFeaturesInRect:(nonnull NSNumber*)reactTag
+                  withBBox:(NSArray<NSNumber*>*)bbox
+                  withFilter:(NSString*)filter
+                  withLayerIDs:(NSArray<NSString*>*)layerIDs
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        
+        if (![view isKindOfClass:[RCTMGLMapView class]]) {
+            RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
+            return;
+        }
+        
+        RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
+        
+        // bbox[top, right, bottom, left]
+        CGFloat width = [bbox[1] floatValue] - [bbox[3] floatValue];
+        CGFloat height = [bbox[0] floatValue] - [bbox[2] floatValue];
+        CGRect rect = CGRectMake([bbox[3] floatValue], [bbox[2] floatValue], width, height);
+        
+        NSArray<id<MGLFeature>> *shapes = [reactMapView visibleFeaturesInRect:rect
+                                                  inStyleLayersWithIdentifiers:[NSSet setWithArray:layerIDs]
+                                                                     predicate:[FilterParser parse:filter]];
+        
+        NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] init];
+        for (int i = 0; i < shapes.count; i++) {
+            [features addObject:shapes[i].geoJSONDictionary];
+        }
+        
+        resolve(@{ @"data": @{ @"type": @"FeatureCollection", @"features": features }});
+    }];
+}
 
 RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
                   withConfiguration:(nonnull NSDictionary*)config

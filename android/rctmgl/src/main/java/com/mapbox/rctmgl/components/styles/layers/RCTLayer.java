@@ -14,6 +14,7 @@ import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 import com.mapbox.rctmgl.utils.ConvertUtils;
 import com.mapbox.rctmgl.utils.DownloadMapImageTask;
+import com.mapbox.rctmgl.utils.FilterParser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -205,117 +206,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
     }
 
     protected Filter.Statement buildFilter() {
-        Filter.Statement completeStatement = null;
-
-        int compound = 0;
-
-        if (mFilter == null) {
-            return null;
-        }
-
-        // we are going to be popping items of the list, we want to treat the react prop as immutable
-        List<String> filterList = new ArrayList<>(mFilter);
-
-        // no filter
-        if (filterList.isEmpty()) {
-            return null;
-        }
-
-        // peak ahead to see if this is a compound filter or not
-        switch (filterList.get(0)) {
-            case "all":
-                compound = COMPOUND_FILTER_ALL;
-                break;
-            case "any":
-                compound = COMPOUND_FILTER_ANY;
-                break;
-            case "none":
-                compound = COMPOUND_FILTER_NONE;
-                break;
-        }
-
-        List<Filter.Statement> compoundStatement = new ArrayList<>();
-
-        if (compound > 0) {
-            filterList.remove(0);
-        }
-
-        while (!filterList.isEmpty()) {
-
-            int posPointer = 1;
-
-            while (posPointer < filterList.size()) {
-                if (FILTER_OPS.contains(filterList.get(posPointer))) {
-                    break;
-                }
-                posPointer++;
-            }
-
-            // TODO: throw useful exceptions here when popping from list fails due to an invalid filter
-
-            List<String> currentFilters = new ArrayList<>(filterList.subList(0, posPointer));
-            filterList.removeAll(currentFilters);
-
-            String op = currentFilters.remove(0);
-            Filter.Statement statement = null;
-            String key = currentFilters.remove(0);
-            List<Object> values = getFilterValues(currentFilters);
-
-            switch (op) {
-                case "in":
-                    statement = Filter.in(key, values);
-                    break;
-                case "!in":
-                    statement = Filter.notIn(key, values);
-                    break;
-                case "<=":
-                    statement = Filter.lte(key, values.get(0));
-                    break;
-                case "<":
-                    statement = Filter.lt(key, values.get(0));
-                    break;
-                case ">=":
-                    statement = Filter.gte(key, values.get(0));
-                    break;
-                case ">":
-                    statement = Filter.gt(key, values.get(0));
-                    break;
-                case "!=":
-                    statement = Filter.neq(key, values.get(0));
-                    break;
-                case "==":
-                    statement = Filter.eq(key, values.get(0));
-                    break;
-                case "has":
-                    statement = Filter.has(key);
-                    break;
-                case "!has":
-                    statement = Filter.notHas(key);
-                    break;
-            }
-
-            if (compound > 0) {
-                compoundStatement.add(statement);
-            } else {
-                completeStatement = statement;
-            }
-        }
-
-        if (compound > 0) {
-            Filter.Statement[] statements = new Filter.Statement[compoundStatement.size()];
-            compoundStatement.toArray(statements);
-
-            switch (compound) {
-                case COMPOUND_FILTER_ALL:
-                    return Filter.all(statements);
-                case COMPOUND_FILTER_ANY:
-                    return Filter.any(statements);
-                case COMPOUND_FILTER_NONE:
-                    return Filter.none(statements);
-            }
-        }
-
-        return completeStatement;
+        return FilterParser.parse(mFilter);
     }
 
     @Override
@@ -343,15 +234,5 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
 
     private boolean hasInitialized() {
         return mMap != null && mLayer != null;
-    }
-
-    private List<Object> getFilterValues(List<String> filter) {
-        List<Object> objects = new ArrayList<>();
-
-        for (String value : filter) {
-            objects.add(ConvertUtils.getObjectFromString(value));
-        }
-
-        return objects;
     }
 }

@@ -3,6 +3,7 @@ package com.mapbox.rctmgl.components.mapview;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.graphics.drawable.Icon;
 import android.location.Location;
 import android.os.Handler;
@@ -32,14 +33,18 @@ import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.camera.CameraStop;
 import com.mapbox.rctmgl.components.camera.CameraUpdateQueue;
+import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
 import com.mapbox.rctmgl.components.styles.light.RCTMGLLight;
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 import com.mapbox.rctmgl.events.AndroidCallbackEvent;
 import com.mapbox.rctmgl.events.constants.EventKeys;
+import com.mapbox.rctmgl.utils.FilterParser;
 import com.mapbox.services.android.location.LostLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
+import com.mapbox.services.commons.geojson.Feature;
+import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Point;
 
 import com.mapbox.rctmgl.events.IEvent;
@@ -48,6 +53,8 @@ import com.mapbox.rctmgl.events.MapClickEvent;
 import com.mapbox.rctmgl.events.constants.EventTypes;
 import com.mapbox.rctmgl.utils.ConvertUtils;
 import com.mapbox.rctmgl.utils.SimpleEventCallback;
+
+import java.util.List;
 
 /**
  * Created by nickitaliano on 8/18/17.
@@ -406,6 +413,28 @@ public class RCTMGLMapView extends MapView implements
         if (mMap != null) {
             mCameraUpdateQueue.execute(mMap);
         }
+    }
+
+    public void queryRenderedFeaturesAtPoint(String callbackID, PointF point, List<String> filter, List<String> layerIDs) {
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
+        List<Feature> features = mMap.queryRenderedFeatures(point, FilterParser.parse(filter), layerIDs.toArray(new String[layerIDs.size()]));
+
+        WritableMap payload = new WritableNativeMap();
+        payload.putString("data", FeatureCollection.fromFeatures(features).toJson());
+        event.setPayload(payload);
+
+        mManager.handleEvent(event);
+    }
+
+    public void queryRenderedFeaturesInRect(String callbackID, RectF rect, List<String> filter, List<String> layerIDs) {
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
+        List<Feature> features = mMap.queryRenderedFeatures(rect, FilterParser.parse(filter), layerIDs.toArray(new String[layerIDs.size()]));
+
+        WritableMap payload = new WritableNativeMap();
+        payload.putString("data", FeatureCollection.fromFeatures(features).toJson());
+        event.setPayload(payload);
+
+        mManager.handleEvent(event);
     }
 
     //endregion

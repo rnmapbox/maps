@@ -32,12 +32,15 @@ import FlyTo from './components/FlyTo';
 import FitBounds from './components/FitBounds';
 import SetUserTrackingModes from './components/SetUserTrackingModes';
 import ShowRegionDidChange from './components/ShowRegionDidChange';
+import CustomIcon from './components/CustomIcon';
 import YoYo from './components/YoYo';
 import EarthQuakes from './components/EarthQuakes';
 import GeoJSONSource from './components/GeoJSONSource';
 import WatercolorRasterTiles from './components/WatercolorRasterTiles';
 import TwoByTwo from './components/TwoByTwo';
 import IndoorBuilding from './components/IndoorBuilding';
+import QueryAtPoint from './components/QueryAtPoint';
+import QueryWithRect from './components/QueryWithRect';
 
 const styles = StyleSheet.create({
   header: {
@@ -84,12 +87,15 @@ const Examples = [
   new ExampleItem('Fit Bounds', FitBounds),
   new ExampleItem('Set User Tracking Modes', SetUserTrackingModes),
   new ExampleItem('Show Region Did Change', ShowRegionDidChange),
+  new ExampleItem('Custom Icon', CustomIcon),
   new ExampleItem('Yo Yo Camera', YoYo),
   new ExampleItem('Clustering Earthquakes', EarthQuakes),
   new ExampleItem('GeoJSON Source', GeoJSONSource),
   new ExampleItem('Watercolor Raster Tiles', WatercolorRasterTiles),
   new ExampleItem('Two Map Views', TwoByTwo),
   new ExampleItem('Indoor Building Map', IndoorBuilding),
+  new ExampleItem('Query Feature Point', QueryAtPoint),
+  new ExampleItem('Query Features Bounding Box', QueryWithRect),
 ];
 
 class App extends React.Component {
