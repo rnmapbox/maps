@@ -25,7 +25,11 @@ public class CameraStop {
     private LatLng mLatLng;
 
     private LatLngBounds mBounds;
-    private int mBoundsPadding = 0;
+    private int mBoundsPaddingLeft = 0;
+    private int mBoundsPaddingRight = 0;
+    private int mBoundsPaddingBottom = 0;
+    private int mBooundsPaddingTop = 0;
+
     private int mMode = CameraMode.EASE;
     private int mDuration = 2000;
     private MapboxMap.CancelableCallback mCallback;
@@ -56,9 +60,12 @@ public class CameraStop {
         mCallback = callback;
     }
 
-    public void setBounds(LatLngBounds bounds, int padding) {
+    public void setBounds(LatLngBounds bounds, int paddingLeft, int paddingRight, int paddingTop, int paddingBottom) {
         mBounds = bounds;
-        mBoundsPadding = padding;
+        mBoundsPaddingLeft = paddingLeft;
+        mBoundsPaddingRight = paddingRight;
+        mBooundsPaddingTop = paddingTop;
+        mBoundsPaddingBottom = paddingBottom;
     }
 
     public void setMode(@CameraMode.Mode int mode) {
@@ -67,7 +74,8 @@ public class CameraStop {
 
     public CameraUpdateItem toCameraUpdate() {
         if (mBounds != null) {
-            CameraUpdate update = CameraUpdateFactory.newLatLngBounds(mBounds, mBoundsPadding);
+            CameraUpdate update = CameraUpdateFactory.newLatLngBounds(mBounds, mBoundsPaddingLeft,
+                    mBooundsPaddingTop, mBoundsPaddingRight, mBoundsPaddingBottom);
             return new CameraUpdateItem(update, mDuration, mCallback, CameraMode.FLIGHT);
         }
 
@@ -117,9 +125,14 @@ public class CameraStop {
         }
 
         if (readableMap.hasKey("bounds")) {
-            int padding = readableMap.hasKey("boundsPadding") ? readableMap.getInt("boundsPadding") : 0;
+            int paddingTop = getBoundsPaddingByKey(readableMap, "boundsPaddingTop");
+            int paddingRight = getBoundsPaddingByKey(readableMap, "boundsPaddingRight");
+            int paddingBottom = getBoundsPaddingByKey(readableMap, "boundsPaddingBottom");
+            int paddingLeft = getBoundsPaddingByKey(readableMap, "boundsPaddingLeft");
+
             FeatureCollection collection = FeatureCollection.fromJson(readableMap.getString("bounds"));
-            stop.setBounds(ConvertUtils.toLatLngBounds(collection), padding);
+            stop.setBounds(ConvertUtils.toLatLngBounds(collection), paddingLeft, paddingRight,
+                    paddingTop, paddingBottom);
         }
 
         if (readableMap.hasKey("mode")) {
@@ -137,5 +150,9 @@ public class CameraStop {
 
         stop.setCallback(callback);
         return stop;
+    }
+
+    private static int getBoundsPaddingByKey(ReadableMap map, String key) {
+        return map.hasKey(key) ? map.getInt(key) : 0;
     }
 }

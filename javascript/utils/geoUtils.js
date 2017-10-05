@@ -1,7 +1,7 @@
 import turfHelpers from '@turf/helpers';
 
-export function makePoint (coordinates) {
-  return turfHelpers.point(coordinates);
+export function makePoint (coordinates, properties) {
+  return turfHelpers.point(coordinates, properties);
 }
 
 export function makeLatLngBounds (northEastCoordinates, southWestCoordinates) {
@@ -9,4 +9,18 @@ export function makeLatLngBounds (northEastCoordinates, southWestCoordinates) {
     turfHelpers.point(northEastCoordinates),
     turfHelpers.point(southWestCoordinates),
   ]);
+}
+
+export function makeFeature(geometry, properties) {
+  return turfHelpers.feature(geometry, properties);
+}
+
+export function makeFeatureCollection (features = []) {
+  return turfHelpers.featureCollection(features);
+}
+
+export function addToFeatureCollection (featureCollection, feature) {
+  let shallowFeatureCollection = Object.assign({}, featureCollection);
+  featureCollection.features.push(feature);
+  return featureCollection;
 }

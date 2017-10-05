@@ -39,6 +39,36 @@
 | onSetCameraComplete | `func` | `none` | `false` | This event is triggered once the camera is finished after calling setCamera |
 
 ### methods
+#### queryRenderedFeaturesAtPoint(coordinate[, filter][, layerIDs])
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `coordinate` | `Array` | `Yes` | A point expressed in the map view’s coordinate system. |
+| `filter` | `Array` | `No` | A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array. |
+| `layerIDs` | `Array` | `No` | A array of layer id's to filter the features by |
+
+
+
+```javascript
+this._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1', 'id2'])
+```
+
+
+#### queryRenderedFeaturesInRect(bbox[, filter][, layerIDs])
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `bbox` | `Array` | `Yes` | A rectangle expressed in the map view’s coordinate system. |
+| `filter` | `Array` | `No` | A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array. |
+| `layerIDs` | `Array` | `No` |  A array of layer id's to filter the features by |
+
+
+
+```javascript
+this._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])
+```
+
+
 #### fitBounds(northEastCoordinates, southWestCoordinates[, padding][, duration])
 ##### arguments
 | Name | Type | Required | Description  |
@@ -52,7 +82,9 @@
 
 ```javascript
 this.map.fitBounds([lng, lat], [lng, lat])
-this.map.fitBounds([lng, lat], [lng, lat], 20, 1000)
+this.map.fitBounds([lng, lat], [lng, lat], 20, 1000) // padding for all sides
+this.map.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)
+this.map.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)
 ```
 
 

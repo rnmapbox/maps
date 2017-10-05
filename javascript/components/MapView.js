@@ -275,7 +275,7 @@ class MapView extends React.Component {
    *
    * @param {Array<Number>} northEastCoordinates - North east coordinate of bound
    * @param {Array<Number>} southWestCoordinates - South west coordinate of bound
-   * @param {Number=} padding - Camera padding for bound
+   * @param {(Number|Array<Number>)=} padding - Camera padding for bound
    * @param {Number=} duration - Duration of camera animation
    * @return {void}
    */
@@ -283,11 +283,38 @@ class MapView extends React.Component {
     if (!this._nativeRef) {
       return;
     }
+
+    let pad = {
+      paddingLeft: 0,
+      paddingRight: 0,
+      paddingTop: 0,
+      paddingBottom: 0,
+    };
+
+    if (Array.isArray(padding)) {
+      if (padding.length === 2) {
+        pad.paddingTop = padding[0];
+        pad.paddingBottom = padding[0];
+        pad.paddingLeft = padding[1];
+        pad.paddingRight = padding[1];
+      } else if (padding.length === 4) {
+        pad.paddingTop = padding[0];
+        pad.paddingRight = padding[1];
+        pad.paddingBottom = padding[2];
+        pad.paddingLeft = padding[3];
+      }
+    } else {
+      pad.paddingLeft = padding;
+      pad.paddingRight = padding;
+      pad.paddingTop = padding;
+      pad.paddingBottom = padding;
+    }
+
     return this.setCamera({
       bounds: {
         ne: northEastCoordinates,
         sw: southWestCoordinates,
-        padding: padding,
+        ...pad,
       },
       duration: duration,
       mode: MapboxGL.CameraModes.Flight,
@@ -403,9 +430,12 @@ class MapView extends React.Component {
     }
 
     if (config.bounds && config.bounds.ne && config.bounds.sw) {
-      const { ne, sw, padding } = config.bounds;
+      const { ne, sw, paddingLeft, paddingRight, paddingTop, paddingBottom } = config.bounds;
       stopConfig.bounds = toJSONString(makeLatLngBounds(ne, sw));
-      stopConfig.boundsPadding = padding;
+      stopConfig.boundsPaddingTop = paddingTop || 0;
+      stopConfig.boundsPaddingRight = paddingRight || 0;
+      stopConfig.boundsPaddingBottom = paddingBottom || 0;
+      stopConfig.boundsPaddingLeft = paddingLeft || 0;
     }
 
     return stopConfig;

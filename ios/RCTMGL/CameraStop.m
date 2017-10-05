@@ -52,8 +52,20 @@
     if (args[@"bounds"]) {
         stop.bounds = [RCTMGLUtils fromFeatureCollection:args[@"bounds"]];
         
-        if (args[@"boundsPadding"]) {
-            stop.boundsPadding = args[@"boundsPadding"];
+        if (args[@"boundsPaddingLeft"]) {
+            stop.boundsPaddingLeft = args[@"boundsPaddingLeft"];
+        }
+        
+        if (args[@"boundsPaddingRight"]) {
+            stop.boundsPaddingRight = args[@"boundsPaddingRight"];
+        }
+        
+        if (args[@"boundsPaddingTop"]) {
+            stop.boundsPaddingTop = args[@"boundsPaddingTop"];
+        }
+        
+        if (args[@"boundsPaddingBottom"]) {
+            stop.boundsPaddingBottom = args[@"boundsPaddingBottom"];
         }
     }
     

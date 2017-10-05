@@ -47,7 +47,10 @@
 - (void)_fitBoundsCamera:(RCTMGLMapView*)mapView withCompletionHandler:(void (^)(void))completionHandler
 {
     MGLCoordinateBounds bounds = _cameraStop.bounds;
-    CGFloat padding = [_cameraStop.boundsPadding floatValue];
+    CGFloat paddingTop = [_cameraStop.boundsPaddingTop floatValue];
+    CGFloat paddingRight = [_cameraStop.boundsPaddingRight floatValue];
+    CGFloat paddingBottom = [_cameraStop.boundsPaddingBottom floatValue];
+    CGFloat paddingLeft = [_cameraStop.boundsPaddingLeft floatValue];
     
     CLLocationCoordinate2D coordinates[] = {
         { bounds.ne.latitude, bounds.sw.longitude },
@@ -55,10 +58,10 @@
         { bounds.sw.latitude, bounds.ne.longitude },
         bounds.ne
     };
-    
+
     [mapView setVisibleCoordinates:coordinates
              count:4
-             edgePadding:UIEdgeInsetsMake(padding, padding, padding, padding)
+             edgePadding:UIEdgeInsetsMake(paddingTop, paddingLeft, paddingBottom, paddingRight)
              direction:mapView.direction
              duration:_cameraStop.duration
              animationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]
