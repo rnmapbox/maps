@@ -9,7 +9,7 @@
 #import "MGLModule.h"
 #import "RCTMGLEventTypes.h"
 #import "CameraMode.h"
-#import "RCTSource.h"
+#import "RCTMGLSource.h"
 @import Mapbox;
 
 @implementation MGLModule

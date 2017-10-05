@@ -7,7 +7,7 @@
 //
 
 #import <React/RCTComponent.h>
-#import "RCTSource.h"
+#import "RCTMGLSource.h"
 #import "RCTMGLLight.h"
 
 @import Mapbox;
@@ -18,7 +18,7 @@
 
 @property (nonatomic, strong) CameraUpdateQueue *cameraUpdateQueue;
 @property (nonatomic, strong) NSMutableArray<id<RCTComponent>> *reactSubviews;
-@property (nonatomic, strong) NSMutableArray<RCTSource*> *sources;
+@property (nonatomic, strong) NSMutableArray<RCTMGLSource*> *sources;
 @property (nonatomic, strong) RCTMGLLight *light;
 
 @property (nonatomic, assign) BOOL animated;

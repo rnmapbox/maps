@@ -6,10 +6,10 @@
 //  Copyright © 2017 Mapbox Inc. All rights reserved.
 //
 
-#import "RCTSource.h"
+#import "RCTMGLSource.h"
 @import Mapbox;
 
-@interface RCTMGLRasterSource : RCTSource
+@interface RCTMGLRasterSource : RCTMGLSource
 
 @property (nonatomic, copy) NSString *url;
 @property (nonatomic, copy) NSString *attribution;

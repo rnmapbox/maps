@@ -6,9 +6,9 @@
 //  Copyright © 2017 Mapbox Inc. All rights reserved.
 //
 
-#import "RCTLayer.h"
+#import "RCTMGLLayer.h"
 @import Mapbox;
 
-@interface RCTMGLRasterLayer : RCTLayer
+@interface RCTMGLRasterLayer : RCTMGLLayer
 
 @end

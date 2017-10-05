@@ -31,10 +31,10 @@ static double const M2PI = M_PI * 2;
 
 - (void) addToMap:(id<RCTComponent>)subview
 {
-    if ([subview isKindOfClass:[RCTSource class]]) {
-        RCTSource *source = (RCTSource*)subview;
+    if ([subview isKindOfClass:[RCTMGLSource class]]) {
+        RCTMGLSource *source = (RCTMGLSource*)subview;
         source.map = self;
-        [_sources addObject:(RCTSource*)subview];
+        [_sources addObject:(RCTMGLSource*)subview];
     } else if ([subview isKindOfClass:[RCTMGLLight class]]) {
         RCTMGLLight *light = (RCTMGLLight*)subview;
         _light = light;
@@ -50,8 +50,8 @@ static double const M2PI = M_PI * 2;
 
 - (void) removeFromMap:(id<RCTComponent>)subview
 {
-    if ([subview isKindOfClass:[RCTSource class]]) {
-        RCTSource *source = (RCTSource*)subview;
+    if ([subview isKindOfClass:[RCTMGLSource class]]) {
+        RCTMGLSource *source = (RCTMGLSource*)subview;
         source.map = nil;
         [_sources removeObject:source];
     } else {

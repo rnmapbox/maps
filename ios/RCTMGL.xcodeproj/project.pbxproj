@@ -28,8 +28,8 @@
 		C4EAF1241F606F7C0016DEE8 /* CameraMode.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF1231F606F7C0016DEE8 /* CameraMode.m */; };
 		C4EAF1271F6083C70016DEE8 /* CameraUpdateItem.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF1261F6083C70016DEE8 /* CameraUpdateItem.m */; };
 		C4EAF12A1F6084920016DEE8 /* CameraUpdateQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF1291F6084920016DEE8 /* CameraUpdateQueue.m */; };
-		C4EAF17D1F6324970016DEE8 /* RCTSource.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF17C1F6324970016DEE8 /* RCTSource.m */; };
-		C4EAF1801F6324A80016DEE8 /* RCTLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF17F1F6324A80016DEE8 /* RCTLayer.m */; };
+		C4EAF17D1F6324970016DEE8 /* RCTMGLSource.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF17C1F6324970016DEE8 /* RCTMGLSource.m */; };
+		C4EAF1801F6324A80016DEE8 /* RCTMGLLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF17F1F6324A80016DEE8 /* RCTMGLLayer.m */; };
 		C4EAF1831F6336E20016DEE8 /* RCTMGLVectorSource.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF1821F6336E20016DEE8 /* RCTMGLVectorSource.m */; };
 		C4EAF1891F633C010016DEE8 /* RCTMGLVectorSourceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF1881F633C010016DEE8 /* RCTMGLVectorSourceManager.m */; };
 		C4EAF18F1F633E020016DEE8 /* RCTMGLFillLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EAF18E1F633E020016DEE8 /* RCTMGLFillLayer.m */; };
@@ -106,10 +106,10 @@
 		C4EAF1261F6083C70016DEE8 /* CameraUpdateItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraUpdateItem.m; sourceTree = "<group>"; };
 		C4EAF1281F6084920016DEE8 /* CameraUpdateQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraUpdateQueue.h; sourceTree = "<group>"; };
 		C4EAF1291F6084920016DEE8 /* CameraUpdateQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraUpdateQueue.m; sourceTree = "<group>"; };
-		C4EAF17B1F6324970016DEE8 /* RCTSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTSource.h; sourceTree = "<group>"; };
-		C4EAF17C1F6324970016DEE8 /* RCTSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTSource.m; sourceTree = "<group>"; };
-		C4EAF17E1F6324A80016DEE8 /* RCTLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTLayer.h; sourceTree = "<group>"; };
-		C4EAF17F1F6324A80016DEE8 /* RCTLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTLayer.m; sourceTree = "<group>"; };
+		C4EAF17B1F6324970016DEE8 /* RCTMGLSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLSource.h; sourceTree = "<group>"; };
+		C4EAF17C1F6324970016DEE8 /* RCTMGLSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLSource.m; sourceTree = "<group>"; };
+		C4EAF17E1F6324A80016DEE8 /* RCTMGLLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLLayer.h; sourceTree = "<group>"; };
+		C4EAF17F1F6324A80016DEE8 /* RCTMGLLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLLayer.m; sourceTree = "<group>"; };
 		C4EAF1811F6336E20016DEE8 /* RCTMGLVectorSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLVectorSource.h; sourceTree = "<group>"; };
 		C4EAF1821F6336E20016DEE8 /* RCTMGLVectorSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLVectorSource.m; sourceTree = "<group>"; };
 		C4EAF1871F633C010016DEE8 /* RCTMGLVectorSourceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLVectorSourceManager.h; sourceTree = "<group>"; };
@@ -304,8 +304,8 @@
 		C4EAF1791F6320AA0016DEE8 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				C4EAF17B1F6324970016DEE8 /* RCTSource.h */,
-				C4EAF17C1F6324970016DEE8 /* RCTSource.m */,
+				C4EAF17B1F6324970016DEE8 /* RCTMGLSource.h */,
+				C4EAF17C1F6324970016DEE8 /* RCTMGLSource.m */,
 				C4EAF1811F6336E20016DEE8 /* RCTMGLVectorSource.h */,
 				C4EAF1821F6336E20016DEE8 /* RCTMGLVectorSource.m */,
 				C4EAF1871F633C010016DEE8 /* RCTMGLVectorSourceManager.h */,
@@ -325,8 +325,8 @@
 		C4EAF17A1F6320B10016DEE8 /* Layers */ = {
 			isa = PBXGroup;
 			children = (
-				C4EAF17E1F6324A80016DEE8 /* RCTLayer.h */,
-				C4EAF17F1F6324A80016DEE8 /* RCTLayer.m */,
+				C4EAF17E1F6324A80016DEE8 /* RCTMGLLayer.h */,
+				C4EAF17F1F6324A80016DEE8 /* RCTMGLLayer.m */,
 				C4EAF18D1F633E020016DEE8 /* RCTMGLFillLayer.h */,
 				C4EAF18E1F633E020016DEE8 /* RCTMGLFillLayer.m */,
 				C4EAF1901F6341520016DEE8 /* RCTMGLFillLayerManager.h */,
@@ -417,7 +417,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4FB12581F79C0270055AE1F /* RCTMGLBackgroundLayer.m in Sources */,
-				C4EAF1801F6324A80016DEE8 /* RCTLayer.m in Sources */,
+				C4EAF1801F6324A80016DEE8 /* RCTMGLLayer.m in Sources */,
 				C4EAF1271F6083C70016DEE8 /* CameraUpdateItem.m in Sources */,
 				C4D144531F4E190C00396F26 /* MGLModule.m in Sources */,
 				C43CA50A1F50C145000B9CB7 /* RCTMGLEvent.m in Sources */,
@@ -450,7 +450,7 @@
 				C4EAF1891F633C010016DEE8 /* RCTMGLVectorSourceManager.m in Sources */,
 				C4FB122D1F7972A00055AE1F /* RCTMGLRasterSource.m in Sources */,
 				C410D5D81F7AD0C100CF822A /* RCTMGLLightManager.m in Sources */,
-				C4EAF17D1F6324970016DEE8 /* RCTSource.m in Sources */,
+				C4EAF17D1F6324970016DEE8 /* RCTMGLSource.m in Sources */,
 				C4FB11131F71EC9F0055AE1F /* RCTMGLSymbolLayerManager.m in Sources */,
 				C4C87A601F844C820064AE95 /* FilterParser.m in Sources */,
 				C4EAF12A1F6084920016DEE8 /* CameraUpdateQueue.m in Sources */,

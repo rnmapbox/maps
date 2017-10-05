@@ -35,8 +35,15 @@ RCT_EXPORT_MODULE(RCTMGLMapView)
     mapView.delegate = self;
 
     // setup map gesture recongizers
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
+    doubleTap.numberOfTapsRequired = 2;
+    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapMap:)];
+    [tap requireGestureRecognizerToFail:doubleTap];
+    
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didLongPressMap:)];
+    
+    [mapView addGestureRecognizer:doubleTap];
     [mapView addGestureRecognizer:tap];
     [mapView addGestureRecognizer:longPress];
     
@@ -263,7 +270,7 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
     
     if (reactMapView.sources.count > 0) {
         for (int i = 0; i < reactMapView.sources.count; i++) {
-            RCTSource *source = reactMapView.sources[i];
+            RCTMGLSource *source = reactMapView.sources[i];
             source.map = reactMapView;
         }
     }

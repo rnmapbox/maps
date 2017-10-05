@@ -6,10 +6,10 @@
 //  Copyright © 2017 Mapbox Inc. All rights reserved.
 //
 
-#import "RCTLayer.h"
+#import "RCTMGLLayer.h"
 @import Mapbox;
 
-@interface RCTMGLLineLayer : RCTLayer
+@interface RCTMGLLineLayer : RCTMGLLayer
 
 @property (nonatomic, copy) NSString *sourceLayerID;
 
