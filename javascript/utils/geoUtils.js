@@ -11,7 +11,7 @@ export function makeLatLngBounds (northEastCoordinates, southWestCoordinates) {
   ]);
 }
 
-export function makeFeature(geometry, properties) {
+export function makeFeature (geometry, properties) {
   return turfHelpers.feature(geometry, properties);
 }
 
@@ -21,6 +21,6 @@ export function makeFeatureCollection (features = []) {
 
 export function addToFeatureCollection (featureCollection, feature) {
   let shallowFeatureCollection = Object.assign({}, featureCollection);
-  featureCollection.features.push(feature);
+  shallowFeatureCollection.features.push(feature);
   return featureCollection;
 }
