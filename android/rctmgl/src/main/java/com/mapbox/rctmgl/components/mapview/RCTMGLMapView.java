@@ -29,6 +29,7 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.UiSettings;
+import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerMode;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.camera.CameraStop;
@@ -358,24 +359,20 @@ public class RCTMGLMapView extends MapView implements
     public void setReactShowUserLocation(boolean showUserLocation) {
         mShowUserLocation = showUserLocation;
 
-        if (mLocationEngine != null) {
-            // deactive location engine if we are hiding the location layer
-            if (!mShowUserLocation) {
+        if (mMap != null) {
+            if (mLocationEngine != null && !mShowUserLocation) {
                 mLocationEngine.deactivate();
                 return;
             }
-
-            if (mMap != null) {
-                enableLocationLayer();
-            }
+            enableLocationLayer();
         }
     }
 
     public void setReactUserTrackingMode(int userTrackingMode) {
         mUserTrackingMode = userTrackingMode;
 
-        if (mLocationLayer != null) {
-            mLocationLayer.setLocationLayerEnabled(mUserTrackingMode);
+        if (mMap != null) {
+            enableLocationLayer();
         }
     }
 
@@ -452,6 +449,9 @@ public class RCTMGLMapView extends MapView implements
 
     @Override
     public void onLocationChanged(Location location) {
+        if (mUserTrackingMode == LocationLayerMode.NONE) {
+            return;
+        }
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
     }
@@ -545,8 +545,9 @@ public class RCTMGLMapView extends MapView implements
 
         }
 
-        if (mUserTrackingMode != mLocationLayer.getLocationLayerMode()) {
-            mLocationLayer.setLocationLayerEnabled(mUserTrackingMode);
+        int trackingMode = getLocationLayerTrackingMode();
+        if (trackingMode != mLocationLayer.getLocationLayerMode()) {
+            mLocationLayer.setLocationLayerEnabled(trackingMode);
         }
     }
 
@@ -561,5 +562,17 @@ public class RCTMGLMapView extends MapView implements
         properties.putBoolean("animated", isAnimated);
 
         return ConvertUtils.toPointFeature(latLng, properties);
+    }
+
+    private int getLocationLayerTrackingMode() {
+        if (!mShowUserLocation) {
+            return LocationLayerMode.NONE;
+        }
+
+        if (mUserTrackingMode == LocationLayerMode.NONE) {
+            return LocationLayerMode.TRACKING;
+        }
+
+        return mUserTrackingMode;
     }
 }
