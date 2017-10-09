@@ -1,4 +1,5 @@
-import { NativeModules } from 'react-native';
+import { NativeModules, PermissionsAndroid } from 'react-native';
+import { IS_ANDROID } from './utils';
 import * as geoUtils from './utils/geoUtils';
 
 // components
@@ -21,6 +22,31 @@ import RasterLayer from './components/RasterLayer';
 import BackgroundLayer from './components/BackgroundLayer';
 
 let MapboxGL = { ...NativeModules.MGLModule };
+
+// static methods
+MapboxGL.requestAndroidLocationPermissions = async function () {
+  if (IS_ANDROID) {
+    const res = await PermissionsAndroid.requestMultiple([
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+    ]);
+
+    if (!res) {
+      return false;
+    }
+
+    const permissions = Object.keys(res);
+    for (let permission of permissions) {
+      if (res[permission] === PermissionsAndroid.RESULTS.GRANTED) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  throw new Error('You should only call this method on Android!');
+};
 
 // components
 MapboxGL.MapView = MapView;

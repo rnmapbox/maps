@@ -13,21 +13,16 @@ import com.facebook.react.common.MapBuilder;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerMode;
-import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.rctmgl.components.camera.constants.CameraMode;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleValue;
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
-import com.mapbox.services.android.telemetry.permissions.PermissionsListener;
-import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
+import com.mapbox.rctmgl.events.constants.EventTypes;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
-
-import com.mapbox.rctmgl.events.constants.EventTypes;
 
 /**
  * Created by nickitaliano on 8/18/17.
@@ -242,34 +237,6 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
     public void getAccessToken(Promise promise) {
         WritableMap map = Arguments.createMap();
         map.putString("accessToken", Mapbox.getAccessToken());
-        promise.resolve(map);
-    }
-
-    @ReactMethod
-    public void requestPermissions(final Promise promise) {
-        if (!PermissionsManager.areLocationPermissionsGranted(mReactContext)) {
-            // ask user to grant location permissions
-            PermissionsManager permissionsManager = new PermissionsManager(new PermissionsListener() {
-                @Override
-                public void onExplanationNeeded(List<String> permissionsToExplain) {
-                    // do nothing
-                }
-
-                @Override
-                public void onPermissionResult(boolean granted) {
-                    handlePermissionResponse(promise, granted);
-                }
-            });
-
-            permissionsManager.requestLocationPermissions(getCurrentActivity());
-        } else {
-           handlePermissionResponse(promise, true);
-        }
-    }
-
-    private void handlePermissionResponse(Promise promise, boolean isGranted) {
-        WritableMap map = Arguments.createMap();
-        map.putBoolean("isGranted", isGranted);
         promise.resolve(map);
     }
 }
