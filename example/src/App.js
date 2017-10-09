@@ -43,6 +43,10 @@ import QueryAtPoint from './components/QueryAtPoint';
 import QueryWithRect from './components/QueryWithRect';
 
 const styles = StyleSheet.create({
+  noPermissionsText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
   header: {
     marginTop: 48,
     fontSize: 24,
@@ -103,6 +107,8 @@ class App extends React.Component {
     super(props);
 
     this.state = {
+      isFetchingAndroidPermission: IS_ANDROID,
+      isAndroidPermissionGranted: false,
       activeExample: -1,
     };
 
@@ -112,7 +118,11 @@ class App extends React.Component {
 
   async componentWillMount () {
     if (IS_ANDROID) {
-      await MapboxGL.requestPermissions();
+      const isGranted = await MapboxGL.requestAndroidLocationPermissions();
+      this.setState({
+        isAndroidPermissionGranted: isGranted,
+        isFetchingAndroidPermission: false,
+      });
     }
     MapboxGL.setAccessToken(config.get('accessToken'));
   }
@@ -168,6 +178,19 @@ class App extends React.Component {
   }
 
   render () {
+    if (IS_ANDROID && !this.state.isAndroidPermissionGranted) {
+      if (this.state.isFetchingAndroidPermission) {
+        return null;
+      }
+      return (
+        <View style={sheet.matchParent}>
+          <Text style={styles.noPermissionsText}>
+            You need to accept location permissions in order to use this example applications
+          </Text>
+        </View>
+      );
+    }
+
     return (
       <View style={sheet.matchParent}>
         <MapHeader label="React Native Mapbox GL" />

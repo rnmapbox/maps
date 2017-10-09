@@ -38,7 +38,6 @@ class ShowMap extends React.Component {
       <TabBarPage {...this.props} scrollable options={this._mapOptions} onOptionPress={this.onMapChange}>
         <MapboxGL.MapView
             showUserLocation={true}
-            userTrackingMode={MapboxGL.UserTrackingModes.Follow}
             styleURL={this.state.styleURL}
             style={sheet.matchParent} />
       </TabBarPage>

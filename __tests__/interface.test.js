@@ -52,7 +52,7 @@ describe('Public Interface', () => {
       // methods
       'setAccessToken',
       'getAccessToken',
-      'requestPermissions',
+      'requestAndroidLocationPermissions',
 
       // utils
       'geoUtils',

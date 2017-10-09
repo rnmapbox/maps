@@ -145,7 +145,6 @@ jest.mock('NativeModules', () => {
     // methods
     setAccessToken: jest.fn(),
     getAccessToken: () => Promise.resolve('test-token'),
-    requestPermissions: () => Promise.resolve(true),
   };
 
   return {
