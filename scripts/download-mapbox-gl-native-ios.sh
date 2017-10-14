@@ -10,6 +10,8 @@ if [ "$VERSION" == "$CURRENT_VERSION" ]; then
   exit 0
 fi
 
+echo "Downloading Mapbox GL iOS $VERSION, this may take a minute."
+
 if ! which curl > /dev/null; then echo "curl command not found. Please install curl"; exit 1; fi;
 if ! which unzip > /dev/null; then echo "unzip command not found. Please install unzip"; exit 1; fi;
 
