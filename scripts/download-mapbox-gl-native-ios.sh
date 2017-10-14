@@ -1,9 +1,14 @@
 #!/bin/sh
 
-VERSION=$1
-
-echo "Downloading Mapbox GL iOS $VERSION, this may take a minute."
 cd ios/
+
+VERSION=$1
+CURRENT_VERSION=$(cat .framework_version)
+
+if [ "$VERSION" == "$CURRENT_VERSION" ]; then
+  echo "The newest version is already installed. Exiting."
+  exit 0
+fi
 
 if ! which curl > /dev/null; then echo "curl command not found. Please install curl"; exit 1; fi;
 if ! which unzip > /dev/null; then echo "unzip command not found. Please install unzip"; exit 1; fi;
@@ -22,3 +27,5 @@ rm temp.zip
 if ! [ -d ./Mapbox.framework ]; then
   echo "Mapbox.framework not found. Please reinstall react-native-mapbox-gl"; exit 1;
 fi;
+
+echo "$VERSION" > .framework_version
