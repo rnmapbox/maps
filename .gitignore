@@ -35,6 +35,7 @@ yarn.lock
 # project specific
 ios/Mapbox.framework
 ios/temp.zip
+ios/.framework_version
 android/build/
 android/.gradle/
 android/.idea/
