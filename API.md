@@ -44,6 +44,8 @@ import { MapView } from '@mapbox/react-native-mapbox-gl';
 | `style`  | React styles | Optional | Styles the actual map view container | N/A |
 | `debugActive`  | `boolean` | Optional | Turns on debug mode. | `false` |
 | `children` | `array` | Optional |  An array of custom Annotation views. See [Custom Annotations](#custom-annotations). | null |
+| `minimumZoomLevel` | `number` | Optional | Set minimum zoom level | `0` |
+| `maximumZoomLevel` | `number` | Optional | Set maximum zoom level | `20` |
 
 
 ## Callback props
