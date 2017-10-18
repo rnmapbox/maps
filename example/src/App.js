@@ -41,6 +41,7 @@ import TwoByTwo from './components/TwoByTwo';
 import IndoorBuilding from './components/IndoorBuilding';
 import QueryAtPoint from './components/QueryAtPoint';
 import QueryWithRect from './components/QueryWithRect';
+import ShapeSourceIcon from './components/ShapeSourceIcon';
 
 const styles = StyleSheet.create({
   noPermissionsText: {
@@ -100,6 +101,7 @@ const Examples = [
   new ExampleItem('Indoor Building Map', IndoorBuilding),
   new ExampleItem('Query Feature Point', QueryAtPoint),
   new ExampleItem('Query Features Bounding Box', QueryWithRect),
+  new ExampleItem('Shape Source From Icon', ShapeSourceIcon),
 ];
 
 class App extends React.Component {
