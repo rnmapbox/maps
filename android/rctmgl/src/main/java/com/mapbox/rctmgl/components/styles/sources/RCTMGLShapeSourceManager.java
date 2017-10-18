@@ -2,12 +2,18 @@ package com.mapbox.rctmgl.components.styles.sources;
 
 import android.util.Log;
 
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by nickitaliano on 9/19/17.
@@ -74,5 +80,18 @@ public class RCTMGLShapeSourceManager extends ViewGroupManager<RCTMGLShapeSource
     @ReactProp(name="tolerance")
     public void setTolerance(RCTMGLShapeSource source, double tolerance) {
         source.setTolerance(tolerance);
+    }
+
+    @ReactProp(name="images")
+    public void setImages(RCTMGLShapeSource source, ReadableMap map) {
+        List<Map.Entry<String, String>> images = new ArrayList<>();
+
+        ReadableMapKeySetIterator iterator = map.keySetIterator();
+        while (iterator.hasNextKey()) {
+            String imageName = iterator.nextKey();
+            images.add(new AbstractMap.SimpleEntry<String, String>(imageName, map.getString(imageName)));
+        }
+
+        source.setImages(images);
     }
 }

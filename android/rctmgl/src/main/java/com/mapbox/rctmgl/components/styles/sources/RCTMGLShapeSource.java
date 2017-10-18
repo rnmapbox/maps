@@ -2,14 +2,19 @@ package com.mapbox.rctmgl.components.styles.sources;
 
 import android.content.Context;
 
+import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
+import com.mapbox.rctmgl.utils.DownloadMapImageTask;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Geometry;
 
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by nickitaliano on 9/19/17.
@@ -28,8 +33,29 @@ public class RCTMGLShapeSource extends  RCTSource<GeoJsonSource> {
     private Integer mBuffer;
     private Double mTolerance;
 
+    private List<Map.Entry<String, String>> mImages;
+
     public RCTMGLShapeSource(Context context) {
         super(context);
+    }
+
+    @Override
+    public void addToMap(final RCTMGLMapView mapView) {
+        if (mImages != null && mImages.size() > 0) {
+            MapboxMap map = mapView.getMapboxMap();
+
+            DownloadMapImageTask.OnAllImagesLoaded imagesLoadedCallback = new DownloadMapImageTask.OnAllImagesLoaded() {
+                @Override
+                public void onAllImagesLoaded() {
+                    RCTMGLShapeSource.super.addToMap(mapView);
+                }
+            };
+
+            DownloadMapImageTask task = new DownloadMapImageTask(map, imagesLoadedCallback);
+            task.execute(mImages.toArray(new Map.Entry[mImages.size()]));
+        } else {
+            super.addToMap(mapView);
+        }
     }
 
     @Override
@@ -81,6 +107,10 @@ public class RCTMGLShapeSource extends  RCTSource<GeoJsonSource> {
 
     public void setTolerance(double tolerance) {
         mTolerance = tolerance;
+    }
+
+    public void setImages(List<Map.Entry<String, String>> images) {
+        mImages = images;
     }
 
     private GeoJsonOptions getOptions() {

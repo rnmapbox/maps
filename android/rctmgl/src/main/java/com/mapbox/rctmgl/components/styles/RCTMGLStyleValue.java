@@ -18,6 +18,7 @@ import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
  */
 
 public class RCTMGLStyleValue {
+
     private String mType;
     private ReadableMap mPayload;
 

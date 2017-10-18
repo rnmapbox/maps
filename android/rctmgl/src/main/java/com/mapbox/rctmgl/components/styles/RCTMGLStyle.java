@@ -8,8 +8,10 @@ import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.rctmgl.utils.DownloadMapImageTask;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by nickitaliano on 9/12/17.
@@ -55,10 +57,16 @@ public class RCTMGLStyle {
     }
 
     public void addImage(String uriStr) {
-        if (uriStr == null) {
+        if (uriStr == null || isTokenString(uriStr)) {
             return;
         }
-        DownloadMapImageTask task = new DownloadMapImageTask(uriStr, mMap);
-        task.execute();
+
+        Map.Entry[] images = new Map.Entry[]{ new AbstractMap.SimpleEntry(uriStr, uriStr) };
+        DownloadMapImageTask task = new DownloadMapImageTask(mMap, null);
+        task.execute(images);
+    }
+
+    private boolean isTokenString(String str) {
+        return str.charAt(0) == '{' && str.charAt(str.length() - 1) == '}';
     }
 }
