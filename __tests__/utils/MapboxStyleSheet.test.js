@@ -214,6 +214,30 @@ describe('MapboxStyleSheet', () => {
       },
     });
   });
+
+  it('should add overrides to special case styles', () => {
+    expect(MapboxGL.StyleSheet.create({ textOffset: [2, 2] } )).toEqual({
+      __MAPBOX_STYLESHEET__: true,
+      textOffset: {
+        type: 'constant',
+        payload: {
+          value: [2, 2],
+          iosType: 'vector',
+        },
+      },
+    });
+
+    expect(MapboxGL.StyleSheet.create({ iconOffset: [2, 2] } )).toEqual({
+      __MAPBOX_STYLESHEET__: true,
+      iconOffset: {
+        type: 'constant',
+        payload: {
+          value: [2, 2],
+          iosType: 'vector',
+        },
+      },
+    });
+  });
 });
 
 function verifyStyleSheetsMatch (styles, expectedStyleSheet) {

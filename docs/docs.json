@@ -1485,6 +1485,13 @@
         "type": "number",
         "default": "none",
         "description": "Specifies the Douglas-Peucker simplification tolerance.\nA greater value produces simpler geometries and improves performance.\nThe default value is 0.375."
+      },
+      {
+        "name": "images",
+        "required": false,
+        "type": "object",
+        "default": "none",
+        "description": "-    * Specifies the external images in key-value pairs required for the shape source.\n-"
       }
     ],
     "name": "ShapeSource"

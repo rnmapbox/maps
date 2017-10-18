@@ -73,8 +73,8 @@ class ShapeSource extends React.Component {
     tolerance: PropTypes.number,
 
     /**
-     * Specifies the external images in key-value pairs required for the shape source.
-     */
+-    * Specifies the external images in key-value pairs required for the shape source.
+-    */
     images: PropTypes.object,
   };
 

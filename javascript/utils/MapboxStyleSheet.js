@@ -1,7 +1,7 @@
 import { isUndefined, isPrimitive } from './index';
 import { processColor, NativeModules } from 'react-native';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
-import styleMap, { StyleTypes, StyleFunctionTypes } from './styleMap';
+import styleMap, { StyleTypes, StyleFunctionTypes, styleExtras } from './styleMap';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -80,20 +80,23 @@ class MapStyleFunctionItem extends MapStyleItem {
 function makeStyleValue (prop, value, extras = {}) {
   let item;
 
+  // search for any extras
+  const extraData = Object.assign({}, styleExtras[prop], extras);
+
   if (!isUndefined(value.type) && !isUndefined(value.payload)) { // function
     item = value;
     item.processStops(prop);
   } else if (styleMap[prop] === StyleTypes.Transition) {
-    item = new MapStyleTransitionItem(value.duration, value.delay, extras);
+    item = new MapStyleTransitionItem(value.duration, value.delay, extraData);
   } else if (styleMap[prop] === StyleTypes.Color) {
-    item = new MapStyleColorItem(processColor(value), extras);
+    item = new MapStyleColorItem(processColor(value), extraData);
   } else if (styleMap[prop] === StyleTypes.Translation) {
-    item = new MapStyleTranslationItem(value.x, value.y, extras);
+    item = new MapStyleTranslationItem(value.x, value.y, extraData);
   } else if (styleMap[prop] === StyleTypes.Image) {
     const res = resolveAssetSource(value) || {};
-    item = new MapStyleConstantItem(res.uri || value, { image: true, ...extras });
+    item = new MapStyleConstantItem(res.uri || value, { image: true, ...extraData });
   } else {
-    item = new MapStyleConstantItem(value);
+    item = new MapStyleConstantItem(value, extraData);
   }
 
   return item.toJSON();

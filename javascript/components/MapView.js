@@ -218,10 +218,14 @@ class MapView extends React.Component {
   }
 
   /**
-   * [queryRenderedFeaturesAtPoint description]
-   * @param  {Array<Number>} coordinate - coordinate
-   * @param  {Array<String>} filter - filter
-   * @param  {Array<String>} layerIDs - layerIDs
+   * Returns an array of rendered map features that intersect with a given point.
+   *
+   * @example
+   * this._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1', 'id2'])
+   *
+   * @param  {Array<Number>} coordinate - A point expressed in the map view’s coordinate system.
+   * @param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.
+   * @param  {Array=} layerIDs - A array of layer id's to filter the features by
    * @return {FeatureCollection}
    */
   async queryRenderedFeaturesAtPoint (coordinate, filter = [], layerIDs = []) {
@@ -243,10 +247,15 @@ class MapView extends React.Component {
   }
 
   /**
-   * [queryRenderedFeaturesInRect description]
-   * @param  {Array<Number>} bbox     [description]
-   * @param  {Array<String>} filters  [description]
-   * @param  {Array<String>} layerIDs [description]
+   * Returns an array of rendered map features that intersect with the given rectangle,
+   * restricted to the given style layers and filtered by the given predicate.
+   *
+   * @example
+   * this._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])
+   *
+   * @param  {Array<Number>} bbox - A rectangle expressed in the map view’s coordinate system.
+   * @param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.
+   * @param  {Array=} layerIDs -  A array of layer id's to filter the features by
    * @return {FeatureCollection}
    */
   async queryRenderedFeaturesInRect (bbox, filter = [], layerIDs = []) {
@@ -271,11 +280,13 @@ class MapView extends React.Component {
    *
    * @example
    * this.map.fitBounds([lng, lat], [lng, lat])
-   * this.map.fitBounds([lng, lat], [lng, lat], 20, 1000)
+   * this.map.fitBounds([lng, lat], [lng, lat], 20, 1000) // padding for all sides
+   * this.map.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)
+   * this.map.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)
    *
    * @param {Array<Number>} northEastCoordinates - North east coordinate of bound
    * @param {Array<Number>} southWestCoordinates - South west coordinate of bound
-   * @param {(Number|Array<Number>)=} padding - Camera padding for bound
+   * @param {Number=} padding - Camera padding for bound
    * @param {Number=} duration - Duration of camera animation
    * @return {void}
    */

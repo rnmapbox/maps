@@ -47,6 +47,14 @@
         rawValue = [NSValue valueWithCGVector:[RCTMGLUtils toCGVector:rawValue]];
     }
 
+    // check for overrides that handle special cases like NSArray vs CGVector
+    NSDictionary *iosTypeOverride = self.payload[@"iosType"];
+    if (iosTypeOverride != nil) {
+        if ([iosTypeOverride isEqual:@"vector"]) {
+            rawValue = [NSValue valueWithCGVector:[RCTMGLUtils toCGVector:rawValue]];
+        }
+    }
+    
     id propertyValue = self.payload[@"propertyValue"];
     if (propertyValue != nil) {
         return @{ propertyValue: [MGLStyleValue valueWithRawValue:rawValue] };

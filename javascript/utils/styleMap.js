@@ -1425,4 +1425,13 @@ const styleMap = {
   visibility: StyleTypes.Constant,
 };
 
+export const styleExtras = {
+  iconOffset: {
+    iosType: 'vector',
+  },
+  textOffset: {
+    iosType: 'vector',
+  },
+};
+
 export default styleMap;
