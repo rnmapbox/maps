@@ -23,10 +23,13 @@ RCT_EXPORT_VIEW_PROPERTY(clusterMaxZoom, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(maxZoom, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(buffer, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(tolerance, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(images, NSDictionary)
 
 - (UIView*)view
 {
-    return [RCTMGLShapeSource new];
+    RCTMGLShapeSource *source = [RCTMGLShapeSource new];
+    source.bridge = self.bridge;
+    return source;
 }
 
 @end

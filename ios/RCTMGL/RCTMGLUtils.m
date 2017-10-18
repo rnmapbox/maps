@@ -58,9 +58,49 @@ static double const MS_TO_S = 0.001;
     return CGVectorMake([arr[0] floatValue], [arr[1] floatValue]);
 }
 
-+ (void)fetchImage:(RCTBridge*)bridge url:(NSString *)url callback:(RCTImageLoaderCompletionBlock)callback
++ (dispatch_block_t)fetchImage:(RCTBridge*)bridge url:(NSString *)url callback:(RCTImageLoaderCompletionBlock)callback
 {
-    [bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:url] callback:callback];
+    return [bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:url] callback:callback];
+}
+
++ (void)fetchImages:(RCTBridge *)bridge style:(MGLStyle *)style objects:(NSDictionary<NSString *, NSString *>*)objects callback:(void (^)())callback
+{
+    dispatch_queue_t concurrentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_queue_t mainQueue = dispatch_get_main_queue();
+    
+    dispatch_group_t imageQueueGroup = dispatch_group_create();
+    
+    NSArray<NSString *> *imageNames = objects.allKeys;
+    __block NSUInteger imagesLeftToLoad = imageNames.count;
+    
+    dispatch_group_async(imageQueueGroup, concurrentQueue, ^{
+        dispatch_group_enter(imageQueueGroup);
+        
+        void (^imageLoadedBlock)() = ^{
+            imagesLeftToLoad--;
+            
+            if (imagesLeftToLoad == 0) {
+                dispatch_group_leave(imageQueueGroup);
+            }
+        };
+        
+        for (NSString *imageName in imageNames) {
+            UIImage *foundImage = [style imageForName:imageName];
+            
+            if (foundImage == nil) {
+                [RCTMGLUtils fetchImage:bridge url:objects[imageName] callback:^(NSError *error, UIImage *image) {
+                    dispatch_async(mainQueue, ^{
+                        [style setImage:image forName:imageName];
+                        imageLoadedBlock();
+                    });
+                }];
+            } else {
+                imageLoadedBlock();
+            }
+        }
+    });
+    
+    dispatch_group_notify(imageQueueGroup, mainQueue, ^{ callback(); });
 }
 
 @end

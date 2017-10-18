@@ -21,6 +21,36 @@
     }
 }
 
+- (void)addToMap
+{
+    if (self.map.style == nil) {
+        return;
+    }
+    
+    if (_images == nil || _images.count == 0) {
+        [super addToMap];
+    } else {
+        [RCTMGLUtils fetchImages:_bridge style:self.map.style objects:_images callback:^{ [super addToMap]; }];
+    }
+}
+
+- (void)removeFromMap
+{
+    if (self.map.style == nil) {
+        return;
+    }
+    
+    [super removeFromMap];
+    
+    if (_images != nil && _images.count > 0) {
+        NSArray<NSString *> *imageNames = _images.allKeys;
+        
+        for (NSString *imageName in imageNames) {
+            [self.map.style removeImageForName:imageName];
+        }
+    }
+}
+
 - (MGLSource*)makeSource
 {
     NSDictionary<MGLShapeSourceOption, id> *options = [self _getOptions];
