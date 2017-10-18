@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
 import { toJSONString, cloneReactChildrenWithProps } from '../utils';
+import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -70,6 +71,11 @@ class ShapeSource extends React.Component {
      * The default value is 0.375.
      */
     tolerance: PropTypes.number,
+
+    /**
+     * Specifies the external images in key-value pairs required for the shape source.
+     */
+    images: PropTypes.object,
   };
 
   static defaultProps = {
@@ -84,6 +90,25 @@ class ShapeSource extends React.Component {
     return toJSONString(this.props.shape);
   }
 
+  _getImages () {
+    if (!this.props.images) {
+      return;
+    }
+
+    let images = {};
+
+    const imageNames = Object.keys(this.props.images);
+    for (let imageName of imageNames) {
+      const res = resolveAssetSource(this.props.images[imageName]);
+
+      if (res && res.uri) {
+        images[imageName] = res.uri;
+      }
+    }
+
+    return images;
+  }
+
   render () {
     const props = {
       id: this.props.id,
@@ -95,6 +120,7 @@ class ShapeSource extends React.Component {
       maxZoomLevel: this.props.maxZoomLevel,
       buffer: this.props.buffer,
       tolerance: this.props.tolerance,
+      images: this._getImages(),
     };
     return (
       <RCTMGLShapeSource {...props}>
