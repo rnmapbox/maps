@@ -41,7 +41,7 @@ public class RCTMGLShapeSource extends  RCTSource<GeoJsonSource> {
 
     @Override
     public void addToMap(final RCTMGLMapView mapView) {
-        if (mImages != null && mImages.size() > 0) {
+        if (hasImages()) {
             MapboxMap map = mapView.getMapboxMap();
 
             DownloadMapImageTask.OnAllImagesLoaded imagesLoadedCallback = new DownloadMapImageTask.OnAllImagesLoaded() {
@@ -55,6 +55,17 @@ public class RCTMGLShapeSource extends  RCTSource<GeoJsonSource> {
             task.execute(mImages.toArray(new Map.Entry[mImages.size()]));
         } else {
             super.addToMap(mapView);
+        }
+    }
+
+    @Override
+    public void removeFromMap(RCTMGLMapView mapView) {
+        super.removeFromMap(mapView);
+
+        if (hasImages()) {
+            for (Map.Entry<String, String> image : mImages) {
+                mMap.removeImage(image.getKey());
+            }
         }
     }
 
@@ -141,5 +152,9 @@ public class RCTMGLShapeSource extends  RCTSource<GeoJsonSource> {
         }
 
         return options;
+    }
+
+    private boolean hasImages() {
+        return mImages != null && mImages.size() > 0;
     }
 }
