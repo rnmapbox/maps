@@ -37,6 +37,7 @@ android/build/
 android/.gradle/
 android/.idea/
 android/android.iml
+android/app/app.iml
 android/gradle/
 android/gradlew
 android/gradlew.bat
