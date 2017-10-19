@@ -43,6 +43,7 @@ import QueryAtPoint from './components/QueryAtPoint';
 import QueryWithRect from './components/QueryWithRect';
 import ShapeSourceIcon from './components/ShapeSourceIcon';
 import CustomVectorSource from './components/CustomVectorSource';
+import ShowPointAnnotation from './components/ShowPointAnnotation';
 
 const styles = StyleSheet.create({
   noPermissionsText: {
@@ -104,6 +105,7 @@ const Examples = [
   new ExampleItem('Query Features Bounding Box', QueryWithRect),
   new ExampleItem('Shape Source From Icon', ShapeSourceIcon),
   new ExampleItem('Custom Vector Source', CustomVectorSource),
+  new ExampleItem('Show Point Annotation', ShowPointAnnotation),
 ];
 
 class App extends React.Component {
