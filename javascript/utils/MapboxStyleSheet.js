@@ -120,7 +120,7 @@ class MapboxStyleSheet {
       } else if (!styleMap[styleProp] && (depth > 0 || isPrimitive(userStyle))) {
         throw new Error(`Invalid Mapbox Style ${styleProp}`);
       } else if (isUndefined(userStyle) || userStyle === null) {
-        throw new Error(`Invalid Mapbox Style ${styleProp} cannot be undefined/null`);
+        continue;
       }
 
       style[styleProp] = makeStyleValue(styleProp, userStyle);

@@ -8,6 +8,8 @@ describe('Public Interface', () => {
       'MapView',
       'StyleSheet',
       'Light',
+      'PointAnnotation',
+      'Callout',
 
       // layers
       'FillLayer',

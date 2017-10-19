@@ -355,6 +355,27 @@ class MapView extends React.Component {
   }
 
   /**
+   * Map camera will move to new coordinate at the same zoom level
+   *
+   * @example
+   * this.map.moveTo([lng, lat], 200) // eases camera to new location based on duration
+   * this.map.moveTo([lng, lat]) // snaps camera to new location without any easing
+   *
+   *  @param {Array<Number>} coordinates - Coordinates that map camera will move too
+   *  @param {Number=} duration - Duration of camera animation
+   *  @return {void}
+   */
+  moveTo (coordinates, duration = 0) {
+    if (!this._nativeRef) {
+      return Promise.reject('No native reference found');
+    }
+    return this.setCamera({
+      centerCoordinate: coordinates,
+      duration: duration,
+    });
+  }
+
+  /**
    * Map camera will zoom to specified level
    *
    * @example

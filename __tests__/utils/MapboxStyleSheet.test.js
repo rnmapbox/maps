@@ -185,16 +185,6 @@ describe('MapboxStyleSheet', () => {
     }).toThrow();
   });
 
-  it('should throw error for undefined or null style values', () => {
-    expect(() => {
-      MapboxGL.StyleSheet.create({ fillOpacity: undefined });
-    }).toThrow();
-
-    expect(() => {
-      MapboxGL.StyleSheet.create({ fillOpacity: null });
-    }).toThrow();
-  });
-
   it('should throw error for passing in undefined or null', () => {
     expect(() => MapboxGL.StyleSheet.create()).toThrow();
     expect(() => MapboxGL.StyleSheet.create(null)).toThrow();
