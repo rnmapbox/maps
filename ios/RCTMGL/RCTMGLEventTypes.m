@@ -31,4 +31,6 @@ NSString *const RCT_MAPBOX_DID_FINISH_RENDERING_MAP_FULLY = @"didfinishrendering
 
 NSString *const RCT_MAPBOX_DID_FINISH_LOADING_STYLE = @"didfinishloadingstyle";
 
+NSString *const RCT_MAPBOX_ANNOTATION_TAP = @"annotationtap";
+
 @end

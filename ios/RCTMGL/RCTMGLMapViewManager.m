@@ -32,6 +32,7 @@ RCT_EXPORT_MODULE(RCTMGLMapView)
 - (UIView *)view
 {
     RCTMGLMapView *mapView = [[RCTMGLMapView alloc] initWithFrame:RCT_MAPBOX_MIN_MAP_FRAME];
+    mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     mapView.delegate = self;
 
     // setup map gesture recongizers
@@ -42,6 +43,15 @@ RCT_EXPORT_MODULE(RCTMGLMapView)
     [tap requireGestureRecognizerToFail:doubleTap];
     
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(didLongPressMap:)];
+    
+    // this allows the internal annotation gestures to take precedents over the map tap gesture
+    for (int i = 0; i < mapView.gestureRecognizers.count; i++) {
+        UIGestureRecognizer *gestuerReconginer = mapView.gestureRecognizers[i];
+        
+        if ([gestuerReconginer isKindOfClass:[UITapGestureRecognizer class]]) {
+            [tap requireGestureRecognizerToFail:gestuerReconginer];
+        }
+    }
     
     [mapView addGestureRecognizer:doubleTap];
     [mapView addGestureRecognizer:tap];
@@ -184,7 +194,7 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
     if (mapView == nil || mapView.onPress == nil) {
         return;
     }
-
+    
     RCTMGLMapTouchEvent *event = [RCTMGLMapTouchEvent makeTapEvent:mapView withPoint:[recognizer locationInView:mapView]];
     [self fireEvent:event withCallback:mapView.onPress];
 }
@@ -202,6 +212,55 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
 }
 
 #pragma mark - MGLMapViewDelegate
+
+- (MGLAnnotationView *)mapView:(MGLMapView *)mapView viewForAnnotation:(id<MGLAnnotation>)annotation
+{
+    if ([annotation isKindOfClass:[RCTMGLPointAnnotation class]]) {
+        RCTMGLPointAnnotation *rctAnnotation = (RCTMGLPointAnnotation *)annotation;
+        return [rctAnnotation getAnnotationView];
+    }
+    return nil;
+}
+
+- (void)mapView:(MGLMapView *)mapView didSelectAnnotation:(nonnull id<MGLAnnotation>)annotation
+{
+    if ([annotation isKindOfClass:[RCTMGLPointAnnotation class]]) {
+        RCTMGLPointAnnotation *rctAnnotation = (RCTMGLPointAnnotation *)annotation;
+        
+        if (rctAnnotation.onSelected != nil) {
+            RCTMGLMapTouchEvent *event = [RCTMGLMapTouchEvent makeAnnotationTapEvent:rctAnnotation];
+            rctAnnotation.onSelected([event toJSON]);
+        }
+    }
+}
+
+- (void)mapView:(MGLMapView *)mapView didDeselectAnnotation:(nonnull id<MGLAnnotation>)annotation
+{
+    if ([annotation isKindOfClass:[RCTMGLPointAnnotation class]]) {
+        RCTMGLPointAnnotation *rctAnnotation = (RCTMGLPointAnnotation *)annotation;
+        
+        if (rctAnnotation.onDeselected != nil) {
+            rctAnnotation.onDeselected(nil);
+        }
+    }
+}
+
+- (BOOL)mapView:(MGLMapView *)mapView annotationCanShowCallout:(id<MGLAnnotation>)annotation {
+    if ([annotation isKindOfClass:[RCTMGLPointAnnotation class]]) {
+        RCTMGLPointAnnotation *rctAnnotation = (RCTMGLPointAnnotation *)annotation;
+        return rctAnnotation.calloutView != nil;
+    }
+    return NO;
+}
+
+- (UIView<MGLCalloutView> *)mapView:(MGLMapView *)mapView calloutViewForAnnotation:(id<MGLAnnotation>)annotation
+{
+    if ([annotation isKindOfClass:[RCTMGLPointAnnotation class]]) {
+        RCTMGLPointAnnotation *rctAnnotation = (RCTMGLPointAnnotation *)annotation;
+        return rctAnnotation.calloutView;
+    }
+    return nil;
+}
 
 - (void)mapView:(MGLMapView *)mapView regionWillChangeAnimated:(BOOL)animated
 {

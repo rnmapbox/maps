@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "RCTMGLEvent.h"
+#import "RCTMGLPointAnnotation.h"
 @import Mapbox;
 
 @interface RCTMGLMapTouchEvent : RCTMGLEvent
@@ -17,5 +18,6 @@
 
 + (RCTMGLMapTouchEvent*)makeTapEvent:(MGLMapView*)mapView withPoint:(CGPoint)point;
 + (RCTMGLMapTouchEvent*)makeLongPressEvent:(MGLMapView*)mapView withPoint:(CGPoint)point;
++ (RCTMGLMapTouchEvent *)makeAnnotationTapEvent:(RCTMGLPointAnnotation *)pointAnnotation;
 
 @end

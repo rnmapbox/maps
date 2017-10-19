@@ -8,17 +8,19 @@
 
 #import <React/RCTComponent.h>
 #import "RCTMGLSource.h"
+#import "RCTMGLPointAnnotation.h"
 #import "RCTMGLLight.h"
 
 @import Mapbox;
 
 @class CameraUpdateQueue;
 
-@interface RCTMGLMapView : MGLMapView
+@interface RCTMGLMapView : MGLMapView<RCTInvalidating>
 
 @property (nonatomic, strong) CameraUpdateQueue *cameraUpdateQueue;
 @property (nonatomic, strong) NSMutableArray<id<RCTComponent>> *reactSubviews;
 @property (nonatomic, strong) NSMutableArray<RCTMGLSource*> *sources;
+@property (nonatomic, strong) NSMutableArray<RCTMGLPointAnnotation*> *pointAnnotations;
 @property (nonatomic, strong) RCTMGLLight *light;
 
 @property (nonatomic, assign) BOOL animated;
@@ -46,5 +48,6 @@
 
 - (CLLocationDistance)getMetersPerPixelAtLatitude:(double)latitude withZoom:(double)zoomLevel;
 - (CLLocationDistance)altitudeFromZoom:(double)zoomLevel;
+- (RCTMGLPointAnnotation*)getRCTPointAnnotation:(MGLPointAnnotation*)mglAnnotation;
 
 @end

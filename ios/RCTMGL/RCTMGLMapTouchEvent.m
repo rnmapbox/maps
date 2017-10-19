@@ -8,6 +8,7 @@
 
 #import "RCTMGLMapTouchEvent.h"
 #import "RCTMGLEventTypes.h"
+#import "RCTMGLPointAnnotation.h"
 @import Mapbox;
 
 @implementation RCTMGLMapTouchEvent
@@ -31,6 +32,15 @@
 + (RCTMGLMapTouchEvent*)makeLongPressEvent:(MGLMapView*)mapView withPoint:(CGPoint)point
 {
     return [RCTMGLMapTouchEvent _fromPoint:point withMapView:mapView andEventType:RCT_MAPBOX_EVENT_LONGPRESS];
+}
+
++ (RCTMGLMapTouchEvent *)makeAnnotationTapEvent:(RCTMGLPointAnnotation *)pointAnnotation
+{
+    RCTMGLMapTouchEvent *event = [[RCTMGLMapTouchEvent alloc] init];
+    event.type = RCT_MAPBOX_ANNOTATION_TAP;
+    event.coordinate = pointAnnotation.coordinate;
+    event.screenPoint = [pointAnnotation.superview convertPoint:pointAnnotation.frame.origin toView:nil];
+    return event;
 }
 
 + (RCTMGLMapTouchEvent*)_fromPoint:(CGPoint)point withMapView:(MGLMapView *)mapView andEventType:(NSString*)eventType

@@ -24,9 +24,20 @@ static double const M2PI = M_PI * 2;
     if (self = [super initWithFrame:frame]) {
         _cameraUpdateQueue = [[CameraUpdateQueue alloc] init];
         _sources = [[NSMutableArray alloc] init];
+        _pointAnnotations = [[NSMutableArray alloc] init];
         _reactSubviews = [[NSMutableArray alloc] init];
     }
     return self;
+}
+
+- (void)invalidate
+{
+    if (_reactSubviews.count == 0) {
+        return;
+    }
+    for (int i = 0; i < _reactSubviews.count; i++) {
+        [self removeReactSubview:(UIView *)_reactSubviews[i]];
+    }
 }
 
 - (void) addToMap:(id<RCTComponent>)subview
@@ -39,6 +50,10 @@ static double const M2PI = M_PI * 2;
         RCTMGLLight *light = (RCTMGLLight*)subview;
         _light = light;
         _light.map = self;
+    } else if ([subview isKindOfClass:[RCTMGLPointAnnotation class]]) {
+        RCTMGLPointAnnotation *pointAnnotation = (RCTMGLPointAnnotation *)subview;
+        pointAnnotation.map = self;
+        [_pointAnnotations addObject:pointAnnotation];
     } else {
         NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
 
@@ -54,6 +69,10 @@ static double const M2PI = M_PI * 2;
         RCTMGLSource *source = (RCTMGLSource*)subview;
         source.map = nil;
         [_sources removeObject:source];
+    } else if ([subview isKindOfClass:[RCTMGLPointAnnotation class]]) {
+        RCTMGLPointAnnotation *pointAnnotation = (RCTMGLPointAnnotation *)subview;
+        pointAnnotation.map = nil;
+        [_pointAnnotations removeObject:pointAnnotation];
     } else {
         NSArray<id<RCTComponent>> *childSubViews = [subview reactSubviews];
         
@@ -196,6 +215,17 @@ static double const M2PI = M_PI * 2;
     CLLocationDistance metersTall = metersPerPixel * self.frame.size.height;
     CLLocationDistance altitude = metersTall / 2 / tan(MGLRadiansFromDegrees(30) / 2.0);
     return altitude * sin(M_PI_2 - MGLRadiansFromDegrees(self.camera.pitch)) / sin(M_PI_2);
+}
+
+- (RCTMGLPointAnnotation*)getRCTPointAnnotation:(MGLPointAnnotation *)mglAnnotation
+{
+    for (int i = 0; i < _pointAnnotations.count; i++) {
+        RCTMGLPointAnnotation *rctAnnotation = _pointAnnotations[i];
+        if (rctAnnotation.annotation == mglAnnotation) {
+            return rctAnnotation;
+        }
+    }
+    return nil;
 }
 
 - (NSURL*)_getStyleURLFromKey:(NSString *)styleURL
