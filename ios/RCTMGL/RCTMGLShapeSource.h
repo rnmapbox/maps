@@ -18,6 +18,7 @@
 @property (nonatomic, copy) NSString *url;
 @property (nonatomic, copy) NSString *shape;
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *images;
+@property (nonatomic, strong) NSArray<NSString *> *nativeImages;
 
 @property (nonatomic, assign) NSNumber *cluster;
 @property (nonatomic, assign) NSNumber *clusterRadius;

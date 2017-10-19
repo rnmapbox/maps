@@ -24,6 +24,7 @@ RCT_EXPORT_VIEW_PROPERTY(maxZoom, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(buffer, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(tolerance, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(images, NSDictionary)
+RCT_EXPORT_VIEW_PROPERTY(nativeImages, NSArray)
 
 - (UIView*)view
 {

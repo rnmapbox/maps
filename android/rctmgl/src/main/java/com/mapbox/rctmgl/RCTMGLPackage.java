@@ -54,7 +54,7 @@ public class RCTMGLPackage implements ReactPackage {
 
         // sources
         managers.add(new RCTMGLVectorSourceManager(reactApplicationContext));
-        managers.add(new RCTMGLShapeSourceManager());
+        managers.add(new RCTMGLShapeSourceManager(reactApplicationContext));
         managers.add(new RCTMGLRasterSourceManager());
 
         // layers

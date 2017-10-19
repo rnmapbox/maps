@@ -65,42 +65,43 @@ static double const MS_TO_S = 0.001;
 
 + (void)fetchImages:(RCTBridge *)bridge style:(MGLStyle *)style objects:(NSDictionary<NSString *, NSString *>*)objects callback:(void (^)())callback
 {
-    dispatch_queue_t concurrentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_queue_t mainQueue = dispatch_get_main_queue();
-    
-    dispatch_group_t imageQueueGroup = dispatch_group_create();
+    if (objects == nil) {
+        callback();
+        return;
+    }
     
     NSArray<NSString *> *imageNames = objects.allKeys;
+    if (imageNames.count == 0) {
+        callback();
+        return;
+    }
+    
+    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
     __block NSUInteger imagesLeftToLoad = imageNames.count;
     
-    dispatch_group_async(imageQueueGroup, concurrentQueue, ^{
-        dispatch_group_enter(imageQueueGroup);
+    void (^imageLoadedBlock)() = ^{
+        imagesLeftToLoad--;
         
-        void (^imageLoadedBlock)() = ^{
-            imagesLeftToLoad--;
-            
-            if (imagesLeftToLoad == 0) {
-                dispatch_group_leave(imageQueueGroup);
-            }
-        };
-        
-        for (NSString *imageName in imageNames) {
-            UIImage *foundImage = [style imageForName:imageName];
-            
-            if (foundImage == nil) {
-                [RCTMGLUtils fetchImage:bridge url:objects[imageName] callback:^(NSError *error, UIImage *image) {
-                    dispatch_async(mainQueue, ^{
-                        [style setImage:image forName:imageName];
-                        imageLoadedBlock();
-                    });
-                }];
-            } else {
-                imageLoadedBlock();
-            }
+        if (imagesLeftToLoad == 0) {
+            dispatch_semaphore_signal(sema);
         }
-    });
+    };
     
-    dispatch_group_notify(imageQueueGroup, mainQueue, ^{ callback(); });
+    for (NSString *imageName in imageNames) {
+        UIImage *foundImage = [style imageForName:imageName];
+        
+        if (foundImage == nil) {
+            [RCTMGLUtils fetchImage:bridge url:objects[imageName] callback:^(NSError *error, UIImage *image) {
+                [style setImage:image forName:imageName];
+                imageLoadedBlock();
+            }];
+        } else {
+            imageLoadedBlock();
+        }
+    }
+    
+    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+    callback();
 }
 
 @end

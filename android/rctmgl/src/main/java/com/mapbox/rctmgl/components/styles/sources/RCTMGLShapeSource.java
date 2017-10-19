@@ -1,6 +1,8 @@
 package com.mapbox.rctmgl.components.styles.sources;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
@@ -34,6 +36,7 @@ public class RCTMGLShapeSource extends  RCTSource<GeoJsonSource> {
     private Double mTolerance;
 
     private List<Map.Entry<String, String>> mImages;
+    private List<Map.Entry<String, BitmapDrawable>> mNativeImages;
 
     public RCTMGLShapeSource(Context context) {
         super(context);
@@ -41,9 +44,22 @@ public class RCTMGLShapeSource extends  RCTSource<GeoJsonSource> {
 
     @Override
     public void addToMap(final RCTMGLMapView mapView) {
-        if (hasImages()) {
-            MapboxMap map = mapView.getMapboxMap();
+        if (!hasNativeImages() && !hasImages()) {
+            super.addToMap(mapView);
+            return;
+        }
 
+        MapboxMap map = mapView.getMapboxMap();
+
+        // add all images from drawables folder
+        if (hasNativeImages()) {
+            for (Map.Entry<String, BitmapDrawable> nativeImage : mNativeImages) {
+                map.addImage(nativeImage.getKey(),  nativeImage.getValue().getBitmap());
+            }
+        }
+
+        // add all external images from javascript layer
+        if (hasImages()) {
             DownloadMapImageTask.OnAllImagesLoaded imagesLoadedCallback = new DownloadMapImageTask.OnAllImagesLoaded() {
                 @Override
                 public void onAllImagesLoaded() {
@@ -53,9 +69,10 @@ public class RCTMGLShapeSource extends  RCTSource<GeoJsonSource> {
 
             DownloadMapImageTask task = new DownloadMapImageTask(map, imagesLoadedCallback);
             task.execute(mImages.toArray(new Map.Entry[mImages.size()]));
-        } else {
-            super.addToMap(mapView);
+            return;
         }
+
+        super.addToMap(mapView);
     }
 
     @Override
@@ -64,6 +81,12 @@ public class RCTMGLShapeSource extends  RCTSource<GeoJsonSource> {
 
         if (hasImages()) {
             for (Map.Entry<String, String> image : mImages) {
+                mMap.removeImage(image.getKey());
+            }
+        }
+
+        if (hasNativeImages()) {
+            for (Map.Entry<String, BitmapDrawable> image : mNativeImages) {
                 mMap.removeImage(image.getKey());
             }
         }
@@ -124,6 +147,10 @@ public class RCTMGLShapeSource extends  RCTSource<GeoJsonSource> {
         mImages = images;
     }
 
+    public void setNativeImages(List<Map.Entry<String, BitmapDrawable>> nativeImages) {
+        mNativeImages = nativeImages;
+    }
+
     private GeoJsonOptions getOptions() {
         GeoJsonOptions options = new GeoJsonOptions();
 
@@ -156,5 +183,9 @@ public class RCTMGLShapeSource extends  RCTSource<GeoJsonSource> {
 
     private boolean hasImages() {
         return mImages != null && mImages.size() > 0;
+    }
+
+    private boolean hasNativeImages() {
+        return mNativeImages != null && mNativeImages.size() > 0;
     }
 }

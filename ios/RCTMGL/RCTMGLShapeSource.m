@@ -27,9 +27,15 @@
         return;
     }
     
-    if (_images == nil || _images.count == 0) {
+    if (![self _hasImages] && ![self _hasNativeImages]) {
         [super addToMap];
     } else {
+        if ([self _hasNativeImages]) {
+            for (NSString *imageName in _nativeImages) {
+                UIImage *image = [UIImage imageNamed:imageName];
+                [self.map.style setImage:image forName:imageName];
+            }
+        }
         [RCTMGLUtils fetchImages:_bridge style:self.map.style objects:_images callback:^{ [super addToMap]; }];
     }
 }
@@ -42,10 +48,16 @@
     
     [super removeFromMap];
     
-    if (_images != nil && _images.count > 0) {
+    if ([self _hasImages]) {
         NSArray<NSString *> *imageNames = _images.allKeys;
         
         for (NSString *imageName in imageNames) {
+            [self.map.style removeImageForName:imageName];
+        }
+    }
+    
+    if ([self _hasNativeImages]) {
+        for (NSString *imageName in _nativeImages) {
             [self.map.style removeImageForName:imageName];
         }
     }
@@ -93,6 +105,16 @@
     }
     
     return options;
+}
+
+- (BOOL)_hasImages
+{
+    return _images != nil && _images.count > 0;
+}
+
+- (BOOL)_hasNativeImages
+{
+    return _nativeImages != nil && _nativeImages.count > 0;
 }
 
 @end
