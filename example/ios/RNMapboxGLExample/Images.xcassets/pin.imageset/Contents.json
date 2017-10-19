@@ -2,15 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "mapbox-logo-color.png",
+      "filename" : "pin.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "pin.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
+      "filename" : "pin.png",
       "scale" : "3x"
     }
   ],
