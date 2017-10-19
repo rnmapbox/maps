@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.mapbox.rctmgl.components.annotation.RCTMGLCalloutManager;
+import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotationManager;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapViewManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLBackgroundLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLCircleLayerManager;
@@ -51,6 +53,8 @@ public class RCTMGLPackage implements ReactPackage {
         // components
         managers.add(new RCTMGLMapViewManager(reactApplicationContext));
         managers.add(new RCTMGLLightManager());
+        managers.add(new RCTMGLPointAnnotationManager(reactApplicationContext));
+        managers.add(new RCTMGLCalloutManager());
 
         // sources
         managers.add(new RCTMGLVectorSourceManager(reactApplicationContext));

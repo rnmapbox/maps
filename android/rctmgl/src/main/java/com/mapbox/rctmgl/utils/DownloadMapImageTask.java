@@ -41,9 +41,7 @@ public class DownloadMapImageTask extends AsyncTask<Map.Entry<String, String>, V
 
         for (Map.Entry<String, String> object : objects) {
             try {
-                InputStream bitmapStream = new URL(object.getValue()).openStream();
-                Bitmap bitmap = BitmapFactory.decodeStream(bitmapStream);
-                bitmapStream.close();
+                Bitmap bitmap = BitmapUtils.getBitmapFromURL(object.getValue());
                 images.add(new AbstractMap.SimpleEntry<String, Bitmap>(object.getKey(), bitmap));
             } catch (Exception e) {
                 Log.w(LOG_TAG, e.getLocalizedMessage());

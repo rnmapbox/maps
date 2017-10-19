@@ -2,6 +2,7 @@ package com.mapbox.rctmgl.components.styles.layers;
 
 import android.content.Context;
 
+import com.facebook.react.uimanager.UIManagerModule;
 import com.mapbox.mapboxsdk.style.layers.Filter;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;

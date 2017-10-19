@@ -4,23 +4,19 @@ import android.util.Log;
 import android.view.View;
 
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.mapbox.services.commons.geojson.FeatureCollection;
+import com.mapbox.rctmgl.components.AbstractEventEmitter;
+import com.mapbox.rctmgl.events.constants.EventKeys;
+import com.mapbox.rctmgl.utils.ConvertUtils;
 import com.mapbox.services.commons.geojson.Point;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
 import javax.annotation.Nullable;
-
-import com.mapbox.rctmgl.components.AbstractEventEmitter;
-import com.mapbox.rctmgl.events.constants.EventKeys;
-import com.mapbox.rctmgl.utils.ConvertUtils;
 
 /**
  * Created by nickitaliano on 8/18/17.
@@ -50,7 +46,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
 
     @Override
     public void addView(RCTMGLMapView mapView, View childView, int childPosition) {
-        mapView.addFeature(childView, childPosition);
+        mapView.addFeature(childView, childPosition + 1);
     }
 
     @Override

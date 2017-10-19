@@ -5,6 +5,7 @@ package com.mapbox.rctmgl.events.constants;
  */
 
 public class EventTypes {
+    // map event types
     public static final String MAP_CLICK = "press";
     public static final String MAP_LONG_CLICK = "longpress";
 
@@ -25,4 +26,8 @@ public class EventTypes {
     public static final String DID_FINISH_RENDERING_MAP_FULLY = "didfinishrenderingmapfully";
 
     public static final String DID_FINISH_LOADING_STYLE = "didfinishloadingstyle";
+
+    // point annotation event types
+    public static final String ANNOTATION_SELECTED = "annotationselected";
+    public static final String ANNOTATION_DESELECTED = "annotationdeselected";
 }
