@@ -242,7 +242,7 @@ public class RCTMGLMapView extends MapView implements
                 event = new MapChangeEvent(this, EventTypes.REGION_IS_CHANGING);
                 break;
             case REGION_DID_CHANGE:
-                event = new MapChangeEvent(this, makeRegionPayload(false), EventTypes.REGION_WILL_CHANGE);
+                event = new MapChangeEvent(this, makeRegionPayload(false), EventTypes.REGION_DID_CHANGE);
                 break;
             case REGION_DID_CHANGE_ANIMATED:
                 event = new MapChangeEvent(this, makeRegionPayload(true), EventTypes.REGION_DID_CHANGE);
