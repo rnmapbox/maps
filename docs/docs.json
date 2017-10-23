@@ -108,6 +108,55 @@
       }
     ]
   },
+  "Callout": {
+    "description": "Callout that displays information about a selected annotation near the annotation.",
+    "methods": [],
+    "props": [
+      {
+        "name": "title",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "String that get's displayed in the default callout."
+      },
+      {
+        "name": "style",
+        "required": false,
+        "type": "any",
+        "default": "none",
+        "description": "Style property for the Animated.View wrapper, apply animations to this"
+      },
+      {
+        "name": "containerStyle",
+        "required": false,
+        "type": "any",
+        "default": "none",
+        "description": "Style property for the native RCTMGLCallout container, set at your own risk."
+      },
+      {
+        "name": "contentStyle",
+        "required": false,
+        "type": "any",
+        "default": "none",
+        "description": "Style property for the content bubble."
+      },
+      {
+        "name": "tipStyle",
+        "required": false,
+        "type": "any",
+        "default": "none",
+        "description": "Style property for the triangle tip under the content."
+      },
+      {
+        "name": "textStyle",
+        "required": false,
+        "type": "any",
+        "default": "none",
+        "description": "Style property for the title in the content bubble."
+      }
+    ],
+    "name": "Callout"
+  },
   "CircleLayer": {
     "description": "CircleLayer is a style layer that renders one or more filled circles on the map.",
     "methods": [],
@@ -949,6 +998,38 @@
         ]
       },
       {
+        "name": "moveTo",
+        "docblock": "Map camera will move to new coordinate at the same zoom level\n\n@example\nthis.map.moveTo([lng, lat], 200) // eases camera to new location based on duration\nthis.map.moveTo([lng, lat]) // snaps camera to new location without any easing\n\n @param {Array<Number>} coordinates - Coordinates that map camera will move too\n @param {Number=} duration - Duration of camera animation\n @return {void}",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "coordinates",
+            "description": "Coordinates that map camera will move too",
+            "type": {
+              "name": "Array"
+            }
+          },
+          {
+            "name": "duration",
+            "description": "Duration of camera animation",
+            "type": {
+              "name": "Number"
+            },
+            "optional": true
+          }
+        ],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "void"
+          }
+        },
+        "description": "Map camera will move to new coordinate at the same zoom level",
+        "examples": [
+          "\nthis.map.moveTo([lng, lat], 200) // eases camera to new location based on duration\nthis.map.moveTo([lng, lat]) // snaps camera to new location without any easing\n\n "
+        ]
+      },
+      {
         "name": "zoomTo",
         "docblock": "Map camera will zoom to specified level\n\n@example\nthis.map.zoomTo(16)\nthis.map.zoomTo(16, 100)\n\n@param {Number} zoomLevel - Zoom level that the map camera will animate too\n@param {Number=} duration - Duration of camera animation\n@return {void}",
         "modifiers": [],
@@ -1234,6 +1315,69 @@
       }
     ],
     "name": "MapView"
+  },
+  "PointAnnotation": {
+    "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.",
+    "methods": [],
+    "props": [
+      {
+        "name": "id",
+        "required": true,
+        "type": "string",
+        "default": "none",
+        "description": "A string that uniquely identifies the annotation"
+      },
+      {
+        "name": "title",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The string containing the annotation’s title. Note this is required to be set if you want to see a callout appear on iOS."
+      },
+      {
+        "name": "snippet",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "The string containing the annotation’s snippet(subtitle). Not displayed in the default callout."
+      },
+      {
+        "name": "selected",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "Manually selects/deselects annotation\n@type {[type]}"
+      },
+      {
+        "name": "coordinate",
+        "required": true,
+        "type": "arrayOf",
+        "default": "none",
+        "description": "The center point (specified as a map coordinate) of the annotation."
+      },
+      {
+        "name": "anchor",
+        "required": false,
+        "type": "shape",
+        "default": "{ x: 0.5, y: 0.5 }",
+        "description": "Specifies the anchor being set on a particular point of the annotation.\nThe anchor point is specified in the continuous space [0.0, 1.0] x [0.0, 1.0],\nwhere (0, 0) is the top-left corner of the image, and (1, 1) is the bottom-right corner.\nNote this is only for custom annotations not the default pin view.\nDefaults to the center of the view."
+      },
+      {
+        "name": "onSelected",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This callback is fired once this annotation is selected. Returns a Feature as the first param."
+      },
+      {
+        "name": "onDeselected",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This callback is fired once this annotation is deselected."
+      }
+    ],
+    "name": "PointAnnotation"
   },
   "RasterLayer": {
     "description": "",

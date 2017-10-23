@@ -103,6 +103,21 @@ this.map.flyTo([lng, lat], 12000)
 ```
 
 
+#### moveTo(coordinates[, duration])
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `coordinates` | `Array` | `Yes` | Coordinates that map camera will move too |
+| `duration` | `Number` | `No` | Duration of camera animation |
+
+
+
+```javascript
+this.map.moveTo([lng, lat], 200) // eases camera to new location based on duration
+this.map.moveTo([lng, lat]) // snaps camera to new location without any easing
+```
+
+
 #### zoomTo(zoomLevel[, duration])
 ##### arguments
 | Name | Type | Required | Description  |
