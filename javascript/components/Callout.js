@@ -77,7 +77,7 @@ class Callout extends React.PureComponent {
     textStyle: PropTypes.any,
   };
 
-  get containerStyle () {
+  get _containerStyle () {
     return [
       {
         position: 'absolute',
@@ -88,11 +88,11 @@ class Callout extends React.PureComponent {
     ];
   }
 
-  get hasChildren () {
+  get _hasChildren () {
     return React.Children.count(this.props.children) > 0;
   }
 
-  renderDefaultCallout () {
+  _renderDefaultCallout () {
     return (
       <Animated.View style={[styles.container, this.props.style]}>
         <View style={[styles.content, this.props.contentStyle]}>
@@ -103,7 +103,7 @@ class Callout extends React.PureComponent {
     );
   }
 
-  renderCustomCallout () {
+  _renderCustomCallout () {
     return (
       <Animated.View style={this.props.style}>
         {this.props.children}
@@ -112,9 +112,9 @@ class Callout extends React.PureComponent {
   }
 
   render () {
-    const calloutContent = this.hasChildren ? this.renderCustomCallout() : this.renderDefaultCallout();
+    const calloutContent = this._hasChildren ? this._renderCustomCallout() : this._renderDefaultCallout();
     return (
-      <RCTMGLCallout style={this.containerStyle}>
+      <RCTMGLCallout style={this._containerStyle}>
         {calloutContent}
       </RCTMGLCallout>
     );
