@@ -441,7 +441,9 @@ public class RCTMGLMapView extends MapView implements
         mLocationEngine.requestLocationUpdates();
 
         Location location = mLocationEngine.getLastLocation();
-        if (location != null) {
+        int trackingMode = getLocationLayerTrackingMode();
+
+        if (location != null && trackingMode != LocationLayerMode.NONE) {
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         }
