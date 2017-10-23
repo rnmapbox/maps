@@ -12,6 +12,7 @@ import exampleIcon from '../assets/example.png';
 const styles = MapboxGL.StyleSheet.create({
   icon: {
     iconImage: exampleIcon,
+    iconAllowOverlap: true,
     iconSize: Platform.OS === 'android' ? 1 : 0.5,
   },
 });
