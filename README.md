@@ -57,6 +57,8 @@ npm install @mapbox/react-native-mapbox-gl@6.0.0-alpha1 --save
 * [MapView](/docs/MapView.md)
 * [Light](/docs/Light.md)
 * [StyleSheet](/docs/StyleSheet.md)
+* [PointAnnotation](/docs/PointAnnotation.md)
+* [Callout](/docs/Callout.md)
 
 ### Sources
 * [VectorSource](/docs/VectorSource.md)
