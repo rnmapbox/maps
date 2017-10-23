@@ -7,6 +7,7 @@
 //
 
 #import "RCTMGLUtils.h"
+#import "RCTMGLImageQueue.h"
 
 @import Mapbox;
 
@@ -58,9 +59,9 @@ static double const MS_TO_S = 0.001;
     return CGVectorMake([arr[0] floatValue], [arr[1] floatValue]);
 }
 
-+ (dispatch_block_t)fetchImage:(RCTBridge*)bridge url:(NSString *)url callback:(RCTImageLoaderCompletionBlock)callback
++ (void)fetchImage:(RCTBridge*)bridge url:(NSString *)url callback:(RCTImageLoaderCompletionBlock)callback
 {
-    return [bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:url] callback:callback];
+    [RCTMGLImageQueue.sharedInstance addImage:url bridge:bridge completionHandler:callback];
 }
 
 + (void)fetchImages:(RCTBridge *)bridge style:(MGLStyle *)style objects:(NSDictionary<NSString *, NSString *>*)objects callback:(void (^)())callback
@@ -76,14 +77,14 @@ static double const MS_TO_S = 0.001;
         return;
     }
     
-    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+
     __block NSUInteger imagesLeftToLoad = imageNames.count;
     
     void (^imageLoadedBlock)() = ^{
         imagesLeftToLoad--;
         
         if (imagesLeftToLoad == 0) {
-            dispatch_semaphore_signal(sema);
+            callback();
         }
     };
     
@@ -91,7 +92,7 @@ static double const MS_TO_S = 0.001;
         UIImage *foundImage = [style imageForName:imageName];
         
         if (foundImage == nil) {
-            [RCTMGLUtils fetchImage:bridge url:objects[imageName] callback:^(NSError *error, UIImage *image) {
+            [RCTMGLImageQueue.sharedInstance addImage:objects[imageName] bridge:bridge completionHandler:^(NSError *error, UIImage *image) {
                 [style setImage:image forName:imageName];
                 imageLoadedBlock();
             }];
@@ -99,9 +100,6 @@ static double const MS_TO_S = 0.001;
             imageLoadedBlock();
         }
     }
-    
-    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-    callback();
 }
 
 @end
