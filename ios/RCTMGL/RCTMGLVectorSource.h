@@ -11,6 +11,6 @@
 
 @interface RCTMGLVectorSource : RCTMGLSource
 
-@property (nonatomic, assign) NSString *url;
+@property (nonatomic, copy) NSString *url;
 
 @end

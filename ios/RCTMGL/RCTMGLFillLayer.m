@@ -15,6 +15,7 @@
 {
     MGLSource *source = [style sourceWithIdentifier:self.sourceID];
     MGLFillStyleLayer *layer = [[MGLFillStyleLayer alloc] initWithIdentifier:self.id source:source];
+    layer.sourceLayerIdentifier = _sourceLayerID;
     layer.predicate = [self buildFilters];
     return layer;
 }

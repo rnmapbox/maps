@@ -6,6 +6,7 @@
 | ---- | :--: | :-----: | :------: | :----------: |
 | id | `string` | `none` | `false` | A string that uniquely identifies the source in the style to which it is added. |
 | sourceID | `string` | `MapboxGL.StyleSource.DefaultSourceID` | `false` | The source from which to obtain the data to style. If the source has not yet been added to the current style, the behavior is undefined. |
+| sourceLayerID | `string` | `none` | `false` | Identifier of the layer within the source identified by the sourceID property from which the receiver obtains the data to style. |
 | aboveLayerID | `string` | `none` | `false` | Inserts a layer above aboveLayerID. |
 | belowLayerID | `string` | `none` | `false` | Inserts a layer below belowLayerID |
 | layerIndex | `number` | `none` | `false` | Inserts a layer at a specified index |

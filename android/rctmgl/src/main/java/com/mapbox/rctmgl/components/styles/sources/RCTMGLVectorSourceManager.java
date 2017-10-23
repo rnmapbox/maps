@@ -38,4 +38,9 @@ public class RCTMGLVectorSourceManager extends AbstractEventEmitter<RCTMGLVector
     public void setId(RCTMGLVectorSource source, String id) {
         source.setID(id);
     }
+
+    @ReactProp(name="url")
+    public void setUrl(RCTMGLVectorSource source, String url) {
+        source.setURL(url);
+    }
 }

@@ -426,6 +426,13 @@
         "description": "The source from which to obtain the data to style. If the source has not yet been added to the current style, the behavior is undefined."
       },
       {
+        "name": "sourceLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Identifier of the layer within the source identified by the sourceID property from which the receiver obtains the data to style."
+      },
+      {
         "name": "aboveLayerID",
         "required": false,
         "type": "string",
@@ -1491,7 +1498,7 @@
         "required": false,
         "type": "object",
         "default": "none",
-        "description": "-    * Specifies the external images in key-value pairs required for the shape source.\n-"
+        "description": "Specifies the external images in key-value pairs required for the shape source.\nIf you have an asset under Image.xcassets on iOS and the drawables directory on android\nyou can specify an array of string names with assets as the key `{ assets: ['pin'] }`."
       }
     ],
     "name": "ShapeSource"

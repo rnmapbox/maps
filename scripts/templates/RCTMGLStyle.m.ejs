@@ -20,7 +20,7 @@
 <% for (const layer of layers) { %>
 - (void)<%- setLayerMethodName(layer, 'ios') -%>:(<%- getLayerType(layer, 'ios') -%> *)layer withReactStyle:(NSDictionary *)reactStyle
 {
-  if (reactStyle == nil) {
+  if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
     return;
   }
@@ -94,6 +94,11 @@
         return false;
     }
     return [str hasPrefix:@"{"] && [str hasSuffix:@"}"];
+}
+
+- (BOOL)_hasReactStyle:(NSDictionary *)reactStyle
+{
+  return reactStyle != nil && reactStyle.allKeys.count > 0;
 }
 
 @end

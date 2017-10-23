@@ -27,6 +27,11 @@ class FillLayer extends AbstractLayer {
     sourceID: PropTypes.string,
 
     /**
+     * Identifier of the layer within the source identified by the sourceID property from which the receiver obtains the data to style.
+     */
+    sourceLayerID: PropTypes.string,
+
+    /**
      * Inserts a layer above aboveLayerID.
      */
     aboveLayerID: PropTypes.string,
@@ -69,6 +74,7 @@ class FillLayer extends AbstractLayer {
   render () {
     const props = {
       ...this.baseProps,
+      sourceLayerID: this.props.sourceLayerID,
     };
     return <RCTMGLFillLayer {...props} />;
   }

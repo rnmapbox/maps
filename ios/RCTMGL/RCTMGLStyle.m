@@ -17,7 +17,7 @@
 
 - (void)fillLayer:(MGLFillStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
 {
-  if (reactStyle == nil) {
+  if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
     return;
   }
@@ -73,7 +73,7 @@
 
 - (void)lineLayer:(MGLLineStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
 {
-  if (reactStyle == nil) {
+  if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
     return;
   }
@@ -151,7 +151,7 @@
 
 - (void)symbolLayer:(MGLSymbolStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
 {
-  if (reactStyle == nil) {
+  if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
     return;
   }
@@ -303,7 +303,7 @@
 
 - (void)circleLayer:(MGLCircleStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
 {
-  if (reactStyle == nil) {
+  if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
     return;
   }
@@ -362,7 +362,7 @@
 
 - (void)fillExtrusionLayer:(MGLFillExtrusionStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
 {
-  if (reactStyle == nil) {
+  if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
     return;
   }
@@ -420,7 +420,7 @@
 
 - (void)rasterLayer:(MGLRasterStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
 {
-  if (reactStyle == nil) {
+  if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
     return;
   }
@@ -471,7 +471,7 @@
 
 - (void)backgroundLayer:(MGLBackgroundStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
 {
-  if (reactStyle == nil) {
+  if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
     return;
   }
@@ -515,7 +515,7 @@
 
 - (void)lightLayer:(MGLLight *)layer withReactStyle:(NSDictionary *)reactStyle
 {
-  if (reactStyle == nil) {
+  if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
     return;
   }
@@ -1853,6 +1853,11 @@
         return false;
     }
     return [str hasPrefix:@"{"] && [str hasSuffix:@"}"];
+}
+
+- (BOOL)_hasReactStyle:(NSDictionary *)reactStyle
+{
+  return reactStyle != nil && reactStyle.allKeys.count > 0;
 }
 
 @end

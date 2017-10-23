@@ -42,6 +42,7 @@ import IndoorBuilding from './components/IndoorBuilding';
 import QueryAtPoint from './components/QueryAtPoint';
 import QueryWithRect from './components/QueryWithRect';
 import ShapeSourceIcon from './components/ShapeSourceIcon';
+import CustomVectorSource from './components/CustomVectorSource';
 
 const styles = StyleSheet.create({
   noPermissionsText: {
@@ -102,6 +103,7 @@ const Examples = [
   new ExampleItem('Query Feature Point', QueryAtPoint),
   new ExampleItem('Query Features Bounding Box', QueryWithRect),
   new ExampleItem('Shape Source From Icon', ShapeSourceIcon),
+  new ExampleItem('Custom Vector Source', CustomVectorSource),
 ];
 
 class App extends React.Component {

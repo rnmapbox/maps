@@ -11,4 +11,6 @@
 
 @interface RCTMGLFillLayer<MGLFillStyleLayer> : RCTMGLLayer
 
+@property (nonatomic, copy) NSString *sourceLayerID;
+
 @end

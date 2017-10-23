@@ -12,6 +12,8 @@ import com.mapbox.rctmgl.components.styles.RCTMGLStyleFactory;
  */
 
 public class RCTMGLFillLayer extends RCTLayer<FillLayer> {
+    private String mSourceLayerID;
+
     public RCTMGLFillLayer(Context context) {
         super(context);
     }
@@ -19,6 +21,10 @@ public class RCTMGLFillLayer extends RCTLayer<FillLayer> {
     @Override
     public FillLayer makeLayer() {
         FillLayer layer = new FillLayer(mID, mSourceID);
+
+        if (mSourceLayerID != null) {
+            layer.setSourceLayer(mSourceLayerID);
+        }
 
         Filter.Statement statement = buildFilter();
         if (statement != null) {
@@ -31,5 +37,13 @@ public class RCTMGLFillLayer extends RCTLayer<FillLayer> {
     @Override
     public void addStyles() {
         RCTMGLStyleFactory.setFillLayerStyle(mLayer, new RCTMGLStyle(mReactStyle, mMap));
+    }
+
+    public void setSourceLayerID(String sourceLayerID) {
+        mSourceLayerID = sourceLayerID;
+
+        if (mLayer != null) {
+            mLayer.setSourceLayer(mSourceLayerID);
+        }
     }
 }

@@ -37,6 +37,11 @@ public class RCTMGLFillLayerManager extends ViewGroupManager<RCTMGLFillLayer> {
         layer.setSourceID(sourceID);
     }
 
+    @ReactProp(name="sourceLayerID")
+    public void setSourceLayerId(RCTMGLFillLayer layer, String sourceLayerID) {
+        layer.setSourceLayerID(sourceLayerID);
+    }
+
     @ReactProp(name="aboveLayerID")
     public void setAboveLayerID(RCTMGLFillLayer layer, String aboveLayerID) {
         layer.setAboveLayerID(aboveLayerID);
