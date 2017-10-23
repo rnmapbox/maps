@@ -34,18 +34,19 @@ class YoYo extends React.Component {
     this.state = {
       zoomLevel: 12,
     };
-
-    this.onUpdateZoomLevel = this.onUpdateZoomLevel.bind(this);
   }
 
   componentDidMount () {
-    this.map.zoomTo(this.state.zoomLevel, 8000);
+    this.cameraLoop();
   }
 
-  onUpdateZoomLevel () {
-    const nextZoomLevel = this.state.zoomLevel === 12 ? 1 : 12;
-    this.setState({ zoomLevel: nextZoomLevel });
-    this.map.zoomTo(nextZoomLevel, 8000);
+  cameraLoop () {
+    requestAnimationFrame(async () => {
+      await this.map.zoomTo(this.state.zoomLevel, 8000);
+      const nextZoomLevel = this.state.zoomLevel === 12 ? 2 : 12;
+      this.setState({ zoomLevel: nextZoomLevel });
+      this.cameraLoop();
+    });
   }
 
   render () {
@@ -54,7 +55,6 @@ class YoYo extends React.Component {
         <MapboxGL.MapView
             zoomLevel={2}
             centerCoordinate={SF_OFFICE_COORDINATE}
-            onSetCameraComplete={this.onUpdateZoomLevel}
             ref={(ref) => this.map = ref}
             style={sheet.matchParent}
             styleURL={MapboxGL.StyleURL.Dark}>
