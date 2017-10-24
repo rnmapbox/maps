@@ -12,7 +12,7 @@
     "postinstall": "node ./scripts/set_access_token.js"
   },
   "dependencies": {
-    "@mapbox/react-native-mapbox-gl": "file:../mapbox-react-native-mapbox-gl-6.0.0-alpha3.tgz",
+    "@mapbox/react-native-mapbox-gl": "file:../mapbox-react-native-mapbox-gl-6.0.0-beta1.tgz",
     "@turf/helpers": "^4.6.0",
     "install": "^0.10.1",
     "npm": "^5.3.0",
