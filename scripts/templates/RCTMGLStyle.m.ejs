@@ -36,7 +36,7 @@
   <% for (let i = 0; i < layer.properties.length; i++) { -%>
   <%- ifOrElseIf(i) -%> ([prop isEqualToString:@"<%= layer.properties[i].name %>"]) {
   <%_ if (layer.properties[i].image) { _%>
-      if ([self _isTokenString:styleValue.payload[@"value"]]) {
+      if (![self _shouldAddImage:styleValue.payload[@"value"]]) {
         [self set<%- iosPropMethodName(layer, pascelCase(layer.properties[i].name)) -%>:layer withReactStyleValue:styleValue];
       } else {
         [RCTMGLUtils fetchImage:_bridge url:styleValue.payload[@"value"] callback:^(NSError *error, UIImage *image) {
@@ -88,12 +88,23 @@
 <% } %>
 <% } %>
 
+- (BOOL)_shouldAddImage:(NSString *)str
+{
+    return str != nil && ![self _isTokenString:str] && [self _isValidURL:str];
+}
+
 - (BOOL)_isTokenString:(NSString *)str
 {
     if (str == nil) {
         return false;
     }
     return [str hasPrefix:@"{"] && [str hasSuffix:@"}"];
+}
+
+- (BOOL)_isValidURL:(NSString *)str
+{
+    NSURL *url = [NSURL URLWithString:str];
+    return [UIApplication.sharedApplication canOpenURL:url];
 }
 
 - (BOOL)_hasReactStyle:(NSDictionary *)reactStyle
