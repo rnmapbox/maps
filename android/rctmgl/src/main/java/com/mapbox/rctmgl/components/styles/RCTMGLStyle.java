@@ -68,11 +68,7 @@ public class RCTMGLStyle {
     }
 
     private boolean shouldAddImage(String uriStr) {
-        return uriStr != null && !isTokenString(uriStr) && isValidURI(uriStr);
-    }
-
-    private boolean isTokenString(String str) {
-        return str.charAt(0) == '{' && str.charAt(str.length() - 1) == '}';
+        return uriStr != null && isValidURI(uriStr);
     }
 
     private boolean isValidURI(String str) {

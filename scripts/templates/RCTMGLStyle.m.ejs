@@ -90,15 +90,7 @@
 
 - (BOOL)_shouldAddImage:(NSString *)str
 {
-    return str != nil && ![self _isTokenString:str] && [self _isValidURL:str];
-}
-
-- (BOOL)_isTokenString:(NSString *)str
-{
-    if (str == nil) {
-        return false;
-    }
-    return [str hasPrefix:@"{"] && [str hasSuffix:@"}"];
+    return str != nil && [self _isValidURL:str];
 }
 
 - (BOOL)_isValidURL:(NSString *)str
