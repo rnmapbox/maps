@@ -77,6 +77,21 @@ class MapStyleFunctionItem extends MapStyleItem {
   }
 }
 
+function resolveImage (imageURL) {
+  let resolved = imageURL;
+
+  if (typeof imageURL === 'number') { // required from JS, local file resolve it's asset filepath
+    const res = resolveAssetSource(imageURL);
+
+    // we found a local uri
+    if (res.uri) {
+      resolved = res.uri;
+    }
+  }
+
+  return resolved;
+}
+
 function makeStyleValue (prop, value, extras = {}) {
   let item;
 
@@ -93,8 +108,7 @@ function makeStyleValue (prop, value, extras = {}) {
   } else if (styleMap[prop] === StyleTypes.Translation) {
     item = new MapStyleTranslationItem(value.x, value.y, extraData);
   } else if (styleMap[prop] === StyleTypes.Image) {
-    const res = resolveAssetSource(value) || {};
-    item = new MapStyleConstantItem(res.uri || value, { image: true, ...extraData });
+    item = new MapStyleConstantItem(resolveImage(value), { image: true, ...extraData });
   } else {
     item = new MapStyleConstantItem(value, extraData);
   }

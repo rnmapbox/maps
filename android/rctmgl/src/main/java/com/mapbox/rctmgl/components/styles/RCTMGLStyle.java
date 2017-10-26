@@ -1,8 +1,10 @@
 package com.mapbox.rctmgl.components.styles;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
 
+import com.facebook.common.util.UriUtil;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -57,16 +59,20 @@ public class RCTMGLStyle {
     }
 
     public void addImage(String uriStr) {
-        if (uriStr == null || isTokenString(uriStr)) {
+        if (!shouldAddImage(uriStr)) {
             return;
         }
-
         Map.Entry[] images = new Map.Entry[]{ new AbstractMap.SimpleEntry(uriStr, uriStr) };
         DownloadMapImageTask task = new DownloadMapImageTask(mMap, null);
         task.execute(images);
     }
 
-    private boolean isTokenString(String str) {
-        return str.charAt(0) == '{' && str.charAt(str.length() - 1) == '}';
+    private boolean shouldAddImage(String uriStr) {
+        return uriStr != null && isValidURI(uriStr);
+    }
+
+    private boolean isValidURI(String str) {
+        Uri uri = Uri.parse(str);
+        return UriUtil.isLocalAssetUri(uri) || UriUtil.isNetworkUri(uri);
     }
 }

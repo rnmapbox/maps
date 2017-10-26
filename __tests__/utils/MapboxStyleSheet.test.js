@@ -24,6 +24,16 @@ describe('MapboxStyleSheet', () => {
     });
   });
 
+  it('should create asset image item for when we require images directly in JS', () => {
+    verifyStyleSheetsMatch({ fillPattern: 123 }, {
+      __MAPBOX_STYLESHEET__: true,
+      fillPattern: {
+        type: 'constant',
+        payload: { value: 'asset://test.png', image: true },
+      },
+    });
+  });
+
   it('should create translate item', () => {
     verifyStyleSheetsMatch({ fillTranslate: { x: 1, y: 2 } }, {
       __MAPBOX_STYLESHEET__: true,
