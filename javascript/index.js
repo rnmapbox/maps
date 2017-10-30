@@ -23,6 +23,9 @@ import SymbolLayer from './components/SymbolLayer';
 import RasterLayer from './components/RasterLayer';
 import BackgroundLayer from './components/BackgroundLayer';
 
+// modules
+import offlineManager from './modules/offline/offlineManager';
+
 let MapboxGL = { ...NativeModules.MGLModule };
 
 // static methods
@@ -70,6 +73,9 @@ MapboxGL.CircleLayer = CircleLayer;
 MapboxGL.SymbolLayer = SymbolLayer;
 MapboxGL.RasterLayer = RasterLayer;
 MapboxGL.BackgroundLayer = BackgroundLayer;
+
+// modules
+MapboxGL.offlineManager = offlineManager;
 
 // utils
 MapboxGL.geoUtils = geoUtils;
