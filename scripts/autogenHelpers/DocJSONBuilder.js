@@ -1,10 +1,13 @@
 const docgen = require('react-docgen');
-const doctrine = require("doctrine");
 const dir = require('node-dir');
 const fs = require('fs');
 const path = require('path');
+const { exec } = require('child_process');
+const JSDocNodeTree = require('./JSDocNodeTree');
 
-const INPUT_PATH = path.join(__dirname, '..', '..', 'javascript', 'components');
+const COMPONENT_PATH = path.join(__dirname, '..', '..', 'javascript', 'components');
+const MODULES_PATH = path.join(__dirname, '..', '..', 'javascript', 'modules');
+
 const OUTPUT_PATH = path.join(__dirname, '..', '..', 'docs', 'docs.json');
 const IGNORE_FILES = ['AbstractLayer'];
 
@@ -16,8 +19,6 @@ class DocJSONBuilder {
       const ComponentName = pascelCase(styleLayer.name);
       this._styledLayers[ComponentName + (ComponentName === 'Light' ? '' : 'Layer')] = styleLayer;
     }
-
-    this._filePath = INPUT_PATH;
   }
 
   get options () {
@@ -84,11 +85,9 @@ class DocJSONBuilder {
     component.methods = component.methods.filter((method) => !privateMethods.includes(method.name));
   }
 
-  generate () {
-    let results = {};
-
+  generateReactComponentsTask (results, filePath) {
     return new Promise((resolve, reject) => {
-      dir.readFiles(this._filePath, this.options, (err, content, fileName, next) => {
+      dir.readFiles(filePath, this.options, (err, content, fileName, next) => {
         if (err) {
           return reject(err);
         }
@@ -103,10 +102,50 @@ class DocJSONBuilder {
         this.postprocess(results[fileName], fileName);
 
         next();
-      }, () => {
-        fs.writeFileSync(OUTPUT_PATH, JSON.stringify(results, null, 2))
+      }, () => resolve());
+    });
+  }
+
+  generateModulesTask (results, filePath) {
+    return new Promise((resolve, reject) => {
+      exec(`documentation build ${MODULES_PATH} -f json`, (err, stdout, stderr) => {
+        if (err || stderr) {
+          reject(err || stderr);
+          return;
+        }
+
+        const modules = JSON.parse(stdout);
+        for (let module of modules) {
+          const node = new JSDocNodeTree(module);
+          const name = `${module.name.charAt(0).toLowerCase()}${module.name.substring(1)}`;
+
+          results[name] = {
+            name: name,
+            description: node.getText(),
+            props: [],
+            styles: [],
+            methods: node.getMethods(),
+          };
+        }
+
         resolve();
       });
+    });
+  }
+
+  generate () {
+    this.generateModulesTask({}, MODULES_PATH);
+
+    let results = {};
+
+    const tasks = [
+      this.generateReactComponentsTask(results, COMPONENT_PATH),
+      this.generateModulesTask(results, MODULES_PATH),
+    ];
+
+    return Promise.all(tasks).then(() => {
+      fs.writeFileSync(OUTPUT_PATH, JSON.stringify(results, null, 2));
+      return true;
     });
   }
 }
