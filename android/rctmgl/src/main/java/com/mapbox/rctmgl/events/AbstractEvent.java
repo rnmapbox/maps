@@ -14,9 +14,17 @@ abstract public class AbstractEvent implements IEvent {
     private String mEventType;
     private long mTimestamp;
 
+    public AbstractEvent(String eventType) {
+        this(null, eventType);
+    }
+
     public AbstractEvent(View view, String eventType) {
         mEventType = eventType;
-        mTagID = view.getId();
+
+        if (view != null) {
+            mTagID = view.getId();
+        }
+
         mTimestamp = System.currentTimeMillis();
     }
 

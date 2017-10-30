@@ -12,6 +12,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.constants.Style;
+import com.mapbox.mapboxsdk.offline.OfflineRegion;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerMode;
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.rctmgl.components.camera.constants.CameraMode;
@@ -195,6 +196,17 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         lightAnchor.put("Map", Property.ANCHOR_MAP);
         lightAnchor.put("Viewport", Property.ANCHOR_VIEWPORT);
 
+        // offline region download states
+        Map<String, Integer> offlinePackDownloadStates = new HashMap<>();
+        offlinePackDownloadStates.put("Inactive", RCTMGLOfflineModule.INACTIVE_REGION_DOWNLOAD_STATE);
+        offlinePackDownloadStates.put("Active", RCTMGLOfflineModule.ACTIVE_REGION_DOWNLOAD_STATE);
+        offlinePackDownloadStates.put("Complete", RCTMGLOfflineModule.COMPLETE_REGION_DOWNLOAD_STATE);
+
+        // offline module callback names
+        Map<String, String> offlineModuleCallbackNames = new HashMap<>();
+        offlineModuleCallbackNames.put("Error", RCTMGLOfflineModule.OFFLINE_ERROR);
+        offlineModuleCallbackNames.put("Progress", RCTMGLOfflineModule.OFFLINE_PROGRESS);
+
         return MapBuilder.<String, Object>builder()
                 .put("StyleURL", styleURLS)
                 .put("EventTypes", eventTypes)
@@ -220,6 +232,8 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
                 .put("TextTransform", textTransform)
                 .put("TextTranslateAnchor", textTranslateAnchor)
                 .put("LightAnchor", lightAnchor)
+                .put("OfflinePackDownloadState", offlinePackDownloadStates)
+                .put("OfflineCallbackName", offlineModuleCallbackNames)
                 .build();
     }
 
