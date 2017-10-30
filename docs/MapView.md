@@ -40,6 +40,9 @@
 
 ### methods
 #### queryRenderedFeaturesAtPoint(coordinate[, filter][, layerIDs])
+
+Returns an array of rendered map features that intersect with a given point.
+
 ##### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
@@ -55,6 +58,9 @@ this._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1'
 
 
 #### queryRenderedFeaturesInRect(bbox[, filter][, layerIDs])
+
+Returns an array of rendered map features that intersect with the given rectangle,<br/>restricted to the given style layers and filtered by the given predicate.
+
 ##### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
@@ -70,6 +76,9 @@ this._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'],
 
 
 #### fitBounds(northEastCoordinates, southWestCoordinates[, padding][, duration])
+
+Map camera transitions to fit provided bounds
+
 ##### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
@@ -89,6 +98,9 @@ this.map.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)
 
 
 #### flyTo(coordinates[, duration])
+
+Map camera will fly to new coordinate
+
 ##### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
@@ -104,6 +116,9 @@ this.map.flyTo([lng, lat], 12000)
 
 
 #### moveTo(coordinates[, duration])
+
+Map camera will move to new coordinate at the same zoom level
+
 ##### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
@@ -119,6 +134,9 @@ this.map.moveTo([lng, lat]) // snaps camera to new location without any easing
 
 
 #### zoomTo(zoomLevel[, duration])
+
+Map camera will zoom to specified level
+
 ##### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
@@ -134,6 +152,9 @@ this.map.zoomTo(16, 100)
 
 
 #### setCamera(config)
+
+Map camera will perform updates based on provided config. Advanced use only!
+
 ##### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
