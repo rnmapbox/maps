@@ -1111,6 +1111,13 @@
         "description": "The mode used to track the user location on the map"
       },
       {
+        "name": "contentInset",
+        "required": false,
+        "type": "union",
+        "default": "none",
+        "description": "The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport."
+      },
+      {
         "name": "heading",
         "required": false,
         "type": "number",
@@ -1193,6 +1200,13 @@
         "type": "bool",
         "default": "true",
         "description": "Enable/Disable the logo on the map."
+      },
+      {
+        "name": "compassEnabled",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "Enable/Disable the compass from appearing on the map"
       },
       {
         "name": "onPress",

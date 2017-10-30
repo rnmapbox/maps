@@ -69,7 +69,9 @@ RCT_REMAP_VIEW_PROPERTY(rotateEnabled, reactRotateEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(attributionEnabled, reactAttributionEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(logoEnabled, reactLogoEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(showUserLocation, reactShowUserLocation, BOOL)
+RCT_REMAP_VIEW_PROPERTY(compassEnabled, reactCompassEnabled, BOOL)
 
+RCT_REMAP_VIEW_PROPERTY(contentInset, reactContentInset, NSArray)
 RCT_REMAP_VIEW_PROPERTY(centerCoordinate, reactCenterCoordinate, NSString)
 RCT_REMAP_VIEW_PROPERTY(styleURL, reactStyleURL, NSString)
 

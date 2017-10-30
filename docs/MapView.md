@@ -8,6 +8,7 @@
 | centerCoordinate | `arrayOf` | `none` | `false` | Initial center coordinate on map [lng, lat] |
 | showUserLocation | `bool` | `none` | `false` | Shows the users location on the map |
 | userTrackingMode | `number` | `MapboxGL.UserTrackingModes.None` | `false` | The mode used to track the user location on the map |
+| contentInset | `union` | `none` | `false` | The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport. |
 | heading | `number` | `0` | `false` | Initial heading on map |
 | pitch | `number` | `0` | `false` | Initial pitch on map |
 | style | `any` | `none` | `false` | Style for wrapping React Native View |
@@ -20,6 +21,7 @@
 | rotateEnabled | `bool` | `true` | `false` | Enable/Disable rotation on map |
 | attributionEnabled | `bool` | `true` | `false` | Enable/Disable attribution on map. For iOS you need to add MGLMapboxMetricsEnabledSettingShownInApp=YES<br/>to your Info.plist |
 | logoEnabled | `bool` | `true` | `false` | Enable/Disable the logo on the map. |
+| compassEnabled | `bool` | `none` | `false` | Enable/Disable the compass from appearing on the map |
 | onPress | `func` | `none` | `false` | Map press listener, gets called when a user presses the map |
 | onLongPress | `func` | `none` | `false` | Map long press listener, gets called when a user long presses the map |
 | onRegionWillChange | `func` | `none` | `false` | This event is triggered whenever the currently displayed map region is about to change. |

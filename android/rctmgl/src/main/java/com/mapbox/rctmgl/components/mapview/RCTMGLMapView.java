@@ -5,6 +5,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.location.Location;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.view.View;
@@ -84,11 +85,12 @@ public class RCTMGLMapView extends MapView implements
     private String mStyleURL;
 
     private boolean mAnimated;
-    private boolean mScrollEnabled;
-    private boolean mPitchEnabled;
-    private boolean mRotateEnabled;
-    private boolean mAttributionEnabled;
-    private boolean mLogoEnabled;
+    private Boolean mScrollEnabled;
+    private Boolean mPitchEnabled;
+    private Boolean mRotateEnabled;
+    private Boolean mAttributionEnabled;
+    private Boolean mLogoEnabled;
+    private Boolean mCompassEnabled;
     private boolean mShowUserLocation;
 
     private long mActiveMarkerID = -1;
@@ -101,6 +103,7 @@ public class RCTMGLMapView extends MapView implements
     private Double mMinZoomLevel;
     private Double mMaxZoomLevel;
 
+    private ReadableArray mInsets;
     private Point mCenterCoordinate;
 
     public RCTMGLMapView(Context context, RCTMGLMapViewManager manager) {
@@ -219,6 +222,8 @@ public class RCTMGLMapView extends MapView implements
     public void onMapReady(final MapboxMap mapboxMap) {
         mMap = mapboxMap;
 
+        reflow(); // the internal widgets(compass, attribution, etc) need this to position themselves correctly
+
         final MarkerViewManager markerViewManager = mMap.getMarkerViewManager();
         markerViewManager.addMarkerViewAdapter(new RCTMGLPointAnnotationAdapter(this, mContext));
         markerViewManager.setOnMarkerViewClickListener(this);
@@ -230,6 +235,7 @@ public class RCTMGLMapView extends MapView implements
         addOnMapChangedListener(this);
 
         // in case props were set before the map was ready lets set them
+        updateInsets();
         updateUISettings();
         setMinMaxZoomLevels();
 
@@ -422,6 +428,11 @@ public class RCTMGLMapView extends MapView implements
         updateCameraPositionIfNeeded(false);
     }
 
+    public void setReactContentInset(ReadableArray array) {
+        mInsets = array;
+        updateInsets();
+    }
+
     public void setReactScrollEnabled(boolean scrollEnabled) {
         mScrollEnabled = scrollEnabled;
         updateUISettings();
@@ -439,6 +450,11 @@ public class RCTMGLMapView extends MapView implements
 
     public void setReactLogoEnabled(boolean logoEnabled) {
         mLogoEnabled = logoEnabled;
+        updateUISettings();
+    }
+
+    public void setReactCompassEnabled(boolean compassEnabled) {
+        mCompassEnabled = compassEnabled;
         updateUISettings();
     }
 
@@ -620,25 +636,55 @@ public class RCTMGLMapView extends MapView implements
         // Gesture settings
         UiSettings uiSettings = mMap.getUiSettings();
 
-        if (uiSettings.isRotateGesturesEnabled() != mScrollEnabled) {
+        if (mScrollEnabled != null && uiSettings.isRotateGesturesEnabled() != mScrollEnabled) {
             uiSettings.setScrollGesturesEnabled(mScrollEnabled);
         }
 
-        if (uiSettings.isTiltGesturesEnabled() != mPitchEnabled) {
+        if (mPitchEnabled != null && uiSettings.isTiltGesturesEnabled() != mPitchEnabled) {
             uiSettings.setTiltGesturesEnabled(mPitchEnabled);
         }
 
-        if (uiSettings.isRotateGesturesEnabled() != mRotateEnabled) {
+        if (mRotateEnabled != null && uiSettings.isRotateGesturesEnabled() != mRotateEnabled) {
             uiSettings.setRotateGesturesEnabled(mRotateEnabled);
         }
 
-        if (uiSettings.isAttributionEnabled() != mAttributionEnabled) {
+        if (mAttributionEnabled != null && uiSettings.isAttributionEnabled() != mAttributionEnabled) {
             uiSettings.setAttributionEnabled(mAttributionEnabled);
         }
 
-        if (uiSettings.isLogoEnabled() != mLogoEnabled) {
+        if (mLogoEnabled != null && uiSettings.isLogoEnabled() != mLogoEnabled) {
             uiSettings.setLogoEnabled(mLogoEnabled);
         }
+
+        if (mCompassEnabled != null && uiSettings.isCompassEnabled() != mCompassEnabled) {
+            uiSettings.setCompassEnabled(mCompassEnabled);
+        }
+    }
+
+    private void updateInsets() {
+        if (mMap == null || mInsets == null) {
+            return;
+        }
+
+        int top = 0, right = 0, bottom = 0, left = 0;
+        if (mInsets.size() == 4) {
+            top = mInsets.getInt(0);
+            right = mInsets.getInt(1);
+            bottom = mInsets.getInt(2);
+            left = mInsets.getInt(3);
+        } else if (mInsets.size() == 2) {
+            top = mInsets.getInt(0);
+            right = mInsets.getInt(1);
+            bottom = top;
+            left = right;
+        } else if (mInsets.size() == 1) {
+            top = mInsets.getInt(0);
+            right = top;
+            bottom = top;
+            left = top;
+        }
+
+        mMap.setPadding(left, top, right, bottom);
     }
 
     private void setMinMaxZoomLevels() {

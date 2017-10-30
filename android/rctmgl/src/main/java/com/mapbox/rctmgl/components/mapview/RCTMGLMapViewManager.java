@@ -115,6 +115,11 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         mapView.setReactLogoEnabled(logoEnabled);
     }
 
+    @ReactProp(name="compassEnabled")
+    public void setCompassEnabled(RCTMGLMapView mapView, boolean compassEnabled) {
+        mapView.setReactCompassEnabled(compassEnabled);
+    }
+
     @ReactProp(name="heading")
     public void setHeading(RCTMGLMapView mapView, double heading) {
         mapView.setReactHeading(heading);
@@ -138,6 +143,11 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     @ReactProp(name="maxZoomLevel")
     public void setMaxZoomLevel(RCTMGLMapView mapView, double maxZoomLevel) {
         mapView.setReactMaxZoomLevel(maxZoomLevel);
+    }
+
+    @ReactProp(name="contentInset")
+    public void setContentInset(RCTMGLMapView mapView, ReadableArray array) {
+        mapView.setReactContentInset(array);
     }
 
     @ReactProp(name="centerCoordinate")
