@@ -8,6 +8,7 @@
 
 #import "MGLModule.h"
 #import "RCTMGLEventTypes.h"
+#import "MGLOfflineModule.h"
 #import "CameraMode.h"
 #import "RCTMGLSource.h"
 @import Mapbox;
@@ -15,6 +16,11 @@
 @implementation MGLModule
 
 RCT_EXPORT_MODULE();
+
+-(BOOL)requiresMainQueueSetup
+{
+    return NO;
+}
 
 - (NSDictionary<NSString *, id> *)constantsToExport
 {
@@ -165,6 +171,16 @@ RCT_EXPORT_MODULE();
     [lightAnchor setObject:@(MGLLightAnchorMap) forKey:@"Map"];
     [lightAnchor setObject:@(MGLLightAnchorViewport) forKey:@"Viewport"];
     
+    // offline module callback names
+    NSMutableDictionary *offlineModuleCallbackNames = [[NSMutableDictionary alloc] init];
+    [offlineModuleCallbackNames setObject:RCT_MAPBOX_OFFLINE_CALLBACK_ERROR forKey:@"Error"];
+    [offlineModuleCallbackNames setObject:RCT_MAPBOX_OFFLINE_CALLBACK_PROGRESS forKey:@"Progress"];
+    
+    NSMutableDictionary *offlinePackDownloadState = [[NSMutableDictionary alloc] init];
+    [offlinePackDownloadState setObject:@(MGLOfflinePackStateInactive) forKey:@"Inactive"];
+    [offlinePackDownloadState setObject:@(MGLOfflinePackStateActive) forKey:@"Active"];
+    [offlinePackDownloadState setObject:@(MGLOfflinePackStateComplete) forKey:@"Complete"];
+    
     return @{
          @"StyleURL": styleURLS,
          @"EventTypes": eventTypes,
@@ -189,13 +205,17 @@ RCT_EXPORT_MODULE();
          @"TextRotationAlignment": textRotationAlignment,
          @"TextTransform": textTransform,
          @"TextTranslateAnchor": textTranslateAnchor,
-         @"LightAnchor": lightAnchor
+         @"LightAnchor": lightAnchor,
+         @"OfflineCallbackName": offlineModuleCallbackNames,
+         @"OfflinePackDownloadState": offlinePackDownloadState
     };
 }
 
 RCT_EXPORT_METHOD(setAccessToken:(NSString *)accessToken)
 {
-    [MGLAccountManager setAccessToken:accessToken];
+    dispatch_async(dispatch_get_main_queue(), ^{
+       [MGLAccountManager setAccessToken:accessToken];
+    });
 }
 
 RCT_EXPORT_METHOD(getAccessToken:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)

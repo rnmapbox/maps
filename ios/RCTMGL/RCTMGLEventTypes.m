@@ -33,4 +33,8 @@ NSString *const RCT_MAPBOX_DID_FINISH_LOADING_STYLE = @"didfinishloadingstyle";
 
 NSString *const RCT_MAPBOX_ANNOTATION_TAP = @"annotationtap";
 
+NSString *const RCT_MAPBOX_OFFLINE_PROGRESS = @"offlinestatus";
+NSString *const RCT_MAPBOX_OFFLINE_ERROR = @"offlineerror";
+NSString *const RCT_MAPBOX_OFFLINE_TILE_LIMIT = @"offlinetilelimit";
+
 @end

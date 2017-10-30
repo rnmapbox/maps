@@ -33,4 +33,8 @@ extern NSString *const RCT_MAPBOX_DID_FINISH_LOADING_STYLE;
 
 extern NSString *const RCT_MAPBOX_ANNOTATION_TAP;
 
+extern NSString *const RCT_MAPBOX_OFFLINE_PROGRESS;
+extern NSString *const RCT_MAPBOX_OFFLINE_ERROR;
+extern NSString *const RCT_MAPBOX_OFFLINE_TILE_LIMIT;
+
 @end
