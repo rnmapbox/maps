@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.mapbox.mapboxsdk.style.layers.FillLayer;
 import com.mapbox.mapboxsdk.style.layers.Filter;
+import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyle;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleFactory;
 
@@ -19,16 +20,25 @@ public class RCTMGLFillLayer extends RCTLayer<FillLayer> {
     }
 
     @Override
+    public void addToMap(RCTMGLMapView mapView) {
+        mMap = mapView.getMapboxMap();
+        mMapView = mapView;
+        mLayer = makeLayer();
+        insertLayer();
+        addStyles();
+
+        Filter.Statement statement = buildFilter();
+        if (statement != null) {
+            mLayer.setFilter(statement);
+        }
+    }
+
+    @Override
     public FillLayer makeLayer() {
         FillLayer layer = new FillLayer(mID, mSourceID);
 
         if (mSourceLayerID != null) {
             layer.setSourceLayer(mSourceLayerID);
-        }
-
-        Filter.Statement statement = buildFilter();
-        if (statement != null) {
-            layer.setFilter(statement);
         }
 
         return layer;

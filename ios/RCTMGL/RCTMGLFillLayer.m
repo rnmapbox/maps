@@ -11,6 +11,23 @@
 
 @implementation RCTMGLFillLayer
 
+- (void)setSourceLayerID:(NSString *)sourceLayerID
+{
+    _sourceLayerID = sourceLayerID;
+    
+    if (self.styleLayer != nil) {
+        ((MGLFillStyleLayer *) self.styleLayer).sourceLayerIdentifier = _sourceLayerID;
+    }
+}
+
+- (void)addToMap:(MGLStyle *)style
+{
+    self.style = style;
+    self.styleLayer = [self makeLayer:style];
+    [self addStyles];
+    [self insertLayer];
+}
+
 - (MGLStyleLayer*)makeLayer:(MGLStyle*)style
 {
     MGLSource *source = [style sourceWithIdentifier:self.sourceID];
