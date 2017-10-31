@@ -363,7 +363,8 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
                             @"zoomLevel": [NSNumber numberWithDouble:mapView.zoomLevel],
                             @"heading": [NSNumber numberWithDouble:mapView.camera.heading],
                             @"pitch": [NSNumber numberWithDouble:mapView.camera.pitch],
-                            @"animated": [NSNumber numberWithBool:animated]
+                            @"animated": [NSNumber numberWithBool:animated],
+                            @"visibleBounds": [RCTMGLUtils fromCoordinateBounds:mapView.visibleCoordinateBounds]
                          };
     return feature.geoJSONDictionary;
 }

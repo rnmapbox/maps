@@ -45,10 +45,14 @@ class ShowRegionDidChange extends React.Component {
     }
 
     const { geometry, properties } = this.state.regionFeature;
+    const neCoord = properties.visibleBounds[0].map((n) => n.toPrecision(6)).join(', ');
+    const swCoord = properties.visibleBounds[1].map((n) => n.toPrecision(6)).join(', ')
     return (
       <Bubble>
         <Text>Latitude: {geometry.coordinates[1]}</Text>
         <Text>Longitude: {geometry.coordinates[0]}</Text>
+        <Text>Visible Bounds NE: {neCoord}</Text>
+        <Text>Visible Bounds SW: {swCoord}</Text>
         <Text>Zoom Level: {properties.zoomLevel}</Text>
         <Text>Heading: {properties.heading}</Text>
         <Text>Pitch: {properties.pitch}</Text>

@@ -23,6 +23,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.geometry.VisibleRegion;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -729,6 +730,9 @@ public class RCTMGLMapView extends MapView implements
         properties.putDouble("heading", position.bearing);
         properties.putDouble("pitch", position.tilt);
         properties.putBoolean("animated", isAnimated);
+
+        VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+        properties.putArray("visibleBounds", ConvertUtils.fromLatLngBounds(visibleRegion.latLngBounds));
 
         return ConvertUtils.toPointFeature(latLng, properties);
     }
