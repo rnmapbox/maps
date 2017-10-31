@@ -231,6 +231,19 @@ class MapView extends React.Component {
   }
 
   /**
+   * The coordinate bounds(ne, sw) visible in the users’s viewport.
+   *
+   * @example
+   * const visibleBounds = await this._map.getVisibleBounds();
+   *
+   * @return {Array}
+   */
+  async getVisibleBounds () {
+    const res = await this._runNativeCommand('getVisibleBounds');
+    return res.visibleBounds;
+  }
+
+  /**
    * Returns an array of rendered map features that intersect with a given point.
    *
    * @example
@@ -449,7 +462,7 @@ class MapView extends React.Component {
     return this._runNativeCommand('setCamera', [cameraConfig]);
   }
 
-  _runNativeCommand (methodName, args) {
+  _runNativeCommand (methodName, args = []) {
     if (IS_ANDROID) {
       return new Promise ((resolve) => {
         const callbackID = '' + Date.now();

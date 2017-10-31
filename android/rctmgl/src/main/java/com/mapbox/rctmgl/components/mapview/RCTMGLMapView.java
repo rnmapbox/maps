@@ -572,6 +572,17 @@ public class RCTMGLMapView extends MapView implements
         mManager.handleEvent(event);
     }
 
+    public void getVisibleBounds(String callbackID) {
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
+        VisibleRegion region = mMap.getProjection().getVisibleRegion();
+
+        WritableMap payload = new WritableNativeMap();
+        payload.putArray("visibleBounds", ConvertUtils.fromLatLngBounds(region.latLngBounds));
+        event.setPayload(payload);
+
+        mManager.handleEvent(event);
+    }
+
     //endregion
 
     @Override

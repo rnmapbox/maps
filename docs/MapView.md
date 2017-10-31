@@ -41,6 +41,22 @@
 | onSetCameraComplete | `func` | `none` | `false` | This event is triggered once the camera is finished after calling setCamera |
 
 ### methods
+#### getVisibleBounds()
+
+The coordinate bounds(ne, sw) visible in the users’s viewport.
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
+
+```javascript
+const visibleBounds = await this._map.getVisibleBounds();
+```
+
+
 #### queryRenderedFeaturesAtPoint(coordinate[, filter][, layerIDs])
 
 Returns an array of rendered map features that intersect with a given point.
