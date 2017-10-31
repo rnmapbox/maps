@@ -46,7 +46,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
 
     @Override
     public void addView(RCTMGLMapView mapView, View childView, int childPosition) {
-        mapView.addFeature(childView, childPosition + 1);
+        mapView.addFeature(childView, childPosition);
     }
 
     @Override
