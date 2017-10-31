@@ -31,11 +31,7 @@ public class RCTMGLSymbolLayer extends RCTLayer<SymbolLayer> {
 
     @Override
     public void addToMap(RCTMGLMapView mapView) {
-        mMap = mapView.getMapboxMap();
-        mMapView = mapView;
-        mLayer = makeLayer();
-        insertLayer();
-        addStyles();
+        super.addToMap(mapView);
 
         Filter.Statement statement = buildFilter();
         if (statement != null) {

@@ -1,5 +1,7 @@
 package com.mapbox.rctmgl.components.styles.sources;
 
+import android.view.View;
+
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -19,6 +21,26 @@ public class RCTMGLRasterSourceManager extends ViewGroupManager<RCTMGLRasterSour
     @Override
     protected RCTMGLRasterSource createViewInstance(ThemedReactContext reactContext) {
         return new RCTMGLRasterSource(reactContext);
+    }
+
+    @Override
+    public View getChildAt(RCTMGLRasterSource source, int childPosition) {
+        return source.getLayerAt(childPosition);
+    }
+
+    @Override
+    public int getChildCount(RCTMGLRasterSource source) {
+        return source.getLayerCount();
+    }
+
+    @Override
+    public void addView(RCTMGLRasterSource source, View childView, int childPosition) {
+        source.addLayer(childView, childPosition);
+    }
+
+    @Override
+    public void removeViewAt(RCTMGLRasterSource source, int childPosition) {
+        source.removeLayer(childPosition);
     }
 
     @ReactProp(name="id")
