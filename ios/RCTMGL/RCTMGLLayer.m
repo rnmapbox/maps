@@ -86,7 +86,9 @@
     
     if ([RCTMGLSource isDefaultSource:_sourceID]) {
         _styleLayer = [style layerWithIdentifier:_id];
-    } else {
+    }
+    
+    if (_styleLayer == nil) {
         _styleLayer = [self makeLayer:style];
         [self insertLayer];
     }
@@ -115,6 +117,10 @@
 
 - (void)insertLayer
 {
+    if ([_style layerWithIdentifier:_id] != nil) {
+        return; // prevent layer from being added twice
+    }
+
     if (_aboveLayerID != nil) {
         [self insertAbove:[_style layerWithIdentifier:_aboveLayerID]];
     } else if (_belowLayerID != nil) {

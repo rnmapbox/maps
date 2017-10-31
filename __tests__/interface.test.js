@@ -11,6 +11,9 @@ describe('Public Interface', () => {
       'PointAnnotation',
       'Callout',
 
+      // modules
+      'offlineManager',
+
       // layers
       'FillLayer',
       'FillExtrusionLayer',
@@ -50,6 +53,8 @@ describe('Public Interface', () => {
       'TextTransform',
       'TextTranslateAnchor',
       'LightAnchor',
+      'OfflinePackDownloadState',
+      'OfflineCallbackName',
 
       // methods
       'setAccessToken',

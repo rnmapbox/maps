@@ -30,4 +30,9 @@ public class EventTypes {
     // point annotation event types
     public static final String ANNOTATION_SELECTED = "annotationselected";
     public static final String ANNOTATION_DESELECTED = "annotationdeselected";
+
+    // offline event types
+    public static final String OFFLINE_ERROR = "offlineerror";
+    public static final String OFFLINE_TILE_LIMIT = "offlinetilelimit";
+    public static final String OFFLINE_STATUS = "offlinestatus";
 }

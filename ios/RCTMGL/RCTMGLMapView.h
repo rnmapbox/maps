@@ -22,6 +22,7 @@
 @property (nonatomic, strong) NSMutableArray<RCTMGLSource*> *sources;
 @property (nonatomic, strong) NSMutableArray<RCTMGLPointAnnotation*> *pointAnnotations;
 @property (nonatomic, strong) RCTMGLLight *light;
+@property (nonatomic, copy) NSArray<NSNumber *> *reactContentInset;
 
 @property (nonatomic, assign) BOOL animated;
 @property (nonatomic, assign) BOOL reactScrollEnabled;
@@ -29,6 +30,7 @@
 @property (nonatomic, assign) BOOL reactRotateEnabled;
 @property (nonatomic, assign) BOOL reactAttributionEnabled;
 @property (nonatomic, assign) BOOL reactLogoEnabled;
+@property (nonatomic, assign) BOOL reactCompassEnabled;
 @property (nonatomic, assign) BOOL reactShowUserLocation;
 
 @property (nonatomic, copy) NSString *reactCenterCoordinate;

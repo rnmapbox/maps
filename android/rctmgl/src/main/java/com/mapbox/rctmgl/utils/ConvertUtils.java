@@ -2,8 +2,12 @@ package com.mapbox.rctmgl.utils;
 
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.util.Log;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.NoSuchKeyException;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
@@ -11,6 +15,7 @@ import com.facebook.react.bridge.WritableNativeMap;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.style.layers.Filter;
+import com.mapbox.rctmgl.events.IEvent;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Point;
@@ -26,6 +31,8 @@ import java.util.List;
  */
 
 public class ConvertUtils {
+    public static final String LOG_TAG = ConvertUtils.class.getSimpleName();
+
     public static WritableMap toPointFeature(LatLng latLng, WritableMap properties) {
         WritableMap map = new WritableNativeMap();
         map.putString("type", "Feature");
@@ -47,6 +54,17 @@ public class ConvertUtils {
         writableCoords.pushDouble(coords[0]);
         writableCoords.pushDouble(coords[1]);
         return writableCoords;
+    }
+
+    public static WritableArray fromLatLngBounds(LatLngBounds latLngBounds) {
+        WritableArray array = Arguments.createArray();
+
+        LatLng[] latLngs = latLngBounds.toLatLngs();
+        for (LatLng latLng : latLngs) {
+            array.pushArray(fromLatLng(latLng));
+        }
+
+        return array;
     }
 
     public static LatLng toLatLng(Point point) {
@@ -130,5 +148,31 @@ public class ConvertUtils {
 
         rectF.set((float)array.getDouble(3), (float)array.getDouble(0), (float)array.getDouble(1), (float)array.getDouble(2));
         return rectF;
+    }
+
+    public static double getDouble(String key, ReadableMap map, double defaultValue) {
+        double value = defaultValue;
+
+        try {
+            value = map.getDouble(key);
+        } catch (NoSuchKeyException e) {
+            // key not found use default value
+            Log.d(LOG_TAG, String.format("No key found for %s, using default value %d", key, defaultValue));
+        }
+
+        return value;
+    }
+
+    public static String getString(String key, ReadableMap map, String defaultValue) {
+        String value = defaultValue;
+
+        try {
+            value = map.getString(key);
+        } catch (NoSuchKeyException e) {
+            // key not found use default value
+            Log.d(LOG_TAG, String.format("No key found for %s, using default value %s", key, defaultValue));
+        }
+
+        return value;
     }
 }

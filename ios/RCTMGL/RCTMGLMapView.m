@@ -139,6 +139,12 @@ static double const M2PI = M_PI * 2;
     self.logoView.hidden = !_reactLogoEnabled;
 }
 
+- (void)setReactCompassEnabled:(BOOL)reactCompassEnabled
+{
+    _reactCompassEnabled = reactCompassEnabled;
+    self.compassView.hidden = !_reactCompassEnabled;
+}
+
 - (void)setReactShowUserLocation:(BOOL)reactShowUserLocation
 {
     _reactShowUserLocation = reactShowUserLocation;
@@ -149,6 +155,30 @@ static double const M2PI = M_PI * 2;
 {
     _reactCenterCoordinate = reactCenterCoordinate;
     [self _updateCameraIfNeeded:YES];
+}
+
+- (void)setReactContentInset:(NSArray<NSNumber *> *)reactContentInset
+{
+    CGFloat top = 0.0f, right = 0.0f, left = 0.0f, bottom = 0.0f;
+    
+    if (reactContentInset.count == 4) {
+        top = [reactContentInset[0] floatValue];
+        right = [reactContentInset[1] floatValue];
+        bottom = [reactContentInset[2] floatValue];
+        left = [reactContentInset[3] floatValue];
+    } else if (reactContentInset.count == 2) {
+        top = [reactContentInset[0] floatValue];
+        right = [reactContentInset[1] floatValue];
+        bottom = [reactContentInset[0] floatValue];
+        left = [reactContentInset[1] floatValue];
+    } else if (reactContentInset.count == 1) {
+        top = [reactContentInset[0] floatValue];
+        right = [reactContentInset[0] floatValue];
+        bottom = [reactContentInset[0] floatValue];
+        left = [reactContentInset[0] floatValue];
+    }
+    
+    self.contentInset = UIEdgeInsetsMake(top, left, bottom, right);
 }
 
 - (void)setReactStyleURL:(NSString *)reactStyleURL

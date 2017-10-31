@@ -39,6 +39,14 @@ static double const MS_TO_S = 0.001;
     return MGLCoordinateBoundsMake(sw, ne);
 }
 
++ (NSArray<NSNumber *> *)fromCoordinateBounds:(MGLCoordinateBounds)bounds
+{
+    return @[
+        @[@(bounds.ne.longitude), @(bounds.ne.latitude)],
+        @[@(bounds.sw.longitude), @(bounds.sw.latitude)]
+    ];
+}
+
 + (NSTimeInterval)fromMS:(NSNumber *)number
 {
     return [number doubleValue] * MS_TO_S;

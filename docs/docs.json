@@ -835,6 +835,24 @@
     "description": "MapView backed by Mapbox Native GL",
     "methods": [
       {
+        "name": "getVisibleBounds",
+        "docblock": "The coordinate bounds(ne, sw) visible in the users’s viewport.\n\n@example\nconst visibleBounds = await this._map.getVisibleBounds();\n\n@return {Array}",
+        "modifiers": [
+          "async"
+        ],
+        "params": [],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "Array"
+          }
+        },
+        "description": "The coordinate bounds(ne, sw) visible in the users’s viewport.",
+        "examples": [
+          "\nconst visibleBounds = await this._map.getVisibleBounds();\n\n"
+        ]
+      },
+      {
         "name": "queryRenderedFeaturesAtPoint",
         "docblock": "Returns an array of rendered map features that intersect with a given point.\n\n@example\nthis._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n@param  {Array<Number>} coordinate - A point expressed in the map view’s coordinate system.\n@param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {Array=} layerIDs - A array of layer id's to filter the features by\n@return {FeatureCollection}",
         "modifiers": [
@@ -1111,6 +1129,13 @@
         "description": "The mode used to track the user location on the map"
       },
       {
+        "name": "contentInset",
+        "required": false,
+        "type": "union",
+        "default": "none",
+        "description": "The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport."
+      },
+      {
         "name": "heading",
         "required": false,
         "type": "number",
@@ -1193,6 +1218,13 @@
         "type": "bool",
         "default": "true",
         "description": "Enable/Disable the logo on the map."
+      },
+      {
+        "name": "compassEnabled",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "Enable/Disable the compass from appearing on the map"
       },
       {
         "name": "onPress",
@@ -2181,5 +2213,220 @@
       }
     ],
     "name": "VectorSource"
+  },
+  "offlineManager": {
+    "name": "offlineManager",
+    "description": "OfflineManager implements a singleton (shared object) that manages offline packs.\nAll of this class’s instance methods are asynchronous, reflecting the fact that offline resources are stored in a database.\nThe shared object maintains a canonical collection of offline packs.",
+    "props": [],
+    "styles": [],
+    "methods": [
+      {
+        "name": "createPack",
+        "description": "Creates and registers an offline pack that downloads the resources needed to use the given region offline.",
+        "params": [
+          {
+            "name": "options",
+            "description": "Create options for a offline pack that specifices zoom levels, style url, and the region to download.",
+            "type": {
+              "name": "OfflineCreatePackOptions"
+            },
+            "optional": false
+          },
+          {
+            "name": "progressListener",
+            "description": "Callback that listens for status events while downloading the offline resource.",
+            "type": {
+              "name": "Callback"
+            },
+            "optional": true
+          },
+          {
+            "name": "errorListener",
+            "description": "Callback that listens for status events while downloading the offline resource.",
+            "type": {
+              "name": "Callback"
+            },
+            "optional": true
+          }
+        ],
+        "examples": [
+          "const progressListener = (offlineRegion, status) => console.log(offlineRegion, status);\nconst errorListener = (offlineRegion, err) => console.log(offlineRegion, err);\n\nawait MapboxGL.offlineManager.createPack({\n  name: 'offlinePack',\n  styleURL: 'mapbox://...',\n  minZoom: 14,\n  maxZoom: 20,\n  bounds: [[neLng, neLat], [swLng, swLat]]\n}, progressListener, errorListener)"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "void"
+          }
+        }
+      },
+      {
+        "name": "deletePack",
+        "description": "Unregisters the given offline pack and allows resources that are no longer required by any remaining packs to be potentially freed.",
+        "params": [
+          {
+            "name": "name",
+            "description": "Name of the offline pack.",
+            "type": {
+              "name": "String"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "await MapboxGL.offlineManager.deletePack('packName')"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "void"
+          }
+        }
+      },
+      {
+        "name": "getPacks",
+        "description": "Retrieves all the current offline packs that are stored in the database.",
+        "params": [],
+        "examples": [
+          "const offlinePacks = await MapboxGL.offlineManager.getPacks();"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "Array"
+          }
+        }
+      },
+      {
+        "name": "getPack",
+        "description": "Retrieves an offline pack that is stored in the database by name.",
+        "params": [
+          {
+            "name": "name",
+            "description": "Name of the offline pack.",
+            "type": {
+              "name": "String"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "const offlinePack = await MapboxGL.offlineManager.getPack();"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "OfflinePack"
+          }
+        }
+      },
+      {
+        "name": "setTileCountLimit",
+        "description": "Sets the maximum number of Mapbox-hosted tiles that may be downloaded and stored on the current device.\nThe Mapbox Terms of Service prohibits changing or bypassing this limit without permission from Mapbox.",
+        "params": [
+          {
+            "name": "limit",
+            "description": "Map tile limit count.",
+            "type": {
+              "name": "Number"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "MapboxGL.offlineManager.setTileCountLimit(1000);"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "void"
+          }
+        }
+      },
+      {
+        "name": "setProgressEventThrottle",
+        "description": "Sets the value at which download status events will be sent over the React Native bridge.\nThese events happening very very fast default is 500ms.",
+        "params": [
+          {
+            "name": "throttleValue",
+            "description": "event throttle value in ms.",
+            "type": {
+              "name": "Number"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "MapboxGL.setProgressEventThrottle(500);"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "void"
+          }
+        }
+      },
+      {
+        "name": "subscribe",
+        "description": "Subscribe to download status/error events for the requested offline pack.\nNote that createPack calls this internally if listeners are provided.",
+        "params": [
+          {
+            "name": "packName",
+            "description": "Name of the offline pack.",
+            "type": {
+              "name": "String"
+            },
+            "optional": false
+          },
+          {
+            "name": "progressListener",
+            "description": "Callback that listens for status events while downloading the offline resource.",
+            "type": {
+              "name": "Callback"
+            },
+            "optional": false
+          },
+          {
+            "name": "errorListener",
+            "description": "Callback that listens for status events while downloading the offline resource.",
+            "type": {
+              "name": "Callback"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "const progressListener = (offlinePack, status) => console.log(offlinePack, status)\nconst errorListener = (offlinePack, err) => console.log(offlinePack, err)\nMapboxGL.offlineManager.subscribe('packName', progressListener, errorListener)"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "void"
+          }
+        }
+      },
+      {
+        "name": "unsubscribe",
+        "description": "Unsubscribes any listeners associated with the offline pack.\nIt's a good idea to call this on componentWillUnmount.",
+        "params": [
+          {
+            "name": "packName",
+            "description": "Name of the offline pack.",
+            "type": {
+              "name": "String"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "MapboxGL.offlineManager.unsubscribe('packName')"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "void"
+          }
+        }
+      }
+    ]
   }
 }

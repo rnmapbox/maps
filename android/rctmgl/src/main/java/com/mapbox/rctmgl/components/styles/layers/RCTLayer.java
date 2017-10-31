@@ -182,6 +182,10 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
     }
 
     protected void insertLayer() {
+        if (mMap.getLayer(mID) != null) {
+            return; // prevent adding a layer twice
+        }
+
         if (mAboveLayerID != null) {
             addAbove(mAboveLayerID);
         } else if (mBelowLayerID != null) {
@@ -216,7 +220,9 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
 
         if (RCTSource.isDefaultSource(mSourceID)) {
             mLayer = mMap.<T>getLayerAs(mID);
-        } else {
+        }
+
+        if (mLayer == null) {
             mLayer = makeLayer();
             insertLayer();
         }

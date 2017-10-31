@@ -9,6 +9,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: colors.secondary.white,
   },
+  baseHeader: {
+    position: 'relative',
+    height: 72,
+  },
   hideHeaderBorder: {
     zIndex: 100,
     borderBottomWidth: 0,
@@ -63,12 +67,17 @@ class MapHeader extends React.PureComponent {
       backgroundColor: this.props.statusBarColor,
     };
 
+    const containerStyle = [styles.hideHeaderBorder, styles.iOSboxShadow];
+    if (this.props.relative) {
+      containerStyle.push(styles.baseHeader);
+    }
+
     return (
       <Header
         backgroundColor={this.props.backgroundColor}
         statusBarProps={statusBarProps}
         elevation={2}
-        outerContainerStyles={[styles.hideHeaderBorder, styles.iOSboxShadow]}
+        outerContainerStyles={containerStyle}
         leftComponent={this.renderBackIcon()}
         centerComponent={this.renderTitle()} />
     );

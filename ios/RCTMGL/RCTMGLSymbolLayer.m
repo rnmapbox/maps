@@ -22,10 +22,12 @@
 
 - (void)addToMap:(MGLStyle *)style
 {
-    self.style = style;
-    self.styleLayer = [self makeLayer:style];
-    [self addStyles];
-    [self insertLayer];
+    [super addToMap:style];
+    
+    NSPredicate *filter = [self buildFilters];
+    if (filter != nil) {
+        ((MGLSymbolStyleLayer *) self.styleLayer).predicate = filter;
+    }
 }
 
 - (MGLSymbolStyleLayer*)makeLayer:(MGLStyle*)style
@@ -33,7 +35,6 @@
     MGLSource *source = [style sourceWithIdentifier:self.sourceID];
     MGLSymbolStyleLayer *layer = [[MGLSymbolStyleLayer alloc] initWithIdentifier:self.id source:source];
     layer.sourceLayerIdentifier = _sourceLayerID;
-    layer.predicate = [self buildFilters];
     return layer;
 }
 

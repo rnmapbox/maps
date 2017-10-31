@@ -46,7 +46,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
 
     @Override
     public void addView(RCTMGLMapView mapView, View childView, int childPosition) {
-        mapView.addFeature(childView, childPosition + 1);
+        mapView.addFeature(childView, childPosition);
     }
 
     @Override
@@ -115,6 +115,11 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         mapView.setReactLogoEnabled(logoEnabled);
     }
 
+    @ReactProp(name="compassEnabled")
+    public void setCompassEnabled(RCTMGLMapView mapView, boolean compassEnabled) {
+        mapView.setReactCompassEnabled(compassEnabled);
+    }
+
     @ReactProp(name="heading")
     public void setHeading(RCTMGLMapView mapView, double heading) {
         mapView.setReactHeading(heading);
@@ -138,6 +143,11 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     @ReactProp(name="maxZoomLevel")
     public void setMaxZoomLevel(RCTMGLMapView mapView, double maxZoomLevel) {
         mapView.setReactMaxZoomLevel(maxZoomLevel);
+    }
+
+    @ReactProp(name="contentInset")
+    public void setContentInset(RCTMGLMapView mapView, ReadableArray array) {
+        mapView.setReactContentInset(array);
     }
 
     @ReactProp(name="centerCoordinate")
@@ -179,6 +189,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     public static final int METHOD_SET_CAMERA = 1;
     public static final int METHOD_QUERY_FEATURES_POINT = 2;
     public static final int METHOD_QUERY_FEATURES_RECT = 3;
+    public static final int METHOD_VISIBLE_BOUNDS = 4;
 
     @Nullable
     @Override
@@ -187,6 +198,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                 .put("setCamera", METHOD_SET_CAMERA)
                 .put("queryRenderedFeaturesAtPoint", METHOD_QUERY_FEATURES_POINT)
                 .put("queryRenderedFeaturesInRect", METHOD_QUERY_FEATURES_RECT)
+                .put("getVisibleBounds", METHOD_VISIBLE_BOUNDS)
                 .build();
     }
 
@@ -210,6 +222,8 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                         Arrays.asList(args.getString(2).split(";")),
                         ConvertUtils.toStringList(args.getArray(3)));
                 break;
+            case METHOD_VISIBLE_BOUNDS:
+                mapView.getVisibleBounds(args.getString(0));
         }
     }
 

@@ -26,9 +26,9 @@ dependencies {
     provided "com.facebook.react:react-native:+"
 
     // Mapbox SDK
-    compile 'com.mapbox.mapboxsdk:mapbox-android-services:2.2.2'
+    compile 'com.mapbox.mapboxsdk:mapbox-android-services:2.2.6'
 
-    compile('com.mapbox.mapboxsdk:mapbox-android-sdk:5.1.3@aar') {
+    compile('com.mapbox.mapboxsdk:mapbox-android-sdk:5.1.4@aar') {
         transitive=true
     }
 

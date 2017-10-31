@@ -18,6 +18,7 @@
 + (CLLocationCoordinate2D)fromFeature:(NSString*)json;
 + (MGLShape*)shapeFromGeoJSON:(NSString*)json;
 + (MGLCoordinateBounds)fromFeatureCollection:(NSString*)json;
++ (NSArray<NSNumber *> *)fromCoordinateBounds:(MGLCoordinateBounds)bounds;
 + (NSTimeInterval)fromMS:(NSNumber*)number;
 + (NSNumber*)clamp:(NSNumber*)value min:(NSNumber*)min max:(NSNumber*)max;
 + (UIColor*)toColor:(id)value;

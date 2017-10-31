@@ -55,7 +55,16 @@ export function runNativeCommand (module, name, nativeRef, args = []) {
 }
 
 export function cloneReactChildrenWithProps (children, propsToAdd = {}) {
-  return React.Children.map(children, (child) => React.cloneElement(child, propsToAdd));
+  if (!children) {
+    return null;
+  }
+
+  if (!Array.isArray(children)) {
+    children = [children];
+  }
+
+  const filteredChildren = children.filter((child) => !!child); // filter out falsy children, since some can be null
+  return React.Children.map(filteredChildren, (child) => React.cloneElement(child, propsToAdd));
 }
 
 export function getIOSModuleName (moduleName) {

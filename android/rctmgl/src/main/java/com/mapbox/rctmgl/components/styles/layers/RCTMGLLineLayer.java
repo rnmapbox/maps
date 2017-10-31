@@ -22,11 +22,7 @@ public class RCTMGLLineLayer extends RCTLayer<LineLayer> {
 
     @Override
     public void addToMap(RCTMGLMapView mapView) {
-        mMap = mapView.getMapboxMap();
-        mMapView = mapView;
-        mLayer = makeLayer();
-        insertLayer();
-        addStyles();
+        super.addToMap(mapView);
 
         Filter.Statement statement = buildFilter();
         if (statement != null) {

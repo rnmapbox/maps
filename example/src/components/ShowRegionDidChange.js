@@ -22,6 +22,12 @@ class ShowRegionDidChange extends React.Component {
     };
 
     this.onRegionDidChange = this.onRegionDidChange.bind(this);
+    this.onDidFinishLoadingMap = this.onDidFinishLoadingMap.bind(this);
+  }
+
+  async onDidFinishLoadingMap () {
+    const visibleBounds = await this._map.getVisibleBounds();
+    console.log('Visible Bounds', visibleBounds); // eslint-disable-line no-console
   }
 
   isValidCoordinate (geometry) {
@@ -45,10 +51,14 @@ class ShowRegionDidChange extends React.Component {
     }
 
     const { geometry, properties } = this.state.regionFeature;
+    const neCoord = properties.visibleBounds[0].map((n) => n.toPrecision(6)).join(', ');
+    const swCoord = properties.visibleBounds[1].map((n) => n.toPrecision(6)).join(', ');
     return (
       <Bubble>
         <Text>Latitude: {geometry.coordinates[1]}</Text>
         <Text>Longitude: {geometry.coordinates[0]}</Text>
+        <Text>Visible Bounds NE: {neCoord}</Text>
+        <Text>Visible Bounds SW: {swCoord}</Text>
         <Text>Zoom Level: {properties.zoomLevel}</Text>
         <Text>Heading: {properties.heading}</Text>
         <Text>Pitch: {properties.pitch}</Text>
@@ -61,8 +71,10 @@ class ShowRegionDidChange extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
+          ref={(c) => this._map = c}
           centerCoordinate={DEFAULT_CENTER_COORDINATE}
           style={sheet.matchParent}
+          onDidFinishLoadingMap={this.onDidFinishLoadingMap}
           onRegionDidChange={this.onRegionDidChange} />
 
         {this.renderRegionChange()}
