@@ -74,8 +74,9 @@ NSString *const DEFAULT_SOURCE_ID = @"composite";
         return;
     }
     
-    if ([RCTMGLSource isDefaultSource:_id]) {
-        _source = [_map.style sourceWithIdentifier:DEFAULT_SOURCE_ID];
+    MGLSource *existingSource = [_map.style sourceWithIdentifier:_id];
+    if (existingSource != nil) {
+        _source = existingSource;
     } else {
         _source = [self makeSource];
         [_map.style addSource:_source];

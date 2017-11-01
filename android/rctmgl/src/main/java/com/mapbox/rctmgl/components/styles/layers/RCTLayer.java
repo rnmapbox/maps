@@ -218,8 +218,9 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         mMap = mapView.getMapboxMap();
         mMapView = mapView;
 
-        if (RCTSource.isDefaultSource(mSourceID)) {
-            mLayer = mMap.<T>getLayerAs(mID);
+        T existingLayer = mMap.<T>getLayerAs(mID);
+        if (existingLayer != null) {
+            mLayer = existingLayer;
         }
 
         if (mLayer == null) {

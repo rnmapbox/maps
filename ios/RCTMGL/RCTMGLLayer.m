@@ -84,8 +84,9 @@
 {
     _style = style;
     
-    if ([RCTMGLSource isDefaultSource:_sourceID]) {
-        _styleLayer = [style layerWithIdentifier:_id];
+    MGLStyleLayer *existingLayer = [style layerWithIdentifier:_id];
+    if (existingLayer != nil) {
+        _styleLayer = existingLayer;
     }
     
     if (_styleLayer == nil) {
