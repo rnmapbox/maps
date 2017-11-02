@@ -61,7 +61,10 @@ class RasterLayer extends AbstractLayer {
     /**
      * Customizable style attributes
      */
-    style: RasterLayerStyleProp,
+    style: PropTypes.oneOfType([
+      RasterLayerStyleProp,
+      PropTypes.arrayOf(RasterLayerStyleProp),
+    ]),
   };
 
   static defaultProps = {

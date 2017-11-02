@@ -64,7 +64,10 @@ class FillLayer extends AbstractLayer {
     /**
      * Customizable style attributes
      */
-    style: FillLayerStyleProp,
+     style: PropTypes.oneOfType([
+       FillLayerStyleProp,
+       PropTypes.arrayOf(FillLayerStyleProp),
+     ]),
   };
 
   static defaultProps = {

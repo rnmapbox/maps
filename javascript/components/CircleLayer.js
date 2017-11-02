@@ -66,7 +66,10 @@ class CircleLayer extends AbstractLayer {
     /**
      * Customizable style attributes
      */
-    style: CircleLayerStyleProp,
+    style: PropTypes.oneOfType([
+      CircleLayerStyleProp,
+      PropTypes.arrayOf(CircleLayerStyleProp),
+    ]),
   };
 
   static defaultProps = {

@@ -64,7 +64,10 @@ class FillExtrusionLayer extends AbstractLayer {
     /**
      * Customizable style attributes
      */
-    style: FillExtrusionLayerStyleProp,
+     style: PropTypes.oneOfType([
+       FillExtrusionLayerStyleProp,
+       PropTypes.arrayOf(FillExtrusionLayerStyleProp),
+     ]),
   };
 
   static defaultProps = {

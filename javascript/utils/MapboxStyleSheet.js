@@ -11,8 +11,12 @@ class MapStyleItem {
     this.payload = payload;
   }
 
-  toJSON () {
-    return { type: this.type, payload: this.payload };
+  toJSON (shouldMarkAsStyle) {
+    return {
+      type: this.type,
+      payload: this.payload,
+      __MAPBOX_STYLE__: shouldMarkAsStyle ? true : undefined,
+    };
   }
 }
 
@@ -67,9 +71,9 @@ class MapStyleFunctionItem extends MapStyleItem {
       const stopValue = this.payload.stops[stopKey];
 
       if (Array.isArray(stopValue)) {
-        stops[stopKey] = makeStyleValue(prop, stopValue[1], { propertyValue: stopValue[0] });
+        stops[stopKey] = makeStyleValue(prop, stopValue[1], { propertyValue: stopValue[0] }, false);
       } else {
-        stops[stopKey] = makeStyleValue(prop, stopValue);
+        stops[stopKey] = makeStyleValue(prop, stopValue, null, false);
       }
     }
 
@@ -92,13 +96,13 @@ function resolveImage (imageURL) {
   return resolved;
 }
 
-function makeStyleValue (prop, value, extras = {}) {
+function makeStyleValue (prop, value, extras = {}, shouldMarkAsStyle = true) {
   let item;
 
   // search for any extras
   const extraData = Object.assign({}, styleExtras[prop], extras);
 
-  if (!isUndefined(value.type) && !isUndefined(value.payload)) { // function
+  if (MapboxStyleSheet.isFunctionStyleItem(value)) {
     item = value;
     item.processStops(prop);
   } else if (styleMap[prop] === StyleTypes.Transition) {
@@ -113,34 +117,32 @@ function makeStyleValue (prop, value, extras = {}) {
     item = new MapStyleConstantItem(value, extraData);
   }
 
-  return item.toJSON();
+  return item.toJSON(shouldMarkAsStyle);
 }
 
 class MapboxStyleSheet {
   static create (userStyles, depth = 0) {
-    if (MapboxStyleSheet.isStyleSheet(userStyles)) {
-      return userStyles;
-    }
-
     const styleProps = Object.keys(userStyles);
     let style = {};
 
     for (let styleProp of styleProps) {
       const userStyle = userStyles[styleProp];
 
+      if (MapboxStyleSheet.isStyleItem(userStyle)) {
+        style[styleProp] = userStyle;
+        continue;
+      }
+
       if (!styleMap[styleProp] && depth === 0 && !isPrimitive(userStyle)) {
         style[styleProp] = MapboxStyleSheet.create(userStyle, depth + 1);
         continue;
-      } else if (!styleMap[styleProp] && (depth > 0 || isPrimitive(userStyle))) {
+      } else if (!styleMap[styleProp] || isUndefined(userStyle) || userStyle === null) {
         throw new Error(`Invalid Mapbox Style ${styleProp}`);
-      } else if (isUndefined(userStyle) || userStyle === null) {
-        continue;
       }
 
       style[styleProp] = makeStyleValue(styleProp, userStyle);
     }
 
-    style.__MAPBOX_STYLESHEET__ = true;
     return style;
   }
 
@@ -168,15 +170,16 @@ class MapboxStyleSheet {
     );
   }
 
-  static isStyleSheet (stylesheet) {
-    if (!stylesheet) {
-      return false;
-    }
-    return stylesheet.__MAPBOX_STYLESHEET__ || false;
+  static isStyleItem (item) {
+    return typeof item === 'object' && item.__MAPBOX_STYLE__ === true;
   }
 
-  static isStyleItem (item) {
-    return item instanceof MapStyleItem;
+  static isFunctionStyleItem (item) {
+    if (item instanceof MapStyleFunctionItem) {
+      return true;
+    }
+    const isStyleItem = MapboxStyleSheet.isStyleItem(item);
+    return isStyleItem && item.type === StyleTypes.Function;
   }
 
   // helpers

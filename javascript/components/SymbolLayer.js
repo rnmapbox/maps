@@ -64,7 +64,10 @@ class SymbolLayer extends AbstractLayer {
     /**
      * Customizable style attributes
      */
-    style: SymbolLayerStyleProp,
+     style: PropTypes.oneOfType([
+       SymbolLayerStyleProp,
+       PropTypes.arrayOf(SymbolLayerStyleProp),
+     ]),
   };
 
   static defaultProps = {

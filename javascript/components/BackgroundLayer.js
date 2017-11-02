@@ -61,7 +61,10 @@ class BackgroundLayer extends AbstractLayer {
     /**
      * Customizable style attributes
      */
-    style: BackgroundLayerStyleProp,
+     style: PropTypes.oneOfType([
+       BackgroundLayerStyleProp,
+       PropTypes.arrayOf(BackgroundLayerStyleProp),
+     ]),
   }
 
   static defaultProps = {

@@ -65,7 +65,10 @@ class LineLayer extends AbstractLayer {
     /**
      * Customizable style attributes
      */
-    style: LineLayerStyleProp,
+     style: PropTypes.oneOfType([
+       LineLayerStyleProp,
+       PropTypes.arrayOf(LineLayerStyleProp),
+     ]),
   };
 
   static defaultProps = {

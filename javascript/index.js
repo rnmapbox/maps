@@ -1,4 +1,4 @@
-import { NativeModules, PermissionsAndroid } from 'react-native';
+import { Animated, NativeModules, PermissionsAndroid } from 'react-native';
 import { IS_ANDROID } from './utils';
 import * as geoUtils from './utils/geoUtils';
 
@@ -79,5 +79,21 @@ MapboxGL.offlineManager = offlineManager;
 
 // utils
 MapboxGL.geoUtils = geoUtils;
+
+// animated
+MapboxGL.Animated = {
+  // sources
+  ShapeSource: Animated.createAnimatedComponent(ShapeSource),
+
+  // layers
+  FillLayer: Animated.createAnimatedComponent(FillLayer),
+  FillExtrusionLayer: Animated.createAnimatedComponent(FillExtrusionLayer),
+  LineLayer: Animated.createAnimatedComponent(LineLayer),
+  CircleLayer: Animated.createAnimatedComponent(CircleLayer),
+  SymbolLayer: Animated.createAnimatedComponent(SymbolLayer),
+  RasterLayer: Animated.createAnimatedComponent(RasterLayer),
+  BackgroundLayer: Animated.createAnimatedComponent(BackgroundLayer),
+};
+
 
 export default MapboxGL;
