@@ -20,9 +20,6 @@
 		876636BAC6A7433BB1891D91 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 389403482ADC4CB0B1E2D7D7 /* Feather.ttf */; };
 		9F398B7A7129435B923D55DD /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 185B11D7852F4121A504A72B /* EvilIcons.ttf */; };
 		C4C87A921F8558410064AE95 /* libRCTMGL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C87A911F8555930064AE95 /* libRCTMGL.a */; };
-		C4DA80C51F59D47400DE53BC /* libcxxreact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C41241351F4D4CF80008C81E /* libcxxreact.a */; };
-		C4DA80C61F59D47400DE53BC /* libdouble-conversion.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C41241411F4D4CF80008C81E /* libdouble-conversion.a */; };
-		C4DA80C71F59D47400DE53BC /* libjschelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C41241391F4D4CF80008C81E /* libjschelpers.a */; };
 		C4DA80C81F59D47400DE53BC /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		C4DA80C91F59D47400DE53BC /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		C4DA80CA1F59D47400DE53BC /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -35,8 +32,6 @@
 		C4DA80D21F59D47400DE53BC /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
 		C4DA80D31F59D47400DE53BC /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C412412D1F4D4CF80008C81E /* libReact.a */; };
 		C4DA80D41F59D47400DE53BC /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C41240E91F4D470B0008C81E /* libRNVectorIcons.a */; };
-		C4DA80D51F59D47400DE53BC /* libthird-party.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C412413D1F4D4CF80008C81E /* libthird-party.a */; };
-		C4DA80D61F59D47400DE53BC /* libyoga.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C41241311F4D4CF80008C81E /* libyoga.a */; };
 		C4E90D671F9928B0003C80E2 /* Mapbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4E90D661F9928B0003C80E2 /* Mapbox.framework */; };
 		C4E90D681F9928B0003C80E2 /* Mapbox.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C4E90D661F9928B0003C80E2 /* Mapbox.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C4FB10FB1F7063E20055AE1F /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = C4FB10FA1F7063E20055AE1F /* main.jsbundle */; };
@@ -340,9 +335,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4C87A921F8558410064AE95 /* libRCTMGL.a in Frameworks */,
-				C4DA80C51F59D47400DE53BC /* libcxxreact.a in Frameworks */,
-				C4DA80C61F59D47400DE53BC /* libdouble-conversion.a in Frameworks */,
-				C4DA80C71F59D47400DE53BC /* libjschelpers.a in Frameworks */,
 				C4DA80C81F59D47400DE53BC /* libRCTActionSheet.a in Frameworks */,
 				C4DA80C91F59D47400DE53BC /* libRCTAnimation.a in Frameworks */,
 				C4DA80CA1F59D47400DE53BC /* libRCTGeolocation.a in Frameworks */,
@@ -355,8 +347,6 @@
 				C4DA80D21F59D47400DE53BC /* libRCTWebSocket.a in Frameworks */,
 				C4DA80D31F59D47400DE53BC /* libReact.a in Frameworks */,
 				C4DA80D41F59D47400DE53BC /* libRNVectorIcons.a in Frameworks */,
-				C4DA80D51F59D47400DE53BC /* libthird-party.a in Frameworks */,
-				C4DA80D61F59D47400DE53BC /* libyoga.a in Frameworks */,
 				C4E90D671F9928B0003C80E2 /* Mapbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1032,6 +1022,7 @@
 					"-lc++",
 					"-ObjC",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.RNMapboxGLExample;
 				PRODUCT_NAME = RNMapboxGLExample;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
@@ -1065,6 +1056,7 @@
 					"-lc++",
 					"-ObjC",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.RNMapboxGLExample;
 				PRODUCT_NAME = RNMapboxGLExample;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
