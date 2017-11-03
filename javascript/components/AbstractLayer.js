@@ -6,6 +6,7 @@ import { getFilter } from '../utils';
 class AbstractLayer extends React.Component {
   get baseProps () {
     return {
+      ...this.props,
       id: this.props.id,
       sourceID: this.props.sourceID,
       reactStyle: this.getStyle(),
@@ -15,6 +16,7 @@ class AbstractLayer extends React.Component {
       belowLayerID: this.props.belowLayerID,
       layerIndex: this.props.layerIndex,
       filter: getFilter(this.props.filter),
+      style: undefined,
     };
   }
 

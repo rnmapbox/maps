@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
-import { cloneReactChildrenWithProps } from '../utils';
+import { cloneReactChildrenWithProps, viewPropTypes } from '../utils';
 
 const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLRasterSource';
-
-const RCTMGLRasterSource = requireNativeComponent(NATIVE_MODULE_NAME, RasterSource);
 
 /**
  * RasterSource is a map content source that supplies raster image tiles to be shown on the map.
@@ -16,6 +14,8 @@ const RCTMGLRasterSource = requireNativeComponent(NATIVE_MODULE_NAME, RasterSour
  */
 class RasterSource extends React.Component {
   static propTypes = {
+    ...viewPropTypes,
+
     /**
      * A string that uniquely identifies the source.
      */
@@ -64,6 +64,7 @@ class RasterSource extends React.Component {
 
   render () {
     const props = {
+      ...this.props,
       id: this.props.id,
       url: this.props.url,
       minZoomLevel: this.props.minZoomLevel,
@@ -79,5 +80,7 @@ class RasterSource extends React.Component {
     );
   }
 }
+
+const RCTMGLRasterSource = requireNativeComponent(NATIVE_MODULE_NAME, RasterSource);
 
 export default RasterSource;

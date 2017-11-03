@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
 
+import { viewPropTypes } from '../utils';
 import { FillExtrusionLayerStyleProp } from '../utils/styleMap';
 import AbstractLayer from './AbstractLayer';
 
@@ -9,13 +10,13 @@ const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLFillExtrusionLayer';
 
-const RCTMGLFillExtrusionLayer = requireNativeComponent(NATIVE_MODULE_NAME, FillExtrusionLayer);
-
 /**
  * FillExtrusionLayer is a style layer that renders one or more 3D extruded polygons on the map.
  */
 class FillExtrusionLayer extends AbstractLayer {
   static propTypes = {
+    ...viewPropTypes,
+
     /**
      * A string that uniquely identifies the source in the style to which it is added.
      */
@@ -82,5 +83,9 @@ class FillExtrusionLayer extends AbstractLayer {
     return <RCTMGLFillExtrusionLayer {...props} />;
   }
 }
+
+const RCTMGLFillExtrusionLayer = requireNativeComponent(NATIVE_MODULE_NAME, FillExtrusionLayer, {
+  nativeOnly: { reactStyle: true },
+});
 
 export default FillExtrusionLayer;
