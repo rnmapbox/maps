@@ -57,11 +57,6 @@ public class RCTMGLBackgroundLayerManager extends ViewGroupManager<RCTMGLBackgro
         layer.setMaxZoomLevel(maxZoomLevel);
     }
 
-    @ReactProp(name="visible")
-    public void setVisible(RCTMGLBackgroundLayer layer, boolean visible) {
-        layer.setVisible(visible);
-    }
-
     @ReactProp(name="reactStyle")
     public void setReactStyle(RCTMGLBackgroundLayer layer, ReadableMap style) {
         layer.setReactStyle(style);

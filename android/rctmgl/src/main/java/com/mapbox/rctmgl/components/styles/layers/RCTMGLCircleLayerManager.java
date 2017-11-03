@@ -59,11 +59,6 @@ public class RCTMGLCircleLayerManager extends ViewGroupManager<RCTMGLCircleLayer
         layer.setMaxZoomLevel(maxZoomLevel);
     }
 
-    @ReactProp(name="visible")
-    public void setVisible(RCTMGLCircleLayer layer, boolean visible) {
-        layer.setVisible(visible);
-    }
-
     @ReactProp(name="reactStyle")
     public void setReactStyle(RCTMGLCircleLayer layer, ReadableMap style) {
         layer.setReactStyle(style);
