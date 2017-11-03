@@ -22,9 +22,9 @@
 
 @property (nonatomic, assign) NSNumber *cluster;
 @property (nonatomic, assign) NSNumber *clusterRadius;
-@property (nonatomic, assign) NSNumber *clusterMaxZoom;
+@property (nonatomic, assign) NSNumber *clusterMaxZoomLevel;
 
-@property (nonatomic, assign) NSNumber *maxZoom;
+@property (nonatomic, assign) NSNumber *maxZoomLevel;
 @property (nonatomic, assign) NSNumber *buffer;
 @property (nonatomic, assign) NSNumber *tolerence;
 

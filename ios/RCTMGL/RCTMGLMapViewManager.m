@@ -29,6 +29,11 @@ static CGRect const RCT_MAPBOX_MIN_MAP_FRAME = { { 0.0f, 0.0f }, { 64.0f, 64.0f 
 
 RCT_EXPORT_MODULE(RCTMGLMapView)
 
+- (BOOL)requiresMainQueueSetup
+{
+    return YES;
+}
+
 - (UIView *)view
 {
     RCTMGLMapView *mapView = [[RCTMGLMapView alloc] initWithFrame:RCT_MAPBOX_MIN_MAP_FRAME];

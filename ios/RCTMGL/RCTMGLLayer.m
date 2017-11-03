@@ -76,7 +76,9 @@
     _reactStyle = reactStyle;
     
     if (_styleLayer != nil) {
-        [self addStyles];
+        dispatch_async(dispatch_get_main_queue(), ^{
+           [self addStyles];
+        });
     }
 }
 

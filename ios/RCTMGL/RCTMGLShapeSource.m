@@ -88,12 +88,12 @@
         options[MGLShapeSourceOptionClusterRadius] = _clusterRadius;
     }
     
-    if (_clusterMaxZoom != nil) {
-        options[MGLShapeSourceOptionMaximumZoomLevelForClustering] = _clusterMaxZoom;
+    if (_clusterMaxZoomLevel != nil) {
+        options[MGLShapeSourceOptionMaximumZoomLevelForClustering] = _clusterMaxZoomLevel;
     }
     
-    if (_maxZoom != nil) {
-        options[MGLShapeSourceOptionMaximumZoomLevel] = _maxZoom;
+    if (_maxZoomLevel != nil) {
+        options[MGLShapeSourceOptionMaximumZoomLevel] = _maxZoomLevel;
     }
     
     if (_buffer != nil) {
