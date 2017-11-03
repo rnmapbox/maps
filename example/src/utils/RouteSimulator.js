@@ -16,7 +16,23 @@ class Polyline {
 
   coordinateFromStart (distance) {
     const pointAlong = along(this._lineStringFeature, distance);
+    pointAlong.properties.distance = distance;
+    pointAlong.properties.nearestIndex = this.findNearestFloorIndex(distance);
     return pointAlong;
+  }
+
+  findNearestFloorIndex (currentDistance) {
+    let runningDistance = 0;
+
+    for (let i = 1; i < this._coordinates.length; i++) {
+      runningDistance += findDistance(this.get(i - 1), this.get(i));
+
+      if (runningDistance >= currentDistance) {
+        return i - 1;
+      }
+    }
+
+    return -1;
   }
 
   get (index) {

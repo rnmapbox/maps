@@ -19,6 +19,7 @@
     "@turf/distance": "^5.0.0",
     "@turf/helpers": "^4.6.0",
     "@turf/line-distance": "^4.7.3",
+    "@turf/nearest": "^4.7.3",
     "install": "^0.10.1",
     "mapbox": "^1.0.0-beta9",
     "npm": "^5.3.0",

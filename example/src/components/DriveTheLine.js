@@ -34,19 +34,21 @@ const styles = StyleSheet.create({
 
 const layerStyles = MapboxGL.StyleSheet.create({
   origin: {
-    circleRadius: 8,
-    circleColor: '#b43b71',
-    circleStrokeWidth: 1,
+    circleRadius: 5,
+    circleColor: 'white',
   },
   destination: {
-    circleRadius: 8,
-    circleColor: '#ba3b3f',
-    circleStrokeWidth: 1,
+    circleRadius: 5,
+    circleColor: 'white',
   },
   route: {
     lineColor: 'white',
-    lineWidth: 2,
+    lineWidth: 3,
     lineOpacity: 0.84,
+  },
+  progress: {
+    lineColor: '#314ccd',
+    lineWidth: 3,
   },
 });
 
@@ -103,7 +105,7 @@ class DriveTheLine extends React.Component {
     );
   }
 
-  renderProgress () {
+  renderCurrentPoint () {
     if (!this.state.currentPoint) {
       return;
     }
@@ -111,6 +113,46 @@ class DriveTheLine extends React.Component {
       <PulseCircleLayer
         shape={this.state.currentPoint}
         aboveLayerID='destinationInnerCircle' />
+    );
+  }
+
+  renderProgressLine () {
+    if (!this.state.currentPoint) {
+      return null;
+    }
+
+    const nearestIndex = this.state.currentPoint.properties.nearestIndex;
+    const coords = this.state.route.geometry.coordinates.filter((c, i) => i <= nearestIndex);
+    coords.push(this.state.currentPoint.geometry.coordinates);
+
+    if (coords.length < 2) {
+      return null;
+    }
+
+    const lineString = makeLineString(coords);
+    return (
+      <MapboxGL.Animated.ShapeSource id='progressSource' shape={lineString}>
+        <MapboxGL.Animated.LineLayer id='progressFill' style={layerStyles.progress} aboveLayerID='routeFill' />
+      </MapboxGL.Animated.ShapeSource>
+    );
+  }
+
+  renderOrigin () {
+    let backgroundColor = 'white';
+
+    if (this.state.currentPoint) {
+      backgroundColor = '#314ccd';
+    }
+
+    const style = [
+      layerStyles.origin,
+      { circleColor: backgroundColor },
+    ];
+
+    return (
+      <MapboxGL.ShapeSource id='origin' shape={MapboxGL.geoUtils.makePoint(SF_OFFICE_COORDINATE)}>
+        <MapboxGL.Animated.CircleLayer id='originInnerCircle' style={style} />
+      </MapboxGL.ShapeSource>
     );
   }
 
@@ -140,12 +182,11 @@ class DriveTheLine extends React.Component {
             style={sheet.matchParent}
             styleURL={MapboxGL.StyleURL.Dark}>
 
-            <MapboxGL.ShapeSource id='origin' shape={MapboxGL.geoUtils.makePoint(SF_OFFICE_COORDINATE)}>
-              <MapboxGL.CircleLayer id='originInnerCircle' style={layerStyles.origin} />
-            </MapboxGL.ShapeSource>
+            {this.renderOrigin()}
 
             {this.renderRoute()}
-            {this.renderProgress()}
+            {this.renderCurrentPoint()}
+            {this.renderProgressLine()}
 
             <MapboxGL.ShapeSource id='destination' shape={MapboxGL.geoUtils.makePoint(SF_ZOO_COORDINATE)}>
               <MapboxGL.CircleLayer id='destinationInnerCircle' style={layerStyles.destination} />

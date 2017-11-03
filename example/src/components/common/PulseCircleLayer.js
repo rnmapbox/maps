@@ -6,9 +6,14 @@ import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
 const styles = MapboxGL.StyleSheet.create({
   innerCircle: {
+    circleColor: 'white',
     circleStrokeWidth: 1,
-    circleStrokeColor: 'white',
+    circleStrokeColor: '#c6d2e1',
+  },
+  innerCirclePulse: {
     circleColor: '#4264fb',
+    circleStrokeColor: '#c6d2e1',
+    circleStrokeWidth: 1,
   },
   outerCircle: {
     circleOpacity: 0.40,
@@ -39,6 +44,8 @@ class PulseCircleLayer extends React.Component {
     super(props);
 
     this.state = {
+      innerRadius: new Animated.Value(props.radius * 0.50),
+      pulseOpacity: new Animated.Value(1),
       pulseRadius: new Animated.Value(props.radius),
     };
 
@@ -46,19 +53,39 @@ class PulseCircleLayer extends React.Component {
   }
 
   componentDidMount () {
+    const expandOutAnim = Animated.parallel([
+      Animated.timing(this.state.pulseOpacity, {
+        toValue: 0,
+        duration: this.props.duration,
+      }),
+      Animated.timing(this.state.pulseRadius, {
+        toValue: this.props.pulseRadius,
+        duration: this.props.duration,
+      }),
+      Animated.timing(this.state.innerRadius, {
+        toValue: this.props.radius * 0.70,
+        duration: this.props.duration / 2,
+      }),
+    ]);
+
+    const shrinkInAnim = Animated.parallel([
+      Animated.timing(this.state.pulseRadius, {
+        toValue: this.props.radius,
+        duration: this.props.duration / 2,
+      }),
+      Animated.timing(this.state.innerRadius, {
+        toValue: this.props.radius * 0.50,
+        duration: this.props.duration / 2,
+      }),
+    ]);
+
     this._loopAnim = Animated.loop(
-      Animated.sequence([
-        Animated.timing(this.state.pulseRadius, {
-          toValue: this.props.pulseRadius,
-          duration: this.props.duration,
-        }),
-        Animated.timing(this.state.pulseRadius, {
-          toValue: this.props.radius,
-          duration: this.props.duration,
-        }),
-      ]),
+      Animated.sequence([expandOutAnim, shrinkInAnim]),
     );
-    this._loopAnim.start();
+
+    this._loopAnim.start(() => {
+      this.setState({ pulseOpacity: 1 });
+    });
   }
 
   componentWillUnmount () {
@@ -76,16 +103,22 @@ class PulseCircleLayer extends React.Component {
       { circleRadius: this.props.radius },
     ];
 
+    const innerCirclePulseStyle = [
+      styles.innerCirclePulse,
+      { circleRadius: this.state.innerRadius },
+    ];
+
     const outerCircleStyle = [
       styles.outerCircle,
       this.props.outerCircleStyle,
-      { circleRadius: this.state.pulseRadius },
+      { circleRadius: this.state.pulseRadius, circleOpacity: this.state.pulseOpacity },
     ];
 
     return (
       <MapboxGL.Animated.ShapeSource id='pulseCircleSource' shape={this.props.shape}>
         <MapboxGL.Animated.CircleLayer id='pulseOuterCircle' style={outerCircleStyle} aboveLayerID={this.props.aboveLayerID} />
-        <MapboxGL.CircleLayer id='pulseInnerCircle' style={innerCircleStyle} aboveLayerID='pulseOuterCircle' />
+        <MapboxGL.Animated.CircleLayer id='pulseInnerCircleCnt' style={innerCircleStyle} aboveLayerID='pulseOuterCircle' />
+        <MapboxGL.Animated.CircleLayer id='pulseInnerCircle' style={innerCirclePulseStyle} aboveLayerID='pulseInnerCircleCnt' />
       </MapboxGL.Animated.ShapeSource>
     );
   }
