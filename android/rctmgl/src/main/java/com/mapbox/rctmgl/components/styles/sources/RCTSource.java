@@ -52,8 +52,9 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
         mMapView = mapView;
         mMap = mapView.getMapboxMap();
 
-        if (mID.equals(DEFAULT_ID)) {
-            mSource = mMap.getSource(DEFAULT_ID);
+        Source existingSource = mMap.getSource(mID);
+        if (existingSource != null) {
+            mSource = existingSource;
         } else {
             mSource = makeSource();
             mMap.addSource(mSource);

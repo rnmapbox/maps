@@ -57,11 +57,6 @@ public class RCTMGLRasterLayerManager extends ViewGroupManager<RCTMGLRasterLayer
         layer.setMaxZoomLevel(maxZoomLevel);
     }
 
-    @ReactProp(name="visible")
-    public void setVisible(RCTMGLRasterLayer layer, boolean visible) {
-        layer.setVisible(visible);
-    }
-
     @ReactProp(name="reactStyle")
     public void setReactStyle(RCTMGLRasterLayer layer, ReadableMap style) {
         layer.setReactStyle(style);

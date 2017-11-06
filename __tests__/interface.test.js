@@ -63,6 +63,9 @@ describe('Public Interface', () => {
 
       // utils
       'geoUtils',
+
+      // animated
+      'Animated',
     ];
     actualKeys.forEach((key) => expect(expectedKeys).toContain(key));
   });

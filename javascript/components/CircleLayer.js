@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
 
+import { viewPropTypes } from '../utils';
 import { CircleLayerStyleProp } from '../utils/styleMap';
 import AbstractLayer from './AbstractLayer';
 
@@ -9,13 +10,13 @@ const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLCircleLayer';
 
-const RCTMGLCircleLayer = requireNativeComponent(NATIVE_MODULE_NAME, CircleLayer);
-
 /**
  * CircleLayer is a style layer that renders one or more filled circles on the map.
  */
 class CircleLayer extends AbstractLayer {
   static propTypes = {
+    ...viewPropTypes,
+
     /**
      * A string that uniquely identifies the source in the style to which it is added.
      */
@@ -66,7 +67,10 @@ class CircleLayer extends AbstractLayer {
     /**
      * Customizable style attributes
      */
-    style: CircleLayerStyleProp,
+    style: PropTypes.oneOfType([
+      CircleLayerStyleProp,
+      PropTypes.arrayOf(CircleLayerStyleProp),
+    ]),
   };
 
   static defaultProps = {
@@ -81,5 +85,9 @@ class CircleLayer extends AbstractLayer {
     return <RCTMGLCircleLayer {...props} />;
   }
 }
+
+const RCTMGLCircleLayer = requireNativeComponent(NATIVE_MODULE_NAME, CircleLayer, {
+  nativeOnly: { reactStyle: true },
+});
 
 export default CircleLayer;

@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
-import { cloneReactChildrenWithProps } from '../utils';
+import { cloneReactChildrenWithProps, viewPropTypes } from '../utils';
 
 const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLVectorSource';
-
-const RCTMGLVectorSource = requireNativeComponent(NATIVE_MODULE_NAME, VectorSource);
 
 /**
  * VectorSource is a map content source that supplies tiled vector data in Mapbox Vector Tile format to be shown on the map.
@@ -15,6 +13,8 @@ const RCTMGLVectorSource = requireNativeComponent(NATIVE_MODULE_NAME, VectorSour
  */
 class VectorSource extends React.Component {
   static propTypes = {
+    ...viewPropTypes,
+
     /**
      * A string that uniquely identifies the source.
      */
@@ -42,5 +42,7 @@ class VectorSource extends React.Component {
     );
   }
 }
+
+const RCTMGLVectorSource = requireNativeComponent(NATIVE_MODULE_NAME, VectorSource);
 
 export default VectorSource;

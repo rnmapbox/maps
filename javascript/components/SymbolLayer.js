@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
 
+import { viewPropTypes } from '../utils';
 import { SymbolLayerStyleProp } from '../utils/styleMap';
 import AbstractLayer from './AbstractLayer';
 
@@ -9,13 +10,13 @@ const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLSymbolLayer';
 
-const RCTMGLSymbolLayer = requireNativeComponent(NATIVE_MODULE_NAME, SymbolLayer);
-
 /**
  * SymbolLayer is a style layer that renders icon and text labels at points or along lines on the map.
  */
 class SymbolLayer extends AbstractLayer {
   static propTypes = {
+    ...viewPropTypes,
+
     /**
      * A string that uniquely identifies the source in the style to which it is added.
      */
@@ -64,7 +65,10 @@ class SymbolLayer extends AbstractLayer {
     /**
      * Customizable style attributes
      */
-    style: SymbolLayerStyleProp,
+     style: PropTypes.oneOfType([
+       SymbolLayerStyleProp,
+       PropTypes.arrayOf(SymbolLayerStyleProp),
+     ]),
   };
 
   static defaultProps = {
@@ -79,5 +83,9 @@ class SymbolLayer extends AbstractLayer {
     return <RCTMGLSymbolLayer {...props} />;
   }
 }
+
+const RCTMGLSymbolLayer = requireNativeComponent(NATIVE_MODULE_NAME, SymbolLayer, {
+  nativeOnly: { reactStyle: true },
+});
 
 export default SymbolLayer;

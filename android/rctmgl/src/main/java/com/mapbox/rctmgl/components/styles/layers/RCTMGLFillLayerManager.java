@@ -67,11 +67,6 @@ public class RCTMGLFillLayerManager extends ViewGroupManager<RCTMGLFillLayer> {
         layer.setMaxZoomLevel(maxZoomLevel);
     }
 
-    @ReactProp(name="visible")
-    public void setVisible(RCTMGLFillLayer layer, boolean visible) {
-        layer.setVisible(visible);
-    }
-
     @ReactProp(name="reactStyle")
     public void setReactStyle(RCTMGLFillLayer layer, ReadableMap style) {
         layer.setReactStyle(style);

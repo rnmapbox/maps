@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
 
+import { viewPropTypes } from '../utils';
 import { RasterLayerStyleProp } from '../utils/styleMap';
 import AbstractLayer from './AbstractLayer';
 
@@ -9,10 +10,10 @@ const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLRasterLayer';
 
-const RCTMGLRasterLayer = requireNativeComponent(NATIVE_MODULE_NAME, RasterLayer);
-
 class RasterLayer extends AbstractLayer {
   static propTypes = {
+    ...viewPropTypes,
+
     /**
      * A string that uniquely identifies the source in the style to which it is added.
      */
@@ -61,7 +62,10 @@ class RasterLayer extends AbstractLayer {
     /**
      * Customizable style attributes
      */
-    style: RasterLayerStyleProp,
+    style: PropTypes.oneOfType([
+      RasterLayerStyleProp,
+      PropTypes.arrayOf(RasterLayerStyleProp),
+    ]),
   };
 
   static defaultProps = {
@@ -76,5 +80,9 @@ class RasterLayer extends AbstractLayer {
     return <RCTMGLRasterLayer {...props} />;
   }
 }
+
+const RCTMGLRasterLayer = requireNativeComponent(NATIVE_MODULE_NAME, RasterLayer, {
+  nativeOnly: { reactStyle: true },
+});
 
 export default RasterLayer;

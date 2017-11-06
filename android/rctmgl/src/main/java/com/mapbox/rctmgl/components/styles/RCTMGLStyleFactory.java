@@ -637,7 +637,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.fillAntialias(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.fillAntialias(styleValue.getBoolean(VALUE_KEY)));
       }
@@ -741,7 +741,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.fillTranslate(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.fillTranslate(styleValue.getFloatArray(VALUE_KEY)));
       }
@@ -769,7 +769,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.fillTranslateAnchor(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.fillTranslateAnchor(styleValue.getString(VALUE_KEY)));
       }
@@ -817,7 +817,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.lineCap(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.lineCap(styleValue.getString(VALUE_KEY)));
       }
@@ -837,7 +837,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.lineJoin(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.lineJoin(styleValue.getString(VALUE_KEY)));
       }
@@ -857,7 +857,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.lineMiterLimit(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.lineMiterLimit(styleValue.getFloat(VALUE_KEY)));
       }
@@ -877,7 +877,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.lineRoundLimit(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.lineRoundLimit(styleValue.getFloat(VALUE_KEY)));
       }
@@ -957,7 +957,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.lineTranslate(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.lineTranslate(styleValue.getFloatArray(VALUE_KEY)));
       }
@@ -985,7 +985,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.lineTranslateAnchor(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.lineTranslateAnchor(styleValue.getString(VALUE_KEY)));
       }
@@ -1005,7 +1005,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.lineWidth(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.lineWidth(styleValue.getFloat(VALUE_KEY)));
       }
@@ -1117,7 +1117,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.lineDasharray(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.lineDasharray(styleValue.getFloatArray(VALUE_KEY)));
       }
@@ -1145,7 +1145,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.linePattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.linePattern(styleValue.getString(VALUE_KEY)));
       }
@@ -1173,7 +1173,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.symbolPlacement(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.symbolPlacement(styleValue.getString(VALUE_KEY)));
       }
@@ -1193,7 +1193,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.symbolSpacing(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.symbolSpacing(styleValue.getFloat(VALUE_KEY)));
       }
@@ -1213,7 +1213,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.symbolAvoidEdges(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.symbolAvoidEdges(styleValue.getBoolean(VALUE_KEY)));
       }
@@ -1233,7 +1233,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.iconAllowOverlap(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.iconAllowOverlap(styleValue.getBoolean(VALUE_KEY)));
       }
@@ -1253,7 +1253,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.iconIgnorePlacement(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.iconIgnorePlacement(styleValue.getBoolean(VALUE_KEY)));
       }
@@ -1273,7 +1273,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.iconOptional(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.iconOptional(styleValue.getBoolean(VALUE_KEY)));
       }
@@ -1293,7 +1293,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.iconRotationAlignment(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.iconRotationAlignment(styleValue.getString(VALUE_KEY)));
       }
@@ -1333,7 +1333,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.iconTextFit(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.iconTextFit(styleValue.getString(VALUE_KEY)));
       }
@@ -1353,7 +1353,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.iconTextFitPadding(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.iconTextFitPadding(styleValue.getFloatArray(VALUE_KEY)));
       }
@@ -1413,7 +1413,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.iconPadding(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.iconPadding(styleValue.getFloat(VALUE_KEY)));
       }
@@ -1433,7 +1433,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.iconKeepUpright(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.iconKeepUpright(styleValue.getBoolean(VALUE_KEY)));
       }
@@ -1473,7 +1473,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.textPitchAlignment(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.textPitchAlignment(styleValue.getString(VALUE_KEY)));
       }
@@ -1493,7 +1493,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.textRotationAlignment(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.textRotationAlignment(styleValue.getString(VALUE_KEY)));
       }
@@ -1533,7 +1533,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.textFont(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.textFont(styleValue.getStringArray(VALUE_KEY)));
       }
@@ -1573,7 +1573,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.textMaxWidth(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.textMaxWidth(styleValue.getFloat(VALUE_KEY)));
       }
@@ -1593,7 +1593,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.textLineHeight(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.textLineHeight(styleValue.getFloat(VALUE_KEY)));
       }
@@ -1613,7 +1613,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.textLetterSpacing(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.textLetterSpacing(styleValue.getFloat(VALUE_KEY)));
       }
@@ -1633,7 +1633,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.textJustify(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.textJustify(styleValue.getString(VALUE_KEY)));
       }
@@ -1653,7 +1653,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.textAnchor(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.textAnchor(styleValue.getString(VALUE_KEY)));
       }
@@ -1673,7 +1673,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.textMaxAngle(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.textMaxAngle(styleValue.getFloat(VALUE_KEY)));
       }
@@ -1713,7 +1713,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.textPadding(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.textPadding(styleValue.getFloat(VALUE_KEY)));
       }
@@ -1733,7 +1733,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.textKeepUpright(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.textKeepUpright(styleValue.getBoolean(VALUE_KEY)));
       }
@@ -1793,7 +1793,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.textAllowOverlap(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.textAllowOverlap(styleValue.getBoolean(VALUE_KEY)));
       }
@@ -1813,7 +1813,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.textIgnorePlacement(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.textIgnorePlacement(styleValue.getBoolean(VALUE_KEY)));
       }
@@ -1833,7 +1833,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.textOptional(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.textOptional(styleValue.getBoolean(VALUE_KEY)));
       }
@@ -1997,7 +1997,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.iconTranslate(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.iconTranslate(styleValue.getFloatArray(VALUE_KEY)));
       }
@@ -2025,7 +2025,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.iconTranslateAnchor(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.iconTranslateAnchor(styleValue.getString(VALUE_KEY)));
       }
@@ -2185,7 +2185,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.textTranslate(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.textTranslate(styleValue.getFloatArray(VALUE_KEY)));
       }
@@ -2213,7 +2213,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.textTranslateAnchor(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.textTranslateAnchor(styleValue.getString(VALUE_KEY)));
       }
@@ -2349,7 +2349,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.circleTranslate(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.circleTranslate(styleValue.getFloatArray(VALUE_KEY)));
       }
@@ -2377,7 +2377,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.circleTranslateAnchor(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.circleTranslateAnchor(styleValue.getString(VALUE_KEY)));
       }
@@ -2397,7 +2397,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.circlePitchScale(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.circlePitchScale(styleValue.getString(VALUE_KEY)));
       }
@@ -2505,7 +2505,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.fillExtrusionOpacity(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.fillExtrusionOpacity(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2561,7 +2561,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.fillExtrusionTranslate(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.fillExtrusionTranslate(styleValue.getFloatArray(VALUE_KEY)));
       }
@@ -2589,7 +2589,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.fillExtrusionTranslateAnchor(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.fillExtrusionTranslateAnchor(styleValue.getString(VALUE_KEY)));
       }
@@ -2609,7 +2609,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.fillExtrusionPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.fillExtrusionPattern(styleValue.getString(VALUE_KEY)));
       }
@@ -2697,7 +2697,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.rasterOpacity(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.rasterOpacity(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2725,7 +2725,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.rasterHueRotate(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.rasterHueRotate(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2753,7 +2753,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.rasterBrightnessMin(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.rasterBrightnessMin(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2781,7 +2781,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.rasterBrightnessMax(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.rasterBrightnessMax(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2809,7 +2809,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.rasterSaturation(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.rasterSaturation(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2837,7 +2837,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.rasterContrast(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.rasterContrast(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2865,7 +2865,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.rasterFadeDuration(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.rasterFadeDuration(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2897,7 +2897,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.backgroundColor(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.backgroundColor(styleValue.getInt(VALUE_KEY)));
       }
@@ -2925,7 +2925,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.backgroundPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.backgroundPattern(styleValue.getString(VALUE_KEY)));
       }
@@ -2953,7 +2953,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.backgroundOpacity(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.backgroundOpacity(styleValue.getFloat(VALUE_KEY)));
       }

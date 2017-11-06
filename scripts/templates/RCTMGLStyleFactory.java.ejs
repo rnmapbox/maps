@@ -72,7 +72,7 @@ public class RCTMGLStyleFactory {
         };
 
         <%_ if (prop.allowedFunctionTypes.length === 1) { _%>
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.<%= prop.name %>(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
         <%_ } else { _%>
         layer.setProperties(PropertyFactory.<%= prop.name %>(styleValue.makeStyleFunction(parser)));
         <%_ } _%>

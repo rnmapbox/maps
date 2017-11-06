@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
 
+import { viewPropTypes } from '../utils';
 import { LineLayerStyleProp } from '../utils/styleMap';
 import AbstractLayer from './AbstractLayer';
 
@@ -9,13 +10,13 @@ const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLLineLayer';
 
-const RCTMGLLineLayer = requireNativeComponent(NATIVE_MODULE_NAME, LineLayer);
-
 /**
  * LineLayer is a style layer that renders one or more stroked polylines on the map.
  */
 class LineLayer extends AbstractLayer {
   static propTypes = {
+    ...viewPropTypes,
+
     /**
      * A string that uniquely identifies the source in the style to which it is added.
      */
@@ -65,7 +66,10 @@ class LineLayer extends AbstractLayer {
     /**
      * Customizable style attributes
      */
-    style: LineLayerStyleProp,
+     style: PropTypes.oneOfType([
+       LineLayerStyleProp,
+       PropTypes.arrayOf(LineLayerStyleProp),
+     ]),
   };
 
   static defaultProps = {
@@ -80,5 +84,9 @@ class LineLayer extends AbstractLayer {
     return <RCTMGLLineLayer {...props} />;
   }
 }
+
+const RCTMGLLineLayer = requireNativeComponent(NATIVE_MODULE_NAME, LineLayer, {
+  nativeOnly: { reactStyle: true },
+});
 
 export default LineLayer;

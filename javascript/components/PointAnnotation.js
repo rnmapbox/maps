@@ -2,12 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { requireNativeComponent, StyleSheet } from 'react-native';
 
-import { toJSONString, isFunction } from '../utils';
+import { toJSONString, isFunction, viewPropTypes } from '../utils';
 import { makePoint } from '../utils/geoUtils';
 
 export const NATIVE_MODULE_NAME = 'RCTMGLPointAnnotation';
-
-const RCTMGLPointAnnotation = requireNativeComponent(NATIVE_MODULE_NAME, PointAnnotation);
 
 const styles = StyleSheet.create({
   container: {
@@ -22,6 +20,8 @@ const styles = StyleSheet.create({
  */
 class PointAnnotation extends React.PureComponent {
   static propTypes = {
+    ...viewPropTypes,
+
     /**
      * A string that uniquely identifies the annotation
      */
@@ -95,6 +95,7 @@ class PointAnnotation extends React.PureComponent {
 
   render () {
     const props = {
+      ...this.props,
       id: this.props.id,
       title: this.props.title,
       snippet: this.props.snippet,
@@ -113,5 +114,12 @@ class PointAnnotation extends React.PureComponent {
     );
   }
 }
+
+const RCTMGLPointAnnotation = requireNativeComponent(NATIVE_MODULE_NAME, PointAnnotation, {
+  nativeOnly: {
+    onMapboxPointAnnotationSelected: true,
+    onMapboxPointAnnotationDeselected: true,
+  },
+});
 
 export default PointAnnotation;

@@ -1432,6 +1432,9 @@ export const styleExtras = {
   textOffset: {
     iosType: 'vector',
   },
+  textTranslate: {
+    iosType: 'vector',
+  }
 };
 
 export default styleMap;

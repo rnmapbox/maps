@@ -1,11 +1,14 @@
 import React from 'react';
 
 import {
+  ViewPropTypes,
+  View,
   NativeModules,
   findNodeHandle,
   Platform,
 } from 'react-native';
 
+export const viewPropTypes = ViewPropTypes || View.props;
 export const IS_ANDROID = Platform.OS === 'android';
 
 export function isFunction (fn) {

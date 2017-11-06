@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
 
+import { viewPropTypes } from '../utils';
 import { BackgroundLayerStyleProp } from '../utils/styleMap';
 import AbstractLayer from './AbstractLayer';
 
@@ -9,10 +10,10 @@ const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLBackgroundLayer';
 
-const RCTMGLBackgroundLayer = requireNativeComponent(NATIVE_MODULE_NAME, BackgroundLayer);
-
 class BackgroundLayer extends AbstractLayer {
   static propTypes = {
+    ...viewPropTypes,
+
     /**
      * A string that uniquely identifies the source in the style to which it is added.
      */
@@ -61,7 +62,10 @@ class BackgroundLayer extends AbstractLayer {
     /**
      * Customizable style attributes
      */
-    style: BackgroundLayerStyleProp,
+     style: PropTypes.oneOfType([
+       BackgroundLayerStyleProp,
+       PropTypes.arrayOf(BackgroundLayerStyleProp),
+     ]),
   }
 
   static defaultProps = {
@@ -72,5 +76,9 @@ class BackgroundLayer extends AbstractLayer {
     return <RCTMGLBackgroundLayer {...this.baseProps} />;
   }
 }
+
+const RCTMGLBackgroundLayer = requireNativeComponent(NATIVE_MODULE_NAME, BackgroundLayer, {
+  nativeOnly: { reactStyle: true },
+});
 
 export default BackgroundLayer;

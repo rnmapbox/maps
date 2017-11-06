@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
 
+import { viewPropTypes } from '../utils';
 import { FillLayerStyleProp } from '../utils/styleMap';
 import AbstractLayer from './AbstractLayer';
 
@@ -9,13 +10,13 @@ const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLFillLayer';
 
-const RCTMGLFillLayer = requireNativeComponent(NATIVE_MODULE_NAME, FillLayer);
-
 /**
  * FillLayer is a style layer that renders one or more filled (and optionally stroked) polygons on the map.
  */
 class FillLayer extends AbstractLayer {
   static propTypes = {
+    ...viewPropTypes,
+
     /**
      * A string that uniquely identifies the source in the style to which it is added.
      */
@@ -64,7 +65,10 @@ class FillLayer extends AbstractLayer {
     /**
      * Customizable style attributes
      */
-    style: FillLayerStyleProp,
+     style: PropTypes.oneOfType([
+       FillLayerStyleProp,
+       PropTypes.arrayOf(FillLayerStyleProp),
+     ]),
   };
 
   static defaultProps = {
@@ -79,5 +83,9 @@ class FillLayer extends AbstractLayer {
     return <RCTMGLFillLayer {...props} />;
   }
 }
+
+const RCTMGLFillLayer = requireNativeComponent(NATIVE_MODULE_NAME, FillLayer, {
+  nativeOnly: { reactStyle: true },
+});
 
 export default FillLayer;

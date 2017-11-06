@@ -22,6 +22,13 @@ export const StyleFunctionTypes = {
   Composite: 'composite',
 };
 
+export const ConstantPropType = PropTypes.shape({
+  type: PropTypes.string.isRequired,
+  payload: PropTypes.shape({
+    value: PropTypes.any.isRequired,
+  }).isRequired,
+});
+
 export const StyleFunctionPropType = PropTypes.shape({
   type: PropTypes.string.isRequired,
   payload: PropTypes.shape({
@@ -90,6 +97,9 @@ export const styleExtras = {
   textOffset: {
     iosType: 'vector',
   },
+  textTranslate: {
+    iosType: 'vector',
+  }
 };
 
 export default styleMap;

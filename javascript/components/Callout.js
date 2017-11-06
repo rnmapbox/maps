@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, Animated, requireNativeComponent, StyleSheet } from 'react-native';
+import { viewPropTypes } from '../utils';
 
 export const NATIVE_MODULE_NAME = 'RCTMGLCallout';
-const RCTMGLCallout = requireNativeComponent(NATIVE_MODULE_NAME, Callout);
 
 const styles = StyleSheet.create({
   container: {
@@ -46,6 +46,8 @@ const styles = StyleSheet.create({
  */
 class Callout extends React.PureComponent {
   static propTypes = {
+    ...viewPropTypes,
+
     /**
      * String that get's displayed in the default callout.
      */
@@ -105,7 +107,7 @@ class Callout extends React.PureComponent {
 
   _renderCustomCallout () {
     return (
-      <Animated.View style={this.props.style}>
+      <Animated.View {...this.props} style={this.props.style}>
         {this.props.children}
       </Animated.View>
     );
@@ -120,5 +122,7 @@ class Callout extends React.PureComponent {
     );
   }
 }
+
+const RCTMGLCallout = requireNativeComponent(NATIVE_MODULE_NAME, Callout);
 
 export default Callout;

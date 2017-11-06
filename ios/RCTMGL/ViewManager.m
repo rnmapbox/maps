@@ -13,6 +13,17 @@
     NSMutableDictionary<NSString*, NSNumber*> *eventTimestampCache;
 }
 
++ (BOOL)requiresMainQueueSetup
+{
+    return YES;
+}
+
++ (NSString *)moduleName
+{
+    // Hack, to prevent JS from throwing a useless warning
+    return @"RCTViewManager";
+}
+
 static NSTimeInterval EVENT_THROTTLE_S = 0.01;
 
 - (instancetype)init

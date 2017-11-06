@@ -17,9 +17,9 @@
 
 RCT_EXPORT_MODULE();
 
--(BOOL)requiresMainQueueSetup
++ (BOOL)requiresMainQueueSetup
 {
-    return NO;
+    return YES;
 }
 
 - (NSDictionary<NSString *, id> *)constantsToExport
@@ -213,9 +213,7 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(setAccessToken:(NSString *)accessToken)
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-       [MGLAccountManager setAccessToken:accessToken];
-    });
+    [MGLAccountManager setAccessToken:accessToken];
 }
 
 RCT_EXPORT_METHOD(getAccessToken:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)

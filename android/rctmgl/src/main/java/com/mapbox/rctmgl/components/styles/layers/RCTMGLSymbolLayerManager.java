@@ -57,11 +57,6 @@ public class RCTMGLSymbolLayerManager extends ViewGroupManager<RCTMGLSymbolLayer
         layer.setMaxZoomLevel(maxZoomLevel);
     }
 
-    @ReactProp(name="visible")
-    public void setVisible(RCTMGLSymbolLayer layer, boolean visible) {
-        layer.setVisible(visible);
-    }
-
     @ReactProp(name="reactStyle")
     public void setReactStyle(RCTMGLSymbolLayer layer, ReadableMap style) {
         layer.setReactStyle(style);

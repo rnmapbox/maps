@@ -1,16 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
-import { toJSONString, cloneReactChildrenWithProps } from '../utils';
+import { toJSONString, cloneReactChildrenWithProps, viewPropTypes } from '../utils';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLShapeSource';
-
-const RCTMGLShapeSource = requireNativeComponent(NATIVE_MODULE_NAME, ShapeSource, {
-  nativeOnly: { nativeImages: true },
-});
 
 /**
  * ShapeSource is a map content source that supplies vector shapes to be shown on the map.
@@ -20,6 +16,8 @@ class ShapeSource extends React.Component {
   static NATIVE_ASSETS_KEY = 'assets';
 
   static propTypes = {
+    ...viewPropTypes,
+
     /**
      * A string that uniquely identifies the source.
      */
@@ -143,5 +141,9 @@ class ShapeSource extends React.Component {
     );
   }
 }
+
+const RCTMGLShapeSource = requireNativeComponent(NATIVE_MODULE_NAME, ShapeSource, {
+  nativeOnly: { nativeImages: true },
+});
 
 export default ShapeSource;

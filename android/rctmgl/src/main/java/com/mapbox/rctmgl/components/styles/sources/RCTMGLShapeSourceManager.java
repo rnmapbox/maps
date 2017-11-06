@@ -96,13 +96,13 @@ public class RCTMGLShapeSourceManager extends ViewGroupManager<RCTMGLShapeSource
         source.setClusterRadius(radius);
     }
 
-    @ReactProp(name="clusterMaxZoom")
-    public void setClusterMaxZoom(RCTMGLShapeSource source, int clusterMaxZoom) {
+    @ReactProp(name="clusterMaxZoomLevel")
+    public void setClusterMaxZoomLevel(RCTMGLShapeSource source, int clusterMaxZoom) {
         source.setClusterMaxZoom(clusterMaxZoom);
     }
 
-    @ReactProp(name="maxZoom")
-    public void setMaxZoom(RCTMGLShapeSource source, int maxZoom) {
+    @ReactProp(name="maxZoomLevel")
+    public void setMaxZoomLevel(RCTMGLShapeSource source, int maxZoom) {
         source.setMaxZoom(maxZoom);
     }
 

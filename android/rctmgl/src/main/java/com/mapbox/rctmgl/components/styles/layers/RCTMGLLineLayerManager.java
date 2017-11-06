@@ -61,11 +61,6 @@ public class RCTMGLLineLayerManager extends ViewGroupManager<RCTMGLLineLayer> {
         layer.setMaxZoomLevel(maxZoomLevel);
     }
 
-    @ReactProp(name="visible")
-    public void setVisible(RCTMGLLineLayer layer, boolean visible) {
-        layer.setVisible(visible);
-    }
-
     @ReactProp(name="reactStyle")
     public void setReactStyle(RCTMGLLineLayer layer, ReadableMap style) {
         layer.setReactStyle(style);

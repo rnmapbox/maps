@@ -10,21 +10,20 @@ import {
   toJSONString,
   getFilter,
   IS_ANDROID,
+  viewPropTypes,
 } from '../utils';
 
 const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLMapView';
 
-const RCTMGLMapView = requireNativeComponent(NATIVE_MODULE_NAME, MapView, {
-  nativeOnly: { onMapChange: true, onAndroidCallback: true },
-});
-
 /**
  * MapView backed by Mapbox Native GL
  */
 class MapView extends React.Component {
   static propTypes = {
+    ...viewPropTypes,
+
     /**
      * Animates changes between pitch and bearing
      */
@@ -609,6 +608,7 @@ class MapView extends React.Component {
 
   render () {
     let props = {
+      ...this.props,
       animated: this.props.animated,
       centerCoordinate: this._getCenterCoordinate(),
       showUserLocation: this.props.showUserLocation,
@@ -644,5 +644,9 @@ class MapView extends React.Component {
     );
   }
 }
+
+const RCTMGLMapView = requireNativeComponent(NATIVE_MODULE_NAME, MapView, {
+  nativeOnly: { onMapChange: true, onAndroidCallback: true },
+});
 
 export default MapView;
