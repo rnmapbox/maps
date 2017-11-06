@@ -204,6 +204,7 @@ global.jsDocReactProp = function (prop) {
     propTypes.push('TranslationPropType');
   } else if (prop.type === 'color') {
     propTypes.push('PropTypes.string');
+    propTypes.push('ConstantPropType');
   } else if (prop.type === 'array') {
     switch (prop.value) {
       case 'number':
@@ -217,12 +218,15 @@ global.jsDocReactProp = function (prop) {
       default:
         propTypes.push('PropTypes.array');
     }
+    propTypes.push('ConstantPropType');
   } else if (prop.type === 'number') {
     propTypes.push('PropTypes.number');
+    propTypes.push('ConstantPropType');
   } else if (prop.type === 'enum') {
     propTypes.push('PropTypes.any');
   } else {
     propTypes.push('PropTypes.string');
+    propTypes.push('ConstantPropType');
   }
 
   if (prop.allowedFunctionTypes && prop.allowedFunctionTypes.length) {
@@ -231,12 +235,21 @@ global.jsDocReactProp = function (prop) {
 
   if (propTypes.length > 1) {
     return `PropTypes.oneOfType([
-    ${propTypes[0]},
-    ${propTypes[1]}
-  ])`;
+${propTypes.map((p) => startAtSpace(4, p)).join(',\n')},
+${startAtSpace(2, '])')}`;
   } else {
     return propTypes[0];
   }
+}
+
+global.startAtSpace = function (spaceCount, str) {
+  let value = '';
+
+  for (let i = 0; i < spaceCount; i++) {
+    value += ' ';
+  }
+
+  return `${value}${str}`;
 }
 
 global.replaceNewLine = function (str) {
