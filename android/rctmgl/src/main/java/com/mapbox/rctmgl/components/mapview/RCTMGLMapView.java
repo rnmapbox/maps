@@ -260,6 +260,10 @@ public class RCTMGLMapView extends MapView implements
             }
             mQueuedFeatures = null;
         }
+
+        if (mPointAnnotations.size() > 0) {
+            markerViewManager.invalidateViewMarkersInVisibleRegion();
+        }
     }
 
     public void reflow() {
