@@ -11,6 +11,8 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.react.bridge.LifecycleEventListener;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
@@ -123,6 +125,8 @@ public class RCTMGLMapView extends MapView implements
         mFeatures = new SparseArray<>();
 
         mHandler = new Handler();
+
+        setLifecycleListeners();
     }
 
     public void addFeature(View childView, int childPosition) {
@@ -715,6 +719,34 @@ public class RCTMGLMapView extends MapView implements
         if (mMaxZoomLevel != null) {
             mMap.setMaxZoomPreference(mMaxZoomLevel);
         }
+    }
+
+    private void setLifecycleListeners() {
+        ReactContext context = (ReactContext) mContext;
+        context.addLifecycleEventListener(new LifecycleEventListener() {
+            @Override
+            public void onHostResume() {
+                int userTrackingMode = getLocationLayerTrackingMode();
+                if (mLocationEngine != null && userTrackingMode != LocationLayerMode.NONE) {
+                    mLocationEngine.activate();
+                }
+                onResume();
+            }
+
+            @Override
+            public void onHostPause() {
+                if (mLocationEngine != null) {
+                    mLocationEngine.deactivate();
+                }
+                onPause();
+            }
+
+            @Override
+            public void onHostDestroy() {
+                dispose();
+                onDestroy();
+            }
+        });
     }
 
     private void enableLocationLayer() {
