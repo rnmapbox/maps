@@ -30,17 +30,16 @@ Not a Mapbox user yet? [Sign up for an account here](https://www.mapbox.com/sign
 ```
 git clone git@github.com:mapbox/react-native-mapbox-gl.git
 cd react-native-mapbox-gl
-git checkout v6
 ```
 
 **Yarn**
 ```
-yarn add @mapbox/react-native-mapbox-gl@6.0.0-beta1
+yarn add @mapbox/react-native-mapbox-gl
 ```
 
 **Npm**
 ```
-npm install @mapbox/react-native-mapbox-gl@6.0.0-beta1 --save
+npm install @mapbox/react-native-mapbox-gl --save
 ```
 
 ## Installation Guides
