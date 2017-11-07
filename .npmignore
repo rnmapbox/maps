@@ -37,3 +37,8 @@ android/gradle/
 android/gradlew
 android/gradlew.bat
 android/local.properties
+
+# react-native-mapbox-gl
+example
+__tests__
+coverage

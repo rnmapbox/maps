@@ -1,0 +1,37 @@
+<%
+  const component = locals.component;
+-%>
+## <MapboxGL.<%- component.name %> />
+### <%- replaceNewLine(component.description) %>
+
+<%_ if (component.props && component.props.length) { _%>
+### props
+| Prop | Type | Default | Required | Description |
+| ---- | :--: | :-----: | :------: | :----------: |
+<%- propMarkdownTableRows(component) %>
+<%_ } _%>
+
+<%_ if (component.methods && component.methods.length) { _%>
+### methods
+<%_ for (let method of component.methods) { _%>
+#### <%- getMarkdownMethodSignature(method) %>
+
+<%- replaceNewLine(method.description) %>
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+<%- methodMarkdownTableRow(method) %>
+
+<%- getMarkdownMethodExamples(method) %>
+<%_ } _%>
+<%_ } _%>
+
+<%_ if (component.styles && component.styles.length) { _%>
+### styles
+| Name | Type | Requires | Disabled By |  Description |
+| ---- | :--: | :------: | :---------: | :----------: |
+<%_ for (let style of component.styles) { _%>
+<%- styleMarkdownTableRow(style) %>
+<%_ } _%>
+<%_ } _%>

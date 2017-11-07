@@ -28,9 +28,14 @@ Pods/
 #
 node_modules/
 npm-debug.log
+package-lock.json
+*.tgz
+yarn.lock
 
 # project specific
 ios/Mapbox.framework
+ios/temp.zip
+ios/.framework_version
 android/build/
 android/.gradle/
 android/.idea/
@@ -41,3 +46,4 @@ android/gradlew.bat
 android/local.properties
 reactnativemapboxgl.iml
 .idea
+coverage

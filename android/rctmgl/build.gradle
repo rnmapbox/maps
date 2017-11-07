@@ -1,0 +1,37 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.1"
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // React Native
+    provided "com.facebook.react:react-native:+"
+
+    // Mapbox SDK
+    compile 'com.mapbox.mapboxsdk:mapbox-android-services:2.2.6'
+
+    compile('com.mapbox.mapboxsdk:mapbox-android-sdk:5.1.4@aar') {
+        transitive=true
+    }
+
+    // Mapbox plugins
+    compile 'com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.1.0'
+}

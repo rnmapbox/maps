@@ -1,0 +1,48 @@
+# OSX
+#
+.DS_Store
+
+# Xcode
+#
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace
+Podfile.lock
+Pods/
+
+# node.js
+#
+node_modules/
+npm-debug.log
+package-lock.json
+*.tgz
+
+# project specific
+ios/Mapbox.framework
+android/build/
+android/.gradle/
+android/.idea/
+android/android.iml
+android/app/app.iml
+android/gradle/
+android/gradlew
+android/gradlew.bat
+android/local.properties
+reactnativemapboxgl.iml
+.idea
+accesstoken
+env.json

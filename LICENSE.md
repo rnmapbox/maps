@@ -1,4 +1,4 @@
-react-native-mapbox-gl copyright (c) 2015, Mapbox.
+react-native-mapbox-gl copyright (c) 2017, Mapbox.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 

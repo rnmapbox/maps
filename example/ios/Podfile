@@ -1,0 +1,39 @@
+use_frameworks!
+
+project 'RNMapboxGLExample.xcodeproj'
+
+def react_native_pods
+
+  # Flexbox Layout Manager Used By React Natve
+  pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga/Yoga.podspec'
+
+  # React Native
+  pod 'React', path: '../node_modules/react-native', :subspecs => [
+    'BatchedBridge',
+    'Core',
+    'DevSupport',
+    'RCTActionSheet',
+    'RCTAnimation',
+    'RCTGeolocation',
+    'RCTImage',
+    'RCTLinkingIOS',
+    'RCTNetwork',
+    'RCTSettings',
+    'RCTText',
+    'RCTVibration',
+    'RCTWebSocket'
+  ]
+
+end
+
+
+target 'RNMapboxGLExample' do
+
+  # Native pods
+  pod 'Mapbox-iOS-SDK', '~> 3.6'
+
+  # React Native pods
+  react_native_pods
+  pod 'react-native-mapbox-gl', path: '../node_modules/react-native-mapbox-gl'
+
+end
