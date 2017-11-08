@@ -81,7 +81,7 @@ function buildProperties (attributes, attrName) {
   return {
     name: camelCase(attrName),
     doc: {
-      description: attributes[attrName].doc,
+      description: formatDescription(attributes[attrName].doc),
       requires: getRequires(attributes[attrName].requires),
       disabledBy: getDisables(attributes[attrName].requires),
       values: attributes[attrName].values,
@@ -96,6 +96,21 @@ function buildProperties (attributes, attrName) {
   };
 }
 
+function formatDescription (description) {
+  let words = description.split(' ');
+
+  for (let i = 0; i < words.length; i++) {
+    const word = words[i];
+
+    if (word.includes('-')) {
+      words[i] = camelCase(word);
+    }
+  }
+
+  let formattedDescription = words.join(' ');
+  return formattedDescription.replace(/\[x, y\]/g, '`{ x: number, y: number }`');
+}
+
 function getRequires (requiredItems) {
   let items = [];
 
@@ -105,7 +120,7 @@ function getRequires (requiredItems) {
 
   for (let item of requiredItems) {
     if (typeof item === 'string') {
-      items.push(item);
+      items.push(camelCase(item, '-'));
     }
   }
 
@@ -121,7 +136,7 @@ function getDisables (disabledItems) {
 
   for (let item of disabledItems) {
     if (item['!']) {
-      items.push(item['!']);
+      items.push(camelCase(item['!'], '-'));
     }
   }
 
