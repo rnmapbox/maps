@@ -13,7 +13,7 @@
 | filter | `array` | `none` | `false` | Filter only the features in the source layer that satisfy a condition that you define |
 | minZoomLevel | `number` | `none` | `false` | The minimum zoom level at which the layer gets parsed and appears. |
 | maxZoomLevel | `number` | `none` | `false` | The maximum zoom level at which the layer gets parsed and appears. |
-| style | `custom` | `none` | `false` | Customizable style attributes |
+| style | `union` | `none` | `false` | Customizable style attributes |
 
 
 ### styles

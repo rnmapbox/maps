@@ -13,7 +13,7 @@
 | filter | `array` | `none` | `false` | Filter only the features in the source layer that satisfy a condition that you define |
 | minZoomLevel | `number` | `none` | `false` | The minimum zoom level at which the layer gets parsed and appears. |
 | maxZoomLevel | `number` | `none` | `false` | The maximum zoom level at which the layer gets parsed and appears. |
-| style | `custom` | `none` | `false` | Customizable style attributes |
+| style | `union` | `none` | `false` | Customizable style attributes |
 
 
 ### styles
@@ -24,9 +24,9 @@
 | `circleColor` | `color` | `none` | `none` | The fill color of the circle. |
 | `circleBlur` | `number` | `none` | `none` | Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. |
 | `circleOpacity` | `number` | `none` | `none` | The opacity at which the circle will be drawn. |
-| `circleTranslate` | `array` | `none` | `none` | The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. |
-| `circleTranslateAnchor` | `enum` | `circle-translate` | `none` | Controls the translation reference point. |
+| `circleTranslate` | `array` | `none` | `none` | The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up, respectively. |
+| `circleTranslateAnchor` | `enum` | `circleTranslate` | `none` | Controls the translation reference point. |
 | `circlePitchScale` | `enum` | `none` | `none` | Controls the scaling behavior of the circle when the map is pitched. |
-| `circleStrokeWidth` | `number` | `none` | `none` | The width of the circle's stroke. Strokes are placed outside of the `circle-radius`. |
+| `circleStrokeWidth` | `number` | `none` | `none` | The width of the circle's stroke. Strokes are placed outside of the `circleRadius`. |
 | `circleStrokeColor` | `color` | `none` | `none` | The stroke color of the circle. |
 | `circleStrokeOpacity` | `number` | `none` | `none` | The opacity of the circle's stroke. |
