@@ -13,17 +13,17 @@
 | filter | `array` | `none` | `false` | Filter only the features in the source layer that satisfy a condition that you define |
 | minZoomLevel | `number` | `none` | `false` | The minimum zoom level at which the layer gets parsed and appears. |
 | maxZoomLevel | `number` | `none` | `false` | The maximum zoom level at which the layer gets parsed and appears. |
-| style | `custom` | `none` | `false` | Customizable style attributes |
+| style | `union` | `none` | `false` | Customizable style attributes |
 
 
 ### styles
 | Name | Type | Requires | Disabled By |  Description |
 | ---- | :--: | :------: | :---------: | :----------: |
 | `visibility` | `enum` | `none` | `none` | Whether this layer is displayed. |
-| `fillExtrusionOpacity` | `number` | `none` | `none` | The opacity of the entire fill extrusion layer. This is rendered on a per-layer, not per-feature, basis, and data-driven styling is not available. |
-| `fillExtrusionColor` | `color` | `none` | `fill-extrusion-pattern` | The base color of the extruded fill. The extrusion's surfaces will be shaded differently based on this color in combination with the root `light` settings. If this color is specified as `rgba` with an alpha component, the alpha component will be ignored; use `fill-extrusion-opacity` to set layer opacity. |
-| `fillExtrusionTranslate` | `array` | `none` | `none` | The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively. |
-| `fillExtrusionTranslateAnchor` | `enum` | `fill-extrusion-translate` | `none` | Controls the translation reference point. |
+| `fillExtrusionOpacity` | `number` | `none` | `none` | The opacity of the entire fill extrusion layer. This is rendered on a perLayer, not perFeature, basis, and dataDriven styling is not available. |
+| `fillExtrusionColor` | `color` | `none` | `fillExtrusionPattern` | The base color of the extruded fill. The extrusion's surfaces will be shaded differently based on this color in combination with the root `light` settings. If this color is specified as `rgba` with an alpha component, the alpha component will be ignored; use `fillExtrusionOpacity` to set layer opacity. |
+| `fillExtrusionTranslate` | `array` | `none` | `none` | The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up (on the flat plane), respectively. |
+| `fillExtrusionTranslateAnchor` | `enum` | `fillExtrusionTranslate` | `none` | Controls the translation reference point. |
 | `fillExtrusionPattern` | `string` | `none` | `none` | Name of image in sprite to use for drawing images on extruded fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). |
 | `fillExtrusionHeight` | `number` | `none` | `none` | The height with which to extrude this layer. |
-| `fillExtrusionBase` | `number` | `fill-extrusion-height` | `none` | The height with which to extrude the base of this layer. Must be less than or equal to `fill-extrusion-height`. |
+| `fillExtrusionBase` | `number` | `fillExtrusionHeight` | `none` | The height with which to extrude the base of this layer. Must be less than or equal to `fillExtrusionHeight`. |

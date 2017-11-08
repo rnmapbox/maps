@@ -69,10 +69,13 @@
       {
         "name": "style",
         "required": false,
-        "type": "custom",
+        "type": "union",
         "default": "none",
         "description": "Customizable style attributes"
       }
+    ],
+    "composes": [
+      "../utils"
     ],
     "name": "BackgroundLayer",
     "styles": [
@@ -89,7 +92,7 @@
         "description": "The color with which the background will be drawn.",
         "requires": [],
         "disabledBy": [
-          "background-pattern"
+          "backgroundPattern"
         ]
       },
       {
@@ -154,6 +157,9 @@
         "default": "none",
         "description": "Style property for the title in the content bubble."
       }
+    ],
+    "composes": [
+      "../utils"
     ],
     "name": "Callout"
   },
@@ -227,10 +233,13 @@
       {
         "name": "style",
         "required": false,
-        "type": "custom",
+        "type": "union",
         "default": "none",
         "description": "Customizable style attributes"
       }
+    ],
+    "composes": [
+      "../utils"
     ],
     "name": "CircleLayer",
     "styles": [
@@ -272,7 +281,7 @@
       {
         "name": "circleTranslate",
         "type": "array",
-        "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
+        "description": "The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up, respectively.",
         "requires": [],
         "disabledBy": []
       },
@@ -281,7 +290,7 @@
         "type": "enum",
         "description": "Controls the translation reference point.",
         "requires": [
-          "circle-translate"
+          "circleTranslate"
         ],
         "disabledBy": []
       },
@@ -295,7 +304,7 @@
       {
         "name": "circleStrokeWidth",
         "type": "number",
-        "description": "The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.",
+        "description": "The width of the circle's stroke. Strokes are placed outside of the `circleRadius`.",
         "requires": [],
         "disabledBy": []
       },
@@ -385,10 +394,13 @@
       {
         "name": "style",
         "required": false,
-        "type": "custom",
+        "type": "union",
         "default": "none",
         "description": "Customizable style attributes"
       }
+    ],
+    "composes": [
+      "../utils"
     ],
     "name": "FillExtrusionLayer",
     "styles": [
@@ -402,23 +414,23 @@
       {
         "name": "fillExtrusionOpacity",
         "type": "number",
-        "description": "The opacity of the entire fill extrusion layer. This is rendered on a per-layer, not per-feature, basis, and data-driven styling is not available.",
+        "description": "The opacity of the entire fill extrusion layer. This is rendered on a perLayer, not perFeature, basis, and dataDriven styling is not available.",
         "requires": [],
         "disabledBy": []
       },
       {
         "name": "fillExtrusionColor",
         "type": "color",
-        "description": "The base color of the extruded fill. The extrusion's surfaces will be shaded differently based on this color in combination with the root `light` settings. If this color is specified as `rgba` with an alpha component, the alpha component will be ignored; use `fill-extrusion-opacity` to set layer opacity.",
+        "description": "The base color of the extruded fill. The extrusion's surfaces will be shaded differently based on this color in combination with the root `light` settings. If this color is specified as `rgba` with an alpha component, the alpha component will be ignored; use `fillExtrusionOpacity` to set layer opacity.",
         "requires": [],
         "disabledBy": [
-          "fill-extrusion-pattern"
+          "fillExtrusionPattern"
         ]
       },
       {
         "name": "fillExtrusionTranslate",
         "type": "array",
-        "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively.",
+        "description": "The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up (on the flat plane), respectively.",
         "requires": [],
         "disabledBy": []
       },
@@ -427,7 +439,7 @@
         "type": "enum",
         "description": "Controls the translation reference point.",
         "requires": [
-          "fill-extrusion-translate"
+          "fillExtrusionTranslate"
         ],
         "disabledBy": []
       },
@@ -448,9 +460,9 @@
       {
         "name": "fillExtrusionBase",
         "type": "number",
-        "description": "The height with which to extrude the base of this layer. Must be less than or equal to `fill-extrusion-height`.",
+        "description": "The height with which to extrude the base of this layer. Must be less than or equal to `fillExtrusionHeight`.",
         "requires": [
-          "fill-extrusion-height"
+          "fillExtrusionHeight"
         ],
         "disabledBy": []
       }
@@ -526,10 +538,13 @@
       {
         "name": "style",
         "required": false,
-        "type": "custom",
+        "type": "union",
         "default": "none",
         "description": "Customizable style attributes"
       }
+    ],
+    "composes": [
+      "../utils"
     ],
     "name": "FillLayer",
     "styles": [
@@ -550,7 +565,7 @@
       {
         "name": "fillOpacity",
         "type": "number",
-        "description": "The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.",
+        "description": "The opacity of the entire fill layer. In contrast to the `fillColor`, this value will also affect the 1px stroke around the fill, if the stroke is used.",
         "requires": [],
         "disabledBy": []
       },
@@ -560,22 +575,22 @@
         "description": "The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.",
         "requires": [],
         "disabledBy": [
-          "fill-pattern"
+          "fillPattern"
         ]
       },
       {
         "name": "fillOutlineColor",
         "type": "color",
-        "description": "The outline color of the fill. Matches the value of `fill-color` if unspecified.",
+        "description": "The outline color of the fill. Matches the value of `fillColor` if unspecified.",
         "requires": [],
         "disabledBy": [
-          "fill-pattern"
+          "fillPattern"
         ]
       },
       {
         "name": "fillTranslate",
         "type": "array",
-        "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
+        "description": "The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up, respectively.",
         "requires": [],
         "disabledBy": []
       },
@@ -584,7 +599,7 @@
         "type": "enum",
         "description": "Controls the translation reference point.",
         "requires": [
-          "fill-translate"
+          "fillTranslate"
         ],
         "disabledBy": []
       },
@@ -608,6 +623,9 @@
         "default": "none",
         "description": "Customizable style attributes"
       }
+    ],
+    "composes": [
+      "../utils"
     ],
     "name": "Light",
     "styles": [
@@ -711,10 +729,13 @@
       {
         "name": "style",
         "required": false,
-        "type": "custom",
+        "type": "union",
         "default": "none",
         "description": "Customizable style attributes"
       }
+    ],
+    "composes": [
+      "../utils"
     ],
     "name": "LineLayer",
     "styles": [
@@ -766,13 +787,13 @@
         "description": "The color with which the line will be drawn.",
         "requires": [],
         "disabledBy": [
-          "line-pattern"
+          "linePattern"
         ]
       },
       {
         "name": "lineTranslate",
         "type": "array",
-        "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
+        "description": "The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up, respectively.",
         "requires": [],
         "disabledBy": []
       },
@@ -781,7 +802,7 @@
         "type": "enum",
         "description": "Controls the translation reference point.",
         "requires": [
-          "line-translate"
+          "lineTranslate"
         ],
         "disabledBy": []
       },
@@ -819,7 +840,7 @@
         "description": "Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width.",
         "requires": [],
         "disabledBy": [
-          "line-pattern"
+          "linePattern"
         ]
       },
       {
@@ -1346,6 +1367,9 @@
         "description": "This event is triggered once the camera is finished after calling setCamera"
       }
     ],
+    "composes": [
+      "../utils"
+    ],
     "name": "MapView"
   },
   "PointAnnotation": {
@@ -1408,6 +1432,9 @@
         "default": "none",
         "description": "This callback is fired once this annotation is deselected."
       }
+    ],
+    "composes": [
+      "../utils"
     ],
     "name": "PointAnnotation"
   },
@@ -1481,10 +1508,13 @@
       {
         "name": "style",
         "required": false,
-        "type": "custom",
+        "type": "union",
         "default": "none",
         "description": "Customizable style attributes"
       }
+    ],
+    "composes": [
+      "../utils"
     ],
     "name": "RasterLayer",
     "styles": [
@@ -1600,6 +1630,9 @@
         "description": "An HTML or literal text string defining the buttons to be displayed in an action sheet when the\nsource is part of a map view’s style and the map view’s attribution button is pressed."
       }
     ],
+    "composes": [
+      "../utils"
+    ],
     "name": "RasterSource"
   },
   "ShapeSource": {
@@ -1677,6 +1710,9 @@
         "description": "Specifies the external images in key-value pairs required for the shape source.\nIf you have an asset under Image.xcassets on iOS and the drawables directory on android\nyou can specify an array of string names with assets as the key `{ assets: ['pin'] }`."
       }
     ],
+    "composes": [
+      "../utils"
+    ],
     "name": "ShapeSource"
   },
   "SymbolLayer": {
@@ -1749,10 +1785,13 @@
       {
         "name": "style",
         "required": false,
-        "type": "custom",
+        "type": "union",
         "default": "none",
         "description": "Customizable style attributes"
       }
+    ],
+    "composes": [
+      "../utils"
     ],
     "name": "SymbolLayer",
     "styles": [
@@ -1782,7 +1821,7 @@
         "type": "boolean",
         "description": "If true, the icon will be visible even if it collides with other previously drawn symbols.",
         "requires": [
-          "icon-image"
+          "iconImage"
         ],
         "disabledBy": []
       },
@@ -1791,7 +1830,7 @@
         "type": "boolean",
         "description": "If true, other symbols can be visible even if they collide with the icon.",
         "requires": [
-          "icon-image"
+          "iconImage"
         ],
         "disabledBy": []
       },
@@ -1800,26 +1839,26 @@
         "type": "boolean",
         "description": "If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not.",
         "requires": [
-          "icon-image",
-          "text-field"
+          "iconImage",
+          "textField"
         ],
         "disabledBy": []
       },
       {
         "name": "iconRotationAlignment",
         "type": "enum",
-        "description": "In combination with `symbol-placement`, determines the rotation behavior of icons.",
+        "description": "In combination with `symbolPlacement`, determines the rotation behavior of icons.",
         "requires": [
-          "icon-image"
+          "iconImage"
         ],
         "disabledBy": []
       },
       {
         "name": "iconSize",
         "type": "number",
-        "description": "Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.",
+        "description": "Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `iconSize`. 1 is the original size; 3 triples the size of the image.",
         "requires": [
-          "icon-image"
+          "iconImage"
         ],
         "disabledBy": []
       },
@@ -1828,18 +1867,18 @@
         "type": "enum",
         "description": "Scales the icon to fit around the associated text.",
         "requires": [
-          "icon-image",
-          "text-field"
+          "iconImage",
+          "textField"
         ],
         "disabledBy": []
       },
       {
         "name": "iconTextFitPadding",
         "type": "array",
-        "description": "Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.",
+        "description": "Size of the additional area added to dimensions determined by `iconTextFit`, in clockwise order: top, right, bottom, left.",
         "requires": [
-          "icon-image",
-          "text-field"
+          "iconImage",
+          "textField"
         ],
         "disabledBy": []
       },
@@ -1855,7 +1894,7 @@
         "type": "number",
         "description": "Rotates the icon clockwise.",
         "requires": [
-          "icon-image"
+          "iconImage"
         ],
         "disabledBy": []
       },
@@ -1864,25 +1903,25 @@
         "type": "number",
         "description": "Size of the additional area around the icon bounding box used for detecting symbol collisions.",
         "requires": [
-          "icon-image"
+          "iconImage"
         ],
         "disabledBy": []
       },
       {
         "name": "iconKeepUpright",
         "type": "boolean",
-        "description": "If true, the icon may be flipped to prevent it from being rendered upside-down.",
+        "description": "If true, the icon may be flipped to prevent it from being rendered upsideDown.",
         "requires": [
-          "icon-image"
+          "iconImage"
         ],
         "disabledBy": []
       },
       {
         "name": "iconOffset",
         "type": "array",
-        "description": "Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. When combined with `icon-rotate` the offset will be as if the rotated direction was up.",
+        "description": "Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. When combined with `iconRotate` the offset will be as if the rotated direction was up.",
         "requires": [
-          "icon-image"
+          "iconImage"
         ],
         "disabledBy": []
       },
@@ -1891,23 +1930,23 @@
         "type": "enum",
         "description": "Orientation of text when map is pitched.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
       {
         "name": "textRotationAlignment",
         "type": "enum",
-        "description": "In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text.",
+        "description": "In combination with `symbolPlacement`, determines the rotation behavior of the individual glyphs forming the text.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
       {
         "name": "textField",
         "type": "string",
-        "description": "Value to use for a text label. Feature properties are specified using tokens like {field_name}.  (Token replacement is only supported for literal `text-field` values--not for property functions.)",
+        "description": "Value to use for a text label. Feature properties are specified using tokens like {field_name}.  (Token replacement is only supported for literal `textField` valuesNot for property functions.)",
         "requires": [],
         "disabledBy": []
       },
@@ -1916,7 +1955,7 @@
         "type": "array",
         "description": "Font stack to use for displaying text.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
@@ -1925,7 +1964,7 @@
         "type": "number",
         "description": "Font size.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
@@ -1934,16 +1973,16 @@
         "type": "number",
         "description": "The maximum line width for text wrapping.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
       {
         "name": "textLineHeight",
         "type": "number",
-        "description": "Text leading value for multi-line text.",
+        "description": "Text leading value for multiLine text.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
@@ -1952,7 +1991,7 @@
         "type": "number",
         "description": "Text tracking amount.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
@@ -1961,7 +2000,7 @@
         "type": "enum",
         "description": "Text justification options.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
@@ -1970,7 +2009,7 @@
         "type": "enum",
         "description": "Part of the text placed closest to the anchor.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
@@ -1979,7 +2018,7 @@
         "type": "number",
         "description": "Maximum angle change between adjacent characters.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
@@ -1988,7 +2027,7 @@
         "type": "number",
         "description": "Rotates the text clockwise.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
@@ -1997,25 +2036,25 @@
         "type": "number",
         "description": "Size of the additional area around the text bounding box used for detecting symbol collisions.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
       {
         "name": "textKeepUpright",
         "type": "boolean",
-        "description": "If true, the text may be flipped vertically to prevent it from being rendered upside-down.",
+        "description": "If true, the text may be flipped vertically to prevent it from being rendered upsideDown.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
       {
         "name": "textTransform",
         "type": "enum",
-        "description": "Specifies how to capitalize text, similar to the CSS `text-transform` property.",
+        "description": "Specifies how to capitalize text, similar to the CSS `textTransform` property.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
@@ -2024,7 +2063,7 @@
         "type": "array",
         "description": "Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
@@ -2033,7 +2072,7 @@
         "type": "boolean",
         "description": "If true, the text will be visible even if it collides with other previously drawn symbols.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
@@ -2042,7 +2081,7 @@
         "type": "boolean",
         "description": "If true, other symbols can be visible even if they collide with the text.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
@@ -2051,8 +2090,8 @@
         "type": "boolean",
         "description": "If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not.",
         "requires": [
-          "text-field",
-          "icon-image"
+          "textField",
+          "iconImage"
         ],
         "disabledBy": []
       },
@@ -2068,7 +2107,7 @@
         "type": "number",
         "description": "The opacity at which the icon will be drawn.",
         "requires": [
-          "icon-image"
+          "iconImage"
         ],
         "disabledBy": []
       },
@@ -2077,7 +2116,7 @@
         "type": "color",
         "description": "The color of the icon. This can only be used with sdf icons.",
         "requires": [
-          "icon-image"
+          "iconImage"
         ],
         "disabledBy": []
       },
@@ -2086,7 +2125,7 @@
         "type": "color",
         "description": "The color of the icon's halo. Icon halos can only be used with SDF icons.",
         "requires": [
-          "icon-image"
+          "iconImage"
         ],
         "disabledBy": []
       },
@@ -2095,7 +2134,7 @@
         "type": "number",
         "description": "Distance of halo to the icon outline.",
         "requires": [
-          "icon-image"
+          "iconImage"
         ],
         "disabledBy": []
       },
@@ -2104,7 +2143,7 @@
         "type": "number",
         "description": "Fade out the halo towards the outside.",
         "requires": [
-          "icon-image"
+          "iconImage"
         ],
         "disabledBy": []
       },
@@ -2113,7 +2152,7 @@
         "type": "array",
         "description": "Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.",
         "requires": [
-          "icon-image"
+          "iconImage"
         ],
         "disabledBy": []
       },
@@ -2122,8 +2161,8 @@
         "type": "enum",
         "description": "Controls the translation reference point.",
         "requires": [
-          "icon-image",
-          "icon-translate"
+          "iconImage",
+          "iconTranslate"
         ],
         "disabledBy": []
       },
@@ -2132,7 +2171,7 @@
         "type": "number",
         "description": "The opacity at which the text will be drawn.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
@@ -2141,7 +2180,7 @@
         "type": "color",
         "description": "The color with which the text will be drawn.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
@@ -2150,16 +2189,16 @@
         "type": "color",
         "description": "The color of the text's halo, which helps it stand out from backgrounds.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
       {
         "name": "textHaloWidth",
         "type": "number",
-        "description": "Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.",
+        "description": "Distance of halo to the font outline. Max text halo width is 1/4 of the fontSize.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
@@ -2168,7 +2207,7 @@
         "type": "number",
         "description": "The halo's fadeout distance towards the outside.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
@@ -2177,7 +2216,7 @@
         "type": "array",
         "description": "Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.",
         "requires": [
-          "text-field"
+          "textField"
         ],
         "disabledBy": []
       },
@@ -2186,8 +2225,8 @@
         "type": "enum",
         "description": "Controls the translation reference point.",
         "requires": [
-          "text-field",
-          "text-translate"
+          "textField",
+          "textTranslate"
         ],
         "disabledBy": []
       }
@@ -2211,6 +2250,9 @@
         "default": "none",
         "description": "A URL to a TileJSON configuration file describing the source’s contents and other metadata."
       }
+    ],
+    "composes": [
+      "../utils"
     ],
     "name": "VectorSource"
   },
