@@ -2,6 +2,7 @@ package com.mapbox.rctmgl.components.annotation;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.mapbox.mapboxsdk.annotations.IconFactory;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.rctmgl.R;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
@@ -74,8 +76,18 @@ public class RCTMGLPointAnnotationAdapter extends MapboxMap.MarkerViewAdapter<RC
             layoutParams.height = height;
         }
 
+        if (Build.VERSION.SDK_INT >= 21) {
+            convertView.setZ(getZIndex(pointAnnotation));
+        }
+
         mMapView.reflow();
         return convertView;
+    }
+
+    private float getZIndex(RCTMGLPointAnnotation pointAnnotation) {
+        float latitudeMax = 90.0f;
+        LatLng latLng = pointAnnotation.getLatLng();
+        return latitudeMax - (float)latLng.getLatitude();
     }
 
     private static class ViewHolder {
