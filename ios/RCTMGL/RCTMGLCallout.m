@@ -26,6 +26,16 @@
 @synthesize anchoredToAnnotation = _anchoredToAnnotation;
 @synthesize dismissesAutomatically = _dismissesAutomatically;
 
+- (instancetype)init
+{
+    if (self = [super init]) {
+        // prevent tap from bubbling up to it's superview
+        UITapGestureRecognizer *captureTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
+        [self addGestureRecognizer:captureTap];
+    }
+    return self;
+}
+
 // https://github.com/mapbox/mapbox-gl-native/issues/9228
 - (void)setCenter:(CGPoint)center {
     center.y = center.y - CGRectGetMidY(self.bounds);
