@@ -71,5 +71,8 @@ npm install @mapbox/react-native-mapbox-gl --save
 * [RasterLayer](/docs/RasterLayer.md)
 * [SymbolLayer](/docs/SymbolLayer.md)
 
+### Offline
+* [OfflineManager](/docs/OfflineManager.md)
+
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmapbox%2Freact-native-mapbox-gl.svg?type=large)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmapbox%2Freact-native-mapbox-gl?ref=badge_large)
