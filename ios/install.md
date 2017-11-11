@@ -1,5 +1,18 @@
 # iOS Installation
 
+## Using CocoaPods
+
+To install with CocoaPods, add the following to your `Podfile`:
+
+```
+  # Mapbox
+  pod 'react-native-mapbox-gl', :path => '../node_modules/@mapbox/react-native-mapbox-gl'
+```
+
+Then run `pod install` and rebuild your project.
+
+## Manual Installation
+
 ### Add Native Mapbox SDK Framework
 
 Select your project in the `Project navigator`. Click `General` tab then add `node_modules/@mapbox/react-native-mapbox-gl/ios/Mapbox.framework` to `Embedded Binaries`. :collision: **Important, make sure you're adding it to general -> `Embedded Binaries` :collision:**
