@@ -127,9 +127,16 @@ const float CENTER_Y_OFFSET_BASE = -0.5f;
     } else {
         // custom view
         self.enabled = YES;
+        self.layer.zPosition = [self _getZPosition];
         [self addGestureRecognizer:customViewTap];
         return self;
     }
+}
+
+- (CGFloat)_getZPosition
+{
+    double latitudeMax = 90.0;
+    return latitudeMax - self.coordinate.latitude;
 }
 
 - (void)_handleTap:(UITapGestureRecognizer *)recognizer

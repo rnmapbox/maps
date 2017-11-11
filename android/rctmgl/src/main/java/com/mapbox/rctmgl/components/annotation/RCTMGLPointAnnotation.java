@@ -86,6 +86,10 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         }
     }
 
+    public LatLng getLatLng() {
+        return ConvertUtils.toLatLng(mCoordinate);
+    }
+
     public long getMapboxID() {
         return mAnnotation == null ? -1 : mAnnotation.getId();
     }
