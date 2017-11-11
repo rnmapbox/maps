@@ -126,9 +126,14 @@ RCT_EXPORT_METHOD(queryRenderedFeaturesAtPoint:(nonnull NSNumber*)reactTag
             return;
         }
         
+        NSSet *layerIDSet = nil;
+        if (layerIDs != nil && layerIDs.count > 0) {
+            layerIDSet = [NSSet setWithArray:layerIDs];
+        }
+        
         RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
         NSArray<id<MGLFeature>> *shapes = [reactMapView visibleFeaturesAtPoint:CGPointMake([point[0] floatValue], [point[1] floatValue])
-                                                       inStyleLayersWithIdentifiers:[NSSet setWithArray:layerIDs]
+                                                       inStyleLayersWithIdentifiers:layerIDSet
                                                        predicate:[FilterParser parse:filter]];
         
         NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] init];
@@ -164,8 +169,13 @@ RCT_EXPORT_METHOD(queryRenderedFeaturesInRect:(nonnull NSNumber*)reactTag
         CGFloat height = [bbox[0] floatValue] - [bbox[2] floatValue];
         CGRect rect = CGRectMake([bbox[3] floatValue], [bbox[2] floatValue], width, height);
         
+        NSSet *layerIDSet = nil;
+        if (layerIDs != nil && layerIDs.count > 0) {
+            layerIDSet = [NSSet setWithArray:layerIDs];
+        }
+        
         NSArray<id<MGLFeature>> *shapes = [reactMapView visibleFeaturesInRect:rect
-                                                  inStyleLayersWithIdentifiers:[NSSet setWithArray:layerIDs]
+                                                  inStyleLayersWithIdentifiers:layerIDSet
                                                                      predicate:[FilterParser parse:filter]];
         
         NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] init];
