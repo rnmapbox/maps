@@ -1206,6 +1206,13 @@
         "description": "Max zoom level of map"
       },
       {
+        "name": "zoomEnabled",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "Enable/Disable zoom on the map"
+      },
+      {
         "name": "scrollEnabled",
         "required": false,
         "type": "bool",

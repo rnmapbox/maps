@@ -107,6 +107,11 @@ static double const M2PI = M_PI * 2;
 }
 #pragma clang diagnostic pop
 
+- (void)setReactZoomEnabled:(BOOL)reactZoomEnabled
+{
+    _reactZoomEnabled = reactZoomEnabled;
+    self.zoomEnabled = _reactZoomEnabled;
+}
 
 - (void)setReactScrollEnabled:(BOOL)reactScrollEnabled
 {

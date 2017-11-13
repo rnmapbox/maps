@@ -16,6 +16,7 @@
 | zoomLevel | `number` | `16` | `false` | Initial zoom level of map |
 | minZoomLevel | `number` | `none` | `false` | Min zoom level of map |
 | maxZoomLevel | `number` | `none` | `false` | Max zoom level of map |
+| zoomEnabled | `bool` | `none` | `false` | Enable/Disable zoom on the map |
 | scrollEnabled | `bool` | `true` | `false` | Enable/Disable scroll on the map |
 | pitchEnabled | `bool` | `true` | `false` | Enable/Disable pitch on map |
 | rotateEnabled | `bool` | `true` | `false` | Enable/Disable rotation on map |
