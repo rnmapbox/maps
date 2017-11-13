@@ -60,12 +60,16 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
             mMap.addSource(mSource);
         }
 
-        if (mQueuedLayers.size() > 0) {
+        if (mQueuedLayers != null && mQueuedLayers.size() > 0) { // first load
             for (int i = 0; i < mQueuedLayers.size(); i++) {
                 int childPosition = mQueuedLayers.keyAt(i);
                 addLayerToMap(mQueuedLayers.get(childPosition), childPosition);
             }
             mQueuedLayers = null;
+        } else if (mLayers.size() > 0) { // handles the case of switching style url, but keeping layers on map
+            for (int i = 0; i < mLayers.size(); i++) {
+                addLayerToMap(mLayers.get(i), i);
+            }
         }
     }
 
@@ -105,8 +109,11 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
         if (mMapView == null || layer == null) {
             return;
         }
+
         layer.addToMap(mMapView);
-        mLayers.add(childPosition, layer);
+        if (!mLayers.contains(layer)) {
+            mLayers.add(childPosition, layer);
+        }
     }
 
     protected void removeLayerFromMap(RCTLayer layer, int childPosition) {

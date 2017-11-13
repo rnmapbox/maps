@@ -221,9 +221,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         T existingLayer = mMap.<T>getLayerAs(mID);
         if (existingLayer != null) {
             mLayer = existingLayer;
-        }
-
-        if (mLayer == null) {
+        } else {
             mLayer = makeLayer();
             insertLayer();
         }

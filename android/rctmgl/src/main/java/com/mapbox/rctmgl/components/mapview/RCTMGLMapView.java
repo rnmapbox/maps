@@ -428,7 +428,14 @@ public class RCTMGLMapView extends MapView implements
         mStyleURL = styleURL;
 
         if (mMap != null) {
-            mMap.setStyleUrl(styleURL);
+            removeAllSourcesFromMap();
+
+            mMap.setStyle(styleURL, new MapboxMap.OnStyleLoadedListener() {
+                @Override
+                public void onStyleLoaded(String style) {
+                    addAllSourcesToMap();
+                }
+            });
         }
     }
 
@@ -794,5 +801,25 @@ public class RCTMGLMapView extends MapView implements
         }
 
         return mUserTrackingMode;
+    }
+
+    private void removeAllSourcesFromMap() {
+        if (mSources.size() == 0) {
+            return;
+        }
+        for (int i = 0; i < mSources.size(); i++) {
+            RCTSource source = mSources.get(mSources.keyAt(i));
+            source.removeFromMap(this);
+        }
+    }
+
+    private void addAllSourcesToMap() {
+        if (mSources.size() == 0) {
+            return;
+        }
+        for (int i = 0; i < mSources.size(); i++) {
+            RCTSource source = mSources.get(mSources.keyAt(i));
+            source.addToMap(this);
+        }
     }
 }
