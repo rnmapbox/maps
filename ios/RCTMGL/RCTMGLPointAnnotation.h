@@ -21,7 +21,9 @@
 @property (nonatomic, copy) NSString *id;
 @property (nonatomic, copy) NSString *reactTitle;
 @property (nonatomic, copy) NSString *reactSnippet;
+
 @property (nonatomic, copy) NSString *reactCoordinate;
+@property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 
 @property (nonatomic, copy) NSDictionary<NSString *, NSNumber *> *anchor;
 
