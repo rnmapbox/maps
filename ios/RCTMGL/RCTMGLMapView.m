@@ -184,6 +184,7 @@ static double const M2PI = M_PI * 2;
 - (void)setReactStyleURL:(NSString *)reactStyleURL
 {
     _reactStyleURL = reactStyleURL;
+    [self _removeAllSourcesFromMap];
     self.styleURL = [self _getStyleURLFromKey:_reactStyleURL];
 }
 
@@ -272,6 +273,16 @@ static double const M2PI = M_PI * 2;
         camera.pitch = _pitch;
         camera.heading = _heading;
         [self setCamera:camera animated:_animated];
+    }
+}
+
+- (void)_removeAllSourcesFromMap
+{
+    if (self.style == nil || _sources.count == 0) {
+        return;
+    }
+    for (RCTMGLSource *source in _sources) {
+        source.map = nil;
     }
 }
 

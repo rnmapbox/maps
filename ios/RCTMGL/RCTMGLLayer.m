@@ -89,9 +89,7 @@
     MGLStyleLayer *existingLayer = [style layerWithIdentifier:_id];
     if (existingLayer != nil) {
         _styleLayer = existingLayer;
-    }
-    
-    if (_styleLayer == nil) {
+    } else {
         _styleLayer = [self makeLayer:style];
         [self insertLayer];
     }
