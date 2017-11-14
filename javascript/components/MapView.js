@@ -88,6 +88,11 @@ class MapView extends React.Component {
     maxZoomLevel: PropTypes.number,
 
     /**
+     * Enable/Disable zoom on the map
+     */
+    zoomEnabled: PropTypes.bool,
+
+    /**
      * Enable/Disable scroll on the map
      */
     scrollEnabled: PropTypes.bool,
@@ -609,23 +614,7 @@ class MapView extends React.Component {
   render () {
     let props = {
       ...this.props,
-      animated: this.props.animated,
       centerCoordinate: this._getCenterCoordinate(),
-      showUserLocation: this.props.showUserLocation,
-      userTrackingMode: this.props.userTrackingMode,
-      heading: this.props.heading,
-      pitch: this.props.pitch,
-      style: this.props.style,
-      styleURL: this.props.styleURL,
-      zoomLevel: this.props.zoomLevel,
-      minZoomLevel: this.props.minZoomLevel,
-      maxZoomLevel: this.props.maxZoomLevel,
-      scrollEnabled: this.props.scrollEnabled,
-      pitchEnabled: this.props.pitchEnabled,
-      rotateEnabled: this.props.rotateEnabled,
-      attributionEnabled: this.props.attributionEnabled,
-      logoEnabled: this.props.logoEnabled,
-      compassEnabled: this.props.compassEnabled,
       contentInset: this._getContentInset(),
     };
 

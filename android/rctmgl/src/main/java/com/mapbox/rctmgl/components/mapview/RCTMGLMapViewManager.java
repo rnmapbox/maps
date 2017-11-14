@@ -90,6 +90,11 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         mapView.setReactAnimated(isAnimated);
     }
 
+    @ReactProp(name="zoomEnabled")
+    public void setZoomEnabled(RCTMGLMapView mapView, boolean zoomEnabled) {
+        mapView.setReactZoomEnabled(zoomEnabled);
+    }
+
     @ReactProp(name="scrollEnabled")
     public void setScrollEnabled(RCTMGLMapView mapView, boolean scrollEnabled) {
         mapView.setReactScrollEnabled(scrollEnabled);

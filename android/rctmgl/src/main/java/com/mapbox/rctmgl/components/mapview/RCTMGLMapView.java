@@ -94,6 +94,7 @@ public class RCTMGLMapView extends MapView implements
     private Boolean mAttributionEnabled;
     private Boolean mLogoEnabled;
     private Boolean mCompassEnabled;
+    private Boolean mZoomEnabled;
     private boolean mShowUserLocation;
 
     private long mActiveMarkerID = -1;
@@ -449,6 +450,11 @@ public class RCTMGLMapView extends MapView implements
         updateInsets();
     }
 
+    public void setReactZoomEnabled(boolean zoomEnabled) {
+        mZoomEnabled = zoomEnabled;
+        updateUISettings();
+    }
+
     public void setReactScrollEnabled(boolean scrollEnabled) {
         mScrollEnabled = scrollEnabled;
         updateUISettings();
@@ -685,6 +691,10 @@ public class RCTMGLMapView extends MapView implements
 
         if (mCompassEnabled != null && uiSettings.isCompassEnabled() != mCompassEnabled) {
             uiSettings.setCompassEnabled(mCompassEnabled);
+        }
+
+        if (mZoomEnabled != null && uiSettings.isZoomGesturesEnabled() != mZoomEnabled) {
+            uiSettings.setZoomGesturesEnabled(mZoomEnabled);
         }
     }
 
