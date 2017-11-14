@@ -85,23 +85,15 @@ const float CENTER_Y_OFFSET_BASE = -0.5f;
     }
 }
 
+- (void)setReactCoordinate:(NSString *)reactCoordinate
+{
+    _reactCoordinate = reactCoordinate;
+    [self _updateCoordinate];
+}
+
 - (NSString *)reuseIdentifier
 {
     return _id;
-}
-
-- (CLLocationCoordinate2D)coordinate
-{
-    if (_reactCoordinate == nil) {
-        return CLLocationCoordinate2DMake(0.0, 0.0);
-    }
-    
-    MGLPointFeature *feature = (MGLPointFeature *)[RCTMGLUtils shapeFromGeoJSON:_reactCoordinate];
-    if (feature == nil) {
-        return CLLocationCoordinate2DMake(0.0, 0.0);
-    }
-    
-    return feature.coordinate;
 }
 
 - (NSString *)title
@@ -172,6 +164,22 @@ const float CENTER_Y_OFFSET_BASE = -0.5f;
     }
     
     self.centerOffset = CGVectorMake(dx, dy);
+}
+
+- (void)_updateCoordinate
+{
+    if (_reactCoordinate == nil) {
+        return;
+    }
+    
+    MGLPointFeature *feature = (MGLPointFeature *)[RCTMGLUtils shapeFromGeoJSON:_reactCoordinate];
+    if (feature == nil) {
+        return;
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+       self.coordinate = feature.coordinate;
+    });
 }
 
 @end
