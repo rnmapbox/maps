@@ -152,6 +152,14 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
 
     public void setFilter(ReadableArray readableFilterArray) {
         mFilter = FilterParser.getFilterList(readableFilterArray);
+
+        if (mLayer != null) {
+            Filter.Statement statement = buildFilter();
+
+            if (statement != null) {
+                updateFilter(statement);
+            }
+        }
     }
 
     public void add() {
@@ -212,6 +220,10 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
 
     protected Filter.Statement buildFilter() {
         return FilterParser.parse(mFilter);
+    }
+
+    protected void updateFilter(Filter.Statement statement) {
+        // override if you want to update the filter
     }
 
     @Override
