@@ -59,6 +59,7 @@ import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Point;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by nickitaliano on 8/18/17.
@@ -571,7 +572,7 @@ public class RCTMGLMapView extends MapView implements
         }
     }
 
-    public void queryRenderedFeaturesAtPoint(String callbackID, PointF point, List<String> filter, List<String> layerIDs) {
+    public void queryRenderedFeaturesAtPoint(String callbackID, PointF point, FilterParser.FilterList filter, List<String> layerIDs) {
         AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
         List<Feature> features = mMap.queryRenderedFeatures(point, FilterParser.parse(filter), layerIDs.toArray(new String[layerIDs.size()]));
 
@@ -582,7 +583,7 @@ public class RCTMGLMapView extends MapView implements
         mManager.handleEvent(event);
     }
 
-    public void queryRenderedFeaturesInRect(String callbackID, RectF rect, List<String> filter, List<String> layerIDs) {
+    public void queryRenderedFeaturesInRect(String callbackID, RectF rect, FilterParser.FilterList filter, List<String> layerIDs) {
         AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
         List<Feature> features = mMap.queryRenderedFeatures(rect, FilterParser.parse(filter), layerIDs.toArray(new String[layerIDs.size()]));
 

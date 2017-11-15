@@ -1,5 +1,6 @@
 package com.mapbox.rctmgl.components.styles.layers;
 
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
@@ -70,7 +71,7 @@ public class RCTMGLCircleLayerManager extends ViewGroupManager<RCTMGLCircleLayer
     }
 
     @ReactProp(name="filter")
-    public void setFilter(RCTMGLCircleLayer layer, String joinedFilterStr) {
-        layer.setFilter(joinedFilterStr.split(";"));
+    public void setFilter(RCTMGLCircleLayer layer, ReadableArray filterList) {
+        layer.setFilter(filterList);
     }
 }

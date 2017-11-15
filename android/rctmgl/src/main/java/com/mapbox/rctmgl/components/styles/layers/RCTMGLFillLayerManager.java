@@ -1,6 +1,7 @@
 package com.mapbox.rctmgl.components.styles.layers;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
@@ -73,7 +74,7 @@ public class RCTMGLFillLayerManager extends ViewGroupManager<RCTMGLFillLayer> {
     }
 
     @ReactProp(name="filter")
-    public void setFilter(RCTMGLFillLayer layer, String joinedFilterStr) {
-        layer.setFilter(joinedFilterStr.split(";"));
+    public void setFilter(RCTMGLFillLayer layer, ReadableArray filterList) {
+        layer.setFilter(filterList);
     }
 }

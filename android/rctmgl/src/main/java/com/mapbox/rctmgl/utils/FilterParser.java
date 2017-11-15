@@ -1,11 +1,15 @@
 package com.mapbox.rctmgl.utils;
 
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.mapbox.mapboxsdk.style.layers.Filter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -33,25 +37,45 @@ public class FilterParser {
     public static final int COMPOUND_FILTER_ANY = 2;
     public static final int COMPOUND_FILTER_NONE = 1;
 
-    public static Filter.Statement parse(List<String> filter) {
+    public static FilterList getFilterList(ReadableArray readableArray) {
+        List<Map<String, Object>> rawFilterList = new ArrayList<>();
+
+        for (int i = 0; i < readableArray.size(); i++) {
+            ReadableMap readableMap = readableArray.getMap(i);
+
+            Map<String, Object> filterItem = new HashMap<>();
+            filterItem.put("type", readableMap.getString("type"));
+
+            switch (readableMap.getString("type")) {
+                case "boolean":
+                    filterItem.put("value", readableMap.getBoolean("value"));
+                    break;
+                case "number":
+                    filterItem.put("value", readableMap.getDouble("value"));
+                    break;
+                default:
+                    filterItem.put("value", readableMap.getString("value"));
+                    break;
+            }
+
+            rawFilterList.add(filterItem);
+        }
+
+        return new FilterList(rawFilterList);
+    }
+
+    public static Filter.Statement parse(FilterList filterList) {
         Filter.Statement completeStatement = null;
 
         int compound = 0;
 
-        if (filter == null) {
-            return null;
-        }
-
-        // we are going to be popping items of the list, we want to treat the react prop as immutable
-        List<String> filterList = new ArrayList<>(filter);
-
         // no filter
-        if (filterList.size() < 2) {
+        if (filterList == null || filterList.size() < 2) {
             return null;
         }
 
         // peak ahead to see if this is a compound filter or not
-        switch (filterList.get(0)) {
+        switch (filterList.getString(0)) {
             case "all":
                 compound = COMPOUND_FILTER_ALL;
                 break;
@@ -66,7 +90,7 @@ public class FilterParser {
         List<Filter.Statement> compoundStatement = new ArrayList<>();
 
         if (compound > 0) {
-            filterList.remove(0);
+            filterList.removeFirst();
         }
 
         while (!filterList.isEmpty()) {
@@ -74,7 +98,7 @@ public class FilterParser {
             int posPointer = 1;
 
             while (posPointer < filterList.size()) {
-                if (FILTER_OPS.contains(filterList.get(posPointer))) {
+                if (FILTER_OPS.contains(filterList.getString(posPointer))) {
                     break;
                 }
                 posPointer++;
@@ -82,12 +106,16 @@ public class FilterParser {
 
             // TODO: throw useful exceptions here when popping from list fails due to an invalid filter
 
-            List<String> currentFilters = new ArrayList<>(filterList.subList(0, posPointer));
+            FilterList currentFilters = filterList.subList(posPointer);
             filterList.removeAll(currentFilters);
 
-            String op = currentFilters.remove(0);
+            String op = currentFilters.getString(0);
+            currentFilters.removeFirst();
+
             Filter.Statement statement = null;
-            String key = currentFilters.remove(0);
+            String key = currentFilters.getString(0);
+            currentFilters.removeFirst();
+
             List<Object> values = getObjectValues(currentFilters);
 
             switch (op) {
@@ -147,13 +175,66 @@ public class FilterParser {
         return completeStatement;
     }
 
-    private static List<Object> getObjectValues(List<String> filter) {
+    private static List<Object> getObjectValues(FilterList filterList) {
         List<Object> objects = new ArrayList<>();
 
-        for (String value : filter) {
-            objects.add(ConvertUtils.getObjectFromString(value));
+        for (int i = 0; i < filterList.size(); i++) {
+            Map<String, Object> item = filterList.get(i);
+            objects.add(item.get("value"));
         }
 
         return objects;
+    }
+
+    public static class FilterList {
+        private List<Map<String, Object>> mFilterList;
+
+        FilterList(List<Map<String, Object>> filterList) {
+            mFilterList = new ArrayList<>(filterList);
+        }
+
+        Object removeFirst() {
+            Map<String, Object> item = mFilterList.remove(0);
+            return item.get("value");
+        }
+
+        Map<String, Object> get(int index) {
+            Map<String, Object> item = mFilterList.get(index);
+
+            if (item == null) {
+                return null;
+            }
+
+            return item;
+        }
+
+        String getString(int index) {
+            Map<String, Object> item = get(index);
+
+            if (!item.get("type").equals("string")) {
+                return "";
+            }
+
+            return (String)item.get("value");
+        }
+
+        int size() {
+            return mFilterList.size();
+        }
+
+        boolean isEmpty() {
+            return mFilterList.isEmpty();
+        }
+
+        FilterList subList(int lastPosition) {
+            List<Map<String, Object>> slice = mFilterList.subList(0, lastPosition);
+            return new FilterList(slice);
+        }
+
+        void removeAll(FilterList itemsToRemove) {
+            for (int i = 0; i < itemsToRemove.size(); i++) {
+                mFilterList.remove(itemsToRemove.get(i));
+            }
+        }
     }
 }
