@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C410D5D51F7AD0B300CF822A /* RCTMGLLight.m in Sources */ = {isa = PBXBuildFile; fileRef = C410D5D41F7AD0B300CF822A /* RCTMGLLight.m */; };
 		C410D5D81F7AD0C100CF822A /* RCTMGLLightManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C410D5D71F7AD0C100CF822A /* RCTMGLLightManager.m */; };
+		C41DCC9D1FBBA8F000895BB4 /* FilterList.m in Sources */ = {isa = PBXBuildFile; fileRef = C41DCC9C1FBBA8F000895BB4 /* FilterList.m */; };
 		C42236A41F6B012000FA9C1C /* RCTMGLStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = C42236A31F6B012000FA9C1C /* RCTMGLStyle.m */; };
 		C42236A71F6C7F4E00FA9C1C /* RCTMGLFillExtrusionLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C42236A61F6C7F4E00FA9C1C /* RCTMGLFillExtrusionLayer.m */; };
 		C42236AA1F6C7F6200FA9C1C /* RCTMGLFillExtrusionLayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C42236A91F6C7F6200FA9C1C /* RCTMGLFillExtrusionLayerManager.m */; };
@@ -74,6 +75,8 @@
 		C410D5D41F7AD0B300CF822A /* RCTMGLLight.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLLight.m; sourceTree = "<group>"; };
 		C410D5D61F7AD0C100CF822A /* RCTMGLLightManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLLightManager.h; sourceTree = "<group>"; };
 		C410D5D71F7AD0C100CF822A /* RCTMGLLightManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLLightManager.m; sourceTree = "<group>"; };
+		C41DCC9B1FBBA8F000895BB4 /* FilterList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilterList.h; sourceTree = "<group>"; };
+		C41DCC9C1FBBA8F000895BB4 /* FilterList.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FilterList.m; sourceTree = "<group>"; };
 		C42236A21F6B012000FA9C1C /* RCTMGLStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLStyle.h; sourceTree = "<group>"; };
 		C42236A31F6B012000FA9C1C /* RCTMGLStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLStyle.m; sourceTree = "<group>"; };
 		C42236A51F6C7F4E00FA9C1C /* RCTMGLFillExtrusionLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLFillExtrusionLayer.h; sourceTree = "<group>"; };
@@ -298,6 +301,8 @@
 				C4C87A5F1F844C820064AE95 /* FilterParser.m */,
 				C470F5B61F9E79D400614A69 /* RCTMGLImageQueue.h */,
 				C470F5B71F9E79D400614A69 /* RCTMGLImageQueue.m */,
+				C41DCC9B1FBBA8F000895BB4 /* FilterList.h */,
+				C41DCC9C1FBBA8F000895BB4 /* FilterList.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -497,6 +502,7 @@
 				C4EAF17D1F6324970016DEE8 /* RCTMGLSource.m in Sources */,
 				C4FB11131F71EC9F0055AE1F /* RCTMGLSymbolLayerManager.m in Sources */,
 				C4C87A601F844C820064AE95 /* FilterParser.m in Sources */,
+				C41DCC9D1FBBA8F000895BB4 /* FilterList.m in Sources */,
 				C4EAF12A1F6084920016DEE8 /* CameraUpdateQueue.m in Sources */,
 				C4FB11041F709CDC0055AE1F /* RCTMGLCircleLayer.m in Sources */,
 				C435A5F71F587D9100824A30 /* ViewManager.m in Sources */,

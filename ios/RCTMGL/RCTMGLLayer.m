@@ -11,6 +11,7 @@
 #import "RCTMGLStyleValue.h"
 #import "RCTMGLUtils.h"
 #import "FilterParser.h"
+#import "FilterList.h"
 
 @implementation RCTMGLLayer
 
@@ -184,7 +185,7 @@
 
 - (NSPredicate*)buildFilters
 {
-    return [FilterParser parse:_filter];
+    return [FilterParser parse:[[FilterList alloc] initWithArray:_filter]];
 }
 
 - (BOOL)_hasInitialized
