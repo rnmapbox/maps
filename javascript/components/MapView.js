@@ -8,10 +8,11 @@ import {
   isNumber,
   runNativeCommand,
   toJSONString,
-  getFilter,
   IS_ANDROID,
   viewPropTypes,
 } from '../utils';
+
+import { getFilter } from '../utils/filterUtils';
 
 const MapboxGL = NativeModules.MGLModule;
 
