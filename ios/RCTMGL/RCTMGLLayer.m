@@ -72,6 +72,19 @@
     }
 }
 
+- (void)setFilter:(NSArray<NSDictionary<NSString *,id> *> *)filter
+{
+    _filter = filter;
+    
+    if (_styleLayer != nil) {
+        NSPredicate *predicate = [self buildFilters];
+        
+        if (predicate != nil) {
+            [self updateFilter:predicate];
+        }
+    }
+}
+
 -(void)setReactStyle:(NSDictionary *)reactStyle
 {
     _reactStyle = reactStyle;
@@ -115,6 +128,11 @@
     @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                    reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                  userInfo:nil];
+}
+
+- (void)updateFilter:(NSPredicate *)predicate
+{
+    // override if you want to update the filter
 }
 
 - (void)insertLayer

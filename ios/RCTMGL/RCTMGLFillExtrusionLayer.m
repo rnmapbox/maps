@@ -11,6 +11,11 @@
 
 @implementation RCTMGLFillExtrusionLayer
 
+- (void)updateFilter:(NSPredicate *)predicate
+{
+    ((MGLFillExtrusionStyleLayer *) self.styleLayer).predicate = predicate;
+}
+
 - (void)setSourceLayerID:(NSString *)sourceLayerID
 {
     _sourceLayerID = sourceLayerID;
@@ -26,7 +31,7 @@
     
     NSPredicate *filter = [self buildFilters];
     if (filter != nil) {
-        ((MGLFillExtrusionStyleLayer *) self.styleLayer).predicate = filter;
+        [self updateFilter:filter];
     }
 }
 

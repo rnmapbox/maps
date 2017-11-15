@@ -41,5 +41,6 @@
 - (void)setZoomBounds;
 - (void)addImage:(NSString*)url;
 - (NSPredicate*)buildFilters;
+- (void)updateFilter:(NSPredicate *)predicate;
 
 @end
