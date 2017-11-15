@@ -116,7 +116,7 @@ public class FilterParser {
             String key = currentFilters.getString(0);
             currentFilters.removeFirst();
 
-            List<Object> values = getObjectValues(currentFilters);
+            Object[] values = getObjectValues(currentFilters);
 
             switch (op) {
                 case "in":
@@ -126,22 +126,22 @@ public class FilterParser {
                     statement = Filter.notIn(key, values);
                     break;
                 case "<=":
-                    statement = Filter.lte(key, values.get(0));
+                    statement = Filter.lte(key, values[0]);
                     break;
                 case "<":
-                    statement = Filter.lt(key, values.get(0));
+                    statement = Filter.lt(key, values[0]);
                     break;
                 case ">=":
-                    statement = Filter.gte(key, values.get(0));
+                    statement = Filter.gte(key, values[0]);
                     break;
                 case ">":
-                    statement = Filter.gt(key, values.get(0));
+                    statement = Filter.gt(key, values[0]);
                     break;
                 case "!=":
-                    statement = Filter.neq(key, values.get(0));
+                    statement = Filter.neq(key, values[0]);
                     break;
                 case "==":
-                    statement = Filter.eq(key, values.get(0));
+                    statement = Filter.eq(key, values[0]);
                     break;
                 case "has":
                     statement = Filter.has(key);
@@ -175,7 +175,7 @@ public class FilterParser {
         return completeStatement;
     }
 
-    private static List<Object> getObjectValues(FilterList filterList) {
+    private static Object[] getObjectValues(FilterList filterList) {
         List<Object> objects = new ArrayList<>();
 
         for (int i = 0; i < filterList.size(); i++) {
@@ -183,7 +183,7 @@ public class FilterParser {
             objects.add(item.get("value"));
         }
 
-        return objects;
+        return objects.toArray(new Object[objects.size()]);
     }
 
     public static class FilterList {
