@@ -11,6 +11,11 @@
 
 @implementation RCTMGLSymbolLayer
 
+- (void)updateFilter:(NSPredicate *)predicate
+{
+    ((MGLSymbolStyleLayer *) self.styleLayer).predicate = predicate;
+}
+
 - (void)setSourceLayerID:(NSString *)sourceLayerID
 {
     _sourceLayerID = sourceLayerID;
@@ -26,7 +31,7 @@
     
     NSPredicate *filter = [self buildFilters];
     if (filter != nil) {
-        ((MGLSymbolStyleLayer *) self.styleLayer).predicate = filter;
+        [self updateFilter:filter];
     }
 }
 

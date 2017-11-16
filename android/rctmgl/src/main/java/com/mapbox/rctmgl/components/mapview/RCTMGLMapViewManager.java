@@ -11,6 +11,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import com.mapbox.rctmgl.components.AbstractEventEmitter;
 import com.mapbox.rctmgl.events.constants.EventKeys;
 import com.mapbox.rctmgl.utils.ConvertUtils;
+import com.mapbox.rctmgl.utils.FilterParser;
 import com.mapbox.services.commons.geojson.Point;
 
 import java.util.Arrays;
@@ -217,14 +218,14 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                 mapView.queryRenderedFeaturesAtPoint(
                         args.getString(0),
                         ConvertUtils.toPointF(args.getArray(1)),
-                        Arrays.asList(args.getString(2).split(";")),
+                        FilterParser.getFilterList(args.getArray(2)),
                         ConvertUtils.toStringList(args.getArray(3)));
                 break;
             case METHOD_QUERY_FEATURES_RECT:
                 mapView.queryRenderedFeaturesInRect(
                         args.getString(0),
                         ConvertUtils.toRectF(args.getArray(1)),
-                        Arrays.asList(args.getString(2).split(";")),
+                        FilterParser.getFilterList(args.getArray(2)),
                         ConvertUtils.toStringList(args.getArray(3)));
                 break;
             case METHOD_VISIBLE_BOUNDS:

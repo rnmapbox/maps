@@ -114,7 +114,7 @@ RCT_EXPORT_METHOD(getVisibleBounds:(nonnull NSNumber*)reactTag
 
 RCT_EXPORT_METHOD(queryRenderedFeaturesAtPoint:(nonnull NSNumber*)reactTag
                   atPoint:(NSArray<NSNumber*>*)point
-                  withFilter:(NSString*)filter
+                  withFilter:(NSArray<NSDictionary<NSString *, id> *> *)filter
                   withLayerIDs:(NSArray<NSString*>*)layerIDs
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
@@ -134,8 +134,8 @@ RCT_EXPORT_METHOD(queryRenderedFeaturesAtPoint:(nonnull NSNumber*)reactTag
         
         RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
         NSArray<id<MGLFeature>> *shapes = [reactMapView visibleFeaturesAtPoint:CGPointMake([point[0] floatValue], [point[1] floatValue])
-                                                       inStyleLayersWithIdentifiers:layerIDSet
-                                                       predicate:[FilterParser parse:filter]];
+                                                        inStyleLayersWithIdentifiers:layerIDSet
+                                                        predicate:[FilterParser parse:[[FilterList alloc] initWithArray:filter]]];
         
         NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] init];
         for (int i = 0; i < shapes.count; i++) {
@@ -150,7 +150,7 @@ RCT_EXPORT_METHOD(queryRenderedFeaturesAtPoint:(nonnull NSNumber*)reactTag
 
 RCT_EXPORT_METHOD(queryRenderedFeaturesInRect:(nonnull NSNumber*)reactTag
                   withBBox:(NSArray<NSNumber*>*)bbox
-                  withFilter:(NSString*)filter
+                  withFilter:(NSArray<NSDictionary<NSString *, id> *> *)filter
                   withLayerIDs:(NSArray<NSString*>*)layerIDs
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
@@ -176,8 +176,8 @@ RCT_EXPORT_METHOD(queryRenderedFeaturesInRect:(nonnull NSNumber*)reactTag
         }
         
         NSArray<id<MGLFeature>> *shapes = [reactMapView visibleFeaturesInRect:rect
-                                                  inStyleLayersWithIdentifiers:layerIDSet
-                                                                     predicate:[FilterParser parse:filter]];
+                                                        inStyleLayersWithIdentifiers:layerIDSet
+                                                        predicate:[FilterParser parse:[[FilterList alloc] initWithArray:filter]]];
         
         NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] init];
         for (int i = 0; i < shapes.count; i++) {

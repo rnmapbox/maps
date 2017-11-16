@@ -11,6 +11,11 @@
 
 @implementation RCTMGLCircleLayer
 
+- (void)updateFilter:(NSPredicate *)predicate
+{
+    ((MGLCircleStyleLayer *) self.styleLayer).predicate = predicate;
+}
+
 - (void)setSourceLayerID:(NSString *)sourceLayerID
 {
     _sourceLayerID = sourceLayerID;
@@ -26,7 +31,7 @@
     
     NSPredicate *filter = [self buildFilters];
     if (filter != nil) {
-        ((MGLCircleStyleLayer *) self.styleLayer).predicate = filter;
+        [self updateFilter:filter];
     }
 }
 

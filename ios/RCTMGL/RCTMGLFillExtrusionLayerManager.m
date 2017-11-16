@@ -19,6 +19,7 @@ RCT_EXPORT_VIEW_PROPERTY(sourceLayerID, NSString);
 // standard layer props
 RCT_EXPORT_VIEW_PROPERTY(id, NSString);
 RCT_EXPORT_VIEW_PROPERTY(sourceID, NSString);
+RCT_EXPORT_VIEW_PROPERTY(filter, NSArray);
 
 RCT_EXPORT_VIEW_PROPERTY(aboveLayerID, NSString);
 RCT_EXPORT_VIEW_PROPERTY(belowLayerID, NSString);

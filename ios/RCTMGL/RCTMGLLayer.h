@@ -18,7 +18,7 @@
 @property (nonatomic, strong) MGLStyleLayer *styleLayer;
 @property (nonatomic, strong) MGLStyle *style;
 @property (nonatomic, strong) NSDictionary *reactStyle;
-@property (nonatomic, strong) NSString *filter;
+@property (nonatomic, strong) NSArray<NSDictionary<NSString *, id> *> *filter;
 
 @property (nonatomic, copy) NSString *id;
 @property (nonatomic, copy) NSString *sourceID;
@@ -41,5 +41,6 @@
 - (void)setZoomBounds;
 - (void)addImage:(NSString*)url;
 - (NSPredicate*)buildFilters;
+- (void)updateFilter:(NSPredicate *)predicate;
 
 @end

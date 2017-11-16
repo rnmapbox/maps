@@ -22,12 +22,17 @@ public class RCTMGLFillExtrusionLayer extends RCTLayer<FillExtrusionLayer> {
     }
 
     @Override
+    protected void updateFilter(Filter.Statement statement) {
+        mLayer.setFilter(statement);
+    }
+
+    @Override
     public void addToMap(RCTMGLMapView mapView) {
         super.addToMap(mapView);
 
         Filter.Statement statement = buildFilter();
         if (statement != null) {
-            mLayer.setFilter(statement);
+            updateFilter(statement);
         }
     }
 

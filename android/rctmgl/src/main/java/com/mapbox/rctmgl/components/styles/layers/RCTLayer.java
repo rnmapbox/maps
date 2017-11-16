@@ -3,6 +3,7 @@ package com.mapbox.rctmgl.components.styles.layers;
 import android.content.Context;
 import android.util.Log;
 
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.style.layers.Filter;
@@ -59,7 +60,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
     protected Double mMinZoomLevel;
     protected Double mMaxZoomLevel;
     protected ReadableMap mReactStyle;
-    protected List<String> mFilter;
+    protected FilterParser.FilterList mFilter;
 
     protected MapboxMap mMap;
     protected T mLayer;
@@ -149,8 +150,16 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         }
     }
 
-    public void setFilter(String[] filter) {
-        mFilter = Arrays.asList(filter);
+    public void setFilter(ReadableArray readableFilterArray) {
+        mFilter = FilterParser.getFilterList(readableFilterArray);
+
+        if (mLayer != null) {
+            Filter.Statement statement = buildFilter();
+
+            if (statement != null) {
+                updateFilter(statement);
+            }
+        }
     }
 
     public void add() {
@@ -211,6 +220,10 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
 
     protected Filter.Statement buildFilter() {
         return FilterParser.parse(mFilter);
+    }
+
+    protected void updateFilter(Filter.Statement statement) {
+        // override if you want to update the filter
     }
 
     @Override

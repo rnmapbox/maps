@@ -1,5 +1,6 @@
 package com.mapbox.rctmgl.components.styles.layers;
 
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
@@ -68,7 +69,7 @@ public class RCTMGLSymbolLayerManager extends ViewGroupManager<RCTMGLSymbolLayer
     }
 
     @ReactProp(name="filter")
-    public void setFilter(RCTMGLSymbolLayer layer, String joinedFilterStr) {
-        layer.setFilter(joinedFilterStr.split(";"));
+    public void setFilter(RCTMGLSymbolLayer layer, ReadableArray filterList) {
+        layer.setFilter(filterList);
     }
 }
