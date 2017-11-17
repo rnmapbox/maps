@@ -54,6 +54,7 @@ import com.mapbox.services.android.location.LostLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
+import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Point;
@@ -777,6 +778,10 @@ public class RCTMGLMapView extends MapView implements
     }
 
     private void enableLocationLayer() {
+        if (!PermissionsManager.areLocationPermissionsGranted(mContext)) {
+            return;
+        }
+
         if (mLocationEngine == null) {
             mLocationEngine = new LostLocationEngine(mContext);
             mLocationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
