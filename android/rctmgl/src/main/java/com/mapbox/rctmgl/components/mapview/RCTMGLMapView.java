@@ -270,6 +270,15 @@ public class RCTMGLMapView extends MapView implements
         if (mPointAnnotations.size() > 0) {
             markerViewManager.invalidateViewMarkersInVisibleRegion();
         }
+
+        mMap.setOnCameraIdleListener(new MapboxMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                if (mPointAnnotations.size() > 0) {
+                    markerViewManager.invalidateViewMarkersInVisibleRegion();
+                }
+            }
+        });
     }
 
     public void reflow() {
