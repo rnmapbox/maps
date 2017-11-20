@@ -113,6 +113,17 @@ NSString *const DEFAULT_SOURCE_ID = @"composite";
                         userInfo:nil];
 }
 
+- (NSArray<NSString *> *)getLayerIDs
+{
+    NSMutableArray *layerIDs = [[NSMutableArray alloc] init];
+    
+    for (RCTMGLLayer *layer in _layers) {
+        [layerIDs addObject:layer.id];
+    }
+    
+    return layerIDs;
+}
+
 + (BOOL)isDefaultSource:(NSString *)sourceID
 {
     return [sourceID isEqualToString:DEFAULT_SOURCE_ID];

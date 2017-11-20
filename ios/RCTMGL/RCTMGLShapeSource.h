@@ -28,4 +28,7 @@
 @property (nonatomic, assign) NSNumber *buffer;
 @property (nonatomic, assign) NSNumber *tolerence;
 
+@property (nonatomic, copy) RCTBubblingEventBlock onPress;
+@property (nonatomic, assign) BOOL hasPressListener;
+
 @end

@@ -21,10 +21,13 @@ extern NSString *const DEFAULT_SOURCE_ID;
 @property (nonatomic, strong) MGLMapView *map;
 
 @property (nonatomic, copy) NSString *id;
+@property (nonatomic, assign) BOOL hasPressListener;
+@property (nonatomic, copy) RCTBubblingEventBlock onPress;
 
 - (void)addToMap;
 - (void)removeFromMap;
 - (MGLSource*)makeSource;
+- (NSArray<NSString *> *)getLayerIDs;
 
 + (BOOL)isDefaultSource:(NSString*)sourceID;
 

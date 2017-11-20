@@ -21,5 +21,7 @@ RCT_EXPORT_VIEW_PROPERTY(id, NSString);
 }
 
 RCT_EXPORT_VIEW_PROPERTY(url, NSString);
+RCT_EXPORT_VIEW_PROPERTY(hasPressListener, BOOL)
+RCT_REMAP_VIEW_PROPERTY(onMapboxVectorSourcePress, onPress, RCTBubblingEventBlock)
 
 @end
