@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
-import { cloneReactChildrenWithProps, viewPropTypes } from '../utils';
+import { cloneReactChildrenWithProps, viewPropTypes, isFunction } from '../utils';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -24,6 +24,8 @@ class VectorSource extends React.Component {
      * A URL to a TileJSON configuration file describing the source’s contents and other metadata.
      */
     url: PropTypes.string,
+
+    onPress: PropTypes.func,
   };
 
   static defaultProps = {
@@ -34,6 +36,9 @@ class VectorSource extends React.Component {
     const props = {
       id: this.props.id,
       url: this.props.url,
+      hasPressListener: isFunction(this.props.onPress),
+      onMapboxVectorSourcePress: this.props.onPress,
+      onPress: undefined,
     };
     return (
       <RCTMGLVectorSource {...props}>
@@ -43,6 +48,11 @@ class VectorSource extends React.Component {
   }
 }
 
-const RCTMGLVectorSource = requireNativeComponent(NATIVE_MODULE_NAME, VectorSource);
+const RCTMGLVectorSource = requireNativeComponent(NATIVE_MODULE_NAME, VectorSource, {
+  nativeOnly: {
+    hasPressListener: true,
+    onMapboxVectorSourcePress: true,
+  },
+});
 
 export default VectorSource;

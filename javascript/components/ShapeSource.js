@@ -1,7 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
-import { toJSONString, cloneReactChildrenWithProps, viewPropTypes } from '../utils';
+
+import {
+  toJSONString,
+  cloneReactChildrenWithProps,
+  viewPropTypes,
+  isFunction,
+} from '../utils';
+
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 const MapboxGL = NativeModules.MGLModule;
@@ -80,6 +87,12 @@ class ShapeSource extends React.Component {
      * you can specify an array of string names with assets as the key `{ assets: ['pin'] }`.
     */
     images: PropTypes.object,
+
+    /**
+     * Source press listener, gets called when a user presses one of the children layers only
+     * if that layer has a higher z-index than another source layers
+     */
+    onPress: PropTypes.func,
   };
 
   static defaultProps = {
@@ -126,6 +139,8 @@ class ShapeSource extends React.Component {
       id: this.props.id,
       url: this.props.url,
       shape: this._getShape(),
+      hasPressListener: isFunction(this.props.onPress),
+      onMapboxShapeSourcePress: this.props.onPress,
       cluster: this.props.cluster ? 1 : 0,
       clusterRadius: this.props.clusterRadius,
       clusterMaxZoomLevel: this.props.clusterMaxZoomLevel,
@@ -133,6 +148,7 @@ class ShapeSource extends React.Component {
       buffer: this.props.buffer,
       tolerance: this.props.tolerance,
       ...this._getImages(),
+      onPress: undefined,
     };
     return (
       <RCTMGLShapeSource {...props}>
@@ -143,7 +159,11 @@ class ShapeSource extends React.Component {
 }
 
 const RCTMGLShapeSource = requireNativeComponent(NATIVE_MODULE_NAME, ShapeSource, {
-  nativeOnly: { nativeImages: true },
+  nativeOnly: {
+    nativeImages: true,
+    hasPressListener: true,
+    onMapboxShapeSourcePress: true,
+  },
 });
 
 export default ShapeSource;
