@@ -25,6 +25,10 @@ class VectorSource extends React.Component {
      */
     url: PropTypes.string,
 
+    /**
+     * Source press listener, gets called when a user presses one of the children layers only
+     * if that layer has a higher z-index than another source layers
+     */
     onPress: PropTypes.func,
   };
 
