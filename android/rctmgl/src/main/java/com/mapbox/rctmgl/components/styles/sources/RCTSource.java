@@ -9,6 +9,7 @@ import com.mapbox.mapboxsdk.style.sources.Source;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
+import com.mapbox.services.commons.geojson.Feature;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
 
     protected String mID;
     protected Source mSource;
+    protected boolean mHasPressListener;
 
     protected List<RCTLayer> mLayers;
     private SparseArray<RCTLayer> mQueuedLayers;
@@ -33,6 +35,29 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
         super(context);
         mLayers = new ArrayList<>();
         mQueuedLayers = new SparseArray<>();
+    }
+
+    public String getID() {
+        return mID;
+    }
+
+    public String[] getLayerIDs() {
+        List<String> layerIDs = new ArrayList<>();
+
+        for (int i = 0; i < mLayers.size(); i++) {
+            RCTLayer layer = mLayers.get(i);
+            layerIDs.add(layer.getID());
+        }
+
+        return layerIDs.toArray(new String[layerIDs.size()]);
+    }
+
+    public boolean hasPressListener() {
+        return mHasPressListener;
+    }
+
+    public void setHasPressListener (boolean hasPressListener) {
+        mHasPressListener = hasPressListener;
     }
 
     public void setID(String id) {
@@ -98,6 +123,9 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
     }
 
     public void removeLayer(int childPosition) {
+        if (childPosition >= mLayers.size()) {
+            return;
+        }
         removeLayerFromMap(mLayers.get(childPosition), childPosition);
     }
 
@@ -125,6 +153,7 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
     }
 
     public abstract T makeSource();
+    public abstract void onPress(Feature feature);
 
     public static boolean isDefaultSource(String sourceID) {
         return DEFAULT_ID.equals(sourceID);

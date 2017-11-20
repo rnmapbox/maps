@@ -1,17 +1,13 @@
 package com.mapbox.rctmgl.components.annotation;
 
-import android.content.Context;
-
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.mapbox.rctmgl.components.AbstractEventEmitter;
 import com.mapbox.rctmgl.events.constants.EventKeys;
-import com.mapbox.rctmgl.utils.ConvertUtils;
+import com.mapbox.rctmgl.utils.GeoJSONUtils;
 
 import java.util.Map;
 
@@ -61,7 +57,7 @@ public class RCTMGLPointAnnotationManager extends AbstractEventEmitter<RCTMGLPoi
 
     @ReactProp(name="coordinate")
     public void setCoordinate(RCTMGLPointAnnotation annotation, String geoJSONStr) {
-        annotation.setCoordinate(ConvertUtils.toPointGemetry(geoJSONStr));
+        annotation.setCoordinate(GeoJSONUtils.toPointGeometry(geoJSONStr));
     }
 
     @ReactProp(name="anchor")

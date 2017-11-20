@@ -5,7 +5,6 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.location.Location;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.view.View;
@@ -17,7 +16,6 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
-import com.mapbox.mapboxsdk.annotations.Annotation;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerView;
 import com.mapbox.mapboxsdk.annotations.MarkerViewManager;
@@ -32,6 +30,7 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.UiSettings;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerMode;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
+import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.annotation.RCTMGLCallout;
 import com.mapbox.rctmgl.components.annotation.RCTMGLCalloutAdapter;
@@ -40,6 +39,7 @@ import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotationAdapter;
 import com.mapbox.rctmgl.components.camera.CameraStop;
 import com.mapbox.rctmgl.components.camera.CameraUpdateQueue;
 import com.mapbox.rctmgl.components.styles.light.RCTMGLLight;
+import com.mapbox.rctmgl.components.styles.sources.RCTMGLShapeSource;
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 import com.mapbox.rctmgl.events.AndroidCallbackEvent;
 import com.mapbox.rctmgl.events.IEvent;
@@ -47,8 +47,8 @@ import com.mapbox.rctmgl.events.MapChangeEvent;
 import com.mapbox.rctmgl.events.MapClickEvent;
 import com.mapbox.rctmgl.events.constants.EventKeys;
 import com.mapbox.rctmgl.events.constants.EventTypes;
-import com.mapbox.rctmgl.utils.ConvertUtils;
 import com.mapbox.rctmgl.utils.FilterParser;
+import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.rctmgl.utils.SimpleEventCallback;
 import com.mapbox.services.android.location.LostLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
@@ -59,6 +59,8 @@ import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Point;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -306,6 +308,25 @@ public class RCTMGLMapView extends MapView implements
             }
         } else {
             PointF screenPoint = mMap.getProjection().toScreenLocation(point);
+            List<RCTSource> touchableSources = getAllTouchableSources();
+
+            Map<String, Feature> hits = new HashMap<>();
+            for (RCTSource touchableSource : touchableSources) {
+                List<Feature> features = mMap.queryRenderedFeatures(screenPoint, touchableSource.getLayerIDs());
+
+                if (features.size() > 0) {
+                    hits.put(touchableSource.getID(), features.get(0));
+                }
+            }
+
+            if (hits.size() > 0) {
+                RCTSource source = getTouchableSourceWithHighestZIndex(touchableSources);
+                if (source != null && source.hasPressListener()) {
+                    source.onPress(hits.get(source.getID()));
+                    return;
+                }
+            }
+
             MapClickEvent event = new MapClickEvent(this, point, screenPoint);
             mManager.handleEvent(event);
         }
@@ -609,7 +630,7 @@ public class RCTMGLMapView extends MapView implements
         VisibleRegion region = mMap.getProjection().getVisibleRegion();
 
         WritableMap payload = new WritableNativeMap();
-        payload.putArray("visibleBounds", ConvertUtils.fromLatLngBounds(region.latLngBounds));
+        payload.putArray("visibleBounds", GeoJSONUtils.fromLatLngBounds(region.latLngBounds));
         event.setPayload(payload);
 
         mManager.handleEvent(event);
@@ -667,7 +688,7 @@ public class RCTMGLMapView extends MapView implements
                 .zoom(mZoomLevel);
 
         if (shouldUpdateTarget) {
-            builder.target(ConvertUtils.toLatLng(mCenterCoordinate));
+            builder.target(GeoJSONUtils.toLatLng(mCenterCoordinate));
         }
 
         return builder.build();
@@ -811,9 +832,9 @@ public class RCTMGLMapView extends MapView implements
         properties.putBoolean("animated", isAnimated);
 
         VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-        properties.putArray("visibleBounds", ConvertUtils.fromLatLngBounds(visibleRegion.latLngBounds));
+        properties.putArray("visibleBounds", GeoJSONUtils.fromLatLngBounds(visibleRegion.latLngBounds));
 
-        return ConvertUtils.toPointFeature(latLng, properties);
+        return GeoJSONUtils.toPointFeature(latLng, properties);
     }
 
     private int getLocationLayerTrackingMode() {
@@ -846,5 +867,51 @@ public class RCTMGLMapView extends MapView implements
             RCTSource source = mSources.get(mSources.keyAt(i));
             source.addToMap(this);
         }
+    }
+
+    private List<RCTSource> getAllTouchableSources() {
+        List<RCTSource> sources = new ArrayList<>();
+
+        for (int i = 0; i < mSources.size(); i++) {
+            RCTSource source = mSources.get(mSources.keyAt(i));
+
+            if (source.hasPressListener()) {
+                sources.add(source);
+            }
+        }
+
+        return sources;
+    }
+
+    private RCTSource getTouchableSourceWithHighestZIndex(List<RCTSource> sources) {
+        if (sources == null || sources.size() == 0) {
+            return null;
+        }
+
+        if (sources.size() == 1) {
+            return sources.get(0);
+        }
+
+        Map<String, RCTSource> layerToSourceMap = new HashMap<>();
+        for (RCTSource source : sources) {
+            String[] layerIDs = source.getLayerIDs();
+
+            for (String layerID : layerIDs) {
+                layerToSourceMap.put(layerID, source);
+            }
+        }
+
+        // getLayers returns from back(N - 1) to front(0)
+        List<Layer> mapboxLayers = mMap.getLayers();
+        for (int i = mapboxLayers.size() - 1; i >= 0; i--) {
+            Layer mapboxLayer = mapboxLayers.get(i);
+
+            String layerID = mapboxLayer.getId();
+            if (layerToSourceMap.containsKey(layerID)) {
+                return layerToSourceMap.get(layerID);
+            }
+        }
+
+        return null;
     }
 }

@@ -10,7 +10,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 
 import com.mapbox.rctmgl.events.constants.EventKeys;
 import com.mapbox.rctmgl.events.constants.EventTypes;
-import com.mapbox.rctmgl.utils.ConvertUtils;
+import com.mapbox.rctmgl.utils.GeoJSONUtils;
 
 /**
  * Created by nickitaliano on 8/23/17.
@@ -46,6 +46,6 @@ public class MapClickEvent extends AbstractEvent {
         WritableMap properties = new WritableNativeMap();
         properties.putDouble("screenPointX", mScreenPoint.x);
         properties.putDouble("screenPointY", mScreenPoint.y);
-        return ConvertUtils.toPointFeature(mTouchedLatLng, properties);
+        return GeoJSONUtils.toPointFeature(mTouchedLatLng, properties);
     }
 }

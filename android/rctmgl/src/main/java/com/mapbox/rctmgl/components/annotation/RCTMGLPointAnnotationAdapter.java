@@ -37,6 +37,10 @@ public class RCTMGLPointAnnotationAdapter extends MapboxMap.MarkerViewAdapter<RC
     public View getView(@NonNull RCTMGLPointAnnotation.CustomView customAnnotationView, @Nullable View convertView, @NonNull ViewGroup parent) {
         final RCTMGLPointAnnotation pointAnnotation = mMapView.getPointAnnotationByID(customAnnotationView.getAnnotationID());
 
+        if (pointAnnotation == null) {
+            return null;
+        }
+
         int width = pointAnnotation.getWidth();
         int height = pointAnnotation.getHeight();
 

@@ -12,6 +12,7 @@ import com.mapbox.rctmgl.components.AbstractEventEmitter;
 import com.mapbox.rctmgl.events.constants.EventKeys;
 import com.mapbox.rctmgl.utils.ConvertUtils;
 import com.mapbox.rctmgl.utils.FilterParser;
+import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.services.commons.geojson.Point;
 
 import java.util.Arrays;
@@ -158,7 +159,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
 
     @ReactProp(name="centerCoordinate")
     public void setCenterCoordinate(RCTMGLMapView mapView, String featureJSONStr) {
-        Point centerCoordinate = ConvertUtils.toPointGemetry(featureJSONStr);
+        Point centerCoordinate = GeoJSONUtils.toPointGeometry(featureJSONStr);
         if (centerCoordinate != null) {
             mapView.setReactCenterCoordinate(centerCoordinate);
         }

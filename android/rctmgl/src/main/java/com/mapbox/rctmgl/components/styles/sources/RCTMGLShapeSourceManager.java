@@ -10,10 +10,15 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.mapbox.rctmgl.components.AbstractEventEmitter;
+import com.mapbox.rctmgl.components.annotation.RCTMGLCallout;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
+import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
+import com.mapbox.rctmgl.events.constants.EventKeys;
 import com.mapbox.rctmgl.utils.ResourceUtils;
 
 import java.net.MalformedURLException;
@@ -27,13 +32,14 @@ import java.util.Map;
  * Created by nickitaliano on 9/19/17.
  */
 
-public class RCTMGLShapeSourceManager extends ViewGroupManager<RCTMGLShapeSource> {
+public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSource> {
     public static final String LOG_TAG = RCTMGLShapeSourceManager.class.getSimpleName();
     public static final String REACT_CLASS = RCTMGLShapeSource.class.getSimpleName();
 
     private ReactApplicationContext mContext;
 
     public RCTMGLShapeSourceManager(ReactApplicationContext context) {
+        super(context);
         mContext = context;
     }
 
@@ -44,7 +50,7 @@ public class RCTMGLShapeSourceManager extends ViewGroupManager<RCTMGLShapeSource
 
     @Override
     protected RCTMGLShapeSource createViewInstance(ThemedReactContext reactContext) {
-        return new RCTMGLShapeSource(reactContext);
+        return new RCTMGLShapeSource(reactContext, this);
     }
 
     @Override
@@ -59,7 +65,7 @@ public class RCTMGLShapeSourceManager extends ViewGroupManager<RCTMGLShapeSource
 
     @Override
     public void addView(RCTMGLShapeSource source, View childView, int childPosition) {
-        source.addLayer(childView, childPosition);
+        source.addLayer(childView, getChildCount(source));
     }
 
     @Override
@@ -67,12 +73,12 @@ public class RCTMGLShapeSourceManager extends ViewGroupManager<RCTMGLShapeSource
         source.removeLayer(childPosition);
     }
 
-    @ReactProp(name="id")
+    @ReactProp(name = "id")
     public void setId(RCTMGLShapeSource source, String id) {
         source.setID(id);
     }
 
-    @ReactProp(name="url")
+    @ReactProp(name = "url")
     public void setURL(RCTMGLShapeSource source, String urlStr) {
         try {
             source.setURL(new URL(urlStr));
@@ -81,42 +87,42 @@ public class RCTMGLShapeSourceManager extends ViewGroupManager<RCTMGLShapeSource
         }
     }
 
-    @ReactProp(name="shape")
+    @ReactProp(name = "shape")
     public void setGeometry(RCTMGLShapeSource source, String geoJSONStr) {
         source.setShape(geoJSONStr);
     }
 
-    @ReactProp(name="cluster")
+    @ReactProp(name = "cluster")
     public void setCluster(RCTMGLShapeSource source, int cluster) {
         source.setCluster(cluster == 1);
     }
 
-    @ReactProp(name="clusterRadius")
+    @ReactProp(name = "clusterRadius")
     public void setClusterRadius(RCTMGLShapeSource source, int radius) {
         source.setClusterRadius(radius);
     }
 
-    @ReactProp(name="clusterMaxZoomLevel")
+    @ReactProp(name = "clusterMaxZoomLevel")
     public void setClusterMaxZoomLevel(RCTMGLShapeSource source, int clusterMaxZoom) {
         source.setClusterMaxZoom(clusterMaxZoom);
     }
 
-    @ReactProp(name="maxZoomLevel")
+    @ReactProp(name = "maxZoomLevel")
     public void setMaxZoomLevel(RCTMGLShapeSource source, int maxZoom) {
         source.setMaxZoom(maxZoom);
     }
 
-    @ReactProp(name="buffer")
+    @ReactProp(name = "buffer")
     public void setBuffer(RCTMGLShapeSource source, int buffer) {
         source.setBuffer(buffer);
     }
 
-    @ReactProp(name="tolerance")
+    @ReactProp(name = "tolerance")
     public void setTolerance(RCTMGLShapeSource source, double tolerance) {
         source.setTolerance(tolerance);
     }
 
-    @ReactProp(name="images")
+    @ReactProp(name = "images")
     public void setImages(RCTMGLShapeSource source, ReadableMap map) {
         List<Map.Entry<String, String>> images = new ArrayList<>();
 
@@ -129,7 +135,7 @@ public class RCTMGLShapeSourceManager extends ViewGroupManager<RCTMGLShapeSource
         source.setImages(images);
     }
 
-    @ReactProp(name="nativeImages")
+    @ReactProp(name = "nativeImages")
     public void setNativeImages(RCTMGLShapeSource source, ReadableArray arr) {
         List<Map.Entry<String, BitmapDrawable>> resources = new ArrayList<>();
 
@@ -143,5 +149,17 @@ public class RCTMGLShapeSourceManager extends ViewGroupManager<RCTMGLShapeSource
         }
 
         source.setNativeImages(resources);
+    }
+
+    @ReactProp(name = "hasPressListener")
+    public void setHasPressListener(RCTMGLShapeSource source, boolean hasPressListener) {
+        source.setHasPressListener(hasPressListener);
+    }
+
+    @Override
+    public Map<String, String> customEvents() {
+        return MapBuilder.<String, String>builder()
+                .put(EventKeys.SHAPE_SOURCE_LAYER_CLICK, "onMapboxShapeSourcePress")
+                .build();
     }
 }
