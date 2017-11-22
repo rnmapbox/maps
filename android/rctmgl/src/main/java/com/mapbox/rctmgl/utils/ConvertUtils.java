@@ -157,7 +157,7 @@ public class ConvertUtils {
             value = map.getDouble(key);
         } catch (NoSuchKeyException e) {
             // key not found use default value
-            Log.d(LOG_TAG, String.format("No key found for %s, using default value %d", key, defaultValue));
+            Log.d(LOG_TAG, String.format("No key found for %s, using default value %f", key, defaultValue));
         }
 
         return value;
