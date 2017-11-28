@@ -5,6 +5,7 @@ import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import com.facebook.react.bridge.ReadableMap;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.annotations.MarkerView;
@@ -26,6 +27,7 @@ import com.mapbox.services.commons.geojson.Geometry;
 import com.mapbox.services.commons.geojson.Point;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +35,7 @@ import java.util.Map;
  * Created by nickitaliano on 9/19/17.
  */
 
-public class RCTMGLShapeSource extends  RCTSource<GeoJsonSource> {
+public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
     private URL mURL;
     private RCTMGLShapeSourceManager mManager;
 

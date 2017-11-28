@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.SparseArray;
 import android.view.View;
 
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.common.MapBuilder;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.style.sources.Source;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
@@ -12,7 +14,9 @@ import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
 import com.mapbox.services.commons.geojson.Feature;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by nickitaliano on 9/7/17.
@@ -21,12 +25,16 @@ import java.util.List;
 public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
     public static final String DEFAULT_ID = "composite";
 
+    public static final double DEFAULT_HITBOX_WIDTH = 44.0;
+    public static final double DEFAULT_HITBOX_HEIGHT = 44.0;
+
     protected RCTMGLMapView mMapView;
     protected MapboxMap mMap;
 
     protected String mID;
     protected Source mSource;
     protected boolean mHasPressListener;
+    protected Map<String, Double> mTouchHitbox;
 
     protected List<RCTLayer> mLayers;
     private SparseArray<RCTLayer> mQueuedLayers;
@@ -60,12 +68,34 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
         mHasPressListener = hasPressListener;
     }
 
+    public void setHitbox(ReadableMap map) {
+        Map<String, Double> hitbox = new HashMap<>();
+        hitbox.put("width", map.getDouble("width"));
+        hitbox.put("height", map.getDouble("height"));
+        mTouchHitbox = hitbox;
+    }
+
     public void setID(String id) {
         mID = id;
     }
 
     public void setSource(Source source) {
         mSource = source;
+    }
+
+    public Map<String, Double> getTouchHitbox() {
+        if (!hasPressListener()) {
+            return null;
+        }
+
+        if (mTouchHitbox == null) {
+            return MapBuilder.<String, Double>builder()
+                    .put("width", DEFAULT_HITBOX_WIDTH)
+                    .put("height", DEFAULT_HITBOX_HEIGHT)
+                    .build();
+        }
+
+        return mTouchHitbox;
     }
 
     public int getLayerCount () {

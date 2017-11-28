@@ -311,16 +311,32 @@ public class RCTMGLMapView extends MapView implements
             List<RCTSource> touchableSources = getAllTouchableSources();
 
             Map<String, Feature> hits = new HashMap<>();
+            List<RCTSource> hitTouchableSources = new ArrayList<>();
             for (RCTSource touchableSource : touchableSources) {
-                List<Feature> features = mMap.queryRenderedFeatures(screenPoint, touchableSource.getLayerIDs());
+                Map<String, Double> hitbox = touchableSource.getTouchHitbox();
+                if (hitbox == null) {
+                    continue;
+                }
 
+                float halfWidth = hitbox.get("width").floatValue() / 2.0f;
+                float halfHeight = hitbox.get("height").floatValue() / 2.0f;
+
+                RectF hitboxF = new RectF();
+                hitboxF.set(
+                        screenPoint.x - halfWidth,
+                        screenPoint.y - halfHeight,
+                        screenPoint.x + halfWidth,
+                        screenPoint.y + halfHeight);
+
+                List<Feature> features = mMap.queryRenderedFeatures(hitboxF, touchableSource.getLayerIDs());
                 if (features.size() > 0) {
                     hits.put(touchableSource.getID(), features.get(0));
+                    hitTouchableSources.add(touchableSource);
                 }
             }
 
             if (hits.size() > 0) {
-                RCTSource source = getTouchableSourceWithHighestZIndex(touchableSources);
+                RCTSource source = getTouchableSourceWithHighestZIndex(hitTouchableSources);
                 if (source != null && source.hasPressListener()) {
                     source.onPress(hits.get(source.getID()));
                     return;

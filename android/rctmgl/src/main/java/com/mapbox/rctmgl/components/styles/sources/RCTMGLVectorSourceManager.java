@@ -3,6 +3,7 @@ package com.mapbox.rctmgl.components.styles.sources;
 import android.view.View;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -67,6 +68,11 @@ public class RCTMGLVectorSourceManager extends AbstractEventEmitter<RCTMGLVector
     @ReactProp(name = "hasPressListener")
     public void setHasPressListener(RCTMGLVectorSource source, boolean hasPressListener) {
         source.setHasPressListener(hasPressListener);
+    }
+
+    @ReactProp(name="hitbox")
+    public void setHitbox(RCTMGLVectorSource source, ReadableMap map) {
+        source.setHitbox(map);
     }
 
     @Override

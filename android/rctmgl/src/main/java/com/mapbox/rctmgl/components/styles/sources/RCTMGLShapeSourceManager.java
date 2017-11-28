@@ -156,6 +156,11 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
         source.setHasPressListener(hasPressListener);
     }
 
+    @ReactProp(name="hitbox")
+    public void setHitbox(RCTMGLShapeSource source, ReadableMap map) {
+        source.setHitbox(map);
+    }
+
     @Override
     public Map<String, String> customEvents() {
         return MapBuilder.<String, String>builder()
