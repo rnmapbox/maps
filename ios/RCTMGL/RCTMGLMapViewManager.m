@@ -229,18 +229,28 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
     NSArray<RCTMGLSource *> *touchableSources = [mapView getAllTouchableSources];
     
     NSMutableDictionary<NSString *, id<MGLFeature>> *hits = [[NSMutableDictionary alloc] init];
+    NSMutableArray<RCTMGLSource *> *hitTouchableSources = [[NSMutableArray alloc] init];
     for (RCTMGLSource *touchableSource in touchableSources) {
-        NSArray<id<MGLFeature>> *features = [mapView visibleFeaturesAtPoint:screenPoint
+        NSDictionary<NSString *, NSNumber *> *hitbox = touchableSource.hitbox;
+        float halfWidth = [hitbox[@"width"] floatValue] / 2.f;
+        float halfHeight = [hitbox[@"height"] floatValue] / 2.f;
+        
+        CGFloat top = screenPoint.y - halfHeight;
+        CGFloat left = screenPoint.x - halfWidth;
+        CGRect hitboxRect = CGRectMake(left, top, [hitbox[@"width"] floatValue], [hitbox[@"height"] floatValue]);
+        
+        NSArray<id<MGLFeature>> *features = [mapView visibleFeaturesInRect:hitboxRect
                                                      inStyleLayersWithIdentifiers:[NSSet setWithArray:[touchableSource getLayerIDs]]
                                                      predicate:nil];
         
         if (features.count > 0) {
             hits[touchableSource.id] = features[0];
+            [hitTouchableSources addObject:touchableSource];
         }
     }
     
     if (hits.count > 0) {
-        RCTMGLSource *source = [mapView getTouchableSourceWithHighestZIndex:touchableSources];
+        RCTMGLSource *source = [mapView getTouchableSourceWithHighestZIndex:hitTouchableSources];
         if (source != nil && source.hasPressListener) {
             NSDictionary<NSString *, id> *geoJSONDict = hits[source.id].geoJSONDictionary;
             

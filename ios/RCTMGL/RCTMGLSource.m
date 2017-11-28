@@ -11,13 +11,16 @@
 
 @implementation RCTMGLSource
 
+double const DEFAULT_HITBOX_AREA = 44.0;
 NSString *const DEFAULT_SOURCE_ID = @"composite";
+
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
         _layers = [[NSMutableArray alloc] init];
         _reactSubviews = [[NSMutableArray alloc] init];
+        _hitbox = @{ @"width": @(DEFAULT_HITBOX_AREA), @"height": @(DEFAULT_HITBOX_AREA) };
     }
     return self;
 }
