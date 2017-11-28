@@ -10,21 +10,21 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.WritableNativeArray;
-import com.facebook.react.bridge.WritableNativeMap;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
-import com.mapbox.mapboxsdk.style.layers.Filter;
-import com.mapbox.rctmgl.events.IEvent;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Point;
-import com.mapbox.services.commons.models.Position;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by nickitaliano on 8/18/17.
@@ -33,73 +33,38 @@ import java.util.List;
 public class ConvertUtils {
     public static final String LOG_TAG = ConvertUtils.class.getSimpleName();
 
-    public static WritableMap toPointFeature(LatLng latLng, WritableMap properties) {
-        WritableMap map = new WritableNativeMap();
-        map.putString("type", "Feature");
-        map.putMap("geometry", toPointGeometry(latLng));
-        map.putMap("properties", properties);
+    public static WritableMap toWritableMap(JsonObject object) {
+        WritableMap map = Arguments.createMap();
+
+        for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+            String propName = entry.getKey();
+            JsonElement jsonElement = entry.getValue();
+
+            if (jsonElement.isJsonPrimitive()) {
+                JsonPrimitive primitive = jsonElement.getAsJsonPrimitive();
+
+                if (primitive.isBoolean()) {
+                    map.putBoolean(propName, primitive.getAsBoolean());
+                } else if (primitive.isNumber()) {
+                    map.putDouble(propName, primitive.getAsDouble());
+                } else {
+                    map.putString(propName, primitive.getAsString());
+                }
+            } else if (jsonElement.isJsonArray()) {
+                JsonArray jsonArray = jsonElement.getAsJsonArray();
+
+                Object[] array = new Object[jsonArray.size()];
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    array[i] = toWritableMap(jsonArray.get(i).getAsJsonObject());
+                }
+
+                map.putArray(propName, Arguments.fromArray(array));
+            } else if (jsonElement.isJsonObject()) {
+                map.putMap(propName, toWritableMap(jsonElement.getAsJsonObject()));
+            }
+        }
+
         return map;
-    }
-
-    public static WritableMap toPointGeometry(LatLng latLng) {
-        WritableMap geometry = new WritableNativeMap();
-        geometry.putString("type", "Point");
-        geometry.putArray("coordinates", fromLatLng(latLng));
-        return geometry;
-    }
-
-    public static WritableArray fromLatLng(LatLng latLng) {
-        double[] coords = new double[]{ latLng.getLongitude(), latLng.getLatitude() };
-        WritableArray writableCoords = new WritableNativeArray();
-        writableCoords.pushDouble(coords[0]);
-        writableCoords.pushDouble(coords[1]);
-        return writableCoords;
-    }
-
-    public static WritableArray fromLatLngBounds(LatLngBounds latLngBounds) {
-        WritableArray array = Arguments.createArray();
-
-        LatLng[] latLngs = latLngBounds.toLatLngs();
-        for (LatLng latLng : latLngs) {
-            array.pushArray(fromLatLng(latLng));
-        }
-
-        return array;
-    }
-
-    public static LatLng toLatLng(Point point) {
-        if (point == null) {
-            return null;
-        }
-
-        Position position = point.getCoordinates();
-        if (position == null) {
-            return null;
-        }
-
-        return new LatLng(position.getLatitude(), position.getLongitude());
-    }
-
-    public static Point toPointGemetry(String featureJSONString) {
-        Feature feature = Feature.fromJson(featureJSONString);
-        if (feature == null) {
-            return null;
-        }
-        return (Point)feature.getGeometry();
-    }
-
-    public static LatLngBounds toLatLngBounds(FeatureCollection featureCollection) {
-        List<Feature> features = featureCollection.getFeatures();
-
-        if (features.size() != 2) {
-            return null;
-        }
-
-        LatLng neLatLng = ConvertUtils.toLatLng((Point)features.get(0).getGeometry());
-        LatLng swLatLng = ConvertUtils.toLatLng((Point)features.get(1).getGeometry());
-
-        return LatLngBounds.from(neLatLng.getLatitude(), neLatLng.getLongitude(),
-                swLatLng.getLatitude(), swLatLng.getLongitude());
     }
 
     public static Object getObjectFromString(String str) {

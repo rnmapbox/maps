@@ -1,20 +1,33 @@
 package com.mapbox.rctmgl.components.styles.sources;
 
 import android.content.Context;
+import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import com.facebook.react.bridge.ReadableMap;
+import com.mapbox.mapboxsdk.annotations.Marker;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.annotations.MarkerView;
+import com.mapbox.mapboxsdk.annotations.MarkerViewOptions;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.rctmgl.components.annotation.RCTMGLCallout;
+import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotationOptions;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
+import com.mapbox.rctmgl.events.FeatureClickEvent;
+import com.mapbox.rctmgl.events.IEvent;
 import com.mapbox.rctmgl.utils.DownloadMapImageTask;
+import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Geometry;
+import com.mapbox.services.commons.geojson.Point;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,8 +35,9 @@ import java.util.Map;
  * Created by nickitaliano on 9/19/17.
  */
 
-public class RCTMGLShapeSource extends  RCTSource<GeoJsonSource> {
+public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
     private URL mURL;
+    private RCTMGLShapeSourceManager mManager;
 
     private String mShape;
 
@@ -38,8 +52,9 @@ public class RCTMGLShapeSource extends  RCTSource<GeoJsonSource> {
     private List<Map.Entry<String, String>> mImages;
     private List<Map.Entry<String, BitmapDrawable>> mNativeImages;
 
-    public RCTMGLShapeSource(Context context) {
+    public RCTMGLShapeSource(Context context, RCTMGLShapeSourceManager manager) {
         super(context);
+        mManager = manager;
     }
 
     @Override
@@ -149,6 +164,10 @@ public class RCTMGLShapeSource extends  RCTSource<GeoJsonSource> {
 
     public void setNativeImages(List<Map.Entry<String, BitmapDrawable>> nativeImages) {
         mNativeImages = nativeImages;
+    }
+
+    public void onPress(Feature feature) {
+        mManager.handleEvent(FeatureClickEvent.makeShapeSourceEvent(this, feature));
     }
 
     private GeoJsonOptions getOptions() {

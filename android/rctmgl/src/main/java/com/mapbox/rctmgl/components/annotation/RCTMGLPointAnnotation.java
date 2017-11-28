@@ -5,7 +5,6 @@ import android.graphics.PointF;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerView;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -13,10 +12,9 @@ import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.events.PointAnnotationClickEvent;
 import com.mapbox.rctmgl.events.constants.EventTypes;
-import com.mapbox.rctmgl.utils.ConvertUtils;
+import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.services.commons.geojson.Point;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -87,7 +85,7 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
     }
 
     public LatLng getLatLng() {
-        return ConvertUtils.toLatLng(mCoordinate);
+        return GeoJSONUtils.toLatLng(mCoordinate);
     }
 
     public long getMapboxID() {
@@ -126,7 +124,7 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         mCoordinate = point;
 
         if (mAnnotation != null) {
-            mAnnotation.setPosition(ConvertUtils.toLatLng(point));
+            mAnnotation.setPosition(GeoJSONUtils.toLatLng(point));
         }
     }
 
@@ -194,13 +192,13 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         options.snippet(mSnippet);
         options.hasChildren(mHasChildren);
         options.anchor(0.5f, 0.5f);
-        options.position(ConvertUtils.toLatLng(mCoordinate));
+        options.position(GeoJSONUtils.toLatLng(mCoordinate));
         return options;
     }
 
     private PointAnnotationClickEvent makeEvent(boolean isSelect) {
         String type = isSelect ? EventTypes.ANNOTATION_SELECTED : EventTypes.ANNOTATION_DESELECTED;
-        LatLng latLng = ConvertUtils.toLatLng(mCoordinate);
+        LatLng latLng = GeoJSONUtils.toLatLng(mCoordinate);
         PointF screenPos = getScreenPosition();
         return new PointAnnotationClickEvent(this, latLng, screenPos, type);
     }

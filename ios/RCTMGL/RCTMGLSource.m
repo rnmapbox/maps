@@ -11,13 +11,16 @@
 
 @implementation RCTMGLSource
 
+double const DEFAULT_HITBOX_AREA = 44.0;
 NSString *const DEFAULT_SOURCE_ID = @"composite";
+
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
         _layers = [[NSMutableArray alloc] init];
         _reactSubviews = [[NSMutableArray alloc] init];
+        _hitbox = @{ @"width": @(DEFAULT_HITBOX_AREA), @"height": @(DEFAULT_HITBOX_AREA) };
     }
     return self;
 }
@@ -111,6 +114,17 @@ NSString *const DEFAULT_SOURCE_ID = @"composite";
     @throw [NSException exceptionWithName:NSInternalInconsistencyException
                         reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                         userInfo:nil];
+}
+
+- (NSArray<NSString *> *)getLayerIDs
+{
+    NSMutableArray *layerIDs = [[NSMutableArray alloc] init];
+    
+    for (RCTMGLLayer *layer in _layers) {
+        [layerIDs addObject:layer.id];
+    }
+    
+    return layerIDs;
 }
 
 + (BOOL)isDefaultSource:(NSString *)sourceID

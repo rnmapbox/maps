@@ -225,12 +225,51 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
 - (void)didTapMap:(UITapGestureRecognizer *)recognizer
 {
     RCTMGLMapView *mapView = (RCTMGLMapView*)recognizer.view;
+    CGPoint screenPoint = [recognizer locationInView:mapView];
+    NSArray<RCTMGLSource *> *touchableSources = [mapView getAllTouchableSources];
     
-    if (mapView == nil || mapView.onPress == nil) {
+    NSMutableDictionary<NSString *, id<MGLFeature>> *hits = [[NSMutableDictionary alloc] init];
+    NSMutableArray<RCTMGLSource *> *hitTouchableSources = [[NSMutableArray alloc] init];
+    for (RCTMGLSource *touchableSource in touchableSources) {
+        NSDictionary<NSString *, NSNumber *> *hitbox = touchableSource.hitbox;
+        float halfWidth = [hitbox[@"width"] floatValue] / 2.f;
+        float halfHeight = [hitbox[@"height"] floatValue] / 2.f;
+        
+        CGFloat top = screenPoint.y - halfHeight;
+        CGFloat left = screenPoint.x - halfWidth;
+        CGRect hitboxRect = CGRectMake(left, top, [hitbox[@"width"] floatValue], [hitbox[@"height"] floatValue]);
+        
+        NSArray<id<MGLFeature>> *features = [mapView visibleFeaturesInRect:hitboxRect
+                                                     inStyleLayersWithIdentifiers:[NSSet setWithArray:[touchableSource getLayerIDs]]
+                                                     predicate:nil];
+        
+        if (features.count > 0) {
+            hits[touchableSource.id] = features[0];
+            [hitTouchableSources addObject:touchableSource];
+        }
+    }
+    
+    if (hits.count > 0) {
+        RCTMGLSource *source = [mapView getTouchableSourceWithHighestZIndex:hitTouchableSources];
+        if (source != nil && source.hasPressListener) {
+            NSDictionary<NSString *, id> *geoJSONDict = hits[source.id].geoJSONDictionary;
+            
+            NSString *eventType = RCT_MAPBOX_VECTOR_SOURCE_LAYER_PRESS;
+            if ([source isKindOfClass:[RCTMGLShapeSource class]]) {
+                eventType = RCT_MAPBOX_SHAPE_SOURCE_LAYER_PRESS;
+            }
+
+            RCTMGLEvent *event = [RCTMGLEvent makeEvent:eventType withPayload:geoJSONDict];
+            [self fireEvent:event withCallback:source.onPress];
+            return;
+        }
+    }
+    
+    if (mapView.onPress == nil) {
         return;
     }
     
-    RCTMGLMapTouchEvent *event = [RCTMGLMapTouchEvent makeTapEvent:mapView withPoint:[recognizer locationInView:mapView]];
+    RCTMGLMapTouchEvent *event = [RCTMGLMapTouchEvent makeTapEvent:mapView withPoint:screenPoint];
     [self fireEvent:event withCallback:mapView.onPress];
 }
 

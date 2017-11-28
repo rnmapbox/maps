@@ -37,4 +37,6 @@ extern NSString *const RCT_MAPBOX_OFFLINE_PROGRESS;
 extern NSString *const RCT_MAPBOX_OFFLINE_ERROR;
 extern NSString *const RCT_MAPBOX_OFFLINE_TILE_LIMIT;
 
+extern NSString *const RCT_MAPBOX_SHAPE_SOURCE_LAYER_PRESS;
+extern NSString *const RCT_MAPBOX_VECTOR_SOURCE_LAYER_PRESS;
 @end

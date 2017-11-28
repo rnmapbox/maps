@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.mapbox.mapboxsdk.style.sources.RasterSource;
 import com.mapbox.mapboxsdk.style.sources.TileSet;
+import com.mapbox.services.commons.geojson.Feature;
 
 /**
  * Created by nickitaliano on 9/25/17.
@@ -74,5 +75,15 @@ public class RCTMGLRasterSource extends RCTSource<RasterSource> {
         }
 
         return tileSet;
+    }
+
+    @Override
+    public boolean hasPressListener() {
+        return false;
+    }
+
+    @Override
+    public void onPress(Feature feature) {
+        // ignore, cannot query raster layers
     }
 }

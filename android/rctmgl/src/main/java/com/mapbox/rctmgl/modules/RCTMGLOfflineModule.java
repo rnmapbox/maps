@@ -13,7 +13,6 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
 import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
@@ -27,16 +26,14 @@ import com.mapbox.rctmgl.events.IEvent;
 import com.mapbox.rctmgl.events.OfflineEvent;
 import com.mapbox.rctmgl.events.constants.EventTypes;
 import com.mapbox.rctmgl.utils.ConvertUtils;
+import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.Locale;
-import java.util.Timer;
 
 /**
  * Created by nickitaliano on 10/24/17.
@@ -333,12 +330,12 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
     private LatLngBounds getBoundsFromOptions(ReadableMap options) {
         String featureCollectionJSONStr = ConvertUtils.getString("bounds", options, "{}");
         FeatureCollection featureCollection = FeatureCollection.fromJson(featureCollectionJSONStr);
-        return ConvertUtils.toLatLngBounds(featureCollection);
+        return GeoJSONUtils.toLatLngBounds(featureCollection);
     }
 
     private WritableMap fromOfflineRegion(OfflineRegion region) {
         WritableMap map = Arguments.createMap();
-        map.putArray("bounds", ConvertUtils.fromLatLngBounds(region.getDefinition().getBounds()));
+        map.putArray("bounds", GeoJSONUtils.fromLatLngBounds(region.getDefinition().getBounds()));
         map.putString("metadata", new String(region.getMetadata()));
         return map;
     }

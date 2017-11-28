@@ -10,7 +10,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.rctmgl.components.camera.constants.CameraMode;
-import com.mapbox.rctmgl.utils.ConvertUtils;
+import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Point;
 
@@ -112,8 +112,8 @@ public class CameraStop {
         }
 
         if (readableMap.hasKey("centerCoordinate")) {
-            Point target = ConvertUtils.toPointGemetry(readableMap.getString("centerCoordinate"));
-            stop.setLatLng(ConvertUtils.toLatLng(target));
+            Point target = GeoJSONUtils.toPointGeometry(readableMap.getString("centerCoordinate"));
+            stop.setLatLng(GeoJSONUtils.toLatLng(target));
         }
 
         if (readableMap.hasKey("zoom")) {
@@ -131,7 +131,7 @@ public class CameraStop {
             int paddingLeft = getBoundsPaddingByKey(readableMap, "boundsPaddingLeft");
 
             FeatureCollection collection = FeatureCollection.fromJson(readableMap.getString("bounds"));
-            stop.setBounds(ConvertUtils.toLatLngBounds(collection), paddingLeft, paddingRight,
+            stop.setBounds(GeoJSONUtils.toLatLngBounds(collection), paddingLeft, paddingRight,
                     paddingTop, paddingBottom);
         }
 

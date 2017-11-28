@@ -19,12 +19,16 @@ extern NSString *const DEFAULT_SOURCE_ID;
 @property (nonatomic, strong) NSMutableArray<RCTMGLLayer*> *layers;
 @property (nonatomic, strong) MGLSource *source;
 @property (nonatomic, strong) MGLMapView *map;
+@property (nonatomic, strong) NSDictionary<NSString *, NSNumber *> *hitbox;
 
 @property (nonatomic, copy) NSString *id;
+@property (nonatomic, assign) BOOL hasPressListener;
+@property (nonatomic, copy) RCTBubblingEventBlock onPress;
 
 - (void)addToMap;
 - (void)removeFromMap;
 - (MGLSource*)makeSource;
+- (NSArray<NSString *> *)getLayerIDs;
 
 + (BOOL)isDefaultSource:(NSString*)sourceID;
 

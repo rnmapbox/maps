@@ -73,6 +73,10 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         mContext = context;
     }
 
+    public String getID() {
+        return mID;
+    }
+
     public void setID(String id) {
         mID = id;
     }

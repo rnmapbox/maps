@@ -264,6 +264,51 @@ static double const M2PI = M_PI * 2;
     return nil;
 }
 
+- (NSArray<RCTMGLSource *> *)getAllTouchableSources
+{
+    NSMutableArray<RCTMGLSource *> *touchableSources = [[NSMutableArray alloc] init];
+    
+    for (RCTMGLSource *source in _sources) {
+        if (source.hasPressListener) {
+            [touchableSources addObject:source];
+        }
+    }
+    
+    return touchableSources;
+}
+
+- (RCTMGLSource *)getTouchableSourceWithHighestZIndex:(NSArray<RCTMGLSource *> *)touchableSources
+{
+    if (touchableSources == nil || touchableSources.count == 0) {
+        return nil;
+    }
+    
+    if (touchableSources.count == 1) {
+        return touchableSources[0];
+    }
+    
+    NSMutableDictionary<NSString *, RCTMGLSource *> *layerToSoureDict = [[NSMutableDictionary alloc] init];
+    for (RCTMGLSource *touchableSource in touchableSources) {
+        NSArray<NSString *> *layerIDs = [touchableSource getLayerIDs];
+        
+        for (NSString *layerID in layerIDs) {
+            layerToSoureDict[layerID] = touchableSource;
+        }
+    }
+    
+    NSArray<MGLStyleLayer *> *layers = self.style.layers;
+    for (int i = (int)layers.count - 1; i >= 0; i--) {
+        MGLStyleLayer *layer = layers[i];
+        
+        RCTMGLSource *source = layerToSoureDict[layer.identifier];
+        if (source != nil) {
+            return source;
+        }
+    }
+    
+    return nil;
+}
+
 - (NSURL*)_getStyleURLFromKey:(NSString *)styleURL
 {
     return [NSURL URLWithString:styleURL];
