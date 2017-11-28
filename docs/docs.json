@@ -1722,6 +1722,13 @@
         "type": "func",
         "default": "none",
         "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers"
+      },
+      {
+        "name": "hitbox",
+        "required": false,
+        "type": "shape",
+        "default": "none",
+        "description": "Overrides the default touch hitbox(44x44 pixels) for the source layers"
       }
     ],
     "composes": [
@@ -2270,6 +2277,13 @@
         "type": "func",
         "default": "none",
         "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers"
+      },
+      {
+        "name": "hitbox",
+        "required": false,
+        "type": "shape",
+        "default": "none",
+        "description": "Overrides the default touch hitbox(44x44 pixels) for the source layers"
       }
     ],
     "composes": [

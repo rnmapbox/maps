@@ -93,6 +93,14 @@ class ShapeSource extends React.Component {
      * if that layer has a higher z-index than another source layers
      */
     onPress: PropTypes.func,
+
+    /**
+     * Overrides the default touch hitbox(44x44 pixels) for the source layers
+     */
+    hitbox: PropTypes.shape({
+      width: PropTypes.number.isRequired,
+      height: PropTypes.number.isRequired,
+    }),
   };
 
   static defaultProps = {
