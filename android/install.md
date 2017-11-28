@@ -31,10 +31,10 @@ dependencies {
 }
 ```
 
-Update Android SDK version if you did `react-native init`, we want to be on `25` or higher.
-* `compileSdkVersion 25`
-* `buildToolsVersion "25.0.1"`
-* `targetSdkVersion 25`
+Update Android SDK version if you did `react-native init`, we want to be on `26` or higher.
+* `compileSdkVersion 26`
+* `buildToolsVersion "26.0.1"`
+* `targetSdkVersion 26`
 
 ### settings.gradle
 

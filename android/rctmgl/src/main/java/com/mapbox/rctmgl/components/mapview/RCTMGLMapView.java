@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactContext;
@@ -678,6 +679,20 @@ public class RCTMGLMapView extends MapView implements
 
     public void init() {
         setStyleUrl(mStyleURL);
+
+        final OnAttachStateChangeListener attachStateChangeListener = new OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View view) {
+                reflow();
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View view) {
+                removeOnAttachStateChangeListener(this);
+            }
+        };
+
+        addOnAttachStateChangeListener(attachStateChangeListener);
     }
 
     private void updateCameraPositionIfNeeded(boolean shouldUpdateTarget) {

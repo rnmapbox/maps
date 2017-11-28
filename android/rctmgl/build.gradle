@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
     }
@@ -26,12 +26,12 @@ dependencies {
     provided "com.facebook.react:react-native:+"
 
     // Mapbox SDK
-    compile 'com.mapbox.mapboxsdk:mapbox-android-services:2.2.6'
+    compile 'com.mapbox.mapboxsdk:mapbox-android-services:2.2.9'
 
-    compile('com.mapbox.mapboxsdk:mapbox-android-sdk:5.1.4@aar') {
+    compile('com.mapbox.mapboxsdk:mapbox-android-sdk:5.2.0@aar') {
         transitive=true
     }
 
     // Mapbox plugins
-    compile 'com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.1.0'
+    compile 'com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.2.0'
 }
