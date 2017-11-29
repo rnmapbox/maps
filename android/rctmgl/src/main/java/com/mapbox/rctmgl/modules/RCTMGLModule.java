@@ -126,6 +126,10 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         circleTranslateAnchor.put("Map", Property.CIRCLE_TRANSLATE_ANCHOR_MAP);
         circleTranslateAnchor.put("Viewport", Property.CIRCLE_TRANSLATE_ANCHOR_VIEWPORT);
 
+        Map<String, String> circlePitchAlignment = new HashMap<>();
+        circlePitchAlignment.put("Map", Property.CIRCLE_PITCH_ALIGNMENT_MAP);
+        circlePitchAlignment.put("Viewport", Property.CIRCLE_PITCH_ALIGNMENT_VIEWPORT);
+
         // fill extrusion layer constants
         Map<String, String> fillExtrusionTranslateAnchor = new HashMap<>();
         fillExtrusionTranslateAnchor.put("Map", Property.FILL_EXTRUSION_TRANSLATE_ANCHOR_MAP);
@@ -147,6 +151,22 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         iconTextFit.put("Width", Property.ICON_TEXT_FIT_WIDTH);
         iconTextFit.put("Height", Property.ICON_TEXT_FIT_HEIGHT);
         iconTextFit.put("Both", Property.ICON_TEXT_FIT_BOTH);
+
+        Map<String, String> iconAnchor = new HashMap<>();
+        iconAnchor.put("Center", Property.ICON_ANCHOR_CENTER);
+        iconAnchor.put("Left", Property.ICON_ANCHOR_LEFT);
+        iconAnchor.put("Right", Property.ICON_ANCHOR_RIGHT);
+        iconAnchor.put("Top", Property.ICON_ANCHOR_TOP);
+        iconAnchor.put("Bottom", Property.ICON_ANCHOR_BOTTOM);
+        iconAnchor.put("TopLeft", Property.ICON_ANCHOR_TOP_LEFT);
+        iconAnchor.put("TopRight", Property.ICON_ANCHOR_TOP_RIGHT);
+        iconAnchor.put("BottomLeft", Property.ICON_ANCHOR_BOTTOM_LEFT);
+        iconAnchor.put("BottomRight", Property.ICON_ANCHOR_BOTTOM_RIGHT);
+
+        Map<String, String> iconPitchAlignment = new HashMap<>();
+        iconPitchAlignment.put("Auto", Property.ICON_PITCH_ALIGNMENT_AUTO);
+        iconPitchAlignment.put("Map", Property.ICON_PITCH_ALIGNMENT_MAP);
+        iconPitchAlignment.put("Viewport", Property.ICON_PITCH_ALIGNMENT_VIEWPORT);
 
         Map<String, String> iconTranslateAnchor = new HashMap<>();
         iconTranslateAnchor.put("Map", Property.ICON_TRANSLATE_ANCHOR_MAP);
@@ -219,14 +239,17 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
                 .put("LineTranslateAnchor", lineTranslateAnchor)
                 .put("CirclePitchScale", circlePitchScale)
                 .put("CircleTranslateAnchor", circleTranslateAnchor)
+                .put("CirclePitchAlignment", circlePitchAlignment)
                 .put("FillExtrusionTranslateAnchor", fillExtrusionTranslateAnchor)
                 .put("FillTranslateAnchor", fillTranslateAnchor)
                 .put("IconRotationAlignment", iconRotationAlignment)
                 .put("IconTextFit", iconTextFit)
                 .put("IconTranslateAnchor", iconTranslateAnchor)
                 .put("SymbolPlacement", symbolPlacement)
+                .put("IconAnchor", iconAnchor)
                 .put("TextAnchor", textAnchor)
                 .put("TextJustify", textJustify)
+                .put("IconPitchAlignment", iconPitchAlignment)
                 .put("TextPitchAlignment", textPitchAlignment)
                 .put("TextRotationAlignment", textRotationAlignment)
                 .put("TextTransform", textTransform)
