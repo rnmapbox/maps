@@ -19,6 +19,13 @@ export const StyleFunctionTypes = {
   Composite: 'composite',
 };
 
+export const ConstantPropType = PropTypes.shape({
+  type: PropTypes.string.isRequired,
+  payload: PropTypes.shape({
+    value: PropTypes.any.isRequired,
+  }).isRequired,
+});
+
 export const StyleFunctionPropType = PropTypes.shape({
   type: PropTypes.string.isRequired,
   payload: PropTypes.shape({
@@ -51,15 +58,17 @@ export const FillLayerStyleProp = PropTypes.shape({
    */
   fillAntialias: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
-   * The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
+   * The opacity of the entire fill layer. In contrast to the `fillColor`, this value will also affect the 1px stroke around the fill, if the stroke is used.
    */
   fillOpacity: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -70,11 +79,12 @@ export const FillLayerStyleProp = PropTypes.shape({
   /**
    * The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
    *
-   * @disabledBy fill-pattern
+   * @disabledBy fillPattern
    */
   fillColor: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -83,13 +93,14 @@ export const FillLayerStyleProp = PropTypes.shape({
   fillColorTransition: TransitionPropType,
 
   /**
-   * The outline color of the fill. Matches the value of `fill-color` if unspecified.
+   * The outline color of the fill. Matches the value of `fillColor` if unspecified.
    *
-   * @disabledBy fill-pattern
+   * @disabledBy fillPattern
    */
   fillOutlineColor: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -98,11 +109,11 @@ export const FillLayerStyleProp = PropTypes.shape({
   fillOutlineColorTransition: TransitionPropType,
 
   /**
-   * The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+   * The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up, respectively.
    */
   fillTranslate: PropTypes.oneOfType([
     TranslationPropType,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -111,13 +122,13 @@ export const FillLayerStyleProp = PropTypes.shape({
   fillTranslateTransition: TransitionPropType,
 
   /**
-   * Controls the translation reference point.
+   * Controls the frame of reference for `fillTranslate`.
    *
-   * @requires fill-translate
+   * @requires fillTranslate
    */
   fillTranslateAnchor: PropTypes.oneOfType([
     TranslationPropType,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -125,7 +136,8 @@ export const FillLayerStyleProp = PropTypes.shape({
    */
   fillPattern: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -141,7 +153,7 @@ export const LineLayerStyleProp = PropTypes.shape({
    */
   lineCap: PropTypes.oneOfType([
     PropTypes.any,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -149,7 +161,7 @@ export const LineLayerStyleProp = PropTypes.shape({
    */
   lineJoin: PropTypes.oneOfType([
     PropTypes.any,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -157,7 +169,8 @@ export const LineLayerStyleProp = PropTypes.shape({
    */
   lineMiterLimit: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -165,7 +178,8 @@ export const LineLayerStyleProp = PropTypes.shape({
    */
   lineRoundLimit: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -178,7 +192,8 @@ export const LineLayerStyleProp = PropTypes.shape({
    */
   lineOpacity: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -189,11 +204,12 @@ export const LineLayerStyleProp = PropTypes.shape({
   /**
    * The color with which the line will be drawn.
    *
-   * @disabledBy line-pattern
+   * @disabledBy linePattern
    */
   lineColor: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -202,11 +218,11 @@ export const LineLayerStyleProp = PropTypes.shape({
   lineColorTransition: TransitionPropType,
 
   /**
-   * The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+   * The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up, respectively.
    */
   lineTranslate: PropTypes.oneOfType([
     TranslationPropType,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -215,13 +231,13 @@ export const LineLayerStyleProp = PropTypes.shape({
   lineTranslateTransition: TransitionPropType,
 
   /**
-   * Controls the translation reference point.
+   * Controls the frame of reference for `lineTranslate`.
    *
-   * @requires line-translate
+   * @requires lineTranslate
    */
   lineTranslateAnchor: PropTypes.oneOfType([
     TranslationPropType,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -229,7 +245,8 @@ export const LineLayerStyleProp = PropTypes.shape({
    */
   lineWidth: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -242,7 +259,8 @@ export const LineLayerStyleProp = PropTypes.shape({
    */
   lineGapWidth: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -255,7 +273,8 @@ export const LineLayerStyleProp = PropTypes.shape({
    */
   lineOffset: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -268,7 +287,8 @@ export const LineLayerStyleProp = PropTypes.shape({
    */
   lineBlur: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -279,11 +299,12 @@ export const LineLayerStyleProp = PropTypes.shape({
   /**
    * Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width.
    *
-   * @disabledBy line-pattern
+   * @disabledBy linePattern
    */
   lineDasharray: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.number),
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -296,7 +317,8 @@ export const LineLayerStyleProp = PropTypes.shape({
    */
   linePattern: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -312,7 +334,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    */
   symbolPlacement: PropTypes.oneOfType([
     PropTypes.any,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -320,7 +342,8 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    */
   symbolSpacing: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -328,313 +351,359 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    */
   symbolAvoidEdges: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
    * If true, the icon will be visible even if it collides with other previously drawn symbols.
    *
-   * @requires icon-image
+   * @requires iconImage
    */
   iconAllowOverlap: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
    * If true, other symbols can be visible even if they collide with the icon.
    *
-   * @requires icon-image
+   * @requires iconImage
    */
   iconIgnorePlacement: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
    * If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not.
    *
-   * @requires icon-image, text-field
+   * @requires iconImage, textField
    */
   iconOptional: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
-   * In combination with `symbol-placement`, determines the rotation behavior of icons.
+   * In combination with `symbolPlacement`, determines the rotation behavior of icons.
    *
-   * @requires icon-image
+   * @requires iconImage
    */
   iconRotationAlignment: PropTypes.oneOfType([
     PropTypes.any,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
-   * Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
+   * Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `iconSize`. 1 is the original size; 3 triples the size of the image.
    *
-   * @requires icon-image
+   * @requires iconImage
    */
   iconSize: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
    * Scales the icon to fit around the associated text.
    *
-   * @requires icon-image, text-field
+   * @requires iconImage, textField
    */
   iconTextFit: PropTypes.oneOfType([
     PropTypes.any,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
-   * Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
+   * Size of the additional area added to dimensions determined by `iconTextFit`, in clockwise order: top, right, bottom, left.
    *
-   * @requires icon-image, text-field
+   * @requires iconImage, textField
    */
   iconTextFitPadding: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.number),
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
-   * Name of image in sprite to use for drawing an image background. A string with {tokens} replaced, referencing the data property to pull from.
+   * Name of image in sprite to use for drawing an image background. A string with `{tokens}` replaced, referencing the data property to pull from. (`{token}` replacement is only supported for literal `iconImage` values; not for property functions.)
    */
   iconImage: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
    * Rotates the icon clockwise.
    *
-   * @requires icon-image
+   * @requires iconImage
    */
   iconRotate: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
    * Size of the additional area around the icon bounding box used for detecting symbol collisions.
    *
-   * @requires icon-image
+   * @requires iconImage
    */
   iconPadding: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
-   * If true, the icon may be flipped to prevent it from being rendered upside-down.
+   * If true, the icon may be flipped to prevent it from being rendered upsideDown.
    *
-   * @requires icon-image
+   * @requires iconImage
    */
   iconKeepUpright: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
-   * Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
+   * Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. When combined with `iconRotate` the offset will be as if the rotated direction was up.
    *
-   * @requires icon-image
+   * @requires iconImage
    */
   iconOffset: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.number),
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
+  ]),
+
+  /**
+   * Part of the icon placed closest to the anchor.
+   *
+   * @requires iconImage
+   */
+  iconAnchor: PropTypes.oneOfType([
+    PropTypes.any,
+    StyleFunctionPropType,
+  ]),
+
+  /**
+   * Orientation of icon when map is pitched.
+   *
+   * @requires iconImage
+   */
+  iconPitchAlignment: PropTypes.oneOfType([
+    PropTypes.any,
+    StyleFunctionPropType,
   ]),
 
   /**
    * Orientation of text when map is pitched.
    *
-   * @requires text-field
+   * @requires textField
    */
   textPitchAlignment: PropTypes.oneOfType([
     PropTypes.any,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
-   * In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text.
+   * In combination with `symbolPlacement`, determines the rotation behavior of the individual glyphs forming the text.
    *
-   * @requires text-field
+   * @requires textField
    */
   textRotationAlignment: PropTypes.oneOfType([
     PropTypes.any,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
-   * Value to use for a text label. Feature properties are specified using tokens like {field_name}.  (Token replacement is only supported for literal `text-field` values--not for property functions.)
+   * Value to use for a text label. Feature properties are specified using tokens like `{field_name}`. (`{token}` replacement is only supported for literal `textField` values; not for property functions.)
    */
   textField: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
    * Font stack to use for displaying text.
    *
-   * @requires text-field
+   * @requires textField
    */
   textFont: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.string),
-    PropTypes.array
+    PropTypes.array,
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
    * Font size.
    *
-   * @requires text-field
+   * @requires textField
    */
   textSize: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
    * The maximum line width for text wrapping.
    *
-   * @requires text-field
+   * @requires textField
    */
   textMaxWidth: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
-   * Text leading value for multi-line text.
+   * Text leading value for multiLine text.
    *
-   * @requires text-field
+   * @requires textField
    */
   textLineHeight: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
    * Text tracking amount.
    *
-   * @requires text-field
+   * @requires textField
    */
   textLetterSpacing: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
    * Text justification options.
    *
-   * @requires text-field
+   * @requires textField
    */
   textJustify: PropTypes.oneOfType([
     PropTypes.any,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
    * Part of the text placed closest to the anchor.
    *
-   * @requires text-field
+   * @requires textField
    */
   textAnchor: PropTypes.oneOfType([
     PropTypes.any,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
    * Maximum angle change between adjacent characters.
    *
-   * @requires text-field
+   * @requires textField
    */
   textMaxAngle: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
    * Rotates the text clockwise.
    *
-   * @requires text-field
+   * @requires textField
    */
   textRotate: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
    * Size of the additional area around the text bounding box used for detecting symbol collisions.
    *
-   * @requires text-field
+   * @requires textField
    */
   textPadding: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
-   * If true, the text may be flipped vertically to prevent it from being rendered upside-down.
+   * If true, the text may be flipped vertically to prevent it from being rendered upsideDown.
    *
-   * @requires text-field
+   * @requires textField
    */
   textKeepUpright: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
-   * Specifies how to capitalize text, similar to the CSS `text-transform` property.
+   * Specifies how to capitalize text, similar to the CSS `textTransform` property.
    *
-   * @requires text-field
+   * @requires textField
    */
   textTransform: PropTypes.oneOfType([
     PropTypes.any,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
    * Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up.
    *
-   * @requires text-field
+   * @requires textField
    */
   textOffset: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.number),
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
    * If true, the text will be visible even if it collides with other previously drawn symbols.
    *
-   * @requires text-field
+   * @requires textField
    */
   textAllowOverlap: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
    * If true, other symbols can be visible even if they collide with the text.
    *
-   * @requires text-field
+   * @requires textField
    */
   textIgnorePlacement: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
    * If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not.
    *
-   * @requires text-field, icon-image
+   * @requires textField, iconImage
    */
   textOptional: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -645,11 +714,12 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   /**
    * The opacity at which the icon will be drawn.
    *
-   * @requires icon-image
+   * @requires iconImage
    */
   iconOpacity: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -660,11 +730,12 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   /**
    * The color of the icon. This can only be used with sdf icons.
    *
-   * @requires icon-image
+   * @requires iconImage
    */
   iconColor: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -675,11 +746,12 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   /**
    * The color of the icon's halo. Icon halos can only be used with SDF icons.
    *
-   * @requires icon-image
+   * @requires iconImage
    */
   iconHaloColor: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -690,11 +762,12 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   /**
    * Distance of halo to the icon outline.
    *
-   * @requires icon-image
+   * @requires iconImage
    */
   iconHaloWidth: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -705,11 +778,12 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   /**
    * Fade out the halo towards the outside.
    *
-   * @requires icon-image
+   * @requires iconImage
    */
   iconHaloBlur: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -720,11 +794,11 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   /**
    * Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
    *
-   * @requires icon-image
+   * @requires iconImage
    */
   iconTranslate: PropTypes.oneOfType([
     TranslationPropType,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -733,23 +807,24 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   iconTranslateTransition: TransitionPropType,
 
   /**
-   * Controls the translation reference point.
+   * Controls the frame of reference for `iconTranslate`.
    *
-   * @requires icon-image, icon-translate
+   * @requires iconImage, iconTranslate
    */
   iconTranslateAnchor: PropTypes.oneOfType([
     TranslationPropType,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
    * The opacity at which the text will be drawn.
    *
-   * @requires text-field
+   * @requires textField
    */
   textOpacity: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -760,11 +835,12 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   /**
    * The color with which the text will be drawn.
    *
-   * @requires text-field
+   * @requires textField
    */
   textColor: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -775,11 +851,12 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   /**
    * The color of the text's halo, which helps it stand out from backgrounds.
    *
-   * @requires text-field
+   * @requires textField
    */
   textHaloColor: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -788,13 +865,14 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   textHaloColorTransition: TransitionPropType,
 
   /**
-   * Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
+   * Distance of halo to the font outline. Max text halo width is 1/4 of the fontSize.
    *
-   * @requires text-field
+   * @requires textField
    */
   textHaloWidth: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -805,11 +883,12 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   /**
    * The halo's fadeout distance towards the outside.
    *
-   * @requires text-field
+   * @requires textField
    */
   textHaloBlur: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -820,11 +899,11 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   /**
    * Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
    *
-   * @requires text-field
+   * @requires textField
    */
   textTranslate: PropTypes.oneOfType([
     TranslationPropType,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -833,13 +912,13 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   textTranslateTransition: TransitionPropType,
 
   /**
-   * Controls the translation reference point.
+   * Controls the frame of reference for `textTranslate`.
    *
-   * @requires text-field, text-translate
+   * @requires textField, textTranslate
    */
   textTranslateAnchor: PropTypes.oneOfType([
     TranslationPropType,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 });
 
@@ -855,7 +934,8 @@ export const CircleLayerStyleProp = PropTypes.shape({
    */
   circleRadius: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -868,7 +948,8 @@ export const CircleLayerStyleProp = PropTypes.shape({
    */
   circleColor: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -881,7 +962,8 @@ export const CircleLayerStyleProp = PropTypes.shape({
    */
   circleBlur: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -894,7 +976,8 @@ export const CircleLayerStyleProp = PropTypes.shape({
    */
   circleOpacity: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -903,11 +986,11 @@ export const CircleLayerStyleProp = PropTypes.shape({
   circleOpacityTransition: TransitionPropType,
 
   /**
-   * The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+   * The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up, respectively.
    */
   circleTranslate: PropTypes.oneOfType([
     TranslationPropType,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -916,13 +999,13 @@ export const CircleLayerStyleProp = PropTypes.shape({
   circleTranslateTransition: TransitionPropType,
 
   /**
-   * Controls the translation reference point.
+   * Controls the frame of reference for `circleTranslate`.
    *
-   * @requires circle-translate
+   * @requires circleTranslate
    */
   circleTranslateAnchor: PropTypes.oneOfType([
     TranslationPropType,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -930,15 +1013,24 @@ export const CircleLayerStyleProp = PropTypes.shape({
    */
   circlePitchScale: PropTypes.oneOfType([
     PropTypes.any,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
-   * The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
+   * Orientation of circle when map is pitched.
+   */
+  circlePitchAlignment: PropTypes.oneOfType([
+    PropTypes.any,
+    StyleFunctionPropType,
+  ]),
+
+  /**
+   * The width of the circle's stroke. Strokes are placed outside of the `circleRadius`.
    */
   circleStrokeWidth: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -951,7 +1043,8 @@ export const CircleLayerStyleProp = PropTypes.shape({
    */
   circleStrokeColor: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -964,7 +1057,8 @@ export const CircleLayerStyleProp = PropTypes.shape({
    */
   circleStrokeOpacity: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -981,11 +1075,12 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
   visibility: PropTypes.any,
 
   /**
-   * The opacity of the entire fill extrusion layer. This is rendered on a per-layer, not per-feature, basis, and data-driven styling is not available.
+   * The opacity of the entire fill extrusion layer. This is rendered on a perLayer, not perFeature, basis, and dataDriven styling is not available.
    */
   fillExtrusionOpacity: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -994,13 +1089,14 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
   fillExtrusionOpacityTransition: TransitionPropType,
 
   /**
-   * The base color of the extruded fill. The extrusion's surfaces will be shaded differently based on this color in combination with the root `light` settings. If this color is specified as `rgba` with an alpha component, the alpha component will be ignored; use `fill-extrusion-opacity` to set layer opacity.
+   * The base color of the extruded fill. The extrusion's surfaces will be shaded differently based on this color in combination with the root `light` settings. If this color is specified as `rgba` with an alpha component, the alpha component will be ignored; use `fillExtrusionOpacity` to set layer opacity.
    *
-   * @disabledBy fill-extrusion-pattern
+   * @disabledBy fillExtrusionPattern
    */
   fillExtrusionColor: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -1009,11 +1105,11 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
   fillExtrusionColorTransition: TransitionPropType,
 
   /**
-   * The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively.
+   * The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up (on the flat plane), respectively.
    */
   fillExtrusionTranslate: PropTypes.oneOfType([
     TranslationPropType,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -1022,13 +1118,13 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
   fillExtrusionTranslateTransition: TransitionPropType,
 
   /**
-   * Controls the translation reference point.
+   * Controls the frame of reference for `fillExtrusionTranslate`.
    *
-   * @requires fill-extrusion-translate
+   * @requires fillExtrusionTranslate
    */
   fillExtrusionTranslateAnchor: PropTypes.oneOfType([
     TranslationPropType,
-    StyleFunctionPropType
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -1036,7 +1132,8 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
    */
   fillExtrusionPattern: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -1049,7 +1146,8 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
    */
   fillExtrusionHeight: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -1058,13 +1156,14 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
   fillExtrusionHeightTransition: TransitionPropType,
 
   /**
-   * The height with which to extrude the base of this layer. Must be less than or equal to `fill-extrusion-height`.
+   * The height with which to extrude the base of this layer. Must be less than or equal to `fillExtrusionHeight`.
    *
-   * @requires fill-extrusion-height
+   * @requires fillExtrusionHeight
    */
   fillExtrusionBase: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -1085,7 +1184,8 @@ export const RasterLayerStyleProp = PropTypes.shape({
    */
   rasterOpacity: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -1098,7 +1198,8 @@ export const RasterLayerStyleProp = PropTypes.shape({
    */
   rasterHueRotate: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -1111,7 +1212,8 @@ export const RasterLayerStyleProp = PropTypes.shape({
    */
   rasterBrightnessMin: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -1124,7 +1226,8 @@ export const RasterLayerStyleProp = PropTypes.shape({
    */
   rasterBrightnessMax: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -1137,7 +1240,8 @@ export const RasterLayerStyleProp = PropTypes.shape({
    */
   rasterSaturation: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -1150,7 +1254,8 @@ export const RasterLayerStyleProp = PropTypes.shape({
    */
   rasterContrast: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -1163,7 +1268,8 @@ export const RasterLayerStyleProp = PropTypes.shape({
    */
   rasterFadeDuration: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -1182,11 +1288,12 @@ export const BackgroundLayerStyleProp = PropTypes.shape({
   /**
    * The color with which the background will be drawn.
    *
-   * @disabledBy background-pattern
+   * @disabledBy backgroundPattern
    */
   backgroundColor: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -1199,7 +1306,8 @@ export const BackgroundLayerStyleProp = PropTypes.shape({
    */
   backgroundPattern: PropTypes.oneOfType([
     PropTypes.string,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -1212,7 +1320,8 @@ export const BackgroundLayerStyleProp = PropTypes.shape({
    */
   backgroundOpacity: PropTypes.oneOfType([
     PropTypes.number,
-    StyleFunctionPropType
+    ConstantPropType,
+    StyleFunctionPropType,
   ]),
 
   /**
@@ -1231,7 +1340,10 @@ export const LightLayerStyleProp = PropTypes.shape({
   /**
    * Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0° (0° when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0° when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0°, directly above, to 180°, directly below).
    */
-  position: PropTypes.arrayOf(PropTypes.number),
+  position: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.number),
+    ConstantPropType,
+  ]),
 
   /**
    * The transition affecting any changes to this layer’s position property.
@@ -1241,7 +1353,10 @@ export const LightLayerStyleProp = PropTypes.shape({
   /**
    * Color tint for lighting extruded geometries.
    */
-  color: PropTypes.string,
+  color: PropTypes.oneOfType([
+    PropTypes.string,
+    ConstantPropType,
+  ]),
 
   /**
    * The transition affecting any changes to this layer’s color property.
@@ -1251,7 +1366,10 @@ export const LightLayerStyleProp = PropTypes.shape({
   /**
    * Intensity of lighting (on a scale from 0 to 1). Higher numbers will present as more extreme contrast.
    */
-  intensity: PropTypes.number,
+  intensity: PropTypes.oneOfType([
+    PropTypes.number,
+    ConstantPropType,
+  ]),
 
   /**
    * The transition affecting any changes to this layer’s intensity property.
@@ -1313,6 +1431,8 @@ const styleMap = {
   iconPadding: StyleTypes.Constant,
   iconKeepUpright: StyleTypes.Constant,
   iconOffset: StyleTypes.Constant,
+  iconAnchor: StyleTypes.Constant,
+  iconPitchAlignment: StyleTypes.Constant,
   textPitchAlignment: StyleTypes.Constant,
   textRotationAlignment: StyleTypes.Constant,
   textField: StyleTypes.Constant,
@@ -1371,6 +1491,7 @@ const styleMap = {
   circleTranslateTransition: StyleTypes.Transition,
   circleTranslateAnchor: StyleTypes.Translation,
   circlePitchScale: StyleTypes.Constant,
+  circlePitchAlignment: StyleTypes.Constant,
   circleStrokeWidth: StyleTypes.Constant,
   circleStrokeWidthTransition: StyleTypes.Transition,
   circleStrokeColor: StyleTypes.Color,
