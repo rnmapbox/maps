@@ -97,6 +97,10 @@ RCT_EXPORT_MODULE();
     [circlePitchScale setObject:@(MGLCircleScaleAlignmentMap) forKey:@"Map"];
     [circlePitchScale setObject:@(MGLCircleScaleAlignmentViewport) forKey:@"Viewport"];
     
+    NSMutableDictionary *circlePitchAlignment = [[NSMutableDictionary alloc] init];
+    [circlePitchAlignment setObject:@(MGLCirclePitchAlignmentMap) forKey:@"Map"];
+    [circlePitchAlignment setObject:@(MGLCirclePitchAlignmentViewport) forKey:@"Viewport"];
+    
     NSMutableDictionary *circleTranslateAnchor = [[NSMutableDictionary alloc] init];
     [circleTranslateAnchor setObject:@(MGLCircleTranslationAnchorMap) forKey:@"Map"];
     [circleTranslateAnchor setObject:@(MGLCircleTranslationAnchorViewport) forKey:@"Viewport"];
@@ -123,9 +127,25 @@ RCT_EXPORT_MODULE();
     [iconTextFit setObject:@(MGLIconTextFitHeight) forKey:@"Height"];
     [iconTextFit setObject:@(MGLIconTextFitBoth) forKey:@"Both"];
     
+    NSMutableDictionary *iconAnchor = [[NSMutableDictionary alloc] init];
+    [iconAnchor setObject:@(MGLIconAnchorCenter) forKey:@"Center"];
+    [iconAnchor setObject:@(MGLIconAnchorTop) forKey:@"Top"];
+    [iconAnchor setObject:@(MGLIconAnchorBottom) forKey:@"Bottom"];
+    [iconAnchor setObject:@(MGLIconAnchorLeft) forKey:@"Left"];
+    [iconAnchor setObject:@(MGLIconAnchorRight) forKey:@"Right"];
+    [iconAnchor setObject:@(MGLIconAnchorTopLeft) forKey:@"TopLeft"];
+    [iconAnchor setObject:@(MGLIconAnchorTopRight) forKey:@"TopRight"];
+    [iconAnchor setObject:@(MGLIconAnchorBottomLeft) forKey:@"BottomLeft"];
+    [iconAnchor setObject:@(MGLIconAnchorBottomRight) forKey:@"BottomRight"];
+    
     NSMutableDictionary *iconTranslateAnchor = [[NSMutableDictionary alloc] init];
     [iconTranslateAnchor setObject:@(MGLIconTranslationAnchorMap) forKey:@"Map"];
     [iconTranslateAnchor setObject:@(MGLIconTranslationAnchorViewport) forKey:@"Viewport"];
+    
+    NSMutableDictionary *iconPitchAlignment = [[NSMutableDictionary alloc] init];
+    [iconPitchAlignment setObject:@(MGLIconPitchAlignmentAuto) forKey:@"Auto"];
+    [iconPitchAlignment setObject:@(MGLIconPitchAlignmentMap) forKey:@"Map"];
+    [iconPitchAlignment setObject:@(MGLIconPitchAlignmentViewport) forKey:@"Viewport"];
     
     NSMutableDictionary *symbolPlacement = [[NSMutableDictionary alloc] init];
     [symbolPlacement setObject:@(MGLSymbolPlacementLine) forKey:@"Line"];
@@ -193,11 +213,14 @@ RCT_EXPORT_MODULE();
          @"LineTranslateAnchor": lineTranslateAnchor,
          @"CirclePitchScale": circlePitchScale,
          @"CircleTranslateAnchor": circleTranslateAnchor,
+         @"CirclePitchAlignment": circlePitchAlignment,
          @"FillExtrusionTranslateAnchor": fillExtrusionTranslateAnchor,
          @"FillTranslateAnchor": fillTranslateAnchor,
          @"IconRotationAlignment": iconRotationAlignment,
          @"IconTextFit": iconTextFit,
          @"IconTranslateAnchor": iconTranslateAnchor,
+         @"IconAnchor": iconAnchor,
+         @"IconPitchAlignment": iconPitchAlignment,
          @"SymbolPlacement": symbolPlacement,
          @"TextAnchor": textAnchor,
          @"TextJustify": textJustify,
