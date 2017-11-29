@@ -75,6 +75,8 @@
 - (void)setIconPadding:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setIconKeepUpright:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setIconOffset:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setIconAnchor:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setIconPitchAlignment:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setTextPitchAlignment:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setTextRotationAlignment:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setTextField:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
@@ -134,6 +136,7 @@
 - (void)setCircleTranslateTransition:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setCircleTranslateAnchor:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setCirclePitchScale:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setCirclePitchAlignment:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setCircleStrokeWidth:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setCircleStrokeWidthTransition:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setCircleStrokeColor:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;

@@ -203,6 +203,10 @@
       [self setIconKeepUpright:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"iconOffset"]) {
       [self setIconOffset:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"iconAnchor"]) {
+      [self setIconAnchor:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"iconPitchAlignment"]) {
+      [self setIconPitchAlignment:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"textPitchAlignment"]) {
       [self setTextPitchAlignment:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"textRotationAlignment"]) {
@@ -342,6 +346,8 @@
       [self setCircleTranslateAnchor:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"circlePitchScale"]) {
       [self setCirclePitchScale:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"circlePitchAlignment"]) {
+      [self setCirclePitchAlignment:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"circleStrokeWidth"]) {
       [self setCircleStrokeWidth:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"circleStrokeWidthTransition"]) {
@@ -995,6 +1001,26 @@
     layer.iconOffset = styleValue.mglStyleValue;
 }
 
+- (void)setIconAnchor:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    NSArray<NSString*> *allowedFunctionTypes = @[@"camera", @"source", @"composite"];
+    if ([styleValue isFunction] && ![styleValue isFunctionTypeSupported:allowedFunctionTypes]) {
+        // TODO throw execpetion
+        return;
+    }
+    layer.iconAnchor = styleValue.mglStyleValue;
+}
+
+- (void)setIconPitchAlignment:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    NSArray<NSString*> *allowedFunctionTypes = @[@"camera"];
+    if ([styleValue isFunction] && ![styleValue isFunctionTypeSupported:allowedFunctionTypes]) {
+        // TODO throw execpetion
+        return;
+    }
+    layer.iconPitchAlignment = styleValue.mglStyleValue;
+}
+
 - (void)setTextPitchAlignment:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
     NSArray<NSString*> *allowedFunctionTypes = @[@"camera"];
@@ -1490,6 +1516,16 @@
         return;
     }
     layer.circleScaleAlignment = styleValue.mglStyleValue;
+}
+
+- (void)setCirclePitchAlignment:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    NSArray<NSString*> *allowedFunctionTypes = @[@"camera"];
+    if ([styleValue isFunction] && ![styleValue isFunctionTypeSupported:allowedFunctionTypes]) {
+        // TODO throw execpetion
+        return;
+    }
+    layer.circlePitchAlignment = styleValue.mglStyleValue;
 }
 
 - (void)setCircleStrokeWidth:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
