@@ -99,7 +99,14 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
     }
 
     public int getLayerCount () {
-        return mLayers.size();
+        int totalCount = 0;
+
+        if (mQueuedLayers != null) {
+            totalCount = mQueuedLayers.size();
+        }
+
+        totalCount += mLayers.size();
+        return totalCount;
     }
 
     @Override
