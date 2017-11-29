@@ -25,8 +25,9 @@
 | `circleBlur` | `number` | `none` | `none` | Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. |
 | `circleOpacity` | `number` | `none` | `none` | The opacity at which the circle will be drawn. |
 | `circleTranslate` | `array` | `none` | `none` | The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up, respectively. |
-| `circleTranslateAnchor` | `enum` | `circleTranslate` | `none` | Controls the translation reference point. |
+| `circleTranslateAnchor` | `enum` | `circleTranslate` | `none` | Controls the frame of reference for `circleTranslate`. |
 | `circlePitchScale` | `enum` | `none` | `none` | Controls the scaling behavior of the circle when the map is pitched. |
+| `circlePitchAlignment` | `enum` | `none` | `none` | Orientation of circle when map is pitched. |
 | `circleStrokeWidth` | `number` | `none` | `none` | The width of the circle's stroke. Strokes are placed outside of the `circleRadius`. |
 | `circleStrokeColor` | `color` | `none` | `none` | The stroke color of the circle. |
 | `circleStrokeOpacity` | `number` | `none` | `none` | The opacity of the circle's stroke. |

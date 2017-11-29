@@ -219,6 +219,12 @@ public class RCTMGLStyleFactory {
             case "iconOffset":
               RCTMGLStyleFactory.setIconOffset(layer, styleValue);
               break;
+            case "iconAnchor":
+              RCTMGLStyleFactory.setIconAnchor(layer, styleValue);
+              break;
+            case "iconPitchAlignment":
+              RCTMGLStyleFactory.setIconPitchAlignment(layer, styleValue);
+              break;
             case "textPitchAlignment":
               RCTMGLStyleFactory.setTextPitchAlignment(layer, styleValue);
               break;
@@ -409,6 +415,9 @@ public class RCTMGLStyleFactory {
               break;
             case "circlePitchScale":
               RCTMGLStyleFactory.setCirclePitchScale(layer, styleValue);
+              break;
+            case "circlePitchAlignment":
+              RCTMGLStyleFactory.setCirclePitchAlignment(layer, styleValue);
               break;
             case "circleStrokeWidth":
               RCTMGLStyleFactory.setCircleStrokeWidth(layer, styleValue);
@@ -1459,6 +1468,46 @@ public class RCTMGLStyleFactory {
       }
     }
 
+    public static void setIconAnchor(SymbolLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isFunction()) {
+        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
+            @Override
+            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
+                return styleValue.getString(VALUE_KEY);
+            }
+
+            @Override
+            protected PropertyValue<String> getStopValue(String value) {
+                return PropertyFactory.iconAnchor(value);
+            }
+        };
+
+        layer.setProperties(PropertyFactory.iconAnchor(styleValue.makeStyleFunction(parser)));
+      } else {
+        layer.setProperties(PropertyFactory.iconAnchor(styleValue.getString(VALUE_KEY)));
+      }
+    }
+
+    public static void setIconPitchAlignment(SymbolLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isFunction()) {
+        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
+            @Override
+            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
+                return styleValue.getString(VALUE_KEY);
+            }
+
+            @Override
+            protected PropertyValue<String> getStopValue(String value) {
+                return PropertyFactory.iconPitchAlignment(value);
+            }
+        };
+
+        layer.setProperties(PropertyFactory.iconPitchAlignment(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      } else {
+        layer.setProperties(PropertyFactory.iconPitchAlignment(styleValue.getString(VALUE_KEY)));
+      }
+    }
+
     public static void setTextPitchAlignment(SymbolLayer layer, RCTMGLStyleValue styleValue) {
       if (styleValue.isFunction()) {
         RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
@@ -2400,6 +2449,26 @@ public class RCTMGLStyleFactory {
         layer.setProperties(PropertyFactory.circlePitchScale(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
       } else {
         layer.setProperties(PropertyFactory.circlePitchScale(styleValue.getString(VALUE_KEY)));
+      }
+    }
+
+    public static void setCirclePitchAlignment(CircleLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isFunction()) {
+        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
+            @Override
+            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
+                return styleValue.getString(VALUE_KEY);
+            }
+
+            @Override
+            protected PropertyValue<String> getStopValue(String value) {
+                return PropertyFactory.circlePitchAlignment(value);
+            }
+        };
+
+        layer.setProperties(PropertyFactory.circlePitchAlignment(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      } else {
+        layer.setProperties(PropertyFactory.circlePitchAlignment(styleValue.getString(VALUE_KEY)));
       }
     }
 

@@ -14,15 +14,15 @@ if (!styleSpecJSON) {
 }
 
 const layers = [];
-const androidVersion = "5.1.3";
-const iosVersion = "3.6.1";
+const androidVersion = "5.2.0";
+const iosVersion = "3.7.0";
 
 const TMPL_PATH = path.join(__dirname, 'templates');
 const IOS_OUTPUT_PATH = path.join(__dirname, '..', 'example', 'node_modules', '@mapbox', 'react-native-mapbox-gl', 'ios', 'RCTMGL');
 const ANDROID_OUTPUT_PATH = path.join(__dirname, '..', 'example', 'node_modules', '@mapbox', 'react-native-mapbox-gl', 'android', 'rctmgl', 'src', 'main', 'java', 'com', 'mapbox', 'rctmgl', 'components', 'styles');
 const JS_OUTPUT_PATH = path.join(__dirname, '..', 'example', 'node_modules', '@mapbox', 'react-native-mapbox-gl', 'javascript', 'utils');
 
-Object.keys(styleSpecJSON.layer.type.values).forEach((layerName) => {
+getSupportedLayers(Object.keys(styleSpecJSON.layer.type.values)).forEach((layerName) => {
   layers.push({
     name: layerName,
     properties: getPropertiesForLayer(layerName),
@@ -63,7 +63,7 @@ function getPropertiesForLayer (layerName) {
     let prop = buildProperties(layoutAttributes, attrName);
 
     // overrides
-    if (['line-join', 'text-max-width', 'text-letter-spacing', 'text-anchor', 'text-justify'].includes(attrName)) {
+    if (['line-join', 'text-max-width', 'text-letter-spacing', 'text-anchor', 'text-justify', 'text-font'].includes(attrName)) {
       prop.allowedFunctionTypes = ['camera'];
     }
 
@@ -71,6 +71,22 @@ function getPropertiesForLayer (layerName) {
   });
 
   return layoutProps.concat(paintProps);
+}
+
+function getSupportedLayers (layerNames) {
+  const layerMap = styleSpecJSON.layer.type.values;
+
+  const supportedLayers = [];
+  for (let layerName of layerNames) {
+    const layer = layerMap[layerName];
+    const support = getAttributeSupport(layer['sdk-support']);
+
+    if (support.basic.android && support.basic.ios) {
+      supportedLayers.push(layerName);
+    }
+  }
+
+  return supportedLayers;
 }
 
 function getSupportedProperties (attributes) {
