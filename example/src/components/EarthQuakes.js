@@ -14,9 +14,11 @@ const layerStyles = MapboxGL.StyleSheet.create({
     circleStrokeWidth: 2,
     circleStrokeColor: 'white',
     circleRadius: 5,
+    circlePitchAlignment: MapboxGL.CirclePitchAlignment.Map,
   },
 
   clusteredPoints: {
+    circlePitchAlignment: MapboxGL.CirclePitchAlignment.Map,
     circleColor: MapboxGL.StyleSheet.source({
       25: 'yellow',
       50: 'red',
@@ -40,6 +42,7 @@ const layerStyles = MapboxGL.StyleSheet.create({
   clusterCount: {
     textField: '{point_count}',
     textSize: 12,
+    textPitchAlignment: MapboxGL.TextPitchAlignment.Map,
   },
 });
 
@@ -53,6 +56,7 @@ class EarthQuakes extends React.Component {
       <Page {...this.props}>
         <MapboxGL.MapView
             zoomLevel={6}
+            pitch={45}
             centerCoordinate={SF_OFFICE_COORDINATE}
             style={sheet.matchParent}
             styleURL={MapboxGL.StyleURL.Dark}>
