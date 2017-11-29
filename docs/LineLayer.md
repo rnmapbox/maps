@@ -27,7 +27,7 @@
 | `lineOpacity` | `number` | `none` | `none` | The opacity at which the line will be drawn. |
 | `lineColor` | `color` | `none` | `linePattern` | The color with which the line will be drawn. |
 | `lineTranslate` | `array` | `none` | `none` | The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up, respectively. |
-| `lineTranslateAnchor` | `enum` | `lineTranslate` | `none` | Controls the translation reference point. |
+| `lineTranslateAnchor` | `enum` | `lineTranslate` | `none` | Controls the frame of reference for `lineTranslate`. |
 | `lineWidth` | `number` | `none` | `none` | Stroke thickness. |
 | `lineGapWidth` | `number` | `none` | `none` | Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap. |
 | `lineOffset` | `number` | `none` | `none` | The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset. |

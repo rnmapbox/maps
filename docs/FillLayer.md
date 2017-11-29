@@ -25,5 +25,5 @@
 | `fillColor` | `color` | `none` | `fillPattern` | The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used. |
 | `fillOutlineColor` | `color` | `none` | `fillPattern` | The outline color of the fill. Matches the value of `fillColor` if unspecified. |
 | `fillTranslate` | `array` | `none` | `none` | The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up, respectively. |
-| `fillTranslateAnchor` | `enum` | `fillTranslate` | `none` | Controls the translation reference point. |
+| `fillTranslateAnchor` | `enum` | `fillTranslate` | `none` | Controls the frame of reference for `fillTranslate`. |
 | `fillPattern` | `string` | `none` | `none` | Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). |
