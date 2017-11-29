@@ -635,7 +635,7 @@
         "required": false,
         "type": "union",
         "default": "none",
-        "description": "An HTTP(S) URL, absolute file URL, or local file URL to the source image."
+        "description": "An HTTP(S) URL, absolute file URL, or local file URL to the source image.\nGifs are currently not supported."
       },
       {
         "name": "coordinates",

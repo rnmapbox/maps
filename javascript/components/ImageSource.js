@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { requireNativeComponent } from 'react-native';
 import { cloneReactChildrenWithProps, viewPropTypes, isNumber, resolveImagePath } from '../utils';
-
-const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLImageSource';
 
@@ -22,6 +20,7 @@ class ImageSource extends React.PureComponent {
 
     /**
      * An HTTP(S) URL, absolute file URL, or local file URL to the source image.
+     * Gifs are currently not supported.
      */
     url: PropTypes.oneOfType([
       PropTypes.number,
