@@ -5,12 +5,56 @@ import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
 
 import sheet from '../styles/sheet';
-import radarGIF from '../assets/radar.png';
+
+import radar0 from '../assets/radar.png';
+import radar1 from '../assets/radar1.png';
+import radar2 from '../assets/radar2.png';
+
+const frames = [
+  radar0,
+  radar1,
+  radar2,
+];
 
 class ImageOverlay extends React.Component {
   static propTypes = {
     ...BaseExamplePropTypes,
   };
+
+  constructor (props) {
+    super(props);
+
+    this.state = {
+      radarFrameIndex: 0,
+    };
+
+    this._timeout = null;
+  }
+
+  componentDidMount () {
+    this.heartbeat();
+  }
+
+  heartbeat () {
+    this._timeout = setTimeout(() => {
+      requestAnimationFrame(() => {
+        let nextFrame = this.state.radarFrameIndex + 1;
+
+        if (nextFrame > 2) {
+          nextFrame = 0;
+        }
+
+        this.setState({ radarFrameIndex: nextFrame });
+        this.heartbeat();
+      });
+    }, 500);
+  }
+
+  componentWillUnmount () {
+    if (this._timeout) {
+      clearTimeout(this._timeout);
+    }
+  }
 
   render () {
     const coordQuad = [
@@ -29,9 +73,9 @@ class ImageOverlay extends React.Component {
             style={sheet.matchParent}
             styleURL={MapboxGL.StyleURL.Dark}>
 
-            <MapboxGL.ImageSource id='radarSource' coordinates={coordQuad} url={radarGIF}>
-              <MapboxGL.RasterLayer id='radarLayer' style={{ rasterOpacity: 1.0 }}/>
-            </MapboxGL.ImageSource>
+            <MapboxGL.Animated.ImageSource key='d' id='radarSource' coordinates={coordQuad} url={frames[this.state.radarFrameIndex]}>
+              <MapboxGL.RasterLayer id='radarLayer' />
+            </MapboxGL.Animated.ImageSource>
 
         </MapboxGL.MapView>
       </Page>
