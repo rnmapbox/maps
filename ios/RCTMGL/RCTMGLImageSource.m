@@ -11,6 +11,16 @@
 
 @implementation RCTMGLImageSource
 
+- (void)setUrl:(NSString *)url
+{
+    _url = url;
+    
+    if (self.source != nil) {
+        MGLImageSource *source = (MGLImageSource *)self.source;
+        source.URL = [NSURL URLWithString:_url];
+    }
+}
+
 - (MGLSource *)makeSource
 {
     return [[MGLImageSource alloc] initWithIdentifier:self.id
