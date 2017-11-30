@@ -33,6 +33,32 @@ import java.util.Map;
 public class ConvertUtils {
     public static final String LOG_TAG = ConvertUtils.class.getSimpleName();
 
+    public static WritableArray toWritableArray(JsonArray array) {
+        WritableArray writableArray = Arguments.createArray();
+
+        for (int i = 0; i < array.size(); i++) {
+            JsonElement element = array.get(i);
+
+            if (element.isJsonArray()) {
+                writableArray.pushArray(toWritableArray(element.getAsJsonArray()));
+            } else if (element.isJsonObject()) {
+                writableArray.pushMap(toWritableMap(element.getAsJsonObject()));
+            } else if (element.isJsonPrimitive()) {
+                JsonPrimitive primitive = element.getAsJsonPrimitive();
+
+                if (primitive.isBoolean()) {
+                    writableArray.pushBoolean(primitive.getAsBoolean());
+                } else if (primitive.isNumber()) {
+                    writableArray.pushDouble(primitive.getAsDouble());
+                } else {
+                    writableArray.pushString(primitive.getAsString());
+                }
+            }
+        }
+
+        return writableArray;
+    }
+
     public static WritableMap toWritableMap(JsonObject object) {
         WritableMap map = Arguments.createMap();
 
@@ -51,14 +77,7 @@ public class ConvertUtils {
                     map.putString(propName, primitive.getAsString());
                 }
             } else if (jsonElement.isJsonArray()) {
-                JsonArray jsonArray = jsonElement.getAsJsonArray();
-
-                Object[] array = new Object[jsonArray.size()];
-                for (int i = 0; i < jsonArray.size(); i++) {
-                    array[i] = toWritableMap(jsonArray.get(i).getAsJsonObject());
-                }
-
-                map.putArray(propName, Arguments.fromArray(array));
+                map.putArray(propName, toWritableArray(jsonElement.getAsJsonArray()));
             } else if (jsonElement.isJsonObject()) {
                 map.putMap(propName, toWritableMap(jsonElement.getAsJsonObject()));
             }
