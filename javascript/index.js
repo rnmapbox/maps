@@ -13,6 +13,7 @@ import Callout from './components/Callout';
 import VectorSource from './components/VectorSource';
 import ShapeSource from './components/ShapeSource';
 import RasterSource from './components/RasterSource';
+import ImageSource from './components/ImageSource';
 
 // layers
 import FillLayer from './components/FillLayer';
@@ -64,6 +65,7 @@ MapboxGL.Callout = Callout;
 MapboxGL.VectorSource = VectorSource;
 MapboxGL.ShapeSource = ShapeSource;
 MapboxGL.RasterSource = RasterSource;
+MapboxGL.ImageSource = ImageSource;
 
 // layers
 MapboxGL.FillLayer = FillLayer;
@@ -84,6 +86,7 @@ MapboxGL.geoUtils = geoUtils;
 MapboxGL.Animated = {
   // sources
   ShapeSource: Animated.createAnimatedComponent(ShapeSource),
+  ImageSource: Animated.createAnimatedComponent(ImageSource),
 
   // layers
   FillLayer: Animated.createAnimatedComponent(FillLayer),

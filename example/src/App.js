@@ -46,6 +46,7 @@ import CustomVectorSource from './components/CustomVectorSource';
 import ShowPointAnnotation from './components/ShowPointAnnotation';
 import CreateOfflineRegion from './components/CreateOfflineRegion';
 import DriveTheLine from './components/DriveTheLine';
+import ImageOverlay from './components/ImageOverlay';
 
 const styles = StyleSheet.create({
   noPermissionsText: {
@@ -110,6 +111,7 @@ const Examples = [
   new ExampleItem('Show Point Annotation', ShowPointAnnotation),
   new ExampleItem('Create Offline Region', CreateOfflineRegion),
   new ExampleItem('Animation Along a Line', DriveTheLine),
+  new ExampleItem('Image Overlay', ImageOverlay),
 ];
 
 class App extends React.Component {

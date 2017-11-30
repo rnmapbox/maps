@@ -27,6 +27,7 @@ describe('Public Interface', () => {
       'VectorSource',
       'ShapeSource',
       'RasterSource',
+      'ImageSource',
 
       // constants
       'UserTrackingModes',

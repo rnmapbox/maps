@@ -1,12 +1,14 @@
 package com.mapbox.rctmgl.utils;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+import com.mapbox.mapboxsdk.geometry.LatLngQuad;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Geometry;
@@ -140,6 +142,13 @@ public class GeoJSONUtils {
         return new LatLng(position.getLatitude(), position.getLongitude());
     }
 
+    public static LatLng toLatLng(ReadableArray coordinates) {
+        if (coordinates == null || coordinates.size() < 2) {
+            return null;
+        }
+        return new LatLng(coordinates.getDouble(1), coordinates.getDouble(0));
+    }
+
     public static Point toPointGeometry(String featureJSONString) {
         Feature feature = Feature.fromJson(featureJSONString);
         if (feature == null) {
@@ -171,5 +180,18 @@ public class GeoJSONUtils {
 
         return LatLngBounds.from(neLatLng.getLatitude(), neLatLng.getLongitude(),
                 swLatLng.getLatitude(), swLatLng.getLongitude());
+    }
+
+    public static LatLngQuad toLatLngQuad(ReadableArray array) {
+        // [top left, top right, bottom right, bottom left]
+        if (array == null || array.size() < 4) {
+            return null;
+        }
+        return new LatLngQuad(
+                toLatLng(array.getArray(0)),
+                toLatLng(array.getArray(1)),
+                toLatLng(array.getArray(2)),
+                toLatLng(array.getArray(3))
+        );
     }
 }

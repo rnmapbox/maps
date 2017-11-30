@@ -8,6 +8,8 @@ import {
   Platform,
 } from 'react-native';
 
+import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
+
 export const viewPropTypes = ViewPropTypes || View.props;
 export const IS_ANDROID = Platform.OS === 'android';
 
@@ -68,6 +70,11 @@ export function cloneReactChildrenWithProps (children, propsToAdd = {}) {
 
   const filteredChildren = children.filter((child) => !!child); // filter out falsy children, since some can be null
   return React.Children.map(filteredChildren, (child) => React.cloneElement(child, propsToAdd));
+}
+
+export function resolveImagePath (imageRef) {
+  const res = resolveAssetSource(imageRef);
+  return res.uri;
 }
 
 export function getIOSModuleName (moduleName) {

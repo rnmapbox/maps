@@ -32,7 +32,7 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
     protected MapboxMap mMap;
 
     protected String mID;
-    protected Source mSource;
+    protected T mSource;
     protected boolean mHasPressListener;
     protected Map<String, Double> mTouchHitbox;
 
@@ -79,7 +79,7 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
         mID = id;
     }
 
-    public void setSource(Source source) {
+    public void setSource(T source) {
         mSource = source;
     }
 
@@ -114,7 +114,7 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
         mMapView = mapView;
         mMap = mapView.getMapboxMap();
 
-        Source existingSource = mMap.getSource(mID);
+        T existingSource = mMap.<T>getSourceAs(mID);
         if (existingSource != null) {
             mSource = existingSource;
         } else {
