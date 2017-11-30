@@ -31,7 +31,7 @@ class FitBounds extends React.Component {
   }
 
   onFitBounds (i, bounds) {
-    this.map.fitBounds(bounds[0], bounds[1], 0, 2000); // ne sw
+    this.map.fitBounds(bounds[0], bounds[1], 0, 200); // ne sw
   }
 
   render () {

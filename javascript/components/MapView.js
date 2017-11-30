@@ -321,7 +321,7 @@ class MapView extends React.Component {
    * @param {Number=} duration - Duration of camera animation
    * @return {void}
    */
-  fitBounds (northEastCoordinates, southWestCoordinates, padding = 0, duration = 2000) {
+  fitBounds (northEastCoordinates, southWestCoordinates, padding = 0, duration = 0.0) {
     if (!this._nativeRef) {
       return;
     }
@@ -359,7 +359,7 @@ class MapView extends React.Component {
         ...pad,
       },
       duration: duration,
-      mode: MapboxGL.CameraModes.Flight,
+      mode: MapboxGL.CameraModes.None,
     });
   }
 
