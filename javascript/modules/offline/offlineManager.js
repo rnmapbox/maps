@@ -61,6 +61,29 @@ class OfflineManager {
   }
 
   /**
+   * Retrieves the current status from a given pack that are stored in the database.
+   *
+   * @example
+   * const status = await MapboxGL.offlineManager.getStatus('packName');
+   *
+   * @param  {String}  name  Name of the offline pack.
+   * @return {Object} status Status object
+   */
+  async getPackStatus (name) {
+    if (!name) {
+      return;
+    }
+
+    await this._initialize();
+    const offlinePack = this._offlinePacks[name];
+    
+    if (offlinePack) {
+      const status = await MapboxGLOfflineManager.getPackStatus(name);
+      return status;
+    }
+  }
+
+  /**
    * Unregisters the given offline pack and allows resources that are no longer required by any remaining packs to be potentially freed.
    *
    * @example

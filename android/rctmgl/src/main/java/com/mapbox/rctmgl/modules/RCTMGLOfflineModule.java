@@ -126,6 +126,49 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void getPackStatus(final String name, final Promise promise) {
+        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
+
+        offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
+            @Override
+            public void onList(OfflineRegion[] offlineRegions) {
+                OfflineRegion region = getRegionByName(name, offlineRegions);
+
+                if (region == null) {
+                    promise.resolve(null);
+                    Log.w(REACT_CLASS, "getPackStatus - Unknown offline region");
+                    return;
+                }
+
+                region.getStatus(new OfflineRegion.OfflineRegionStatusCallback() {
+                    @Override
+                    public void onStatus(OfflineRegionStatus status) {
+                        final WritableMap map = Arguments.createMap();
+                        map.putInt("downloadState", status.getDownloadState());
+                        map.putInt("completedResourceCount", (int)status.getCompletedResourceCount());
+                        map.putInt("completedResourceSize", (int)status.getCompletedResourceSize());
+                        map.putInt("completedTileSize", (int)status.getCompletedTileSize());
+                        map.putInt("completedTileCount", (int)status.getCompletedTileCount());
+                        map.putInt("requiredResourceCount", (int)status.getRequiredResourceCount());
+                        Log.d(REACT_CLASS, String.format("getPackStatus %s", map));
+                        promise.resolve(map);
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        promise.reject("getPackStatus", error);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+                promise.reject("getPackStatus", error);
+            }
+        });
+    }
+
+    @ReactMethod
     public void deletePack(final String name, final Promise promise) {
         final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
 
