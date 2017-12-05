@@ -150,7 +150,6 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
                         map.putInt("completedTileSize", (int)status.getCompletedTileSize());
                         map.putInt("completedTileCount", (int)status.getCompletedTileCount());
                         map.putInt("requiredResourceCount", (int)status.getRequiredResourceCount());
-                        Log.d(REACT_CLASS, String.format("getPackStatus %s", map));
                         promise.resolve(map);
                     }
 
