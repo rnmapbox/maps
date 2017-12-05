@@ -53,6 +53,18 @@ describe('offlineManager', () => {
     expect(offlinePack).toBeTruthy();
   });
 
+  it('should get pack status', async () => {
+    await MapboxGL.offlineManager.createPack(packOptions);
+    let offlinePack = await MapboxGL.offlineManager.getPack(packOptions.name);
+    expect(offlinePack).toBeTruthy();    
+    
+    let status = await MapboxGL.offlineManager.getPackStatus(packOptions.name);
+    expect(status).toBeTruthy();
+
+    status = await MapboxGL.offlineManager.getPackStatus('xyz');
+    expect(status).toBeFalsy();
+  });  
+
   it('should delete pack', async () => {
     await MapboxGL.offlineManager.createPack(packOptions);
     let offlinePack = await MapboxGL.offlineManager.getPack(packOptions.name);
