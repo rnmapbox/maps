@@ -2,6 +2,7 @@ import { isUndefined, isPrimitive } from './index';
 import { processColor, NativeModules } from 'react-native';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import styleMap, { StyleTypes, StyleFunctionTypes, styleExtras } from './styleMap';
+import BridgeValue from './BridgeValue';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -12,11 +13,17 @@ class MapStyleItem {
   }
 
   toJSON (shouldMarkAsStyle) {
-    return {
-      type: this.type,
+    const json = {
+      styletype: this.type,
       payload: this.payload,
-      __MAPBOX_STYLE__: shouldMarkAsStyle ? true : undefined,
+      __MAPBOX_STYLE__: true,
     };
+
+    if (!shouldMarkAsStyle) {
+      delete json.__MAPBOX_STYLE__;
+    }
+
+    return json;
   }
 }
 
@@ -58,22 +65,30 @@ class MapStyleFunctionItem extends MapStyleItem {
     super(StyleTypes.Function, {
       fn: fn,
       mode: mode,
-      stops: payload.stops || {},
+      stops: [],
       attributeName: payload.attributeName,
     });
+
+    this._rawStops = payload.stops;
   }
 
   processStops (prop) {
-    let stops = {};
+    let stops = [];
 
-    const stopKeys = Object.keys(this.payload.stops);
-    for (let stopKey of stopKeys) {
-      const stopValue = this.payload.stops[stopKey];
+    const isComposite = this.payload.fn === 'composite';
+    for (let rawStop of this._rawStops) {
+      const [stopKey, stopValue] = rawStop;
 
-      if (Array.isArray(stopValue)) {
-        stops[stopKey] = makeStyleValue(prop, stopValue[1], { propertyValue: stopValue[0] }, false);
+      if (isComposite) {
+        stops.push([
+          stopKey,
+          makeStyleValue(prop, stopValue[1], { propertyValue: stopValue[0] }, false),
+        ]);
       } else {
-        stops[stopKey] = makeStyleValue(prop, stopValue, null, false);
+        stops.push([
+          stopKey,
+          makeStyleValue(prop, stopValue, null, false),
+        ]);
       }
     }
 
@@ -147,26 +162,74 @@ class MapboxStyleSheet {
   }
 
   static camera (stops, mode) {
+    const stopNativeArray = [];
+    const cameraZoomLevels = Object.keys(stops);
+
+    for (let cameraZoomLevel of cameraZoomLevels) {
+      const keyBridgeValue = new BridgeValue(cameraZoomLevel|0);
+
+      stopNativeArray.push([
+        keyBridgeValue.toJSON(),
+        stops[cameraZoomLevel],
+      ]);
+    }
+
     return new MapStyleFunctionItem(
       StyleFunctionTypes.Camera,
       mode: mode,
-      { stops: stops },
+      { stops: stopNativeArray },
     );
   }
 
   static source (stops, attributeName, mode) {
+    const stopNativeArray = [];
+
+    if (Array.isArray(stops)) {
+      for (let stop of stops) {
+        const keyBridgeValue = new BridgeValue(stop[0]);
+
+        stopNativeArray.push([
+          keyBridgeValue.toJSON(),
+          stop[1],
+        ]);
+      }
+    } else if (stops) {
+      const stopKeys = Object.keys(stops);
+      for (let stopKey of stopKeys) {
+        const keyBridgeValue = new BridgeValue(stopKey);
+
+        stopNativeArray.push([
+          keyBridgeValue.toJSON(),
+          stops[stopKey],
+        ]);
+      }
+    }
+
     return new MapStyleFunctionItem(
       StyleFunctionTypes.Source,
       mode: mode,
-      { stops: stops, attributeName: attributeName },
+      { stops: stopNativeArray, attributeName: attributeName },
     );
   }
 
   static composite (stops, attributeName, mode) {
+    const stopNativeArray = [];
+    const cameraZoomLevels = Object.keys(stops);
+
+    for (let cameraZoomLevel of cameraZoomLevels) {
+      const [propName, styleValue] = stops[cameraZoomLevel];
+      const keyBridgeValue = new BridgeValue(cameraZoomLevel|0);
+
+      stopNativeArray.push([
+        keyBridgeValue.toJSON(),
+        [propName, new BridgeValue(styleValue)],
+      ]);
+    }
+
     return new MapStyleFunctionItem(
       StyleFunctionTypes.Composite,
       mode: mode,
-      { stops: stops, attributeName: attributeName },
+      { stops: stopNativeArray, attributeName: attributeName },
     );
   }
 

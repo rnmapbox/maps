@@ -7,7 +7,7 @@ describe('MapboxStyleSheet', () => {
   it('should create constant item', () => {
     verifyStyleSheetsMatch({ fillOpacity: 0.84 }, {
       fillOpacity: {
-        type: 'constant',
+        styletype: 'constant',
         payload: { value: 0.84 },
         __MAPBOX_STYLE__: true,
       },
@@ -17,7 +17,7 @@ describe('MapboxStyleSheet', () => {
   it('should create transition item', () => {
     verifyStyleSheetsMatch({ fillColorTransition: { delay: 10, duration: 200 } }, {
       fillColorTransition: {
-        type: 'transition',
+        styletype: 'transition',
         payload: {
           value: {
             duration: 200,
@@ -32,7 +32,7 @@ describe('MapboxStyleSheet', () => {
   it('should create image item', () => {
     verifyStyleSheetsMatch({ fillPattern: 'test' }, {
       fillPattern: {
-        type: 'constant',
+        styletype: 'constant',
         payload: { value: 'test', image: true },
         __MAPBOX_STYLE__: true,
       },
@@ -42,8 +42,8 @@ describe('MapboxStyleSheet', () => {
   it('should create asset image item for when we require images directly in JS', () => {
     verifyStyleSheetsMatch({ fillPattern: 123 }, {
       fillPattern: {
-        type: 'constant',
-        payload: { value: 'asset://test.png', image: true },
+        styletype: 'constant',
+        payload: { value: 'asset://test.png' , image: true },
         __MAPBOX_STYLE__: true,
       },
     });
@@ -52,7 +52,7 @@ describe('MapboxStyleSheet', () => {
   it('should create translate item', () => {
     verifyStyleSheetsMatch({ fillTranslate: { x: 1, y: 2 } }, {
       fillTranslate: {
-        type: 'translation',
+        styletype: 'translation',
         payload: { value: [1, 2] },
         __MAPBOX_STYLE__: true,
       },
@@ -66,13 +66,20 @@ describe('MapboxStyleSheet', () => {
     verifyStyleSheetsMatch({ fillColor: styleFunction }, {
       fillColor: {
         __MAPBOX_STYLE__: true,
-        type: 'function',
+        styletype: 'function',
         payload: {
           fn: 'camera',
-          stops: {
-            1: { type: 'color', payload: { value: BLUE_INT } },
-            2: { type: 'color', payload: { value: GREEN_INT } },
-          },
+          attributeName: undefined,
+          stops: [
+            [
+              { type: 'number', value: 1 },
+              { styletype: 'color', payload: { value: BLUE_INT } },
+            ],
+            [
+              { type: 'number', value: 2 },
+              { styletype: 'color', payload: { value: GREEN_INT } },
+            ],
+          ],
           mode: 'mode',
         },
       },
@@ -90,40 +97,85 @@ describe('MapboxStyleSheet', () => {
     verifyStyleSheetsMatch({ fillColor: styleFunction }, {
       fillColor: {
         __MAPBOX_STYLE__: true,
-        type: 'function',
+        styletype: 'function',
         payload: {
           fn: 'composite',
           mode: 'mode',
           attributeName: 'rating',
-          stops: {
-            1: { type: 'color', payload: { value: BLUE_INT, propertyValue: 0 } },
-            16: { type: 'color', payload: { value: GREEN_INT, propertyValue: 3 } },
-            20: { type: 'color', payload: { value: BLUE_INT, propertyValue: 5 } },
-          },
+          stops: [
+            [
+              { type: 'number', value: 1 },
+              { styletype: 'color', payload: { value: BLUE_INT, propertyValue: 0 } },
+            ],
+            [
+              { type: 'number', value: 16 },
+              { styletype: 'color', payload: { value: GREEN_INT, propertyValue: 3 } },
+            ],
+            [
+              { type: 'number', value: 20 },
+              { styletype: 'color', payload: { value: BLUE_INT, propertyValue: 5 } },
+            ],
+          ],
         }, // payload
       }, // fillPattern
     });
 
   });
 
-  it('should create source function', () => {
+  it('should create source object function', () => {
     const stops = { bergan: 'blue', hudson: 'green' };
     const styleFunction = MapboxGL.StyleSheet.source(stops, 'county', 'mode');
 
     verifyStyleSheetsMatch({ fillColor: styleFunction }, {
       fillColor: {
         __MAPBOX_STYLE__: true,
-        type: 'function',
+        styletype: 'function',
         payload: {
           fn: 'source',
           mode: 'mode',
           attributeName: 'county',
-          stops: {
-            bergan: { type: 'color', payload: { value: BLUE_INT } },
-            hudson: { type: 'color', payload: { value: GREEN_INT } },
-          },
+          stops: [
+            [
+              { type: 'string', value: 'bergan' },
+              { styletype: 'color', payload: { value: BLUE_INT } },
+            ],
+            [
+              { type: 'string', value: 'hudson' },
+              { styletype: 'color', payload: { value: GREEN_INT } },
+            ],
+          ],
         }, // payload
       }, // fillColor
+    });
+  });
+
+  it('should create source array function', () => {
+    const stops = [
+      ['bergan', 'blue'],
+      ['hudson', 'green'],
+    ];
+    const styleFunction = MapboxGL.StyleSheet.source(stops, 'county', 'mode');
+
+    verifyStyleSheetsMatch({ fillColor: styleFunction }, {
+      fillColor: {
+        __MAPBOX_STYLE__: true,
+        styletype: 'function',
+        payload: {
+          fn: 'source',
+          mode: 'mode',
+          attributeName: 'county',
+          stops: [
+            [
+              { type: 'string', value: 'bergan' },
+              { styletype: 'color', payload: { value: BLUE_INT } },
+            ],
+            [
+              { type: 'string', value: 'hudson' },
+              { styletype: 'color', payload: { value: GREEN_INT } },
+            ],
+          ],
+        },
+      },
     });
   });
 
@@ -134,31 +186,36 @@ describe('MapboxStyleSheet', () => {
     };
 
     verifyStyleSheetsMatch(styles, {
-      fillOpacity: { type: 'constant', payload: { value: 0.84 }, __MAPBOX_STYLE__: true },
-      fillPattern: { type: 'constant', payload: { value: 'test', image: true }, __MAPBOX_STYLE__: true },
+      fillOpacity: { styletype: 'constant', payload: { value: 0.84 }, __MAPBOX_STYLE__: true },
+      fillPattern: { styletype: 'constant', payload: { value: 'test', image: true }, __MAPBOX_STYLE__: true },
     });
   });
 
   it('should create stylesheet with a mix of stlye functions and constants', () => {
     const styles = {
-      fillColor: MapboxGL.StyleSheet.source({ bergan: 'blue' }, 'county', 'mode'),
+      fillColor: MapboxGL.StyleSheet.source([
+        ['bergan', 'blue'],
+      ], 'county', 'mode'),
       fillOpacity: 0.84,
     };
 
     verifyStyleSheetsMatch(styles, {
       fillColor: {
         __MAPBOX_STYLE__: true,
-        type: 'function',
+        styletype: 'function',
         payload: {
           fn: 'source',
           mode: 'mode',
           attributeName: 'county',
-          stops: {
-            bergan: { type: 'color', payload: { value: BLUE_INT } },
-          },
+          stops: [
+            [
+              { type: 'string', value: 'bergan' },
+              { styletype: 'color', payload: { value: BLUE_INT } },
+            ],
+          ],
         },
       },
-      fillOpacity: { type: 'constant', payload: { value: 0.84 }, __MAPBOX_STYLE__: true },
+      fillOpacity: { styletype: 'constant', payload: { value: 0.84 }, __MAPBOX_STYLE__: true },
     });
 
   });
@@ -177,12 +234,12 @@ describe('MapboxStyleSheet', () => {
 
     verifyStyleSheetsMatch(styles, {
       water: {
-        fillColor: { type: 'color', payload: { value: GREEN_INT }, __MAPBOX_STYLE__: true },
-        fillOpacity: { type: 'constant', payload: { value: 0.40 }, __MAPBOX_STYLE__: true },
+        fillColor: { styletype: 'color', payload: { value: GREEN_INT }, __MAPBOX_STYLE__: true },
+        fillOpacity: { styletype: 'constant', payload: { value: 0.40 }, __MAPBOX_STYLE__: true },
       },
       building: {
-        fillColor: { type: 'color', payload: { value: BLUE_INT }, __MAPBOX_STYLE__: true },
-        fillOpacity: { type: 'constant', payload: { value: 0.84 }, __MAPBOX_STYLE__: true },
+        fillColor: { styletype: 'color', payload: { value: BLUE_INT }, __MAPBOX_STYLE__: true },
+        fillOpacity: { styletype: 'constant', payload: { value: 0.84 }, __MAPBOX_STYLE__: true },
       },
     });
   });
@@ -215,10 +272,10 @@ describe('MapboxStyleSheet', () => {
     expect(MapboxGL.StyleSheet.create({ fillExtrusionHeight: MapboxGL.StyleSheet.identity('height') } )).toEqual({
       fillExtrusionHeight: {
         __MAPBOX_STYLE__: true,
-        type: 'function',
+        styletype: 'function',
         payload: {
           fn: 'source',
-          stops: {},
+          stops: [],
           attributeName: 'height',
           mode: MapboxGL.InterpolationMode.Identity,
         },
@@ -230,7 +287,7 @@ describe('MapboxStyleSheet', () => {
     expect(MapboxGL.StyleSheet.create({ textOffset: [2, 2] } )).toEqual({
       textOffset: {
         __MAPBOX_STYLE__: true,
-        type: 'constant',
+        styletype: 'constant',
         payload: {
           value: [2, 2],
           iosType: 'vector',
@@ -241,7 +298,7 @@ describe('MapboxStyleSheet', () => {
     expect(MapboxGL.StyleSheet.create({ iconOffset: [2, 2] } )).toEqual({
       iconOffset: {
         __MAPBOX_STYLE__: true,
-        type: 'constant',
+        styletype: 'constant',
         payload: {
           value: [2, 2],
           iosType: 'vector',

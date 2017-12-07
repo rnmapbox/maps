@@ -20,18 +20,18 @@ export const StyleFunctionTypes = {
 };
 
 export const ConstantPropType = PropTypes.shape({
-  type: PropTypes.string.isRequired,
+  styletype: PropTypes.string.isRequired,
   payload: PropTypes.shape({
     value: PropTypes.any.isRequired,
   }).isRequired,
 });
 
 export const StyleFunctionPropType = PropTypes.shape({
-  type: PropTypes.string.isRequired,
+  styletype: PropTypes.string.isRequired,
   payload: PropTypes.shape({
     fn: PropTypes.string,
     attributeName: PropTypes.string,
-    stops: PropTypes.object,
+    stops: PropTypes.array,
     mode: PropTypes.any,
   }).isRequired,
 });
