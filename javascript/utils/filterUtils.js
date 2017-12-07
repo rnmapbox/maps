@@ -1,4 +1,4 @@
-import { isBoolean, isNumber, isString } from './index';
+import BridgeValue from './BridgeValue';
 
 export function getFilter (filter) {
   if (!Array.isArray(filter) || filter.length == 0) {
@@ -18,34 +18,9 @@ export function getFilter (filter) {
 
   let filterItems = [];
   for (let item of flattenedFilter) {
-    const filterItem = new FilterItem(item);
+    const filterItem = new BridgeValue(item);
     filterItems.push(filterItem.toJSON());
   }
 
   return filterItems;
-}
-
-export class FilterItem {
-  constructor (value) {
-    this.value = value;
-  }
-
-  getType () {
-    if (isBoolean(this.value)) {
-      return 'boolean';
-    } else if (isNumber(this.value)) {
-      return 'number';
-    } else if (isString(this.value)) {
-      return 'string';
-    } else {
-      throw new Error('FilterItem must be a primitive');
-    }
-  }
-
-  toJSON () {
-    return {
-      type: this.getType(),
-      value: this.value,
-    };
-  }
 }
