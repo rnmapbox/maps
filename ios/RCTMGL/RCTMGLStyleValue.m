@@ -154,6 +154,15 @@
     return [MGLStyleValue valueWithRawValue:[NSValue valueWithMGLSphericalPosition:pos]];
 }
 
+- (BOOL)isVisible
+{
+    id value = self.payload[@"value"];
+    if (![value isKindOfClass:[NSString class]]) {
+        return NO;
+    }
+    return [value isEqualToString:@"visible"];
+}
+
 - (id)_getStopKey:(NSDictionary *)jsStopKey
 {
     NSString *payloadKey = @"value";

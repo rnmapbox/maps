@@ -559,7 +559,7 @@
 
 - (void)setFillStyleLayerVisibility:(MGLFillStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
-    layer.visible = styleValue.mglStyleValue;
+    layer.visible = [styleValue isVisible];
 }
 
 - (void)setFillAntialias:(MGLFillStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
@@ -701,7 +701,7 @@
 
 - (void)setLineStyleLayerVisibility:(MGLLineStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
-    layer.visible = styleValue.mglStyleValue;
+    layer.visible = [styleValue isVisible];
 }
 
 - (void)setLineOpacity:(MGLLineStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
@@ -1213,7 +1213,7 @@
 
 - (void)setSymbolStyleLayerVisibility:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
-    layer.visible = styleValue.mglStyleValue;
+    layer.visible = [styleValue isVisible];
 }
 
 - (void)setIconOpacity:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
@@ -1420,7 +1420,7 @@
 
 - (void)setCircleStyleLayerVisibility:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
-    layer.visible = styleValue.mglStyleValue;
+    layer.visible = [styleValue isVisible];
 }
 
 - (void)setCircleRadius:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
@@ -1577,7 +1577,7 @@
 
 - (void)setFillExtrusionStyleLayerVisibility:(MGLFillExtrusionStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
-    layer.visible = styleValue.mglStyleValue;
+    layer.visible = [styleValue isVisible];
 }
 
 - (void)setFillExtrusionOpacity:(MGLFillExtrusionStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
@@ -1684,7 +1684,7 @@
 
 - (void)setRasterStyleLayerVisibility:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
-    layer.visible = styleValue.mglStyleValue;
+    layer.visible = [styleValue isVisible];
 }
 
 - (void)setRasterOpacity:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
@@ -1796,7 +1796,7 @@
 
 - (void)setBackgroundStyleLayerVisibility:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
-    layer.visible = styleValue.mglStyleValue;
+    layer.visible = [styleValue isVisible];
 }
 
 - (void)setBackgroundColor:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
