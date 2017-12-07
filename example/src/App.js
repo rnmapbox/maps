@@ -48,6 +48,7 @@ import CreateOfflineRegion from './components/CreateOfflineRegion';
 import DriveTheLine from './components/DriveTheLine';
 import ImageOverlay from './components/ImageOverlay';
 import DataDrivenCircleColors from './components/DataDrivenCircleColors';
+import ChoroplethLayerByZoomLevel from './components/ChoroplethLayerByZoomLevel';
 
 const styles = StyleSheet.create({
   noPermissionsText: {
@@ -114,6 +115,7 @@ const Examples = [
   new ExampleItem('Animation Along a Line', DriveTheLine),
   new ExampleItem('Image Overlay', ImageOverlay),
   new ExampleItem('Data Driven Circle Colors', DataDrivenCircleColors),
+  new ExampleItem('Choropleth Layer By Zoom Level', ChoroplethLayerByZoomLevel),
 ];
 
 class App extends React.Component {
