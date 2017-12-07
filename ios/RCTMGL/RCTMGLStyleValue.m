@@ -19,7 +19,7 @@
 - (void)setConfig:(NSDictionary *)config
 {
     _config = config;
-    type = (NSString*)config[@"type"];
+    type = (NSString*)config[@"styletype"];
     payload = (NSDictionary*)config[@"payload"];
 }
 
@@ -89,7 +89,7 @@
 - (MGLStyleValue*)makeStyleFunction
 {
     NSString *fnType = (NSString*)payload[@"fn"];
-    NSDictionary *rawStops = payload[@"stops"];
+    NSArray<NSArray<NSDictionary *> *> *rawStops = payload[@"stops"];
     NSNumber *mode = payload[@"mode"];
     NSString *attributeName = payload[@"attributeName"];
     
@@ -97,9 +97,11 @@
     if (rawStops.count > 0) {
         stops = [[NSMutableDictionary alloc] init];
         
-        for (id stopKey in rawStops.allKeys) {
-            RCTMGLStyleValue *rctStyleValue = [RCTMGLStyleValue make:rawStops[stopKey]];
-            stops[[self _getStopKey:stopKey]] = rctStyleValue.mglStyleValue;
+        for (NSArray *rawStop in rawStops) {
+            NSDictionary *jsStopKey = rawStop[0];
+            NSDictionary *jsStopValue = rawStop[1];
+            RCTMGLStyleValue *rctStyleValue = [RCTMGLStyleValue make:jsStopValue];
+            stops[[self _getStopKey:jsStopKey]] = rctStyleValue.mglStyleValue;
         }
     }
     
@@ -152,16 +154,18 @@
     return [MGLStyleValue valueWithRawValue:[NSValue valueWithMGLSphericalPosition:pos]];
 }
 
-- (id)_getStopKey:(id)key
+- (id)_getStopKey:(NSDictionary *)jsStopKey
 {
-    // Javascript does a toString on all keys in it's objects,
-    // so we have to attempt to parse any numbers sent down as keys
-    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-    NSNumber *numberKey = [numberFormatter numberFromString:key];
-    if (numberKey != nil) {
-        return numberKey;
+    NSString *payloadKey = @"value";
+    NSString *type = jsStopKey[@"type"];
+    
+    if ([type isEqualToString:@"number"]) {
+        return (NSNumber *)jsStopKey[payloadKey];
+    } else if ([type isEqualToString:@"boolean"]) {
+        return [NSNumber numberWithBool:jsStopKey[payloadKey]];
+    } else {
+        return (NSString *)jsStopKey[payloadKey];
     }
-    return key;
 }
 
 + (RCTMGLStyleValue*)make:(NSDictionary*)config;
