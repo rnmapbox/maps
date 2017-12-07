@@ -125,7 +125,11 @@ function makeStyleValue (prop, value, extras = {}, shouldMarkAsStyle = true) {
   } else if (styleMap[prop] === StyleTypes.Color) {
     item = new MapStyleColorItem(processColor(value), extraData);
   } else if (styleMap[prop] === StyleTypes.Translation) {
-    item = new MapStyleTranslationItem(value.x, value.y, extraData);
+    if (Array.isArray(value)) {
+      item = new MapStyleTranslationItem(value[0], value[1], extraData);
+    } else {
+      item = new MapStyleTranslationItem(value.x, value.y, extraData); // supports object based API
+    }
   } else if (styleMap[prop] === StyleTypes.Image) {
     item = new MapStyleConstantItem(resolveImage(value), { image: true, ...extraData });
   } else {

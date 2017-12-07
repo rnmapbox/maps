@@ -49,11 +49,21 @@ describe('MapboxStyleSheet', () => {
     });
   });
 
-  it('should create translate item', () => {
+  it('should create translate item from object', () => {
     verifyStyleSheetsMatch({ fillTranslate: { x: 1, y: 2 } }, {
       fillTranslate: {
         styletype: 'translation',
-        payload: { value: [1, 2] },
+        payload: { value: [1, 2], iosType: 'vector' },
+        __MAPBOX_STYLE__: true,
+      },
+    });
+  });
+
+  it('should create translate item from array', () => {
+    verifyStyleSheetsMatch({ fillTranslate: [1, 2] }, {
+      fillTranslate: {
+        styletype: 'translation',
+        payload: { value: [1, 2], iosType: 'vector' },
         __MAPBOX_STYLE__: true,
       },
     });
