@@ -44,10 +44,13 @@ export const TransitionPropType = PropTypes.shape({
   delay: PropTypes.number,
 });
 
-export const TranslationPropType = PropTypes.shape({
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-});
+export const TranslationPropType = PropTypes.oneOfType([
+  PropTypes.shape({
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired,
+  }),
+  PropTypes.arrayOf(PropTypes.number),
+]);
 
 <%_ for (let layer of layers) { _%>
 export const <%- pascelCase(layer.name) _%>LayerStyleProp = PropTypes.shape({
@@ -91,15 +94,36 @@ const styleMap = {
 };
 
 export const styleExtras = {
+  // offsets
   iconOffset: {
     iosType: 'vector',
   },
   textOffset: {
     iosType: 'vector',
   },
+  lineOffset: {
+    iosType: 'vector',
+  },
+
+  // translates
+  fillTranslate: {
+    iosType: 'vector',
+  },
+  lineTranslate: {
+    iosType: 'vector',
+  },
+  iconTranslate: {
+    iosType: 'vector',
+  },
   textTranslate: {
     iosType: 'vector',
-  }
+  },
+  circleTranslate: {
+    iosType: 'vector',
+  },
+  fillExtrusionTranslate: {
+    iosType: 'vector',
+  },
 };
 
 export default styleMap;

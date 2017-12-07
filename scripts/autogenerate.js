@@ -124,7 +124,7 @@ function formatDescription (description) {
   }
 
   let formattedDescription = words.join(' ');
-  return formattedDescription.replace(/\[x, y\]/g, '`{ x: number, y: number }`');
+  return formattedDescription;
 }
 
 function getRequires (requiredItems) {
