@@ -29,6 +29,7 @@
     "preinstall": "npm run fetch:ios:sdk",
     "test": "npm run lint && npm run unittest",
     "unittest": "jest --coverage --verbose",
+    "unittest:single": "jest --testNamePattern",
     "lint": "./node_modules/eslint/bin/eslint.js ./javascript/** ./example/src/** ./__tests__/**",
     "lint:fix": "npm run lint -- --fix"
   },
