@@ -30,23 +30,23 @@ This is a value function defining a style value that changes with its properties
 
 ```javascript
 // would color the layer based the property rating=[1, 5]
-MapboxGL.StyleSheet.source({
-  1: 'red',
-  2: 'organge',
-  3: 'yellow',
-  4: 'yellowgreen',
-  5: 'green',
-}, 'rating', MapboxGL.InterpolationMode.Categorical);
+MapboxGL.StyleSheet.source([
+  [1, 'red'],
+  [2, 'organge'],
+  [3, 'yellow'],
+  [4, 'yellowgreen'],
+  [5, 'green'],
+], 'rating', MapboxGL.InterpolationMode.Categorical);
 
 // Example of use inside stylesheet
 MapboxGL.StyleSheet.create({
-  circleColor: MapboxGL.StyleSheet.source({
-    1: 'red',
-    2: 'organge',
-    3: 'yellow',
-    4: 'yellowgreen',
-    5: 'green',
-  }, 'rating', MapboxGL.InterpolationMode.Categorical),
+  circleColor: MapboxGL.StyleSheet.source([
+    [1, 'red'],
+    [2, 'organge'],
+    [3, 'yellow'],
+    [4, 'yellowgreen'],
+    [5, 'green'],
+  ], 'rating', MapboxGL.InterpolationMode.Categorical),
 });
 ```
 
@@ -123,20 +123,20 @@ const layerStyles = MapboxGL.StyleSheet.create({
   },
 
   clusteredPoints: {
-    circleColor: MapboxGL.StyleSheet.source({
-      25: 'yellow',
-      50: 'red',
-      75: 'blue',
-      100: 'orange',
-      300: 'pink',
-      750: 'white',
-    }, 'point_count', MapboxGL.InterpolationMode.Exponential),
+    circleColor: MapboxGL.StyleSheet.source([
+      [25, 'yellow'],
+      [50, 'red'],
+      [75, 'blue'],
+      [100, 'orange'],
+      [300, 'pink'],
+      [750, 'white'],
+    ], 'point_count', MapboxGL.InterpolationMode.Exponential),
 
-    circleRadius: MapboxGL.StyleSheet.source({
-      0: 15,
-      100: 20,
-      750: 30,
-    }, 'point_count', MapboxGL.InterpolationMode.Exponential),
+    circleRadius: MapboxGL.StyleSheet.source([
+      [0, 15],
+      [100, 20],
+      [750, 30],
+    ], 'point_count', MapboxGL.InterpolationMode.Exponential),
 
     circleOpacity: 0.84,
     circleStrokeWidth: 2,
@@ -173,11 +173,11 @@ const layerStyles = MapboxGL.StyleSheet.create({
     fillExtrusionOpacity: 1,
     fillExtrusionHeight: MapboxGL.StyleSheet.identity('height'),
     fillExtrusionBase: MapboxGL.StyleSheet.identity('min_height'),
-    fillExtrusionColor: MapboxGL.StyleSheet.source({
-      0: 'white',
-      50: 'blue',
-      100: 'red',
-    }, 'height', MapboxGL.InterpolationMode.Exponential),
+    fillExtrusionColor: MapboxGL.StyleSheet.source([
+      [0, 'white'],
+      [50, 'blue'],
+      [100, 'red'],
+    ], 'height', MapboxGL.InterpolationMode.Exponential),
     fillExtrusionColorTransition: { duration: 2000, delay: 0 },
   },
   streets: {
@@ -212,7 +212,7 @@ As an end user this is something you won't ever have to deal with. I thought it 
 ```javascript
 // constants
 {
-  type: 'constant',
+  styletype: 'constant',
   payload: {
     value: {CONSTANT_VALUE}
   }
@@ -220,7 +220,7 @@ As an end user this is something you won't ever have to deal with. I thought it 
 
 // color
 {
-  type: 'color',
+  styletype: 'color',
   payload: {
     value: {INT_COLOR_VALUE}
   }
@@ -228,7 +228,7 @@ As an end user this is something you won't ever have to deal with. I thought it 
 
 // image
 {
-  type: 'constant',
+  styletype: 'constant',
   payload: {
     value: '{img_uri}',
     image: true
@@ -237,7 +237,7 @@ As an end user this is something you won't ever have to deal with. I thought it 
 
 // transition
 {
-  type: 'transition',
+  styletype: 'transition',
   payload: {
     value: { duration: Number, delay: Number }
   }
@@ -245,7 +245,7 @@ As an end user this is something you won't ever have to deal with. I thought it 
 
 // translate
 {
-  type: 'translation',
+  styletype: 'translation',
   payload: {
     value: [x, y]
   }
@@ -253,10 +253,13 @@ As an end user this is something you won't ever have to deal with. I thought it 
 
 // style function
 {
-  type: 'function',
+  styletype: 'function',
   payload: {
     fn: 'camera|source|composite',
-    stops: object,
+    stops: [
+      key, // { type: 'string', value: 'propName' }
+      stylevalue // { styletype: 'color', payload: { value: COLOR_INT } }
+    ],
     attributeName: '{property_name}',
     mode: MapboxGL.{Exponential|Identity|Interval|Categorical}
   }
