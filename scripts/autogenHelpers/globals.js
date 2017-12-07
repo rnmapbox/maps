@@ -225,6 +225,10 @@ global.jsDocReactProp = function (prop) {
   } else if (prop.type === 'enum') {
     propTypes.push('PropTypes.any');
   } else {
+    // images can be required which result in a number
+    if (prop.name.indexOf('Image') !== -1 || prop.name.indexOf('Pattern') !== -1) {
+      propTypes.push('PropTypes.number');
+    }
     propTypes.push('PropTypes.string');
     propTypes.push('ConstantPropType');
   }

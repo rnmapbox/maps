@@ -135,6 +135,7 @@ export const FillLayerStyleProp = PropTypes.shape({
    * Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).
    */
   fillPattern: PropTypes.oneOfType([
+    PropTypes.number,
     PropTypes.string,
     ConstantPropType,
     StyleFunctionPropType,
@@ -316,6 +317,7 @@ export const LineLayerStyleProp = PropTypes.shape({
    * Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512).
    */
   linePattern: PropTypes.oneOfType([
+    PropTypes.number,
     PropTypes.string,
     ConstantPropType,
     StyleFunctionPropType,
@@ -434,6 +436,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * Name of image in sprite to use for drawing an image background. A string with `{tokens}` replaced, referencing the data property to pull from. (`{token}` replacement is only supported for literal `iconImage` values; not for property functions.)
    */
   iconImage: PropTypes.oneOfType([
+    PropTypes.number,
     PropTypes.string,
     ConstantPropType,
     StyleFunctionPropType,
@@ -1131,6 +1134,7 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
    * Name of image in sprite to use for drawing images on extruded fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).
    */
   fillExtrusionPattern: PropTypes.oneOfType([
+    PropTypes.number,
     PropTypes.string,
     ConstantPropType,
     StyleFunctionPropType,
@@ -1305,6 +1309,7 @@ export const BackgroundLayerStyleProp = PropTypes.shape({
    * Name of image in sprite to use for drawing an image background. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).
    */
   backgroundPattern: PropTypes.oneOfType([
+    PropTypes.number,
     PropTypes.string,
     ConstantPropType,
     StyleFunctionPropType,
