@@ -75,7 +75,7 @@ class MapStyleFunctionItem extends MapStyleItem {
   processStops (prop) {
     let stops = [];
 
-    const isComposite = this.payload.fn === 'composite';
+    const isComposite = this.payload.fn === StyleFunctionTypes.Composite;
     for (let rawStop of this._rawStops) {
       const [stopKey, stopValue] = rawStop;
 
@@ -222,7 +222,7 @@ class MapboxStyleSheet {
 
       stopNativeArray.push([
         keyBridgeValue.toJSON(),
-        [propName, new BridgeValue(styleValue)],
+        [propName, styleValue],
       ]);
     }
 
