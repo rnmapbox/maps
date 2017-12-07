@@ -59,7 +59,6 @@ class FlyTo extends React.Component {
   }
 
   render () {
-    console.log(layerStyles.building)
     return (
       <TabBarPage {...this.props} options={this._flyToOptions} onOptionPress={this.onFlyToPress}>
         <MapboxGL.MapView
