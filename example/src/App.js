@@ -47,6 +47,7 @@ import ShowPointAnnotation from './components/ShowPointAnnotation';
 import CreateOfflineRegion from './components/CreateOfflineRegion';
 import DriveTheLine from './components/DriveTheLine';
 import ImageOverlay from './components/ImageOverlay';
+import DataDrivenCircleColors from './components/DataDrivenCircleColors';
 
 const styles = StyleSheet.create({
   noPermissionsText: {
@@ -112,6 +113,7 @@ const Examples = [
   new ExampleItem('Create Offline Region', CreateOfflineRegion),
   new ExampleItem('Animation Along a Line', DriveTheLine),
   new ExampleItem('Image Overlay', ImageOverlay),
+  new ExampleItem('Data Driven Circle Colors', DataDrivenCircleColors),
 ];
 
 class App extends React.Component {
