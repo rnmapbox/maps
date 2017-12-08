@@ -1,4 +1,7 @@
-import { getFilter, FilterItem } from '../../javascript/utils/filterUtils';
+import { getFilter } from '../../javascript/utils/filterUtils';
+import BridgeValue from '../../javascript/utils/BridgeValue';
+
+const FilterItem = BridgeValue;
 
 describe('filterUtils', () => {
   it('should parse flat filter', () => {
@@ -58,8 +61,6 @@ describe('filterUtils', () => {
   it('should throw error if the filter item is not a primitive', () => {
     verifyErrorFilterItem(undefined);
     verifyErrorFilterItem(null);
-    verifyErrorFilterItem([]);
-    verifyErrorFilterItem({});
   });
 });
 

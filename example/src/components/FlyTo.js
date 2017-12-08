@@ -12,11 +12,11 @@ const layerStyles = MapboxGL.StyleSheet.create({
     fillExtrusionOpacity: 1,
     fillExtrusionHeight: MapboxGL.StyleSheet.identity('height'),
     fillExtrusionBase: MapboxGL.StyleSheet.identity('min_height'),
-    fillExtrusionColor: MapboxGL.StyleSheet.source({
-      0: 'white',
-      50: 'blue',
-      100: 'red',
-    }, 'height', MapboxGL.InterpolationMode.Exponential),
+    fillExtrusionColor: MapboxGL.StyleSheet.source([
+      [0, 'white'],
+      [50, 'blue'],
+      [100, 'red'],
+    ], 'height', MapboxGL.InterpolationMode.Exponential),
     fillExtrusionColorTransition: { duration: 2000, delay: 0 },
   },
   streets: {

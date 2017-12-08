@@ -73,7 +73,7 @@ RCT_EXPORT_MODULE();
     // interpolation modes
     NSMutableDictionary *interpolationModes = [[NSMutableDictionary alloc] init];
     [interpolationModes setObject:@(MGLInterpolationModeExponential) forKey:@"Exponential"];
-    [interpolationModes setObject:@(MGLInterpolationModeCategorical) forKey:@"Categorial"];
+    [interpolationModes setObject:@(MGLInterpolationModeCategorical) forKey:@"Categorical"];
     [interpolationModes setObject:@(MGLInterpolationModeInterval) forKey:@"Interval"];
     [interpolationModes setObject:@(MGLInterpolationModeIdentity) forKey:@"Identity"];
     

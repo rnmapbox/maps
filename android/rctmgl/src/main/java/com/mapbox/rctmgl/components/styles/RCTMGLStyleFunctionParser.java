@@ -33,14 +33,16 @@ public abstract class RCTMGLStyleFunctionParser<T, V> {
     }
 
     public List<StopConfig> getRawStops() {
-        ReadableMap stopMap = mStyleValue.getMap("stops");
+        ReadableArray readableArrayRawStops = mStyleValue.getArray("stops");
 
         List<StopConfig> rawStops = new ArrayList<>();
-        ReadableMapKeySetIterator it = stopMap.keySetIterator();
 
-        while(it.hasNextKey()) {
-            String stopKey = it.nextKey();
-            RCTMGLStyleValue innerStyleValue = new RCTMGLStyleValue(stopMap.getMap(stopKey));
+        for (int i = 0; i < readableArrayRawStops.size(); i++) {
+            ReadableArray rawStop = readableArrayRawStops.getArray(i);
+
+            ReadableMap jsStopKey = rawStop.getMap(0);
+            ReadableMap jsStopValue = rawStop.getMap(1);
+            RCTMGLStyleValue innerStyleValue = new RCTMGLStyleValue(jsStopValue);
 
             Object propertyValue = null;
             try {
@@ -60,9 +62,9 @@ public abstract class RCTMGLStyleFunctionParser<T, V> {
 
             StopConfig config;
             if (propertyValue != null) {
-                config = new StopConfig(getStopKey(stopKey), getRawStopValue(innerStyleValue), propertyValue);
+                config = new StopConfig(getStopKey(jsStopKey), getRawStopValue(innerStyleValue), propertyValue);
             } else {
-                config = new StopConfig(getStopKey(stopKey), getRawStopValue(innerStyleValue));
+                config = new StopConfig(getStopKey(jsStopKey), getRawStopValue(innerStyleValue));
             }
 
             rawStops.add(config);
@@ -90,17 +92,18 @@ public abstract class RCTMGLStyleFunctionParser<T, V> {
     protected abstract T getRawStopValue (RCTMGLStyleValue styleValue);
     protected abstract PropertyValue<V> getStopValue(T value);
 
-    private Object getStopKey(String key) {
-        NumberFormat numberFormat = NumberFormat.getNumberInstance();
+    private Object getStopKey(ReadableMap jsStopKey) {
+        String payloadKey = "value";
+        String type = jsStopKey.getString("type");
 
-        try {
-            return numberFormat.parse(key);
-        } catch (ParseException e) {
-            // Javascript does a toString on all object keys
-            // we need to attempt to parse this out
+        switch (type) {
+            case "number":
+                return jsStopKey.getDouble(payloadKey);
+            case "boolean":
+                return jsStopKey.getBoolean(payloadKey);
+            default:
+                return jsStopKey.getString(payloadKey);
         }
-
-        return key;
     }
 
     private class StopConfig {

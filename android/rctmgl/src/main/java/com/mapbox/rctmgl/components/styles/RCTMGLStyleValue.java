@@ -32,7 +32,7 @@ public class RCTMGLStyleValue {
     public static final int InterpolationModeIdentity = 103;
 
     public RCTMGLStyleValue(@NonNull ReadableMap config) {
-        mType = config.getString("type");
+        mType = config.getString("styletype");
         mPayload = config.getMap("payload");
     }
 

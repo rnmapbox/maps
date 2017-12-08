@@ -20,18 +20,18 @@ export const StyleFunctionTypes = {
 };
 
 export const ConstantPropType = PropTypes.shape({
-  type: PropTypes.string.isRequired,
+  styletype: PropTypes.string.isRequired,
   payload: PropTypes.shape({
     value: PropTypes.any.isRequired,
   }).isRequired,
 });
 
 export const StyleFunctionPropType = PropTypes.shape({
-  type: PropTypes.string.isRequired,
+  styletype: PropTypes.string.isRequired,
   payload: PropTypes.shape({
     fn: PropTypes.string,
     attributeName: PropTypes.string,
-    stops: PropTypes.object,
+    stops: PropTypes.array,
     mode: PropTypes.any,
   }).isRequired,
 });
@@ -41,10 +41,13 @@ export const TransitionPropType = PropTypes.shape({
   delay: PropTypes.number,
 });
 
-export const TranslationPropType = PropTypes.shape({
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-});
+export const TranslationPropType = PropTypes.oneOfType([
+  PropTypes.shape({
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired,
+  }),
+  PropTypes.arrayOf(PropTypes.number),
+]);
 
 export const FillLayerStyleProp = PropTypes.shape({
 
@@ -109,7 +112,7 @@ export const FillLayerStyleProp = PropTypes.shape({
   fillOutlineColorTransition: TransitionPropType,
 
   /**
-   * The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up, respectively.
+   * The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
    */
   fillTranslate: PropTypes.oneOfType([
     TranslationPropType,
@@ -219,7 +222,7 @@ export const LineLayerStyleProp = PropTypes.shape({
   lineColorTransition: TransitionPropType,
 
   /**
-   * The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up, respectively.
+   * The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
    */
   lineTranslate: PropTypes.oneOfType([
     TranslationPropType,
@@ -989,7 +992,7 @@ export const CircleLayerStyleProp = PropTypes.shape({
   circleOpacityTransition: TransitionPropType,
 
   /**
-   * The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up, respectively.
+   * The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
    */
   circleTranslate: PropTypes.oneOfType([
     TranslationPropType,
@@ -1108,7 +1111,7 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
   fillExtrusionColorTransition: TransitionPropType,
 
   /**
-   * The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up (on the flat plane), respectively.
+   * The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively.
    */
   fillExtrusionTranslate: PropTypes.oneOfType([
     TranslationPropType,
@@ -1552,15 +1555,36 @@ const styleMap = {
 };
 
 export const styleExtras = {
+  // offsets
   iconOffset: {
     iosType: 'vector',
   },
   textOffset: {
     iosType: 'vector',
   },
+  lineOffset: {
+    iosType: 'vector',
+  },
+
+  // translates
+  fillTranslate: {
+    iosType: 'vector',
+  },
+  lineTranslate: {
+    iosType: 'vector',
+  },
+  iconTranslate: {
+    iosType: 'vector',
+  },
   textTranslate: {
     iosType: 'vector',
-  }
+  },
+  circleTranslate: {
+    iosType: 'vector',
+  },
+  fillExtrusionTranslate: {
+    iosType: 'vector',
+  },
 };
 
 export default styleMap;

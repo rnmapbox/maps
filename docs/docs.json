@@ -281,7 +281,7 @@
       {
         "name": "circleTranslate",
         "type": "array",
-        "description": "The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up, respectively.",
+        "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
         "requires": [],
         "disabledBy": []
       },
@@ -437,7 +437,7 @@
       {
         "name": "fillExtrusionTranslate",
         "type": "array",
-        "description": "The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up (on the flat plane), respectively.",
+        "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively.",
         "requires": [],
         "disabledBy": []
       },
@@ -597,7 +597,7 @@
       {
         "name": "fillTranslate",
         "type": "array",
-        "description": "The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up, respectively.",
+        "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
         "requires": [],
         "disabledBy": []
       },
@@ -831,7 +831,7 @@
       {
         "name": "lineTranslate",
         "type": "array",
-        "description": "The geometry's offset. Values are `{ x: number, y: number }` where negatives indicate left and up, respectively.",
+        "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
         "requires": [],
         "disabledBy": []
       },

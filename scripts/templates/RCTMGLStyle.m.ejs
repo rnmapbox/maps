@@ -74,6 +74,8 @@
     <%_ } _%>
     <%_ if (layer.name === 'light' && prop.name === 'position') { _%>
     layer.position = [styleValue getSphericalPosition];
+    <%_ } else if (prop.name === 'visibility') { _%>
+    layer.visible = [styleValue isVisible];
     <%_ } else { _%>
     layer.<%- iosPropName(prop.name) -%> = styleValue.mglStyleValue;
     <%_ } _%>

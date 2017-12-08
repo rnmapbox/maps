@@ -8,10 +8,10 @@ import sheet from '../styles/sheet';
 
 const styles = MapboxGL.StyleSheet.create({
   boxFill: {
-    fillColor: MapboxGL.StyleSheet.source({
-      0: 'green',
-      1: 'blue',
-    }, 'box', MapboxGL.InterpolationMode.Categorial),
+    fillColor: MapboxGL.StyleSheet.source([
+      [0, 'green'],
+      [1, 'blue'],
+    ], 'box', MapboxGL.InterpolationMode.Categorial),
     fillAntialias: true,
   },
 });
