@@ -174,6 +174,12 @@ public class RCTMGLMapView extends MapView implements
         if (feature instanceof RCTSource) {
             mSources.remove(childPosition);
         } else if (feature instanceof RCTMGLPointAnnotation) {
+            RCTMGLPointAnnotation annotation = (RCTMGLPointAnnotation) feature;
+
+            if (annotation.getMapboxID() == mActiveMarkerID) {
+                mActiveMarkerID = -1;
+            }
+
             mPointAnnotations.remove(childPosition);
         }
 
