@@ -5,8 +5,12 @@ import android.graphics.PointF;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.uimanager.UIManagerModule;
 import com.mapbox.mapboxsdk.annotations.MarkerView;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
@@ -48,6 +52,11 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         return false;
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setMeasuredDimension(getWidth(), getHeight());
     }
 
     @Override
@@ -163,7 +172,6 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
     }
 
     public void onDeselect() {
-
         mManager.handleEvent(makeEvent(false));
     }
 
@@ -176,12 +184,7 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
 
         final RCTMGLPointAnnotation self = this;
         if (mIsSelected) {
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    mMapView.selectAnnotation(self);
-                }
-            });
+            mMapView.selectAnnotation(self);
         }
     }
 

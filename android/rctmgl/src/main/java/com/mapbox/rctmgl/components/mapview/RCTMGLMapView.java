@@ -79,10 +79,10 @@ public class RCTMGLMapView extends MapView implements
     private Context mContext;
     private Handler mHandler;
 
-    private SparseArray<RCTSource> mSources;
-    private SparseArray<RCTMGLPointAnnotation> mPointAnnotations;
-    private SparseArray<AbstractMapFeature> mQueuedFeatures;
-    private SparseArray<AbstractMapFeature> mFeatures;
+    private List<AbstractMapFeature> mFeatures;
+    private List<AbstractMapFeature> mQueuedFeatures;
+    private Map<String, RCTMGLPointAnnotation> mPointAnnotations;
+    private Map<String, RCTSource> mSources;
 
     private CameraUpdateQueue mCameraUpdateQueue;
 
@@ -125,10 +125,10 @@ public class RCTMGLMapView extends MapView implements
         mManager = manager;
         mCameraUpdateQueue = new CameraUpdateQueue();
 
-        mSources = new SparseArray<>();
-        mPointAnnotations = new SparseArray<>();
-        mQueuedFeatures = new SparseArray<>();
-        mFeatures = new SparseArray<>();
+        mSources = new HashMap<>();
+        mPointAnnotations = new HashMap<>();
+        mQueuedFeatures = new ArrayList<>();
+        mFeatures = new ArrayList<>();
 
         mHandler = new Handler();
 
@@ -139,12 +139,14 @@ public class RCTMGLMapView extends MapView implements
         AbstractMapFeature feature = null;
 
         if (childView instanceof RCTSource) {
-            mSources.put(childPosition, (RCTSource) childView);
+            RCTSource source = (RCTSource) childView;
+            mSources.put(source.getID(), source);
             feature = (AbstractMapFeature) childView;
         } else if (childView instanceof RCTMGLLight) {
             feature = (AbstractMapFeature) childView;
         } else if (childView instanceof RCTMGLPointAnnotation) {
-            mPointAnnotations.put(childPosition, (RCTMGLPointAnnotation) childView);
+            RCTMGLPointAnnotation annotation = (RCTMGLPointAnnotation) childView;
+            mPointAnnotations.put(annotation.getID(), annotation);
             feature = (AbstractMapFeature) childView;
         } else {
             ViewGroup children = (ViewGroup) childView;
@@ -157,9 +159,9 @@ public class RCTMGLMapView extends MapView implements
         if (feature != null) {
             if (mMap != null) {
                 feature.addToMap(this);
-                mFeatures.put(childPosition, feature);
+                mFeatures.add(childPosition, feature);
             } else {
-                mQueuedFeatures.put(childPosition, feature);
+                mQueuedFeatures.add(childPosition, feature);
             }
         }
     }
@@ -172,13 +174,20 @@ public class RCTMGLMapView extends MapView implements
         }
 
         if (feature instanceof RCTSource) {
-            mSources.remove(childPosition);
+            RCTSource source = (RCTSource) feature;
+            mSources.remove(source.getID());
         } else if (feature instanceof RCTMGLPointAnnotation) {
-            mPointAnnotations.remove(childPosition);
+            RCTMGLPointAnnotation annotation = (RCTMGLPointAnnotation) feature;
+
+            if (annotation.getMapboxID() == mActiveMarkerID) {
+                mActiveMarkerID = -1;
+            }
+
+            mPointAnnotations.remove(annotation.getID());
         }
 
         feature.removeFromMap(this);
-        mFeatures.remove(childPosition);
+        mFeatures.remove(feature);
     }
 
     public int getFeatureCount() {
@@ -186,7 +195,7 @@ public class RCTMGLMapView extends MapView implements
     }
 
     public AbstractMapFeature getFeatureAt(int i) {
-        return mFeatures.get(mFeatures.keyAt(i));
+        return mFeatures.get(i);
     }
 
     public void dispose() {
@@ -201,8 +210,8 @@ public class RCTMGLMapView extends MapView implements
             return null;
         }
 
-        for (int i = 0; i < mPointAnnotations.size(); i++) {
-            RCTMGLPointAnnotation annotation = mPointAnnotations.get(mPointAnnotations.keyAt(i));
+        for (String key : mPointAnnotations.keySet()) {
+            RCTMGLPointAnnotation annotation = mPointAnnotations.get(key);
 
             if (annotation != null && annotationID.equals(annotation.getID())) {
                 return annotation;
@@ -213,13 +222,14 @@ public class RCTMGLMapView extends MapView implements
     }
 
     public RCTMGLPointAnnotation getPointAnnotationByMarkerID(long markerID) {
-        for (int i = 0; i < mPointAnnotations.size(); i++) {
-            RCTMGLPointAnnotation annotation = mPointAnnotations.get(mPointAnnotations.keyAt(i));
+        for (String key : mPointAnnotations.keySet()) {
+            RCTMGLPointAnnotation annotation = mPointAnnotations.get(key);
 
             if (annotation != null && markerID == annotation.getMapboxID()) {
                 return annotation;
             }
         }
+
         return null;
     }
 
@@ -263,10 +273,9 @@ public class RCTMGLMapView extends MapView implements
 
         if (mQueuedFeatures.size() > 0) {
             for (int i = 0; i < mQueuedFeatures.size(); i++) {
-                int childPosition = mQueuedFeatures.keyAt(i);
-                AbstractMapFeature feature = mQueuedFeatures.get(childPosition);
+                AbstractMapFeature feature = mQueuedFeatures.get(i);
                 feature.addToMap(this);
-                mFeatures.put(childPosition, feature);
+                mFeatures.add(feature);
             }
             mQueuedFeatures = null;
         }
@@ -299,54 +308,60 @@ public class RCTMGLMapView extends MapView implements
 
     @Override
     public void onMapClick(@NonNull LatLng point) {
+        boolean isEventCaptured = false;
+
         if (mActiveMarkerID != -1) {
-            for (int i = 0; i < mPointAnnotations.size(); i++) {
-                RCTMGLPointAnnotation annotation = mPointAnnotations.get(mPointAnnotations.keyAt(i));
+            for (String key : mPointAnnotations.keySet()) {
+                RCTMGLPointAnnotation annotation = mPointAnnotations.get(key);
 
                 if (mActiveMarkerID == annotation.getMapboxID()) {
-                    deselectAnnotation(annotation);
+                    isEventCaptured = deselectAnnotation(annotation);
                 }
             }
-        } else {
-            PointF screenPoint = mMap.getProjection().toScreenLocation(point);
-            List<RCTSource> touchableSources = getAllTouchableSources();
-
-            Map<String, Feature> hits = new HashMap<>();
-            List<RCTSource> hitTouchableSources = new ArrayList<>();
-            for (RCTSource touchableSource : touchableSources) {
-                Map<String, Double> hitbox = touchableSource.getTouchHitbox();
-                if (hitbox == null) {
-                    continue;
-                }
-
-                float halfWidth = hitbox.get("width").floatValue() / 2.0f;
-                float halfHeight = hitbox.get("height").floatValue() / 2.0f;
-
-                RectF hitboxF = new RectF();
-                hitboxF.set(
-                        screenPoint.x - halfWidth,
-                        screenPoint.y - halfHeight,
-                        screenPoint.x + halfWidth,
-                        screenPoint.y + halfHeight);
-
-                List<Feature> features = mMap.queryRenderedFeatures(hitboxF, touchableSource.getLayerIDs());
-                if (features.size() > 0) {
-                    hits.put(touchableSource.getID(), features.get(0));
-                    hitTouchableSources.add(touchableSource);
-                }
-            }
-
-            if (hits.size() > 0) {
-                RCTSource source = getTouchableSourceWithHighestZIndex(hitTouchableSources);
-                if (source != null && source.hasPressListener()) {
-                    source.onPress(hits.get(source.getID()));
-                    return;
-                }
-            }
-
-            MapClickEvent event = new MapClickEvent(this, point, screenPoint);
-            mManager.handleEvent(event);
         }
+
+        if (isEventCaptured) {
+            return;
+        }
+
+        PointF screenPoint = mMap.getProjection().toScreenLocation(point);
+        List<RCTSource> touchableSources = getAllTouchableSources();
+
+        Map<String, Feature> hits = new HashMap<>();
+        List<RCTSource> hitTouchableSources = new ArrayList<>();
+        for (RCTSource touchableSource : touchableSources) {
+            Map<String, Double> hitbox = touchableSource.getTouchHitbox();
+            if (hitbox == null) {
+                continue;
+            }
+
+            float halfWidth = hitbox.get("width").floatValue() / 2.0f;
+            float halfHeight = hitbox.get("height").floatValue() / 2.0f;
+
+            RectF hitboxF = new RectF();
+            hitboxF.set(
+                    screenPoint.x - halfWidth,
+                    screenPoint.y - halfHeight,
+                    screenPoint.x + halfWidth,
+                    screenPoint.y + halfHeight);
+
+            List<Feature> features = mMap.queryRenderedFeatures(hitboxF, touchableSource.getLayerIDs());
+            if (features.size() > 0) {
+                hits.put(touchableSource.getID(), features.get(0));
+                hitTouchableSources.add(touchableSource);
+            }
+        }
+
+        if (hits.size() > 0) {
+            RCTSource source = getTouchableSourceWithHighestZIndex(hitTouchableSources);
+            if (source != null && source.hasPressListener()) {
+                source.onPress(hits.get(source.getID()));
+                return;
+            }
+        }
+
+        MapClickEvent event = new MapClickEvent(this, point, screenPoint);
+        mManager.handleEvent(event);
     }
 
     @Override
@@ -363,8 +378,8 @@ public class RCTMGLMapView extends MapView implements
         RCTMGLPointAnnotation activeAnnotation = null;
         RCTMGLPointAnnotation nextActiveAnnotation = null;
 
-        for (int i = 0; i < mPointAnnotations.size(); i++) {
-            RCTMGLPointAnnotation annotation = mPointAnnotations.get(mPointAnnotations.keyAt(i));
+        for (String key : mPointAnnotations.keySet()) {
+            RCTMGLPointAnnotation annotation = mPointAnnotations.get(key);
             final long curMarkerID = annotation.getMapboxID();
 
             if (selectedMarkerID == curMarkerID) {
@@ -389,7 +404,7 @@ public class RCTMGLMapView extends MapView implements
         final long id = annotation.getMapboxID();
 
         if (id != mActiveMarkerID) {
-            MarkerView markerView = annotation.getMarker();
+            final MarkerView markerView = annotation.getMarker();
             mMap.selectMarker(markerView);
             annotation.onSelect(true);
             mActiveMarkerID = id;
@@ -401,16 +416,19 @@ public class RCTMGLMapView extends MapView implements
         }
     }
 
-    public void deselectAnnotation(RCTMGLPointAnnotation annotation) {
+    public boolean deselectAnnotation(RCTMGLPointAnnotation annotation) {
         MarkerView markerView = annotation.getMarker();
+
+        RCTMGLCallout calloutView = annotation.getCalloutView();
+        if (calloutView != null) {
+            markerView.hideInfoWindow();
+        }
+
         mMap.deselectMarker(markerView);
         mActiveMarkerID = -1;
         annotation.onDeselect();
 
-        RCTMGLCallout calloutView = annotation.getCalloutView();
-        if (markerView.isInfoWindowShown() && calloutView != null) {
-            markerView.hideInfoWindow();
-        }
+        return calloutView != null;
     }
 
     @Override
@@ -884,8 +902,8 @@ public class RCTMGLMapView extends MapView implements
         if (mSources.size() == 0) {
             return;
         }
-        for (int i = 0; i < mSources.size(); i++) {
-            RCTSource source = mSources.get(mSources.keyAt(i));
+        for (String key : mSources.keySet()) {
+            RCTSource source = mSources.get(key);
             source.removeFromMap(this);
         }
     }
@@ -894,8 +912,8 @@ public class RCTMGLMapView extends MapView implements
         if (mSources.size() == 0) {
             return;
         }
-        for (int i = 0; i < mSources.size(); i++) {
-            RCTSource source = mSources.get(mSources.keyAt(i));
+        for (String key : mSources.keySet()) {
+            RCTSource source = mSources.get(key);
             source.addToMap(this);
         }
     }
@@ -903,8 +921,8 @@ public class RCTMGLMapView extends MapView implements
     private List<RCTSource> getAllTouchableSources() {
         List<RCTSource> sources = new ArrayList<>();
 
-        for (int i = 0; i < mSources.size(); i++) {
-            RCTSource source = mSources.get(mSources.keyAt(i));
+        for (String key : mSources.keySet()) {
+            RCTSource source = mSources.get(key);
 
             if (source.hasPressListener()) {
                 sources.add(source);
