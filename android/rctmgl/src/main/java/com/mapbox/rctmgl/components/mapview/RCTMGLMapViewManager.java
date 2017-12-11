@@ -15,8 +15,6 @@ import com.mapbox.rctmgl.utils.FilterParser;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.services.commons.geojson.Point;
 
-import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
-
 import java.util.Arrays;
 import java.util.Map;
 
@@ -30,8 +28,6 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     public static final String LOG_TAG = RCTMGLMapViewManager.class.getSimpleName();
     public static final String REACT_CLASS = RCTMGLMapView.class.getSimpleName();
 
-    private boolean mTextureMode = false;
-    
     public RCTMGLMapViewManager(ReactApplicationContext context) {
         super(context);
     }
@@ -72,9 +68,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
 
     @Override
     protected RCTMGLMapView createViewInstance(ThemedReactContext themedReactContext) {
-        MapboxMapOptions options = new MapboxMapOptions();
-        options.textureMode(mTextureMode);
-        return new RCTMGLMapView(themedReactContext, this, options);
+        return new RCTMGLMapView(themedReactContext, this);
     }
 
     @Override
@@ -179,11 +173,6 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     @ReactProp(name="userTrackingMode")
     public void setUserTrackingMode(RCTMGLMapView mapView, int userTrackingMode) {
         mapView.setReactUserTrackingMode(userTrackingMode);
-    }
-
-    @ReactProp(name="textureMode")
-    public void setTextureMode(RCTMGLMapView mapView, boolean textureMode) {
-        mTextureMode = textureMode;
     }
 
     //endregion

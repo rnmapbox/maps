@@ -27,7 +27,6 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.VisibleRegion;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.UiSettings;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerMode;
@@ -116,8 +115,8 @@ public class RCTMGLMapView extends MapView implements
     private ReadableArray mInsets;
     private Point mCenterCoordinate;
 
-    public RCTMGLMapView(Context context, RCTMGLMapViewManager manager, MapboxMapOptions options) {
-        super(context, options);
+    public RCTMGLMapView(Context context, RCTMGLMapViewManager manager) {
+        super(context);
 
         super.onCreate(null);
         super.getMapAsync(this);

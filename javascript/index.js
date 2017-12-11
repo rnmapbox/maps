@@ -4,6 +4,7 @@ import * as geoUtils from './utils/geoUtils';
 
 // components
 import MapView from './components/MapView';
+import MapView from './components/AndroidTextureMapView';
 import MapboxStyleSheet from './utils/MapboxStyleSheet';
 import Light from './components/Light';
 import PointAnnotation from './components/PointAnnotation';
@@ -56,6 +57,7 @@ MapboxGL.requestAndroidLocationPermissions = async function () {
 
 // components
 MapboxGL.MapView = MapView;
+MapboxGL.AndroidTextureMapView = AndroidTextureMapView;
 MapboxGL.StyleSheet = MapboxStyleSheet;
 MapboxGL.Light = Light;
 MapboxGL.PointAnnotation = PointAnnotation;
