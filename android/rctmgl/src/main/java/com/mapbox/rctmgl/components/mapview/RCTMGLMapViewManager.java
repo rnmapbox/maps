@@ -74,7 +74,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     protected RCTMGLMapView createViewInstance(ThemedReactContext themedReactContext) {
         MapboxMapOptions options = new MapboxMapOptions();
         options.textureMode(mTextureMode);
-        return new RCTMGLMapView(themedReactContext, this);
+        return new RCTMGLMapView(themedReactContext, this, options);
     }
 
     @Override
