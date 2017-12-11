@@ -15,6 +15,8 @@ import com.mapbox.rctmgl.utils.FilterParser;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.services.commons.geojson.Point;
 
+import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
+
 import java.util.Arrays;
 import java.util.Map;
 
@@ -28,6 +30,8 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     public static final String LOG_TAG = RCTMGLMapViewManager.class.getSimpleName();
     public static final String REACT_CLASS = RCTMGLMapView.class.getSimpleName();
 
+    private boolean mTextureMode = false;
+    
     public RCTMGLMapViewManager(ReactApplicationContext context) {
         super(context);
     }
@@ -68,6 +72,8 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
 
     @Override
     protected RCTMGLMapView createViewInstance(ThemedReactContext themedReactContext) {
+        MapboxMapOptions options = new MapboxMapOptions();
+        options.textureMode(mTextureMode);
         return new RCTMGLMapView(themedReactContext, this);
     }
 

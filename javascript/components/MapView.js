@@ -115,6 +115,11 @@ class MapView extends React.Component {
     attributionEnabled: PropTypes.bool,
 
     /**
+     * Enable/Disable TextureMode insted of SurfaceView
+     */
+    textureMode: PropTypes.bool,
+
+    /**
      * Enable/Disable the logo on the map.
      */
     logoEnabled: PropTypes.bool,
@@ -222,6 +227,7 @@ class MapView extends React.Component {
     zoomLevel: 16,
     userTrackingMode: MapboxGL.UserTrackingModes.None,
     styleURL: MapboxGL.StyleURL.Street,
+    textureMode: false
   };
 
   constructor (props) {
