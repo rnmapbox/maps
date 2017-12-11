@@ -37,12 +37,12 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
     protected Map<String, Double> mTouchHitbox;
 
     protected List<RCTLayer> mLayers;
-    private SparseArray<RCTLayer> mQueuedLayers;
+    private List<RCTLayer> mQueuedLayers;
 
     public RCTSource(Context context) {
         super(context);
         mLayers = new ArrayList<>();
-        mQueuedLayers = new SparseArray<>();
+        mQueuedLayers = new ArrayList<>();
     }
 
     public String getID() {
@@ -124,8 +124,7 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
 
         if (mQueuedLayers != null && mQueuedLayers.size() > 0) { // first load
             for (int i = 0; i < mQueuedLayers.size(); i++) {
-                int childPosition = mQueuedLayers.keyAt(i);
-                addLayerToMap(mQueuedLayers.get(childPosition), childPosition);
+                addLayerToMap(mQueuedLayers.get(i), i);
             }
             mQueuedLayers = null;
         } else if (mLayers.size() > 0) { // handles the case of switching style url, but keeping layers on map
@@ -153,7 +152,7 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
 
         RCTLayer layer = (RCTLayer) childView;
         if (mMap == null) {
-            mQueuedLayers.put(childPosition, layer);
+            mQueuedLayers.add(childPosition, layer);
         } else {
             addLayerToMap(layer, childPosition);
         }
