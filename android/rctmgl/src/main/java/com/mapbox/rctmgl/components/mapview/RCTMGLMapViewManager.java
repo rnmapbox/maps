@@ -181,6 +181,11 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         mapView.setReactUserTrackingMode(userTrackingMode);
     }
 
+    @ReactProp(name="textureMode")
+    public void setTextureMode(RCTMGLMapView mapView, boolean textureMode) {
+        mTextureMode = textureMode;
+    }
+
     //endregion
 
     //region Custom Events
