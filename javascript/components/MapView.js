@@ -214,7 +214,7 @@ class MapView extends React.Component {
     /**
      * This event is triggered once the camera is finished after calling setCamera
      */
-    onSetCameraComplete: PropTypes.func
+    onSetCameraComplete: PropTypes.func,
   };
 
   static defaultProps = {
