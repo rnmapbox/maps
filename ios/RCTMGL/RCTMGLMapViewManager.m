@@ -202,6 +202,7 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
         }
         
         __weak RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
+
         [reactMapView.cameraUpdateQueue flush]; // remove any curreny camera updates
         
         if (config[@"stops"]) {
@@ -224,7 +225,7 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
 
 - (void)didTapMap:(UITapGestureRecognizer *)recognizer
 {
-    RCTMGLMapView *mapView = (RCTMGLMapView*)recognizer.view;
+    RCTMGLMapView *mapView = (RCTMGLMapView*)recognizer.view;    
     CGPoint screenPoint = [recognizer locationInView:mapView];
     NSArray<RCTMGLSource *> *touchableSources = [mapView getAllTouchableSources];
     
@@ -286,6 +287,13 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
 }
 
 #pragma mark - MGLMapViewDelegate
+
+- (BOOL)mapView:(MGLMapView *)mapView shouldChangeFromCamera:(MGLMapCamera *)oldCamera toCamera:(MGLMapCamera *)newCamera
+{
+    RCTMGLMapView *reactMapView = (RCTMGLMapView *)mapView;
+    reactMapView.isUserInteraction = YES;
+    return YES;
+}
 
 - (MGLAnnotationView *)mapView:(MGLMapView *)mapView viewForAnnotation:(id<MGLAnnotation>)annotation
 {
@@ -351,6 +359,7 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
 {
     NSDictionary *payload = [self _makeRegionPayload:mapView animated:animated];
     [self reactMapDidChange:mapView eventType:RCT_MAPBOX_REGION_DID_CHANGE andPayload:payload];
+    ((RCTMGLMapView *) mapView).isUserInteraction = NO;
 }
 
 - (void)mapViewWillStartLoadingMap:(MGLMapView *)mapView
@@ -429,6 +438,7 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
 
 - (NSDictionary*)_makeRegionPayload:(MGLMapView*)mapView animated:(BOOL)animated
 {
+    RCTMGLMapView *rctMapView = (RCTMGLMapView *)mapView;
     MGLPointFeature *feature = [[MGLPointFeature alloc] init];
     feature.coordinate = mapView.centerCoordinate;
     feature.attributes = @{
@@ -436,6 +446,7 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
                             @"heading": [NSNumber numberWithDouble:mapView.camera.heading],
                             @"pitch": [NSNumber numberWithDouble:mapView.camera.pitch],
                             @"animated": [NSNumber numberWithBool:animated],
+                            @"isUserInteraction": @(rctMapView.isUserInteraction),
                             @"visibleBounds": [RCTMGLUtils fromCoordinateBounds:mapView.visibleCoordinateBounds]
                          };
     return feature.geoJSONDictionary;
