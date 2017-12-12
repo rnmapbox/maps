@@ -68,7 +68,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
 
     @Override
     protected RCTMGLMapView createViewInstance(ThemedReactContext themedReactContext) {
-        return new RCTMGLMapView(themedReactContext, this);
+        return new RCTMGLMapView(themedReactContext, this, null);
     }
 
     @Override
