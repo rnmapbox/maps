@@ -16,9 +16,8 @@ Not a Mapbox user yet? [Sign up for an account here](https://www.mapbox.com/sign
 
 ## Installation
 
-* Make sure you are in the example directory under the `v6` branch
+* Make sure you are in the example directory
 ```
-git checkout v6
 cd example
 ```
 * Create a file called `accesstoken` in the root of the example project and just paste in your [Mapbox access token](https://www.mapbox.com/studio/account/tokens/).
