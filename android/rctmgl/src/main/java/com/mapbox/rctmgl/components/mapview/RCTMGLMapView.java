@@ -10,6 +10,7 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.MotionEvent;
 
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactContext;
@@ -304,6 +305,17 @@ public class RCTMGLMapView extends MapView implements
                 layout(getLeft(), getTop(), getRight(), getBottom());
             }
         });
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        boolean result = super.onTouchEvent(ev);
+
+        if (result) {
+            requestDisallowInterceptTouchEvent(true);
+        }
+
+        return result;
     }
 
     @Override
