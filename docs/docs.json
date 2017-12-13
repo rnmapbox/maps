@@ -1293,6 +1293,13 @@
         "description": "Enable/Disable the compass from appearing on the map"
       },
       {
+        "name": "textureMode",
+        "required": false,
+        "type": "bool",
+        "default": "false",
+        "description": "Enable/Disable TextureMode insted of SurfaceView"
+      },
+      {
         "name": "onPress",
         "required": false,
         "type": "func",

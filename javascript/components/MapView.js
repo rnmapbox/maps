@@ -229,7 +229,7 @@ class MapView extends React.Component {
     zoomLevel: 16,
     userTrackingMode: MapboxGL.UserTrackingModes.None,
     styleURL: MapboxGL.StyleURL.Street,
-    textureMode: false
+    textureMode: false,
   };
 
   constructor (props) {
@@ -648,7 +648,7 @@ class MapView extends React.Component {
         </RCTMGLMapView>
       );
     }
-    
+
   }
 }
 
