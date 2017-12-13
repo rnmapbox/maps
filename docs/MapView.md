@@ -23,6 +23,7 @@
 | attributionEnabled | `bool` | `true` | `false` | Enable/Disable attribution on map. For iOS you need to add MGLMapboxMetricsEnabledSettingShownInApp=YES<br/>to your Info.plist |
 | logoEnabled | `bool` | `true` | `false` | Enable/Disable the logo on the map. |
 | compassEnabled | `bool` | `none` | `false` | Enable/Disable the compass from appearing on the map |
+| textureMode | `bool` | `false` | `false` | Enable/Disable TextureMode insted of SurfaceView |
 | onPress | `func` | `none` | `false` | Map press listener, gets called when a user presses the map |
 | onLongPress | `func` | `none` | `false` | Map long press listener, gets called when a user long presses the map |
 | onRegionWillChange | `func` | `none` | `false` | This event is triggered whenever the currently displayed map region is about to change. |
