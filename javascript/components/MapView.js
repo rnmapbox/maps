@@ -442,7 +442,7 @@ class MapView extends React.Component {
    * @example
    * this.map.setCamera({
    *   centerCoordinate: [lng, lat],
-   *   zoomLevel: 16,
+   *   zoom: 16,
    *   duration: 2000,
    * })
    *

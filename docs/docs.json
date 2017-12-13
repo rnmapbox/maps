@@ -1140,7 +1140,7 @@
       },
       {
         "name": "setCamera",
-        "docblock": "Map camera will perform updates based on provided config. Advanced use only!\n\n@example\nthis.map.setCamera({\n  centerCoordinate: [lng, lat],\n  zoomLevel: 16,\n  duration: 2000,\n})\n\nthis.map.setCamera({\n  stops: [\n    { pitch: 45, duration: 200 },\n    { heading: 180, duration: 300 },\n  ]\n})\n\n @param {Object} config - Camera configuration",
+        "docblock": "Map camera will perform updates based on provided config. Advanced use only!\n\n@example\nthis.map.setCamera({\n  centerCoordinate: [lng, lat],\n  zoom: 16,\n  duration: 2000,\n})\n\nthis.map.setCamera({\n  stops: [\n    { pitch: 45, duration: 200 },\n    { heading: 180, duration: 300 },\n  ]\n})\n\n @param {Object} config - Camera configuration",
         "modifiers": [],
         "params": [
           {
@@ -1154,7 +1154,7 @@
         "returns": null,
         "description": "Map camera will perform updates based on provided config. Advanced use only!",
         "examples": [
-          "\nthis.map.setCamera({\n  centerCoordinate: [lng, lat],\n  zoomLevel: 16,\n  duration: 2000,\n})\n\nthis.map.setCamera({\n  stops: [\n    { pitch: 45, duration: 200 },\n    { heading: 180, duration: 300 },\n  ]\n})\n\n "
+          "\nthis.map.setCamera({\n  centerCoordinate: [lng, lat],\n  zoom: 16,\n  duration: 2000,\n})\n\nthis.map.setCamera({\n  stops: [\n    { pitch: 45, duration: 200 },\n    { heading: 180, duration: 300 },\n  ]\n})\n\n "
         ]
       }
     ],
