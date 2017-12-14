@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 class Bubble extends React.PureComponent {
   render () {
     return (
-      <View style={styles.containter}>
+      <View style={[styles.containter, this.props.style]}>
         {this.props.children}
       </View>
     );

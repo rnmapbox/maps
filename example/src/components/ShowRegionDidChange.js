@@ -3,11 +3,11 @@ import { Text } from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
-import Page from './common/Page';
+import TabBarPage from './common/TabBarPage';
 import Bubble from './common/Bubble';
 
 import sheet from '../styles/sheet';
-import { DEFAULT_CENTER_COORDINATE } from '../utils';
+import { DEFAULT_CENTER_COORDINATE, SF_OFFICE_COORDINATE } from '../utils';
 
 class ShowRegionDidChange extends React.Component {
   static propTypes = {
@@ -21,12 +21,29 @@ class ShowRegionDidChange extends React.Component {
       regionFeature: undefined,
     };
 
+    this._tabOptions = [
+      { label: 'Fly To', data: SF_OFFICE_COORDINATE },
+      { label: 'Fit Bounds', data: [[-74.126410, 40.797968], [-74.143727, 40.772177]] },
+      { label: 'Zoom To', data: 12 },
+    ];
+
     this.onRegionDidChange = this.onRegionDidChange.bind(this);
     this.onDidFinishLoadingMap = this.onDidFinishLoadingMap.bind(this);
+    this.onOptionPress = this.onOptionPress.bind(this);
+  }
+
+  async onOptionPress (optionIndex, optionData) {
+    if (optionIndex === 0) {
+      await this.map.flyTo(optionData);
+    } else if (optionIndex === 1) {
+      await this.map.fitBounds(optionData[0], optionData[1], 0, 200);
+    } else if (optionIndex === 2) {
+      await this.map.zoomTo(optionData, 200);
+    }
   }
 
   async onDidFinishLoadingMap () {
-    const visibleBounds = await this._map.getVisibleBounds();
+    const visibleBounds = await this.map.getVisibleBounds();
     console.log('Visible Bounds', visibleBounds); // eslint-disable-line no-console
   }
 
@@ -54,7 +71,7 @@ class ShowRegionDidChange extends React.Component {
     const neCoord = properties.visibleBounds[0].map((n) => n.toPrecision(6)).join(', ');
     const swCoord = properties.visibleBounds[1].map((n) => n.toPrecision(6)).join(', ');
     return (
-      <Bubble>
+      <Bubble style={{ marginBottom: 100 }}>
         <Text>Latitude: {geometry.coordinates[1]}</Text>
         <Text>Longitude: {geometry.coordinates[0]}</Text>
         <Text>Visible Bounds NE: {neCoord}</Text>
@@ -62,6 +79,7 @@ class ShowRegionDidChange extends React.Component {
         <Text>Zoom Level: {properties.zoomLevel}</Text>
         <Text>Heading: {properties.heading}</Text>
         <Text>Pitch: {properties.pitch}</Text>
+        <Text>Is User Interaction: {properties.isUserInteraction ? 'true' : 'false'}</Text>
         <Text>Animated: {properties.animated ? 'true' : 'false'}</Text>
       </Bubble>
     );
@@ -69,16 +87,16 @@ class ShowRegionDidChange extends React.Component {
 
   render () {
     return (
-      <Page {...this.props}>
+      <TabBarPage {...this.props} options={this._tabOptions} onOptionPress={this.onOptionPress}>
         <MapboxGL.MapView
-          ref={(c) => this._map = c}
+          ref={(c) => this.map = c}
           centerCoordinate={DEFAULT_CENTER_COORDINATE}
           style={sheet.matchParent}
           onDidFinishLoadingMap={this.onDidFinishLoadingMap}
           onRegionDidChange={this.onRegionDidChange} />
 
         {this.renderRegionChange()}
-      </Page>
+      </TabBarPage>
     );
   }
 }

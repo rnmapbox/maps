@@ -6,6 +6,7 @@ import android.graphics.RectF;
 import android.location.Location;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,6 +87,7 @@ public class RCTMGLMapView extends MapView implements
     private Map<String, RCTSource> mSources;
 
     private CameraUpdateQueue mCameraUpdateQueue;
+    private CameraChangeTracker mCameraChangeTracker = new CameraChangeTracker();
 
     private MapboxMap mMap;
     private LocationEngine mLocationEngine;
@@ -285,11 +287,34 @@ public class RCTMGLMapView extends MapView implements
             markerViewManager.invalidateViewMarkersInVisibleRegion();
         }
 
-        mMap.setOnCameraIdleListener(new MapboxMap.OnCameraIdleListener() {
+        final RCTMGLMapView self = this;
+        mMap.addOnCameraIdleListener(new MapboxMap.OnCameraIdleListener() {
+            long lastTimestamp = System.currentTimeMillis();
+
             @Override
             public void onCameraIdle() {
                 if (mPointAnnotations.size() > 0) {
                     markerViewManager.invalidateViewMarkersInVisibleRegion();
+                }
+
+                long curTimestamp = System.currentTimeMillis();
+                if (curTimestamp - lastTimestamp < 500) {
+                    return;
+                }
+
+                boolean isAnimated = mCameraChangeTracker.isAnimated();
+                IEvent event = new MapChangeEvent(self, makeRegionPayload(isAnimated), EventTypes.REGION_DID_CHANGE);
+                mManager.handleEvent(event);
+                mCameraChangeTracker.setReason(-1);
+                lastTimestamp = curTimestamp;
+            }
+        });
+
+        mMap.addOnCameraMoveStartedListener(new MapboxMap.OnCameraMoveStartedListener() {
+            @Override
+            public void onCameraMoveStarted(int reason) {
+                if (mCameraChangeTracker.isEmpty()) {
+                    mCameraChangeTracker.setReason(reason);
                 }
             }
         });
@@ -447,10 +472,10 @@ public class RCTMGLMapView extends MapView implements
                 event = new MapChangeEvent(this, EventTypes.REGION_IS_CHANGING);
                 break;
             case REGION_DID_CHANGE:
-                event = new MapChangeEvent(this, makeRegionPayload(false), EventTypes.REGION_DID_CHANGE);
+                mCameraChangeTracker.setRegionChangeAnimated(false);
                 break;
             case REGION_DID_CHANGE_ANIMATED:
-                event = new MapChangeEvent(this, makeRegionPayload(true), EventTypes.REGION_DID_CHANGE);
+                mCameraChangeTracker.setRegionChangeAnimated(true);
                 break;
             case WILL_START_LOADING_MAP:
                 event = new MapChangeEvent(this, EventTypes.WILL_START_LOADING_MAP);
@@ -626,10 +651,23 @@ public class RCTMGLMapView extends MapView implements
                 @Override
                 public void onCompleteAll() {
                     callback.onFinish();
+                    mCameraChangeTracker.setReason(3);
                 }
             });
         } else {
-            CameraStop stop = CameraStop.fromReadableMap(args, callback);
+            CameraStop stop = CameraStop.fromReadableMap(args, new MapboxMap.CancelableCallback() {
+                @Override
+                public void onCancel() {
+                    callback.onCancel();
+                    mCameraChangeTracker.setReason(1);
+                }
+
+                @Override
+                public void onFinish() {
+                    callback.onFinish();
+                    mCameraChangeTracker.setReason(3);
+                }
+            });
             mCameraUpdateQueue.offer(stop);
         }
 
@@ -880,6 +918,7 @@ public class RCTMGLMapView extends MapView implements
         properties.putDouble("heading", position.bearing);
         properties.putDouble("pitch", position.tilt);
         properties.putBoolean("animated", isAnimated);
+        properties.putBoolean("isUserInteraction", mCameraChangeTracker.isUserInteraction());
 
         VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
         properties.putArray("visibleBounds", GeoJSONUtils.fromLatLngBounds(visibleRegion.latLngBounds));
@@ -963,5 +1002,31 @@ public class RCTMGLMapView extends MapView implements
         }
 
         return null;
+    }
+
+    private static class CameraChangeTracker {
+        private int reason;
+        private boolean isRegionChangeAnimated;
+
+        public void setReason(int reason) {
+            Log.d(LOG_TAG, String.format("%d", reason));
+            this.reason = reason;
+        }
+
+        public void setRegionChangeAnimated(boolean isRegionChangeAnimated) {
+            this.isRegionChangeAnimated = isRegionChangeAnimated;
+        }
+
+        public boolean isUserInteraction() {
+            return reason == 1 || reason == 2; // gesture or user animation
+        }
+
+        public boolean isAnimated() {
+            return isRegionChangeAnimated;
+        }
+
+        public boolean isEmpty() {
+            return reason == -1;
+        }
     }
 }

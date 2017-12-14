@@ -38,6 +38,7 @@
 @property (nonatomic, copy) NSString *reactCenterCoordinate;
 @property (nonatomic, copy) NSString *reactStyleURL;
 
+@property (nonatomic, assign) BOOL isUserInteraction;
 @property (nonatomic, assign) int reactUserTrackingMode;
 
 @property (nonatomic, assign) double heading;
