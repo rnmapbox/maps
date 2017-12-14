@@ -185,7 +185,7 @@ Map camera will perform updates based on provided config. Advanced use only!
 ```javascript
 this.map.setCamera({
   centerCoordinate: [lng, lat],
-  zoomLevel: 16,
+  zoom: 16,
   duration: 2000,
 })
 
