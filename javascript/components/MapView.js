@@ -8,7 +8,7 @@ import {
   isNumber,
   runNativeCommand,
   toJSONString,
-  IS_ANDROID,
+  isAndroid,
   viewPropTypes,
 } from '../utils';
 
@@ -278,7 +278,7 @@ class MapView extends React.Component {
       layerIDs,
     ]);
 
-    if (IS_ANDROID) {
+    if (isAndroid()) {
       return JSON.parse(res.data);
     }
 
@@ -307,7 +307,7 @@ class MapView extends React.Component {
       layerIDs,
     ]);
 
-    if (IS_ANDROID) {
+    if (isAndroid()) {
       return JSON.parse(res.data);
     }
 
@@ -476,7 +476,7 @@ class MapView extends React.Component {
   }
 
   _runNativeCommand (methodName, args = []) {
-    if (IS_ANDROID) {
+    if (isAndroid()) {
       return new Promise ((resolve) => {
         const callbackID = '' + Date.now();
         this._addAddAndroidCallback(callbackID, resolve);
@@ -632,10 +632,10 @@ class MapView extends React.Component {
       onPress: this._onPress,
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
-      onAndroidCallback: IS_ANDROID ? this._onAndroidCallback : undefined,
+      onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
     };
 
-    if (IS_ANDROID && this.props.textureMode) {
+    if (isAndroid() && this.props.textureMode) {
       return (
         <RCTMGLAndroidTextureMapView {...props} {...callbacks}>
           {this.props.children}
@@ -657,7 +657,7 @@ const RCTMGLMapView = requireNativeComponent(NATIVE_MODULE_NAME, MapView, {
 });
 
 let RCTMGLAndroidTextureMapView;
-if (IS_ANDROID) {
+if (isAndroid()) {
   RCTMGLAndroidTextureMapView = requireNativeComponent(ANDROID_TEXTURE_NATIVE_MODULE_NAME, MapView, {
     nativeOnly: { onMapChange: true, onAndroidCallback: true },
   });

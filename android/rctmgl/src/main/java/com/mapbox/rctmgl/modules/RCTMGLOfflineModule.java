@@ -161,6 +161,30 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void setPackObserver(final String name, final Promise promise) {
+        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
+
+        offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
+            @Override
+            public void onList(OfflineRegion[] offlineRegions) {
+                OfflineRegion region = getRegionByName(name, offlineRegions);
+                boolean hasRegion = region != null;
+
+                if (hasRegion) {
+                    setOfflineRegionObserver(name, region);
+                }
+
+                promise.resolve(hasRegion);
+            }
+
+            @Override
+            public void onError(String error) {
+                promise.reject("setPackObserver", error);
+            }
+        });
+    }
+
+    @ReactMethod
     public void deletePack(final String name, final Promise promise) {
         final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
 

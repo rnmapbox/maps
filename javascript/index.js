@@ -1,5 +1,5 @@
 import { Animated, NativeModules, PermissionsAndroid } from 'react-native';
-import { IS_ANDROID } from './utils';
+import { isAndroid } from './utils';
 import * as geoUtils from './utils/geoUtils';
 
 // components
@@ -31,7 +31,7 @@ let MapboxGL = { ...NativeModules.MGLModule };
 
 // static methods
 MapboxGL.requestAndroidLocationPermissions = async function () {
-  if (IS_ANDROID) {
+  if (isAndroid()) {
     const res = await PermissionsAndroid.requestMultiple([
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
