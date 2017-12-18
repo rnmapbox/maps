@@ -24,6 +24,10 @@ class OfflinePack {
     return this._metadata;
   }
 
+  status () {
+    return MapboxGLOfflineManager.getPackStatus(this.name);
+  }
+
   resume () {
     return MapboxGLOfflineManager.resumePackDownload(this.name);
   }
