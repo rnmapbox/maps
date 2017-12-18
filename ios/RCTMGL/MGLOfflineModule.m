@@ -243,7 +243,12 @@ RCT_EXPORT_METHOD(setProgressEventThrottle:(NSNumber *)throttleValue)
     NSDictionary *payload = @{
       @"state": @(pack.state),
       @"name": name,
-      @"percentage": @(ceilf(progressPercentage * 100.0))
+      @"percentage": @(ceilf(progressPercentage * 100.0)),
+      @"completedResourceCount": @(pack.progress.countOfResourcesCompleted),
+      @"completedResourceSize": @(pack.progress.countOfBytesCompleted),
+      @"completedTileSize": @(pack.progress.countOfTileBytesCompleted),
+      @"completedTileCount": @(pack.progress.countOfTilesCompleted),
+      @"requiredResourceCount": @(pack.progress.maximumResourcesExpected)
     };
     
     return [RCTMGLEvent makeEvent:RCT_MAPBOX_OFFLINE_PROGRESS withPayload:payload];
