@@ -22,6 +22,7 @@ import com.mapbox.mapboxsdk.offline.OfflineRegionDefinition;
 import com.mapbox.mapboxsdk.offline.OfflineRegionError;
 import com.mapbox.mapboxsdk.offline.OfflineRegionStatus;
 import com.mapbox.mapboxsdk.offline.OfflineTilePyramidRegionDefinition;
+import com.mapbox.mapboxsdk.storage.FileSource;
 import com.mapbox.rctmgl.events.IEvent;
 import com.mapbox.rctmgl.events.OfflineEvent;
 import com.mapbox.rctmgl.events.constants.EventTypes;
@@ -32,6 +33,7 @@ import com.mapbox.services.commons.geojson.FeatureCollection;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
@@ -78,15 +80,24 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
         OfflineManager.CreateOfflineRegionCallback callback = new OfflineManager.CreateOfflineRegionCallback() {
             @Override
             public void onCreate(OfflineRegion offlineRegion) {
+                // TODO: Remove once we update to 5.2.2
+                FileSource.getInstance(mReactContext).deactivate();
+
                 promise.resolve(fromOfflineRegion(offlineRegion));
                 setOfflineRegionObserver(name, offlineRegion);
             }
 
             @Override
             public void onError(String error) {
+                // TODO: Remove once we update to 5.2.2
+                FileSource.getInstance(mReactContext).deactivate();
+                
                 sendEvent(makeErrorEvent(name, EventTypes.OFFLINE_ERROR, error));
             }
         };
+
+        // TODO: Remove once we update to 5.2.2
+        FileSource.getInstance(mReactContext).activate();
 
         offlineManager.createOfflineRegion(definition, metadataBytes, callback);
     }
