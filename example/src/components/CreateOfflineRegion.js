@@ -1,5 +1,14 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, Dimensions, StyleSheet } from 'react-native';
+
+import {
+  Alert,
+  Text,
+  View,
+  TouchableOpacity,
+  Dimensions,
+  StyleSheet,
+} from 'react-native';
+
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 import geoViewport from '@mapbox/geo-viewport';
 
@@ -44,6 +53,7 @@ class CreateOfflineRegion extends React.Component {
 
     this.state = {
       name: `test-${Date.now()}`,
+      offlineRegion: null,
       offlineRegionStatus: null,
     };
 
@@ -52,6 +62,7 @@ class CreateOfflineRegion extends React.Component {
 
     this.onResume = this.onResume.bind(this);
     this.onPause = this.onPause.bind(this);
+    this.onStatusRequest = this.onStatusRequest.bind(this);
   }
 
   componentWillUnmount () {
@@ -82,6 +93,7 @@ class CreateOfflineRegion extends React.Component {
   onDownloadProgress (offlineRegion, offlineRegionStatus) {
     this.setState({
       name: offlineRegion.name,
+      offlineRegion: offlineRegion,
       offlineRegionStatus: offlineRegionStatus,
     });
   }
@@ -95,6 +107,13 @@ class CreateOfflineRegion extends React.Component {
   onPause () {
     if (this.state.offlineRegion) {
       this.state.offlineRegion.pause();
+    }
+  }
+
+  async onStatusRequest () {
+    if (this.state.offlineRegion) {
+      const offlineRegionStatus = await this.state.offlineRegion.status();
+      Alert.alert('Get Status', JSON.stringify(offlineRegionStatus, null, 2));
     }
   }
 
@@ -144,6 +163,12 @@ class CreateOfflineRegion extends React.Component {
                 <TouchableOpacity onPress={this.onResume}>
                   <View style={styles.button}>
                     <Text style={styles.buttonTxt}>Resume</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={this.onStatusRequest}>
+                  <View style={styles.button}>
+                    <Text style={styles.buttonTxt}>Status</Text>
                   </View>
                 </TouchableOpacity>
 
