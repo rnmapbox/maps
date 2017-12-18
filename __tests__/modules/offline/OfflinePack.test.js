@@ -31,4 +31,12 @@ describe('OfflinePack', () => {
     expect(spy).toHaveBeenCalled();
     spy.mockRestore();
   });
+
+  it('should get pack status', () => {
+    const spy = jest.spyOn(NativeModules.MGLOfflineModule, 'getPackStatus');
+    const offlinePack = new OfflinePack(fakeNativePack);
+    offlinePack.status();
+    expect(spy).toHaveBeenCalled();
+    spy.mockRestore();
+  });
 });
