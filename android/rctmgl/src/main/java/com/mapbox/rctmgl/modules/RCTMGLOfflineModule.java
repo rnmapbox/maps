@@ -143,14 +143,7 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
                 region.getStatus(new OfflineRegion.OfflineRegionStatusCallback() {
                     @Override
                     public void onStatus(OfflineRegionStatus status) {
-                        final WritableMap map = Arguments.createMap();
-                        map.putInt("downloadState", status.getDownloadState());
-                        map.putInt("completedResourceCount", (int)status.getCompletedResourceCount());
-                        map.putInt("completedResourceSize", (int)status.getCompletedResourceSize());
-                        map.putInt("completedTileSize", (int)status.getCompletedTileSize());
-                        map.putInt("completedTileCount", (int)status.getCompletedTileCount());
-                        map.putInt("requiredResourceCount", (int)status.getRequiredResourceCount());
-                        promise.resolve(map);
+                        promise.resolve(makeRegionStatus(name, status));
                     }
 
                     @Override
