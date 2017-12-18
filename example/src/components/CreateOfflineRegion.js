@@ -44,8 +44,7 @@ class CreateOfflineRegion extends React.Component {
 
     this.state = {
       name: `test-${Date.now()}`,
-      percentage: 0,
-      offlineRegion: null,
+      offlineRegionStatus: null,
     };
 
     this.onDownloadProgress = this.onDownloadProgress.bind(this);
@@ -80,15 +79,10 @@ class CreateOfflineRegion extends React.Component {
     );
   }
 
-  onDownloadProgress (offlineRegion, downloadStatus) {
-    // the iOS SDK will return 0 on the first event of a resume offline pack download
-    if (this.state.percentage > downloadStatus.percentage) {
-      return;
-    }
+  onDownloadProgress (offlineRegion, offlineRegionStatus) {
     this.setState({
       name: offlineRegion.name,
-      percentage: downloadStatus.percentage,
-      offlineRegion: offlineRegion,
+      offlineRegionStatus: offlineRegionStatus,
     });
   }
 
@@ -105,13 +99,26 @@ class CreateOfflineRegion extends React.Component {
   }
 
   _formatPercent () {
-    if (!this.state.percentage) {
+    if (!this.state.offlineRegionStatus) {
       return '0%';
     }
-    return `${(''+this.state.percentage).split('.')[0]}%`;
+    return Math.round(this.state.offlineRegionStatus.percentage / 10) / 10;
+  }
+
+  _getRegionDownloadState (downloadState) {
+    switch (downloadState) {
+      case MapboxGL.OfflinePackDownloadState.Active:
+        return 'Active';
+      case MapboxGL.OfflinePackDownloadState.Complete:
+        return 'Complete';
+      default:
+        return 'Inactive';
+    }
   }
 
   render () {
+    const offlineRegionStatus = this.state.offlineRegionStatus;
+
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
@@ -122,13 +129,16 @@ class CreateOfflineRegion extends React.Component {
             centerCoordinate={CENTER_COORD}
             style={sheet.matchParent} />
 
-        {this.state.name !== null ? (
+        {offlineRegionStatus !== null ? (
           <Bubble>
             <View style={{ flex : 1 }}>
 
-              <Text style={styles.percentageText}>
-                Offline pack {this.state.name} is at {this._formatPercent()}
-              </Text>
+              <Text>Download State: {this._getRegionDownloadState(offlineRegionStatus.state)}</Text>
+              <Text>Download Percent: {offlineRegionStatus.percentage}</Text>
+              <Text>Completed Resource Count: {offlineRegionStatus.completedResourceCount}</Text>
+              <Text>Completed Resource Size: {offlineRegionStatus.completedResourceSize}</Text>
+              <Text>Completed Tile Count: {offlineRegionStatus.completedTileCount}</Text>
+              <Text>Required Resource Count: {offlineRegionStatus.requiredResourceCount}</Text>
 
               <View style={styles.buttonCnt}>
                 <TouchableOpacity onPress={this.onResume}>
