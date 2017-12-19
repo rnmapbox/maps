@@ -166,8 +166,10 @@ NativeModules.MGLOfflineModule = {
   },
   getPacks: () => Promise.resolve([]),
   deletePack: () => Promise.resolve(),
+  getPackStatus: () => Promise.resolve({}),
   pausePackDownload: () => Promise.resolve(),
   resumePackDownload: () => Promise.resolve(),
+  setPackObserver: () => Promise.resolve(),
   setTileCountLimit: jest.fn(),
   setProgressEventThrottle: jest.fn(),
 };

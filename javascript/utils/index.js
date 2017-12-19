@@ -11,7 +11,10 @@ import {
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 export const viewPropTypes = ViewPropTypes || View.props;
-export const IS_ANDROID = Platform.OS === 'android';
+
+export function isAndroid () {
+  return Platform.OS === 'android';
+}
 
 export function isFunction (fn) {
   return typeof fn === 'function';
@@ -43,12 +46,12 @@ export function runNativeCommand (module, name, nativeRef, args = []) {
     throw new Error(`Could not find handle for native ref ${module}.${name}`);
   }
 
-  const managerInstance = IS_ANDROID ? NativeModules.UIManager[module] : NativeModules[getIOSModuleName(module)];
+  const managerInstance = isAndroid() ? NativeModules.UIManager[module] : NativeModules[getIOSModuleName(module)];
   if (!managerInstance) {
     throw new Error(`Could not find ${module}`);
   }
 
-  if (IS_ANDROID) {
+  if (isAndroid()) {
     return NativeModules.UIManager.dispatchViewManagerCommand(
       handle,
       managerInstance.Commands[name],

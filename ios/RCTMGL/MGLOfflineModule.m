@@ -102,6 +102,21 @@ RCT_EXPORT_METHOD(getPacks:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseR
     resolve(jsonPacks);
 }
 
+RCT_EXPORT_METHOD(getPackStatus:(NSString *)name
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    MGLOfflinePack *pack = [self _getPackFromName:name];
+    
+    if (pack == nil) {
+        resolve(nil);
+        NSLog(@"getPackStatus - Unknown offline region");
+        return;
+    }
+    
+    resolve([self _makeRegionStatusPayload:name pack:pack]);
+}
+
 RCT_EXPORT_METHOD(deletePack:(NSString *)name
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
@@ -233,20 +248,27 @@ RCT_EXPORT_METHOD(setProgressEventThrottle:(NSNumber *)throttleValue)
                                 error:nil];
 }
 
-- (RCTMGLEvent *)_makeProgressEvent:(NSString *)name pack:(MGLOfflinePack *)pack
+- (NSDictionary *)_makeRegionStatusPayload:(NSString *)name pack:(MGLOfflinePack *)pack
 {
-    
     uint64_t completedResources = pack.progress.countOfResourcesCompleted;
     uint64_t expectedResources = pack.progress.countOfResourcesExpected;
     float progressPercentage = (float)completedResources / expectedResources;
     
-    NSDictionary *payload = @{
+    return @{
       @"state": @(pack.state),
       @"name": name,
-      @"percentage": @(ceilf(progressPercentage * 100.0))
+      @"percentage": @(ceilf(progressPercentage * 100.0)),
+      @"completedResourceCount": @(pack.progress.countOfResourcesCompleted),
+      @"completedResourceSize": @(pack.progress.countOfBytesCompleted),
+      @"completedTileSize": @(pack.progress.countOfTileBytesCompleted),
+      @"completedTileCount": @(pack.progress.countOfTilesCompleted),
+      @"requiredResourceCount": @(pack.progress.maximumResourcesExpected)
     };
-    
-    return [RCTMGLEvent makeEvent:RCT_MAPBOX_OFFLINE_PROGRESS withPayload:payload];
+}
+
+- (RCTMGLEvent *)_makeProgressEvent:(NSString *)name pack:(MGLOfflinePack *)pack
+{
+    return [RCTMGLEvent makeEvent:RCT_MAPBOX_OFFLINE_PROGRESS withPayload:[self _makeRegionStatusPayload:name pack:pack]];
 }
 
 - (RCTMGLEvent *)_makeErrorEvent:(NSString *)name type:(NSString *)type message:(NSString *)message

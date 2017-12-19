@@ -126,6 +126,65 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void getPackStatus(final String name, final Promise promise) {
+        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
+
+        offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
+            @Override
+            public void onList(OfflineRegion[] offlineRegions) {
+                OfflineRegion region = getRegionByName(name, offlineRegions);
+
+                if (region == null) {
+                    promise.resolve(null);
+                    Log.w(REACT_CLASS, "getPackStatus - Unknown offline region");
+                    return;
+                }
+
+                region.getStatus(new OfflineRegion.OfflineRegionStatusCallback() {
+                    @Override
+                    public void onStatus(OfflineRegionStatus status) {
+                        promise.resolve(makeRegionStatus(name, status));
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        promise.reject("getPackStatus", error);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+                promise.reject("getPackStatus", error);
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setPackObserver(final String name, final Promise promise) {
+        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
+
+        offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
+            @Override
+            public void onList(OfflineRegion[] offlineRegions) {
+                OfflineRegion region = getRegionByName(name, offlineRegions);
+                boolean hasRegion = region != null;
+
+                if (hasRegion) {
+                    setOfflineRegionObserver(name, region);
+                }
+
+                promise.resolve(hasRegion);
+            }
+
+            @Override
+            public void onError(String error) {
+                promise.reject("setPackObserver", error);
+            }
+        });
+    }
+
+    @ReactMethod
     public void deletePack(final String name, final Promise promise) {
         final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
 
@@ -264,7 +323,7 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
                 Log.d(REACT_CLASS, String.format("Completed Resource count %d", status.getCompletedResourceCount()));
 
                 if (shouldSendUpdate(System.currentTimeMillis(), status)) {
-                    sendEvent(makeStatusEvent(name, region, status));
+                    sendEvent(makeStatusEvent(name, status));
                     timestamp = System.currentTimeMillis();
                 }
                 prevStatus = status;
@@ -317,25 +376,35 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
         return new OfflineEvent(OFFLINE_ERROR, errorType, payload);
     }
 
-    private OfflineEvent makeStatusEvent(String regionName, OfflineRegion region, OfflineRegionStatus status) {
-        WritableMap payload = new WritableNativeMap();
+    private OfflineEvent makeStatusEvent(String regionName, OfflineRegionStatus status) {
+        return new OfflineEvent(OFFLINE_PROGRESS, EventTypes.OFFLINE_STATUS, makeRegionStatus(regionName, status));
+    }
+
+    private WritableMap makeRegionStatus(String regionName, OfflineRegionStatus status) {
+        WritableMap map = Arguments.createMap();
 
         int downloadState = status.getDownloadState();
+        double percentage = 0.0;
 
         if (status.isComplete()) {
             downloadState = COMPLETE_REGION_DOWNLOAD_STATE;
-            payload.putDouble("percentage", 100);
+            percentage = 100.0;
         } else {
-            double percentage = status.getRequiredResourceCount() >= 0
+            percentage = status.getRequiredResourceCount() >= 0
                     ? (100.0 * status.getCompletedResourceCount() / status.getRequiredResourceCount()) :
                     0.0;
-            payload.putDouble("percentage", percentage);
         }
 
-        payload.putInt("state", downloadState);
-        payload.putString("name", regionName);
+        map.putString("name", regionName);
+        map.putInt("state", downloadState);
+        map.putDouble("percentage", percentage);
+        map.putInt("completedResourceCount", (int)status.getCompletedResourceCount());
+        map.putInt("completedResourceSize", (int)status.getCompletedResourceSize());
+        map.putInt("completedTileSize", (int)status.getCompletedTileSize());
+        map.putInt("completedTileCount", (int)status.getCompletedTileCount());
+        map.putInt("requiredResourceCount", (int)status.getRequiredResourceCount());
 
-        return new OfflineEvent(OFFLINE_PROGRESS, EventTypes.OFFLINE_STATUS, payload);
+        return map;
     }
 
     private LatLngBounds getBoundsFromOptions(ReadableMap options) {

@@ -1,5 +1,5 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
-import { isUndefined, isFunction } from '../../utils';
+import { isUndefined, isFunction, isAndroid } from '../../utils';
 
 import OfflineCreatePackOptions from './OfflineCreatePackOptions';
 import OfflinePack from './OfflinePack';
@@ -152,7 +152,7 @@ class OfflineManager {
    * @param  {Callback} errorListener      Callback that listens for status events while downloading the offline resource.
    * @return {void}
    */
-  subscribe (packName, progressListener, errorListener) {
+  async subscribe (packName, progressListener, errorListener) {
     const totalProgressListeners = Object.keys(this._progressListeners).length;
     if (isFunction(progressListener)) {
       if (totalProgressListeners === 0) {
@@ -167,6 +167,17 @@ class OfflineManager {
         OfflineModuleEventEmitter.addListener(MapboxGL.OfflineCallbackName.Error, this._onError);
       }
       this._errorListeners[packName] = errorListener;
+    }
+
+    // we need to manually set the pack observer on Android
+    // if we're resuming a pack download instead of going thru the create flow
+    if (isAndroid() && this._offlinePacks[packName]) {
+      try {
+        // manually set a listener, since listeners are only set on create flow
+        await MapboxGLOfflineManager.setPackObserver(packName);
+      } catch (e) {
+        console.log('Unable to set pack observer', e); // eslint-disable-line
+      }
     }
   }
 

@@ -1,6 +1,6 @@
+import { NativeModules, Platform } from 'react-native';
 import MapboxGL from '../../../javascript';
 import { OfflineModuleEventEmitter } from '../../../javascript/modules/offline/offlineManager';
-import { NativeModules } from 'react-native';
 
 describe('offlineManager', () => {
   const packOptions = {
@@ -143,6 +143,52 @@ describe('offlineManager', () => {
       expect(
         MapboxGL.offlineManager._hasListeners(packOptions.name, MapboxGL.offlineManager._errorListeners)
       ).toBeFalsy();
+    });
+  });
+
+  describe('Android', () => {
+    beforeEach(() => Platform.OS = 'android');
+
+    it('should set pack observer manually', async () => {
+      const spy = jest.spyOn(NativeModules.MGLOfflineModule, 'setPackObserver');
+
+      const name = `test-${Date.now()}`;
+      const noop = () => {};
+      const options = { ...packOptions, name: name };
+      await MapboxGL.offlineManager.createPack(options);
+      await MapboxGL.offlineManager.subscribe(name, noop, noop);
+
+      expect(spy).toHaveBeenCalled();
+      spy.mockRestore();
+    });
+
+    it('should not set pack observer manually during create flow', async () => {
+      const spy = jest.spyOn(NativeModules.MGLOfflineModule, 'setPackObserver');
+
+      const name = `test-${Date.now()}`;
+      const noop = () => {};
+      const options = { ...packOptions, name: name };
+      await MapboxGL.offlineManager.createPack(options, noop, noop);
+
+      expect(spy).not.toHaveBeenCalled();
+      spy.mockRestore();
+    });
+  });
+
+  describe('iOS', () => {
+    beforeEach(() => Platform.OS = 'ios');
+
+    it('should not set pack observer manually', async () => {
+      const spy = jest.spyOn(NativeModules.MGLOfflineModule, 'setPackObserver');
+
+      const name = `test-${Date.now()}`;
+      const noop = () => {};
+      const options = { ...packOptions, name: name };
+      await MapboxGL.offlineManager.createPack(options);
+      await MapboxGL.offlineManager.subscribe(name, noop, noop);
+
+      expect(spy).not.toHaveBeenCalled();
+      spy.mockRestore();
     });
   });
 });
