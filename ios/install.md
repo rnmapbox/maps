@@ -55,6 +55,8 @@ Then in Xcode navigate to `Build Phases` click on it and you should see `Link Bi
 ### Add Framework Header Search Paths
 In the `Build Settings` of your application target search for `FRAMEWORK_SEARCH_PATHS`. Add `$(PROJECT_DIR)/../node_modules/@mapbox/react-native-mapbox-gl/ios` non-recursive to your `Framework Search Paths`.
 
+**Important** If their is a select input under `Debug` line, choose `Any iOS SDK`.
+
 ### Add Run Script
 
 In the `Build Phases` tab, click the plus sign and then `New Run Script Phase`
