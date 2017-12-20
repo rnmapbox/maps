@@ -14,7 +14,7 @@ const styles = MapboxGL.StyleSheet.create({
     iconSize: MapboxGL.StyleSheet.source([
       ['example', IS_ANDROID ? 1 : 0.5],
       ['airport-15', 1.2],
-    ], 'icon', MapboxGL.InterpolationMode.Categorial),
+    ], 'icon', MapboxGL.InterpolationMode.Categorical),
   },
 });
 
