@@ -93,6 +93,11 @@ android {
     compileSdkVersion 26
     buildToolsVersion "23.0.1"
 
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
     defaultConfig {
         applicationId "com.rnmapboxglexample"
         minSdkVersion 16
