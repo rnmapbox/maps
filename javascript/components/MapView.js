@@ -206,15 +206,8 @@ class MapView extends React.Component {
     */
     onDidFinishLoadingStyle: PropTypes.func,
 
-    /**
-    * This event is triggered when a fly to animation is cancelled or completed after calling flyTo
-    */
-    onFlyToComplete: PropTypes.func,
 
-    /**
-     * This event is triggered once the camera is finished after calling setCamera
-     */
-    onSetCameraComplete: PropTypes.func,
+    onUserTrackingModeChange: PropTypes.func,
   };
 
   static defaultProps = {
@@ -633,6 +626,7 @@ class MapView extends React.Component {
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
       onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
+      onUserTrackingModeChange: this.props.onUserTrackingModeChange,
     };
 
     if (isAndroid() && this.props.textureMode) {
