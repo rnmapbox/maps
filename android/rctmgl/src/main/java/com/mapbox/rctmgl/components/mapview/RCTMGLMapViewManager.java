@@ -185,6 +185,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                 .put(EventKeys.MAP_CLICK, "onPress")
                 .put(EventKeys.MAP_LONG_CLICK,"onLongPress")
                 .put(EventKeys.MAP_ONCHANGE, "onMapChange")
+                .put(EventKeys.MAP_USER_TRACKING_MODE_CHANGE, "onUserTrackingModeChange")
                 .put(EventKeys.MAP_ANDROID_CALLBACK, "onAndroidCallback")
                 .build();
     }

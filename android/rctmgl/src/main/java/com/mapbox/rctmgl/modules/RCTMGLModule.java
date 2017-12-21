@@ -19,6 +19,7 @@ import com.mapbox.rctmgl.components.camera.constants.CameraMode;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleValue;
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 import com.mapbox.rctmgl.events.constants.EventTypes;
+import com.mapbox.rctmgl.location.UserTrackingMode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +39,6 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
     public RCTMGLModule(ReactApplicationContext reactApplicationContext) {
         super(reactApplicationContext);
         mReactContext = reactApplicationContext;
-        mUiThreadHandler = new Handler(Looper.getMainLooper());
     }
 
     @Override
@@ -80,10 +80,10 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
 
         // user tracking modes
         Map<String, Integer> userTrackingModes = new HashMap<>();
-        userTrackingModes.put("None", LocationLayerMode.NONE);
-        userTrackingModes.put("Follow", LocationLayerMode.TRACKING);
-        userTrackingModes.put("FollowWithCourse", LocationLayerMode.NAVIGATION);
-        userTrackingModes.put("FollowWithHeading", LocationLayerMode.COMPASS);
+        userTrackingModes.put("None", UserTrackingMode.NONE);
+        userTrackingModes.put("Follow", UserTrackingMode.FOLLOW);
+        userTrackingModes.put("FollowWithCourse", UserTrackingMode.FollowWithCourse);
+        userTrackingModes.put("FollowWithHeading", UserTrackingMode.FollowWithHeading);
 
         // camera modes
         Map<String, Integer> cameraModes = new HashMap<>();
@@ -262,7 +262,7 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setAccessToken(final String accessToken) {
-        mUiThreadHandler.post(new Runnable() {
+        mReactContext.runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 Mapbox.getInstance(getReactApplicationContext(), accessToken);
