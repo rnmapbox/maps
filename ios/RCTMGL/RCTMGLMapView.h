@@ -50,6 +50,7 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onMapChange;
+@property (nonatomic, copy) RCTBubblingEventBlock onUserTrackingModeChange;
 
 - (CLLocationDistance)getMetersPerPixelAtLatitude:(double)latitude withZoom:(double)zoomLevel;
 - (CLLocationDistance)altitudeFromZoom:(double)zoomLevel;

@@ -226,7 +226,8 @@ static double const M2PI = M_PI * 2;
 - (void)setReactUserTrackingMode:(int)reactUserTrackingMode
 {
     _reactUserTrackingMode = reactUserTrackingMode;
-    [self setUserTrackingMode:(NSUInteger)_reactUserTrackingMode animated:_animated];
+    [self setUserTrackingMode:_reactUserTrackingMode animated:NO];
+    self.showsUserHeadingIndicator = (NSUInteger)_reactUserTrackingMode == MGLUserTrackingModeFollowWithHeading;
 }
 
 #pragma mark - methods
