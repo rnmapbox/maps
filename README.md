@@ -15,7 +15,7 @@ Mapbox is the location data platform for mobile and web applications. We provide
 
 ## Sign up for Mapbox
 
-Not a Mapbox user yet? [Sign up for an account here](https://www.mapbox.com/signup/). Once you’re signed in, all you need to start building is a Mapbox access token. Use this same short code with all of our interactive mapping libraries, Python and JavaScript SDKs, and directly against our REST APIs. You can [create and manage your access tokens in Mapbox Studio](https://www.mapbox.com/studio/account/tokens/).
+Not a Mapbox user yet? [Sign up for an account here](https://www.mapbox.com/signup/). Once you’re signed in, all you need to start building is a Mapbox access token. Use this same short code with all of our interactive mapping libraries, Python and JavaScript SDKs, and directly against our REST APIs. You can create and manage your access tokens on your [Mapbox Account page](https://www.mapbox.com/account/).
 
 
 ## Installation
