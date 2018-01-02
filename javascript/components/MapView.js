@@ -243,6 +243,14 @@ class MapView extends React.Component {
     this._callbackMap = new Map();
   }
 
+  // Add convertCoordinate:ToPointToView
+  async getPointInView (coordinate) {
+    const res = await this._runNativeCommand('getPointInView',[
+      coordinate,
+    ]);
+    return res.pointInView;
+  }
+
   /**
    * The coordinate bounds(ne, sw) visible in the users’s viewport.
    *
