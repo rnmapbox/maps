@@ -58,8 +58,10 @@
       } else {
         [RCTMGLUtils fetchImage:_bridge url:styleValue.payload[@"value"] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
-            [_style setImage:image forName:styleValue.payload[@"value"]];
-            [self setFillPattern:layer withReactStyleValue:styleValue];
+            dispatch_async(dispatch_get_main_queue(), ^{
+              [_style setImage:image forName:styleValue.payload[@"value"]];
+              [self setFillPattern:layer withReactStyleValue:styleValue];
+            });
           }
         }];
       }
@@ -136,8 +138,10 @@
       } else {
         [RCTMGLUtils fetchImage:_bridge url:styleValue.payload[@"value"] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
-            [_style setImage:image forName:styleValue.payload[@"value"]];
-            [self setLinePattern:layer withReactStyleValue:styleValue];
+            dispatch_async(dispatch_get_main_queue(), ^{
+              [_style setImage:image forName:styleValue.payload[@"value"]];
+              [self setLinePattern:layer withReactStyleValue:styleValue];
+            });
           }
         }];
       }
@@ -190,8 +194,10 @@
       } else {
         [RCTMGLUtils fetchImage:_bridge url:styleValue.payload[@"value"] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
-            [_style setImage:image forName:styleValue.payload[@"value"]];
-            [self setIconImage:layer withReactStyleValue:styleValue];
+            dispatch_async(dispatch_get_main_queue(), ^{
+              [_style setImage:image forName:styleValue.payload[@"value"]];
+              [self setIconImage:layer withReactStyleValue:styleValue];
+            });
           }
         }];
       }
@@ -403,8 +409,10 @@
       } else {
         [RCTMGLUtils fetchImage:_bridge url:styleValue.payload[@"value"] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
-            [_style setImage:image forName:styleValue.payload[@"value"]];
-            [self setFillExtrusionPattern:layer withReactStyleValue:styleValue];
+            dispatch_async(dispatch_get_main_queue(), ^{
+              [_style setImage:image forName:styleValue.payload[@"value"]];
+              [self setFillExtrusionPattern:layer withReactStyleValue:styleValue];
+            });
           }
         }];
       }
@@ -502,8 +510,10 @@
       } else {
         [RCTMGLUtils fetchImage:_bridge url:styleValue.payload[@"value"] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
-            [_style setImage:image forName:styleValue.payload[@"value"]];
-            [self setBackgroundPattern:layer withReactStyleValue:styleValue];
+            dispatch_async(dispatch_get_main_queue(), ^{
+              [_style setImage:image forName:styleValue.payload[@"value"]];
+              [self setBackgroundPattern:layer withReactStyleValue:styleValue];
+            });
           }
         }];
       }
