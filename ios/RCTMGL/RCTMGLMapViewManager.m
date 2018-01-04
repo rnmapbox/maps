@@ -95,7 +95,6 @@ RCT_EXPORT_VIEW_PROPERTY(onMapChange, RCTBubblingEventBlock)
 
 #pragma mark - React Methods
 
-// Add convertCoordinate:ToPointToView 
 RCT_EXPORT_METHOD(getPointInView:(nonnull NSNumber*)reactTag
                   atCoordinate:(NSArray<NSNumber*>*)coordinate
                   resolver:(RCTPromiseResolveBlock)resolve
@@ -110,13 +109,11 @@ RCT_EXPORT_METHOD(getPointInView:(nonnull NSNumber*)reactTag
         }
         
         RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
-        // CLLocationCoordinate2DMake(Lat, Lng)
+
         CGPoint pointInView = [reactMapView convertCoordinate:CLLocationCoordinate2DMake([coordinate[0] doubleValue], [coordinate[1] doubleValue])
                                                  toPointToView:reactMapView];
 
-        resolve(@{ @"pointInView": [NSArray arrayWithObjects: [NSNumber numberWithFloat:pointInView.x],
-                                                   [NSNumber numberWithFloat:pointInView.y],
-                                                   nil] });
+        resolve(@{ @"pointInView": @[@(pointInView.x), @(pointInView.y)] });
     }];
 }
 

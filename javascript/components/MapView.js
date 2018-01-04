@@ -243,7 +243,15 @@ class MapView extends React.Component {
     this._callbackMap = new Map();
   }
 
-  // Add convertCoordinate:ToPointToView
+  /**
+   * Converts a geographic coordinate to a point in the given view’s coordinate system.
+   *
+   * @example
+   * const pointInView = await this._map.getPointInView([-37.817070, 144.949901]);
+   * 
+   * @param {Array<Number>} coordinate - A point expressed in the map view's coordinate system.
+   * @return {Array}
+   */
   async getPointInView (coordinate) {
     const res = await this._runNativeCommand('getPointInView',[
       coordinate,
@@ -251,7 +259,7 @@ class MapView extends React.Component {
     return res.pointInView;
   }
 
-  /**
+    /**
    * The coordinate bounds(ne, sw) visible in the users’s viewport.
    *
    * @example
