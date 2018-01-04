@@ -110,7 +110,7 @@ RCT_EXPORT_METHOD(getPointInView:(nonnull NSNumber*)reactTag
         
         RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
 
-        CGPoint pointInView = [reactMapView convertCoordinate:CLLocationCoordinate2DMake([coordinate[0] doubleValue], [coordinate[1] doubleValue])
+        CGPoint pointInView = [reactMapView convertCoordinate:CLLocationCoordinate2DMake([coordinate[1] doubleValue], [coordinate[0] doubleValue])
                                                  toPointToView:reactMapView];
 
         resolve(@{ @"pointInView": @[@(pointInView.x), @(pointInView.y)] });
