@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Platform } from 'react-native';
+import { Text } from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
@@ -13,7 +13,7 @@ const styles = MapboxGL.StyleSheet.create({
   icon: {
     iconImage: exampleIcon,
     iconAllowOverlap: true,
-    iconSize: Platform.OS === 'android' ? 1 : 0.5,
+    iconSize: 0.5,
   },
 });
 

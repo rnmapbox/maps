@@ -33,7 +33,7 @@ describe('MapboxStyleSheet', () => {
     verifyStyleSheetsMatch({ fillPattern: 'test' }, {
       fillPattern: {
         styletype: 'constant',
-        payload: { value: 'test', image: true },
+        payload: { value: 'test', image: true, shouldAddImage: false },
         __MAPBOX_STYLE__: true,
       },
     });
@@ -43,7 +43,7 @@ describe('MapboxStyleSheet', () => {
     verifyStyleSheetsMatch({ fillPattern: 123 }, {
       fillPattern: {
         styletype: 'constant',
-        payload: { value: 'asset://test.png' , image: true },
+        payload: { value: 'asset://test.png' , image: true, shouldAddImage: true },
         __MAPBOX_STYLE__: true,
       },
     });
@@ -197,7 +197,7 @@ describe('MapboxStyleSheet', () => {
 
     verifyStyleSheetsMatch(styles, {
       fillOpacity: { styletype: 'constant', payload: { value: 0.84 }, __MAPBOX_STYLE__: true },
-      fillPattern: { styletype: 'constant', payload: { value: 'test', image: true }, __MAPBOX_STYLE__: true },
+      fillPattern: { styletype: 'constant', payload: { value: 'test', image: true, shouldAddImage: false }, __MAPBOX_STYLE__: true },
     });
   });
 
