@@ -1,7 +1,10 @@
 package com.mapbox.rctmgl.utils;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.LruCache;
 
@@ -23,6 +26,10 @@ public class BitmapUtils {
     };
 
     public static Bitmap getBitmapFromURL(String url) {
+        return BitmapUtils.getBitmapFromURL(url, null);
+    }
+
+    public static Bitmap getBitmapFromURL(String url, BitmapFactory.Options options) {
         Bitmap bitmap = getImage(url);
 
         if (bitmap != null) {
@@ -31,7 +38,7 @@ public class BitmapUtils {
 
         try {
             InputStream bitmapStream = new URL(url).openStream();
-            bitmap = BitmapFactory.decodeStream(bitmapStream);
+            bitmap = BitmapFactory.decodeStream(bitmapStream, null, options);
             bitmapStream.close();
             addImage(url, bitmap);
         } catch (Exception e) {
@@ -39,6 +46,12 @@ public class BitmapUtils {
         }
 
         return bitmap;
+    }
+
+    public static Bitmap getBitmapFromResource(Context context, String resourceName, BitmapFactory.Options options) {
+        Resources resources = context.getResources();
+        int resID = resources.getIdentifier(resourceName, "drawable", context.getPackageName());
+        return BitmapFactory.decodeResource(resources, resID, options);
     }
 
     private static void addImage(String imageURL, Bitmap bitmap) {

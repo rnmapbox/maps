@@ -22,6 +22,6 @@ public class RCTMGLBackgroundLayer extends RCTLayer<BackgroundLayer> {
 
     @Override
     public void addStyles() {
-        RCTMGLStyleFactory.setBackgroundLayerStyle(mLayer, new RCTMGLStyle(mReactStyle, mMap));
+        RCTMGLStyleFactory.setBackgroundLayerStyle(mLayer, new RCTMGLStyle(getContext(), mReactStyle, mMap));
     }
 }

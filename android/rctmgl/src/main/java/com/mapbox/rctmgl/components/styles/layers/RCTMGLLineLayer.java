@@ -48,7 +48,7 @@ public class RCTMGLLineLayer extends RCTLayer<LineLayer> {
 
     @Override
     public void addStyles() {
-        RCTMGLStyleFactory.setLineLayerStyle(mLayer, new RCTMGLStyle(mReactStyle, mMap));
+        RCTMGLStyleFactory.setLineLayerStyle(mLayer, new RCTMGLStyle(getContext(), mReactStyle, mMap));
     }
 
     public void setSourceLayerID(String sourceLayerID) {

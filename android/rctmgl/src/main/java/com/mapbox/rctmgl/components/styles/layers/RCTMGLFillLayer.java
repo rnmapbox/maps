@@ -48,7 +48,7 @@ public class RCTMGLFillLayer extends RCTLayer<FillLayer> {
 
     @Override
     public void addStyles() {
-        RCTMGLStyleFactory.setFillLayerStyle(mLayer, new RCTMGLStyle(mReactStyle, mMap));
+        RCTMGLStyleFactory.setFillLayerStyle(mLayer, new RCTMGLStyle(getContext(), mReactStyle, mMap));
     }
 
     public void setSourceLayerID(String sourceLayerID) {

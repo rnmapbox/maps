@@ -15,13 +15,15 @@ import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
 import com.mapbox.mapboxsdk.style.light.Light;
 import com.mapbox.mapboxsdk.style.light.Position;
+import com.mapbox.rctmgl.utils.DownloadMapImageTask;
 
 import java.util.List;
 
 public class RCTMGLStyleFactory {
     public static final String VALUE_KEY = "value";
+    public static final String SHOULD_ADD_IMAGE_KEY = "shouldAddImage";
 
-    public static void setFillLayerStyle(FillLayer layer, RCTMGLStyle style) {
+    public static void setFillLayerStyle(final FillLayer layer, RCTMGLStyle style) {
       List<String> styleKeys = style.getAllStyleKeys();
 
       if (styleKeys.size() == 0) {
@@ -29,7 +31,7 @@ public class RCTMGLStyleFactory {
       }
 
       for (String styleKey : styleKeys) {
-        RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
+        final RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
 
         switch (styleKey) {
             case "visibility":
@@ -66,8 +68,12 @@ public class RCTMGLStyleFactory {
               RCTMGLStyleFactory.setFillTranslateAnchor(layer, styleValue);
               break;
             case "fillPattern":
-              style.addImage(styleValue.getString(VALUE_KEY));
-              RCTMGLStyleFactory.setFillPattern(layer, styleValue);
+              style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
+                  @Override
+                  public void onAllImagesLoaded() {
+                      RCTMGLStyleFactory.setFillPattern(layer, styleValue);
+                  }
+              });
               break;
             case "fillPatternTransition":
               RCTMGLStyleFactory.setFillPatternTransition(layer, styleValue);
@@ -75,7 +81,7 @@ public class RCTMGLStyleFactory {
         }
       }
     }
-    public static void setLineLayerStyle(LineLayer layer, RCTMGLStyle style) {
+    public static void setLineLayerStyle(final LineLayer layer, RCTMGLStyle style) {
       List<String> styleKeys = style.getAllStyleKeys();
 
       if (styleKeys.size() == 0) {
@@ -83,7 +89,7 @@ public class RCTMGLStyleFactory {
       }
 
       for (String styleKey : styleKeys) {
-        RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
+        final RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
 
         switch (styleKey) {
             case "lineCap":
@@ -153,8 +159,12 @@ public class RCTMGLStyleFactory {
               RCTMGLStyleFactory.setLineDasharrayTransition(layer, styleValue);
               break;
             case "linePattern":
-              style.addImage(styleValue.getString(VALUE_KEY));
-              RCTMGLStyleFactory.setLinePattern(layer, styleValue);
+              style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
+                  @Override
+                  public void onAllImagesLoaded() {
+                      RCTMGLStyleFactory.setLinePattern(layer, styleValue);
+                  }
+              });
               break;
             case "linePatternTransition":
               RCTMGLStyleFactory.setLinePatternTransition(layer, styleValue);
@@ -162,7 +172,7 @@ public class RCTMGLStyleFactory {
         }
       }
     }
-    public static void setSymbolLayerStyle(SymbolLayer layer, RCTMGLStyle style) {
+    public static void setSymbolLayerStyle(final SymbolLayer layer, RCTMGLStyle style) {
       List<String> styleKeys = style.getAllStyleKeys();
 
       if (styleKeys.size() == 0) {
@@ -170,7 +180,7 @@ public class RCTMGLStyleFactory {
       }
 
       for (String styleKey : styleKeys) {
-        RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
+        final RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
 
         switch (styleKey) {
             case "symbolPlacement":
@@ -204,8 +214,12 @@ public class RCTMGLStyleFactory {
               RCTMGLStyleFactory.setIconTextFitPadding(layer, styleValue);
               break;
             case "iconImage":
-              style.addImage(styleValue.getString(VALUE_KEY));
-              RCTMGLStyleFactory.setIconImage(layer, styleValue);
+              style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
+                  @Override
+                  public void onAllImagesLoaded() {
+                      RCTMGLStyleFactory.setIconImage(layer, styleValue);
+                  }
+              });
               break;
             case "iconRotate":
               RCTMGLStyleFactory.setIconRotate(layer, styleValue);
@@ -366,7 +380,7 @@ public class RCTMGLStyleFactory {
         }
       }
     }
-    public static void setCircleLayerStyle(CircleLayer layer, RCTMGLStyle style) {
+    public static void setCircleLayerStyle(final CircleLayer layer, RCTMGLStyle style) {
       List<String> styleKeys = style.getAllStyleKeys();
 
       if (styleKeys.size() == 0) {
@@ -374,7 +388,7 @@ public class RCTMGLStyleFactory {
       }
 
       for (String styleKey : styleKeys) {
-        RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
+        final RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
 
         switch (styleKey) {
             case "visibility":
@@ -440,7 +454,7 @@ public class RCTMGLStyleFactory {
         }
       }
     }
-    public static void setFillExtrusionLayerStyle(FillExtrusionLayer layer, RCTMGLStyle style) {
+    public static void setFillExtrusionLayerStyle(final FillExtrusionLayer layer, RCTMGLStyle style) {
       List<String> styleKeys = style.getAllStyleKeys();
 
       if (styleKeys.size() == 0) {
@@ -448,7 +462,7 @@ public class RCTMGLStyleFactory {
       }
 
       for (String styleKey : styleKeys) {
-        RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
+        final RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
 
         switch (styleKey) {
             case "visibility":
@@ -476,8 +490,12 @@ public class RCTMGLStyleFactory {
               RCTMGLStyleFactory.setFillExtrusionTranslateAnchor(layer, styleValue);
               break;
             case "fillExtrusionPattern":
-              style.addImage(styleValue.getString(VALUE_KEY));
-              RCTMGLStyleFactory.setFillExtrusionPattern(layer, styleValue);
+              style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
+                  @Override
+                  public void onAllImagesLoaded() {
+                      RCTMGLStyleFactory.setFillExtrusionPattern(layer, styleValue);
+                  }
+              });
               break;
             case "fillExtrusionPatternTransition":
               RCTMGLStyleFactory.setFillExtrusionPatternTransition(layer, styleValue);
@@ -497,7 +515,7 @@ public class RCTMGLStyleFactory {
         }
       }
     }
-    public static void setRasterLayerStyle(RasterLayer layer, RCTMGLStyle style) {
+    public static void setRasterLayerStyle(final RasterLayer layer, RCTMGLStyle style) {
       List<String> styleKeys = style.getAllStyleKeys();
 
       if (styleKeys.size() == 0) {
@@ -505,7 +523,7 @@ public class RCTMGLStyleFactory {
       }
 
       for (String styleKey : styleKeys) {
-        RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
+        final RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
 
         switch (styleKey) {
             case "visibility":
@@ -556,7 +574,7 @@ public class RCTMGLStyleFactory {
         }
       }
     }
-    public static void setBackgroundLayerStyle(BackgroundLayer layer, RCTMGLStyle style) {
+    public static void setBackgroundLayerStyle(final BackgroundLayer layer, RCTMGLStyle style) {
       List<String> styleKeys = style.getAllStyleKeys();
 
       if (styleKeys.size() == 0) {
@@ -564,7 +582,7 @@ public class RCTMGLStyleFactory {
       }
 
       for (String styleKey : styleKeys) {
-        RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
+        final RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
 
         switch (styleKey) {
             case "visibility":
@@ -577,8 +595,12 @@ public class RCTMGLStyleFactory {
               RCTMGLStyleFactory.setBackgroundColorTransition(layer, styleValue);
               break;
             case "backgroundPattern":
-              style.addImage(styleValue.getString(VALUE_KEY));
-              RCTMGLStyleFactory.setBackgroundPattern(layer, styleValue);
+              style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
+                  @Override
+                  public void onAllImagesLoaded() {
+                      RCTMGLStyleFactory.setBackgroundPattern(layer, styleValue);
+                  }
+              });
               break;
             case "backgroundPatternTransition":
               RCTMGLStyleFactory.setBackgroundPatternTransition(layer, styleValue);
@@ -592,7 +614,7 @@ public class RCTMGLStyleFactory {
         }
       }
     }
-    public static void setLightLayerStyle(Light layer, RCTMGLStyle style) {
+    public static void setLightLayerStyle(final Light layer, RCTMGLStyle style) {
       List<String> styleKeys = style.getAllStyleKeys();
 
       if (styleKeys.size() == 0) {
@@ -600,7 +622,7 @@ public class RCTMGLStyleFactory {
       }
 
       for (String styleKey : styleKeys) {
-        RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
+        final RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
 
         switch (styleKey) {
             case "anchor":

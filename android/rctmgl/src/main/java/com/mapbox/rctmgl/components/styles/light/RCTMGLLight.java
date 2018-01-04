@@ -47,6 +47,6 @@ public class RCTMGLLight extends AbstractMapFeature {
     }
 
     private void setLight(Light light) {
-        RCTMGLStyleFactory.setLightLayerStyle(light, new RCTMGLStyle(mReactStyle, mMap));
+        RCTMGLStyleFactory.setLightLayerStyle(light, new RCTMGLStyle(getContext(), mReactStyle, mMap));
     }
 }

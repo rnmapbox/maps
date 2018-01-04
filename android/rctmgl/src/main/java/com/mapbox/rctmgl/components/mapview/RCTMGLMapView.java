@@ -7,10 +7,8 @@ import android.location.Location;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.MotionEvent;
 
 import com.facebook.react.bridge.LifecycleEventListener;
@@ -43,7 +41,6 @@ import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotationAdapter;
 import com.mapbox.rctmgl.components.camera.CameraStop;
 import com.mapbox.rctmgl.components.camera.CameraUpdateQueue;
 import com.mapbox.rctmgl.components.styles.light.RCTMGLLight;
-import com.mapbox.rctmgl.components.styles.sources.RCTMGLShapeSource;
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 import com.mapbox.rctmgl.events.AndroidCallbackEvent;
 import com.mapbox.rctmgl.events.IEvent;
