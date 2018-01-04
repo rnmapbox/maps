@@ -17,6 +17,7 @@
 #import "CameraStop.h"
 #import "CameraUpdateQueue.h"
 #import "FilterParser.h"
+#import "MGLFaux3DUserLocationAnnotationView.h"
 
 @interface RCTMGLMapViewManager() <MGLMapViewDelegate>
 @end
@@ -314,7 +315,7 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
         RCTMGLPointAnnotation *rctAnnotation = (RCTMGLPointAnnotation *)annotation;
         return [rctAnnotation getAnnotationView];
     } else if ([annotation isKindOfClass:[MGLUserLocation class]]) {
-        return [[RCTMGLUserLocationAnnotationView alloc] init];
+        return [[MGLFaux3DUserLocationAnnotationView alloc] init];
     }
     return nil;
 }
