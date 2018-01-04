@@ -291,8 +291,18 @@ public class RCTMGLMapView extends MapView implements
             enableLocation();
         }
 
-        if (mCenterCoordinate != null) {
-            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(buildCamera()));
+        if (mCenterCoordinate != null && mUserTrackingMode == UserTrackingMode.NONE) {
+            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(buildCamera()), new MapboxMap.CancelableCallback() {
+                @Override
+                public void onCancel() {
+                    sendRegionChangeEvent(false);
+                }
+
+                @Override
+                public void onFinish() {
+                    sendRegionChangeEvent(false);
+                }
+            });
         }
 
         if (!mCameraUpdateQueue.isEmpty()) {
@@ -327,10 +337,7 @@ public class RCTMGLMapView extends MapView implements
                     return;
                 }
 
-                boolean isAnimated = mCameraChangeTracker.isAnimated();
-                IEvent event = new MapChangeEvent(self, makeRegionPayload(isAnimated), EventTypes.REGION_DID_CHANGE);
-                mManager.handleEvent(event);
-                mCameraChangeTracker.setReason(-1);
+                sendRegionChangeEvent(mCameraChangeTracker.isAnimated());
                 lastTimestamp = curTimestamp;
             }
         });
@@ -970,6 +977,13 @@ public class RCTMGLMapView extends MapView implements
         Location lastKnownLocation = mLocationManger.getLastKnownLocation();
         if (lastKnownLocation != null) {
             mLocationChangeListener.onLocationChange(lastKnownLocation);
+
+            postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    sendRegionChangeEvent(false);
+                }
+            }, 200);
         }
     }
 
@@ -1164,5 +1178,11 @@ public class RCTMGLMapView extends MapView implements
     private double getMapRotation() {
         CameraPosition cameraPosition = mMap.getCameraPosition();
         return cameraPosition.bearing;
+    }
+
+    private void sendRegionChangeEvent(boolean isAnimated) {
+        IEvent event = new MapChangeEvent(this, makeRegionPayload(isAnimated), EventTypes.REGION_DID_CHANGE);
+        mManager.handleEvent(event);
+        mCameraChangeTracker.setReason(-1);
     }
 }
