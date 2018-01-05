@@ -230,6 +230,12 @@ static double const M2PI = M_PI * 2;
     self.showsUserHeadingIndicator = (NSUInteger)_reactUserTrackingMode == MGLUserTrackingModeFollowWithHeading;
 }
 
+- (void)setReactUserLocationVerticalAlignment:(int)reactUserLocationVerticalAlignment
+{
+    _reactUserLocationVerticalAlignment = reactUserLocationVerticalAlignment;
+    self.userLocationVerticalAlignment = reactUserLocationVerticalAlignment;
+}
+
 #pragma mark - methods
 
 - (CLLocationDistance)getMetersPerPixelAtLatitude:(double)latitude withZoom:(double)zoomLevel

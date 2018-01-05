@@ -40,6 +40,7 @@
 
 @property (nonatomic, assign) BOOL isUserInteraction;
 @property (nonatomic, assign) int reactUserTrackingMode;
+@property (nonatomic, assign) int reactUserLocationVerticalAlignment;
 
 @property (nonatomic, assign) double heading;
 @property (nonatomic, assign) double pitch;

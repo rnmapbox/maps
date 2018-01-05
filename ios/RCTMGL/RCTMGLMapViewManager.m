@@ -83,6 +83,7 @@ RCT_REMAP_VIEW_PROPERTY(centerCoordinate, reactCenterCoordinate, NSString)
 RCT_REMAP_VIEW_PROPERTY(styleURL, reactStyleURL, NSString)
 
 RCT_REMAP_VIEW_PROPERTY(userTrackingMode, reactUserTrackingMode, int)
+RCT_REMAP_VIEW_PROPERTY(userLocationVerticalAlignment, reactUserLocationVerticalAlignment, int)
 
 RCT_EXPORT_VIEW_PROPERTY(heading, double)
 RCT_EXPORT_VIEW_PROPERTY(pitch, double)
