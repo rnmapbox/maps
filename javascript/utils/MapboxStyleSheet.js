@@ -100,7 +100,7 @@ function resolveImage (imageURL) {
   let resolved = imageURL;
 
   if (typeof imageURL === 'number') { // required from JS, local file resolve it's asset filepath
-    const res = resolveAssetSource(imageURL);
+    const res = resolveAssetSource(imageURL) || {};
 
     // we found a local uri
     if (res.uri) {
@@ -131,7 +131,11 @@ function makeStyleValue (prop, value, extras = {}, shouldMarkAsStyle = true) {
       item = new MapStyleTranslationItem(value.x, value.y, extraData); // supports object based API
     }
   } else if (styleMap[prop] === StyleTypes.Image) {
-    item = new MapStyleConstantItem(resolveImage(value), { image: true, ...extraData });
+    item = new MapStyleConstantItem(resolveImage(value), {
+      image: true,
+      shouldAddImage: typeof value === 'number', // required from JS, tell native code to add image to map style
+      ...extraData,
+    });
   } else {
     item = new MapStyleConstantItem(value, extraData);
   }

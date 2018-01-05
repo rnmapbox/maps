@@ -82,7 +82,7 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
                 }
             };
 
-            DownloadMapImageTask task = new DownloadMapImageTask(map, imagesLoadedCallback);
+            DownloadMapImageTask task = new DownloadMapImageTask(getContext(), map, imagesLoadedCallback);
             task.execute(mImages.toArray(new Map.Entry[mImages.size()]));
             return;
         }

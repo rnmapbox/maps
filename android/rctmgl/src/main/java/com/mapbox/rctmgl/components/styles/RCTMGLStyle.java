@@ -1,8 +1,8 @@
 package com.mapbox.rctmgl.components.styles;
 
+import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringDef;
 
 import com.facebook.common.util.UriUtil;
 import com.facebook.react.bridge.ReadableMap;
@@ -20,10 +20,12 @@ import java.util.Map;
  */
 
 public class RCTMGLStyle {
+    private Context mContext;
     private ReadableMap mReactStyle;
     private MapboxMap mMap;
 
-    public RCTMGLStyle(@NonNull ReadableMap reactStyle, @NonNull MapboxMap map) {
+    public RCTMGLStyle(@NonNull Context context, @NonNull ReadableMap reactStyle, @NonNull MapboxMap map) {
+        mContext = context;
         mReactStyle = reactStyle;
         mMap = map;
     }
@@ -58,12 +60,23 @@ public class RCTMGLStyle {
         return new RCTMGLStyleValue(styleValueConfig);
     }
 
-    public void addImage(String uriStr) {
-        if (!shouldAddImage(uriStr)) {
+    public void addImage(RCTMGLStyleValue styleValue) {
+        addImage(styleValue, null);
+    }
+
+    public void addImage(RCTMGLStyleValue styleValue, DownloadMapImageTask.OnAllImagesLoaded callback) {
+        String uriStr = styleValue.getString(RCTMGLStyleFactory.VALUE_KEY);
+        boolean shouldAddImage = styleValue.getBoolean(RCTMGLStyleFactory.SHOULD_ADD_IMAGE_KEY);
+
+        if (!shouldAddImage) {
+            if (callback != null) {
+                callback.onAllImagesLoaded();
+            }
             return;
         }
+
         Map.Entry[] images = new Map.Entry[]{ new AbstractMap.SimpleEntry(uriStr, uriStr) };
-        DownloadMapImageTask task = new DownloadMapImageTask(mMap, null);
+        DownloadMapImageTask task = new DownloadMapImageTask(mContext, mMap, callback);
         task.execute(images);
     }
 

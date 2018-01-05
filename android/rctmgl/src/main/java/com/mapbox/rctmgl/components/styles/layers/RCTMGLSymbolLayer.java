@@ -57,7 +57,7 @@ public class RCTMGLSymbolLayer extends RCTLayer<SymbolLayer> {
 
     @Override
     public void addStyles() {
-        RCTMGLStyleFactory.setSymbolLayerStyle(mLayer, new RCTMGLStyle(mReactStyle, mMap));
+        RCTMGLStyleFactory.setSymbolLayerStyle(mLayer, new RCTMGLStyle(getContext(), mReactStyle, mMap));
     }
 
     public void setSourceLayerID(String sourceLayerID) {

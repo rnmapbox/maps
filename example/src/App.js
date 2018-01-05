@@ -83,6 +83,8 @@ const styles = StyleSheet.create({
   },
 });
 
+MapboxGL.setAccessToken(config.get('accessToken'));
+
 class ExampleItem {
   constructor (label, Component) {
     this.label = label;
@@ -140,7 +142,6 @@ class App extends React.Component {
         isFetchingAndroidPermission: false,
       });
     }
-    MapboxGL.setAccessToken(config.get('accessToken'));
   }
 
   getActiveItem () {
@@ -164,7 +165,6 @@ class App extends React.Component {
         <TouchableOpacity onPress={() => this.onExamplePress(index)}>
           <View style={styles.exampleListItem}>
             <Text style={styles.exampleListLabel}>{item.label}</Text>
-
             <Icon name='keyboard-arrow-right' />
           </View>
         </TouchableOpacity>

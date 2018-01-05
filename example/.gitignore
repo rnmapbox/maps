@@ -46,3 +46,4 @@ reactnativemapboxgl.iml
 .idea
 accesstoken
 env.json
+android/app/rnmapboxglexample.keystore

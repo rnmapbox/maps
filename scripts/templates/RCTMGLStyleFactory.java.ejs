@@ -18,14 +18,16 @@ import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
 import com.mapbox.mapboxsdk.style.light.Light;
 import com.mapbox.mapboxsdk.style.light.Position;
+import com.mapbox.rctmgl.utils.DownloadMapImageTask;
 
 import java.util.List;
 
 public class RCTMGLStyleFactory {
     public static final String VALUE_KEY = "value";
+    public static final String SHOULD_ADD_IMAGE_KEY = "shouldAddImage";
 
   <%_ for (const layer of layers) { _%>
-    public static void <%- setLayerMethodName(layer) -%>(<%- getLayerType(layer, 'android') -%> layer, RCTMGLStyle style) {
+    public static void <%- setLayerMethodName(layer) -%>(final <%- getLayerType(layer, 'android') -%> layer, RCTMGLStyle style) {
       List<String> styleKeys = style.getAllStyleKeys();
 
       if (styleKeys.size() == 0) {
@@ -33,15 +35,21 @@ public class RCTMGLStyleFactory {
       }
 
       for (String styleKey : styleKeys) {
-        RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
+        final RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
 
         switch (styleKey) {
           <%_ for (const prop of layer.properties) { _%>
             case "<%= prop.name %>":
               <%_ if (prop.image) { _%>
-              style.addImage(styleValue.getString(VALUE_KEY));
-              <%_ } _%>
+              style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
+                  @Override
+                  public void onAllImagesLoaded() {
+                      RCTMGLStyleFactory.set<%- pascelCase(prop.name) -%>(layer, styleValue);
+                  }
+              });
+              <%_ } else { _%>
               RCTMGLStyleFactory.set<%- pascelCase(prop.name) -%>(layer, styleValue);
+              <%_ } _%>
               break;
             <%_ if (prop.transition) { _%>
             case "<%= prop.name %>Transition":
