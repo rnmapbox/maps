@@ -31,6 +31,7 @@ import ShowClick from './components/ShowClick';
 import FlyTo from './components/FlyTo';
 import FitBounds from './components/FitBounds';
 import SetUserTrackingModes from './components/SetUserTrackingModes';
+import SetUserLocationVerticalAlignment from './components/SetUserLocationVerticalAlignment';
 import ShowRegionDidChange from './components/ShowRegionDidChange';
 import CustomIcon from './components/CustomIcon';
 import YoYo from './components/YoYo';
@@ -100,6 +101,7 @@ const Examples = [
   new ExampleItem('Fly To', FlyTo),
   new ExampleItem('Fit Bounds', FitBounds),
   new ExampleItem('Set User Tracking Modes', SetUserTrackingModes),
+  new ExampleItem('Set User Location Vertical Alignment', SetUserLocationVerticalAlignment),
   new ExampleItem('Show Region Did Change', ShowRegionDidChange),
   new ExampleItem('Custom Icon', CustomIcon),
   new ExampleItem('Yo Yo Camera', YoYo),
