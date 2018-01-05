@@ -175,6 +175,11 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         mapView.setReactUserTrackingMode(userTrackingMode);
     }
 
+    @ReactProp(name="userLocationVerticalAlignment")
+    public void setUserLocationVerticalAlignment(RCTMGLMapView mapView, int userLocationVerticalAlignment) {
+        mapView.setReactUserLocationVerticalAlignment(userLocationVerticalAlignment);
+    }
+
     //endregion
 
     //region Custom Events

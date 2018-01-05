@@ -19,6 +19,7 @@ import com.mapbox.rctmgl.components.camera.constants.CameraMode;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleValue;
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 import com.mapbox.rctmgl.events.constants.EventTypes;
+import com.mapbox.rctmgl.location.UserLocationVerticalAlignment;
 import com.mapbox.rctmgl.location.UserTrackingMode;
 
 import java.util.HashMap;
@@ -84,6 +85,12 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         userTrackingModes.put("Follow", UserTrackingMode.FOLLOW);
         userTrackingModes.put("FollowWithCourse", UserTrackingMode.FollowWithCourse);
         userTrackingModes.put("FollowWithHeading", UserTrackingMode.FollowWithHeading);
+
+        // user location vertical alignment
+        Map<String, Integer> userLocationVerticalAlignment = new HashMap<>();
+        userLocationVerticalAlignment.put("Center", UserLocationVerticalAlignment.CENTER);
+        userLocationVerticalAlignment.put("Top", UserLocationVerticalAlignment.TOP);
+        userLocationVerticalAlignment.put("Bottom", UserLocationVerticalAlignment.BOTTOM);
 
         // camera modes
         Map<String, Integer> cameraModes = new HashMap<>();
@@ -231,6 +238,7 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
                 .put("StyleURL", styleURLS)
                 .put("EventTypes", eventTypes)
                 .put("UserTrackingModes", userTrackingModes)
+                .put("UserLocationVerticalAlignment", userLocationVerticalAlignment)
                 .put("CameraModes", cameraModes)
                 .put("StyleSource", styleSourceConsts)
                 .put("InterpolationMode", interpolationModes)
