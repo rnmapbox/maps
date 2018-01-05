@@ -48,6 +48,11 @@ class MapView extends React.Component {
     userTrackingMode: PropTypes.number,
 
     /**
+     * The vertical alignment of the user location within in map. This is only enabled while tracking the users location.
+     */
+    userLocationVerticalAlignment: PropTypes.number,
+
+    /**
      * The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport.
      */
     contentInset: PropTypes.oneOfType([
@@ -206,7 +211,9 @@ class MapView extends React.Component {
     */
     onDidFinishLoadingStyle: PropTypes.func,
 
-
+    /**
+     * This event is triggered when the users tracking mode is changed.
+     */
     onUserTrackingModeChange: PropTypes.func,
   };
 

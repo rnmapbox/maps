@@ -1188,6 +1188,13 @@
         "description": "The mode used to track the user location on the map"
       },
       {
+        "name": "userLocationVerticalAlignment",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The vertical alignment of the user location within in map. This is only enabled while tracking the users location."
+      },
+      {
         "name": "contentInset",
         "required": false,
         "type": "union",
@@ -1405,18 +1412,11 @@
         "description": "This event is triggered when a style has finished loading."
       },
       {
-        "name": "onFlyToComplete",
+        "name": "onUserTrackingModeChange",
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "This event is triggered when a fly to animation is cancelled or completed after calling flyTo"
-      },
-      {
-        "name": "onSetCameraComplete",
-        "required": false,
-        "type": "func",
-        "default": "none",
-        "description": "This event is triggered once the camera is finished after calling setCamera"
+        "description": "This event is triggered when the users tracking mode is changed."
       }
     ],
     "composes": [
