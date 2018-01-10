@@ -229,9 +229,6 @@ public class RCTMGLMapView extends MapView implements
     }
 
     public void dispose() {
-        if (mLocationLayer != null) {
-            mLocationLayer.removeCompassListener(mLocationManger);
-        }
         mLocationManger.dispose();
     }
 
@@ -386,7 +383,7 @@ public class RCTMGLMapView extends MapView implements
                 }
 
                 double currentMapRotation = getMapRotation();
-                if (lastMapRotation != currentMapRotation) {
+                if (lastMapRotation != currentMapRotation && mCameraChangeTracker.isUserInteraction()) {
                     updateUserTrackingMode(UserTrackingMode.FOLLOW);
                 }
 
@@ -1001,7 +998,6 @@ public class RCTMGLMapView extends MapView implements
     private void updateLocationLayer() {
         if (mLocationLayer == null) {
             mLocationLayer = new LocationLayerPlugin(this, mMap, mLocationManger.getEngine());
-            mLocationLayer.addCompassListener(mLocationManger);
         }
 
         int userLayerMode = UserTrackingMode.getMapLayerMode(mUserLocation.getTrackingMode(), mShowUserLocation);
@@ -1190,10 +1186,13 @@ public class RCTMGLMapView extends MapView implements
     }
 
     private double getDirectionForUserLocationUpdate() {
+        // NOTE: The direction of this is used for map rotation only, not location layer rotation
         CameraPosition currentCamera = mMap.getCameraPosition();
         double direction = currentCamera.bearing;
 
-        if (mUserLocation.getTrackingMode() == UserTrackingMode.FollowWithCourse) {
+
+        int userTrackingMode = mUserLocation.getTrackingMode();
+        if (userTrackingMode == UserTrackingMode.FollowWithHeading || userTrackingMode == UserTrackingMode.FollowWithCourse) {
             direction = mUserLocation.getBearing();
         }
 

@@ -2,7 +2,9 @@ package com.mapbox.rctmgl.location;
 
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.hardware.GeomagneticField;
 import android.location.Location;
+import android.util.Log;
 
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -20,6 +22,8 @@ import com.mapbox.services.commons.geojson.Point;
 
 public class UserLocation {
     private Location currentLocation;
+    private Location previousLocation;
+
     private int userTrackingMode = UserTrackingMode.NONE;
 
     public UserLocation() {
@@ -50,6 +54,7 @@ public class UserLocation {
     }
 
     public void setCurrentLocation(Location currentLocation) {
+        this.previousLocation = this.currentLocation;
         this.currentLocation = currentLocation;
     }
 
