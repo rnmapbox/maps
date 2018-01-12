@@ -50,6 +50,7 @@ import DriveTheLine from './components/DriveTheLine';
 import ImageOverlay from './components/ImageOverlay';
 import DataDrivenCircleColors from './components/DataDrivenCircleColors';
 import ChoroplethLayerByZoomLevel from './components/ChoroplethLayerByZoomLevel';
+import PointInMapView from './components/PointInMapView';
 
 const styles = StyleSheet.create({
   noPermissionsText: {
@@ -120,6 +121,7 @@ const Examples = [
   new ExampleItem('Image Overlay', ImageOverlay),
   new ExampleItem('Data Driven Circle Colors', DataDrivenCircleColors),
   new ExampleItem('Choropleth Layer By Zoom Level', ChoroplethLayerByZoomLevel),
+  new ExampleItem('Get Pixel Point in MapView', PointInMapView),
 ];
 
 class App extends React.Component {
