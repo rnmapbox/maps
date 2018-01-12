@@ -13,6 +13,7 @@ import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
+import com.mapbox.rctmgl.location.UserLocationLayerConstants;
 import com.mapbox.rctmgl.utils.ConvertUtils;
 import com.mapbox.rctmgl.utils.DownloadMapImageTask;
 import com.mapbox.rctmgl.utils.FilterParser;
@@ -170,6 +171,16 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         if (!hasInitialized()) {
             return;
         }
+
+        String userBackgroundID = UserLocationLayerConstants.BACKGROUND_LAYER_ID;
+        Layer userLocationBackgroundLayer = mMap.getLayer(userBackgroundID);
+
+        // place below user location layer
+        if (userLocationBackgroundLayer != null) {
+            mMap.addLayerBelow(mLayer, userBackgroundID);
+            return;
+        }
+
         mMap.addLayer(mLayer);
     }
 

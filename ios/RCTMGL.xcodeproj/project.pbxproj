@@ -10,6 +10,9 @@
 		C410D5D51F7AD0B300CF822A /* RCTMGLLight.m in Sources */ = {isa = PBXBuildFile; fileRef = C410D5D41F7AD0B300CF822A /* RCTMGLLight.m */; };
 		C410D5D81F7AD0C100CF822A /* RCTMGLLightManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C410D5D71F7AD0C100CF822A /* RCTMGLLightManager.m */; };
 		C41DCC9D1FBBA8F000895BB4 /* FilterList.m in Sources */ = {isa = PBXBuildFile; fileRef = C41DCC9C1FBBA8F000895BB4 /* FilterList.m */; };
+		C42219B51FEB205300EE9E35 /* MGLFaux3DUserLocationAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = C42219B41FEB205300EE9E35 /* MGLFaux3DUserLocationAnnotationView.m */; };
+		C42219BC1FEB215E00EE9E35 /* MGLUserLocationHeadingArrowLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C42219BB1FEB215E00EE9E35 /* MGLUserLocationHeadingArrowLayer.m */; };
+		C42219BF1FEB21D500EE9E35 /* MGLUserLocationHeadingBeamLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C42219BE1FEB21D500EE9E35 /* MGLUserLocationHeadingBeamLayer.m */; };
 		C42236A41F6B012000FA9C1C /* RCTMGLStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = C42236A31F6B012000FA9C1C /* RCTMGLStyle.m */; };
 		C42236A71F6C7F4E00FA9C1C /* RCTMGLFillExtrusionLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C42236A61F6C7F4E00FA9C1C /* RCTMGLFillExtrusionLayer.m */; };
 		C42236AA1F6C7F6200FA9C1C /* RCTMGLFillExtrusionLayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C42236A91F6C7F6200FA9C1C /* RCTMGLFillExtrusionLayerManager.m */; };
@@ -79,6 +82,13 @@
 		C410D5D71F7AD0C100CF822A /* RCTMGLLightManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLLightManager.m; sourceTree = "<group>"; };
 		C41DCC9B1FBBA8F000895BB4 /* FilterList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilterList.h; sourceTree = "<group>"; };
 		C41DCC9C1FBBA8F000895BB4 /* FilterList.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FilterList.m; sourceTree = "<group>"; };
+		C42219B31FEB205300EE9E35 /* MGLFaux3DUserLocationAnnotationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGLFaux3DUserLocationAnnotationView.h; sourceTree = "<group>"; };
+		C42219B41FEB205300EE9E35 /* MGLFaux3DUserLocationAnnotationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MGLFaux3DUserLocationAnnotationView.m; sourceTree = "<group>"; };
+		C42219B91FEB211700EE9E35 /* MGLUserLocationHeadingIndicator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGLUserLocationHeadingIndicator.h; sourceTree = "<group>"; };
+		C42219BA1FEB215E00EE9E35 /* MGLUserLocationHeadingArrowLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGLUserLocationHeadingArrowLayer.h; sourceTree = "<group>"; };
+		C42219BB1FEB215E00EE9E35 /* MGLUserLocationHeadingArrowLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MGLUserLocationHeadingArrowLayer.m; sourceTree = "<group>"; };
+		C42219BD1FEB21D500EE9E35 /* MGLUserLocationHeadingBeamLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGLUserLocationHeadingBeamLayer.h; sourceTree = "<group>"; };
+		C42219BE1FEB21D500EE9E35 /* MGLUserLocationHeadingBeamLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MGLUserLocationHeadingBeamLayer.m; sourceTree = "<group>"; };
 		C42236A21F6B012000FA9C1C /* RCTMGLStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLStyle.h; sourceTree = "<group>"; };
 		C42236A31F6B012000FA9C1C /* RCTMGLStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLStyle.m; sourceTree = "<group>"; };
 		C42236A51F6C7F4E00FA9C1C /* RCTMGLFillExtrusionLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLFillExtrusionLayer.h; sourceTree = "<group>"; };
@@ -197,6 +207,20 @@
 			name = Light;
 			sourceTree = "<group>";
 		};
+		C42219B21FEB1FD600EE9E35 /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				C42219B31FEB205300EE9E35 /* MGLFaux3DUserLocationAnnotationView.h */,
+				C42219B41FEB205300EE9E35 /* MGLFaux3DUserLocationAnnotationView.m */,
+				C42219B91FEB211700EE9E35 /* MGLUserLocationHeadingIndicator.h */,
+				C42219BA1FEB215E00EE9E35 /* MGLUserLocationHeadingArrowLayer.h */,
+				C42219BB1FEB215E00EE9E35 /* MGLUserLocationHeadingArrowLayer.m */,
+				C42219BD1FEB21D500EE9E35 /* MGLUserLocationHeadingBeamLayer.h */,
+				C42219BE1FEB21D500EE9E35 /* MGLUserLocationHeadingBeamLayer.m */,
+			);
+			name = Location;
+			sourceTree = "<group>";
+		};
 		C43773B91F56024900AF6D71 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -277,6 +301,7 @@
 		C4D1443F1F4E16F600396F26 /* RCTMGL */ = {
 			isa = PBXGroup;
 			children = (
+				C42219B21FEB1FD600EE9E35 /* Location */,
 				C43773B91F56024900AF6D71 /* Components */,
 				C43CA5031F507B8D000B9CB7 /* Events */,
 				C4D144941F4E2EC800396F26 /* Utils */,
@@ -487,6 +512,7 @@
 				C42236AA1F6C7F6200FA9C1C /* RCTMGLFillExtrusionLayerManager.m in Sources */,
 				C4FB12331F799F190055AE1F /* RCTMGLRasterLayer.m in Sources */,
 				C4D1444C1F4E178100396F26 /* RCTMGLMapView.m in Sources */,
+				C42219BF1FEB21D500EE9E35 /* MGLUserLocationHeadingBeamLayer.m in Sources */,
 				C410D5D51F7AD0B300CF822A /* RCTMGLLight.m in Sources */,
 				C42236A41F6B012000FA9C1C /* RCTMGLStyle.m in Sources */,
 				C4FD1DC21FCF550E00213AF2 /* RCTMGLImageSourceManager.m in Sources */,
@@ -507,11 +533,13 @@
 				C4FB10FE1F707A140055AE1F /* RCTMGLLineLayer.m in Sources */,
 				C4EAF1831F6336E20016DEE8 /* RCTMGLVectorSource.m in Sources */,
 				C4EAF1891F633C010016DEE8 /* RCTMGLVectorSourceManager.m in Sources */,
+				C42219BC1FEB215E00EE9E35 /* MGLUserLocationHeadingArrowLayer.m in Sources */,
 				C4FB122D1F7972A00055AE1F /* RCTMGLRasterSource.m in Sources */,
 				C4C87B941F9143DA0064AE95 /* RCTMGLCalloutManager.m in Sources */,
 				C410D5D81F7AD0C100CF822A /* RCTMGLLightManager.m in Sources */,
 				C4EAF17D1F6324970016DEE8 /* RCTMGLSource.m in Sources */,
 				C4FB11131F71EC9F0055AE1F /* RCTMGLSymbolLayerManager.m in Sources */,
+				C42219B51FEB205300EE9E35 /* MGLFaux3DUserLocationAnnotationView.m in Sources */,
 				C4C87A601F844C820064AE95 /* FilterParser.m in Sources */,
 				C4FD1DBF1FCF54FB00213AF2 /* RCTMGLImageSource.m in Sources */,
 				C41DCC9D1FBBA8F000895BB4 /* FilterList.m in Sources */,

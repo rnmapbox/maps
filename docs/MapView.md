@@ -8,6 +8,7 @@
 | centerCoordinate | `arrayOf` | `none` | `false` | Initial center coordinate on map [lng, lat] |
 | showUserLocation | `bool` | `none` | `false` | Shows the users location on the map |
 | userTrackingMode | `number` | `MapboxGL.UserTrackingModes.None` | `false` | The mode used to track the user location on the map |
+| userLocationVerticalAlignment | `number` | `none` | `false` | The vertical alignment of the user location within in map. This is only enabled while tracking the users location. |
 | contentInset | `union` | `none` | `false` | The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport. |
 | heading | `number` | `0` | `false` | Initial heading on map |
 | pitch | `number` | `0` | `false` | Initial pitch on map |
@@ -39,8 +40,7 @@
 | onDidFinishRenderingMap | `func` | `none` | `false` | This event is triggered when the map finished rendering the map. |
 | onDidFinishRenderingMapFully | `func` | `none` | `false` | This event is triggered when the map fully finished rendering the map. |
 | onDidFinishLoadingStyle | `func` | `none` | `false` | This event is triggered when a style has finished loading. |
-| onFlyToComplete | `func` | `none` | `false` | This event is triggered when a fly to animation is cancelled or completed after calling flyTo |
-| onSetCameraComplete | `func` | `none` | `false` | This event is triggered once the camera is finished after calling setCamera |
+| onUserTrackingModeChange | `func` | `none` | `false` | This event is triggered when the users tracking mode is changed. |
 
 ### methods
 #### getVisibleBounds()

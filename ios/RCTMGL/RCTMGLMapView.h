@@ -40,6 +40,7 @@
 
 @property (nonatomic, assign) BOOL isUserInteraction;
 @property (nonatomic, assign) int reactUserTrackingMode;
+@property (nonatomic, assign) int reactUserLocationVerticalAlignment;
 
 @property (nonatomic, assign) double heading;
 @property (nonatomic, assign) double pitch;
@@ -50,6 +51,7 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onMapChange;
+@property (nonatomic, copy) RCTBubblingEventBlock onUserTrackingModeChange;
 
 - (CLLocationDistance)getMetersPerPixelAtLatitude:(double)latitude withZoom:(double)zoomLevel;
 - (CLLocationDistance)altitudeFromZoom:(double)zoomLevel;

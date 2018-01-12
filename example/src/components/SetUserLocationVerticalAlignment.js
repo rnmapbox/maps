@@ -7,7 +7,7 @@ import TabBarPage from './common/TabBarPage';
 import sheet from '../styles/sheet';
 import { onSortOptions } from '../utils';
 
-class ShowMap extends React.Component {
+class SetUserLocationVerticalAlignment extends React.Component {
   static propTypes = {
     ...BaseExamplePropTypes,
   };
@@ -15,36 +15,35 @@ class ShowMap extends React.Component {
   constructor (props) {
     super(props);
 
-    this._mapOptions = Object.keys(MapboxGL.StyleURL).map((key) => {
+    this._alignmentOptions = Object.keys(MapboxGL.UserLocationVerticalAlignment).map((key) => {
       return {
         label: key,
-        data: MapboxGL.StyleURL[key],
+        data: MapboxGL.UserLocationVerticalAlignment[key],
       };
     }).sort(onSortOptions);
 
     this.state = {
-      styleURL: this._mapOptions[0].data,
+      currentAlignmentMode: this._alignmentOptions[0].data,
     };
 
-    this.onMapChange = this.onMapChange.bind(this);
+    this.onAlignmentChange = this.onAlignmentChange.bind(this);
   }
 
-  onMapChange (index, styleURL) {
-    this.setState({ styleURL: styleURL });
+  onAlignmentChange (index, userLocationVerticalAlignment) {
+    this.setState({ currentAlignmentMode: userLocationVerticalAlignment });
   }
 
   render () {
     return (
-      <TabBarPage {...this.props} scrollable options={this._mapOptions} onOptionPress={this.onMapChange}>
+      <TabBarPage {...this.props} options={this._alignmentOptions} onOptionPress={this.onAlignmentChange}>
         <MapboxGL.MapView
             showUserLocation={true}
-            zoomLevel={12}
             userTrackingMode={MapboxGL.UserTrackingModes.Follow}
-            styleURL={this.state.styleURL}
+            userLocationVerticalAlignment={this.state.currentAlignmentMode}
             style={sheet.matchParent} />
       </TabBarPage>
     );
   }
 }
 
-export default ShowMap;
+export default SetUserLocationVerticalAlignment;

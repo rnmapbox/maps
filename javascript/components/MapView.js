@@ -48,6 +48,11 @@ class MapView extends React.Component {
     userTrackingMode: PropTypes.number,
 
     /**
+     * The vertical alignment of the user location within in map. This is only enabled while tracking the users location.
+     */
+    userLocationVerticalAlignment: PropTypes.number,
+
+    /**
      * The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport.
      */
     contentInset: PropTypes.oneOfType([
@@ -214,14 +219,9 @@ class MapView extends React.Component {
     onDidFinishLoadingStyle: PropTypes.func,
 
     /**
-    * This event is triggered when a fly to animation is cancelled or completed after calling flyTo
-    */
-    onFlyToComplete: PropTypes.func,
-
-    /**
-     * This event is triggered once the camera is finished after calling setCamera
+     * This event is triggered when the users tracking mode is changed.
      */
-    onSetCameraComplete: PropTypes.func,
+    onUserTrackingModeChange: PropTypes.func,
   };
 
   static defaultProps = {
@@ -640,6 +640,7 @@ class MapView extends React.Component {
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
       onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
+      onUserTrackingModeChange: this.props.onUserTrackingModeChange,
     };
 
     if (isAndroid() && this.props.textureMode) {

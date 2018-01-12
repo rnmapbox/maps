@@ -13,6 +13,8 @@
 extern NSString *const RCT_MAPBOX_EVENT_TAP;
 extern NSString *const RCT_MAPBOX_EVENT_LONGPRESS;
 
+extern NSString *const RCT_MAPBOX_USER_TRACKING_MODE_CHANGE;
+
 extern NSString *const RCT_MAPBOX_REGION_WILL_CHANGE_EVENT;
 extern NSString *const RCT_MAPBOX_REGION_IS_CHANGING;
 extern NSString *const RCT_MAPBOX_REGION_DID_CHANGE;

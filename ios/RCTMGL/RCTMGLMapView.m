@@ -226,7 +226,14 @@ static double const M2PI = M_PI * 2;
 - (void)setReactUserTrackingMode:(int)reactUserTrackingMode
 {
     _reactUserTrackingMode = reactUserTrackingMode;
-    [self setUserTrackingMode:(NSUInteger)_reactUserTrackingMode animated:_animated];
+    [self setUserTrackingMode:_reactUserTrackingMode animated:NO];
+    self.showsUserHeadingIndicator = (NSUInteger)_reactUserTrackingMode == MGLUserTrackingModeFollowWithHeading;
+}
+
+- (void)setReactUserLocationVerticalAlignment:(int)reactUserLocationVerticalAlignment
+{
+    _reactUserLocationVerticalAlignment = reactUserLocationVerticalAlignment;
+    self.userLocationVerticalAlignment = reactUserLocationVerticalAlignment;
 }
 
 #pragma mark - methods
