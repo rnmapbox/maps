@@ -23,18 +23,17 @@ class PointInMapView extends React.Component {
 
   async onPress (e) {
     const pointInView = await this._map.getPointInView(e.geometry.coordinates);
-    console.log("YOO", pointInView);
     this.setState({ pointInView: pointInView });
   }
 
   renderPointInView () {
     if (!this.state.pointInView) {
-      return <Text>Touch map to see xy pixel location</Text>
+      return <Text>Touch map to see xy pixel location</Text>;
     }
 
     return [
       <Text key={'x'}>x: {this.state.pointInView[0]}</Text>,
-      <Text key={'y'}>y: {this.state.pointInView[1]}</Text>
+      <Text key={'y'}>y: {this.state.pointInView[1]}</Text>,
     ];
   }
 
