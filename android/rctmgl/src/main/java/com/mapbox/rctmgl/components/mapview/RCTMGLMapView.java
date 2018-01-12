@@ -15,7 +15,9 @@ import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerView;
@@ -815,6 +817,21 @@ public class RCTMGLMapView extends MapView implements
 
         WritableMap payload = new WritableNativeMap();
         payload.putArray("visibleBounds", GeoJSONUtils.fromLatLngBounds(region.latLngBounds));
+        event.setPayload(payload);
+
+        mManager.handleEvent(event);
+    }
+
+    public void getPointInView(String callbackID, LatLng mapCoordinate) {
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
+
+        PointF pointInView = mMap.getProjection().toScreenLocation(mapCoordinate);
+        WritableMap payload = new WritableNativeMap();
+
+        WritableArray array = new WritableNativeArray();
+        array.pushDouble(pointInView.x);
+        array.pushDouble(pointInView.y);
+        payload.putArray("pointInView", array);
         event.setPayload(payload);
 
         mManager.handleEvent(event);

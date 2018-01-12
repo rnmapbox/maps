@@ -203,6 +203,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     public static final int METHOD_QUERY_FEATURES_POINT = 2;
     public static final int METHOD_QUERY_FEATURES_RECT = 3;
     public static final int METHOD_VISIBLE_BOUNDS = 4;
+    public static final int METHOD_GET_POINT_IN_VIEW = 5;
 
     @Nullable
     @Override
@@ -212,6 +213,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                 .put("queryRenderedFeaturesAtPoint", METHOD_QUERY_FEATURES_POINT)
                 .put("queryRenderedFeaturesInRect", METHOD_QUERY_FEATURES_RECT)
                 .put("getVisibleBounds", METHOD_VISIBLE_BOUNDS)
+                .put("getPointInView", METHOD_GET_POINT_IN_VIEW)
                 .build();
     }
 
@@ -237,6 +239,10 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                 break;
             case METHOD_VISIBLE_BOUNDS:
                 mapView.getVisibleBounds(args.getString(0));
+                break;
+            case METHOD_GET_POINT_IN_VIEW:
+                mapView.getPointInView(args.getString(0), GeoJSONUtils.toLatLng(args.getArray(1)));
+                break;
         }
     }
 
