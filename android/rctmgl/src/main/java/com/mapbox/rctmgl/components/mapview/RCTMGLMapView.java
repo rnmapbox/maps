@@ -6,6 +6,7 @@ import android.graphics.RectF;
 import android.location.Location;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.text.LoginFilter;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -909,7 +910,9 @@ public class RCTMGLMapView extends MapView implements
             return;
         }
 
+        final DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
         int top = 0, right = 0, bottom = 0, left = 0;
+
         if (mInsets.size() == 4) {
             top = mInsets.getInt(0);
             right = mInsets.getInt(1);
@@ -927,7 +930,11 @@ public class RCTMGLMapView extends MapView implements
             left = top;
         }
 
-        mMap.setPadding(left, top, right, bottom);
+        mMap.setPadding(
+                Float.valueOf(left * metrics.scaledDensity).intValue(),
+                Float.valueOf(top * metrics.scaledDensity).intValue(),
+                Float.valueOf(right * metrics.scaledDensity).intValue(),
+                Float.valueOf(bottom * metrics.scaledDensity).intValue());
     }
 
     private void setMinMaxZoomLevels() {
@@ -1181,6 +1188,7 @@ public class RCTMGLMapView extends MapView implements
         return new CameraPosition.Builder()
                 .target(center)
                 .bearing(getDirectionForUserLocationUpdate())
+                .tilt(mPitch)
                 .zoom(zoomLevel)
                 .build();
     }
@@ -1190,10 +1198,11 @@ public class RCTMGLMapView extends MapView implements
         CameraPosition currentCamera = mMap.getCameraPosition();
         double direction = currentCamera.bearing;
 
-
         int userTrackingMode = mUserLocation.getTrackingMode();
         if (userTrackingMode == UserTrackingMode.FollowWithHeading || userTrackingMode == UserTrackingMode.FollowWithCourse) {
             direction = mUserLocation.getBearing();
+        } else if (mHeading != 0.0) {
+            direction = mHeading;
         }
 
         return direction;
