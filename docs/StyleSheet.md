@@ -17,7 +17,7 @@ MapboxGL.StyleSheet.camera({
 
 // Example of use inside stylesheet
 MapboxGL.StyleSheet.create({
-  fillColor: MapboxGL.StyleTypes.camera({
+  fillColor: MapboxGL.StyleSheet.camera({
     15: 'blue',
     20: 'green',
   }, MapboxGL.InterpolationMode.Interval),
