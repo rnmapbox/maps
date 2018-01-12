@@ -87,19 +87,21 @@ RCT_EXPORT_METHOD(createPack:(NSDictionary *)options
 
 RCT_EXPORT_METHOD(getPacks:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-    NSArray<MGLOfflinePack *> *packs = [[MGLOfflineStorage sharedOfflineStorage] packs];
-    NSMutableArray<NSDictionary *> *jsonPacks = [[NSMutableArray alloc] init];
-    
-    if (packs == nil) {
-        resolve(@[]);
-        return;
-    }
-    
-    for (MGLOfflinePack *pack in packs) {
-        [jsonPacks addObject:[self _convertPackToDict:pack]];
-    }
-    
-    resolve(jsonPacks);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSArray<MGLOfflinePack *> *packs = [[MGLOfflineStorage sharedOfflineStorage] packs];
+        NSMutableArray<NSDictionary *> *jsonPacks = [[NSMutableArray alloc] init];
+        
+        if (packs == nil) {
+            resolve(@[]);
+            return;
+        }
+        
+        for (MGLOfflinePack *pack in packs) {
+            [jsonPacks addObject:[self _convertPackToDict:pack]];
+        }
+        
+        resolve(jsonPacks);
+    });
 }
 
 RCT_EXPORT_METHOD(getPackStatus:(NSString *)name
