@@ -1,6 +1,8 @@
 package com.mapbox.rctmgl.components.camera;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.DisplayMetrics;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -100,7 +102,7 @@ public class CameraStop {
         return new CameraUpdateItem(CameraUpdateFactory.newCameraPosition(builder.build()), mDuration, mCallback, mMode);
     }
 
-    public static CameraStop fromReadableMap(@NonNull ReadableMap readableMap, MapboxMap.CancelableCallback callback) {
+    public static CameraStop fromReadableMap(Context context, @NonNull ReadableMap readableMap, MapboxMap.CancelableCallback callback) {
         CameraStop stop = new CameraStop();
 
         if (readableMap.hasKey("pitch")) {
@@ -129,6 +131,13 @@ public class CameraStop {
             int paddingRight = getBoundsPaddingByKey(readableMap, "boundsPaddingRight");
             int paddingBottom = getBoundsPaddingByKey(readableMap, "boundsPaddingBottom");
             int paddingLeft = getBoundsPaddingByKey(readableMap, "boundsPaddingLeft");
+
+            // scale padding by pixel ratio
+            DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+            paddingTop = Float.valueOf(paddingTop * metrics.scaledDensity).intValue();
+            paddingRight = Float.valueOf(paddingRight * metrics.scaledDensity).intValue();
+            paddingBottom = Float.valueOf(paddingBottom * metrics.scaledDensity).intValue();
+            paddingLeft = Float.valueOf(paddingLeft * metrics.scaledDensity).intValue();
 
             FeatureCollection collection = FeatureCollection.fromJson(readableMap.getString("bounds"));
             stop.setBounds(GeoJSONUtils.toLatLngBounds(collection), paddingLeft, paddingRight,

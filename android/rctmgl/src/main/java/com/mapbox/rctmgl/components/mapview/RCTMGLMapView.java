@@ -754,7 +754,7 @@ public class RCTMGLMapView extends MapView implements
             ReadableArray stops = args.getArray("stops");
 
             for (int i = 0; i < stops.size(); i++) {
-                CameraStop stop = CameraStop.fromReadableMap(stops.getMap(i), null);
+                CameraStop stop = CameraStop.fromReadableMap(mContext, stops.getMap(i), null);
                 mCameraUpdateQueue.offer(stop);
             }
 
@@ -766,7 +766,7 @@ public class RCTMGLMapView extends MapView implements
                 }
             });
         } else {
-            CameraStop stop = CameraStop.fromReadableMap(args, new MapboxMap.CancelableCallback() {
+            CameraStop stop = CameraStop.fromReadableMap(mContext, args, new MapboxMap.CancelableCallback() {
                 @Override
                 public void onCancel() {
                     callback.onCancel();
