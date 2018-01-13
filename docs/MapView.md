@@ -43,6 +43,22 @@
 | onUserTrackingModeChange | `func` | `none` | `false` | This event is triggered when the users tracking mode is changed. |
 
 ### methods
+#### getPointInView(coordinate)
+
+Converts a geographic coordinate to a point in the given view’s coordinate system.
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `coordinate` | `Array` | `Yes` | A point expressed in the map view's coordinate system. |
+
+
+
+```javascript
+const pointInView = await this._map.getPointInView([-37.817070, 144.949901]);
+```
+
+
 #### getVisibleBounds()
 
 The coordinate bounds(ne, sw) visible in the users’s viewport.

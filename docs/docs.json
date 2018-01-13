@@ -894,6 +894,32 @@
     "description": "MapView backed by Mapbox Native GL",
     "methods": [
       {
+        "name": "getPointInView",
+        "docblock": "Converts a geographic coordinate to a point in the given view’s coordinate system.\n\n@example\nconst pointInView = await this._map.getPointInView([-37.817070, 144.949901]);\n\n@param {Array<Number>} coordinate - A point expressed in the map view's coordinate system.\n@return {Array}",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "coordinate",
+            "description": "A point expressed in the map view's coordinate system.",
+            "type": {
+              "name": "Array"
+            }
+          }
+        ],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "Array"
+          }
+        },
+        "description": "Converts a geographic coordinate to a point in the given view’s coordinate system.",
+        "examples": [
+          "\nconst pointInView = await this._map.getPointInView([-37.817070, 144.949901]);\n\n"
+        ]
+      },
+      {
         "name": "getVisibleBounds",
         "docblock": "The coordinate bounds(ne, sw) visible in the users’s viewport.\n\n@example\nconst visibleBounds = await this._map.getVisibleBounds();\n\n@return {Array}",
         "modifiers": [
