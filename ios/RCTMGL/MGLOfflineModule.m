@@ -17,6 +17,7 @@
     double lastPackTimestamp;
     double eventThrottle;
     BOOL hasListeners;
+    NSMutableArray<RCTPromiseResolveBlock> *packRequestQueue;
 }
 
 RCT_EXPORT_MODULE()
@@ -44,6 +45,7 @@ NSString *const RCT_MAPBOX_OFFLINE_CALLBACK_ERROR = @"MapboOfflineRegionError";
 - (instancetype)init
 {
     if (self = [super init]) {
+        packRequestQueue = [NSMutableArray new];
         eventThrottle = 300;
         lastPackState = -1;
         
@@ -51,13 +53,39 @@ NSString *const RCT_MAPBOX_OFFLINE_CALLBACK_ERROR = @"MapboOfflineRegionError";
         [defaultCenter addObserver:self selector:@selector(offlinePackProgressDidChange:) name:MGLOfflinePackProgressChangedNotification object:nil];
         [defaultCenter addObserver:self selector:@selector(offlinePackDidReceiveError:) name:MGLOfflinePackErrorNotification object:nil];
         [defaultCenter addObserver:self selector:@selector(offlinePackDidReceiveMaxAllowedMapboxTiles:) name:MGLOfflinePackMaximumMapboxTilesReachedNotification object:nil];
+        
+        [[MGLOfflineStorage sharedOfflineStorage] addObserver:self forKeyPath:@"packs" options:NSKeyValueObservingOptionInitial context:NULL];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [[MGLOfflineStorage sharedOfflineStorage] removeObserver:self forKeyPath:@"packs"];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (NSArray<NSString *> *)supportedEvents
 {
     return @[RCT_MAPBOX_OFFLINE_CALLBACK_PROGRESS, RCT_MAPBOX_OFFLINE_CALLBACK_ERROR];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
+{
+    if (packRequestQueue.count == 0) {
+        return;
+    }
+    
+    NSArray<MGLOfflinePack *> *packs = [[MGLOfflineStorage sharedOfflineStorage] packs];
+    if (packs == nil) {
+        return;
+    }
+    
+    while (packRequestQueue.count > 0) {
+        RCTPromiseResolveBlock resolve = [packRequestQueue objectAtIndex:0];
+        resolve([self _convertPacksToJson:packs]);
+        [packRequestQueue removeObjectAtIndex:0];
+    }
 }
 
 RCT_EXPORT_METHOD(createPack:(NSDictionary *)options
@@ -89,18 +117,14 @@ RCT_EXPORT_METHOD(getPacks:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseR
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSArray<MGLOfflinePack *> *packs = [[MGLOfflineStorage sharedOfflineStorage] packs];
-        NSMutableArray<NSDictionary *> *jsonPacks = [[NSMutableArray alloc] init];
         
         if (packs == nil) {
-            resolve(@[]);
+            // packs have not loaded yet
+            [packRequestQueue addObject:resolve];
             return;
         }
-        
-        for (MGLOfflinePack *pack in packs) {
-            [jsonPacks addObject:[self _convertPackToDict:pack]];
-        }
-        
-        resolve(jsonPacks);
+
+        resolve([self _convertPacksToJson:packs]);
     });
 }
 
@@ -277,6 +301,21 @@ RCT_EXPORT_METHOD(setProgressEventThrottle:(NSNumber *)throttleValue)
 {
     NSDictionary *payload = @{ @"name": name, @"message": message };
     return [RCTMGLEvent makeEvent:type withPayload:payload];
+}
+
+- (NSArray<NSDictionary *> *)_convertPacksToJson:(NSArray<MGLOfflinePack *> *)packs
+{
+    NSMutableArray<NSDictionary *> *jsonPacks = [NSMutableArray new];
+    
+    if (packs == nil) {
+        return jsonPacks;
+    }
+    
+    for (MGLOfflinePack *pack in packs) {
+        [jsonPacks addObject:[self _convertPackToDict:pack]];
+    }
+    
+    return jsonPacks;
 }
 
 - (NSDictionary *)_convertPackToDict:(MGLOfflinePack *)pack
