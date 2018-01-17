@@ -840,19 +840,9 @@ public class RCTMGLMapView extends MapView implements
     public void init() {
         setStyleUrl(mStyleURL);
 
-        final OnAttachStateChangeListener attachStateChangeListener = new OnAttachStateChangeListener() {
-            @Override
-            public void onViewAttachedToWindow(View view) {
-                reflow();
-            }
-
-            @Override
-            public void onViewDetachedFromWindow(View view) {
-                removeOnAttachStateChangeListener(this);
-            }
-        };
-
-        addOnAttachStateChangeListener(attachStateChangeListener);
+        // very important, this will make sure that mapbox-gl-native initializes the gl surface
+        // https://github.com/mapbox/react-native-mapbox-gl/issues/955
+        getViewTreeObserver().dispatchOnGlobalLayout();
     }
 
     private void updateCameraPositionIfNeeded(boolean shouldUpdateTarget) {
