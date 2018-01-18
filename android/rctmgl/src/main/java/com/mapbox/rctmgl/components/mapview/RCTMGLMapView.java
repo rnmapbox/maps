@@ -1,6 +1,7 @@
 package com.mapbox.rctmgl.components.mapview;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.location.Location;
@@ -56,6 +57,7 @@ import com.mapbox.rctmgl.location.UserLocation;
 import com.mapbox.rctmgl.location.UserLocationVerticalAlignment;
 import com.mapbox.rctmgl.location.UserTrackingMode;
 import com.mapbox.rctmgl.location.UserTrackingState;
+import com.mapbox.rctmgl.utils.BitmapUtils;
 import com.mapbox.rctmgl.utils.FilterParser;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.rctmgl.utils.GeoViewport;
@@ -835,6 +837,25 @@ public class RCTMGLMapView extends MapView implements
         event.setPayload(payload);
 
         mManager.handleEvent(event);
+    }
+
+    public void takeSnap(final String callbackID, final boolean writeToDisk) {
+        final AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
+
+        if (mMap == null) {
+            throw new Error("takeSnap should only be called after the map has rendered");
+        }
+
+        mMap.snapshot(new MapboxMap.SnapshotReadyCallback() {
+            @Override
+            public void onSnapshotReady(Bitmap snapshot) {
+                WritableMap payload = new WritableNativeMap();
+                String uri = writeToDisk ? BitmapUtils.createTempFile(mContext, snapshot) : BitmapUtils.createBase64(snapshot);
+                payload.putString("uri", uri);
+                event.setPayload(payload);
+                mManager.handleEvent(event);
+            }
+        });
     }
 
     public void init() {

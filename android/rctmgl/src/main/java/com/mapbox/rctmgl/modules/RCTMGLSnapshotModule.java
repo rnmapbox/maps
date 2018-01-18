@@ -21,6 +21,7 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.snapshotter.MapSnapshot;
 import com.mapbox.mapboxsdk.snapshotter.MapSnapshotter;
 import com.mapbox.mapboxsdk.storage.FileSource;
+import com.mapbox.rctmgl.utils.BitmapUtils;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
@@ -78,9 +79,9 @@ public class RCTMGLSnapshotModule extends ReactContextBaseJavaModule {
 
                         String result = null;
                         if (jsOptions.getBoolean("writeToDisk")) {
-                            result = createFile(bitmap);
+                            result = BitmapUtils.createTempFile(mContext, bitmap);
                         } else {
-                            result = createBase64(bitmap);
+                            result = BitmapUtils.createBase64(bitmap);
                         }
 
                         if (result == null) {
@@ -125,35 +126,6 @@ public class RCTMGLSnapshotModule extends ReactContextBaseJavaModule {
         }
 
         return options;
-    }
-
-    private String createFile(Bitmap bitmap) {
-        File tempFile = null;
-        FileOutputStream outputStream = null;
-
-        try {
-            tempFile = File.createTempFile(REACT_CLASS, ".png", mContext.getCacheDir());
-            outputStream = new FileOutputStream(tempFile);
-        } catch (IOException e) {
-            Log.w(REACT_CLASS, e.getLocalizedMessage());
-        }
-
-        if (tempFile == null) {
-            return null;
-        }
-
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-        closeSnapshotOutputStream(outputStream);
-        return Uri.fromFile(tempFile).toString();
-    }
-
-    private String createBase64(Bitmap bitmap) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-        byte[] bitmapBytes = outputStream.toByteArray();
-        closeSnapshotOutputStream(outputStream);
-        String base64Prefix = "data:image/png;base64,";
-        return base64Prefix + Base64.encodeToString(bitmapBytes, Base64.NO_WRAP);
     }
 
     private void closeSnapshotOutputStream(OutputStream outputStream) {
