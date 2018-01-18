@@ -8,6 +8,7 @@
 
 #import "MGLSnapshotModule.h"
 #import "RCTMGLUtils.h"
+#import "RNMBImageUtils.h"
 @import Mapbox;
 
 @implementation MGLSnapshotModule
@@ -34,10 +35,10 @@ RCT_EXPORT_METHOD(takeSnap:(NSDictionary *)jsOptions
             }
             
             NSString *result = nil;
-            if (jsOptions[@"writeToDisk"]) {
-                result = [self _createFile:snapshot.image options:jsOptions];
+            if ([jsOptions[@"writeToDisk"] boolValue]) {
+                result = [RNMBImageUtils createTempFile:snapshot.image];
             } else {
-                result = [self _createBase64:snapshot.image options:jsOptions];
+                result = [RNMBImageUtils createBase64:snapshot.image];
             }
             
             resolve(result);
@@ -72,29 +73,6 @@ RCT_EXPORT_METHOD(takeSnap:(NSDictionary *)jsOptions
     }
 
     return options;
-}
-
-- (NSString *)_createFile:(UIImage *)image options:(NSDictionary *)jsOptions
-{
-    NSString *fileID = [[NSUUID UUID] UUIDString];
-    NSString *pathComponent = [NSString stringWithFormat:@"Documents/rctmgl-snapshot-%@.%@", fileID, @"png"];
-    NSString *filePath = [NSHomeDirectory() stringByAppendingPathComponent: pathComponent];
-    
-    NSData *data = [self _getData:image options:jsOptions];
-    [data writeToFile:filePath atomically:YES];
-
-    return filePath;
-}
-
-- (NSString *)_createBase64:(UIImage *)image options:(NSDictionary *)jsOptions
-{
-    NSData *data = [self _getData:image options:jsOptions];
-    return [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn];
-}
-
-- (NSData *)_getData:(UIImage *)image options:(NSDictionary *)jsOptions
-{
-    return UIImagePNGRepresentation(image);
 }
 
 @end

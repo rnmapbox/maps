@@ -120,6 +120,25 @@ RCT_EXPORT_METHOD(getPointInView:(nonnull NSNumber*)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(takeSnap:(nonnull NSNumber*)reactTag
+                  writeToDisk:(BOOL)writeToDisk
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        
+        if (![view isKindOfClass:[RCTMGLMapView class]]) {
+            RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
+            return;
+        }
+        
+        RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
+        NSString *uri = [reactMapView takeSnap:writeToDisk];
+        resolve(@{ @"uri": uri });
+    }];
+}
+
 RCT_EXPORT_METHOD(getVisibleBounds:(nonnull NSNumber*)reactTag
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)

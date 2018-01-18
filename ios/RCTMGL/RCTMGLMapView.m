@@ -9,6 +9,7 @@
 #import "RCTMGLMapView.h"
 #import "CameraUpdateQueue.h"
 #import "RCTMGLUtils.h"
+#import "RNMBImageUtils.h"
 #import "UIView+React.h"
 
 @implementation RCTMGLMapView
@@ -237,6 +238,15 @@ static double const M2PI = M_PI * 2;
 }
 
 #pragma mark - methods
+
+- (NSString *)takeSnap:(BOOL)writeToDisk
+{
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, YES, 0);
+    [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:YES];
+    UIImage *snapshot = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return writeToDisk ? [RNMBImageUtils createTempFile:snapshot] : [RNMBImageUtils createBase64:snapshot];
+}
 
 - (CLLocationDistance)getMetersPerPixelAtLatitude:(double)latitude withZoom:(double)zoomLevel
 {
