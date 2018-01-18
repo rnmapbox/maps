@@ -1,5 +1,5 @@
 ## <MapboxGL.snapshotManager />
-### The snapshotManager generates static raster images of the map.<br/>Each snapshot image depicts a portion of a map defined by an SnapshotOptions object you provide.<br/>The snapshotter generates an the snapshot asynchronouss.
+### The snapshotManager generates static raster images of the map.<br/>Each snapshot image depicts a portion of a map defined by an SnapshotOptions object you provide.<br/>The snapshotter generates the snapshot asynchronous.
 
 
 ### methods

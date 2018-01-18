@@ -500,7 +500,7 @@ class MapView extends React.Component {
 
   /**
    * Takes snapshot of map with current tiles and returns a URI to the image
-   * @param  {Boolean} writeToDisk If true will create a temp file, otherwise it in base64
+   * @param  {Boolean} writeToDisk If true will create a temp file, otherwise it is in base64
    * @return {String}
    */
   async takeSnap (writeToDisk = false) {

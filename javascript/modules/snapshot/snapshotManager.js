@@ -6,7 +6,7 @@ const MapboxGLSnapshotManger = NativeModules.MGLSnapshotModule;
 /**
  * The snapshotManager generates static raster images of the map.
  * Each snapshot image depicts a portion of a map defined by an SnapshotOptions object you provide.
- * The snapshotter generates an the snapshot asynchronouss.
+ * The snapshotter generates the snapshot asynchronous.
  */
 class SnapshotManager {
   /**

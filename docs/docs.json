@@ -1182,6 +1182,30 @@
         "examples": [
           "\nthis.map.setCamera({\n  centerCoordinate: [lng, lat],\n  zoom: 16,\n  duration: 2000,\n})\n\nthis.map.setCamera({\n  stops: [\n    { pitch: 45, duration: 200 },\n    { heading: 180, duration: 300 },\n  ]\n})\n\n "
         ]
+      },
+      {
+        "name": "takeSnap",
+        "docblock": "Takes snapshot of map with current tiles and returns a URI to the image\n@param  {Boolean} writeToDisk If true will create a temp file, otherwise it is in base64\n@return {String}",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "writeToDisk",
+            "description": "If true will create a temp file, otherwise it is in base64",
+            "type": {
+              "name": "Boolean"
+            }
+          }
+        ],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "String"
+          }
+        },
+        "description": "Takes snapshot of map with current tiles and returns a URI to the image",
+        "examples": []
       }
     ],
     "props": [
@@ -2597,7 +2621,7 @@
   },
   "snapshotManager": {
     "name": "snapshotManager",
-    "description": "The snapshotManager generates static raster images of the map.\nEach snapshot image depicts a portion of a map defined by an SnapshotOptions object you provide.\nThe snapshotter generates an the snapshot asynchronouss.",
+    "description": "The snapshotManager generates static raster images of the map.\nEach snapshot image depicts a portion of a map defined by an SnapshotOptions object you provide.\nThe snapshotter generates the snapshot asynchronous.",
     "props": [],
     "styles": [],
     "methods": [
