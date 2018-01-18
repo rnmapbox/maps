@@ -60,6 +60,7 @@
 		C4FB125B1F79C03E0055AE1F /* RCTMGLBackgroundLayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FB125A1F79C03E0055AE1F /* RCTMGLBackgroundLayerManager.m */; };
 		C4FD1DBF1FCF54FB00213AF2 /* RCTMGLImageSource.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD1DBE1FCF54FB00213AF2 /* RCTMGLImageSource.m */; };
 		C4FD1DC21FCF550E00213AF2 /* RCTMGLImageSourceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD1DC11FCF550E00213AF2 /* RCTMGLImageSourceManager.m */; };
+		C4FD1DC51FD1F04300213AF2 /* MGLSnapshotModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD1DC41FD1F04200213AF2 /* MGLSnapshotModule.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -183,6 +184,8 @@
 		C4FD1DBE1FCF54FB00213AF2 /* RCTMGLImageSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLImageSource.m; sourceTree = "<group>"; };
 		C4FD1DC01FCF550E00213AF2 /* RCTMGLImageSourceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLImageSourceManager.h; sourceTree = "<group>"; };
 		C4FD1DC11FCF550E00213AF2 /* RCTMGLImageSourceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLImageSourceManager.m; sourceTree = "<group>"; };
+		C4FD1DC31FD1F04200213AF2 /* MGLSnapshotModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGLSnapshotModule.h; sourceTree = "<group>"; };
+		C4FD1DC41FD1F04200213AF2 /* MGLSnapshotModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MGLSnapshotModule.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -319,6 +322,8 @@
 				C4D144521F4E190C00396F26 /* MGLModule.m */,
 				C470F6AA1FA11C9500614A69 /* MGLOfflineModule.h */,
 				C470F6AB1FA11C9500614A69 /* MGLOfflineModule.m */,
+				C4FD1DC31FD1F04200213AF2 /* MGLSnapshotModule.h */,
+				C4FD1DC41FD1F04200213AF2 /* MGLSnapshotModule.m */,
 			);
 			name = Modules;
 			sourceTree = "<group>";
@@ -534,6 +539,7 @@
 				C4EAF1831F6336E20016DEE8 /* RCTMGLVectorSource.m in Sources */,
 				C4EAF1891F633C010016DEE8 /* RCTMGLVectorSourceManager.m in Sources */,
 				C42219BC1FEB215E00EE9E35 /* MGLUserLocationHeadingArrowLayer.m in Sources */,
+				C4FD1DC51FD1F04300213AF2 /* MGLSnapshotModule.m in Sources */,
 				C4FB122D1F7972A00055AE1F /* RCTMGLRasterSource.m in Sources */,
 				C4C87B941F9143DA0064AE95 /* RCTMGLCalloutManager.m in Sources */,
 				C410D5D81F7AD0C100CF822A /* RCTMGLLightManager.m in Sources */,
