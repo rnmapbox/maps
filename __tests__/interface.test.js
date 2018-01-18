@@ -13,6 +13,7 @@ describe('Public Interface', () => {
 
       // modules
       'offlineManager',
+      'snapshotManager',
 
       // layers
       'FillLayer',

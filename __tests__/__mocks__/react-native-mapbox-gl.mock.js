@@ -173,3 +173,9 @@ NativeModules.MGLOfflineModule = {
   setTileCountLimit: jest.fn(),
   setProgressEventThrottle: jest.fn(),
 };
+
+NativeModules.MGLSnapshotModule = {
+  takeSnap: () => {
+    return Promise.resolve('file://test.png');
+  },
+};
