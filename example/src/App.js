@@ -52,6 +52,7 @@ import DataDrivenCircleColors from './components/DataDrivenCircleColors';
 import ChoroplethLayerByZoomLevel from './components/ChoroplethLayerByZoomLevel';
 import PointInMapView from './components/PointInMapView';
 import TakeSnapshot from './components/TakeSnapshot';
+import TakeSnapshotWithMap from './components/TakeSnapshotWithMap';
 
 const styles = StyleSheet.create({
   noPermissionsText: {
@@ -124,6 +125,7 @@ const Examples = [
   new ExampleItem('Choropleth Layer By Zoom Level', ChoroplethLayerByZoomLevel),
   new ExampleItem('Get Pixel Point in MapView', PointInMapView),
   new ExampleItem('Take Snapshot Without Map', TakeSnapshot),
+  new ExampleItem('Take Snapshot With Map', TakeSnapshotWithMap),
 ];
 
 class App extends React.Component {
