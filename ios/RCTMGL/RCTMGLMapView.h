@@ -58,5 +58,6 @@
 - (RCTMGLPointAnnotation*)getRCTPointAnnotation:(MGLPointAnnotation*)mglAnnotation;
 - (NSArray<RCTMGLSource *> *)getAllTouchableSources;
 - (RCTMGLSource *)getTouchableSourceWithHighestZIndex:(NSArray<RCTMGLSource *> *)touchableSources;
+- (NSString *)takeSnap:(BOOL)writeToDisk;
 
 @end

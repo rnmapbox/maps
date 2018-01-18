@@ -214,4 +214,14 @@ this.map.setCamera({
 ```
 
 
+#### takeSnap(writeToDisk)
+
+Takes snapshot of map with current tiles and returns a URI to the image
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `writeToDisk` | `Boolean` | `Yes` | If true will create a temp file, otherwise it is in base64 |
+
+
 

@@ -26,6 +26,7 @@ import BackgroundLayer from './components/BackgroundLayer';
 
 // modules
 import offlineManager from './modules/offline/offlineManager';
+import snapshotManager from './modules/snapshot/snapshotManager';
 
 let MapboxGL = { ...NativeModules.MGLModule };
 
@@ -78,6 +79,7 @@ MapboxGL.BackgroundLayer = BackgroundLayer;
 
 // modules
 MapboxGL.offlineManager = offlineManager;
+MapboxGL.snapshotManager = snapshotManager;
 
 // utils
 MapboxGL.geoUtils = geoUtils;
