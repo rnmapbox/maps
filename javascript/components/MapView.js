@@ -255,7 +255,7 @@ class MapView extends React.Component {
    *
    * @example
    * const pointInView = await this._map.getPointInView([-37.817070, 144.949901]);
-   * 
+   *
    * @param {Array<Number>} coordinate - A point expressed in the map view's coordinate system.
    * @return {Array}
    */
@@ -496,6 +496,16 @@ class MapView extends React.Component {
     }
 
     return this._runNativeCommand('setCamera', [cameraConfig]);
+  }
+
+  /**
+   * Takes snapshot of map with current tiles and returns a URI to the image
+   * @param  {Boolean} writeToDisk If true will create a temp file, otherwise it in base64
+   * @return {String}
+   */
+  async takeSnap (writeToDisk = false) {
+    const res = await this._runNativeCommand('takeSnap', [writeToDisk]);
+    return res.uri;
   }
 
   _runNativeCommand (methodName, args = []) {
