@@ -28,6 +28,7 @@ import com.mapbox.rctmgl.components.styles.sources.RCTMGLShapeSourceManager;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLVectorSourceManager;
 import com.mapbox.rctmgl.modules.RCTMGLModule;
 import com.mapbox.rctmgl.modules.RCTMGLOfflineModule;
+import com.mapbox.rctmgl.modules.RCTMGLSnapshotModule;
 
 /**
  * Created by nickitaliano on 8/18/17.
@@ -41,6 +42,7 @@ public class RCTMGLPackage implements ReactPackage {
 
         modules.add(new RCTMGLModule(reactApplicationContext));
         modules.add(new RCTMGLOfflineModule(reactApplicationContext));
+        modules.add(new RCTMGLSnapshotModule(reactApplicationContext));
 
         return modules;
     }
