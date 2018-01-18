@@ -2594,5 +2594,36 @@
         }
       }
     ]
+  },
+  "snapshotManager": {
+    "name": "snapshotManager",
+    "description": "The snapshotManager generates static raster images of the map.\nEach snapshot image depicts a portion of a map defined by an SnapshotOptions object you provide.\nThe snapshotter generates an the snapshot asynchronouss.",
+    "props": [],
+    "styles": [],
+    "methods": [
+      {
+        "name": "takeSnap",
+        "description": "Takes a snapshot of the base map using the provided Snapshot options. NOTE pitch, heading, zoomLevel only works when centerCoordinate is set!",
+        "params": [
+          {
+            "name": "options",
+            "description": "Snapshot options for create a static image of the base map",
+            "type": {
+              "name": "SnapshotOptions"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "// creates a temp file png of base map\nconst uri = await MapboxGL.snapshotManager.takeSnap({\n  centerCoordinate: [-74.126410, 40.797968],\n  width: width,\n  height: height,\n  zoomLevel: 12,\n  pitch: 30,\n  heading: 20,\n  styleURL: MapboxGL.StyleURL.Dark,\n  writeToDisk: true, // creates a temp file\n});\n\n// creates base64 png of base map\nconst uri = await MapboxGL.snapshotManager.takeSnap({\n  centerCoordinate: [-74.126410, 40.797968],\n  width: width,\n  height: height,\n  zoomLevel: 12,\n  pitch: 30,\n  heading: 20,\n  styleURL: MapboxGL.StyleURL.Dark,\n});\n\n// creates snapshot with bounds\nconst uri = await MapboxGL.snapshotManager.takeSnap({\n  bounds: [[-74.126410, 40.797968], [-74.143727, 40.772177]],\n  width: width,\n  height: height,\n  styleURL: MapboxGL.StyleURL.Dark,\n});"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "Promise"
+          }
+        }
+      }
+    ]
   }
 }
