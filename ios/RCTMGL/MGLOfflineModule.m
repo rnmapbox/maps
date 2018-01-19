@@ -279,6 +279,11 @@ RCT_EXPORT_METHOD(setProgressEventThrottle:(NSNumber *)throttleValue)
     uint64_t completedResources = pack.progress.countOfResourcesCompleted;
     uint64_t expectedResources = pack.progress.countOfResourcesExpected;
     float progressPercentage = (float)completedResources / expectedResources;
+
+    // prevent NaN errors when expectedResources is 0
+    if(expectedResources == 0) {
+        progressPercentage = 0;
+    }
     
     return @{
       @"state": @(pack.state),
