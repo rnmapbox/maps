@@ -1,20 +1,8 @@
 package com.mapbox.rctmgl.location;
 
-import android.graphics.PointF;
-import android.graphics.RectF;
-import android.hardware.GeomagneticField;
 import android.location.Location;
-import android.util.Log;
 
-import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.plugins.locationlayer.TurfTransformation;
-import com.mapbox.rctmgl.utils.GeoJSONUtils;
-import com.mapbox.services.api.utils.turf.TurfConstants;
-import com.mapbox.services.api.utils.turf.TurfHelpers;
-import com.mapbox.services.api.utils.turf.TurfMeasurement;
-import com.mapbox.services.commons.geojson.Point;
 
 /**
  * Created by nickitaliano on 12/13/17.
