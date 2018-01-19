@@ -101,6 +101,8 @@ public class LocationManager implements LocationEngineListener {
                 locationEngine.setFastestInterval(1000);
                 locationEngine.activate();
             }
+        } else {
+            locationEngine.activate();
         }
     }
 

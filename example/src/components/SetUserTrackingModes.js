@@ -25,12 +25,14 @@ class SetUserTrackingModes extends React.Component {
     }).sort(onSortOptions);
 
     this.state = {
+      showUserLocation: true,
       userSelectedUserTrackingMode: this._trackingOptions[0].data,
       currentTrackingMode: this._trackingOptions[0].data,
     };
 
     this.onTrackingChange = this.onTrackingChange.bind(this);
     this.onUserTrackingModeChange = this.onUserTrackingModeChange.bind(this);
+    this.onToggleUserLocation = this.onToggleUserLocation.bind(this);
   }
 
   onTrackingChange (index, userTrackingMode) {
@@ -43,6 +45,10 @@ class SetUserTrackingModes extends React.Component {
   onUserTrackingModeChange (e) {
     const userTrackingMode = e.nativeEvent.payload.userTrackingMode;
     this.setState({ currentTrackingMode: userTrackingMode });
+  }
+
+  onToggleUserLocation () {
+    this.setState({ showUserLocation: !this.state.showUserLocation });
   }
 
   get userTrackingModeText () {
@@ -62,13 +68,17 @@ class SetUserTrackingModes extends React.Component {
     return (
       <TabBarPage {...this.props} scrollable options={this._trackingOptions} onOptionPress={this.onTrackingChange}>
         <MapboxGL.MapView
-            showUserLocation={true}
+            showUserLocation={this.state.showUserLocation}
             userTrackingMode={this.state.userSelectedUserTrackingMode}
             onUserTrackingModeChange={this.onUserTrackingModeChange}
             style={sheet.matchParent} />
 
-        <Bubble style={{ marginBottom: 100 }}>
+        <Bubble style={{ bottom: 100 }}>
           <Text>User Tracking Mode: {this.userTrackingModeText}</Text>
+        </Bubble>
+
+        <Bubble onPress={this.onToggleUserLocation} style={{ bottom: 180 }}>
+          <Text>Toggle User Location</Text>
         </Bubble>
       </TabBarPage>
     );

@@ -34,6 +34,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.UiSettings;
+import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerMode;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
@@ -702,7 +703,17 @@ public class RCTMGLMapView extends MapView implements
         if (mMap != null) {
             if (mLocationManger.isActive() && !mShowUserLocation) {
                 mLocationManger.disable();
-                updateLocationLayer();
+
+                if (mLocationLayer != null) {
+                   int trackingMode = mUserLocation.getTrackingMode();
+
+                   if (trackingMode != UserTrackingMode.NONE) {
+                       mUserLocation.setTrackingMode(UserTrackingMode.NONE);
+                       updateUserTrackingMode(UserTrackingMode.NONE);
+                   }
+
+                   updateLocationLayer();
+                }
             } else {
                 enableLocation();
             }
@@ -984,7 +995,7 @@ public class RCTMGLMapView extends MapView implements
         context.addLifecycleEventListener(new LifecycleEventListener() {
             @Override
             public void onHostResume() {
-                if (!mLocationManger.isActive()) {
+                if (mShowUserLocation && !mLocationManger.isActive()) {
                     mLocationManger.enable();
                 }
                 onResume();

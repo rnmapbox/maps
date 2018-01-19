@@ -13,7 +13,9 @@ public class UserTrackingMode {
     public static final int FollowWithHeading = 3;
 
     public static int getMapLayerMode(int mode, boolean isShowUserLocation) {
-        if (!isShowUserLocation || mode == NONE) {
+        if (!isShowUserLocation) {
+            return LocationLayerMode.NONE;
+        } else if (mode == NONE) {
             return LocationLayerMode.TRACKING;
         } else if (mode == FollowWithCourse) {
             return LocationLayerMode.NAVIGATION;

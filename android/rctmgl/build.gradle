@@ -33,5 +33,5 @@ dependencies {
     }
 
     // Mapbox plugins
-    compile 'com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.2.0'
+    compile 'com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.3.0'
 }
