@@ -14,4 +14,5 @@ Pod::Spec.new do |s|
   s.source_files	= "ios/RCTMGL/**/*.{h,m}"
 
   s.vendored_frameworks = 'ios/Mapbox.framework'
+  s.dependency 'React'
 end
