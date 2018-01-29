@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.LoginFilter;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.MotionEvent;
@@ -169,6 +170,20 @@ public class RCTMGLMapView extends MapView implements
         mHandler = new Handler();
 
         setLifecycleListeners();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasWindowFocus) {
+        super.onWindowFocusChanged(hasWindowFocus);
+        if (mLocationLayer == null) {
+            return;
+        }
+        if (hasWindowFocus) {
+            mLocationLayer.onStart();
+        } else {
+            mLocationLayer.onStop();
+        }
+
     }
 
     public void addFeature(View childView, int childPosition) {
@@ -991,8 +1006,8 @@ public class RCTMGLMapView extends MapView implements
     }
 
     private void setLifecycleListeners() {
-        ReactContext context = (ReactContext) mContext;
-        context.addLifecycleEventListener(new LifecycleEventListener() {
+        final ReactContext reactContext = (ReactContext) mContext;
+        reactContext.addLifecycleEventListener(new LifecycleEventListener() {
             @Override
             public void onHostResume() {
                 if (mShowUserLocation && !mLocationManger.isActive()) {
@@ -1013,6 +1028,7 @@ public class RCTMGLMapView extends MapView implements
             public void onHostDestroy() {
                 dispose();
                 onDestroy();
+                reactContext.removeLifecycleEventListener(this);
             }
         });
     }
