@@ -169,6 +169,11 @@ class MapView extends React.Component {
     onRegionDidChange: PropTypes.func,
 
     /**
+    * This event is triggered whenever the location engine receives a location update
+    */
+    onUserLocationUpdate: PropTypes.func,
+
+    /**
     * This event is triggered when the map is about to start loading a new map style.
     */
     onWillStartLoadingMap: PropTypes.func,
@@ -617,6 +622,9 @@ class MapView extends React.Component {
         break;
       case MapboxGL.EventTypes.RegionDidChange:
         propName = 'onRegionDidChange';
+        break;
+      case MapboxGL.EventTypes.UserLocationUpdated:
+        propName = 'onUserLocationUpdate';
         break;
       case MapboxGL.EventTypes.WillStartLoadinMap:
         propName = 'onWillStartLoadingMap';
