@@ -250,6 +250,9 @@ public class RCTMGLMapView extends MapView implements
     }
 
     public void dispose() {
+        if(mLocationLayer != null){
+            mLocationLayer.onStop();
+        }
         mLocationManger.dispose();
     }
 
