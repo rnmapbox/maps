@@ -268,7 +268,21 @@ RCT_EXPORT_METHOD(setProgressEventThrottle:(NSNumber *)throttleValue)
 
 - (NSDictionary *)_unarchiveMetadata:(MGLOfflinePack *)pack
 {
-    NSString *data = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
+    id data = [NSKeyedUnarchiver unarchiveObjectWithData:pack.context];
+    // Version v5 store data as NSDictionary while v6 store data as JSON string.
+    // User might save offline pack in v5 and then try to read in v6.
+    // In v5 are metadata stored nested which need to be handled in JS.
+    // Example of how data are stored in v5
+    // {
+    //      name: "New York",
+    //      metadata: {
+    //          customMeta: "...",
+    //      }
+    // }
+    if ([data isKindOfClass:[NSDictionary class]]) {;
+        return data;
+    }
+    
     return [NSJSONSerialization JSONObjectWithData:[data dataUsingEncoding:NSUTF8StringEncoding]
                                 options:NSJSONReadingMutableContainers
                                 error:nil];
