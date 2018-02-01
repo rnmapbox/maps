@@ -35,8 +35,8 @@ class OfflineCreatePackOptions {
 
   _makeMetadata (metadata) {
     return JSON.stringify({
-      name: this.name,
       ...metadata,
+      name: this.name,
     });
   }
 }
