@@ -10,7 +10,7 @@ class OfflineCreatePackOptions {
     this.bounds = this._makeLatLngBounds(options.bounds);
     this.minZoom = options.minZoom;
     this.maxZoom = options.maxZoom;
-    this.metadata = this._makeMetadata();
+    this.metadata = this._makeMetadata(options.metadata);
   }
 
   _assert (options) {
@@ -33,8 +33,11 @@ class OfflineCreatePackOptions {
     return toJSONString(makeLatLngBounds(ne, sw));
   }
 
-  _makeMetadata () {
-    return JSON.stringify({ name: this.name });
+  _makeMetadata (metadata) {
+    return JSON.stringify({
+      ...metadata,
+      name: this.name,
+    });
   }
 }
 

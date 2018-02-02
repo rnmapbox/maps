@@ -8,6 +8,9 @@ describe('OfflineCreatePackOptions', () => {
     bounds: [[0, 1], [2, 3]],
     minZoom: 1,
     maxZoom: 22,
+    metadata: {
+      customData: 'hiking',
+    },
   };
 
   it('should create valid options', () => {
@@ -28,6 +31,7 @@ describe('OfflineCreatePackOptions', () => {
 
     // we expect a json string
     expect(actualOptions.metadata).toEqual(JSON.stringify({
+      customData: options.metadata.customData,
       name: options.name,
     }));
   });
