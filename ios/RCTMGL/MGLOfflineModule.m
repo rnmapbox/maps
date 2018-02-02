@@ -279,7 +279,7 @@ RCT_EXPORT_METHOD(setProgressEventThrottle:(NSNumber *)throttleValue)
     //          customMeta: "...",
     //      }
     // }
-    if ([data isKindOfClass:[NSDictionary class]]) {;
+    if ([data isKindOfClass:[NSDictionary class]]) {
         return data;
     }
     
