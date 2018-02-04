@@ -814,6 +814,20 @@ public class RCTMGLMapView extends MapView implements
         mManager.handleEvent(event);
     }
 
+    public void getZoom(String callbackID) {
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
+
+        CameraPosition position = mMap.getCameraPosition();
+
+        WritableMap payload = new WritableNativeMap();
+
+        payload.putDouble("zoom", position.zoom);
+
+        event.setPayload(payload);
+
+        mManager.handleEvent(event);
+    }
+
     public void queryRenderedFeaturesInRect(String callbackID, RectF rect, FilterParser.FilterList filter, List<String> layerIDs) {
         AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
         List<Feature> features = mMap.queryRenderedFeatures(rect, FilterParser.parse(filter), layerIDs.toArray(new String[layerIDs.size()]));

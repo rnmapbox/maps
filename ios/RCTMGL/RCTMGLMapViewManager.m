@@ -156,6 +156,23 @@ RCT_EXPORT_METHOD(getVisibleBounds:(nonnull NSNumber*)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(getZoom:(nonnull NSNumber*)reactTag
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+
+        if (![view isKindOfClass:[RCTMGLMapView class]]) {
+            RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
+            return;
+        }
+
+        RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
+        resolve(@{ @"zoom": @(reactMapView.zoomLevel) });
+    }];
+}
+
 RCT_EXPORT_METHOD(queryRenderedFeaturesAtPoint:(nonnull NSNumber*)reactTag
                   atPoint:(NSArray<NSNumber*>*)point
                   withFilter:(NSArray<NSDictionary<NSString *, id> *> *)filter

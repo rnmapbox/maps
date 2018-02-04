@@ -225,3 +225,16 @@ Takes snapshot of map with current tiles and returns a URI to the image
 
 
 
+#### getZoom()
+
+Returns the current zoom of the map view.
+
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+```javascript
+const zoom = await this._map.getZoom();
+```
