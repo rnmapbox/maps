@@ -517,9 +517,8 @@ class MapView extends React.Component {
    * @return {Number}
    */
 
-  async getZoom (){
+  async getZoom () {
     const res = await this._runNativeCommand('getZoom');
-
     return res.zoom;
   }
 

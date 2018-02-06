@@ -816,13 +816,10 @@ public class RCTMGLMapView extends MapView implements
 
     public void getZoom(String callbackID) {
         AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
-
         CameraPosition position = mMap.getCameraPosition();
 
         WritableMap payload = new WritableNativeMap();
-
         payload.putDouble("zoom", position.zoom);
-
         event.setPayload(payload);
 
         mManager.handleEvent(event);
