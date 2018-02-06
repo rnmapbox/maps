@@ -110,6 +110,7 @@ public class LocationManager implements LocationEngineListener {
         if (locationEngine == null) {
             return;
         }
+        locationEngine.removeLocationUpdates();
         locationEngine.deactivate();
     }
 
