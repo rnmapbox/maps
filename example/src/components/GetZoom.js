@@ -17,9 +17,11 @@ class GetZoom extends React.Component {
     this.state = {
       zoom: 9,
     };
+
+    this.onRegionDidChange = this.onRegionDidChange.bind(this);
   }
 
-  onRegionDidChange = async () => {
+  async onRegionDidChange () {
     const zoom = await this._map.getZoom();
     this.setState({ zoom });
   }
