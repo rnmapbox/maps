@@ -508,6 +508,20 @@ class MapView extends React.Component {
     return res.uri;
   }
 
+  /**
+   * Returns the current zoom of the map view.
+   *
+   * @example
+   * const zoom = await this._map.getZoom();
+   *
+   * @return {Number}
+   */
+
+  async getZoom () {
+    const res = await this._runNativeCommand('getZoom');
+    return res.zoom;
+  }
+
   _runNativeCommand (methodName, args = []) {
     if (isAndroid()) {
       return new Promise ((resolve) => {
