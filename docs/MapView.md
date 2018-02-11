@@ -238,3 +238,15 @@ Returns the current zoom of the map view.
 ```javascript
 const zoom = await this._map.getZoom();
 ```
+
+#### getCenter()
+
+Returns the map's geographical centerpoint
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+```javascript
+const center = await this._map.getCenter();
+```

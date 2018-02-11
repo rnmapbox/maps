@@ -522,6 +522,19 @@ class MapView extends React.Component {
     return res.zoom;
   }
 
+  /**
+   * Returns the map's geographical centerpoint
+   *
+   * @example
+   * const center = await this._map.getCenter();
+   *
+   * @return {Array<Number>} Coordinates
+   */
+  async getCenter () {
+    const res = await this._runNativeCommand('getCenter');
+    return res.center;
+  }
+
   _runNativeCommand (methodName, args = []) {
     if (isAndroid()) {
       return new Promise ((resolve) => {

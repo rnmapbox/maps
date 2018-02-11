@@ -54,6 +54,7 @@ import PointInMapView from './components/PointInMapView';
 import TakeSnapshot from './components/TakeSnapshot';
 import TakeSnapshotWithMap from './components/TakeSnapshotWithMap';
 import GetZoom from './components/GetZoom';
+import GetCenter from './components/GetCenter';
 
 const styles = StyleSheet.create({
   noPermissionsText: {
@@ -128,6 +129,7 @@ const Examples = [
   new ExampleItem('Take Snapshot Without Map', TakeSnapshot),
   new ExampleItem('Take Snapshot With Map', TakeSnapshotWithMap),
   new ExampleItem('Get Current Zoom', GetZoom),
+  new ExampleItem('Get Center', GetCenter),
 ];
 
 class App extends React.Component {
