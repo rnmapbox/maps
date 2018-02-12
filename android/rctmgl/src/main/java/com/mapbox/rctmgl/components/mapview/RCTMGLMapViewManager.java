@@ -73,6 +73,8 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
 
     @Override
     public void onDropViewInstance(RCTMGLMapView mapView) {
+        super.onDropViewInstance(mapView);
+
         try {
             mapView.dispose();
         } catch (Exception e) {
