@@ -206,6 +206,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     public static final int METHOD_GET_POINT_IN_VIEW = 5;
     public static final int METHOD_TAKE_SNAP = 6;
     public static final int METHOD_GET_ZOOM = 7;
+    public static final int METHOD_GET_CENTER = 8;
 
     @Nullable
     @Override
@@ -218,6 +219,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                 .put("getPointInView", METHOD_GET_POINT_IN_VIEW)
                 .put("takeSnap", METHOD_TAKE_SNAP)
                 .put("getZoom", METHOD_GET_ZOOM)
+                .put("getCenter", METHOD_GET_CENTER)
                 .build();
     }
 
@@ -251,6 +253,8 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                 mapView.takeSnap(args.getString(0), args.getBoolean(1));
             case METHOD_GET_ZOOM:
                 mapView.getZoom(args.getString(0));
+            case METHOD_GET_CENTER:
+                mapView.getCenter(args.getString(0));
                 break;
         }
     }

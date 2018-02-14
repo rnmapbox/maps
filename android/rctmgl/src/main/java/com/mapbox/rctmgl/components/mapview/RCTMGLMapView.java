@@ -899,6 +899,20 @@ public class RCTMGLMapView extends MapView implements
         });
     }
 
+    public void getCenter(String callbackID) {
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
+        LatLng center = mMap.getCameraPosition().target;
+
+        WritableArray array = new WritableNativeArray();
+        array.pushDouble(center.getLongitude());
+        array.pushDouble(center.getLatitude());
+        WritableMap payload = new WritableNativeMap();
+        payload.putArray("center", array);
+        event.setPayload(payload);
+
+        mManager.handleEvent(event);
+    }
+
     public void init() {
         setStyleUrl(mStyleURL);
 
