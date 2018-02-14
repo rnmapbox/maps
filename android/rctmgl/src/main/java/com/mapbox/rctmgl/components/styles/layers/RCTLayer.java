@@ -61,7 +61,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
     protected Double mMinZoomLevel;
     protected Double mMaxZoomLevel;
     protected ReadableMap mReactStyle;
-    protected FilterParser.FilterList mFilter;
+    protected Filter.Statement mFilter;
 
     protected MapboxMap mMap;
     protected T mLayer;
@@ -156,13 +156,13 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
     }
 
     public void setFilter(ReadableArray readableFilterArray) {
-        mFilter = FilterParser.getFilterList(readableFilterArray);
+        FilterParser.FilterList filterList = FilterParser.getFilterList(readableFilterArray);
+
+        mFilter = buildFilter(filterList);
 
         if (mLayer != null) {
-            Filter.Statement statement = buildFilter();
-
-            if (statement != null) {
-                updateFilter(statement);
+            if (mFilter != null) {
+                updateFilter(mFilter);
             }
         }
     }
@@ -233,8 +233,8 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         }
     }
 
-    protected Filter.Statement buildFilter() {
-        return FilterParser.parse(mFilter);
+    protected Filter.Statement buildFilter(FilterParser.FilterList filterList) {
+        return FilterParser.parse(filterList);
     }
 
     protected void updateFilter(Filter.Statement statement) {

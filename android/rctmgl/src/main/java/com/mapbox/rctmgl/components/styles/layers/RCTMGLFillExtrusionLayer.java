@@ -30,9 +30,8 @@ public class RCTMGLFillExtrusionLayer extends RCTLayer<FillExtrusionLayer> {
     public void addToMap(RCTMGLMapView mapView) {
         super.addToMap(mapView);
 
-        Filter.Statement statement = buildFilter();
-        if (statement != null) {
-            updateFilter(statement);
+        if (mFilter != null) {
+            updateFilter(mFilter);
         }
     }
 
