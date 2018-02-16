@@ -6,7 +6,7 @@
 | ---- | :--: | :-----: | :------: | :----------: |
 | id | `string` | `MapboxGL.StyleSource.DefaultSourceID` | `false` | A string that uniquely identifies the source. |
 | url | `string` | `none` | `false` | An HTTP(S) URL, absolute file URL, or local file URL relative to the current application’s resource bundle. |
-| shape | `object` | `none` | `false` | The contents of the source. A shape can represent a GeoJSON geometry, a feature, or a feature collection. |
+| shape | `object` | `none` | `false` | The contents of the source. A shape can represent a GeoJSON geometry, a feature, or a feature colllection. |
 | cluster | `bool` | `none` | `false` | Enables clustering on the source for point shapes. |
 | clusterRadius | `number` | `none` | `false` | Specifies the radius of each cluster if clustering is enabled.<br/>A value of 512 produces a radius equal to the width of a tile.<br/>The default value is 50. |
 | clusterMaxZoomLevel | `number` | `none` | `false` | Specifies the maximum zoom level at which to cluster points if clustering is enabled.<br/>Defaults to one zoom level less than the value of maxZoomLevel so that, at the maximum zoom level,<br/>the shapes are not clustered. |

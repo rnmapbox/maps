@@ -1206,6 +1206,42 @@
         },
         "description": "Takes snapshot of map with current tiles and returns a URI to the image",
         "examples": []
+      },
+      {
+        "name": "getZoom",
+        "docblock": "Returns the current zoom of the map view.\n\n@example\nconst zoom = await this._map.getZoom();\n\n@return {Number}",
+        "modifiers": [
+          "async"
+        ],
+        "params": [],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "Number"
+          }
+        },
+        "description": "Returns the current zoom of the map view.",
+        "examples": [
+          "\nconst zoom = await this._map.getZoom();\n\n"
+        ]
+      },
+      {
+        "name": "getCenter",
+        "docblock": "Returns the map's geographical centerpoint\n\n@example\nconst center = await this._map.getCenter();\n\n@return {Array<Number>} Coordinates",
+        "modifiers": [
+          "async"
+        ],
+        "params": [],
+        "returns": {
+          "description": "Coordinates",
+          "type": {
+            "name": "Array"
+          }
+        },
+        "description": "Returns the map's geographical centerpoint",
+        "examples": [
+          "\nconst center = await this._map.getCenter();\n\n"
+        ]
       }
     ],
     "props": [
