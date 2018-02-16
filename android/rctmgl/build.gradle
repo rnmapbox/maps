@@ -28,7 +28,7 @@ dependencies {
     // Mapbox SDK
     compile 'com.mapbox.mapboxsdk:mapbox-android-services:2.2.9'
 
-    compile('com.mapbox.mapboxsdk:mapbox-android-sdk:5.3.1@aar') {
+    compile('com.mapbox.mapboxsdk:mapbox-android-sdk:5.4.1@aar') {
         transitive=true
     }
 
