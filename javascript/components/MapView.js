@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { View, StyleSheet, NativeModules, requireNativeComponent } from 'react-native';
 import { makePoint, makeLatLngBounds } from '../utils/geoUtils';
 
 import {
@@ -19,6 +19,10 @@ const MapboxGL = NativeModules.MGLModule;
 export const NATIVE_MODULE_NAME = 'RCTMGLMapView';
 
 export const ANDROID_TEXTURE_NATIVE_MODULE_NAME = 'RCTMGLAndroidTextureMapView';
+
+const styles = StyleSheet.create({
+  matchParent: { flex: 1 },
+});
 
 /**
  * MapView backed by Mapbox Native GL
@@ -242,10 +246,15 @@ class MapView extends React.Component {
   constructor (props) {
     super(props);
 
+    this.state = {
+      isReady: null,
+    };
+
     this._onPress = this._onPress.bind(this);
     this._onLongPress = this._onLongPress.bind(this);
     this._onChange = this._onChange.bind(this);
     this._onAndroidCallback = this._onAndroidCallback.bind(this);
+    this._onLayout = this._onLayout.bind(this);
 
     this._callbackMap = new Map();
   }
@@ -655,6 +664,10 @@ class MapView extends React.Component {
     }
   }
 
+  _onLayout () {
+    this.setState({ isReady: true });
+  }
+
   _handleOnChange (propName, payload) {
     if (isFunction(this.props[propName])) {
       this.props[propName](payload);
@@ -685,6 +698,7 @@ class MapView extends React.Component {
       ...this.props,
       centerCoordinate: this._getCenterCoordinate(),
       contentInset: this._getContentInset(),
+      style: styles.matchParent,
     };
 
     const callbacks = {
@@ -696,20 +710,22 @@ class MapView extends React.Component {
       onUserTrackingModeChange: this.props.onUserTrackingModeChange,
     };
 
-    if (isAndroid() && this.props.textureMode) {
-      return (
+    let mapView = null;
+    if (isAndroid() && this.props.textureMode && this.state.isReady) {
+      mapView = (
         <RCTMGLAndroidTextureMapView {...props} {...callbacks}>
           {this.props.children}
         </RCTMGLAndroidTextureMapView>
       );
-    } else {
-      return (
+    } else if (this.state.isReady) {
+      mapView = (
         <RCTMGLMapView {...props} {...callbacks}>
           {this.props.children}
         </RCTMGLMapView>
       );
     }
 
+    return <View onLayout={this._onLayout} style={this.props.style}>{mapView}</View>;
   }
 }
 
