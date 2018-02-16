@@ -251,8 +251,10 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                 break;
             case METHOD_TAKE_SNAP:
                 mapView.takeSnap(args.getString(0), args.getBoolean(1));
+                break;
             case METHOD_GET_ZOOM:
                 mapView.getZoom(args.getString(0));
+                break;
             case METHOD_GET_CENTER:
                 mapView.getCenter(args.getString(0));
                 break;
