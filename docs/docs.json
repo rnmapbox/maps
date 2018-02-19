@@ -1428,6 +1428,13 @@
         "description": "This event is triggered whenever the currently displayed map region finished changing"
       },
       {
+        "name": "onUserLocationUpdate",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This event is triggered whenever the location engine receives a location update"
+      },
+      {
         "name": "onWillStartLoadingMap",
         "required": false,
         "type": "func",

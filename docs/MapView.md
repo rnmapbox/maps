@@ -30,6 +30,7 @@
 | onRegionWillChange | `func` | `none` | `false` | This event is triggered whenever the currently displayed map region is about to change. |
 | onRegionIsChanging | `func` | `none` | `false` | This event is triggered whenever the currently displayed map region is changing. |
 | onRegionDidChange | `func` | `none` | `false` | This event is triggered whenever the currently displayed map region finished changing |
+| onUserLocationUpdate | `func` | `none` | `false` | This event is triggered whenever the location engine receives a location update |
 | onWillStartLoadingMap | `func` | `none` | `false` | This event is triggered when the map is about to start loading a new map style. |
 | onDidFinishLoadingMap | `func` | `none` | `false` | This is triggered when the map has successfully loaded a new map style. |
 | onDidFailLoadingMap | `func` | `none` | `false` | This event is triggered when the map has failed to load a new map style. |
