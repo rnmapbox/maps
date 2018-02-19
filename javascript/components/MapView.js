@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { View, StyleSheet, NativeModules, requireNativeComponent } from 'react-native';
 import { makePoint, makeLatLngBounds } from '../utils/geoUtils';
 
 import {
@@ -19,6 +19,10 @@ const MapboxGL = NativeModules.MGLModule;
 export const NATIVE_MODULE_NAME = 'RCTMGLMapView';
 
 export const ANDROID_TEXTURE_NATIVE_MODULE_NAME = 'RCTMGLAndroidTextureMapView';
+
+const styles = StyleSheet.create({
+  matchParent: { flex: 1 },
+});
 
 /**
  * MapView backed by Mapbox Native GL
@@ -242,12 +246,18 @@ class MapView extends React.Component {
   constructor (props) {
     super(props);
 
+    this.state = {
+      isReady: null,
+    };
+
     this._onPress = this._onPress.bind(this);
     this._onLongPress = this._onLongPress.bind(this);
     this._onChange = this._onChange.bind(this);
     this._onAndroidCallback = this._onAndroidCallback.bind(this);
+    this._onLayout = this._onLayout.bind(this);
 
     this._callbackMap = new Map();
+    this._preRefMapMethodQueue = [];
   }
 
   /**
@@ -536,6 +546,15 @@ class MapView extends React.Component {
   }
 
   _runNativeCommand (methodName, args = []) {
+    if (!this._nativeRef) {
+      return new Promise((resolve) => {
+        this._preRefMapMethodQueue.push({
+          method: { name: methodName, args: args },
+          resolver: resolve,
+        });
+      });
+    }
+
     if (isAndroid()) {
       return new Promise ((resolve) => {
         const callbackID = '' + Date.now();
@@ -655,6 +674,10 @@ class MapView extends React.Component {
     }
   }
 
+  _onLayout () {
+    this.setState({ isReady: true });
+  }
+
   _handleOnChange (propName, payload) {
     if (isFunction(this.props[propName])) {
       this.props[propName](payload);
@@ -680,15 +703,29 @@ class MapView extends React.Component {
     return this.props.contentInset;
   }
 
+  async _setNativeRef (nativeRef) {
+    this._nativeRef = nativeRef;
+
+    while (this._preRefMapMethodQueue.length > 0) {
+      const item = this._preRefMapMethodQueue.pop();
+
+      if (item && item.method && item.resolver) {
+        const res = await this._runNativeCommand(item.method.name, item.method.args);
+        item.resolver(res);
+      }
+    }
+  }
+
   render () {
     let props = {
       ...this.props,
       centerCoordinate: this._getCenterCoordinate(),
       contentInset: this._getContentInset(),
+      style: styles.matchParent,
     };
 
     const callbacks = {
-      ref: (nativeRef) => this._nativeRef = nativeRef,
+      ref: (nativeRef) => this._setNativeRef(nativeRef),
       onPress: this._onPress,
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
@@ -696,20 +733,22 @@ class MapView extends React.Component {
       onUserTrackingModeChange: this.props.onUserTrackingModeChange,
     };
 
-    if (isAndroid() && this.props.textureMode) {
-      return (
+    let mapView = null;
+    if (isAndroid() && this.props.textureMode && this.state.isReady) {
+      mapView = (
         <RCTMGLAndroidTextureMapView {...props} {...callbacks}>
           {this.props.children}
         </RCTMGLAndroidTextureMapView>
       );
-    } else {
-      return (
+    } else if (this.state.isReady) {
+      mapView = (
         <RCTMGLMapView {...props} {...callbacks}>
           {this.props.children}
         </RCTMGLMapView>
       );
     }
 
+    return <View onLayout={this._onLayout} style={this.props.style}>{mapView}</View>;
   }
 }
 

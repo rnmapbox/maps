@@ -38,7 +38,6 @@ RCT_EXPORT_MODULE(RCTMGLMapView)
 - (UIView *)view
 {
     RCTMGLMapView *mapView = [[RCTMGLMapView alloc] initWithFrame:RCT_MAPBOX_MIN_MAP_FRAME];
-    mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     mapView.delegate = self;
 
     // setup map gesture recongizers
