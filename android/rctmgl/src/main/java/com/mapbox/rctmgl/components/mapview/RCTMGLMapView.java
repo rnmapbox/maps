@@ -97,6 +97,7 @@ public class RCTMGLMapView extends MapView implements
     private Handler mHandler;
     private LifecycleEventListener mLifeCycleListener;
     private boolean mPaused;
+    private boolean mDestroyed;
 
     private List<AbstractMapFeature> mFeatures;
     private List<AbstractMapFeature> mQueuedFeatures;
@@ -195,6 +196,12 @@ public class RCTMGLMapView extends MapView implements
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mDestroyed = true;
+    }
+
+    @Override
     public void onWindowFocusChanged(boolean hasWindowFocus) {
         super.onWindowFocusChanged(hasWindowFocus);
         if (mLocationLayer == null) {
@@ -272,6 +279,10 @@ public class RCTMGLMapView extends MapView implements
     }
 
     public synchronized void dispose() {
+        if (mDestroyed) {
+            return;
+        }
+
         ReactContext reactContext = (ReactContext) mContext;
         reactContext.removeLifecycleEventListener(mLifeCycleListener);
 
