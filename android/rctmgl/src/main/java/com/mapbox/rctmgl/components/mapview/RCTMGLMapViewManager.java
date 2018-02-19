@@ -8,6 +8,7 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.rctmgl.components.AbstractEventEmitter;
 import com.mapbox.rctmgl.events.constants.EventKeys;
 import com.mapbox.rctmgl.utils.ConvertUtils;
@@ -225,6 +226,13 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
 
     @Override
     public void receiveCommand(RCTMGLMapView mapView, int commandID, @Nullable ReadableArray args) {
+        // allows method calls to work with componentDidMount
+        MapboxMap mapboxMap = mapView.getMapboxMap();
+        if (mapboxMap == null) {
+            mapView.enqueuePreRenderMapMethod(commandID, args);
+            return;
+        }
+
         switch (commandID) {
             case METHOD_SET_CAMERA:
                 mapView.setCamera(args.getString(0), args.getMap(1));

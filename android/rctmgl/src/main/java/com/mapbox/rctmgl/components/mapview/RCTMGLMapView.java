@@ -75,6 +75,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 /**
  * Created by nickitaliano on 8/18/17.
  */
@@ -98,6 +100,7 @@ public class RCTMGLMapView extends MapView implements
 
     private CameraUpdateQueue mCameraUpdateQueue;
     private CameraChangeTracker mCameraChangeTracker = new CameraChangeTracker();
+    private Map<Integer, ReadableArray> mPreRenderMethodMap = new HashMap<>();
 
     private MapboxMap mMap;
     private LocationManager mLocationManger;
@@ -184,6 +187,10 @@ public class RCTMGLMapView extends MapView implements
             mLocationLayer.onStop();
         }
 
+    }
+
+    public void enqueuePreRenderMapMethod(Integer methodID, @Nullable ReadableArray args) {
+        mPreRenderMethodMap.put(methodID, args);
     }
 
     public void addFeature(View childView, int childPosition) {
@@ -609,6 +616,12 @@ public class RCTMGLMapView extends MapView implements
                 event = new MapChangeEvent(this, EventTypes.DID_FINISH_RENDERING_MAP);
                 break;
             case DID_FINISH_RENDERING_MAP_FULLY_RENDERED:
+                if (mPreRenderMethodMap.size() > 0) {
+                    for (Integer methodID : mPreRenderMethodMap.keySet()) {
+                        mManager.receiveCommand(this, methodID, mPreRenderMethodMap.get(methodID));
+                    }
+                    mPreRenderMethodMap.clear();
+                }
                 event = new MapChangeEvent(this, EventTypes.DID_FINISH_RENDERING_MAP_FULLY);
                 break;
             case DID_FINISH_LOADING_STYLE:
