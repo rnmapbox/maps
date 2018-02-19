@@ -13,6 +13,7 @@ public class EventTypes {
     public static final String REGION_WILL_CHANGE = "regionwillchange";
     public static final String REGION_IS_CHANGING = "regionischanging";
     public static final String REGION_DID_CHANGE  = "regiondidchange";
+    public static final String USER_LOCATION_UPDATED = "userlocationdupdated";
 
     public static final String WILL_START_LOADING_MAP = "willstartloadingmap";
     public static final String DID_FINISH_LOADING_MAP = "didfinishloadingmap";

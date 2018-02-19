@@ -13,6 +13,7 @@
 NSString *const RCT_MAPBOX_EVENT_TAP = @"press";
 NSString *const RCT_MAPBOX_EVENT_LONGPRESS = @"longpress";
 
+NSString *const RCT_MAPBOX_USER_LOCATION_UPDATE = @"userlocationdupdated";
 NSString *const RCT_MAPBOX_USER_TRACKING_MODE_CHANGE = @"usertrackingmodechange";
 
 NSString *const RCT_MAPBOX_REGION_WILL_CHANGE_EVENT = @"regionwillchange";

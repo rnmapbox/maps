@@ -69,6 +69,7 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         eventTypes.put("RegionWilChange", EventTypes.REGION_WILL_CHANGE);
         eventTypes.put("RegionIsChanging", EventTypes.REGION_IS_CHANGING);
         eventTypes.put("RegionDidChange", EventTypes.REGION_DID_CHANGE);
+        eventTypes.put("UserLocationUpdated", EventTypes.USER_LOCATION_UPDATED);
         eventTypes.put("WillStartLoadingMap", EventTypes.WILL_START_LOADING_MAP);
         eventTypes.put("DidFinishLoadingMap", EventTypes.DID_FINISH_LOADING_MAP);
         eventTypes.put("DidFailLoadingMap", EventTypes.DID_FAIL_LOADING_MAP);

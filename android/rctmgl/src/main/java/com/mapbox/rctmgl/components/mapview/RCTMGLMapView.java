@@ -148,6 +148,7 @@ public class RCTMGLMapView extends MapView implements
             if (mUserTrackingState == UserTrackingState.POSSIBLE || distToNextLocation > 0.0f) {
                 updateUserLocation(true);
             }
+            sendUserLocationUpdateEvent(nextLocation);
         }
     };
 
@@ -1320,4 +1321,35 @@ public class RCTMGLMapView extends MapView implements
         mManager.handleEvent(event);
         mCameraChangeTracker.setReason(-1);
     }
+
+    private void sendUserLocationUpdateEvent(Location location) {
+        if(location == null){
+            return;
+        }
+        IEvent event = new MapChangeEvent(this, makeLocationChangePayload(location), EventTypes.USER_LOCATION_UPDATED);
+        mManager.handleEvent(event);
+    }
+
+    /**
+     * Create a payload of the location data per the web api geolocation spec
+     * https://dev.w3.org/geo/api/spec-source.html#position
+     * @return
+     */
+    private WritableMap makeLocationChangePayload(Location location) {
+
+        WritableMap positionProperties = new WritableNativeMap();
+        WritableMap coords = new WritableNativeMap();
+
+        coords.putDouble("longitude", location.getLongitude());
+        coords.putDouble("latitude", location.getLatitude());
+        coords.putDouble("altitude", location.getAltitude());
+        coords.putDouble("accuracy", location.getAccuracy());
+        coords.putDouble("heading", location.getBearing());
+        coords.putDouble("speed", location.getSpeed());
+
+        positionProperties.putMap("coords", coords);
+        positionProperties.putDouble("timestamp", location.getTime());
+        return positionProperties;
+    }
+
 }

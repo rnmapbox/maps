@@ -365,6 +365,29 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
 
 #pragma mark - MGLMapViewDelegate
 
+- (void)mapView:(MGLMapView *)mapView didUpdateUserLocation:(MGLUserLocation *)userLocation
+{
+    if (userLocation == nil) {
+        return;
+    }
+    
+    RCTMGLMapView *reactMapView = (RCTMGLMapView *)mapView;
+    
+    NSDictionary *coords = @{
+      @"speed": @(userLocation.location.speed),
+      @"heading": @(userLocation.heading.trueHeading),
+      @"accuracy": @(userLocation.location.horizontalAccuracy),
+      @"altitude": @(userLocation.location.altitude),
+      @"latitude": @(userLocation.location.coordinate.latitude),
+      @"longitude": @(userLocation.location.coordinate.longitude)
+     };
+    
+    double utcTimestampMS = [userLocation.location.timestamp timeIntervalSince1970] * 1000.0;
+    NSDictionary *payload = @{ @"timestamp": @(utcTimestampMS), @"coords": coords };
+    RCTMGLEvent *locationEvent = [RCTMGLEvent makeEvent:RCT_MAPBOX_USER_LOCATION_UPDATE withPayload:payload];
+    [self fireEvent:locationEvent withCallback:reactMapView.onMapChange];
+}
+
 - (void)mapView:(MGLMapView *)mapView didChangeUserTrackingMode:(MGLUserTrackingMode)mode animated:(BOOL)animated
 {
     RCTMGLMapView *reactMapView = (RCTMGLMapView *)mapView;
