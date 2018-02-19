@@ -257,6 +257,7 @@ class MapView extends React.Component {
     this._onLayout = this._onLayout.bind(this);
 
     this._callbackMap = new Map();
+    this._preRefMapMethodQueue = [];
   }
 
   /**
@@ -545,6 +546,15 @@ class MapView extends React.Component {
   }
 
   _runNativeCommand (methodName, args = []) {
+    if (!this._nativeRef) {
+      return new Promise((resolve) => {
+        this._preRefMapMethodQueue.push({
+          method: { name: methodName, args: args },
+          resolver: resolve,
+        });
+      });
+    }
+
     if (isAndroid()) {
       return new Promise ((resolve) => {
         const callbackID = '' + Date.now();
@@ -693,6 +703,19 @@ class MapView extends React.Component {
     return this.props.contentInset;
   }
 
+  async _setNativeRef (nativeRef) {
+    this._nativeRef = nativeRef;
+
+    while (this._preRefMapMethodQueue.length > 0) {
+      const item = this._preRefMapMethodQueue.pop();
+
+      if (item && item.method && item.resolver) {
+        const res = await this._runNativeCommand(item.method.name, item.method.args);
+        item.resolver(res);
+      }
+    }
+  }
+
   render () {
     let props = {
       ...this.props,
@@ -702,7 +725,7 @@ class MapView extends React.Component {
     };
 
     const callbacks = {
-      ref: (nativeRef) => this._nativeRef = nativeRef,
+      ref: (nativeRef) => this._setNativeRef(nativeRef),
       onPress: this._onPress,
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
