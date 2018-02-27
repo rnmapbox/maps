@@ -979,6 +979,10 @@ public class RCTMGLMapView extends MapView implements
         getViewTreeObserver().dispatchOnGlobalLayout();
     }
 
+    public boolean isDestroyed(){
+        return mDestroyed;
+    }
+
     private void updateCameraPositionIfNeeded(boolean shouldUpdateTarget) {
         if (mMap != null) {
             CameraPosition prevPosition = mMap.getCameraPosition();

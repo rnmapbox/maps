@@ -121,7 +121,7 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
     public void setURL(URL url) {
         mURL = url;
 
-        if (mSource != null) {
+        if (mSource != null && mMapView != null && !mMapView.isDestroyed() ) {
             ((GeoJsonSource) mSource).setUrl(mURL);
         }
     }
@@ -129,7 +129,7 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
     public void setShape(String geoJSONStr) {
         mShape = geoJSONStr;
 
-        if (mSource != null) {
+        if (mSource != null && mMapView != null && !mMapView.isDestroyed() ) {
             ((GeoJsonSource) mSource).setGeoJson(mShape);
         }
     }
