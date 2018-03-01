@@ -7,12 +7,12 @@
 //
 
 #import "RCTMGLImageQueue.h"
+#import "RCTMGLImageQueueOperation.h"
 #import "RCTMGLUtils.h"
 
 @implementation RCTMGLImageQueue
 {
     NSOperationQueue *imageQueue;
-    NSMutableArray<RCTImageLoaderCancellationBlock> *cancellationBlocks;
 }
 
 - (id)init
@@ -20,18 +20,12 @@
     if (self = [super init]) {
         imageQueue = [[NSOperationQueue alloc] init];
         imageQueue.name = @"com.mapbox.rctmgl.DownloadImageQueue";
-        cancellationBlocks = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    if (cancellationBlocks.count > 0) {
-        for (RCTImageLoaderCancellationBlock cancelBlock in cancellationBlocks) {
-            cancelBlock();
-        }
-    }
     [self cancelAllOperations];
 }
 
@@ -52,14 +46,11 @@
 
 - (void)addImage:(NSString *)imageURL bridge:(RCTBridge *)bridge completionHandler:(RCTImageLoaderCompletionBlock)handler
 {
-    NSBlockOperation *downloadOperation = [[NSBlockOperation alloc] init];
-    
-    [downloadOperation addExecutionBlock:^{
-        RCTImageLoaderCancellationBlock cancelBlock = [bridge.imageLoader loadImageWithURLRequest:[RCTConvert NSURLRequest:imageURL] callback:handler];
-        [cancellationBlocks addObject:cancelBlock];
-    }];
-    
-    [imageQueue addOperation:downloadOperation];
+    RCTMGLImageQueueOperation *operation = [[RCTMGLImageQueueOperation alloc] init];
+    operation.bridge = bridge;
+    operation.urlRequest = [RCTConvert NSURLRequest:imageURL];
+    operation.completionHandler = handler;
+    [imageQueue addOperation:operation];
 }
 
 @end

@@ -21,6 +21,7 @@
 		C43CA5061F507BCC000B9CB7 /* RCTMGLMapTouchEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = C43CA5051F507BCC000B9CB7 /* RCTMGLMapTouchEvent.m */; };
 		C43CA50A1F50C145000B9CB7 /* RCTMGLEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = C43CA5091F50C145000B9CB7 /* RCTMGLEvent.m */; };
 		C43CA50D1F53A4EF000B9CB7 /* RCTMGLEventTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = C43CA50C1F53A4EF000B9CB7 /* RCTMGLEventTypes.m */; };
+		C45339CD204780EB00888553 /* RCTMGLImageQueueOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = C45339CC204780EB00888553 /* RCTMGLImageQueueOperation.m */; };
 		C470F5B81F9E79D400614A69 /* RCTMGLImageQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = C470F5B71F9E79D400614A69 /* RCTMGLImageQueue.m */; };
 		C470F6AC1FA11C9500614A69 /* MGLOfflineModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C470F6AB1FA11C9500614A69 /* MGLOfflineModule.m */; };
 		C4C87A601F844C820064AE95 /* FilterParser.m in Sources */ = {isa = PBXBuildFile; fileRef = C4C87A5F1F844C820064AE95 /* FilterParser.m */; };
@@ -108,6 +109,8 @@
 		C43CA5091F50C145000B9CB7 /* RCTMGLEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLEvent.m; sourceTree = "<group>"; };
 		C43CA50B1F53A4EF000B9CB7 /* RCTMGLEventTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLEventTypes.h; sourceTree = "<group>"; };
 		C43CA50C1F53A4EF000B9CB7 /* RCTMGLEventTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLEventTypes.m; sourceTree = "<group>"; };
+		C45339CB204780EB00888553 /* RCTMGLImageQueueOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLImageQueueOperation.h; sourceTree = "<group>"; };
+		C45339CC204780EB00888553 /* RCTMGLImageQueueOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLImageQueueOperation.m; sourceTree = "<group>"; };
 		C470F5B61F9E79D400614A69 /* RCTMGLImageQueue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLImageQueue.h; sourceTree = "<group>"; };
 		C470F5B71F9E79D400614A69 /* RCTMGLImageQueue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLImageQueue.m; sourceTree = "<group>"; };
 		C470F6AA1FA11C9500614A69 /* MGLOfflineModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGLOfflineModule.h; sourceTree = "<group>"; };
@@ -344,6 +347,8 @@
 				C41DCC9C1FBBA8F000895BB4 /* FilterList.m */,
 				C416014E20112B5200006116 /* RNMBImageUtils.h */,
 				C416014F20112B5200006116 /* RNMBImageUtils.m */,
+				C45339CB204780EB00888553 /* RCTMGLImageQueueOperation.h */,
+				C45339CC204780EB00888553 /* RCTMGLImageQueueOperation.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -510,6 +515,7 @@
 				C4C87B7E1F8FEC090064AE95 /* RCTMGLPointAnnotation.m in Sources */,
 				C4EAF1271F6083C70016DEE8 /* CameraUpdateItem.m in Sources */,
 				C470F5B81F9E79D400614A69 /* RCTMGLImageQueue.m in Sources */,
+				C45339CD204780EB00888553 /* RCTMGLImageQueueOperation.m in Sources */,
 				C4D144531F4E190C00396F26 /* MGLModule.m in Sources */,
 				C4C87B7B1F8FEBF50064AE95 /* RCTMGLPointAnnotationManager.m in Sources */,
 				C43CA50A1F50C145000B9CB7 /* RCTMGLEvent.m in Sources */,
