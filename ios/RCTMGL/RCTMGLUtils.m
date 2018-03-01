@@ -85,8 +85,8 @@ static double const MS_TO_S = 0.001;
         return;
     }
     
-
     __block NSUInteger imagesLeftToLoad = imageNames.count;
+    __weak MGLStyle *weakStyle = style;
     
     void (^imageLoadedBlock)() = ^{
         imagesLeftToLoad--;
@@ -101,8 +101,10 @@ static double const MS_TO_S = 0.001;
         
         if (foundImage == nil) {
             [RCTMGLImageQueue.sharedInstance addImage:objects[imageName] bridge:bridge completionHandler:^(NSError *error, UIImage *image) {
-                [style setImage:image forName:imageName];
-                imageLoadedBlock();
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakStyle setImage:image forName:imageName];
+                    imageLoadedBlock();
+                });
             }];
         } else {
             imageLoadedBlock();
