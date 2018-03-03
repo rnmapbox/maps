@@ -1386,11 +1386,11 @@
         "description": "Enable/Disable the compass from appearing on the map"
       },
       {
-        "name": "textureMode",
+        "name": "surfaceView",
         "required": false,
         "type": "bool",
         "default": "false",
-        "description": "Enable/Disable TextureMode insted of SurfaceView"
+        "description": "[Android only] Enable/Disable use of GLSurfaceView insted of TextureView."
       },
       {
         "name": "onPress",

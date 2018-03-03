@@ -143,9 +143,9 @@ class MapView extends React.Component {
     compassEnabled: PropTypes.bool,
 
     /**
-     * Enable/Disable TextureMode insted of SurfaceView
+     * [Android only] Enable/Disable use of GLSurfaceView insted of TextureView.
      */
-    textureMode: PropTypes.bool,
+    surfaceView: PropTypes.bool,
 
     /**
      * Map press listener, gets called when a user presses the map
@@ -245,7 +245,7 @@ class MapView extends React.Component {
     zoomLevel: 16,
     userTrackingMode: MapboxGL.UserTrackingModes.None,
     styleURL: MapboxGL.StyleURL.Street,
-    textureMode: false,
+    surfaceView: false,
   };
 
   constructor (props) {
@@ -742,7 +742,7 @@ class MapView extends React.Component {
     };
 
     let mapView = null;
-    if (isAndroid() && this.props.textureMode && this.state.isReady) {
+    if (isAndroid() && !this.props.surfaceView && this.state.isReady) {
       mapView = (
         <RCTMGLAndroidTextureMapView {...props} {...callbacks}>
           {this.props.children}
