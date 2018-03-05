@@ -265,4 +265,11 @@ RCT_EXPORT_METHOD(setTelemetryEnabled:(BOOL *)telemetryEnabled)
                                             forKey:@"MGLMapboxMetricsEnabled"];
 }
 
+RCT_EXPORT_METHOD(isTelemetryEnabled:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    BOOL isTelemetryEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:@"MGLMapboxMetricsEnabled"];
+    resolve([NSNumber numberWithBool:isTelemetryEnabled]);
+    return;
+}
+
 @end

@@ -290,12 +290,16 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setTelemetryEnabled(final boolean telemetryEnabled) {
-    mReactContext.runOnUiQueueThread(new Runnable() {
-        @Override
-        public void run() {
-            MapboxTelemetry.getInstance().setTelemetryEnabled(telemetryEnabled);
-        }
-    });
-}
+        mReactContext.runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                MapboxTelemetry.getInstance().setTelemetryEnabled(telemetryEnabled);
+            }
+        });
+    }
 
+    @ReactMethod
+    public void isTelemetryEnabled(Promise promise) {
+        promise.resolve(MapboxTelemetry.getInstance().isTelemetryEnabled());
+    }
 }
