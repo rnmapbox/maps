@@ -401,7 +401,8 @@ public class RCTMGLMapView extends MapView implements
         final RCTMGLMapView self = this;
         mMap.addOnCameraIdleListener(new MapboxMap.OnCameraIdleListener() {
             long lastTimestamp = System.currentTimeMillis();
-
+		boolean lastAnimated = false; // Workaround for the event called twice
+		
             @Override
             public void onCameraIdle() {
                 if (mPointAnnotations.size() > 0) {
@@ -409,14 +410,17 @@ public class RCTMGLMapView extends MapView implements
                 }
 
                 long curTimestamp = System.currentTimeMillis();
-                if (curTimestamp - lastTimestamp < 500) {
+		boolean curAnimated = mCameraChangeTracker.isAnimated();
+                if (curTimestamp - lastTimestamp < 500 && curAnimated == lastAnimated) {
                     return;
                 }
-
-                sendRegionChangeEvent(mCameraChangeTracker.isAnimated());
+		
+                sendRegionChangeEvent(curAnimated);
                 lastTimestamp = curTimestamp;
+		lastAnimated = curAnimated;
             }
         });
+		
 
         mMap.addOnCameraMoveStartedListener(new MapboxMap.OnCameraMoveStartedListener() {
             @Override
