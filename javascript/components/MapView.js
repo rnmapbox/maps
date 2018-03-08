@@ -100,6 +100,12 @@ class MapView extends React.Component {
     maxZoomLevel: PropTypes.number,
 
     /**
+     * Automatically change the language of the map labels to the system’s preferred language,
+     * this is not something that can be toggled on/off
+     */
+    localizeLabels: PropTypes.bool,
+
+    /**
      * Enable/Disable zoom on the map
      */
     zoomEnabled: PropTypes.bool,
@@ -237,6 +243,7 @@ class MapView extends React.Component {
     animated: false,
     heading: 0,
     pitch: 0,
+    localizeLabels: false,
     scrollEnabled: true,
     pitchEnabled: true,
     rotateEnabled: true,
