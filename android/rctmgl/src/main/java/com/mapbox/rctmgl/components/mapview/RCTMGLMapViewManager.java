@@ -122,6 +122,11 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         mapView.setReactAnimated(isAnimated);
     }
 
+    @ReactProp(name="localizeLabels")
+    public void setLocalizeLabels(RCTMGLMapView mapView, boolean localizeLabels) {
+        mapView.setLocalizeLabels(localizeLabels);
+    }
+
     @ReactProp(name="zoomEnabled")
     public void setZoomEnabled(RCTMGLMapView mapView, boolean zoomEnabled) {
         mapView.setReactZoomEnabled(zoomEnabled);

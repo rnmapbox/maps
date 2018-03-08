@@ -38,7 +38,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.UiSettings;
-import com.mapbox.mapboxsdk.net.ConnectivityReceiver;
+import com.mapbox.mapboxsdk.plugins.localization.LocalizationPlugin;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerMode;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.mapboxsdk.storage.FileSource;
@@ -78,6 +78,7 @@ import com.mapbox.services.commons.geojson.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -112,12 +113,15 @@ public class RCTMGLMapView extends MapView implements
 
     private MapboxMap mMap;
     private LocationManager mLocationManger;
-    private LocationLayerPlugin mLocationLayer;
     private UserLocation mUserLocation;
+
+    private LocationLayerPlugin mLocationLayer;
+    private LocalizationPlugin mLocalizationPlugin;
 
     private String mStyleURL;
 
     private boolean mAnimated;
+    private boolean mLocalizeLabels;
     private Boolean mScrollEnabled;
     private Boolean mPitchEnabled;
     private Boolean mRotateEnabled;
@@ -469,6 +473,16 @@ public class RCTMGLMapView extends MapView implements
                 lastMapRotation = currentMapRotation;
             }
         });
+
+        mLocalizationPlugin = new LocalizationPlugin(this, mMap);
+        if (mLocalizeLabels) {
+            try {
+                mLocalizationPlugin.matchMapLanguageWithDeviceDefault();
+            } catch (Exception e) {
+                final String localeString = Locale.getDefault().toString();
+                Log.w(LOG_TAG, String.format("Could not find matching locale for %s", localeString));
+            }
+        }
     }
 
     public void reflow() {
@@ -709,6 +723,10 @@ public class RCTMGLMapView extends MapView implements
     public void setReactContentInset(ReadableArray array) {
         mInsets = array;
         updateInsets();
+    }
+
+    public void setLocalizeLabels(boolean localizeLabels) {
+        mLocalizeLabels = localizeLabels;
     }
 
     public void setReactZoomEnabled(boolean zoomEnabled) {
