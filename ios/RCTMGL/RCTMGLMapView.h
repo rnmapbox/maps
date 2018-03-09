@@ -26,6 +26,7 @@
 @property (nonatomic, copy) NSArray<NSNumber *> *reactContentInset;
 
 @property (nonatomic, assign) BOOL animated;
+@property (nonatomic, assign) BOOL reactLocalizeLabels;
 @property (nonatomic, assign) BOOL reactScrollEnabled;
 @property (nonatomic, assign) BOOL reactPitchEnabled;
 @property (nonatomic, assign) BOOL reactRotateEnabled;
