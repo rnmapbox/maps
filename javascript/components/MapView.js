@@ -645,7 +645,7 @@ class MapView extends React.Component {
       case MapboxGL.EventTypes.UserLocationUpdated:
         propName = 'onUserLocationUpdate';
         break;
-      case MapboxGL.EventTypes.WillStartLoadinMap:
+      case MapboxGL.EventTypes.WillStartLoadingMap:
         propName = 'onWillStartLoadingMap';
         break;
       case MapboxGL.EventTypes.DidFinishLoadingMap:
