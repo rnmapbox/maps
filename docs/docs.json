@@ -1337,6 +1337,13 @@
         "description": "Max zoom level of map"
       },
       {
+        "name": "localizeLabels",
+        "required": false,
+        "type": "bool",
+        "default": "false",
+        "description": "Automatically change the language of the map labels to the system’s preferred language,\nthis is not something that can be toggled on/off"
+      },
+      {
         "name": "zoomEnabled",
         "required": false,
         "type": "bool",
