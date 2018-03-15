@@ -44,7 +44,7 @@ class TabBarPage extends React.Component {
     scrollable: false,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -54,7 +54,7 @@ class TabBarPage extends React.Component {
     this.onOptionPress = this.onOptionPress.bind(this);
   }
 
-  onOptionPress (index) {
+  onOptionPress(index) {
     this.setState({ currentIndex: index });
 
     if (typeof this.props.onOptionPress === 'function') {
@@ -63,7 +63,7 @@ class TabBarPage extends React.Component {
     }
   }
 
-  render () {
+  render() {
     let buttonGroupProps = {
       selectedBackgroundColor: colors.primary.grayFaint,
       containerBorderRadius: 0,

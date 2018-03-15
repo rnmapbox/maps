@@ -22,7 +22,7 @@ class Bubble extends React.PureComponent {
     onPress: PropTypes.func,
   };
 
-  render () {
+  render() {
     let innerChildView = this.props.children;
 
     if (this.props.onPress) {

@@ -73,7 +73,10 @@ describe('offlineManager', () => {
 
   it('should set progress event throttle value', () => {
     const expectedThrottleValue = 500;
-    const spy = jest.spyOn(NativeModules.MGLOfflineModule, 'setProgressEventThrottle');
+    const spy = jest.spyOn(
+      NativeModules.MGLOfflineModule,
+      'setProgressEventThrottle',
+    );
     MapboxGL.offlineManager.setProgressEventThrottle(expectedThrottleValue);
     expect(spy).toHaveBeenCalledWith(expectedThrottleValue);
     spy.mockRestore();
@@ -91,17 +94,27 @@ describe('offlineManager', () => {
     it('should call progress listener', async () => {
       const listener = jest.fn();
       await MapboxGL.offlineManager.createPack(packOptions, listener);
-      const expectedOfflinePack = await MapboxGL.offlineManager.getPack(packOptions.name);
+      const expectedOfflinePack = await MapboxGL.offlineManager.getPack(
+        packOptions.name,
+      );
       MapboxGL.offlineManager._onProgress(mockOnProgressEvent);
-      expect(listener).toHaveBeenCalledWith(expectedOfflinePack, mockOnProgressEvent.payload);
+      expect(listener).toHaveBeenCalledWith(
+        expectedOfflinePack,
+        mockOnProgressEvent.payload,
+      );
     });
 
     it('should call error listener', async () => {
       const listener = jest.fn();
       await MapboxGL.offlineManager.createPack(packOptions, null, listener);
-      const expectedOfflinePack = await MapboxGL.offlineManager.getPack(packOptions.name);
+      const expectedOfflinePack = await MapboxGL.offlineManager.getPack(
+        packOptions.name,
+      );
       MapboxGL.offlineManager._onError(mockErrorEvent);
-      expect(listener).toHaveBeenCalledWith(expectedOfflinePack, mockErrorEvent.payload);
+      expect(listener).toHaveBeenCalledWith(
+        expectedOfflinePack,
+        mockErrorEvent.payload,
+      );
     });
 
     it('should not call listeners after unsubscribe', async () => {
@@ -127,27 +140,39 @@ describe('offlineManager', () => {
       await MapboxGL.offlineManager.createPack(packOptions, listener, listener);
 
       expect(
-        MapboxGL.offlineManager._hasListeners(packOptions.name, MapboxGL.offlineManager._progressListeners)
+        MapboxGL.offlineManager._hasListeners(
+          packOptions.name,
+          MapboxGL.offlineManager._progressListeners,
+        ),
       ).toBeTruthy();
 
       expect(
-        MapboxGL.offlineManager._hasListeners(packOptions.name, MapboxGL.offlineManager._errorListeners)
+        MapboxGL.offlineManager._hasListeners(
+          packOptions.name,
+          MapboxGL.offlineManager._errorListeners,
+        ),
       ).toBeTruthy();
 
       MapboxGL.offlineManager._onProgress(mockOnProgressCompleteEvent);
 
       expect(
-        MapboxGL.offlineManager._hasListeners(packOptions.name, MapboxGL.offlineManager._progressListeners)
+        MapboxGL.offlineManager._hasListeners(
+          packOptions.name,
+          MapboxGL.offlineManager._progressListeners,
+        ),
       ).toBeFalsy();
 
       expect(
-        MapboxGL.offlineManager._hasListeners(packOptions.name, MapboxGL.offlineManager._errorListeners)
+        MapboxGL.offlineManager._hasListeners(
+          packOptions.name,
+          MapboxGL.offlineManager._errorListeners,
+        ),
       ).toBeFalsy();
     });
   });
 
   describe('Android', () => {
-    beforeEach(() => Platform.OS = 'android');
+    beforeEach(() => (Platform.OS = 'android'));
 
     it('should set pack observer manually', async () => {
       const spy = jest.spyOn(NativeModules.MGLOfflineModule, 'setPackObserver');
@@ -176,7 +201,7 @@ describe('offlineManager', () => {
   });
 
   describe('iOS', () => {
-    beforeEach(() => Platform.OS = 'ios');
+    beforeEach(() => (Platform.OS = 'ios'));
 
     it('should not set pack observer manually', async () => {
       const spy = jest.spyOn(NativeModules.MGLOfflineModule, 'setPackObserver');

@@ -30,7 +30,7 @@ class TakeSnapshotWithMap extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -38,36 +38,37 @@ class TakeSnapshotWithMap extends React.Component {
     };
   }
 
-  async onTakeSnapshot () {
+  async onTakeSnapshot() {
     const uri = await this.map.takeSnap(false);
     this.setState({ uri: uri });
   }
 
-  render () {
+  render() {
     return (
       <Page {...this.props}>
         <View style={{ flex: 1 }}>
           <MapboxGL.MapView
-              zoomLevel={16}
-              pitch={45}
-              centerCoordinate={[-122.400021, 37.789085]}
-              ref={(ref) => this.map = ref}
-              style={{ flex: 0.5 }}>
-
-              <MapboxGL.VectorSource>
-                <MapboxGL.FillExtrusionLayer
-                  id='building3d'
-                  sourceLayerID='building'
-                  style={layerStyles.building} />
-              </MapboxGL.VectorSource>
+            zoomLevel={16}
+            pitch={45}
+            centerCoordinate={[-122.400021, 37.789085]}
+            ref={(ref) => (this.map = ref)}
+            style={{ flex: 0.5 }}>
+            <MapboxGL.VectorSource>
+              <MapboxGL.FillExtrusionLayer
+                id="building3d"
+                sourceLayerID="building"
+                style={layerStyles.building}
+              />
+            </MapboxGL.VectorSource>
           </MapboxGL.MapView>
 
           <View style={{ flex: 0.5 }}>
             {this.state.uri ? (
               <Image
-                resizeMode='contain'
+                resizeMode="contain"
                 style={sheet.matchParent}
-                source={{ uri: this.state.uri }} />
+                source={{ uri: this.state.uri }}
+              />
             ) : null}
           </View>
         </View>

@@ -9,11 +9,11 @@ const Types = {
 };
 
 export default class BridgeValue {
-  constructor (rawValue) {
+  constructor(rawValue) {
     this.rawValue = rawValue;
   }
 
-  get type () {
+  get type() {
     if (Array.isArray(this.rawValue)) {
       return Types.Array;
     } else if (isBoolean(this.rawValue)) {
@@ -29,7 +29,7 @@ export default class BridgeValue {
     }
   }
 
-  get value () {
+  get value() {
     const type = this.type;
 
     let value;
@@ -47,11 +47,15 @@ export default class BridgeValue {
       const stringKeys = Object.keys(this.rawValue);
       for (let stringKey of stringKeys) {
         value.push([
-          (new BridgeValue(stringKey)).toJSON(),
-          (new BridgeValue(this.rawValue[stringKey])).toJSON(),
+          new BridgeValue(stringKey).toJSON(),
+          new BridgeValue(this.rawValue[stringKey]).toJSON(),
         ]);
       }
-    } else if (type === Types.Bool || type === Types.Number || type === Types.String) {
+    } else if (
+      type === Types.Bool ||
+      type === Types.Number ||
+      type === Types.String
+    ) {
       value = this.rawValue;
     } else {
       throw new Error('[value] BridgeValue must be a primitive/array/object');
@@ -60,7 +64,7 @@ export default class BridgeValue {
     return value;
   }
 
-  toJSON () {
+  toJSON() {
     return {
       type: this.type,
       value: this.value,

@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, Animated, requireNativeComponent, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  Animated,
+  requireNativeComponent,
+  StyleSheet,
+} from 'react-native';
 import { viewPropTypes } from '../utils';
 
 export const NATIVE_MODULE_NAME = 'RCTMGLCallout';
@@ -79,7 +85,7 @@ class Callout extends React.PureComponent {
     textStyle: PropTypes.any,
   };
 
-  get _containerStyle () {
+  get _containerStyle() {
     return [
       {
         position: 'absolute',
@@ -90,22 +96,24 @@ class Callout extends React.PureComponent {
     ];
   }
 
-  get _hasChildren () {
+  get _hasChildren() {
     return React.Children.count(this.props.children) > 0;
   }
 
-  _renderDefaultCallout () {
+  _renderDefaultCallout() {
     return (
       <Animated.View style={[styles.container, this.props.style]}>
         <View style={[styles.content, this.props.contentStyle]}>
-          <Text style={[styles.title, this.props.textStyle]}>{this.props.title}</Text>
+          <Text style={[styles.title, this.props.textStyle]}>
+            {this.props.title}
+          </Text>
         </View>
         <View style={[styles.tip, this.props.tipStyle]} />
       </Animated.View>
     );
   }
 
-  _renderCustomCallout () {
+  _renderCustomCallout() {
     return (
       <Animated.View {...this.props} style={this.props.style}>
         {this.props.children}
@@ -113,8 +121,10 @@ class Callout extends React.PureComponent {
     );
   }
 
-  render () {
-    const calloutContent = this._hasChildren ? this._renderCustomCallout() : this._renderDefaultCallout();
+  render() {
+    const calloutContent = this._hasChildren
+      ? this._renderCustomCallout()
+      : this._renderDefaultCallout();
     return (
       <RCTMGLCallout style={this._containerStyle}>
         {calloutContent}

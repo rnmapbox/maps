@@ -57,7 +57,7 @@ class DriveTheLine extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -69,60 +69,75 @@ class DriveTheLine extends React.Component {
     this.onStart = this.onStart.bind(this);
   }
 
-  onStart () {
+  onStart() {
     const routeSimulator = new RouteSimulator(this.state.route);
-    routeSimulator.addListener((currentPoint) => this.setState({ currentPoint: currentPoint }));
+    routeSimulator.addListener((currentPoint) =>
+      this.setState({ currentPoint: currentPoint }),
+    );
     routeSimulator.start();
     this.setState({ routeSimulator: routeSimulator });
   }
 
-  async componentDidMount () {
-    const res = await MapboxClient.getDirections([
-      { latitude: SF_OFFICE_COORDINATE[1], longitude: SF_OFFICE_COORDINATE[0] },
-      { latitude: SF_ZOO_COORDINATE[1], longitude: SF_ZOO_COORDINATE[0] },
-    ], { profile: 'walking', geometry: 'polyline' });
+  async componentDidMount() {
+    const res = await MapboxClient.getDirections(
+      [
+        {
+          latitude: SF_OFFICE_COORDINATE[1],
+          longitude: SF_OFFICE_COORDINATE[0],
+        },
+        { latitude: SF_ZOO_COORDINATE[1], longitude: SF_ZOO_COORDINATE[0] },
+      ],
+      { profile: 'walking', geometry: 'polyline' },
+    );
 
     this.setState({
       route: makeLineString(res.entity.routes[0].geometry.coordinates),
     });
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     if (this.state.routeSimulator) {
       this.state.routeSimulator.stop();
     }
   }
 
-  renderRoute () {
+  renderRoute() {
     if (!this.state.route) {
       return null;
     }
 
     return (
-      <MapboxGL.ShapeSource id='routeSource' shape={this.state.route}>
-        <MapboxGL.LineLayer id='routeFill' style={layerStyles.route} belowLayerID='originInnerCircle' />
+      <MapboxGL.ShapeSource id="routeSource" shape={this.state.route}>
+        <MapboxGL.LineLayer
+          id="routeFill"
+          style={layerStyles.route}
+          belowLayerID="originInnerCircle"
+        />
       </MapboxGL.ShapeSource>
     );
   }
 
-  renderCurrentPoint () {
+  renderCurrentPoint() {
     if (!this.state.currentPoint) {
       return;
     }
     return (
       <PulseCircleLayer
         shape={this.state.currentPoint}
-        aboveLayerID='destinationInnerCircle' />
+        aboveLayerID="destinationInnerCircle"
+      />
     );
   }
 
-  renderProgressLine () {
+  renderProgressLine() {
     if (!this.state.currentPoint) {
       return null;
     }
 
     const nearestIndex = this.state.currentPoint.properties.nearestIndex;
-    const coords = this.state.route.geometry.coordinates.filter((c, i) => i <= nearestIndex);
+    const coords = this.state.route.geometry.coordinates.filter(
+      (c, i) => i <= nearestIndex,
+    );
     coords.push(this.state.currentPoint.geometry.coordinates);
 
     if (coords.length < 2) {
@@ -131,32 +146,35 @@ class DriveTheLine extends React.Component {
 
     const lineString = makeLineString(coords);
     return (
-      <MapboxGL.Animated.ShapeSource id='progressSource' shape={lineString}>
-        <MapboxGL.Animated.LineLayer id='progressFill' style={layerStyles.progress} aboveLayerID='routeFill' />
+      <MapboxGL.Animated.ShapeSource id="progressSource" shape={lineString}>
+        <MapboxGL.Animated.LineLayer
+          id="progressFill"
+          style={layerStyles.progress}
+          aboveLayerID="routeFill"
+        />
       </MapboxGL.Animated.ShapeSource>
     );
   }
 
-  renderOrigin () {
+  renderOrigin() {
     let backgroundColor = 'white';
 
     if (this.state.currentPoint) {
       backgroundColor = '#314ccd';
     }
 
-    const style = [
-      layerStyles.origin,
-      { circleColor: backgroundColor },
-    ];
+    const style = [layerStyles.origin, { circleColor: backgroundColor }];
 
     return (
-      <MapboxGL.ShapeSource id='origin' shape={MapboxGL.geoUtils.makePoint(SF_OFFICE_COORDINATE)}>
-        <MapboxGL.Animated.CircleLayer id='originInnerCircle' style={style} />
+      <MapboxGL.ShapeSource
+        id="origin"
+        shape={MapboxGL.geoUtils.makePoint(SF_OFFICE_COORDINATE)}>
+        <MapboxGL.Animated.CircleLayer id="originInnerCircle" style={style} />
       </MapboxGL.ShapeSource>
     );
   }
 
-  renderActions () {
+  renderActions() {
     if (this.state.routeSimulator) {
       return null;
     }
@@ -164,33 +182,38 @@ class DriveTheLine extends React.Component {
       <View style={styles.buttonCnt}>
         <Button
           raised
-          title='Start'
+          title="Start"
           onPress={this.onStart}
           style={styles.button}
-          disabled={!this.state.route} />
+          disabled={!this.state.route}
+        />
       </View>
     );
   }
 
-  render () {
+  render() {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-            zoomLevel={11}
-            ref={(c) => this._map = c}
-            centerCoordinate={[-122.452652, 37.762963]}
-            style={sheet.matchParent}
-            styleURL={MapboxGL.StyleURL.Dark}>
+          zoomLevel={11}
+          ref={(c) => (this._map = c)}
+          centerCoordinate={[-122.452652, 37.762963]}
+          style={sheet.matchParent}
+          styleURL={MapboxGL.StyleURL.Dark}>
+          {this.renderOrigin()}
 
-            {this.renderOrigin()}
+          {this.renderRoute()}
+          {this.renderCurrentPoint()}
+          {this.renderProgressLine()}
 
-            {this.renderRoute()}
-            {this.renderCurrentPoint()}
-            {this.renderProgressLine()}
-
-            <MapboxGL.ShapeSource id='destination' shape={MapboxGL.geoUtils.makePoint(SF_ZOO_COORDINATE)}>
-              <MapboxGL.CircleLayer id='destinationInnerCircle' style={layerStyles.destination} />
-            </MapboxGL.ShapeSource>
+          <MapboxGL.ShapeSource
+            id="destination"
+            shape={MapboxGL.geoUtils.makePoint(SF_ZOO_COORDINATE)}>
+            <MapboxGL.CircleLayer
+              id="destinationInnerCircle"
+              style={layerStyles.destination}
+            />
+          </MapboxGL.ShapeSource>
         </MapboxGL.MapView>
 
         {this.renderActions()}

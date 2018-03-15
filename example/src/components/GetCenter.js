@@ -11,7 +11,7 @@ class GetCenter extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -23,36 +23,32 @@ class GetCenter extends React.Component {
     this.getLng = this.getLng.bind(this);
   }
 
-  async onRegionDidChange () {
+  async onRegionDidChange() {
     const center = await this._map.getCenter();
     this.setState({ center });
   }
 
-
-  getLng () {
+  getLng() {
     const { center } = this.state;
-    return center.length === 2
-      ? `Lng: ${center[0]}`
-      : 'Not available';
+    return center.length === 2 ? `Lng: ${center[0]}` : 'Not available';
   }
 
-  getLat () {
+  getLat() {
     const { center } = this.state;
-    return center.length === 2
-      ? `Lat: ${center[1]}`
-      : 'Not available';
+    return center.length === 2 ? `Lat: ${center[1]}` : 'Not available';
   }
 
-  render () {
+  render() {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
           onRegionDidChange={this.onRegionDidChange}
           zoomLevel={9}
-          ref={(c) => this._map = c}
+          ref={(c) => (this._map = c)}
           onPress={this.onPress}
           centerCoordinate={[-73.970895, 40.723279]}
-          style={{ flex: 1 }} />
+          style={{ flex: 1 }}
+        />
 
         <Bubble>
           <Text>Center</Text>

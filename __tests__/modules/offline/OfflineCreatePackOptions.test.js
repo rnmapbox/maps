@@ -19,21 +19,25 @@ describe('OfflineCreatePackOptions', () => {
     expect(actualOptions.styleURL).toEqual(options.styleURL);
 
     // we expect a feature collection string
-    expect(actualOptions.bounds).toEqual(JSON.stringify(
-      MapboxGL.geoUtils.makeFeatureCollection([
-        MapboxGL.geoUtils.makePoint(options.bounds[0]),
-        MapboxGL.geoUtils.makePoint(options.bounds[1]),
-      ]),
-    ));
+    expect(actualOptions.bounds).toEqual(
+      JSON.stringify(
+        MapboxGL.geoUtils.makeFeatureCollection([
+          MapboxGL.geoUtils.makePoint(options.bounds[0]),
+          MapboxGL.geoUtils.makePoint(options.bounds[1]),
+        ]),
+      ),
+    );
 
     expect(actualOptions.minZoom).toEqual(options.minZoom);
     expect(actualOptions.maxZoom).toEqual(options.maxZoom);
 
     // we expect a json string
-    expect(actualOptions.metadata).toEqual(JSON.stringify({
-      customData: options.metadata.customData,
-      name: options.name,
-    }));
+    expect(actualOptions.metadata).toEqual(
+      JSON.stringify({
+        customData: options.metadata.customData,
+        name: options.name,
+      }),
+    );
   });
 
   it('should throw error without a styleURL', () => {
@@ -64,6 +68,6 @@ describe('OfflineCreatePackOptions', () => {
   });
 });
 
-function verifyErrorThrown (invalidOptions) {
+function verifyErrorThrown(invalidOptions) {
   expect(() => new OfflineCreatePackOptions(invalidOptions)).toThrow();
 }

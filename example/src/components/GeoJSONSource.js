@@ -25,24 +25,29 @@ class GeoJSONSource extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  render () {
+  render() {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-            zoomLevel={2}
-            centerCoordinate={[-35.15165038, 40.62357280]}
-            onSetCameraComplete={this.onUpdateZoomLevel}
-            ref={(ref) => this.map = ref}
-            style={sheet.matchParent}
-            styleURL={MapboxGL.StyleURL.Dark}>
+          zoomLevel={2}
+          centerCoordinate={[-35.15165038, 40.6235728]}
+          onSetCameraComplete={this.onUpdateZoomLevel}
+          ref={(ref) => (this.map = ref)}
+          style={sheet.matchParent}
+          styleURL={MapboxGL.StyleURL.Dark}>
+          <MapboxGL.VectorSource>
+            <MapboxGL.BackgroundLayer
+              id="background"
+              style={layerStyles.background}
+            />
+          </MapboxGL.VectorSource>
 
-            <MapboxGL.VectorSource>
-              <MapboxGL.BackgroundLayer id='background' style={layerStyles.background} />
-            </MapboxGL.VectorSource>
-
-            <MapboxGL.ShapeSource id='smileyFaceSource' shape={smileyFaceGeoJSON}>
-              <MapboxGL.FillLayer id='smileyFaceFill' style={layerStyles.smileyFace} />
-            </MapboxGL.ShapeSource>
+          <MapboxGL.ShapeSource id="smileyFaceSource" shape={smileyFaceGeoJSON}>
+            <MapboxGL.FillLayer
+              id="smileyFaceFill"
+              style={layerStyles.smileyFace}
+            />
+          </MapboxGL.ShapeSource>
         </MapboxGL.MapView>
       </Page>
     );

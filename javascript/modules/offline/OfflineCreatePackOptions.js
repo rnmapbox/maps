@@ -2,7 +2,7 @@ import { makeLatLngBounds } from '../../utils/geoUtils';
 import { toJSONString } from '../../utils';
 
 class OfflineCreatePackOptions {
-  constructor (options = {}) {
+  constructor(options = {}) {
     this._assert(options);
 
     this.name = options.name;
@@ -13,9 +13,11 @@ class OfflineCreatePackOptions {
     this.metadata = this._makeMetadata(options.metadata);
   }
 
-  _assert (options) {
+  _assert(options) {
     if (!options.styleURL) {
-      throw new Error('Style URL must be provided for creating an offline pack');
+      throw new Error(
+        'Style URL must be provided for creating an offline pack',
+      );
     }
 
     if (!options.name) {
@@ -27,13 +29,13 @@ class OfflineCreatePackOptions {
     }
   }
 
-  _makeLatLngBounds (bounds) {
+  _makeLatLngBounds(bounds) {
     const ne = bounds[0];
     const sw = bounds[1];
     return toJSONString(makeLatLngBounds(ne, sw));
   }
 
-  _makeMetadata (metadata) {
+  _makeMetadata(metadata) {
     return JSON.stringify({
       ...metadata,
       name: this.name,

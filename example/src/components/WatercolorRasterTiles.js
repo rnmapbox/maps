@@ -25,7 +25,7 @@ class WatercolorRasterTiles extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -35,11 +35,11 @@ class WatercolorRasterTiles extends React.Component {
     this.onOpacityChange = this.onOpacityChange.bind(this);
   }
 
-  onOpacityChange (value) {
+  onOpacityChange(value) {
     this.setState({ opacity: value });
   }
 
-  render () {
+  render() {
     const rasterSourceProps = {
       id: 'stamenWatercolorSource',
       url: 'https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg',
@@ -49,16 +49,16 @@ class WatercolorRasterTiles extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-            zoomLevel={16}
-            centerCoordinate={SF_OFFICE_COORDINATE}
-            style={sheet.matchParent}>
-
-            <MapboxGL.RasterSource {...rasterSourceProps}>
-              <MapboxGL.RasterLayer
-                id='stamenWatercolorLayer'
-                sourceID='stamenWatercolorSource'
-                style={{ rasterOpacity: this.state.opacity }} />
-            </MapboxGL.RasterSource>
+          zoomLevel={16}
+          centerCoordinate={SF_OFFICE_COORDINATE}
+          style={sheet.matchParent}>
+          <MapboxGL.RasterSource {...rasterSourceProps}>
+            <MapboxGL.RasterLayer
+              id="stamenWatercolorLayer"
+              sourceID="stamenWatercolorSource"
+              style={{ rasterOpacity: this.state.opacity }}
+            />
+          </MapboxGL.RasterSource>
         </MapboxGL.MapView>
 
         <View style={styles.slider}>
@@ -68,7 +68,8 @@ class WatercolorRasterTiles extends React.Component {
             thumbTintColor={colors.primary.blue}
             thumbTouchSize={{ width: 44, height: 44 }}
             maximumTrackTintColor={colors.secondary.purpleLight}
-            minimumTrackTintColor={colors.secondary.purpleDark} />
+            minimumTrackTintColor={colors.secondary.purpleDark}
+          />
         </View>
       </Page>
     );

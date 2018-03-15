@@ -20,8 +20,14 @@ class Light extends AbstractLayer {
     style: LightLayerStyleProp,
   };
 
-  render () {
-    return <RCTMGLLight {...this.props} style={undefined} reactStyle={this.getStyle()} />;
+  render() {
+    return (
+      <RCTMGLLight
+        {...this.props}
+        style={undefined}
+        reactStyle={this.getStyle()}
+      />
+    );
   }
 }
 

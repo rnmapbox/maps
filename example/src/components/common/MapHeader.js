@@ -42,7 +42,7 @@ class MapHeader extends React.PureComponent {
     backgroundColor: colors.primary.blue,
   };
 
-  renderBackIcon () {
+  renderBackIcon() {
     if (!this.props.onBack) {
       return null;
     }
@@ -53,15 +53,16 @@ class MapHeader extends React.PureComponent {
         onPress={this.props.onBack}
         color={colors.secondary.white}
         underlayColor={'rgba(255, 255, 255, 0.4)'}
-        name='keyboard-backspace' />
+        name="keyboard-backspace"
+      />
     );
   }
 
-  renderTitle () {
+  renderTitle() {
     return <Text style={styles.label}>{this.props.label}</Text>;
   }
 
-  render () {
+  render() {
     const statusBarProps = {
       barStyle: this.props.statusBarTextTheme,
       backgroundColor: this.props.statusBarColor,
@@ -79,7 +80,8 @@ class MapHeader extends React.PureComponent {
         elevation={2}
         outerContainerStyles={containerStyle}
         leftComponent={this.renderBackIcon()}
-        centerComponent={this.renderTitle()} />
+        centerComponent={this.renderTitle()}
+      />
     );
   }
 }

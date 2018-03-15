@@ -6,7 +6,9 @@ import OfflinePack from './OfflinePack';
 
 const MapboxGL = NativeModules.MGLModule;
 const MapboxGLOfflineManager = NativeModules.MGLOfflineModule;
-export const OfflineModuleEventEmitter = new NativeEventEmitter(MapboxGLOfflineManager);
+export const OfflineModuleEventEmitter = new NativeEventEmitter(
+  MapboxGLOfflineManager,
+);
 
 /**
  * OfflineManager implements a singleton (shared object) that manages offline packs.
@@ -14,7 +16,7 @@ export const OfflineModuleEventEmitter = new NativeEventEmitter(MapboxGLOfflineM
  * The shared object maintains a canonical collection of offline packs.
  */
 class OfflineManager {
-  constructor () {
+  constructor() {
     this._hasInitialized = false;
     this._offlinePacks = {};
 
@@ -46,17 +48,21 @@ class OfflineManager {
    * @param  {Callback=} errorListener Callback that listens for status events while downloading the offline resource.
    * @return {void}
    */
-  async createPack (options, progressListener, errorListener) {
+  async createPack(options, progressListener, errorListener) {
     await this._initialize();
 
     const packOptions = new OfflineCreatePackOptions(options);
 
     if (this._offlinePacks[packOptions.name]) {
-      throw new Error(`Offline pack with name ${packOptions.name} already exists.`);
+      throw new Error(
+        `Offline pack with name ${packOptions.name} already exists.`,
+      );
     }
 
     this.subscribe(packOptions.name, progressListener, errorListener);
-    const nativeOfflinePack = await MapboxGLOfflineManager.createPack(packOptions);
+    const nativeOfflinePack = await MapboxGLOfflineManager.createPack(
+      packOptions,
+    );
     this._offlinePacks[packOptions.name] = new OfflinePack(nativeOfflinePack);
   }
 
@@ -69,7 +75,7 @@ class OfflineManager {
    * @param  {String}  name  Name of the offline pack.
    * @return {void}
    */
-  async deletePack (name) {
+  async deletePack(name) {
     if (!name) {
       return;
     }
@@ -91,9 +97,11 @@ class OfflineManager {
    *
    * @return {Array<OfflinePack>}
    */
-  async getPacks () {
+  async getPacks() {
     await this._initialize();
-    return Object.keys(this._offlinePacks).map((name) => this._offlinePacks[name]);
+    return Object.keys(this._offlinePacks).map(
+      (name) => this._offlinePacks[name],
+    );
   }
 
   /**
@@ -105,7 +113,7 @@ class OfflineManager {
    * @param  {String}  name  Name of the offline pack.
    * @return {OfflinePack}
    */
-  async getPack (name) {
+  async getPack(name) {
     await this._initialize();
     return this._offlinePacks[name];
   }
@@ -120,7 +128,7 @@ class OfflineManager {
    * @param {Number} limit Map tile limit count.
    * @return {void}
    */
-  setTileCountLimit (limit) {
+  setTileCountLimit(limit) {
     MapboxGLOfflineManager.setTileCountLimit(limit);
   }
 
@@ -134,7 +142,7 @@ class OfflineManager {
    * @param {Number} throttleValue event throttle value in ms.
    * @return {void}
    */
-  setProgressEventThrottle (throttleValue) {
+  setProgressEventThrottle(throttleValue) {
     MapboxGLOfflineManager.setProgressEventThrottle(throttleValue);
   }
 
@@ -152,11 +160,14 @@ class OfflineManager {
    * @param  {Callback} errorListener      Callback that listens for status events while downloading the offline resource.
    * @return {void}
    */
-  async subscribe (packName, progressListener, errorListener) {
+  async subscribe(packName, progressListener, errorListener) {
     const totalProgressListeners = Object.keys(this._progressListeners).length;
     if (isFunction(progressListener)) {
       if (totalProgressListeners === 0) {
-        OfflineModuleEventEmitter.addListener(MapboxGL.OfflineCallbackName.Progress, this._onProgress);
+        OfflineModuleEventEmitter.addListener(
+          MapboxGL.OfflineCallbackName.Progress,
+          this._onProgress,
+        );
       }
       this._progressListeners[packName] = progressListener;
     }
@@ -164,7 +175,10 @@ class OfflineManager {
     const totalErrorListeners = Object.keys(this._errorListeners).length;
     if (isFunction(errorListener)) {
       if (totalErrorListeners === 0) {
-        OfflineModuleEventEmitter.addListener(MapboxGL.OfflineCallbackName.Error, this._onError);
+        OfflineModuleEventEmitter.addListener(
+          MapboxGL.OfflineCallbackName.Error,
+          this._onError,
+        );
       }
       this._errorListeners[packName] = errorListener;
     }
@@ -191,20 +205,26 @@ class OfflineManager {
    * @param  {String} packName Name of the offline pack.
    * @return {void}
    */
-  unsubscribe (packName) {
+  unsubscribe(packName) {
     delete this._progressListeners[packName];
     delete this._errorListeners[packName];
 
     if (Object.keys(this._progressListeners).length === 0) {
-      OfflineModuleEventEmitter.removeListener(MapboxGL.OfflineCallbackName.Progress, this._onProgress);
+      OfflineModuleEventEmitter.removeListener(
+        MapboxGL.OfflineCallbackName.Progress,
+        this._onProgress,
+      );
     }
 
     if (Object.keys(this._errorListeners).length === 0) {
-      OfflineModuleEventEmitter.removeListener(MapboxGL.OfflineCallbackName.Error, this._onError);
+      OfflineModuleEventEmitter.removeListener(
+        MapboxGL.OfflineCallbackName.Error,
+        this._onError,
+      );
     }
   }
 
-  _initialize () {
+  _initialize() {
     return new Promise(async (resolve, reject) => {
       if (this._hasInitialized) {
         return resolve(true);
@@ -227,7 +247,7 @@ class OfflineManager {
     });
   }
 
-  _onProgress (e) {
+  _onProgress(e) {
     const { name, state } = e.payload;
 
     if (!this._hasListeners(name, this._progressListeners)) {
@@ -243,7 +263,7 @@ class OfflineManager {
     }
   }
 
-  _onError (e) {
+  _onError(e) {
     const { name } = e.payload;
 
     if (!this._hasListeners(name, this._errorListeners)) {
@@ -254,8 +274,10 @@ class OfflineManager {
     this._errorListeners[name](pack, e.payload);
   }
 
-  _hasListeners (name, listenerMap) {
-    return !isUndefined(this._offlinePacks[name]) && isFunction(listenerMap[name]);
+  _hasListeners(name, listenerMap) {
+    return (
+      !isUndefined(this._offlinePacks[name]) && isFunction(listenerMap[name])
+    );
   }
 }
 

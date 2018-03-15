@@ -48,7 +48,7 @@ class SnapshotManager {
    * @param  {SnapshotOptions}  options Snapshot options for create a static image of the base map
    * @return {Promise}
    */
-  takeSnap (options = {}) {
+  takeSnap(options = {}) {
     const snapshotOptions = new SnapshotOptions(options);
 
     return new Promise(async (resolve, reject) => {

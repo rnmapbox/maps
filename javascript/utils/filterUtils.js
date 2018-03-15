@@ -1,6 +1,6 @@
 import BridgeValue from './BridgeValue';
 
-export function getFilter (filter) {
+export function getFilter(filter) {
   if (!Array.isArray(filter) || filter.length == 0) {
     return [];
   }

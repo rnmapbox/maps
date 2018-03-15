@@ -31,7 +31,7 @@ import snapshotManager from './modules/snapshot/snapshotManager';
 let MapboxGL = { ...NativeModules.MGLModule };
 
 // static methods
-MapboxGL.requestAndroidLocationPermissions = async function () {
+MapboxGL.requestAndroidLocationPermissions = async function() {
   if (isAndroid()) {
     const res = await PermissionsAndroid.requestMultiple([
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
@@ -99,6 +99,5 @@ MapboxGL.Animated = {
   RasterLayer: Animated.createAnimatedComponent(RasterLayer),
   BackgroundLayer: Animated.createAnimatedComponent(BackgroundLayer),
 };
-
 
 export default MapboxGL;

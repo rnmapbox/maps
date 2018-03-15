@@ -1,6 +1,13 @@
 import React from 'react';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
-import { View, Image, StyleSheet, Dimensions, Text, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Image,
+  StyleSheet,
+  Dimensions,
+  Text,
+  ActivityIndicator,
+} from 'react-native';
 
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
@@ -20,7 +27,7 @@ class TakeSnapshot extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -28,11 +35,11 @@ class TakeSnapshot extends React.Component {
     };
   }
 
-  async componentDidMount () {
+  async componentDidMount() {
     const { width, height } = Dimensions.get('window');
 
     const uri = await MapboxGL.snapshotManager.takeSnap({
-      centerCoordinate: [-74.126410, 40.797968],
+      centerCoordinate: [-74.12641, 40.797968],
       width: width,
       height: height,
       zoomLevel: 12,
@@ -45,12 +52,13 @@ class TakeSnapshot extends React.Component {
     this.setState({ snapshotURI: uri });
   }
 
-  render () {
+  render() {
     let childView = null;
 
     if (!this.state.snapshotURI) {
       childView = (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <ActivityIndicator size="large" color="#0000ff" />
           <Text>Generating Snapshot</Text>
         </View>
@@ -60,17 +68,14 @@ class TakeSnapshot extends React.Component {
         <View style={styles.container}>
           <Image
             source={{ uri: this.state.snapshotURI }}
-            resizeMode='contain'
-            style={styles.snapshot} />
+            resizeMode="contain"
+            style={styles.snapshot}
+          />
         </View>
       );
     }
 
-    return (
-      <Page {...this.props}>
-        {childView}
-      </Page>
-    );
+    return <Page {...this.props}>{childView}</Page>;
   }
 }
 

@@ -15,7 +15,7 @@ class ShowClick extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -28,11 +28,14 @@ class ShowClick extends React.Component {
     this.onPress = this.onPress.bind(this);
   }
 
-  get hasValidLastClick () {
-    return typeof this.state.latitude === 'number' && typeof this.state.longitude === 'number';
+  get hasValidLastClick() {
+    return (
+      typeof this.state.latitude === 'number' &&
+      typeof this.state.longitude === 'number'
+    );
   }
 
-  onPress (event) {
+  onPress(event) {
     const { geometry, properties } = event;
 
     this.setState({
@@ -43,7 +46,7 @@ class ShowClick extends React.Component {
     });
   }
 
-  renderLastClicked () {
+  renderLastClicked() {
     if (!this.hasValidLastClick) {
       return (
         <Bubble>
@@ -62,13 +65,14 @@ class ShowClick extends React.Component {
     );
   }
 
-  render () {
+  render() {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
           centerCoordinate={DEFAULT_CENTER_COORDINATE}
           style={sheet.matchParent}
-          onPress={this.onPress} />
+          onPress={this.onPress}
+        />
 
         {this.renderLastClicked()}
       </Page>
