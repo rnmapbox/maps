@@ -1,4 +1,4 @@
-import { isUndefined, isPrimitive } from './index';
+import { isUndefined, isPrimitive, isString } from './index';
 import { processColor, NativeModules } from 'react-native';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import styleMap, {
@@ -53,8 +53,11 @@ class MapStyleTranslationItem extends MapStyleItem {
 }
 
 class MapStyleConstantItem extends MapStyleItem {
-  constructor(value, extras = {}) {
-    super(StyleTypes.Constant, { value: value, ...extras });
+  constructor(prop, value, extras = {}) {
+    super(StyleTypes.Constant, {
+      value: resolveStyleValue(prop, value),
+      ...extras,
+    });
   }
 }
 
@@ -102,6 +105,38 @@ class MapStyleFunctionItem extends MapStyleItem {
   }
 }
 
+let STYLE_MAP = {};
+Object.keys(MapboxGL).forEach((key) => {
+  if (
+    !['setAccessToken', 'getAccessToken', 'setTelemetryEnabled'].includes(key)
+  ) {
+    STYLE_MAP[key.toLowerCase()] = MapboxGL[key];
+  }
+});
+
+function resolveStyleValue(styleProp, styleValue) {
+  // style is not an enum value
+  if (!STYLE_MAP[styleProp.toLowerCase()] || !isString(styleValue)) {
+    return styleValue;
+  }
+
+  // can't find enum values abort abort
+  const valueMap = STYLE_MAP[styleProp.toLowerCase()];
+  if (!valueMap) {
+    return styleValue;
+  }
+
+  // find enum value that matches
+  const enumKeys = Object.keys(valueMap);
+  for (let enumKey of enumKeys) {
+    if (enumKey.toLowerCase() === styleValue.toLowerCase()) {
+      return valueMap[enumKey];
+    }
+  }
+
+  return styleValue;
+}
+
 function resolveImage(imageURL) {
   let resolved = imageURL;
 
@@ -138,13 +173,13 @@ function makeStyleValue(prop, value, extras = {}, shouldMarkAsStyle = true) {
       item = new MapStyleTranslationItem(value.x, value.y, extraData); // supports object based API
     }
   } else if (styleMap[prop] === StyleTypes.Image) {
-    item = new MapStyleConstantItem(resolveImage(value), {
+    item = new MapStyleConstantItem(prop, resolveImage(value), {
       image: true,
       shouldAddImage: typeof value === 'number', // required from JS, tell native code to add image to map style
       ...extraData,
     });
   } else {
-    item = new MapStyleConstantItem(value, extraData);
+    item = new MapStyleConstantItem(prop, value, extraData);
   }
 
   return item.toJSON(shouldMarkAsStyle);

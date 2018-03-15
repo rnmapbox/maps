@@ -392,6 +392,32 @@ describe('MapboxStyleSheet', () => {
       },
     });
   });
+
+  it('should resolve style value from enum', () => {
+    expect(MapboxGL.StyleSheet.create({ lineCap: 'round' })).toEqual({
+      lineCap: {
+        __MAPBOX_STYLE__: true,
+        styletype: 'constant',
+        payload: {
+          value: MapboxGL.LineCap.Round,
+        },
+      },
+    });
+  });
+
+  it('should not try to resolve style value when using enum', () => {
+    expect(
+      MapboxGL.StyleSheet.create({ lineCap: MapboxGL.LineCap.Round }),
+    ).toEqual({
+      lineCap: {
+        __MAPBOX_STYLE__: true,
+        styletype: 'constant',
+        payload: {
+          value: MapboxGL.LineCap.Round,
+        },
+      },
+    });
+  });
 });
 
 function verifyStyleSheetsMatch(styles, expectedStyleSheet) {
