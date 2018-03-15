@@ -65,17 +65,17 @@ class SymbolLayer extends AbstractLayer {
     /**
      * Customizable style attributes
      */
-     style: PropTypes.oneOfType([
-       SymbolLayerStyleProp,
-       PropTypes.arrayOf(SymbolLayerStyleProp),
-     ]),
+    style: PropTypes.oneOfType([
+      SymbolLayerStyleProp,
+      PropTypes.arrayOf(SymbolLayerStyleProp),
+    ]),
   };
 
   static defaultProps = {
     sourceID: MapboxGL.StyleSource.DefaultSourceID,
   };
 
-  render () {
+  render() {
     const props = {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
@@ -84,8 +84,12 @@ class SymbolLayer extends AbstractLayer {
   }
 }
 
-const RCTMGLSymbolLayer = requireNativeComponent(NATIVE_MODULE_NAME, SymbolLayer, {
-  nativeOnly: { reactStyle: true },
-});
+const RCTMGLSymbolLayer = requireNativeComponent(
+  NATIVE_MODULE_NAME,
+  SymbolLayer,
+  {
+    nativeOnly: { reactStyle: true },
+  },
+);
 
 export default SymbolLayer;

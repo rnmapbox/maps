@@ -30,8 +30,8 @@
     "test": "npm run lint && npm run unittest",
     "unittest": "jest --coverage --verbose",
     "unittest:single": "jest --testNamePattern",
-    "format": "./node_modules/.bin/prettier --write",
-    "lint": "./node_modules/eslint/bin/eslint.js ./javascript/** ./example/src/** ./__tests__/** --fix",
+    "format": "npm run lint -- --fix",
+    "lint": "./node_modules/eslint/bin/eslint.js ./javascript/** ./example/src/** ./__tests__/**",
     "precommit": "lint-staged"
   },
   "peerDependencies": {
@@ -51,7 +51,9 @@
     "eslint": "^3.19.0",
     "eslint-config-strict-react": "8.0.1",
     "eslint-plugin-import": "2.7.0",
+    "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "5.2.2",
+    "husky": "^0.14.3",
     "jest": "21.0.2",
     "jest-cli": "^21.2.1",
     "lint-staged": "^7.0.0",
@@ -76,16 +78,9 @@
       "__tests__/__mocks__"
     ]
   },
-  "prettier": {
-    "singleQuote": true,
-    "trailingComma": "es5",
-    "jsxBracketSameLine": true,
-    "arrowParens": "always"
-  },
   "lint-staged": {
     "*.js": [
-      "npm run lint",
-      "npm run format",
+      "eslint ./javascript/**/*.js  ./example/src/**/*.js ./__tests__/**/*.js --fix",
       "git add"
     ]
   },

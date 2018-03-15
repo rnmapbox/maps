@@ -62,7 +62,7 @@ class RasterSource extends React.Component {
     id: MapboxGL.StyleSource.DefaultSourceID,
   };
 
-  render () {
+  render() {
     const props = {
       ...this.props,
       id: this.props.id,
@@ -75,12 +75,17 @@ class RasterSource extends React.Component {
     };
     return (
       <RCTMGLRasterSource {...props}>
-        {cloneReactChildrenWithProps(this.props.children, { sourceID: this.props.id })}
+        {cloneReactChildrenWithProps(this.props.children, {
+          sourceID: this.props.id,
+        })}
       </RCTMGLRasterSource>
     );
   }
 }
 
-const RCTMGLRasterSource = requireNativeComponent(NATIVE_MODULE_NAME, RasterSource);
+const RCTMGLRasterSource = requireNativeComponent(
+  NATIVE_MODULE_NAME,
+  RasterSource,
+);
 
 export default RasterSource;

@@ -11,10 +11,11 @@ import { IS_ANDROID } from '../utils';
 const styles = MapboxGL.StyleSheet.create({
   icon: {
     iconImage: '{icon}',
-    iconSize: MapboxGL.StyleSheet.source([
-      ['example', IS_ANDROID ? 1 : 0.5],
-      ['airport-15', 1.2],
-    ], 'icon', MapboxGL.InterpolationMode.Categorical),
+    iconSize: MapboxGL.StyleSheet.source(
+      [['example', IS_ANDROID ? 1 : 0.5], ['airport-15', 1.2]],
+      'icon',
+      MapboxGL.InterpolationMode.Categorical,
+    ),
   },
 });
 
@@ -62,21 +63,19 @@ class ShapeSourceIcon extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  render () {
+  render() {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-            zoomLevel={17}
-            centerCoordinate={[-117.20611157485, 52.180961084261]}
-            style={sheet.matchParent}>
-
-            <MapboxGL.ShapeSource
-              id='exampleShapeSource'
-              shape={featureCollection}
-              images={{ example: exampleIcon, assets: ['pin'] }}>
-              <MapboxGL.SymbolLayer id='exampleIconName' style={styles.icon} />
-            </MapboxGL.ShapeSource>
-
+          zoomLevel={17}
+          centerCoordinate={[-117.20611157485, 52.180961084261]}
+          style={sheet.matchParent}>
+          <MapboxGL.ShapeSource
+            id="exampleShapeSource"
+            shape={featureCollection}
+            images={{ example: exampleIcon, assets: ['pin'] }}>
+            <MapboxGL.SymbolLayer id="exampleIconName" style={styles.icon} />
+          </MapboxGL.ShapeSource>
         </MapboxGL.MapView>
       </Page>
     );

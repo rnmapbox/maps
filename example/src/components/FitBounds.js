@@ -9,18 +9,12 @@ import sheet from '../styles/sheet';
 class FitBounds extends React.Component {
   static propTypes = { ...BaseExamplePropTypes };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
-    const houseBounds = [
-      [-74.135379, 40.795909],
-      [-74.135449, 40.795578],
-    ];
+    const houseBounds = [[-74.135379, 40.795909], [-74.135449, 40.795578]];
 
-    const townBounds = [
-      [-74.126410, 40.797968],
-      [-74.143727, 40.772177],
-    ];
+    const townBounds = [[-74.12641, 40.797968], [-74.143727, 40.772177]];
 
     this._bounds = [
       { label: 'Fit House', data: houseBounds },
@@ -30,20 +24,24 @@ class FitBounds extends React.Component {
     this.onFitBounds = this.onFitBounds.bind(this);
   }
 
-  onFitBounds (i, bounds) {
+  onFitBounds(i, bounds) {
     this.map.fitBounds(bounds[0], bounds[1], 0, 200); // ne sw
   }
 
-  render () {
+  render() {
     return (
-      <TabBarPage {...this.props} options={this._bounds} onOptionPress={this.onFitBounds}>
+      <TabBarPage
+        {...this.props}
+        options={this._bounds}
+        onOptionPress={this.onFitBounds}>
         <MapboxGL.MapView
-            ref={(ref) => this.map = ref}
-            zoomLevel={18}
-            maxZoomLevel={19}
-            centerCoordinate={[-74.135426, 40.795765]}
-            styleURL={MapboxGL.StyleURL.Satellite}
-            style={sheet.matchParent} />
+          ref={(ref) => (this.map = ref)}
+          zoomLevel={18}
+          maxZoomLevel={19}
+          centerCoordinate={[-74.135426, 40.795765]}
+          styleURL={MapboxGL.StyleURL.Satellite}
+          style={sheet.matchParent}
+        />
       </TabBarPage>
     );
   }

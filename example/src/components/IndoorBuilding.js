@@ -21,9 +21,7 @@ const styles = StyleSheet.create({
 });
 
 const layerStyles = MapboxGL.StyleSheet.create({
-  light: {
-
-  },
+  light: {},
   building: {
     fillExtrusionOpacity: 0.5,
     fillExtrusionHeight: MapboxGL.StyleSheet.identity('height'),
@@ -38,7 +36,7 @@ class IndoorBuilding extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -48,29 +46,32 @@ class IndoorBuilding extends React.Component {
     this.onSliderChange = this.onSliderChange.bind(this);
   }
 
-  onSliderChange (value) {
+  onSliderChange(value) {
     this.setState({ sliderValue: value });
   }
 
-  render () {
+  render() {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-            zoomLevel={16}
-            pitch={40}
-            heading={20}
-            centerCoordinate={[-87.61694, 41.86625]}
-            ref={(ref) => this.map = ref}
-            style={sheet.matchParent}>
+          zoomLevel={16}
+          pitch={40}
+          heading={20}
+          centerCoordinate={[-87.61694, 41.86625]}
+          ref={(ref) => (this.map = ref)}
+          style={sheet.matchParent}>
+          <MapboxGL.Light
+            style={{ position: [5, 90, this.state.sliderValue] }}
+          />
 
-            <MapboxGL.Light style={{ position: [5, 90, this.state.sliderValue] }} />
-
-            <MapboxGL.ShapeSource id='indoorBuildingSource' shape={indoorMapGeoJSON}>
-              <MapboxGL.FillExtrusionLayer
-                id='building3d'
-                style={layerStyles.building} />
-            </MapboxGL.ShapeSource>
-
+          <MapboxGL.ShapeSource
+            id="indoorBuildingSource"
+            shape={indoorMapGeoJSON}>
+            <MapboxGL.FillExtrusionLayer
+              id="building3d"
+              style={layerStyles.building}
+            />
+          </MapboxGL.ShapeSource>
         </MapboxGL.MapView>
 
         <View style={styles.slider}>
@@ -82,7 +83,8 @@ class IndoorBuilding extends React.Component {
             maximumValue={180}
             thumbTouchSize={{ width: 44, height: 44 }}
             maximumTrackTintColor={colors.secondary.purpleLight}
-            minimumTrackTintColor={colors.secondary.purpleDark} />
+            minimumTrackTintColor={colors.secondary.purpleDark}
+          />
         </View>
       </Page>
     );

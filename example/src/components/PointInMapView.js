@@ -11,7 +11,7 @@ class PointInMapView extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -21,12 +21,12 @@ class PointInMapView extends React.Component {
     this.onPress = this.onPress.bind(this);
   }
 
-  async onPress (e) {
+  async onPress(e) {
     const pointInView = await this._map.getPointInView(e.geometry.coordinates);
     this.setState({ pointInView: pointInView });
   }
 
-  renderPointInView () {
+  renderPointInView() {
     if (!this.state.pointInView) {
       return <Text>Touch map to see xy pixel location</Text>;
     }
@@ -37,19 +37,18 @@ class PointInMapView extends React.Component {
     ];
   }
 
-  render () {
+  render() {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-            zoomLevel={9}
-            ref={(c) => this._map = c}
-            onPress={this.onPress}
-            centerCoordinate={[-73.970895, 40.723279]}
-            style={{ flex: 1 }} />
+          zoomLevel={9}
+          ref={(c) => (this._map = c)}
+          onPress={this.onPress}
+          centerCoordinate={[-73.970895, 40.723279]}
+          style={{ flex: 1 }}
+        />
 
-        <Bubble>
-          {this.renderPointInView()}
-        </Bubble>
+        <Bubble>{this.renderPointInView()}</Bubble>
       </Page>
     );
   }

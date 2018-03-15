@@ -13,13 +13,16 @@ const layerStyles = MapboxGL.StyleSheet.create({
   background: {
     backgroundColor: colors.primary.blue,
   },
-   water: {
-    fillColor: MapboxGL.StyleSheet.camera({
+  water: {
+    fillColor: MapboxGL.StyleSheet.camera(
+      {
         1: colors.secondary.green,
         8: colors.secondary.orange,
         10: colors.secondary.red,
         18: colors.secondary.yellow,
-    }, MapboxGL.InterpolationMode.Exponential),
+      },
+      MapboxGL.InterpolationMode.Exponential,
+    ),
   },
 });
 
@@ -28,7 +31,7 @@ class YoYo extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -36,11 +39,11 @@ class YoYo extends React.Component {
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.cameraLoop();
   }
 
-  cameraLoop () {
+  cameraLoop() {
     requestAnimationFrame(async () => {
       await this.map.zoomTo(this.state.zoomLevel, 8000);
       const nextZoomLevel = this.state.zoomLevel === 12 ? 2 : 12;
@@ -49,20 +52,22 @@ class YoYo extends React.Component {
     });
   }
 
-  render () {
+  render() {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-            zoomLevel={2}
-            centerCoordinate={SF_OFFICE_COORDINATE}
-            ref={(ref) => this.map = ref}
-            style={sheet.matchParent}
-            styleURL={MapboxGL.StyleURL.Dark}>
-
-            <MapboxGL.VectorSource>
-              <MapboxGL.BackgroundLayer id='background' style={layerStyles.background} />
-              <MapboxGL.FillLayer id='water' style={layerStyles.water} />
-            </MapboxGL.VectorSource>
+          zoomLevel={2}
+          centerCoordinate={SF_OFFICE_COORDINATE}
+          ref={(ref) => (this.map = ref)}
+          style={sheet.matchParent}
+          styleURL={MapboxGL.StyleURL.Dark}>
+          <MapboxGL.VectorSource>
+            <MapboxGL.BackgroundLayer
+              id="background"
+              style={layerStyles.background}
+            />
+            <MapboxGL.FillLayer id="water" style={layerStyles.water} />
+          </MapboxGL.VectorSource>
         </MapboxGL.MapView>
       </Page>
     );

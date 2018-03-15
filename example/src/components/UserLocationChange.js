@@ -13,7 +13,7 @@ class UserLocationChange extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -29,7 +29,7 @@ class UserLocationChange extends React.Component {
     this.onUserLocationUpdate = this.onUserLocationUpdate.bind(this);
   }
 
-  onUserLocationUpdate (location) {
+  onUserLocationUpdate(location) {
     this.setState({
       timestamp: location.timestamp,
       latitude: location.coords.latitude,
@@ -41,7 +41,7 @@ class UserLocationChange extends React.Component {
     });
   }
 
-  renderLocationInfo () {
+  renderLocationInfo() {
     if (this.state.timestamp <= 0) {
       return null;
     }
@@ -58,15 +58,16 @@ class UserLocationChange extends React.Component {
     );
   }
 
-  render () {
+  render() {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-            zoomLevel={16}
-            showUserLocation={true}
-            onUserLocationUpdate={this.onUserLocationUpdate}
-            userTrackingMode={MapboxGL.UserTrackingModes.Follow}
-            style={sheet.matchParent} />
+          zoomLevel={16}
+          showUserLocation={true}
+          onUserLocationUpdate={this.onUserLocationUpdate}
+          userTrackingMode={MapboxGL.UserTrackingModes.Follow}
+          style={sheet.matchParent}
+        />
         {this.renderLocationInfo()}
       </Page>
     );

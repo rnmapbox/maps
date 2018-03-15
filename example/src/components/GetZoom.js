@@ -11,7 +11,7 @@ class GetZoom extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -21,21 +21,22 @@ class GetZoom extends React.Component {
     this.onRegionDidChange = this.onRegionDidChange.bind(this);
   }
 
-  async onRegionDidChange () {
+  async onRegionDidChange() {
     const zoom = await this._map.getZoom();
     this.setState({ zoom });
   }
 
-  render () {
+  render() {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-            onRegionDidChange={this.onRegionDidChange}
-            zoomLevel={9}
-            ref={(c) => this._map = c}
-            onPress={this.onPress}
-            centerCoordinate={[-73.970895, 40.723279]}
-            style={{ flex: 1 }} />
+          onRegionDidChange={this.onRegionDidChange}
+          zoomLevel={9}
+          ref={(c) => (this._map = c)}
+          onPress={this.onPress}
+          centerCoordinate={[-73.970895, 40.723279]}
+          style={{ flex: 1 }}
+        />
 
         <Bubble>
           <Text>Current zoom: {this.state.zoom}</Text>

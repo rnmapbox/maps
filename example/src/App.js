@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
 MapboxGL.setAccessToken(config.get('accessToken'));
 
 class ExampleItem {
-  constructor (label, Component) {
+  constructor(label, Component) {
     this.label = label;
     this.Component = Component;
   }
@@ -107,7 +107,10 @@ const Examples = [
   new ExampleItem('Fly To', FlyTo),
   new ExampleItem('Fit Bounds', FitBounds),
   new ExampleItem('Set User Tracking Modes', SetUserTrackingModes),
-  new ExampleItem('Set User Location Vertical Alignment', SetUserLocationVerticalAlignment),
+  new ExampleItem(
+    'Set User Location Vertical Alignment',
+    SetUserLocationVerticalAlignment,
+  ),
   new ExampleItem('Show Region Did Change', ShowRegionDidChange),
   new ExampleItem('Custom Icon', CustomIcon),
   new ExampleItem('Yo Yo Camera', YoYo),
@@ -135,7 +138,7 @@ const Examples = [
 ];
 
 class App extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -148,7 +151,7 @@ class App extends React.Component {
     this.onCloseExample = this.onCloseExample.bind(this);
   }
 
-  async componentWillMount () {
+  async componentWillMount() {
     if (IS_ANDROID) {
       const isGranted = await MapboxGL.requestAndroidLocationPermissions();
       this.setState({
@@ -158,35 +161,38 @@ class App extends React.Component {
     }
   }
 
-  getActiveItem () {
-    if (this.state.activeExample < 0 || this.state.activeExample >= Examples.length) {
+  getActiveItem() {
+    if (
+      this.state.activeExample < 0 ||
+      this.state.activeExample >= Examples.length
+    ) {
       return null;
     }
     return Examples[this.state.activeExample];
   }
 
-  onExamplePress (activeExamplePosition) {
+  onExamplePress(activeExamplePosition) {
     this.setState({ activeExample: activeExamplePosition });
   }
 
-  onCloseExample () {
+  onCloseExample() {
     this.setState({ activeExample: -1 });
   }
 
-  renderItem ({ item, index }) {
+  renderItem({ item, index }) {
     return (
       <View style={styles.exampleListItemBorder}>
         <TouchableOpacity onPress={() => this.onExamplePress(index)}>
           <View style={styles.exampleListItem}>
             <Text style={styles.exampleListLabel}>{item.label}</Text>
-            <Icon name='keyboard-arrow-right' />
+            <Icon name="keyboard-arrow-right" />
           </View>
         </TouchableOpacity>
       </View>
     );
   }
 
-  renderActiveExample () {
+  renderActiveExample() {
     const item = this.getActiveItem();
 
     const modalProps = {
@@ -199,15 +205,19 @@ class App extends React.Component {
     return (
       <Modal {...modalProps}>
         <View style={styles.exampleBackground}>
-          {modalProps.visible  ? (
-            <item.Component key={item.label} label={item.label} onDismissExample={this.onCloseExample} />
+          {modalProps.visible ? (
+            <item.Component
+              key={item.label}
+              label={item.label}
+              onDismissExample={this.onCloseExample}
+            />
           ) : null}
         </View>
       </Modal>
     );
   }
 
-  render () {
+  render() {
     if (IS_ANDROID && !this.state.isAndroidPermissionGranted) {
       if (this.state.isFetchingAndroidPermission) {
         return null;
@@ -215,7 +225,8 @@ class App extends React.Component {
       return (
         <View style={sheet.matchParent}>
           <Text style={styles.noPermissionsText}>
-            You need to accept location permissions in order to use this example applications
+            You need to accept location permissions in order to use this example
+            applications
           </Text>
         </View>
       );
@@ -229,8 +240,9 @@ class App extends React.Component {
           <FlatList
             style={styles.exampleList}
             data={Examples}
-            keyExtractor={item => item.label}
-            renderItem={this.renderItem} />
+            keyExtractor={(item) => item.label}
+            renderItem={this.renderItem}
+          />
         </View>
 
         {this.renderActiveExample()}

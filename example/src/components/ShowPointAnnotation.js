@@ -35,7 +35,7 @@ class ShowPointAnnotation extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -43,9 +43,7 @@ class ShowPointAnnotation extends React.Component {
       previousActiveAnnotationIndex: -1,
 
       backgroundColor: 'blue',
-      coordinates: [
-        [-73.99155, 40.73581],
-      ],
+      coordinates: [[-73.99155, 40.73581]],
     };
 
     this._scaleIn = null;
@@ -54,13 +52,13 @@ class ShowPointAnnotation extends React.Component {
     this.onPress = this.onPress.bind(this);
   }
 
-  onPress (feature) {
+  onPress(feature) {
     const coords = Object.assign([], this.state.coordinates);
     coords.push(feature.geometry.coordinates);
     this.setState({ coordinates: coords });
   }
 
-  onAnnotationSelected (activeIndex, feature) {
+  onAnnotationSelected(activeIndex, feature) {
     if (this.state.activeIndex === activeIndex) {
       return;
     }
@@ -74,7 +72,7 @@ class ShowPointAnnotation extends React.Component {
     }
   }
 
-  onAnnotationDeselected (deselectedIndex) {
+  onAnnotationDeselected(deselectedIndex) {
     let nextState = {};
 
     if (this.state.activeAnnotationIndex === deselectedIndex) {
@@ -87,12 +85,14 @@ class ShowPointAnnotation extends React.Component {
     this.setState(nextState);
   }
 
-  renderAnnotations () {
+  renderAnnotations() {
     const items = [];
 
     for (let i = 0; i < this.state.coordinates.length; i++) {
       const coordinate = this.state.coordinates[i];
-      const title = `Longitude: ${this.state.coordinates[i][0]} Latitude: ${this.state.coordinates[i][1]}`;
+      const title = `Longitude: ${this.state.coordinates[i][0]} Latitude: ${
+        this.state.coordinates[i][1]
+      }`;
       const id = `pointAnnotation${i}`;
 
       let animationStyle = {};
@@ -106,37 +106,34 @@ class ShowPointAnnotation extends React.Component {
         <MapboxGL.PointAnnotation
           key={id}
           id={id}
-          title='Test'
+          title="Test"
           selected={i === 0}
           onSelected={(feature) => this.onAnnotationSelected(i, feature)}
           onDeselected={() => this.onAnnotationDeselected(i)}
           coordinate={coordinate}>
-
           <View style={styles.annotationContainer}>
             <Animated.View style={[styles.annotationFill, animationStyle]} />
           </View>
 
           <MapboxGL.Callout title={title} />
-        </MapboxGL.PointAnnotation>
+        </MapboxGL.PointAnnotation>,
       );
     }
 
     return items;
   }
 
-  render () {
+  render() {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          ref={(c) => this._map = c}
+          ref={(c) => (this._map = c)}
           zoomLevel={16}
           onPress={this.onPress}
           onDidFinishLoadingMap={this.onDidFinishLoadingMap}
           centerCoordinate={this.state.coordinates[0]}
           style={sheet.matchParent}>
-
           {this.renderAnnotations()}
-
         </MapboxGL.MapView>
 
         <Bubble>

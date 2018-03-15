@@ -66,17 +66,17 @@ class LineLayer extends AbstractLayer {
     /**
      * Customizable style attributes
      */
-     style: PropTypes.oneOfType([
-       LineLayerStyleProp,
-       PropTypes.arrayOf(LineLayerStyleProp),
-     ]),
+    style: PropTypes.oneOfType([
+      LineLayerStyleProp,
+      PropTypes.arrayOf(LineLayerStyleProp),
+    ]),
   };
 
   static defaultProps = {
     sourceID: MapboxGL.StyleSource.DefaultSourceID,
   };
 
-  render () {
+  render() {
     const props = {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,

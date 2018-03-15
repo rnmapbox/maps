@@ -5,9 +5,11 @@ import { makePoint, makeFeatureCollection } from '../../utils/geoUtils';
 const MapboxGL = NativeModules.MGLModule;
 
 class SnapshotOptions {
-  constructor (options = {}) {
+  constructor(options = {}) {
     if (!options.centerCoordinate && !options.bounds) {
-      throw new Error('Center coordinate or bounds must be supplied in order to take a snapshot');
+      throw new Error(
+        'Center coordinate or bounds must be supplied in order to take a snapshot',
+      );
     }
 
     this.styleURL = options.styleURL || MapboxGL.StyleURL.Street;
@@ -19,7 +21,9 @@ class SnapshotOptions {
     this.writeToDisk = options.writeToDisk || false;
 
     if (options.centerCoordinate) {
-      this.centerCoordinate = this._createCenterCoordPoint(options.centerCoordinate);
+      this.centerCoordinate = this._createCenterCoordPoint(
+        options.centerCoordinate,
+      );
     }
 
     if (options.bounds) {
@@ -27,7 +31,7 @@ class SnapshotOptions {
     }
   }
 
-  toJSON () {
+  toJSON() {
     return {
       styleURL: this.styleURL,
       heading: this.heading,
@@ -41,12 +45,12 @@ class SnapshotOptions {
     };
   }
 
-  _createCenterCoordPoint (centerCoordinate) {
+  _createCenterCoordPoint(centerCoordinate) {
     const point = makePoint(centerCoordinate);
     return toJSONString(point);
   }
 
-  _createBoundsCollection (bounds) {
+  _createBoundsCollection(bounds) {
     const features = [];
 
     for (let bound of bounds) {

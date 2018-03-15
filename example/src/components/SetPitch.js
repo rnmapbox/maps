@@ -11,7 +11,7 @@ class SetPitch extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this._pitchOptions = [
@@ -23,19 +23,23 @@ class SetPitch extends React.Component {
     this.onUpdatePitch = this.onUpdatePitch.bind(this);
   }
 
-  onUpdatePitch (index, pitch) {
+  onUpdatePitch(index, pitch) {
     this.map.setCamera({ pitch: pitch, duration: 300 });
   }
 
-  render () {
+  render() {
     return (
-      <TabBarPage {...this.props} options={this._pitchOptions} onOptionPress={this.onUpdatePitch}>
+      <TabBarPage
+        {...this.props}
+        options={this._pitchOptions}
+        onOptionPress={this.onUpdatePitch}>
         <MapboxGL.MapView
-          ref={(ref) => this.map = ref}
+          ref={(ref) => (this.map = ref)}
           pitch={15}
           showUserLocation={true}
           userTrackingMode={MapboxGL.UserTrackingModes.Follow}
-          style={sheet.matchParent} />
+          style={sheet.matchParent}
+        />
       </TabBarPage>
     );
   }

@@ -3,9 +3,7 @@ import OfflinePack from '../../../javascript/modules/offline/OfflinePack';
 
 describe('OfflinePack', () => {
   const fakeNativePack = {
-    bounds: [
-      [0, 1], [2, 3],
-    ],
+    bounds: [[0, 1], [2, 3]],
     metadata: '{"name":"test"}',
   };
 
@@ -17,7 +15,10 @@ describe('OfflinePack', () => {
   });
 
   it('should resume pack download', () => {
-    const spy = jest.spyOn(NativeModules.MGLOfflineModule, 'resumePackDownload');
+    const spy = jest.spyOn(
+      NativeModules.MGLOfflineModule,
+      'resumePackDownload',
+    );
     const offlinePack = new OfflinePack(fakeNativePack);
     offlinePack.resume();
     expect(spy).toHaveBeenCalled();

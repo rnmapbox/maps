@@ -65,17 +65,17 @@ class FillExtrusionLayer extends AbstractLayer {
     /**
      * Customizable style attributes
      */
-     style: PropTypes.oneOfType([
-       FillExtrusionLayerStyleProp,
-       PropTypes.arrayOf(FillExtrusionLayerStyleProp),
-     ]),
+    style: PropTypes.oneOfType([
+      FillExtrusionLayerStyleProp,
+      PropTypes.arrayOf(FillExtrusionLayerStyleProp),
+    ]),
   };
 
   static defaultProps = {
     sourceID: MapboxGL.StyleSource.DefaultSourceID,
   };
 
-  render () {
+  render() {
     const props = {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
@@ -84,8 +84,12 @@ class FillExtrusionLayer extends AbstractLayer {
   }
 }
 
-const RCTMGLFillExtrusionLayer = requireNativeComponent(NATIVE_MODULE_NAME, FillExtrusionLayer, {
-  nativeOnly: { reactStyle: true },
-});
+const RCTMGLFillExtrusionLayer = requireNativeComponent(
+  NATIVE_MODULE_NAME,
+  FillExtrusionLayer,
+  {
+    nativeOnly: { reactStyle: true },
+  },
+);
 
 export default FillExtrusionLayer;

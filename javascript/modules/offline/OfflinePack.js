@@ -3,36 +3,36 @@ import { NativeModules } from 'react-native';
 const MapboxGLOfflineManager = NativeModules.MGLOfflineModule;
 
 class OfflinePack {
-  constructor (pack) {
+  constructor(pack) {
     this.pack = pack;
     this._metadata = null;
   }
 
-  get name () {
+  get name() {
     const metadata = this.metadata;
     return metadata.name;
   }
 
-  get bounds () {
+  get bounds() {
     return this.pack.bounds;
   }
 
-  get metadata () {
+  get metadata() {
     if (!this._metadata) {
       this._metadata = JSON.parse(this.pack.metadata);
     }
     return this._metadata;
   }
 
-  status () {
+  status() {
     return MapboxGLOfflineManager.getPackStatus(this.name);
   }
 
-  resume () {
+  resume() {
     return MapboxGLOfflineManager.resumePackDownload(this.name);
   }
 
-  pause () {
+  pause() {
     return MapboxGLOfflineManager.pausePackDownload(this.name);
   }
 }

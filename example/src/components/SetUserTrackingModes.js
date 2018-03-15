@@ -14,15 +14,17 @@ class SetUserTrackingModes extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
-    this._trackingOptions = Object.keys(MapboxGL.UserTrackingModes).map((key) => {
-      return {
-        label: key,
-        data: MapboxGL.UserTrackingModes[key],
-      };
-    }).sort(onSortOptions);
+    this._trackingOptions = Object.keys(MapboxGL.UserTrackingModes)
+      .map((key) => {
+        return {
+          label: key,
+          data: MapboxGL.UserTrackingModes[key],
+        };
+      })
+      .sort(onSortOptions);
 
     this.state = {
       showUserLocation: true,
@@ -35,23 +37,23 @@ class SetUserTrackingModes extends React.Component {
     this.onToggleUserLocation = this.onToggleUserLocation.bind(this);
   }
 
-  onTrackingChange (index, userTrackingMode) {
+  onTrackingChange(index, userTrackingMode) {
     this.setState({
       userSelectedUserTrackingMode: userTrackingMode,
       currentTrackingMode: userTrackingMode,
     });
   }
 
-  onUserTrackingModeChange (e) {
+  onUserTrackingModeChange(e) {
     const userTrackingMode = e.nativeEvent.payload.userTrackingMode;
     this.setState({ currentTrackingMode: userTrackingMode });
   }
 
-  onToggleUserLocation () {
+  onToggleUserLocation() {
     this.setState({ showUserLocation: !this.state.showUserLocation });
   }
 
-  get userTrackingModeText () {
+  get userTrackingModeText() {
     switch (this.state.currentTrackingMode) {
       case MapboxGL.UserTrackingModes.Follow:
         return 'Follow';
@@ -64,14 +66,19 @@ class SetUserTrackingModes extends React.Component {
     }
   }
 
-  render () {
+  render() {
     return (
-      <TabBarPage {...this.props} scrollable options={this._trackingOptions} onOptionPress={this.onTrackingChange}>
+      <TabBarPage
+        {...this.props}
+        scrollable
+        options={this._trackingOptions}
+        onOptionPress={this.onTrackingChange}>
         <MapboxGL.MapView
-            showUserLocation={this.state.showUserLocation}
-            userTrackingMode={this.state.userSelectedUserTrackingMode}
-            onUserTrackingModeChange={this.onUserTrackingModeChange}
-            style={sheet.matchParent} />
+          showUserLocation={this.state.showUserLocation}
+          userTrackingMode={this.state.userSelectedUserTrackingMode}
+          onUserTrackingModeChange={this.onUserTrackingModeChange}
+          style={sheet.matchParent}
+        />
 
         <Bubble style={{ bottom: 100 }}>
           <Text>User Tracking Mode: {this.userTrackingModeText}</Text>

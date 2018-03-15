@@ -73,27 +73,27 @@ class PointAnnotation extends React.PureComponent {
 
   static defaultProps = {
     anchor: { x: 0.5, y: 0.5 },
-  }
+  };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
     this._onSelected = this._onSelected.bind(this);
   }
 
-  _onSelected (e) {
+  _onSelected(e) {
     if (isFunction(this.props.onSelected)) {
       this.props.onSelected(e.nativeEvent.payload);
     }
   }
 
-  _getCoordinate () {
+  _getCoordinate() {
     if (!this.props.coordinate) {
       return;
     }
     return toJSONString(makePoint(this.props.coordinate));
   }
 
-  render () {
+  render() {
     const props = {
       ...this.props,
       id: this.props.id,
@@ -115,11 +115,15 @@ class PointAnnotation extends React.PureComponent {
   }
 }
 
-const RCTMGLPointAnnotation = requireNativeComponent(NATIVE_MODULE_NAME, PointAnnotation, {
-  nativeOnly: {
-    onMapboxPointAnnotationSelected: true,
-    onMapboxPointAnnotationDeselected: true,
+const RCTMGLPointAnnotation = requireNativeComponent(
+  NATIVE_MODULE_NAME,
+  PointAnnotation,
+  {
+    nativeOnly: {
+      onMapboxPointAnnotationSelected: true,
+      onMapboxPointAnnotationDeselected: true,
+    },
   },
-});
+);
 
 export default PointAnnotation;

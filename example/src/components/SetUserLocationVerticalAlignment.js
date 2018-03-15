@@ -12,15 +12,17 @@ class SetUserLocationVerticalAlignment extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
-    this._alignmentOptions = Object.keys(MapboxGL.UserLocationVerticalAlignment).map((key) => {
-      return {
-        label: key,
-        data: MapboxGL.UserLocationVerticalAlignment[key],
-      };
-    }).sort(onSortOptions);
+    this._alignmentOptions = Object.keys(MapboxGL.UserLocationVerticalAlignment)
+      .map((key) => {
+        return {
+          label: key,
+          data: MapboxGL.UserLocationVerticalAlignment[key],
+        };
+      })
+      .sort(onSortOptions);
 
     this.state = {
       currentAlignmentMode: this._alignmentOptions[0].data,
@@ -29,18 +31,22 @@ class SetUserLocationVerticalAlignment extends React.Component {
     this.onAlignmentChange = this.onAlignmentChange.bind(this);
   }
 
-  onAlignmentChange (index, userLocationVerticalAlignment) {
+  onAlignmentChange(index, userLocationVerticalAlignment) {
     this.setState({ currentAlignmentMode: userLocationVerticalAlignment });
   }
 
-  render () {
+  render() {
     return (
-      <TabBarPage {...this.props} options={this._alignmentOptions} onOptionPress={this.onAlignmentChange}>
+      <TabBarPage
+        {...this.props}
+        options={this._alignmentOptions}
+        onOptionPress={this.onAlignmentChange}>
         <MapboxGL.MapView
-            showUserLocation={true}
-            userTrackingMode={MapboxGL.UserTrackingModes.Follow}
-            userLocationVerticalAlignment={this.state.currentAlignmentMode}
-            style={sheet.matchParent} />
+          showUserLocation={true}
+          userTrackingMode={MapboxGL.UserTrackingModes.Follow}
+          userLocationVerticalAlignment={this.state.currentAlignmentMode}
+          style={sheet.matchParent}
+        />
       </TabBarPage>
     );
   }

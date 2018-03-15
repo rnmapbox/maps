@@ -1,6 +1,9 @@
 import { NativeModules } from 'react-native';
 import SnapshotOptions from '../../../javascript/modules/snapshot/SnapshotOptions';
-import { makePoint, makeFeatureCollection } from '../../../javascript/utils/geoUtils';
+import {
+  makePoint,
+  makeFeatureCollection,
+} from '../../../javascript/utils/geoUtils';
 
 describe('SnapshotOptions', () => {
   it('should throw error if no centerCoordinate or bounds are provided', () => {
@@ -39,7 +42,9 @@ describe('SnapshotOptions', () => {
     const options = new SnapshotOptions(expectedOptions);
     expect(options.toJSON()).toEqual({
       ...expectedOptions,
-      centerCoordinate: JSON.stringify(makePoint(expectedOptions.centerCoordinate)),
+      centerCoordinate: JSON.stringify(
+        makePoint(expectedOptions.centerCoordinate),
+      ),
     });
   });
 

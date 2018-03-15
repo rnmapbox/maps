@@ -62,23 +62,27 @@ class BackgroundLayer extends AbstractLayer {
     /**
      * Customizable style attributes
      */
-     style: PropTypes.oneOfType([
-       BackgroundLayerStyleProp,
-       PropTypes.arrayOf(BackgroundLayerStyleProp),
-     ]),
-  }
+    style: PropTypes.oneOfType([
+      BackgroundLayerStyleProp,
+      PropTypes.arrayOf(BackgroundLayerStyleProp),
+    ]),
+  };
 
   static defaultProps = {
     sourceID: MapboxGL.StyleSource.DefaultSourceID,
   };
 
-  render () {
+  render() {
     return <RCTMGLBackgroundLayer {...this.baseProps} />;
   }
 }
 
-const RCTMGLBackgroundLayer = requireNativeComponent(NATIVE_MODULE_NAME, BackgroundLayer, {
-  nativeOnly: { reactStyle: true },
-});
+const RCTMGLBackgroundLayer = requireNativeComponent(
+  NATIVE_MODULE_NAME,
+  BackgroundLayer,
+  {
+    nativeOnly: { reactStyle: true },
+  },
+);
 
 export default BackgroundLayer;

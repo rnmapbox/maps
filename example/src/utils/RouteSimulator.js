@@ -4,7 +4,7 @@ import along from '@turf/along';
 import findDistance from '@turf/distance';
 
 class Polyline {
-  constructor (lineStringFeature) {
+  constructor(lineStringFeature) {
     this._coordinates = lineStringFeature.geometry.coordinates;
     this._lineStringFeature = lineStringFeature;
 
@@ -14,14 +14,14 @@ class Polyline {
     }
   }
 
-  coordinateFromStart (distance) {
+  coordinateFromStart(distance) {
     const pointAlong = along(this._lineStringFeature, distance);
     pointAlong.properties.distance = distance;
     pointAlong.properties.nearestIndex = this.findNearestFloorIndex(distance);
     return pointAlong;
   }
 
-  findNearestFloorIndex (currentDistance) {
+  findNearestFloorIndex(currentDistance) {
     let runningDistance = 0;
 
     for (let i = 1; i < this._coordinates.length; i++) {
@@ -35,44 +35,44 @@ class Polyline {
     return -1;
   }
 
-  get (index) {
+  get(index) {
     return MapboxGL.geoUtils.makePoint(this._coordinates[index]);
   }
 
-  get totalDistance () {
+  get totalDistance() {
     return this._totalDistance;
   }
 }
 
 class RouteSimulator {
-  constructor (lineString, speed = 0.04) {
+  constructor(lineString, speed = 0.04) {
     this._polyline = new Polyline(lineString);
     this._previousDistance = 0;
     this._currentDistance = 0;
     this._speed = speed;
   }
 
-  addListener (listener) {
+  addListener(listener) {
     this._listener = listener;
   }
 
-  start () {
+  start() {
     this.tick();
   }
 
-  reset () {
+  reset() {
     this._previousDistance = 0;
     this._currentDistance = 0;
     this.start();
   }
 
-  stop () {
+  stop() {
     if (this._anim) {
       this._anim.stop();
     }
   }
 
-  tick () {
+  tick() {
     requestAnimationFrame(() => {
       this._previousDistance = this._currentDistance;
       this._currentDistance += this._speed;
@@ -105,7 +105,7 @@ class RouteSimulator {
     });
   }
 
-  emit (pointFeature) {
+  emit(pointFeature) {
     this._listener(pointFeature);
   }
 }

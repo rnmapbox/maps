@@ -3,7 +3,8 @@
   "env": {
     "es6": true,
     "browser": true,
-    "jest": true
+    "jest": true,
+    "node": true
   },
   "parserOptions": {
     "sourceType": "module",
@@ -12,7 +13,7 @@
     }
   },
   "extends": ["eslint:recommended"],
-  "plugins": ["react", "import"],
+  "plugins": ["react", "import", "prettier"],
   "settings": {
     "import/core-modules": [
       "react",
@@ -22,10 +23,8 @@
     ]
   },
   "rules": {
-    "comma-dangle": ["error", "always-multiline"],
     "no-console": ["error", { allow: ["warn", "error"] }],
     "semi": ["error", "always"],
-    "space-before-function-paren": ["error", "always"],
 
     "react/jsx-no-duplicate-props": ["error"],
     "react/jsx-no-undef": ["error"],
@@ -48,5 +47,12 @@
     "import/no-dynamic-require": ["error"],
     "import/no-unresolved": ["error"],
     "import/no-webpack-loader-syntax": ["error"],
+
+    "prettier/prettier": ["error", {
+      "singleQuote": true,
+      "trailingComma": "all",
+      "jsxBracketSameLine": true,
+      "arrowParens": "always"
+    }]
   }
 }
