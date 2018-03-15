@@ -1,68 +1,83 @@
 let iosPropNameOverrides = {};
 
 const iosSpecOverrides = {
-  "icon-allow-overlap": "icon-allows-overlap",
-  "icon-image": "icon-image-name",
-  "icon-ignore-placement": "icon-ignores-placement",
-  "icon-keep-upright": "keeps-icon-upright",
-  "icon-rotate": "icon-rotation",
-  "icon-size": "icon-scale",
-  "symbol-avoid-edges": "symbol-avoids-edges",
-  "text-allow-overlap": "text-allows-overlap",
-  "text-field": "text",
-  "text-font": "text-font-names",
-  "text-ignore-placement": "text-ignores-placement",
-  "text-justify": "text-justification",
-  "text-keep-upright": "keeps-text-upright",
-  "text-max-angle": "maximum-text-angle",
-  "text-max-width": "maximum-text-width",
-  "text-rotate": "text-rotation",
-  "text-size": "text-font-size",
-  "circle-pitch-scale": "circle-scale-alignment",
-  "circle-translate": "circle-translation",
-  "circle-translate-anchor": "circle-translation-anchor",
-  "fill-antialias": "fill-antialiased",
-  "fill-translate": "fill-translation",
-  "fill-translate-anchor": "fill-translation-anchor",
-  "fill-extrusion-translate": "fill-extrusion-translation",
-  "fill-extrusion-translate-anchor": "fill-extrusion-translation-anchor",
-  "raster-brightness-min": "minimum-raster-brightness",
-  "raster-brightness-max": "maximum-raster-brightness",
-  "raster-hue-rotate": "raster-hue-rotation",
-  "line-dasharray": "line-dash-pattern",
-  "line-translate": "line-translation",
-  "line-translate-anchor": "line-translation-anchor",
-  "icon-translate": "icon-translation",
-  "icon-translate-anchor": "icon-translation-anchor",
-  "text-translate": "text-translation",
-  "text-translate-anchor": "text-translation-anchor"
+  'icon-allow-overlap': 'icon-allows-overlap',
+  'icon-image': 'icon-image-name',
+  'icon-ignore-placement': 'icon-ignores-placement',
+  'icon-keep-upright': 'keeps-icon-upright',
+  'icon-rotate': 'icon-rotation',
+  'icon-size': 'icon-scale',
+  'symbol-avoid-edges': 'symbol-avoids-edges',
+  'text-allow-overlap': 'text-allows-overlap',
+  'text-field': 'text',
+  'text-font': 'text-font-names',
+  'text-ignore-placement': 'text-ignores-placement',
+  'text-justify': 'text-justification',
+  'text-keep-upright': 'keeps-text-upright',
+  'text-max-angle': 'maximum-text-angle',
+  'text-max-width': 'maximum-text-width',
+  'text-rotate': 'text-rotation',
+  'text-size': 'text-font-size',
+  'circle-pitch-scale': 'circle-scale-alignment',
+  'circle-translate': 'circle-translation',
+  'circle-translate-anchor': 'circle-translation-anchor',
+  'fill-antialias': 'fill-antialiased',
+  'fill-translate': 'fill-translation',
+  'fill-translate-anchor': 'fill-translation-anchor',
+  'fill-extrusion-translate': 'fill-extrusion-translation',
+  'fill-extrusion-translate-anchor': 'fill-extrusion-translation-anchor',
+  'raster-brightness-min': 'minimum-raster-brightness',
+  'raster-brightness-max': 'maximum-raster-brightness',
+  'raster-hue-rotate': 'raster-hue-rotation',
+  'line-dasharray': 'line-dash-pattern',
+  'line-translate': 'line-translation',
+  'line-translate-anchor': 'line-translation-anchor',
+  'icon-translate': 'icon-translation',
+  'icon-translate-anchor': 'icon-translation-anchor',
+  'text-translate': 'text-translation',
+  'text-translate-anchor': 'text-translation-anchor',
 };
 
-global.camelCase = function (str, delimiter = '-') {
+global.getValue = function(value, defaultValue) {
+  if (!exists(value) || value === '') {
+    return defaultValue;
+  }
+  return value;
+};
+
+global.exists = function(value) {
+  return typeof value !== 'undefined' && value !== null;
+};
+
+global.camelCase = function(str, delimiter = '-') {
   const parts = str.split(delimiter);
-  return parts.map((part, index) => {
-    if (index === 0) {
-      return part;
-    }
-    return part.charAt(0).toUpperCase() + part.substring(1);
-  }).join('');
+  return parts
+    .map((part, index) => {
+      if (index === 0) {
+        return part;
+      }
+      return part.charAt(0).toUpperCase() + part.substring(1);
+    })
+    .join('');
 };
 
-global.pascelCase = function (str, delimiter = '-') {
+global.pascelCase = function(str, delimiter = '-') {
   const parts = str.split(delimiter);
-  return parts.map((part, index) => {
-    return part.charAt(0).toUpperCase() + part.substring(1);
-  }).join('');
+  return parts
+    .map((part, index) => {
+      return part.charAt(0).toUpperCase() + part.substring(1);
+    })
+    .join('');
 };
 
-global.setLayerMethodName = function (layer, platform) {
+global.setLayerMethodName = function(layer, platform) {
   if (platform === 'ios') {
     return `${camelCase(layer.name)}Layer`;
   }
   return `set${pascelCase(layer.name)}LayerStyle`;
 };
 
-global.getLayerType = function (layer, platform) {
+global.getLayerType = function(layer, platform) {
   const isIOS = platform === 'ios';
 
   switch (layer.name) {
@@ -83,22 +98,24 @@ global.getLayerType = function (layer, platform) {
     case 'light':
       return isIOS ? 'MGLLight' : 'Light';
     default:
-      throw new Error(`Is ${layer.name} a new layer? We should add support for it!`);
+      throw new Error(
+        `Is ${layer.name} a new layer? We should add support for it!`,
+      );
   }
-}
+};
 
-global.ifOrElseIf = function (index) {
+global.ifOrElseIf = function(index) {
   if (index === 0) {
     return 'if';
   }
   return '} else if';
 };
 
-global.iosStringArrayLiteral = function (arr) {
+global.iosStringArrayLiteral = function(arr) {
   return `@[@${arr.map((item) => `"${item}"`).join(', @')}]`;
-}
+};
 
-global.iosPropName = function (name) {
+global.iosPropName = function(name) {
   if (name.indexOf('visibility') !== -1) {
     return 'visible';
   }
@@ -106,16 +123,16 @@ global.iosPropName = function (name) {
     return iosPropNameOverrides[name];
   }
   return name;
-}
+};
 
-global.iosPropMethodName = function (layer, name) {
+global.iosPropMethodName = function(layer, name) {
   if (name.indexOf('Visibility') !== -1) {
     return pascelCase(layer.name) + 'StyleLayer' + name;
   }
   return name;
-}
+};
 
-global.androidInputType = function (type, value) {
+global.androidInputType = function(type, value) {
   if (type === 'array' && value) {
     return `${androidInputType(value)}[]`;
   }
@@ -130,9 +147,9 @@ global.androidInputType = function (type, value) {
     default:
       return 'String';
   }
-}
+};
 
-global.androidOutputType = function (type, value) {
+global.androidOutputType = function(type, value) {
   if (type === 'array' && value) {
     return `${androidOutputType(value)}[]`;
   }
@@ -147,9 +164,9 @@ global.androidOutputType = function (type, value) {
     default:
       return 'String';
   }
-}
+};
 
-global.androidGetConfigType = function (androidType) {
+global.androidGetConfigType = function(androidType) {
   switch (androidType) {
     case 'Integer':
       return 'styleValue.getInt(VALUE_KEY)';
@@ -164,9 +181,9 @@ global.androidGetConfigType = function (androidType) {
     default:
       return 'styleValue.getString(VALUE_KEY)';
   }
-}
+};
 
-global.jsStyleType = function (prop) {
+global.jsStyleType = function(prop) {
   if (prop.type === 'color') {
     return 'StyleTypes.Color';
   }
@@ -180,9 +197,9 @@ global.jsStyleType = function (prop) {
   }
 
   return 'StyleTypes.Constant';
-}
+};
 
-global.jsDocPropRequires = function (prop) {
+global.jsDocPropRequires = function(prop) {
   if (!prop.doc.requires) {
     return;
   }
@@ -190,14 +207,14 @@ global.jsDocPropRequires = function (prop) {
   let desc = '';
   for (let item of prop.doc.requires) {
     if (typeof item === 'string') {
-      desc += (item + ', ');
+      desc += item + ', ';
     }
   }
 
   return desc;
-}
+};
 
-global.jsDocReactProp = function (prop) {
+global.jsDocReactProp = function(prop) {
   let propTypes = [];
 
   if (prop.name.indexOf('Translate') !== -1) {
@@ -214,7 +231,7 @@ global.jsDocReactProp = function (prop) {
         propTypes.push('PropTypes.arrayOf(PropTypes.bool)');
         break;
       case 'string':
-        propTypes.push('PropTypes.arrayOf(PropTypes.string)')
+        propTypes.push('PropTypes.arrayOf(PropTypes.string)');
       default:
         propTypes.push('PropTypes.array');
     }
@@ -226,7 +243,10 @@ global.jsDocReactProp = function (prop) {
     propTypes.push('PropTypes.any');
   } else {
     // images can be required which result in a number
-    if (prop.name.indexOf('Image') !== -1 || prop.name.indexOf('Pattern') !== -1) {
+    if (
+      prop.name.indexOf('Image') !== -1 ||
+      prop.name.indexOf('Pattern') !== -1
+    ) {
       propTypes.push('PropTypes.number');
     }
     propTypes.push('PropTypes.string');
@@ -244,9 +264,9 @@ ${startAtSpace(2, '])')}`;
   } else {
     return propTypes[0];
   }
-}
+};
 
-global.startAtSpace = function (spaceCount, str) {
+global.startAtSpace = function(spaceCount, str) {
   let value = '';
 
   for (let i = 0; i < spaceCount; i++) {
@@ -254,56 +274,71 @@ global.startAtSpace = function (spaceCount, str) {
   }
 
   return `${value}${str}`;
-}
+};
 
-global.replaceNewLine = function (str) {
+global.replaceNewLine = function(str) {
   return str.replace(/\n/g, '<br/>');
-}
+};
 
-global.styleMarkdownTableRow = function (style) {
-  return `| \`${style.name}\` | \`${style.type}\` | \`${style.requires.join(', ') || 'none'}\` | \`${style.disabledBy.join(', ') || 'none'}\` | ${replaceNewLine(style.description)} |`;
-}
+global.styleMarkdownTableRow = function(style) {
+  return `| \`${style.name}\` | \`${style.type}\` | \`${style.requires.join(
+    ', ',
+  ) || 'none'}\` | \`${style.disabledBy.join(', ') ||
+    'none'}\` | ${replaceNewLine(style.description)} |`;
+};
 
-global.methodMarkdownTableRow = function (method) {
-  return method.params.map((param) => {
-    return `| \`${param.name}\` | \`${param.type.name}\` | \`${param.optional ? 'No' : 'Yes'}\` | ${replaceNewLine(param.description)} |`;
-  }).join('\n');
-}
+global.methodMarkdownTableRow = function(method) {
+  return method.params
+    .map((param) => {
+      return `| \`${param.name}\` | \`${param.type.name}\` | \`${
+        param.optional ? 'No' : 'Yes'
+      }\` | ${replaceNewLine(param.description)} |`;
+    })
+    .join('\n');
+};
 
-global.propMarkdownTableRows = function (component) {
-  return component.props.map((prop) => {
-    return `| ${prop.name} | \`${prop.type}\` | \`${prop.default}\` | \`${prop.required}\` | ${replaceNewLine(prop.description)} |`;
-  }).join('\n');
-}
+global.propMarkdownTableRows = function(component) {
+  return component.props
+    .map((prop) => {
+      return `| ${prop.name} | \`${prop.type}\` | \`${prop.default}\` | \`${
+        prop.required
+      }\` | ${replaceNewLine(prop.description)} |`;
+    })
+    .join('\n');
+};
 
-global.getMarkdownMethodSignature = function (method) {
-  const params = method.params.map((param, i) => {
-    const isOptional = param.optional;
+global.getMarkdownMethodSignature = function(method) {
+  const params = method.params
+    .map((param, i) => {
+      const isOptional = param.optional;
 
-    let name = '';
+      let name = '';
 
-    if (i !== 0) {
-      name += ', ';
-    }
+      if (i !== 0) {
+        name += ', ';
+      }
 
-    name += param.name;
-    return isOptional ? `[${name}]` : name;
-  }).join('');
+      name += param.name;
+      return isOptional ? `[${name}]` : name;
+    })
+    .join('');
 
   return `${method.name}(${params})`;
-}
+};
 
-global.getMarkdownMethodExamples = function (method) {
-  return method.examples.map((example) => {
-    return `
+global.getMarkdownMethodExamples = function(method) {
+  return method.examples
+    .map((example) => {
+      return `
 
 \`\`\`javascript
 ${example.trim()}
 \`\`\`
 
 `;
-  }).join('');
-}
+    })
+    .join('');
+};
 
 Object.keys(iosSpecOverrides).forEach((propName) => {
   const camelCasePropName = camelCase(propName);

@@ -17,17 +17,263 @@
 
 
 ### styles
-| Name | Type | Requires | Disabled By |  Description |
-| ---- | :--: | :------: | :---------: | :----------: |
-| `visibility` | `enum` | `none` | `none` | Whether this layer is displayed. |
-| `circleRadius` | `number` | `none` | `none` | Circle radius. |
-| `circleColor` | `color` | `none` | `none` | The fill color of the circle. |
-| `circleBlur` | `number` | `none` | `none` | Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. |
-| `circleOpacity` | `number` | `none` | `none` | The opacity at which the circle will be drawn. |
-| `circleTranslate` | `array` | `none` | `none` | The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. |
-| `circleTranslateAnchor` | `enum` | `circleTranslate` | `none` | Controls the frame of reference for `circleTranslate`. |
-| `circlePitchScale` | `enum` | `none` | `none` | Controls the scaling behavior of the circle when the map is pitched. |
-| `circlePitchAlignment` | `enum` | `none` | `none` | Orientation of circle when map is pitched. |
-| `circleStrokeWidth` | `number` | `none` | `none` | The width of the circle's stroke. Strokes are placed outside of the `circleRadius`. |
-| `circleStrokeColor` | `color` | `none` | `none` | The stroke color of the circle. |
-| `circleStrokeOpacity` | `number` | `none` | `none` | The opacity of the circle's stroke. |
+___
+
+#### Name
+visibility
+
+#### Description
+Whether this layer is displayed.
+
+#### Type
+enum
+
+#### Default Value
+<span>visible</span>
+
+#### Supported Values
+**visible** - The layer is shown.<br />
+**none** - The layer is not shown.<br />
+
+
+
+___
+
+#### Name
+circleRadius
+
+#### Description
+Circle radius.
+
+#### Type
+number
+
+#### Default Value
+<span>5</span>
+
+#### Units
+pixels
+
+#### Minimum
+0
+
+
+#### Supported Style Functions
+camera, source, composite
+
+___
+
+#### Name
+circleColor
+
+#### Description
+The fill color of the circle.
+
+#### Type
+color
+
+#### Default Value
+<span>#000000</span>
+
+
+#### Supported Style Functions
+camera, source, composite
+
+___
+
+#### Name
+circleBlur
+
+#### Description
+Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
+
+#### Type
+number
+
+#### Default Value
+<span>0</span>
+
+
+#### Supported Style Functions
+camera, source, composite
+
+___
+
+#### Name
+circleOpacity
+
+#### Description
+The opacity at which the circle will be drawn.
+
+#### Type
+number
+
+#### Default Value
+<span>1</span>
+
+#### Minimum
+0
+
+
+#### Maximum
+1
+
+#### Supported Style Functions
+camera, source, composite
+
+___
+
+#### Name
+circleTranslate
+
+#### Description
+The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+
+#### Type
+array&lt;number&gt;
+
+#### Default Value
+<span>0,0</span>
+
+#### Units
+pixels
+
+
+#### Supported Style Functions
+camera
+
+___
+
+#### Name
+circleTranslateAnchor
+
+#### Description
+Controls the frame of reference for `circleTranslate`.
+
+#### Type
+enum
+
+#### Default Value
+<span>map</span>
+
+#### Supported Values
+**map** - The circle is translated relative to the map.<br />
+**viewport** - The circle is translated relative to the viewport.<br />
+
+
+#### Requires
+circleTranslate
+
+#### Supported Style Functions
+camera
+
+___
+
+#### Name
+circlePitchScale
+
+#### Description
+Controls the scaling behavior of the circle when the map is pitched.
+
+#### Type
+enum
+
+#### Default Value
+<span>map</span>
+
+#### Supported Values
+**map** - Circles are scaled according to their apparent distance to the camera.<br />
+**viewport** - Circles are not scaled.<br />
+
+
+#### Supported Style Functions
+camera
+
+___
+
+#### Name
+circlePitchAlignment
+
+#### Description
+Orientation of circle when map is pitched.
+
+#### Type
+enum
+
+#### Default Value
+<span>viewport</span>
+
+#### Supported Values
+**map** - The circle is aligned to the plane of the map.<br />
+**viewport** - The circle is aligned to the plane of the viewport.<br />
+
+
+#### Supported Style Functions
+camera
+
+___
+
+#### Name
+circleStrokeWidth
+
+#### Description
+The width of the circle's stroke. Strokes are placed outside of the `circleRadius`.
+
+#### Type
+number
+
+#### Default Value
+<span>0</span>
+
+#### Units
+pixels
+
+#### Minimum
+0
+
+
+#### Supported Style Functions
+camera, source, composite
+
+___
+
+#### Name
+circleStrokeColor
+
+#### Description
+The stroke color of the circle.
+
+#### Type
+color
+
+#### Default Value
+<span>#000000</span>
+
+
+#### Supported Style Functions
+camera, source, composite
+
+___
+
+#### Name
+circleStrokeOpacity
+
+#### Description
+The opacity of the circle's stroke.
+
+#### Type
+number
+
+#### Default Value
+<span>1</span>
+
+#### Minimum
+0
+
+
+#### Maximum
+1
+
+#### Supported Style Functions
+camera, source, composite
+

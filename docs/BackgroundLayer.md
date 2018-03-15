@@ -17,9 +17,86 @@
 
 
 ### styles
-| Name | Type | Requires | Disabled By |  Description |
-| ---- | :--: | :------: | :---------: | :----------: |
-| `visibility` | `enum` | `none` | `none` | Whether this layer is displayed. |
-| `backgroundColor` | `color` | `none` | `backgroundPattern` | The color with which the background will be drawn. |
-| `backgroundPattern` | `string` | `none` | `none` | Name of image in sprite to use for drawing an image background. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). |
-| `backgroundOpacity` | `number` | `none` | `none` | The opacity at which the background will be drawn. |
+___
+
+#### Name
+visibility
+
+#### Description
+Whether this layer is displayed.
+
+#### Type
+enum
+
+#### Default Value
+<span>visible</span>
+
+#### Supported Values
+**visible** - The layer is shown.<br />
+**none** - The layer is not shown.<br />
+
+
+
+___
+
+#### Name
+backgroundColor
+
+#### Description
+The color with which the background will be drawn.
+
+#### Type
+color
+
+#### Default Value
+<span>#000000</span>
+
+
+#### Disabled By
+backgroundPattern
+
+#### Supported Style Functions
+camera
+
+___
+
+#### Name
+backgroundPattern
+
+#### Description
+Name of image in sprite to use for drawing an image background. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).
+
+#### Type
+string
+
+#### Default Value
+<span></span>
+
+
+#### Supported Style Functions
+camera
+
+___
+
+#### Name
+backgroundOpacity
+
+#### Description
+The opacity at which the background will be drawn.
+
+#### Type
+number
+
+#### Default Value
+<span>1</span>
+
+#### Minimum
+0
+
+
+#### Maximum
+1
+
+#### Supported Style Functions
+camera
+
