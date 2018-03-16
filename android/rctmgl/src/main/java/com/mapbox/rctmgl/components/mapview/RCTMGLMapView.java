@@ -189,6 +189,8 @@ public class RCTMGLMapView extends MapView implements
         mHandler = new Handler();
 
         setLifecycleListeners();
+
+        addOnMapChangedListener(this);
     }
 
     @Override
@@ -359,8 +361,6 @@ public class RCTMGLMapView extends MapView implements
 
         mMap.setOnMapClickListener(this);
         mMap.setOnMapLongClickListener(this);
-
-        addOnMapChangedListener(this);
 
         // in case props were set before the map was ready lets set them
         updateInsets();
