@@ -16,16 +16,16 @@
 | style | `union` | `none` | `false` | Customizable style attributes |
 
 
-### [styles](#FillExtrusionLayer-styles)
+### styles
 
-* <a href="#visibility">visibility</a><br/>
-* <a href="#fillExtrusionOpacity">fillExtrusionOpacity</a><br/>
-* <a href="#fillExtrusionColor">fillExtrusionColor</a><br/>
-* <a href="#fillExtrusionTranslate">fillExtrusionTranslate</a><br/>
-* <a href="#fillExtrusionTranslateAnchor">fillExtrusionTranslateAnchor</a><br/>
-* <a href="#fillExtrusionPattern">fillExtrusionPattern</a><br/>
-* <a href="#fillExtrusionHeight">fillExtrusionHeight</a><br/>
-* <a href="#fillExtrusionBase">fillExtrusionBase</a><br/>
+* <a href="#name">visibility</a><br/>
+* <a href="#name-1">fillExtrusionOpacity</a><br/>
+* <a href="#name-2">fillExtrusionColor</a><br/>
+* <a href="#name-3">fillExtrusionTranslate</a><br/>
+* <a href="#name-4">fillExtrusionTranslateAnchor</a><br/>
+* <a href="#name-5">fillExtrusionPattern</a><br/>
+* <a href="#name-6">fillExtrusionHeight</a><br/>
+* <a href="#name-7">fillExtrusionBase</a><br/>
 
 ___
 

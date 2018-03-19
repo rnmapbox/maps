@@ -16,12 +16,12 @@
 | style | `union` | `none` | `false` | Customizable style attributes |
 
 
-### [styles](#BackgroundLayer-styles)
+### styles
 
-* <a href="#visibility">visibility</a><br/>
-* <a href="#backgroundColor">backgroundColor</a><br/>
-* <a href="#backgroundPattern">backgroundPattern</a><br/>
-* <a href="#backgroundOpacity">backgroundOpacity</a><br/>
+* <a href="#name">visibility</a><br/>
+* <a href="#name-1">backgroundColor</a><br/>
+* <a href="#name-2">backgroundPattern</a><br/>
+* <a href="#name-3">backgroundOpacity</a><br/>
 
 ___
 

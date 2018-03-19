@@ -16,16 +16,16 @@
 | style | `union` | `none` | `false` | Customizable style attributes |
 
 
-### [styles](#RasterLayer-styles)
+### styles
 
-* <a href="#visibility">visibility</a><br/>
-* <a href="#rasterOpacity">rasterOpacity</a><br/>
-* <a href="#rasterHueRotate">rasterHueRotate</a><br/>
-* <a href="#rasterBrightnessMin">rasterBrightnessMin</a><br/>
-* <a href="#rasterBrightnessMax">rasterBrightnessMax</a><br/>
-* <a href="#rasterSaturation">rasterSaturation</a><br/>
-* <a href="#rasterContrast">rasterContrast</a><br/>
-* <a href="#rasterFadeDuration">rasterFadeDuration</a><br/>
+* <a href="#name">visibility</a><br/>
+* <a href="#name-1">rasterOpacity</a><br/>
+* <a href="#name-2">rasterHueRotate</a><br/>
+* <a href="#name-3">rasterBrightnessMin</a><br/>
+* <a href="#name-4">rasterBrightnessMax</a><br/>
+* <a href="#name-5">rasterSaturation</a><br/>
+* <a href="#name-6">rasterContrast</a><br/>
+* <a href="#name-7">rasterFadeDuration</a><br/>
 
 ___
 

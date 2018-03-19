@@ -16,20 +16,20 @@
 | style | `union` | `none` | `false` | Customizable style attributes |
 
 
-### [styles](#CircleLayer-styles)
+### styles
 
-* <a href="#visibility">visibility</a><br/>
-* <a href="#circleRadius">circleRadius</a><br/>
-* <a href="#circleColor">circleColor</a><br/>
-* <a href="#circleBlur">circleBlur</a><br/>
-* <a href="#circleOpacity">circleOpacity</a><br/>
-* <a href="#circleTranslate">circleTranslate</a><br/>
-* <a href="#circleTranslateAnchor">circleTranslateAnchor</a><br/>
-* <a href="#circlePitchScale">circlePitchScale</a><br/>
-* <a href="#circlePitchAlignment">circlePitchAlignment</a><br/>
-* <a href="#circleStrokeWidth">circleStrokeWidth</a><br/>
-* <a href="#circleStrokeColor">circleStrokeColor</a><br/>
-* <a href="#circleStrokeOpacity">circleStrokeOpacity</a><br/>
+* <a href="#name">visibility</a><br/>
+* <a href="#name-1">circleRadius</a><br/>
+* <a href="#name-2">circleColor</a><br/>
+* <a href="#name-3">circleBlur</a><br/>
+* <a href="#name-4">circleOpacity</a><br/>
+* <a href="#name-5">circleTranslate</a><br/>
+* <a href="#name-6">circleTranslateAnchor</a><br/>
+* <a href="#name-7">circlePitchScale</a><br/>
+* <a href="#name-8">circlePitchAlignment</a><br/>
+* <a href="#name-9">circleStrokeWidth</a><br/>
+* <a href="#name-10">circleStrokeColor</a><br/>
+* <a href="#name-11">circleStrokeOpacity</a><br/>
 
 ___
 

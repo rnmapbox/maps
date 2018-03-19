@@ -16,23 +16,23 @@
 | style | `union` | `none` | `false` | Customizable style attributes |
 
 
-### [styles](#LineLayer-styles)
+### styles
 
-* <a href="#lineCap">lineCap</a><br/>
-* <a href="#lineJoin">lineJoin</a><br/>
-* <a href="#lineMiterLimit">lineMiterLimit</a><br/>
-* <a href="#lineRoundLimit">lineRoundLimit</a><br/>
-* <a href="#visibility">visibility</a><br/>
-* <a href="#lineOpacity">lineOpacity</a><br/>
-* <a href="#lineColor">lineColor</a><br/>
-* <a href="#lineTranslate">lineTranslate</a><br/>
-* <a href="#lineTranslateAnchor">lineTranslateAnchor</a><br/>
-* <a href="#lineWidth">lineWidth</a><br/>
-* <a href="#lineGapWidth">lineGapWidth</a><br/>
-* <a href="#lineOffset">lineOffset</a><br/>
-* <a href="#lineBlur">lineBlur</a><br/>
-* <a href="#lineDasharray">lineDasharray</a><br/>
-* <a href="#linePattern">linePattern</a><br/>
+* <a href="#name">lineCap</a><br/>
+* <a href="#name-1">lineJoin</a><br/>
+* <a href="#name-2">lineMiterLimit</a><br/>
+* <a href="#name-3">lineRoundLimit</a><br/>
+* <a href="#name-4">visibility</a><br/>
+* <a href="#name-5">lineOpacity</a><br/>
+* <a href="#name-6">lineColor</a><br/>
+* <a href="#name-7">lineTranslate</a><br/>
+* <a href="#name-8">lineTranslateAnchor</a><br/>
+* <a href="#name-9">lineWidth</a><br/>
+* <a href="#name-10">lineGapWidth</a><br/>
+* <a href="#name-11">lineOffset</a><br/>
+* <a href="#name-12">lineBlur</a><br/>
+* <a href="#name-13">lineDasharray</a><br/>
+* <a href="#name-14">linePattern</a><br/>
 
 ___
 

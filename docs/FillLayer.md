@@ -16,16 +16,16 @@
 | style | `union` | `none` | `false` | Customizable style attributes |
 
 
-### [styles](#FillLayer-styles)
+### styles
 
-* <a href="#visibility">visibility</a><br/>
-* <a href="#fillAntialias">fillAntialias</a><br/>
-* <a href="#fillOpacity">fillOpacity</a><br/>
-* <a href="#fillColor">fillColor</a><br/>
-* <a href="#fillOutlineColor">fillOutlineColor</a><br/>
-* <a href="#fillTranslate">fillTranslate</a><br/>
-* <a href="#fillTranslateAnchor">fillTranslateAnchor</a><br/>
-* <a href="#fillPattern">fillPattern</a><br/>
+* <a href="#name">visibility</a><br/>
+* <a href="#name-1">fillAntialias</a><br/>
+* <a href="#name-2">fillOpacity</a><br/>
+* <a href="#name-3">fillColor</a><br/>
+* <a href="#name-4">fillOutlineColor</a><br/>
+* <a href="#name-5">fillTranslate</a><br/>
+* <a href="#name-6">fillTranslateAnchor</a><br/>
+* <a href="#name-7">fillPattern</a><br/>
 
 ___
 

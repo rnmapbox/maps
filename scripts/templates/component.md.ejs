@@ -28,10 +28,13 @@
 <%_ } _%>
 
 <%_ if (component.styles && component.styles.length) { _%>
-### [styles](#<%- component.name -%>-styles)
+### styles
 
-<%_ for (let style of component.styles) { _%>
-* <a href="#<%- style.name -%>"><%- style.name %></a><br/>
+<%_ for (let i = 0; i < component.styles.length; i++) { _%>
+<%
+const style = component.styles[i];
+-%>
+* <a href="#name<%- i > 0 ? '-' + i : '' -%>"><%- style.name %></a><br/>
 <%_ } _%>
 
 <%_ for (let style of component.styles) { _%>
