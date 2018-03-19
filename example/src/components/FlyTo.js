@@ -23,8 +23,8 @@ const layerStyles = MapboxGL.StyleSheet.create({
     lineColor: 'blue',
     lineWidth: 2,
     lineOpacity: 0.5,
-    lineJoin: MapboxGL.LineJoin.Round,
-    lineCap: MapboxGL.LineCap.Round,
+    lineJoin: 'round',
+    lineCap: 'round',
     lineDasharray: [2, 2],
   },
 });

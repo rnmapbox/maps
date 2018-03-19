@@ -79,10 +79,13 @@
     ]
   },
   "lint-staged": {
-    "*.js": [
-      "eslint ./javascript/**/*.js  ./example/src/**/*.js ./__tests__/**/*.js --fix",
-      "git add"
-    ]
+    "linters": {
+      "*.js": [
+        "eslint ./javascript/**/*.js  ./example/src/**/*.js ./__tests__/**/*.js --fix",
+        "git add"
+      ]
+    },
+    "ignore": ["**/scripts/**/*.js"]
   },
   "rnpm": {
     "android": {

@@ -9,30 +9,69 @@ const DocJSONBuilder = require('./autogenHelpers/DocJSONBuilder');
 const MarkdownBuilder = require('./autogenHelpers/MarkdownBuilder');
 
 if (!styleSpecJSON) {
-  console.log('Could not find style spec, try running "yarn run fetch:style:spec"');
+  console.log(
+    'Could not find style spec, try running "yarn run fetch:style:spec"',
+  );
   process.exit(1);
 }
 
 const layers = [];
-const androidVersion = "5.2.0";
-const iosVersion = "3.7.0";
+const androidVersion = '5.2.0';
+const iosVersion = '3.7.0';
 
 const TMPL_PATH = path.join(__dirname, 'templates');
-const IOS_OUTPUT_PATH = path.join(__dirname, '..', 'example', 'node_modules', '@mapbox', 'react-native-mapbox-gl', 'ios', 'RCTMGL');
-const ANDROID_OUTPUT_PATH = path.join(__dirname, '..', 'example', 'node_modules', '@mapbox', 'react-native-mapbox-gl', 'android', 'rctmgl', 'src', 'main', 'java', 'com', 'mapbox', 'rctmgl', 'components', 'styles');
-const JS_OUTPUT_PATH = path.join(__dirname, '..', 'example', 'node_modules', '@mapbox', 'react-native-mapbox-gl', 'javascript', 'utils');
+const IOS_OUTPUT_PATH = path.join(
+  __dirname,
+  '..',
+  'example',
+  'node_modules',
+  '@mapbox',
+  'react-native-mapbox-gl',
+  'ios',
+  'RCTMGL',
+);
+const ANDROID_OUTPUT_PATH = path.join(
+  __dirname,
+  '..',
+  'example',
+  'node_modules',
+  '@mapbox',
+  'react-native-mapbox-gl',
+  'android',
+  'rctmgl',
+  'src',
+  'main',
+  'java',
+  'com',
+  'mapbox',
+  'rctmgl',
+  'components',
+  'styles',
+);
+const JS_OUTPUT_PATH = path.join(
+  __dirname,
+  '..',
+  'example',
+  'node_modules',
+  '@mapbox',
+  'react-native-mapbox-gl',
+  'javascript',
+  'utils',
+);
 
-getSupportedLayers(Object.keys(styleSpecJSON.layer.type.values)).forEach((layerName) => {
-  layers.push({
-    name: layerName,
-    properties: getPropertiesForLayer(layerName),
-  });
-});
+getSupportedLayers(Object.keys(styleSpecJSON.layer.type.values)).forEach(
+  (layerName) => {
+    layers.push({
+      name: layerName,
+      properties: getPropertiesForLayer(layerName),
+    });
+  },
+);
 
 // add light as a layer
-layers.push({ name: 'light', properties: getPropertiesForLight() })
+layers.push({ name: 'light', properties: getPropertiesForLight() });
 
-function getPropertiesForLight () {
+function getPropertiesForLight() {
   const lightAttributes = styleSpecJSON.light;
 
   const lightProps = getSupportedProperties(lightAttributes).map((attrName) => {
@@ -44,7 +83,7 @@ function getPropertiesForLight () {
   return lightProps;
 }
 
-function getPropertiesForLayer (layerName) {
+function getPropertiesForLayer(layerName) {
   const paintAttributes = styleSpecJSON[`paint_${layerName}`];
   const layoutAttributes = styleSpecJSON[`layout_${layerName}`];
 
@@ -59,21 +98,32 @@ function getPropertiesForLayer (layerName) {
     return prop;
   });
 
-  const layoutProps = getSupportedProperties(layoutAttributes).map((attrName) => {
-    let prop = buildProperties(layoutAttributes, attrName);
+  const layoutProps = getSupportedProperties(layoutAttributes).map(
+    (attrName) => {
+      let prop = buildProperties(layoutAttributes, attrName);
 
-    // overrides
-    if (['line-join', 'text-max-width', 'text-letter-spacing', 'text-anchor', 'text-justify', 'text-font'].includes(attrName)) {
-      prop.allowedFunctionTypes = ['camera'];
-    }
+      // overrides
+      if (
+        [
+          'line-join',
+          'text-max-width',
+          'text-letter-spacing',
+          'text-anchor',
+          'text-justify',
+          'text-font',
+        ].includes(attrName)
+      ) {
+        prop.allowedFunctionTypes = ['camera'];
+      }
 
-    return prop;
-  });
+      return prop;
+    },
+  );
 
   return layoutProps.concat(paintProps);
 }
 
-function getSupportedLayers (layerNames) {
+function getSupportedLayers(layerNames) {
   const layerMap = styleSpecJSON.layer.type.values;
 
   const supportedLayers = [];
@@ -89,14 +139,20 @@ function getSupportedLayers (layerNames) {
   return supportedLayers;
 }
 
-function getSupportedProperties (attributes) {
-  return Object.keys(attributes).filter((attrName) => isAttrSupported(attributes[attrName]));
+function getSupportedProperties(attributes) {
+  return Object.keys(attributes).filter((attrName) =>
+    isAttrSupported(attributes[attrName]),
+  );
 }
 
-function buildProperties (attributes, attrName) {
+function buildProperties(attributes, attrName) {
   return {
     name: camelCase(attrName),
     doc: {
+      default: attributes[attrName].default,
+      minimum: attributes[attrName].minimum,
+      maximum: attributes[attrName].maximum,
+      units: attributes[attrName].units,
       description: formatDescription(attributes[attrName].doc),
       requires: getRequires(attributes[attrName].requires),
       disabledBy: getDisables(attributes[attrName].requires),
@@ -112,7 +168,7 @@ function buildProperties (attributes, attrName) {
   };
 }
 
-function formatDescription (description) {
+function formatDescription(description) {
   let words = description.split(' ');
 
   for (let i = 0; i < words.length; i++) {
@@ -127,7 +183,7 @@ function formatDescription (description) {
   return formattedDescription;
 }
 
-function getRequires (requiredItems) {
+function getRequires(requiredItems) {
   let items = [];
 
   if (!requiredItems) {
@@ -143,7 +199,7 @@ function getRequires (requiredItems) {
   return items;
 }
 
-function getDisables (disabledItems) {
+function getDisables(disabledItems) {
   let items = [];
 
   if (!disabledItems) {
@@ -159,20 +215,23 @@ function getDisables (disabledItems) {
   return items;
 }
 
-function isImage (attrName) {
-  return attrName.toLowerCase().indexOf('pattern') !== -1 || attrName.toLowerCase().indexOf('image') !== -1;
+function isImage(attrName) {
+  return (
+    attrName.toLowerCase().indexOf('pattern') !== -1 ||
+    attrName.toLowerCase().indexOf('image') !== -1
+  );
 }
 
-function isTranslate (attrName) {
+function isTranslate(attrName) {
   return attrName.toLowerCase().indexOf('translate') !== -1;
 }
 
-function isAttrSupported (attr) {
+function isAttrSupported(attr) {
   const support = getAttributeSupport(attr['sdk-support']);
   return support.basic.android && support.basic.ios;
 }
 
-function getAttributeSupport (sdkSupport) {
+function getAttributeSupport(sdkSupport) {
   let support = {
     basic: { android: false, ios: false },
     data: { android: false, ios: false },
@@ -188,7 +247,10 @@ function getAttributeSupport (sdkSupport) {
 
   const dataDrivenSupport = sdkSupport['data-driven styling'];
   if (dataDrivenSupport && dataDrivenSupport.android) {
-    support.data.android = isVersionGTE(androidVersion, dataDrivenSupport.android);
+    support.data.android = isVersionGTE(
+      androidVersion,
+      dataDrivenSupport.android,
+    );
   }
   if (dataDrivenSupport && dataDrivenSupport.ios) {
     support.data.ios = isVersionGTE(iosVersion, dataDrivenSupport.ios);
@@ -208,7 +270,7 @@ function isVersionGTE(version, otherVersion) {
   return v >= ov;
 }
 
-function getAllowedFunctionTypes (paintAttr) {
+function getAllowedFunctionTypes(paintAttr) {
   const allowedFunctionTypes = [];
 
   if (paintAttr['zoom-function']) {
@@ -240,12 +302,12 @@ function getAllowedFunctionTypes (paintAttr) {
   {
     input: path.join(TMPL_PATH, 'styleMap.js.ejs'),
     output: path.join(JS_OUTPUT_PATH, 'styleMap.js'),
-  }
+  },
 ].forEach(({ input, output }) => {
   console.log(`Generating ${output.split('/').pop()}`);
   const tmpl = ejs.compile(fs.readFileSync(input, 'utf8'), { strict: true });
   fs.writeFileSync(output, tmpl({ layers: layers }));
-})
+});
 
 // autogenerate docs
 const docBuilder = new DocJSONBuilder(layers);

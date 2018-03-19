@@ -14,11 +14,11 @@ const layerStyles = MapboxGL.StyleSheet.create({
     circleStrokeWidth: 2,
     circleStrokeColor: 'white',
     circleRadius: 5,
-    circlePitchAlignment: MapboxGL.CirclePitchAlignment.Map,
+    circlePitchAlignment: 'map',
   },
 
   clusteredPoints: {
-    circlePitchAlignment: MapboxGL.CirclePitchAlignment.Map,
+    circlePitchAlignment: 'map',
     circleColor: MapboxGL.StyleSheet.source(
       [
         [25, 'yellow'],
@@ -46,7 +46,7 @@ const layerStyles = MapboxGL.StyleSheet.create({
   clusterCount: {
     textField: '{point_count}',
     textSize: 12,
-    textPitchAlignment: MapboxGL.TextPitchAlignment.Map,
+    textPitchAlignment: 'map',
   },
 });
 
