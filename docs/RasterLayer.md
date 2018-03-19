@@ -16,20 +16,29 @@
 | style | `union` | `none` | `false` | Customizable style attributes |
 
 
-### styles
+### [styles](#RasterLayer-styles)
+
+* <a href="#visibility">visibility</a><br/>
+* <a href="#rasterOpacity">rasterOpacity</a><br/>
+* <a href="#rasterHueRotate">rasterHueRotate</a><br/>
+* <a href="#rasterBrightnessMin">rasterBrightnessMin</a><br/>
+* <a href="#rasterBrightnessMax">rasterBrightnessMax</a><br/>
+* <a href="#rasterSaturation">rasterSaturation</a><br/>
+* <a href="#rasterContrast">rasterContrast</a><br/>
+* <a href="#rasterFadeDuration">rasterFadeDuration</a><br/>
+
 ___
 
 #### Name
-visibility
+`visibility`
 
 #### Description
 Whether this layer is displayed.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>visible</span>
+`visible`
 
 #### Supported Values
 **visible** - The layer is shown.<br />
@@ -40,165 +49,158 @@ enum
 ___
 
 #### Name
-rasterOpacity
+`rasterOpacity`
 
 #### Description
 The opacity at which the image will be drawn.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>1</span>
+`1`
 
 #### Minimum
-0
+`0`
 
 
 #### Maximum
-1
+`1`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-rasterHueRotate
+`rasterHueRotate`
 
 #### Description
 Rotates hues around the color wheel.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>0</span>
+`0`
 
 #### Units
-degrees
+`degrees`
 
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-rasterBrightnessMin
+`rasterBrightnessMin`
 
 #### Description
 Increase or reduce the brightness of the image. The value is the minimum brightness.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>0</span>
+`0`
 
 #### Minimum
-0
+`0`
 
 
 #### Maximum
-1
+`1`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-rasterBrightnessMax
+`rasterBrightnessMax`
 
 #### Description
 Increase or reduce the brightness of the image. The value is the maximum brightness.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>1</span>
+`1`
 
 #### Minimum
-0
+`0`
 
 
 #### Maximum
-1
+`1`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-rasterSaturation
+`rasterSaturation`
 
 #### Description
 Increase or reduce the saturation of the image.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>0</span>
+`0`
 
 #### Minimum
--1
+`-1`
 
 
 #### Maximum
-1
+`1`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-rasterContrast
+`rasterContrast`
 
 #### Description
 Increase or reduce the contrast of the image.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>0</span>
+`0`
 
 #### Minimum
--1
+`-1`
 
 
 #### Maximum
-1
+`1`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-rasterFadeDuration
+`rasterFadeDuration`
 
 #### Description
 Fade duration when a new tile is added.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>300</span>
+`300`
 
 #### Units
-milliseconds
+`milliseconds`
 
 #### Minimum
-0
+`0`
 
 
 #### Supported Style Functions
-camera
+`camera`
 

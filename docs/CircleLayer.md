@@ -16,20 +16,33 @@
 | style | `union` | `none` | `false` | Customizable style attributes |
 
 
-### styles
+### [styles](#CircleLayer-styles)
+
+* <a href="#visibility">visibility</a><br/>
+* <a href="#circleRadius">circleRadius</a><br/>
+* <a href="#circleColor">circleColor</a><br/>
+* <a href="#circleBlur">circleBlur</a><br/>
+* <a href="#circleOpacity">circleOpacity</a><br/>
+* <a href="#circleTranslate">circleTranslate</a><br/>
+* <a href="#circleTranslateAnchor">circleTranslateAnchor</a><br/>
+* <a href="#circlePitchScale">circlePitchScale</a><br/>
+* <a href="#circlePitchAlignment">circlePitchAlignment</a><br/>
+* <a href="#circleStrokeWidth">circleStrokeWidth</a><br/>
+* <a href="#circleStrokeColor">circleStrokeColor</a><br/>
+* <a href="#circleStrokeOpacity">circleStrokeOpacity</a><br/>
+
 ___
 
 #### Name
-visibility
+`visibility`
 
 #### Description
 Whether this layer is displayed.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>visible</span>
+`visible`
 
 #### Supported Values
 **visible** - The layer is shown.<br />
@@ -40,121 +53,115 @@ enum
 ___
 
 #### Name
-circleRadius
+`circleRadius`
 
 #### Description
 Circle radius.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>5</span>
+`5`
 
 #### Units
-pixels
+`pixels`
 
 #### Minimum
-0
+`0`
 
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-circleColor
+`circleColor`
 
 #### Description
 The fill color of the circle.
 
 #### Type
-color
-
+`color`
 #### Default Value
-<span>#000000</span>
+`#000000`
 
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-circleBlur
+`circleBlur`
 
 #### Description
 Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>0</span>
+`0`
 
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-circleOpacity
+`circleOpacity`
 
 #### Description
 The opacity at which the circle will be drawn.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>1</span>
+`1`
 
 #### Minimum
-0
+`0`
 
 
 #### Maximum
-1
+`1`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-circleTranslate
+`circleTranslate`
 
 #### Description
 The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
 
 #### Type
-array&lt;number&gt;
-
+`array<number>`
 #### Default Value
-<span>0,0</span>
+`[0,0]`
 
 #### Units
-pixels
+`pixels`
 
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-circleTranslateAnchor
+`circleTranslateAnchor`
 
 #### Description
 Controls the frame of reference for `circleTranslate`.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>map</span>
+`map`
 
 #### Supported Values
 **map** - The circle is translated relative to the map.<br />
@@ -162,24 +169,23 @@ enum
 
 
 #### Requires
-circleTranslate
+`circleTranslate`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-circlePitchScale
+`circlePitchScale`
 
 #### Description
 Controls the scaling behavior of the circle when the map is pitched.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>map</span>
+`map`
 
 #### Supported Values
 **map** - Circles are scaled according to their apparent distance to the camera.<br />
@@ -187,21 +193,20 @@ enum
 
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-circlePitchAlignment
+`circlePitchAlignment`
 
 #### Description
 Orientation of circle when map is pitched.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>viewport</span>
+`viewport`
 
 #### Supported Values
 **map** - The circle is aligned to the plane of the map.<br />
@@ -209,71 +214,68 @@ enum
 
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-circleStrokeWidth
+`circleStrokeWidth`
 
 #### Description
 The width of the circle's stroke. Strokes are placed outside of the `circleRadius`.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>0</span>
+`0`
 
 #### Units
-pixels
+`pixels`
 
 #### Minimum
-0
+`0`
 
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-circleStrokeColor
+`circleStrokeColor`
 
 #### Description
 The stroke color of the circle.
 
 #### Type
-color
-
+`color`
 #### Default Value
-<span>#000000</span>
+`#000000`
 
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-circleStrokeOpacity
+`circleStrokeOpacity`
 
 #### Description
 The opacity of the circle's stroke.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>1</span>
+`1`
 
 #### Minimum
-0
+`0`
 
 
 #### Maximum
-1
+`1`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 

@@ -16,20 +16,29 @@
 | style | `union` | `none` | `false` | Customizable style attributes |
 
 
-### styles
+### [styles](#FillExtrusionLayer-styles)
+
+* <a href="#visibility">visibility</a><br/>
+* <a href="#fillExtrusionOpacity">fillExtrusionOpacity</a><br/>
+* <a href="#fillExtrusionColor">fillExtrusionColor</a><br/>
+* <a href="#fillExtrusionTranslate">fillExtrusionTranslate</a><br/>
+* <a href="#fillExtrusionTranslateAnchor">fillExtrusionTranslateAnchor</a><br/>
+* <a href="#fillExtrusionPattern">fillExtrusionPattern</a><br/>
+* <a href="#fillExtrusionHeight">fillExtrusionHeight</a><br/>
+* <a href="#fillExtrusionBase">fillExtrusionBase</a><br/>
+
 ___
 
 #### Name
-visibility
+`visibility`
 
 #### Description
 Whether this layer is displayed.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>visible</span>
+`visible`
 
 #### Supported Values
 **visible** - The layer is shown.<br />
@@ -40,82 +49,78 @@ enum
 ___
 
 #### Name
-fillExtrusionOpacity
+`fillExtrusionOpacity`
 
 #### Description
 The opacity of the entire fill extrusion layer. This is rendered on a perLayer, not perFeature, basis, and dataDriven styling is not available.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>1</span>
+`1`
 
 #### Minimum
-0
+`0`
 
 
 #### Maximum
-1
+`1`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-fillExtrusionColor
+`fillExtrusionColor`
 
 #### Description
 The base color of the extruded fill. The extrusion's surfaces will be shaded differently based on this color in combination with the root `light` settings. If this color is specified as `rgba` with an alpha component, the alpha component will be ignored; use `fillExtrusionOpacity` to set layer opacity.
 
 #### Type
-color
-
+`color`
 #### Default Value
-<span>#000000</span>
+`#000000`
 
 
 #### Disabled By
-fillExtrusionPattern
+`fillExtrusionPattern`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-fillExtrusionTranslate
+`fillExtrusionTranslate`
 
 #### Description
 The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively.
 
 #### Type
-array&lt;number&gt;
-
+`array<number>`
 #### Default Value
-<span>0,0</span>
+`[0,0]`
 
 #### Units
-pixels
+`pixels`
 
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-fillExtrusionTranslateAnchor
+`fillExtrusionTranslateAnchor`
 
 #### Description
 Controls the frame of reference for `fillExtrusionTranslate`.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>map</span>
+`map`
 
 #### Supported Values
 **map** - The fill extrusion is translated relative to the map.<br />
@@ -123,77 +128,72 @@ enum
 
 
 #### Requires
-fillExtrusionTranslate
+`fillExtrusionTranslate`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-fillExtrusionPattern
+`fillExtrusionPattern`
 
 #### Description
 Name of image in sprite to use for drawing images on extruded fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).
 
 #### Type
-string
-
-#### Default Value
-<span></span>
+`string`
 
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-fillExtrusionHeight
+`fillExtrusionHeight`
 
 #### Description
 The height with which to extrude this layer.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>0</span>
+`0`
 
 #### Units
-meters
+`meters`
 
 #### Minimum
-0
+`0`
 
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-fillExtrusionBase
+`fillExtrusionBase`
 
 #### Description
 The height with which to extrude the base of this layer. Must be less than or equal to `fillExtrusionHeight`.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>0</span>
+`0`
 
 #### Units
-meters
+`meters`
 
 #### Minimum
-0
+`0`
 
 
 #### Requires
-fillExtrusionHeight
+`fillExtrusionHeight`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 

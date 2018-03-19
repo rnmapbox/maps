@@ -28,21 +28,27 @@
 <%_ } _%>
 
 <%_ if (component.styles && component.styles.length) { _%>
-### styles
+### [styles](#<%- component.name -%>-styles)
+
+<%_ for (let style of component.styles) { _%>
+* <a href="#<%- style.name -%>"><%- style.name %></a><br/>
+<%_ } _%>
+
 <%_ for (let style of component.styles) { _%>
 ___
 
 #### Name
-<%- style.name %>
+`<%- style.name %>`
 
 #### Description
 <%- style.description %>
 
 #### Type
-<%= style.type %>
-
+`<%- style.type %>`
+<%_ if (exists(style.default)) { _%>
 #### Default Value
-<span><%- style.default %></span>
+`<%= getStyleDefaultValue(style) %>`
+<%_ } _%>
 
 <%_ if (style.type === 'enum') { _%>
 #### Supported Values
@@ -53,33 +59,33 @@ ___
 <%_ } _%>
 <%_ if (exists(style.units)) { _%>
 #### Units
-<%- style.units %>
+`<%- style.units %>`
 
 <%_ } _%>
 <%_ if (exists(style.minimum)) { _%>
 #### Minimum
-<%- style.minimum %>
+`<%- style.minimum %>`
 
 <%_ } _%>
 
 <%_ if (exists(style.maximum)) { _%>
 #### Maximum
-<%- style.maximum %>
+`<%- style.maximum %>`
 
 <%_ } _%>
 <%_ if (style.requires.length) { _%>
 #### Requires
-<%- style.requires.join(', ') %>
+`<%- style.requires.join(', ') %>`
 
 <%_ } _%>
 <%_ if (style.disabledBy.length) { _%>
 #### Disabled By
-<%- style.disabledBy.join(', ') %>
+`<%- style.disabledBy.join(', ') %>`
 
 <%_ } _%>
 <%_ if (style.allowedFunctionTypes.length) { _%>
 #### Supported Style Functions
-<%- style.allowedFunctionTypes.join(', ') %>
+`<%- style.allowedFunctionTypes.join(', ') %>`
 <%_ } _%>
 
 <%_ } _%>

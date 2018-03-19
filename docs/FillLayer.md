@@ -16,20 +16,29 @@
 | style | `union` | `none` | `false` | Customizable style attributes |
 
 
-### styles
+### [styles](#FillLayer-styles)
+
+* <a href="#visibility">visibility</a><br/>
+* <a href="#fillAntialias">fillAntialias</a><br/>
+* <a href="#fillOpacity">fillOpacity</a><br/>
+* <a href="#fillColor">fillColor</a><br/>
+* <a href="#fillOutlineColor">fillOutlineColor</a><br/>
+* <a href="#fillTranslate">fillTranslate</a><br/>
+* <a href="#fillTranslateAnchor">fillTranslateAnchor</a><br/>
+* <a href="#fillPattern">fillPattern</a><br/>
+
 ___
 
 #### Name
-visibility
+`visibility`
 
 #### Description
 Whether this layer is displayed.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>visible</span>
+`visible`
 
 #### Supported Values
 **visible** - The layer is shown.<br />
@@ -40,121 +49,113 @@ enum
 ___
 
 #### Name
-fillAntialias
+`fillAntialias`
 
 #### Description
 Whether or not the fill should be antialiased.
 
 #### Type
-boolean
-
+`boolean`
 #### Default Value
-<span>true</span>
+`true`
 
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-fillOpacity
+`fillOpacity`
 
 #### Description
 The opacity of the entire fill layer. In contrast to the `fillColor`, this value will also affect the 1px stroke around the fill, if the stroke is used.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>1</span>
+`1`
 
 #### Minimum
-0
+`0`
 
 
 #### Maximum
-1
+`1`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-fillColor
+`fillColor`
 
 #### Description
 The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
 
 #### Type
-color
-
+`color`
 #### Default Value
-<span>#000000</span>
+`#000000`
 
 
 #### Disabled By
-fillPattern
+`fillPattern`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-fillOutlineColor
+`fillOutlineColor`
 
 #### Description
 The outline color of the fill. Matches the value of `fillColor` if unspecified.
 
 #### Type
-color
-
-#### Default Value
-<span></span>
+`color`
 
 
 #### Disabled By
-fillPattern
+`fillPattern`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-fillTranslate
+`fillTranslate`
 
 #### Description
 The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
 
 #### Type
-array&lt;number&gt;
-
+`array<number>`
 #### Default Value
-<span>0,0</span>
+`[0,0]`
 
 #### Units
-pixels
+`pixels`
 
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-fillTranslateAnchor
+`fillTranslateAnchor`
 
 #### Description
 Controls the frame of reference for `fillTranslate`.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>map</span>
+`map`
 
 #### Supported Values
 **map** - The fill is translated relative to the map.<br />
@@ -162,26 +163,23 @@ enum
 
 
 #### Requires
-fillTranslate
+`fillTranslate`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-fillPattern
+`fillPattern`
 
 #### Description
 Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).
 
 #### Type
-string
-
-#### Default Value
-<span></span>
+`string`
 
 
 #### Supported Style Functions
-camera
+`camera`
 

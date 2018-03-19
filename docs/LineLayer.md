@@ -16,20 +16,36 @@
 | style | `union` | `none` | `false` | Customizable style attributes |
 
 
-### styles
+### [styles](#LineLayer-styles)
+
+* <a href="#lineCap">lineCap</a><br/>
+* <a href="#lineJoin">lineJoin</a><br/>
+* <a href="#lineMiterLimit">lineMiterLimit</a><br/>
+* <a href="#lineRoundLimit">lineRoundLimit</a><br/>
+* <a href="#visibility">visibility</a><br/>
+* <a href="#lineOpacity">lineOpacity</a><br/>
+* <a href="#lineColor">lineColor</a><br/>
+* <a href="#lineTranslate">lineTranslate</a><br/>
+* <a href="#lineTranslateAnchor">lineTranslateAnchor</a><br/>
+* <a href="#lineWidth">lineWidth</a><br/>
+* <a href="#lineGapWidth">lineGapWidth</a><br/>
+* <a href="#lineOffset">lineOffset</a><br/>
+* <a href="#lineBlur">lineBlur</a><br/>
+* <a href="#lineDasharray">lineDasharray</a><br/>
+* <a href="#linePattern">linePattern</a><br/>
+
 ___
 
 #### Name
-lineCap
+`lineCap`
 
 #### Description
 The display of line endings.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>butt</span>
+`butt`
 
 #### Supported Values
 **butt** - A cap with a squared-off end which is drawn to the exact endpoint of the line.<br />
@@ -38,21 +54,20 @@ enum
 
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-lineJoin
+`lineJoin`
 
 #### Description
 The display of lines when joining.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>miter</span>
+`miter`
 
 #### Supported Values
 **bevel** - A join with a squared-off end which is drawn beyond the endpoint of the line at a distance of one-half of the line's width.<br />
@@ -61,57 +76,54 @@ enum
 
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-lineMiterLimit
+`lineMiterLimit`
 
 #### Description
 Used to automatically convert miter joins to bevel joins for sharp angles.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>2</span>
+`2`
 
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-lineRoundLimit
+`lineRoundLimit`
 
 #### Description
 Used to automatically convert round joins to miter joins for shallow angles.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>1.05</span>
+`1.05`
 
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-visibility
+`visibility`
 
 #### Description
 Whether this layer is displayed.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>visible</span>
+`visible`
 
 #### Supported Values
 **visible** - The layer is shown.<br />
@@ -122,82 +134,78 @@ enum
 ___
 
 #### Name
-lineOpacity
+`lineOpacity`
 
 #### Description
 The opacity at which the line will be drawn.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>1</span>
+`1`
 
 #### Minimum
-0
+`0`
 
 
 #### Maximum
-1
+`1`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-lineColor
+`lineColor`
 
 #### Description
 The color with which the line will be drawn.
 
 #### Type
-color
-
+`color`
 #### Default Value
-<span>#000000</span>
+`#000000`
 
 
 #### Disabled By
-linePattern
+`linePattern`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-lineTranslate
+`lineTranslate`
 
 #### Description
 The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
 
 #### Type
-array&lt;number&gt;
-
+`array<number>`
 #### Default Value
-<span>0,0</span>
+`[0,0]`
 
 #### Units
-pixels
+`pixels`
 
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-lineTranslateAnchor
+`lineTranslateAnchor`
 
 #### Description
 Controls the frame of reference for `lineTranslate`.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>map</span>
+`map`
 
 #### Supported Values
 **map** - The line is translated relative to the map.<br />
@@ -205,146 +213,136 @@ enum
 
 
 #### Requires
-lineTranslate
+`lineTranslate`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-lineWidth
+`lineWidth`
 
 #### Description
 Stroke thickness.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>1</span>
+`1`
 
 #### Units
-pixels
+`pixels`
 
 #### Minimum
-0
+`0`
 
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-lineGapWidth
+`lineGapWidth`
 
 #### Description
 Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>0</span>
+`0`
 
 #### Units
-pixels
+`pixels`
 
 #### Minimum
-0
+`0`
 
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-lineOffset
+`lineOffset`
 
 #### Description
 The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>0</span>
+`0`
 
 #### Units
-pixels
+`pixels`
 
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-lineBlur
+`lineBlur`
 
 #### Description
 Blur applied to the line, in pixels.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>0</span>
+`0`
 
 #### Units
-pixels
+`pixels`
 
 #### Minimum
-0
+`0`
 
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-lineDasharray
+`lineDasharray`
 
 #### Description
 Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width.
 
 #### Type
-array&lt;number&gt;
-
-#### Default Value
-<span></span>
+`array<number>`
 
 #### Units
-line widths
+`line widths`
 
 #### Minimum
-0
+`0`
 
 
 #### Disabled By
-linePattern
+`linePattern`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-linePattern
+`linePattern`
 
 #### Description
 Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512).
 
 #### Type
-string
-
-#### Default Value
-<span></span>
+`string`
 
 
 #### Supported Style Functions
-camera
+`camera`
 

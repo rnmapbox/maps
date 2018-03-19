@@ -16,20 +16,72 @@
 | style | `union` | `none` | `false` | Customizable style attributes |
 
 
-### styles
+### [styles](#SymbolLayer-styles)
+
+* <a href="#symbolPlacement">symbolPlacement</a><br/>
+* <a href="#symbolSpacing">symbolSpacing</a><br/>
+* <a href="#symbolAvoidEdges">symbolAvoidEdges</a><br/>
+* <a href="#iconAllowOverlap">iconAllowOverlap</a><br/>
+* <a href="#iconIgnorePlacement">iconIgnorePlacement</a><br/>
+* <a href="#iconOptional">iconOptional</a><br/>
+* <a href="#iconRotationAlignment">iconRotationAlignment</a><br/>
+* <a href="#iconSize">iconSize</a><br/>
+* <a href="#iconTextFit">iconTextFit</a><br/>
+* <a href="#iconTextFitPadding">iconTextFitPadding</a><br/>
+* <a href="#iconImage">iconImage</a><br/>
+* <a href="#iconRotate">iconRotate</a><br/>
+* <a href="#iconPadding">iconPadding</a><br/>
+* <a href="#iconKeepUpright">iconKeepUpright</a><br/>
+* <a href="#iconOffset">iconOffset</a><br/>
+* <a href="#iconAnchor">iconAnchor</a><br/>
+* <a href="#iconPitchAlignment">iconPitchAlignment</a><br/>
+* <a href="#textPitchAlignment">textPitchAlignment</a><br/>
+* <a href="#textRotationAlignment">textRotationAlignment</a><br/>
+* <a href="#textField">textField</a><br/>
+* <a href="#textFont">textFont</a><br/>
+* <a href="#textSize">textSize</a><br/>
+* <a href="#textMaxWidth">textMaxWidth</a><br/>
+* <a href="#textLineHeight">textLineHeight</a><br/>
+* <a href="#textLetterSpacing">textLetterSpacing</a><br/>
+* <a href="#textJustify">textJustify</a><br/>
+* <a href="#textAnchor">textAnchor</a><br/>
+* <a href="#textMaxAngle">textMaxAngle</a><br/>
+* <a href="#textRotate">textRotate</a><br/>
+* <a href="#textPadding">textPadding</a><br/>
+* <a href="#textKeepUpright">textKeepUpright</a><br/>
+* <a href="#textTransform">textTransform</a><br/>
+* <a href="#textOffset">textOffset</a><br/>
+* <a href="#textAllowOverlap">textAllowOverlap</a><br/>
+* <a href="#textIgnorePlacement">textIgnorePlacement</a><br/>
+* <a href="#textOptional">textOptional</a><br/>
+* <a href="#visibility">visibility</a><br/>
+* <a href="#iconOpacity">iconOpacity</a><br/>
+* <a href="#iconColor">iconColor</a><br/>
+* <a href="#iconHaloColor">iconHaloColor</a><br/>
+* <a href="#iconHaloWidth">iconHaloWidth</a><br/>
+* <a href="#iconHaloBlur">iconHaloBlur</a><br/>
+* <a href="#iconTranslate">iconTranslate</a><br/>
+* <a href="#iconTranslateAnchor">iconTranslateAnchor</a><br/>
+* <a href="#textOpacity">textOpacity</a><br/>
+* <a href="#textColor">textColor</a><br/>
+* <a href="#textHaloColor">textHaloColor</a><br/>
+* <a href="#textHaloWidth">textHaloWidth</a><br/>
+* <a href="#textHaloBlur">textHaloBlur</a><br/>
+* <a href="#textTranslate">textTranslate</a><br/>
+* <a href="#textTranslateAnchor">textTranslateAnchor</a><br/>
+
 ___
 
 #### Name
-symbolPlacement
+`symbolPlacement`
 
 #### Description
 Label placement relative to its geometry.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>point</span>
+`point`
 
 #### Supported Values
 **point** - The label is placed at the point where the geometry is located.<br />
@@ -37,126 +89,120 @@ enum
 
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-symbolSpacing
+`symbolSpacing`
 
 #### Description
 Distance between two symbol anchors.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>250</span>
+`250`
 
 #### Units
-pixels
+`pixels`
 
 #### Minimum
-1
+`1`
 
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-symbolAvoidEdges
+`symbolAvoidEdges`
 
 #### Description
 If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer.
 
 #### Type
-boolean
-
+`boolean`
 #### Default Value
-<span>false</span>
+`false`
 
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-iconAllowOverlap
+`iconAllowOverlap`
 
 #### Description
 If true, the icon will be visible even if it collides with other previously drawn symbols.
 
 #### Type
-boolean
-
+`boolean`
 #### Default Value
-<span>false</span>
+`false`
 
 
 #### Requires
-iconImage
+`iconImage`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-iconIgnorePlacement
+`iconIgnorePlacement`
 
 #### Description
 If true, other symbols can be visible even if they collide with the icon.
 
 #### Type
-boolean
-
+`boolean`
 #### Default Value
-<span>false</span>
+`false`
 
 
 #### Requires
-iconImage
+`iconImage`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-iconOptional
+`iconOptional`
 
 #### Description
 If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not.
 
 #### Type
-boolean
-
+`boolean`
 #### Default Value
-<span>false</span>
+`false`
 
 
 #### Requires
-iconImage, textField
+`iconImage, textField`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-iconRotationAlignment
+`iconRotationAlignment`
 
 #### Description
 In combination with `symbolPlacement`, determines the rotation behavior of icons.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>auto</span>
+`auto`
 
 #### Supported Values
 **map** - When `symbol-placement` is set to `point`, aligns icons east-west. When `symbol-placement` is set to `line`, aligns icon x-axes with the line.<br />
@@ -165,51 +211,49 @@ enum
 
 
 #### Requires
-iconImage
+`iconImage`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-iconSize
+`iconSize`
 
 #### Description
 Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `iconSize`. 1 is the original size; 3 triples the size of the image.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>1</span>
+`1`
 
 #### Units
-factor of the original icon size
+`factor of the original icon size`
 
 #### Minimum
-0
+`0`
 
 
 #### Requires
-iconImage
+`iconImage`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-iconTextFit
+`iconTextFit`
 
 #### Description
 Scales the icon to fit around the associated text.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>none</span>
+`none`
 
 #### Supported Values
 **none** - The icon is displayed at its intrinsic aspect ratio.<br />
@@ -219,162 +263,153 @@ enum
 
 
 #### Requires
-iconImage, textField
+`iconImage, textField`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-iconTextFitPadding
+`iconTextFitPadding`
 
 #### Description
 Size of the additional area added to dimensions determined by `iconTextFit`, in clockwise order: top, right, bottom, left.
 
 #### Type
-array&lt;number&gt;
-
+`array<number>`
 #### Default Value
-<span>0,0,0,0</span>
+`[0,0,0,0]`
 
 #### Units
-pixels
+`pixels`
 
 
 #### Requires
-iconImage, textField
+`iconImage, textField`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-iconImage
+`iconImage`
 
 #### Description
 Name of image in sprite to use for drawing an image background. A string with `{tokens}` replaced, referencing the data property to pull from. (`{token}` replacement is only supported for literal `iconImage` values; not for property functions.)
 
 #### Type
-string
-
-#### Default Value
-<span></span>
+`string`
 
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-iconRotate
+`iconRotate`
 
 #### Description
 Rotates the icon clockwise.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>0</span>
+`0`
 
 #### Units
-degrees
+`degrees`
 
 
 #### Requires
-iconImage
+`iconImage`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-iconPadding
+`iconPadding`
 
 #### Description
 Size of the additional area around the icon bounding box used for detecting symbol collisions.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>2</span>
+`2`
 
 #### Units
-pixels
+`pixels`
 
 #### Minimum
-0
+`0`
 
 
 #### Requires
-iconImage
+`iconImage`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-iconKeepUpright
+`iconKeepUpright`
 
 #### Description
 If true, the icon may be flipped to prevent it from being rendered upsideDown.
 
 #### Type
-boolean
-
+`boolean`
 #### Default Value
-<span>false</span>
+`false`
 
 
 #### Requires
-iconImage
+`iconImage`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-iconOffset
+`iconOffset`
 
 #### Description
 Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. When combined with `iconRotate` the offset will be as if the rotated direction was up.
 
 #### Type
-array&lt;number&gt;
-
+`array<number>`
 #### Default Value
-<span>0,0</span>
+`[0,0]`
 
 #### Units
-pixels multiplied by the value of "icon-size"
+`pixels multiplied by the value of "icon-size"`
 
 
 #### Requires
-iconImage
+`iconImage`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-iconAnchor
+`iconAnchor`
 
 #### Description
 Part of the icon placed closest to the anchor.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>center</span>
+`center`
 
 #### Supported Values
 **center** - The center of the icon is placed closest to the anchor.<br />
@@ -389,24 +424,23 @@ enum
 
 
 #### Requires
-iconImage
+`iconImage`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-iconPitchAlignment
+`iconPitchAlignment`
 
 #### Description
 Orientation of icon when map is pitched.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>auto</span>
+`auto`
 
 #### Supported Values
 **map** - The icon is aligned to the plane of the map.<br />
@@ -415,24 +449,23 @@ enum
 
 
 #### Requires
-iconImage
+`iconImage`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-textPitchAlignment
+`textPitchAlignment`
 
 #### Description
 Orientation of text when map is pitched.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>auto</span>
+`auto`
 
 #### Supported Values
 **map** - The text is aligned to the plane of the map.<br />
@@ -441,24 +474,23 @@ enum
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-textRotationAlignment
+`textRotationAlignment`
 
 #### Description
 In combination with `symbolPlacement`, determines the rotation behavior of the individual glyphs forming the text.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>auto</span>
+`auto`
 
 #### Supported Values
 **map** - When `symbol-placement` is set to `point`, aligns text east-west. When `symbol-placement` is set to `line`, aligns text x-axes with the line.<br />
@@ -467,165 +499,158 @@ enum
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-textField
+`textField`
 
 #### Description
 Value to use for a text label. Feature properties are specified using tokens like `{field_name}`. (`{token}` replacement is only supported for literal `textField` values; not for property functions.)
 
 #### Type
-string
-
+`string`
 #### Default Value
-<span></span>
+`empty string`
 
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-textFont
+`textFont`
 
 #### Description
 Font stack to use for displaying text.
 
 #### Type
-array&lt;string&gt;
-
+`array<string>`
 #### Default Value
-<span>Open Sans Regular,Arial Unicode MS Regular</span>
+`[Open Sans Regular,Arial Unicode MS Regular]`
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-textSize
+`textSize`
 
 #### Description
 Font size.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>16</span>
+`16`
 
 #### Units
-pixels
+`pixels`
 
 #### Minimum
-0
+`0`
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-textMaxWidth
+`textMaxWidth`
 
 #### Description
 The maximum line width for text wrapping.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>10</span>
+`10`
 
 #### Units
-ems
+`ems`
 
 #### Minimum
-0
+`0`
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-textLineHeight
+`textLineHeight`
 
 #### Description
 Text leading value for multiLine text.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>1.2</span>
+`1.2`
 
 #### Units
-ems
+`ems`
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-textLetterSpacing
+`textLetterSpacing`
 
 #### Description
 Text tracking amount.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>0</span>
+`0`
 
 #### Units
-ems
+`ems`
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-textJustify
+`textJustify`
 
 #### Description
 Text justification options.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>center</span>
+`center`
 
 #### Supported Values
 **left** - The text is aligned to the left.<br />
@@ -634,24 +659,23 @@ enum
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-textAnchor
+`textAnchor`
 
 #### Description
 Part of the text placed closest to the anchor.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>center</span>
+`center`
 
 #### Supported Values
 **center** - The center of the text is placed closest to the anchor.<br />
@@ -666,120 +690,115 @@ enum
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-textMaxAngle
+`textMaxAngle`
 
 #### Description
 Maximum angle change between adjacent characters.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>45</span>
+`45`
 
 #### Units
-degrees
+`degrees`
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-textRotate
+`textRotate`
 
 #### Description
 Rotates the text clockwise.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>0</span>
+`0`
 
 #### Units
-degrees
+`degrees`
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-textPadding
+`textPadding`
 
 #### Description
 Size of the additional area around the text bounding box used for detecting symbol collisions.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>2</span>
+`2`
 
 #### Units
-pixels
+`pixels`
 
 #### Minimum
-0
+`0`
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-textKeepUpright
+`textKeepUpright`
 
 #### Description
 If true, the text may be flipped vertically to prevent it from being rendered upsideDown.
 
 #### Type
-boolean
-
+`boolean`
 #### Default Value
-<span>true</span>
+`true`
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-textTransform
+`textTransform`
 
 #### Description
 Specifies how to capitalize text, similar to the CSS `textTransform` property.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>none</span>
+`none`
 
 #### Supported Values
 **none** - The text is not altered.<br />
@@ -788,111 +807,106 @@ enum
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-textOffset
+`textOffset`
 
 #### Description
 Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up.
 
 #### Type
-array&lt;number&gt;
-
+`array<number>`
 #### Default Value
-<span>0,0</span>
+`[0,0]`
 
 #### Units
-ems
+`ems`
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-textAllowOverlap
+`textAllowOverlap`
 
 #### Description
 If true, the text will be visible even if it collides with other previously drawn symbols.
 
 #### Type
-boolean
-
+`boolean`
 #### Default Value
-<span>false</span>
+`false`
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-textIgnorePlacement
+`textIgnorePlacement`
 
 #### Description
 If true, other symbols can be visible even if they collide with the text.
 
 #### Type
-boolean
-
+`boolean`
 #### Default Value
-<span>false</span>
+`false`
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-textOptional
+`textOptional`
 
 #### Description
 If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not.
 
 #### Type
-boolean
-
+`boolean`
 #### Default Value
-<span>false</span>
+`false`
 
 
 #### Requires
-textField, iconImage
+`textField, iconImage`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-visibility
+`visibility`
 
 #### Description
 Whether this layer is displayed.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>visible</span>
+`visible`
 
 #### Supported Values
 **visible** - The layer is shown.<br />
@@ -903,163 +917,156 @@ enum
 ___
 
 #### Name
-iconOpacity
+`iconOpacity`
 
 #### Description
 The opacity at which the icon will be drawn.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>1</span>
+`1`
 
 #### Minimum
-0
+`0`
 
 
 #### Maximum
-1
+`1`
 
 #### Requires
-iconImage
+`iconImage`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-iconColor
+`iconColor`
 
 #### Description
 The color of the icon. This can only be used with sdf icons.
 
 #### Type
-color
-
+`color`
 #### Default Value
-<span>#000000</span>
+`#000000`
 
 
 #### Requires
-iconImage
+`iconImage`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-iconHaloColor
+`iconHaloColor`
 
 #### Description
 The color of the icon's halo. Icon halos can only be used with SDF icons.
 
 #### Type
-color
-
+`color`
 #### Default Value
-<span>rgba(0, 0, 0, 0)</span>
+`rgba(0, 0, 0, 0)`
 
 
 #### Requires
-iconImage
+`iconImage`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-iconHaloWidth
+`iconHaloWidth`
 
 #### Description
 Distance of halo to the icon outline.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>0</span>
+`0`
 
 #### Units
-pixels
+`pixels`
 
 #### Minimum
-0
+`0`
 
 
 #### Requires
-iconImage
+`iconImage`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-iconHaloBlur
+`iconHaloBlur`
 
 #### Description
 Fade out the halo towards the outside.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>0</span>
+`0`
 
 #### Units
-pixels
+`pixels`
 
 #### Minimum
-0
+`0`
 
 
 #### Requires
-iconImage
+`iconImage`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-iconTranslate
+`iconTranslate`
 
 #### Description
 Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
 
 #### Type
-array&lt;number&gt;
-
+`array<number>`
 #### Default Value
-<span>0,0</span>
+`[0,0]`
 
 #### Units
-pixels
+`pixels`
 
 
 #### Requires
-iconImage
+`iconImage`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-iconTranslateAnchor
+`iconTranslateAnchor`
 
 #### Description
 Controls the frame of reference for `iconTranslate`.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>map</span>
+`map`
 
 #### Supported Values
 **map** - Icons are translated relative to the map.<br />
@@ -1067,171 +1074,164 @@ enum
 
 
 #### Requires
-iconImage, iconTranslate
+`iconImage, iconTranslate`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-textOpacity
+`textOpacity`
 
 #### Description
 The opacity at which the text will be drawn.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>1</span>
+`1`
 
 #### Minimum
-0
+`0`
 
 
 #### Maximum
-1
+`1`
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-textColor
+`textColor`
 
 #### Description
 The color with which the text will be drawn.
 
 #### Type
-color
-
+`color`
 #### Default Value
-<span>#000000</span>
+`#000000`
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-textHaloColor
+`textHaloColor`
 
 #### Description
 The color of the text's halo, which helps it stand out from backgrounds.
 
 #### Type
-color
-
+`color`
 #### Default Value
-<span>rgba(0, 0, 0, 0)</span>
+`rgba(0, 0, 0, 0)`
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-textHaloWidth
+`textHaloWidth`
 
 #### Description
 Distance of halo to the font outline. Max text halo width is 1/4 of the fontSize.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>0</span>
+`0`
 
 #### Units
-pixels
+`pixels`
 
 #### Minimum
-0
+`0`
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-textHaloBlur
+`textHaloBlur`
 
 #### Description
 The halo's fadeout distance towards the outside.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>0</span>
+`0`
 
 #### Units
-pixels
+`pixels`
 
 #### Minimum
-0
+`0`
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera, source, composite
+`camera, source, composite`
 
 ___
 
 #### Name
-textTranslate
+`textTranslate`
 
 #### Description
 Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
 
 #### Type
-array&lt;number&gt;
-
+`array<number>`
 #### Default Value
-<span>0,0</span>
+`[0,0]`
 
 #### Units
-pixels
+`pixels`
 
 
 #### Requires
-textField
+`textField`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-textTranslateAnchor
+`textTranslateAnchor`
 
 #### Description
 Controls the frame of reference for `textTranslate`.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>map</span>
+`map`
 
 #### Supported Values
 **map** - The text is translated relative to the map.<br />
@@ -1239,8 +1239,8 @@ enum
 
 
 #### Requires
-textField, textTranslate
+`textField, textTranslate`
 
 #### Supported Style Functions
-camera
+`camera`
 

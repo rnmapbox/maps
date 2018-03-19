@@ -340,6 +340,16 @@ ${example.trim()}
     .join('');
 };
 
+global.getStyleDefaultValue = function (style) {
+  if (style.type === 'string' && style.default === '') {
+    return 'empty string';
+  } else if (style.type.includes('array')) {
+    return `[${style.default}]`;
+  } else {
+    return style.default;
+  }
+}
+
 Object.keys(iosSpecOverrides).forEach((propName) => {
   const camelCasePropName = camelCase(propName);
   const camelCasePropOverride = camelCase(iosSpecOverrides[propName]);

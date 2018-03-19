@@ -16,20 +16,25 @@
 | style | `union` | `none` | `false` | Customizable style attributes |
 
 
-### styles
+### [styles](#BackgroundLayer-styles)
+
+* <a href="#visibility">visibility</a><br/>
+* <a href="#backgroundColor">backgroundColor</a><br/>
+* <a href="#backgroundPattern">backgroundPattern</a><br/>
+* <a href="#backgroundOpacity">backgroundOpacity</a><br/>
+
 ___
 
 #### Name
-visibility
+`visibility`
 
 #### Description
 Whether this layer is displayed.
 
 #### Type
-enum
-
+`enum`
 #### Default Value
-<span>visible</span>
+`visible`
 
 #### Supported Values
 **visible** - The layer is shown.<br />
@@ -40,63 +45,58 @@ enum
 ___
 
 #### Name
-backgroundColor
+`backgroundColor`
 
 #### Description
 The color with which the background will be drawn.
 
 #### Type
-color
-
+`color`
 #### Default Value
-<span>#000000</span>
+`#000000`
 
 
 #### Disabled By
-backgroundPattern
+`backgroundPattern`
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-backgroundPattern
+`backgroundPattern`
 
 #### Description
 Name of image in sprite to use for drawing an image background. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).
 
 #### Type
-string
-
-#### Default Value
-<span></span>
+`string`
 
 
 #### Supported Style Functions
-camera
+`camera`
 
 ___
 
 #### Name
-backgroundOpacity
+`backgroundOpacity`
 
 #### Description
 The opacity at which the background will be drawn.
 
 #### Type
-number
-
+`number`
 #### Default Value
-<span>1</span>
+`1`
 
 #### Minimum
-0
+`0`
 
 
 #### Maximum
-1
+`1`
 
 #### Supported Style Functions
-camera
+`camera`
 
