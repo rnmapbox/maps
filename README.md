@@ -24,7 +24,7 @@ Not a Mapbox user yet? [Sign up for an account here](https://www.mapbox.com/sign
 
 * [node](https://nodejs.org)
 * [npm](https://www.npmjs.com/)
-* [React Native](https://facebook.github.io/react-native/) >= 0.47.1
+* [React Native](https://facebook.github.io/react-native/) recommended version 0.50 or greater
 
 **Git**
 ```
