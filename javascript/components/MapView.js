@@ -17,6 +17,8 @@ import {
   viewPropTypes,
 } from '../utils';
 
+import _ from 'underscore';
+
 import { getFilter } from '../utils/filterUtils';
 
 const MapboxGL = NativeModules.MGLModule;
@@ -242,6 +244,16 @@ class MapView extends React.Component {
      * This event is triggered when the users tracking mode is changed.
      */
     onUserTrackingModeChange: PropTypes.func,
+
+    /**
+     * The emitted frequency of regionwillchange events
+     */
+    regionWillChangeDebounceTime: PropTypes.number,
+
+    /**
+     * The emitted frequency of regiondidchange events
+     */
+    regionDidChangeDebounceTime: PropTypes.number,
   };
 
   static defaultProps = {
@@ -258,6 +270,8 @@ class MapView extends React.Component {
     userTrackingMode: MapboxGL.UserTrackingModes.None,
     styleURL: MapboxGL.StyleURL.Street,
     surfaceView: false,
+    regionWillChangeDebounceTime: 10,
+    regionDidChangeDebounceTime: 500,
   };
 
   constructor(props) {
@@ -272,6 +286,18 @@ class MapView extends React.Component {
     this._onChange = this._onChange.bind(this);
     this._onAndroidCallback = this._onAndroidCallback.bind(this);
     this._onLayout = this._onLayout.bind(this);
+
+    // debounced map change methods
+    this._onDebouncedRegionWillChange = _.debounce(
+      this._onRegionWillChange.bind(this),
+      props.regionWillChangeDebounceTime,
+      true,
+    );
+
+    this._onDebouncedRegionDidChange = _.debounce(
+      this._onRegionDidChange.bind(this),
+      props.regionDidChangeDebounceTime,
+    );
 
     this._callbackMap = new Map();
     this._preRefMapMethodQueue = [];
@@ -659,20 +685,32 @@ class MapView extends React.Component {
     }
   }
 
+  _onRegionWillChange(payload) {
+    if (isFunction(this.props.onRegionWillChange)) {
+      this.props.onRegionWillChange(payload);
+    }
+  }
+
+  _onRegionDidChange(payload) {
+    if (isFunction(this.props.onRegionDidChange)) {
+      this.props.onRegionDidChange(payload);
+    }
+  }
+
   _onChange(e) {
     const { type, payload } = e.nativeEvent;
     let propName = '';
 
     switch (type) {
       case MapboxGL.EventTypes.RegionWillChange:
-        propName = 'onRegionWillChange';
-        break;
+        this._onDebouncedRegionWillChange(payload);
+        return;
       case MapboxGL.EventTypes.RegionIsChanging:
         propName = 'onRegionIsChanging';
         break;
       case MapboxGL.EventTypes.RegionDidChange:
-        propName = 'onRegionDidChange';
-        break;
+        this._onDebouncedRegionDidChange(payload);
+        return;
       case MapboxGL.EventTypes.UserLocationUpdated:
         propName = 'onUserLocationUpdate';
         break;
