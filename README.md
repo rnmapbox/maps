@@ -75,6 +75,9 @@ npm install @mapbox/react-native-mapbox-gl --save
 * [OfflineManager](/docs/OfflineManager.md)
 * [SnapshotManager](/docs/snapshotManager.md)
 
+## Expo Support
+We have a feature request open with Expo if you want to see it get in show your support https://expo.canny.io/feature-requests/p/add-mapbox-gl-support
+
 ## Developer Group
 
 Have a question or need some help? Join our [Gitter developer group](https://gitter.im/react-native-mapbox-gl/Lobby)!
