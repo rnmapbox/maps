@@ -67,7 +67,7 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         Map<String, String> eventTypes = new HashMap<>();
         eventTypes.put("MapClick", EventTypes.MAP_CLICK);
         eventTypes.put("MapLongClick", EventTypes.MAP_LONG_CLICK);
-        eventTypes.put("RegionWilChange", EventTypes.REGION_WILL_CHANGE);
+        eventTypes.put("RegionWillChange", EventTypes.REGION_WILL_CHANGE);
         eventTypes.put("RegionIsChanging", EventTypes.REGION_IS_CHANGING);
         eventTypes.put("RegionDidChange", EventTypes.REGION_DID_CHANGE);
         eventTypes.put("UserLocationUpdated", EventTypes.USER_LOCATION_UPDATED);
