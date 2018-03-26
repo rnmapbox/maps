@@ -40,7 +40,8 @@
     "react-native": ">=0.47.1"
   },
   "dependencies": {
-    "@turf/helpers": "4.6.0"
+    "@turf/helpers": "4.6.0",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "babel-eslint": "6.1.2",
@@ -85,7 +86,9 @@
         "git add"
       ]
     },
-    "ignore": ["**/scripts/**/*.js"]
+    "ignore": [
+      "**/scripts/**/*.js"
+    ]
   },
   "rnpm": {
     "android": {

@@ -18,6 +18,7 @@ class ShowRegionDidChange extends React.Component {
     super(props);
 
     this.state = {
+      reason: '',
       regionFeature: undefined,
     };
 
@@ -31,6 +32,7 @@ class ShowRegionDidChange extends React.Component {
     ];
 
     this.onRegionDidChange = this.onRegionDidChange.bind(this);
+    this.onRegionWillChange = this.onRegionWillChange.bind(this);
     this.onDidFinishLoadingMap = this.onDidFinishLoadingMap.bind(this);
     this.onOptionPress = this.onOptionPress.bind(this);
   }
@@ -57,8 +59,12 @@ class ShowRegionDidChange extends React.Component {
     return geometry.coordinates[0] !== 0 && geometry.coordinates[1] !== 0;
   }
 
+  onRegionWillChange(regionFeature) {
+    this.setState({ reason: 'will change', regionFeature: regionFeature });
+  }
+
   onRegionDidChange(regionFeature) {
-    this.setState({ regionFeature: regionFeature });
+    this.setState({ reason: 'did change', regionFeature: regionFeature });
   }
 
   renderRegionChange() {
@@ -82,6 +88,7 @@ class ShowRegionDidChange extends React.Component {
       .join(', ');
     return (
       <Bubble style={{ marginBottom: 100 }}>
+        <Text>{this.state.reason}</Text>
         <Text>Latitude: {geometry.coordinates[1]}</Text>
         <Text>Longitude: {geometry.coordinates[0]}</Text>
         <Text>Visible Bounds NE: {neCoord}</Text>
@@ -108,6 +115,7 @@ class ShowRegionDidChange extends React.Component {
           centerCoordinate={DEFAULT_CENTER_COORDINATE}
           style={sheet.matchParent}
           onDidFinishLoadingMap={this.onDidFinishLoadingMap}
+          onRegionWillChange={this.onRegionWillChange}
           onRegionDidChange={this.onRegionDidChange}
         />
 
