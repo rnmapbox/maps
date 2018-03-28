@@ -52,6 +52,7 @@ class VectorSource extends React.Component {
     const props = {
       id: this.props.id,
       url: this.props.url,
+      hitbox: this.props.hitbox,
       hasPressListener: isFunction(this.props.onPress),
       onMapboxVectorSourcePress: this.props.onPress,
       onPress: undefined,
