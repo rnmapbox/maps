@@ -30,6 +30,7 @@ class CustomIcon extends React.Component {
     };
 
     this.onPress = this.onPress.bind(this);
+    this.onSourceLayerPress = this.onSourceLayerPress.bind(this);
   }
 
   async onPress(e) {
@@ -39,6 +40,11 @@ class CustomIcon extends React.Component {
         MapboxGL.geoUtils.makeFeature(e.geometry),
       ),
     });
+  }
+
+  onSourceLayerPress(e) {
+    const feature = e.nativeEvent.payload;
+    console.log('You pressed a layer here is your feature', feature); // eslint-disable-line
   }
 
   render() {
@@ -52,6 +58,8 @@ class CustomIcon extends React.Component {
           style={sheet.matchParent}>
           <MapboxGL.ShapeSource
             id="symbolLocationSource"
+            hitbox={{ width: 20, height: 20 }}
+            onPress={this.onSourceLayerPress}
             shape={this.state.featureCollection}>
             <MapboxGL.SymbolLayer
               id="symbolLocationSymbols"

@@ -150,6 +150,7 @@ class ShapeSource extends React.Component {
       id: this.props.id,
       url: this.props.url,
       shape: this._getShape(),
+      hitbox: this.props.hitbox,
       hasPressListener: isFunction(this.props.onPress),
       onMapboxShapeSourcePress: this.props.onPress,
       cluster: this.props.cluster ? 1 : 0,
