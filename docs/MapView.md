@@ -60,6 +60,22 @@ Converts a geographic coordinate to a point in the given view’s coordinate sys
 const pointInView = await this._map.getPointInView([-37.817070, 144.949901]);
 ```
 
+#### getCoordinateFromView(point)
+
+Converts a point in the given view’s coordinate system to a geographic coordinate.
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `point` | `Array` | `Yes` | A point expressed in the given view’s coordinate system. |
+
+
+
+```javascript
+const coordinate = await this._map.getCoordinateFromView([100, 100]);
+```
+
+
 
 #### getVisibleBounds()
 

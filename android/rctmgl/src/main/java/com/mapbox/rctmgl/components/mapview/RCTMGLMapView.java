@@ -981,6 +981,21 @@ public class RCTMGLMapView extends MapView implements
         mManager.handleEvent(event);
     }
 
+    public void getCoordinateFromView(String callbackID, PointF pointInView) {
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
+
+        LatLng mapCoordinate = mMap.getProjection().fromScreenLocation(pointInView);
+        WritableMap payload = new WritableNativeMap();
+
+        WritableArray array = new WritableNativeArray();
+        array.pushDouble(mapCoordinate.getLongitude());
+        array.pushDouble(mapCoordinate.getLatitude());
+        payload.putArray("coordinateFromView", array);
+        event.setPayload(payload);
+
+        mManager.handleEvent(event);
+    }
+
     public void takeSnap(final String callbackID, final boolean writeToDisk) {
         final AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
 
