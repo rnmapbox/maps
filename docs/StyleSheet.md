@@ -32,7 +32,7 @@ This is a value function defining a style value that changes with its properties
 // would color the layer based the property rating=[1, 5]
 MapboxGL.StyleSheet.source([
   [1, 'red'],
-  [2, 'organge'],
+  [2, 'orange'],
   [3, 'yellow'],
   [4, 'yellowgreen'],
   [5, 'green'],
@@ -42,7 +42,7 @@ MapboxGL.StyleSheet.source([
 MapboxGL.StyleSheet.create({
   circleColor: MapboxGL.StyleSheet.source([
     [1, 'red'],
-    [2, 'organge'],
+    [2, 'orange'],
     [3, 'yellow'],
     [4, 'yellowgreen'],
     [5, 'green'],
