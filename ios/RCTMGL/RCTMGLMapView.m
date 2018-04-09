@@ -37,7 +37,7 @@ static double const M2PI = M_PI * 2;
         return;
     }
     for (int i = 0; i < _reactSubviews.count; i++) {
-        [self removeReactSubview:(UIView *)_reactSubviews[i]];
+        [self removeFromMap:_reactSubviews[i]];
     }
 }
 
