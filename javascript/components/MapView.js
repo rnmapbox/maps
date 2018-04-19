@@ -318,6 +318,20 @@ class MapView extends React.Component {
   }
 
   /**
+   * Converts a point in the given view’s coordinate system to a geographic coordinate.
+   *
+   * @example
+   * const coordinate = await this._map.getCoordinateFromView([100, 100]);
+   *
+   * @param {Array<Number>} point - A point expressed in the given view’s coordinate system.
+   * @return {Array}
+   */
+  async getCoordinateFromView(point) {
+    const res = await this._runNativeCommand('getCoordinateFromView', [point]);
+    return res.coordinateFromView;
+  }
+
+  /**
    * The coordinate bounds(ne, sw) visible in the users’s viewport.
    *
    * @example

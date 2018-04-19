@@ -120,6 +120,29 @@ RCT_EXPORT_METHOD(getPointInView:(nonnull NSNumber*)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(getCoordinateFromView:(nonnull NSNumber*)reactTag
+                  atPoint:(CGPoint)point
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
+    id view = viewRegistry[reactTag];
+    
+    if (![view isKindOfClass:[RCTMGLMapView class]]) {
+      RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
+      return;
+    }
+    
+    RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
+    
+    CLLocationCoordinate2D coordinate = [reactMapView convertPoint:point
+                                            toCoordinateFromView:reactMapView];
+    
+    resolve(@{ @"coordinateFromView": @[@(coordinate.longitude), @(coordinate.latitude)] });
+  }];
+}
+
+
 RCT_EXPORT_METHOD(takeSnap:(nonnull NSNumber*)reactTag
                   writeToDisk:(BOOL)writeToDisk
                   resolver:(RCTPromiseResolveBlock)resolve
