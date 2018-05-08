@@ -52,6 +52,9 @@ const float CENTER_Y_OFFSET_BASE = -0.5f;
     [super reactSetFrame:frame];
 
     if (isMapSetBeforeFrame) {
+        if ([self _isFrameSet]) {
+            [_map removeAnnotation:self];
+        }
         [self _addAnnotation];
     }
 }
