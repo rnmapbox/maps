@@ -48,13 +48,13 @@ const float CENTER_Y_OFFSET_BASE = -0.5f;
 
 - (void)reactSetFrame:(CGRect)frame
 {
+    if ([self _isFrameSet]) {
+        [_map removeAnnotation:self];
+    }
     [self _setCenterOffset:frame];
     [super reactSetFrame:frame];
 
     if (isMapSetBeforeFrame) {
-        if ([self _isFrameSet]) {
-            [_map removeAnnotation:self];
-        }
         [self _addAnnotation];
     }
 }
