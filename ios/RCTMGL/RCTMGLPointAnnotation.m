@@ -15,7 +15,6 @@ const float CENTER_Y_OFFSET_BASE = -0.5f;
 
 @implementation RCTMGLPointAnnotation
 {
-    BOOL isMapSetBeforeFrame;
     UITapGestureRecognizer *customViewTap;
 }
 
@@ -48,15 +47,12 @@ const float CENTER_Y_OFFSET_BASE = -0.5f;
 
 - (void)reactSetFrame:(CGRect)frame
 {
-    if ([self _isFrameSet]) {
+    if ([_map.annotations containsObject:self]) {
         [_map removeAnnotation:self];
     }
-    [self _setCenterOffset:frame];
     [super reactSetFrame:frame];
-
-    if (isMapSetBeforeFrame) {
-        [self _addAnnotation];
-    }
+    [self _setCenterOffset:frame];
+    [self _addAnnotation];
 }
 
 - (void)setAnchor:(NSDictionary<NSString *, NSNumber *> *)anchor
@@ -76,7 +72,6 @@ const float CENTER_Y_OFFSET_BASE = -0.5f;
         // prevents annotations from flying in from the top left corner
         // if the frame hasn't been set yet
         if (![self _isFrameSet]) {
-            isMapSetBeforeFrame = YES;
             return;
         }
 
