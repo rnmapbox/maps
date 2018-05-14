@@ -424,14 +424,6 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
     [self fireEvent:event withCallback:reactMapView.onUserTrackingModeChange];
 }
 
-/*- (BOOL)mapView:(MGLMapView *)mapView shouldChangeFromCamera:(MGLMapCamera *)oldCamera toCamera:(MGLMapCamera *)newCamera
-{
-    RCTMGLMapView *reactMapView = (RCTMGLMapView *)mapView;
-    reactMapView.isUserInteraction = YES;
-    return YES;
-}
- */
-
 - (MGLAnnotationView *)mapView:(MGLMapView *)mapView viewForAnnotation:(id<MGLAnnotation>)annotation
 {
     if ([annotation isKindOfClass:[RCTMGLPointAnnotation class]]) {
