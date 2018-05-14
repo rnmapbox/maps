@@ -17,13 +17,190 @@
 
 
 ### styles
-| Name | Type | Requires | Disabled By |  Description |
-| ---- | :--: | :------: | :---------: | :----------: |
-| `visibility` | `enum` | `none` | `none` | Whether this layer is displayed. |
-| `rasterOpacity` | `number` | `none` | `none` | The opacity at which the image will be drawn. |
-| `rasterHueRotate` | `number` | `none` | `none` | Rotates hues around the color wheel. |
-| `rasterBrightnessMin` | `number` | `none` | `none` | Increase or reduce the brightness of the image. The value is the minimum brightness. |
-| `rasterBrightnessMax` | `number` | `none` | `none` | Increase or reduce the brightness of the image. The value is the maximum brightness. |
-| `rasterSaturation` | `number` | `none` | `none` | Increase or reduce the saturation of the image. |
-| `rasterContrast` | `number` | `none` | `none` | Increase or reduce the contrast of the image. |
-| `rasterFadeDuration` | `number` | `none` | `none` | Fade duration when a new tile is added. |
+
+* <a href="#name">visibility</a><br/>
+* <a href="#name-1">rasterOpacity</a><br/>
+* <a href="#name-2">rasterHueRotate</a><br/>
+* <a href="#name-3">rasterBrightnessMin</a><br/>
+* <a href="#name-4">rasterBrightnessMax</a><br/>
+* <a href="#name-5">rasterSaturation</a><br/>
+* <a href="#name-6">rasterContrast</a><br/>
+* <a href="#name-7">rasterFadeDuration</a><br/>
+
+___
+
+#### Name
+`visibility`
+
+#### Description
+Whether this layer is displayed.
+
+#### Type
+`enum`
+#### Default Value
+`visible`
+
+#### Supported Values
+**visible** - The layer is shown.<br />
+**none** - The layer is not shown.<br />
+
+
+
+___
+
+#### Name
+`rasterOpacity`
+
+#### Description
+The opacity at which the image will be drawn.
+
+#### Type
+`number`
+#### Default Value
+`1`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Supported Style Functions
+`camera`
+
+___
+
+#### Name
+`rasterHueRotate`
+
+#### Description
+Rotates hues around the color wheel.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Units
+`degrees`
+
+
+#### Supported Style Functions
+`camera`
+
+___
+
+#### Name
+`rasterBrightnessMin`
+
+#### Description
+Increase or reduce the brightness of the image. The value is the minimum brightness.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Supported Style Functions
+`camera`
+
+___
+
+#### Name
+`rasterBrightnessMax`
+
+#### Description
+Increase or reduce the brightness of the image. The value is the maximum brightness.
+
+#### Type
+`number`
+#### Default Value
+`1`
+
+#### Minimum
+`0`
+
+
+#### Maximum
+`1`
+
+#### Supported Style Functions
+`camera`
+
+___
+
+#### Name
+`rasterSaturation`
+
+#### Description
+Increase or reduce the saturation of the image.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`-1`
+
+
+#### Maximum
+`1`
+
+#### Supported Style Functions
+`camera`
+
+___
+
+#### Name
+`rasterContrast`
+
+#### Description
+Increase or reduce the contrast of the image.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Minimum
+`-1`
+
+
+#### Maximum
+`1`
+
+#### Supported Style Functions
+`camera`
+
+___
+
+#### Name
+`rasterFadeDuration`
+
+#### Description
+Fade duration when a new tile is added.
+
+#### Type
+`number`
+#### Default Value
+`300`
+
+#### Units
+`milliseconds`
+
+#### Minimum
+`0`
+
+
+#### Supported Style Functions
+`camera`
+

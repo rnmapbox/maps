@@ -9,6 +9,7 @@
 #import "RCTMGLMapView.h"
 #import "CameraUpdateQueue.h"
 #import "RCTMGLUtils.h"
+#import "RNMBImageUtils.h"
 #import "UIView+React.h"
 
 @implementation RCTMGLMapView
@@ -36,7 +37,7 @@ static double const M2PI = M_PI * 2;
         return;
     }
     for (int i = 0; i < _reactSubviews.count; i++) {
-        [self removeReactSubview:(UIView *)_reactSubviews[i]];
+        [self removeFromMap:_reactSubviews[i]];
     }
 }
 
@@ -226,10 +227,26 @@ static double const M2PI = M_PI * 2;
 - (void)setReactUserTrackingMode:(int)reactUserTrackingMode
 {
     _reactUserTrackingMode = reactUserTrackingMode;
-    [self setUserTrackingMode:(NSUInteger)_reactUserTrackingMode animated:_animated];
+    [self setUserTrackingMode:_reactUserTrackingMode animated:NO];
+    self.showsUserHeadingIndicator = (NSUInteger)_reactUserTrackingMode == MGLUserTrackingModeFollowWithHeading;
+}
+
+- (void)setReactUserLocationVerticalAlignment:(int)reactUserLocationVerticalAlignment
+{
+    _reactUserLocationVerticalAlignment = reactUserLocationVerticalAlignment;
+    self.userLocationVerticalAlignment = reactUserLocationVerticalAlignment;
 }
 
 #pragma mark - methods
+
+- (NSString *)takeSnap:(BOOL)writeToDisk
+{
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, YES, 0);
+    [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:YES];
+    UIImage *snapshot = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return writeToDisk ? [RNMBImageUtils createTempFile:snapshot] : [RNMBImageUtils createBase64:snapshot];
+}
 
 - (CLLocationDistance)getMetersPerPixelAtLatitude:(double)latitude withZoom:(double)zoomLevel
 {

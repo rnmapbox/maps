@@ -65,17 +65,17 @@ class FillLayer extends AbstractLayer {
     /**
      * Customizable style attributes
      */
-     style: PropTypes.oneOfType([
-       FillLayerStyleProp,
-       PropTypes.arrayOf(FillLayerStyleProp),
-     ]),
+    style: PropTypes.oneOfType([
+      FillLayerStyleProp,
+      PropTypes.arrayOf(FillLayerStyleProp),
+    ]),
   };
 
   static defaultProps = {
     sourceID: MapboxGL.StyleSource.DefaultSourceID,
   };
 
-  render () {
+  render() {
     const props = {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,

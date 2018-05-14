@@ -85,7 +85,7 @@ class ShapeSource extends React.Component {
      * Specifies the external images in key-value pairs required for the shape source.
      * If you have an asset under Image.xcassets on iOS and the drawables directory on android
      * you can specify an array of string names with assets as the key `{ assets: ['pin'] }`.
-    */
+     */
     images: PropTypes.object,
 
     /**
@@ -107,7 +107,7 @@ class ShapeSource extends React.Component {
     id: MapboxGL.StyleSource.DefaultSourceID,
   };
 
-  _getShape () {
+  _getShape() {
     if (!this.props.shape) {
       return;
     }
@@ -115,7 +115,7 @@ class ShapeSource extends React.Component {
     return toJSONString(this.props.shape);
   }
 
-  _getImages () {
+  _getImages() {
     if (!this.props.images) {
       return;
     }
@@ -125,7 +125,10 @@ class ShapeSource extends React.Component {
 
     const imageNames = Object.keys(this.props.images);
     for (let imageName of imageNames) {
-      if (imageName === ShapeSource.NATIVE_ASSETS_KEY && Array.isArray(this.props.images[ShapeSource.NATIVE_ASSETS_KEY])) {
+      if (
+        imageName === ShapeSource.NATIVE_ASSETS_KEY &&
+        Array.isArray(this.props.images[ShapeSource.NATIVE_ASSETS_KEY])
+      ) {
         nativeImages = this.props.images[ShapeSource.NATIVE_ASSETS_KEY];
         continue;
       }
@@ -142,11 +145,12 @@ class ShapeSource extends React.Component {
     };
   }
 
-  render () {
+  render() {
     const props = {
       id: this.props.id,
       url: this.props.url,
       shape: this._getShape(),
+      hitbox: this.props.hitbox,
       hasPressListener: isFunction(this.props.onPress),
       onMapboxShapeSourcePress: this.props.onPress,
       cluster: this.props.cluster ? 1 : 0,
@@ -160,18 +164,24 @@ class ShapeSource extends React.Component {
     };
     return (
       <RCTMGLShapeSource {...props}>
-        {cloneReactChildrenWithProps(this.props.children, { sourceID: this.props.id })}
+        {cloneReactChildrenWithProps(this.props.children, {
+          sourceID: this.props.id,
+        })}
       </RCTMGLShapeSource>
     );
   }
 }
 
-const RCTMGLShapeSource = requireNativeComponent(NATIVE_MODULE_NAME, ShapeSource, {
-  nativeOnly: {
-    nativeImages: true,
-    hasPressListener: true,
-    onMapboxShapeSourcePress: true,
+const RCTMGLShapeSource = requireNativeComponent(
+  NATIVE_MODULE_NAME,
+  ShapeSource,
+  {
+    nativeOnly: {
+      nativeImages: true,
+      hasPressListener: true,
+      onMapboxShapeSourcePress: true,
+    },
   },
-});
+);
 
 export default ShapeSource;

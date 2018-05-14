@@ -11,7 +11,7 @@ class SetBearing extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this._bearingOptions = [
@@ -23,19 +23,23 @@ class SetBearing extends React.Component {
     this.onBearingChange = this.onBearingChange.bind(this);
   }
 
-  onBearingChange (index, bearing) {
+  onBearingChange(index, bearing) {
     this.map.setCamera({ heading: bearing, duration: 150 });
   }
 
-  render () {
+  render() {
     return (
-      <TabBarPage {...this.props} options={this._bearingOptions} onOptionPress={this.onBearingChange}>
+      <TabBarPage
+        {...this.props}
+        options={this._bearingOptions}
+        onOptionPress={this.onBearingChange}>
         <MapboxGL.MapView
-            ref={(ref) => this.map = ref}
-            heading={0}
-            showUserLocation={true}
-            userTrackingMode={MapboxGL.UserTrackingModes.Follow}
-            style={sheet.matchParent} />
+          ref={(ref) => (this.map = ref)}
+          heading={0}
+          showUserLocation={true}
+          userTrackingMode={MapboxGL.UserTrackingModes.Follow}
+          style={sheet.matchParent}
+        />
       </TabBarPage>
     );
   }

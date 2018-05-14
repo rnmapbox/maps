@@ -72,7 +72,7 @@ class RasterLayer extends AbstractLayer {
     sourceID: MapboxGL.StyleSource.DefaultSourceID,
   };
 
-  render () {
+  render() {
     const props = {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
@@ -81,8 +81,12 @@ class RasterLayer extends AbstractLayer {
   }
 }
 
-const RCTMGLRasterLayer = requireNativeComponent(NATIVE_MODULE_NAME, RasterLayer, {
-  nativeOnly: { reactStyle: true },
-});
+const RCTMGLRasterLayer = requireNativeComponent(
+  NATIVE_MODULE_NAME,
+  RasterLayer,
+  {
+    nativeOnly: { reactStyle: true },
+  },
+);
 
 export default RasterLayer;

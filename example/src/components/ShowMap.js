@@ -12,15 +12,17 @@ class ShowMap extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
-    this._mapOptions = Object.keys(MapboxGL.StyleURL).map((key) => {
-      return {
-        label: key,
-        data: MapboxGL.StyleURL[key],
-      };
-    }).sort(onSortOptions);
+    this._mapOptions = Object.keys(MapboxGL.StyleURL)
+      .map((key) => {
+        return {
+          label: key,
+          data: MapboxGL.StyleURL[key],
+        };
+      })
+      .sort(onSortOptions);
 
     this.state = {
       styleURL: this._mapOptions[0].data,
@@ -29,18 +31,24 @@ class ShowMap extends React.Component {
     this.onMapChange = this.onMapChange.bind(this);
   }
 
-  onMapChange (index, styleURL) {
+  onMapChange(index, styleURL) {
     this.setState({ styleURL: styleURL });
   }
 
-  render () {
+  render() {
     return (
-      <TabBarPage {...this.props} scrollable options={this._mapOptions} onOptionPress={this.onMapChange}>
+      <TabBarPage
+        {...this.props}
+        scrollable
+        options={this._mapOptions}
+        onOptionPress={this.onMapChange}>
         <MapboxGL.MapView
-            showUserLocation={true}
-            userTrackingMode={MapboxGL.UserTrackingModes.Follow}
-            styleURL={this.state.styleURL}
-            style={sheet.matchParent} />
+          showUserLocation={true}
+          zoomLevel={12}
+          userTrackingMode={MapboxGL.UserTrackingModes.Follow}
+          styleURL={this.state.styleURL}
+          style={sheet.matchParent}
+        />
       </TabBarPage>
     );
   }

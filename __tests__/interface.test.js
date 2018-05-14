@@ -13,6 +13,7 @@ describe('Public Interface', () => {
 
       // modules
       'offlineManager',
+      'snapshotManager',
 
       // layers
       'FillLayer',
@@ -63,6 +64,8 @@ describe('Public Interface', () => {
       // methods
       'setAccessToken',
       'getAccessToken',
+      'setTelemetryEnabled',
+      'isTelemetryEnabled',
       'requestAndroidLocationPermissions',
 
       // utils

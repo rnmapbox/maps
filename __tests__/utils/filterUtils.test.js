@@ -64,14 +64,14 @@ describe('filterUtils', () => {
   });
 });
 
-function verifyFilterItem (filterItem, expectedType, expectedValue) {
+function verifyFilterItem(filterItem, expectedType, expectedValue) {
   expect(filterItem.toJSON()).toEqual({
     type: expectedType,
     value: expectedValue,
   });
 }
 
-function verifyErrorFilterItem (value) {
+function verifyErrorFilterItem(value) {
   const filterItem = new FilterItem(value);
   expect(() => filterItem.toJSON()).toThrow();
 }

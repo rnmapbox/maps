@@ -4,7 +4,7 @@ import MapboxStyleSheet from '../utils/MapboxStyleSheet';
 import { getFilter } from '../utils/filterUtils';
 
 class AbstractLayer extends React.Component {
-  get baseProps () {
+  get baseProps() {
     return {
       ...this.props,
       id: this.props.id,
@@ -20,7 +20,7 @@ class AbstractLayer extends React.Component {
     };
   }
 
-  getStyle () {
+  getStyle() {
     if (!this.props.style) {
       return;
     }
@@ -43,7 +43,7 @@ class AbstractLayer extends React.Component {
     return flattenStyle;
   }
 
-  _getMapboxStyleSheet (style) {
+  _getMapboxStyleSheet(style) {
     return MapboxStyleSheet.create(style);
   }
 }

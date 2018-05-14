@@ -25,23 +25,23 @@ class TwoByTwo extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  renderMap (styleURL, layerStyle) {
+  renderMap(styleURL, layerStyle) {
     return (
       <MapboxGL.MapView
-          zoomLevel={2}
-          centerCoordinate={[-35.15165038, 40.62357280]}
-          onSetCameraComplete={this.onUpdateZoomLevel}
-          ref={(ref) => this.map = ref}
-          style={sheet.matchParent}
-          styleURL={styleURL}>
-          <MapboxGL.ShapeSource id='smileyFaceSource' shape={smileyFaceGeoJSON}>
-            <MapboxGL.FillLayer id='smileyFaceFill' style={layerStyle} />
-          </MapboxGL.ShapeSource>
+        zoomLevel={2}
+        centerCoordinate={[-35.15165038, 40.6235728]}
+        onSetCameraComplete={this.onUpdateZoomLevel}
+        ref={(ref) => (this.map = ref)}
+        style={sheet.matchParent}
+        styleURL={styleURL}>
+        <MapboxGL.ShapeSource id="smileyFaceSource" shape={smileyFaceGeoJSON}>
+          <MapboxGL.FillLayer id="smileyFaceFill" style={layerStyle} />
+        </MapboxGL.ShapeSource>
       </MapboxGL.MapView>
     );
   }
 
-  render () {
+  render() {
     return (
       <Page {...this.props}>
         {this.renderMap(MapboxGL.StyleURL.Light, layerStyles.smileyFaceDark)}

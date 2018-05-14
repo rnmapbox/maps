@@ -10,18 +10,14 @@ import radar0 from '../assets/radar.png';
 import radar1 from '../assets/radar1.png';
 import radar2 from '../assets/radar2.png';
 
-const frames = [
-  radar0,
-  radar1,
-  radar2,
-];
+const frames = [radar0, radar1, radar2];
 
 class ImageOverlay extends React.Component {
   static propTypes = {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -31,11 +27,11 @@ class ImageOverlay extends React.Component {
     this._timeout = null;
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.heartbeat();
   }
 
-  heartbeat () {
+  heartbeat() {
     this._timeout = setTimeout(() => {
       requestAnimationFrame(() => {
         let nextFrame = this.state.radarFrameIndex + 1;
@@ -50,13 +46,13 @@ class ImageOverlay extends React.Component {
     }, 500);
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     if (this._timeout) {
       clearTimeout(this._timeout);
     }
   }
 
-  render () {
+  render() {
     const coordQuad = [
       [-80.425, 46.437], // top left
       [-71.516, 46.437], // top right
@@ -67,16 +63,18 @@ class ImageOverlay extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-            zoomLevel={5.2}
-            centerCoordinate={[-75.789, 41.874]}
-            ref={(ref) => this.map = ref}
-            style={sheet.matchParent}
-            styleURL={MapboxGL.StyleURL.Dark}>
-
-            <MapboxGL.Animated.ImageSource key='d' id='radarSource' coordinates={coordQuad} url={frames[this.state.radarFrameIndex]}>
-              <MapboxGL.RasterLayer id='radarLayer' />
-            </MapboxGL.Animated.ImageSource>
-
+          zoomLevel={5.2}
+          centerCoordinate={[-75.789, 41.874]}
+          ref={(ref) => (this.map = ref)}
+          style={sheet.matchParent}
+          styleURL={MapboxGL.StyleURL.Dark}>
+          <MapboxGL.Animated.ImageSource
+            key="d"
+            id="radarSource"
+            coordinates={coordQuad}
+            url={frames[this.state.radarFrameIndex]}>
+            <MapboxGL.RasterLayer id="radarLayer" />
+          </MapboxGL.Animated.ImageSource>
         </MapboxGL.MapView>
       </Page>
     );

@@ -52,6 +52,7 @@ RCT_EXPORT_MODULE();
     [eventTypes setObject:RCT_MAPBOX_DID_FINISH_RENDERING_MAP forKey:@"DidFinishRenderingMap"];
     [eventTypes setObject:RCT_MAPBOX_DID_FINISH_RENDERING_MAP_FULLY forKey:@"DidFinishRenderingMapFully"];
     [eventTypes setObject:RCT_MAPBOX_DID_FINISH_LOADING_STYLE forKey:@"DidFinishLoadingStyle"];
+    [eventTypes setObject:RCT_MAPBOX_USER_LOCATION_UPDATE forKey:@"UserLocationUpdated"];
     
     // user tracking modes
     NSMutableDictionary *userTrackingModes = [[NSMutableDictionary alloc] init];
@@ -59,6 +60,12 @@ RCT_EXPORT_MODULE();
     [userTrackingModes setObject:[NSNumber numberWithInt:MGLUserTrackingModeFollow] forKey:@"Follow"];
     [userTrackingModes setObject:[NSNumber numberWithInt:MGLUserTrackingModeFollowWithHeading] forKey:@"FollowWithHeading"];
     [userTrackingModes setObject:[NSNumber numberWithInt:MGLUserTrackingModeFollowWithCourse] forKey:@"FollowWithCourse"];
+    
+    // user location vertical alignment
+    NSMutableDictionary *userLocationVerticalAlignment = [[NSMutableDictionary alloc] init];
+    [userLocationVerticalAlignment setObject:[NSNumber numberWithInt:MGLAnnotationVerticalAlignmentTop] forKey:@"Top"];
+    [userLocationVerticalAlignment setObject:[NSNumber numberWithInt:MGLAnnotationVerticalAlignmentCenter] forKey:@"Center"];
+    [userLocationVerticalAlignment setObject:[NSNumber numberWithInt:MGLAnnotationVerticalAlignmentBottom] forKey:@"Bottom"];
     
     // camera modes
     NSMutableDictionary *cameraModes = [[NSMutableDictionary alloc] init];
@@ -205,6 +212,7 @@ RCT_EXPORT_MODULE();
          @"StyleURL": styleURLS,
          @"EventTypes": eventTypes,
          @"UserTrackingModes": userTrackingModes,
+         @"UserLocationVerticalAlignment": userLocationVerticalAlignment,
          @"CameraModes": cameraModes,
          @"StyleSource": styleSourceConsts,
          @"InterpolationMode": interpolationModes,
@@ -249,6 +257,19 @@ RCT_EXPORT_METHOD(getAccessToken:(RCTPromiseResolveBlock)resolve rejecter:(RCTPr
     }
     
     reject(@"missing_access_token", @"No access token has been set", nil);
+}
+
+RCT_EXPORT_METHOD(setTelemetryEnabled:(BOOL *)telemetryEnabled)
+{
+    [[NSUserDefaults standardUserDefaults] setBool:telemetryEnabled
+                                            forKey:@"MGLMapboxMetricsEnabled"];
+}
+
+RCT_EXPORT_METHOD(isTelemetryEnabled:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    BOOL isTelemetryEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:@"MGLMapboxMetricsEnabled"];
+    resolve([NSNumber numberWithBool:isTelemetryEnabled]);
+    return;
 }
 
 @end

@@ -29,9 +29,67 @@
 
 <%_ if (component.styles && component.styles.length) { _%>
 ### styles
-| Name | Type | Requires | Disabled By |  Description |
-| ---- | :--: | :------: | :---------: | :----------: |
+
+<%_ for (let i = 0; i < component.styles.length; i++) { _%>
+<%
+const style = component.styles[i];
+-%>
+* <a href="#name<%- i > 0 ? '-' + i : '' -%>"><%- style.name %></a><br/>
+<%_ } _%>
+
 <%_ for (let style of component.styles) { _%>
-<%- styleMarkdownTableRow(style) %>
+___
+
+#### Name
+`<%- style.name %>`
+
+#### Description
+<%- style.description %>
+
+#### Type
+`<%- style.type %>`
+<%_ if (exists(style.default)) { _%>
+#### Default Value
+`<%= getStyleDefaultValue(style) %>`
+<%_ } _%>
+
+<%_ if (style.type === 'enum') { _%>
+#### Supported Values
+<%_ for (var i = 0; i < style.values.length; i++) { _%>
+**<%- style.values[i].value %>** - <%- style.values[i].doc %><br />
+<%_ } _%>
+
+<%_ } _%>
+<%_ if (exists(style.units)) { _%>
+#### Units
+`<%- style.units %>`
+
+<%_ } _%>
+<%_ if (exists(style.minimum)) { _%>
+#### Minimum
+`<%- style.minimum %>`
+
+<%_ } _%>
+
+<%_ if (exists(style.maximum)) { _%>
+#### Maximum
+`<%- style.maximum %>`
+
+<%_ } _%>
+<%_ if (style.requires.length) { _%>
+#### Requires
+`<%- style.requires.join(', ') %>`
+
+<%_ } _%>
+<%_ if (style.disabledBy.length) { _%>
+#### Disabled By
+`<%- style.disabledBy.join(', ') %>`
+
+<%_ } _%>
+<%_ if (style.allowedFunctionTypes.length) { _%>
+#### Supported Style Functions
+`<%- style.allowedFunctionTypes.join(', ') %>`
+<%_ } _%>
+
 <%_ } _%>
 <%_ } _%>

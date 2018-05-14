@@ -48,7 +48,7 @@ class CreateOfflineRegion extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -65,15 +65,20 @@ class CreateOfflineRegion extends React.Component {
     this.onStatusRequest = this.onStatusRequest.bind(this);
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     // avoid setState warnings if we back out before we finishing downloading
     MapboxGL.offlineManager.deletePack(this.state.name);
     MapboxGL.offlineManager.unsubscribe('test');
   }
 
-  async onDidFinishLoadingStyle () {
+  async onDidFinishLoadingStyle() {
     const { width, height } = Dimensions.get('window');
-    const bounds = geoViewport.bounds(CENTER_COORD, 12, [width, height], MAPBOX_VECTOR_TILE_SIZE);
+    const bounds = geoViewport.bounds(
+      CENTER_COORD,
+      12,
+      [width, height],
+      MAPBOX_VECTOR_TILE_SIZE,
+    );
 
     const options = {
       name: this.state.name,
@@ -84,13 +89,10 @@ class CreateOfflineRegion extends React.Component {
     };
 
     // start download
-    MapboxGL.offlineManager.createPack(
-      options,
-      this.onDownloadProgress,
-    );
+    MapboxGL.offlineManager.createPack(options, this.onDownloadProgress);
   }
 
-  onDownloadProgress (offlineRegion, offlineRegionStatus) {
+  onDownloadProgress(offlineRegion, offlineRegionStatus) {
     this.setState({
       name: offlineRegion.name,
       offlineRegion: offlineRegion,
@@ -98,33 +100,33 @@ class CreateOfflineRegion extends React.Component {
     });
   }
 
-  onResume () {
+  onResume() {
     if (this.state.offlineRegion) {
       this.state.offlineRegion.resume();
     }
   }
 
-  onPause () {
+  onPause() {
     if (this.state.offlineRegion) {
       this.state.offlineRegion.pause();
     }
   }
 
-  async onStatusRequest () {
+  async onStatusRequest() {
     if (this.state.offlineRegion) {
       const offlineRegionStatus = await this.state.offlineRegion.status();
       Alert.alert('Get Status', JSON.stringify(offlineRegionStatus, null, 2));
     }
   }
 
-  _formatPercent () {
+  _formatPercent() {
     if (!this.state.offlineRegionStatus) {
       return '0%';
     }
     return Math.round(this.state.offlineRegionStatus.percentage / 10) / 10;
   }
 
-  _getRegionDownloadState (downloadState) {
+  _getRegionDownloadState(downloadState) {
     switch (downloadState) {
       case MapboxGL.OfflinePackDownloadState.Active:
         return 'Active';
@@ -135,29 +137,43 @@ class CreateOfflineRegion extends React.Component {
     }
   }
 
-  render () {
+  render() {
     const offlineRegionStatus = this.state.offlineRegionStatus;
 
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-            zoomLevel={10}
-            ref={(c) => this._map = c}
-            onPress={this.onPress}
-            onDidFinishLoadingMap={this.onDidFinishLoadingStyle}
-            centerCoordinate={CENTER_COORD}
-            style={sheet.matchParent} />
+          zoomLevel={10}
+          ref={(c) => (this._map = c)}
+          onPress={this.onPress}
+          onDidFinishLoadingMap={this.onDidFinishLoadingStyle}
+          centerCoordinate={CENTER_COORD}
+          style={sheet.matchParent}
+        />
 
         {offlineRegionStatus !== null ? (
           <Bubble>
-            <View style={{ flex : 1 }}>
-
-              <Text>Download State: {this._getRegionDownloadState(offlineRegionStatus.state)}</Text>
+            <View style={{ flex: 1 }}>
+              <Text>
+                Download State:{' '}
+                {this._getRegionDownloadState(offlineRegionStatus.state)}
+              </Text>
               <Text>Download Percent: {offlineRegionStatus.percentage}</Text>
-              <Text>Completed Resource Count: {offlineRegionStatus.completedResourceCount}</Text>
-              <Text>Completed Resource Size: {offlineRegionStatus.completedResourceSize}</Text>
-              <Text>Completed Tile Count: {offlineRegionStatus.completedTileCount}</Text>
-              <Text>Required Resource Count: {offlineRegionStatus.requiredResourceCount}</Text>
+              <Text>
+                Completed Resource Count:{' '}
+                {offlineRegionStatus.completedResourceCount}
+              </Text>
+              <Text>
+                Completed Resource Size:{' '}
+                {offlineRegionStatus.completedResourceSize}
+              </Text>
+              <Text>
+                Completed Tile Count: {offlineRegionStatus.completedTileCount}
+              </Text>
+              <Text>
+                Required Resource Count:{' '}
+                {offlineRegionStatus.requiredResourceCount}
+              </Text>
 
               <View style={styles.buttonCnt}>
                 <TouchableOpacity onPress={this.onResume}>

@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
-import { cloneReactChildrenWithProps, viewPropTypes, isFunction } from '../utils';
+import {
+  cloneReactChildrenWithProps,
+  viewPropTypes,
+  isFunction,
+} from '../utils';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -44,27 +48,34 @@ class VectorSource extends React.Component {
     id: MapboxGL.StyleSource.DefaultSourceID,
   };
 
-  render () {
+  render() {
     const props = {
       id: this.props.id,
       url: this.props.url,
+      hitbox: this.props.hitbox,
       hasPressListener: isFunction(this.props.onPress),
       onMapboxVectorSourcePress: this.props.onPress,
       onPress: undefined,
     };
     return (
       <RCTMGLVectorSource {...props}>
-        {cloneReactChildrenWithProps(this.props.children, { sourceID: this.props.id })}
+        {cloneReactChildrenWithProps(this.props.children, {
+          sourceID: this.props.id,
+        })}
       </RCTMGLVectorSource>
     );
   }
 }
 
-const RCTMGLVectorSource = requireNativeComponent(NATIVE_MODULE_NAME, VectorSource, {
-  nativeOnly: {
-    hasPressListener: true,
-    onMapboxVectorSourcePress: true,
+const RCTMGLVectorSource = requireNativeComponent(
+  NATIVE_MODULE_NAME,
+  VectorSource,
+  {
+    nativeOnly: {
+      hasPressListener: true,
+      onMapboxVectorSourcePress: true,
+    },
   },
-});
+);
 
 export default VectorSource;

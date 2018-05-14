@@ -1,8 +1,8 @@
 import { NativeModules } from 'react-native';
 
-function keyMirror (keys) {
+function keyMirror(keys) {
   let obj = {};
-  keys.forEach((key) => obj[key] = key);
+  keys.forEach((key) => (obj[key] = key));
   return obj;
 }
 
@@ -40,69 +40,25 @@ NativeModules.MGLModule = {
     'DidFinishLoadingStyle',
     'SetCameraComplete',
   ]),
-  CameraModes: keyMirror([
-    'Flight',
-    'Ease',
-    'None',
-  ]),
-  StyleSource: keyMirror([
-    'DefaultSourceID',
-  ]),
+  CameraModes: keyMirror(['Flight', 'Ease', 'None']),
+  StyleSource: keyMirror(['DefaultSourceID']),
   InterpolationMode: keyMirror([
     'Exponential',
     'Categorical',
     'Interval',
     'Identity',
   ]),
-  LineJoin: keyMirror([
-    'Bevel',
-    'Round',
-    'Miter',
-  ]),
-  LineCap: keyMirror([
-    'Butt',
-    'Round',
-    'Square',
-  ]),
-  LineTranslateAnchor: keyMirror([
-    'Map',
-    'Viewport',
-  ]),
-  CirclePitchScale: keyMirror([
-    'Map',
-    'Viewport',
-  ]),
-  CircleTranslateAnchor: keyMirror([
-    'Map',
-    'Viewport',
-  ]),
-  FillExtrusionTranslateAnchor: keyMirror([
-    'Map',
-    'Viewport',
-  ]),
-  FillTranslateAnchor: keyMirror([
-    'Map',
-    'Viewport',
-  ]),
-  IconRotationAlignment: keyMirror([
-    'Auto',
-    'Map',
-    'Viewport',
-  ]),
-  IconTextFit: keyMirror([
-    'None',
-    'Width',
-    'Height',
-    'Both',
-  ]),
-  IconTranslateAnchor: keyMirror([
-    'Map',
-    'Viewport',
-  ]),
-  SymbolPlacement: keyMirror([
-    'Line',
-    'Point',
-  ]),
+  LineJoin: keyMirror(['Bevel', 'Round', 'Miter']),
+  LineCap: keyMirror(['Butt', 'Round', 'Square']),
+  LineTranslateAnchor: keyMirror(['Map', 'Viewport']),
+  CirclePitchScale: keyMirror(['Map', 'Viewport']),
+  CircleTranslateAnchor: keyMirror(['Map', 'Viewport']),
+  FillExtrusionTranslateAnchor: keyMirror(['Map', 'Viewport']),
+  FillTranslateAnchor: keyMirror(['Map', 'Viewport']),
+  IconRotationAlignment: keyMirror(['Auto', 'Map', 'Viewport']),
+  IconTextFit: keyMirror(['None', 'Width', 'Height', 'Both']),
+  IconTranslateAnchor: keyMirror(['Map', 'Viewport']),
+  SymbolPlacement: keyMirror(['Line', 'Point']),
   TextAnchor: keyMirror([
     'Center',
     'Left',
@@ -114,47 +70,20 @@ NativeModules.MGLModule = {
     'BottomLeft',
     'BottomRight',
   ]),
-  TextJustify: keyMirror([
-    'Center',
-    'Left',
-    'Right',
-  ]),
-  TextPitchAlignment: keyMirror([
-    'Auto',
-    'Map',
-    'Viewport',
-  ]),
-  TextRotationAlignment: keyMirror([
-    'Auto',
-    'Map',
-    'Viewport',
-  ]),
-  TextTransform: keyMirror([
-    'None',
-    'Lowercase',
-    'Uppercase',
-  ]),
-  TextTranslateAnchor: keyMirror([
-    'Map',
-    'Viewport',
-  ]),
-  LightAnchor: keyMirror([
-    'Map',
-    'Viewport',
-  ]),
-  OfflinePackDownloadState: keyMirror([
-    'Inactive',
-    'Active',
-    'Complete',
-  ]),
-  OfflineCallbackName: keyMirror([
-    'Progress',
-    'Error',
-  ]),
+  TextJustify: keyMirror(['Center', 'Left', 'Right']),
+  TextPitchAlignment: keyMirror(['Auto', 'Map', 'Viewport']),
+  TextRotationAlignment: keyMirror(['Auto', 'Map', 'Viewport']),
+  TextTransform: keyMirror(['None', 'Lowercase', 'Uppercase']),
+  TextTranslateAnchor: keyMirror(['Map', 'Viewport']),
+  LightAnchor: keyMirror(['Map', 'Viewport']),
+  OfflinePackDownloadState: keyMirror(['Inactive', 'Active', 'Complete']),
+  OfflineCallbackName: keyMirror(['Progress', 'Error']),
 
   // methods
   setAccessToken: jest.fn(),
   getAccessToken: () => Promise.resolve('test-token'),
+  setTelemetryEnabled: jest.fn(),
+  isTelemetryEnabled: () => Promise.resolve(true),
 };
 
 NativeModules.MGLOfflineModule = {
@@ -172,4 +101,10 @@ NativeModules.MGLOfflineModule = {
   setPackObserver: () => Promise.resolve(),
   setTileCountLimit: jest.fn(),
   setProgressEventThrottle: jest.fn(),
+};
+
+NativeModules.MGLSnapshotModule = {
+  takeSnap: () => {
+    return Promise.resolve('file://test.png');
+  },
 };

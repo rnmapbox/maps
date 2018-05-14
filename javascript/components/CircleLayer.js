@@ -77,7 +77,7 @@ class CircleLayer extends AbstractLayer {
     sourceID: MapboxGL.StyleSource.DefaultSourceID,
   };
 
-  render () {
+  render() {
     const props = {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
@@ -86,8 +86,12 @@ class CircleLayer extends AbstractLayer {
   }
 }
 
-const RCTMGLCircleLayer = requireNativeComponent(NATIVE_MODULE_NAME, CircleLayer, {
-  nativeOnly: { reactStyle: true },
-});
+const RCTMGLCircleLayer = requireNativeComponent(
+  NATIVE_MODULE_NAME,
+  CircleLayer,
+  {
+    nativeOnly: { reactStyle: true },
+  },
+);
 
 export default CircleLayer;

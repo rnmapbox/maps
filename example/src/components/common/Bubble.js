@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import PropTypes from 'prop-types';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 
 const styles = StyleSheet.create({
   containter: {
@@ -17,10 +18,24 @@ const styles = StyleSheet.create({
 });
 
 class Bubble extends React.PureComponent {
-  render () {
+  static propTypes = {
+    onPress: PropTypes.func,
+  };
+
+  render() {
+    let innerChildView = this.props.children;
+
+    if (this.props.onPress) {
+      innerChildView = (
+        <TouchableOpacity onPress={this.props.onPress}>
+          {this.props.children}
+        </TouchableOpacity>
+      );
+    }
+
     return (
       <View style={[styles.containter, this.props.style]}>
-        {this.props.children}
+        {innerChildView}
       </View>
     );
   }

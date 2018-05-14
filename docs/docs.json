@@ -82,32 +82,60 @@
       {
         "name": "visibility",
         "type": "enum",
+        "values": [
+          {
+            "value": "visible",
+            "doc": "The layer is shown."
+          },
+          {
+            "value": "none",
+            "doc": "The layer is not shown."
+          }
+        ],
+        "default": "visible",
         "description": "Whether this layer is displayed.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": []
       },
       {
         "name": "backgroundColor",
         "type": "color",
+        "values": [],
+        "default": "#000000",
         "description": "The color with which the background will be drawn.",
         "requires": [],
         "disabledBy": [
           "backgroundPattern"
+        ],
+        "allowedFunctionTypes": [
+          "camera"
         ]
       },
       {
         "name": "backgroundPattern",
         "type": "string",
+        "values": [],
         "description": "Name of image in sprite to use for drawing an image background. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "backgroundOpacity",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 1,
         "description": "The opacity at which the background will be drawn.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       }
     ]
   },
@@ -246,88 +274,208 @@
       {
         "name": "visibility",
         "type": "enum",
+        "values": [
+          {
+            "value": "visible",
+            "doc": "The layer is shown."
+          },
+          {
+            "value": "none",
+            "doc": "The layer is not shown."
+          }
+        ],
+        "default": "visible",
         "description": "Whether this layer is displayed.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": []
       },
       {
         "name": "circleRadius",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "pixels",
+        "default": 5,
         "description": "Circle radius.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "circleColor",
         "type": "color",
+        "values": [],
+        "default": "#000000",
         "description": "The fill color of the circle.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "circleBlur",
         "type": "number",
+        "values": [],
+        "default": 0,
         "description": "Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "circleOpacity",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 1,
         "description": "The opacity at which the circle will be drawn.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "circleTranslate",
-        "type": "array",
+        "type": "array<number>",
+        "values": [],
+        "units": "pixels",
+        "default": [
+          0,
+          0
+        ],
         "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "circleTranslateAnchor",
         "type": "enum",
+        "values": [
+          {
+            "value": "map",
+            "doc": "The circle is translated relative to the map."
+          },
+          {
+            "value": "viewport",
+            "doc": "The circle is translated relative to the viewport."
+          }
+        ],
+        "default": "map",
         "description": "Controls the frame of reference for `circleTranslate`.",
         "requires": [
           "circleTranslate"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "circlePitchScale",
         "type": "enum",
+        "values": [
+          {
+            "value": "map",
+            "doc": "Circles are scaled according to their apparent distance to the camera."
+          },
+          {
+            "value": "viewport",
+            "doc": "Circles are not scaled."
+          }
+        ],
+        "default": "map",
         "description": "Controls the scaling behavior of the circle when the map is pitched.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "circlePitchAlignment",
         "type": "enum",
+        "values": [
+          {
+            "value": "map",
+            "doc": "The circle is aligned to the plane of the map."
+          },
+          {
+            "value": "viewport",
+            "doc": "The circle is aligned to the plane of the viewport."
+          }
+        ],
+        "default": "viewport",
         "description": "Orientation of circle when map is pitched.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "circleStrokeWidth",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "pixels",
+        "default": 0,
         "description": "The width of the circle's stroke. Strokes are placed outside of the `circleRadius`.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "circleStrokeColor",
         "type": "color",
+        "values": [],
+        "default": "#000000",
         "description": "The stroke color of the circle.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "circleStrokeOpacity",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 1,
         "description": "The opacity of the circle's stroke.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       }
     ]
   },
@@ -414,64 +562,135 @@
       {
         "name": "visibility",
         "type": "enum",
+        "values": [
+          {
+            "value": "visible",
+            "doc": "The layer is shown."
+          },
+          {
+            "value": "none",
+            "doc": "The layer is not shown."
+          }
+        ],
+        "default": "visible",
         "description": "Whether this layer is displayed.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": []
       },
       {
         "name": "fillExtrusionOpacity",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 1,
         "description": "The opacity of the entire fill extrusion layer. This is rendered on a perLayer, not perFeature, basis, and dataDriven styling is not available.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "fillExtrusionColor",
         "type": "color",
+        "values": [],
+        "default": "#000000",
         "description": "The base color of the extruded fill. The extrusion's surfaces will be shaded differently based on this color in combination with the root `light` settings. If this color is specified as `rgba` with an alpha component, the alpha component will be ignored; use `fillExtrusionOpacity` to set layer opacity.",
         "requires": [],
         "disabledBy": [
           "fillExtrusionPattern"
+        ],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
         ]
       },
       {
         "name": "fillExtrusionTranslate",
-        "type": "array",
+        "type": "array<number>",
+        "values": [],
+        "units": "pixels",
+        "default": [
+          0,
+          0
+        ],
         "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "fillExtrusionTranslateAnchor",
         "type": "enum",
+        "values": [
+          {
+            "value": "map",
+            "doc": "The fill extrusion is translated relative to the map."
+          },
+          {
+            "value": "viewport",
+            "doc": "The fill extrusion is translated relative to the viewport."
+          }
+        ],
+        "default": "map",
         "description": "Controls the frame of reference for `fillExtrusionTranslate`.",
         "requires": [
           "fillExtrusionTranslate"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "fillExtrusionPattern",
         "type": "string",
+        "values": [],
         "description": "Name of image in sprite to use for drawing images on extruded fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "fillExtrusionHeight",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "meters",
+        "default": 0,
         "description": "The height with which to extrude this layer.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "fillExtrusionBase",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "meters",
+        "default": 0,
         "description": "The height with which to extrude the base of this layer. Must be less than or equal to `fillExtrusionHeight`.",
         "requires": [
           "fillExtrusionHeight"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       }
     ]
   },
@@ -558,64 +777,130 @@
       {
         "name": "visibility",
         "type": "enum",
+        "values": [
+          {
+            "value": "visible",
+            "doc": "The layer is shown."
+          },
+          {
+            "value": "none",
+            "doc": "The layer is not shown."
+          }
+        ],
+        "default": "visible",
         "description": "Whether this layer is displayed.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": []
       },
       {
         "name": "fillAntialias",
         "type": "boolean",
+        "values": [],
+        "default": true,
         "description": "Whether or not the fill should be antialiased.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "fillOpacity",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 1,
         "description": "The opacity of the entire fill layer. In contrast to the `fillColor`, this value will also affect the 1px stroke around the fill, if the stroke is used.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "fillColor",
         "type": "color",
+        "values": [],
+        "default": "#000000",
         "description": "The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.",
         "requires": [],
         "disabledBy": [
           "fillPattern"
+        ],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
         ]
       },
       {
         "name": "fillOutlineColor",
         "type": "color",
+        "values": [],
         "description": "The outline color of the fill. Matches the value of `fillColor` if unspecified.",
         "requires": [],
         "disabledBy": [
           "fillPattern"
+        ],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
         ]
       },
       {
         "name": "fillTranslate",
-        "type": "array",
+        "type": "array<number>",
+        "values": [],
+        "units": "pixels",
+        "default": [
+          0,
+          0
+        ],
         "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "fillTranslateAnchor",
         "type": "enum",
+        "values": [
+          {
+            "value": "map",
+            "doc": "The fill is translated relative to the map."
+          },
+          {
+            "value": "viewport",
+            "doc": "The fill is translated relative to the viewport."
+          }
+        ],
+        "default": "map",
         "description": "Controls the frame of reference for `fillTranslate`.",
         "requires": [
           "fillTranslate"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "fillPattern",
         "type": "string",
+        "values": [],
         "description": "Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       }
     ]
   },
@@ -670,30 +955,57 @@
       {
         "name": "anchor",
         "type": "enum",
+        "values": [
+          {
+            "value": "map",
+            "doc": "The position of the light source is aligned to the rotation of the map."
+          },
+          {
+            "value": "viewport",
+            "doc": "The position of the light source is aligned to the rotation of the viewport."
+          }
+        ],
+        "default": "viewport",
         "description": "Whether extruded geometries are lit relative to the map or viewport.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": []
       },
       {
         "name": "position",
-        "type": "array",
+        "type": "array<number>",
+        "values": [],
+        "default": [
+          1.15,
+          210,
+          30
+        ],
         "description": "Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0° (0° when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0° when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0°, directly above, to 180°, directly below).",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": []
       },
       {
         "name": "color",
         "type": "color",
+        "values": [],
+        "default": "#ffffff",
         "description": "Color tint for lighting extruded geometries.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": []
       },
       {
         "name": "intensity",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0.5,
         "description": "Intensity of lighting (on a scale from 0 to 1). Higher numbers will present as more extreme contrast.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": []
       }
     ]
   },
@@ -780,119 +1092,285 @@
       {
         "name": "lineCap",
         "type": "enum",
+        "values": [
+          {
+            "value": "butt",
+            "doc": "A cap with a squared-off end which is drawn to the exact endpoint of the line."
+          },
+          {
+            "value": "round",
+            "doc": "A cap with a rounded end which is drawn beyond the endpoint of the line at a radius of one-half of the line's width and centered on the endpoint of the line."
+          },
+          {
+            "value": "square",
+            "doc": "A cap with a squared-off end which is drawn beyond the endpoint of the line at a distance of one-half of the line's width."
+          }
+        ],
+        "default": "butt",
         "description": "The display of line endings.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "lineJoin",
         "type": "enum",
+        "values": [
+          {
+            "value": "bevel",
+            "doc": "A join with a squared-off end which is drawn beyond the endpoint of the line at a distance of one-half of the line's width."
+          },
+          {
+            "value": "round",
+            "doc": "A join with a rounded end which is drawn beyond the endpoint of the line at a radius of one-half of the line's width and centered on the endpoint of the line."
+          },
+          {
+            "value": "miter",
+            "doc": "A join with a sharp, angled corner which is drawn with the outer sides beyond the endpoint of the path until they meet."
+          }
+        ],
+        "default": "miter",
         "description": "The display of lines when joining.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "lineMiterLimit",
         "type": "number",
+        "values": [],
+        "default": 2,
         "description": "Used to automatically convert miter joins to bevel joins for sharp angles.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "lineRoundLimit",
         "type": "number",
+        "values": [],
+        "default": 1.05,
         "description": "Used to automatically convert round joins to miter joins for shallow angles.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "visibility",
         "type": "enum",
+        "values": [
+          {
+            "value": "visible",
+            "doc": "The layer is shown."
+          },
+          {
+            "value": "none",
+            "doc": "The layer is not shown."
+          }
+        ],
+        "default": "visible",
         "description": "Whether this layer is displayed.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": []
       },
       {
         "name": "lineOpacity",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 1,
         "description": "The opacity at which the line will be drawn.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "lineColor",
         "type": "color",
+        "values": [],
+        "default": "#000000",
         "description": "The color with which the line will be drawn.",
         "requires": [],
         "disabledBy": [
           "linePattern"
+        ],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
         ]
       },
       {
         "name": "lineTranslate",
-        "type": "array",
+        "type": "array<number>",
+        "values": [],
+        "units": "pixels",
+        "default": [
+          0,
+          0
+        ],
         "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "lineTranslateAnchor",
         "type": "enum",
+        "values": [
+          {
+            "value": "map",
+            "doc": "The line is translated relative to the map."
+          },
+          {
+            "value": "viewport",
+            "doc": "The line is translated relative to the viewport."
+          }
+        ],
+        "default": "map",
         "description": "Controls the frame of reference for `lineTranslate`.",
         "requires": [
           "lineTranslate"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "lineWidth",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "pixels",
+        "default": 1,
         "description": "Stroke thickness.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "lineGapWidth",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "pixels",
+        "default": 0,
         "description": "Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "lineOffset",
         "type": "number",
+        "values": [],
+        "units": "pixels",
+        "default": 0,
         "description": "The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "lineBlur",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "pixels",
+        "default": 0,
         "description": "Blur applied to the line, in pixels.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "lineDasharray",
-        "type": "array",
+        "type": "array<number>",
+        "values": [],
+        "minimum": 0,
+        "units": "line widths",
         "description": "Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width.",
         "requires": [],
         "disabledBy": [
           "linePattern"
+        ],
+        "allowedFunctionTypes": [
+          "camera"
         ]
       },
       {
         "name": "linePattern",
         "type": "string",
+        "values": [],
         "description": "Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512).",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       }
     ]
   },
   "MapView": {
     "description": "MapView backed by Mapbox Native GL",
     "methods": [
+      {
+        "name": "getPointInView",
+        "docblock": "Converts a geographic coordinate to a point in the given view’s coordinate system.\n\n@example\nconst pointInView = await this._map.getPointInView([-37.817070, 144.949901]);\n\n@param {Array<Number>} coordinate - A point expressed in the map view's coordinate system.\n@return {Array}",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "coordinate",
+            "description": "A point expressed in the map view's coordinate system.",
+            "type": {
+              "name": "Array"
+            }
+          }
+        ],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "Array"
+          }
+        },
+        "description": "Converts a geographic coordinate to a point in the given view’s coordinate system.",
+        "examples": [
+          "\nconst pointInView = await this._map.getPointInView([-37.817070, 144.949901]);\n\n"
+        ]
+      },
       {
         "name": "getVisibleBounds",
         "docblock": "The coordinate bounds(ne, sw) visible in the users’s viewport.\n\n@example\nconst visibleBounds = await this._map.getVisibleBounds();\n\n@return {Array}",
@@ -1156,6 +1634,66 @@
         "examples": [
           "\nthis.map.setCamera({\n  centerCoordinate: [lng, lat],\n  zoom: 16,\n  duration: 2000,\n})\n\nthis.map.setCamera({\n  stops: [\n    { pitch: 45, duration: 200 },\n    { heading: 180, duration: 300 },\n  ]\n})\n\n "
         ]
+      },
+      {
+        "name": "takeSnap",
+        "docblock": "Takes snapshot of map with current tiles and returns a URI to the image\n@param  {Boolean} writeToDisk If true will create a temp file, otherwise it is in base64\n@return {String}",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "writeToDisk",
+            "description": "If true will create a temp file, otherwise it is in base64",
+            "type": {
+              "name": "Boolean"
+            }
+          }
+        ],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "String"
+          }
+        },
+        "description": "Takes snapshot of map with current tiles and returns a URI to the image",
+        "examples": []
+      },
+      {
+        "name": "getZoom",
+        "docblock": "Returns the current zoom of the map view.\n\n@example\nconst zoom = await this._map.getZoom();\n\n@return {Number}",
+        "modifiers": [
+          "async"
+        ],
+        "params": [],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "Number"
+          }
+        },
+        "description": "Returns the current zoom of the map view.",
+        "examples": [
+          "\nconst zoom = await this._map.getZoom();\n\n"
+        ]
+      },
+      {
+        "name": "getCenter",
+        "docblock": "Returns the map's geographical centerpoint\n\n@example\nconst center = await this._map.getCenter();\n\n@return {Array<Number>} Coordinates",
+        "modifiers": [
+          "async"
+        ],
+        "params": [],
+        "returns": {
+          "description": "Coordinates",
+          "type": {
+            "name": "Array"
+          }
+        },
+        "description": "Returns the map's geographical centerpoint",
+        "examples": [
+          "\nconst center = await this._map.getCenter();\n\n"
+        ]
       }
     ],
     "props": [
@@ -1186,6 +1724,13 @@
         "type": "number",
         "default": "MapboxGL.UserTrackingModes.None",
         "description": "The mode used to track the user location on the map"
+      },
+      {
+        "name": "userLocationVerticalAlignment",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The vertical alignment of the user location within in map. This is only enabled while tracking the users location."
       },
       {
         "name": "contentInset",
@@ -1244,6 +1789,13 @@
         "description": "Max zoom level of map"
       },
       {
+        "name": "localizeLabels",
+        "required": false,
+        "type": "bool",
+        "default": "false",
+        "description": "Automatically change the language of the map labels to the system’s preferred language,\nthis is not something that can be toggled on/off"
+      },
+      {
         "name": "zoomEnabled",
         "required": false,
         "type": "bool",
@@ -1276,7 +1828,7 @@
         "required": false,
         "type": "bool",
         "default": "true",
-        "description": "Enable/Disable attribution on map. For iOS you need to add MGLMapboxMetricsEnabledSettingShownInApp=YES\nto your Info.plist"
+        "description": "The Mapbox terms of service, which governs the use of Mapbox-hosted vector tiles and styles,\n[requires](https://www.mapbox.com/help/how-attribution-works/) these copyright notices to accompany any map that features Mapbox-designed styles, OpenStreetMap data, or other Mapbox data such as satellite or terrain data.\nIf that applies to this map view, do not hide this view or remove any notices from it.\n\nYou are additionally [required](https://www.mapbox.com/help/how-mobile-apps-work/#telemetry) to provide users with the option to disable anonymous usage and location sharing (telemetry).\nIf this view is hidden, you must implement this setting elsewhere in your app. See our website for [Android](https://www.mapbox.com/android-docs/map-sdk/overview/#telemetry-opt-out) and [iOS](https://www.mapbox.com/ios-sdk/#telemetry_opt_out) for implementation details.\n\nEnable/Disable attribution on map. For iOS you need to add MGLMapboxMetricsEnabledSettingShownInApp=YES\nto your Info.plist"
       },
       {
         "name": "logoEnabled",
@@ -1293,11 +1845,11 @@
         "description": "Enable/Disable the compass from appearing on the map"
       },
       {
-        "name": "textureMode",
+        "name": "surfaceView",
         "required": false,
         "type": "bool",
         "default": "false",
-        "description": "Enable/Disable TextureMode insted of SurfaceView"
+        "description": "[Android only] Enable/Disable use of GLSurfaceView insted of TextureView."
       },
       {
         "name": "onPress",
@@ -1333,6 +1885,13 @@
         "type": "func",
         "default": "none",
         "description": "This event is triggered whenever the currently displayed map region finished changing"
+      },
+      {
+        "name": "onUserLocationUpdate",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This event is triggered whenever the location engine receives a location update"
       },
       {
         "name": "onWillStartLoadingMap",
@@ -1405,18 +1964,11 @@
         "description": "This event is triggered when a style has finished loading."
       },
       {
-        "name": "onFlyToComplete",
+        "name": "onUserTrackingModeChange",
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "This event is triggered when a fly to animation is cancelled or completed after calling flyTo"
-      },
-      {
-        "name": "onSetCameraComplete",
-        "required": false,
-        "type": "func",
-        "default": "none",
-        "description": "This event is triggered once the camera is finished after calling setCamera"
+        "description": "This event is triggered when the users tracking mode is changed."
       }
     ],
     "composes": [
@@ -1573,58 +2125,118 @@
       {
         "name": "visibility",
         "type": "enum",
+        "values": [
+          {
+            "value": "visible",
+            "doc": "The layer is shown."
+          },
+          {
+            "value": "none",
+            "doc": "The layer is not shown."
+          }
+        ],
+        "default": "visible",
         "description": "Whether this layer is displayed.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": []
       },
       {
         "name": "rasterOpacity",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 1,
         "description": "The opacity at which the image will be drawn.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "rasterHueRotate",
         "type": "number",
+        "values": [],
+        "units": "degrees",
+        "default": 0,
         "description": "Rotates hues around the color wheel.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "rasterBrightnessMin",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 0,
         "description": "Increase or reduce the brightness of the image. The value is the minimum brightness.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "rasterBrightnessMax",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 1,
         "description": "Increase or reduce the brightness of the image. The value is the maximum brightness.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "rasterSaturation",
         "type": "number",
+        "values": [],
+        "minimum": -1,
+        "maximum": 1,
+        "default": 0,
         "description": "Increase or reduce the saturation of the image.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "rasterContrast",
         "type": "number",
+        "values": [],
+        "minimum": -1,
+        "maximum": 1,
+        "default": 0,
         "description": "Increase or reduce the contrast of the image.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "rasterFadeDuration",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "milliseconds",
+        "default": 300,
         "description": "Fade duration when a new tile is added.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       }
     ]
   },
@@ -1864,455 +2476,1006 @@
       {
         "name": "symbolPlacement",
         "type": "enum",
+        "values": [
+          {
+            "value": "point",
+            "doc": "The label is placed at the point where the geometry is located."
+          },
+          {
+            "value": "line",
+            "doc": "The label is placed along the line of the geometry. Can only be used on `LineString` and `Polygon` geometries."
+          }
+        ],
+        "default": "point",
         "description": "Label placement relative to its geometry.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "symbolSpacing",
         "type": "number",
+        "values": [],
+        "minimum": 1,
+        "units": "pixels",
+        "default": 250,
         "description": "Distance between two symbol anchors.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "symbolAvoidEdges",
         "type": "boolean",
+        "values": [],
+        "default": false,
         "description": "If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "iconAllowOverlap",
         "type": "boolean",
+        "values": [],
+        "default": false,
         "description": "If true, the icon will be visible even if it collides with other previously drawn symbols.",
         "requires": [
           "iconImage"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "iconIgnorePlacement",
         "type": "boolean",
+        "values": [],
+        "default": false,
         "description": "If true, other symbols can be visible even if they collide with the icon.",
         "requires": [
           "iconImage"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "iconOptional",
         "type": "boolean",
+        "values": [],
+        "default": false,
         "description": "If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not.",
         "requires": [
           "iconImage",
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "iconRotationAlignment",
         "type": "enum",
+        "values": [
+          {
+            "value": "map",
+            "doc": "When `symbol-placement` is set to `point`, aligns icons east-west. When `symbol-placement` is set to `line`, aligns icon x-axes with the line."
+          },
+          {
+            "value": "viewport",
+            "doc": "Produces icons whose x-axes are aligned with the x-axis of the viewport, regardless of the value of `symbol-placement`."
+          },
+          {
+            "value": "auto",
+            "doc": "When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line`, this is equivalent to `map`."
+          }
+        ],
+        "default": "auto",
         "description": "In combination with `symbolPlacement`, determines the rotation behavior of icons.",
         "requires": [
           "iconImage"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "iconSize",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "factor of the original icon size",
+        "default": 1,
         "description": "Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `iconSize`. 1 is the original size; 3 triples the size of the image.",
         "requires": [
           "iconImage"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "iconTextFit",
         "type": "enum",
+        "values": [
+          {
+            "value": "none",
+            "doc": "The icon is displayed at its intrinsic aspect ratio."
+          },
+          {
+            "value": "width",
+            "doc": "The icon is scaled in the x-dimension to fit the width of the text."
+          },
+          {
+            "value": "height",
+            "doc": "The icon is scaled in the y-dimension to fit the height of the text."
+          },
+          {
+            "value": "both",
+            "doc": "The icon is scaled in both x- and y-dimensions."
+          }
+        ],
+        "default": "none",
         "description": "Scales the icon to fit around the associated text.",
         "requires": [
           "iconImage",
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "iconTextFitPadding",
-        "type": "array",
+        "type": "array<number>",
+        "values": [],
+        "units": "pixels",
+        "default": [
+          0,
+          0,
+          0,
+          0
+        ],
         "description": "Size of the additional area added to dimensions determined by `iconTextFit`, in clockwise order: top, right, bottom, left.",
         "requires": [
           "iconImage",
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "iconImage",
         "type": "string",
+        "values": [],
         "description": "Name of image in sprite to use for drawing an image background. A string with `{tokens}` replaced, referencing the data property to pull from. (`{token}` replacement is only supported for literal `iconImage` values; not for property functions.)",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "iconRotate",
         "type": "number",
+        "values": [],
+        "units": "degrees",
+        "default": 0,
         "description": "Rotates the icon clockwise.",
         "requires": [
           "iconImage"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "iconPadding",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "pixels",
+        "default": 2,
         "description": "Size of the additional area around the icon bounding box used for detecting symbol collisions.",
         "requires": [
           "iconImage"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "iconKeepUpright",
         "type": "boolean",
+        "values": [],
+        "default": false,
         "description": "If true, the icon may be flipped to prevent it from being rendered upsideDown.",
         "requires": [
           "iconImage"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "iconOffset",
-        "type": "array",
+        "type": "array<number>",
+        "values": [],
+        "units": "pixels multiplied by the value of \"icon-size\"",
+        "default": [
+          0,
+          0
+        ],
         "description": "Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. When combined with `iconRotate` the offset will be as if the rotated direction was up.",
         "requires": [
           "iconImage"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "iconAnchor",
         "type": "enum",
+        "values": [
+          {
+            "value": "center",
+            "doc": "The center of the icon is placed closest to the anchor."
+          },
+          {
+            "value": "left",
+            "doc": "The left side of the icon is placed closest to the anchor."
+          },
+          {
+            "value": "right",
+            "doc": "The right side of the icon is placed closest to the anchor."
+          },
+          {
+            "value": "top",
+            "doc": "The top of the icon is placed closest to the anchor."
+          },
+          {
+            "value": "bottom",
+            "doc": "The bottom of the icon is placed closest to the anchor."
+          },
+          {
+            "value": "top-left",
+            "doc": "The top left corner of the icon is placed closest to the anchor."
+          },
+          {
+            "value": "top-right",
+            "doc": "The top right corner of the icon is placed closest to the anchor."
+          },
+          {
+            "value": "bottom-left",
+            "doc": "The bottom left corner of the icon is placed closest to the anchor."
+          },
+          {
+            "value": "bottom-right",
+            "doc": "The bottom right corner of the icon is placed closest to the anchor."
+          }
+        ],
+        "default": "center",
         "description": "Part of the icon placed closest to the anchor.",
         "requires": [
           "iconImage"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "iconPitchAlignment",
         "type": "enum",
+        "values": [
+          {
+            "value": "map",
+            "doc": "The icon is aligned to the plane of the map."
+          },
+          {
+            "value": "viewport",
+            "doc": "The icon is aligned to the plane of the viewport."
+          },
+          {
+            "value": "auto",
+            "doc": "Automatically matches the value of `icon-rotation-alignment`."
+          }
+        ],
+        "default": "auto",
         "description": "Orientation of icon when map is pitched.",
         "requires": [
           "iconImage"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "textPitchAlignment",
         "type": "enum",
+        "values": [
+          {
+            "value": "map",
+            "doc": "The text is aligned to the plane of the map."
+          },
+          {
+            "value": "viewport",
+            "doc": "The text is aligned to the plane of the viewport."
+          },
+          {
+            "value": "auto",
+            "doc": "Automatically matches the value of `text-rotation-alignment`."
+          }
+        ],
+        "default": "auto",
         "description": "Orientation of text when map is pitched.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "textRotationAlignment",
         "type": "enum",
+        "values": [
+          {
+            "value": "map",
+            "doc": "When `symbol-placement` is set to `point`, aligns text east-west. When `symbol-placement` is set to `line`, aligns text x-axes with the line."
+          },
+          {
+            "value": "viewport",
+            "doc": "Produces glyphs whose x-axes are aligned with the x-axis of the viewport, regardless of the value of `symbol-placement`."
+          },
+          {
+            "value": "auto",
+            "doc": "When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line`, this is equivalent to `map`."
+          }
+        ],
+        "default": "auto",
         "description": "In combination with `symbolPlacement`, determines the rotation behavior of the individual glyphs forming the text.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "textField",
         "type": "string",
+        "values": [],
+        "default": "",
         "description": "Value to use for a text label. Feature properties are specified using tokens like `{field_name}`. (`{token}` replacement is only supported for literal `textField` values; not for property functions.)",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "textFont",
-        "type": "array",
+        "type": "array<string>",
+        "values": [],
+        "default": [
+          "Open Sans Regular",
+          "Arial Unicode MS Regular"
+        ],
         "description": "Font stack to use for displaying text.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "textSize",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "pixels",
+        "default": 16,
         "description": "Font size.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "textMaxWidth",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "ems",
+        "default": 10,
         "description": "The maximum line width for text wrapping.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "textLineHeight",
         "type": "number",
+        "values": [],
+        "units": "ems",
+        "default": 1.2,
         "description": "Text leading value for multiLine text.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "textLetterSpacing",
         "type": "number",
+        "values": [],
+        "units": "ems",
+        "default": 0,
         "description": "Text tracking amount.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "textJustify",
         "type": "enum",
+        "values": [
+          {
+            "value": "left",
+            "doc": "The text is aligned to the left."
+          },
+          {
+            "value": "center",
+            "doc": "The text is centered."
+          },
+          {
+            "value": "right",
+            "doc": "The text is aligned to the right."
+          }
+        ],
+        "default": "center",
         "description": "Text justification options.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "textAnchor",
         "type": "enum",
+        "values": [
+          {
+            "value": "center",
+            "doc": "The center of the text is placed closest to the anchor."
+          },
+          {
+            "value": "left",
+            "doc": "The left side of the text is placed closest to the anchor."
+          },
+          {
+            "value": "right",
+            "doc": "The right side of the text is placed closest to the anchor."
+          },
+          {
+            "value": "top",
+            "doc": "The top of the text is placed closest to the anchor."
+          },
+          {
+            "value": "bottom",
+            "doc": "The bottom of the text is placed closest to the anchor."
+          },
+          {
+            "value": "top-left",
+            "doc": "The top left corner of the text is placed closest to the anchor."
+          },
+          {
+            "value": "top-right",
+            "doc": "The top right corner of the text is placed closest to the anchor."
+          },
+          {
+            "value": "bottom-left",
+            "doc": "The bottom left corner of the text is placed closest to the anchor."
+          },
+          {
+            "value": "bottom-right",
+            "doc": "The bottom right corner of the text is placed closest to the anchor."
+          }
+        ],
+        "default": "center",
         "description": "Part of the text placed closest to the anchor.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "textMaxAngle",
         "type": "number",
+        "values": [],
+        "units": "degrees",
+        "default": 45,
         "description": "Maximum angle change between adjacent characters.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "textRotate",
         "type": "number",
+        "values": [],
+        "units": "degrees",
+        "default": 0,
         "description": "Rotates the text clockwise.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "textPadding",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "pixels",
+        "default": 2,
         "description": "Size of the additional area around the text bounding box used for detecting symbol collisions.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "textKeepUpright",
         "type": "boolean",
+        "values": [],
+        "default": true,
         "description": "If true, the text may be flipped vertically to prevent it from being rendered upsideDown.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "textTransform",
         "type": "enum",
+        "values": [
+          {
+            "value": "none",
+            "doc": "The text is not altered."
+          },
+          {
+            "value": "uppercase",
+            "doc": "Forces all letters to be displayed in uppercase."
+          },
+          {
+            "value": "lowercase",
+            "doc": "Forces all letters to be displayed in lowercase."
+          }
+        ],
+        "default": "none",
         "description": "Specifies how to capitalize text, similar to the CSS `textTransform` property.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "textOffset",
-        "type": "array",
+        "type": "array<number>",
+        "values": [],
+        "units": "ems",
+        "default": [
+          0,
+          0
+        ],
         "description": "Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "textAllowOverlap",
         "type": "boolean",
+        "values": [],
+        "default": false,
         "description": "If true, the text will be visible even if it collides with other previously drawn symbols.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "textIgnorePlacement",
         "type": "boolean",
+        "values": [],
+        "default": false,
         "description": "If true, other symbols can be visible even if they collide with the text.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "textOptional",
         "type": "boolean",
+        "values": [],
+        "default": false,
         "description": "If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not.",
         "requires": [
           "textField",
           "iconImage"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "visibility",
         "type": "enum",
+        "values": [
+          {
+            "value": "visible",
+            "doc": "The layer is shown."
+          },
+          {
+            "value": "none",
+            "doc": "The layer is not shown."
+          }
+        ],
+        "default": "visible",
         "description": "Whether this layer is displayed.",
         "requires": [],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": []
       },
       {
         "name": "iconOpacity",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 1,
         "description": "The opacity at which the icon will be drawn.",
         "requires": [
           "iconImage"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "iconColor",
         "type": "color",
+        "values": [],
+        "default": "#000000",
         "description": "The color of the icon. This can only be used with sdf icons.",
         "requires": [
           "iconImage"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "iconHaloColor",
         "type": "color",
+        "values": [],
+        "default": "rgba(0, 0, 0, 0)",
         "description": "The color of the icon's halo. Icon halos can only be used with SDF icons.",
         "requires": [
           "iconImage"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "iconHaloWidth",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "pixels",
+        "default": 0,
         "description": "Distance of halo to the icon outline.",
         "requires": [
           "iconImage"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "iconHaloBlur",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "pixels",
+        "default": 0,
         "description": "Fade out the halo towards the outside.",
         "requires": [
           "iconImage"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "iconTranslate",
-        "type": "array",
+        "type": "array<number>",
+        "values": [],
+        "units": "pixels",
+        "default": [
+          0,
+          0
+        ],
         "description": "Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.",
         "requires": [
           "iconImage"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "iconTranslateAnchor",
         "type": "enum",
+        "values": [
+          {
+            "value": "map",
+            "doc": "Icons are translated relative to the map."
+          },
+          {
+            "value": "viewport",
+            "doc": "Icons are translated relative to the viewport."
+          }
+        ],
+        "default": "map",
         "description": "Controls the frame of reference for `iconTranslate`.",
         "requires": [
           "iconImage",
           "iconTranslate"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "textOpacity",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 1,
         "description": "The opacity at which the text will be drawn.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "textColor",
         "type": "color",
+        "values": [],
+        "default": "#000000",
         "description": "The color with which the text will be drawn.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "textHaloColor",
         "type": "color",
+        "values": [],
+        "default": "rgba(0, 0, 0, 0)",
         "description": "The color of the text's halo, which helps it stand out from backgrounds.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "textHaloWidth",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "pixels",
+        "default": 0,
         "description": "Distance of halo to the font outline. Max text halo width is 1/4 of the fontSize.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "textHaloBlur",
         "type": "number",
+        "values": [],
+        "minimum": 0,
+        "units": "pixels",
+        "default": 0,
         "description": "The halo's fadeout distance towards the outside.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera",
+          "source",
+          "composite"
+        ]
       },
       {
         "name": "textTranslate",
-        "type": "array",
+        "type": "array<number>",
+        "values": [],
+        "units": "pixels",
+        "default": [
+          0,
+          0
+        ],
         "description": "Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.",
         "requires": [
           "textField"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       },
       {
         "name": "textTranslateAnchor",
         "type": "enum",
+        "values": [
+          {
+            "value": "map",
+            "doc": "The text is translated relative to the map."
+          },
+          {
+            "value": "viewport",
+            "doc": "The text is translated relative to the viewport."
+          }
+        ],
+        "default": "map",
         "description": "Controls the frame of reference for `textTranslate`.",
         "requires": [
           "textField",
           "textTranslate"
         ],
-        "disabledBy": []
+        "disabledBy": [],
+        "allowedFunctionTypes": [
+          "camera"
+        ]
       }
     ]
   },
@@ -2564,6 +3727,37 @@
           "description": "",
           "type": {
             "name": "void"
+          }
+        }
+      }
+    ]
+  },
+  "snapshotManager": {
+    "name": "snapshotManager",
+    "description": "The snapshotManager generates static raster images of the map.\nEach snapshot image depicts a portion of a map defined by an SnapshotOptions object you provide.\nThe snapshotter generates the snapshot asynchronous.",
+    "props": [],
+    "styles": [],
+    "methods": [
+      {
+        "name": "takeSnap",
+        "description": "Takes a snapshot of the base map using the provided Snapshot options. NOTE pitch, heading, zoomLevel only works when centerCoordinate is set!",
+        "params": [
+          {
+            "name": "options",
+            "description": "Snapshot options for create a static image of the base map",
+            "type": {
+              "name": "SnapshotOptions"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "// creates a temp file png of base map\nconst uri = await MapboxGL.snapshotManager.takeSnap({\n  centerCoordinate: [-74.126410, 40.797968],\n  width: width,\n  height: height,\n  zoomLevel: 12,\n  pitch: 30,\n  heading: 20,\n  styleURL: MapboxGL.StyleURL.Dark,\n  writeToDisk: true, // creates a temp file\n});\n\n// creates base64 png of base map\nconst uri = await MapboxGL.snapshotManager.takeSnap({\n  centerCoordinate: [-74.126410, 40.797968],\n  width: width,\n  height: height,\n  zoomLevel: 12,\n  pitch: 30,\n  heading: 20,\n  styleURL: MapboxGL.StyleURL.Dark,\n});\n\n// creates snapshot with bounds\nconst uri = await MapboxGL.snapshotManager.takeSnap({\n  bounds: [[-74.126410, 40.797968], [-74.143727, 40.772177]],\n  width: width,\n  height: height,\n  styleURL: MapboxGL.StyleURL.Dark,\n});"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "Promise"
           }
         }
       }

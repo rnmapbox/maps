@@ -14,11 +14,15 @@ import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.offline.OfflineRegion;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerMode;
+import com.mapbox.mapboxsdk.storage.FileSource;
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.rctmgl.components.camera.constants.CameraMode;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleValue;
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 import com.mapbox.rctmgl.events.constants.EventTypes;
+import com.mapbox.rctmgl.location.UserLocationVerticalAlignment;
+import com.mapbox.rctmgl.location.UserTrackingMode;
+import com.mapbox.services.android.telemetry.MapboxTelemetry;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +42,6 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
     public RCTMGLModule(ReactApplicationContext reactApplicationContext) {
         super(reactApplicationContext);
         mReactContext = reactApplicationContext;
-        mUiThreadHandler = new Handler(Looper.getMainLooper());
     }
 
     @Override
@@ -64,9 +67,10 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         Map<String, String> eventTypes = new HashMap<>();
         eventTypes.put("MapClick", EventTypes.MAP_CLICK);
         eventTypes.put("MapLongClick", EventTypes.MAP_LONG_CLICK);
-        eventTypes.put("RegionWilChange", EventTypes.REGION_WILL_CHANGE);
+        eventTypes.put("RegionWillChange", EventTypes.REGION_WILL_CHANGE);
         eventTypes.put("RegionIsChanging", EventTypes.REGION_IS_CHANGING);
         eventTypes.put("RegionDidChange", EventTypes.REGION_DID_CHANGE);
+        eventTypes.put("UserLocationUpdated", EventTypes.USER_LOCATION_UPDATED);
         eventTypes.put("WillStartLoadingMap", EventTypes.WILL_START_LOADING_MAP);
         eventTypes.put("DidFinishLoadingMap", EventTypes.DID_FINISH_LOADING_MAP);
         eventTypes.put("DidFailLoadingMap", EventTypes.DID_FAIL_LOADING_MAP);
@@ -80,10 +84,16 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
 
         // user tracking modes
         Map<String, Integer> userTrackingModes = new HashMap<>();
-        userTrackingModes.put("None", LocationLayerMode.NONE);
-        userTrackingModes.put("Follow", LocationLayerMode.TRACKING);
-        userTrackingModes.put("FollowWithCourse", LocationLayerMode.NAVIGATION);
-        userTrackingModes.put("FollowWithHeading", LocationLayerMode.COMPASS);
+        userTrackingModes.put("None", UserTrackingMode.NONE);
+        userTrackingModes.put("Follow", UserTrackingMode.FOLLOW);
+        userTrackingModes.put("FollowWithCourse", UserTrackingMode.FollowWithCourse);
+        userTrackingModes.put("FollowWithHeading", UserTrackingMode.FollowWithHeading);
+
+        // user location vertical alignment
+        Map<String, Integer> userLocationVerticalAlignment = new HashMap<>();
+        userLocationVerticalAlignment.put("Center", UserLocationVerticalAlignment.CENTER);
+        userLocationVerticalAlignment.put("Top", UserLocationVerticalAlignment.TOP);
+        userLocationVerticalAlignment.put("Bottom", UserLocationVerticalAlignment.BOTTOM);
 
         // camera modes
         Map<String, Integer> cameraModes = new HashMap<>();
@@ -231,6 +241,7 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
                 .put("StyleURL", styleURLS)
                 .put("EventTypes", eventTypes)
                 .put("UserTrackingModes", userTrackingModes)
+                .put("UserLocationVerticalAlignment", userLocationVerticalAlignment)
                 .put("CameraModes", cameraModes)
                 .put("StyleSource", styleSourceConsts)
                 .put("InterpolationMode", interpolationModes)
@@ -262,7 +273,7 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setAccessToken(final String accessToken) {
-        mUiThreadHandler.post(new Runnable() {
+        mReactContext.runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 Mapbox.getInstance(getReactApplicationContext(), accessToken);
@@ -275,5 +286,20 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         WritableMap map = Arguments.createMap();
         map.putString("accessToken", Mapbox.getAccessToken());
         promise.resolve(map);
+    }
+
+    @ReactMethod
+    public void setTelemetryEnabled(final boolean telemetryEnabled) {
+        mReactContext.runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                MapboxTelemetry.getInstance().setTelemetryEnabled(telemetryEnabled);
+            }
+        });
+    }
+
+    @ReactMethod
+    public void isTelemetryEnabled(Promise promise) {
+        promise.resolve(MapboxTelemetry.getInstance().isTelemetryEnabled());
     }
 }

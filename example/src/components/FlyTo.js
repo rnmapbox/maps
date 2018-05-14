@@ -12,19 +12,19 @@ const layerStyles = MapboxGL.StyleSheet.create({
     fillExtrusionOpacity: 1,
     fillExtrusionHeight: MapboxGL.StyleSheet.identity('height'),
     fillExtrusionBase: MapboxGL.StyleSheet.identity('min_height'),
-    fillExtrusionColor: MapboxGL.StyleSheet.source([
-      [0, 'white'],
-      [50, 'blue'],
-      [100, 'red'],
-    ], 'height', MapboxGL.InterpolationMode.Exponential),
+    fillExtrusionColor: MapboxGL.StyleSheet.source(
+      [[0, 'white'], [50, 'blue'], [100, 'red']],
+      'height',
+      MapboxGL.InterpolationMode.Exponential,
+    ),
     fillExtrusionColorTransition: { duration: 2000, delay: 0 },
   },
   streets: {
     lineColor: 'blue',
     lineWidth: 2,
-    lineOpacity: 0.50,
-    lineJoin: MapboxGL.LineJoin.Round,
-    lineCap: MapboxGL.LineCap.Round,
+    lineOpacity: 0.5,
+    lineJoin: 'round',
+    lineCap: 'round',
     lineDasharray: [2, 2],
   },
 });
@@ -37,7 +37,7 @@ class FlyTo extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this._flyToOptions = [
@@ -49,38 +49,42 @@ class FlyTo extends React.Component {
     this.onFlyToComplete = this.onFlyToComplete.bind(this);
   }
 
-  async onFlyToPress (i, coordinates) {
+  async onFlyToPress(i, coordinates) {
     await this.map.flyTo(coordinates, 6000);
     this.onFlyToComplete();
   }
 
-  onFlyToComplete () {
+  onFlyToComplete() {
     Alert.alert('Fly To Animation Completed', 'We did it!!!');
   }
 
-  render () {
+  render() {
     return (
-      <TabBarPage {...this.props} options={this._flyToOptions} onOptionPress={this.onFlyToPress}>
+      <TabBarPage
+        {...this.props}
+        options={this._flyToOptions}
+        onOptionPress={this.onFlyToPress}>
         <MapboxGL.MapView
-            zoomLevel={16}
-            pitch={45}
-            centerCoordinate={FlyTo.SF_OFFICE_LOCATION}
-            ref={(ref) => this.map = ref}
-            style={sheet.matchParent}>
+          zoomLevel={16}
+          pitch={45}
+          centerCoordinate={FlyTo.SF_OFFICE_LOCATION}
+          ref={(ref) => (this.map = ref)}
+          style={sheet.matchParent}>
+          <MapboxGL.VectorSource>
+            <MapboxGL.FillExtrusionLayer
+              id="building3d"
+              sourceLayerID="building"
+              style={layerStyles.building}
+            />
 
-            <MapboxGL.VectorSource>
-              <MapboxGL.FillExtrusionLayer
-                id='building3d'
-                sourceLayerID='building'
-                style={layerStyles.building} />
-
-              <MapboxGL.LineLayer
-                id='streetLineColor'
-                sourceLayerID='road'
-                minZoomLevel={14}
-                belowLayerID='building3d'
-                style={layerStyles.streets} />
-            </MapboxGL.VectorSource>
+            <MapboxGL.LineLayer
+              id="streetLineColor"
+              sourceLayerID="road"
+              minZoomLevel={14}
+              belowLayerID="building3d"
+              style={layerStyles.streets}
+            />
+          </MapboxGL.VectorSource>
         </MapboxGL.MapView>
       </TabBarPage>
     );

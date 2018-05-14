@@ -3,7 +3,11 @@
 cd ios/
 
 VERSION=$1
-CURRENT_VERSION=$(cat .framework_version)
+if type /usr/libexec/PlistBuddy &> /dev/null; then
+  CURRENT_VERSION=$(/usr/libexec/PlistBuddy -c "Print :MGLSemanticVersionString" Mapbox.framework/Info.plist)
+else
+  CURRENT_VERSION=$(cat .framework_version)
+fi
 
 if [ "$VERSION" == "$CURRENT_VERSION" ]; then
   echo "The newest version is already installed. Exiting."

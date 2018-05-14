@@ -1,7 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { requireNativeComponent } from 'react-native';
-import { cloneReactChildrenWithProps, viewPropTypes, isNumber, resolveImagePath } from '../utils';
+import {
+  cloneReactChildrenWithProps,
+  viewPropTypes,
+  isNumber,
+  resolveImagePath,
+} from '../utils';
 
 export const NATIVE_MODULE_NAME = 'RCTMGLImageSource';
 
@@ -22,10 +27,7 @@ class ImageSource extends React.PureComponent {
      * An HTTP(S) URL, absolute file URL, or local file URL to the source image.
      * Gifs are currently not supported.
      */
-    url: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.string,
-    ]),
+    url: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 
     /**
      * The top left, top right, bottom right, and bottom left coordinates for the image.
@@ -33,9 +35,9 @@ class ImageSource extends React.PureComponent {
     coordinates: PropTypes.arrayOf(
       PropTypes.arrayOf(PropTypes.number).isRequired,
     ).isRequired,
-  }
+  };
 
-  _getURL () {
+  _getURL() {
     let url = this.props.url;
 
     if (isNumber(this.props.url)) {
@@ -45,8 +47,12 @@ class ImageSource extends React.PureComponent {
     return url;
   }
 
-  render () {
-    if (!this.props.url || !this.props.coordinates || !this.props.coordinates.length) {
+  render() {
+    if (
+      !this.props.url ||
+      !this.props.coordinates ||
+      !this.props.coordinates.length
+    ) {
       return null;
     }
 
@@ -55,14 +61,19 @@ class ImageSource extends React.PureComponent {
       url: this._getURL(),
     };
 
-    return  (
+    return (
       <RCTMGLImageSource {...props}>
-        {cloneReactChildrenWithProps(this.props.children, { sourceID: this.props.id })}
+        {cloneReactChildrenWithProps(this.props.children, {
+          sourceID: this.props.id,
+        })}
       </RCTMGLImageSource>
     );
   }
 }
 
-const RCTMGLImageSource = requireNativeComponent(NATIVE_MODULE_NAME, ImageSource);
+const RCTMGLImageSource = requireNativeComponent(
+  NATIVE_MODULE_NAME,
+  ImageSource,
+);
 
 export default ImageSource;

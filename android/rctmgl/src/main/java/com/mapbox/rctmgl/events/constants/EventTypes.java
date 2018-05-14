@@ -8,10 +8,12 @@ public class EventTypes {
     // map event types
     public static final String MAP_CLICK = "press";
     public static final String MAP_LONG_CLICK = "longpress";
+    public static final String MAP_USER_TRACKING_MODE_CHANGE = "usertrackingmodechange";
 
     public static final String REGION_WILL_CHANGE = "regionwillchange";
     public static final String REGION_IS_CHANGING = "regionischanging";
     public static final String REGION_DID_CHANGE  = "regiondidchange";
+    public static final String USER_LOCATION_UPDATED = "userlocationdupdated";
 
     public static final String WILL_START_LOADING_MAP = "willstartloadingmap";
     public static final String DID_FINISH_LOADING_MAP = "didfinishloadingmap";

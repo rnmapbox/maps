@@ -14,25 +14,29 @@ const layerStyles = MapboxGL.StyleSheet.create({
     circleStrokeWidth: 2,
     circleStrokeColor: 'white',
     circleRadius: 5,
-    circlePitchAlignment: MapboxGL.CirclePitchAlignment.Map,
+    circlePitchAlignment: 'map',
   },
 
   clusteredPoints: {
-    circlePitchAlignment: MapboxGL.CirclePitchAlignment.Map,
-    circleColor: MapboxGL.StyleSheet.source([
-      [25, 'yellow'],
-      [50, 'red'],
-      [75, 'blue'],
-      [100, 'orange'],
-      [300, 'pink'],
-      [750, 'white'],
-    ], 'point_count', MapboxGL.InterpolationMode.Exponential),
+    circlePitchAlignment: 'map',
+    circleColor: MapboxGL.StyleSheet.source(
+      [
+        [25, 'yellow'],
+        [50, 'red'],
+        [75, 'blue'],
+        [100, 'orange'],
+        [300, 'pink'],
+        [750, 'white'],
+      ],
+      'point_count',
+      MapboxGL.InterpolationMode.Exponential,
+    ),
 
-    circleRadius: MapboxGL.StyleSheet.source([
-      [0, 15],
-      [100, 20],
-      [750, 30],
-    ], 'point_count', MapboxGL.InterpolationMode.Exponential),
+    circleRadius: MapboxGL.StyleSheet.source(
+      [[0, 15], [100, 20], [750, 30]],
+      'point_count',
+      MapboxGL.InterpolationMode.Exponential,
+    ),
 
     circleOpacity: 0.84,
     circleStrokeWidth: 2,
@@ -42,7 +46,7 @@ const layerStyles = MapboxGL.StyleSheet.create({
   clusterCount: {
     textField: '{point_count}',
     textSize: 12,
-    textPitchAlignment: MapboxGL.TextPitchAlignment.Map,
+    textPitchAlignment: 'map',
   },
 });
 
@@ -51,39 +55,39 @@ class EarthQuakes extends React.Component {
     ...BaseExamplePropTypes,
   };
 
-  render () {
+  render() {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-            zoomLevel={6}
-            pitch={45}
-            centerCoordinate={SF_OFFICE_COORDINATE}
-            style={sheet.matchParent}
-            styleURL={MapboxGL.StyleURL.Dark}>
+          zoomLevel={6}
+          pitch={45}
+          centerCoordinate={SF_OFFICE_COORDINATE}
+          style={sheet.matchParent}
+          styleURL={MapboxGL.StyleURL.Dark}>
+          <MapboxGL.ShapeSource
+            id="earthquakes"
+            cluster
+            clusterRadius={50}
+            clusterMaxZoom={14}
+            url="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson">
+            <MapboxGL.SymbolLayer
+              id="pointCount"
+              style={layerStyles.clusterCount}
+            />
 
-            <MapboxGL.ShapeSource
-              id='earthquakes'
-              cluster
-              clusterRadius={50}
-              clusterMaxZoom={14}
-              url='https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson'>
+            <MapboxGL.CircleLayer
+              id="clusteredPoints"
+              belowLayerID="pointCount"
+              filter={['has', 'point_count']}
+              style={layerStyles.clusteredPoints}
+            />
 
-              <MapboxGL.SymbolLayer
-                id='pointCount'
-                style={layerStyles.clusterCount} />
-
-              <MapboxGL.CircleLayer
-                id='clusteredPoints'
-                belowLayerID='pointCount'
-                filter={['has', 'point_count']}
-                style={layerStyles.clusteredPoints} />
-
-              <MapboxGL.CircleLayer
-                id='singlePoint'
-                filter={['!has', 'point_count']}
-                style={layerStyles.singlePoint} />
-
-            </MapboxGL.ShapeSource>
+            <MapboxGL.CircleLayer
+              id="singlePoint"
+              filter={['!has', 'point_count']}
+              style={layerStyles.singlePoint}
+            />
+          </MapboxGL.ShapeSource>
         </MapboxGL.MapView>
       </Page>
     );

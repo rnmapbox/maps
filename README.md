@@ -24,7 +24,7 @@ Not a Mapbox user yet? [Sign up for an account here](https://www.mapbox.com/sign
 
 * [node](https://nodejs.org)
 * [npm](https://www.npmjs.com/)
-* [React Native](https://facebook.github.io/react-native/) >= 0.47.1
+* [React Native](https://facebook.github.io/react-native/) recommended version 0.50 or greater
 
 **Git**
 ```
@@ -46,7 +46,7 @@ npm install @mapbox/react-native-mapbox-gl --save
 
 * [Android](/android/install.md)
 * [iOS](/ios/install.md)
-* [Example](/example/README.md)
+* [Example](/example)
 
 ## Documentation
 
@@ -73,6 +73,14 @@ npm install @mapbox/react-native-mapbox-gl --save
 
 ### Offline
 * [OfflineManager](/docs/OfflineManager.md)
+* [SnapshotManager](/docs/snapshotManager.md)
+
+## Expo Support
+We have a feature request open with Expo if you want to see it get in show your support https://expo.canny.io/feature-requests/p/add-mapbox-gl-support
+
+## Developer Group
+
+Have a question or need some help? Join our [Gitter developer group](https://gitter.im/react-native-mapbox-gl/Lobby)!
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmapbox%2Freact-native-mapbox-gl.svg?type=large)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmapbox%2Freact-native-mapbox-gl?ref=badge_large)

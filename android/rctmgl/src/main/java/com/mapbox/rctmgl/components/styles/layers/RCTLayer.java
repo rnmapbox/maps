@@ -13,6 +13,7 @@ import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
+import com.mapbox.rctmgl.location.UserLocationLayerConstants;
 import com.mapbox.rctmgl.utils.ConvertUtils;
 import com.mapbox.rctmgl.utils.DownloadMapImageTask;
 import com.mapbox.rctmgl.utils.FilterParser;
@@ -60,7 +61,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
     protected Double mMinZoomLevel;
     protected Double mMaxZoomLevel;
     protected ReadableMap mReactStyle;
-    protected FilterParser.FilterList mFilter;
+    protected Filter.Statement mFilter;
 
     protected MapboxMap mMap;
     protected T mLayer;
@@ -155,13 +156,13 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
     }
 
     public void setFilter(ReadableArray readableFilterArray) {
-        mFilter = FilterParser.getFilterList(readableFilterArray);
+        FilterParser.FilterList filterList = FilterParser.getFilterList(readableFilterArray);
+
+        mFilter = buildFilter(filterList);
 
         if (mLayer != null) {
-            Filter.Statement statement = buildFilter();
-
-            if (statement != null) {
-                updateFilter(statement);
+            if (mFilter != null) {
+                updateFilter(mFilter);
             }
         }
     }
@@ -170,6 +171,16 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         if (!hasInitialized()) {
             return;
         }
+
+        String userBackgroundID = UserLocationLayerConstants.BACKGROUND_LAYER_ID;
+        Layer userLocationBackgroundLayer = mMap.getLayer(userBackgroundID);
+
+        // place below user location layer
+        if (userLocationBackgroundLayer != null) {
+            mMap.addLayerBelow(mLayer, userBackgroundID);
+            return;
+        }
+
         mMap.addLayer(mLayer);
     }
 
@@ -222,8 +233,8 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         }
     }
 
-    protected Filter.Statement buildFilter() {
-        return FilterParser.parse(mFilter);
+    protected Filter.Statement buildFilter(FilterParser.FilterList filterList) {
+        return FilterParser.parse(filterList);
     }
 
     protected void updateFilter(Filter.Statement statement) {
