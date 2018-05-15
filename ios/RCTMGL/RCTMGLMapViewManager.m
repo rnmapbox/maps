@@ -477,7 +477,7 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
 
 - (void)mapView:(MGLMapView *)mapView regionWillChangeWithReason:(MGLCameraChangeReason)reason animated:(BOOL)animated
 {
-    ((RCTMGLMapView *) mapView).isUserInteraction = (bool)(reason & ~MGLCameraChangeReasonProgrammatic);
+    ((RCTMGLMapView *) mapView).isUserInteraction = (BOOL)(reason & ~MGLCameraChangeReasonProgrammatic);
     
     NSDictionary *payload = [self _makeRegionPayload:mapView animated:animated];
     [self reactMapDidChange:mapView eventType:RCT_MAPBOX_REGION_WILL_CHANGE_EVENT andPayload:payload];
@@ -490,7 +490,7 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
 
 - (void)mapView:(MGLMapView *)mapView regionDidChangeWithReason:(MGLCameraChangeReason)reason animated:(BOOL)animated
 {
-    ((RCTMGLMapView *) mapView).isUserInteraction = (bool)(reason & ~MGLCameraChangeReasonProgrammatic);
+    ((RCTMGLMapView *) mapView).isUserInteraction = (BOOL)(reason & ~MGLCameraChangeReasonProgrammatic);
     
     NSDictionary *payload = [self _makeRegionPayload:mapView animated:animated];
     [self reactMapDidChange:mapView eventType:RCT_MAPBOX_REGION_DID_CHANGE andPayload:payload];
