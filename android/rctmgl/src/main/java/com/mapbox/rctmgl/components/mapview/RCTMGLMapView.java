@@ -421,6 +421,11 @@ public class RCTMGLMapView extends MapView implements
                 long curTimestamp = System.currentTimeMillis();
                 boolean curAnimated = mCameraChangeTracker.isAnimated();
                 if (curTimestamp - lastTimestamp < 500 && curAnimated == lastAnimated) {
+                      // even if we don't send the change event, we need to set the reason...
+                    //this happens when you have multiple calls to setCamera very quickly. This method will short circuit,
+                    //and then the next time the user moves the map, it will think it is NOT from a user interaction , because
+                    // this flag was not reset
+                    mCameraChangeTracker.setReason(-1);
                     return;
                 }
 
