@@ -34,10 +34,13 @@ class CustomIcon extends React.Component {
   }
 
   async onPress(e) {
+    let feature = MapboxGL.geoUtils.makeFeature(e.geometry);
+    feature.id = '' + Date.now();
+
     this.setState({
       featureCollection: MapboxGL.geoUtils.addToFeatureCollection(
         this.state.featureCollection,
-        MapboxGL.geoUtils.makeFeature(e.geometry),
+        feature,
       ),
     });
   }
