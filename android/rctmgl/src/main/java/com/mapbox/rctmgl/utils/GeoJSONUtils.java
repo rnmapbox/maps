@@ -27,6 +27,7 @@ public class GeoJSONUtils {
     public static WritableMap fromFeature(Feature feature) {
         WritableMap map = Arguments.createMap();
         map.putString("type", "Feature");
+        map.putString("id", feature.getId());
 
         WritableMap geometry = fromGeometry(feature.getGeometry());
         map.putMap("geometry", geometry);

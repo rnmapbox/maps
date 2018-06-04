@@ -256,13 +256,26 @@ class MapboxStyleSheet {
 
   static composite(stops, attributeName, mode) {
     const stopNativeArray = [];
-    const cameraZoomLevels = Object.keys(stops);
 
-    for (let cameraZoomLevel of cameraZoomLevels) {
-      const [propName, styleValue] = stops[cameraZoomLevel];
-      const keyBridgeValue = new BridgeValue(cameraZoomLevel | 0);
+    if (Array.isArray(stops)) {
+      for (let zoomPropertyStop of stops) {
+        const propValue = zoomPropertyStop[0].value;
+        const styleValue = zoomPropertyStop[1];
 
-      stopNativeArray.push([keyBridgeValue.toJSON(), [propName, styleValue]]);
+        stopNativeArray.push([
+          new BridgeValue(zoomPropertyStop[0].zoom).toJSON(),
+          [propValue, styleValue],
+        ]);
+      }
+    } else {
+      const cameraZoomLevels = Object.keys(stops);
+
+      for (let cameraZoomLevel of cameraZoomLevels) {
+        const [propName, styleValue] = stops[cameraZoomLevel];
+        const keyBridgeValue = new BridgeValue(cameraZoomLevel | 0);
+
+        stopNativeArray.push([keyBridgeValue.toJSON(), [propName, styleValue]]);
+      }
     }
 
     return new MapStyleFunctionItem(
