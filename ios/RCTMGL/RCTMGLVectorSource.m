@@ -12,7 +12,7 @@
 
 - (MGLSource*)makeSource
 {
-    return [[MGLVectorSource alloc] initWithIdentifier:self.id configurationURL:[NSURL URLWithString:_url]];
+    return [[MGLVectorTileSource alloc] initWithIdentifier:self.id configurationURL:[NSURL URLWithString:_url]];
 }
 
 @end

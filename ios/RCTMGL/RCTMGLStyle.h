@@ -171,7 +171,6 @@
 - (void)setRasterContrast:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setRasterContrastTransition:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setRasterFadeDuration:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
-- (void)setRasterFadeDurationTransition:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setBackgroundStyleLayerVisibility:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setBackgroundColor:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setBackgroundColorTransition:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;

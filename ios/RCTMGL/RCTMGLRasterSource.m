@@ -12,7 +12,7 @@
 
 - (MGLSource*)makeSource
 {
-    return [[MGLRasterSource alloc] initWithIdentifier:self.id
+    return [[MGLRasterTileSource alloc] initWithIdentifier:self.id
                                     tileURLTemplates:@[_url]
                                     options:[self _getOptions]];
 }
