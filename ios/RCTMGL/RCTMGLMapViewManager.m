@@ -424,13 +424,6 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
     [self fireEvent:event withCallback:reactMapView.onUserTrackingModeChange];
 }
 
-- (BOOL)mapView:(MGLMapView *)mapView shouldChangeFromCamera:(MGLMapCamera *)oldCamera toCamera:(MGLMapCamera *)newCamera
-{
-    RCTMGLMapView *reactMapView = (RCTMGLMapView *)mapView;
-    reactMapView.isUserInteraction = YES;
-    return YES;
-}
-
 - (MGLAnnotationView *)mapView:(MGLMapView *)mapView viewForAnnotation:(id<MGLAnnotation>)annotation
 {
     if ([annotation isKindOfClass:[RCTMGLPointAnnotation class]]) {
@@ -482,8 +475,10 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
     return nil;
 }
 
-- (void)mapView:(MGLMapView *)mapView regionWillChangeAnimated:(BOOL)animated
+- (void)mapView:(MGLMapView *)mapView regionWillChangeWithReason:(MGLCameraChangeReason)reason animated:(BOOL)animated
 {
+    ((RCTMGLMapView *) mapView).isUserInteraction = (BOOL)(reason & ~MGLCameraChangeReasonProgrammatic);
+    
     NSDictionary *payload = [self _makeRegionPayload:mapView animated:animated];
     [self reactMapDidChange:mapView eventType:RCT_MAPBOX_REGION_WILL_CHANGE_EVENT andPayload:payload];
 }
@@ -493,11 +488,12 @@ RCT_EXPORT_METHOD(setCamera:(nonnull NSNumber*)reactTag
     [self reactMapDidChange:mapView eventType:RCT_MAPBOX_REGION_IS_CHANGING];
 }
 
-- (void)mapView:(MGLMapView *)mapView regionDidChangeAnimated:(BOOL)animated
+- (void)mapView:(MGLMapView *)mapView regionDidChangeWithReason:(MGLCameraChangeReason)reason animated:(BOOL)animated
 {
+    ((RCTMGLMapView *) mapView).isUserInteraction = (BOOL)(reason & ~MGLCameraChangeReasonProgrammatic);
+    
     NSDictionary *payload = [self _makeRegionPayload:mapView animated:animated];
     [self reactMapDidChange:mapView eventType:RCT_MAPBOX_REGION_DID_CHANGE andPayload:payload];
-    ((RCTMGLMapView *) mapView).isUserInteraction = NO;
 }
 
 - (void)mapViewWillStartLoadingMap:(MGLMapView *)mapView
