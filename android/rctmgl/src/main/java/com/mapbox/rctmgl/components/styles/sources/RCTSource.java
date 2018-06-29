@@ -1,7 +1,6 @@
 package com.mapbox.rctmgl.components.styles.sources;
 
 import android.content.Context;
-import android.util.SparseArray;
 import android.view.View;
 
 import com.facebook.react.bridge.ReadableMap;
@@ -142,7 +141,12 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
                 layer.removeFromMap(mMapView);
             }
         }
-        mMap.removeSource(mSource);
+        if (mQueuedLayers != null) {
+            mQueuedLayers.clear();
+        }
+        if (mMap != null && mSource != null) {
+            mMap.removeSource(mSource);
+        }
     }
 
     public void addLayer(View childView, int childPosition) {
@@ -159,13 +163,19 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
     }
 
     public void removeLayer(int childPosition) {
-        if (childPosition >= mLayers.size()) {
-            return;
+        RCTLayer layer;
+        if (mQueuedLayers != null && mQueuedLayers.size() > 0) {
+            layer = mQueuedLayers.get(childPosition);
+        } else {
+            layer = mLayers.get(childPosition);
         }
-        removeLayerFromMap(mLayers.get(childPosition), childPosition);
+        removeLayerFromMap(layer, childPosition);
     }
 
     public RCTLayer getLayerAt(int childPosition) {
+        if (mQueuedLayers != null && mQueuedLayers.size() > 0) {
+            return mQueuedLayers.get(childPosition);
+        }
         return mLayers.get(childPosition);
     }
 
@@ -181,11 +191,14 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
     }
 
     protected void removeLayerFromMap(RCTLayer layer, int childPosition) {
-        if (mMapView == null || layer == null) {
-            return;
+        if (mMapView != null && layer != null) {
+            layer.removeFromMap(mMapView);
         }
-        layer.removeFromMap(mMapView);
-        mLayers.remove(childPosition);
+        if (mQueuedLayers != null && mQueuedLayers.size() > 0) {
+            mQueuedLayers.remove(childPosition);
+        } else {
+            mLayers.remove(childPosition);
+        }
     }
 
     public abstract T makeSource();
