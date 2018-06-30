@@ -1093,7 +1093,7 @@ public class RCTMGLMapView extends MapView implements
         // Gesture settings
         UiSettings uiSettings = mMap.getUiSettings();
 
-        if (mScrollEnabled != null && uiSettings.isRotateGesturesEnabled() != mScrollEnabled) {
+        if (mScrollEnabled != null && uiSettings.isScrollGesturesEnabled() != mScrollEnabled) {
             uiSettings.setScrollGesturesEnabled(mScrollEnabled);
         }
 
