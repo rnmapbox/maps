@@ -105,7 +105,9 @@ NSString *const DEFAULT_SOURCE_ID = @"composite";
     }
     
     if (![RCTMGLSource isDefaultSource:_id]) {
-        [_map.style removeSource:_source];
+        if (_source != nil) {
+            [_map.style removeSource:_source];
+        }
     }
 }
 
