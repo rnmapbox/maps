@@ -57,6 +57,9 @@ class VectorSource extends React.Component {
       onMapboxVectorSourcePress: this.props.onPress,
       onPress: undefined,
     };
+
+    if (!props.url) return null; // Avoid crash
+
     return (
       <RCTMGLVectorSource {...props}>
         {cloneReactChildrenWithProps(this.props.children, {

@@ -73,6 +73,9 @@ class RasterSource extends React.Component {
       tms: this.props.tms,
       attribution: this.props.attribution,
     };
+
+    if (!props.url) return null; // Avoid crash
+
     return (
       <RCTMGLRasterSource {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
