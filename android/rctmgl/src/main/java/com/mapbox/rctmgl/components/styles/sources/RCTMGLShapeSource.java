@@ -48,6 +48,7 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
     private Integer mMaxZoom;
     private Integer mBuffer;
     private Double mTolerance;
+    private boolean mRemoved = false;
 
     private List<Map.Entry<String, String>> mImages;
     private List<Map.Entry<String, BitmapDrawable>> mNativeImages;
@@ -59,6 +60,7 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
 
     @Override
     public void addToMap(final RCTMGLMapView mapView) {
+        mRemoved = false;
         if (!hasNativeImages() && !hasImages()) {
             super.addToMap(mapView);
             return;
@@ -78,6 +80,8 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
             DownloadMapImageTask.OnAllImagesLoaded imagesLoadedCallback = new DownloadMapImageTask.OnAllImagesLoaded() {
                 @Override
                 public void onAllImagesLoaded() {
+                    // don't add the ShapeSource when the it was removed while loading images
+                    if (mRemoved) return;
                     RCTMGLShapeSource.super.addToMap(mapView);
                 }
             };
@@ -93,6 +97,8 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
     @Override
     public void removeFromMap(RCTMGLMapView mapView) {
         super.removeFromMap(mapView);
+        mRemoved = true;
+        if (mMap == null) return;
 
         if (hasImages()) {
             for (Map.Entry<String, String> image : mImages) {

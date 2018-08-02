@@ -113,7 +113,9 @@
 
 - (void)removeFromMap:(MGLStyle *)style
 {
-    [style removeLayer:_styleLayer];
+    if (_styleLayer != nil) {
+        [style removeLayer:_styleLayer];
+    }
 }
 
 - (MGLStyleLayer*)makeLayer:(MGLStyle*)style
