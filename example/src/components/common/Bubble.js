@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 
 const styles = StyleSheet.create({
-  containter: {
+  container: {
     borderRadius: 30,
     position: 'absolute',
     bottom: 16,
@@ -34,7 +34,7 @@ class Bubble extends React.PureComponent {
     }
 
     return (
-      <View style={[styles.containter, this.props.style]}>
+      <View style={[styles.container, this.props.style]}>
         {innerChildView}
       </View>
     );
