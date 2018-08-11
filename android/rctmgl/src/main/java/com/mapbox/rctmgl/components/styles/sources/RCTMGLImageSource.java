@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper;
 import com.mapbox.mapboxsdk.geometry.LatLngQuad;
 import com.mapbox.mapboxsdk.style.sources.ImageSource;
 import com.mapbox.rctmgl.utils.BitmapUtils;
@@ -28,6 +29,7 @@ public class RCTMGLImageSource extends RCTSource<ImageSource> {
     public static final String LOG_TAG = RCTMGLImageSource.class.getSimpleName();
 
     private URL mURL;
+    private int mResourceId;
     private LatLngQuad mCoordQuad;
 
     public RCTMGLImageSource(Context context) {
@@ -36,6 +38,9 @@ public class RCTMGLImageSource extends RCTSource<ImageSource> {
 
     @Override
     public ImageSource makeSource() {
+        if (this.mURL == null) {
+            return new ImageSource(mID, mCoordQuad, this.mResourceId);
+        }
         return new ImageSource(mID, mCoordQuad, mURL);
     }
 
@@ -46,15 +51,29 @@ public class RCTMGLImageSource extends RCTSource<ImageSource> {
 
     public void setURL(String url) {
         try {
-            mURL = new URL(url);
+            Uri uri = Uri.parse(url);
 
-            if (mSource != null) {
-                mSource.setUrl(mURL);
+            if (uri.getScheme() == null) {
+                this.mResourceId = ResourceDrawableIdHelper.getInstance().getResourceDrawableId(this.getContext(), url);
+
+                if (mSource != null) {
+                    mSource.setImage(this.mResourceId);
+                }
+
+            } else {
+
+                mURL = new URL(url);
+
+                if (mSource != null) {
+                    mSource.setUrl(mURL);
+                }
             }
+
         } catch (MalformedURLException e) {
             Log.w(LOG_TAG, e.getLocalizedMessage());
         }
     }
+
 
     public void setCoordinates(LatLngQuad coordQuad) {
         mCoordQuad = coordQuad;
