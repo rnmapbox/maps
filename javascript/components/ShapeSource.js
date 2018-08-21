@@ -162,9 +162,6 @@ class ShapeSource extends React.Component {
       ...this._getImages(),
       onPress: undefined,
     };
-
-    if (!props.url) return null; // Avoid crash
-
     return (
       <RCTMGLShapeSource {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
