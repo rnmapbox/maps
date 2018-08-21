@@ -49,6 +49,7 @@ public class BitmapUtils {
             addImage(url, bitmap);
         } catch (Exception e) {
             Log.w(LOG_TAG, e.getLocalizedMessage());
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ALPHA_8); // Returns a transparent bitmap
         }
 
         return bitmap;
