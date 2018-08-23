@@ -542,7 +542,7 @@ public class RCTMGLMapView extends MapView implements
             mChangeDelimiterSuppressionDepth = 0;
         }
 
-        if (result) {
+        if (result && mScrollEnabled) {
             requestDisallowInterceptTouchEvent(true);
         }
 
