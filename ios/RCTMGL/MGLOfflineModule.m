@@ -203,12 +203,12 @@ RCT_EXPORT_METHOD(resumePackDownload:(NSString *)name
     resolve(nil);
 }
 
-RCT_EXPORT_METHOD(setTileCountLimit:(NSNumber *)limit)
+RCT_EXPORT_METHOD(setTileCountLimit:(nonnull NSNumber *)limit)
 {
     [[MGLOfflineStorage sharedOfflineStorage] setMaximumAllowedMapboxTiles:[limit intValue]];
 }
 
-RCT_EXPORT_METHOD(setProgressEventThrottle:(NSNumber *)throttleValue)
+RCT_EXPORT_METHOD(setProgressEventThrottle:(nonnull NSNumber *)throttleValue)
 {
     eventThrottle = [throttleValue doubleValue];
 }
