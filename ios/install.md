@@ -5,7 +5,7 @@
 To install with CocoaPods, add the following to your `Podfile`:
 
 ```
-  # Flexbox Layout Manager Used By React Natve
+  # Flexbox Layout Manager Used By React Native
   pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga/Yoga.podspec'
 
   # React Native
