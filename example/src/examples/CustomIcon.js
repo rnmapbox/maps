@@ -9,9 +9,6 @@ import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
 import Bubble from './common/Bubble';
 
-import sheet from '../styles/sheet';
-import exampleIcon from '../assets/example.png';
-
 const styles = {
   icon: {
     iconImage: exampleIcon,

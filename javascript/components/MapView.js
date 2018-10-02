@@ -21,8 +21,6 @@ import {
 import NativeBridgeComponent from './NativeBridgeComponent';
 import Camera from './Camera';
 
-import _ from 'underscore';
-
 import { getFilter } from '../utils/filterUtils';
 
 const MapboxGL = NativeModules.MGLModule;

@@ -7,8 +7,6 @@ import sheet from '../styles/sheet';
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import TabBarPage from './common/TabBarPage';
 
-import sheet from '../styles/sheet';
-
 const layerStyles = {
   building: {
     fillExtrusionColor: '#aaa',

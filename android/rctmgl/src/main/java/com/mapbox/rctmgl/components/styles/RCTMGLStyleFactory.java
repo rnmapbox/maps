@@ -568,9 +568,6 @@ public class RCTMGLStyleFactory {
             case "rasterFadeDuration":
               RCTMGLStyleFactory.setRasterFadeDuration(layer, styleValue);
               break;
-            case "rasterFadeDurationTransition":
-              RCTMGLStyleFactory.setRasterFadeDurationTransition(layer, styleValue);
-              break;
         }
       }
     }
@@ -651,44 +648,20 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(FillLayer layer, RCTMGLStyleValue styleValue) {
-        layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
+      layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
     }
 
     public static void setFillAntialias(FillLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Boolean, Boolean> parser = new RCTMGLStyleFunctionParser<Boolean, Boolean>(styleValue) {
-            @Override
-            protected Boolean getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getBoolean(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Boolean> getStopValue(Boolean value) {
-                return PropertyFactory.fillAntialias(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.fillAntialias(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.fillAntialias(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.fillAntialias(styleValue.getBoolean(VALUE_KEY)));
       }
     }
 
     public static void setFillOpacity(FillLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.fillOpacity(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.fillOpacity(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.fillOpacity(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.fillOpacity(styleValue.getFloat(VALUE_KEY)));
       }
@@ -703,20 +676,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setFillColor(FillLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Integer, String> parser = new RCTMGLStyleFunctionParser<Integer, String>(styleValue) {
-            @Override
-            protected Integer getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getInt(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(Integer value) {
-                return PropertyFactory.fillColor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.fillColor(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.fillColor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.fillColor(styleValue.getInt(VALUE_KEY)));
       }
@@ -731,20 +692,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setFillOutlineColor(FillLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Integer, String> parser = new RCTMGLStyleFunctionParser<Integer, String>(styleValue) {
-            @Override
-            protected Integer getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getInt(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(Integer value) {
-                return PropertyFactory.fillOutlineColor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.fillOutlineColor(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.fillOutlineColor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.fillOutlineColor(styleValue.getInt(VALUE_KEY)));
       }
@@ -759,20 +708,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setFillTranslate(FillLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float[], Float[]> parser = new RCTMGLStyleFunctionParser<Float[], Float[]>(styleValue) {
-            @Override
-            protected Float[] getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloatArray(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float[]> getStopValue(Float[] value) {
-                return PropertyFactory.fillTranslate(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.fillTranslate(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.fillTranslate(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.fillTranslate(styleValue.getFloatArray(VALUE_KEY)));
       }
@@ -787,40 +724,16 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setFillTranslateAnchor(FillLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.fillTranslateAnchor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.fillTranslateAnchor(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.fillTranslateAnchor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.fillTranslateAnchor(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setFillPattern(FillLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.fillPattern(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.fillPattern(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.fillPattern(styleValue.getString(VALUE_KEY)));
       }
@@ -835,104 +748,44 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setLineCap(LineLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.lineCap(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.lineCap(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.lineCap(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.lineCap(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setLineJoin(LineLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.lineJoin(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.lineJoin(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.lineJoin(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.lineJoin(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setLineMiterLimit(LineLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.lineMiterLimit(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.lineMiterLimit(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.lineMiterLimit(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.lineMiterLimit(styleValue.getFloat(VALUE_KEY)));
       }
     }
 
     public static void setLineRoundLimit(LineLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.lineRoundLimit(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.lineRoundLimit(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.lineRoundLimit(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.lineRoundLimit(styleValue.getFloat(VALUE_KEY)));
       }
     }
 
     public static void setVisibility(LineLayer layer, RCTMGLStyleValue styleValue) {
-        layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
+      layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
     }
 
     public static void setLineOpacity(LineLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.lineOpacity(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.lineOpacity(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.lineOpacity(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.lineOpacity(styleValue.getFloat(VALUE_KEY)));
       }
@@ -947,20 +800,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setLineColor(LineLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Integer, String> parser = new RCTMGLStyleFunctionParser<Integer, String>(styleValue) {
-            @Override
-            protected Integer getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getInt(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(Integer value) {
-                return PropertyFactory.lineColor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.lineColor(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.lineColor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.lineColor(styleValue.getInt(VALUE_KEY)));
       }
@@ -975,20 +816,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setLineTranslate(LineLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float[], Float[]> parser = new RCTMGLStyleFunctionParser<Float[], Float[]>(styleValue) {
-            @Override
-            protected Float[] getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloatArray(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float[]> getStopValue(Float[] value) {
-                return PropertyFactory.lineTranslate(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.lineTranslate(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.lineTranslate(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.lineTranslate(styleValue.getFloatArray(VALUE_KEY)));
       }
@@ -1003,40 +832,16 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setLineTranslateAnchor(LineLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.lineTranslateAnchor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.lineTranslateAnchor(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.lineTranslateAnchor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.lineTranslateAnchor(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setLineWidth(LineLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.lineWidth(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.lineWidth(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.lineWidth(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.lineWidth(styleValue.getFloat(VALUE_KEY)));
       }
@@ -1051,20 +856,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setLineGapWidth(LineLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.lineGapWidth(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.lineGapWidth(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.lineGapWidth(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.lineGapWidth(styleValue.getFloat(VALUE_KEY)));
       }
@@ -1079,20 +872,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setLineOffset(LineLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.lineOffset(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.lineOffset(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.lineOffset(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.lineOffset(styleValue.getFloat(VALUE_KEY)));
       }
@@ -1107,20 +888,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setLineBlur(LineLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.lineBlur(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.lineBlur(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.lineBlur(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.lineBlur(styleValue.getFloat(VALUE_KEY)));
       }
@@ -1135,20 +904,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setLineDasharray(LineLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float[], Float[]> parser = new RCTMGLStyleFunctionParser<Float[], Float[]>(styleValue) {
-            @Override
-            protected Float[] getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloatArray(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float[]> getStopValue(Float[] value) {
-                return PropertyFactory.lineDasharray(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.lineDasharray(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.lineDasharray(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.lineDasharray(styleValue.getFloatArray(VALUE_KEY)));
       }
@@ -1163,20 +920,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setLinePattern(LineLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.linePattern(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.linePattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.linePattern(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.linePattern(styleValue.getString(VALUE_KEY)));
       }
@@ -1191,744 +936,300 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setSymbolPlacement(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.symbolPlacement(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.symbolPlacement(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.symbolPlacement(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.symbolPlacement(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setSymbolSpacing(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.symbolSpacing(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.symbolSpacing(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.symbolSpacing(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.symbolSpacing(styleValue.getFloat(VALUE_KEY)));
       }
     }
 
     public static void setSymbolAvoidEdges(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Boolean, Boolean> parser = new RCTMGLStyleFunctionParser<Boolean, Boolean>(styleValue) {
-            @Override
-            protected Boolean getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getBoolean(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Boolean> getStopValue(Boolean value) {
-                return PropertyFactory.symbolAvoidEdges(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.symbolAvoidEdges(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.symbolAvoidEdges(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.symbolAvoidEdges(styleValue.getBoolean(VALUE_KEY)));
       }
     }
 
     public static void setIconAllowOverlap(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Boolean, Boolean> parser = new RCTMGLStyleFunctionParser<Boolean, Boolean>(styleValue) {
-            @Override
-            protected Boolean getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getBoolean(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Boolean> getStopValue(Boolean value) {
-                return PropertyFactory.iconAllowOverlap(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconAllowOverlap(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconAllowOverlap(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconAllowOverlap(styleValue.getBoolean(VALUE_KEY)));
       }
     }
 
     public static void setIconIgnorePlacement(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Boolean, Boolean> parser = new RCTMGLStyleFunctionParser<Boolean, Boolean>(styleValue) {
-            @Override
-            protected Boolean getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getBoolean(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Boolean> getStopValue(Boolean value) {
-                return PropertyFactory.iconIgnorePlacement(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconIgnorePlacement(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconIgnorePlacement(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconIgnorePlacement(styleValue.getBoolean(VALUE_KEY)));
       }
     }
 
     public static void setIconOptional(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Boolean, Boolean> parser = new RCTMGLStyleFunctionParser<Boolean, Boolean>(styleValue) {
-            @Override
-            protected Boolean getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getBoolean(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Boolean> getStopValue(Boolean value) {
-                return PropertyFactory.iconOptional(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconOptional(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconOptional(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconOptional(styleValue.getBoolean(VALUE_KEY)));
       }
     }
 
     public static void setIconRotationAlignment(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.iconRotationAlignment(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconRotationAlignment(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconRotationAlignment(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconRotationAlignment(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setIconSize(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.iconSize(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconSize(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconSize(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconSize(styleValue.getFloat(VALUE_KEY)));
       }
     }
 
     public static void setIconTextFit(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.iconTextFit(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconTextFit(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconTextFit(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconTextFit(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setIconTextFitPadding(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float[], Float[]> parser = new RCTMGLStyleFunctionParser<Float[], Float[]>(styleValue) {
-            @Override
-            protected Float[] getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloatArray(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float[]> getStopValue(Float[] value) {
-                return PropertyFactory.iconTextFitPadding(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconTextFitPadding(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconTextFitPadding(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconTextFitPadding(styleValue.getFloatArray(VALUE_KEY)));
       }
     }
 
     public static void setIconImage(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.iconImage(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconImage(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconImage(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconImage(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setIconRotate(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.iconRotate(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconRotate(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconRotate(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconRotate(styleValue.getFloat(VALUE_KEY)));
       }
     }
 
     public static void setIconPadding(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.iconPadding(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconPadding(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconPadding(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconPadding(styleValue.getFloat(VALUE_KEY)));
       }
     }
 
     public static void setIconKeepUpright(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Boolean, Boolean> parser = new RCTMGLStyleFunctionParser<Boolean, Boolean>(styleValue) {
-            @Override
-            protected Boolean getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getBoolean(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Boolean> getStopValue(Boolean value) {
-                return PropertyFactory.iconKeepUpright(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconKeepUpright(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconKeepUpright(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconKeepUpright(styleValue.getBoolean(VALUE_KEY)));
       }
     }
 
     public static void setIconOffset(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float[], Float[]> parser = new RCTMGLStyleFunctionParser<Float[], Float[]>(styleValue) {
-            @Override
-            protected Float[] getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloatArray(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float[]> getStopValue(Float[] value) {
-                return PropertyFactory.iconOffset(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconOffset(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconOffset(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconOffset(styleValue.getFloatArray(VALUE_KEY)));
       }
     }
 
     public static void setIconAnchor(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.iconAnchor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconAnchor(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconAnchor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconAnchor(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setIconPitchAlignment(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.iconPitchAlignment(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconPitchAlignment(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconPitchAlignment(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconPitchAlignment(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setTextPitchAlignment(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.textPitchAlignment(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textPitchAlignment(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textPitchAlignment(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textPitchAlignment(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setTextRotationAlignment(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.textRotationAlignment(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textRotationAlignment(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textRotationAlignment(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textRotationAlignment(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setTextField(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.textField(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textField(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textField(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textField(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setTextFont(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String[], String[]> parser = new RCTMGLStyleFunctionParser<String[], String[]>(styleValue) {
-            @Override
-            protected String[] getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getStringArray(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String[]> getStopValue(String[] value) {
-                return PropertyFactory.textFont(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textFont(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textFont(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textFont(styleValue.getStringArray(VALUE_KEY)));
       }
     }
 
     public static void setTextSize(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.textSize(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textSize(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textSize(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textSize(styleValue.getFloat(VALUE_KEY)));
       }
     }
 
     public static void setTextMaxWidth(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.textMaxWidth(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textMaxWidth(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textMaxWidth(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textMaxWidth(styleValue.getFloat(VALUE_KEY)));
       }
     }
 
     public static void setTextLineHeight(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.textLineHeight(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textLineHeight(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textLineHeight(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textLineHeight(styleValue.getFloat(VALUE_KEY)));
       }
     }
 
     public static void setTextLetterSpacing(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.textLetterSpacing(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textLetterSpacing(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textLetterSpacing(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textLetterSpacing(styleValue.getFloat(VALUE_KEY)));
       }
     }
 
     public static void setTextJustify(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.textJustify(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textJustify(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textJustify(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textJustify(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setTextAnchor(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.textAnchor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textAnchor(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textAnchor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textAnchor(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setTextMaxAngle(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.textMaxAngle(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textMaxAngle(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textMaxAngle(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textMaxAngle(styleValue.getFloat(VALUE_KEY)));
       }
     }
 
     public static void setTextRotate(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.textRotate(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textRotate(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textRotate(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textRotate(styleValue.getFloat(VALUE_KEY)));
       }
     }
 
     public static void setTextPadding(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.textPadding(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textPadding(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textPadding(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textPadding(styleValue.getFloat(VALUE_KEY)));
       }
     }
 
     public static void setTextKeepUpright(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Boolean, Boolean> parser = new RCTMGLStyleFunctionParser<Boolean, Boolean>(styleValue) {
-            @Override
-            protected Boolean getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getBoolean(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Boolean> getStopValue(Boolean value) {
-                return PropertyFactory.textKeepUpright(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textKeepUpright(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textKeepUpright(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textKeepUpright(styleValue.getBoolean(VALUE_KEY)));
       }
     }
 
     public static void setTextTransform(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.textTransform(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textTransform(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textTransform(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textTransform(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setTextOffset(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float[], Float[]> parser = new RCTMGLStyleFunctionParser<Float[], Float[]>(styleValue) {
-            @Override
-            protected Float[] getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloatArray(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float[]> getStopValue(Float[] value) {
-                return PropertyFactory.textOffset(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textOffset(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textOffset(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textOffset(styleValue.getFloatArray(VALUE_KEY)));
       }
     }
 
     public static void setTextAllowOverlap(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Boolean, Boolean> parser = new RCTMGLStyleFunctionParser<Boolean, Boolean>(styleValue) {
-            @Override
-            protected Boolean getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getBoolean(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Boolean> getStopValue(Boolean value) {
-                return PropertyFactory.textAllowOverlap(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textAllowOverlap(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textAllowOverlap(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textAllowOverlap(styleValue.getBoolean(VALUE_KEY)));
       }
     }
 
     public static void setTextIgnorePlacement(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Boolean, Boolean> parser = new RCTMGLStyleFunctionParser<Boolean, Boolean>(styleValue) {
-            @Override
-            protected Boolean getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getBoolean(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Boolean> getStopValue(Boolean value) {
-                return PropertyFactory.textIgnorePlacement(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textIgnorePlacement(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textIgnorePlacement(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textIgnorePlacement(styleValue.getBoolean(VALUE_KEY)));
       }
     }
 
     public static void setTextOptional(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Boolean, Boolean> parser = new RCTMGLStyleFunctionParser<Boolean, Boolean>(styleValue) {
-            @Override
-            protected Boolean getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getBoolean(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Boolean> getStopValue(Boolean value) {
-                return PropertyFactory.textOptional(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textOptional(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textOptional(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textOptional(styleValue.getBoolean(VALUE_KEY)));
       }
     }
 
     public static void setVisibility(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-        layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
+      layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
     }
 
     public static void setIconOpacity(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.iconOpacity(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconOpacity(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconOpacity(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconOpacity(styleValue.getFloat(VALUE_KEY)));
       }
@@ -1943,20 +1244,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setIconColor(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Integer, String> parser = new RCTMGLStyleFunctionParser<Integer, String>(styleValue) {
-            @Override
-            protected Integer getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getInt(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(Integer value) {
-                return PropertyFactory.iconColor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconColor(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconColor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconColor(styleValue.getInt(VALUE_KEY)));
       }
@@ -1971,20 +1260,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setIconHaloColor(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Integer, String> parser = new RCTMGLStyleFunctionParser<Integer, String>(styleValue) {
-            @Override
-            protected Integer getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getInt(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(Integer value) {
-                return PropertyFactory.iconHaloColor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconHaloColor(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconHaloColor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconHaloColor(styleValue.getInt(VALUE_KEY)));
       }
@@ -1999,20 +1276,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setIconHaloWidth(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.iconHaloWidth(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconHaloWidth(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconHaloWidth(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconHaloWidth(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2027,20 +1292,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setIconHaloBlur(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.iconHaloBlur(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconHaloBlur(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconHaloBlur(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconHaloBlur(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2055,20 +1308,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setIconTranslate(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float[], Float[]> parser = new RCTMGLStyleFunctionParser<Float[], Float[]>(styleValue) {
-            @Override
-            protected Float[] getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloatArray(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float[]> getStopValue(Float[] value) {
-                return PropertyFactory.iconTranslate(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconTranslate(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconTranslate(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconTranslate(styleValue.getFloatArray(VALUE_KEY)));
       }
@@ -2083,40 +1324,16 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setIconTranslateAnchor(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.iconTranslateAnchor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.iconTranslateAnchor(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.iconTranslateAnchor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.iconTranslateAnchor(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setTextOpacity(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.textOpacity(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textOpacity(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textOpacity(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textOpacity(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2131,20 +1348,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setTextColor(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Integer, String> parser = new RCTMGLStyleFunctionParser<Integer, String>(styleValue) {
-            @Override
-            protected Integer getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getInt(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(Integer value) {
-                return PropertyFactory.textColor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textColor(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textColor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textColor(styleValue.getInt(VALUE_KEY)));
       }
@@ -2159,20 +1364,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setTextHaloColor(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Integer, String> parser = new RCTMGLStyleFunctionParser<Integer, String>(styleValue) {
-            @Override
-            protected Integer getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getInt(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(Integer value) {
-                return PropertyFactory.textHaloColor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textHaloColor(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textHaloColor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textHaloColor(styleValue.getInt(VALUE_KEY)));
       }
@@ -2187,20 +1380,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setTextHaloWidth(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.textHaloWidth(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textHaloWidth(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textHaloWidth(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textHaloWidth(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2215,20 +1396,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setTextHaloBlur(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.textHaloBlur(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textHaloBlur(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textHaloBlur(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textHaloBlur(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2243,20 +1412,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setTextTranslate(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float[], Float[]> parser = new RCTMGLStyleFunctionParser<Float[], Float[]>(styleValue) {
-            @Override
-            protected Float[] getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloatArray(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float[]> getStopValue(Float[] value) {
-                return PropertyFactory.textTranslate(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textTranslate(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textTranslate(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textTranslate(styleValue.getFloatArray(VALUE_KEY)));
       }
@@ -2271,44 +1428,20 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setTextTranslateAnchor(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.textTranslateAnchor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.textTranslateAnchor(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textTranslateAnchor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textTranslateAnchor(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setVisibility(CircleLayer layer, RCTMGLStyleValue styleValue) {
-        layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
+      layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
     }
 
     public static void setCircleRadius(CircleLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.circleRadius(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.circleRadius(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.circleRadius(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.circleRadius(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2323,20 +1456,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setCircleColor(CircleLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Integer, String> parser = new RCTMGLStyleFunctionParser<Integer, String>(styleValue) {
-            @Override
-            protected Integer getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getInt(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(Integer value) {
-                return PropertyFactory.circleColor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.circleColor(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.circleColor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.circleColor(styleValue.getInt(VALUE_KEY)));
       }
@@ -2351,20 +1472,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setCircleBlur(CircleLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.circleBlur(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.circleBlur(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.circleBlur(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.circleBlur(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2379,20 +1488,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setCircleOpacity(CircleLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.circleOpacity(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.circleOpacity(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.circleOpacity(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.circleOpacity(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2407,20 +1504,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setCircleTranslate(CircleLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float[], Float[]> parser = new RCTMGLStyleFunctionParser<Float[], Float[]>(styleValue) {
-            @Override
-            protected Float[] getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloatArray(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float[]> getStopValue(Float[] value) {
-                return PropertyFactory.circleTranslate(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.circleTranslate(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.circleTranslate(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.circleTranslate(styleValue.getFloatArray(VALUE_KEY)));
       }
@@ -2435,80 +1520,32 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setCircleTranslateAnchor(CircleLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.circleTranslateAnchor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.circleTranslateAnchor(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.circleTranslateAnchor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.circleTranslateAnchor(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setCirclePitchScale(CircleLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.circlePitchScale(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.circlePitchScale(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.circlePitchScale(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.circlePitchScale(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setCirclePitchAlignment(CircleLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.circlePitchAlignment(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.circlePitchAlignment(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.circlePitchAlignment(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.circlePitchAlignment(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setCircleStrokeWidth(CircleLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.circleStrokeWidth(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.circleStrokeWidth(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.circleStrokeWidth(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.circleStrokeWidth(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2523,20 +1560,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setCircleStrokeColor(CircleLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Integer, String> parser = new RCTMGLStyleFunctionParser<Integer, String>(styleValue) {
-            @Override
-            protected Integer getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getInt(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(Integer value) {
-                return PropertyFactory.circleStrokeColor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.circleStrokeColor(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.circleStrokeColor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.circleStrokeColor(styleValue.getInt(VALUE_KEY)));
       }
@@ -2551,20 +1576,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setCircleStrokeOpacity(CircleLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.circleStrokeOpacity(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.circleStrokeOpacity(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.circleStrokeOpacity(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.circleStrokeOpacity(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2579,24 +1592,12 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
-        layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
+      layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
     }
 
     public static void setFillExtrusionOpacity(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.fillExtrusionOpacity(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.fillExtrusionOpacity(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.fillExtrusionOpacity(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.fillExtrusionOpacity(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2611,20 +1612,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setFillExtrusionColor(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Integer, String> parser = new RCTMGLStyleFunctionParser<Integer, String>(styleValue) {
-            @Override
-            protected Integer getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getInt(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(Integer value) {
-                return PropertyFactory.fillExtrusionColor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.fillExtrusionColor(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.fillExtrusionColor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.fillExtrusionColor(styleValue.getInt(VALUE_KEY)));
       }
@@ -2639,20 +1628,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setFillExtrusionTranslate(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float[], Float[]> parser = new RCTMGLStyleFunctionParser<Float[], Float[]>(styleValue) {
-            @Override
-            protected Float[] getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloatArray(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float[]> getStopValue(Float[] value) {
-                return PropertyFactory.fillExtrusionTranslate(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.fillExtrusionTranslate(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.fillExtrusionTranslate(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.fillExtrusionTranslate(styleValue.getFloatArray(VALUE_KEY)));
       }
@@ -2667,40 +1644,16 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setFillExtrusionTranslateAnchor(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.fillExtrusionTranslateAnchor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.fillExtrusionTranslateAnchor(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.fillExtrusionTranslateAnchor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.fillExtrusionTranslateAnchor(styleValue.getString(VALUE_KEY)));
       }
     }
 
     public static void setFillExtrusionPattern(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.fillExtrusionPattern(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.fillExtrusionPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.fillExtrusionPattern(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.fillExtrusionPattern(styleValue.getString(VALUE_KEY)));
       }
@@ -2715,20 +1668,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setFillExtrusionHeight(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.fillExtrusionHeight(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.fillExtrusionHeight(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.fillExtrusionHeight(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.fillExtrusionHeight(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2743,20 +1684,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setFillExtrusionBase(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.fillExtrusionBase(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.fillExtrusionBase(styleValue.makeStyleFunction(parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.fillExtrusionBase(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.fillExtrusionBase(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2771,24 +1700,12 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(RasterLayer layer, RCTMGLStyleValue styleValue) {
-        layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
+      layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
     }
 
     public static void setRasterOpacity(RasterLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.rasterOpacity(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.rasterOpacity(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.rasterOpacity(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.rasterOpacity(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2803,20 +1720,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setRasterHueRotate(RasterLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.rasterHueRotate(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.rasterHueRotate(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.rasterHueRotate(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.rasterHueRotate(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2831,20 +1736,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setRasterBrightnessMin(RasterLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.rasterBrightnessMin(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.rasterBrightnessMin(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.rasterBrightnessMin(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.rasterBrightnessMin(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2859,20 +1752,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setRasterBrightnessMax(RasterLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.rasterBrightnessMax(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.rasterBrightnessMax(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.rasterBrightnessMax(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.rasterBrightnessMax(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2887,20 +1768,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setRasterSaturation(RasterLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.rasterSaturation(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.rasterSaturation(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.rasterSaturation(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.rasterSaturation(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2915,20 +1784,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setRasterContrast(RasterLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.rasterContrast(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.rasterContrast(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.rasterContrast(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.rasterContrast(styleValue.getFloat(VALUE_KEY)));
       }
@@ -2943,52 +1800,20 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setRasterFadeDuration(RasterLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.rasterFadeDuration(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.rasterFadeDuration(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.rasterFadeDuration(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.rasterFadeDuration(styleValue.getFloat(VALUE_KEY)));
       }
     }
 
-
-    public static void setRasterFadeDurationTransition(RasterLayer layer, RCTMGLStyleValue styleValue) {
-      TransitionOptions transition = styleValue.getTransition();
-      if (transition != null) {
-        layer.setRasterFadeDurationTransition(transition);
-      }
-    }
-
     public static void setVisibility(BackgroundLayer layer, RCTMGLStyleValue styleValue) {
-        layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
+      layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
     }
 
     public static void setBackgroundColor(BackgroundLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Integer, String> parser = new RCTMGLStyleFunctionParser<Integer, String>(styleValue) {
-            @Override
-            protected Integer getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getInt(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(Integer value) {
-                return PropertyFactory.backgroundColor(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.backgroundColor(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.backgroundColor(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.backgroundColor(styleValue.getInt(VALUE_KEY)));
       }
@@ -3003,20 +1828,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setBackgroundPattern(BackgroundLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<String, String> parser = new RCTMGLStyleFunctionParser<String, String>(styleValue) {
-            @Override
-            protected String getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getString(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<String> getStopValue(String value) {
-                return PropertyFactory.backgroundPattern(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.backgroundPattern(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.backgroundPattern(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.backgroundPattern(styleValue.getString(VALUE_KEY)));
       }
@@ -3031,20 +1844,8 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setBackgroundOpacity(BackgroundLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isFunction()) {
-        RCTMGLStyleFunctionParser<Float, Float> parser = new RCTMGLStyleFunctionParser<Float, Float>(styleValue) {
-            @Override
-            protected Float getRawStopValue(RCTMGLStyleValue styleValue) {
-                return styleValue.getFloat(VALUE_KEY);
-            }
-
-            @Override
-            protected PropertyValue<Float> getStopValue(Float value) {
-                return PropertyFactory.backgroundOpacity(value);
-            }
-        };
-
-        layer.setProperties(PropertyFactory.backgroundOpacity(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.backgroundOpacity(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.backgroundOpacity(styleValue.getFloat(VALUE_KEY)));
       }
@@ -3059,12 +1860,12 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setAnchor(Light layer, RCTMGLStyleValue styleValue) {
-        layer.setAnchor(styleValue.getString(VALUE_KEY));
+      layer.setAnchor(styleValue.getString(VALUE_KEY));
     }
 
     public static void setPosition(Light layer, RCTMGLStyleValue styleValue) {
-        Float[] values = styleValue.getFloatArray(VALUE_KEY);
-        layer.setPosition(Position.fromPosition(values[0], values[1], values[2]));
+      Float[] values = styleValue.getFloatArray(VALUE_KEY);
+      layer.setPosition(Position.fromPosition(values[0], values[1], values[2]));
     }
 
 
@@ -3076,7 +1877,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setColor(Light layer, RCTMGLStyleValue styleValue) {
-        layer.setColor(styleValue.getInt(VALUE_KEY));
+      layer.setColor(styleValue.getInt(VALUE_KEY));
     }
 
 
@@ -3088,7 +1889,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setIntensity(Light layer, RCTMGLStyleValue styleValue) {
-        layer.setIntensity(styleValue.getFloat(VALUE_KEY));
+      layer.setIntensity(styleValue.getFloat(VALUE_KEY));
     }
 
 

@@ -32,7 +32,7 @@
     "react-native-elements": "^1.1.0",
     "react-native-vector-icons": "^6.3.0",
     "react-native-safe-area-view": "^0.13.1",
-    "react-navigation": "^3.0.0",
+    "react-navigation": "^2.18.3",
     "url": "^0.11.0"
   },
   "devDependencies": {

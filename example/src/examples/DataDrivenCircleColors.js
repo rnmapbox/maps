@@ -6,8 +6,6 @@ import sheet from '../styles/sheet';
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
 
-import sheet from '../styles/sheet';
-
 const styles = {
   circles: {
     circleRadius: [

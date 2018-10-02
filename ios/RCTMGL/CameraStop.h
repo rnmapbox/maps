@@ -7,6 +7,7 @@
 //
 
 @import Mapbox;
+#import "RCTMGLCamera.h"
 
 @interface CameraStop : NSObject
 

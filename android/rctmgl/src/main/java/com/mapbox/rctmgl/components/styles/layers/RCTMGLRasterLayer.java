@@ -2,9 +2,7 @@ package com.mapbox.rctmgl.components.styles.layers;
 
 import android.content.Context;
 
-import com.mapbox.mapboxsdk.style.layers.Filter;
 import com.mapbox.mapboxsdk.style.layers.RasterLayer;
-import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyle;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleFactory;
 

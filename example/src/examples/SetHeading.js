@@ -6,8 +6,6 @@ import sheet from '../styles/sheet';
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import TabBarPage from './common/TabBarPage';
 
-import sheet from '../styles/sheet';
-
 class SetHeading extends React.Component {
   static propTypes = {
     ...BaseExamplePropTypes,

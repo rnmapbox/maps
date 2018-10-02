@@ -2,12 +2,11 @@ package com.mapbox.rctmgl.components.styles.layers;
 
 import android.content.Context;
 
+import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.FillLayer;
-import com.mapbox.mapboxsdk.style.layers.Filter;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyle;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleFactory;
-import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 
 /**
  * Created by nickitaliano on 9/8/17.
@@ -21,8 +20,8 @@ public class RCTMGLFillLayer extends RCTLayer<FillLayer> {
     }
 
     @Override
-    protected void updateFilter(Filter.Statement statement) {
-        mLayer.setFilter(statement);
+    protected void updateFilter(Expression expression) {
+        mLayer.setFilter(expression);
     }
 
     @Override

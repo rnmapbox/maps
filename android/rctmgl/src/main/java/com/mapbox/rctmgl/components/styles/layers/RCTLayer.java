@@ -1,27 +1,21 @@
 package com.mapbox.rctmgl.components.styles.layers;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.style.layers.Filter;
+import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
-import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 import com.mapbox.rctmgl.location.UserLocationLayerConstants;
-import com.mapbox.rctmgl.utils.ConvertUtils;
-import com.mapbox.rctmgl.utils.DownloadMapImageTask;
-import com.mapbox.rctmgl.utils.FilterParser;
+import com.mapbox.rctmgl.utils.ExpressionParser;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,26 +24,6 @@ import java.util.Set;
 
 public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
     public static final String LOG_TAG = RCTLayer.class.getSimpleName();
-
-    public static final Set<String> FILTER_OPS = new HashSet<String>(Arrays.asList(
-            "all",
-            "any",
-            "none",
-            "in",
-            "!in",
-            "<=",
-            "<",
-            ">=",
-            ">",
-            "!=",
-            "==",
-            "has",
-            "!has"
-    ));
-
-    public static final int COMPOUND_FILTER_ALL = 3;
-    public static final int COMPOUND_FILTER_ANY = 2;
-    public static final int COMPOUND_FILTER_NONE = 1;
 
     protected String mID;
     protected String mSourceID;
@@ -61,7 +35,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
     protected Double mMinZoomLevel;
     protected Double mMaxZoomLevel;
     protected ReadableMap mReactStyle;
-    protected Filter.Statement mFilter;
+    protected Expression mFilter;
 
     protected MapboxMap mMap;
     protected T mLayer;
@@ -156,9 +130,9 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
     }
 
     public void setFilter(ReadableArray readableFilterArray) {
-        FilterParser.FilterList filterList = FilterParser.getFilterList(readableFilterArray);
+        Expression filterExpression = ExpressionParser.from(readableFilterArray);
 
-        mFilter = buildFilter(filterList);
+        mFilter = filterExpression;
 
         if (mLayer != null) {
             if (mFilter != null) {
@@ -233,11 +207,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         }
     }
 
-    protected Filter.Statement buildFilter(FilterParser.FilterList filterList) {
-        return FilterParser.parse(filterList);
-    }
-
-    protected void updateFilter(Filter.Statement statement) {
+    protected void updateFilter(Expression expression) {
         // override if you want to update the filter
     }
 

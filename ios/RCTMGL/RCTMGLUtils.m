@@ -33,6 +33,15 @@ static double const MS_TO_S = 0.001;
     return [MGLShape shapeWithData:data encoding:NSUTF8StringEncoding error:nil];
 }
 
++ (NSString *)hashURI:(NSString *)uri
+{
+    if (uri == nil) {
+        return @"-1";
+    }
+    NSUInteger hash = [uri hash];
+    return [NSString stringWithFormat:@"%lu", (unsigned long)hash];
+}
+
 + (MGLCoordinateBounds)fromFeatureCollection:(NSString*)jsonStr
 {
     NSData* data = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];

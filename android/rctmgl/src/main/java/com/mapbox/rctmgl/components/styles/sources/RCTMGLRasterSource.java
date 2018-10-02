@@ -2,9 +2,9 @@ package com.mapbox.rctmgl.components.styles.sources;
 
 import android.content.Context;
 
+import com.mapbox.geojson.Feature;
 import com.mapbox.mapboxsdk.style.sources.RasterSource;
 import com.mapbox.mapboxsdk.style.sources.TileSet;
-import com.mapbox.services.commons.geojson.Feature;
 
 /**
  * Created by nickitaliano on 9/25/17.

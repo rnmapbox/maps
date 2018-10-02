@@ -2,8 +2,8 @@ package com.mapbox.rctmgl.components.styles.layers;
 
 import android.content.Context;
 
+import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.CircleLayer;
-import com.mapbox.mapboxsdk.style.layers.Filter;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyle;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleFactory;
@@ -20,8 +20,8 @@ public class RCTMGLCircleLayer extends RCTLayer<CircleLayer> {
     }
 
     @Override
-    protected void updateFilter(Filter.Statement statement) {
-        mLayer.setFilter(statement);
+    protected void updateFilter(Expression expression) {
+        mLayer.setFilter(expression);
     }
 
     @Override

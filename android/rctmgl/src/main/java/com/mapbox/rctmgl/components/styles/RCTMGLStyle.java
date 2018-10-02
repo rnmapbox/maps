@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import com.facebook.common.util.UriUtil;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -65,27 +64,16 @@ public class RCTMGLStyle {
     }
 
     public void addImage(RCTMGLStyleValue styleValue, DownloadMapImageTask.OnAllImagesLoaded callback) {
-        String uriStr = styleValue.getString(RCTMGLStyleFactory.VALUE_KEY);
-        boolean shouldAddImage = styleValue.getBoolean(RCTMGLStyleFactory.SHOULD_ADD_IMAGE_KEY);
-
-        if (!shouldAddImage) {
+        if (!styleValue.shouldAddImage()) {
             if (callback != null) {
                 callback.onAllImagesLoaded();
             }
             return;
         }
 
+        String uriStr = styleValue.getImageURI();
         Map.Entry[] images = new Map.Entry[]{ new AbstractMap.SimpleEntry(uriStr, uriStr) };
         DownloadMapImageTask task = new DownloadMapImageTask(mContext, mMap, callback);
         task.execute(images);
-    }
-
-    private boolean shouldAddImage(String uriStr) {
-        return uriStr != null && isValidURI(uriStr);
-    }
-
-    private boolean isValidURI(String str) {
-        Uri uri = Uri.parse(str);
-        return UriUtil.isLocalAssetUri(uri) || UriUtil.isNetworkUri(uri);
     }
 }

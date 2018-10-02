@@ -13,9 +13,6 @@
 NSString *const RCT_MAPBOX_EVENT_TAP = @"press";
 NSString *const RCT_MAPBOX_EVENT_LONGPRESS = @"longpress";
 
-NSString *const RCT_MAPBOX_USER_LOCATION_UPDATE = @"userlocationdupdated";
-NSString *const RCT_MAPBOX_USER_TRACKING_MODE_CHANGE = @"usertrackingmodechange";
-
 NSString *const RCT_MAPBOX_REGION_WILL_CHANGE_EVENT = @"regionwillchange";
 NSString *const RCT_MAPBOX_REGION_IS_CHANGING = @"regionischanging";
 NSString *const RCT_MAPBOX_REGION_DID_CHANGE = @"regiondidchange";
@@ -42,5 +39,7 @@ NSString *const RCT_MAPBOX_OFFLINE_TILE_LIMIT = @"offlinetilelimit";
 
 NSString *const RCT_MAPBOX_SHAPE_SOURCE_LAYER_PRESS = @"shapesourcelayerpress";
 NSString *const RCT_MAPBOX_VECTOR_SOURCE_LAYER_PRESS = @"vectorsourcelayerpress";
+
+NSString *const RCT_MAPBOX_USER_LOCATION_UPDATE = @"MapboxUserLocationUpdate";
 
 @end

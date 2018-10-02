@@ -5,9 +5,7 @@ import android.graphics.PointF;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.uimanager.UIManagerModule;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.annotations.MarkerView;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
@@ -17,7 +15,6 @@ import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.events.PointAnnotationClickEvent;
 import com.mapbox.rctmgl.events.constants.EventTypes;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
-import com.mapbox.services.commons.geojson.Point;
 
 import java.util.Arrays;
 import java.util.List;

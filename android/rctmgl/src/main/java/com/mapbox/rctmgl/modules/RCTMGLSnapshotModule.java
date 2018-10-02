@@ -15,21 +15,16 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.camera.CameraUpdate;
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.snapshotter.MapSnapshot;
 import com.mapbox.mapboxsdk.snapshotter.MapSnapshotter;
 import com.mapbox.mapboxsdk.storage.FileSource;
 import com.mapbox.rctmgl.utils.BitmapUtils;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
-import com.mapbox.services.commons.geojson.Feature;
-import com.mapbox.services.commons.geojson.FeatureCollection;
-import com.mapbox.services.commons.geojson.Point;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
@@ -117,7 +112,7 @@ public class RCTMGLSnapshotModule extends ReactContextBaseJavaModule {
         } else {
             Feature centerPoint = Feature.fromJson(jsOptions.getString("centerCoordinate"));
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(GeoJSONUtils.toLatLng((Point) centerPoint.getGeometry()))
+                    .target(GeoJSONUtils.toLatLng((Point) centerPoint.geometry()))
                     .tilt(jsOptions.getDouble("pitch"))
                     .bearing(jsOptions.getDouble("heading"))
                     .zoom(jsOptions.getDouble("zoomLevel"))

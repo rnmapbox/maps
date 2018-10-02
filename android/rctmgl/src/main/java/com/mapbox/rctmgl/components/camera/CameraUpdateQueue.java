@@ -2,9 +2,14 @@ package com.mapbox.rctmgl.components.camera;
 
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 
 /**
  * Created by nickitaliano on 9/5/17.
@@ -12,6 +17,7 @@ import java.util.Queue;
 
 public class CameraUpdateQueue {
     private Queue<CameraStop> mQueue;
+
     private OnCompleteAllListener mCompleteListener;
 
     public interface OnCompleteAllListener {
@@ -35,16 +41,17 @@ public class CameraUpdateQueue {
     }
 
     public void flush() {
-        while (!mQueue.isEmpty()) {
+        while (mQueue.size() > 0) {
             mQueue.remove();
         }
+        mQueue = new LinkedList<>();
     }
 
     public void setOnCompleteAllListener(OnCompleteAllListener listener) {
         mCompleteListener = listener;
     }
 
-    public void execute(final MapboxMap map) {
+    public void execute(MapboxMap map) {
         if (mQueue.isEmpty()) {
             if (mCompleteListener != null) {
                 mCompleteListener.onCompleteAll();
@@ -57,12 +64,8 @@ public class CameraUpdateQueue {
             return;
         }
 
-        final CameraUpdateItem item = stop.toCameraUpdate();
-        item.execute(map, new CameraUpdateItem.OnCameraCompleteListener() {
-            @Override
-            public void onComplete() {
-                execute(map);
-            }
-        });
+        CameraUpdateItem item = stop.toCameraUpdate(map);
+        item.run();
+        execute(map);
     }
 }

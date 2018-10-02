@@ -5,13 +5,10 @@ import android.support.annotation.NonNull;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.mapbox.mapboxsdk.style.functions.CameraFunction;
-import com.mapbox.mapboxsdk.style.functions.CompositeFunction;
-import com.mapbox.mapboxsdk.style.functions.Function;
-import com.mapbox.mapboxsdk.style.functions.SourceFunction;
-import com.mapbox.mapboxsdk.style.functions.stops.Stop;
-import com.mapbox.mapboxsdk.style.functions.stops.Stops;
+import com.facebook.react.bridge.ReadableType;
+import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
+import com.mapbox.rctmgl.utils.ExpressionParser;
 
 /**
  * Created by nickitaliano on 9/12/17.
@@ -20,11 +17,12 @@ import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
 public class RCTMGLStyleValue {
 
     private String mType;
+    private boolean isExpression;
+    private Expression mExpression;
     private ReadableMap mPayload;
 
-    public static final String FunctionTypeCamera = "camera";
-    public static final String FunctionTypeSource = "source";
-    public static final String FunctionTypeComposite = "composite";
+    private String imageURI = "";
+    private boolean isAddImage;
 
     public static final int InterpolationModeExponential = 100;
     public static final int InterpolationModeInterval = 101;
@@ -33,7 +31,19 @@ public class RCTMGLStyleValue {
 
     public RCTMGLStyleValue(@NonNull ReadableMap config) {
         mType = config.getString("styletype");
-        mPayload = config.getMap("payload");
+        mPayload = config.getMap("stylevalue");
+
+        if ("image".equals(mType)) {
+            imageURI = mPayload.getString("value");
+            isAddImage = imageURI != null && imageURI.contains("://");
+            return;
+        }
+
+        Dynamic dynamic = mPayload.getDynamic("value");
+        if (dynamic.getType().equals(ReadableType.Array)) {
+            isExpression = true;
+            mExpression = ExpressionParser.from(dynamic.asArray());
+        }
     }
 
     public String getType() {
@@ -77,7 +87,8 @@ public class RCTMGLStyleValue {
 
         Float[] floatArr = new Float[arr.size()];
         for (int i = 0; i < arr.size(); i++) {
-            floatArr[i] = (float) arr.getDouble(i);
+            ReadableMap item = arr.getMap(i);
+            floatArr[i] = (float) item.getDouble("value");
         }
 
         return floatArr;
@@ -98,65 +109,20 @@ public class RCTMGLStyleValue {
         return mPayload.getMap(key);
     }
 
-    public Function makeStyleFunction(RCTMGLStyleFunctionParser functionParser) {
-        String fnType = getString("fn");
-        int mode = getInt("mode");
-
-        switch (fnType) {
-            case FunctionTypeCamera:
-                return makeCameraFunction(mode, functionParser);
-            case FunctionTypeSource:
-                return makeSourceFunction(mode, getString("attributeName"), functionParser);
-            case FunctionTypeComposite:
-                return makeCompositeFunction(mode, getString("attributeName"), functionParser);
-            default:
-                return null;
-        }
+    public Expression getExpression() {
+        return mExpression;
     }
 
-    public CameraFunction makeCameraFunction(int mode, RCTMGLStyleFunctionParser functionParser) {
-        Stop[] stops = functionParser.getStops(functionParser.getRawStops());
-
-        switch (mode) {
-            case InterpolationModeExponential:
-                return Function.zoom(Stops.exponential(stops));
-            case InterpolationModeInterval:
-                return Function.zoom(Stops.interval(stops));
-            default:
-                return null;
-        }
+    public boolean isExpression() {
+        return isExpression;
     }
 
-    public SourceFunction makeSourceFunction(int mode, String property, RCTMGLStyleFunctionParser functionParser) {
-        Stop[] stops = functionParser.getStops(functionParser.getRawStops());
-
-        switch (mode) {
-            case InterpolationModeExponential:
-                return Function.property(property, Stops.exponential(stops));
-            case InterpolationModeInterval:
-                return Function.property(property, Stops.interval(stops));
-            case InterpolationModeCategorical:
-                return Function.property(property, Stops.categorical(stops));
-            case InterpolationModeIdentity:
-                return Function.property(property, Stops.identity());
-            default:
-                return null;
-        }
+    public boolean shouldAddImage() {
+        return isAddImage;
     }
 
-    public CompositeFunction makeCompositeFunction(int mode, String property, RCTMGLStyleFunctionParser functionParser) {
-        Stop[] stops = functionParser.getStops(functionParser.getRawStops());
-
-        switch (mode) {
-            case InterpolationModeExponential:
-                return Function.composite(property, Stops.exponential(stops));
-            case InterpolationModeInterval:
-                return Function.composite(property, Stops.interval(stops));
-            case InterpolationModeCategorical:
-                return Function.composite(property, Stops.categorical(stops));
-            default:
-                return null;
-        }
+    public String getImageURI() {
+        return imageURI;
     }
 
     public TransitionOptions getTransition() {

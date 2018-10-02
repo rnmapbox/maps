@@ -9,9 +9,6 @@ import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
 import Bubble from './common/Bubble';
 
-import sheet from '../styles/sheet';
-import nycJSON from '../assets/nyc_geojson.json';
-
 const styles = {
   neighborhoods: {
     fillAntialias: true,

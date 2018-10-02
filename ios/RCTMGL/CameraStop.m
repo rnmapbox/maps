@@ -9,6 +9,7 @@
 #import "CameraStop.h"
 #import "CameraMode.h"
 #import "RCTMGLUtils.h"
+#import "RCTMGLCamera.h"
 
 @implementation CameraStop
 

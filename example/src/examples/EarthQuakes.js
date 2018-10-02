@@ -7,9 +7,6 @@ import {SF_OFFICE_COORDINATE} from '../utils';
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
 
-import sheet from '../styles/sheet';
-import { SF_OFFICE_COORDINATE } from '../utils';
-
 const layerStyles = {
   singlePoint: {
     circleColor: 'green',

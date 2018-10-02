@@ -5,12 +5,12 @@ import android.view.View;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
+import com.mapbox.geojson.Feature;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.style.sources.Source;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
-import com.mapbox.services.commons.geojson.Feature;
 
 import java.util.ArrayList;
 import java.util.HashMap;

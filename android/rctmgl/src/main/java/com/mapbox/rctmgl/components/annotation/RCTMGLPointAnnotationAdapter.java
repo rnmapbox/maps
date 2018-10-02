@@ -27,7 +27,7 @@ public class RCTMGLPointAnnotationAdapter extends MapboxMap.MarkerViewAdapter<RC
     private LayoutInflater mInflater;
 
     public RCTMGLPointAnnotationAdapter(RCTMGLMapView mapView, Context context) {
-        super(context);
+        super(context, RCTMGLPointAnnotation.CustomView.class);
         mMapView = mapView;
         mInflater = LayoutInflater.from(context);
     }

@@ -6,16 +6,16 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Geometry;
+import com.mapbox.geojson.LineString;
+import com.mapbox.geojson.Point;
+import com.mapbox.geojson.Polygon;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.geometry.LatLngQuad;
-import com.mapbox.services.commons.geojson.Feature;
-import com.mapbox.services.commons.geojson.FeatureCollection;
-import com.mapbox.services.commons.geojson.Geometry;
-import com.mapbox.services.commons.geojson.LineString;
-import com.mapbox.services.commons.geojson.Point;
-import com.mapbox.services.commons.geojson.Polygon;
-import com.mapbox.services.commons.models.Position;
+import com.mapbox.mapboxsdk.style.light.Position;
 
 import java.util.List;
 
@@ -27,19 +27,19 @@ public class GeoJSONUtils {
     public static WritableMap fromFeature(Feature feature) {
         WritableMap map = Arguments.createMap();
         map.putString("type", "Feature");
-        map.putString("id", feature.getId());
+        map.putString("id", feature.id());
 
-        WritableMap geometry = fromGeometry(feature.getGeometry());
+        WritableMap geometry = fromGeometry(feature.geometry());
         map.putMap("geometry", geometry);
 
-        WritableMap properties = ConvertUtils.toWritableMap(feature.getProperties());
+        WritableMap properties = ConvertUtils.toWritableMap(feature.properties());
         map.putMap("properties", properties);
 
         return map;
     }
 
     public static WritableMap fromGeometry(Geometry geometry) {
-        final String type = geometry.getType();
+        final String type = geometry.type();
 
         switch (type) {
             case "Point":
@@ -75,16 +75,15 @@ public class GeoJSONUtils {
     }
 
     public static WritableArray getCoordinates(Point point) {
-        double[] coords = point.getCoordinates().getCoordinates();
-        return Arguments.fromArray(coords);
+        return Arguments.fromArray(pointToDoubleArray(point));
     }
 
     public static WritableArray getCoordinates(LineString lineString) {
         WritableArray array = Arguments.createArray();
 
-        List<Position> positions = lineString.getCoordinates();
-        for (Position position : positions) {
-            array.pushArray(Arguments.fromArray(position.getCoordinates()));
+        List<Point> points = lineString.coordinates();
+        for (Point point : points) {
+            array.pushArray(Arguments.fromArray(pointToDoubleArray(point)));
         }
 
         return array;
@@ -93,12 +92,16 @@ public class GeoJSONUtils {
     public static WritableArray getCoordinates(Polygon polygon) {
         WritableArray array = Arguments.createArray();
 
-        List<List<Position>> positions = polygon.getCoordinates();
-        for (List<Position> curPositions : positions) {
+        List<List<Point>> points = polygon.coordinates();
+        if (points == null) {
+            return array;
+        }
+
+        for (List<Point> curPoint : points) {
             WritableArray innerArray = Arguments.createArray();
 
-            for (Position position : curPositions) {
-                innerArray.pushArray(Arguments.fromArray(position.getCoordinates()));
+            for (Point point : curPoint) {
+                innerArray.pushArray(Arguments.fromArray(pointToDoubleArray(point)));
             }
 
             array.pushArray(innerArray);
@@ -134,13 +137,7 @@ public class GeoJSONUtils {
         if (point == null) {
             return null;
         }
-
-        Position position = point.getCoordinates();
-        if (position == null) {
-            return null;
-        }
-
-        return new LatLng(position.getLatitude(), position.getLongitude());
+        return new LatLng(point.latitude(), point.longitude());
     }
 
     public static LatLng toLatLng(ReadableArray coordinates) {
@@ -155,7 +152,7 @@ public class GeoJSONUtils {
         if (feature == null) {
             return null;
         }
-        return (Point)feature.getGeometry();
+        return (Point)feature.geometry();
     }
 
     public static WritableArray fromLatLngBounds(LatLngBounds latLngBounds) {
@@ -170,14 +167,14 @@ public class GeoJSONUtils {
     }
 
     public static LatLngBounds toLatLngBounds(FeatureCollection featureCollection) {
-        List<Feature> features = featureCollection.getFeatures();
+        List<Feature> features = featureCollection.features();
 
         if (features.size() != 2) {
             return null;
         }
 
-        LatLng neLatLng = toLatLng((Point)features.get(0).getGeometry());
-        LatLng swLatLng = toLatLng((Point)features.get(1).getGeometry());
+        LatLng neLatLng = toLatLng((Point)features.get(0).geometry());
+        LatLng swLatLng = toLatLng((Point)features.get(1).geometry());
 
         return LatLngBounds.from(neLatLng.getLatitude(), neLatLng.getLongitude(),
                 swLatLng.getLatitude(), swLatLng.getLongitude());
@@ -194,5 +191,12 @@ public class GeoJSONUtils {
                 toLatLng(array.getArray(2)),
                 toLatLng(array.getArray(3))
         );
+    }
+
+    public static double[] pointToDoubleArray(Point point) {
+        if (point == null) {
+            return new double[] { 0.0, 0.0 };
+        }
+        return new double[] { point.longitude(), point.latitude() };
     }
 }

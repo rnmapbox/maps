@@ -13,7 +13,7 @@ import {Icon} from 'react-native-elements';
 import SafeAreaView from 'react-native-safe-area-view';
 
 import { createStackNavigator } from 'react-navigation';
-import CardStackStyleInterpolator from 'react-navigation/src/views/StackView/StackViewStyleInterpolator';
+import CardStackStyleInterpolator from 'react-navigation-stack/dist/views/StackView/StackViewStyleInterpolator';
 
 // Styles
 import sheet from './styles/sheet';
