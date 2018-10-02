@@ -17,7 +17,13 @@ import {
   isAndroid,
   viewPropTypes,
 } from '../utils';
-import {getFilter} from '../utils/filterUtils';
+
+import NativeBridgeComponent from './NativeBridgeComponent';
+import Camera from './Camera';
+
+import _ from 'underscore';
+
+import { getFilter } from '../utils/filterUtils';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -32,26 +38,9 @@ const styles = StyleSheet.create({
 /**
  * MapView backed by Mapbox Native GL
  */
-class MapView extends React.Component {
+class MapView extends NativeBridgeComponent {
   static propTypes = {
     ...viewPropTypes,
-
-    /**
-     * Animates changes between pitch and bearing
-     */
-    animated: PropTypes.bool,
-
-    /**
-     * Initial center coordinate on map [lng, lat]
-     */
-    centerCoordinate: PropTypes.arrayOf(PropTypes.number),
-
-    /**
-     * Initial bounds on map [[lng, lat], [lng, lat]]
-     */
-    visibleCoordinateBounds: PropTypes.arrayOf(
-      PropTypes.arrayOf(PropTypes.number),
-    ),
 
     /**
      * Shows the users location on the map
@@ -77,16 +66,6 @@ class MapView extends React.Component {
     ]),
 
     /**
-     * Initial heading on map
-     */
-    heading: PropTypes.number,
-
-    /**
-     * Initial pitch on map
-     */
-    pitch: PropTypes.number,
-
-    /**
      * Style for wrapping React Native View
      */
     style: PropTypes.any,
@@ -95,21 +74,6 @@ class MapView extends React.Component {
      * Style URL for map
      */
     styleURL: PropTypes.string,
-
-    /**
-     * Initial zoom level of map
-     */
-    zoomLevel: PropTypes.number,
-
-    /**
-     * Min zoom level of map
-     */
-    minZoomLevel: PropTypes.number,
-
-    /**
-     * Max zoom level of map
-     */
-    maxZoomLevel: PropTypes.number,
 
     /**
      * Automatically change the language of the map labels to the system’s preferred language,
@@ -191,11 +155,6 @@ class MapView extends React.Component {
     onRegionDidChange: PropTypes.func,
 
     /**
-     * This event is triggered whenever the location engine receives a location update
-     */
-    onUserLocationUpdate: PropTypes.func,
-
-    /**
      * This event is triggered when the map is about to start loading a new map style.
      */
     onWillStartLoadingMap: PropTypes.func,
@@ -246,11 +205,6 @@ class MapView extends React.Component {
     onDidFinishLoadingStyle: PropTypes.func,
 
     /**
-     * This event is triggered when the users tracking mode is changed.
-     */
-    onUserTrackingModeChange: PropTypes.func,
-
-    /**
      * The emitted frequency of regionwillchange events
      */
     regionWillChangeDebounceTime: PropTypes.number,
@@ -262,17 +216,12 @@ class MapView extends React.Component {
   };
 
   static defaultProps = {
-    animated: false,
-    heading: 0,
-    pitch: 0,
     localizeLabels: false,
     scrollEnabled: true,
     pitchEnabled: true,
     rotateEnabled: true,
     attributionEnabled: true,
     logoEnabled: true,
-    zoomLevel: 16,
-    userTrackingMode: MapboxGL.UserTrackingModes.None,
     styleURL: MapboxGL.StyleURL.Street,
     surfaceView: false,
     regionWillChangeDebounceTime: 10,
@@ -284,12 +233,15 @@ class MapView extends React.Component {
 
     this.state = {
       isReady: null,
+      region: null,
+      width: 0,
+      height: 0,
+      isUserInteraction: false,
     };
 
     this._onPress = this._onPress.bind(this);
     this._onLongPress = this._onLongPress.bind(this);
     this._onChange = this._onChange.bind(this);
-    this._onAndroidCallback = this._onAndroidCallback.bind(this);
     this._onLayout = this._onLayout.bind(this);
 
     // debounced map change methods
@@ -304,7 +256,6 @@ class MapView extends React.Component {
       props.regionDidChangeDebounceTime,
     );
 
-    this._callbackMap = new Map();
     this._preRefMapMethodQueue = [];
   }
 
@@ -666,10 +617,10 @@ class MapView extends React.Component {
         runNativeCommand(NATIVE_MODULE_NAME, methodName, this._nativeRef, args);
       });
     }
-    return runNativeCommand(
+    return super._runNativeCommand(
       NATIVE_MODULE_NAME,
-      methodName,
       this._nativeRef,
+      methodName,
       args,
     );
   }
@@ -744,12 +695,14 @@ class MapView extends React.Component {
     if (isFunction(this.props.onRegionWillChange)) {
       this.props.onRegionWillChange(payload);
     }
+    this.setState({ isUserInteraction: payload.properties.isUserInteraction });
   }
 
   _onRegionDidChange(payload) {
     if (isFunction(this.props.onRegionDidChange)) {
       this.props.onRegionDidChange(payload);
     }
+    this.setState({ region: payload });
   }
 
   _onChange(e) {
@@ -820,8 +773,12 @@ class MapView extends React.Component {
     }
   }
 
-  _onLayout() {
-    this.setState({isReady: true});
+  _onLayout(e) {
+    this.setState({
+      isReady: true,
+      width: e.nativeEvent.layout.width,
+      height: e.nativeEvent.layout.height,
+    });
   }
 
   _handleOnChange(propName, payload) {
@@ -877,11 +834,15 @@ class MapView extends React.Component {
     }
   }
 
+  setNativeProps(props) {
+    if (this._nativeRef) {
+      this._nativeRef.setNativeProps(props);
+    }
+  }
+
   render() {
     const props = {
       ...this.props,
-      centerCoordinate: this._getCenterCoordinate(),
-      visibleCoordinateBounds: this._getVisibleCoordinateBounds(),
       contentInset: this._getContentInset(),
       style: styles.matchParent,
     };

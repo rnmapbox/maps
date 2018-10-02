@@ -78,7 +78,7 @@ class RasterLayer extends AbstractLayer {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
     };
-    return <RCTMGLRasterLayer {...props} />;
+    return <RCTMGLRasterLayer ref='nativeLayer' {...props} />;
   }
 }
 

@@ -312,7 +312,35 @@
 			remoteGlobalIDString = 2D2A28201D9B03D100D4039D;
 			remoteInfo = "RCTAnimation-tvOS";
 		};
-		78C398B81ACF4ADC00677621 /* PBXContainerItemProxy */ = {
+		C4692AC021588C120039E2BC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C412411D1F4D4CF80008C81E /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EBF21BDC1FC498900052F4D5;
+			remoteInfo = jsinspector;
+		};
+		C4692AC221588C120039E2BC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C412411D1F4D4CF80008C81E /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EBF21BFA1FC4989A0052F4D5;
+			remoteInfo = "jsinspector-tvOS";
+		};
+		C4692AC421588C120039E2BC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C412411D1F4D4CF80008C81E /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9936F3131F5F2E4B0010BF04;
+			remoteInfo = privatedata;
+		};
+		C4692AC621588C120039E2BC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C412411D1F4D4CF80008C81E /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9936F32F1F5F2E5B0010BF04;
+			remoteInfo = "privatedata-tvOS";
+		};
+		C4C87A901F8555930064AE95 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */;
 			proxyType = 2;
@@ -684,6 +712,22 @@
 				FE03836274308650C287AEFF /* Pods-RNMapboxGLExample.release.xcconfig */,
 				29CF8AEAEB85CD9239D0DA42 /* Pods-RNMapboxGLExampleTests.debug.xcconfig */,
 				EA906C5240540673CDECFBA0 /* Pods-RNMapboxGLExampleTests.release.xcconfig */,
+				C412412D1F4D4CF80008C81E /* libReact.a */,
+				C412412F1F4D4CF80008C81E /* libReact.a */,
+				C41241311F4D4CF80008C81E /* libyoga.a */,
+				C41241331F4D4CF80008C81E /* libyoga.a */,
+				C41241351F4D4CF80008C81E /* libcxxreact.a */,
+				C41241371F4D4CF80008C81E /* libcxxreact.a */,
+				C41241391F4D4CF80008C81E /* libjschelpers.a */,
+				C412413B1F4D4CF80008C81E /* libjschelpers.a */,
+				C4692AC121588C120039E2BC /* libjsinspector.a */,
+				C4692AC321588C120039E2BC /* libjsinspector-tvOS.a */,
+				C412413D1F4D4CF80008C81E /* libthird-party.a */,
+				C412413F1F4D4CF80008C81E /* libthird-party.a */,
+				C41241411F4D4CF80008C81E /* libdouble-conversion.a */,
+				C41241431F4D4CF80008C81E /* libdouble-conversion.a */,
+				C4692AC521588C120039E2BC /* libprivatedata.a */,
+				C4692AC721588C120039E2BC /* libprivatedata-tvOS.a */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1073,7 +1117,35 @@
 			remoteRef = 3DAD3EA61DF850E9000B6D8A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		3DAD3EA91DF850E9000B6D8A /* libcxxreact.a */ = {
+		C4692AC121588C120039E2BC /* libjsinspector.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libjsinspector.a;
+			remoteRef = C4692AC021588C120039E2BC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C4692AC321588C120039E2BC /* libjsinspector-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libjsinspector-tvOS.a";
+			remoteRef = C4692AC221588C120039E2BC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C4692AC521588C120039E2BC /* libprivatedata.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libprivatedata.a;
+			remoteRef = C4692AC421588C120039E2BC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C4692AC721588C120039E2BC /* libprivatedata-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libprivatedata-tvOS.a";
+			remoteRef = C4692AC621588C120039E2BC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C4C87A911F8555930064AE95 /* libRCTMGL.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libcxxreact.a;
@@ -1415,7 +1487,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/../node_modules/@mapbox/react-native-mapbox-gl/ios",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = RNMapboxGLExample/Info.plist;
+				INSTALL_PATH = "$(INSTALL_PATH)";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -1438,6 +1516,12 @@
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = RNMapboxGLExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/../node_modules/@mapbox/react-native-mapbox-gl/ios",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INSTALL_PATH = "$(INSTALL_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",

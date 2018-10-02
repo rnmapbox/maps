@@ -1,10 +1,12 @@
 /* eslint react/prop-types:0  */
 import React from 'react';
+import { processColor } from 'react-native';
+import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
+import { getFilter } from '../utils/filterUtils';
+import { getStyleType } from '../utils/styleMap';
+import BridgeValue from '../utils/BridgeValue';
 
-import MapboxStyleSheet from '../utils/MapboxStyleSheet';
-import {getFilter} from '../utils/filterUtils';
-
-class AbstractLayer extends React.Component {
+class AbstractLayer extends React.PureComponent {
   get baseProps() {
     return {
       ...this.props,
@@ -21,31 +23,45 @@ class AbstractLayer extends React.Component {
     };
   }
 
+  getStyleTypeFormatter (styleType) {
+    if (styleType === 'color') {
+      return processColor;
+    }
+    return;
+  }
+
   getStyle() {
     if (!this.props.style) {
       return;
     }
 
-    if (!Array.isArray(this.props.style)) {
-      return this._getMapboxStyleSheet(this.props.style);
-    }
+    let nativeStyle = {};
+    const styleProps = Object.keys(this.props.style);
+    for (let styleProp of styleProps) {
+      const styleType = getStyleType(styleProp);
+      let rawStyle = this.props.style[styleProp];
 
-    const styles = this.props.style;
-    let flattenStyle = {};
-
-    for (const style of styles) {
-      if (!style) {
-        continue;
+      if (styleType === 'color' && typeof rawStyle === 'string') {
+        rawStyle = processColor(rawStyle);
+      } else if (styleType === 'image' && typeof rawStyle === 'number') {
+        const asset = resolveAssetSource(rawStyle) || {};
+        rawStyle = asset.uri || rawStyle;
       }
-      const mapboxStyle = this._getMapboxStyleSheet(style);
-      flattenStyle = Object.assign(flattenStyle, mapboxStyle);
+
+      const bridgeValue = new BridgeValue(rawStyle);
+      nativeStyle[styleProp] = {
+        styletype: styleType,
+        stylevalue: bridgeValue.toJSON(),
+      };
     }
 
-    return flattenStyle;
+    return nativeStyle;
   }
 
-  _getMapboxStyleSheet(style) {
-    return MapboxStyleSheet.create(style);
+  setNativeProps(props) {
+    if (this.refs.nativeLayer) {
+      this.refs.nativeLayer.setNativeProps(props);
+    }
   }
 }
 

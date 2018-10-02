@@ -82,7 +82,7 @@ class LineLayer extends AbstractLayer {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
     };
-    return <RCTMGLLineLayer {...props} />;
+    return <RCTMGLLineLayer ref='nativeLayer' {...props} />;
   }
 }
 
