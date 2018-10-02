@@ -270,10 +270,9 @@ global.jsDocReactProp = function(prop) {
   let propTypes = [];
 
   if (prop.name.indexOf('Translate') !== -1) {
-    propTypes.push('TranslationPropType');
+    propTypes.push('PropTypes.arrayOf(PropTypes.number)');
   } else if (prop.type === 'color') {
     propTypes.push('PropTypes.string');
-    propTypes.push('ConstantPropType');
   } else if (prop.type === 'array') {
     switch (prop.value) {
       case 'number':
@@ -287,10 +286,8 @@ global.jsDocReactProp = function(prop) {
       default:
         propTypes.push('PropTypes.array');
     }
-    propTypes.push('ConstantPropType');
   } else if (prop.type === 'number') {
     propTypes.push('PropTypes.number');
-    propTypes.push('ConstantPropType');
   } else if (prop.type === 'enum') {
     propTypes.push('PropTypes.any');
   } else {
@@ -302,11 +299,10 @@ global.jsDocReactProp = function(prop) {
       propTypes.push('PropTypes.number');
     }
     propTypes.push('PropTypes.string');
-    propTypes.push('ConstantPropType');
   }
 
-  if (prop.allowedFunctionTypes && prop.allowedFunctionTypes.length) {
-    propTypes.push('StyleFunctionPropType');
+  if (prop.expressionSupported && !propTypes.includes('PropTypes.array')) {
+    propTypes.push('PropTypes.array');
   }
 
   if (propTypes.length > 1) {
