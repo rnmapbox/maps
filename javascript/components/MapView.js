@@ -303,6 +303,37 @@ class MapView extends React.Component {
     this._preRefMapMethodQueue = [];
   }
 
+  componentDidMount() {
+    this.setHandledMapChangedEvents(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setHandledMapChangedEvents(nextProps);
+  }
+
+  setHandledMapChangedEvents(props) {
+    if (isAndroid()) {
+        const events = [];
+
+        if (props.onRegionWillChange) events.push(MapboxGL.EventTypes.RegionWillChange);
+        if (props.onRegionIsChanging) events.push(MapboxGL.EventTypes.RegionIsChanging);
+        if (props.onRegionDidChange) events.push(MapboxGL.EventTypes.RegionDidChange);
+        if (props.onUserLocationUpdate) events.push(MapboxGL.EventTypes.UserLocationUpdated);
+        if (props.onWillStartLoadingMap) events.push(MapboxGL.EventTypes.WillStartLoadingMap);
+        if (props.onDidFinishLoadingMap) events.push(MapboxGL.EventTypes.DidFinishLoadingMap);
+        if (props.onDidFailLoadingMap) events.push(MapboxGL.EventTypes.DidFailLoadingMap);
+        if (props.onWillStartRenderingFrame) events.push(MapboxGL.EventTypes.WillStartRenderingFrame);
+        if (props.onDidFinishRenderingFrame) events.push(MapboxGL.EventTypes.DidFinishRenderingFrame);
+        if (props.onDidFinishRenderingFrameFully) events.push(MapboxGL.EventTypes.DidFinishRenderingFrameFully);
+        if (props.onWillStartRenderingMap) events.push(MapboxGL.EventTypes.WillStartRenderingMap);
+        if (props.onDidFinishRenderingMap) events.push(MapboxGL.EventTypes.DidFinishRenderingMap);
+        if (props.onDidFinishRenderingMapFully) events.push(MapboxGL.EventTypes.DidFinishRenderingMapFully);
+        if (props.onDidFinishLoadingStyle) events.push(MapboxGL.EventTypes.DidFinishLoadingStyle);
+
+        this._runNativeCommand('setHandledMapChangedEvents', events);
+    }
+  }
+
   /**
    * Converts a geographic coordinate to a point in the given view’s coordinate system.
    *
@@ -712,19 +743,28 @@ class MapView extends React.Component {
   }
 
   _onChange(e) {
+    const { regionWillChangeDebounceTime, regionDidChangeDebounceTime } = this.props;
     const { type, payload } = e.nativeEvent;
     let propName = '';
 
     switch (type) {
       case MapboxGL.EventTypes.RegionWillChange:
-        this._onDebouncedRegionWillChange(payload);
-        return;
+        if (regionWillChangeDebounceTime > 0) {
+          this._onDebouncedRegionWillChange(payload);
+        } else {
+          propName = 'onRegionWillChange';
+        }
+        break;
       case MapboxGL.EventTypes.RegionIsChanging:
         propName = 'onRegionIsChanging';
         break;
       case MapboxGL.EventTypes.RegionDidChange:
-        this._onDebouncedRegionDidChange(payload);
-        return;
+        if (regionDidChangeDebounceTime > 0) {
+          this._onDebouncedRegionDidChange(payload);
+        } else {
+          propName = 'onRegionDidChange';
+        }
+        break;
       case MapboxGL.EventTypes.UserLocationUpdated:
         propName = 'onUserLocationUpdate';
         break;
