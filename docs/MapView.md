@@ -107,7 +107,7 @@ Returns an array of rendered map features that intersect with a given point.
 
 
 ```javascript
-this._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1', 'id2'])
+const features = await this._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1', 'id2'])
 ```
 
 
@@ -125,7 +125,7 @@ Returns an array of rendered map features that intersect with the given rectangl
 
 
 ```javascript
-this._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])
+const features = await this._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])
 ```
 
 
