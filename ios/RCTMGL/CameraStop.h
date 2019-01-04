@@ -10,14 +10,14 @@
 
 @interface CameraStop : NSObject
 
-@property (nonatomic, assign) NSNumber *pitch;
-@property (nonatomic, assign) NSNumber *heading;
-@property (nonatomic, assign) NSNumber *zoom;
-@property (nonatomic, assign) NSNumber *boundsPaddingLeft;
-@property (nonatomic, assign) NSNumber *boundsPaddingRight;
-@property (nonatomic, assign) NSNumber *boundsPaddingTop;
-@property (nonatomic, assign) NSNumber *boundsPaddingBottom;
-@property (nonatomic, assign) NSNumber *mode;
+@property (nonatomic, strong) NSNumber *pitch;
+@property (nonatomic, strong) NSNumber *heading;
+@property (nonatomic, strong) NSNumber *zoom;
+@property (nonatomic, strong) NSNumber *boundsPaddingLeft;
+@property (nonatomic, strong) NSNumber *boundsPaddingRight;
+@property (nonatomic, strong) NSNumber *boundsPaddingTop;
+@property (nonatomic, strong) NSNumber *boundsPaddingBottom;
+@property (nonatomic, strong) NSNumber *mode;
 @property (nonatomic, assign) NSTimeInterval duration;
 
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;

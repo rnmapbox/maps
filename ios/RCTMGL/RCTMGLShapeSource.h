@@ -20,13 +20,13 @@
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *images;
 @property (nonatomic, strong) NSArray<NSString *> *nativeImages;
 
-@property (nonatomic, assign) NSNumber *cluster;
-@property (nonatomic, assign) NSNumber *clusterRadius;
-@property (nonatomic, assign) NSNumber *clusterMaxZoomLevel;
+@property (nonatomic, strong) NSNumber *cluster;
+@property (nonatomic, strong) NSNumber *clusterRadius;
+@property (nonatomic, strong) NSNumber *clusterMaxZoomLevel;
 
-@property (nonatomic, assign) NSNumber *maxZoomLevel;
-@property (nonatomic, assign) NSNumber *buffer;
-@property (nonatomic, assign) NSNumber *tolerence;
+@property (nonatomic, strong) NSNumber *maxZoomLevel;
+@property (nonatomic, strong) NSNumber *buffer;
+@property (nonatomic, strong) NSNumber *tolerence;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, assign) BOOL hasPressListener;

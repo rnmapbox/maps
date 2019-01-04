@@ -14,9 +14,9 @@
 @property (nonatomic, copy) NSString *url;
 @property (nonatomic, copy) NSString *attribution;
 
-@property (nonatomic, assign) NSNumber *tileSize;
-@property (nonatomic, assign) NSNumber *minZoomLevel;
-@property (nonatomic, assign) NSNumber *maxZoomLevel;
+@property (nonatomic, strong) NSNumber *tileSize;
+@property (nonatomic, strong) NSNumber *minZoomLevel;
+@property (nonatomic, strong) NSNumber *maxZoomLevel;
 
 @property (nonatomic, assign) BOOL tms;
 
