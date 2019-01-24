@@ -49,17 +49,17 @@ Select the 'Copy items if needed' checkbox.
 
 
 ### Add React Native Mapbox SDK Files
-In the Xcode's `Project navigator`, right click on the `Libraries` folder ➜ `Add Files to <...>`. Add `node_modules/@mapbox/react-native-mapbox-gl/ios/RCTMGL.xcodeproj`.
+In Xcode's `Project navigator`, right click on the `Libraries` folder ➜ `Add Files to <...>`. Add `node_modules/@mapbox/react-native-mapbox-gl/ios/RCTMGL.xcodeproj`.
 Then in Xcode navigate to `Build Phases` click on it and you should see `Link Binary with Libraries`, we need to add `libRCTMGL.a`.
 
 ### Add Framework Header Search Paths
 In the `Build Settings` of your application target search for `FRAMEWORK_SEARCH_PATHS`. Add `$(PROJECT_DIR)/../node_modules/@mapbox/react-native-mapbox-gl/ios` non-recursive to your `Framework Search Paths`.
 
-**Important** If their is a select input under `Debug` line, choose `Any iOS SDK`.
+**Important** If there is a select input under `Debug` line, choose `Any iOS SDK`.
 
 ### Add Run Script
 
-In the `Build Phases` tab, click the plus sign and then `New Run Script Phase`
+In the `Build Phases` tab, click the plus sign and then `New Run Script Phase`.
 
 ![](https://cldup.com/jgt8p_dHjD.png)
 
