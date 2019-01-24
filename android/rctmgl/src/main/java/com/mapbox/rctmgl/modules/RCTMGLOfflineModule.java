@@ -320,11 +320,6 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
 
             @Override
             public void onStatusChanged(OfflineRegionStatus status) {
-                // ignore status inactive updates
-                Log.d(REACT_CLASS, String.format("Status %d", status.getDownloadState()));
-                Log.d(REACT_CLASS, String.format("Required Resource count %d", status.getRequiredResourceCount()));
-                Log.d(REACT_CLASS, String.format("Completed Resource count %d", status.getCompletedResourceCount()));
-
                 if (shouldSendUpdate(System.currentTimeMillis(), status)) {
                     sendEvent(makeStatusEvent(name, status));
                     timestamp = System.currentTimeMillis();
