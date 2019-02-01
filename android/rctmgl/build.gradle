@@ -1,12 +1,16 @@
 apply plugin: 'com.android.library'
 
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    compileSdkVersion safeExtGet("compileSdkVersion", 26)
+    buildToolsVersion safeExtGet("buildToolsVersion", '26.0.1')
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 26
+        minSdkVersion safeExtGet('minSdkVersion', 16)
+        targetSdkVersion safeExtGet('targetSdkVersion', 26)
         versionCode 1
         versionName "1.0"
     }
@@ -20,19 +24,19 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // React Native
-    provided "com.facebook.react:react-native:+"
+    compileOnly "com.facebook.react:react-native:+"
 
     // Mapbox SDK
-    compile 'com.mapbox.mapboxsdk:mapbox-android-services:2.2.9'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-services:2.2.9'
 
-    compile('com.mapbox.mapboxsdk:mapbox-android-sdk:5.4.1@aar') {
+    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:5.4.1@aar') {
         transitive=true
     }
 
     // Mapbox plugins
-    compile 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization:0.1.0'
-    compile 'com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.3.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization:0.1.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.3.0'
 }
