@@ -1,11 +1,11 @@
 import React from 'react';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
-import BaseExamplePropTypes from './common/BaseExamplePropTypes';
-import Page from './common/Page';
-
 import sheet from '../styles/sheet';
 import smileyFaceGeoJSON from '../assets/smiley_face.json';
+
+import BaseExamplePropTypes from './common/BaseExamplePropTypes';
+import Page from './common/Page';
 
 const layerStyles = MapboxGL.StyleSheet.create({
   smileyFaceLight: {
@@ -31,9 +31,10 @@ class TwoByTwo extends React.Component {
         zoomLevel={2}
         centerCoordinate={[-35.15165038, 40.6235728]}
         onSetCameraComplete={this.onUpdateZoomLevel}
-        ref={(ref) => (this.map = ref)}
+        ref={ref => (this.map = ref)}
         style={sheet.matchParent}
-        styleURL={styleURL}>
+        styleURL={styleURL}
+      >
         <MapboxGL.ShapeSource id="smileyFaceSource" shape={smileyFaceGeoJSON}>
           <MapboxGL.FillLayer id="smileyFaceFill" style={layerStyle} />
         </MapboxGL.ShapeSource>

@@ -1,4 +1,4 @@
-import { getFilter } from '../../javascript/utils/filterUtils';
+import {getFilter} from '../../javascript/utils/filterUtils';
 import BridgeValue from '../../javascript/utils/BridgeValue';
 
 const FilterItem = BridgeValue;
@@ -7,9 +7,9 @@ describe('filterUtils', () => {
   it('should parse flat filter', () => {
     const filter = ['==', 'rating', 10];
     expect(getFilter(filter)).toEqual([
-      { type: 'string', value: '==' },
-      { type: 'string', value: 'rating' },
-      { type: 'number', value: 10 },
+      {type: 'string', value: '=='},
+      {type: 'string', value: 'rating'},
+      {type: 'number', value: 10},
     ]);
   });
 
@@ -21,16 +21,16 @@ describe('filterUtils', () => {
       ['==', 'enabled', true],
     ];
     expect(getFilter(filter)).toEqual([
-      { type: 'string', value: 'all' },
-      { type: 'string', value: '==' },
-      { type: 'string', value: 'class' },
-      { type: 'string', value: 'street_limited' },
-      { type: 'string', value: '>=' },
-      { type: 'string', value: 'admin_level' },
-      { type: 'number', value: 3 },
-      { type: 'string', value: '==' },
-      { type: 'string', value: 'enabled' },
-      { type: 'boolean', value: true },
+      {type: 'string', value: 'all'},
+      {type: 'string', value: '=='},
+      {type: 'string', value: 'class'},
+      {type: 'string', value: 'street_limited'},
+      {type: 'string', value: '>='},
+      {type: 'string', value: 'admin_level'},
+      {type: 'number', value: 3},
+      {type: 'string', value: '=='},
+      {type: 'string', value: 'enabled'},
+      {type: 'boolean', value: true},
     ]);
   });
 

@@ -1,12 +1,12 @@
 import React from 'react';
-import { Animated, View, Text, StyleSheet } from 'react-native';
+import {Animated, View, Text, StyleSheet} from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
+
+import sheet from '../styles/sheet';
 
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
 import Bubble from './common/Bubble';
-
-import sheet from '../styles/sheet';
 
 const ANNOTATION_SIZE = 45;
 
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     height: ANNOTATION_SIZE - 3,
     borderRadius: (ANNOTATION_SIZE - 3) / 2,
     backgroundColor: 'orange',
-    transform: [{ scale: 0.6 }],
+    transform: [{scale: 0.6}],
   },
 });
 
@@ -55,7 +55,7 @@ class ShowPointAnnotation extends React.Component {
   onPress(feature) {
     const coords = Object.assign([], this.state.coordinates);
     coords.push(feature.geometry.coordinates);
-    this.setState({ coordinates: coords });
+    this.setState({coordinates: coords});
   }
 
   onAnnotationSelected(activeIndex, feature) {
@@ -64,8 +64,8 @@ class ShowPointAnnotation extends React.Component {
     }
 
     this._scaleIn = new Animated.Value(0.6);
-    Animated.timing(this._scaleIn, { toValue: 1.0, duration: 200 }).start();
-    this.setState({ activeAnnotationIndex: activeIndex });
+    Animated.timing(this._scaleIn, {toValue: 1.0, duration: 200}).start();
+    this.setState({activeAnnotationIndex: activeIndex});
 
     if (this.state.previousActiveAnnotationIndex !== -1) {
       this._map.moveTo(feature.geometry.coordinates, 500);
@@ -73,14 +73,14 @@ class ShowPointAnnotation extends React.Component {
   }
 
   onAnnotationDeselected(deselectedIndex) {
-    let nextState = {};
+    const nextState = {};
 
     if (this.state.activeAnnotationIndex === deselectedIndex) {
       nextState.activeAnnotationIndex = -1;
     }
 
     this._scaleOut = new Animated.Value(1);
-    Animated.timing(this._scaleOut, { toValue: 0.6, duration: 200 }).start();
+    Animated.timing(this._scaleOut, {toValue: 0.6, duration: 200}).start();
     nextState.previousActiveAnnotationIndex = deselectedIndex;
     this.setState(nextState);
   }
@@ -95,11 +95,11 @@ class ShowPointAnnotation extends React.Component {
       }`;
       const id = `pointAnnotation${i}`;
 
-      let animationStyle = {};
+      const animationStyle = {};
       if (i === this.state.activeAnnotationIndex) {
-        animationStyle.transform = [{ scale: this._scaleIn }];
+        animationStyle.transform = [{scale: this._scaleIn}];
       } else if (i === this.state.previousActiveAnnotationIndex) {
-        animationStyle.transform = [{ scale: this._scaleOut }];
+        animationStyle.transform = [{scale: this._scaleOut}];
       }
 
       items.push(
@@ -108,9 +108,10 @@ class ShowPointAnnotation extends React.Component {
           id={id}
           title="Test"
           selected={i === 0}
-          onSelected={(feature) => this.onAnnotationSelected(i, feature)}
+          onSelected={feature => this.onAnnotationSelected(i, feature)}
           onDeselected={() => this.onAnnotationDeselected(i)}
-          coordinate={coordinate}>
+          coordinate={coordinate}
+        >
           <View style={styles.annotationContainer}>
             <Animated.View style={[styles.annotationFill, animationStyle]} />
           </View>
@@ -127,12 +128,13 @@ class ShowPointAnnotation extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          ref={(c) => (this._map = c)}
+          ref={c => (this._map = c)}
           zoomLevel={16}
           onPress={this.onPress}
           onDidFinishLoadingMap={this.onDidFinishLoadingMap}
           centerCoordinate={this.state.coordinates[0]}
-          style={sheet.matchParent}>
+          style={sheet.matchParent}
+        >
           {this.renderAnnotations()}
         </MapboxGL.MapView>
 

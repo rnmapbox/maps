@@ -1,10 +1,10 @@
 import React from 'react';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
+import sheet from '../styles/sheet';
+
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
-
-import sheet from '../styles/sheet';
 
 const styles = MapboxGL.StyleSheet.create({
   circles: {
@@ -43,10 +43,12 @@ class DataDrivenCircleColors extends React.PureComponent {
           pitch={45}
           styleURL={MapboxGL.StyleURL.Light}
           centerCoordinate={[-122.400021, 37.789085]}
-          style={sheet.matchParent}>
+          style={sheet.matchParent}
+        >
           <MapboxGL.VectorSource
             id="population"
-            url={'mapbox://examples.8fgz4egr'}>
+            url={'mapbox://examples.8fgz4egr'}
+          >
             <MapboxGL.CircleLayer
               id="sf2010CircleFill"
               sourceLayerID="sf2010"

@@ -1,12 +1,12 @@
 import React from 'react';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
-import BaseExamplePropTypes from './common/BaseExamplePropTypes';
-import Page from './common/Page';
-
 import sheet from '../styles/sheet';
 import exampleIcon from '../assets/example.png';
-import { IS_ANDROID } from '../utils';
+import {IS_ANDROID} from '../utils';
+
+import Page from './common/Page';
+import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 
 const styles = MapboxGL.StyleSheet.create({
   icon: {
@@ -69,11 +69,13 @@ class ShapeSourceIcon extends React.Component {
         <MapboxGL.MapView
           zoomLevel={17}
           centerCoordinate={[-117.20611157485, 52.180961084261]}
-          style={sheet.matchParent}>
+          style={sheet.matchParent}
+        >
           <MapboxGL.ShapeSource
             id="exampleShapeSource"
             shape={featureCollection}
-            images={{ example: exampleIcon, assets: ['pin'] }}>
+            images={{example: exampleIcon, assets: ['pin']}}
+          >
             <MapboxGL.SymbolLayer id="exampleIconName" style={styles.icon} />
           </MapboxGL.ShapeSource>
         </MapboxGL.MapView>

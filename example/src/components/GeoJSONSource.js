@@ -1,13 +1,12 @@
 import React from 'react';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
-import BaseExamplePropTypes from './common/BaseExamplePropTypes';
-import Page from './common/Page';
-
 import sheet from '../styles/sheet';
-
 import gridPattern from '../assets/grid_pattern.png';
 import smileyFaceGeoJSON from '../assets/smiley_face.json';
+
+import Page from './common/Page';
+import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 
 const layerStyles = MapboxGL.StyleSheet.create({
   background: {
@@ -32,9 +31,10 @@ class GeoJSONSource extends React.Component {
           zoomLevel={2}
           centerCoordinate={[-35.15165038, 40.6235728]}
           onSetCameraComplete={this.onUpdateZoomLevel}
-          ref={(ref) => (this.map = ref)}
+          ref={ref => (this.map = ref)}
           style={sheet.matchParent}
-          styleURL={MapboxGL.StyleURL.Dark}>
+          styleURL={MapboxGL.StyleURL.Dark}
+        >
           <MapboxGL.VectorSource>
             <MapboxGL.BackgroundLayer
               id="background"

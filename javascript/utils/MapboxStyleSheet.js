@@ -1,12 +1,16 @@
-import { isUndefined, isPrimitive, isString } from './index';
-import { processColor, NativeModules } from 'react-native';
+// @flow
+
+import {processColor, NativeModules} from 'react-native';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
+
 import styleMap, {
   StyleTypes,
   StyleFunctionTypes,
   styleExtras,
 } from './styleMap';
 import BridgeValue from './BridgeValue';
+
+import {isUndefined, isPrimitive, isString} from './index';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -35,8 +39,8 @@ class MapStyleTransitionItem extends MapStyleItem {
   constructor(duration = 0, delay = 0, extras = {}) {
     super(StyleTypes.Transition, {
       value: {
-        duration: duration,
-        delay: delay,
+        duration,
+        delay,
       },
       ...extras,
     });
@@ -63,15 +67,15 @@ class MapStyleConstantItem extends MapStyleItem {
 
 class MapStyleColorItem extends MapStyleItem {
   constructor(value, extras = {}) {
-    super(StyleTypes.Color, { value: value, ...extras });
+    super(StyleTypes.Color, {value, ...extras});
   }
 }
 
 class MapStyleFunctionItem extends MapStyleItem {
   constructor(fn, mode = MapboxGL.InterpolationMode.Exponential, payload) {
     super(StyleTypes.Function, {
-      fn: fn,
-      mode: mode,
+      fn,
+      mode,
       stops: [],
       attributeName: payload.attributeName,
     });
@@ -80,10 +84,10 @@ class MapStyleFunctionItem extends MapStyleItem {
   }
 
   processStops(prop) {
-    let stops = [];
+    const stops = [];
 
     const isComposite = this.payload.fn === StyleFunctionTypes.Composite;
-    for (let rawStop of this._rawStops) {
+    for (const rawStop of this._rawStops) {
       const [stopKey, stopValue] = rawStop;
 
       if (isComposite) {
@@ -92,7 +96,7 @@ class MapStyleFunctionItem extends MapStyleItem {
           makeStyleValue(
             prop,
             stopValue[1],
-            { propertyValue: stopValue[0] },
+            {propertyValue: stopValue[0]},
             false,
           ),
         ]);
@@ -105,8 +109,8 @@ class MapStyleFunctionItem extends MapStyleItem {
   }
 }
 
-let STYLE_MAP = {};
-Object.keys(MapboxGL).forEach((key) => {
+const STYLE_MAP = {};
+Object.keys(MapboxGL).forEach(key => {
   if (
     !['setAccessToken', 'getAccessToken', 'setTelemetryEnabled'].includes(key)
   ) {
@@ -128,7 +132,7 @@ function resolveStyleValue(styleProp, styleValue) {
 
   // find enum value that matches
   const enumKeys = Object.keys(valueMap);
-  for (let enumKey of enumKeys) {
+  for (const enumKey of enumKeys) {
     if (enumKey.toLowerCase() === styleValue.toLowerCase()) {
       return valueMap[enumKey];
     }
@@ -159,6 +163,7 @@ function makeStyleValue(prop, value, extras = {}, shouldMarkAsStyle = true) {
   // search for any extras
   const extraData = Object.assign({}, styleExtras[prop], extras);
 
+  // eslint-disable-next-line no-use-before-define
   if (MapboxStyleSheet.isFunctionStyleItem(value)) {
     item = value;
     item.processStops(prop);
@@ -188,9 +193,9 @@ function makeStyleValue(prop, value, extras = {}, shouldMarkAsStyle = true) {
 class MapboxStyleSheet {
   static create(userStyles, depth = 0) {
     const styleProps = Object.keys(userStyles);
-    let style = {};
+    const style = {};
 
-    for (let styleProp of styleProps) {
+    for (const styleProp of styleProps) {
       const userStyle = userStyles[styleProp];
 
       if (MapboxStyleSheet.isStyleItem(userStyle)) {
@@ -219,7 +224,7 @@ class MapboxStyleSheet {
     const stopNativeArray = [];
     const cameraZoomLevels = Object.keys(stops);
 
-    for (let cameraZoomLevel of cameraZoomLevels) {
+    for (const cameraZoomLevel of cameraZoomLevels) {
       const keyBridgeValue = new BridgeValue(cameraZoomLevel | 0);
 
       stopNativeArray.push([keyBridgeValue.toJSON(), stops[cameraZoomLevel]]);
@@ -234,14 +239,14 @@ class MapboxStyleSheet {
     const stopNativeArray = [];
 
     if (Array.isArray(stops)) {
-      for (let stop of stops) {
+      for (const stop of stops) {
         const keyBridgeValue = new BridgeValue(stop[0]);
 
         stopNativeArray.push([keyBridgeValue.toJSON(), stop[1]]);
       }
     } else if (stops) {
       const stopKeys = Object.keys(stops);
-      for (let stopKey of stopKeys) {
+      for (const stopKey of stopKeys) {
         const keyBridgeValue = new BridgeValue(stopKey);
 
         stopNativeArray.push([keyBridgeValue.toJSON(), stops[stopKey]]);
@@ -250,7 +255,7 @@ class MapboxStyleSheet {
 
     return new MapStyleFunctionItem(StyleFunctionTypes.Source, (mode: mode), {
       stops: stopNativeArray,
-      attributeName: attributeName,
+      attributeName,
     });
   }
 
@@ -258,7 +263,7 @@ class MapboxStyleSheet {
     const stopNativeArray = [];
 
     if (Array.isArray(stops)) {
-      for (let zoomPropertyStop of stops) {
+      for (const zoomPropertyStop of stops) {
         const propValue = zoomPropertyStop[0].value;
         const styleValue = zoomPropertyStop[1];
 
@@ -270,7 +275,7 @@ class MapboxStyleSheet {
     } else {
       const cameraZoomLevels = Object.keys(stops);
 
-      for (let cameraZoomLevel of cameraZoomLevels) {
+      for (const cameraZoomLevel of cameraZoomLevels) {
         const [propName, styleValue] = stops[cameraZoomLevel];
         const keyBridgeValue = new BridgeValue(cameraZoomLevel | 0);
 
@@ -281,7 +286,7 @@ class MapboxStyleSheet {
     return new MapStyleFunctionItem(
       StyleFunctionTypes.Composite,
       (mode: mode),
-      { stops: stopNativeArray, attributeName: attributeName },
+      {stops: stopNativeArray, attributeName},
     );
   }
 

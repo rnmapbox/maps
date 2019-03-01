@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { requireNativeComponent, StyleSheet } from 'react-native';
+import {requireNativeComponent, StyleSheet} from 'react-native';
 
-import { toJSONString, isFunction, viewPropTypes } from '../utils';
-import { makePoint } from '../utils/geoUtils';
+import {toJSONString, isFunction, viewPropTypes} from '../utils';
+import {makePoint} from '../utils/geoUtils';
 
 export const NATIVE_MODULE_NAME = 'RCTMGLPointAnnotation';
 
@@ -72,7 +72,7 @@ class PointAnnotation extends React.PureComponent {
   };
 
   static defaultProps = {
-    anchor: { x: 0.5, y: 0.5 },
+    anchor: {x: 0.5, y: 0.5},
   };
 
   constructor(props) {

@@ -25,5 +25,6 @@
 + (void)fetchImage:(RCTBridge*)bridge url:(NSString*)url callback:(RCTImageLoaderCompletionBlock)callback;
 + (void)fetchImages:(RCTBridge *)bridge style:(MGLStyle *)style objects:(NSDictionary<NSString *, NSString *>*)objects callback:(void (^)())callback;
 + (CGVector)toCGVector:(NSArray<NSNumber*>*)arr;
++ (UIEdgeInsets)toUIEdgeInsets:(NSArray<NSNumber *> *)arr;
 
 @end

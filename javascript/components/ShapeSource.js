@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import {NativeModules, requireNativeComponent} from 'react-native';
+import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 import {
   toJSONString,
@@ -8,8 +9,6 @@ import {
   viewPropTypes,
   isFunction,
 } from '../utils';
-
-import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -111,7 +110,6 @@ class ShapeSource extends React.Component {
     if (!this.props.shape) {
       return;
     }
-    // TODO: Add turf validation and throw exeception
     return toJSONString(this.props.shape);
   }
 
@@ -120,11 +118,11 @@ class ShapeSource extends React.Component {
       return;
     }
 
-    let images = {};
+    const images = {};
     let nativeImages = [];
 
     const imageNames = Object.keys(this.props.images);
-    for (let imageName of imageNames) {
+    for (const imageName of imageNames) {
       if (
         imageName === ShapeSource.NATIVE_ASSETS_KEY &&
         Array.isArray(this.props.images[ShapeSource.NATIVE_ASSETS_KEY])
@@ -140,8 +138,8 @@ class ShapeSource extends React.Component {
     }
 
     return {
-      images: images,
-      nativeImages: nativeImages,
+      images,
+      nativeImages,
     };
   }
 

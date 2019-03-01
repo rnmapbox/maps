@@ -1,6 +1,7 @@
-import { NativeModules, Platform } from 'react-native';
+import {NativeModules, Platform} from 'react-native';
+
 import MapboxGL from '../../../javascript';
-import { OfflineModuleEventEmitter } from '../../../javascript/modules/offline/offlineManager';
+import {OfflineModuleEventEmitter} from '../../../javascript/modules/offline/offlineManager';
 
 describe('offlineManager', () => {
   const packOptions = {
@@ -39,7 +40,7 @@ describe('offlineManager', () => {
 
   afterEach(async () => {
     const packs = await MapboxGL.offlineManager.getPacks();
-    for (let pack of packs) {
+    for (const pack of packs) {
       await MapboxGL.offlineManager.deletePack(pack.name);
     }
   });
@@ -179,7 +180,7 @@ describe('offlineManager', () => {
 
       const name = `test-${Date.now()}`;
       const noop = () => {};
-      const options = { ...packOptions, name: name };
+      const options = {...packOptions, name};
       await MapboxGL.offlineManager.createPack(options);
       await MapboxGL.offlineManager.subscribe(name, noop, noop);
 
@@ -192,7 +193,7 @@ describe('offlineManager', () => {
 
       const name = `test-${Date.now()}`;
       const noop = () => {};
-      const options = { ...packOptions, name: name };
+      const options = {...packOptions, name};
       await MapboxGL.offlineManager.createPack(options, noop, noop);
 
       expect(spy).not.toHaveBeenCalled();
@@ -208,7 +209,7 @@ describe('offlineManager', () => {
 
       const name = `test-${Date.now()}`;
       const noop = () => {};
-      const options = { ...packOptions, name: name };
+      const options = {...packOptions, name};
       await MapboxGL.offlineManager.createPack(options);
       await MapboxGL.offlineManager.subscribe(name, noop, noop);
 

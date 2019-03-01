@@ -74,6 +74,6 @@ describe('Public Interface', () => {
       // animated
       'Animated',
     ];
-    actualKeys.forEach((key) => expect(expectedKeys).toContain(key));
+    actualKeys.forEach(key => expect(expectedKeys).toContain(key));
   });
 });

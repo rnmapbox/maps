@@ -1123,7 +1123,7 @@
 
 - (void)setTextAnchor:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
-    NSArray<NSString*> *allowedFunctionTypes = @[@"camera"];
+    NSArray<NSString*> *allowedFunctionTypes = @[@"camera", @"source", @"composite"];
     if ([styleValue isFunction] && ![styleValue isFunctionTypeSupported:allowedFunctionTypes]) {
         // TODO throw execpetion
         return;

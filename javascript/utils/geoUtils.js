@@ -20,7 +20,7 @@ export function makeFeatureCollection(features = []) {
 }
 
 export function addToFeatureCollection(featureCollection, feature) {
-  let shallowFeatureCollection = Object.assign({}, featureCollection);
+  const shallowFeatureCollection = Object.assign({}, featureCollection);
   shallowFeatureCollection.features.push(feature);
   return featureCollection;
 }

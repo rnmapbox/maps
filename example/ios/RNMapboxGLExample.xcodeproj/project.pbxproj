@@ -272,6 +272,34 @@
 			remoteGlobalIDString = 3DBE0D0D1F3B181C0099AA32;
 			remoteInfo = "fishhook-tvOS";
 		};
+		E96E1A3B2229747000A128F5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C412411D1F4D4CF80008C81E /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EBF21BDC1FC498900052F4D5;
+			remoteInfo = jsinspector;
+		};
+		E96E1A3D2229747000A128F5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C412411D1F4D4CF80008C81E /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EBF21BFA1FC4989A0052F4D5;
+			remoteInfo = "jsinspector-tvOS";
+		};
+		E96E1A3F2229747000A128F5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C412411D1F4D4CF80008C81E /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9936F3131F5F2E4B0010BF04;
+			remoteInfo = privatedata;
+		};
+		E96E1A412229747000A128F5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C412411D1F4D4CF80008C81E /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9936F32F1F5F2E5B0010BF04;
+			remoteInfo = "privatedata-tvOS";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -555,10 +583,14 @@
 				C41241371F4D4CF80008C81E /* libcxxreact.a */,
 				C41241391F4D4CF80008C81E /* libjschelpers.a */,
 				C412413B1F4D4CF80008C81E /* libjschelpers.a */,
+				E96E1A3C2229747000A128F5 /* libjsinspector.a */,
+				E96E1A3E2229747000A128F5 /* libjsinspector-tvOS.a */,
 				C412413D1F4D4CF80008C81E /* libthird-party.a */,
 				C412413F1F4D4CF80008C81E /* libthird-party.a */,
 				C41241411F4D4CF80008C81E /* libdouble-conversion.a */,
 				C41241431F4D4CF80008C81E /* libdouble-conversion.a */,
+				E96E1A402229747000A128F5 /* libprivatedata.a */,
+				E96E1A422229747000A128F5 /* libprivatedata-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -927,6 +959,34 @@
 			fileType = archive.ar;
 			path = "libfishhook-tvOS.a";
 			remoteRef = C4E90D571F99239E003C80E2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E96E1A3C2229747000A128F5 /* libjsinspector.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libjsinspector.a;
+			remoteRef = E96E1A3B2229747000A128F5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E96E1A3E2229747000A128F5 /* libjsinspector-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libjsinspector-tvOS.a";
+			remoteRef = E96E1A3D2229747000A128F5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E96E1A402229747000A128F5 /* libprivatedata.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libprivatedata.a;
+			remoteRef = E96E1A3F2229747000A128F5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E96E1A422229747000A128F5 /* libprivatedata-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libprivatedata-tvOS.a";
+			remoteRef = E96E1A412229747000A128F5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

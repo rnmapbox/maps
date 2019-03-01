@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Text, StyleSheet } from 'react-native';
-import { Icon, Header } from 'react-native-elements';
+import {Text, StyleSheet} from 'react-native';
+import {Icon, Header} from 'react-native-elements';
+
 import colors from '../../styles/colors';
 
 const styles = StyleSheet.create({
@@ -49,7 +50,7 @@ class MapHeader extends React.PureComponent {
     return (
       <Icon
         size={32}
-        iconStyle={{ position: 'relative', top: 2 }}
+        iconStyle={{position: 'relative', top: 2}}
         onPress={this.props.onBack}
         color={colors.secondary.white}
         underlayColor={'rgba(255, 255, 255, 0.4)'}

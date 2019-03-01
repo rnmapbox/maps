@@ -1,6 +1,6 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
-let styles = {};
+const styles = {};
 
 styles.matchParent = {
   flex: 1,

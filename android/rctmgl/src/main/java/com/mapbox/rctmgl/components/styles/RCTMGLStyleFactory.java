@@ -1724,7 +1724,7 @@ public class RCTMGLStyleFactory {
             }
         };
 
-        layer.setProperties(PropertyFactory.textAnchor(styleValue.makeCameraFunction(styleValue.getInt("mode"), parser)));
+        layer.setProperties(PropertyFactory.textAnchor(styleValue.makeStyleFunction(parser)));
       } else {
         layer.setProperties(PropertyFactory.textAnchor(styleValue.getString(VALUE_KEY)));
       }

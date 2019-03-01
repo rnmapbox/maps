@@ -1,12 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
-
-import BaseExamplePropTypes from './common/BaseExamplePropTypes';
-import Page from './common/Page';
 
 import sheet from '../styles/sheet';
 import colors from '../styles/colors';
+
+import BaseExamplePropTypes from './common/BaseExamplePropTypes';
+import Page from './common/Page';
 
 const styles = StyleSheet.create({
   button: {
@@ -40,19 +40,20 @@ class TakeSnapshotWithMap extends React.Component {
 
   async onTakeSnapshot() {
     const uri = await this.map.takeSnap(false);
-    this.setState({ uri: uri });
+    this.setState({uri});
   }
 
   render() {
     return (
       <Page {...this.props}>
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
           <MapboxGL.MapView
             zoomLevel={16}
             pitch={45}
             centerCoordinate={[-122.400021, 37.789085]}
-            ref={(ref) => (this.map = ref)}
-            style={{ flex: 0.5 }}>
+            ref={ref => (this.map = ref)}
+            style={{flex: 0.5}}
+          >
             <MapboxGL.VectorSource>
               <MapboxGL.FillExtrusionLayer
                 id="building3d"
@@ -62,12 +63,12 @@ class TakeSnapshotWithMap extends React.Component {
             </MapboxGL.VectorSource>
           </MapboxGL.MapView>
 
-          <View style={{ flex: 0.5 }}>
+          <View style={{flex: 0.5}}>
             {this.state.uri ? (
               <Image
                 resizeMode="contain"
                 style={sheet.matchParent}
-                source={{ uri: this.state.uri }}
+                source={{uri: this.state.uri}}
               />
             ) : null}
           </View>
@@ -75,7 +76,7 @@ class TakeSnapshotWithMap extends React.Component {
 
         <TouchableOpacity onPress={() => this.onTakeSnapshot()}>
           <View style={styles.button}>
-            <Text style={{ color: 'white' }}>Take snapshot</Text>
+            <Text style={{color: 'white'}}>Take snapshot</Text>
           </View>
         </TouchableOpacity>
       </Page>

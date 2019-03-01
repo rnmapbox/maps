@@ -1,4 +1,4 @@
-import { isBoolean, isNumber, isString } from './index';
+import {isBoolean, isNumber, isString} from './index';
 
 const Types = {
   Array: 'array',
@@ -16,28 +16,31 @@ export default class BridgeValue {
   get type() {
     if (Array.isArray(this.rawValue)) {
       return Types.Array;
-    } else if (isBoolean(this.rawValue)) {
-      return Types.Bool;
-    } else if (isNumber(this.rawValue)) {
-      return Types.Number;
-    } else if (isString(this.rawValue)) {
-      return Types.String;
-    } else if (this.rawValue && typeof this.rawValue === 'object') {
-      return Types.HashMap;
-    } else {
-      throw new Error('[type] BridgeValue must be a primitive/array/object');
     }
+    if (isBoolean(this.rawValue)) {
+      return Types.Bool;
+    }
+    if (isNumber(this.rawValue)) {
+      return Types.Number;
+    }
+    if (isString(this.rawValue)) {
+      return Types.String;
+    }
+    if (this.rawValue && typeof this.rawValue === 'object') {
+      return Types.HashMap;
+    }
+    throw new Error('[type] BridgeValue must be a primitive/array/object');
   }
 
   get value() {
-    const type = this.type;
+    const {type} = this;
 
     let value;
 
     if (type === Types.Array) {
       value = [];
 
-      for (let innerRawValue of this.rawValue) {
+      for (const innerRawValue of this.rawValue) {
         const bridgeValue = new BridgeValue(innerRawValue);
         value.push(bridgeValue.toJSON());
       }
@@ -45,7 +48,7 @@ export default class BridgeValue {
       value = [];
 
       const stringKeys = Object.keys(this.rawValue);
-      for (let stringKey of stringKeys) {
+      for (const stringKey of stringKeys) {
         value.push([
           new BridgeValue(stringKey).toJSON(),
           new BridgeValue(this.rawValue[stringKey]).toJSON(),

@@ -1,13 +1,13 @@
 import React from 'react';
-import { Text } from 'react-native';
+import {Text} from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
+
+import sheet from '../styles/sheet';
+import {DEFAULT_CENTER_COORDINATE, SF_OFFICE_COORDINATE} from '../utils';
 
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import TabBarPage from './common/TabBarPage';
 import Bubble from './common/Bubble';
-
-import sheet from '../styles/sheet';
-import { DEFAULT_CENTER_COORDINATE, SF_OFFICE_COORDINATE } from '../utils';
 
 class ShowRegionDidChange extends React.Component {
   static propTypes = {
@@ -23,12 +23,12 @@ class ShowRegionDidChange extends React.Component {
     };
 
     this._tabOptions = [
-      { label: 'Fly To', data: SF_OFFICE_COORDINATE },
+      {label: 'Fly To', data: SF_OFFICE_COORDINATE},
       {
         label: 'Fit Bounds',
         data: [[-74.12641, 40.797968], [-74.143727, 40.772177]],
       },
-      { label: 'Zoom To', data: 12 },
+      {label: 'Zoom To', data: 12},
     ];
 
     this.onRegionDidChange = this.onRegionDidChange.bind(this);
@@ -60,11 +60,11 @@ class ShowRegionDidChange extends React.Component {
   }
 
   onRegionWillChange(regionFeature) {
-    this.setState({ reason: 'will change', regionFeature: regionFeature });
+    this.setState({reason: 'will change', regionFeature});
   }
 
   onRegionDidChange(regionFeature) {
-    this.setState({ reason: 'did change', regionFeature: regionFeature });
+    this.setState({reason: 'did change', regionFeature});
   }
 
   renderRegionChange() {
@@ -79,15 +79,15 @@ class ShowRegionDidChange extends React.Component {
       );
     }
 
-    const { geometry, properties } = this.state.regionFeature;
+    const {geometry, properties} = this.state.regionFeature;
     const neCoord = properties.visibleBounds[0]
-      .map((n) => n.toPrecision(6))
+      .map(n => n.toPrecision(6))
       .join(', ');
     const swCoord = properties.visibleBounds[1]
-      .map((n) => n.toPrecision(6))
+      .map(n => n.toPrecision(6))
       .join(', ');
     return (
-      <Bubble style={{ marginBottom: 100 }}>
+      <Bubble style={{marginBottom: 100}}>
         <Text>{this.state.reason}</Text>
         <Text>Latitude: {geometry.coordinates[1]}</Text>
         <Text>Longitude: {geometry.coordinates[0]}</Text>
@@ -109,9 +109,10 @@ class ShowRegionDidChange extends React.Component {
       <TabBarPage
         {...this.props}
         options={this._tabOptions}
-        onOptionPress={this.onOptionPress}>
+        onOptionPress={this.onOptionPress}
+      >
         <MapboxGL.MapView
-          ref={(c) => (this.map = c)}
+          ref={c => (this.map = c)}
           centerCoordinate={DEFAULT_CENTER_COORDINATE}
           style={sheet.matchParent}
           onDidFinishLoadingMap={this.onDidFinishLoadingMap}

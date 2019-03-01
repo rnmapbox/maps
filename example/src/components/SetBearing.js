@@ -1,10 +1,10 @@
 import React from 'react';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
+import sheet from '../styles/sheet';
+
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import TabBarPage from './common/TabBarPage';
-
-import sheet from '../styles/sheet';
 
 class SetBearing extends React.Component {
   static propTypes = {
@@ -15,16 +15,16 @@ class SetBearing extends React.Component {
     super(props);
 
     this._bearingOptions = [
-      { label: '0', data: 0 },
-      { label: '90', data: 90 },
-      { label: '180', data: 180 },
+      {label: '0', data: 0},
+      {label: '90', data: 90},
+      {label: '180', data: 180},
     ];
 
     this.onBearingChange = this.onBearingChange.bind(this);
   }
 
   onBearingChange(index, bearing) {
-    this.map.setCamera({ heading: bearing, duration: 150 });
+    this.map.setCamera({heading: bearing, duration: 150});
   }
 
   render() {
@@ -32,9 +32,10 @@ class SetBearing extends React.Component {
       <TabBarPage
         {...this.props}
         options={this._bearingOptions}
-        onOptionPress={this.onBearingChange}>
+        onOptionPress={this.onBearingChange}
+      >
         <MapboxGL.MapView
-          ref={(ref) => (this.map = ref)}
+          ref={ref => (this.map = ref)}
           heading={0}
           showUserLocation={true}
           userTrackingMode={MapboxGL.UserTrackingModes.Follow}

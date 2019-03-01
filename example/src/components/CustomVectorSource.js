@@ -1,10 +1,10 @@
 import React from 'react';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
+import sheet from '../styles/sheet';
+
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
-
-import sheet from '../styles/sheet';
 
 const styles = MapboxGL.StyleSheet.create({
   boxFill: {
@@ -31,10 +31,12 @@ class CustomVectorSource extends React.PureComponent {
         <MapboxGL.MapView
           zoomLevel={2}
           centerCoordinate={[-101.051593, 41.370337]}
-          style={sheet.matchParent}>
+          style={sheet.matchParent}
+        >
           <MapboxGL.VectorSource
             id="customSourceExample"
-            url={VECTOR_SOURCE_URL}>
+            url={VECTOR_SOURCE_URL}
+          >
             <MapboxGL.FillLayer
               id="customSourceFill"
               sourceLayerID="react-native-example"

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native';
+import {Text} from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
@@ -23,7 +23,7 @@ class PointInMapView extends React.Component {
 
   async onPress(e) {
     const pointInView = await this._map.getPointInView(e.geometry.coordinates);
-    this.setState({ pointInView: pointInView });
+    this.setState({pointInView});
   }
 
   renderPointInView() {
@@ -42,10 +42,10 @@ class PointInMapView extends React.Component {
       <Page {...this.props}>
         <MapboxGL.MapView
           zoomLevel={9}
-          ref={(c) => (this._map = c)}
+          ref={c => (this._map = c)}
           onPress={this.onPress}
           centerCoordinate={[-73.970895, 40.723279]}
-          style={{ flex: 1 }}
+          style={{flex: 1}}
         />
 
         <Bubble>{this.renderPointInView()}</Bubble>

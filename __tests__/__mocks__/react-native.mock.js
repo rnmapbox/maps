@@ -1,5 +1,5 @@
 jest.mock('react-native/Libraries/Image/resolveAssetSource', () => {
-  return () => ({ uri: `asset://test.png` });
+  return () => ({uri: 'asset://test.png'});
 });
 
 jest.mock('NativeEventEmitter', () => {

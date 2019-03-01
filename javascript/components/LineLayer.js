@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import {NativeModules, requireNativeComponent} from 'react-native';
 
-import { viewPropTypes } from '../utils';
-import { LineLayerStyleProp } from '../utils/styleMap';
+import {viewPropTypes} from '../utils';
+import {LineLayerStyleProp} from '../utils/styleMap';
+
 import AbstractLayer from './AbstractLayer';
 
 const MapboxGL = NativeModules.MGLModule;
@@ -86,7 +87,7 @@ class LineLayer extends AbstractLayer {
 }
 
 const RCTMGLLineLayer = requireNativeComponent(NATIVE_MODULE_NAME, LineLayer, {
-  nativeOnly: { reactStyle: true },
+  nativeOnly: {reactStyle: true},
 });
 
 export default LineLayer;

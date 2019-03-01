@@ -35,13 +35,17 @@ class TakeSnapshot extends React.Component {
     };
   }
 
-  async componentDidMount() {
-    const { width, height } = Dimensions.get('window');
+  componentDidMount() {
+    this.takeSnapshot();
+  }
+
+  async takeSnapshot() {
+    const {width, height} = Dimensions.get('window');
 
     const uri = await MapboxGL.snapshotManager.takeSnap({
       centerCoordinate: [-74.12641, 40.797968],
-      width: width,
-      height: height,
+      width,
+      height,
       zoomLevel: 12,
       pitch: 30,
       heading: 20,
@@ -49,7 +53,7 @@ class TakeSnapshot extends React.Component {
       writeToDisk: true, // creates a temp file
     });
 
-    this.setState({ snapshotURI: uri });
+    this.setState({snapshotURI: uri});
   }
 
   render() {
@@ -57,8 +61,7 @@ class TakeSnapshot extends React.Component {
 
     if (!this.state.snapshotURI) {
       childView = (
-        <View
-          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <ActivityIndicator size="large" color="#0000ff" />
           <Text>Generating Snapshot</Text>
         </View>
@@ -67,7 +70,7 @@ class TakeSnapshot extends React.Component {
       childView = (
         <View style={styles.container}>
           <Image
-            source={{ uri: this.state.snapshotURI }}
+            source={{uri: this.state.snapshotURI}}
             resizeMode="contain"
             style={styles.snapshot}
           />

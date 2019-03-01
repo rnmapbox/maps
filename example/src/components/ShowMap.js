@@ -1,11 +1,11 @@
 import React from 'react';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
+import sheet from '../styles/sheet';
+import {onSortOptions} from '../utils';
+
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import TabBarPage from './common/TabBarPage';
-
-import sheet from '../styles/sheet';
-import { onSortOptions } from '../utils';
 
 class ShowMap extends React.Component {
   static propTypes = {
@@ -16,7 +16,7 @@ class ShowMap extends React.Component {
     super(props);
 
     this._mapOptions = Object.keys(MapboxGL.StyleURL)
-      .map((key) => {
+      .map(key => {
         return {
           label: key,
           data: MapboxGL.StyleURL[key],
@@ -32,7 +32,7 @@ class ShowMap extends React.Component {
   }
 
   onMapChange(index, styleURL) {
-    this.setState({ styleURL: styleURL });
+    this.setState({styleURL});
   }
 
   render() {
@@ -41,7 +41,8 @@ class ShowMap extends React.Component {
         {...this.props}
         scrollable
         options={this._mapOptions}
-        onOptionPress={this.onMapChange}>
+        onOptionPress={this.onMapChange}
+      >
         <MapboxGL.MapView
           showUserLocation={true}
           zoomLevel={12}

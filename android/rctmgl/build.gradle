@@ -32,7 +32,7 @@ dependencies {
     // Mapbox SDK
     implementation 'com.mapbox.mapboxsdk:mapbox-android-services:2.2.9'
 
-    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:5.4.1@aar') {
+    implementation('com.mapbox.mapboxsdk:mapbox-android-sdk:5.5.3@aar') {
         transitive=true
     }
 

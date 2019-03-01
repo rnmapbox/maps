@@ -1555,6 +1555,11 @@ const styleMap = {
 };
 
 export const styleExtras = {
+  // padding
+  iconTextFitPadding: {
+    iosType: 'edgeinsets',
+  },
+
   // offsets
   iconOffset: {
     iosType: 'vector',
@@ -1565,7 +1570,6 @@ export const styleExtras = {
   lineOffset: {
     iosType: 'vector',
   },
-
   // translates
   fillTranslate: {
     iosType: 'vector',

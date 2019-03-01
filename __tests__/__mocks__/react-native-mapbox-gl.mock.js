@@ -1,8 +1,8 @@
-import { NativeModules } from 'react-native';
+import {NativeModules} from 'react-native';
 
 function keyMirror(keys) {
-  let obj = {};
-  keys.forEach((key) => (obj[key] = key));
+  const obj = {};
+  keys.forEach(key => (obj[key] = key));
   return obj;
 }
 
@@ -87,10 +87,10 @@ NativeModules.MGLModule = {
 };
 
 NativeModules.MGLOfflineModule = {
-  createPack: (packOptions) => {
+  createPack: packOptions => {
     return Promise.resolve({
       bounds: packOptions.bounds,
-      metadata: JSON.stringify({ name: packOptions.name }),
+      metadata: JSON.stringify({name: packOptions.name}),
     });
   },
   getPacks: () => Promise.resolve([]),

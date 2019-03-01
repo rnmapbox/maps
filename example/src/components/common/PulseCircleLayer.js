@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Animated } from 'react-native';
-
+import {Animated} from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
 const styles = MapboxGL.StyleSheet.create({
@@ -84,7 +83,7 @@ class PulseCircleLayer extends React.Component {
     );
 
     this._loopAnim.start(() => {
-      this.setState({ pulseOpacity: 1 });
+      this.setState({pulseOpacity: 1});
     });
   }
 
@@ -100,12 +99,12 @@ class PulseCircleLayer extends React.Component {
     const innerCircleStyle = [
       styles.innerCircle,
       this.props.innerCircleStyle,
-      { circleRadius: this.props.radius },
+      {circleRadius: this.props.radius},
     ];
 
     const innerCirclePulseStyle = [
       styles.innerCirclePulse,
-      { circleRadius: this.state.innerRadius },
+      {circleRadius: this.state.innerRadius},
     ];
 
     const outerCircleStyle = [
@@ -120,7 +119,8 @@ class PulseCircleLayer extends React.Component {
     return (
       <MapboxGL.Animated.ShapeSource
         id="pulseCircleSource"
-        shape={this.props.shape}>
+        shape={this.props.shape}
+      >
         <MapboxGL.Animated.CircleLayer
           id="pulseOuterCircle"
           style={outerCircleStyle}

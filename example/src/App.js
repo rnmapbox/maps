@@ -1,6 +1,5 @@
 import React from 'react';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
-
 import {
   View,
   Text,
@@ -9,21 +8,17 @@ import {
   Modal,
   TouchableOpacity,
 } from 'react-native';
+import {Icon} from 'react-native-elements';
 
-import { Icon } from 'react-native-elements';
-
-// components
+// Components
 import MapHeader from './components/common/MapHeader';
-
-// styles
+// Styles
 import sheet from './styles/sheet';
 import colors from './styles/colors';
-
-// utils
-import { IS_ANDROID } from './utils';
+// Utils
+import {IS_ANDROID} from './utils';
 import config from './utils/config';
-
-// examples
+// Examples
 import ShowMap from './components/ShowMap';
 import SetPitch from './components/SetPitch';
 import SetBearing from './components/SetBearing';
@@ -172,14 +167,14 @@ class App extends React.Component {
   }
 
   onExamplePress(activeExamplePosition) {
-    this.setState({ activeExample: activeExamplePosition });
+    this.setState({activeExample: activeExamplePosition});
   }
 
   onCloseExample() {
-    this.setState({ activeExample: -1 });
+    this.setState({activeExample: -1});
   }
 
-  renderItem({ item, index }) {
+  renderItem({item, index}) {
     return (
       <View style={styles.exampleListItemBorder}>
         <TouchableOpacity onPress={() => this.onExamplePress(index)}>
@@ -240,7 +235,7 @@ class App extends React.Component {
           <FlatList
             style={styles.exampleList}
             data={Examples}
-            keyExtractor={(item) => item.label}
+            keyExtractor={item => item.label}
             renderItem={this.renderItem}
           />
         </View>
