@@ -1,13 +1,13 @@
 import React from 'react';
-import { Text } from 'react-native';
+import {Text} from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
+
+import sheet from '../styles/sheet';
+import nycJSON from '../assets/nyc_geojson.json';
 
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
 import Bubble from './common/Bubble';
-
-import sheet from '../styles/sheet';
-import nycJSON from '../assets/nyc_geojson.json';
 
 const styles = MapboxGL.StyleSheet.create({
   neighborhoods: {
@@ -35,11 +35,11 @@ class QueryAtPoint extends React.Component {
   }
 
   get emptyState() {
-    return { selectedGeoJSON: null, selectedCommunityDistrict: -1 };
+    return {selectedGeoJSON: null, selectedCommunityDistrict: -1};
   }
 
   async onPress(e) {
-    const { screenPointX, screenPointY } = e.properties;
+    const {screenPointX, screenPointY} = e.properties;
 
     const featureCollection = await this._map.queryRenderedFeaturesAtPoint(
       [screenPointX, screenPointY],
@@ -63,11 +63,12 @@ class QueryAtPoint extends React.Component {
       <Page {...this.props}>
         <MapboxGL.MapView
           zoomLevel={9}
-          ref={(c) => (this._map = c)}
+          ref={c => (this._map = c)}
           onPress={this.onPress}
           centerCoordinate={[-73.970895, 40.723279]}
           style={sheet.matchParent}
-          styleURL={MapboxGL.StyleURL.Light}>
+          styleURL={MapboxGL.StyleURL.Light}
+        >
           <MapboxGL.ShapeSource id="nyc" shape={nycJSON}>
             <MapboxGL.FillLayer id="nycFill" style={styles.neighborhoods} />
           </MapboxGL.ShapeSource>
@@ -75,7 +76,8 @@ class QueryAtPoint extends React.Component {
           {this.state.selectedGeoJSON ? (
             <MapboxGL.ShapeSource
               id="selectedNYC"
-              shape={this.state.selectedGeoJSON}>
+              shape={this.state.selectedGeoJSON}
+            >
               <MapboxGL.FillLayer
                 id="selectedNYCFill"
                 style={styles.selectedNeighborhood}

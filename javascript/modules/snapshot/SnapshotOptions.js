@@ -1,6 +1,7 @@
-import { NativeModules } from 'react-native';
-import { toJSONString } from '../../utils';
-import { makePoint, makeFeatureCollection } from '../../utils/geoUtils';
+import {NativeModules} from 'react-native';
+
+import {toJSONString} from '../../utils';
+import {makePoint, makeFeatureCollection} from '../../utils/geoUtils';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -53,7 +54,7 @@ class SnapshotOptions {
   _createBoundsCollection(bounds) {
     const features = [];
 
-    for (let bound of bounds) {
+    for (const bound of bounds) {
       features.push(makePoint(bound));
     }
 

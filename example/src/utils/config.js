@@ -1,4 +1,4 @@
-import env from './../../env.json';
+import env from '../../env.json';
 
 class Config {
   get(key) {

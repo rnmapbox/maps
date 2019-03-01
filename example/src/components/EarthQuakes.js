@@ -1,11 +1,11 @@
 import React from 'react';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
+import sheet from '../styles/sheet';
+import {SF_OFFICE_COORDINATE} from '../utils';
+
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
-
-import sheet from '../styles/sheet';
-import { SF_OFFICE_COORDINATE } from '../utils';
 
 const layerStyles = MapboxGL.StyleSheet.create({
   singlePoint: {
@@ -63,13 +63,15 @@ class EarthQuakes extends React.Component {
           pitch={45}
           centerCoordinate={SF_OFFICE_COORDINATE}
           style={sheet.matchParent}
-          styleURL={MapboxGL.StyleURL.Dark}>
+          styleURL={MapboxGL.StyleURL.Dark}
+        >
           <MapboxGL.ShapeSource
             id="earthquakes"
             cluster
             clusterRadius={50}
             clusterMaxZoom={14}
-            url="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson">
+            url="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
+          >
             <MapboxGL.SymbolLayer
               id="pointCount"
               style={layerStyles.clusterCount}

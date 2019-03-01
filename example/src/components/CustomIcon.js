@@ -1,13 +1,13 @@
 import React from 'react';
-import { Text } from 'react-native';
+import {Text} from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
+
+import sheet from '../styles/sheet';
+import exampleIcon from '../assets/example.png';
 
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
 import Bubble from './common/Bubble';
-
-import sheet from '../styles/sheet';
-import exampleIcon from '../assets/example.png';
 
 const styles = MapboxGL.StyleSheet.create({
   icon: {
@@ -34,8 +34,8 @@ class CustomIcon extends React.Component {
   }
 
   async onPress(e) {
-    let feature = MapboxGL.geoUtils.makeFeature(e.geometry);
-    feature.id = '' + Date.now();
+    const feature = MapboxGL.geoUtils.makeFeature(e.geometry);
+    feature.id = `${Date.now()}`;
 
     this.setState({
       featureCollection: MapboxGL.geoUtils.addToFeatureCollection(
@@ -55,15 +55,17 @@ class CustomIcon extends React.Component {
       <Page {...this.props}>
         <MapboxGL.MapView
           zoomLevel={9}
-          ref={(c) => (this._map = c)}
+          ref={c => (this._map = c)}
           onPress={this.onPress}
           centerCoordinate={[-73.970895, 40.723279]}
-          style={sheet.matchParent}>
+          style={sheet.matchParent}
+        >
           <MapboxGL.ShapeSource
             id="symbolLocationSource"
-            hitbox={{ width: 20, height: 20 }}
+            hitbox={{width: 20, height: 20}}
             onPress={this.onSourceLayerPress}
-            shape={this.state.featureCollection}>
+            shape={this.state.featureCollection}
+          >
             <MapboxGL.SymbolLayer
               id="symbolLocationSymbols"
               minZoomLevel={1}

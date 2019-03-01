@@ -1,5 +1,6 @@
-import { NativeModules, NativeEventEmitter } from 'react-native';
-import { isUndefined, isFunction, isAndroid } from '../../utils';
+import {NativeModules, NativeEventEmitter} from 'react-native';
+
+import {isUndefined, isFunction, isAndroid} from '../../utils';
 
 import OfflineCreatePackOptions from './OfflineCreatePackOptions';
 import OfflinePack from './OfflinePack';
@@ -100,7 +101,7 @@ class OfflineManager {
   async getPacks() {
     await this._initialize();
     return Object.keys(this._offlinePacks).map(
-      (name) => this._offlinePacks[name],
+      name => this._offlinePacks[name],
     );
   }
 
@@ -233,7 +234,7 @@ class OfflineManager {
       try {
         const nativeOfflinePacks = await MapboxGLOfflineManager.getPacks();
 
-        for (let nativeOfflinePack of nativeOfflinePacks) {
+        for (const nativeOfflinePack of nativeOfflinePacks) {
           const offlinePack = new OfflinePack(nativeOfflinePack);
           this._offlinePacks[offlinePack.name] = offlinePack;
         }
@@ -248,7 +249,7 @@ class OfflineManager {
   }
 
   _onProgress(e) {
-    const { name, state } = e.payload;
+    const {name, state} = e.payload;
 
     if (!this._hasListeners(name, this._progressListeners)) {
       return;
@@ -264,7 +265,7 @@ class OfflineManager {
   }
 
   _onError(e) {
-    const { name } = e.payload;
+    const {name} = e.payload;
 
     if (!this._hasListeners(name, this._errorListeners)) {
       return;

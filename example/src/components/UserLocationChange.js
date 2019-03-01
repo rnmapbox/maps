@@ -1,12 +1,12 @@
 import React from 'react';
-import { Text } from 'react-native';
+import {Text} from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
+
+import sheet from '../styles/sheet';
 
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
 import Bubble from './common/Bubble';
-
-import sheet from '../styles/sheet';
 
 class UserLocationChange extends React.Component {
   static propTypes = {

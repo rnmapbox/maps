@@ -1,13 +1,13 @@
 import React from 'react';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
+import sheet from '../styles/sheet';
+
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import TabBarPage from './common/TabBarPage';
 
-import sheet from '../styles/sheet';
-
 class FitBounds extends React.Component {
-  static propTypes = { ...BaseExamplePropTypes };
+  static propTypes = {...BaseExamplePropTypes};
 
   constructor(props) {
     super(props);
@@ -17,8 +17,8 @@ class FitBounds extends React.Component {
     const townBounds = [[-74.12641, 40.797968], [-74.143727, 40.772177]];
 
     this._bounds = [
-      { label: 'Fit House', data: houseBounds },
-      { label: 'Fit Town', data: townBounds },
+      {label: 'Fit House', data: houseBounds},
+      {label: 'Fit Town', data: townBounds},
     ];
 
     this.onFitBounds = this.onFitBounds.bind(this);
@@ -33,9 +33,10 @@ class FitBounds extends React.Component {
       <TabBarPage
         {...this.props}
         options={this._bounds}
-        onOptionPress={this.onFitBounds}>
+        onOptionPress={this.onFitBounds}
+      >
         <MapboxGL.MapView
-          ref={(ref) => (this.map = ref)}
+          ref={ref => (this.map = ref)}
           zoomLevel={18}
           maxZoomLevel={19}
           centerCoordinate={[-74.135426, 40.795765]}

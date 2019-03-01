@@ -7,7 +7,8 @@ import {
   requireNativeComponent,
   StyleSheet,
 } from 'react-native';
-import { viewPropTypes } from '../utils';
+
+import {viewPropTypes} from '../utils';
 
 export const NATIVE_MODULE_NAME = 'RCTMGLCallout';
 

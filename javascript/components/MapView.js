@@ -6,8 +6,9 @@ import {
   NativeModules,
   requireNativeComponent,
 } from 'react-native';
-import { makePoint, makeLatLngBounds } from '../utils/geoUtils';
+import _ from 'underscore';
 
+import {makePoint, makeLatLngBounds} from '../utils/geoUtils';
 import {
   isFunction,
   isNumber,
@@ -16,10 +17,7 @@ import {
   isAndroid,
   viewPropTypes,
 } from '../utils';
-
-import _ from 'underscore';
-
-import { getFilter } from '../utils/filterUtils';
+import {getFilter} from '../utils/filterUtils';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -28,7 +26,7 @@ export const NATIVE_MODULE_NAME = 'RCTMGLMapView';
 export const ANDROID_TEXTURE_NATIVE_MODULE_NAME = 'RCTMGLAndroidTextureMapView';
 
 const styles = StyleSheet.create({
-  matchParent: { flex: 1 },
+  matchParent: {flex: 1},
 });
 
 /**
@@ -313,24 +311,38 @@ class MapView extends React.Component {
 
   setHandledMapChangedEvents(props) {
     if (isAndroid()) {
-        const events = [];
+      const events = [];
 
-        if (props.onRegionWillChange) events.push(MapboxGL.EventTypes.RegionWillChange);
-        if (props.onRegionIsChanging) events.push(MapboxGL.EventTypes.RegionIsChanging);
-        if (props.onRegionDidChange) events.push(MapboxGL.EventTypes.RegionDidChange);
-        if (props.onUserLocationUpdate) events.push(MapboxGL.EventTypes.UserLocationUpdated);
-        if (props.onWillStartLoadingMap) events.push(MapboxGL.EventTypes.WillStartLoadingMap);
-        if (props.onDidFinishLoadingMap) events.push(MapboxGL.EventTypes.DidFinishLoadingMap);
-        if (props.onDidFailLoadingMap) events.push(MapboxGL.EventTypes.DidFailLoadingMap);
-        if (props.onWillStartRenderingFrame) events.push(MapboxGL.EventTypes.WillStartRenderingFrame);
-        if (props.onDidFinishRenderingFrame) events.push(MapboxGL.EventTypes.DidFinishRenderingFrame);
-        if (props.onDidFinishRenderingFrameFully) events.push(MapboxGL.EventTypes.DidFinishRenderingFrameFully);
-        if (props.onWillStartRenderingMap) events.push(MapboxGL.EventTypes.WillStartRenderingMap);
-        if (props.onDidFinishRenderingMap) events.push(MapboxGL.EventTypes.DidFinishRenderingMap);
-        if (props.onDidFinishRenderingMapFully) events.push(MapboxGL.EventTypes.DidFinishRenderingMapFully);
-        if (props.onDidFinishLoadingStyle) events.push(MapboxGL.EventTypes.DidFinishLoadingStyle);
+      if (props.onRegionWillChange)
+        events.push(MapboxGL.EventTypes.RegionWillChange);
+      if (props.onRegionIsChanging)
+        events.push(MapboxGL.EventTypes.RegionIsChanging);
+      if (props.onRegionDidChange)
+        events.push(MapboxGL.EventTypes.RegionDidChange);
+      if (props.onUserLocationUpdate)
+        events.push(MapboxGL.EventTypes.UserLocationUpdated);
+      if (props.onWillStartLoadingMap)
+        events.push(MapboxGL.EventTypes.WillStartLoadingMap);
+      if (props.onDidFinishLoadingMap)
+        events.push(MapboxGL.EventTypes.DidFinishLoadingMap);
+      if (props.onDidFailLoadingMap)
+        events.push(MapboxGL.EventTypes.DidFailLoadingMap);
+      if (props.onWillStartRenderingFrame)
+        events.push(MapboxGL.EventTypes.WillStartRenderingFrame);
+      if (props.onDidFinishRenderingFrame)
+        events.push(MapboxGL.EventTypes.DidFinishRenderingFrame);
+      if (props.onDidFinishRenderingFrameFully)
+        events.push(MapboxGL.EventTypes.DidFinishRenderingFrameFully);
+      if (props.onWillStartRenderingMap)
+        events.push(MapboxGL.EventTypes.WillStartRenderingMap);
+      if (props.onDidFinishRenderingMap)
+        events.push(MapboxGL.EventTypes.DidFinishRenderingMap);
+      if (props.onDidFinishRenderingMapFully)
+        events.push(MapboxGL.EventTypes.DidFinishRenderingMapFully);
+      if (props.onDidFinishLoadingStyle)
+        events.push(MapboxGL.EventTypes.DidFinishLoadingStyle);
 
-        this._runNativeCommand('setHandledMapChangedEvents', events);
+      this._runNativeCommand('setHandledMapChangedEvents', events);
     }
   }
 
@@ -460,7 +472,7 @@ class MapView extends React.Component {
       return;
     }
 
-    let pad = {
+    const pad = {
       paddingLeft: 0,
       paddingRight: 0,
       paddingTop: 0,
@@ -492,7 +504,7 @@ class MapView extends React.Component {
         sw: southWestCoordinates,
         ...pad,
       },
-      duration: duration,
+      duration,
       mode: MapboxGL.CameraModes.None,
     });
   }
@@ -510,11 +522,11 @@ class MapView extends React.Component {
    */
   flyTo(coordinates, duration = 2000) {
     if (!this._nativeRef) {
-      return Promise.reject('No native reference found');
+      return Promise.reject(new Error('No native reference found'));
     }
     return this.setCamera({
       centerCoordinate: coordinates,
-      duration: duration,
+      duration,
       mode: MapboxGL.CameraModes.Flight,
     });
   }
@@ -532,11 +544,11 @@ class MapView extends React.Component {
    */
   moveTo(coordinates, duration = 0) {
     if (!this._nativeRef) {
-      return Promise.reject('No native reference found');
+      return Promise.reject(new Error('No native reference found'));
     }
     return this.setCamera({
       centerCoordinate: coordinates,
-      duration: duration,
+      duration,
     });
   }
 
@@ -553,11 +565,11 @@ class MapView extends React.Component {
    */
   zoomTo(zoomLevel, duration = 2000) {
     if (!this._nativeRef) {
-      return Promise.reject('No native reference found');
+      return Promise.reject(new Error('No native reference found'));
     }
     return this.setCamera({
       zoom: zoomLevel,
-      duration: duration,
+      duration,
       mode: MapboxGL.CameraModes.Flight,
     });
   }
@@ -591,7 +603,7 @@ class MapView extends React.Component {
     if (config.stops) {
       cameraConfig.stops = [];
 
-      for (let stop of config.stops) {
+      for (const stop of config.stops) {
         cameraConfig.stops.push(this._createStopConfig(stop));
       }
     } else {
@@ -640,17 +652,17 @@ class MapView extends React.Component {
 
   _runNativeCommand(methodName, args = []) {
     if (!this._nativeRef) {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         this._preRefMapMethodQueue.push({
-          method: { name: methodName, args: args },
+          method: {name: methodName, args},
           resolver: resolve,
         });
       });
     }
 
     if (isAndroid()) {
-      return new Promise((resolve) => {
-        const callbackID = '' + Date.now();
+      return new Promise(resolve => {
+        const callbackID = `${Date.now()}`;
         this._addAddAndroidCallback(callbackID, resolve);
         args.unshift(callbackID);
         runNativeCommand(NATIVE_MODULE_NAME, methodName, this._nativeRef, args);
@@ -665,7 +677,7 @@ class MapView extends React.Component {
   }
 
   _createStopConfig(config = {}) {
-    let stopConfig = {
+    const stopConfig = {
       mode: isNumber(config.mode) ? config.mode : MapboxGL.CameraModes.Ease,
       pitch: config.pitch,
       heading: config.heading,
@@ -743,8 +755,11 @@ class MapView extends React.Component {
   }
 
   _onChange(e) {
-    const { regionWillChangeDebounceTime, regionDidChangeDebounceTime } = this.props;
-    const { type, payload } = e.nativeEvent;
+    const {
+      regionWillChangeDebounceTime,
+      regionDidChangeDebounceTime,
+    } = this.props;
+    const {type, payload} = e.nativeEvent;
     let propName = '';
 
     switch (type) {
@@ -798,6 +813,8 @@ class MapView extends React.Component {
       case MapboxGL.EventTypes.DidFinishLoadingStyle:
         propName = 'onDidFinishLoadingStyle';
         break;
+      default:
+        console.warn('Unhandled event callback type', type);
     }
 
     if (propName.length) {
@@ -806,7 +823,7 @@ class MapView extends React.Component {
   }
 
   _onLayout() {
-    this.setState({ isReady: true });
+    this.setState({isReady: true});
   }
 
   _handleOnChange(propName, payload) {
@@ -851,7 +868,7 @@ class MapView extends React.Component {
   }
 
   render() {
-    let props = {
+    const props = {
       ...this.props,
       centerCoordinate: this._getCenterCoordinate(),
       contentInset: this._getContentInset(),
@@ -859,7 +876,7 @@ class MapView extends React.Component {
     };
 
     const callbacks = {
-      ref: (nativeRef) => this._setNativeRef(nativeRef),
+      ref: nativeRef => this._setNativeRef(nativeRef),
       onPress: this._onPress,
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
@@ -891,7 +908,7 @@ class MapView extends React.Component {
 }
 
 const RCTMGLMapView = requireNativeComponent(NATIVE_MODULE_NAME, MapView, {
-  nativeOnly: { onMapChange: true, onAndroidCallback: true },
+  nativeOnly: {onMapChange: true, onAndroidCallback: true},
 });
 
 let RCTMGLAndroidTextureMapView;
@@ -900,7 +917,7 @@ if (isAndroid()) {
     ANDROID_TEXTURE_NATIVE_MODULE_NAME,
     MapView,
     {
-      nativeOnly: { onMapChange: true, onAndroidCallback: true },
+      nativeOnly: {onMapChange: true, onAndroidCallback: true},
     },
   );
 }

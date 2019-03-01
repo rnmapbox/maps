@@ -1,7 +1,8 @@
 /* eslint react/prop-types:0  */
 import React from 'react';
+
 import MapboxStyleSheet from '../utils/MapboxStyleSheet';
-import { getFilter } from '../utils/filterUtils';
+import {getFilter} from '../utils/filterUtils';
 
 class AbstractLayer extends React.Component {
   get baseProps() {
@@ -32,7 +33,7 @@ class AbstractLayer extends React.Component {
     const styles = this.props.style;
     let flattenStyle = {};
 
-    for (let style of styles) {
+    for (const style of styles) {
       if (!style) {
         continue;
       }

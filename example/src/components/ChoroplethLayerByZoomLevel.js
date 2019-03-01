@@ -1,10 +1,10 @@
 import React from 'react';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
+import sheet from '../styles/sheet';
+
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
-
-import sheet from '../styles/sheet';
 
 const styles = MapboxGL.StyleSheet.create({
   statePopulation: {
@@ -58,10 +58,12 @@ class ChoroplethLayerByZoomLevel extends React.PureComponent {
           minZoomLevel={3}
           styleURL={MapboxGL.StyleURL.Light}
           centerCoordinate={[-98, 38.88]}
-          style={sheet.matchParent}>
+          style={sheet.matchParent}
+        >
           <MapboxGL.VectorSource
             id="population"
-            url={'mapbox://mapbox.660ui7x6'}>
+            url={'mapbox://mapbox.660ui7x6'}
+          >
             <MapboxGL.FillLayer
               id="state-population"
               sourceLayerID="state_county_population_2014_cen"

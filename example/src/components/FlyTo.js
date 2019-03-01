@@ -1,11 +1,11 @@
 import React from 'react';
-import { Alert } from 'react-native';
+import {Alert} from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
+
+import sheet from '../styles/sheet';
 
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import TabBarPage from './common/TabBarPage';
-
-import sheet from '../styles/sheet';
 
 const layerStyles = MapboxGL.StyleSheet.create({
   building: {
@@ -17,7 +17,7 @@ const layerStyles = MapboxGL.StyleSheet.create({
       'height',
       MapboxGL.InterpolationMode.Exponential,
     ),
-    fillExtrusionColorTransition: { duration: 2000, delay: 0 },
+    fillExtrusionColorTransition: {duration: 2000, delay: 0},
   },
   streets: {
     lineColor: 'blue',
@@ -31,6 +31,7 @@ const layerStyles = MapboxGL.StyleSheet.create({
 
 class FlyTo extends React.Component {
   static SF_OFFICE_LOCATION = [-122.400021, 37.789085];
+
   static DC_OFFICE_LOCATION = [-77.036086, 38.910233];
 
   static propTypes = {
@@ -41,8 +42,8 @@ class FlyTo extends React.Component {
     super(props);
 
     this._flyToOptions = [
-      { label: 'SF', data: FlyTo.SF_OFFICE_LOCATION },
-      { label: 'DC', data: FlyTo.DC_OFFICE_LOCATION },
+      {label: 'SF', data: FlyTo.SF_OFFICE_LOCATION},
+      {label: 'DC', data: FlyTo.DC_OFFICE_LOCATION},
     ];
 
     this.onFlyToPress = this.onFlyToPress.bind(this);
@@ -63,13 +64,15 @@ class FlyTo extends React.Component {
       <TabBarPage
         {...this.props}
         options={this._flyToOptions}
-        onOptionPress={this.onFlyToPress}>
+        onOptionPress={this.onFlyToPress}
+      >
         <MapboxGL.MapView
           zoomLevel={16}
           pitch={45}
           centerCoordinate={FlyTo.SF_OFFICE_LOCATION}
-          ref={(ref) => (this.map = ref)}
-          style={sheet.matchParent}>
+          ref={ref => (this.map = ref)}
+          style={sheet.matchParent}
+        >
           <MapboxGL.VectorSource>
             <MapboxGL.FillExtrusionLayer
               id="building3d"

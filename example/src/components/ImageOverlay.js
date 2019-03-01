@@ -1,14 +1,13 @@
 import React from 'react';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
-import BaseExamplePropTypes from './common/BaseExamplePropTypes';
-import Page from './common/Page';
-
 import sheet from '../styles/sheet';
-
 import radar0 from '../assets/radar.png';
 import radar1 from '../assets/radar1.png';
 import radar2 from '../assets/radar2.png';
+
+import Page from './common/Page';
+import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 
 const frames = [radar0, radar1, radar2];
 
@@ -40,7 +39,7 @@ class ImageOverlay extends React.Component {
           nextFrame = 0;
         }
 
-        this.setState({ radarFrameIndex: nextFrame });
+        this.setState({radarFrameIndex: nextFrame});
         this.heartbeat();
       });
     }, 500);
@@ -65,14 +64,16 @@ class ImageOverlay extends React.Component {
         <MapboxGL.MapView
           zoomLevel={5.2}
           centerCoordinate={[-75.789, 41.874]}
-          ref={(ref) => (this.map = ref)}
+          ref={ref => (this.map = ref)}
           style={sheet.matchParent}
-          styleURL={MapboxGL.StyleURL.Dark}>
+          styleURL={MapboxGL.StyleURL.Dark}
+        >
           <MapboxGL.Animated.ImageSource
             key="d"
             id="radarSource"
             coordinates={coordQuad}
-            url={frames[this.state.radarFrameIndex]}>
+            url={frames[this.state.radarFrameIndex]}
+          >
             <MapboxGL.RasterLayer id="radarLayer" />
           </MapboxGL.Animated.ImageSource>
         </MapboxGL.MapView>

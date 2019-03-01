@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import {NativeModules, requireNativeComponent} from 'react-native';
 
-import { viewPropTypes } from '../utils';
-import { RasterLayerStyleProp } from '../utils/styleMap';
+import {viewPropTypes} from '../utils';
+import {RasterLayerStyleProp} from '../utils/styleMap';
+
 import AbstractLayer from './AbstractLayer';
 
 const MapboxGL = NativeModules.MGLModule;
@@ -85,7 +86,7 @@ const RCTMGLRasterLayer = requireNativeComponent(
   NATIVE_MODULE_NAME,
   RasterLayer,
   {
-    nativeOnly: { reactStyle: true },
+    nativeOnly: {reactStyle: true},
   },
 );
 

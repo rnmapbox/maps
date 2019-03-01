@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   Alert,
   Text,
@@ -8,14 +7,14 @@ import {
   Dimensions,
   StyleSheet,
 } from 'react-native';
-
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 import geoViewport from '@mapbox/geo-viewport';
+
+import sheet from '../styles/sheet';
 
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
 import Bubble from './common/Bubble';
-import sheet from '../styles/sheet';
 
 const CENTER_COORD = [-73.970895, 40.723279];
 const MAPBOX_VECTOR_TILE_SIZE = 512;
@@ -72,7 +71,7 @@ class CreateOfflineRegion extends React.Component {
   }
 
   async onDidFinishLoadingStyle() {
-    const { width, height } = Dimensions.get('window');
+    const {width, height} = Dimensions.get('window');
     const bounds = geoViewport.bounds(
       CENTER_COORD,
       12,
@@ -95,8 +94,8 @@ class CreateOfflineRegion extends React.Component {
   onDownloadProgress(offlineRegion, offlineRegionStatus) {
     this.setState({
       name: offlineRegion.name,
-      offlineRegion: offlineRegion,
-      offlineRegionStatus: offlineRegionStatus,
+      offlineRegion,
+      offlineRegionStatus,
     });
   }
 
@@ -138,13 +137,13 @@ class CreateOfflineRegion extends React.Component {
   }
 
   render() {
-    const offlineRegionStatus = this.state.offlineRegionStatus;
+    const {offlineRegionStatus} = this.state;
 
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
           zoomLevel={10}
-          ref={(c) => (this._map = c)}
+          ref={c => (this._map = c)}
           onPress={this.onPress}
           onDidFinishLoadingMap={this.onDidFinishLoadingStyle}
           centerCoordinate={CENTER_COORD}
@@ -153,7 +152,7 @@ class CreateOfflineRegion extends React.Component {
 
         {offlineRegionStatus !== null ? (
           <Bubble>
-            <View style={{ flex: 1 }}>
+            <View style={{flex: 1}}>
               <Text>
                 Download State:{' '}
                 {this._getRegionDownloadState(offlineRegionStatus.state)}

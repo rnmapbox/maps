@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {StyleSheet, ScrollView} from 'react-native';
+import {ButtonGroup} from 'react-native-elements';
 
-import { StyleSheet, ScrollView } from 'react-native';
-import { ButtonGroup } from 'react-native-elements';
+import colors from '../../styles/colors';
 
 import BaseExamplePropTypes from './BaseExamplePropTypes';
 import Page from './Page';
-
-import colors from '../../styles/colors';
 
 const TAB_BAR_HEIGHT = 70;
 
@@ -55,7 +54,7 @@ class TabBarPage extends React.Component {
   }
 
   onOptionPress(index) {
-    this.setState({ currentIndex: index });
+    this.setState({currentIndex: index});
 
     if (typeof this.props.onOptionPress === 'function') {
       const option = this.props.options[index];
@@ -64,12 +63,12 @@ class TabBarPage extends React.Component {
   }
 
   render() {
-    let buttonGroupProps = {
+    const buttonGroupProps = {
       selectedBackgroundColor: colors.primary.grayFaint,
       containerBorderRadius: 0,
       onPress: this.onOptionPress,
       selectedIndex: this.state.currentIndex,
-      buttons: this.props.options.map((o) => o.label),
+      buttons: this.props.options.map(o => o.label),
       containerStyle: styles.buttonGroup,
     };
 
@@ -77,8 +76,8 @@ class TabBarPage extends React.Component {
       buttonGroupProps.buttonStyle = styles.scrollableButton;
     }
 
-    let view = this.props.scrollable ? (
-      <ScrollView horizontal style={{ maxHeight: TAB_BAR_HEIGHT }}>
+    const view = this.props.scrollable ? (
+      <ScrollView horizontal style={{maxHeight: TAB_BAR_HEIGHT}}>
         <ButtonGroup {...buttonGroupProps} />
       </ScrollView>
     ) : (

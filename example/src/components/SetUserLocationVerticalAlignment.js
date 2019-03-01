@@ -1,11 +1,11 @@
 import React from 'react';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
+import sheet from '../styles/sheet';
+import {onSortOptions} from '../utils';
+
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import TabBarPage from './common/TabBarPage';
-
-import sheet from '../styles/sheet';
-import { onSortOptions } from '../utils';
 
 class SetUserLocationVerticalAlignment extends React.Component {
   static propTypes = {
@@ -16,7 +16,7 @@ class SetUserLocationVerticalAlignment extends React.Component {
     super(props);
 
     this._alignmentOptions = Object.keys(MapboxGL.UserLocationVerticalAlignment)
-      .map((key) => {
+      .map(key => {
         return {
           label: key,
           data: MapboxGL.UserLocationVerticalAlignment[key],
@@ -32,7 +32,7 @@ class SetUserLocationVerticalAlignment extends React.Component {
   }
 
   onAlignmentChange(index, userLocationVerticalAlignment) {
-    this.setState({ currentAlignmentMode: userLocationVerticalAlignment });
+    this.setState({currentAlignmentMode: userLocationVerticalAlignment});
   }
 
   render() {
@@ -40,7 +40,8 @@ class SetUserLocationVerticalAlignment extends React.Component {
       <TabBarPage
         {...this.props}
         options={this._alignmentOptions}
-        onOptionPress={this.onAlignmentChange}>
+        onOptionPress={this.onAlignmentChange}
+      >
         <MapboxGL.MapView
           showUserLocation={true}
           userTrackingMode={MapboxGL.UserTrackingModes.Follow}

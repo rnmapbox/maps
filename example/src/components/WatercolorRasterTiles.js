@@ -1,14 +1,14 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
-import { Slider } from 'react-native-elements';
-
-import BaseExamplePropTypes from './common/BaseExamplePropTypes';
-import Page from './common/Page';
+import {Slider} from 'react-native-elements';
 
 import sheet from '../styles/sheet';
 import colors from '../styles/colors';
-import { SF_OFFICE_COORDINATE } from '../utils';
+import {SF_OFFICE_COORDINATE} from '../utils';
+
+import Page from './common/Page';
+import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 
 const styles = StyleSheet.create({
   slider: {
@@ -36,7 +36,7 @@ class WatercolorRasterTiles extends React.Component {
   }
 
   onOpacityChange(value) {
-    this.setState({ opacity: value });
+    this.setState({opacity: value});
   }
 
   render() {
@@ -51,12 +51,13 @@ class WatercolorRasterTiles extends React.Component {
         <MapboxGL.MapView
           zoomLevel={16}
           centerCoordinate={SF_OFFICE_COORDINATE}
-          style={sheet.matchParent}>
+          style={sheet.matchParent}
+        >
           <MapboxGL.RasterSource {...rasterSourceProps}>
             <MapboxGL.RasterLayer
               id="stamenWatercolorLayer"
               sourceID="stamenWatercolorSource"
-              style={{ rasterOpacity: this.state.opacity }}
+              style={{rasterOpacity: this.state.opacity}}
             />
           </MapboxGL.RasterSource>
         </MapboxGL.MapView>
@@ -66,7 +67,7 @@ class WatercolorRasterTiles extends React.Component {
             value={this.state.opacity}
             onValueChange={this.onOpacityChange}
             thumbTintColor={colors.primary.blue}
-            thumbTouchSize={{ width: 44, height: 44 }}
+            thumbTouchSize={{width: 44, height: 44}}
             maximumTrackTintColor={colors.secondary.purpleLight}
             minimumTrackTintColor={colors.secondary.purpleDark}
           />

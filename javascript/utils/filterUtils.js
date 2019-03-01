@@ -1,7 +1,7 @@
 import BridgeValue from './BridgeValue';
 
 export function getFilter(filter) {
-  if (!Array.isArray(filter) || filter.length == 0) {
+  if (!Array.isArray(filter) || filter.length === 0) {
     return [];
   }
 
@@ -16,8 +16,8 @@ export function getFilter(filter) {
     }
   }
 
-  let filterItems = [];
-  for (let item of flattenedFilter) {
+  const filterItems = [];
+  for (const item of flattenedFilter) {
     const filterItem = new BridgeValue(item);
     filterItems.push(filterItem.toJSON());
   }

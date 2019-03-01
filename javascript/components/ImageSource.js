@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { requireNativeComponent } from 'react-native';
+import {requireNativeComponent} from 'react-native';
+
 import {
   cloneReactChildrenWithProps,
   viewPropTypes,
@@ -38,7 +39,7 @@ class ImageSource extends React.PureComponent {
   };
 
   _getURL() {
-    let url = this.props.url;
+    let {url} = this.props;
 
     if (isNumber(this.props.url)) {
       url = resolveImagePath(this.props.url);

@@ -22,6 +22,11 @@ static double const MS_TO_S = 0.001;
     return feature.coordinate;
 }
 
++ (UIEdgeInsets)toUIEdgeInsets:(NSArray<NSNumber *> *)arr
+{
+    return UIEdgeInsetsMake([arr[0] floatValue], [arr[1] floatValue], [arr[2] floatValue], [arr[3] floatValue]);
+}
+
 + (MGLShape*)shapeFromGeoJSON:(NSString*)jsonStr
 {
     NSData* data = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];

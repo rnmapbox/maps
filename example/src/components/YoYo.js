@@ -1,13 +1,12 @@
 import React from 'react';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
-import BaseExamplePropTypes from './common/BaseExamplePropTypes';
-import Page from './common/Page';
-
 import sheet from '../styles/sheet';
 import colors from '../styles/colors';
+import {SF_OFFICE_COORDINATE} from '../utils';
 
-import { SF_OFFICE_COORDINATE } from '../utils';
+import Page from './common/Page';
+import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 
 const layerStyles = MapboxGL.StyleSheet.create({
   background: {
@@ -47,7 +46,7 @@ class YoYo extends React.Component {
     requestAnimationFrame(async () => {
       await this.map.zoomTo(this.state.zoomLevel, 8000);
       const nextZoomLevel = this.state.zoomLevel === 12 ? 2 : 12;
-      this.setState({ zoomLevel: nextZoomLevel });
+      this.setState({zoomLevel: nextZoomLevel});
       this.cameraLoop();
     });
   }
@@ -58,9 +57,10 @@ class YoYo extends React.Component {
         <MapboxGL.MapView
           zoomLevel={2}
           centerCoordinate={SF_OFFICE_COORDINATE}
-          ref={(ref) => (this.map = ref)}
+          ref={ref => (this.map = ref)}
           style={sheet.matchParent}
-          styleURL={MapboxGL.StyleURL.Dark}>
+          styleURL={MapboxGL.StyleURL.Dark}
+        >
           <MapboxGL.VectorSource>
             <MapboxGL.BackgroundLayer
               id="background"

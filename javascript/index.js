@@ -1,21 +1,19 @@
-import { Animated, NativeModules, PermissionsAndroid } from 'react-native';
-import { isAndroid } from './utils';
-import * as geoUtils from './utils/geoUtils';
+import {Animated, NativeModules, PermissionsAndroid} from 'react-native';
 
-// components
+import {isAndroid} from './utils';
+import * as geoUtils from './utils/geoUtils';
+// Components
 import MapView from './components/MapView';
 import MapboxStyleSheet from './utils/MapboxStyleSheet';
 import Light from './components/Light';
 import PointAnnotation from './components/PointAnnotation';
 import Callout from './components/Callout';
-
-// sources
+// Sources
 import VectorSource from './components/VectorSource';
 import ShapeSource from './components/ShapeSource';
 import RasterSource from './components/RasterSource';
 import ImageSource from './components/ImageSource';
-
-// layers
+// Layers
 import FillLayer from './components/FillLayer';
 import FillExtrusionLayer from './components/FillExtrusionLayer';
 import LineLayer from './components/LineLayer';
@@ -23,12 +21,11 @@ import CircleLayer from './components/CircleLayer';
 import SymbolLayer from './components/SymbolLayer';
 import RasterLayer from './components/RasterLayer';
 import BackgroundLayer from './components/BackgroundLayer';
-
-// modules
+// Modules
 import offlineManager from './modules/offline/offlineManager';
 import snapshotManager from './modules/snapshot/snapshotManager';
 
-let MapboxGL = { ...NativeModules.MGLModule };
+const MapboxGL = {...NativeModules.MGLModule};
 
 // static methods
 MapboxGL.requestAndroidLocationPermissions = async function() {
@@ -43,7 +40,7 @@ MapboxGL.requestAndroidLocationPermissions = async function() {
     }
 
     const permissions = Object.keys(res);
-    for (let permission of permissions) {
+    for (const permission of permissions) {
       if (res[permission] === PermissionsAndroid.RESULTS.GRANTED) {
         return true;
       }

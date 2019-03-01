@@ -1,13 +1,13 @@
 import React from 'react';
-import { Text } from 'react-native';
+import {Text} from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
+
+import sheet from '../styles/sheet';
+import {onSortOptions} from '../utils';
 
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import TabBarPage from './common/TabBarPage';
 import Bubble from './common/Bubble';
-
-import sheet from '../styles/sheet';
-import { onSortOptions } from '../utils';
 
 class SetUserTrackingModes extends React.Component {
   static propTypes = {
@@ -18,7 +18,7 @@ class SetUserTrackingModes extends React.Component {
     super(props);
 
     this._trackingOptions = Object.keys(MapboxGL.UserTrackingModes)
-      .map((key) => {
+      .map(key => {
         return {
           label: key,
           data: MapboxGL.UserTrackingModes[key],
@@ -45,12 +45,12 @@ class SetUserTrackingModes extends React.Component {
   }
 
   onUserTrackingModeChange(e) {
-    const userTrackingMode = e.nativeEvent.payload.userTrackingMode;
-    this.setState({ currentTrackingMode: userTrackingMode });
+    const {userTrackingMode} = e.nativeEvent.payload;
+    this.setState({currentTrackingMode: userTrackingMode});
   }
 
   onToggleUserLocation() {
-    this.setState({ showUserLocation: !this.state.showUserLocation });
+    this.setState({showUserLocation: !this.state.showUserLocation});
   }
 
   get userTrackingModeText() {
@@ -72,7 +72,8 @@ class SetUserTrackingModes extends React.Component {
         {...this.props}
         scrollable
         options={this._trackingOptions}
-        onOptionPress={this.onTrackingChange}>
+        onOptionPress={this.onTrackingChange}
+      >
         <MapboxGL.MapView
           showUserLocation={this.state.showUserLocation}
           userTrackingMode={this.state.userSelectedUserTrackingMode}
@@ -80,11 +81,11 @@ class SetUserTrackingModes extends React.Component {
           style={sheet.matchParent}
         />
 
-        <Bubble style={{ bottom: 100 }}>
+        <Bubble style={{bottom: 100}}>
           <Text>User Tracking Mode: {this.userTrackingModeText}</Text>
         </Bubble>
 
-        <Bubble onPress={this.onToggleUserLocation} style={{ bottom: 180 }}>
+        <Bubble onPress={this.onToggleUserLocation} style={{bottom: 180}}>
           <Text>Toggle User Location</Text>
         </Bubble>
       </TabBarPage>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native';
+import {Text} from 'react-native';
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
@@ -23,7 +23,7 @@ class GetZoom extends React.Component {
 
   async onRegionDidChange() {
     const zoom = await this._map.getZoom();
-    this.setState({ zoom });
+    this.setState({zoom});
   }
 
   render() {
@@ -32,10 +32,10 @@ class GetZoom extends React.Component {
         <MapboxGL.MapView
           onRegionDidChange={this.onRegionDidChange}
           zoomLevel={9}
-          ref={(c) => (this._map = c)}
+          ref={c => (this._map = c)}
           onPress={this.onPress}
           centerCoordinate={[-73.970895, 40.723279]}
-          style={{ flex: 1 }}
+          style={{flex: 1}}
         />
 
         <Bubble>
