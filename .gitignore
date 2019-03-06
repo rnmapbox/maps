@@ -36,6 +36,7 @@ yarn.lock
 ios/Mapbox.framework
 ios/temp.zip
 ios/.framework_version
+ios/Pods/
 android/build/
 android/.gradle/
 android/.idea/
@@ -49,3 +50,11 @@ reactnativemapboxgl.iml
 coverage
 .project
 *.core.prefs
+
+# Buck
+.buckd
+buck-out
+/ReactAndroid/src/main/jni/prebuilt/lib/armeabi-v7a/
+/ReactAndroid/src/main/jni/prebuilt/lib/x86/
+/ReactAndroid/src/main/gen
+

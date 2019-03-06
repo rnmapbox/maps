@@ -33,14 +33,11 @@ package-lock.json
 
 # project specific
 ios/Mapbox.framework
-android/build/
 android/.gradle/
+android/build/
 android/.idea/
 android/android.iml
 android/app/app.iml
-android/gradle/
-android/gradlew
-android/gradlew.bat
 android/local.properties
 reactnativemapboxgl.iml
 .idea
