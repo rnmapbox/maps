@@ -69,6 +69,8 @@ export function cloneReactChildrenWithProps(children, propsToAdd = {}) {
 
   if (!Array.isArray(children)) {
     foundChildren = [children];
+  } else {
+    foundChildren = children
   }
 
   const filteredChildren = foundChildren.filter(child => !!child); // filter out falsy children, since some can be null
