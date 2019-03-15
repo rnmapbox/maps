@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const styleSpecJSON = require('../style-spec/v8.json');
 const ejs = require('ejs');
+const prettier = require('prettier')
 
 const DocJSONBuilder = require('./autogenHelpers/DocJSONBuilder');
 const MarkdownBuilder = require('./autogenHelpers/MarkdownBuilder');
@@ -292,6 +293,10 @@ function getAllowedFunctionTypes(paintAttr) {
     output: path.join(IOS_OUTPUT_PATH, 'RCTMGLStyle.h'),
   },
   {
+    input: path.join(TMPL_PATH, 'index.d.ts.ejs'),
+    output: path.join(IOS_OUTPUT_PATH, 'index.d.ts'),
+  },
+  {
     input: path.join(TMPL_PATH, 'RCTMGLStyle.m.ejs'),
     output: path.join(IOS_OUTPUT_PATH, 'RCTMGLStyle.m'),
   },
@@ -303,10 +308,15 @@ function getAllowedFunctionTypes(paintAttr) {
     input: path.join(TMPL_PATH, 'styleMap.js.ejs'),
     output: path.join(JS_OUTPUT_PATH, 'styleMap.js'),
   },
-].forEach(({ input, output }) => {
-  console.log(`Generating ${output.split('/').pop()}`);
-  const tmpl = ejs.compile(fs.readFileSync(input, 'utf8'), { strict: true });
-  fs.writeFileSync(output, tmpl({ layers: layers }));
+].forEach(({input, output}) => {
+  const filename = output.split('/').pop();
+  console.log(`Generating ${filename}`);
+  const tmpl = ejs.compile(fs.readFileSync(input, 'utf8'), {strict: true});
+  let results = tmpl({layers});
+  if (filename.endsWith('ts')) {
+    results = prettier.format(results, {filepath: filename});
+  }
+  fs.writeFileSync(output, results);
 });
 
 // autogenerate docs

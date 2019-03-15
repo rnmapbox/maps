@@ -214,6 +214,58 @@ global.jsDocPropRequires = function(prop) {
   return desc;
 };
 
+global.dtsInterfaceType = function(prop) {
+  let propTypes = [];
+
+  if (prop.name.indexOf('Translate') !== -1) {
+    propTypes.push('TranslationProps');
+  } else if (prop.type === 'color') {
+    propTypes.push('string');
+    // propTypes.push('ConstantPropType');
+  } else if (prop.type === 'array') {
+    switch (prop.value) {
+      case 'number':
+        propTypes.push('number[]');
+        break;
+      case 'boolean':
+        propTypes.push('boolean[]');
+        break;
+      case 'string':
+        propTypes.push('string[]');
+      default:
+        propTypes.push('any[]');
+    }
+    // propTypes.push('ConstantPropType');
+  } else if (prop.type === 'number') {
+    propTypes.push('number');
+
+  } else if (prop.type === 'enum') {
+    propTypes.push('any');
+  } else {
+    // images can be required which result in a number
+    if (
+      prop.name.indexOf('Image') !== -1 ||
+      prop.name.indexOf('Pattern') !== -1
+    ) {
+      propTypes.push('number');
+    }
+    propTypes.push('string');
+  }
+
+  if (prop.allowedFunctionTypes && prop.allowedFunctionTypes.length) {
+    propTypes.push('StyleFunctionProps');
+  }
+
+  if (propTypes.length > 1) {
+    return `TransitionProps | 
+${propTypes.map((p) => startAtSpace(4, p)).join(' | ')},
+${startAtSpace(2, '')}`;
+  } else {
+    return propTypes[0];
+  }
+};
+
+
 global.jsDocReactProp = function(prop) {
   let propTypes = [];
 
