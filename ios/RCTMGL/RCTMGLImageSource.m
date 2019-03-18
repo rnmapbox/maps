@@ -23,9 +23,20 @@
 
 - (MGLSource *)makeSource
 {
+    NSURL *myURL;
+
+    if ([[_url substringToIndex:4] isEqualToString:@"http"]) {
+        myURL = [NSURL URLWithString:_url];
+    }
+    else
+    {
+        //Default consider it file url path
+        myURL = [NSURL fileURLWithPath:_url];
+    }
+
     return [[MGLImageSource alloc] initWithIdentifier:self.id
                                    coordinateQuad:[self _makeCoordQuad]
-                                   URL:[NSURL URLWithString:_url]];
+                                   URL:myURL];
 }
 
 - (MGLCoordinateQuad)_makeCoordQuad
