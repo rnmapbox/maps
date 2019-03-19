@@ -13,6 +13,9 @@
 #import "UIView+React.h"
 
 @implementation RCTMGLMapView
+{
+    BOOL _pendingInitialLayout;
+}
 
 static double const DEG2RAD = M_PI / 180;
 static double const LAT_MAX = 85.051128779806604;
@@ -23,12 +26,22 @@ static double const M2PI = M_PI * 2;
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
+        _pendingInitialLayout = YES;
         _cameraUpdateQueue = [[CameraUpdateQueue alloc] init];
         _sources = [[NSMutableArray alloc] init];
         _pointAnnotations = [[NSMutableArray alloc] init];
         _reactSubviews = [[NSMutableArray alloc] init];
     }
     return self;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    if (_pendingInitialLayout) {
+        _pendingInitialLayout = NO;
+        [self _updateCameraAfterInitialLayout];
+    }
 }
 
 - (void)invalidate
@@ -161,6 +174,14 @@ static double const M2PI = M_PI * 2;
 {
     _reactCenterCoordinate = reactCenterCoordinate;
     [self _updateCameraIfNeeded:YES];
+}
+
+- (void)setReactVisibleCoordinateBounds:(NSString *)reactVisibleCoordinateBounds
+{
+    _reactVisibleCoordinateBounds = reactVisibleCoordinateBounds;
+    if (!_pendingInitialLayout) {
+        [self _updateCameraIfNeeded:YES];
+    }
 }
 
 - (void)setReactContentInset:(NSArray<NSNumber *> *)reactContentInset
@@ -331,10 +352,27 @@ static double const M2PI = M_PI * 2;
     return [NSURL URLWithString:styleURL];
 }
 
+
+/**
+ setVisibleCoordinateBounds() won't properly work if the view has empty bounds so
+ we need to wait for the initial layoutSubviews() before we can use reactVisibleCoordinateBounds
+ */
+- (void)_updateCameraAfterInitialLayout {
+    if (_reactVisibleCoordinateBounds != nil) {
+        [self _updateCameraIfNeeded:YES];
+    }
+}
+
 - (void)_updateCameraIfNeeded:(BOOL)shouldUpdateCenterCoord
 {
     if (shouldUpdateCenterCoord) {
-        [self setCenterCoordinate:[RCTMGLUtils fromFeature:_reactCenterCoordinate] animated:_animated];
+        if (_reactCenterCoordinate != nil) {
+            [self setCenterCoordinate:[RCTMGLUtils fromFeature:_reactCenterCoordinate] animated:_animated];
+        } else {
+            MGLCoordinateBounds bounds = [RCTMGLUtils fromFeatureCollection:_reactVisibleCoordinateBounds];
+            [self setVisibleCoordinateBounds:bounds animated:_animated];
+            
+        }
     } else {
         MGLMapCamera *camera = [self.camera copy];
         camera.pitch = _pitch;

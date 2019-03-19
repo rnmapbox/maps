@@ -60,22 +60,6 @@ Converts a geographic coordinate to a point in the given view’s coordinate sys
 const pointInView = await this._map.getPointInView([-37.817070, 144.949901]);
 ```
 
-#### getCoordinateFromView(point)
-
-Converts a point in the given view’s coordinate system to a geographic coordinate.
-
-##### arguments
-| Name | Type | Required | Description  |
-| ---- | :--: | :------: | :----------: |
-| `point` | `Array` | `Yes` | A point expressed in the given view’s coordinate system. |
-
-
-
-```javascript
-const coordinate = await this._map.getCoordinateFromView([100, 100]);
-```
-
-
 
 #### getVisibleBounds()
 
@@ -107,7 +91,7 @@ Returns an array of rendered map features that intersect with a given point.
 
 
 ```javascript
-const features = await this._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1', 'id2'])
+this._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1', 'id2'])
 ```
 
 
@@ -125,7 +109,7 @@ Returns an array of rendered map features that intersect with the given rectangl
 
 
 ```javascript
-const features = await this._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])
+this._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])
 ```
 
 

@@ -106,7 +106,7 @@ Sets the value at which download status events will be sent over the React Nativ
 
 
 ```javascript
-MapboxGL.offlineManager.setProgressEventThrottle(500);
+MapboxGL.setProgressEventThrottle(500);
 ```
 
 

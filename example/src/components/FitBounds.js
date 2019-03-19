@@ -9,16 +9,15 @@ import TabBarPage from './common/TabBarPage';
 class FitBounds extends React.Component {
   static propTypes = {...BaseExamplePropTypes};
 
+  houseBounds = [[-74.135379, 40.795909], [-74.135449, 40.795578]];
+  townBounds = [[-74.12641, 40.797968], [-74.143727, 40.772177]];
+
   constructor(props) {
     super(props);
 
-    const houseBounds = [[-74.135379, 40.795909], [-74.135449, 40.795578]];
-
-    const townBounds = [[-74.12641, 40.797968], [-74.143727, 40.772177]];
-
     this._bounds = [
-      {label: 'Fit House', data: houseBounds},
-      {label: 'Fit Town', data: townBounds},
+      {label: 'Fit House', data: this.houseBounds},
+      {label: 'Fit Town', data: this.townBounds},
     ];
 
     this.onFitBounds = this.onFitBounds.bind(this);
@@ -37,9 +36,9 @@ class FitBounds extends React.Component {
       >
         <MapboxGL.MapView
           ref={ref => (this.map = ref)}
-          zoomLevel={18}
+          contentInset={10}
+          visibleCoordinateBounds={this.houseBounds}
           maxZoomLevel={19}
-          centerCoordinate={[-74.135426, 40.795765]}
           styleURL={MapboxGL.StyleURL.Satellite}
           style={sheet.matchParent}
         />

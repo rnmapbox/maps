@@ -47,6 +47,11 @@ class MapView extends React.Component {
     centerCoordinate: PropTypes.arrayOf(PropTypes.number),
 
     /**
+     * Initial bounds on map [[lng, lat], [lng, lat]]
+     */
+    visibleCoordinateBounds: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
+
+    /**
      * Shows the users location on the map
      */
     showUserLocation: PropTypes.bool,
@@ -822,6 +827,18 @@ class MapView extends React.Component {
     return toJSONString(makePoint(this.props.centerCoordinate));
   }
 
+  _getVisibleCoordinateBounds() {
+    if (!this.props.visibleCoordinateBounds) {
+      return;
+    }
+    return toJSONString(
+      makeLatLngBounds(
+        this.props.visibleCoordinateBounds[0],
+        this.props.visibleCoordinateBounds[1],
+      ),
+    );
+  }
+
   _getContentInset() {
     if (!this.props.contentInset) {
       return;
@@ -854,6 +871,7 @@ class MapView extends React.Component {
     const props = {
       ...this.props,
       centerCoordinate: this._getCenterCoordinate(),
+      visibleCoordinateBounds: this._getVisibleCoordinateBounds(),
       contentInset: this._getContentInset(),
       style: styles.matchParent,
     };

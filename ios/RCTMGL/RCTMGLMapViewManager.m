@@ -80,6 +80,7 @@ RCT_REMAP_VIEW_PROPERTY(zoomEnabled, reactZoomEnabled, BOOL)
 
 RCT_REMAP_VIEW_PROPERTY(contentInset, reactContentInset, NSArray)
 RCT_REMAP_VIEW_PROPERTY(centerCoordinate, reactCenterCoordinate, NSString)
+RCT_REMAP_VIEW_PROPERTY(visibleCoordinateBounds, reactVisibleCoordinateBounds, NSString)
 RCT_REMAP_VIEW_PROPERTY(styleURL, reactStyleURL, NSString)
 
 RCT_REMAP_VIEW_PROPERTY(userTrackingMode, reactUserTrackingMode, int)

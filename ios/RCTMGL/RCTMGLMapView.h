@@ -37,6 +37,7 @@
 @property (nonatomic, assign) BOOL reactZoomEnabled;
 
 @property (nonatomic, copy) NSString *reactCenterCoordinate;
+@property (nonatomic, copy) NSString *reactVisibleCoordinateBounds;
 @property (nonatomic, copy) NSString *reactStyleURL;
 
 @property (nonatomic, assign) BOOL isUserInteraction;

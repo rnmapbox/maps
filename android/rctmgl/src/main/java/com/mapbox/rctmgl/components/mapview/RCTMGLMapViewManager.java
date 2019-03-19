@@ -9,12 +9,14 @@ import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.rctmgl.components.AbstractEventEmitter;
 import com.mapbox.rctmgl.events.constants.EventKeys;
 import com.mapbox.rctmgl.utils.ConvertUtils;
 import com.mapbox.rctmgl.utils.FilterParser;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
+import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Point;
 
 import java.util.ArrayList;
@@ -195,6 +197,15 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         Point centerCoordinate = GeoJSONUtils.toPointGeometry(featureJSONStr);
         if (centerCoordinate != null) {
             mapView.setReactCenterCoordinate(centerCoordinate);
+        }
+    }
+
+    @ReactProp(name="visibleCoordinateBounds")
+    public void setVisibleCoordinateBounds(RCTMGLMapView mapView, String featureJSONStr) {
+        FeatureCollection collection = FeatureCollection.fromJson(featureJSONStr);
+        LatLngBounds bounds = GeoJSONUtils.toLatLngBounds(collection);
+        if (bounds != null) {
+            mapView.setReactVisibleCoordinateBounds(bounds);
         }
     }
 

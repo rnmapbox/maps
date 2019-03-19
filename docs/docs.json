@@ -1346,6 +1346,18 @@
     "description": "MapView backed by Mapbox Native GL",
     "methods": [
       {
+        "name": "setHandledMapChangedEvents",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "props",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
         "name": "getPointInView",
         "docblock": "Converts a geographic coordinate to a point in the given view’s coordinate system.\n\n@example\nconst pointInView = await this._map.getPointInView([-37.817070, 144.949901]);\n\n@param {Array<Number>} coordinate - A point expressed in the map view's coordinate system.\n@return {Array}",
         "modifiers": [
@@ -1369,6 +1381,32 @@
         "description": "Converts a geographic coordinate to a point in the given view’s coordinate system.",
         "examples": [
           "\nconst pointInView = await this._map.getPointInView([-37.817070, 144.949901]);\n\n"
+        ]
+      },
+      {
+        "name": "getCoordinateFromView",
+        "docblock": "Converts a point in the given view’s coordinate system to a geographic coordinate.\n\n@example\nconst coordinate = await this._map.getCoordinateFromView([100, 100]);\n\n@param {Array<Number>} point - A point expressed in the given view’s coordinate system.\n@return {Array}",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "point",
+            "description": "A point expressed in the given view’s coordinate system.",
+            "type": {
+              "name": "Array"
+            }
+          }
+        ],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "Array"
+          }
+        },
+        "description": "Converts a point in the given view’s coordinate system to a geographic coordinate.",
+        "examples": [
+          "\nconst coordinate = await this._map.getCoordinateFromView([100, 100]);\n\n"
         ]
       },
       {
@@ -1712,6 +1750,13 @@
         "description": "Initial center coordinate on map [lng, lat]"
       },
       {
+        "name": "visibleCoordinateBounds",
+        "required": false,
+        "type": "arrayOf",
+        "default": "none",
+        "description": "Initial bounds on map [[lng, lat], [lng, lat]]"
+      },
+      {
         "name": "showUserLocation",
         "required": false,
         "type": "bool",
@@ -1969,6 +2014,20 @@
         "type": "func",
         "default": "none",
         "description": "This event is triggered when the users tracking mode is changed."
+      },
+      {
+        "name": "regionWillChangeDebounceTime",
+        "required": false,
+        "type": "number",
+        "default": "10",
+        "description": "The emitted frequency of regionwillchange events"
+      },
+      {
+        "name": "regionDidChangeDebounceTime",
+        "required": false,
+        "type": "number",
+        "default": "500",
+        "description": "The emitted frequency of regiondidchange events"
       }
     ],
     "composes": [
@@ -2019,7 +2078,7 @@
         "name": "anchor",
         "required": false,
         "type": "shape",
-        "default": "{ x: 0.5, y: 0.5 }",
+        "default": "{x: 0.5, y: 0.5}",
         "description": "Specifies the anchor being set on a particular point of the annotation.\nThe anchor point is specified in the continuous space [0.0, 1.0] x [0.0, 1.0],\nwhere (0, 0) is the top-left corner of the image, and (1, 1) is the bottom-right corner.\nNote this is only for custom annotations not the default pin view.\nDefaults to the center of the view."
       },
       {
