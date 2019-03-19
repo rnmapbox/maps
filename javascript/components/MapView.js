@@ -468,10 +468,6 @@ class MapView extends React.Component {
     padding = 0,
     duration = 0.0,
   ) {
-    if (!this._nativeRef) {
-      return;
-    }
-
     const pad = {
       paddingLeft: 0,
       paddingRight: 0,
@@ -521,9 +517,6 @@ class MapView extends React.Component {
    *  @return {void}
    */
   flyTo(coordinates, duration = 2000) {
-    if (!this._nativeRef) {
-      return Promise.reject(new Error('No native reference found'));
-    }
     return this.setCamera({
       centerCoordinate: coordinates,
       duration,
@@ -543,9 +536,6 @@ class MapView extends React.Component {
    *  @return {void}
    */
   moveTo(coordinates, duration = 0) {
-    if (!this._nativeRef) {
-      return Promise.reject(new Error('No native reference found'));
-    }
     return this.setCamera({
       centerCoordinate: coordinates,
       duration,
@@ -564,9 +554,6 @@ class MapView extends React.Component {
    * @return {void}
    */
   zoomTo(zoomLevel, duration = 2000) {
-    if (!this._nativeRef) {
-      return Promise.reject(new Error('No native reference found'));
-    }
     return this.setCamera({
       zoom: zoomLevel,
       duration,
@@ -594,10 +581,6 @@ class MapView extends React.Component {
    *  @param {Object} config - Camera configuration
    */
   setCamera(config = {}) {
-    if (!this._nativeRef) {
-      return;
-    }
-
     let cameraConfig = {};
 
     if (config.stops) {
