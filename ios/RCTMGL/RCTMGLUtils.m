@@ -59,7 +59,9 @@ static double const MS_TO_S = 0.001;
 
 + (NSNumber*)clamp:(NSNumber *)value min:(NSNumber *)min max:(NSNumber *)max
 {
-    return MAX(MIN(value, max), min);
+    if ([value doubleValue] < [min doubleValue]) return min;
+    if ([value doubleValue] > [max doubleValue]) return max;
+    return value;
 }
 
 + (UIColor*)toColor:(id)value
