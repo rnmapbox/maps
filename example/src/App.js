@@ -27,7 +27,7 @@ import FlyTo from './components/FlyTo';
 import FitBounds from './components/FitBounds';
 import SetUserTrackingModes from './components/SetUserTrackingModes';
 import SetUserLocationVerticalAlignment from './components/SetUserLocationVerticalAlignment';
-import ShowRegionDidChange from './components/ShowRegionDidChange';
+import ShowRegionChange from './components/ShowRegionChange';
 import CustomIcon from './components/CustomIcon';
 import YoYo from './components/YoYo';
 import EarthQuakes from './components/EarthQuakes';
@@ -101,7 +101,7 @@ const Examples = [
     'Set User Location Vertical Alignment',
     SetUserLocationVerticalAlignment,
   ),
-  new ExampleItem('Show Region Did Change', ShowRegionDidChange),
+  new ExampleItem('Show Region Change', ShowRegionChange),
   new ExampleItem('Custom Icon', CustomIcon),
   new ExampleItem('Yo Yo Camera', YoYo),
   new ExampleItem('Clustering Earthquakes', EarthQuakes),
