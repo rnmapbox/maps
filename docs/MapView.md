@@ -277,4 +277,14 @@ const center = await this._map.getCenter();
 ```
 
 
+#### showAttribution()
+
+Show the attribution and telemetry action sheet.<br/>If you implement a custom attribution button, you should add this action to the button.
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
 

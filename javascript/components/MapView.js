@@ -640,6 +640,14 @@ class MapView extends React.Component {
     return res.center;
   }
 
+  /**
+   * Show the attribution and telemetry action sheet.
+   * If you implement a custom attribution button, you should add this action to the button.
+   */
+  showAttribution() {
+    return this._runNativeCommand('showAttribution');
+  }
+
   _runNativeCommand(methodName, args = []) {
     if (!this._nativeRef) {
       return new Promise(resolve => {

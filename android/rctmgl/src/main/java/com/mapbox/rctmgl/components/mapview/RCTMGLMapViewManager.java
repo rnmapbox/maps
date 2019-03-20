@@ -254,6 +254,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     public static final int METHOD_GET_ZOOM = 8;
     public static final int METHOD_GET_CENTER = 9;
     public static final int METHOD_SET_HANDLED_MAP_EVENTS = 10;
+    public static final int METHOD_SHOW_ATTRIBUTION = 11;
 
     @Nullable
     @Override
@@ -269,6 +270,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                 .put("getZoom", METHOD_GET_ZOOM)
                 .put("getCenter", METHOD_GET_CENTER)
                 .put( "setHandledMapChangedEvents", METHOD_SET_HANDLED_MAP_EVENTS)
+                .put("showAttribution", METHOD_SHOW_ATTRIBUTION)
                 .build();
     }
 
@@ -325,6 +327,9 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                     }
                     mapView.setHandledMapChangedEvents(eventsArray);
                 }
+                break;
+            case METHOD_SHOW_ATTRIBUTION:
+                mapView.showAttribution();
                 break;
         }
     }

@@ -1042,6 +1042,11 @@ public class RCTMGLMapView extends MapView implements
         mManager.handleEvent(event);
     }
 
+    public void showAttribution() {
+        View attributionView = findViewById(com.mapbox.mapboxsdk.R.id.attributionView);
+        attributionView.callOnClick();
+    }
+
     public void init() {
         setStyleUrl(mStyleURL);
 
