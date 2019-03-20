@@ -1346,18 +1346,6 @@
     "description": "MapView backed by Mapbox Native GL",
     "methods": [
       {
-        "name": "setHandledMapChangedEvents",
-        "docblock": null,
-        "modifiers": [],
-        "params": [
-          {
-            "name": "props",
-            "type": null
-          }
-        ],
-        "returns": null
-      },
-      {
         "name": "getPointInView",
         "docblock": "Converts a geographic coordinate to a point in the given view’s coordinate system.\n\n@example\nconst pointInView = await this._map.getPointInView([-37.817070, 144.949901]);\n\n@param {Array<Number>} coordinate - A point expressed in the map view's coordinate system.\n@return {Array}",
         "modifiers": [

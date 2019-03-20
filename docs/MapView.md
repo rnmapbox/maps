@@ -6,6 +6,7 @@
 | ---- | :--: | :-----: | :------: | :----------: |
 | animated | `bool` | `false` | `false` | Animates changes between pitch and bearing |
 | centerCoordinate | `arrayOf` | `none` | `false` | Initial center coordinate on map [lng, lat] |
+| visibleCoordinateBounds | `arrayOf` | `none` | `false` | Initial bounds on map [[lng, lat], [lng, lat]] |
 | showUserLocation | `bool` | `none` | `false` | Shows the users location on the map |
 | userTrackingMode | `number` | `MapboxGL.UserTrackingModes.None` | `false` | The mode used to track the user location on the map |
 | userLocationVerticalAlignment | `number` | `none` | `false` | The vertical alignment of the user location within in map. This is only enabled while tracking the users location. |
@@ -43,6 +44,8 @@
 | onDidFinishRenderingMapFully | `func` | `none` | `false` | This event is triggered when the map fully finished rendering the map. |
 | onDidFinishLoadingStyle | `func` | `none` | `false` | This event is triggered when a style has finished loading. |
 | onUserTrackingModeChange | `func` | `none` | `false` | This event is triggered when the users tracking mode is changed. |
+| regionWillChangeDebounceTime | `number` | `10` | `false` | The emitted frequency of regionwillchange events |
+| regionDidChangeDebounceTime | `number` | `500` | `false` | The emitted frequency of regiondidchange events |
 
 ### methods
 #### getPointInView(coordinate)
@@ -58,6 +61,22 @@ Converts a geographic coordinate to a point in the given view’s coordinate sys
 
 ```javascript
 const pointInView = await this._map.getPointInView([-37.817070, 144.949901]);
+```
+
+
+#### getCoordinateFromView(point)
+
+Converts a point in the given view’s coordinate system to a geographic coordinate.
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `point` | `Array` | `Yes` | A point expressed in the given view’s coordinate system. |
+
+
+
+```javascript
+const coordinate = await this._map.getCoordinateFromView([100, 100]);
 ```
 
 
