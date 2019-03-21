@@ -5,8 +5,8 @@ def safeExtGet(prop, fallback) {
 }
 
 android {
-    compileSdkVersion safeExtGet("compileSdkVersion", 26)
-    buildToolsVersion safeExtGet("buildToolsVersion", '26.0.1')
+    compileSdkVersion safeExtGet("compileSdkVersion", 28)
+    buildToolsVersion safeExtGet("buildToolsVersion", '28.0.3')
 
     defaultConfig {
         minSdkVersion safeExtGet('minSdkVersion', 16)
@@ -34,10 +34,10 @@ dependencies {
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:5.5.3@aar'
 
     // Dependencies
-    implementation 'com.android.support:support-vector-drawable:28.0.0'
-    implementation 'com.android.support:support-annotations:28.0.0'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
+    implementation "com.android.support:support-vector-drawable:${safeExtGet('supportLibVersion', '28.0.0')}"
+    implementation "com.android.support:support-annotations:${safeExtGet('supportLibVersion', '28.0.0')}"
+    implementation "com.android.support:appcompat-v7:${safeExtGet('supportLibVersion', '28.0.0')}"
+    implementation "com.squareup.okhttp3:okhttp:${safeExtGet('okhttpVersion', '3.12.1')}"
 
     // Mapbox plugins
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization:0.1.0'
