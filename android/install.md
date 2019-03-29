@@ -27,7 +27,7 @@ Add project under `dependencies`
 
 ```
 dependencies {
-    compile project(':mapbox-react-native-mapbox-gl')
+    implementation project(':mapbox-react-native-mapbox-gl')
 }
 ```
 
