@@ -24,6 +24,11 @@ type Visibility = 'visible' | 'none'
 type Alignment = 'map' | 'viewport';
 type AutoAlignment = Alignment | 'auto';
 
+type NamedStyles<T> = { 
+    [P in keyof T]: SymbolLayerStyle | RasterLayerStyle | LineLayerStyle | FillLayerStyle | 
+        FillExtrusionLayerStyle | CircleLayerStyle | BackgroundLayerStyle 
+};
+
 declare namespace MapboxGL {
     function setAccessToken(accessToken: string): void;
     function getAccessToken(): Promise<void>;
@@ -52,6 +57,7 @@ declare namespace MapboxGL {
     class Light extends Component<LightProps> { }
 
     class StyleSheet extends Component {
+        static create<T extends NamedStyles<T> | NamedStyles<any>>(styles: T): void;        
         camera(stops: {[key: number]: string}, interpolationMode?: InterpolationMode): void;
         source(stops: {[key: number]: string}, attributeName: string, interpolationMode?: InterpolationMode): void;
         composite(stops: {[key: number]: string}, attributeName: string, interpolationMode?: InterpolationMode): void;
@@ -66,7 +72,7 @@ declare namespace MapboxGL {
      * Sources
      */
     class VectorSource extends Component<VectorSourceProps> { }
-    class ShapeSourceProps extends Component<ShapeSourceProps> { }
+    class ShapeSource extends Component<ShapeSourceProps> { }
     class RasterSource extends Component<RasterSourceProps> { }
 
     /**
@@ -143,7 +149,7 @@ interface MapViewProps extends ViewProperties {
     pitch?: number;
     style?: any;
     styleURL?: MapboxGL.StyleURL;
-    zoomlevel?: number;
+    zoomLevel?: number;
     minZoomLevel?: number;
     maxZoomLevel?: number;
     localizeLabels?: boolean;
@@ -155,6 +161,8 @@ interface MapViewProps extends ViewProperties {
     logoEnabled?: boolean;
     compassEnabled?: boolean;
     surfaceView?: boolean;
+    regionWillChangeDebounceTime?: number;
+    regionDidChangeDebounceTime?: number;
 
     onPress?: () => void;
     onLongPress?: () => void;
