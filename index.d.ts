@@ -323,7 +323,7 @@ interface PointAnnotationProps {
     title?: string;
     snippet?: string;
     selected?: boolean;
-    coordinate: Array<string>;
+    coordinate: Array<number>;
     anchor?: Point;
     onSelected?: () => void;
     onDeselected?: () => void;
