@@ -10,7 +10,7 @@ _An unofficial React Native library for building maps with the [Mapbox Maps SDK 
 
 * [node](https://nodejs.org)
 * [npm](https://www.npmjs.com/)
-* [React Native](https://facebook.github.io/react-native/) recommended version 0.50 or greater
+* [React Native](https://facebook.github.io/react-native/) (0.59+)
 
 **Git**
 ```
