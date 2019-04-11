@@ -1,5 +1,5 @@
 import React from 'react';
-import MapboxGL from '@mapbox/react-native-mapbox-gl';
+import MapboxGL from '@react-native-mapbox/maps';
 
 import sheet from '../styles/sheet';
 import {SF_OFFICE_COORDINATE} from '../utils';

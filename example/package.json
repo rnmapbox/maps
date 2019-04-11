@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@mapbox/geo-viewport": "^0.4.0",
-    "@mapbox/react-native-mapbox-gl": "file:../mapbox-react-native-mapbox-gl-6.1.4.tgz",
+    "@react-native-mapbox/maps": "file:../react-native-mapbox-maps-7.0.0.tgz",
     "@turf/along": "^5.1.5",
     "@turf/bearing": "^5.1.5",
     "@turf/distance": "^5.1.5",
