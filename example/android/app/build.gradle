@@ -133,7 +133,7 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:1.1.1"
     implementation "com.google.android.gms:play-services-location:15.0.1"
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    implementation project(':mapbox-react-native-mapbox-gl')
+    implementation project(':android-mapbox-react-native-mapbox-gl')
     implementation project(':react-native-vector-icons')
 }
 
