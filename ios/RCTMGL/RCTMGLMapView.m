@@ -40,7 +40,8 @@ static double const M2PI = M_PI * 2;
     [super layoutSubviews];
     if (_pendingInitialLayout) {
         _pendingInitialLayout = NO;
-        [self _updateCameraAfterInitialLayout];
+        // FMTODO
+        // [self.camera _updateCameraAfterInitialLayout];
     }
 }
 
@@ -172,8 +173,9 @@ static double const M2PI = M_PI * 2;
 
 - (void)setReactShowUserLocation:(BOOL)reactShowUserLocation
 {
-    _reactShowUserLocation = reactShowUserLocation;
-    self.showsUserLocation = _reactShowUserLocation;
+    // FMTODO
+    //_reactShowUserLocation = reactShowUserLocation;
+    self.showsUserLocation = reactShowUserLocation; //_reactShowUserLocation;
 }
 
 - (void)setReactContentInset:(NSArray<NSNumber *> *)reactContentInset

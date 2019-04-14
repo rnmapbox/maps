@@ -8,6 +8,7 @@ import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.ViewGroupManager;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,9 +27,11 @@ abstract public class AbstractEventEmitter<T extends ViewGroup> extends ViewGrou
     private static final double BRIDGE_TIMEOUT_MS = 10;
     private Map<String, Long> mRateLimitedEvents;
     private EventDispatcher mEventDispatcher;
+    private ReactApplicationContext mRCTAppContext;
 
     public AbstractEventEmitter(ReactApplicationContext reactApplicationContext) {
         mRateLimitedEvents = new HashMap<>();
+        mRCTAppContext = reactApplicationContext;
     }
 
     public void handleEvent(IEvent event) {

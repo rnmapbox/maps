@@ -54,7 +54,8 @@ const CGFloat MGLUserLocationHeadingUpdateThreshold = 0.01;
     if (CLLocationCoordinate2DIsValid(self.userLocation.coordinate))
     {
         RCTMGLMapView *reactMapView = (RCTMGLMapView *)self.mapView;
-        (reactMapView.reactUserTrackingMode == MGLUserTrackingModeFollowWithCourse) ? [self drawPuck] : [self drawDot];
+        // FM - TODO
+        (reactMapView.userTrackingMode == MGLUserTrackingModeFollowWithCourse) ? [self drawPuck] : [self drawDot];
         [self updatePitch];
     }
     
@@ -234,7 +235,7 @@ const CGFloat MGLUserLocationHeadingUpdateThreshold = 0.01;
     
     // heading indicator (tinted, beam or arrow)
     RCTMGLMapView *reactMapView = (RCTMGLMapView *)self.mapView;
-    BOOL headingTrackingModeEnabled = reactMapView.reactUserTrackingMode == MGLUserTrackingModeFollowWithHeading;
+    BOOL headingTrackingModeEnabled = reactMapView.userTrackingMode == MGLUserTrackingModeFollowWithHeading;
     BOOL showHeadingIndicator = self.mapView.showsUserHeadingIndicator || headingTrackingModeEnabled;
 
     if (showHeadingIndicator)

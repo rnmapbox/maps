@@ -1,6 +1,8 @@
 package com.mapbox.rctmgl.location;
 
+/*
 import com.mapbox.mapboxsdk.plugins.locationlayer.modes.RenderMode;
+*/
 
 /**
  * Created by nickitaliano on 12/13/17.
@@ -12,6 +14,7 @@ public class UserTrackingMode {
     public static final int FollowWithCourse = 2;
     public static final int FollowWithHeading = 3;
 
+    /*
     public static int getMapLayerMode(int mode, boolean isShowUserLocation) {
         if (!isShowUserLocation) {
             return -1;
@@ -29,4 +32,5 @@ public class UserTrackingMode {
     public static boolean isUserGesture(int reason) {
         return reason == 1 || reason == 2; // user gesture or animation
     }
+    */
 }

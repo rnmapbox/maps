@@ -36,7 +36,9 @@ public class RCTMGLCameraManager extends AbstractEventEmitter<RCTMGLCamera> {
 
     @ReactProp(name="stop")
     public void setStop(RCTMGLCamera camera, ReadableMap map) {
-        CameraStop stop = CameraStop.fromReadableMap(mContext, map, null);
-        camera.setStop(stop);
+        if (map != null) {
+            CameraStop stop = CameraStop.fromReadableMap(mContext, map, null);
+            camera.setStop(stop);
+        }
     }
 }
