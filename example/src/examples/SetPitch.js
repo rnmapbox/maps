@@ -38,7 +38,7 @@ class SetPitch extends React.Component {
   }
 
   onUpdatePitch(index, pitch) {
-    this.setState({ followPitch: pitch });
+    this.setState({followPitch: pitch});
   }
 
   render() {

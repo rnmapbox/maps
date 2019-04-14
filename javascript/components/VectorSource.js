@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import {NativeModules, requireNativeComponent} from 'react-native';
+
+import {cloneReactChildrenWithProps, viewPropTypes, isFunction} from '../utils';
+
 import AbstractSource from './AbstractSource';
-import {
-  cloneReactChildrenWithProps,
-  viewPropTypes,
-  isFunction,
-} from '../utils';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -59,7 +57,7 @@ class VectorSource extends AbstractSource {
       onPress: undefined,
     };
     return (
-      <RCTMGLVectorSource ref='nativeSource' {...props}>
+      <RCTMGLVectorSource ref="nativeSource" {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}

@@ -49,7 +49,7 @@ class YoYo extends React.Component {
   cameraLoop() {
     requestAnimationFrame(async () => {
       const nextZoomLevel = this.state.zoomLevel === 12 ? 2 : 12;
-      this.setState({ zoomLevel: nextZoomLevel });
+      this.setState({zoomLevel: nextZoomLevel});
       setTimeout(() => this.cameraLoop(), 2000);
     });
   }

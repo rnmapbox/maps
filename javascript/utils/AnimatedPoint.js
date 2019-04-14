@@ -1,16 +1,16 @@
-import { Animated } from 'react-native';
+import {Animated} from 'react-native';
 
 // Used react-native-maps as a reference
 // https://github.com/react-community/react-native-maps/blob/master/lib/components/AnimatedRegion.js
 const AnimatedWithChildren = Object.getPrototypeOf(Animated.ValueXY);
 
 const DEFAULT_COORD = [0, 0];
-const DEFAULT_POINT = { type: 'Point', coordinates: DEFAULT_COORD };
+const DEFAULT_POINT = {type: 'Point', coordinates: DEFAULT_COORD};
 
 let uniqueID = 0;
 
 export class AnimatedPoint extends AnimatedWithChildren {
-  constructor (point = DEFAULT_POINT) {
+  constructor(point = DEFAULT_POINT) {
     super();
 
     this.longitude = point.coordinates[0] || 0;
@@ -52,7 +52,7 @@ export class AnimatedPoint extends AnimatedWithChildren {
   }
 
   addListener(cb) {
-    const id = String(uniqueID++) + '-' + String(Date.now());
+    const id = `${String(uniqueID++)}-${String(Date.now())}`;
 
     const completeCB = () => {
       if (typeof cb === 'function') {
@@ -74,7 +74,7 @@ export class AnimatedPoint extends AnimatedWithChildren {
     delete this._listeners[id];
   }
 
-  spring(config = { coordinates: DEFAULT_COORD }) {
+  spring(config = {coordinates: DEFAULT_COORD}) {
     return Animated.parallel([
       Animated.spring(this.longitude, {
         ...config,
@@ -87,7 +87,7 @@ export class AnimatedPoint extends AnimatedWithChildren {
     ]);
   }
 
-  timing(config = { coordinates: DEFAULT_COORD }) {
+  timing(config = {coordinates: DEFAULT_COORD}) {
     return Animated.parallel([
       Animated.timing(this.longitude, {
         ...config,
@@ -103,10 +103,7 @@ export class AnimatedPoint extends AnimatedWithChildren {
   __getValue() {
     return {
       type: 'Point',
-      coordinates: [
-        this.longitude.__getValue(),
-        this.latitude.__getValue(),
-      ],
+      coordinates: [this.longitude.__getValue(), this.latitude.__getValue()],
     };
   }
 

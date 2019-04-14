@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NativeModules, requireNativeComponent } from 'react-native';
-import { cloneReactChildrenWithProps, viewPropTypes } from '../utils';
+import {NativeModules, requireNativeComponent} from 'react-native';
+
+import {cloneReactChildrenWithProps, viewPropTypes} from '../utils';
+
 import AbstractSource from './AbstractSource';
 
 const MapboxGL = NativeModules.MGLModule;
@@ -75,7 +77,7 @@ class RasterSource extends AbstractSource {
       attribution: this.props.attribution,
     };
     return (
-      <RCTMGLRasterSource ref='nativeSource' {...props}>
+      <RCTMGLRasterSource ref="nativeSource" {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}

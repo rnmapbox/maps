@@ -38,7 +38,7 @@ class SetHeading extends React.Component {
   }
 
   onHeadingChange(index, heading) {
-    this.setState({ heading: heading });
+    this.setState({heading});
   }
 
   render() {

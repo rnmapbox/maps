@@ -1,5 +1,5 @@
 import React from 'react';
-import { Easing } from 'react-native';
+import {Easing} from 'react-native';
 import PropTypes from 'prop-types';
 
 import MapboxGL from '../../index';
@@ -32,7 +32,7 @@ class Annotation extends React.Component {
     animationEasingFunction: Easing.linear,
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     const shape = this._getShapeFromProps(props);
@@ -44,16 +44,15 @@ class Annotation extends React.Component {
     this.onPress = this.onPress.bind(this);
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     if (!Array.isArray(this.props.coordinates)) {
-      this.setState({ shape: null });
+      this.setState({shape: null});
       return;
     }
 
-    const hasCoordChanged = (
+    const hasCoordChanged =
       prevProps.coordinates[0] !== this.props.coordinates[0] ||
-      prevProps.coordinates[1] !== this.props.coordinates[1]
-    );
+      prevProps.coordinates[1] !== this.props.coordinates[1];
 
     if (!hasCoordChanged) {
       return;
@@ -63,11 +62,13 @@ class Annotation extends React.Component {
       // flush current animations
       this.state.shape.stopAnimation();
 
-      this.state.shape.timing({
-        coordinates: this.props.coordinates,
-        easing: this.props.animationEasingFunction,
-        duration: this.props.animationDuration,
-      }).start();
+      this.state.shape
+        .timing({
+          coordinates: this.props.coordinates,
+          easing: this.props.animationEasingFunction,
+          duration: this.props.animationDuration,
+        })
+        .start();
     } else if (!this.state.shape || !this.props.animated) {
       const shape = this._getShapeFromProps(this.props);
 
@@ -77,7 +78,7 @@ class Annotation extends React.Component {
     }
   }
 
-  onPress () {
+  onPress() {
     if (this.props.onPress) {
       this.props.onPress();
     }
@@ -86,10 +87,10 @@ class Annotation extends React.Component {
   _getShapeFromProps(props = {}) {
     const lng = props.coordinates[0] || 0;
     const lat = props.coordinates[1] || 0;
-    return { type: 'Point', coordinates: [lng, lat] };
+    return {type: 'Point', coordinates: [lng, lat]};
   }
 
-  get symbolStyle () {
+  get symbolStyle() {
     if (!this.props.icon) {
       return;
     }
@@ -98,7 +99,7 @@ class Annotation extends React.Component {
     });
   }
 
-  render () {
+  render() {
     if (!this.props.coordinates) {
       return null;
     }
@@ -106,13 +107,14 @@ class Annotation extends React.Component {
     return (
       <MapboxGL.Animated.ShapeSource
         id={this.props.id}
-        ref='source'
+        ref="source"
         onPress={this.onPress}
-        shape={this.state.shape}>
-
+        shape={this.state.shape}
+      >
         <MapboxGL.SymbolLayer
           id={`${this.props.id}-symbol`}
-          style={this.symbolStyle}>
+          style={this.symbolStyle}
+        >
           {this.props.children}
         </MapboxGL.SymbolLayer>
       </MapboxGL.Animated.ShapeSource>

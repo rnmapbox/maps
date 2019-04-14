@@ -1,9 +1,10 @@
 /* eslint react/prop-types:0  */
 import React from 'react';
-import { processColor } from 'react-native';
+import {processColor} from 'react-native';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
-import { getFilter } from '../utils/filterUtils';
-import { getStyleType } from '../utils/styleMap';
+
+import {getFilter} from '../utils/filterUtils';
+import {getStyleType} from '../utils/styleMap';
 import BridgeValue from '../utils/BridgeValue';
 
 class AbstractLayer extends React.PureComponent {
@@ -23,11 +24,10 @@ class AbstractLayer extends React.PureComponent {
     };
   }
 
-  getStyleTypeFormatter (styleType) {
+  getStyleTypeFormatter(styleType) {
     if (styleType === 'color') {
       return processColor;
     }
-    return;
   }
 
   getStyle() {
@@ -35,9 +35,9 @@ class AbstractLayer extends React.PureComponent {
       return;
     }
 
-    let nativeStyle = {};
+    const nativeStyle = {};
     const styleProps = Object.keys(this.props.style);
-    for (let styleProp of styleProps) {
+    for (const styleProp of styleProps) {
       const styleType = getStyleType(styleProp);
       let rawStyle = this.props.style[styleProp];
 

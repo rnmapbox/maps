@@ -42,8 +42,14 @@ export function pointAlongLine(lineString, distAlong) {
   return along(lineString, distAlong);
 }
 
-export function getOrCalculateVisibleRegion(coord, zoomLevel, width, height, nativeRegion) {
-  let region = {
+export function getOrCalculateVisibleRegion(
+  coord,
+  zoomLevel,
+  width,
+  height,
+  nativeRegion,
+) {
+  const region = {
     ne: [0, 0],
     sw: [0, 0],
   };

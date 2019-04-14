@@ -74,7 +74,7 @@ class BackgroundLayer extends AbstractLayer {
   };
 
   render() {
-    return <RCTMGLBackgroundLayer ref='nativeLayer' {...this.baseProps} />;
+    return <RCTMGLBackgroundLayer ref="nativeLayer" {...this.baseProps} />;
   }
 }
 

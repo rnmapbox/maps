@@ -1,22 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {NativeModules, requireNativeComponent} from 'react-native';
 
-import {
-  NativeModules,
-  requireNativeComponent,
-} from 'react-native';
+import locationManager from '../modules/location/locationManager';
+import {isNumber, toJSONString, viewPropTypes, existenceChange} from '../utils';
+import * as geoUtils from '../utils/geoUtils';
 
 import NativeBridgeComponent from './NativeBridgeComponent';
-import locationManager from '../modules/location/locationManager';
-
-import {
-  isNumber,
-  toJSONString,
-  viewPropTypes,
-  existenceChange,
-} from '../utils';
-
-import * as geoUtils from '../utils/geoUtils';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -28,11 +18,7 @@ class Camera extends NativeBridgeComponent {
 
     animationDuration: PropTypes.number,
 
-    animationMode: PropTypes.oneOf([
-      'flyTo',
-      'easeTo',
-      'moveTo',
-    ]),
+    animationMode: PropTypes.oneOf(['flyTo', 'easeTo', 'moveTo']),
 
     // normal
     centerCoordinate: PropTypes.arrayOf(PropTypes.number),
@@ -46,11 +32,7 @@ class Camera extends NativeBridgeComponent {
     // user tracking
     followUserLocation: PropTypes.bool,
 
-    followUserMode: PropTypes.oneOf([
-      'normal',
-      'compass',
-      'course',
-    ]),
+    followUserMode: PropTypes.oneOf(['normal', 'compass', 'course']),
 
     followZoomLevel: PropTypes.number,
     followPitch: PropTypes.number,
@@ -75,25 +57,26 @@ class Camera extends NativeBridgeComponent {
     Ease: 'easeTo',
   };
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     this._handleCameraChange(this.props, nextProps);
   }
 
-  shouldComponentUpdate () {
+  shouldComponentUpdate() {
     return false;
   }
 
-  _handleCameraChange (currentCamera, nextCamera) {
+  _handleCameraChange(currentCamera, nextCamera) {
     const hasCameraChanged = this._hasCameraChanged(currentCamera, nextCamera);
     if (!hasCameraChanged) {
       return;
     }
 
     if (currentCamera.followUserLocation && !nextCamera.followUserLocation) {
-      this.refs.camera.setNativeProps({ followUserLocation: false });
+      this.refs.camera.setNativeProps({followUserLocation: false});
       return;
-    } else if (!currentCamera.followUserLocation && nextCamera.followUserLocation) {
-      this.refs.camera.setNativeProps({ followUserLocation: true });
+    }
+    if (!currentCamera.followUserLocation && nextCamera.followUserLocation) {
+      this.refs.camera.setNativeProps({followUserLocation: true});
     }
 
     if (nextCamera.followUserLocation) {
@@ -105,7 +88,7 @@ class Camera extends NativeBridgeComponent {
       return;
     }
 
-    let cameraConfig = {
+    const cameraConfig = {
       animationMode: nextCamera.animationMode,
       animationDuration: nextCamera.animationDuration,
       zoomLevel: nextCamera.zoomLevel,
@@ -113,7 +96,10 @@ class Camera extends NativeBridgeComponent {
       heading: nextCamera.heading,
     };
 
-    if (nextCamera.bounds && this._hasBoundsChanged(currentCamera, nextCamera)) {
+    if (
+      nextCamera.bounds &&
+      this._hasBoundsChanged(currentCamera, nextCamera)
+    ) {
       cameraConfig.bounds = nextCamera.bounds;
     } else {
       cameraConfig.centerCoordinate = nextCamera.centerCoordinate;
@@ -122,7 +108,7 @@ class Camera extends NativeBridgeComponent {
     this._setCamera(cameraConfig);
   }
 
-  _hasCameraChanged (currentCamera, nextCamera) {
+  _hasCameraChanged(currentCamera, nextCamera) {
     const c = currentCamera;
     const n = nextCamera;
 
@@ -145,10 +131,14 @@ class Camera extends NativeBridgeComponent {
       c.animationMode !== n.animationMode ||
       c.animationDuration !== n.animationDuration;
 
-    return hasDefaultPropsChanged || hasFollowPropsChanged || hasAnimationPropsChanged;
+    return (
+      hasDefaultPropsChanged ||
+      hasFollowPropsChanged ||
+      hasAnimationPropsChanged
+    );
   }
 
-  _hasCenterCoordinateChanged (currentCamera, nextCamera) {
+  _hasCenterCoordinateChanged(currentCamera, nextCamera) {
     const cC = currentCamera.centerCoordinate;
     const nC = nextCamera.centerCoordinate;
 
@@ -160,12 +150,14 @@ class Camera extends NativeBridgeComponent {
       return false;
     }
 
-    const isLngDiff = currentCamera.centerCoordinate[0] !== nextCamera.centerCoordinate[0];
-    const isLatDiff = currentCamera.centerCoordinate[1] !== nextCamera.centerCoordinate[1]
+    const isLngDiff =
+      currentCamera.centerCoordinate[0] !== nextCamera.centerCoordinate[0];
+    const isLatDiff =
+      currentCamera.centerCoordinate[1] !== nextCamera.centerCoordinate[1];
     return isLngDiff || isLatDiff;
   }
 
-  _hasBoundsChanged (currentCamera, nextCamera) {
+  _hasBoundsChanged(currentCamera, nextCamera) {
     const cB = currentCamera.bounds;
     const nB = nextCamera.bounds;
 
@@ -192,14 +184,14 @@ class Camera extends NativeBridgeComponent {
     if (config.stops) {
       cameraConfig.stops = [];
 
-      for (let stop of config.stops) {
+      for (const stop of config.stops) {
         cameraConfig.stops.push(this._createStopConfig(stop));
       }
     } else {
       cameraConfig = this._createStopConfig(config);
     }
 
-    this.refs.camera.setNativeProps({ stop: cameraConfig });
+    this.refs.camera.setNativeProps({stop: cameraConfig});
   }
 
   _createStopConfig(config = {}) {
@@ -207,7 +199,7 @@ class Camera extends NativeBridgeComponent {
       return null;
     }
 
-    let stopConfig = {
+    const stopConfig = {
       mode: this._getNativeCameraMode(config),
       pitch: config.pitch,
       heading: config.heading,
@@ -252,7 +244,7 @@ class Camera extends NativeBridgeComponent {
   }
 
   _getAlignment(coordinate, zoomLevel) {
-    let region = geoUtils.getOrCalculateVisibleRegion(
+    const region = geoUtils.getOrCalculateVisibleRegion(
       coordinate,
       zoomLevel,
       this.props._mapWidth,
@@ -265,15 +257,23 @@ class Camera extends NativeBridgeComponent {
     const bottomLeftCorner = [region.sw[0], region.sw[1]];
 
     const verticalLineString = geoUtils.makeLineString([
-      topLeftCorner, bottomLeftCorner,
+      topLeftCorner,
+      bottomLeftCorner,
     ]);
 
     const horizontalLineString = geoUtils.makeLineString([
-      topLeftCorner, topRightCorner,
+      topLeftCorner,
+      topRightCorner,
     ]);
 
-    const distVertical = geoUtils.calculateDistance(topLeftCorner, bottomLeftCorner);
-    const distHorizontal = geoUtils.calculateDistance(topLeftCorner, topRightCorner);
+    const distVertical = geoUtils.calculateDistance(
+      topLeftCorner,
+      bottomLeftCorner,
+    );
+    const distHorizontal = geoUtils.calculateDistance(
+      topLeftCorner,
+      topRightCorner,
+    );
 
     const verticalPoint = geoUtils.pointAlongLine(
       verticalLineString,
@@ -288,18 +288,19 @@ class Camera extends NativeBridgeComponent {
     return [verticalPoint[0], horizontalPoint[1]];
   }
 
-  render () {
+  render() {
     const props = Object.assign({}, this.props);
 
     return (
       <RCTMGLCamera
-        ref='camera'
+        ref="camera"
         followUserLocation={this.props.followUserLocation}
         followUserMode={this.props.followUserMode}
         followUserPitch={this.props.followUserPitch}
         followHeading={this.props.followHeading}
         followZoomLevel={this.props.followZoomLevel}
-        stop={this._createStopConfig(props)} />
+        stop={this._createStopConfig(props)}
+      />
     );
   }
 }

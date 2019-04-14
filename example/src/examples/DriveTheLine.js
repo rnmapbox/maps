@@ -5,9 +5,7 @@ import {Button} from 'react-native-elements';
 import {lineString as makeLineString} from '@turf/helpers';
 
 import RouteSimulator from '../utils/RouteSimulator';
-
-import { directionsClient } from '../MapboxClient';
-
+import {directionsClient} from '../MapboxClient';
 import sheet from '../styles/sheet';
 import {SF_OFFICE_COORDINATE} from '../utils';
 
@@ -84,8 +82,8 @@ class DriveTheLine extends React.Component {
   async componentDidMount() {
     const reqOptions = {
       waypoints: [
-        { coordinates: SF_OFFICE_COORDINATE },
-        { coordinates: SF_ZOO_COORDINATE },
+        {coordinates: SF_OFFICE_COORDINATE},
+        {coordinates: SF_ZOO_COORDINATE},
       ],
       profile: 'walking',
       geometries: 'geojson',

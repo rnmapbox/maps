@@ -33,7 +33,7 @@ import snapshotManager from './modules/snapshot/snapshotManager';
 // helpers
 import AnimatedPoint from './utils/AnimatedPoint';
 
-let MapboxGL = { ...NativeModules.MGLModule };
+const MapboxGL = {...NativeModules.MGLModule};
 
 // static methods
 MapboxGL.requestAndroidLocationPermissions = async function() {

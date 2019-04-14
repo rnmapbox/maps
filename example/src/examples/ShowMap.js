@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert } from 'react-native';
+import {Alert} from 'react-native';
 import MapboxGL from '@react-native-mapbox/maps';
 
 import sheet from '../styles/sheet';
@@ -45,7 +45,7 @@ class ShowMap extends React.Component {
     this.setState({styleURL});
   }
 
-  onUserMarkerPress () {
+  onUserMarkerPress() {
     Alert.alert('You pressed on the user location annotation');
   }
 
@@ -59,15 +59,11 @@ class ShowMap extends React.Component {
       >
         <MapboxGL.MapView
           styleURL={this.state.styleURL}
-          style={sheet.matchParent}>
+          style={sheet.matchParent}
+        >
+          <MapboxGL.Camera followZoomLevel={12} followUserLocation />
 
-          <MapboxGL.Camera
-            followZoomLevel={12}
-            followUserLocation />
-
-          <MapboxGL.UserLocation
-            onPress={this.onUserMarkerPress} />
-
+          <MapboxGL.UserLocation onPress={this.onUserMarkerPress} />
         </MapboxGL.MapView>
       </TabBarPage>
     );

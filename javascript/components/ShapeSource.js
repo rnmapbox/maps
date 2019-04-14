@@ -2,13 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {NativeModules, requireNativeComponent} from 'react-native';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
-import AbstractSource from './AbstractSource';
+
 import {
   toJSONString,
   cloneReactChildrenWithProps,
   viewPropTypes,
   isFunction,
 } from '../utils';
+
+import AbstractSource from './AbstractSource';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -107,7 +109,7 @@ class ShapeSource extends AbstractSource {
   };
 
   setNativeProps(props) {
-    let shallowProps = Object.assign({}, props);
+    const shallowProps = Object.assign({}, props);
 
     // Adds support for Animated
     if (shallowProps.shape && typeof shallowProps !== 'string') {
@@ -173,7 +175,7 @@ class ShapeSource extends AbstractSource {
     };
 
     return (
-      <RCTMGLShapeSource ref='nativeSource' {...props}>
+      <RCTMGLShapeSource ref="nativeSource" {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}

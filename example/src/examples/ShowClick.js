@@ -67,9 +67,7 @@ class ShowClick extends React.Component {
   render() {
     return (
       <Page {...this.props}>
-        <MapboxGL.MapView
-          style={sheet.matchParent}
-          onPress={this.onPress}>
+        <MapboxGL.MapView style={sheet.matchParent} onPress={this.onPress}>
           <MapboxGL.Camera centerCoordinate={DEFAULT_CENTER_COORDINATE} />
         </MapboxGL.MapView>
         {this.renderLastClicked()}

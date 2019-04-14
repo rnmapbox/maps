@@ -61,7 +61,7 @@ class FlyTo extends React.Component {
   }
 
   onFlyToPress(i) {
-    this.setState({ location: this._flyToOptions[i].data });
+    this.setState({location: this._flyToOptions[i].data});
   }
 
   onFlyToComplete() {

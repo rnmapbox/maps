@@ -1,15 +1,7 @@
 import React from 'react';
-import MapboxGL from '@mapbox/react-native-mapbox-gl';
-
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
-
-import { Icon } from 'react-native-elements';
+import MapboxGL from '@react-native-mapbox/maps';
+import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import {Icon} from 'react-native-elements';
 
 // components
 import MapHeader from '../examples/common/MapHeader';
@@ -136,7 +128,7 @@ class Home extends React.Component {
     this.props.navigation.navigate('Demo', Examples[activeExamplePosition]);
   }
 
-  renderItem({ item, index }) {
+  renderItem({item, index}) {
     return (
       <View style={styles.exampleListItemBorder}>
         <TouchableOpacity onPress={() => this.onExamplePress(index)}>
@@ -158,7 +150,7 @@ class Home extends React.Component {
           <FlatList
             style={styles.exampleList}
             data={Examples}
-            keyExtractor={(item) => item.label}
+            keyExtractor={item => item.label}
             renderItem={this.renderItem}
           />
         </View>

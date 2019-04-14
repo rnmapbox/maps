@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import {View} from 'react-native';
 import PropTypes from 'prop-types';
 import {NativeModules, requireNativeComponent} from 'react-native';
 
@@ -84,7 +84,7 @@ class SymbolLayer extends AbstractLayer {
       return isSnapshot;
     }
 
-    React.Children.forEach(this.props.children, (child) => {
+    React.Children.forEach(this.props.children, child => {
       if (child.type === View) {
         isSnapshot = true;
       }
@@ -101,9 +101,7 @@ class SymbolLayer extends AbstractLayer {
     };
 
     return (
-      <RCTMGLSymbolLayer {...props}>
-        {this.props.children}
-      </RCTMGLSymbolLayer>
+      <RCTMGLSymbolLayer {...props}>{this.props.children}</RCTMGLSymbolLayer>
     );
   }
 }
@@ -112,7 +110,7 @@ const RCTMGLSymbolLayer = requireNativeComponent(
   NATIVE_MODULE_NAME,
   SymbolLayer,
   {
-    nativeOnly: { reactStyle: true, snapshot: true },
+    nativeOnly: {reactStyle: true, snapshot: true},
   },
 );
 

@@ -17,11 +17,10 @@ import {
   isAndroid,
   viewPropTypes,
 } from '../utils';
+import {getFilter} from '../utils/filterUtils';
 
 import NativeBridgeComponent from './NativeBridgeComponent';
 import Camera from './Camera';
-
-import { getFilter } from '../utils/filterUtils';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -693,14 +692,14 @@ class MapView extends NativeBridgeComponent {
     if (isFunction(this.props.onRegionWillChange)) {
       this.props.onRegionWillChange(payload);
     }
-    this.setState({ isUserInteraction: payload.properties.isUserInteraction });
+    this.setState({isUserInteraction: payload.properties.isUserInteraction});
   }
 
   _onRegionDidChange(payload) {
     if (isFunction(this.props.onRegionDidChange)) {
       this.props.onRegionDidChange(payload);
     }
-    this.setState({ region: payload });
+    this.setState({region: payload});
   }
 
   _onChange(e) {

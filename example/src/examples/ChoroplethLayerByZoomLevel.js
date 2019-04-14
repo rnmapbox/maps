@@ -74,12 +74,13 @@ class ChoroplethLayerByZoomLevel extends React.PureComponent {
       <Page {...this.props}>
         <MapboxGL.MapView
           styleURL={MapboxGL.StyleURL.Light}
-          style={sheet.matchParent}>
-
+          style={sheet.matchParent}
+        >
           <MapboxGL.Camera
             centerCoordinate={[-98, 38.88]}
             zoomLevel={3}
-            minZoomLevel={3} />
+            minZoomLevel={3}
+          />
 
           <MapboxGL.VectorSource
             id="population"

@@ -7,12 +7,11 @@ import {
   Text,
   TouchableOpacity,
   View,
-  YellowBox
+  YellowBox,
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 import SafeAreaView from 'react-native-safe-area-view';
-
-import { createStackNavigator } from 'react-navigation';
+import {createStackNavigator} from 'react-navigation';
 import CardStackStyleInterpolator from 'react-navigation-stack/dist/views/StackView/StackViewStyleInterpolator';
 
 // Styles
@@ -27,7 +26,10 @@ import Home from './scenes/Home';
 import Demo from './scenes/Demo';
 
 // :(
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+YellowBox.ignoreWarnings([
+  'Warning: isMounted(...) is deprecated',
+  'Module RCTImageLoader',
+]);
 
 const styles = StyleSheet.create({
   noPermissionsText: {

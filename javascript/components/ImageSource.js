@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { requireNativeComponent } from 'react-native';
-import AbstractSource from './AbstractSource';
+import {requireNativeComponent} from 'react-native';
+
 import {
   cloneReactChildrenWithProps,
   viewPropTypes,
   isNumber,
   resolveImagePath,
 } from '../utils';
+
+import AbstractSource from './AbstractSource';
 
 export const NATIVE_MODULE_NAME = 'RCTMGLImageSource';
 
@@ -63,7 +65,7 @@ class ImageSource extends AbstractSource {
     };
 
     return (
-      <RCTMGLImageSource ref='nativeSource' {...props}>
+      <RCTMGLImageSource ref="nativeSource" {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}

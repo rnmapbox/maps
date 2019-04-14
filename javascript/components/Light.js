@@ -30,7 +30,7 @@ class Light extends AbstractLayer {
   render() {
     return (
       <RCTMGLLight
-        ref='nativeLight'
+        ref="nativeLight"
         {...this.props}
         style={undefined}
         reactStyle={this.getStyle()}

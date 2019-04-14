@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {NativeModules, requireNativeComponent} from 'react-native';
 
-import { NativeModules, requireNativeComponent } from 'react-native';
-import { viewPropTypes } from '../utils';
+import {viewPropTypes} from '../utils';
+import locationManager from '../modules/location/locationManager';
 
 import Annotation from './annotations/Annotation';
 import CircleLayer from './CircleLayer';
-import locationManager from '../modules/location/locationManager';
 
 const mapboxBlue = 'rgba(51, 181, 229, 100)';
 
@@ -33,19 +33,22 @@ const layerStyles = {
 
 const normalIcon = [
   <CircleLayer
-    key='mapboxUserLocationPluseCircle'
-    id='mapboxUserLocationPluseCircle'
-    style={layerStyles.normal.pluse} />,
+    key="mapboxUserLocationPluseCircle"
+    id="mapboxUserLocationPluseCircle"
+    style={layerStyles.normal.pluse}
+  />,
   <CircleLayer
-    key='mapboxUserLocationWhiteCircle'
-    id='mapboxUserLocationWhiteCircle'
-    style={layerStyles.normal.background} />,
+    key="mapboxUserLocationWhiteCircle"
+    id="mapboxUserLocationWhiteCircle"
+    style={layerStyles.normal.background}
+  />,
   <CircleLayer
-    key='mapboxUserLocationBlueCicle'
-    id='mapboxUserLocationBlueCicle'
-    aboveLayerID='mapboxUserLocationWhiteCircle'
-    style={layerStyles.normal.foreground} />
-]
+    key="mapboxUserLocationBlueCicle"
+    id="mapboxUserLocationBlueCicle"
+    aboveLayerID="mapboxUserLocationWhiteCircle"
+    style={layerStyles.normal.foreground}
+  />,
+];
 
 const compassIcon = null;
 const navigationIcon = null;
@@ -54,12 +57,7 @@ class UserLocation extends React.Component {
   static propTypes = {
     animated: PropTypes.bool,
 
-    renderMode: PropTypes.oneOf([
-      'normal',
-      'compass',
-      'navigation',
-      'custom',
-    ]),
+    renderMode: PropTypes.oneOf(['normal', 'compass', 'navigation', 'custom']),
 
     visible: PropTypes.bool,
 
@@ -98,7 +96,7 @@ class UserLocation extends React.Component {
     this._onLocationUpdate = this._onLocationUpdate.bind(this);
   }
 
-  async componentDidMount () {
+  async componentDidMount() {
     const lastKnownLocation = await locationManager.getLastKnownLocation();
 
     if (lastKnownLocation) {
@@ -110,7 +108,7 @@ class UserLocation extends React.Component {
     locationManager.addListener(this._onLocationUpdate);
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     locationManager.removeListener(this._onLocationUpdate);
   }
 
@@ -144,18 +142,21 @@ class UserLocation extends React.Component {
     }
   }
 
-  render () {
+  render() {
     if (!this.props.visible || !this.state.coordinates) {
       return null;
     }
 
-    let children = this.props.children ? this.props.children : this.userIconLayers;
+    const children = this.props.children
+      ? this.props.children
+      : this.userIconLayers;
     return (
       <Annotation
         animated={this.props.animated}
-        id='mapboxUserLocation'
+        id="mapboxUserLocation"
         onPress={this.props.onPress}
-        coordinates={this.state.coordinates}>
+        coordinates={this.state.coordinates}
+      >
         {children}
       </Annotation>
     );
