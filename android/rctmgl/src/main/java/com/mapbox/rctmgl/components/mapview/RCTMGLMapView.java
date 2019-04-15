@@ -26,8 +26,9 @@ import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.annotations.Marker;
-import com.mapbox.mapboxsdk.annotations.MarkerView;
-import com.mapbox.mapboxsdk.annotations.MarkerViewManager;
+import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.markerview.MarkerView;
+import com.mapbox.mapboxsdk.plugins.markerview.MarkerViewManager;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -40,7 +41,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.UiSettings;
 import com.mapbox.mapboxsdk.plugins.localization.LocalizationPlugin;
-import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
+// import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.Property;
@@ -82,6 +83,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+
 /**
  * Created by nickitaliano on 8/18/17.
  */
@@ -89,7 +91,12 @@ import javax.annotation.Nullable;
 @SuppressWarnings({"MissingPermission"})
 public class RCTMGLMapView extends MapView implements
         OnMapReadyCallback, MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener,
-        MapView.OnMapChangedListener, MapboxMap.OnMarkerViewClickListener {
+        /* MapView.OnMapChangedListener*/
+        MapView.OnCameraDidChangeListener, MapView.OnDidFailLoadingMapListener,
+        MapView.OnDidFinishLoadingMapListener, MapView.OnWillStartRenderingFrameListener,
+        MapView.OnDidFinishRenderingFrameListener, MapView.OnWillStartRenderingMapListener,
+        MapView.OnDidFinishRenderingMapListener, MapView.OnDidFinishLoadingStyleListener,
+        MapboxMap.OnMarkerClickListener {
     public static final String LOG_TAG = RCTMGLMapView.class.getSimpleName();
 
     private RCTMGLMapViewManager mManager;
@@ -121,6 +128,8 @@ public class RCTMGLMapView extends MapView implements
     private Boolean mCompassEnabled;
     private Boolean mZoomEnabled;
 
+    private MarkerViewManager markerViewManager;
+
     private long mActiveMarkerID = -1;
 
     private ReadableArray mInsets;
@@ -148,7 +157,16 @@ public class RCTMGLMapView extends MapView implements
 
         setLifecycleListeners();
 
-        addOnMapChangedListener(this);
+//        addOnMapChangedListener(this);
+        addOnCameraDidChangeListener(this);
+        addOnDidFailLoadingMapListener(this);
+        addOnDidFinishLoadingMapListener(this);
+
+        addOnWillStartRenderingFrameListener(this);
+        addOnDidFinishRenderingFrameListener(this);
+        addOnWillStartRenderingMapListener(this);
+        addOnDidFinishRenderingMapListener(this);
+        addOnDidFinishLoadingStyleListener(this);
     }
 
     @Override
@@ -330,11 +348,16 @@ public class RCTMGLMapView extends MapView implements
     public void onMapReady(final MapboxMap mapboxMap) {
         mMap = mapboxMap;
 
+        mMap.setStyle(new Style.Builder().fromUrl(mStyleURL));
+
         reflow(); // the internal widgets(compass, attribution, etc) need this to position themselves correctly
 
-        final MarkerViewManager markerViewManager = mMap.getMarkerViewManager();
-        markerViewManager.addMarkerViewAdapter(new RCTMGLPointAnnotationAdapter(this, mContext));
-        markerViewManager.setOnMarkerViewClickListener(this);
+        mMap.setOnMarkerClickListener(this);
+
+        markerViewManager = new MarkerViewManager(this, mMap); /* mMap.getMarkerViewManager(); */
+        // FMTODO markerViewManager.addMarker(new RCTMGLPointAnnotationAdapter(this, mContext));
+        // FMTODO markerViewManager.addMarkerViewAdapter(new RCTMGLPointAnnotationAdapter(this, mContext));
+        // FMTODO markerViewManager.setOnMarkerViewClickListener(this);
         mMap.setInfoWindowAdapter(new RCTMGLCalloutAdapter(this));
 
         mMap.addOnMapClickListener(this);
@@ -353,16 +376,18 @@ public class RCTMGLMapView extends MapView implements
             mQueuedFeatures = null;
         }
 
+        /* FMTODO
         if (mPointAnnotations.size() > 0) {
             markerViewManager.invalidateViewMarkersInVisibleRegion();
-        }
+        } */
 
         mMap.addOnCameraIdleListener(new MapboxMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
+                /* FMTODO
                 if (mPointAnnotations.size() > 0) {
                     markerViewManager.invalidateViewMarkersInVisibleRegion();
-                }
+                } */
 
                 // if we have onCameraIdle during mCameraChangeTracker.isAnimating()
                 // it's a 'fling animation' after user gesture
@@ -450,7 +475,7 @@ public class RCTMGLMapView extends MapView implements
     }
 
     @Override
-    public void onMapClick(@NonNull LatLng point) {
+    public boolean onMapClick(@NonNull LatLng point) {
         boolean isEventCaptured = false;
 
         if (mActiveMarkerID != -1) {
@@ -464,7 +489,7 @@ public class RCTMGLMapView extends MapView implements
         }
 
         if (isEventCaptured) {
-            return;
+            return true;
         }
 
         PointF screenPoint = mMap.getProjection().toScreenLocation(point);
@@ -499,23 +524,25 @@ public class RCTMGLMapView extends MapView implements
             RCTSource source = getTouchableSourceWithHighestZIndex(hitTouchableSources);
             if (source != null && source.hasPressListener()) {
                 source.onPress(hits.get(source.getID()));
-                return;
+                return true;
             }
         }
 
         MapClickEvent event = new MapClickEvent(this, point, screenPoint);
         mManager.handleEvent(event);
+        return false;
     }
 
     @Override
-    public void onMapLongClick(@NonNull LatLng point) {
+    public boolean onMapLongClick(@NonNull LatLng point) {
         PointF screenPoint = mMap.getProjection().toScreenLocation(point);
         MapClickEvent event = new MapClickEvent(this, point, screenPoint, EventTypes.MAP_LONG_CLICK);
         mManager.handleEvent(event);
+        return false;
     }
 
     @Override
-    public boolean onMarkerClick(@NonNull Marker marker, @NonNull View view, @NonNull MapboxMap.MarkerViewAdapter adapter) {
+    public boolean onMarkerClick(@NonNull Marker marker) {
         final long selectedMarkerID = marker.getId();
 
         RCTMGLPointAnnotation activeAnnotation = null;
@@ -547,27 +574,27 @@ public class RCTMGLMapView extends MapView implements
         final long id = annotation.getMapboxID();
 
         if (id != mActiveMarkerID) {
-            final MarkerView markerView = annotation.getMarker();
-            mMap.selectMarker(markerView);
+            final Marker marker = annotation.getMarker();
+            mMap.selectMarker(marker);
             annotation.onSelect(true);
             mActiveMarkerID = id;
 
             RCTMGLCallout calloutView = annotation.getCalloutView();
-            if (!markerView.isInfoWindowShown() && calloutView != null) {
-                markerView.showInfoWindow(mMap, this);
+            if (!marker.isInfoWindowShown() && calloutView != null) {
+                marker.showInfoWindow(mMap, this);
             }
         }
     }
 
     public boolean deselectAnnotation(RCTMGLPointAnnotation annotation) {
-        MarkerView markerView = annotation.getMarker();
+        Marker marker = annotation.getMarker();
 
         RCTMGLCallout calloutView = annotation.getCalloutView();
         if (calloutView != null) {
-            markerView.hideInfoWindow();
+            marker.hideInfoWindow();
         }
 
-        mMap.deselectMarker(markerView);
+        mMap.deselectMarker(marker);
         mActiveMarkerID = -1;
         annotation.onDeselect();
 
@@ -575,6 +602,61 @@ public class RCTMGLMapView extends MapView implements
     }
 
     @Override
+    public void onCameraDidChange(boolean animated) {
+        mCameraChangeTracker.setIsAnimating(animated);
+    }
+
+    @Override
+    public void onDidFailLoadingMap(String errorMessage) {
+        handleMapChangedEvent(EventTypes.DID_FAIL_LOADING_MAP);
+    }
+
+    @Override
+    public void onDidFinishLoadingMap() {
+        handleMapChangedEvent(EventTypes.DID_FINISH_LOADING_MAP);
+    }
+
+    @Override
+    public void onWillStartRenderingFrame() {
+        handleMapChangedEvent(EventTypes.WILL_START_RENDERING_FRAME);
+    }
+
+    @Override
+    public void onDidFinishRenderingFrame(boolean fully) {
+        if (fully) {
+            handleMapChangedEvent(EventTypes.DID_FINISH_RENDERING_FRAME_FULLY);
+        } else {
+            handleMapChangedEvent(EventTypes.DID_FINISH_RENDERING_FRAME);
+        }
+    }
+
+    @Override
+    public void onWillStartRenderingMap() {
+        handleMapChangedEvent(EventTypes.WILL_START_RENDERING_MAP);
+    }
+
+    @Override
+    public void onDidFinishRenderingMap(boolean fully) {
+        if (fully) {
+            if (mPreRenderMethodMap.size() > 0) {
+                for (Integer methodID : mPreRenderMethodMap.keySet()) {
+                    mManager.receiveCommand(this, methodID, mPreRenderMethodMap.get(methodID));
+                }
+                mPreRenderMethodMap.clear();
+            }
+            handleMapChangedEvent(EventTypes.DID_FINISH_RENDERING_MAP_FULLY);
+        } else {
+            handleMapChangedEvent(EventTypes.DID_FINISH_RENDERING_MAP);
+        }
+    }
+
+    @Override
+    public void onDidFinishLoadingStyle() {
+        handleMapChangedEvent(EventTypes.DID_FINISH_LOADING_STYLE);
+    }
+
+
+    /*
     public void onMapChanged(int changed) {
         String eventType = null;
 
@@ -584,36 +666,36 @@ public class RCTMGLMapView extends MapView implements
             case REGION_DID_CHANGE:
                 break;
             case REGION_WILL_CHANGE_ANIMATED:
-                mCameraChangeTracker.setIsAnimating(true);
+                mCameraChangeTracker.setIsAnimating(true); //*
                 break;
             case REGION_DID_CHANGE_ANIMATED:
-                mCameraChangeTracker.setIsAnimating(false);
+                mCameraChangeTracker.setIsAnimating(false); //*
                 break;
             case WILL_START_LOADING_MAP:
                 eventType = EventTypes.WILL_START_LOADING_MAP;
                 break;
             case DID_FAIL_LOADING_MAP:
-                eventType = EventTypes.DID_FAIL_LOADING_MAP;
+                eventType = EventTypes.DID_FAIL_LOADING_MAP; //*
                 break;
             case DID_FINISH_LOADING_MAP:
-                eventType = EventTypes.DID_FINISH_LOADING_MAP;
+                eventType = EventTypes.DID_FINISH_LOADING_MAP; //*
                 break;
             case WILL_START_RENDERING_FRAME:
-                eventType = EventTypes.WILL_START_RENDERING_FRAME;
+                eventType = EventTypes.WILL_START_RENDERING_FRAME; //*
                 break;
             case DID_FINISH_RENDERING_FRAME:
-                eventType = EventTypes.DID_FINISH_RENDERING_FRAME;
+                eventType = EventTypes.DID_FINISH_RENDERING_FRAME; //*
                 break;
             case DID_FINISH_RENDERING_FRAME_FULLY_RENDERED:
-                eventType = EventTypes.DID_FINISH_RENDERING_FRAME_FULLY;
+                eventType = EventTypes.DID_FINISH_RENDERING_FRAME_FULLY; //*
                 break;
             case WILL_START_RENDERING_MAP:
-                eventType = EventTypes.WILL_START_RENDERING_MAP;
+                eventType = EventTypes.WILL_START_RENDERING_MAP; // *
                 break;
             case DID_FINISH_RENDERING_MAP:
-                eventType = EventTypes.DID_FINISH_RENDERING_MAP;
+                eventType = EventTypes.DID_FINISH_RENDERING_MAP; // *
                 break;
-            case DID_FINISH_RENDERING_MAP_FULLY_RENDERED:
+            case DID_FINISH_RENDERING_MAP_FULLY_RENDERED: // * FMTODO no equivalent
                 if (mPreRenderMethodMap.size() > 0) {
                     for (Integer methodID : mPreRenderMethodMap.keySet()) {
                         mManager.receiveCommand(this, methodID, mPreRenderMethodMap.get(methodID));
@@ -623,14 +705,14 @@ public class RCTMGLMapView extends MapView implements
                 eventType = EventTypes.DID_FINISH_RENDERING_MAP_FULLY;
                 break;
             case DID_FINISH_LOADING_STYLE:
-                eventType = EventTypes.DID_FINISH_LOADING_STYLE;
+                eventType = EventTypes.DID_FINISH_LOADING_STYLE; //*
                 break;
         }
 
         if (eventType != null) {
             handleMapChangedEvent(eventType);
         }
-    }
+    } */
 
     //endregion
 
@@ -642,9 +724,9 @@ public class RCTMGLMapView extends MapView implements
         if (mMap != null) {
             removeAllSourcesFromMap();
 
-            mMap.setStyle(styleURL, new MapboxMap.OnStyleLoadedListener() {
+            mMap.setStyle(styleURL, new Style.OnStyleLoaded() {
                 @Override
-                public void onStyleLoaded(String style) {
+                public void onStyleLoaded(@NonNull Style style) {
                     addAllSourcesToMap();
                 }
             });
@@ -811,8 +893,6 @@ public class RCTMGLMapView extends MapView implements
     }
 
     public void init() {
-        setStyleUrl(mStyleURL);
-
         // very important, this will make sure that mapbox-gl-native initializes the gl surface
         // https://github.com/mapbox/react-native-mapbox-gl/issues/955
         getViewTreeObserver().dispatchOnGlobalLayout();
@@ -989,7 +1069,7 @@ public class RCTMGLMapView extends MapView implements
         }
 
         // getLayers returns from back(N - 1) to front(0)
-        List<Layer> mapboxLayers = mMap.getLayers();
+        List<Layer> mapboxLayers = mMap.getStyle().getLayers();
         for (int i = mapboxLayers.size() - 1; i >= 0; i--) {
             Layer mapboxLayer = mapboxLayers.get(i);
 

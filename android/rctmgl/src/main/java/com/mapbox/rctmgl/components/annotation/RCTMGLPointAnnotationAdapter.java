@@ -22,19 +22,20 @@ import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
  * Created by nickitaliano on 9/27/17.
  */
 
-public class RCTMGLPointAnnotationAdapter extends MapboxMap.MarkerViewAdapter<RCTMGLPointAnnotation.CustomView> {
+public class RCTMGLPointAnnotationAdapter /* extends MapboxMap.MarkerViewAdapter<RCTMGLPointAnnotation.CustomView> */ {
+    /*
     private RCTMGLMapView mMapView;
     private LayoutInflater mInflater;
 
     public RCTMGLPointAnnotationAdapter(RCTMGLMapView mapView, Context context) {
-        super(context, RCTMGLPointAnnotation.CustomView.class);
+        super(context, RCTMGLPointAnnotation.CustomMarker.class);
         mMapView = mapView;
         mInflater = LayoutInflater.from(context);
     }
 
     @Nullable
     @Override
-    public View getView(@NonNull RCTMGLPointAnnotation.CustomView customAnnotationView, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(@NonNull RCTMGLPointAnnotation.CustomMarker customAnnotationView, @Nullable View convertView, @NonNull ViewGroup parent) {
         final RCTMGLPointAnnotation pointAnnotation = mMapView.getPointAnnotationByID(customAnnotationView.getAnnotationID());
 
         if (pointAnnotation == null) {
@@ -97,5 +98,5 @@ public class RCTMGLPointAnnotationAdapter extends MapboxMap.MarkerViewAdapter<RC
     private static class ViewHolder {
         ImageView imageView;
         LinearLayout customLayout;
-    }
+    }*/
 }

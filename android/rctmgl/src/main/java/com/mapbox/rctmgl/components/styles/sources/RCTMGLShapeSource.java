@@ -55,7 +55,7 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         // add all images from drawables folder
         if (hasNativeImages()) {
             for (Map.Entry<String, BitmapDrawable> nativeImage : mNativeImages) {
-                map.addImage(nativeImage.getKey(),  nativeImage.getValue().getBitmap());
+                map.getStyle().addImage(nativeImage.getKey(),  nativeImage.getValue().getBitmap());
             }
         }
 
@@ -86,13 +86,13 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
 
         if (hasImages()) {
             for (Map.Entry<String, String> image : mImages) {
-                mMap.removeImage(image.getKey());
+                mMap.getStyle().removeImage(image.getKey());
             }
         }
 
         if (hasNativeImages()) {
             for (Map.Entry<String, BitmapDrawable> image : mNativeImages) {
-                mMap.removeImage(image.getKey());
+                mMap.getStyle().removeImage(image.getKey());
             }
         }
     }

@@ -30,7 +30,7 @@ public class RCTMGLLight extends AbstractMapFeature {
     @Override
     public void addToMap(RCTMGLMapView mapView) {
         mMap = mapView.getMapboxMap();
-        setLight(mMap.getLight());
+        setLight(mMap.getStyle().getLight());
     }
 
     @Override
@@ -42,7 +42,7 @@ public class RCTMGLLight extends AbstractMapFeature {
         mReactStyle = reactStyle;
 
         if (mMap != null) {
-            setLight(mMap.getLight());
+            setLight(mMap.getStyle().getLight());
         }
     }
 

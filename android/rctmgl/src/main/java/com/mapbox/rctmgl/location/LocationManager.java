@@ -2,14 +2,20 @@ package com.mapbox.rctmgl.location;
 
 import android.content.Context;
 import android.location.Location;
+import android.os.Looper;
 import android.util.Log;
 
 import com.mapbox.android.core.location.LocationEngine;
+import com.mapbox.android.core.location.LocationEngineCallback;
 
+/*
 import com.mapbox.android.core.location.LocationEngineListener;
 import com.mapbox.android.core.location.LocationEnginePriority;
+*/
 
 import com.mapbox.android.core.location.LocationEngineProvider;
+import com.mapbox.android.core.location.LocationEngineRequest;
+import com.mapbox.android.core.location.LocationEngineResult;
 import com.mapbox.android.core.permissions.PermissionsManager;
 
 import java.lang.ref.WeakReference;
@@ -22,12 +28,20 @@ import java.util.Locale;
  */
 
 @SuppressWarnings({"MissingPermission"})
-public class LocationManager implements LocationEngineListener {
+public class LocationManager implements LocationEngineCallback<LocationEngineResult> {
+    static final long DEFAULT_FASTEST_INTERVAL_MILLIS = 1000;
+    static final long DEFAULT_INTERVAL_MILLIS = 1000;
+
     public static final String LOG_TAG = LocationManager.class.getSimpleName();
 
     private LocationEngine locationEngine;
     private Context context;
     private List<OnUserLocationChange> listeners = new ArrayList<>();
+
+    private boolean isActive = false;
+    private Location lastLocation = null;
+
+    private LocationEngineRequest locationEngineRequest = null;
 
     private static WeakReference<LocationManager> INSTANCE = null;
 
@@ -44,11 +58,14 @@ public class LocationManager implements LocationEngineListener {
 
     private LocationManager(Context context) {
         this.context = context;
-        LocationEngineProvider locationEngineProvider = new LocationEngineProvider(context.getApplicationContext());
-        locationEngine = locationEngineProvider.obtainBestLocationEngineAvailable();
-        locationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
-        locationEngine.addLocationEngineListener(this);
-        locationEngine.setFastestInterval(1000);
+        locationEngine = LocationEngineProvider.getBestLocationEngine(context.getApplicationContext());
+        // locationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
+        locationEngineRequest = new LocationEngineRequest.Builder(DEFAULT_INTERVAL_MILLIS)
+                .setFastestInterval(DEFAULT_FASTEST_INTERVAL_MILLIS)
+                .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
+                .build();
+        // locationEngine.addLocationEngineListener(this);
+        //locationEngine.setFastestInterval(1000);
     }
 
     public void addLocationListener(OnUserLocationChange listener) {
@@ -67,12 +84,17 @@ public class LocationManager implements LocationEngineListener {
         if (!PermissionsManager.areLocationPermissionsGranted(context)) {
             return;
         }
-        locationEngine.activate();
+        locationEngine.requestLocationUpdates(
+                locationEngineRequest,
+                this,
+                Looper.getMainLooper()
+        );
+        isActive = true;
     }
 
     public void disable() {
-        locationEngine.removeLocationUpdates();
-        locationEngine.deactivate();
+        locationEngine.removeLocationUpdates(this);
+        isActive = false;
     }
 
     public void dispose() {
@@ -80,43 +102,41 @@ public class LocationManager implements LocationEngineListener {
             return;
         }
         disable();
-        locationEngine.removeLocationUpdates();
-        locationEngine.removeLocationEngineListener(this);
+        locationEngine.removeLocationUpdates(this);
     }
 
     public boolean isActive() {
-        return locationEngine != null && locationEngine.isConnected();
+        return locationEngine != null && this.isActive;
     }
 
     public Location getLastKnownLocation() {
         if (locationEngine == null) {
             return null;
         }
-        return locationEngine.getLastLocation();
+        return lastLocation;
     }
 
     public LocationEngine getEngine() {
         return locationEngine;
     }
 
-    @Override
-    public void onConnected() {
-        Log.d(LOG_TAG, "Connected");
-        locationEngine.requestLocationUpdates();
-
-        Location lastKnownLocation = getLastKnownLocation();
-        if (lastKnownLocation != null) {
-            onLocationChanged(lastKnownLocation);
-        }
-    }
-
-    @Override
     public void onLocationChanged(Location location) {
+        lastLocation = location;
         Log.d(LOG_TAG, String.format(Locale.ENGLISH, "Tick [%f, %f]", location.getLongitude(), location.getLatitude()));
         Log.d(LOG_TAG, String.format(Locale.ENGLISH, "Listener count %d", listeners.size()));
 
         for (OnUserLocationChange listener : listeners) {
             listener.onLocationChange(location);
         }
+    }
+
+    @Override
+    public void onFailure(Exception exception) {
+        // FMTODO handle this.
+    }
+
+    @Override
+    public void onSuccess(LocationEngineResult result) {
+        onLocationChanged(result.getLastLocation());
     }
 }

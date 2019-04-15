@@ -65,7 +65,7 @@ public class DownloadMapImageTask extends AsyncTask<Map.Entry<String, String>, V
         }
 
         for (Map.Entry<String, Bitmap> image : images) {
-            mMap.addImage(image.getKey(), image.getValue());
+            mMap.getStyle().addImage(image.getKey(), image.getValue()); // FMTODO 6->7 check
         }
 
         if (mCallback != null) {

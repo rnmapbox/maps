@@ -4,7 +4,8 @@ import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.mapbox.mapboxsdk.annotations.BaseMarkerViewOptions;
+// import com.mapbox.mapboxsdk.annotations.BaseMarkerViewOptions;
+import com.mapbox.mapboxsdk.annotations.BaseMarkerOptions;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -13,7 +14,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
  * Created by nickitaliano on 9/27/17.
  */
 
-public class RCTMGLPointAnnotationOptions extends BaseMarkerViewOptions<RCTMGLPointAnnotation.CustomView, RCTMGLPointAnnotationOptions> {
+public class RCTMGLPointAnnotationOptions extends BaseMarkerOptions<RCTMGLPointAnnotation.CustomMarker, RCTMGLPointAnnotationOptions> {
     private String mAnnotationID;
     private boolean mHasChildren;
 
@@ -23,12 +24,12 @@ public class RCTMGLPointAnnotationOptions extends BaseMarkerViewOptions<RCTMGLPo
         position((LatLng) in.readParcelable(LatLng.class.getClassLoader()));
         snippet(in.readString());
         title(in.readString());
-        flat(in.readByte() != 0);
+        /* flat(in.readByte() != 0); */
         anchor(in.readFloat(), in.readFloat());
-        infoWindowAnchor(in.readFloat(), in.readFloat());
+        /* infoWindowAnchor(in.readFloat(), in.readFloat());
         rotation(in.readFloat());
         visible(in.readByte() != 0);
-        alpha(in.readFloat());
+        alpha(in.readFloat()); */
         if (in.readByte() != 0) {
             // this means we have an icon
             String iconId = in.readString();
@@ -46,8 +47,8 @@ public class RCTMGLPointAnnotationOptions extends BaseMarkerViewOptions<RCTMGLPo
     }
 
     @Override
-    public RCTMGLPointAnnotation.CustomView getMarker() {
-        return new RCTMGLPointAnnotation.CustomView(getAnnotationID(), this);
+    public RCTMGLPointAnnotation.CustomMarker getMarker() {
+        return new RCTMGLPointAnnotation.CustomMarker(getAnnotationID(), this);
     }
 
     @Override
@@ -57,22 +58,29 @@ public class RCTMGLPointAnnotationOptions extends BaseMarkerViewOptions<RCTMGLPo
 
     @Override
     public void writeToParcel(Parcel out, int flags) {
-        out.writeParcelable(getPosition(), flags);
-        out.writeString(getSnippet());
-        out.writeString(getTitle());
+        out.writeParcelable(position, flags);
+        out.writeString(snippet);
+        out.writeString(title);
+        /*
         out.writeByte((byte) (isFlat() ? 1 : 0));
+        */
+        /*
         out.writeFloat(getAnchorU());
         out.writeFloat(getAnchorV());
+
         out.writeFloat(getInfoWindowAnchorU());
         out.writeFloat(getInfoWindowAnchorV());
         out.writeFloat(getRotation());
+        */
+/*
         out.writeByte((byte) (isVisible() ? 1 : 0));
         out.writeFloat(alpha);
-        Icon icon = getIcon();
+        */
+        Icon icon = this.icon;
         out.writeByte((byte) (icon != null ? 1 : 0));
         if (icon != null) {
-            out.writeString(getIcon().getId());
-            out.writeParcelable(getIcon().getBitmap(), flags);
+            out.writeString(this.icon.getId());
+            out.writeParcelable(this.icon.getBitmap(), flags);
         }
         out.writeString(getAnnotationID());
         out.writeByte((byte) (getHasChildren() ? 1 : 0));
@@ -94,6 +102,11 @@ public class RCTMGLPointAnnotationOptions extends BaseMarkerViewOptions<RCTMGLPo
 
     public boolean getHasChildren() {
         return mHasChildren;
+    }
+
+    public RCTMGLPointAnnotationOptions anchor(float x, float y) {
+        // TODO
+        return this;
     }
 
     public static final Parcelable.Creator<RCTMGLPointAnnotationOptions> CREATOR =

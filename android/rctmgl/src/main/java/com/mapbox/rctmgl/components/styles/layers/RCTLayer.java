@@ -147,40 +147,40 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         }
 
         String userBackgroundID = UserLocationLayerConstants.BACKGROUND_LAYER_ID;
-        Layer userLocationBackgroundLayer = mMap.getLayer(userBackgroundID);
+        Layer userLocationBackgroundLayer = mMap.getStyle().getLayer(userBackgroundID);
 
         // place below user location layer
         if (userLocationBackgroundLayer != null) {
-            mMap.addLayerBelow(mLayer, userBackgroundID);
+            mMap.getStyle().addLayerBelow(mLayer, userBackgroundID);
             return;
         }
 
-        mMap.addLayer(mLayer);
+        mMap.getStyle().addLayer(mLayer);
     }
 
     public void addAbove(String aboveLayerID) {
         if (!hasInitialized()) {
             return;
         }
-        mMap.addLayerAbove(mLayer, aboveLayerID);
+        mMap.getStyle().addLayerAbove(mLayer, aboveLayerID);
     }
 
     public void addBelow(String belowLayerID) {
         if (!hasInitialized()) {
             return;
         }
-        mMap.addLayerBelow(mLayer, belowLayerID);
+        mMap.getStyle().addLayerBelow(mLayer, belowLayerID);
     }
 
     public void addAtIndex(int index) {
         if (!hasInitialized()) {
             return;
         }
-        mMap.addLayerAt(mLayer, index);
+        mMap.getStyle().addLayerAt(mLayer, index);
     }
 
     protected void insertLayer() {
-        if (mMap.getLayer(mID) != null) {
+        if (mMap.getStyle().getLayer(mID) != null) {
             return; // prevent adding a layer twice
         }
 
@@ -216,7 +216,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         mMap = mapView.getMapboxMap();
         mMapView = mapView;
 
-        T existingLayer = mMap.<T>getLayerAs(mID);
+        T existingLayer = mMap.getStyle().<T>getLayerAs(mID);
         if (existingLayer != null) {
             mLayer = existingLayer;
         } else {
@@ -229,7 +229,9 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
 
     @Override
     public void removeFromMap(RCTMGLMapView mapView) {
-        mMap.removeLayer(mLayer);
+        if (mMap.getStyle() != null) {
+            mMap.getStyle().removeLayer(mLayer);
+        }
     }
 
     public abstract T makeLayer();

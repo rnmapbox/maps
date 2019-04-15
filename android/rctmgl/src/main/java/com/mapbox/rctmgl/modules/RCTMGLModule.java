@@ -12,7 +12,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.mapbox.android.telemetry.MapboxTelemetry;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.constants.Style;
+// import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.rctmgl.components.camera.constants.CameraMode;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleValue;
@@ -20,6 +20,8 @@ import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 import com.mapbox.rctmgl.events.constants.EventTypes;
 import com.mapbox.rctmgl.location.UserLocationVerticalAlignment;
 import com.mapbox.rctmgl.location.UserTrackingMode;
+import com.mapbox.mapboxsdk.maps.Style;
+
 
 import java.util.HashMap;
 import java.util.Map;

@@ -30,7 +30,7 @@ public class RCTMGLVectorSource extends RCTSource<VectorSource> {
     @Override
     public VectorSource makeSource() {
         if (isDefaultSource(mID)) {
-            return (VectorSource)mMap.getSource(DEFAULT_ID);
+            return (VectorSource)mMap.getStyle().getSource(DEFAULT_ID);
         }
         return new VectorSource(mID, mURL);
     }

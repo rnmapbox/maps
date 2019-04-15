@@ -15,7 +15,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
 import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.mapboxsdk.constants.Style;
+// import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.offline.OfflineManager;
 import com.mapbox.mapboxsdk.offline.OfflineRegion;
@@ -29,6 +29,7 @@ import com.mapbox.rctmgl.events.OfflineEvent;
 import com.mapbox.rctmgl.events.constants.EventTypes;
 import com.mapbox.rctmgl.utils.ConvertUtils;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
+import com.mapbox.mapboxsdk.maps.Style;
 
 import org.json.JSONException;
 import org.json.JSONObject;

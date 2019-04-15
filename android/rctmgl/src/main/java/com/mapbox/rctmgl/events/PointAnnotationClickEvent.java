@@ -6,7 +6,7 @@ import android.view.View;
 
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
-import com.mapbox.mapboxsdk.annotations.MarkerView;
+import com.mapbox.mapboxsdk.plugins.markerview.MarkerView;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotation;
 import com.mapbox.rctmgl.events.constants.EventKeys;

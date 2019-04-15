@@ -4,7 +4,7 @@ package com.mapbox.rctmgl.location;
 import com.mapbox.mapboxsdk.plugins.locationlayer.modes.RenderMode;
 */
 
-import com.mapbox.mapboxsdk.plugins.locationlayer.modes.RenderMode;
+import com.mapbox.mapboxsdk.location.modes.RenderMode;
 
 /**
  * Created by nickitaliano on 12/13/17.
