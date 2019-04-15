@@ -256,6 +256,42 @@ public class RCTMGLMapView extends MapView implements
         onDestroy();
     }
 
+    public VisibleRegion getVisibleRegion(LatLng center, double zoomLevel) {
+        DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
+        int[] contentPadding = mMap.getPadding();
+
+        // we want to get the width, and height scaled based on pixel density, that also includes content padding
+        // (width * percentOfWidthWeWant - (leftPadding + rightPadding)) / dpi
+        int mapWidth = (int)((mMap.getWidth() * 0.75 - (contentPadding[0] + contentPadding[2])) / metrics.scaledDensity);
+        int mapHeight = (int)((mMap.getHeight() * 0.75 - (contentPadding[1] + contentPadding[3])) / metrics.scaledDensity);
+        VisibleRegion region = GeoViewport.getRegion(center, (int) zoomLevel, mapWidth, mapHeight);
+        return region;
+    }
+
+    public CameraPosition getCameraPosition() {
+        return mMap.getCameraPosition();
+    }
+
+    public void animateCamera(CameraUpdate cameraUpdate, MapboxMap.CancelableCallback callback) {
+        mMap.animateCamera(cameraUpdate, callback);
+    }
+
+    public void moveCamera(CameraUpdate cameraUpdate, MapboxMap.CancelableCallback callback) {
+        mMap.moveCamera(cameraUpdate, callback);
+    }
+
+    public void moveCamera(CameraUpdate cameraUpdate) {
+        mMap.moveCamera(cameraUpdate);
+    }
+
+    public void easeCamera(CameraUpdate cameraUpdate, int duration, MapboxMap.CancelableCallback callback) {
+        mMap.easeCamera(cameraUpdate, duration, callback);
+    }
+
+    public void easeCamera(CameraUpdate cameraUpdate) {
+        mMap.easeCamera(cameraUpdate);
+    }
+
     public RCTMGLPointAnnotation getPointAnnotationByID(String annotationID) {
         if (annotationID == null) {
             return null;
@@ -977,7 +1013,7 @@ public class RCTMGLMapView extends MapView implements
         return cameraPosition.bearing;
     }
 
-    private void sendRegionDidChangeEvent() {
+    public void sendRegionDidChangeEvent() {
         handleMapChangedEvent(EventTypes.REGION_DID_CHANGE);
         mCameraChangeTracker.setReason(-1);
     }

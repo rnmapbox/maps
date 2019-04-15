@@ -30,6 +30,9 @@ public class MapChangeEvent extends AbstractEvent {
 
     @Override
     public WritableMap getPayload() {
-        return mPayload;
+        // FMTODO
+        WritableMap payloadClone = Arguments.createMap();
+        payloadClone.merge(mPayload);
+        return payloadClone;
     }
 }
