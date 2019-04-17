@@ -63,7 +63,7 @@ public class CameraUpdateItem implements RunnableFuture<Void> {
             return;
         }
 
-        if (mCameraMode == CameraMode.FLIGHT) {
+        if (mCameraMode == CameraMode.FLIGHT && mDuration > 0) {
             map.animateCamera(mCameraUpdate, mDuration, callback);
         } else if (mCameraMode == CameraMode.EASE) {
             map.easeCamera(mCameraUpdate, mDuration, callback);

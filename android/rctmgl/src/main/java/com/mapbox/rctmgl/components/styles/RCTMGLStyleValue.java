@@ -41,8 +41,13 @@ public class RCTMGLStyleValue {
 
         Dynamic dynamic = mPayload.getDynamic("value");
         if (dynamic.getType().equals(ReadableType.Array)) {
-            isExpression = true;
-            mExpression = ExpressionParser.from(dynamic.asArray());
+            ReadableArray array = dynamic.asArray();
+            if (array.size() > 0 && array.getMap(0) != null && array.getMap(0).getString("type").equals("number")) {
+                // FMTODO - array of numbers, not an expression
+            } else {
+                isExpression = true;
+                mExpression = ExpressionParser.from(array);
+            }
         }
     }
 

@@ -17,10 +17,10 @@
 
 - (NSExpression *)mglStyleValue
 {
-    if ([_styleType isEqualToString:@"color"] && [expressionJSON isKindOfClass:[NSNumber class]]) {
+    if ([_styleType isEqualToString:@"color"] && [[[(NSArray*)expressionJSON objectEnumerator] nextObject] isKindOfClass:[NSNumber class]]) {
         UIColor *color = [RCTMGLUtils toColor:expressionJSON];
         return [NSExpression expressionWithMGLJSONObject:color];
-    } else if ([_styleType isEqualToString:@"vector"] && [expressionJSON isKindOfClass:[NSNumber class]]) {
+    } else if ([_styleType isEqualToString:@"vector"] && [[[(NSArray*)expressionJSON objectEnumerator] nextObject] isKindOfClass:[NSNumber class]]) {
         CGVector vector = [RCTMGLUtils toCGVector:(NSArray<NSNumber *> *)expressionJSON];
         return [NSExpression expressionWithMGLJSONObject:[NSValue valueWithCGVector:vector]];
     } else if ([_styleType isEqual:@"edgeinsets"] && [expressionJSON isKindOfClass:[NSNumber class]]){

@@ -24,7 +24,14 @@ class Camera extends NativeBridgeComponent {
     centerCoordinate: PropTypes.arrayOf(PropTypes.number),
     heading: PropTypes.number,
     pitch: PropTypes.number,
-    bounds: PropTypes.arrayOf(PropTypes.number),
+    bounds: PropTypes.shape({
+      ne: PropTypes.arrayOf(PropTypes.number).isRequired,
+      sw: PropTypes.arrayOf(PropTypes.number).isRequired,
+      paddingLeft: PropTypes.number,
+      paddingRight: PropTypes.number,
+      paddingTop: PropTypes.number,
+      paddingBottom: PropTypes.number,
+    }),
     zoomLevel: PropTypes.number,
     minZoomLevel: PropTypes.number,
     maxZoomLevel: PropTypes.number,
@@ -170,11 +177,14 @@ class Camera extends NativeBridgeComponent {
     }
 
     return (
-      !!cB.bounds !== !!nB.bounds ||
-      cB.bounds[0][0] !== nB.bounds[0][0] ||
-      cB.bounds[0][1] !== nB.bounds[0][1] ||
-      cB.bounds[1][0] !== nB.bounds[1][0] ||
-      cB.bounds[1][1] !== nB.bounds[1][1]
+      cB.ne[0] !== nB.ne[0] ||
+      cB.ne[1] !== nB.ne[1] ||
+      cB.sw[0] !== nB.sw[0] ||
+      cB.sw[1] !== nB.sw[1] ||
+      cB.paddingTop != nB.paddingTop ||
+      cB.paddingLeft != nB.pddingLeft ||
+      cB.paddingRight != nB.paddingRight ||
+      cB.paddingBottom != nB.paddingBottom
     );
   }
 
@@ -222,7 +232,7 @@ class Camera extends NativeBridgeComponent {
         paddingTop,
         paddingBottom,
       } = config.bounds;
-      stopConfig.bounds = toJSONString(makeLatLngBounds(ne, sw));
+      stopConfig.bounds = toJSONString(geoUtils.makeLatLngBounds(ne, sw));
       stopConfig.boundsPaddingTop = paddingTop || 0;
       stopConfig.boundsPaddingRight = paddingRight || 0;
       stopConfig.boundsPaddingBottom = paddingBottom || 0;
