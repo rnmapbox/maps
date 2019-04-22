@@ -79,9 +79,7 @@
     if (_styleLayer != nil) {
         NSPredicate *predicate = [self buildFilters];
         
-        if (predicate != nil) {
-            [self updateFilter:predicate];
-        }
+        [self updateFilter:predicate];
     }
 }
 
