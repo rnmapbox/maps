@@ -116,6 +116,15 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
         return lastLocation;
     }
 
+
+    public void getLastKnownLocation(LocationEngineCallback<LocationEngineResult> callback) {
+        if (locationEngine == null) {
+            callback.onFailure(new Exception("LocationEngine not initialized"));
+        }
+
+        locationEngine.getLastLocation(callback);
+    }
+
     public LocationEngine getEngine() {
         return locationEngine;
     }

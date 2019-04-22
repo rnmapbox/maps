@@ -30,7 +30,12 @@ static double const MS_TO_S = 0.001;
 + (MGLShape*)shapeFromGeoJSON:(NSString*)jsonStr
 {
     NSData* data = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
-    return [MGLShape shapeWithData:data encoding:NSUTF8StringEncoding error:nil];
+    NSError* error = nil;
+    MGLShape* result = [MGLShape shapeWithData:data encoding:NSUTF8StringEncoding error:&error];
+    if (error != nil) {
+      RCTLogWarn(@"Failed to convert data to shape error:%@ src:%@", error, jsonStr);
+    }
+    return result;
 }
 
 + (NSString *)hashURI:(NSString *)uri

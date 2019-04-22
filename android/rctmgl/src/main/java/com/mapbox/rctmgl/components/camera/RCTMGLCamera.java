@@ -62,7 +62,7 @@ public class RCTMGLCamera extends AbstractMapFeature {
 
     public static final int USER_LOCATION_CAMERA_MOVE_DURATION = 1000;
 
-    private LocationManager mLocationManger;
+    private LocationManager mLocationManager;
     private UserLocation mUserLocation;
     private boolean mShowUserLocation;
 
@@ -122,7 +122,7 @@ public class RCTMGLCamera extends AbstractMapFeature {
         mCameraUpdateQueue = new CameraUpdateQueue();
 
         mUserLocation = new UserLocation();
-        mLocationManger = LocationManager.getInstance(context);
+        mLocationManager = LocationManager.getInstance(context);
     }
 
     @Override
@@ -308,8 +308,8 @@ public class RCTMGLCamera extends AbstractMapFeature {
             return;
         }
 
-        if (!mLocationManger.isActive()) {
-            mLocationManger.enable();
+        if (!mLocationManager.isActive()) {
+            mLocationManager.enable();
         }
 
         mMapView.getMapboxMap().getStyle(new Style.OnStyleLoaded() {
@@ -323,8 +323,9 @@ public class RCTMGLCamera extends AbstractMapFeature {
     private void enableLocationComponent(@NonNull Style style) {
         updateLocationLayer(style);
 
-        Location lastKnownLocation = mLocationManger.getLastKnownLocation();
-        mLocationManger.addLocationListener(mLocationChangeListener);
+        Location lastKnownLocation = mLocationManager.getLastKnownLocation();
+        mLocationManager.addLocationListener(mLocationChangeListener);
+
         if (lastKnownLocation != null) {
             mLocationChangeListener.onLocationChange(lastKnownLocation);
 
@@ -351,6 +352,7 @@ public class RCTMGLCamera extends AbstractMapFeature {
                 .locationComponentOptions(locationComponentOptions)
                 .build();
         mLocationComponent.activateLocationComponent(locationComponentActivationOptions);
+        mLocationComponent.setLocationEngine(mLocationManager.getEngine());
 
         int userLayerMode = UserTrackingMode.getMapLayerMode(mUserLocation.getTrackingMode(), mShowUserLocation);
         mLocationComponent.setLocationComponentEnabled(userLayerMode != -1);

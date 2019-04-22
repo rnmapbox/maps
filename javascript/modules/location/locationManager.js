@@ -19,7 +19,9 @@ class LocationManager {
   async getLastKnownLocation() {
     if (!this._lastKnownLocation) {
       const lastKnownLocation = await MapboxGLLocationManager.getLastKnownLocation();
-      this._lastKnownLocation = lastKnownLocation;
+      if (!this._lastKnownLocation && lastKnownLocation) {
+        this._lastKnownLocation = lastKnownLocation;
+      }
     }
     return this._lastKnownLocation;
   }

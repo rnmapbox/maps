@@ -78,7 +78,10 @@
 
 - (RCTMGLLocation *)getLastKnownLocation
 {
-    lastKnownLocation = locationManager.location;
+    CLLocation* newLastLocation = locationManager.location;
+    if (newLastLocation) {
+      lastKnownLocation = newLastLocation;
+    }
     RCTMGLLocation *location = [self _convertToMapboxLocation:lastKnownLocation];
     return location;
 }

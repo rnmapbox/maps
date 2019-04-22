@@ -111,12 +111,13 @@ class Annotation extends React.Component {
         onPress={this.onPress}
         shape={this.state.shape}
       >
-        <MapboxGL.SymbolLayer
-          id={`${this.props.id}-symbol`}
-          style={this.symbolStyle}
-        >
-          {this.props.children}
-        </MapboxGL.SymbolLayer>
+        {this.symbolStyle && (
+          <MapboxGL.SymbolLayer
+            id={`${this.props.id}-symbol`}
+            style={this.symbolStyle}
+          />
+        )}
+        {this.props.children}
       </MapboxGL.Animated.ShapeSource>
     );
   }
