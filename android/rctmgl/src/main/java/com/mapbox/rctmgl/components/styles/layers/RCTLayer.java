@@ -43,9 +43,12 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
     protected Context mContext;
     protected RCTMGLMapView mMapView;
 
+    protected boolean mHadFilter;
+
     public RCTLayer(Context context) {
         super(context);
         mContext = context;
+        mHadFilter = false;
     }
 
     public String getID() {
@@ -136,7 +139,10 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
 
         if (mLayer != null) {
             if (mFilter != null) {
+                mHadFilter = true;
                 updateFilter(mFilter);
+            } else if (mHadFilter) {
+                updateFilter(Expression.literal(true));
             }
         }
     }
@@ -225,6 +231,10 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         }
 
         addStyles();
+        if (mFilter != null) {
+            mHadFilter = true;
+            updateFilter(mFilter);
+        }
     }
 
     @Override

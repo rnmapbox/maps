@@ -9,14 +9,18 @@ import com.facebook.react.bridge.WritableNativeMap;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Geometry;
+import com.mapbox.geojson.GeometryCollection;
 import com.mapbox.geojson.LineString;
+import com.mapbox.geojson.MultiPoint;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.geometry.LatLngQuad;
 import com.mapbox.mapboxsdk.style.light.Position;
+import com.mapbox.turf.TurfMeasurement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -166,18 +170,21 @@ public class GeoJSONUtils {
         return array;
     }
 
+    private static GeometryCollection toGeometryCollection(List<Feature> features) {
+        ArrayList<Geometry> geometries = new ArrayList<>();
+        geometries.ensureCapacity(features.size());
+        for (Feature feature : features) {
+            geometries.add(feature.geometry());
+        }
+        return GeometryCollection.fromGeometries(geometries);
+    }
+
     public static LatLngBounds toLatLngBounds(FeatureCollection featureCollection) {
         List<Feature> features = featureCollection.features();
 
-        if (features.size() != 2) {
-            return null;
-        }
+        double[] bbox = TurfMeasurement.bbox(toGeometryCollection(features));
 
-        LatLng neLatLng = toLatLng((Point)features.get(0).geometry());
-        LatLng swLatLng = toLatLng((Point)features.get(1).geometry());
-
-        return LatLngBounds.from(neLatLng.getLatitude(), neLatLng.getLongitude(),
-                swLatLng.getLatitude(), swLatLng.getLongitude());
+        return LatLngBounds.from(bbox[3], bbox[2], bbox[1], bbox[0]);
     }
 
     public static LatLngQuad toLatLngQuad(ReadableArray array) {

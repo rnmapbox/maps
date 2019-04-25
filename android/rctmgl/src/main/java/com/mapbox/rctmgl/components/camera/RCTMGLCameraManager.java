@@ -1,5 +1,6 @@
 package com.mapbox.rctmgl.components.camera;
 
+import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ThemedReactContext;

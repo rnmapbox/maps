@@ -27,10 +27,6 @@ public class RCTMGLFillLayer extends RCTLayer<FillLayer> {
     @Override
     public void addToMap(RCTMGLMapView mapView) {
         super.addToMap(mapView);
-
-        if (mFilter != null) {
-            updateFilter(mFilter);
-        }
     }
 
     @Override
