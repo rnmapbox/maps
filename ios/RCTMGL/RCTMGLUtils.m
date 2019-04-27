@@ -122,10 +122,15 @@ static double const MS_TO_S = 0.001;
         
         if (foundImage == nil) {
             [RCTMGLImageQueue.sharedInstance addImage:objects[imageName] bridge:bridge completionHandler:^(NSError *error, UIImage *image) {
+              if (!image) {
+                RCTLogWarn(@"Failed to fetch image: %@ error:%@", imageName, error);
+              }
+              else {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakStyle setImage:image forName:imageName];
                     imageLoadedBlock();
                 });
+              }
             }];
         } else {
             imageLoadedBlock();

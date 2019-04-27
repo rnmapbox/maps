@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.facebook.common.logging.FLog;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 
 import java.util.AbstractMap;
@@ -48,10 +49,17 @@ public class DownloadMapImageTask extends AsyncTask<Map.Entry<String, String>, V
                 } catch (Exception e) {
                     Log.w(LOG_TAG, e.getLocalizedMessage());
                 }
+            } else if (uri.startsWith("/")) {
+                Bitmap bitmap = BitmapUtils.getBitmapFromPath(uri, null);
+                images.add(new AbstractMap.SimpleEntry<String, Bitmap>(object.getKey(), bitmap));
             } else {
                 // local asset required from JS require('image.png') or import icon from 'image.png' while in release mode
                 Bitmap bitmap = BitmapUtils.getBitmapFromResource(mContext, uri, null);
-                images.add(new AbstractMap.SimpleEntry<String, Bitmap>(object.getKey(), bitmap));
+                if (bitmap != null) {
+                    images.add(new AbstractMap.SimpleEntry<String, Bitmap>(object.getKey(), bitmap));
+                } else {
+                    FLog.e(LOG_TAG, "Failed to load bitmap from: " + uri);
+                }
             }
         }
 

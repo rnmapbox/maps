@@ -42,11 +42,12 @@ public class RCTMGLStyleValue {
         Dynamic dynamic = mPayload.getDynamic("value");
         if (dynamic.getType().equals(ReadableType.Array)) {
             ReadableArray array = dynamic.asArray();
-            if (array.size() > 0 && array.getMap(0) != null && array.getMap(0).getString("type").equals("number")) {
-                // FMTODO - array of numbers, not an expression
-            } else {
-                isExpression = true;
-                mExpression = ExpressionParser.from(array);
+            if (array.size() > 0) {
+                ReadableMap map = array.getMap(0);
+                if (map != null && map.getString("type").equals("string")) {
+                    isExpression = true;
+                    mExpression = ExpressionParser.from(array);
+                }
             }
         }
     }
@@ -104,7 +105,8 @@ public class RCTMGLStyleValue {
 
         String[] stringArr = new String[arr.size()];
         for (int i = 0; i < arr.size(); i++) {
-            stringArr[i] = arr.getString(i);
+            ReadableMap item = arr.getMap(i);
+            stringArr[i] = item.getString("value");
         }
 
         return stringArr;
