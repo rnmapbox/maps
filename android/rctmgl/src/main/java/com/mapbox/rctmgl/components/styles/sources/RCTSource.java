@@ -209,6 +209,11 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
         }
     }
 
+    public Style getStyle() {
+        if (mMap == null) return null;
+        return mMap.getStyle();
+    }
+
     public abstract T makeSource();
     public abstract void onPress(Feature feature);
 

@@ -5,6 +5,7 @@ import android.graphics.drawable.BitmapDrawable;
 
 import com.mapbox.geojson.Feature;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
@@ -84,15 +85,18 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         mRemoved = true;
         if (mMap == null) return;
 
-        if (hasImages()) {
-            for (Map.Entry<String, String> image : mImages) {
-                mMap.getStyle().removeImage(image.getKey());
+        Style style = this.getStyle();
+        if (style != null) {
+            if (hasImages()) {
+                for (Map.Entry<String, String> image : mImages) {
+                    style.removeImage(image.getKey());
+                }
             }
-        }
 
-        if (hasNativeImages()) {
-            for (Map.Entry<String, BitmapDrawable> image : mNativeImages) {
-                mMap.getStyle().removeImage(image.getKey());
+            if (hasNativeImages()) {
+                for (Map.Entry<String, BitmapDrawable> image : mNativeImages) {
+                    style.removeImage(image.getKey());
+                }
             }
         }
     }
