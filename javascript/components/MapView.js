@@ -517,7 +517,7 @@ class MapView extends NativeBridgeComponent {
   }
 
   /**
-   * Map camera will perform updates based on provided config. Advanced use only!
+   * Map camera will perform updates based on provided config.
    *
    * @example
    * this.map.setCamera({
@@ -536,19 +536,7 @@ class MapView extends NativeBridgeComponent {
    *  @param {Object} config - Camera configuration
    */
   setCamera(config = {}) {
-    let cameraConfig = {};
-
-    if (config.stops) {
-      cameraConfig.stops = [];
-
-      for (const stop of config.stops) {
-        cameraConfig.stops.push(this._createStopConfig(stop));
-      }
-    } else {
-      cameraConfig = this._createStopConfig(config);
-    }
-
-    return this._runNativeCommand('setCamera', [cameraConfig]);
+    console.warn("MapView.setCamera is deprecated - please use a Camera#setCamera")
   }
 
   /**

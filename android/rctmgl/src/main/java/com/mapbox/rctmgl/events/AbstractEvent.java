@@ -51,7 +51,10 @@ abstract public class AbstractEvent implements IEvent {
     public WritableMap toJSON() {
         WritableMap map = Arguments.createMap();
         map.putString("type", getType());
-        map.putMap("payload", getPayload());
+
+        WritableMap payloadClone = Arguments.createMap();
+        payloadClone.merge(getPayload());
+        map.putMap("payload", payloadClone);
         return map;
     }
 }
