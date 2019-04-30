@@ -34,7 +34,7 @@ npm install @react-native-mapbox/maps --save
 * [iOS](/ios/install.md)
 * [Example](/example)
 
-## [Getting Started](/docs/GettingStarted)
+## [Getting Started](/docs/GettingStarted.md)
 
 ## Documentation
 
