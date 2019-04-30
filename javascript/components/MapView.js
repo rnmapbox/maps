@@ -536,7 +536,9 @@ class MapView extends NativeBridgeComponent {
    *  @param {Object} config - Camera configuration
    */
   setCamera(config = {}) {
-    console.warn("MapView.setCamera is deprecated - please use a Camera#setCamera")
+    console.warn(
+      'MapView.setCamera is deprecated - please use a Camera#setCamera',
+    );
   }
 
   /**
