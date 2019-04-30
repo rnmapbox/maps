@@ -11,18 +11,16 @@
 
 @interface RCTMGLStyleValue : NSObject
 
-@property (nonatomic, strong) NSDictionary *config;
+@property (nonatomic, strong) NSString *styleType;
+@property (nonatomic, strong) NSDictionary *rawStyleValue;
+@property (nonatomic, readonly) NSExpression *mglStyleValue;
 
-@property (nonatomic, readonly) NSString *type;
-@property (nonatomic, readonly) NSDictionary *payload;
-@property (nonatomic, readonly) id mglStyleValue;
-
-- (BOOL)isFunction;
-- (BOOL)isFunctionTypeSupported:(NSArray<NSString*>*)allowedFunctionTypes;
+- (BOOL)shouldAddImage;
+- (NSString *)getImageURI;
 - (MGLTransition)getTransition;
-- (MGLStyleValue*)getSphericalPosition;
+- (NSExpression *)getSphericalPosition;
 - (BOOL)isVisible;
 
-+ (RCTMGLStyleValue*)make:(NSDictionary*)config;
++ (RCTMGLStyleValue*)make:(NSString*)expressionJSONStr;
 
 @end

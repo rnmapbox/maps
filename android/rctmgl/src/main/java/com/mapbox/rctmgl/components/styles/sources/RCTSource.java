@@ -1,16 +1,18 @@
 package com.mapbox.rctmgl.components.styles.sources;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
+import com.mapbox.geojson.Feature;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.sources.Source;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
-import com.mapbox.services.commons.geojson.Feature;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -113,24 +115,30 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
         mMapView = mapView;
         mMap = mapView.getMapboxMap();
 
-        T existingSource = mMap.<T>getSourceAs(mID);
-        if (existingSource != null) {
-            mSource = existingSource;
-        } else {
-            mSource = makeSource();
-            mMap.addSource(mSource);
-        }
+        mMap.getStyle(new Style.OnStyleLoaded() {
+            public void onStyleLoaded(@NonNull Style style) {
+                T existingSource = mMap.getStyle().<T>getSourceAs(mID);
+                if (existingSource != null) {
+                    mSource = existingSource;
+                } else {
+                    mSource = makeSource();
+                    mMap.getStyle().addSource(mSource);
+                }
 
-        if (mQueuedLayers != null && mQueuedLayers.size() > 0) { // first load
-            for (int i = 0; i < mQueuedLayers.size(); i++) {
-                addLayerToMap(mQueuedLayers.get(i), i);
+                if (mQueuedLayers != null && mQueuedLayers.size() > 0) { // first load
+                    for (int i = 0; i < mQueuedLayers.size(); i++) {
+                        addLayerToMap(mQueuedLayers.get(i), i);
+                    }
+                    mQueuedLayers = null;
+                } else if (mLayers.size() > 0) { // handles the case of switching style url, but keeping layers on map
+                    for (int i = 0; i < mLayers.size(); i++) {
+                        addLayerToMap(mLayers.get(i), i);
+                    }
+                }
             }
-            mQueuedLayers = null;
-        } else if (mLayers.size() > 0) { // handles the case of switching style url, but keeping layers on map
-            for (int i = 0; i < mLayers.size(); i++) {
-                addLayerToMap(mLayers.get(i), i);
-            }
-        }
+        });
+
+
     }
 
     @Override
@@ -144,8 +152,8 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
         if (mQueuedLayers != null) {
             mQueuedLayers.clear();
         }
-        if (mMap != null && mSource != null) {
-            mMap.removeSource(mSource);
+        if (mMap != null && mSource != null  && mMap.getStyle() != null) {
+            mMap.getStyle().removeSource(mSource);
         }
     }
 
@@ -199,6 +207,11 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
         } else {
             mLayers.remove(childPosition);
         }
+    }
+
+    public Style getStyle() {
+        if (mMap == null) return null;
+        return mMap.getStyle();
     }
 
     public abstract T makeSource();

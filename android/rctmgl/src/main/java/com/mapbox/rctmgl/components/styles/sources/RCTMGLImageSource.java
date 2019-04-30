@@ -1,25 +1,18 @@
 package com.mapbox.rctmgl.components.styles.sources;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Movie;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Handler;
 import android.util.Log;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper;
+import com.mapbox.geojson.Feature;
 import com.mapbox.mapboxsdk.geometry.LatLngQuad;
 import com.mapbox.mapboxsdk.style.sources.ImageSource;
-import com.mapbox.rctmgl.utils.BitmapUtils;
-import com.mapbox.services.commons.geojson.Feature;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
-import java.util.Map;
+
+import android.net.Uri;
 
 /**
  * Created by nickitaliano on 11/29/17.

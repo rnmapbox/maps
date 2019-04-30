@@ -16,6 +16,6 @@
 - (CameraStop* _Nonnull)dequeue;
 - (void)flush;
 - (BOOL)isEmpty;
-- (void)execute:(RCTMGLMapView* _Nonnull)mapView withCompletionHandler:(nullable void (^)(void))completionHandler;
+- (void)execute:(RCTMGLMapView* _Nonnull)mapView;
 
 @end

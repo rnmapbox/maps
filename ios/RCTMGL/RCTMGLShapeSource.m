@@ -17,7 +17,7 @@
     
     if (self.source != nil) {
         MGLShapeSource *source = (MGLShapeSource *)self.source;
-        [source setShape:[RCTMGLUtils shapeFromGeoJSON:_shape]];
+        [source setShape: shape == nil ? nil : [RCTMGLUtils shapeFromGeoJSON:_shape]];
     }
 }
 

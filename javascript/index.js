@@ -4,11 +4,14 @@ import {isAndroid} from './utils';
 import * as geoUtils from './utils/geoUtils';
 // Components
 import MapView from './components/MapView';
-import MapboxStyleSheet from './utils/MapboxStyleSheet';
 import Light from './components/Light';
 import PointAnnotation from './components/PointAnnotation';
+import Annotation from './components/annotations/Annotation';
 import Callout from './components/Callout';
-// Sources
+import UserLocation from './components/UserLocation';
+import Camera from './components/Camera';
+
+// sources
 import VectorSource from './components/VectorSource';
 import ShapeSource from './components/ShapeSource';
 import RasterSource from './components/RasterSource';
@@ -21,9 +24,14 @@ import CircleLayer from './components/CircleLayer';
 import SymbolLayer from './components/SymbolLayer';
 import RasterLayer from './components/RasterLayer';
 import BackgroundLayer from './components/BackgroundLayer';
-// Modules
+
+// modules
+import locationManager from './modules/location/locationManager';
 import offlineManager from './modules/offline/offlineManager';
 import snapshotManager from './modules/snapshot/snapshotManager';
+
+// helpers
+import AnimatedPoint from './utils/AnimatedPoint';
 
 const MapboxGL = {...NativeModules.MGLModule};
 
@@ -54,10 +62,14 @@ MapboxGL.requestAndroidLocationPermissions = async function() {
 
 // components
 MapboxGL.MapView = MapView;
-MapboxGL.StyleSheet = MapboxStyleSheet;
 MapboxGL.Light = Light;
 MapboxGL.PointAnnotation = PointAnnotation;
 MapboxGL.Callout = Callout;
+MapboxGL.UserLocation = UserLocation;
+MapboxGL.Camera = Camera;
+
+// annotations
+MapboxGL.Annotation = Annotation;
 
 // sources
 MapboxGL.VectorSource = VectorSource;
@@ -75,11 +87,13 @@ MapboxGL.RasterLayer = RasterLayer;
 MapboxGL.BackgroundLayer = BackgroundLayer;
 
 // modules
+MapboxGL.locationManager = locationManager;
 MapboxGL.offlineManager = offlineManager;
 MapboxGL.snapshotManager = snapshotManager;
 
 // utils
 MapboxGL.geoUtils = geoUtils;
+MapboxGL.AnimatedPoint = AnimatedPoint;
 
 // animated
 MapboxGL.Animated = {

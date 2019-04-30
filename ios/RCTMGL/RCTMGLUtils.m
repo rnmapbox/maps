@@ -30,7 +30,21 @@ static double const MS_TO_S = 0.001;
 + (MGLShape*)shapeFromGeoJSON:(NSString*)jsonStr
 {
     NSData* data = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
-    return [MGLShape shapeWithData:data encoding:NSUTF8StringEncoding error:nil];
+    NSError* error = nil;
+    MGLShape* result = [MGLShape shapeWithData:data encoding:NSUTF8StringEncoding error:&error];
+    if (error != nil) {
+      RCTLogWarn(@"Failed to convert data to shape error:%@ src:%@", error, jsonStr);
+    }
+    return result;
+}
+
++ (NSString *)hashURI:(NSString *)uri
+{
+    if (uri == nil) {
+        return @"-1";
+    }
+    NSUInteger hash = [uri hash];
+    return [NSString stringWithFormat:@"%lu", (unsigned long)hash];
 }
 
 + (MGLCoordinateBounds)fromFeatureCollection:(NSString*)jsonStr
@@ -108,10 +122,15 @@ static double const MS_TO_S = 0.001;
         
         if (foundImage == nil) {
             [RCTMGLImageQueue.sharedInstance addImage:objects[imageName] bridge:bridge completionHandler:^(NSError *error, UIImage *image) {
+              if (!image) {
+                RCTLogWarn(@"Failed to fetch image: %@ error:%@", imageName, error);
+              }
+              else {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [weakStyle setImage:image forName:imageName];
                     imageLoadedBlock();
                 });
+              }
             }];
         } else {
             imageLoadedBlock();

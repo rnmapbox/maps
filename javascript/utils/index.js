@@ -26,6 +26,13 @@ export function isAndroid() {
   return Platform.OS === 'android';
 }
 
+export function existenceChange(cur, next) {
+  if (!cur && !next) {
+    return false;
+  }
+  return (!cur && next) || (cur && !next);
+}
+
 export function isFunction(fn) {
   return typeof fn === 'function';
 }

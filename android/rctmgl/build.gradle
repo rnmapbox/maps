@@ -30,8 +30,9 @@ dependencies {
     compileOnly "com.facebook.react:react-native:+"
 
     // Mapbox SDK
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-services:2.2.9'
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:5.5.3@aar'
+
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.6.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:7.3.0'
 
     // Dependencies
     implementation "com.android.support:support-vector-drawable:${safeExtGet('supportLibVersion', '28.0.0')}"
@@ -40,6 +41,6 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:${safeExtGet('okhttpVersion', '3.12.1')}"
 
     // Mapbox plugins
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization:0.1.0'
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.3.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v7:0.9.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v7:0.2.0'
 }

@@ -1,22 +1,12 @@
 package com.mapbox.rctmgl.events;
 
-import android.os.StrictMode;
 import android.view.View;
 
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.WritableNativeMap;
-import com.google.gson.JsonObject;
-import com.mapbox.rctmgl.events.AbstractEvent;
+import com.mapbox.geojson.Feature;
 import com.mapbox.rctmgl.events.constants.EventKeys;
 import com.mapbox.rctmgl.events.constants.EventTypes;
-import com.mapbox.rctmgl.utils.ConvertUtils;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
-import com.mapbox.services.commons.geojson.Feature;
-import com.mapbox.services.commons.geojson.Geometry;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by nickitaliano on 11/7/17.

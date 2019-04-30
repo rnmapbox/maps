@@ -12,177 +12,121 @@
 
 @implementation RCTMGLStyleValue
 {
-    NSString *type;
-    NSDictionary *payload;
+    NSObject *expressionJSON;
 }
 
-- (void)setConfig:(NSDictionary *)config
+- (NSExpression *)mglStyleValue
 {
-    _config = config;
-    type = (NSString*)config[@"styletype"];
-    payload = (NSDictionary*)config[@"payload"];
-}
-
-- (NSString*)type
-{
-    return type;
-}
-
-- (NSDictionary*)payload
-{
-    return payload;
-}
-
-- (id)mglStyleValue
-{
-    if ([self isFunction]) {
-        return [self makeStyleFunction];
-    }
-    
-    id rawValue = self.payload[@"value"];
-    
-    if ([self.type isEqualToString:@"color"]) {
-        rawValue = [RCTMGLUtils toColor:rawValue];
-    } else if ([self.type isEqualToString:@"translate"]) {
-        rawValue = [NSValue valueWithCGVector:[RCTMGLUtils toCGVector:rawValue]];
-    }
-
-    // check for overrides that handle special cases like NSArray vs CGVector
-    NSDictionary *iosTypeOverride = self.payload[@"iosType"];
-    if (iosTypeOverride != nil) {
-        if ([iosTypeOverride isEqual:@"vector"]) {
-            rawValue = [NSValue valueWithCGVector:[RCTMGLUtils toCGVector:rawValue]];
-        } else if ([iosTypeOverride isEqual:@"edgeinsets"]){
-            rawValue = [NSValue valueWithUIEdgeInsets:[RCTMGLUtils toUIEdgeInsets:rawValue]];
-        }
-    }
-    
-    id propertyValue = self.payload[@"propertyValue"];
-    if (propertyValue != nil) {
-        return @{ propertyValue: [MGLStyleValue valueWithRawValue:rawValue] };
-    }
-    
-    return [MGLStyleValue valueWithRawValue:rawValue];
-}
-
-- (BOOL)isFunction
-{
-    return [type isEqualToString:@"function"];
-}
-
-- (BOOL)isTranslation
-{
-    return [type isEqualToString:@"translate"];
-}
-
-- (BOOL)isFunctionTypeSupported:(NSArray<NSString *> *)allowedFunctionTypes
-{
-    NSString *fnType = (NSString*)payload[@"fn"];
-    
-    for (NSString *curFnType in allowedFunctionTypes) {
-        if ([curFnType isEqualToString:fnType]) {
-            return YES;
-        }
-    }
-    
-    return NO;
-}
-
-- (MGLStyleValue*)makeStyleFunction
-{
-    NSString *fnType = (NSString*)payload[@"fn"];
-    NSArray<NSArray<NSDictionary *> *> *rawStops = payload[@"stops"];
-    NSNumber *mode = payload[@"mode"];
-    NSString *attributeName = payload[@"attributeName"];
-    
-    NSMutableDictionary<id, id> *stops = nil;
-    if (rawStops.count > 0) {
-        stops = [[NSMutableDictionary alloc] init];
-        
-        for (NSArray *rawStop in rawStops) {
-            NSDictionary *jsStopKey = rawStop[0];
-            NSDictionary *jsStopValue = rawStop[1];
-            RCTMGLStyleValue *rctStyleValue = [RCTMGLStyleValue make:jsStopValue];
-            stops[[self _getStopKey:jsStopKey]] = rctStyleValue.mglStyleValue;
-        }
-    }
-    
-    MGLInterpolationMode interpolationMode = [mode integerValue];
-    if ([fnType isEqualToString:@"camera"]) {
-        return [MGLStyleValue valueWithInterpolationMode:interpolationMode
-                              cameraStops:stops
-                              options:nil];
-    } else if ([fnType isEqualToString:@"source"]) {
-        return [MGLStyleValue valueWithInterpolationMode:interpolationMode
-                              sourceStops:stops
-                              attributeName:attributeName
-                              options:nil];
-    } else if ([fnType isEqualToString:@"composite"]) {
-        return [MGLStyleValue valueWithInterpolationMode:interpolationMode
-                              compositeStops:stops
-                              attributeName:attributeName
-                              options:nil];
+    if ([_styleType isEqualToString:@"color"] && [expressionJSON respondsToSelector:@selector(objectEnumerator)] && [[[(NSArray*)expressionJSON objectEnumerator] nextObject] isKindOfClass:[NSNumber class]]) {
+        UIColor *color = [RCTMGLUtils toColor:expressionJSON];
+        return [NSExpression expressionWithMGLJSONObject:color];
+    } else if ([_styleType isEqualToString:@"color"] && [expressionJSON isKindOfClass:[NSNumber class]]) {
+      
+        UIColor *color = [RCTMGLUtils toColor:expressionJSON];
+        return [NSExpression expressionWithMGLJSONObject:color];
+    } else if ([_styleType isEqualToString:@"vector"] && [expressionJSON respondsToSelector:@selector(objectEnumerator)] && [[[(NSArray*)expressionJSON objectEnumerator] nextObject] isKindOfClass:[NSNumber class]]) {
+        CGVector vector = [RCTMGLUtils toCGVector:(NSArray<NSNumber *> *)expressionJSON];
+        return [NSExpression expressionWithMGLJSONObject:[NSValue valueWithCGVector:vector]];
+    } else if ([_styleType isEqual:@"edgeinsets"] && [expressionJSON isKindOfClass:[NSNumber class]]){
+        UIEdgeInsets edgeInsets = [RCTMGLUtils toUIEdgeInsets:(NSArray<NSNumber *> *)expressionJSON];
+        return [NSExpression expressionWithMGLJSONObject:[NSValue valueWithUIEdgeInsets:edgeInsets]];
     } else {
-        return nil;
+        return [NSExpression expressionWithMGLJSONObject:expressionJSON];
     }
+}
+
+- (void)setStyleObject:(NSObject *)object
+{
+    expressionJSON = object;
+}
+
+- (NSObject *)parse:(NSDictionary *)rawStyleValue
+{
+    NSObject *object = nil;
+    NSString *type = (NSString *)rawStyleValue[@"type"];
+    
+    if ([type isEqualToString:@"string"]) {
+        object = (NSString *)rawStyleValue[@"value"];
+    } else if ([type isEqualToString:@"number"]) {
+        object = (NSNumber *)rawStyleValue[@"value"];
+    } else if ([type isEqualToString:@"boolean"]) {
+        object = rawStyleValue[@"value"];
+    } else if ([type isEqualToString:@"hashmap"]) {
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        NSArray *values = (NSArray *)rawStyleValue[@"value"];
+        
+        for (int i = 0; i < values.count; i++) {
+            NSObject *key = [self parse:values[i][0]];
+            NSObject *value = [self parse:values[i][1]];
+            dict[[key mutableCopy]] = value;
+        }
+        
+        object = dict;
+    } else if ([type isEqualToString:@"array"]) {
+        NSMutableArray *arr = [[NSMutableArray alloc] init];
+        NSArray *values = (NSArray *)rawStyleValue[@"value"];
+        
+        for (int i = 0; i < values.count; i++) {
+            [arr addObject:[self parse:values[i]]];
+        }
+        
+        object = arr;
+    }
+    
+    return object;
+}
+
+- (BOOL)shouldAddImage
+{
+    NSString *imageURI = (NSString *)expressionJSON;
+    return [imageURI containsString:@"://"];
+}
+
+- (NSString *)getImageURI
+{
+    return (NSString *)expressionJSON;
 }
 
 - (MGLTransition)getTransition
 {
-    if (![self.type isEqualToString:@"transition"]) {
-        return MGLTransitionMake(0, 0);
+    if (![expressionJSON isKindOfClass:[NSDictionary class]]) {
+        return MGLTransitionMake(0.f, 0.f);
     }
     
-    NSDictionary *config = self.payload[@"value"];
-    if (config == nil) {
-        return MGLTransitionMake(0, 0);
-    }
+    NSDictionary *config = (NSDictionary *)expressionJSON;
+    NSNumber *duration = config[@"duration"] != nil ? @([config[@"duration"] floatValue]) : @(0.f);
+    NSNumber *delay = config[@"delay"] != nil ? @([config[@"delay"] floatValue]) : @(0.f);
     
-    NSNumber *duration = config[@"duration"];
-    NSNumber *delay = config[@"delay"];
-    
-    return MGLTransitionMake([duration doubleValue], [delay doubleValue]);
+    return MGLTransitionMake([duration floatValue], [delay floatValue]);
 }
 
-- (MGLStyleValue*)getSphericalPosition
+- (NSExpression *)getSphericalPosition
 {
-    NSArray<NSNumber*> *values = self.payload[@"value"];
+    NSArray *values = (NSArray<NSNumber *> *)expressionJSON;
     
     CGFloat radial = [values[0] floatValue];
     CLLocationDistance azimuthal = [values[1] doubleValue];
     CLLocationDistance polar = [values[2] doubleValue];
     
     MGLSphericalPosition pos = MGLSphericalPositionMake(radial, azimuthal, polar);
-    return [MGLStyleValue valueWithRawValue:[NSValue valueWithMGLSphericalPosition:pos]];
+    return [NSExpression expressionWithMGLJSONObject:@(pos)];
 }
 
 - (BOOL)isVisible
 {
-    id value = self.payload[@"value"];
-    if (![value isKindOfClass:[NSString class]]) {
-        return NO;
+    if ([expressionJSON isKindOfClass:[NSString class]]) {
+        NSString *visible = (NSString *)expressionJSON;
+        return [visible isEqualToString:@"visible"];
     }
-    return [value isEqualToString:@"visible"];
+    return YES;
 }
 
-- (id)_getStopKey:(NSDictionary *)jsStopKey
-{
-    NSString *payloadKey = @"value";
-    NSString *type = jsStopKey[@"type"];
-    
-    if ([type isEqualToString:@"number"]) {
-        return (NSNumber *)jsStopKey[payloadKey];
-    } else if ([type isEqualToString:@"boolean"]) {
-        return [NSNumber numberWithBool:jsStopKey[payloadKey]];
-    } else {
-        return (NSString *)jsStopKey[payloadKey];
-    }
-}
-
-+ (RCTMGLStyleValue*)make:(NSDictionary*)config;
++ (RCTMGLStyleValue*)make:(NSDictionary*)rawStyleValue;
 {
     RCTMGLStyleValue *styleValue = [[RCTMGLStyleValue alloc] init];
-    styleValue.config = config;
+    styleValue.styleType = (NSString *)rawStyleValue[@"styletype"];
+    NSObject *object = [styleValue parse:(NSDictionary *)rawStyleValue[@"stylevalue"]];
+    [styleValue setStyleObject:object];
     return styleValue;
 }
 

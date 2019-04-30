@@ -2,11 +2,13 @@ package com.mapbox.rctmgl.components;
 
 import android.view.ViewGroup;
 
+import com.facebook.react.ReactApplication;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.ViewGroupManager;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +16,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import com.facebook.react.uimanager.events.EventDispatcher;
+import com.mapbox.rctmgl.events.EventEmitter;
 import com.mapbox.rctmgl.events.IEvent;
 
 /**
@@ -24,9 +27,11 @@ abstract public class AbstractEventEmitter<T extends ViewGroup> extends ViewGrou
     private static final double BRIDGE_TIMEOUT_MS = 10;
     private Map<String, Long> mRateLimitedEvents;
     private EventDispatcher mEventDispatcher;
+    private ReactApplicationContext mRCTAppContext;
 
     public AbstractEventEmitter(ReactApplicationContext reactApplicationContext) {
         mRateLimitedEvents = new HashMap<>();
+        mRCTAppContext = reactApplicationContext;
     }
 
     public void handleEvent(IEvent event) {
@@ -39,6 +44,11 @@ abstract public class AbstractEventEmitter<T extends ViewGroup> extends ViewGrou
 
         mRateLimitedEvents.put(eventCacheKey, System.currentTimeMillis());
         mEventDispatcher.dispatchEvent(new AbstractEvent(event.getID(), event.getKey(), event.toJSON()));
+
+        RCTEventEmitter emitter = EventEmitter.getViewEmitter(mRCTAppContext);
+        if (emitter != null) {
+            emitter.receiveEvent(event.getID(), event.getKey(), event.toJSON());
+        }
     }
 
     @Override

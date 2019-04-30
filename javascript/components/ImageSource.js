@@ -9,13 +9,15 @@ import {
   resolveImagePath,
 } from '../utils';
 
+import AbstractSource from './AbstractSource';
+
 export const NATIVE_MODULE_NAME = 'RCTMGLImageSource';
 
 /**
  * ImageSource is a content source that is used for a georeferenced raster image to be shown on the map.
  * The georeferenced image scales and rotates as the user zooms and rotates the map
  */
-class ImageSource extends React.PureComponent {
+class ImageSource extends AbstractSource {
   static propTypes = {
     ...viewPropTypes,
 
@@ -63,7 +65,7 @@ class ImageSource extends React.PureComponent {
     };
 
     return (
-      <RCTMGLImageSource {...props}>
+      <RCTMGLImageSource ref="nativeSource" {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}

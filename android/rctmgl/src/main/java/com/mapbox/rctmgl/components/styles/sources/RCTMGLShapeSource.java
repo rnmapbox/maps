@@ -1,33 +1,18 @@
 package com.mapbox.rctmgl.components.styles.sources;
 
 import android.content.Context;
-import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 
-import com.facebook.react.bridge.ReadableMap;
-import com.mapbox.mapboxsdk.annotations.Marker;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.annotations.MarkerView;
-import com.mapbox.mapboxsdk.annotations.MarkerViewOptions;
+import com.mapbox.geojson.Feature;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
-import com.mapbox.rctmgl.components.annotation.RCTMGLCallout;
-import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotationOptions;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
-import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
 import com.mapbox.rctmgl.events.FeatureClickEvent;
-import com.mapbox.rctmgl.events.IEvent;
 import com.mapbox.rctmgl.utils.DownloadMapImageTask;
-import com.mapbox.rctmgl.utils.GeoJSONUtils;
-import com.mapbox.services.commons.geojson.Feature;
-import com.mapbox.services.commons.geojson.FeatureCollection;
-import com.mapbox.services.commons.geojson.Geometry;
-import com.mapbox.services.commons.geojson.Point;
 
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,7 +56,7 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         // add all images from drawables folder
         if (hasNativeImages()) {
             for (Map.Entry<String, BitmapDrawable> nativeImage : mNativeImages) {
-                map.addImage(nativeImage.getKey(),  nativeImage.getValue().getBitmap());
+                map.getStyle().addImage(nativeImage.getKey(),  nativeImage.getValue().getBitmap());
             }
         }
 
@@ -100,15 +85,18 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         mRemoved = true;
         if (mMap == null) return;
 
-        if (hasImages()) {
-            for (Map.Entry<String, String> image : mImages) {
-                mMap.removeImage(image.getKey());
+        Style style = this.getStyle();
+        if (style != null) {
+            if (hasImages()) {
+                for (Map.Entry<String, String> image : mImages) {
+                    style.removeImage(image.getKey());
+                }
             }
-        }
 
-        if (hasNativeImages()) {
-            for (Map.Entry<String, BitmapDrawable> image : mNativeImages) {
-                mMap.removeImage(image.getKey());
+            if (hasNativeImages()) {
+                for (Map.Entry<String, BitmapDrawable> image : mNativeImages) {
+                    style.removeImage(image.getKey());
+                }
             }
         }
     }

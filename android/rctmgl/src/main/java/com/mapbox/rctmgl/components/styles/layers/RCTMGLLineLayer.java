@@ -2,8 +2,7 @@ package com.mapbox.rctmgl.components.styles.layers;
 
 import android.content.Context;
 
-import com.facebook.react.uimanager.UIManagerModule;
-import com.mapbox.mapboxsdk.style.layers.Filter;
+import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyle;
@@ -21,17 +20,13 @@ public class RCTMGLLineLayer extends RCTLayer<LineLayer> {
     }
 
     @Override
-    protected void updateFilter(Filter.Statement statement) {
-        mLayer.setFilter(statement);
+    protected void updateFilter(Expression expression) {
+        mLayer.setFilter(expression);
     }
 
     @Override
     public void addToMap(RCTMGLMapView mapView) {
         super.addToMap(mapView);
-
-        if (mFilter != null) {
-            updateFilter(mFilter);
-        }
     }
 
     @Override

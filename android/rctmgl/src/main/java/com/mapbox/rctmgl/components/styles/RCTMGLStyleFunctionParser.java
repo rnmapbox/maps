@@ -10,7 +10,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReadableNativeArray;
 import com.facebook.react.bridge.ReadableType;
-import com.mapbox.mapboxsdk.style.functions.stops.Stop;
+import com.mapbox.mapboxsdk.style.expressions.Expression.Stop;
 import com.mapbox.mapboxsdk.style.layers.PropertyValue;
 
 import java.text.NumberFormat;
@@ -71,22 +71,6 @@ public abstract class RCTMGLStyleFunctionParser<T, V> {
         }
 
         return rawStops;
-    }
-
-    protected Stop[] getStops(List<StopConfig> rawStops) {
-        Stop[] stops = new Stop[rawStops.size()];
-
-        for (int i = 0; i < rawStops.size(); i++) {
-            StopConfig config = rawStops.get(i);
-
-            if (config.propertyValue != null) {
-                stops[i] = Stop.stop((Number) config.key, config.propertyValue, getStopValue(config.value));
-            } else {
-                stops[i] = Stop.stop(config.key, getStopValue(config.value));
-            }
-        }
-
-        return stops;
     }
 
     protected abstract T getRawStopValue (RCTMGLStyleValue styleValue);

@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 
 import com.facebook.react.bridge.ReadableMap;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -13,8 +15,6 @@ import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.rctmgl.components.camera.constants.CameraMode;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
-import com.mapbox.services.commons.geojson.FeatureCollection;
-import com.mapbox.services.commons.geojson.Point;
 
 /**
  * Created by nickitaliano on 9/5/17.
@@ -74,11 +74,11 @@ public class CameraStop {
         mMode = mode;
     }
 
-    public CameraUpdateItem toCameraUpdate() {
+    public CameraUpdateItem toCameraUpdate(MapboxMap map) {
         if (mBounds != null) {
             CameraUpdate update = CameraUpdateFactory.newLatLngBounds(mBounds, mBoundsPaddingLeft,
                     mBooundsPaddingTop, mBoundsPaddingRight, mBoundsPaddingBottom);
-            return new CameraUpdateItem(update, mDuration, mCallback, CameraMode.FLIGHT);
+            return new CameraUpdateItem(map, update, mDuration, mCallback, CameraMode.FLIGHT);
         }
 
         CameraPosition.Builder builder = new CameraPosition.Builder();
@@ -99,7 +99,7 @@ public class CameraStop {
             builder.target(mLatLng);
         }
 
-        return new CameraUpdateItem(CameraUpdateFactory.newCameraPosition(builder.build()), mDuration, mCallback, mMode);
+        return new CameraUpdateItem(map, CameraUpdateFactory.newCameraPosition(builder.build()), mDuration, mCallback, mMode);
     }
 
     public static CameraStop fromReadableMap(Context context, @NonNull ReadableMap readableMap, MapboxMap.CancelableCallback callback) {

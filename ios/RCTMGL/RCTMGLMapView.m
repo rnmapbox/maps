@@ -40,7 +40,8 @@ static double const M2PI = M_PI * 2;
     [super layoutSubviews];
     if (_pendingInitialLayout) {
         _pendingInitialLayout = NO;
-        [self _updateCameraAfterInitialLayout];
+        // FMTODO
+        // [self.camera _updateCameraAfterInitialLayout];
     }
 }
 
@@ -68,6 +69,9 @@ static double const M2PI = M_PI * 2;
         RCTMGLPointAnnotation *pointAnnotation = (RCTMGLPointAnnotation *)subview;
         pointAnnotation.map = self;
         [_pointAnnotations addObject:pointAnnotation];
+    } else if ([subview isKindOfClass:[RCTMGLCamera class]]) {
+        RCTMGLCamera *camera = (RCTMGLCamera *)subview;
+        camera.map = self;
     } else {
         NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
 
@@ -87,6 +91,9 @@ static double const M2PI = M_PI * 2;
         RCTMGLPointAnnotation *pointAnnotation = (RCTMGLPointAnnotation *)subview;
         pointAnnotation.map = nil;
         [_pointAnnotations removeObject:pointAnnotation];
+    } else if ([subview isKindOfClass:[RCTMGLCamera class]]) {
+        RCTMGLCamera *camera = (RCTMGLCamera *)subview;
+        camera.map = nil;
     } else {
         NSArray<id<RCTComponent>> *childSubViews = [subview reactSubviews];
         
@@ -166,22 +173,9 @@ static double const M2PI = M_PI * 2;
 
 - (void)setReactShowUserLocation:(BOOL)reactShowUserLocation
 {
-    _reactShowUserLocation = reactShowUserLocation;
-    self.showsUserLocation = _reactShowUserLocation;
-}
-
-- (void)setReactCenterCoordinate:(NSString *)reactCenterCoordinate
-{
-    _reactCenterCoordinate = reactCenterCoordinate;
-    [self _updateCameraIfNeeded:YES];
-}
-
-- (void)setReactVisibleCoordinateBounds:(NSString *)reactVisibleCoordinateBounds
-{
-    _reactVisibleCoordinateBounds = reactVisibleCoordinateBounds;
-    if (!_pendingInitialLayout) {
-        [self _updateCameraIfNeeded:YES];
-    }
+    // FMTODO
+    //_reactShowUserLocation = reactShowUserLocation;
+    self.showsUserLocation = reactShowUserLocation; //_reactShowUserLocation;
 }
 
 - (void)setReactContentInset:(NSArray<NSNumber *> *)reactContentInset
@@ -213,49 +207,6 @@ static double const M2PI = M_PI * 2;
     _reactStyleURL = reactStyleURL;
     [self _removeAllSourcesFromMap];
     self.styleURL = [self _getStyleURLFromKey:_reactStyleURL];
-}
-
-- (void)setHeading:(double)heading
-{
-    _heading = heading;
-    [self _updateCameraIfNeeded:NO];
-}
-
-- (void)setPitch:(double)pitch
-{
-    _pitch = pitch;
-    [self _updateCameraIfNeeded:NO];
-}
-
-- (void)setReactZoomLevel:(double)reactZoomLevel
-{
-    _reactZoomLevel = reactZoomLevel;
-    self.zoomLevel = _reactZoomLevel;
-}
-
-- (void)setReactMinZoomLevel:(double)reactMinZoomLevel
-{
-    _reactMinZoomLevel = reactMinZoomLevel;
-    self.minimumZoomLevel = _reactMinZoomLevel;
-}
-
-- (void)setReactMaxZoomLevel:(double)reactMaxZoomLevel
-{
-    _reactMaxZoomLevel = reactMaxZoomLevel;
-    self.maximumZoomLevel = reactMaxZoomLevel;
-}
-
-- (void)setReactUserTrackingMode:(int)reactUserTrackingMode
-{
-    _reactUserTrackingMode = reactUserTrackingMode;
-    [self setUserTrackingMode:_reactUserTrackingMode animated:NO];
-    self.showsUserHeadingIndicator = (NSUInteger)_reactUserTrackingMode == MGLUserTrackingModeFollowWithHeading;
-}
-
-- (void)setReactUserLocationVerticalAlignment:(int)reactUserLocationVerticalAlignment
-{
-    _reactUserLocationVerticalAlignment = reactUserLocationVerticalAlignment;
-    self.userLocationVerticalAlignment = reactUserLocationVerticalAlignment;
 }
 
 #pragma mark - methods
@@ -350,35 +301,6 @@ static double const M2PI = M_PI * 2;
 - (NSURL*)_getStyleURLFromKey:(NSString *)styleURL
 {
     return [NSURL URLWithString:styleURL];
-}
-
-
-/**
- setVisibleCoordinateBounds() won't properly work if the view has empty bounds so
- we need to wait for the initial layoutSubviews() before we can use reactVisibleCoordinateBounds
- */
-- (void)_updateCameraAfterInitialLayout {
-    if (_reactVisibleCoordinateBounds != nil) {
-        [self _updateCameraIfNeeded:YES];
-    }
-}
-
-- (void)_updateCameraIfNeeded:(BOOL)shouldUpdateCenterCoord
-{
-    if (shouldUpdateCenterCoord) {
-        if (_reactCenterCoordinate != nil) {
-            [self setCenterCoordinate:[RCTMGLUtils fromFeature:_reactCenterCoordinate] animated:_animated];
-        } else {
-            MGLCoordinateBounds bounds = [RCTMGLUtils fromFeatureCollection:_reactVisibleCoordinateBounds];
-            [self setVisibleCoordinateBounds:bounds animated:_animated];
-            
-        }
-    } else {
-        MGLMapCamera *camera = [self.camera copy];
-        camera.pitch = _pitch;
-        camera.heading = _heading;
-        [self setCamera:camera animated:_animated];
-    }
 }
 
 - (void)_removeAllSourcesFromMap

@@ -21,9 +21,16 @@ class Light extends AbstractLayer {
     style: LightLayerStyleProp,
   };
 
+  setNativeProps(props) {
+    if (this.refs.nativeLight) {
+      this.refs.nativeLight.setNativeProps(props);
+    }
+  }
+
   render() {
     return (
       <RCTMGLLight
+        ref="nativeLight"
         {...this.props}
         style={undefined}
         reactStyle={this.getStyle()}

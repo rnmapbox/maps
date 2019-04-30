@@ -79,9 +79,7 @@
     if (_styleLayer != nil) {
         NSPredicate *predicate = [self buildFilters];
         
-        if (predicate != nil) {
-            [self updateFilter:predicate];
-        }
+        [self updateFilter:predicate];
     }
 }
 
@@ -99,7 +97,10 @@
 - (void)addToMap:(MGLStyle *)style
 {
     _style = style;
-    
+    if (_id == nil) {
+      RCTLogError(@"Cannot add a layer without id to the map: %@", self);
+      return;
+    }
     MGLStyleLayer *existingLayer = [style layerWithIdentifier:_id];
     if (existingLayer != nil) {
         _styleLayer = existingLayer;

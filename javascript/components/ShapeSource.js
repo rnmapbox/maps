@@ -10,6 +10,8 @@ import {
   isFunction,
 } from '../utils';
 
+import AbstractSource from './AbstractSource';
+
 const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLShapeSource';
@@ -18,7 +20,7 @@ export const NATIVE_MODULE_NAME = 'RCTMGLShapeSource';
  * ShapeSource is a map content source that supplies vector shapes to be shown on the map.
  * The shape may be a url or a GeoJSON object
  */
-class ShapeSource extends React.Component {
+class ShapeSource extends AbstractSource {
   static NATIVE_ASSETS_KEY = 'assets';
 
   static propTypes = {
@@ -106,6 +108,17 @@ class ShapeSource extends React.Component {
     id: MapboxGL.StyleSource.DefaultSourceID,
   };
 
+  setNativeProps(props) {
+    const shallowProps = Object.assign({}, props);
+
+    // Adds support for Animated
+    if (shallowProps.shape && typeof shallowProps !== 'string') {
+      shallowProps.shape = JSON.stringify(shallowProps.shape);
+    }
+
+    super.setNativeProps(shallowProps);
+  }
+
   _getShape() {
     if (!this.props.shape) {
       return;
@@ -160,8 +173,9 @@ class ShapeSource extends React.Component {
       ...this._getImages(),
       onPress: undefined,
     };
+
     return (
-      <RCTMGLShapeSource {...props}>
+      <RCTMGLShapeSource ref="nativeSource" {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}

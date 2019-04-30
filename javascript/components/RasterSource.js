@@ -4,6 +4,8 @@ import {NativeModules, requireNativeComponent} from 'react-native';
 
 import {cloneReactChildrenWithProps, viewPropTypes} from '../utils';
 
+import AbstractSource from './AbstractSource';
+
 const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLRasterSource';
@@ -13,7 +15,7 @@ export const NATIVE_MODULE_NAME = 'RCTMGLRasterSource';
  * The location of and metadata about the tiles are defined either by an option dictionary
  * or by an external file that conforms to the TileJSON specification.
  */
-class RasterSource extends React.Component {
+class RasterSource extends AbstractSource {
   static propTypes = {
     ...viewPropTypes,
 
@@ -75,7 +77,7 @@ class RasterSource extends React.Component {
       attribution: this.props.attribution,
     };
     return (
-      <RCTMGLRasterSource {...props}>
+      <RCTMGLRasterSource ref="nativeSource" {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}

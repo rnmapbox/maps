@@ -47,12 +47,13 @@
     return queue.count == 0;
 }
 
-- (void)execute:(RCTMGLMapView*)mapView withCompletionHandler:(nullable void (^)(void))completeAllHandler
+- (void)execute:(RCTMGLMapView*)mapView
 {
+    if (mapView == nil) {
+        return;
+    }
+
     if ([self isEmpty]) {
-        if (completeAllHandler != nil) {
-            completeAllHandler();
-        }
         return;
     }
 
@@ -65,7 +66,9 @@
     item.cameraStop = stop;
     
     __weak CameraUpdateQueue *weakSelf = self;
-    [item execute:mapView withCompletionHandler:^{ [weakSelf execute:mapView withCompletionHandler:completeAllHandler]; }];
+    __weak RCTMGLMapView *weakMap = mapView;
+    
+    [item execute:mapView withCompletionHandler:^{ [weakSelf execute:weakMap]; }];
 }
 
 @end

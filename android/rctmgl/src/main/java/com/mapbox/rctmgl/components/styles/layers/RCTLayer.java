@@ -1,27 +1,21 @@
 package com.mapbox.rctmgl.components.styles.layers;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.style.layers.Filter;
+import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
-import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 import com.mapbox.rctmgl.location.UserLocationLayerConstants;
-import com.mapbox.rctmgl.utils.ConvertUtils;
-import com.mapbox.rctmgl.utils.DownloadMapImageTask;
-import com.mapbox.rctmgl.utils.FilterParser;
+import com.mapbox.rctmgl.utils.ExpressionParser;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,26 +24,6 @@ import java.util.Set;
 
 public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
     public static final String LOG_TAG = RCTLayer.class.getSimpleName();
-
-    public static final Set<String> FILTER_OPS = new HashSet<String>(Arrays.asList(
-            "all",
-            "any",
-            "none",
-            "in",
-            "!in",
-            "<=",
-            "<",
-            ">=",
-            ">",
-            "!=",
-            "==",
-            "has",
-            "!has"
-    ));
-
-    public static final int COMPOUND_FILTER_ALL = 3;
-    public static final int COMPOUND_FILTER_ANY = 2;
-    public static final int COMPOUND_FILTER_NONE = 1;
 
     protected String mID;
     protected String mSourceID;
@@ -61,7 +35,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
     protected Double mMinZoomLevel;
     protected Double mMaxZoomLevel;
     protected ReadableMap mReactStyle;
-    protected Filter.Statement mFilter;
+    protected Expression mFilter;
 
     protected MapboxMap mMap;
     protected T mLayer;
@@ -69,9 +43,12 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
     protected Context mContext;
     protected RCTMGLMapView mMapView;
 
+    protected boolean mHadFilter;
+
     public RCTLayer(Context context) {
         super(context);
         mContext = context;
+        mHadFilter = false;
     }
 
     public String getID() {
@@ -156,13 +133,16 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
     }
 
     public void setFilter(ReadableArray readableFilterArray) {
-        FilterParser.FilterList filterList = FilterParser.getFilterList(readableFilterArray);
+        Expression filterExpression = ExpressionParser.from(readableFilterArray);
 
-        mFilter = buildFilter(filterList);
+        mFilter = filterExpression;
 
         if (mLayer != null) {
             if (mFilter != null) {
+                mHadFilter = true;
                 updateFilter(mFilter);
+            } else if (mHadFilter) {
+                updateFilter(Expression.literal(true));
             }
         }
     }
@@ -173,40 +153,40 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         }
 
         String userBackgroundID = UserLocationLayerConstants.BACKGROUND_LAYER_ID;
-        Layer userLocationBackgroundLayer = mMap.getLayer(userBackgroundID);
+        Layer userLocationBackgroundLayer = mMap.getStyle().getLayer(userBackgroundID);
 
         // place below user location layer
         if (userLocationBackgroundLayer != null) {
-            mMap.addLayerBelow(mLayer, userBackgroundID);
+            mMap.getStyle().addLayerBelow(mLayer, userBackgroundID);
             return;
         }
 
-        mMap.addLayer(mLayer);
+        mMap.getStyle().addLayer(mLayer);
     }
 
     public void addAbove(String aboveLayerID) {
         if (!hasInitialized()) {
             return;
         }
-        mMap.addLayerAbove(mLayer, aboveLayerID);
+        mMap.getStyle().addLayerAbove(mLayer, aboveLayerID);
     }
 
     public void addBelow(String belowLayerID) {
         if (!hasInitialized()) {
             return;
         }
-        mMap.addLayerBelow(mLayer, belowLayerID);
+        mMap.getStyle().addLayerBelow(mLayer, belowLayerID);
     }
 
     public void addAtIndex(int index) {
         if (!hasInitialized()) {
             return;
         }
-        mMap.addLayerAt(mLayer, index);
+        mMap.getStyle().addLayerAt(mLayer, index);
     }
 
     protected void insertLayer() {
-        if (mMap.getLayer(mID) != null) {
+        if (mMap.getStyle().getLayer(mID) != null) {
             return; // prevent adding a layer twice
         }
 
@@ -233,11 +213,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         }
     }
 
-    protected Filter.Statement buildFilter(FilterParser.FilterList filterList) {
-        return FilterParser.parse(filterList);
-    }
-
-    protected void updateFilter(Filter.Statement statement) {
+    protected void updateFilter(Expression expression) {
         // override if you want to update the filter
     }
 
@@ -246,7 +222,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         mMap = mapView.getMapboxMap();
         mMapView = mapView;
 
-        T existingLayer = mMap.<T>getLayerAs(mID);
+        T existingLayer = mMap.getStyle().<T>getLayerAs(mID);
         if (existingLayer != null) {
             mLayer = existingLayer;
         } else {
@@ -255,11 +231,17 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         }
 
         addStyles();
+        if (mFilter != null) {
+            mHadFilter = true;
+            updateFilter(mFilter);
+        }
     }
 
     @Override
     public void removeFromMap(RCTMGLMapView mapView) {
-        mMap.removeLayer(mLayer);
+        if (mMap.getStyle() != null) {
+            mMap.getStyle().removeLayer(mLayer);
+        }
     }
 
     public abstract T makeLayer();

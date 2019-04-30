@@ -1,6 +1,10 @@
 package com.mapbox.rctmgl.location;
 
-import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerMode;
+/*
+import com.mapbox.mapboxsdk.plugins.locationlayer.modes.RenderMode;
+*/
+
+import com.mapbox.mapboxsdk.location.modes.RenderMode;
 
 /**
  * Created by nickitaliano on 12/13/17.
@@ -14,15 +18,15 @@ public class UserTrackingMode {
 
     public static int getMapLayerMode(int mode, boolean isShowUserLocation) {
         if (!isShowUserLocation) {
-            return LocationLayerMode.NONE;
+            return -1;
         } else if (mode == NONE) {
-            return LocationLayerMode.TRACKING;
+            return -1;
         } else if (mode == FollowWithCourse) {
-            return LocationLayerMode.NAVIGATION;
+            return RenderMode.GPS;
         } else if (mode == FollowWithHeading) {
-            return LocationLayerMode.COMPASS;
+            return RenderMode.COMPASS;
         } else {
-            return LocationLayerMode.TRACKING;
+            return RenderMode.NORMAL;
         }
     }
 

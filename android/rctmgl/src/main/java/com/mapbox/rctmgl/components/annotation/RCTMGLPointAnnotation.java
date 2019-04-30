@@ -5,19 +5,17 @@ import android.graphics.PointF;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.uimanager.UIManagerModule;
-import com.mapbox.mapboxsdk.annotations.MarkerView;
+import com.mapbox.geojson.Point;
+import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.plugins.markerview.MarkerView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.events.PointAnnotationClickEvent;
 import com.mapbox.rctmgl.events.constants.EventTypes;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
-import com.mapbox.services.commons.geojson.Point;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +26,7 @@ import java.util.List;
 
 public class RCTMGLPointAnnotation extends AbstractMapFeature {
     private RCTMGLPointAnnotationManager mManager;
-    private MarkerView mAnnotation;
+    private Marker mAnnotation;
     private MapboxMap mMap;
     private RCTMGLMapView mMapView;
 
@@ -141,7 +139,9 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         mAnchor = Arrays.asList(x, y);
 
         if (mAnnotation != null) {
-            mAnnotation.setAnchor(x, y);
+            mAnnotation.setRightOffsetPixels((int)x);
+            mAnnotation.setTopOffsetPixels((int)y);
+            /* FMTODO mAnnotation.setAnchor(x, y); */
         }
     }
 
@@ -157,7 +157,7 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         }
     }
 
-    public MarkerView getMarker() {
+    public Marker getMarker() {
         return mAnnotation;
     }
 
@@ -179,7 +179,10 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         mAnnotation = mMap.addMarker(buildOptions());
         
         if (mAnchor != null && mAnchor.size() == 2) {
-            mAnnotation.setAnchor(mAnchor.get(0), mAnchor.get(1));
+
+            //mAnnotation.setAnchor(mAnchor.get(0), mAnchor.get(1));
+            mAnnotation.setRightOffsetPixels((int)mAnchor.get(0).floatValue());
+            mAnnotation.setTopOffsetPixels((int)mAnchor.get(1).floatValue());
         }
 
         final RCTMGLPointAnnotation self = this;
@@ -187,6 +190,7 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
             mMapView.selectAnnotation(self);
         }
     }
+
 
     private RCTMGLPointAnnotationOptions buildOptions() {
         RCTMGLPointAnnotationOptions options = new RCTMGLPointAnnotationOptions();
@@ -212,6 +216,25 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         return new PointF((float) loc[0], (float) loc[1]);
     }
 
+    public static class CustomMarker extends Marker {
+        private String mAnnotationID;
+        private RCTMGLPointAnnotationOptions mOptions;
+
+        public CustomMarker(String annotationID, RCTMGLPointAnnotationOptions options) {
+            super(options);
+            mOptions = options;
+            mAnnotationID = annotationID;
+        }
+
+        public String getAnnotationID() {
+            return mAnnotationID;
+        }
+
+        public boolean isDefaultIcon() {
+            return !mOptions.getHasChildren();
+        }
+    }
+/*
     public static class CustomView extends MarkerView {
         private String mAnnotationID;
         private RCTMGLPointAnnotationOptions mOptions;
@@ -229,5 +252,5 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         public boolean isDefaultIcon() {
             return !mOptions.getHasChildren();
         }
-    }
+    } */
 }

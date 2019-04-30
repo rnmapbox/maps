@@ -10,11 +10,9 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
+import com.mapbox.mapboxsdk.maps.TelemetryDefinition;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.constants.Style;
-import com.mapbox.mapboxsdk.offline.OfflineRegion;
-import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerMode;
-import com.mapbox.mapboxsdk.storage.FileSource;
+// import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.rctmgl.components.camera.constants.CameraMode;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleValue;
@@ -22,7 +20,8 @@ import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 import com.mapbox.rctmgl.events.constants.EventTypes;
 import com.mapbox.rctmgl.location.UserLocationVerticalAlignment;
 import com.mapbox.rctmgl.location.UserTrackingMode;
-import com.mapbox.services.android.telemetry.MapboxTelemetry;
+import com.mapbox.mapboxsdk.maps.Style;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -237,6 +236,10 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         offlineModuleCallbackNames.put("Error", RCTMGLOfflineModule.OFFLINE_ERROR);
         offlineModuleCallbackNames.put("Progress", RCTMGLOfflineModule.OFFLINE_PROGRESS);
 
+        // location module callback names
+        Map<String, String> locationModuleCallbackNames = new HashMap<>();
+        locationModuleCallbackNames.put("Update", RCTMGLLocationModule.LOCATION_UPDATE);
+
         return MapBuilder.<String, Object>builder()
                 .put("StyleURL", styleURLS)
                 .put("EventTypes", eventTypes)
@@ -268,6 +271,7 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
                 .put("LightAnchor", lightAnchor)
                 .put("OfflinePackDownloadState", offlinePackDownloadStates)
                 .put("OfflineCallbackName", offlineModuleCallbackNames)
+                .put("LocationCallbackName", locationModuleCallbackNames)
                 .build();
     }
 
@@ -293,13 +297,9 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         mReactContext.runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
-                MapboxTelemetry.getInstance().setTelemetryEnabled(telemetryEnabled);
+                TelemetryDefinition telemetry = Mapbox.getTelemetry();
+                telemetry.setUserTelemetryRequestState(telemetryEnabled);
             }
         });
-    }
-
-    @ReactMethod
-    public void isTelemetryEnabled(Promise promise) {
-        promise.resolve(MapboxTelemetry.getInstance().isTelemetryEnabled());
     }
 }

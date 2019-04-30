@@ -164,6 +164,8 @@ function buildProperties(attributes, attrName) {
     image: isImage(attrName),
     translate: isTranslate(attrName),
     transition: attributes[attrName].transition,
+    expression: attributes[attrName].expression,
+    expressionSupported: Object.keys(attributes[attrName].expression || {}).length > 0,
     support: getAttributeSupport(attributes[attrName]['sdk-support']),
     allowedFunctionTypes: getAllowedFunctionTypes(attributes[attrName]),
   };

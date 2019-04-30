@@ -78,19 +78,8 @@ project.ext.react = [
 
 apply from: "../../node_modules/react-native/react.gradle"
 
-/**
- * Set this to true to create two separate APKs instead of one:
- *   - An APK that only works on ARM devices
- *   - An APK that only works on x86 devices
- * The advantage is the size of the APK is reduced by about 4MB.
- * Upload all the APKs to the Play Store and people will download
- * the correct one based on the CPU architecture of their device.
- */
-def enableSeparateBuildPerCPUArchitecture = false
 
-/**
- * Run Proguard to shrink the Java bytecode in release builds.
- */
+def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
@@ -140,10 +129,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation project(':mapbox-react-native-mapbox-gl')
-    implementation project(':react-native-vector-icons')
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    implementation "com.google.android.gms:play-services-location:15.0.1"
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation project(':android-mapbox-react-native-mapbox-gl')
+    implementation project(':react-native-vector-icons')
 }
 
 // Run this once to be able to run the application with BUCK

@@ -2,116 +2,99 @@ package com.mapbox.rctmgl.location;
 
 import android.content.Context;
 import android.location.Location;
+import android.os.Looper;
 import android.util.Log;
 
-import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.plugins.locationlayer.CompassListener;
-import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
-import com.mapbox.services.android.location.MockLocationEngine;
-import com.mapbox.services.android.telemetry.location.GoogleLocationEngine;
-import com.mapbox.services.android.telemetry.location.LocationEngine;
-import com.mapbox.services.android.telemetry.location.LocationEngineListener;
-import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
-import com.mapbox.services.android.telemetry.location.LostLocationEngine;
-import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
-import com.mapbox.services.api.directions.v5.DirectionsCriteria;
-import com.mapbox.services.api.directions.v5.MapboxDirections;
-import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
-import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.services.commons.models.Position;
+import com.mapbox.android.core.location.LocationEngine;
+import com.mapbox.android.core.location.LocationEngineCallback;
 
+/*
+import com.mapbox.android.core.location.LocationEngineListener;
+import com.mapbox.android.core.location.LocationEnginePriority;
+*/
+
+import com.mapbox.android.core.location.LocationEngineProvider;
+import com.mapbox.android.core.location.LocationEngineRequest;
+import com.mapbox.android.core.location.LocationEngineResult;
+import com.mapbox.android.core.permissions.PermissionsManager;
+
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.Locale;
 
 /**
  * Created by nickitaliano on 12/12/17.
  */
 
 @SuppressWarnings({"MissingPermission"})
-public class LocationManager implements LocationEngineListener {
-    // TODO: Add JS API to allow easier UI testing
-    private static final boolean MOCK_LOCATION = false;
-    private static final double[] originCoord = new double[]{ -74.135319, 40.795952 };
-    private static final double[] destCoord = new double[]{ -74.134510, 40.787626 };
+public class LocationManager implements LocationEngineCallback<LocationEngineResult> {
+    static final long DEFAULT_FASTEST_INTERVAL_MILLIS = 1000;
+    static final long DEFAULT_INTERVAL_MILLIS = 1000;
+
+    public static final String LOG_TAG = LocationManager.class.getSimpleName();
 
     private LocationEngine locationEngine;
-    private OnUserLocationChange userLocationListener;
     private Context context;
+    private List<OnUserLocationChange> listeners = new ArrayList<>();
+
+    private boolean isActive = false;
+    private Location lastLocation = null;
+
+    private LocationEngineRequest locationEngineRequest = null;
+
+    private static WeakReference<LocationManager> INSTANCE = null;
+
+    public static LocationManager getInstance(Context context) {
+        if (INSTANCE == null) {
+            INSTANCE = new WeakReference<>(new LocationManager(context));
+        }
+        return INSTANCE.get();
+    }
 
     public interface OnUserLocationChange {
         void onLocationChange(Location location);
     }
 
-    public LocationManager(Context context) {
+    private LocationManager(Context context) {
         this.context = context;
+        locationEngine = LocationEngineProvider.getBestLocationEngine(context.getApplicationContext());
+        // locationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
+        locationEngineRequest = new LocationEngineRequest.Builder(DEFAULT_INTERVAL_MILLIS)
+                .setFastestInterval(DEFAULT_FASTEST_INTERVAL_MILLIS)
+                .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
+                .build();
+        // locationEngine.addLocationEngineListener(this);
+        //locationEngine.setFastestInterval(1000);
+    }
+
+    public void addLocationListener(OnUserLocationChange listener) {
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+
+    public void removeLocationListener(OnUserLocationChange listener) {
+        if (listeners.contains(listener)) {
+            listeners.remove(listener);
+        }
     }
 
     public void enable() {
         if (!PermissionsManager.areLocationPermissionsGranted(context)) {
             return;
         }
-
-        if (locationEngine == null) {
-            if (MOCK_LOCATION) {
-                Position origin = Position.fromCoordinates(originCoord);
-                Position dest = Position.fromCoordinates(destCoord);
-
-                List<Position> positionList = new ArrayList<>();
-                positionList.add(origin);
-                positionList.add(dest);
-
-                MapboxDirections client = new MapboxDirections.Builder<>()
-                        .setAccessToken(Mapbox.getAccessToken())
-                        .setProfile(DirectionsCriteria.PROFILE_DRIVING)
-                        .setSteps(true)
-                        .setCoordinates(positionList)
-                        .build();
-
-                final LocationManager self = this;
-                client.enqueueCall(new Callback<DirectionsResponse>() {
-                    @Override
-                    public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
-                        DirectionsRoute route = response.body().getRoutes().get(0);
-
-                        MockLocationEngine mockLocationEngine = new MockLocationEngine();
-                        mockLocationEngine.setRoute(route);
-
-                        locationEngine = mockLocationEngine;
-                        locationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
-                        locationEngine.addLocationEngineListener(self);
-                        locationEngine.setFastestInterval(1000);
-                        locationEngine.activate();
-                    }
-
-                    @Override
-                    public void onFailure(Call<DirectionsResponse> call, Throwable t) {
-
-                    }
-                });
-            } else {
-                locationEngine = LostLocationEngine.getLocationEngine(context);
-                locationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
-                locationEngine.addLocationEngineListener(this);
-                locationEngine.setFastestInterval(1000);
-                locationEngine.activate();
-            }
-        } else {
-            locationEngine.activate();
-        }
+        locationEngine.requestLocationUpdates(
+                locationEngineRequest,
+                this,
+                Looper.getMainLooper()
+        );
+        isActive = true;
     }
 
     public void disable() {
-        if (locationEngine == null) {
-            return;
-        }
-        locationEngine.removeLocationUpdates();
-        locationEngine.deactivate();
+        locationEngine.removeLocationUpdates(this);
+        isActive = false;
     }
 
     public void dispose() {
@@ -119,46 +102,50 @@ public class LocationManager implements LocationEngineListener {
             return;
         }
         disable();
-        locationEngine.removeLocationUpdates();
-        locationEngine.removeLocationEngineListener(this);
-    }
-
-    public void setOnLocationChangeListener(OnUserLocationChange listener) {
-        this.userLocationListener = listener;
+        locationEngine.removeLocationUpdates(this);
     }
 
     public boolean isActive() {
-        if (locationEngine == null) {
-            return false;
-        }
-        return locationEngine.isConnected();
+        return locationEngine != null && this.isActive;
     }
 
     public Location getLastKnownLocation() {
         if (locationEngine == null) {
             return null;
         }
-        return locationEngine.getLastLocation();
+        return lastLocation;
+    }
+
+
+    public void getLastKnownLocation(LocationEngineCallback<LocationEngineResult> callback) {
+        if (locationEngine == null) {
+            callback.onFailure(new Exception("LocationEngine not initialized"));
+        }
+
+        locationEngine.getLastLocation(callback);
     }
 
     public LocationEngine getEngine() {
         return locationEngine;
     }
 
-    @Override
-    public void onConnected() {
-        locationEngine.requestLocationUpdates();
+    public void onLocationChanged(Location location) {
+        lastLocation = location;
+        Log.d(LOG_TAG, String.format(Locale.ENGLISH, "Tick [%f, %f]", location.getLongitude(), location.getLatitude()));
+        Log.d(LOG_TAG, String.format(Locale.ENGLISH, "Listener count %d", listeners.size()));
 
-        Location lastKnownLocation = getLastKnownLocation();
-        if (lastKnownLocation != null) {
-            onLocationChanged(lastKnownLocation);
+        for (OnUserLocationChange listener : listeners) {
+            listener.onLocationChange(location);
         }
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-        if (this.userLocationListener != null) {
-            this.userLocationListener.onLocationChange(location);
-        }
+    public void onFailure(Exception exception) {
+        // FMTODO handle this.
+    }
+
+    @Override
+    public void onSuccess(LocationEngineResult result) {
+        onLocationChanged(result.getLastLocation());
     }
 }
