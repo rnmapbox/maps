@@ -1,5 +1,5 @@
 import {Animated} from 'react-native';
-import MapboxGL from '@react-native-mapbox/maps';
+import MapboxGL from '@mapbox/react-native-mapbox-gl';
 import along from '@turf/along';
 import findDistance from '@turf/distance';
 

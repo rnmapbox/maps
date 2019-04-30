@@ -1,6 +1,6 @@
 import React from 'react';
 import {Animated, View, Text, StyleSheet} from 'react-native';
-import MapboxGL from '@react-native-mapbox/maps';
+import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
 import sheet from '../styles/sheet';
 
