@@ -17,8 +17,8 @@ if (!styleSpecJSON) {
 }
 
 const layers = [];
-const androidVersion = '5.2.0';
-const iosVersion = '3.7.0';
+const androidVersion = '7.3.0';
+const iosVersion = '4.9.0';
 
 const TMPL_PATH = path.join(__dirname, 'templates');
 const IOS_OUTPUT_PATH = path.join(
@@ -26,8 +26,8 @@ const IOS_OUTPUT_PATH = path.join(
   '..',
   'example',
   'node_modules',
-  '@mapbox',
-  'react-native-mapbox-gl',
+  '@react-native-mapbox',
+  'maps',
   'ios',
   'RCTMGL',
 );
@@ -36,8 +36,8 @@ const ANDROID_OUTPUT_PATH = path.join(
   '..',
   'example',
   'node_modules',
-  '@mapbox',
-  'react-native-mapbox-gl',
+  '@react-native-mapbox',
+  'maps',
   'android',
   'rctmgl',
   'src',
@@ -54,8 +54,8 @@ const JS_OUTPUT_PATH = path.join(
   '..',
   'example',
   'node_modules',
-  '@mapbox',
-  'react-native-mapbox-gl',
+  '@react-native-mapbox',
+  'maps',
   'javascript',
   'utils',
 );
