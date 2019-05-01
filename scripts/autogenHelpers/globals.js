@@ -95,6 +95,10 @@ global.getLayerType = function(layer, platform) {
       return isIOS ? 'MGLBackgroundStyleLayer' : 'BackgroundLayer';
     case 'raster':
       return isIOS ? 'MGLRasterStyleLayer' : 'RasterLayer';
+    case 'heatmap':
+      return isIOS ? 'MGLHeatmapStyleLayer' : 'HeatmapLayer';
+    case 'hillshade':
+      return isIOS ? 'MGLHillshadeStyleLayer' : 'HillshadeLayer';
     case 'light':
       return isIOS ? 'MGLLight' : 'Light';
     default:
@@ -257,7 +261,7 @@ global.dtsInterfaceType = function(prop) {
   }
 
   if (propTypes.length > 1) {
-    return `TransitionProps | 
+    return `TransitionProps |
 ${propTypes.map((p) => startAtSpace(4, p)).join(' | ')},
 ${startAtSpace(2, '')}`;
   } else {
