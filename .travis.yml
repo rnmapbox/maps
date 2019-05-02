@@ -1,0 +1,30 @@
+matrix:
+  include:
+    - language: android
+      jdk: oraclejdk8
+      before_install:
+        - nvm install 8
+    - os: osx
+      osx_image: xcode10.2
+      node_js: 8
+
+install:
+  - cd example
+  - echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
+  - npm install
+  - echo $TRAVIS_OS_NAME
+  - |
+    if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+      cd ios
+      pod install
+      gem install xcpretty
+    fi
+
+script:
+  - |
+    if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+      cd example/ios
+      xcodebuild -workspace ./RNMapboxGLExample.xcworkspace -scheme RNMapboxGLExample | xcpretty -c
+    fi
+
+
