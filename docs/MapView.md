@@ -4,20 +4,12 @@
 ### props
 | Prop | Type | Default | Required | Description |
 | ---- | :--: | :-----: | :------: | :----------: |
-| animated | `bool` | `false` | `false` | Animates changes between pitch and bearing |
-| centerCoordinate | `arrayOf` | `none` | `false` | Initial center coordinate on map [lng, lat] |
-| visibleCoordinateBounds | `arrayOf` | `none` | `false` | Initial bounds on map [[lng, lat], [lng, lat]] |
 | showUserLocation | `bool` | `none` | `false` | Shows the users location on the map |
-| userTrackingMode | `number` | `MapboxGL.UserTrackingModes.None` | `false` | The mode used to track the user location on the map |
+| userTrackingMode | `number` | `none` | `false` | The mode used to track the user location on the map |
 | userLocationVerticalAlignment | `number` | `none` | `false` | The vertical alignment of the user location within in map. This is only enabled while tracking the users location. |
 | contentInset | `union` | `none` | `false` | The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport. |
-| heading | `number` | `0` | `false` | Initial heading on map |
-| pitch | `number` | `0` | `false` | Initial pitch on map |
 | style | `any` | `none` | `false` | Style for wrapping React Native View |
 | styleURL | `string` | `MapboxGL.StyleURL.Street` | `false` | Style URL for map |
-| zoomLevel | `number` | `16` | `false` | Initial zoom level of map |
-| minZoomLevel | `number` | `none` | `false` | Min zoom level of map |
-| maxZoomLevel | `number` | `none` | `false` | Max zoom level of map |
 | localizeLabels | `bool` | `false` | `false` | Automatically change the language of the map labels to the system’s preferred language,<br/>this is not something that can be toggled on/off |
 | zoomEnabled | `bool` | `none` | `false` | Enable/Disable zoom on the map |
 | scrollEnabled | `bool` | `true` | `false` | Enable/Disable scroll on the map |
@@ -32,7 +24,6 @@
 | onRegionWillChange | `func` | `none` | `false` | This event is triggered whenever the currently displayed map region is about to change. |
 | onRegionIsChanging | `func` | `none` | `false` | This event is triggered whenever the currently displayed map region is changing. |
 | onRegionDidChange | `func` | `none` | `false` | This event is triggered whenever the currently displayed map region finished changing |
-| onUserLocationUpdate | `func` | `none` | `false` | This event is triggered whenever the location engine receives a location update |
 | onWillStartLoadingMap | `func` | `none` | `false` | This event is triggered when the map is about to start loading a new map style. |
 | onDidFinishLoadingMap | `func` | `none` | `false` | This is triggered when the map has successfully loaded a new map style. |
 | onDidFailLoadingMap | `func` | `none` | `false` | This event is triggered when the map has failed to load a new map style. |
@@ -43,7 +34,6 @@
 | onDidFinishRenderingMap | `func` | `none` | `false` | This event is triggered when the map finished rendering the map. |
 | onDidFinishRenderingMapFully | `func` | `none` | `false` | This event is triggered when the map fully finished rendering the map. |
 | onDidFinishLoadingStyle | `func` | `none` | `false` | This event is triggered when a style has finished loading. |
-| onUserTrackingModeChange | `func` | `none` | `false` | This event is triggered when the users tracking mode is changed. |
 | regionWillChangeDebounceTime | `number` | `10` | `false` | The emitted frequency of regionwillchange events |
 | regionDidChangeDebounceTime | `number` | `500` | `false` | The emitted frequency of regiondidchange events |
 
@@ -210,29 +200,12 @@ this.map.zoomTo(16, 100)
 
 #### setCamera(config)
 
-Map camera will perform updates based on provided config. Advanced use only!
+Map camera will perform updates based on provided config. Deprecated use Camera#setCamera.
 
 ##### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `config` | `Object` | `Yes` | Camera configuration |
-
-
-
-```javascript
-this.map.setCamera({
-  centerCoordinate: [lng, lat],
-  zoom: 16,
-  duration: 2000,
-})
-
-this.map.setCamera({
-  stops: [
-    { pitch: 45, duration: 200 },
-    { heading: 180, duration: 300 },
-  ]
-})
-```
+| `config` | `n/a` | `Yes` | undefined |
 
 
 #### takeSnap(writeToDisk)

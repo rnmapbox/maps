@@ -329,6 +329,9 @@ global.startAtSpace = function(spaceCount, str) {
 };
 
 global.replaceNewLine = function(str) {
+  if (str === undefined) {
+    return undefined;
+  }
   return str.replace(/\n/g, '<br/>');
 };
 
@@ -342,7 +345,7 @@ global.styleMarkdownTableRow = function(style) {
 global.methodMarkdownTableRow = function(method) {
   return method.params
     .map((param) => {
-      return `| \`${param.name}\` | \`${param.type.name}\` | \`${
+      return `| \`${param.name}\` | \`${(param.type && param.type.name) || 'n/a'}\` | \`${
         param.optional ? 'No' : 'Yes'
       }\` | ${replaceNewLine(param.description)} |`;
     })
@@ -379,6 +382,9 @@ global.getMarkdownMethodSignature = function(method) {
 };
 
 global.getMarkdownMethodExamples = function(method) {
+  if (method.examples == null) {
+    return null;
+  }
   return method.examples
     .map((example) => {
       return `

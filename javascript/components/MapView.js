@@ -517,27 +517,11 @@ class MapView extends NativeBridgeComponent {
   }
 
   /**
-   * Map camera will perform updates based on provided config.
-   *
-   * @example
-   * this.map.setCamera({
-   *   centerCoordinate: [lng, lat],
-   *   zoom: 16,
-   *   duration: 2000,
-   * })
-   *
-   * this.map.setCamera({
-   *   stops: [
-   *     { pitch: 45, duration: 200 },
-   *     { heading: 180, duration: 300 },
-   *   ]
-   * })
-   *
-   *  @param {Object} config - Camera configuration
+   * Map camera will perform updates based on provided config. Deprecated use Camera#setCamera.
    */
   setCamera(config = {}) {
     console.warn(
-      'MapView.setCamera is deprecated - please use a Camera#setCamera',
+      'MapView.setCamera is deprecated - please use Camera#setCamera',
     );
   }
 

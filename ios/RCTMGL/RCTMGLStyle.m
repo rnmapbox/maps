@@ -378,6 +378,45 @@
   }
 }
 
+- (void)heatmapLayer:(MGLHeatmapStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
+{
+  if (![self _hasReactStyle:reactStyle]) {
+    // TODO throw exception
+    return;
+  }
+
+  NSArray<NSString*> *styleProps = [reactStyle allKeys];
+  for (NSString *prop in styleProps) {
+    if ([prop isEqualToString:@"__MAPBOX_STYLESHEET__"]) {
+      continue;
+    }
+
+    RCTMGLStyleValue *styleValue = [RCTMGLStyleValue make:reactStyle[prop]];
+
+    if ([prop isEqualToString:@"visibility"]) {
+      [self setHeatmapStyleLayerVisibility:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"heatmapRadius"]) {
+      [self setHeatmapRadius:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"heatmapRadiusTransition"]) {
+      [self setHeatmapRadiusTransition:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"heatmapWeight"]) {
+      [self setHeatmapWeight:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"heatmapIntensity"]) {
+      [self setHeatmapIntensity:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"heatmapIntensityTransition"]) {
+      [self setHeatmapIntensityTransition:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"heatmapColor"]) {
+      [self setHeatmapColor:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"heatmapOpacity"]) {
+      [self setHeatmapOpacity:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"heatmapOpacityTransition"]) {
+      [self setHeatmapOpacityTransition:layer withReactStyleValue:styleValue];
+    } else {
+      // TODO throw exception
+    }
+  }
+}
+
 - (void)fillExtrusionLayer:(MGLFillExtrusionStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
 {
   if (![self _hasReactStyle:reactStyle]) {
@@ -483,6 +522,49 @@
       [self setRasterContrastTransition:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"rasterFadeDuration"]) {
       [self setRasterFadeDuration:layer withReactStyleValue:styleValue];
+    } else {
+      // TODO throw exception
+    }
+  }
+}
+
+- (void)hillshadeLayer:(MGLHillshadeStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
+{
+  if (![self _hasReactStyle:reactStyle]) {
+    // TODO throw exception
+    return;
+  }
+
+  NSArray<NSString*> *styleProps = [reactStyle allKeys];
+  for (NSString *prop in styleProps) {
+    if ([prop isEqualToString:@"__MAPBOX_STYLESHEET__"]) {
+      continue;
+    }
+
+    RCTMGLStyleValue *styleValue = [RCTMGLStyleValue make:reactStyle[prop]];
+
+    if ([prop isEqualToString:@"visibility"]) {
+      [self setHillshadeStyleLayerVisibility:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"hillshadeIlluminationDirection"]) {
+      [self setHillshadeIlluminationDirection:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"hillshadeIlluminationAnchor"]) {
+      [self setHillshadeIlluminationAnchor:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"hillshadeExaggeration"]) {
+      [self setHillshadeExaggeration:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"hillshadeExaggerationTransition"]) {
+      [self setHillshadeExaggerationTransition:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"hillshadeShadowColor"]) {
+      [self setHillshadeShadowColor:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"hillshadeShadowColorTransition"]) {
+      [self setHillshadeShadowColorTransition:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"hillshadeHighlightColor"]) {
+      [self setHillshadeHighlightColor:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"hillshadeHighlightColorTransition"]) {
+      [self setHillshadeHighlightColorTransition:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"hillshadeAccentColor"]) {
+      [self setHillshadeAccentColor:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"hillshadeAccentColorTransition"]) {
+      [self setHillshadeAccentColorTransition:layer withReactStyleValue:styleValue];
     } else {
       // TODO throw exception
     }
@@ -1183,6 +1265,53 @@
 
 
 
+- (void)setHeatmapStyleLayerVisibility:(MGLHeatmapStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.visible = [styleValue isVisible];
+}
+
+- (void)setHeatmapRadius:(MGLHeatmapStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.heatmapRadius = styleValue.mglStyleValue;
+}
+
+- (void)setHeatmapRadiusTransition:(MGLHeatmapStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.heatmapRadiusTransition = [styleValue getTransition];
+}
+
+- (void)setHeatmapWeight:(MGLHeatmapStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.heatmapWeight = styleValue.mglStyleValue;
+}
+
+- (void)setHeatmapIntensity:(MGLHeatmapStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.heatmapIntensity = styleValue.mglStyleValue;
+}
+
+- (void)setHeatmapIntensityTransition:(MGLHeatmapStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.heatmapIntensityTransition = [styleValue getTransition];
+}
+
+- (void)setHeatmapColor:(MGLHeatmapStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.heatmapColor = styleValue.mglStyleValue;
+}
+
+- (void)setHeatmapOpacity:(MGLHeatmapStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.heatmapOpacity = styleValue.mglStyleValue;
+}
+
+- (void)setHeatmapOpacityTransition:(MGLHeatmapStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.heatmapOpacityTransition = [styleValue getTransition];
+}
+
+
+
 - (void)setFillExtrusionStyleLayerVisibility:(MGLFillExtrusionStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
     layer.visible = [styleValue isVisible];
@@ -1323,6 +1452,63 @@
 - (void)setRasterFadeDuration:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
     layer.rasterFadeDuration = styleValue.mglStyleValue;
+}
+
+
+
+- (void)setHillshadeStyleLayerVisibility:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.visible = [styleValue isVisible];
+}
+
+- (void)setHillshadeIlluminationDirection:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.hillshadeIlluminationDirection = styleValue.mglStyleValue;
+}
+
+- (void)setHillshadeIlluminationAnchor:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.hillshadeIlluminationAnchor = styleValue.mglStyleValue;
+}
+
+- (void)setHillshadeExaggeration:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.hillshadeExaggeration = styleValue.mglStyleValue;
+}
+
+- (void)setHillshadeExaggerationTransition:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.hillshadeExaggerationTransition = [styleValue getTransition];
+}
+
+- (void)setHillshadeShadowColor:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.hillshadeShadowColor = styleValue.mglStyleValue;
+}
+
+- (void)setHillshadeShadowColorTransition:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.hillshadeShadowColorTransition = [styleValue getTransition];
+}
+
+- (void)setHillshadeHighlightColor:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.hillshadeHighlightColor = styleValue.mglStyleValue;
+}
+
+- (void)setHillshadeHighlightColorTransition:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.hillshadeHighlightColorTransition = [styleValue getTransition];
+}
+
+- (void)setHillshadeAccentColor:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.hillshadeAccentColor = styleValue.mglStyleValue;
+}
+
+- (void)setHillshadeAccentColorTransition:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.hillshadeAccentColorTransition = [styleValue getTransition];
 }
 
 

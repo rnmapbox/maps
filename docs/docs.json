@@ -108,20 +108,28 @@
         "disabledBy": [
           "backgroundPattern"
         ],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "backgroundPattern",
         "type": "string",
         "values": [],
-        "description": "Name of image in sprite to use for drawing an image background. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).",
+        "description": "Name of image in sprite to use for drawing an image background. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "backgroundOpacity",
@@ -133,9 +141,13 @@
         "description": "The opacity at which the background will be drawn.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       }
     ]
   },
@@ -190,6 +202,135 @@
       "../utils"
     ],
     "name": "Callout"
+  },
+  "Camera": {
+    "description": "",
+    "methods": [],
+    "props": [
+      {
+        "name": "animationDuration",
+        "required": false,
+        "type": "number",
+        "default": "2000",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "animationMode",
+        "required": false,
+        "type": "enum",
+        "default": "'easeTo'",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "centerCoordinate",
+        "required": false,
+        "type": "arrayOf",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "heading",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "pitch",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "bounds",
+        "required": false,
+        "type": "shape",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "zoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "minZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "maxZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "followUserLocation",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "followUserMode",
+        "required": false,
+        "type": "enum",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "followZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "followPitch",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "followHeading",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "triggerKey",
+        "required": false,
+        "type": "any",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "alignment",
+        "required": false,
+        "type": "arrayOf",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "isUserInteraction",
+        "required": false,
+        "type": "FIX ME UNKNOWN TYPE",
+        "default": "false",
+        "description": "FIX ME NO DESCRIPTION"
+      }
+    ],
+    "composes": [
+      "../utils"
+    ],
+    "name": "Camera"
   },
   "CircleLayer": {
     "description": "CircleLayer is a style layer that renders one or more filled circles on the map.",
@@ -300,11 +441,14 @@
         "description": "Circle radius.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "circleColor",
@@ -314,11 +458,14 @@
         "description": "The fill color of the circle.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "circleBlur",
@@ -328,11 +475,14 @@
         "description": "Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "circleOpacity",
@@ -344,11 +494,14 @@
         "description": "The opacity at which the circle will be drawn.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "circleTranslate",
@@ -362,9 +515,13 @@
         "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "circleTranslateAnchor",
@@ -385,9 +542,13 @@
           "circleTranslate"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "circlePitchScale",
@@ -406,9 +567,13 @@
         "description": "Controls the scaling behavior of the circle when the map is pitched.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "circlePitchAlignment",
@@ -427,9 +592,13 @@
         "description": "Orientation of circle when map is pitched.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "circleStrokeWidth",
@@ -441,11 +610,14 @@
         "description": "The width of the circle's stroke. Strokes are placed outside of the `circleRadius`.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "circleStrokeColor",
@@ -455,11 +627,14 @@
         "description": "The stroke color of the circle.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "circleStrokeOpacity",
@@ -471,11 +646,14 @@
         "description": "The opacity of the circle's stroke.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       }
     ]
   },
@@ -588,9 +766,13 @@
         "description": "The opacity of the entire fill extrusion layer. This is rendered on a perLayer, not perFeature, basis, and dataDriven styling is not available.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "fillExtrusionColor",
@@ -602,11 +784,14 @@
         "disabledBy": [
           "fillExtrusionPattern"
         ],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "fillExtrusionTranslate",
@@ -620,9 +805,13 @@
         "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "fillExtrusionTranslateAnchor",
@@ -643,20 +832,28 @@
           "fillExtrusionTranslate"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "fillExtrusionPattern",
         "type": "string",
         "values": [],
-        "description": "Name of image in sprite to use for drawing images on extruded fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).",
+        "description": "Name of image in sprite to use for drawing images on extruded fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "fillExtrusionHeight",
@@ -668,11 +865,14 @@
         "description": "The height with which to extrude this layer.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "fillExtrusionBase",
@@ -686,11 +886,14 @@
           "fillExtrusionHeight"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       }
     ]
   },
@@ -801,9 +1004,13 @@
         "description": "Whether or not the fill should be antialiased.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "fillOpacity",
@@ -815,11 +1022,14 @@
         "description": "The opacity of the entire fill layer. In contrast to the `fillColor`, this value will also affect the 1px stroke around the fill, if the stroke is used.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "fillColor",
@@ -831,11 +1041,14 @@
         "disabledBy": [
           "fillPattern"
         ],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "fillOutlineColor",
@@ -846,11 +1059,14 @@
         "disabledBy": [
           "fillPattern"
         ],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "fillTranslate",
@@ -864,9 +1080,13 @@
         "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "fillTranslateAnchor",
@@ -887,20 +1107,28 @@
           "fillTranslate"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "fillPattern",
         "type": "string",
         "values": [],
-        "description": "Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).",
+        "description": "Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       }
     ]
   },
@@ -969,7 +1197,13 @@
         "description": "Whether extruded geometries are lit relative to the map or viewport.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": []
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "position",
@@ -983,7 +1217,13 @@
         "description": "Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0° (0° when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0° when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0°, directly above, to 180°, directly below).",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": []
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "color",
@@ -993,7 +1233,13 @@
         "description": "Color tint for lighting extruded geometries.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": []
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "intensity",
@@ -1005,7 +1251,13 @@
         "description": "Intensity of lighting (on a scale from 0 to 1). Higher numbers will present as more extreme contrast.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": []
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       }
     ]
   },
@@ -1110,9 +1362,13 @@
         "description": "The display of line endings.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "lineJoin",
@@ -1137,7 +1393,14 @@
         "disabledBy": [],
         "allowedFunctionTypes": [
           "camera"
-        ]
+        ],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "lineMiterLimit",
@@ -1147,9 +1410,13 @@
         "description": "Used to automatically convert miter joins to bevel joins for sharp angles.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "lineRoundLimit",
@@ -1159,9 +1426,13 @@
         "description": "Used to automatically convert round joins to miter joins for shallow angles.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "visibility",
@@ -1192,11 +1463,14 @@
         "description": "The opacity at which the line will be drawn.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "lineColor",
@@ -1208,11 +1482,14 @@
         "disabledBy": [
           "linePattern"
         ],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "lineTranslate",
@@ -1226,9 +1503,13 @@
         "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "lineTranslateAnchor",
@@ -1249,9 +1530,13 @@
           "lineTranslate"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "lineWidth",
@@ -1265,7 +1550,14 @@
         "disabledBy": [],
         "allowedFunctionTypes": [
           "camera"
-        ]
+        ],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "lineGapWidth",
@@ -1277,11 +1569,14 @@
         "description": "Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "lineOffset",
@@ -1292,11 +1587,14 @@
         "description": "The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "lineBlur",
@@ -1308,11 +1606,14 @@
         "description": "Blur applied to the line, in pixels.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "lineDasharray",
@@ -1320,25 +1621,33 @@
         "values": [],
         "minimum": 0,
         "units": "line widths",
-        "description": "Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width.",
+        "description": "Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoomDependent expressions will be evaluated only at integer zoom levels.",
         "requires": [],
         "disabledBy": [
           "linePattern"
         ],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "linePattern",
         "type": "string",
         "values": [],
-        "description": "Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512).",
+        "description": "Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       }
     ]
   },
@@ -1644,22 +1953,16 @@
       },
       {
         "name": "setCamera",
-        "docblock": "Map camera will perform updates based on provided config. Advanced use only!\n\n@example\nthis.map.setCamera({\n  centerCoordinate: [lng, lat],\n  zoom: 16,\n  duration: 2000,\n})\n\nthis.map.setCamera({\n  stops: [\n    { pitch: 45, duration: 200 },\n    { heading: 180, duration: 300 },\n  ]\n})\n\n @param {Object} config - Camera configuration",
+        "docblock": "Map camera will perform updates based on provided config. Deprecated use Camera#setCamera.",
         "modifiers": [],
         "params": [
           {
-            "name": "config",
-            "description": "Camera configuration",
-            "type": {
-              "name": "Object"
-            }
+            "name": "config"
           }
         ],
         "returns": null,
-        "description": "Map camera will perform updates based on provided config. Advanced use only!",
-        "examples": [
-          "\nthis.map.setCamera({\n  centerCoordinate: [lng, lat],\n  zoom: 16,\n  duration: 2000,\n})\n\nthis.map.setCamera({\n  stops: [\n    { pitch: 45, duration: 200 },\n    { heading: 180, duration: 300 },\n  ]\n})\n\n "
-        ]
+        "description": "Map camera will perform updates based on provided config. Deprecated use Camera#setCamera.",
+        "examples": []
       },
       {
         "name": "takeSnap",
@@ -1733,27 +2036,6 @@
     ],
     "props": [
       {
-        "name": "animated",
-        "required": false,
-        "type": "bool",
-        "default": "false",
-        "description": "Animates changes between pitch and bearing"
-      },
-      {
-        "name": "centerCoordinate",
-        "required": false,
-        "type": "arrayOf",
-        "default": "none",
-        "description": "Initial center coordinate on map [lng, lat]"
-      },
-      {
-        "name": "visibleCoordinateBounds",
-        "required": false,
-        "type": "arrayOf",
-        "default": "none",
-        "description": "Initial bounds on map [[lng, lat], [lng, lat]]"
-      },
-      {
         "name": "showUserLocation",
         "required": false,
         "type": "bool",
@@ -1764,7 +2046,7 @@
         "name": "userTrackingMode",
         "required": false,
         "type": "number",
-        "default": "MapboxGL.UserTrackingModes.None",
+        "default": "none",
         "description": "The mode used to track the user location on the map"
       },
       {
@@ -1782,20 +2064,6 @@
         "description": "The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport."
       },
       {
-        "name": "heading",
-        "required": false,
-        "type": "number",
-        "default": "0",
-        "description": "Initial heading on map"
-      },
-      {
-        "name": "pitch",
-        "required": false,
-        "type": "number",
-        "default": "0",
-        "description": "Initial pitch on map"
-      },
-      {
         "name": "style",
         "required": false,
         "type": "any",
@@ -1808,27 +2076,6 @@
         "type": "string",
         "default": "MapboxGL.StyleURL.Street",
         "description": "Style URL for map"
-      },
-      {
-        "name": "zoomLevel",
-        "required": false,
-        "type": "number",
-        "default": "16",
-        "description": "Initial zoom level of map"
-      },
-      {
-        "name": "minZoomLevel",
-        "required": false,
-        "type": "number",
-        "default": "none",
-        "description": "Min zoom level of map"
-      },
-      {
-        "name": "maxZoomLevel",
-        "required": false,
-        "type": "number",
-        "default": "none",
-        "description": "Max zoom level of map"
       },
       {
         "name": "localizeLabels",
@@ -1929,13 +2176,6 @@
         "description": "This event is triggered whenever the currently displayed map region finished changing"
       },
       {
-        "name": "onUserLocationUpdate",
-        "required": false,
-        "type": "func",
-        "default": "none",
-        "description": "This event is triggered whenever the location engine receives a location update"
-      },
-      {
         "name": "onWillStartLoadingMap",
         "required": false,
         "type": "func",
@@ -2004,13 +2244,6 @@
         "type": "func",
         "default": "none",
         "description": "This event is triggered when a style has finished loading."
-      },
-      {
-        "name": "onUserTrackingModeChange",
-        "required": false,
-        "type": "func",
-        "default": "none",
-        "description": "This event is triggered when the users tracking mode is changed."
       },
       {
         "name": "regionWillChangeDebounceTime",
@@ -2207,9 +2440,13 @@
         "description": "The opacity at which the image will be drawn.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "rasterHueRotate",
@@ -2220,9 +2457,13 @@
         "description": "Rotates hues around the color wheel.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "rasterBrightnessMin",
@@ -2234,9 +2475,13 @@
         "description": "Increase or reduce the brightness of the image. The value is the minimum brightness.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "rasterBrightnessMax",
@@ -2248,9 +2493,13 @@
         "description": "Increase or reduce the brightness of the image. The value is the maximum brightness.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "rasterSaturation",
@@ -2262,9 +2511,13 @@
         "description": "Increase or reduce the saturation of the image.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "rasterContrast",
@@ -2276,9 +2529,13 @@
         "description": "Increase or reduce the contrast of the image.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "rasterFadeDuration",
@@ -2290,9 +2547,13 @@
         "description": "Fade duration when a new tile is added.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       }
     ]
   },
@@ -2546,9 +2807,13 @@
         "description": "Label placement relative to its geometry.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "symbolSpacing",
@@ -2560,9 +2825,13 @@
         "description": "Distance between two symbol anchors.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "symbolAvoidEdges",
@@ -2572,9 +2841,13 @@
         "description": "If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "iconAllowOverlap",
@@ -2586,9 +2859,13 @@
           "iconImage"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "iconIgnorePlacement",
@@ -2600,9 +2877,13 @@
           "iconImage"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "iconOptional",
@@ -2615,9 +2896,13 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "iconRotationAlignment",
@@ -2642,9 +2927,13 @@
           "iconImage"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "iconSize",
@@ -2658,11 +2947,14 @@
           "iconImage"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "iconTextFit",
@@ -2692,9 +2984,13 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "iconTextFitPadding",
@@ -2713,22 +3009,29 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "iconImage",
         "type": "string",
         "values": [],
-        "description": "Name of image in sprite to use for drawing an image background. A string with `{tokens}` replaced, referencing the data property to pull from. (`{token}` replacement is only supported for literal `iconImage` values; not for property functions.)",
+        "description": "Name of image in sprite to use for drawing an image background.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "iconRotate",
@@ -2741,11 +3044,14 @@
           "iconImage"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "iconPadding",
@@ -2759,9 +3065,13 @@
           "iconImage"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "iconKeepUpright",
@@ -2773,29 +3083,35 @@
           "iconImage"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "iconOffset",
         "type": "array<number>",
         "values": [],
-        "units": "pixels multiplied by the value of \"icon-size\"",
         "default": [
           0,
           0
         ],
-        "description": "Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. When combined with `iconRotate` the offset will be as if the rotated direction was up.",
+        "description": "Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `iconSize` to obtain the final offset in pixels. When combined with `iconRotate` the offset will be as if the rotated direction was up.",
         "requires": [
           "iconImage"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "iconAnchor",
@@ -2844,11 +3160,14 @@
           "iconImage"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "iconPitchAlignment",
@@ -2873,9 +3192,13 @@
           "iconImage"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "textPitchAlignment",
@@ -2900,9 +3223,13 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "textRotationAlignment",
@@ -2927,23 +3254,30 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "textField",
         "type": "string",
         "values": [],
         "default": "",
-        "description": "Value to use for a text label. Feature properties are specified using tokens like `{field_name}`. (`{token}` replacement is only supported for literal `textField` values; not for property functions.)",
+        "description": "Value to use for a text label.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "textFont",
@@ -2960,7 +3294,14 @@
         "disabledBy": [],
         "allowedFunctionTypes": [
           "camera"
-        ]
+        ],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "textSize",
@@ -2974,11 +3315,14 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "textMaxWidth",
@@ -2994,7 +3338,14 @@
         "disabledBy": [],
         "allowedFunctionTypes": [
           "camera"
-        ]
+        ],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "textLineHeight",
@@ -3007,9 +3358,13 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "textLetterSpacing",
@@ -3024,7 +3379,14 @@
         "disabledBy": [],
         "allowedFunctionTypes": [
           "camera"
-        ]
+        ],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "textJustify",
@@ -3051,7 +3413,14 @@
         "disabledBy": [],
         "allowedFunctionTypes": [
           "camera"
-        ]
+        ],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "textAnchor",
@@ -3102,7 +3471,14 @@
         "disabledBy": [],
         "allowedFunctionTypes": [
           "camera"
-        ]
+        ],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "textMaxAngle",
@@ -3115,9 +3491,13 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "textRotate",
@@ -3130,11 +3510,14 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "textPadding",
@@ -3148,9 +3531,13 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "textKeepUpright",
@@ -3162,9 +3549,13 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "textTransform",
@@ -3189,11 +3580,14 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "textOffset",
@@ -3209,11 +3603,14 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "textAllowOverlap",
@@ -3225,9 +3622,13 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "textIgnorePlacement",
@@ -3239,9 +3640,13 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "textOptional",
@@ -3254,9 +3659,13 @@
           "iconImage"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "visibility",
@@ -3289,11 +3698,14 @@
           "iconImage"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "iconColor",
@@ -3305,11 +3717,14 @@
           "iconImage"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "iconHaloColor",
@@ -3321,11 +3736,14 @@
           "iconImage"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "iconHaloWidth",
@@ -3339,11 +3757,14 @@
           "iconImage"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "iconHaloBlur",
@@ -3357,11 +3778,14 @@
           "iconImage"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "iconTranslate",
@@ -3377,9 +3801,13 @@
           "iconImage"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "iconTranslateAnchor",
@@ -3401,9 +3829,13 @@
           "iconTranslate"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "textOpacity",
@@ -3417,11 +3849,14 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "textColor",
@@ -3433,11 +3868,14 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "textHaloColor",
@@ -3449,11 +3887,14 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "textHaloWidth",
@@ -3467,11 +3908,14 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "textHaloBlur",
@@ -3485,11 +3929,14 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera",
-          "source",
-          "composite"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
       },
       {
         "name": "textTranslate",
@@ -3505,9 +3952,13 @@
           "textField"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
       },
       {
         "name": "textTranslateAnchor",
@@ -3529,11 +3980,65 @@
           "textTranslate"
         ],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ]
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
       }
     ]
+  },
+  "UserLocation": {
+    "description": "",
+    "methods": [
+      {
+        "name": "userIconLayers",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      }
+    ],
+    "props": [
+      {
+        "name": "animated",
+        "required": false,
+        "type": "bool",
+        "default": "true",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "renderMode",
+        "required": false,
+        "type": "enum",
+        "default": "'normal'",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "visible",
+        "required": false,
+        "type": "bool",
+        "default": "true",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "onPress",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "onUpdate",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      }
+    ],
+    "name": "UserLocation"
   },
   "VectorSource": {
     "description": "VectorSource is a map content source that supplies tiled vector data in Mapbox Vector Tile format to be shown on the map.\nThe location of and metadata about the tiles are defined either by an option dictionary or by an external file that conforms to the TileJSON specification.",
@@ -3572,6 +4077,77 @@
       "../utils"
     ],
     "name": "VectorSource"
+  },
+  "Annotation": {
+    "description": "",
+    "methods": [
+      {
+        "name": "onPress",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "symbolStyle",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      }
+    ],
+    "props": [
+      {
+        "name": "id",
+        "required": true,
+        "type": "string",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "animated",
+        "required": false,
+        "type": "bool",
+        "default": "false",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "animationDuration",
+        "required": false,
+        "type": "number",
+        "default": "1000",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "animationEasingFunction",
+        "required": false,
+        "type": "func",
+        "default": "Easing.linear",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "coordinates",
+        "required": false,
+        "type": "arrayOf",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "onPress",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "icon",
+        "required": false,
+        "type": "union",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      }
+    ],
+    "name": "Annotation"
   },
   "offlineManager": {
     "name": "offlineManager",

@@ -18,8 +18,10 @@
 - (void)lineLayer:(MGLLineStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
 - (void)symbolLayer:(MGLSymbolStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
 - (void)circleLayer:(MGLCircleStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
+- (void)heatmapLayer:(MGLHeatmapStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
 - (void)fillExtrusionLayer:(MGLFillExtrusionStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
 - (void)rasterLayer:(MGLRasterStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
+- (void)hillshadeLayer:(MGLHillshadeStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
 - (void)backgroundLayer:(MGLBackgroundStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
 - (void)lightLayer:(MGLLight *)layer withReactStyle:(NSDictionary *)reactStyle;
 
@@ -143,6 +145,15 @@
 - (void)setCircleStrokeColorTransition:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setCircleStrokeOpacity:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setCircleStrokeOpacityTransition:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHeatmapStyleLayerVisibility:(MGLHeatmapStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHeatmapRadius:(MGLHeatmapStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHeatmapRadiusTransition:(MGLHeatmapStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHeatmapWeight:(MGLHeatmapStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHeatmapIntensity:(MGLHeatmapStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHeatmapIntensityTransition:(MGLHeatmapStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHeatmapColor:(MGLHeatmapStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHeatmapOpacity:(MGLHeatmapStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHeatmapOpacityTransition:(MGLHeatmapStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setFillExtrusionStyleLayerVisibility:(MGLFillExtrusionStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setFillExtrusionOpacity:(MGLFillExtrusionStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setFillExtrusionOpacityTransition:(MGLFillExtrusionStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
@@ -171,6 +182,17 @@
 - (void)setRasterContrast:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setRasterContrastTransition:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setRasterFadeDuration:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHillshadeStyleLayerVisibility:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHillshadeIlluminationDirection:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHillshadeIlluminationAnchor:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHillshadeExaggeration:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHillshadeExaggerationTransition:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHillshadeShadowColor:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHillshadeShadowColorTransition:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHillshadeHighlightColor:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHillshadeHighlightColorTransition:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHillshadeAccentColor:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setHillshadeAccentColorTransition:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setBackgroundStyleLayerVisibility:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setBackgroundColor:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setBackgroundColorTransition:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;

@@ -12,6 +12,8 @@ import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.PropertyValue;
 import com.mapbox.mapboxsdk.style.layers.RasterLayer;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
+import com.mapbox.mapboxsdk.style.layers.HeatmapLayer;
+import com.mapbox.mapboxsdk.style.layers.HillshadeLayer;
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
 import com.mapbox.mapboxsdk.style.light.Light;
 import com.mapbox.mapboxsdk.style.light.Position;
@@ -454,6 +456,47 @@ public class RCTMGLStyleFactory {
         }
       }
     }
+    public static void setHeatmapLayerStyle(final HeatmapLayer layer, RCTMGLStyle style) {
+      List<String> styleKeys = style.getAllStyleKeys();
+
+      if (styleKeys.size() == 0) {
+        return;
+      }
+
+      for (String styleKey : styleKeys) {
+        final RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
+
+        switch (styleKey) {
+            case "visibility":
+              RCTMGLStyleFactory.setVisibility(layer, styleValue);
+              break;
+            case "heatmapRadius":
+              RCTMGLStyleFactory.setHeatmapRadius(layer, styleValue);
+              break;
+            case "heatmapRadiusTransition":
+              RCTMGLStyleFactory.setHeatmapRadiusTransition(layer, styleValue);
+              break;
+            case "heatmapWeight":
+              RCTMGLStyleFactory.setHeatmapWeight(layer, styleValue);
+              break;
+            case "heatmapIntensity":
+              RCTMGLStyleFactory.setHeatmapIntensity(layer, styleValue);
+              break;
+            case "heatmapIntensityTransition":
+              RCTMGLStyleFactory.setHeatmapIntensityTransition(layer, styleValue);
+              break;
+            case "heatmapColor":
+              RCTMGLStyleFactory.setHeatmapColor(layer, styleValue);
+              break;
+            case "heatmapOpacity":
+              RCTMGLStyleFactory.setHeatmapOpacity(layer, styleValue);
+              break;
+            case "heatmapOpacityTransition":
+              RCTMGLStyleFactory.setHeatmapOpacityTransition(layer, styleValue);
+              break;
+        }
+      }
+    }
     public static void setFillExtrusionLayerStyle(final FillExtrusionLayer layer, RCTMGLStyle style) {
       List<String> styleKeys = style.getAllStyleKeys();
 
@@ -567,6 +610,53 @@ public class RCTMGLStyleFactory {
               break;
             case "rasterFadeDuration":
               RCTMGLStyleFactory.setRasterFadeDuration(layer, styleValue);
+              break;
+        }
+      }
+    }
+    public static void setHillshadeLayerStyle(final HillshadeLayer layer, RCTMGLStyle style) {
+      List<String> styleKeys = style.getAllStyleKeys();
+
+      if (styleKeys.size() == 0) {
+        return;
+      }
+
+      for (String styleKey : styleKeys) {
+        final RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
+
+        switch (styleKey) {
+            case "visibility":
+              RCTMGLStyleFactory.setVisibility(layer, styleValue);
+              break;
+            case "hillshadeIlluminationDirection":
+              RCTMGLStyleFactory.setHillshadeIlluminationDirection(layer, styleValue);
+              break;
+            case "hillshadeIlluminationAnchor":
+              RCTMGLStyleFactory.setHillshadeIlluminationAnchor(layer, styleValue);
+              break;
+            case "hillshadeExaggeration":
+              RCTMGLStyleFactory.setHillshadeExaggeration(layer, styleValue);
+              break;
+            case "hillshadeExaggerationTransition":
+              RCTMGLStyleFactory.setHillshadeExaggerationTransition(layer, styleValue);
+              break;
+            case "hillshadeShadowColor":
+              RCTMGLStyleFactory.setHillshadeShadowColor(layer, styleValue);
+              break;
+            case "hillshadeShadowColorTransition":
+              RCTMGLStyleFactory.setHillshadeShadowColorTransition(layer, styleValue);
+              break;
+            case "hillshadeHighlightColor":
+              RCTMGLStyleFactory.setHillshadeHighlightColor(layer, styleValue);
+              break;
+            case "hillshadeHighlightColorTransition":
+              RCTMGLStyleFactory.setHillshadeHighlightColorTransition(layer, styleValue);
+              break;
+            case "hillshadeAccentColor":
+              RCTMGLStyleFactory.setHillshadeAccentColor(layer, styleValue);
+              break;
+            case "hillshadeAccentColorTransition":
+              RCTMGLStyleFactory.setHillshadeAccentColorTransition(layer, styleValue);
               break;
         }
       }
@@ -1591,6 +1681,74 @@ public class RCTMGLStyleFactory {
       }
     }
 
+    public static void setVisibility(HeatmapLayer layer, RCTMGLStyleValue styleValue) {
+      layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
+    }
+
+    public static void setHeatmapRadius(HeatmapLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.heatmapRadius(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.heatmapRadius(styleValue.getFloat(VALUE_KEY)));
+      }
+    }
+
+
+    public static void setHeatmapRadiusTransition(HeatmapLayer layer, RCTMGLStyleValue styleValue) {
+      TransitionOptions transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.setHeatmapRadiusTransition(transition);
+      }
+    }
+
+    public static void setHeatmapWeight(HeatmapLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.heatmapWeight(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.heatmapWeight(styleValue.getFloat(VALUE_KEY)));
+      }
+    }
+
+    public static void setHeatmapIntensity(HeatmapLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.heatmapIntensity(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.heatmapIntensity(styleValue.getFloat(VALUE_KEY)));
+      }
+    }
+
+
+    public static void setHeatmapIntensityTransition(HeatmapLayer layer, RCTMGLStyleValue styleValue) {
+      TransitionOptions transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.setHeatmapIntensityTransition(transition);
+      }
+    }
+
+    public static void setHeatmapColor(HeatmapLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.heatmapColor(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.heatmapColor(styleValue.getInt(VALUE_KEY)));
+      }
+    }
+
+    public static void setHeatmapOpacity(HeatmapLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.heatmapOpacity(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.heatmapOpacity(styleValue.getFloat(VALUE_KEY)));
+      }
+    }
+
+
+    public static void setHeatmapOpacityTransition(HeatmapLayer layer, RCTMGLStyleValue styleValue) {
+      TransitionOptions transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.setHeatmapOpacityTransition(transition);
+      }
+    }
+
     public static void setVisibility(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
       layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
     }
@@ -1804,6 +1962,90 @@ public class RCTMGLStyleFactory {
         layer.setProperties(PropertyFactory.rasterFadeDuration(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.rasterFadeDuration(styleValue.getFloat(VALUE_KEY)));
+      }
+    }
+
+    public static void setVisibility(HillshadeLayer layer, RCTMGLStyleValue styleValue) {
+      layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
+    }
+
+    public static void setHillshadeIlluminationDirection(HillshadeLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.hillshadeIlluminationDirection(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.hillshadeIlluminationDirection(styleValue.getFloat(VALUE_KEY)));
+      }
+    }
+
+    public static void setHillshadeIlluminationAnchor(HillshadeLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.hillshadeIlluminationAnchor(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.hillshadeIlluminationAnchor(styleValue.getString(VALUE_KEY)));
+      }
+    }
+
+    public static void setHillshadeExaggeration(HillshadeLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.hillshadeExaggeration(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.hillshadeExaggeration(styleValue.getFloat(VALUE_KEY)));
+      }
+    }
+
+
+    public static void setHillshadeExaggerationTransition(HillshadeLayer layer, RCTMGLStyleValue styleValue) {
+      TransitionOptions transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.setHillshadeExaggerationTransition(transition);
+      }
+    }
+
+    public static void setHillshadeShadowColor(HillshadeLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.hillshadeShadowColor(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.hillshadeShadowColor(styleValue.getInt(VALUE_KEY)));
+      }
+    }
+
+
+    public static void setHillshadeShadowColorTransition(HillshadeLayer layer, RCTMGLStyleValue styleValue) {
+      TransitionOptions transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.setHillshadeShadowColorTransition(transition);
+      }
+    }
+
+    public static void setHillshadeHighlightColor(HillshadeLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.hillshadeHighlightColor(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.hillshadeHighlightColor(styleValue.getInt(VALUE_KEY)));
+      }
+    }
+
+
+    public static void setHillshadeHighlightColorTransition(HillshadeLayer layer, RCTMGLStyleValue styleValue) {
+      TransitionOptions transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.setHillshadeHighlightColorTransition(transition);
+      }
+    }
+
+    public static void setHillshadeAccentColor(HillshadeLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.hillshadeAccentColor(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.hillshadeAccentColor(styleValue.getInt(VALUE_KEY)));
+      }
+    }
+
+
+    public static void setHillshadeAccentColorTransition(HillshadeLayer layer, RCTMGLStyleValue styleValue) {
+      TransitionOptions transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.setHillshadeAccentColorTransition(transition);
       }
     }
 

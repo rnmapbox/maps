@@ -66,8 +66,9 @@ The opacity at which the image will be drawn.
 #### Maximum
 `1`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -86,8 +87,9 @@ Rotates hues around the color wheel.
 `degrees`
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -109,8 +111,9 @@ Increase or reduce the brightness of the image. The value is the minimum brightn
 #### Maximum
 `1`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -132,8 +135,9 @@ Increase or reduce the brightness of the image. The value is the maximum brightn
 #### Maximum
 `1`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -155,8 +159,9 @@ Increase or reduce the saturation of the image.
 #### Maximum
 `1`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -178,8 +183,9 @@ Increase or reduce the contrast of the image.
 #### Maximum
 `1`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -201,6 +207,7 @@ Fade duration when a new tile is added.
 `0`
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 

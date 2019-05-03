@@ -88,8 +88,9 @@ Label placement relative to its geometry.
 **line** - The label is placed along the line of the geometry. Can only be used on `LineString` and `Polygon` geometries.<br />
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -111,8 +112,9 @@ Distance between two symbol anchors.
 `1`
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -128,8 +130,9 @@ If true, the symbols will not cross tile edges to avoid mutual collisions. Recom
 `false`
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -148,8 +151,9 @@ If true, the icon will be visible even if it collides with other previously draw
 #### Requires
 `iconImage`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -168,8 +172,9 @@ If true, other symbols can be visible even if they collide with the icon.
 #### Requires
 `iconImage`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -188,8 +193,9 @@ If true, text will display without their corresponding icons when the icon colli
 #### Requires
 `iconImage, textField`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -213,8 +219,9 @@ In combination with `symbolPlacement`, determines the rotation behavior of icons
 #### Requires
 `iconImage`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -239,8 +246,9 @@ Scales the original size of the icon by the provided factor. The new pixel size 
 #### Requires
 `iconImage`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -265,8 +273,9 @@ Scales the icon to fit around the associated text.
 #### Requires
 `iconImage, textField`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -288,8 +297,9 @@ Size of the additional area added to dimensions determined by `iconTextFit`, in 
 #### Requires
 `iconImage, textField`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -297,14 +307,15 @@ ___
 `iconImage`
 
 #### Description
-Name of image in sprite to use for drawing an image background. A string with `{tokens}` replaced, referencing the data property to pull from. (`{token}` replacement is only supported for literal `iconImage` values; not for property functions.)
+Name of image in sprite to use for drawing an image background.
 
 #### Type
 `string`
 
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -326,8 +337,9 @@ Rotates the icon clockwise.
 #### Requires
 `iconImage`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -352,8 +364,9 @@ Size of the additional area around the icon bounding box used for detecting symb
 #### Requires
 `iconImage`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -372,8 +385,9 @@ If true, the icon may be flipped to prevent it from being rendered upsideDown.
 #### Requires
 `iconImage`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -381,22 +395,20 @@ ___
 `iconOffset`
 
 #### Description
-Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. When combined with `iconRotate` the offset will be as if the rotated direction was up.
+Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `iconSize` to obtain the final offset in pixels. When combined with `iconRotate` the offset will be as if the rotated direction was up.
 
 #### Type
 `array<number>`
 #### Default Value
 `[0,0]`
 
-#### Units
-`pixels multiplied by the value of "icon-size"`
-
 
 #### Requires
 `iconImage`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -426,8 +438,9 @@ Part of the icon placed closest to the anchor.
 #### Requires
 `iconImage`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -451,8 +464,9 @@ Orientation of icon when map is pitched.
 #### Requires
 `iconImage`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -476,8 +490,9 @@ Orientation of text when map is pitched.
 #### Requires
 `textField`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -501,8 +516,9 @@ In combination with `symbolPlacement`, determines the rotation behavior of the i
 #### Requires
 `textField`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -510,7 +526,7 @@ ___
 `textField`
 
 #### Description
-Value to use for a text label. Feature properties are specified using tokens like `{field_name}`. (`{token}` replacement is only supported for literal `textField` values; not for property functions.)
+Value to use for a text label.
 
 #### Type
 `string`
@@ -518,8 +534,9 @@ Value to use for a text label. Feature properties are specified using tokens lik
 `empty string`
 
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -540,6 +557,9 @@ Font stack to use for displaying text.
 
 #### Supported Style Functions
 `camera`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -564,8 +584,9 @@ Font size.
 #### Requires
 `textField`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -592,6 +613,9 @@ The maximum line width for text wrapping.
 
 #### Supported Style Functions
 `camera`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -613,8 +637,9 @@ Text leading value for multiLine text.
 #### Requires
 `textField`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -638,6 +663,9 @@ Text tracking amount.
 
 #### Supported Style Functions
 `camera`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -663,6 +691,9 @@ Text justification options.
 
 #### Supported Style Functions
 `camera`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -694,6 +725,9 @@ Part of the text placed closest to the anchor.
 
 #### Supported Style Functions
 `camera`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -715,8 +749,9 @@ Maximum angle change between adjacent characters.
 #### Requires
 `textField`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -738,8 +773,9 @@ Rotates the text clockwise.
 #### Requires
 `textField`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -764,8 +800,9 @@ Size of the additional area around the text bounding box used for detecting symb
 #### Requires
 `textField`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -784,8 +821,9 @@ If true, the text may be flipped vertically to prevent it from being rendered up
 #### Requires
 `textField`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -809,8 +847,9 @@ Specifies how to capitalize text, similar to the CSS `textTransform` property.
 #### Requires
 `textField`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -832,8 +871,9 @@ Offset distance of text from its anchor. Positive values indicate right and down
 #### Requires
 `textField`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -852,8 +892,9 @@ If true, the text will be visible even if it collides with other previously draw
 #### Requires
 `textField`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -872,8 +913,9 @@ If true, other symbols can be visible even if they collide with the text.
 #### Requires
 `textField`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -892,8 +934,9 @@ If true, icons will display without their corresponding text when the text colli
 #### Requires
 `textField, iconImage`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -937,8 +980,9 @@ The opacity at which the icon will be drawn.
 #### Requires
 `iconImage`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -957,8 +1001,9 @@ The color of the icon. This can only be used with sdf icons.
 #### Requires
 `iconImage`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -977,8 +1022,9 @@ The color of the icon's halo. Icon halos can only be used with SDF icons.
 #### Requires
 `iconImage`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -1003,8 +1049,9 @@ Distance of halo to the icon outline.
 #### Requires
 `iconImage`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -1029,8 +1076,9 @@ Fade out the halo towards the outside.
 #### Requires
 `iconImage`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -1052,8 +1100,9 @@ Distance that the icon's anchor is moved from its original placement. Positive v
 #### Requires
 `iconImage`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -1076,8 +1125,9 @@ Controls the frame of reference for `iconTranslate`.
 #### Requires
 `iconImage, iconTranslate`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -1102,8 +1152,9 @@ The opacity at which the text will be drawn.
 #### Requires
 `textField`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -1122,8 +1173,9 @@ The color with which the text will be drawn.
 #### Requires
 `textField`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -1142,8 +1194,9 @@ The color of the text's halo, which helps it stand out from backgrounds.
 #### Requires
 `textField`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -1168,8 +1221,9 @@ Distance of halo to the font outline. Max text halo width is 1/4 of the fontSize
 #### Requires
 `textField`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -1194,8 +1248,9 @@ The halo's fadeout distance towards the outside.
 #### Requires
 `textField`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -1217,8 +1272,9 @@ Distance that the text's anchor is moved from its original placement. Positive v
 #### Requires
 `textField`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -1241,6 +1297,7 @@ Controls the frame of reference for `textTranslate`.
 #### Requires
 `textField, textTranslate`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
