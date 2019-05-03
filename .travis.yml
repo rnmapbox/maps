@@ -4,9 +4,32 @@ matrix:
       jdk: oraclejdk8
       before_install:
         - nvm install 8
+        - echo yes | sdkmanager "platforms;android-28"
+      android:
+        components:
+          - tools
+          - platform-tools
+          - build-tools-28.0.3
+          - tools
+      cache:
+        bundler: true
+        npm: true
+        directories:
+          - example/node_modules
+      before_cache:
+        - rm -f example/node_modules/\@react-native-mapbox/
     - os: osx
       osx_image: xcode10.2
       node_js: 8
+      cache:
+        bundler: true
+        npm: true
+        cocoapods: true
+        directories:
+          - example/node_modules
+      before_cache:
+        - rm -f example/node_modules/\@react-native-mapbox/
+      podfile: example/ios/Podfile
 
 install:
   - cd example
@@ -18,6 +41,12 @@ install:
       cd ios
       pod install
       gem install xcpretty
+    fi
+  - |
+    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      cd android
+      ./gradlew tasks
+      ./gradlew assembleAndroidTest
     fi
 
 script:
