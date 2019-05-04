@@ -131,7 +131,10 @@ class Home extends React.Component {
   renderItem({item, index}) {
     return (
       <View style={styles.exampleListItemBorder}>
-        <TouchableOpacity onPress={() => this.onExamplePress(index)}>
+        <TouchableOpacity
+          onPress={() => this.onExamplePress(index)}
+          testID={`example-${item.label}`}
+        >
           <View style={styles.exampleListItem}>
             <Text style={styles.exampleListLabel}>{item.label}</Text>
             <Icon name="keyboard-arrow-right" />
@@ -146,7 +149,7 @@ class Home extends React.Component {
       <View style={sheet.matchParent}>
         <MapHeader label="React Native Mapbox GL" />
 
-        <View style={sheet.matchParent}>
+        <View style={sheet.matchParent} testID="example-menu">
           <FlatList
             style={styles.exampleList}
             data={Examples}

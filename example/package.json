@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@mapbox/geo-viewport": "^0.4.0",
+    "@mapbox/mapbox-sdk": "^0.6.0",
     "@react-native-mapbox/maps": "file:../react-native-mapbox-maps-7.0.0.tgz",
     "@turf/along": "^5.1.5",
     "@turf/bearing": "^5.1.5",
@@ -23,36 +24,60 @@
     "@turf/nearest": "^4.7.3",
     "buffer": "^5.1.0",
     "install": "^0.12.2",
-    "@mapbox/mapbox-sdk": "^0.6.0",
+    "jest-cli": "^24.7.1",
     "moment": "^2.24.0",
     "npm": "^5.10.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.3",
     "react-native": "0.59.0",
     "react-native-elements": "^1.1.0",
-    "react-native-vector-icons": "^6.3.0",
     "react-native-safe-area-view": "^0.13.1",
+    "react-native-vector-icons": "^6.3.0",
     "react-navigation": "^2.18.3",
     "url": "^0.11.0"
   },
   "devDependencies": {
-    "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "^24.4.0",
-    "jest": "^24.4.0",
-    "metro-react-native-babel-preset": "^0.53.0",
-    "react-test-renderer": "16.8.3",
     "@babel/core": "^7.3.4",
     "@babel/plugin-proposal-class-properties": "7.3.4",
     "@babel/plugin-transform-exponentiation-operator": "7.2.0",
     "@babel/plugin-transform-flow-strip-types": "7.3.4",
     "@babel/plugin-transform-runtime": "7.3.4",
     "@babel/runtime": "^7.3.4",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^24.4.0",
     "babel-plugin-transform-remove-console": "6.9.4",
+    "detox": "^12.6.1",
+    "flow-bin": "^0.95.1",
     "fs-extra": "^4.0.3",
+    "jest": "^24.7.1",
+    "metro-react-native-babel-preset": "^0.53.0",
     "minimatch": "^3.0.4",
     "node-watch": "^0.6.0",
-    "rimraf": "^2.6.3",
-    "flow-bin": "^0.95.1"
+    "react-test-renderer": "16.8.3",
+    "rimraf": "^2.6.3"
+  },
+  "detox": {
+    "configurations": {
+      "android.emu.debug": {
+        "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+        "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+        "type": "android.emulator",
+        "name": "Nexus_S_API_Q"
+      },
+      "android.emu.release": {
+        "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",
+        "build": "cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
+        "type": "android.emulator",
+        "name": "Nexus_S_API_Q"
+      },
+      "ios.sim.release": {
+        "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/RNMapboxGLExample.app",
+        "build": "xcodebuild -workspace ios/RNMapboxGLExample.xcworkspace -scheme RNMapboxGLExample -configuration Release -sdk iphonesimulator -derivedDataPath ios/build",
+        "type": "ios.simulator",
+        "name": "iPhone 7"
+      }
+    },
+    "test-runner": "jest"
   },
   "jest": {
     "preset": "react-native"

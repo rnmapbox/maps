@@ -16,8 +16,12 @@ matrix:
         npm: true
         directories:
           - example/node_modules
+          - $HOME/.gradle/caches/
+          - $HOME/.gradle/wrapper/
       before_cache:
         - rm -f example/node_modules/\@react-native-mapbox/
+        - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+        - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
     - os: osx
       osx_image: xcode10.2
       node_js: 8
@@ -27,33 +31,45 @@ matrix:
         cocoapods: true
         directories:
           - example/node_modules
+          - $HOME/Library/Caches/Homebrew
       before_cache:
         - rm -f example/node_modules/\@react-native-mapbox/
+        - brew cleanup
       podfile: example/ios/Podfile
 
 install:
-  - cd example
+  - echo $TRAVIS_BUILD_DIR
+  - cd $TRAVIS_BUILD_DIR/example
   - echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
   - npm install
+  - npm install -g detox-cli
   - echo $TRAVIS_OS_NAME
   - |
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-      cd ios
+      cd $TRAVIS_BUILD_DIR/example/ios
       pod install
+      cd $TRAVIS_BUILD_DIR/example
       gem install xcpretty
-    fi
-  - |
-    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-      cd android
-      ./gradlew tasks
-      ./gradlew assembleAndroidTest
+      brew tap wix/brew
+      brew install applesimutils
+      brew tap facebook/fb
+      brew install fbsimctl --HEAD
+      detox clean-framework-cache && detox build-framework-cache
     fi
 
 script:
   - |
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-      cd example/ios
-      xcodebuild -workspace ./RNMapboxGLExample.xcworkspace -scheme RNMapboxGLExample | xcpretty -c
+      cd $TRAVIS_BUILD_DIR/example/ios
+      # xcodebuild -workspace ./RNMapboxGLExample.xcworkspace -scheme RNMapboxGLExample | xcpretty -c
+      cd $TRAVIS_BUILD_DIR/example
+      detox build --configuration ios.sim.release | xcpretty -c
+      detox test --configuration ios.sim.release --loglevel trace --cleanup
     fi
-
+  - |
+    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      cd $TRAVIS_BUILD_DIR/example/android
+      ./gradlew tasks
+      ./gradlew assembleDebug
+    fi
 

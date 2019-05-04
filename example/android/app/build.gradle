@@ -97,6 +97,9 @@ android {
         versionCode 1
         versionName "1.0"
 
+	    testBuildType System.getProperty('testBuildType', 'debug')
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+
     }
     splits {
         abi {
@@ -135,6 +138,9 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation project(':android-mapbox-react-native-mapbox-gl')
     implementation project(':react-native-vector-icons')
+
+    androidTestImplementation('com.wix:detox:+') { transitive = true }
+    androidTestImplementation 'junit:junit:4.12'
 }
 
 // Run this once to be able to run the application with BUCK
