@@ -9,11 +9,15 @@ describe('Public Interface', () => {
       'StyleSheet',
       'Light',
       'PointAnnotation',
+      'Annotation',
       'Callout',
+      'Camera',
+      'UserLocation',
 
       // modules
       'offlineManager',
       'snapshotManager',
+      'locationManager',
 
       // layers
       'FillLayer',
@@ -73,6 +77,9 @@ describe('Public Interface', () => {
 
       // animated
       'Animated',
+
+      // helpers
+      'AnimatedPoint',
     ];
     actualKeys.forEach(key => expect(expectedKeys).toContain(key));
   });

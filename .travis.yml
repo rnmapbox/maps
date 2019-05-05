@@ -16,8 +16,12 @@ matrix:
         npm: true
         directories:
           - example/node_modules
+          - $HOME/.gradle/caches/
+          - $HOME/.gradle/wrapper/
       before_cache:
         - rm -f example/node_modules/\@react-native-mapbox/
+        - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+        - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
     - os: osx
       osx_image: xcode10.2
       node_js: 8
@@ -27,33 +31,39 @@ matrix:
         cocoapods: true
         directories:
           - example/node_modules
+          - $HOME/Library/Caches/Homebrew
       before_cache:
         - rm -f example/node_modules/\@react-native-mapbox/
+        - brew cleanup
       podfile: example/ios/Podfile
 
 install:
-  - cd example
+  - cd $TRAVIS_BUILD_DIR/example
   - echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
   - npm install
   - echo $TRAVIS_OS_NAME
   - |
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-      cd ios
+      cd $TRAVIS_BUILD_DIR/example/ios
       pod install
       gem install xcpretty
-    fi
-  - |
-    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-      cd android
-      ./gradlew tasks
-      ./gradlew assembleAndroidTest
     fi
 
 script:
   - |
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-      cd example/ios
+      cd $TRAVIS_BUILD_DIR/example/ios
       xcodebuild -workspace ./RNMapboxGLExample.xcworkspace -scheme RNMapboxGLExample | xcpretty -c
     fi
+  - |
+    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      cd $TRAVIS_BUILD_DIR/example/android
+      ./gradlew tasks
+      ./gradlew assembleDebug
+    fi
+  - cd $TRAVIS_BUILD_DIR
+  - npm install -g 'jest@24.8.0'
+  - npm install
+  - npm run unittest
 
 
