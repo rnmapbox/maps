@@ -21,54 +21,55 @@
 * <a href="#name">symbolPlacement</a><br/>
 * <a href="#name-1">symbolSpacing</a><br/>
 * <a href="#name-2">symbolAvoidEdges</a><br/>
-* <a href="#name-3">iconAllowOverlap</a><br/>
-* <a href="#name-4">iconIgnorePlacement</a><br/>
-* <a href="#name-5">iconOptional</a><br/>
-* <a href="#name-6">iconRotationAlignment</a><br/>
-* <a href="#name-7">iconSize</a><br/>
-* <a href="#name-8">iconTextFit</a><br/>
-* <a href="#name-9">iconTextFitPadding</a><br/>
-* <a href="#name-10">iconImage</a><br/>
-* <a href="#name-11">iconRotate</a><br/>
-* <a href="#name-12">iconPadding</a><br/>
-* <a href="#name-13">iconKeepUpright</a><br/>
-* <a href="#name-14">iconOffset</a><br/>
-* <a href="#name-15">iconAnchor</a><br/>
-* <a href="#name-16">iconPitchAlignment</a><br/>
-* <a href="#name-17">textPitchAlignment</a><br/>
-* <a href="#name-18">textRotationAlignment</a><br/>
-* <a href="#name-19">textField</a><br/>
-* <a href="#name-20">textFont</a><br/>
-* <a href="#name-21">textSize</a><br/>
-* <a href="#name-22">textMaxWidth</a><br/>
-* <a href="#name-23">textLineHeight</a><br/>
-* <a href="#name-24">textLetterSpacing</a><br/>
-* <a href="#name-25">textJustify</a><br/>
-* <a href="#name-26">textAnchor</a><br/>
-* <a href="#name-27">textMaxAngle</a><br/>
-* <a href="#name-28">textRotate</a><br/>
-* <a href="#name-29">textPadding</a><br/>
-* <a href="#name-30">textKeepUpright</a><br/>
-* <a href="#name-31">textTransform</a><br/>
-* <a href="#name-32">textOffset</a><br/>
-* <a href="#name-33">textAllowOverlap</a><br/>
-* <a href="#name-34">textIgnorePlacement</a><br/>
-* <a href="#name-35">textOptional</a><br/>
-* <a href="#name-36">visibility</a><br/>
-* <a href="#name-37">iconOpacity</a><br/>
-* <a href="#name-38">iconColor</a><br/>
-* <a href="#name-39">iconHaloColor</a><br/>
-* <a href="#name-40">iconHaloWidth</a><br/>
-* <a href="#name-41">iconHaloBlur</a><br/>
-* <a href="#name-42">iconTranslate</a><br/>
-* <a href="#name-43">iconTranslateAnchor</a><br/>
-* <a href="#name-44">textOpacity</a><br/>
-* <a href="#name-45">textColor</a><br/>
-* <a href="#name-46">textHaloColor</a><br/>
-* <a href="#name-47">textHaloWidth</a><br/>
-* <a href="#name-48">textHaloBlur</a><br/>
-* <a href="#name-49">textTranslate</a><br/>
-* <a href="#name-50">textTranslateAnchor</a><br/>
+* <a href="#name-3">symbolZOrder</a><br/>
+* <a href="#name-4">iconAllowOverlap</a><br/>
+* <a href="#name-5">iconIgnorePlacement</a><br/>
+* <a href="#name-6">iconOptional</a><br/>
+* <a href="#name-7">iconRotationAlignment</a><br/>
+* <a href="#name-8">iconSize</a><br/>
+* <a href="#name-9">iconTextFit</a><br/>
+* <a href="#name-10">iconTextFitPadding</a><br/>
+* <a href="#name-11">iconImage</a><br/>
+* <a href="#name-12">iconRotate</a><br/>
+* <a href="#name-13">iconPadding</a><br/>
+* <a href="#name-14">iconKeepUpright</a><br/>
+* <a href="#name-15">iconOffset</a><br/>
+* <a href="#name-16">iconAnchor</a><br/>
+* <a href="#name-17">iconPitchAlignment</a><br/>
+* <a href="#name-18">textPitchAlignment</a><br/>
+* <a href="#name-19">textRotationAlignment</a><br/>
+* <a href="#name-20">textField</a><br/>
+* <a href="#name-21">textFont</a><br/>
+* <a href="#name-22">textSize</a><br/>
+* <a href="#name-23">textMaxWidth</a><br/>
+* <a href="#name-24">textLineHeight</a><br/>
+* <a href="#name-25">textLetterSpacing</a><br/>
+* <a href="#name-26">textJustify</a><br/>
+* <a href="#name-27">textAnchor</a><br/>
+* <a href="#name-28">textMaxAngle</a><br/>
+* <a href="#name-29">textRotate</a><br/>
+* <a href="#name-30">textPadding</a><br/>
+* <a href="#name-31">textKeepUpright</a><br/>
+* <a href="#name-32">textTransform</a><br/>
+* <a href="#name-33">textOffset</a><br/>
+* <a href="#name-34">textAllowOverlap</a><br/>
+* <a href="#name-35">textIgnorePlacement</a><br/>
+* <a href="#name-36">textOptional</a><br/>
+* <a href="#name-37">visibility</a><br/>
+* <a href="#name-38">iconOpacity</a><br/>
+* <a href="#name-39">iconColor</a><br/>
+* <a href="#name-40">iconHaloColor</a><br/>
+* <a href="#name-41">iconHaloWidth</a><br/>
+* <a href="#name-42">iconHaloBlur</a><br/>
+* <a href="#name-43">iconTranslate</a><br/>
+* <a href="#name-44">iconTranslateAnchor</a><br/>
+* <a href="#name-45">textOpacity</a><br/>
+* <a href="#name-46">textColor</a><br/>
+* <a href="#name-47">textHaloColor</a><br/>
+* <a href="#name-48">textHaloWidth</a><br/>
+* <a href="#name-49">textHaloBlur</a><br/>
+* <a href="#name-50">textTranslate</a><br/>
+* <a href="#name-51">textTranslateAnchor</a><br/>
 
 ___
 
@@ -86,6 +87,7 @@ Label placement relative to its geometry.
 #### Supported Values
 **point** - The label is placed at the point where the geometry is located.<br />
 **line** - The label is placed along the line of the geometry. Can only be used on `LineString` and `Polygon` geometries.<br />
+**line-center** - The label is placed at the center of the line of the geometry. Can only be used on `LineString` and `Polygon` geometries. Note that a single feature in a vector tile may contain multiple line geometries.<br />
 
 
 #### Expression
@@ -128,6 +130,29 @@ If true, the symbols will not cross tile edges to avoid mutual collisions. Recom
 `boolean`
 #### Default Value
 `false`
+
+
+#### Expression
+
+Parameters: `zoom`
+
+___
+
+#### Name
+`symbolZOrder`
+
+#### Description
+Controls the order in which overlapping symbols in the same layer are rendered
+
+#### Type
+`enum`
+#### Default Value
+`auto`
+
+#### Supported Values
+**auto** - If `symbol-sort-key` is set, sort based on that. Otherwise sort symbols by their y-position relative to the viewport.<br />
+**viewport-y** - Symbols will be sorted by their y-position relative to the viewport.<br />
+**source** - Symbols will be rendered in the same order as the source data with no sorting applied.<br />
 
 
 #### Expression
@@ -211,9 +236,9 @@ In combination with `symbolPlacement`, determines the rotation behavior of icons
 `auto`
 
 #### Supported Values
-**map** - When `symbol-placement` is set to `point`, aligns icons east-west. When `symbol-placement` is set to `line`, aligns icon x-axes with the line.<br />
+**map** - When `symbol-placement` is set to `point`, aligns icons east-west. When `symbol-placement` is set to `line` or `line-center`, aligns icon x-axes with the line.<br />
 **viewport** - Produces icons whose x-axes are aligned with the x-axis of the viewport, regardless of the value of `symbol-placement`.<br />
-**auto** - When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line`, this is equivalent to `map`.<br />
+**auto** - When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line` or `line-center`, this is equivalent to `map`.<br />
 
 
 #### Requires
@@ -508,9 +533,9 @@ In combination with `symbolPlacement`, determines the rotation behavior of the i
 `auto`
 
 #### Supported Values
-**map** - When `symbol-placement` is set to `point`, aligns text east-west. When `symbol-placement` is set to `line`, aligns text x-axes with the line.<br />
+**map** - When `symbol-placement` is set to `point`, aligns text east-west. When `symbol-placement` is set to `line` or `line-center`, aligns text x-axes with the line.<br />
 **viewport** - Produces glyphs whose x-axes are aligned with the x-axis of the viewport, regardless of the value of `symbol-placement`.<br />
-**auto** - When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line`, this is equivalent to `map`.<br />
+**auto** - When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line` or `line-center`, this is equivalent to `map`.<br />
 
 
 #### Requires
@@ -526,12 +551,12 @@ ___
 `textField`
 
 #### Description
-Value to use for a text label.
+Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options.
 
 #### Type
-`string`
+`formatted`
 #### Default Value
-`empty string`
+``
 
 
 #### Expression
@@ -681,6 +706,7 @@ Text justification options.
 `center`
 
 #### Supported Values
+**auto** - The text is aligned towards the anchor position.<br />
 **left** - The text is aligned to the left.<br />
 **center** - The text is centered.<br />
 **right** - The text is aligned to the right.<br />
@@ -871,6 +897,9 @@ Offset distance of text from its anchor. Positive values indicate right and down
 #### Requires
 `textField`
 
+#### Disabled By
+`textRadialOffset`
+
 #### Expression
 
 Parameters: `zoom, feature`
@@ -982,7 +1011,7 @@ The opacity at which the icon will be drawn.
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -1003,7 +1032,7 @@ The color of the icon. This can only be used with sdf icons.
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -1024,7 +1053,7 @@ The color of the icon's halo. Icon halos can only be used with SDF icons.
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -1051,7 +1080,7 @@ Distance of halo to the icon outline.
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -1078,7 +1107,7 @@ Fade out the halo towards the outside.
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -1154,7 +1183,7 @@ The opacity at which the text will be drawn.
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -1175,7 +1204,7 @@ The color with which the text will be drawn.
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -1196,7 +1225,7 @@ The color of the text's halo, which helps it stand out from backgrounds.
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -1223,7 +1252,7 @@ Distance of halo to the font outline. Max text halo width is 1/4 of the fontSize
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -1250,7 +1279,7 @@ The halo's fadeout distance towards the outside.
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 

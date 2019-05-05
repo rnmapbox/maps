@@ -171,6 +171,9 @@ public class RCTMGLStyleFactory {
             case "linePatternTransition":
               RCTMGLStyleFactory.setLinePatternTransition(layer, styleValue);
               break;
+            case "lineGradient":
+              RCTMGLStyleFactory.setLineGradient(layer, styleValue);
+              break;
         }
       }
     }
@@ -193,6 +196,9 @@ public class RCTMGLStyleFactory {
               break;
             case "symbolAvoidEdges":
               RCTMGLStyleFactory.setSymbolAvoidEdges(layer, styleValue);
+              break;
+            case "symbolZOrder":
+              RCTMGLStyleFactory.setSymbolZOrder(layer, styleValue);
               break;
             case "iconAllowOverlap":
               RCTMGLStyleFactory.setIconAllowOverlap(layer, styleValue);
@@ -607,6 +613,9 @@ public class RCTMGLStyleFactory {
               break;
             case "rasterContrastTransition":
               RCTMGLStyleFactory.setRasterContrastTransition(layer, styleValue);
+              break;
+            case "rasterResampling":
+              RCTMGLStyleFactory.setRasterResampling(layer, styleValue);
               break;
             case "rasterFadeDuration":
               RCTMGLStyleFactory.setRasterFadeDuration(layer, styleValue);
@@ -1025,6 +1034,14 @@ public class RCTMGLStyleFactory {
       }
     }
 
+    public static void setLineGradient(LineLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.lineGradient(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.lineGradient(styleValue.getInt(VALUE_KEY)));
+      }
+    }
+
     public static void setSymbolPlacement(SymbolLayer layer, RCTMGLStyleValue styleValue) {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.symbolPlacement(styleValue.getExpression()));
@@ -1046,6 +1063,14 @@ public class RCTMGLStyleFactory {
         layer.setProperties(PropertyFactory.symbolAvoidEdges(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.symbolAvoidEdges(styleValue.getBoolean(VALUE_KEY)));
+      }
+    }
+
+    public static void setSymbolZOrder(SymbolLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.symbolZOrder(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.symbolZOrder(styleValue.getString(VALUE_KEY)));
       }
     }
 
@@ -1954,6 +1979,14 @@ public class RCTMGLStyleFactory {
       TransitionOptions transition = styleValue.getTransition();
       if (transition != null) {
         layer.setRasterContrastTransition(transition);
+      }
+    }
+
+    public static void setRasterResampling(RasterLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.rasterResampling(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.rasterResampling(styleValue.getString(VALUE_KEY)));
       }
     }
 

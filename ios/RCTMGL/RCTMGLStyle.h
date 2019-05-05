@@ -62,9 +62,11 @@
 - (void)setLineDasharrayTransition:(MGLLineStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setLinePattern:(MGLLineStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setLinePatternTransition:(MGLLineStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setLineGradient:(MGLLineStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setSymbolPlacement:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setSymbolSpacing:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setSymbolAvoidEdges:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setSymbolZOrder:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setIconAllowOverlap:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setIconIgnorePlacement:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setIconOptional:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
@@ -181,6 +183,7 @@
 - (void)setRasterSaturationTransition:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setRasterContrast:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setRasterContrastTransition:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setRasterResampling:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setRasterFadeDuration:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setHillshadeStyleLayerVisibility:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setHillshadeIlluminationDirection:(MGLHillshadeStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;

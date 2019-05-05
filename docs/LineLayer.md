@@ -33,6 +33,7 @@
 * <a href="#name-12">lineBlur</a><br/>
 * <a href="#name-13">lineDasharray</a><br/>
 * <a href="#name-14">linePattern</a><br/>
+* <a href="#name-15">lineGradient</a><br/>
 
 ___
 
@@ -159,7 +160,7 @@ The opacity at which the line will be drawn.
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -180,7 +181,7 @@ The color with which the line will be drawn.
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -252,7 +253,7 @@ Stroke thickness.
 `camera`
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -276,7 +277,7 @@ Draws a line casing outside of a line's actual path. Value indicates the width o
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -297,7 +298,7 @@ The line's offset. For linear features, a positive value offsets the line to the
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -321,7 +322,7 @@ Blur applied to the line, in pixels.
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -362,5 +363,24 @@ Name of image in sprite to use for drawing image lines. For seamless patterns, i
 
 #### Expression
 
-Parameters: `zoom`
+Parameters: `zoom, feature`
+
+___
+
+#### Name
+`lineGradient`
+
+#### Description
+Defines a gradient with which to color a line feature. Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
+
+#### Type
+`color`
+
+
+#### Disabled By
+`lineDasharray, linePattern`
+
+#### Expression
+
+Parameters: `line-progress`
 

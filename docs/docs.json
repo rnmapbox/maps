@@ -446,7 +446,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -463,7 +464,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -480,7 +482,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -499,7 +502,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -615,7 +619,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -632,7 +637,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -651,7 +657,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       }
@@ -789,7 +796,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -851,7 +859,8 @@
         "expression": {
           "interpolated": false,
           "parameters": [
-            "zoom"
+            "zoom",
+            "feature"
           ]
         }
       },
@@ -870,7 +879,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -891,7 +901,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       }
@@ -1027,7 +1038,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -1046,7 +1058,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -1064,7 +1077,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -1126,7 +1140,8 @@
         "expression": {
           "interpolated": false,
           "parameters": [
-            "zoom"
+            "zoom",
+            "feature"
           ]
         }
       }
@@ -1468,7 +1483,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -1487,7 +1503,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -1555,7 +1572,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -1574,7 +1592,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -1592,7 +1611,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -1611,7 +1631,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -1645,7 +1666,26 @@
         "expression": {
           "interpolated": false,
           "parameters": [
-            "zoom"
+            "zoom",
+            "feature"
+          ]
+        }
+      },
+      {
+        "name": "lineGradient",
+        "type": "color",
+        "values": [],
+        "description": "Defines a gradient with which to color a line feature. Can only be used with GeoJSON sources that specify `\"lineMetrics\": true`.",
+        "requires": [],
+        "disabledBy": [
+          "lineDasharray",
+          "linePattern"
+        ],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "line-progress"
           ]
         }
       }
@@ -2538,6 +2578,31 @@
         }
       },
       {
+        "name": "rasterResampling",
+        "type": "enum",
+        "values": [
+          {
+            "value": "linear",
+            "doc": "(Bi)linear filtering interpolates pixel values using the weighted average of the four closest original source pixels creating a smooth but blurry look when overscaled"
+          },
+          {
+            "value": "nearest",
+            "doc": "Nearest neighbor filtering interpolates pixel values using the nearest original source pixel creating a sharp but pixelated look when overscaled"
+          }
+        ],
+        "default": "linear",
+        "description": "The resampling/interpolation method to use for overscaling, also known as texture magnification filter",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
+      },
+      {
         "name": "rasterFadeDuration",
         "type": "number",
         "values": [],
@@ -2801,6 +2866,10 @@
           {
             "value": "line",
             "doc": "The label is placed along the line of the geometry. Can only be used on `LineString` and `Polygon` geometries."
+          },
+          {
+            "value": "line-center",
+            "doc": "The label is placed at the center of the line of the geometry. Can only be used on `LineString` and `Polygon` geometries. Note that a single feature in a vector tile may contain multiple line geometries."
           }
         ],
         "default": "point",
@@ -2839,6 +2908,35 @@
         "values": [],
         "default": false,
         "description": "If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
+      },
+      {
+        "name": "symbolZOrder",
+        "type": "enum",
+        "values": [
+          {
+            "value": "auto",
+            "doc": "If `symbol-sort-key` is set, sort based on that. Otherwise sort symbols by their y-position relative to the viewport."
+          },
+          {
+            "value": "viewport-y",
+            "doc": "Symbols will be sorted by their y-position relative to the viewport."
+          },
+          {
+            "value": "source",
+            "doc": "Symbols will be rendered in the same order as the source data with no sorting applied."
+          }
+        ],
+        "default": "auto",
+        "description": "Controls the order in which overlapping symbols in the same layer are rendered",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -2910,7 +3008,7 @@
         "values": [
           {
             "value": "map",
-            "doc": "When `symbol-placement` is set to `point`, aligns icons east-west. When `symbol-placement` is set to `line`, aligns icon x-axes with the line."
+            "doc": "When `symbol-placement` is set to `point`, aligns icons east-west. When `symbol-placement` is set to `line` or `line-center`, aligns icon x-axes with the line."
           },
           {
             "value": "viewport",
@@ -2918,7 +3016,7 @@
           },
           {
             "value": "auto",
-            "doc": "When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line`, this is equivalent to `map`."
+            "doc": "When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line` or `line-center`, this is equivalent to `map`."
           }
         ],
         "default": "auto",
@@ -3237,7 +3335,7 @@
         "values": [
           {
             "value": "map",
-            "doc": "When `symbol-placement` is set to `point`, aligns text east-west. When `symbol-placement` is set to `line`, aligns text x-axes with the line."
+            "doc": "When `symbol-placement` is set to `point`, aligns text east-west. When `symbol-placement` is set to `line` or `line-center`, aligns text x-axes with the line."
           },
           {
             "value": "viewport",
@@ -3245,7 +3343,7 @@
           },
           {
             "value": "auto",
-            "doc": "When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line`, this is equivalent to `map`."
+            "doc": "When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line` or `line-center`, this is equivalent to `map`."
           }
         ],
         "default": "auto",
@@ -3264,10 +3362,10 @@
       },
       {
         "name": "textField",
-        "type": "string",
+        "type": "formatted",
         "values": [],
         "default": "",
-        "description": "Value to use for a text label.",
+        "description": "Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -3392,6 +3490,10 @@
         "name": "textJustify",
         "type": "enum",
         "values": [
+          {
+            "value": "auto",
+            "doc": "The text is aligned towards the anchor position."
+          },
           {
             "value": "left",
             "doc": "The text is aligned to the left."
@@ -3602,7 +3704,9 @@
         "requires": [
           "textField"
         ],
-        "disabledBy": [],
+        "disabledBy": [
+          "textRadialOffset"
+        ],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
@@ -3703,7 +3807,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -3722,7 +3827,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -3741,7 +3847,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -3762,7 +3869,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -3783,7 +3891,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -3854,7 +3963,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -3873,7 +3983,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -3892,7 +4003,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -3913,7 +4025,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },
@@ -3934,7 +4047,8 @@
           "interpolated": true,
           "parameters": [
             "zoom",
-            "feature"
+            "feature",
+            "feature-state"
           ]
         }
       },

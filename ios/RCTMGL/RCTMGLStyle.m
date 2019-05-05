@@ -151,6 +151,8 @@
       }
     } else if ([prop isEqualToString:@"linePatternTransition"]) {
       [self setLinePatternTransition:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"lineGradient"]) {
+      [self setLineGradient:layer withReactStyleValue:styleValue];
     } else {
       // TODO throw exception
     }
@@ -178,6 +180,8 @@
       [self setSymbolSpacing:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"symbolAvoidEdges"]) {
       [self setSymbolAvoidEdges:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"symbolZOrder"]) {
+      [self setSymbolZOrder:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"iconAllowOverlap"]) {
       [self setIconAllowOverlap:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"iconIgnorePlacement"]) {
@@ -520,6 +524,8 @@
       [self setRasterContrast:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"rasterContrastTransition"]) {
       [self setRasterContrastTransition:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"rasterResampling"]) {
+      [self setRasterResampling:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"rasterFadeDuration"]) {
       [self setRasterFadeDuration:layer withReactStyleValue:styleValue];
     } else {
@@ -844,6 +850,11 @@
     layer.linePatternTransition = [styleValue getTransition];
 }
 
+- (void)setLineGradient:(MGLLineStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.lineGradient = styleValue.mglStyleValue;
+}
+
 
 
 - (void)setSymbolPlacement:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
@@ -859,6 +870,11 @@
 - (void)setSymbolAvoidEdges:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
     layer.symbolAvoidsEdges = styleValue.mglStyleValue;
+}
+
+- (void)setSymbolZOrder:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.symbolZOrder = styleValue.mglStyleValue;
 }
 
 - (void)setIconAllowOverlap:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
@@ -1447,6 +1463,11 @@
 - (void)setRasterContrastTransition:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
     layer.rasterContrastTransition = [styleValue getTransition];
+}
+
+- (void)setRasterResampling:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.rasterResampling = styleValue.mglStyleValue;
 }
 
 - (void)setRasterFadeDuration:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue

@@ -89,7 +89,7 @@ The base color of the extruded fill. The extrusion's surfaces will be shaded dif
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -151,7 +151,7 @@ Name of image in sprite to use for drawing images on extruded fills. For seamles
 
 #### Expression
 
-Parameters: `zoom`
+Parameters: `zoom, feature`
 
 ___
 
@@ -175,7 +175,7 @@ The height with which to extrude this layer.
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -202,5 +202,5 @@ The height with which to extrude the base of this layer. Must be less than or eq
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 

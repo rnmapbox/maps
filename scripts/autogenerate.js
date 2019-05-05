@@ -234,15 +234,15 @@ function getAttributeSupport(sdkSupport) {
     data: { android: false, ios: false },
   };
 
-  const basicSupport = sdkSupport['basic functionality'];
-  if (basicSupport.android) {
+  const basicSupport = sdkSupport && sdkSupport['basic functionality'];
+  if (basicSupport && basicSupport.android) {
     support.basic.android = isVersionGTE(androidVersion, basicSupport.android);
   }
-  if (basicSupport.ios) {
+  if (basicSupport && basicSupport.ios) {
     support.basic.ios = isVersionGTE(iosVersion, basicSupport.ios);
   }
 
-  const dataDrivenSupport = sdkSupport['data-driven styling'];
+  const dataDrivenSupport = sdkSupport && sdkSupport['data-driven styling'];
   if (dataDrivenSupport && dataDrivenSupport.android) {
     support.data.android = isVersionGTE(
       androidVersion,

@@ -334,6 +334,16 @@ export const LineLayerStyleProp = PropTypes.shape({
     duration: PropTypes.number,
     delay: PropTypes.number,
   }),
+
+  /**
+   * Defines a gradient with which to color a line feature. Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
+   *
+   * @disabledBy lineDasharray, linePattern
+   */
+  lineGradient: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
 });
 
 export const SymbolLayerStyleProp = PropTypes.shape({
@@ -359,6 +369,14 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    */
   symbolAvoidEdges: PropTypes.oneOfType([
     PropTypes.bool,
+    PropTypes.array,
+  ]),
+
+  /**
+   * Controls the order in which overlapping symbols in the same layer are rendered
+   */
+  symbolZOrder: PropTypes.oneOfType([
+    PropTypes.any,
     PropTypes.array,
   ]),
 
@@ -522,7 +540,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   ]),
 
   /**
-   * Value to use for a text label.
+   * Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options.
    */
   textField: PropTypes.oneOfType([
     PropTypes.string,
@@ -653,6 +671,8 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up.
    *
    * @requires textField
+   *
+   * @disabledBy textRadialOffset
    */
   textOffset: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.number),
@@ -1388,6 +1408,14 @@ export const RasterLayerStyleProp = PropTypes.shape({
   }),
 
   /**
+   * The resampling/interpolation method to use for overscaling, also known as texture magnification filter
+   */
+  rasterResampling: PropTypes.oneOfType([
+    PropTypes.any,
+    PropTypes.array,
+  ]),
+
+  /**
    * Fade duration when a new tile is added.
    */
   rasterFadeDuration: PropTypes.oneOfType([
@@ -1640,10 +1668,12 @@ const styleMap = {
   lineDasharrayTransition: StyleTypes.Transition,
   linePattern: StyleTypes.Image,
   linePatternTransition: StyleTypes.Transition,
+  lineGradient: StyleTypes.Color,
 
   symbolPlacement: StyleTypes.Constant,
   symbolSpacing: StyleTypes.Constant,
   symbolAvoidEdges: StyleTypes.Constant,
+  symbolZOrder: StyleTypes.Constant,
   iconAllowOverlap: StyleTypes.Constant,
   iconIgnorePlacement: StyleTypes.Constant,
   iconOptional: StyleTypes.Constant,
@@ -1759,6 +1789,7 @@ const styleMap = {
   rasterSaturationTransition: StyleTypes.Transition,
   rasterContrast: StyleTypes.Constant,
   rasterContrastTransition: StyleTypes.Transition,
+  rasterResampling: StyleTypes.Constant,
   rasterFadeDuration: StyleTypes.Constant,
 
   hillshadeIlluminationDirection: StyleTypes.Constant,

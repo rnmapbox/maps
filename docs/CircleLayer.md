@@ -72,7 +72,7 @@ Circle radius.
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -90,7 +90,7 @@ The fill color of the circle.
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -108,7 +108,7 @@ Amount to blur the circle. 1 blurs the circle such that only the centerpoint is 
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -132,7 +132,7 @@ The opacity at which the circle will be drawn.
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -246,7 +246,7 @@ The width of the circle's stroke. Strokes are placed outside of the `circleRadiu
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -264,7 +264,7 @@ The stroke color of the circle.
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -288,5 +288,5 @@ The opacity of the circle's stroke.
 
 #### Expression
 
-Parameters: `zoom, feature`
+Parameters: `zoom, feature, feature-state`
 
