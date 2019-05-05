@@ -37,7 +37,7 @@ export const FillLayerStyleProp = PropTypes.shape({
    * Whether or not the fill should be antialiased.
    */
   fillAntialias: PropTypes.oneOfType([
-    PropTypes.string,
+    PropTypes.bool,
     PropTypes.array,
   ]),
 
@@ -358,7 +358,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer.
    */
   symbolAvoidEdges: PropTypes.oneOfType([
-    PropTypes.string,
+    PropTypes.bool,
     PropTypes.array,
   ]),
 
@@ -368,7 +368,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires iconImage
    */
   iconAllowOverlap: PropTypes.oneOfType([
-    PropTypes.string,
+    PropTypes.bool,
     PropTypes.array,
   ]),
 
@@ -378,7 +378,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires iconImage
    */
   iconIgnorePlacement: PropTypes.oneOfType([
-    PropTypes.string,
+    PropTypes.bool,
     PropTypes.array,
   ]),
 
@@ -388,7 +388,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires iconImage, textField
    */
   iconOptional: PropTypes.oneOfType([
-    PropTypes.string,
+    PropTypes.bool,
     PropTypes.array,
   ]),
 
@@ -467,7 +467,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires iconImage
    */
   iconKeepUpright: PropTypes.oneOfType([
-    PropTypes.string,
+    PropTypes.bool,
     PropTypes.array,
   ]),
 
@@ -635,7 +635,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires textField
    */
   textKeepUpright: PropTypes.oneOfType([
-    PropTypes.string,
+    PropTypes.bool,
     PropTypes.array,
   ]),
 
@@ -665,7 +665,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires textField
    */
   textAllowOverlap: PropTypes.oneOfType([
-    PropTypes.string,
+    PropTypes.bool,
     PropTypes.array,
   ]),
 
@@ -675,7 +675,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires textField
    */
   textIgnorePlacement: PropTypes.oneOfType([
-    PropTypes.string,
+    PropTypes.bool,
     PropTypes.array,
   ]),
 
@@ -685,7 +685,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires textField, iconImage
    */
   textOptional: PropTypes.oneOfType([
-    PropTypes.string,
+    PropTypes.bool,
     PropTypes.array,
   ]),
 
@@ -1093,6 +1093,78 @@ export const CircleLayerStyleProp = PropTypes.shape({
   }),
 });
 
+export const HeatmapLayerStyleProp = PropTypes.shape({
+
+  /**
+   * Whether this layer is displayed.
+   */
+  visibility: PropTypes.any,
+
+  /**
+   * Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed.
+   */
+  heatmapRadius: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+  ]),
+
+  /**
+   * The transition affecting any changes to this layer’s heatmapRadius property.
+   */
+  heatmapRadiusTransition: PropTypes.shape({
+    duration: PropTypes.number,
+    delay: PropTypes.number,
+  }),
+
+  /**
+   * A measure of how much an individual point contributes to the heatmap. A value of 10 would be equivalent to having 10 points of weight 1 in the same spot. Especially useful when combined with clustering.
+   */
+  heatmapWeight: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+  ]),
+
+  /**
+   * Similar to `heatmapWeight` but controls the intensity of the heatmap globally. Primarily used for adjusting the heatmap based on zoom level.
+   */
+  heatmapIntensity: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+  ]),
+
+  /**
+   * The transition affecting any changes to this layer’s heatmapIntensity property.
+   */
+  heatmapIntensityTransition: PropTypes.shape({
+    duration: PropTypes.number,
+    delay: PropTypes.number,
+  }),
+
+  /**
+   * Defines the color of each pixel based on its density value in a heatmap.  Should be an expression that uses `["heatmapDensity"]` as input.
+   */
+  heatmapColor: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
+
+  /**
+   * The global opacity at which the heatmap layer will be drawn.
+   */
+  heatmapOpacity: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+  ]),
+
+  /**
+   * The transition affecting any changes to this layer’s heatmapOpacity property.
+   */
+  heatmapOpacityTransition: PropTypes.shape({
+    duration: PropTypes.number,
+    delay: PropTypes.number,
+  }),
+});
+
 export const FillExtrusionLayerStyleProp = PropTypes.shape({
 
   /**
@@ -1322,6 +1394,94 @@ export const RasterLayerStyleProp = PropTypes.shape({
     PropTypes.number,
     PropTypes.array,
   ]),
+});
+
+export const HillshadeLayerStyleProp = PropTypes.shape({
+
+  /**
+   * Whether this layer is displayed.
+   */
+  visibility: PropTypes.any,
+
+  /**
+   * The direction of the light source used to generate the hillshading with 0 as the top of the viewport if `hillshadeIlluminationAnchor` is set to `viewport` and due north if `hillshadeIlluminationAnchor` is set to `map`.
+   */
+  hillshadeIlluminationDirection: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+  ]),
+
+  /**
+   * Direction of light source when map is rotated.
+   */
+  hillshadeIlluminationAnchor: PropTypes.oneOfType([
+    PropTypes.any,
+    PropTypes.array,
+  ]),
+
+  /**
+   * Intensity of the hillshade
+   */
+  hillshadeExaggeration: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+  ]),
+
+  /**
+   * The transition affecting any changes to this layer’s hillshadeExaggeration property.
+   */
+  hillshadeExaggerationTransition: PropTypes.shape({
+    duration: PropTypes.number,
+    delay: PropTypes.number,
+  }),
+
+  /**
+   * The shading color of areas that face away from the light source.
+   */
+  hillshadeShadowColor: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
+
+  /**
+   * The transition affecting any changes to this layer’s hillshadeShadowColor property.
+   */
+  hillshadeShadowColorTransition: PropTypes.shape({
+    duration: PropTypes.number,
+    delay: PropTypes.number,
+  }),
+
+  /**
+   * The shading color of areas that faces towards the light source.
+   */
+  hillshadeHighlightColor: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
+
+  /**
+   * The transition affecting any changes to this layer’s hillshadeHighlightColor property.
+   */
+  hillshadeHighlightColorTransition: PropTypes.shape({
+    duration: PropTypes.number,
+    delay: PropTypes.number,
+  }),
+
+  /**
+   * The shading color used to accentuate rugged terrain like sharp cliffs and gorges.
+   */
+  hillshadeAccentColor: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
+
+  /**
+   * The transition affecting any changes to this layer’s hillshadeAccentColor property.
+   */
+  hillshadeAccentColorTransition: PropTypes.shape({
+    duration: PropTypes.number,
+    delay: PropTypes.number,
+  }),
 });
 
 export const BackgroundLayerStyleProp = PropTypes.shape({
@@ -1564,6 +1724,15 @@ const styleMap = {
   circleStrokeOpacity: StyleTypes.Constant,
   circleStrokeOpacityTransition: StyleTypes.Transition,
 
+  heatmapRadius: StyleTypes.Constant,
+  heatmapRadiusTransition: StyleTypes.Transition,
+  heatmapWeight: StyleTypes.Constant,
+  heatmapIntensity: StyleTypes.Constant,
+  heatmapIntensityTransition: StyleTypes.Transition,
+  heatmapColor: StyleTypes.Color,
+  heatmapOpacity: StyleTypes.Constant,
+  heatmapOpacityTransition: StyleTypes.Transition,
+
   fillExtrusionOpacity: StyleTypes.Constant,
   fillExtrusionOpacityTransition: StyleTypes.Transition,
   fillExtrusionColor: StyleTypes.Color,
@@ -1592,6 +1761,17 @@ const styleMap = {
   rasterContrastTransition: StyleTypes.Transition,
   rasterFadeDuration: StyleTypes.Constant,
 
+  hillshadeIlluminationDirection: StyleTypes.Constant,
+  hillshadeIlluminationAnchor: StyleTypes.Constant,
+  hillshadeExaggeration: StyleTypes.Constant,
+  hillshadeExaggerationTransition: StyleTypes.Transition,
+  hillshadeShadowColor: StyleTypes.Color,
+  hillshadeShadowColorTransition: StyleTypes.Transition,
+  hillshadeHighlightColor: StyleTypes.Color,
+  hillshadeHighlightColorTransition: StyleTypes.Transition,
+  hillshadeAccentColor: StyleTypes.Color,
+  hillshadeAccentColorTransition: StyleTypes.Transition,
+
   backgroundColor: StyleTypes.Color,
   backgroundColorTransition: StyleTypes.Transition,
   backgroundPattern: StyleTypes.Image,
@@ -1611,11 +1791,6 @@ const styleMap = {
 };
 
 export const styleExtras = {
-  // padding
-  iconTextFitPadding: {
-    iosType: 'edgeinsets',
-  },
-
   // offsets
   iconOffset: {
     iosType: 'vector',
@@ -1626,6 +1801,7 @@ export const styleExtras = {
   lineOffset: {
     iosType: 'vector',
   },
+
   // translates
   fillTranslate: {
     iosType: 'vector',

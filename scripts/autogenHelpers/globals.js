@@ -292,6 +292,8 @@ global.jsDocReactProp = function(prop) {
     }
   } else if (prop.type === 'number') {
     propTypes.push('PropTypes.number');
+  } else if (prop.type === 'boolean') {
+    propTypes.push('PropTypes.bool');
   } else if (prop.type === 'enum') {
     propTypes.push('PropTypes.any');
   } else {
