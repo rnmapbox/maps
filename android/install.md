@@ -1,64 +1,80 @@
 # Android Installation
 
-## Gradle Setup
+## `PROJECT_ROOT/android/build.gradle`
+We need to add an additional repository in order to get our dependencies.
 
-### project:build.gradle
-
-We need to add some `repositories` in order to get our dependencies.
-
-* `jcenter()`
 * `https://jitpack.io`
-* `http://maven.google.com`
 
-```
+```diff
 allprojects {
     repositories {
+        mavenLocal()
+        google()
         jcenter()
-        maven { url "$rootDir/../node_modules/react-native/android" }
-        maven { url "https://jitpack.io" }
-        maven { url "https://maven.google.com" }
++       maven { url "https://jitpack.io" }
+        maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url "$rootDir/../node_modules/react-native/android"
+        }
     }
 }
 ```
 
-### app:build.gradle
-
-Add project under `dependencies`
+Make sure that your `buildscript > ext` settings are correct.
+We want to be on `28` or higher:
 
 ```
-dependencies {
-    implementation project(':mapbox-react-native-mapbox-gl')
+buildscript {
+    ext {
+        buildToolsVersion = "28.0.3"
+        compileSdkVersion = 28
+        targetSdkVersion = 28
+    }
 }
 ```
 
-Update Android SDK version if you did `react-native init`, we want to be on `28` or higher.
-* `compileSdkVersion 28`
-* `buildToolsVersion "28.0.3"`
-* `targetSdkVersion 26`
+## `PROJECT_ROOT/android/app/build.gradle`
+### PRE RN 59
 
-You can also set the Support Library version or the okhttp version as well if you use other modules that depend on them:
+Add project under `dependencies`
+
+```diff
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    implementation "com.facebook.react:react-native:+"  // From node_modules
++   implementation project(':react-native-mapbox/maps')
+}
+```
+
+You can set the Support Library version or the okhttp version if you use other modules that depend on them:
 * `supportLibVersion "28.0.0"`
 * `okhttpVersion "3.12.1"`
 
-### settings.gradle
+
+## `PROJECT_ROOT/android/app/settings.gradle`
 
 Include project, so gradle knows where to find the project
 
-```
-include ':mapbox-react-native-mapbox-gl'
-project(':mapbox-react-native-mapbox-gl').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-mapbox/maps/android/rctmgl')
+```diff
+rootProject.name = <YOUR_PROJECT_NAME>
+
++include ':@react-native-mapbox_maps'
++project(':@react-native-mapbox_maps').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-mapbox/maps/android/rctmgl')
+
+include ':app'¬
 ```
 
-### MainApplication.java
+## `PROJECT_ROOT/android/app/src/main/java/com/YOUR_PROJECT_NAME/MainApplication.java`
 
 We need to register our package
 
-Add `import com.mapbox.rctmgl.RCTMGLPackage;` as an import statement and
-`new RCTMGLPackage()` in `getPackages()`
+Add `import com.mapbox.rctmgl.RCTMGLPackage;`  
+as an import statement and  
+`new RCTMGLPackage()` within the `getPackages()` method
 
-Here is an example
-```
-package com.rngltest;
+```diff
+package <YOUR_PROJECT_NAME>;
 
 import android.app.Application;
 
@@ -67,7 +83,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.mapbox.rctmgl.RCTMGLPackage;
++import com.mapbox.rctmgl.RCTMGLPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -84,8 +100,13 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-          new RCTMGLPackage()
++         new RCTMGLPackage()
       );
+    }
+
+    @Override
+    protected String getJSMainModuleName() {
+      return "index";
     }
   };
 
@@ -100,5 +121,6 @@ public class MainApplication extends Application implements ReactApplication {
     SoLoader.init(this, /* native exopackage */ false);
   }
 }
+
 ```
 Checkout the [example application](../example/README.md) to see how it's configured for an example.
