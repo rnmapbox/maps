@@ -22,10 +22,24 @@ class FitBounds extends React.Component {
     ];
 
     this.onFitBounds = this.onFitBounds.bind(this);
+
+    this.state = {
+      bounds: {
+        ne: this.houseBounds[0],
+        sw: this.houseBounds[1],
+      },
+      animationDuration: 0,
+    };
   }
 
   onFitBounds(i, bounds) {
-    this.map.fitBounds(bounds[0], bounds[1], 0, 200); // ne sw
+    this.setState({
+      bounds: {
+        ne: bounds[0],
+        sw: bounds[1],
+      },
+      animationDuration: 2000,
+    });
   }
 
   render() {
@@ -36,13 +50,16 @@ class FitBounds extends React.Component {
         onOptionPress={this.onFitBounds}
       >
         <MapboxGL.MapView
-          ref={ref => (this.map = ref)}
           contentInset={10}
-          visibleCoordinateBounds={this.houseBounds}
-          maxZoomLevel={19}
           styleURL={MapboxGL.StyleURL.Satellite}
           style={sheet.matchParent}
-        />
+        >
+          <MapboxGL.Camera
+            bounds={this.state.bounds}
+            animationDuration={this.state.animationDuration}
+            maxZoomLevel={19}
+          />
+        </MapboxGL.MapView>
       </TabBarPage>
     );
   }
