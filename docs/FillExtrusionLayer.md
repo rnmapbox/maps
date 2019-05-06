@@ -66,8 +66,9 @@ The opacity of the entire fill extrusion layer. This is rendered on a perLayer, 
 #### Maximum
 `1`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -86,8 +87,9 @@ The base color of the extruded fill. The extrusion's surfaces will be shaded dif
 #### Disabled By
 `fillExtrusionPattern`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -106,8 +108,9 @@ The geometry's offset. Values are [x, y] where negatives indicate left and up (o
 `pixels`
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -130,8 +133,9 @@ Controls the frame of reference for `fillExtrusionTranslate`.
 #### Requires
 `fillExtrusionTranslate`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -139,14 +143,15 @@ ___
 `fillExtrusionPattern`
 
 #### Description
-Name of image in sprite to use for drawing images on extruded fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).
+Name of image in sprite to use for drawing images on extruded fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.
 
 #### Type
 `string`
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -168,8 +173,9 @@ The height with which to extrude this layer.
 `0`
 
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -194,6 +200,7 @@ The height with which to extrude the base of this layer. Must be less than or eq
 #### Requires
 `fillExtrusionHeight`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 

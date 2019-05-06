@@ -60,8 +60,9 @@ Whether or not the fill should be antialiased.
 `true`
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -83,8 +84,9 @@ The opacity of the entire fill layer. In contrast to the `fillColor`, this value
 #### Maximum
 `1`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -103,8 +105,9 @@ The color of the filled part of this layer. This color can be specified as `rgba
 #### Disabled By
 `fillPattern`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -121,8 +124,9 @@ The outline color of the fill. Matches the value of `fillColor` if unspecified.
 #### Disabled By
 `fillPattern`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -141,8 +145,9 @@ The geometry's offset. Values are [x, y] where negatives indicate left and up, r
 `pixels`
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -165,8 +170,9 @@ Controls the frame of reference for `fillTranslate`.
 #### Requires
 `fillTranslate`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -174,12 +180,13 @@ ___
 `fillPattern`
 
 #### Description
-Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).
+Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.
 
 #### Type
 `string`
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom, feature`
 

@@ -33,6 +33,7 @@
 * <a href="#name-12">lineBlur</a><br/>
 * <a href="#name-13">lineDasharray</a><br/>
 * <a href="#name-14">linePattern</a><br/>
+* <a href="#name-15">lineGradient</a><br/>
 
 ___
 
@@ -53,8 +54,9 @@ The display of line endings.
 **square** - A cap with a squared-off end which is drawn beyond the endpoint of the line at a distance of one-half of the line's width.<br />
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -77,6 +79,9 @@ The display of lines when joining.
 
 #### Supported Style Functions
 `camera`
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -92,8 +97,9 @@ Used to automatically convert miter joins to bevel joins for sharp angles.
 `2`
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -109,8 +115,9 @@ Used to automatically convert round joins to miter joins for shallow angles.
 `1.05`
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -151,8 +158,9 @@ The opacity at which the line will be drawn.
 #### Maximum
 `1`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -171,8 +179,9 @@ The color with which the line will be drawn.
 #### Disabled By
 `linePattern`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -191,8 +200,9 @@ The geometry's offset. Values are [x, y] where negatives indicate left and up, r
 `pixels`
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -215,8 +225,9 @@ Controls the frame of reference for `lineTranslate`.
 #### Requires
 `lineTranslate`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -240,6 +251,9 @@ Stroke thickness.
 
 #### Supported Style Functions
 `camera`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -261,8 +275,9 @@ Draws a line casing outside of a line's actual path. Value indicates the width o
 `0`
 
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -281,8 +296,9 @@ The line's offset. For linear features, a positive value offsets the line to the
 `pixels`
 
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -304,8 +320,9 @@ Blur applied to the line, in pixels.
 `0`
 
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -313,7 +330,7 @@ ___
 `lineDasharray`
 
 #### Description
-Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width.
+Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoomDependent expressions will be evaluated only at integer zoom levels.
 
 #### Type
 `array<number>`
@@ -328,8 +345,9 @@ Specifies the lengths of the alternating dashes and gaps that form the dash patt
 #### Disabled By
 `linePattern`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -337,12 +355,32 @@ ___
 `linePattern`
 
 #### Description
-Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512).
+Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.
 
 #### Type
 `string`
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom, feature`
+
+___
+
+#### Name
+`lineGradient`
+
+#### Description
+Defines a gradient with which to color a line feature. Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
+
+#### Type
+`color`
+
+
+#### Disabled By
+`lineDasharray, linePattern`
+
+#### Expression
+
+Parameters: `line-progress`
 

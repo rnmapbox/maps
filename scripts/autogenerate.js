@@ -21,23 +21,21 @@ const androidVersion = '7.3.0';
 const iosVersion = '4.9.0';
 
 const TMPL_PATH = path.join(__dirname, 'templates');
-const IOS_OUTPUT_PATH = path.join(
-  __dirname,
+
+const outputToExample = true;
+const OUTPUT_EXAMPLE_PREFIX = [
   '..',
   'example',
   'node_modules',
   '@react-native-mapbox',
   'maps',
-  'ios',
-  'RCTMGL',
-);
+];
+const OUTPUT_PREFIX = outputToExample ? OUTPUT_EXAMPLE_PREFIX : ['..'];
+
+const IOS_OUTPUT_PATH = path.join(__dirname, ...OUTPUT_PREFIX, 'ios', 'RCTMGL');
 const ANDROID_OUTPUT_PATH = path.join(
   __dirname,
-  '..',
-  'example',
-  'node_modules',
-  '@react-native-mapbox',
-  'maps',
+  ...OUTPUT_PREFIX,
   'android',
   'rctmgl',
   'src',
@@ -51,11 +49,7 @@ const ANDROID_OUTPUT_PATH = path.join(
 );
 const JS_OUTPUT_PATH = path.join(
   __dirname,
-  '..',
-  'example',
-  'node_modules',
-  '@react-native-mapbox',
-  'maps',
+  ...OUTPUT_PREFIX,
   'javascript',
   'utils',
 );
@@ -240,15 +234,15 @@ function getAttributeSupport(sdkSupport) {
     data: { android: false, ios: false },
   };
 
-  const basicSupport = sdkSupport['basic functionality'];
-  if (basicSupport.android) {
+  const basicSupport = sdkSupport && sdkSupport['basic functionality'];
+  if (basicSupport && basicSupport.android) {
     support.basic.android = isVersionGTE(androidVersion, basicSupport.android);
   }
-  if (basicSupport.ios) {
+  if (basicSupport && basicSupport.ios) {
     support.basic.ios = isVersionGTE(iosVersion, basicSupport.ios);
   }
 
-  const dataDrivenSupport = sdkSupport['data-driven styling'];
+  const dataDrivenSupport = sdkSupport && sdkSupport['data-driven styling'];
   if (dataDrivenSupport && dataDrivenSupport.android) {
     support.data.android = isVersionGTE(
       androidVersion,

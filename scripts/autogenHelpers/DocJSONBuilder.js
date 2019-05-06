@@ -15,7 +15,15 @@ const COMPONENT_PATH = path.join(
 const MODULES_PATH = path.join(__dirname, '..', '..', 'javascript', 'modules');
 
 const OUTPUT_PATH = path.join(__dirname, '..', '..', 'docs', 'docs.json');
-const IGNORE_FILES = ['AbstractLayer'];
+const IGNORE_FILES = [
+  'AbstractLayer',
+  'AbstractSource',
+  'NativeBridgeComponent',
+];
+
+const IGNORE_METHODS = [
+  'setNativeProps',
+];
 
 class DocJSONBuilder {
   constructor(styledLayers) {
@@ -66,6 +74,7 @@ class DocJSONBuilder {
           requires: prop.doc.requires,
           disabledBy: prop.doc.disabledBy,
           allowedFunctionTypes: prop.allowedFunctionTypes || [],
+          expression: prop.expression,
         };
 
         if (prop.type === 'enum') {
@@ -87,7 +96,7 @@ class DocJSONBuilder {
       return {
         name: propName || 'FIX ME NO NAME',
         required: propMeta.required || false,
-        type: propMeta.type.name || 'FIX ME UNKNOWN TYPE',
+        type: (propMeta.type && propMeta.type.name) || 'FIX ME UNKNOWN TYPE',
         default: !propMeta.defaultValue
           ? 'none'
           : propMeta.defaultValue.value.replace(/\n/g, ''),
@@ -112,6 +121,7 @@ class DocJSONBuilder {
         );
       }
     }
+    privateMethods.push(...IGNORE_METHODS);
 
     component.methods = component.methods.filter(
       (method) => !privateMethods.includes(method.name),

@@ -59,8 +59,9 @@ The color with which the background will be drawn.
 #### Disabled By
 `backgroundPattern`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -68,14 +69,15 @@ ___
 `backgroundPattern`
 
 #### Description
-Name of image in sprite to use for drawing an image background. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512).
+Name of image in sprite to use for drawing an image background. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.
 
 #### Type
 `string`
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -97,6 +99,7 @@ The opacity at which the background will be drawn.
 #### Maximum
 `1`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 

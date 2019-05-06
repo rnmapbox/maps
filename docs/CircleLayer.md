@@ -70,8 +70,9 @@ Circle radius.
 `0`
 
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -87,8 +88,9 @@ The fill color of the circle.
 `#000000`
 
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -104,8 +106,9 @@ Amount to blur the circle. 1 blurs the circle such that only the centerpoint is 
 `0`
 
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -127,8 +130,9 @@ The opacity at which the circle will be drawn.
 #### Maximum
 `1`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -147,8 +151,9 @@ The geometry's offset. Values are [x, y] where negatives indicate left and up, r
 `pixels`
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -171,8 +176,9 @@ Controls the frame of reference for `circleTranslate`.
 #### Requires
 `circleTranslate`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -192,8 +198,9 @@ Controls the scaling behavior of the circle when the map is pitched.
 **viewport** - Circles are not scaled.<br />
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -213,8 +220,9 @@ Orientation of circle when map is pitched.
 **viewport** - The circle is aligned to the plane of the viewport.<br />
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -236,8 +244,9 @@ The width of the circle's stroke. Strokes are placed outside of the `circleRadiu
 `0`
 
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -253,8 +262,9 @@ The stroke color of the circle.
 `#000000`
 
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 
 ___
 
@@ -276,6 +286,7 @@ The opacity of the circle's stroke.
 #### Maximum
 `1`
 
-#### Supported Style Functions
-`camera, source, composite`
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
 

@@ -32,6 +32,9 @@ Whether extruded geometries are lit relative to the map or viewport.
 **viewport** - The position of the light source is aligned to the rotation of the viewport.<br />
 
 
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -47,6 +50,9 @@ Position of the light source relative to lit (extruded) geometries, in [r radial
 `[1.15,210,30]`
 
 
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -62,6 +68,9 @@ Color tint for lighting extruded geometries.
 `#ffffff`
 
 
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -83,4 +92,7 @@ Intensity of lighting (on a scale from 0 to 1). Higher numbers will present as m
 #### Maximum
 `1`
 
+#### Expression
+
+Parameters: `zoom`
 

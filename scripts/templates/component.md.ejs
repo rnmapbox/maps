@@ -90,6 +90,10 @@ ___
 #### Supported Style Functions
 `<%- style.allowedFunctionTypes.join(', ') %>`
 <%_ } _%>
+<%_ if (style.expression) { _%>
+#### Expression
 
+Parameters: `<%- (style.expression.parameters || []).join(', ') %>`
+<%_ } %>
 <%_ } _%>
 <%_ } _%>

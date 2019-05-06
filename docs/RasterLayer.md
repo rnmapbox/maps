@@ -25,7 +25,8 @@
 * <a href="#name-4">rasterBrightnessMax</a><br/>
 * <a href="#name-5">rasterSaturation</a><br/>
 * <a href="#name-6">rasterContrast</a><br/>
-* <a href="#name-7">rasterFadeDuration</a><br/>
+* <a href="#name-7">rasterResampling</a><br/>
+* <a href="#name-8">rasterFadeDuration</a><br/>
 
 ___
 
@@ -66,8 +67,9 @@ The opacity at which the image will be drawn.
 #### Maximum
 `1`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -86,8 +88,9 @@ Rotates hues around the color wheel.
 `degrees`
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -109,8 +112,9 @@ Increase or reduce the brightness of the image. The value is the minimum brightn
 #### Maximum
 `1`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -132,8 +136,9 @@ Increase or reduce the brightness of the image. The value is the maximum brightn
 #### Maximum
 `1`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -155,8 +160,9 @@ Increase or reduce the saturation of the image.
 #### Maximum
 `1`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -178,8 +184,31 @@ Increase or reduce the contrast of the image.
 #### Maximum
 `1`
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
+
+___
+
+#### Name
+`rasterResampling`
+
+#### Description
+The resampling/interpolation method to use for overscaling, also known as texture magnification filter
+
+#### Type
+`enum`
+#### Default Value
+`linear`
+
+#### Supported Values
+**linear** - (Bi)linear filtering interpolates pixel values using the weighted average of the four closest original source pixels creating a smooth but blurry look when overscaled<br />
+**nearest** - Nearest neighbor filtering interpolates pixel values using the nearest original source pixel creating a sharp but pixelated look when overscaled<br />
+
+
+#### Expression
+
+Parameters: `zoom`
 
 ___
 
@@ -201,6 +230,7 @@ Fade duration when a new tile is added.
 `0`
 
 
-#### Supported Style Functions
-`camera`
+#### Expression
+
+Parameters: `zoom`
 
