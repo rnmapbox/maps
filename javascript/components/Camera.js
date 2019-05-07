@@ -323,4 +323,10 @@ const RCTMGLCamera = requireNativeComponent(NATIVE_MODULE_NAME, Camera, {
   },
 });
 
+Camera.UserTrackingModes = {
+  Follow: 'normal',
+  FollowWithHeading: 'compass',
+  FollowWithCourse: 'course',
+};
+
 export default Camera;

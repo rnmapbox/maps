@@ -17,6 +17,7 @@ class SetUserTrackingModes extends React.Component {
   constructor(props) {
     super(props);
 
+    // eslint-disable-next-line fp/no-mutating-methods
     this._trackingOptions = Object.keys(MapboxGL.UserTrackingModes)
       .map(key => {
         return {
@@ -24,6 +25,12 @@ class SetUserTrackingModes extends React.Component {
           data: MapboxGL.UserTrackingModes[key],
         };
       })
+      .concat([
+        {
+          label: 'None',
+          data: 'none',
+        },
+      ])
       .sort(onSortOptions);
 
     this.state = {
@@ -74,12 +81,20 @@ class SetUserTrackingModes extends React.Component {
         options={this._trackingOptions}
         onOptionPress={this.onTrackingChange}
       >
-        <MapboxGL.MapView
-          showUserLocation={this.state.showUserLocation}
-          userTrackingMode={this.state.userSelectedUserTrackingMode}
-          onUserTrackingModeChange={this.onUserTrackingModeChange}
-          style={sheet.matchParent}
-        />
+        <MapboxGL.MapView style={sheet.matchParent}>
+          <MapboxGL.UserLocation visible={this.state.showUserLocation} />
+
+          <MapboxGL.Camera
+            followUserLocation={
+              this.state.userSelectedUserTrackingMode !== 'none'
+            }
+            followUserMode={
+              this.state.userSelectedUserTrackingMode !== 'none' ?
+                this.state.userSelectedUserTrackingMode : 'normal'
+            }
+            onUserTrackingModeChange={this.onUserTrackingModeChange}
+          />
+        </MapboxGL.MapView>
 
         <Bubble style={{bottom: 100}}>
           <Text>User Tracking Mode: {this.userTrackingModeText}</Text>

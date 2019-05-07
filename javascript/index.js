@@ -60,6 +60,8 @@ MapboxGL.requestAndroidLocationPermissions = async function() {
   throw new Error('You should only call this method on Android!');
 };
 
+MapboxGL.UserTrackingModes = Camera.UserTrackingModes;
+
 // components
 MapboxGL.MapView = MapView;
 MapboxGL.Light = Light;
