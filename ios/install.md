@@ -22,7 +22,6 @@ To install with CocoaPods, add the following to your `Podfile`:
     'RCTNetwork',
     'RCTPushNotification',
     'RCTSettings',
-    'RCTTest',
     'RCTText',
     'RCTVibration',
     'RCTWebSocket',
