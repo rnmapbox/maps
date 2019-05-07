@@ -27,30 +27,39 @@
     return self;
 }
 
+- (void)dealloc {
+    if (_map) {
+        _map.layoutObserver = nil;
+    }
+}
+
+- (void)setMaxZoomLevel:(NSNumber *)maxZoomLevel {
+    _maxZoomLevel = maxZoomLevel;
+    [self _updateMinMaxZoomLevel];
+}
+
+- (void)setMinZoomLevel:(NSNumber *)minZoomLevel {
+    _minZoomLevel = minZoomLevel;
+    [self _updateMinMaxZoomLevel];
+}
+
 - (void)setStop:(NSDictionary<NSString *,id> *)stop
 {
     _stop = stop;
     
-    if (_map != nil) {
-        if (_followUserLocation) {
-            [self _updateCameraFromTrackingMode];
-        } else {
-            [self _updateCameraFromJavascript];
-        }
-    }
+    [self _updateCamera];
 }
 
 - (void)setMap:(RCTMGLMapView *)map
 {
-    _map = map;
-    
     if (_map != nil) {
-        if (_followUserLocation) {
-            [self _updateCameraFromTrackingMode];
-        } else {
-            [self _updateCameraFromJavascript];
-        }
+        _map.layoutObserver = nil;
     }
+    _map = map;
+    _map.layoutObserver = self;
+
+    [self _updateMinMaxZoomLevel];
+    [self _updateCamera];
 }
 
 - (void)setFollowUserLocation:(BOOL)followUserLocation
@@ -101,6 +110,29 @@
     [cameraUpdateQueue execute:_map];
 }
 
+- (void)_updateCamera
+{
+    if (_map != nil) {
+        if (_followUserLocation) {
+            [self _updateCameraFromTrackingMode];
+        } else {
+            [self _updateCameraFromJavascript];
+        }
+    }
+}
+
+- (void)_updateMinMaxZoomLevel
+{
+    if (_map != nil) {
+        if (_maxZoomLevel) {
+            _map.maximumZoomLevel = [_maxZoomLevel doubleValue];
+        }
+        if (_minZoomLevel) {
+            _map.minimumZoomLevel = [_minZoomLevel doubleValue];
+        }
+    }
+}
+
 - (void)_updateCameraFromTrackingMode
 {
     if (!_followUserLocation || _map == nil) {
@@ -146,6 +178,11 @@
     } else {
         return MGLUserTrackingModeNone;
     }
+}
+
+- (void)initialLayout
+{
+    [self _updateCamera];
 }
 
 @end

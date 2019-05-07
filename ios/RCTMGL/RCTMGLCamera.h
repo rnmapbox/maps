@@ -24,6 +24,9 @@
 @property (nonatomic, copy) NSNumber *followPitch;
 @property (nonatomic, copy) NSNumber *followHeading;
 
+@property (nonatomic, copy) NSNumber *maxZoomLevel;
+@property (nonatomic, copy) NSNumber *minZoomLevel;
+
 @property (nonatomic, copy) NSString *alignment;
 @property (nonatomic, copy, readonly) NSNumber *cameraAnimationMode;
 

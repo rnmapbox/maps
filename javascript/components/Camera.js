@@ -310,6 +310,8 @@ class Camera extends NativeBridgeComponent {
         followHeading={this.props.followHeading}
         followZoomLevel={this.props.followZoomLevel}
         stop={this._createStopConfig(props)}
+        maxZoomLevel={this.props.maxZoomLevel}
+        minZoomLevel={this.props.minZoomLevel}
       />
     );
   }
