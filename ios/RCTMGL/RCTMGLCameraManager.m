@@ -28,6 +28,9 @@ RCT_EXPORT_VIEW_PROPERTY(followHeading, NSNumber)
 
 RCT_EXPORT_VIEW_PROPERTY(alignment, NSString)
 
+RCT_EXPORT_VIEW_PROPERTY(maxZoomLevel, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(minZoomLevel, NSNumber)
+
 #pragma Methods
 
 - (BOOL)requiresMainQueueSetup

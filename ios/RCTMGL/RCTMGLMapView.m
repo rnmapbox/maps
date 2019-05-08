@@ -40,8 +40,10 @@ static double const M2PI = M_PI * 2;
     [super layoutSubviews];
     if (_pendingInitialLayout) {
         _pendingInitialLayout = NO;
-        // FMTODO
-        // [self.camera _updateCameraAfterInitialLayout];
+
+        if (self.layoutObserver) {
+            [self.layoutObserver initialLayout];
+        }
     }
 }
 

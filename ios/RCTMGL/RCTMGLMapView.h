@@ -17,9 +17,14 @@
 
 @class CameraUpdateQueue;
 
+@protocol RCTMGLMapViewLayoutObserver<NSObject>
+- (void)initialLayout;
+@end
+
 @interface RCTMGLMapView : MGLMapView<RCTInvalidating>
 
 @property (nonatomic, strong) CameraUpdateQueue *cameraUpdateQueue;
+@property (nonatomic, weak) id<RCTMGLMapViewLayoutObserver> layoutObserver;
 @property (nonatomic, strong) NSMutableArray<id<RCTComponent>> *reactSubviews;
 @property (nonatomic, strong) NSMutableArray<RCTMGLSource*> *sources;
 @property (nonatomic, strong) NSMutableArray<RCTMGLPointAnnotation*> *pointAnnotations;

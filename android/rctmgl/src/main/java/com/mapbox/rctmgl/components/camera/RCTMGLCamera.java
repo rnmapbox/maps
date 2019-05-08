@@ -73,6 +73,9 @@ public class RCTMGLCamera extends AbstractMapFeature {
     private double mPitch;
     private double mZoomLevel;
 
+    private double mMinZoomLevel = -1;
+    private double mMaxZoomLevel = -1;
+
     private boolean mFollowUserLocation;
     private String mFollowUserMode;
 
@@ -132,6 +135,7 @@ public class RCTMGLCamera extends AbstractMapFeature {
         if (mCameraStop != null) {
             updateCamera();
         }
+        updateMaxMinZoomLevel();
 
         if (mShowUserLocation) {
             enableLocation();
@@ -149,6 +153,18 @@ public class RCTMGLCamera extends AbstractMapFeature {
 
         if (mMapView != null) {
             updateCamera();
+        }
+    }
+
+    private void updateMaxMinZoomLevel() {
+        MapboxMap map = getMapboxMap();
+        if (map != null) {
+            if (mMinZoomLevel >= 0.0) {
+                map.setMinZoomPreference(mMinZoomLevel);
+            }
+            if (mMaxZoomLevel >= 0.0) {
+                map.setMaxZoomPreference(mMaxZoomLevel);
+            }
         }
     }
 
@@ -360,6 +376,16 @@ public class RCTMGLCamera extends AbstractMapFeature {
         if (userLayerMode != -1) {
             mLocationComponent.setRenderMode(userLayerMode);
         }
+    }
+
+    public void setMinZoomLevel(double zoomLevel) {
+        mMinZoomLevel = zoomLevel;
+        updateMaxMinZoomLevel();
+    }
+
+    public void setMaxZoomLevel(double zoomLevel) {
+        mMaxZoomLevel = zoomLevel;
+        updateMaxMinZoomLevel();
     }
 
     public void setZoomLevel(double zoomLevel) {
