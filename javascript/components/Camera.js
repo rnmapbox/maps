@@ -301,6 +301,10 @@ class Camera extends NativeBridgeComponent {
   render() {
     const props = Object.assign({}, this.props);
 
+    const callbacks = {
+      onUserTrackingModeChange: props.onUserTrackingModeChange,
+    };
+
     return (
       <RCTMGLCamera
         ref="camera"
@@ -312,6 +316,7 @@ class Camera extends NativeBridgeComponent {
         stop={this._createStopConfig(props)}
         maxZoomLevel={this.props.maxZoomLevel}
         minZoomLevel={this.props.minZoomLevel}
+        {...callbacks}
       />
     );
   }

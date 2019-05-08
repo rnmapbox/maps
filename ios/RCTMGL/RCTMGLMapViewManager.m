@@ -373,6 +373,12 @@ RCT_EXPORT_METHOD(showAttribution:(nonnull NSNumber *)reactTag
     return nil;
 }
 
+- (void)mapView:(MGLMapView *)mapView didChangeUserTrackingMode:(MGLUserTrackingMode)mode animated:(BOOL)animated
+{
+    RCTMGLMapView* reactMapView = ((RCTMGLMapView *) mapView);
+    [reactMapView didChangeUserTrackingMode:mode animated:animated];
+}
+
 - (void)mapView:(MGLMapView *)mapView didSelectAnnotation:(nonnull id<MGLAnnotation>)annotation
 {
     if ([annotation isKindOfClass:[RCTMGLPointAnnotation class]]) {

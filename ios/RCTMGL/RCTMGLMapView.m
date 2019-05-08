@@ -41,9 +41,7 @@ static double const M2PI = M_PI * 2;
     if (_pendingInitialLayout) {
         _pendingInitialLayout = NO;
 
-        if (self.layoutObserver) {
-            [self.layoutObserver initialLayout];
-        }
+        [   _reactCamera initialLayout];
     }
 }
 
@@ -313,6 +311,10 @@ static double const M2PI = M_PI * 2;
     for (RCTMGLSource *source in _sources) {
         source.map = nil;
     }
+}
+
+- (void)didChangeUserTrackingMode:(MGLUserTrackingMode)mode animated:(BOOL)animated {
+    [_reactCamera didChangeUserTrackingMode:mode animated:animated];
 }
 
 @end

@@ -17,14 +17,15 @@
 
 @class CameraUpdateQueue;
 
-@protocol RCTMGLMapViewLayoutObserver<NSObject>
+@protocol RCTMGLMapViewCamera<NSObject>
 - (void)initialLayout;
+- (void)didChangeUserTrackingMode:(MGLUserTrackingMode)mode animated:(BOOL)animated;
 @end
 
 @interface RCTMGLMapView : MGLMapView<RCTInvalidating>
 
 @property (nonatomic, strong) CameraUpdateQueue *cameraUpdateQueue;
-@property (nonatomic, weak) id<RCTMGLMapViewLayoutObserver> layoutObserver;
+@property (nonatomic, weak) id<RCTMGLMapViewCamera> reactCamera;
 @property (nonatomic, strong) NSMutableArray<id<RCTComponent>> *reactSubviews;
 @property (nonatomic, strong) NSMutableArray<RCTMGLSource*> *sources;
 @property (nonatomic, strong) NSMutableArray<RCTMGLPointAnnotation*> *pointAnnotations;
@@ -54,5 +55,6 @@
 - (NSArray<RCTMGLSource *> *)getAllTouchableSources;
 - (RCTMGLSource *)getTouchableSourceWithHighestZIndex:(NSArray<RCTMGLSource *> *)touchableSources;
 - (NSString *)takeSnap:(BOOL)writeToDisk;
+- (void)didChangeUserTrackingMode:(MGLUserTrackingMode)mode animated:(BOOL)animated;
 
 @end
