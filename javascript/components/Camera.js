@@ -88,6 +88,7 @@ class Camera extends NativeBridgeComponent {
 
     if (nextCamera.followUserLocation) {
       this.refs.camera.setNativeProps({
+        followUserMode: nextCamera.followUserMode,
         followPitch: nextCamera.followPitch || nextCamera.pitch,
         followHeading: nextCamera.followHeading || nextCamera.heading,
         followZoomLevel: nextCamera.followZoomLevel || nextCamera.zoomLevel,
