@@ -2,8 +2,8 @@
 
 ### Breaking changes:
 
-* isTelemeryEnbaled removed (as no longer supported on android) [#1](https://github.com/mfazekas/maps/pull/1)
-* Camera related properties on MapView now have to specified on a camera object:
+* isTelemetryEnabled removed (as no longer supported on android) [#1](https://github.com/mfazekas/maps/pull/1)
+* Camera related properties on MapView now have to be specified on a camera object:
    ```jsx
    <MapView
       zoomLevel={8}
