@@ -1,7 +1,7 @@
 package com.mapbox.rctmgl.events;
 
 import android.graphics.PointF;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 
 import com.facebook.react.bridge.WritableMap;
