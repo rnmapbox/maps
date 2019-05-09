@@ -88,6 +88,7 @@ class Camera extends NativeBridgeComponent {
 
     if (nextCamera.followUserLocation) {
       this.refs.camera.setNativeProps({
+        followUserMode: nextCamera.followUserMode,
         followPitch: nextCamera.followPitch || nextCamera.pitch,
         followHeading: nextCamera.followHeading || nextCamera.heading,
         followZoomLevel: nextCamera.followZoomLevel || nextCamera.zoomLevel,
@@ -301,6 +302,10 @@ class Camera extends NativeBridgeComponent {
   render() {
     const props = Object.assign({}, this.props);
 
+    const callbacks = {
+      onUserTrackingModeChange: props.onUserTrackingModeChange,
+    };
+
     return (
       <RCTMGLCamera
         ref="camera"
@@ -312,6 +317,7 @@ class Camera extends NativeBridgeComponent {
         stop={this._createStopConfig(props)}
         maxZoomLevel={this.props.maxZoomLevel}
         minZoomLevel={this.props.minZoomLevel}
+        {...callbacks}
       />
     );
   }
@@ -322,5 +328,11 @@ const RCTMGLCamera = requireNativeComponent(NATIVE_MODULE_NAME, Camera, {
     stop: true,
   },
 });
+
+Camera.UserTrackingModes = {
+  Follow: 'normal',
+  FollowWithHeading: 'compass',
+  FollowWithCourse: 'course',
+};
 
 export default Camera;

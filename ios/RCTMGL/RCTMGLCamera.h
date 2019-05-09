@@ -5,7 +5,7 @@
 //  Created by Nick Italiano on 6/22/18.
 //  Copyright © 2018 Mapbox Inc. All rights reserved.
 //
-
+#import <React/RCTComponent.h>
 #import <UIKit/UIKit.h>
 
 @class RCTMGLMapView;
@@ -29,5 +29,7 @@
 
 @property (nonatomic, copy) NSString *alignment;
 @property (nonatomic, copy, readonly) NSNumber *cameraAnimationMode;
+
+@property (nonatomic, copy) RCTBubblingEventBlock onUserTrackingModeChange;
 
 @end

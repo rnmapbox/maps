@@ -17,6 +17,7 @@
 #import "CameraStop.h"
 #import "CameraUpdateQueue.h"
 #import "FilterParser.h"
+#import "RCTMGLUserLocation.h"
 
 @interface RCTMGLMapViewManager() <MGLMapViewDelegate>
 @end
@@ -362,11 +363,20 @@ RCT_EXPORT_METHOD(showAttribution:(nonnull NSNumber *)reactTag
 
 - (MGLAnnotationView *)mapView:(MGLMapView *)mapView viewForAnnotation:(id<MGLAnnotation>)annotation
 {
-    if ([annotation isKindOfClass:[RCTMGLPointAnnotation class]]) {
+    if ([annotation isKindOfClass:[MGLUserLocation class]] && mapView.userLocation != nil) {
+        return [[RCTMGLUserLocation sharedInstance] builtinUserAnnotation];
+    }
+    else if ([annotation isKindOfClass:[RCTMGLPointAnnotation class]]) {
         RCTMGLPointAnnotation *rctAnnotation = (RCTMGLPointAnnotation *)annotation;
         return [rctAnnotation getAnnotationView];
     }
     return nil;
+}
+
+- (void)mapView:(MGLMapView *)mapView didChangeUserTrackingMode:(MGLUserTrackingMode)mode animated:(BOOL)animated
+{
+    RCTMGLMapView* reactMapView = ((RCTMGLMapView *) mapView);
+    [reactMapView didChangeUserTrackingMode:mode animated:animated];
 }
 
 - (void)mapView:(MGLMapView *)mapView didSelectAnnotation:(nonnull id<MGLAnnotation>)annotation

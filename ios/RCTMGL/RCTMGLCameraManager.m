@@ -31,6 +31,8 @@ RCT_EXPORT_VIEW_PROPERTY(alignment, NSString)
 RCT_EXPORT_VIEW_PROPERTY(maxZoomLevel, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(minZoomLevel, NSNumber)
 
+RCT_EXPORT_VIEW_PROPERTY(onUserTrackingModeChange, RCTBubblingEventBlock)
+
 #pragma Methods
 
 - (BOOL)requiresMainQueueSetup

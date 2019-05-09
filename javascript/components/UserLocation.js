@@ -63,6 +63,8 @@ class UserLocation extends React.Component {
 
     onPress: PropTypes.func,
     onUpdate: PropTypes.func,
+
+    children: PropTypes.any,
   };
 
   static defaultProps = {
@@ -106,10 +108,30 @@ class UserLocation extends React.Component {
     }
 
     locationManager.addListener(this._onLocationUpdate);
+    this.setLocationManager({
+      running: this.needsLocationManagerRunning(),
+    });
+  }
+
+  locationManagerRunning = false;
+
+  setLocationManager({running}) {
+    if (this.locationManagerRunning !== running) {
+      if (running) {
+        locationManager.start();
+      } else {
+        locationManager.stop();
+      }
+    }
+  }
+
+  needsLocationManagerRunning() {
+    return this.props.onUpdate || this.props.visible;
   }
 
   componentWillUnmount() {
     locationManager.removeListener(this._onLocationUpdate);
+    this.setLocationManager({running: false});
   }
 
   _onLocationUpdate(location) {
@@ -140,6 +162,12 @@ class UserLocation extends React.Component {
       default:
         return this.props.children;
     }
+  }
+
+  componentDidUpdate() {
+    this.setLocationManager({
+      running: this.needsLocationManagerRunning(),
+    });
   }
 
   render() {

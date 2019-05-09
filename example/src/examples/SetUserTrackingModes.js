@@ -17,6 +17,7 @@ class SetUserTrackingModes extends React.Component {
   constructor(props) {
     super(props);
 
+    // eslint-disable-next-line fp/no-mutating-methods
     this._trackingOptions = Object.keys(MapboxGL.UserTrackingModes)
       .map(key => {
         return {
@@ -24,12 +25,18 @@ class SetUserTrackingModes extends React.Component {
           data: MapboxGL.UserTrackingModes[key],
         };
       })
+      .concat([
+        {
+          label: 'None',
+          data: 'none',
+        },
+      ])
       .sort(onSortOptions);
 
     this.state = {
       showUserLocation: true,
-      userSelectedUserTrackingMode: this._trackingOptions[0].data,
-      currentTrackingMode: this._trackingOptions[0].data,
+      userSelectedUserTrackingMode: this._trackingOptions[3].data,
+      currentTrackingMode: this._trackingOptions[3].data,
     };
 
     this.onTrackingChange = this.onTrackingChange.bind(this);
@@ -45,8 +52,8 @@ class SetUserTrackingModes extends React.Component {
   }
 
   onUserTrackingModeChange(e) {
-    const {userTrackingMode} = e.nativeEvent.payload;
-    this.setState({currentTrackingMode: userTrackingMode});
+    const {followUserMode, followUserLocation} = e.nativeEvent.payload;
+    this.setState({currentTrackingMode: followUserMode || 'none'});
   }
 
   onToggleUserLocation() {
@@ -71,15 +78,25 @@ class SetUserTrackingModes extends React.Component {
       <TabBarPage
         {...this.props}
         scrollable
+        initialIndex={3}
         options={this._trackingOptions}
         onOptionPress={this.onTrackingChange}
       >
-        <MapboxGL.MapView
-          showUserLocation={this.state.showUserLocation}
-          userTrackingMode={this.state.userSelectedUserTrackingMode}
-          onUserTrackingModeChange={this.onUserTrackingModeChange}
-          style={sheet.matchParent}
-        />
+        <MapboxGL.MapView style={sheet.matchParent}>
+          <MapboxGL.UserLocation visible={this.state.showUserLocation} />
+
+          <MapboxGL.Camera
+            followUserLocation={
+              this.state.userSelectedUserTrackingMode !== 'none'
+            }
+            followUserMode={
+              this.state.userSelectedUserTrackingMode !== 'none'
+                ? this.state.userSelectedUserTrackingMode
+                : 'normal'
+            }
+            onUserTrackingModeChange={this.onUserTrackingModeChange}
+          />
+        </MapboxGL.MapView>
 
         <Bubble style={{bottom: 100}}>
           <Text>User Tracking Mode: {this.userTrackingModeText}</Text>

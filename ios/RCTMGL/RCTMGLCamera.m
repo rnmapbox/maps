@@ -12,6 +12,8 @@
 #import "RCTMGLLocation.h"
 #import "RCTMGLUtils.h"
 #import "RCTMGLLocationManager.h"
+#import "RCTMGLEvent.h"
+#import "RCTMGLEventTypes.h"
 
 @implementation RCTMGLCamera
 {
@@ -29,7 +31,7 @@
 
 - (void)dealloc {
     if (_map) {
-        _map.layoutObserver = nil;
+        _map.reactCamera = nil;
     }
 }
 
@@ -53,10 +55,10 @@
 - (void)setMap:(RCTMGLMapView *)map
 {
     if (_map != nil) {
-        _map.layoutObserver = nil;
+        _map.reactCamera = nil;
     }
     _map = map;
-    _map.layoutObserver = self;
+    _map.reactCamera = self;
 
     [self _updateMinMaxZoomLevel];
     [self _updateCamera];
@@ -180,9 +182,31 @@
     }
 }
 
+- (NSString*)_trackingModeToString:(MGLUserTrackingMode) mode {
+    switch (mode) {
+        case MGLUserTrackingModeFollowWithHeading:
+            return @"compass";
+        case MGLUserTrackingModeFollowWithCourse:
+            return @"course";
+        case MGLUserTrackingModeFollow:
+            return @"normal";
+        case MGLUserTrackingModeNone:
+            return [NSNull null];
+    }
+}
+
 - (void)initialLayout
 {
     [self _updateCamera];
+}
+
+- (void)didChangeUserTrackingMode:(MGLUserTrackingMode)mode animated:(BOOL)animated
+{
+    NSDictionary *payload = @{ @"followUserMode": [self _trackingModeToString: mode], @"followUserLocation": @((BOOL)(mode != MGLUserTrackingModeNone)) };
+    RCTMGLEvent *event = [RCTMGLEvent makeEvent:RCT_MAPBOX_USER_TRACKING_MODE_CHANGE withPayload:payload];
+    if (_onUserTrackingModeChange) {
+        _onUserTrackingModeChange([event toJSON]);
+    }
 }
 
 @end
