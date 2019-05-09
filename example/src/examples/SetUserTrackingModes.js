@@ -35,8 +35,8 @@ class SetUserTrackingModes extends React.Component {
 
     this.state = {
       showUserLocation: true,
-      userSelectedUserTrackingMode: this._trackingOptions[0].data,
-      currentTrackingMode: this._trackingOptions[0].data,
+      userSelectedUserTrackingMode: this._trackingOptions[3].data,
+      currentTrackingMode: this._trackingOptions[3].data,
     };
 
     this.onTrackingChange = this.onTrackingChange.bind(this);
@@ -78,6 +78,7 @@ class SetUserTrackingModes extends React.Component {
       <TabBarPage
         {...this.props}
         scrollable
+        initialIndex={3}
         options={this._trackingOptions}
         onOptionPress={this.onTrackingChange}
       >
