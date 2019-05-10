@@ -2,7 +2,9 @@ package com.mapbox.rctmgl.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Base64;
 import android.util.Log;
 
 import com.facebook.common.logging.FLog;
@@ -12,6 +14,8 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static com.facebook.react.views.textinput.ReactTextInputManager.TAG;
 
 /**
  * Created by nickitaliano on 9/13/17.
@@ -52,6 +56,14 @@ public class DownloadMapImageTask extends AsyncTask<Map.Entry<String, String>, V
             } else if (uri.startsWith("/")) {
                 Bitmap bitmap = BitmapUtils.getBitmapFromPath(uri, null);
                 images.add(new AbstractMap.SimpleEntry<String, Bitmap>(object.getKey(), bitmap));
+            } else if (uri.startsWith("data:image")) {
+                try {
+                    byte[] decodedString = Base64.decode(uri.substring(uri.indexOf(",") + 1), Base64.DEFAULT);
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    images.add(new AbstractMap.SimpleEntry<String, Bitmap>(object.getKey(), bitmap));
+                } catch (Exception e) {
+                    FLog.e(LOG_TAG, "Failed to load bitmap from base64: " + uri);
+                }
             } else {
                 // local asset required from JS require('image.png') or import icon from 'image.png' while in release mode
                 Bitmap bitmap = BitmapUtils.getBitmapFromResource(mContext, uri, null);
