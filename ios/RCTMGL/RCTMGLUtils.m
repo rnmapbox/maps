@@ -121,17 +121,23 @@ static double const MS_TO_S = 0.001;
         UIImage *foundImage = [style imageForName:imageName];
         
         if (foundImage == nil) {
-            [RCTMGLImageQueue.sharedInstance addImage:objects[imageName] bridge:bridge completionHandler:^(NSError *error, UIImage *image) {
-              if (!image) {
-                RCTLogWarn(@"Failed to fetch image: %@ error:%@", imageName, error);
-              }
-              else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakStyle setImage:image forName:imageName];
-                    imageLoadedBlock();
-                });
-              }
-            }];
+            if ([objects[imageName] containsString:@"data:image"]) {
+                NSData *data = [[NSData alloc]initWithBase64EncodedString:[objects[imageName] componentsSeparatedByString:@","][1] options:NSDataBase64DecodingIgnoreUnknownCharacters];
+                [weakStyle setImage:[UIImage imageWithData:data] forName:imageName];
+                imageLoadedBlock();
+            } else {
+                [RCTMGLImageQueue.sharedInstance addImage:objects[imageName] bridge:bridge completionHandler:^(NSError *error, UIImage *image) {
+                  if (!image) {
+                    RCTLogWarn(@"Failed to fetch image: %@ error:%@", imageName, error);
+                  }
+                  else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakStyle setImage:image forName:imageName];
+                        imageLoadedBlock();
+                    });
+                  }
+                }];
+            }
         } else {
             imageLoadedBlock();
         }
