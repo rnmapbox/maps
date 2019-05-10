@@ -30,6 +30,17 @@ To install with CocoaPods, add the following to your `Podfile`:
 
   # Mapbox
   pod 'react-native-mapbox-gl', :path => '../node_modules/@react-native-mapbox/maps'
+
+  # Third party
+  pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+
+  post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      if target.name == "React"
+        target.remove_from_project
+      end
+    end
+  end
 ```
 
 Then run `pod install` and rebuild your project.
@@ -54,12 +65,11 @@ After adding Mapbox.framework it should be listed in your Embedded Binaries:
 
 <!-- ![](https://cldup.com/s4U3JfS_-l.png) -->
 
-
 ### Add React Native Mapbox SDK Files
+
 In Xcode's `Project navigator`, right click on the `Libraries` folder ➜ `Add Files to <...>`. Add `node_modules/@react-native-mapbox/maps/ios/RCTMGL.xcodeproj`.
 
 ![](https://s3.systemlevel.com/docs-public/addfilesto.png)
-
 
 Then in Xcode navigate to `Build Phases` click on it and you should see `Link Binary with Libraries`, we need to add `libRCTMGL.a`.
 
@@ -69,9 +79,9 @@ After you add 'libRCTMGL.a' it should be listed as such:
 
 ![](https://s3.systemlevel.com/docs-public/buildphasesadd.png)
 
-
 ### Add Framework Header Search Paths
-In the `Build Settings` of your application target search for `FRAMEWORK_SEARCH_PATHS`. 
+
+In the `Build Settings` of your application target search for `FRAMEWORK_SEARCH_PATHS`.
 
 ![](https://s3.systemlevel.com/docs-public/frameworksearch.png)
 

@@ -58,8 +58,7 @@ script:
   - |
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       cd $TRAVIS_BUILD_DIR/example/android
-      ./gradlew tasks
-      ./gradlew assembleDebug
+      TERM=dumb ./gradlew assemble
     fi
   - cd $TRAVIS_BUILD_DIR
   - npm install -g 'jest@24.8.0'

@@ -1467,7 +1467,7 @@
 
 - (void)setRasterResampling:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
-    layer.rasterResampling = styleValue.mglStyleValue;
+    layer.rasterResamplingMode = styleValue.mglStyleValue;
 }
 
 - (void)setRasterFadeDuration:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
