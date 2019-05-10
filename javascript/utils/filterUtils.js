@@ -5,19 +5,19 @@ export function getFilter(filter) {
     return [];
   }
 
-  let flattenedFilter = [];
-  for (let i = 0; i < filter.length; i++) {
-    const item = filter[i];
+  // let flattenedFilter = [];
+  // for (let i = 0; i < filter.length; i++) {
+  //   const item = filter[i];
 
-    if (Array.isArray(item)) {
-      flattenedFilter = flattenedFilter.concat(item);
-    } else {
-      flattenedFilter.push(item);
-    }
-  }
+  //   if (Array.isArray(item)) {
+  //     flattenedFilter = flattenedFilter.concat(item);
+  //   } else {
+  //     flattenedFilter.push(item);
+  //   }
+  // }
 
   const filterItems = [];
-  for (const item of flattenedFilter) {
+  for (const item of filter) {
     const filterItem = new BridgeValue(item);
     filterItems.push(filterItem.toJSON());
   }
