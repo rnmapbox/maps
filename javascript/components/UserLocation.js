@@ -57,7 +57,7 @@ class UserLocation extends React.Component {
   static propTypes = {
     animated: PropTypes.bool,
 
-    renderMode: PropTypes.oneOf(['normal', 'compass', 'navigation', 'custom']),
+    renderMode: PropTypes.oneOf(['normal', 'custom']),
 
     visible: PropTypes.bool,
 
@@ -75,16 +75,7 @@ class UserLocation extends React.Component {
 
   static RenderMode = {
     Normal: 'normal',
-    Compass: 'compass',
-    Navigation: 'navigation',
     Custom: 'custom',
-  };
-
-  static TrackingMode = {
-    None: 'none',
-    Follow: 'follow',
-    FollowWithHeading: 'followWithHeading',
-    FollowWithCourse: 'followWithCourse',
   };
 
   constructor(props) {
@@ -155,10 +146,6 @@ class UserLocation extends React.Component {
     switch (this.props.renderMode) {
       case UserLocation.RenderMode.Normal:
         return normalIcon;
-      case UserLocation.RenderMode.Compass:
-        return compassIcon;
-      case UserLocation.RenderMode.Navigation:
-        return navigationIcon;
       default:
         return this.props.children;
     }
