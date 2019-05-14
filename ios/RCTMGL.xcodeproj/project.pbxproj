@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6156D5A5228B16AA0014A495 /* RCTMGLUserLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6156D5A3228B16AA0014A495 /* RCTMGLUserLocation.m */; };
 		C410D5D51F7AD0B300CF822A /* RCTMGLLight.m in Sources */ = {isa = PBXBuildFile; fileRef = C410D5D41F7AD0B300CF822A /* RCTMGLLight.m */; };
 		C410D5D81F7AD0C100CF822A /* RCTMGLLightManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C410D5D71F7AD0C100CF822A /* RCTMGLLightManager.m */; };
 		C416015020112B5200006116 /* RNMBImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C416014F20112B5200006116 /* RNMBImageUtils.m */; };
@@ -81,6 +82,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6156D5A3228B16AA0014A495 /* RCTMGLUserLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLUserLocation.m; sourceTree = "<group>"; };
+		6156D5A4228B16AA0014A495 /* RCTMGLUserLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLUserLocation.h; sourceTree = "<group>"; };
 		C410D5D31F7AD0B300CF822A /* RCTMGLLight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLLight.h; sourceTree = "<group>"; };
 		C410D5D41F7AD0B300CF822A /* RCTMGLLight.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLLight.m; sourceTree = "<group>"; };
 		C410D5D61F7AD0C100CF822A /* RCTMGLLightManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLLightManager.h; sourceTree = "<group>"; };
@@ -230,6 +233,8 @@
 				C490EE0620DC5CDB00CB2E57 /* RCTMGLLocationManagerDelegate.h */,
 				C490EE0720DC66DD00CB2E57 /* RCTMGLLocation.h */,
 				C490EE0A20DC6B7C00CB2E57 /* RCTMGLLocation.m */,
+				6156D5A4228B16AA0014A495 /* RCTMGLUserLocation.h */,
+				6156D5A3228B16AA0014A495 /* RCTMGLUserLocation.m */,
 			);
 			name = Location;
 			sourceTree = "<group>";
@@ -502,6 +507,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = C4D144341F4E16F600396F26;
@@ -571,6 +577,7 @@
 				C490EE0220DC565000CB2E57 /* RCTMGLLocationModule.m in Sources */,
 				C4FB11131F71EC9F0055AE1F /* RCTMGLSymbolLayerManager.m in Sources */,
 				C4C87A601F844C820064AE95 /* FilterParser.m in Sources */,
+				6156D5A5228B16AA0014A495 /* RCTMGLUserLocation.m in Sources */,
 				C4FD1DBF1FCF54FB00213AF2 /* RCTMGLImageSource.m in Sources */,
 				C41DCC9D1FBBA8F000895BB4 /* FilterList.m in Sources */,
 				C4EAF12A1F6084920016DEE8 /* CameraUpdateQueue.m in Sources */,
