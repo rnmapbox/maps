@@ -156,6 +156,6 @@ public class RCTMGLStyleValue {
         if (config.hasKey("enablePlacementTransitions")) {
             enablePlacementTransitions = config.getMap("enablePlacementTransitions").getBoolean("value");
         }
-        return TransitionOptions.fromTransitionOptions(config.getMap("duration").getInt("value"), config.getMap("delay").getInt("value"), enablePlacementTransitions);
+        return new TransitionOptions(config.getMap("duration").getInt("value"), config.getMap("delay").getInt("value"), enablePlacementTransitions);
     }
 }
