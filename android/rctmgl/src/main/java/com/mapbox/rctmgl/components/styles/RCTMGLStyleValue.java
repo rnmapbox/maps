@@ -6,6 +6,7 @@ import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.bridge.WritableNativeMap;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
 import com.mapbox.rctmgl.utils.ExpressionParser;
@@ -42,7 +43,7 @@ public class RCTMGLStyleValue {
         Dynamic dynamic = mPayload.getDynamic("value");
         if (dynamic.getType().equals(ReadableType.Array)) {
             ReadableArray array = dynamic.asArray();
-            if (array.size() > 0) {
+            if (array.size() > 0 && mPayload.getString("type").equals("array")) {
                 ReadableMap map = array.getMap(0);
                 if (map != null && map.getString("type").equals("string")) {
                     isExpression = true;
@@ -113,7 +114,20 @@ public class RCTMGLStyleValue {
     }
 
     public ReadableMap getMap(String key) {
-        return mPayload.getMap(key);
+        if ("hashmap".equals(mPayload.getString("type"))) {
+            ReadableArray keyValues = mPayload.getArray("value");
+            WritableNativeMap result = new WritableNativeMap();
+            for (int i = 0; i < keyValues.size(); i++) {
+                ReadableArray keyValue = keyValues.getArray(i);
+                String stringKey = keyValue.getMap(0).getString("value");
+                WritableNativeMap value = new WritableNativeMap();
+                value.merge(keyValue.getMap(1));
+                result.putMap(stringKey, value);
+            }
+            return result;
+        }
+
+        return null;
     }
 
     public Expression getExpression() {
@@ -137,6 +151,11 @@ public class RCTMGLStyleValue {
             return null;
         }
         ReadableMap config = getMap(RCTMGLStyleFactory.VALUE_KEY);
-        return TransitionOptions.fromTransitionOptions(config.getInt("duration"), config.getInt("delay"));
+
+        boolean enablePlacementTransitions = true;
+        if (config.hasKey("enablePlacementTransitions")) {
+            enablePlacementTransitions = config.getMap("enablePlacementTransitions").getBoolean("value");
+        }
+        return TransitionOptions.fromTransitionOptions(config.getMap("duration").getInt("value"), config.getMap("delay").getInt("value"), enablePlacementTransitions);
     }
 }
