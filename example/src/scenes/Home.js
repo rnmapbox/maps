@@ -51,8 +51,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   exampleList: {
-    flex: 1,
-    marginTop: 60 + 12, // header + list padding,
+    flex: 1
   },
   exampleListItemBorder: {
     borderBottomWidth: StyleSheet.hairlineWidth,
