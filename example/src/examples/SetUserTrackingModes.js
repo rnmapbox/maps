@@ -67,7 +67,7 @@ class SetUserTrackingModes extends React.Component {
       case MapboxGL.UserTrackingModes.FollowWithCourse:
         return 'FollowWithCourse';
       case MapboxGL.UserTrackingModes.FollowWithHeading:
-        return 'FolloWithHeading';
+        return 'FollowWithHeading';
       default:
         return 'None';
     }
