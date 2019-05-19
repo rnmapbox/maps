@@ -22,15 +22,30 @@ describe('filterUtils', () => {
     ];
     expect(getFilter(filter)).toEqual([
       {type: 'string', value: 'all'},
-      {type: 'string', value: '=='},
-      {type: 'string', value: 'class'},
-      {type: 'string', value: 'street_limited'},
-      {type: 'string', value: '>='},
-      {type: 'string', value: 'admin_level'},
-      {type: 'number', value: 3},
-      {type: 'string', value: '=='},
-      {type: 'string', value: 'enabled'},
-      {type: 'boolean', value: true},
+      {
+        type: 'array',
+        value: [
+          {type: 'string', value: '=='},
+          {type: 'string', value: 'class'},
+          {type: 'string', value: 'street_limited'},
+        ],
+      },
+      {
+        type: 'array',
+        value: [
+          {type: 'string', value: '>='},
+          {type: 'string', value: 'admin_level'},
+          {type: 'number', value: 3},
+        ],
+      },
+      {
+        type: 'array',
+        value: [
+          {type: 'string', value: '=='},
+          {type: 'string', value: 'enabled'},
+          {type: 'boolean', value: true},
+        ],
+      },
     ]);
   });
 

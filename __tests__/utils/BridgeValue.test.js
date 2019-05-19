@@ -62,6 +62,37 @@ describe('BridgeValue', () => {
     });
   });
 
+  it('should convert complex expression', () => {
+    const bridgeValue = new BridgeValue([
+      'all',
+      ['foo', 'bar'],
+      ['baz', 'bao'],
+    ]);
+    expect(bridgeValue.toJSON()).toEqual({
+      type: 'array',
+      value: [
+        {
+          type: 'string',
+          value: 'all',
+        },
+        {
+          type: 'array',
+          value: [
+            {type: 'string', value: 'foo'},
+            {type: 'string', value: 'bar'},
+          ],
+        },
+        {
+          type: 'array',
+          value: [
+            {type: 'string', value: 'baz'},
+            {type: 'string', value: 'bao'},
+          ],
+        },
+      ]
+    });
+  });
+
   it('should convert to array of arrays', () => {
     const bridgeValue = new BridgeValue([
       [1],
