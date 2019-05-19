@@ -89,7 +89,7 @@ describe('BridgeValue', () => {
             {type: 'string', value: 'bao'},
           ],
         },
-      ]
+      ],
     });
   });
 

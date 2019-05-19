@@ -8,6 +8,7 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.NoSuchKeyException;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.google.gson.JsonArray;
@@ -27,6 +28,65 @@ import java.util.Map;
 
 public class ConvertUtils {
     public static final String LOG_TAG = ConvertUtils.class.getSimpleName();
+
+    public static JsonObject toJsonObject(ReadableMap map) {
+        if (map == null) return null;
+        JsonObject result = new JsonObject();
+        ReadableMapKeySetIterator it = map.keySetIterator();
+
+        while (it.hasNextKey()) {
+            String key = it.nextKey();
+            switch (map.getType(key)) {
+                case Map:
+                    result.add(key, toJsonObject(map.getMap(key)));
+                    break;
+                case Array:
+                    result.add(key, toJsonArray(map.getArray(key)));
+                    break;
+                case Null:
+                    result.add(key, null);
+                    break;
+                case Number:
+                    result.addProperty(key, map.getDouble(key));
+                    break;
+                case String:
+                    result.addProperty(key, map.getString(key));
+                    break;
+                case Boolean:
+                    result.addProperty(key, map.getBoolean(key));
+                    break;
+            }
+        }
+        return result;
+    }
+
+    public static JsonArray toJsonArray(ReadableArray array) {
+        if (array == null) return null;
+        JsonArray result = new JsonArray(array.size());
+        for (int i = 0; i < array.size(); i++) {
+            switch (array.getType(i)) {
+                case Map:
+                    result.add(toJsonObject(array.getMap(i)));
+                    break;
+                case Array:
+                    result.add(toJsonArray(array.getArray(i)));
+                    break;
+                case Null:
+                    result.add((JsonElement)null);
+                    break;
+                case Number:
+                    result.add(array.getDouble(i));
+                    break;
+                case String:
+                    result.add(array.getString(i));
+                    break;
+                case Boolean:
+                    result.add(array.getBoolean(i));
+                    break;
+            }
+        }
+        return result;
+    }
 
     public static WritableArray toWritableArray(JsonArray array) {
         WritableArray writableArray = Arguments.createArray();

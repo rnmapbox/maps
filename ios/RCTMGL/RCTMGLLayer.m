@@ -206,7 +206,8 @@
 
 - (NSPredicate*)buildFilters
 {
-    return [FilterParser parse:[[FilterList alloc] initWithArray:_filter]];
+    return [NSPredicate predicateWithMGLJSONObject:_filter];
+    /* return [FilterParser parse:[[FilterList alloc] initWithArray:_filter]]; */
 }
 
 - (BOOL)_hasInitialized

@@ -5,10 +5,14 @@ export function getFilter(filter) {
     return [];
   }
 
+  return filter;
+
+/*
   const filterItems = [];
   for (const item of filter) {
     const filterItem = new BridgeValue(item);
     filterItems.push(filterItem.toJSON());
   }
   return filterItems;
+*/
 }
