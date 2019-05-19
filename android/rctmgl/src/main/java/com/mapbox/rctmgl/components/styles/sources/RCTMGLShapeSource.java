@@ -52,11 +52,14 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         }
 
         MapboxMap map = mapView.getMapboxMap();
+        Style style = map.getStyle();
 
-        // add all images from drawables folder
-        if (hasNativeImages()) {
-            for (Map.Entry<String, BitmapDrawable> nativeImage : mNativeImages) {
-                map.getStyle().addImage(nativeImage.getKey(),  nativeImage.getValue().getBitmap());
+        if (style != null) {
+            // add all images from drawables folder
+            if (hasNativeImages()) {
+                for (Map.Entry<String, BitmapDrawable> nativeImage : mNativeImages) {
+                    style.addImage(nativeImage.getKey(),  nativeImage.getValue().getBitmap());
+                }
             }
         }
 
