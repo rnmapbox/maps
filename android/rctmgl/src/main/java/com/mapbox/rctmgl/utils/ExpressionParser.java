@@ -4,6 +4,9 @@ import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
+import com.mapbox.mapboxsdk.style.expressions.Expression.Converter;
+
+import org.json.JSONArray;
 
 import java.util.Locale;
 
@@ -15,28 +18,11 @@ public class ExpressionParser {
     static final String TYPE_BOOL = "boolean";
 
     public static Expression from(ReadableArray rawExpressions) {
-        StringBuilder builder = new StringBuilder();
-
         if (rawExpressions == null || rawExpressions.size() == 0) {
             return null;
         }
 
-        builder.append("[");
-        for (int i = 0; i < rawExpressions.size(); i++) {
-            ReadableMap item = rawExpressions.getMap(i);
-
-            String curExpression = stringExpression(item);
-            if (!curExpression.isEmpty()) {
-                builder.append(curExpression);
-
-                if (i < rawExpressions.size() - 1) {
-                    builder.append(",");
-                }
-            }
-        }
-        builder.append("]");
-
-        return Expression.raw(builder.toString());
+        return Expression.Converter.convert(ConvertUtils.toJsonArray(rawExpressions));
     }
 
     public static Expression from(ReadableMap rawExpression) {

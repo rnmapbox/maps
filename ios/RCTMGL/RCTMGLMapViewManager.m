@@ -16,8 +16,8 @@
 #import "RCTMGLUtils.h"
 #import "CameraStop.h"
 #import "CameraUpdateQueue.h"
-#import "FilterParser.h"
 #import "RCTMGLUserLocation.h"
+#import "FilterParser.h"
 
 @interface RCTMGLMapViewManager() <MGLMapViewDelegate>
 @end
@@ -221,9 +221,10 @@ RCT_EXPORT_METHOD(queryRenderedFeaturesAtPoint:(nonnull NSNumber*)reactTag
         }
         
         RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
+        NSPredicate* predicate = [FilterParser parse:filter];
         NSArray<id<MGLFeature>> *shapes = [reactMapView visibleFeaturesAtPoint:CGPointMake([point[0] floatValue], [point[1] floatValue])
                                                         inStyleLayersWithIdentifiers:layerIDSet
-                                                        predicate:[FilterParser parse:[[FilterList alloc] initWithArray:filter]]];
+                                                        predicate:predicate];
         
         NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] init];
         for (int i = 0; i < shapes.count; i++) {
@@ -263,9 +264,10 @@ RCT_EXPORT_METHOD(queryRenderedFeaturesInRect:(nonnull NSNumber*)reactTag
             layerIDSet = [NSSet setWithArray:layerIDs];
         }
         
+        NSPredicate* predicate = [FilterParser parse:filter];
         NSArray<id<MGLFeature>> *shapes = [reactMapView visibleFeaturesInRect:rect
                                                         inStyleLayersWithIdentifiers:layerIDSet
-                                                        predicate:[FilterParser parse:[[FilterList alloc] initWithArray:filter]]];
+                                                        predicate:predicate];
         
         NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] init];
         for (int i = 0; i < shapes.count; i++) {
