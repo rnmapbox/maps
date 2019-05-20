@@ -90,9 +90,7 @@
     [super addToMap:style];
     
     NSPredicate *filter = [self buildFilters];
-    if (filter != nil) {
-        [self updateFilter:filter];
-    }
+    [self updateFilter:filter];
     
     if (_snapshot == YES) {
         UIImage *image = [self _createViewSnapshot];

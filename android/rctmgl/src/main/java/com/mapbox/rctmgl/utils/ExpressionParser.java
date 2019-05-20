@@ -23,33 +23,6 @@ public class ExpressionParser {
         }
 
         return Expression.Converter.convert(ConvertUtils.toJsonArray(rawExpressions));
-        /*
-        return null;
-
-        StringBuilder builder = new StringBuilder();
-
-        if (rawExpressions == null || rawExpressions.size() == 0) {
-            return null;
-        }
-
-        builder.append("[");
-        for (int i = 0; i < rawExpressions.size(); i++) {
-            ReadableMap item = rawExpressions.getMap(i);
-
-            String curExpression = stringExpression(item);
-            if (!curExpression.isEmpty()) {
-                builder.append(curExpression);
-
-                if (i < rawExpressions.size() - 1) {
-                    builder.append(",");
-                }
-            }
-        }
-        builder.append("]");
-
-        return Expression.raw(builder.toString());
-
-         */
     }
 
     public static Expression from(ReadableMap rawExpression) {
