@@ -41,7 +41,7 @@
     _aboveLayerID = aboveLayerID;
     if (_styleLayer != nil) {
         [self removeFromMap:_style];
-        [self insertAbove:[_style layerWithIdentifier:aboveLayerID]];
+        [self insertAbove:aboveLayerID];
     }
 }
 
@@ -54,7 +54,7 @@
     _belowLayerID = belowLayerID;
     if (_styleLayer != nil) {
         [self removeFromMap:_style];
-        [self insertBelow:[_style layerWithIdentifier:belowLayerID]];
+        [self insertBelow:_belowLayerID];
     }
 }
 
@@ -144,9 +144,9 @@
     }
 
     if (_aboveLayerID != nil) {
-        [self insertAbove:[_style layerWithIdentifier:_aboveLayerID]];
+        [self insertAbove:_aboveLayerID];
     } else if (_belowLayerID != nil) {
-        [self insertBelow:[_style layerWithIdentifier:_belowLayerID]];
+        [self insertBelow:_belowLayerID];
     } else if (_layerIndex != nil) {
         [self insertAtIndex:(NSUInteger)_layerIndex];
     } else {
@@ -167,17 +167,29 @@
     }
 }
 
--(void)insertAbove:(MGLStyleLayer*)layer
+-(void)insertAbove:(NSString*)aboveLayerID
 {
+    MGLStyleLayer* layer = [_style layerWithIdentifier:aboveLayerID];
     if (![self _hasInitialized]) {
+        return;
+    }
+    if (!layer) {
+        RCTLogWarn(@"Cannot find layer with id: %@ to insert above", aboveLayerID);
+        [_style addLayer:_styleLayer];
         return;
     }
     [_style insertLayer:_styleLayer aboveLayer:layer];
 }
 
--(void)insertBelow:(MGLStyleLayer*)layer
+-(void)insertBelow:(NSString*)belowLayerID
 {
+    MGLStyleLayer* layer = [_style layerWithIdentifier:belowLayerID];
     if (![self _hasInitialized]) {
+        return;
+    }
+    if (!layer) {
+        RCTLogWarn(@"Cannot find layer with id: %@ to insert below", belowLayerID);
+        [_style addLayer:_styleLayer];
         return;
     }
     [_style insertLayer:_styleLayer belowLayer:layer];
