@@ -158,24 +158,36 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         // place below user location layer
         if (userLocationBackgroundLayer != null) {
             mMap.getStyle().addLayerBelow(mLayer, userBackgroundID);
+            mMapView.layerAdded(mLayer);
             return;
         }
 
         mMap.getStyle().addLayer(mLayer);
+        mMapView.layerAdded(mLayer);
     }
 
-    public void addAbove(String aboveLayerID) {
-        if (!hasInitialized()) {
-            return;
-        }
-        mMap.getStyle().addLayerAbove(mLayer, aboveLayerID);
+    public void addAbove(final String aboveLayerID) {
+        mMapView.waitForLayer(aboveLayerID, new RCTMGLMapView.FoundLayerCallback() {
+            public void found(Layer layer) {
+                if (!hasInitialized()) {
+                    return;
+                }
+                mMap.getStyle().addLayerAbove(mLayer, aboveLayerID);
+                mMapView.layerAdded(mLayer);
+            }
+        });
     }
 
-    public void addBelow(String belowLayerID) {
-        if (!hasInitialized()) {
-            return;
-        }
-        mMap.getStyle().addLayerBelow(mLayer, belowLayerID);
+    public void addBelow(final String belowLayerID) {
+        mMapView.waitForLayer(belowLayerID, new RCTMGLMapView.FoundLayerCallback() {
+            public void found(Layer layer) {
+                if (!hasInitialized()) {
+                    return;
+                }
+                mMap.getStyle().addLayerBelow(mLayer, belowLayerID);
+                mMapView.layerAdded(mLayer);
+            }
+        });
     }
 
     public void addAtIndex(int index) {
@@ -183,6 +195,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
             return;
         }
         mMap.getStyle().addLayerAt(mLayer, index);
+        mMapView.layerAdded(mLayer);
     }
 
     protected void insertLayer() {

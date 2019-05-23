@@ -75,9 +75,12 @@ import com.mapbox.rctmgl.utils.GeoViewport;
 import com.mapbox.rctmgl.utils.SimpleEventCallback;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 
@@ -263,6 +266,11 @@ public class RCTMGLMapView extends MapView implements
             return;
         }
 
+        if (!layerWaiters.isEmpty()) {
+            Log.w(LOG_TAG, String.format("The following layers were waited on but never appeared %s", layerWaiters.keySet()));
+            layerWaiters.clear();
+        }
+
         ReactContext reactContext = (ReactContext) mContext;
         reactContext.removeLifecycleEventListener(mLifeCycleListener);
 
@@ -340,6 +348,38 @@ public class RCTMGLMapView extends MapView implements
 
     public MapboxMap getMapboxMap() {
         return mMap;
+    }
+
+    public interface FoundLayerCallback {
+        public void found(Layer layer);
+    }
+
+    private Map<String, List<FoundLayerCallback>> layerWaiters = new HashMap<String,List<FoundLayerCallback>>();
+
+    public void layerAdded(Layer layer) {
+        String layerId = layer.getId();
+
+        List<FoundLayerCallback> callbacks = layerWaiters.get(layerId);
+        if (callbacks != null) {
+            for (FoundLayerCallback callback : callbacks) {
+                callback.found(layer);
+            }
+        }
+        layerWaiters.remove(layerId);
+    }
+
+    public void waitForLayer(String layerID, FoundLayerCallback callback) {
+        Layer layer = mMap.getStyle().getLayer(layerID);
+        if (layer != null) {
+            callback.found(layer);
+        } else {
+            List<FoundLayerCallback> waiters = layerWaiters.get(layerID);
+            if (waiters == null) {
+                waiters = new ArrayList<FoundLayerCallback>();
+                layerWaiters.put(layerID, waiters);
+            }
+            waiters.add(callback);
+        }
     }
 
     //region Map Callbacks
