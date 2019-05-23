@@ -11,6 +11,7 @@
 #import "RCTMGLStyleValue.h"
 #import "RCTMGLUtils.h"
 #import "FilterParser.h"
+#import "RCTMGLMapView.h"
 
 @implementation RCTMGLLayer
 
@@ -93,8 +94,9 @@
     }
 }
 
-- (void)addToMap:(MGLStyle *)style
+- (void)addToMap:(RCTMGLMapView*) map style:(MGLStyle *)style
 {
+    _map = map;
     _style = style;
     if (_id == nil) {
       RCTLogError(@"Cannot add a layer without id to the map: %@", self);
@@ -105,10 +107,11 @@
         _styleLayer = existingLayer;
     } else {
         _styleLayer = [self makeLayer:style];
-        [self insertLayer];
+        [self insertLayer: map];
     }
     
     [self addStyles];
+    [self addedToMap];
 }
 
 - (void)removeFromMap:(MGLStyle *)style
@@ -132,12 +135,17 @@
                                  userInfo:nil];
 }
 
+- (void)addedToMap
+{
+    // override if you want
+}
+
 - (void)updateFilter:(NSPredicate *)predicate
 {
     // override if you want to update the filter
 }
 
-- (void)insertLayer
+- (void)insertLayer: (RCTMGLMapView*) map
 {
     if ([_style layerWithIdentifier:_id] != nil) {
         return; // prevent layer from being added twice
@@ -151,6 +159,7 @@
         [self insertAtIndex:(NSUInteger)_layerIndex];
     } else {
         [_style addLayer:_styleLayer];
+        [_map layerAdded:_styleLayer];
     }
     
     [self setZoomBounds];
@@ -167,32 +176,27 @@
     }
 }
 
--(void)insertAbove:(NSString*)aboveLayerID
+-(void)insertAbove:(NSString*)aboveLayerIDs
 {
-    MGLStyleLayer* layer = [_style layerWithIdentifier:aboveLayerID];
-    if (![self _hasInitialized]) {
-        return;
-    }
-    if (!layer) {
-        RCTLogWarn(@"Cannot find layer with id: %@ to insert above", aboveLayerID);
-        [_style addLayer:_styleLayer];
-        return;
-    }
-    [_style insertLayer:_styleLayer aboveLayer:layer];
+    [_map waitForLayerWithID: aboveLayerIDs then:^void (MGLStyleLayer* layer) {
+        if (![self _hasInitialized]) {
+            return;
+        }
+        [_style insertLayer:_styleLayer aboveLayer:layer];
+        [_map layerAdded:_styleLayer];
+    }];
 }
 
 -(void)insertBelow:(NSString*)belowLayerID
 {
-    MGLStyleLayer* layer = [_style layerWithIdentifier:belowLayerID];
-    if (![self _hasInitialized]) {
-        return;
-    }
-    if (!layer) {
-        RCTLogWarn(@"Cannot find layer with id: %@ to insert below", belowLayerID);
-        [_style addLayer:_styleLayer];
-        return;
-    }
-    [_style insertLayer:_styleLayer belowLayer:layer];
+    [_map waitForLayerWithID: belowLayerID then:^void (MGLStyleLayer* layer) {
+        if (![self _hasInitialized]) {
+            return;
+        }
+        
+        [_style insertLayer:_styleLayer belowLayer:layer];
+        [_map layerAdded:_styleLayer];
+    }];
 }
 
 -(void)insertAtIndex:(NSUInteger)index
@@ -201,6 +205,7 @@
         return;
     }
     [_style insertLayer:_styleLayer atIndex:index];
+    [_map layerAdded:_styleLayer];
 }
 
 - (void)addImage:(NSString *)url

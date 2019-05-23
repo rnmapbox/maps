@@ -8,6 +8,7 @@
 
 #import "RCTMGLShapeSource.h"
 #import "RCTMGLUtils.h"
+#import "RCTMGLMapView.h"
 
 @implementation RCTMGLShapeSource
 

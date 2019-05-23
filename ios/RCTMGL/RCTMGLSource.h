@@ -18,7 +18,7 @@ extern NSString *const DEFAULT_SOURCE_ID;
 @property (nonatomic, strong) NSMutableArray<id<RCTComponent>> *reactSubviews;
 @property (nonatomic, strong) NSMutableArray<RCTMGLLayer*> *layers;
 @property (nonatomic, strong) MGLSource *source;
-@property (nonatomic, strong) MGLMapView *map;
+@property (nonatomic, strong) RCTMGLMapView *map;
 @property (nonatomic, strong) NSDictionary<NSString *, NSNumber *> *hitbox;
 
 @property (nonatomic, copy) NSString *id;
