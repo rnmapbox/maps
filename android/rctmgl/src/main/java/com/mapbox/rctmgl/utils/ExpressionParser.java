@@ -3,6 +3,7 @@ package com.mapbox.rctmgl.utils;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.google.gson.JsonArray;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.expressions.Expression.Converter;
 
@@ -24,6 +25,13 @@ public class ExpressionParser {
 
         return Expression.Converter.convert(ConvertUtils.toJsonArray(rawExpressions));
     }
+
+    public static Expression fromTyped(ReadableMap rawExpressions) {
+        JsonArray array = (JsonArray)ConvertUtils.typedToJsonElement(rawExpressions);
+        return Expression.Converter.convert(array);
+    }
+
+
 
     public static Expression from(ReadableMap rawExpression) {
         return Expression.raw("[" + stringExpression(rawExpression) + "]");

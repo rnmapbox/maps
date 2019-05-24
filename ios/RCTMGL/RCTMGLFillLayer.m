@@ -25,10 +25,8 @@
     }
 }
 
-- (void)addToMap:(MGLStyle *)style
+- (void)addedToMap
 {
-    [super addToMap:style];
-    
     NSPredicate *filter = [self buildFilters];
     if (filter != nil) {
         [self updateFilter:filter];

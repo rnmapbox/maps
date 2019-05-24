@@ -8,6 +8,7 @@
 
 #import "RCTMGLSource.h"
 #import "UIView+React.h"
+#import "RCTMGLMapView.h"
 
 @implementation RCTMGLSource
 
@@ -32,7 +33,7 @@ NSString *const DEFAULT_SOURCE_ID = @"composite";
         RCTMGLLayer *layer = (RCTMGLLayer*)subview;
         
         if (_map.style != nil) {
-            [layer addToMap:_map.style];
+            [layer addToMap:_map style:_map.style];
         }
 
         [_layers addObject:layer];
@@ -88,7 +89,7 @@ NSString *const DEFAULT_SOURCE_ID = @"composite";
     if (_layers.count > 0) {
         for (int i = 0; i < _layers.count; i++) {
             RCTMGLLayer *layer = [_layers objectAtIndex:i];
-            [layer addToMap:_map.style];
+            [layer addToMap:_map style:_map.style];
         }
     }
 }

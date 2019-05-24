@@ -9,6 +9,7 @@ import com.facebook.react.bridge.NoSuchKeyException;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.google.gson.JsonArray;
@@ -86,6 +87,43 @@ public class ConvertUtils {
             }
         }
         return result;
+    }
+
+    public static JsonElement typedToJsonElement(ReadableMap map) {
+        if (map == null) return null;
+
+        String type = map.getString("type");
+
+        if (type.equals(ExpressionParser.TYPE_MAP)) {
+            JsonObject result = new JsonObject();
+            ReadableMap mapValue = map.getMap("value");
+            ReadableMapKeySetIterator it = mapValue.keySetIterator();
+            while (it.hasNextKey()) {
+                String key = it.nextKey();
+                result.add(key, typedToJsonElement(mapValue.getMap(key)));
+            }
+            return result;
+        }
+        else if (type.equals(ExpressionParser.TYPE_ARRAY)) {
+            ReadableArray arrayValue = map.getArray("value");
+            JsonArray result = new JsonArray(arrayValue.size());
+            for (int i = 0; i < arrayValue.size(); i++) {
+                result.add(typedToJsonElement(arrayValue.getMap(i)));
+            }
+            return result;
+        }
+        else if (type.equals(ExpressionParser.TYPE_BOOL)) {
+            return new JsonPrimitive(map.getBoolean("value"));
+        }
+        else if (type.equals(ExpressionParser.TYPE_NUMBER)) {
+            return new JsonPrimitive(map.getDouble("value"));
+        }
+        else if (type.equals(ExpressionParser.TYPE_STRING)) {
+            return new JsonPrimitive(map.getString("value"));
+        }
+        else {
+            throw new RuntimeException(String.format("Unrecognized type {}", map.getString("type")));
+        }
     }
 
     public static WritableArray toWritableArray(JsonArray array) {
