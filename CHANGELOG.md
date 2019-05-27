@@ -2,6 +2,25 @@
 
 ### Breaking changes:
 
+* `StyleSheet.create` removed. Mapbox styles are now just a map a no need to `StyleSheet.create`, `StylesSheet.indetity` also removed, use expressions array instead:
+   ```jsx
+   mapboxStyle=MapboxGL.Stylesheet.create({..., fillColor: MapboxGL.Stylesheet.identity('color') ...})
+   ...
+   <MapView
+     ...
+     <FillLayer style={mapboxStyle}... />
+   </MapView>
+   ```
+   
+   is now:
+   ```jsx
+   mapboxStyle={..., fillColor: ['get', 'color'] ...}
+   ...
+   <MapView
+     ...
+     <FillLayer style={mapboxStyle}... />
+   </MapView>
+   ```
 * isTelemetryEnabled removed (as no longer supported on android) [#1](https://github.com/mfazekas/maps/pull/1)
 * Camera related properties on MapView now have to be specified on a camera object:
    ```jsx
