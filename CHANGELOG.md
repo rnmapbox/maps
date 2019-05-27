@@ -2,7 +2,9 @@
 
 ### Breaking changes:
 
-* `StyleSheet.create` removed. Mapbox styles are now just a map a no need to `StyleSheet.create`, `StylesSheet.indetity` also removed, use expressions array instead:
+* `StyleSheet.create` removed.  
+Mapbox styles are now just a map no need for `StyleSheet.create`.  
+`StylesSheet.identity` also removed, use expressions array instead:
    ```jsx
    mapboxStyle=MapboxGL.Stylesheet.create({..., fillColor: MapboxGL.Stylesheet.identity('color') ...})
    ...
@@ -21,8 +23,8 @@
      <FillLayer style={mapboxStyle}... />
    </MapView>
    ```
-* isTelemetryEnabled removed (as no longer supported on android) [#1](https://github.com/mfazekas/maps/pull/1)
-* Camera related properties on MapView now have to be specified on a camera object:
+* `isTelemetryEnabled` removed (as no longer supported on android) [#1](https://github.com/mfazekas/maps/pull/1)
+* Camera related properties on `MapView` now have to be specified on a camera object:
    ```jsx
    <MapView
       zoomLevel={8}
@@ -33,7 +35,7 @@
    </MapView>
    ```
     
-   is now
+   is now:
    
    ```jsx
    <MapView
@@ -45,7 +47,7 @@
      />
    </MapView>
    ```
-* User tracking properties moved from MapView to Camera
+* User tracking properties moved from `MapView` to `Camera`
    ```jsx
    <MapView
       userTrackingMode={UserTrackingModes.Follow}
@@ -55,7 +57,7 @@
    </MapView>
    ```
     
-   is now
+   is now:
    
    ```jsx
    <MapView
