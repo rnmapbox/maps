@@ -3,6 +3,8 @@
 
 ### Stylesheet is now a JS object, see [CHANGELOG.txt](../CHANGELOG.txt)  for more details
 
+See (Mapbox expression specs)[https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions] for refernce on expressions.
+
 ### Style functions
 
 #### zoom based expressions (replaces camera(stops[, interpolationMode]))
