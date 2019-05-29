@@ -30,7 +30,7 @@ class ShowRegionDidChange extends React.Component {
       {label: 'Fly To', data: SF_OFFICE_COORDINATE},
       {
         label: 'Fit Bounds',
-        data: [[-74.12641, 40.797968], [-74.143727, 40.772177]],
+        data: {ne: [-74.12641, 40.797968], sw: [-74.143727, 40.772177]},
       },
       {label: 'Zoom To', data: 16},
     ];
