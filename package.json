@@ -2,7 +2,10 @@
   "name": "@react-native-mapbox-gl/maps",
   "description": "A Mapbox GL react native module for creating custom maps",
   "version": "7.0.0",
-  "author": "Nick Italiano",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "React Native Mapbox Team",
   "main": "./javascript/index.js",
   "keywords": [
     "gl",
