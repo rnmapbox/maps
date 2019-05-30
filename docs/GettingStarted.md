@@ -23,13 +23,9 @@ MapboxGL.setAccessToken("<YOUR_ACCESSTOKEN>");
 By default mapbox collects telemetry.
 If you would like to programmatically disable this within your app add the code below.
 
-Notice that `isTelemetryEnabled` returns a Promise.
-
 ```js
   componentDidMount() {
-    MapboxGL.isTelemetryEnabled().then(isEnabled => {
-      isEnabled && MapboxGL.setTelemetryEnabled(false);
-    });
+    MapboxGL.setTelemetryEnabled(false);
   }
 ```
 
@@ -63,9 +59,7 @@ const styles = StyleSheet.create({
 
 export default class App extends Component {
   componentDidMount() {
-    MapboxGL.isTelemetryEnabled().then(isEnabled => {
-      isEnabled && MapboxGL.setTelemetryEnabled(false);
-    });
+    MapboxGL.setTelemetryEnabled(false);
   }
 
   render() {
