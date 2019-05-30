@@ -43,7 +43,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
-+   implementation project(':react-native-mapbox/maps')
++   implementation project(':react-native-mapbox-gl/maps')
 }
 ```
 
@@ -60,7 +60,7 @@ Include project, so gradle knows where to find the project
 rootProject.name = <YOUR_PROJECT_NAME>
 
 +include ':@react-native-mapbox_maps'
-+project(':@react-native-mapbox_maps').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-mapbox/maps/android/rctmgl')
++project(':@react-native-mapbox_maps').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-mapbox-gl/maps/android/rctmgl')
 
 include ':app'¬
 ```

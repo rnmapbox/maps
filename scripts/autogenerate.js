@@ -27,7 +27,7 @@ const OUTPUT_EXAMPLE_PREFIX = [
   '..',
   'example',
   'node_modules',
-  '@react-native-mapbox',
+  '@react-native-mapbox-gl',
   'maps',
 ];
 const OUTPUT_PREFIX = outputToExample ? OUTPUT_EXAMPLE_PREFIX : ['..'];

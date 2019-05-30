@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs-extra');
 
 const RNGL_DIR = path.join('..');
-const RNGL_EXAMPLE_DIR = path.join('node_modules', '@mapbox', 'react-native-mapbox-gl');
+const RNGL_EXAMPLE_DIR = path.join('node_modules', '@react-native-mapbox-gl', 'maps');
 
 function copyFile(source, dest) {
   return new Promise((resolve, reject) => {

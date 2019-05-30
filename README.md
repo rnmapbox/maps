@@ -3,7 +3,7 @@
 _An unofficial React Native library for building maps with the [Mapbox Maps SDK for iOS](https://www.mapbox.com/ios-sdk/) and [Mapbox Maps SDK for Android](https://www.mapbox.com/android-sdk/)_
 
 [![npm version](https://badge.fury.io/js/%40mapbox%2Freact-native-mapbox-gl.svg)](https://badge.fury.io/js/%40mapbox%2Freact-native-mapbox-gl)
-![build_status](https://travis-ci.org/react-native-mapbox/maps.svg?branch=master)
+![build_status](https://travis-ci.org/react-native-mapbox-gl/maps.svg?branch=master)
 
 ## Installation
 
@@ -15,18 +15,18 @@ _An unofficial React Native library for building maps with the [Mapbox Maps SDK 
 
 **Git**
 ```
-git clone git@github.com:react-native-mapbox/maps.git
+git clone git@github.com:react-native-mapbox-gl/maps.git
 cd maps
 ```
 
 **Yarn**
 ```
-yarn add @react-native-mapbox/maps
+yarn add @react-native-mapbox-gl/maps
 ```
 
 **Npm**
 ```
-npm install @react-native-mapbox/maps --save
+npm install @react-native-mapbox-gl/maps --save
 ```
 
 ## Installation Guides
