@@ -44,8 +44,7 @@ class AbstractLayer extends React.PureComponent {
       if (styleType === 'color' && typeof rawStyle === 'string') {
         rawStyle = processColor(rawStyle);
       } else if (styleType === 'image' && typeof rawStyle === 'number') {
-        const asset = resolveAssetSource(rawStyle) || {};
-        rawStyle = asset.uri || rawStyle;
+        rawStyle = resolveAssetSource(rawStyle) || {};
       }
 
       const bridgeValue = new BridgeValue(rawStyle);

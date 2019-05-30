@@ -17,6 +17,7 @@
 
 - (BOOL)shouldAddImage;
 - (NSString *)getImageURI;
+- (double)getImageScale;
 - (MGLTransition)getTransition;
 - (NSExpression *)getSphericalPosition;
 - (BOOL)isVisible;

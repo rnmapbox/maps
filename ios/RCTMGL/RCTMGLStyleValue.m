@@ -27,6 +27,8 @@
     } else if ([_styleType isEqualToString:@"vector"] && [expressionJSON respondsToSelector:@selector(objectEnumerator)] && [[[(NSArray*)expressionJSON objectEnumerator] nextObject] isKindOfClass:[NSNumber class]]) {
         CGVector vector = [RCTMGLUtils toCGVector:(NSArray<NSNumber *> *)expressionJSON];
         return [NSExpression expressionWithMGLJSONObject:[NSValue valueWithCGVector:vector]];
+    } else if ([_styleType isEqualToString:@"image"] && [expressionJSON isKindOfClass:[NSDictionary class]]) {
+        return [NSExpression expressionForConstantValue:[self getImageURI]];
     } else if ([_styleType isEqual:@"edgeinsets"] && [expressionJSON isKindOfClass:[NSNumber class]]){
         UIEdgeInsets edgeInsets = [RCTMGLUtils toUIEdgeInsets:(NSArray<NSNumber *> *)expressionJSON];
         return [NSExpression expressionWithMGLJSONObject:[NSValue valueWithUIEdgeInsets:edgeInsets]];
@@ -76,15 +78,36 @@
     return object;
 }
 
+
+
 - (BOOL)shouldAddImage
 {
-    NSString *imageURI = (NSString *)expressionJSON;
+    NSString *imageURI = [self getImageURI];
+    
     return [imageURI containsString:@"://"];
 }
 
 - (NSString *)getImageURI
 {
-    return (NSString *)expressionJSON;
+    if ([expressionJSON isKindOfClass:[NSDictionary class]]) {
+        return [expressionJSON valueForKey:@"uri"];
+    } else {
+        return (NSString *)expressionJSON;
+    }
+}
+
+- (double)getImageScale
+{
+    if ([expressionJSON isKindOfClass:[NSDictionary class]]) {
+        id scale = [expressionJSON valueForKey:@"scale"];
+        if ([scale isKindOfClass:[NSNumber class]]) {
+            return [scale doubleValue];
+        } else {
+            return 1.0;
+        }
+    } else {
+        return 1.0;
+    }
 }
 
 - (MGLTransition)getTransition

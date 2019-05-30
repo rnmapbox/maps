@@ -213,7 +213,7 @@
     if (url == nil) {
         return;
     }
-    [RCTMGLUtils fetchImage:_bridge url:url callback:^(NSError *error, UIImage *image) {
+    [RCTMGLUtils fetchImage:_bridge url:url scale:1.0 callback:^(NSError *error, UIImage *image) {
         if (image != nil) {
             [_style setImage:image forName:url];
         }
