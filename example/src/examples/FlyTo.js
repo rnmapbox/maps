@@ -1,6 +1,6 @@
 import React from 'react';
 import {Alert} from 'react-native';
-import MapboxGL from '@react-native-mapbox/maps';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import sheet from '../styles/sheet';
 

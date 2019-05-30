@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text} from 'react-native';
-import MapboxGL from '@react-native-mapbox/maps';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import sheet from '../styles/sheet';
 import {DEFAULT_CENTER_COORDINATE} from '../utils';

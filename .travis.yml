@@ -21,7 +21,7 @@ matrix:
           - $HOME/.gradle/caches/
           - $HOME/.gradle/wrapper/
       before_cache:
-        - rm -f example/node_modules/\@react-native-mapbox/
+        - rm -f example/node_modules/\@react-native-mapbox-gl/
         - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
         - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
     - os: osx
@@ -35,7 +35,7 @@ matrix:
           - example/node_modules
           - $HOME/Library/Caches/Homebrew
       before_cache:
-        - rm -f example/node_modules/\@react-native-mapbox/
+        - rm -f example/node_modules/\@react-native-mapbox-gl/
         - brew cleanup
       podfile: example/ios/Podfile
 
@@ -47,7 +47,7 @@ install:
   - cd $TRAVIS_BUILD_DIR/example
   - echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
   - find node_modules -name ".git" -exec rm -r "{}" \; || true
-  - rm -rf example/node_modules/\@react-native-mapbox/
+  - rm -rf example/node_modules/\@react-native-mapbox-gl/
   - yarn install
   - echo $TRAVIS_OS_NAME
   - |
