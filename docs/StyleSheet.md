@@ -16,7 +16,7 @@ new:
 // color would change based on zoom level keys.
 [
   'interpolate',
-  ['exponentiental', 1.5],
+  ['exponential', 1.5],
   ['zoom'],
   0, 'blue',
   10, 'green',
