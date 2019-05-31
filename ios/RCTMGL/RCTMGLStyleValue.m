@@ -31,7 +31,6 @@
         UIEdgeInsets edgeInsets = [RCTMGLUtils toUIEdgeInsets:(NSArray<NSNumber *> *)expressionJSON];
         return [NSExpression expressionWithMGLJSONObject:[NSValue valueWithUIEdgeInsets:edgeInsets]];
     } else if ([_styleType isEqualToString:@"enum"] && [expressionJSON isKindOfClass:[NSNumber class]]) {
-        UIColor *color = [RCTMGLUtils toColor:expressionJSON];
         // ensure we pass through values as NSUInteger when mapping to an MGL enum
         NSUInteger uintValue = [(NSNumber*)expressionJSON unsignedIntegerValue];
         id rawValue = [NSValue value:&uintValue withObjCType:@encode(NSUInteger)];
