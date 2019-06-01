@@ -26,6 +26,7 @@ public class RCTMGLStyleValue {
 
     private String imageURI = "";
     private boolean isAddImage;
+    private Double imageScale = 1.0;
 
     public static final int InterpolationModeExponential = 100;
     public static final int InterpolationModeInterval = 101;
@@ -37,7 +38,16 @@ public class RCTMGLStyleValue {
         mPayload = config.getMap("stylevalue");
 
         if ("image".equals(mType)) {
-            imageURI = mPayload.getString("value");
+            imageScale = 1.0;
+            if ("hashmap".equals(mPayload.getString("type"))) {
+                ReadableMap map = getMap();
+                imageURI = map.getMap("uri").getString("value");
+                if (map.getMap("scale") != null) {
+                    imageScale = map.getMap("scale").getDouble("value");
+                }
+            } else {
+                imageURI = mPayload.getString("value");
+            }
             isAddImage = imageURI != null && imageURI.contains("://");
             return;
         }
@@ -115,7 +125,7 @@ public class RCTMGLStyleValue {
         return stringArr;
     }
 
-    public ReadableMap getMap(String key) {
+    public ReadableMap getMap() {
         if ("hashmap".equals(mPayload.getString("type"))) {
             ReadableArray keyValues = mPayload.getArray("value");
             WritableNativeMap result = new WritableNativeMap();
@@ -132,6 +142,10 @@ public class RCTMGLStyleValue {
         return null;
     }
 
+    public ReadableMap getMap(String _key) {
+        return getMap();
+    }
+
     public Expression getExpression() {
         return mExpression;
     }
@@ -146,6 +160,10 @@ public class RCTMGLStyleValue {
 
     public String getImageURI() {
         return imageURI;
+    }
+
+    public double getImageScale() {
+        return imageScale;
     }
 
     public TransitionOptions getTransition() {
