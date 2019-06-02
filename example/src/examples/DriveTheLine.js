@@ -42,6 +42,7 @@ const layerStyles = {
   },
   route: {
     lineColor: 'white',
+    lineCap: MapboxGL.LineJoin.Round,
     lineWidth: 3,
     lineOpacity: 0.84,
   },
