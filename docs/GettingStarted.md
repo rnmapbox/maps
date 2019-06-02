@@ -1,6 +1,6 @@
 # Getting Started
 
-Congratulations, you successfully installed react-native-mapbox/maps! 🎉  
+Congratulations, you successfully installed react-native-mapbox-gl/maps! 🎉  
 Where to go from here?  
 You can head straight to [examples](/example) folder if you want to jump into the deep end.  
 However, if you prefer an easier ramp-up, then make sure to stick around and check out the guides below.
@@ -13,7 +13,7 @@ You can create and manage your access tokens on your [Mapbox Account page](https
 Once you have your accessToken, set it like this
 
 ```js
-import MapboxGL from "@react-native-mapbox/maps";
+import MapboxGL from "@react-native-mapbox-gl/maps";
 
 MapboxGL.setAccessToken("<YOUR_ACCESSTOKEN>");
 ```
@@ -23,13 +23,9 @@ MapboxGL.setAccessToken("<YOUR_ACCESSTOKEN>");
 By default mapbox collects telemetry.
 If you would like to programmatically disable this within your app add the code below.
 
-Notice that `isTelemetryEnabled` returns a Promise.
-
 ```js
   componentDidMount() {
-    MapboxGL.isTelemetryEnabled().then(isEnabled => {
-      isEnabled && MapboxGL.setTelemetryEnabled(false);
-    });
+    MapboxGL.setTelemetryEnabled(false);
   }
 ```
 
@@ -40,7 +36,7 @@ For more information on mapbox and telemetry: [https://www.mapbox.com/telemetry]
 ```js
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
-import MapboxGL from "@react-native-mapbox/maps";
+import MapboxGL from "@react-native-mapbox-gl/maps";
 
 MapboxGL.setAccessToken("<YOUR_ACCESSTOKEN>");
 
@@ -63,9 +59,7 @@ const styles = StyleSheet.create({
 
 export default class App extends Component {
   componentDidMount() {
-    MapboxGL.isTelemetryEnabled().then(isEnabled => {
-      isEnabled && MapboxGL.setTelemetryEnabled(false);
-    });
+    MapboxGL.setTelemetryEnabled(false);
   }
 
   render() {

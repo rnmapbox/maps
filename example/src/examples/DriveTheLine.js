@@ -1,5 +1,5 @@
 import React from 'react';
-import MapboxGL from '@react-native-mapbox/maps';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 import {View, StyleSheet} from 'react-native';
 import {Button} from 'react-native-elements';
 import {lineString as makeLineString} from '@turf/helpers';
@@ -42,6 +42,7 @@ const layerStyles = {
   },
   route: {
     lineColor: 'white',
+    lineCap: MapboxGL.LineJoin.Round,
     lineWidth: 3,
     lineOpacity: 0.84,
   },

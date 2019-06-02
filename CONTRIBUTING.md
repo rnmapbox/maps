@@ -7,10 +7,10 @@
 1. `cd` into your project
 1. You have 2 options for linking `react-native-mapbox-gl`
   * Use `react-native link`
-  * Clone `@react-native-mapbox/maps` into the `node_modules` folder
+  * Clone `@react-native-mapbox-gl/maps` into the `node_modules` folder
 1. Go through a normal install process for your platform
 
-Once installed, you can edit any file in `@react-native-mapbox/maps`,  
+Once installed, you can edit any file in `@react-native-mapbox-gl/maps`,  
 commit the changes and push them to a fork for creating a pull request.
 
 ## Best practices for PR's

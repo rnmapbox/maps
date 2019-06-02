@@ -29,7 +29,7 @@ To install with CocoaPods, add the following to your `Podfile`:
   ]
 
   # Mapbox
-  pod 'react-native-mapbox-gl', :path => '../node_modules/@react-native-mapbox/maps'
+  pod 'react-native-mapbox-gl', :path => '../node_modules/@react-native-mapbox-gl/maps'
 
   # Third party
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
@@ -49,7 +49,7 @@ Then run `pod install` and rebuild your project.
 
 ### Add Native Mapbox SDK Framework
 
-Select your project in the `Project navigator`. Click `General` tab then add `node_modules/@react-native-mapbox/maps/ios/Mapbox.framework` to `Embedded Binaries`. :collision: **Important, make sure you're adding it to general -> `Embedded Binaries` :collision:**
+Select your project in the `Project navigator`. Click `General` tab then add `node_modules/@react-native-mapbox-gl/maps/ios/Mapbox.framework` to `Embedded Binaries`. :collision: **Important, make sure you're adding it to general -> `Embedded Binaries` :collision:**
 
 Click 'Add other' to open the file browser and select Mapbox.framework.
 
@@ -67,7 +67,7 @@ After adding Mapbox.framework it should be listed in your Embedded Binaries:
 
 ### Add React Native Mapbox SDK Files
 
-In Xcode's `Project navigator`, right click on the `Libraries` folder ➜ `Add Files to <...>`. Add `node_modules/@react-native-mapbox/maps/ios/RCTMGL.xcodeproj`.
+In Xcode's `Project navigator`, right click on the `Libraries` folder ➜ `Add Files to <...>`. Add `node_modules/@react-native-mapbox-gl/maps/ios/RCTMGL.xcodeproj`.
 
 ![](https://s3.systemlevel.com/docs-public/addfilesto.png)
 
@@ -85,7 +85,7 @@ In the `Build Settings` of your application target search for `FRAMEWORK_SEARCH_
 
 ![](https://s3.systemlevel.com/docs-public/frameworksearch.png)
 
-Add `$(PROJECT_DIR)/../node_modules/@react-native-mapbox/maps/ios` non-recursive to your `Framework Search Paths`.
+Add `$(PROJECT_DIR)/../node_modules/@react-native-mapbox-gl/maps/ios` non-recursive to your `Framework Search Paths`.
 
 ![](https://s3.systemlevel.com/docs-public/frameworksearchadd.png)
 

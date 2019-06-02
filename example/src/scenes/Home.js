@@ -1,5 +1,5 @@
 import React from 'react';
-import MapboxGL from '@react-native-mapbox/maps';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {Icon} from 'react-native-elements';
 
