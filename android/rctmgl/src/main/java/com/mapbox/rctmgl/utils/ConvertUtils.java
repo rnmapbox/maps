@@ -96,11 +96,13 @@ public class ConvertUtils {
 
         if (type.equals(ExpressionParser.TYPE_MAP)) {
             JsonObject result = new JsonObject();
-            ReadableMap mapValue = map.getMap("value");
-            ReadableMapKeySetIterator it = mapValue.keySetIterator();
-            while (it.hasNextKey()) {
-                String key = it.nextKey();
-                result.add(key, typedToJsonElement(mapValue.getMap(key)));
+
+            ReadableArray keyValues = map.getArray("value");
+            for (int i = 0; i < keyValues.size(); i++) {
+                ReadableArray keyValue = keyValues.getArray(i);
+                String key = keyValue.getMap(0).getString("value");
+
+                result.add(key, typedToJsonElement(keyValue.getMap(1)));
             }
             return result;
         }
