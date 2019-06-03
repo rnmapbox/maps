@@ -65,8 +65,7 @@ Mapbox styles are now just a map no need for `StyleSheet.create`.
    >
      <Camera
         followUserLocation=true
-        // one of
-        followUserMode="normal | compass | course"
+        followUserMode="normal"
      />
    </MapView>
    ``` 
