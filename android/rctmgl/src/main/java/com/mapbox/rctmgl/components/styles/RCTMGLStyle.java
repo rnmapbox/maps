@@ -1,13 +1,13 @@
 package com.mapbox.rctmgl.components.styles;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.rctmgl.utils.DownloadMapImageTask;
+import com.mapbox.rctmgl.utils.ImageEntry;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -63,6 +63,10 @@ public class RCTMGLStyle {
         addImage(styleValue, null);
     }
 
+    public ImageEntry imageEntry(RCTMGLStyleValue styleValue) {
+        return new ImageEntry(styleValue.getImageURI(), styleValue.getImageScale());
+    }
+
     public void addImage(RCTMGLStyleValue styleValue, DownloadMapImageTask.OnAllImagesLoaded callback) {
         if (!styleValue.shouldAddImage()) {
             if (callback != null) {
@@ -72,7 +76,7 @@ public class RCTMGLStyle {
         }
 
         String uriStr = styleValue.getImageURI();
-        Map.Entry[] images = new Map.Entry[]{ new AbstractMap.SimpleEntry(uriStr, uriStr) };
+        Map.Entry[] images = new Map.Entry[]{ new AbstractMap.SimpleEntry(uriStr, imageEntry(styleValue)) };
         DownloadMapImageTask task = new DownloadMapImageTask(mContext, mMap, callback);
         task.execute(images);
     }

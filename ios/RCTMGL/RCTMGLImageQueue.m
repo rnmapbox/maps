@@ -44,12 +44,13 @@
     [imageQueue cancelAllOperations];
 }
 
-- (void)addImage:(NSString *)imageURL bridge:(RCTBridge *)bridge completionHandler:(RCTImageLoaderCompletionBlock)handler
+- (void)addImage:(NSString *)imageURL scale:(double)scale bridge:(RCTBridge *)bridge completionHandler:(RCTImageLoaderCompletionBlock)handler
 {
     RCTMGLImageQueueOperation *operation = [[RCTMGLImageQueueOperation alloc] init];
     operation.bridge = bridge;
     operation.urlRequest = [RCTConvert NSURLRequest:imageURL];
     operation.completionHandler = handler;
+    operation.scale = scale;
     [imageQueue addOperation:operation];
 }
 

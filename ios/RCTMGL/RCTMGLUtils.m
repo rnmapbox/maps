@@ -88,9 +88,9 @@ static double const MS_TO_S = 0.001;
     return CGVectorMake([arr[0] floatValue], [arr[1] floatValue]);
 }
 
-+ (void)fetchImage:(RCTBridge*)bridge url:(NSString *)url callback:(RCTImageLoaderCompletionBlock)callback
++ (void)fetchImage:(RCTBridge*)bridge url:(NSString *)url scale:(double)scale callback:(RCTImageLoaderCompletionBlock)callback
 {
-    [RCTMGLImageQueue.sharedInstance addImage:url bridge:bridge completionHandler:callback];
+    [RCTMGLImageQueue.sharedInstance addImage:url scale:scale bridge:bridge completionHandler:callback];
 }
 
 + (void)fetchImages:(RCTBridge *)bridge style:(MGLStyle *)style objects:(NSDictionary<NSString *, NSString *>*)objects callback:(void (^)())callback
@@ -121,7 +121,7 @@ static double const MS_TO_S = 0.001;
         UIImage *foundImage = [style imageForName:imageName];
         
         if (foundImage == nil) {
-            [RCTMGLImageQueue.sharedInstance addImage:objects[imageName] bridge:bridge completionHandler:^(NSError *error, UIImage *image) {
+            [RCTMGLImageQueue.sharedInstance addImage:objects[imageName] scale:1.0 bridge:bridge completionHandler:^(NSError *error, UIImage *image) {
               if (!image) {
                 RCTLogWarn(@"Failed to fetch image: %@ error:%@", imageName, error);
               }
