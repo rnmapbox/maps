@@ -62,6 +62,7 @@ public class UserTrackingMode {
     }
 
     public static int fromString(String value) {
+        if (value == null) value = "";
         switch (value) {
             case "course":
                 return UserTrackingMode.FollowWithCourse;
