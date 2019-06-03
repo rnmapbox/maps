@@ -11,6 +11,7 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.events.FeatureClickEvent;
 import com.mapbox.rctmgl.utils.DownloadMapImageTask;
+import com.mapbox.rctmgl.utils.ImageEntry;
 
 import java.net.URL;
 import java.util.List;
@@ -35,7 +36,7 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
     private Double mTolerance;
     private boolean mRemoved = false;
 
-    private List<Map.Entry<String, String>> mImages;
+    private List<Map.Entry<String, ImageEntry>> mImages;
     private List<Map.Entry<String, BitmapDrawable>> mNativeImages;
 
     public RCTMGLShapeSource(Context context, RCTMGLShapeSourceManager manager) {
@@ -91,7 +92,7 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         Style style = this.getStyle();
         if (style != null) {
             if (hasImages()) {
-                for (Map.Entry<String, String> image : mImages) {
+                for (Map.Entry<String, ImageEntry> image : mImages) {
                     style.removeImage(image.getKey());
                 }
             }
@@ -155,7 +156,7 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         mTolerance = tolerance;
     }
 
-    public void setImages(List<Map.Entry<String, String>> images) {
+    public void setImages(List<Map.Entry<String, ImageEntry>> images) {
         mImages = images;
     }
 
