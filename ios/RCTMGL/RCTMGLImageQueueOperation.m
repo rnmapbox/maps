@@ -23,7 +23,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         cancellationBlock = [weakSelf.bridge.imageLoader loadImageWithURLRequest:weakSelf.urlRequest
                                                                             size:CGSizeZero
-                                                                           scale:UIScreen.mainScreen.scale
+                                                                           scale:self.scale
                                                                          clipped:YES
                                                                       resizeMode:RCTResizeModeStretch
                                                                    progressBlock:nil

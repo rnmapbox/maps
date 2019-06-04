@@ -23,6 +23,7 @@ Mapbox styles are now just a map no need for `StyleSheet.create`.
      <FillLayer style={mapboxStyle}... />
    </MapView>
    ```
+  See [docs/StyleSheet.md](docs/StyleSheet.md) for more examples
 * `isTelemetryEnabled` removed (as no longer supported on android) [#1](https://github.com/mfazekas/maps/pull/1)
 * Camera related properties on `MapView` now have to be specified on a camera object:
    ```jsx
@@ -65,7 +66,7 @@ Mapbox styles are now just a map no need for `StyleSheet.create`.
    >
      <Camera
         followUserLocation=true
-        followUserMode="follow"
+        followUserMode="normal"
      />
    </MapView>
    ``` 

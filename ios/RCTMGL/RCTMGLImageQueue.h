@@ -14,6 +14,6 @@
 + (instancetype)sharedInstance;
 
 - (void)cancelAllOperations;
-- (void)addImage:(NSString *)imageURL bridge:(RCTBridge *)bridge completionHandler:(RCTImageLoaderCompletionBlock)handler;
+- (void)addImage:(NSString *)imageURL scale:(double)scale bridge:(RCTBridge *)bridge completionHandler:(RCTImageLoaderCompletionBlock)handler;
 
 @end
