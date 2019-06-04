@@ -1823,6 +1823,11 @@ const styleMap = {
 };
 
 export const styleExtras = {
+  // padding
+  iconTextFitPadding: {
+    iosType: 'edgeinsets',
+  },
+
   // offsets
   iconOffset: {
     iosType: 'vector',
