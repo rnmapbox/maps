@@ -29,7 +29,7 @@
         return [NSExpression expressionWithMGLJSONObject:[NSValue valueWithCGVector:vector]];
     } else if ([_styleType isEqualToString:@"image"] && [expressionJSON isKindOfClass:[NSDictionary class]]) {
         return [NSExpression expressionForConstantValue:[self getImageURI]];
-    } else if ([_styleType isEqual:@"edgeinsets"] && [expressionJSON isKindOfClass:[NSNumber class]]){
+    } else if ([_styleType isEqual:@"edgeinsets"] && [expressionJSON respondsToSelector:@selector(objectEnumerator)] && [[[(NSArray*)expressionJSON objectEnumerator] nextObject] isKindOfClass:[NSNumber class]]){
         UIEdgeInsets edgeInsets = [RCTMGLUtils toUIEdgeInsets:(NSArray<NSNumber *> *)expressionJSON];
         return [NSExpression expressionWithMGLJSONObject:[NSValue valueWithUIEdgeInsets:edgeInsets]];
     } else if ([_styleType isEqualToString:@"enum"] && [expressionJSON isKindOfClass:[NSNumber class]]) {
@@ -37,6 +37,8 @@
         NSUInteger uintValue = [(NSNumber*)expressionJSON unsignedIntegerValue];
         id rawValue = [NSValue value:&uintValue withObjCType:@encode(NSUInteger)];
         return [NSExpression expressionWithMGLJSONObject:rawValue];
+    } else if ([expressionJSON respondsToSelector:@selector(objectEnumerator)] && [[[(NSArray*)expressionJSON objectEnumerator] nextObject] isKindOfClass:[NSNumber class]]) {
+        return [NSExpression expressionForConstantValue:expressionJSON];
     } else {
         return [NSExpression expressionWithMGLJSONObject:expressionJSON];
     }
