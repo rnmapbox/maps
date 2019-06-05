@@ -31,8 +31,8 @@ dependencies {
 
     // Mapbox SDK
 
-    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.6.0'
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:7.3.2'
+    implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.8.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:8.0.0'
 
     // Dependencies
     implementation "com.android.support:support-vector-drawable:${safeExtGet('supportLibVersion', '28.0.0')}"
