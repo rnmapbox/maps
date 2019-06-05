@@ -78,7 +78,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.<%= prop.name %>(styleValue.getExpression()));
       } else {
-        layer.setProperties(PropertyFactory.<%= prop.name %>(<%- androidGetConfigType(androidInputType(prop.type, prop.value)) -%>));
+        layer.setProperties(PropertyFactory.<%= prop.name %>(<%- androidGetConfigType(androidInputType(prop.type, prop.value), prop.name) -%>));
       }
       <%_ } _%>
     }

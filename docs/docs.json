@@ -4108,6 +4108,25 @@
     "description": "",
     "methods": [
       {
+        "name": "setLocationManager",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "{running}",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "needsLocationManagerRunning",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
         "name": "userIconLayers",
         "docblock": null,
         "modifiers": [],
@@ -4148,6 +4167,13 @@
         "name": "onUpdate",
         "required": false,
         "type": "func",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "children",
+        "required": false,
+        "type": "any",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       }
