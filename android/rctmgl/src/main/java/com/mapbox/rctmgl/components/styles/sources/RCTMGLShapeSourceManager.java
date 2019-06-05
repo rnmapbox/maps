@@ -3,6 +3,7 @@ package com.mapbox.rctmgl.components.styles.sources;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.util.Log;
 import android.view.View;
 
@@ -19,6 +20,7 @@ import com.mapbox.rctmgl.components.annotation.RCTMGLCallout;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
 import com.mapbox.rctmgl.events.constants.EventKeys;
+import com.mapbox.rctmgl.utils.ImageEntry;
 import com.mapbox.rctmgl.utils.ResourceUtils;
 
 import java.net.MalformedURLException;
@@ -124,12 +126,12 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
 
     @ReactProp(name = "images")
     public void setImages(RCTMGLShapeSource source, ReadableMap map) {
-        List<Map.Entry<String, String>> images = new ArrayList<>();
+        List<Map.Entry<String, ImageEntry>> images = new ArrayList<>();
 
         ReadableMapKeySetIterator iterator = map.keySetIterator();
         while (iterator.hasNextKey()) {
             String imageName = iterator.nextKey();
-            images.add(new AbstractMap.SimpleEntry<String, String>(imageName, map.getString(imageName)));
+            images.add(new AbstractMap.SimpleEntry<String, ImageEntry>(imageName, new ImageEntry(map.getString(imageName), 1.0)));
         }
 
         source.setImages(images);
