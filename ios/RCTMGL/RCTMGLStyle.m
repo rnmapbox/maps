@@ -58,7 +58,7 @@
       } else {
         NSString *imageURI = [styleValue getImageURI];
 
-          [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
+        [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
               [_style setImage:image forName:imageURI];
@@ -140,7 +140,7 @@
       } else {
         NSString *imageURI = [styleValue getImageURI];
 
-          [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
+        [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
               [_style setImage:image forName:imageURI];
@@ -458,7 +458,7 @@
       } else {
         NSString *imageURI = [styleValue getImageURI];
 
-          [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
+        [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
               [_style setImage:image forName:imageURI];
@@ -604,7 +604,7 @@
       } else {
         NSString *imageURI = [styleValue getImageURI];
 
-          [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
+        [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
               [_style setImage:image forName:imageURI];
