@@ -105,4 +105,12 @@ Open the newly added `Run Script` and paste:
 
 ![](https://s3.systemlevel.com/docs-public/runscript.png)
 
+If you have any issues related to not being able to find strip-frameworks.sh during your build process, click and drag the strip-frameworks.sh file into the xcode editor:
+
+![](https://s3.systemlevel.com/docs-public/strip-frameworks.png)
+
+![](https://s3.systemlevel.com/docs-public/drag.png)
+
+
+
 Checkout the [example application](/example/README.md) to see how it's configured for an example.
