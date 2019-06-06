@@ -2,6 +2,7 @@
 
 ### Breaking changes:
 
+* iOS mapbox libraries updated to [5.0.0](https://github.com/mapbox/mapbox-gl-native/releases/tag/ios-v5.0.0) android libraries updated to [8.0.0](https://github.com/mapbox/mapbox-gl-native/releases/tag/android-v8.0.0)
 * `StyleSheet.create` removed.  
 Mapbox styles are now just a map no need for `StyleSheet.create`.  
 `StylesSheet.identity` also removed, use expressions array instead:
@@ -48,6 +49,7 @@ Mapbox styles are now just a map no need for `StyleSheet.create`.
      />
    </MapView>
    ```
+   See [docs/Camera.md](docs/Camera.md) for more examples
 * User tracking properties moved from `MapView` to `Camera`
    ```jsx
    <MapView
