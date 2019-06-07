@@ -8,12 +8,18 @@
 
 #import "RCTMGLFillLayer.h"
 #import "RCTMGLStyle.h"
+#import <React/RCTLog.h>
 
 @implementation RCTMGLFillLayer
 
 - (void)updateFilter:(NSPredicate *)predicate
 {
-    ((MGLFillStyleLayer *) self.styleLayer).predicate = predicate;
+    @try {
+        ((MGLFillStyleLayer *) self.styleLayer).predicate = predicate;
+    }
+    @catch (NSException* exception) {
+        RCTLogError(@"Invalid predicate: %@ on layer %@ - %@ reason: %@", predicate, self, exception.name, exception.reason);
+    }
 }
 
 - (void)setSourceLayerID:(NSString *)sourceLayerID

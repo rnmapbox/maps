@@ -9,6 +9,7 @@
 #import "RCTMGLSymbolLayer.h"
 #import "RCTMGLStyle.h"
 #import "UIView+React.h"
+#import <React/RCTLog.h>
 
 @implementation RCTMGLSymbolLayer
 
@@ -50,7 +51,12 @@
 
 - (void)updateFilter:(NSPredicate *)predicate
 {
-    ((MGLSymbolStyleLayer *) self.styleLayer).predicate = predicate;
+    @try {
+        ((MGLSymbolStyleLayer *) self.styleLayer).predicate = predicate;
+    }
+    @catch (NSException* exception) {
+        RCTLogError(@"Invalid predicate: %@ on layer %@ - %@ reason: %@", predicate, self, exception.name, exception.reason);
+    }
 }
 
 - (void)setSourceLayerID:(NSString *)sourceLayerID
