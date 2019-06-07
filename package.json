@@ -61,7 +61,7 @@
     "ejs": "^2.5.7",
     "ejs-lint": "^0.3.0",
     "eslint": "^5.3.0",
-    "eslint-config-strict-react": "8.0.1",
+    "eslint-config-strict-react": "9.0.2",
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "5.2.2",
