@@ -1134,7 +1134,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.iconImage(styleValue.getExpression()));
       } else {
-        layer.setProperties(PropertyFactory.iconImage(styleValue.getString(VALUE_KEY)));
+        layer.setProperties(PropertyFactory.iconImage(styleValue.getImageURI()));
       }
     }
 

@@ -1,6 +1,9 @@
 # Android Installation
+`react-native link` should get you almost there,  
+however we need to add some additional lines to `build.gradle`.
 
-## `PROJECT_ROOT/android/build.gradle`
+    
+## `android/build.gradle`
 We need to add an additional repository in order to get our dependencies.
 
 * `https://jitpack.io`
@@ -33,8 +36,13 @@ buildscript {
 }
 ```
 
-## `PROJECT_ROOT/android/app/build.gradle`
-### PRE RN 59
+Everything below should've been covered by `react-native link`,   
+however it never hurts to make sure it actually did what it was supposed to
+
+---
+
+
+## `android/app/build.gradle`
 
 Add project under `dependencies`
 
@@ -43,7 +51,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
-+   implementation project(':react-native-mapbox/maps')
++   implementation project(':@react-native-mapbox-gl_maps')
 }
 ```
 
@@ -52,20 +60,20 @@ You can set the Support Library version or the okhttp version if you use other m
 * `okhttpVersion "3.12.1"`
 
 
-## `PROJECT_ROOT/android/app/settings.gradle`
+## `android/app/settings.gradle`
 
 Include project, so gradle knows where to find the project
 
 ```diff
 rootProject.name = <YOUR_PROJECT_NAME>
 
-+include ':@react-native-mapbox_maps'
-+project(':@react-native-mapbox_maps').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-mapbox/maps/android/rctmgl')
++include ':@react-native-mapbox-gl_maps'
++project(':@react-native-mapbox-gl_maps').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-mapbox-gl/maps/android/rctmgl')
 
 include ':app'¬
 ```
 
-## `PROJECT_ROOT/android/app/src/main/java/com/YOUR_PROJECT_NAME/MainApplication.java`
+## `android/app/src/main/java/com/PROJECT_NAME/MainApplication.java`
 
 We need to register our package
 

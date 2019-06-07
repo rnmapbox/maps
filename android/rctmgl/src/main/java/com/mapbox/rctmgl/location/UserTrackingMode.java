@@ -33,4 +33,30 @@ public class UserTrackingMode {
     public static boolean isUserGesture(int reason) {
         return reason == 1 || reason == 2; // user gesture or animation
     }
+
+    public static String toString(int value) {
+        switch (value) {
+            case UserTrackingMode.FOLLOW:
+                return "normal";
+            case UserTrackingMode.FollowWithCourse:
+                return "course";
+            case UserTrackingMode.FollowWithHeading:
+                return "compass";
+        }
+        return null;
+    }
+
+    public static int fromString(String value) {
+        if (value == null) value = "";
+        switch (value) {
+            case "course":
+                return UserTrackingMode.FollowWithCourse;
+            case "normal":
+                return UserTrackingMode.FOLLOW;
+            case "compass":
+                return UserTrackingMode.FollowWithHeading;
+            default:
+                return UserTrackingMode.NONE;
+        }
+    }
 }

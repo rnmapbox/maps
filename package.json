@@ -1,8 +1,11 @@
 {
-  "name": "@react-native-mapbox/maps",
+  "name": "@react-native-mapbox-gl/maps",
   "description": "A Mapbox GL react native module for creating custom maps",
-  "version": "7.0.0",
-  "author": "Nick Italiano",
+  "version": "7.0.0-rc2",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "React Native Mapbox Team",
   "main": "./javascript/index.js",
   "keywords": [
     "gl",
@@ -14,10 +17,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/react-native-mapbox/maps"
+    "url": "https://github.com/react-native-mapbox-gl/maps"
   },
   "scripts": {
-    "fetch:ios:sdk": "node ./scripts/download-mapbox-gl-native-ios-if-on-mac.js 4.9.0",
+    "fetch:ios:sdk": "node ./scripts/download-mapbox-gl-native-ios-if-on-mac.js 5.0.0",
     "fetch:style:spec": ". ./scripts/download-style-spec.sh",
     "generate": "node ./scripts/autogenerate",
     "preinstall": "npm run fetch:ios:sdk",
@@ -48,7 +51,7 @@
     "eslint-plugin-react-native": "^3.6.0",
     "@babel/core": "7.0.0",
     "@babel/plugin-proposal-class-properties": "7.0.0",
-    "@babel/plugin-transform-exponentiation-operator": "7.0.0",
+    "@babel/plugin-transform-exponentiation-operator": "7.2.0",
     "@babel/plugin-transform-flow-strip-types": "7.0.0",
     "@babel/plugin-transform-runtime": "7.0.0",
     "@babel/runtime": "7.0.0",

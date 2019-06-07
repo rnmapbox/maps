@@ -75,9 +75,12 @@ import com.mapbox.rctmgl.utils.GeoViewport;
 import com.mapbox.rctmgl.utils.SimpleEventCallback;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 
@@ -263,6 +266,11 @@ public class RCTMGLMapView extends MapView implements
             return;
         }
 
+        if (!layerWaiters.isEmpty()) {
+            Log.w(LOG_TAG, String.format("The following layers were waited on but never appeared %s", layerWaiters.keySet()));
+            layerWaiters.clear();
+        }
+
         ReactContext reactContext = (ReactContext) mContext;
         reactContext.removeLifecycleEventListener(mLifeCycleListener);
 
@@ -342,6 +350,38 @@ public class RCTMGLMapView extends MapView implements
         return mMap;
     }
 
+    public interface FoundLayerCallback {
+        public void found(Layer layer);
+    }
+
+    private Map<String, List<FoundLayerCallback>> layerWaiters = new HashMap<String,List<FoundLayerCallback>>();
+
+    public void layerAdded(Layer layer) {
+        String layerId = layer.getId();
+
+        List<FoundLayerCallback> callbacks = layerWaiters.get(layerId);
+        if (callbacks != null) {
+            for (FoundLayerCallback callback : callbacks) {
+                callback.found(layer);
+            }
+        }
+        layerWaiters.remove(layerId);
+    }
+
+    public void waitForLayer(String layerID, FoundLayerCallback callback) {
+        Layer layer = mMap.getStyle().getLayer(layerID);
+        if (layer != null) {
+            callback.found(layer);
+        } else {
+            List<FoundLayerCallback> waiters = layerWaiters.get(layerID);
+            if (waiters == null) {
+                waiters = new ArrayList<FoundLayerCallback>();
+                layerWaiters.put(layerID, waiters);
+            }
+            waiters.add(callback);
+        }
+    }
+
     //region Map Callbacks
 
     @Override
@@ -389,49 +429,19 @@ public class RCTMGLMapView extends MapView implements
                     markerViewManager.invalidateViewMarkersInVisibleRegion();
                 } */
 
-                // if we have onCameraIdle during mCameraChangeTracker.isAnimating()
-                // it's a 'fling animation' after user gesture
-
-                // don't send didChange event if we gonna still animate fling
-                // we should use fling listener or send didCHange but with isUserInteraction false
-                // region didn't finish changing yet
-
-                // what to send as 'animated' at the end if we have fling? probably false as
-                // whole region change was triggered by user gesture
-
-                // actually we should have proper reason set in onCameraMoveStarted
-
-                if (!mCameraChangeTracker.isAnimating()) {
-                    Log.d("MOVE_EVENT", "onCameraIdle SENDING DID_CHANGE EVENT isUserInteraction: " + mCameraChangeTracker.isUserInteraction() + " isAnimated: " + mCameraChangeTracker.isAnimated());
-                    sendRegionDidChangeEvent();
-                } else {
-                    Log.d("MOVE_EVENT", "onCameraIdle NOT SENDING DID_CHANGE EVENT on fling");
-                }
-            }
+                Log.d("MOVE_EVENT", "onCameraIdle SENDING DID_CHANGE EVENT isUserInteraction: " + mCameraChangeTracker.isUserInteraction() + " isAnimated: " + mCameraChangeTracker.isAnimated());
+                sendRegionDidChangeEvent();            }
         });
 
         mMap.addOnCameraMoveStartedListener(new MapboxMap.OnCameraMoveStartedListener() {
             @Override
             public void onCameraMoveStarted(int reason) {
-                // actually now we don't send DID CHANGE event when we are animating fling
-                // and we don't reset reason, then we will not send WILL CHANGE when starting fling
-                if (mCameraChangeTracker.isEmpty()) {
-                    // was this condition here because it can be set by setCamera ?
-                    // setCamera will not trigger events for camera listeners ?
-                    // or other cause?
-                    // actually we can say if we are starting fling here if reason is set, was it an original condition intention here?
-
-                    // when is reason 2 send?
-                    // can we have SDK reason but not animated?
-                    mCameraChangeTracker.setReason(reason);
-
-                    Log.d("MOVE_EVENT", "onCameraMoveStarted SENDING WILL_CHANGE EVENT reason: " + reason + " isUserInteraction: " + mCameraChangeTracker.isUserInteraction() + " isAnimated: " + mCameraChangeTracker.isAnimated());
-                    handleMapChangedEvent(EventTypes.REGION_WILL_CHANGE);
-                } else {
-                    Log.d("MOVE_EVENT", "onCameraMoveStarted NOT SENDING WILL_CHANGE EVENT on fling");
-                }
+                mCameraChangeTracker.setReason(reason);
+                Log.d("MOVE_EVENT", "onCameraMoveStarted SENDING WILL_CHANGE EVENT reason: " + reason + " isUserInteraction: " + mCameraChangeTracker.isUserInteraction() + " isAnimated: " + mCameraChangeTracker.isAnimated());
+                handleMapChangedEvent(EventTypes.REGION_WILL_CHANGE);
             }
         });
+
 
         /*mLocalizationPlugin = new LocalizationPlugin(this, mMap);
         if (mLocalizeLabels) {

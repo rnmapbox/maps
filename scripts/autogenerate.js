@@ -17,8 +17,8 @@ if (!styleSpecJSON) {
 }
 
 const layers = [];
-const androidVersion = '7.3.2';
-const iosVersion = '4.10.0';
+const androidVersion = '8.0.0';
+const iosVersion = '5.0.0';
 
 const TMPL_PATH = path.join(__dirname, 'templates');
 
@@ -27,7 +27,7 @@ const OUTPUT_EXAMPLE_PREFIX = [
   '..',
   'example',
   'node_modules',
-  '@react-native-mapbox',
+  '@react-native-mapbox-gl',
   'maps',
 ];
 const OUTPUT_PREFIX = outputToExample ? OUTPUT_EXAMPLE_PREFIX : ['..'];

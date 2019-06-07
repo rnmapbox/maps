@@ -5,6 +5,8 @@ matrix:
       before_install:
         - nvm install 8
         - echo yes | sdkmanager "platforms;android-28"
+        - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.16.0
+        - export PATH=$HOME/.yarn/bin:$PATH
       android:
         components:
           - tools
@@ -13,13 +15,13 @@ matrix:
           - tools
       cache:
         bundler: true
-        npm: true
+        yarn: true
         directories:
           - example/node_modules
           - $HOME/.gradle/caches/
           - $HOME/.gradle/wrapper/
       before_cache:
-        - rm -f example/node_modules/\@react-native-mapbox/
+        - rm -f example/node_modules/\@react-native-mapbox-gl/
         - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
         - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
     - os: osx
@@ -27,33 +29,41 @@ matrix:
       node_js: 8
       cache:
         bundler: true
-        npm: true
+        yarn: true
         cocoapods: true
         directories:
           - example/node_modules
           - $HOME/Library/Caches/Homebrew
       before_cache:
-        - rm -f example/node_modules/\@react-native-mapbox/
+        - rm -f example/node_modules/\@react-native-mapbox-gl/
         - brew cleanup
       podfile: example/ios/Podfile
+
+before_install:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.16.0
+  - export PATH=$HOME/.yarn/bin:$PATH
 
 install:
   - cd $TRAVIS_BUILD_DIR/example
   - echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
-  - npm install
+  - find node_modules -name ".git" -exec rm -r "{}" \; || true
+  - rm -rf example/node_modules/\@react-native-mapbox-gl/
+  - yarn install
   - echo $TRAVIS_OS_NAME
   - |
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       cd $TRAVIS_BUILD_DIR/example/ios
       pod install
+      pod update
       gem install xcpretty
     fi
-
 script:
   - |
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       cd $TRAVIS_BUILD_DIR/example/ios
-      xcodebuild -workspace ./RNMapboxGLExample.xcworkspace -scheme RNMapboxGLExample | xcpretty -c
+      set -o pipefail
+      rm -f build
+      xcodebuild -arch x86_64 -sdk iphonesimulator12.2  -workspace ./RNMapboxGLExample.xcworkspace -scheme RNMapboxGLExample | xcpretty -c
     fi
   - |
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
@@ -61,8 +71,15 @@ script:
       TERM=dumb ./gradlew assemble
     fi
   - cd $TRAVIS_BUILD_DIR
-  - npm install -g 'jest@24.8.0'
-  - npm install
-  - npm run unittest
-
-
+  - yarn global add -g 'jest@24.8.0'
+  - yarn install
+  - yarn run unittest
+deploy:
+  provider: npm
+  email: kristfallro@gmail.com
+  api_key:
+    secure: B2hTPnT+8dWEbpBc8c2/8rwlmha8iVkRXzj88W+bgsg3k1c+tX+fNTJtbHqtahMuLfkBn6iSxfL9Bv70pXUSkdjyArlE7QdddzMx6UOO9vjoReuh1lyWNTHDx2u9iOSFYX1zsEJrf6wXkfhAtrBqF/tg2pu2NdHcaTy9grhPGnQgFpVCYKrQ67uoursqavd0nUiXVAteLH12zo0Nn1LhchogWA6CZPzz5PNgOv/KuiGIt/fmcg/Y7nlwI5BL0R29MmTIDR33tP509lFwyFTgqY/Xv4jWy0Miw+r0WQFYllkncj6dpuJ7FTdmOMfwL5vJX7B+kpZAtiBlXWtuIetRAfa/1KIWqeSIAYZTNFoEOymOXQM6DWklB3guGkAMnXNZslUvUevPzAY4SUL5fcoD+3FO8H4VAm328+hCtQWkyZbNLrU4X1FHd3BVY19YiHONHLGND9jzyzM/z0JocV0VG5azaIpPQDFVOjxhrWzTMAgwA+hNKtvQJegXIbW/sQJp12zPLv0dHJuIKjwXrnQtlSdr8JResHPFcLScuAWJ4QTSU2khcn0Ul5RnhCSGD3ic45nt46AzABqBhD6rMLesH+gbJ/i9v3LbiU7+r5JSTPfZ4ntJs168AeXy27hnWck54OjKIHp6JZ25jbJwTRCEZH1i7ETYKcheyTRR4sDiUxI=
+  on:
+    tags: true
+    repo: react-native-mapbox-gl/maps
+    branch: master

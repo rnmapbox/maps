@@ -1,5 +1,5 @@
 import React from 'react';
-import MapboxGL from '@react-native-mapbox/maps';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {Icon} from 'react-native-elements';
 
@@ -51,8 +51,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   exampleList: {
-    flex: 1,
-    marginTop: 60 + 12, // header + list padding,
+    flex: 1
   },
   exampleListItemBorder: {
     borderBottomWidth: StyleSheet.hairlineWidth,

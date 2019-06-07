@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
 import com.mapbox.mapboxsdk.style.light.Light;
 import com.mapbox.mapboxsdk.style.light.Position;
@@ -30,7 +31,7 @@ public class RCTMGLLight extends AbstractMapFeature {
     @Override
     public void addToMap(RCTMGLMapView mapView) {
         mMap = mapView.getMapboxMap();
-        setLight(mMap.getStyle().getLight());
+        setLight();
     }
 
     @Override
@@ -41,12 +42,24 @@ public class RCTMGLLight extends AbstractMapFeature {
     public void setReactStyle(ReadableMap reactStyle) {
         mReactStyle = reactStyle;
 
-        if (mMap != null) {
-            setLight(mMap.getStyle().getLight());
-        }
+        setLight();
     }
 
     private void setLight(Light light) {
         RCTMGLStyleFactory.setLightLayerStyle(light, new RCTMGLStyle(getContext(), mReactStyle, mMap));
+    }
+
+    private void setLight() {
+        Style style = getStyle();
+        if (style != null) {
+            setLight(style.getLight());
+        }
+    }
+
+    private Style getStyle() {
+        if (mMap == null) {
+            return null;
+        }
+        return mMap.getStyle();
     }
 }

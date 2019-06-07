@@ -85,20 +85,16 @@
     }
 }
 
-- (void)addToMap:(MGLStyle *)style
+- (void)addedToMap
 {
-    [super addToMap:style];
-    
     NSPredicate *filter = [self buildFilters];
-    if (filter != nil) {
-        [self updateFilter:filter];
-    }
+    [self updateFilter:filter];
     
     if (_snapshot == YES) {
         UIImage *image = [self _createViewSnapshot];
         
         if (image != nil) {
-            [style setImage:image forName:self.id];
+            [self.style setImage:image forName:self.id];
             
             MGLSymbolStyleLayer *layer = (MGLSymbolStyleLayer *)self.styleLayer;
             layer.iconImageName = [NSExpression expressionForConstantValue:self.id];

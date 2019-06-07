@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text} from 'react-native';
-import MapboxGL from '@react-native-mapbox/maps';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import sheet from '../styles/sheet';
 import {onSortOptions} from '../utils';
@@ -67,7 +67,7 @@ class SetUserTrackingModes extends React.Component {
       case MapboxGL.UserTrackingModes.FollowWithCourse:
         return 'FollowWithCourse';
       case MapboxGL.UserTrackingModes.FollowWithHeading:
-        return 'FolloWithHeading';
+        return 'FollowWithHeading';
       default:
         return 'None';
     }

@@ -6,11 +6,9 @@
 //  Copyright © 2017 Mapbox Inc. All rights reserved.
 //
 #import <Foundation/Foundation.h>
-#import "FilterList.h"
 
 @interface FilterParser : NSObject
 
-+ (NSSet<NSString*>*)FILTER_OPS;
-+ (NSPredicate*)parse:(FilterList *)filter;
++ (NSPredicate*)parse:(NSArray *)filter;
 
 @end

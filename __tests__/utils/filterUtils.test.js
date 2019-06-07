@@ -6,11 +6,7 @@ const FilterItem = BridgeValue;
 describe('filterUtils', () => {
   it('should parse flat filter', () => {
     const filter = ['==', 'rating', 10];
-    expect(getFilter(filter)).toEqual([
-      {type: 'string', value: '=='},
-      {type: 'string', value: 'rating'},
-      {type: 'number', value: 10},
-    ]);
+    expect(getFilter(filter)).toEqual(['==', 'rating', 10]);
   });
 
   it('should parse filter with array', () => {
@@ -21,16 +17,10 @@ describe('filterUtils', () => {
       ['==', 'enabled', true],
     ];
     expect(getFilter(filter)).toEqual([
-      {type: 'string', value: 'all'},
-      {type: 'string', value: '=='},
-      {type: 'string', value: 'class'},
-      {type: 'string', value: 'street_limited'},
-      {type: 'string', value: '>='},
-      {type: 'string', value: 'admin_level'},
-      {type: 'number', value: 3},
-      {type: 'string', value: '=='},
-      {type: 'string', value: 'enabled'},
-      {type: 'boolean', value: true},
+      'all',
+      ['==', 'class', 'street_limited'],
+      ['>=', 'admin_level', 3],
+      ['==', 'enabled', true],
     ]);
   });
 

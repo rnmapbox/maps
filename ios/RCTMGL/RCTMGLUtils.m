@@ -51,10 +51,10 @@ static double const MS_TO_S = 0.001;
 {
     NSData* data = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
     MGLShapeCollectionFeature *featureCollection = (MGLShapeCollectionFeature*)[MGLShapeCollectionFeature shapeWithData:data encoding:NSUTF8StringEncoding error:nil];
-    
+
     CLLocationCoordinate2D ne = featureCollection.shapes[0].coordinate;
     CLLocationCoordinate2D sw = featureCollection.shapes[1].coordinate;
-    
+
     return MGLCoordinateBoundsMake(sw, ne);
 }
 
@@ -88,9 +88,9 @@ static double const MS_TO_S = 0.001;
     return CGVectorMake([arr[0] floatValue], [arr[1] floatValue]);
 }
 
-+ (void)fetchImage:(RCTBridge*)bridge url:(NSString *)url callback:(RCTImageLoaderCompletionBlock)callback
++ (void)fetchImage:(RCTBridge*)bridge url:(NSString *)url scale:(double)scale callback:(RCTImageLoaderCompletionBlock)callback
 {
-    [RCTMGLImageQueue.sharedInstance addImage:url bridge:bridge completionHandler:callback];
+    [RCTMGLImageQueue.sharedInstance addImage:url scale:scale bridge:bridge completionHandler:callback];
 }
 
 + (void)fetchImages:(RCTBridge *)bridge style:(MGLStyle *)style objects:(NSDictionary<NSString *, NSString *>*)objects callback:(void (^)())callback
@@ -99,27 +99,27 @@ static double const MS_TO_S = 0.001;
         callback();
         return;
     }
-    
+
     NSArray<NSString *> *imageNames = objects.allKeys;
     if (imageNames.count == 0) {
         callback();
         return;
     }
-    
+
     __block NSUInteger imagesLeftToLoad = imageNames.count;
     __weak MGLStyle *weakStyle = style;
-    
+
     void (^imageLoadedBlock)() = ^{
         imagesLeftToLoad--;
-        
+
         if (imagesLeftToLoad == 0) {
             callback();
         }
     };
-    
+
     for (NSString *imageName in imageNames) {
         UIImage *foundImage = [style imageForName:imageName];
-        
+
         if (foundImage == nil) {
             if ([objects[imageName] containsString:@"data:image"]) {
                 NSData *data = [[NSData alloc]initWithBase64EncodedString:[objects[imageName] componentsSeparatedByString:@","][1] options:NSDataBase64DecodingIgnoreUnknownCharacters];

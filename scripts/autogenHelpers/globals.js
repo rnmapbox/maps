@@ -37,6 +37,7 @@ const iosSpecOverrides = {
   'icon-translate-anchor': 'icon-translation-anchor',
   'text-translate': 'text-translation',
   'text-translate-anchor': 'text-translation-anchor',
+  'raster-resampling': 'raster-resampling-mode',
 };
 
 global.getValue = function(value, defaultValue) {
@@ -171,7 +172,7 @@ global.androidOutputType = function(type, value) {
   }
 };
 
-global.androidGetConfigType = function(androidType) {
+global.androidGetConfigType = function(androidType, name) {
   switch (androidType) {
     case 'Integer':
       return 'styleValue.getInt(VALUE_KEY)';
@@ -184,13 +185,21 @@ global.androidGetConfigType = function(androidType) {
     case 'String[]':
       return 'styleValue.getStringArray(VALUE_KEY)';
     default:
-      return 'styleValue.getString(VALUE_KEY)';
+      if (name === 'iconImage') {
+        return 'styleValue.getImageURI()';
+      } else {
+        return 'styleValue.getString(VALUE_KEY)';
+      }
   }
 };
 
 global.jsStyleType = function(prop) {
   if (prop.type === 'color') {
     return 'StyleTypes.Color';
+  }
+
+  if (prop.type === 'enum') {
+    return 'StyleTypes.Enum';
   }
 
   if (prop.type === 'string' && prop.image) {

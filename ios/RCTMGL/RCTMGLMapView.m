@@ -31,6 +31,7 @@ static double const M2PI = M_PI * 2;
         _sources = [[NSMutableArray alloc] init];
         _pointAnnotations = [[NSMutableArray alloc] init];
         _reactSubviews = [[NSMutableArray alloc] init];
+        _layerWaiters = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -52,6 +53,40 @@ static double const M2PI = M_PI * 2;
     }
     for (int i = 0; i < _reactSubviews.count; i++) {
         [self removeFromMap:_reactSubviews[i]];
+    }
+}
+
+- (void)layerAdded:(MGLStyleLayer*) layer
+{
+    NSString* layerID = layer.identifier;
+    NSMutableArray* waiters = [_layerWaiters valueForKey:layerID];
+    if (waiters) {
+        for (FoundLayerBlock foundLayerBlock in waiters) {
+            foundLayerBlock(layer);
+        }
+        [_layerWaiters removeObjectForKey:layerID];
+    }
+}
+
+- (void)waitForLayerWithID:(nonnull NSString*)layerID then:(void (^)(MGLStyleLayer* layer))foundLayer {
+    if (self.style) {
+        MGLStyleLayer* layer = [self.style layerWithIdentifier:layerID];
+        if (layer) {
+            foundLayer(layer);
+        } else {
+            NSMutableArray* existingWaiters = [_layerWaiters valueForKey:layerID];
+            
+            NSMutableArray* waiters = existingWaiters;
+            if (waiters == nil) {
+                waiters = [[NSMutableArray alloc] init];
+            }
+            [waiters addObject:foundLayer];
+            if (! existingWaiters) {
+                [_layerWaiters setObject:waiters forKey:layerID];
+            }
+        }
+    } else {
+        // TODO
     }
 }
 
@@ -100,6 +135,10 @@ static double const M2PI = M_PI * 2;
         for (int i = 0; i < childSubViews.count; i++) {
             [self removeFromMap:childSubViews[i]];
         }
+    }
+    if ([_layerWaiters count] > 0) {
+        RCTLogWarn(@"The following layers were waited on but never added to the map: %@", [_layerWaiters allKeys]);
+        [_layerWaiters removeAllObjects];
     }
 }
 

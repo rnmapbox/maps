@@ -15,6 +15,7 @@ export const StyleTypes = {
   Translation: 'translation',
   Function: 'function',
   Image: 'image',
+  Enum: 'enum',
 };
 
 export function getStyleType(styleProp) {
@@ -74,6 +75,11 @@ const styleMap = {
 };
 
 export const styleExtras = {
+  // padding
+  iconTextFitPadding: {
+    iosType: 'edgeinsets',
+  },
+
   // offsets
   iconOffset: {
     iosType: 'vector',

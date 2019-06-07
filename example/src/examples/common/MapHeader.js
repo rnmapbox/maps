@@ -46,6 +46,7 @@ class MapHeader extends React.PureComponent {
           icon: this.props.onBack ? 'arrow-back' : '',
           onPress: this.props.onBack,
           color: colors.secondary.white,
+          underlayColor: this.props.backgroundColor
         }}
         centerComponent={{text: this.props.label, style: styles.label}}
       />

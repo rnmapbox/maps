@@ -6,8 +6,11 @@ import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.bridge.WritableNativeMap;
+import com.google.gson.JsonArray;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
+import com.mapbox.rctmgl.utils.ConvertUtils;
 import com.mapbox.rctmgl.utils.ExpressionParser;
 
 /**
@@ -23,6 +26,7 @@ public class RCTMGLStyleValue {
 
     private String imageURI = "";
     private boolean isAddImage;
+    private Double imageScale = 1.0;
 
     public static final int InterpolationModeExponential = 100;
     public static final int InterpolationModeInterval = 101;
@@ -34,7 +38,16 @@ public class RCTMGLStyleValue {
         mPayload = config.getMap("stylevalue");
 
         if ("image".equals(mType)) {
-            imageURI = mPayload.getString("value");
+            imageScale = 1.0;
+            if ("hashmap".equals(mPayload.getString("type"))) {
+                ReadableMap map = getMap();
+                imageURI = map.getMap("uri").getString("value");
+                if (map.getMap("scale") != null) {
+                    imageScale = map.getMap("scale").getDouble("value");
+                }
+            } else {
+                imageURI = mPayload.getString("value");
+            }
             isAddImage = imageURI != null && imageURI.contains("://");
             return;
         }
@@ -42,11 +55,11 @@ public class RCTMGLStyleValue {
         Dynamic dynamic = mPayload.getDynamic("value");
         if (dynamic.getType().equals(ReadableType.Array)) {
             ReadableArray array = dynamic.asArray();
-            if (array.size() > 0) {
+            if (array.size() > 0 && mPayload.getString("type").equals("array")) {
                 ReadableMap map = array.getMap(0);
                 if (map != null && map.getString("type").equals("string")) {
                     isExpression = true;
-                    mExpression = ExpressionParser.from(array);
+                    mExpression = ExpressionParser.fromTyped(mPayload);
                 }
             }
         }
@@ -112,8 +125,25 @@ public class RCTMGLStyleValue {
         return stringArr;
     }
 
-    public ReadableMap getMap(String key) {
-        return mPayload.getMap(key);
+    public ReadableMap getMap() {
+        if ("hashmap".equals(mPayload.getString("type"))) {
+            ReadableArray keyValues = mPayload.getArray("value");
+            WritableNativeMap result = new WritableNativeMap();
+            for (int i = 0; i < keyValues.size(); i++) {
+                ReadableArray keyValue = keyValues.getArray(i);
+                String stringKey = keyValue.getMap(0).getString("value");
+                WritableNativeMap value = new WritableNativeMap();
+                value.merge(keyValue.getMap(1));
+                result.putMap(stringKey, value);
+            }
+            return result;
+        }
+
+        return null;
+    }
+
+    public ReadableMap getMap(String _key) {
+        return getMap();
     }
 
     public Expression getExpression() {
@@ -132,11 +162,20 @@ public class RCTMGLStyleValue {
         return imageURI;
     }
 
+    public double getImageScale() {
+        return imageScale;
+    }
+
     public TransitionOptions getTransition() {
         if (!mType.equals("transition")) {
             return null;
         }
         ReadableMap config = getMap(RCTMGLStyleFactory.VALUE_KEY);
-        return TransitionOptions.fromTransitionOptions(config.getInt("duration"), config.getInt("delay"));
+
+        boolean enablePlacementTransitions = true;
+        if (config.hasKey("enablePlacementTransitions")) {
+            enablePlacementTransitions = config.getMap("enablePlacementTransitions").getBoolean("value");
+        }
+        return new TransitionOptions(config.getMap("duration").getInt("value"), config.getMap("delay").getInt("value"), enablePlacementTransitions);
     }
 }
