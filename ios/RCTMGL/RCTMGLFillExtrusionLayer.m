@@ -8,12 +8,18 @@
 
 #import "RCTMGLFillExtrusionLayer.h"
 #import "RCTMGLStyle.h"
+#import <React/RCTLog.h>
 
 @implementation RCTMGLFillExtrusionLayer
 
 - (void)updateFilter:(NSPredicate *)predicate
 {
-    ((MGLFillExtrusionStyleLayer *) self.styleLayer).predicate = predicate;
+    @try {
+        ((MGLFillExtrusionStyleLayer *) self.styleLayer).predicate = predicate;
+    }
+    @catch (NSException* exception) {
+        RCTLogError(@"Invalid predicate: %@ on layer %@ - Name: %@ reason: %@", predicate, self, exception.name, exception.reason);
+    }
 }
 
 - (void)setSourceLayerID:(NSString *)sourceLayerID
