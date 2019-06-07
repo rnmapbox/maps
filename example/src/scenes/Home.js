@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   exampleList: {
-    flex: 1
+    flex: 1,
   },
   exampleListItemBorder: {
     borderBottomWidth: StyleSheet.hairlineWidth,
