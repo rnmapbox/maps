@@ -76,7 +76,7 @@
     "react-docgen": "2.18.0",
     "react-native": "0.59.0",
     "react-test-renderer": "16.8.3",
-    "flow-bin": "^0.95.1"
+    "flow-bin": "^0.100.0"
   },
   "jest": {
     "preset": "react-native",
