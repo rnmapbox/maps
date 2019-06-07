@@ -4,6 +4,7 @@ _An unofficial React Native library for building maps with the [Mapbox Maps SDK 
 
 [![npm version](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps.svg)](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps)
 ![build_status](https://travis-ci.org/react-native-mapbox-gl/maps.svg?branch=master)
+[![Depfu](https://badges.depfu.com/badges/2eac6b62372619718b7f55ebbf8e9d8f/overview.svg)](https://depfu.com/github/react-native-mapbox-gl/maps?project_id=8248)
 
 ## Installation
 
