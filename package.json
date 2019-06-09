@@ -73,7 +73,7 @@
     "node-dir": "0.1.17",
     "prettier": "^1.11.1",
     "react": "16.8.6",
-    "react-docgen": "2.18.0",
+    "react-docgen": "4.1.1",
     "react-native": "0.59.0",
     "react-test-renderer": "16.8.3",
     "flow-bin": "^0.95.1"
