@@ -126,16 +126,16 @@ static double const MS_TO_S = 0.001;
                 [weakStyle setImage:[UIImage imageWithData:data] forName:imageName];
                 imageLoadedBlock();
             } else {
-                [RCTMGLImageQueue.sharedInstance addImage:objects[imageName] bridge:bridge completionHandler:^(NSError *error, UIImage *image) {
-                  if (!image) {
-                    RCTLogWarn(@"Failed to fetch image: %@ error:%@", imageName, error);
-                  }
-                  else {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [weakStyle setImage:image forName:imageName];
-                        imageLoadedBlock();
-                    });
-                  }
+                [RCTMGLImageQueue.sharedInstance addImage:objects[imageName] scale:1 bridge:bridge completionHandler:^(NSError *error, UIImage *image) {
+                    if (!image) {
+                        RCTLogWarn(@"Failed to fetch image: %@ error:%@", imageName, error);
+                    }
+                    else {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [weakStyle setImage:image forName:imageName];
+                            imageLoadedBlock();
+                        });
+                    }
                 }];
             }
         } else {
