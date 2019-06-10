@@ -172,7 +172,7 @@ global.androidOutputType = function(type, value) {
   }
 };
 
-global.androidGetConfigType = function(androidType, name) {
+global.androidGetConfigType = function(androidType, prop) {
   switch (androidType) {
     case 'Integer':
       return 'styleValue.getInt(VALUE_KEY)';
@@ -185,7 +185,7 @@ global.androidGetConfigType = function(androidType, name) {
     case 'String[]':
       return 'styleValue.getStringArray(VALUE_KEY)';
     default:
-      if (name === 'iconImage') {
+      if (prop && prop.image) {
         return 'styleValue.getImageURI()';
       } else {
         return 'styleValue.getString(VALUE_KEY)';
@@ -257,10 +257,7 @@ global.dtsInterfaceType = function(prop) {
     propTypes.push('any');
   } else {
     // images can be required which result in a number
-    if (
-      prop.name.indexOf('Image') !== -1 ||
-      prop.name.indexOf('Pattern') !== -1
-    ) {
+    if (prop.image) {
       propTypes.push('number');
     }
     propTypes.push('string');
@@ -308,10 +305,7 @@ global.jsDocReactProp = function(prop) {
     propTypes.push('PropTypes.any');
   } else {
     // images can be required which result in a number
-    if (
-      prop.name.indexOf('Image') !== -1 ||
-      prop.name.indexOf('Pattern') !== -1
-    ) {
+    if (prop.image) {
       propTypes.push('PropTypes.number');
     }
     propTypes.push('PropTypes.string');

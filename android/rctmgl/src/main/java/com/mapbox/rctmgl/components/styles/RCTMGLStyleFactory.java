@@ -834,7 +834,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.fillPattern(styleValue.getExpression()));
       } else {
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.getString(VALUE_KEY)));
+        layer.setProperties(PropertyFactory.fillPattern(styleValue.getImageURI()));
       }
     }
 
@@ -1022,7 +1022,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.linePattern(styleValue.getExpression()));
       } else {
-        layer.setProperties(PropertyFactory.linePattern(styleValue.getString(VALUE_KEY)));
+        layer.setProperties(PropertyFactory.linePattern(styleValue.getImageURI()));
       }
     }
 
@@ -1838,7 +1838,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.fillExtrusionPattern(styleValue.getExpression()));
       } else {
-        layer.setProperties(PropertyFactory.fillExtrusionPattern(styleValue.getString(VALUE_KEY)));
+        layer.setProperties(PropertyFactory.fillExtrusionPattern(styleValue.getImageURI()));
       }
     }
 
@@ -2106,7 +2106,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.backgroundPattern(styleValue.getExpression()));
       } else {
-        layer.setProperties(PropertyFactory.backgroundPattern(styleValue.getString(VALUE_KEY)));
+        layer.setProperties(PropertyFactory.backgroundPattern(styleValue.getImageURI()));
       }
     }
 
