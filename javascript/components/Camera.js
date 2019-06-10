@@ -189,6 +189,143 @@ class Camera extends NativeBridgeComponent {
     );
   }
 
+  /**
+   * Map camera transitions to fit provided bounds
+   *
+   * @example
+   * this.map.fitBounds([lng, lat], [lng, lat])
+   * this.map.fitBounds([lng, lat], [lng, lat], 20, 1000) // padding for all sides
+   * this.map.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)
+   * this.map.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)
+   *
+   * @param {Array<Number>} northEastCoordinates - North east coordinate of bound
+   * @param {Array<Number>} southWestCoordinates - South west coordinate of bound
+   * @param {Number=} padding - Camera padding for bound
+   * @param {Number=} duration - Duration of camera animation
+   * @return {void}
+   */
+  fitBounds(
+    northEastCoordinates,
+    southWestCoordinates,
+    padding = 0,
+    duration = 0.0,
+  ) {
+    const pad = {
+      paddingLeft: 0,
+      paddingRight: 0,
+      paddingTop: 0,
+      paddingBottom: 0,
+    };
+
+    if (Array.isArray(padding)) {
+      if (padding.length === 2) {
+        pad.paddingTop = padding[0];
+        pad.paddingBottom = padding[0];
+        pad.paddingLeft = padding[1];
+        pad.paddingRight = padding[1];
+      } else if (padding.length === 4) {
+        pad.paddingTop = padding[0];
+        pad.paddingRight = padding[1];
+        pad.paddingBottom = padding[2];
+        pad.paddingLeft = padding[3];
+      }
+    } else {
+      pad.paddingLeft = padding;
+      pad.paddingRight = padding;
+      pad.paddingTop = padding;
+      pad.paddingBottom = padding;
+    }
+
+    return this.setCamera({
+      bounds: {
+        ne: northEastCoordinates,
+        sw: southWestCoordinates,
+        ...pad,
+      },
+      duration,
+      animationMode: Camera.Mode.Move,
+    });
+  }
+
+  /**
+   * Map camera will fly to new coordinate
+   *
+   * @example
+   * this.camera.flyTo([lng, lat])
+   * this.camera.flyTo([lng, lat], 12000)
+   *
+   *  @param {Array<Number>} coordinates - Coordinates that map camera will jump too
+   *  @param {Number=} duration - Duration of camera animation
+   *  @return {void}
+   */
+  flyTo(coordinates, duration = 2000) {
+    return this.setCamera({
+      centerCoordinate: coordinates,
+      duration,
+      animationMode: Camera.Mode.Flight,
+    });
+  }
+
+  /**
+   * Map camera will move to new coordinate at the same zoom level
+   *
+   * @example
+   * this.camera.moveTo([lng, lat], 200) // eases camera to new location based on duration
+   * this.camera.moveTo([lng, lat]) // snaps camera to new location without any easing
+   *
+   *  @param {Array<Number>} coordinates - Coordinates that map camera will move too
+   *  @param {Number=} duration - Duration of camera animation
+   *  @return {void}
+   */
+  moveTo(coordinates, duration = 0) {
+    return this._setCamera({
+      centerCoordinate: coordinates,
+      duration,
+    });
+  }
+
+  /**
+   * Map camera will zoom to specified level
+   *
+   * @example
+   * this.camera.zoomTo(16)
+   * this.camera.zoomTo(16, 100)
+   *
+   * @param {Number} zoomLevel - Zoom level that the map camera will animate too
+   * @param {Number=} duration - Duration of camera animation
+   * @return {void}
+   */
+  zoomTo(zoomLevel, duration = 2000) {
+    return this._setCamera({
+      zoom: zoomLevel,
+      duration,
+      animationMode: Camera.Mode.Flight,
+    });
+  }
+
+  /**
+   * Map camera will perform updates based on provided config. Advanced use only!
+   *
+   * @example
+   * this.map.setCamera({
+   *   centerCoordinate: [lng, lat],
+   *   zoom: 16,
+   *   duration: 2000,
+   * })
+   *
+   * this.map.setCamera({
+   *   stops: [
+   *     { pitch: 45, duration: 200 },
+   *     { heading: 180, duration: 300 },
+   *   ]
+   * })
+   *
+   *  @param {Object} config - Camera configuration
+   */
+  setCamera(config = {}) {
+    this._setCamera(config);
+  }
+
   _setCamera(config = {}) {
     let cameraConfig = {};
 
