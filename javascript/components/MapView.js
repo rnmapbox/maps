@@ -225,7 +225,6 @@ class MapView extends NativeBridgeComponent {
     regionDidChangeDebounceTime: 500,
   };
 
-  _mounted = false;
   constructor(props) {
     super(props);
 
@@ -258,12 +257,12 @@ class MapView extends NativeBridgeComponent {
   }
 
   componentDidMount() {
-    this._mounted = true;
     this._setHandledMapChangedEvents(this.props);
   }
 
   componentWillUnmount() {
-    this._mounted = false;
+    this._onDebouncedRegionWillChange.cancel();
+    this._onDebouncedRegionDidChange.cancel();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -672,8 +671,6 @@ class MapView extends NativeBridgeComponent {
     if (isFunction(this.props.onRegionWillChange)) {
       this.props.onRegionWillChange(payload);
     }
-    if (!this._mounted) return;
-    
     this.setState({isUserInteraction: payload.properties.isUserInteraction});
   }
 
@@ -681,8 +678,6 @@ class MapView extends NativeBridgeComponent {
     if (isFunction(this.props.onRegionDidChange)) {
       this.props.onRegionDidChange(payload);
     }
-    if (!this._mounted) return;
-    
     this.setState({region: payload});
   }
 
@@ -755,8 +750,6 @@ class MapView extends NativeBridgeComponent {
   }
 
   _onLayout(e) {
-    if (!this._mounted) return;
-    
     this.setState({
       isReady: true,
       width: e.nativeEvent.layout.width,
