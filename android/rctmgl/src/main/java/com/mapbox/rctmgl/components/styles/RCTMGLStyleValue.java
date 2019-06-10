@@ -48,7 +48,7 @@ public class RCTMGLStyleValue {
             } else {
                 imageURI = mPayload.getString("value");
             }
-            isAddImage = imageURI != null && imageURI.contains("://");
+            isAddImage = imageURI != null;
             return;
         }
 
