@@ -172,7 +172,7 @@ global.androidOutputType = function(type, value) {
   }
 };
 
-global.androidGetConfigType = function(androidType, name) {
+global.androidGetConfigType = function(androidType, prop) {
   switch (androidType) {
     case 'Integer':
       return 'styleValue.getInt(VALUE_KEY)';
@@ -185,7 +185,7 @@ global.androidGetConfigType = function(androidType, name) {
     case 'String[]':
       return 'styleValue.getStringArray(VALUE_KEY)';
     default:
-      if (name === 'iconImage') {
+      if (prop && prop.image) {
         return 'styleValue.getImageURI()';
       } else {
         return 'styleValue.getString(VALUE_KEY)';
