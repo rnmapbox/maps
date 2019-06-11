@@ -43,7 +43,7 @@
 {
     RCTMGLStyle *style = [[RCTMGLStyle alloc] initWithMGLStyle:self.style];
     style.bridge = self.bridge;
-    [style heatmapLayer:(MGLHeatmapStyleLayer *) withReactStyle:self.reactStyle];
+    [style heatmapLayer:(MGLHeatmapStyleLayer *)self.styleLayer withReactStyle:self.reactStyle];
 }
 
 @end
