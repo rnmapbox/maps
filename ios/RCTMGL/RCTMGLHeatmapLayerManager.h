@@ -1,12 +1,12 @@
 //
 //  RCTMGLHeatmapLayerManager.h
-//  Pods
+//  RCTMGL
 //
 //  Created by Dheeraj Yalamanchili on 6/8/19.
 //
 
-#ifndef RCTMGLHeatmapLayerManager_h
-#define RCTMGLHeatmapLayerManager_h
+#import "ViewManager.h"
 
+@interface RCTMGLHeatmapLayerManager : ViewManager
 
-#endif /* RCTMGLHeatmapLayerManager_h */
+@end
