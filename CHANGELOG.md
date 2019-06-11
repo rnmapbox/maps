@@ -26,6 +26,7 @@ Mapbox styles are now just a map no need for `StyleSheet.create`.
    ```
   See [docs/StyleSheet.md](docs/StyleSheet.md) for more examples
 * `isTelemetryEnabled` removed (as no longer supported on android) [#1](https://github.com/mfazekas/maps/pull/1)
+* MapView#flyTo, MapView#bitBounds, MapView#flyTo, MapView#moveTo, MapView#zoomTo, MapView#setCamera moved to Camera. There is also experimantal properties, to replace those. See [docs/Camera.md](docs/Camera.md)
 * Camera related properties on `MapView` now have to be specified on a camera object:
    ```jsx
    <MapView
