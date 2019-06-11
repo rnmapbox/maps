@@ -23,7 +23,7 @@
 | isUserInteraction | `FIX ME UNKNOWN TYPE` | `false` | `false` | FIX ME NO DESCRIPTION |
 
 ### methods
-#### fitBounds(northEastCoordinates, southWestCoordinates[, padding][, duration])
+#### fitBounds(northEastCoordinates, southWestCoordinates[, padding][, animationDuration])
 
 Map camera transitions to fit provided bounds
 
@@ -33,19 +33,19 @@ Map camera transitions to fit provided bounds
 | `northEastCoordinates` | `Array` | `Yes` | North east coordinate of bound |
 | `southWestCoordinates` | `Array` | `Yes` | South west coordinate of bound |
 | `padding` | `Number` | `No` | Camera padding for bound |
-| `duration` | `Number` | `No` | Duration of camera animation |
+| `animationDuration` | `Number` | `No` | Duration of camera animation |
 
 
 
 ```javascript
-this.map.fitBounds([lng, lat], [lng, lat])
-this.map.fitBounds([lng, lat], [lng, lat], 20, 1000) // padding for all sides
-this.map.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)
-this.map.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)
+this.camera.fitBounds([lng, lat], [lng, lat])
+this.camera.fitBounds([lng, lat], [lng, lat], 20, 1000) // padding for all sides
+this.camera.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)
+this.camera.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)
 ```
 
 
-#### flyTo(coordinates[, duration])
+#### flyTo(coordinates[, animationDuration])
 
 Map camera will fly to new coordinate
 
@@ -53,7 +53,7 @@ Map camera will fly to new coordinate
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `coordinates` | `Array` | `Yes` | Coordinates that map camera will jump too |
-| `duration` | `Number` | `No` | Duration of camera animation |
+| `animationDuration` | `Number` | `No` | Duration of camera animation |
 
 
 
@@ -63,7 +63,7 @@ this.camera.flyTo([lng, lat], 12000)
 ```
 
 
-#### moveTo(coordinates[, duration])
+#### moveTo(coordinates[, animationDuration])
 
 Map camera will move to new coordinate at the same zoom level
 
@@ -71,7 +71,7 @@ Map camera will move to new coordinate at the same zoom level
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `coordinates` | `Array` | `Yes` | Coordinates that map camera will move too |
-| `duration` | `Number` | `No` | Duration of camera animation |
+| `animationDuration` | `Number` | `No` | Duration of camera animation |
 
 
 
@@ -81,7 +81,7 @@ this.camera.moveTo([lng, lat]) // snaps camera to new location without any easin
 ```
 
 
-#### zoomTo(zoomLevel[, duration])
+#### zoomTo(zoomLevel[, animationDuration])
 
 Map camera will zoom to specified level
 
@@ -89,7 +89,7 @@ Map camera will zoom to specified level
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `zoomLevel` | `Number` | `Yes` | Zoom level that the map camera will animate too |
-| `duration` | `Number` | `No` | Duration of camera animation |
+| `animationDuration` | `Number` | `No` | Duration of camera animation |
 
 
 
@@ -111,16 +111,16 @@ Map camera will perform updates based on provided config. Advanced use only!
 
 
 ```javascript
-this.map.setCamera({
+this.camera.setCamera({
   centerCoordinate: [lng, lat],
-  zoom: 16,
-  duration: 2000,
+  zoomLevel: 16,
+  animationDuration: 2000,
 })
 
-this.map.setCamera({
+this.camera.setCamera({
   stops: [
-    { pitch: 45, duration: 200 },
-    { heading: 180, duration: 300 },
+    { pitch: 45, animationDuration: 200 },
+    { heading: 180, animationDuration: 300 },
   ]
 })
 ```

@@ -193,22 +193,22 @@ class Camera extends NativeBridgeComponent {
    * Map camera transitions to fit provided bounds
    *
    * @example
-   * this.map.fitBounds([lng, lat], [lng, lat])
-   * this.map.fitBounds([lng, lat], [lng, lat], 20, 1000) // padding for all sides
-   * this.map.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)
-   * this.map.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)
+   * this.camera.fitBounds([lng, lat], [lng, lat])
+   * this.camera.fitBounds([lng, lat], [lng, lat], 20, 1000) // padding for all sides
+   * this.camera.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)
+   * this.camera.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)
    *
    * @param {Array<Number>} northEastCoordinates - North east coordinate of bound
    * @param {Array<Number>} southWestCoordinates - South west coordinate of bound
    * @param {Number=} padding - Camera padding for bound
-   * @param {Number=} duration - Duration of camera animation
+   * @param {Number=} animationDuration - Duration of camera animation
    * @return {void}
    */
   fitBounds(
     northEastCoordinates,
     southWestCoordinates,
     padding = 0,
-    duration = 0.0,
+    animationDuration = 0.0,
   ) {
     const pad = {
       paddingLeft: 0,
@@ -242,7 +242,7 @@ class Camera extends NativeBridgeComponent {
         sw: southWestCoordinates,
         ...pad,
       },
-      duration,
+      animationDuration,
       animationMode: Camera.Mode.Move,
     });
   }
@@ -255,13 +255,13 @@ class Camera extends NativeBridgeComponent {
    * this.camera.flyTo([lng, lat], 12000)
    *
    *  @param {Array<Number>} coordinates - Coordinates that map camera will jump too
-   *  @param {Number=} duration - Duration of camera animation
+   *  @param {Number=} animationDuration - Duration of camera animation
    *  @return {void}
    */
-  flyTo(coordinates, duration = 2000) {
+  flyTo(coordinates, animationDuration = 2000) {
     return this.setCamera({
       centerCoordinate: coordinates,
-      duration,
+      animationDuration,
       animationMode: Camera.Mode.Flight,
     });
   }
@@ -274,13 +274,13 @@ class Camera extends NativeBridgeComponent {
    * this.camera.moveTo([lng, lat]) // snaps camera to new location without any easing
    *
    *  @param {Array<Number>} coordinates - Coordinates that map camera will move too
-   *  @param {Number=} duration - Duration of camera animation
+   *  @param {Number=} animationDuration - Duration of camera animation
    *  @return {void}
    */
-  moveTo(coordinates, duration = 0) {
+  moveTo(coordinates, animationDuration = 0) {
     return this._setCamera({
       centerCoordinate: coordinates,
-      duration,
+      animationDuration,
     });
   }
 
@@ -292,13 +292,13 @@ class Camera extends NativeBridgeComponent {
    * this.camera.zoomTo(16, 100)
    *
    * @param {Number} zoomLevel - Zoom level that the map camera will animate too
-   * @param {Number=} duration - Duration of camera animation
+   * @param {Number=} animationDuration - Duration of camera animation
    * @return {void}
    */
-  zoomTo(zoomLevel, duration = 2000) {
+  zoomTo(zoomLevel, animationDuration = 2000) {
     return this._setCamera({
-      zoom: zoomLevel,
-      duration,
+      zoomLevel,
+      animationDuration,
       animationMode: Camera.Mode.Flight,
     });
   }
@@ -307,16 +307,16 @@ class Camera extends NativeBridgeComponent {
    * Map camera will perform updates based on provided config. Advanced use only!
    *
    * @example
-   * this.map.setCamera({
+   * this.camera.setCamera({
    *   centerCoordinate: [lng, lat],
-   *   zoom: 16,
-   *   duration: 2000,
+   *   zoomLevel: 16,
+   *   animationDuration: 2000,
    * })
    *
-   * this.map.setCamera({
+   * this.camera.setCamera({
    *   stops: [
-   *     { pitch: 45, duration: 200 },
-   *     { heading: 180, duration: 300 },
+   *     { pitch: 45, animationDuration: 200 },
+   *     { heading: 180, animationDuration: 300 },
    *   ]
    * })
    *
