@@ -205,7 +205,170 @@
   },
   "Camera": {
     "description": "",
-    "methods": [],
+    "methods": [
+      {
+        "name": "fitBounds",
+        "docblock": "Map camera transitions to fit provided bounds\n\n@example\nthis.camera.fitBounds([lng, lat], [lng, lat])\nthis.camera.fitBounds([lng, lat], [lng, lat], 20, 1000) // padding for all sides\nthis.camera.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)\nthis.camera.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)\n\n@param {Array<Number>} northEastCoordinates - North east coordinate of bound\n@param {Array<Number>} southWestCoordinates - South west coordinate of bound\n@param {Number=} padding - Camera padding for bound\n@param {Number=} animationDuration - Duration of camera animation\n@return {void}",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "northEastCoordinates",
+            "description": "North east coordinate of bound",
+            "type": {
+              "name": "Array"
+            }
+          },
+          {
+            "name": "southWestCoordinates",
+            "description": "South west coordinate of bound",
+            "type": {
+              "name": "Array"
+            }
+          },
+          {
+            "name": "padding",
+            "description": "Camera padding for bound",
+            "type": {
+              "name": "Number"
+            },
+            "optional": true
+          },
+          {
+            "name": "animationDuration",
+            "description": "Duration of camera animation",
+            "type": {
+              "name": "Number"
+            },
+            "optional": true
+          }
+        ],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "void"
+          }
+        },
+        "description": "Map camera transitions to fit provided bounds",
+        "examples": [
+          "\nthis.camera.fitBounds([lng, lat], [lng, lat])\nthis.camera.fitBounds([lng, lat], [lng, lat], 20, 1000) // padding for all sides\nthis.camera.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)\nthis.camera.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)\n\n"
+        ]
+      },
+      {
+        "name": "flyTo",
+        "docblock": "Map camera will fly to new coordinate\n\n@example\nthis.camera.flyTo([lng, lat])\nthis.camera.flyTo([lng, lat], 12000)\n\n @param {Array<Number>} coordinates - Coordinates that map camera will jump too\n @param {Number=} animationDuration - Duration of camera animation\n @return {void}",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "coordinates",
+            "description": "Coordinates that map camera will jump too",
+            "type": {
+              "name": "Array"
+            }
+          },
+          {
+            "name": "animationDuration",
+            "description": "Duration of camera animation",
+            "type": {
+              "name": "Number"
+            },
+            "optional": true
+          }
+        ],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "void"
+          }
+        },
+        "description": "Map camera will fly to new coordinate",
+        "examples": [
+          "\nthis.camera.flyTo([lng, lat])\nthis.camera.flyTo([lng, lat], 12000)\n\n "
+        ]
+      },
+      {
+        "name": "moveTo",
+        "docblock": "Map camera will move to new coordinate at the same zoom level\n\n@example\nthis.camera.moveTo([lng, lat], 200) // eases camera to new location based on duration\nthis.camera.moveTo([lng, lat]) // snaps camera to new location without any easing\n\n @param {Array<Number>} coordinates - Coordinates that map camera will move too\n @param {Number=} animationDuration - Duration of camera animation\n @return {void}",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "coordinates",
+            "description": "Coordinates that map camera will move too",
+            "type": {
+              "name": "Array"
+            }
+          },
+          {
+            "name": "animationDuration",
+            "description": "Duration of camera animation",
+            "type": {
+              "name": "Number"
+            },
+            "optional": true
+          }
+        ],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "void"
+          }
+        },
+        "description": "Map camera will move to new coordinate at the same zoom level",
+        "examples": [
+          "\nthis.camera.moveTo([lng, lat], 200) // eases camera to new location based on duration\nthis.camera.moveTo([lng, lat]) // snaps camera to new location without any easing\n\n "
+        ]
+      },
+      {
+        "name": "zoomTo",
+        "docblock": "Map camera will zoom to specified level\n\n@example\nthis.camera.zoomTo(16)\nthis.camera.zoomTo(16, 100)\n\n@param {Number} zoomLevel - Zoom level that the map camera will animate too\n@param {Number=} animationDuration - Duration of camera animation\n@return {void}",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "zoomLevel",
+            "description": "Zoom level that the map camera will animate too",
+            "type": {
+              "name": "Number"
+            }
+          },
+          {
+            "name": "animationDuration",
+            "description": "Duration of camera animation",
+            "type": {
+              "name": "Number"
+            },
+            "optional": true
+          }
+        ],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "void"
+          }
+        },
+        "description": "Map camera will zoom to specified level",
+        "examples": [
+          "\nthis.camera.zoomTo(16)\nthis.camera.zoomTo(16, 100)\n\n"
+        ]
+      },
+      {
+        "name": "setCamera",
+        "docblock": "Map camera will perform updates based on provided config. Advanced use only!\n\n@example\nthis.camera.setCamera({\n  centerCoordinate: [lng, lat],\n  zoomLevel: 16,\n  animationDuration: 2000,\n})\n\nthis.camera.setCamera({\n  stops: [\n    { pitch: 45, animationDuration: 200 },\n    { heading: 180, animationDuration: 300 },\n  ]\n})\n\n @param {Object} config - Camera configuration",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "config",
+            "description": "Camera configuration",
+            "type": {
+              "name": "Object"
+            }
+          }
+        ],
+        "returns": null,
+        "description": "Map camera will perform updates based on provided config. Advanced use only!",
+        "examples": [
+          "\nthis.camera.setCamera({\n  centerCoordinate: [lng, lat],\n  zoomLevel: 16,\n  animationDuration: 2000,\n})\n\nthis.camera.setCamera({\n  stops: [\n    { pitch: 45, animationDuration: 200 },\n    { heading: 180, animationDuration: 300 },\n  ]\n})\n\n "
+        ]
+      }
+    ],
     "props": [
       {
         "name": "animationDuration",
@@ -1846,149 +2009,6 @@
         "description": "Returns an array of rendered map features that intersect with the given rectangle,\nrestricted to the given style layers and filtered by the given predicate.",
         "examples": [
           "\nthis._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n"
-        ]
-      },
-      {
-        "name": "fitBounds",
-        "docblock": "Map camera transitions to fit provided bounds\n\n@example\nthis.map.fitBounds([lng, lat], [lng, lat])\nthis.map.fitBounds([lng, lat], [lng, lat], 20, 1000) // padding for all sides\nthis.map.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)\nthis.map.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)\n\n@param {Array<Number>} northEastCoordinates - North east coordinate of bound\n@param {Array<Number>} southWestCoordinates - South west coordinate of bound\n@param {Number=} padding - Camera padding for bound\n@param {Number=} duration - Duration of camera animation\n@return {void}",
-        "modifiers": [],
-        "params": [
-          {
-            "name": "northEastCoordinates",
-            "description": "North east coordinate of bound",
-            "type": {
-              "name": "Array"
-            }
-          },
-          {
-            "name": "southWestCoordinates",
-            "description": "South west coordinate of bound",
-            "type": {
-              "name": "Array"
-            }
-          },
-          {
-            "name": "padding",
-            "description": "Camera padding for bound",
-            "type": {
-              "name": "Number"
-            },
-            "optional": true
-          },
-          {
-            "name": "duration",
-            "description": "Duration of camera animation",
-            "type": {
-              "name": "Number"
-            },
-            "optional": true
-          }
-        ],
-        "returns": {
-          "description": null,
-          "type": {
-            "name": "void"
-          }
-        },
-        "description": "Map camera transitions to fit provided bounds",
-        "examples": [
-          "\nthis.map.fitBounds([lng, lat], [lng, lat])\nthis.map.fitBounds([lng, lat], [lng, lat], 20, 1000) // padding for all sides\nthis.map.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)\nthis.map.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)\n\n"
-        ]
-      },
-      {
-        "name": "flyTo",
-        "docblock": "Map camera will fly to new coordinate\n\n@example\nthis.map.flyTo([lng, lat])\nthis.map.flyTo([lng, lat], 12000)\n\n @param {Array<Number>} coordinates - Coordinates that map camera will jump too\n @param {Number=} duration - Duration of camera animation\n @return {void}",
-        "modifiers": [],
-        "params": [
-          {
-            "name": "coordinates",
-            "description": "Coordinates that map camera will jump too",
-            "type": {
-              "name": "Array"
-            }
-          },
-          {
-            "name": "duration",
-            "description": "Duration of camera animation",
-            "type": {
-              "name": "Number"
-            },
-            "optional": true
-          }
-        ],
-        "returns": {
-          "description": null,
-          "type": {
-            "name": "void"
-          }
-        },
-        "description": "Map camera will fly to new coordinate",
-        "examples": [
-          "\nthis.map.flyTo([lng, lat])\nthis.map.flyTo([lng, lat], 12000)\n\n "
-        ]
-      },
-      {
-        "name": "moveTo",
-        "docblock": "Map camera will move to new coordinate at the same zoom level\n\n@example\nthis.map.moveTo([lng, lat], 200) // eases camera to new location based on duration\nthis.map.moveTo([lng, lat]) // snaps camera to new location without any easing\n\n @param {Array<Number>} coordinates - Coordinates that map camera will move too\n @param {Number=} duration - Duration of camera animation\n @return {void}",
-        "modifiers": [],
-        "params": [
-          {
-            "name": "coordinates",
-            "description": "Coordinates that map camera will move too",
-            "type": {
-              "name": "Array"
-            }
-          },
-          {
-            "name": "duration",
-            "description": "Duration of camera animation",
-            "type": {
-              "name": "Number"
-            },
-            "optional": true
-          }
-        ],
-        "returns": {
-          "description": null,
-          "type": {
-            "name": "void"
-          }
-        },
-        "description": "Map camera will move to new coordinate at the same zoom level",
-        "examples": [
-          "\nthis.map.moveTo([lng, lat], 200) // eases camera to new location based on duration\nthis.map.moveTo([lng, lat]) // snaps camera to new location without any easing\n\n "
-        ]
-      },
-      {
-        "name": "zoomTo",
-        "docblock": "Map camera will zoom to specified level\n\n@example\nthis.map.zoomTo(16)\nthis.map.zoomTo(16, 100)\n\n@param {Number} zoomLevel - Zoom level that the map camera will animate too\n@param {Number=} duration - Duration of camera animation\n@return {void}",
-        "modifiers": [],
-        "params": [
-          {
-            "name": "zoomLevel",
-            "description": "Zoom level that the map camera will animate too",
-            "type": {
-              "name": "Number"
-            }
-          },
-          {
-            "name": "duration",
-            "description": "Duration of camera animation",
-            "type": {
-              "name": "Number"
-            },
-            "optional": true
-          }
-        ],
-        "returns": {
-          "description": null,
-          "type": {
-            "name": "void"
-          }
-        },
-        "description": "Map camera will zoom to specified level",
-        "examples": [
-          "\nthis.map.zoomTo(16)\nthis.map.zoomTo(16, 100)\n\n"
         ]
       },
       {

@@ -189,6 +189,143 @@ class Camera extends NativeBridgeComponent {
     );
   }
 
+  /**
+   * Map camera transitions to fit provided bounds
+   *
+   * @example
+   * this.camera.fitBounds([lng, lat], [lng, lat])
+   * this.camera.fitBounds([lng, lat], [lng, lat], 20, 1000) // padding for all sides
+   * this.camera.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)
+   * this.camera.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)
+   *
+   * @param {Array<Number>} northEastCoordinates - North east coordinate of bound
+   * @param {Array<Number>} southWestCoordinates - South west coordinate of bound
+   * @param {Number=} padding - Camera padding for bound
+   * @param {Number=} animationDuration - Duration of camera animation
+   * @return {void}
+   */
+  fitBounds(
+    northEastCoordinates,
+    southWestCoordinates,
+    padding = 0,
+    animationDuration = 0.0,
+  ) {
+    const pad = {
+      paddingLeft: 0,
+      paddingRight: 0,
+      paddingTop: 0,
+      paddingBottom: 0,
+    };
+
+    if (Array.isArray(padding)) {
+      if (padding.length === 2) {
+        pad.paddingTop = padding[0];
+        pad.paddingBottom = padding[0];
+        pad.paddingLeft = padding[1];
+        pad.paddingRight = padding[1];
+      } else if (padding.length === 4) {
+        pad.paddingTop = padding[0];
+        pad.paddingRight = padding[1];
+        pad.paddingBottom = padding[2];
+        pad.paddingLeft = padding[3];
+      }
+    } else {
+      pad.paddingLeft = padding;
+      pad.paddingRight = padding;
+      pad.paddingTop = padding;
+      pad.paddingBottom = padding;
+    }
+
+    return this.setCamera({
+      bounds: {
+        ne: northEastCoordinates,
+        sw: southWestCoordinates,
+        ...pad,
+      },
+      animationDuration,
+      animationMode: Camera.Mode.Move,
+    });
+  }
+
+  /**
+   * Map camera will fly to new coordinate
+   *
+   * @example
+   * this.camera.flyTo([lng, lat])
+   * this.camera.flyTo([lng, lat], 12000)
+   *
+   *  @param {Array<Number>} coordinates - Coordinates that map camera will jump too
+   *  @param {Number=} animationDuration - Duration of camera animation
+   *  @return {void}
+   */
+  flyTo(coordinates, animationDuration = 2000) {
+    return this.setCamera({
+      centerCoordinate: coordinates,
+      animationDuration,
+      animationMode: Camera.Mode.Flight,
+    });
+  }
+
+  /**
+   * Map camera will move to new coordinate at the same zoom level
+   *
+   * @example
+   * this.camera.moveTo([lng, lat], 200) // eases camera to new location based on duration
+   * this.camera.moveTo([lng, lat]) // snaps camera to new location without any easing
+   *
+   *  @param {Array<Number>} coordinates - Coordinates that map camera will move too
+   *  @param {Number=} animationDuration - Duration of camera animation
+   *  @return {void}
+   */
+  moveTo(coordinates, animationDuration = 0) {
+    return this._setCamera({
+      centerCoordinate: coordinates,
+      animationDuration,
+    });
+  }
+
+  /**
+   * Map camera will zoom to specified level
+   *
+   * @example
+   * this.camera.zoomTo(16)
+   * this.camera.zoomTo(16, 100)
+   *
+   * @param {Number} zoomLevel - Zoom level that the map camera will animate too
+   * @param {Number=} animationDuration - Duration of camera animation
+   * @return {void}
+   */
+  zoomTo(zoomLevel, animationDuration = 2000) {
+    return this._setCamera({
+      zoomLevel,
+      animationDuration,
+      animationMode: Camera.Mode.Flight,
+    });
+  }
+
+  /**
+   * Map camera will perform updates based on provided config. Advanced use only!
+   *
+   * @example
+   * this.camera.setCamera({
+   *   centerCoordinate: [lng, lat],
+   *   zoomLevel: 16,
+   *   animationDuration: 2000,
+   * })
+   *
+   * this.camera.setCamera({
+   *   stops: [
+   *     { pitch: 45, animationDuration: 200 },
+   *     { heading: 180, animationDuration: 300 },
+   *   ]
+   * })
+   *
+   *  @param {Object} config - Camera configuration
+   */
+  setCamera(config = {}) {
+    this._setCamera(config);
+  }
+
   _setCamera(config = {}) {
     let cameraConfig = {};
 

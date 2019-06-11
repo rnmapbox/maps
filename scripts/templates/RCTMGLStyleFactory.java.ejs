@@ -71,14 +71,14 @@ public class RCTMGLStyleFactory {
       Float[] values = styleValue.getFloatArray(VALUE_KEY);
       layer.set<%- pascelCase(prop.name) -%>(Position.fromPosition(values[0], values[1], values[2]));
       <%_ } else if (layer.name === 'light') { _%>
-      layer.set<%- pascelCase(prop.name) -%>(<%- androidGetConfigType(androidInputType(prop.type, prop.value)) -%>);
+      layer.set<%- pascelCase(prop.name) -%>(<%- androidGetConfigType(androidInputType(prop.type, prop.value), prop) -%>);
       <%_ } else if (prop.name === 'visibility') { _%>
       layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
       <%_ } else { _%>
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.<%= prop.name %>(styleValue.getExpression()));
       } else {
-        layer.setProperties(PropertyFactory.<%= prop.name %>(<%- androidGetConfigType(androidInputType(prop.type, prop.value), prop.name) -%>));
+        layer.setProperties(PropertyFactory.<%= prop.name %>(<%- androidGetConfigType(androidInputType(prop.type, prop.value), prop) -%>));
       }
       <%_ } _%>
     }
