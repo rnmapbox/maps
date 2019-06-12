@@ -62,6 +62,7 @@ class MapView extends NativeBridgeComponent {
       PropTypes.number,
     ]),
 
+    maxBounds: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
     /**
      * Style for wrapping React Native View
      */

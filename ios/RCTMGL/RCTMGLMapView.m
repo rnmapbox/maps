@@ -32,6 +32,7 @@ static double const M2PI = M_PI * 2;
         _pointAnnotations = [[NSMutableArray alloc] init];
         _reactSubviews = [[NSMutableArray alloc] init];
         _layerWaiters = [[NSMutableDictionary alloc] init];
+        _restrictPanning = NO;
     }
     return self;
 }
@@ -215,6 +216,17 @@ static double const M2PI = M_PI * 2;
     // FMTODO
     //_reactShowUserLocation = reactShowUserLocation;
     self.showsUserLocation = reactShowUserLocation; //_reactShowUserLocation;
+}
+
+- (void)setReactMaxBounds:(NSArray<NSArray<NSNumber *> *> *)maxBounds {
+    if (maxBounds != nil && ![maxBounds isKindOfClass:NSNull.class]) {
+        CLLocationCoordinate2D ne = CLLocationCoordinate2DMake(maxBounds[0][1].doubleValue, maxBounds[0][0].doubleValue);
+        CLLocationCoordinate2D sw = CLLocationCoordinate2DMake(maxBounds[1][1].doubleValue, maxBounds[1][0].doubleValue);
+        _maxBounds = MGLCoordinateBoundsMake(sw, ne);
+        _restrictPanning = YES;
+    } else {
+        _restrictPanning = NO;
+    }
 }
 
 - (void)setReactContentInset:(NSArray<NSNumber *> *)reactContentInset

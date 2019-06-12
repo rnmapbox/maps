@@ -77,6 +77,7 @@ RCT_REMAP_VIEW_PROPERTY(compassEnabled, reactCompassEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(zoomEnabled, reactZoomEnabled, BOOL)
 
 RCT_REMAP_VIEW_PROPERTY(contentInset, reactContentInset, NSArray)
+RCT_REMAP_VIEW_PROPERTY(maxBounds, reactMaxBounds, NSArray)
 RCT_REMAP_VIEW_PROPERTY(styleURL, reactStyleURL, NSString)
 
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
@@ -362,6 +363,24 @@ RCT_EXPORT_METHOD(showAttribution:(nonnull NSNumber *)reactTag
 }
 
 #pragma mark - MGLMapViewDelegate
+
+- (BOOL)mapView:(MGLMapView *)mapView shouldChangeFromCamera:(MGLMapCamera *)oldCamera toCamera:(MGLMapCamera *)newCamera {
+    RCTMGLMapView *rnMapView = (RCTMGLMapView*)mapView;
+    if (!rnMapView.restrictPanning) {
+        return NO;
+    }
+
+    MGLMapCamera *currentCamera = rnMapView.camera;
+    CLLocationCoordinate2D newCameraCenter = newCamera.centerCoordinate;
+    rnMapView.camera = newCamera;
+    MGLCoordinateBounds newVisibleCoordinates = rnMapView.visibleCoordinateBounds;
+    rnMapView.camera = currentCamera;
+    
+    BOOL inside = MGLCoordinateInCoordinateBounds(newCameraCenter, rnMapView.maxBounds);
+    BOOL intersects = MGLCoordinateInCoordinateBounds(newVisibleCoordinates.ne, rnMapView.maxBounds) && MGLCoordinateInCoordinateBounds(newVisibleCoordinates.sw, rnMapView.maxBounds);
+    
+    return inside && intersects;
+}
 
 - (MGLAnnotationView *)mapView:(MGLMapView *)mapView viewForAnnotation:(id<MGLAnnotation>)annotation
 {

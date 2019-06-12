@@ -33,7 +33,8 @@ typedef void (^FoundLayerBlock) (MGLStyleLayer* layer);
 @property (nonatomic, strong) NSMutableArray<RCTMGLPointAnnotation*> *pointAnnotations;
 @property (nonatomic, strong) RCTMGLLight *light;
 @property (nonatomic, copy) NSArray<NSNumber *> *reactContentInset;
-
+@property (nonatomic) MGLCoordinateBounds maxBounds;
+@property (nonatomic, assign) BOOL restrictPanning;
 @property (nonatomic, strong) NSMutableDictionary<NSString*, NSMutableArray<FoundLayerBlock>*> *layerWaiters;
 
 @property (nonatomic, assign) BOOL reactLocalizeLabels;

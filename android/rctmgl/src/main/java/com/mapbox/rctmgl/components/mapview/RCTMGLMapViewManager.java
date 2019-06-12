@@ -9,6 +9,7 @@ import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.rctmgl.components.AbstractEventEmitter;
@@ -162,6 +163,26 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         mapView.setReactContentInset(array);
     }
 
+    @ReactProp(name="maxBounds")
+    public void setMaxBounds(RCTMGLMapView mapView, ReadableArray array) {
+        if (array == null) {
+            return;
+        }
+        ReadableArray ne = array.getArray((0));
+        ReadableArray sw = array.getArray((1));
+        LatLngBounds bounds = LatLngBounds.from(
+                sw.getDouble(1),
+                sw.getDouble(0),
+                ne.getDouble(1),
+                ne.getDouble(0)
+        );
+        if (mapView != null) {
+            MapboxMap mapboxMap = mapView.getMapboxMap();
+            if (mapboxMap != null) {
+                mapboxMap.setLatLngBoundsForCameraTarget(bounds);
+            }
+        }
+    }
     //endregion
 
     //region Custom Events
@@ -191,6 +212,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     public static final int METHOD_GET_CENTER = 9;
     public static final int METHOD_SET_HANDLED_MAP_EVENTS = 10;
     public static final int METHOD_SHOW_ATTRIBUTION = 11;
+    public static final int METHOD_SET_MAX_BOUNDS = 12;
 
     @Nullable
     @Override
@@ -206,6 +228,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                 .put("getCenter", METHOD_GET_CENTER)
                 .put( "setHandledMapChangedEvents", METHOD_SET_HANDLED_MAP_EVENTS)
                 .put("showAttribution", METHOD_SHOW_ATTRIBUTION)
+                .put("setMaxBounds", METHOD_SET_MAX_BOUNDS)
                 .build();
     }
 
@@ -263,6 +286,18 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
             case METHOD_SHOW_ATTRIBUTION:
                 mapView.showAttribution();
                 break;
+            case METHOD_SET_MAX_BOUNDS:
+                Log.d("RCTMGLMapViewManager", "METHOD_SET_MAX_BOUNDS:" + args.toString());
+                ReadableArray bArray = args.getArray(0);
+                ReadableArray ne = bArray.getArray((0));
+                ReadableArray sw = bArray.getArray((1));
+                LatLngBounds bounds = LatLngBounds.from(
+                    ne.getDouble(1),
+                    ne.getDouble(0),
+                    sw.getDouble(1),
+                    sw.getDouble(0)
+                );
+                mapboxMap.setLatLngBoundsForCameraTarget(bounds);
         }
     }
 
