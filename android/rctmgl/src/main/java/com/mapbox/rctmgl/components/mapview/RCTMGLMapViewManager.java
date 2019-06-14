@@ -168,8 +168,8 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         if (array == null) {
             return;
         }
-        ReadableArray ne = array.getArray((0));
-        ReadableArray sw = array.getArray((1));
+        ReadableArray ne = array.getArray((1));
+        ReadableArray sw = array.getArray((0));
         LatLngBounds bounds = LatLngBounds.from(
                 sw.getDouble(1),
                 sw.getDouble(0),
@@ -289,8 +289,8 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
             case METHOD_SET_MAX_BOUNDS:
                 Log.d("RCTMGLMapViewManager", "METHOD_SET_MAX_BOUNDS:" + args.toString());
                 ReadableArray bArray = args.getArray(0);
-                ReadableArray ne = bArray.getArray((0));
-                ReadableArray sw = bArray.getArray((1));
+                ReadableArray ne = bArray.getArray((1));
+                ReadableArray sw = bArray.getArray((0));
                 LatLngBounds bounds = LatLngBounds.from(
                     ne.getDouble(1),
                     ne.getDouble(0),
