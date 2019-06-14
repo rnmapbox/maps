@@ -13,14 +13,7 @@ const MapboxGL = NativeModules.MGLModule;
 export const NATIVE_MODULE_NAME = 'RCTMGLCamera';
 
 class Camera extends NativeBridgeComponent {
-  static propTypes = {
-    ...viewPropTypes,
-
-    animationDuration: PropTypes.number,
-
-    animationMode: PropTypes.oneOf(['flyTo', 'easeTo', 'moveTo']),
-
-    // normal
+  static ViewSettingsPropTypes = {
     centerCoordinate: PropTypes.arrayOf(PropTypes.number),
     heading: PropTypes.number,
     pitch: PropTypes.number,
@@ -33,6 +26,21 @@ class Camera extends NativeBridgeComponent {
       paddingBottom: PropTypes.number,
     }),
     zoomLevel: PropTypes.number,
+  };
+
+  static propTypes = {
+    ...viewPropTypes,
+
+    animationDuration: PropTypes.number,
+
+    animationMode: PropTypes.oneOf(['flyTo', 'easeTo', 'moveTo']),
+
+    // default - view settings
+    defaultViewSettings: PropTypes.shape(Camera.ViewSettingsPropTypes),
+
+    // normal - view settings
+    ...Camera.ViewSettingsPropTypes,
+
     minZoomLevel: PropTypes.number,
     maxZoomLevel: PropTypes.number,
 
@@ -342,8 +350,26 @@ class Camera extends NativeBridgeComponent {
     this.refs.camera.setNativeProps({stop: cameraConfig});
   }
 
-  _createStopConfig(config = {}) {
-    if (this.props.followUserLocation) {
+  _createDefaultViewCamera() {
+    if (this.defaultViewCamera) {
+      return this.defaultViewCamera;
+    }
+    if (!this.props.defaultViewSettings) {
+      return null;
+    }
+
+    this.defaultViewCamera = this._createStopConfig(
+      {
+        ...this.props.defaultViewSettings,
+        animationMode: Camera.Mode.Move,
+      },
+      false,
+    );
+    return this.defaultViewCamera;
+  }
+
+  _createStopConfig(config = {}, ignoreFollowUserLocation = false) {
+    if (this.props.followUserLocation && !ignoreFollowUserLocation) {
       return null;
     }
 
@@ -454,6 +480,7 @@ class Camera extends NativeBridgeComponent {
         stop={this._createStopConfig(props)}
         maxZoomLevel={this.props.maxZoomLevel}
         minZoomLevel={this.props.minZoomLevel}
+        defaultStop={this._createDefaultViewCamera()}
         {...callbacks}
       />
     );
