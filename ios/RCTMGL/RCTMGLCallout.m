@@ -42,7 +42,7 @@
     [super setCenter:center];
 }
 
-- (void)presentCalloutFromRect:(CGRect)rect inView:(UIView *)view constrainedToView:(UIView *)constrainedView animated:(BOOL)animated
+- (void)presentCalloutFromRect:(CGRect)rect inView:(UIView *)view constrainedToRect:(CGRect)constrainedRect animated:(BOOL)animated;
 {
     // we want to attach to our parents parent to be on the same zPosition stack, so the callout will appear over other custom views
     [view.superview addSubview:self];
