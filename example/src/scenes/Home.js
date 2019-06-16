@@ -43,6 +43,7 @@ import TakeSnapshotWithMap from '../examples/TakeSnapshotWithMap';
 import GetZoom from '../examples/GetZoom';
 import GetCenter from '../examples/GetCenter';
 import UserLocationChange from '../examples/UserLocationChange';
+import Heatmap from '../examples/Heatmap';
 
 const styles = StyleSheet.create({
   header: {
@@ -115,6 +116,7 @@ const Examples = [
   new ExampleItem('Get Current Zoom', GetZoom),
   new ExampleItem('Get Center', GetCenter),
   new ExampleItem('User Location Updates', UserLocationChange),
+  new ExampleItem('Heatmap', Heatmap),
 ];
 
 class Home extends React.Component {

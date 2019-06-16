@@ -1,5 +1,5 @@
 ## <MapboxGL.HeatmapLayer />
-### HeatmapLayer renders a heatmap of provided GeoJSON data based on the provided style.
+### HeatmapLayer is a style layer that renders one or more filled circles on the map.
 
 ### props
 | Prop | Type | Default | Required | Description |
@@ -19,12 +19,11 @@
 ### styles
 
 * <a href="#name">visibility</a><br/>
-* <a href="#name-1">heatmapColor</a><br/>
-* <a href="#name-2">heatmapIntensity</a><br/>
-* <a href="#name-3">heatmapOpacity</a><br/>
-* <a href="#name-4">heatmapRadius</a><br/>
-* <a href="#name-5">heatmapWeight</a><br/>
-
+* <a href="#name-1">heatmapRadius</a><br/>
+* <a href="#name-2">heatmapWeight</a><br/>
+* <a href="#name-3">heatmapIntensity</a><br/>
+* <a href="#name-4">heatmapColor</a><br/>
+* <a href="#name-5">heatmapOpacity</a><br/>
 
 ___
 
@@ -48,73 +47,22 @@ Whether this layer is displayed.
 ___
 
 #### Name
-`heatmapColor`
-
-#### Description
-The color of the heatmap.
-
-#### Type
-`enum`
-#### Default Value
-`visible`
-
-#### Supported Values
-**visible** - The layer is shown.<br />
-**none** - The layer is not shown.<br />
-
-
-
-___
-
-#### Name
-`heatmapIntensity`
-
-#### Description
-The intensity of the heatmap. This is a multiplier on top of heatmapWeight.
-
-#### Type
-`number`
-#### Default Value
-`1`
-
-
-#### Expression
-
-Parameters: `zoom, feature, feature-state`
-
-___
-
-#### Name
-`heatmapOpacity`
-
-#### Description
-Adjusts opacity of the heatmap layer.
-
-#### Type
-`number`
-#### Default Value
-`1`
-
-
-#### Expression
-
-Parameters: `zoom, feature, feature-state`
-
-___
-
-#### Name
 `heatmapRadius`
 
 #### Description
-Adjusts the heatmap radius based on parameters.
+Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed.
 
 #### Type
 `number`
 #### Default Value
-`1`
+`30`
+
+#### Units
+`pixels`
 
 #### Minimum
-`0`
+`1`
+
 
 #### Expression
 
@@ -126,7 +74,67 @@ ___
 `heatmapWeight`
 
 #### Description
-Sets the weight of the heatmap based on parameters.
+A measure of how much an individual point contributes to the heatmap. A value of 10 would be equivalent to having 10 points of weight 1 in the same spot. Especially useful when combined with clustering.
+
+#### Type
+`number`
+#### Default Value
+`1`
+
+#### Minimum
+`0`
+
+
+#### Expression
+
+Parameters: `zoom, feature, feature-state`
+
+___
+
+#### Name
+`heatmapIntensity`
+
+#### Description
+Similar to `heatmapWeight` but controls the intensity of the heatmap globally. Primarily used for adjusting the heatmap based on zoom level.
+
+#### Type
+`number`
+#### Default Value
+`1`
+
+#### Minimum
+`0`
+
+
+#### Expression
+
+Parameters: `zoom`
+
+___
+
+#### Name
+`heatmapColor`
+
+#### Description
+Defines the color of each pixel based on its density value in a heatmap.  Should be an expression that uses `["heatmapDensity"]` as input.
+
+#### Type
+`color`
+#### Default Value
+`interpolate,linear,heatmap-density,0,rgba(0, 0, 255, 0),0.1,royalblue,0.3,cyan,0.5,lime,0.7,yellow,1,red`
+
+
+#### Expression
+
+Parameters: `heatmap-density`
+
+___
+
+#### Name
+`heatmapOpacity`
+
+#### Description
+The global opacity at which the heatmap layer will be drawn.
 
 #### Type
 `number`
@@ -142,7 +150,5 @@ Sets the weight of the heatmap based on parameters.
 
 #### Expression
 
-Parameters: `zoom, feature, feature-state`
-
-___
+Parameters: `zoom`
 
