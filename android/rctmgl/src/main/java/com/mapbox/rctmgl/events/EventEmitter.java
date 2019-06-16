@@ -42,17 +42,4 @@ public class EventEmitter {
 
         return emitter;
     }
-
-    public static RCTEventEmitter getViewEmitter(ReactApplicationContext reactApplicationContext) {
-        RCTEventEmitter emitter = null;
-
-        try {
-            emitter = getCurrentReactContext(reactApplicationContext)
-                    .getJSModule(RCTEventEmitter.class);
-        } catch (NullPointerException e) {
-            Log.d(LOG_TAG, e.getLocalizedMessage());
-        }
-
-        return emitter;
-    }
 }
