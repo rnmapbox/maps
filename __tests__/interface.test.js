@@ -23,6 +23,7 @@ describe('Public Interface', () => {
       'FillLayer',
       'FillExtrusionLayer',
       'CircleLayer',
+      'HeatmapLayer',
       'LineLayer',
       'SymbolLayer',
       'BackgroundLayer',
