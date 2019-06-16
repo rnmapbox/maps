@@ -62,6 +62,7 @@ npm install @react-native-mapbox-gl/maps --save
 * [LineLayer](/docs/LineLayer.md)
 * [RasterLayer](/docs/RasterLayer.md)
 * [SymbolLayer](/docs/SymbolLayer.md)
+* [HeatmapLayer](/docs/HeatmapLayer.md)
 
 ### Offline
 * [OfflineManager](/docs/OfflineManager.md)
