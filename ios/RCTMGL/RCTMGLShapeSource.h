@@ -31,4 +31,6 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, assign) BOOL hasPressListener;
 
+-(BOOL)addMissingImageToStyle:(NSString *)imageName;
+
 @end

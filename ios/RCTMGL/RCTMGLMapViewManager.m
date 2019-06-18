@@ -505,6 +505,19 @@ RCT_EXPORT_METHOD(showAttribution:(nonnull NSNumber *)reactTag
     [self reactMapDidChange:reactMapView eventType:RCT_MAPBOX_DID_FINISH_LOADING_STYLE];
 }
 
+-(UIImage *)mapView:(MGLMapView *)mapView didFailToLoadImage:(NSString *)imageName
+{
+    RCTMGLMapView* reactMapView = ((RCTMGLMapView *) mapView);
+    NSArray<RCTMGLShapeSource *> *shapeSources = [reactMapView getAllShapeSources];
+    for (RCTMGLShapeSource *shapeSource in shapeSources) {
+        if([shapeSource addMissingImageToStyle:imageName]) {
+            // The image was added inside addMissingImageToStyle so we can return nil
+            return nil;
+        }
+    }
+    return nil;
+}
+
 - (void)reactMapDidChange:(MGLMapView*)mapView eventType:(NSString*)type
 {
     [self reactMapDidChange:mapView eventType:type andPayload:nil];
