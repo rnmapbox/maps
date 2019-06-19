@@ -60,6 +60,7 @@ typedef void (^FoundLayerBlock) (MGLStyleLayer* layer);
 - (CLLocationDistance)altitudeFromZoom:(double)zoomLevel;
 - (RCTMGLPointAnnotation*)getRCTPointAnnotation:(MGLPointAnnotation*)mglAnnotation;
 - (NSArray<RCTMGLSource *> *)getAllTouchableSources;
+- (NSArray<RCTMGLSource *> *)getAllShapeSources;
 - (RCTMGLSource *)getTouchableSourceWithHighestZIndex:(NSArray<RCTMGLSource *> *)touchableSources;
 - (NSString *)takeSnap:(BOOL)writeToDisk;
 - (void)didChangeUserTrackingMode:(MGLUserTrackingMode)mode animated:(BOOL)animated;

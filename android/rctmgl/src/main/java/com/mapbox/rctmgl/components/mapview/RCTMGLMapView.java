@@ -56,6 +56,7 @@ import com.mapbox.rctmgl.components.camera.CameraUpdateQueue;
 import com.mapbox.rctmgl.components.camera.RCTMGLCamera;
 import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeTracker;
 import com.mapbox.rctmgl.components.styles.light.RCTMGLLight;
+import com.mapbox.rctmgl.components.styles.sources.RCTMGLShapeSource;
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 import com.mapbox.rctmgl.events.AndroidCallbackEvent;
 import com.mapbox.rctmgl.events.IEvent;
@@ -99,7 +100,7 @@ public class RCTMGLMapView extends MapView implements
         MapView.OnDidFinishLoadingMapListener, MapView.OnWillStartRenderingFrameListener,
         MapView.OnDidFinishRenderingFrameListener, MapView.OnWillStartRenderingMapListener,
         MapView.OnDidFinishRenderingMapListener, MapView.OnDidFinishLoadingStyleListener,
-        MapboxMap.OnMarkerClickListener {
+        MapboxMap.OnMarkerClickListener, MapView.OnStyleImageMissingListener {
     public static final String LOG_TAG = RCTMGLMapView.class.getSimpleName();
 
     private RCTMGLMapViewManager mManager;
@@ -164,6 +165,7 @@ public class RCTMGLMapView extends MapView implements
         addOnCameraDidChangeListener(this);
         addOnDidFailLoadingMapListener(this);
         addOnDidFinishLoadingMapListener(this);
+        addOnStyleImageMissingListener(this);
 
         addOnWillStartRenderingFrameListener(this);
         addOnDidFinishRenderingFrameListener(this);
@@ -665,6 +667,16 @@ public class RCTMGLMapView extends MapView implements
         handleMapChangedEvent(EventTypes.DID_FINISH_LOADING_STYLE);
     }
 
+    @Override
+    public void onStyleImageMissing(@NonNull String id) {
+        List<RCTMGLShapeSource> allShapeSources = getAllShapeSources();
+        for (RCTMGLShapeSource shapeSource : allShapeSources) {
+            if (shapeSource.addMissingImageToStyle(id)) {
+                return;
+            }
+        }
+
+    }
 
     /*
     public void onMapChanged(int changed) {
@@ -1051,13 +1063,26 @@ public class RCTMGLMapView extends MapView implements
 
         for (String key : mSources.keySet()) {
             RCTSource source = mSources.get(key);
-
-            if (source.hasPressListener()) {
+            if (source != null && source.hasPressListener()) {
                 sources.add(source);
             }
         }
 
         return sources;
+    }
+
+    private List<RCTMGLShapeSource> getAllShapeSources() {
+        List<RCTMGLShapeSource> shapeSources = new ArrayList<>();
+
+        for (String key : mSources.keySet()) {
+            RCTSource source = mSources.get(key);
+
+            if (source instanceof RCTMGLShapeSource) {
+                shapeSources.add((RCTMGLShapeSource)source);
+            }
+        }
+
+        return shapeSources;
     }
 
     private RCTSource getTouchableSourceWithHighestZIndex(List<RCTSource> sources) {

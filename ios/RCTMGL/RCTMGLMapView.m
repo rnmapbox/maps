@@ -305,6 +305,18 @@ static double const M2PI = M_PI * 2;
     return touchableSources;
 }
 
+- (NSArray<RCTMGLShapeSource *> *)getAllShapeSources
+{
+    NSMutableArray<RCTMGLSource *> *shapeSources = [[NSMutableArray alloc] init];
+    
+    for (RCTMGLSource *source in _sources) {
+        if ([source isKindOfClass:[RCTMGLShapeSource class]]) {
+            [shapeSources addObject:source];
+        }
+    }
+    
+    return shapeSources;
+}
 - (RCTMGLSource *)getTouchableSourceWithHighestZIndex:(NSArray<RCTMGLSource *> *)touchableSources
 {
     if (touchableSources == nil || touchableSources.count == 0) {
