@@ -86,6 +86,10 @@ class SetUserTrackingModes extends React.Component {
           <MapboxGL.UserLocation visible={this.state.showUserLocation} />
 
           <MapboxGL.Camera
+            defaultSettings={{
+              centerCoordinate: [-111.8678, 40.2866],
+              zoomLevel: 16,
+            }}
             followUserLocation={
               this.state.userSelectedUserTrackingMode !== 'none'
             }

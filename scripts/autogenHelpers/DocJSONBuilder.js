@@ -89,11 +89,23 @@ class DocJSONBuilder {
       }
     }
 
-    // props
-    component.props = Object.keys(component.props).map((propName) => {
-      const propMeta = component.props[propName];
+    function mapNestedProp(propMeta) {
+      let result = {
+        type: {
+          name: propMeta.name,
+          value: propMeta.value,
+        },
+        description: propMeta.description,
+        required: propMeta.required,
+      };
+      if (propMeta.value) {
+        result.type.value = propMeta.value;
+      }
+      return result;
+    }
 
-      return {
+    function mapProp(propMeta, propName) {
+      var result =  {
         name: propName || 'FIX ME NO NAME',
         required: propMeta.required || false,
         type: (propMeta.type && propMeta.type.name) || 'FIX ME UNKNOWN TYPE',
@@ -102,6 +114,20 @@ class DocJSONBuilder {
           : propMeta.defaultValue.value.replace(/\n/g, ''),
         description: propMeta.description || 'FIX ME NO DESCRIPTION',
       };
+      if (propMeta.type && (propMeta.type.name === "shape") && propMeta.type.value) {
+        var type = propMeta.type.value;
+        var value =
+          Object.keys(type).map(propName => (mapProp(mapNestedProp(type[propName]), propName)));
+        result.type = { name: "shape", value };
+      }
+      return result;
+    }
+
+    // props
+    component.props = Object.keys(component.props).map((propName) => {
+      const propMeta = component.props[propName];
+
+      return mapProp(propMeta, propName);
     });
 
     // methods

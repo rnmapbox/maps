@@ -8,5 +8,7 @@
 | url | `string` | `none` | `false` | A URL to a TileJSON configuration file describing the source’s contents and other metadata. |
 | onPress | `func` | `none` | `false` | Source press listener, gets called when a user presses one of the children layers only<br/>if that layer has a higher z-index than another source layers |
 | hitbox | `shape` | `none` | `false` | Overrides the default touch hitbox(44x44 pixels) for the source layers |
+| &nbsp;&nbsp;width | `number` | `none` | `true` | FIX ME NO DESCRIPTION |
+| &nbsp;&nbsp;height | `number` | `none` | `true` | FIX ME NO DESCRIPTION |
 
 

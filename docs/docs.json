@@ -1,6 +1,7 @@
 {
   "BackgroundLayer": {
     "description": "",
+    "displayName": "BackgroundLayer",
     "methods": [],
     "props": [
       {
@@ -153,6 +154,7 @@
   },
   "Callout": {
     "description": "Callout that displays information about a selected annotation near the annotation.",
+    "displayName": "Callout",
     "methods": [],
     "props": [
       {
@@ -205,6 +207,7 @@
   },
   "Camera": {
     "description": "",
+    "displayName": "Camera",
     "methods": [
       {
         "name": "fitBounds",
@@ -215,15 +218,27 @@
             "name": "northEastCoordinates",
             "description": "North east coordinate of bound",
             "type": {
-              "name": "Array"
-            }
+              "name": "Array",
+              "elements": [
+                {
+                  "name": "Number"
+                }
+              ]
+            },
+            "optional": false
           },
           {
             "name": "southWestCoordinates",
             "description": "South west coordinate of bound",
             "type": {
-              "name": "Array"
-            }
+              "name": "Array",
+              "elements": [
+                {
+                  "name": "Number"
+                }
+              ]
+            },
+            "optional": false
           },
           {
             "name": "padding",
@@ -262,8 +277,14 @@
             "name": "coordinates",
             "description": "Coordinates that map camera will jump too",
             "type": {
-              "name": "Array"
-            }
+              "name": "Array",
+              "elements": [
+                {
+                  "name": "Number"
+                }
+              ]
+            },
+            "optional": false
           },
           {
             "name": "animationDuration",
@@ -294,8 +315,14 @@
             "name": "coordinates",
             "description": "Coordinates that map camera will move too",
             "type": {
-              "name": "Array"
-            }
+              "name": "Array",
+              "elements": [
+                {
+                  "name": "Number"
+                }
+              ]
+            },
+            "optional": false
           },
           {
             "name": "animationDuration",
@@ -327,7 +354,8 @@
             "description": "Zoom level that the map camera will animate too",
             "type": {
               "name": "Number"
-            }
+            },
+            "optional": false
           },
           {
             "name": "animationDuration",
@@ -359,7 +387,8 @@
             "description": "Camera configuration",
             "type": {
               "name": "Object"
-            }
+            },
+            "optional": false
           }
         ],
         "returns": null,
@@ -385,30 +414,168 @@
         "description": "FIX ME NO DESCRIPTION"
       },
       {
+        "name": "defaultSettings",
+        "required": false,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "centerCoordinate",
+              "required": false,
+              "type": "arrayOf",
+              "default": "none",
+              "description": "Center coordinate on map [lng, lat]"
+            },
+            {
+              "name": "heading",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Heading on map"
+            },
+            {
+              "name": "pitch",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Pitch on map"
+            },
+            {
+              "name": "bounds",
+              "required": false,
+              "type": {
+                "name": "shape",
+                "value": [
+                  {
+                    "name": "ne",
+                    "required": true,
+                    "type": "arrayOf",
+                    "default": "none",
+                    "description": "northEastCoordinates - North east coordinate of bound"
+                  },
+                  {
+                    "name": "sw",
+                    "required": true,
+                    "type": "arrayOf",
+                    "default": "none",
+                    "description": "southWestCoordinates - North east coordinate of bound"
+                  },
+                  {
+                    "name": "paddingLeft",
+                    "required": false,
+                    "type": "number",
+                    "default": "none",
+                    "description": "Left camera padding for bounds"
+                  },
+                  {
+                    "name": "paddingRight",
+                    "required": false,
+                    "type": "number",
+                    "default": "none",
+                    "description": "Right camera padding for bounds"
+                  },
+                  {
+                    "name": "paddingTop",
+                    "required": false,
+                    "type": "number",
+                    "default": "none",
+                    "description": "Top camera padding for bounds"
+                  },
+                  {
+                    "name": "paddingBottom",
+                    "required": false,
+                    "type": "number",
+                    "default": "none",
+                    "description": "Bottom camera padding for bounds"
+                  }
+                ]
+              },
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "zoomLevel",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Zoom level of the map"
+            }
+          ]
+        },
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
         "name": "centerCoordinate",
         "required": false,
         "type": "arrayOf",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Center coordinate on map [lng, lat]"
       },
       {
         "name": "heading",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Heading on map"
       },
       {
         "name": "pitch",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Pitch on map"
       },
       {
         "name": "bounds",
         "required": false,
-        "type": "shape",
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "ne",
+              "required": true,
+              "type": "arrayOf",
+              "default": "none",
+              "description": "northEastCoordinates - North east coordinate of bound"
+            },
+            {
+              "name": "sw",
+              "required": true,
+              "type": "arrayOf",
+              "default": "none",
+              "description": "southWestCoordinates - North east coordinate of bound"
+            },
+            {
+              "name": "paddingLeft",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Left camera padding for bounds"
+            },
+            {
+              "name": "paddingRight",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Right camera padding for bounds"
+            },
+            {
+              "name": "paddingTop",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Top camera padding for bounds"
+            },
+            {
+              "name": "paddingBottom",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Bottom camera padding for bounds"
+            }
+          ]
+        },
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       },
@@ -417,7 +584,7 @@
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Zoom level of the map"
       },
       {
         "name": "minZoomLevel",
@@ -497,6 +664,7 @@
   },
   "CircleLayer": {
     "description": "CircleLayer is a style layer that renders one or more filled circles on the map.",
+    "displayName": "CircleLayer",
     "methods": [],
     "props": [
       {
@@ -829,6 +997,7 @@
   },
   "FillExtrusionLayer": {
     "description": "FillExtrusionLayer is a style layer that renders one or more 3D extruded polygons on the map.",
+    "displayName": "FillExtrusionLayer",
     "methods": [],
     "props": [
       {
@@ -1073,6 +1242,7 @@
   },
   "FillLayer": {
     "description": "FillLayer is a style layer that renders one or more filled (and optionally stroked) polygons on the map.",
+    "displayName": "FillLayer",
     "methods": [],
     "props": [
       {
@@ -1312,6 +1482,7 @@
   },
   "ImageSource": {
     "description": "ImageSource is a content source that is used for a georeferenced raster image to be shown on the map.\nThe georeferenced image scales and rotates as the user zooms and rotates the map",
+    "displayName": "ImageSource",
     "methods": [],
     "props": [
       {
@@ -1343,6 +1514,7 @@
   },
   "Light": {
     "description": "Light represents the light source for extruded geometries",
+    "displayName": "Light",
     "methods": [],
     "props": [
       {
@@ -1441,6 +1613,7 @@
   },
   "LineLayer": {
     "description": "LineLayer is a style layer that renders one or more stroked polylines on the map.",
+    "displayName": "LineLayer",
     "methods": [],
     "props": [
       {
@@ -1856,6 +2029,7 @@
   },
   "MapView": {
     "description": "MapView backed by Mapbox Native GL",
+    "displayName": "MapView",
     "methods": [
       {
         "name": "getPointInView",
@@ -1868,8 +2042,14 @@
             "name": "coordinate",
             "description": "A point expressed in the map view's coordinate system.",
             "type": {
-              "name": "Array"
-            }
+              "name": "Array",
+              "elements": [
+                {
+                  "name": "Number"
+                }
+              ]
+            },
+            "optional": false
           }
         ],
         "returns": {
@@ -1894,8 +2074,14 @@
             "name": "point",
             "description": "A point expressed in the given view’s coordinate system.",
             "type": {
-              "name": "Array"
-            }
+              "name": "Array",
+              "elements": [
+                {
+                  "name": "Number"
+                }
+              ]
+            },
+            "optional": false
           }
         ],
         "returns": {
@@ -1938,8 +2124,14 @@
             "name": "coordinate",
             "description": "A point expressed in the map view’s coordinate system.",
             "type": {
-              "name": "Array"
-            }
+              "name": "Array",
+              "elements": [
+                {
+                  "name": "Number"
+                }
+              ]
+            },
+            "optional": false
           },
           {
             "name": "filter",
@@ -1980,8 +2172,14 @@
             "name": "bbox",
             "description": "A rectangle expressed in the map view’s coordinate system.",
             "type": {
-              "name": "Array"
-            }
+              "name": "Array",
+              "elements": [
+                {
+                  "name": "Number"
+                }
+              ]
+            },
+            "optional": false
           },
           {
             "name": "filter",
@@ -2036,7 +2234,8 @@
             "description": "If true will create a temp file, otherwise it is in base64",
             "type": {
               "name": "Boolean"
-            }
+            },
+            "optional": false
           }
         ],
         "returns": {
@@ -2076,7 +2275,12 @@
         "returns": {
           "description": "Coordinates",
           "type": {
-            "name": "Array"
+            "name": "Array",
+            "elements": [
+              {
+                "name": "Number"
+              }
+            ]
           }
         },
         "description": "Returns the map's geographical centerpoint",
@@ -2327,6 +2531,7 @@
   },
   "PointAnnotation": {
     "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.",
+    "displayName": "PointAnnotation",
     "methods": [],
     "props": [
       {
@@ -2367,7 +2572,25 @@
       {
         "name": "anchor",
         "required": false,
-        "type": "shape",
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "x",
+              "required": true,
+              "type": "number",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "y",
+              "required": true,
+              "type": "number",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            }
+          ]
+        },
         "default": "{x: 0.5, y: 0.5}",
         "description": "Specifies the anchor being set on a particular point of the annotation.\nThe anchor point is specified in the continuous space [0.0, 1.0] x [0.0, 1.0],\nwhere (0, 0) is the top-left corner of the image, and (1, 1) is the bottom-right corner.\nNote this is only for custom annotations not the default pin view.\nDefaults to the center of the view."
       },
@@ -2393,6 +2616,7 @@
   },
   "RasterLayer": {
     "description": "",
+    "displayName": "RasterLayer",
     "methods": [],
     "props": [
       {
@@ -2644,6 +2868,7 @@
   },
   "RasterSource": {
     "description": "RasterSource is a map content source that supplies raster image tiles to be shown on the map.\nThe location of and metadata about the tiles are defined either by an option dictionary\nor by an external file that conforms to the TileJSON specification.",
+    "displayName": "RasterSource",
     "methods": [],
     "props": [
       {
@@ -2703,6 +2928,7 @@
   },
   "ShapeSource": {
     "description": "ShapeSource is a map content source that supplies vector shapes to be shown on the map.\nThe shape may be a url or a GeoJSON object",
+    "displayName": "ShapeSource",
     "methods": [],
     "props": [
       {
@@ -2785,7 +3011,25 @@
       {
         "name": "hitbox",
         "required": false,
-        "type": "shape",
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "width",
+              "required": true,
+              "type": "number",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "height",
+              "required": true,
+              "type": "number",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            }
+          ]
+        },
         "default": "none",
         "description": "Overrides the default touch hitbox(44x44 pixels) for the source layers"
       }
@@ -2797,6 +3041,7 @@
   },
   "SymbolLayer": {
     "description": "SymbolLayer is a style layer that renders icon and text labels at points or along lines on the map.",
+    "displayName": "SymbolLayer",
     "methods": [],
     "props": [
       {
@@ -4126,6 +4371,7 @@
   },
   "UserLocation": {
     "description": "",
+    "displayName": "UserLocation",
     "methods": [
       {
         "name": "setLocationManager",
@@ -4149,7 +4395,9 @@
       {
         "name": "userIconLayers",
         "docblock": null,
-        "modifiers": [],
+        "modifiers": [
+          "get"
+        ],
         "params": [],
         "returns": null
       }
@@ -4202,6 +4450,7 @@
   },
   "VectorSource": {
     "description": "VectorSource is a map content source that supplies tiled vector data in Mapbox Vector Tile format to be shown on the map.\nThe location of and metadata about the tiles are defined either by an option dictionary or by an external file that conforms to the TileJSON specification.",
+    "displayName": "VectorSource",
     "methods": [],
     "props": [
       {
@@ -4228,7 +4477,25 @@
       {
         "name": "hitbox",
         "required": false,
-        "type": "shape",
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "width",
+              "required": true,
+              "type": "number",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "height",
+              "required": true,
+              "type": "number",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            }
+          ]
+        },
         "default": "none",
         "description": "Overrides the default touch hitbox(44x44 pixels) for the source layers"
       }
@@ -4240,6 +4507,7 @@
   },
   "Annotation": {
     "description": "",
+    "displayName": "Annotation",
     "methods": [
       {
         "name": "onPress",
@@ -4251,7 +4519,9 @@
       {
         "name": "symbolStyle",
         "docblock": null,
-        "modifiers": [],
+        "modifiers": [
+          "get"
+        ],
         "params": [],
         "returns": null
       }
