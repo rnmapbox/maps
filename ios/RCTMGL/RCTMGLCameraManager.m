@@ -33,6 +33,8 @@ RCT_EXPORT_VIEW_PROPERTY(minZoomLevel, NSNumber)
 
 RCT_EXPORT_VIEW_PROPERTY(onUserTrackingModeChange, RCTBubblingEventBlock)
 
+RCT_EXPORT_VIEW_PROPERTY(defaultStop, NSDictionary)
+
 #pragma Methods
 
 - (BOOL)requiresMainQueueSetup
