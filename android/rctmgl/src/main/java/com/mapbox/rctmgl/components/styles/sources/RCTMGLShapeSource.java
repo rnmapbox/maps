@@ -63,16 +63,12 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         mapView.getMapboxMap().getStyle(new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
-                addToMapWithStyle(mapView);
+                MapboxMap map = mapView.getMapboxMap();
+                addNativeImages(mNativeImages, map);
+                addRemoteImages(mImages, map);
+                RCTMGLShapeSource.super.addToMap(mapView);
             }
         });
-    }
-
-    private void addToMapWithStyle(final RCTMGLMapView mapView) {
-        MapboxMap map = mapView.getMapboxMap();
-        addNativeImages(mNativeImages, map);
-        addRemoteImages(mImages, map);
-        RCTMGLShapeSource.super.addToMap(mapView);
     }
 
     @Override
