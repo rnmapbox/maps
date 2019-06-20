@@ -71,7 +71,7 @@
 - (void)_centerCoordWithZoomCamera:(RCTMGLMapView*)mapView animated:(BOOL)animated withCompletionHandler:(void (^)(void))completionHandler
 {
     MGLMapCamera *camera = [MGLMapCamera cameraLookingAtCenterCoordinate:_cameraStop.coordinate
-                                    fromDistance:[mapView altitudeFromZoom:[_cameraStop.zoom doubleValue]]
+                                    fromDistance:[mapView altitudeFromZoom:[_cameraStop.zoom doubleValue] atLatitude:_cameraStop.coordinate.latitude]
                                     pitch:[_cameraStop.pitch floatValue]
                                     heading:[_cameraStop.heading floatValue]];
     [mapView setCamera:camera
@@ -92,12 +92,12 @@
         nextCamera.heading = [_cameraStop.heading floatValue];
     }
     
-    if (_cameraStop.zoom != nil) {
-        nextCamera.altitude = [mapView altitudeFromZoom:[_cameraStop.zoom doubleValue]];
-    }
-    
     if ([self _isCoordValid:_cameraStop.coordinate]) {
         nextCamera.centerCoordinate = _cameraStop.coordinate;
+    }
+    
+    if (_cameraStop.zoom != nil) {
+        nextCamera.altitude = [mapView altitudeFromZoom:[_cameraStop.zoom doubleValue] atLatitude:nextCamera.centerCoordinate.latitude atPitch:nextCamera.pitch];
     }
     
     return nextCamera;
