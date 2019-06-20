@@ -90,7 +90,7 @@ class DocJSONBuilder {
     }
 
     function mapNestedProp(propMeta) {
-      let result = {
+      const result = {
         type: {
           name: propMeta.name,
           value: propMeta.value,
@@ -104,21 +104,53 @@ class DocJSONBuilder {
       return result;
     }
 
-    function mapProp(propMeta, propName) {
-      var result =  {
-        name: propName || 'FIX ME NO NAME',
-        required: propMeta.required || false,
-        type: (propMeta.type && propMeta.type.name) || 'FIX ME UNKNOWN TYPE',
-        default: !propMeta.defaultValue
-          ? 'none'
-          : propMeta.defaultValue.value.replace(/\n/g, ''),
-        description: propMeta.description || 'FIX ME NO DESCRIPTION',
-      };
-      if (propMeta.type && (propMeta.type.name === "shape") && propMeta.type.value) {
-        var type = propMeta.type.value;
-        var value =
-          Object.keys(type).map(propName => (mapProp(mapNestedProp(type[propName]), propName)));
-        result.type = { name: "shape", value };
+    function mapProp(propMeta, propName, array) {
+      let result = {};
+      if (!array) {
+        result = {
+          name: propName || 'FIX ME NO NAME',
+          required: propMeta.required || false,
+          type: (propMeta.type && propMeta.type.name) || 'FIX ME UNKNOWN TYPE',
+          default: !propMeta.defaultValue
+            ? 'none'
+            : propMeta.defaultValue.value.replace(/\n/g, ''),
+          description: propMeta.description || 'FIX ME NO DESCRIPTION',
+        }
+      } else {
+        if (propName) {
+          result.name = propName;
+        }
+        if (propMeta.required !== undefined) {
+          result.required = propMeta.required;
+        }
+        result.type =
+          (propMeta.type && propMeta.type.name) || 'FIX ME UNKNOWN TYPE';
+        if (propMeta.defaultValue) {
+          result.default = propMeta.defaultValue.value.replace(/\n/g, '');
+        }
+        if (propMeta.description) {
+          result.description = propMeta.description;
+        }
+      }
+
+      if (
+        propMeta.type &&
+        propMeta.type.name === 'arrayOf' &&
+        propMeta.type.value
+      ) {
+        console.log("arrayOf", propName, propMeta);
+        result.type = {name: 'array', value: mapProp(mapNestedProp(propMeta.type.value), undefined, true)};
+      }
+      if (
+        propMeta.type &&
+        propMeta.type.name === 'shape' &&
+        propMeta.type.value
+      ) {
+        const type = propMeta.type.value;
+        const value = Object.keys(type).map(_name =>
+          mapProp(mapNestedProp(type[_name]), _name, false),
+        );
+        result.type = {name: 'shape', value};
       }
       return result;
     }
@@ -127,7 +159,7 @@ class DocJSONBuilder {
     component.props = Object.keys(component.props).map((propName) => {
       const propMeta = component.props[propName];
 
-      return mapProp(propMeta, propName);
+      return mapProp(propMeta, propName, false);
     });
 
     // methods

@@ -422,7 +422,12 @@
             {
               "name": "centerCoordinate",
               "required": false,
-              "type": "arrayOf",
+              "type": {
+                "name": "array",
+                "value": {
+                  "type": "number"
+                }
+              },
               "default": "none",
               "description": "Center coordinate on map [lng, lat]"
             },
@@ -449,14 +454,24 @@
                   {
                     "name": "ne",
                     "required": true,
-                    "type": "arrayOf",
+                    "type": {
+                      "name": "array",
+                      "value": {
+                        "type": "number"
+                      }
+                    },
                     "default": "none",
                     "description": "northEastCoordinates - North east coordinate of bound"
                   },
                   {
                     "name": "sw",
                     "required": true,
-                    "type": "arrayOf",
+                    "type": {
+                      "name": "array",
+                      "value": {
+                        "type": "number"
+                      }
+                    },
                     "default": "none",
                     "description": "southWestCoordinates - North east coordinate of bound"
                   },
@@ -508,7 +523,12 @@
       {
         "name": "centerCoordinate",
         "required": false,
-        "type": "arrayOf",
+        "type": {
+          "name": "array",
+          "value": {
+            "type": "number"
+          }
+        },
         "default": "none",
         "description": "Center coordinate on map [lng, lat]"
       },
@@ -535,14 +555,24 @@
             {
               "name": "ne",
               "required": true,
-              "type": "arrayOf",
+              "type": {
+                "name": "array",
+                "value": {
+                  "type": "number"
+                }
+              },
               "default": "none",
               "description": "northEastCoordinates - North east coordinate of bound"
             },
             {
               "name": "sw",
               "required": true,
-              "type": "arrayOf",
+              "type": {
+                "name": "array",
+                "value": {
+                  "type": "number"
+                }
+              },
               "default": "none",
               "description": "southWestCoordinates - North east coordinate of bound"
             },
@@ -645,7 +675,12 @@
       {
         "name": "alignment",
         "required": false,
-        "type": "arrayOf",
+        "type": {
+          "name": "array",
+          "value": {
+            "type": "number"
+          }
+        },
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       },
@@ -1482,6 +1517,7 @@
   },
   "HeatmapLayer": {
     "description": "HeatmapLayer is a style layer that renders one or more filled circles on the map.",
+    "displayName": "HeatmapLayer",
     "methods": [],
     "props": [
       {
@@ -1713,7 +1749,17 @@
       {
         "name": "coordinates",
         "required": true,
-        "type": "arrayOf",
+        "type": {
+          "name": "array",
+          "value": {
+            "type": {
+              "name": "array",
+              "value": {
+                "type": "number"
+              }
+            }
+          }
+        },
         "default": "none",
         "description": "The top left, top right, bottom right, and bottom left coordinates for the image."
       }
@@ -2776,7 +2822,12 @@
       {
         "name": "coordinate",
         "required": true,
-        "type": "arrayOf",
+        "type": {
+          "name": "array",
+          "value": {
+            "type": "number"
+          }
+        },
         "default": "none",
         "description": "The center point (specified as a map coordinate) of the annotation."
       },
@@ -4769,7 +4820,12 @@
       {
         "name": "coordinates",
         "required": false,
-        "type": "arrayOf",
+        "type": {
+          "name": "array",
+          "value": {
+            "type": "number"
+          }
+        },
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       },

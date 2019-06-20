@@ -365,9 +365,11 @@ function _propMarkdownTableRows(props, prefix = "") {
       if (typeof(type) === "object") {
         type = type.name;
       }
-      let result =  `| ${prefix}${prop.name} | \`${type}\` | \`${prop.default}\` | \`${
+      let defaultValue = prop.default || '';
+      let { description = '' } = prop;
+      let result =  `| ${prefix}${prop.name} | \`${type}\` | \`${defaultValue}\` | \`${
         prop.required
-      }\` | ${replaceNewLine(prop.description)} |`;
+      }\` | ${replaceNewLine(description)} |`;
       if (type == "shape") {
         result = `${result}\n${_propMarkdownTableRows(prop.type.value, `&nbsp;&nbsp;${prefix}`)}`
       }
