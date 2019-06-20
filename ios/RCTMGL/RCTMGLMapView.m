@@ -275,7 +275,12 @@ static double const M2PI = M_PI * 2;
 
 - (CLLocationDistance)altitudeFromZoom:(double)zoomLevel
 {
-    CLLocationDistance metersPerPixel = [self getMetersPerPixelAtLatitude:self.camera.centerCoordinate.latitude withZoom:zoomLevel];
+    return [self altitudeFromZoom:zoomLevel atLatitude:self.camera.centerCoordinate.latitude];
+}
+
+- (CLLocationDistance)altitudeFromZoom:(double)zoomLevel atLatitude:(CLLocationDegrees)latitude
+{
+    CLLocationDistance metersPerPixel = [self getMetersPerPixelAtLatitude:latitude withZoom:zoomLevel];
     CLLocationDistance metersTall = metersPerPixel * self.frame.size.height;
     CLLocationDistance altitude = metersTall / 2 / tan(MGLRadiansFromDegrees(30) / 2.0);
     return altitude * sin(M_PI_2 - MGLRadiansFromDegrees(self.camera.pitch)) / sin(M_PI_2);

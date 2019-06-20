@@ -58,6 +58,7 @@ typedef void (^FoundLayerBlock) (MGLStyleLayer* layer);
 
 - (CLLocationDistance)getMetersPerPixelAtLatitude:(double)latitude withZoom:(double)zoomLevel;
 - (CLLocationDistance)altitudeFromZoom:(double)zoomLevel;
+- (CLLocationDistance)altitudeFromZoom:(double)zoomLevel atLatitude:(CLLocationDegrees)latitude;
 - (RCTMGLPointAnnotation*)getRCTPointAnnotation:(MGLPointAnnotation*)mglAnnotation;
 - (NSArray<RCTMGLSource *> *)getAllTouchableSources;
 - (NSArray<RCTMGLSource *> *)getAllShapeSources;
