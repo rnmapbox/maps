@@ -218,6 +218,7 @@
 
 - (void)initialLayout
 {
+    [self _setInitialCamera];
     [self _updateCamera];
 }
 
