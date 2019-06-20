@@ -170,7 +170,7 @@ static UIImage * _placeHolderImage;
 + (NSString *)placeholderImage {
     if (_placeHolderImage) return _placeHolderImage;
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(1, 1), NO, 0.0);
-    UIImage *blank = UIGraphicsGetImageFromCurrentImageContext();
+    _placeHolderImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return _placeHolderImage;
 }
