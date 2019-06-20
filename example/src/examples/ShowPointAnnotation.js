@@ -102,9 +102,15 @@ class ShowPointAnnotation extends React.Component {
       }
 
       items.push(
-        <MapboxGL.Annotation key={id} id={id} coordinates={coordinate}>
+        <MapboxGL.PointAnnotation
+          key={id}
+          id={id}
+          coordinate={coordinate}
+          title="This is a point ann"
+        >
           <View style={styles.annotationContainer} />
-        </MapboxGL.Annotation>,
+          <MapboxGL.Callout title="This is a sample" />
+        </MapboxGL.PointAnnotation>,
       );
     }
 

@@ -19,6 +19,7 @@ import com.mapbox.rctmgl.components.styles.layers.RCTMGLBackgroundLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLCircleLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLFillExtrusionLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLFillLayerManager;
+import com.mapbox.rctmgl.components.styles.layers.RCTMGLHeatmapLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLLineLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLRasterLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLSymbolLayerManager;
@@ -76,6 +77,7 @@ public class RCTMGLPackage implements ReactPackage {
         // layers
         managers.add(new RCTMGLFillLayerManager());
         managers.add(new RCTMGLFillExtrusionLayerManager());
+        managers.add(new RCTMGLHeatmapLayerManager());
         managers.add(new RCTMGLLineLayerManager());
         managers.add(new RCTMGLCircleLayerManager());
         managers.add(new RCTMGLSymbolLayerManager());

@@ -43,6 +43,14 @@ public class RCTMGLCameraManager extends AbstractEventEmitter<RCTMGLCamera> {
         }
     }
 
+    @ReactProp(name="defaultStop")
+    public void setDefaultStop(RCTMGLCamera camera, ReadableMap map) {
+        if (map != null) {
+            CameraStop stop = CameraStop.fromReadableMap(mContext, map, null);
+            camera.setDefaultStop(stop);
+        }
+    }
+
     @ReactProp(name="userTrackingMode")
     public void setUserTrackingMode(RCTMGLCamera camera, int userTrackingMode) {
         camera.setUserTrackingMode(userTrackingMode);

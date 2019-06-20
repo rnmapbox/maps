@@ -114,15 +114,14 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
     public void addToMap(RCTMGLMapView mapView) {
         mMapView = mapView;
         mMap = mapView.getMapboxMap();
-
         mMap.getStyle(new Style.OnStyleLoaded() {
             public void onStyleLoaded(@NonNull Style style) {
-                T existingSource = mMap.getStyle().<T>getSourceAs(mID);
+                T existingSource = style.getSourceAs(mID);
                 if (existingSource != null) {
                     mSource = existingSource;
                 } else {
                     mSource = makeSource();
-                    mMap.getStyle().addSource(mSource);
+                    style.addSource(mSource);
                 }
 
                 if (mQueuedLayers != null && mQueuedLayers.size() > 0) { // first load

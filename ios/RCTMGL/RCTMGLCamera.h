@@ -13,6 +13,7 @@
 @interface RCTMGLCamera : UIView
 
 @property (nonatomic, strong) NSDictionary<NSString *, id> *stop;
+@property (nonatomic, strong) NSDictionary<NSString *, id> *defaultStop;
 @property (nonatomic, strong) RCTMGLMapView *map;
 
 @property (nonatomic, copy) NSNumber *animationDuration;

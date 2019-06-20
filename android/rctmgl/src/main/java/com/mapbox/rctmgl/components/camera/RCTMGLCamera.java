@@ -51,6 +51,7 @@ public class RCTMGLCamera extends AbstractMapFeature {
 
     private boolean hasSentFirstRegion = false;
 
+    private CameraStop mDefaultStop;
     private CameraStop mCameraStop;
     private CameraUpdateQueue mCameraUpdateQueue;
 
@@ -132,6 +133,7 @@ public class RCTMGLCamera extends AbstractMapFeature {
     public void addToMap(RCTMGLMapView mapView) {
         mMapView = mapView;
 
+        setInitialCamera();
         if (mCameraStop != null) {
             updateCamera();
         }
@@ -156,6 +158,10 @@ public class RCTMGLCamera extends AbstractMapFeature {
         }
     }
 
+    public void setDefaultStop(CameraStop stop) {
+        mDefaultStop = stop;
+    }
+
     private void updateMaxMinZoomLevel() {
         MapboxMap map = getMapboxMap();
         if (map != null) {
@@ -165,6 +171,15 @@ public class RCTMGLCamera extends AbstractMapFeature {
             if (mMaxZoomLevel >= 0.0) {
                 map.setMaxZoomPreference(mMaxZoomLevel);
             }
+        }
+    }
+
+    private void setInitialCamera() {
+        if (mDefaultStop != null) {
+            mDefaultStop.setDuration(0);
+            mDefaultStop.setMode(com.mapbox.rctmgl.components.camera.constants.CameraMode.NONE);
+            CameraUpdateItem item = mDefaultStop.toCameraUpdate(mMapView.getMapboxMap());
+            item.run();
         }
     }
 

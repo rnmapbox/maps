@@ -12,6 +12,61 @@ const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLCamera';
 
+const SettingsPropTypes = {
+  /**
+   * Center coordinate on map [lng, lat]
+   */
+  centerCoordinate: PropTypes.arrayOf(PropTypes.number),
+
+  /**
+   * Heading on map
+   */
+  heading: PropTypes.number,
+
+  /**
+   * Pitch on map
+   */
+  pitch: PropTypes.number,
+
+
+  bounds: PropTypes.shape({
+    /**
+     * northEastCoordinates - North east coordinate of bound
+     */
+    ne: PropTypes.arrayOf(PropTypes.number).isRequired,
+
+    /**
+     * southWestCoordinates - North east coordinate of bound
+     */
+    sw: PropTypes.arrayOf(PropTypes.number).isRequired,
+
+    /**
+     * Left camera padding for bounds
+     */
+    paddingLeft: PropTypes.number,
+
+    /**
+     * Right camera padding for bounds
+     */
+    paddingRight: PropTypes.number,
+
+    /**
+     * Top camera padding for bounds
+     */
+    paddingTop: PropTypes.number,
+
+    /**
+     * Bottom camera padding for bounds
+     */
+    paddingBottom: PropTypes.number,
+  }),
+
+  /**
+   * Zoom level of the map
+   */
+  zoomLevel: PropTypes.number,
+};
+
 class Camera extends NativeBridgeComponent {
   static propTypes = {
     ...viewPropTypes,
@@ -20,19 +75,12 @@ class Camera extends NativeBridgeComponent {
 
     animationMode: PropTypes.oneOf(['flyTo', 'easeTo', 'moveTo']),
 
-    // normal
-    centerCoordinate: PropTypes.arrayOf(PropTypes.number),
-    heading: PropTypes.number,
-    pitch: PropTypes.number,
-    bounds: PropTypes.shape({
-      ne: PropTypes.arrayOf(PropTypes.number).isRequired,
-      sw: PropTypes.arrayOf(PropTypes.number).isRequired,
-      paddingLeft: PropTypes.number,
-      paddingRight: PropTypes.number,
-      paddingTop: PropTypes.number,
-      paddingBottom: PropTypes.number,
-    }),
-    zoomLevel: PropTypes.number,
+    // default - view settings
+    defaultSettings: PropTypes.shape(SettingsPropTypes),
+
+    // normal - view settings
+    ...SettingsPropTypes,
+
     minZoomLevel: PropTypes.number,
     maxZoomLevel: PropTypes.number,
 
@@ -342,8 +390,26 @@ class Camera extends NativeBridgeComponent {
     this.refs.camera.setNativeProps({stop: cameraConfig});
   }
 
-  _createStopConfig(config = {}) {
-    if (this.props.followUserLocation) {
+  _createDefaultCamera() {
+    if (this.defaultCamera) {
+      return this.defaultCamera;
+    }
+    if (!this.props.defaultSettings) {
+      return null;
+    }
+
+    this.defaultCamera = this._createStopConfig(
+      {
+        ...this.props.defaultSettings,
+        animationMode: Camera.Mode.Move,
+      },
+      false,
+    );
+    return this.defaultCamera;
+  }
+
+  _createStopConfig(config = {}, ignoreFollowUserLocation = false) {
+    if (this.props.followUserLocation && !ignoreFollowUserLocation) {
       return null;
     }
 
@@ -454,6 +520,7 @@ class Camera extends NativeBridgeComponent {
         stop={this._createStopConfig(props)}
         maxZoomLevel={this.props.maxZoomLevel}
         minZoomLevel={this.props.minZoomLevel}
+        defaultStop={this._createDefaultCamera()}
         {...callbacks}
       />
     );

@@ -93,7 +93,7 @@ static double const MS_TO_S = 0.001;
     [RCTMGLImageQueue.sharedInstance addImage:url scale:scale bridge:bridge completionHandler:callback];
 }
 
-+ (void)fetchImages:(RCTBridge *)bridge style:(MGLStyle *)style objects:(NSDictionary<NSString *, NSString *>*)objects callback:(void (^)())callback
++ (void)fetchImages:(RCTBridge *)bridge style:(MGLStyle *)style objects:(NSDictionary<NSString *, NSString *>*)objects forceUpdate:(BOOL)forceUpdate callback:(void (^)())callback
 {
     if (objects == nil) {
         callback();
@@ -118,24 +118,23 @@ static double const MS_TO_S = 0.001;
     };
 
     for (NSString *imageName in imageNames) {
-        UIImage *foundImage = [style imageForName:imageName];
-
-        if (foundImage == nil) {
+        UIImage *foundImage = forceUpdate ? nil : [style imageForName:imageName];
+        if (forceUpdate || foundImage == nil) {
             if ([objects[imageName] containsString:@"data:image"]) {
                 NSData *data = [[NSData alloc]initWithBase64EncodedString:[objects[imageName] componentsSeparatedByString:@","][1] options:NSDataBase64DecodingIgnoreUnknownCharacters];
                 [weakStyle setImage:[UIImage imageWithData:data] forName:imageName];
                 imageLoadedBlock();
             } else {
-                [RCTMGLImageQueue.sharedInstance addImage:objects[imageName] scale:1 bridge:bridge completionHandler:^(NSError *error, UIImage *image) {
-                    if (!image) {
-                        RCTLogWarn(@"Failed to fetch image: %@ error:%@", imageName, error);
-                    }
-                    else {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [weakStyle setImage:image forName:imageName];
-                            imageLoadedBlock();
-                        });
-                    }
+                [RCTMGLImageQueue.sharedInstance addImage:objects[imageName] scale:1.0 bridge:bridge completionHandler:^(NSError *error, UIImage *image) {
+                if (!image) {
+                    RCTLogWarn(@"Failed to fetch image: %@ error:%@", imageName, error);
+                }
+                else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakStyle setImage:image forName:imageName];
+                        imageLoadedBlock();
+                    });
+                }
                 }];
             }
         } else {
