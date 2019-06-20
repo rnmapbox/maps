@@ -16,6 +16,8 @@ import VectorSource from './components/VectorSource';
 import ShapeSource from './components/ShapeSource';
 import RasterSource from './components/RasterSource';
 import ImageSource from './components/ImageSource';
+import Images from './components/Images';
+
 // Layers
 import FillLayer from './components/FillLayer';
 import FillExtrusionLayer from './components/FillExtrusionLayer';
@@ -79,6 +81,7 @@ MapboxGL.VectorSource = VectorSource;
 MapboxGL.ShapeSource = ShapeSource;
 MapboxGL.RasterSource = RasterSource;
 MapboxGL.ImageSource = ImageSource;
+MapboxGL.Images = Images;
 
 // layers
 MapboxGL.FillLayer = FillLayer;

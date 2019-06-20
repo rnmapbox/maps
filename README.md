@@ -48,6 +48,7 @@ npm install @react-native-mapbox-gl/maps --save
 * [Callout](/docs/Callout.md)
 * [Camera](docs/Camera.md)
 * [UserLocation](docs/UserLocation.md)
+* [Images](docs/Images.md)
 
 ### Sources
 * [VectorSource](/docs/VectorSource.md)
