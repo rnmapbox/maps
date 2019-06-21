@@ -92,6 +92,9 @@ class ShapeSource extends AbstractSource {
     /**
      * Source press listener, gets called when a user presses one of the children layers only
      * if that layer has a higher z-index than another source layers
+     *
+     * @param {NativeSyntheticEvent<GeoJSONFeatureEvent>} event - event with geojson feature as payload
+     * @return void
      */
     onPress: PropTypes.func,
 

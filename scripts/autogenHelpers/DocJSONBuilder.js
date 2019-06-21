@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
 const JSDocNodeTree = require('./JSDocNodeTree');
+const parseJsDoc = require('react-docgen/dist/utils/parseJsDoc').default;
 
 const COMPONENT_PATH = path.join(
   __dirname,
@@ -138,8 +139,23 @@ class DocJSONBuilder {
         propMeta.type.name === 'arrayOf' &&
         propMeta.type.value
       ) {
-        console.log("arrayOf", propName, propMeta);
-        result.type = {name: 'array', value: mapProp(mapNestedProp(propMeta.type.value), undefined, true)};
+        result.type = {
+          name: 'array',
+          value: mapProp(mapNestedProp(propMeta.type.value), undefined, true),
+        }
+      }
+
+      if (propMeta.type && propMeta.type.name === 'func') {
+        const jsdoc = parseJsDoc(propMeta.description);
+        if (jsdoc && jsdoc.description) {
+          result.description = jsdoc.description;
+        }
+        if (jsdoc && jsdoc.params && (jsdoc.params.length > 0)) {
+          result.params = jsdoc.params;
+        }
+        if (jsdoc && jsdoc.returns) {
+          result.returns = jsdoc.returns;
+        }
       }
       if (
         propMeta.type &&

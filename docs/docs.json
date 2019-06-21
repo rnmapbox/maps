@@ -3268,7 +3268,26 @@
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers"
+        "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers",
+        "params": [
+          {
+            "name": "event",
+            "description": "event with geojson feature as payload",
+            "type": {
+              "name": "NativeSyntheticEvent",
+              "elements": [
+                {
+                  "name": "GeoJSONFeatureEvent"
+                }
+              ]
+            },
+            "optional": false
+          }
+        ],
+        "returns": {
+          "description": "void",
+          "type": null
+        }
       },
       {
         "name": "hitbox",
