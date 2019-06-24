@@ -138,16 +138,22 @@ class MapView extends NativeBridgeComponent {
 
     /**
      * This event is triggered whenever the currently displayed map region is about to change.
+     *
+     * @param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
      */
     onRegionWillChange: PropTypes.func,
 
     /**
      * This event is triggered whenever the currently displayed map region is changing.
+     *
+     * @param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
      */
     onRegionIsChanging: PropTypes.func,
 
     /**
      * This event is triggered whenever the currently displayed map region finished changing
+     *
+     * @param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
      */
     onRegionDidChange: PropTypes.func,
 
