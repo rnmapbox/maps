@@ -9,7 +9,7 @@ import Page from './common/Page';
 
 const styles = {
   icon: {
-    iconImage: '{icon}',
+    iconImage: ['get', 'icon'],
 
     iconSize: [
       'match',
