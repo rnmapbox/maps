@@ -37,6 +37,7 @@ class ShowRegionDidChange extends React.Component {
 
     this.onRegionDidChange = this.onRegionDidChange.bind(this);
     this.onRegionWillChange = this.onRegionWillChange.bind(this);
+    this.onRegionIsChanging = this.onRegionIsChanging.bind(this);
     this.onDidFinishLoadingMap = this.onDidFinishLoadingMap.bind(this);
     this.onOptionPress = this.onOptionPress.bind(this);
   }
@@ -88,13 +89,17 @@ class ShowRegionDidChange extends React.Component {
     this.setState({reason: 'did change', regionFeature});
   }
 
+  onRegionIsChanging(regionFeature) {
+    this.setState({reason: 'is changing', regionFeature});
+  }
+
   renderRegionChange() {
     if (
       !this.state.regionFeature ||
       !this.isValidCoordinate(this.state.regionFeature.geometry)
     ) {
       return (
-        <Bubble>
+        <Bubble style={{marginBottom: 100}}>
           <Text>Move the map!</Text>
         </Bubble>
       );
@@ -139,6 +144,7 @@ class ShowRegionDidChange extends React.Component {
           style={sheet.matchParent}
           onDidFinishLoadingMap={this.onDidFinishLoadingMap}
           onRegionWillChange={this.onRegionWillChange}
+          onRegionIsChanging={this.onRegionIsChanging}
           onRegionDidChange={this.onRegionDidChange}
         >
           <MapboxGL.Camera {...this.state.cameraConfig} />

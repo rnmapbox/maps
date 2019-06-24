@@ -95,7 +95,7 @@ import javax.annotation.Nullable;
 @SuppressWarnings({"MissingPermission"})
 public class RCTMGLMapView extends MapView implements
         OnMapReadyCallback, MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener,
-        /* MapView.OnMapChangedListener*/
+        MapView.OnCameraIsChangingListener,
         MapView.OnCameraDidChangeListener, MapView.OnDidFailLoadingMapListener,
         MapView.OnDidFinishLoadingMapListener, MapView.OnWillStartRenderingFrameListener,
         MapView.OnDidFinishRenderingFrameListener, MapView.OnWillStartRenderingMapListener,
@@ -162,6 +162,7 @@ public class RCTMGLMapView extends MapView implements
         setLifecycleListeners();
 
 //        addOnMapChangedListener(this);
+        addOnCameraIsChangingListener(this);
         addOnCameraDidChangeListener(this);
         addOnDidFailLoadingMapListener(this);
         addOnDidFinishLoadingMapListener(this);
@@ -616,6 +617,11 @@ public class RCTMGLMapView extends MapView implements
     @Override
     public void onCameraDidChange(boolean animated) {
         mCameraChangeTracker.setIsAnimating(animated);
+    }
+
+    @Override
+    public void onCameraIsChanging() {
+        handleMapChangedEvent(EventTypes.REGION_IS_CHANGING);
     }
 
     @Override
