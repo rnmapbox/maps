@@ -3,6 +3,7 @@ package com.mapbox.rctmgl.components.camera;
 import android.support.annotation.NonNull;
 
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
+import com.mapbox.mapboxsdk.constants.MapboxConstants;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.rctmgl.components.camera.constants.CameraMode;
 
@@ -63,12 +64,20 @@ public class CameraUpdateItem implements RunnableFuture<Void> {
             return;
         }
 
-        if (mCameraMode == CameraMode.FLIGHT && mDuration > 0) {
-            map.animateCamera(mCameraUpdate, mDuration, callback);
-        } else if (mCameraMode == CameraMode.EASE) {
-            map.easeCamera(mCameraUpdate, mDuration, callback);
-        } else {
+        // animateCamera / easeCamera only allows positive duration
+        if (mDuration == 0 || mCameraMode == CameraMode.NONE) {
             map.moveCamera(mCameraUpdate, callback);
+            return;
+        }
+
+        // On iOS a duration of -1 means default or dynamic duration (based on flight-path length)
+        // On Android we can fallback to Mapbox's default duration as there is no such API
+        int duration = mDuration < 0 ? MapboxConstants.ANIMATION_DURATION : mDuration;
+
+        if (mCameraMode == CameraMode.FLIGHT) {
+            map.animateCamera(mCameraUpdate, duration, callback);
+        } else if (mCameraMode == CameraMode.EASE) {
+            map.easeCamera(mCameraUpdate, duration, callback);
         }
     }
 
