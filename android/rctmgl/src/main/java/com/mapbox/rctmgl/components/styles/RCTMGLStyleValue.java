@@ -45,8 +45,13 @@ public class RCTMGLStyleValue {
                 if (map.getMap("scale") != null) {
                     imageScale = map.getMap("scale").getDouble("value");
                 }
-            } else {
+            } else if ("string".equals(mPayload.getString("type"))) {
                 imageURI = mPayload.getString("value");
+                if (isTokenizedValue(mPayload.getString("value"))) {
+                    imageURI = null;
+                }
+            } else {
+                imageURI = null;
             }
             isAddImage = imageURI != null;
             return;
@@ -63,6 +68,10 @@ public class RCTMGLStyleValue {
                 }
             }
         }
+    }
+
+    private boolean isTokenizedValue(String value) {
+        return (value.startsWith("{") && value.endsWith("}"));
     }
 
     public String getType() {
