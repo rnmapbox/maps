@@ -53,21 +53,11 @@
     if (args[@"bounds"]) {
         stop.bounds = [RCTMGLUtils fromFeatureCollection:args[@"bounds"]];
         
-        if (args[@"boundsPaddingLeft"]) {
-            stop.boundsPaddingLeft = args[@"boundsPaddingLeft"];
-        }
-        
-        if (args[@"boundsPaddingRight"]) {
-            stop.boundsPaddingRight = args[@"boundsPaddingRight"];
-        }
-        
-        if (args[@"boundsPaddingTop"]) {
-            stop.boundsPaddingTop = args[@"boundsPaddingTop"];
-        }
-        
-        if (args[@"boundsPaddingBottom"]) {
-            stop.boundsPaddingBottom = args[@"boundsPaddingBottom"];
-        }
+        CGFloat paddingTop = args[@"boundsPaddingTop"] ? [args[@"boundsPaddingTop"] floatValue] : 0.0;
+        CGFloat paddingRight = args[@"boundsPaddingRight"] ? [args[@"boundsPaddingRight"] floatValue] : 0.0;
+        CGFloat paddingBottom = args[@"boundsPaddingBottom"] ? [args[@"boundsPaddingBottom"] floatValue] : 0.0;
+        CGFloat paddingLeft = args[@"boundsPaddingLeft"] ? [args[@"boundsPaddingLeft"] floatValue] : 0.0;
+        stop.boundsPadding = UIEdgeInsetsMake(paddingTop, paddingLeft, paddingBottom, paddingRight);
     }
     
     NSTimeInterval duration = 2.0;
