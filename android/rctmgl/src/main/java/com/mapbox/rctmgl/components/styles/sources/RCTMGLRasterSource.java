@@ -28,6 +28,7 @@ public class RCTMGLRasterSource extends RCTSource<RasterSource> {
 
     @Override
     public RasterSource makeSource() {
+        if (mTileSize == null) return new RasterSource(mID, buildTileset());
         return new RasterSource(mID, buildTileset(), mTileSize);
     }
 
