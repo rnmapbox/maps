@@ -231,7 +231,7 @@ class Camera extends NativeBridgeComponent {
       cB.sw[0] !== nB.sw[0] ||
       cB.sw[1] !== nB.sw[1] ||
       cB.paddingTop != nB.paddingTop ||
-      cB.paddingLeft != nB.pddingLeft ||
+      cB.paddingLeft != nB.paddingLeft ||
       cB.paddingRight != nB.paddingRight ||
       cB.paddingBottom != nB.paddingBottom
     );
