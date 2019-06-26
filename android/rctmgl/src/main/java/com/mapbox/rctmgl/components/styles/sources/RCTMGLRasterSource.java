@@ -28,7 +28,7 @@ public class RCTMGLRasterSource extends RCTSource<RasterSource> {
 
     @Override
     public RasterSource makeSource() {
-        return new RasterSource(mID, buildTileset(), mTileSize);
+        return new RasterSource(mID, buildTileset(), mTileSize == null ? 256 : mTileSize);
     }
 
     public void setURL(String url) {
