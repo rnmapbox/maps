@@ -57,4 +57,10 @@ abstract public class AbstractEvent implements IEvent {
         map.putMap("payload", payloadClone);
         return map;
     }
+
+    @Override
+    public boolean canCoalesce() {
+        // default behavior of com.facebook.react.uimanager.events.Event
+        return true;
+    }
 }

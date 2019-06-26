@@ -32,4 +32,10 @@ public class AndroidCallbackEvent extends AbstractEvent {
     public WritableMap getPayload() {
         return mPayload;
     }
+
+    @Override
+    public boolean canCoalesce() {
+        // never coalesce callbacks into a single event
+        return false;
+    }
 }
