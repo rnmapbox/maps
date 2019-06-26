@@ -72,14 +72,15 @@
     }
 }
 
-- (void)setFilter:(NSArray<NSDictionary<NSString *,id> *> *)filter
+- (void)setFilter:(NSArray *)filter
 {
     _filter = filter;
     
     if (_styleLayer != nil) {
         NSPredicate *predicate = [self buildFilters];
-        
-        [self updateFilter:predicate];
+        if (predicate) {
+            [self updateFilter:predicate];
+        }
     }
 }
 
@@ -222,7 +223,7 @@
 
 - (NSPredicate*)buildFilters
 {
-    return [FilterParser parse:_filter];
+    return _filter ? [FilterParser parse:_filter] : nil;
 }
 
 - (BOOL)_hasInitialized

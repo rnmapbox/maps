@@ -94,7 +94,9 @@
 - (void)addedToMap
 {
     NSPredicate *filter = [self buildFilters];
-    [self updateFilter:filter];
+    if (filter != nil) {
+        [self updateFilter:filter];
+    }
     
     if (_snapshot == YES) {
         UIImage *image = [self _createViewSnapshot];
