@@ -28,6 +28,8 @@ export const NATIVE_MODULE_NAME = 'RCTMGLMapView';
 
 export const ANDROID_TEXTURE_NATIVE_MODULE_NAME = 'RCTMGLAndroidTextureMapView';
 
+let callbackIncrement = 0;
+
 const styles = StyleSheet.create({
   matchParent: {flex: 1},
 });
@@ -479,7 +481,8 @@ class MapView extends NativeBridgeComponent {
 
     if (isAndroid()) {
       return new Promise(resolve => {
-        const callbackID = `${Date.now()}`;
+        callbackIncrement++;
+        const callbackID = `${methodName}_${callbackIncrement}`;
         this._addAddAndroidCallback(callbackID, resolve);
         args.unshift(callbackID);
         runNativeCommand(NATIVE_MODULE_NAME, methodName, this._nativeRef, args);
