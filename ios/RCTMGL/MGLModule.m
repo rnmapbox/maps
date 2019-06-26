@@ -253,7 +253,7 @@ RCT_EXPORT_METHOD(getAccessToken:(RCTPromiseResolveBlock)resolve rejecter:(RCTPr
     reject(@"missing_access_token", @"No access token has been set", nil);
 }
 
-RCT_EXPORT_METHOD(setTelemetryEnabled:(BOOL *)telemetryEnabled)
+RCT_EXPORT_METHOD(setTelemetryEnabled:(BOOL)telemetryEnabled)
 {
     [[NSUserDefaults standardUserDefaults] setBool:telemetryEnabled
                                             forKey:@"MGLMapboxMetricsEnabled"];
