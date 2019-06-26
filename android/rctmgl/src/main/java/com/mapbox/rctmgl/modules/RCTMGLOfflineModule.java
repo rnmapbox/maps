@@ -199,6 +199,9 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
                     return;
                 }
 
+                // stop download before deleting (https://github.com/mapbox/mapbox-gl-native/issues/12382#issuecomment-431055103)
+                region.setDownloadState(INACTIVE_REGION_DOWNLOAD_STATE);
+
                 region.delete(new OfflineRegion.OfflineRegionDeleteCallback() {
                     @Override
                     public void onDelete() {

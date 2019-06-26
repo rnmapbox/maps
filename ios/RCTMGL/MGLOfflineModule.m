@@ -153,7 +153,11 @@ RCT_EXPORT_METHOD(deletePack:(NSString *)name
         resolve(nil);
         return;
     }
-    
+    if (pack.state == MGLOfflinePackStateInvalid) {
+        NSError *error = [NSError errorWithDomain:MGLErrorDomain code:1 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Pack has already been deleted", nil)}];
+        reject(@"deletePack", error.description, error);
+        return;
+    }
     [[MGLOfflineStorage sharedOfflineStorage] removePack:pack withCompletionHandler:^(NSError *error) {
         if (error != nil) {
             reject(@"deletePack", error.description, error);
@@ -216,7 +220,11 @@ RCT_EXPORT_METHOD(setProgressEventThrottle:(nonnull NSNumber *)throttleValue)
 - (void)offlinePackProgressDidChange:(NSNotification *)notification
 {
     MGLOfflinePack *pack = notification.object;
-    
+  
+    if (pack.state == MGLOfflinePackStateInvalid) {
+        return; // Avoid invalid offline pack exception
+    }
+  
     if ([self _shouldSendProgressEvent:[self _getCurrentTimestamp] pack:pack]) {
         NSDictionary *metadata = [self _unarchiveMetadata:pack];
         RCTMGLEvent *event = [self _makeProgressEvent:metadata[@"name"] pack:pack];
@@ -230,6 +238,9 @@ RCT_EXPORT_METHOD(setProgressEventThrottle:(nonnull NSNumber *)throttleValue)
 - (void)offlinePackDidReceiveError:(NSNotification *)notification
 {
     MGLOfflinePack *pack = notification.object;
+    if (pack.state == MGLOfflinePackStateInvalid) {
+        return; // Avoid invalid offline pack exception
+    }
     NSDictionary *metadata = [self _unarchiveMetadata:pack];
     
     NSString *name = metadata[@"name"];
