@@ -22,7 +22,7 @@
 @property (nonatomic, strong) MGLStyle *style;
 @property (nonatomic, weak) RCTMGLMapView* map;
 @property (nonatomic, strong) NSDictionary *reactStyle;
-@property (nonatomic, strong) NSArray<NSDictionary<NSString *, id> *> *filter;
+@property (nonatomic, strong) NSArray *filter;
 
 @property (nonatomic, copy) NSString *id;
 @property (nonatomic, copy) NSString *sourceID;
