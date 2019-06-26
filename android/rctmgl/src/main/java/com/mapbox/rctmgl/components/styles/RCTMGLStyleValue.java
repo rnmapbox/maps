@@ -24,10 +24,6 @@ public class RCTMGLStyleValue {
     private Expression mExpression;
     private ReadableMap mPayload;
 
-    private String imageURI = "";
-    private boolean isAddImage;
-    private Double imageScale = 1.0;
-
     public static final int InterpolationModeExponential = 100;
     public static final int InterpolationModeInterval = 101;
     public static final int InterpolationModeCategorical = 102;
@@ -36,21 +32,6 @@ public class RCTMGLStyleValue {
     public RCTMGLStyleValue(@NonNull ReadableMap config) {
         mType = config.getString("styletype");
         mPayload = config.getMap("stylevalue");
-
-        if ("image".equals(mType)) {
-            imageScale = 1.0;
-            if ("hashmap".equals(mPayload.getString("type"))) {
-                ReadableMap map = getMap();
-                imageURI = map.getMap("uri").getString("value");
-                if (map.getMap("scale") != null) {
-                    imageScale = map.getMap("scale").getDouble("value");
-                }
-            } else {
-                imageURI = mPayload.getString("value");
-            }
-            isAddImage = imageURI != null;
-            return;
-        }
 
         Dynamic dynamic = mPayload.getDynamic("value");
         if (dynamic.getType().equals(ReadableType.Array)) {
@@ -152,18 +133,6 @@ public class RCTMGLStyleValue {
 
     public boolean isExpression() {
         return isExpression;
-    }
-
-    public boolean shouldAddImage() {
-        return isAddImage;
-    }
-
-    public String getImageURI() {
-        return imageURI;
-    }
-
-    public double getImageScale() {
-        return imageScale;
     }
 
     public TransitionOptions getTransition() {

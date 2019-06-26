@@ -185,11 +185,7 @@ global.androidGetConfigType = function(androidType, prop) {
     case 'String[]':
       return 'styleValue.getStringArray(VALUE_KEY)';
     default:
-      if (prop && prop.image) {
-        return 'styleValue.getImageURI()';
-      } else {
-        return 'styleValue.getString(VALUE_KEY)';
-      }
+      return 'styleValue.getString(VALUE_KEY)';
   }
 };
 

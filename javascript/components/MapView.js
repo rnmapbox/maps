@@ -16,6 +16,7 @@ import {
   toJSONString,
   isAndroid,
   viewPropTypes,
+  resolveImagePath
 } from '../utils';
 import {getFilter} from '../utils/filterUtils';
 
@@ -120,6 +121,13 @@ class MapView extends NativeBridgeComponent {
      * Enable/Disable the compass from appearing on the map
      */
     compassEnabled: PropTypes.bool,
+
+    /**
+     * Define extra images that can be referenced by name in the style JSON (keys are names and values are URIs or the image identifiers that RN returns when importing a static image via `import` or `require()`)
+     */
+    extraSprites: PropTypes.objectOf(
+      PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
 
     /**
      * [Android only] Enable/Disable use of GLSurfaceView insted of TextureView.
@@ -227,6 +235,7 @@ class MapView extends NativeBridgeComponent {
     logoEnabled: true,
     styleURL: MapboxGL.StyleURL.Street,
     surfaceView: false,
+    extraSprites: null,
     regionWillChangeDebounceTime: 10,
     regionDidChangeDebounceTime: 500,
   };
@@ -686,6 +695,26 @@ class MapView extends NativeBridgeComponent {
     return this.props.contentInset;
   }
 
+  _getExtraSprites() {
+    if (!this.props.extraSprites) {
+      return null;
+    }
+    // cache value of object with numeric uris resolved so react doesn't update that prop every time the component renders
+    if (this.props.extraSprites === this._lastExtraSprites) {
+      return this._resolvedExtraSprites;
+    }
+    this._lastExtraSprites = this.props.extraSprites;
+    this._resolvedExtraSprites = {};
+
+    Object.keys(this.props.extraSprites).forEach(name => {
+      const uri = this.props.extraSprites[name];
+      this._resolvedExtraSprites[name] = isNumber(uri)
+        ? resolveImagePath(uri)
+        : uri;
+    });
+    return this._resolvedExtraSprites;
+  }
+
   async _setNativeRef(nativeRef) {
     this._nativeRef = nativeRef;
 
@@ -712,6 +741,7 @@ class MapView extends NativeBridgeComponent {
     const props = {
       ...this.props,
       contentInset: this._getContentInset(),
+      extraSprites: this._getExtraSprites(),
       style: styles.matchParent,
     };
 

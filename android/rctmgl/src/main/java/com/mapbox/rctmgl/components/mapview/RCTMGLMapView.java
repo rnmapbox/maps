@@ -17,6 +17,7 @@ import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
@@ -74,6 +75,7 @@ import com.mapbox.rctmgl.utils.BitmapUtils;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.rctmgl.utils.GeoViewport;
 import com.mapbox.rctmgl.utils.SimpleEventCallback;
+import com.mapbox.rctmgl.utils.Sprite;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -140,6 +142,8 @@ public class RCTMGLMapView extends MapView implements
 
     private HashSet<String> mHandledMapChangedEvents = null;
 
+    final private Map<String, Sprite> mExtraSprites;
+
     public RCTMGLMapView(Context context, RCTMGLMapViewManager manager, MapboxMapOptions options) {
         super(context, options);
 
@@ -156,6 +160,7 @@ public class RCTMGLMapView extends MapView implements
         mPointAnnotations = new HashMap<>();
         mQueuedFeatures = new ArrayList<>();
         mFeatures = new ArrayList<>();
+        mExtraSprites = new HashMap<>();
 
         mHandler = new Handler();
 
@@ -391,7 +396,16 @@ public class RCTMGLMapView extends MapView implements
     public void onMapReady(final MapboxMap mapboxMap) {
         mMap = mapboxMap;
 
-        mMap.setStyle(new Style.Builder().fromUrl(mStyleURL));
+        mMap.setStyle(new Style.Builder().fromUrl(mStyleURL), new Style.OnStyleLoaded() {
+            @Override
+            public void onStyleLoaded(@NonNull Style style) {
+                synchronized (mExtraSprites) {
+                    for (Map.Entry<String, Sprite> entry : mExtraSprites.entrySet()) {
+                        entry.getValue().load(getContext(), mMap);
+                    }
+                }
+            }
+        });
 
         reflow(); // the internal widgets(compass, attribution, etc) need this to position themselves correctly
 
@@ -444,7 +458,6 @@ public class RCTMGLMapView extends MapView implements
                 handleMapChangedEvent(EventTypes.REGION_WILL_CHANGE);
             }
         });
-
 
         /*mLocalizationPlugin = new LocalizationPlugin(this, mMap);
         if (mLocalizeLabels) {
@@ -803,6 +816,25 @@ public class RCTMGLMapView extends MapView implements
     public void setReactAttributionEnabled(boolean attributionEnabled) {
         mAttributionEnabled = attributionEnabled;
         updateUISettings();
+    }
+
+    public void setReactExtraSprites(ReadableMap extraSprites) {
+        if (extraSprites == null) return;
+        ReadableMapKeySetIterator iterator = extraSprites.keySetIterator();
+
+        synchronized (mExtraSprites) {
+            while (iterator.hasNextKey()) {
+                String key = iterator.nextKey();
+                if (!mExtraSprites.containsKey(key)) {
+                    Sprite sprite = new Sprite(key, extraSprites.getString(key));
+                    mExtraSprites.put(key, sprite);
+                    if (mMap != null && mMap.getStyle() != null) {
+                        sprite.load(getContext(), mMap);
+                    }
+                    // if style not yet loaded, sprite.load is called from the onStyleLoaded callback in onMapReady
+                }
+            }
+        }
     }
 
     //endregion

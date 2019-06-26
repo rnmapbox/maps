@@ -15,9 +15,6 @@
 @property (nonatomic, strong) NSDictionary *rawStyleValue;
 @property (nonatomic, readonly) NSExpression *mglStyleValue;
 
-- (BOOL)shouldAddImage;
-- (NSString *)getImageURI;
-- (double)getImageScale;
 - (MGLTransition)getTransition;
 - (NSExpression *)getSphericalPosition;
 - (BOOL)isVisible;

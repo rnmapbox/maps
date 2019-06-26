@@ -10,6 +10,7 @@
 | contentInset | `union` | `none` | `false` | The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport. |
 | style | `any` | `none` | `false` | Style for wrapping React Native View |
 | styleURL | `string` | `MapboxGL.StyleURL.Street` | `false` | Style URL for map |
+| extraSprites | `object` | `null` | `false` | Define extra images that can be referenced by name in the style JSON (keys are names and values are URIs or the image identifiers that RN returns when importing a static image via `import` or `require()`) | 
 | localizeLabels | `bool` | `false` | `false` | Automatically change the language of the map labels to the system’s preferred language,<br/>this is not something that can be toggled on/off |
 | zoomEnabled | `bool` | `none` | `false` | Enable/Disable zoom on the map |
 | scrollEnabled | `bool` | `true` | `false` | Enable/Disable scroll on the map |

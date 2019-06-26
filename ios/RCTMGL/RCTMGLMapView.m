@@ -12,6 +12,9 @@
 #import "RNMBImageUtils.h"
 #import "UIView+React.h"
 
+@implementation RCTMGLSprite
+@end
+
 @implementation RCTMGLMapView
 {
     BOOL _pendingInitialLayout;
@@ -32,6 +35,7 @@ static double const M2PI = M_PI * 2;
         _pointAnnotations = [[NSMutableArray alloc] init];
         _reactSubviews = [[NSMutableArray alloc] init];
         _layerWaiters = [[NSMutableDictionary alloc] init];
+        _extraSprites = [[NSMutableDictionary alloc] init];
     }
     return self;
 }

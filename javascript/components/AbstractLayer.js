@@ -1,7 +1,6 @@
 /* eslint react/prop-types:0  */
 import React from 'react';
 import {processColor} from 'react-native';
-import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 import {getFilter} from '../utils/filterUtils';
 import {getStyleType} from '../utils/styleMap';
@@ -43,8 +42,6 @@ class AbstractLayer extends React.PureComponent {
 
       if (styleType === 'color' && typeof rawStyle === 'string') {
         rawStyle = processColor(rawStyle);
-      } else if (styleType === 'image' && typeof rawStyle === 'number') {
-        rawStyle = resolveAssetSource(rawStyle) || {};
       }
 
       const bridgeValue = new BridgeValue(rawStyle);

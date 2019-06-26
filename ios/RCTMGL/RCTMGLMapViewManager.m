@@ -82,6 +82,32 @@ RCT_REMAP_VIEW_PROPERTY(styleURL, reactStyleURL, NSString)
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onLongPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onMapChange, RCTBubblingEventBlock)
+RCT_CUSTOM_VIEW_PROPERTY(extraSprites, NSDictionary, RCTMGLMapView)
+{
+  if (!json) return;
+  @synchronized (view.extraSprites) {
+    for (NSString *name in json) {
+      RCTMGLSprite *sprite = view.extraSprites[name];
+      if (!sprite) {
+        sprite = [[RCTMGLSprite alloc] init];
+        sprite.name = name;
+        sprite.url = json[name];
+        view.extraSprites[name] = sprite;
+        [RCTMGLUtils fetchImage:self.bridge url:sprite.url scale:[[UIScreen mainScreen] scale] callback:^(NSError *error, UIImage *image) {
+          if (error) {
+            RCTLogError(@"Error loading extra image: %@", name);
+          } else if (image != nil) {
+            sprite.image = image;
+            dispatch_async(dispatch_get_main_queue(), ^{
+              if (view.style) [view.style setImage:image forName:sprite.name];
+              // if style is not loaded yet, the image gets added in didFinishLoadingStyle
+            });
+          }
+        }];
+      }
+    }
+  }
+}
 
 #pragma mark - React Methods
 
@@ -202,7 +228,7 @@ RCT_EXPORT_METHOD(getCenter:(nonnull NSNumber*)reactTag
 
 RCT_EXPORT_METHOD(queryRenderedFeaturesAtPoint:(nonnull NSNumber*)reactTag
                   atPoint:(NSArray<NSNumber*>*)point
-                  withFilter:(NSArray<NSDictionary<NSString *, id> *> *)filter
+                  withFilter:(NSArray *)filter
                   withLayerIDs:(NSArray<NSString*>*)layerIDs
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
@@ -239,7 +265,7 @@ RCT_EXPORT_METHOD(queryRenderedFeaturesAtPoint:(nonnull NSNumber*)reactTag
 
 RCT_EXPORT_METHOD(queryRenderedFeaturesInRect:(nonnull NSNumber*)reactTag
                   withBBox:(NSArray<NSNumber*>*)bbox
-                  withFilter:(NSArray<NSDictionary<NSString *, id> *> *)filter
+                  withFilter:(NSArray *)filter
                   withLayerIDs:(NSArray<NSString*>*)layerIDs
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
@@ -500,6 +526,15 @@ RCT_EXPORT_METHOD(showAttribution:(nonnull NSNumber *)reactTag
     
     if (reactMapView.light != nil) {
         reactMapView.light.map = reactMapView;
+    }
+  
+    @synchronized (reactMapView.extraSprites) {
+        for (NSString *name in reactMapView.extraSprites) {
+            RCTMGLSprite *sprite = reactMapView.extraSprites[name];
+            if (sprite.image) {
+                [style setImage:sprite.image forName:sprite.name];
+            }
+       }
     }
     
     [self reactMapDidChange:reactMapView eventType:RCT_MAPBOX_DID_FINISH_LOADING_STYLE];

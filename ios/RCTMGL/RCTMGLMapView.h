@@ -24,6 +24,14 @@
 
 typedef void (^FoundLayerBlock) (MGLStyleLayer* layer);
 
+@interface RCTMGLSprite : NSObject
+
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *url;
+@property (nonatomic, strong) UIImage *image;
+
+@end
+
 @interface RCTMGLMapView : MGLMapView<RCTInvalidating>
 
 @property (nonatomic, strong) CameraUpdateQueue *cameraUpdateQueue;
@@ -33,6 +41,7 @@ typedef void (^FoundLayerBlock) (MGLStyleLayer* layer);
 @property (nonatomic, strong) NSMutableArray<RCTMGLPointAnnotation*> *pointAnnotations;
 @property (nonatomic, strong) RCTMGLLight *light;
 @property (nonatomic, copy) NSArray<NSNumber *> *reactContentInset;
+@property (nonatomic, strong, readonly) NSMutableDictionary<NSString*, RCTMGLSprite*> *extraSprites;
 
 @property (nonatomic, strong) NSMutableDictionary<NSString*, NSMutableArray<FoundLayerBlock>*> *layerWaiters;
 

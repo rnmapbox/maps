@@ -17,13 +17,11 @@ import com.mapbox.mapboxsdk.style.layers.HillshadeLayer;
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
 import com.mapbox.mapboxsdk.style.light.Light;
 import com.mapbox.mapboxsdk.style.light.Position;
-import com.mapbox.rctmgl.utils.DownloadMapImageTask;
 
 import java.util.List;
 
 public class RCTMGLStyleFactory {
     public static final String VALUE_KEY = "value";
-    public static final String SHOULD_ADD_IMAGE_KEY = "shouldAddImage";
 
     public static void setFillLayerStyle(final FillLayer layer, RCTMGLStyle style) {
       List<String> styleKeys = style.getAllStyleKeys();
@@ -70,12 +68,7 @@ public class RCTMGLStyleFactory {
               RCTMGLStyleFactory.setFillTranslateAnchor(layer, styleValue);
               break;
             case "fillPattern":
-              style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
-                  @Override
-                  public void onAllImagesLoaded() {
-                      RCTMGLStyleFactory.setFillPattern(layer, styleValue);
-                  }
-              });
+              RCTMGLStyleFactory.setFillPattern(layer, styleValue);
               break;
             case "fillPatternTransition":
               RCTMGLStyleFactory.setFillPatternTransition(layer, styleValue);
@@ -161,12 +154,7 @@ public class RCTMGLStyleFactory {
               RCTMGLStyleFactory.setLineDasharrayTransition(layer, styleValue);
               break;
             case "linePattern":
-              style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
-                  @Override
-                  public void onAllImagesLoaded() {
-                      RCTMGLStyleFactory.setLinePattern(layer, styleValue);
-                  }
-              });
+              RCTMGLStyleFactory.setLinePattern(layer, styleValue);
               break;
             case "linePatternTransition":
               RCTMGLStyleFactory.setLinePatternTransition(layer, styleValue);
@@ -222,12 +210,7 @@ public class RCTMGLStyleFactory {
               RCTMGLStyleFactory.setIconTextFitPadding(layer, styleValue);
               break;
             case "iconImage":
-              style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
-                  @Override
-                  public void onAllImagesLoaded() {
-                      RCTMGLStyleFactory.setIconImage(layer, styleValue);
-                  }
-              });
+              RCTMGLStyleFactory.setIconImage(layer, styleValue);
               break;
             case "iconRotate":
               RCTMGLStyleFactory.setIconRotate(layer, styleValue);
@@ -539,12 +522,7 @@ public class RCTMGLStyleFactory {
               RCTMGLStyleFactory.setFillExtrusionTranslateAnchor(layer, styleValue);
               break;
             case "fillExtrusionPattern":
-              style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
-                  @Override
-                  public void onAllImagesLoaded() {
-                      RCTMGLStyleFactory.setFillExtrusionPattern(layer, styleValue);
-                  }
-              });
+              RCTMGLStyleFactory.setFillExtrusionPattern(layer, styleValue);
               break;
             case "fillExtrusionPatternTransition":
               RCTMGLStyleFactory.setFillExtrusionPatternTransition(layer, styleValue);
@@ -691,12 +669,7 @@ public class RCTMGLStyleFactory {
               RCTMGLStyleFactory.setBackgroundColorTransition(layer, styleValue);
               break;
             case "backgroundPattern":
-              style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
-                  @Override
-                  public void onAllImagesLoaded() {
-                      RCTMGLStyleFactory.setBackgroundPattern(layer, styleValue);
-                  }
-              });
+              RCTMGLStyleFactory.setBackgroundPattern(layer, styleValue);
               break;
             case "backgroundPatternTransition":
               RCTMGLStyleFactory.setBackgroundPatternTransition(layer, styleValue);
@@ -834,7 +807,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.fillPattern(styleValue.getExpression()));
       } else {
-        layer.setProperties(PropertyFactory.fillPattern(styleValue.getImageURI()));
+        layer.setProperties(PropertyFactory.fillPattern(styleValue.getString(VALUE_KEY)));
       }
     }
 
@@ -1022,7 +995,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.linePattern(styleValue.getExpression()));
       } else {
-        layer.setProperties(PropertyFactory.linePattern(styleValue.getImageURI()));
+        layer.setProperties(PropertyFactory.linePattern(styleValue.getString(VALUE_KEY)));
       }
     }
 
@@ -1134,7 +1107,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.iconImage(styleValue.getExpression()));
       } else {
-        layer.setProperties(PropertyFactory.iconImage(styleValue.getImageURI()));
+        layer.setProperties(PropertyFactory.iconImage(styleValue.getString(VALUE_KEY)));
       }
     }
 
@@ -1838,7 +1811,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.fillExtrusionPattern(styleValue.getExpression()));
       } else {
-        layer.setProperties(PropertyFactory.fillExtrusionPattern(styleValue.getImageURI()));
+        layer.setProperties(PropertyFactory.fillExtrusionPattern(styleValue.getString(VALUE_KEY)));
       }
     }
 
@@ -2106,7 +2079,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.backgroundPattern(styleValue.getExpression()));
       } else {
-        layer.setProperties(PropertyFactory.backgroundPattern(styleValue.getImageURI()));
+        layer.setProperties(PropertyFactory.backgroundPattern(styleValue.getString(VALUE_KEY)));
       }
     }
 

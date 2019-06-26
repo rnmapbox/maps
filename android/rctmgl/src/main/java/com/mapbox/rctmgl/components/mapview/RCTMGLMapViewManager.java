@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -161,6 +162,12 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     public void setContentInset(RCTMGLMapView mapView, ReadableArray array) {
         mapView.setReactContentInset(array);
     }
+
+    @ReactProp(name="extraSprites")
+    public void setExtraSprites(RCTMGLMapView mapView, ReadableMap extraSprites) {
+        mapView.setReactExtraSprites(extraSprites);
+    }
+
 
     //endregion
 

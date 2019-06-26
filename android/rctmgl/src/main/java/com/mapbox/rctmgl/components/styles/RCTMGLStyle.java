@@ -58,26 +58,4 @@ public class RCTMGLStyle {
 
         return new RCTMGLStyleValue(styleValueConfig);
     }
-
-    public void addImage(RCTMGLStyleValue styleValue) {
-        addImage(styleValue, null);
-    }
-
-    public ImageEntry imageEntry(RCTMGLStyleValue styleValue) {
-        return new ImageEntry(styleValue.getImageURI(), styleValue.getImageScale());
-    }
-
-    public void addImage(RCTMGLStyleValue styleValue, DownloadMapImageTask.OnAllImagesLoaded callback) {
-        if (!styleValue.shouldAddImage()) {
-            if (callback != null) {
-                callback.onAllImagesLoaded();
-            }
-            return;
-        }
-
-        String uriStr = styleValue.getImageURI();
-        Map.Entry[] images = new Map.Entry[]{ new AbstractMap.SimpleEntry(uriStr, imageEntry(styleValue)) };
-        DownloadMapImageTask task = new DownloadMapImageTask(mContext, mMap, callback);
-        task.execute(images);
-    }
 }

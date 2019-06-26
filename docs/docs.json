@@ -2572,6 +2572,13 @@
         "description": "Style URL for map"
       },
       {
+        "name": "extraSprites",
+        "required": false,
+        "type": "object",
+        "default": "null",
+        "description": "Define extra images that can be referenced by name in the style JSON (keys are names and values are URIs or the image identifiers that RN returns when importing a static image via `import` or `require()`)"
+      },
+      {
         "name": "localizeLabels",
         "required": false,
         "type": "bool",

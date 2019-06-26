@@ -53,20 +53,7 @@
     } else if ([prop isEqualToString:@"fillTranslateAnchor"]) {
       [self setFillTranslateAnchor:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"fillPattern"]) {
-      if (![styleValue shouldAddImage]) {
-        [self setFillPattern:layer withReactStyleValue:styleValue];
-      } else {
-        NSString *imageURI = [styleValue getImageURI];
-
-        [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
-          if (image != nil) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-              [_style setImage:image forName:imageURI];
-              [self setFillPattern:layer withReactStyleValue:styleValue];
-            });
-          }
-        }];
-      }
+      [self setFillPattern:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"fillPatternTransition"]) {
       [self setFillPatternTransition:layer withReactStyleValue:styleValue];
     } else {
@@ -135,20 +122,7 @@
     } else if ([prop isEqualToString:@"lineDasharrayTransition"]) {
       [self setLineDasharrayTransition:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"linePattern"]) {
-      if (![styleValue shouldAddImage]) {
-        [self setLinePattern:layer withReactStyleValue:styleValue];
-      } else {
-        NSString *imageURI = [styleValue getImageURI];
-
-        [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
-          if (image != nil) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-              [_style setImage:image forName:imageURI];
-              [self setLinePattern:layer withReactStyleValue:styleValue];
-            });
-          }
-        }];
-      }
+      [self setLinePattern:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"linePatternTransition"]) {
       [self setLinePatternTransition:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"lineGradient"]) {
@@ -197,20 +171,7 @@
     } else if ([prop isEqualToString:@"iconTextFitPadding"]) {
       [self setIconTextFitPadding:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"iconImage"]) {
-      if (![styleValue shouldAddImage]) {
-        [self setIconImage:layer withReactStyleValue:styleValue];
-      } else {
-        NSString *imageURI = [styleValue getImageURI];
-
-        [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
-          if (image != nil) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-              [_style setImage:image forName:imageURI];
-              [self setIconImage:layer withReactStyleValue:styleValue];
-            });
-          }
-        }];
-      }
+      [self setIconImage:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"iconRotate"]) {
       [self setIconRotate:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"iconPadding"]) {
@@ -453,20 +414,7 @@
     } else if ([prop isEqualToString:@"fillExtrusionTranslateAnchor"]) {
       [self setFillExtrusionTranslateAnchor:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"fillExtrusionPattern"]) {
-      if (![styleValue shouldAddImage]) {
-        [self setFillExtrusionPattern:layer withReactStyleValue:styleValue];
-      } else {
-        NSString *imageURI = [styleValue getImageURI];
-
-        [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
-          if (image != nil) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-              [_style setImage:image forName:imageURI];
-              [self setFillExtrusionPattern:layer withReactStyleValue:styleValue];
-            });
-          }
-        }];
-      }
+      [self setFillExtrusionPattern:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"fillExtrusionPatternTransition"]) {
       [self setFillExtrusionPatternTransition:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"fillExtrusionHeight"]) {
@@ -599,20 +547,7 @@
     } else if ([prop isEqualToString:@"backgroundColorTransition"]) {
       [self setBackgroundColorTransition:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"backgroundPattern"]) {
-      if (![styleValue shouldAddImage]) {
-        [self setBackgroundPattern:layer withReactStyleValue:styleValue];
-      } else {
-        NSString *imageURI = [styleValue getImageURI];
-
-        [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
-          if (image != nil) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-              [_style setImage:image forName:imageURI];
-              [self setBackgroundPattern:layer withReactStyleValue:styleValue];
-            });
-          }
-        }];
-      }
+      [self setBackgroundPattern:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"backgroundPatternTransition"]) {
       [self setBackgroundPatternTransition:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"backgroundOpacity"]) {
