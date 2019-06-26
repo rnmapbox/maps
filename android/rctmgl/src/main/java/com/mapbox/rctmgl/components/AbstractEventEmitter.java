@@ -44,6 +44,10 @@ abstract public class AbstractEventEmitter<T extends ViewGroup> extends ViewGrou
 
         mRateLimitedEvents.put(eventCacheKey, System.currentTimeMillis());
         mEventDispatcher.dispatchEvent(new AbstractEvent(event.getID(), event.getKey(), event.toJSON()));
+        RCTEventEmitter emitter = EventEmitter.getViewEmitter(mRCTAppContext);
+        if (emitter != null) {
+            emitter.receiveEvent(event.getID(), event.getKey(), event.toJSON());
+        }
     }
 
     @Override
