@@ -30,6 +30,7 @@ declare namespace MapboxGL {
     function setAccessToken(accessToken: string): void;
     function getAccessToken(): Promise<void>;
     function setTelemetryEnabled(telemetryEnabled: boolean): void;
+    function requestAndroidLocationPermissions(): Promise<boolean>;
 
     /**
      * Components
@@ -40,20 +41,44 @@ declare namespace MapboxGL {
         getVisibleBounds(): Promise<void>;
         queryRenderedFeaturesAtPoint(coordinate: Array<number>, filter?: Array<string>, layerIds?: Array<string>): Promise<void>;
         queryRenderedFeaturesInRect(coordinate: Array<number>, filter?: Array<string>, layerIds?: Array<string>): Promise<void>;
-        fitBounds(northEastCoordinates: Array<number>, southWestCoordinates: Array<number>, padding?: number, duration?: number): void;
-        flyTo(coordinates: Array<number>, duration?: number): void;
-        moveTo(coordinates: Array<number>, duration?: number): void;
-        zoomTo(zoomLevel: number, duration?: number): void;
-        setCamera(config: any): void;
         takeSnap(writeToDisk: boolean): Promise<string>;
         getZoom(): Promise<number>;
         getCenter(): Promise<Array<number>>;
     }
 
+    class Camera extends Component<CameraProps> {
+        fitBounds(
+            northEastCoordinates: Array<number>,
+            southWestCoordinates: Array<number>,
+            padding?: number,
+            duration?: number
+        ): void
+        flyTo(coordinates: Array<number>, duration?: number): void
+        moveTo(coordinates: Array<number>, duration?: number): void;
+        zoomTo(zoomLevel: number, duration?: number): void;
+        setCamera(config: any): void
+    }
+
+    class UserLocation extends Component<UserLocationProps> { }
+
+    interface Location {
+        coords: Coordinates;
+        timestamp?: number;
+    }
+
+    interface Coordinates {
+        heading?: number;
+        speed?: number;
+        latitude: number;
+        longitude: number;
+        accuracy?: number;
+        altitude?: number;
+    }
+
     class Light extends Component<LightProps> { }
 
     class StyleSheet extends Component {
-        static create<T extends NamedStyles<T> | NamedStyles<any>>(styles: T): void;        
+        static create<T extends NamedStyles<T> | NamedStyles<any>>(styles: T): void;
         camera(stops: {[key: number]: string}, interpolationMode?: InterpolationMode): void;
         source(stops: {[key: number]: string}, attributeName: string, interpolationMode?: InterpolationMode): void;
         composite(stops: {[key: number]: string}, attributeName: string, interpolationMode?: InterpolationMode): void;
@@ -136,18 +161,11 @@ declare namespace MapboxGL {
 
 interface MapViewProps extends ViewProperties {
     animated?: boolean;
-    centerCoordinate?: Array<number>;
-    showUserLocation?: boolean;
     userTrackingMode?: number;
     userLocationVerticalAlignment?: number;
     contentInset?: Array<number>;
-    heading?: number;
-    pitch?: number;
     style?: any;
-    styleURL?: MapboxGL.StyleURL;
-    zoomLevel?: number;
-    minZoomLevel?: number;
-    maxZoomLevel?: number;
+    styleURL?: string;
     localizeLabels?: boolean;
     zoomEnabled?: boolean;
     scrollEnabled?: boolean;
@@ -177,6 +195,24 @@ interface MapViewProps extends ViewProperties {
     onDidFinishRenderingMapFully?: () => void;
     onDidFinishLoadingStyle?: () => void;
     onUserTrackingModeChange?: () => void;
+}
+
+interface CameraProps {
+    animationDuration?: number;
+    animationMode?: string;
+    centerCoordinate?: Array<number>;
+    heading?: number;
+    pitch?: number;
+    zoomLevel?: number;
+    minZoomLevel?: number;
+    maxZoomLevel?: number;
+}
+
+interface UserLocationProps {
+    animated: boolean
+    visible: boolean
+
+    onUpdate?: (location: MapboxGL.Location) => void;
 }
 
 interface LightStyle {
@@ -361,7 +397,7 @@ interface ShapeSourceProps {
     tolerance?: number;
     images?: any;
     onPress?: () => void;
-    hitbox: any;
+    hitbox?: any;
 }
 
 interface RasterSourceProps {
