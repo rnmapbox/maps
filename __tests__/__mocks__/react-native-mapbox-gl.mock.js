@@ -107,3 +107,9 @@ NativeModules.MGLSnapshotModule = {
     return Promise.resolve('file://test.png');
   },
 };
+
+NativeModules.MGLLocationModule = {
+  getLastKnownLocation: jest.fn(),
+  start: jest.fn(),
+  pause: jest.fn(),
+};
