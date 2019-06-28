@@ -66,7 +66,7 @@
     "eslint-plugin-react": "7.13.0",
     "eslint-plugin-react-native": "^3.6.0",
     "flow-bin": "^0.95.1",
-    "husky": "^0.14.3",
+    "husky": "^2.7.0",
     "jest": "24.8.0",
     "jest-cli": "^24.8.0",
     "lint-staged": "^8.2.0",
