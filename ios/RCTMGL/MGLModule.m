@@ -241,6 +241,16 @@ RCT_EXPORT_METHOD(setAccessToken:(NSString *)accessToken)
     [MGLAccountManager setAccessToken:accessToken];
 }
 
+RCT_EXPORT_METHOD(addCustomHeader:(NSString *)headerName forHeaderValue:(NSString *) headerValue)
+{
+    reject(@"addCustomHeader not implemented on ios", @"addCustomHeader is not implemented for ios", nil);
+}
+
+RCT_EXPORT_METHOD(removeCustomHeader:(NSString *)headerName)
+{
+    reject(@"removeCustomHeader not implemented on ios", @"removeCustomHeader is not implemented for ios", nil);
+}
+
 RCT_EXPORT_METHOD(getAccessToken:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     NSString *accessToken = MGLAccountManager.accessToken;

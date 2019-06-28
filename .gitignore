@@ -50,6 +50,7 @@ reactnativemapboxgl.iml
 coverage
 .project
 *.core.prefs
+*.iml
 
 # Buck
 .buckd
@@ -58,3 +59,6 @@ buck-out
 /ReactAndroid/src/main/jni/prebuilt/lib/x86/
 /ReactAndroid/src/main/gen
 
+# VSCode
+.vscode/
+.classpath
