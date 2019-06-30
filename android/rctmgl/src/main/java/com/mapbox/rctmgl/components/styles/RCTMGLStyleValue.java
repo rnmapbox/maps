@@ -46,9 +46,13 @@ public class RCTMGLStyleValue {
                     imageScale = map.getMap("scale").getDouble("value");
                 }
             } else if ("string".equals(mPayload.getString("type"))) {
-                imageURI = mPayload.getString("value");
-                if (isTokenizedValue(mPayload.getString("value"))) {
+                String value = mPayload.getString("value");
+                if (value.contains("://")) {
+                    imageURI = value;
+                } else {
                     imageURI = null;
+                    isExpression = true;
+                    mExpression = Expression.literal(value);
                 }
             } else {
                 imageURI = null;
