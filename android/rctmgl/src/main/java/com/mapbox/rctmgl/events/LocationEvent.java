@@ -89,4 +89,9 @@ public class LocationEvent implements IEvent {
         map.putMap("payload", getPayload());
         return map;
     }
+
+    @Override
+    public boolean canCoalesce() {
+        return true;
+    }
 }

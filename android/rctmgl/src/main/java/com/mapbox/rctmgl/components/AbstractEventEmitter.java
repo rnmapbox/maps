@@ -43,7 +43,7 @@ abstract public class AbstractEventEmitter<T extends ViewGroup> extends ViewGrou
         }
 
         mRateLimitedEvents.put(eventCacheKey, System.currentTimeMillis());
-        mEventDispatcher.dispatchEvent(new AbstractEvent(event.getID(), event.getKey(), event.toJSON()));
+        mEventDispatcher.dispatchEvent(new AbstractEvent(event.getID(), event.getKey(), event.canCoalesce(), event.toJSON()));
     }
 
     @Override

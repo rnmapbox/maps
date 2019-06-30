@@ -8,11 +8,13 @@ import javax.annotation.Nullable;
 
 public class AbstractEvent extends Event<AbstractEvent> {
     private String mEventName;
+    private final boolean mCanCoalesce;
     private WritableMap mEvent;
 
-    public AbstractEvent(int viewId, String eventName, @Nullable WritableMap event) {
+    public AbstractEvent(int viewId, String eventName, boolean canCoalesce, @Nullable WritableMap event) {
         super(viewId);
         mEventName = eventName;
+        mCanCoalesce = canCoalesce;
         mEvent = event;
     }
 
@@ -24,5 +26,10 @@ public class AbstractEvent extends Event<AbstractEvent> {
     @Override
     public void dispatch(RCTEventEmitter rctEventEmitter) {
         rctEventEmitter.receiveEvent(getViewTag(), getEventName(), mEvent);
+    }
+
+    @Override
+    public boolean canCoalesce() {
+        return mCanCoalesce;
     }
 }
