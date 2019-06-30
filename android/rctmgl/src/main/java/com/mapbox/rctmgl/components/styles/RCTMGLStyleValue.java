@@ -54,7 +54,7 @@ public class RCTMGLStyleValue {
                 imageURI = null;
             }
             isAddImage = imageURI != null;
-            return;
+            if (isAddImage) { return; }
         }
 
         Dynamic dynamic = mPayload.getDynamic("value");
