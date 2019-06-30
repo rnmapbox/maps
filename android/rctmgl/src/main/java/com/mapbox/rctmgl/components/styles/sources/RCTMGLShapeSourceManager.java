@@ -11,6 +11,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
@@ -131,7 +132,15 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
         ReadableMapKeySetIterator iterator = map.keySetIterator();
         while (iterator.hasNextKey()) {
             String imageName = iterator.nextKey();
-            images.add(new AbstractMap.SimpleEntry<String, ImageEntry>(imageName, new ImageEntry(map.getString(imageName), 1.0)));
+            if (map.getType(imageName) == ReadableType.Map) {
+                ReadableMap imageMap = map.getMap(imageName);
+                String uri = imageMap.getString("uri");
+                boolean hasScale = imageMap.hasKey("scale") && imageMap.getType("scale") == ReadableType.Number;
+                double scale = hasScale ? imageMap.getDouble("scale") : 1.0;
+                images.add(new AbstractMap.SimpleEntry<String, ImageEntry>(imageName, new ImageEntry(uri, scale)));
+            } else {
+                images.add(new AbstractMap.SimpleEntry<String, ImageEntry>(imageName, new ImageEntry(map.getString(imageName), 1.0)));
+            }
         }
 
         source.setImages(images);
