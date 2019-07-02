@@ -203,7 +203,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
     }
 
     protected void insertLayer() {
-        if (mMap.getStyle() == null) return;
+        if (mMap == null || mMap.getStyle() == null) return;
         if (mMap.getStyle().getLayer(mID) != null) {
             return; // prevent adding a layer twice
         }
@@ -240,7 +240,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         mMap = mapView.getMapboxMap();
         mMapView = mapView;
 
-        if (mMap.getStyle() == null) return;
+        if (mMap == null || mMap.getStyle() == null) return;
 
         T existingLayer = mMap.getStyle().<T>getLayerAs(mID);
         if (existingLayer != null) {
@@ -259,7 +259,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
 
     @Override
     public void removeFromMap(RCTMGLMapView mapView) {
-        if (mMap.getStyle() != null) {
+        if (mMap != null && mMap.getStyle() != null) {
             mMap.getStyle().removeLayer(mLayer);
         }
     }
