@@ -131,10 +131,10 @@ public class RCTMGLCamera extends AbstractMapFeature {
         mMapView = mapView;
 
         setInitialCamera();
+        updateMaxMinZoomLevel();
         if (mCameraStop != null) {
             updateCamera();
         }
-        updateMaxMinZoomLevel();
 
         if (mShowUserLocation || mFollowUserLocation) {
             enableLocation();
