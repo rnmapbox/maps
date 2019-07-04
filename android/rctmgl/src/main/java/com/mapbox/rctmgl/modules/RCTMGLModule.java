@@ -1,7 +1,7 @@
 package com.mapbox.rctmgl.modules;
 
 import android.os.Handler;
-import android.os.Looper;
+import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
@@ -18,10 +18,15 @@ import com.mapbox.rctmgl.components.camera.constants.CameraMode;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleValue;
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 import com.mapbox.rctmgl.events.constants.EventTypes;
+import com.mapbox.rctmgl.http.CustomHeadersInterceptor;
 import com.mapbox.rctmgl.location.UserLocationVerticalAlignment;
 import com.mapbox.rctmgl.location.UserTrackingMode;
 import com.mapbox.mapboxsdk.maps.Style;
 
+import okhttp3.Dispatcher;
+import okhttp3.OkHttpClient;
+
+import com.mapbox.mapboxsdk.module.http.HttpRequestUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +39,8 @@ import javax.annotation.Nullable;
 
 public class RCTMGLModule extends ReactContextBaseJavaModule {
     public static final String REACT_CLASS = RCTMGLModule.class.getSimpleName();
+
+    private static boolean customHeaderInterceptorAdded = false;
 
     private Handler mUiThreadHandler;
     private ReactApplicationContext mReactContext;
@@ -286,6 +293,35 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void removeCustomHeader(final String headerName) {
+        mReactContext.runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                CustomHeadersInterceptor.INSTANCE.removeHeader(headerName);
+            }
+        });
+    }
+
+    @ReactMethod
+    public void addCustomHeader(final String headerName, final String headerValue) {
+        Log.d("header", String.format("add custom header headerName=%s", headerName));
+        mReactContext.runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                if (!customHeaderInterceptorAdded) {
+                    Log.i("header", "Add interceptor");
+                    OkHttpClient httpClient = new OkHttpClient.Builder()
+                            .addInterceptor(CustomHeadersInterceptor.INSTANCE).dispatcher(getDispatcher()).build();
+                    HttpRequestUtil.setOkHttpClient(httpClient);
+                    customHeaderInterceptorAdded = true;
+                }
+
+                CustomHeadersInterceptor.INSTANCE.addHeader(headerName, headerValue);
+            }
+        });
+    }
+
+    @ReactMethod
     public void getAccessToken(Promise promise) {
         WritableMap map = Arguments.createMap();
         map.putString("accessToken", Mapbox.getAccessToken());
@@ -301,5 +337,13 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
                 telemetry.setUserTelemetryRequestState(telemetryEnabled);
             }
         });
+    }
+
+    private Dispatcher getDispatcher() {
+        Dispatcher dispatcher = new Dispatcher();
+        // Matches core limit set on
+        // https://github.com/mapbox/mapbox-gl-native/blob/master/platform/android/src/http_file_source.cpp#L192
+        dispatcher.setMaxRequestsPerHost(20);
+        return dispatcher;
     }
 }

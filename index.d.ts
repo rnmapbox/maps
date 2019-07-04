@@ -27,6 +27,8 @@ type NamedStyles<T> = {
 };
 
 declare namespace MapboxGL {
+    function removeCustomHeader(headerName: string): void;
+    function addCustomHeader(headerName: string, headerValue: string): void;
     function setAccessToken(accessToken: string): void;
     function getAccessToken(): Promise<void>;
     function setTelemetryEnabled(telemetryEnabled: boolean): void;
