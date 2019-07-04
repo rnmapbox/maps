@@ -90,7 +90,7 @@
     if ([self _isCoordValid:_cameraStop.coordinate]) {
         nextCamera.centerCoordinate = _cameraStop.coordinate;
     } else if ([self _areBoundsValid:_cameraStop.bounds]) {
-        MGLMapCamera *boundsCamera = [mapView camera:_cameraStop fittingCoordinateBounds:_cameraStop.bounds edgePadding: _cameraStop.boundsPadding];
+        MGLMapCamera *boundsCamera = [mapView camera:nextCamera fittingCoordinateBounds:_cameraStop.bounds edgePadding: _cameraStop.boundsPadding];
         nextCamera.centerCoordinate = boundsCamera.centerCoordinate;
         nextCamera.altitude = boundsCamera.altitude;
     }
