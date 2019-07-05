@@ -7,6 +7,7 @@ import locationManager from '../modules/location/locationManager';
 
 import Annotation from './annotations/Annotation';
 import CircleLayer from './CircleLayer';
+import NativeUserLocation from './NativeUserLocation';
 
 const mapboxBlue = 'rgba(51, 181, 229, 100)';
 
@@ -57,7 +58,7 @@ class UserLocation extends React.Component {
   static propTypes = {
     animated: PropTypes.bool,
 
-    renderMode: PropTypes.oneOf(['normal', 'custom']),
+    renderMode: PropTypes.oneOf(['normal', 'custom', 'native']),
 
     visible: PropTypes.bool,
 
@@ -74,6 +75,7 @@ class UserLocation extends React.Component {
   };
 
   static RenderMode = {
+    Native: 'native',
     Normal: 'normal',
     Custom: 'custom',
   };
@@ -90,6 +92,10 @@ class UserLocation extends React.Component {
   }
 
   async componentDidMount() {
+    locationManager.addListener(this._onLocationUpdate);
+
+    if (this.renderMode === UserLocation.RenderMode.Native) return;
+
     const lastKnownLocation = await locationManager.getLastKnownLocation();
 
     if (lastKnownLocation) {
@@ -98,7 +104,6 @@ class UserLocation extends React.Component {
       });
     }
 
-    locationManager.addListener(this._onLocationUpdate);
     this.setLocationManager({
       running: this.needsLocationManagerRunning(),
     });
@@ -117,6 +122,7 @@ class UserLocation extends React.Component {
   }
 
   needsLocationManagerRunning() {
+    if (this.props.renderMode === UserLocation.RenderMode.Native) return false;
     return this.props.onUpdate || this.props.visible;
   }
 
@@ -158,7 +164,15 @@ class UserLocation extends React.Component {
   }
 
   render() {
-    if (!this.props.visible || !this.state.coordinates) {
+    if (!this.props.visible) {
+      return null;
+    }
+
+    if (this.props.renderMode === UserLocation.RenderMode.Native) {
+      return <NativeUserLocation {...this.props} />;
+    }
+
+    if (!this.state.coordinates) {
       return null;
     }
 

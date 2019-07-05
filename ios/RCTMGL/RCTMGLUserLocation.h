@@ -10,6 +10,6 @@
 
 + (id)sharedInstance;
 
-- (MGLUserLocationAnnotationView*)builtinUserAnnotation;
+- (MGLUserLocationAnnotationView*)hiddenUserAnnotation;
 
 @end

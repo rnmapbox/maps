@@ -42,6 +42,7 @@ import com.mapbox.rctmgl.components.annotation.RCTMGLCallout;
 import com.mapbox.rctmgl.components.annotation.RCTMGLCalloutAdapter;
 import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotation;
 import com.mapbox.rctmgl.components.camera.RCTMGLCamera;
+import com.mapbox.rctmgl.components.location.RCTMGLNativeUserLocation;
 import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeTracker;
 import com.mapbox.rctmgl.components.styles.light.RCTMGLLight;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLShapeSource;
@@ -182,13 +183,14 @@ public class RCTMGLMapView extends MapView implements
             feature = (AbstractMapFeature) childView;
         } else if (childView instanceof RCTMGLLight) {
             feature = (AbstractMapFeature) childView;
-        } else if (childView instanceof RCTMGLPointAnnotation) {
+        } else if (childView instanceof RCTMGLNativeUserLocation) {
+            feature = (AbstractMapFeature) childView;
+        }  else if (childView instanceof RCTMGLPointAnnotation) {
             RCTMGLPointAnnotation annotation = (RCTMGLPointAnnotation) childView;
             mPointAnnotations.put(annotation.getID(), annotation);
             feature = (AbstractMapFeature) childView;
         } else if (childView instanceof RCTMGLCamera) {
-            RCTMGLCamera camera = (RCTMGLCamera) childView;
-            mCamera = camera;
+            mCamera = (RCTMGLCamera) childView;
             feature = (AbstractMapFeature) childView;
         } else {
             ViewGroup children = (ViewGroup) childView;

@@ -65,6 +65,8 @@
 		C4FD1DBF1FCF54FB00213AF2 /* RCTMGLImageSource.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD1DBE1FCF54FB00213AF2 /* RCTMGLImageSource.m */; };
 		C4FD1DC21FCF550E00213AF2 /* RCTMGLImageSourceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD1DC11FCF550E00213AF2 /* RCTMGLImageSourceManager.m */; };
 		C4FD1DC51FD1F04300213AF2 /* MGLSnapshotModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD1DC41FD1F04200213AF2 /* MGLSnapshotModule.m */; };
+		DF3CFC0622CFCE0500A83174 /* RCTMGLNativeUserLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = DF3CFC0222CFCE0500A83174 /* RCTMGLNativeUserLocation.m */; };
+		DF3CFC0722CFCE0500A83174 /* RCTMGLNativeUserLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DF3CFC0322CFCE0500A83174 /* RCTMGLNativeUserLocationManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -198,6 +200,10 @@
 		C4FD1DC11FCF550E00213AF2 /* RCTMGLImageSourceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLImageSourceManager.m; sourceTree = "<group>"; };
 		C4FD1DC31FD1F04200213AF2 /* MGLSnapshotModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGLSnapshotModule.h; sourceTree = "<group>"; };
 		C4FD1DC41FD1F04200213AF2 /* MGLSnapshotModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MGLSnapshotModule.m; sourceTree = "<group>"; };
+		DF3CFC0222CFCE0500A83174 /* RCTMGLNativeUserLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLNativeUserLocation.m; sourceTree = "<group>"; };
+		DF3CFC0322CFCE0500A83174 /* RCTMGLNativeUserLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLNativeUserLocationManager.m; sourceTree = "<group>"; };
+		DF3CFC0422CFCE0500A83174 /* RCTMGLNativeUserLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLNativeUserLocationManager.h; sourceTree = "<group>"; };
+		DF3CFC0522CFCE0500A83174 /* RCTMGLNativeUserLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLNativeUserLocation.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -239,12 +245,13 @@
 		C43773B91F56024900AF6D71 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				C4C87B781F8FEB4D0064AE95 /* Annotations */,
-				C4EAF1781F6320A40016DEE8 /* Styles */,
-				C4EAF0EE1F5FAEB50016DEE8 /* Camera */,
-				C43773BA1F56025800AF6D71 /* MapView */,
 				C435A5F51F587D9100824A30 /* ViewManager.h */,
 				C435A5F61F587D9100824A30 /* ViewManager.m */,
+				C4C87B781F8FEB4D0064AE95 /* Annotations */,
+				C4EAF0EE1F5FAEB50016DEE8 /* Camera */,
+				DF3CFC0122CFCD8B00A83174 /* Location */,
+				C43773BA1F56025800AF6D71 /* MapView */,
+				C4EAF1781F6320A40016DEE8 /* Styles */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -462,6 +469,17 @@
 			name = Layers;
 			sourceTree = "<group>";
 		};
+		DF3CFC0122CFCD8B00A83174 /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				DF3CFC0522CFCE0500A83174 /* RCTMGLNativeUserLocation.h */,
+				DF3CFC0222CFCE0500A83174 /* RCTMGLNativeUserLocation.m */,
+				DF3CFC0422CFCE0500A83174 /* RCTMGLNativeUserLocationManager.h */,
+				DF3CFC0322CFCE0500A83174 /* RCTMGLNativeUserLocationManager.m */,
+			);
+			name = Location;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -521,6 +539,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C470F6AC1FA11C9500614A69 /* MGLOfflineModule.m in Sources */,
+				DF3CFC0722CFCE0500A83174 /* RCTMGLNativeUserLocationManager.m in Sources */,
 				C4FB12581F79C0270055AE1F /* RCTMGLBackgroundLayer.m in Sources */,
 				C4EAF1801F6324A80016DEE8 /* RCTMGLLayer.m in Sources */,
 				C4C87B7E1F8FEC090064AE95 /* RCTMGLPointAnnotation.m in Sources */,
@@ -563,6 +582,7 @@
 				C4FB10FE1F707A140055AE1F /* RCTMGLLineLayer.m in Sources */,
 				C4EAF1831F6336E20016DEE8 /* RCTMGLVectorSource.m in Sources */,
 				C4EAF1891F633C010016DEE8 /* RCTMGLVectorSourceManager.m in Sources */,
+				DF3CFC0622CFCE0500A83174 /* RCTMGLNativeUserLocation.m in Sources */,
 				C490EE1120DD710000CB2E57 /* RCTMGLCameraManager.m in Sources */,
 				431CDACE229D61A6008BE92D /* RCTMGLUserLocation.m in Sources */,
 				C4FD1DC51FD1F04300213AF2 /* MGLSnapshotModule.m in Sources */,

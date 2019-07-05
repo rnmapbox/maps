@@ -11,6 +11,7 @@
 #import "RCTMGLUtils.h"
 #import "RNMBImageUtils.h"
 #import "UIView+React.h"
+#import "RCTMGLNativeUserLocation.h"
 
 @implementation RCTMGLMapView
 {
@@ -100,7 +101,10 @@ static double const M2PI = M_PI * 2;
         RCTMGLLight *light = (RCTMGLLight*)subview;
         _light = light;
         _light.map = self;
-    } else if ([subview isKindOfClass:[RCTMGLPointAnnotation class]]) {
+    } else if ([subview isKindOfClass:[RCTMGLNativeUserLocation class]]) {
+        RCTMGLNativeUserLocation *nativeUserLocation = (RCTMGLNativeUserLocation*)subview;
+        nativeUserLocation.map = self;
+    }  else if ([subview isKindOfClass:[RCTMGLPointAnnotation class]]) {
         RCTMGLPointAnnotation *pointAnnotation = (RCTMGLPointAnnotation *)subview;
         pointAnnotation.map = self;
         [_pointAnnotations addObject:pointAnnotation];
@@ -129,7 +133,10 @@ static double const M2PI = M_PI * 2;
     } else if ([subview isKindOfClass:[RCTMGLCamera class]]) {
         RCTMGLCamera *camera = (RCTMGLCamera *)subview;
         camera.map = nil;
-    } else {
+    } else if ([subview isKindOfClass:[RCTMGLNativeUserLocation class]]) {
+        RCTMGLNativeUserLocation *nativeUserLocation = (RCTMGLNativeUserLocation *)subview;
+        nativeUserLocation.map = nil;
+    }  else {
         NSArray<id<RCTComponent>> *childSubViews = [subview reactSubviews];
         
         for (int i = 0; i < childSubViews.count; i++) {
