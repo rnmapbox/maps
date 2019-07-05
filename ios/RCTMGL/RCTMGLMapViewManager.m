@@ -405,7 +405,11 @@ RCT_EXPORT_METHOD(setSourceVisibility:(nonnull NSNumber *)reactTag
 - (MGLAnnotationView *)mapView:(MGLMapView *)mapView viewForAnnotation:(id<MGLAnnotation>)annotation
 {
     if ([annotation isKindOfClass:[MGLUserLocation class]] && mapView.userLocation != nil) {
-        return [[RCTMGLUserLocation sharedInstance] builtinUserAnnotation];
+        RCTMGLMapView* reactMapView = ((RCTMGLMapView *) mapView);
+        if (reactMapView.useNativeUserLocationAnnotationView) {
+            return nil;
+        }
+        return [[RCTMGLUserLocation sharedInstance] hiddenUserAnnotation];
     }
     else if ([annotation isKindOfClass:[RCTMGLPointAnnotation class]]) {
         RCTMGLPointAnnotation *rctAnnotation = (RCTMGLPointAnnotation *)annotation;

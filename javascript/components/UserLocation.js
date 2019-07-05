@@ -6,6 +6,7 @@ import locationManager from '../modules/location/locationManager';
 import Annotation from './annotations/Annotation'; // eslint-disable-line import/no-cycle
 import CircleLayer from './CircleLayer';
 import HeadingIndicator from './HeadingIndicator';
+import NativeUserLocation from './NativeUserLocation';
 
 const mapboxBlue = 'rgba(51, 181, 229, 100)';
 
@@ -59,6 +60,8 @@ class UserLocation extends React.Component {
      */
     animated: PropTypes.bool,
 
+    renderMode: PropTypes.oneOf(['normal', 'native']),
+
     /**
      * Whether location icon is visible
      */
@@ -92,6 +95,12 @@ class UserLocation extends React.Component {
     visible: true,
     showsUserHeadingIndicator: false,
     minDisplacement: 0,
+    renderMode: 'normal',
+  };
+
+  static RenderMode = {
+    Native: 'native',
+    Normal: 'normal',
   };
 
   constructor(props) {
@@ -116,9 +125,12 @@ class UserLocation extends React.Component {
     this._isMounted = true;
 
     locationManager.addListener(this._onLocationUpdate);
+
     await this.setLocationManager({
       running: this.needsLocationManagerRunning(),
     });
+
+    if (this.renderMode === UserLocation.RenderMode.Native) return;
 
     locationManager.setMinDisplacement(this.props.minDisplacement);
   }
@@ -169,7 +181,8 @@ class UserLocation extends React.Component {
    * @return {boolean}
    */
   needsLocationManagerRunning() {
-    return !!this.props.onUpdate || this.props.visible;
+    if (this.props.renderMode === UserLocation.RenderMode.Native) return false;
+    return !!this.props.onUpdate || this.props.visible;  
   }
 
   _onLocationUpdate(location) {
@@ -205,7 +218,15 @@ class UserLocation extends React.Component {
       animated,
     } = this.props;
 
-    if (!visible || !coordinates) {
+    if (!visible) {
+      return null;
+    }
+
+    if (this.props.renderMode === UserLocation.RenderMode.Native) {
+      return <NativeUserLocation {...this.props} />;
+    }
+
+    if (!this.coordinates) {
       return null;
     }
 

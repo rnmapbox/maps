@@ -60,6 +60,7 @@ typedef void (^StyleLoadedBlock) (MGLStyle* style);
 @property (nonatomic, assign) MGLCoordinateBounds maxBounds;
 
 @property (nonatomic, assign) BOOL isUserInteraction;
+@property (nonatomic, assign) BOOL useNativeUserLocationAnnotationView;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onLongPress;
