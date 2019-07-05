@@ -19,6 +19,7 @@ import FlyTo from '../examples/FlyTo';
 import FitBounds from '../examples/FitBounds';
 import SetUserTrackingModes from '../examples/SetUserTrackingModes';
 import SetUserLocationVerticalAlignment from '../examples/SetUserLocationVerticalAlignment';
+import SetUserLocationRenderMode from '../examples/SetUserLocationRenderMode';
 import ShowRegionDidChange from '../examples/ShowRegionDidChange';
 import CustomIcon from '../examples/CustomIcon';
 import YoYo from '../examples/YoYo';
@@ -92,6 +93,7 @@ const Examples = [
     'Set User Location Vertical Alignment',
     SetUserLocationVerticalAlignment,
   ),
+  new ExampleItem('Set User Location Render Mode', SetUserLocationRenderMode),
   new ExampleItem('Show Region Did Change', ShowRegionDidChange),
   new ExampleItem('Custom Icon', CustomIcon),
   new ExampleItem('Yo Yo Camera', YoYo),
