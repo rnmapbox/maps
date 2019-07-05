@@ -30,7 +30,7 @@
     return userLocation;
 }
 
-- (MGLUserLocationAnnotationView*)builtinUserAnnotation
+- (MGLUserLocationAnnotationView*)hiddenUserAnnotation
 {
     return [[HiddenUserLocationAnnotationView alloc] init];
 }
