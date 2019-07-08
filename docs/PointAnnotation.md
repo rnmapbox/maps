@@ -1,3 +1,5 @@
+_**deprecated and buggy, use [SymbolLayer](https://github.com/react-native-mapbox-gl/maps/blob/master/docs/SymbolLayer.md) instead**_
+
 ## <MapboxGL.PointAnnotation />
 ### PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.
 
