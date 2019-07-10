@@ -6,11 +6,29 @@
 | ---- | :--: | :-----: | :------: | :----------: |
 | animationDuration | `number` | `2000` | `false` | FIX ME NO DESCRIPTION |
 | animationMode | `enum` | `'easeTo'` | `false` | FIX ME NO DESCRIPTION |
-| centerCoordinate | `arrayOf` | `none` | `false` | FIX ME NO DESCRIPTION |
-| heading | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
-| pitch | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
+| defaultSettings | `shape` | `none` | `false` | FIX ME NO DESCRIPTION |
+| &nbsp;&nbsp;centerCoordinate | `array` | `none` | `false` | Center coordinate on map [lng, lat] |
+| &nbsp;&nbsp;heading | `number` | `none` | `false` | Heading on map |
+| &nbsp;&nbsp;pitch | `number` | `none` | `false` | Pitch on map |
+| &nbsp;&nbsp;bounds | `shape` | `none` | `false` | FIX ME NO DESCRIPTION |
+| &nbsp;&nbsp;&nbsp;&nbsp;ne | `array` | `none` | `true` | northEastCoordinates - North east coordinate of bound |
+| &nbsp;&nbsp;&nbsp;&nbsp;sw | `array` | `none` | `true` | southWestCoordinates - North east coordinate of bound |
+| &nbsp;&nbsp;&nbsp;&nbsp;paddingLeft | `number` | `none` | `false` | Left camera padding for bounds |
+| &nbsp;&nbsp;&nbsp;&nbsp;paddingRight | `number` | `none` | `false` | Right camera padding for bounds |
+| &nbsp;&nbsp;&nbsp;&nbsp;paddingTop | `number` | `none` | `false` | Top camera padding for bounds |
+| &nbsp;&nbsp;&nbsp;&nbsp;paddingBottom | `number` | `none` | `false` | Bottom camera padding for bounds |
+| &nbsp;&nbsp;zoomLevel | `number` | `none` | `false` | Zoom level of the map |
+| centerCoordinate | `array` | `none` | `false` | Center coordinate on map [lng, lat] |
+| heading | `number` | `none` | `false` | Heading on map |
+| pitch | `number` | `none` | `false` | Pitch on map |
 | bounds | `shape` | `none` | `false` | FIX ME NO DESCRIPTION |
-| zoomLevel | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
+| &nbsp;&nbsp;ne | `array` | `none` | `true` | northEastCoordinates - North east coordinate of bound |
+| &nbsp;&nbsp;sw | `array` | `none` | `true` | southWestCoordinates - North east coordinate of bound |
+| &nbsp;&nbsp;paddingLeft | `number` | `none` | `false` | Left camera padding for bounds |
+| &nbsp;&nbsp;paddingRight | `number` | `none` | `false` | Right camera padding for bounds |
+| &nbsp;&nbsp;paddingTop | `number` | `none` | `false` | Top camera padding for bounds |
+| &nbsp;&nbsp;paddingBottom | `number` | `none` | `false` | Bottom camera padding for bounds |
+| zoomLevel | `number` | `none` | `false` | Zoom level of the map |
 | minZoomLevel | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
 | maxZoomLevel | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
 | followUserLocation | `bool` | `none` | `false` | FIX ME NO DESCRIPTION |
@@ -19,7 +37,7 @@
 | followPitch | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
 | followHeading | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
 | triggerKey | `any` | `none` | `false` | FIX ME NO DESCRIPTION |
-| alignment | `arrayOf` | `none` | `false` | FIX ME NO DESCRIPTION |
+| alignment | `array` | `none` | `false` | FIX ME NO DESCRIPTION |
 | isUserInteraction | `FIX ME UNKNOWN TYPE` | `false` | `false` | FIX ME NO DESCRIPTION |
 
 ### methods

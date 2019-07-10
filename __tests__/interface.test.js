@@ -23,6 +23,7 @@ describe('Public Interface', () => {
       'FillLayer',
       'FillExtrusionLayer',
       'CircleLayer',
+      'HeatmapLayer',
       'LineLayer',
       'SymbolLayer',
       'BackgroundLayer',
@@ -33,6 +34,7 @@ describe('Public Interface', () => {
       'ShapeSource',
       'RasterSource',
       'ImageSource',
+      'Images',
 
       // constants
       'UserTrackingModes',

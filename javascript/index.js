@@ -16,9 +16,12 @@ import VectorSource from './components/VectorSource';
 import ShapeSource from './components/ShapeSource';
 import RasterSource from './components/RasterSource';
 import ImageSource from './components/ImageSource';
+import Images from './components/Images';
+
 // Layers
 import FillLayer from './components/FillLayer';
 import FillExtrusionLayer from './components/FillExtrusionLayer';
+import HeatmapLayer from './components/HeatmapLayer';
 import LineLayer from './components/LineLayer';
 import CircleLayer from './components/CircleLayer';
 import SymbolLayer from './components/SymbolLayer';
@@ -78,10 +81,12 @@ MapboxGL.VectorSource = VectorSource;
 MapboxGL.ShapeSource = ShapeSource;
 MapboxGL.RasterSource = RasterSource;
 MapboxGL.ImageSource = ImageSource;
+MapboxGL.Images = Images;
 
 // layers
 MapboxGL.FillLayer = FillLayer;
 MapboxGL.FillExtrusionLayer = FillExtrusionLayer;
+MapboxGL.HeatmapLayer = HeatmapLayer;
 MapboxGL.LineLayer = LineLayer;
 MapboxGL.CircleLayer = CircleLayer;
 MapboxGL.SymbolLayer = SymbolLayer;

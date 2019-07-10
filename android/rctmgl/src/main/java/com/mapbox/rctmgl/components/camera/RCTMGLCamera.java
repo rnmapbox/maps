@@ -17,9 +17,6 @@ import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentOptions;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
 // import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
-import com.mapbox.mapboxsdk.style.layers.Layer;
-import com.mapbox.mapboxsdk.style.layers.Property;
-import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.events.IEvent;
@@ -27,7 +24,6 @@ import com.mapbox.rctmgl.events.MapUserTrackingModeEvent;
 import com.mapbox.rctmgl.events.MapChangeEvent;
 import com.mapbox.rctmgl.location.LocationManager;
 import com.mapbox.rctmgl.location.UserLocation;
-import com.mapbox.rctmgl.location.UserLocationLayerConstants;
 import com.mapbox.rctmgl.location.UserLocationVerticalAlignment;
 import com.mapbox.rctmgl.location.UserTrackingMode;
 import com.mapbox.rctmgl.location.UserTrackingState;
@@ -52,6 +48,7 @@ public class RCTMGLCamera extends AbstractMapFeature {
 
     private boolean hasSentFirstRegion = false;
 
+    private CameraStop mDefaultStop;
     private CameraStop mCameraStop;
     private CameraUpdateQueue mCameraUpdateQueue;
 
@@ -133,10 +130,11 @@ public class RCTMGLCamera extends AbstractMapFeature {
     public void addToMap(RCTMGLMapView mapView) {
         mMapView = mapView;
 
+        setInitialCamera();
+        updateMaxMinZoomLevel();
         if (mCameraStop != null) {
             updateCamera();
         }
-        updateMaxMinZoomLevel();
 
         if (mShowUserLocation || mFollowUserLocation) {
             enableLocation();
@@ -157,6 +155,10 @@ public class RCTMGLCamera extends AbstractMapFeature {
         }
     }
 
+    public void setDefaultStop(CameraStop stop) {
+        mDefaultStop = stop;
+    }
+
     private void updateMaxMinZoomLevel() {
         MapboxMap map = getMapboxMap();
         if (map != null) {
@@ -166,6 +168,15 @@ public class RCTMGLCamera extends AbstractMapFeature {
             if (mMaxZoomLevel >= 0.0) {
                 map.setMaxZoomPreference(mMaxZoomLevel);
             }
+        }
+    }
+
+    private void setInitialCamera() {
+        if (mDefaultStop != null) {
+            mDefaultStop.setDuration(0);
+            mDefaultStop.setMode(com.mapbox.rctmgl.components.camera.constants.CameraMode.NONE);
+            CameraUpdateItem item = mDefaultStop.toCameraUpdate(mMapView.getMapboxMap());
+            item.run();
         }
     }
 
@@ -235,7 +246,7 @@ public class RCTMGLCamera extends AbstractMapFeature {
         if(location == null){
             return;
         }
-        IEvent event = new MapChangeEvent(this, makeLocationChangePayload(location), EventTypes.USER_LOCATION_UPDATED);
+        IEvent event = new MapChangeEvent(this, EventTypes.USER_LOCATION_UPDATED, makeLocationChangePayload(location));
         mManager.handleEvent(event);
     }
 

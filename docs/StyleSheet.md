@@ -3,7 +3,7 @@
 
 ### Stylesheet is now a JS object, see [CHANGELOG.txt](../CHANGELOG.txt)  for more details
 
-See (Mapbox expression specs)[https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions] for refernce on expressions.
+See (Mapbox expression specs)[https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions] for reference on expressions.
 
 ### Style functions
 

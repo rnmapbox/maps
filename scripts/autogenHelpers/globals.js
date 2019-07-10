@@ -358,15 +358,28 @@ global.methodMarkdownTableRow = function(method) {
     .join('\n');
 };
 
-global.propMarkdownTableRows = function(component) {
-  return component.props
+function _propMarkdownTableRows(props, prefix = "") {
+  return props
     .map((prop) => {
-      return `| ${prop.name} | \`${prop.type}\` | \`${prop.default}\` | \`${
+      let type = prop.type;
+      if (typeof(type) === "object") {
+        type = type.name;
+      }
+      let defaultValue = prop.default || '';
+      let { description = '' } = prop;
+      let result =  `| ${prefix}${prop.name} | \`${type}\` | \`${defaultValue}\` | \`${
         prop.required
-      }\` | ${replaceNewLine(prop.description)} |`;
+      }\` | ${replaceNewLine(description)} |`;
+      if (type == "shape") {
+        result = `${result}\n${_propMarkdownTableRows(prop.type.value, `&nbsp;&nbsp;${prefix}`)}`
+      }
+      return result;
     })
     .join('\n');
 };
+global.propMarkdownTableRows = function (component) {
+  return _propMarkdownTableRows(component.props, "");
+}
 
 global.getMarkdownMethodSignature = function(method) {
   const params = method.params

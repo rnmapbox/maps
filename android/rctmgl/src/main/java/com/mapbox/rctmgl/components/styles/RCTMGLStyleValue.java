@@ -45,11 +45,20 @@ public class RCTMGLStyleValue {
                 if (map.getMap("scale") != null) {
                     imageScale = map.getMap("scale").getDouble("value");
                 }
+            } else if ("string".equals(mPayload.getString("type"))) {
+                String value = mPayload.getString("value");
+                if (value.contains("://")) {
+                    imageURI = value;
+                } else {
+                    imageURI = null;
+                    isExpression = true;
+                    mExpression = Expression.literal(value);
+                }
             } else {
-                imageURI = mPayload.getString("value");
+                imageURI = null;
             }
             isAddImage = imageURI != null;
-            return;
+            if (isAddImage) { return; }
         }
 
         Dynamic dynamic = mPayload.getDynamic("value");
@@ -63,6 +72,10 @@ public class RCTMGLStyleValue {
                 }
             }
         }
+    }
+
+    private boolean isTokenizedValue(String value) {
+        return (value.startsWith("{") && value.endsWith("}"));
     }
 
     public String getType() {

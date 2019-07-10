@@ -275,10 +275,17 @@ static double const M2PI = M_PI * 2;
 
 - (CLLocationDistance)altitudeFromZoom:(double)zoomLevel
 {
-    CLLocationDistance metersPerPixel = [self getMetersPerPixelAtLatitude:self.camera.centerCoordinate.latitude withZoom:zoomLevel];
-    CLLocationDistance metersTall = metersPerPixel * self.frame.size.height;
-    CLLocationDistance altitude = metersTall / 2 / tan(MGLRadiansFromDegrees(30) / 2.0);
-    return altitude * sin(M_PI_2 - MGLRadiansFromDegrees(self.camera.pitch)) / sin(M_PI_2);
+    return [self altitudeFromZoom:zoomLevel atLatitude:self.camera.centerCoordinate.latitude];
+}
+
+- (CLLocationDistance)altitudeFromZoom:(double)zoomLevel atLatitude:(CLLocationDegrees)latitude
+{
+    return [self altitudeFromZoom:zoomLevel atLatitude:latitude atPitch:self.camera.pitch];
+}
+
+- (CLLocationDistance)altitudeFromZoom:(double)zoomLevel atLatitude:(CLLocationDegrees)latitude atPitch:(CGFloat)pitch
+{
+    return MGLAltitudeForZoomLevel(zoomLevel, pitch, latitude, self.frame.size);
 }
 
 - (RCTMGLPointAnnotation*)getRCTPointAnnotation:(MGLPointAnnotation *)mglAnnotation
@@ -305,6 +312,18 @@ static double const M2PI = M_PI * 2;
     return touchableSources;
 }
 
+- (NSArray<RCTMGLShapeSource *> *)getAllShapeSources
+{
+    NSMutableArray<RCTMGLSource *> *shapeSources = [[NSMutableArray alloc] init];
+    
+    for (RCTMGLSource *source in _sources) {
+        if ([source isKindOfClass:[RCTMGLShapeSource class]]) {
+            [shapeSources addObject:source];
+        }
+    }
+    
+    return shapeSources;
+}
 - (RCTMGLSource *)getTouchableSourceWithHighestZIndex:(NSArray<RCTMGLSource *> *)touchableSources
 {
     if (touchableSources == nil || touchableSources.count == 0) {

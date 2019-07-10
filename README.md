@@ -48,6 +48,7 @@ npm install @react-native-mapbox-gl/maps --save
 * [Callout](/docs/Callout.md)
 * [Camera](docs/Camera.md)
 * [UserLocation](docs/UserLocation.md)
+* [Images](docs/Images.md)
 
 ### Sources
 * [VectorSource](/docs/VectorSource.md)
@@ -62,6 +63,7 @@ npm install @react-native-mapbox-gl/maps --save
 * [LineLayer](/docs/LineLayer.md)
 * [RasterLayer](/docs/RasterLayer.md)
 * [SymbolLayer](/docs/SymbolLayer.md)
+* [HeatmapLayer](/docs/HeatmapLayer.md)
 
 ### Offline
 * [OfflineManager](/docs/OfflineManager.md)

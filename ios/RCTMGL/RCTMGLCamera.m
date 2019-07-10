@@ -14,6 +14,7 @@
 #import "RCTMGLLocationManager.h"
 #import "RCTMGLEvent.h"
 #import "RCTMGLEventTypes.h"
+#import "CameraMode.h"
 
 @implementation RCTMGLCamera
 {
@@ -45,6 +46,11 @@
     [self _updateMinMaxZoomLevel];
 }
 
+- (void)setDefaultStop:(NSDictionary<NSString *,id> *)stop
+{
+    _defaultStop = stop;
+}
+
 - (void)setStop:(NSDictionary<NSString *,id> *)stop
 {
     _stop = stop;
@@ -60,6 +66,7 @@
     _map = map;
     _map.reactCamera = self;
 
+    [self _setInitialCamera];
     [self _updateMinMaxZoomLevel];
     [self _updateCamera];
 }
@@ -110,6 +117,20 @@
     
     [cameraUpdateQueue enqueue:[CameraStop fromDictionary:_stop]];
     [cameraUpdateQueue execute:_map];
+}
+
+- (void)_setInitialCamera
+{
+    if (! _defaultStop) {
+        return;
+    }
+
+    CameraStop* stop = [CameraStop fromDictionary:_defaultStop];
+    stop.duration = 0;
+    stop.mode = [NSNumber numberWithInt:RCT_MAPBOX_CAMERA_MODE_NONE];
+    CameraUpdateItem *item = [[CameraUpdateItem alloc] init];
+    item.cameraStop = stop;
+    [item execute:_map withCompletionHandler:^{ }];
 }
 
 - (void)_updateCamera
@@ -197,6 +218,7 @@
 
 - (void)initialLayout
 {
+    [self _setInitialCamera];
     [self _updateCamera];
 }
 

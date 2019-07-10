@@ -13,12 +13,12 @@
 
 - (void)execute:(RCTMGLMapView *)mapView withCompletionHandler:(void (^)(void))completionHandler
 {
-    if ([self _areBoundsValid:_cameraStop.bounds]) {
-        [self _fitBoundsCamera:mapView withCompletionHandler:completionHandler];
-    } else if (_cameraStop.mode == [NSNumber numberWithInt:RCT_MAPBOX_CAMERA_MODE_FLIGHT]) {
+    if (_cameraStop.mode == [NSNumber numberWithInt:RCT_MAPBOX_CAMERA_MODE_FLIGHT]) {
         [self _flyToCamera:mapView withCompletionHandler:completionHandler];
     } else if (_cameraStop.mode == [NSNumber numberWithInt:RCT_MAPBOX_CAMERA_MODE_EASE]) {
         [self _moveCamera:mapView animated:YES withCompletionHandler:completionHandler];
+    } else if ([self _areBoundsValid:_cameraStop.bounds]) {
+        [self _fitBoundsCamera:mapView withCompletionHandler:completionHandler];
     } else {
         [self _moveCamera:mapView animated:NO withCompletionHandler:completionHandler];
     }
@@ -47,11 +47,6 @@
 - (void)_fitBoundsCamera:(RCTMGLMapView*)mapView withCompletionHandler:(void (^)(void))completionHandler
 {
     MGLCoordinateBounds bounds = _cameraStop.bounds;
-    CGFloat paddingTop = [_cameraStop.boundsPaddingTop floatValue];
-    CGFloat paddingRight = [_cameraStop.boundsPaddingRight floatValue];
-    CGFloat paddingBottom = [_cameraStop.boundsPaddingBottom floatValue];
-    CGFloat paddingLeft = [_cameraStop.boundsPaddingLeft floatValue];
-    
     CLLocationCoordinate2D coordinates[] = {
         { bounds.ne.latitude, bounds.sw.longitude },
         bounds.sw,
@@ -61,7 +56,7 @@
 
     [mapView setVisibleCoordinates:coordinates
              count:4
-             edgePadding:UIEdgeInsetsMake(paddingTop, paddingLeft, paddingBottom, paddingRight)
+             edgePadding:_cameraStop.boundsPadding
              direction:mapView.direction
              duration:_cameraStop.duration
              animationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]
@@ -71,7 +66,7 @@
 - (void)_centerCoordWithZoomCamera:(RCTMGLMapView*)mapView animated:(BOOL)animated withCompletionHandler:(void (^)(void))completionHandler
 {
     MGLMapCamera *camera = [MGLMapCamera cameraLookingAtCenterCoordinate:_cameraStop.coordinate
-                                    fromDistance:[mapView altitudeFromZoom:[_cameraStop.zoom doubleValue]]
+                                    fromDistance:[mapView altitudeFromZoom:[_cameraStop.zoom doubleValue] atLatitude:_cameraStop.coordinate.latitude]
                                     pitch:[_cameraStop.pitch floatValue]
                                     heading:[_cameraStop.heading floatValue]];
     [mapView setCamera:camera
@@ -92,12 +87,16 @@
         nextCamera.heading = [_cameraStop.heading floatValue];
     }
     
-    if (_cameraStop.zoom != nil) {
-        nextCamera.altitude = [mapView altitudeFromZoom:[_cameraStop.zoom doubleValue]];
-    }
-    
     if ([self _isCoordValid:_cameraStop.coordinate]) {
         nextCamera.centerCoordinate = _cameraStop.coordinate;
+    } else if ([self _areBoundsValid:_cameraStop.bounds]) {
+        MGLMapCamera *boundsCamera = [mapView camera:nextCamera fittingCoordinateBounds:_cameraStop.bounds edgePadding: _cameraStop.boundsPadding];
+        nextCamera.centerCoordinate = boundsCamera.centerCoordinate;
+        nextCamera.altitude = boundsCamera.altitude;
+    }
+    
+    if (_cameraStop.zoom != nil) {
+        nextCamera.altitude = [mapView altitudeFromZoom:[_cameraStop.zoom doubleValue] atLatitude:nextCamera.centerCoordinate.latitude atPitch:nextCamera.pitch];
     }
     
     return nextCamera;

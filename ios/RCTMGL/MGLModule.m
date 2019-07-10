@@ -241,6 +241,16 @@ RCT_EXPORT_METHOD(setAccessToken:(NSString *)accessToken)
     [MGLAccountManager setAccessToken:accessToken];
 }
 
+RCT_EXPORT_METHOD(addCustomHeader:(NSString *)headerName forHeaderValue:(NSString *) headerValue)
+{
+    // do nothing for now
+}
+
+RCT_EXPORT_METHOD(removeCustomHeader:(NSString *)headerName)
+{
+    // do nothing for now
+}
+
 RCT_EXPORT_METHOD(getAccessToken:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     NSString *accessToken = MGLAccountManager.accessToken;
@@ -253,7 +263,7 @@ RCT_EXPORT_METHOD(getAccessToken:(RCTPromiseResolveBlock)resolve rejecter:(RCTPr
     reject(@"missing_access_token", @"No access token has been set", nil);
 }
 
-RCT_EXPORT_METHOD(setTelemetryEnabled:(BOOL *)telemetryEnabled)
+RCT_EXPORT_METHOD(setTelemetryEnabled:(BOOL)telemetryEnabled)
 {
     [[NSUserDefaults standardUserDefaults] setBool:telemetryEnabled
                                             forKey:@"MGLMapboxMetricsEnabled"];

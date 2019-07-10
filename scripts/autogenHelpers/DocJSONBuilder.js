@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
 const JSDocNodeTree = require('./JSDocNodeTree');
+const parseJsDoc = require('react-docgen/dist/utils/parseJsDoc').default;
 
 const COMPONENT_PATH = path.join(
   __dirname,
@@ -89,19 +90,92 @@ class DocJSONBuilder {
       }
     }
 
+    function mapNestedProp(propMeta) {
+      const result = {
+        type: {
+          name: propMeta.name,
+          value: propMeta.value,
+        },
+        description: propMeta.description,
+        required: propMeta.required,
+      };
+      if (propMeta.value) {
+        result.type.value = propMeta.value;
+      }
+      return result;
+    }
+
+    function mapProp(propMeta, propName, array) {
+      let result = {};
+      if (!array) {
+        result = {
+          name: propName || 'FIX ME NO NAME',
+          required: propMeta.required || false,
+          type: (propMeta.type && propMeta.type.name) || 'FIX ME UNKNOWN TYPE',
+          default: !propMeta.defaultValue
+            ? 'none'
+            : propMeta.defaultValue.value.replace(/\n/g, ''),
+          description: propMeta.description || 'FIX ME NO DESCRIPTION',
+        }
+      } else {
+        if (propName) {
+          result.name = propName;
+        }
+        if (propMeta.required !== undefined) {
+          result.required = propMeta.required;
+        }
+        result.type =
+          (propMeta.type && propMeta.type.name) || 'FIX ME UNKNOWN TYPE';
+        if (propMeta.defaultValue) {
+          result.default = propMeta.defaultValue.value.replace(/\n/g, '');
+        }
+        if (propMeta.description) {
+          result.description = propMeta.description;
+        }
+      }
+
+      if (
+        propMeta.type &&
+        propMeta.type.name === 'arrayOf' &&
+        propMeta.type.value
+      ) {
+        result.type = {
+          name: 'array',
+          value: mapProp(mapNestedProp(propMeta.type.value), undefined, true),
+        }
+      }
+
+      if (propMeta.type && propMeta.type.name === 'func') {
+        const jsdoc = parseJsDoc(propMeta.description);
+        if (jsdoc && jsdoc.description) {
+          result.description = jsdoc.description;
+        }
+        if (jsdoc && jsdoc.params && (jsdoc.params.length > 0)) {
+          result.params = jsdoc.params;
+        }
+        if (jsdoc && jsdoc.returns) {
+          result.returns = jsdoc.returns;
+        }
+      }
+      if (
+        propMeta.type &&
+        propMeta.type.name === 'shape' &&
+        propMeta.type.value
+      ) {
+        const type = propMeta.type.value;
+        const value = Object.keys(type).map(_name =>
+          mapProp(mapNestedProp(type[_name]), _name, false),
+        );
+        result.type = {name: 'shape', value};
+      }
+      return result;
+    }
+
     // props
     component.props = Object.keys(component.props).map((propName) => {
       const propMeta = component.props[propName];
 
-      return {
-        name: propName || 'FIX ME NO NAME',
-        required: propMeta.required || false,
-        type: (propMeta.type && propMeta.type.name) || 'FIX ME UNKNOWN TYPE',
-        default: !propMeta.defaultValue
-          ? 'none'
-          : propMeta.defaultValue.value.replace(/\n/g, ''),
-        description: propMeta.description || 'FIX ME NO DESCRIPTION',
-      };
+      return mapProp(propMeta, propName, false);
     });
 
     // methods

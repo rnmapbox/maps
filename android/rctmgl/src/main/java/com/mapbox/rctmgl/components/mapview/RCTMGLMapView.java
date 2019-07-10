@@ -16,72 +16,49 @@ import android.view.MotionEvent;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
-import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.plugins.markerview.MarkerView;
 import com.mapbox.mapboxsdk.plugins.markerview.MarkerViewManager;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.geometry.VisibleRegion;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.UiSettings;
-import com.mapbox.mapboxsdk.plugins.localization.LocalizationPlugin;
 // import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.Layer;
-import com.mapbox.mapboxsdk.style.layers.Property;
-import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.annotation.RCTMGLCallout;
 import com.mapbox.rctmgl.components.annotation.RCTMGLCalloutAdapter;
 import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotation;
-import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotationAdapter;
-import com.mapbox.rctmgl.components.camera.CameraStop;
-import com.mapbox.rctmgl.components.camera.CameraUpdateQueue;
 import com.mapbox.rctmgl.components.camera.RCTMGLCamera;
 import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeTracker;
 import com.mapbox.rctmgl.components.styles.light.RCTMGLLight;
+import com.mapbox.rctmgl.components.styles.sources.RCTMGLShapeSource;
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 import com.mapbox.rctmgl.events.AndroidCallbackEvent;
 import com.mapbox.rctmgl.events.IEvent;
 import com.mapbox.rctmgl.events.MapChangeEvent;
 import com.mapbox.rctmgl.events.MapClickEvent;
-import com.mapbox.rctmgl.events.MapUserTrackingModeEvent;
-import com.mapbox.rctmgl.events.constants.EventKeys;
 import com.mapbox.rctmgl.events.constants.EventTypes;
-import com.mapbox.rctmgl.location.LocationManager;
-import com.mapbox.rctmgl.location.UserLocation;
-import com.mapbox.rctmgl.location.UserLocationLayerConstants;
-import com.mapbox.rctmgl.location.UserLocationVerticalAlignment;
-import com.mapbox.rctmgl.location.UserTrackingState;
 import com.mapbox.rctmgl.utils.BitmapUtils;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.rctmgl.utils.GeoViewport;
-import com.mapbox.rctmgl.utils.SimpleEventCallback;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -94,12 +71,12 @@ import javax.annotation.Nullable;
 @SuppressWarnings({"MissingPermission"})
 public class RCTMGLMapView extends MapView implements
         OnMapReadyCallback, MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener,
-        /* MapView.OnMapChangedListener*/
+        MapView.OnCameraIsChangingListener,
         MapView.OnCameraDidChangeListener, MapView.OnDidFailLoadingMapListener,
         MapView.OnDidFinishLoadingMapListener, MapView.OnWillStartRenderingFrameListener,
         MapView.OnDidFinishRenderingFrameListener, MapView.OnWillStartRenderingMapListener,
         MapView.OnDidFinishRenderingMapListener, MapView.OnDidFinishLoadingStyleListener,
-        MapboxMap.OnMarkerClickListener {
+        MapboxMap.OnMarkerClickListener, MapView.OnStyleImageMissingListener {
     public static final String LOG_TAG = RCTMGLMapView.class.getSimpleName();
 
     private RCTMGLMapViewManager mManager;
@@ -161,9 +138,11 @@ public class RCTMGLMapView extends MapView implements
         setLifecycleListeners();
 
 //        addOnMapChangedListener(this);
+        addOnCameraIsChangingListener(this);
         addOnCameraDidChangeListener(this);
         addOnDidFailLoadingMapListener(this);
         addOnDidFinishLoadingMapListener(this);
+        addOnStyleImageMissingListener(this);
 
         addOnWillStartRenderingFrameListener(this);
         addOnDidFinishRenderingFrameListener(this);
@@ -617,6 +596,11 @@ public class RCTMGLMapView extends MapView implements
     }
 
     @Override
+    public void onCameraIsChanging() {
+        handleMapChangedEvent(EventTypes.REGION_IS_CHANGING);
+    }
+
+    @Override
     public void onDidFailLoadingMap(String errorMessage) {
         handleMapChangedEvent(EventTypes.DID_FAIL_LOADING_MAP);
     }
@@ -665,6 +649,16 @@ public class RCTMGLMapView extends MapView implements
         handleMapChangedEvent(EventTypes.DID_FINISH_LOADING_STYLE);
     }
 
+    @Override
+    public void onStyleImageMissing(@NonNull String id) {
+        List<RCTMGLShapeSource> allShapeSources = getAllShapeSources();
+        for (RCTMGLShapeSource shapeSource : allShapeSources) {
+            if (shapeSource.addMissingImageToStyle(id)) {
+                return;
+            }
+        }
+
+    }
 
     /*
     public void onMapChanged(int changed) {
@@ -791,51 +785,46 @@ public class RCTMGLMapView extends MapView implements
 
     //region Methods
     public void queryRenderedFeaturesAtPoint(String callbackID, PointF point, Expression filter, List<String> layerIDs) {
-        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
         List<Feature> features = mMap.queryRenderedFeatures(point, filter, layerIDs.toArray(new String[layerIDs.size()]));
 
         WritableMap payload = new WritableNativeMap();
         payload.putString("data", FeatureCollection.fromFeatures(features).toJson());
-        event.setPayload(payload);
 
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
         mManager.handleEvent(event);
     }
 
     public void getZoom(String callbackID) {
-        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
         CameraPosition position = mMap.getCameraPosition();
 
         WritableMap payload = new WritableNativeMap();
         payload.putDouble("zoom", position.zoom);
-        event.setPayload(payload);
 
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
         mManager.handleEvent(event);
     }
 
     public void queryRenderedFeaturesInRect(String callbackID, RectF rect, Expression filter, List<String> layerIDs) {
-        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
         List<Feature> features = mMap.queryRenderedFeatures(rect, filter, layerIDs.toArray(new String[layerIDs.size()]));
 
         WritableMap payload = new WritableNativeMap();
         payload.putString("data", FeatureCollection.fromFeatures(features).toJson());
-        event.setPayload(payload);
 
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
         mManager.handleEvent(event);
     }
 
     public void getVisibleBounds(String callbackID) {
-        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
         VisibleRegion region = mMap.getProjection().getVisibleRegion();
 
         WritableMap payload = new WritableNativeMap();
         payload.putArray("visibleBounds", GeoJSONUtils.fromLatLngBounds(region.latLngBounds));
-        event.setPayload(payload);
 
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
         mManager.handleEvent(event);
     }
 
     public void getPointInView(String callbackID, LatLng mapCoordinate) {
-        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
 
         PointF pointInView = mMap.getProjection().toScreenLocation(mapCoordinate);
         WritableMap payload = new WritableNativeMap();
@@ -844,13 +833,12 @@ public class RCTMGLMapView extends MapView implements
         array.pushDouble(pointInView.x);
         array.pushDouble(pointInView.y);
         payload.putArray("pointInView", array);
-        event.setPayload(payload);
 
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
         mManager.handleEvent(event);
     }
 
     public void getCoordinateFromView(String callbackID, PointF pointInView) {
-        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
 
         LatLng mapCoordinate = mMap.getProjection().fromScreenLocation(pointInView);
         WritableMap payload = new WritableNativeMap();
@@ -859,13 +847,12 @@ public class RCTMGLMapView extends MapView implements
         array.pushDouble(mapCoordinate.getLongitude());
         array.pushDouble(mapCoordinate.getLatitude());
         payload.putArray("coordinateFromView", array);
-        event.setPayload(payload);
 
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
         mManager.handleEvent(event);
     }
 
     public void takeSnap(final String callbackID, final boolean writeToDisk) {
-        final AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
 
         if (mMap == null) {
             throw new Error("takeSnap should only be called after the map has rendered");
@@ -877,14 +864,14 @@ public class RCTMGLMapView extends MapView implements
                 WritableMap payload = new WritableNativeMap();
                 String uri = writeToDisk ? BitmapUtils.createTempFile(mContext, snapshot) : BitmapUtils.createBase64(snapshot);
                 payload.putString("uri", uri);
-                event.setPayload(payload);
+
+                AndroidCallbackEvent event = new AndroidCallbackEvent(RCTMGLMapView.this, callbackID, payload);
                 mManager.handleEvent(event);
             }
         });
     }
 
     public void getCenter(String callbackID) {
-        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, EventKeys.MAP_ANDROID_CALLBACK);
         LatLng center = mMap.getCameraPosition().target;
 
         WritableArray array = new WritableNativeArray();
@@ -892,8 +879,8 @@ public class RCTMGLMapView extends MapView implements
         array.pushDouble(center.getLatitude());
         WritableMap payload = new WritableNativeMap();
         payload.putArray("center", array);
-        event.setPayload(payload);
 
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
         mManager.handleEvent(event);
     }
 
@@ -1021,7 +1008,7 @@ public class RCTMGLMapView extends MapView implements
     }
 
     public void sendRegionChangeEvent(boolean isAnimated) {
-        IEvent event = new MapChangeEvent(this, makeRegionPayload(new Boolean(isAnimated)), EventTypes.REGION_DID_CHANGE);
+        IEvent event = new MapChangeEvent(this, EventTypes.REGION_DID_CHANGE, makeRegionPayload(new Boolean(isAnimated)));
         mManager.handleEvent(event);
         mCameraChangeTracker.setReason(CameraChangeTracker.EMPTY);
     }
@@ -1051,13 +1038,26 @@ public class RCTMGLMapView extends MapView implements
 
         for (String key : mSources.keySet()) {
             RCTSource source = mSources.get(key);
-
-            if (source.hasPressListener()) {
+            if (source != null && source.hasPressListener()) {
                 sources.add(source);
             }
         }
 
         return sources;
+    }
+
+    private List<RCTMGLShapeSource> getAllShapeSources() {
+        List<RCTMGLShapeSource> shapeSources = new ArrayList<>();
+
+        for (String key : mSources.keySet()) {
+            RCTSource source = mSources.get(key);
+
+            if (source instanceof RCTMGLShapeSource) {
+                shapeSources.add((RCTMGLShapeSource)source);
+            }
+        }
+
+        return shapeSources;
     }
 
     private RCTSource getTouchableSourceWithHighestZIndex(List<RCTSource> sources) {
@@ -1118,7 +1118,7 @@ public class RCTMGLMapView extends MapView implements
             case EventTypes.REGION_WILL_CHANGE:
             case EventTypes.REGION_DID_CHANGE:
             case EventTypes.REGION_IS_CHANGING:
-                event = new MapChangeEvent(this, makeRegionPayload(null), eventType);
+                event = new MapChangeEvent(this, eventType, makeRegionPayload(null));
                 break;
             default:
                 event = new MapChangeEvent(this, eventType);
@@ -1139,7 +1139,7 @@ public class RCTMGLMapView extends MapView implements
         if(location == null){
             return;
         }
-        IEvent event = new MapChangeEvent(this, makeLocationChangePayload(location), EventTypes.USER_LOCATION_UPDATED);
+        IEvent event = new MapChangeEvent(this, EventTypes.USER_LOCATION_UPDATED, makeLocationChangePayload(location));
         mManager.handleEvent(event);
     }
 

@@ -30,13 +30,14 @@ public class CameraStop {
     private int mBoundsPaddingLeft = 0;
     private int mBoundsPaddingRight = 0;
     private int mBoundsPaddingBottom = 0;
-    private int mBooundsPaddingTop = 0;
+    private int mBoundsPaddingTop = 0;
 
     private int mMode = CameraMode.EASE;
     private int mDuration = 2000;
     private MapboxMap.CancelableCallback mCallback;
 
-    public CameraStop() {}
+    public CameraStop() {
+    }
 
     public void setBearing(double bearing) {
         mBearing = bearing;
@@ -66,7 +67,7 @@ public class CameraStop {
         mBounds = bounds;
         mBoundsPaddingLeft = paddingLeft;
         mBoundsPaddingRight = paddingRight;
-        mBooundsPaddingTop = paddingTop;
+        mBoundsPaddingTop = paddingTop;
         mBoundsPaddingBottom = paddingBottom;
     }
 
@@ -75,13 +76,8 @@ public class CameraStop {
     }
 
     public CameraUpdateItem toCameraUpdate(MapboxMap map) {
-        if (mBounds != null) {
-            CameraUpdate update = CameraUpdateFactory.newLatLngBounds(mBounds, mBoundsPaddingLeft,
-                    mBooundsPaddingTop, mBoundsPaddingRight, mBoundsPaddingBottom);
-            return new CameraUpdateItem(map, update, mDuration, mCallback, CameraMode.FLIGHT);
-        }
-
-        CameraPosition.Builder builder = new CameraPosition.Builder();
+        CameraPosition currentCamera = map.getCameraPosition();
+        CameraPosition.Builder builder = new CameraPosition.Builder(currentCamera);
 
         if (mBearing != null) {
             builder.bearing(mBearing);
@@ -91,12 +87,34 @@ public class CameraStop {
             builder.tilt(mTilt);
         }
 
-        if (mZoom != null) {
-            builder.zoom(mZoom);
-        }
-
         if (mLatLng != null) {
             builder.target(mLatLng);
+        } else if (mBounds != null) {
+            double tilt = mTilt != null ? mTilt : currentCamera.tilt;
+            double bearing = mBearing != null ? mBearing : currentCamera.bearing;
+
+            // Adding map padding to the camera padding which is the same behavior as
+            // mapbox native does on iOS
+            int[] mapPadding = map.getPadding();
+            int paddingLeft = mapPadding[0] + mBoundsPaddingLeft;
+            int paddingTop = mapPadding[1] + mBoundsPaddingTop;
+            int paddingRight = mapPadding[2] + mBoundsPaddingRight;
+            int paddingBottom = mapPadding[3] + mBoundsPaddingBottom;
+
+            int[] cameraPadding = {paddingLeft, paddingTop, paddingRight, paddingBottom};
+            CameraPosition boundsCamera = map.getCameraForLatLngBounds(mBounds, cameraPadding, bearing, tilt);
+            if (boundsCamera != null) {
+                builder.target(boundsCamera.target);
+                builder.zoom(boundsCamera.zoom);
+            } else {
+                CameraUpdate update = CameraUpdateFactory.newLatLngBounds(mBounds, paddingLeft,
+                        paddingTop, paddingRight, paddingBottom);
+                return new CameraUpdateItem(map, update, mDuration, mCallback, mMode);
+            }
+        }
+
+        if (mZoom != null) {
+            builder.zoom(mZoom);
         }
 
         return new CameraUpdateItem(map, CameraUpdateFactory.newCameraPosition(builder.build()), mDuration, mCallback, mMode);

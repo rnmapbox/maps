@@ -8,7 +8,7 @@
 | animated | `bool` | `false` | `false` | FIX ME NO DESCRIPTION |
 | animationDuration | `number` | `1000` | `false` | FIX ME NO DESCRIPTION |
 | animationEasingFunction | `func` | `Easing.linear` | `false` | FIX ME NO DESCRIPTION |
-| coordinates | `arrayOf` | `none` | `false` | FIX ME NO DESCRIPTION |
+| coordinates | `array` | `none` | `false` | FIX ME NO DESCRIPTION |
 | onPress | `func` | `none` | `false` | FIX ME NO DESCRIPTION |
 | icon | `union` | `none` | `false` | FIX ME NO DESCRIPTION |
 

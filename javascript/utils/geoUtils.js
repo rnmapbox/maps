@@ -1,4 +1,4 @@
-import turfHelpers from '@turf/helpers';
+import {featureCollection, point, feature, lineString} from '@turf/helpers';
 import distance from '@turf/distance';
 import along from '@turf/along';
 import geoViewport from '@mapbox/geo-viewport';
@@ -6,26 +6,26 @@ import geoViewport from '@mapbox/geo-viewport';
 const VECTOR_TILE_SIZE = 512;
 
 export function makePoint(coordinates, properties) {
-  return turfHelpers.point(coordinates, properties);
+  return point(coordinates, properties);
 }
 
 export function makeLineString(coordinates, properties) {
-  return turfHelpers.lineString(coordinates, properties);
+  return lineString(coordinates, properties);
 }
 
 export function makeLatLngBounds(northEastCoordinates, southWestCoordinates) {
-  return turfHelpers.featureCollection([
-    turfHelpers.point(northEastCoordinates),
-    turfHelpers.point(southWestCoordinates),
+  return featureCollection([
+    point(northEastCoordinates),
+    point(southWestCoordinates),
   ]);
 }
 
 export function makeFeature(geometry, properties) {
-  return turfHelpers.feature(geometry, properties);
+  return feature(geometry, properties);
 }
 
 export function makeFeatureCollection(features = []) {
-  return turfHelpers.featureCollection(features);
+  return featureCollection(features);
 }
 
 export function addToFeatureCollection(featureCollection, feature) {

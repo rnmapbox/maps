@@ -9,7 +9,7 @@ import Page from './common/Page';
 
 const styles = {
   icon: {
-    iconImage: '{icon}',
+    iconImage: ['get', 'icon'],
 
     iconSize: [
       'match',
@@ -75,11 +75,12 @@ class ShapeSourceIcon extends React.Component {
             zoomLevel={17}
             centerCoordinate={[-117.20611157485, 52.180961084261]}
           />
-
+          <MapboxGL.Images
+            images={{example: exampleIcon, assets: ['pin']}}
+          />
           <MapboxGL.ShapeSource
             id="exampleShapeSource"
             shape={featureCollection}
-            images={{example: exampleIcon, assets: ['pin']}}
           >
             <MapboxGL.SymbolLayer id="exampleIconName" style={styles.icon} />
           </MapboxGL.ShapeSource>

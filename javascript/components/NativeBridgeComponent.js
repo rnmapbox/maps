@@ -3,9 +3,12 @@ import React from 'react';
 import {runNativeCommand, isAndroid} from '../utils';
 
 class NativeBridgeComponent extends React.Component {
-  constructor(props) {
+  static callbackIncrement = 0;
+
+  constructor(props, nativeModuleName) {
     super(props);
 
+    this._nativeModuleName = nativeModuleName;
     this._onAndroidCallback = this._onAndroidCallback.bind(this);
     this._callbackMap = new Map();
   }
@@ -30,17 +33,47 @@ class NativeBridgeComponent extends React.Component {
     callback.call(null, e.nativeEvent.payload);
   }
 
-  _runNativeCommand(nativeModuleName, nativeRef, methodName, args = []) {
-    if (isAndroid()) {
+  async _runPendingNativeCommands(nativeRef) {
+    if (!nativeRef)
+      while (this._preRefMapMethodQueue.length > 0) {
+        const item = this._preRefMapMethodQueue.pop();
+
+        if (item && item.method && item.resolver) {
+          const res = await this._runNativeCommand(
+            item.method.name,
+            nativeRef,
+            item.method.args,
+          );
+          item.resolver(res);
+        }
+      }
+  }
+
+  _runNativeCommand(methodName, nativeRef, args = []) {
+    if (!nativeRef) {
       return new Promise(resolve => {
-        const callbackID = `${Date.now()}`;
-        this._addAddAndroidCallback(callbackID, resolve);
-        args.unshift(callbackID);
-        runNativeCommand(nativeModuleName, methodName, this._nativeRef, args);
+        this._preRefMapMethodQueue.push({
+          method: {name: methodName, args},
+          resolver: resolve,
+        });
       });
     }
 
-    return runNativeCommand(nativeModuleName, methodName, nativeRef, args);
+    if (isAndroid()) {
+      return new Promise(resolve => {
+        NativeBridgeComponent.callbackIncrement++;
+        const callbackID = `${methodName}_${NativeBridgeComponent.callbackIncrement}`;
+        this._addAddAndroidCallback(callbackID, resolve);
+        args.unshift(callbackID);
+        runNativeCommand(this._nativeModuleName, methodName, nativeRef, args);
+      });
+    }
+    return runNativeCommand(
+      this._nativeModuleName,
+      methodName,
+      nativeRef,
+      args,
+    );
   }
 }
 
