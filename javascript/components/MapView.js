@@ -12,7 +12,6 @@ import {makePoint, makeLatLngBounds} from '../utils/geoUtils';
 import {
   isFunction,
   isNumber,
-  runNativeCommand,
   toJSONString,
   isAndroid,
   viewPropTypes,
@@ -20,7 +19,6 @@ import {
 import {getFilter} from '../utils/filterUtils';
 
 import NativeBridgeComponent from './NativeBridgeComponent';
-import Camera from './Camera';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -232,7 +230,7 @@ class MapView extends NativeBridgeComponent {
   };
 
   constructor(props) {
-    super(props);
+    super(props, NATIVE_MODULE_NAME);
 
     this.state = {
       isReady: null,
@@ -468,29 +466,7 @@ class MapView extends NativeBridgeComponent {
   }
 
   _runNativeCommand(methodName, args = []) {
-    if (!this._nativeRef) {
-      return new Promise(resolve => {
-        this._preRefMapMethodQueue.push({
-          method: {name: methodName, args},
-          resolver: resolve,
-        });
-      });
-    }
-
-    if (isAndroid()) {
-      return new Promise(resolve => {
-        const callbackID = `${Date.now()}`;
-        this._addAddAndroidCallback(callbackID, resolve);
-        args.unshift(callbackID);
-        runNativeCommand(NATIVE_MODULE_NAME, methodName, this._nativeRef, args);
-      });
-    }
-    return super._runNativeCommand(
-      NATIVE_MODULE_NAME,
-      this._nativeRef,
-      methodName,
-      args,
-    );
+    return super._runNativeCommand(methodName, this._nativeRef, args);
   }
 
   _createStopConfig(config = {}) {
@@ -525,26 +501,6 @@ class MapView extends NativeBridgeComponent {
     }
 
     return stopConfig;
-  }
-
-  _addAddAndroidCallback(id, callback) {
-    this._callbackMap.set(id, callback);
-  }
-
-  _removeAndroidCallback(id) {
-    this._callbackMap.remove(id);
-  }
-
-  _onAndroidCallback(e) {
-    const callbackID = e.nativeEvent.type;
-    const callback = this._callbackMap.get(callbackID);
-
-    if (!callback) {
-      return;
-    }
-
-    this._callbackMap.delete(callbackID);
-    callback.call(null, e.nativeEvent.payload);
   }
 
   _onPress(e) {
@@ -686,20 +642,9 @@ class MapView extends NativeBridgeComponent {
     return this.props.contentInset;
   }
 
-  async _setNativeRef(nativeRef) {
+  _setNativeRef(nativeRef) {
     this._nativeRef = nativeRef;
-
-    while (this._preRefMapMethodQueue.length > 0) {
-      const item = this._preRefMapMethodQueue.pop();
-
-      if (item && item.method && item.resolver) {
-        const res = await this._runNativeCommand(
-          item.method.name,
-          item.method.args,
-        );
-        item.resolver(res);
-      }
-    }
+    super._runPendingNativeCommands(nativeRef);
   }
 
   setNativeProps(props) {

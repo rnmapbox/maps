@@ -2,7 +2,7 @@
 
 ### Breaking changes:
 
-* iOS mapbox libraries updated to [5.0.0](https://github.com/mapbox/mapbox-gl-native/releases/tag/ios-v5.0.0) android libraries updated to [8.0.0](https://github.com/mapbox/mapbox-gl-native/releases/tag/android-v8.0.0)
+* iOS mapbox libraries updated to [5.1.0](https://github.com/mapbox/mapbox-gl-native/releases/tag/ios-v5.1.0) android libraries updated to [8.1.0](https://github.com/mapbox/mapbox-gl-native/releases/tag/android-v8.1.0)
 * `StyleSheet.create` removed.  
 Mapbox styles are now just a map no need for `StyleSheet.create`.  
 `StylesSheet.identity` also removed, use expressions array instead:
@@ -77,5 +77,19 @@ Mapbox styles are now just a map no need for `StyleSheet.create`.
    * MapView#userTrackingMode is now Camera#followUserMode and Camera#followUserLocation
    * followUserMode is now a string with ('normal','compass','course'), and UserTrackingModes enum is deprecated
    * MapView#onUserTrackingModeChange is now Camera#onUserTrackingModeChange and payload contains followUserMode and followUserLocation. 
+
+* ShapeSource#images was depreacted, use Images#images instead.
+   ```jsx
+   <MapView
+     ...
+   >
+     ...
+     <Images images={{pin, dot}} />
+     ...
+     <ShapeSource ... >
+        <SymbolLayer ...>
+     </ShapeSource>
+   </MapView>
+   ```
 
 * TODO document all changes

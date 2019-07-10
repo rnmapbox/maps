@@ -241,6 +241,16 @@ RCT_EXPORT_METHOD(setAccessToken:(NSString *)accessToken)
     [MGLAccountManager setAccessToken:accessToken];
 }
 
+RCT_EXPORT_METHOD(addCustomHeader:(NSString *)headerName forHeaderValue:(NSString *) headerValue)
+{
+    // do nothing for now
+}
+
+RCT_EXPORT_METHOD(removeCustomHeader:(NSString *)headerName)
+{
+    // do nothing for now
+}
+
 RCT_EXPORT_METHOD(getAccessToken:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     NSString *accessToken = MGLAccountManager.accessToken;
