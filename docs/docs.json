@@ -2698,21 +2698,51 @@
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "This event is triggered whenever the currently displayed map region is about to change."
+        "description": "This event is triggered whenever the currently displayed map region is about to change.",
+        "params": [
+          {
+            "name": "feature",
+            "description": "The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds",
+            "type": {
+              "name": "PointFeature"
+            },
+            "optional": false
+          }
+        ]
       },
       {
         "name": "onRegionIsChanging",
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "This event is triggered whenever the currently displayed map region is changing."
+        "description": "This event is triggered whenever the currently displayed map region is changing.",
+        "params": [
+          {
+            "name": "feature",
+            "description": "The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds",
+            "type": {
+              "name": "PointFeature"
+            },
+            "optional": false
+          }
+        ]
       },
       {
         "name": "onRegionDidChange",
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "This event is triggered whenever the currently displayed map region finished changing"
+        "description": "This event is triggered whenever the currently displayed map region finished changing",
+        "params": [
+          {
+            "name": "feature",
+            "description": "The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds",
+            "type": {
+              "name": "PointFeature"
+            },
+            "optional": false
+          }
+        ]
       },
       {
         "name": "onWillStartLoadingMap",
@@ -2805,7 +2835,7 @@
     "name": "MapView"
   },
   "PointAnnotation": {
-    "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.",
+    "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate. PointAnnotation is legacy, soon to be deprecated, and should use ShapeSource and SymbolLayer instead.",
     "displayName": "PointAnnotation",
     "methods": [],
     "props": [
