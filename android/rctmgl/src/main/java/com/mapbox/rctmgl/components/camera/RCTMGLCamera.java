@@ -355,11 +355,13 @@ public class RCTMGLCamera extends AbstractMapFeature {
 
     private void updateLocationLayer(@NonNull Style style) {
         if (mLocationComponent == null) {
-            mLocationComponent = getMapboxMap().getLocationComponent();
+            MapboxMap mapboxMap = getMapboxMap();
+            mLocationComponent = mapboxMap.getLocationComponent();
 
             LocationComponentOptions.Builder builder = LocationComponentOptions.builder(mContext);
             if (!mShowUserLocation) {
                 builder = builder
+                        .padding(mapboxMap.getPadding())
                         .backgroundDrawable(R.drawable.empty)
                         .backgroundDrawableStale(R.drawable.empty)
                         .bearingDrawable(R.drawable.empty)
