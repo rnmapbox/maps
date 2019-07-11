@@ -1,5 +1,5 @@
 ## <MapboxGL.PointAnnotation />
-### PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.
+### PointAnnotation represents a one-dimensional shape located at a single geographical coordinate. PointAnnotation is legacy, soon to be deprecated, and should use ShapeSource and SymbolLayer instead.
 
 ### props
 | Prop | Type | Default | Required | Description |
