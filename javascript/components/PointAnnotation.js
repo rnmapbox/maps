@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 });
 
 /**
- * PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.
+ * PointAnnotation represents a one-dimensional shape located at a single geographical coordinate. PointAnnotation is legacy, soon to be deprecated, and should use ShapeSource and SymbolLayer instead.
  */
 class PointAnnotation extends React.PureComponent {
   static propTypes = {
