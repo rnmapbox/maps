@@ -1,6 +1,6 @@
 package com.mapbox.rctmgl.components.styles;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
