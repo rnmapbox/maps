@@ -27,7 +27,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // React Native
-    compileOnly "com.facebook.react:react-native:+"
+    implementation "com.facebook.react:react-native:+"
 
     // Mapbox SDK
 
