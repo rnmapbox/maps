@@ -70,7 +70,7 @@ public class DownloadMapImageTask extends AsyncTask<Map.Entry<String, ImageEntry
                 images.add(new AbstractMap.SimpleEntry<>(object.getKey(), bitmap));
             } else {
                 // local asset required from JS require('image.png') or import icon from 'image.png' while in release mode
-                Bitmap bitmap = BitmapUtils.getBitmapFromResource(context, uri, getBitmapOptions(metrics, imageEntry.scale));
+                Bitmap bitmap = BitmapUtils.getBitmapFromResource(context, uri, null);
                 if (bitmap != null) {
                     images.add(new AbstractMap.SimpleEntry<>(object.getKey(), bitmap));
                 } else {
