@@ -71,6 +71,11 @@ class MapView extends NativeBridgeComponent {
     styleURL: PropTypes.string,
 
     /**
+     * Preferred Frame Rate per second for native map renders.
+     */
+    preferredFramesPerSecond: PropTypes.number,
+
+    /**
      * Automatically change the language of the map labels to the system’s preferred language,
      * this is not something that can be toggled on/off
      */
@@ -224,6 +229,7 @@ class MapView extends NativeBridgeComponent {
     attributionEnabled: true,
     logoEnabled: true,
     styleURL: MapboxGL.StyleURL.Street,
+    preferredFramesPerSecond: 60,
     surfaceView: false,
     regionWillChangeDebounceTime: 10,
     regionDidChangeDebounceTime: 500,

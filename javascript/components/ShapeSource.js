@@ -88,7 +88,7 @@ class ShapeSource extends AbstractSource {
      * Specifies the external images in key-value pairs required for the shape source.
      * If you have an asset under Image.xcassets on iOS and the drawables directory on android
      * you can specify an array of string names with assets as the key `{ assets: ['pin'] }`.
-     * 
+     *
      * Deprecated, please use Images#images.
      */
     images: PropTypes.object,
@@ -138,7 +138,9 @@ class ShapeSource extends AbstractSource {
       return;
     }
     if (!this.props.id.startsWith(ShapeSource.imageSourcePrefix)) {
-      console.warn("ShapeSource#images is deprecated, please use Images#images")
+      console.warn(
+        'ShapeSource#images is deprecated, please use Images#images',
+      );
     }
 
     const images = {};

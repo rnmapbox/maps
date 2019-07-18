@@ -1,7 +1,6 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, NativeModules, requireNativeComponent} from 'react-native';
 import PropTypes from 'prop-types';
-import {NativeModules, requireNativeComponent} from 'react-native';
 
 import {viewPropTypes} from '../utils';
 import {SymbolLayerStyleProp} from '../utils/styleMap';
