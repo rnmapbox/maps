@@ -22,6 +22,10 @@ public class RCTMGLRasterLayer extends RCTLayer<RasterLayer> {
 
     @Override
     public void addStyles() {
-        RCTMGLStyleFactory.setRasterLayerStyle(mLayer, new RCTMGLStyle(getContext(), mReactStyle, mMap));
+        try {
+            RCTMGLStyleFactory.setRasterLayerStyle(mLayer, new RCTMGLStyle(getContext(), mReactStyle, mMap));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }

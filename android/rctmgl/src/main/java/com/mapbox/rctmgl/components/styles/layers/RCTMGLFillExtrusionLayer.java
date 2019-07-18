@@ -42,7 +42,11 @@ public class RCTMGLFillExtrusionLayer extends RCTLayer<FillExtrusionLayer> {
 
     @Override
     public void addStyles() {
-        RCTMGLStyleFactory.setFillExtrusionLayerStyle(mLayer, new RCTMGLStyle(getContext(), mReactStyle, mMap));
+        try {
+            RCTMGLStyleFactory.setFillExtrusionLayerStyle(mLayer, new RCTMGLStyle(getContext(), mReactStyle, mMap));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void setSourceLayerID(String sourceLayerID) {

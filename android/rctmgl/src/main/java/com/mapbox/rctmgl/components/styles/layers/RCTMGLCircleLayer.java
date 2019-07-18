@@ -42,7 +42,11 @@ public class RCTMGLCircleLayer extends RCTLayer<CircleLayer> {
 
     @Override
     public void addStyles() {
-        RCTMGLStyleFactory.setCircleLayerStyle(mLayer, new RCTMGLStyle(getContext(), mReactStyle, mMap));
+        try {
+            RCTMGLStyleFactory.setCircleLayerStyle(mLayer, new RCTMGLStyle(getContext(), mReactStyle, mMap));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void setSourceLayerID(String sourceLayerID) {

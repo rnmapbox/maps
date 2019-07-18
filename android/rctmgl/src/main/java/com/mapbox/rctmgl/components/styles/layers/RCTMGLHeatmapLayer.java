@@ -42,7 +42,11 @@ public class RCTMGLHeatmapLayer extends RCTLayer<HeatmapLayer> {
 
     @Override
     public void addStyles() {
-        RCTMGLStyleFactory.setHeatmapLayerStyle(mLayer, new RCTMGLStyle(getContext(), mReactStyle, mMap));
+        try {
+            RCTMGLStyleFactory.setHeatmapLayerStyle(mLayer, new RCTMGLStyle(getContext(), mReactStyle, mMap));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void setSourceLayerID(String sourceLayerID) {
