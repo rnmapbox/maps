@@ -4,9 +4,6 @@
 ### props
 | Prop | Type | Default | Required | Description |
 | ---- | :--: | :-----: | :------: | :----------: |
-| showUserLocation | `bool` | `none` | `false` | Shows the users location on the map |
-| userTrackingMode | `number` | `none` | `false` | The mode used to track the user location on the map |
-| userLocationVerticalAlignment | `number` | `none` | `false` | The vertical alignment of the user location within in map. This is only enabled while tracking the users location. |
 | contentInset | `union` | `none` | `false` | The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport. |
 | style | `any` | `none` | `false` | Style for wrapping React Native View |
 | styleURL | `string` | `MapboxGL.StyleURL.Street` | `false` | Style URL for map |

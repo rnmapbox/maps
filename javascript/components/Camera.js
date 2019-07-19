@@ -96,6 +96,9 @@ class Camera extends React.Component {
 
     // position
     alignment: PropTypes.arrayOf(PropTypes.number),
+
+    // Triggered when the 
+    onUserTrackingModeChange: PropTypes.func,
   };
 
   static defaultProps = {
