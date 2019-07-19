@@ -11,7 +11,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
  */
 
 public class RCTMGLSymbolLayerManager extends ViewGroupManager<RCTMGLSymbolLayer> {
-    public static final String REACT_CLASS = RCTMGLSymbolLayer.class.getSimpleName();
+    public static final String REACT_CLASS = "RCTMGLSymbolLayer";
 
     @Override
     public String getName() {

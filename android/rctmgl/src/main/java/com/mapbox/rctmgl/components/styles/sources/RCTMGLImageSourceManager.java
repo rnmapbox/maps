@@ -17,7 +17,7 @@ import com.mapbox.rctmgl.utils.GeoJSONUtils;
  */
 
 public class RCTMGLImageSourceManager extends ViewGroupManager<RCTMGLImageSource> {
-    final String REACT_CLASS = RCTMGLImageSource.class.getSimpleName();
+    public static final String REACT_CLASS = "RCTMGLImageSource";
 
     @Override
     public String getName() {

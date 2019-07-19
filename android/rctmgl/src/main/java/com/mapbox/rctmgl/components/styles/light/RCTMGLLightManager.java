@@ -10,7 +10,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
  */
 
 public class RCTMGLLightManager extends ViewGroupManager<RCTMGLLight> {
-    public static final String REACT_CLASS = RCTMGLLight.class.getSimpleName();
+    public static final String REACT_CLASS = "RCTMGLLight";
 
     @Override
     public String getName() {
