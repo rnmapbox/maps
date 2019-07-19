@@ -80,7 +80,7 @@ apply from: "../../node_modules/react-native/react.gradle"
 
 
 def enableSeparateBuildPerCPUArchitecture = false
-def enableProguardInReleaseBuilds = false
+def enableProguardInReleaseBuilds = true
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
