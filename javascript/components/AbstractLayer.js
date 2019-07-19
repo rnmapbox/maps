@@ -37,23 +37,29 @@ class AbstractLayer extends React.PureComponent {
 
     const nativeStyle = {};
     const styleProps = Object.keys(this.props.style);
-    for (const styleProp of styleProps) {
-      const styleType = getStyleType(styleProp);
-      let rawStyle = this.props.style[styleProp];
 
-      if (styleType === 'color' && typeof rawStyle === 'string') {
-        rawStyle = processColor(rawStyle);
-      } else if (styleType === 'image' && typeof rawStyle === 'number') {
-        rawStyle = resolveAssetSource(rawStyle) || {};
+    try {
+      for (const styleProp of styleProps) {
+        const styleType = getStyleType(styleProp);
+        let rawStyle = this.props.style[styleProp];
+  
+        if (styleType === 'color' && typeof rawStyle === 'string') {
+          rawStyle = processColor(rawStyle);
+        } else if (styleType === 'image' && typeof rawStyle === 'number') {
+          rawStyle = resolveAssetSource(rawStyle) || {};
+        }
+  
+        const bridgeValue = new BridgeValue(rawStyle);
+        nativeStyle[styleProp] = {
+          styletype: styleType,
+          stylevalue: bridgeValue.toJSON(),
+        };
       }
-
-      const bridgeValue = new BridgeValue(rawStyle);
-      nativeStyle[styleProp] = {
-        styletype: styleType,
-        stylevalue: bridgeValue.toJSON(),
-      };
+    } catch (err) {
+      console.warn(err.message);
+      return;
     }
-
+  
     return nativeStyle;
   }
 
