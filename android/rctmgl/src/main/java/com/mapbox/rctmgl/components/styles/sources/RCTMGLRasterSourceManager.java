@@ -11,7 +11,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
  */
 
 public class RCTMGLRasterSourceManager extends ViewGroupManager<RCTMGLRasterSource> {
-    public static final String REACT_CLASS = RCTMGLRasterSource.class.getSimpleName();
+    public static final String REACT_CLASS = "RCTMGLRasterSource";
 
     @Override
     public String getName() {

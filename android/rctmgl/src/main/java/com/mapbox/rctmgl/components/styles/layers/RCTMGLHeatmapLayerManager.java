@@ -13,11 +13,11 @@ import java.util.ArrayList;
  */
 
 public class RCTMGLHeatmapLayerManager extends ViewGroupManager<RCTMGLHeatmapLayer>{
-    public static final String REACT_Class = RCTMGLHeatmapLayer.class.getSimpleName();
+    public static final String REACT_CLASS = "RCTMGLHeatmapLayer";
 
     @Override
     public String getName() {
-        return REACT_Class;
+        return REACT_CLASS;
     }
 
     @Override
@@ -74,4 +74,4 @@ public class RCTMGLHeatmapLayerManager extends ViewGroupManager<RCTMGLHeatmapLay
     public void setFilter(RCTMGLHeatmapLayer layer, ReadableArray filterList) {
         layer.setFilter(filterList);
     }
-}
+}

@@ -16,7 +16,7 @@ import java.util.Map;
  */
 
 public class RCTMGLFillLayerManager extends ViewGroupManager<RCTMGLFillLayer> {
-    public static final String REACT_CLASS = RCTMGLFillLayer.class.getSimpleName();
+    public static final String REACT_CLASS = "RCTMGLFillLayer";
 
     @Override
     public String getName() {
