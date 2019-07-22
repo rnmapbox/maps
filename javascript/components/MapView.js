@@ -71,7 +71,13 @@ class MapView extends NativeBridgeComponent {
     styleURL: PropTypes.string,
 
     /**
-     * Preferred Frame Rate per second for native map renders.
+     * iOS: The preferred frame rate at which the map view is rendered.
+     * The default value for this property is MGLMapViewPreferredFramesPerSecondDefault,
+     * which will adaptively set the preferred frame rate based on the capability of
+     * the user’s device to maintain a smooth experience. This property can be set to arbitrary integer values.
+     *
+     * Android: The maximum frame rate at which the map view is rendered, but it can't excess the ability of device hardware.
+     * This property can be set to arbitrary integer values.
      */
     preferredFramesPerSecond: PropTypes.number,
 
@@ -229,7 +235,6 @@ class MapView extends NativeBridgeComponent {
     attributionEnabled: true,
     logoEnabled: true,
     styleURL: MapboxGL.StyleURL.Street,
-    preferredFramesPerSecond: 60,
     surfaceView: false,
     regionWillChangeDebounceTime: 10,
     regionDidChangeDebounceTime: 500,
