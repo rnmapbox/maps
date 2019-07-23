@@ -306,7 +306,7 @@ class MapView extends NativeBridgeComponent {
       if (props.onDidFinishLoadingStyle)
         events.push(MapboxGL.EventTypes.DidFinishLoadingStyle);
 
-      this._runNativeCommand('setHandledMapChangedEvents', events);
+      this._sendNativeCommand('setHandledMapChangedEvents', events);
     }
   }
 
@@ -320,7 +320,7 @@ class MapView extends NativeBridgeComponent {
    * @return {Array}
    */
   async getPointInView(coordinate) {
-    const res = await this._runNativeCommand('getPointInView', [coordinate]);
+    const res = await this._sendNativeCommand('getPointInView', [coordinate]);
     return res.pointInView;
   }
 
@@ -334,7 +334,7 @@ class MapView extends NativeBridgeComponent {
    * @return {Array}
    */
   async getCoordinateFromView(point) {
-    const res = await this._runNativeCommand('getCoordinateFromView', [point]);
+    const res = await this._sendNativeCommand('getCoordinateFromView', [point]);
     return res.coordinateFromView;
   }
 
@@ -347,7 +347,7 @@ class MapView extends NativeBridgeComponent {
    * @return {Array}
    */
   async getVisibleBounds() {
-    const res = await this._runNativeCommand('getVisibleBounds');
+    const res = await this._sendNativeCommand('getVisibleBounds');
     return res.visibleBounds;
   }
 
@@ -367,7 +367,7 @@ class MapView extends NativeBridgeComponent {
       throw new Error('Must pass in valid coordinate[lng, lat]');
     }
 
-    const res = await this._runNativeCommand('queryRenderedFeaturesAtPoint', [
+    const res = await this._sendNativeCommand('queryRenderedFeaturesAtPoint', [
       coordinate,
       getFilter(filter),
       layerIDs,
@@ -398,7 +398,7 @@ class MapView extends NativeBridgeComponent {
         'Must pass in a valid bounding box[top, right, bottom, left]',
       );
     }
-    const res = await this._runNativeCommand('queryRenderedFeaturesInRect', [
+    const res = await this._sendNativeCommand('queryRenderedFeaturesInRect', [
       bbox,
       getFilter(filter),
       layerIDs,
@@ -426,7 +426,7 @@ class MapView extends NativeBridgeComponent {
    * @return {String}
    */
   async takeSnap(writeToDisk = false) {
-    const res = await this._runNativeCommand('takeSnap', [writeToDisk]);
+    const res = await this._sendNativeCommand('takeSnap', [writeToDisk]);
     return res.uri;
   }
 
@@ -440,7 +440,7 @@ class MapView extends NativeBridgeComponent {
    */
 
   async getZoom() {
-    const res = await this._runNativeCommand('getZoom');
+    const res = await this._sendNativeCommand('getZoom');
     return res.zoom;
   }
 
@@ -453,7 +453,7 @@ class MapView extends NativeBridgeComponent {
    * @return {Array<Number>} Coordinates
    */
   async getCenter() {
-    const res = await this._runNativeCommand('getCenter');
+    const res = await this._sendNativeCommand('getCenter');
     return res.center;
   }
 
@@ -462,10 +462,10 @@ class MapView extends NativeBridgeComponent {
    * If you implement a custom attribution button, you should add this action to the button.
    */
   showAttribution() {
-    return this._runNativeCommand('showAttribution');
+    return this._sendNativeCommand('showAttribution');
   }
 
-  _runNativeCommand(methodName, args = []) {
+  _sendNativeCommand(methodName, args = []) {
     return super._runNativeCommand(methodName, this._nativeRef, args);
   }
 
