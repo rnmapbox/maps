@@ -34,7 +34,7 @@ class NativeBridgeComponent extends React.Component {
   }
 
   async _runPendingNativeCommands(nativeRef) {
-    if (!nativeRef)
+    if (nativeRef) {
       while (this._preRefMapMethodQueue.length > 0) {
         const item = this._preRefMapMethodQueue.pop();
 
@@ -47,6 +47,7 @@ class NativeBridgeComponent extends React.Component {
           item.resolver(res);
         }
       }
+    }
   }
 
   _runNativeCommand(methodName, nativeRef, args = []) {
