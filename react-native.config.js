@@ -1,7 +1,9 @@
 module.exports = {
-  project: {
-    android: {
-      sourceDir: './android/rctmgl',
+  dependency: {
+    platforms: {
+      android: {
+        sourceDir: './android/rctmgl',
+      },
     },
   },
 }
