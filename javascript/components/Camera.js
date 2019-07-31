@@ -110,7 +110,7 @@ class Camera extends React.Component {
     Ease: 'easeTo',
   };
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this._handleCameraChange(this.props, nextProps);
   }
 
