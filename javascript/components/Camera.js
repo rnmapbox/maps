@@ -26,7 +26,6 @@ const SettingsPropTypes = {
    */
   pitch: PropTypes.number,
 
-
   bounds: PropTypes.shape({
     /**
      * northEastCoordinates - North east coordinate of bound
