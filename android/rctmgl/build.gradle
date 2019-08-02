@@ -44,4 +44,8 @@ dependencies {
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v7:0.9.0'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v7:0.2.0'
     implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:4.8.0'
+
+
+    // ANDROIDX JETIFY
+    implementation 'androidx.appcompat:appcompat:1.0.2'
 }
