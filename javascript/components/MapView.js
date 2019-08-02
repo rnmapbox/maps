@@ -280,7 +280,7 @@ class MapView extends NativeBridgeComponent {
     this._onDebouncedRegionDidChange.cancel();
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this._setHandledMapChangedEvents(nextProps);
   }
 

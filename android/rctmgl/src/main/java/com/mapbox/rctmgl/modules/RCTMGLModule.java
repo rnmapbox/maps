@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
+import com.facebook.react.module.annotations.ReactModule;
 import com.mapbox.mapboxsdk.maps.TelemetryDefinition;
 import com.mapbox.mapboxsdk.Mapbox;
 // import com.mapbox.mapboxsdk.constants.Style;
@@ -37,8 +38,9 @@ import javax.annotation.Nullable;
  * Created by nickitaliano on 8/18/17.
  */
 
+@ReactModule(name = RCTMGLModule.REACT_CLASS)
 public class RCTMGLModule extends ReactContextBaseJavaModule {
-    public static final String REACT_CLASS = RCTMGLModule.class.getSimpleName();
+    public static final String REACT_CLASS = "RCTMGLModule";
 
     private static boolean customHeaderInterceptorAdded = false;
 

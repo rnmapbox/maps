@@ -15,7 +15,7 @@ import java.util.Map;
  */
 
 public class RCTMGLLineLayerManager extends ViewGroupManager<RCTMGLLineLayer> {
-    public static final String REACT_CLASS = RCTMGLLineLayer.class.getSimpleName();
+    public static final String REACT_CLASS = "RCTMGLLineLayer";
 
     @Override
     public String getName() {

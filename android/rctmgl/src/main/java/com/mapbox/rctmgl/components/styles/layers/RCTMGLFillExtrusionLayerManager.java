@@ -16,7 +16,7 @@ import java.util.Map;
  */
 
 public class RCTMGLFillExtrusionLayerManager extends ViewGroupManager<RCTMGLFillExtrusionLayer> {
-    public static final String REACT_CLASS = RCTMGLFillExtrusionLayer.class.getSimpleName();
+    public static final String REACT_CLASS = "RCTMGLFillExtrusionLayer";
 
     @Override
     public String getName() {

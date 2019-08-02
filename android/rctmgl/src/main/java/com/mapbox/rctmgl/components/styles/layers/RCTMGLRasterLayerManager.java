@@ -10,7 +10,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
  */
 
 public class RCTMGLRasterLayerManager extends ViewGroupManager<RCTMGLRasterLayer> {
-    public static final String REACT_CLASS = RCTMGLRasterLayer.class.getSimpleName();
+    public static final String REACT_CLASS = "RCTMGLRasterLayer";
 
     @Override
     public String getName() {

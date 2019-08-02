@@ -16,7 +16,7 @@ import java.util.Map;
  */
 
 public class RCTMGLPointAnnotationManager extends AbstractEventEmitter<RCTMGLPointAnnotation> {
-    public static final String REACT_CLASS = RCTMGLPointAnnotation.class.getSimpleName();
+    public static final String REACT_CLASS = "RCTMGLPointAnnotation";
 
     public RCTMGLPointAnnotationManager(ReactApplicationContext reactApplicationContext) {
         super(reactApplicationContext);

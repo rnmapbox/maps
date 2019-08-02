@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RCTMGLCameraManager extends AbstractEventEmitter<RCTMGLCamera> {
-    public static final String REACT_CLASS = RCTMGLCamera.class.getSimpleName();
+    public static final String REACT_CLASS = "RCTMGLCamera";
 
     private ReactApplicationContext mContext;
 

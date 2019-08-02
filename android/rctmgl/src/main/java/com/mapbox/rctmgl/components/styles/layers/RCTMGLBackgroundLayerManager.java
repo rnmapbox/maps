@@ -10,7 +10,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
  */
 
 public class RCTMGLBackgroundLayerManager extends ViewGroupManager<RCTMGLBackgroundLayer> {
-    public static final String REACT_CLASS = RCTMGLBackgroundLayer.class.getSimpleName();
+    public static final String REACT_CLASS = "RCTMGLBackgroundLayer";
 
     @Override
     public String getName() {

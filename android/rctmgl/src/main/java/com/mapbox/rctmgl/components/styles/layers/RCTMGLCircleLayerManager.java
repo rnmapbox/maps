@@ -13,11 +13,11 @@ import java.util.ArrayList;
  */
 
 public class RCTMGLCircleLayerManager extends ViewGroupManager<RCTMGLCircleLayer> {
-    public static final String REACT_Class = RCTMGLCircleLayer.class.getSimpleName();
+    public static final String REACT_CLASS = "RCTMGLCircleLayer";
 
     @Override
     public String getName() {
-        return REACT_Class;
+        return REACT_CLASS;
     }
 
     @Override

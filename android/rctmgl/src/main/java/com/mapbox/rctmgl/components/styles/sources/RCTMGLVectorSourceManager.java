@@ -19,7 +19,7 @@ import java.util.Map;
  */
 
 public class RCTMGLVectorSourceManager extends AbstractEventEmitter<RCTMGLVectorSource> {
-    public static final String REACT_CLASS = RCTMGLVectorSource.class.getSimpleName();
+    public static final String REACT_CLASS = "RCTMGLVectorSource";
 
     public RCTMGLVectorSourceManager(ReactApplicationContext reactApplicationContext) {
         super(reactApplicationContext);
