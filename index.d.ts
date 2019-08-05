@@ -199,9 +199,9 @@ interface MapViewProps extends ViewProperties {
     onUserTrackingModeChange?: () => void;
 }
 
-interface CameraProps {
+interface CameraProps extends ViewProperties {
     animationDuration?: number;
-    animationMode?: string;
+    animationMode?: 'flyTo' | 'easeTo' | 'moveTo';
     centerCoordinate?: Array<number>;
     heading?: number;
     pitch?: number;
