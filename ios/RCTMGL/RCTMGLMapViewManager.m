@@ -367,7 +367,7 @@ RCT_EXPORT_METHOD(showAttribution:(nonnull NSNumber *)reactTag
 - (BOOL)mapView:(MGLMapView *)mapView shouldChangeFromCamera:(MGLMapCamera *)oldCamera toCamera:(MGLMapCamera *)newCamera {
     RCTMGLMapView *rnMapView = (RCTMGLMapView*)mapView;
     if (!rnMapView.restrictPanning) {
-        return NO;
+        return YES;
     }
 
     MGLMapCamera *currentCamera = rnMapView.camera;

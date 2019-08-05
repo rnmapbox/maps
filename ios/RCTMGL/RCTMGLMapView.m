@@ -219,13 +219,12 @@ static double const M2PI = M_PI * 2;
 }
 
 - (void)setReactMaxBounds:(NSArray<NSArray<NSNumber *> *> *)maxBounds {
-    if (maxBounds != nil && ![maxBounds isKindOfClass:NSNull.class]) {
+    _restrictPanning = NO;
+    if (maxBounds != nil && ![maxBounds isKindOfClass:NSNull.class] && maxBounds.count == 2) {
         CLLocationCoordinate2D ne = CLLocationCoordinate2DMake(maxBounds[0][1].doubleValue, maxBounds[0][0].doubleValue);
         CLLocationCoordinate2D sw = CLLocationCoordinate2DMake(maxBounds[1][1].doubleValue, maxBounds[1][0].doubleValue);
         _maxBounds = MGLCoordinateBoundsMake(sw, ne);
         _restrictPanning = YES;
-    } else {
-        _restrictPanning = NO;
     }
 }
 
