@@ -2,9 +2,9 @@
 
 ### Breaking changes:
 
-* iOS mapbox libraries updated to [5.1.0](https://github.com/mapbox/mapbox-gl-native/releases/tag/ios-v5.1.0) android libraries updated to [8.1.0](https://github.com/mapbox/mapbox-gl-native/releases/tag/android-v8.1.0)
-* `StyleSheet.create` removed.  
-Mapbox styles are now just a map no need for `StyleSheet.create`.  
+* iOS mapbox libraries updated to [5.2.0](https://github.com/mapbox/mapbox-gl-native/releases/tag/ios-v5.2.0) android libraries updated to [8.2.1](https://github.com/mapbox/mapbox-gl-native/releases/tag/android-v8.2.1)
+* `StyleSheet.create` removed.
+Mapbox styles are now just a map no need for `StyleSheet.create`.
 `StylesSheet.identity` also removed, use expressions array instead:
    ```jsx
    mapboxStyle=MapboxGL.Stylesheet.create({..., fillColor: MapboxGL.Stylesheet.identity('color') ...})
@@ -14,7 +14,7 @@ Mapbox styles are now just a map no need for `StyleSheet.create`.
      <FillLayer style={mapboxStyle}... />
    </MapView>
    ```
-   
+
    is now:
    ```jsx
    mapboxStyle={..., fillColor: ['get', 'color'] ...}
@@ -37,9 +37,9 @@ Mapbox styles are now just a map no need for `StyleSheet.create`.
       ...
    </MapView>
    ```
-    
+
    is now:
-   
+
    ```jsx
    <MapView
      ...
@@ -60,9 +60,9 @@ Mapbox styles are now just a map no need for `StyleSheet.create`.
       ...
    </MapView>
    ```
-    
+
    is now:
-   
+
    ```jsx
    <MapView
      ...
@@ -72,11 +72,11 @@ Mapbox styles are now just a map no need for `StyleSheet.create`.
         followUserMode="normal"
      />
    </MapView>
-   ``` 
+   ```
    The following properties were changed:
    * MapView#userTrackingMode is now Camera#followUserMode and Camera#followUserLocation
    * followUserMode is now a string with ('normal','compass','course'), and UserTrackingModes enum is deprecated
-   * MapView#onUserTrackingModeChange is now Camera#onUserTrackingModeChange and payload contains followUserMode and followUserLocation. 
+   * MapView#onUserTrackingModeChange is now Camera#onUserTrackingModeChange and payload contains followUserMode and followUserLocation.
 
 * ShapeSource#images was depreacted, use Images#images instead.
    ```jsx
