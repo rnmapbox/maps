@@ -117,6 +117,11 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         mapView.setReactStyleURL(styleURL);
     }
 
+    @ReactProp(name="preferredFramesPerSecond")
+    public void setPreferredFramesPerSecond(RCTMGLMapView mapView, int preferredFramesPerSecond) {
+        mapView.setReactPreferredFramesPerSecond(preferredFramesPerSecond);
+    }
+
     @ReactProp(name="localizeLabels")
     public void setLocalizeLabels(RCTMGLMapView mapView, boolean localizeLabels) {
         mapView.setLocalizeLabels(localizeLabels);

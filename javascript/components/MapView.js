@@ -38,21 +38,6 @@ class MapView extends NativeBridgeComponent {
     ...viewPropTypes,
 
     /**
-     * Shows the users location on the map
-     */
-    showUserLocation: PropTypes.bool,
-
-    /**
-     * The mode used to track the user location on the map
-     */
-    userTrackingMode: PropTypes.number,
-
-    /**
-     * The vertical alignment of the user location within in map. This is only enabled while tracking the users location.
-     */
-    userLocationVerticalAlignment: PropTypes.number,
-
-    /**
      * The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport.
      */
     contentInset: PropTypes.oneOfType([
@@ -69,6 +54,17 @@ class MapView extends NativeBridgeComponent {
      * Style URL for map
      */
     styleURL: PropTypes.string,
+
+    /**
+     * iOS: The preferred frame rate at which the map view is rendered.
+     * The default value for this property is MGLMapViewPreferredFramesPerSecondDefault,
+     * which will adaptively set the preferred frame rate based on the capability of
+     * the user’s device to maintain a smooth experience. This property can be set to arbitrary integer values.
+     *
+     * Android: The maximum frame rate at which the map view is rendered, but it can't excess the ability of device hardware.
+     * This property can be set to arbitrary integer values.
+     */
+    preferredFramesPerSecond: PropTypes.number,
 
     /**
      * Automatically change the language of the map labels to the system’s preferred language,
@@ -201,6 +197,11 @@ class MapView extends NativeBridgeComponent {
     onDidFinishRenderingMapFully: PropTypes.func,
 
     /**
+     * This event is triggered when the user location is updated.
+     */
+    onUserLocationUpdate: PropTypes.func,
+
+    /**
      * This event is triggered when a style has finished loading.
      */
     onDidFinishLoadingStyle: PropTypes.func,
@@ -269,7 +270,7 @@ class MapView extends NativeBridgeComponent {
     this._onDebouncedRegionDidChange.cancel();
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this._setHandledMapChangedEvents(nextProps);
   }
 
@@ -666,7 +667,6 @@ class MapView extends NativeBridgeComponent {
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
       onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
-      onUserTrackingModeChange: this.props.onUserTrackingModeChange,
     };
 
     let mapView = null;

@@ -75,9 +75,7 @@ class ShapeSourceIcon extends React.Component {
             zoomLevel={17}
             centerCoordinate={[-117.20611157485, 52.180961084261]}
           />
-          <MapboxGL.Images
-            images={{example: exampleIcon, assets: ['pin']}}
-          />
+          <MapboxGL.Images images={{example: exampleIcon, assets: ['pin']}} />
           <MapboxGL.ShapeSource
             id="exampleShapeSource"
             shape={featureCollection}
