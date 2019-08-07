@@ -38,21 +38,6 @@ class MapView extends NativeBridgeComponent {
     ...viewPropTypes,
 
     /**
-     * Shows the users location on the map
-     */
-    showUserLocation: PropTypes.bool,
-
-    /**
-     * The mode used to track the user location on the map
-     */
-    userTrackingMode: PropTypes.number,
-
-    /**
-     * The vertical alignment of the user location within in map. This is only enabled while tracking the users location.
-     */
-    userLocationVerticalAlignment: PropTypes.number,
-
-    /**
      * The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport.
      */
     contentInset: PropTypes.oneOfType([
@@ -210,6 +195,11 @@ class MapView extends NativeBridgeComponent {
      * This event is triggered when the map fully finished rendering the map.
      */
     onDidFinishRenderingMapFully: PropTypes.func,
+
+    /**
+     * This event is triggered when the user location is updated.
+     */
+    onUserLocationUpdate: PropTypes.func,
 
     /**
      * This event is triggered when a style has finished loading.
@@ -677,7 +667,6 @@ class MapView extends NativeBridgeComponent {
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
       onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
-      onUserTrackingModeChange: this.props.onUserTrackingModeChange,
     };
 
     let mapView = null;
