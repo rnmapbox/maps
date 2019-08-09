@@ -257,8 +257,6 @@ class MapView extends NativeBridgeComponent {
       this._onRegionDidChange.bind(this),
       props.regionDidChangeDebounceTime,
     );
-
-    this._preRefMapMethodQueue = [];
   }
 
   componentDidMount() {
