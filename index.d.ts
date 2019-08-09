@@ -398,7 +398,7 @@ interface ShapeSourceProps {
     buffer?: number;
     tolerance?: number;
     images?: any;
-    onPress?: (any) => void;
+    onPress?: (event: any) => void;
     hitbox?: any;
 }
 
