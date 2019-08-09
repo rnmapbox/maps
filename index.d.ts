@@ -391,7 +391,7 @@ interface ShapeSourceProps {
     id?: string;
     url?: string;
     shape?: any;
-    cluter?: boolean;
+    cluster?: boolean;
     clusterRadius?: number;
     clusterMaxZoomLevel?: number;
     maxZoomLevel?: number;
