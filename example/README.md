@@ -20,12 +20,7 @@ Not a Mapbox user yet? [Sign up for an account here](https://www.mapbox.com/sign
 ```
 cd example
 ```
-* Create a file called `env.json` in the root of the example project and just paste in your [Mapbox access token](https://www.mapbox.com/studio/account/tokens/) in the property `accessToken`.
-```
-{
-  accessToken: {accessToken}
-}
-```
+* Create a file called `accesstoken` in the root of the example project and just paste in your [Mapbox access token](https://www.mapbox.com/studio/account/tokens/). (The `accesstoken` file is processed in postinstall, so you need to run `npm install` after adding/changing accesstoken.)
 
 * Install our dependencies using `npm install`.
 ## Start React Native Packager
