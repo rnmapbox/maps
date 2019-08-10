@@ -15,4 +15,11 @@
     return [[MGLVectorTileSource alloc] initWithIdentifier:self.id configurationURL:[NSURL URLWithString:_url]];
 }
 
+- (NSArray<id <MGLFeature>> *)featuresInSourceLayersWithIdentifiers:(NSSet<NSString *> *)sourceLayerIdentifiers predicate:(nullable NSPredicate *)predicate
+{
+    MGLVectorTileSource* vectorSource = (MGLVectorTileSource*)self.source;
+    
+    return [vectorSource featuresInSourceLayersWithIdentifiers:sourceLayerIdentifiers predicate: predicate];
+}
+
 @end

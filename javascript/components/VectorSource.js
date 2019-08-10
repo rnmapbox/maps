@@ -2,9 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {NativeModules, requireNativeComponent} from 'react-native';
 
-import {cloneReactChildrenWithProps, viewPropTypes, isFunction} from '../utils';
+import {
+  cloneReactChildrenWithProps,
+  viewPropTypes,
+  isFunction,
+  isAndroid,
+} from '../utils';
 
 import AbstractSource from './AbstractSource';
+import NativeBridgeComponent from './NativeBridgeComponent';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -14,7 +20,7 @@ export const NATIVE_MODULE_NAME = 'RCTMGLVectorSource';
  * VectorSource is a map content source that supplies tiled vector data in Mapbox Vector Tile format to be shown on the map.
  * The location of and metadata about the tiles are defined either by an option dictionary or by an external file that conforms to the TileJSON specification.
  */
-class VectorSource extends AbstractSource {
+class VectorSource extends NativeBridgeComponent(AbstractSource) {
   static propTypes = {
     ...viewPropTypes,
 
@@ -47,6 +53,36 @@ class VectorSource extends AbstractSource {
     id: MapboxGL.StyleSource.DefaultSourceID,
   };
 
+  constructor(props) {
+    super(props, NATIVE_MODULE_NAME);
+  }
+
+  _setNativeRef(nativeRef) {
+    this._nativeRef = nativeRef;
+    super._runPendingNativeCommands(nativeRef);
+  }
+
+  /**
+   * Returns an array of rendered map features that intersect with a given point.
+   *
+   * @example
+   * vectorSource.features(['id1', 'id2'])
+   *
+   * @param  {Array=} layerIDs - A array of layer id's to filter the features by
+   * @return {FeatureCollection}
+   */
+  async features(layerIDs = []) {
+    const res = await this._runNativeCommand('features', this._nativeRef, [
+      layerIDs,
+    ]);
+
+    if (isAndroid()) {
+      return JSON.parse(res.data);
+    }
+
+    return res.data;
+  }
+
   render() {
     const props = {
       id: this.props.id,
@@ -55,6 +91,7 @@ class VectorSource extends AbstractSource {
       hasPressListener: isFunction(this.props.onPress),
       onMapboxVectorSourcePress: this.props.onPress,
       onPress: undefined,
+      ref: nativeRef => this._setNativeRef(nativeRef),
     };
     return (
       <RCTMGLVectorSource ref="nativeSource" {...props}>

@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 /**
  * MapView backed by Mapbox Native GL
  */
-class MapView extends NativeBridgeComponent {
+class MapView extends NativeBridgeComponent(React.Component) {
   static propTypes = {
     ...viewPropTypes,
 
