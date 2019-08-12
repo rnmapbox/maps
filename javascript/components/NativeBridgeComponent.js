@@ -2,10 +2,10 @@ import React from 'react';
 
 import {runNativeCommand, isAndroid} from '../utils';
 
+let callbackIncrement = 0;
+
 const NativeBridgeComponent = B =>
   class extends B {
-    static callbackIncrement = 0;
-
     constructor(props, nativeModuleName) {
       super(props);
 
@@ -63,8 +63,8 @@ const NativeBridgeComponent = B =>
 
       if (isAndroid()) {
         return new Promise(resolve => {
-          NativeBridgeComponent.callbackIncrement++;
-          const callbackID = `${methodName}_${NativeBridgeComponent.callbackIncrement}`;
+          callbackIncrement += 1;
+          const callbackID = `${methodName}_${callbackIncrement}`;
           this._addAddAndroidCallback(callbackID, resolve);
           args.unshift(callbackID);
           runNativeCommand(this._nativeModuleName, methodName, nativeRef, args);

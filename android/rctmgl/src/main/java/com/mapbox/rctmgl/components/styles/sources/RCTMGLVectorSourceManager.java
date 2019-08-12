@@ -1,8 +1,10 @@
 package com.mapbox.rctmgl.components.styles.sources;
 
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -10,6 +12,8 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import com.mapbox.rctmgl.components.AbstractEventEmitter;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.events.constants.EventKeys;
+import com.mapbox.rctmgl.utils.ConvertUtils;
+import com.mapbox.rctmgl.utils.ExpressionParser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,6 +83,32 @@ public class RCTMGLVectorSourceManager extends AbstractEventEmitter<RCTMGLVector
     public Map<String, String> customEvents() {
         return MapBuilder.<String, String>builder()
                 .put(EventKeys.VECTOR_SOURCE_LAYER_CLICK, "onMapboxVectorSourcePress")
+                .put(EventKeys.MAP_ANDROID_CALLBACK, "onAndroidCallback")
                 .build();
+    }
+
+    //region React Methods
+    public static final int METHOD_FEATURES = 102;
+
+    @Nullable
+    @Override
+    public Map<String, Integer> getCommandsMap() {
+        return MapBuilder.<String, Integer>builder()
+                .put("features", METHOD_FEATURES)
+                .build();
+    }
+
+    @Override
+    public void receiveCommand(RCTMGLVectorSource vectorSource, int commandID, @Nullable ReadableArray args) {
+
+        switch (commandID) {
+            case METHOD_FEATURES:
+                vectorSource.querySourceFeatures(
+                        args.getString(0),
+                        ConvertUtils.toStringList(args.getArray(1)),
+                        ExpressionParser.from(args.getArray(2))
+                        );
+                break;
+        }
     }
 }

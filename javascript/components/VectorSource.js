@@ -11,6 +11,7 @@ import {
 
 import AbstractSource from './AbstractSource';
 import NativeBridgeComponent from './NativeBridgeComponent';
+import {getFilter} from '../utils/filterUtils';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -63,17 +64,21 @@ class VectorSource extends NativeBridgeComponent(AbstractSource) {
   }
 
   /**
-   * Returns an array of rendered map features that intersect with a given point.
+   * Returns all features that match the query parameters regardless of whether or not the feature is
+   * currently rendered on the map. The domain of the query includes all currently-loaded vector tiles
+   * and GeoJSON source tiles. This function does not check tiles outside of the visible viewport.
    *
    * @example
    * vectorSource.features(['id1', 'id2'])
    *
-   * @param  {Array=} layerIDs - A array of layer id's to filter the features by
+   * @param  {Array=} layerIDs - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.
+   * @param  {Array=} filter - an optional filter statement to filter the returned Features.
    * @return {FeatureCollection}
    */
-  async features(layerIDs = []) {
+  async features(layerIDs = [], filter = []) {
     const res = await this._runNativeCommand('features', this._nativeRef, [
       layerIDs,
+      getFilter(filter),
     ]);
 
     if (isAndroid()) {
@@ -92,6 +97,7 @@ class VectorSource extends NativeBridgeComponent(AbstractSource) {
       onMapboxVectorSourcePress: this.props.onPress,
       onPress: undefined,
       ref: nativeRef => this._setNativeRef(nativeRef),
+      onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
     };
     return (
       <RCTMGLVectorSource ref="nativeSource" {...props}>
