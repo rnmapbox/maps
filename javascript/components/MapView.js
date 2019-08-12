@@ -305,7 +305,11 @@ class MapView extends NativeBridgeComponent(React.Component) {
       if (props.onDidFinishLoadingStyle)
         events.push(MapboxGL.EventTypes.DidFinishLoadingStyle);
 
-      this._runNativeCommand('setHandledMapChangedEvents', events);
+      this._runNativeCommand(
+        'setHandledMapChangedEvents',
+        this._nativeRef,
+        events,
+      );
     }
   }
 
@@ -319,7 +323,11 @@ class MapView extends NativeBridgeComponent(React.Component) {
    * @return {Array}
    */
   async getPointInView(coordinate) {
-    const res = await this._runNativeCommand('getPointInView', [coordinate]);
+    const res = await this._runNativeCommand(
+      'getPointInView',
+      this._nativeRef,
+      [coordinate],
+    );
     return res.pointInView;
   }
 
@@ -333,7 +341,11 @@ class MapView extends NativeBridgeComponent(React.Component) {
    * @return {Array}
    */
   async getCoordinateFromView(point) {
-    const res = await this._runNativeCommand('getCoordinateFromView', [point]);
+    const res = await this._runNativeCommand(
+      'getCoordinateFromView',
+      this._nativeRef,
+      [point],
+    );
     return res.coordinateFromView;
   }
 
@@ -346,7 +358,10 @@ class MapView extends NativeBridgeComponent(React.Component) {
    * @return {Array}
    */
   async getVisibleBounds() {
-    const res = await this._runNativeCommand('getVisibleBounds');
+    const res = await this._runNativeCommand(
+      'getVisibleBounds',
+      this._nativeRef,
+    );
     return res.visibleBounds;
   }
 
@@ -366,11 +381,11 @@ class MapView extends NativeBridgeComponent(React.Component) {
       throw new Error('Must pass in valid coordinate[lng, lat]');
     }
 
-    const res = await this._runNativeCommand('queryRenderedFeaturesAtPoint', [
-      coordinate,
-      getFilter(filter),
-      layerIDs,
-    ]);
+    const res = await this._runNativeCommand(
+      'queryRenderedFeaturesAtPoint',
+      this._nativeRef,
+      [coordinate, getFilter(filter), layerIDs],
+    );
 
     if (isAndroid()) {
       return JSON.parse(res.data);
@@ -397,11 +412,11 @@ class MapView extends NativeBridgeComponent(React.Component) {
         'Must pass in a valid bounding box[top, right, bottom, left]',
       );
     }
-    const res = await this._runNativeCommand('queryRenderedFeaturesInRect', [
-      bbox,
-      getFilter(filter),
-      layerIDs,
-    ]);
+    const res = await this._runNativeCommand(
+      'queryRenderedFeaturesInRect',
+      this._nativeRef,
+      [bbox, getFilter(filter), layerIDs],
+    );
 
     if (isAndroid()) {
       return JSON.parse(res.data);
@@ -425,7 +440,9 @@ class MapView extends NativeBridgeComponent(React.Component) {
    * @return {String}
    */
   async takeSnap(writeToDisk = false) {
-    const res = await this._runNativeCommand('takeSnap', [writeToDisk]);
+    const res = await this._runNativeCommand('takeSnap', this._nativeRef, [
+      writeToDisk,
+    ]);
     return res.uri;
   }
 
@@ -439,7 +456,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
    */
 
   async getZoom() {
-    const res = await this._runNativeCommand('getZoom');
+    const res = await this._runNativeCommand('getZoom', this._nativeRef);
     return res.zoom;
   }
 
@@ -452,7 +469,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
    * @return {Array<Number>} Coordinates
    */
   async getCenter() {
-    const res = await this._runNativeCommand('getCenter');
+    const res = await this._runNativeCommand('getCenter', this._nativeRef);
     return res.center;
   }
 
@@ -461,11 +478,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
    * If you implement a custom attribution button, you should add this action to the button.
    */
   showAttribution() {
-    return this._runNativeCommand('showAttribution');
-  }
-
-  _runNativeCommand(methodName, args = []) {
-    return super._runNativeCommand(methodName, this._nativeRef, args);
+    return this._runNativeCommand('showAttribution', this._nativeRef);
   }
 
   _createStopConfig(config = {}) {
