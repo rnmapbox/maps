@@ -8,10 +8,10 @@ import {
   isFunction,
   isAndroid,
 } from '../utils';
+import {getFilter} from '../utils/filterUtils';
 
 import AbstractSource from './AbstractSource';
 import NativeBridgeComponent from './NativeBridgeComponent';
-import {getFilter} from '../utils/filterUtils';
 
 const MapboxGL = NativeModules.MGLModule;
 

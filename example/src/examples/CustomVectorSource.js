@@ -1,13 +1,12 @@
 import React from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {Text, Button, View} from 'react-native';
+import {Text} from 'react-native';
 
 import sheet from '../styles/sheet';
 
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
 import Bubble from './common/Bubble';
-import { nullLiteralTypeAnnotation } from '@babel/types';
 
 const styles = {
   boxFill: {
@@ -45,7 +44,7 @@ class CustomVectorSource extends React.PureComponent {
   };
 
   render() {
-    const { featuresCount } = this.state;
+    const {featuresCount} = this.state;
     return (
       <Page {...this.props}>
         <MapboxGL.MapView style={sheet.matchParent}>
@@ -68,9 +67,9 @@ class CustomVectorSource extends React.PureComponent {
             />
           </MapboxGL.VectorSource>
         </MapboxGL.MapView>
-        <Bubble>
-          {featuresCount && <View><Text>Features: {featuresCount}</Text></View>}
-          <Button title="Query features" onPress={this.queryFeatures} />
+        <Bubble onPress={this.queryFeatures}>
+          <Text>Query features:</Text>
+          {featuresCount && <Text>Count: {featuresCount}</Text>}
         </Bubble>
       </Page>
     );

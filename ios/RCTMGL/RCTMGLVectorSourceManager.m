@@ -11,6 +11,8 @@
 #import "RCTMGLVectorSourceManager.h"
 #import "RCTMGLVectorSource.h"
 
+#import "FilterParser.h"
+
 @implementation RCTMGLVectorSourceManager
 
 RCT_EXPORT_MODULE(RCTMGLVectorSource);
@@ -30,6 +32,7 @@ RCT_EXPORT_VIEW_PROPERTY(hitbox, NSDictionary)
 
 RCT_EXPORT_METHOD(features:(nonnull NSNumber*)reactTag
                   withLayerIDs:(NSArray<NSString*>*)layerIDs
+                  withFilter:(NSArray<NSDictionary<NSString *, id> *> *)filter
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -45,15 +48,10 @@ RCT_EXPORT_METHOD(features:(nonnull NSNumber*)reactTag
         if (layerIDs != nil && layerIDs.count > 0) {
             layerIDSet = [NSSet setWithArray:layerIDs];
         }
-        // NSPredicate* predicate = [FilterParser parse:filter];
+        NSPredicate* predicate = [FilterParser parse:filter];
         NSArray<id<MGLFeature>> *shapes = [vectorSource
                                            featuresInSourceLayersWithIdentifiers: layerIDSet
-                                           predicate: nil];
-        /*
-        [reactMapView visibleFeaturesAtPoint:CGPointMake([point[0] floatValue], [point[1] floatValue])
-                                                  inStyleLayersWithIdentifiers:layerIDSet
-                                                                     predicate:predicate];*/
-        
+                                           predicate: predicate];
         
         NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] initWithCapacity:shapes.count];
         for (int i = 0; i < shapes.count; i++) {
