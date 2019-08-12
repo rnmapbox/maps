@@ -34,7 +34,7 @@
 | followUserLocation | `bool` | `none` | `false` | FIX ME NO DESCRIPTION |
 | followUserMode | `enum` | `none` | `false` | FIX ME NO DESCRIPTION |
 | followZoomLevel | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
-| followPitch | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
+| followUserPitch | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
 | followHeading | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
 | triggerKey | `any` | `none` | `false` | FIX ME NO DESCRIPTION |
 | alignment | `array` | `none` | `false` | FIX ME NO DESCRIPTION |
