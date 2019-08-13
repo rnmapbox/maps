@@ -7,7 +7,8 @@
 //
 
 #import "ViewManager.h"
+#import <React/RCTBridgeModule.h>
 
-@interface RCTMGLVectorSourceManager : ViewManager
+@interface RCTMGLVectorSourceManager : ViewManager<RCTBridgeModule>
 
 @end

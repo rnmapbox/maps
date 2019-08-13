@@ -13,4 +13,6 @@
 
 @property (nonatomic, copy) NSString *url;
 
+- (NSArray<id <MGLFeature>> *)featuresInSourceLayersWithIdentifiers:(NSSet<NSString *> *)sourceLayerIdentifiers predicate:(nullable NSPredicate *)predicate;
+
 @end
