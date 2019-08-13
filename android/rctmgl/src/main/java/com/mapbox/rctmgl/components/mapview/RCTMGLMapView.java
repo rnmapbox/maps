@@ -191,7 +191,7 @@ public class RCTMGLMapView extends MapView implements
             RCTMGLCamera camera = (RCTMGLCamera) childView;
             mCamera = camera;
             feature = (AbstractMapFeature) childView;
-        } else {
+        } else if (childView instanceof ViewGroup) {
             ViewGroup children = (ViewGroup) childView;
 
             for (int i = 0; i < children.getChildCount(); i++) {
