@@ -210,12 +210,7 @@ public class RCTMGLMapView extends MapView implements
     }
 
     public void removeFeature(int childPosition) {
-        AbstractMapFeature feature;
-        if (mQueuedFeatures != null && mQueuedFeatures.size() > 0) {
-            feature = mQueuedFeatures.get(childPosition);
-        } else {
-            feature = mFeatures.get(childPosition);
-        }
+        AbstractMapFeature feature = features().get(childPosition);
 
         if (feature == null) {
             return;
@@ -235,11 +230,15 @@ public class RCTMGLMapView extends MapView implements
         }
 
         feature.removeFromMap(this);
-        if (mQueuedFeatures != null && mQueuedFeatures.size() > 0) {
-            mQueuedFeatures.remove(feature);
-        } else {
-            mFeatures.remove(feature);
-        }
+        features().remove(feature);
+    }
+
+    private List<AbstractMapFeature> features() {
+      if (mQueuedFeatures != null && mQueuedFeatures.size() > 0) {
+         return mQueuedFeatures;
+      } else {
+         return mFeatures;
+      }
     }
 
     public int getFeatureCount() {
