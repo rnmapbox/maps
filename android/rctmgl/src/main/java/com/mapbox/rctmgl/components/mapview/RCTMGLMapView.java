@@ -253,10 +253,7 @@ public class RCTMGLMapView extends MapView implements
     }
 
     public AbstractMapFeature getFeatureAt(int i) {
-        if (mQueuedFeatures != null && mQueuedFeatures.size() > 0) {
-            return mQueuedFeatures.get(i);
-        }
-        return mFeatures.get(i);
+        return features().get(i);
     }
 
     public synchronized void dispose() {
