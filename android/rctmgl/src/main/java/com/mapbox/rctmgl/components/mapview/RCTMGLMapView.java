@@ -242,14 +242,7 @@ public class RCTMGLMapView extends MapView implements
     }
 
     public int getFeatureCount() {
-        int totalCount = 0;
-
-        if (mQueuedFeatures != null) {
-            totalCount = mQueuedFeatures.size();
-        }
-
-        totalCount += mFeatures.size();
-        return totalCount;
+        return features().size();
     }
 
     public AbstractMapFeature getFeatureAt(int i) {
