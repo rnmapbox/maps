@@ -104,7 +104,7 @@ declare namespace MapboxGL {
     class SymbolLayer extends Component<SymbolLayerProps> { }
     class HeatmapLayer extends Component<HeatmapLayerProps> { }
     class Images extends Component<ImagesProps> { }
-    class ImagesSource extends Component<ImagesSourceProps> { }
+    class ImageSource extends Component<ImageSourceProps> { }
 
     /**
      * Offline
@@ -555,7 +555,7 @@ interface ImagesProps extends ViewProps {
     images?: Object
 }
 
-interface ImagesSourceProps extends ViewProps {
+interface ImageSourceProps extends ViewProps {
     id?: string
     url?: number | string,
     coordinates: number[][]
