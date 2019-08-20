@@ -1,3 +1,5 @@
+the single reason to fork is to fix https://github.com/react-native-mapbox-gl/maps/issues/326#issuecomment-522935363
+
 # Mapbox Maps SDK for React Native
 
 _An unofficial React Native library for building maps with the [Mapbox Maps SDK for iOS](https://www.mapbox.com/ios-sdk/) and [Mapbox Maps SDK for Android](https://www.mapbox.com/android-sdk/)_

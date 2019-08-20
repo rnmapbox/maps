@@ -61,13 +61,22 @@ const NativeBridgeComponent = B =>
         });
       }
 
+      // https://github.com/react-native-mapbox-gl/maps/issues/326#issuecomment-522935363
       if (isAndroid()) {
+        // https://github.com/react-native-mapbox-gl/maps/issues/326
+        // TypeError: args.unshift is not a function
+        // fix: args is not an array, so need to perform it into real array
+        const _args = [];
+        for (let i=0; i<args.length; i++) {
+          _args.push(args[i]);
+        }
+
         return new Promise(resolve => {
           callbackIncrement += 1;
           const callbackID = `${methodName}_${callbackIncrement}`;
           this._addAddAndroidCallback(callbackID, resolve);
-          args.unshift(callbackID);
-          runNativeCommand(this._nativeModuleName, methodName, nativeRef, args);
+          _args.unshift(callbackID);
+          runNativeCommand(this._nativeModuleName, methodName, nativeRef, _args);
         });
       }
       return runNativeCommand(
