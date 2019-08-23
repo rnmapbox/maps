@@ -31,6 +31,7 @@
 | onDidFinishRenderingMap | `func` | `none` | `false` | This event is triggered when the map finished rendering the map. |
 | onDidFinishRenderingMapFully | `func` | `none` | `false` | This event is triggered when the map fully finished rendering the map. |
 | onDidFinishLoadingStyle | `func` | `none` | `false` | This event is triggered when a style has finished loading. |
+| onUserLocationUpdate | `func` | `none` | `false` | This event is triggered when the user location is updated. |
 | regionWillChangeDebounceTime | `number` | `10` | `false` | The emitted frequency of regionwillchange events |
 | regionDidChangeDebounceTime | `number` | `500` | `false` | The emitted frequency of regiondidchange events |
 
