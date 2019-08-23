@@ -157,7 +157,7 @@ declare namespace MapboxGL {
     }
 }
 
-interface MapViewProps extends ViewProperties {
+export interface MapViewProps extends ViewProperties {
     animated?: boolean;
     userTrackingMode?: number;
     userLocationVerticalAlignment?: number;
@@ -195,7 +195,7 @@ interface MapViewProps extends ViewProperties {
     onUserTrackingModeChange?: () => void;
 }
 
-interface CameraProps extends CameraSettings, ViewProperties {
+export interface CameraProps extends CameraSettings, ViewProperties {
     animationDuration?: number;
     animationMode?: "flyTo" | "easeTo" | "moveTo";
     defaultSettings?: CameraSettings;
@@ -211,7 +211,7 @@ interface CameraProps extends CameraSettings, ViewProperties {
     onUserTrackingModeChange?: (...args: any[]) => any;
 }
 
-interface CameraSettings {
+export interface CameraSettings {
     centerCoordinate?: number[];
     heading?: number;
     pitch?: number;
@@ -227,7 +227,7 @@ interface CameraSettings {
 }
 
 
-interface UserLocationProps {
+export interface UserLocationProps {
     animated?: boolean;
     renderMode?: "normal" | "custom";
     visible?: boolean;
@@ -236,7 +236,7 @@ interface UserLocationProps {
     children?: any;
 }
 
-interface LightStyle {
+export interface LightStyle {
     anchor?: Alignment;
     position?: Array<number>;
     positionTransition?: Transition;
@@ -246,12 +246,12 @@ interface LightStyle {
     intensityTransition?: Transition;
 }
 
-interface Transition {
+export interface Transition {
     duration: number;
     delay: number;
 }
 
-interface BackgroundLayerStyle {
+export interface BackgroundLayerStyle {
     visibilvisibility?: Visibility; ity?: Visibility;
     backgroundColor?: string;
     backgroundColorTransition?: Transition;
@@ -261,7 +261,7 @@ interface BackgroundLayerStyle {
     backgroundOpacityTransition?: Transition;
 }
 
-interface CircleLayerStyle {
+export interface CircleLayerStyle {
     visibility?: Visibility;
     circleRadius?: number;
     circleRadiusTransition?: Transition;
@@ -284,7 +284,7 @@ interface CircleLayerStyle {
     circleStrokeOpacityTransition?: Transition;
 }
 
-interface FillExtrusionLayerStyle {
+export interface FillExtrusionLayerStyle {
     visibility?: Visibility;
     fillExtrusionOpacity?: number;
     fillExtrusionOpacityTransition?: Transition;
@@ -301,7 +301,7 @@ interface FillExtrusionLayerStyle {
     fillExtrusionBaseTransition?: Transition;
 }
 
-interface FillLayerStyle {
+export interface FillLayerStyle {
     visibility?: Visibility;
     fillAntialias?: boolean;
     fillOpacity?: number;
@@ -317,7 +317,7 @@ interface FillLayerStyle {
     fillPatternTransition?: Transition;
 }
 
-interface LineLayerStyle {
+export interface LineLayerStyle {
     lineCap?: 'butt' | 'round' | 'square';
     lineJoin?: 'bevel' | 'round' | 'miter';
     lineMiterLimit?: number;
@@ -344,7 +344,7 @@ interface LineLayerStyle {
     linePatternTransition?: Transition;
 }
 
-interface RasterLayerStyle {
+export interface RasterLayerStyle {
     visibility?: Visibility;
     rasterOpacity?: number;
     rasterOpacityTransition?: Transition;
@@ -361,7 +361,7 @@ interface RasterLayerStyle {
     rasterFadeDuration?: number;
 }
 
-interface SymbolLayerStyle {
+export interface SymbolLayerStyle {
     symbolPlacement?: 'point' | 'line';
     symbolSpacing?: number;
     symbolAvoidEdges?: boolean;
@@ -427,7 +427,7 @@ interface SymbolLayerStyle {
     textTranslateAnchor?: Alignment;
 }
 
-interface HeatmapLayerStyle {
+export interface HeatmapLayerStyle {
     visibility?: Visibility;
     heatmapRadius?: number;
     heatmapRadiusTransition?: Transition;
@@ -439,16 +439,16 @@ interface HeatmapLayerStyle {
     heatmapOpacityTransition?: Transition;
 }
 
-interface Point {
+export interface Point {
     x: number;
     y: number;
 }
 
-interface LightProps extends ViewProps {
+export interface LightProps extends ViewProps {
     style?: LightStyle;
 }
 
-interface PointAnnotationProps {
+export interface PointAnnotationProps {
     id: string;
     title?: string;
     snippet?: string;
@@ -459,7 +459,7 @@ interface PointAnnotationProps {
     onDeselected?: () => void;
 }
 
-interface CalloutProps extends ViewProps {
+export interface CalloutProps extends ViewProps {
     title?: string;
     style?: any;
     containerStyle?: any;
@@ -469,7 +469,7 @@ interface CalloutProps extends ViewProps {
 
 }
 
-interface VectorSourceProps extends ViewProps {
+export interface VectorSourceProps extends ViewProps {
     id?: string;
     url?: string;
     onPress?: (...args: any[]) => any;
@@ -479,7 +479,7 @@ interface VectorSourceProps extends ViewProps {
     };
 }
 
-interface ShapeSourceProps extends ViewProps {
+export interface ShapeSourceProps extends ViewProps {
     id?: string;
     url?: string;
     shape?: Object;
@@ -497,7 +497,7 @@ interface ShapeSourceProps extends ViewProps {
     };
 }
 
-interface RasterSourceProps extends ViewProps {
+export interface RasterSourceProps extends ViewProps {
     id?: MapboxGL.StyleSource;
     url?: string;
     minZoomLevel?: number;
@@ -507,7 +507,7 @@ interface RasterSourceProps extends ViewProps {
     attribution?: string;
 }
 
-interface LayerBaseProps extends ViewProps {
+export interface LayerBaseProps extends ViewProps {
     id?: string;
     sourceID?: MapboxGL.StyleSource;
     sourceLayerID?: string;
@@ -519,49 +519,49 @@ interface LayerBaseProps extends ViewProps {
     maxZoomLevel?: number;
 }
 
-interface BackgroundLayerProps extends LayerBaseProps {
+export interface BackgroundLayerProps extends LayerBaseProps {
     style?: BackgroundLayerStyle;
 }
 
-interface CircleLayerProps extends LayerBaseProps {
+export interface CircleLayerProps extends LayerBaseProps {
     style?: CircleLayerStyle;
 }
 
-interface FillExtrusionLayerProps extends LayerBaseProps {
+export interface FillExtrusionLayerProps extends LayerBaseProps {
     style?: FillExtrusionLayerStyle;
 }
 
-interface FillLayerProps extends LayerBaseProps {
+export interface FillLayerProps extends LayerBaseProps {
     style?: FillLayerStyle;
 }
 
-interface LineLayerProps extends LayerBaseProps {
+export interface LineLayerProps extends LayerBaseProps {
     style?: LineLayerStyle;
 }
 
-interface RasterLayerProps extends LayerBaseProps {
+export interface RasterLayerProps extends LayerBaseProps {
     style?: RasterLayerStyle;
 }
 
-interface SymbolLayerProps extends LayerBaseProps {
+export interface SymbolLayerProps extends LayerBaseProps {
     style?: SymbolLayerStyle;
 }
 
-interface HeatmapLayerProps extends LayerBaseProps {
+export interface HeatmapLayerProps extends LayerBaseProps {
     style?: HeatmapLayerStyle;
 }
 
-interface ImagesProps extends ViewProps {
+export interface ImagesProps extends ViewProps {
     images?: Object
 }
 
-interface ImageSourceProps extends ViewProps {
+export interface ImageSourceProps extends ViewProps {
     id?: string
     url?: number | string,
     coordinates: number[][]
 }
 
-interface OfflineCreatePackOptions {
+export interface OfflineCreatePackOptions {
     name?: string;
     styleURL?: MapboxGL.StyleURL;
     bounds?: Array<number>;
@@ -570,7 +570,7 @@ interface OfflineCreatePackOptions {
     metadata?: any;
 }
 
-interface SnapshotOptions {
+export interface SnapshotOptions {
     centerCoordinate?: Array<number>;
     width?: number;
     height?: number;
