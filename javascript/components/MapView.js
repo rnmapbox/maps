@@ -33,24 +33,9 @@ const styles = StyleSheet.create({
 /**
  * MapView backed by Mapbox Native GL
  */
-class MapView extends NativeBridgeComponent {
+class MapView extends NativeBridgeComponent(React.Component) {
   static propTypes = {
     ...viewPropTypes,
-
-    /**
-     * Shows the users location on the map
-     */
-    showUserLocation: PropTypes.bool,
-
-    /**
-     * The mode used to track the user location on the map
-     */
-    userTrackingMode: PropTypes.number,
-
-    /**
-     * The vertical alignment of the user location within in map. This is only enabled while tracking the users location.
-     */
-    userLocationVerticalAlignment: PropTypes.number,
 
     /**
      * The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport.
@@ -69,6 +54,17 @@ class MapView extends NativeBridgeComponent {
      * Style URL for map
      */
     styleURL: PropTypes.string,
+
+    /**
+     * iOS: The preferred frame rate at which the map view is rendered.
+     * The default value for this property is MGLMapViewPreferredFramesPerSecondDefault,
+     * which will adaptively set the preferred frame rate based on the capability of
+     * the user’s device to maintain a smooth experience. This property can be set to arbitrary integer values.
+     *
+     * Android: The maximum frame rate at which the map view is rendered, but it can't excess the ability of device hardware.
+     * This property can be set to arbitrary integer values.
+     */
+    preferredFramesPerSecond: PropTypes.number,
 
     /**
      * Automatically change the language of the map labels to the system’s preferred language,
@@ -201,6 +197,11 @@ class MapView extends NativeBridgeComponent {
     onDidFinishRenderingMapFully: PropTypes.func,
 
     /**
+     * This event is triggered when the user location is updated.
+     */
+    onUserLocationUpdate: PropTypes.func,
+
+    /**
      * This event is triggered when a style has finished loading.
      */
     onDidFinishLoadingStyle: PropTypes.func,
@@ -256,8 +257,6 @@ class MapView extends NativeBridgeComponent {
       this._onRegionDidChange.bind(this),
       props.regionDidChangeDebounceTime,
     );
-
-    this._preRefMapMethodQueue = [];
   }
 
   componentDidMount() {
@@ -269,7 +268,7 @@ class MapView extends NativeBridgeComponent {
     this._onDebouncedRegionDidChange.cancel();
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this._setHandledMapChangedEvents(nextProps);
   }
 
@@ -306,7 +305,11 @@ class MapView extends NativeBridgeComponent {
       if (props.onDidFinishLoadingStyle)
         events.push(MapboxGL.EventTypes.DidFinishLoadingStyle);
 
-      this._runNativeCommand('setHandledMapChangedEvents', events);
+      this._runNativeCommand(
+        'setHandledMapChangedEvents',
+        this._nativeRef,
+        events,
+      );
     }
   }
 
@@ -320,7 +323,11 @@ class MapView extends NativeBridgeComponent {
    * @return {Array}
    */
   async getPointInView(coordinate) {
-    const res = await this._runNativeCommand('getPointInView', [coordinate]);
+    const res = await this._runNativeCommand(
+      'getPointInView',
+      this._nativeRef,
+      [coordinate],
+    );
     return res.pointInView;
   }
 
@@ -334,7 +341,11 @@ class MapView extends NativeBridgeComponent {
    * @return {Array}
    */
   async getCoordinateFromView(point) {
-    const res = await this._runNativeCommand('getCoordinateFromView', [point]);
+    const res = await this._runNativeCommand(
+      'getCoordinateFromView',
+      this._nativeRef,
+      [point],
+    );
     return res.coordinateFromView;
   }
 
@@ -347,7 +358,10 @@ class MapView extends NativeBridgeComponent {
    * @return {Array}
    */
   async getVisibleBounds() {
-    const res = await this._runNativeCommand('getVisibleBounds');
+    const res = await this._runNativeCommand(
+      'getVisibleBounds',
+      this._nativeRef,
+    );
     return res.visibleBounds;
   }
 
@@ -367,11 +381,11 @@ class MapView extends NativeBridgeComponent {
       throw new Error('Must pass in valid coordinate[lng, lat]');
     }
 
-    const res = await this._runNativeCommand('queryRenderedFeaturesAtPoint', [
-      coordinate,
-      getFilter(filter),
-      layerIDs,
-    ]);
+    const res = await this._runNativeCommand(
+      'queryRenderedFeaturesAtPoint',
+      this._nativeRef,
+      [coordinate, getFilter(filter), layerIDs],
+    );
 
     if (isAndroid()) {
       return JSON.parse(res.data);
@@ -398,11 +412,11 @@ class MapView extends NativeBridgeComponent {
         'Must pass in a valid bounding box[top, right, bottom, left]',
       );
     }
-    const res = await this._runNativeCommand('queryRenderedFeaturesInRect', [
-      bbox,
-      getFilter(filter),
-      layerIDs,
-    ]);
+    const res = await this._runNativeCommand(
+      'queryRenderedFeaturesInRect',
+      this._nativeRef,
+      [bbox, getFilter(filter), layerIDs],
+    );
 
     if (isAndroid()) {
       return JSON.parse(res.data);
@@ -426,7 +440,9 @@ class MapView extends NativeBridgeComponent {
    * @return {String}
    */
   async takeSnap(writeToDisk = false) {
-    const res = await this._runNativeCommand('takeSnap', [writeToDisk]);
+    const res = await this._runNativeCommand('takeSnap', this._nativeRef, [
+      writeToDisk,
+    ]);
     return res.uri;
   }
 
@@ -440,7 +456,7 @@ class MapView extends NativeBridgeComponent {
    */
 
   async getZoom() {
-    const res = await this._runNativeCommand('getZoom');
+    const res = await this._runNativeCommand('getZoom', this._nativeRef);
     return res.zoom;
   }
 
@@ -453,7 +469,7 @@ class MapView extends NativeBridgeComponent {
    * @return {Array<Number>} Coordinates
    */
   async getCenter() {
-    const res = await this._runNativeCommand('getCenter');
+    const res = await this._runNativeCommand('getCenter', this._nativeRef);
     return res.center;
   }
 
@@ -462,11 +478,7 @@ class MapView extends NativeBridgeComponent {
    * If you implement a custom attribution button, you should add this action to the button.
    */
   showAttribution() {
-    return this._runNativeCommand('showAttribution');
-  }
-
-  _runNativeCommand(methodName, args = []) {
-    return super._runNativeCommand(methodName, this._nativeRef, args);
+    return this._runNativeCommand('showAttribution', this._nativeRef);
   }
 
   _createStopConfig(config = {}) {
@@ -666,7 +678,6 @@ class MapView extends NativeBridgeComponent {
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
       onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
-      onUserTrackingModeChange: this.props.onUserTrackingModeChange,
     };
 
     let mapView = null;

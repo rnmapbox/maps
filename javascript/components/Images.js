@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { viewPropTypes } from '../utils';
+import {viewPropTypes} from '../utils';
+
 import ShapeSource from './ShapeSource';
 
 /**
@@ -21,7 +22,9 @@ class Images extends React.Component {
 
   _getID() {
     if (!this.id) {
-      this.id = `${ShapeSource.imageSourcePrefix}-${Math.random().toString(36).substr(2,9)}`
+      this.id = `${ShapeSource.imageSourcePrefix}-${Math.random()
+        .toString(36)
+        .substr(2, 9)}`;
     }
     return this.id;
   }
@@ -34,8 +37,8 @@ class Images extends React.Component {
         images={this.props.images}
         id={id}
         shape={{
-          "type": "FeatureCollection",
-          "features": []
+          type: 'FeatureCollection',
+          features: [],
         }}
       >
         {this.props.children}

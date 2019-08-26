@@ -98,8 +98,8 @@ static UIImage * _placeHolderImage;
         options[MGLShapeSourceOptionBuffer] = _buffer;
     }
     
-    if (_tolerence != nil) {
-        options[MGLShapeSourceOptionSimplificationTolerance] = _tolerence;
+    if (_tolerance != nil) {
+        options[MGLShapeSourceOptionSimplificationTolerance] = _tolerance;
     }
     
     return options;

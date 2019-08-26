@@ -27,12 +27,12 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // React Native
-    compileOnly "com.facebook.react:react-native:+"
+    implementation "com.facebook.react:react-native:+"
 
     // Mapbox SDK
 
     implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.8.0'
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:8.1.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:8.2.1'
 
     // Dependencies
     implementation "androidx.vectordrawable:vectordrawable:${safeExtGet('vectordrawableVersion', '1.0.1')}"

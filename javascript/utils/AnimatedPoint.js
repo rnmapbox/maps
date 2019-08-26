@@ -27,12 +27,12 @@ export class AnimatedPoint extends AnimatedWithChildren {
     this._listeners = {};
   }
 
-  setValue(coordinates = DEFAULT_POINT) {
-    this.longitude._value = point.coordinates[0];
-    this.latitude._value = point.coordinates[1];
+  setValue(point = DEFAULT_POINT) {
+    this.longitude.setValue(point.coordinates[0]);
+    this.latitude.setValue(point.coordinates[1]);
   }
 
-  setOffset(coordinates = DEFAULT_POINT) {
+  setOffset(point = DEFAULT_POINT) {
     this.longitude.setOffset(point.coordinates[0]);
     this.latitude.setOffset(point.coordinates[1]);
   }

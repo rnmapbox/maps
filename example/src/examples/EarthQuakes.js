@@ -83,7 +83,7 @@ class EarthQuakes extends React.Component {
 
             <MapboxGL.CircleLayer
               id="singlePoint"
-              filter={['!' ['has', 'point_count']]}
+              filter={['!', ['has', 'point_count']]}
               style={layerStyles.singlePoint}
             />
           </MapboxGL.ShapeSource>

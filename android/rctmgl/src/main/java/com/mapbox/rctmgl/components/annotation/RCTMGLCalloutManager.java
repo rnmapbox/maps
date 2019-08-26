@@ -8,7 +8,7 @@ import com.facebook.react.uimanager.ViewGroupManager;
  */
 
 public class RCTMGLCalloutManager extends ViewGroupManager<RCTMGLCallout> {
-    public static final String REACT_CLASS = RCTMGLCallout.class.getSimpleName();
+    public static final String REACT_CLASS = "RCTMGLCallout";
 
     @Override
     public String getName() {

@@ -26,7 +26,6 @@ const SettingsPropTypes = {
    */
   pitch: PropTypes.number,
 
-
   bounds: PropTypes.shape({
     /**
      * northEastCoordinates - North east coordinate of bound
@@ -96,6 +95,9 @@ class Camera extends React.Component {
 
     // position
     alignment: PropTypes.arrayOf(PropTypes.number),
+
+    // Triggered when the 
+    onUserTrackingModeChange: PropTypes.func,
   };
 
   static defaultProps = {
@@ -110,7 +112,7 @@ class Camera extends React.Component {
     Ease: 'easeTo',
   };
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this._handleCameraChange(this.props, nextProps);
   }
 

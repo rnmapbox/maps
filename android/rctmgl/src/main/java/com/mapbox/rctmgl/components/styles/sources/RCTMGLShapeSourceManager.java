@@ -37,7 +37,7 @@ import java.util.Map;
 
 public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSource> {
     public static final String LOG_TAG = RCTMGLShapeSourceManager.class.getSimpleName();
-    public static final String REACT_CLASS = RCTMGLShapeSource.class.getSimpleName();
+    public static final String REACT_CLASS = "RCTMGLShapeSource";
 
     private ReactApplicationContext mContext;
 

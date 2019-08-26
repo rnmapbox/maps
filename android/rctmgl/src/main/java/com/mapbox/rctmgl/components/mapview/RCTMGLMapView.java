@@ -99,6 +99,7 @@ public class RCTMGLMapView extends MapView implements
 
     private String mStyleURL;
 
+    private Integer mPreferredFramesPerSecond;
     private boolean mLocalizeLabels;
     private Boolean mScrollEnabled;
     private Boolean mPitchEnabled;
@@ -136,7 +137,7 @@ public class RCTMGLMapView extends MapView implements
         mHandler = new Handler();
 
         setLifecycleListeners();
-
+        
 //        addOnMapChangedListener(this);
         addOnCameraIsChangingListener(this);
         addOnCameraDidChangeListener(this);
@@ -190,7 +191,7 @@ public class RCTMGLMapView extends MapView implements
             RCTMGLCamera camera = (RCTMGLCamera) childView;
             mCamera = camera;
             feature = (AbstractMapFeature) childView;
-        } else {
+        } else if (childView instanceof ViewGroup) {
             ViewGroup children = (ViewGroup) childView;
 
             for (int i = 0; i < children.getChildCount(); i++) {
@@ -209,7 +210,7 @@ public class RCTMGLMapView extends MapView implements
     }
 
     public void removeFeature(int childPosition) {
-        AbstractMapFeature feature = mFeatures.get(childPosition);
+        AbstractMapFeature feature = features().get(childPosition);
 
         if (feature == null) {
             return;
@@ -229,15 +230,23 @@ public class RCTMGLMapView extends MapView implements
         }
 
         feature.removeFromMap(this);
-        mFeatures.remove(feature);
+        features().remove(feature);
+    }
+
+    private List<AbstractMapFeature> features() {
+      if (mQueuedFeatures != null && mQueuedFeatures.size() > 0) {
+         return mQueuedFeatures;
+      } else {
+         return mFeatures;
+      }
     }
 
     public int getFeatureCount() {
-        return mFeatures.size();
+        return features().size();
     }
 
     public AbstractMapFeature getFeatureAt(int i) {
-        return mFeatures.get(i);
+        return features().get(i);
     }
 
     public synchronized void dispose() {
@@ -367,8 +376,8 @@ public class RCTMGLMapView extends MapView implements
     public void onMapReady(final MapboxMap mapboxMap) {
         mMap = mapboxMap;
 
-        mMap.setStyle(new Style.Builder().fromUrl(mStyleURL));
-
+        mMap.setStyle(new Style.Builder().fromUrl(mStyleURL));        
+        
         reflow(); // the internal widgets(compass, attribution, etc) need this to position themselves correctly
 
         mMap.setOnMarkerClickListener(this);
@@ -383,6 +392,7 @@ public class RCTMGLMapView extends MapView implements
         mMap.addOnMapLongClickListener(this);
 
         // in case props were set before the map was ready lets set them
+        updatePreferredFramesPerSecond();
         updateInsets();
         updateUISettings();
 
@@ -737,6 +747,11 @@ public class RCTMGLMapView extends MapView implements
         }
     }
 
+    public void setReactPreferredFramesPerSecond(Integer preferredFramesPerSecond) {
+      mPreferredFramesPerSecond = preferredFramesPerSecond;      
+      updatePreferredFramesPerSecond();    
+    }
+
     public void setReactContentInset(ReadableArray array) {
         mInsets = array;
         updateInsets();
@@ -906,7 +921,7 @@ public class RCTMGLMapView extends MapView implements
         // Gesture settings
         UiSettings uiSettings = mMap.getUiSettings();
 
-        if (mScrollEnabled != null && uiSettings.isRotateGesturesEnabled() != mScrollEnabled) {
+        if (mScrollEnabled != null && uiSettings.isScrollGesturesEnabled() != mScrollEnabled) {
             uiSettings.setScrollGesturesEnabled(mScrollEnabled);
         }
 
@@ -932,7 +947,14 @@ public class RCTMGLMapView extends MapView implements
 
         if (mZoomEnabled != null && uiSettings.isZoomGesturesEnabled() != mZoomEnabled) {
             uiSettings.setZoomGesturesEnabled(mZoomEnabled);
-        }
+        }              
+    }
+
+    private void updatePreferredFramesPerSecond(){
+      if (mPreferredFramesPerSecond == null) {
+        return;
+      }
+      setMaximumFps(mPreferredFramesPerSecond);
     }
 
     private void updateInsets() {

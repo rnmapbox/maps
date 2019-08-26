@@ -90,39 +90,38 @@ class UserLocation extends React.Component {
   }
 
   async componentDidMount() {
-    const lastKnownLocation = await locationManager.getLastKnownLocation();
-
-    if (lastKnownLocation) {
-      this.setState({
-        coordinates: this._getCoordinatesFromLocation(lastKnownLocation),
-      });
-    }
-
     locationManager.addListener(this._onLocationUpdate);
-    this.setLocationManager({
+    await this.setLocationManager({
       running: this.needsLocationManagerRunning(),
     });
   }
 
   locationManagerRunning = false;
 
-  setLocationManager({running}) {
+  setLocationManager = async ({running}) => {
     if (this.locationManagerRunning !== running) {
+      this.locationManagerRunning = running;
       if (running) {
         locationManager.start();
-      } else {
-        locationManager.stop();
+
+        const lastKnownLocation = await locationManager.getLastKnownLocation();
+
+        if (lastKnownLocation) {
+          this.setState({
+            coordinates: this._getCoordinatesFromLocation(lastKnownLocation),
+          });
+        }
       }
     }
-  }
+  };
 
   needsLocationManagerRunning() {
     return this.props.onUpdate || this.props.visible;
   }
 
-  componentWillUnmount() {
+  async componentWillUnmount() {
     locationManager.removeListener(this._onLocationUpdate);
-    this.setLocationManager({running: false});
+    await this.setLocationManager({running: false});
   }
 
   _onLocationUpdate(location) {
@@ -151,8 +150,8 @@ class UserLocation extends React.Component {
     }
   }
 
-  componentDidUpdate() {
-    this.setLocationManager({
+  async componentDidUpdate() {
+    await this.setLocationManager({
       running: this.needsLocationManagerRunning(),
     });
   }
