@@ -35,9 +35,9 @@ dependencies {
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:8.1.0'
 
     // Dependencies
-    implementation "androidx.vectordrawable:vectordrawable:1.0.1"
-    implementation "androidx.annotation:annotation:1.1.0"
-    implementation "androidx.appcompat:appcompat:1.0.2"
+    implementation "androidx.vectordrawable:vectordrawable:${safeExtGet('vectordrawableVersion', '1.0.1')}"
+    implementation "androidx.annotation:annotation:${safeExtGet('annotationVersion', '1.1.0')}"
+    implementation "androidx.appcompat:appcompat:${safeExtGet('annotationVersion', '1.0.2')}"
     
     implementation "com.squareup.okhttp3:okhttp:${safeExtGet('okhttpVersion', '3.12.1')}"
 
