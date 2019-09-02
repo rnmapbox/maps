@@ -244,7 +244,6 @@ RCT_EXPORT_METHOD(setAccessToken:(NSString *)accessToken)
 
 RCT_EXPORT_METHOD(addCustomHeader:(NSString *)headerName forHeaderValue:(NSString *) headerValue)
 {
-    //[RCTMGLImageQueue.sharedInstance addImage:url scale:scale bridge:bridge completionHandler:callback];
     [MGLCustomHeaders.sharedInstance addHeader:headerValue forHeaderName:headerName];
 }
 

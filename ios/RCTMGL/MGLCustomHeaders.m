@@ -64,20 +64,23 @@
 // adds runtime headers copied from [MGLCustomHeaders _currentHeaders]
 +(void)initHeaders
 {
-    //TODO: Protect so this happens only once
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        Class targetClass = [NSMutableURLRequest class];
-        Method oldMethod = class_getClassMethod(targetClass, @selector(requestWithURL:));
-        Method newMethod = class_getClassMethod(targetClass, @selector(__swizzle_requestWithURL:));
-        method_exchangeImplementations(oldMethod, newMethod);
-    });
+    if (!areHeadersAdded) {
+        areHeadersAdded = YES
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            Class targetClass = [NSMutableURLRequest class];
+            Method oldMethod = class_getClassMethod(targetClass, @selector(requestWithURL:));
+            Method newMethod = class_getClassMethod(targetClass, @selector(__swizzle_requestWithURL:));
+            method_exchangeImplementations(oldMethod, newMethod);
+        });
+    }
 }
 
 - (instancetype)init
 {
     if (self = [super init]) {
         _currentHeaders = [[NSMutableDictionary alloc] init];
+        areHeadersAdded = NO;
     }
     return self;
 }
