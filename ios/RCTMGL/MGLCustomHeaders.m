@@ -10,15 +10,6 @@
 #import <MapBox/MGLNetworkConfiguration.h>
 
 @implementation NSMutableURLRequest (CustomHeaders)
-    + (void)load {
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            Class class = [self class];
-            Method oldMethod = class_getClassMethod(class, @selector(requestWithURL:));
-            Method newMethod = class_getClassMethod(class, @selector(__swizzle_requestWithURL:));
-            method_exchangeImplementations(oldMethod, newMethod);
-        });
-    }
 
     +(NSMutableURLRequest*) __swizzle_requestWithURL:(NSURL*)url {
         if([url.scheme isEqualToString:@"ws"]) {
@@ -62,10 +53,11 @@
 
 // This replaces the [NSMutableURLRequest requestWithURL:] with custom implementation which
 // adds runtime headers copied from [MGLCustomHeaders _currentHeaders]
-+(void)initHeaders
+-(void)initHeaders
 {
     if (!areHeadersAdded) {
-        areHeadersAdded = YES
+        areHeadersAdded = YES;
+        NSLog(@"Replace method [NSMutableURLRequest requestWithURL]");
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             Class targetClass = [NSMutableURLRequest class];

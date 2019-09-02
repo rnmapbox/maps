@@ -12,8 +12,8 @@
 
 @property (nonatomic, strong) NSMutableDictionary<NSString*, NSString*> *currentHeaders;
 
-+ (void)initHeaders;
 + (id)sharedInstance;
+- (void)initHeaders;
 - (void)addHeader:(NSString*)value forHeaderName:(NSString *)header;
 - (void)removeHeader:(NSString *)header;
 
