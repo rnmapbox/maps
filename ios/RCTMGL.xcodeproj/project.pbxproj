@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		431CDACE229D61A6008BE92D /* RCTMGLUserLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 431CDACC229D61A6008BE92D /* RCTMGLUserLocation.m */; };
+		641DE8A8231019E8003B792D /* MGLCustomHeaders.m in Sources */ = {isa = PBXBuildFile; fileRef = 641DE8A7231019E8003B792D /* MGLCustomHeaders.m */; };
 		C410D5D51F7AD0B300CF822A /* RCTMGLLight.m in Sources */ = {isa = PBXBuildFile; fileRef = C410D5D41F7AD0B300CF822A /* RCTMGLLight.m */; };
 		C410D5D81F7AD0C100CF822A /* RCTMGLLightManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C410D5D71F7AD0C100CF822A /* RCTMGLLightManager.m */; };
 		C416015020112B5200006116 /* RNMBImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C416014F20112B5200006116 /* RNMBImageUtils.m */; };
@@ -83,6 +84,8 @@
 /* Begin PBXFileReference section */
 		431CDACC229D61A6008BE92D /* RCTMGLUserLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLUserLocation.m; sourceTree = "<group>"; };
 		431CDACD229D61A6008BE92D /* RCTMGLUserLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLUserLocation.h; sourceTree = "<group>"; };
+		641DE8A6231019E8003B792D /* MGLCustomHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGLCustomHeaders.h; sourceTree = "<group>"; };
+		641DE8A7231019E8003B792D /* MGLCustomHeaders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGLCustomHeaders.m; sourceTree = "<group>"; };
 		C410D5D31F7AD0B300CF822A /* RCTMGLLight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLLight.h; sourceTree = "<group>"; };
 		C410D5D41F7AD0B300CF822A /* RCTMGLLight.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLLight.m; sourceTree = "<group>"; };
 		C410D5D61F7AD0C100CF822A /* RCTMGLLightManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLLightManager.h; sourceTree = "<group>"; };
@@ -330,6 +333,8 @@
 		C4D144501F4E188F00396F26 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				641DE8A6231019E8003B792D /* MGLCustomHeaders.h */,
+				641DE8A7231019E8003B792D /* MGLCustomHeaders.m */,
 				C4D144511F4E190C00396F26 /* MGLModule.h */,
 				C4D144521F4E190C00396F26 /* MGLModule.m */,
 				C470F6AA1FA11C9500614A69 /* MGLOfflineModule.h */,
@@ -572,6 +577,7 @@
 				C4EAF17D1F6324970016DEE8 /* RCTMGLSource.m in Sources */,
 				C490EE0220DC565000CB2E57 /* RCTMGLLocationModule.m in Sources */,
 				C4FB11131F71EC9F0055AE1F /* RCTMGLSymbolLayerManager.m in Sources */,
+				641DE8A8231019E8003B792D /* MGLCustomHeaders.m in Sources */,
 				C4C87A601F844C820064AE95 /* FilterParser.m in Sources */,
 				C4FD1DBF1FCF54FB00213AF2 /* RCTMGLImageSource.m in Sources */,
 				C4EAF12A1F6084920016DEE8 /* CameraUpdateQueue.m in Sources */,

@@ -69,6 +69,10 @@ npm install @react-native-mapbox-gl/maps --save
 * [OfflineManager](/docs/OfflineManager.md)
 * [SnapshotManager](/docs/snapshotManager.md)
 
+### Misc
+* [CustomHttpHeaders](/docs/CustomHttpHeaders.md)
+
+
 ## Expo Support
 We have a feature request open with Expo if you want to see it get in show your support https://expo.canny.io/feature-requests/p/add-mapbox-gl-support
 

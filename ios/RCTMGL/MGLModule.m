@@ -11,6 +11,7 @@
 #import "MGLOfflineModule.h"
 #import "CameraMode.h"
 #import "RCTMGLSource.h"
+#import "MGLCustomHeaders.h"
 @import Mapbox;
 
 @implementation MGLModule
@@ -243,12 +244,12 @@ RCT_EXPORT_METHOD(setAccessToken:(NSString *)accessToken)
 
 RCT_EXPORT_METHOD(addCustomHeader:(NSString *)headerName forHeaderValue:(NSString *) headerValue)
 {
-    // do nothing for now
+    [MGLCustomHeaders.sharedInstance addHeader:headerValue forHeaderName:headerName];
 }
 
 RCT_EXPORT_METHOD(removeCustomHeader:(NSString *)headerName)
 {
-    // do nothing for now
+    [MGLCustomHeaders.sharedInstance removeHeader:headerName];
 }
 
 RCT_EXPORT_METHOD(getAccessToken:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
