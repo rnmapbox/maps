@@ -198,6 +198,32 @@ static double const M2PI = M_PI * 2;
     
 }
 
+- (void)setReactAttributionPosition:(NSDictionary<NSString *,NSNumber *> *)position
+{
+    NSNumber *left   = [position valueForKey:@"left"];
+    NSNumber *right  = [position valueForKey:@"right"];
+    NSNumber *top    = [position valueForKey:@"top"];
+    NSNumber *bottom = [position valueForKey:@"bottom"];
+    if (left != nil && top != nil) {
+        [self setAttributionButtonPosition:MGLOrnamentPositionTopLeft];
+        [self setAttributionButtonMargins:CGPointMake([left floatValue], [top floatValue])];
+    } else if (right != nil && top != nil) {
+        [self setAttributionButtonPosition:MGLOrnamentPositionTopRight];
+        [self setAttributionButtonMargins:CGPointMake([right floatValue], [top floatValue])];
+    } else if (bottom != nil && right != nil) {
+        [self setAttributionButtonPosition:MGLOrnamentPositionBottomRight];
+        [self setAttributionButtonMargins:CGPointMake([right floatValue], [bottom floatValue])];
+    } else if (bottom != nil && left != nil) {
+        [self setAttributionButtonPosition:MGLOrnamentPositionBottomLeft];
+        [self setAttributionButtonMargins:CGPointMake([left floatValue], [bottom floatValue])];
+    } else {
+        [self setAttributionButtonPosition:MGLOrnamentPositionBottomRight];
+        // same as MGLOrnamentDefaultPositionOffset in MGLMapView.mm
+        [self setAttributionButtonMargins:CGPointMake(8, 8)];
+    }
+    
+}
+
 - (void)setReactLogoEnabled:(BOOL)reactLogoEnabled
 {
     _reactLogoEnabled = reactLogoEnabled;

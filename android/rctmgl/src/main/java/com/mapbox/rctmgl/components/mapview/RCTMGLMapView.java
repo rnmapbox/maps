@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.MotionEvent;
@@ -16,6 +17,7 @@ import android.view.MotionEvent;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
@@ -56,6 +58,7 @@ import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.rctmgl.utils.GeoViewport;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -105,6 +108,8 @@ public class RCTMGLMapView extends MapView implements
     private Boolean mPitchEnabled;
     private Boolean mRotateEnabled;
     private Boolean mAttributionEnabled;
+    private Integer mAttributionGravity;
+    private int[] mAttributionMargin;
     private Boolean mLogoEnabled;
     private Boolean mCompassEnabled;
     private Boolean mZoomEnabled;
@@ -137,7 +142,7 @@ public class RCTMGLMapView extends MapView implements
         mHandler = new Handler();
 
         setLifecycleListeners();
-        
+
 //        addOnMapChangedListener(this);
         addOnCameraIsChangingListener(this);
         addOnCameraDidChangeListener(this);
@@ -376,8 +381,8 @@ public class RCTMGLMapView extends MapView implements
     public void onMapReady(final MapboxMap mapboxMap) {
         mMap = mapboxMap;
 
-        mMap.setStyle(new Style.Builder().fromUrl(mStyleURL));        
-        
+        mMap.setStyle(new Style.Builder().fromUrl(mStyleURL));
+
         reflow(); // the internal widgets(compass, attribution, etc) need this to position themselves correctly
 
         mMap.setOnMarkerClickListener(this);
@@ -748,8 +753,8 @@ public class RCTMGLMapView extends MapView implements
     }
 
     public void setReactPreferredFramesPerSecond(Integer preferredFramesPerSecond) {
-      mPreferredFramesPerSecond = preferredFramesPerSecond;      
-      updatePreferredFramesPerSecond();    
+      mPreferredFramesPerSecond = preferredFramesPerSecond;
+      updatePreferredFramesPerSecond();
     }
 
     public void setReactContentInset(ReadableArray array) {
@@ -793,6 +798,40 @@ public class RCTMGLMapView extends MapView implements
 
     public void setReactAttributionEnabled(boolean attributionEnabled) {
         mAttributionEnabled = attributionEnabled;
+        updateUISettings();
+    }
+
+    public void setReactAttributionPosition(ReadableMap position) {
+        if (position == null) {
+            // reset from explicit to default
+            if (mAttributionGravity != null) {
+                MapboxMapOptions defaultOptions = MapboxMapOptions.createFromAttributes(mContext);
+                mAttributionGravity = defaultOptions.getAttributionGravity();
+                mAttributionMargin = Arrays.copyOf(defaultOptions.getAttributionMargins(), 4);
+                updateUISettings();
+            }
+            return;
+        }
+        mAttributionGravity = Gravity.NO_GRAVITY;
+        if (position.hasKey("left")) {
+            mAttributionGravity |= Gravity.START;
+        }
+        if (position.hasKey("right")) {
+            mAttributionGravity |= Gravity.END;
+        }
+        if (position.hasKey("top")) {
+            mAttributionGravity |= Gravity.TOP;
+        }
+        if (position.hasKey("bottom")) {
+            mAttributionGravity |= Gravity.BOTTOM;
+        }
+        float density = mContext.getResources().getDisplayMetrics().density;
+        mAttributionMargin = new int[]{
+            position.hasKey("left") ? (int) density * position.getInt("left") : 0,
+            position.hasKey("top") ? (int) density * position.getInt("top") : 0,
+            position.hasKey("right") ? (int) density * position.getInt("right") : 0,
+            position.hasKey("bottom") ? (int) density * position.getInt("bottom") : 0
+        };
         updateUISettings();
     }
 
@@ -937,6 +976,25 @@ public class RCTMGLMapView extends MapView implements
             uiSettings.setAttributionEnabled(mAttributionEnabled);
         }
 
+        if (mAttributionGravity != null && uiSettings.getAttributionGravity() != mAttributionGravity) {
+            uiSettings.setAttributionGravity(mAttributionGravity);
+        }
+
+        if (mAttributionMargin != null &&
+                (uiSettings.getAttributionMarginLeft() != mAttributionMargin[0] ||
+                        uiSettings.getAttributionMarginTop() != mAttributionMargin[1] ||
+                        uiSettings.getAttributionMarginRight() != mAttributionMargin[2] ||
+                        uiSettings.getAttributionMarginBottom() != mAttributionMargin[3]
+                )
+        ) {
+            uiSettings.setAttributionMargins(
+                mAttributionMargin[0],
+                mAttributionMargin[1],
+                mAttributionMargin[2],
+                mAttributionMargin[3]
+            );
+        }
+
         if (mLogoEnabled != null && uiSettings.isLogoEnabled() != mLogoEnabled) {
             uiSettings.setLogoEnabled(mLogoEnabled);
         }
@@ -947,7 +1005,7 @@ public class RCTMGLMapView extends MapView implements
 
         if (mZoomEnabled != null && uiSettings.isZoomGesturesEnabled() != mZoomEnabled) {
             uiSettings.setZoomGesturesEnabled(mZoomEnabled);
-        }              
+        }
     }
 
     private void updatePreferredFramesPerSecond(){
