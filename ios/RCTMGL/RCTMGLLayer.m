@@ -68,7 +68,7 @@
     _layerIndex = layerIndex;
     if (_styleLayer != nil) {
         [self removeFromMap:_style];
-        [self insertAtIndex:(NSUInteger)_layerIndex];
+        [self insertAtIndex:_layerIndex.unsignedIntegerValue];
     }
 }
 
@@ -157,7 +157,7 @@
     } else if (_belowLayerID != nil) {
         [self insertBelow:_belowLayerID];
     } else if (_layerIndex != nil) {
-        [self insertAtIndex:(NSUInteger)_layerIndex];
+        [self insertAtIndex:_layerIndex.unsignedIntegerValue];
     } else {
         [_style addLayer:_styleLayer];
         [_map layerAdded:_styleLayer];
