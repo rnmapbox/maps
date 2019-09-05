@@ -142,7 +142,7 @@ public class RCTMGLMapView extends MapView implements
         mHandler = new Handler();
 
         setLifecycleListeners();
-
+        
 //        addOnMapChangedListener(this);
         addOnCameraIsChangingListener(this);
         addOnCameraDidChangeListener(this);
@@ -381,8 +381,8 @@ public class RCTMGLMapView extends MapView implements
     public void onMapReady(final MapboxMap mapboxMap) {
         mMap = mapboxMap;
 
-        mMap.setStyle(new Style.Builder().fromUrl(mStyleURL));
-
+        mMap.setStyle(new Style.Builder().fromUrl(mStyleURL));        
+        
         reflow(); // the internal widgets(compass, attribution, etc) need this to position themselves correctly
 
         mMap.setOnMarkerClickListener(this);
@@ -753,8 +753,8 @@ public class RCTMGLMapView extends MapView implements
     }
 
     public void setReactPreferredFramesPerSecond(Integer preferredFramesPerSecond) {
-      mPreferredFramesPerSecond = preferredFramesPerSecond;
-      updatePreferredFramesPerSecond();
+      mPreferredFramesPerSecond = preferredFramesPerSecond;      
+      updatePreferredFramesPerSecond();    
     }
 
     public void setReactContentInset(ReadableArray array) {
@@ -1005,7 +1005,7 @@ public class RCTMGLMapView extends MapView implements
 
         if (mZoomEnabled != null && uiSettings.isZoomGesturesEnabled() != mZoomEnabled) {
             uiSettings.setZoomGesturesEnabled(mZoomEnabled);
-        }
+        }              
     }
 
     private void updatePreferredFramesPerSecond(){
