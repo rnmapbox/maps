@@ -90,8 +90,8 @@ class ShowPointAnnotation extends React.Component {
 
     for (let i = 0; i < this.state.coordinates.length; i++) {
       const coordinate = this.state.coordinates[i];
-      console.log('render annotation', coordinate.join())
-      const title = `Longitude: ${coordinate[0]} Latitude: ${coordinate[1]}`;
+
+      const title = `Lon: ${coordinate[0]} Lat: ${coordinate[1]}`;
       const id = `pointAnnotation${i}`;
 
       const animationStyle = {};
@@ -107,7 +107,7 @@ class ShowPointAnnotation extends React.Component {
           id={id}
           coordinate={coordinate}
           anchor={{x: 0, y: -1}}
-          title="This is a point ann"
+          title={title}
           onSelected={e => {
             console.log(e)
           }}

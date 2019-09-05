@@ -1,6 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Demo extends React.Component {
+  static propTypes = {
+    navigation: PropTypes.shape({
+      getParam: PropTypes.func,
+      goBack: PropTypes.func,
+    }),
+  };
+
   onDismissExample() {
     this.props.navigation.goBack();
   }

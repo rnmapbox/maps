@@ -428,7 +428,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
   /**
    * Map camera will perform updates based on provided config. Deprecated use Camera#setCamera.
    */
-  setCamera(config = {}) {
+  setCamera() {
     console.warn(
       'MapView.setCamera is deprecated - please use Camera#setCamera',
     );

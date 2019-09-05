@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {NativeModules, requireNativeComponent} from 'react-native';
 
-import locationManager from '../modules/location/locationManager';
-import {isNumber, toJSONString, viewPropTypes, existenceChange} from '../utils';
+import {toJSONString, viewPropTypes, existenceChange} from '../utils';
 import * as geoUtils from '../utils/geoUtils';
 
 const MapboxGL = NativeModules.MGLModule;
@@ -96,7 +95,7 @@ class Camera extends React.Component {
     // position
     alignment: PropTypes.arrayOf(PropTypes.number),
 
-    // Triggered when the 
+    // Triggered when the
     onUserTrackingModeChange: PropTypes.func,
   };
 
@@ -230,10 +229,10 @@ class Camera extends React.Component {
       cB.ne[1] !== nB.ne[1] ||
       cB.sw[0] !== nB.sw[0] ||
       cB.sw[1] !== nB.sw[1] ||
-      cB.paddingTop != nB.paddingTop ||
-      cB.paddingLeft != nB.paddingLeft ||
-      cB.paddingRight != nB.paddingRight ||
-      cB.paddingBottom != nB.paddingBottom
+      cB.paddingTop !== nB.paddingTop ||
+      cB.paddingLeft !== nB.paddingLeft ||
+      cB.paddingRight !== nB.paddingRight ||
+      cB.paddingBottom !== nB.paddingBottom
     );
   }
 
@@ -291,7 +290,7 @@ class Camera extends React.Component {
         ...pad,
       },
       animationDuration,
-      animationMode: Camera.Mode.Move,
+      animationMode: Camera.Mode.Ease,
     });
   }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.Property;
@@ -151,18 +152,19 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         if (!hasInitialized()) {
             return;
         }
+        if (getStyle() == null) return;
 
         String userBackgroundID = UserLocationLayerConstants.BACKGROUND_LAYER_ID;
-        Layer userLocationBackgroundLayer = mMap.getStyle().getLayer(userBackgroundID);
+        Layer userLocationBackgroundLayer = getStyle().getLayer(userBackgroundID);
 
         // place below user location layer
         if (userLocationBackgroundLayer != null) {
-            mMap.getStyle().addLayerBelow(mLayer, userBackgroundID);
+            getStyle().addLayerBelow(mLayer, userBackgroundID);
             mMapView.layerAdded(mLayer);
             return;
         }
 
-        mMap.getStyle().addLayer(mLayer);
+        getStyle().addLayer(mLayer);
         mMapView.layerAdded(mLayer);
     }
 
@@ -172,7 +174,8 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
                 if (!hasInitialized()) {
                     return;
                 }
-                mMap.getStyle().addLayerAbove(mLayer, aboveLayerID);
+                if (getStyle() == null) return;
+                getStyle().addLayerAbove(mLayer, aboveLayerID);
                 mMapView.layerAdded(mLayer);
             }
         });
@@ -184,7 +187,8 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
                 if (!hasInitialized()) {
                     return;
                 }
-                mMap.getStyle().addLayerBelow(mLayer, belowLayerID);
+                if (getStyle() == null) return;
+                getStyle().addLayerBelow(mLayer, belowLayerID);
                 mMapView.layerAdded(mLayer);
             }
         });
@@ -194,12 +198,14 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         if (!hasInitialized()) {
             return;
         }
-        mMap.getStyle().addLayerAt(mLayer, index);
+        if (getStyle() == null) return;
+        getStyle().addLayerAt(mLayer, index);
         mMapView.layerAdded(mLayer);
     }
 
     protected void insertLayer() {
-        if (mMap.getStyle().getLayer(mID) != null) {
+        if (getStyle() == null) return;
+        if (getStyle().getLayer(mID) != null) {
             return; // prevent adding a layer twice
         }
 
@@ -235,7 +241,9 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         mMap = mapView.getMapboxMap();
         mMapView = mapView;
 
-        T existingLayer = mMap.getStyle().<T>getLayerAs(mID);
+        if (getStyle() == null) return;
+
+        T existingLayer = getStyle().<T>getLayerAs(mID);
         if (existingLayer != null) {
             mLayer = existingLayer;
         } else {
@@ -252,9 +260,16 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
 
     @Override
     public void removeFromMap(RCTMGLMapView mapView) {
-        if (mMap.getStyle() != null) {
-            mMap.getStyle().removeLayer(mLayer);
+        if (getStyle() != null) {
+            getStyle().removeLayer(mLayer);
         }
+    }
+
+    private Style getStyle() {
+        if (mMap == null) {
+            return null;
+        }
+        return mMap.getStyle();
     }
 
     public abstract T makeLayer();
