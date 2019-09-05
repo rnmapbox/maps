@@ -89,10 +89,13 @@ class Camera extends React.Component {
     followPitch: PropTypes.number,
     followHeading: PropTypes.number,
 
+    // manual update
     triggerKey: PropTypes.any,
 
+    // position
     alignment: PropTypes.arrayOf(PropTypes.number),
 
+    // Triggered when the
     onUserTrackingModeChange: PropTypes.func,
   };
 

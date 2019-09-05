@@ -29,9 +29,10 @@ export function makeFeatureCollection(features = []) {
 }
 
 export function addToFeatureCollection(newFeatureCollection, newFeature) {
-  const shallowFeatureCollection = Object.assign({}, newFeatureCollection);
-  shallowFeatureCollection.features.push(newFeature);
-  return featureCollection;
+  return {
+    ...newFeatureCollection,
+    features: [...newFeatureCollection.features, newFeature],
+  };
 }
 
 export function calculateDistance(origin, dest) {
