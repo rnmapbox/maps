@@ -9,6 +9,13 @@ import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import TabBarPage from './common/TabBarPage';
 import Bubble from './common/Bubble';
 
+const isValidCoordinate = geometry => {
+  if (!geometry) {
+    return false;
+  }
+  return geometry.coordinates[0] !== 0 && geometry.coordinates[1] !== 0;
+};
+
 class ShowRegionDidChange extends React.Component {
   static propTypes = {
     ...BaseExamplePropTypes,
@@ -38,7 +45,6 @@ class ShowRegionDidChange extends React.Component {
     this.onRegionDidChange = this.onRegionDidChange.bind(this);
     this.onRegionWillChange = this.onRegionWillChange.bind(this);
     this.onRegionIsChanging = this.onRegionIsChanging.bind(this);
-    this.onDidFinishLoadingMap = this.onDidFinishLoadingMap.bind(this);
     this.onOptionPress = this.onOptionPress.bind(this);
   }
 
@@ -69,18 +75,6 @@ class ShowRegionDidChange extends React.Component {
     }
   }
 
-  async onDidFinishLoadingMap() {
-    const visibleBounds = await this.map.getVisibleBounds();
-    console.log('Visible Bounds', visibleBounds); // eslint-disable-line no-console
-  }
-
-  isValidCoordinate(geometry) {
-    if (!geometry) {
-      return false;
-    }
-    return geometry.coordinates[0] !== 0 && geometry.coordinates[1] !== 0;
-  }
-
   onRegionWillChange(regionFeature) {
     this.setState({reason: 'will change', regionFeature});
   }
@@ -96,7 +90,7 @@ class ShowRegionDidChange extends React.Component {
   renderRegionChange() {
     if (
       !this.state.regionFeature ||
-      !this.isValidCoordinate(this.state.regionFeature.geometry)
+      !isValidCoordinate(this.state.regionFeature.geometry)
     ) {
       return (
         <Bubble style={{marginBottom: 100}}>
@@ -142,7 +136,6 @@ class ShowRegionDidChange extends React.Component {
         <MapboxGL.MapView
           ref={c => (this.map = c)}
           style={sheet.matchParent}
-          onDidFinishLoadingMap={this.onDidFinishLoadingMap}
           onRegionWillChange={this.onRegionWillChange}
           onRegionIsChanging={this.onRegionIsChanging}
           onRegionDidChange={this.onRegionDidChange}

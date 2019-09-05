@@ -41,6 +41,7 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:${safeExtGet('okhttpVersion', '3.12.1')}"
 
     // Mapbox plugins
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.5.1'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v8:0.10.0'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v8:0.3.0'
     implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:4.8.0'

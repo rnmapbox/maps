@@ -1,16 +1,11 @@
 import React from 'react';
-import MapboxGL from '@react-native-mapbox-gl/maps';
 import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {Icon} from 'react-native-elements';
+import PropTypes from 'prop-types';
 
-// components
 import MapHeader from '../examples/common/MapHeader';
-
-// styles
 import sheet from '../styles/sheet';
 import colors from '../styles/colors';
-
-// examples
 import ShowMap from '../examples/ShowMap';
 import SetPitch from '../examples/SetPitch';
 import SetHeading from '../examples/SetHeading';
@@ -120,6 +115,10 @@ const Examples = [
 ];
 
 class Home extends React.Component {
+  static propTypes = {
+    navigation: PropTypes.shape({navigate: PropTypes.func}),
+  };
+
   constructor(props) {
     super(props);
     this.renderItem = this.renderItem.bind(this);

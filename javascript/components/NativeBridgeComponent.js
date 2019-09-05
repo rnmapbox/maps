@@ -1,5 +1,3 @@
-import React from 'react';
-
 import {runNativeCommand, isAndroid} from '../utils';
 
 let callbackIncrement = 0;

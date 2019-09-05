@@ -76,10 +76,6 @@ class DriveTheLine extends React.Component {
     this.setState({routeSimulator});
   }
 
-  componentDidMount() {
-    this.getDirections();
-  }
-
   async componentDidMount() {
     const reqOptions = {
       waypoints: [
