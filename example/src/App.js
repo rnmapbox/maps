@@ -1,27 +1,14 @@
 import React from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {
-  FlatList,
-  Modal,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  YellowBox,
-} from 'react-native';
-import {Icon} from 'react-native-elements';
+import {StyleSheet, Text, View, YellowBox} from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import {createStackNavigator} from 'react-navigation';
-import CardStackStyleInterpolator from 'react-navigation-stack/dist/views/StackView/StackViewStyleInterpolator';
+import CardStackStyleInterpolator from 'react-navigation-stack/dist/views/StackView/StackViewStyleInterpolator'; // eslint-disable-line import/no-extraneous-dependencies
 
-// Styles
 import sheet from './styles/sheet';
 import colors from './styles/colors';
-// Utils
 import {IS_ANDROID} from './utils';
 import config from './utils/config';
-
-// screens
 import Home from './scenes/Home';
 import Demo from './scenes/Demo';
 

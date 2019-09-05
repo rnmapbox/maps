@@ -52,7 +52,9 @@ export class AnimatedPoint extends AnimatedWithChildren {
   }
 
   addListener(cb) {
-    const id = `${String(uniqueID++)}-${String(Date.now())}`;
+    uniqueID += uniqueID;
+
+    const id = `${String(uniqueID)}-${String(Date.now())}`;
 
     const completeCB = () => {
       if (typeof cb === 'function') {

@@ -52,7 +52,7 @@ class SetUserTrackingModes extends React.Component {
   }
 
   onUserTrackingModeChange(e) {
-    const {followUserMode, followUserLocation} = e.nativeEvent.payload;
+    const {followUserMode} = e.nativeEvent.payload;
     this.setState({currentTrackingMode: followUserMode || 'none'});
   }
 

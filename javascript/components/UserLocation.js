@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {NativeModules, requireNativeComponent} from 'react-native';
 
-import {viewPropTypes} from '../utils';
 import locationManager from '../modules/location/locationManager';
 
-import Annotation from './annotations/Annotation';
+import Annotation from './annotations/Annotation'; // eslint-disable-line import/no-cycle
 import CircleLayer from './CircleLayer';
 
 const mapboxBlue = 'rgba(51, 181, 229, 100)';
@@ -49,9 +47,6 @@ const normalIcon = [
     style={layerStyles.normal.foreground}
   />,
 ];
-
-const compassIcon = null;
-const navigationIcon = null;
 
 class UserLocation extends React.Component {
   static propTypes = {
