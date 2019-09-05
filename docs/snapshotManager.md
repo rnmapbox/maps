@@ -24,10 +24,10 @@ const uri = await MapboxGL.snapshotManager.takeSnap({
   pitch: 30,
   heading: 20,
   styleURL: MapboxGL.StyleURL.Dark,
-  writeToDisk: true, // creates a temp file
+  writeToDisk: true, // Create a temporary file
 });
 
-// creates base64 png of base map
+// creates base64 png of base map without logo
 const uri = await MapboxGL.snapshotManager.takeSnap({
   centerCoordinate: [-74.126410, 40.797968],
   width: width,
@@ -36,6 +36,7 @@ const uri = await MapboxGL.snapshotManager.takeSnap({
   pitch: 30,
   heading: 20,
   styleURL: MapboxGL.StyleURL.Dark,
+  withLogo: false, // Disable Mapbox logo (Android only)
 });
 
 // creates snapshot with bounds

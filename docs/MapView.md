@@ -7,6 +7,7 @@
 | contentInset | `union` | `none` | `false` | The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport. |
 | style | `any` | `none` | `false` | Style for wrapping React Native View |
 | styleURL | `string` | `MapboxGL.StyleURL.Street` | `false` | Style URL for map |
+| preferredFramesPerSecond | `number` | `none` | `false` | iOS: The preferred frame rate at which the map view is rendered.<br/>The default value for this property is MGLMapViewPreferredFramesPerSecondDefault,<br/>which will adaptively set the preferred frame rate based on the capability of<br/>the user’s device to maintain a smooth experience. This property can be set to arbitrary integer values.<br/><br/>Android: The maximum frame rate at which the map view is rendered, but it can't excess the ability of device hardware.<br/>This property can be set to arbitrary integer values. |
 | localizeLabels | `bool` | `false` | `false` | Automatically change the language of the map labels to the system’s preferred language,<br/>this is not something that can be toggled on/off |
 | zoomEnabled | `bool` | `none` | `false` | Enable/Disable zoom on the map |
 | scrollEnabled | `bool` | `true` | `false` | Enable/Disable scroll on the map |
@@ -30,6 +31,7 @@
 | onWillStartRenderingMap | `func` | `none` | `false` | This event is triggered when the map will start rendering the map. |
 | onDidFinishRenderingMap | `func` | `none` | `false` | This event is triggered when the map finished rendering the map. |
 | onDidFinishRenderingMapFully | `func` | `none` | `false` | This event is triggered when the map fully finished rendering the map. |
+| onUserLocationUpdate | `func` | `none` | `false` | This event is triggered when the user location is updated. |
 | onDidFinishLoadingStyle | `func` | `none` | `false` | This event is triggered when a style has finished loading. |
 | regionWillChangeDebounceTime | `number` | `10` | `false` | The emitted frequency of regionwillchange events |
 | regionDidChangeDebounceTime | `number` | `500` | `false` | The emitted frequency of regiondidchange events |
@@ -119,14 +121,14 @@ this._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'],
 ```
 
 
-#### setCamera(config)
+#### setCamera()
 
 Map camera will perform updates based on provided config. Deprecated use Camera#setCamera.
 
 ##### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `config` | `n/a` | `Yes` | undefined |
+
 
 
 #### takeSnap(writeToDisk)
