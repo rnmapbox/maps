@@ -20,7 +20,7 @@ class SnapshotOptions {
     this.width = options.width || 50.0;
     this.height = options.height || 50.0;
     this.writeToDisk = options.writeToDisk || false;
-    this.withLogo = options.withLogo || true;
+    this.withLogo = options.withLogo === undefined ? true : options.withLogo;
 
     if (options.centerCoordinate) {
       this.centerCoordinate = this._createCenterCoordPoint(
