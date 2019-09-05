@@ -36,6 +36,7 @@ class SnapshotManager {
    *   pitch: 30,
    *   heading: 20,
    *   styleURL: MapboxGL.StyleURL.Dark,
+   *   withLogo: false, // disables Mapbox logo
    * });
    *
    * // creates snapshot with bounds

@@ -49,6 +49,7 @@ class TakeSnapshot extends React.Component {
       zoomLevel: 12,
       pitch: 30,
       heading: 20,
+      withLogo: false,
       styleURL: MapboxGL.StyleURL.Dark,
       writeToDisk: true, // creates a temp file
     });
