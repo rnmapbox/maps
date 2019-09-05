@@ -24,11 +24,11 @@ RCT_EXPORT_METHOD(takeSnap:(NSDictionary *)jsOptions
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{      
         MGLMapSnapshotOptions *options = [self _getOptions:jsOptions];
-        MGLMapSnapshotter *snapshotter = [[MGLMapSnapshotter alloc] initWithOptions:options];
-        
-        [snapshotter startWithCompletionHandler:^(MGLMapSnapshot *snapshot, NSError *err) {
+        __block MGLMapSnapshotter *snapshotter = [[MGLMapSnapshotter alloc] initWithOptions:options];
+
+        [snapshotter startWithCompletionHandler:^(MGLMapSnapshot * _Nullable snapshot, NSError * _Nullable err) {         
             if (err != nil) {
                 reject(@"takeSnap", @"Could not create snapshot", err);
                 return;
@@ -42,6 +42,7 @@ RCT_EXPORT_METHOD(takeSnap:(NSDictionary *)jsOptions
             }
             
             resolve(result);
+            snapshotter = nil;
         }];
     });
 }
