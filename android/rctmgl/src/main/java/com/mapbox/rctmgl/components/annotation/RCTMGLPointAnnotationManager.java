@@ -45,28 +45,13 @@ public class RCTMGLPointAnnotationManager extends AbstractEventEmitter<RCTMGLPoi
         annotation.setID(id);
     }
 
-    @ReactProp(name="title")
-    public void setTitle(RCTMGLPointAnnotation annotation, String title) {
-        annotation.setTitle(title);
-    }
-
-    @ReactProp(name="snippet")
-    public void setSnippet(RCTMGLPointAnnotation annotation, String snippet) {
-        annotation.setSnippet(snippet);
-    }
-
     @ReactProp(name="coordinate")
     public void setCoordinate(RCTMGLPointAnnotation annotation, String geoJSONStr) {
-        annotation.setCoordinate(GeoJSONUtils.toPointGeometry(geoJSONStr));
+        annotation.setLatLng(GeoJSONUtils.toPointGeometry(geoJSONStr));
     }
 
     @ReactProp(name="anchor")
     public void setAnchor(RCTMGLPointAnnotation annotation, ReadableMap map) {
         annotation.setAnchor((float) map.getDouble("x"), (float) map.getDouble("y"));
-    }
-
-    @ReactProp(name="selected")
-    public void setSelected(RCTMGLPointAnnotation annotation, boolean isSelected) {
-        annotation.setReactSelected(isSelected);
     }
 }
