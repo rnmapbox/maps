@@ -7,7 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Bitmap;
 import android.view.MotionEvent;
 import android.view.View;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.mapbox.geojson.Point;
@@ -70,34 +70,18 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
                     int oldRight, int oldBottom) {
                 if (left != oldLeft || right != oldRight || top != oldTop || bottom != oldBottom) {
                     if (v != null) {
-                        int w = v.getWidth();
-                        int h = v.getHeight();
-                        if (w <= 0 || h <= 0) {
-                            throw new RuntimeException("Impossible to snapshot the view: view is invalid");
+                        int w = right - left;
+                        int h = bottom - top;
+                        if (w > 0 && h > 0) {
+                            Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                            bitmap.eraseColor(Color.TRANSPARENT);
+                            Canvas canvas = new Canvas(bitmap);
+                            v.draw(canvas);
+                            mBitmap = bitmap;
+                            mBitmapId = Integer.toString(v.getId());
+                            addBitmapToStyle();
                         }
-                        v.layout(0, 0, w, h);
-                        Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-                        bitmap.eraseColor(Color.TRANSPARENT);
-                        Canvas canvas = new Canvas(bitmap);
-                        v.draw(canvas);
-                        mBitmap = bitmap;
-                        mBitmapId = Integer.toString(v.getId());
-                        if (mMap != null) {
-                            mMap.getStyle(new Style.OnStyleLoaded() {
-                                @Override
-                                public void onStyleLoaded(@NonNull Style style) {
-                                    style.addImage(mBitmapId, mBitmap);
-                                    if (mAnnotation != null) {
-                                        mAnnotation.setIconImage(mBitmapId);
-                                    }
-                                    if (mAnchor != null) {
-                                        int w = mBitmap.getWidth();
-                                        int h = mBitmap.getHeight();
-                                        mAnnotation.setIconOffset(new PointF(w * mAnchor[0], h * mAnchor[1]));
-                                    }
-                                }
-                            });
-                        }
+
                     }
                 }
             }
@@ -112,6 +96,9 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
                 public void onStyleLoaded(@NonNull Style style) {
                     style.removeImage(mBitmapId);
                     mHasChildren = false;
+                    mBitmap = null;
+                    mBitmapId = null;
+                    setOptions();
                 }
             });
         }
@@ -122,16 +109,8 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         mMapView = mapView;
         mMap = mapView.getMapboxMap();
         makeMarker();
-        if (mBitmapId != null) {
-            mMap.getStyle(new Style.OnStyleLoaded() {
-                @Override
-                public void onStyleLoaded(@NonNull Style style) {
-                    style.addImage(mBitmapId, mBitmap);
-                    if (mAnnotation != null) {
-                        mAnnotation.setIconImage(mBitmapId);
-                    }
-                }
-            });
+        if (mHasChildren) {
+            addBitmapToStyle();
         }
     }
 
@@ -167,17 +146,25 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
 
         if (mAnnotation != null) {
             mAnnotation.setLatLng(GeoJSONUtils.toLatLng(point));
+            mMapView.getSymbolManager().update(mAnnotation);
         }
     }
 
     public void setAnchor(float x, float y) {
         mAnchor = new Float[]{x, y};
-
-        if (mAnnotation != null && mBitmap != null) {
-            int w = mBitmap.getWidth();
-            int h = mBitmap.getHeight();
-            mAnnotation.setIconOffset(new PointF(w * mAnchor[0], h * mAnchor[1]));
-        }
+        Log.v("test", "setAnchor: " + Float.toString(x));
+        // if (mAnnotation != null) {
+        //     int w, h;
+        //     if (mBitmap != null) {
+        //         w = mBitmap.getWidth();
+        //         h = mBitmap.getHeight();
+        //     } else {
+        //         w = 23;
+        //         h = 33;
+        //     }
+        //     mAnnotation.setIconOffset(new PointF(w * mAnchor[0], h * mAnchor[1]));
+        //     mMapView.getSymbolManager().update(mAnnotation);
+        // }
     }
 
     public Symbol getMarker() {
@@ -200,6 +187,7 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
 
     public void makeMarker() {
         mAnnotation = mMapView.getSymbolManager().create(buildOptions());
+        setOptions();
     }
 
     private SymbolOptions buildOptions() {
@@ -208,19 +196,48 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
             .withIconSize(1.0f)
             .withSymbolSortKey(10.0f)
             .withDraggable(true);
-        if (mAnchor != null && mBitmap != null) {
-            int w = mBitmap.getWidth();
-            int h = mBitmap.getHeight();
-            options.withIconOffset(new Float[]{w * mAnchor[0], h * mAnchor[1]});
-        }
-        if (mHasChildren) {
-            if (mBitmapId != null) {
-                options.withIconImage(mBitmapId);
-            }
-        } else {
-            options.withIconImage(MARKER_IMAGE_ID);
-        }
         return options;
+    }
+
+    private void setOptions() {
+        if (mAnnotation != null) {
+            if (mHasChildren) {
+                if (mBitmapId != null) {
+                    mAnnotation.setIconImage(mBitmapId);
+                }
+            } else {
+                mAnnotation.setIconImage(MARKER_IMAGE_ID);
+                mAnnotation.setIconAnchor("bottom");
+            }
+            if (mAnchor != null) {
+                if (mHasChildren) {
+                    if (mBitmap != null) {
+                        int w = mBitmap.getWidth();
+                        int h = mBitmap.getHeight();
+                        final float scale = getResources().getDisplayMetrics().density;
+                        w = (int) (w / scale);
+                        h = (int) (h / scale);
+                        mAnnotation.setIconAnchor("top-left");
+                        mAnnotation.setIconOffset(new PointF(w * mAnchor[0] * -1, h * mAnchor[1] * -1));
+                    }
+                }
+            }
+            mMapView.getSymbolManager().update(mAnnotation);
+        }
+    }
+
+    private void addBitmapToStyle() {
+        if (mMap != null && mBitmapId != null && mBitmap != null) {
+            mMap.getStyle(new Style.OnStyleLoaded() {
+                @Override
+                public void onStyleLoaded(@NonNull Style style) {
+                    if (style.getImage(mBitmapId) == null) {
+                        style.addImage(mBitmapId, mBitmap);
+                        setOptions();
+                    }
+                }
+            });
+        }
     }
 
     private PointAnnotationClickEvent makeEvent(boolean isSelect) {
