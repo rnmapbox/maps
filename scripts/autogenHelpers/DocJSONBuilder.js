@@ -1,10 +1,12 @@
-const docgen = require('react-docgen');
-const dir = require('node-dir');
 const fs = require('fs');
 const path = require('path');
-const { exec } = require('child_process');
-const JSDocNodeTree = require('./JSDocNodeTree');
+const {exec} = require('child_process');
+
+const dir = require('node-dir');
+const docgen = require('react-docgen');
 const parseJsDoc = require('react-docgen/dist/utils/parseJsDoc').default;
+
+const JSDocNodeTree = require('./JSDocNodeTree');
 
 const COMPONENT_PATH = path.join(
   __dirname,
@@ -22,15 +24,13 @@ const IGNORE_FILES = [
   'NativeBridgeComponent',
 ];
 
-const IGNORE_METHODS = [
-  'setNativeProps',
-];
+const IGNORE_METHODS = ['setNativeProps'];
 
 class DocJSONBuilder {
   constructor(styledLayers) {
     this._styledLayers = {};
 
-    for (let styleLayer of styledLayers) {
+    for (const styleLayer of styledLayers) {
       const ComponentName = pascelCase(styleLayer.name);
       this._styledLayers[
         ComponentName + (ComponentName === 'Light' ? '' : 'Layer')
@@ -62,8 +62,8 @@ class DocJSONBuilder {
     if (this._styledLayers[name] && this._styledLayers[name].properties) {
       component.styles = [];
 
-      for (let prop of this._styledLayers[name].properties) {
-        let docStyle = {
+      for (const prop of this._styledLayers[name].properties) {
+        const docStyle = {
           name: prop.name,
           type: prop.type,
           values: [],
@@ -79,8 +79,8 @@ class DocJSONBuilder {
         };
 
         if (prop.type === 'enum') {
-          docStyle.values = Object.keys(prop.doc.values).map((value) => {
-            return { value: value, doc: prop.doc.values[value].doc };
+          docStyle.values = Object.keys(prop.doc.values).map(value => {
+            return {value, doc: prop.doc.values[value].doc};
           });
         } else if (prop.type === 'array') {
           docStyle.type = `${docStyle.type}<${prop.value}>`;
@@ -116,7 +116,7 @@ class DocJSONBuilder {
             ? 'none'
             : propMeta.defaultValue.value.replace(/\n/g, ''),
           description: propMeta.description || 'FIX ME NO DESCRIPTION',
-        }
+        };
       } else {
         if (propName) {
           result.name = propName;
@@ -142,7 +142,7 @@ class DocJSONBuilder {
         result.type = {
           name: 'array',
           value: mapProp(mapNestedProp(propMeta.type.value), undefined, true),
-        }
+        };
       }
 
       if (propMeta.type && propMeta.type.name === 'func') {
@@ -150,7 +150,7 @@ class DocJSONBuilder {
         if (jsdoc && jsdoc.description) {
           result.description = jsdoc.description;
         }
-        if (jsdoc && jsdoc.params && (jsdoc.params.length > 0)) {
+        if (jsdoc && jsdoc.params && jsdoc.params.length > 0) {
           result.params = jsdoc.params;
         }
         if (jsdoc && jsdoc.returns) {
@@ -172,7 +172,7 @@ class DocJSONBuilder {
     }
 
     // props
-    component.props = Object.keys(component.props).map((propName) => {
+    component.props = Object.keys(component.props).map(propName => {
       const propMeta = component.props[propName];
 
       return mapProp(propMeta, propName, false);
@@ -180,7 +180,7 @@ class DocJSONBuilder {
 
     // methods
     const privateMethods = [];
-    for (let method of component.methods) {
+    for (const method of component.methods) {
       if (this.isPrivateMethod(method.name)) {
         privateMethods.push(method.name);
         continue;
@@ -189,8 +189,8 @@ class DocJSONBuilder {
       if (method.docblock) {
         const examples = method.docblock
           .split('@')
-          .filter((block) => block.startsWith('example'));
-        method.examples = examples.map((example) =>
+          .filter(block => block.startsWith('example'));
+        method.examples = examples.map(example =>
           example.substring('example'.length),
         );
       }
@@ -198,7 +198,7 @@ class DocJSONBuilder {
     privateMethods.push(...IGNORE_METHODS);
 
     component.methods = component.methods.filter(
-      (method) => !privateMethods.includes(method.name),
+      method => !privateMethods.includes(method.name),
     );
   }
 
@@ -239,14 +239,14 @@ class DocJSONBuilder {
           }
 
           const modules = JSON.parse(stdout);
-          for (let module of modules) {
+          for (const module of modules) {
             const node = new JSDocNodeTree(module);
             const name = `${module.name
               .charAt(0)
               .toLowerCase()}${module.name.substring(1)}`;
 
             results[name] = {
-              name: name,
+              name,
               description: node.getText(),
               props: [],
               styles: [],
@@ -263,7 +263,7 @@ class DocJSONBuilder {
   generate() {
     this.generateModulesTask({}, MODULES_PATH);
 
-    let results = {};
+    const results = {};
 
     const tasks = [
       this.generateReactComponentsTask(results, COMPONENT_PATH),
