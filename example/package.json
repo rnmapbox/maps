@@ -10,7 +10,8 @@
     "clean:node:modules": "./scripts/clean_node_modules.sh",
     "preinstall": "npm run pack:gl",
     "postinstall": "node ./scripts/set_access_token.js",
-    "test": "jest"
+    "test": "jest",
+    "reset:from:gl": "npm run clean:node:modules && npm install"
   },
   "dependencies": {
     "@mapbox/geo-viewport": "^0.4.0",

@@ -1,5 +1,7 @@
 # iOS Installation
 
+## If you are using autolinking feature introduced in React-Native `0.60.0` you do not need any additional steps.
+
 ## Using CocoaPods
 
 To install with CocoaPods, add the following to your `Podfile`:
@@ -110,7 +112,5 @@ If you have any issues related to not being able to find strip-frameworks.sh dur
 ![](https://s3.systemlevel.com/docs-public/strip-frameworks.png)
 
 ![](https://s3.systemlevel.com/docs-public/drag.png)
-
-
 
 Checkout the [example application](/example/README.md) to see how it's configured for an example.

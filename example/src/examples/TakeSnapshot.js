@@ -50,7 +50,7 @@ class TakeSnapshot extends React.Component {
       pitch: 30,
       heading: 20,
       styleURL: MapboxGL.StyleURL.Dark,
-      writeToDisk: true, // creates a temp file
+      writeToDisk: true,
     });
 
     this.setState({snapshotURI: uri});

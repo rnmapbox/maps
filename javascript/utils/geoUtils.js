@@ -28,18 +28,19 @@ export function makeFeatureCollection(features = []) {
   return featureCollection(features);
 }
 
-export function addToFeatureCollection(featureCollection, feature) {
-  const shallowFeatureCollection = Object.assign({}, featureCollection);
-  shallowFeatureCollection.features.push(feature);
-  return featureCollection;
+export function addToFeatureCollection(newFeatureCollection, newFeature) {
+  return {
+    ...newFeatureCollection,
+    features: [...newFeatureCollection.features, newFeature],
+  };
 }
 
 export function calculateDistance(origin, dest) {
   return distance(origin, dest);
 }
 
-export function pointAlongLine(lineString, distAlong) {
-  return along(lineString, distAlong);
+export function pointAlongLine(newLineString, distAlong) {
+  return along(newLineString, distAlong);
 }
 
 export function getOrCalculateVisibleRegion(
