@@ -63,7 +63,7 @@ You can set the Support Library version or the okhttp version if you use other m
 * `okhttpVersion "3.12.1"`
 
 
-## 3. `android/app/settings.gradle`
+## 3. `android/settings.gradle`
 
 Include project, so gradle knows where to find the project
 
