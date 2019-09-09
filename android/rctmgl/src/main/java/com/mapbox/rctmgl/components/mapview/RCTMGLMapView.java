@@ -841,6 +841,9 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
 
         if (mScrollEnabled != null && uiSettings.isScrollGesturesEnabled() != mScrollEnabled) {
             uiSettings.setScrollGesturesEnabled(mScrollEnabled);
+            if (!mScrollEnabled) {
+                mMap.getGesturesManager().getMoveGestureDetector().interrupt();
+            }
         }
 
         if (mPitchEnabled != null && uiSettings.isTiltGesturesEnabled() != mPitchEnabled) {
@@ -849,6 +852,9 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
 
         if (mRotateEnabled != null && uiSettings.isRotateGesturesEnabled() != mRotateEnabled) {
             uiSettings.setRotateGesturesEnabled(mRotateEnabled);
+            if (!mRotateEnabled) {
+                mMap.getGesturesManager().getRotateGestureDetector().interrupt();
+            }
         }
 
         if (mAttributionEnabled != null && uiSettings.isAttributionEnabled() != mAttributionEnabled) {
@@ -865,6 +871,9 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
 
         if (mZoomEnabled != null && uiSettings.isZoomGesturesEnabled() != mZoomEnabled) {
             uiSettings.setZoomGesturesEnabled(mZoomEnabled);
+            if (!mZoomEnabled) {
+                mMap.getGesturesManager().getStandardScaleGestureDetector().interrupt();
+            }
         }
     }
 
