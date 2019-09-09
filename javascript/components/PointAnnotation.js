@@ -69,6 +69,16 @@ class PointAnnotation extends React.PureComponent {
      * This callback is fired once this annotation is deselected.
      */
     onDeselected: PropTypes.func,
+
+    /**
+     * This callback is fired once this annotation has started being dragged.
+     */
+    onDragStart: PropTypes.func,
+
+    /**
+     * This callback is fired once this annotation has stopped being dragged.
+     */
+    onDragEnd: PropTypes.func,
   };
 
   static defaultProps = {
@@ -78,11 +88,25 @@ class PointAnnotation extends React.PureComponent {
   constructor(props) {
     super(props);
     this._onSelected = this._onSelected.bind(this);
+    this._onDragStart = this._onDragStart.bind(this);
+    this._onDragEnd = this._onDragEnd.bind(this);
   }
 
   _onSelected(e) {
     if (isFunction(this.props.onSelected)) {
       this.props.onSelected(e.nativeEvent.payload);
+    }
+  }
+
+  _onDragStart(e) {
+    if (isFunction(this.props.onDragStart)) {
+      this.props.onDragStart(e.nativeEvent.payload);
+    }
+  }
+
+  _onDragEnd(e) {
+    if (isFunction(this.props.onDragEnd)) {
+      this.props.onDragEnd(e.nativeEvent.payload);
     }
   }
 
@@ -102,9 +126,10 @@ class PointAnnotation extends React.PureComponent {
       anchor: this.props.anchor,
       selected: this.props.selected,
       style: [this.props.style, styles.container],
-      hasOnPress: typeof this.props.onPress === 'function',
       onMapboxPointAnnotationSelected: this._onSelected,
       onMapboxPointAnnotationDeselected: this.props.onDeselected,
+      onMapboxPointAnnotationDragStart: this._onDragStart,
+      onMapboxPointAnnotationDragEnd: this._onDragEnd,
       coordinate: this._getCoordinate(),
     };
     return (
@@ -122,6 +147,8 @@ const RCTMGLPointAnnotation = requireNativeComponent(
     nativeOnly: {
       onMapboxPointAnnotationSelected: true,
       onMapboxPointAnnotationDeselected: true,
+      onMapboxPointAnnotationDragStart: true,
+      onMapboxPointAnnotationDragEnd: true,
     },
   },
 );

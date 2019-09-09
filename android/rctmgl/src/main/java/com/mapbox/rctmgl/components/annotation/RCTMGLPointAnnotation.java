@@ -23,6 +23,7 @@ import com.mapbox.mapboxsdk.utils.ColorUtils;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.events.PointAnnotationClickEvent;
+import com.mapbox.rctmgl.events.PointAnnotationDragEvent;
 import com.mapbox.rctmgl.events.constants.EventTypes;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
 
@@ -69,20 +70,7 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop,
                     int oldRight, int oldBottom) {
                 if (left != oldLeft || right != oldRight || top != oldTop || bottom != oldBottom) {
-                    if (v != null) {
-                        int w = right - left;
-                        int h = bottom - top;
-                        if (w > 0 && h > 0) {
-                            Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-                            bitmap.eraseColor(Color.TRANSPARENT);
-                            Canvas canvas = new Canvas(bitmap);
-                            v.draw(canvas);
-                            mBitmap = bitmap;
-                            mBitmapId = Integer.toString(v.getId());
-                            addBitmapToStyle();
-                        }
-
-                    }
+                    viewToBitmap(v, left, top, right, bottom);
                 }
             }
         });
@@ -98,7 +86,7 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
                     mHasChildren = false;
                     mBitmap = null;
                     mBitmapId = null;
-                    setOptions();
+                    updateOptions();
                 }
             });
         }
@@ -152,19 +140,11 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
 
     public void setAnchor(float x, float y) {
         mAnchor = new Float[]{x, y};
-        Log.v("test", "setAnchor: " + Float.toString(x));
-        // if (mAnnotation != null) {
-        //     int w, h;
-        //     if (mBitmap != null) {
-        //         w = mBitmap.getWidth();
-        //         h = mBitmap.getHeight();
-        //     } else {
-        //         w = 23;
-        //         h = 33;
-        //     }
-        //     mAnnotation.setIconOffset(new PointF(w * mAnchor[0], h * mAnchor[1]));
-        //     mMapView.getSymbolManager().update(mAnnotation);
-        // }
+
+        if (mAnnotation != null) {
+            updateAnchor();
+            mMapView.getSymbolManager().update(mAnnotation);
+        }
     }
 
     public Symbol getMarker() {
@@ -181,13 +161,21 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         mManager.handleEvent(makeEvent(false));
     }
 
+    public void onDragStart() {
+        LatLng latLng = mAnnotation.getLatLng();
+        mCoordinate = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+        mManager.handleEvent(makeDragEvent(EventTypes.ANNOTATION_DRAG_START));
+    }
+
     public void onDragEnd() {
-        mManager.handleEvent(makeEvent(false));
+        LatLng latLng = mAnnotation.getLatLng();
+        mCoordinate = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+        mManager.handleEvent(makeDragEvent(EventTypes.ANNOTATION_DRAG_END));
     }
 
     public void makeMarker() {
         mAnnotation = mMapView.getSymbolManager().create(buildOptions());
-        setOptions();
+        updateOptions();
     }
 
     private SymbolOptions buildOptions() {
@@ -199,30 +187,54 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         return options;
     }
 
-    private void setOptions() {
+    private void updateOptions() {
         if (mAnnotation != null) {
-            if (mHasChildren) {
-                if (mBitmapId != null) {
-                    mAnnotation.setIconImage(mBitmapId);
-                }
-            } else {
-                mAnnotation.setIconImage(MARKER_IMAGE_ID);
-                mAnnotation.setIconAnchor("bottom");
-            }
-            if (mAnchor != null) {
-                if (mHasChildren) {
-                    if (mBitmap != null) {
-                        int w = mBitmap.getWidth();
-                        int h = mBitmap.getHeight();
-                        final float scale = getResources().getDisplayMetrics().density;
-                        w = (int) (w / scale);
-                        h = (int) (h / scale);
-                        mAnnotation.setIconAnchor("top-left");
-                        mAnnotation.setIconOffset(new PointF(w * mAnchor[0] * -1, h * mAnchor[1] * -1));
-                    }
-                }
-            }
+            updateIconImage();
+            updateAnchor();
             mMapView.getSymbolManager().update(mAnnotation);
+        }
+    }
+
+    private void updateIconImage() {
+        if (mHasChildren) {
+            if (mBitmapId != null) {
+                mAnnotation.setIconImage(mBitmapId);
+            }
+        } else {
+            mAnnotation.setIconImage(MARKER_IMAGE_ID);
+            mAnnotation.setIconAnchor("bottom");
+        }
+    }
+
+    private void updateAnchor() {
+        if (mAnchor != null) {
+            if (mHasChildren) {
+                if (mBitmap != null) {
+                    int w = mBitmap.getWidth();
+                    int h = mBitmap.getHeight();
+                    final float scale = getResources().getDisplayMetrics().density;
+                    w = (int) (w / scale);
+                    h = (int) (h / scale);
+                    mAnnotation.setIconAnchor("top-left");
+                    mAnnotation.setIconOffset(new PointF(w * mAnchor[0] * -1, h * mAnchor[1] * -1));
+                }
+            }
+        }
+    }
+
+    private void viewToBitmap(View v, int left, int top, int right, int bottom) {
+        if (v != null) {
+            int w = right - left;
+            int h = bottom - top;
+            if (w > 0 && h > 0) {
+                Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                bitmap.eraseColor(Color.TRANSPARENT);
+                Canvas canvas = new Canvas(bitmap);
+                v.draw(canvas);
+                mBitmap = bitmap;
+                mBitmapId = Integer.toString(v.getId());
+                addBitmapToStyle();
+            }
         }
     }
 
@@ -233,7 +245,7 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
                 public void onStyleLoaded(@NonNull Style style) {
                     if (style.getImage(mBitmapId) == null) {
                         style.addImage(mBitmapId, mBitmap);
-                        setOptions();
+                        updateOptions();
                     }
                 }
             });
@@ -245,6 +257,12 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         LatLng latLng = GeoJSONUtils.toLatLng(mCoordinate);
         PointF screenPos = getScreenPosition();
         return new PointAnnotationClickEvent(this, latLng, screenPos, type);
+    }
+
+    private PointAnnotationDragEvent makeDragEvent(String type) {
+        LatLng latLng = GeoJSONUtils.toLatLng(mCoordinate);
+        PointF screenPos = getScreenPosition();
+        return new PointAnnotationDragEvent(this, latLng, screenPos, type);
     }
 
     private PointF getScreenPosition() {

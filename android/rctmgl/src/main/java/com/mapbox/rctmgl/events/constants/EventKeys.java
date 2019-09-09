@@ -18,6 +18,8 @@ public class EventKeys {
     // point annotation events
     public static final String POINT_ANNOTATION_SELECTED = ns("pointannotation.selected");
     public static final String POINT_ANNOTATION_DESELECTED = ns("pointannotation.deselected");
+    public static final String POINT_ANNOTATION_DRAG_START = ns("pointannotation.dragstart");
+    public static final String POINT_ANNOTATION_DRAG_END = ns("pointannotation.dragend");
 
     // source events
     public static final String SHAPE_SOURCE_LAYER_CLICK = ns("shapesource.layer.pressed");
