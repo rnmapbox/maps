@@ -841,6 +841,9 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
 
         if (mScrollEnabled != null && uiSettings.isScrollGesturesEnabled() != mScrollEnabled) {
             uiSettings.setScrollGesturesEnabled(mScrollEnabled);
+            if (!mScrollEnabled) {
+                mMap.getGesturesManager().getMoveGestureDetector().interrupt();
+            }
         }
 
         if (mPitchEnabled != null && uiSettings.isTiltGesturesEnabled() != mPitchEnabled) {
