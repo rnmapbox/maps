@@ -44,6 +44,12 @@ class PointAnnotation extends React.PureComponent {
     selected: PropTypes.bool,
 
     /**
+     * Draggable
+     * @type {[type]}
+     */
+    draggable: PropTypes.bool,
+
+    /**
      * The center point (specified as a map coordinate) of the annotation.
      */
     coordinate: PropTypes.arrayOf(PropTypes.number).isRequired,
@@ -132,6 +138,7 @@ class PointAnnotation extends React.PureComponent {
       snippet: this.props.snippet,
       anchor: this.props.anchor,
       selected: this.props.selected,
+      draggable: this.props.draggable,
       style: [this.props.style, styles.container],
       onMapboxPointAnnotationSelected: this._onSelected,
       onMapboxPointAnnotationDeselected: this._onDeselected,

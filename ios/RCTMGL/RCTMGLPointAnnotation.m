@@ -7,6 +7,7 @@
 //
 
 #import "RCTMGLPointAnnotation.h"
+#import "RCTMGLMapTouchEvent.h"
 #import "RCTMGLUtils.h"
 #import "UIView+React.h"
 
@@ -90,6 +91,12 @@ const float CENTER_Y_OFFSET_BASE = -0.5f;
             [_map deselectAnnotation:self animated:NO];
         }
     }
+}
+
+- (void)setReactDraggable:(BOOL)reactDraggable
+{
+    _reactDraggable = reactDraggable;
+    self.draggable = _reactDraggable;
 }
 
 - (void)setReactCoordinate:(NSString *)reactCoordinate
@@ -198,7 +205,7 @@ const float CENTER_Y_OFFSET_BASE = -0.5f;
 
     [_map addAnnotation:self];
     if (_reactSelected) {
-        [_map selectAnnotation:self animated:NO];
+        [_map selectAnnotation:self animated:NO completionHandler:nil];
     }
 }
 
@@ -206,5 +213,66 @@ const float CENTER_Y_OFFSET_BASE = -0.5f;
 {
     return self.frame.size.width > 0 && self.frame.size.height > 0;
 }
+
+- (void)setDragState:(MGLAnnotationViewDragState)dragState animated:(BOOL)animated {
+    [super setDragState:dragState animated:animated];
+    switch (dragState) {
+        case MGLAnnotationViewDragStateStarting: {
+            [self startDragging];
+            if (self.onDragStart != nil) {
+                RCTMGLMapTouchEvent *event = [RCTMGLMapTouchEvent makeAnnotationTapEvent:self];
+                self.onDragStart([event toJSON]);
+            }
+            break;
+        }
+
+        case MGLAnnotationViewDragStateDragging:
+            break;
+
+        case MGLAnnotationViewDragStateEnding:
+        case MGLAnnotationViewDragStateCanceling: {
+            [self endDragging];
+            if (self.onDragEnd != nil) {
+                RCTMGLMapTouchEvent *event = [RCTMGLMapTouchEvent makeAnnotationTapEvent:self];
+                self.onDragEnd([event toJSON]);
+            }
+            break;
+        }
+
+        case MGLAnnotationViewDragStateNone:
+            return;
+    }
+}
+
+- (void)startDragging {
+    [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:0 animations:^{
+        self.layer.opacity = 0.8f;
+        self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.5, 1.5);
+    } completion:nil];
+    
+    // Initialize haptic feedback generator and give the user a light thud.
+    if (@available(iOS 10.0, *)) {
+        self.hapticFeedback = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleLight];
+        [self.hapticFeedback impactOccurred];
+
+        // Keep the generator prepared, as the drop feedback event will probably happen quite soon.
+        [self.hapticFeedback prepare];
+        }
+    }
+    
+- (void)endDragging {
+    self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.5, 1.5);
+    [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:0 animations:^{
+        self.layer.opacity = 1;
+        self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
+    } completion:nil];
+
+    // Give the user more haptic feedback when they drop the annotation, then release the current generator.
+    if (@available(iOS 10.0, *)) {
+        [self.hapticFeedback impactOccurred];
+        self.hapticFeedback = nil;
+    }
+}
+
 
 @end

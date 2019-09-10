@@ -16,6 +16,7 @@
 @interface RCTMGLPointAnnotation : MGLAnnotationView<MGLAnnotation>
 
 @property (nonatomic, weak) MGLMapView *map;
+@property (nonatomic, nullable) UIImpactFeedbackGenerator *hapticFeedback;
 @property (nonatomic, strong) RCTMGLCallout *calloutView;
 
 @property (nonatomic, copy) NSString *id;
@@ -29,8 +30,11 @@
 
 @property (nonatomic, copy) RCTBubblingEventBlock onSelected;
 @property (nonatomic, copy) RCTBubblingEventBlock onDeselected;
+@property (nonatomic, copy) RCTBubblingEventBlock onDragStart;
+@property (nonatomic, copy) RCTBubblingEventBlock onDragEnd;
 
 @property (nonatomic, assign) BOOL reactSelected;
+@property (nonatomic, assign) BOOL reactDraggable;
 
 - (MGLAnnotationView *)getAnnotationView;
 
