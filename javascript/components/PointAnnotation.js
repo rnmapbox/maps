@@ -88,6 +88,7 @@ class PointAnnotation extends React.PureComponent {
   constructor(props) {
     super(props);
     this._onSelected = this._onSelected.bind(this);
+    this._onDeselected = this._onDeselected.bind(this);
     this._onDragStart = this._onDragStart.bind(this);
     this._onDragEnd = this._onDragEnd.bind(this);
   }
@@ -95,6 +96,12 @@ class PointAnnotation extends React.PureComponent {
   _onSelected(e) {
     if (isFunction(this.props.onSelected)) {
       this.props.onSelected(e.nativeEvent.payload);
+    }
+  }
+
+  _onDeselected(e) {
+    if (isFunction(this.props.onDeselected)) {
+      this.props.onDeselected(e.nativeEvent.payload);
     }
   }
 
@@ -127,7 +134,7 @@ class PointAnnotation extends React.PureComponent {
       selected: this.props.selected,
       style: [this.props.style, styles.container],
       onMapboxPointAnnotationSelected: this._onSelected,
-      onMapboxPointAnnotationDeselected: this.props.onDeselected,
+      onMapboxPointAnnotationDeselected: this._onDeselected,
       onMapboxPointAnnotationDragStart: this._onDragStart,
       onMapboxPointAnnotationDragEnd: this._onDragEnd,
       coordinate: this._getCoordinate(),

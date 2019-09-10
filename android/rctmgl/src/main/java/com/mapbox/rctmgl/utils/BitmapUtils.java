@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
 import android.util.LruCache;
+import android.view.View;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -88,6 +91,21 @@ public class BitmapUtils {
         closeSnapshotOutputStream(outputStream);
         String base64Prefix = "data:image/png;base64,";
         return base64Prefix + Base64.encodeToString(bitmapBytes, Base64.NO_WRAP);
+    }
+
+    public static Bitmap viewToBitmap(View v, int left, int top, int right, int bottom) {
+        Bitmap bitmap = null;
+        if (v != null) {
+            int w = right - left;
+            int h = bottom - top;
+            if (w > 0 && h > 0) {
+                bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                bitmap.eraseColor(Color.TRANSPARENT);
+                Canvas canvas = new Canvas(bitmap);
+                v.draw(canvas);
+            }
+        }
+        return bitmap;
     }
 
     private static void addImage(String imageURL, Bitmap bitmap) {

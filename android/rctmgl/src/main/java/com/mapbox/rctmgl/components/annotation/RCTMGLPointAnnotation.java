@@ -2,8 +2,6 @@ package com.mapbox.rctmgl.components.annotation;
 
 import android.content.Context;
 import android.graphics.PointF;
-import android.graphics.Color;
-import android.graphics.Canvas;
 import android.graphics.Bitmap;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,6 +24,7 @@ import com.mapbox.rctmgl.events.PointAnnotationClickEvent;
 import com.mapbox.rctmgl.events.PointAnnotationDragEvent;
 import com.mapbox.rctmgl.events.constants.EventTypes;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
+import com.mapbox.rctmgl.utils.BitmapUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,7 +33,7 @@ import java.util.List;
  * Created by nickitaliano on 9/27/17.
  */
 
-public class RCTMGLPointAnnotation extends AbstractMapFeature {
+public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.OnLayoutChangeListener {
     private RCTMGLPointAnnotationManager mManager;
     private Symbol mAnnotation;
     private MapboxMap mMap;
@@ -49,11 +48,16 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
     private String mSnippet;
 
     private Float[] mAnchor;
-    private RCTMGLCallout mCallout;
     private boolean mIsSelected;
-    private Bitmap mBitmap;
-    private String mBitmapId;
+
     private View mChildView;
+    private Bitmap mChildBitmap;
+    private String mChildBitmapId;
+
+    private View mCalloutView;
+    private Symbol mCalloutSymbol;
+    private Bitmap mCalloutBitmap;
+    private String mCalloutBitmapId;
 
     private static final String MARKER_IMAGE_ID = "MARKER_IMAGE_ID";
 
@@ -64,28 +68,26 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
 
     @Override
     public void addView(View childView, int childPosition) {
-        mHasChildren = true;
-        childView.addOnLayoutChangeListener(new OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop,
-                    int oldRight, int oldBottom) {
-                if (left != oldLeft || right != oldRight || top != oldTop || bottom != oldBottom) {
-                    viewToBitmap(v, left, top, right, bottom);
-                }
-            }
-        });
+        if (childView instanceof RCTMGLCallout) {
+            mCalloutView = childView;
+        } else {
+            mChildView = childView;
+        }
+        childView.addOnLayoutChangeListener(this);
     }
 
     @Override
     public void removeView(View childView) {
-        if (mBitmapId != null) {
+        if (mChildView != null) {
             mMap.getStyle(new Style.OnStyleLoaded() {
                 @Override
                 public void onStyleLoaded(@NonNull Style style) {
-                    style.removeImage(mBitmapId);
-                    mHasChildren = false;
-                    mBitmap = null;
-                    mBitmapId = null;
+                    // TODO test this
+                    style.removeImage(mChildBitmapId);
+                    mChildView = null;
+                    mCalloutView = null;
+                    mChildBitmap = null;
+                    mChildBitmapId = null;
                     updateOptions();
                 }
             });
@@ -97,8 +99,12 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         mMapView = mapView;
         mMap = mapView.getMapboxMap();
         makeMarker();
-        if (mHasChildren) {
-            addBitmapToStyle();
+        if (mChildView != null) {
+            addBitmapToStyle(mChildBitmap, mChildBitmapId);
+            updateOptions();
+        }
+        if (mCalloutView != null) {
+            addBitmapToStyle(mCalloutBitmap, mCalloutBitmapId);
         }
     }
 
@@ -106,6 +112,24 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
     public void removeFromMap(RCTMGLMapView mapView) {
         if (mAnnotation != null) {
             mMapView.getSymbolManager().delete(mAnnotation);
+        }
+    }
+
+    @Override
+    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop,
+            int oldRight, int oldBottom) {
+        if (left != oldLeft || right != oldRight || top != oldTop || bottom != oldBottom) {
+            Bitmap bitmap = BitmapUtils.viewToBitmap(v, left, top, right, bottom);
+            String bitmapId = Integer.toString(v.getId());
+            addBitmapToStyle(bitmap, bitmapId);
+            if (v instanceof RCTMGLCallout) {
+                mCalloutBitmap = bitmap;
+                mCalloutBitmapId = bitmapId;
+            } else {
+                mChildBitmap = bitmap;
+                mChildBitmapId = bitmapId;
+                updateOptions();
+            }
         }
     }
 
@@ -125,8 +149,8 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         mID = id;
     }
 
-    public RCTMGLCallout getCalloutView() {
-        return mCallout;
+    public View getCalloutView() {
+        return mCalloutView;
     }
 
     public void setLatLng(Point point) {
@@ -135,6 +159,10 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         if (mAnnotation != null) {
             mAnnotation.setLatLng(GeoJSONUtils.toLatLng(point));
             mMapView.getSymbolManager().update(mAnnotation);
+        }
+        if (mCalloutSymbol != null) {
+            mCalloutSymbol.setLatLng(GeoJSONUtils.toLatLng(point));
+            mMapView.getSymbolManager().update(mCalloutSymbol);
         }
     }
 
@@ -152,6 +180,9 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
     }
 
     public void onSelect(boolean shouldSendEvent) {
+        if (mCalloutView != null) {
+            makeCallout();
+        }
         if (shouldSendEvent) {
             mManager.handleEvent(makeEvent(true));
         }
@@ -159,6 +190,9 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
 
     public void onDeselect() {
         mManager.handleEvent(makeEvent(false));
+        if (mCalloutSymbol != null) {
+            mMapView.getSymbolManager().delete(mCalloutSymbol);
+        }
     }
 
     public void onDragStart() {
@@ -174,17 +208,13 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
     }
 
     public void makeMarker() {
-        mAnnotation = mMapView.getSymbolManager().create(buildOptions());
-        updateOptions();
-    }
-
-    private SymbolOptions buildOptions() {
         SymbolOptions options = new SymbolOptions()
             .withLatLng(GeoJSONUtils.toLatLng(mCoordinate))
             .withIconSize(1.0f)
             .withSymbolSortKey(10.0f)
             .withDraggable(true);
-        return options;
+        mAnnotation = mMapView.getSymbolManager().create(options);
+        updateOptions();
     }
 
     private void updateOptions() {
@@ -196,9 +226,9 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
     }
 
     private void updateIconImage() {
-        if (mHasChildren) {
-            if (mBitmapId != null) {
-                mAnnotation.setIconImage(mBitmapId);
+        if (mChildView != null) {
+            if (mChildBitmapId != null) {
+                mAnnotation.setIconImage(mChildBitmapId);
             }
         } else {
             mAnnotation.setIconImage(MARKER_IMAGE_ID);
@@ -207,46 +237,45 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
     }
 
     private void updateAnchor() {
-        if (mAnchor != null) {
-            if (mHasChildren) {
-                if (mBitmap != null) {
-                    int w = mBitmap.getWidth();
-                    int h = mBitmap.getHeight();
-                    final float scale = getResources().getDisplayMetrics().density;
-                    w = (int) (w / scale);
-                    h = (int) (h / scale);
-                    mAnnotation.setIconAnchor("top-left");
-                    mAnnotation.setIconOffset(new PointF(w * mAnchor[0] * -1, h * mAnchor[1] * -1));
-                }
-            }
+        if (mAnchor != null && mChildView != null && mChildBitmap != null) {
+            int w = mChildBitmap.getWidth();
+            int h = mChildBitmap.getHeight();
+            final float scale = getResources().getDisplayMetrics().density;
+            w = (int) (w / scale);
+            h = (int) (h / scale);
+            mAnnotation.setIconAnchor("top-left");
+            mAnnotation.setIconOffset(new PointF(w * mAnchor[0] * -1, h * mAnchor[1] * -1));
         }
     }
 
-    private void viewToBitmap(View v, int left, int top, int right, int bottom) {
-        if (v != null) {
-            int w = right - left;
-            int h = bottom - top;
-            if (w > 0 && h > 0) {
-                Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-                bitmap.eraseColor(Color.TRANSPARENT);
-                Canvas canvas = new Canvas(bitmap);
-                v.draw(canvas);
-                mBitmap = bitmap;
-                mBitmapId = Integer.toString(v.getId());
-                addBitmapToStyle();
-            }
+    private void makeCallout() {
+        SymbolOptions options = new SymbolOptions()
+            .withLatLng(GeoJSONUtils.toLatLng(mCoordinate))
+            .withIconImage(mCalloutBitmapId)
+            .withIconSize(1.0f)
+            .withSymbolSortKey(11.0f)
+            .withDraggable(false);
+
+        if (mChildView != null) {
+            final float scale = getResources().getDisplayMetrics().density;
+            int h = (int) mChildBitmap.getHeight() / 2;
+            h = (int) (h / scale);
+            float offset = (float) h * -1;
+            options.withIconOffset(new Float[] {0f, offset});
+            options.withIconAnchor("bottom");
+        } else {
+            options.withIconOffset(new Float[] {0f, -28f});
+            options.withIconAnchor("bottom");
         }
+        mCalloutSymbol = mMapView.getSymbolManager().create(options);
     }
 
-    private void addBitmapToStyle() {
-        if (mMap != null && mBitmapId != null && mBitmap != null) {
+    private void addBitmapToStyle(final Bitmap bitmap, final String bitmapId) {
+        if (mMap != null && bitmapId != null && bitmap != null) {
             mMap.getStyle(new Style.OnStyleLoaded() {
                 @Override
                 public void onStyleLoaded(@NonNull Style style) {
-                    if (style.getImage(mBitmapId) == null) {
-                        style.addImage(mBitmapId, mBitmap);
-                        updateOptions();
-                    }
+                    style.addImage(bitmapId, bitmap);
                 }
             });
         }
