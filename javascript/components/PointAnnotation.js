@@ -45,7 +45,6 @@ class PointAnnotation extends React.PureComponent {
 
     /**
      * Enable or disable dragging. Defaults to false.
-     * @type {[type]}
      */
     draggable: PropTypes.bool,
 
