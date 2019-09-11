@@ -122,7 +122,13 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
             callback.onFailure(new Exception("LocationEngine not initialized"));
         }
 
-        locationEngine.getLastLocation(callback);
+        try {
+            locationEngine.getLastLocation(callback);
+        }
+        catch(Exception exception) {
+            Log.w(LOG_TAG, exception);
+            callback.onFailure(exception);
+        }
     }
 
     public LocationEngine getEngine() {
