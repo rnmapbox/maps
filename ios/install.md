@@ -1,6 +1,13 @@
 # iOS Installation
 
-## If you are using autolinking feature introduced in React-Native `0.60.0` you do not need any additional steps.
+## React-Native > `0.60.0` 
+If you are using autolinking feature introduced in 0.60.0
+You do only need 1 additional step:
+
+Add the following entry to Build Settings -> Framework Search Paths (Debug and Release)
+${PROJECT_DIR}/../node_modules/@react-native-mapbox-gl/maps (recursive)
+
+
 
 ## Using CocoaPods
 
