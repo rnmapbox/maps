@@ -33,7 +33,7 @@ const float CENTER_Y_OFFSET_BASE = -0.5f;
         self.calloutView = (RCTMGLCallout *)subview;
         self.calloutView.representedObject = self;
     } else {
-        [super insertReactSubview:subview atIndex:atIndex];
+        [super insertReactSubview:subview atIndex:0];
     }
 }
 
@@ -86,7 +86,7 @@ const float CENTER_Y_OFFSET_BASE = -0.5f;
 
     if (_map != nil) {
         if (_reactSelected) {
-            [_map selectAnnotation:self animated:NO];
+            [_map selectAnnotation:self animated:NO completionHandler:nil];
         } else {
             [_map deselectAnnotation:self animated:NO];
         }
@@ -147,7 +147,7 @@ const float CENTER_Y_OFFSET_BASE = -0.5f;
 
 - (void)_handleTap:(UITapGestureRecognizer *)recognizer
 {
-    [_map selectAnnotation:self.annotation animated:NO];
+    [_map selectAnnotation:self animated:NO completionHandler:nil];
 }
 
 - (void)_setCenterOffset:(CGRect)frame
