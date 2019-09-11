@@ -15,6 +15,7 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.markerview.MarkerView;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.utils.ColorUtils;
@@ -222,8 +223,11 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
             .withDraggable(mDraggable)
             .withIconSize(1.0f)
             .withSymbolSortKey(10.0f);
-        mAnnotation = mMapView.getSymbolManager().create(options);
-        updateOptions();
+        SymbolManager symbolManager = mMapView.getSymbolManager();
+        if (symbolManager != null) {
+            mAnnotation = symbolManager.create(options);
+            updateOptions();
+        }
     }
 
     private void updateOptions() {
@@ -273,7 +277,10 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
             .withIconOffset(new Float[] {0f, yOffset})
             .withSymbolSortKey(11.0f)
             .withDraggable(false);
-        mCalloutSymbol = mMapView.getSymbolManager().create(options);
+        SymbolManager symbolManager = mMapView.getSymbolManager();
+        if (symbolManager != null) {
+            mCalloutSymbol = symbolManager.create(options);
+        }
     }
 
     private void addBitmapToStyle(final Bitmap bitmap, final String bitmapId) {

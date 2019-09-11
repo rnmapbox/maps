@@ -45,7 +45,6 @@ import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.android.gestures.MoveGestureDetector;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.annotation.RCTMGLCallout;
-import com.mapbox.rctmgl.components.annotation.RCTMGLCalloutAdapter;
 import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotation;
 import com.mapbox.rctmgl.components.camera.RCTMGLCamera;
 import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeTracker;
@@ -391,13 +390,11 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         mMap.getStyle(new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
-                addQueuedFeatures();
                 createSymbolManager(style);
                 setUpImage(style);
+                addQueuedFeatures();
             }
         });
-
-        mMap.setInfoWindowAdapter(new RCTMGLCalloutAdapter(this));
 
         updatePreferredFramesPerSecond();
         updateInsets();
@@ -1201,7 +1198,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     */
     private void setUpImage(@NonNull Style loadedStyle) {
         loadedStyle.addImage("MARKER_IMAGE_ID", BitmapFactory.decodeResource(
-            this.getResources(), R.drawable.pin)
+            this.getResources(), R.drawable.red_marker)
         );
     }
 
