@@ -16,7 +16,6 @@
 @interface RCTMGLPointAnnotation : MGLAnnotationView<MGLAnnotation>
 
 @property (nonatomic, weak) MGLMapView *map;
-@property (nonatomic, nullable) UIImpactFeedbackGenerator *hapticFeedback;
 @property (nonatomic, strong) RCTMGLCallout *calloutView;
 
 @property (nonatomic, copy) NSString *id;
