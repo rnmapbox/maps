@@ -105,6 +105,7 @@ public class RCTMGLSnapshotModule extends ReactContextBaseJavaModule {
                 (int) jsOptions.getDouble("width"),
                 (int) jsOptions.getDouble("height"));
 
+        options.withLogo(jsOptions.getBoolean("withLogo"));
         options.withStyle(jsOptions.getString("styleURL"));
         options.withPixelRatio(Float.valueOf(mContext.getResources().getDisplayMetrics().scaledDensity).intValue());
 

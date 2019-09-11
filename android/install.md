@@ -1,9 +1,12 @@
 # Android Installation
+
+## If you are using autolinking feature introduced in React-Native `0.60.0` you can skip `react-native link react-native-mapbox-gl` command and just follow first paragraph
+
 `react-native link` should get you almost there,  
 however we need to add some additional lines to `build.gradle`.
 
     
-## `android/build.gradle`
+## 1. `android/build.gradle`
 We need to add an additional repository in order to get our dependencies.
 
 * `https://jitpack.io`
@@ -42,7 +45,7 @@ however it never hurts to make sure it actually did what it was supposed to
 ---
 
 
-## `android/app/build.gradle`
+## 2. `android/app/build.gradle`
 
 Add project under `dependencies`
 
@@ -60,7 +63,7 @@ You can set the Support Library version or the okhttp version if you use other m
 * `okhttpVersion "3.12.1"`
 
 
-## `android/app/settings.gradle`
+## 3. `android/settings.gradle`
 
 Include project, so gradle knows where to find the project
 
@@ -73,7 +76,7 @@ rootProject.name = <YOUR_PROJECT_NAME>
 include ':app'¬
 ```
 
-## `android/app/src/main/java/com/PROJECT_NAME/MainApplication.java`
+## 4. `android/app/src/main/java/com/PROJECT_NAME/MainApplication.java`
 
 We need to register our package
 

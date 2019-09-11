@@ -685,6 +685,13 @@
         "description": "FIX ME NO DESCRIPTION"
       },
       {
+        "name": "onUserTrackingModeChange",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
         "name": "isUserInteraction",
         "required": false,
         "type": "FIX ME UNKNOWN TYPE",
@@ -2488,11 +2495,7 @@
         "name": "setCamera",
         "docblock": "Map camera will perform updates based on provided config. Deprecated use Camera#setCamera.",
         "modifiers": [],
-        "params": [
-          {
-            "name": "config"
-          }
-        ],
+        "params": [],
         "returns": null,
         "description": "Map camera will perform updates based on provided config. Deprecated use Camera#setCamera.",
         "examples": []
@@ -2575,27 +2578,6 @@
     ],
     "props": [
       {
-        "name": "showUserLocation",
-        "required": false,
-        "type": "bool",
-        "default": "none",
-        "description": "Shows the users location on the map"
-      },
-      {
-        "name": "userTrackingMode",
-        "required": false,
-        "type": "number",
-        "default": "none",
-        "description": "The mode used to track the user location on the map"
-      },
-      {
-        "name": "userLocationVerticalAlignment",
-        "required": false,
-        "type": "number",
-        "default": "none",
-        "description": "The vertical alignment of the user location within in map. This is only enabled while tracking the users location."
-      },
-      {
         "name": "contentInset",
         "required": false,
         "type": "union",
@@ -2615,6 +2597,13 @@
         "type": "string",
         "default": "MapboxGL.StyleURL.Street",
         "description": "Style URL for map"
+      },
+      {
+        "name": "preferredFramesPerSecond",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "iOS: The preferred frame rate at which the map view is rendered.\nThe default value for this property is MGLMapViewPreferredFramesPerSecondDefault,\nwhich will adaptively set the preferred frame rate based on the capability of\nthe user’s device to maintain a smooth experience. This property can be set to arbitrary integer values.\n\nAndroid: The maximum frame rate at which the map view is rendered, but it can't excess the ability of device hardware.\nThis property can be set to arbitrary integer values."
       },
       {
         "name": "localizeLabels",
@@ -2657,6 +2646,13 @@
         "type": "bool",
         "default": "true",
         "description": "The Mapbox terms of service, which governs the use of Mapbox-hosted vector tiles and styles,\n[requires](https://www.mapbox.com/help/how-attribution-works/) these copyright notices to accompany any map that features Mapbox-designed styles, OpenStreetMap data, or other Mapbox data such as satellite or terrain data.\nIf that applies to this map view, do not hide this view or remove any notices from it.\n\nYou are additionally [required](https://www.mapbox.com/help/how-mobile-apps-work/#telemetry) to provide users with the option to disable anonymous usage and location sharing (telemetry).\nIf this view is hidden, you must implement this setting elsewhere in your app. See our website for [Android](https://www.mapbox.com/android-docs/map-sdk/overview/#telemetry-opt-out) and [iOS](https://www.mapbox.com/ios-sdk/#telemetry_opt_out) for implementation details.\n\nEnable/Disable attribution on map. For iOS you need to add MGLMapboxMetricsEnabledSettingShownInApp=YES\nto your Info.plist"
+      },
+      {
+        "name": "attributionPosition",
+        "required": false,
+        "type": "union",
+        "default": "none",
+        "description": "Adds attribution offset, e.g. `{top: 8, left: 8}` will put attribution button in top-left corner of the map"
       },
       {
         "name": "logoEnabled",
@@ -2806,6 +2802,13 @@
         "type": "func",
         "default": "none",
         "description": "This event is triggered when the map fully finished rendering the map."
+      },
+      {
+        "name": "onUserLocationUpdate",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This event is triggered when the user location is updated."
       },
       {
         "name": "onDidFinishLoadingStyle",
@@ -4705,7 +4708,9 @@
       {
         "name": "setLocationManager",
         "docblock": null,
-        "modifiers": [],
+        "modifiers": [
+          "async"
+        ],
         "params": [
           {
             "name": "{running}",
@@ -4780,7 +4785,43 @@
   "VectorSource": {
     "description": "VectorSource is a map content source that supplies tiled vector data in Mapbox Vector Tile format to be shown on the map.\nThe location of and metadata about the tiles are defined either by an option dictionary or by an external file that conforms to the TileJSON specification.",
     "displayName": "VectorSource",
-    "methods": [],
+    "methods": [
+      {
+        "name": "features",
+        "docblock": "Returns all features that match the query parameters regardless of whether or not the feature is\ncurrently rendered on the map. The domain of the query includes all currently-loaded vector tiles\nand GeoJSON source tiles. This function does not check tiles outside of the visible viewport.\n\n@example\nvectorSource.features(['id1', 'id2'])\n\n@param  {Array=} layerIDs - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {Array=} filter - an optional filter statement to filter the returned Features.\n@return {FeatureCollection}",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "layerIDs",
+            "description": "A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.",
+            "type": {
+              "name": "Array"
+            },
+            "optional": true
+          },
+          {
+            "name": "filter",
+            "description": "an optional filter statement to filter the returned Features.",
+            "type": {
+              "name": "Array"
+            },
+            "optional": true
+          }
+        ],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "FeatureCollection"
+          }
+        },
+        "description": "Returns all features that match the query parameters regardless of whether or not the feature is\ncurrently rendered on the map. The domain of the query includes all currently-loaded vector tiles\nand GeoJSON source tiles. This function does not check tiles outside of the visible viewport.",
+        "examples": [
+          "\nvectorSource.features(['id1', 'id2'])\n\n"
+        ]
+      }
+    ],
     "props": [
       {
         "name": "id",
@@ -4900,6 +4941,20 @@
         "name": "onPress",
         "required": false,
         "type": "func",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "children",
+        "required": false,
+        "type": "any",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "style",
+        "required": false,
+        "type": "any",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       },
@@ -5148,7 +5203,7 @@
           }
         ],
         "examples": [
-          "// creates a temp file png of base map\nconst uri = await MapboxGL.snapshotManager.takeSnap({\n  centerCoordinate: [-74.126410, 40.797968],\n  width: width,\n  height: height,\n  zoomLevel: 12,\n  pitch: 30,\n  heading: 20,\n  styleURL: MapboxGL.StyleURL.Dark,\n  writeToDisk: true, // creates a temp file\n});\n\n// creates base64 png of base map\nconst uri = await MapboxGL.snapshotManager.takeSnap({\n  centerCoordinate: [-74.126410, 40.797968],\n  width: width,\n  height: height,\n  zoomLevel: 12,\n  pitch: 30,\n  heading: 20,\n  styleURL: MapboxGL.StyleURL.Dark,\n});\n\n// creates snapshot with bounds\nconst uri = await MapboxGL.snapshotManager.takeSnap({\n  bounds: [[-74.126410, 40.797968], [-74.143727, 40.772177]],\n  width: width,\n  height: height,\n  styleURL: MapboxGL.StyleURL.Dark,\n});"
+          "// creates a temp file png of base map\nconst uri = await MapboxGL.snapshotManager.takeSnap({\n  centerCoordinate: [-74.126410, 40.797968],\n  width: width,\n  height: height,\n  zoomLevel: 12,\n  pitch: 30,\n  heading: 20,\n  styleURL: MapboxGL.StyleURL.Dark,\n  writeToDisk: true, // Create a temporary file\n});\n\n// creates base64 png of base map without logo\nconst uri = await MapboxGL.snapshotManager.takeSnap({\n  centerCoordinate: [-74.126410, 40.797968],\n  width: width,\n  height: height,\n  zoomLevel: 12,\n  pitch: 30,\n  heading: 20,\n  styleURL: MapboxGL.StyleURL.Dark,\n  withLogo: false, // Disable Mapbox logo (Android only)\n});\n\n// creates snapshot with bounds\nconst uri = await MapboxGL.snapshotManager.takeSnap({\n  bounds: [[-74.126410, 40.797968], [-74.143727, 40.772177]],\n  width: width,\n  height: height,\n  styleURL: MapboxGL.StyleURL.Dark,\n});"
         ],
         "returns": {
           "description": "",

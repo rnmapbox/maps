@@ -157,6 +157,12 @@ declare namespace MapboxGL {
     }
 }
 
+export type AttributionPosition =
+  { top: number; left: number;} |
+  { top: number; right: number;} |
+  { bottom: number; left: number;} |
+  { bottom: number; right: number;};
+
 export interface MapViewProps extends ViewProperties {
     animated?: boolean;
     userTrackingMode?: number;
@@ -170,6 +176,7 @@ export interface MapViewProps extends ViewProperties {
     pitchEnabled?: boolean;
     rotateEnabled?: boolean;
     attributionEnabled?: boolean;
+    attributionPosition?: AttributionPosition;
     logoEnabled?: boolean;
     compassEnabled?: boolean;
     surfaceView?: boolean;

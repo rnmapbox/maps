@@ -41,6 +41,7 @@ typedef void (^FoundLayerBlock) (MGLStyleLayer* layer);
 @property (nonatomic, assign) BOOL reactPitchEnabled;
 @property (nonatomic, assign) BOOL reactRotateEnabled;
 @property (nonatomic, assign) BOOL reactAttributionEnabled;
+@property (nonatomic, strong) NSDictionary<NSString *, NSNumber *> *reactAttributionPosition;
 @property (nonatomic, assign) BOOL reactLogoEnabled;
 @property (nonatomic, assign) BOOL reactCompassEnabled;
 @property (nonatomic, assign) BOOL reactZoomEnabled;
