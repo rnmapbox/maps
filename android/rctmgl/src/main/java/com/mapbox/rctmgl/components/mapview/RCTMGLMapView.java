@@ -27,7 +27,6 @@ import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.plugins.markerview.MarkerViewManager;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolDragListener;
@@ -117,7 +116,6 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     private Boolean mCompassEnabled;
     private Boolean mZoomEnabled;
 
-    private MarkerViewManager markerViewManager;
     private SymbolManager symbolManager;
 
     private long mActiveMarkerID = -1;
@@ -159,7 +157,6 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         addOnWillStartRenderingMapListener(this);
         addOnDidFinishRenderingMapListener(this);
         addOnDidFinishLoadingStyleListener(this);
-
     }
 
     @Override
@@ -394,17 +391,13 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         mMap.getStyle(new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
-                createSymbolManager(style);
                 addQueuedFeatures();
+                createSymbolManager(style);
                 setUpImage(style);
             }
         });
-        markerViewManager = new MarkerViewManager(this, mMap); /* mMap.getMarkerViewManager(); */
 
         mMap.setInfoWindowAdapter(new RCTMGLCalloutAdapter(this));
-
-        // mMap.addOnMapClickListener(this);
-        // mMap.addOnMapLongClickListener(this);
 
         updatePreferredFramesPerSecond();
         updateInsets();
@@ -468,13 +461,9 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
             public void onAnnotationDragStarted(Symbol symbol) {
                 mAnnotationClicked = true;
                 final long selectedMarkerID = symbol.getId();
-                for (String key : mPointAnnotations.keySet()) {
-                    RCTMGLPointAnnotation annotation = mPointAnnotations.get(key);
-                    final long curMarkerID = annotation.getMapboxID();
-
-                    if (selectedMarkerID == curMarkerID) {
-                        annotation.onDragStart();
-                    }
+                RCTMGLPointAnnotation annotation = getPointAnnotationByMarkerID(selectedMarkerID);
+                if (annotation != null) {
+                    annotation.onDragStart();
                 }
             }
 
@@ -488,13 +477,9 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
             public void onAnnotationDragFinished(Symbol symbol) {
                 mAnnotationClicked = false;
                 final long selectedMarkerID = symbol.getId();
-                for (String key : mPointAnnotations.keySet()) {
-                    RCTMGLPointAnnotation annotation = mPointAnnotations.get(key);
-                    final long curMarkerID = annotation.getMapboxID();
-
-                    if (selectedMarkerID == curMarkerID) {
-                        annotation.onDragEnd();
-                    }
+                RCTMGLPointAnnotation annotation = getPointAnnotationByMarkerID(selectedMarkerID);
+                if (annotation != null) {
+                    annotation.onDragEnd();
                 }
             }
         });
@@ -617,25 +602,13 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     }
 
     public void selectAnnotation(RCTMGLPointAnnotation annotation) {
-        final long id = annotation.getMapboxID();
+        mActiveMarkerID = annotation.getMapboxID();
         annotation.onSelect(true);
-        mActiveMarkerID = id;
-
-        // RCTMGLCallout calloutView = annotation.getCalloutView();
-        // if (!marker.isInfoWindowShown() && calloutView != null) {
-        //     marker.showInfoWindow(mMap, this);
-        // }
     }
 
     public void deselectAnnotation(RCTMGLPointAnnotation annotation) {
         mActiveMarkerID = -1;
         annotation.onDeselect();
-        // Marker marker = annotation.getMarker();
-
-        // RCTMGLCallout calloutView = annotation.getCalloutView();
-        // if (calloutView != null) {
-        //     marker.hideInfoWindow();
-        // }
     }
 
     @Override

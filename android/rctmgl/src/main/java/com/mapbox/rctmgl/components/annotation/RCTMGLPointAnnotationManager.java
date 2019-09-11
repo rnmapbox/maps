@@ -49,7 +49,7 @@ public class RCTMGLPointAnnotationManager extends AbstractEventEmitter<RCTMGLPoi
 
     @ReactProp(name="coordinate")
     public void setCoordinate(RCTMGLPointAnnotation annotation, String geoJSONStr) {
-        annotation.setLatLng(GeoJSONUtils.toPointGeometry(geoJSONStr));
+        annotation.setCoordinate(GeoJSONUtils.toPointGeometry(geoJSONStr));
     }
 
     @ReactProp(name="anchor")

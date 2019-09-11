@@ -154,7 +154,7 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
         return mCalloutView;
     }
 
-    public void setLatLng(Point point) {
+    public void setCoordinate(Point point) {
         mCoordinate = point;
 
         if (mAnnotation != null) {
@@ -258,24 +258,21 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
     }
 
     private void makeCallout() {
+        float yOffset = -28f;
+        if (mChildView != null) {
+            float scale = getResources().getDisplayMetrics().density;
+            int h = (int) mChildBitmap.getHeight() / 2;
+            h = (int) (h / scale);
+            yOffset = (float) h * -1;
+        }
         SymbolOptions options = new SymbolOptions()
             .withLatLng(GeoJSONUtils.toLatLng(mCoordinate))
             .withIconImage(mCalloutBitmapId)
             .withIconSize(1.0f)
+            .withIconAnchor("bottom")
+            .withIconOffset(new Float[] {0f, yOffset})
             .withSymbolSortKey(11.0f)
             .withDraggable(false);
-
-        if (mChildView != null) {
-            final float scale = getResources().getDisplayMetrics().density;
-            int h = (int) mChildBitmap.getHeight() / 2;
-            h = (int) (h / scale);
-            float offset = (float) h * -1;
-            options.withIconOffset(new Float[] {0f, offset});
-            options.withIconAnchor("bottom");
-        } else {
-            options.withIconOffset(new Float[] {0f, -28f});
-            options.withIconAnchor("bottom");
-        }
         mCalloutSymbol = mMapView.getSymbolManager().create(options);
     }
 
