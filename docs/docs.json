@@ -2875,7 +2875,7 @@
         "required": false,
         "type": "bool",
         "default": "false",
-        "description": "Enable or disable dragging. Defaults to false.\n@type {[type]}"
+        "description": "Enable or disable dragging. Defaults to false."
       },
       {
         "name": "coordinate",
