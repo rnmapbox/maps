@@ -7,7 +7,7 @@ You do only need 1 additional step:
 Add the following entry to Build Settings -> Framework Search Paths (Debug and Release)
 ${PROJECT_DIR}/../node_modules/@react-native-mapbox-gl/maps (recursive)
 
-![alt text](https://user-images.githubusercontent.com/6492229/64736515-19658f00-d4eb-11e9-974f-3aa3f03406d8.png)
+![](https://user-images.githubusercontent.com/6492229/64736515-19658f00-d4eb-11e9-974f-3aa3f03406d8.png)
 
 ## Using CocoaPods
 
