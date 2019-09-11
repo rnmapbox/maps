@@ -5,7 +5,7 @@ import android.graphics.PointF;
 import android.graphics.Bitmap;
 import android.view.MotionEvent;
 import android.view.View;
-import androidx.annotation.NonNull;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.mapbox.geojson.Point;
