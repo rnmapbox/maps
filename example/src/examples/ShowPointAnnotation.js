@@ -106,15 +106,9 @@ class ShowPointAnnotation extends React.Component {
           key={id}
           id={id}
           coordinate={coordinate}
-          anchor={{x: 0, y: -1}}
-          title={title}
-          onSelected={e => {
-            console.log(e)
-          }}
-        >
-          <View style={{width: 50, height: 50, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red'}}>
-            <View style={{width: 20, height: 20, backgroundColor: 'blue'}} />
-          </View>
+          title={title}>
+          <View style={styles.annotationContainer} />
+          <MapboxGL.Callout title="This is a sample" />
         </MapboxGL.PointAnnotation>,
       );
     }
@@ -129,23 +123,12 @@ class ShowPointAnnotation extends React.Component {
           ref={c => (this._map = c)}
           onPress={this.onPress}
           onDidFinishLoadingMap={this.onDidFinishLoadingMap}
-          style={sheet.matchParent}
-        >
+          style={sheet.matchParent}>
           <MapboxGL.Camera
             zoomLevel={16}
             centerCoordinate={this.state.coordinates[0]}
           />
-          <MapboxGL.PointAnnotation
-            key={'te'}
-            id={'te'}
-            coordinate={[-73.98929439910518,40.73398665121209]}
-            anchor={{x: 0.5, y: 1}}
-            title="This is a point ann"
-          >
-            <View style={{width: 50, height: 50, justifyContent: 'center', alignItems: 'center', backgroundColor: 'yellow'}}>
-              <View style={{width: 20, height: 20, backgroundColor: 'green', borderRadius: 10}} />
-            </View>
-          </MapboxGL.PointAnnotation>
+
           {this.renderAnnotations()}
         </MapboxGL.MapView>
 
