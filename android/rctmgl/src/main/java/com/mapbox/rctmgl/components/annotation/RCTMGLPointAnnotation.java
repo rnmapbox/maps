@@ -49,6 +49,7 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
 
     private Float[] mAnchor;
     private boolean mIsSelected;
+    private boolean mDraggable;
 
     private View mChildView;
     private Bitmap mChildBitmap;
@@ -175,6 +176,14 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
         }
     }
 
+    public void setDraggable(Boolean draggable) {
+        mDraggable = draggable;
+        if (mAnnotation != null) {
+            mAnnotation.setDraggable(draggable);
+            mMapView.getSymbolManager().update(mAnnotation);
+        }
+    }
+
     public Symbol getMarker() {
         return mAnnotation;
     }
@@ -210,9 +219,9 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
     public void makeMarker() {
         SymbolOptions options = new SymbolOptions()
             .withLatLng(GeoJSONUtils.toLatLng(mCoordinate))
+            .withDraggable(mDraggable)
             .withIconSize(1.0f)
-            .withSymbolSortKey(10.0f)
-            .withDraggable(true);
+            .withSymbolSortKey(10.0f);
         mAnnotation = mMapView.getSymbolManager().create(options);
         updateOptions();
     }

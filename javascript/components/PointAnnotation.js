@@ -44,7 +44,7 @@ class PointAnnotation extends React.PureComponent {
     selected: PropTypes.bool,
 
     /**
-     * Draggable
+     * Enable or disable dragging. Defaults to false.
      * @type {[type]}
      */
     draggable: PropTypes.bool,
@@ -89,6 +89,7 @@ class PointAnnotation extends React.PureComponent {
 
   static defaultProps = {
     anchor: {x: 0.5, y: 0.5},
+    draggable: false,
   };
 
   constructor(props) {

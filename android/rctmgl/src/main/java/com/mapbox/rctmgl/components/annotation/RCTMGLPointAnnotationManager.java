@@ -56,4 +56,9 @@ public class RCTMGLPointAnnotationManager extends AbstractEventEmitter<RCTMGLPoi
     public void setAnchor(RCTMGLPointAnnotation annotation, ReadableMap map) {
         annotation.setAnchor((float) map.getDouble("x"), (float) map.getDouble("y"));
     }
+
+    @ReactProp(name="draggable")
+    public void setDraggable(RCTMGLPointAnnotation annotation, Boolean draggable) {
+        annotation.setDraggable(draggable);
+    }
 }
