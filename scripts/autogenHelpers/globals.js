@@ -280,9 +280,7 @@ ${startAtSpace(2, '')}`;
 global.jsDocReactProp = function(prop) {
   let propTypes = [];
 
-  if (prop.name.indexOf('Translate') !== -1) {
-    propTypes.push('PropTypes.arrayOf(PropTypes.number)');
-  } else if (prop.type === 'color') {
+  if (prop.type === 'color') {
     propTypes.push('PropTypes.string');
   } else if (prop.type === 'array') {
     switch (prop.value) {
@@ -302,7 +300,11 @@ global.jsDocReactProp = function(prop) {
   } else if (prop.type === 'boolean') {
     propTypes.push('PropTypes.bool');
   } else if (prop.type === 'enum') {
-    propTypes.push('PropTypes.any');
+    if (prop.doc.values) {
+      propTypes.push(`PropTypes.oneOf([${Object.keys(prop.doc.values).map(v => `'${v}'`).join(', ')}])`);
+    } else {
+      propTypes.push('PropTypes.any');
+    }
   } else {
     // images can be required which result in a number
     if (prop.image) {

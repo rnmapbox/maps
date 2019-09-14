@@ -32,7 +32,7 @@ export const FillLayerStyleProp = PropTypes.shape({
   /**
    * Whether this layer is displayed.
    */
-  visibility: PropTypes.any,
+  visibility: PropTypes.oneOf(['visible', 'none']),
 
   /**
    * Whether or not the fill should be antialiased.
@@ -116,7 +116,7 @@ export const FillLayerStyleProp = PropTypes.shape({
    * @requires fillTranslate
    */
   fillTranslateAnchor: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.number),
+    PropTypes.oneOf(['map', 'viewport']),
     PropTypes.array,
   ]),
 
@@ -144,7 +144,7 @@ export const LineLayerStyleProp = PropTypes.shape({
    * The display of line endings.
    */
   lineCap: PropTypes.oneOfType([
-    PropTypes.any,
+    PropTypes.oneOf(['butt', 'round', 'square']),
     PropTypes.array,
   ]),
 
@@ -152,7 +152,7 @@ export const LineLayerStyleProp = PropTypes.shape({
    * The display of lines when joining.
    */
   lineJoin: PropTypes.oneOfType([
-    PropTypes.any,
+    PropTypes.oneOf(['bevel', 'round', 'miter']),
     PropTypes.array,
   ]),
 
@@ -175,7 +175,7 @@ export const LineLayerStyleProp = PropTypes.shape({
   /**
    * Whether this layer is displayed.
    */
-  visibility: PropTypes.any,
+  visibility: PropTypes.oneOf(['visible', 'none']),
 
   /**
    * The opacity at which the line will be drawn.
@@ -233,7 +233,7 @@ export const LineLayerStyleProp = PropTypes.shape({
    * @requires lineTranslate
    */
   lineTranslateAnchor: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.number),
+    PropTypes.oneOf(['map', 'viewport']),
     PropTypes.array,
   ]),
 
@@ -353,7 +353,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * Label placement relative to its geometry.
    */
   symbolPlacement: PropTypes.oneOfType([
-    PropTypes.any,
+    PropTypes.oneOf(['point', 'line', 'line-center']),
     PropTypes.array,
   ]),
 
@@ -377,7 +377,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * Controls the order in which overlapping symbols in the same layer are rendered
    */
   symbolZOrder: PropTypes.oneOfType([
-    PropTypes.any,
+    PropTypes.oneOf(['auto', 'viewport-y', 'source']),
     PropTypes.array,
   ]),
 
@@ -417,7 +417,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires iconImage
    */
   iconRotationAlignment: PropTypes.oneOfType([
-    PropTypes.any,
+    PropTypes.oneOf(['map', 'viewport', 'auto']),
     PropTypes.array,
   ]),
 
@@ -437,7 +437,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires iconImage, textField
    */
   iconTextFit: PropTypes.oneOfType([
-    PropTypes.any,
+    PropTypes.oneOf(['none', 'width', 'height', 'both']),
     PropTypes.array,
   ]),
 
@@ -506,7 +506,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires iconImage
    */
   iconAnchor: PropTypes.oneOfType([
-    PropTypes.any,
+    PropTypes.oneOf(['center', 'left', 'right', 'top', 'bottom', 'top-left', 'top-right', 'bottom-left', 'bottom-right']),
     PropTypes.array,
   ]),
 
@@ -516,7 +516,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires iconImage
    */
   iconPitchAlignment: PropTypes.oneOfType([
-    PropTypes.any,
+    PropTypes.oneOf(['map', 'viewport', 'auto']),
     PropTypes.array,
   ]),
 
@@ -526,7 +526,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires textField
    */
   textPitchAlignment: PropTypes.oneOfType([
-    PropTypes.any,
+    PropTypes.oneOf(['map', 'viewport', 'auto']),
     PropTypes.array,
   ]),
 
@@ -536,7 +536,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires textField
    */
   textRotationAlignment: PropTypes.oneOfType([
-    PropTypes.any,
+    PropTypes.oneOf(['map', 'viewport', 'auto']),
     PropTypes.array,
   ]),
 
@@ -604,7 +604,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires textField
    */
   textJustify: PropTypes.oneOfType([
-    PropTypes.any,
+    PropTypes.oneOf(['auto', 'left', 'center', 'right']),
     PropTypes.array,
   ]),
 
@@ -614,7 +614,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires textField
    */
   textAnchor: PropTypes.oneOfType([
-    PropTypes.any,
+    PropTypes.oneOf(['center', 'left', 'right', 'top', 'bottom', 'top-left', 'top-right', 'bottom-left', 'bottom-right']),
     PropTypes.array,
   ]),
 
@@ -664,7 +664,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires textField
    */
   textTransform: PropTypes.oneOfType([
-    PropTypes.any,
+    PropTypes.oneOf(['none', 'uppercase', 'lowercase']),
     PropTypes.array,
   ]),
 
@@ -713,7 +713,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   /**
    * Whether this layer is displayed.
    */
-  visibility: PropTypes.any,
+  visibility: PropTypes.oneOf(['visible', 'none']),
 
   /**
    * The opacity at which the icon will be drawn.
@@ -829,7 +829,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires iconImage, iconTranslate
    */
   iconTranslateAnchor: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.number),
+    PropTypes.oneOf(['map', 'viewport']),
     PropTypes.array,
   ]),
 
@@ -947,7 +947,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
    * @requires textField, textTranslate
    */
   textTranslateAnchor: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.number),
+    PropTypes.oneOf(['map', 'viewport']),
     PropTypes.array,
   ]),
 });
@@ -957,7 +957,7 @@ export const CircleLayerStyleProp = PropTypes.shape({
   /**
    * Whether this layer is displayed.
    */
-  visibility: PropTypes.any,
+  visibility: PropTypes.oneOf(['visible', 'none']),
 
   /**
    * Circle radius.
@@ -1045,7 +1045,7 @@ export const CircleLayerStyleProp = PropTypes.shape({
    * @requires circleTranslate
    */
   circleTranslateAnchor: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.number),
+    PropTypes.oneOf(['map', 'viewport']),
     PropTypes.array,
   ]),
 
@@ -1053,7 +1053,7 @@ export const CircleLayerStyleProp = PropTypes.shape({
    * Controls the scaling behavior of the circle when the map is pitched.
    */
   circlePitchScale: PropTypes.oneOfType([
-    PropTypes.any,
+    PropTypes.oneOf(['map', 'viewport']),
     PropTypes.array,
   ]),
 
@@ -1061,7 +1061,7 @@ export const CircleLayerStyleProp = PropTypes.shape({
    * Orientation of circle when map is pitched.
    */
   circlePitchAlignment: PropTypes.oneOfType([
-    PropTypes.any,
+    PropTypes.oneOf(['map', 'viewport']),
     PropTypes.array,
   ]),
 
@@ -1119,7 +1119,7 @@ export const HeatmapLayerStyleProp = PropTypes.shape({
   /**
    * Whether this layer is displayed.
    */
-  visibility: PropTypes.any,
+  visibility: PropTypes.oneOf(['visible', 'none']),
 
   /**
    * Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed.
@@ -1191,7 +1191,7 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
   /**
    * Whether this layer is displayed.
    */
-  visibility: PropTypes.any,
+  visibility: PropTypes.oneOf(['visible', 'none']),
 
   /**
    * The opacity of the entire fill extrusion layer. This is rendered on a perLayer, not perFeature, basis, and dataDriven styling is not available.
@@ -1249,7 +1249,7 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
    * @requires fillExtrusionTranslate
    */
   fillExtrusionTranslateAnchor: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.number),
+    PropTypes.oneOf(['map', 'viewport']),
     PropTypes.array,
   ]),
 
@@ -1310,7 +1310,7 @@ export const RasterLayerStyleProp = PropTypes.shape({
   /**
    * Whether this layer is displayed.
    */
-  visibility: PropTypes.any,
+  visibility: PropTypes.oneOf(['visible', 'none']),
 
   /**
    * The opacity at which the image will be drawn.
@@ -1412,7 +1412,7 @@ export const RasterLayerStyleProp = PropTypes.shape({
    * The resampling/interpolation method to use for overscaling, also known as texture magnification filter
    */
   rasterResampling: PropTypes.oneOfType([
-    PropTypes.any,
+    PropTypes.oneOf(['linear', 'nearest']),
     PropTypes.array,
   ]),
 
@@ -1430,7 +1430,7 @@ export const HillshadeLayerStyleProp = PropTypes.shape({
   /**
    * Whether this layer is displayed.
    */
-  visibility: PropTypes.any,
+  visibility: PropTypes.oneOf(['visible', 'none']),
 
   /**
    * The direction of the light source used to generate the hillshading with 0 as the top of the viewport if `hillshadeIlluminationAnchor` is set to `viewport` and due north if `hillshadeIlluminationAnchor` is set to `map`.
@@ -1444,7 +1444,7 @@ export const HillshadeLayerStyleProp = PropTypes.shape({
    * Direction of light source when map is rotated.
    */
   hillshadeIlluminationAnchor: PropTypes.oneOfType([
-    PropTypes.any,
+    PropTypes.oneOf(['map', 'viewport']),
     PropTypes.array,
   ]),
 
@@ -1518,7 +1518,7 @@ export const BackgroundLayerStyleProp = PropTypes.shape({
   /**
    * Whether this layer is displayed.
    */
-  visibility: PropTypes.any,
+  visibility: PropTypes.oneOf(['visible', 'none']),
 
   /**
    * The color with which the background will be drawn.
@@ -1578,7 +1578,7 @@ export const LightLayerStyleProp = PropTypes.shape({
    * Whether extruded geometries are lit relative to the map or viewport.
    */
   anchor: PropTypes.oneOfType([
-    PropTypes.any,
+    PropTypes.oneOf(['map', 'viewport']),
     PropTypes.array,
   ]),
 
