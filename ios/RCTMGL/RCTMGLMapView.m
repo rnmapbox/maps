@@ -247,9 +247,12 @@ static double const M2PI = M_PI * 2;
 
 - (void)setReactCompassViewMargins:(CGPoint)reactCompassViewMargins
 {
-    CGPoint point;
-    point = reactCompassViewMargins;
-    self.compassViewMargins = point;
+    if(!self.compassView.hidden)
+    {
+        CGPoint point;
+        point = reactCompassViewMargins;
+        self.compassViewMargins = point;
+    }
 }
 
 - (void)setReactShowUserLocation:(BOOL)reactShowUserLocation
