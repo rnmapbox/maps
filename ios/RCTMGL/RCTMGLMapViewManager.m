@@ -79,7 +79,7 @@ RCT_REMAP_VIEW_PROPERTY(compassEnabled, reactCompassEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(zoomEnabled, reactZoomEnabled, BOOL)
 
 RCT_REMAP_VIEW_PROPERTY(compassViewPosition, reactCompassViewPosition, NSInteger *)
-// RCT_REMAP_VIEW_PROPERTY(compassViewMargins, reactCompassViewMargins, NSDictionary <NSString *, CGFloat *>*)
+RCT_REMAP_VIEW_PROPERTY(compassViewMargins, reactCompassViewMargins, CGPoint)
 
 
 RCT_REMAP_VIEW_PROPERTY(contentInset, reactContentInset, NSArray)
