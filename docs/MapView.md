@@ -134,7 +134,6 @@ Map camera will perform updates based on provided config. Deprecated use Camera#
 
 
 
-
 #### takeSnap(writeToDisk)
 
 Takes snapshot of map with current tiles and returns a URI to the image

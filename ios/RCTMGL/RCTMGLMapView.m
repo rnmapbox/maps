@@ -41,7 +41,7 @@ static double const M2PI = M_PI * 2;
     [super layoutSubviews];
     if (_pendingInitialLayout) {
         _pendingInitialLayout = NO;
-        
+
         [   _reactCamera initialLayout];
     }
 }
@@ -109,7 +109,7 @@ static double const M2PI = M_PI * 2;
         camera.map = self;
     } else {
         NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
-        
+
         for (int i = 0; i < childSubviews.count; i++) {
             [self addToMap:childSubviews[i]];
         }
