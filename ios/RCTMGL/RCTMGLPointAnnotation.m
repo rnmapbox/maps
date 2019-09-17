@@ -218,7 +218,6 @@ const float CENTER_Y_OFFSET_BASE = -0.5f;
     [super setDragState:dragState animated:animated];
     switch (dragState) {
         case MGLAnnotationViewDragStateStarting: {
-            [self startDragging];
             if (self.onDragStart != nil) {
                 RCTMGLMapTouchEvent *event = [RCTMGLMapTouchEvent makeAnnotationTapEvent:self];
                 self.onDragStart([event toJSON]);
@@ -231,7 +230,6 @@ const float CENTER_Y_OFFSET_BASE = -0.5f;
 
         case MGLAnnotationViewDragStateEnding:
         case MGLAnnotationViewDragStateCanceling: {
-            [self endDragging];
             if (self.onDragEnd != nil) {
                 RCTMGLMapTouchEvent *event = [RCTMGLMapTouchEvent makeAnnotationTapEvent:self];
                 self.onDragEnd([event toJSON]);
@@ -243,21 +241,5 @@ const float CENTER_Y_OFFSET_BASE = -0.5f;
             return;
     }
 }
-
-- (void)startDragging {
-    [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:0 animations:^{
-        self.layer.opacity = 0.8f;
-        self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.5, 1.5);
-    } completion:nil];
-}
-
-- (void)endDragging {
-    self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.5, 1.5);
-    [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:0 animations:^{
-        self.layer.opacity = 1;
-        self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
-    } completion:nil];
-}
-
 
 @end
