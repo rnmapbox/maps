@@ -236,6 +236,24 @@ static double const M2PI = M_PI * 2;
     self.compassView.hidden = !_reactCompassEnabled;
 }
 
+- (void)setReactCompassViewPosition:(NSInteger *)reactCompassViewPosition
+{
+    if(!self.compassView.hidden)
+    {
+        _reactCompassViewPosition = reactCompassViewPosition;
+        self.compassViewPosition = _reactCompassViewPosition;
+    }
+}
+
+//- (void)setReactCompassViewMargins:(NSDictionary *)reactCompassViewMargins
+//{
+//    CGPoint point;
+//    _reactCompassViewMargins = reactCompassViewMargins;
+//    point.x = ([reactCompassViewMargins objectForKey: @"x"]);
+//    point.y = ([reactCompassViewMargins objectForKey: @"y"]);
+//    self.compassViewMargins = point;
+//}
+
 - (void)setReactShowUserLocation:(BOOL)reactShowUserLocation
 {
     // FMTODO

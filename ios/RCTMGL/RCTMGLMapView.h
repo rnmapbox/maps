@@ -46,6 +46,9 @@ typedef void (^FoundLayerBlock) (MGLStyleLayer* layer);
 @property (nonatomic, assign) BOOL reactCompassEnabled;
 @property (nonatomic, assign) BOOL reactZoomEnabled;
 
+@property (nonatomic, assign) NSInteger *reactCompassViewPosition;
+// @property (nonatomic, assign) NSDictionary <NSString *, NSNumber *>*reactCompassViewMargins;
+
 @property (nonatomic, copy) NSString *reactStyleURL;
 @property (nonatomic, assign) NSInteger *reactPreferredFramesPerSecond;
 

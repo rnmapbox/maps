@@ -78,6 +78,10 @@ RCT_REMAP_VIEW_PROPERTY(logoEnabled, reactLogoEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(compassEnabled, reactCompassEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(zoomEnabled, reactZoomEnabled, BOOL)
 
+RCT_REMAP_VIEW_PROPERTY(compassViewPosition, reactCompassViewPosition, NSInteger *)
+// RCT_REMAP_VIEW_PROPERTY(compassViewMargins, reactCompassViewMargins, NSDictionary <NSString *, CGFloat *>*)
+
+
 RCT_REMAP_VIEW_PROPERTY(contentInset, reactContentInset, NSArray)
 RCT_REMAP_VIEW_PROPERTY(styleURL, reactStyleURL, NSString)
 RCT_REMAP_VIEW_PROPERTY(preferredFramesPerSecond, reactPreferredFramesPerSecond, NSInteger)
