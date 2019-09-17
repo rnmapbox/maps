@@ -109,6 +109,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     private int[] mAttributionMargin;
     private Boolean mLogoEnabled;
     private Boolean mCompassEnabled;
+    private ReadableMap mCompassViewMargins;
     private Boolean mZoomEnabled;
 
     private MarkerViewManager markerViewManager;
@@ -714,6 +715,11 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         updateUISettings();
     }
 
+    public void setReactCompassViewMargins(ReadableMap compassViewMargins) {
+        mCompassViewMargins = compassViewMargins;
+        updateUISettings();
+    }
+
     public void setReactAttributionEnabled(boolean attributionEnabled) {
         mAttributionEnabled = attributionEnabled;
         updateUISettings();
@@ -925,6 +931,12 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
 
         if (mCompassEnabled != null && uiSettings.isCompassEnabled() != mCompassEnabled) {
             uiSettings.setCompassEnabled(mCompassEnabled);
+        }
+
+        if (mCompassEnabled != null && uiSettings.isCompassEnabled()) {
+            int xMargin = mCompassViewMargins.getInt("x") * 2;
+            int yMargin = mCompassViewMargins.getInt("y") * 2;
+            uiSettings.setCompassMargins(xMargin, yMargin, xMargin, yMargin);
         }
 
         if (mZoomEnabled != null && uiSettings.isZoomGesturesEnabled() != mZoomEnabled) {
