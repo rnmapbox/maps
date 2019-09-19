@@ -27,6 +27,8 @@ public class RCTMGLPointAnnotationManager extends AbstractEventEmitter<RCTMGLPoi
         return MapBuilder.<String, String>builder()
                 .put(EventKeys.POINT_ANNOTATION_SELECTED, "onMapboxPointAnnotationSelected")
                 .put(EventKeys.POINT_ANNOTATION_DESELECTED, "onMapboxPointAnnotationDeselected")
+                .put(EventKeys.POINT_ANNOTATION_DRAG_START, "onMapboxPointAnnotationDragStart")
+                .put(EventKeys.POINT_ANNOTATION_DRAG_END, "onMapboxPointAnnotationDragEnd")
                 .build();
     }
 
@@ -45,16 +47,6 @@ public class RCTMGLPointAnnotationManager extends AbstractEventEmitter<RCTMGLPoi
         annotation.setID(id);
     }
 
-    @ReactProp(name="title")
-    public void setTitle(RCTMGLPointAnnotation annotation, String title) {
-        annotation.setTitle(title);
-    }
-
-    @ReactProp(name="snippet")
-    public void setSnippet(RCTMGLPointAnnotation annotation, String snippet) {
-        annotation.setSnippet(snippet);
-    }
-
     @ReactProp(name="coordinate")
     public void setCoordinate(RCTMGLPointAnnotation annotation, String geoJSONStr) {
         annotation.setCoordinate(GeoJSONUtils.toPointGeometry(geoJSONStr));
@@ -65,8 +57,8 @@ public class RCTMGLPointAnnotationManager extends AbstractEventEmitter<RCTMGLPoi
         annotation.setAnchor((float) map.getDouble("x"), (float) map.getDouble("y"));
     }
 
-    @ReactProp(name="selected")
-    public void setSelected(RCTMGLPointAnnotation annotation, boolean isSelected) {
-        annotation.setReactSelected(isSelected);
+    @ReactProp(name="draggable")
+    public void setDraggable(RCTMGLPointAnnotation annotation, Boolean draggable) {
+        annotation.setDraggable(draggable);
     }
 }

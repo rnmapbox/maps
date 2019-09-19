@@ -12,9 +12,4 @@ public class RCTMGLCallout extends ReactViewGroup {
     public RCTMGLCallout(Context context) {
         super(context);
     }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(getWidth(), getHeight());
-    }
 }

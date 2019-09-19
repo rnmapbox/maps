@@ -2871,6 +2871,13 @@
         "description": "Manually selects/deselects annotation\n@type {[type]}"
       },
       {
+        "name": "draggable",
+        "required": false,
+        "type": "bool",
+        "default": "false",
+        "description": "Enable or disable dragging. Defaults to false."
+      },
+      {
         "name": "coordinate",
         "required": true,
         "type": {
@@ -2920,6 +2927,20 @@
         "type": "func",
         "default": "none",
         "description": "This callback is fired once this annotation is deselected."
+      },
+      {
+        "name": "onDragStart",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This callback is fired once this annotation has started being dragged."
+      },
+      {
+        "name": "onDragEnd",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This callback is fired once this annotation has stopped being dragged."
       }
     ],
     "composes": [

@@ -2,20 +2,30 @@ package com.mapbox.rctmgl.components.annotation;
 
 import android.content.Context;
 import android.graphics.PointF;
+import android.graphics.Bitmap;
 import android.view.MotionEvent;
 import android.view.View;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.markerview.MarkerView;
+import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.utils.ColorUtils;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.events.PointAnnotationClickEvent;
+import com.mapbox.rctmgl.events.PointAnnotationDragEvent;
 import com.mapbox.rctmgl.events.constants.EventTypes;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
+import com.mapbox.rctmgl.utils.BitmapUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,9 +34,9 @@ import java.util.List;
  * Created by nickitaliano on 9/27/17.
  */
 
-public class RCTMGLPointAnnotation extends AbstractMapFeature {
+public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.OnLayoutChangeListener {
     private RCTMGLPointAnnotationManager mManager;
-    private Marker mAnnotation;
+    private Symbol mAnnotation;
     private MapboxMap mMap;
     private RCTMGLMapView mMapView;
 
@@ -38,9 +48,20 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
     private String mTitle;
     private String mSnippet;
 
-    private List<Float> mAnchor;
-    private RCTMGLCallout mCallout;
+    private Float[] mAnchor;
     private boolean mIsSelected;
+    private boolean mDraggable;
+
+    private View mChildView;
+    private Bitmap mChildBitmap;
+    private String mChildBitmapId;
+
+    private View mCalloutView;
+    private Symbol mCalloutSymbol;
+    private Bitmap mCalloutBitmap;
+    private String mCalloutBitmapId;
+
+    private static final String MARKER_IMAGE_ID = "MARKER_IMAGE_ID";
 
     public RCTMGLPointAnnotation(Context context, RCTMGLPointAnnotationManager manager) {
         super(context);
@@ -48,32 +69,30 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        return false;
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(getWidth(), getHeight());
-    }
-
-    @Override
     public void addView(View childView, int childPosition) {
         if (childView instanceof RCTMGLCallout) {
-            mCallout = (RCTMGLCallout) childView;
+            mCalloutView = childView;
         } else {
-            super.addView(childView, childPosition);
-            mHasChildren = true;
+            mChildView = childView;
         }
+        childView.addOnLayoutChangeListener(this);
     }
 
     @Override
     public void removeView(View childView) {
-        if (childView instanceof RCTMGLCallout) {
-            mCallout = null;
-        } else {
-            super.removeView(childView);
-            mHasChildren = false;
+        if (mChildView != null) {
+            mMap.getStyle(new Style.OnStyleLoaded() {
+                @Override
+                public void onStyleLoaded(@NonNull Style style) {
+                    // TODO test this
+                    style.removeImage(mChildBitmapId);
+                    mChildView = null;
+                    mCalloutView = null;
+                    mChildBitmap = null;
+                    mChildBitmapId = null;
+                    updateOptions();
+                }
+            });
         }
     }
 
@@ -82,12 +101,37 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         mMapView = mapView;
         mMap = mapView.getMapboxMap();
         makeMarker();
+        if (mChildView != null) {
+            addBitmapToStyle(mChildBitmap, mChildBitmapId);
+            updateOptions();
+        }
+        if (mCalloutView != null) {
+            addBitmapToStyle(mCalloutBitmap, mCalloutBitmapId);
+        }
     }
 
     @Override
     public void removeFromMap(RCTMGLMapView mapView) {
         if (mAnnotation != null) {
-            mMap.removeMarker(mAnnotation);
+            mMapView.getSymbolManager().delete(mAnnotation);
+        }
+    }
+
+    @Override
+    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop,
+            int oldRight, int oldBottom) {
+        if (left != oldLeft || right != oldRight || top != oldTop || bottom != oldBottom) {
+            Bitmap bitmap = BitmapUtils.viewToBitmap(v, left, top, right, bottom);
+            String bitmapId = Integer.toString(v.getId());
+            addBitmapToStyle(bitmap, bitmapId);
+            if (v instanceof RCTMGLCallout) {
+                mCalloutBitmap = bitmap;
+                mCalloutBitmapId = bitmapId;
+            } else {
+                mChildBitmap = bitmap;
+                mChildBitmapId = bitmapId;
+                updateOptions();
+            }
         }
     }
 
@@ -99,7 +143,7 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         return mAnnotation == null ? -1 : mAnnotation.getId();
     }
 
-    public String getID () {
+    public String getID() {
         return mID;
     }
 
@@ -107,65 +151,48 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         mID = id;
     }
 
-    public RCTMGLCallout getCalloutView() {
-        return mCallout;
-    }
-
-    public void setTitle(String title) {
-        mTitle = title;
-
-        if (mAnnotation != null) {
-            mAnnotation.setTitle(mTitle);
-        }
-    }
-
-    public void setSnippet(String snippet) {
-        mSnippet = snippet;
-
-        if (mAnnotation != null) {
-            mAnnotation.setSnippet(snippet);
-        }
+    public View getCalloutView() {
+        return mCalloutView;
     }
 
     public void setCoordinate(Point point) {
         mCoordinate = point;
 
         if (mAnnotation != null) {
-            mAnnotation.setPosition(GeoJSONUtils.toLatLng(point));
+            mAnnotation.setLatLng(GeoJSONUtils.toLatLng(point));
+            mMapView.getSymbolManager().update(mAnnotation);
+        }
+        if (mCalloutSymbol != null) {
+            mCalloutSymbol.setLatLng(GeoJSONUtils.toLatLng(point));
+            mMapView.getSymbolManager().update(mCalloutSymbol);
         }
     }
 
     public void setAnchor(float x, float y) {
-        mAnchor = Arrays.asList(x, y);
+        mAnchor = new Float[]{x, y};
 
         if (mAnnotation != null) {
-            mAnnotation.setRightOffsetPixels((int)x);
-            mAnnotation.setTopOffsetPixels((int)y);
-            /* FMTODO mAnnotation.setAnchor(x, y); */
+            updateAnchor();
+            mMapView.getSymbolManager().update(mAnnotation);
         }
     }
 
-    public void setReactSelected(boolean isSelected) {
-        mIsSelected = isSelected;
-
+    public void setDraggable(Boolean draggable) {
+        mDraggable = draggable;
         if (mAnnotation != null) {
-            if (mIsSelected) {
-                mMap.selectMarker(mAnnotation);
-            } else {
-                mMap.deselectMarker(mAnnotation);
-            }
+            mAnnotation.setDraggable(draggable);
+            mMapView.getSymbolManager().update(mAnnotation);
         }
     }
 
-    public Marker getMarker() {
+    public Symbol getMarker() {
         return mAnnotation;
     }
 
-    public RCTMGLCallout getCallout() {
-        return mCallout;
-    }
-
     public void onSelect(boolean shouldSendEvent) {
+        if (mCalloutView != null) {
+            makeCallout();
+        }
         if (shouldSendEvent) {
             mManager.handleEvent(makeEvent(true));
         }
@@ -173,34 +200,98 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
 
     public void onDeselect() {
         mManager.handleEvent(makeEvent(false));
+        if (mCalloutSymbol != null) {
+            mMapView.getSymbolManager().delete(mCalloutSymbol);
+        }
+    }
+
+    public void onDragStart() {
+        LatLng latLng = mAnnotation.getLatLng();
+        mCoordinate = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+        mManager.handleEvent(makeDragEvent(EventTypes.ANNOTATION_DRAG_START));
+    }
+
+    public void onDragEnd() {
+        LatLng latLng = mAnnotation.getLatLng();
+        mCoordinate = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+        mManager.handleEvent(makeDragEvent(EventTypes.ANNOTATION_DRAG_END));
     }
 
     public void makeMarker() {
-        mAnnotation = mMap.addMarker(buildOptions());
-        
-        if (mAnchor != null && mAnchor.size() == 2) {
-
-            //mAnnotation.setAnchor(mAnchor.get(0), mAnchor.get(1));
-            mAnnotation.setRightOffsetPixels((int)mAnchor.get(0).floatValue());
-            mAnnotation.setTopOffsetPixels((int)mAnchor.get(1).floatValue());
-        }
-
-        final RCTMGLPointAnnotation self = this;
-        if (mIsSelected) {
-            mMapView.selectAnnotation(self);
+        SymbolOptions options = new SymbolOptions()
+            .withLatLng(GeoJSONUtils.toLatLng(mCoordinate))
+            .withDraggable(mDraggable)
+            .withIconSize(1.0f)
+            .withSymbolSortKey(10.0f);
+        SymbolManager symbolManager = mMapView.getSymbolManager();
+        if (symbolManager != null) {
+            mAnnotation = symbolManager.create(options);
+            updateOptions();
         }
     }
 
+    private void updateOptions() {
+        if (mAnnotation != null) {
+            updateIconImage();
+            updateAnchor();
+            mMapView.getSymbolManager().update(mAnnotation);
+        }
+    }
 
-    private RCTMGLPointAnnotationOptions buildOptions() {
-        RCTMGLPointAnnotationOptions options = new RCTMGLPointAnnotationOptions();
-        options.annotationID(mID);
-        options.title(mTitle);
-        options.snippet(mSnippet);
-        options.hasChildren(mHasChildren);
-        options.anchor(0.5f, 0.5f);
-        options.position(GeoJSONUtils.toLatLng(mCoordinate));
-        return options;
+    private void updateIconImage() {
+        if (mChildView != null) {
+            if (mChildBitmapId != null) {
+                mAnnotation.setIconImage(mChildBitmapId);
+            }
+        } else {
+            mAnnotation.setIconImage(MARKER_IMAGE_ID);
+            mAnnotation.setIconAnchor("bottom");
+        }
+    }
+
+    private void updateAnchor() {
+        if (mAnchor != null && mChildView != null && mChildBitmap != null) {
+            int w = mChildBitmap.getWidth();
+            int h = mChildBitmap.getHeight();
+            final float scale = getResources().getDisplayMetrics().density;
+            w = (int) (w / scale);
+            h = (int) (h / scale);
+            mAnnotation.setIconAnchor("top-left");
+            mAnnotation.setIconOffset(new PointF(w * mAnchor[0] * -1, h * mAnchor[1] * -1));
+        }
+    }
+
+    private void makeCallout() {
+        float yOffset = -28f;
+        if (mChildView != null) {
+            float scale = getResources().getDisplayMetrics().density;
+            int h = (int) mChildBitmap.getHeight() / 2;
+            h = (int) (h / scale);
+            yOffset = (float) h * -1;
+        }
+        SymbolOptions options = new SymbolOptions()
+            .withLatLng(GeoJSONUtils.toLatLng(mCoordinate))
+            .withIconImage(mCalloutBitmapId)
+            .withIconSize(1.0f)
+            .withIconAnchor("bottom")
+            .withIconOffset(new Float[] {0f, yOffset})
+            .withSymbolSortKey(11.0f)
+            .withDraggable(false);
+        SymbolManager symbolManager = mMapView.getSymbolManager();
+        if (symbolManager != null) {
+            mCalloutSymbol = symbolManager.create(options);
+        }
+    }
+
+    private void addBitmapToStyle(final Bitmap bitmap, final String bitmapId) {
+        if (mMap != null && bitmapId != null && bitmap != null) {
+            mMap.getStyle(new Style.OnStyleLoaded() {
+                @Override
+                public void onStyleLoaded(@NonNull Style style) {
+                    style.addImage(bitmapId, bitmap);
+                }
+            });
+        }
     }
 
     private PointAnnotationClickEvent makeEvent(boolean isSelect) {
@@ -210,47 +301,15 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature {
         return new PointAnnotationClickEvent(this, latLng, screenPos, type);
     }
 
+    private PointAnnotationDragEvent makeDragEvent(String type) {
+        LatLng latLng = GeoJSONUtils.toLatLng(mCoordinate);
+        PointF screenPos = getScreenPosition();
+        return new PointAnnotationDragEvent(this, latLng, screenPos, type);
+    }
+
     private PointF getScreenPosition() {
         int[] loc = new int[2];
         getLocationOnScreen(loc);
         return new PointF((float) loc[0], (float) loc[1]);
     }
-
-    public static class CustomMarker extends Marker {
-        private String mAnnotationID;
-        private RCTMGLPointAnnotationOptions mOptions;
-
-        public CustomMarker(String annotationID, RCTMGLPointAnnotationOptions options) {
-            super(options);
-            mOptions = options;
-            mAnnotationID = annotationID;
-        }
-
-        public String getAnnotationID() {
-            return mAnnotationID;
-        }
-
-        public boolean isDefaultIcon() {
-            return !mOptions.getHasChildren();
-        }
-    }
-/*
-    public static class CustomView extends MarkerView {
-        private String mAnnotationID;
-        private RCTMGLPointAnnotationOptions mOptions;
-
-        public CustomView(String annotationID, RCTMGLPointAnnotationOptions options) {
-            super(options);
-            mOptions = options;
-            mAnnotationID = annotationID;
-        }
-
-        public String getAnnotationID() {
-            return mAnnotationID;
-        }
-
-        public boolean isDefaultIcon() {
-            return !mOptions.getHasChildren();
-        }
-    } */
 }

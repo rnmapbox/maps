@@ -29,8 +29,11 @@
 
 @property (nonatomic, copy) RCTBubblingEventBlock onSelected;
 @property (nonatomic, copy) RCTBubblingEventBlock onDeselected;
+@property (nonatomic, copy) RCTBubblingEventBlock onDragStart;
+@property (nonatomic, copy) RCTBubblingEventBlock onDragEnd;
 
 @property (nonatomic, assign) BOOL reactSelected;
+@property (nonatomic, assign) BOOL reactDraggable;
 
 - (MGLAnnotationView *)getAnnotationView;
 
