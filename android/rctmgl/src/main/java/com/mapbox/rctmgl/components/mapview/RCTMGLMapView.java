@@ -934,7 +934,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         }
 
         if (mCompassEnabled != null && uiSettings.isCompassEnabled()) {
-            Double pixelDensity = getResources().getDisplayMetrics().density;
+            int pixelDensity = (int)getResources().getDisplayMetrics().density;
 
             int xMargin = mCompassViewMargins.getInt("x") * pixelDensity;
             int yMargin = mCompassViewMargins.getInt("y") * pixelDensity;
