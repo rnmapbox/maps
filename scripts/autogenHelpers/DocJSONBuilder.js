@@ -231,7 +231,7 @@ class DocJSONBuilder {
   generateModulesTask(results, filePath) {
     return new Promise((resolve, reject) => {
       exec(
-        `documentation build ${MODULES_PATH} -f json`,
+        `npx documentation build ${MODULES_PATH} -f json`,
         (err, stdout, stderr) => {
           if (err || stderr) {
             reject(err || stderr);
