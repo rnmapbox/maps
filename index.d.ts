@@ -179,6 +179,8 @@ export interface MapViewProps extends ViewProperties {
     attributionPosition?: AttributionPosition;
     logoEnabled?: boolean;
     compassEnabled?: boolean;
+    compassViewPosition?: number;
+    compassViewMargins?: object;
     surfaceView?: boolean;
     regionWillChangeDebounceTime?: number;
     regionDidChangeDebounceTime?: number;
