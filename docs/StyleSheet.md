@@ -1,7 +1,7 @@
 ## StyleSheet
 
 
-### Stylesheet is now a JS object, see [CHANGELOG.txt](../CHANGELOG.txt)  for more details
+### Stylesheet is now a JS object, see [CHANGELOG.md](../CHANGELOG.md)  for more details
 
 See (Mapbox expression specs)[https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions] for reference on expressions.
 
