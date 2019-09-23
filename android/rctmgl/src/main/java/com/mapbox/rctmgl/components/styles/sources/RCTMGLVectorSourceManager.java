@@ -1,7 +1,6 @@
 package com.mapbox.rctmgl.components.styles.sources;
 
 import android.support.annotation.Nullable;
-import android.view.View;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
@@ -9,64 +8,35 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.mapbox.rctmgl.components.AbstractEventEmitter;
-import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.events.constants.EventKeys;
 import com.mapbox.rctmgl.utils.ConvertUtils;
 import com.mapbox.rctmgl.utils.ExpressionParser;
 
-import java.util.HashMap;
+import javax.annotation.Nonnull;
+
 import java.util.Map;
 
 /**
  * Created by nickitaliano on 9/8/17.
  */
 
-public class RCTMGLVectorSourceManager extends AbstractEventEmitter<RCTMGLVectorSource> {
+public class RCTMGLVectorSourceManager extends RCTMGLTileSourceManager<RCTMGLVectorSource> {
     public static final String REACT_CLASS = "RCTMGLVectorSource";
 
     public RCTMGLVectorSourceManager(ReactApplicationContext reactApplicationContext) {
         super(reactApplicationContext);
     }
 
+    @Nonnull
     @Override
     public String getName() {
         return REACT_CLASS;
     }
 
+    @Nonnull
     @Override
-    protected RCTMGLVectorSource createViewInstance(ThemedReactContext reactContext) {
+    protected RCTMGLVectorSource createViewInstance(@Nonnull ThemedReactContext reactContext) {
         return new RCTMGLVectorSource(reactContext, this);
-    }
-
-    @Override
-    public View getChildAt(RCTMGLVectorSource source, int childPosition) {
-        return source.getLayerAt(childPosition);
-    }
-
-    @Override
-    public int getChildCount(RCTMGLVectorSource source) {
-        return source.getLayerCount();
-    }
-
-    @Override
-    public void addView(RCTMGLVectorSource source, View childView, int childPosition) {
-        source.addLayer(childView, childPosition);
-    }
-
-    @Override
-    public void removeViewAt(RCTMGLVectorSource source, int childPosition) {
-        source.removeLayer(childPosition);
-    }
-
-    @ReactProp(name="id")
-    public void setId(RCTMGLVectorSource source, String id) {
-        source.setID(id);
-    }
-
-    @ReactProp(name="url")
-    public void setUrl(RCTMGLVectorSource source, String url) {
-        source.setURL(url);
     }
 
     @ReactProp(name = "hasPressListener")

@@ -42,7 +42,9 @@ class WatercolorRasterTiles extends React.Component {
   render() {
     const rasterSourceProps = {
       id: 'stamenWatercolorSource',
-      url: 'https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg',
+      tileUrlTemplates: [
+        'https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg',
+      ],
       tileSize: 256,
     };
 

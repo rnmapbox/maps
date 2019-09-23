@@ -30,6 +30,12 @@ class RasterSource extends AbstractSource {
     url: PropTypes.string,
 
     /**
+     * An array of tile URL templates. If multiple endpoints are specified, clients may use any combination of endpoints.
+     * Example: https://example.com/raster-tiles/{z}/{x}/{y}.png
+     */
+    tileUrlTemplates: PropTypes.arrayOf(PropTypes.string),
+
+    /**
      * An unsigned integer that specifies the minimum zoom level at which to display tiles from the source.
      * The value should be between 0 and 22, inclusive, and less than
      * maxZoomLevel, if specified. The default value for this option is 0.
@@ -65,11 +71,31 @@ class RasterSource extends AbstractSource {
     id: MapboxGL.StyleSource.DefaultSourceID,
   };
 
+  constructor(props) {
+    super(props);
+    if (props.url && props.url.includes('{z}')) {
+      console.warn(
+        'RasterSource `url` property contains a tile URL template string. Please use `tileUrlTemplates` instead.',
+      );
+    }
+  }
+
   render() {
+    let {url} = this.props;
+    let {tileUrlTemplates} = this.props;
+
+    // Swapping url for tileUrlTemplates to provide backward compatiblity
+    // when RasterSource supported only tile url as url prop
+    if (url && url.includes('{z}')) {
+      tileUrlTemplates = [url];
+      url = undefined;
+    }
+
     const props = {
       ...this.props,
       id: this.props.id,
-      url: this.props.url,
+      url,
+      tileUrlTemplates,
       minZoomLevel: this.props.minZoomLevel,
       maxZoomLevel: this.props.maxZoomLevel,
       tileSize: this.props.tileSize,

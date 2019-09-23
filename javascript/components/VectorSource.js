@@ -36,6 +36,37 @@ class VectorSource extends NativeBridgeComponent(AbstractSource) {
     url: PropTypes.string,
 
     /**
+     * An array of tile URL templates. If multiple endpoints are specified, clients may use any combination of endpoints.
+     * Example: https://example.com/vector-tiles/{z}/{x}/{y}.pbf
+     */
+    tileUrlTemplates: PropTypes.arrayOf(PropTypes.string),
+
+    /**
+     * An unsigned integer that specifies the minimum zoom level at which to display tiles from the source.
+     * The value should be between 0 and 22, inclusive, and less than
+     * maxZoomLevel, if specified. The default value for this option is 0.
+     */
+    minZoomLevel: PropTypes.number,
+
+    /**
+     * An unsigned integer that specifies the maximum zoom level at which to display tiles from the source.
+     * The value should be between 0 and 22, inclusive, and less than
+     * minZoomLevel, if specified. The default value for this option is 22.
+     */
+    maxZoomLevel: PropTypes.number,
+
+    /**
+     * Influences the y direction of the tile coordinates. (tms inverts y axis)
+     */
+    tms: PropTypes.bool,
+
+    /**
+     * An HTML or literal text string defining the buttons to be displayed in an action sheet when the
+     * source is part of a map view’s style and the map view’s attribution button is pressed.
+     */
+    attribution: PropTypes.string,
+
+    /**
      * Source press listener, gets called when a user presses one of the children layers only
      * if that layer has a higher z-index than another source layers
      */
@@ -92,6 +123,11 @@ class VectorSource extends NativeBridgeComponent(AbstractSource) {
     const props = {
       id: this.props.id,
       url: this.props.url,
+      tileUrlTemplates: this.props.tileUrlTemplates,
+      minZoomLevel: this.props.minZoomLevel,
+      maxZoomLevel: this.props.maxZoomLevel,
+      tms: this.props.tms,
+      attribution: this.props.attribution,
       hitbox: this.props.hitbox,
       hasPressListener: isFunction(this.props.onPress),
       onMapboxVectorSourcePress: this.props.onPress,
