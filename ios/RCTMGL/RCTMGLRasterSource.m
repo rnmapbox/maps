@@ -12,33 +12,21 @@
 
 - (MGLSource*)makeSource
 {
-    return [[MGLRasterTileSource alloc] initWithIdentifier:self.id
-                                    tileURLTemplates:@[_url]
-                                    options:[self _getOptions]];
+    if (self.url != nil) {
+        NSURL *url = [NSURL URLWithString:self.url];
+        if (self.tileSize != nil) {
+            return [[MGLRasterTileSource alloc] initWithIdentifier:self.id configurationURL:url tileSize:[self.tileSize floatValue]];
+        }
+        return [[MGLRasterTileSource alloc] initWithIdentifier:self.id configurationURL:url];
+    }
+    return [[MGLRasterTileSource alloc] initWithIdentifier:self.id tileURLTemplates:self.tileUrlTemplates options:[self getOptions]];
 }
 
-- (NSDictionary<MGLTileSourceOption, id>*)_getOptions
-{
-    NSMutableDictionary<MGLTileSourceOption, id> *options = [[NSMutableDictionary alloc] init];
+- (NSDictionary<MGLTileSourceOption,id> *)getOptions {
+    NSMutableDictionary<MGLTileSourceOption, id> *options = [[NSMutableDictionary alloc] initWithDictionary:[super getOptions]];
     
-    if (_maxZoomLevel != nil) {
-        options[MGLTileSourceOptionMaximumZoomLevel] = _maxZoomLevel;
-    }
-    
-    if (_minZoomLevel != nil) {
-        options[MGLTileSourceOptionMinimumZoomLevel] = _minZoomLevel;
-    }
-    
-    if (_tileSize != nil) {
+    if (self.tileSize != nil) {
         options[MGLTileSourceOptionTileSize] = _tileSize;
-    }
-
-    if (_tms) {
-        options[MGLTileSourceOptionTileCoordinateSystem] = [NSNumber numberWithUnsignedInteger:MGLTileCoordinateSystemTMS];
-    }
-
-    if (_attribution != nil) {
-        options[MGLTileSourceOptionAttributionHTMLString] = _attribution;
     }
     
     return options;

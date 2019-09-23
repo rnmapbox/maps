@@ -2669,6 +2669,20 @@
         "description": "Enable/Disable the compass from appearing on the map"
       },
       {
+        "name": "compassViewPosition",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Position the compass on a corner of the map"
+      },
+      {
+        "name": "compassViewMargins",
+        "required": false,
+        "type": "object",
+        "default": "none",
+        "description": "Add margins to the compass with x and y values"
+      },
+      {
         "name": "surfaceView",
         "required": false,
         "type": "bool",
@@ -3218,6 +3232,18 @@
         "type": "string",
         "default": "none",
         "description": "A URL to a TileJSON configuration file describing the source’s contents and other metadata."
+      },
+      {
+        "name": "tileUrlTemplates",
+        "required": false,
+        "type": {
+          "name": "array",
+          "value": {
+            "type": "string"
+          }
+        },
+        "default": "none",
+        "description": "An array of tile URL templates. If multiple endpoints are specified, clients may use any combination of endpoints.\nExample: https://example.com/raster-tiles/{z}/{x}/{y}.png"
       },
       {
         "name": "minZoomLevel",
@@ -4857,6 +4883,46 @@
         "type": "string",
         "default": "none",
         "description": "A URL to a TileJSON configuration file describing the source’s contents and other metadata."
+      },
+      {
+        "name": "tileUrlTemplates",
+        "required": false,
+        "type": {
+          "name": "array",
+          "value": {
+            "type": "string"
+          }
+        },
+        "default": "none",
+        "description": "An array of tile URL templates. If multiple endpoints are specified, clients may use any combination of endpoints.\nExample: https://example.com/vector-tiles/{z}/{x}/{y}.pbf"
+      },
+      {
+        "name": "minZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "An unsigned integer that specifies the minimum zoom level at which to display tiles from the source.\nThe value should be between 0 and 22, inclusive, and less than\nmaxZoomLevel, if specified. The default value for this option is 0."
+      },
+      {
+        "name": "maxZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "An unsigned integer that specifies the maximum zoom level at which to display tiles from the source.\nThe value should be between 0 and 22, inclusive, and less than\nminZoomLevel, if specified. The default value for this option is 22."
+      },
+      {
+        "name": "tms",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "Influences the y direction of the tile coordinates. (tms inverts y axis)"
+      },
+      {
+        "name": "attribution",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "An HTML or literal text string defining the buttons to be displayed in an action sheet when the\nsource is part of a map view’s style and the map view’s attribution button is pressed."
       },
       {
         "name": "onPress",

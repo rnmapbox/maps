@@ -17,8 +17,8 @@
 | attributionPosition | `union` | `none` | `false` | Adds attribution offset, e.g. `{top: 8, left: 8}` will put attribution button in top-left corner of the map |
 | logoEnabled | `bool` | `true` | `false` | Enable/Disable the logo on the map. |
 | compassEnabled | `bool` | `none` | `false` | Enable/Disable the compass from appearing on the map |
-| compassViewPosition | `number` | `1` | `false` | Change corner of map the compass starts at. (iOS only) 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight |
-| compassViewMargins | `object` | `none` | `false` | Add margins to the compass. |
+| compassViewPosition | `string` | `none` | `false` | Position the compass on a corner of the map |
+| compassViewMargins | `object` | `none` | `false` | Add margins to the compass with x and y values |
 | surfaceView | `bool` | `false` | `false` | [Android only] Enable/Disable use of GLSurfaceView insted of TextureView. |
 | onPress | `func` | `none` | `false` | Map press listener, gets called when a user presses the map |
 | onLongPress | `func` | `none` | `false` | Map long press listener, gets called when a user long presses the map |

@@ -106,7 +106,8 @@ class ShowPointAnnotation extends React.Component {
           key={id}
           id={id}
           coordinate={coordinate}
-          title={title}>
+          title={title}
+        >
           <View style={styles.annotationContainer} />
           <MapboxGL.Callout title="This is a sample" />
         </MapboxGL.PointAnnotation>,
@@ -123,7 +124,8 @@ class ShowPointAnnotation extends React.Component {
           ref={c => (this._map = c)}
           onPress={this.onPress}
           onDidFinishLoadingMap={this.onDidFinishLoadingMap}
-          style={sheet.matchParent}>
+          style={sheet.matchParent}
+        >
           <MapboxGL.Camera
             zoomLevel={16}
             centerCoordinate={this.state.coordinates[0]}
