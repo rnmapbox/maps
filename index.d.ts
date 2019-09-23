@@ -478,9 +478,15 @@ export interface CalloutProps extends ViewProps {
 
 }
 
-export interface VectorSourceProps extends ViewProps {
+export interface TileSourceProps extends ViewProps {
     id?: string;
     url?: string;
+    tileUrlTemplates?: Array<string>;
+    minZoomLevel?: number;
+    maxZoomLevel?: number;
+}
+
+export interface VectorSourceProps extends TileSourceProps {
     onPress?: (...args: any[]) => any;
     hitbox?: {
         width: number;
@@ -506,14 +512,8 @@ export interface ShapeSourceProps extends ViewProps {
     };
 }
 
-export interface RasterSourceProps extends ViewProps {
-    id?: MapboxGL.StyleSource;
-    url?: string;
-    minZoomLevel?: number;
-    maxZoomLevel?: number;
+export interface RasterSourceProps extends TileSourceProps {
     tileSize?: number;
-    tms?: boolean;
-    attribution?: string;
 }
 
 export interface LayerBaseProps extends ViewProps {

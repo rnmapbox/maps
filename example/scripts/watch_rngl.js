@@ -20,6 +20,9 @@ async function main () {
     console.log('Copying javascript');
     await copyFile(path.join(RNGL_EXAMPLE_DIR, 'javascript'), path.join(RNGL_DIR, 'javascript'));
 
+    console.log('Copying typescript');
+    await copyFile(path.join(RNGL_EXAMPLE_DIR, 'index.d.ts'), path.join(RNGL_DIR, 'index.d.ts'));
+
     console.log('Copying java');
     await copyFile(path.join(RNGL_EXAMPLE_DIR, 'android', 'rctmgl', 'src'), path.join(RNGL_DIR, 'android', 'rctmgl', 'src'));
 
