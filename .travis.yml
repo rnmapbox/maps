@@ -74,6 +74,7 @@ script:
   - yarn global add -g 'jest@24.8.0'
   - yarn install
   - yarn run unittest
+  - yarn run generate
 deploy:
   provider: npm
   email: kristfallro@gmail.com
