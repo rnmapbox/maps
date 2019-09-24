@@ -17,8 +17,8 @@ if (!styleSpecJSON) {
 }
 
 const layers = [];
-const androidVersion = '8.2.1';
-const iosVersion = '5.2.0';
+const androidVersion = '8.3.3';
+const iosVersion = '5.3.2';
 
 const TMPL_PATH = path.join(__dirname, 'templates');
 
