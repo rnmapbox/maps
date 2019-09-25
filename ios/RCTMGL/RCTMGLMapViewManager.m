@@ -442,12 +442,8 @@ RCT_EXPORT_METHOD(showAttribution:(nonnull NSNumber *)reactTag
 }
 
 - (void)mapView:(MGLMapView *)mapView regionDidChangeWithReason:(MGLCameraChangeReason)reason animated:(BOOL)animated
-{
-    NSLog(@"RDC: DID CHANGE: %d", reason);
-    
+{    
     if ((reason & MGLCameraChangeReasonTransitionCancelled) == MGLCameraChangeReasonTransitionCancelled) return;
-
-    NSLog(@"RDC: PASS CHECK: %d", reason);
 
     ((RCTMGLMapView *) mapView).isUserInteraction = (BOOL)(reason & ~MGLCameraChangeReasonProgrammatic);
     
