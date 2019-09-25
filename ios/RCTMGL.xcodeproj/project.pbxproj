@@ -66,6 +66,7 @@
 		C4FD1DBF1FCF54FB00213AF2 /* RCTMGLImageSource.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD1DBE1FCF54FB00213AF2 /* RCTMGLImageSource.m */; };
 		C4FD1DC21FCF550E00213AF2 /* RCTMGLImageSourceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD1DC11FCF550E00213AF2 /* RCTMGLImageSourceManager.m */; };
 		C4FD1DC51FD1F04300213AF2 /* MGLSnapshotModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD1DC41FD1F04200213AF2 /* MGLSnapshotModule.m */; };
+		DF16042F233BFDD100A4231D /* RCTMGLTileSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DF16042E233BFDD000A4231D /* RCTMGLTileSource.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -201,6 +202,8 @@
 		C4FD1DC11FCF550E00213AF2 /* RCTMGLImageSourceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLImageSourceManager.m; sourceTree = "<group>"; };
 		C4FD1DC31FD1F04200213AF2 /* MGLSnapshotModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGLSnapshotModule.h; sourceTree = "<group>"; };
 		C4FD1DC41FD1F04200213AF2 /* MGLSnapshotModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MGLSnapshotModule.m; sourceTree = "<group>"; };
+		DF16042D233BFDD000A4231D /* RCTMGLTileSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTMGLTileSource.h; sourceTree = "<group>"; };
+		DF16042E233BFDD000A4231D /* RCTMGLTileSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTMGLTileSource.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -418,6 +421,8 @@
 				C4FB11091F71D09E0055AE1F /* RCTMGLShapeSource.m */,
 				C4FB110B1F71D0B10055AE1F /* RCTMGLShapeSourceManager.h */,
 				C4FB110C1F71D0B10055AE1F /* RCTMGLShapeSourceManager.m */,
+				DF16042D233BFDD000A4231D /* RCTMGLTileSource.h */,
+				DF16042E233BFDD000A4231D /* RCTMGLTileSource.m */,
 				C4FB122B1F7972A00055AE1F /* RCTMGLRasterSource.h */,
 				C4FB122C1F7972A00055AE1F /* RCTMGLRasterSource.m */,
 				C4FB122E1F7972B40055AE1F /* RCTMGLRasterSourceManager.h */,
@@ -532,6 +537,7 @@
 				C4EAF1271F6083C70016DEE8 /* CameraUpdateItem.m in Sources */,
 				C470F5B81F9E79D400614A69 /* RCTMGLImageQueue.m in Sources */,
 				C45339CD204780EB00888553 /* RCTMGLImageQueueOperation.m in Sources */,
+				DF16042F233BFDD100A4231D /* RCTMGLTileSource.m in Sources */,
 				C4D144531F4E190C00396F26 /* MGLModule.m in Sources */,
 				C4C87B7B1F8FEBF50064AE95 /* RCTMGLPointAnnotationManager.m in Sources */,
 				C43CA50A1F50C145000B9CB7 /* RCTMGLEvent.m in Sources */,
