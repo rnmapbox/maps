@@ -335,7 +335,7 @@ ___
 Name of image in sprite to use for drawing an image background.
 
 #### Type
-`string`
+`image`
 
 
 #### Expression
@@ -749,6 +749,9 @@ Part of the text placed closest to the anchor.
 #### Requires
 `textField`
 
+#### Disabled By
+`textVariableAnchor`
+
 #### Supported Style Functions
 `camera`
 #### Expression
@@ -883,7 +886,7 @@ ___
 `textOffset`
 
 #### Description
-Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up.
+Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with textVariableAnchor, input values will be taken as absolute values. Offsets along the x and yAxis will be applied automatically based on the anchor position.
 
 #### Type
 `array<number>`
