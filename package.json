@@ -103,10 +103,5 @@
     "ignore": [
       "**/scripts/**/*.js"
     ]
-  },
-  "rnpm": {
-    "android": {
-      "sourceDir": "./android/rctmgl"
-    }
   }
 }
