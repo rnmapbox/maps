@@ -206,7 +206,7 @@
         return;
     }
     NSArray *layers = _style.layers;
-    if (index > layers.count) {
+    if (index >= layers.count) {
         index = layers.count - 1;
     }
     [_style insertLayer:_styleLayer atIndex:index];
