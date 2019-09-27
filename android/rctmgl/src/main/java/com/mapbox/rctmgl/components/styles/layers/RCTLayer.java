@@ -199,6 +199,10 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
             return;
         }
         if (getStyle() == null) return;
+        int layerSize = getStyle().getLayers().size();
+        if (index > layerSize) {
+            index = layerSize - 1;
+        }
         getStyle().addLayerAt(mLayer, index);
         mMapView.layerAdded(mLayer);
     }
