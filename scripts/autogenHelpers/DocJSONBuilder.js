@@ -218,7 +218,9 @@ class DocJSONBuilder {
             return;
           }
 
-          results[fileName] = docgen.parse(content);
+          results[fileName] = docgen.parse(content, undefined, undefined, {
+            filename: fileName,
+          });
           this.postprocess(results[fileName], fileName);
 
           next();
