@@ -74,7 +74,7 @@
     "metro-react-native-babel-preset": "0.49.1",
     "node-dir": "0.1.17",
     "prettier": "^1.11.1",
-    "react": "16.8.6",
+    "react": "16.10.1",
     "react-docgen": "^5.0.0-beta.1",
     "react-native": "0.59.10",
     "react-test-renderer": "16.8.3"
