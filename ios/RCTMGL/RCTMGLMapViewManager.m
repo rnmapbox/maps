@@ -303,6 +303,27 @@ RCT_EXPORT_METHOD(showAttribution:(nonnull NSNumber *)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(setSourceVisibility:(nonnull NSNumber *)reactTag
+                  visible:(BOOL)visible
+                  sourceId:(nonnull NSString*)sourceId
+                  sourceLayerId:(nullable NSString*)sourceLayerId
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
+        id view = viewRegistry[reactTag];
+        
+        if (![view isKindOfClass:[RCTMGLMapView class]]) {
+            RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
+            return;
+        }
+        
+        __weak RCTMGLMapView *reactMapView = (RCTMGLMapView*)view;
+        [reactMapView setSourceVisibility:visible sourceId:sourceId sourceLayerId:sourceLayerId];
+        resolve(nil);
+    }];
+}
+
 #pragma mark - UIGestureRecognizers
 
 - (void)didTapMap:(UITapGestureRecognizer *)recognizer
@@ -519,6 +540,7 @@ RCT_EXPORT_METHOD(showAttribution:(nonnull NSNumber *)reactTag
         reactMapView.light.map = reactMapView;
     }
     
+    [reactMapView notifyStyleLoaded];
     [self reactMapDidChange:reactMapView eventType:RCT_MAPBOX_DID_FINISH_LOADING_STYLE];
 }
 

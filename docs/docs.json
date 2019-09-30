@@ -2602,6 +2602,42 @@
         ]
       },
       {
+        "name": "setSourceVisibility",
+        "docblock": "Sets the visibility of all the layers referencing the specified `sourceLayerId` and/or `sourceId`\n\n@example\nawait this._map.setSourceVisibility(false, 'composite', 'building')\n\n@param {boolean} visible - Visibility of the layers\n@param {String} sourceId - Identifier of the target source (e.g. 'composite')\n@param {String=} sourceLayerId - Identifier of the target source-layer (e.g. 'building')",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "visible",
+            "description": "Visibility of the layers",
+            "type": {
+              "name": "boolean"
+            },
+            "optional": false
+          },
+          {
+            "name": "sourceId",
+            "description": "Identifier of the target source (e.g. 'composite')",
+            "type": {
+              "name": "String"
+            },
+            "optional": false
+          },
+          {
+            "name": "sourceLayerId",
+            "description": "Identifier of the target source-layer (e.g. 'building')",
+            "type": {
+              "name": "String"
+            },
+            "optional": true
+          }
+        ],
+        "returns": null,
+        "description": "Sets the visibility of all the layers referencing the specified `sourceLayerId` and/or `sourceId`",
+        "examples": [
+          "\nawait this._map.setSourceVisibility(false, 'composite', 'building')\n\n"
+        ]
+      },
+      {
         "name": "showAttribution",
         "docblock": "Show the attribution and telemetry action sheet.\nIf you implement a custom attribution button, you should add this action to the button.",
         "modifiers": [],

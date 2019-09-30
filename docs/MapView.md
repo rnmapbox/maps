@@ -177,6 +177,24 @@ const center = await this._map.getCenter();
 ```
 
 
+#### setSourceVisibility(visible, sourceId[, sourceLayerId])
+
+Sets the visibility of all the layers referencing the specified `sourceLayerId` and/or `sourceId`
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `visible` | `boolean` | `Yes` | Visibility of the layers |
+| `sourceId` | `String` | `Yes` | Identifier of the target source (e.g. 'composite') |
+| `sourceLayerId` | `String` | `No` | Identifier of the target source-layer (e.g. 'building') |
+
+
+
+```javascript
+await this._map.setSourceVisibility(false, 'composite', 'building')
+```
+
+
 #### showAttribution()
 
 Show the attribution and telemetry action sheet.<br/>If you implement a custom attribution button, you should add this action to the button.
