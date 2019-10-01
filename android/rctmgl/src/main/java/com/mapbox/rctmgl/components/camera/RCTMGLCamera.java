@@ -7,6 +7,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.geometry.VisibleRegion;
 import com.mapbox.mapboxsdk.location.OnCameraTrackingChangedListener;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
@@ -74,6 +75,8 @@ public class RCTMGLCamera extends AbstractMapFeature {
     private double mMinZoomLevel = -1;
     private double mMaxZoomLevel = -1;
 
+    private LatLngBounds mMaxBounds;
+
     private boolean mFollowUserLocation;
     private String mFollowUserMode;
 
@@ -132,6 +135,8 @@ public class RCTMGLCamera extends AbstractMapFeature {
 
         setInitialCamera();
         updateMaxMinZoomLevel();
+        updateMaxBounds();
+
         if (mCameraStop != null) {
             updateCamera();
         }
@@ -157,6 +162,18 @@ public class RCTMGLCamera extends AbstractMapFeature {
 
     public void setDefaultStop(CameraStop stop) {
         mDefaultStop = stop;
+    }
+
+    public void setMaxBounds(LatLngBounds bounds) {
+        mMaxBounds = bounds;
+        updateMaxBounds();
+    }
+
+    private void updateMaxBounds() {
+        MapboxMap map = getMapboxMap();
+        if (map != null && mMaxBounds != null) {
+            map.setLatLngBoundsForCameraTarget(mMaxBounds);
+        }
     }
 
     private void updateMaxMinZoomLevel() {

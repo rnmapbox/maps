@@ -210,6 +210,7 @@ export interface CameraProps extends CameraSettings, ViewProperties {
     defaultSettings?: CameraSettings;
     minZoomLevel?: number;
     maxZoomLevel?: number;
+    maxBounds?: {ne: [number, number], sw: [number, number]}
     followUserLocation?: boolean;
     followUserMode?: "normal" | "compass" | "course";
     followZoomLevel?: number;
