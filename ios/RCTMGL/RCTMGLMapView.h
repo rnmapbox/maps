@@ -52,6 +52,8 @@ typedef void (^FoundLayerBlock) (MGLStyleLayer* layer);
 @property (nonatomic, copy) NSString *reactStyleURL;
 @property (nonatomic, assign) NSInteger *reactPreferredFramesPerSecond;
 
+@property (nonatomic, assign) MGLCoordinateBounds maxBounds;
+
 @property (nonatomic, assign) BOOL isUserInteraction;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
