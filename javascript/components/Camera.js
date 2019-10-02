@@ -81,7 +81,7 @@ class Camera extends React.Component {
     maxZoomLevel: PropTypes.number,
 
     /**
-     * Constrain the view to these bounds (Android only)
+     * Restrict map panning so that the center is within these bounds
      */
     maxBounds: PropTypes.shape({
       /**

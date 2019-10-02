@@ -663,7 +663,7 @@
           ]
         },
         "default": "none",
-        "description": "Constrain the view to these bounds (Android only)"
+        "description": "Restrict map panning so that the center is within these bounds"
       },
       {
         "name": "followUserLocation",
