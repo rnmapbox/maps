@@ -1,8 +1,54 @@
-declare module 'mapbox__react-native-mapbox-gl';
+declare module 'react-native-mapbox-gl__maps';
 
-import {Component} from 'react';
+import {Component, ReactNode} from 'react';
 
-import {ViewProperties, ViewStyle} from 'react-native';
+import {
+  ViewProps,
+  ViewStyle,
+  StyleProp,
+  ImageSourcePropType,
+} from 'react-native';
+
+import {SyntheticEvent} from 'react';
+import * as GeoJSON from '@turf/helpers/lib/geojson';
+
+// prettier-ignore
+type ExpressionName =
+    // Types
+    | 'array' | 'boolean' | 'collator' | 'format' | 'literal' | 'number' | 'object' | 'string'
+    | 'to-boolean' | 'to-color' | 'to-number' | 'to-string' | 'typeof'
+    // Feature data
+    | 'feature-state' | 'geometry-type' | 'id' | 'line-progress' | 'properties'
+    // Lookup
+    | 'at' | 'get' | 'has' | 'length'
+    // Decision
+    | '!' | '!=' | '<' | '<=' | '==' | '>' | '>=' | 'all' | 'any' | 'case' | 'match' | 'coalesce'
+    // Ramps, scales, curves
+    | 'interpolate' | 'interpolate-hcl' | 'interpolate-lab' | 'step'
+    // Variable binding
+    | 'let' | 'var'
+    // String
+    | 'concat' | 'downcase' | 'is-supported-script' | 'resolved-locale' | 'upcase'
+    // Color
+    | 'rgb' | 'rgba'
+    // Math
+    | '-' | '*' | '/' | '%' | '^' | '+' | 'abs' | 'acos' | 'asin' | 'atan' | 'ceil' | 'cos' | 'e'
+    | 'floor' | 'ln' | 'ln2' | 'log10' | 'log2' | 'max' | 'min' | 'pi' | 'round' | 'sin' | 'sqrt' | 'tan'
+    // Zoom, Heatmap
+    | 'zoom' | 'heatmap-density';
+
+type ExpressionField = any;
+
+// After TS 3.7 this can be typed as:
+//    string
+//   | number
+//   | boolean
+//   | Expression
+//   | ExpressionField[]
+//   | {[key: string]: ExpressionField};
+//  See https://github.com/microsoft/TypeScript/pull/33050
+
+export type Expression = [ExpressionName, ...ExpressionField[]];
 
 type Anchor =
   | 'center'
@@ -29,6 +75,12 @@ type NamedStyles<T> = {
     | BackgroundLayerStyle;
 };
 
+export type MapboxGLEvent<
+  T extends string,
+  P = GeoJSON.Feature,
+  V = Element
+> = SyntheticEvent<V, {type: T; payload: P}>;
+
 declare namespace MapboxGL {
   function removeCustomHeader(headerName: string): void;
   function addCustomHeader(headerName: string, headerValue: string): void;
@@ -41,36 +93,37 @@ declare namespace MapboxGL {
    * Components
    */
   class MapView extends Component<MapViewProps> {
-    getPointInView(coordinate: Array<number>): Promise<void>;
-    getCoordinateFromView(point: Array<number>): Promise<void>;
+    getPointInView(coordinate: GeoJSON.Position): Promise<void>;
+    getCoordinateFromView(point: GeoJSON.Position): Promise<void>;
     getVisibleBounds(): Promise<void>;
     queryRenderedFeaturesAtPoint(
-      coordinate: Array<number>,
+      coordinate: GeoJSON.Position,
       filter?: Array<string>,
       layerIds?: Array<string>,
     ): Promise<void>;
     queryRenderedFeaturesInRect(
-      coordinate: Array<number>,
+      coordinate: GeoJSON.Position,
       filter?: Array<string>,
       layerIds?: Array<string>,
     ): Promise<void>;
     takeSnap(writeToDisk?: boolean): Promise<string>;
     getZoom(): Promise<number>;
-    getCenter(): Promise<Array<number>>;
+    getCenter(): Promise<GeoJSON.Position>;
     showAttribution(): void;
   }
 
+  type Padding = number | [number, number] | [number, number, number, number];
   class Camera extends Component<CameraProps> {
     fitBounds(
-      northEastCoordinates: Array<number>,
-      southWestCoordinates: Array<number>,
-      padding?: number,
+      northEastCoordinates: GeoJSON.Position,
+      southWestCoordinates: GeoJSON.Position,
+      padding?: Padding,
       duration?: number,
     ): void;
-    flyTo(coordinates: Array<number>, duration?: number): void;
-    moveTo(coordinates: Array<number>, duration?: number): void;
+    flyTo(coordinates: GeoJSON.Position, duration?: number): void;
+    moveTo(coordinates: GeoJSON.Position, duration?: number): void;
     zoomTo(zoomLevel: number, duration?: number): void;
-    setCamera(config?: any): void;
+    setCamera(config: CameraSettings): void;
   }
 
   class UserLocation extends Component<UserLocationProps> {}
@@ -200,12 +253,20 @@ export type AttributionPosition =
   | {bottom: number; left: number}
   | {bottom: number; right: number};
 
-export interface MapViewProps extends ViewProperties {
+export interface RegionPayload {
+  zoomLevel: number;
+  heading: number;
+  animated: boolean;
+  isUserInteraction: number;
+  visibleRegion: GeoJSON.Position[];
+}
+
+export interface MapViewProps extends ViewProps {
   animated?: boolean;
-  userTrackingMode?: number;
+  userTrackingMode?: MapboxGL.UserTrackingModes;
   userLocationVerticalAlignment?: number;
   contentInset?: Array<number>;
-  style?: any;
+  style?: StyleProp;
   styleURL?: string;
   localizeLabels?: boolean;
   zoomEnabled?: boolean;
@@ -217,17 +278,23 @@ export interface MapViewProps extends ViewProperties {
   logoEnabled?: boolean;
   compassEnabled?: boolean;
   compassViewPosition?: number;
-  compassViewMargins?: object;
+  compassViewMargins?: Point;
   surfaceView?: boolean;
   regionWillChangeDebounceTime?: number;
   regionDidChangeDebounceTime?: number;
 
-  onPress?: () => void;
-  onLongPress?: () => void;
-  onRegionWillChange?: () => void;
-  onRegionIsChanging?: () => void;
-  onRegionDidChange?: () => void;
-  onUserLocationUpdate?: () => void;
+  onPress?: (feature: GeoJSON.Feature) => void;
+  onLongPress?: (feature: GeoJSON.Feature) => void;
+  onRegionWillChange?: (
+    feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
+  ) => void;
+  onRegionIsChanging?: (
+    feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
+  ) => void;
+  onRegionDidChange?: (
+    feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
+  ) => void;
+  onUserLocationUpdate?: (feature: MapboxGL.Location) => void;
   onWillStartLoadingMap?: () => void;
   onDidFinishLoadingMap?: () => void;
   onDidFailLoadingMap?: () => void;
@@ -241,7 +308,7 @@ export interface MapViewProps extends ViewProperties {
   onUserTrackingModeChange?: () => void;
 }
 
-export interface CameraProps extends CameraSettings, ViewProperties {
+export interface CameraProps extends CameraSettings, ViewProps {
   animationDuration?: number;
   animationMode?: 'flyTo' | 'easeTo' | 'moveTo';
   defaultSettings?: CameraSettings;
@@ -255,16 +322,24 @@ export interface CameraProps extends CameraSettings, ViewProperties {
   followHeading?: number;
   triggerKey?: any;
   alignment?: number[];
-  onUserTrackingModeChange?: (...args: any[]) => any;
+  onUserTrackingModeChange?: (
+    event: MapboxGLEvent<
+      'usertrackingmodechange',
+      {
+        followUserLocation: boolean;
+        followUserMode: 'normal' | 'compass' | 'course' | null;
+      }
+    >,
+  ) => void;
 }
 
 export interface CameraSettings {
-  centerCoordinate?: number[];
+  centerCoordinate?: GeoJSON.Position;
   heading?: number;
   pitch?: number;
   bounds?: {
-    ne: number[];
-    sw: number[];
+    ne: GeoJSON.Position;
+    sw: GeoJSON.Position;
     paddingLeft?: number;
     paddingRight?: number;
     paddingTop?: number;
@@ -277,19 +352,23 @@ export interface UserLocationProps {
   animated?: boolean;
   renderMode?: 'normal' | 'custom';
   visible?: boolean;
-  onPress?: (...args: any[]) => any;
+  onPress?: () => void;
   onUpdate?: (location: MapboxGL.Location) => void;
-  children?: any;
+  children?: ReactNode;
 }
 
+export type WithExpression<T> = {
+  [P in keyof T]: T[P] | Expression;
+};
+
 export interface LightStyle {
-  anchor?: Alignment;
-  position?: Array<number>;
-  positionTransition?: Transition;
-  color?: string;
-  colorTransition?: Transition;
-  intensity?: number;
-  intensityTransition?: Transition;
+  anchor?: Alignment | Expression;
+  position?: GeoJSON.Position | Expression;
+  positionTransition?: Transition | Expression;
+  color?: string | Expression;
+  colorTransition?: Transition | Expression;
+  intensity?: number | Expression;
+  intensityTransition?: Transition | Expression;
 }
 
 export interface Transition {
@@ -298,192 +377,191 @@ export interface Transition {
 }
 
 export interface BackgroundLayerStyle {
-  visibilvisibility?: Visibility;
-  ity?: Visibility;
-  backgroundColor?: string;
-  backgroundColorTransition?: Transition;
-  backgroundPattern?: string;
-  backgroundPatternTransition?: Transition;
-  backgroundOpacity?: number;
-  backgroundOpacityTransition?: Transition;
+  visibility?: Visibility | Expression;
+  backgroundColor?: string | Expression;
+  backgroundColorTransition?: Transition | Expression;
+  backgroundPattern?: string | Expression;
+  backgroundPatternTransition?: Transition | Expression;
+  backgroundOpacity?: number | Expression;
+  backgroundOpacityTransition?: Transition | Expression;
 }
 
 export interface CircleLayerStyle {
-  visibility?: Visibility;
-  circleRadius?: number;
-  circleRadiusTransition?: Transition;
-  circleColor?: string;
-  circleColorTransition?: Transition;
-  circleBlur?: number;
-  circleBlurTransition?: Transition;
-  circleOpacity?: number;
-  circleOpacityTransition?: Transition;
-  circleTranslate?: Array<number>;
-  circleTranslateTransition?: Transition;
-  circleTranslateAnchor?: Alignment;
-  circlePitchScale?: Alignment;
-  circlePitchAlignment?: Alignment;
-  circleStrokeWidth?: number;
-  circleStrokeWidthTransition?: Transition;
-  circleStrokeColor?: string;
-  circleStrokeColorTransition?: Transition;
-  circleStrokeOpacity?: number;
-  circleStrokeOpacityTransition?: Transition;
+  visibility?: Visibility | Expression;
+  circleRadius?: number | Expression;
+  circleRadiusTransition?: Transition | Expression;
+  circleColor?: string | Expression;
+  circleColorTransition?: Transition | Expression;
+  circleBlur?: number | Expression;
+  circleBlurTransition?: Transition | Expression;
+  circleOpacity?: number | Expression;
+  circleOpacityTransition?: Transition | Expression;
+  circleTranslate?: Array<number> | Expression;
+  circleTranslateTransition?: Transition | Expression;
+  circleTranslateAnchor?: Alignment | Expression;
+  circlePitchScale?: Alignment | Expression;
+  circlePitchAlignment?: Alignment | Expression;
+  circleStrokeWidth?: number | Expression;
+  circleStrokeWidthTransition?: Transition | Expression;
+  circleStrokeColor?: string | Expression;
+  circleStrokeColorTransition?: Transition | Expression;
+  circleStrokeOpacity?: number | Expression;
+  circleStrokeOpacityTransition?: Transition | Expression;
 }
 
 export interface FillExtrusionLayerStyle {
-  visibility?: Visibility;
-  fillExtrusionOpacity?: number;
-  fillExtrusionOpacityTransition?: Transition;
-  fillExtrusionColor?: string;
-  fillExtrusionColorTransition?: Transition;
-  fillExtrusionTranslate?: Array<number>;
-  fillExtrusionTranslateTransition?: Transition;
-  fillExtrusionTranslateAnchor?: Alignment;
-  fillExtrusionPattern?: string;
-  fillExtrusionPatternTransition?: Transition;
-  fillExtrusionHeight?: number;
-  fillExtrusionHeightTransition?: Transition;
-  fillExtrusionBase?: number;
-  fillExtrusionBaseTransition?: Transition;
+  visibility?: Visibility | Expression;
+  fillExtrusionOpacity?: number | Expression;
+  fillExtrusionOpacityTransition?: Transition | Expression;
+  fillExtrusionColor?: string | Expression;
+  fillExtrusionColorTransition?: Transition | Expression;
+  fillExtrusionTranslate?: Array<number> | Expression;
+  fillExtrusionTranslateTransition?: Transition | Expression;
+  fillExtrusionTranslateAnchor?: Alignment | Expression;
+  fillExtrusionPattern?: string | Expression;
+  fillExtrusionPatternTransition?: Transition | Expression;
+  fillExtrusionHeight?: number | Expression;
+  fillExtrusionHeightTransition?: Transition | Expression;
+  fillExtrusionBase?: number | Expression;
+  fillExtrusionBaseTransition?: Transition | Expression;
 }
 
 export interface FillLayerStyle {
-  visibility?: Visibility;
-  fillAntialias?: boolean;
-  fillOpacity?: number;
-  fillExtrusionOpacityTransition?: Transition;
-  fillColor?: string;
-  fillColorTransition?: Transition;
-  fillOutlineColor?: string;
-  fillOutlineColorTransition?: Transition;
-  fillTranslate?: Array<number>;
-  fillTranslateTransition?: Transition;
-  fillTranslateAnchor?: Alignment;
-  fillPattern?: string;
-  fillPatternTransition?: Transition;
+  visibility?: Visibility | Expression;
+  fillAntialias?: boolean | Expression;
+  fillOpacity?: number | Expression;
+  fillExtrusionOpacityTransition?: Transition | Expression;
+  fillColor?: string | Expression;
+  fillColorTransition?: Transition | Expression;
+  fillOutlineColor?: string | Expression;
+  fillOutlineColorTransition?: Transition | Expression;
+  fillTranslate?: Array<number> | Expression;
+  fillTranslateTransition?: Transition | Expression;
+  fillTranslateAnchor?: Alignment | Expression;
+  fillPattern?: string | Expression;
+  fillPatternTransition?: Transition | Expression;
 }
 
 export interface LineLayerStyle {
-  lineCap?: 'butt' | 'round' | 'square';
-  lineJoin?: 'bevel' | 'round' | 'miter';
-  lineMiterLimit?: number;
-  lineRoundLimit?: number;
-  visibility?: Visibility;
-  lineOpacity?: number;
-  lineOpacityTransition?: Transition;
-  lineColor?: string;
-  lineColorTransition?: Transition;
-  lineTranslate?: Array<number>;
-  lineTranslateTransition?: Transition;
-  lineTranslateAnchor?: Alignment;
-  lineWidth?: number;
-  lineWidthTransition?: Transition;
-  lineGapWidth?: number;
-  lineGapWidthTransition?: Transition;
-  lineOffset?: number;
-  lineOffsetTransition?: Transition;
-  lineBlur?: number;
-  lineBlurTransition?: Transition;
-  lineDasharray?: Array<number>;
-  lineDasharrayTransition?: Transition;
-  linePattern?: string;
-  linePatternTransition?: Transition;
+  lineCap?: 'butt' | 'round' | 'square' | Expression;
+  lineJoin?: 'bevel' | 'round' | 'miter' | Expression;
+  lineMiterLimit?: number | Expression;
+  lineRoundLimit?: number | Expression;
+  visibility?: Visibility | Expression;
+  lineOpacity?: number | Expression;
+  lineOpacityTransition?: Transition | Expression;
+  lineColor?: string | Expression;
+  lineColorTransition?: Transition | Expression;
+  lineTranslate?: Array<number> | Expression;
+  lineTranslateTransition?: Transition | Expression;
+  lineTranslateAnchor?: Alignment | Expression;
+  lineWidth?: number | Expression;
+  lineWidthTransition?: Transition | Expression;
+  lineGapWidth?: number | Expression;
+  lineGapWidthTransition?: Transition | Expression;
+  lineOffset?: number | Expression;
+  lineOffsetTransition?: Transition | Expression;
+  lineBlur?: number | Expression;
+  lineBlurTransition?: Transition | Expression;
+  lineDasharray?: Array<number> | Expression;
+  lineDasharrayTransition?: Transition | Expression;
+  linePattern?: string | Expression;
+  linePatternTransition?: Transition | Expression;
 }
 
 export interface RasterLayerStyle {
-  visibility?: Visibility;
-  rasterOpacity?: number;
-  rasterOpacityTransition?: Transition;
-  rasterHueRotate?: number;
-  rasterHueRotateTransition?: Transition;
-  rasterBrightnessMin?: number;
-  rasterBrightnessMinTransition?: Transition;
-  rasterBrightnessMax?: number;
-  rasterBrightnessMaxTransition?: Transition;
-  rasterSaturation?: number;
-  rasterSaturationTransition?: Transition;
-  rasterContrast?: number;
-  rasterContrastTransition?: Transition;
-  rasterFadeDuration?: number;
+  visibility?: Visibility | Expression;
+  rasterOpacity?: number | Expression;
+  rasterOpacityTransition?: Transition | Expression;
+  rasterHueRotate?: Expression;
+  rasterHueRotateTransition?: Transition | Expression;
+  rasterBrightnessMin?: number | Expression;
+  rasterBrightnessMinTransition?: Transition | Expression;
+  rasterBrightnessMax?: number | Expression;
+  rasterBrightnessMaxTransition?: Transition | Expression;
+  rasterSaturation?: number | Expression;
+  rasterSaturationTransition?: Transition | Expression;
+  rasterContrast?: number | Expression;
+  rasterContrastTransition?: Transition | Expression;
+  rasterFadeDuration?: number | Expression;
 }
 
 export interface SymbolLayerStyle {
-  symbolPlacement?: 'point' | 'line';
-  symbolSpacing?: number;
-  symbolAvoidEdges?: boolean;
-  iconAllowOverlap?: boolean;
-  iconIgnorePlacement?: boolean;
-  iconOptional?: boolean;
-  iconRotationAlignment?: AutoAlignment;
-  iconSize?: number;
-  iconTextFit?: 'none' | 'width' | 'height' | 'both';
-  iconTextFitPadding?: Array<number>;
-  iconImage?: string;
-  iconRotate?: number;
-  iconPadding?: number;
-  iconKeepUpright?: boolean;
-  iconOffset?: Array<number>;
-  iconAnchor?: Anchor;
-  iconPitchAlignment?: AutoAlignment;
-  textPitchAlignment?: AutoAlignment;
-  textRotationAlignment?: AutoAlignment;
-  textField?: string;
-  textFont?: Array<string>;
-  textSize?: number;
-  textMaxWidth?: number;
-  textLineHeight?: number;
-  textLetterSpacing?: number;
-  textJustify?: 'left' | 'center' | 'right';
-  textAnchor?: Anchor;
-  textMaxAngle?: number;
-  textRotate?: number;
-  textPadding?: number;
-  textKeepUpright?: boolean;
-  textTransform?: 'none' | 'uppercase' | 'lowercase';
-  textOffset?: Array<number>;
-  textAllowOverlap?: boolean;
-  textIgnorePlacement?: boolean;
-  textOptional?: boolean;
-  visibility?: Visibility;
-  iconOpacity?: number;
-  iconOpacityTransition?: Transition;
-  iconColor?: string;
-  iconColorTransition?: Transition;
-  iconHaloColor?: string;
-  iconHaloColorTransition?: Transition;
-  iconHaloWidth?: number;
-  iconHaloWidthTransition?: Transition;
-  iconHaloBlur?: number;
-  iconHaloBlurTransition?: Transition;
-  iconTranslate?: Array<number>;
-  iconTranslateTransition?: Transition;
-  iconTranslateAnchor?: Alignment;
-  textOpacity?: number;
-  textOpacityTransition?: Transition;
-  textColor?: string;
-  textColorTransition?: Transition;
-  textHaloColor?: string;
-  textHaloColorTransition?: Transition;
-  textHaloWidth?: number;
-  textHaloWidthTransition?: Transition;
-  textHaloBlur?: number;
-  textHaloBlurTransition?: Transition;
-  textTranslate?: Array<number>;
-  textTranslateTransition?: Transition;
-  textTranslateAnchor?: Alignment;
+  symbolPlacement?: 'point' | 'line' | Expression;
+  symbolSpacing?: number | Expression;
+  symbolAvoidEdges?: boolean | Expression;
+  iconAllowOverlap?: boolean | Expression;
+  iconIgnorePlacement?: boolean | Expression;
+  iconOptional?: boolean | Expression;
+  iconRotationAlignment?: AutoAlignment | Expression;
+  iconSize?: number | Expression;
+  iconTextFit?: 'none' | 'width' | 'height' | 'both' | Expression;
+  iconTextFitPadding?: Array<number> | Expression;
+  iconImage?: string | Expression;
+  iconRotate?: number | Expression;
+  iconPadding?: number | Expression;
+  iconKeepUpright?: boolean | Expression;
+  iconOffset?: Array<number> | Expression;
+  iconAnchor?: Anchor | Expression;
+  iconPitchAlignment?: AutoAlignment | Expression;
+  textPitchAlignment?: AutoAlignment | Expression;
+  textRotationAlignment?: AutoAlignment | Expression;
+  textField?: string | Expression;
+  textFont?: Array<string> | Expression;
+  textSize?: number | Expression;
+  textMaxWidth?: number | Expression;
+  textLineHeight?: number | Expression;
+  textLetterSpacing?: number | Expression;
+  textJustify?: 'left' | 'center' | 'right' | Expression;
+  textAnchor?: Anchor | Expression;
+  textMaxAngle?: number | Expression;
+  textRotate?: number | Expression;
+  textPadding?: number | Expression;
+  textKeepUpright?: boolean | Expression;
+  textTransform?: 'none' | 'uppercase' | 'lowercase' | Expression;
+  textOffset?: Array<number> | Expression;
+  textAllowOverlap?: boolean | Expression;
+  textIgnorePlacement?: boolean | Expression;
+  textOptional?: boolean | Expression;
+  visibility?: Visibility | Expression;
+  iconOpacity?: number | Expression;
+  iconOpacityTransition?: Transition | Expression;
+  iconColor?: string | Expression;
+  iconColorTransition?: Transition | Expression;
+  iconHaloColor?: string | Expression;
+  iconHaloColorTransition?: Transition | Expression;
+  iconHaloWidth?: number | Expression;
+  iconHaloWidthTransition?: Transition | Expression;
+  iconHaloBlur?: number | Expression;
+  iconHaloBlurTransition?: Transition | Expression;
+  iconTranslate?: Array<number> | Expression;
+  iconTranslateTransition?: Transition | Expression;
+  iconTranslateAnchor?: Alignment | Expression;
+  textOpacity?: number | Expression;
+  textOpacityTransition?: Transition | Expression;
+  textColor?: string | Expression;
+  textColorTransition?: Transition | Expression;
+  textHaloColor?: string | Expression;
+  textHaloColorTransition?: Transition | Expression;
+  textHaloWidth?: number | Expression;
+  textHaloWidthTransition?: Transition | Expression;
+  textHaloBlur?: number | Expression;
+  textHaloBlurTransition?: Transition | Expression;
+  textTranslate?: Array<number> | Expression;
+  textTranslateTransition?: Transition | Expression;
+  textTranslateAnchor?: Alignment | Expression;
 }
 
 export interface HeatmapLayerStyle {
-  visibility?: Visibility;
-  heatmapRadius?: number;
-  heatmapRadiusTransition?: Transition;
-  heatmapWeight?: number;
-  heatmapIntensity?: number;
-  heatmapIntensityTransition?: Transition;
-  heatmapColor?: string;
-  heatmapOpacity?: number;
-  heatmapOpacityTransition?: Transition;
+  visibility?: Visibility | Expression;
+  heatmapRadius?: number | Expression;
+  heatmapRadiusTransition?: Transition | Expression;
+  heatmapWeight?: number | Expression;
+  heatmapIntensity?: number | Expression;
+  heatmapIntensityTransition?: Transition | Expression;
+  heatmapColor?: string | Expression;
+  heatmapOpacity?: number | Expression;
+  heatmapOpacityTransition?: Transition | Expression;
 }
 
 export interface Point {
@@ -491,7 +569,7 @@ export interface Point {
   y: number;
 }
 
-export interface LightProps extends ViewProps {
+export interface LightProps extends Omit<ViewProps, 'style'> {
   style?: LightStyle;
 }
 
@@ -500,19 +578,19 @@ export interface PointAnnotationProps {
   title?: string;
   snippet?: string;
   selected?: boolean;
-  coordinate: Array<number>;
+  coordinate: GeoJSON.Position;
   anchor?: Point;
   onSelected?: () => void;
   onDeselected?: () => void;
 }
 
-export interface CalloutProps extends ViewProps {
+export interface CalloutProps extends Omit<ViewProps, 'style'> {
   title?: string;
-  style?: any;
-  containerStyle?: any;
-  contentStyle?: any;
-  tipStyle?: any;
-  textStyle?: any;
+  style?: StyleProp<WithExpression<ViewStyle>>;
+  containerStyle?: StyleProp<WithExpression<ViewStyle>>;
+  contentStyle?: StyleProp<WithExpression<ViewStyle>>;
+  tipStyle?: StyleProp<WithExpression<ViewStyle>>;
+  textStyle?: StyleProp<WithExpression<ViewStyle>>;
 }
 
 export interface TileSourceProps extends ViewProps {
@@ -524,7 +602,7 @@ export interface TileSourceProps extends ViewProps {
 }
 
 export interface VectorSourceProps extends TileSourceProps {
-  onPress?: (...args: any[]) => any;
+  onPress?: (event: MapboxGLEvent<'vectorsourcelayerpress'>) => void;
   hitbox?: {
     width: number;
     height: number;
@@ -534,15 +612,15 @@ export interface VectorSourceProps extends TileSourceProps {
 export interface ShapeSourceProps extends ViewProps {
   id?: string;
   url?: string;
-  shape?: Object;
+  shape?: GeoJSON.Geometries | GeoJSON.Feature | GeoJSON.FeatureCollection;
   cluster?: boolean;
   clusterRadius?: number;
   clusterMaxZoomLevel?: number;
   maxZoomLevel?: number;
   buffer?: number;
   tolerance?: number;
-  images?: Object;
-  onPress?: (event: any) => void;
+  images?: {assets?: string[]; [key: string]: ImageSourcePropType};
+  onPress?: (event: MapboxGLEvent<'shapesourcelayerpress'>) => void;
   hitbox?: {
     width: number;
     height: number;
@@ -553,7 +631,7 @@ export interface RasterSourceProps extends TileSourceProps {
   tileSize?: number;
 }
 
-export interface LayerBaseProps extends ViewProps {
+export interface LayerBaseProps<T = {}> extends Omit<ViewProps, 'style'> {
   id?: string;
   sourceID?: MapboxGL.StyleSource;
   sourceLayerID?: string;
@@ -566,58 +644,63 @@ export interface LayerBaseProps extends ViewProps {
 }
 
 export interface BackgroundLayerProps extends LayerBaseProps {
-  style?: BackgroundLayerStyle;
+  style?: StyleProp<BackgroundLayerStyle>;
 }
 
 export interface CircleLayerProps extends LayerBaseProps {
-  style?: CircleLayerStyle;
+  style?: StyleProp<CircleLayerStyle>;
 }
 
 export interface FillExtrusionLayerProps extends LayerBaseProps {
-  style?: FillExtrusionLayerStyle;
+  style?: StyleProp<FillExtrusionLayerStyle>;
 }
 
 export interface FillLayerProps extends LayerBaseProps {
-  style?: FillLayerStyle;
+  style?: StyleProp<FillLayerStyle>;
 }
 
 export interface LineLayerProps extends LayerBaseProps {
-  style?: LineLayerStyle;
+  style?: StyleProp<LineLayerStyle>;
 }
 
 export interface RasterLayerProps extends LayerBaseProps {
-  style?: RasterLayerStyle;
+  style?: StyleProp<RasterLayerStyle>;
 }
 
 export interface SymbolLayerProps extends LayerBaseProps {
-  style?: SymbolLayerStyle;
+  style?: StyleProp<SymbolLayerStyle>;
 }
 
 export interface HeatmapLayerProps extends LayerBaseProps {
-  style?: HeatmapLayerStyle;
+  style?: StyleProp<HeatmapLayerStyle>;
 }
 
 export interface ImagesProps extends ViewProps {
-  images?: Object;
+  images?: {assets?: string[]; [key: string]: ImageSourcePropType};
 }
 
 export interface ImageSourceProps extends ViewProps {
   id?: string;
   url?: number | string;
-  coordinates: number[][];
+  coordinates: [
+    GeoJSON.Position,
+    GeoJSON.Position,
+    GeoJSON.Position,
+    GeoJSON.Position,
+  ];
 }
 
 export interface OfflineCreatePackOptions {
   name?: string;
   styleURL?: MapboxGL.StyleURL;
-  bounds?: Array<number>;
+  bounds?: [GeoJSON.Position, GeoJSON.Position];
   minZoom?: number;
   maxZoom?: number;
   metadata?: any;
 }
 
 export interface SnapshotOptions {
-  centerCoordinate?: Array<number>;
+  centerCoordinate?: GeoJSON.Position;
   width?: number;
   height?: number;
   zoomLevel?: number;
