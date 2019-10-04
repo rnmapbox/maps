@@ -46,6 +46,11 @@
     [self _updateMinMaxZoomLevel];
 }
 
+- (void)setMaxBounds:(NSString *)maxBounds {
+    _maxBounds = maxBounds;
+    [self _updateMaxBounds];
+}
+
 - (void)setDefaultStop:(NSDictionary<NSString *,id> *)stop
 {
     _defaultStop = stop;
@@ -68,6 +73,7 @@
 
     [self _setInitialCamera];
     [self _updateMinMaxZoomLevel];
+    [self _updateMaxBounds];
     [self _updateCamera];
 }
 
@@ -152,6 +158,15 @@
         }
         if (_minZoomLevel) {
             _map.minimumZoomLevel = [_minZoomLevel doubleValue];
+        }
+    }
+}
+
+- (void)_updateMaxBounds
+{
+    if (_map != nil) {
+        if (_maxBounds) {
+            _map.maxBounds = [RCTMGLUtils fromFeatureCollection:_maxBounds];
         }
     }
 }

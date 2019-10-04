@@ -631,6 +631,41 @@
         "description": "FIX ME NO DESCRIPTION"
       },
       {
+        "name": "maxBounds",
+        "required": false,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "ne",
+              "required": true,
+              "type": {
+                "name": "array",
+                "value": {
+                  "type": "number"
+                }
+              },
+              "default": "none",
+              "description": "northEastCoordinates - North east coordinate of bound"
+            },
+            {
+              "name": "sw",
+              "required": true,
+              "type": {
+                "name": "array",
+                "value": {
+                  "type": "number"
+                }
+              },
+              "default": "none",
+              "description": "southWestCoordinates - South west coordinate of bound"
+            }
+          ]
+        },
+        "default": "none",
+        "description": "Restrict map panning so that the center is within these bounds"
+      },
+      {
         "name": "followUserLocation",
         "required": false,
         "type": "bool",

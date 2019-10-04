@@ -428,6 +428,12 @@ RCT_EXPORT_METHOD(showAttribution:(nonnull NSNumber *)reactTag
     return nil;
 }
 
+- (BOOL)mapView:(MGLMapView *)mapView shouldChangeFromCamera:(MGLMapCamera *)oldCamera toCamera:(MGLMapCamera *)newCamera 
+{
+    RCTMGLMapView* reactMapView = ((RCTMGLMapView *) mapView);
+    return MGLCoordinateBoundsIsEmpty(reactMapView.maxBounds) || MGLCoordinateInCoordinateBounds(newCamera.centerCoordinate, reactMapView.maxBounds);
+}
+
 - (void)mapView:(MGLMapView *)mapView regionWillChangeWithReason:(MGLCameraChangeReason)reason animated:(BOOL)animated
 {
     ((RCTMGLMapView *) mapView).isUserInteraction = (BOOL)(reason & ~MGLCameraChangeReasonProgrammatic);
