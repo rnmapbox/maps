@@ -10,6 +10,10 @@ const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLRasterSource';
 
+const isTileTemplateUrl = url =>
+  url &&
+  (url.includes('{z}') || url.includes('{bbox-') || url.includes('{quadkey}'));
+
 /**
  * RasterSource is a map content source that supplies raster image tiles to be shown on the map.
  * The location of and metadata about the tiles are defined either by an option dictionary
@@ -73,9 +77,9 @@ class RasterSource extends AbstractSource {
 
   constructor(props) {
     super(props);
-    if (props.url && props.url.includes('{z}')) {
+    if (isTileTemplateUrl(props.url)) {
       console.warn(
-        'RasterSource `url` property contains a tile URL template string. Please use `tileUrlTemplates` instead.',
+        `RasterSource 'url' property contains a Tile URL Template, but is intended for a StyleJSON URL. Please migrate your VectorSource to use: \`tileUrlTemplates=["${props.url}"]\` instead.`,
       );
     }
   }
@@ -86,7 +90,7 @@ class RasterSource extends AbstractSource {
 
     // Swapping url for tileUrlTemplates to provide backward compatiblity
     // when RasterSource supported only tile url as url prop
-    if (url && url.includes('{z}')) {
+    if (isTileTemplateUrl(url)) {
       tileUrlTemplates = [url];
       url = undefined;
     }
