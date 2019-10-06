@@ -84,6 +84,16 @@
     }
 }
 
+- (void)setMap:(RCTMGLMapView *)map {
+    if (map == nil) {
+        [self removeFromMap:_map.style];
+        _map = nil;
+    } else {
+        _map = map;
+        [self addToMap:map style:map.style];
+    }
+}
+
 -(void)setReactStyle:(NSDictionary *)reactStyle
 {
     _reactStyle = reactStyle;
@@ -97,6 +107,9 @@
 
 - (void)addToMap:(RCTMGLMapView*) map style:(MGLStyle *)style
 {
+    if (style == nil) {
+        return;
+    }
     _map = map;
     _style = style;
     if (_id == nil) {

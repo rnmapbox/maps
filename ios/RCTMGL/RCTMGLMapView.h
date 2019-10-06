@@ -30,6 +30,7 @@ typedef void (^FoundLayerBlock) (MGLStyleLayer* layer);
 @property (nonatomic, weak) id<RCTMGLMapViewCamera> reactCamera;
 @property (nonatomic, strong) NSMutableArray<id<RCTComponent>> *reactSubviews;
 @property (nonatomic, strong) NSMutableArray<RCTMGLSource*> *sources;
+@property (nonatomic, strong) NSMutableArray<RCTMGLLayer*> *layers;
 @property (nonatomic, strong) NSMutableArray<RCTMGLPointAnnotation*> *pointAnnotations;
 @property (nonatomic, strong) RCTMGLLight *light;
 @property (nonatomic, copy) NSArray<NSNumber *> *reactContentInset;
