@@ -34,7 +34,7 @@
   "peerDependencies": {
     "prop-types": ">=15.5.8",
     "react": "^16.6.1",
-    "react-native": ">=0.57.6"
+    "react-native": ">=0.60.0"
   },
   "dependencies": {
     "@turf/helpers": ">= 4.6.0 <7.0.0",

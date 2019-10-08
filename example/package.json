@@ -12,7 +12,7 @@
     "pack:gl": "./scripts/npm_pack_rngl.sh",
     "clean:node:modules": "./scripts/clean_node_modules.sh",
     "preinstall": "npm run pack:gl",
-    "postinstall": "node ./scripts/set_access_token.js",
+    "postinstall": "node ./scripts/set_access_token.js && jetifier",
     "reset:from:gl": "npm run clean:node:modules && npm install"
   },
   "dependencies": {
@@ -45,6 +45,7 @@
     "babel-jest": "^24.9.0",
     "eslint": "^6.4.0",
     "jest": "^24.9.0",
+    "jetifier": "^1.6.4",
     "metro-react-native-babel-preset": "^0.56.0",
     "react-test-renderer": "16.9.0"
   },
