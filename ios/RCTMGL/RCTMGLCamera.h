@@ -28,6 +28,8 @@
 @property (nonatomic, copy) NSNumber *maxZoomLevel;
 @property (nonatomic, copy) NSNumber *minZoomLevel;
 
+@property (nonatomic, copy) NSString *maxBounds;
+
 @property (nonatomic, copy) NSString *alignment;
 @property (nonatomic, copy, readonly) NSNumber *cameraAnimationMode;
 

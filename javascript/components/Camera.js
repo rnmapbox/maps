@@ -80,6 +80,21 @@ class Camera extends React.Component {
     minZoomLevel: PropTypes.number,
     maxZoomLevel: PropTypes.number,
 
+    /**
+     * Restrict map panning so that the center is within these bounds
+     */
+    maxBounds: PropTypes.shape({
+      /**
+       * northEastCoordinates - North east coordinate of bound
+       */
+      ne: PropTypes.arrayOf(PropTypes.number).isRequired,
+
+      /**
+       * southWestCoordinates - South west coordinate of bound
+       */
+      sw: PropTypes.arrayOf(PropTypes.number).isRequired,
+    }),
+
     // user tracking
     followUserLocation: PropTypes.bool,
 
@@ -501,6 +516,14 @@ class Camera extends React.Component {
     return [verticalPoint[0], horizontalPoint[1]];
   }
 
+  _getMaxBounds() {
+    const bounds = this.props.maxBounds;
+    if (!bounds || !bounds.ne || !bounds.sw) {
+      return null;
+    }
+    return toJSONString(geoUtils.makeLatLngBounds(bounds.ne, bounds.sw));
+  }
+
   render() {
     const props = Object.assign({}, this.props);
 
@@ -519,6 +542,7 @@ class Camera extends React.Component {
         stop={this._createStopConfig(props)}
         maxZoomLevel={this.props.maxZoomLevel}
         minZoomLevel={this.props.minZoomLevel}
+        maxBounds={this._getMaxBounds()}
         defaultStop={this._createDefaultCamera()}
         {...callbacks}
       />

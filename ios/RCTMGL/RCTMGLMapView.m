@@ -29,6 +29,7 @@ static double const M2PI = M_PI * 2;
         _pendingInitialLayout = YES;
         _cameraUpdateQueue = [[CameraUpdateQueue alloc] init];
         _sources = [[NSMutableArray alloc] init];
+        _layers = [[NSMutableArray alloc] init];
         _pointAnnotations = [[NSMutableArray alloc] init];
         _reactSubviews = [[NSMutableArray alloc] init];
         _layerWaiters = [[NSMutableDictionary alloc] init];
@@ -107,6 +108,10 @@ static double const M2PI = M_PI * 2;
     } else if ([subview isKindOfClass:[RCTMGLCamera class]]) {
         RCTMGLCamera *camera = (RCTMGLCamera *)subview;
         camera.map = self;
+    } else if ([subview isKindOfClass:[RCTMGLLayer class]]) {
+        RCTMGLLayer *layer = (RCTMGLLayer*)subview;
+        layer.map = self;
+        [_layers addObject:layer];
     } else {
         NSArray<id<RCTComponent>> *childSubviews = [subview reactSubviews];
 
@@ -129,6 +134,10 @@ static double const M2PI = M_PI * 2;
     } else if ([subview isKindOfClass:[RCTMGLCamera class]]) {
         RCTMGLCamera *camera = (RCTMGLCamera *)subview;
         camera.map = nil;
+    } else if ([subview isKindOfClass:[RCTMGLLayer class]]) {
+        RCTMGLLayer *layer = (RCTMGLLayer*)subview;
+        layer.map = nil;
+        [_layers removeObject:layer];
     } else {
         NSArray<id<RCTComponent>> *childSubViews = [subview reactSubviews];
         

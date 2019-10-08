@@ -31,6 +31,9 @@
 | zoomLevel | `number` | `none` | `false` | Zoom level of the map |
 | minZoomLevel | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
 | maxZoomLevel | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
+| maxBounds | `shape` | `none` | `false` | Restrict map panning so that the center is within these bounds |
+| &nbsp;&nbsp;ne | `array` | `none` | `true` | northEastCoordinates - North east coordinate of bound |
+| &nbsp;&nbsp;sw | `array` | `none` | `true` | southWestCoordinates - South west coordinate of bound |
 | followUserLocation | `bool` | `none` | `false` | FIX ME NO DESCRIPTION |
 | followUserMode | `enum` | `none` | `false` | FIX ME NO DESCRIPTION |
 | followZoomLevel | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
