@@ -93,19 +93,19 @@ declare namespace MapboxGL {
    * Components
    */
   class MapView extends Component<MapViewProps> {
-    getPointInView(coordinate: GeoJSON.Position): Promise<void>;
-    getCoordinateFromView(point: GeoJSON.Position): Promise<void>;
+    getPointInView(coordinate: GeoJSON.Position): Promise<GeoJSON.Position>;
+    getCoordinateFromView(point: GeoJSON.Position): Promise<GeoJSON.Position>;
     getVisibleBounds(): Promise<void>;
     queryRenderedFeaturesAtPoint(
       coordinate: GeoJSON.Position,
       filter?: Array<string>,
       layerIds?: Array<string>,
-    ): Promise<void>;
+    ): Promise<GeoJSON.FeatureCollection?>;
     queryRenderedFeaturesInRect(
       coordinate: GeoJSON.Position,
       filter?: Array<string>,
       layerIds?: Array<string>,
-    ): Promise<void>;
+    ): Promise<GeoJSON.FeatureCollection?>;
     takeSnap(writeToDisk?: boolean): Promise<string>;
     getZoom(): Promise<number>;
     getCenter(): Promise<GeoJSON.Position>;
