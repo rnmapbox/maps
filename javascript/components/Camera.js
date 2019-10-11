@@ -417,7 +417,7 @@ class Camera extends React.Component {
         ...this.props.defaultSettings,
         animationMode: Camera.Mode.Move,
       },
-      false,
+      true,
     );
     return this.defaultCamera;
   }
