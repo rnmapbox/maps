@@ -191,27 +191,36 @@ declare namespace MapboxGL {
   /**
    * Offline
    */
-  class offlineManager extends Component {
+  class OfflineManager extends Component {
     createPack(
       options: OfflineCreatePackOptions,
-      progressListener?: () => void,
-      errorListener?: () => void,
+      progressListener?: (pack: OfflinePack, status: object) => void,
+      errorListener?: (pack: OfflinePack, err: object) => void
     ): void;
     deletePack(name: string): Promise<void>;
-    getPacks(): Promise<void>;
-    getPack(name: string): Promise<void>;
+    getPacks(): Promise<Array<OfflinePack>>;
+    getPack(name: string): Promise<OfflinePack>;
     setTileCountLimit(limit: number): void;
     setProgressEventThrottle(throttleValue: number): void;
     subscribe(
       packName: string,
-      progressListener: () => void,
-      errorListener: () => void,
+      progressListener: (pack: OfflinePack, status: object) => void,
+      errorListener?: (pack: OfflinePack, err: object) => void
     ): void;
     unsubscribe(packName: string): void;
   }
 
   class snapshotManager extends Component {
     takeSnap(options: SnapshotOptions): Promise<void>;
+  }
+
+  interface OfflinePack {
+    name: string,
+    bounds: [GeoJSON.Position, GeoJSON.Position];
+    metadata: any;
+    status: () => any,
+    resume: () => any,
+    pause: () => any,
   }
 
   /**
