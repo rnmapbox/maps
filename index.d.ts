@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 
 import {SyntheticEvent} from 'react';
-import * as GeoJSON from '@turf/helpers/lib/geojson';
 
 // prettier-ignore
 type ExpressionName =
