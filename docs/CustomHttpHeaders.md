@@ -8,13 +8,13 @@ Custom headers are implemented using OkHttp interseptor for android and method s
 
 ### Prerequisites
 
-#### Android 
+#### Android
 
 None
 
 #### IOS
 
-To enable this on iOS you need to call `[MGLCustomHeaders initHeaders]` pretty early in the lifecycle of the application. This will swizzle the custom method.
+To enable this on iOS you need to call `[[MGLCustomHeaders sharedInstance] initHeaders]` pretty early in the lifecycle of the application. This will swizzle the custom method.
 Suggested location is `[AppDelegate application: didFinishLaunchingWithOptions:]`
 
 #### Working example (AppDelegate.m)
@@ -22,15 +22,19 @@ Suggested location is `[AppDelegate application: didFinishLaunchingWithOptions:]
 ```obj-c
 @implementation AppDelegate
 
+// (1) Include the header file
+#import "MGLCustomHeaders.h"
+
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"SampleApp"
                                             initialProperties:nil];
-  // *** Init headers, add swizzle method
-  [MGLCustomHeaders initHeaders];
-  // *** Optionally you can add some global headers here
+  // (2) Init headers, add swizzle method
+  [[MGLCustomHeaders sharedInstance] initHeaders];
+  // (3*) Optionally you can add some global headers here
   [[MGLCustomHeaders sharedInstance] addHeader:@"IP" forHeaderName:@"X-For-Real"];
 
   ...
@@ -41,7 +45,6 @@ Suggested location is `[AppDelegate application: didFinishLaunchingWithOptions:]
 
 @end
 ```
-
 
 ### Sending custom http headers with the tile requests
 
@@ -83,4 +86,3 @@ export default class HelloWorldApp extends Component {
   }
 }
 ```
-
