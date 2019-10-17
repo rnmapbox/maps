@@ -28,8 +28,7 @@
     "unittest": "jest --coverage --verbose",
     "unittest:single": "jest --testNamePattern",
     "format": "npm run lint -- --fix",
-    "lint": "./node_modules/eslint/bin/eslint.js ./javascript/** ./example/src/** ./__tests__/**",
-    "precommit": "lint-staged"
+    "lint": "./node_modules/eslint/bin/eslint.js ./javascript/** ./example/src/** ./__tests__/**"
   },
   "peerDependencies": {
     "prop-types": ">=15.5.8",
@@ -67,7 +66,7 @@
     "eslint-plugin-react": "7.13.0",
     "eslint-plugin-react-native": "^3.6.0",
     "flow-bin": "^0.95.1",
-    "husky": "^0.14.3",
+    "husky": "3.0.5",
     "jest": "24.8.0",
     "jest-cli": "^24.8.0",
     "lint-staged": "^8.2.0",
@@ -92,6 +91,11 @@
       "example",
       "__tests__/__mocks__"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && npm run generate"
+    }
   },
   "lint-staged": {
     "linters": {
