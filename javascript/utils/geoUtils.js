@@ -25,7 +25,7 @@ export function makeFeature(geometry, properties) {
 }
 
 export function makeFeatureCollection(features = [], options) {
-  return featureCollection(features);
+  return featureCollection(features, options);
 }
 
 export function addToFeatureCollection(newFeatureCollection, newFeature) {
