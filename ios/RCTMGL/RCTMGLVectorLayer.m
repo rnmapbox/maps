@@ -8,10 +8,16 @@
 
 #import "RCTMGLVectorLayer.h"
 #import "RCTMGLStyle.h"
-
+#import "FilterParser.h"
 #import <React/RCTLog.h>
 
 @implementation RCTMGLVectorLayer
+
+
+- (NSPredicate*)buildFilters
+{
+    return self.filter ? [FilterParser parse:self.filter] : nil;
+}
 
 - (void)updateFilter:(NSPredicate *)predicate
 {
@@ -37,6 +43,16 @@
     NSPredicate *filter = [self buildFilters];
     if (filter != nil) {
         [self updateFilter:filter];
+    }
+}
+
+- (void)setFilter:(NSArray*)filter
+{
+    [super setFilter: filter];
+
+    if (self.styleLayer != nil) {
+        NSPredicate *predicate = [self buildFilters];
+        [self updateFilter:predicate];
     }
 }
 
