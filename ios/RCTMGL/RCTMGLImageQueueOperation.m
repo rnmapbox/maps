@@ -18,17 +18,18 @@
     if (self.isCancelled) {
         return;
     }
-    
+
     __weak RCTMGLImageQueueOperation *weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        cancellationBlock = [weakSelf.bridge.imageLoader loadImageWithURLRequest:weakSelf.urlRequest
-                                                                            size:CGSizeZero
-                                                                           scale:self.scale
-                                                                         clipped:YES
-                                                                      resizeMode:RCTResizeModeStretch
-                                                                   progressBlock:nil
-                                                                partialLoadBlock:nil
-                                                                 completionBlock:weakSelf.completionHandler];
+        cancellationBlock = [[weakSelf.bridge moduleForName:@"ImageLoader" lazilyLoadIfNecessary:YES]
+                             loadImageWithURLRequest:weakSelf.urlRequest
+                             size:CGSizeZero
+                             scale:weakSelf.scale
+                             clipped:YES
+                             resizeMode:RCTResizeModeStretch
+                             progressBlock:nil
+                             partialLoadBlock:nil
+                             completionBlock:weakSelf.completionHandler];
     });
 }
 

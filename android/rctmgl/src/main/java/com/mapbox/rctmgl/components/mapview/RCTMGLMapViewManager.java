@@ -1,10 +1,12 @@
 package com.mapbox.rctmgl.components.mapview;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -152,6 +154,11 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         mapView.setReactAttributionEnabled(attributionEnabled);
     }
 
+    @ReactProp(name="attributionPosition")
+    public void setAttributionPosition(RCTMGLMapView mapView, @Nullable ReadableMap attributionPosition) {
+        mapView.setReactAttributionPosition(attributionPosition);
+    }
+
     @ReactProp(name="logoEnabled")
     public void setLogoEnabled(RCTMGLMapView mapView, boolean logoEnabled) {
         mapView.setReactLogoEnabled(logoEnabled);
@@ -160,6 +167,11 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     @ReactProp(name="compassEnabled")
     public void setCompassEnabled(RCTMGLMapView mapView, boolean compassEnabled) {
         mapView.setReactCompassEnabled(compassEnabled);
+    }
+
+    @ReactProp(name="compassViewMargins")
+    public void setCompassViewMargins(RCTMGLMapView mapView, ReadableMap compassViewMargins){
+        mapView.setReactCompassViewMargins(compassViewMargins);
     }
 
     @ReactProp(name="contentInset")

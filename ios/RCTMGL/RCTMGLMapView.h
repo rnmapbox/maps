@@ -30,6 +30,7 @@ typedef void (^FoundLayerBlock) (MGLStyleLayer* layer);
 @property (nonatomic, weak) id<RCTMGLMapViewCamera> reactCamera;
 @property (nonatomic, strong) NSMutableArray<id<RCTComponent>> *reactSubviews;
 @property (nonatomic, strong) NSMutableArray<RCTMGLSource*> *sources;
+@property (nonatomic, strong) NSMutableArray<RCTMGLLayer*> *layers;
 @property (nonatomic, strong) NSMutableArray<RCTMGLPointAnnotation*> *pointAnnotations;
 @property (nonatomic, strong) RCTMGLLight *light;
 @property (nonatomic, copy) NSArray<NSNumber *> *reactContentInset;
@@ -41,12 +42,18 @@ typedef void (^FoundLayerBlock) (MGLStyleLayer* layer);
 @property (nonatomic, assign) BOOL reactPitchEnabled;
 @property (nonatomic, assign) BOOL reactRotateEnabled;
 @property (nonatomic, assign) BOOL reactAttributionEnabled;
+@property (nonatomic, strong) NSDictionary<NSString *, NSNumber *> *reactAttributionPosition;
 @property (nonatomic, assign) BOOL reactLogoEnabled;
 @property (nonatomic, assign) BOOL reactCompassEnabled;
 @property (nonatomic, assign) BOOL reactZoomEnabled;
 
+@property (nonatomic, assign) NSInteger *reactCompassViewPosition;
+@property (nonatomic, assign) CGPoint reactCompassViewMargins;
+
 @property (nonatomic, copy) NSString *reactStyleURL;
 @property (nonatomic, assign) NSInteger *reactPreferredFramesPerSecond;
+
+@property (nonatomic, assign) MGLCoordinateBounds maxBounds;
 
 @property (nonatomic, assign) BOOL isUserInteraction;
 

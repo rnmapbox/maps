@@ -2,23 +2,18 @@ import {Animated, NativeModules, PermissionsAndroid} from 'react-native';
 
 import {isAndroid} from './utils';
 import * as geoUtils from './utils/geoUtils';
-// Components
 import MapView from './components/MapView';
 import Light from './components/Light';
 import PointAnnotation from './components/PointAnnotation';
-import Annotation from './components/annotations/Annotation';
+import Annotation from './components/annotations/Annotation'; // eslint-disable-line import/no-cycle
 import Callout from './components/Callout';
-import UserLocation from './components/UserLocation';
+import UserLocation from './components/UserLocation'; // eslint-disable-line import/no-cycle
 import Camera from './components/Camera';
-
-// sources
 import VectorSource from './components/VectorSource';
 import ShapeSource from './components/ShapeSource';
 import RasterSource from './components/RasterSource';
 import ImageSource from './components/ImageSource';
 import Images from './components/Images';
-
-// Layers
 import FillLayer from './components/FillLayer';
 import FillExtrusionLayer from './components/FillExtrusionLayer';
 import HeatmapLayer from './components/HeatmapLayer';
@@ -27,14 +22,10 @@ import CircleLayer from './components/CircleLayer';
 import SymbolLayer from './components/SymbolLayer';
 import RasterLayer from './components/RasterLayer';
 import BackgroundLayer from './components/BackgroundLayer';
-
-// modules
 import locationManager from './modules/location/locationManager';
 import offlineManager from './modules/offline/offlineManager';
 import snapshotManager from './modules/snapshot/snapshotManager';
-
-// helpers
-import AnimatedPoint from './utils/AnimatedPoint';
+import AnimatedMapPoint from './utils/AnimatedPoint';
 
 const MapboxGL = {...NativeModules.MGLModule};
 
@@ -100,7 +91,7 @@ MapboxGL.snapshotManager = snapshotManager;
 
 // utils
 MapboxGL.geoUtils = geoUtils;
-MapboxGL.AnimatedPoint = AnimatedPoint;
+MapboxGL.AnimatedPoint = AnimatedMapPoint;
 
 // animated
 MapboxGL.Animated = {

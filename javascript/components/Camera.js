@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {NativeModules, requireNativeComponent} from 'react-native';
 
-import locationManager from '../modules/location/locationManager';
-import {isNumber, toJSONString, viewPropTypes, existenceChange} from '../utils';
+import {toJSONString, viewPropTypes, existenceChange} from '../utils';
 import * as geoUtils from '../utils/geoUtils';
 
 const MapboxGL = NativeModules.MGLModule;
@@ -81,6 +80,21 @@ class Camera extends React.Component {
     minZoomLevel: PropTypes.number,
     maxZoomLevel: PropTypes.number,
 
+    /**
+     * Restrict map panning so that the center is within these bounds
+     */
+    maxBounds: PropTypes.shape({
+      /**
+       * northEastCoordinates - North east coordinate of bound
+       */
+      ne: PropTypes.arrayOf(PropTypes.number).isRequired,
+
+      /**
+       * southWestCoordinates - South west coordinate of bound
+       */
+      sw: PropTypes.arrayOf(PropTypes.number).isRequired,
+    }),
+
     // user tracking
     followUserLocation: PropTypes.bool,
 
@@ -95,6 +109,9 @@ class Camera extends React.Component {
 
     // position
     alignment: PropTypes.arrayOf(PropTypes.number),
+
+    // Triggered when the
+    onUserTrackingModeChange: PropTypes.func,
   };
 
   static defaultProps = {
@@ -227,10 +244,10 @@ class Camera extends React.Component {
       cB.ne[1] !== nB.ne[1] ||
       cB.sw[0] !== nB.sw[0] ||
       cB.sw[1] !== nB.sw[1] ||
-      cB.paddingTop != nB.paddingTop ||
-      cB.paddingLeft != nB.paddingLeft ||
-      cB.paddingRight != nB.paddingRight ||
-      cB.paddingBottom != nB.paddingBottom
+      cB.paddingTop !== nB.paddingTop ||
+      cB.paddingLeft !== nB.paddingLeft ||
+      cB.paddingRight !== nB.paddingRight ||
+      cB.paddingBottom !== nB.paddingBottom
     );
   }
 
@@ -288,7 +305,7 @@ class Camera extends React.Component {
         ...pad,
       },
       animationDuration,
-      animationMode: Camera.Mode.Move,
+      animationMode: Camera.Mode.Ease,
     });
   }
 
@@ -400,7 +417,7 @@ class Camera extends React.Component {
         ...this.props.defaultSettings,
         animationMode: Camera.Mode.Move,
       },
-      false,
+      true,
     );
     return this.defaultCamera;
   }
@@ -499,6 +516,14 @@ class Camera extends React.Component {
     return [verticalPoint[0], horizontalPoint[1]];
   }
 
+  _getMaxBounds() {
+    const bounds = this.props.maxBounds;
+    if (!bounds || !bounds.ne || !bounds.sw) {
+      return null;
+    }
+    return toJSONString(geoUtils.makeLatLngBounds(bounds.ne, bounds.sw));
+  }
+
   render() {
     const props = Object.assign({}, this.props);
 
@@ -517,6 +542,7 @@ class Camera extends React.Component {
         stop={this._createStopConfig(props)}
         maxZoomLevel={this.props.maxZoomLevel}
         minZoomLevel={this.props.minZoomLevel}
+        maxBounds={this._getMaxBounds()}
         defaultStop={this._createDefaultCamera()}
         {...callbacks}
       />

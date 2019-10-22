@@ -1,16 +1,11 @@
 import React from 'react';
-import MapboxGL from '@react-native-mapbox-gl/maps';
 import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {Icon} from 'react-native-elements';
+import PropTypes from 'prop-types';
 
-// components
 import MapHeader from '../examples/common/MapHeader';
-
-// styles
 import sheet from '../styles/sheet';
 import colors from '../styles/colors';
-
-// examples
 import ShowMap from '../examples/ShowMap';
 import SetPitch from '../examples/SetPitch';
 import SetHeading from '../examples/SetHeading';
@@ -44,6 +39,9 @@ import GetZoom from '../examples/GetZoom';
 import GetCenter from '../examples/GetCenter';
 import UserLocationChange from '../examples/UserLocationChange';
 import Heatmap from '../examples/Heatmap';
+import RestrictMapBounds from '../examples/RestrictMapBounds';
+import ShowAndHideLayer from '../examples/ShowAndHideLayer';
+import ChangeLayerColor from '../examples/ChangeLayerColor';
 
 const styles = StyleSheet.create({
   header: {
@@ -87,6 +85,7 @@ const Examples = [
   new ExampleItem('Show Click', ShowClick),
   new ExampleItem('Fly To', FlyTo),
   new ExampleItem('Fit Bounds', FitBounds),
+  new ExampleItem('Restrict Bounds', RestrictMapBounds),
   new ExampleItem('Set User Tracking Modes', SetUserTrackingModes),
   new ExampleItem(
     'Set User Location Vertical Alignment',
@@ -117,9 +116,15 @@ const Examples = [
   new ExampleItem('Get Center', GetCenter),
   new ExampleItem('User Location Updates', UserLocationChange),
   new ExampleItem('Heatmap', Heatmap),
+  new ExampleItem('Show and hide a layer', ShowAndHideLayer),
+  new ExampleItem('Change Layer Color', ChangeLayerColor),
 ];
 
 class Home extends React.Component {
+  static propTypes = {
+    navigation: PropTypes.shape({navigate: PropTypes.func}),
+  };
+
   constructor(props) {
     super(props);
     this.renderItem = this.renderItem.bind(this);

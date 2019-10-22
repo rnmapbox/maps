@@ -64,7 +64,9 @@ export default class BridgeValue {
       value = this.rawValue;
     } else {
       throw new Error(
-        `[value - ${this.rawValue}] BridgeValue must be a primitive/array/object`,
+        `[value - ${
+          this.rawValue
+        }] BridgeValue must be a primitive/array/object`,
       );
     }
 

@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const styleSpecJSON = require('../style-spec/v8.json');
 const ejs = require('ejs');
+const {execSync} = require('child_process');
 const prettier = require('prettier')
 
 const DocJSONBuilder = require('./autogenHelpers/DocJSONBuilder');
@@ -18,11 +19,11 @@ if (!styleSpecJSON) {
 
 const layers = [];
 const androidVersion = '8.2.1';
-const iosVersion = '5.2.0';
+const iosVersion = '5.3.2';
 
 const TMPL_PATH = path.join(__dirname, 'templates');
 
-const outputToExample = true;
+const outputToExample = false;
 const OUTPUT_EXAMPLE_PREFIX = [
   '..',
   'example',
@@ -282,40 +283,61 @@ function getAllowedFunctionTypes(paintAttr) {
   return allowedFunctionTypes;
 }
 
-// autogenerate code
-[
-  {
-    input: path.join(TMPL_PATH, 'RCTMGLStyle.h.ejs'),
-    output: path.join(IOS_OUTPUT_PATH, 'RCTMGLStyle.h'),
-  },
-  {
-    input: path.join(TMPL_PATH, 'index.d.ts.ejs'),
-    output: path.join(IOS_OUTPUT_PATH, 'index.d.ts'),
-  },
-  {
-    input: path.join(TMPL_PATH, 'RCTMGLStyle.m.ejs'),
-    output: path.join(IOS_OUTPUT_PATH, 'RCTMGLStyle.m'),
-  },
-  {
-    input: path.join(TMPL_PATH, 'RCTMGLStyleFactory.java.ejs'),
-    output: path.join(ANDROID_OUTPUT_PATH, 'RCTMGLStyleFactory.java'),
-  },
-  {
-    input: path.join(TMPL_PATH, 'styleMap.js.ejs'),
-    output: path.join(JS_OUTPUT_PATH, 'styleMap.js'),
-  },
-].forEach(({input, output}) => {
-  const filename = output.split('/').pop();
-  console.log(`Generating ${filename}`);
-  const tmpl = ejs.compile(fs.readFileSync(input, 'utf8'), {strict: true});
-  let results = tmpl({layers});
-  if (filename.endsWith('ts')) {
-    results = prettier.format(results, {filepath: filename});
-  }
-  fs.writeFileSync(output, results);
-});
 
-// autogenerate docs
-const docBuilder = new DocJSONBuilder(layers);
-const markdownBuilder = new MarkdownBuilder();
-docBuilder.generate().then(() => markdownBuilder.generate());
+async function generate() {
+  const templateMappings = [
+    {
+      input: path.join(TMPL_PATH, 'RCTMGLStyle.h.ejs'),
+      output: path.join(IOS_OUTPUT_PATH, 'RCTMGLStyle.h'),
+    },
+    {
+      input: path.join(TMPL_PATH, 'index.d.ts.ejs'),
+      output: path.join(IOS_OUTPUT_PATH, 'index.d.ts'),
+    },
+    {
+      input: path.join(TMPL_PATH, 'RCTMGLStyle.m.ejs'),
+      output: path.join(IOS_OUTPUT_PATH, 'RCTMGLStyle.m'),
+    },
+    {
+      input: path.join(TMPL_PATH, 'RCTMGLStyleFactory.java.ejs'),
+      output: path.join(ANDROID_OUTPUT_PATH, 'RCTMGLStyleFactory.java'),
+    },
+    {
+      input: path.join(TMPL_PATH, 'styleMap.js.ejs'),
+      output: path.join(JS_OUTPUT_PATH, 'styleMap.js'),
+    },
+  ];
+  const outputPaths = templateMappings.map(m => m.output);
+
+  // autogenerate code
+  templateMappings.forEach(({input, output}) => {
+    const filename = output.split('/').pop();
+    console.log(`Generating ${filename}`);
+    const tmpl = ejs.compile(fs.readFileSync(input, 'utf8'), {strict: true});
+    let results = tmpl({layers});
+    if (filename.endsWith('ts')) {
+      results = prettier.format(results, {filepath: filename});
+    }
+    fs.writeFileSync(output, results);
+  });
+
+  // autogenerate docs
+  const docBuilder = new DocJSONBuilder(layers);
+  const markdownBuilder = new MarkdownBuilder();
+  await docBuilder.generate();
+  await markdownBuilder.generate();
+
+  // Check if any generated files changed
+  try {
+    execSync(`git diff --exit-code docs/ ${outputPaths.join(' ')}`);
+  } catch (error) {
+    console.error(
+      '\n\nThere are unstaged changes in the generated code. ' +
+        'Please add them to your commit.\n' +
+        'If you would really like to exlude them, run "git commit -n" to skip.\n\n',
+    );
+    process.exit(1);
+  }
+}
+
+generate();

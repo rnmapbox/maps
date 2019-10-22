@@ -73,9 +73,14 @@ RCT_REMAP_VIEW_PROPERTY(scrollEnabled, reactScrollEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(pitchEnabled, reactPitchEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(rotateEnabled, reactRotateEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(attributionEnabled, reactAttributionEnabled, BOOL)
+RCT_REMAP_VIEW_PROPERTY(attributionPosition, reactAttributionPosition, NSDictionary)
 RCT_REMAP_VIEW_PROPERTY(logoEnabled, reactLogoEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(compassEnabled, reactCompassEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(zoomEnabled, reactZoomEnabled, BOOL)
+
+RCT_REMAP_VIEW_PROPERTY(compassViewPosition, reactCompassViewPosition, NSInteger *)
+RCT_REMAP_VIEW_PROPERTY(compassViewMargins, reactCompassViewMargins, CGPoint)
+
 
 RCT_REMAP_VIEW_PROPERTY(contentInset, reactContentInset, NSArray)
 RCT_REMAP_VIEW_PROPERTY(styleURL, reactStyleURL, NSString)
@@ -423,6 +428,12 @@ RCT_EXPORT_METHOD(showAttribution:(nonnull NSNumber *)reactTag
     return nil;
 }
 
+- (BOOL)mapView:(MGLMapView *)mapView shouldChangeFromCamera:(MGLMapCamera *)oldCamera toCamera:(MGLMapCamera *)newCamera 
+{
+    RCTMGLMapView* reactMapView = ((RCTMGLMapView *) mapView);
+    return MGLCoordinateBoundsIsEmpty(reactMapView.maxBounds) || MGLCoordinateInCoordinateBounds(newCamera.centerCoordinate, reactMapView.maxBounds);
+}
+
 - (void)mapView:(MGLMapView *)mapView regionWillChangeWithReason:(MGLCameraChangeReason)reason animated:(BOOL)animated
 {
     ((RCTMGLMapView *) mapView).isUserInteraction = (BOOL)(reason & ~MGLCameraChangeReasonProgrammatic);
@@ -437,7 +448,9 @@ RCT_EXPORT_METHOD(showAttribution:(nonnull NSNumber *)reactTag
 }
 
 - (void)mapView:(MGLMapView *)mapView regionDidChangeWithReason:(MGLCameraChangeReason)reason animated:(BOOL)animated
-{
+{    
+    if ((reason & MGLCameraChangeReasonTransitionCancelled) == MGLCameraChangeReasonTransitionCancelled) return;
+
     ((RCTMGLMapView *) mapView).isUserInteraction = (BOOL)(reason & ~MGLCameraChangeReasonProgrammatic);
     
     NSDictionary *payload = [self _makeRegionPayload:mapView animated:animated];
@@ -493,11 +506,13 @@ RCT_EXPORT_METHOD(showAttribution:(nonnull NSNumber *)reactTag
     RCTMGLMapView *reactMapView = (RCTMGLMapView*)mapView;
     //style.localizesLabels = reactMapView.reactLocalizeLabels;
     
-    if (reactMapView.sources.count > 0) {
-        for (int i = 0; i < reactMapView.sources.count; i++) {
-            RCTMGLSource *source = reactMapView.sources[i];
-            source.map = reactMapView;
-        }
+    for (int i = 0; i < reactMapView.sources.count; i++) {
+        RCTMGLSource *source = reactMapView.sources[i];
+        source.map = reactMapView;
+    }
+    for (int i = 0; i < reactMapView.layers.count; i++) {
+        RCTMGLLayer *layer = reactMapView.layers[i];
+        layer.map = reactMapView;
     }
     
     if (reactMapView.light != nil) {

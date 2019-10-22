@@ -68,7 +68,7 @@
     _layerIndex = layerIndex;
     if (_styleLayer != nil) {
         [self removeFromMap:_style];
-        [self insertAtIndex:(NSUInteger)_layerIndex];
+        [self insertAtIndex:_layerIndex.unsignedIntegerValue];
     }
 }
 
@@ -78,9 +78,17 @@
     
     if (_styleLayer != nil) {
         NSPredicate *predicate = [self buildFilters];
-        if (predicate) {
-            [self updateFilter:predicate];
-        }
+        [self updateFilter:predicate];
+    }
+}
+
+- (void)setMap:(RCTMGLMapView *)map {
+    if (map == nil) {
+        [self removeFromMap:_map.style];
+        _map = nil;
+    } else {
+        _map = map;
+        [self addToMap:map style:map.style];
     }
 }
 
@@ -97,6 +105,9 @@
 
 - (void)addToMap:(RCTMGLMapView*) map style:(MGLStyle *)style
 {
+    if (style == nil) {
+        return;
+    }
     _map = map;
     _style = style;
     if (_id == nil) {
@@ -157,7 +168,7 @@
     } else if (_belowLayerID != nil) {
         [self insertBelow:_belowLayerID];
     } else if (_layerIndex != nil) {
-        [self insertAtIndex:(NSUInteger)_layerIndex];
+        [self insertAtIndex:_layerIndex.unsignedIntegerValue];
     } else {
         [_style addLayer:_styleLayer];
         [_map layerAdded:_styleLayer];

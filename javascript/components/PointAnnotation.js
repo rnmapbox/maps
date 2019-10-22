@@ -44,6 +44,11 @@ class PointAnnotation extends React.PureComponent {
     selected: PropTypes.bool,
 
     /**
+     * Enable or disable dragging. Defaults to false.
+     */
+    draggable: PropTypes.bool,
+
+    /**
      * The center point (specified as a map coordinate) of the annotation.
      */
     coordinate: PropTypes.arrayOf(PropTypes.number).isRequired,
@@ -69,20 +74,52 @@ class PointAnnotation extends React.PureComponent {
      * This callback is fired once this annotation is deselected.
      */
     onDeselected: PropTypes.func,
+
+    /**
+     * This callback is fired once this annotation has started being dragged.
+     */
+    onDragStart: PropTypes.func,
+
+    /**
+     * This callback is fired once this annotation has stopped being dragged.
+     */
+    onDragEnd: PropTypes.func,
   };
 
   static defaultProps = {
     anchor: {x: 0.5, y: 0.5},
+    draggable: false,
   };
 
   constructor(props) {
     super(props);
     this._onSelected = this._onSelected.bind(this);
+    this._onDeselected = this._onDeselected.bind(this);
+    this._onDragStart = this._onDragStart.bind(this);
+    this._onDragEnd = this._onDragEnd.bind(this);
   }
 
   _onSelected(e) {
     if (isFunction(this.props.onSelected)) {
       this.props.onSelected(e.nativeEvent.payload);
+    }
+  }
+
+  _onDeselected(e) {
+    if (isFunction(this.props.onDeselected)) {
+      this.props.onDeselected(e.nativeEvent.payload);
+    }
+  }
+
+  _onDragStart(e) {
+    if (isFunction(this.props.onDragStart)) {
+      this.props.onDragStart(e.nativeEvent.payload);
+    }
+  }
+
+  _onDragEnd(e) {
+    if (isFunction(this.props.onDragEnd)) {
+      this.props.onDragEnd(e.nativeEvent.payload);
     }
   }
 
@@ -101,10 +138,12 @@ class PointAnnotation extends React.PureComponent {
       snippet: this.props.snippet,
       anchor: this.props.anchor,
       selected: this.props.selected,
+      draggable: this.props.draggable,
       style: [this.props.style, styles.container],
-      hasOnPress: typeof this.props.onPress === 'function',
       onMapboxPointAnnotationSelected: this._onSelected,
-      onMapboxPointAnnotationDeselected: this.props.onDeselected,
+      onMapboxPointAnnotationDeselected: this._onDeselected,
+      onMapboxPointAnnotationDragStart: this._onDragStart,
+      onMapboxPointAnnotationDragEnd: this._onDragEnd,
       coordinate: this._getCoordinate(),
     };
     return (
@@ -122,6 +161,8 @@ const RCTMGLPointAnnotation = requireNativeComponent(
     nativeOnly: {
       onMapboxPointAnnotationSelected: true,
       onMapboxPointAnnotationDeselected: true,
+      onMapboxPointAnnotationDragStart: true,
+      onMapboxPointAnnotationDragEnd: true,
     },
   },
 );

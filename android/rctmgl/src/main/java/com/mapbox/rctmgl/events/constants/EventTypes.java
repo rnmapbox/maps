@@ -32,6 +32,8 @@ public class EventTypes {
     // point annotation event types
     public static final String ANNOTATION_SELECTED = "annotationselected";
     public static final String ANNOTATION_DESELECTED = "annotationdeselected";
+    public static final String ANNOTATION_DRAG_START = "annotationdragstart";
+    public static final String ANNOTATION_DRAG_END = "annotationdragend";
 
     // offline event types
     public static final String OFFLINE_ERROR = "offlineerror";

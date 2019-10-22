@@ -54,7 +54,8 @@ module.exports = {
     "plugin:flowtype/recommended"
   ],
   "rules": {
-    "react/no-deprecated": "error",
+    "react/no-deprecated": "warn",
+    "react/no-string-refs": "warn",
     "import/named": [2],
     "import/no-named-default": [0],
     "import/order": ["error", { "groups": ["builtin", "external", "parent", "sibling", "index"], "newlines-between": "always" }],

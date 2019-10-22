@@ -2,22 +2,19 @@ package com.mapbox.rctmgl.components;
 
 import android.view.ViewGroup;
 
-import com.facebook.react.ReactApplication;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.ViewGroupManager;
-import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.facebook.react.uimanager.events.EventDispatcher;
+import com.mapbox.rctmgl.events.IEvent;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nullable;
-
-import com.facebook.react.uimanager.events.EventDispatcher;
-import com.mapbox.rctmgl.events.EventEmitter;
-import com.mapbox.rctmgl.events.IEvent;
+import javax.annotation.Nonnull;
 
 /**
  * Created by nickitaliano on 8/23/17.
@@ -47,7 +44,7 @@ abstract public class AbstractEventEmitter<T extends ViewGroup> extends ViewGrou
     }
 
     @Override
-    protected void addEventEmitters(ThemedReactContext context, T view) {
+    protected void addEventEmitters(ThemedReactContext context, @Nonnull T view) {
         mEventDispatcher = context.getNativeModule(UIManagerModule.class).getEventDispatcher();
     }
 
@@ -55,6 +52,11 @@ abstract public class AbstractEventEmitter<T extends ViewGroup> extends ViewGrou
     @Override
     public Map<String, Object> getExportedCustomDirectEventTypeConstants() {
         Map<String, String> events = customEvents();
+
+        if (events == null) {
+            return null;
+        }
+
         Map<String, Object> exportedEvents = new HashMap<>();
 
         for (Map.Entry<String, String> event : events.entrySet()) {
@@ -64,6 +66,7 @@ abstract public class AbstractEventEmitter<T extends ViewGroup> extends ViewGrou
         return exportedEvents;
     }
 
+    @Nullable
     public abstract Map<String, String> customEvents();
 
     private boolean shouldDropEvent(String cacheKey, IEvent event) {

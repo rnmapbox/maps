@@ -20,6 +20,8 @@ const styles = StyleSheet.create({
 class Bubble extends React.PureComponent {
   static propTypes = {
     onPress: PropTypes.func,
+    children: PropTypes.any,
+    style: PropTypes.any,
   };
 
   render() {

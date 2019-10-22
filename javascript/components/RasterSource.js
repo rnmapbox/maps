@@ -10,6 +10,10 @@ const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLRasterSource';
 
+const isTileTemplateUrl = url =>
+  url &&
+  (url.includes('{z}') || url.includes('{bbox-') || url.includes('{quadkey}'));
+
 /**
  * RasterSource is a map content source that supplies raster image tiles to be shown on the map.
  * The location of and metadata about the tiles are defined either by an option dictionary
@@ -28,6 +32,12 @@ class RasterSource extends AbstractSource {
      * A URL to a TileJSON configuration file describing the source’s contents and other metadata.
      */
     url: PropTypes.string,
+
+    /**
+     * An array of tile URL templates. If multiple endpoints are specified, clients may use any combination of endpoints.
+     * Example: https://example.com/raster-tiles/{z}/{x}/{y}.png
+     */
+    tileUrlTemplates: PropTypes.arrayOf(PropTypes.string),
 
     /**
      * An unsigned integer that specifies the minimum zoom level at which to display tiles from the source.
@@ -65,11 +75,31 @@ class RasterSource extends AbstractSource {
     id: MapboxGL.StyleSource.DefaultSourceID,
   };
 
+  constructor(props) {
+    super(props);
+    if (isTileTemplateUrl(props.url)) {
+      console.warn(
+        `RasterSource 'url' property contains a Tile URL Template, but is intended for a StyleJSON URL. Please migrate your VectorSource to use: \`tileUrlTemplates=["${props.url}"]\` instead.`,
+      );
+    }
+  }
+
   render() {
+    let {url} = this.props;
+    let {tileUrlTemplates} = this.props;
+
+    // Swapping url for tileUrlTemplates to provide backward compatiblity
+    // when RasterSource supported only tile url as url prop
+    if (isTileTemplateUrl(url)) {
+      tileUrlTemplates = [url];
+      url = undefined;
+    }
+
     const props = {
       ...this.props,
       id: this.props.id,
-      url: this.props.url,
+      url,
+      tileUrlTemplates,
       minZoomLevel: this.props.minZoomLevel,
       maxZoomLevel: this.props.maxZoomLevel,
       tileSize: this.props.tileSize,

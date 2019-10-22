@@ -1,11 +1,13 @@
 package com.mapbox.rctmgl.components.camera;
 
+import com.mapbox.geojson.FeatureCollection;
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.mapbox.rctmgl.components.AbstractEventEmitter;
+import com.mapbox.rctmgl.utils.GeoJSONUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,6 +50,14 @@ public class RCTMGLCameraManager extends AbstractEventEmitter<RCTMGLCamera> {
         if (map != null) {
             CameraStop stop = CameraStop.fromReadableMap(mContext, map, null);
             camera.setDefaultStop(stop);
+        }
+    }
+
+    @ReactProp(name="maxBounds")
+    public void setMaxBounds(RCTMGLCamera camera, String value) {
+        if (value != null) {
+            FeatureCollection collection = FeatureCollection.fromJson(value);
+            camera.setMaxBounds(GeoJSONUtils.toLatLngBounds(collection));
         }
     }
 
