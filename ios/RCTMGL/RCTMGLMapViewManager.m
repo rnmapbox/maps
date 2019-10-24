@@ -40,7 +40,6 @@ RCT_EXPORT_MODULE(RCTMGLMapView)
     RCTMGLMapView *mapView = [[RCTMGLMapView alloc] initWithFrame:RCT_MAPBOX_MIN_MAP_FRAME];
     mapView.delegate = self;
 
-
     // setup map gesture recongizers
     UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
     doubleTap.numberOfTapsRequired = 2;
@@ -83,6 +82,8 @@ RCT_REMAP_VIEW_PROPERTY(compassViewMargins, reactCompassViewMargins, CGPoint)
 
 
 RCT_REMAP_VIEW_PROPERTY(contentInset, reactContentInset, NSArray)
+RCT_REMAP_VIEW_PROPERTY(userLocationAnchorPoint, reactUserLocationAnchorPoint, CGPoint)
+
 RCT_REMAP_VIEW_PROPERTY(styleURL, reactStyleURL, NSString)
 RCT_REMAP_VIEW_PROPERTY(preferredFramesPerSecond, reactPreferredFramesPerSecond, NSInteger)
 
@@ -439,6 +440,12 @@ RCT_EXPORT_METHOD(showAttribution:(nonnull NSNumber *)reactTag
     ((RCTMGLMapView *) mapView).isUserInteraction = (BOOL)(reason & ~MGLCameraChangeReasonProgrammatic);
     NSDictionary *payload = [self _makeRegionPayload:mapView animated:animated];
     [self reactMapDidChange:mapView eventType:RCT_MAPBOX_REGION_WILL_CHANGE_EVENT andPayload:payload];
+}
+
+- (CGPoint)mapViewUserLocationAnchorPoint:(nonnull MGLMapView *)mapView 
+{   
+    RCTMGLMapView* reactMapView = ((RCTMGLMapView *) mapView);
+    return reactMapView.userLocationAnchorPoint;
 }
 
 - (void)mapViewRegionIsChanging:(MGLMapView *)mapView

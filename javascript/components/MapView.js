@@ -46,6 +46,13 @@ class MapView extends NativeBridgeComponent(React.Component) {
     ]),
 
     /**
+     * The anchor point on the map.  Defaults to center of the map.
+     * Expects an objext of {x, y} coordinates based on the map view dimensions.
+     * Tip: Use onLayout to set map view dimensions to a redux store or local state.
+     */
+    userLocationAnchorPoint: PropTypes.object,
+
+    /**
      * Style for wrapping React Native View
      */
     style: PropTypes.any,
@@ -672,6 +679,14 @@ class MapView extends NativeBridgeComponent(React.Component) {
     }
 
     return this.props.contentInset;
+  }
+
+  _getUserLocationAnchorPoint() {
+    if (!this.props.userLocationAnchorPoint) {
+      return;
+    }
+
+    return this.props.userLocationAnchorPoint;
   }
 
   _setNativeRef(nativeRef) {

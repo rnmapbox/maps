@@ -20,6 +20,7 @@
 | compassEnabled | `bool` | `none` | `false` | Enable/Disable the compass from appearing on the map |
 | compassViewPosition | `string` | `none` | `false` | Position the compass on a corner of the map |
 | compassViewMargins | `object` | `none` | `false` | Add margins to the compass with x and y values |
+| userLocationAnchorPoint | `object` | `none` | `false` | The anchor point on the map.  Defaults to center of the map. Expects an objext of {x, y} coordinates based on the map view dimensions. Tip: Use onLayout to set map view dimensions to a redux store or local state. - Currently only implmented on iOS |
 | surfaceView | `bool` | `false` | `false` | [Android only] Enable/Disable use of GLSurfaceView insted of TextureView. |
 | onPress | `func` | `none` | `false` | Map press listener, gets called when a user presses the map |
 | onLongPress | `func` | `none` | `false` | Map long press listener, gets called when a user long presses the map |

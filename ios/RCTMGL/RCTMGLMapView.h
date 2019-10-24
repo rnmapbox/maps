@@ -35,6 +35,9 @@ typedef void (^FoundLayerBlock) (MGLStyleLayer* layer);
 @property (nonatomic, strong) RCTMGLLight *light;
 @property (nonatomic, copy) NSArray<NSNumber *> *reactContentInset;
 
+@property (nonatomic, assign) CGPoint userLocationAnchorPoint;
+@property (nonatomic, assign) CGPoint reactUserLocationAnchorPoint;
+
 @property (nonatomic, strong) NSMutableDictionary<NSString*, NSMutableArray<FoundLayerBlock>*> *layerWaiters;
 
 @property (nonatomic, assign) BOOL reactLocalizeLabels;

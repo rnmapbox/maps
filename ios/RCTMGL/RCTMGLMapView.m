@@ -206,6 +206,15 @@ static double const M2PI = M_PI * 2;
     self.attributionButton.hidden = !_reactAttributionEnabled;
     
 }
+- (void)setReactUserLocationAnchorPoint:(CGPoint)reactUserLocationAnchorPoint
+{
+     {
+        CGPoint point;
+        point = reactUserLocationAnchorPoint;
+        self.userLocationAnchorPoint = point;
+    }        
+}
+
 
 - (void)setReactAttributionPosition:(NSDictionary<NSString *,NSNumber *> *)position
 {
