@@ -166,6 +166,7 @@ static double const M2PI = M_PI * 2;
     // underlying mapview action here.
     [self removeFromMap:subview];
     [_reactSubviews removeObject:(UIView *)subview];
+    [(UIView *)subview removeFromSuperview];
 }
 #pragma clang diagnostic pop
 
