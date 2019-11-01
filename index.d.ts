@@ -97,12 +97,12 @@ declare namespace MapboxGL {
     getVisibleBounds(): Promise<void>;
     queryRenderedFeaturesAtPoint(
       coordinate: GeoJSON.Position,
-      filter?: Array<string>,
+      filter?: Array<any>,
       layerIds?: Array<string>,
     ): Promise<GeoJSON.FeatureCollection?>;
     queryRenderedFeaturesInRect(
       coordinate: GeoJSON.Position,
-      filter?: Array<string>,
+      filter?: Array<any>,
       layerIds?: Array<string>,
     ): Promise<GeoJSON.FeatureCollection?>;
     takeSnap(writeToDisk?: boolean): Promise<string>;
@@ -646,7 +646,7 @@ export interface LayerBaseProps<T = {}> extends Omit<ViewProps, 'style'> {
   aboveLayerID?: string;
   belowLayerID?: string;
   layerIndex?: number;
-  filter?: Array<string>;
+  filter?: Array<any>;
   minZoomLevel?: number;
   maxZoomLevel?: number;
 }
