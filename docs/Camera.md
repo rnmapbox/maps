@@ -35,8 +35,8 @@
 | maxBounds | `shape` | `none` | `false` | Restrict map panning so that the center is within these bounds |
 | &nbsp;&nbsp;ne | `array` | `none` | `true` | northEastCoordinates - North east coordinate of bound |
 | &nbsp;&nbsp;sw | `array` | `none` | `true` | southWestCoordinates - South west coordinate of bound |
-| followUserLocation | `bool` | `none` | `false` | FIX ME NO DESCRIPTION |
-| followUserMode | `enum` | `none` | `false` | FIX ME NO DESCRIPTION |
+| followUserLocation | `bool` | `none` | `false` | Should the map orientation follow the user's. |
+| followUserMode | `enum` | `none` | `false` | The mode used to track the user location on the map. One of; "normal", "compass", "course". Each mode string is also available as a member on the `MapboxGL.UserTrackingModes` object. `Follow` (normal), `FollowWithHeading` (compass), `FollowWithCourse` (course). NOTE: `followUserLocation` must be set to `true` for any of the modes to take effect. [Example](../example/src/examples/SetUserTrackingModes.js) |
 | followZoomLevel | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
 | followPitch | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
 | followHeading | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
