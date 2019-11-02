@@ -394,6 +394,7 @@ export interface CameraSettings {
     paddingBottom?: number;
   };
   zoomLevel?: number;
+  animationDuration?: number;
 }
 
 export interface UserLocationProps {
