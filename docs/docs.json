@@ -670,14 +670,14 @@
         "required": false,
         "type": "bool",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Should the map orientation follow the user's."
       },
       {
         "name": "followUserMode",
         "required": false,
         "type": "enum",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "The mode used to track the user location on the map. One of; \"normal\", \"compass\", \"course\". Each mode string is also available as a member on the `MapboxGL.UserTrackingModes` object. `Follow` (normal), `FollowWithHeading` (compass), `FollowWithCourse` (course). NOTE: `followUserLocation` must be set to `true` for any of the modes to take effect. [Example](../example/src/examples/SetUserTrackingModes.js)"
       },
       {
         "name": "followZoomLevel",

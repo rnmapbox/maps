@@ -95,9 +95,14 @@ class Camera extends React.Component {
       sw: PropTypes.arrayOf(PropTypes.number).isRequired,
     }),
 
-    // user tracking
+    /**
+     * Should the map orientation follow the user's.
+     */
     followUserLocation: PropTypes.bool,
 
+    /**
+     * The mode used to track the user location on the map. One of; "normal", "compass", "course". Each mode string is also available as a member on the `MapboxGL.UserTrackingModes` object. `Follow` (normal), `FollowWithHeading` (compass), `FollowWithCourse` (course). NOTE: `followUserLocation` must be set to `true` for any of the modes to take effect. [Example](../example/src/examples/SetUserTrackingModes.js)
+     */
     followUserMode: PropTypes.oneOf(['normal', 'compass', 'course']),
 
     followZoomLevel: PropTypes.number,

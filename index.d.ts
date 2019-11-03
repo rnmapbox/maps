@@ -1,6 +1,10 @@
 declare module 'react-native-mapbox-gl__maps';
 
-import {Component, ReactNode} from 'react';
+import {
+  Component,
+  ReactNode,
+  SyntheticEvent,
+} from 'react';
 
 import {
   ViewProps,
@@ -9,8 +13,19 @@ import {
   ImageSourcePropType,
 } from 'react-native';
 
-import {SyntheticEvent} from 'react';
-import * as GeoJSON from '@turf/helpers/lib/geojson';
+import {
+  Geometry,
+  Properties,
+  Position,
+  Feature,
+  LineString,
+  Coord,
+  Units,
+  Point,
+  BBox,
+  Id,
+  FeatureCollection,
+} from '@turf/helpers';
 
 // prettier-ignore
 type ExpressionName =
@@ -88,6 +103,30 @@ declare namespace MapboxGL {
   function getAccessToken(): Promise<void>;
   function setTelemetryEnabled(telemetryEnabled: boolean): void;
   function requestAndroidLocationPermissions(): Promise<boolean>;
+
+  /**
+   * GeoUtils
+   */
+  interface UnitsOptions {
+    units?: Units;
+  }
+
+  interface PositionsOptions {
+    bbox?: BBox;
+    id?: Id;
+  }
+
+  namespace geoUtils {
+    function makePoint<P = Properties>(coordinates: Position, properties?: P, options?: PositionsOptions): Feature<Point, P>;
+    function makeLineString<P = Properties>(coordinates: Position[], properties?: P, options?: PositionsOptions): Feature<LineString, P>;
+    function makeLatLngBounds<G = Geometry, P = Properties>(northEastCoordinates: Position[], southWestCoordinates: Position[]): FeatureCollection<G, P>;
+    function makeFeature<G = Geometry, P = Properties>(geometry: G, properties?: P): Feature<G, P>;
+    function makeFeatureCollection<G = Geometry, P = Properties>(features: Array<FeatureCollection<G, P>>, options?: PositionsOptions): FeatureCollection<G, P>;
+    function addToFeatureCollection<G = Geometry, P = Properties>(newFeatureCollection: Array<FeatureCollection<G, P>>, newFeature: Feature<G, P>): FeatureCollection<G, P>;
+    function calculateDistance(origin: Coord, dest: Coord, otions?: UnitsOptions): number;
+    function pointAlongLine(newLineString: Feature<LineString> | LineString, distAlong: number, otions?: UnitsOptions): Feature<Point>;
+    function getOrCalculateVisibleRegion(coord: { lon: number; lat: number }, zoomLevel: number, width: number, height: number, nativeRegion: { properties: { visibleBounds: number[] }; visibleBounds: number[] }): void;
+  }
 
   /**
    * Components
@@ -191,27 +230,36 @@ declare namespace MapboxGL {
   /**
    * Offline
    */
-  class offlineManager extends Component {
+  class OfflineManager extends Component {
     createPack(
       options: OfflineCreatePackOptions,
-      progressListener?: () => void,
-      errorListener?: () => void,
+      progressListener?: (pack: OfflinePack, status: object) => void,
+      errorListener?: (pack: OfflinePack, err: object) => void
     ): void;
     deletePack(name: string): Promise<void>;
-    getPacks(): Promise<void>;
-    getPack(name: string): Promise<void>;
+    getPacks(): Promise<Array<OfflinePack>>;
+    getPack(name: string): Promise<OfflinePack>;
     setTileCountLimit(limit: number): void;
     setProgressEventThrottle(throttleValue: number): void;
     subscribe(
       packName: string,
-      progressListener: () => void,
-      errorListener: () => void,
+      progressListener: (pack: OfflinePack, status: object) => void,
+      errorListener?: (pack: OfflinePack, err: object) => void
     ): void;
     unsubscribe(packName: string): void;
   }
 
   class snapshotManager extends Component {
     takeSnap(options: SnapshotOptions): Promise<void>;
+  }
+
+  interface OfflinePack {
+    name: string,
+    bounds: [GeoJSON.Position, GeoJSON.Position];
+    metadata: any;
+    status: () => any,
+    resume: () => any,
+    pause: () => any,
   }
 
   /**
@@ -346,6 +394,7 @@ export interface CameraSettings {
     paddingBottom?: number;
   };
   zoomLevel?: number;
+  animationDuration?: number;
 }
 
 export interface UserLocationProps {
