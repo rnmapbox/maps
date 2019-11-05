@@ -22,6 +22,8 @@ MapboxGL.setAccessToken("<YOUR_ACCESSTOKEN>");
 
 If you are hosting styles and sources on localhost, you might need to set the connection status manually for Mapbox to be able to use them. See [mapbox/mapbox-gl-native#12819](https://github.com/mapbox/mapbox-gl-native/issues/12819).
 
+Manually sets the connectivity state of the app, bypassing any checks to the ConnectivityManager. Set to `true` for connected, `false` for disconnected, and `null` for ConnectivityManager to determine.
+
 ```js
 import MapboxGL from "@react-native-mapbox-gl/maps";
 
