@@ -341,6 +341,16 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         });
     }
 
+    @ReactMethod
+    public void setConnected(final boolean connected) {
+        mReactContext.runOnUiQueueThread(new Runnable() {
+            @Override
+            public void run() {
+                Mapbox.setConnected(connected);
+            }
+        });
+    }
+
     private Dispatcher getDispatcher() {
         Dispatcher dispatcher = new Dispatcher();
         // Matches core limit set on

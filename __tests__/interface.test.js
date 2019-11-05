@@ -71,6 +71,7 @@ describe('Public Interface', () => {
       'setAccessToken',
       'getAccessToken',
       'setTelemetryEnabled',
+      'setConnected',
       'requestAndroidLocationPermissions',
 
       // utils

@@ -102,6 +102,7 @@ declare namespace MapboxGL {
   function setAccessToken(accessToken: string): void;
   function getAccessToken(): Promise<void>;
   function setTelemetryEnabled(telemetryEnabled: boolean): void;
+  function setConnected(connected: boolean): void;
   function requestAndroidLocationPermissions(): Promise<boolean>;
 
   /**
