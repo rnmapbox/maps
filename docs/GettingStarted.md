@@ -1,21 +1,33 @@
 # Getting Started
 
-Congratulations, you successfully installed react-native-mapbox-gl/maps! 🎉  
-Where to go from here?  
-You can head straight to [examples](/example) folder if you want to jump into the deep end.  
+Congratulations, you successfully installed react-native-mapbox-gl/maps! 🎉
+Where to go from here?
+You can head straight to [examples](/example) folder if you want to jump into the deep end.
 However, if you prefer an easier ramp-up, then make sure to stick around and check out the guides below.
 
 ## Setting your accessToken
 
-In order to work, mapbox requires you to create an accessToken and set it in your app.  
-If you haven't created on yet, make sure to sign up for an account [here](https://www.mapbox.com/signup/)  
-You can create and manage your access tokens on your [Mapbox Account page](https://www.mapbox.com/account/)  
+In order to work, mapbox requires you to create an accessToken and set it in your app.
+If you haven't created on yet, make sure to sign up for an account [here](https://www.mapbox.com/signup/)
+You can create and manage your access tokens on your [Mapbox Account page](https://www.mapbox.com/account/)
 Once you have your accessToken, set it like this
 
 ```js
 import MapboxGL from "@react-native-mapbox-gl/maps";
 
 MapboxGL.setAccessToken("<YOUR_ACCESSTOKEN>");
+```
+
+## Setting connection status [Android only]
+
+If you are hosting styles and sources on localhost, you might need to set the connection status manually for Mapbox to be able to use them. See [mapbox/mapbox-gl-native#12819](https://github.com/mapbox/mapbox-gl-native/issues/12819).
+
+Manually sets the connectivity state of the app, bypassing any checks to the ConnectivityManager. Set to `true` for connected, `false` for disconnected, and `null` for ConnectivityManager to determine.
+
+```js
+import MapboxGL from "@react-native-mapbox-gl/maps";
+
+MapboxGL.setConneced(true);
 ```
 
 ## Disabling Telemetry
