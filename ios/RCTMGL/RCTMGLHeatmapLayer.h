@@ -5,10 +5,8 @@
 //  Created by Dheeraj Yalamanchili on 6/8/19.
 //
 
-#import "RCTMGLLayer.h"
+#import "RCTMGLVectorLayer.h"
 
-@interface RCTMGLHeatmapLayer : RCTMGLLayer
-
-@property (nonatomic, copy) NSString *sourceLayerID;
+@interface RCTMGLHeatmapLayer : RCTMGLVectorLayer
 
 @end

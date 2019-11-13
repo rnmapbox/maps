@@ -7,9 +7,9 @@
 //
 
 #import <React/RCTComponent.h>
-#import "RCTMGLLayer.h"
+#import "RCTMGLVectorLayer.h"
 
-@interface RCTMGLSymbolLayer : RCTMGLLayer<RCTInvalidating>
+@interface RCTMGLSymbolLayer : RCTMGLVectorLayer<RCTInvalidating>
 
 @property (nonatomic, strong) NSMutableArray<id<RCTComponent>> *reactSubviews;
 
