@@ -20,7 +20,7 @@
     "url": "https://github.com/react-native-mapbox-gl/maps"
   },
   "scripts": {
-    "fetch:ios:sdk": "node ./scripts/download-mapbox-gl-native-ios-if-on-mac.js 5.3.2",
+    "fetch:ios:sdk": "node ./scripts/download-mapbox-gl-native-ios-if-on-mac.js 5.5.0",
     "fetch:style:spec": ". ./scripts/download-style-spec.sh",
     "generate": "node ./scripts/autogenerate",
     "preinstall": "npm run fetch:ios:sdk",
