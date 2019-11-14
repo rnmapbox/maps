@@ -173,7 +173,10 @@
 
 - (void)_updateCameraFromTrackingMode
 {
-    if (!_followUserLocation || _map == nil) {
+    if (_map == nil) {
+          return;
+    }
+    if (!_followUserLocation) {
         _map.userTrackingMode = MGLUserTrackingModeNone;
         return;
     }
@@ -207,7 +210,7 @@
 
 - (NSUInteger)_userTrackingMode
 {
-    if ([_followUserMode isEqualToString:@"heading"]) {
+    if ([_followUserMode isEqualToString:@"compass"]) {
         return MGLUserTrackingModeFollowWithHeading;
     } else if ([_followUserMode isEqualToString:@"course"]) {
         return MGLUserTrackingModeFollowWithCourse;
