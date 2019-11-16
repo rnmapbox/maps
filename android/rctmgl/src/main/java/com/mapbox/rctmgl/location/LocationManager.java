@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import timber.log.Timber;
-
 /**
  * Created by nickitaliano on 12/12/17.
  */
