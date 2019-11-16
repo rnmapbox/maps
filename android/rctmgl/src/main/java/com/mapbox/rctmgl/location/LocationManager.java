@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 /**
  * Created by nickitaliano on 12/12/17.
  */
@@ -40,7 +42,7 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
 
     private boolean isActive = false;
     private Location lastLocation = null;
-
+    private Location lastDispatchedLocation = null;
     private LocationEngineRequest locationEngineRequest = null;
 
     private static WeakReference<LocationManager> INSTANCE = null;
@@ -160,6 +162,7 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
         // because the user has likely moved
         if (isSignificantlyNewer) {
             // If the new location is more than two minutes older, it must be worse
+            return true;
         } else if (isSignificantlyOlder) {
             return false;
         }
@@ -171,7 +174,10 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
         boolean isSignificantlyLessAccurate = accuracyDelta > 200;
 
         // events keeps firing with very low change constantly
-        boolean notSignificant = accuracyDelta > -1 && accuracyDelta < 1;
+        double distance = distanceInCm(location.getLatitude(), location.getLongitude(), currentBestLocation.getLatitude(), currentBestLocation.getLongitude());
+
+        boolean isSignificant = isMoreAccurate ? distance > 10 : distance > 100;
+
 
 
         // Check if the old and new location are from the same provider
@@ -179,11 +185,11 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
                 currentBestLocation.getProvider());
 
         // Determine location quality using a combination of timeliness and accuracy
-        if (isMoreAccurate && !notSignificant) {
+        if (isMoreAccurate && isSignificant) {
             return true;
-        } else if (isNewer && !isLessAccurate && !notSignificant) {
+        } else if (isNewer && !isLessAccurate &&isSignificant) {
             return true;
-        } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider && !notSignificant) {
+        } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider && isSignificant) {
             return true;
         }
 
@@ -197,22 +203,39 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
         return provider1.equals(provider2);
     }
 
+    /** calculates the distance between two locations in MILES */
+    private double distanceInCm(double lat1, double lng1, double lat2, double lng2) {
 
+        double earthRadius = 6371; // in km, change to  3958.75 for miles output
+
+        double dLat = Math.toRadians(lat2-lat1);
+        double dLng = Math.toRadians(lng2-lng1);
+
+        double sindLat = Math.sin(dLat / 2);
+        double sindLng = Math.sin(dLng / 2);
+
+        double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2)
+                * Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2));
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+
+
+        return earthRadius * c * 100000; // output distance, in CM
+    }
+
+    //    https://stackoverflow.com/questions/18170131/comparing-two-locations-using-their-longitude-and-latitude
     public void onLocationChanged(Location location) {
-
         Log.d(LOG_TAG, String.format(Locale.ENGLISH, "Tick [%f, %f]", location.getLongitude(), location.getLatitude()));
         Log.d(LOG_TAG, String.format(Locale.ENGLISH, "Listener count %d", listeners.size()));
-
-        if (isBetterLocation(location, lastLocation)) {
+        if (isBetterLocation(location, lastDispatchedLocation)) {
             for (OnUserLocationChange listener : listeners) {
                 listener.onLocationChange(location);
 
             }
-            
-            lastLocation = location;
+            lastDispatchedLocation = location;
         }
-
-
+        lastLocation = location;
     }
 
     @Override
@@ -222,6 +245,8 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
 
     @Override
     public void onSuccess(LocationEngineResult result) {
-        onLocationChanged(result.getLastLocation());
+        if (result != null) {
+            onLocationChanged(result.getLastLocation());
+        }
     }
 }
