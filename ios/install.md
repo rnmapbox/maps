@@ -52,9 +52,9 @@ Then run `pod install` and rebuild your project.
 
 ### Add Native Mapbox SDK Framework
 
-Select your project in the `Project navigator`. Click `General` tab then add `node_modules/@react-native-mapbox-gl/maps/ios/Mapbox.framework` to `Embedded Binaries`. :collision: **Important, make sure you're adding it to general -> `Embedded Binaries` :collision:**
+Select your project in the `Project navigator`. Click `General` tab then add `node_modules/@react-native-mapbox-gl/maps/ios/RNMapbox.framework` to `Embedded Binaries`. :collision: **Important, make sure you're adding it to general -> `Embedded Binaries` :collision:**
 
-Click 'Add other' to open the file browser and select Mapbox.framework.
+Click 'Add other' to open the file browser and select RNMapbox.framework.
 
 ![](https://s3.systemlevel.com/docs-public/addother.png)
 
@@ -103,7 +103,7 @@ In the `Build Phases` tab, click the plus sign and then `New Run Script Phase`.
 Open the newly added `Run Script` and paste:
 
 ```bash
- "${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mapbox.framework/strip-frameworks.sh"
+ "${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNMapbox.framework/strip-frameworks.sh"
 ```
 
 ![](https://s3.systemlevel.com/docs-public/runscript.png)

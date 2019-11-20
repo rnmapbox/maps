@@ -33,7 +33,7 @@ package-lock.json
 yarn.lock
 
 # project specific
-ios/Mapbox.framework
+ios/RNMapbox.framework
 ios/temp.zip
 ios/.framework_version
 ios/Pods/
