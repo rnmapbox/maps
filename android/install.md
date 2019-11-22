@@ -1,6 +1,6 @@
 # Android Installation
 
-## If you are using autolinking feature introduced in React-Native `0.60.0` you can skip `react-native link react-native-mapbox-gl` command and just follow first paragraph
+## If you are using autolinking feature introduced in React-Native `0.60.0` you can skip `react-native link @react-native-mapbox-gl/maps` command and just follow first paragraph
 
 `react-native link` should get you almost there,  
 however we need to add some additional lines to `build.gradle`.
