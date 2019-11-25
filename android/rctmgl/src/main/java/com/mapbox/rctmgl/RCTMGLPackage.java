@@ -39,14 +39,22 @@ import com.mapbox.rctmgl.modules.RCTMGLSnapshotModule;
 
 public class RCTMGLPackage implements ReactPackage {
 
+    private int smallestDisplacement = 0;
+
+    public RCTMGLPackage(int... args) {
+        smallestDisplacement = args.length > 0 ? args[0] : 0;
+    }
+
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactApplicationContext) {
         List<NativeModule> modules = new ArrayList<>();
 
+        RCTMGLLocationModule locationModule = new RCTMGLLocationModule(reactApplicationContext, smallestDisplacement);
+
         modules.add(new RCTMGLModule(reactApplicationContext));
         modules.add(new RCTMGLOfflineModule(reactApplicationContext));
         modules.add(new RCTMGLSnapshotModule(reactApplicationContext));
-        modules.add(new RCTMGLLocationModule(reactApplicationContext));
+        modules.add(locationModule);
 
         return modules;
     }

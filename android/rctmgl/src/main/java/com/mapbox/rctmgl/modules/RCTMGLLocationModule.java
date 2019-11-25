@@ -58,9 +58,9 @@ public class RCTMGLLocationModule extends ReactContextBaseJavaModule {
         }
     };
 
-    public RCTMGLLocationModule(ReactApplicationContext reactContext) {
+    public RCTMGLLocationModule(ReactApplicationContext reactContext, int smallestDisplacement) {
         super(reactContext);
-        locationManager = LocationManager.getInstance(reactContext);
+        locationManager = LocationManager.getInstance(reactContext, smallestDisplacement);
         reactContext.addLifecycleEventListener(lifecycleEventListener);
     }
 
