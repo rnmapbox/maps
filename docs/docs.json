@@ -75,9 +75,7 @@
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
+    "composes": ["../utils"],
     "name": "BackgroundLayer",
     "styles": [
       {
@@ -106,15 +104,11 @@
         "default": "#000000",
         "description": "The color with which the background will be drawn.",
         "requires": [],
-        "disabledBy": [
-          "backgroundPattern"
-        ],
+        "disabledBy": ["backgroundPattern"],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -127,9 +121,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -145,9 +137,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       }
     ]
@@ -200,9 +190,7 @@
         "description": "Style property for the title in the content bubble."
       }
     ],
-    "composes": [
-      "../utils"
-    ],
+    "composes": ["../utils"],
     "name": "Callout"
   },
   "Camera": {
@@ -734,9 +722,7 @@
         "description": "FIX ME NO DESCRIPTION"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
+    "composes": ["../utils"],
     "name": "Camera"
   },
   "CircleLayer": {
@@ -815,9 +801,7 @@
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
+    "composes": ["../utils"],
     "name": "CircleLayer",
     "styles": [
       {
@@ -852,11 +836,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -870,11 +850,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -888,11 +864,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -908,11 +880,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -920,19 +888,14 @@
         "type": "array<number>",
         "values": [],
         "units": "pixels",
-        "default": [
-          0,
-          0
-        ],
+        "default": [0, 0],
         "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -950,16 +913,12 @@
         ],
         "default": "map",
         "description": "Controls the frame of reference for `circleTranslate`.",
-        "requires": [
-          "circleTranslate"
-        ],
+        "requires": ["circleTranslate"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -982,9 +941,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -1007,9 +964,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -1025,11 +980,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -1043,11 +994,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -1063,11 +1010,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       }
     ]
@@ -1148,9 +1091,7 @@
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
+    "composes": ["../utils"],
     "name": "FillExtrusionLayer",
     "styles": [
       {
@@ -1185,9 +1126,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -1197,17 +1136,11 @@
         "default": "#000000",
         "description": "The base color of the extruded fill. The extrusion's surfaces will be shaded differently based on this color in combination with the root `light` settings. If this color is specified as `rgba` with an alpha component, the alpha component will be ignored; use `fillExtrusionOpacity` to set layer opacity.",
         "requires": [],
-        "disabledBy": [
-          "fillExtrusionPattern"
-        ],
+        "disabledBy": ["fillExtrusionPattern"],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -1215,19 +1148,14 @@
         "type": "array<number>",
         "values": [],
         "units": "pixels",
-        "default": [
-          0,
-          0
-        ],
+        "default": [0, 0],
         "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -1245,16 +1173,12 @@
         ],
         "default": "map",
         "description": "Controls the frame of reference for `fillExtrusionTranslate`.",
-        "requires": [
-          "fillExtrusionTranslate"
-        ],
+        "requires": ["fillExtrusionTranslate"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -1267,10 +1191,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       },
       {
@@ -1286,11 +1207,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -1301,18 +1218,12 @@
         "units": "meters",
         "default": 0,
         "description": "The height with which to extrude the base of this layer. Must be less than or equal to `fillExtrusionHeight`.",
-        "requires": [
-          "fillExtrusionHeight"
-        ],
+        "requires": ["fillExtrusionHeight"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       }
     ]
@@ -1393,9 +1304,7 @@
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
+    "composes": ["../utils"],
     "name": "FillLayer",
     "styles": [
       {
@@ -1428,9 +1337,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -1446,11 +1353,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -1460,17 +1363,11 @@
         "default": "#000000",
         "description": "The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.",
         "requires": [],
-        "disabledBy": [
-          "fillPattern"
-        ],
+        "disabledBy": ["fillPattern"],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -1479,17 +1376,11 @@
         "values": [],
         "description": "The outline color of the fill. Matches the value of `fillColor` if unspecified.",
         "requires": [],
-        "disabledBy": [
-          "fillPattern"
-        ],
+        "disabledBy": ["fillPattern"],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -1497,19 +1388,14 @@
         "type": "array<number>",
         "values": [],
         "units": "pixels",
-        "default": [
-          0,
-          0
-        ],
+        "default": [0, 0],
         "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -1527,16 +1413,12 @@
         ],
         "default": "map",
         "description": "Controls the frame of reference for `fillTranslate`.",
-        "requires": [
-          "fillTranslate"
-        ],
+        "requires": ["fillTranslate"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -1549,10 +1431,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       }
     ]
@@ -1633,9 +1512,7 @@
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
+    "composes": ["../utils"],
     "name": "HeatmapLayer",
     "styles": [
       {
@@ -1670,11 +1547,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -1689,11 +1562,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -1708,9 +1577,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -1719,12 +1586,8 @@
         "values": [],
         "default": [
           "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "heatmap-density"
-          ],
+          ["linear"],
+          ["heatmap-density"],
           0,
           "rgba(0, 0, 255, 0)",
           0.1,
@@ -1744,9 +1607,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "heatmap-density"
-          ]
+          "parameters": ["heatmap-density"]
         }
       },
       {
@@ -1762,9 +1623,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       }
     ]
@@ -1806,9 +1665,7 @@
         "description": "The top left, top right, bottom right, and bottom left coordinates for the image."
       }
     ],
-    "composes": [
-      "../utils"
-    ],
+    "composes": ["../utils"],
     "name": "ImageSource"
   },
   "Images": {
@@ -1824,9 +1681,7 @@
         "description": "Specifies the external images in key-value pairs required for the shape source.\nIf you have an asset under Image.xcassets on iOS and the drawables directory on android\nyou can specify an array of string names with assets as the key `{ assets: ['pin'] }`."
       }
     ],
-    "composes": [
-      "../utils"
-    ],
+    "composes": ["../utils"],
     "name": "Images"
   },
   "Light": {
@@ -1842,9 +1697,7 @@
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
+    "composes": ["../utils"],
     "name": "Light",
     "styles": [
       {
@@ -1867,29 +1720,21 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
         "name": "position",
         "type": "array<number>",
         "values": [],
-        "default": [
-          1.15,
-          210,
-          30
-        ],
+        "default": [1.15, 210, 30],
         "description": "Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0° (0° when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0° when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0°, directly above, to 180°, directly below).",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -1903,9 +1748,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -1921,9 +1764,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       }
     ]
@@ -2004,9 +1845,7 @@
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
+    "composes": ["../utils"],
     "name": "LineLayer",
     "styles": [
       {
@@ -2033,9 +1872,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -2059,15 +1896,10 @@
         "description": "The display of lines when joining.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ],
+        "allowedFunctionTypes": ["camera"],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       },
       {
@@ -2081,9 +1913,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -2097,9 +1927,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -2134,11 +1962,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -2148,17 +1972,11 @@
         "default": "#000000",
         "description": "The color with which the line will be drawn.",
         "requires": [],
-        "disabledBy": [
-          "linePattern"
-        ],
+        "disabledBy": ["linePattern"],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -2166,19 +1984,14 @@
         "type": "array<number>",
         "values": [],
         "units": "pixels",
-        "default": [
-          0,
-          0
-        ],
+        "default": [0, 0],
         "description": "The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -2196,16 +2009,12 @@
         ],
         "default": "map",
         "description": "Controls the frame of reference for `lineTranslate`.",
-        "requires": [
-          "lineTranslate"
-        ],
+        "requires": ["lineTranslate"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -2218,16 +2027,10 @@
         "description": "Stroke thickness.",
         "requires": [],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ],
+        "allowedFunctionTypes": ["camera"],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -2243,11 +2046,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -2262,11 +2061,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -2282,11 +2077,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -2297,15 +2088,11 @@
         "units": "line widths",
         "description": "Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoomDependent expressions will be evaluated only at integer zoom levels.",
         "requires": [],
-        "disabledBy": [
-          "linePattern"
-        ],
+        "disabledBy": ["linePattern"],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -2318,10 +2105,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       },
       {
@@ -2330,16 +2114,11 @@
         "values": [],
         "description": "Defines a gradient with which to color a line feature. Can only be used with GeoJSON sources that specify `\"lineMetrics\": true`.",
         "requires": [],
-        "disabledBy": [
-          "lineDasharray",
-          "linePattern"
-        ],
+        "disabledBy": ["lineDasharray", "linePattern"],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "line-progress"
-          ]
+          "parameters": ["line-progress"]
         }
       }
     ]
@@ -2351,9 +2130,7 @@
       {
         "name": "getPointInView",
         "docblock": "Converts a geographic coordinate to a point in the given view’s coordinate system.\n\n@example\nconst pointInView = await this._map.getPointInView([-37.817070, 144.949901]);\n\n@param {Array<Number>} coordinate - A point expressed in the map view's coordinate system.\n@return {Array}",
-        "modifiers": [
-          "async"
-        ],
+        "modifiers": ["async"],
         "params": [
           {
             "name": "coordinate",
@@ -2383,9 +2160,7 @@
       {
         "name": "getCoordinateFromView",
         "docblock": "Converts a point in the given view’s coordinate system to a geographic coordinate.\n\n@example\nconst coordinate = await this._map.getCoordinateFromView([100, 100]);\n\n@param {Array<Number>} point - A point expressed in the given view’s coordinate system.\n@return {Array}",
-        "modifiers": [
-          "async"
-        ],
+        "modifiers": ["async"],
         "params": [
           {
             "name": "point",
@@ -2415,9 +2190,7 @@
       {
         "name": "getVisibleBounds",
         "docblock": "The coordinate bounds(ne, sw) visible in the users’s viewport.\n\n@example\nconst visibleBounds = await this._map.getVisibleBounds();\n\n@return {Array}",
-        "modifiers": [
-          "async"
-        ],
+        "modifiers": ["async"],
         "params": [],
         "returns": {
           "description": null,
@@ -2433,9 +2206,7 @@
       {
         "name": "queryRenderedFeaturesAtPoint",
         "docblock": "Returns an array of rendered map features that intersect with a given point.\n\n@example\nthis._map.queryRenderedFeaturesAtPoint([30, 40], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n@param  {Array<Number>} coordinate - A point expressed in the map view’s coordinate system.\n@param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {Array=} layerIDs - A array of layer id's to filter the features by\n@return {FeatureCollection}",
-        "modifiers": [
-          "async"
-        ],
+        "modifiers": ["async"],
         "params": [
           {
             "name": "coordinate",
@@ -2481,9 +2252,7 @@
       {
         "name": "queryRenderedFeaturesInRect",
         "docblock": "Returns an array of rendered map features that intersect with the given rectangle,\nrestricted to the given style layers and filtered by the given predicate.\n\n@example\nthis._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])\n\n@param  {Array<Number>} bbox - A rectangle expressed in the map view’s coordinate system.\n@param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {Array=} layerIDs -  A array of layer id's to filter the features by\n@return {FeatureCollection}",
-        "modifiers": [
-          "async"
-        ],
+        "modifiers": ["async"],
         "params": [
           {
             "name": "bbox",
@@ -2538,9 +2307,7 @@
       {
         "name": "takeSnap",
         "docblock": "Takes snapshot of map with current tiles and returns a URI to the image\n@param  {Boolean} writeToDisk If true will create a temp file, otherwise it is in base64\n@return {String}",
-        "modifiers": [
-          "async"
-        ],
+        "modifiers": ["async"],
         "params": [
           {
             "name": "writeToDisk",
@@ -2563,9 +2330,7 @@
       {
         "name": "getZoom",
         "docblock": "Returns the current zoom of the map view.\n\n@example\nconst zoom = await this._map.getZoom();\n\n@return {Number}",
-        "modifiers": [
-          "async"
-        ],
+        "modifiers": ["async"],
         "params": [],
         "returns": {
           "description": null,
@@ -2574,16 +2339,12 @@
           }
         },
         "description": "Returns the current zoom of the map view.",
-        "examples": [
-          "\nconst zoom = await this._map.getZoom();\n\n"
-        ]
+        "examples": ["\nconst zoom = await this._map.getZoom();\n\n"]
       },
       {
         "name": "getCenter",
         "docblock": "Returns the map's geographical centerpoint\n\n@example\nconst center = await this._map.getCenter();\n\n@return {Array<Number>} Coordinates",
-        "modifiers": [
-          "async"
-        ],
+        "modifiers": ["async"],
         "params": [],
         "returns": {
           "description": "Coordinates",
@@ -2597,9 +2358,7 @@
           }
         },
         "description": "Returns the map's geographical centerpoint",
-        "examples": [
-          "\nconst center = await this._map.getCenter();\n\n"
-        ]
+        "examples": ["\nconst center = await this._map.getCenter();\n\n"]
       },
       {
         "name": "setSourceVisibility",
@@ -2889,13 +2648,6 @@
         "description": "This event is triggered when the map fully finished rendering the map."
       },
       {
-        "name": "onUserLocationUpdate",
-        "required": false,
-        "type": "func",
-        "default": "none",
-        "description": "This event is triggered when the user location is updated."
-      },
-      {
         "name": "onDidFinishLoadingStyle",
         "required": false,
         "type": "func",
@@ -2917,9 +2669,7 @@
         "description": "The emitted frequency of regiondidchange events"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
+    "composes": ["../utils"],
     "name": "MapView"
   },
   "PointAnnotation": {
@@ -3028,9 +2778,7 @@
         "description": "This callback is fired once this annotation has stopped being dragged."
       }
     ],
-    "composes": [
-      "../utils"
-    ],
+    "composes": ["../utils"],
     "name": "PointAnnotation"
   },
   "RasterLayer": {
@@ -3109,9 +2857,7 @@
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
+    "composes": ["../utils"],
     "name": "RasterLayer",
     "styles": [
       {
@@ -3146,9 +2892,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -3163,9 +2907,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -3181,9 +2923,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -3199,9 +2939,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -3217,9 +2955,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -3235,9 +2971,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -3260,9 +2994,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -3278,9 +3010,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       }
     ]
@@ -3352,9 +3082,7 @@
         "description": "An HTML or literal text string defining the buttons to be displayed in an action sheet when the\nsource is part of a map view’s style and the map view’s attribution button is pressed."
       }
     ],
-    "composes": [
-      "../utils"
-    ],
+    "composes": ["../utils"],
     "name": "RasterSource"
   },
   "ShapeSource": {
@@ -3484,9 +3212,7 @@
         "description": "Overrides the default touch hitbox(44x44 pixels) for the source layers"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
+    "composes": ["../utils"],
     "name": "ShapeSource"
   },
   "SymbolLayer": {
@@ -3565,9 +3291,7 @@
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
+    "composes": ["../utils"],
     "name": "SymbolLayer",
     "styles": [
       {
@@ -3594,9 +3318,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -3612,9 +3334,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -3628,9 +3348,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -3657,9 +3375,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -3668,16 +3384,12 @@
         "values": [],
         "default": false,
         "description": "If true, the icon will be visible even if it collides with other previously drawn symbols.",
-        "requires": [
-          "iconImage"
-        ],
+        "requires": ["iconImage"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -3686,16 +3398,12 @@
         "values": [],
         "default": false,
         "description": "If true, other symbols can be visible even if they collide with the icon.",
-        "requires": [
-          "iconImage"
-        ],
+        "requires": ["iconImage"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -3704,17 +3412,12 @@
         "values": [],
         "default": false,
         "description": "If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not.",
-        "requires": [
-          "iconImage",
-          "textField"
-        ],
+        "requires": ["iconImage", "textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -3736,16 +3439,12 @@
         ],
         "default": "auto",
         "description": "In combination with `symbolPlacement`, determines the rotation behavior of icons.",
-        "requires": [
-          "iconImage"
-        ],
+        "requires": ["iconImage"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -3756,17 +3455,12 @@
         "units": "factor of the original icon size",
         "default": 1,
         "description": "Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `iconSize`. 1 is the original size; 3 triples the size of the image.",
-        "requires": [
-          "iconImage"
-        ],
+        "requires": ["iconImage"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       },
       {
@@ -3792,17 +3486,12 @@
         ],
         "default": "none",
         "description": "Scales the icon to fit around the associated text.",
-        "requires": [
-          "iconImage",
-          "textField"
-        ],
+        "requires": ["iconImage", "textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -3810,24 +3499,14 @@
         "type": "array<number>",
         "values": [],
         "units": "pixels",
-        "default": [
-          0,
-          0,
-          0,
-          0
-        ],
+        "default": [0, 0, 0, 0],
         "description": "Size of the additional area added to dimensions determined by `iconTextFit`, in clockwise order: top, right, bottom, left.",
-        "requires": [
-          "iconImage",
-          "textField"
-        ],
+        "requires": ["iconImage", "textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -3840,10 +3519,7 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       },
       {
@@ -3853,17 +3529,12 @@
         "units": "degrees",
         "default": 0,
         "description": "Rotates the icon clockwise.",
-        "requires": [
-          "iconImage"
-        ],
+        "requires": ["iconImage"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       },
       {
@@ -3874,16 +3545,12 @@
         "units": "pixels",
         "default": 2,
         "description": "Size of the additional area around the icon bounding box used for detecting symbol collisions.",
-        "requires": [
-          "iconImage"
-        ],
+        "requires": ["iconImage"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -3892,38 +3559,26 @@
         "values": [],
         "default": false,
         "description": "If true, the icon may be flipped to prevent it from being rendered upsideDown.",
-        "requires": [
-          "iconImage"
-        ],
+        "requires": ["iconImage"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
         "name": "iconOffset",
         "type": "array<number>",
         "values": [],
-        "default": [
-          0,
-          0
-        ],
+        "default": [0, 0],
         "description": "Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `iconSize` to obtain the final offset in pixels. When combined with `iconRotate` the offset will be as if the rotated direction was up.",
-        "requires": [
-          "iconImage"
-        ],
+        "requires": ["iconImage"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       },
       {
@@ -3969,17 +3624,12 @@
         ],
         "default": "center",
         "description": "Part of the icon placed closest to the anchor.",
-        "requires": [
-          "iconImage"
-        ],
+        "requires": ["iconImage"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       },
       {
@@ -4001,16 +3651,12 @@
         ],
         "default": "auto",
         "description": "Orientation of icon when map is pitched.",
-        "requires": [
-          "iconImage"
-        ],
+        "requires": ["iconImage"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -4032,16 +3678,12 @@
         ],
         "default": "auto",
         "description": "Orientation of text when map is pitched.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -4063,16 +3705,12 @@
         ],
         "default": "auto",
         "description": "In combination with `symbolPlacement`, determines the rotation behavior of the individual glyphs forming the text.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -4086,34 +3724,21 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       },
       {
         "name": "textFont",
         "type": "array<string>",
         "values": [],
-        "default": [
-          "Open Sans Regular",
-          "Arial Unicode MS Regular"
-        ],
+        "default": ["Open Sans Regular", "Arial Unicode MS Regular"],
         "description": "Font stack to use for displaying text.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ],
+        "allowedFunctionTypes": ["camera"],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       },
       {
@@ -4124,17 +3749,12 @@
         "units": "pixels",
         "default": 16,
         "description": "Font size.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       },
       {
@@ -4145,19 +3765,12 @@
         "units": "ems",
         "default": 10,
         "description": "The maximum line width for text wrapping.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ],
+        "allowedFunctionTypes": ["camera"],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       },
       {
@@ -4167,16 +3780,12 @@
         "units": "ems",
         "default": 1.2,
         "description": "Text leading value for multiLine text.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -4186,19 +3795,12 @@
         "units": "ems",
         "default": 0,
         "description": "Text tracking amount.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ],
+        "allowedFunctionTypes": ["camera"],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       },
       {
@@ -4224,19 +3826,12 @@
         ],
         "default": "center",
         "description": "Text justification options.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ],
+        "allowedFunctionTypes": ["camera"],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       },
       {
@@ -4282,19 +3877,12 @@
         ],
         "default": "center",
         "description": "Part of the text placed closest to the anchor.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
-        "allowedFunctionTypes": [
-          "camera"
-        ],
+        "allowedFunctionTypes": ["camera"],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       },
       {
@@ -4304,16 +3892,12 @@
         "units": "degrees",
         "default": 45,
         "description": "Maximum angle change between adjacent characters.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -4323,17 +3907,12 @@
         "units": "degrees",
         "default": 0,
         "description": "Rotates the text clockwise.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       },
       {
@@ -4344,16 +3923,12 @@
         "units": "pixels",
         "default": 2,
         "description": "Size of the additional area around the text bounding box used for detecting symbol collisions.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -4362,16 +3937,12 @@
         "values": [],
         "default": true,
         "description": "If true, the text may be flipped vertically to prevent it from being rendered upsideDown.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -4393,17 +3964,12 @@
         ],
         "default": "none",
         "description": "Specifies how to capitalize text, similar to the CSS `textTransform` property.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       },
       {
@@ -4411,24 +3977,14 @@
         "type": "array<number>",
         "values": [],
         "units": "ems",
-        "default": [
-          0,
-          0
-        ],
+        "default": [0, 0],
         "description": "Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up.",
-        "requires": [
-          "textField"
-        ],
-        "disabledBy": [
-          "textRadialOffset"
-        ],
+        "requires": ["textField"],
+        "disabledBy": ["textRadialOffset"],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature"
-          ]
+          "parameters": ["zoom", "feature"]
         }
       },
       {
@@ -4437,16 +3993,12 @@
         "values": [],
         "default": false,
         "description": "If true, the text will be visible even if it collides with other previously drawn symbols.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -4455,16 +4007,12 @@
         "values": [],
         "default": false,
         "description": "If true, other symbols can be visible even if they collide with the text.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -4473,17 +4021,12 @@
         "values": [],
         "default": false,
         "description": "If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not.",
-        "requires": [
-          "textField",
-          "iconImage"
-        ],
+        "requires": ["textField", "iconImage"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -4513,18 +4056,12 @@
         "maximum": 1,
         "default": 1,
         "description": "The opacity at which the icon will be drawn.",
-        "requires": [
-          "iconImage"
-        ],
+        "requires": ["iconImage"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -4533,18 +4070,12 @@
         "values": [],
         "default": "#000000",
         "description": "The color of the icon. This can only be used with sdf icons.",
-        "requires": [
-          "iconImage"
-        ],
+        "requires": ["iconImage"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -4553,18 +4084,12 @@
         "values": [],
         "default": "rgba(0, 0, 0, 0)",
         "description": "The color of the icon's halo. Icon halos can only be used with SDF icons.",
-        "requires": [
-          "iconImage"
-        ],
+        "requires": ["iconImage"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -4575,18 +4100,12 @@
         "units": "pixels",
         "default": 0,
         "description": "Distance of halo to the icon outline.",
-        "requires": [
-          "iconImage"
-        ],
+        "requires": ["iconImage"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -4597,18 +4116,12 @@
         "units": "pixels",
         "default": 0,
         "description": "Fade out the halo towards the outside.",
-        "requires": [
-          "iconImage"
-        ],
+        "requires": ["iconImage"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -4616,21 +4129,14 @@
         "type": "array<number>",
         "values": [],
         "units": "pixels",
-        "default": [
-          0,
-          0
-        ],
+        "default": [0, 0],
         "description": "Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.",
-        "requires": [
-          "iconImage"
-        ],
+        "requires": ["iconImage"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -4648,17 +4154,12 @@
         ],
         "default": "map",
         "description": "Controls the frame of reference for `iconTranslate`.",
-        "requires": [
-          "iconImage",
-          "iconTranslate"
-        ],
+        "requires": ["iconImage", "iconTranslate"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -4669,18 +4170,12 @@
         "maximum": 1,
         "default": 1,
         "description": "The opacity at which the text will be drawn.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -4689,18 +4184,12 @@
         "values": [],
         "default": "#000000",
         "description": "The color with which the text will be drawn.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -4709,18 +4198,12 @@
         "values": [],
         "default": "rgba(0, 0, 0, 0)",
         "description": "The color of the text's halo, which helps it stand out from backgrounds.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -4731,18 +4214,12 @@
         "units": "pixels",
         "default": 0,
         "description": "Distance of halo to the font outline. Max text halo width is 1/4 of the fontSize.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -4753,18 +4230,12 @@
         "units": "pixels",
         "default": 0,
         "description": "The halo's fadeout distance towards the outside.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom",
-            "feature",
-            "feature-state"
-          ]
+          "parameters": ["zoom", "feature", "feature-state"]
         }
       },
       {
@@ -4772,21 +4243,14 @@
         "type": "array<number>",
         "values": [],
         "units": "pixels",
-        "default": [
-          0,
-          0
-        ],
+        "default": [0, 0],
         "description": "Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.",
-        "requires": [
-          "textField"
-        ],
+        "requires": ["textField"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       },
       {
@@ -4804,17 +4268,12 @@
         ],
         "default": "map",
         "description": "Controls the frame of reference for `textTranslate`.",
-        "requires": [
-          "textField",
-          "textTranslate"
-        ],
+        "requires": ["textField", "textTranslate"],
         "disabledBy": [],
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": false,
-          "parameters": [
-            "zoom"
-          ]
+          "parameters": ["zoom"]
         }
       }
     ]
@@ -4826,9 +4285,7 @@
       {
         "name": "setLocationManager",
         "docblock": "Wheather to start or stop the locationManager\nNotice, that locationManager will start automatically when\neither `onUpdate` or `visible` are set\n\n@param {Object} running - Object with key `running` and `boolean` value\n@return {void}",
-        "modifiers": [
-          "async"
-        ],
+        "modifiers": ["async"],
         "params": [
           {
             "name": "{running}"
@@ -4895,6 +4352,13 @@
         "description": "Callback that is triggered on location update"
       },
       {
+        "name": "minDisplacement",
+        "required": false,
+        "type": "double",
+        "default": "0.1 (10cm)",
+        "description": "Minimal displacement before update triggers if zero it will trigger onUpdate every second"
+      },
+      {
         "name": "children",
         "required": false,
         "type": "any",
@@ -4911,9 +4375,7 @@
       {
         "name": "features",
         "docblock": "Returns all features that match the query parameters regardless of whether or not the feature is\ncurrently rendered on the map. The domain of the query includes all currently-loaded vector tiles\nand GeoJSON source tiles. This function does not check tiles outside of the visible viewport.\n\n@example\nvectorSource.features(['id1', 'id2'])\n\n@param  {Array=} layerIDs - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {Array=} filter - an optional filter statement to filter the returned Features.\n@return {FeatureCollection}",
-        "modifiers": [
-          "async"
-        ],
+        "modifiers": ["async"],
         "params": [
           {
             "name": "layerIDs",
@@ -4939,9 +4401,7 @@
           }
         },
         "description": "Returns all features that match the query parameters regardless of whether or not the feature is\ncurrently rendered on the map. The domain of the query includes all currently-loaded vector tiles\nand GeoJSON source tiles. This function does not check tiles outside of the visible viewport.",
-        "examples": [
-          "\nvectorSource.features(['id1', 'id2'])\n\n"
-        ]
+        "examples": ["\nvectorSource.features(['id1', 'id2'])\n\n"]
       }
     ],
     "props": [
@@ -5032,9 +4492,7 @@
         "description": "Overrides the default touch hitbox(44x44 pixels) for the source layers"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
+    "composes": ["../utils"],
     "name": "VectorSource"
   },
   "Annotation": {
@@ -5051,9 +4509,7 @@
       {
         "name": "symbolStyle",
         "docblock": null,
-        "modifiers": [
-          "get"
-        ],
+        "modifiers": ["get"],
         "params": [],
         "returns": null
       }
@@ -5188,9 +4644,7 @@
             "optional": false
           }
         ],
-        "examples": [
-          "await MapboxGL.offlineManager.deletePack('packName')"
-        ],
+        "examples": ["await MapboxGL.offlineManager.deletePack('packName')"],
         "returns": {
           "description": "",
           "type": {
@@ -5285,9 +4739,7 @@
             "optional": false
           }
         ],
-        "examples": [
-          "MapboxGL.offlineManager.setTileCountLimit(1000);"
-        ],
+        "examples": ["MapboxGL.offlineManager.setTileCountLimit(1000);"],
         "returns": {
           "description": "",
           "type": {
@@ -5308,9 +4760,7 @@
             "optional": false
           }
         ],
-        "examples": [
-          "MapboxGL.setProgressEventThrottle(500);"
-        ],
+        "examples": ["MapboxGL.setProgressEventThrottle(500);"],
         "returns": {
           "description": "",
           "type": {
@@ -5370,9 +4820,7 @@
             "optional": false
           }
         ],
-        "examples": [
-          "MapboxGL.offlineManager.unsubscribe('packName')"
-        ],
+        "examples": ["MapboxGL.offlineManager.unsubscribe('packName')"],
         "returns": {
           "description": "",
           "type": {

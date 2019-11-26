@@ -1,12 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import locationManager from '../modules/location/locationManager';
+import locationManager from "../modules/location/locationManager";
 
-import Annotation from './annotations/Annotation'; // eslint-disable-line import/no-cycle
-import CircleLayer from './CircleLayer';
+import Annotation from "./annotations/Annotation"; // eslint-disable-line import/no-cycle
+import CircleLayer from "./CircleLayer";
 
-const mapboxBlue = 'rgba(51, 181, 229, 100)';
+const mapboxBlue = "rgba(51, 181, 229, 100)";
 
 const layerStyles = {
   normal: {
@@ -14,19 +14,19 @@ const layerStyles = {
       circleRadius: 15,
       circleColor: mapboxBlue,
       circleOpacity: 0.2,
-      circlePitchAlignment: 'map',
+      circlePitchAlignment: "map"
     },
     background: {
       circleRadius: 9,
-      circleColor: '#fff',
-      circlePitchAlignment: 'map',
+      circleColor: "#fff",
+      circlePitchAlignment: "map"
     },
     foreground: {
       circleRadius: 6,
       circleColor: mapboxBlue,
-      circlePitchAlignment: 'map',
-    },
-  },
+      circlePitchAlignment: "map"
+    }
+  }
 };
 
 const normalIcon = [
@@ -45,7 +45,7 @@ const normalIcon = [
     id="mapboxUserLocationBlueCicle"
     aboveLayerID="mapboxUserLocationWhiteCircle"
     style={layerStyles.normal.foreground}
-  />,
+  />
 ];
 
 class UserLocation extends React.Component {
@@ -60,7 +60,7 @@ class UserLocation extends React.Component {
      * One of `"normal"`, `"custom"`.
      * "custom" must be of type mapbox-gl-native components
      */
-    renderMode: PropTypes.oneOf(['normal', 'custom']),
+    renderMode: PropTypes.oneOf(["normal", "custom"]),
 
     /**
      * Wheather location icon is visible
@@ -76,22 +76,24 @@ class UserLocation extends React.Component {
      * Callback that is triggered on location update
      */
     onUpdate: PropTypes.func,
+    minDisplacement: PropTypes.number,
 
     /**
      * Custom location icon of type mapbox-gl-native components
      */
-    children: PropTypes.any,
+    children: PropTypes.any
   };
 
   static defaultProps = {
     animated: true,
     visible: true,
-    renderMode: 'normal',
+    minDisplacement: 0.1, // 10 cm
+    renderMode: "normal"
   };
 
   static RenderMode = {
-    Normal: 'normal',
-    Custom: 'custom',
+    Normal: "normal",
+    Custom: "custom"
   };
 
   constructor(props) {
@@ -99,7 +101,7 @@ class UserLocation extends React.Component {
 
     this.state = {
       shouldShowUserLocation: false,
-      coordinates: null,
+      coordinates: null
     };
 
     this._onLocationUpdate = this._onLocationUpdate.bind(this);
@@ -108,7 +110,7 @@ class UserLocation extends React.Component {
   async componentDidMount() {
     locationManager.addListener(this._onLocationUpdate);
     await this.setLocationManager({
-      running: this.needsLocationManagerRunning(),
+      running: this.needsLocationManagerRunning()
     });
   }
 
@@ -122,7 +124,7 @@ class UserLocation extends React.Component {
    * @param {Object} running - Object with key `running` and `boolean` value
    * @return {void}
    */
-  setLocationManager = async ({running}) => {
+  setLocationManager = async ({ running }) => {
     if (this.locationManagerRunning !== running) {
       this.locationManagerRunning = running;
       if (running) {
@@ -132,7 +134,7 @@ class UserLocation extends React.Component {
 
         if (lastKnownLocation) {
           this.setState({
-            coordinates: this._getCoordinatesFromLocation(lastKnownLocation),
+            coordinates: this._getCoordinatesFromLocation(lastKnownLocation)
           });
         }
       }
@@ -151,12 +153,12 @@ class UserLocation extends React.Component {
 
   async componentWillUnmount() {
     locationManager.removeListener(this._onLocationUpdate);
-    await this.setLocationManager({running: false});
+    await this.setLocationManager({ running: false });
   }
 
   _onLocationUpdate(location) {
     this.setState({
-      coordinates: this._getCoordinatesFromLocation(location),
+      coordinates: this._getCoordinatesFromLocation(location)
     });
 
     if (this.props.onUpdate) {
@@ -182,7 +184,7 @@ class UserLocation extends React.Component {
 
   async componentDidUpdate() {
     await this.setLocationManager({
-      running: this.needsLocationManagerRunning(),
+      running: this.needsLocationManagerRunning()
     });
   }
 
