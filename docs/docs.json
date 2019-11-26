@@ -2620,6 +2620,13 @@
         "description": "The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport."
       },
       {
+        "name": "userLocationAnchorPoint",
+        "required": false,
+        "type": "object",
+        "default": "none",
+        "description": "The anchor point on the map.  Defaults to center of the map.\nExpects an objext of {x, y} coordinates based on the map view dimensions.\nTip: Use onLayout to set map view dimensions to a redux store or local state."
+      },
+      {
         "name": "style",
         "required": false,
         "type": "any",

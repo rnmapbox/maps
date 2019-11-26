@@ -6,6 +6,7 @@
 | Prop | Type | Default | Required | Description |
 | ---- | :--: | :-----: | :------: | :----------: |
 | contentInset | `union` | `none` | `false` | The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport. |
+| userLocationAnchorPoint | `object` | `none` | `false` | The anchor point on the map.  Defaults to center of the map.<br/>Expects an objext of {x, y} coordinates based on the map view dimensions.<br/>Tip: Use onLayout to set map view dimensions to a redux store or local state. |
 | style | `any` | `none` | `false` | Style for wrapping React Native View |
 | styleURL | `string` | `MapboxGL.StyleURL.Street` | `false` | Style URL for map |
 | preferredFramesPerSecond | `number` | `none` | `false` | iOS: The preferred frame rate at which the map view is rendered.<br/>The default value for this property is MGLMapViewPreferredFramesPerSecondDefault,<br/>which will adaptively set the preferred frame rate based on the capability of<br/>the user’s device to maintain a smooth experience. This property can be set to arbitrary integer values.<br/><br/>Android: The maximum frame rate at which the map view is rendered, but it can't excess the ability of device hardware.<br/>This property can be set to arbitrary integer values. |
@@ -20,7 +21,6 @@
 | compassEnabled | `bool` | `none` | `false` | Enable/Disable the compass from appearing on the map |
 | compassViewPosition | `string` | `none` | `false` | Position the compass on a corner of the map |
 | compassViewMargins | `object` | `none` | `false` | Add margins to the compass with x and y values |
-| userLocationAnchorPoint | `object` | `none` | `false` | The anchor point on the map.  Defaults to center of the map. Expects an objext of {x, y} coordinates based on the map view dimensions. Tip: Use onLayout to set map view dimensions to a redux store or local state. - Currently only implmented on iOS |
 | surfaceView | `bool` | `false` | `false` | [Android only] Enable/Disable use of GLSurfaceView insted of TextureView. |
 | onPress | `func` | `none` | `false` | Map press listener, gets called when a user presses the map |
 | onLongPress | `func` | `none` | `false` | Map long press listener, gets called when a user long presses the map |
