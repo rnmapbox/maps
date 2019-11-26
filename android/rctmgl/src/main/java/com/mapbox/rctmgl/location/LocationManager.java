@@ -59,13 +59,10 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
     private LocationManager(Context context) {
         this.context = context;
         locationEngine = LocationEngineProvider.getBestLocationEngine(context.getApplicationContext());
-        // locationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
         locationEngineRequest = new LocationEngineRequest.Builder(DEFAULT_INTERVAL_MILLIS)
                 .setFastestInterval(DEFAULT_FASTEST_INTERVAL_MILLIS)
                 .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
                 .build();
-        // locationEngine.addLocationEngineListener(this);
-        //locationEngine.setFastestInterval(1000);
     }
 
     public void addLocationListener(OnUserLocationChange listener) {
