@@ -209,7 +209,7 @@ RCT_EXPORT_METHOD(getCenter:(nonnull NSNumber*)reactTag
 
 RCT_EXPORT_METHOD(queryRenderedFeaturesAtPoint:(nonnull NSNumber*)reactTag
                   atPoint:(NSArray<NSNumber*>*)point
-                  withFilter:(NSArray<NSDictionary<NSString *, id> *> *)filter
+                  withFilter:(NSArray*)filter
                   withLayerIDs:(NSArray<NSString*>*)layerIDs
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
@@ -246,7 +246,7 @@ RCT_EXPORT_METHOD(queryRenderedFeaturesAtPoint:(nonnull NSNumber*)reactTag
 
 RCT_EXPORT_METHOD(queryRenderedFeaturesInRect:(nonnull NSNumber*)reactTag
                   withBBox:(NSArray<NSNumber*>*)bbox
-                  withFilter:(NSArray<NSDictionary<NSString *, id> *> *)filter
+                  withFilter:(NSArray*)filter
                   withLayerIDs:(NSArray<NSString*>*)layerIDs
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
