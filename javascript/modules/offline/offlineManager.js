@@ -91,6 +91,19 @@ class OfflineManager {
   }
 
   /**
+   * Deletes the existing database, which includes both the ambient cache and offline packs, then reinitializes it.
+   *
+   * @example
+   * await MapboxGL.offlineManager.resetDatabase();
+   *
+   * @return {void}
+   */
+  async resetDatabase() {
+    await this._initialize();
+    await MapboxGLOfflineManager.resetDatabase();
+  }
+
+  /**
    * Retrieves all the current offline packs that are stored in the database.
    *
    * @example
