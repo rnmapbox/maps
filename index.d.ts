@@ -250,8 +250,8 @@ declare namespace MapboxGL {
     unsubscribe(packName: string): void;
   }
 
-  class snapshotManager extends Component {
-    takeSnap(options: SnapshotOptions): Promise<void>;
+  class snapshotManager {
+    static takeSnap(options: SnapshotOptions): Promise<string>;
   }
 
   interface OfflinePack {
