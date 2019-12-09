@@ -124,8 +124,8 @@ declare namespace MapboxGL {
     function makeFeature<G = Geometry, P = Properties>(geometry: G, properties?: P): Feature<G, P>;
     function makeFeatureCollection<G = Geometry, P = Properties>(features: Array<FeatureCollection<G, P>>, options?: PositionsOptions): FeatureCollection<G, P>;
     function addToFeatureCollection<G = Geometry, P = Properties>(newFeatureCollection: Array<FeatureCollection<G, P>>, newFeature: Feature<G, P>): FeatureCollection<G, P>;
-    function calculateDistance(origin: Coord, dest: Coord, otions?: UnitsOptions): number;
-    function pointAlongLine(newLineString: Feature<LineString> | LineString, distAlong: number, otions?: UnitsOptions): Feature<Point>;
+    function calculateDistance(origin: Coord, dest: Coord, options?: UnitsOptions): number;
+    function pointAlongLine(newLineString: Feature<LineString> | LineString, distAlong: number, options?: UnitsOptions): Feature<Point>;
     function getOrCalculateVisibleRegion(coord: { lon: number; lat: number }, zoomLevel: number, width: number, height: number, nativeRegion: { properties: { visibleBounds: number[] }; visibleBounds: number[] }): void;
   }
 
