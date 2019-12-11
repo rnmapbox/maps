@@ -38,6 +38,7 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
     private Context context;
     private List<OnUserLocationChange> listeners = new ArrayList<>();
 
+    private float mMinDisplacement = 0;
     private boolean isActive = false;
     private Location lastLocation = null;
 
@@ -58,10 +59,15 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
 
     private LocationManager(Context context) {
         this.context = context;
-        locationEngine = LocationEngineProvider.getBestLocationEngine(context.getApplicationContext());
+        this.buildEngineRequest();
+
+    }
+    private void buildEngineRequest() {
+        locationEngine = LocationEngineProvider.getBestLocationEngine(this.context.getApplicationContext());
         locationEngineRequest = new LocationEngineRequest.Builder(DEFAULT_INTERVAL_MILLIS)
                 .setFastestInterval(DEFAULT_FASTEST_INTERVAL_MILLIS)
                 .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
+                .setDisplacement(mMinDisplacement)
                 .build();
     }
 
@@ -76,11 +82,21 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
             listeners.remove(listener);
         }
     }
-
+    public void setMinDisplacement(float minDisplacement) {
+        mMinDisplacement = minDisplacement;
+    }
     public void enable() {
         if (!PermissionsManager.areLocationPermissionsGranted(context)) {
             return;
         }
+
+        // remove existing listeners
+        locationEngine.removeLocationUpdates(this);
+
+        // refresh location engine request with new values
+        this.buildEngineRequest();
+
+        // add new listeners
         locationEngine.requestLocationUpdates(
                 locationEngineRequest,
                 this,
@@ -88,6 +104,7 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
         );
         isActive = true;
     }
+
 
     public void disable() {
         locationEngine.removeLocationUpdates(this);

@@ -71,6 +71,11 @@ RCT_EXPORT_METHOD(stop)
     [locationManager stop];
 }
 
+RCT_EXPORT_METHOD(setMinDisplacement)
+{
+    [locationManager setMinDisplacement];
+}
+
 RCT_EXPORT_METHOD(getLastKnownLocation:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     RCTMGLLocation *lastKnownLocation = [locationManager getLastKnownLocation];
@@ -91,3 +96,4 @@ RCT_EXPORT_METHOD(getLastKnownLocation:(RCTPromiseResolveBlock)resolve rejecter:
 }
 
 @end
+

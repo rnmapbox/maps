@@ -2648,6 +2648,13 @@
         "description": "This event is triggered when the map fully finished rendering the map."
       },
       {
+        "name": "onUserLocationUpdate",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This event is triggered when the user location is updated."
+      },
+      {
         "name": "onDidFinishLoadingStyle",
         "required": false,
         "type": "func",
@@ -4354,9 +4361,9 @@
       {
         "name": "minDisplacement",
         "required": false,
-        "type": "double",
-        "default": "0.1 (10cm)",
-        "description": "Minimal displacement before update triggers if zero it will trigger onUpdate every second"
+        "type": "number",
+        "default": "0.1",
+        "description": "FIX ME NO DESCRIPTION"
       },
       {
         "name": "children",
@@ -4862,3 +4869,4 @@
     ]
   }
 }
+

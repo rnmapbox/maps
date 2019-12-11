@@ -19,8 +19,9 @@ typedef void (^RCTMGLLocationBlock)(RCTMGLLocation *location);
 
 + (id)sharedInstance;
 
-- (void)start;
+- (void)start:(CLLocationDistance)minDisplacement;
 - (void)stop;
+- (void)setMinDisplacement:(CLLocationDistance)minDisplacement;
 - (BOOL)isEnabled;
 - (RCTMGLLocation *)getLastKnownLocation;
 - (void)addListener:(RCTMGLLocationBlock)listener;

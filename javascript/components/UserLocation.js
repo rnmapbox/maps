@@ -76,6 +76,7 @@ class UserLocation extends React.Component {
      * Callback that is triggered on location update
      */
     onUpdate: PropTypes.func,
+
     minDisplacement: PropTypes.number,
 
     /**
@@ -182,10 +183,14 @@ class UserLocation extends React.Component {
     }
   }
 
-  async componentDidUpdate() {
+  async componentDidUpdate(prevProps) {
     await this.setLocationManager({
       running: this.needsLocationManagerRunning()
     });
+
+    if (this.props.minDisplacement !== prevProps.minDisplacement) {
+      locationManager.setMinDisplacement(this.props.minDisplacement);
+    }
   }
 
   render() {
