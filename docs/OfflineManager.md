@@ -47,6 +47,22 @@ await MapboxGL.offlineManager.deletePack('packName')
 ```
 
 
+#### resetDatabase()
+
+Deletes the existing database, which includes both the ambient cache and offline packs, then reinitializes it.
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
+
+```javascript
+await MapboxGL.offlineManager.resetDatabase();
+```
+
+
 #### getPacks()
 
 Retrieves all the current offline packs that are stored in the database.
