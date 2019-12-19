@@ -88,7 +88,7 @@ class UserLocation extends React.Component {
   static defaultProps = {
     animated: true,
     visible: true,
-    minDisplacement: 0.1, // 10 cm
+    minDisplacement: 0,
     renderMode: "normal"
   };
 
