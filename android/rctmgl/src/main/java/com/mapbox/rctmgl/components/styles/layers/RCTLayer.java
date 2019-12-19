@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.common.logging.FLog;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
@@ -201,6 +202,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         if (getStyle() == null) return;
         int layerSize = getStyle().getLayers().size();
         if (index >= layerSize) {
+            FLog.e(LOG_TAG, "Layer index is greater than number of layers on map. Layer inserted at end of layer stack.");
             index = layerSize - 1;
         }
         getStyle().addLayerAt(mLayer, index);
