@@ -14,14 +14,14 @@
 | children | `any` | `none` | `false` | Custom location icon of type mapbox-gl-native components |
 
 ### methods
-#### setLocationManager({running})
+#### setLocationManager({ running })
 
 Wheather to start or stop the locationManager<br/>Notice, that locationManager will start automatically when<br/>either `onUpdate` or `visible` are set
 
 ##### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `{running}` | `n/a` | `Yes` | undefined |
+| `{ running }` | `n/a` | `Yes` | undefined |
 
 
 #### needsLocationManagerRunning()

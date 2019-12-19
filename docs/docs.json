@@ -4295,7 +4295,8 @@
         "modifiers": ["async"],
         "params": [
           {
-            "name": "{running}"
+            "name": "{ running }",
+            "type": null
           }
         ],
         "returns": {
@@ -4362,7 +4363,7 @@
         "name": "minDisplacement",
         "required": false,
         "type": "number",
-        "default": "0.1",
+        "default": "0",
         "description": "FIX ME NO DESCRIPTION"
       },
       {
