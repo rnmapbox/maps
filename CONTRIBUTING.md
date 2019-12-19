@@ -20,5 +20,7 @@ commit the changes and push them to a fork for creating a pull request.
 
 ## Documentation
 
-Documentation is auto-generated from code blocks and comments.
-Run `npm run generate` to generate updated documentation.
+Documentation is generated from code blocks and comments.
+It will be auto-generated when you commit changes.
+If any changes are generated from your edits, the changed files will need to be added using `git add` before attempting the commit again.
+To manually generate the changes, run `npm run generate`.

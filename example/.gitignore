@@ -21,26 +21,40 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
-Podfile.lock
-Pods/
+
+# Android/IntelliJ
+#
+build/
+.idea
+.gradle
+local.properties
+*.iml
 
 # node.js
 #
 node_modules/
 npm-debug.log
-package-lock.json
-*.tgz
+yarn-error.log
 
-# project specific
-ios/Mapbox.framework
-android/.gradle/
-android/build/
-android/.idea/
-android/android.iml
-android/app/app.iml
-android/local.properties
-reactnativemapboxgl.iml
-.idea
-accesstoken
-env.json
-android/app/rnmapboxglexample.keystore
+# BUCK
+buck-out/
+\.buckd/
+*.keystore
+!debug.keystore
+
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://docs.fastlane.tools/best-practices/source-control/
+
+*/fastlane/report.xml
+*/fastlane/Preview.html
+*/fastlane/screenshots
+
+# Bundle artifact
+*.jsbundle
+
+# CocoaPods
+/ios/Pods/

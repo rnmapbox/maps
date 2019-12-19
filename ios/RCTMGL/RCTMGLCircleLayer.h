@@ -6,10 +6,8 @@
 //  Copyright © 2017 Mapbox Inc. All rights reserved.
 //
 
-#import "RCTMGLLayer.h"
+#import "RCTMGLVectorLayer.h"
 
-@interface RCTMGLCircleLayer : RCTMGLLayer
-
-@property (nonatomic, copy) NSString *sourceLayerID;
+@interface RCTMGLCircleLayer : RCTMGLVectorLayer
 
 @end

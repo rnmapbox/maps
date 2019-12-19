@@ -7,7 +7,7 @@
 
 #import "MGLCustomHeaders.h"
 #import <Mapbox/Mapbox.h>
-#import <MapBox/MGLNetworkConfiguration.h>
+#import <Mapbox/MGLNetworkConfiguration.h>
 
 @implementation NSMutableURLRequest (CustomHeaders)
 

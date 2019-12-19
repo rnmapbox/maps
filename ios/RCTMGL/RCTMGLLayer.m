@@ -10,7 +10,6 @@
 #import "RCTMGLSource.h"
 #import "RCTMGLStyleValue.h"
 #import "RCTMGLUtils.h"
-#import "FilterParser.h"
 #import "RCTMGLMapView.h"
 
 @implementation RCTMGLLayer
@@ -72,15 +71,13 @@
     }
 }
 
-- (void)setFilter:(NSArray *)filter
-{
-    _filter = filter;
-    
-    if (_styleLayer != nil) {
-        NSPredicate *predicate = [self buildFilters];
-        if (predicate) {
-            [self updateFilter:predicate];
-        }
+- (void)setMap:(RCTMGLMapView *)map {
+    if (map == nil) {
+        [self removeFromMap:_map.style];
+        _map = nil;
+    } else {
+        _map = map;
+        [self addToMap:map style:map.style];
     }
 }
 
@@ -97,6 +94,9 @@
 
 - (void)addToMap:(RCTMGLMapView*) map style:(MGLStyle *)style
 {
+    if (style == nil) {
+        return;
+    }
     _map = map;
     _style = style;
     if (_id == nil) {
@@ -139,11 +139,6 @@
 - (void)addedToMap
 {
     // override if you want
-}
-
-- (void)updateFilter:(NSPredicate *)predicate
-{
-    // override if you want to update the filter
 }
 
 - (void)insertLayer: (RCTMGLMapView*) map
@@ -223,11 +218,6 @@
             [_style setImage:image forName:url];
         }
     }];
-}
-
-- (NSPredicate*)buildFilters
-{
-    return _filter ? [FilterParser parse:_filter] : nil;
 }
 
 - (BOOL)_hasInitialized

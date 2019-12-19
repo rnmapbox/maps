@@ -5,12 +5,12 @@ import geoViewport from '@mapbox/geo-viewport';
 
 const VECTOR_TILE_SIZE = 512;
 
-export function makePoint(coordinates, properties) {
-  return point(coordinates, properties);
+export function makePoint(coordinates, properties, options) {
+  return point(coordinates, properties, options);
 }
 
-export function makeLineString(coordinates, properties) {
-  return lineString(coordinates, properties);
+export function makeLineString(coordinates, properties, options) {
+  return lineString(coordinates, properties, options);
 }
 
 export function makeLatLngBounds(northEastCoordinates, southWestCoordinates) {
@@ -24,8 +24,8 @@ export function makeFeature(geometry, properties) {
   return feature(geometry, properties);
 }
 
-export function makeFeatureCollection(features = []) {
-  return featureCollection(features);
+export function makeFeatureCollection(features = [], options) {
+  return featureCollection(features, options);
 }
 
 export function addToFeatureCollection(newFeatureCollection, newFeature) {
@@ -35,12 +35,12 @@ export function addToFeatureCollection(newFeatureCollection, newFeature) {
   };
 }
 
-export function calculateDistance(origin, dest) {
-  return distance(origin, dest);
+export function calculateDistance(origin, dest, options) {
+  return distance(origin, dest, options);
 }
 
-export function pointAlongLine(newLineString, distAlong) {
-  return along(newLineString, distAlong);
+export function pointAlongLine(newLineString, distAlong, options) {
+  return along(newLineString, distAlong, options);
 }
 
 export function getOrCalculateVisibleRegion(

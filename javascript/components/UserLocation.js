@@ -50,15 +50,36 @@ const normalIcon = [
 
 class UserLocation extends React.Component {
   static propTypes = {
+    /**
+     * Wheather location icon is animated between updates
+     */
     animated: PropTypes.bool,
 
+    /**
+     * Rendermode of user location icon.
+     * One of `"normal"`, `"custom"`.
+     * "custom" must be of type mapbox-gl-native components
+     */
     renderMode: PropTypes.oneOf(['normal', 'custom']),
 
+    /**
+     * Wheather location icon is visible
+     */
     visible: PropTypes.bool,
 
+    /**
+     * Callback that is triggered on location icon press
+     */
     onPress: PropTypes.func,
+
+    /**
+     * Callback that is triggered on location update
+     */
     onUpdate: PropTypes.func,
 
+    /**
+     * Custom location icon of type mapbox-gl-native components
+     */
     children: PropTypes.any,
   };
 
@@ -93,6 +114,14 @@ class UserLocation extends React.Component {
 
   locationManagerRunning = false;
 
+  /**
+   * Wheather to start or stop the locationManager
+   * Notice, that locationManager will start automatically when
+   * either `onUpdate` or `visible` are set
+   *
+   * @param {Object} running - Object with key `running` and `boolean` value
+   * @return {void}
+   */
   setLocationManager = async ({running}) => {
     if (this.locationManagerRunning !== running) {
       this.locationManagerRunning = running;
@@ -110,6 +139,12 @@ class UserLocation extends React.Component {
     }
   };
 
+  /**
+   *
+   * If locationManager should be running
+   *
+   * @return {void}
+   */
   needsLocationManagerRunning() {
     return this.props.onUpdate || this.props.visible;
   }
@@ -136,7 +171,7 @@ class UserLocation extends React.Component {
     return [location.coords.longitude, location.coords.latitude];
   }
 
-  get userIconLayers() {
+  _userIconLayers() {
     switch (this.props.renderMode) {
       case UserLocation.RenderMode.Normal:
         return normalIcon;
@@ -158,7 +193,8 @@ class UserLocation extends React.Component {
 
     const children = this.props.children
       ? this.props.children
-      : this.userIconLayers;
+      : this._userIconLayers();
+
     return (
       <Annotation
         animated={this.props.animated}
@@ -173,3 +209,8 @@ class UserLocation extends React.Component {
 }
 
 export default UserLocation;
+
+// TODO:
+// * why is there even a RenderMode if children are rendered regardless?
+// * why is #userIconLayers a getter?!
+// * state.shouldShowUserLocation is unused

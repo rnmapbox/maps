@@ -631,18 +631,53 @@
         "description": "FIX ME NO DESCRIPTION"
       },
       {
+        "name": "maxBounds",
+        "required": false,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "ne",
+              "required": true,
+              "type": {
+                "name": "array",
+                "value": {
+                  "type": "number"
+                }
+              },
+              "default": "none",
+              "description": "northEastCoordinates - North east coordinate of bound"
+            },
+            {
+              "name": "sw",
+              "required": true,
+              "type": {
+                "name": "array",
+                "value": {
+                  "type": "number"
+                }
+              },
+              "default": "none",
+              "description": "southWestCoordinates - South west coordinate of bound"
+            }
+          ]
+        },
+        "default": "none",
+        "description": "Restrict map panning so that the center is within these bounds"
+      },
+      {
         "name": "followUserLocation",
         "required": false,
         "type": "bool",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Should the map orientation follow the user's."
       },
       {
         "name": "followUserMode",
         "required": false,
         "type": "enum",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "The mode used to track the user location on the map. One of; \"normal\", \"compass\", \"course\". Each mode string is also available as a member on the `MapboxGL.UserTrackingModes` object. `Follow` (normal), `FollowWithHeading` (compass), `FollowWithCourse` (course). NOTE: `followUserLocation` must be set to `true` for any of the modes to take effect. [Example](../example/src/examples/SetUserTrackingModes.js)"
       },
       {
         "name": "followZoomLevel",
@@ -4754,33 +4789,37 @@
     "methods": [
       {
         "name": "setLocationManager",
-        "docblock": null,
+        "docblock": "Wheather to start or stop the locationManager\nNotice, that locationManager will start automatically when\neither `onUpdate` or `visible` are set\n\n@param {Object} running - Object with key `running` and `boolean` value\n@return {void}",
         "modifiers": [
           "async"
         ],
         "params": [
           {
-            "name": "{running}",
-            "type": null
+            "name": "{running}"
           }
         ],
-        "returns": null
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "void"
+          }
+        },
+        "description": "Wheather to start or stop the locationManager\nNotice, that locationManager will start automatically when\neither `onUpdate` or `visible` are set",
+        "examples": []
       },
       {
         "name": "needsLocationManagerRunning",
-        "docblock": null,
+        "docblock": "If locationManager should be running\n\n@return {void}",
         "modifiers": [],
         "params": [],
-        "returns": null
-      },
-      {
-        "name": "userIconLayers",
-        "docblock": null,
-        "modifiers": [
-          "get"
-        ],
-        "params": [],
-        "returns": null
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "void"
+          }
+        },
+        "description": "If locationManager should be running",
+        "examples": []
       }
     ],
     "props": [
@@ -4789,42 +4828,42 @@
         "required": false,
         "type": "bool",
         "default": "true",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Wheather location icon is animated between updates"
       },
       {
         "name": "renderMode",
         "required": false,
         "type": "enum",
         "default": "'normal'",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Rendermode of user location icon.\nOne of `\"normal\"`, `\"custom\"`.\n\"custom\" must be of type mapbox-gl-native components"
       },
       {
         "name": "visible",
         "required": false,
         "type": "bool",
         "default": "true",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Wheather location icon is visible"
       },
       {
         "name": "onPress",
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Callback that is triggered on location icon press"
       },
       {
         "name": "onUpdate",
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Callback that is triggered on location update"
       },
       {
         "name": "children",
         "required": false,
         "type": "any",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Custom location icon of type mapbox-gl-native components"
       }
     ],
     "name": "UserLocation"
