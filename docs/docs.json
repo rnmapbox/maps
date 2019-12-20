@@ -5163,6 +5163,20 @@
         }
       },
       {
+        "name": "resetDatabase",
+        "description": "Deletes the existing database, which includes both the ambient cache and offline packs, then reinitializes it.",
+        "params": [],
+        "examples": [
+          "await MapboxGL.offlineManager.resetDatabase();"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "void"
+          }
+        }
+      },
+      {
         "name": "getPacks",
         "description": "Retrieves all the current offline packs that are stored in the database.",
         "params": [],
