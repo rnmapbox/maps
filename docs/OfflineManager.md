@@ -95,6 +95,22 @@ const offlinePack = await MapboxGL.offlineManager.getPack();
 ```
 
 
+#### mergeOfflineRegions(path)
+
+Sideloads offline db
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `path` | `String` | `Yes` | Path to offline tile db on file system. |
+
+
+
+```javascript
+await MapboxGL.offlineManager.mergeOfflineRegions(path);
+```
+
+
 #### setTileCountLimit(limit)
 
 Sets the maximum number of Mapbox-hosted tiles that may be downloaded and stored on the current device.<br/>The Mapbox Terms of Service prohibits changing or bypassing this limit without permission from Mapbox.

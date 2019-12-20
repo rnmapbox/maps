@@ -133,6 +133,20 @@ class OfflineManager {
   }
 
   /**
+   * Sideloads offline db
+   *
+   * @example
+   * await MapboxGL.offlineManager.mergeOfflineRegions(path);
+   *
+   * @param {String} path Path to offline tile db on file system.
+   * @return {void}
+   */
+  async mergeOfflineRegions(path) {
+    await this._initialize();
+    return MapboxGLOfflineManager.mergeOfflineRegions(path);
+  }
+
+  /**
    * Sets the maximum number of Mapbox-hosted tiles that may be downloaded and stored on the current device.
    * The Mapbox Terms of Service prohibits changing or bypassing this limit without permission from Mapbox.
    *
