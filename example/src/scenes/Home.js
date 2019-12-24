@@ -42,6 +42,7 @@ import Heatmap from '../examples/Heatmap';
 import RestrictMapBounds from '../examples/RestrictMapBounds';
 import ShowAndHideLayer from '../examples/ShowAndHideLayer';
 import ChangeLayerColor from '../examples/ChangeLayerColor';
+import SourceLayerVisibility from '../examples/SourceLayerVisibility';
 
 const styles = StyleSheet.create({
   header: {
@@ -118,6 +119,7 @@ const Examples = [
   new ExampleItem('Heatmap', Heatmap),
   new ExampleItem('Show and hide a layer', ShowAndHideLayer),
   new ExampleItem('Change Layer Color', ChangeLayerColor),
+  new ExampleItem('Source Layer Visiblity', SourceLayerVisibility),
 ];
 
 class Home extends React.Component {

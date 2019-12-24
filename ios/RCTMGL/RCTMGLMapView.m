@@ -33,6 +33,7 @@ static double const M2PI = M_PI * 2;
         _pointAnnotations = [[NSMutableArray alloc] init];
         _reactSubviews = [[NSMutableArray alloc] init];
         _layerWaiters = [[NSMutableDictionary alloc] init];
+        _styleWaiters = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -90,6 +91,23 @@ static double const M2PI = M_PI * 2;
         // TODO
     }
 }
+
+- (void)getStyle:(void (^)(MGLStyle* style))onStyleLoaded {
+    if (self.style) {
+        onStyleLoaded(self.style);
+    } else {
+        [_styleWaiters addObject:onStyleLoaded];
+    }
+}
+
+- (void)notifyStyleLoaded {
+    if (!self.style) return;
+    for (StyleLoadedBlock styleLoadedBlock in self.styleWaiters) {
+        styleLoadedBlock(self.style);
+    }
+    [self.styleWaiters removeAllObjects];
+}
+
 
 - (void) addToMap:(id<RCTComponent>)subview
 {
@@ -149,6 +167,27 @@ static double const M2PI = M_PI * 2;
         RCTLogWarn(@"The following layers were waited on but never added to the map: %@", [_layerWaiters allKeys]);
         [_layerWaiters removeAllObjects];
     }
+}
+
+- (void)setSourceVisibility:(BOOL)visible sourceId:(NSString *)sourceId sourceLayerId:(NSString *)sourceLayerId {
+    __weak typeof(self) weakSelf = self;
+    [self getStyle:^(MGLStyle *style) {
+        __strong typeof(self) strongSelf = weakSelf;
+        for (MGLStyleLayer *layer in strongSelf.style.layers) {
+            if ([layer isKindOfClass:[MGLForegroundStyleLayer class]]) {
+                MGLForegroundStyleLayer *foregroundLayer = (MGLForegroundStyleLayer*)layer;
+                if (![foregroundLayer.sourceIdentifier isEqualToString:sourceId]) continue;
+                if (sourceLayerId == nil || sourceLayerId.length == 0) {
+                    layer.visible = visible;
+                } else if ([layer isKindOfClass:[MGLVectorStyleLayer class]]) {
+                    MGLVectorStyleLayer *vectorLayer = (MGLVectorStyleLayer*)layer;
+                    if ([vectorLayer.sourceLayerIdentifier isEqualToString:sourceLayerId]) {
+                        layer.visible = visible;
+                    }
+                }
+            }
+        }
+    }];
 }
 
 #pragma clang diagnostic push

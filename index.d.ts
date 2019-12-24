@@ -153,6 +153,7 @@ declare namespace MapboxGL {
     getZoom(): Promise<number>;
     getCenter(): Promise<GeoJSON.Position>;
     showAttribution(): void;
+    setSourceVisibility(visible: Boolean, sourceId: string, sourceLayerId?: string): void;
   }
 
   type Padding = number | [number, number] | [number, number, number, number];
