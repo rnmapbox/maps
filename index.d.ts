@@ -105,6 +105,9 @@ declare namespace MapboxGL {
   function setConnected(connected: boolean): void;
   function requestAndroidLocationPermissions(): Promise<boolean>;
 
+  const offlineManager: OfflineManager;
+  const snapshotManager: SnapshotManager;
+  
   /**
    * GeoUtils
    */
@@ -250,7 +253,7 @@ declare namespace MapboxGL {
     unsubscribe(packName: string): void;
   }
 
-  class snapshotManager {
+  class SnapshotManager {
     static takeSnap(options: SnapshotOptions): Promise<string>;
   }
 
