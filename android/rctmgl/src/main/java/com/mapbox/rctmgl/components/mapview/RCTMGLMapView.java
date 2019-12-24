@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
@@ -41,23 +42,14 @@ import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolDragListener;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
-import com.mapbox.mapboxsdk.style.layers.CircleLayer;
-import com.mapbox.mapboxsdk.style.layers.FillExtrusionLayer;
-import com.mapbox.mapboxsdk.style.layers.FillLayer;
-import com.mapbox.mapboxsdk.style.layers.HeatmapLayer;
-import com.mapbox.mapboxsdk.style.layers.HillshadeLayer;
 import com.mapbox.mapboxsdk.style.layers.Layer;
-import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.layers.Property;
-import com.mapbox.mapboxsdk.style.layers.RasterLayer;
-import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.rctmgl.R;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotation;
 import com.mapbox.rctmgl.components.camera.RCTMGLCamera;
 import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeTracker;
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
-import com.mapbox.rctmgl.components.styles.layers.RCTMGLSymbolLayer;
 import com.mapbox.rctmgl.components.styles.light.RCTMGLLight;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLShapeSource;
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
@@ -913,40 +905,9 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
             public void onStyleLoaded(@NonNull Style style) {
                 List<Layer> layers = style.getLayers();
                 for (Layer layer : layers) {
-                    String source = "";
-                    String sourceLayer = null;
-                    if (layer instanceof CircleLayer) {
-                        CircleLayer symbolLayer = (CircleLayer) layer;
-                        source = symbolLayer.getSourceId();
-                        sourceLayer = symbolLayer.getSourceLayer();
-                    } else if (layer instanceof FillExtrusionLayer) {
-                        FillExtrusionLayer fillExtrusionLayer = (FillExtrusionLayer)layer;
-                        source = fillExtrusionLayer.getSourceId();
-                        sourceLayer = fillExtrusionLayer.getSourceLayer();
-                    } else if (layer instanceof FillLayer) {
-                        FillLayer fillLayer = (FillLayer)layer;
-                        source = fillLayer.getSourceId();
-                        sourceLayer = fillLayer.getSourceLayer();
-                    } else if (layer instanceof HeatmapLayer) {
-                        HeatmapLayer heatmapLayer = (HeatmapLayer)layer;
-                        source = heatmapLayer.getSourceId();
-                        sourceLayer = heatmapLayer.getSourceLayer();
-                    } else if (layer instanceof HillshadeLayer) {
-                        HillshadeLayer hillshadeLayer = (HillshadeLayer)layer;
-                        source = hillshadeLayer.getSourceId();
-                    } else if (layer instanceof LineLayer) {
-                        LineLayer lineLayer = (LineLayer)layer;
-                        source = lineLayer.getSourceId();
-                        sourceLayer = lineLayer.getSourceLayer();
-                    } else if (layer instanceof RasterLayer) {
-                        RasterLayer rasterLayer = (RasterLayer) layer;
-                        source = rasterLayer.getSourceId();
-                    } else if (layer instanceof SymbolLayer) {
-                        SymbolLayer symbolLayer = (SymbolLayer)layer;
-                        source = symbolLayer.getSourceId();
-                        sourceLayer = symbolLayer.getSourceLayer();
-                    }
-                    if (source.equals(sourceId) && (sourceLayerId == null || sourceLayerId.equals(sourceLayer))) {
+                    LayerSourceInfo layerSourceInfo = new LayerSourceInfo(layer);
+                    if (layerSourceInfo.sourceId.equals(sourceId) && (sourceLayerId == null
+                            || sourceLayerId.equals(layerSourceInfo.sourceLayerId))) {
                         layer.setProperties(visibility(visible ? Property.VISIBLE : Property.NONE));
                     }
                 }
