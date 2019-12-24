@@ -102,13 +102,10 @@ static double const M2PI = M_PI * 2;
 
 - (void)notifyStyleLoaded {
     if (!self.style) return;
-    for (int i = (int)self.styleWaiters.count - 1; i >= 0; i--) {
-        StyleLoadedBlock styleLoadedBlock = self.styleWaiters[i];
-        if (styleLoadedBlock) {
-            styleLoadedBlock(self.style);
-        }
-        [self.styleWaiters removeObjectAtIndex:i];
+    for (StyleLoadedBlock styleLoadedBlock in self.styleWaiters) {
+        styleLoadedBlock(self.style);
     }
+    [self.styleWaiters removeAllObjects];
 }
 
 
