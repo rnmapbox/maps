@@ -105,6 +105,9 @@ declare namespace MapboxGL {
   function setConnected(connected: boolean): void;
   function requestAndroidLocationPermissions(): Promise<boolean>;
 
+  const offlineManager: OfflineManager;
+  const snapshotManager: SnapshotManager;
+  
   /**
    * GeoUtils
    */
@@ -240,6 +243,7 @@ declare namespace MapboxGL {
     deletePack(name: string): Promise<void>;
     getPacks(): Promise<Array<OfflinePack>>;
     getPack(name: string): Promise<OfflinePack>;
+    resetDatabase(): Promise<void>;
     setTileCountLimit(limit: number): void;
     setProgressEventThrottle(throttleValue: number): void;
     subscribe(
@@ -250,7 +254,7 @@ declare namespace MapboxGL {
     unsubscribe(packName: string): void;
   }
 
-  class snapshotManager {
+  class SnapshotManager {
     static takeSnap(options: SnapshotOptions): Promise<string>;
   }
 
