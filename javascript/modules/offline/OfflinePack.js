@@ -10,7 +10,7 @@ class OfflinePack {
 
   get name() {
     const {metadata} = this;
-    return metadata.name;
+    return metadata && metadata.name;
   }
 
   get bounds() {
@@ -18,7 +18,7 @@ class OfflinePack {
   }
 
   get metadata() {
-    if (!this._metadata) {
+    if (!this._metadata && this.pack.metadata) {
       this._metadata = JSON.parse(this.pack.metadata);
     }
     return this._metadata;
