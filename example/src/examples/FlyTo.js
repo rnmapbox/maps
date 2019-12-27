@@ -73,8 +73,7 @@ class FlyTo extends React.Component {
       <TabBarPage
         {...this.props}
         options={this._flyToOptions}
-        onOptionPress={this.onFlyToPress}
-      >
+        onOptionPress={this.onFlyToPress}>
         <MapboxGL.MapView style={sheet.matchParent}>
           <MapboxGL.Camera
             zoomLevel={16}

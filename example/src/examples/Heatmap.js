@@ -23,8 +23,7 @@ class Heatmap extends React.Component {
 
           <MapboxGL.ShapeSource
             id="earthquakes"
-            url="https://www.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson"
-          >
+            url="https://www.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson">
             <MapboxGL.HeatmapLayer
               id="earthquakes"
               sourceID="earthquakes"

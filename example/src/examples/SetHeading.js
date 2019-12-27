@@ -46,12 +46,10 @@ class SetHeading extends React.Component {
       <TabBarPage
         {...this.props}
         options={this._bearingOptions}
-        onOptionPress={this.onHeadingChange}
-      >
+        onOptionPress={this.onHeadingChange}>
         <MapboxGL.MapView
           ref={ref => (this.map = ref)}
-          style={sheet.matchParent}
-        >
+          style={sheet.matchParent}>
           <MapboxGL.Camera {...this.state} followUserLocation />
           <MapboxGL.UserLocation />
         </MapboxGL.MapView>

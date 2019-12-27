@@ -54,8 +54,7 @@ class IndoorBuilding extends React.Component {
       <Page {...this.props}>
         <MapboxGL.MapView
           ref={ref => (this.map = ref)}
-          style={sheet.matchParent}
-        >
+          style={sheet.matchParent}>
           <MapboxGL.Camera
             zoomLevel={16}
             pitch={40}
@@ -67,8 +66,7 @@ class IndoorBuilding extends React.Component {
 
           <MapboxGL.ShapeSource
             id="indoorBuildingSource"
-            shape={indoorMapGeoJSON}
-          >
+            shape={indoorMapGeoJSON}>
             <MapboxGL.FillExtrusionLayer
               id="building3d"
               style={layerStyles.building}

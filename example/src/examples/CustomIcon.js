@@ -55,8 +55,7 @@ class CustomIcon extends React.Component {
         <MapboxGL.MapView
           ref={c => (this._map = c)}
           onPress={this.onPress}
-          style={sheet.matchParent}
-        >
+          style={sheet.matchParent}>
           <MapboxGL.Camera
             zoomLevel={9}
             centerCoordinate={[-73.970895, 40.723279]}
@@ -66,8 +65,7 @@ class CustomIcon extends React.Component {
             id="symbolLocationSource"
             hitbox={{width: 20, height: 20}}
             onPress={this.onSourceLayerPress}
-            shape={this.state.featureCollection}
-          >
+            shape={this.state.featureCollection}>
             <MapboxGL.SymbolLayer
               id="symbolLocationSymbols"
               minZoomLevel={1}

@@ -75,8 +75,7 @@ class App extends React.Component {
       return (
         <SafeAreaView
           style={[sheet.matchParent, {backgroundColor: colors.primary.blue}]}
-          forceInset={{top: 'always'}}
-        >
+          forceInset={{top: 'always'}}>
           <View style={sheet.matchParent}>
             <Text style={styles.noPermissionsText}>
               You need to accept location permissions in order to use this

@@ -40,8 +40,7 @@ class SetUserLocationVerticalAlignment extends React.Component {
       <TabBarPage
         {...this.props}
         options={this._alignmentOptions}
-        onOptionPress={this.onAlignmentChange}
-      >
+        onOptionPress={this.onAlignmentChange}>
         <MapboxGL.MapView style={sheet.matchParent}>
           <MapboxGL.Camera followUserLocation />
           <MapboxGL.UserLocation />

@@ -33,8 +33,7 @@ class TwoByTwo extends React.Component {
         onSetCameraComplete={this.onUpdateZoomLevel}
         ref={ref => (this.map = ref)}
         style={sheet.matchParent}
-        styleURL={styleURL}
-      >
+        styleURL={styleURL}>
         <MapboxGL.ShapeSource id="smileyFaceSource" shape={smileyFaceGeoJSON}>
           <MapboxGL.FillLayer id="smileyFaceFill" style={layerStyle} />
         </MapboxGL.ShapeSource>

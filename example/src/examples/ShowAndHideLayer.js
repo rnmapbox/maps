@@ -33,8 +33,7 @@ class ShowAndHideLayer extends React.Component {
         <MapboxGL.MapView
           ref={c => (this._map = c)}
           onPress={this.onPress}
-          style={{flex: 1}}
-        >
+          style={{flex: 1}}>
           <MapboxGL.Camera defaultSettings={defaultCamera} />
           <MapboxGL.FillLayer id="building" style={{visibility}} />
           <MapboxGL.LineLayer id="building-outline" style={{visibility}} />

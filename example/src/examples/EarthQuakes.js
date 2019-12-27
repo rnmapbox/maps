@@ -54,8 +54,7 @@ class EarthQuakes extends React.Component {
       <Page {...this.props}>
         <MapboxGL.MapView
           style={sheet.matchParent}
-          styleURL={MapboxGL.StyleURL.Dark}
-        >
+          styleURL={MapboxGL.StyleURL.Dark}>
           <MapboxGL.Camera
             zoomLevel={6}
             pitch={45}
@@ -67,8 +66,7 @@ class EarthQuakes extends React.Component {
             cluster
             clusterRadius={50}
             clusterMaxZoom={14}
-            url="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
-          >
+            url="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson">
             <MapboxGL.SymbolLayer
               id="pointCount"
               style={layerStyles.clusterCount}

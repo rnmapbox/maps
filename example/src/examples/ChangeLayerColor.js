@@ -34,8 +34,7 @@ class ChangeLayerColor extends React.Component {
         <MapboxGL.MapView
           ref={c => (this._map = c)}
           onPress={this.onPress}
-          style={{flex: 1}}
-        >
+          style={{flex: 1}}>
           <MapboxGL.Camera defaultSettings={defaultCamera} />
           {!!fillColor && <MapboxGL.FillLayer id="water" style={{fillColor}} />}
         </MapboxGL.MapView>

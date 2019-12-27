@@ -1,15 +1,10 @@
-import React from "react";
-import {
-  render,
-  fireEvent,
-  flushMicrotasksQueue
-} from "react-native-testing-library";
+import React from 'react';
+import {render, fireEvent} from 'react-native-testing-library';
 
-import UserLocation from "../../javascript/components/UserLocation";
-import ShapeSource from "../../javascript/components/ShapeSource";
-import CircleLayer from "../../javascript/components/CircleLayer";
-
-import locationManager from "../../javascript/modules/location/locationManager";
+import UserLocation from '../../javascript/components/UserLocation';
+import ShapeSource from '../../javascript/components/ShapeSource';
+import CircleLayer from '../../javascript/components/CircleLayer';
+import locationManager from '../../javascript/modules/location/locationManager';
 
 const position = {
   coords: {
@@ -18,16 +13,16 @@ const position = {
     heading: 251.5358428955078,
     latitude: 51.5462244,
     longitude: 4.1036916,
-    speed: 0.08543474227190018
+    speed: 0.08543474227190018,
   },
-  timestamp: 1573730357879
+  timestamp: 1573730357879,
 };
 
-describe("UserLocation", () => {
+describe('UserLocation', () => {
   beforeEach(() => {
-    jest.spyOn(locationManager, "start").mockImplementation(jest.fn());
+    jest.spyOn(locationManager, 'start').mockImplementation(jest.fn());
     jest
-      .spyOn(locationManager, "getLastKnownLocation")
+      .spyOn(locationManager, 'getLastKnownLocation')
       .mockImplementation(() => position);
   });
 
@@ -35,8 +30,8 @@ describe("UserLocation", () => {
     jest.restoreAllMocks();
   });
 
-  test("renders with CircleLayers by default", done => {
-    const { getAllByType } = render(<UserLocation />);
+  test('renders with CircleLayers by default', done => {
+    const {getAllByType} = render(<UserLocation />);
 
     setTimeout(() => {
       const shapeSource = getAllByType(ShapeSource);
@@ -48,8 +43,8 @@ describe("UserLocation", () => {
     });
   });
 
-  test("does not render with visible set to false", done => {
-    const { queryByType } = render(<UserLocation visible={false} />);
+  test('does not render with visible set to false', done => {
+    const {queryByType} = render(<UserLocation visible={false} />);
 
     setTimeout(() => {
       const shapeSource = queryByType(ShapeSource);
@@ -61,22 +56,22 @@ describe("UserLocation", () => {
     });
   });
 
-  test("renders with CustomChild when provided", done => {
+  test('renders with CustomChild when provided', done => {
     const circleLayerProps = {
-      key: "testUserLocationCircle",
-      id: "testUserLocationCircle",
+      key: 'testUserLocationCircle',
+      id: 'testUserLocationCircle',
       style: {
         circleRadius: 5,
-        circleColor: "#ccc",
+        circleColor: '#ccc',
         circleOpacity: 1,
-        circlePitchAlignment: "map"
-      }
+        circlePitchAlignment: 'map',
+      },
     };
 
-    const { queryByType, queryAllByType } = render(
+    const {queryByType, queryAllByType} = render(
       <UserLocation>
         <CircleLayer {...circleLayerProps} />
-      </UserLocation>
+      </UserLocation>,
     );
 
     setTimeout(() => {
@@ -92,7 +87,7 @@ describe("UserLocation", () => {
     });
   });
 
-  test("calls onUpdate callback when new location is received", () => {
+  test('calls onUpdate callback when new location is received', () => {
     const onUpdateCallback = jest.fn();
 
     render(<UserLocation onUpdate={onUpdateCallback} />);
@@ -104,22 +99,22 @@ describe("UserLocation", () => {
         heading: 251.5358428955078,
         latitude: 51.5462244,
         longitude: 4.1036916,
-        speed: 0.08543474227190018
+        speed: 0.08543474227190018,
       },
-      timestamp: 1573730357879
+      timestamp: 1573730357879,
     });
 
     expect(onUpdateCallback).toHaveBeenCalled();
   });
 
-  test("calls onPress callback when location icon is pressed", () => {
+  test('calls onPress callback when location icon is pressed', () => {
     const onPressCallback = jest.fn();
 
-    const { queryByType } = render(<UserLocation onPress={onPressCallback} />);
+    const {queryByType} = render(<UserLocation onPress={onPressCallback} />);
 
     const shapeSource = queryByType(ShapeSource);
-    fireEvent(shapeSource, "onPress");
-    fireEvent(shapeSource, "onPress");
+    fireEvent(shapeSource, 'onPress');
+    fireEvent(shapeSource, 'onPress');
     expect(onPressCallback).toHaveBeenCalledTimes(2);
   });
 });
