@@ -28,7 +28,7 @@
     "unittest": "jest --coverage --verbose",
     "unittest:single": "jest --testNamePattern",
     "format": "npm run lint -- --fix",
-    "lint": "./node_modules/eslint/bin/eslint.js ./javascript/** ./example/src/** ./__tests__/**"
+    "lint": "eslint . --ignore-pattern 'example' --ignore-pattern 'scripts' --fix && cd example/ && eslint . --ignore-pattern 'scripts' --fix"
   },
   "peerDependencies": {
     "prop-types": ">=15.5.8",
@@ -56,7 +56,7 @@
     "documentation": "12.1.2",
     "ejs": "^2.5.7",
     "ejs-lint": "^0.3.0",
-    "eslint": "^6.0.0",
+    "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-config-strict-react": "9.0.2",
