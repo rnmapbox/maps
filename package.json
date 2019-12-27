@@ -102,7 +102,7 @@
   "lint-staged": {
     "linters": {
       "*.js": [
-        "eslint ./javascript/**/*.js  ./example/src/**/*.js ./__tests__/**/*.js --fix",
+        "yarn lint",
         "git add"
       ]
     },
