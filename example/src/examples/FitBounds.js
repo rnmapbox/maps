@@ -47,13 +47,11 @@ class FitBounds extends React.Component {
       <TabBarPage
         {...this.props}
         options={this._bounds}
-        onOptionPress={this.onFitBounds}
-      >
+        onOptionPress={this.onFitBounds}>
         <MapboxGL.MapView
           contentInset={10}
           styleURL={MapboxGL.StyleURL.Satellite}
-          style={sheet.matchParent}
-        >
+          style={sheet.matchParent}>
           <MapboxGL.Camera
             bounds={this.state.bounds}
             animationDuration={this.state.animationDuration}

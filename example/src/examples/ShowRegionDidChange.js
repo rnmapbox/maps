@@ -131,15 +131,13 @@ class ShowRegionDidChange extends React.Component {
       <TabBarPage
         {...this.props}
         options={this._tabOptions}
-        onOptionPress={this.onOptionPress}
-      >
+        onOptionPress={this.onOptionPress}>
         <MapboxGL.MapView
           ref={c => (this.map = c)}
           style={sheet.matchParent}
           onRegionWillChange={this.onRegionWillChange}
           onRegionIsChanging={this.onRegionIsChanging}
-          onRegionDidChange={this.onRegionDidChange}
-        >
+          onRegionDidChange={this.onRegionDidChange}>
           <MapboxGL.Camera {...this.state.cameraConfig} />
         </MapboxGL.MapView>
         {this.renderRegionChange()}

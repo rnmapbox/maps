@@ -64,8 +64,7 @@ class ImageOverlay extends React.Component {
         <MapboxGL.MapView
           ref={ref => (this.map = ref)}
           style={sheet.matchParent}
-          styleURL={MapboxGL.StyleURL.Dark}
-        >
+          styleURL={MapboxGL.StyleURL.Dark}>
           <MapboxGL.Camera
             zoomLevel={5.2}
             centerCoordinate={[-75.789, 41.874]}
@@ -75,8 +74,7 @@ class ImageOverlay extends React.Component {
             key="d"
             id="radarSource"
             coordinates={coordQuad}
-            url={frames[this.state.radarFrameIndex]}
-          >
+            url={frames[this.state.radarFrameIndex]}>
             <MapboxGL.RasterLayer id="radarLayer" />
           </MapboxGL.Animated.ImageSource>
         </MapboxGL.MapView>

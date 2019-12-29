@@ -46,8 +46,7 @@ class SetPitch extends React.Component {
       <TabBarPage
         {...this.props}
         options={this._pitchOptions}
-        onOptionPress={this.onUpdatePitch}
-      >
+        onOptionPress={this.onUpdatePitch}>
         <MapboxGL.MapView style={sheet.matchParent}>
           <MapboxGL.Camera {...this.state} followUserLocation />
           <MapboxGL.UserLocation />

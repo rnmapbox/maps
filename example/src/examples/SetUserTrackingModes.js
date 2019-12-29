@@ -80,8 +80,7 @@ class SetUserTrackingModes extends React.Component {
         scrollable
         initialIndex={3}
         options={this._trackingOptions}
-        onOptionPress={this.onTrackingChange}
-      >
+        onOptionPress={this.onTrackingChange}>
         <MapboxGL.MapView style={sheet.matchParent}>
           <MapboxGL.UserLocation visible={this.state.showUserLocation} />
 

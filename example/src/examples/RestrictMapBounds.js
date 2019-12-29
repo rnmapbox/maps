@@ -23,8 +23,7 @@ const RestrictMapBounds = props => (
   <Page {...props}>
     <MapboxGL.MapView
       style={sheet.matchParent}
-      styleURL={MapboxGL.StyleURL.SatelliteStreet}
-    >
+      styleURL={MapboxGL.StyleURL.SatelliteStreet}>
       <MapboxGL.Camera
         maxBounds={bounds}
         zoomLevel={15}

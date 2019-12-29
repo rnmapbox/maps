@@ -58,8 +58,7 @@ class CustomVectorSource extends React.PureComponent {
             url={VECTOR_SOURCE_URL}
             ref={source => {
               this._vectorSource = source;
-            }}
-          >
+            }}>
             <MapboxGL.FillLayer
               id="customSourceFill"
               sourceLayerID="react-native-example"

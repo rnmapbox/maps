@@ -145,8 +145,7 @@ class CreateOfflineRegion extends React.Component {
           ref={c => (this._map = c)}
           onPress={this.onPress}
           onDidFinishLoadingMap={this.onDidFinishLoadingStyle}
-          style={sheet.matchParent}
-        >
+          style={sheet.matchParent}>
           <MapboxGL.Camera zoomLevel={10} centerCoordinate={CENTER_COORD} />
         </MapboxGL.MapView>
 

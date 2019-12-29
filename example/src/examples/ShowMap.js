@@ -55,12 +55,10 @@ class ShowMap extends React.Component {
         {...this.props}
         scrollable
         options={this._mapOptions}
-        onOptionPress={this.onMapChange}
-      >
+        onOptionPress={this.onMapChange}>
         <MapboxGL.MapView
           styleURL={this.state.styleURL}
-          style={sheet.matchParent}
-        >
+          style={sheet.matchParent}>
           <MapboxGL.Camera followZoomLevel={12} followUserLocation />
 
           <MapboxGL.UserLocation onPress={this.onUserMarkerPress} />

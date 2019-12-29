@@ -78,8 +78,7 @@ class ShapeSourceIcon extends React.Component {
           <MapboxGL.Images images={{example: exampleIcon, assets: ['pin']}} />
           <MapboxGL.ShapeSource
             id="exampleShapeSource"
-            shape={featureCollection}
-          >
+            shape={featureCollection}>
             <MapboxGL.SymbolLayer id="exampleIconName" style={styles.icon} />
           </MapboxGL.ShapeSource>
         </MapboxGL.MapView>

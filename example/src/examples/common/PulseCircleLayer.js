@@ -119,8 +119,7 @@ class PulseCircleLayer extends React.Component {
     return (
       <MapboxGL.Animated.ShapeSource
         id="pulseCircleSource"
-        shape={this.props.shape}
-      >
+        shape={this.props.shape}>
         <MapboxGL.Animated.CircleLayer
           id="pulseOuterCircle"
           style={outerCircleStyle}

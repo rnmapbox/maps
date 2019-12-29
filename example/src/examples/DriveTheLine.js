@@ -166,8 +166,7 @@ class DriveTheLine extends React.Component {
     return (
       <MapboxGL.ShapeSource
         id="origin"
-        shape={MapboxGL.geoUtils.makePoint(SF_OFFICE_COORDINATE)}
-      >
+        shape={MapboxGL.geoUtils.makePoint(SF_OFFICE_COORDINATE)}>
         <MapboxGL.Animated.CircleLayer id="originInnerCircle" style={style} />
       </MapboxGL.ShapeSource>
     );
@@ -196,8 +195,7 @@ class DriveTheLine extends React.Component {
         <MapboxGL.MapView
           ref={c => (this._map = c)}
           style={sheet.matchParent}
-          styleURL={MapboxGL.StyleURL.Dark}
-        >
+          styleURL={MapboxGL.StyleURL.Dark}>
           <MapboxGL.Camera
             zoomLevel={11}
             centerCoordinate={[-122.452652, 37.762963]}
@@ -211,8 +209,7 @@ class DriveTheLine extends React.Component {
 
           <MapboxGL.ShapeSource
             id="destination"
-            shape={MapboxGL.geoUtils.makePoint(SF_ZOO_COORDINATE)}
-          >
+            shape={MapboxGL.geoUtils.makePoint(SF_ZOO_COORDINATE)}>
             <MapboxGL.CircleLayer
               id="destinationInnerCircle"
               style={layerStyles.destination}
