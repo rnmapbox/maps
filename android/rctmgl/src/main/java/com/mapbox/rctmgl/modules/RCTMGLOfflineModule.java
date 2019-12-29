@@ -301,6 +301,25 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void mergeOfflineRegions(final String path, final Promise promise) {
+        activateFileSource();
+
+        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
+
+        offlineManager.mergeOfflineRegions(path, new OfflineManager.MergeOfflineRegionsCallback() {
+            @Override
+            public void onMerge(OfflineRegion[] offlineRegions) {
+                promise.resolve(null);
+            }
+
+            @Override
+            public void onError(String error) {
+                promise.reject("mergeOfflineRegions", error);
+            }
+        });
+    }
+
+    @ReactMethod
     public void setTileCountLimit(int tileCountLimit) {
         OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
         offlineManager.setOfflineMapboxTileCountLimit(tileCountLimit);
