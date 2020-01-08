@@ -20,8 +20,8 @@ export function makeLatLngBounds(northEastCoordinates, southWestCoordinates) {
   ]);
 }
 
-export function makeFeature(geometry, properties) {
-  return feature(geometry, properties);
+export function makeFeature(geometry, properties, options) {
+  return feature(geometry, properties, options);
 }
 
 export function makeFeatureCollection(features = [], options) {
