@@ -4831,7 +4831,7 @@
         ],
         "params": [
           {
-            "name": "{ running }"
+            "name": "{running}"
           }
         ],
         "returns": {
@@ -4870,7 +4870,7 @@
         "name": "renderMode",
         "required": false,
         "type": "enum",
-        "default": "\"normal\"",
+        "default": "'normal'",
         "description": "Rendermode of user location icon.\nOne of `\"normal\"`, `\"custom\"`.\n\"custom\" must be of type mapbox-gl-native components"
       },
       {
