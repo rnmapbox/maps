@@ -5,7 +5,7 @@ const path = require('path');
 const styleSpecJSON = require('../style-spec/v8.json');
 const ejs = require('ejs');
 const {execSync} = require('child_process');
-const prettier = require('prettier')
+const prettier = require('prettier');
 
 const DocJSONBuilder = require('./autogenHelpers/DocJSONBuilder');
 const MarkdownBuilder = require('./autogenHelpers/MarkdownBuilder');
@@ -18,7 +18,7 @@ if (!styleSpecJSON) {
 }
 
 const layers = [];
-const androidVersion = '8.2.1';
+const androidVersion = '8.6.0';
 const iosVersion = '5.5.0';
 
 const TMPL_PATH = path.join(__dirname, 'templates');
