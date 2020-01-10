@@ -200,6 +200,11 @@
     if (![self _hasInitialized]) {
         return;
     }
+    NSArray *layers = _style.layers;
+    if (index >= layers.count) {
+        RCTLogWarn(@"Layer index is greater than number of layers on map. Layer inserted at end of layer stack.");
+        index = layers.count - 1;
+    }
     [_style insertLayer:_styleLayer atIndex:index];
     [_map layerAdded:_styleLayer];
 }
