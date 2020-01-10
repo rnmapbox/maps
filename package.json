@@ -52,7 +52,7 @@
     "@types/geojson": "^7946.0.7",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "24.8.0",
+    "babel-jest": "24.9.0",
     "documentation": "12.1.2",
     "ejs": "^2.5.7",
     "ejs-lint": "^0.3.0",
