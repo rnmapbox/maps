@@ -56,9 +56,9 @@ RCT_EXPORT_MODULE();
     return @[RCT_MAPBOX_USER_LOCATION_UPDATE];
 }
 
-RCT_EXPORT_METHOD(start)
+RCT_EXPORT_METHOD(start:(CLLocationDistance)minDisplacement)
 {
-    [locationManager start];
+  [locationManager start:minDisplacement];
 }
 
 RCT_EXPORT_METHOD(pause)
@@ -69,6 +69,11 @@ RCT_EXPORT_METHOD(pause)
 RCT_EXPORT_METHOD(stop)
 {
     [locationManager stop];
+}
+
+RCT_EXPORT_METHOD(setMinDisplacement:(CLLocationDistance)minDisplacement)
+{
+    [locationManager setMinDisplacement:minDisplacement];
 }
 
 RCT_EXPORT_METHOD(getLastKnownLocation:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
@@ -82,7 +87,7 @@ RCT_EXPORT_METHOD(getLastKnownLocation:(RCTPromiseResolveBlock)resolve rejecter:
     if (!hasListeners) {
         return;
     }
-    
+
     if (self.bridge == nil) {
         return;
     }
@@ -91,3 +96,4 @@ RCT_EXPORT_METHOD(getLastKnownLocation:(RCTPromiseResolveBlock)resolve rejecter:
 }
 
 @end
+

@@ -6,21 +6,22 @@
 | Prop | Type | Default | Required | Description |
 | ---- | :--: | :-----: | :------: | :----------: |
 | animated | `bool` | `true` | `false` | Wheather location icon is animated between updates |
-| renderMode | `enum` | `'normal'` | `false` | Rendermode of user location icon.<br/>One of `"normal"`, `"custom"`.<br/>"custom" must be of type mapbox-gl-native components |
+| renderMode | `enum` | `"normal"` | `false` | Rendermode of user location icon.<br/>One of `"normal"`, `"custom"`.<br/>"custom" must be of type mapbox-gl-native components |
 | visible | `bool` | `true` | `false` | Wheather location icon is visible |
 | onPress | `func` | `none` | `false` | Callback that is triggered on location icon press |
 | onUpdate | `func` | `none` | `false` | Callback that is triggered on location update |
+| minDisplacement | `number` | `0` | `false` | FIX ME NO DESCRIPTION |
 | children | `any` | `none` | `false` | Custom location icon of type mapbox-gl-native components |
 
 ### methods
-#### setLocationManager({running})
+#### setLocationManager({ running })
 
 Wheather to start or stop the locationManager<br/>Notice, that locationManager will start automatically when<br/>either `onUpdate` or `visible` are set
 
 ##### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `{running}` | `n/a` | `Yes` | undefined |
+| `{ running }` | `n/a` | `Yes` | undefined |
 
 
 #### needsLocationManagerRunning()

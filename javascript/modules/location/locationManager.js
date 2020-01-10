@@ -44,15 +44,15 @@ class LocationManager {
     this._listeners = [];
   }
 
-  start() {
+  start(displacement = 0) {
     if (this._isPaused) {
-      MapboxGLLocationManager.start();
+      MapboxGLLocationManager.start(displacement);
       this._isPaused = false;
       return;
     }
 
     if (!this._isListening) {
-      MapboxGLLocationManager.start();
+      MapboxGLLocationManager.start(displacement);
 
       LocationModuleEventEmitter.addListener(
         MapboxGL.LocationCallbackName.Update,
@@ -81,6 +81,10 @@ class LocationManager {
     }
 
     this._isListening = false;
+  }
+
+  setMinDisplacement(minDisplacement) {
+    MapboxGLLocationManager.setMinDisplacement(minDisplacement);
   }
 
   onUpdate(location) {
