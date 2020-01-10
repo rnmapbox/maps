@@ -5,7 +5,7 @@ matrix:
       before_install:
         - nvm install 8
         - echo yes | sdkmanager "platforms;android-28"
-        - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.16.0
+        - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.21.1
         - export PATH=$HOME/.yarn/bin:$PATH
       android:
         components:
@@ -40,7 +40,7 @@ matrix:
       podfile: example/ios/Podfile
 
 before_install:
-  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.16.0
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.21.1
   - export PATH=$HOME/.yarn/bin:$PATH
 
 install:
