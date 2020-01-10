@@ -100,14 +100,8 @@
     }
   },
   "lint-staged": {
-    "linters": {
-      "*.js": [
-        "yarn lint",
-        "git add"
+    "*.js": [
+      "yarn lint"
       ]
-    },
-    "ignore": [
-      "**/scripts/**/*.js"
-    ]
   }
 }
