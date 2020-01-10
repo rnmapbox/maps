@@ -53,7 +53,10 @@ describe('SnapshotOptions', () => {
 
   it('should create options with bounds', () => {
     const expectedOptions = {
-      bounds: [[1, 2], [3, 4]],
+      bounds: [
+        [1, 2],
+        [3, 4],
+      ],
       width: 400,
       height: 600,
       styleURL: NativeModules.MGLModule.StyleURL.Light,

@@ -5,7 +5,10 @@ describe('BridgeValue', () => {
     const bridgeValue = new BridgeValue([1, 2]);
     expect(bridgeValue.toJSON()).toEqual({
       type: 'array',
-      value: [{type: 'number', value: 1}, {type: 'number', value: 2}],
+      value: [
+        {type: 'number', value: 1},
+        {type: 'number', value: 2},
+      ],
     });
   });
 
@@ -24,7 +27,10 @@ describe('BridgeValue', () => {
     const bridgeValue = new BridgeValue([true, false]);
     expect(bridgeValue.toJSON()).toEqual({
       type: 'array',
-      value: [{type: 'boolean', value: true}, {type: 'boolean', value: false}],
+      value: [
+        {type: 'boolean', value: true},
+        {type: 'boolean', value: false},
+      ],
     });
   });
 
@@ -40,7 +46,10 @@ describe('BridgeValue', () => {
         {
           type: 'hashmap',
           value: [
-            [{type: 'string', value: 'prop1'}, {type: 'number', value: 1}],
+            [
+              {type: 'string', value: 'prop1'},
+              {type: 'number', value: 1},
+            ],
           ],
         },
         {
@@ -55,7 +64,10 @@ describe('BridgeValue', () => {
         {
           type: 'hashmap',
           value: [
-            [{type: 'string', value: 'prop3'}, {type: 'boolean', value: false}],
+            [
+              {type: 'string', value: 'prop3'},
+              {type: 'boolean', value: false},
+            ],
           ],
         },
       ],
@@ -144,8 +156,14 @@ describe('BridgeValue', () => {
     expect(bridgeValue.toJSON()).toEqual({
       type: 'hashmap',
       value: [
-        [{type: 'string', value: 'prop1'}, {type: 'string', value: 'value1'}],
-        [{type: 'string', value: 'prop2'}, {type: 'number', value: 2}],
+        [
+          {type: 'string', value: 'prop1'},
+          {type: 'string', value: 'value1'},
+        ],
+        [
+          {type: 'string', value: 'prop2'},
+          {type: 'number', value: 2},
+        ],
       ],
     });
   });

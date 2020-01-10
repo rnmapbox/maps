@@ -4,7 +4,10 @@ import OfflinePack from '../../../javascript/modules/offline/OfflinePack';
 
 describe('OfflinePack', () => {
   const fakeNativePack = {
-    bounds: [[0, 1], [2, 3]],
+    bounds: [
+      [0, 1],
+      [2, 3],
+    ],
     metadata: '{"name":"test"}',
   };
 
