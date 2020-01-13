@@ -107,7 +107,7 @@ declare namespace MapboxGL {
 
   const offlineManager: OfflineManager;
   const snapshotManager: SnapshotManager;
-  
+
   /**
    * GeoUtils
    */
@@ -410,6 +410,7 @@ export interface UserLocationProps {
   onPress?: () => void;
   onUpdate?: (location: MapboxGL.Location) => void;
   children?: ReactNode;
+  minDisplacement?: number;
 }
 
 export type WithExpression<T> = {
