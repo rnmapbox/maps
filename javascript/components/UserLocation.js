@@ -51,7 +51,7 @@ const normalIcon = [
 class UserLocation extends React.Component {
   static propTypes = {
     /**
-     * Wheather location icon is animated between updates
+     * Whether location icon is animated between updates
      */
     animated: PropTypes.bool,
 
@@ -63,7 +63,7 @@ class UserLocation extends React.Component {
     renderMode: PropTypes.oneOf(['normal', 'custom']),
 
     /**
-     * Wheather location icon is visible
+     * Whether location icon is visible
      */
     visible: PropTypes.bool,
 
@@ -118,7 +118,7 @@ class UserLocation extends React.Component {
   locationManagerRunning = false;
 
   /**
-   * Wheather to start or stop the locationManager
+   * Whether to start or stop the locationManager
    * Notice, that locationManager will start automatically when
    * either `onUpdate` or `visible` are set
    *

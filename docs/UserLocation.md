@@ -5,9 +5,9 @@
 ### props
 | Prop | Type | Default | Required | Description |
 | ---- | :--: | :-----: | :------: | :----------: |
-| animated | `bool` | `true` | `false` | Wheather location icon is animated between updates |
+| animated | `bool` | `true` | `false` | Whether location icon is animated between updates |
 | renderMode | `enum` | `'normal'` | `false` | Rendermode of user location icon.<br/>One of `"normal"`, `"custom"`.<br/>"custom" must be of type mapbox-gl-native components |
-| visible | `bool` | `true` | `false` | Wheather location icon is visible |
+| visible | `bool` | `true` | `false` | Whether location icon is visible |
 | onPress | `func` | `none` | `false` | Callback that is triggered on location icon press |
 | onUpdate | `func` | `none` | `false` | Callback that is triggered on location update |
 | minDisplacement | `number` | `0` | `false` | FIX ME NO DESCRIPTION |
@@ -16,7 +16,7 @@
 ### methods
 #### setLocationManager({running})
 
-Wheather to start or stop the locationManager<br/>Notice, that locationManager will start automatically when<br/>either `onUpdate` or `visible` are set
+Whether to start or stop the locationManager<br/>Notice, that locationManager will start automatically when<br/>either `onUpdate` or `visible` are set
 
 ##### arguments
 | Name | Type | Required | Description  |
