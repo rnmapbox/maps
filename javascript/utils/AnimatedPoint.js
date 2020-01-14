@@ -1,50 +1,37 @@
-import {Animated} from 'react-native';
+import { Animated } from 'react-native';
 
 // Used react-native-maps as a reference
 // https://github.com/react-community/react-native-maps/blob/master/lib/components/AnimatedRegion.js
 const AnimatedWithChildren = Object.getPrototypeOf(Animated.ValueXY);
 
-const DEFAULT_COORD = [0, 0];
-const DEFAULT_POINT = {type: 'Point', coordinates: DEFAULT_COORD};
+import AnimatedCoordinates from './AnimatedCoordinates';
 
-let uniqueID = 0;
+const DEFAULT_COORD = [0, 0];
+const DEFAULT_POINT = { type: 'Point', coordinates: DEFAULT_COORD };
 
 export class AnimatedPoint extends AnimatedWithChildren {
   constructor(point = DEFAULT_POINT) {
     super();
 
-    this.longitude = point.coordinates[0] || 0;
-    this.latitude = point.coordinates[1] || 0;
-
-    if (!(this.longitude instanceof Animated.Value)) {
-      this.longitude = new Animated.Value(this.longitude);
-    }
-
-    if (!(this.latitude instanceof Animated.Value)) {
-      this.latitude = new Animated.Value(this.latitude);
-    }
+    this.coordinates = new AnimatedCoordinates(point.coordinates);
 
     this._listeners = {};
   }
 
   setValue(point = DEFAULT_POINT) {
-    this.longitude.setValue(point.coordinates[0]);
-    this.latitude.setValue(point.coordinates[1]);
+    this.coordinates.setValue(point.coordinates);
   }
 
   setOffset(point = DEFAULT_POINT) {
-    this.longitude.setOffset(point.coordinates[0]);
-    this.latitude.setOffset(point.coordinates[1]);
+    this.coordinates.setOffset(point.coordinates);
   }
 
   flattenOffset() {
-    this.longitude.flattenOffset();
-    this.latitude.flattenOffset();
+    this.coordinates.flattenOffset();
   }
 
   stopAnimation(cb) {
-    this.longitude.stopAnimation();
-    this.latitude.stopAnimation();
+    this.coordinates.stopAnimation();
 
     if (typeof cb === 'function') {
       cb(this.__getValue());
@@ -52,70 +39,34 @@ export class AnimatedPoint extends AnimatedWithChildren {
   }
 
   addListener(cb) {
-    uniqueID += 1;
-    const id = `${String(uniqueID)}-${String(Date.now())}`;
-
-    const completeCB = () => {
-      if (typeof cb === 'function') {
-        cb(this.__getValue());
-      }
-    };
-
-    this._listeners[id] = {
-      longitude: this.longitude.addListener(completeCB),
-      latitude: this.latitude.addListener(completeCB),
-    };
-
-    return id;
+    return this.coordinates.addListener(cb);
   }
 
   removeListener(id) {
-    this.longitude.removeListener(this._listeners[id].longitude);
-    this.latitude.removeListener(this._listeners[id].latitude);
-    delete this._listeners[id];
+    return this.coordinates.removeListener(id);
   }
 
-  spring(config = {coordinates: DEFAULT_COORD}) {
-    return Animated.parallel([
-      Animated.spring(this.longitude, {
-        ...config,
-        toValue: config.coordinates[0],
-      }),
-      Animated.spring(this.latitude, {
-        ...config,
-        toValue: config.coordinates[1],
-      }),
-    ]);
+  spring(config = { coordinates: DEFAULT_COORD }) {
+    return this.coordinates.spring(config);
   }
 
-  timing(config = {coordinates: DEFAULT_COORD}) {
-    return Animated.parallel([
-      Animated.timing(this.longitude, {
-        ...config,
-        toValue: config.coordinates[0],
-      }),
-      Animated.timing(this.latitude, {
-        ...config,
-        toValue: config.coordinates[1],
-      }),
-    ]);
+  timing(config = { coordinates: DEFAULT_COORD }) {
+    return this.coordinates.timing(config);
   }
 
   __getValue() {
     return {
       type: 'Point',
-      coordinates: [this.longitude.__getValue(), this.latitude.__getValue()],
+      coordinates: this.coordinates.__getValue()
     };
   }
 
   __attach() {
-    this.longitude.__addChild(this);
-    this.latitude.__addChild(this);
+    this.coordinates.__attach(this);
   }
 
   __detach() {
-    this.longitude.__removeChild(this);
-    this.latitude.__removeChild(this);
+    this.coordinates.__detach(this);
   }
 }
 
