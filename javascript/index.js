@@ -25,7 +25,7 @@ import BackgroundLayer from './components/BackgroundLayer';
 import locationManager from './modules/location/locationManager';
 import offlineManager from './modules/offline/offlineManager';
 import snapshotManager from './modules/snapshot/snapshotManager';
-import AnimatedMapPoint from './utils/AnimatedPoint';
+import AnimatedMapPoint from './utils/animated/AnimatedPoint';
 
 const MapboxGL = {...NativeModules.MGLModule};
 
