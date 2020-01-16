@@ -50,6 +50,13 @@ export class AnimatedCoordinates extends AnimatedWithChildren {
     }
   }
 
+  clone() {
+    return new AnimatedCoordinates([
+      this.longitude._value,
+      this.latitude._value,
+    ]);
+  }
+
   addListener(cb) {
     uniqueID += 1;
     const id = `${String(uniqueID)}-${String(Date.now())}`;
@@ -74,29 +81,31 @@ export class AnimatedCoordinates extends AnimatedWithChildren {
     delete this._listeners[id];
   }
 
-  spring(config = { coordinates: DEFAULT_COORD }) {
+  spring(config = {coordinates: DEFAULT_COORD}) {
+    const {coordinates} = config;
     return Animated.parallel([
       Animated.spring(this.longitude, {
         ...config,
-        toValue: config.coordinates[0]
+        toValue: coordinates[0],
       }),
       Animated.spring(this.latitude, {
         ...config,
-        toValue: config.coordinates[1]
+        toValue: coordinates[1],
       })
     ]);
   }
 
-  timing(config = { coordinates: DEFAULT_COORD }) {
+  timing(config = {coordinates: DEFAULT_COORD}) {
+    const {coordinates} = config;
     return Animated.parallel([
       Animated.timing(this.longitude, {
         ...config,
-        toValue: config.coordinates[0]
+        toValue: coordinates[0],
       }),
       Animated.timing(this.latitude, {
         ...config,
-        toValue: config.coordinates[1]
-      })
+        toValue: coordinates[1],
+      }),
     ]);
   }
 

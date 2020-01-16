@@ -24,8 +24,9 @@ import BackgroundLayer from './components/BackgroundLayer';
 import locationManager from './modules/location/locationManager';
 import offlineManager from './modules/offline/offlineManager';
 import snapshotManager from './modules/snapshot/snapshotManager';
-import AnimatedMapPoint from './utils/AnimatedPoint';
 import MarkerView from './components/MarkerView';
+import AnimatedMapPoint from './utils/animated/AnimatedPoint';
+import AnimatedLineString from './utils/animated/AnimatedLineString';
 
 const MapboxGL = {...NativeModules.MGLModule};
 
@@ -92,6 +93,7 @@ MapboxGL.snapshotManager = snapshotManager;
 
 // utils
 MapboxGL.AnimatedPoint = AnimatedMapPoint;
+MapboxGL.AnimatedLineString = AnimatedLineString;
 
 // animated
 MapboxGL.Animated = {
@@ -135,6 +137,7 @@ export {
   offlineManager,
   snapshotManager,
   AnimatedMapPoint,
+  AnimatedLineString,
 };
 
 export default MapboxGL;
