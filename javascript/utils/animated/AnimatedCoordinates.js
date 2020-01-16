@@ -4,16 +4,14 @@ import { Animated } from 'react-native';
 // https://github.com/react-community/react-native-maps/blob/master/lib/components/AnimatedRegion.js
 const AnimatedWithChildren = Object.getPrototypeOf(Animated.ValueXY);
 
-const DEFAULT_COORD = [0, 0];
-
 let uniqueID = 0;
 
 export class AnimatedCoordinates extends AnimatedWithChildren {
-  constructor(coordinates = DEFAULT_POINT) {
+  constructor(coordinates) {
     super();
 
-    this.longitude = coordinates[0] || 0;
-    this.latitude = coordinates[1] || 0;
+    this.longitude = coordinates[0];
+    this.latitude = coordinates[1];
 
     if (!(this.longitude instanceof Animated.Value)) {
       this.longitude = new Animated.Value(this.longitude);
@@ -26,12 +24,12 @@ export class AnimatedCoordinates extends AnimatedWithChildren {
     this._listeners = {};
   }
 
-  setValue(coordinates = DEFAULT_COORD) {
+  setValue(coordinates) {
     this.longitude.setValue(coordinates[0]);
     this.latitude.setValue(coordinates[1]);
   }
 
-  setOffset(coordinates = DEFAULT_COORD) {
+  setOffset(coordinates) {
     this.longitude.setOffset(coordinates[0]);
     this.latitude.setOffset(coordinates[1]);
   }
@@ -74,30 +72,29 @@ export class AnimatedCoordinates extends AnimatedWithChildren {
     delete this._listeners[id];
   }
 
-  spring(config = { coordinates: DEFAULT_COORD }) {
+  animate(type, config) {
     return Animated.parallel([
-      Animated.spring(this.longitude, {
+      Animated[type](this.longitude, {
         ...config,
         toValue: config.coordinates[0]
       }),
-      Animated.spring(this.latitude, {
+      Animated[type](this.latitude, {
         ...config,
         toValue: config.coordinates[1]
       })
     ]);
   }
 
+  spring(config = { coordinates: DEFAULT_COORD }) {
+    return this.animate('spring', config);
+  }
+
   timing(config = { coordinates: DEFAULT_COORD }) {
-    return Animated.parallel([
-      Animated.timing(this.longitude, {
-        ...config,
-        toValue: config.coordinates[0]
-      }),
-      Animated.timing(this.latitude, {
-        ...config,
-        toValue: config.coordinates[1]
-      })
-    ]);
+    return this.animate('timing', config);
+  }
+
+  decay(config = { coordinates: DEFAULT_COORD }) {
+    return this.animate('decay', config);
   }
 
   __getValue() {
@@ -105,7 +102,6 @@ export class AnimatedCoordinates extends AnimatedWithChildren {
   }
 
   __attach(self) {
-    console.log('__attach', self);
     this.longitude.__addChild(self || this);
     this.latitude.__addChild(self || this);
   }

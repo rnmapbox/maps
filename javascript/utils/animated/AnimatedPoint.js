@@ -54,6 +54,10 @@ export class AnimatedPoint extends AnimatedWithChildren {
     return this.coordinates.timing(config);
   }
 
+  decay(config = { coordinates: DEFAULT_COORD }) {
+    return this.coordinates.decay(config);
+  }
+
   __getValue() {
     return {
       type: 'Point',
