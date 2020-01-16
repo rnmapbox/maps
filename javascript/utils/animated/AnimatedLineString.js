@@ -17,22 +17,13 @@ export class AnimatedLineString extends AnimatedWithChildren {
   constructor(line = DEFAULT_LINE) {
     super();
 
-    this.coordinates = line.coordinates.map(
-      coord => new AnimatedCoordinates(coord),
-    );
+    //this._listeners = {};
 
-    this._listeners = {};
-  }
+    this.coordinates = [];
 
-  setValue(line = DEFAULT_LINE) {
-    // TODO
-    console.log("SetValue", line);
-    this.coordinates.setValue(point.coordinates);
-  }
-
-  setOffset(line = DEFAULT_LINE) {
-    // TODO
-    this.coordinates.setOffset(point.coordinates);
+    line.coordinates.forEach((coord) => {
+      this.coordinates.push(new AnimatedCoordinates(coord));
+    });
   }
 
   flattenOffset() {
@@ -63,38 +54,86 @@ export class AnimatedLineString extends AnimatedWithChildren {
     });
   }
 
+  _last(items) {
+    return items.length > 0 ? items[items.length - 1] : null;
+  }
+
+  _setup(coordinates) {
+    const last = this._last(this.coordinates);
+
+    let i = this.coordinates.length;
+
+    while (i < coordinates.length) {
+      this.coordinates.push(new AnimatedCoordinates(last.__getValue()));
+      i++;
+    }
+  }
+
+  _cleanup(coordinates) {
+    while (this.coordinates.length > coordinates.length) {
+      const popped = this.coordinates.pop();
+    }
+    super.__callListeners(this.__getValue());
+  }
+
+  animate(type, config) {
+    const { coordinates, ...rest } = config;
+
+    const last = this._last(coordinates);
+
+    this._setup(coordinates);
+
+    // Animate existing values
+    let animations = coordinates.map((coord, i) => {
+      return this.coordinates[i][type]({
+        ...config,
+        coordinates: coordinates[i]
+      });
+    });
+
+    // Animate remaining values
+    let i = coordinates.length;
+    while (this.coordinates[i]) {
+      animations.push(
+        this.coordinates[i][type]({
+          ...config,
+          coordinates: last
+        })
+      );
+      i++;
+    }
+
+    return Animated.parallel(animations);
+  }
+
+  runImmediate(type, coordinates) {
+    this._setup(coordinates);
+
+    this.coordinates.forEach((coord, i) => {
+      coord[type](coordinates[i]);
+    });
+
+    this._cleanup(coordinates);
+  }
+
+  setValue(line) {
+    this.runImmediate('setValue', line.coordinates);
+  }
+
+  setOffset(line) {
+    this.runImmediate('setOffset', line.coordinates);
+  }
+
   spring(config = { coordinates: DEFAULT_COORD }) {
-    // TODO
-    return Animated.parallel(
-      this.coordinates.map((coord) => {
-        return coord.spring(config);
-      })
-    );
+    return this.animate('spring', config);
   }
 
   timing(config = { coordinates: DEFAULT_COORD }) {
-    let {coordinates} = config;
-    if (config.coordinates.length > this.coordinates.length) {
-      const lastCoord = this.coordinates[this.coordinates.length - 1];
-      while (this.coordinates.length < coordinates.length) {
-        this.coordinates.push(lastCoord.clone());
-      }
-    } else if (coordinates.length < this.coordinates.length) {
-      coordinates = [...coordinates];
-      const lastCoordinate = coordinates[coordinates.length - 1];
-      while (coordinates.length < this.coordinates.length) {
-        coordinates.push([...lastCoordinate]);
-      }
-    }
+    return this.animate('timing', config);
+  }
 
-    return Animated.parallel(
-      this.coordinates.map((coord, i) =>
-        coord.timing({
-          ...config,
-          coordinates: coordinates[i],
-        })
-      ),
-    );
+  decay(config = { coordinates: DEFAULT_COORD }) {
+    return this.animate('decay', config);
   }
 
   __getValue() {
@@ -105,13 +144,11 @@ export class AnimatedLineString extends AnimatedWithChildren {
   }
 
   __attach() {
-    const self = this;
-    this.coordinates.forEach((coord) => coord.__attach(self));
+    this.coordinates.forEach((coord) => coord.__attach(this));
   }
 
   __detach() {
-    const self = this;
-    this.coordinates.forEach((coord) => coord.__detach(self));
+    this.coordinates.forEach((coord) => coord.__detach(this));
   }
 }
 
