@@ -26,7 +26,7 @@ matrix:
         - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
     - os: osx
       osx_image: xcode10.2
-      node_js: 8
+      node_js: 10.18.1
       cache:
         bundler: true
         yarn: true
