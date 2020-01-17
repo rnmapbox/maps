@@ -48,11 +48,9 @@ export class AnimatedCoordinates extends AnimatedWithChildren {
     }
   }
 
-  clone() {
-    return new AnimatedCoordinates([
-      this.longitude._value,
-      this.latitude._value,
-    ]);
+  resetAnimation() {
+    this.longitude.resetAnimation();
+    this.latitude.resetAnimation();
   }
 
   addListener(cb) {
