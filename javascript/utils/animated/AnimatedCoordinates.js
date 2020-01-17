@@ -48,6 +48,11 @@ export class AnimatedCoordinates extends AnimatedWithChildren {
     }
   }
 
+  resetAnimation() {
+    this.longitude.resetAnimation();
+    this.latitude.resetAnimation();
+  }
+
   addListener(cb) {
     uniqueID += 1;
     const id = `${String(uniqueID)}-${String(Date.now())}`;

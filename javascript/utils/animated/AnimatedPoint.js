@@ -38,6 +38,10 @@ export class AnimatedPoint extends AnimatedWithChildren {
     }
   }
 
+  resetAnimation() {
+    this.coordinates.resetAnimation();
+  }
+
   addListener(cb) {
     return this.coordinates.addListener(cb);
   }

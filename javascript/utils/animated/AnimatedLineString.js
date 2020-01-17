@@ -42,6 +42,12 @@ export class AnimatedLineString extends AnimatedWithChildren {
     }
   }
 
+  resetAnimation() {
+    this.coordinates.forEach((coord) => {
+      coord.resetAnimation();
+    })
+  }
+
   addListener(cb) {
     this.coordinates.forEach((coord) => {
       coord.addListener(cb);
