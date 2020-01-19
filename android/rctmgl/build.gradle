@@ -32,7 +32,7 @@ dependencies {
     // Mapbox SDK
 
     implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:4.9.0'
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:8.6.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:8.6.1'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v8:0.7.0'
 
     // Dependencies
