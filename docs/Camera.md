@@ -21,7 +21,7 @@
 | &nbsp;&nbsp;zoomLevel | `number` | `none` | `false` | Zoom level of the map |
 | centerCoordinate | `array` | `none` | `false` | Center coordinate on map [lng, lat] |
 | heading | `number` | `none` | `false` | Heading on map |
-| pitch | `number` | `none` | `false` | Pitch on map |
+| pitch | `number` | `none` | `false` | Pitch on map, min 0 and max 100 |
 | bounds | `shape` | `none` | `false` | FIX ME NO DESCRIPTION |
 | &nbsp;&nbsp;ne | `array` | `none` | `true` | northEastCoordinates - North east coordinate of bound |
 | &nbsp;&nbsp;sw | `array` | `none` | `true` | southWestCoordinates - North east coordinate of bound |
