@@ -7,6 +7,9 @@ assignees: ''
 
 ---
 
+🚨 Before you report, please make sure you tested on a physical device 🚨
+
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
