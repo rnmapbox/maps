@@ -22,6 +22,7 @@ If applicable, add screenshots to help explain your problem.
 **Versions (please complete the following information):**
  - Platfrom: [e.g. Android, iOS]
  - Device: [e.g. iPhone6]
+ - Emulator/ Simulator: [yes/ no]
  - OS: [e.g. iOS8.1]
  - SDK Version [e.g. 22]
  - React Native Version [e.g. 0.59]
