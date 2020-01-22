@@ -1,6 +1,6 @@
 ## 7.2.0
 
-- Upstream changes in Mapbox iOS SDK 5.6.0 has made installing the SDK as an embedded framework difficult. We have therefore discontinued supporting manual installations. To update, follow the iOS installation instructions using cocapods. No breaking changes are made in the use of the library beyond the way to install it.
+- Upstream changes in Mapbox iOS SDK 5.6.0 has made installing the SDK as an embedded framework difficult. We have therefore discontinued supporting manual installations. To update, follow the iOS installation instructions using cocoapods.
 
 ## 7.0.0
 
