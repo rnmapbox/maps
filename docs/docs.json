@@ -4825,13 +4825,13 @@
     "methods": [
       {
         "name": "setLocationManager",
-        "docblock": "Wheather to start or stop the locationManager\nNotice, that locationManager will start automatically when\neither `onUpdate` or `visible` are set\n\n@param {Object} running - Object with key `running` and `boolean` value\n@return {void}",
+        "docblock": "Whether to start or stop the locationManager\nNotice, that locationManager will start automatically when\neither `onUpdate` or `visible` are set\n\n@param {Object} running - Object with key `running` and `boolean` value\n@return {void}",
         "modifiers": [
           "async"
         ],
         "params": [
           {
-            "name": "{ running }"
+            "name": "{running}"
           }
         ],
         "returns": {
@@ -4840,7 +4840,7 @@
             "name": "void"
           }
         },
-        "description": "Wheather to start or stop the locationManager\nNotice, that locationManager will start automatically when\neither `onUpdate` or `visible` are set",
+        "description": "Whether to start or stop the locationManager\nNotice, that locationManager will start automatically when\neither `onUpdate` or `visible` are set",
         "examples": []
       },
       {
@@ -4864,13 +4864,13 @@
         "required": false,
         "type": "bool",
         "default": "true",
-        "description": "Wheather location icon is animated between updates"
+        "description": "Whether location icon is animated between updates"
       },
       {
         "name": "renderMode",
         "required": false,
         "type": "enum",
-        "default": "\"normal\"",
+        "default": "'normal'",
         "description": "Rendermode of user location icon.\nOne of `\"normal\"`, `\"custom\"`.\n\"custom\" must be of type mapbox-gl-native components"
       },
       {
@@ -4878,7 +4878,7 @@
         "required": false,
         "type": "bool",
         "default": "true",
-        "description": "Wheather location icon is visible"
+        "description": "Whether location icon is visible"
       },
       {
         "name": "onPress",
