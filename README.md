@@ -10,70 +10,78 @@ _An unofficial React Native library for building maps with the [Mapbox Maps SDK 
 
 **Dependencies**
 
-* [node](https://nodejs.org)
-* [npm](https://www.npmjs.com/)
-* [React Native](https://facebook.github.io/react-native/) (0.59+)
+- [node](https://nodejs.org)
+- [npm](https://www.npmjs.com/)
+- [React Native](https://facebook.github.io/react-native/) (0.60+)
 
 **Git**
+
 ```
 git clone git@github.com:react-native-mapbox-gl/maps.git
 cd maps
 ```
 
 **Yarn**
+
 ```
 yarn add @react-native-mapbox-gl/maps
 ```
 
 **Npm**
+
 ```
 npm install @react-native-mapbox-gl/maps --save
 ```
 
 ## Installation Guides
 
-* [Android](/android/install.md)
-* [iOS](/ios/install.md)
-* [Example](/example)
+- [Android](/android/install.md)
+- [iOS](/ios/install.md)
+- [Example](/example)
 
 ## [Getting Started](/docs/GettingStarted.md)
 
 ## Documentation
 
 ### Components
-* [MapView](/docs/MapView.md)
-* [Light](/docs/Light.md)
-* [StyleSheet](/docs/StyleSheet.md)
-* [PointAnnotation](/docs/PointAnnotation.md)
-* [Callout](/docs/Callout.md)
-* [Camera](docs/Camera.md)
-* [UserLocation](docs/UserLocation.md)
-* [Images](docs/Images.md)
+
+- [MapView](/docs/MapView.md)
+- [Light](/docs/Light.md)
+- [StyleSheet](/docs/StyleSheet.md)
+- [PointAnnotation](/docs/PointAnnotation.md)
+- [Callout](/docs/Callout.md)
+- [Camera](docs/Camera.md)
+- [UserLocation](docs/UserLocation.md)
+- [Images](docs/Images.md)
 
 ### Sources
-* [VectorSource](/docs/VectorSource.md)
-* [ShapeSource](/docs/ShapeSource.md)
-* [RasterSource](/docs/RasterSource.md)
+
+- [VectorSource](/docs/VectorSource.md)
+- [ShapeSource](/docs/ShapeSource.md)
+- [RasterSource](/docs/RasterSource.md)
 
 ### Layers
-* [BackgroundLayer](/docs/BackgroundLayer.md)
-* [CircleLayer](/docs/CircleLayer.md)
-* [FillExtrusionLayer](/docs/FillExtrusionLayer.md)
-* [FillLayer](/docs/FillLayer.md)
-* [LineLayer](/docs/LineLayer.md)
-* [RasterLayer](/docs/RasterLayer.md)
-* [SymbolLayer](/docs/SymbolLayer.md)
-* [HeatmapLayer](/docs/HeatmapLayer.md)
+
+- [BackgroundLayer](/docs/BackgroundLayer.md)
+- [CircleLayer](/docs/CircleLayer.md)
+- [FillExtrusionLayer](/docs/FillExtrusionLayer.md)
+- [FillLayer](/docs/FillLayer.md)
+- [LineLayer](/docs/LineLayer.md)
+- [RasterLayer](/docs/RasterLayer.md)
+- [SymbolLayer](/docs/SymbolLayer.md)
+- [HeatmapLayer](/docs/HeatmapLayer.md)
 
 ### Offline
-* [OfflineManager](/docs/OfflineManager.md)
-* [SnapshotManager](/docs/snapshotManager.md)
+
+- [OfflineManager](/docs/OfflineManager.md)
+- [SnapshotManager](/docs/snapshotManager.md)
 
 ### Misc
-* [CustomHttpHeaders](/docs/CustomHttpHeaders.md)
 
+- [CustomHttpHeaders](/docs/CustomHttpHeaders.md)
 
 ## Expo Support
+
 We have a feature request open with Expo if you want to see it get in show your support https://expo.canny.io/feature-requests/p/add-mapbox-gl-support
 
 ## Developer Group
