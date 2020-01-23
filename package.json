@@ -23,7 +23,7 @@
     "fetch:style:spec": ". ./scripts/download-style-spec.sh",
     "generate": "node ./scripts/autogenerate",
     "test": "npm run lint && npm run unittest",
-    "unittest": "jest --coverage --verbose",
+    "unittest": "jest",
     "unittest:single": "jest --testNamePattern",
     "format": "npm run lint -- --fix",
     "lint": "eslint . --ignore-pattern 'example' --ignore-pattern 'scripts' --fix && cd example/ && eslint . --ignore-pattern 'scripts' --fix"
