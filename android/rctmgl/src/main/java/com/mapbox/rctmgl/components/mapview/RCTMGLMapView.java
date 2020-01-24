@@ -837,6 +837,9 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     public void getPointInView(String callbackID, LatLng mapCoordinate) {
 
         PointF pointInView = mMap.getProjection().toScreenLocation(mapCoordinate);
+        float density = getDisplayDensity();
+        pointInView.x /= density;
+        pointInView.y /= density;
         WritableMap payload = new WritableNativeMap();
 
         WritableArray array = new WritableNativeArray();
