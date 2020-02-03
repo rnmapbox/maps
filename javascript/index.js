@@ -26,6 +26,7 @@ import locationManager from './modules/location/locationManager';
 import offlineManager from './modules/offline/offlineManager';
 import snapshotManager from './modules/snapshot/snapshotManager';
 import AnimatedMapPoint from './utils/AnimatedPoint';
+import MarkerView from './components/MarkerView';
 
 const MapboxGL = {...NativeModules.MGLModule};
 
@@ -66,6 +67,7 @@ MapboxGL.Camera = Camera;
 
 // annotations
 MapboxGL.Annotation = Annotation;
+MapboxGL.MarkerView = MarkerView;
 
 // sources
 MapboxGL.VectorSource = VectorSource;

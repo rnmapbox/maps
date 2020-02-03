@@ -7,6 +7,7 @@ import MapHeader from '../examples/common/MapHeader';
 import sheet from '../styles/sheet';
 import colors from '../styles/colors';
 import ShowMap from '../examples/ShowMap';
+import MarkerView from '../examples/MarkerView';
 import SetPitch from '../examples/SetPitch';
 import SetHeading from '../examples/SetHeading';
 import ShowClick from '../examples/ShowClick';
@@ -82,6 +83,7 @@ class ExampleItem {
 
 const Examples = [
   new ExampleItem('Show Map', ShowMap),
+  new ExampleItem('Marker View', MarkerView),
   new ExampleItem('Set Pitch', SetPitch),
   new ExampleItem('Set Heading', SetHeading),
   new ExampleItem('Show Click', ShowClick),

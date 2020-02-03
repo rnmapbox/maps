@@ -2922,6 +2922,29 @@
     ],
     "name": "MapView"
   },
+  "MarkerView": {
+    "description": "MarkerView allows you to place a react native marker to the map",
+    "displayName": "MarkerView",
+    "methods": [],
+    "props": [
+      {
+        "name": "coordinate",
+        "required": true,
+        "type": {
+          "name": "array",
+          "value": {
+            "type": "number"
+          }
+        },
+        "default": "none",
+        "description": "The center point (specified as a map coordinate) of the marker."
+      }
+    ],
+    "composes": [
+      "../utils"
+    ],
+    "name": "MarkerView"
+  },
   "PointAnnotation": {
     "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate. PointAnnotation is legacy, soon to be deprecated, and should use ShapeSource and SymbolLayer instead.",
     "displayName": "PointAnnotation",
