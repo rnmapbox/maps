@@ -126,7 +126,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
     compassEnabled: PropTypes.bool,
 
     /**
-     * Position the compass on a corner of the map
+     * Change corner of map the compass starts at. (iOS only) 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight
      */
     compassViewPosition: PropTypes.string,
 
