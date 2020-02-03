@@ -2744,7 +2744,7 @@
         "required": false,
         "type": "string",
         "default": "none",
-        "description": "Position the compass on a corner of the map"
+        "description": "Change corner of map the compass starts at. (iOS only) 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight"
       },
       {
         "name": "compassViewMargins",
