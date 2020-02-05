@@ -1258,7 +1258,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     public MarkerViewManager getMakerViewManager(MapboxMap map) {
         if (makerViewManager == null) {
             if (map == null) {
-                throw new Error("tmakerViewManager should be called one the map has loaded");
+                throw new Error("makerViewManager should be called one the map has loaded");
             }
             makerViewManager = new MarkerViewManager(this, map);
         }

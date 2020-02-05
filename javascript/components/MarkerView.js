@@ -1,14 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {requireNativeComponent} from 'react-native';
+import {Platform, requireNativeComponent} from 'react-native';
 
 import {toJSONString, viewPropTypes} from '../utils';
 import {makePoint} from '../utils/geoUtils';
 
+import PointAnnotation from './PointAnnotation';
+
 export const NATIVE_MODULE_NAME = 'RCTMGLMarkerView';
 
 /**
- * MarkerView allows you to place a react native marker to the map
+ * MarkerView allows you to place a interactive react native marker to the map. If you have static view consider using PointAnnotation or SymbolLayer they'll offer much better performance.
+ * This is based on [MakerView plugin](https://docs.mapbox.com/android/plugins/overview/markerview/) on android and PointAnnotation on iOS.
  */
 class MarkerView extends React.PureComponent {
   static propTypes = {
@@ -39,12 +42,16 @@ class MarkerView extends React.PureComponent {
 
   _getCoordinate() {
     if (!this.props.coordinate) {
-      return;
+      return undefined;
     }
     return toJSONString(makePoint(this.props.coordinate));
   }
 
   render() {
+    if (Platform.OS === 'ios') {
+      return <PointAnnotation {...this.props} />;
+    }
+
     const props = {
       ...this.props,
       anchor: this.props.anchor,
@@ -56,10 +63,9 @@ class MarkerView extends React.PureComponent {
   }
 }
 
-const RCTMGLMarkerView = requireNativeComponent(
-  NATIVE_MODULE_NAME,
-  MarkerView,
-  {},
-);
+const RCTMGLMarkerView =
+  Platform.OS === 'android'
+    ? requireNativeComponent(NATIVE_MODULE_NAME, MarkerView, {})
+    : undefined;
 
 export default MarkerView;

@@ -2923,7 +2923,7 @@
     "name": "MapView"
   },
   "MarkerView": {
-    "description": "MarkerView allows you to place a react native marker to the map",
+    "description": "MarkerView allows you to place a interactive react native marker to the map. If you have static view consider using PointAnnotation or SymbolLayer they'll offer much better performance.\nThis is based on [MakerView plugin](https://docs.mapbox.com/android/plugins/overview/markerview/) on android and PointAnnotation on iOS.",
     "displayName": "MarkerView",
     "methods": [],
     "props": [
@@ -2971,7 +2971,7 @@
     "name": "MarkerView"
   },
   "PointAnnotation": {
-    "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate. PointAnnotation is legacy, soon to be deprecated, and should use ShapeSource and SymbolLayer instead.",
+    "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate. Consider using ShapeSource and SymbolLayer instead, if you have many points and you have static images, they'll offer much better performance.\nIf you need interctive views please use MarkerView, as with PointAnnotation on android child views are rendered onto a bitmap for better performance.",
     "displayName": "PointAnnotation",
     "methods": [],
     "props": [
