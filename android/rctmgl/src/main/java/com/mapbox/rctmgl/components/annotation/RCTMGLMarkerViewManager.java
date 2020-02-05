@@ -1,6 +1,7 @@
 package com.mapbox.rctmgl.components.annotation;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -24,6 +25,11 @@ public class RCTMGLMarkerViewManager extends AbstractEventEmitter<RCTMGLMarkerVi
     @ReactProp(name="coordinate")
     public void setCoordinate(RCTMGLMarkerView markerView, String geoJSONStr) {
         markerView.setCoordinate(GeoJSONUtils.toPointGeometry(geoJSONStr));
+    }
+
+    @ReactProp(name="anchor")
+    public void setAnchor(RCTMGLMarkerView markerView, ReadableMap map) {
+        markerView.setAnchor((float) map.getDouble("x"), (float) map.getDouble("y"));
     }
 
     @Override

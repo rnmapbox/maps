@@ -1,6 +1,7 @@
 package com.mapbox.rctmgl.components.annotation;
 
 import android.content.Context;
+import android.graphics.PointF;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -14,7 +15,7 @@ import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
 
-public class RCTMGLMarkerView extends AbstractMapFeature {
+public class RCTMGLMarkerView extends AbstractMapFeature implements MarkerView.OnPositionUpdateListener, View.OnLayoutChangeListener {
     private RCTMGLMarkerViewManager mManager;
     private RCTMGLMapView mMapView;
 
@@ -25,6 +26,7 @@ public class RCTMGLMarkerView extends AbstractMapFeature {
 
     private MarkerView mMarkerView;
     private Point mCoordinate;
+    private Float[] mAnchor;
 
 
     public RCTMGLMarkerView(Context context, RCTMGLMarkerViewManager manager) {
@@ -45,9 +47,23 @@ public class RCTMGLMarkerView extends AbstractMapFeature {
         }
     }
 
+    public void setAnchor(float x, float y) {
+        mAnchor = new Float[]{x, y};
+        refresh();
+    }
+
+    public void refresh() {
+        // this will cause position to be recalculated
+        if (mMarkerView != null) {
+            mMarkerView.setLatLng(GeoJSONUtils.toLatLng(mCoordinate));
+        }
+    }
+
     @Override
     public void addToMap(RCTMGLMapView mapView) {
         mMapView = mapView;
+
+        final RCTMGLMarkerView rctmglMarkerView = this;
 
         mMapView.getMapAsync(
             new OnMapReadyCallback() {
@@ -58,6 +74,7 @@ public class RCTMGLMarkerView extends AbstractMapFeature {
 
                     if (mChildView != null) {
                         mMarkerView = new MarkerView(GeoJSONUtils.toLatLng(mCoordinate), mChildView);
+                        mMarkerView.setOnPositionUpdateListener(rctmglMarkerView);
                         mMarkerViewManager.addMarker(mMarkerView);
                     }
                 }
@@ -66,11 +83,30 @@ public class RCTMGLMarkerView extends AbstractMapFeature {
     }
 
     @Override
+    public PointF onUpdate(PointF pointF) {
+        if (mAnchor != null) {
+            return new PointF(
+                    pointF.x - mChildView.getWidth() * mAnchor[0],
+                    pointF.y - mChildView.getHeight() * mAnchor[1]
+                    );
+        }
+        return pointF;
+    }
+
+    @Override
     public void removeFromMap(RCTMGLMapView mapView) {
         if (mMarkerView != null) {
             mMarkerViewManager.removeMarker(mMarkerView);
             mMarkerView = null;
             mMarkerViewManager = null;
+        }
+    }
+
+    @Override
+    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop,
+                               int oldRight, int oldBottom) {
+        if (left != oldLeft || right != oldRight || top != oldTop || bottom != oldBottom) {
+            refresh();
         }
     }
 }

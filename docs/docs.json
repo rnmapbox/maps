@@ -2937,7 +2937,32 @@
           }
         },
         "default": "none",
-        "description": "The center point (specified as a map coordinate) of the marker."
+        "description": "The center point (specified as a map coordinate) of the marker.\nSee also #anchor."
+      },
+      {
+        "name": "anchor",
+        "required": false,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "x",
+              "required": true,
+              "type": "number",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "y",
+              "required": true,
+              "type": "number",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            }
+          ]
+        },
+        "default": "{x: 0.5, y: 0.5}",
+        "description": "Specifies the anchor being set on a particular point of the annotation.\nThe anchor point is specified in the continuous space [0.0, 1.0] x [0.0, 1.0],\nwhere (0, 0) is the top-left corner of the image, and (1, 1) is the bottom-right corner.\nNote this is only for custom annotations not the default pin view.\nDefaults to the center of the view."
       }
     ],
     "composes": [
