@@ -1,5 +1,5 @@
 import React from 'react';
-import {Animated, View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import sheet from '../styles/sheet';
@@ -8,27 +8,29 @@ import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
 import Bubble from './common/Bubble';
 
-const ANNOTATION_SIZE = 45;
-
-const styles = StyleSheet.create({
-  annotationContainer: {
-    width: ANNOTATION_SIZE,
-    height: ANNOTATION_SIZE,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    borderRadius: ANNOTATION_SIZE / 2,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(0, 0, 0, 0.45)',
-  },
-  annotationFill: {
-    width: ANNOTATION_SIZE - 3,
-    height: ANNOTATION_SIZE - 3,
-    borderRadius: (ANNOTATION_SIZE - 3) / 2,
-    backgroundColor: 'orange',
-    transform: [{scale: 0.6}],
-  },
-});
+// eslint-disable-next-line react/prop-types
+const AnnotationContent = ({title}) => (
+  <View style={{borderColor: 'black', borderWidth: 1.0, width: 60}}>
+    <Text>{title}</Text>
+    <TouchableOpacity
+      style={{
+        backgroundColor: 'blue',
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+      <Text
+        style={{
+          color: 'white',
+          fontWeight: 'bold',
+        }}>
+        Btn
+      </Text>
+    </TouchableOpacity>
+  </View>
+);
 
 class ShowMarkerView extends React.Component {
   static propTypes = {
@@ -39,81 +41,9 @@ class ShowMarkerView extends React.Component {
     super(props);
 
     this.state = {
-      activeAnnotationIndex: -1,
-      previousActiveAnnotationIndex: -1,
-
       backgroundColor: 'blue',
-      coordinates: [[-73.99155, 40.73581]],
+      coordinates: [[-73.99155, 40.73581], [-73.99155, 40.73681]],
     };
-
-    this._scaleIn = null;
-    this._scaleOut = null;
-
-    this.onPress = this.onPress.bind(this);
-  }
-
-  onPress(feature) {
-    const coords = Object.assign([], this.state.coordinates);
-    coords.push(feature.geometry.coordinates);
-    this.setState({coordinates: coords});
-  }
-
-  onAnnotationSelected(activeIndex, feature) {
-    if (this.state.activeIndex === activeIndex) {
-      return;
-    }
-
-    this._scaleIn = new Animated.Value(0.6);
-    Animated.timing(this._scaleIn, {toValue: 1.0, duration: 200}).start();
-    this.setState({activeAnnotationIndex: activeIndex});
-
-    if (this.state.previousActiveAnnotationIndex !== -1) {
-      this._map.moveTo(feature.geometry.coordinates, 500);
-    }
-  }
-
-  onAnnotationDeselected(deselectedIndex) {
-    const nextState = {};
-
-    if (this.state.activeAnnotationIndex === deselectedIndex) {
-      nextState.activeAnnotationIndex = -1;
-    }
-
-    this._scaleOut = new Animated.Value(1);
-    Animated.timing(this._scaleOut, {toValue: 0.6, duration: 200}).start();
-    nextState.previousActiveAnnotationIndex = deselectedIndex;
-    this.setState(nextState);
-  }
-
-  renderAnnotations() {
-    const items = [];
-
-    for (let i = 0; i < this.state.coordinates.length; i++) {
-      const coordinate = this.state.coordinates[i];
-
-      const title = `Lon: ${coordinate[0]} Lat: ${coordinate[1]}`;
-      const id = `pointAnnotation${i}`;
-
-      const animationStyle = {};
-      if (i === this.state.activeAnnotationIndex) {
-        animationStyle.transform = [{scale: this._scaleIn}];
-      } else if (i === this.state.previousActiveAnnotationIndex) {
-        animationStyle.transform = [{scale: this._scaleOut}];
-      }
-
-      items.push(
-        <MapboxGL.PointAnnotation
-          key={id}
-          id={id}
-          coordinate={coordinate}
-          title={title}>
-          <View style={styles.annotationContainer} />
-          <MapboxGL.Callout title="This is a sample" />
-        </MapboxGL.PointAnnotation>,
-      );
-    }
-
-    return items;
   }
 
   render() {
@@ -129,28 +59,12 @@ class ShowMarkerView extends React.Component {
             centerCoordinate={this.state.coordinates[0]}
           />
 
-          {this.renderAnnotations()}
+          <MapboxGL.PointAnnotation coordinate={this.state.coordinates[1]}>
+            <AnnotationContent title={'this is a point annotation'} />
+          </MapboxGL.PointAnnotation>
+
           <MapboxGL.MarkerView coordinate={this.state.coordinates[0]}>
-            <View style={{borderColor: 'black', borderWidth: 1.0, width: 60}}>
-              <Text>Hello world!</Text>
-              <TouchableOpacity
-                style={{
-                  backgroundColor: 'blue',
-                  width: 40,
-                  height: 40,
-                  borderRadius: 20,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Text
-                  style={{
-                    color: 'white',
-                    fontWeight: 'bold',
-                  }}>
-                  Btn
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <AnnotationContent title={'this is a marker view'} />
           </MapboxGL.MarkerView>
         </MapboxGL.MapView>
 

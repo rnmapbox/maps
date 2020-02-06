@@ -83,7 +83,6 @@ class ExampleItem {
 
 const Examples = [
   new ExampleItem('Show Map', ShowMap),
-  new ExampleItem('Marker View', MarkerView),
   new ExampleItem('Set Pitch', SetPitch),
   new ExampleItem('Set Heading', SetHeading),
   new ExampleItem('Show Click', ShowClick),
@@ -108,6 +107,7 @@ const Examples = [
   new ExampleItem('Shape Source From Icon', ShapeSourceIcon),
   new ExampleItem('Custom Vector Source', CustomVectorSource),
   new ExampleItem('Show Point Annotation', ShowPointAnnotation),
+  new ExampleItem('Marker View', MarkerView),
   new ExampleItem('Create Offline Region', CreateOfflineRegion),
   new ExampleItem('Animation Along a Line', DriveTheLine),
   new ExampleItem('Image Overlay', ImageOverlay),
