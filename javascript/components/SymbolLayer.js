@@ -100,7 +100,9 @@ class SymbolLayer extends AbstractLayer {
     };
 
     return (
-      <RCTMGLSymbolLayer {...props}>{this.props.children}</RCTMGLSymbolLayer>
+      <RCTMGLSymbolLayer ref="nativeLayer" {...props}>
+        {this.props.children}
+      </RCTMGLSymbolLayer>
     );
   }
 }
