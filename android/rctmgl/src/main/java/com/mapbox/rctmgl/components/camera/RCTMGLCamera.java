@@ -41,7 +41,7 @@ import com.mapbox.geojson.Point;
 
 import com.mapbox.android.core.permissions.PermissionsManager;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class RCTMGLCamera extends AbstractMapFeature {
     private RCTMGLCameraManager mManager;

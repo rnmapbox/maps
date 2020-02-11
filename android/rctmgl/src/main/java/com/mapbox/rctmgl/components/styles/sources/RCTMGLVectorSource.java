@@ -1,8 +1,8 @@
 package com.mapbox.rctmgl.components.styles.sources;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.support.annotation.Size;
+import androidx.annotation.Nullable;
+import androidx.annotation.Size;
 
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
