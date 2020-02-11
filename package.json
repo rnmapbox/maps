@@ -84,7 +84,7 @@
       "javascript/**/*.js"
     ],
     "setupFiles": [
-      "./__tests__/__mocks__/react-native-mapbox-gl.mock.js",
+      "./setup-jest.js",
       "./__tests__/__mocks__/react-native.mock.js"
     ],
     "modulePathIgnorePatterns": [
