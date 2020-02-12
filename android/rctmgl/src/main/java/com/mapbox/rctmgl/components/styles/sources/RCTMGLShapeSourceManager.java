@@ -125,43 +125,6 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
         source.setTolerance(tolerance);
     }
 
-    @ReactProp(name = "images")
-    public void setImages(RCTMGLShapeSource source, ReadableMap map) {
-        List<Map.Entry<String, ImageEntry>> images = new ArrayList<>();
-
-        ReadableMapKeySetIterator iterator = map.keySetIterator();
-        while (iterator.hasNextKey()) {
-            String imageName = iterator.nextKey();
-            if (map.getType(imageName) == ReadableType.Map) {
-                ReadableMap imageMap = map.getMap(imageName);
-                String uri = imageMap.getString("uri");
-                boolean hasScale = imageMap.hasKey("scale") && imageMap.getType("scale") == ReadableType.Number;
-                double scale = hasScale ? imageMap.getDouble("scale") : 1.0;
-                images.add(new AbstractMap.SimpleEntry<String, ImageEntry>(imageName, new ImageEntry(uri, scale)));
-            } else {
-                images.add(new AbstractMap.SimpleEntry<String, ImageEntry>(imageName, new ImageEntry(map.getString(imageName), 1.0)));
-            }
-        }
-
-        source.setImages(images);
-    }
-
-    @ReactProp(name = "nativeImages")
-    public void setNativeImages(RCTMGLShapeSource source, ReadableArray arr) {
-        List<Map.Entry<String, BitmapDrawable>> resources = new ArrayList<>();
-
-        for (int i = 0; i < arr.size(); i++) {
-            String resourceName = arr.getString(i);
-            BitmapDrawable drawable = (BitmapDrawable) ResourceUtils.getDrawableByName(mContext, resourceName);
-
-            if (drawable != null) {
-                resources.add(new AbstractMap.SimpleEntry<String, BitmapDrawable>(resourceName, drawable));
-            }
-        }
-
-        source.setNativeImages(resources);
-    }
-
     @ReactProp(name = "hasPressListener")
     public void setHasPressListener(RCTMGLShapeSource source, boolean hasPressListener) {
         source.setHasPressListener(hasPressListener);

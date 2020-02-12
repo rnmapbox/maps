@@ -44,4 +44,7 @@ public class EventTypes {
     public static final String SHAPE_SOURCE_LAYER_CLICK = "shapesourcelayerpress";
     public static final String VECTOR_SOURCE_LAYER_CLICK = "vectorsourcelayerpress";
     public static final String RASTER_SOURCE_LAYER_CLICK = "rastersourcelayerpress";
+
+    // image missing event type
+    public static final String IMAGES_MISSING = "imagesmissing";
 }

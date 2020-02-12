@@ -50,6 +50,7 @@ import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotation;
 import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerView;
 import com.mapbox.rctmgl.components.camera.RCTMGLCamera;
+import com.mapbox.rctmgl.components.images.RCTMGLImages;
 import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeTracker;
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
 import com.mapbox.rctmgl.components.styles.light.RCTMGLLight;
@@ -100,6 +101,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     private List<AbstractMapFeature> mQueuedFeatures;
     private Map<String, RCTMGLPointAnnotation> mPointAnnotations;
     private Map<String, RCTSource> mSources;
+    private List<RCTMGLImages> mImages;
 
     private CameraChangeTracker mCameraChangeTracker = new CameraChangeTracker();
     private List<Pair<Integer, ReadableArray>> mPreRenderMethods = new ArrayList<>();
@@ -146,6 +148,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         mManager = manager;
 
         mSources = new HashMap<>();
+        mImages = new ArrayList<>();
         mPointAnnotations = new HashMap<>();
         mQueuedFeatures = new ArrayList<>();
         mFeatures = new ArrayList<>();
@@ -195,6 +198,10 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         if (childView instanceof RCTSource) {
             RCTSource source = (RCTSource) childView;
             mSources.put(source.getID(), source);
+            feature = (AbstractMapFeature) childView;
+        } else if (childView instanceof RCTMGLImages) {
+            RCTMGLImages images = (RCTMGLImages) childView;
+            mImages.add(images);
             feature = (AbstractMapFeature) childView;
         } else if (childView instanceof RCTMGLLight) {
             feature = (AbstractMapFeature) childView;
@@ -247,6 +254,9 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
             }
 
             mPointAnnotations.remove(annotation.getID());
+        } else if (feature instanceof RCTMGLImages) {
+            RCTMGLImages images = (RCTMGLImages) feature;
+            mImages.remove(images);
         }
 
         feature.removeFromMap(this);
@@ -683,13 +693,14 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
 
     @Override
     public void onStyleImageMissing(@NonNull String id) {
-        List<RCTMGLShapeSource> allShapeSources = getAllShapeSources();
-        for (RCTMGLShapeSource shapeSource : allShapeSources) {
-            if (shapeSource.addMissingImageToStyle(id)) {
+        for (RCTMGLImages images : mImages) {
+            if (images.addMissingImageToStyle(id, mMap)) {
                 return;
             }
         }
-
+        for (RCTMGLImages images : mImages) {
+            images.sendImageMissingEvent(id, mMap);
+        }
     }
 
     private float getDisplayDensity() {

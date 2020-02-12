@@ -16,6 +16,7 @@
 @import Mapbox;
 
 @class CameraUpdateQueue;
+@class RCTMGLImages;
 
 @protocol RCTMGLMapViewCamera<NSObject>
 - (void)initialLayout;
@@ -31,6 +32,7 @@ typedef void (^StyleLoadedBlock) (MGLStyle* style);
 @property (nonatomic, weak) id<RCTMGLMapViewCamera> reactCamera;
 @property (nonatomic, strong) NSMutableArray<id<RCTComponent>> *reactSubviews;
 @property (nonatomic, strong) NSMutableArray<RCTMGLSource*> *sources;
+@property (nonatomic, strong) NSMutableArray<RCTMGLImages*> *images;
 @property (nonatomic, strong) NSMutableArray<RCTMGLLayer*> *layers;
 @property (nonatomic, strong) NSMutableArray<RCTMGLPointAnnotation*> *pointAnnotations;
 @property (nonatomic, strong) RCTMGLLight *light;
@@ -73,6 +75,7 @@ typedef void (^StyleLoadedBlock) (MGLStyle* style);
 - (RCTMGLPointAnnotation*)getRCTPointAnnotation:(MGLPointAnnotation*)mglAnnotation;
 - (NSArray<RCTMGLSource *> *)getAllTouchableSources;
 - (NSArray<RCTMGLSource *> *)getAllShapeSources;
+- (NSArray<RCTMGLImages *> *)getAllImages;
 - (RCTMGLSource *)getTouchableSourceWithHighestZIndex:(NSArray<RCTMGLSource *> *)touchableSources;
 - (NSString *)takeSnap:(BOOL)writeToDisk;
 - (void)didChangeUserTrackingMode:(MGLUserTrackingMode)mode animated:(BOOL)animated;

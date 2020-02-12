@@ -3474,13 +3474,6 @@
         "description": "Specifies the Douglas-Peucker simplification tolerance.\nA greater value produces simpler geometries and improves performance.\nThe default value is 0.375."
       },
       {
-        "name": "images",
-        "required": false,
-        "type": "object",
-        "default": "none",
-        "description": "Specifies the external images in key-value pairs required for the shape source.\nIf you have an asset under Image.xcassets on iOS and the drawables directory on android\nyou can specify an array of string names with assets as the key `{ assets: ['pin'] }`.\n\nDeprecated, please use Images#images."
-      },
-      {
         "name": "onPress",
         "required": false,
         "type": "func",

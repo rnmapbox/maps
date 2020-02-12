@@ -18,6 +18,7 @@
 #import "CameraUpdateQueue.h"
 #import "RCTMGLUserLocation.h"
 #import "FilterParser.h"
+#import "RCTMGLImages.h"
 
 @interface RCTMGLMapViewManager() <MGLMapViewDelegate>
 @end
@@ -547,12 +548,16 @@ RCT_EXPORT_METHOD(setSourceVisibility:(nonnull NSNumber *)reactTag
 -(UIImage *)mapView:(MGLMapView *)mapView didFailToLoadImage:(NSString *)imageName
 {
     RCTMGLMapView* reactMapView = ((RCTMGLMapView *) mapView);
-    NSArray<RCTMGLShapeSource *> *shapeSources = [reactMapView getAllShapeSources];
-    for (RCTMGLShapeSource *shapeSource in shapeSources) {
-        if([shapeSource addMissingImageToStyle:imageName]) {
+    NSArray<RCTMGLImages *> *allImages = [reactMapView getAllImages];
+    for (RCTMGLImages *images in allImages) {
+        if([images addMissingImageToStyle:imageName]) {
             // The image was added inside addMissingImageToStyle so we can return nil
             return nil;
         }
+    }
+    
+    for (RCTMGLImages *images in allImages) {
+        [images sendImageMissingEvent:imageName];
     }
     return nil;
 }

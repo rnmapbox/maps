@@ -14,7 +14,6 @@
 | maxZoomLevel | `number` | `none` | `false` | Specifies the maximum zoom level at which to create vector tiles.<br/>A greater value produces greater detail at high zoom levels.<br/>The default value is 18. |
 | buffer | `number` | `none` | `false` | Specifies the size of the tile buffer on each side.<br/>A value of 0 produces no buffer. A value of 512 produces a buffer as wide as the tile itself.<br/>Larger values produce fewer rendering artifacts near tile edges and slower performance.<br/>The default value is 128. |
 | tolerance | `number` | `none` | `false` | Specifies the Douglas-Peucker simplification tolerance.<br/>A greater value produces simpler geometries and improves performance.<br/>The default value is 0.375. |
-| images | `object` | `none` | `false` | Specifies the external images in key-value pairs required for the shape source.<br/>If you have an asset under Image.xcassets on iOS and the drawables directory on android<br/>you can specify an array of string names with assets as the key `{ assets: ['pin'] }`.<br/><br/>Deprecated, please use Images#images. |
 | onPress | `func` | `none` | `false` | Source press listener, gets called when a user presses one of the children layers only<br/>if that layer has a higher z-index than another source layers |
 | hitbox | `shape` | `none` | `false` | Overrides the default touch hitbox(44x44 pixels) for the source layers |
 | &nbsp;&nbsp;width | `number` | `none` | `true` | FIX ME NO DESCRIPTION |
