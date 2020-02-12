@@ -7,7 +7,18 @@ assignees: ''
 
 ---
 
-🚨 Before you report, please make sure you tested on a physical device 🚨
+🚨🚨🚨
+* Please respect and fill out the issue template
+* Before you report, please make sure you tested on a physical device
+* For build issues: Can you reproduce it on a clean install of the example app?
+* Please make sure, that code examples are formatted.
+
+If you want others to spend time on your issue, please make sure to first spend some time on the ticket.
+
+Not following the above will lead to the ticket being closed.
+Thanks for understanding.
+🚨🚨🚨
+
 
 
 **Describe the bug**
