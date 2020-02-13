@@ -30,16 +30,16 @@ class AbstractLayer extends React.PureComponent {
     }
   }
 
-  getStyle() {
-    if (!this.props.style) {
+  _getStyle(style) {
+    if (!style) {
       return;
     }
 
     const nativeStyle = {};
-    const styleProps = Object.keys(this.props.style);
+    const styleProps = Object.keys(style);
     for (const styleProp of styleProps) {
       const styleType = getStyleType(styleProp);
-      let rawStyle = this.props.style[styleProp];
+      let rawStyle = style[styleProp];
 
       if (styleType === 'color' && typeof rawStyle === 'string') {
         rawStyle = processColor(rawStyle);
@@ -57,9 +57,17 @@ class AbstractLayer extends React.PureComponent {
     return nativeStyle;
   }
 
+  getStyle() {
+    return this._getStyle(this.props.style);
+  }
+
   setNativeProps(props) {
     if (this.refs.nativeLayer) {
-      this.refs.nativeLayer.setNativeProps(props);
+      let propsToPass = props;
+      if (props.style) {
+        propsToPass = {...props, reactStyle: this._getStyle(props.style)};
+      }
+      this.refs.nativeLayer.setNativeProps(propsToPass);
     }
   }
 }
