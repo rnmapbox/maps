@@ -14,6 +14,15 @@
 
 static UIImage * _placeHolderImage;
 
+- (void)setURL: (NSString*) url
+{
+    _url = url;
+    if (self.source != nil) {
+        MGLShapeSource *source = (MGLShapeSource *)self.source;
+        [source setURL: url == nil ? nil : [NSURL URLWithString:url]];
+    }
+}
+
 - (void)setShape:(NSString *)shape
 {
     _shape = shape;
