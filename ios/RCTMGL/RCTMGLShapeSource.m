@@ -14,7 +14,7 @@
 
 static UIImage * _placeHolderImage;
 
-- (void)setURL: (NSString*) url
+- (void)setUrl: (NSString*) url
 {
     _url = url;
     if (self.source != nil) {
