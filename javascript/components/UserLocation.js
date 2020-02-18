@@ -113,6 +113,8 @@ class UserLocation extends React.Component {
     await this.setLocationManager({
       running: this.needsLocationManagerRunning(),
     });
+
+    locationManager.setMinDisplacement(this.props.minDisplacement);
   }
 
   locationManagerRunning = false;
