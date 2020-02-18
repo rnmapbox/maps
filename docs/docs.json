@@ -2742,7 +2742,7 @@
       {
         "name": "compassViewPosition",
         "required": false,
-        "type": "string",
+        "type": "number",
         "default": "none",
         "description": "Change corner of map the compass starts at. (iOS only) 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight"
       },
