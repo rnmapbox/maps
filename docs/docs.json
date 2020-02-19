@@ -2922,8 +2922,56 @@
     ],
     "name": "MapView"
   },
+  "MarkerView": {
+    "description": "MarkerView allows you to place a interactive react native marker to the map. If you have static view consider using PointAnnotation or SymbolLayer they'll offer much better performance.\nThis is based on [MakerView plugin](https://docs.mapbox.com/android/plugins/overview/markerview/) on android and PointAnnotation on iOS.",
+    "displayName": "MarkerView",
+    "methods": [],
+    "props": [
+      {
+        "name": "coordinate",
+        "required": true,
+        "type": {
+          "name": "array",
+          "value": {
+            "type": "number"
+          }
+        },
+        "default": "none",
+        "description": "The center point (specified as a map coordinate) of the marker.\nSee also #anchor."
+      },
+      {
+        "name": "anchor",
+        "required": false,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "x",
+              "required": true,
+              "type": "number",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "y",
+              "required": true,
+              "type": "number",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            }
+          ]
+        },
+        "default": "{x: 0.5, y: 0.5}",
+        "description": "Specifies the anchor being set on a particular point of the annotation.\nThe anchor point is specified in the continuous space [0.0, 1.0] x [0.0, 1.0],\nwhere (0, 0) is the top-left corner of the image, and (1, 1) is the bottom-right corner.\nNote this is only for custom annotations not the default pin view.\nDefaults to the center of the view."
+      }
+    ],
+    "composes": [
+      "../utils"
+    ],
+    "name": "MarkerView"
+  },
   "PointAnnotation": {
-    "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate. PointAnnotation is legacy, soon to be deprecated, and should use ShapeSource and SymbolLayer instead.",
+    "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate. Consider using ShapeSource and SymbolLayer instead, if you have many points and you have static images, they'll offer much better performance.\nIf you need interctive views please use MarkerView, as with PointAnnotation on android child views are rendered onto a bitmap for better performance.",
     "displayName": "PointAnnotation",
     "methods": [],
     "props": [

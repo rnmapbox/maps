@@ -7,6 +7,7 @@ import MapHeader from '../examples/common/MapHeader';
 import sheet from '../styles/sheet';
 import colors from '../styles/colors';
 import ShowMap from '../examples/ShowMap';
+import MarkerView from '../examples/MarkerView';
 import SetPitch from '../examples/SetPitch';
 import SetHeading from '../examples/SetHeading';
 import ShowClick from '../examples/ShowClick';
@@ -106,6 +107,7 @@ const Examples = [
   new ExampleItem('Shape Source From Icon', ShapeSourceIcon),
   new ExampleItem('Custom Vector Source', CustomVectorSource),
   new ExampleItem('Show Point Annotation', ShowPointAnnotation),
+  new ExampleItem('Marker View', MarkerView),
   new ExampleItem('Create Offline Region', CreateOfflineRegion),
   new ExampleItem('Animation Along a Line', DriveTheLine),
   new ExampleItem('Image Overlay', ImageOverlay),
