@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {NativeModules, requireNativeComponent} from 'react-native';
-import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 import {
   toJSONString,
@@ -22,8 +21,6 @@ export const NATIVE_MODULE_NAME = 'RCTMGLShapeSource';
  */
 class ShapeSource extends AbstractSource {
   static NATIVE_ASSETS_KEY = 'assets';
-
-  static imageSourcePrefix = '__shape_source_images__';
 
   static propTypes = {
     ...viewPropTypes,
@@ -85,15 +82,6 @@ class ShapeSource extends AbstractSource {
     tolerance: PropTypes.number,
 
     /**
-     * Specifies the external images in key-value pairs required for the shape source.
-     * If you have an asset under Image.xcassets on iOS and the drawables directory on android
-     * you can specify an array of string names with assets as the key `{ assets: ['pin'] }`.
-     *
-     * Deprecated, please use Images#images.
-     */
-    images: PropTypes.object,
-
-    /**
      * Source press listener, gets called when a user presses one of the children layers only
      * if that layer has a higher z-index than another source layers
      *
@@ -133,41 +121,6 @@ class ShapeSource extends AbstractSource {
     return toJSONString(this.props.shape);
   }
 
-  _getImages() {
-    if (!this.props.images) {
-      return;
-    }
-    if (!this.props.id.startsWith(ShapeSource.imageSourcePrefix)) {
-      console.warn(
-        'ShapeSource#images is deprecated, please use Images#images',
-      );
-    }
-
-    const images = {};
-    let nativeImages = [];
-
-    const imageNames = Object.keys(this.props.images);
-    for (const imageName of imageNames) {
-      if (
-        imageName === ShapeSource.NATIVE_ASSETS_KEY &&
-        Array.isArray(this.props.images[ShapeSource.NATIVE_ASSETS_KEY])
-      ) {
-        nativeImages = this.props.images[ShapeSource.NATIVE_ASSETS_KEY];
-        continue;
-      }
-
-      const res = resolveAssetSource(this.props.images[imageName]);
-      if (res && res.uri) {
-        images[imageName] = res;
-      }
-    }
-
-    return {
-      images,
-      nativeImages,
-    };
-  }
-
   render() {
     const props = {
       id: this.props.id,
@@ -182,7 +135,6 @@ class ShapeSource extends AbstractSource {
       maxZoomLevel: this.props.maxZoomLevel,
       buffer: this.props.buffer,
       tolerance: this.props.tolerance,
-      ...this._getImages(),
       onPress: undefined,
     };
 
@@ -201,7 +153,6 @@ const RCTMGLShapeSource = requireNativeComponent(
   ShapeSource,
   {
     nativeOnly: {
-      nativeImages: true,
       hasPressListener: true,
       onMapboxShapeSourcePress: true,
     },

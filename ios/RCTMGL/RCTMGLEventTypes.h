@@ -45,4 +45,6 @@ extern NSString *const RCT_MAPBOX_VECTOR_SOURCE_LAYER_PRESS;
 
 extern NSString *const RCT_MAPBOX_USER_LOCATION_UPDATE;
 
+extern NSString *const RCT_MAPBOX_IMAGES_MISSING_IMAGE;
+
 @end

@@ -50,47 +50,18 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
     public RCTMGLShapeSource(Context context, RCTMGLShapeSourceManager manager) {
         super(context);
         mManager = manager;
-        if (mImagePlaceholder == null) {
-            mImagePlaceholder = BitmapUtils.getBitmapFromDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.empty_drawable, null));
-        }
     }
 
     @Override
     public void addToMap(final RCTMGLMapView mapView) {
         // Wait for style before adding the source to the map
-        // only then we can pre-load required images / placeholders into the style
-        // before we add the ShapeSource to the map
         mapView.getMapboxMap().getStyle(new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
                 MapboxMap map = mapView.getMapboxMap();
-                addNativeImages(mNativeImages, map);
-                addRemoteImages(mImages, map);
                 RCTMGLShapeSource.super.addToMap(mapView);
             }
         });
-    }
-
-    @Override
-    public void removeFromMap(RCTMGLMapView mapView) {
-        super.removeFromMap(mapView);
-        removeImages();
-    }
-
-    private void removeImages() {
-        Style style = getStyle();
-        if (style == null) return;
-        if (hasImages()) {
-            for (Map.Entry<String, ImageEntry> image : mImages) {
-                style.removeImage(image.getKey());
-            }
-        }
-
-        if (hasNativeImages()) {
-            for (Map.Entry<String, BitmapDrawable> image : mNativeImages) {
-                style.removeImage(image.getKey());
-            }
-        }
     }
 
     @Override
@@ -144,14 +115,6 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         mTolerance = tolerance;
     }
 
-    public void setImages(List<Map.Entry<String, ImageEntry>> images) {
-        mImages = images;
-    }
-
-    public void setNativeImages(List<Map.Entry<String, BitmapDrawable>> nativeImages) {
-        mNativeImages = nativeImages;
-    }
-
     public void onPress(Feature feature) {
         mManager.handleEvent(FeatureClickEvent.makeShapeSourceEvent(this, feature));
     }
@@ -184,80 +147,5 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         }
 
         return options;
-    }
-
-    private boolean hasImages() {
-        return mImages != null && mImages.size() > 0;
-    }
-
-    private boolean hasNativeImages() {
-        return mNativeImages != null && mNativeImages.size() > 0;
-    }
-
-    public boolean addMissingImageToStyle(@NonNull String id) {
-        if (mMap == null) return false;
-
-        if (mNativeImages != null) {
-            for (Map.Entry<String, BitmapDrawable> entry : mNativeImages) {
-                if (entry.getKey().equals(id)) {
-                    addNativeImages(Collections.singletonList(entry), mMap );
-                    return true;
-                }
-            }
-        }
-        if (mImages != null) {
-            for (Map.Entry<String, ImageEntry> entry : mImages) {
-                if (entry.getKey().equals(id)) {
-                    addRemoteImages(Collections.singletonList(entry), mMap);
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private boolean hasImage(String imageId, @NonNull MapboxMap map) {
-        Style style = map.getStyle();
-        return style != null && style.getImage(imageId) != null;
-    }
-
-    private void addNativeImages(@Nullable List<Map.Entry<String, BitmapDrawable>> imageEntries, @NonNull MapboxMap map) {
-        Style style = map.getStyle();
-        if (style == null || imageEntries == null) return;
-
-        for (Map.Entry<String, BitmapDrawable> imageEntry : imageEntries) {
-            if (!hasImage(imageEntry.getKey(), map)) {
-                style.addImage(imageEntry.getKey(), imageEntry.getValue());
-            }
-        }
-    }
-
-    private void addRemoteImages(@Nullable List<Map.Entry<String, ImageEntry>> imageEntries, @NonNull MapboxMap map) {
-        Style style = map.getStyle();
-        if (style == null || imageEntries == null) return;
-
-        List<Map.Entry<String, ImageEntry>> missingImages = new ArrayList<>();
-
-        // Add image placeholder for images that are not yet available in the style. This way
-        // we can load the images asynchronously and add the ShapeSource to the map without delay.
-        // The same is required when this ShapeSource is updated with new/added images and the
-        // data references them. In which case addMissingImageToStyle will take care of loading
-        // them in a similar way.
-        //
-        // See also: https://github.com/mapbox/mapbox-gl-native/pull/14253#issuecomment-478827792
-        for (Map.Entry<String, ImageEntry> imageEntry : imageEntries) {
-            if (!hasImage(imageEntry.getKey(), map)) {
-                style.addImage(imageEntry.getKey(), mImagePlaceholder);
-                missingImages.add(imageEntry);
-            }
-        }
-
-        if (missingImages.size() > 0) {
-            DownloadMapImageTask task = new DownloadMapImageTask(getContext(), map, null);
-            Map.Entry[] params = missingImages.toArray(new Map.Entry[missingImages.size()]);
-            //noinspection unchecked
-            task.execute(params);
-        }
     }
 }
