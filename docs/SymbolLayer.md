@@ -22,55 +22,59 @@
 * <a href="#name">symbolPlacement</a><br/>
 * <a href="#name-1">symbolSpacing</a><br/>
 * <a href="#name-2">symbolAvoidEdges</a><br/>
-* <a href="#name-3">symbolZOrder</a><br/>
-* <a href="#name-4">iconAllowOverlap</a><br/>
-* <a href="#name-5">iconIgnorePlacement</a><br/>
-* <a href="#name-6">iconOptional</a><br/>
-* <a href="#name-7">iconRotationAlignment</a><br/>
-* <a href="#name-8">iconSize</a><br/>
-* <a href="#name-9">iconTextFit</a><br/>
-* <a href="#name-10">iconTextFitPadding</a><br/>
-* <a href="#name-11">iconImage</a><br/>
-* <a href="#name-12">iconRotate</a><br/>
-* <a href="#name-13">iconPadding</a><br/>
-* <a href="#name-14">iconKeepUpright</a><br/>
-* <a href="#name-15">iconOffset</a><br/>
-* <a href="#name-16">iconAnchor</a><br/>
-* <a href="#name-17">iconPitchAlignment</a><br/>
-* <a href="#name-18">textPitchAlignment</a><br/>
-* <a href="#name-19">textRotationAlignment</a><br/>
-* <a href="#name-20">textField</a><br/>
-* <a href="#name-21">textFont</a><br/>
-* <a href="#name-22">textSize</a><br/>
-* <a href="#name-23">textMaxWidth</a><br/>
-* <a href="#name-24">textLineHeight</a><br/>
-* <a href="#name-25">textLetterSpacing</a><br/>
-* <a href="#name-26">textJustify</a><br/>
-* <a href="#name-27">textAnchor</a><br/>
-* <a href="#name-28">textMaxAngle</a><br/>
-* <a href="#name-29">textRotate</a><br/>
-* <a href="#name-30">textPadding</a><br/>
-* <a href="#name-31">textKeepUpright</a><br/>
-* <a href="#name-32">textTransform</a><br/>
-* <a href="#name-33">textOffset</a><br/>
-* <a href="#name-34">textAllowOverlap</a><br/>
-* <a href="#name-35">textIgnorePlacement</a><br/>
-* <a href="#name-36">textOptional</a><br/>
-* <a href="#name-37">visibility</a><br/>
-* <a href="#name-38">iconOpacity</a><br/>
-* <a href="#name-39">iconColor</a><br/>
-* <a href="#name-40">iconHaloColor</a><br/>
-* <a href="#name-41">iconHaloWidth</a><br/>
-* <a href="#name-42">iconHaloBlur</a><br/>
-* <a href="#name-43">iconTranslate</a><br/>
-* <a href="#name-44">iconTranslateAnchor</a><br/>
-* <a href="#name-45">textOpacity</a><br/>
-* <a href="#name-46">textColor</a><br/>
-* <a href="#name-47">textHaloColor</a><br/>
-* <a href="#name-48">textHaloWidth</a><br/>
-* <a href="#name-49">textHaloBlur</a><br/>
-* <a href="#name-50">textTranslate</a><br/>
-* <a href="#name-51">textTranslateAnchor</a><br/>
+* <a href="#name-3">symbolSortKey</a><br/>
+* <a href="#name-4">symbolZOrder</a><br/>
+* <a href="#name-5">iconAllowOverlap</a><br/>
+* <a href="#name-6">iconIgnorePlacement</a><br/>
+* <a href="#name-7">iconOptional</a><br/>
+* <a href="#name-8">iconRotationAlignment</a><br/>
+* <a href="#name-9">iconSize</a><br/>
+* <a href="#name-10">iconTextFit</a><br/>
+* <a href="#name-11">iconTextFitPadding</a><br/>
+* <a href="#name-12">iconImage</a><br/>
+* <a href="#name-13">iconRotate</a><br/>
+* <a href="#name-14">iconPadding</a><br/>
+* <a href="#name-15">iconKeepUpright</a><br/>
+* <a href="#name-16">iconOffset</a><br/>
+* <a href="#name-17">iconAnchor</a><br/>
+* <a href="#name-18">iconPitchAlignment</a><br/>
+* <a href="#name-19">textPitchAlignment</a><br/>
+* <a href="#name-20">textRotationAlignment</a><br/>
+* <a href="#name-21">textField</a><br/>
+* <a href="#name-22">textFont</a><br/>
+* <a href="#name-23">textSize</a><br/>
+* <a href="#name-24">textMaxWidth</a><br/>
+* <a href="#name-25">textLineHeight</a><br/>
+* <a href="#name-26">textLetterSpacing</a><br/>
+* <a href="#name-27">textJustify</a><br/>
+* <a href="#name-28">textRadialOffset</a><br/>
+* <a href="#name-29">textVariableAnchor</a><br/>
+* <a href="#name-30">textAnchor</a><br/>
+* <a href="#name-31">textMaxAngle</a><br/>
+* <a href="#name-32">textWritingMode</a><br/>
+* <a href="#name-33">textRotate</a><br/>
+* <a href="#name-34">textPadding</a><br/>
+* <a href="#name-35">textKeepUpright</a><br/>
+* <a href="#name-36">textTransform</a><br/>
+* <a href="#name-37">textOffset</a><br/>
+* <a href="#name-38">textAllowOverlap</a><br/>
+* <a href="#name-39">textIgnorePlacement</a><br/>
+* <a href="#name-40">textOptional</a><br/>
+* <a href="#name-41">visibility</a><br/>
+* <a href="#name-42">iconOpacity</a><br/>
+* <a href="#name-43">iconColor</a><br/>
+* <a href="#name-44">iconHaloColor</a><br/>
+* <a href="#name-45">iconHaloWidth</a><br/>
+* <a href="#name-46">iconHaloBlur</a><br/>
+* <a href="#name-47">iconTranslate</a><br/>
+* <a href="#name-48">iconTranslateAnchor</a><br/>
+* <a href="#name-49">textOpacity</a><br/>
+* <a href="#name-50">textColor</a><br/>
+* <a href="#name-51">textHaloColor</a><br/>
+* <a href="#name-52">textHaloWidth</a><br/>
+* <a href="#name-53">textHaloBlur</a><br/>
+* <a href="#name-54">textTranslate</a><br/>
+* <a href="#name-55">textTranslateAnchor</a><br/>
 
 ___
 
@@ -125,7 +129,7 @@ ___
 `symbolAvoidEdges`
 
 #### Description
-If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer.
+If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries.
 
 #### Type
 `boolean`
@@ -136,6 +140,22 @@ If true, the symbols will not cross tile edges to avoid mutual collisions. Recom
 #### Expression
 
 Parameters: `zoom`
+
+___
+
+#### Name
+`symbolSortKey`
+
+#### Description
+Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key when they overlap. Features with a lower sort key will have priority over other features when doing placement.
+
+#### Type
+`number`
+
+
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -336,7 +356,7 @@ ___
 Name of image in sprite to use for drawing an image background.
 
 #### Type
-`string`
+`resolvedImage`
 
 
 #### Expression
@@ -725,6 +745,49 @@ Parameters: `zoom, feature`
 ___
 
 #### Name
+`textRadialOffset`
+
+#### Description
+Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `textVariableAnchor`, which defaults to using the twoDimensional `textOffset` if present.
+
+#### Type
+`number`
+#### Default Value
+`0`
+
+#### Units
+`ems`
+
+
+#### Requires
+`textField`
+
+#### Expression
+
+Parameters: `zoom, feature`
+
+___
+
+#### Name
+`textVariableAnchor`
+
+#### Description
+To increase the chance of placing highPriority labels on the map, you can provide an array of `textAnchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `textJustify: auto` to choose justification based on anchor position. To apply an offset, use the `textRadialOffset` or the twoDimensional `textOffset`.
+
+#### Type
+`array<enum>`
+
+
+#### Requires
+`textField`
+
+#### Expression
+
+Parameters: `zoom`
+
+___
+
+#### Name
 `textAnchor`
 
 #### Description
@@ -750,6 +813,9 @@ Part of the text placed closest to the anchor.
 #### Requires
 `textField`
 
+#### Disabled By
+`textVariableAnchor`
+
 #### Supported Style Functions
 `camera`
 #### Expression
@@ -771,6 +837,25 @@ Maximum angle change between adjacent characters.
 
 #### Units
 `degrees`
+
+
+#### Requires
+`textField`
+
+#### Expression
+
+Parameters: `zoom`
+
+___
+
+#### Name
+`textWritingMode`
+
+#### Description
+The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. The order of elements in an array define priority order for the placement of an orientation variant.
+
+#### Type
+`array<enum>`
 
 
 #### Requires
@@ -884,7 +969,7 @@ ___
 `textOffset`
 
 #### Description
-Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up.
+Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with textVariableAnchor, input values will be taken as absolute values. Offsets along the x and yAxis will be applied automatically based on the anchor position.
 
 #### Type
 `array<number>`

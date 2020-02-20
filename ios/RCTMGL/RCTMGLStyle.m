@@ -180,6 +180,8 @@
       [self setSymbolSpacing:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"symbolAvoidEdges"]) {
       [self setSymbolAvoidEdges:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"symbolSortKey"]) {
+      [self setSymbolSortKey:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"symbolZOrder"]) {
       [self setSymbolZOrder:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"iconAllowOverlap"]) {
@@ -241,10 +243,16 @@
       [self setTextLetterSpacing:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"textJustify"]) {
       [self setTextJustify:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"textRadialOffset"]) {
+      [self setTextRadialOffset:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"textVariableAnchor"]) {
+      [self setTextVariableAnchor:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"textAnchor"]) {
       [self setTextAnchor:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"textMaxAngle"]) {
       [self setTextMaxAngle:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"textWritingMode"]) {
+      [self setTextWritingMode:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"textRotate"]) {
       [self setTextRotate:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"textPadding"]) {
@@ -872,6 +880,11 @@
     layer.symbolAvoidsEdges = styleValue.mglStyleValue;
 }
 
+- (void)setSymbolSortKey:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.symbolSortKey = styleValue.mglStyleValue;
+}
+
 - (void)setSymbolZOrder:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
     layer.symbolZOrder = styleValue.mglStyleValue;
@@ -992,6 +1005,16 @@
     layer.textJustification = styleValue.mglStyleValue;
 }
 
+- (void)setTextRadialOffset:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.textRadialOffset = styleValue.mglStyleValue;
+}
+
+- (void)setTextVariableAnchor:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.textVariableAnchor = styleValue.mglStyleValue;
+}
+
 - (void)setTextAnchor:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
     layer.textAnchor = styleValue.mglStyleValue;
@@ -1000,6 +1023,11 @@
 - (void)setTextMaxAngle:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
     layer.maximumTextAngle = styleValue.mglStyleValue;
+}
+
+- (void)setTextWritingMode:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.textWritingModes = styleValue.mglStyleValue;
 }
 
 - (void)setTextRotate:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue

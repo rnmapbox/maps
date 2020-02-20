@@ -2,13 +2,43 @@ require('./autogenHelpers/globals');
 
 const fs = require('fs');
 const path = require('path');
-const styleSpecJSON = require('../style-spec/v8.json');
+
 const ejs = require('ejs');
+
 const {execSync} = require('child_process');
+
 const prettier = require('prettier');
+
+const styleSpecJSON = require('../style-spec/v8.json');
 
 const DocJSONBuilder = require('./autogenHelpers/DocJSONBuilder');
 const MarkdownBuilder = require('./autogenHelpers/MarkdownBuilder');
+
+function readIosVersion() {
+  const podspecPath = path.join(
+    __dirname,
+    '..',
+    'react-native-mapbox-gl.podspec',
+  );
+  const lines = fs.readFileSync(podspecPath, 'utf8').split('\n');
+  const mapboxLineRegex = /^\s+s\.dependency\s+'Mapbox-iOS-SDK', '~>\s+(\d+\.\d+)'$/;
+  const mapboxLine = lines.filter(i => mapboxLineRegex.exec(i))[0];
+  return `${mapboxLineRegex.exec(mapboxLine)[1]}.0`;
+}
+
+function readAndroidVersion() {
+  const buildGradlePath = path.join(
+    __dirname,
+    '..',
+    'android',
+    'rctmgl',
+    'build.gradle',
+  );
+  const lines = fs.readFileSync(buildGradlePath, 'utf8').split('\n');
+  const mapboxLineRegex = /^\s+implementation\s+'com.mapbox.mapboxsdk:mapbox-android-sdk:(\d+\.\d+\.\d+)'$/;
+  const mapboxLine = lines.filter(i => mapboxLineRegex.exec(i))[0];
+  return mapboxLineRegex.exec(mapboxLine)[1];
+}
 
 if (!styleSpecJSON) {
   console.log(
@@ -18,8 +48,8 @@ if (!styleSpecJSON) {
 }
 
 const layers = [];
-const androidVersion = '8.6.1';
-const iosVersion = '5.5.0';
+const androidVersion = readAndroidVersion();
+const iosVersion = readIosVersion();
 
 const TMPL_PATH = path.join(__dirname, 'templates');
 
@@ -56,7 +86,7 @@ const JS_OUTPUT_PATH = path.join(
 );
 
 getSupportedLayers(Object.keys(styleSpecJSON.layer.type.values)).forEach(
-  (layerName) => {
+  layerName => {
     layers.push({
       name: layerName,
       properties: getPropertiesForLayer(layerName),
@@ -65,12 +95,12 @@ getSupportedLayers(Object.keys(styleSpecJSON.layer.type.values)).forEach(
 );
 
 // add light as a layer
-layers.push({ name: 'light', properties: getPropertiesForLight() });
+layers.push({name: 'light', properties: getPropertiesForLight()});
 
 function getPropertiesForLight() {
   const lightAttributes = styleSpecJSON.light;
 
-  const lightProps = getSupportedProperties(lightAttributes).map((attrName) => {
+  const lightProps = getSupportedProperties(lightAttributes).map(attrName => {
     return Object.assign({}, buildProperties(lightAttributes, attrName), {
       allowedFunctionTypes: [],
     });
@@ -83,8 +113,8 @@ function getPropertiesForLayer(layerName) {
   const paintAttributes = styleSpecJSON[`paint_${layerName}`];
   const layoutAttributes = styleSpecJSON[`layout_${layerName}`];
 
-  const paintProps = getSupportedProperties(paintAttributes).map((attrName) => {
-    let prop = buildProperties(paintAttributes, attrName);
+  const paintProps = getSupportedProperties(paintAttributes).map(attrName => {
+    const prop = buildProperties(paintAttributes, attrName);
 
     // overrides
     if (['line-width'].includes(attrName)) {
@@ -94,27 +124,25 @@ function getPropertiesForLayer(layerName) {
     return prop;
   });
 
-  const layoutProps = getSupportedProperties(layoutAttributes).map(
-    (attrName) => {
-      let prop = buildProperties(layoutAttributes, attrName);
+  const layoutProps = getSupportedProperties(layoutAttributes).map(attrName => {
+    const prop = buildProperties(layoutAttributes, attrName);
 
-      // overrides
-      if (
-        [
-          'line-join',
-          'text-max-width',
-          'text-letter-spacing',
-          'text-anchor',
-          'text-justify',
-          'text-font',
-        ].includes(attrName)
-      ) {
-        prop.allowedFunctionTypes = ['camera'];
-      }
+    // overrides
+    if (
+      [
+        'line-join',
+        'text-max-width',
+        'text-letter-spacing',
+        'text-anchor',
+        'text-justify',
+        'text-font',
+      ].includes(attrName)
+    ) {
+      prop.allowedFunctionTypes = ['camera'];
+    }
 
-      return prop;
-    },
-  );
+    return prop;
+  });
 
   return layoutProps.concat(paintProps);
 }
@@ -123,7 +151,7 @@ function getSupportedLayers(layerNames) {
   const layerMap = styleSpecJSON.layer.type.values;
 
   const supportedLayers = [];
-  for (let layerName of layerNames) {
+  for (const layerName of layerNames) {
     const layer = layerMap[layerName];
     const support = getAttributeSupport(layer['sdk-support']);
 
@@ -136,7 +164,7 @@ function getSupportedLayers(layerNames) {
 }
 
 function getSupportedProperties(attributes) {
-  return Object.keys(attributes).filter((attrName) =>
+  return Object.keys(attributes).filter(attrName =>
     isAttrSupported(attributes[attrName]),
   );
 }
@@ -160,14 +188,15 @@ function buildProperties(attributes, attrName) {
     translate: isTranslate(attrName),
     transition: attributes[attrName].transition,
     expression: attributes[attrName].expression,
-    expressionSupported: Object.keys(attributes[attrName].expression || {}).length > 0,
+    expressionSupported:
+      Object.keys(attributes[attrName].expression || {}).length > 0,
     support: getAttributeSupport(attributes[attrName]['sdk-support']),
     allowedFunctionTypes: getAllowedFunctionTypes(attributes[attrName]),
   };
 }
 
 function formatDescription(description) {
-  let words = description.split(' ');
+  const words = description.split(' ');
 
   for (let i = 0; i < words.length; i++) {
     const word = words[i];
@@ -177,18 +206,18 @@ function formatDescription(description) {
     }
   }
 
-  let formattedDescription = words.join(' ');
+  const formattedDescription = words.join(' ');
   return formattedDescription;
 }
 
 function getRequires(requiredItems) {
-  let items = [];
+  const items = [];
 
   if (!requiredItems) {
     return items;
   }
 
-  for (let item of requiredItems) {
+  for (const item of requiredItems) {
     if (typeof item === 'string') {
       items.push(camelCase(item, '-'));
     }
@@ -198,13 +227,13 @@ function getRequires(requiredItems) {
 }
 
 function getDisables(disabledItems) {
-  let items = [];
+  const items = [];
 
   if (!disabledItems) {
     return items;
   }
 
-  for (let item of disabledItems) {
+  for (const item of disabledItems) {
     if (item['!']) {
       items.push(camelCase(item['!'], '-'));
     }
@@ -230,9 +259,9 @@ function isAttrSupported(attr) {
 }
 
 function getAttributeSupport(sdkSupport) {
-  let support = {
-    basic: { android: false, ios: false },
-    data: { android: false, ios: false },
+  const support = {
+    basic: {android: false, ios: false},
+    data: {android: false, ios: false},
   };
 
   const basicSupport = sdkSupport && sdkSupport['basic functionality'];
@@ -263,8 +292,14 @@ function getAttributeSupport(sdkSupport) {
 }
 
 function isVersionGTE(version, otherVersion) {
-  const v = +version.split('.').join('');
-  const ov = +otherVersion.split('.').join('');
+  const v = +version
+    .split('.')
+    .map(i => String(i).padStart(3, '0'))
+    .join('');
+  const ov = +otherVersion
+    .split('.')
+    .map(i => String(i).padStart(3, '0'))
+    .join('');
   return v >= ov;
 }
 
@@ -282,7 +317,6 @@ function getAllowedFunctionTypes(paintAttr) {
 
   return allowedFunctionTypes;
 }
-
 
 async function generate() {
   const templateMappings = [

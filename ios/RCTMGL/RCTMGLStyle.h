@@ -66,6 +66,7 @@
 - (void)setSymbolPlacement:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setSymbolSpacing:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setSymbolAvoidEdges:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setSymbolSortKey:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setSymbolZOrder:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setIconAllowOverlap:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setIconIgnorePlacement:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
@@ -90,8 +91,11 @@
 - (void)setTextLineHeight:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setTextLetterSpacing:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setTextJustify:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setTextRadialOffset:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setTextVariableAnchor:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setTextAnchor:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setTextMaxAngle:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
+- (void)setTextWritingMode:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setTextRotate:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setTextPadding:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setTextKeepUpright:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
