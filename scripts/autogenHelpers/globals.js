@@ -38,6 +38,7 @@ const iosSpecOverrides = {
   'text-translate': 'text-translation',
   'text-translate-anchor': 'text-translation-anchor',
   'raster-resampling': 'raster-resampling-mode',
+  'text-writing-mode': 'text-writing-modes',
 };
 
 global.getValue = function(value, defaultValue) {
@@ -203,6 +204,10 @@ global.jsStyleType = function(prop) {
   }
 
   if (prop.type === 'string' && prop.image) {
+    return 'StyleTypes.Image';
+  }
+
+  if (prop.type === 'resolvedImage') {
     return 'StyleTypes.Image';
   }
 

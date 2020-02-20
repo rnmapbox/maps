@@ -119,7 +119,7 @@
       },
       {
         "name": "backgroundPattern",
-        "type": "string",
+        "type": "resolvedImage",
         "values": [],
         "description": "Name of image in sprite to use for drawing an image background. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.",
         "requires": [],
@@ -1259,7 +1259,7 @@
       },
       {
         "name": "fillExtrusionPattern",
-        "type": "string",
+        "type": "resolvedImage",
         "values": [],
         "description": "Name of image in sprite to use for drawing images on extruded fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.",
         "requires": [],
@@ -1541,7 +1541,7 @@
       },
       {
         "name": "fillPattern",
-        "type": "string",
+        "type": "resolvedImage",
         "values": [],
         "description": "Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.",
         "requires": [],
@@ -2310,7 +2310,7 @@
       },
       {
         "name": "linePattern",
-        "type": "string",
+        "type": "resolvedImage",
         "values": [],
         "description": "Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.",
         "requires": [],
@@ -3670,7 +3670,7 @@
         "type": "boolean",
         "values": [],
         "default": false,
-        "description": "If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer.",
+        "description": "If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -3678,6 +3678,22 @@
           "interpolated": false,
           "parameters": [
             "zoom"
+          ]
+        }
+      },
+      {
+        "name": "symbolSortKey",
+        "type": "number",
+        "values": [],
+        "description": "Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key when they overlap. Features with a lower sort key will have priority over other features when doing placement.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom",
+            "feature"
           ]
         }
       },
@@ -3880,7 +3896,7 @@
       },
       {
         "name": "iconImage",
-        "type": "string",
+        "type": "resolvedImage",
         "values": [],
         "description": "Name of image in sprite to use for drawing an image background.",
         "requires": [],
@@ -4288,6 +4304,43 @@
         }
       },
       {
+        "name": "textRadialOffset",
+        "type": "number",
+        "values": [],
+        "units": "ems",
+        "default": 0,
+        "description": "Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `textVariableAnchor`, which defaults to using the twoDimensional `textOffset` if present.",
+        "requires": [
+          "textField"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
+      },
+      {
+        "name": "textVariableAnchor",
+        "type": "array<enum>",
+        "values": [],
+        "description": "To increase the chance of placing highPriority labels on the map, you can provide an array of `textAnchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `textJustify: auto` to choose justification based on anchor position. To apply an offset, use the `textRadialOffset` or the twoDimensional `textOffset`.",
+        "requires": [
+          "textField"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
+      },
+      {
         "name": "textAnchor",
         "type": "enum",
         "values": [
@@ -4333,7 +4386,9 @@
         "requires": [
           "textField"
         ],
-        "disabledBy": [],
+        "disabledBy": [
+          "textVariableAnchor"
+        ],
         "allowedFunctionTypes": [
           "camera"
         ],
@@ -4359,6 +4414,23 @@
         "allowedFunctionTypes": [],
         "expression": {
           "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        }
+      },
+      {
+        "name": "textWritingMode",
+        "type": "array<enum>",
+        "values": [],
+        "description": "The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. The order of elements in an array define priority order for the placement of an orientation variant.",
+        "requires": [
+          "textField"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
           "parameters": [
             "zoom"
           ]
@@ -4463,7 +4535,7 @@
           0,
           0
         ],
-        "description": "Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up.",
+        "description": "Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with textVariableAnchor, input values will be taken as absolute values. Offsets along the x and yAxis will be applied automatically based on the anchor position.",
         "requires": [
           "textField"
         ],

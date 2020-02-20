@@ -366,10 +366,18 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   ]),
 
   /**
-   * If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer.
+   * If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries.
    */
   symbolAvoidEdges: PropTypes.oneOfType([
     PropTypes.bool,
+    PropTypes.array,
+  ]),
+
+  /**
+   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key when they overlap. Features with a lower sort key will have priority over other features when doing placement.
+   */
+  symbolSortKey: PropTypes.oneOfType([
+    PropTypes.number,
     PropTypes.array,
   ]),
 
@@ -609,9 +617,28 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   ]),
 
   /**
+   * Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `textVariableAnchor`, which defaults to using the twoDimensional `textOffset` if present.
+   *
+   * @requires textField
+   */
+  textRadialOffset: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+  ]),
+
+  /**
+   * To increase the chance of placing highPriority labels on the map, you can provide an array of `textAnchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `textJustify: auto` to choose justification based on anchor position. To apply an offset, use the `textRadialOffset` or the twoDimensional `textOffset`.
+   *
+   * @requires textField
+   */
+  textVariableAnchor: PropTypes.array,
+
+  /**
    * Part of the text placed closest to the anchor.
    *
    * @requires textField
+   *
+   * @disabledBy textVariableAnchor
    */
   textAnchor: PropTypes.oneOfType([
     PropTypes.oneOf(['center', 'left', 'right', 'top', 'bottom', 'top-left', 'top-right', 'bottom-left', 'bottom-right']),
@@ -627,6 +654,13 @@ export const SymbolLayerStyleProp = PropTypes.shape({
     PropTypes.number,
     PropTypes.array,
   ]),
+
+  /**
+   * The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. The order of elements in an array define priority order for the placement of an orientation variant.
+   *
+   * @requires textField
+   */
+  textWritingMode: PropTypes.array,
 
   /**
    * Rotates the text clockwise.
@@ -669,7 +703,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   ]),
 
   /**
-   * Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up.
+   * Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with textVariableAnchor, input values will be taken as absolute values. Offsets along the x and yAxis will be applied automatically based on the anchor position.
    *
    * @requires textField
    *
@@ -1674,6 +1708,7 @@ const styleMap = {
   symbolPlacement: StyleTypes.Enum,
   symbolSpacing: StyleTypes.Constant,
   symbolAvoidEdges: StyleTypes.Constant,
+  symbolSortKey: StyleTypes.Constant,
   symbolZOrder: StyleTypes.Enum,
   iconAllowOverlap: StyleTypes.Constant,
   iconIgnorePlacement: StyleTypes.Constant,
@@ -1698,8 +1733,11 @@ const styleMap = {
   textLineHeight: StyleTypes.Constant,
   textLetterSpacing: StyleTypes.Constant,
   textJustify: StyleTypes.Enum,
+  textRadialOffset: StyleTypes.Constant,
+  textVariableAnchor: StyleTypes.Constant,
   textAnchor: StyleTypes.Enum,
   textMaxAngle: StyleTypes.Constant,
+  textWritingMode: StyleTypes.Constant,
   textRotate: StyleTypes.Constant,
   textPadding: StyleTypes.Constant,
   textKeepUpright: StyleTypes.Constant,

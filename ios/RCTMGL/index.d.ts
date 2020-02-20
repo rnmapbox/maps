@@ -246,9 +246,14 @@ export interface symbolLayerStyleProps {
   symbolSpacing: number;
 
   /**
-   * If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer.
+   * If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries.
    */
   symbolAvoidEdges: string;
+
+  /**
+   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key when they overlap. Features with a lower sort key will have priority over other features when doing placement.
+   */
+  symbolSortKey: number;
 
   /**
    * Controls the order in which overlapping symbols in the same layer are rendered
@@ -413,9 +418,25 @@ export interface symbolLayerStyleProps {
   textJustify: TransitionProps | any | StyleFunctionProps;
 
   /**
+   * Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `textVariableAnchor`, which defaults to using the twoDimensional `textOffset` if present.
+   *
+   * @requires textField
+   */
+  textRadialOffset: number;
+
+  /**
+   * To increase the chance of placing highPriority labels on the map, you can provide an array of `textAnchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `textJustify: auto` to choose justification based on anchor position. To apply an offset, use the `textRadialOffset` or the twoDimensional `textOffset`.
+   *
+   * @requires textField
+   */
+  textVariableAnchor: any[];
+
+  /**
    * Part of the text placed closest to the anchor.
    *
    * @requires textField
+   *
+   * @disabledBy textVariableAnchor
    */
   textAnchor: TransitionProps | any | StyleFunctionProps;
 
@@ -425,6 +446,13 @@ export interface symbolLayerStyleProps {
    * @requires textField
    */
   textMaxAngle: number;
+
+  /**
+   * The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. The order of elements in an array define priority order for the placement of an orientation variant.
+   *
+   * @requires textField
+   */
+  textWritingMode: any[];
 
   /**
    * Rotates the text clockwise.
@@ -455,7 +483,7 @@ export interface symbolLayerStyleProps {
   textTransform: any;
 
   /**
-   * Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up.
+   * Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with textVariableAnchor, input values will be taken as absolute values. Offsets along the x and yAxis will be applied automatically based on the anchor position.
    *
    * @requires textField
    *

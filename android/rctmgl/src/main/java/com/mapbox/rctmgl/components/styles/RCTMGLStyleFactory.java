@@ -197,6 +197,9 @@ public class RCTMGLStyleFactory {
             case "symbolAvoidEdges":
               RCTMGLStyleFactory.setSymbolAvoidEdges(layer, styleValue);
               break;
+            case "symbolSortKey":
+              RCTMGLStyleFactory.setSymbolSortKey(layer, styleValue);
+              break;
             case "symbolZOrder":
               RCTMGLStyleFactory.setSymbolZOrder(layer, styleValue);
               break;
@@ -274,11 +277,20 @@ public class RCTMGLStyleFactory {
             case "textJustify":
               RCTMGLStyleFactory.setTextJustify(layer, styleValue);
               break;
+            case "textRadialOffset":
+              RCTMGLStyleFactory.setTextRadialOffset(layer, styleValue);
+              break;
+            case "textVariableAnchor":
+              RCTMGLStyleFactory.setTextVariableAnchor(layer, styleValue);
+              break;
             case "textAnchor":
               RCTMGLStyleFactory.setTextAnchor(layer, styleValue);
               break;
             case "textMaxAngle":
               RCTMGLStyleFactory.setTextMaxAngle(layer, styleValue);
+              break;
+            case "textWritingMode":
+              RCTMGLStyleFactory.setTextWritingMode(layer, styleValue);
               break;
             case "textRotate":
               RCTMGLStyleFactory.setTextRotate(layer, styleValue);
@@ -1066,6 +1078,14 @@ public class RCTMGLStyleFactory {
       }
     }
 
+    public static void setSymbolSortKey(SymbolLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.symbolSortKey(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.symbolSortKey(styleValue.getFloat(VALUE_KEY)));
+      }
+    }
+
     public static void setSymbolZOrder(SymbolLayer layer, RCTMGLStyleValue styleValue) {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.symbolZOrder(styleValue.getExpression()));
@@ -1258,6 +1278,22 @@ public class RCTMGLStyleFactory {
       }
     }
 
+    public static void setTextRadialOffset(SymbolLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textRadialOffset(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.textRadialOffset(styleValue.getFloat(VALUE_KEY)));
+      }
+    }
+
+    public static void setTextVariableAnchor(SymbolLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textVariableAnchor(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.textVariableAnchor(styleValue.getStringArray(VALUE_KEY)));
+      }
+    }
+
     public static void setTextAnchor(SymbolLayer layer, RCTMGLStyleValue styleValue) {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.textAnchor(styleValue.getExpression()));
@@ -1271,6 +1307,14 @@ public class RCTMGLStyleFactory {
         layer.setProperties(PropertyFactory.textMaxAngle(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.textMaxAngle(styleValue.getFloat(VALUE_KEY)));
+      }
+    }
+
+    public static void setTextWritingMode(SymbolLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.textWritingMode(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.textWritingMode(styleValue.getStringArray(VALUE_KEY)));
       }
     }
 

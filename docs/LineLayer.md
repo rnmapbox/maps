@@ -359,7 +359,7 @@ ___
 Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.
 
 #### Type
-`string`
+`resolvedImage`
 
 
 #### Expression
