@@ -75,6 +75,7 @@ public class RCTMGLMarkerView extends AbstractMapFeature implements MarkerView.O
                     if (mChildView != null) {
                         mMarkerView = new MarkerView(GeoJSONUtils.toLatLng(mCoordinate), mChildView);
                         mMarkerView.setOnPositionUpdateListener(rctmglMarkerView);
+                        mChildView.addOnLayoutChangeListener(rctmglMarkerView);
                         mMarkerViewManager.addMarker(mMarkerView);
                     }
                 }
@@ -97,6 +98,8 @@ public class RCTMGLMarkerView extends AbstractMapFeature implements MarkerView.O
     public void removeFromMap(RCTMGLMapView mapView) {
         if (mMarkerView != null) {
             mMarkerViewManager.removeMarker(mMarkerView);
+            mChildView.removeOnLayoutChangeListener(this);
+            mMarkerView.setOnPositionUpdateListener(null);
             mMarkerView = null;
             mMarkerViewManager = null;
         }
