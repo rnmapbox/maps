@@ -186,5 +186,109 @@ describe('Camera', () => {
         });
       });
     });
+
+    describe('#_hasCameraChanged', () => {
+      let camera;
+
+      beforeEach(() => {
+        camera = new Camera();
+
+        // set up fake ref
+        camera.refs = {
+          camera: {
+            setNativeProps: jest.fn(),
+          },
+        };
+
+        // set up fake props
+        // we only do this, because we want to test the class methods!
+        camera.props = {};
+
+        jest.spyOn(camera, '_hasCenterCoordinateChanged');
+        jest.spyOn(camera, '_hasBoundsChanged');
+      });
+
+      test('returns true if "hasDefaultPropsChanged"', () => {
+        const testCases = [
+          [{heading: 120}, {heading: 121}],
+          [
+            {
+              centerCoordinate: [-111.8678, 40.2866],
+            },
+            {
+              centerCoordinate: [-111.8678, 38.2866],
+            },
+          ],
+          [
+            {
+              bounds: {
+                ne: [-74.12641, 40.797968],
+                sw: [-74.143727, 40.772177],
+              },
+            },
+            {
+              bounds: {
+                ne: [-64.12641, 40.797968],
+                sw: [-74.143727, 40.772177],
+              },
+            },
+          ],
+          [
+            {
+              pitch: 45,
+            },
+            {
+              pitch: 55,
+            },
+          ],
+          [
+            {
+              zoomLevel: 10,
+            },
+            {
+              zoomLevel: 15,
+            },
+          ],
+          [
+            // using the usecase in /example
+            {
+              triggerKey: 1582486618640, // Date.now()
+            },
+            {
+              triggerKey: 1582486626818, // Date.now()
+            },
+          ],
+        ];
+
+        testCases.forEach(c => {
+          expect(camera._hasCameraChanged(c[0], c[1])).toBe(true);
+        });
+      });
+
+      test('returns true if "hasFollowPropsChanged"', () => {
+        const testCases = [
+          [{followUserLocation: false}, {followUserLocation: true}],
+          [{followUserMode: 'normal'}, {followUserMode: 'course'}],
+          [{followZoomLevel: 10}, {followZoomLevel: 13}],
+          [{followHeading: 100}, {followHeading: 110}],
+          [{followPitch: 40}, {followPitch: 49}],
+        ];
+
+        testCases.forEach(c => {
+          expect(camera._hasCameraChanged(c[0], c[1])).toBe(true);
+        });
+      });
+
+      test('returns true if "hasAnimationPropsChanged"', () => {
+        const testCases = [
+          [{animationDuration: 3000}, {animationDuration: 1000}],
+          [{animationMode: 'flyTo'}, {animationMode: 'easeTo'}],
+        ];
+
+        testCases.forEach(c => {
+          expect(camera._hasCameraChanged(c[0], c[1])).toBe(true);
+        });
+      });
+    });
   });
 });
