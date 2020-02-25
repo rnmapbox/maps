@@ -111,4 +111,33 @@ MapboxGL.Animated = {
   BackgroundLayer: Animated.createAnimatedComponent(BackgroundLayer),
 };
 
+export {
+  MapView,
+  Light,
+  PointAnnotation,
+  Callout,
+  UserLocation,
+  Camera,
+  Annotation,
+  MarkerView,
+  VectorSource,
+  ShapeSource,
+  RasterSource,
+  ImageSource,
+  Images,
+  FillLayer,
+  FillExtrusionLayer,
+  HeatmapLayer,
+  LineLayer,
+  CircleLayer,
+  SymbolLayer,
+  RasterLayer,
+  BackgroundLayer,
+  locationManager,
+  offlineManager,
+  snapshotManager,
+  geoUtils,
+  AnimatedMapPoint,
+};
+
 export default MapboxGL;
