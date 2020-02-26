@@ -91,4 +91,9 @@ public class RCTMGLCameraManager extends AbstractEventEmitter<RCTMGLCamera> {
         camera.setMaxZoomLevel(value);
     }
 
+    @ReactProp(name="userLocationVerticalAlignment")
+    public void setUserLocationVerticalAlignment(RCTMGLCamera camera, int userLocationVerticalAlignment) {
+        camera.setReactUserLocationVerticalAlignment(userLocationVerticalAlignment);
+    }
+
 }
