@@ -61,6 +61,11 @@ const SettingsPropTypes = {
    * Zoom level of the map
    */
   zoomLevel: PropTypes.number,
+
+  /**
+   * The vertical alignment of the user location within in map. This is only enabled while tracking the users location.
+   */
+  userLocationVerticalAlignment: PropTypes.number,
 };
 
 class Camera extends React.Component {
@@ -140,6 +145,17 @@ class Camera extends React.Component {
   }
 
   _handleCameraChange(currentCamera, nextCamera) {
+    // setting it in here up top for it to take immediate effect
+    // TODO: refactor when other issues are solved
+    if (
+      currentCamera.userLocationVerticalAlignment !==
+      nextCamera.userLocationVerticalAlignment
+    ) {
+      this.refs.camera.setNativeProps({
+        userLocationVerticalAlignment: nextCamera.userLocationVerticalAlignment,
+      });
+    }
+
     const hasCameraChanged = this._hasCameraChanged(currentCamera, nextCamera);
     if (!hasCameraChanged) {
       return;
@@ -547,6 +563,7 @@ class Camera extends React.Component {
         stop={this._createStopConfig(props)}
         maxZoomLevel={this.props.maxZoomLevel}
         minZoomLevel={this.props.minZoomLevel}
+        userLocationVerticalAlignment={this.props.userLocationVerticalAlignment}
         maxBounds={this._getMaxBounds()}
         defaultStop={this._createDefaultCamera()}
         {...callbacks}
