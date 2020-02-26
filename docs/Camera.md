@@ -19,6 +19,7 @@
 | &nbsp;&nbsp;&nbsp;&nbsp;paddingTop | `number` | `none` | `false` | Top camera padding for bounds |
 | &nbsp;&nbsp;&nbsp;&nbsp;paddingBottom | `number` | `none` | `false` | Bottom camera padding for bounds |
 | &nbsp;&nbsp;zoomLevel | `number` | `none` | `false` | Zoom level of the map |
+| &nbsp;&nbsp;userLocationVerticalAlignment | `number` | `none` | `false` | The vertical alignment of the user location within in map. This is only enabled while tracking the users location. |
 | centerCoordinate | `array` | `none` | `false` | Center coordinate on map [lng, lat] |
 | heading | `number` | `none` | `false` | Heading on map |
 | pitch | `number` | `none` | `false` | Pitch on map |
@@ -30,6 +31,7 @@
 | &nbsp;&nbsp;paddingTop | `number` | `none` | `false` | Top camera padding for bounds |
 | &nbsp;&nbsp;paddingBottom | `number` | `none` | `false` | Bottom camera padding for bounds |
 | zoomLevel | `number` | `none` | `false` | Zoom level of the map |
+| userLocationVerticalAlignment | `number` | `none` | `false` | The vertical alignment of the user location within in map. This is only enabled while tracking the users location. |
 | minZoomLevel | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
 | maxZoomLevel | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
 | maxBounds | `shape` | `none` | `false` | Restrict map panning so that the center is within these bounds |

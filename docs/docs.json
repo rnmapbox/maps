@@ -514,6 +514,13 @@
               "type": "number",
               "default": "none",
               "description": "Zoom level of the map"
+            },
+            {
+              "name": "userLocationVerticalAlignment",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "The vertical alignment of the user location within in map. This is only enabled while tracking the users location."
             }
           ]
         },
@@ -615,6 +622,13 @@
         "type": "number",
         "default": "none",
         "description": "Zoom level of the map"
+      },
+      {
+        "name": "userLocationVerticalAlignment",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The vertical alignment of the user location within in map. This is only enabled while tracking the users location."
       },
       {
         "name": "minZoomLevel",
