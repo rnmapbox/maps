@@ -2,6 +2,8 @@ package com.mapbox.rctmgl.components.camera;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
@@ -29,6 +31,7 @@ import com.mapbox.rctmgl.location.UserLocationVerticalAlignment;
 import com.mapbox.rctmgl.location.UserTrackingMode;
 import com.mapbox.rctmgl.location.UserTrackingState;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
+import com.mapbox.rctmgl.utils.GeoViewport;
 
 import com.mapbox.rctmgl.R;
 
@@ -41,7 +44,7 @@ import com.mapbox.geojson.Point;
 
 import com.mapbox.android.core.permissions.PermissionsManager;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class RCTMGLCamera extends AbstractMapFeature {
     private RCTMGLCameraManager mManager;
@@ -82,7 +85,6 @@ public class RCTMGLCamera extends AbstractMapFeature {
 
     private Context mContext;
 
-
     private LocationManager.OnUserLocationChange mLocationChangeListener = new LocationManager.OnUserLocationChange() {
         @Override
         public void onLocationChange(Location nextLocation) {
@@ -120,6 +122,7 @@ public class RCTMGLCamera extends AbstractMapFeature {
     };
 
     public RCTMGLCamera(Context context, RCTMGLCameraManager manager) {
+
         super(context);
         mContext = context;
         mManager = manager;
@@ -148,7 +151,6 @@ public class RCTMGLCamera extends AbstractMapFeature {
 
     @Override
     public void removeFromMap(RCTMGLMapView mapView) {
-
     }
 
     public void setStop(CameraStop stop) {
@@ -220,11 +222,30 @@ public class RCTMGLCamera extends AbstractMapFeature {
         }
     }
 
+    public void setReactUserLocationVerticalAlignment(int userLocationVerticalAlignment) {
+        MapboxMap map = getMapboxMap();
+        mUserLocationVerticalAlignment = userLocationVerticalAlignment;
+
+        if (map != null && mUserLocation.getTrackingMode() != UserTrackingMode.NONE) {
+            updateUserLocation(false);
+        }
+
+    }
+
     private CameraPosition getUserLocationUpdateCameraPosition(double zoomLevel) {
         LatLng center = mUserLocation.getCoordinate();
 
-        if (mUserLocationVerticalAlignment != UserLocationVerticalAlignment.CENTER) {
-            VisibleRegion region = mMapView.getVisibleRegion(center, zoomLevel);
+        if ((center != null) && mUserLocationVerticalAlignment != UserLocationVerticalAlignment.CENTER) {
+            MapboxMap map = getMapboxMap();
+
+            DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
+            int[] contentPadding = map.getPadding();
+
+            // we want to get the width, and height scaled based on pixel density, that also includes content padding
+            // (width * percentOfWidthWeWant - (leftPadding + rightPadding)) / dpi
+            int mapWidth = (int)((map.getWidth() * 0.75 - (contentPadding[0] + contentPadding[2])) / metrics.scaledDensity);
+            int mapHeight = (int)((map.getHeight() * 0.75 - (contentPadding[1] + contentPadding[3])) / metrics.scaledDensity);
+            VisibleRegion region = GeoViewport.getRegion(center, (int) zoomLevel, mapWidth, mapHeight);
 
             switch (mUserLocationVerticalAlignment) {
                 case UserLocationVerticalAlignment.TOP:
