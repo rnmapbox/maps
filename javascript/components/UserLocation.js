@@ -140,6 +140,8 @@ class UserLocation extends React.Component {
             coordinates: this._getCoordinatesFromLocation(lastKnownLocation),
           });
         }
+      } else if (!running) {
+        locationManager.dispose();
       }
     }
   };
