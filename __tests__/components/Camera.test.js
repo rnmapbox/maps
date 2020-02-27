@@ -340,5 +340,108 @@ describe('Camera', () => {
       });
     });
 
+    describe('#_hasBoundsChanged', () => {
+      const camera = new Camera();
+      const bounds = {
+        bounds: {
+          ne: [-74.12641, 40.797968],
+          sw: [-74.143727, 40.772177],
+          paddingTop: 5,
+          paddingLeft: 5,
+          paddingRight: 5,
+          paddingBottom: 5,
+        },
+      };
+
+      test('returns false when bounds are missing', () => {
+        expect(camera._hasBoundsChanged({}, {})).toBe(false);
+      });
+
+      test('returns false when bounds have not changed', () => {
+        expect(camera._hasBoundsChanged(bounds, bounds)).toBe(false);
+      });
+
+      test('returns true when bound props have changed', () => {
+        // ne[0]
+        expect(
+          camera._hasBoundsChanged(bounds, {
+            bounds: {
+              ...bounds.bounds,
+              ne: [-34.12641, 40.797968],
+            },
+          }),
+        ).toBe(true);
+
+        // ne[1]
+        expect(
+          camera._hasBoundsChanged(bounds, {
+            bounds: {
+              ...bounds.bounds,
+              ne: [-74.12641, 30.797968],
+            },
+          }),
+        ).toBe(true);
+
+        // sw[0]
+        expect(
+          camera._hasBoundsChanged(bounds, {
+            bounds: {
+              ...bounds.bounds,
+              sw: [-74.143723, 40.772177],
+            },
+          }),
+        ).toBe(true);
+
+        // sw[1]
+        expect(
+          camera._hasBoundsChanged(bounds, {
+            bounds: {
+              ...bounds.bounds,
+              sw: [-74.143727, 40.772137],
+            },
+          }),
+        ).toBe(true);
+
+        // paddingTop
+        expect(
+          camera._hasBoundsChanged(bounds, {
+            bounds: {
+              ...bounds.bounds,
+              paddingTop: 3,
+            },
+          }),
+        ).toBe(true);
+
+        // paddingLeft
+        expect(
+          camera._hasBoundsChanged(bounds, {
+            bounds: {
+              ...bounds.bounds,
+              paddingLeft: 3,
+            },
+          }),
+        ).toBe(true);
+
+        // paddingRight
+        expect(
+          camera._hasBoundsChanged(bounds, {
+            bounds: {
+              ...bounds.bounds,
+              paddingRight: 3,
+            },
+          }),
+        ).toBe(true);
+
+        // paddingBottom
+        expect(
+          camera._hasBoundsChanged(bounds, {
+            bounds: {
+              ...bounds.bounds,
+              paddingBottom: 3,
+            },
+          }),
+        ).toBe(true);
+      });
+    });
   });
 });
