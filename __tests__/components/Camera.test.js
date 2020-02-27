@@ -290,5 +290,55 @@ describe('Camera', () => {
         });
       });
     });
+
+    describe('#_hasCenterCoordinateChanged', () => {
+      const camera = new Camera();
+
+      test('returns false when centerCoordinates are missing', () => {
+        expect(camera._hasCenterCoordinateChanged({}, {})).toBe(false);
+      });
+
+      test('returns false when centerCoordinates have not changed', () => {
+        expect(
+          camera._hasCenterCoordinateChanged(
+            {centerCoordinate: [-111.8678, 40.2866]},
+            {centerCoordinate: [-111.8678, 40.2866]},
+          ),
+        ).toBe(false);
+      });
+
+      test('returns true when centerCoordinates have changed', () => {
+        expect(
+          camera._hasCenterCoordinateChanged(
+            {centerCoordinate: [-111.8678, 40.2866]},
+            {},
+          ),
+        ).toBe(true);
+
+        expect(
+          camera._hasCenterCoordinateChanged(
+            {},
+            {centerCoordinate: [-111.8678, 40.2866]},
+          ),
+        ).toBe(true);
+
+        // isLngDiff
+        expect(
+          camera._hasCenterCoordinateChanged(
+            {centerCoordinate: [-111.2678, 40.2866]},
+            {centerCoordinate: [-111.8678, 40.2866]},
+          ),
+        ).toBe(true);
+
+        // isLatDiff
+        expect(
+          camera._hasCenterCoordinateChanged(
+            {centerCoordinate: [-111.2678, 40.2866]},
+            {centerCoordinate: [-111.8678, 33.2866]},
+          ),
+        ).toBe(true);
+      });
+    });
+
   });
 });
