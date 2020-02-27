@@ -75,9 +75,6 @@ describe('Public Interface', () => {
       'setConnected',
       'requestAndroidLocationPermissions',
 
-      // utils
-      'geoUtils',
-
       // animated
       'Animated',
 

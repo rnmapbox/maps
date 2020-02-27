@@ -2,6 +2,7 @@ import {Animated} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import along from '@turf/along';
 import findDistance from '@turf/distance';
+import {point} from '@turf/helpers';
 
 class Polyline {
   constructor(lineStringFeature) {
@@ -36,7 +37,7 @@ class Polyline {
   }
 
   get(index) {
-    return MapboxGL.geoUtils.makePoint(this._coordinates[index]);
+    return point(this._coordinates[index]);
   }
 
   get totalDistance() {
