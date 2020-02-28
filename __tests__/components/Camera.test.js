@@ -506,7 +506,7 @@ describe('Camera', () => {
 
       // TODO: Refactor #fitBounds to throw when ne or sw aren't provided
       // This is a public method and people will call it with all sorts of data
-      test('throws when "ne" or "sw" are missing', () => {});
+      test.skip('throws when "ne" or "sw" are missing', () => {});
 
       test('works with "padding" being a single number', () => {
         const expectedCallResult = {
@@ -560,6 +560,37 @@ describe('Camera', () => {
 
         camera.fitBounds(ne, sw, [3, 5, 8, 10], 500);
         expect(camera.setCamera).toHaveBeenCalledWith(expectedCallResult);
+      });
+    });
+
+    describe.only('$flyTo', () => {
+      const camera = new Camera();
+
+      beforeEach(() => {
+        camera.setCamera = jest.fn();
+      });
+
+      test.skip('throws when no coordinates are provided', () => {
+        // TODO: Refactor #flyTo to throw when coordinates aren't provided
+        // This is a public method and people will call it with all sorts of data
+      });
+
+      test('sets default "animationDuration" when called without it', () => {
+        camera.flyTo([-111.8678, 40.2866]);
+        expect(camera.setCamera).toHaveBeenCalledWith({
+          animationDuration: 2000,
+          animationMode: 'flyTo',
+          centerCoordinate: [-111.8678, 40.2866],
+        });
+      });
+
+      test('calls "setCamera" with correct config', () => {
+        camera.flyTo([-111.8678, 40.2866], 5000);
+        expect(camera.setCamera).toHaveBeenCalledWith({
+          animationDuration: 5000,
+          animationMode: 'flyTo',
+          centerCoordinate: [-111.8678, 40.2866],
+        });
       });
     });
   });
