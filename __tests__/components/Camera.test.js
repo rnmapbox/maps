@@ -563,7 +563,7 @@ describe('Camera', () => {
       });
     });
 
-    describe.only('$flyTo', () => {
+    describe('#flyTo', () => {
       const camera = new Camera();
 
       beforeEach(() => {
@@ -589,6 +589,37 @@ describe('Camera', () => {
         expect(camera.setCamera).toHaveBeenCalledWith({
           animationDuration: 5000,
           animationMode: 'flyTo',
+          centerCoordinate: [-111.8678, 40.2866],
+        });
+      });
+    });
+
+    describe('#moveTo', () => {
+      const camera = new Camera();
+
+      beforeEach(() => {
+        // FIXME: Why is moveTo calling #_setCamera instead of #setCamera?
+        // let's be consistent here - have all methods use one of both
+        camera._setCamera = jest.fn();
+      });
+
+      test.skip('throws when no coordinates are provided', () => {
+        // TODO: Refactor #moveTo to throw when coordinates aren't provided
+        // This is a public method and people will call it with all sorts of data
+      });
+
+      test('sets default "animationDuration" when called without it', () => {
+        camera.moveTo([-111.8678, 40.2866]);
+        expect(camera._setCamera).toHaveBeenCalledWith({
+          animationDuration: 0,
+          centerCoordinate: [-111.8678, 40.2866],
+        });
+      });
+
+      test('calls "setCamera" with correct config', () => {
+        camera.moveTo([-111.8678, 40.2866], 5000);
+        expect(camera._setCamera).toHaveBeenCalledWith({
+          animationDuration: 5000,
           centerCoordinate: [-111.8678, 40.2866],
         });
       });
