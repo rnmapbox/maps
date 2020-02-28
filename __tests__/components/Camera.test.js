@@ -1059,5 +1059,41 @@ describe('Camera', () => {
         expect(camera._getNativeCameraMode({})).toStrictEqual('Ease');
       });
     });
+
+    describe('#_getMaxBounds', () => {
+      const camera = new Camera();
+
+      test('returns null if no "maxBounds"', () => {
+        camera.props = {};
+        expect(camera._getMaxBounds()).toStrictEqual(null);
+
+        camera.props = {
+          maxBounds: {
+            ne: [-74.12641, 40.797968],
+          },
+        };
+        expect(camera._getMaxBounds()).toStrictEqual(null);
+
+        camera.props = {
+          maxBounds: {
+            sw: [-74.143727, 40.772177],
+          },
+        };
+        expect(camera._getMaxBounds()).toStrictEqual(null);
+      });
+
+      test('returns maxBounds when "maxBounds" property is set', () => {
+        camera.props = {
+          maxBounds: {
+            ne: [-74.12641, 40.797968],
+            sw: [-74.143727, 40.772177],
+          },
+        };
+
+        expect(camera._getMaxBounds()).toStrictEqual(
+          '{"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-74.12641,40.797968]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-74.143727,40.772177]}}]}',
+        );
+      });
+    });
   });
 });
