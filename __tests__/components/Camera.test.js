@@ -47,7 +47,8 @@ const cameraWithBounds = {
 };
 
 describe('Camera', () => {
-  test('renders', () => {
+  describe('render', () => {
+  test('renders correctly', () => {
     const {getByTestId} = render(<Camera />);
 
     expect(getByTestId('Camera')).toBeDefined();
@@ -76,6 +77,8 @@ describe('Camera', () => {
       defaultStop: null,
       onUserTrackingModeChange: undefined,
     });
+  });
+
   });
 
   describe('methods', () => {
