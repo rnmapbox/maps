@@ -686,5 +686,198 @@ describe('Camera', () => {
         expect(camera._setCamera).toHaveBeenCalledWith(config);
       });
     });
+
+    describe('#_setCamera', () => {
+      const camera = new Camera();
+
+      beforeEach(() => {
+        jest.spyOn(Camera.prototype, '_createStopConfig');
+
+        // set up fake ref
+        camera.refs = {
+          camera: {
+            setNativeProps: jest.fn(),
+          },
+        };
+
+        // set up fake props
+        // we only do this, because we want to test the class methods!
+        camera.props = {};
+
+        jest.clearAllMocks();
+      });
+
+      test('calls "_createStopConfig" and passes stopConfig to "setNativeProps"', () => {
+        const config = {
+          animationDuration: 500,
+          animationMode: 'easeTo',
+          bounds: {
+            ne: [-63.12641, 39.797968],
+            paddingBottom: 8,
+            paddingLeft: 10,
+            paddingRight: 5,
+            paddingTop: 3,
+            sw: [-74.143727, 40.772177],
+          },
+          heading: 100,
+          pitch: 45,
+          zoomLevel: 11,
+        };
+
+        camera._setCamera(config);
+
+        expect(camera._createStopConfig).toHaveBeenCalledWith({
+          animationDuration: 500,
+          animationMode: 'easeTo',
+          bounds: {
+            ne: [-63.12641, 39.797968],
+            paddingBottom: 8,
+            paddingLeft: 10,
+            paddingRight: 5,
+            paddingTop: 3,
+            sw: [-74.143727, 40.772177],
+          },
+          heading: 100,
+          pitch: 45,
+          zoomLevel: 11,
+        });
+
+        expect(camera._createStopConfig).toHaveBeenCalledTimes(1);
+
+        expect(camera.refs.camera.setNativeProps).toHaveBeenCalledWith({
+          stop: {
+            bounds:
+              '{"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-63.12641,39.797968]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-74.143727,40.772177]}}]}',
+            boundsPaddingBottom: 8,
+            boundsPaddingLeft: 10,
+            boundsPaddingRight: 5,
+            boundsPaddingTop: 3,
+            duration: 500,
+            heading: 100,
+            mode: 'Ease',
+            pitch: 45,
+            zoom: 11,
+          },
+        });
+      });
+
+      test('creates multiple stops when provided', () => {
+        const config = {
+          stops: [
+            {
+              animationDuration: 50,
+              animationMode: 'easeTo',
+              bounds: {
+                ne: [-63.12641, 39.797968],
+                paddingBottom: 2,
+                paddingLeft: 2,
+                paddingRight: 2,
+                paddingTop: 2,
+                sw: [-74.143727, 40.772177],
+              },
+              heading: 20,
+              pitch: 25,
+              zoomLevel: 16,
+            },
+            {
+              animationDuration: 3000,
+              animationMode: 'flyTo',
+              bounds: {
+                ne: [-63.12641, 59.797968],
+                paddingBottom: 8,
+                paddingLeft: 10,
+                paddingRight: 5,
+                paddingTop: 3,
+                sw: [-71.143727, 40.772177],
+              },
+              heading: 40,
+              pitch: 45,
+              zoomLevel: 8,
+            },
+            {
+              animationDuration: 500,
+              animationMode: 'easeTo',
+              bounds: {
+                ne: [-63.12641, 39.797968],
+                paddingBottom: 8,
+                paddingLeft: 10,
+                paddingRight: 5,
+                paddingTop: 3,
+                sw: [-74.143727, 40.772177],
+              },
+              heading: 100,
+              pitch: 45,
+              zoomLevel: 11,
+            },
+          ],
+        };
+
+        camera._setCamera(config);
+
+        expect(camera._createStopConfig).toHaveBeenCalledTimes(3);
+
+        expect(camera._createStopConfig).toHaveBeenCalledWith({
+          animationDuration: 500,
+          animationMode: 'easeTo',
+          bounds: {
+            ne: [-63.12641, 39.797968],
+            paddingBottom: 8,
+            paddingLeft: 10,
+            paddingRight: 5,
+            paddingTop: 3,
+            sw: [-74.143727, 40.772177],
+          },
+          heading: 100,
+          pitch: 45,
+          zoomLevel: 11,
+        });
+
+        expect(camera.refs.camera.setNativeProps).toHaveBeenCalledWith({
+          stop: {
+            stops: [
+              {
+                bounds:
+                  '{"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-63.12641,39.797968]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-74.143727,40.772177]}}]}',
+                boundsPaddingBottom: 2,
+                boundsPaddingLeft: 2,
+                boundsPaddingRight: 2,
+                boundsPaddingTop: 2,
+                duration: 50,
+                heading: 20,
+                mode: 'Ease',
+                pitch: 25,
+                zoom: 16,
+              },
+              {
+                bounds:
+                  '{"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-63.12641,59.797968]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-71.143727,40.772177]}}]}',
+                boundsPaddingBottom: 8,
+                boundsPaddingLeft: 10,
+                boundsPaddingRight: 5,
+                boundsPaddingTop: 3,
+                duration: 3000,
+                heading: 40,
+                mode: 'Flight',
+                pitch: 45,
+                zoom: 8,
+              },
+              {
+                bounds:
+                  '{"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-63.12641,39.797968]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-74.143727,40.772177]}}]}',
+                boundsPaddingBottom: 8,
+                boundsPaddingLeft: 10,
+                boundsPaddingRight: 5,
+                boundsPaddingTop: 3,
+                duration: 500,
+                heading: 100,
+                mode: 'Ease',
+                pitch: 45,
+                zoom: 11,
+              },
+            ],
+          },
+        });
+      });
+    });
   });
 });
