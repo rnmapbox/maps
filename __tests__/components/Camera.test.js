@@ -879,5 +879,39 @@ describe('Camera', () => {
         });
       });
     });
+
+    describe('#_createDefaultCamera', () => {
+      const camera = new Camera();
+
+      beforeEach(() => {});
+
+      test('returns null without "defaultSettings"', () => {
+        camera.props = {};
+        expect(camera._createDefaultCamera()).toBe(null);
+      });
+
+      test('returns "defaultCamera" with "defaultSettings" and sets property', () => {
+        camera.props = {
+          defaultSettings: {
+            centerCoordinate: [-111.8678, 40.2866],
+            zoomLevel: 16,
+          },
+        };
+
+        const defaultCamera = {
+          centerCoordinate:
+            '{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-111.8678,40.2866]}}',
+          duration: 0,
+          heading: undefined,
+          mode: 'None',
+          pitch: undefined,
+          zoom: 16,
+        };
+
+        expect(camera.defaultCamera).toStrictEqual(undefined);
+        expect(camera._createDefaultCamera()).toStrictEqual(defaultCamera);
+        expect(camera.defaultCamera).toStrictEqual(defaultCamera);
+      });
+    });
   });
 });
