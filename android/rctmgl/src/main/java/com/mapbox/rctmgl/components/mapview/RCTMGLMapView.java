@@ -8,6 +8,8 @@ import android.graphics.RectF;
 import android.location.Location;
 import android.os.Handler;
 import androidx.annotation.NonNull;
+import androidx.annotation.UiThread;
+
 import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.Gravity;
@@ -108,6 +110,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     private List<Pair<Integer, ReadableArray>> mPreRenderMethods = new ArrayList<>();
 
     private MapboxMap mMap;
+    private boolean mReflowDone = false;
 
     private String mStyleURL;
 
@@ -131,6 +134,8 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     private ReadableArray mInsets;
 
     private HashSet<String> mHandledMapChangedEvents = null;
+
+    private final List<OnMapReadyCallback> onMapAndReflowReadyCallbackList = new ArrayList<>();
 
 
     private MarkerViewManager makerViewManager = null;
@@ -465,8 +470,29 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
                 measure(View.MeasureSpec.makeMeasureSpec(getMeasuredWidth(), View.MeasureSpec.EXACTLY),
                         View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), View.MeasureSpec.EXACTLY));
                 layout(getLeft(), getTop(), getRight(), getBottom());
+                mReflowDone = true;
+
+                for (OnMapReadyCallback callback : onMapAndReflowReadyCallbackList) {
+                    callback.onMapReady(mMap);
+                }
+                onMapAndReflowReadyCallbackList.clear();
             }
         });
+    }
+
+    /**
+     * Sets a callback object which will be triggered when the {@link MapboxMap} instance is done with reflow
+     *
+     * @param callback The callback object that will be triggered when the map is ready and reflow finished
+     */
+    @UiThread
+    public void getMapWithReflowAsync(final @NonNull OnMapReadyCallback callback) {
+        if (mMap == null || !mReflowDone) {
+            // Add callback to the list only if the style hasn't loaded, or the drawing surface isn't ready
+            onMapAndReflowReadyCallbackList.add(callback);
+        } else {
+            callback.onMapReady(mMap);
+        }
     }
 
     public void createSymbolManager(Style style) {
