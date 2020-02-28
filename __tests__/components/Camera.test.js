@@ -81,6 +81,16 @@ describe('Camera', () => {
 
   });
 
+  describe('class', () => {
+    test('correct "UserTrackingModes" statics', () => {
+      expect(Camera.UserTrackingModes).toStrictEqual({
+        Follow: 'normal',
+        FollowWithCourse: 'course',
+        FollowWithHeading: 'compass',
+      });
+    });
+  });
+
   describe('methods', () => {
     describe('#_handleCameraChange', () => {
       let camera;
