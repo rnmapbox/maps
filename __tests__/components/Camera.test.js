@@ -913,5 +913,118 @@ describe('Camera', () => {
         expect(camera.defaultCamera).toStrictEqual(defaultCamera);
       });
     });
+
+    describe('#_createStopConfig', () => {
+      const camera = new Camera();
+      const configWithoutBounds = {
+        animationDuration: 2000,
+        pitch: 45,
+        heading: 110,
+        zoomLevel: 9,
+      };
+
+      const configWithBounds = {
+        animationDuration: 500,
+        animationMode: 'easeTo',
+        bounds: {
+          ne: [-63.12641, 39.797968],
+          paddingBottom: 8,
+          paddingLeft: 10,
+          paddingRight: 5,
+          paddingTop: 3,
+          sw: [-74.143727, 40.772177],
+        },
+        heading: 100,
+        pitch: 45,
+        zoomLevel: 11,
+      };
+
+      beforeEach(() => {
+        jest.spyOn(Camera.prototype, '_getNativeCameraMode');
+
+        jest.clearAllMocks();
+      });
+
+      test('returns null with "followUserLocation" prop and "!ignoreFollowUserLocation"', () => {
+        camera.props = {
+          followUserLocation: true,
+        };
+        expect(camera._createStopConfig()).toBe(null);
+      });
+
+      test('returns correct "stopConfig" without bounds', () => {
+        camera.props = {
+          followUserLocation: true,
+        };
+
+        expect(
+          camera._createStopConfig(configWithoutBounds, true),
+        ).toStrictEqual({
+          duration: 2000,
+          heading: 110,
+          mode: 'Ease',
+          pitch: 45,
+          zoom: 9,
+        });
+
+        // with centerCoordinate
+        expect(
+          camera._createStopConfig(
+            {...configWithoutBounds, centerCoordinate: [-111.8678, 40.2866]},
+            true,
+          ),
+        ).toStrictEqual({
+          centerCoordinate:
+            '{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-111.8678,40.2866]}}',
+          duration: 2000,
+          heading: 110,
+          mode: 'Ease',
+          pitch: 45,
+          zoom: 9,
+        });
+      });
+
+      test('returns correct "stopConfig" with bounds', () => {
+        camera.props = {
+          followUserLocation: true,
+        };
+
+        expect(camera._createStopConfig(configWithBounds, true)).toStrictEqual({
+          bounds:
+            '{"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-63.12641,39.797968]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-74.143727,40.772177]}}]}',
+          boundsPaddingBottom: 8,
+          boundsPaddingLeft: 10,
+          boundsPaddingRight: 5,
+          boundsPaddingTop: 3,
+          duration: 500,
+          heading: 100,
+          mode: 'Ease',
+          pitch: 45,
+          zoom: 11,
+        });
+
+        // with centerCoordinate
+        expect(
+          camera._createStopConfig(
+            {...configWithBounds, centerCoordinate: [-111.8678, 40.2866]},
+            true,
+          ),
+        ).toStrictEqual({
+          bounds:
+            '{"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-63.12641,39.797968]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-74.143727,40.772177]}}]}',
+          boundsPaddingBottom: 8,
+          boundsPaddingLeft: 10,
+          boundsPaddingRight: 5,
+          boundsPaddingTop: 3,
+          centerCoordinate:
+            '{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-111.8678,40.2866]}}',
+          duration: 500,
+          heading: 100,
+          mode: 'Ease',
+          pitch: 45,
+          zoom: 11,
+        });
+      });
+    });
   });
 });
