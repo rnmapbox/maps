@@ -655,5 +655,36 @@ describe('Camera', () => {
         });
       });
     });
+
+    describe('#setCamera', () => {
+      const camera = new Camera();
+
+      beforeEach(() => {
+        camera._setCamera = jest.fn();
+      });
+
+      test('sets default empty "config" when called without one', () => {
+        camera.setCamera();
+        expect(camera._setCamera).toHaveBeenCalledWith({});
+      });
+
+      test('calls "_setCamera" with passed config', () => {
+        const config = {
+          animationDuration: 500,
+          animationMode: 'easeTo',
+          bounds: {
+            ne: [-63.12641, 39.797968],
+            paddingBottom: 8,
+            paddingLeft: 10,
+            paddingRight: 5,
+            paddingTop: 3,
+            sw: [-74.143727, 40.772177],
+          },
+        };
+
+        camera.setCamera(config);
+        expect(camera._setCamera).toHaveBeenCalledWith(config);
+      });
+    });
   });
 });
