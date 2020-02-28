@@ -101,7 +101,7 @@ describe('Camera', () => {
         jest.spyOn(camera, '_hasBoundsChanged');
       });
 
-      test('does not call "#_setCamera" or "#setNativeProps" when `nextCamera` has no changes to `currentCamera`', () => {
+      test('does not call "#_setCamera" or "#setNativeProps" when "nextCamera" has no changes to "currentCamera"', () => {
         camera._handleCameraChange(
           cameraWithoutFollowDefault,
           cameraWithoutFollowDefault,
@@ -112,7 +112,7 @@ describe('Camera', () => {
         expect(camera.refs.camera.setNativeProps).not.toHaveBeenCalled();
       });
 
-      test('sets `followUserLocation` to false when it was removed on `nextCamera`', () => {
+      test('sets "followUserLocation" to false when it was removed on "nextCamera"', () => {
         camera._handleCameraChange(
           cameraWithFollowCourse,
           cameraWithoutFollowDefault,
@@ -128,7 +128,7 @@ describe('Camera', () => {
         });
       });
 
-      test('sets `followUserLocation` to true when it was added on `nextCamera`', () => {
+      test('sets "followUserLocation" to true when it was added on "nextCamera"', () => {
         camera._handleCameraChange(
           cameraWithoutFollowDefault,
           cameraWithFollowCourse,
@@ -150,7 +150,7 @@ describe('Camera', () => {
         });
       });
 
-      test('calls `#_setCamera` when `nextCamera` "hasChanged" without bounds', () => {
+      test('calls "#_setCamera" when "nextCamera" "hasChanged" without bounds', () => {
         camera._handleCameraChange(
           cameraWithoutFollowDefault,
           cameraWithoutFollowChanged,
@@ -168,7 +168,7 @@ describe('Camera', () => {
         });
       });
 
-      test('calls `#_hasBoundsChanged` & `#_setCamera` when `nextCamera` "hasChanged" with bounds', () => {
+      test('calls "#_hasBoundsChanged" & "#_setCamera" when "nextCamera" "hasChanged" with bounds', () => {
         camera._handleCameraChange(
           cameraWithoutFollowDefault,
           cameraWithBounds,
@@ -441,6 +441,125 @@ describe('Camera', () => {
             },
           }),
         ).toBe(true);
+      });
+    });
+
+    describe('#fitBounds', () => {
+      const camera = new Camera();
+      const ne = [-63.12641, 39.797968];
+      const sw = [-74.143727, 40.772177];
+
+      beforeEach(() => {
+        camera.setCamera = jest.fn();
+      });
+
+      test('works without provided "padding" and/ or "animationDuration"', () => {
+        // FIXME: animationDuration and padding of null lead to malformed setCamera config
+
+        const expectedCallResults = [
+          {
+            animationDuration: null,
+            animationMode: 'easeTo',
+            bounds: {
+              ne: [-63.12641, 39.797968],
+              paddingBottom: null,
+              paddingLeft: null,
+              paddingRight: null,
+              paddingTop: null,
+              sw: [-74.143727, 40.772177],
+            },
+          },
+          {
+            animationDuration: 0,
+            animationMode: 'easeTo',
+            bounds: {
+              ne: [-63.12641, 39.797968],
+              paddingBottom: null,
+              paddingLeft: null,
+              paddingRight: null,
+              paddingTop: null,
+              sw: [-74.143727, 40.772177],
+            },
+          },
+          {
+            animationDuration: 0,
+            animationMode: 'easeTo',
+            bounds: {
+              ne: [-63.12641, 39.797968],
+              paddingBottom: 0,
+              paddingLeft: 0,
+              paddingRight: 0,
+              paddingTop: 0,
+              sw: [-74.143727, 40.772177],
+            },
+          },
+        ];
+
+        camera.fitBounds(ne, sw, null, null);
+        camera.fitBounds(ne, sw, null);
+        camera.fitBounds(ne, sw);
+
+        camera.setCamera.mock.calls.forEach((call, i) => {
+          expect(call[0]).toStrictEqual(expectedCallResults[i]);
+        });
+      });
+
+      // TODO: Refactor #fitBounds to throw when ne or sw aren't provided
+      // This is a public method and people will call it with all sorts of data
+      test('throws when "ne" or "sw" are missing', () => {});
+
+      test('works with "padding" being a single number', () => {
+        const expectedCallResult = {
+          animationDuration: 500,
+          animationMode: 'easeTo',
+          bounds: {
+            ne: [-63.12641, 39.797968],
+            paddingBottom: 3,
+            paddingLeft: 3,
+            paddingRight: 3,
+            paddingTop: 3,
+            sw: [-74.143727, 40.772177],
+          },
+        };
+
+        camera.fitBounds(ne, sw, 3, 500);
+        expect(camera.setCamera).toHaveBeenCalledWith(expectedCallResult);
+      });
+
+      test('works with "padding" being an array of two numbers', () => {
+        const expectedCallResult = {
+          animationDuration: 500,
+          animationMode: 'easeTo',
+          bounds: {
+            ne: [-63.12641, 39.797968],
+            paddingBottom: 3,
+            paddingLeft: 5,
+            paddingRight: 5,
+            paddingTop: 3,
+            sw: [-74.143727, 40.772177],
+          },
+        };
+
+        camera.fitBounds(ne, sw, [3, 5], 500);
+        expect(camera.setCamera).toHaveBeenCalledWith(expectedCallResult);
+      });
+
+      test('works with "padding" being an array of four numbers', () => {
+        const expectedCallResult = {
+          animationDuration: 500,
+          animationMode: 'easeTo',
+          bounds: {
+            ne: [-63.12641, 39.797968],
+            paddingBottom: 8,
+            paddingLeft: 10,
+            paddingRight: 5,
+            paddingTop: 3,
+            sw: [-74.143727, 40.772177],
+          },
+        };
+
+        camera.fitBounds(ne, sw, [3, 5, 8, 10], 500);
+        expect(camera.setCamera).toHaveBeenCalledWith(expectedCallResult);
       });
     });
   });
