@@ -1,3 +1,10 @@
+## 8.0.0
+### Breaking changes
+- iOS mapbox libraries updated to [5.7.0](https://github.com/mapbox/mapbox-gl-native-ios/releases/tag/ios-v5.7.0) android libraries updated to [9.0.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.0.0)
+- added [MarkerView](docs/MarkerView.md)
+- ShapeSource#images is now removed (deprecated in 7.*), use Images#images instead.
+- [Images#onImagesMissing](docs/Images.md)
+
 ## 7.2.0
 
 - Upstream changes in Mapbox iOS SDK 5.6.0 has made installing the SDK as an embedded framework difficult. We have therefore discontinued supporting manual installations. To update, follow the iOS installation instructions using cocoapods.
