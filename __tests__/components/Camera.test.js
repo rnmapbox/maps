@@ -616,11 +616,42 @@ describe('Camera', () => {
         });
       });
 
-      test('calls "setCamera" with correct config', () => {
+      test('calls "_setCamera" with correct config', () => {
         camera.moveTo([-111.8678, 40.2866], 5000);
         expect(camera._setCamera).toHaveBeenCalledWith({
           animationDuration: 5000,
           centerCoordinate: [-111.8678, 40.2866],
+        });
+      });
+    });
+
+    describe('#zoomTo', () => {
+      const camera = new Camera();
+
+      beforeEach(() => {
+        camera._setCamera = jest.fn();
+      });
+
+      test.skip('throws when no zoomLevel is provided', () => {
+        // TODO: Refactor #moveTo to throw when coordinates aren't provided
+        // This is a public method and people will call it with all sorts of data
+      });
+
+      test('sets default "animationDuration" when called without it', () => {
+        camera.zoomTo(10);
+        expect(camera._setCamera).toHaveBeenCalledWith({
+          animationDuration: 2000,
+          zoomLevel: 10,
+          animationMode: 'flyTo',
+        });
+      });
+
+      test('calls "_setCamera" with correct config', () => {
+        camera.zoomTo(10, 3000);
+        expect(camera._setCamera).toHaveBeenCalledWith({
+          animationDuration: 3000,
+          zoomLevel: 10,
+          animationMode: 'flyTo',
         });
       });
     });
