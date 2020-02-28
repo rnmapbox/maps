@@ -2973,7 +2973,17 @@
   "PointAnnotation": {
     "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate. Consider using ShapeSource and SymbolLayer instead, if you have many points and you have static images, they'll offer much better performance.\nIf you need interctive views please use MarkerView, as with PointAnnotation on android child views are rendered onto a bitmap for better performance.",
     "displayName": "PointAnnotation",
-    "methods": [],
+    "methods": [
+      {
+        "name": "refresh",
+        "docblock": "On android point annotation is rendered offscreen with a canvas into an image.\nTo rerender the image from the current state of the view call refresh.\nCall this for example from Image#onLoad.",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "On android point annotation is rendered offscreen with a canvas into an image.\nTo rerender the image from the current state of the view call refresh.\nCall this for example from Image#onLoad.",
+        "examples": []
+      }
+    ],
     "props": [
       {
         "name": "id",

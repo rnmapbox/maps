@@ -3,22 +3,16 @@ package com.mapbox.rctmgl.components.annotation;
 import android.content.Context;
 import android.graphics.PointF;
 import android.graphics.Bitmap;
-import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.NonNull;
-import android.util.Log;
 
 import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.plugins.markerview.MarkerView;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.utils.ColorUtils;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.events.PointAnnotationClickEvent;
@@ -26,13 +20,6 @@ import com.mapbox.rctmgl.events.PointAnnotationDragEvent;
 import com.mapbox.rctmgl.events.constants.EventTypes;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.rctmgl.utils.BitmapUtils;
-
-import java.util.Arrays;
-import java.util.List;
-
-/**
- * Created by nickitaliano on 9/27/17.
- */
 
 public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.OnLayoutChangeListener {
     private RCTMGLPointAnnotationManager mManager;
@@ -76,6 +63,9 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
             mChildView = childView;
         }
         childView.addOnLayoutChangeListener(this);
+        if (mMapView != null) {
+            mMapView.offscreenAnnotationViewContainer().addView(childView);
+        }
     }
 
     @Override
@@ -94,6 +84,9 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
                 }
             });
         }
+        if (mMapView != null) {
+            mMapView.offscreenAnnotationViewContainer().removeView(childView);
+        }
     }
 
     @Override
@@ -101,11 +94,18 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
         mMapView = mapView;
         mMap = mapView.getMapboxMap();
         makeMarker();
+
         if (mChildView != null) {
+            if (!mChildView.isAttachedToWindow()) {
+                mMapView.offscreenAnnotationViewContainer().addView(mChildView);
+            }
             addBitmapToStyle(mChildBitmap, mChildBitmapId);
             updateOptions();
         }
         if (mCalloutView != null) {
+            if (!mCalloutView.isAttachedToWindow()) {
+                mMapView.offscreenAnnotationViewContainer().addView(mCalloutView);
+            }
             addBitmapToStyle(mCalloutBitmap, mCalloutBitmapId);
         }
     }
@@ -115,24 +115,38 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
         if (mAnnotation != null) {
             mMapView.getSymbolManager().delete(mAnnotation);
         }
+        if (mChildView != null) {
+            mMapView.offscreenAnnotationViewContainer().removeView(mChildView);
+        }
+        if (mCalloutView != null) {
+            mMapView.offscreenAnnotationViewContainer().removeView(mCalloutView);
+        }
     }
 
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop,
             int oldRight, int oldBottom) {
         if (left != oldLeft || right != oldRight || top != oldTop || bottom != oldBottom) {
-            Bitmap bitmap = BitmapUtils.viewToBitmap(v, left, top, right, bottom);
-            String bitmapId = Integer.toString(v.getId());
-            addBitmapToStyle(bitmap, bitmapId);
-            if (v instanceof RCTMGLCallout) {
-                mCalloutBitmap = bitmap;
-                mCalloutBitmapId = bitmapId;
-            } else {
-                mChildBitmap = bitmap;
-                mChildBitmapId = bitmapId;
-                updateOptions();
-            }
+            refreshBitmap(v, left, top, right, bottom);
         }
+    }
+
+    private void refreshBitmap(View v, int left, int top, int right, int bottom) {
+        Bitmap bitmap = BitmapUtils.viewToBitmap(v, left, top, right, bottom);
+        String bitmapId = Integer.toString(v.getId());
+        addBitmapToStyle(bitmap, bitmapId);
+        if (v instanceof RCTMGLCallout) {
+            mCalloutBitmap = bitmap;
+            mCalloutBitmapId = bitmapId;
+        } else {
+            mChildBitmap = bitmap;
+            mChildBitmapId = bitmapId;
+            updateOptions();
+        }
+    }
+
+    private void refreshBitmap(View v) {
+        refreshBitmap(v, v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
     }
 
     public LatLng getLatLng() {
@@ -311,5 +325,11 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
         int[] loc = new int[2];
         getLocationOnScreen(loc);
         return new PointF((float) loc[0], (float) loc[1]);
+    }
+
+    public void refresh() {
+        if (mChildView != null) {
+            refreshBitmap(mChildView);
+        }
     }
 }
