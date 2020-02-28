@@ -1026,5 +1026,25 @@ describe('Camera', () => {
         });
       });
     });
+
+    describe('#_getNativeCameraMode', () => {
+      const camera = new Camera();
+
+      test('returns "Flight" for "flyTo"', () => {
+        expect(
+          camera._getNativeCameraMode({animationMode: 'flyTo'}),
+        ).toStrictEqual('Flight');
+      });
+
+      test('returns "None" for "moveTo"', () => {
+        expect(
+          camera._getNativeCameraMode({animationMode: 'moveTo'}),
+        ).toStrictEqual('None');
+      });
+
+      test('returns "Ease" as default', () => {
+        expect(camera._getNativeCameraMode({})).toStrictEqual('Ease');
+      });
+    });
   });
 });
