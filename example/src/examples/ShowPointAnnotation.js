@@ -1,5 +1,7 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable fp/no-mutating-methods */
 import React from 'react';
-import {Animated, View, Text, StyleSheet} from 'react-native';
+import {Animated, View, Text, StyleSheet, Image} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import sheet from '../styles/sheet';
@@ -20,6 +22,7 @@ const styles = StyleSheet.create({
     borderRadius: ANNOTATION_SIZE / 2,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: 'rgba(0, 0, 0, 0.45)',
+    overflow: 'hidden',
   },
   annotationFill: {
     width: ANNOTATION_SIZE - 3,
@@ -29,6 +32,30 @@ const styles = StyleSheet.create({
     transform: [{scale: 0.6}],
   },
 });
+
+class AnnotationWithRemoteImage extends React.Component {
+  annotationRef = null;
+
+  render() {
+    const {id, coordinate, title} = this.props;
+    return (
+      <MapboxGL.PointAnnotation
+        id={id}
+        coordinate={coordinate}
+        title={title}
+        ref={ref => (this.annotationRef = ref)}>
+        <View style={styles.annotationContainer}>
+          <Image
+            source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}}
+            style={{width: ANNOTATION_SIZE, height: ANNOTATION_SIZE}}
+            onLoad={() => this.annotationRef.refresh()}
+          />
+        </View>
+        <MapboxGL.Callout title="This is a sample" />
+      </MapboxGL.PointAnnotation>
+    );
+  }
+}
 
 class ShowPointAnnotation extends React.Component {
   static propTypes = {
@@ -101,16 +128,27 @@ class ShowPointAnnotation extends React.Component {
         animationStyle.transform = [{scale: this._scaleOut}];
       }
 
-      items.push(
-        <MapboxGL.PointAnnotation
-          key={id}
-          id={id}
-          coordinate={coordinate}
-          title={title}>
-          <View style={styles.annotationContainer} />
-          <MapboxGL.Callout title="This is a sample" />
-        </MapboxGL.PointAnnotation>,
-      );
+      if ((i % 2) === 1) {
+        items.push(
+          <AnnotationWithRemoteImage
+            key={id}
+            id={id}
+            coordinate={coordinate}
+            title={title} />
+        );
+
+      } else {
+        items.push(
+          <MapboxGL.PointAnnotation
+            key={id}
+            id={id}
+            coordinate={coordinate}
+            title={title}>
+            <View style={styles.annotationContainer} />
+            <MapboxGL.Callout title="This is a sample with image" />
+          </MapboxGL.PointAnnotation>,
+        );
+      }
     }
 
     return items;

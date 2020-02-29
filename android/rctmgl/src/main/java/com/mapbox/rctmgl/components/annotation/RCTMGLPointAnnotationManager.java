@@ -1,6 +1,9 @@
 package com.mapbox.rctmgl.components.annotation;
 
+import androidx.annotation.Nullable;
+
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -32,6 +35,17 @@ public class RCTMGLPointAnnotationManager extends AbstractEventEmitter<RCTMGLPoi
                 .build();
     }
 
+    //region React Methods
+    public static final int METHOD_REFRESH = 2;
+
+    @Nullable
+    @Override
+    public Map<String, Integer> getCommandsMap() {
+        return MapBuilder.<String, Integer>builder()
+                .put("refresh", METHOD_REFRESH)
+                .build();
+    }
+
     @Override
     public String getName() {
         return REACT_CLASS;
@@ -60,5 +74,14 @@ public class RCTMGLPointAnnotationManager extends AbstractEventEmitter<RCTMGLPoi
     @ReactProp(name="draggable")
     public void setDraggable(RCTMGLPointAnnotation annotation, Boolean draggable) {
         annotation.setDraggable(draggable);
+    }
+
+    @Override
+    public void receiveCommand(RCTMGLPointAnnotation annotation, String command, @Nullable ReadableArray args) {
+        switch (command) {
+            case "refresh":
+                annotation.refresh();
+                break;
+        }
     }
 }

@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 
 import com.facebook.react.bridge.LifecycleEventListener;
@@ -139,6 +140,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
 
 
     private MarkerViewManager makerViewManager = null;
+    private ViewGroup mOffscreenAnnotationViewContainer = null;
 
     private boolean mAnnotationClicked = false;
 
@@ -1294,6 +1296,23 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         loadedStyle.addImage("MARKER_IMAGE_ID", BitmapFactory.decodeResource(
             this.getResources(), R.drawable.red_marker)
         );
+    }
+
+    /**
+     * PointAnnotations are rendered to a canvas, but react native Image component is
+     * implemented on top of Fresco, and fresco will not load images when their view is
+     * not attached to the window. So we'll have an offscreen view where we add those views
+     * so they can rendered full to canvas.
+     */
+    public ViewGroup offscreenAnnotationViewContainer() {
+        if (mOffscreenAnnotationViewContainer == null) {
+            mOffscreenAnnotationViewContainer = new FrameLayout(getContext());
+            FrameLayout.LayoutParams flParams = new FrameLayout.LayoutParams(0,0);
+            flParams.setMargins(-10000, -10000, -10000,-10000);
+            mOffscreenAnnotationViewContainer.setLayoutParams(flParams);
+            addView(mOffscreenAnnotationViewContainer);
+        }
+        return mOffscreenAnnotationViewContainer;
     }
 
     public MarkerViewManager getMakerViewManager(MapboxMap map) {
