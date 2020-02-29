@@ -1,9 +1,11 @@
 ## 8.0.0
-### Breaking changes
+### Breaking changes - [#610](https://github.com/react-native-mapbox-gl/maps/issues/610)
 - iOS mapbox libraries updated to [5.7.0](https://github.com/mapbox/mapbox-gl-native-ios/releases/tag/ios-v5.7.0) android libraries updated to [9.0.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.0.0)
 - added [MarkerView](docs/MarkerView.md)
 - ShapeSource#images is now removed (deprecated in 7.*), use Images#images instead.
 - [Images#onImagesMissing](docs/Images.md)
+- Android code migrated to AndroidX, RN 59.0+ is required.
+- geoUtils is now private, please use [turf-js](https://turfjs.org/) instead
 
 ## 7.2.0
 
