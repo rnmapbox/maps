@@ -1,14 +1,12 @@
-import MapboxGL from '../../../javascript';
+import {featureCollection, point} from '@turf/helpers';
+
 import OfflineCreatePackOptions from '../../../javascript/modules/offline/OfflineCreatePackOptions';
 
 describe('OfflineCreatePackOptions', () => {
   const options = {
     name: 'test',
     styleURL: 'mapbox://fake-style-url',
-    bounds: [
-      [0, 1],
-      [2, 3],
-    ],
+    bounds: [[0, 1], [2, 3]],
     minZoom: 1,
     maxZoom: 22,
     metadata: {
@@ -24,10 +22,7 @@ describe('OfflineCreatePackOptions', () => {
     // we expect a feature collection string
     expect(actualOptions.bounds).toEqual(
       JSON.stringify(
-        MapboxGL.geoUtils.makeFeatureCollection([
-          MapboxGL.geoUtils.makePoint(options.bounds[0]),
-          MapboxGL.geoUtils.makePoint(options.bounds[1]),
-        ]),
+        featureCollection([point(options.bounds[0]), point(options.bounds[1])]),
       ),
     );
 

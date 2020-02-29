@@ -1,7 +1,6 @@
 import {Animated, NativeModules, PermissionsAndroid} from 'react-native';
 
 import {isAndroid} from './utils';
-import * as geoUtils from './utils/geoUtils';
 import MapView from './components/MapView';
 import Light from './components/Light';
 import PointAnnotation from './components/PointAnnotation';
@@ -92,7 +91,6 @@ MapboxGL.offlineManager = offlineManager;
 MapboxGL.snapshotManager = snapshotManager;
 
 // utils
-MapboxGL.geoUtils = geoUtils;
 MapboxGL.AnimatedPoint = AnimatedMapPoint;
 
 // animated
@@ -136,7 +134,6 @@ export {
   locationManager,
   offlineManager,
   snapshotManager,
-  geoUtils,
   AnimatedMapPoint,
 };
 
