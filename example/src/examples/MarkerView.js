@@ -59,7 +59,9 @@ class ShowMarkerView extends React.Component {
             centerCoordinate={this.state.coordinates[0]}
           />
 
-          <MapboxGL.PointAnnotation coordinate={this.state.coordinates[1]}>
+          <MapboxGL.PointAnnotation
+            coordinate={this.state.coordinates[1]}
+            id="pt-ann">
             <AnnotationContent title={'this is a point annotation'} />
           </MapboxGL.PointAnnotation>
 

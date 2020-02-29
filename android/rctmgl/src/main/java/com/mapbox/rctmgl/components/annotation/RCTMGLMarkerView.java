@@ -65,7 +65,7 @@ public class RCTMGLMarkerView extends AbstractMapFeature implements MarkerView.O
 
         final RCTMGLMarkerView rctmglMarkerView = this;
 
-        mMapView.getMapAsync(
+        mMapView.getMapWithReflowAsync(
             new OnMapReadyCallback() {
                 @Override
                 public void onMapReady(@NonNull MapboxMap mapboxMap) {
