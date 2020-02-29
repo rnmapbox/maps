@@ -538,6 +538,7 @@ class Camera extends React.Component {
 
     return (
       <RCTMGLCamera
+        testID="Camera"
         ref="camera"
         followUserLocation={this.props.followUserLocation}
         followUserMode={this.props.followUserMode}
