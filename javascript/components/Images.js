@@ -24,6 +24,12 @@ class Images extends React.Component {
      * you can specify an array of string names with assets as the key `{ assets: ['pin'] }`.
      */
     images: PropTypes.object,
+
+    /**
+     * Gets called when a Layer is trying to render an image whose key is not present in
+     * any of the `Images` component of the Map.
+     */
+    onImageMissing: PropTypes.func,
   };
 
   _getImages() {
@@ -55,23 +61,28 @@ class Images extends React.Component {
     };
   }
 
+  _onImageMissing(event) {
+    if (this.props.onImageMissing) {
+      this.props.onImageMissing(event.nativeEvent.payload.imageKey);
+    }
+  }
+
   render() {
     const props = {
       id: this.props.id,
+      hasOnImageMissing: !!this.props.onImageMissing,
+      onImageMissing: this._onImageMissing.bind(this),
       ...this._getImages(),
     };
 
-    return (
-      <RCTMGLImages ref="nativeSource" {...props}>
-        {this.props.children}
-      </RCTMGLImages>
-    );
+    return <RCTMGLImages {...props}>{this.props.children}</RCTMGLImages>;
   }
 }
 
 const RCTMGLImages = requireNativeComponent(NATIVE_MODULE_NAME, Images, {
   nativeOnly: {
     nativeImages: true,
+    onImageMissing: true,
   },
 });
 
