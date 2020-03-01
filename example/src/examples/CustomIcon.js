@@ -45,9 +45,13 @@ class CustomIcon extends React.Component {
     });
   }
 
-  onSourceLayerPress(e) {
-    const feature = e.nativeEvent.payload;
-    console.log('You pressed a layer here is your feature', feature); // eslint-disable-line
+  onSourceLayerPress({features, coordinates, point}) {
+    console.log(
+      'You pressed a layer here are your features:',
+      features,
+      coordinates,
+      point,
+    );
   }
 
   render() {

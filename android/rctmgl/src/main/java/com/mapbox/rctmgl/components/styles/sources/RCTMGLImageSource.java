@@ -38,7 +38,7 @@ public class RCTMGLImageSource extends RCTSource<ImageSource> {
     }
 
     @Override
-    public void onPress(Feature feature) {
+    public void onPress(OnPressEvent feature) {
         // ignore, we cannot query raster layers
     }
 

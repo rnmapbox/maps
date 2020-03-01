@@ -576,7 +576,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         PointF screenPoint = mMap.getProjection().toScreenLocation(point);
         List<RCTSource> touchableSources = getAllTouchableSources();
 
-        Map<String, Feature> hits = new HashMap<>();
+        Map<String, List<Feature>> hits = new HashMap<>();
         List<RCTSource> hitTouchableSources = new ArrayList<>();
         for (RCTSource touchableSource : touchableSources) {
             Map<String, Double> hitbox = touchableSource.getTouchHitbox();
@@ -593,7 +593,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
 
             List<Feature> features = mMap.queryRenderedFeatures(hitboxF, touchableSource.getLayerIDs());
             if (features.size() > 0) {
-                hits.put(touchableSource.getID(), features.get(0));
+                hits.put(touchableSource.getID(), features);
                 hitTouchableSources.add(touchableSource);
             }
         }
@@ -601,7 +601,11 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         if (hits.size() > 0) {
             RCTSource source = getTouchableSourceWithHighestZIndex(hitTouchableSources);
             if (source != null && source.hasPressListener()) {
-                source.onPress(hits.get(source.getID()));
+                source.onPress(new RCTSource.OnPressEvent(
+                        hits.get(source.getID()),
+                        point,
+                        screenPoint
+                        ));
                 return true;
             }
         }

@@ -27,8 +27,8 @@ public class RCTMGLVectorSource extends RCTMGLTileSource<VectorSource> {
         mManager = manager;
     }
 
-    public void onPress(Feature feature) {
-        mManager.handleEvent(FeatureClickEvent.makeVectorSourceEvent(this, feature));
+    public void onPress(OnPressEvent event) {
+        mManager.handleEvent(FeatureClickEvent.makeVectorSourceEvent(this, event));
     }
 
     @Override

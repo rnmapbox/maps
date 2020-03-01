@@ -277,10 +277,7 @@ RCT_EXPORT_METHOD(queryRenderedFeaturesInRect:(nonnull NSNumber*)reactTag
                                                         inStyleLayersWithIdentifiers:layerIDSet
                                                         predicate:predicate];
         
-        NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] init];
-        for (int i = 0; i < shapes.count; i++) {
-            [features addObject:shapes[i].geoJSONDictionary];
-        }
+        NSArray<NSDictionary*>* features = [self featuresToJSON:shapes];
         
         resolve(@{ @"data": @{ @"type": @"FeatureCollection", @"features": features }});
     }];
@@ -333,7 +330,7 @@ RCT_EXPORT_METHOD(setSourceVisibility:(nonnull NSNumber *)reactTag
     CGPoint screenPoint = [recognizer locationInView:mapView];
     NSArray<RCTMGLSource *> *touchableSources = [mapView getAllTouchableSources];
     
-    NSMutableDictionary<NSString *, id<MGLFeature>> *hits = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary<NSString *, NSArray<id<MGLFeature>>* > *hits = [[NSMutableDictionary alloc] init];
     NSMutableArray<RCTMGLSource *> *hitTouchableSources = [[NSMutableArray alloc] init];
     for (RCTMGLSource *touchableSource in touchableSources) {
         NSDictionary<NSString *, NSNumber *> *hitbox = touchableSource.hitbox;
@@ -349,7 +346,7 @@ RCT_EXPORT_METHOD(setSourceVisibility:(nonnull NSNumber *)reactTag
                                                      predicate:nil];
         
         if (features.count > 0) {
-            hits[touchableSource.id] = features[0];
+            hits[touchableSource.id] = features;
             [hitTouchableSources addObject:touchableSource];
         }
     }
@@ -357,14 +354,27 @@ RCT_EXPORT_METHOD(setSourceVisibility:(nonnull NSNumber *)reactTag
     if (hits.count > 0) {
         RCTMGLSource *source = [mapView getTouchableSourceWithHighestZIndex:hitTouchableSources];
         if (source != nil && source.hasPressListener) {
-            NSDictionary<NSString *, id> *geoJSONDict = hits[source.id].geoJSONDictionary;
+            NSArray* geoJSONDicts = [self featuresToJSON: hits[source.id]];
             
             NSString *eventType = RCT_MAPBOX_VECTOR_SOURCE_LAYER_PRESS;
             if ([source isKindOfClass:[RCTMGLShapeSource class]]) {
                 eventType = RCT_MAPBOX_SHAPE_SOURCE_LAYER_PRESS;
             }
 
-            RCTMGLEvent *event = [RCTMGLEvent makeEvent:eventType withPayload:geoJSONDict];
+            CLLocationCoordinate2D coordinate = [mapView convertPoint:screenPoint
+                                                    toCoordinateFromView:mapView];
+            
+            RCTMGLEvent *event = [RCTMGLEvent makeEvent:eventType withPayload: @{
+                @"features": geoJSONDicts,
+                @"point": @{
+                        @"x": [NSNumber numberWithDouble: screenPoint.x],
+                        @"y":[NSNumber numberWithDouble: screenPoint.y]
+                },
+                @"coordinates": @{
+                        @"latitude": [NSNumber numberWithDouble: coordinate.latitude],
+                        @"longitude": [NSNumber numberWithDouble: coordinate.longitude]
+                }
+            }];
             [self fireEvent:event withCallback:source.onPress];
             return;
         }
@@ -588,6 +598,15 @@ RCT_EXPORT_METHOD(setSourceVisibility:(nonnull NSNumber *)reactTag
                             @"visibleBounds": [RCTMGLUtils fromCoordinateBounds:mapView.visibleCoordinateBounds]
                          };
     return feature.geoJSONDictionary;
+}
+
+- (NSArray<NSDictionary*> *) featuresToJSON:(NSArray<id<MGLFeature>> *) features
+{
+    NSMutableArray<NSDictionary*> *json = [[NSMutableArray alloc] init];
+     for(id<MGLFeature> feature in features) {
+        [json addObject:feature.geoJSONDictionary];
+    }
+    return json;
 }
 
 @end

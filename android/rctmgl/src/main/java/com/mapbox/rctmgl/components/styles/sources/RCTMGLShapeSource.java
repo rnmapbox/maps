@@ -115,8 +115,8 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         mTolerance = tolerance;
     }
 
-    public void onPress(Feature feature) {
-        mManager.handleEvent(FeatureClickEvent.makeShapeSourceEvent(this, feature));
+    public void onPress(OnPressEvent event) {
+        mManager.handleEvent(FeatureClickEvent.makeShapeSourceEvent(this, event));
     }
 
     private GeoJsonOptions getOptions() {

@@ -2,11 +2,14 @@ package com.mapbox.rctmgl.components.styles.sources;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
+
+import android.graphics.PointF;
 import android.view.View;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 import com.mapbox.geojson.Feature;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.sources.Source;
@@ -214,7 +217,20 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
     }
 
     public abstract T makeSource();
-    public abstract void onPress(Feature feature);
+
+    static public class OnPressEvent {
+        public List<Feature> features;
+        public LatLng latLng;
+        public PointF screenPoint;
+
+        public OnPressEvent(@NonNull List<Feature> features, @NonNull LatLng latLng, @NonNull PointF screenPoint) {
+            this.features = features;
+            this.latLng = latLng;
+            this.screenPoint = screenPoint;
+        }
+    }
+
+    public abstract void onPress(OnPressEvent event);
 
     public static boolean isDefaultSource(String sourceID) {
         return DEFAULT_ID.equals(sourceID);
