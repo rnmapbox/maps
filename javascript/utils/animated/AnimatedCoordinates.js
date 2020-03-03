@@ -1,4 +1,4 @@
-import { Animated } from 'react-native';
+import {Animated} from 'react-native';
 
 // Used react-native-maps as a reference
 // https://github.com/react-community/react-native-maps/blob/master/lib/components/AnimatedRegion.js
@@ -10,9 +10,7 @@ export class AnimatedCoordinates extends AnimatedWithChildren {
   constructor(coordinates) {
     super();
 
-    this.longitude = coordinates[0];
-    this.latitude = coordinates[1];
-
+    [this.longitude, this.latitude] = coordinates;
     if (!(this.longitude instanceof Animated.Value)) {
       this.longitude = new Animated.Value(this.longitude);
     }
@@ -91,15 +89,15 @@ export class AnimatedCoordinates extends AnimatedWithChildren {
     ]);
   }
 
-  spring(config = { coordinates: DEFAULT_COORD }) {
+  spring(config) {
     return this.animate('spring', config);
   }
 
-  timing(config = { coordinates: DEFAULT_COORD }) {
+  timing(config) {
     return this.animate('timing', config);
   }
 
-  decay(config = { coordinates: DEFAULT_COORD }) {
+  decay(config) {
     return this.animate('decay', config);
   }
 
