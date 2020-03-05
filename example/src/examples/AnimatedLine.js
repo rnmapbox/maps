@@ -1,6 +1,11 @@
 import React from 'react';
-import {StyleSheet, Easing, Button} from 'react-native';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import {Easing, Button} from 'react-native';
+import {
+  Animated,
+  MapView,
+  Camera,
+  LineJoin,
+} from '@react-native-mapbox-gl/maps';
 
 import sheet from '../styles/sheet';
 
@@ -11,6 +16,7 @@ import Bubble from './common/Bubble';
 const lon = -73.99255;
 const lat = 40.73581;
 const delta = 0.001;
+const steps = 300;
 
 class AnimatedLine extends React.Component {
   static propTypes = {
@@ -24,9 +30,12 @@ class AnimatedLine extends React.Component {
       backgroundColor: 'blue',
       coordinates: [[-73.99155, 40.73581]],
 
-      shape: new MapboxGL.AnimatedLineString({
-        coordinates: [[lon + delta, lat], [lon, lat], [lon, lat + delta]], //  [[lon, lat], [lon + delta, lat + delta]], ///
-      }),
+      shape: new Animated.CoordinatesArray(
+        [...Array(steps).keys()].map((v, i) => [
+          lon + delta * (i / steps) * (i / steps),
+          lat + (delta * i) / steps,
+        ]),
+      ),
     };
   }
 
@@ -34,7 +43,10 @@ class AnimatedLine extends React.Component {
     setTimeout(() => {
       this.state.shape
         .timing({
-          coordinates: [[lon, lat], [lon, lat + delta]],
+          toValue: [...Array(steps).keys()].map((v, i) => [
+            lon - (delta * i) / steps,
+            lat + (2.0 * (delta * i)) / steps,
+          ]),
           duration: 1000,
           easing: Easing.linear,
         })
@@ -43,10 +55,10 @@ class AnimatedLine extends React.Component {
     setTimeout(() => {
       this.state.shape
         .timing({
-          coordinates: [
-            [lon + delta, lat + delta],
-            [lon + delta, lat + delta + delta],
-          ],
+          toValue: [...Array(steps).keys()].map((v, i) => [
+            lon + (delta * i) / steps,
+            lat + delta * (i / steps) * (i / steps),
+          ]),
           duration: 1000,
           easing: Easing.linear,
         })
@@ -60,7 +72,7 @@ class AnimatedLine extends React.Component {
     setTimeout(() => {
       this.state.shape
         .timing({
-          coordinates: [[lon + delta, lat], [lon, lat], [lon, lat + delta]],
+          toValue: [[lon + delta, lat], [lon, lat], [lon, lat + delta]],
           duration: time,
           easing: Easing.linear,
         })
@@ -70,11 +82,7 @@ class AnimatedLine extends React.Component {
     setTimeout(() => {
       this.state.shape
         .timing({
-          coordinates: [
-            [lon + delta, lat],
-            [lon, lat],
-            [lon + delta, lat + delta],
-          ],
+          toValue: [[lon + delta, lat], [lon, lat], [lon + delta, lat + delta]],
           duration: time,
           easing: Easing.linear,
         })
@@ -84,7 +92,7 @@ class AnimatedLine extends React.Component {
     setTimeout(() => {
       this.state.shape
         .timing({
-          coordinates: [[lon, lat], [lon, lat + delta]],
+          toValue: [[lon, lat], [lon, lat + delta]],
           duration: time,
           easing: Easing.linear,
         })
@@ -92,35 +100,78 @@ class AnimatedLine extends React.Component {
     }, 6000);
   }
 
+  startAnimateRoute() {
+    const time = 3000;
+
+    setTimeout(() => {
+      this.state.shape
+        .timing({
+          toValue: [
+            [lon, lat],
+            [lon, lat + 2 * delta],
+            [lon + delta, lat + 2 * delta + delta],
+            [lon + delta + 2 * delta, lat + 2 * delta + delta + delta],
+          ],
+          duration: time,
+          easing: Easing.linear,
+        })
+        .start();
+    }, 0);
+
+    setTimeout(() => {
+      this.state.shape
+        .timing({
+          toValue: [[lon, lat], [lon, lat + 1 * delta]],
+          duration: time,
+          easing: Easing.linear,
+        })
+        .start();
+    }, time);
+  }
+
   render() {
     return (
       <Page {...this.props}>
-        <MapboxGL.MapView
+        <MapView
           ref={c => (this._map = c)}
           onPress={this.onPress}
           onDidFinishLoadingMap={this.onDidFinishLoadingMap}
           style={sheet.matchParent}>
-          <MapboxGL.Camera
-            zoomLevel={16}
-            centerCoordinate={this.state.coordinates[0]}
-          />
+          <Camera zoomLevel={16} centerCoordinate={this.state.coordinates[0]} />
 
-          <MapboxGL.Animated.ShapeSource id={'shape'} shape={this.state.shape}>
-            <MapboxGL.Animated.LineLayer
+          <Animated.ShapeSource
+            id={'shape'}
+            shape={
+              new Animated.Shape({
+                type: 'LineString',
+                coordinates: this.state.shape,
+              })
+            }>
+            <Animated.LineLayer
               id={'line'}
               style={{
-                lineCap: MapboxGL.LineJoin.Round,
+                lineCap: LineJoin.Round,
                 lineWidth: 6,
                 lineOpacity: 0.84,
                 lineColor: '#314ccd',
               }}
             />
-          </MapboxGL.Animated.ShapeSource>
-        </MapboxGL.MapView>
+          </Animated.ShapeSource>
+        </MapView>
 
         <Bubble>
-          <Button title="Animate 2" onPress={() => this.startAnimate2()} />
-          <Button title="Animate 3" onPress={() => this.startAnimate3()} />
+          <Button
+            title="Animate a lot of points"
+            onPress={() => this.startAnimate2()}
+          />
+          <Button
+            title="Animate a few points with abort"
+            onPress={() => this.startAnimate3()}
+          />
+          <Button
+            title="Animate route"
+            onPress={() => this.startAnimateRoute()}
+          />
         </Bubble>
       </Page>
     );
