@@ -125,12 +125,59 @@ describe('UserLocation', () => {
 
     beforeEach(() => {
       ul = new UserLocation();
+      jest.spyOn(locationManager, 'start').mockImplementation(jest.fn());
+      jest.spyOn(locationManager, 'dispose').mockImplementation(jest.fn());
+      jest
+        .spyOn(locationManager, 'getLastKnownLocation')
+        .mockImplementation(() => position);
+
+      ul.setState = jest.fn();
+    });
+
+    afterEach(() => {
+      jest.clearAllMocks();
     });
 
     test('initial state is as expected', () => {
       const initialState = {coordinates: null, shouldShowUserLocation: false};
 
       expect(ul.state).toStrictEqual(initialState);
+      expect(ul.locationManagerRunning).toStrictEqual(false);
+    });
+
+    // TODO: replace object { running: boolean } argument with simple boolean
+    describe('#setLocationManager', () => {
+      test('called with "running" true', async () => {
+        const lastKnownLocation = [4.1036916, 51.5462244];
+
+        expect(ul.locationManagerRunning).toStrictEqual(false);
+
+        await ul.setLocationManager({running: true});
+
+        expect(ul.locationManagerRunning).toStrictEqual(true);
+        expect(locationManager.start).toHaveBeenCalledTimes(1);
+        expect(locationManager.getLastKnownLocation).toHaveBeenCalledTimes(1);
+        expect(ul.setState).toHaveBeenCalledTimes(1);
+        expect(ul.setState).toHaveBeenCalledWith({
+          coordinates: lastKnownLocation,
+        });
+        expect(locationManager.dispose).not.toHaveBeenCalled();
+      });
+
+      test('called with "running" false', async () => {
+        // start
+        expect(ul.locationManagerRunning).toStrictEqual(false);
+        await ul.setLocationManager({running: true});
+        expect(ul.locationManagerRunning).toStrictEqual(true);
+
+        // stop
+        await ul.setLocationManager({running: false});
+
+        expect(ul.locationManagerRunning).toStrictEqual(false);
+        // only once from start
+        expect(locationManager.start).toHaveBeenCalledTimes(1);
+        expect(locationManager.dispose).toHaveBeenCalledTimes(1);
+      });
     });
   });
 });
