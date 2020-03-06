@@ -132,6 +132,13 @@ describe('UserLocation', () => {
         .mockImplementation(() => position);
 
       ul.setState = jest.fn();
+
+      ul.props = {
+        animated: true,
+        visible: true,
+        minDisplacement: 0,
+        renderMode: 'normal',
+      };
     });
 
     afterEach(() => {
@@ -177,6 +184,35 @@ describe('UserLocation', () => {
         // only once from start
         expect(locationManager.start).toHaveBeenCalledTimes(1);
         expect(locationManager.dispose).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('#needsLocationManagerRunning', () => {
+      test('returns true correctly', () => {
+        // default props "onUpdate: undefined, visible: true"
+        expect(ul.needsLocationManagerRunning()).toStrictEqual(true);
+
+        ul.props = {
+          onUpdate: () => {},
+          visible: true,
+        };
+
+        expect(ul.needsLocationManagerRunning()).toStrictEqual(true);
+
+        ul.props = {
+          onUpdate: () => {},
+          visible: false,
+        };
+
+        expect(ul.needsLocationManagerRunning()).toStrictEqual(true);
+      });
+
+      test('returns false correctly', () => {
+        ul.props = {
+          visible: false,
+        };
+
+        expect(ul.needsLocationManagerRunning()).toStrictEqual(false);
       });
     });
   });
