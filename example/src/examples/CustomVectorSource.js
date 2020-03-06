@@ -58,6 +58,12 @@ class CustomVectorSource extends React.PureComponent {
             url={VECTOR_SOURCE_URL}
             ref={source => {
               this._vectorSource = source;
+            }}
+            onPress={(e) => {
+              console.log(
+                `VectorSource onPress: ${e.features}`,
+                e.features,
+              );
             }}>
             <MapboxGL.FillLayer
               id="customSourceFill"

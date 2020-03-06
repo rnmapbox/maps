@@ -66,7 +66,7 @@ module.exports = {
     quotes: [2, "single"],
     "eol-last": [0],
     "no-continue": [1],
-    "class-methods-use-this": [1],
+    "class-methods-use-this": [0],
     "no-bitwise": [1],
     "prefer-destructuring": [1],
     "consistent-return": [1],

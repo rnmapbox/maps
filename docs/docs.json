@@ -3425,7 +3425,20 @@
   "ShapeSource": {
     "description": "ShapeSource is a map content source that supplies vector shapes to be shown on the map.\nThe shape may be a url or a GeoJSON object",
     "displayName": "ShapeSource",
-    "methods": [],
+    "methods": [
+      {
+        "name": "onPress",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "event",
+            "type": null
+          }
+        ],
+        "returns": null
+      }
+    ],
     "props": [
       {
         "name": "id",
@@ -3499,14 +3512,38 @@
         "params": [
           {
             "name": "event",
-            "description": "event with geojson feature as payload",
+            "description": null,
             "type": {
-              "name": "NativeSyntheticEvent",
+              "name": "Object"
+            },
+            "optional": false
+          },
+          {
+            "name": "event.features",
+            "description": "the geojson features that have hit by the press (might be multiple)",
+            "type": {
+              "name": "Array",
               "elements": [
                 {
-                  "name": "GeoJSONFeatureEvent"
+                  "name": "Object"
                 }
               ]
+            },
+            "optional": false
+          },
+          {
+            "name": "event.coordinates",
+            "description": "the coordinates of the click",
+            "type": {
+              "name": "Object"
+            },
+            "optional": false
+          },
+          {
+            "name": "event.point",
+            "description": "the point of the click",
+            "type": {
+              "name": "Object"
             },
             "optional": false
           }
@@ -5079,6 +5116,18 @@
         "examples": [
           "\nvectorSource.features(['id1', 'id2'])\n\n"
         ]
+      },
+      {
+        "name": "onPress",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "event",
+            "type": null
+          }
+        ],
+        "returns": null
       }
     ],
     "props": [
@@ -5141,7 +5190,46 @@
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers"
+        "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers",
+        "params": [
+          {
+            "name": "event",
+            "description": null,
+            "type": {
+              "name": "Object"
+            },
+            "optional": false
+          },
+          {
+            "name": "event.features",
+            "description": "the geojson features that have hit by the press (might be multiple)",
+            "type": {
+              "name": "Array",
+              "elements": [
+                {
+                  "name": "Object"
+                }
+              ]
+            },
+            "optional": false
+          },
+          {
+            "name": "event.coordinates",
+            "description": "the coordinates of the click",
+            "type": {
+              "name": "Object"
+            },
+            "optional": false
+          },
+          {
+            "name": "event.point",
+            "description": "the point of the click",
+            "type": {
+              "name": "Object"
+            },
+            "optional": false
+          }
+        ]
       },
       {
         "name": "hitbox",

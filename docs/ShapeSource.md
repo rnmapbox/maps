@@ -19,4 +19,15 @@
 | &nbsp;&nbsp;width | `number` | `none` | `true` | FIX ME NO DESCRIPTION |
 | &nbsp;&nbsp;height | `number` | `none` | `true` | FIX ME NO DESCRIPTION |
 
+### methods
+#### onPress(event)
+
+
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `event` | `n/a` | `Yes` | undefined |
+
+
 

@@ -8,6 +8,7 @@ import {
   viewPropTypes,
   isFunction,
 } from '../utils';
+import {copyPropertiesAsDeprecated} from '../utils/deprecation';
 
 import AbstractSource from './AbstractSource';
 
@@ -85,7 +86,10 @@ class ShapeSource extends AbstractSource {
      * Source press listener, gets called when a user presses one of the children layers only
      * if that layer has a higher z-index than another source layers
      *
-     * @param {NativeSyntheticEvent<GeoJSONFeatureEvent>} event - event with geojson feature as payload
+     * @param {Object} event
+     * @param {Object[]} event.features - the geojson features that have hit by the press (might be multiple)
+     * @param {Object} event.coordinates - the coordinates of the click
+     * @param {Object} event.point - the point of the click
      * @return void
      */
     onPress: PropTypes.func,
@@ -121,6 +125,35 @@ class ShapeSource extends AbstractSource {
     return toJSONString(this.props.shape);
   }
 
+  onPress(event) {
+    const {
+      nativeEvent: {
+        payload: {features, coordinates, point},
+      },
+    } = event;
+    let newEvent = {
+      features,
+      coordinates,
+      point,
+    };
+    newEvent = copyPropertiesAsDeprecated(
+      event,
+      newEvent,
+      key => {
+        console.warn(
+          `event.${key} is deprecated on ShapeSource#onPress, please use event.features`,
+        );
+      },
+      {
+        nativeEvent: origNativeEvent => ({
+          ...origNativeEvent,
+          payload: features[0],
+        }),
+      },
+    );
+    this.props.onPress(newEvent);
+  }
+
   render() {
     const props = {
       id: this.props.id,
@@ -128,7 +161,7 @@ class ShapeSource extends AbstractSource {
       shape: this._getShape(),
       hitbox: this.props.hitbox,
       hasPressListener: isFunction(this.props.onPress),
-      onMapboxShapeSourcePress: this.props.onPress,
+      onMapboxShapeSourcePress: this.onPress.bind(this),
       cluster: this.props.cluster ? 1 : 0,
       clusterRadius: this.props.clusterRadius,
       clusterMaxZoomLevel: this.props.clusterMaxZoomLevel,

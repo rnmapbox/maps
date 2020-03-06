@@ -35,4 +35,14 @@ vectorSource.features(['id1', 'id2'])
 ```
 
 
+#### onPress(event)
+
+
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `event` | `n/a` | `Yes` | undefined |
+
+
 
