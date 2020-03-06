@@ -24,6 +24,7 @@
     "@turf/bearing": "^5.1.5",
     "@turf/distance": "^5.1.5",
     "@turf/helpers": "^4.7.3",
+    "@turf/length": "^6.0.2",
     "@turf/line-distance": "^4.7.3",
     "@turf/nearest": "^4.7.3",
     "buffer": "^5.1.0",

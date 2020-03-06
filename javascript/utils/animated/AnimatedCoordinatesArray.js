@@ -18,10 +18,28 @@ class AnimatedCoordinatesArray extends AnimatedWithChildren {
     super();
 
     this.coordinatesArray = coordinatesArray.map(coord => [...coord]);
+
+    // progressValue is a 0->1 value describing the animation
+    this.progressValue = new Animated.Value(0.0);
+    this.progressValue.__addChild(this);
   }
 
-  newCoordAnimator(config) {
-    const {toValue} = config;
+  /**
+   * @typedef {Object} CoordinatesAnimator
+   *
+   * @property {function} calculate - Calculate new coordinates based on progres: a nubmer
+   *   between 0-1 specifying where the animation is, and origCoords the starting coordinates.
+   */
+
+
+  /**
+   * Subclasses can override to implement different animations.
+   *
+   * @param {*} toValue - to value from animate
+   * @param {*} actCoords - the current coordinates array to start from
+   * @returns {CoordinatesAnimator}
+   */
+  createCoordinatesAnimator(toValue, actCoords) {
     const newCoords = toValue.map(coord => [...coord]);
     return {
       coords: newCoords,
@@ -74,43 +92,58 @@ class AnimatedCoordinatesArray extends AnimatedWithChildren {
     };
   }
 
-  animate(type, config) {
-    const {toValue, ...rest} = config;
+  animate(progressAnimation, config) {
+    const {toValue} = config;
 
-    if (this.coordAnimator) {
-      // there was a started but not finsihed animation
-      this.animation.stop();
-      this.coordinatesArray = this.coordAnimator.calculateState(
-        this.transformToNew.__getValue(),
+    const onAnimationStart = animation => {
+      if (this.coordAnimator) {
+        // there was a started but not finsihed animation
+        const actProgress = this.progressValue.__getValue();
+        this.animation.stop();
+        this.progressValue.setValue(0.0);
+        this.coordinatesArray = this.coordAnimator.calculate(
+          actProgress,
+          this.coordinatesArray,
+        );
+        this.coordAnimator = null;
+        this.animation = null;
+      }
+
+      this.animation = animation;
+      this.coordAnimator = this.createCoordinatesAnimator(
+        toValue,
         this.coordinatesArray,
       );
-      this.transformToNew.__removeChild(this);
-      this.coordAnimator = null;
-      this.transformToNew = null;
-      this.animation = null;
-    }
+    };
 
-    const transformToNew = new Animated.Value(0.0);
-    transformToNew.__addChild(this);
-    this.transformToNew = transformToNew;
-    this.animation = Animated[type](this.transformToNew, {
-      ...rest,
-      toValue: 1.0,
-    });
-    this.coordAnimator = this.newCoordAnimator(config);
-    return this.animation;
+    const origAnimationStart = progressAnimation.start;
+    const newAnimation = progressAnimation;
+    newAnimation.start = function start(...args) {
+      onAnimationStart(progressAnimation);
+      origAnimationStart(...args);
+    }
+    return newAnimation;
   }
 
   timing(config) {
-    return this.animate('timing', config);
+    return this.animate(
+      Animated.timing(this.progressValue, {...config, toValue: 1.0}),
+      config,
+    );
   }
 
   spring(config) {
-    return this.animate('spring', config);
+    return this.animate(
+      Animated.spring(this.progressValue, {...config, toValue: 1.0}),
+      config,
+    );
   }
 
   decay(config) {
-    return this.animate('decay', config);
+    return this.animate(
+      Animated.decay(this.progressValue, {...config, toValue: 1.0}),
+      config,
+    );
   }
 
   __getValue() {
@@ -118,7 +151,7 @@ class AnimatedCoordinatesArray extends AnimatedWithChildren {
       return this.coordinatesArray.map(coord => [coord[0], coord[1]]);
     }
     return this.coordAnimator.calculate(
-      this.transformToNew.__getValue(),
+      this.progressValue.__getValue(),
       this.coordinatesArray,
     );
   }
