@@ -28,7 +28,7 @@ describe('UserLocation', () => {
     });
 
     afterEach(() => {
-      jest.restoreAllMocks();
+      jest.clearAllMocks();
     });
 
     test('renders with CircleLayers by default', done => {
