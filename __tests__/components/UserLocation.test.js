@@ -25,6 +25,10 @@ describe('UserLocation', () => {
       jest
         .spyOn(locationManager, 'getLastKnownLocation')
         .mockImplementation(() => position);
+
+      jest.spyOn(locationManager, 'addListener');
+
+      jest.spyOn(locationManager, 'removeListener');
     });
 
     afterEach(() => {
@@ -118,6 +122,17 @@ describe('UserLocation', () => {
       fireEvent(shapeSource, 'onPress');
       expect(onPressCallback).toHaveBeenCalledTimes(2);
     });
+
+    test('correctly unmounts', async () => {
+      const {unmount} = render(<UserLocation />);
+
+      expect(locationManager.addListener).toHaveBeenCalled();
+      expect(locationManager.removeListener).not.toHaveBeenCalled();
+
+      unmount();
+
+      expect(locationManager.removeListener).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('methods', () => {
@@ -139,6 +154,8 @@ describe('UserLocation', () => {
         minDisplacement: 0,
         renderMode: 'normal',
       };
+
+      ul._isMounted = true;
     });
 
     afterEach(() => {

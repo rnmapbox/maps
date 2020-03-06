@@ -109,6 +109,7 @@ class UserLocation extends React.Component {
   }
 
   async componentDidMount() {
+    this._isMounted = true;
     locationManager.addListener(this._onLocationUpdate);
     await this.setLocationManager({
       running: this.needsLocationManagerRunning(),
@@ -136,7 +137,7 @@ class UserLocation extends React.Component {
 
         const lastKnownLocation = await locationManager.getLastKnownLocation();
 
-        if (lastKnownLocation) {
+        if (lastKnownLocation && this._isMounted) {
           this.setState({
             coordinates: this._getCoordinatesFromLocation(lastKnownLocation),
           });
@@ -158,6 +159,8 @@ class UserLocation extends React.Component {
   }
 
   async componentWillUnmount() {
+    this._isMounted = false;
+
     locationManager.removeListener(this._onLocationUpdate);
     await this.setLocationManager({running: false});
   }
