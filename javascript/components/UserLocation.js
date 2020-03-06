@@ -121,6 +121,7 @@ class UserLocation extends React.Component {
 
   /**
    * Whether to start or stop the locationManager
+   *
    * Notice, that locationManager will start automatically when
    * either `onUpdate` or `visible` are set
    *
@@ -150,10 +151,10 @@ class UserLocation extends React.Component {
    *
    * If locationManager should be running
    *
-   * @return {void}
+   * @return {boolean}
    */
   needsLocationManagerRunning() {
-    return this.props.onUpdate || this.props.visible;
+    return !!this.props.onUpdate || this.props.visible;
   }
 
   async componentWillUnmount() {
