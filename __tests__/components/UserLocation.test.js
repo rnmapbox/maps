@@ -250,5 +250,22 @@ describe('UserLocation', () => {
         expect(ul.props.onUpdate).toHaveBeenCalledWith(position);
       });
     });
+
+    describe('_getCoordinatesFromLocation', () => {
+      test('returns coordinates from position', () => {
+        expect(ul._getCoordinatesFromLocation(position)).toStrictEqual([
+          4.1036916,
+          51.5462244,
+        ]);
+      });
+
+      test('returns when location or coords are missing', () => {
+        expect(ul._getCoordinatesFromLocation()).toStrictEqual();
+
+        expect(
+          ul._getCoordinatesFromLocation({fakeLocation: null}),
+        ).toStrictEqual();
+      });
+    });
   });
 });
