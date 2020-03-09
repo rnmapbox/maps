@@ -1,7 +1,9 @@
 import React from 'react';
 import {render, fireEvent} from 'react-native-testing-library';
 
-import UserLocation from '../../javascript/components/UserLocation';
+import UserLocation, {
+  normalIcon,
+} from '../../javascript/components/UserLocation';
 import ShapeSource from '../../javascript/components/ShapeSource';
 import CircleLayer from '../../javascript/components/CircleLayer';
 import locationManager from '../../javascript/modules/location/locationManager';
@@ -265,6 +267,32 @@ describe('UserLocation', () => {
         expect(
           ul._getCoordinatesFromLocation({fakeLocation: null}),
         ).toStrictEqual();
+      });
+    });
+
+    describe('#_userIconLayers', () => {
+      test('returns "normal" on default RenderMode', () => {
+        expect(ul._userIconLayers()).toStrictEqual(normalIcon);
+      });
+
+      test('returns "children" if defined and mode is custom', () => {
+        const child = (
+          <CircleLayer
+            key="mapboxUserLocationPluseCircle"
+            id="mapboxUserLocationPluseCircle"
+            style={{
+              circleRadius: 15,
+              circleColor: 'tomato',
+              circleOpacity: 0.2,
+              circlePitchAlignment: 'map',
+            }}
+          />
+        );
+
+        ul.props.children = child;
+        ul.props.renderMode = 'custom';
+
+        expect(ul._userIconLayers()).toStrictEqual(child);
       });
     });
   });
