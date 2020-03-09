@@ -106,6 +106,10 @@ class UserLocation extends React.Component {
     };
 
     this._onLocationUpdate = this._onLocationUpdate.bind(this);
+
+    // required as #setLocationManager attempts to setState
+    // after component unmount
+    this._isMounted = null;
   }
 
   async componentDidMount() {
