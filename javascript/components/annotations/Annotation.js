@@ -3,7 +3,7 @@ import {Easing} from 'react-native';
 import PropTypes from 'prop-types';
 
 import MapboxGL from '../../index'; // eslint-disable-line import/no-cycle
-import AnimatedMapPoint from '../../utils/AnimatedPoint';
+import AnimatedMapPoint from '../../utils/animated/AnimatedPoint';
 
 class Annotation extends React.Component {
   static propTypes = {

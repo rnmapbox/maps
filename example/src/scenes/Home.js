@@ -28,6 +28,7 @@ import QueryWithRect from '../examples/QueryWithRect';
 import ShapeSourceIcon from '../examples/ShapeSourceIcon';
 import CustomVectorSource from '../examples/CustomVectorSource';
 import ShowPointAnnotation from '../examples/ShowPointAnnotation';
+import AnimatedLine from '../examples/AnimatedLine';
 import CreateOfflineRegion from '../examples/CreateOfflineRegion';
 import DriveTheLine from '../examples/DriveTheLine';
 import ImageOverlay from '../examples/ImageOverlay';
@@ -107,6 +108,7 @@ const Examples = [
   new ExampleItem('Shape Source From Icon', ShapeSourceIcon),
   new ExampleItem('Custom Vector Source', CustomVectorSource),
   new ExampleItem('Show Point Annotation', ShowPointAnnotation),
+  new ExampleItem('Animated Line', AnimatedLine),
   new ExampleItem('Marker View', MarkerView),
   new ExampleItem('Create Offline Region', CreateOfflineRegion),
   new ExampleItem('Animation Along a Line', DriveTheLine),

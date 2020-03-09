@@ -80,6 +80,8 @@ describe('Public Interface', () => {
 
       // helpers
       'AnimatedPoint',
+      'AnimatedCoordinatesArray',
+      'AnimatedShape',
     ];
     actualKeys.forEach(key => expect(expectedKeys).toContain(key));
   });

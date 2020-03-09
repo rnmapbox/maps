@@ -1,4 +1,8 @@
-import {Animated, NativeModules, PermissionsAndroid} from 'react-native';
+import {
+  Animated as RNAnimated,
+  NativeModules,
+  PermissionsAndroid,
+} from 'react-native';
 
 import {isAndroid} from './utils';
 import MapView from './components/MapView';
@@ -24,8 +28,10 @@ import BackgroundLayer from './components/BackgroundLayer';
 import locationManager from './modules/location/locationManager';
 import offlineManager from './modules/offline/offlineManager';
 import snapshotManager from './modules/snapshot/snapshotManager';
-import AnimatedMapPoint from './utils/AnimatedPoint';
 import MarkerView from './components/MarkerView';
+import AnimatedMapPoint from './utils/animated/AnimatedPoint';
+import AnimatedShape from './utils/animated/AnimatedShape';
+import AnimatedCoordinatesArray from './utils/animated/AnimatedCoordinatesArray';
 
 const MapboxGL = {...NativeModules.MGLModule};
 
@@ -92,22 +98,32 @@ MapboxGL.snapshotManager = snapshotManager;
 
 // utils
 MapboxGL.AnimatedPoint = AnimatedMapPoint;
+MapboxGL.AnimatedCoordinatesArray = AnimatedCoordinatesArray;
+MapboxGL.AnimatedShape = AnimatedShape;
 
 // animated
-MapboxGL.Animated = {
+const Animated = {
   // sources
-  ShapeSource: Animated.createAnimatedComponent(ShapeSource),
-  ImageSource: Animated.createAnimatedComponent(ImageSource),
+  ShapeSource: RNAnimated.createAnimatedComponent(ShapeSource),
+  ImageSource: RNAnimated.createAnimatedComponent(ImageSource),
 
   // layers
-  FillLayer: Animated.createAnimatedComponent(FillLayer),
-  FillExtrusionLayer: Animated.createAnimatedComponent(FillExtrusionLayer),
-  LineLayer: Animated.createAnimatedComponent(LineLayer),
-  CircleLayer: Animated.createAnimatedComponent(CircleLayer),
-  SymbolLayer: Animated.createAnimatedComponent(SymbolLayer),
-  RasterLayer: Animated.createAnimatedComponent(RasterLayer),
-  BackgroundLayer: Animated.createAnimatedComponent(BackgroundLayer),
+  FillLayer: RNAnimated.createAnimatedComponent(FillLayer),
+  FillExtrusionLayer: RNAnimated.createAnimatedComponent(FillExtrusionLayer),
+  LineLayer: RNAnimated.createAnimatedComponent(LineLayer),
+  CircleLayer: RNAnimated.createAnimatedComponent(CircleLayer),
+  SymbolLayer: RNAnimated.createAnimatedComponent(SymbolLayer),
+  RasterLayer: RNAnimated.createAnimatedComponent(RasterLayer),
+  BackgroundLayer: RNAnimated.createAnimatedComponent(BackgroundLayer),
+
+  // values
+  CoordinatesArray: AnimatedCoordinatesArray,
+  Shape: AnimatedShape,
 };
+
+MapboxGL.Animated = Animated;
+
+const {LineJoin} = MapboxGL;
 
 export {
   MapView,
@@ -135,6 +151,10 @@ export {
   offlineManager,
   snapshotManager,
   AnimatedMapPoint,
+  AnimatedCoordinatesArray,
+  AnimatedShape,
+  Animated,
+  LineJoin,
 };
 
 export default MapboxGL;
