@@ -29,7 +29,7 @@ const layerStyles = {
   },
 };
 
-const normalIcon = [
+export const normalIcon = [
   <CircleLayer
     key="mapboxUserLocationPluseCircle"
     id="mapboxUserLocationPluseCircle"
@@ -228,8 +228,3 @@ class UserLocation extends React.Component {
 }
 
 export default UserLocation;
-
-// TODO:
-// * why is there even a RenderMode if children are rendered regardless?
-// * why is #userIconLayers a getter?!
-// * state.shouldShowUserLocation is unused
