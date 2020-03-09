@@ -106,11 +106,13 @@ class UserLocation extends React.Component {
     };
 
     this._onLocationUpdate = this._onLocationUpdate.bind(this);
-
-    // required as #setLocationManager attempts to setState
-    // after component unmount
-    this._isMounted = null;
   }
+
+  // required as #setLocationManager attempts to setState
+  // after component unmount
+  _isMounted = null;
+
+  locationManagerRunning = false;
 
   async componentDidMount() {
     this._isMounted = true;
@@ -122,7 +124,22 @@ class UserLocation extends React.Component {
     locationManager.setMinDisplacement(this.props.minDisplacement);
   }
 
-  locationManagerRunning = false;
+  async componentDidUpdate(prevProps) {
+    await this.setLocationManager({
+      running: this.needsLocationManagerRunning(),
+    });
+
+    if (this.props.minDisplacement !== prevProps.minDisplacement) {
+      locationManager.setMinDisplacement(this.props.minDisplacement);
+    }
+  }
+
+  async componentWillUnmount() {
+    this._isMounted = false;
+
+    locationManager.removeListener(this._onLocationUpdate);
+    await this.setLocationManager({running: false});
+  }
 
   /**
    * Whether to start or stop the locationManager
@@ -162,13 +179,6 @@ class UserLocation extends React.Component {
     return !!this.props.onUpdate || this.props.visible;
   }
 
-  async componentWillUnmount() {
-    this._isMounted = false;
-
-    locationManager.removeListener(this._onLocationUpdate);
-    await this.setLocationManager({running: false});
-  }
-
   _onLocationUpdate(location) {
     this.setState({
       coordinates: this._getCoordinatesFromLocation(location),
@@ -192,16 +202,6 @@ class UserLocation extends React.Component {
         return normalIcon;
       default:
         return this.props.children;
-    }
-  }
-
-  async componentDidUpdate(prevProps) {
-    await this.setLocationManager({
-      running: this.needsLocationManagerRunning(),
-    });
-
-    if (this.props.minDisplacement !== prevProps.minDisplacement) {
-      locationManager.setMinDisplacement(this.props.minDisplacement);
     }
   }
 
