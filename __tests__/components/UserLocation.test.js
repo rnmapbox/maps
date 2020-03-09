@@ -232,5 +232,23 @@ describe('UserLocation', () => {
         expect(ul.needsLocationManagerRunning()).toStrictEqual(false);
       });
     });
+
+    describe('#_onLocationUpdate', () => {
+      test('sets state with new location', () => {
+        expect(ul.state.coordinates).toStrictEqual(null);
+        ul._onLocationUpdate(position);
+        expect(ul.setState).toHaveBeenCalledTimes(1);
+        expect(ul.setState).toHaveBeenCalledWith({
+          coordinates: [4.1036916, 51.5462244],
+        });
+      });
+
+      test('calls "onUpdate"', () => {
+        ul.props.onUpdate = jest.fn();
+        ul._onLocationUpdate(position);
+        expect(ul.props.onUpdate).toHaveBeenCalledTimes(1);
+        expect(ul.props.onUpdate).toHaveBeenCalledWith(position);
+      });
+    });
   });
 });
