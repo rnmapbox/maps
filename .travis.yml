@@ -83,3 +83,5 @@ deploy:
     tags: true
     repo: react-native-mapbox-gl/maps
     branch: master
+    condition: $TRAVIS_OS_NAME = linux
+
