@@ -38,7 +38,7 @@ class ShowMap extends React.Component {
   }
 
   componentWillUnmount() {
-    MapboxGL.locationManager.dispose();
+    MapboxGL.locationManager.stop();
   }
 
   onMapChange(index, styleURL) {
