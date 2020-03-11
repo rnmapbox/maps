@@ -34,13 +34,14 @@ target 'RNMapboxGLExample' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
   pod 'react-native-mapbox-gl', :path => '../node_modules/@react-native-mapbox-gl/maps'
 
-
   target 'RNMapboxGLExampleTests' do
     inherit! :search_paths
     # Pods for testing
   end
 
-  use_frameworks!
+  pod 'NoUseFrameworks-MapboxMobileEvents',  :podspec => '../node_modules/@react-native-mapbox-gl/maps/ios/NoUseFrameworks-MapboxMobileEvents/NoUseFrameworks-MapboxMobileEvents.podspec.json'
+  # use_frameworks!
+
   use_native_modules!
 end
 
