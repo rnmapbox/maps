@@ -4992,7 +4992,7 @@
     "methods": [
       {
         "name": "setLocationManager",
-        "docblock": "Whether to start or stop the locationManager\nNotice, that locationManager will start automatically when\neither `onUpdate` or `visible` are set\n\n@param {Object} running - Object with key `running` and `boolean` value\n@return {void}",
+        "docblock": "Whether to start or stop the locationManager\n\nNotice, that locationManager will start automatically when\neither `onUpdate` or `visible` are set\n\n@param {Object} running - Object with key `running` and `boolean` value\n@return {void}",
         "modifiers": [
           "async"
         ],
@@ -5007,18 +5007,18 @@
             "name": "void"
           }
         },
-        "description": "Whether to start or stop the locationManager\nNotice, that locationManager will start automatically when\neither `onUpdate` or `visible` are set",
+        "description": "Whether to start or stop the locationManager\n\nNotice, that locationManager will start automatically when\neither `onUpdate` or `visible` are set",
         "examples": []
       },
       {
         "name": "needsLocationManagerRunning",
-        "docblock": "If locationManager should be running\n\n@return {void}",
+        "docblock": "If locationManager should be running\n\n@return {boolean}",
         "modifiers": [],
         "params": [],
         "returns": {
           "description": null,
           "type": {
-            "name": "void"
+            "name": "boolean"
           }
         },
         "description": "If locationManager should be running",

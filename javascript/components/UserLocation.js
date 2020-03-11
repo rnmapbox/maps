@@ -29,7 +29,7 @@ const layerStyles = {
   },
 };
 
-const normalIcon = [
+export const normalIcon = [
   <CircleLayer
     key="mapboxUserLocationPluseCircle"
     id="mapboxUserLocationPluseCircle"
@@ -108,7 +108,14 @@ class UserLocation extends React.Component {
     this._onLocationUpdate = this._onLocationUpdate.bind(this);
   }
 
+  // required as #setLocationManager attempts to setState
+  // after component unmount
+  _isMounted = null;
+
+  locationManagerRunning = false;
+
   async componentDidMount() {
+    this._isMounted = true;
     locationManager.addListener(this._onLocationUpdate);
     await this.setLocationManager({
       running: this.needsLocationManagerRunning(),
@@ -117,10 +124,26 @@ class UserLocation extends React.Component {
     locationManager.setMinDisplacement(this.props.minDisplacement);
   }
 
-  locationManagerRunning = false;
+  async componentDidUpdate(prevProps) {
+    await this.setLocationManager({
+      running: this.needsLocationManagerRunning(),
+    });
+
+    if (this.props.minDisplacement !== prevProps.minDisplacement) {
+      locationManager.setMinDisplacement(this.props.minDisplacement);
+    }
+  }
+
+  async componentWillUnmount() {
+    this._isMounted = false;
+
+    locationManager.removeListener(this._onLocationUpdate);
+    await this.setLocationManager({running: false});
+  }
 
   /**
    * Whether to start or stop the locationManager
+   *
    * Notice, that locationManager will start automatically when
    * either `onUpdate` or `visible` are set
    *
@@ -135,7 +158,7 @@ class UserLocation extends React.Component {
 
         const lastKnownLocation = await locationManager.getLastKnownLocation();
 
-        if (lastKnownLocation) {
+        if (lastKnownLocation && this._isMounted) {
           this.setState({
             coordinates: this._getCoordinatesFromLocation(lastKnownLocation),
           });
@@ -150,15 +173,10 @@ class UserLocation extends React.Component {
    *
    * If locationManager should be running
    *
-   * @return {void}
+   * @return {boolean}
    */
   needsLocationManagerRunning() {
-    return this.props.onUpdate || this.props.visible;
-  }
-
-  async componentWillUnmount() {
-    locationManager.removeListener(this._onLocationUpdate);
-    await this.setLocationManager({running: false});
+    return !!this.props.onUpdate || this.props.visible;
   }
 
   _onLocationUpdate(location) {
@@ -187,16 +205,6 @@ class UserLocation extends React.Component {
     }
   }
 
-  async componentDidUpdate(prevProps) {
-    await this.setLocationManager({
-      running: this.needsLocationManagerRunning(),
-    });
-
-    if (this.props.minDisplacement !== prevProps.minDisplacement) {
-      locationManager.setMinDisplacement(this.props.minDisplacement);
-    }
-  }
-
   render() {
     if (!this.props.visible || !this.state.coordinates) {
       return null;
@@ -220,8 +228,3 @@ class UserLocation extends React.Component {
 }
 
 export default UserLocation;
-
-// TODO:
-// * why is there even a RenderMode if children are rendered regardless?
-// * why is #userIconLayers a getter?!
-// * state.shouldShowUserLocation is unused

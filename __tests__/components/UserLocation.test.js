@@ -1,7 +1,9 @@
 import React from 'react';
 import {render, fireEvent} from 'react-native-testing-library';
 
-import UserLocation from '../../javascript/components/UserLocation';
+import UserLocation, {
+  normalIcon,
+} from '../../javascript/components/UserLocation';
 import ShapeSource from '../../javascript/components/ShapeSource';
 import CircleLayer from '../../javascript/components/CircleLayer';
 import locationManager from '../../javascript/modules/location/locationManager';
@@ -19,102 +21,279 @@ const position = {
 };
 
 describe('UserLocation', () => {
-  beforeEach(() => {
-    jest.spyOn(locationManager, 'start').mockImplementation(jest.fn());
-    jest
-      .spyOn(locationManager, 'getLastKnownLocation')
-      .mockImplementation(() => position);
-  });
+  describe('render', () => {
+    beforeEach(() => {
+      jest.spyOn(locationManager, 'start').mockImplementation(jest.fn());
+      jest
+        .spyOn(locationManager, 'getLastKnownLocation')
+        .mockImplementation(() => position);
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
+      jest.spyOn(locationManager, 'addListener');
 
-  test('renders with CircleLayers by default', done => {
-    const {getAllByType} = render(<UserLocation />);
-
-    setTimeout(() => {
-      const shapeSource = getAllByType(ShapeSource);
-      const circleLayer = getAllByType(CircleLayer);
-
-      expect(shapeSource.length).toBe(1);
-      expect(circleLayer.length).toBe(3);
-      done();
+      jest.spyOn(locationManager, 'removeListener');
     });
-  });
 
-  test('does not render with visible set to false', done => {
-    const {queryByType} = render(<UserLocation visible={false} />);
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
 
-    setTimeout(() => {
+    test('renders with CircleLayers by default', done => {
+      const {getAllByType} = render(<UserLocation />);
+
+      setTimeout(() => {
+        const shapeSource = getAllByType(ShapeSource);
+        const circleLayer = getAllByType(CircleLayer);
+
+        expect(shapeSource.length).toBe(1);
+        expect(circleLayer.length).toBe(3);
+        done();
+      });
+    });
+
+    test('does not render with visible set to false', done => {
+      const {queryByType} = render(<UserLocation visible={false} />);
+
+      setTimeout(() => {
+        const shapeSource = queryByType(ShapeSource);
+        const circleLayer = queryByType(CircleLayer);
+
+        expect(shapeSource).toEqual(null);
+        expect(circleLayer).toEqual(null);
+        done();
+      });
+    });
+
+    test('renders with CustomChild when provided', done => {
+      const circleLayerProps = {
+        key: 'testUserLocationCircle',
+        id: 'testUserLocationCircle',
+        style: {
+          circleRadius: 5,
+          circleColor: '#ccc',
+          circleOpacity: 1,
+          circlePitchAlignment: 'map',
+        },
+      };
+
+      const {queryByType, queryAllByType} = render(
+        <UserLocation>
+          <CircleLayer {...circleLayerProps} />
+        </UserLocation>,
+      );
+
+      setTimeout(() => {
+        const shapeSource = queryByType(ShapeSource);
+        const circleLayer = queryAllByType(CircleLayer);
+
+        expect(shapeSource).toBeDefined();
+        expect(circleLayer[0]).toBeDefined();
+        expect(circleLayer.length).toBe(1);
+
+        expect(circleLayer[0].props.style).toEqual(circleLayerProps.style);
+        done();
+      });
+    });
+
+    test('calls onUpdate callback when new location is received', () => {
+      const onUpdateCallback = jest.fn();
+
+      render(<UserLocation onUpdate={onUpdateCallback} />);
+
+      locationManager.onUpdate({
+        coords: {
+          accuracy: 9.977999687194824,
+          altitude: 44.64373779296875,
+          heading: 251.5358428955078,
+          latitude: 51.5462244,
+          longitude: 4.1036916,
+          speed: 0.08543474227190018,
+        },
+        timestamp: 1573730357879,
+      });
+
+      expect(onUpdateCallback).toHaveBeenCalled();
+    });
+
+    test('calls onPress callback when location icon is pressed', () => {
+      const onPressCallback = jest.fn();
+
+      const {queryByType} = render(<UserLocation onPress={onPressCallback} />);
+
       const shapeSource = queryByType(ShapeSource);
-      const circleLayer = queryByType(CircleLayer);
+      fireEvent(shapeSource, 'onPress');
+      fireEvent(shapeSource, 'onPress');
+      expect(onPressCallback).toHaveBeenCalledTimes(2);
+    });
 
-      expect(shapeSource).toEqual(null);
-      expect(circleLayer).toEqual(null);
-      done();
+    test('correctly unmounts', async () => {
+      const {unmount} = render(<UserLocation />);
+
+      expect(locationManager.addListener).toHaveBeenCalled();
+      expect(locationManager.removeListener).not.toHaveBeenCalled();
+
+      unmount();
+
+      expect(locationManager.removeListener).toHaveBeenCalledTimes(1);
     });
   });
 
-  test('renders with CustomChild when provided', done => {
-    const circleLayerProps = {
-      key: 'testUserLocationCircle',
-      id: 'testUserLocationCircle',
-      style: {
-        circleRadius: 5,
-        circleColor: '#ccc',
-        circleOpacity: 1,
-        circlePitchAlignment: 'map',
-      },
-    };
+  describe('methods', () => {
+    let ul;
 
-    const {queryByType, queryAllByType} = render(
-      <UserLocation>
-        <CircleLayer {...circleLayerProps} />
-      </UserLocation>,
-    );
+    beforeEach(() => {
+      ul = new UserLocation();
+      jest.spyOn(locationManager, 'start').mockImplementation(jest.fn());
+      jest.spyOn(locationManager, 'dispose').mockImplementation(jest.fn());
+      jest
+        .spyOn(locationManager, 'getLastKnownLocation')
+        .mockImplementation(() => position);
 
-    setTimeout(() => {
-      const shapeSource = queryByType(ShapeSource);
-      const circleLayer = queryAllByType(CircleLayer);
+      ul.setState = jest.fn();
 
-      expect(shapeSource).toBeDefined();
-      expect(circleLayer[0]).toBeDefined();
-      expect(circleLayer.length).toBe(1);
+      ul.props = {
+        animated: true,
+        visible: true,
+        minDisplacement: 0,
+        renderMode: 'normal',
+      };
 
-      expect(circleLayer[0].props.style).toEqual(circleLayerProps.style);
-      done();
-    });
-  });
-
-  test('calls onUpdate callback when new location is received', () => {
-    const onUpdateCallback = jest.fn();
-
-    render(<UserLocation onUpdate={onUpdateCallback} />);
-
-    locationManager.onUpdate({
-      coords: {
-        accuracy: 9.977999687194824,
-        altitude: 44.64373779296875,
-        heading: 251.5358428955078,
-        latitude: 51.5462244,
-        longitude: 4.1036916,
-        speed: 0.08543474227190018,
-      },
-      timestamp: 1573730357879,
+      ul._isMounted = true;
     });
 
-    expect(onUpdateCallback).toHaveBeenCalled();
-  });
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
 
-  test('calls onPress callback when location icon is pressed', () => {
-    const onPressCallback = jest.fn();
+    test('initial state is as expected', () => {
+      const initialState = {coordinates: null, shouldShowUserLocation: false};
 
-    const {queryByType} = render(<UserLocation onPress={onPressCallback} />);
+      expect(ul.state).toStrictEqual(initialState);
+      expect(ul.locationManagerRunning).toStrictEqual(false);
+    });
 
-    const shapeSource = queryByType(ShapeSource);
-    fireEvent(shapeSource, 'onPress');
-    fireEvent(shapeSource, 'onPress');
-    expect(onPressCallback).toHaveBeenCalledTimes(2);
+    // TODO: replace object { running: boolean } argument with simple boolean
+    describe('#setLocationManager', () => {
+      test('called with "running" true', async () => {
+        const lastKnownLocation = [4.1036916, 51.5462244];
+
+        expect(ul.locationManagerRunning).toStrictEqual(false);
+
+        await ul.setLocationManager({running: true});
+
+        expect(ul.locationManagerRunning).toStrictEqual(true);
+        expect(locationManager.start).toHaveBeenCalledTimes(1);
+        expect(locationManager.getLastKnownLocation).toHaveBeenCalledTimes(1);
+        expect(ul.setState).toHaveBeenCalledTimes(1);
+        expect(ul.setState).toHaveBeenCalledWith({
+          coordinates: lastKnownLocation,
+        });
+        expect(locationManager.dispose).not.toHaveBeenCalled();
+      });
+
+      test('called with "running" false', async () => {
+        // start
+        expect(ul.locationManagerRunning).toStrictEqual(false);
+        await ul.setLocationManager({running: true});
+        expect(ul.locationManagerRunning).toStrictEqual(true);
+
+        // stop
+        await ul.setLocationManager({running: false});
+
+        expect(ul.locationManagerRunning).toStrictEqual(false);
+        // only once from start
+        expect(locationManager.start).toHaveBeenCalledTimes(1);
+        expect(locationManager.dispose).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('#needsLocationManagerRunning', () => {
+      test('returns true correctly', () => {
+        // default props "onUpdate: undefined, visible: true"
+        expect(ul.needsLocationManagerRunning()).toStrictEqual(true);
+
+        ul.props = {
+          onUpdate: () => {},
+          visible: true,
+        };
+
+        expect(ul.needsLocationManagerRunning()).toStrictEqual(true);
+
+        ul.props = {
+          onUpdate: () => {},
+          visible: false,
+        };
+
+        expect(ul.needsLocationManagerRunning()).toStrictEqual(true);
+      });
+
+      test('returns false correctly', () => {
+        ul.props = {
+          visible: false,
+        };
+
+        expect(ul.needsLocationManagerRunning()).toStrictEqual(false);
+      });
+    });
+
+    describe('#_onLocationUpdate', () => {
+      test('sets state with new location', () => {
+        expect(ul.state.coordinates).toStrictEqual(null);
+        ul._onLocationUpdate(position);
+        expect(ul.setState).toHaveBeenCalledTimes(1);
+        expect(ul.setState).toHaveBeenCalledWith({
+          coordinates: [4.1036916, 51.5462244],
+        });
+      });
+
+      test('calls "onUpdate"', () => {
+        ul.props.onUpdate = jest.fn();
+        ul._onLocationUpdate(position);
+        expect(ul.props.onUpdate).toHaveBeenCalledTimes(1);
+        expect(ul.props.onUpdate).toHaveBeenCalledWith(position);
+      });
+    });
+
+    describe('_getCoordinatesFromLocation', () => {
+      test('returns coordinates from position', () => {
+        expect(ul._getCoordinatesFromLocation(position)).toStrictEqual([
+          4.1036916,
+          51.5462244,
+        ]);
+      });
+
+      test('returns when location or coords are missing', () => {
+        expect(ul._getCoordinatesFromLocation()).toStrictEqual();
+
+        expect(
+          ul._getCoordinatesFromLocation({fakeLocation: null}),
+        ).toStrictEqual();
+      });
+    });
+
+    describe('#_userIconLayers', () => {
+      test('returns "normal" on default RenderMode', () => {
+        expect(ul._userIconLayers()).toStrictEqual(normalIcon);
+      });
+
+      test('returns "children" if defined and mode is custom', () => {
+        const child = (
+          <CircleLayer
+            key="mapboxUserLocationPluseCircle"
+            id="mapboxUserLocationPluseCircle"
+            style={{
+              circleRadius: 15,
+              circleColor: 'tomato',
+              circleOpacity: 0.2,
+              circlePitchAlignment: 'map',
+            }}
+          />
+        );
+
+        ul.props.children = child;
+        ul.props.renderMode = 'custom';
+
+        expect(ul._userIconLayers()).toStrictEqual(child);
+      });
+    });
   });
 });
