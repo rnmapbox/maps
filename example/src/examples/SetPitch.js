@@ -34,7 +34,7 @@ class SetPitch extends React.Component {
   }
 
   componentWillUnmount() {
-    MapboxGL.locationManager.dispose();
+    MapboxGL.locationManager.stop();
   }
 
   onUpdatePitch(index, pitch) {

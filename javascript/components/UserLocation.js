@@ -164,7 +164,7 @@ class UserLocation extends React.Component {
           });
         }
       } else if (!running) {
-        locationManager.dispose();
+        locationManager.stop();
       }
     }
   };

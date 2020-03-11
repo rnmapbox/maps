@@ -12,7 +12,6 @@ class LocationManager {
     this._listeners = [];
     this._lastKnownLocation = null;
     this._isListening = false;
-    this._isPaused = false;
     this.onUpdate = this.onUpdate.bind(this);
   }
 
@@ -45,12 +44,6 @@ class LocationManager {
   }
 
   start(displacement = 0) {
-    if (this._isPaused) {
-      MapboxGLLocationManager.start(displacement);
-      this._isPaused = false;
-      return;
-    }
-
     if (!this._isListening) {
       MapboxGLLocationManager.start(displacement);
 
@@ -63,14 +56,7 @@ class LocationManager {
     }
   }
 
-  pause() {
-    if (!this._isPaused && this._isListening) {
-      MapboxGLLocationManager.pause();
-      this._isListening = false;
-    }
-  }
-
-  dispose() {
+  stop() {
     MapboxGLLocationManager.stop();
 
     if (this._isListening) {

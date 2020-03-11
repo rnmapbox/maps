@@ -143,7 +143,7 @@ describe('UserLocation', () => {
     beforeEach(() => {
       ul = new UserLocation();
       jest.spyOn(locationManager, 'start').mockImplementation(jest.fn());
-      jest.spyOn(locationManager, 'dispose').mockImplementation(jest.fn());
+      jest.spyOn(locationManager, 'stop').mockImplementation(jest.fn());
       jest
         .spyOn(locationManager, 'getLastKnownLocation')
         .mockImplementation(() => position);
@@ -187,7 +187,7 @@ describe('UserLocation', () => {
         expect(ul.setState).toHaveBeenCalledWith({
           coordinates: lastKnownLocation,
         });
-        expect(locationManager.dispose).not.toHaveBeenCalled();
+        expect(locationManager.stop).not.toHaveBeenCalled();
       });
 
       test('called with "running" false', async () => {
@@ -202,7 +202,7 @@ describe('UserLocation', () => {
         expect(ul.locationManagerRunning).toStrictEqual(false);
         // only once from start
         expect(locationManager.start).toHaveBeenCalledTimes(1);
-        expect(locationManager.dispose).toHaveBeenCalledTimes(1);
+        expect(locationManager.stop).toHaveBeenCalledTimes(1);
       });
     });
 

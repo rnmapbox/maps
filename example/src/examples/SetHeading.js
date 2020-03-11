@@ -34,7 +34,7 @@ class SetHeading extends React.Component {
   }
 
   componentWillUnmount() {
-    MapboxGL.locationManager.dispose();
+    MapboxGL.locationManager.stop();
   }
 
   onHeadingChange(index, heading) {
