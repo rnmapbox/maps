@@ -45,7 +45,6 @@ import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolClickListener;
 import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolDragListener;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
-import com.mapbox.mapboxsdk.plugins.markerview.MarkerViewManager;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.Property;
@@ -53,6 +52,8 @@ import com.mapbox.rctmgl.R;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotation;
 import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerView;
+import com.mapbox.rctmgl.components.annotation.MarkerView;
+import com.mapbox.rctmgl.components.annotation.MarkerViewManager;
 import com.mapbox.rctmgl.components.camera.RCTMGLCamera;
 import com.mapbox.rctmgl.components.images.RCTMGLImages;
 import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeTracker;
@@ -111,7 +112,6 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     private List<Pair<Integer, ReadableArray>> mPreRenderMethods = new ArrayList<>();
 
     private MapboxMap mMap;
-    private boolean mReflowDone = false;
 
     private String mStyleURL;
 
@@ -136,10 +136,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
 
     private HashSet<String> mHandledMapChangedEvents = null;
 
-    private final List<OnMapReadyCallback> onMapAndReflowReadyCallbackList = new ArrayList<>();
-
-
-    private MarkerViewManager makerViewManager = null;
+    private MarkerViewManager markerViewManager = null;
     private ViewGroup mOffscreenAnnotationViewContainer = null;
 
     private boolean mAnnotationClicked = false;
@@ -472,29 +469,8 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
                 measure(View.MeasureSpec.makeMeasureSpec(getMeasuredWidth(), View.MeasureSpec.EXACTLY),
                         View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), View.MeasureSpec.EXACTLY));
                 layout(getLeft(), getTop(), getRight(), getBottom());
-                mReflowDone = true;
-
-                for (OnMapReadyCallback callback : onMapAndReflowReadyCallbackList) {
-                    callback.onMapReady(mMap);
-                }
-                onMapAndReflowReadyCallbackList.clear();
             }
         });
-    }
-
-    /**
-     * Sets a callback object which will be triggered when the {@link MapboxMap} instance is done with reflow
-     *
-     * @param callback The callback object that will be triggered when the map is ready and reflow finished
-     */
-    @UiThread
-    public void getMapWithReflowAsync(final @NonNull OnMapReadyCallback callback) {
-        if (mMap == null || !mReflowDone) {
-            // Add callback to the list only if the style hasn't loaded, or the drawing surface isn't ready
-            onMapAndReflowReadyCallbackList.add(callback);
-        } else {
-            callback.onMapReady(mMap);
-        }
     }
 
     public void createSymbolManager(Style style) {
@@ -562,7 +538,13 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         if (!mPaused) {
+            if (markerViewManager != null) {
+                markerViewManager.removeViews();
+            }
             super.onLayout(changed, left, top, right, bottom);
+            if (markerViewManager != null) {
+                markerViewManager.restoreViews();
+            }
         }
     }
 
@@ -1319,14 +1301,14 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         return mOffscreenAnnotationViewContainer;
     }
 
-    public MarkerViewManager getMakerViewManager(MapboxMap map) {
-        if (makerViewManager == null) {
+    public MarkerViewManager getMarkerViewManager(MapboxMap map) {
+        if (markerViewManager == null) {
             if (map == null) {
                 throw new Error("makerViewManager should be called one the map has loaded");
             }
-            makerViewManager = new MarkerViewManager(this, map);
+            markerViewManager = new MarkerViewManager(this, map);
         }
-        return makerViewManager;
+        return markerViewManager;
     }
 
 }
