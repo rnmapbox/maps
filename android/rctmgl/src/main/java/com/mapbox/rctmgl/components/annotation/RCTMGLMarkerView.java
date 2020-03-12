@@ -9,8 +9,6 @@ import androidx.annotation.NonNull;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.mapbox.mapboxsdk.plugins.markerview.MarkerView;
-import com.mapbox.mapboxsdk.plugins.markerview.MarkerViewManager;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
@@ -20,7 +18,6 @@ public class RCTMGLMarkerView extends AbstractMapFeature implements MarkerView.O
     private RCTMGLMapView mMapView;
 
     private View mChildView;
-
 
     private MarkerViewManager mMarkerViewManager;
 
@@ -65,12 +62,11 @@ public class RCTMGLMarkerView extends AbstractMapFeature implements MarkerView.O
 
         final RCTMGLMarkerView rctmglMarkerView = this;
 
-        mMapView.getMapWithReflowAsync(
+        mMapView.getMapAsync(
             new OnMapReadyCallback() {
                 @Override
                 public void onMapReady(@NonNull MapboxMap mapboxMap) {
-                    MarkerViewManager markerViewManager = new MarkerViewManager(mMapView, mapboxMap);
-                    mMarkerViewManager = mMapView.getMakerViewManager(mapboxMap);
+                    mMarkerViewManager = mMapView.getMarkerViewManager(mapboxMap);
 
                     if (mChildView != null) {
                         mMarkerView = new MarkerView(GeoJSONUtils.toLatLng(mCoordinate), mChildView);
