@@ -75,7 +75,10 @@ describe('AnimatedShapeSource', () => {
 
   test('testAddingCoords', () => {
     AnimatedShapeSource.__skipSetNativeProps_FOR_TESTS_ONLY = false;
-    const coordinates = new AnimatedCoordinatesArray([[1, 1], [10, 10]]);
+    const coordinates = new AnimatedCoordinatesArray([
+      [1, 1],
+      [10, 10],
+    ]);
 
     let shapeSourceRef;
     // eslint-disable-next-line no-unused-vars
@@ -90,7 +93,11 @@ describe('AnimatedShapeSource', () => {
 
     coordinates
       .timing({
-        toValue: [[21, 21], [30, 30], [50, 50]],
+        toValue: [
+          [21, 21],
+          [30, 30],
+          [50, 50],
+        ],
         duration: 20,
         easing: Easing.linear,
         useNativeDriver: false,
@@ -109,7 +116,7 @@ describe('AnimatedShapeSource', () => {
           coordinates: [
             [1 + (i + 1) * 4, 1 + (i + 1) * 4],
             [10 + (i + 1) * 4, 10 + (i + 1) * 4],
-            [10 + (i + 1) * 8, 10 + (i + 1) * 8]
+            [10 + (i + 1) * 8, 10 + (i + 1) * 8],
           ],
         }),
       });

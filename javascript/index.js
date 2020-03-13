@@ -32,6 +32,8 @@ import MarkerView from './components/MarkerView';
 import AnimatedMapPoint from './utils/animated/AnimatedPoint';
 import AnimatedShape from './utils/animated/AnimatedShape';
 import AnimatedCoordinatesArray from './utils/animated/AnimatedCoordinatesArray';
+import AnimatedExtractCoordinateFromArray from './utils/animated/AnimatedExtractCoordinateFromArray';
+import AnimatedRouteCoordinatesArray from './utils/animated/AnimatedRouteCoordinatesArray';
 
 const MapboxGL = {...NativeModules.MGLModule};
 
@@ -99,6 +101,8 @@ MapboxGL.snapshotManager = snapshotManager;
 // utils
 MapboxGL.AnimatedPoint = AnimatedMapPoint;
 MapboxGL.AnimatedCoordinatesArray = AnimatedCoordinatesArray;
+MapboxGL.AnimatedExtractCoordinateFromArray = AnimatedExtractCoordinateFromArray;
+MapboxGL.AnimatedRouteCoordinatesArray = AnimatedRouteCoordinatesArray;
 MapboxGL.AnimatedShape = AnimatedShape;
 
 // animated
@@ -118,7 +122,9 @@ const Animated = {
 
   // values
   CoordinatesArray: AnimatedCoordinatesArray,
+  RouteCoordinatesArray: AnimatedRouteCoordinatesArray,
   Shape: AnimatedShape,
+  ExtractCoordinateFromArray : AnimatedExtractCoordinateFromArray, 
 };
 
 MapboxGL.Animated = Animated;

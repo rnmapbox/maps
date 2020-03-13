@@ -1,14 +1,9 @@
 import React from 'react';
 import {Easing, Button} from 'react-native';
-import {
-  Animated,
-  MapView,
-  Camera,
-  LineJoin,
-} from '@react-native-mapbox-gl/maps';
-import {lineString, point} from '@turf/helpers';
+import {Animated, MapView, Camera} from '@react-native-mapbox-gl/maps';
+import along from '@turf/along';
 import length from '@turf/length';
-import distance from '@turf/distance';
+import {point, lineString} from '@turf/helpers';
 
 import sheet from '../styles/sheet';
 
@@ -25,47 +20,6 @@ const lat = 40.73581;
 const delta = 0.001;
 const steps = 300;
 
-class RouteCoordinatesArray extends Animated.CoordinatesArray {
-  createCoordinatesAnimator(toValue, origCoords) {
-    const {along} = toValue;
-
-    return {
-      dist: along[0],
-      distconf: along[1],
-
-      calculate(progress, coords) {
-        const currentDist = progress * this.dist;
-
-        let prevsum = 0;
-        let actsum = 0;
-        let i = origCoords.length - 1;
-        while (actsum < currentDist && i > 0) {
-          prevsum = actsum;
-          actsum += distance(
-            point(coords[i]),
-            point(coords[i - 1]),
-            this.distconf,
-          );
-          i -= 1;
-        }
-        if (actsum <= currentDist) {
-          return [coords[0]];
-        }
-        const r = (currentDist - prevsum) / (actsum - prevsum);
-        const or = 1.0 - r;
-
-        return [
-          ...coords.slice(0, i + 1),
-          [
-            coords[i][0] * r + coords[i + 1][0] * or,
-            coords[i][1] * r + coords[i + 1][1] * or,
-          ],
-        ];
-      },
-    };
-  }
-}
-
 class AnimatedLine extends React.Component {
   static propTypes = {
     ...BaseExamplePropTypes,
@@ -73,6 +27,13 @@ class AnimatedLine extends React.Component {
 
   constructor(props) {
     super(props);
+
+    const route = new Animated.RouteCoordinatesArray([
+      [blon, blat],
+      [blon, blat + 2 * bdelta],
+      [blon + bdelta, blat + 2 * bdelta + bdelta],
+      [blon + bdelta + 2 * bdelta, blat + 2 * bdelta + bdelta + bdelta],
+    ]);
 
     this.state = {
       backgroundColor: 'blue',
@@ -84,16 +45,16 @@ class AnimatedLine extends React.Component {
           lat + (delta * i) / steps,
         ]),
       ),
-      route: new RouteCoordinatesArray([
-        [blon, blat],
-        [blon, blat + 2 * bdelta],
-        [blon + bdelta, blat + 2 * bdelta + bdelta],
-        [blon + bdelta + 2 * bdelta, blat + 2 * bdelta + bdelta + bdelta],
-      ]),
+      targetPoint: {
+        type: 'FeatureCollection',
+        features: [],
+      },
+      route,
+      actPoint: new Animated.ExtractCoordinateFromArray(route, -1),
     };
   }
 
-  startAnimate2() {
+  startAnimate() {
     setTimeout(() => {
       this.state.shape
         .timing({
@@ -120,13 +81,17 @@ class AnimatedLine extends React.Component {
     }, 4000);
   }
 
-  startAnimate3() {
+  startAnimateFewPointsWithAbort() {
     const time = 3000;
 
     setTimeout(() => {
       this.state.shape
         .timing({
-          toValue: [[lon + delta, lat], [lon, lat], [lon, lat + delta]],
+          toValue: [
+            [lon + delta, lat],
+            [lon, lat],
+            [lon, lat + delta],
+          ],
           duration: time,
           easing: Easing.linear,
         })
@@ -136,7 +101,11 @@ class AnimatedLine extends React.Component {
     setTimeout(() => {
       this.state.shape
         .timing({
-          toValue: [[lon + delta, lat], [lon, lat], [lon + delta, lat + delta]],
+          toValue: [
+            [lon + delta, lat],
+            [lon, lat],
+            [lon + delta, lat + delta],
+          ],
           duration: time,
           easing: Easing.linear,
         })
@@ -146,7 +115,10 @@ class AnimatedLine extends React.Component {
     setTimeout(() => {
       this.state.shape
         .timing({
-          toValue: [[lon, lat], [lon, lat + delta]],
+          toValue: [
+            [lon, lat],
+            [lon, lat + delta],
+          ],
           duration: time,
           easing: Easing.linear,
         })
@@ -154,7 +126,7 @@ class AnimatedLine extends React.Component {
     }, 6000);
   }
 
-  startAnimateRoute() {
+  startAnimateMorphingRoute() {
     const time = 3000;
 
     setTimeout(() => {
@@ -175,7 +147,10 @@ class AnimatedLine extends React.Component {
     setTimeout(() => {
       this.state.shape
         .timing({
-          toValue: [[lon, lat], [lon, lat + 1 * delta]],
+          toValue: [
+            [lon, lat],
+            [lon, lat + 1 * delta],
+          ],
           duration: time,
           easing: Easing.linear,
         })
@@ -183,10 +158,28 @@ class AnimatedLine extends React.Component {
     }, time);
   }
 
-  startAnimateRoute2() {
+  startAnimateRoute() {
+    const vec = this.state.route.__getValue();
+    const ls = {
+      type: 'LineString',
+      coordinates: vec,
+    };
+    const len = length(ls, {units: 'meters'});
+    let dest = len - 89.0;
+    let pt;
+    if (len === 0.0) {
+      const {originalRoute} = this.state.route;
+      dest = length(lineString(originalRoute), {units: 'meters'});
+      pt = point(originalRoute[originalRoute.length - 1]);
+    } else {
+      if (dest < 0) {
+        dest = 0;
+      }
+      pt = along(ls, dest, {units: 'meters'});
+    }
     this.state.route
       .timing({
-        toValue: {along: [180, {units: 'meters'}]},
+        toValue: {end: {point: pt}},
         duration: 2000,
         easing: Easing.linear,
       })
@@ -214,10 +207,28 @@ class AnimatedLine extends React.Component {
             <Animated.LineLayer
               id={'lineroute'}
               style={{
-                lineCap: LineJoin.Round,
+                lineCap: 'round',
                 lineWidth: 6,
                 lineOpacity: 0.84,
                 lineColor: '#514ccd',
+              }}
+            />
+          </Animated.ShapeSource>
+
+          <Animated.ShapeSource
+            id="currentLocationSource"
+            shape={
+              new Animated.Shape({
+                type: 'Point',
+                coordinates: this.state.actPoint,
+              })
+            }>
+            <Animated.CircleLayer
+              id="currentLocationCircle"
+              style={{
+                circleOpacity: 0.8,
+                circleColor: '#c62221',
+                circleRadius: 20,
               }}
             />
           </Animated.ShapeSource>
@@ -233,7 +244,7 @@ class AnimatedLine extends React.Component {
             <Animated.LineLayer
               id={'line'}
               style={{
-                lineCap: LineJoin.Round,
+                lineCap: 'round',
                 lineWidth: 6,
                 lineOpacity: 0.84,
                 lineColor: '#314ccd',
@@ -249,15 +260,15 @@ class AnimatedLine extends React.Component {
           />
           <Button
             title="Animate a few points with abort"
-            onPress={() => this.startAnimate3()}
+            onPress={() => this.startAnimateFewPointsWithAbort()}
+          />
+          <Button
+            title="Animate route/morphing"
+            onPress={() => this.startAnimateMorphingRoute()}
           />
           <Button
             title="Animate route"
             onPress={() => this.startAnimateRoute()}
-          />
-          <Button
-            title="Animate route2"
-            onPress={() => this.startAnimateRoute2()}
           />
         </Bubble>
       </Page>

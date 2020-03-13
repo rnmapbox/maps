@@ -37,7 +37,9 @@
     "@mapbox/geo-viewport": ">= 0.4.0",
     "@turf/along": ">= 4.0.0 <7.0.0",
     "@turf/distance": ">= 4.0.0 <7.0.0",
+    "@turf/nearest-point-on-line": ">= 4.0.0 <7.0.0",
     "@turf/helpers": ">= 4.6.0 <7.0.0",
+    "@turf/length": ">= 4.6.0 <7.0.0",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
