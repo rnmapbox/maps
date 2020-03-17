@@ -17,7 +17,18 @@ class LocationManager {
 
   async getLastKnownLocation() {
     if (!this._lastKnownLocation) {
-      const lastKnownLocation = await MapboxGLLocationManager.getLastKnownLocation();
+      let lastKnownLocation;
+
+      // as location can be brittle it might happen,
+      // that we get an exception from native land
+      // let's silently catch it and simply log out
+      // instead of throwing an exception
+      try {
+        lastKnownLocation = await MapboxGLLocationManager.getLastKnownLocation();
+      } catch (error) {
+        console.log('locationManager Error: ', error);
+      }
+
       if (!this._lastKnownLocation && lastKnownLocation) {
         this._lastKnownLocation = lastKnownLocation;
       }
