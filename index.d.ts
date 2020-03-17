@@ -243,7 +243,7 @@ declare namespace MapboxGL {
     ): void;
     deletePack(name: string): Promise<void>;
     getPacks(): Promise<Array<OfflinePack>>;
-    getPack(name: string): Promise<OfflinePack>;
+    getPack(name: string): Promise<OfflinePack | undefined>;
     resetDatabase(): Promise<void>;
     setTileCountLimit(limit: number): void;
     setProgressEventThrottle(throttleValue: number): void;
