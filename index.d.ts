@@ -748,7 +748,7 @@ export interface ImageSourceProps extends ViewProps {
 
 export interface OfflineCreatePackOptions {
   name?: string;
-  styleURL?: MapboxGL.StyleURL;
+  styleURL?: string;
   bounds?: [GeoJSON.Position, GeoJSON.Position];
   minZoom?: number;
   maxZoom?: number;
@@ -762,7 +762,7 @@ export interface SnapshotOptions {
   zoomLevel?: number;
   pitch?: number;
   heading?: number;
-  styleURL?: MapboxGL.StyleURL;
+  styleURL?: string;
   writeToDisk?: boolean;
 }
 
