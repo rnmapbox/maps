@@ -263,9 +263,20 @@ declare namespace MapboxGL {
     name: string,
     bounds: [GeoJSON.Position, GeoJSON.Position];
     metadata: any;
-    status: () => any,
-    resume: () => any,
-    pause: () => any,
+    status: () => Promise<OfflinePackStatus>,
+    resume: () => Promise<void>,
+    pause: () => Promise<void>,
+  }
+
+  interface OfflinePackStatus {
+    name: string,
+    state: number,
+    percentage: number,
+    completedResourceCount: number,
+    completedResourceSize: number,
+    completedTileSize: number,
+    completedTileCount: number,
+    requiredResourceCount: number,
   }
 
   /**
