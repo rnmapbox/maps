@@ -133,7 +133,7 @@ describe('LocationManager', () => {
           listenerB,
         ]);
 
-        locationManager.removeAllListeners(listenerB);
+        locationManager.removeAllListeners();
         expect(locationManager._listeners).toStrictEqual([]);
       });
     });
