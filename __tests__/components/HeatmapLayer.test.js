@@ -3,8 +3,6 @@ import {render} from 'react-native-testing-library';
 
 import HeatmapLayer from '../../javascript/components/HeatmapLayer';
 
-export const NATIVE_MODULE_NAME = 'RCTMGLHeatmapLayer';
-
 describe('HeatmapLayer', () => {
   test('renders correctly with default props', () => {
     const {getByType} = render(<HeatmapLayer />);
