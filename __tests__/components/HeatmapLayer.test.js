@@ -45,5 +45,4 @@ describe('HeatmapLayer', () => {
       },
     });
   });
-  // debug();
 });
