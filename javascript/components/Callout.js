@@ -56,7 +56,7 @@ class Callout extends React.PureComponent {
     ...viewPropTypes,
 
     /**
-     * String that gets displayed in the default callout.
+     * String that get's displayed in the default callout.
      */
     title: PropTypes.string,
 
