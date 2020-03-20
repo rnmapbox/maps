@@ -2,9 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import locationManager from '../modules/location/locationManager';
+import headingIcon from '../../assets/heading.png';
 
 import Annotation from './annotations/Annotation'; // eslint-disable-line import/no-cycle
 import CircleLayer from './CircleLayer';
+import SymbolLayer from './SymbolLayer';
 
 const mapboxBlue = 'rgba(51, 181, 229, 100)';
 
@@ -26,27 +28,13 @@ const layerStyles = {
       circleColor: mapboxBlue,
       circlePitchAlignment: 'map',
     },
+    headingIndicator: {
+      iconImage: headingIcon,
+      iconAllowOverlap: true,
+      iconPitchAlignment: 'map',
+    },
   },
 };
-
-export const normalIcon = [
-  <CircleLayer
-    key="mapboxUserLocationPluseCircle"
-    id="mapboxUserLocationPluseCircle"
-    style={layerStyles.normal.pluse}
-  />,
-  <CircleLayer
-    key="mapboxUserLocationWhiteCircle"
-    id="mapboxUserLocationWhiteCircle"
-    style={layerStyles.normal.background}
-  />,
-  <CircleLayer
-    key="mapboxUserLocationBlueCicle"
-    id="mapboxUserLocationBlueCicle"
-    aboveLayerID="mapboxUserLocationWhiteCircle"
-    style={layerStyles.normal.foreground}
-  />,
-];
 
 class UserLocation extends React.Component {
   static propTypes = {
@@ -54,13 +42,6 @@ class UserLocation extends React.Component {
      * Whether location icon is animated between updates
      */
     animated: PropTypes.bool,
-
-    /**
-     * Rendermode of user location icon.
-     * One of `"normal"`, `"custom"`.
-     * "custom" must be of type mapbox-gl-native components
-     */
-    renderMode: PropTypes.oneOf(['normal', 'custom']),
 
     /**
      * Whether location icon is visible
@@ -77,6 +58,11 @@ class UserLocation extends React.Component {
      */
     onUpdate: PropTypes.func,
 
+    /**
+     * Show or hide small arrow which indicates direction the device is pointing relative to north. Value is between 0-360 degrees.
+     */
+    showsUserHeadingIndicator: PropTypes.bool,
+
     minDisplacement: PropTypes.number,
 
     /**
@@ -88,13 +74,8 @@ class UserLocation extends React.Component {
   static defaultProps = {
     animated: true,
     visible: true,
+    showsUserHeadingIndicator: false,
     minDisplacement: 0,
-    renderMode: 'normal',
-  };
-
-  static RenderMode = {
-    Normal: 'normal',
-    Custom: 'custom',
   };
 
   constructor(props) {
@@ -103,6 +84,7 @@ class UserLocation extends React.Component {
     this.state = {
       shouldShowUserLocation: false,
       coordinates: null,
+      heading: null,
     };
 
     this._onLocationUpdate = this._onLocationUpdate.bind(this);
@@ -156,13 +138,8 @@ class UserLocation extends React.Component {
       if (running) {
         locationManager.start();
 
-        const lastKnownLocation = await locationManager.getLastKnownLocation();
-
-        if (lastKnownLocation && this._isMounted) {
-          this.setState({
-            coordinates: this._getCoordinatesFromLocation(lastKnownLocation),
-          });
-        }
+        const location = await locationManager.getLastKnownLocation();
+        this._onLocationUpdate(location);
       } else if (!running) {
         locationManager.stop();
       }
@@ -180,39 +157,33 @@ class UserLocation extends React.Component {
   }
 
   _onLocationUpdate(location) {
-    this.setState({
-      coordinates: this._getCoordinatesFromLocation(location),
-    });
+    if (location && location.coords) {
+      const {longitude, latitude, heading} = location.coords;
+      this.setState({
+        coordinates: [longitude, latitude],
+        heading,
+      });
+    } else {
+      this.setState({
+        coordinates: null,
+        heading: null,
+      });
+    }
 
     if (this.props.onUpdate) {
       this.props.onUpdate(location);
     }
   }
 
-  _getCoordinatesFromLocation(location) {
-    if (!location || !location.coords) {
-      return;
-    }
-    return [location.coords.longitude, location.coords.latitude];
-  }
-
-  _userIconLayers() {
-    switch (this.props.renderMode) {
-      case UserLocation.RenderMode.Normal:
-        return normalIcon;
-      default:
-        return this.props.children;
-    }
-  }
-
   render() {
-    if (!this.props.visible || !this.state.coordinates) {
+    const {heading, coordinates} = this.state;
+    const {children, visible, showsUserHeadingIndicator} = this.props;
+
+    if (!visible || !coordinates) {
       return null;
     }
 
-    const children = this.props.children
-      ? this.props.children
-      : this._userIconLayers();
+    console.log(showsUserHeadingIndicator);
 
     return (
       <Annotation
@@ -220,8 +191,41 @@ class UserLocation extends React.Component {
         id="mapboxUserLocation"
         onPress={this.props.onPress}
         coordinates={this.state.coordinates}
+        style={{
+          iconRotate: heading,
+        }}
       >
-        {children}
+        {children || [
+          <CircleLayer
+            key="mapboxUserLocationPluseCircle"
+            id="mapboxUserLocationPluseCircle"
+            style={layerStyles.normal.pluse}
+          />,
+          <CircleLayer
+            key="mapboxUserLocationWhiteCircle"
+            id="mapboxUserLocationWhiteCircle"
+            style={layerStyles.normal.background}
+          />,
+          <CircleLayer
+            key="mapboxUserLocationBlueCicle"
+            id="mapboxUserLocationBlueCicle"
+            aboveLayerID="mapboxUserLocationWhiteCircle"
+            style={layerStyles.normal.foreground}
+          />,
+          ...(showsUserHeadingIndicator && heading
+            ? [
+                <SymbolLayer
+                  key="mapboxUserLocationHeadingIndicator"
+                  id="mapboxUserLocationHeadingIndicator"
+                  belowLayerID="mapboxUserLocationWhiteCircle"
+                  style={{
+                    iconRotate: heading,
+                    ...layerStyles.normal.headingIndicator,
+                  }}
+                />,
+              ]
+            : []),
+        ]}
       </Annotation>
     );
   }
