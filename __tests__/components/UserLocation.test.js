@@ -1,9 +1,7 @@
 import React from 'react';
 import {render, fireEvent} from 'react-native-testing-library';
 
-import UserLocation, {
-  normalIcon,
-} from '../../javascript/components/UserLocation';
+import UserLocation from '../../javascript/components/UserLocation';
 import ShapeSource from '../../javascript/components/ShapeSource';
 import CircleLayer from '../../javascript/components/CircleLayer';
 import locationManager from '../../javascript/modules/location/locationManager';
@@ -165,7 +163,11 @@ describe('UserLocation', () => {
     });
 
     test('initial state is as expected', () => {
-      const initialState = {coordinates: null, shouldShowUserLocation: false};
+      const initialState = {
+        coordinates: null, 
+        shouldShowUserLocation: false,
+        heading: null,
+      };
 
       expect(ul.state).toStrictEqual(initialState);
       expect(ul.locationManagerRunning).toStrictEqual(false);
@@ -175,6 +177,7 @@ describe('UserLocation', () => {
     describe('#setLocationManager', () => {
       test('called with "running" true', async () => {
         const lastKnownLocation = [4.1036916, 51.5462244];
+        const heading = 251.5358428955078;
 
         expect(ul.locationManagerRunning).toStrictEqual(false);
 
@@ -186,6 +189,7 @@ describe('UserLocation', () => {
         expect(ul.setState).toHaveBeenCalledTimes(1);
         expect(ul.setState).toHaveBeenCalledWith({
           coordinates: lastKnownLocation,
+          heading,
         });
         expect(locationManager.stop).not.toHaveBeenCalled();
       });
@@ -242,6 +246,7 @@ describe('UserLocation', () => {
         expect(ul.setState).toHaveBeenCalledTimes(1);
         expect(ul.setState).toHaveBeenCalledWith({
           coordinates: [4.1036916, 51.5462244],
+          heading: 251.5358428955078,
         });
       });
 
@@ -250,49 +255,6 @@ describe('UserLocation', () => {
         ul._onLocationUpdate(position);
         expect(ul.props.onUpdate).toHaveBeenCalledTimes(1);
         expect(ul.props.onUpdate).toHaveBeenCalledWith(position);
-      });
-    });
-
-    describe('_getCoordinatesFromLocation', () => {
-      test('returns coordinates from position', () => {
-        expect(ul._getCoordinatesFromLocation(position)).toStrictEqual([
-          4.1036916,
-          51.5462244,
-        ]);
-      });
-
-      test('returns when location or coords are missing', () => {
-        expect(ul._getCoordinatesFromLocation()).toStrictEqual();
-
-        expect(
-          ul._getCoordinatesFromLocation({fakeLocation: null}),
-        ).toStrictEqual();
-      });
-    });
-
-    describe('#_userIconLayers', () => {
-      test('returns "normal" on default RenderMode', () => {
-        expect(ul._userIconLayers()).toStrictEqual(normalIcon);
-      });
-
-      test('returns "children" if defined and mode is custom', () => {
-        const child = (
-          <CircleLayer
-            key="mapboxUserLocationPluseCircle"
-            id="mapboxUserLocationPluseCircle"
-            style={{
-              circleRadius: 15,
-              circleColor: 'tomato',
-              circleOpacity: 0.2,
-              circlePitchAlignment: 'map',
-            }}
-          />
-        );
-
-        ul.props.children = child;
-        ul.props.renderMode = 'custom';
-
-        expect(ul._userIconLayers()).toStrictEqual(child);
       });
     });
   });

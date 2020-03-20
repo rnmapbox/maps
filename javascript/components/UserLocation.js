@@ -183,8 +183,6 @@ class UserLocation extends React.Component {
       return null;
     }
 
-    console.log(showsUserHeadingIndicator);
-
     return (
       <Annotation
         animated={this.props.animated}
