@@ -1,7 +1,9 @@
 import React from 'react';
 import {render, fireEvent} from 'react-native-testing-library';
 
-import UserLocation from '../../javascript/components/UserLocation';
+import UserLocation, {
+  normalIcon,
+} from '../../javascript/components/UserLocation';
 import ShapeSource from '../../javascript/components/ShapeSource';
 import CircleLayer from '../../javascript/components/CircleLayer';
 import locationManager from '../../javascript/modules/location/locationManager';
@@ -152,10 +154,7 @@ describe('UserLocation', () => {
         animated: true,
         visible: true,
         minDisplacement: 0,
-        renderMode: 'normal',
       };
-
-      ul._isMounted = true;
     });
 
     afterEach(() => {
@@ -164,7 +163,7 @@ describe('UserLocation', () => {
 
     test('initial state is as expected', () => {
       const initialState = {
-        coordinates: null, 
+        coordinates: null,
         shouldShowUserLocation: false,
         heading: null,
       };

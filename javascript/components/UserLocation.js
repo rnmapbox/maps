@@ -36,6 +36,38 @@ const layerStyles = {
   },
 };
 
+export const headingIndicator = heading => (
+  <SymbolLayer
+    key="mapboxUserLocationHeadingIndicator"
+    id="mapboxUserLocationHeadingIndicator"
+    belowLayerID="mapboxUserLocationWhiteCircle"
+    style={{
+      iconRotate: heading,
+      ...layerStyles.normal.headingIndicator,
+    }}
+  />
+);
+
+export const normalIcon = (showsUserHeadingIndicator, heading) => [
+  <CircleLayer
+    key="mapboxUserLocationPluseCircle"
+    id="mapboxUserLocationPluseCircle"
+    style={layerStyles.normal.pluse}
+  />,
+  <CircleLayer
+    key="mapboxUserLocationWhiteCircle"
+    id="mapboxUserLocationWhiteCircle"
+    style={layerStyles.normal.background}
+  />,
+  <CircleLayer
+    key="mapboxUserLocationBlueCicle"
+    id="mapboxUserLocationBlueCicle"
+    aboveLayerID="mapboxUserLocationWhiteCircle"
+    style={layerStyles.normal.foreground}
+  />,
+  ...(showsUserHeadingIndicator && heading ? [headingIndicator(heading)] : []),
+];
+
 class UserLocation extends React.Component {
   static propTypes = {
     /**
@@ -59,7 +91,7 @@ class UserLocation extends React.Component {
     onUpdate: PropTypes.func,
 
     /**
-     * Show or hide small arrow which indicates direction the device is pointing relative to north. Value is between 0-360 degrees.
+     * Show or hide small arrow which indicates direction the device is pointing relative to north.
      */
     showsUserHeadingIndicator: PropTypes.bool,
 
@@ -187,37 +219,7 @@ class UserLocation extends React.Component {
           iconRotate: heading,
         }}
       >
-        {children || [
-          <CircleLayer
-            key="mapboxUserLocationPluseCircle"
-            id="mapboxUserLocationPluseCircle"
-            style={layerStyles.normal.pluse}
-          />,
-          <CircleLayer
-            key="mapboxUserLocationWhiteCircle"
-            id="mapboxUserLocationWhiteCircle"
-            style={layerStyles.normal.background}
-          />,
-          <CircleLayer
-            key="mapboxUserLocationBlueCicle"
-            id="mapboxUserLocationBlueCicle"
-            aboveLayerID="mapboxUserLocationWhiteCircle"
-            style={layerStyles.normal.foreground}
-          />,
-          ...(showsUserHeadingIndicator && heading
-            ? [
-                <SymbolLayer
-                  key="mapboxUserLocationHeadingIndicator"
-                  id="mapboxUserLocationHeadingIndicator"
-                  belowLayerID="mapboxUserLocationWhiteCircle"
-                  style={{
-                    iconRotate: heading,
-                    ...layerStyles.normal.headingIndicator,
-                  }}
-                />,
-              ]
-            : []),
-        ]}
+        {children || normalIcon(showsUserHeadingIndicator, heading)}
       </Annotation>
     );
   }
