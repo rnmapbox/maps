@@ -90,14 +90,9 @@ class UserLocation extends React.Component {
     this._onLocationUpdate = this._onLocationUpdate.bind(this);
   }
 
-  // required as #setLocationManager attempts to setState
-  // after component unmount
-  _isMounted = null;
-
   locationManagerRunning = false;
 
   async componentDidMount() {
-    this._isMounted = true;
     locationManager.addListener(this._onLocationUpdate);
     await this.setLocationManager({
       running: this.needsLocationManagerRunning(),
@@ -117,8 +112,6 @@ class UserLocation extends React.Component {
   }
 
   async componentWillUnmount() {
-    this._isMounted = false;
-
     locationManager.removeListener(this._onLocationUpdate);
     await this.setLocationManager({running: false});
   }
