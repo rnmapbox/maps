@@ -150,18 +150,19 @@ class UserLocation extends React.Component {
   }
 
   _onLocationUpdate(location) {
+    let coordinates = null;
+    let heading = null;
+
     if (location && location.coords) {
-      const {longitude, latitude, heading} = location.coords;
-      this.setState({
-        coordinates: [longitude, latitude],
-        heading,
-      });
-    } else {
-      this.setState({
-        coordinates: null,
-        heading: null,
-      });
+      const {longitude, latitude} = location.coords;
+      coordinates = [longitude, latitude];
+      heading = location.coords.heading;
     }
+
+    this.setState({
+      coordinates,
+      heading,
+    });
 
     if (this.props.onUpdate) {
       this.props.onUpdate(location);
