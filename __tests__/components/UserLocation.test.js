@@ -155,6 +155,8 @@ describe('UserLocation', () => {
         visible: true,
         minDisplacement: 0,
       };
+
+      ul._isMounted = true;
     });
 
     afterEach(() => {
