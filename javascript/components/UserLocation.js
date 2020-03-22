@@ -130,6 +130,7 @@ class UserLocation extends React.Component {
 
   async componentDidMount() {
     this._isMounted = true;
+
     locationManager.addListener(this._onLocationUpdate);
     await this.setLocationManager({
       running: this.needsLocationManagerRunning(),
@@ -212,7 +213,13 @@ class UserLocation extends React.Component {
 
   render() {
     const {heading, coordinates} = this.state;
-    const {children, visible, showsUserHeadingIndicator} = this.props;
+    const {
+      children,
+      visible,
+      showsUserHeadingIndicator,
+      onPress,
+      animated,
+    } = this.props;
 
     if (!visible || !coordinates) {
       return null;
@@ -220,10 +227,10 @@ class UserLocation extends React.Component {
 
     return (
       <Annotation
-        animated={this.props.animated}
+        animated={animated}
         id="mapboxUserLocation"
-        onPress={this.props.onPress}
-        coordinates={this.state.coordinates}
+        onPress={onPress}
+        coordinates={coordinates}
         style={{
           iconRotate: heading,
         }}
