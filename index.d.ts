@@ -416,12 +416,12 @@ export interface CameraSettings {
 
 export interface UserLocationProps {
   animated?: boolean;
-  renderMode?: 'normal' | 'custom';
   visible?: boolean;
   onPress?: () => void;
   onUpdate?: (location: MapboxGL.Location) => void;
-  children?: ReactNode;
+  showsUserHeadingIndicator: boolean,
   minDisplacement?: number;
+  children?: ReactNode;
 }
 
 export type WithExpression<T> = {
