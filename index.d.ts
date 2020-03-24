@@ -413,6 +413,23 @@ export interface CameraProps extends CameraSettings, ViewProps {
   ) => void;
 }
 
+export interface CameraStopSettings {
+  centerCoordinate?: GeoJSON.Position;
+  heading?: number;
+  pitch?: number;
+  bounds?: {
+    ne: GeoJSON.Position;
+    sw: GeoJSON.Position;
+    paddingLeft?: number;
+    paddingRight?: number;
+    paddingTop?: number;
+    paddingBottom?: number;
+  };
+  zoomLevel?: number;
+  animationDuration?: number;
+  animationMode?: 'flyTo' | 'easeTo' | 'moveTo';
+}
+
 export interface CameraSettings {
   centerCoordinate?: GeoJSON.Position;
   heading?: number;
@@ -427,6 +444,7 @@ export interface CameraSettings {
   };
   zoomLevel?: number;
   animationDuration?: number;
+  stops?: CameraStopSettings[];
 }
 
 export interface UserLocationProps {
