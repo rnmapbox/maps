@@ -120,8 +120,14 @@
     if (_map != nil && _map.userTrackingMode != MGLUserTrackingModeNone) {
         _map.userTrackingMode = MGLUserTrackingModeNone;
     }
-    
-    [cameraUpdateQueue enqueue:[CameraStop fromDictionary:_stop]];
+    if (_stop[@"stops"]) {
+        NSArray* stops = _stop[@"stops"];
+        for (NSDictionary* stop in stops) {
+            [cameraUpdateQueue enqueue:[CameraStop fromDictionary:stop]];
+        }
+    } else {
+        [cameraUpdateQueue enqueue:[CameraStop fromDictionary:_stop]];
+    }
     [cameraUpdateQueue execute:_map];
 }
 
