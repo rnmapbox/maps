@@ -12,6 +12,7 @@ assignees: ''
 * Before you report, please make sure you tested on a physical device
 * For build issues: Can you reproduce it on a clean install of the example app? Please include full steps to reproduce from `react-native init`
 * Please include standalone code sample - a single component with one MapView in it. Use [one of our example](https://github.com/react-native-mapbox-gl/maps/blob/master/example/src/examples/PointInMapView.js) screens as a starging point.
+* Use gitter and/or stack overflow for questions.
 
 If you want others to spend time on your issue, please make sure to first spend some time on the ticket. 
 
