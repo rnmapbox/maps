@@ -159,7 +159,7 @@
     "props": [
       {
         "name": "title",
-        "required": false,
+        "required": true,
         "type": "string",
         "default": "none",
         "description": "String that get's displayed in the default callout."
