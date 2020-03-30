@@ -77,9 +77,9 @@ public class RCTMGLPointAnnotationManager extends AbstractEventEmitter<RCTMGLPoi
     }
 
     @Override
-    public void receiveCommand(RCTMGLPointAnnotation annotation, String command, @Nullable ReadableArray args) {
-        switch (command) {
-            case "refresh":
+    public void receiveCommand(RCTMGLPointAnnotation annotation, int commandID, @Nullable ReadableArray args) {
+        switch (commandID) {
+            case METHOD_REFRESH:
                 annotation.refresh();
                 break;
         }
