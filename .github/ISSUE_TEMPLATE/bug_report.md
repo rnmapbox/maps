@@ -29,9 +29,52 @@ A clear and concise description of what the bug is.
 **To Reproduce**
 Steps to reproduce the behavior. 
 
-If possible include a single standalone React Native component. Use [one of our example](https://github.com/react-native-mapbox-gl/maps/blob/master/example/src/examples/PointInMapView.js) screens as a starging point.
+Please include a single standalone React Native component. Use [one of our example](https://github.com/react-native-mapbox-gl/maps/blob/master/example/src/examples/BugReportTemplate.js) screens as a starging point.
+Please simplify the exampel as much as possible.
+
+Example:
+```js
+import React from 'react';
+import {
+  MapView,
+  ShapeSource,
+  LineLayer,
+  Camera,
+} from '@react-native-mapbox-gl/maps';
+
+const aLine = {
+  type: 'LineString',
+  coordinates: [
+    [-74.00597, 40.71427],
+    [-74.00697, 40.71527],
+  ],
+};
+
+class BugReportExample extends React.Component {
+  render() {
+    return (
+      <MapView style={{flex: 1}}>
+        <Camera centerCoordinate={[-74.00597, 40.71427]} zoomLevel={14} />
+        <ShapeSource id="idStreetLayer" shape={aLine}>
+          <LineLayer id="idStreetLayer" />
+        </ShapeSource>
+      </MapView>
+    );
+  }
+}
+```
 
 If it's a build/startup issue please include full steps to reproduce from `react-native init ...`
+
+Example:
+
+```sh
+react-native init sample --version react-native@0.60.5
+cd sample
+npm install react-native-mapbox-gl/maps#master --save
+# or released version `npm install @react-native-mapbox-gl/maps@8.0.0-rc1 --save`
+react-native run-android
+```
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
