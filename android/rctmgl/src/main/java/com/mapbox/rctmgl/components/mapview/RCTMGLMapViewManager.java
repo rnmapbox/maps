@@ -174,6 +174,11 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         mapView.setReactCompassViewMargins(compassViewMargins);
     }
 
+    @ReactProp(name="compassViewPosition")
+    public void setCompassViewPosition(RCTMGLMapView mapView, int compassViewPosition) {
+        mapView.setReactCompassViewPosition(compassViewPosition);
+    }
+
     @ReactProp(name="contentInset")
     public void setContentInset(RCTMGLMapView mapView, ReadableArray array) {
         mapView.setReactContentInset(array);

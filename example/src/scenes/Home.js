@@ -46,6 +46,7 @@ import ShowAndHideLayer from '../examples/ShowAndHideLayer';
 import ChangeLayerColor from '../examples/ChangeLayerColor';
 import SourceLayerVisibility from '../examples/SourceLayerVisibility';
 import SetDisplacement from '../examples/SetDisplacement';
+import CompassView from '../examples/CompassView';
 
 const styles = StyleSheet.create({
   header: {
@@ -126,6 +127,7 @@ const Examples = [
   new ExampleItem('Change Layer Color', ChangeLayerColor),
   new ExampleItem('Source Layer Visiblity', SourceLayerVisibility),
   new ExampleItem('Set Displacement', SetDisplacement),
+  new ExampleItem('Compass View', CompassView),
 ];
 
 class Home extends React.Component {

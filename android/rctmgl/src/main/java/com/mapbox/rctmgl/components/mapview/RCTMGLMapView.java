@@ -126,6 +126,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     private Boolean mLogoEnabled;
     private Boolean mCompassEnabled;
     private ReadableMap mCompassViewMargins;
+    private int mCompassViewPosition = -1;
     private Boolean mZoomEnabled;
 
     private SymbolManager symbolManager;
@@ -786,6 +787,11 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         updateUISettings();
     }
 
+    public void setReactCompassViewPosition(int compassViewPosition) {
+        mCompassViewPosition = compassViewPosition;
+        updateUISettings();
+    }
+
     public void setReactAttributionEnabled(boolean attributionEnabled) {
         mAttributionEnabled = attributionEnabled;
         updateUISettings();
@@ -1024,12 +1030,44 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
             uiSettings.setCompassEnabled(mCompassEnabled);
         }
 
+        if (mCompassViewPosition != -1 && uiSettings.isCompassEnabled()) {
+            switch (mCompassViewPosition) {
+                case 0:
+                    uiSettings.setCompassGravity(Gravity.TOP | Gravity.START);
+                    break;
+                case 1:
+                    uiSettings.setCompassGravity(Gravity.TOP | Gravity.END);
+                    break;
+                case 2:
+                    uiSettings.setCompassGravity(Gravity.BOTTOM | Gravity.END);
+                    break;
+                case 3:
+                    uiSettings.setCompassGravity(Gravity.BOTTOM | Gravity.END);
+                    break;
+            }
+        }
+
         if (mCompassViewMargins != null && uiSettings.isCompassEnabled()) {
             int pixelDensity = (int)getResources().getDisplayMetrics().density;
 
-            int xMargin = mCompassViewMargins.getInt("x") * pixelDensity;
-            int yMargin = mCompassViewMargins.getInt("y") * pixelDensity;
-            uiSettings.setCompassMargins(xMargin, yMargin, xMargin, yMargin);
+            int x = mCompassViewMargins.getInt("x") * pixelDensity;
+            int y = mCompassViewMargins.getInt("y") * pixelDensity;
+
+            switch (uiSettings.getCompassGravity()) {
+                case Gravity.TOP | Gravity.START:
+                    uiSettings.setCompassMargins(x, y, 0, 0);
+                    break;
+                default:
+                case Gravity.TOP | Gravity.END:
+                    uiSettings.setCompassMargins(0, y, x, 0);
+                    break;
+                case Gravity.BOTTOM | Gravity.START:
+                    uiSettings.setCompassMargins(x, 0, 0, y);
+                    break;
+                case Gravity.BOTTOM | Gravity.END:
+                    uiSettings.setCompassMargins(0, 0, x, y);
+                    break;
+            }
         }
 
         if (mZoomEnabled != null && uiSettings.isZoomGesturesEnabled() != mZoomEnabled) {
