@@ -29,8 +29,8 @@ A clear and concise description of what the bug is.
 **To Reproduce**
 Steps to reproduce the behavior. 
 
-Please include a single standalone React Native component. Use [one of our example](https://github.com/react-native-mapbox-gl/maps/blob/master/example/src/examples/BugReportTemplate.js) screens as a starging point.
-Please simplify the exampel as much as possible.
+Please include a single standalone React Native component. Use [one of our example](https://github.com/react-native-mapbox-gl/maps/blob/master/example/src/examples/BugReportTemplate.js) screens as a starting point.
+Please simplify the example as much as possible.
 
 Example:
 ```js
