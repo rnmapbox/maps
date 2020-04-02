@@ -61,7 +61,7 @@ describe('Camera', () => {
         testID: 'Camera',
         followUserLocation: undefined,
         followUserMode: undefined,
-        followUserPitch: undefined,
+        followPitch: undefined,
         followHeading: undefined,
         followZoomLevel: undefined,
         stop: {
