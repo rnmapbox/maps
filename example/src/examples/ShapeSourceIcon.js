@@ -82,7 +82,6 @@ class ShapeSourceIcon extends React.Component {
   state = {
     images: {
       example: exampleIcon,
-      assets: ['pin'],
     },
   };
 
@@ -97,6 +96,7 @@ class ShapeSourceIcon extends React.Component {
             centerCoordinate={[-117.20611157485, 52.180961084261]}
           />
           <MapboxGL.Images
+            nativeAssetImages={['pin']}
             images={images}
             onImageMissing={imageKey =>
               this.setState({
