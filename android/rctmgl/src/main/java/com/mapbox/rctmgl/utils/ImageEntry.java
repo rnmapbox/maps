@@ -14,4 +14,12 @@ public class ImageEntry {
         uri = _uri;
         scale = ImageEntry.defaultScale;
     }
+
+    public double getScaleOr(double v) {
+        if (scale == ImageEntry.defaultScale) {
+            return v;
+        } else {
+            return scale;
+        }
+    }
 }

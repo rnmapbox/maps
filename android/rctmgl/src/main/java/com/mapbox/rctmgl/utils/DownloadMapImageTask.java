@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -22,6 +23,7 @@ import com.facebook.react.views.imagehelper.ImageSource;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -71,6 +73,10 @@ public class DownloadMapImageTask extends AsyncTask<Map.Entry<String, ImageEntry
 
             String uri = imageEntry.uri;
 
+            if (uri.startsWith("/")) {
+                uri = Uri.fromFile(new File(uri)).toString();
+            }
+
             if (uri.startsWith("http://") || uri.startsWith("https://") ||
                 uri.startsWith("file://") || uri.startsWith("asset://") || uri.startsWith("data:")) {
                 ImageSource source = new ImageSource(context, uri);
@@ -92,7 +98,7 @@ public class DownloadMapImageTask extends AsyncTask<Map.Entry<String, ImageEntry
                                 // Copy the bitmap to make sure it doesn't get recycled when we release
                                 // the fresco reference.
                                 .copy(Bitmap.Config.ARGB_8888, true);
-                            bitmap.setDensity((int)((double)DisplayMetrics.DENSITY_DEFAULT * imageEntry.scale));
+                            bitmap.setDensity((int) ((double) DisplayMetrics.DENSITY_DEFAULT * imageEntry.getScaleOr(1.0)));
                             images.add(new AbstractMap.SimpleEntry<>(object.getKey(), bitmap));
                         } else {
                             FLog.e(LOG_TAG, "Failed to load bitmap from: " + uri);
@@ -143,9 +149,11 @@ public class DownloadMapImageTask extends AsyncTask<Map.Entry<String, ImageEntry
 
     private BitmapFactory.Options getBitmapOptions(DisplayMetrics metrics, Double scale) {
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScreenDensity = metrics.densityDpi;
-        options.inTargetDensity = metrics.densityDpi;
-        options.inDensity = (int)((double)DisplayMetrics.DENSITY_DEFAULT * scale);
+        if (scale != ImageEntry.defaultScale) {
+            options.inScreenDensity = metrics.densityDpi;
+            options.inTargetDensity = metrics.densityDpi;
+            options.inDensity = (int) ((double) DisplayMetrics.DENSITY_DEFAULT * scale);
+        }
         return options;
     }
 }

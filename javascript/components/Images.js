@@ -9,6 +9,18 @@ import ShapeSource from './ShapeSource';
 
 export const NATIVE_MODULE_NAME = 'RCTMGLImages';
 
+function _isUrlOrPath(value) {
+  return (
+    (typeof value === 'string' || value instanceof String) &&
+    (value.startsWith('file://') ||
+      value.startsWith('http://') ||
+      value.startsWith('https://') ||
+      value.startsWith('data:') ||
+      value.startsWith('asset://') ||
+      value.startsWith('/'))
+  );
+}
+
 /**
  * Images defines the images used in Symbol etc layers
  */
@@ -42,13 +54,13 @@ class Images extends React.Component {
 
     const imageNames = Object.keys(this.props.images);
     for (const imageName of imageNames) {
-      if (
-        imageName === ShapeSource.NATIVE_ASSETS_KEY &&
-        Array.isArray(this.props.images[Images.NATIVE_ASSETS_KEY])
-      ) {
-        nativeImages = this.props.images[Images.NATIVE_ASSETS_KEY];
+      const value = this.props.images[imageName];
+      if (imageName === ShapeSource.NATIVE_ASSETS_KEY && Array.isArray(value)) {
+        nativeImages = value;
+      } else if (_isUrlOrPath(value)) {
+        images[imageName] = value;
       } else {
-        const res = resolveAssetSource(this.props.images[imageName]);
+        const res = resolveAssetSource(value);
         if (res && res.uri) {
           images[imageName] = res;
         }
