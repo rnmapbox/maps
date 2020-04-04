@@ -2,11 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import locationManager from '../modules/location/locationManager';
-import headingIcon from '../../assets/heading.png';
 
 import Annotation from './annotations/Annotation'; // eslint-disable-line import/no-cycle
 import CircleLayer from './CircleLayer';
-import SymbolLayer from './SymbolLayer';
+import HeadingIndicator from './HeadingIndicator';
 
 const mapboxBlue = 'rgba(51, 181, 229, 100)';
 
@@ -28,25 +27,8 @@ const layerStyles = {
       circleColor: mapboxBlue,
       circlePitchAlignment: 'map',
     },
-    headingIndicator: {
-      iconImage: headingIcon,
-      iconAllowOverlap: true,
-      iconPitchAlignment: 'map',
-    },
   },
 };
-
-export const headingIndicator = heading => (
-  <SymbolLayer
-    key="mapboxUserLocationHeadingIndicator"
-    id="mapboxUserLocationHeadingIndicator"
-    belowLayerID="mapboxUserLocationWhiteCircle"
-    style={{
-      iconRotate: heading,
-      ...layerStyles.normal.headingIndicator,
-    }}
-  />
-);
 
 export const normalIcon = (showsUserHeadingIndicator, heading) => [
   <CircleLayer
@@ -65,7 +47,7 @@ export const normalIcon = (showsUserHeadingIndicator, heading) => [
     aboveLayerID="mapboxUserLocationWhiteCircle"
     style={layerStyles.normal.foreground}
   />,
-  ...(showsUserHeadingIndicator && heading !== null ? [headingIndicator(heading)] : []),
+  ...(showsUserHeadingIndicator && heading !== null ? [HeadingIndicator(heading)] : []),
 ];
 
 class UserLocation extends React.Component {

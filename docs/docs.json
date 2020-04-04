@@ -1557,6 +1557,21 @@
       }
     ]
   },
+  "HeadingIndicator": {
+    "description": "",
+    "displayName": "HeadingIndicator",
+    "methods": [],
+    "props": [
+      {
+        "name": "heading",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      }
+    ],
+    "name": "HeadingIndicator"
+  },
   "HeatmapLayer": {
     "description": "HeatmapLayer is a style layer that renders one or more filled circles on the map.",
     "displayName": "HeatmapLayer",
@@ -5034,13 +5049,6 @@
         "description": "Whether location icon is animated between updates"
       },
       {
-        "name": "renderMode",
-        "required": false,
-        "type": "enum",
-        "default": "'normal'",
-        "description": "Rendermode of user location icon.\nOne of `\"normal\"`, `\"custom\"`.\n\"custom\" must be of type mapbox-gl-native components"
-      },
-      {
         "name": "visible",
         "required": false,
         "type": "bool",
@@ -5060,6 +5068,13 @@
         "type": "func",
         "default": "none",
         "description": "Callback that is triggered on location update"
+      },
+      {
+        "name": "showsUserHeadingIndicator",
+        "required": false,
+        "type": "bool",
+        "default": "false",
+        "description": "Show or hide small arrow which indicates direction the device is pointing relative to north."
       },
       {
         "name": "minDisplacement",

@@ -6,10 +6,10 @@
 | Prop | Type | Default | Required | Description |
 | ---- | :--: | :-----: | :------: | :----------: |
 | animated | `bool` | `true` | `false` | Whether location icon is animated between updates |
-| renderMode | `enum` | `'normal'` | `false` | Rendermode of user location icon.<br/>One of `"normal"`, `"custom"`.<br/>"custom" must be of type mapbox-gl-native components |
 | visible | `bool` | `true` | `false` | Whether location icon is visible |
 | onPress | `func` | `none` | `false` | Callback that is triggered on location icon press |
 | onUpdate | `func` | `none` | `false` | Callback that is triggered on location update |
+| showsUserHeadingIndicator | `bool` | `false` | `false` | Show or hide small arrow which indicates direction the device is pointing relative to north. |
 | minDisplacement | `number` | `0` | `false` | FIX ME NO DESCRIPTION |
 | children | `any` | `none` | `false` | Custom location icon of type mapbox-gl-native components |
 
