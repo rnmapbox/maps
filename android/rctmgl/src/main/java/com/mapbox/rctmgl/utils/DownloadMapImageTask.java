@@ -149,9 +149,9 @@ public class DownloadMapImageTask extends AsyncTask<Map.Entry<String, ImageEntry
 
     private BitmapFactory.Options getBitmapOptions(DisplayMetrics metrics, Double scale) {
         BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScreenDensity = metrics.densityDpi;
+        options.inTargetDensity = metrics.densityDpi;
         if (scale != ImageEntry.defaultScale) {
-            options.inScreenDensity = metrics.densityDpi;
-            options.inTargetDensity = metrics.densityDpi;
             options.inDensity = (int) ((double) DisplayMetrics.DENSITY_DEFAULT * scale);
         }
         return options;

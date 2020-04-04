@@ -32,10 +32,16 @@ class Images extends React.Component {
 
     /**
      * Specifies the external images in key-value pairs required for the shape source.
-     * If you have an asset under Image.xcassets on iOS and the drawables directory on android
-     * you can specify an array of string names with assets as the key `{ assets: ['pin'] }`.
+     * Keys are names - see iconImage expressions, values can be either urls-s objects 
+     * with format {uri: 'http://...'}` or `require('image.png')` or `import 'image.png'`
      */
     images: PropTypes.object,
+
+    /**
+     * If you have an asset under Image.xcassets on iOS and the drawables directory on android
+     * you can specify an array of string names with assets as the key `['pin']`.
+     */
+    nativeAssetImages: PropTypes.arrayOf(PropTypes.string),
 
     /**
      * Gets called when a Layer is trying to render an image whose key is not present in
@@ -56,6 +62,9 @@ class Images extends React.Component {
     for (const imageName of imageNames) {
       const value = this.props.images[imageName];
       if (imageName === ShapeSource.NATIVE_ASSETS_KEY && Array.isArray(value)) {
+        console.warn(
+          `Use of ${ShapeSource.NATIVE_ASSETS_KEY} in Images#images is deprecated please use Images#nativeAssetImages`,
+        );
         nativeImages = value;
       } else if (_isUrlOrPath(value)) {
         images[imageName] = value;
@@ -65,6 +74,10 @@ class Images extends React.Component {
           images[imageName] = res;
         }
       }
+    }
+
+    if (this.props.nativeAssetImages) {
+      nativeImages = this.props.nativeAssetImages;
     }
 
     return {
