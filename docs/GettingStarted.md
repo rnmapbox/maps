@@ -27,7 +27,7 @@ Manually sets the connectivity state of the app, bypassing any checks to the Con
 ```js
 import MapboxGL from "@react-native-mapbox-gl/maps";
 
-MapboxGL.setConneced(true);
+MapboxGL.setConnected(true);
 ```
 
 ## Disabling Telemetry
