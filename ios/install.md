@@ -18,6 +18,6 @@ If you cannot use `use_frameworks!` for some reason, please see our workaround -
 
 ## React-Native > `0.60.0`
 
-If you are using autolinking feature introduced in React-Native `0.60.0` you do not need any additional steps.
+If you are using autolinking feature introduced in React-Native `0.60.0`, you still need either the `use_frameworks!` or the `use_frameworks!` workaround above followed by `pod install`
 
 Checkout the [example application](/example/README.md) to see how it's configured for an example.
