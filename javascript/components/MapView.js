@@ -21,6 +21,11 @@ import {getFilter} from '../utils/filterUtils';
 import NativeBridgeComponent from './NativeBridgeComponent';
 
 const MapboxGL = NativeModules.MGLModule;
+if (MapboxGL == null) {
+  console.error(
+    'Native part of Mapbox React Native libraries were not registered properly, double check our native installation guides.',
+  );
+}
 
 export const NATIVE_MODULE_NAME = 'RCTMGLMapView';
 

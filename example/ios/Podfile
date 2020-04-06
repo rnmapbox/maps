@@ -32,14 +32,14 @@ target 'RNMapboxGLExample' do
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
-  pod 'react-native-mapbox-gl', :path => '../node_modules/@react-native-mapbox-gl/maps'
+  pod 'react-native-mapbox-gl', :path => '../../'
 
   target 'RNMapboxGLExampleTests' do
     inherit! :search_paths
     # Pods for testing
   end
 
-  pod 'NoUseFrameworks-MapboxMobileEvents',  :podspec => '../node_modules/@react-native-mapbox-gl/maps/ios/NoUseFrameworks-MapboxMobileEvents/NoUseFrameworks-MapboxMobileEvents.podspec.json'
+  pod 'NoUseFrameworks-MapboxMobileEvents',  :podspec => '../../ios/NoUseFrameworks-MapboxMobileEvents/NoUseFrameworks-MapboxMobileEvents.podspec.json'
   # use_frameworks!
 
   use_native_modules!
