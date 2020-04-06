@@ -51,27 +51,32 @@ class Images extends React.Component {
   };
 
   _getImages() {
-    if (!this.props.images) {
+    if (!this.props.images && !this.props.nativeAssetImages) {
       return {};
     }
 
     const images = {};
     let nativeImages = [];
 
-    const imageNames = Object.keys(this.props.images);
-    for (const imageName of imageNames) {
-      const value = this.props.images[imageName];
-      if (imageName === ShapeSource.NATIVE_ASSETS_KEY && Array.isArray(value)) {
-        console.warn(
-          `Use of ${ShapeSource.NATIVE_ASSETS_KEY} in Images#images is deprecated please use Images#nativeAssetImages`,
-        );
-        nativeImages = value;
-      } else if (_isUrlOrPath(value)) {
-        images[imageName] = value;
-      } else {
-        const res = resolveAssetSource(value);
-        if (res && res.uri) {
-          images[imageName] = res;
+    if (this.props.images) {
+      const imageNames = Object.keys(this.props.images);
+      for (const imageName of imageNames) {
+        const value = this.props.images[imageName];
+        if (
+          imageName === ShapeSource.NATIVE_ASSETS_KEY &&
+          Array.isArray(value)
+        ) {
+          console.warn(
+            `Use of ${ShapeSource.NATIVE_ASSETS_KEY} in Images#images is deprecated please use Images#nativeAssetImages`,
+          );
+          nativeImages = value;
+        } else if (_isUrlOrPath(value)) {
+          images[imageName] = value;
+        } else {
+          const res = resolveAssetSource(value);
+          if (res && res.uri) {
+            images[imageName] = res;
+          }
         }
       }
     }
