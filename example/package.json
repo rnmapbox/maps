@@ -34,7 +34,7 @@
     "react-navigation": "^2.18.3",
     "url": "^0.11.0",
 
-    "underscore": "^1.8.3",
+    "debounce": "^1.2.0",
     "@turf/nearest-point-on-line": ">= 4.0.0 <7.0.0"
   },
   "devDependencies": {

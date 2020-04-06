@@ -16,7 +16,7 @@ module.exports = {
             '@turf/length': './node_modules/@turf/length',
             '@turf/along': './node_modules/@turf/along',
             '@mapbox/geo-viewport': './node_modules/@mapbox/geo-viewport',
-            'underscore': './node_modules/underscore',
+            'debounce': './node_modules/debounce',
 
             '@babel': './node_modules/@babel',
             fbjs: './node_modules/fbjs',
