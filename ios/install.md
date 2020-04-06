@@ -1,6 +1,6 @@
 # iOS Installation
 
-## Using CocoaPods
+## React-Native >= `0.62.0`
 
 To install with CocoaPods, add the following to your `Podfile`:
 
@@ -8,13 +8,20 @@ To install with CocoaPods, add the following to your `Podfile`:
   # Mapbox
   pod 'react-native-mapbox-gl', :path => '../node_modules/@react-native-mapbox-gl/maps'
 
-  # Make also sure you have use_frameworks! enabled
-  use_frameworks!
+  # Workaround if use_frameworks! failed
+  pod 'NoUseFrameworks-MapboxMobileEvents',  :podspec => '../node_modules/@react-native-mapbox-gl/maps/ios/NoUseFrameworks-MapboxMobileEvents/NoUseFrameworks-MapboxMobileEvents.podspec.json'
 ```
 
-Then run `pod install` and rebuild your project.
+## React-Native = `0.61.0`
 
-If you cannot use `use_frameworks!` for some reason, please see our workaround - https://github.com/react-native-mapbox-gl/maps/pull/714
+To install with CocoaPods, add the following to your `Podfile`:
+
+```
+  # Mapbox
+  pod 'react-native-mapbox-gl', :path => '../node_modules/@react-native-mapbox-gl/maps'
+
+  use_frameworks!
+```
 
 ## React-Native > `0.60.0`
 
