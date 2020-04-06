@@ -404,14 +404,14 @@
         "required": false,
         "type": "number",
         "default": "2000",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "The duration a camera update takes (in ms)"
       },
       {
         "name": "animationMode",
         "required": false,
         "type": "enum",
         "default": "'easeTo'",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "The animationstyle when the camara updates. One of; `flyTo`, `easeTo`, `moveTo`"
       },
       {
         "name": "defaultSettings",
@@ -621,14 +621,14 @@
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "The minimun zoom level of the map"
       },
       {
         "name": "maxZoomLevel",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "The maximun zoom level of the map"
       },
       {
         "name": "maxBounds",
@@ -684,21 +684,21 @@
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "The zoomLevel on map while followUserLocation is set to `true`"
       },
       {
         "name": "followPitch",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "The pitch on map while followUserLocation is set to `true`"
       },
       {
         "name": "followHeading",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "The heading on map while followUserLocation is set to `true`"
       },
       {
         "name": "triggerKey",
