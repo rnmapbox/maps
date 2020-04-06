@@ -62,12 +62,18 @@ class UserLocationChange extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          zoomLevel={16}
-          showUserLocation={true}
-          onUserLocationUpdate={this.onUserLocationUpdate}
-          userTrackingMode={MapboxGL.UserTrackingModes.Follow}
           style={sheet.matchParent}
-        />
+        >
+          <MapboxGL.UserLocation
+            visible={true}
+            onUpdate={this.onUserLocationUpdate}
+          />
+          <MapboxGL.Camera
+            zoomLevel={16}
+            followUserMode={'normal'}
+            followUserLocation
+          />
+        </MapboxGL.MapView>
         {this.renderLocationInfo()}
       </Page>
     );
