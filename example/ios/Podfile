@@ -32,15 +32,19 @@ target 'RNMapboxGLExample' do
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
-  pod 'react-native-mapbox-gl', :path => '../../'
+
+  # default version
+  # pod 'react-native-mapbox-gl', :path => '../../'
+
+  # use frameworks version
+  pod 'react-native-mapbox-gl/DynamicLibrary', :path => '../../'
+  ENV["REACT_NATIVE_MAPBOX_GL_USE_FRAMEWORKS"] = "YES"
+  use_frameworks!
 
   target 'RNMapboxGLExampleTests' do
     inherit! :search_paths
     # Pods for testing
   end
-
-  pod 'NoUseFrameworks-MapboxMobileEvents',  :podspec => '../../ios/NoUseFrameworks-MapboxMobileEvents/NoUseFrameworks-MapboxMobileEvents.podspec.json'
-  # use_frameworks!
 
   use_native_modules!
 end
