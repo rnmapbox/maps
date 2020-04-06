@@ -67,8 +67,14 @@ class Camera extends React.Component {
   static propTypes = {
     ...viewPropTypes,
 
+    /**
+     * The duration a camera update takes (in ms)
+     */
     animationDuration: PropTypes.number,
 
+    /**
+     * The animationstyle when the camara updates. One of; `flyTo`, `easeTo`, `moveTo`
+     */
     animationMode: PropTypes.oneOf(['flyTo', 'easeTo', 'moveTo']),
 
     // default - view settings
@@ -77,7 +83,14 @@ class Camera extends React.Component {
     // normal - view settings
     ...SettingsPropTypes,
 
+    /**
+     * The minimun zoom level of the map
+     */
     minZoomLevel: PropTypes.number,
+
+    /**
+     * The maximun zoom level of the map
+     */
     maxZoomLevel: PropTypes.number,
 
     /**
@@ -105,12 +118,19 @@ class Camera extends React.Component {
      */
     followUserMode: PropTypes.oneOf(['normal', 'compass', 'course']),
 
+    /**
+     * The zoomLevel on map while followUserLocation is set to `true`
+     */
     followZoomLevel: PropTypes.number,
 
     /**
-     * The pitch while followUserLocation is set to true.
+     * The pitch on map while followUserLocation is set to `true`
      */
     followPitch: PropTypes.number,
+
+    /**
+     * The heading on map while followUserLocation is set to `true`
+     */
     followHeading: PropTypes.number,
 
     // manual update
