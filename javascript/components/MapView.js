@@ -6,7 +6,7 @@ import {
   NativeModules,
   requireNativeComponent,
 } from 'react-native';
-import _ from 'underscore';
+import {debounce} from 'debounce';
 
 import {makePoint, makeLatLngBounds} from '../utils/geoUtils';
 import {
@@ -272,13 +272,13 @@ class MapView extends NativeBridgeComponent(React.Component) {
     this._onLayout = this._onLayout.bind(this);
 
     // debounced map change methods
-    this._onDebouncedRegionWillChange = _.debounce(
+    this._onDebouncedRegionWillChange = debounce(
       this._onRegionWillChange.bind(this),
       props.regionWillChangeDebounceTime,
       true,
     );
 
-    this._onDebouncedRegionDidChange = _.debounce(
+    this._onDebouncedRegionDidChange = debounce(
       this._onRegionDidChange.bind(this),
       props.regionDidChangeDebounceTime,
     );
