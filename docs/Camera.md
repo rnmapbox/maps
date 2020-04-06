@@ -5,8 +5,8 @@
 ### props
 | Prop | Type | Default | Required | Description |
 | ---- | :--: | :-----: | :------: | :----------: |
-| animationDuration | `number` | `2000` | `false` | FIX ME NO DESCRIPTION |
-| animationMode | `enum` | `'easeTo'` | `false` | FIX ME NO DESCRIPTION |
+| animationDuration | `number` | `2000` | `false` | The duration a camera update takes (in ms) |
+| animationMode | `enum` | `'easeTo'` | `false` | The animationstyle when the camara updates. One of; `flyTo`, `easeTo`, `moveTo` |
 | defaultSettings | `shape` | `none` | `false` | FIX ME NO DESCRIPTION |
 | &nbsp;&nbsp;centerCoordinate | `array` | `none` | `false` | Center coordinate on map [lng, lat] |
 | &nbsp;&nbsp;heading | `number` | `none` | `false` | Heading on map |
@@ -30,16 +30,16 @@
 | &nbsp;&nbsp;paddingTop | `number` | `none` | `false` | Top camera padding for bounds |
 | &nbsp;&nbsp;paddingBottom | `number` | `none` | `false` | Bottom camera padding for bounds |
 | zoomLevel | `number` | `none` | `false` | Zoom level of the map |
-| minZoomLevel | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
-| maxZoomLevel | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
+| minZoomLevel | `number` | `none` | `false` | The minimun zoom level of the map |
+| maxZoomLevel | `number` | `none` | `false` | The maximun zoom level of the map |
 | maxBounds | `shape` | `none` | `false` | Restrict map panning so that the center is within these bounds |
 | &nbsp;&nbsp;ne | `array` | `none` | `true` | northEastCoordinates - North east coordinate of bound |
 | &nbsp;&nbsp;sw | `array` | `none` | `true` | southWestCoordinates - South west coordinate of bound |
 | followUserLocation | `bool` | `none` | `false` | Should the map orientation follow the user's. |
 | followUserMode | `enum` | `none` | `false` | The mode used to track the user location on the map. One of; "normal", "compass", "course". Each mode string is also available as a member on the `MapboxGL.UserTrackingModes` object. `Follow` (normal), `FollowWithHeading` (compass), `FollowWithCourse` (course). NOTE: `followUserLocation` must be set to `true` for any of the modes to take effect. [Example](../example/src/examples/SetUserTrackingModes.js) |
-| followZoomLevel | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
-| followPitch | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
-| followHeading | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
+| followZoomLevel | `number` | `none` | `false` | The zoomLevel on map while followUserLocation is set to `true` |
+| followPitch | `number` | `none` | `false` | The pitch on map while followUserLocation is set to `true` |
+| followHeading | `number` | `none` | `false` | The heading on map while followUserLocation is set to `true` |
 | triggerKey | `any` | `none` | `false` | FIX ME NO DESCRIPTION |
 | alignment | `array` | `none` | `false` | FIX ME NO DESCRIPTION |
 | onUserTrackingModeChange | `func` | `none` | `false` | FIX ME NO DESCRIPTION |

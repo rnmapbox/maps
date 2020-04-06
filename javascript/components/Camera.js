@@ -106,6 +106,10 @@ class Camera extends React.Component {
     followUserMode: PropTypes.oneOf(['normal', 'compass', 'course']),
 
     followZoomLevel: PropTypes.number,
+
+    /**
+     * The pitch while followUserLocation is set to true.
+     */
     followPitch: PropTypes.number,
     followHeading: PropTypes.number,
 
@@ -542,7 +546,7 @@ class Camera extends React.Component {
         ref="camera"
         followUserLocation={this.props.followUserLocation}
         followUserMode={this.props.followUserMode}
-        followUserPitch={this.props.followUserPitch}
+        followPitch={this.props.followPitch}
         followHeading={this.props.followHeading}
         followZoomLevel={this.props.followZoomLevel}
         stop={this._createStopConfig(props)}

@@ -132,6 +132,21 @@ declare namespace MapboxGL {
     function getOrCalculateVisibleRegion(coord: { lon: number; lat: number }, zoomLevel: number, width: number, height: number, nativeRegion: { properties: { visibleBounds: number[] }; visibleBounds: number[] }): void;
   }
 
+  namespace Animated {
+    // sources
+    class ShapeSource extends Component<ShapeSourceProps> {}
+    class ImageSource extends Component<ImageSourceProps> {}
+
+    // layers
+    class FillLayer extends Component<FillLayerProps> {}
+    class FillExtrusionLayer extends Component<FillExtrusionLayerProps> {}
+    class LineLayer extends Component<LineLayerProps> {}
+    class CircleLayer extends Component<CircleLayerProps> {}
+    class SymbolLayer extends Component<SymbolLayerProps> {}
+    class RasterLayer extends Component<RasterLayerProps> {}
+    class BackgroundLayer extends Component<BackgroundLayerProps> {}
+  }
+
   /**
    * Components
    */

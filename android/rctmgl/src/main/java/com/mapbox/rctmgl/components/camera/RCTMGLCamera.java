@@ -164,6 +164,11 @@ public class RCTMGLCamera extends AbstractMapFeature {
         mDefaultStop = stop;
     }
 
+    public void setFollowPitch(double pitch) {
+        mPitch = pitch;
+        updateCameraPositionIfNeeded(true);
+    }
+
     public void setMaxBounds(LatLngBounds bounds) {
         mMaxBounds = bounds;
         updateMaxBounds();
