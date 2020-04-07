@@ -289,8 +289,8 @@ class MapView extends NativeBridgeComponent(React.Component) {
   }
 
   componentWillUnmount() {
-    this._onDebouncedRegionWillChange.cancel();
-    this._onDebouncedRegionDidChange.cancel();
+    this._onDebouncedRegionWillChange.clear();
+    this._onDebouncedRegionDidChange.clear();
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
