@@ -171,6 +171,14 @@ public class RCTMGLStyleValue {
         return isAddImage;
     }
 
+    public Boolean isImageStringValue() {
+        return "string".equals(mPayload.getString("type"));
+    }
+
+    public String getImageStringValue() {
+        return mPayload.getString("value");
+    }
+
     public String getImageURI() {
         return imageURI;
     }

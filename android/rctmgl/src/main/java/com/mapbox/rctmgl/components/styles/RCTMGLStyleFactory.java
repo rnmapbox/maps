@@ -845,6 +845,8 @@ public class RCTMGLStyleFactory {
     public static void setFillPattern(FillLayer layer, RCTMGLStyleValue styleValue) {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.fillPattern(styleValue.getExpression()));
+      } else if (styleValue.isImageStringValue()) {
+        layer.setProperties(PropertyFactory.fillPattern(styleValue.getImageStringValue()));
       } else {
         layer.setProperties(PropertyFactory.fillPattern(styleValue.getImageURI()));
       }
@@ -1033,6 +1035,8 @@ public class RCTMGLStyleFactory {
     public static void setLinePattern(LineLayer layer, RCTMGLStyleValue styleValue) {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.linePattern(styleValue.getExpression()));
+      } else if (styleValue.isImageStringValue()) {
+        layer.setProperties(PropertyFactory.linePattern(styleValue.getImageStringValue()));
       } else {
         layer.setProperties(PropertyFactory.linePattern(styleValue.getImageURI()));
       }
@@ -1153,6 +1157,8 @@ public class RCTMGLStyleFactory {
     public static void setIconImage(SymbolLayer layer, RCTMGLStyleValue styleValue) {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.iconImage(styleValue.getExpression()));
+      } else if (styleValue.isImageStringValue()) {
+        layer.setProperties(PropertyFactory.iconImage(styleValue.getImageStringValue()));
       } else {
         layer.setProperties(PropertyFactory.iconImage(styleValue.getImageURI()));
       }
@@ -1881,6 +1887,8 @@ public class RCTMGLStyleFactory {
     public static void setFillExtrusionPattern(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.fillExtrusionPattern(styleValue.getExpression()));
+      } else if (styleValue.isImageStringValue()) {
+        layer.setProperties(PropertyFactory.fillExtrusionPattern(styleValue.getImageStringValue()));
       } else {
         layer.setProperties(PropertyFactory.fillExtrusionPattern(styleValue.getImageURI()));
       }
@@ -2149,6 +2157,8 @@ public class RCTMGLStyleFactory {
     public static void setBackgroundPattern(BackgroundLayer layer, RCTMGLStyleValue styleValue) {
       if (styleValue.isExpression()) {
         layer.setProperties(PropertyFactory.backgroundPattern(styleValue.getExpression()));
+      } else if (styleValue.isImageStringValue()) {
+        layer.setProperties(PropertyFactory.backgroundPattern(styleValue.getImageStringValue()));
       } else {
         layer.setProperties(PropertyFactory.backgroundPattern(styleValue.getImageURI()));
       }
