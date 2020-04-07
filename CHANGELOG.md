@@ -3,9 +3,9 @@
 ### Breaking changes - [#610](https://github.com/react-native-mapbox-gl/maps/issues/610)
 
 - iOS mapbox libraries updated to [5.7.0](https://github.com/mapbox/mapbox-gl-native-ios/releases/tag/ios-v5.7.0) android libraries updated to [9.0.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.0.0)
-- ShapeSource#images is now removed (deprecated in 7.*), use Images#images instead.
+- ShapeSource#images is now removed (deprecated in 7.*), use Images#images instead. Also special `assets` inside `images` is now deprecated, use `nativeAssetImages` istead.
 - [Images#onImagesMissing](docs/Images.md)
-- Android code migrated to AndroidX, RN 59.0+ is required.
+- Android code migrated to AndroidX, RN 60.0+ is recommended.
 - geoUtils is now private, please use [turf-js](https://turfjs.org/) instead
 - VectorSource/SymbolSource#onPress sends ({features, point, coordinates}) instead of single feature in `event.nativeEvent.payload`. [PR#700](https://github.com/react-native-mapbox-gl/maps/pull/700)
 
