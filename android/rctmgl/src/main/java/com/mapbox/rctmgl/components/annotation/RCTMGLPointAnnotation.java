@@ -320,12 +320,18 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
         String type = isSelect ? EventTypes.ANNOTATION_SELECTED : EventTypes.ANNOTATION_DESELECTED;
         LatLng latLng = GeoJSONUtils.toLatLng(mCoordinate);
         PointF screenPos = getScreenPosition(latLng);
+        float density = getDisplayDensity();
+        screenPos.x /= density;
+        screenPos.y /= density;
         return new PointAnnotationClickEvent(this, latLng, screenPos, type);
     }
 
     private PointAnnotationDragEvent makeDragEvent(String type) {
         LatLng latLng = GeoJSONUtils.toLatLng(mCoordinate);
         PointF screenPos = getScreenPosition(latLng);
+        float density = getDisplayDensity();
+        screenPos.x /= density;
+        screenPos.y /= density;
         return new PointAnnotationDragEvent(this, latLng, screenPos, type);
     }
 
