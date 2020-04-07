@@ -974,6 +974,14 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         return mDestroyed;
     }
 
+    public void getStyle(Style.OnStyleLoaded onStyleLoaded) {
+        if (mMap == null) {
+            return;
+        }
+
+        mMap.getStyle(onStyleLoaded);
+    }
+
     private void updateUISettings() {
         if (mMap == null) {
             return;

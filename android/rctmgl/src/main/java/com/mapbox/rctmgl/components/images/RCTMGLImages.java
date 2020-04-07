@@ -66,7 +66,7 @@ public class RCTMGLImages extends AbstractMapFeature {
     }
 
     private void removeImages(RCTMGLMapView mapView) {
-        mapView.getMapboxMap().getStyle(new Style.OnStyleLoaded() {
+        mapView.getStyle(new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
                 if (hasImages()) {
@@ -128,7 +128,7 @@ public class RCTMGLImages extends AbstractMapFeature {
         // Wait for style before adding the source to the map
         // only then we can pre-load required images / placeholders into the style
         // before we add the ShapeSource to the map
-        mapView.getMapboxMap().getStyle(new Style.OnStyleLoaded() {
+        mapView.getStyle(new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
                 MapboxMap map = mapView.getMapboxMap();
