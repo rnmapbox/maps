@@ -34,12 +34,11 @@ target 'RNMapboxGLExample' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   # default version
-  # pod 'react-native-mapbox-gl', :path => '../../'
+  pod 'react-native-mapbox-gl', :path => '../../'
 
-  # use frameworks version
-  pod 'react-native-mapbox-gl/DynamicLibrary', :path => '../../'
-  ENV["REACT_NATIVE_MAPBOX_GL_USE_FRAMEWORKS"] = "YES"
-  use_frameworks!
+  # for use_frameworks!
+  # pod 'react-native-mapbox-gl/DynamicLibrary', :path => '../../'
+  # use_frameworks!
 
   target 'RNMapboxGLExampleTests' do
     inherit! :search_paths

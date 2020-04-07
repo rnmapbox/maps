@@ -6,6 +6,8 @@
 
 Demo Application for [React Native Mapbox GL](../README.md)
 
+*Note:* this app is using [non trivial bable/metro configs](https://github.com/react-native-mapbox-gl/maps/pull/778), so we can consume the `maps` library from parent directory directly. Regular apps don't need this complicated setup.
+
 ## What is Mapbox?
 
 Mapbox is the location data platform for mobile and web applications. We provide [building blocks](https://www.mapbox.com/products/) to add location features like maps, search, and navigation into any experience you create. Use our simple and powerful APIs & SDKs and our open source libraries for interactivity and control.
@@ -23,6 +25,7 @@ cd example
 * Create a file called `accesstoken` in the root of the example project and just paste in your [Mapbox access token](https://www.mapbox.com/studio/account/tokens/). (The `accesstoken` file is processed in postinstall, so you need to run `npm install` after adding/changing accesstoken.)
 
 * Install our dependencies using `npm install`.
+
 ## Start React Native Packager
 
 Open up another tab in your Terminal and run
@@ -30,12 +33,13 @@ Open up another tab in your Terminal and run
 npm start
 ```
 
+*Note*: if modules were added to base lib you might need to run `npm start --reset-cache` because we're using `babel` to [rewrite imports](https://github.com/react-native-mapbox-gl/maps/pull/778)
+
 ## Run Android Simulator
 
 * Start Android emulator
 * Run `adb reverse tcp:8081 tcp:8081` to forward port to packager(needed for hot reloading, if you're not developing you can skip this step).
 * Run `react-native run-android` from `example` directory
-
 
 **NOTE**
 
