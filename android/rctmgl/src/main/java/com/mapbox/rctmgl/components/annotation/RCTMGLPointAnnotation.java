@@ -22,6 +22,7 @@ import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.rctmgl.utils.BitmapUtils;
 
 public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.OnLayoutChangeListener {
+    private Context mContext;
     private RCTMGLPointAnnotationManager mManager;
     private Symbol mAnnotation;
     private MapboxMap mMap;
@@ -52,6 +53,7 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
 
     public RCTMGLPointAnnotation(Context context, RCTMGLPointAnnotationManager manager) {
         super(context);
+        mContext = context;
         mManager = manager;
     }
 
@@ -312,13 +314,23 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
         String type = isSelect ? EventTypes.ANNOTATION_SELECTED : EventTypes.ANNOTATION_DESELECTED;
         LatLng latLng = GeoJSONUtils.toLatLng(mCoordinate);
         PointF screenPos = getScreenPosition(latLng);
+        float density = getDisplayDensity();
+        screenPos.x /= density;
+        screenPos.y /= density;
         return new PointAnnotationClickEvent(this, latLng, screenPos, type);
     }
 
     private PointAnnotationDragEvent makeDragEvent(String type) {
         LatLng latLng = GeoJSONUtils.toLatLng(mCoordinate);
         PointF screenPos = getScreenPosition(latLng);
+        float density = getDisplayDensity();
+        screenPos.x /= density;
+        screenPos.y /= density;
         return new PointAnnotationDragEvent(this, latLng, screenPos, type);
+    }
+
+    private float getDisplayDensity() {
+        return mContext.getResources().getDisplayMetrics().density;
     }
 
     private PointF getScreenPosition(LatLng latLng) {
