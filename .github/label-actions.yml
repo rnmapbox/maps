@@ -30,28 +30,14 @@ issues:
       # Reopen the issue
       open: true
       actions:
-  # Actions taken when the `heated` label is added
-  heated:
-    # Post a comment
-    comment: >
-      The thread has been temporarily locked.
-      Please follow our community guidelines.
-    # Lock the thread
-    lock: true
-    # Set a lock reason, such as `off-topic`, `too heated`, `resolved` or `spam`
-    lockReason: "too heated"
-  # Actions taken when the `heated` label is removed
-  -heated:
-    # Unlock the thread
-    unlock: true
-  "Needs: Issue Template":
-    comment: >
-      <table><tbody><tr><th width="50">:warning:</th><th width="100%">
-      Missing Required Fields
-      </th></tr><tr><td>:information_source:</td><td>
-      It looks like your issue may be missing some necessary information. GitHub provides an example template whenever a <a href="https://github.com/facebook/react-native/issues/new?template=bug_report.md">new issue is created</a>. Could you go back and make sure to fill out the template? You may edit this issue, or close it and open a new one.
-      </td></tr></tbody></table>
-    close: true
+    "Needs: Issue Template":
+      comment: >
+        <table><tbody><tr><th width="50">:warning:</th><th width="100%">
+        Missing Required Fields
+        </th></tr><tr><td>:information_source:</td><td>
+        It looks like your issue may be missing some necessary information. GitHub provides an example template whenever a <a href="https://github.com/facebook/react-native/issues/new?template=bug_report.md">new issue is created</a>. Could you go back and make sure to fill out the template? You may edit this issue, or close it and open a new one.
+        </td></tr></tbody></table>
+      close: true
   
 # Optionally, specify configuration settings just for pull requests
 pulls:
