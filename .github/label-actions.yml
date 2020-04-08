@@ -26,7 +26,7 @@ issues:
         :wave: @{issue-author}, please use our idea board to request new features.
       # Close the issue
       close: true
-    "Needs: Issue Template"
+    "Needs: Issue Template":
       # our issue template is not respected - required fields are missing
       comment: >
         :wave: @{issue-author}, please respect our issue template - required fields are missing.
