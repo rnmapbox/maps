@@ -29,16 +29,7 @@ issues:
     -wontfix:
       # Reopen the issue
       open: true
-      actions:
-    "Needs: Issue Template":
-      comment: >
-        <table><tbody><tr><th width="50">:warning:</th><th width="100%">
-        Missing Required Fields
-        </th></tr><tr><td>:information_source:</td><td>
-        It looks like your issue may be missing some necessary information. GitHub provides an example template whenever a <a href="https://github.com/facebook/react-native/issues/new?template=bug_report.md">new issue is created</a>. Could you go back and make sure to fill out the template? You may edit this issue, or close it and open a new one.
-        </td></tr></tbody></table>
-      close: true
-  
+
 # Optionally, specify configuration settings just for pull requests
 pulls:
   actions:
