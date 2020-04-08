@@ -12,6 +12,7 @@ import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.TransitionOptions;
 import com.mapbox.rctmgl.utils.ConvertUtils;
 import com.mapbox.rctmgl.utils.ExpressionParser;
+import com.mapbox.rctmgl.utils.ImageEntry;
 
 /**
  * Created by nickitaliano on 9/12/17.
@@ -26,7 +27,7 @@ public class RCTMGLStyleValue {
 
     private String imageURI = "";
     private boolean isAddImage;
-    private Double imageScale = 1.0;
+    private Double imageScale = ImageEntry.defaultScale;
 
     public static final int InterpolationModeExponential = 100;
     public static final int InterpolationModeInterval = 101;
@@ -38,7 +39,7 @@ public class RCTMGLStyleValue {
         mPayload = config.getMap("stylevalue");
 
         if ("image".equals(mType)) {
-            imageScale = 1.0;
+            imageScale = ImageEntry.defaultScale;
             if ("hashmap".equals(mPayload.getString("type"))) {
                 ReadableMap map = getMap();
                 imageURI = map.getMap("uri").getString("value");
