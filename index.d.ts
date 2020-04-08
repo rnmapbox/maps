@@ -96,6 +96,18 @@ export type MapboxGLEvent<
   V = Element
 > = SyntheticEvent<V, {type: T; payload: P}>;
 
+export type OnPressEvent = {
+  features: Array<GeoJSON.Feature>;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  point: {
+    x: number;
+    y: number;
+  }
+};
+
 declare namespace MapboxGL {
   function removeCustomHeader(headerName: string): void;
   function addCustomHeader(headerName: string, headerValue: string): void;
@@ -669,7 +681,7 @@ export interface TileSourceProps extends ViewProps {
 }
 
 export interface VectorSourceProps extends TileSourceProps {
-  onPress?: (event: MapboxGLEvent<'vectorsourcelayerpress'>) => void;
+  onPress?: (event: OnPressEvent) => void;
   hitbox?: {
     width: number;
     height: number;
@@ -687,7 +699,7 @@ export interface ShapeSourceProps extends ViewProps {
   buffer?: number;
   tolerance?: number;
   images?: {assets?: string[]; [key: string]: ImageSourcePropType};
-  onPress?: (event: MapboxGLEvent<'shapesourcelayerpress'>) => void;
+  onPress?: (event: OnPressEvent) => void;
   hitbox?: {
     width: number;
     height: number;
