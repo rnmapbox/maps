@@ -76,9 +76,11 @@ public class RCTMGLStyleFactory {
       layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
       <%_ } else if (prop.type === 'resolvedImage') { _%>
       if (styleValue.isExpression()) {
-        layer.setProperties(PropertyFactory.<%= prop.name %>(styleValue.getExpression()));
-      } else if (styleValue.isImageStringValue()) {
-        layer.setProperties(PropertyFactory.<%= prop.name %>(styleValue.getImageStringValue()));
+        if (styleValue.isImageStringValue()) {
+          layer.setProperties(PropertyFactory.<%= prop.name %>(styleValue.getImageStringValue()));
+        } else {
+          layer.setProperties(PropertyFactory.<%= prop.name %>(styleValue.getExpression()));
+        }
       } else {
         layer.setProperties(PropertyFactory.<%= prop.name %>(<%- androidGetConfigType(androidInputType(prop.type, prop.value), prop) -%>));
       }
