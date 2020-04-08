@@ -4,6 +4,7 @@
 
 - iOS mapbox libraries updated to [5.7.0](https://github.com/mapbox/mapbox-gl-native-ios/releases/tag/ios-v5.7.0) android libraries updated to [9.0.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.0.0)
 - ShapeSource#images is now removed (deprecated in 7.*), use Images#images instead. Also special `assets` inside `images` is now deprecated, use `nativeAssetImages` istead.
+- iOS now defaults to non `use_frameworks!`, if you want to continue to use `use_frameworks!` please see our iOS installation guidelines
 - [Images#onImagesMissing](docs/Images.md)
 - Android code migrated to AndroidX, RN 60.0+ is recommended.
 - geoUtils is now private, please use [turf-js](https://turfjs.org/) instead
