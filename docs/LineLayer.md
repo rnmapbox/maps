@@ -162,6 +162,26 @@ The opacity at which the line will be drawn.
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`lineOpacityTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s lineOpacity propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -183,6 +203,26 @@ The color with which the line will be drawn.
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`lineColorTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s lineColor propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -204,6 +244,26 @@ The geometry's offset. Values are [x, y] where negatives indicate left and up, r
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`lineTranslateTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s lineTranslate propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -255,6 +315,26 @@ Stroke thickness.
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`lineWidthTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s lineWidth propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -279,6 +359,26 @@ Draws a line casing outside of a line's actual path. Value indicates the width o
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`lineGapWidthTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s lineGapWidth propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -300,6 +400,26 @@ The line's offset. For linear features, a positive value offsets the line to the
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`lineOffsetTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s lineOffset propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -324,6 +444,26 @@ Blur applied to the line, in pixels.
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`lineBlurTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s lineBlur propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -349,6 +489,26 @@ Specifies the lengths of the alternating dashes and gaps that form the dash patt
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`lineDasharrayTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s lineDasharray propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -365,6 +525,26 @@ Name of image in sprite to use for drawing image lines. For seamless patterns, i
 #### Expression
 
 Parameters: `zoom, feature`
+___
+
+#### Name
+
+`linePatternTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s linePattern propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 

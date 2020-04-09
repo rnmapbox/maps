@@ -115,7 +115,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "backgroundPattern",
@@ -130,7 +131,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "backgroundOpacity",
@@ -148,7 +150,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       }
     ]
   },
@@ -159,7 +162,7 @@
     "props": [
       {
         "name": "title",
-        "required": true,
+        "required": false,
         "type": "string",
         "default": "none",
         "description": "String that get's displayed in the default callout."
@@ -857,7 +860,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "circleColor",
@@ -875,7 +879,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "circleBlur",
@@ -893,7 +898,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "circleOpacity",
@@ -913,7 +919,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "circleTranslate",
@@ -933,7 +940,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "circleTranslateAnchor",
@@ -1030,7 +1038,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "circleStrokeColor",
@@ -1048,7 +1057,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "circleStrokeOpacity",
@@ -1068,7 +1078,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       }
     ]
   },
@@ -1188,7 +1199,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "fillExtrusionColor",
@@ -1208,7 +1220,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "fillExtrusionTranslate",
@@ -1228,7 +1241,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "fillExtrusionTranslateAnchor",
@@ -1271,7 +1285,8 @@
             "zoom",
             "feature"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "fillExtrusionHeight",
@@ -1291,7 +1306,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "fillExtrusionBase",
@@ -1313,7 +1329,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       }
     ]
   },
@@ -1451,7 +1468,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "fillColor",
@@ -1471,7 +1489,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "fillOutlineColor",
@@ -1490,7 +1509,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "fillTranslate",
@@ -1510,7 +1530,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "fillTranslateAnchor",
@@ -1553,7 +1574,8 @@
             "zoom",
             "feature"
           ]
-        }
+        },
+        "transition": true
       }
     ]
   },
@@ -1690,7 +1712,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "heatmapWeight",
@@ -1709,7 +1732,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": false
       },
       {
         "name": "heatmapIntensity",
@@ -1726,7 +1750,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "heatmapColor",
@@ -1762,7 +1787,8 @@
           "parameters": [
             "heatmap-density"
           ]
-        }
+        },
+        "transition": false
       },
       {
         "name": "heatmapOpacity",
@@ -1780,7 +1806,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       }
     ]
   },
@@ -1904,7 +1931,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": false
       },
       {
         "name": "position",
@@ -1924,7 +1952,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "color",
@@ -1940,7 +1969,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "intensity",
@@ -1958,7 +1988,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       }
     ]
   },
@@ -2173,7 +2204,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "lineColor",
@@ -2193,7 +2225,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "lineTranslate",
@@ -2213,7 +2246,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "lineTranslateAnchor",
@@ -2262,7 +2296,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "lineGapWidth",
@@ -2282,7 +2317,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "lineOffset",
@@ -2301,7 +2337,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "lineBlur",
@@ -2321,7 +2358,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "lineDasharray",
@@ -2340,7 +2378,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "linePattern",
@@ -2356,7 +2395,8 @@
             "zoom",
             "feature"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "lineGradient",
@@ -2374,7 +2414,8 @@
           "parameters": [
             "line-progress"
           ]
-        }
+        },
+        "transition": false
       }
     ]
   },
@@ -3241,7 +3282,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "rasterHueRotate",
@@ -3258,7 +3300,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "rasterBrightnessMin",
@@ -3276,7 +3319,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "rasterBrightnessMax",
@@ -3294,7 +3338,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "rasterSaturation",
@@ -3312,7 +3357,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "rasterContrast",
@@ -3330,7 +3376,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "rasterResampling",
@@ -3373,7 +3420,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": false
       }
     ]
   },
@@ -4719,7 +4767,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "iconColor",
@@ -4739,7 +4788,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "iconHaloColor",
@@ -4759,7 +4809,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "iconHaloWidth",
@@ -4781,7 +4832,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "iconHaloBlur",
@@ -4803,7 +4855,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "iconTranslate",
@@ -4825,7 +4878,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "iconTranslateAnchor",
@@ -4875,7 +4929,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "textColor",
@@ -4895,7 +4950,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "textHaloColor",
@@ -4915,7 +4971,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "textHaloWidth",
@@ -4937,7 +4994,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "textHaloBlur",
@@ -4959,7 +5017,8 @@
             "feature",
             "feature-state"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "textTranslate",
@@ -4981,7 +5040,8 @@
           "parameters": [
             "zoom"
           ]
-        }
+        },
+        "transition": true
       },
       {
         "name": "textTranslateAnchor",

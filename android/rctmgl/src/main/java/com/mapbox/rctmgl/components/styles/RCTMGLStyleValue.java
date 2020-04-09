@@ -198,6 +198,15 @@ public class RCTMGLStyleValue {
         if (config.hasKey("enablePlacementTransitions")) {
             enablePlacementTransitions = config.getMap("enablePlacementTransitions").getBoolean("value");
         }
-        return new TransitionOptions(config.getMap("duration").getInt("value"), config.getMap("delay").getInt("value"), enablePlacementTransitions);
+        int duration = 300;
+        int delay = 0;
+        if (config.hasKey("duration") && ReadableType.Map.equals(config.getType("duration"))) {
+            duration = config.getMap("duration").getInt("value");
+        }
+        if (config.hasKey("delay") && ReadableType.Map.equals(config.getType("delay"))) {
+            duration = config.getMap("delay").getInt("value");
+        }
+
+        return new TransitionOptions(duration, delay, enablePlacementTransitions);
     }
 }

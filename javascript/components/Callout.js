@@ -58,7 +58,7 @@ class Callout extends React.PureComponent {
     /**
      * String that get's displayed in the default callout.
      */
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
 
     /**
      * Style property for the Animated.View wrapper, apply animations to this

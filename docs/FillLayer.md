@@ -88,6 +88,26 @@ The opacity of the entire fill layer. In contrast to the `fillColor`, this value
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`fillOpacityTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillOpacity propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -109,6 +129,26 @@ The color of the filled part of this layer. This color can be specified as `rgba
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`fillColorTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillColor propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -128,6 +168,26 @@ The outline color of the fill. Matches the value of `fillColor` if unspecified.
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`fillOutlineColorTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillOutlineColor propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -149,6 +209,26 @@ The geometry's offset. Values are [x, y] where negatives indicate left and up, r
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`fillTranslateTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillTranslate propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -190,4 +270,24 @@ Name of image in sprite to use for drawing image fills. For seamless patterns, i
 #### Expression
 
 Parameters: `zoom, feature`
+___
+
+#### Name
+
+`fillPatternTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s fillPattern propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
