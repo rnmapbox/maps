@@ -95,6 +95,28 @@ ___
 #### Expression
 
 Parameters: `<%- (style.expression.parameters || []).join(', ') %>`
+<%_ } _%>
+<%_ if (style.transition) { _%>
+___
+
+#### Name
+
+`<%- style.name %>Transition`
+
+#### Description
+
+The transition affecting any changes to this layer’s <%- style.name %> propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 <%_ } %>
 <%_ } _%>
 <%_ } _%>

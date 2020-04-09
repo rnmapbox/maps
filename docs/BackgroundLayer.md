@@ -63,6 +63,26 @@ The color with which the background will be drawn.
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`backgroundColorTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s backgroundColor propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -79,6 +99,26 @@ Name of image in sprite to use for drawing an image background. For seamless pat
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`backgroundPatternTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s backgroundPattern propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -103,4 +143,24 @@ The opacity at which the background will be drawn.
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`backgroundOpacityTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s backgroundOpacity propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 

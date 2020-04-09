@@ -54,6 +54,26 @@ Position of the light source relative to lit (extruded) geometries, in [r radial
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`positionTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s position propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -72,6 +92,26 @@ Color tint for lighting extruded geometries.
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`colorTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s color propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -96,4 +136,24 @@ Intensity of lighting (on a scale from 0 to 1). Higher numbers will present as m
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`intensityTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s intensity propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 

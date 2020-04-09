@@ -68,6 +68,26 @@ Radius of influence of one heatmap point in pixels. Increasing the value makes t
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`heatmapRadiusTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s heatmapRadius propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -110,6 +130,26 @@ Similar to `heatmapWeight` but controls the intensity of the heatmap globally. P
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`heatmapIntensityTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s heatmapIntensity propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -152,4 +192,24 @@ The global opacity at which the heatmap layer will be drawn.
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`heatmapOpacityTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s heatmapOpacity propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 

@@ -1098,6 +1098,26 @@ The opacity at which the icon will be drawn.
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`iconOpacityTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s iconOpacity propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -1119,6 +1139,26 @@ The color of the icon. This can only be used with sdf icons.
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`iconColorTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s iconColor propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -1140,6 +1180,26 @@ The color of the icon's halo. Icon halos can only be used with SDF icons.
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`iconHaloColorTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s iconHaloColor propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -1167,6 +1227,26 @@ Distance of halo to the icon outline.
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`iconHaloWidthTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s iconHaloWidth propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -1194,6 +1274,26 @@ Fade out the halo towards the outside.
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`iconHaloBlurTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s iconHaloBlur propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -1218,6 +1318,26 @@ Distance that the icon's anchor is moved from its original placement. Positive v
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`iconTranslateTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s iconTranslate propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -1270,6 +1390,26 @@ The opacity at which the text will be drawn.
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`textOpacityTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s textOpacity propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -1291,6 +1431,26 @@ The color with which the text will be drawn.
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`textColorTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s textColor propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -1312,6 +1472,26 @@ The color of the text's halo, which helps it stand out from backgrounds.
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`textHaloColorTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s textHaloColor propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -1339,6 +1519,26 @@ Distance of halo to the font outline. Max text halo width is 1/4 of the fontSize
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`textHaloWidthTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s textHaloWidth propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -1366,6 +1566,26 @@ The halo's fadeout distance towards the outside.
 #### Expression
 
 Parameters: `zoom, feature, feature-state`
+___
+
+#### Name
+
+`textHaloBlurTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s textHaloBlur propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -1390,6 +1610,26 @@ Distance that the text's anchor is moved from its original placement. Positive v
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`textTranslateTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s textTranslate propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 

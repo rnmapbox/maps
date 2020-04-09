@@ -76,6 +76,7 @@ class DocJSONBuilder {
           disabledBy: prop.doc.disabledBy,
           allowedFunctionTypes: prop.allowedFunctionTypes || [],
           expression: prop.expression,
+          transition: prop.transition,
         };
 
         if (prop.type === 'enum') {

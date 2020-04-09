@@ -126,10 +126,12 @@
     }
     
     NSDictionary *config = (NSDictionary *)expressionJSON;
-    NSNumber *duration = config[@"duration"] != nil ? @([config[@"duration"] floatValue]) : @(0.f);
-    NSNumber *delay = config[@"delay"] != nil ? @([config[@"delay"] floatValue]) : @(0.f);
+    double duration = config[@"duration"] != nil ? [config[@"duration"] doubleValue] : 300.0;
+    double delay = config[@"delay"] != nil ? [config[@"delay"] doubleValue] : 0.0;
+
+    const double millisecondsToSeconds = 1.0/1000.0;
     
-    return MGLTransitionMake([duration floatValue], [delay floatValue]);
+    return MGLTransitionMake(duration * millisecondsToSeconds, delay * millisecondsToSeconds);
 }
 
 - (NSExpression *)getSphericalPosition

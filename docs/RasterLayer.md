@@ -71,6 +71,26 @@ The opacity at which the image will be drawn.
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`rasterOpacityTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s rasterOpacity propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -92,6 +112,26 @@ Rotates hues around the color wheel.
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`rasterHueRotateTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s rasterHueRotate propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -116,6 +156,26 @@ Increase or reduce the brightness of the image. The value is the minimum brightn
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`rasterBrightnessMinTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s rasterBrightnessMin propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -140,6 +200,26 @@ Increase or reduce the brightness of the image. The value is the maximum brightn
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`rasterBrightnessMaxTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s rasterBrightnessMax propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -164,6 +244,26 @@ Increase or reduce the saturation of the image.
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`rasterSaturationTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s rasterSaturation propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
@@ -188,6 +288,26 @@ Increase or reduce the contrast of the image.
 #### Expression
 
 Parameters: `zoom`
+___
+
+#### Name
+
+`rasterContrastTransition`
+
+#### Description
+
+The transition affecting any changes to this layer’s rasterContrast propery.
+
+#### Type
+
+`{ duration, delay }`
+
+#### Units
+`milliseconds`
+
+#### Default Value
+`{duration: 300, delay: 0}`
+
 
 ___
 
