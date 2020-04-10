@@ -64,8 +64,6 @@ public class RCTMGLImagesManager extends AbstractEventEmitter<RCTMGLImages> {
                 boolean hasScale = imageMap.hasKey("scale") && imageMap.getType("scale") == ReadableType.Number;
                 double scale = hasScale ? imageMap.getDouble("scale") : ImageEntry.defaultScale;
                 imageEntry = new ImageEntry(uri, scale);
-
-
             } else {
                 imageEntry = new ImageEntry(map.getString(imageName));
             }
