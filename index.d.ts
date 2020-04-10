@@ -448,7 +448,7 @@ export interface UserLocationProps {
   visible?: boolean;
   onPress?: () => void;
   onUpdate?: (location: MapboxGL.Location) => void;
-  showsUserHeadingIndicator: boolean,
+  showsUserHeadingIndicator?: boolean,
   minDisplacement?: number;
   children?: ReactNode;
 }
