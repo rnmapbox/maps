@@ -76,7 +76,6 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
             mMap.getStyle(new Style.OnStyleLoaded() {
                 @Override
                 public void onStyleLoaded(@NonNull Style style) {
-                    // TODO test this
                     style.removeImage(mChildBitmapId);
                     mChildView = null;
                     mCalloutView = null;
@@ -128,6 +127,9 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop,
             int oldRight, int oldBottom) {
+        if (left == 0 && top == 0 && right == 0 && bottom == 0) {
+            return;
+        }
         if (left != oldLeft || right != oldRight || top != oldTop || bottom != oldBottom) {
             refreshBitmap(v, left, top, right, bottom);
         }
@@ -141,9 +143,11 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
             mCalloutBitmap = bitmap;
             mCalloutBitmapId = bitmapId;
         } else {
-            mChildBitmap = bitmap;
-            mChildBitmapId = bitmapId;
-            updateOptions();
+            if (bitmap != null) {
+                mChildBitmap = bitmap;
+                mChildBitmapId = bitmapId;
+                updateOptions();
+            }
         }
     }
 
@@ -280,10 +284,12 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
     private void makeCallout() {
         float yOffset = -28f;
         if (mChildView != null) {
-            float scale = getResources().getDisplayMetrics().density;
-            int h = (int) mChildBitmap.getHeight() / 2;
-            h = (int) (h / scale);
-            yOffset = (float) h * -1;
+            if (mChildBitmap != null) {
+                float scale = getResources().getDisplayMetrics().density;
+                int h = (int) mChildBitmap.getHeight() / 2;
+                h = (int) (h / scale);
+                yOffset = (float) h * -1;
+            }
         }
         SymbolOptions options = new SymbolOptions()
             .withLatLng(GeoJSONUtils.toLatLng(mCoordinate))
