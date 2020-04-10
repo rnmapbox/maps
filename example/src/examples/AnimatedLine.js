@@ -256,7 +256,7 @@ class AnimatedLine extends React.Component {
         <Bubble>
           <Button
             title="Animate a lot of points"
-            onPress={() => this.startAnimate2()}
+            onPress={() => this.startAnimate()}
           />
           <Button
             title="Animate a few points with abort"

@@ -13,6 +13,10 @@ if (__DEV__) {
   }
 }
 
+const defaultConfig = {
+  useNativeDriver: false,
+};
+
 class AnimatedCoordinatesArray extends AnimatedWithChildren {
   constructor(...args) {
     super();
@@ -52,7 +56,6 @@ class AnimatedCoordinatesArray extends AnimatedWithChildren {
     const {coords, targetCoords} = state;
     const newF = progress;
     const origF = 1.0 - newF;
-    
 
     // common
     const commonLen = Math.min(coords.length, targetCoords.length);
@@ -142,7 +145,11 @@ class AnimatedCoordinatesArray extends AnimatedWithChildren {
     const progressValue = new Animated.Value(0.0);
     return this.animate(
       progressValue,
-      Animated.timing(progressValue, {...config, toValue: 1.0}),
+      Animated.timing(progressValue, {
+        ...defaultConfig,
+        ...config,
+        toValue: 1.0,
+      }),
       config,
     );
   }
@@ -151,7 +158,11 @@ class AnimatedCoordinatesArray extends AnimatedWithChildren {
     const progressValue = new Animated.Value(0.0);
     return this.animate(
       progressValue,
-      Animated.spring(progressValue, {...config, toValue: 1.0}),
+      Animated.spring(progressValue, {
+        ...defaultConfig,
+        ...config,
+        toValue: 1.0,
+      }),
       config,
     );
   }
@@ -160,7 +171,11 @@ class AnimatedCoordinatesArray extends AnimatedWithChildren {
     const progressValue = new Animated.Value(0.0);
     return this.animate(
       progressValue,
-      Animated.decay(this.progressValue, {...config, toValue: 1.0}),
+      Animated.decay(this.progressValue, {
+        ...defaultConfig,
+        ...config,
+        toValue: 1.0,
+      }),
       config,
     );
   }
