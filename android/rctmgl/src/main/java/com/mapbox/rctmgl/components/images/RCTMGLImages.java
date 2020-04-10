@@ -18,17 +18,24 @@ import com.mapbox.rctmgl.events.ImageMissingEvent;
 import com.mapbox.rctmgl.utils.DownloadMapImageTask;
 import com.mapbox.rctmgl.utils.ImageEntry;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class RCTMGLImages extends AbstractMapFeature {
     private static Bitmap mImagePlaceholder;
-    private List<Map.Entry<String, ImageEntry>> mImages;
-    private List<Map.Entry<String, BitmapDrawable>> mNativeImages;
+    Set<String> mCurrentImages;
+    private Map<String, ImageEntry> mImages;
+    private Map<String, BitmapDrawable> mNativeImages;
     private RCTMGLImagesManager mManager;
     private boolean mSendMissingImageEvents = false;
+    private MapboxMap mMap;
 
     protected String mID;
 
@@ -43,17 +50,42 @@ public class RCTMGLImages extends AbstractMapFeature {
     public RCTMGLImages(Context context, RCTMGLImagesManager manager) {
         super(context);
         mManager = manager;
+        mCurrentImages = new HashSet<>();
+        mImages = new HashMap<>();
+        mNativeImages = new HashMap();
         if (mImagePlaceholder == null) {
             mImagePlaceholder = BitmapUtils.getBitmapFromDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.empty_drawable, null));
         }
     }
 
     public void setImages(List<Map.Entry<String, ImageEntry>> images) {
-        mImages = images;
+        Map<String, ImageEntry> newImages = new HashMap<>();
+        for (Map.Entry<String, ImageEntry> entry : images) {
+            String key = entry.getKey();
+            ImageEntry value = entry.getValue();
+            ImageEntry oldValue = mImages.put(key, value);
+            if (oldValue == null) {
+                newImages.put(key, value);
+            }
+        }
+        if (mMap != null && mMap.getStyle() != null) {
+            addImagesToStyle(newImages, mMap);
+        }
     }
 
     public void setNativeImages(List<Map.Entry<String, BitmapDrawable>> nativeImages) {
-        mNativeImages = nativeImages;
+        Map<String, BitmapDrawable> newImages = new HashMap<>();
+        for (Map.Entry<String, BitmapDrawable> entry : nativeImages) {
+            String key = entry.getKey();
+            BitmapDrawable value = entry.getValue();
+            BitmapDrawable oldValue = mNativeImages.put(key, value);
+            if (oldValue == null) {
+                newImages.put(key, value);
+            }
+        }
+        if (mMap != null && mMap.getStyle() != null) {
+            addNativeImagesToStyle(newImages, mMap);
+        }
     }
 
     public void setHasOnImageMissing(boolean value) {
@@ -63,24 +95,28 @@ public class RCTMGLImages extends AbstractMapFeature {
     @Override
     public void removeFromMap(RCTMGLMapView mapView) {
         removeImages(mapView);
+        mMap = null;
+        mNativeImages = new HashMap<>();
+        mImages = new HashMap<>();
+        mCurrentImages = new HashSet<>();
     }
 
     private void removeImages(RCTMGLMapView mapView) {
         mapView.getStyle(new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
-                if (hasImages()) {
-                    for (Map.Entry<String, ImageEntry> image : mImages) {
-                        style.removeImage(image.getKey());
-                    }
+            if (hasImages()) {
+                for (Map.Entry<String, ImageEntry> image : mImages.entrySet()) {
+                    style.removeImage(image.getKey());
                 }
+            }
 
-                if (hasNativeImages()) {
-                    for (Map.Entry<String, BitmapDrawable> image : mNativeImages) {
-                        style.removeImage(image.getKey());
-                    }
+            if (hasNativeImages()) {
+                for (Map.Entry<String, BitmapDrawable> image : mNativeImages.entrySet()) {
+                    style.removeImage(image.getKey());
                 }
-            }});
+            }
+        }});
     }
 
     private boolean hasImages() {
@@ -91,25 +127,40 @@ public class RCTMGLImages extends AbstractMapFeature {
         return mNativeImages != null && mNativeImages.size() > 0;
     }
 
+
+    static <K, V> List<Map.Entry<K,V>> entry(K k, V v) {
+        return Collections.singletonList((Map.Entry<K,V>)new AbstractMap.SimpleEntry<K, V>(k, v));
+    }
+
     public boolean addMissingImageToStyle(@NonNull String id, @NonNull MapboxMap map) {
         if (mNativeImages != null) {
-            for (Map.Entry<String, BitmapDrawable> entry : mNativeImages) {
-                if (entry.getKey().equals(id)) {
-                    addNativeImages(Collections.singletonList(entry), map );
-                    return true;
-                }
+            BitmapDrawable drawable = mNativeImages.get(id);
+            if (drawable != null) {
+                addNativeImages(RCTMGLImages.entry(id, drawable), map);
+                return true;
             }
         }
         if (mImages != null) {
-            for (Map.Entry<String, ImageEntry> entry : mImages) {
-                if (entry.getKey().equals(id)) {
-                    addRemoteImages(Collections.singletonList(entry), map);
-                    return true;
-                }
+            ImageEntry entry = mImages.get(id);
+            if (entry != null) {
+                addRemoteImages(RCTMGLImages.entry(id, entry), map);
+                return true;
             }
         }
 
         return false;
+    }
+
+    public void addImagesToStyle(Map<String, ImageEntry> images, @NonNull MapboxMap map) {
+        if (images != null) {
+            addRemoteImages(new ArrayList<>(images.entrySet()), map);
+        }
+    }
+
+    public void addNativeImagesToStyle(Map<String, BitmapDrawable> images, @NonNull MapboxMap map) {
+        if (images != null) {
+            addNativeImages(new ArrayList<>(images.entrySet()), map);
+        }
     }
 
     public void sendImageMissingEvent(@NonNull String id, @NonNull MapboxMap map) {
@@ -132,8 +183,9 @@ public class RCTMGLImages extends AbstractMapFeature {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
                 MapboxMap map = mapView.getMapboxMap();
-                addNativeImages(mNativeImages, map);
-                addRemoteImages(mImages, map);
+                mMap = map;
+                addNativeImagesToStyle(mNativeImages, map);
+                addImagesToStyle(mImages, map);
                 // super.addToMap(mapView);
             }
         });
@@ -146,6 +198,7 @@ public class RCTMGLImages extends AbstractMapFeature {
         for (Map.Entry<String, BitmapDrawable> imageEntry : imageEntries) {
             if (!hasImage(imageEntry.getKey(), map)) {
                 style.addImage(imageEntry.getKey(), imageEntry.getValue());
+                mCurrentImages.add(imageEntry.getKey());
             }
         }
     }
@@ -167,6 +220,7 @@ public class RCTMGLImages extends AbstractMapFeature {
             if (!hasImage(imageEntry.getKey(), map)) {
                 style.addImage(imageEntry.getKey(), mImagePlaceholder);
                 missingImages.add(imageEntry);
+                mCurrentImages.add(imageEntry.getKey());
             }
         }
 
