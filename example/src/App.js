@@ -33,13 +33,16 @@ const AppStackNavigator = createStackNavigator(
   {
     Home: {screen: Home},
     Demo: {screen: Demo},
+    Group: {screen: Home},
   },
   {
     initialRouteName: 'Home',
 
     navigationOptions: {
-      header: null,
       ...TransitionPresets.SlideFromRightIOS,
+    },
+    defaultNavigationOptions: {
+      header: null,
     }
   },
 );
