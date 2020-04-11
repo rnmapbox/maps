@@ -3,7 +3,7 @@ import {render} from 'react-native-testing-library';
 
 import CircleLayer from '../../javascript/components/CircleLayer';
 
-describe('Callout', () => {
+describe('CircleLayer', () => {
   test('renders correctly with default props', () => {
     const {queryByTestId} = render(<CircleLayer />);
     const circleLayer = queryByTestId('rctmglCircleLayer');
