@@ -74,7 +74,7 @@ public abstract class RCTMGLTileSourceManager<T extends RCTMGLTileSource> extend
     }
 
     @ReactProp(name="tms")
-    public void setTMS(RCTMGLRasterSource source, boolean tms) {
+    public void setTMS(T source, boolean tms) {
         source.setTMS(tms);
     }
 }
