@@ -16,6 +16,7 @@ import FlyTo from '../examples/FlyTo';
 import FitBounds from '../examples/FitBounds';
 import SetUserTrackingModes from '../examples/SetUserTrackingModes';
 import SetUserLocationVerticalAlignment from '../examples/SetUserLocationVerticalAlignment';
+import SetUserLocationRenderMode from '../examples/SetUserLocationRenderMode';
 import ShowRegionDidChange from '../examples/ShowRegionDidChange';
 import CustomIcon from '../examples/CustomIcon';
 import YoYo from '../examples/YoYo';
@@ -136,6 +137,7 @@ const Examples = [
     ),
     new ExampleItem('User Location Updates', UserLocationChange),
     new ExampleItem('Set Displacement', SetDisplacement),
+    new ExampleItem('Set User Location Render Mode', SetUserLocationRenderMode),
   ]),
   new ExampleGroup('Symbol/CircleLayer', [
     new ExampleItem('Custom Icon', CustomIcon),
