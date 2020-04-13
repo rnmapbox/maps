@@ -147,6 +147,7 @@ class Camera extends React.Component {
     animationMode: 'easeTo',
     animationDuration: 2000,
     isUserInteraction: false,
+    setFollowUserMode: 'normal',
   };
 
   static Mode = {

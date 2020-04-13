@@ -2,7 +2,7 @@ package com.mapbox.rctmgl.components.location;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.location.LocationComponent;
@@ -56,4 +56,6 @@ public class RCTMGLNativeUserLocation extends AbstractMapFeature implements OnMa
         }
         locationComponent.setLocationComponentEnabled(mEnabled);
     }
+
+
 }

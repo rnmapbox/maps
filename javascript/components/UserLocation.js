@@ -226,7 +226,7 @@ class UserLocation extends React.Component {
       return <NativeUserLocation {...this.props} />;
     }
 
-    if (!this.coordinates) {
+    if (!coordinates) {
       return null;
     }
 

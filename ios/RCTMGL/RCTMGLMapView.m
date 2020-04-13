@@ -170,7 +170,6 @@ static double const M2PI = M_PI * 2;
         RCTMGLLayer *layer = (RCTMGLLayer*)subview;
         layer.map = nil;
         [_layers removeObject:layer];
-    } else {
     } else if ([subview isKindOfClass:[RCTMGLNativeUserLocation class]]) {
         RCTMGLNativeUserLocation *nativeUserLocation = (RCTMGLNativeUserLocation *)subview;
         nativeUserLocation.map = nil;

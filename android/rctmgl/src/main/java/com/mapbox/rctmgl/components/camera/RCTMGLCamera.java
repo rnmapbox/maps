@@ -19,6 +19,7 @@ import com.mapbox.mapboxsdk.location.LocationComponentOptions;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
 // import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
+import com.mapbox.rctmgl.components.location.LocationComponentManager;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.events.IEvent;
 import com.mapbox.rctmgl.events.MapUserTrackingModeEvent;
@@ -53,7 +54,8 @@ public class RCTMGLCamera extends AbstractMapFeature {
     private CameraStop mCameraStop;
     private CameraUpdateQueue mCameraUpdateQueue;
 
-    private LocationComponent mLocationComponent;
+    // private LocationComponent mLocationComponent;
+    private LocationComponentManager mLocationComponentManager;
 
     private int mUserTrackingMode;
     private int mUserTrackingState = UserTrackingState.POSSIBLE;
@@ -63,7 +65,6 @@ public class RCTMGLCamera extends AbstractMapFeature {
 
     private LocationManager mLocationManager;
     private UserLocation mUserLocation;
-    private boolean mShowUserLocation = false;
 
     private Point mCenterCoordinate;
 
@@ -86,12 +87,12 @@ public class RCTMGLCamera extends AbstractMapFeature {
     private LocationManager.OnUserLocationChange mLocationChangeListener = new LocationManager.OnUserLocationChange() {
         @Override
         public void onLocationChange(Location nextLocation) {
-            if (getMapboxMap() == null || mLocationComponent == null || (!mShowUserLocation && !mFollowUserLocation)) {
+            if (getMapboxMap() == null || mLocationComponentManager == null || !mLocationComponentManager.hasLocationComponent() || (!mFollowUserLocation)) {
                 return;
             }
 
             float distToNextLocation = mUserLocation.getDistance(nextLocation);
-            mLocationComponent.forceLocationUpdate(nextLocation); // FMTODO - use builtin location tracking.
+            mLocationComponentManager.forceLocationUpdate(nextLocation);
             mUserLocation.setCurrentLocation(nextLocation);
 
             if (mUserTrackingState == UserTrackingState.POSSIBLE || distToNextLocation > 0.0f) {
@@ -141,7 +142,7 @@ public class RCTMGLCamera extends AbstractMapFeature {
             updateCamera();
         }
 
-        if (mShowUserLocation || mFollowUserLocation) {
+        if (mFollowUserLocation) {
             enableLocation();
         }
     }
@@ -214,7 +215,7 @@ public class RCTMGLCamera extends AbstractMapFeature {
     }
 
     private void updateUserLocation(boolean isAnimated) {
-        if ((!mShowUserLocation && !mFollowUserLocation) || mUserLocation.getTrackingMode() == UserTrackingMode.NONE) {
+        if ((!mFollowUserLocation) || mUserLocation.getTrackingMode() == UserTrackingMode.NONE) {
             return;
         }
 
@@ -376,7 +377,14 @@ public class RCTMGLCamera extends AbstractMapFeature {
     }
 
     private void updateLocationLayer(@NonNull Style style) {
-        if (mLocationComponent == null) {
+        if (mLocationComponentManager == null) {
+            mLocationComponentManager = mMapView.getLocationComponentManager();
+        }
+
+        mLocationComponentManager.update(style);
+
+        /*
+        if (mLocationComponent == null ) {
             MapboxMap mapboxMap = getMapboxMap();
             mLocationComponent = mapboxMap.getLocationComponent();
 
@@ -401,12 +409,51 @@ public class RCTMGLCamera extends AbstractMapFeature {
             mLocationComponent.activateLocationComponent(locationComponentActivationOptions);
             mLocationComponent.setLocationEngine(mLocationManager.getEngine());
         }
-        int userLayerMode = UserTrackingMode.getMapLayerMode(mUserLocation.getTrackingMode(), mShowUserLocation);
-        mLocationComponent.setLocationComponentEnabled(mFollowUserLocation || mShowUserLocation);
+        */
+        // int userLayerMode = UserTrackingMode.getMapLayerMode(mUserLocation.getTrackingMode(), mShowUserLocation);
 
+        if (mFollowUserLocation) {
+            mLocationComponentManager.setCameraMode(UserTrackingMode.getCameraMode(mUserTrackingMode));
+        }
+        mLocationComponentManager.setFollowUserLocation(mFollowUserLocation);
+
+                /*
         if (userLayerMode != -1) {
             mLocationComponent.setRenderMode(userLayerMode);
-        }
+        } *
+
+                 */
+
+                if (mFollowUserLocation) {
+                    mLocationComponentManager.setCameraMode(UserTrackingMode.getCameraMode(mUserTrackingMode));
+                    mLocationComponentManager.addOnCameraTrackingChangedListener(new OnCameraTrackingChangedListener() {
+                            @Override public void onCameraTrackingChanged(int currentMode) {
+                                int userTrackingMode = UserTrackingMode.NONE;
+                                switch (currentMode) {
+                                    case CameraMode.NONE:
+                                        userTrackingMode = UserTrackingMode.NONE;
+                                        break;
+                                    case CameraMode.TRACKING:
+                                        userTrackingMode = UserTrackingMode.FOLLOW;
+                                        break;
+                                    case CameraMode.TRACKING_COMPASS:
+                                        userTrackingMode = UserTrackingMode.FollowWithHeading;
+                                        break;
+                                    case CameraMode.TRACKING_GPS:
+                                        userTrackingMode = UserTrackingMode.FollowWithCourse;
+                                        break;
+                                    default:
+                                        userTrackingMode = UserTrackingMode.NONE;
+                                }
+                                updateUserTrackingMode(userTrackingMode);
+                            }
+                            @Override public void onCameraTrackingDismissed() {
+                            }
+                    });
+                } else {
+                    mLocationComponentManager.setCameraMode(CameraMode.NONE);
+                }
+                /*
         if (mFollowUserLocation) {
             if (!mShowUserLocation) {
                 mLocationComponent.setRenderMode(RenderMode.GPS);
@@ -441,7 +488,7 @@ public class RCTMGLCamera extends AbstractMapFeature {
             );
         } else {
             mLocationComponent.setCameraMode(CameraMode.NONE);
-        }
+        } */
     }
 
     public void setMinZoomLevel(double zoomLevel) {
@@ -500,7 +547,6 @@ public class RCTMGLCamera extends AbstractMapFeature {
                 if (oldTrackingMode == UserTrackingMode.NONE) {
                     mUserTrackingState = UserTrackingState.POSSIBLE;
                 }
-                mShowUserLocation = false;
                 break;
 
         }

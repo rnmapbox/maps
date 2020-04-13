@@ -56,6 +56,7 @@ import com.mapbox.rctmgl.components.annotation.MarkerView;
 import com.mapbox.rctmgl.components.annotation.MarkerViewManager;
 import com.mapbox.rctmgl.components.camera.RCTMGLCamera;
 import com.mapbox.rctmgl.components.images.RCTMGLImages;
+import com.mapbox.rctmgl.components.location.LocationComponentManager;
 import com.mapbox.rctmgl.components.location.RCTMGLNativeUserLocation;
 import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeTracker;
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
@@ -142,6 +143,8 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     private ViewGroup mOffscreenAnnotationViewContainer = null;
 
     private boolean mAnnotationClicked = false;
+
+    private LocationComponentManager mLocationComponentManager = null;
 
     public RCTMGLMapView(Context context, RCTMGLMapViewManager manager, MapboxMapOptions options) {
         super(context, options);
@@ -1359,4 +1362,10 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         return markerViewManager;
     }
 
+    public LocationComponentManager getLocationComponentManager() {
+        if (mLocationComponentManager == null) {
+            mLocationComponentManager = new LocationComponentManager(this, mContext);
+        }
+        return mLocationComponentManager;
+    }
 }
