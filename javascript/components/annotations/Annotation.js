@@ -3,7 +3,6 @@ import {Easing} from 'react-native';
 import PropTypes from 'prop-types';
 
 import SymbolLayer from '../SymbolLayer';
-
 import Animated from '../../utils/animated/Animated';
 import AnimatedMapPoint from '../../utils/animated/AnimatedPoint';
 
@@ -90,7 +89,7 @@ class Annotation extends React.Component {
 
   get symbolStyle() {
     if (!this.props.icon) {
-      return;
+      return undefined;
     }
     return Object.assign({}, this.props.style, {
       iconImage: this.props.icon,

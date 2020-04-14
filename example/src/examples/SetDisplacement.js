@@ -24,7 +24,7 @@ class SetDisplacement extends React.Component {
     MapboxGL.locationManager.stop();
   }
 
-  onDisplacementChange = index => {
+  onDisplacementChange = (index) => {
     this.setState({minDisplacement: DISPLACEMENT[index]});
   };
 

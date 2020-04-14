@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
 import headingIcon from '../../assets/heading.png';
 
@@ -11,7 +11,7 @@ const style = {
   iconPitchAlignment: 'map',
 };
 
-const HeadingIndicator = heading => (
+const HeadingIndicator = (heading) => (
   <SymbolLayer
     key="mapboxUserLocationHeadingIndicator"
     id="mapboxUserLocationHeadingIndicator"

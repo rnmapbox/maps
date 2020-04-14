@@ -50,17 +50,11 @@ class SnapshotManager {
    * @param  {SnapshotOptions}  options Snapshot options for create a static image of the base map
    * @return {Promise}
    */
-  takeSnap(options = {}) {
+  async takeSnap(options = {}) {
     const snapshotOptions = new SnapshotOptions(options);
 
-    return new Promise(async (resolve, reject) => {
-      try {
-        const uri = await MapboxGLSnapshotManger.takeSnap(snapshotOptions);
-        resolve(uri);
-      } catch (e) {
-        reject(e);
-      }
-    });
+    const uri = await MapboxGLSnapshotManger.takeSnap(snapshotOptions);
+    return uri;
   }
 }
 

@@ -16,7 +16,7 @@ class SetUserLocationVerticalAlignment extends React.Component {
     super(props);
 
     this._alignmentOptions = Object.keys(MapboxGL.UserLocationVerticalAlignment)
-      .map(key => {
+      .map((key) => {
         return {
           label: key,
           data: MapboxGL.UserLocationVerticalAlignment[key],

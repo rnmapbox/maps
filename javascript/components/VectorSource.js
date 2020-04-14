@@ -9,7 +9,6 @@ import {
   isAndroid,
 } from '../utils';
 import {getFilter} from '../utils/filterUtils';
-
 import {copyPropertiesAsDeprecated} from '../utils/deprecation';
 
 import AbstractSource from './AbstractSource';
@@ -71,7 +70,7 @@ class VectorSource extends NativeBridgeComponent(AbstractSource) {
     /**
      * Source press listener, gets called when a user presses one of the children layers only
      * if that layer has a higher z-index than another source layers
-     * 
+     *
      * @param {Object} event
      * @param {Object[]} event.features - the geojson features that have hit by the press (might be multiple)
      * @param {Object} event.coordinates - the coordinates of the click
@@ -140,19 +139,18 @@ class VectorSource extends NativeBridgeComponent(AbstractSource) {
     newEvent = copyPropertiesAsDeprecated(
       event,
       newEvent,
-      key => {
+      (key) => {
         console.warn(
           `event.${key} is deprecated on VectorSource#onPress, please use event.features`,
         );
       },
       {
-        nativeEvent: origNativeEvent => ({
+        nativeEvent: (origNativeEvent) => ({
           ...origNativeEvent,
           payload: features[0],
         }),
       },
     );
-    console.log("+++ newEvent.features", newEvent.features);
     this.props.onPress(newEvent);
   }
 
@@ -169,7 +167,7 @@ class VectorSource extends NativeBridgeComponent(AbstractSource) {
       hasPressListener: isFunction(this.props.onPress),
       onMapboxVectorSourcePress: this.onPress.bind(this),
       onPress: undefined,
-      ref: nativeRef => this._setNativeRef(nativeRef),
+      ref: (nativeRef) => this._setNativeRef(nativeRef),
       onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
     };
     return (

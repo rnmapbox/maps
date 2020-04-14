@@ -82,7 +82,10 @@ class CreateOfflineRegion extends React.Component {
     const options = {
       name: this.state.name,
       styleURL: MapboxGL.StyleURL.Street,
-      bounds: [[bounds[0], bounds[1]], [bounds[2], bounds[3]]],
+      bounds: [
+        [bounds[0], bounds[1]],
+        [bounds[2], bounds[3]],
+      ],
       minZoom: 10,
       maxZoom: 20,
     };
@@ -142,7 +145,7 @@ class CreateOfflineRegion extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          ref={c => (this._map = c)}
+          ref={(c) => (this._map = c)}
           onPress={this.onPress}
           onDidFinishLoadingMap={this.onDidFinishLoadingStyle}
           style={sheet.matchParent}>

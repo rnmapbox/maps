@@ -9,7 +9,7 @@ import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import TabBarPage from './common/TabBarPage';
 import Bubble from './common/Bubble';
 
-const isValidCoordinate = geometry => {
+const isValidCoordinate = (geometry) => {
   if (!geometry) {
     return false;
   }
@@ -102,10 +102,10 @@ class ShowRegionDidChange extends React.Component {
     const {geometry, properties} = this.state.regionFeature;
 
     const neCoord = properties.visibleBounds[0]
-      .map(n => n.toPrecision(6))
+      .map((n) => n.toPrecision(6))
       .join(', ');
     const swCoord = properties.visibleBounds[1]
-      .map(n => n.toPrecision(6))
+      .map((n) => n.toPrecision(6))
       .join(', ');
 
     return (
@@ -133,7 +133,7 @@ class ShowRegionDidChange extends React.Component {
         options={this._tabOptions}
         onOptionPress={this.onOptionPress}>
         <MapboxGL.MapView
-          ref={c => (this.map = c)}
+          ref={(c) => (this.map = c)}
           style={sheet.matchParent}
           onRegionWillChange={this.onRegionWillChange}
           onRegionIsChanging={this.onRegionIsChanging}

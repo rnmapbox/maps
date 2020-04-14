@@ -5,6 +5,7 @@ import {
   StyleSheet,
   findNodeHandle,
   UIManager,
+  Platform,
 } from 'react-native';
 
 import {toJSONString, isFunction, viewPropTypes} from '../utils';
@@ -131,7 +132,7 @@ class PointAnnotation extends React.PureComponent {
 
   _getCoordinate() {
     if (!this.props.coordinate) {
-      return;
+      return undefined;
     }
     return toJSONString(makePoint(this.props.coordinate));
   }

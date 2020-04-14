@@ -48,7 +48,7 @@ class LocationManager {
   }
 
   removeListener(listener) {
-    this._listeners = this._listeners.filter(l => l !== listener);
+    this._listeners = this._listeners.filter((l) => l !== listener);
   }
 
   removeAllListeners() {
@@ -88,7 +88,7 @@ class LocationManager {
   onUpdate(location) {
     this._lastKnownLocation = location;
 
-    this._listeners.forEach(l => l(location));
+    this._listeners.forEach((l) => l(location));
   }
 }
 

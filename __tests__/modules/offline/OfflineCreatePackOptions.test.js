@@ -6,7 +6,10 @@ describe('OfflineCreatePackOptions', () => {
   const options = {
     name: 'test',
     styleURL: 'mapbox://fake-style-url',
-    bounds: [[0, 1], [2, 3]],
+    bounds: [
+      [0, 1],
+      [2, 3],
+    ],
     minZoom: 1,
     maxZoom: 22,
     metadata: {

@@ -9,9 +9,15 @@ import TabBarPage from './common/TabBarPage';
 class FitBounds extends React.Component {
   static propTypes = {...BaseExamplePropTypes};
 
-  houseBounds = [[-74.135379, 40.795909], [-74.135449, 40.795578]];
+  houseBounds = [
+    [-74.135379, 40.795909],
+    [-74.135449, 40.795578],
+  ];
 
-  townBounds = [[-74.12641, 40.797968], [-74.143727, 40.772177]];
+  townBounds = [
+    [-74.12641, 40.797968],
+    [-74.143727, 40.772177],
+  ];
 
   constructor(props) {
     super(props);

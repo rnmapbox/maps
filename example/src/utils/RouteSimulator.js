@@ -1,5 +1,4 @@
 import {Animated} from 'react-native';
-import MapboxGL from '@react-native-mapbox-gl/maps';
 import along from '@turf/along';
 import findDistance from '@turf/distance';
 import {point} from '@turf/helpers';
@@ -79,7 +78,7 @@ class RouteSimulator {
       this._currentDistance += this._speed;
 
       // interpolate between previous to current distance
-      const listener = step => {
+      const listener = (step) => {
         const currentPosition = this._polyline.coordinateFromStart(step.value);
         this.emit(currentPosition);
       };

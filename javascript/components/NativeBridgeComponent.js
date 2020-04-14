@@ -2,7 +2,7 @@ import {runNativeCommand, isAndroid} from '../utils';
 
 let callbackIncrement = 0;
 
-const NativeBridgeComponent = B =>
+const NativeBridgeComponent = (B) =>
   class extends B {
     constructor(props, nativeModuleName) {
       super(props);
@@ -34,7 +34,7 @@ const NativeBridgeComponent = B =>
     }
 
     async _runPendingNativeCommands(nativeRef) {
-      if (nativeRef)
+      if (nativeRef) {
         while (this._preRefMapMethodQueue.length > 0) {
           const item = this._preRefMapMethodQueue.pop();
 
@@ -47,11 +47,12 @@ const NativeBridgeComponent = B =>
             item.resolver(res);
           }
         }
+      }
     }
 
     _runNativeCommand(methodName, nativeRef, args = []) {
       if (!nativeRef) {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           this._preRefMapMethodQueue.push({
             method: {name: methodName, args},
             resolver: resolve,
@@ -60,7 +61,7 @@ const NativeBridgeComponent = B =>
       }
 
       if (isAndroid()) {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           callbackIncrement += 1;
           const callbackID = `${methodName}_${callbackIncrement}`;
           this._addAddAndroidCallback(callbackID, resolve);

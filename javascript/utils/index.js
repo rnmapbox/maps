@@ -83,7 +83,9 @@ export function runNativeCommand(module, name, nativeRef, args = []) {
 }
 
 export function cloneReactChildrenWithProps(children, propsToAdd = {}) {
-  if (!children) return null;
+  if (!children) {
+    return null;
+  }
 
   let foundChildren = null;
 
@@ -93,8 +95,8 @@ export function cloneReactChildrenWithProps(children, propsToAdd = {}) {
     foundChildren = children;
   }
 
-  const filteredChildren = foundChildren.filter(child => !!child); // filter out falsy children, since some can be null
-  return React.Children.map(filteredChildren, child =>
+  const filteredChildren = foundChildren.filter((child) => !!child); // filter out falsy children, since some can be null
+  return React.Children.map(filteredChildren, (child) =>
     React.cloneElement(child, propsToAdd),
   );
 }

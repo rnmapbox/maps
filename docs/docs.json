@@ -1863,7 +1863,7 @@
         "required": false,
         "type": "object",
         "default": "none",
-        "description": "Specifies the external images in key-value pairs required for the shape source.\nKeys are names - see iconImage expressions, values can be either urls-s objects \nwith format {uri: 'http://...'}` or `require('image.png')` or `import 'image.png'`"
+        "description": "Specifies the external images in key-value pairs required for the shape source.\nKeys are names - see iconImage expressions, values can be either urls-s objects\nwith format {uri: 'http://...'}` or `require('image.png')` or `import 'image.png'`"
       },
       {
         "name": "nativeAssetImages",

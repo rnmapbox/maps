@@ -17,7 +17,7 @@ class ShowMap extends React.Component {
     super(props);
 
     this._mapOptions = Object.keys(MapboxGL.StyleURL)
-      .map(key => {
+      .map((key) => {
         return {
           label: key,
           data: MapboxGL.StyleURL[key],

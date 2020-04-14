@@ -49,7 +49,6 @@ const features = {
   ],
 };
 
-
 class BugReportExample extends React.Component {
   state = {
     radius: 20,

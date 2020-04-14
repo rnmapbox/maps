@@ -17,9 +17,8 @@ class SetUserTrackingModes extends React.Component {
   constructor(props) {
     super(props);
 
-    // eslint-disable-next-line fp/no-mutating-methods
     this._trackingOptions = Object.keys(MapboxGL.UserTrackingModes)
-      .map(key => {
+      .map((key) => {
         return {
           label: key,
           data: MapboxGL.UserTrackingModes[key],

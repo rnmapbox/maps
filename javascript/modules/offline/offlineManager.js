@@ -114,7 +114,7 @@ class OfflineManager {
   async getPacks() {
     await this._initialize();
     return Object.keys(this._offlinePacks).map(
-      name => this._offlinePacks[name],
+      (name) => this._offlinePacks[name],
     );
   }
 
@@ -252,27 +252,20 @@ class OfflineManager {
     }
   }
 
-  _initialize() {
-    return new Promise(async (resolve, reject) => {
-      if (this._hasInitialized) {
-        return resolve(true);
-      }
+  async _initialize() {
+    if (this._hasInitialized) {
+      return true;
+    }
 
-      try {
-        const nativeOfflinePacks = await MapboxGLOfflineManager.getPacks();
+    const nativeOfflinePacks = await MapboxGLOfflineManager.getPacks();
 
-        for (const nativeOfflinePack of nativeOfflinePacks) {
-          const offlinePack = new OfflinePack(nativeOfflinePack);
-          this._offlinePacks[offlinePack.name] = offlinePack;
-        }
-      } catch (e) {
-        reject(e);
-        return;
-      }
+    for (const nativeOfflinePack of nativeOfflinePacks) {
+      const offlinePack = new OfflinePack(nativeOfflinePack);
+      this._offlinePacks[offlinePack.name] = offlinePack;
+    }
 
-      this._hasInitialized = true;
-      return resolve(true);
-    });
+    this._hasInitialized = true;
+    return true;
   }
 
   _onProgress(e) {

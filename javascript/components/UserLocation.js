@@ -47,7 +47,9 @@ export const normalIcon = (showsUserHeadingIndicator, heading) => [
     aboveLayerID="mapboxUserLocationWhiteCircle"
     style={layerStyles.normal.foreground}
   />,
-  ...(showsUserHeadingIndicator && heading !== null ? [HeadingIndicator(heading)] : []),
+  ...(showsUserHeadingIndicator && heading !== null
+    ? [HeadingIndicator(heading)]
+    : []),
 ];
 
 class UserLocation extends React.Component {

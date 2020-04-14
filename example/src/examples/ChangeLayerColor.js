@@ -21,9 +21,7 @@ class ChangeLayerColor extends React.Component {
   };
 
   onPress = () => {
-    const fillColor = `#${Math.random()
-      .toString(16)
-      .substr(-6)}`;
+    const fillColor = `#${Math.random().toString(16).substr(-6)}`;
     this.setState({fillColor});
   };
 
@@ -32,7 +30,7 @@ class ChangeLayerColor extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          ref={c => (this._map = c)}
+          ref={(c) => (this._map = c)}
           onPress={this.onPress}
           style={{flex: 1}}>
           <MapboxGL.Camera defaultSettings={defaultCamera} />
