@@ -17,6 +17,7 @@ import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 public class RCTMGLNativeUserLocation extends AbstractMapFeature implements OnMapReadyCallback, Style.OnStyleLoaded {
     private boolean mEnabled = true;
     private MapboxMap mMap;
+    private RCTMGLMapView mMapView;
 
     public RCTMGLNativeUserLocation(Context context) {
         super(context);
@@ -25,6 +26,7 @@ public class RCTMGLNativeUserLocation extends AbstractMapFeature implements OnMa
     @Override
     public void addToMap(RCTMGLMapView mapView) {
         mEnabled = true;
+        mMapView = mapView;
         mapView.getMapAsync(this);
     }
 
@@ -45,6 +47,10 @@ public class RCTMGLNativeUserLocation extends AbstractMapFeature implements OnMa
     @Override
     public void onStyleLoaded(@NonNull Style style) {
         Context context = getContext();
+
+        LocationComponentManager locationComponent = mMapView.getLocationComponentManager();
+        locationComponent.showUserLocation(mEnabled);
+/*
         if (!PermissionsManager.areLocationPermissionsGranted(context)) {
             return;
         }
@@ -55,6 +61,7 @@ public class RCTMGLNativeUserLocation extends AbstractMapFeature implements OnMa
             locationComponent.setRenderMode(RenderMode.NORMAL);
         }
         locationComponent.setLocationComponentEnabled(mEnabled);
+ */
     }
 
 

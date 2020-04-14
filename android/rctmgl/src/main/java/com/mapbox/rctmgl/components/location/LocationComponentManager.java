@@ -32,10 +32,7 @@ public class LocationComponentManager {
     private LocationComponent mLocationComponent = null;
     private Context mContext = null;
 
-
-
         // state
-    private boolean mLocationComponentShown = false;
     private @CameraMode.Mode int mCameraMode = CameraMode.NONE;
 
 
@@ -48,20 +45,11 @@ public class LocationComponentManager {
     }
 
     private boolean mShowUserLocation = false;
+
+
     private boolean mFollowUserLocation = false;
 
     private boolean mShowingUserLocation = false;
-
-/*
-    public void setCameraMode(@CameraMode.Mode int cameraMode) {
-        mCameraMode = cameraMode;
-    }
-
-    public void setLocationComponentShown(boolean showLocationComponent) {
-        mLocationComponentShown = showLocationComponent;
-    }
-
- */
 
     // TODO revise refactored from Camera
 
@@ -85,9 +73,17 @@ public class LocationComponentManager {
     private void stateChanged() {
         mLocationComponent.setLocationComponentEnabled((mFollowUserLocation || mShowUserLocation));
 
+        if (mShowingUserLocation != mShowUserLocation) {
+            updateShowUserLocation(mShowUserLocation);
+        }
+
         if (mFollowUserLocation) {
             if (!mShowUserLocation) {
                 mLocationComponent.setRenderMode(RenderMode.GPS);
+            } else {
+                //mLocationComponent.setRenderMode(RenderMode.NORMAL); // circle
+                mLocationComponent.setRenderMode(RenderMode.COMPASS); // circle with small triangle
+                // mLocationComponent.setRenderMode(RenderMode.GPS); // big arrow
             }
             mLocationComponent.onStart();
         } else {
@@ -124,6 +120,10 @@ public class LocationComponentManager {
             mShowingUserLocation = displayUserLocation;
         }
 
+        updateShowUserLocation(displayUserLocation);
+    }
+
+    private void updateShowUserLocation(boolean displayUserLocation) {
         if (mShowingUserLocation != displayUserLocation) {
             mLocationComponent.applyStyle(options(displayUserLocation));
             mShowingUserLocation = displayUserLocation;
