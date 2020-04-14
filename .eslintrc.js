@@ -1,6 +1,6 @@
 module.exports = {
   parser: "babel-eslint",
-  plugins: ["react", "react-native", "prettier", "fp", "flowtype"],
+  plugins: ["react", "react-native", "prettier", "fp", "flowtype", "import"],
   env: {
     jest: true
   },
@@ -13,9 +13,10 @@ module.exports = {
         extensions: [".js", ".jsx"]
       }
     },
+    "import/ignore": ["react-native"],
     react: {
       pragma: "React",
-      version: "16.6.1",
+      version: "16.11.0",
       flowVersion: "0.87"
     },
     parserOptions: {
@@ -40,9 +41,9 @@ module.exports = {
   extends: [
     "eslint:recommended",
     "plugin:react/recommended",
-    "airbnb-base",
     "prettier",
-    "plugin:flowtype/recommended"
+    "plugin:flowtype/recommended",
+    "@react-native-community",
   ],
   rules: {
     "react/no-deprecated": "warn",
@@ -87,6 +88,6 @@ module.exports = {
         bracketSpacing: false
       }
     ],
-    "fp/no-mutating-methods": "warn"
+    "fp/no-mutating-methods": "warn",
   }
 };

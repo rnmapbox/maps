@@ -43,7 +43,7 @@ const AppStackNavigator = createStackNavigator(
     },
     defaultNavigationOptions: {
       headerShown: false,
-    }
+    },
   },
 );
 const AppContainer = createAppContainer(AppStackNavigator);

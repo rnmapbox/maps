@@ -48,7 +48,7 @@ class SetHeading extends React.Component {
         options={this._bearingOptions}
         onOptionPress={this.onHeadingChange}>
         <MapboxGL.MapView
-          ref={ref => (this.map = ref)}
+          ref={(ref) => (this.map = ref)}
           style={sheet.matchParent}>
           <MapboxGL.Camera {...this.state} followUserLocation />
           <MapboxGL.UserLocation />

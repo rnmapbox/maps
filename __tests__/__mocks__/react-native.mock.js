@@ -4,7 +4,7 @@ jest.mock('react-native/Libraries/Image/resolveAssetSource', () => {
 
 jest.mock('NativeEventEmitter', () => {
   function MockEventEmitter() {}
-  MockEventEmitter.prototype.addListener = function() {};
-  MockEventEmitter.prototype.removeListener = function() {};
+  MockEventEmitter.prototype.addListener = function () {};
+  MockEventEmitter.prototype.removeListener = function () {};
   return MockEventEmitter;
 });

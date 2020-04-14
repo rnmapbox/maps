@@ -205,7 +205,7 @@ function ExampleGroupComponent({items, navigation, showBack}) {
         <FlatList
           style={styles.exampleList}
           data={items}
-          keyExtractor={item => item.label}
+          keyExtractor={(item) => item.label}
           renderItem={renderItem}
         />
       </View>

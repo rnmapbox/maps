@@ -68,7 +68,7 @@ class TabBarPage extends React.Component {
       containerBorderRadius: 0,
       onPress: this.onOptionPress,
       selectedIndex: this.state.currentIndex,
-      buttons: this.props.options.map(o => o.label),
+      buttons: this.props.options.map((o) => o.label),
       containerStyle: styles.buttonGroup,
     };
 

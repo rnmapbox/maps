@@ -61,9 +61,7 @@ class UserLocationChange extends React.Component {
   render() {
     return (
       <Page {...this.props}>
-        <MapboxGL.MapView
-          style={sheet.matchParent}
-        >
+        <MapboxGL.MapView style={sheet.matchParent}>
           <MapboxGL.UserLocation
             visible={true}
             onUpdate={this.onUserLocationUpdate}

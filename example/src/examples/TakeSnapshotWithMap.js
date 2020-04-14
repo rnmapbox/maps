@@ -47,7 +47,7 @@ class TakeSnapshotWithMap extends React.Component {
     return (
       <Page {...this.props}>
         <View style={{flex: 1}}>
-          <MapboxGL.MapView ref={ref => (this.map = ref)} style={{flex: 0.5}}>
+          <MapboxGL.MapView ref={(ref) => (this.map = ref)} style={{flex: 0.5}}>
             <MapboxGL.Camera
               zoomLevel={16}
               pitch={45}

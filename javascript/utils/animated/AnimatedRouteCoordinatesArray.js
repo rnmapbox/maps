@@ -1,4 +1,9 @@
-import {lineString, point, convertDistance as convertDistanceFn, convertLength as convertLengthFn} from '@turf/helpers';
+import {
+  lineString,
+  point,
+  convertDistance as convertDistanceFn,
+  convertLength as convertLengthFn,
+} from '@turf/helpers';
 import distance from '@turf/distance';
 import nearestPointOnLine from '@turf/nearest-point-on-line';
 import length from '@turf/length';
@@ -8,7 +13,6 @@ import AnimatedCoordinatesArray from './AnimatedCoordinatesArray';
 const convertLength = convertLengthFn || convertDistanceFn;
 
 export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesArray {
-
   /**
    * Calculate initial state
    *
@@ -16,14 +20,17 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
    * @returns {object} - the state object
    */
   onInitialState(coordinatesArray) {
-    return { fullRoute: coordinatesArray.map(coord => [coord[0], coord[1]]), end: { from: 0 } };
+    return {
+      fullRoute: coordinatesArray.map((coord) => [coord[0], coord[1]]),
+      end: {from: 0},
+    };
   }
 
   /**
    * Calculate value from state.
-   *  
-   * @param {object} state - either state from initialState and/or from calculate 
-   * @returns {object}  
+   *
+   * @param {object} state - either state from initialState and/or from calculate
+   * @returns {object}
    */
   onGetValue(state) {
     return state.actRoute || state.fullRoute;
@@ -31,7 +38,7 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
 
   /**
    * Calculates state based on startingState and progress, returns a new state
-   * 
+   *
    * @param {object} state - state object from initialState and/or from calculate
    * @param {number} progress - value between 0 and 1
    * @returns {object} next state
@@ -53,13 +60,13 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
       i -= 1;
     }
     if (actsum <= currentEnd) {
-      let actRoute = [...fullRoute.slice(0, i + 1)];
+      const actRoute = [...fullRoute.slice(0, i + 1)];
       return {fullRoute, end: {...end, current: currentEnd}, actRoute};
     }
     const r = (currentEnd - prevsum) / (actsum - prevsum);
     const or = 1.0 - r;
 
-    let actRoute = [
+    const actRoute = [
       ...fullRoute.slice(0, i + 1),
       [
         fullRoute[i][0] * r + fullRoute[i + 1][0] * or,
@@ -79,11 +86,13 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
   onStart(state, toValue) {
     const {fullRoute, end} = state;
     let toDist;
-    if (! toValue.end) {
-      console.error("RouteCoordinatesArray: toValue should have end with either along or point");
+    if (!toValue.end) {
+      console.error(
+        'RouteCoordinatesArray: toValue should have end with either along or point',
+      );
     }
     if (toValue.end.along != null) {
-      let {units} = toValue;
+      const {units} = toValue;
       const ls = lineString(fullRoute);
       toDist = convertLength(toValue.end.along, units);
       toDist = length(ls) - toDist;
@@ -105,13 +114,13 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
       );
     }
 
-    let result = {
+    const result = {
       fullRoute,
       end: {
         ...end,
-        from: (end.current != null) ? end.current : end.from,
+        from: end.current != null ? end.current : end.from,
         to: toDist,
-      }
+      },
     };
     return result;
   }

@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable fp/no-mutating-methods */
 import React from 'react';
 import {Animated, View, Text, StyleSheet, Image} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
@@ -43,7 +41,7 @@ class AnnotationWithRemoteImage extends React.Component {
         id={id}
         coordinate={coordinate}
         title={title}
-        ref={ref => (this.annotationRef = ref)}>
+        ref={(ref) => (this.annotationRef = ref)}>
         <View style={styles.annotationContainer}>
           <Image
             source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}}
@@ -128,15 +126,15 @@ class ShowPointAnnotation extends React.Component {
         animationStyle.transform = [{scale: this._scaleOut}];
       }
 
-      if ((i % 2) === 1) {
+      if (i % 2 === 1) {
         items.push(
           <AnnotationWithRemoteImage
             key={id}
             id={id}
             coordinate={coordinate}
-            title={title} />
+            title={title}
+          />,
         );
-
       } else {
         items.push(
           <MapboxGL.PointAnnotation
@@ -158,7 +156,7 @@ class ShowPointAnnotation extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          ref={c => (this._map = c)}
+          ref={(c) => (this._map = c)}
           onPress={this.onPress}
           onDidFinishLoadingMap={this.onDidFinishLoadingMap}
           style={sheet.matchParent}>

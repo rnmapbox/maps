@@ -139,13 +139,13 @@ class ShapeSource extends AbstractSource {
     newEvent = copyPropertiesAsDeprecated(
       event,
       newEvent,
-      key => {
+      (key) => {
         console.warn(
           `event.${key} is deprecated on ShapeSource#onPress, please use event.features`,
         );
       },
       {
-        nativeEvent: origNativeEvent => ({
+        nativeEvent: (origNativeEvent) => ({
           ...origNativeEvent,
           payload: features[0],
         }),

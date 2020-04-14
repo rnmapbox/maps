@@ -8,7 +8,6 @@ import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
 import Bubble from './common/Bubble';
 
-// eslint-disable-next-line react/prop-types
 const AnnotationContent = ({title}) => (
   <View style={{borderColor: 'black', borderWidth: 1.0, width: 60}}>
     <Text>{title}</Text>
@@ -42,7 +41,10 @@ class ShowMarkerView extends React.Component {
 
     this.state = {
       backgroundColor: 'blue',
-      coordinates: [[-73.99155, 40.73581], [-73.99155, 40.73681]],
+      coordinates: [
+        [-73.99155, 40.73581],
+        [-73.99155, 40.73681],
+      ],
     };
   }
 
@@ -50,7 +52,7 @@ class ShowMarkerView extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          ref={c => (this._map = c)}
+          ref={(c) => (this._map = c)}
           onPress={this.onPress}
           onDidFinishLoadingMap={this.onDidFinishLoadingMap}
           style={sheet.matchParent}>

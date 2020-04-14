@@ -301,34 +301,48 @@ class MapView extends NativeBridgeComponent(React.Component) {
     if (isAndroid()) {
       const events = [];
 
-      if (props.onRegionWillChange)
+      if (props.onRegionWillChange) {
         events.push(MapboxGL.EventTypes.RegionWillChange);
-      if (props.onRegionIsChanging)
+      }
+      if (props.onRegionIsChanging) {
         events.push(MapboxGL.EventTypes.RegionIsChanging);
-      if (props.onRegionDidChange)
+      }
+      if (props.onRegionDidChange) {
         events.push(MapboxGL.EventTypes.RegionDidChange);
-      if (props.onUserLocationUpdate)
+      }
+      if (props.onUserLocationUpdate) {
         events.push(MapboxGL.EventTypes.UserLocationUpdated);
-      if (props.onWillStartLoadingMap)
+      }
+      if (props.onWillStartLoadingMap) {
         events.push(MapboxGL.EventTypes.WillStartLoadingMap);
-      if (props.onDidFinishLoadingMap)
+      }
+      if (props.onDidFinishLoadingMap) {
         events.push(MapboxGL.EventTypes.DidFinishLoadingMap);
-      if (props.onDidFailLoadingMap)
+      }
+      if (props.onDidFailLoadingMap) {
         events.push(MapboxGL.EventTypes.DidFailLoadingMap);
-      if (props.onWillStartRenderingFrame)
+      }
+      if (props.onWillStartRenderingFrame) {
         events.push(MapboxGL.EventTypes.WillStartRenderingFrame);
-      if (props.onDidFinishRenderingFrame)
+      }
+      if (props.onDidFinishRenderingFrame) {
         events.push(MapboxGL.EventTypes.DidFinishRenderingFrame);
-      if (props.onDidFinishRenderingFrameFully)
+      }
+      if (props.onDidFinishRenderingFrameFully) {
         events.push(MapboxGL.EventTypes.DidFinishRenderingFrameFully);
-      if (props.onWillStartRenderingMap)
+      }
+      if (props.onWillStartRenderingMap) {
         events.push(MapboxGL.EventTypes.WillStartRenderingMap);
-      if (props.onDidFinishRenderingMap)
+      }
+      if (props.onDidFinishRenderingMap) {
         events.push(MapboxGL.EventTypes.DidFinishRenderingMap);
-      if (props.onDidFinishRenderingMapFully)
+      }
+      if (props.onDidFinishRenderingMapFully) {
         events.push(MapboxGL.EventTypes.DidFinishRenderingMapFully);
-      if (props.onDidFinishLoadingStyle)
+      }
+      if (props.onDidFinishLoadingStyle) {
         events.push(MapboxGL.EventTypes.DidFinishLoadingStyle);
+      }
 
       this._runNativeCommand(
         'setHandledMapChangedEvents',
@@ -716,7 +730,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
     };
 
     const callbacks = {
-      ref: nativeRef => this._setNativeRef(nativeRef),
+      ref: (nativeRef) => this._setNativeRef(nativeRef),
       onPress: this._onPress,
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
