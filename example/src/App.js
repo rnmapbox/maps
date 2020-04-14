@@ -42,7 +42,7 @@ const AppStackNavigator = createStackNavigator(
       ...TransitionPresets.SlideFromRightIOS,
     },
     defaultNavigationOptions: {
-      header: null,
+      headerShown: false,
     }
   },
 );
