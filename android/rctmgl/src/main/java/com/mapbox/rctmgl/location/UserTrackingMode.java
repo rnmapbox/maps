@@ -72,8 +72,9 @@ public class UserTrackingMode {
             case "compass":
                 return UserTrackingMode.FollowWithHeading;
             default:
-                throw new AssertionError("NONE")
-                return UserTrackingMode.NONE;
+                return UserTrackingMode.FOLLOW;
+                //throw new AssertionError("NONE");
+                //return UserTrackingMode.NONE;
                 //return UserTrackingMode.FOLLOW;
         }
     }

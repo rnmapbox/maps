@@ -92,11 +92,11 @@ public class RCTMGLCamera extends AbstractMapFeature {
             }
 
             float distToNextLocation = mUserLocation.getDistance(nextLocation);
-            mLocationComponentManager.forceLocationUpdate(nextLocation);
+            // mLocationComponentManager.forceLocationUpdate(nextLocation);
             mUserLocation.setCurrentLocation(nextLocation);
 
             if (mUserTrackingState == UserTrackingState.POSSIBLE || distToNextLocation > 0.0f) {
-                updateUserLocation(true);
+                // updateUserLocation(true);
             }
             sendUserLocationUpdateEvent(nextLocation);
         }
@@ -552,8 +552,8 @@ public class RCTMGLCamera extends AbstractMapFeature {
         }
 
         if (getMapboxMap() != null) {
-            updateUserLocation
-                    (false);
+            //updateUserLocation
+                   // (false);
             updateLocationLayer(getMapboxMap().getStyle());
         }
     }
