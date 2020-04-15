@@ -13,6 +13,6 @@
 @interface RCTMGLNativeUserLocation : UIView
 
 @property (nonatomic, strong) RCTMGLMapView *map;
-
+@property (nonatomic) BOOL iosShowsUserHeadingIndicator;
 
 @end

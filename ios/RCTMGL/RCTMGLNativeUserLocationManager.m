@@ -4,6 +4,8 @@
 @implementation RCTMGLNativeUserLocationManager
 
 RCT_EXPORT_MODULE(RCTMGLNativeUserLocation)
+RCT_EXPORT_VIEW_PROPERTY(iosShowsUserHeadingIndicator, BOOL)
+
 
 #pragma - View Properties
 
