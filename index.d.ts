@@ -681,7 +681,7 @@ export interface PointAnnotationProps {
 }
 
 export interface CalloutProps extends Omit<ViewProps, 'style'> {
-  title: string;
+  title?: string;
   style?: StyleProp<WithExpression<ViewStyle>>;
   containerStyle?: StyleProp<WithExpression<ViewStyle>>;
   contentStyle?: StyleProp<WithExpression<ViewStyle>>;
