@@ -764,7 +764,11 @@ class MapView extends NativeBridgeComponent(React.Component) {
     }
 
     return (
-      <View onLayout={this._onLayout} style={this.props.style}>
+      <View
+        onLayout={this._onLayout}
+        style={this.props.style}
+        testID={this.props.testID}
+      >
         {mapView}
       </View>
     );
