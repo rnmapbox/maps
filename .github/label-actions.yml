@@ -5,11 +5,11 @@ issues:
     # our issue template is not respected - required fields are missing
     "Needs: Issue Template":
       comment: >
-        :wave: @{issue-author}, please respect our issue template - required fields are missing.
+        :wave: @{issue-author}, please respect our issue template<br>required fields are missing.
       # Close the issue
       close: true
     "question":
       comment: >
-        :thinking: @{issue-author}, this is rather a question than an issue - please use our gitter chat or stackoverflow for this.
+        :thinking: @{issue-author}, this is rather a question than an issue<br>please use our [gitter](https://gitter.im/react-native-mapbox-gl/Lobby) or stackoverflow for this.
       # Close the issue
       close: true
