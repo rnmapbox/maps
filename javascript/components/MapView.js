@@ -121,6 +121,12 @@ class MapView extends NativeBridgeComponent(React.Component) {
     ]),
 
     /**
+     * MapView's tintColor - ios only
+     * @platform ios
+     */
+    tintColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+
+    /**
      * Enable/Disable the logo on the map.
      */
     logoEnabled: PropTypes.bool,

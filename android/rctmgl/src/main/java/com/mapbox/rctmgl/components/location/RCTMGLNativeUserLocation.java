@@ -47,22 +47,16 @@ public class RCTMGLNativeUserLocation extends AbstractMapFeature implements OnMa
     @Override
     public void onStyleLoaded(@NonNull Style style) {
         Context context = getContext();
-
-        LocationComponentManager locationComponent = mMapView.getLocationComponentManager();
-        locationComponent.showUserLocation(mEnabled);
-/*
         if (!PermissionsManager.areLocationPermissionsGranted(context)) {
             return;
         }
 
-        LocationComponent locationComponent = mMap.getLocationComponent();
-        if (mEnabled) {
-            locationComponent.activateLocationComponent(LocationComponentActivationOptions.builder(context, style).build());
-            locationComponent.setRenderMode(RenderMode.NORMAL);
-        }
-        locationComponent.setLocationComponentEnabled(mEnabled);
- */
+        LocationComponentManager locationComponent = mMapView.getLocationComponentManager();
+        locationComponent.showUserLocation(mEnabled);
     }
 
-
+    public void setRenderMode(@RenderMode.Mode int renderMode) {
+        LocationComponentManager locationComponent = mMapView.getLocationComponentManager();
+        locationComponent.setRenderMode(renderMode);
+    }
 }

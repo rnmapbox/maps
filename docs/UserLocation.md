@@ -6,6 +6,8 @@
 | Prop | Type | Default | Required | Description |
 | ---- | :--: | :-----: | :------: | :----------: |
 | animated | `bool` | `true` | `false` | Whether location icon is animated between updates |
+| renderMode | `enum` | `'normal'` | `false` | FIX ME NO DESCRIPTION |
+| androidRenderMode | `enum` | `none` | `false` | native/android only render mode<br/><br/> - normal: just a circle<br/> - compass: triangle with heading<br/> - gps: large arrow<br/><br/>@platform android |
 | visible | `bool` | `true` | `false` | Whether location icon is visible |
 | onPress | `func` | `none` | `false` | Callback that is triggered on location icon press |
 | onUpdate | `func` | `none` | `false` | Callback that is triggered on location update |

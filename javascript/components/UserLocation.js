@@ -63,6 +63,17 @@ class UserLocation extends React.Component {
     renderMode: PropTypes.oneOf(['normal', 'native']),
 
     /**
+     * native/android only render mode
+     *
+     *  - normal: just a circle
+     *  - compass: triangle with heading
+     *  - gps: large arrow
+     *
+     * @platform android
+     */
+    androidRenderMode: PropTypes.oneOf(['normal', 'compass', 'gps']),
+
+    /**
      * Whether location icon is visible
      */
     visible: PropTypes.bool,
@@ -130,7 +141,9 @@ class UserLocation extends React.Component {
       running: this.needsLocationManagerRunning(),
     });
 
-    if (this.renderMode === UserLocation.RenderMode.Native) return;
+    if (this.renderMode === UserLocation.RenderMode.Native) {
+      return;
+    }
 
     locationManager.setMinDisplacement(this.props.minDisplacement);
   }
@@ -157,10 +170,11 @@ class UserLocation extends React.Component {
    * Notice, that locationManager will start automatically when
    * either `onUpdate` or `visible` are set
    *
+   * @async
    * @param {Object} running - Object with key `running` and `boolean` value
-   * @return {void}
+   * @return {Promise<void>}
    */
-  setLocationManager = async ({running}) => {
+  async setLocationManager({running}) {
     if (this.locationManagerRunning !== running) {
       this.locationManagerRunning = running;
       if (running) {
@@ -172,7 +186,7 @@ class UserLocation extends React.Component {
         locationManager.stop();
       }
     }
-  };
+  }
 
   /**
    *
@@ -181,8 +195,10 @@ class UserLocation extends React.Component {
    * @return {boolean}
    */
   needsLocationManagerRunning() {
-    if (this.props.renderMode === UserLocation.RenderMode.Native) return false;
-    return !!this.props.onUpdate || this.props.visible;  
+    if (this.props.renderMode === UserLocation.RenderMode.Native) {
+      return false;
+    }
+    return !!this.props.onUpdate || this.props.visible;
   }
 
   _onLocationUpdate(location) {
@@ -208,6 +224,16 @@ class UserLocation extends React.Component {
     }
   }
 
+  _renderNative() {
+    const {androidRenderMode, showsUserHeadingIndicator} = this.props;
+
+    let props = {
+      androidRenderMode,
+      iosShowsUserHeadingIndicator: showsUserHeadingIndicator,
+    };
+    return <NativeUserLocation {...props} />;
+  }
+
   render() {
     const {heading, coordinates} = this.state;
     const {
@@ -223,7 +249,7 @@ class UserLocation extends React.Component {
     }
 
     if (this.props.renderMode === UserLocation.RenderMode.Native) {
-      return <NativeUserLocation {...this.props} />;
+      return this._renderNative();
     }
 
     if (!coordinates) {

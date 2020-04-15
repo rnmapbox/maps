@@ -679,7 +679,7 @@
         "name": "followUserMode",
         "required": false,
         "type": "enum",
-        "default": "none",
+        "default": "'normal'",
         "description": "The mode used to track the user location on the map. One of; \"normal\", \"compass\", \"course\". Each mode string is also available as a member on the `MapboxGL.UserTrackingModes` object. `Follow` (normal), `FollowWithHeading` (compass), `FollowWithCourse` (course). NOTE: `followUserLocation` must be set to `true` for any of the modes to take effect. [Example](../example/src/examples/SetUserTrackingModes.js)"
       },
       {
@@ -2801,6 +2801,13 @@
         "description": "Adds attribution offset, e.g. `{top: 8, left: 8}` will put attribution button in top-left corner of the map"
       },
       {
+        "name": "tintColor",
+        "required": false,
+        "type": "union",
+        "default": "none",
+        "description": "MapView's tintColor - ios only\n@platform ios"
+      },
+      {
         "name": "logoEnabled",
         "required": false,
         "type": "bool",
@@ -3044,6 +3051,28 @@
       "../utils"
     ],
     "name": "MarkerView"
+  },
+  "NativeUserLocation": {
+    "description": "",
+    "displayName": "NativeUserLocation",
+    "methods": [],
+    "props": [
+      {
+        "name": "androidRenderMode",
+        "required": false,
+        "type": "enum",
+        "default": "none",
+        "description": "Android render mode.\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@platform android"
+      },
+      {
+        "name": "iosShowsUserHeadingIndicator",
+        "required": false,
+        "type": "bool",
+        "default": "none",
+        "description": "iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.\n\n@platform ios"
+      }
+    ],
+    "name": "NativeUserLocation"
   },
   "PointAnnotation": {
     "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate. Consider using ShapeSource and SymbolLayer instead, if you have many points and you have static images, they'll offer much better performance.\nIf you need interctive views please use MarkerView, as with PointAnnotation on android child views are rendered onto a bitmap for better performance.",
@@ -5079,7 +5108,7 @@
     "methods": [
       {
         "name": "setLocationManager",
-        "docblock": "Whether to start or stop the locationManager\n\nNotice, that locationManager will start automatically when\neither `onUpdate` or `visible` are set\n\n@param {Object} running - Object with key `running` and `boolean` value\n@return {void}",
+        "docblock": "Whether to start or stop the locationManager\n\nNotice, that locationManager will start automatically when\neither `onUpdate` or `visible` are set\n\n@async\n@param {Object} running - Object with key `running` and `boolean` value\n@return {Promise<void>}",
         "modifiers": [
           "async"
         ],
@@ -5091,7 +5120,12 @@
         "returns": {
           "description": null,
           "type": {
-            "name": "void"
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "void"
+              }
+            ]
           }
         },
         "description": "Whether to start or stop the locationManager\n\nNotice, that locationManager will start automatically when\neither `onUpdate` or `visible` are set",
@@ -5119,6 +5153,20 @@
         "type": "bool",
         "default": "true",
         "description": "Whether location icon is animated between updates"
+      },
+      {
+        "name": "renderMode",
+        "required": false,
+        "type": "enum",
+        "default": "'normal'",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "androidRenderMode",
+        "required": false,
+        "type": "enum",
+        "default": "none",
+        "description": "native/android only render mode\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@platform android"
       },
       {
         "name": "visible",
