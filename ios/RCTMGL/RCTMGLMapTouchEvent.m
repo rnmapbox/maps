@@ -18,6 +18,7 @@
     MGLPointFeature *feature = [[MGLPointFeature alloc] init];
     feature.coordinate = _coordinate;
     feature.attributes = @{
+                            @"id": _id,
                             @"screenPointX": [NSNumber numberWithDouble:_screenPoint.x],
                             @"screenPointY":[NSNumber numberWithDouble:_screenPoint.y]
                          };
@@ -38,6 +39,7 @@
 {
     RCTMGLMapTouchEvent *event = [[RCTMGLMapTouchEvent alloc] init];
     event.type = RCT_MAPBOX_ANNOTATION_TAP;
+    event.id = pointAnnotation.id;
     event.coordinate = pointAnnotation.coordinate;
     event.screenPoint = [pointAnnotation.superview convertPoint:pointAnnotation.frame.origin toView:nil];
     return event;
