@@ -13,6 +13,7 @@
 
 @interface RCTMGLMapTouchEvent : RCTMGLEvent
 
+@property (nonatomic, copy) NSString *id;
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 @property (nonatomic, assign) CGPoint screenPoint;
 
