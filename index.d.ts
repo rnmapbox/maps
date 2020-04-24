@@ -1,17 +1,13 @@
-declare module 'react-native-mapbox-gl__maps';
+declare module "react-native-mapbox-gl__maps";
 
-import {
-  Component,
-  ReactNode,
-  SyntheticEvent,
-} from 'react';
+import { Component, ReactNode, SyntheticEvent } from "react";
 
 import {
   ViewProps,
   ViewStyle,
   StyleProp,
   ImageSourcePropType,
-} from 'react-native';
+} from "react-native";
 
 import {
   Geometry,
@@ -25,7 +21,7 @@ import {
   BBox,
   Id,
   FeatureCollection,
-} from '@turf/helpers';
+} from "@turf/helpers";
 
 // prettier-ignore
 type ExpressionName =
@@ -66,18 +62,18 @@ type ExpressionField = any;
 export type Expression = [ExpressionName, ...ExpressionField[]];
 
 type Anchor =
-  | 'center'
-  | 'left'
-  | 'right'
-  | 'top'
-  | 'bottom'
-  | 'top-left'
-  | 'top-right'
-  | 'bottom-left'
-  | 'bottom-right';
-type Visibility = 'visible' | 'none';
-type Alignment = 'map' | 'viewport';
-type AutoAlignment = Alignment | 'auto';
+  | "center"
+  | "left"
+  | "right"
+  | "top"
+  | "bottom"
+  | "top-left"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-right";
+type Visibility = "visible" | "none";
+type Alignment = "map" | "viewport";
+type AutoAlignment = Alignment | "auto";
 
 type NamedStyles<T> = {
   [P in keyof T]:
@@ -94,7 +90,7 @@ export type MapboxGLEvent<
   T extends string,
   P = GeoJSON.Feature,
   V = Element
-> = SyntheticEvent<V, {type: T; payload: P}>;
+> = SyntheticEvent<V, { type: T; payload: P }>;
 
 export type OnPressEvent = {
   features: Array<GeoJSON.Feature>;
@@ -105,7 +101,7 @@ export type OnPressEvent = {
   point: {
     x: number;
     y: number;
-  }
+  };
 };
 
 declare namespace MapboxGL {
@@ -133,15 +129,52 @@ declare namespace MapboxGL {
   }
 
   namespace geoUtils {
-    function makePoint<P = Properties>(coordinates: Position, properties?: P, options?: PositionsOptions): Feature<Point, P>;
-    function makeLineString<P = Properties>(coordinates: Position[], properties?: P, options?: PositionsOptions): Feature<LineString, P>;
-    function makeLatLngBounds<G = Geometry, P = Properties>(northEastCoordinates: Position[], southWestCoordinates: Position[]): FeatureCollection<G, P>;
-    function makeFeature<G = Geometry, P = Properties>(geometry: G, properties?: P): Feature<G, P>;
-    function makeFeatureCollection<G = Geometry, P = Properties>(features: Array<FeatureCollection<G, P>>, options?: PositionsOptions): FeatureCollection<G, P>;
-    function addToFeatureCollection<G = Geometry, P = Properties>(newFeatureCollection: Array<FeatureCollection<G, P>>, newFeature: Feature<G, P>): FeatureCollection<G, P>;
-    function calculateDistance(origin: Coord, dest: Coord, options?: UnitsOptions): number;
-    function pointAlongLine(newLineString: Feature<LineString> | LineString, distAlong: number, options?: UnitsOptions): Feature<Point>;
-    function getOrCalculateVisibleRegion(coord: { lon: number; lat: number }, zoomLevel: number, width: number, height: number, nativeRegion: { properties: { visibleBounds: number[] }; visibleBounds: number[] }): void;
+    function makePoint<P = Properties>(
+      coordinates: Position,
+      properties?: P,
+      options?: PositionsOptions,
+    ): Feature<Point, P>;
+    function makeLineString<P = Properties>(
+      coordinates: Position[],
+      properties?: P,
+      options?: PositionsOptions,
+    ): Feature<LineString, P>;
+    function makeLatLngBounds<G = Geometry, P = Properties>(
+      northEastCoordinates: Position[],
+      southWestCoordinates: Position[],
+    ): FeatureCollection<G, P>;
+    function makeFeature<G = Geometry, P = Properties>(
+      geometry: G,
+      properties?: P,
+    ): Feature<G, P>;
+    function makeFeatureCollection<G = Geometry, P = Properties>(
+      features: Array<FeatureCollection<G, P>>,
+      options?: PositionsOptions,
+    ): FeatureCollection<G, P>;
+    function addToFeatureCollection<G = Geometry, P = Properties>(
+      newFeatureCollection: Array<FeatureCollection<G, P>>,
+      newFeature: Feature<G, P>,
+    ): FeatureCollection<G, P>;
+    function calculateDistance(
+      origin: Coord,
+      dest: Coord,
+      options?: UnitsOptions,
+    ): number;
+    function pointAlongLine(
+      newLineString: Feature<LineString> | LineString,
+      distAlong: number,
+      options?: UnitsOptions,
+    ): Feature<Point>;
+    function getOrCalculateVisibleRegion(
+      coord: { lon: number; lat: number },
+      zoomLevel: number,
+      width: number,
+      height: number,
+      nativeRegion: {
+        properties: { visibleBounds: number[] };
+        visibleBounds: number[];
+      },
+    ): void;
   }
 
   namespace Animated {
@@ -170,17 +203,21 @@ declare namespace MapboxGL {
       coordinate: GeoJSON.Position,
       filter?: Expression,
       layerIds?: Array<string>,
-    ): Promise<GeoJSON.FeatureCollection?>;
+    ): Promise<?GeoJSON.FeatureCollection>;
     queryRenderedFeaturesInRect(
       coordinate: GeoJSON.Position,
       filter?: Expression,
       layerIds?: Array<string>,
-    ): Promise<GeoJSON.FeatureCollection?>;
+    ): Promise<?GeoJSON.FeatureCollection>;
     takeSnap(writeToDisk?: boolean): Promise<string>;
     getZoom(): Promise<number>;
     getCenter(): Promise<GeoJSON.Position>;
     showAttribution(): void;
-    setSourceVisibility(visible: Boolean, sourceId: string, sourceLayerId?: string): void;
+    setSourceVisibility(
+      visible: Boolean,
+      sourceId: string,
+      sourceLayerId?: string,
+    ): void;
   }
 
   type Padding = number | [number, number] | [number, number, number, number];
@@ -218,16 +255,16 @@ declare namespace MapboxGL {
   class StyleSheet extends Component {
     static create<T extends NamedStyles<T> | NamedStyles<any>>(styles: T): void;
     camera(
-      stops: {[key: number]: string},
+      stops: { [key: number]: string },
       interpolationMode?: InterpolationMode,
     ): void;
     source(
-      stops: {[key: number]: string},
+      stops: { [key: number]: string },
       attributeName: string,
       interpolationMode?: InterpolationMode,
     ): void;
     composite(
-      stops: {[key: number]: string},
+      stops: { [key: number]: string },
       attributeName: string,
       interpolationMode?: InterpolationMode,
     ): void;
@@ -236,6 +273,7 @@ declare namespace MapboxGL {
   }
 
   class PointAnnotation extends Component<PointAnnotationProps> {}
+  class MarkerView extends Component<MarkerViewProps> {}
   class Callout extends Component<CalloutProps> {}
 
   /**
@@ -266,7 +304,7 @@ declare namespace MapboxGL {
     createPack(
       options: OfflineCreatePackOptions,
       progressListener?: (pack: OfflinePack, status: object) => void,
-      errorListener?: (pack: OfflinePack, err: object) => void
+      errorListener?: (pack: OfflinePack, err: object) => void,
     ): void;
     deletePack(name: string): Promise<void>;
     getPacks(): Promise<Array<OfflinePack>>;
@@ -277,7 +315,7 @@ declare namespace MapboxGL {
     subscribe(
       packName: string,
       progressListener: (pack: OfflinePack, status: object) => void,
-      errorListener?: (pack: OfflinePack, err: object) => void
+      errorListener?: (pack: OfflinePack, err: object) => void,
     ): void;
     unsubscribe(packName: string): void;
   }
@@ -287,23 +325,23 @@ declare namespace MapboxGL {
   }
 
   interface OfflinePack {
-    name: string,
+    name: string;
     bounds: [GeoJSON.Position, GeoJSON.Position];
     metadata: any;
-    status: () => Promise<OfflinePackStatus>,
-    resume: () => Promise<void>,
-    pause: () => Promise<void>,
+    status: () => Promise<OfflinePackStatus>;
+    resume: () => Promise<void>;
+    pause: () => Promise<void>;
   }
 
   interface OfflinePackStatus {
-    name: string,
-    state: number,
-    percentage: number,
-    completedResourceCount: number,
-    completedResourceSize: number,
-    completedTileSize: number,
-    completedTileCount: number,
-    requiredResourceCount: number,
+    name: string;
+    state: number;
+    percentage: number;
+    completedResourceCount: number;
+    completedResourceSize: number;
+    completedTileSize: number;
+    completedTileCount: number;
+    requiredResourceCount: number;
   }
 
   /**
@@ -324,14 +362,14 @@ declare namespace MapboxGL {
   }
 
   enum StyleURL {
-    Street = 'mapbox://styles/mapbox/streets-v11',
-    Dark = 'mapbox://styles/mapbox/dark-v10',
-    Light = 'mapbox://styles/mapbox/light-v10',
-    Outdoors = 'mapbox://styles/mapbox/outdoors-v11',
-    Satellite = 'mapbox://styles/mapbox/satellite-v9',
-    SatelliteStreet = 'mapbox://styles/mapbox/satellite-streets-v11',
-    TrafficDay = 'mapbox://styles/mapbox/navigation-preview-day-v4',
-    TrafficNight = 'mapbox://styles/mapbox/navigation-preview-night-v4',
+    Street = "mapbox://styles/mapbox/streets-v11",
+    Dark = "mapbox://styles/mapbox/dark-v10",
+    Light = "mapbox://styles/mapbox/light-v10",
+    Outdoors = "mapbox://styles/mapbox/outdoors-v11",
+    Satellite = "mapbox://styles/mapbox/satellite-v9",
+    SatelliteStreet = "mapbox://styles/mapbox/satellite-streets-v11",
+    TrafficDay = "mapbox://styles/mapbox/navigation-preview-day-v4",
+    TrafficNight = "mapbox://styles/mapbox/navigation-preview-night-v4",
   }
 
   enum StyleSource {
@@ -340,10 +378,10 @@ declare namespace MapboxGL {
 }
 
 export type AttributionPosition =
-  | {top: number; left: number}
-  | {top: number; right: number}
-  | {bottom: number; left: number}
-  | {bottom: number; right: number};
+  | { top: number; left: number }
+  | { top: number; right: number }
+  | { bottom: number; left: number }
+  | { bottom: number; right: number };
 
 export interface RegionPayload {
   zoomLevel: number;
@@ -402,13 +440,13 @@ export interface MapViewProps extends ViewProps {
 
 export interface CameraProps extends CameraSettings, ViewProps {
   animationDuration?: number;
-  animationMode?: 'flyTo' | 'easeTo' | 'moveTo';
+  animationMode?: "flyTo" | "easeTo" | "moveTo";
   defaultSettings?: CameraSettings;
   minZoomLevel?: number;
   maxZoomLevel?: number;
-  maxBounds?: {ne: [number, number]; sw: [number, number]};
+  maxBounds?: { ne: [number, number]; sw: [number, number] };
   followUserLocation?: boolean;
-  followUserMode?: 'normal' | 'compass' | 'course';
+  followUserMode?: "normal" | "compass" | "course";
   followZoomLevel?: number;
   followPitch?: number;
   followHeading?: number;
@@ -416,10 +454,10 @@ export interface CameraProps extends CameraSettings, ViewProps {
   alignment?: number[];
   onUserTrackingModeChange?: (
     event: MapboxGLEvent<
-      'usertrackingmodechange',
+      "usertrackingmodechange",
       {
         followUserLocation: boolean;
-        followUserMode: 'normal' | 'compass' | 'course' | null;
+        followUserMode: "normal" | "compass" | "course" | null;
       }
     >,
   ) => void;
@@ -439,7 +477,7 @@ export interface CameraSettings {
   };
   zoomLevel?: number;
   animationDuration?: number;
-  animationMode?: 'flyTo' | 'easeTo' | 'moveTo';
+  animationMode?: "flyTo" | "easeTo" | "moveTo";
   stops?: CameraSettings[];
 }
 
@@ -448,7 +486,7 @@ export interface UserLocationProps {
   visible?: boolean;
   onPress?: () => void;
   onUpdate?: (location: MapboxGL.Location) => void;
-  showsUserHeadingIndicator?: boolean,
+  showsUserHeadingIndicator?: boolean;
   minDisplacement?: number;
   children?: ReactNode;
 }
@@ -539,8 +577,8 @@ export interface FillLayerStyle {
 }
 
 export interface LineLayerStyle {
-  lineCap?: 'butt' | 'round' | 'square' | Expression;
-  lineJoin?: 'bevel' | 'round' | 'miter' | Expression;
+  lineCap?: "butt" | "round" | "square" | Expression;
+  lineJoin?: "bevel" | "round" | "miter" | Expression;
   lineMiterLimit?: number | Expression;
   lineRoundLimit?: number | Expression;
   visibility?: Visibility | Expression;
@@ -583,7 +621,7 @@ export interface RasterLayerStyle {
 }
 
 export interface SymbolLayerStyle {
-  symbolPlacement?: 'point' | 'line' | Expression;
+  symbolPlacement?: "point" | "line" | Expression;
   symbolSpacing?: number | Expression;
   symbolAvoidEdges?: boolean | Expression;
   iconAllowOverlap?: boolean | Expression;
@@ -591,7 +629,7 @@ export interface SymbolLayerStyle {
   iconOptional?: boolean | Expression;
   iconRotationAlignment?: AutoAlignment | Expression;
   iconSize?: number | Expression;
-  iconTextFit?: 'none' | 'width' | 'height' | 'both' | Expression;
+  iconTextFit?: "none" | "width" | "height" | "both" | Expression;
   iconTextFitPadding?: Array<number> | Expression;
   iconImage?: string | Expression;
   iconRotate?: number | Expression;
@@ -608,13 +646,13 @@ export interface SymbolLayerStyle {
   textMaxWidth?: number | Expression;
   textLineHeight?: number | Expression;
   textLetterSpacing?: number | Expression;
-  textJustify?: 'left' | 'center' | 'right' | Expression;
+  textJustify?: "left" | "center" | "right" | Expression;
   textAnchor?: Anchor | Expression;
   textMaxAngle?: number | Expression;
   textRotate?: number | Expression;
   textPadding?: number | Expression;
   textKeepUpright?: boolean | Expression;
-  textTransform?: 'none' | 'uppercase' | 'lowercase' | Expression;
+  textTransform?: "none" | "uppercase" | "lowercase" | Expression;
   textOffset?: Array<number> | Expression;
   textAllowOverlap?: boolean | Expression;
   textIgnorePlacement?: boolean | Expression;
@@ -665,7 +703,7 @@ export interface Point {
   y: number;
 }
 
-export interface LightProps extends Omit<ViewProps, 'style'> {
+export interface LightProps extends Omit<ViewProps, "style"> {
   style?: LightStyle;
 }
 
@@ -680,7 +718,12 @@ export interface PointAnnotationProps {
   onDeselected?: () => void;
 }
 
-export interface CalloutProps extends Omit<ViewProps, 'style'> {
+export interface MarkerViewProps {
+  coordinates: GeoJSON.Position;
+  anchor?: Point;
+}
+
+export interface CalloutProps extends Omit<ViewProps, "style"> {
   title?: string;
   style?: StyleProp<WithExpression<ViewStyle>>;
   containerStyle?: StyleProp<WithExpression<ViewStyle>>;
@@ -715,7 +758,7 @@ export interface ShapeSourceProps extends ViewProps {
   maxZoomLevel?: number;
   buffer?: number;
   tolerance?: number;
-  images?: {assets?: string[]; [key: string]: ImageSourcePropType};
+  images?: { assets?: string[]; [key: string]: ImageSourcePropType };
   onPress?: (event: OnPressEvent) => void;
   hitbox?: {
     width: number;
@@ -727,7 +770,7 @@ export interface RasterSourceProps extends TileSourceProps {
   tileSize?: number;
 }
 
-export interface LayerBaseProps<T = {}> extends Omit<ViewProps, 'style'> {
+export interface LayerBaseProps<T = {}> extends Omit<ViewProps, "style"> {
   id?: string;
   sourceID?: MapboxGL.StyleSource;
   sourceLayerID?: string;
@@ -772,7 +815,7 @@ export interface HeatmapLayerProps extends LayerBaseProps {
 }
 
 export interface ImagesProps extends ViewProps {
-  images?: {assets?: string[]; [key: string]: ImageSourcePropType};
+  images?: { assets?: string[]; [key: string]: ImageSourcePropType };
 }
 
 export interface ImageSourceProps extends ViewProps {
