@@ -351,8 +351,9 @@ export interface RegionPayload {
   zoomLevel: number;
   heading: number;
   animated: boolean;
-  isUserInteraction: number;
-  visibleRegion: GeoJSON.Position[];
+  isUserInteraction: boolean;
+  visibleBounds: GeoJSON.Position[];
+  pitch: number;
 }
 
 export interface MapViewProps extends ViewProps {
