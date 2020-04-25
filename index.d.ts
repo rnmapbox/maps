@@ -267,9 +267,9 @@ declare namespace MapboxGL {
   class OfflineManager extends Component {
     createPack(
       options: OfflineCreatePackOptions,
-      progressListener?: (pack: OfflinePack, status: object) => void,
-      errorListener?: (pack: OfflinePack, err: object) => void
-    ): void;
+      progressListener?: (pack: OfflinePack, status: OfflineProgressStatus) => void,
+      errorListener?: (pack: OfflinePack, err: OfflineProgressError) => void
+    ): Promise<void>;
     deletePack(name: string): Promise<void>;
     getPacks(): Promise<Array<OfflinePack>>;
     getPack(name: string): Promise<OfflinePack | undefined>;
@@ -286,6 +286,22 @@ declare namespace MapboxGL {
 
   class SnapshotManager {
     static takeSnap(options: SnapshotOptions): Promise<string>;
+  }
+
+  interface OfflineProgressStatus {
+    name: string;
+    state: number;
+    percentage: number;
+    completedResourcesSize: number;
+    completedTileCount: number;
+    completedResourceCount: number;
+    requiredResourceCount: number;
+    completedTileSize: number;
+  }
+
+  interface OfflineProgressError {
+    message: string;
+    name: string;
   }
 
   interface OfflinePack {
