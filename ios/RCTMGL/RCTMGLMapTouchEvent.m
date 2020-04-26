@@ -17,11 +17,18 @@
 {
     MGLPointFeature *feature = [[MGLPointFeature alloc] init];
     feature.coordinate = _coordinate;
-    feature.attributes = @{
-                            @"id": _id,
-                            @"screenPointX": [NSNumber numberWithDouble:_screenPoint.x],
-                            @"screenPointY":[NSNumber numberWithDouble:_screenPoint.y]
-                         };
+    if (_id == nil) {
+        feature.attributes = @{
+           @"screenPointX": [NSNumber numberWithDouble:_screenPoint.x],
+           @"screenPointY":[NSNumber numberWithDouble:_screenPoint.y]
+        };
+    } else {
+        feature.attributes = @{
+           @"id": _id,
+           @"screenPointX": [NSNumber numberWithDouble:_screenPoint.x],
+           @"screenPointY":[NSNumber numberWithDouble:_screenPoint.y]
+        };
+    }
     return [feature geoJSONDictionary];
 }
 
@@ -49,7 +56,6 @@
 {
     RCTMGLMapTouchEvent *event = [[RCTMGLMapTouchEvent alloc] init];
     event.type = eventType;
-    event.id = @"";
     event.coordinate =[mapView convertPoint:point toCoordinateFromView:mapView];
     event.screenPoint = point;
     return event;
