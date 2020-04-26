@@ -17,11 +17,13 @@
 {
     MGLPointFeature *feature = [[MGLPointFeature alloc] init];
     feature.coordinate = _coordinate;
-    feature.attributes = @{
-                            @"id": _id,
-                            @"screenPointX": [NSNumber numberWithDouble:_screenPoint.x],
-                            @"screenPointY":[NSNumber numberWithDouble:_screenPoint.y]
-                         };
+    NSMutableDictionary *attributes = [NSMutableDictionary new];
+    [attributes setValue:[NSNumber numberWithDouble:_screenPoint.x] forKey:@"screenPointX"];
+    [attributes setValue:[NSNumber numberWithDouble:_screenPoint.y] forKey:@"screenPointY"];
+    if (_id) {
+        [attributes setValue:_id forKey:@"id"];
+    }
+    feature.attributes = attributes;
     return [feature geoJSONDictionary];
 }
 
