@@ -49,6 +49,7 @@
 {
     RCTMGLMapTouchEvent *event = [[RCTMGLMapTouchEvent alloc] init];
     event.type = eventType;
+    event.id = @"";
     event.coordinate =[mapView convertPoint:point toCoordinateFromView:mapView];
     event.screenPoint = point;
     return event;
