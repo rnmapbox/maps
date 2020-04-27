@@ -719,7 +719,7 @@ export interface PointAnnotationProps {
 }
 
 export interface MarkerViewProps {
-  coordinates: GeoJSON.Position;
+  coordinate: GeoJSON.Position;
   anchor?: Point;
 }
 
