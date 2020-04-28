@@ -2,9 +2,9 @@ platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 # We ingore warning except for RNMBGL
-inhibit_warning_by_default = true
+INHIBIT_WARNING_BY_DEFAULT = true
 
-if inhibit_warning_by_default
+if INHIBIT_WARNING_BY_DEFAULT
   ORIG_POD = method(:pod)
 
   # Override pods so we default to disbling all warnings
@@ -28,7 +28,7 @@ def add_flipper_pods!
   pod 'FlipperKit/FlipperKitUserDefaultsPlugin', version, :configuration => 'Debug'
   pod 'FlipperKit/FlipperKitReactPlugin', version, :configuration => 'Debug'
 
-  if inhibit_warning_by_default
+  if INHIBIT_WARNING_BY_DEFAULT
       # we only include those to remove warnings
     pod 'Flipper-Folly'
     pod 'Flipper-RSocket'
@@ -46,7 +46,7 @@ def flipper_post_install(installer)
       end
     end
 
-    if inhibit_warning_by_default
+    if INHIBIT_WARNING_BY_DEFAULT
       target.build_configurations.each do |config|
         config.build_settings['IPHONE_OS_DEPLOY_MENT_TARGET'] = '9.0'
       end
