@@ -11,7 +11,6 @@
 #import "RCTMGLShapeSource.h"
 #import "RCTMGLPointAnnotation.h"
 #import "RCTMGLLight.h"
-#import "RCTMGLCamera.h"
 
 @import Mapbox;
 
@@ -23,8 +22,8 @@
 - (void)didChangeUserTrackingMode:(MGLUserTrackingMode)mode animated:(BOOL)animated;
 @end
 
-typedef void (^FoundLayerBlock) (MGLStyleLayer* layer);
-typedef void (^StyleLoadedBlock) (MGLStyle* style);
+typedef void (^FoundLayerBlock) (MGLStyleLayer* __nonnull layer);
+typedef void (^StyleLoadedBlock) (MGLStyle* __nonnull style);
 
 @interface RCTMGLMapView : MGLMapView<RCTInvalidating>
 
@@ -55,7 +54,7 @@ typedef void (^StyleLoadedBlock) (MGLStyle* style);
 @property (nonatomic, assign) CGPoint reactCompassViewMargins;
 
 @property (nonatomic, copy) NSString *reactStyleURL;
-@property (nonatomic, assign) NSInteger *reactPreferredFramesPerSecond;
+@property (nonatomic, assign) NSInteger reactPreferredFramesPerSecond;
 
 @property (nonatomic, assign) MGLCoordinateBounds maxBounds;
 
@@ -81,7 +80,7 @@ typedef void (^StyleLoadedBlock) (MGLStyle* style);
 - (NSString *)takeSnap:(BOOL)writeToDisk;
 - (void)didChangeUserTrackingMode:(MGLUserTrackingMode)mode animated:(BOOL)animated;
 
-- (void)waitForLayerWithID:(nonnull NSString*)layerID then:(void (^)(MGLStyleLayer* layer))foundLayer;
+- (void)waitForLayerWithID:(nonnull NSString*)layerID then:(void (^ _Nonnull)(MGLStyleLayer* _Nonnull layer))foundLayer;
 
 - (void)setSourceVisibility:(BOOL)visiblity sourceId:(nonnull NSString*)sourceId sourceLayerId:(nullable NSString*)sourceLayerId;
 

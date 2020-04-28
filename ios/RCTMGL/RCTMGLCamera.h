@@ -7,10 +7,11 @@
 //
 #import <React/RCTComponent.h>
 #import <UIKit/UIKit.h>
+#import "RCTMGLMapView.h"
 
 @class RCTMGLMapView;
 
-@interface RCTMGLCamera : UIView
+@interface RCTMGLCamera : UIView<RCTMGLMapViewCamera>
 
 @property (nonatomic, strong) NSDictionary<NSString *, id> *stop;
 @property (nonatomic, strong) NSDictionary<NSString *, id> *defaultStop;

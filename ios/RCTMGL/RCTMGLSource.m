@@ -61,7 +61,7 @@ NSString *const DEFAULT_SOURCE_ID = @"composite";
 }
 #pragma clang diagnostic pop
 
-- (void)setMap:(MGLMapView *)map
+- (void)setMap:(RCTMGLMapView *)map
 {
     if (map == nil) {
         [self removeFromMap];

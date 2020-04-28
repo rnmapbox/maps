@@ -51,18 +51,18 @@
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [locationManager requestWhenInUseAuthorization];
-        [locationManager startUpdatingLocation];
-        [locationManager startUpdatingHeading];
-        [locationManager setDistanceFilter:(minDisplacement)];
-        isListening = YES;
+        [self->locationManager requestWhenInUseAuthorization];
+        [self->locationManager startUpdatingLocation];
+        [self->locationManager startUpdatingHeading];
+        [self->locationManager setDistanceFilter:(minDisplacement)];
+        self->isListening = YES;
     });
 }
 
 - (void)setMinDisplacement:(CLLocationDistance)minDisplacement
 {
      dispatch_async(dispatch_get_main_queue(), ^{
-        [locationManager setDistanceFilter:(minDisplacement)];
+        [self->locationManager setDistanceFilter:(minDisplacement)];
     });
 }
 
@@ -73,9 +73,9 @@
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [locationManager stopUpdatingLocation];
-        [locationManager stopUpdatingHeading];
-        isListening = NO;
+        [self->locationManager stopUpdatingLocation];
+        [self->locationManager stopUpdatingHeading];
+        self->isListening = NO;
     });
 }
 
@@ -129,8 +129,8 @@
     __weak RCTMGLLocationManager *weakSelf = self;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        locationManager = [[CLLocationManager alloc] init];
-        locationManager.delegate = weakSelf;
+        self->locationManager = [[CLLocationManager alloc] init];
+        self->locationManager.delegate = weakSelf;
     });
 }
 

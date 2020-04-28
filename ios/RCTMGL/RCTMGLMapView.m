@@ -359,7 +359,7 @@ static double const M2PI = M_PI * 2;
     self.styleURL = [self _getStyleURLFromKey:_reactStyleURL];
 }
 
-- (void)setReactPreferredFramesPerSecond:(NSInteger *)reactPreferredFramesPerSecond
+- (void)setReactPreferredFramesPerSecond:(NSInteger)reactPreferredFramesPerSecond
 {    
     self.preferredFramesPerSecond = reactPreferredFramesPerSecond;
 }

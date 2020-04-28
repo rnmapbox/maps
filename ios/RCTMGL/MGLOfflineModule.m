@@ -146,7 +146,7 @@ RCT_EXPORT_METHOD(getPacks:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseR
         
         if (packs == nil) {
             // packs have not loaded yet
-            [packRequestQueue addObject:resolve];
+            [self->packRequestQueue addObject:resolve];
             return;
         }
 

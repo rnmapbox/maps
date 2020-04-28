@@ -115,7 +115,7 @@ static UIImage * _placeHolderImage;
     return _nativeImages != nil && _nativeImages.count > 0;
 }
 
-+ (NSString *)placeholderImage {
++ (UIImage *)placeholderImage {
     if (_placeHolderImage) return _placeHolderImage;
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(1, 1), NO, 0.0);
     _placeHolderImage = UIGraphicsGetImageFromCurrentImageContext();

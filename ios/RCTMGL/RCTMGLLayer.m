@@ -178,8 +178,8 @@
         if (![self _hasInitialized]) {
             return;
         }
-        [_style insertLayer:_styleLayer aboveLayer:layer];
-        [_map layerAdded:_styleLayer];
+        [self->_style insertLayer:self->_styleLayer aboveLayer:layer];
+        [self->_map layerAdded:self->_styleLayer];
     }];
 }
 
@@ -190,8 +190,8 @@
             return;
         }
         
-        [_style insertLayer:_styleLayer belowLayer:layer];
-        [_map layerAdded:_styleLayer];
+        [self->_style insertLayer:self->_styleLayer belowLayer:layer];
+        [self->_map layerAdded:self->_styleLayer];
     }];
 }
 
@@ -205,8 +205,8 @@
         RCTLogWarn(@"Layer index is greater than number of layers on map. Layer inserted at end of layer stack.");
         index = layers.count - 1;
     }
-    [_style insertLayer:_styleLayer atIndex:index];
-    [_map layerAdded:_styleLayer];
+    [_style insertLayer:self->_styleLayer atIndex:index];
+    [_map layerAdded:self->_styleLayer];
 }
 
 - (void)addImage:(NSString *)url
@@ -216,7 +216,7 @@
     }
     [RCTMGLUtils fetchImage:_bridge url:url scale:1.0 callback:^(NSError *error, UIImage *image) {
         if (image != nil) {
-            [_style setImage:image forName:url];
+            [self->_style setImage:image forName:url];
         }
     }];
 }
