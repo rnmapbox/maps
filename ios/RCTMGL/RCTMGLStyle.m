@@ -61,7 +61,7 @@
         [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
-              [_style setImage:image forName:imageURI];
+              [self->_style setImage:image forName:imageURI];
               [self setFillPattern:layer withReactStyleValue:styleValue];
             });
           }
@@ -143,7 +143,7 @@
         [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
-              [_style setImage:image forName:imageURI];
+              [self->_style setImage:image forName:imageURI];
               [self setLinePattern:layer withReactStyleValue:styleValue];
             });
           }
@@ -207,7 +207,7 @@
         [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
-              [_style setImage:image forName:imageURI];
+              [self->_style setImage:image forName:imageURI];
               [self setIconImage:layer withReactStyleValue:styleValue];
             });
           }
@@ -469,7 +469,7 @@
         [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
-              [_style setImage:image forName:imageURI];
+              [self->_style setImage:image forName:imageURI];
               [self setFillExtrusionPattern:layer withReactStyleValue:styleValue];
             });
           }
@@ -615,7 +615,7 @@
         [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
-              [_style setImage:image forName:imageURI];
+              [self->_style setImage:image forName:imageURI];
               [self setBackgroundPattern:layer withReactStyleValue:styleValue];
             });
           }

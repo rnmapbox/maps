@@ -93,7 +93,7 @@ static double const MS_TO_S = 0.001;
     [RCTMGLImageQueue.sharedInstance addImage:url scale:scale bridge:bridge completionHandler:callback];
 }
 
-+ (void)fetchImages:(RCTBridge *)bridge style:(MGLStyle *)style objects:(NSDictionary<NSString *, NSString *>*)objects forceUpdate:(BOOL)forceUpdate callback:(void (^)())callback
++ (void)fetchImages:(RCTBridge *)bridge style:(MGLStyle *)style objects:(NSDictionary<NSString *, id>*)objects forceUpdate:(BOOL)forceUpdate callback:(void (^)(void))callback
 {
     if (objects == nil) {
         callback();
@@ -109,7 +109,7 @@ static double const MS_TO_S = 0.001;
     __block NSUInteger imagesLeftToLoad = imageNames.count;
     __weak MGLStyle *weakStyle = style;
     
-    void (^imageLoadedBlock)() = ^{
+    void (^imageLoadedBlock)(void) = ^{
         imagesLeftToLoad--;
         
         if (imagesLeftToLoad == 0) {
