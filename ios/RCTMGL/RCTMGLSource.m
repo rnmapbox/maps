@@ -87,7 +87,7 @@ NSString *const DEFAULT_SOURCE_ID = @"composite";
         if (_source != nil) {
             [_map.style addSource:_source];
         } else {
-            RCTLogError(@"Count not find source: %@. Either make sure it's an existing id or provide url/shape or other data required to create that source", _id);
+            RCTLogError(@"Could not create source with id:%@. Make sure url/shape is provided", _id);
         }
     }
     

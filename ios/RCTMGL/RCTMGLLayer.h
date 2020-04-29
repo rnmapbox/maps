@@ -16,34 +16,36 @@
 
 @interface RCTMGLLayer<T> : UIView
 
-@property (nonatomic, weak) RCTBridge *bridge;
+@property (nonatomic, weak, nullable) RCTBridge* bridge;
 
-@property (nonatomic, strong) MGLStyleLayer *styleLayer;
-@property (nonatomic, strong) MGLStyle *style;
-@property (nonatomic, weak) RCTMGLMapView* map;
-@property (nonatomic, strong) NSDictionary *reactStyle;
-@property (nonatomic, strong) NSArray *filter;
+@property (nonatomic, strong, nullable) MGLStyleLayer *styleLayer;
+@property (nonatomic, strong, nullable) MGLStyle *style;
+@property (nonatomic, weak, nullable) RCTMGLMapView* map;
+@property (nonatomic, strong, nullable) NSDictionary *reactStyle;
+@property (nonatomic, strong, nullable) NSArray *filter;
 
-@property (nonatomic, copy) NSString *id;
-@property (nonatomic, copy) NSString *sourceID;
+@property (nonatomic, copy, nullable) NSString *id;
+@property (nonatomic, copy, nullable) NSString *sourceID;
 
-@property (nonatomic, copy) NSString *aboveLayerID;
-@property (nonatomic, copy) NSString *belowLayerID;
-@property (nonatomic, copy) NSNumber *layerIndex;
+@property (nonatomic, copy, nullable) NSString *aboveLayerID;
+@property (nonatomic, copy, nullable) NSString *belowLayerID;
+@property (nonatomic, copy, nullable) NSNumber *layerIndex;
 
-@property (nonatomic, copy) NSNumber *maxZoomLevel;
-@property (nonatomic, copy) NSNumber *minZoomLevel;
+@property (nonatomic, copy, nullable) NSNumber *maxZoomLevel;
+@property (nonatomic, copy, nullable) NSNumber *minZoomLevel;
 
-- (void)addToMap:(RCTMGLMapView*)map style:(MGLStyle*)style;
+- (void)addToMap:(nonnull RCTMGLMapView*)map style:(nonnull MGLStyle*)style;
 - (void)addedToMap;
-- (void)removeFromMap:(MGLStyle*)style;
-- (T)makeLayer:(MGLStyle*)style;
+- (void)removeFromMap:(nonnull MGLStyle*)style;
+- (nullable T)makeLayer:(nonnull MGLStyle*)style;
 - (void)addStyles;
-- (void)insertAbove:(NSString*)layer;
-- (void)insertBelow:(NSString*)layer;
+- (void)insertAbove:(nonnull NSString*)layer;
+- (void)insertBelow:(nonnull NSString*)layer;
 - (void)insertAtIndex:(NSUInteger)index;
 - (void)insertLayer;
 - (void)setZoomBounds;
-- (void)addImage:(NSString*)url;
+//- (void)addImage:(nonnull NSString*)url;
+
+- (nullable MGLSource*)layerWithSourceIDInStyle:(nonnull MGLStyle*) style;
 
 @end
