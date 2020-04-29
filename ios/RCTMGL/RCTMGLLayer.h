@@ -44,7 +44,6 @@
 - (void)insertAtIndex:(NSUInteger)index;
 - (void)insertLayer;
 - (void)setZoomBounds;
-//- (void)addImage:(nonnull NSString*)url;
 
 - (nullable MGLSource*)layerWithSourceIDInStyle:(nonnull MGLStyle*) style;
 
