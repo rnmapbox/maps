@@ -108,6 +108,10 @@
         _styleLayer = existingLayer;
     } else {
         _styleLayer = [self makeLayer:style];
+        if (_styleLayer == nil) {
+            RCTLogError(@"Failed to make layer: %@", _id);
+            return;
+        }
         [self insertLayer: map];
     }
     
@@ -122,7 +126,7 @@
     }
 }
 
-- (MGLStyleLayer*)makeLayer:(MGLStyle*)style
+- (nullable MGLStyleLayer*)makeLayer:(MGLStyle*)style
 {
     @throw [NSException exceptionWithName:NSInternalInconsistencyException
                         reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
