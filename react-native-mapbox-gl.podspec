@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.license     	= "MIT"
   s.platform    	= :ios, "8.0"
 
-  s.dependency 'Mapbox-iOS-SDK', '~> 5.7'
+  s.dependency 'Mapbox-iOS-SDK', '~> 5.8'
   s.dependency 'React'
 
   s.subspec 'DynamicLibrary' do |sp|
@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
     s.default_subspecs= ['DynamicLibrary']
   else
     s.subspec 'StaticLibraryFixer' do |sp|
-      s.dependency '@react-native-mapbox-gl-mapbox-static', '~> 5.7'
+      s.dependency '@react-native-mapbox-gl-mapbox-static', '~> 5.8'
     end
 
     s.default_subspecs= ['DynamicLibrary', 'StaticLibraryFixer']
