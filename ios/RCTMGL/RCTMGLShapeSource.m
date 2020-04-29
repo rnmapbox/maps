@@ -50,7 +50,7 @@ static UIImage * _placeHolderImage;
     [super removeFromMap];
 }
 
-- (MGLSource*)makeSource
+- (nullable MGLSource*)makeSource
 {
     NSDictionary<MGLShapeSourceOption, id> *options = [self _getOptions];
     
@@ -59,8 +59,11 @@ static UIImage * _placeHolderImage;
         return [[MGLShapeSource alloc] initWithIdentifier:self.id shape:shape options:options];
     }
     
-    NSURL *url = [[NSURL alloc] initWithString:_url];
-    return [[MGLShapeSource alloc] initWithIdentifier:self.id URL:url options:options];
+    if (_url != nil) {
+        NSURL *url = [[NSURL alloc] initWithString:_url];
+        return [[MGLShapeSource alloc] initWithIdentifier:self.id URL:url options:options];
+    }
+    return nil;
 }
 
 - (NSDictionary<MGLShapeSourceOption, id>*)_getOptions

@@ -10,7 +10,7 @@
 
 @implementation RCTMGLRasterSource
 
-- (MGLSource*)makeSource
+- (nullable MGLSource*)makeSource
 {
     if (self.url != nil) {
         NSURL *url = [NSURL URLWithString:self.url];

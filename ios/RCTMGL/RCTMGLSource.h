@@ -27,7 +27,7 @@ extern NSString * _Nonnull const DEFAULT_SOURCE_ID;
 
 - (void)addToMap;
 - (void)removeFromMap;
-- (MGLSource*)makeSource;
+- (nullable MGLSource*)makeSource;
 - (NSArray<NSString *> *)getLayerIDs;
 
 + (BOOL)isDefaultSource:(NSString*)sourceID;

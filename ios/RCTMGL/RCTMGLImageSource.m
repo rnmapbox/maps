@@ -21,7 +21,7 @@
     }
 }
 
-- (MGLSource *)makeSource
+- (nullable MGLSource *)makeSource
 {
     NSURL *myURL;
 

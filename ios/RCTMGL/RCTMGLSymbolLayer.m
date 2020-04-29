@@ -91,6 +91,7 @@
 - (MGLSymbolStyleLayer*)makeLayer:(MGLStyle*)style
 {
     MGLSource *source = [style sourceWithIdentifier:self.sourceID];
+    if (source == nil) { return nil; }
     MGLSymbolStyleLayer *layer = [[MGLSymbolStyleLayer alloc] initWithIdentifier:self.id source:source];
     layer.sourceLayerIdentifier = self.sourceLayerID;
     return layer;
