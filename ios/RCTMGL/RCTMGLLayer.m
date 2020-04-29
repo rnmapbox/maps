@@ -222,18 +222,6 @@
     [_map layerAdded:self->_styleLayer];
 }
 
-- (void)addImage:(NSString *)url
-{
-    if (url == nil) {
-        return;
-    }
-    [RCTMGLUtils fetchImage:_bridge url:url scale:1.0 callback:^(NSError *error, UIImage *image) {
-        if (image != nil) {
-            [self->_style setImage:image forName:url];
-        }
-    }];
-}
-
 - (BOOL)_hasInitialized
 {
     return _style != nil && _styleLayer != nil;
