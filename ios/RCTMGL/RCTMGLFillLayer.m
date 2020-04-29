@@ -14,7 +14,7 @@
 
 - (MGLStyleLayer*)makeLayer:(MGLStyle*)style
 {
-    MGLSource *source = [style sourceWithIdentifier:self.sourceID];
+    MGLSource *source = [self layerWithSourceIDInStyle:style];
     if (source == nil) { return nil; }
     MGLFillStyleLayer *layer = [[MGLFillStyleLayer alloc] initWithIdentifier:self.id source:source];
     layer.sourceLayerIdentifier = self.sourceLayerID;

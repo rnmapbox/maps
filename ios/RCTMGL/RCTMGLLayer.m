@@ -119,6 +119,15 @@
     [self addedToMap];
 }
 
+- (nullable MGLSource*)layerWithSourceIDInStyle:(nonnull MGLStyle*) style
+{
+    MGLSource* result = [style sourceWithIdentifier: self.sourceID];
+    if (result == NULL) {
+        RCTLogError(@"Cannot find layer with id: %@ referenced by layer:%@", self.sourceID, _id);
+    }
+    return result;
+}
+
 - (void)removeFromMap:(MGLStyle *)style
 {
     if (_styleLayer != nil) {
