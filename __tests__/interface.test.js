@@ -84,6 +84,7 @@ describe('Public Interface', () => {
       'AnimatedShape',
       'AnimatedExtractCoordinateFromArray',
       'AnimatedRouteCoordinatesArray',
+      'Logger',
     ];
     actualKeys.forEach((key) => expect(expectedKeys).toContain(key));
   });

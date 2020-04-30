@@ -13,6 +13,7 @@
 #import "RCTMGLImages.h"
 #import "UIView+React.h"
 #import "RCTMGLNativeUserLocation.h"
+#import "RCTMGLLogging.h"
 
 @implementation RCTMGLMapView
 {
@@ -37,6 +38,7 @@ static double const M2PI = M_PI * 2;
         _reactSubviews = [[NSMutableArray alloc] init];
         _layerWaiters = [[NSMutableDictionary alloc] init];
         _styleWaiters = [[NSMutableArray alloc] init];
+        _logging = [[RCTMGLLogging alloc] init];
     }
     return self;
 }

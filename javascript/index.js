@@ -35,6 +35,7 @@ import AnimatedShape from './utils/animated/AnimatedShape';
 import AnimatedCoordinatesArray from './utils/animated/AnimatedCoordinatesArray';
 import AnimatedExtractCoordinateFromArray from './utils/animated/AnimatedExtractCoordinateFromArray';
 import AnimatedRouteCoordinatesArray from './utils/animated/AnimatedRouteCoordinatesArray';
+import Logger from './utils/Logger';
 
 const MapboxGL = {...NativeModules.MGLModule};
 
@@ -108,6 +109,7 @@ MapboxGL.AnimatedCoordinatesArray = AnimatedCoordinatesArray;
 MapboxGL.AnimatedExtractCoordinateFromArray = AnimatedExtractCoordinateFromArray;
 MapboxGL.AnimatedRouteCoordinatesArray = AnimatedRouteCoordinatesArray;
 MapboxGL.AnimatedShape = AnimatedShape;
+MapboxGL.Logger = Logger;
 
 const {LineJoin} = MapboxGL;
 
@@ -141,6 +143,7 @@ export {
   AnimatedShape,
   Animated,
   LineJoin,
+  Logger,
 };
 
 export default MapboxGL;

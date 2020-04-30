@@ -17,6 +17,7 @@ import {
   viewPropTypes,
 } from '../utils';
 import {getFilter} from '../utils/filterUtils';
+import Logger from '../utils/Logger';
 
 import NativeBridgeComponent from './NativeBridgeComponent';
 
@@ -264,6 +265,9 @@ class MapView extends NativeBridgeComponent(React.Component) {
   constructor(props) {
     super(props, NATIVE_MODULE_NAME);
 
+    this.logger = Logger.sharedInstance();
+    this.logger.start();
+
     this.state = {
       isReady: null,
       region: null,
@@ -297,6 +301,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
   componentWillUnmount() {
     this._onDebouncedRegionWillChange.clear();
     this._onDebouncedRegionDidChange.clear();
+    this.logger.stop();
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
