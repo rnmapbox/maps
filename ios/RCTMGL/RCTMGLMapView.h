@@ -16,6 +16,7 @@
 
 @class CameraUpdateQueue;
 @class RCTMGLImages;
+@class RCTMGLLogging;
 
 @protocol RCTMGLMapViewCamera<NSObject>
 - (void)initialLayout;
@@ -27,6 +28,7 @@ typedef void (^StyleLoadedBlock) (MGLStyle* __nonnull style);
 
 @interface RCTMGLMapView : MGLMapView<RCTInvalidating>
 
+@property (nonatomic, strong, nonnull) RCTMGLLogging* logging;
 @property (nonatomic, strong) CameraUpdateQueue *cameraUpdateQueue;
 @property (nonatomic, weak) id<RCTMGLMapViewCamera> reactCamera;
 @property (nonatomic, strong) NSMutableArray<id<RCTComponent>> *reactSubviews;
