@@ -1,3 +1,11 @@
+## 8.1.0.beta1
+
+- Upgrade to [ios 5.8.0](https://github.com/mapbox/mapbox-gl-native-ios/releases/tag/ios-v5.8.0)
+- Upgrade to [android 9.1.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.1.0)
+- Set default Mapbox logging verbosity to warning. (Change it using Logger.setLogLevel('verbose'))
+- Error/Warn mapbox log messages are treated as redbox/yellowbox errors/warnings. (Override it using Logger.setLoggerCallback(log => { return true })
+- Native user location [#825](https://github.com/react-native-mapbox-gl/maps/pull/825)
+
 ## 8.0.0
 
 ### Breaking changes - [#610](https://github.com/react-native-mapbox-gl/maps/issues/610)
