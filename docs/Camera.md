@@ -61,10 +61,10 @@ Map camera transitions to fit provided bounds
 
 
 ```javascript
-this.camera.fitBounds([lng, lat], [lng, lat])
-this.camera.fitBounds([lng, lat], [lng, lat], 20, 1000) // padding for all sides
-this.camera.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)
-this.camera.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)
+this.camera.fitBounds([lat, lng], [lat, lng])
+this.camera.fitBounds([lat, lng], [lat, lng], 20, 1000) // padding for all sides
+this.camera.fitBounds([lat, lng], [lat, lng], [verticalPadding, horizontalPadding], 1000)
+this.camera.fitBounds([lat, lng], [lat, lng], [top, right, bottom, left], 1000)
 ```
 
 
