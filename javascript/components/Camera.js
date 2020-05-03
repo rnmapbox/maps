@@ -284,10 +284,10 @@ class Camera extends React.Component {
    * Map camera transitions to fit provided bounds
    *
    * @example
-   * this.camera.fitBounds([lng, lat], [lng, lat])
-   * this.camera.fitBounds([lng, lat], [lng, lat], 20, 1000) // padding for all sides
-   * this.camera.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)
-   * this.camera.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)
+   * this.camera.fitBounds([lat, lng], [lat, lng])
+   * this.camera.fitBounds([lat, lng], [lat, lng], 20, 1000) // padding for all sides
+   * this.camera.fitBounds([lng, lat], [lat, lng], [verticalPadding, horizontalPadding], 1000)
+   * this.camera.fitBounds([lat, lng], [lat, lng], [top, right, bottom, left], 1000)
    *
    * @param {Array<Number>} northEastCoordinates - North east coordinate of bound
    * @param {Array<Number>} southWestCoordinates - South west coordinate of bound
