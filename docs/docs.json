@@ -214,7 +214,7 @@
     "methods": [
       {
         "name": "fitBounds",
-        "docblock": "Map camera transitions to fit provided bounds\n\n@example\nthis.camera.fitBounds([lng, lat], [lng, lat])\nthis.camera.fitBounds([lng, lat], [lng, lat], 20, 1000) // padding for all sides\nthis.camera.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)\nthis.camera.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)\n\n@param {Array<Number>} northEastCoordinates - North east coordinate of bound\n@param {Array<Number>} southWestCoordinates - South west coordinate of bound\n@param {Number=} padding - Camera padding for bound\n@param {Number=} animationDuration - Duration of camera animation\n@return {void}",
+        "docblock": "Map camera transitions to fit provided bounds\n\n@example\nthis.camera.fitBounds([lat, lng], [lat, lng])\nthis.camera.fitBounds([lat, lng], [lat, lng], 20, 1000) // padding for all sides\nthis.camera.fitBounds([lat, lng], [lat, lng], [verticalPadding, horizontalPadding], 1000)\nthis.camera.fitBounds([lat, lng], [lat, lng], [top, right, bottom, left], 1000)\n\n@param {Array<Number>} northEastCoordinates - North east coordinate of bound\n@param {Array<Number>} southWestCoordinates - South west coordinate of bound\n@param {Number=} padding - Camera padding for bound\n@param {Number=} animationDuration - Duration of camera animation\n@return {void}",
         "modifiers": [],
         "params": [
           {
@@ -268,7 +268,7 @@
         },
         "description": "Map camera transitions to fit provided bounds",
         "examples": [
-          "\nthis.camera.fitBounds([lng, lat], [lng, lat])\nthis.camera.fitBounds([lng, lat], [lng, lat], 20, 1000) // padding for all sides\nthis.camera.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)\nthis.camera.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)\n\n"
+          "\nthis.camera.fitBounds([lat, lng], [lat, lng])\nthis.camera.fitBounds([lat, lng], [lat, lng], 20, 1000) // padding for all sides\nthis.camera.fitBounds([lat, lng], [lat, lng], [verticalPadding, horizontalPadding], 1000)\nthis.camera.fitBounds([lat, lng], [lat, lng], [top, right, bottom, left], 1000)\n\n"
         ]
       },
       {
