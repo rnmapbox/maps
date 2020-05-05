@@ -1,4 +1,4 @@
-import { NativeModules } from 'react-native';
+import { NativeModules, Platform } from 'react-native';
 
 import { Camera } from './components/Camera';
 import { Atmosphere } from './components/Atmosphere';
@@ -38,7 +38,12 @@ import Style from './components/Style';
 import Logger from './utils/Logger';
 import { requestAndroidLocationPermissions } from './requestAndroidLocationPermissions';
 
-const MapboxGL = { ...NativeModules.MGLModule };
+const MapboxGL = Platform.select({
+  native: () => ({ ...NativeModules.MGLModule }),
+  web: () => {
+    return require('./utils/MGLModuleForWeb').default;
+  },
+})();
 
 // static methods
 MapboxGL.requestAndroidLocationPermissions = requestAndroidLocationPermissions;
