@@ -1,11 +1,7 @@
 import React from 'react';
-import {
-  ViewPropTypes,
-  View,
-  NativeModules,
-  findNodeHandle,
-  Platform,
-} from 'react-native';
+import {NativeModules, findNodeHandle, Platform} from 'react-native';
+
+import viewPropTypes from './viewPropTypes';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 function getAndroidManagerInstance(module) {
@@ -20,7 +16,7 @@ function getIosManagerInstance(module) {
   return NativeModules[getIOSModuleName(module)];
 }
 
-export const viewPropTypes = ViewPropTypes || View.props;
+export {viewPropTypes};
 
 export function isAndroid() {
   return Platform.OS === 'android';

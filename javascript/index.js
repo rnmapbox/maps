@@ -1,8 +1,4 @@
-import {
-  Animated as RNAnimated,
-  NativeModules,
-  PermissionsAndroid,
-} from 'react-native';
+import {NativeModules, Platform, PermissionsAndroid} from 'react-native';
 
 import {isAndroid} from './utils';
 import MapView from './components/MapView';
@@ -37,7 +33,12 @@ import AnimatedExtractCoordinateFromArray from './utils/animated/AnimatedExtract
 import AnimatedRouteCoordinatesArray from './utils/animated/AnimatedRouteCoordinatesArray';
 import Logger from './utils/Logger';
 
-const MapboxGL = {...NativeModules.MGLModule};
+const MapboxGL = Platform.select({
+  native: () => ({...NativeModules.MGLModule}),
+  web: () => {
+    return require('./web/MGLModule').default;
+  },
+})();
 
 // static methods
 MapboxGL.requestAndroidLocationPermissions = async function () {

@@ -23,6 +23,7 @@ const IGNORE_FILES = [
   'AbstractSource',
   'NativeBridgeComponent',
 ];
+const IGNORE_PATTERN = /\.web$/;
 
 const IGNORE_METHODS = ['setNativeProps'];
 
@@ -214,9 +215,11 @@ class DocJSONBuilder {
           }
 
           fileName = fileName.replace('.js', '');
-          if (IGNORE_FILES.includes(fileName)) {
-            next();
-            return;
+          if (
+            IGNORE_FILES.includes(fileName) ||
+            fileName.match(IGNORE_PATTERN)
+          ) {
+            return next();
           }
 
           results[fileName] = docgen.parse(content, undefined, undefined, {
@@ -224,7 +227,7 @@ class DocJSONBuilder {
           });
           this.postprocess(results[fileName], fileName);
 
-          next();
+          return next();
         },
         () => resolve(),
       );
