@@ -40,7 +40,9 @@
     "@turf/nearest-point-on-line": ">= 4.0.0 <7.0.0",
     "@turf/helpers": ">= 4.6.0 <7.0.0",
     "@turf/length": ">= 4.6.0 <7.0.0",
-    "debounce": "^1.2.0"
+    "debounce": "^1.2.0",
+
+    "mapbox-gl": "^1.10.0"
   },
   "devDependencies": {
     "@babel/core": "7.5.0",
