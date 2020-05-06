@@ -236,6 +236,7 @@ declare namespace MapboxGL {
   }
 
   class PointAnnotation extends Component<PointAnnotationProps> {}
+  class MarkerView extends Component<MarkerViewProps> {}
   class Callout extends Component<CalloutProps> {}
 
   /**
@@ -678,6 +679,9 @@ export interface PointAnnotationProps {
   anchor?: Point;
   onSelected?: () => void;
   onDeselected?: () => void;
+}
+
+export interface MarkerViewProps extends PointAnnotationProps {
 }
 
 export interface CalloutProps extends Omit<ViewProps, 'style'> {
