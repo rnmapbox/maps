@@ -12,8 +12,6 @@ module.exports = (api) => {
             {
               alias: {
                 '@react-native-mapbox-gl/maps': './rnmbgl/javascript/index.js',
-               // 'react-native-web/dist/exports/ViewPropTypes':
-               //   './web/ViewPropTypes.js',
               },
             },
           ]
