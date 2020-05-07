@@ -35,6 +35,7 @@
     if (self = [super init]) {
         [self _setupLocationManager];
         listeners = [[NSMutableArray alloc] init];
+        displacement = 0.0;
     }
     return self;
 }
