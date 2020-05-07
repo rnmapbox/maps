@@ -17,7 +17,7 @@
     CLLocationManager *locationManager;
     CLLocation *lastKnownLocation;
     CLHeading *lastKnownHeading;
-    CLLocationDistance *displacement
+    CLLocationDistance displacement;
     NSMutableArray<RCTMGLLocationBlock> *listeners;
     BOOL isListening;
 }
