@@ -17,6 +17,7 @@
     CLLocationManager *locationManager;
     CLLocation *lastKnownLocation;
     CLHeading *lastKnownHeading;
+    CLLocationDistance *displacement
     NSMutableArray<RCTMGLLocationBlock> *listeners;
     BOOL isListening;
 }
@@ -46,10 +47,13 @@
 
 - (void)start:(CLLocationDistance)minDisplacement
 {
+
+    displacement = minDisplacement;
+
     if ([self isEnabled]) {
         return;
     }
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
         [self->locationManager requestWhenInUseAuthorization];
         [self->locationManager startUpdatingLocation];
@@ -61,7 +65,10 @@
 
 - (void)setMinDisplacement:(CLLocationDistance)minDisplacement
 {
-     dispatch_async(dispatch_get_main_queue(), ^{
+
+    displacement = minDisplacement;
+
+    dispatch_async(dispatch_get_main_queue(), ^{
         [self->locationManager setDistanceFilter:(minDisplacement)];
     });
 }
@@ -71,7 +78,7 @@
     if (![self isEnabled]) {
         return;
     }
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
         [self->locationManager stopUpdatingLocation];
         [self->locationManager stopUpdatingHeading];
@@ -104,7 +111,7 @@
 - (void)removeListener:(RCTMGLLocationBlock)listener
 {
     NSUInteger indexOf = [listeners indexOfObject:listener];
-    
+
     if (indexOf == NSNotFound) {
         return;
     }
@@ -115,6 +122,11 @@
 - (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)heading
 {
     lastKnownHeading = heading;
+
+    if (displacement > 0) {
+      return;
+    }
+
     [self _updateDelegate];
 }
 
@@ -127,7 +139,7 @@
 - (void)_setupLocationManager
 {
     __weak RCTMGLLocationManager *weakSelf = self;
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
         self->locationManager = [[CLLocationManager alloc] init];
         self->locationManager.delegate = weakSelf;
@@ -139,16 +151,16 @@
     if (_delegate == nil) {
         return;
     }
-    
+
     RCTMGLLocation *userLocation = [self _convertToMapboxLocation:lastKnownLocation];
-    
+
     if (listeners.count > 0) {
         for (int i = 0; i < listeners.count; i++) {
             RCTMGLLocationBlock listener = listeners[i];
             listener(userLocation);
         }
     }
-    
+
     [_delegate locationManager:self didUpdateLocation:userLocation];
 }
 
