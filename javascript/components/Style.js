@@ -176,6 +176,11 @@ function asSourceComponent(id, source) {
   return null;
 }
 
+/**
+ * Style is a component that automatically adds sources / layers to the map using Mapbox GL Style Spec.
+ * Only [`sources`](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) & [`layers`](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/) are supported.
+ * Other fields such as `sprites`, `glyphs` etc. will be ignored.
+ */
 const Style = (props) => {
   const [fetchedJson, setFetchedJson] = useState({});
   const json = typeof props.json === 'object' ? props.json : fetchedJson;
