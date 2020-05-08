@@ -50,6 +50,7 @@ import SourceLayerVisibility from '../examples/SourceLayerVisibility';
 import SetDisplacement from '../examples/SetDisplacement';
 import CompassView from '../examples/CompassView';
 import BugReportTemplate from '../examples/BugReportExample';
+import StyleJson from '../examples/StyleJson';
 
 const styles = StyleSheet.create({
   header: {
@@ -115,6 +116,7 @@ const Examples = [
     new ExampleItem('Show and hide a layer', ShowAndHideLayer),
     new ExampleItem('Change Layer Color', ChangeLayerColor),
     new ExampleItem('Source Layer Visiblity', SourceLayerVisibility),
+    new ExampleItem('Style JSON', StyleJson),
   ]),
   new ExampleGroup('Camera', [
     new ExampleItem('Set Pitch', SetPitch),
