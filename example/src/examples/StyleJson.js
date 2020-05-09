@@ -46,7 +46,6 @@ class StyleJson extends React.Component {
               this.state.showAltStyle ? StyleJsonExample2 : StyleJsonExample
             }
           />
-          {/* )} */}
         </MapboxGL.MapView>
         <Bubble onPress={this.onPress}>
           <Text>{this.state.showAltStyle ? 'Style 2' : 'Style 1'}</Text>
