@@ -66,25 +66,38 @@ function getLayerComponentType(layer) {
 }
 
 function asLayerComponent(layer) {
-  const style = {
-    ...toCamelCaseKeys(layer.paint),
-    ...toCamelCaseKeys(layer.layout),
-  };
-
   const LayerComponent = getLayerComponentType(layer);
   if (!LayerComponent) {
     return null;
   }
 
-  return (
-    <LayerComponent
-      key={layer.id}
-      id={layer.id}
-      sourceID={layer.source}
-      sourceLayerID={layer['source-layer']}
-      style={style}
-    />
-  );
+  const style = {
+    ...toCamelCaseKeys(layer.paint),
+    ...toCamelCaseKeys(layer.layout),
+  };
+
+  const layerProps = {};
+
+  if (layer.source) {
+    layerProps.sourceID = layer.source;
+  }
+  if (layer['source-layer']) {
+    layerProps.sourceLayerID = layer['source-layer'];
+  }
+  if (layer.minzoom) {
+    layerProps.minZoomLevel = layer.minzoom;
+  }
+  if (layer.maxzoom) {
+    layerProps.maxZoomLevel = layer.maxzoom;
+  }
+  if (layer.filter) {
+    layerProps.filter = layer.filter;
+  }
+  if (Object.keys(style).length) {
+    layerProps.style = style;
+  }
+
+  return <LayerComponent key={layer.id} id={layer.id} {...layerProps} />;
 }
 
 function getTileSourceProps(source) {
