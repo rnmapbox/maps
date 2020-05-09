@@ -3688,6 +3688,21 @@
     ],
     "name": "ShapeSource"
   },
+  "Style": {
+    "description": "Style is a component that automatically adds sources / layers to the map using Mapbox GL Style Spec.\nOnly [`sources`](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) & [`layers`](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/) are supported.\nOther fields such as `sprites`, `glyphs` etc. will be ignored.",
+    "displayName": "Style",
+    "methods": [],
+    "props": [
+      {
+        "name": "json",
+        "required": false,
+        "type": "any",
+        "default": "none",
+        "description": "A JSON object conforming to the schema described in the Mapbox Style Specification , or a URL to such JSON."
+      }
+    ],
+    "name": "Style"
+  },
   "SymbolLayer": {
     "description": "SymbolLayer is a style layer that renders icon and text labels at points or along lines on the map.",
     "displayName": "SymbolLayer",
