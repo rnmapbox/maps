@@ -24,7 +24,7 @@
       "source-layer": "state_county_population_2014_cen",
       "type": "fill",
       "maxzoom": 4,
-      "filters": ["==", "isState", true],
+      "filter": ["==", "isState", true],
       "paint": {
         "fill-opacity": 0.75,
         "fill-color": [
@@ -58,7 +58,7 @@
       "source-layer": "state_county_population_2014_cen",
       "type": "fill",
       "maxzoom": 4,
-      "filters": ["==", "isState", true],
+      "filter": ["==", "isState", true],
       "paint": {
         "fill-opacity": 0.75,
         "fill-color": [

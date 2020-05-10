@@ -66,25 +66,38 @@ function getLayerComponentType(layer) {
 }
 
 function asLayerComponent(layer) {
-  const style = {
-    ...toCamelCaseKeys(layer.paint),
-    ...toCamelCaseKeys(layer.layout),
-  };
-
   const LayerComponent = getLayerComponentType(layer);
   if (!LayerComponent) {
     return null;
   }
 
-  return (
-    <LayerComponent
-      key={layer.id}
-      id={layer.id}
-      sourceID={layer.source}
-      sourceLayerID={layer['source-layer']}
-      style={style}
-    />
-  );
+  const style = {
+    ...toCamelCaseKeys(layer.paint),
+    ...toCamelCaseKeys(layer.layout),
+  };
+
+  const layerProps = {};
+
+  if (layer.source) {
+    layerProps.sourceID = layer.source;
+  }
+  if (layer['source-layer']) {
+    layerProps.sourceLayerID = layer['source-layer'];
+  }
+  if (layer.minzoom) {
+    layerProps.minZoomLevel = layer.minzoom;
+  }
+  if (layer.maxzoom) {
+    layerProps.maxZoomLevel = layer.maxzoom;
+  }
+  if (layer.filter) {
+    layerProps.filter = layer.filter;
+  }
+  if (Object.keys(style).length) {
+    layerProps.style = style;
+  }
+
+  return <LayerComponent key={layer.id} id={layer.id} {...layerProps} />;
 }
 
 function getTileSourceProps(source) {
@@ -179,7 +192,7 @@ function asSourceComponent(id, source) {
 /**
  * Style is a component that automatically adds sources / layers to the map using Mapbox GL Style Spec.
  * Only [`sources`](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) & [`layers`](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/) are supported.
- * Other fields such as `sprites`, `glyphs` etc. will be ignored.
+ * Other fields such as `sprites`, `glyphs` etc. will be ignored. Not all layer / source attributes from the style spec are supported, in general the supported attributes will mentioned under https://github.com/react-native-mapbox-gl/maps/tree/master/docs.
  */
 const Style = (props) => {
   const [fetchedJson, setFetchedJson] = useState({});
