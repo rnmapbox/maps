@@ -17,7 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-
+import com.mapbox.mapboxsdk.log.Logger;
 
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactContext;
@@ -41,6 +41,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.maps.UiSettings;
+import com.mapbox.mapboxsdk.plugins.localization.LocalizationPlugin;
 import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolClickListener;
 import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolDragListener;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
@@ -78,6 +79,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 
 import javax.annotation.Nullable;
 
@@ -115,6 +117,8 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
 
     private MapboxMap mMap;
 
+    private LocalizationPlugin mLocalizationPlugin;
+    
     private String mStyleURL;
 
     private Integer mPreferredFramesPerSecond;
@@ -428,6 +432,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
                 createSymbolManager(style);
                 setUpImage(style);
                 addQueuedFeatures();
+                setupLocalization(style);
             }
         });
 
@@ -528,6 +533,18 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
             }
             mQueuedFeatures = null;
         }
+    }
+
+    private void setupLocalization(Style style) {
+      mLocalizationPlugin = new LocalizationPlugin(RCTMGLMapView.this, mMap, style);
+      if (mLocalizeLabels) {
+          try {
+              mLocalizationPlugin.matchMapLanguageWithDeviceDefault();
+          } catch (Exception e) {
+              final String localeString = Locale.getDefault().toString();
+              Logger.w(LOG_TAG, String.format("Could not find matching locale for %s", localeString));
+          }
+      }
     }
 
     @Override
