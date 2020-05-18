@@ -2,8 +2,8 @@ module.exports = (api) => {
   const isWeb = api.caller(isTargetWeb);
 
   return {
-    // presets: ['module:metro-react-native-babel-preset'],
-    presets: ['babel-preset-expo'],
+    presets: ['module:metro-react-native-babel-preset'],
+    // presets: ['babel-preset-expo'],
     plugins: [
       '@babel/plugin-transform-modules-commonjs',
       isWeb
