@@ -36,7 +36,7 @@ import Logger from './utils/Logger';
 const MapboxGL = Platform.select({
   native: () => ({...NativeModules.MGLModule}),
   web: () => {
-    return require('./web/MGLModule').default;
+    return require('./utils/MGLModuleForWeb').default;
   },
 })();
 
