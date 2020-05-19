@@ -56,6 +56,8 @@ install:
     gem install xcpretty
   fi
 script:
+- cd $TRAVIS_BUILD_DIR
+- yarn install
 - |
   if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     cd $TRAVIS_BUILD_DIR/example/ios
