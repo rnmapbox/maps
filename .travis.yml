@@ -68,7 +68,10 @@ script:
     cd $TRAVIS_BUILD_DIR/example/android
     pwd
     ls -la ../node_modules/react-native/Libraries/Image/AssetRegistry.js
-    ls -la ../../node_modules/react-native/Libraries/Image/AssetRegistry.js 
+    ls -la ../../node_modules/react-native/Libraries/Image/AssetRegistry.js
+    ls -la ../../
+    ls -la ../../node_modules
+    cat ../../node_modules/react-native/package.json
     TERM=dumb ./gradlew assemble
   fi
 - cd $TRAVIS_BUILD_DIR
