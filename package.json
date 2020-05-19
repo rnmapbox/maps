@@ -70,7 +70,7 @@
     "node-dir": "0.1.17",
     "react": "16.8.6",
     "react-docgen": "^5.0.0-beta.1",
-    "react-native": "0.59.10",
+    "react-native": "0.62.1",
     "typescript": "3.8.3",
     "react-native-testing-library": "^1.11.1",
     "react-test-renderer": "16.8.3",
