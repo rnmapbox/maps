@@ -6,8 +6,18 @@
  */
 const path = require('path');
 
+/*
+  See
+
+  https://medium.com/@dushyant_db/how-to-import-files-from-outside-of-root-directory-with-react-native-metro-bundler-18207a348427
+*/
+
 const blacklist = require('metro-config/src/defaults/blacklist');
 const glob = require('glob-to-regexp');
+
+const extraNodeModules = {
+  '@react-native-mapbox-gl/maps': path.resolve(__dirname+'/../maps')
+}
 
 function getBlacklist() {
   const nodeModuleDirs = [
@@ -32,6 +42,13 @@ function getBlacklist() {
 module.exports = {
   resolver: {
     blacklistRE: getBlacklist(),
+    extraNodeModules: new Proxy(extraNodeModules, {
+      get: (target, name) => {
+        return name in target
+          ? target[name]
+          : path.join(process.cwd(), `node_modules/${name}`);
+      },
+    }),
   },
   watchFolders: [path.resolve(__dirname, '..')],
   transformer: {
