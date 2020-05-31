@@ -91,6 +91,22 @@ class OfflineManager {
   }
 
   /**
+   * Forces a revalidation of the tiles in the ambient cache and downloads a fresh version of the tiles from the tile server.
+   * This is the recommend method for clearing the cache.
+   * This is the most efficient method because tiles in the ambient cache are re-downloaded to remove outdated data from a device.
+   * It does not erase resources from the ambient cache or delete the database, which can be computationally expensive operations that may carry unintended side effects.
+   *
+   * @example
+   * await MapboxGL.offlineManager.invalidateAmbientCache();
+   *
+   * @return {void}
+   */
+  async invalidateAmbientCache() {
+    await this._initialize();
+    await MapboxGLOfflineManager.invalidateAmbientCache();
+  }
+
+  /**
    * Deletes the existing database, which includes both the ambient cache and offline packs, then reinitializes it.
    *
    * @example
