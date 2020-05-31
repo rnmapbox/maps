@@ -5574,6 +5574,20 @@
         }
       },
       {
+        "name": "invalidateAmbientCache",
+        "description": "Forces a revalidation of the tiles in the ambient cache and downloads a fresh version of the tiles from the tile server.\nThis is the recommend method for clearing the cache.\nThis is the most efficient method because tiles in the ambient cache are re-downloaded to remove outdated data from a device.\nIt does not erase resources from the ambient cache or delete the database, which can be computationally expensive operations that may carry unintended side effects.",
+        "params": [],
+        "examples": [
+          "await MapboxGL.offlineManager.invalidateAmbientCache();"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "void"
+          }
+        }
+      },
+      {
         "name": "resetDatabase",
         "description": "Deletes the existing database, which includes both the ambient cache and offline packs, then reinitializes it.",
         "params": [],
