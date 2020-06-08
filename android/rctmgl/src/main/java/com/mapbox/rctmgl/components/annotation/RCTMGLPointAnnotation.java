@@ -113,14 +113,19 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
 
     @Override
     public void removeFromMap(RCTMGLMapView mapView) {
+        RCTMGLMapView map = (mMapView != null) ? mMapView : mapView;
+        if (map == null) {
+            return;
+        }
+
         if (mAnnotation != null) {
-            mMapView.getSymbolManager().delete(mAnnotation);
+            map.getSymbolManager().delete(mAnnotation);
         }
         if (mChildView != null) {
-            mMapView.offscreenAnnotationViewContainer().removeView(mChildView);
+            map.offscreenAnnotationViewContainer().removeView(mChildView);
         }
         if (mCalloutView != null) {
-            mMapView.offscreenAnnotationViewContainer().removeView(mCalloutView);
+            map.offscreenAnnotationViewContainer().removeView(mCalloutView);
         }
     }
 
