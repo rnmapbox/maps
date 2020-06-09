@@ -208,7 +208,7 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
     };
 
     return (
-      <RCTMGLShapeSource ref="nativeSource" {...props}>
+      <RCTMGLShapeSource {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}

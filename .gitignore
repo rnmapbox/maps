@@ -53,6 +53,9 @@ node_modules
 package-lock.json
 /example/package-lock.json
 
+# Expo
+.expo
+
 # OS X
 .DS_Store
 
