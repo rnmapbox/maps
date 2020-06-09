@@ -47,6 +47,13 @@ public class RCTMGLVectorSource extends RCTMGLTileSource<VectorSource> {
     public void querySourceFeatures(String callbackID,
                                              @Size(min = 1) List<String> layerIDs,
                                              @Nullable Expression filter) {
+        if (mSource == null) {
+            WritableMap payload = new WritableNativeMap();
+            payload.putString("error", "source is not yet loaded");
+            AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+            mManager.handleEvent(event);
+            return;
+        }
         List<Feature> features = mSource.querySourceFeatures(layerIDs.toArray(new String[layerIDs.size()]), filter);
         WritableMap payload = new WritableNativeMap();
         payload.putString("data", FeatureCollection.fromFeatures(features).toJson());

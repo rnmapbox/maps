@@ -7,6 +7,8 @@ import android.media.Image;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -21,6 +23,7 @@ import com.mapbox.rctmgl.components.annotation.RCTMGLCallout;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
 import com.mapbox.rctmgl.events.constants.EventKeys;
+import com.mapbox.rctmgl.utils.ExpressionParser;
 import com.mapbox.rctmgl.utils.ImageEntry;
 import com.mapbox.rctmgl.utils.ResourceUtils;
 
@@ -139,6 +142,30 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
     public Map<String, String> customEvents() {
         return MapBuilder.<String, String>builder()
                 .put(EventKeys.SHAPE_SOURCE_LAYER_CLICK, "onMapboxShapeSourcePress")
+                .put(EventKeys.MAP_ANDROID_CALLBACK, "onAndroidCallback")
                 .build();
+    }
+
+    //region React Methods
+    public static final int METHOD_FEATURES = 103;
+
+    @Nullable
+    @Override
+    public Map<String, Integer> getCommandsMap() {
+        return MapBuilder.<String, Integer>builder()
+                .put("features", METHOD_FEATURES)
+                .build();
+    }
+
+    @Override
+    public void receiveCommand(RCTMGLShapeSource source, int commandID, @Nullable ReadableArray args) {
+        switch (commandID) {
+            case METHOD_FEATURES:
+                source.querySourceFeatures(
+                        args.getString(0),
+                        ExpressionParser.from(args.getArray(1))
+                        );
+                break;
+        }
     }
 }

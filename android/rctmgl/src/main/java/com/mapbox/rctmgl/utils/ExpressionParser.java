@@ -11,6 +11,8 @@ import org.json.JSONArray;
 
 import java.util.Locale;
 
+import javax.annotation.Nullable;
+
 public class ExpressionParser {
     static final String TYPE_STRING = "string";
     static final String TYPE_ARRAY = "array";
@@ -18,7 +20,7 @@ public class ExpressionParser {
     static final String TYPE_MAP = "hashmap";
     static final String TYPE_BOOL = "boolean";
 
-    public static Expression from(ReadableArray rawExpressions) {
+    public static @Nullable Expression from(@Nullable  ReadableArray rawExpressions) {
         if (rawExpressions == null || rawExpressions.size() == 0) {
             return null;
         }

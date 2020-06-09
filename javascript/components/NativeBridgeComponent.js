@@ -13,8 +13,8 @@ const NativeBridgeComponent = (B) =>
       this._preRefMapMethodQueue = [];
     }
 
-    _addAddAndroidCallback(id, callback) {
-      this._callbackMap.set(id, callback);
+    _addAddAndroidCallback(id, resolve, reject) {
+      this._callbackMap.set(id, {resolve, reject});
     }
 
     _removeAndroidCallback(id) {
@@ -30,7 +30,12 @@ const NativeBridgeComponent = (B) =>
       }
 
       this._callbackMap.delete(callbackID);
-      callback.call(null, e.nativeEvent.payload);
+      let {payload} = e.nativeEvent;
+      if (payload.error) {
+        callback.reject.call(null, new Error(payload.error));
+      } else {
+        callback.resolve.call(null, payload);
+      }
     }
 
     async _runPendingNativeCommands(nativeRef) {
@@ -61,10 +66,10 @@ const NativeBridgeComponent = (B) =>
       }
 
       if (isAndroid()) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
           callbackIncrement += 1;
           const callbackID = `${methodName}_${callbackIncrement}`;
-          this._addAddAndroidCallback(callbackID, resolve);
+          this._addAddAndroidCallback(callbackID, resolve, reject);
           args.unshift(callbackID);
           runNativeCommand(this._nativeModuleName, methodName, nativeRef, args);
         });
