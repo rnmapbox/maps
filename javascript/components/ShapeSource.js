@@ -2,15 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {NativeModules, requireNativeComponent} from 'react-native';
 
+import {getFilter} from '../utils/filterUtils';
 import {
   toJSONString,
   cloneReactChildrenWithProps,
   viewPropTypes,
   isFunction,
+  isAndroid,
 } from '../utils';
 import {copyPropertiesAsDeprecated} from '../utils/deprecation';
 
 import AbstractSource from './AbstractSource';
+import NativeBridgeComponent from './NativeBridgeComponent';
 
 const MapboxGL = NativeModules.MGLModule;
 
@@ -20,7 +23,7 @@ export const NATIVE_MODULE_NAME = 'RCTMGLShapeSource';
  * ShapeSource is a map content source that supplies vector shapes to be shown on the map.
  * The shape may be a url or a GeoJSON object
  */
-class ShapeSource extends AbstractSource {
+class ShapeSource extends NativeBridgeComponent(AbstractSource) {
   static NATIVE_ASSETS_KEY = 'assets';
 
   static propTypes = {
@@ -107,6 +110,37 @@ class ShapeSource extends AbstractSource {
     id: MapboxGL.StyleSource.DefaultSourceID,
   };
 
+  constructor(props) {
+    super(props, NATIVE_MODULE_NAME);
+  }
+
+  _setNativeRef(nativeRef) {
+    this._nativeRef = nativeRef;
+    super._runPendingNativeCommands(nativeRef);
+  }
+
+  /**
+   * Returns all features from the source that match the query parameters regardless of whether or not the feature is
+   * currently rendered on the map.
+   *
+   * @example
+   * shapeSource.features()
+   *
+   * @param  {Array=} filter - an optional filter statement to filter the returned Features.
+   * @return {FeatureCollection}
+   */
+  async features(filter = []) {
+    const res = await this._runNativeCommand('features', this._nativeRef, [
+      getFilter(filter),
+    ]);
+
+    if (isAndroid()) {
+      return JSON.parse(res.data);
+    }
+
+    return res.data;
+  }
+
   setNativeProps(props) {
     const shallowProps = Object.assign({}, props);
 
@@ -169,6 +203,8 @@ class ShapeSource extends AbstractSource {
       buffer: this.props.buffer,
       tolerance: this.props.tolerance,
       onPress: undefined,
+      ref: (nativeRef) => this._setNativeRef(nativeRef),
+      onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
     };
 
     return (

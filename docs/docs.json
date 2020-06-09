@@ -3531,6 +3531,33 @@
     "displayName": "ShapeSource",
     "methods": [
       {
+        "name": "features",
+        "docblock": "Returns all features from the source that match the query parameters regardless of whether or not the feature is\ncurrently rendered on the map.\n\n@example\nshapeSource.features()\n\n@param  {Array=} filter - an optional filter statement to filter the returned Features.\n@return {FeatureCollection}",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "filter",
+            "description": "an optional filter statement to filter the returned Features.",
+            "type": {
+              "name": "Array"
+            },
+            "optional": true
+          }
+        ],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "FeatureCollection"
+          }
+        },
+        "description": "Returns all features from the source that match the query parameters regardless of whether or not the feature is\ncurrently rendered on the map.",
+        "examples": [
+          "\nshapeSource.features()\n\n"
+        ]
+      },
+      {
         "name": "onPress",
         "docblock": null,
         "modifiers": [],

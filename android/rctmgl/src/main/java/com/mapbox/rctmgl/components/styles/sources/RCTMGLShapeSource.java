@@ -5,16 +5,22 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.Size;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeMap;
 import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonOptions;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 import com.mapbox.rctmgl.R;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
+import com.mapbox.rctmgl.events.AndroidCallbackEvent;
 import com.mapbox.rctmgl.events.FeatureClickEvent;
 import com.mapbox.rctmgl.utils.DownloadMapImageTask;
 import com.mapbox.rctmgl.utils.ImageEntry;
@@ -147,5 +153,22 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         }
 
         return options;
+    }
+
+    public void querySourceFeatures(String callbackID,
+                                    @Nullable Expression filter) {
+        if (mSource == null) {
+            WritableMap payload = new WritableNativeMap();
+            payload.putString("error", "source is not yet loaded");
+            AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+            mManager.handleEvent(event);
+            return;
+        }
+        List<Feature> features = mSource.querySourceFeatures(filter);
+        WritableMap payload = new WritableNativeMap();
+        payload.putString("data", FeatureCollection.fromFeatures(features).toJson());
+
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+        mManager.handleEvent(event);
     }
 }

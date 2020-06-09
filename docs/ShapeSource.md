@@ -20,6 +20,22 @@
 | &nbsp;&nbsp;height | `number` | `none` | `true` | FIX ME NO DESCRIPTION |
 
 ### methods
+#### features([filter])
+
+Returns all features from the source that match the query parameters regardless of whether or not the feature is<br/>currently rendered on the map.
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `filter` | `Array` | `No` | an optional filter statement to filter the returned Features. |
+
+
+
+```javascript
+shapeSource.features()
+```
+
+
 #### onPress(event)
 
 
