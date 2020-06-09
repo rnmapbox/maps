@@ -46,7 +46,7 @@ describe('AnimatedShapeSource', () => {
       />,
     );
     const setNativeProps = jest.fn();
-    shapeSourceRef._component.refs.nativeSource.setNativeProps = setNativeProps;
+    shapeSourceRef._component._nativeRef.setNativeProps = setNativeProps;
 
     coordinates
       .timing({
@@ -95,7 +95,7 @@ describe('AnimatedShapeSource', () => {
       />,
     );
     const setNativeProps = jest.fn();
-    shapeSourceRef._component.refs.nativeSource.setNativeProps = setNativeProps;
+    shapeSourceRef._component._nativeRef.setNativeProps = setNativeProps;
 
     coordinates
       .timing({
@@ -147,7 +147,7 @@ describe('AnimatedShapeSource', () => {
       />,
     );
     const setNativeProps = jest.fn();
-    shapeSourceRef._component.refs.nativeSource.setNativeProps = setNativeProps;
+    shapeSourceRef._component._nativeRef.setNativeProps = setNativeProps;
 
     coordinates
       .timing({
