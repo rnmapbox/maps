@@ -51,6 +51,7 @@ import SetDisplacement from '../examples/SetDisplacement';
 import CompassView from '../examples/CompassView';
 import BugReportTemplate from '../examples/BugReportExample';
 import StyleJson from '../examples/StyleJson';
+import ShapeSourceTS from '../examples/SymbolCircleLayer/ShapeSource';
 
 const styles = StyleSheet.create({
   header: {
@@ -146,6 +147,7 @@ const Examples = [
     new ExampleItem('Clustering Earthquakes', EarthQuakes),
     new ExampleItem('Shape Source From Icon', ShapeSourceIcon),
     new ExampleItem('Data Driven Circle Colors', DataDrivenCircleColors),
+    new ExampleItem('Shape Source From Icon.TS', ShapeSourceTS),
   ]),
   new ExampleGroup('Fill/RasterLayer', [
     new ExampleItem('GeoJSON Source', GeoJSONSource),
