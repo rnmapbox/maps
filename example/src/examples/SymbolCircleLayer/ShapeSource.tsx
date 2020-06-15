@@ -8,7 +8,6 @@ import exampleIcon from '../../assets/example.png';
 const styles = {
   icon: {
     iconImage: ['get', 'icon'],
-
     iconSize: [
       'match',
       ['get', 'icon'],
