@@ -79,6 +79,38 @@ await MapboxGL.offlineManager.invalidateAmbientCache();
 ```
 
 
+#### clearAmbientCache()
+
+Erases resources from the ambient cache.<br/>This method clears the cache and decreases the amount of space that map resources take up on the device.
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
+
+```javascript
+await MapboxGL.offlineManager.clearAmbientCache();
+```
+
+
+#### setMaximumAmbientCacheSize(size)
+
+Sets the maximum size of the ambient cache in bytes. Disables the ambient cache if set to 0.<br/>This method may be computationally expensive because it will erase resources from the ambient cache if its size is decreased.
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `size` | `Number` | `Yes` | Size of ambient cache. |
+
+
+
+```javascript
+await MapboxGL.offlineManager.setMaximumAmbientCacheSize(5000000);
+```
+
+
 #### resetDatabase()
 
 Deletes the existing database, which includes both the ambient cache and offline packs, then reinitializes it.

@@ -165,6 +165,31 @@ RCT_EXPORT_METHOD(invalidateAmbientCache:(RCTPromiseResolveBlock)resolve rejecte
     }];
 }
 
+RCT_EXPORT_METHOD(clearAmbientCache:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [[MGLOfflineStorage sharedOfflineStorage] clearAmbientCacheWithCompletionHandler:^(NSError *error) {
+        if (error != nil) {
+            reject(@"clearAmbientCache", error.description, error);
+            return;
+        }
+        resolve(nil);
+    }];
+}
+
+RCT_EXPORT_METHOD(setMaximumAmbientCacheSize:(NSUInteger)cacheSize
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [[MGLOfflineStorage sharedOfflineStorage] setMaximumAmbientCacheSize:cacheSize withCompletionHandler:^(NSError *error) {
+        if (error != nil) {
+            reject(@"setMaximumAmbientCacheSize", error.description, error);
+            return;
+        }
+        resolve(nil);
+    }];
+    
+}
+
 RCT_EXPORT_METHOD(resetDatabase:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     [[MGLOfflineStorage sharedOfflineStorage] resetDatabaseWithCompletionHandler:^(NSError *error) {

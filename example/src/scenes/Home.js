@@ -52,6 +52,7 @@ import CompassView from '../examples/CompassView';
 import BugReportTemplate from '../examples/BugReportExample';
 import StyleJson from '../examples/StyleJson';
 import ShapeSourceTS from '../examples/SymbolCircleLayer/ShapeSource';
+import CacheManagement from '../examples/CacheManagement';
 
 const styles = StyleSheet.create({
   header: {
@@ -173,6 +174,7 @@ const Examples = [
     new ExampleItem('Yo Yo Camera', YoYo),
   ]),
   new ExampleItem('Bug Report Template', BugReportPage),
+  new ExampleItem('Cache management', CacheManagement),
 ];
 
 function ExampleGroupComponent({items, navigation, showBack}) {

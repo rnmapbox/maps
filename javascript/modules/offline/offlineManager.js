@@ -131,6 +131,35 @@ class OfflineManager {
   }
 
   /**
+   * Erases resources from the ambient cache.
+   * This method clears the cache and decreases the amount of space that map resources take up on the device.
+   *
+   * @example
+   * await MapboxGL.offlineManager.clearAmbientCache();
+   *
+   * @return {void}
+   */
+  async clearAmbientCache() {
+    await this._initialize();
+    await MapboxGLOfflineManager.clearAmbientCache();
+  }
+
+  /**
+   * Sets the maximum size of the ambient cache in bytes. Disables the ambient cache if set to 0.
+   * This method may be computationally expensive because it will erase resources from the ambient cache if its size is decreased.
+   *
+   * @example
+   * await MapboxGL.offlineManager.setMaximumAmbientCacheSize(5000000);
+   *
+   * @param  {Number}  size  Size of ambient cache.
+   * @return {void}
+   */
+  async setMaximumAmbientCacheSize(size) {
+    await this._initialize();
+    await MapboxGLOfflineManager.setMaximumAmbientCacheSize(size);
+  }
+
+  /**
    * Deletes the existing database, which includes both the ambient cache and offline packs, then reinitializes it.
    *
    * @example

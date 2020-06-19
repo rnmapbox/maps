@@ -138,6 +138,44 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
         });
     }
 
+    @ReactMethod
+    public void clearAmbientCache(final Promise promise) {
+        activateFileSource();
+
+        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
+
+        offlineManager.clearAmbientCache(new OfflineManager.FileSourceCallback() {
+            @Override
+            public void onSuccess() {
+                promise.resolve(null);
+            }
+
+            @Override
+            public void onError(String error) {
+                promise.reject("clearAmbientCache", error);
+            }
+        });
+    }
+
+    @ReactMethod
+    public void setMaximumAmbientCacheSize(int size, final Promise promise) {
+        activateFileSource();
+
+        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
+
+        offlineManager.setMaximumAmbientCacheSize(size, new OfflineManager.FileSourceCallback() {
+            @Override
+            public void onSuccess() {
+                promise.resolve(null);
+            }
+
+            @Override
+            public void onError(String error) {
+                promise.reject("setMaximumAmbientCacheSize", error);
+            }
+        });
+    }
+
 
     @ReactMethod
     public void resetDatabase(final Promise promise) {
