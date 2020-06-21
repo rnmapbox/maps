@@ -4,7 +4,7 @@ Comparsion of various annotations available in React native mapbox:
 |-----------------------|--------------------|--------------------------------------|-------------------------|---------------------|
 |Can use images         | &check;            |                                      |                         |                     |
 |RN Views as childern   | iOS: static        |iOS: interactive <br/> android: static|interactive              |                     |
-|Interactions           | click              |iOS: full <b/> android: click & drag & callout  |full                     | click          |
+|Interactions           | click              |iOS: full <br/> android: click & drag & callout  |full                     | click          |
 |Control Z-index        | &check;            |iOS: always on top, android: n/a      |always on top            | &check;             |
 |Clustering             | &check;            |                                      |                         | &check;             |
 |Style with expressions | &check;            |                                      |                         | &check;             |
