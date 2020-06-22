@@ -220,6 +220,43 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void invalidatePack(final String name, final Promise promise) {
+        activateFileSource();
+
+        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
+
+        offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
+            @Override
+            public void onList(OfflineRegion[] offlineRegions) {
+                OfflineRegion region = getRegionByName(name, offlineRegions);
+
+                if (region == null) {
+                    promise.resolve(null);
+                    Log.w(REACT_CLASS, "invalidateRegion - Unknown offline region");
+                    return;
+                }
+
+                region.invalidate(new OfflineRegion.OfflineRegionInvalidateCallback() {
+                    @Override
+                    public void onInvalidate() {
+                        promise.resolve(null);
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        promise.reject("invalidateRegion", error);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+                promise.reject("invalidateRegion", error);
+            }
+        });
+    }
+
+    @ReactMethod
     public void deletePack(final String name, final Promise promise) {
         activateFileSource();
 

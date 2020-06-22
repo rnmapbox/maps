@@ -68,6 +68,30 @@ class OfflineManager {
   }
 
   /**
+   * Invalidates the specified offline pack. This method checks that the tiles in the specified offline pack match those from the server. Local tiles that do not match the latest version on the server are updated.
+   *
+   * This is more efficient than deleting the offline pack and downloading it again. If the data stored locally matches that on the server, new data will not be downloaded.
+   *
+   * @example
+   * await MapboxGL.offlineManager.invalidatePack('packName')
+   *
+   * @param  {String}  name  Name of the offline pack.
+   * @return {void}
+   */
+  async invalidatePack(name) {
+    if (!name) {
+      return;
+    }
+
+    await this._initialize();
+
+    const offlinePack = this._offlinePacks[name];
+    if (offlinePack) {
+      await MapboxGLOfflineManager.invalidatePack(name);
+    }
+  }
+
+  /**
    * Unregisters the given offline pack and allows resources that are no longer required by any remaining packs to be potentially freed.
    *
    * @example
