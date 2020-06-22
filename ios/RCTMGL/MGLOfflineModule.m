@@ -192,6 +192,25 @@ RCT_EXPORT_METHOD(getPackStatus:(NSString *)name
     resolve([self _makeRegionStatusPayload:name pack:pack]);
 }
 
+RCT_EXPORT_METHOD(invalidatePack:(NSString *)name
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    MGLOfflinePack *pack = [self _getPackFromName:name];
+
+    if (pack == nil) {
+        resolve(nil);
+        return;
+    }
+    [[MGLOfflineStorage sharedOfflineStorage] invalidatePack:pack  withCompletionHandler:^(NSError *error) {
+        if (error != nil) {
+            reject(@"invalidatePack", error.description, error);
+            return;
+        }
+        resolve(nil);
+    }];
+}
+
 RCT_EXPORT_METHOD(deletePack:(NSString *)name
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
