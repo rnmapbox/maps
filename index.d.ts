@@ -292,7 +292,7 @@ declare namespace MapboxGL {
     name: string;
     state: number;
     percentage: number;
-    completedResourcesSize: number;
+    completedResourceSize: number;
     completedTileCount: number;
     completedResourceCount: number;
     requiredResourceCount: number;
