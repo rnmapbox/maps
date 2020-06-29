@@ -21,7 +21,7 @@ function readIosVersion() {
     'react-native-mapbox-gl.podspec',
   );
   const lines = fs.readFileSync(podspecPath, 'utf8').split('\n');
-  const mapboxLineRegex = /^\s+s\.dependency\s+'Mapbox-iOS-SDK', '~>\s+(\d+\.\d+)'$/;
+  const mapboxLineRegex = /^REACT_NATIVE_MAPBOX_MAPBOX_IOS_VERSION\s*=\s*.+'~>\s+(\d+\.\d+)'$/;
   const mapboxLine = lines.filter(i => mapboxLineRegex.exec(i))[0];
   return `${mapboxLineRegex.exec(mapboxLine)[1]}.0`;
 }
