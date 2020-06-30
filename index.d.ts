@@ -111,7 +111,7 @@ export type OnPressEvent = {
 declare namespace MapboxGL {
   function removeCustomHeader(headerName: string): void;
   function addCustomHeader(headerName: string, headerValue: string): void;
-  function setAccessToken(accessToken: string): void;
+  function setAccessToken(accessToken: string | null): void;
   function getAccessToken(): Promise<void>;
   function setTelemetryEnabled(telemetryEnabled: boolean): void;
   function setConnected(connected: boolean): void;
