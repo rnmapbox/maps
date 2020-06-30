@@ -1,4 +1,16 @@
-## 8.1.0.beta1
+## 8.1.0.rc2
+
+- Fix [camera padding on android](https://github.com/react-native-mapbox-gl/maps/pull/941)
+- Allow [zPosition on iOS](https://github.com/react-native-mapbox-gl/maps/pull/942) in PointAnnotation child views.
+- Added [InvalidatePack](https://github.com/react-native-mapbox-gl/maps/pull/929)
+- Allow to [customize iOS framework version used](https://github.com/react-native-mapbox-gl/maps/pull/940)
+
+## 8.1.0.rc1
+
+- Added [invalidateAmbientCache](https://github.com/react-native-mapbox-gl/maps/pull/899)
+- Implemented [ShapeSource#features](https://github.com/react-native-mapbox-gl/maps/pull/911)
+
+## 8.1.0.beta
 
 - Upgrade to [ios 5.8.0](https://github.com/mapbox/mapbox-gl-native-ios/releases/tag/ios-v5.8.0)
 - Upgrade to [android 9.1.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.1.0)
