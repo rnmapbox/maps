@@ -106,6 +106,7 @@ public class CameraStop {
             if (boundsCamera != null) {
                 builder.target(boundsCamera.target);
                 builder.zoom(boundsCamera.zoom);
+                builder.padding(boundsCamera.padding);
             } else {
                 CameraUpdate update = CameraUpdateFactory.newLatLngBounds(mBounds, paddingLeft,
                         paddingTop, paddingRight, paddingBottom);
