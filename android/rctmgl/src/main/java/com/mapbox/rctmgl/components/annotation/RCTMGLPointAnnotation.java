@@ -236,6 +236,12 @@ public class RCTMGLPointAnnotation extends AbstractMapFeature implements View.On
         mManager.handleEvent(makeDragEvent(EventTypes.ANNOTATION_DRAG_START));
     }
 
+    public void onDrag() {
+        LatLng latLng = mAnnotation.getLatLng();
+        mCoordinate = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+        mManager.handleEvent(makeDragEvent(EventTypes.ANNOTATION_DRAG));
+    }
+
     public void onDragEnd() {
         LatLng latLng = mAnnotation.getLatLng();
         mCoordinate = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());

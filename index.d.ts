@@ -684,6 +684,9 @@ export interface PointAnnotationProps {
   anchor?: Point;
   onSelected?: () => void;
   onDeselected?: () => void;
+  onDragStart?: () => void;
+  onDrag?: () => void;
+  onDragEnd?: () => void;
 }
 
 export interface MarkerViewProps extends PointAnnotationProps {

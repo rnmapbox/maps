@@ -19,6 +19,7 @@ public class EventKeys {
     public static final String POINT_ANNOTATION_SELECTED = ns("pointannotation.selected");
     public static final String POINT_ANNOTATION_DESELECTED = ns("pointannotation.deselected");
     public static final String POINT_ANNOTATION_DRAG_START = ns("pointannotation.dragstart");
+    public static final String POINT_ANNOTATION_DRAG = ns("pointannotation.drag");
     public static final String POINT_ANNOTATION_DRAG_END = ns("pointannotation.dragend");
 
     // source events
