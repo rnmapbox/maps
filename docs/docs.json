@@ -464,7 +464,7 @@
                       }
                     },
                     "default": "none",
-                    "description": "northEastCoordinates - North east coordinate of bound"
+                    "description": "North east coordinate of bound"
                   },
                   {
                     "name": "sw",
@@ -476,7 +476,7 @@
                       }
                     },
                     "default": "none",
-                    "description": "southWestCoordinates - North east coordinate of bound"
+                    "description": "South west coordinate of bound"
                   },
                   {
                     "name": "paddingLeft",
@@ -509,7 +509,7 @@
                 ]
               },
               "default": "none",
-              "description": "FIX ME NO DESCRIPTION"
+              "description": "Represents a rectangle in geographical coordinates marking the visible area of the map."
             },
             {
               "name": "zoomLevel",
@@ -521,7 +521,7 @@
           ]
         },
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Default view settings applied on camera"
       },
       {
         "name": "centerCoordinate",
@@ -565,7 +565,7 @@
                 }
               },
               "default": "none",
-              "description": "northEastCoordinates - North east coordinate of bound"
+              "description": "North east coordinate of bound"
             },
             {
               "name": "sw",
@@ -577,7 +577,7 @@
                 }
               },
               "default": "none",
-              "description": "southWestCoordinates - North east coordinate of bound"
+              "description": "South west coordinate of bound"
             },
             {
               "name": "paddingLeft",
@@ -610,7 +610,7 @@
           ]
         },
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Represents a rectangle in geographical coordinates marking the visible area of the map."
       },
       {
         "name": "zoomLevel",

@@ -81,7 +81,7 @@ class Camera extends React.Component {
     animationMode: PropTypes.oneOf(['flyTo', 'easeTo', 'moveTo']),
 
     /**
-     * Default settings applied on camera
+     * Default view settings applied on camera
      */
     defaultSettings: PropTypes.shape(SettingsPropTypes),
 
