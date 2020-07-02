@@ -25,14 +25,17 @@ const SettingsPropTypes = {
    */
   pitch: PropTypes.number,
 
+  /**
+   * Represents a rectangle in geographical coordinates marking the visible area of the map.
+   */
   bounds: PropTypes.shape({
     /**
-     * northEastCoordinates - North east coordinate of bound
+     * North east coordinate of bound
      */
     ne: PropTypes.arrayOf(PropTypes.number).isRequired,
 
     /**
-     * southWestCoordinates - North east coordinate of bound
+     * South west coordinate of bound
      */
     sw: PropTypes.arrayOf(PropTypes.number).isRequired,
 
@@ -77,7 +80,9 @@ class Camera extends React.Component {
      */
     animationMode: PropTypes.oneOf(['flyTo', 'easeTo', 'moveTo']),
 
-    // default - view settings
+    /**
+     * Default view settings applied on camera
+     */
     defaultSettings: PropTypes.shape(SettingsPropTypes),
 
     // normal - view settings

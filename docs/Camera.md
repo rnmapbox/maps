@@ -7,13 +7,13 @@
 | ---- | :--: | :-----: | :------: | :----------: |
 | animationDuration | `number` | `2000` | `false` | The duration a camera update takes (in ms) |
 | animationMode | `enum` | `'easeTo'` | `false` | The animationstyle when the camara updates. One of; `flyTo`, `easeTo`, `moveTo` |
-| defaultSettings | `shape` | `none` | `false` | FIX ME NO DESCRIPTION |
+| defaultSettings | `shape` | `none` | `false` | Default view settings applied on camera |
 | &nbsp;&nbsp;centerCoordinate | `array` | `none` | `false` | Center coordinate on map [lng, lat] |
 | &nbsp;&nbsp;heading | `number` | `none` | `false` | Heading on map |
 | &nbsp;&nbsp;pitch | `number` | `none` | `false` | Pitch on map |
-| &nbsp;&nbsp;bounds | `shape` | `none` | `false` | FIX ME NO DESCRIPTION |
-| &nbsp;&nbsp;&nbsp;&nbsp;ne | `array` | `none` | `true` | northEastCoordinates - North east coordinate of bound |
-| &nbsp;&nbsp;&nbsp;&nbsp;sw | `array` | `none` | `true` | southWestCoordinates - North east coordinate of bound |
+| &nbsp;&nbsp;bounds | `shape` | `none` | `false` | Represents a rectangle in geographical coordinates marking the visible area of the map. |
+| &nbsp;&nbsp;&nbsp;&nbsp;ne | `array` | `none` | `true` | North east coordinate of bound |
+| &nbsp;&nbsp;&nbsp;&nbsp;sw | `array` | `none` | `true` | South west coordinate of bound |
 | &nbsp;&nbsp;&nbsp;&nbsp;paddingLeft | `number` | `none` | `false` | Left camera padding for bounds |
 | &nbsp;&nbsp;&nbsp;&nbsp;paddingRight | `number` | `none` | `false` | Right camera padding for bounds |
 | &nbsp;&nbsp;&nbsp;&nbsp;paddingTop | `number` | `none` | `false` | Top camera padding for bounds |
@@ -22,9 +22,9 @@
 | centerCoordinate | `array` | `none` | `false` | Center coordinate on map [lng, lat] |
 | heading | `number` | `none` | `false` | Heading on map |
 | pitch | `number` | `none` | `false` | Pitch on map |
-| bounds | `shape` | `none` | `false` | FIX ME NO DESCRIPTION |
-| &nbsp;&nbsp;ne | `array` | `none` | `true` | northEastCoordinates - North east coordinate of bound |
-| &nbsp;&nbsp;sw | `array` | `none` | `true` | southWestCoordinates - North east coordinate of bound |
+| bounds | `shape` | `none` | `false` | Represents a rectangle in geographical coordinates marking the visible area of the map. |
+| &nbsp;&nbsp;ne | `array` | `none` | `true` | North east coordinate of bound |
+| &nbsp;&nbsp;sw | `array` | `none` | `true` | South west coordinate of bound |
 | &nbsp;&nbsp;paddingLeft | `number` | `none` | `false` | Left camera padding for bounds |
 | &nbsp;&nbsp;paddingRight | `number` | `none` | `false` | Right camera padding for bounds |
 | &nbsp;&nbsp;paddingTop | `number` | `none` | `false` | Top camera padding for bounds |
