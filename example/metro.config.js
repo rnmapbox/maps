@@ -16,8 +16,8 @@ const blacklist = require('metro-config/src/defaults/blacklist');
 const glob = require('glob-to-regexp');
 
 const extraNodeModules = {
-  '@react-native-mapbox-gl/maps': path.resolve(__dirname+'/../maps')
-}
+  '@react-native-mapbox-gl/maps': path.resolve(__dirname + '/../maps'),
+};
 
 function getBlacklist() {
   const nodeModuleDirs = [
