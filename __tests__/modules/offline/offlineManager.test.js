@@ -46,6 +46,8 @@ describe('offlineManager', () => {
     for (const pack of packs) {
       await MapboxGL.offlineManager.deletePack(pack.name);
     }
+
+    jest.clearAllMocks();
   });
 
   it('should create pack', async () => {

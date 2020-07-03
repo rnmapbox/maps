@@ -5,8 +5,8 @@ import HeatmapLayer from '../../javascript/components/HeatmapLayer';
 
 describe('HeatmapLayer', () => {
   test('renders correctly with default props', () => {
-    const {getByType} = render(<HeatmapLayer />);
-    const heatmapLayer = getByType('RCTMGLHeatmapLayer');
+    const {UNSAFE_getByType} = render(<HeatmapLayer />);
+    const heatmapLayer = UNSAFE_getByType('RCTMGLHeatmapLayer');
     const {props} = heatmapLayer;
     expect(props.sourceID).toStrictEqual('DefaultSourceID');
   });
@@ -24,8 +24,8 @@ describe('HeatmapLayer', () => {
       maxZoomLevel: 8,
       style: {visibility: 'none'},
     };
-    const {getByType} = render(<HeatmapLayer {...testProps} />);
-    const {props} = getByType('RCTMGLHeatmapLayer');
+    const {UNSAFE_getByType} = render(<HeatmapLayer {...testProps} />);
+    const {props} = UNSAFE_getByType('RCTMGLHeatmapLayer');
 
     expect(props.id).toStrictEqual(testProps.id);
     expect(props.sourceID).toStrictEqual(testProps.sourceID);

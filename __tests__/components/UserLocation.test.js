@@ -22,27 +22,25 @@ const position = {
 
 describe('UserLocation', () => {
   describe('render', () => {
+    jest.spyOn(locationManager, 'start').mockImplementation(jest.fn());
+    jest
+      .spyOn(locationManager, 'getLastKnownLocation')
+      .mockImplementation(() => position);
+
+    jest.spyOn(locationManager, 'addListener');
+
+    jest.spyOn(locationManager, 'removeListener');
+
     beforeEach(() => {
-      jest.spyOn(locationManager, 'start').mockImplementation(jest.fn());
-      jest
-        .spyOn(locationManager, 'getLastKnownLocation')
-        .mockImplementation(() => position);
-
-      jest.spyOn(locationManager, 'addListener');
-
-      jest.spyOn(locationManager, 'removeListener');
-    });
-
-    afterEach(() => {
       jest.clearAllMocks();
     });
 
     test('renders with CircleLayers by default', (done) => {
-      const {getAllByType} = render(<UserLocation />);
+      const {UNSAFE_getAllByType} = render(<UserLocation />);
 
       setTimeout(() => {
-        const shapeSource = getAllByType(ShapeSource);
-        const circleLayer = getAllByType(CircleLayer);
+        const shapeSource = UNSAFE_getAllByType(ShapeSource);
+        const circleLayer = UNSAFE_getAllByType(CircleLayer);
 
         expect(shapeSource.length).toBe(1);
         expect(circleLayer.length).toBe(3);
@@ -51,11 +49,11 @@ describe('UserLocation', () => {
     });
 
     test('does not render with visible set to false', (done) => {
-      const {queryByType} = render(<UserLocation visible={false} />);
+      const {UNSAFE_queryByType} = render(<UserLocation visible={false} />);
 
       setTimeout(() => {
-        const shapeSource = queryByType(ShapeSource);
-        const circleLayer = queryByType(CircleLayer);
+        const shapeSource = UNSAFE_queryByType(ShapeSource);
+        const circleLayer = UNSAFE_queryByType(CircleLayer);
 
         expect(shapeSource).toEqual(null);
         expect(circleLayer).toEqual(null);
@@ -75,15 +73,15 @@ describe('UserLocation', () => {
         },
       };
 
-      const {queryByType, queryAllByType} = render(
+      const {UNSAFE_queryByType, UNSAFE_queryAllByType} = render(
         <UserLocation>
           <CircleLayer {...circleLayerProps} />
         </UserLocation>,
       );
 
       setTimeout(() => {
-        const shapeSource = queryByType(ShapeSource);
-        const circleLayer = queryAllByType(CircleLayer);
+        const shapeSource = UNSAFE_queryByType(ShapeSource);
+        const circleLayer = UNSAFE_queryAllByType(CircleLayer);
 
         expect(shapeSource).toBeDefined();
         expect(circleLayer[0]).toBeDefined();
@@ -117,9 +115,11 @@ describe('UserLocation', () => {
     test('calls onPress callback when location icon is pressed', () => {
       const onPressCallback = jest.fn();
 
-      const {queryByType} = render(<UserLocation onPress={onPressCallback} />);
+      const {UNSAFE_queryByType} = render(
+        <UserLocation onPress={onPressCallback} />,
+      );
 
-      const shapeSource = queryByType(ShapeSource);
+      const shapeSource = UNSAFE_queryByType(ShapeSource);
       fireEvent(shapeSource, 'onPress');
       fireEvent(shapeSource, 'onPress');
       expect(onPressCallback).toHaveBeenCalledTimes(2);
