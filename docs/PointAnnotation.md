@@ -18,6 +18,7 @@
 | onDeselected | `func` | `none` | `false` | This callback is fired once this annotation is deselected. |
 | onDragStart | `func` | `none` | `false` | This callback is fired once this annotation has started being dragged. |
 | onDragEnd | `func` | `none` | `false` | This callback is fired once this annotation has stopped being dragged. |
+| onDrag | `func` | `none` | `false` | This callback is fired during this annotation is being dragged. |
 
 ### methods
 #### refresh()
