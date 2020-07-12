@@ -117,4 +117,6 @@ NativeModules.MGLLocationModule = {
 
 // Mock for AbortController. Will probably not be required during testing.
 window = {};
-window.AbortController = class {};
+window.AbortController = class {
+  abort = jest.fn();
+};

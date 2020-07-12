@@ -47,7 +47,7 @@ install:
 - echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
 - find node_modules -name ".git" -exec rm -r "{}" \; || true
 - rm -rf example/node_modules/\@react-native-mapbox-gl/
-- yarn install
+- yarn install --ignore-engines
 - echo $TRAVIS_OS_NAME
 - |
   if [ "$TRAVIS_OS_NAME" == "osx" ]; then
@@ -71,7 +71,7 @@ script:
   fi
 - cd $TRAVIS_BUILD_DIR
 - yarn global add -g 'jest@24.8.0'
-- yarn install
+- yarn install --ignore-engines
 - yarn run unittest
 - yarn run generate
 deploy:

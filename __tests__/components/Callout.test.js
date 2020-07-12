@@ -14,12 +14,12 @@ describe('Callout', () => {
 
   describe('_renderDefaultCallout', () => {
     test('renders default children', () => {
-      const {getByType, getAllByType} = render(<Callout />);
-      const callout = getByType('RCTMGLCallout');
+      const {UNSAFE_getByType, UNSAFE_getAllByType} = render(<Callout />);
+      const callout = UNSAFE_getByType('RCTMGLCallout');
 
       expect(callout).toBeDefined();
-      expect(getAllByType(Text).length).toBe(1);
-      expect(getAllByType(View).length).toBe(3);
+      expect(UNSAFE_getAllByType(Text).length).toBe(1);
+      expect(UNSAFE_getAllByType(View).length).toBe(3);
     });
 
     test('renders with custom styles', () => {
@@ -30,11 +30,13 @@ describe('Callout', () => {
         tipStyle: {height: 4},
         textStyle: {height: 5},
       };
-      const {getByType, getAllByType} = render(<Callout {...testProps} />);
+      const {UNSAFE_getByType, UNSAFE_getAllByType} = render(
+        <Callout {...testProps} />,
+      );
 
-      const callout = getByType('RCTMGLCallout');
-      const views = getAllByType(View);
-      const text = getByType(Text);
+      const callout = UNSAFE_getByType('RCTMGLCallout');
+      const views = UNSAFE_getAllByType(View);
+      const text = UNSAFE_getByType(Text);
 
       const calloutWrapperTestStyle = callout.props.style[1].height;
       const animatedViewTestStyle = views[0].props.style.height;
@@ -54,13 +56,13 @@ describe('Callout', () => {
 
   describe('_renderCustomCallout', () => {
     test('renders custom children', () => {
-      const {getByTestId, queryByType} = render(
+      const {getByTestId, UNSAFE_queryByType} = render(
         <Callout>
           <View testID="TestChild">{'Foo Bar'}</View>
         </Callout>,
       );
 
-      expect(queryByType(Text)).toBeNull();
+      expect(UNSAFE_queryByType(Text)).toBeNull();
       expect(getByTestId('TestChild')).toBeDefined();
     });
 
@@ -69,13 +71,13 @@ describe('Callout', () => {
         style: {width: 1},
         containerStyle: {width: 2},
       };
-      const {getByType, getAllByType} = render(
+      const {UNSAFE_getByType, UNSAFE_getAllByType} = render(
         <Callout {...testProps}>
           <View>{'Foo Bar'}</View>
         </Callout>,
       );
-      const callout = getByType('RCTMGLCallout');
-      const views = getAllByType(View);
+      const callout = UNSAFE_getByType('RCTMGLCallout');
+      const views = UNSAFE_getAllByType(View);
 
       const calloutWrapperTestStyle = callout.props.style[1].width;
       const animatedViewTestStyle = views[0].props.style.width;

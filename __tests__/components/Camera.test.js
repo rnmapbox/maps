@@ -58,6 +58,7 @@ describe('Camera', () => {
       const {getByTestId} = render(<Camera />);
 
       expect(getByTestId('Camera').props).toStrictEqual({
+        children: undefined,
         testID: 'Camera',
         followUserLocation: undefined,
         followUserMode: undefined,
