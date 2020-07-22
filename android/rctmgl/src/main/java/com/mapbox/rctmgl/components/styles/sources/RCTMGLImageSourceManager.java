@@ -56,7 +56,7 @@ public class RCTMGLImageSourceManager extends ViewGroupManager<RCTMGLImageSource
 
     @ReactProp(name = "url")
     public void setUrl(RCTMGLImageSource source, String url) {
-        source .setURL(url);
+        source.setURL(url);
     }
 
     @ReactProp(name = "coordinates")

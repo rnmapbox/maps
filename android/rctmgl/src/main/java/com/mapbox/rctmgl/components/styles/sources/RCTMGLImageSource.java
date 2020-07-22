@@ -58,11 +58,11 @@ public class RCTMGLImageSource extends RCTSource<ImageSource> {
                 mURL = new URL(url);
 
                 if (mSource != null) {
-                    mSource.setUrl(mURL);
+                    mSource.setUri(mURL.toURI());
                 }
             }
 
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             Log.w(LOG_TAG, e.getLocalizedMessage());
         }
     }
