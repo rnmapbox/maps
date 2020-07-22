@@ -21,7 +21,6 @@ import {
   LineString,
   Coord,
   Units,
-  Point,
   BBox,
   Id,
   FeatureCollection,
@@ -170,12 +169,12 @@ declare namespace MapboxGL {
       coordinate: GeoJSON.Position,
       filter?: Expression,
       layerIds?: Array<string>,
-    ): Promise<GeoJSON.FeatureCollection?>;
+    ): Promise<GeoJSON.FeatureCollection | undefined>;
     queryRenderedFeaturesInRect(
       coordinate: GeoJSON.Position,
       filter?: Expression,
       layerIds?: Array<string>,
-    ): Promise<GeoJSON.FeatureCollection?>;
+    ): Promise<GeoJSON.FeatureCollection | undefined>;
     takeSnap(writeToDisk?: boolean): Promise<string>;
     getZoom(): Promise<number>;
     getCenter(): Promise<GeoJSON.Position>;
@@ -364,7 +363,7 @@ export interface MapViewProps extends ViewProps {
   userTrackingMode?: MapboxGL.UserTrackingModes;
   userLocationVerticalAlignment?: number;
   contentInset?: Array<number>;
-  style?: StyleProp;
+  style?: StyleProp<ViewStyle>;
   styleURL?: string;
   localizeLabels?: boolean;
   zoomEnabled?: boolean;
@@ -721,14 +720,14 @@ export interface VectorSourceProps extends TileSourceProps {
 export interface ShapeSourceProps extends ViewProps {
   id?: string;
   url?: string;
-  shape?: GeoJSON.Geometries | GeoJSON.Feature | GeoJSON.FeatureCollection;
+  shape?: GeoJSON.GeometryCollection | GeoJSON.Feature | GeoJSON.FeatureCollection;
   cluster?: boolean;
   clusterRadius?: number;
   clusterMaxZoomLevel?: number;
   maxZoomLevel?: number;
   buffer?: number;
   tolerance?: number;
-  images?: {assets?: string[]; [key: string]: ImageSourcePropType};
+  images?: {assets?: string[]} & {[key: string]: ImageSourcePropType};
   onPress?: (event: OnPressEvent) => void;
   hitbox?: {
     width: number;
@@ -785,7 +784,7 @@ export interface HeatmapLayerProps extends LayerBaseProps {
 }
 
 export interface ImagesProps extends ViewProps {
-  images?: {assets?: string[]; [key: string]: ImageSourcePropType};
+  images?: {assets?: string[]} & {[key: string]: ImageSourcePropType};
 }
 
 export interface ImageSourceProps extends ViewProps {
