@@ -8,7 +8,10 @@
 
 #import "RCTMGLStyleValue.h"
 #import "RCTMGLUtils.h"
+
+#import <React/RCTImageSource.h>
 #import <React/RCTImageLoader.h>
+#import <React/RCTGIFImageDecoder.h>
 
 @implementation RCTMGLStyleValue
 {
@@ -21,7 +24,7 @@
         UIColor *color = [RCTMGLUtils toColor:expressionJSON];
         return [NSExpression expressionWithMGLJSONObject:color];
     } else if ([_styleType isEqualToString:@"color"] && [expressionJSON isKindOfClass:[NSNumber class]]) {
-      
+
         UIColor *color = [RCTMGLUtils toColor:expressionJSON];
         return [NSExpression expressionWithMGLJSONObject:color];
     } else if ([_styleType isEqualToString:@"vector"] && [expressionJSON respondsToSelector:@selector(objectEnumerator)] && [[[(NSArray*)expressionJSON objectEnumerator] nextObject] isKindOfClass:[NSNumber class]]) {
@@ -53,7 +56,7 @@
 {
     NSObject *object = nil;
     NSString *type = (NSString *)rawStyleValue[@"type"];
-    
+
     if ([type isEqualToString:@"string"]) {
         object = (NSString *)rawStyleValue[@"value"];
     } else if ([type isEqualToString:@"number"]) {
@@ -63,25 +66,25 @@
     } else if ([type isEqualToString:@"hashmap"]) {
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
         NSArray *values = (NSArray *)rawStyleValue[@"value"];
-        
+
         for (int i = 0; i < values.count; i++) {
             NSObject *key = [self parse:values[i][0]];
             NSObject *value = [self parse:values[i][1]];
             dict[[key mutableCopy]] = value;
         }
-        
+
         object = dict;
     } else if ([type isEqualToString:@"array"]) {
         NSMutableArray *arr = [[NSMutableArray alloc] init];
         NSArray *values = (NSArray *)rawStyleValue[@"value"];
-        
+
         for (int i = 0; i < values.count; i++) {
             [arr addObject:[self parse:values[i]]];
         }
-        
+
         object = arr;
     }
-    
+
     return object;
 }
 
@@ -90,7 +93,7 @@
 - (BOOL)shouldAddImage
 {
     NSString *imageURI = [self getImageURI];
-    
+
     return [imageURI containsString:@"://"];
 }
 
@@ -124,24 +127,24 @@
     if (![expressionJSON isKindOfClass:[NSDictionary class]]) {
         return MGLTransitionMake(0.f, 0.f);
     }
-    
+
     NSDictionary *config = (NSDictionary *)expressionJSON;
     double duration = config[@"duration"] != nil ? [config[@"duration"] doubleValue] : 300.0;
     double delay = config[@"delay"] != nil ? [config[@"delay"] doubleValue] : 0.0;
 
     const double millisecondsToSeconds = 1.0/1000.0;
-    
+
     return MGLTransitionMake(duration * millisecondsToSeconds, delay * millisecondsToSeconds);
 }
 
 - (NSExpression *)getSphericalPosition
 {
     NSArray *values = (NSArray<NSNumber *> *)expressionJSON;
-    
+
     CGFloat radial = [values[0] floatValue];
     CLLocationDistance azimuthal = [values[1] doubleValue];
     CLLocationDistance polar = [values[2] doubleValue];
-    
+
     MGLSphericalPosition pos = MGLSphericalPositionMake(radial, azimuthal, polar);
     return [NSExpression expressionWithMGLJSONObject:@(pos)];
 }

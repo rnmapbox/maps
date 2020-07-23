@@ -61,8 +61,10 @@
         [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
-              [self->_style setImage:image forName:imageURI];
-              [self setFillPattern:layer withReactStyleValue:styleValue];
+                if (image && imageURI && layer && styleValue) {
+                    [self->_style setImage:image forName:imageURI];
+                    [self setFillPattern:layer withReactStyleValue:styleValue];
+                }
             });
           }
         }];

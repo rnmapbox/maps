@@ -9,7 +9,9 @@
 #import <MapKit/MapKit.h>
 #import <React/RCTBridge.h>
 #import <React/RCTConvert.h>
+#import <React/RCTImageSource.h>
 #import <React/RCTImageLoader.h>
+#import <React/RCTGIFImageDecoder.h>
 
 @import Mapbox;
 
