@@ -12,6 +12,7 @@ import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+import com.mapbox.mapboxsdk.log.Logger;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.rctmgl.components.AbstractEventEmitter;
 import com.mapbox.rctmgl.events.constants.EventKeys;
@@ -319,21 +320,19 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         private void diposeNativeMapView() {
             final RCTMGLMapView mapView = mViewManager.getByReactTag(getReactTag());
 
-            RunnableFuture<Void> task = new FutureTask<>(new Runnable() {
-                @Override
-                public void run() {
-                    mapView.dispose();
+            if (mapView != null) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            mapView.dispose();
+                        }
+                        catch (Exception ex) {
+                            Logger.e(LOG_TAG, " disposeNativeMapView() exception destroying map view", ex);
+                        }
+                    }
                 }
-            }, null);
-
-            runOnUiThread(task);
-
-            try {
-                task.get(); // this will block until Runnable completes
-            } catch (InterruptedException | ExecutionException e) {
-                // handle exception
-                Log.e(getClass().getSimpleName() , " diposeNativeMapView() exception destroying map view", e);
-            }
+            });
         }
     }
 }
