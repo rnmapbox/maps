@@ -40,6 +40,7 @@
     "@turf/nearest-point-on-line": ">= 4.0.0 <7.0.0",
     "@turf/helpers": ">= 4.6.0 <7.0.0",
     "@turf/length": ">= 4.6.0 <7.0.0",
+    "@types/geojson": "^7946.0.7",
     "debounce": "^1.2.0"
   },
   "devDependencies": {
@@ -49,7 +50,6 @@
     "@babel/plugin-transform-flow-strip-types": "7.10.1",
     "@babel/plugin-transform-runtime": "7.10.3",
     "@babel/runtime": "7.10.3",
-    "@types/geojson": "^7946.0.7",
     "babel-core": "6.26.3",
     "babel-eslint": "^10.0.1",
     "documentation": "13.0.1",
