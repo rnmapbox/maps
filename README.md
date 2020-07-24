@@ -79,6 +79,7 @@ npm install @react-native-mapbox-gl/maps --save
 
 ### Misc
 
+- [MapboxGL](/docs/MapboxGL.md)
 - [CustomHttpHeaders](/docs/CustomHttpHeaders.md)
 
 ## Expo Support
