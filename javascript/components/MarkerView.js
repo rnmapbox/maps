@@ -35,6 +35,9 @@ class MarkerView extends React.PureComponent {
       y: PropTypes.number.isRequired,
     }),
 
+    /**
+     * Expects one child - can be container with multiple elements
+     */
     children: PropTypes.element.isRequired,
   };
 
