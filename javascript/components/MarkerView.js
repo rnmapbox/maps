@@ -34,6 +34,11 @@ class MarkerView extends React.PureComponent {
       x: PropTypes.number.isRequired,
       y: PropTypes.number.isRequired,
     }),
+
+    /**
+     * Expects one child - can be container with multiple elements
+     */
+    children: PropTypes.element.isRequired,
   };
 
   static defaultProps = {
@@ -57,6 +62,7 @@ class MarkerView extends React.PureComponent {
       anchor: this.props.anchor,
       coordinate: this._getCoordinate(),
     };
+
     return (
       <RCTMGLMarkerView {...props}>{this.props.children}</RCTMGLMarkerView>
     );
