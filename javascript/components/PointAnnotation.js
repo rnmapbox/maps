@@ -10,6 +10,7 @@ import {
 
 import {toJSONString, isFunction, viewPropTypes} from '../utils';
 import {makePoint} from '../utils/geoUtils';
+import NativeBridgeComponent from "./NativeBridgeComponent";
 
 export const NATIVE_MODULE_NAME = 'RCTMGLPointAnnotation';
 
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
  * PointAnnotation represents a one-dimensional shape located at a single geographical coordinate. Consider using ShapeSource and SymbolLayer instead, if you have many points and you have static images, they'll offer much better performance.
  * If you need interctive views please use MarkerView, as with PointAnnotation on android child views are rendered onto a bitmap for better performance.
  */
-class PointAnnotation extends React.PureComponent {
+class PointAnnotation extends NativeBridgeComponent(React.PureComponent) {
   static propTypes = {
     ...viewPropTypes,
 
@@ -99,7 +100,7 @@ class PointAnnotation extends React.PureComponent {
   };
 
   constructor(props) {
-    super(props);
+    super(props, NATIVE_MODULE_NAME);
     this._onSelected = this._onSelected.bind(this);
     this._onDeselected = this._onDeselected.bind(this);
     this._onDragStart = this._onDragStart.bind(this);
@@ -137,6 +138,11 @@ class PointAnnotation extends React.PureComponent {
     return toJSONString(makePoint(this.props.coordinate));
   }
 
+  _setNativeRef(nativeRef) {
+    this._nativeRef = nativeRef;
+    super._runPendingNativeCommands(nativeRef);
+  }
+
   /**
    * On android point annotation is rendered offscreen with a canvas into an image.
    * To rerender the image from the current state of the view call refresh.
@@ -144,7 +150,10 @@ class PointAnnotation extends React.PureComponent {
    */
   refresh() {
     if (Platform.OS === 'android') {
-      UIManager.dispatchViewManagerCommand(findNodeHandle(this), 'refresh', []);
+      this._runNativeCommand(
+        'refresh',
+        this._nativeRef,
+      );
     }
   }
 
@@ -165,7 +174,7 @@ class PointAnnotation extends React.PureComponent {
       coordinate: this._getCoordinate(),
     };
     return (
-      <RCTMGLPointAnnotation {...props}>
+      <RCTMGLPointAnnotation ref={(nativeRef) => this._setNativeRef(nativeRef)} {...props}>
         {this.props.children}
       </RCTMGLPointAnnotation>
     );
