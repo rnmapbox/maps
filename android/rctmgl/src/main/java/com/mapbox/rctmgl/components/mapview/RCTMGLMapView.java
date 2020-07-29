@@ -1115,13 +1115,13 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         setMaximumFps(mPreferredFramesPerSecond);
     }
 
-    private void updateInsets() {
-        if (mMap == null || mInsets == null) {
-            return;
+    public double[] getContentInset() {
+        if (mInsets == null) {
+            double[] result = {0,0,0,0};
+        
+            return result;
         }
-
-        final DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
-        int top = 0, right = 0, bottom = 0, left = 0;
+        double top = 0, right = 0, bottom = 0, left = 0;
 
         if (mInsets.size() == 4) {
             top = mInsets.getInt(0);
@@ -1140,10 +1140,24 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
             left = top;
         }
 
-        mMap.setPadding(Float.valueOf(left * metrics.scaledDensity).intValue(),
-                Float.valueOf(top * metrics.scaledDensity).intValue(),
-                Float.valueOf(right * metrics.scaledDensity).intValue(),
-                Float.valueOf(bottom * metrics.scaledDensity).intValue());
+        final DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
+    
+        double[] result = {left * metrics.scaledDensity, top * metrics.scaledDensity, right * metrics.scaledDensity, bottom * metrics.scaledDensity};
+        return result;
+    }
+
+    private void updateInsets() {
+        if (mMap == null || mInsets == null) {
+            return;
+        }
+
+        double padding[] = getContentInset();
+        double top = padding[1], right = padding[2], bottom = padding[3], left = padding[0];
+
+        mMap.setPadding(Double.valueOf(left).intValue(),
+                Double.valueOf(top).intValue(),
+                Double.valueOf(right).intValue(),
+                Double.valueOf(bottom).intValue());
     }
 
     private void setLifecycleListeners() {
