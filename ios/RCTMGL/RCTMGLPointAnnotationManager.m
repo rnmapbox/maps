@@ -25,6 +25,7 @@ RCT_REMAP_VIEW_PROPERTY(draggable, reactDraggable, BOOL)
 RCT_REMAP_VIEW_PROPERTY(onMapboxPointAnnotationSelected, onSelected, RCTBubblingEventBlock)
 RCT_REMAP_VIEW_PROPERTY(onMapboxPointAnnotationDeselected, onDeselected, RCTBubblingEventBlock)
 RCT_REMAP_VIEW_PROPERTY(onMapboxPointAnnotationDragStart, onDragStart, RCTBubblingEventBlock)
+RCT_REMAP_VIEW_PROPERTY(onMapboxPointAnnotationDrag, onDrag, RCTBubblingEventBlock)
 RCT_REMAP_VIEW_PROPERTY(onMapboxPointAnnotationDragEnd, onDragEnd, RCTBubblingEventBlock)
 
 - (UIView *)view

@@ -695,10 +695,14 @@ export interface PointAnnotationProps {
   title?: string;
   snippet?: string;
   selected?: boolean;
+  draggable?: boolean;
   coordinate: GeoJSON.Position;
   anchor?: Point;
   onSelected?: () => void;
   onDeselected?: () => void;
+  onDragStart?: () => void;
+  onDrag?: () => void;
+  onDragEnd?: () => void;
 }
 
 export interface MarkerViewProps extends PointAnnotationProps {

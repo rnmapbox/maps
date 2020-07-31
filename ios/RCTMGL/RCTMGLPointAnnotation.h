@@ -30,6 +30,7 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onSelected;
 @property (nonatomic, copy) RCTBubblingEventBlock onDeselected;
 @property (nonatomic, copy) RCTBubblingEventBlock onDragStart;
+@property (nonatomic, copy) RCTBubblingEventBlock onDrag;
 @property (nonatomic, copy) RCTBubblingEventBlock onDragEnd;
 
 @property (nonatomic, assign) BOOL reactSelected;
