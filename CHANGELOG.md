@@ -1,3 +1,7 @@
+## 8.1.0.rc3
+
+- Fix [iOS interface for getAccessToken() on Android](https://github.com/react-native-mapbox-gl/maps/pull/954)
+
 ## 8.1.0.rc2
 
 - Fix [camera padding on android](https://github.com/react-native-mapbox-gl/maps/pull/941)
