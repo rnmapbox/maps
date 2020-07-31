@@ -93,8 +93,8 @@ class PointAnnotation extends React.PureComponent {
     onDragEnd: PropTypes.func,
 
     /**
-    * This callback is fired during this annotation is being dragged.
-    */
+     * This callback is fired while this annotation is being dragged.
+     */
     onDrag: PropTypes.func,
   };
 
