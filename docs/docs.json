@@ -3005,7 +3005,7 @@
     "name": "MapView"
   },
   "MarkerView": {
-    "description": "MarkerView allows you to place a interactive react native marker to the map. If you have static view consider using PointAnnotation or SymbolLayer they'll offer much better performance.\nThis is based on [MakerView plugin](https://docs.mapbox.com/android/plugins/overview/markerview/) on android and PointAnnotation on iOS.",
+    "description": "MarkerView allows you to place a interactive react native marker to the map.\n\nIf you have static view consider using PointAnnotation or SymbolLayer they'll offer much better performance\n.\nThis is based on [MakerView plugin](https://docs.mapbox.com/android/plugins/overview/markerview/) on Android\nand PointAnnotation on iOS.",
     "displayName": "MarkerView",
     "methods": [],
     "props": [
@@ -3032,14 +3032,14 @@
               "required": true,
               "type": "number",
               "default": "none",
-              "description": "FIX ME NO DESCRIPTION"
+              "description": "`x` of anchor"
             },
             {
               "name": "y",
               "required": true,
               "type": "number",
               "default": "none",
-              "description": "FIX ME NO DESCRIPTION"
+              "description": "`y` of anchor"
             }
           ]
         },
@@ -3082,7 +3082,7 @@
     "name": "NativeUserLocation"
   },
   "PointAnnotation": {
-    "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate. Consider using ShapeSource and SymbolLayer instead, if you have many points and you have static images, they'll offer much better performance.\nIf you need interctive views please use MarkerView, as with PointAnnotation on android child views are rendered onto a bitmap for better performance.",
+    "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.\n\nConsider using ShapeSource and SymbolLayer instead, if you have many points and you have static images,\nthey'll offer much better performance\n\n.\nIf you need interctive views please use MarkerView,\nas with PointAnnotation on Android child views are rendered onto a bitmap for better performance.",
     "displayName": "PointAnnotation",
     "methods": [
       {
@@ -3154,14 +3154,14 @@
               "required": true,
               "type": "number",
               "default": "none",
-              "description": "FIX ME NO DESCRIPTION"
+              "description": "See anchor"
             },
             {
               "name": "y",
               "required": true,
               "type": "number",
               "default": "none",
-              "description": "FIX ME NO DESCRIPTION"
+              "description": "See anchor"
             }
           ]
         },
@@ -3702,14 +3702,14 @@
               "required": true,
               "type": "number",
               "default": "none",
-              "description": "FIX ME NO DESCRIPTION"
+              "description": "`width` of hitbox"
             },
             {
               "name": "height",
               "required": true,
               "type": "number",
               "default": "none",
-              "description": "FIX ME NO DESCRIPTION"
+              "description": "`height` of hitbox"
             }
           ]
         },
@@ -5208,7 +5208,7 @@
         "required": false,
         "type": "enum",
         "default": "'normal'",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Which render mode to use.\nCan either be `normal` or `native`"
       },
       {
         "name": "androidRenderMode",
@@ -5250,7 +5250,7 @@
         "required": false,
         "type": "number",
         "default": "0",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Minimum amount of movement before GPS location is updated in meters"
       },
       {
         "name": "children",
@@ -5426,14 +5426,14 @@
               "required": true,
               "type": "number",
               "default": "none",
-              "description": "FIX ME NO DESCRIPTION"
+              "description": "`width` of hitbox"
             },
             {
               "name": "height",
               "required": true,
               "type": "number",
               "default": "none",
-              "description": "FIX ME NO DESCRIPTION"
+              "description": "`height` of hitbox"
             }
           ]
         },

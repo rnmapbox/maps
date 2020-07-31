@@ -6,13 +6,13 @@
 | Prop | Type | Default | Required | Description |
 | ---- | :--: | :-----: | :------: | :----------: |
 | animated | `bool` | `true` | `false` | Whether location icon is animated between updates |
-| renderMode | `enum` | `'normal'` | `false` | FIX ME NO DESCRIPTION |
+| renderMode | `enum` | `'normal'` | `false` | Which render mode to use.<br/>Can either be `normal` or `native` |
 | androidRenderMode | `enum` | `none` | `false` | native/android only render mode<br/><br/> - normal: just a circle<br/> - compass: triangle with heading<br/> - gps: large arrow<br/><br/>@platform android |
 | visible | `bool` | `true` | `false` | Whether location icon is visible |
 | onPress | `func` | `none` | `false` | Callback that is triggered on location icon press |
 | onUpdate | `func` | `none` | `false` | Callback that is triggered on location update |
 | showsUserHeadingIndicator | `bool` | `false` | `false` | Show or hide small arrow which indicates direction the device is pointing relative to north. |
-| minDisplacement | `number` | `0` | `false` | FIX ME NO DESCRIPTION |
+| minDisplacement | `number` | `0` | `false` | Minimum amount of movement before GPS location is updated in meters |
 | children | `any` | `none` | `false` | Custom location icon of type mapbox-gl-native components |
 
 ### methods
