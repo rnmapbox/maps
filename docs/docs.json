@@ -3195,6 +3195,13 @@
         "type": "func",
         "default": "none",
         "description": "This callback is fired once this annotation has stopped being dragged."
+      },
+      {
+        "name": "onDrag",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This callback is fired while this annotation is being dragged."
       }
     ],
     "composes": [

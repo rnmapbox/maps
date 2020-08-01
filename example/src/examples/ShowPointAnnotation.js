@@ -41,6 +41,10 @@ class AnnotationWithRemoteImage extends React.Component {
         id={id}
         coordinate={coordinate}
         title={title}
+        draggable
+        onDrag={(e) => console.log('onDrag:', e.properties.id, e.geometry.coordinates)}
+        onDragStart={(e) => console.log('onDragStart:', e.properties.id, e.geometry.coordinates)}
+        onDragEnd={(e) => console.log('onDragEnd:', e.properties.id, e.geometry.coordinates)}
         ref={(ref) => (this.annotationRef = ref)}>
         <View style={styles.annotationContainer}>
           <Image

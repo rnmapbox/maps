@@ -111,7 +111,7 @@ declare namespace MapboxGL {
   function removeCustomHeader(headerName: string): void;
   function addCustomHeader(headerName: string, headerValue: string): void;
   function setAccessToken(accessToken: string | null): void;
-  function getAccessToken(): Promise<void>;
+  function getAccessToken(): Promise<string>;
   function setTelemetryEnabled(telemetryEnabled: boolean): void;
   function setConnected(connected: boolean): void;
   function requestAndroidLocationPermissions(): Promise<boolean>;
@@ -697,10 +697,14 @@ export interface PointAnnotationProps {
   title?: string;
   snippet?: string;
   selected?: boolean;
+  draggable?: boolean;
   coordinate: GeoJSON.Position;
   anchor?: Point;
   onSelected?: () => void;
   onDeselected?: () => void;
+  onDragStart?: () => void;
+  onDrag?: () => void;
+  onDragEnd?: () => void;
 }
 
 export interface MarkerViewProps extends PointAnnotationProps {

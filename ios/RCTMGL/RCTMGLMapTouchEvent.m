@@ -52,11 +52,24 @@
     return event;
 }
 
++ (RCTMGLMapTouchEvent *)makeAnnotationTapEventOnDrag:(RCTMGLPointAnnotation *)pointAnnotation
+{
+    RCTMGLMapTouchEvent *event = [[RCTMGLMapTouchEvent alloc] init];
+    event.type = RCT_MAPBOX_ANNOTATION_TAP;
+    event.id = pointAnnotation.id;
+    CGPoint screenPoint = [pointAnnotation.superview convertPoint:pointAnnotation.layer.position toView:nil];
+    screenPoint.x -= (pointAnnotation.layer.bounds.size.width * pointAnnotation.layer.anchorPoint.x);
+    screenPoint.y -= (pointAnnotation.layer.bounds.size.height * pointAnnotation.layer.anchorPoint.y);
+    event.screenPoint = screenPoint;
+    event.coordinate =  [pointAnnotation.map convertPoint:pointAnnotation.layer.position toCoordinateFromView:pointAnnotation.map];
+    return event;
+}
+
 + (RCTMGLMapTouchEvent*)_fromPoint:(CGPoint)point withMapView:(MGLMapView *)mapView andEventType:(NSString*)eventType
 {
     RCTMGLMapTouchEvent *event = [[RCTMGLMapTouchEvent alloc] init];
     event.type = eventType;
-    event.coordinate =[mapView convertPoint:point toCoordinateFromView:mapView];
+    event.coordinate = [mapView convertPoint:point toCoordinateFromView:mapView];
     event.screenPoint = point;
     return event;
 }

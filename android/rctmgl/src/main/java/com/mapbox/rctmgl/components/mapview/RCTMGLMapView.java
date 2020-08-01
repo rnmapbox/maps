@@ -505,9 +505,12 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
             }
 
             @Override
-            // Left empty on purpose
             public void onAnnotationDrag(Symbol symbol) {
-
+                final long selectedMarkerID = symbol.getId();
+                RCTMGLPointAnnotation annotation = getPointAnnotationByMarkerID(selectedMarkerID);
+                if (annotation != null) {
+                    annotation.onDrag();
+                }
             }
 
             @Override
