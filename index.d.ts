@@ -234,7 +234,9 @@ declare namespace MapboxGL {
     identity(attributeName: string): number;
   }
 
-  class PointAnnotation extends Component<PointAnnotationProps> {}
+  class PointAnnotation extends Component<PointAnnotationProps> {
+    refresh(): void;
+  }
   class MarkerView extends Component<MarkerViewProps> {}
   class Callout extends Component<CalloutProps> {}
   interface Style extends React.FC<StyleProps> {}
