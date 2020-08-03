@@ -22,8 +22,14 @@ const styles = StyleSheet.create({
 });
 
 /**
- * PointAnnotation represents a one-dimensional shape located at a single geographical coordinate. Consider using ShapeSource and SymbolLayer instead, if you have many points and you have static images, they'll offer much better performance.
- * If you need interctive views please use MarkerView, as with PointAnnotation on android child views are rendered onto a bitmap for better performance.
+ * PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.
+ *
+ * Consider using ShapeSource and SymbolLayer instead, if you have many points and you have static images,
+ * they'll offer much better performance
+ *
+ * .
+ * If you need interctive views please use MarkerView,
+ * as with PointAnnotation on Android child views are rendered onto a bitmap for better performance.
  */
 class PointAnnotation extends React.PureComponent {
   static propTypes = {
@@ -68,7 +74,13 @@ class PointAnnotation extends React.PureComponent {
      * Defaults to the center of the view.
      */
     anchor: PropTypes.shape({
+      /**
+       * See anchor
+       */
       x: PropTypes.number.isRequired,
+      /**
+       * See anchor
+       */
       y: PropTypes.number.isRequired,
     }),
 
