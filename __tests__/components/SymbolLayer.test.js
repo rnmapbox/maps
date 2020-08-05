@@ -49,25 +49,4 @@ describe('SymbolLayer', () => {
       },
     });
   });
-
-  test('renders correctly with textVariableAnchor & textRadialOffset styles', () => {
-    const customStyle = {
-      textVariableAnchor: [
-        'center',
-        'left',
-        'right',
-        'top',
-        'bottom',
-        'top-left',
-        'top-right',
-        'bottom-left',
-        'bottom-right',
-      ],
-      textRadialOffset: 1,
-    };
-
-    const {UNSAFE_getByType} = render(<SymbolLayer style={customStyle} />);
-    const symbolLayer = UNSAFE_getByType(NATIVE_MODULE_NAME);
-    const {props} = symbolLayer;
-  });
 });
