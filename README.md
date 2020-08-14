@@ -7,27 +7,30 @@ _An unofficial React Native library for building maps with the [Mapbox Maps SDK 
 [![Depfu](https://badges.depfu.com/badges/2eac6b62372619718b7f55ebbf8e9d8f/overview.svg)](https://depfu.com/github/react-native-mapbox-gl/maps?project_id=8248)
 
 ## Installation
+### Prerequisit
+On Android we support from version 6 (API 23) upwards  
 
-**Dependencies**
+
+### Dependencies
 
 - [node](https://nodejs.org)
 - [npm](https://www.npmjs.com/)
 - [React Native](https://facebook.github.io/react-native/) (0.60+)
 
-**Git**
+### Git
 
 ```
 git clone git@github.com:react-native-mapbox-gl/maps.git
 cd maps
 ```
 
-**Yarn**
+### Yarn
 
 ```
 yarn add @react-native-mapbox-gl/maps
 ```
 
-**Npm**
+### Npm
 
 ```
 npm install @react-native-mapbox-gl/maps --save
