@@ -781,7 +781,8 @@ export interface CircleLayerProps extends LayerBaseProps {
   style?: StyleProp<CircleLayerStyle>;
 }
 
-export interface FillExtrusionLayerProps extends LayerBaseProps {
+export interface FillExtrusionLayerProps extends Omit<LayerBaseProps, 'id'>  {
+  id: string;
   style?: StyleProp<FillExtrusionLayerStyle>;
 }
 

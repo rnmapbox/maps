@@ -1090,7 +1090,7 @@
     "props": [
       {
         "name": "id",
-        "required": false,
+        "required": true,
         "type": "string",
         "default": "none",
         "description": "A string that uniquely identifies the source in the style to which it is added."
