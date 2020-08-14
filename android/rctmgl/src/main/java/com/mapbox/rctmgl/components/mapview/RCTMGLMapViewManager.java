@@ -320,19 +320,24 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         private void diposeNativeMapView() {
             final RCTMGLMapView mapView = mViewManager.getByReactTag(getReactTag());
 
-            if (mapView != null) {
+            if (mapView != null)
+            {
                 runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
-                        try {
+                    public void run()
+                    {
+                        try
+                        {
                             mapView.dispose();
                         }
-                        catch (Exception ex) {
-                            Logger.e(LOG_TAG, " disposeNativeMapView() exception destroying map view", ex);
+                        catch (Exception ex)
+                        {
+                            Log.e(getClass().getSimpleName() , " disposeNativeMapView() exception destroying map view", ex);
                         }
                     }
-                }
-            });
+                });
+            }
         }
     }
 }
+
