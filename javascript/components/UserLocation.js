@@ -142,8 +142,6 @@ class UserLocation extends React.Component {
   async componentDidMount() {
     this._isMounted = true;
 
-    // locationManager.addListener(this._onLocationUpdate);
-
     await this.setLocationManager({
       required: this.needsLocationManagerRunning(),
     });
@@ -167,7 +165,6 @@ class UserLocation extends React.Component {
 
   async componentWillUnmount() {
     this._isMounted = false;
-    // locationManager.removeListener(this._onLocationUpdate);
     await this.setLocationManager({required: false});
   }
 
@@ -185,12 +182,8 @@ class UserLocation extends React.Component {
     if (this.locationManagerRequired !== required) {
       this.locationManagerRequired = required;
       if (required) {
-        // locationManager.start();
         locationManager.addListener(this._onLocationUpdate);
-        // const location = await locationManager.getLastKnownLocation();
-        // this._onLocationUpdate(location);
       } else {
-        // locationManager.stop();
         locationManager.removeListener(this._onLocationUpdate);
       }
     }
