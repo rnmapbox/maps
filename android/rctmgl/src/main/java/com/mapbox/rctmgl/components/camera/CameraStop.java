@@ -16,6 +16,8 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.rctmgl.components.camera.constants.CameraMode;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
 
+import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
+
 /**
  * Created by nickitaliano on 9/5/17.
  */
@@ -75,7 +77,8 @@ public class CameraStop {
         mMode = mode;
     }
 
-    public CameraUpdateItem toCameraUpdate(MapboxMap map) {
+    public CameraUpdateItem toCameraUpdate(RCTMGLMapView mapView) {
+        MapboxMap map = mapView.getMapboxMap();
         CameraPosition currentCamera = map.getCameraPosition();
         CameraPosition.Builder builder = new CameraPosition.Builder(currentCamera);
 
@@ -95,11 +98,12 @@ public class CameraStop {
 
             // Adding map padding to the camera padding which is the same behavior as
             // mapbox native does on iOS
-            int[] mapPadding = map.getPadding();
-            int paddingLeft = mapPadding[0] + mBoundsPaddingLeft;
-            int paddingTop = mapPadding[1] + mBoundsPaddingTop;
-            int paddingRight = mapPadding[2] + mBoundsPaddingRight;
-            int paddingBottom = mapPadding[3] + mBoundsPaddingBottom;
+            double[] contentInset = mapView.getContentInset();
+
+            int paddingLeft = Double.valueOf(contentInset[0] + mBoundsPaddingLeft).intValue();
+            int paddingTop = Double.valueOf(contentInset[1] + mBoundsPaddingTop).intValue();
+            int paddingRight = Double.valueOf(contentInset[2] + mBoundsPaddingRight).intValue();
+            int paddingBottom = Double.valueOf(contentInset[3] + mBoundsPaddingBottom).intValue();
 
             int[] cameraPadding = {paddingLeft, paddingTop, paddingRight, paddingBottom};
             CameraPosition boundsCamera = map.getCameraForLatLngBounds(mBounds, cameraPadding, bearing, tilt);

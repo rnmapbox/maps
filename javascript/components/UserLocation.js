@@ -60,6 +60,10 @@ class UserLocation extends React.Component {
      */
     animated: PropTypes.bool,
 
+    /**
+     * Which render mode to use.
+     * Can either be `normal` or `native`
+     */
     renderMode: PropTypes.oneOf(['normal', 'native']),
 
     /**
@@ -93,6 +97,9 @@ class UserLocation extends React.Component {
      */
     showsUserHeadingIndicator: PropTypes.bool,
 
+    /**
+     * Minimum amount of movement before GPS location is updated in meters
+     */
     minDisplacement: PropTypes.number,
 
     /**

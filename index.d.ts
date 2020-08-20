@@ -21,7 +21,6 @@ import {
   LineString,
   Coord,
   Units,
-  Point,
   BBox,
   Id,
   FeatureCollection,
@@ -112,7 +111,7 @@ declare namespace MapboxGL {
   function removeCustomHeader(headerName: string): void;
   function addCustomHeader(headerName: string, headerValue: string): void;
   function setAccessToken(accessToken: string | null): void;
-  function getAccessToken(): Promise<void>;
+  function getAccessToken(): Promise<string>;
   function setTelemetryEnabled(telemetryEnabled: boolean): void;
   function setConnected(connected: boolean): void;
   function requestAndroidLocationPermissions(): Promise<boolean>;
@@ -170,12 +169,12 @@ declare namespace MapboxGL {
       coordinate: GeoJSON.Position,
       filter?: Expression,
       layerIds?: Array<string>,
-    ): Promise<GeoJSON.FeatureCollection?>;
+    ): Promise<GeoJSON.FeatureCollection | undefined>;
     queryRenderedFeaturesInRect(
       coordinate: GeoJSON.Position,
       filter?: Expression,
       layerIds?: Array<string>,
-    ): Promise<GeoJSON.FeatureCollection?>;
+    ): Promise<GeoJSON.FeatureCollection | undefined>;
     takeSnap(writeToDisk?: boolean): Promise<string>;
     getZoom(): Promise<number>;
     getCenter(): Promise<GeoJSON.Position>;
@@ -235,7 +234,9 @@ declare namespace MapboxGL {
     identity(attributeName: string): number;
   }
 
-  class PointAnnotation extends Component<PointAnnotationProps> {}
+  class PointAnnotation extends Component<PointAnnotationProps> {
+    refresh(): void;
+  }
   class MarkerView extends Component<MarkerViewProps> {}
   class Callout extends Component<CalloutProps> {}
   interface Style extends React.FC<StyleProps> {}
@@ -267,9 +268,9 @@ declare namespace MapboxGL {
   class OfflineManager extends Component {
     createPack(
       options: OfflineCreatePackOptions,
-      progressListener?: (pack: OfflinePack, status: object) => void,
-      errorListener?: (pack: OfflinePack, err: object) => void
-    ): void;
+      progressListener?: (pack: OfflinePack, status: OfflineProgressStatus) => void,
+      errorListener?: (pack: OfflinePack, err: OfflineProgressError) => void
+    ): Promise<void>;
     deletePack(name: string): Promise<void>;
     getPacks(): Promise<Array<OfflinePack>>;
     getPack(name: string): Promise<OfflinePack | undefined>;
@@ -289,6 +290,22 @@ declare namespace MapboxGL {
 
   class SnapshotManager {
     static takeSnap(options: SnapshotOptions): Promise<string>;
+  }
+
+  interface OfflineProgressStatus {
+    name: string;
+    state: number;
+    percentage: number;
+    completedResourceSize: number;
+    completedTileCount: number;
+    completedResourceCount: number;
+    requiredResourceCount: number;
+    completedTileSize: number;
+  }
+
+  interface OfflineProgressError {
+    message: string;
+    name: string;
   }
 
   interface OfflinePack {
@@ -364,7 +381,7 @@ export interface MapViewProps extends ViewProps {
   userTrackingMode?: MapboxGL.UserTrackingModes;
   userLocationVerticalAlignment?: number;
   contentInset?: Array<number>;
-  style?: StyleProp;
+  style?: StyleProp<ViewStyle>;
   styleURL?: string;
   localizeLabels?: boolean;
   zoomEnabled?: boolean;
@@ -680,10 +697,14 @@ export interface PointAnnotationProps {
   title?: string;
   snippet?: string;
   selected?: boolean;
+  draggable?: boolean;
   coordinate: GeoJSON.Position;
   anchor?: Point;
   onSelected?: () => void;
   onDeselected?: () => void;
+  onDragStart?: () => void;
+  onDrag?: () => void;
+  onDragEnd?: () => void;
 }
 
 export interface MarkerViewProps extends PointAnnotationProps {
@@ -721,14 +742,14 @@ export interface VectorSourceProps extends TileSourceProps {
 export interface ShapeSourceProps extends ViewProps {
   id?: string;
   url?: string;
-  shape?: GeoJSON.Geometries | GeoJSON.Feature | GeoJSON.FeatureCollection;
+  shape?: GeoJSON.GeometryCollection | GeoJSON.Feature | GeoJSON.FeatureCollection;
   cluster?: boolean;
   clusterRadius?: number;
   clusterMaxZoomLevel?: number;
   maxZoomLevel?: number;
   buffer?: number;
   tolerance?: number;
-  images?: {assets?: string[]; [key: string]: ImageSourcePropType};
+  images?: {assets?: string[]} & {[key: string]: ImageSourcePropType};
   onPress?: (event: OnPressEvent) => void;
   hitbox?: {
     width: number;
@@ -785,7 +806,7 @@ export interface HeatmapLayerProps extends LayerBaseProps {
 }
 
 export interface ImagesProps extends ViewProps {
-  images?: {assets?: string[]; [key: string]: ImageSourcePropType};
+  images?: {assets?: string[]} & {[key: string]: ImageSourcePropType};
 }
 
 export interface ImageSourceProps extends ViewProps {

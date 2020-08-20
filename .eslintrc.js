@@ -1,30 +1,27 @@
 module.exports = {
-  parser: "babel-eslint",
-  plugins: ["react", "react-native", "prettier", "fp", "flowtype", "import"],
+  parser: 'babel-eslint',
+  plugins: ['react', 'react-native', 'prettier', 'fp', 'flowtype', 'import'],
   env: {
-    jest: true
+    jest: true,
   },
   settings: {
     react: {
-      version: require("./package.json").dependencies.react
+      version: require('./package.json').dependencies.react,
+      pragma: 'React',
+      flowVersion: '0.87',
     },
-    "import/resolver": {
+    'import/resolver': {
       node: {
-        extensions: [".js", ".jsx"]
-      }
+        extensions: ['.js', '.jsx'],
+      },
     },
-    "import/ignore": ["react-native"],
-    react: {
-      pragma: "React",
-      version: "16.11.0",
-      flowVersion: "0.87"
-    },
+    'import/ignore': ['react-native'],
     parserOptions: {
       ecmaFeatures: {
         jsx: true,
-        modules: true
-      }
-    }
+        modules: true,
+      },
+    },
   },
   globals: {
     fetch: true,
@@ -36,58 +33,58 @@ module.exports = {
     window: true,
     document: true,
     navigator: true,
-    XMLSerializer: true
+    XMLSerializer: true,
   },
   extends: [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "prettier",
-    "plugin:flowtype/recommended",
-    "@react-native-community",
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'prettier',
+    'plugin:flowtype/recommended',
+    '@react-native-community',
   ],
   rules: {
-    "react/no-deprecated": "warn",
-    "react/no-string-refs": "warn",
-    "import/named": [2],
-    "import/no-named-default": [0],
-    "import/order": [
-      "error",
+    'react/no-deprecated': 'warn',
+    'react/no-string-refs': 'warn',
+    'import/named': [2],
+    'import/no-named-default': [0],
+    'import/order': [
+      'error',
       {
-        groups: ["builtin", "external", "parent", "sibling", "index"],
-        "newlines-between": "always"
-      }
+        groups: ['builtin', 'external', 'parent', 'sibling', 'index'],
+        'newlines-between': 'always',
+      },
     ],
-    "import/exports-last": [0],
-    "import/no-useless-path-segments": [2],
+    'import/exports-last': [0],
+    'import/no-useless-path-segments': [2],
     camelcase: [0],
-    "no-console": [0],
-    "import/prefer-default-export": "off",
-    "jsx-a11y/href-no-hash": "off",
-    "react/prop-types": [2],
-    quotes: [2, "single"],
-    "eol-last": [0],
-    "no-continue": [1],
-    "class-methods-use-this": [0],
-    "no-bitwise": [1],
-    "prefer-destructuring": [1],
-    "consistent-return": [1],
-    "no-warning-comments": [1],
-    "no-mixed-requires": [0],
-    "no-return-assign": 0,
-    "no-underscore-dangle": [0],
-    "no-await-in-loop": 0,
-    "no-restricted-syntax": 0,
-    "no-use-before-define": ["error", { functions: false }],
-    "no-unused-expressions": ["error", { allowTaggedTemplates: true }],
-    "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
-    "prettier/prettier": [
-      "error",
+    'no-console': [0],
+    'import/prefer-default-export': 'off',
+    'jsx-a11y/href-no-hash': 'off',
+    'react/prop-types': [2],
+    quotes: [2, 'single'],
+    'eol-last': [0],
+    'no-continue': [1],
+    'class-methods-use-this': [0],
+    'no-bitwise': [1],
+    'prefer-destructuring': [1],
+    'consistent-return': [1],
+    'no-warning-comments': [1],
+    'no-mixed-requires': [0],
+    'no-return-assign': 0,
+    'no-underscore-dangle': [0],
+    'no-await-in-loop': 0,
+    'no-restricted-syntax': 0,
+    'no-use-before-define': ['error', {functions: false}],
+    'no-unused-expressions': ['error', {allowTaggedTemplates: true}],
+    'no-plusplus': ['error', {allowForLoopAfterthoughts: true}],
+    'prettier/prettier': [
+      'error',
       {
         singleQuote: true,
-        trailingComma: "all",
-        bracketSpacing: false
-      }
+        trailingComma: 'all',
+        bracketSpacing: false,
+      },
     ],
-    "fp/no-mutating-methods": "warn",
-  }
+    'fp/no-mutating-methods': 'warn',
+  },
 };

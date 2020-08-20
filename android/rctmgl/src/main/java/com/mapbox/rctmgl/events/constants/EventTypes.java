@@ -33,6 +33,7 @@ public class EventTypes {
     public static final String ANNOTATION_SELECTED = "annotationselected";
     public static final String ANNOTATION_DESELECTED = "annotationdeselected";
     public static final String ANNOTATION_DRAG_START = "annotationdragstart";
+    public static final String ANNOTATION_DRAG = "annotationdrag";
     public static final String ANNOTATION_DRAG_END = "annotationdragend";
 
     // offline event types

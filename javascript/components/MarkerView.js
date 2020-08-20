@@ -10,8 +10,12 @@ import PointAnnotation from './PointAnnotation';
 export const NATIVE_MODULE_NAME = 'RCTMGLMarkerView';
 
 /**
- * MarkerView allows you to place a interactive react native marker to the map. If you have static view consider using PointAnnotation or SymbolLayer they'll offer much better performance.
- * This is based on [MakerView plugin](https://docs.mapbox.com/android/plugins/overview/markerview/) on android and PointAnnotation on iOS.
+ * MarkerView allows you to place a interactive react native marker to the map.
+ *
+ * If you have static view consider using PointAnnotation or SymbolLayer they'll offer much better performance
+ * .
+ * This is based on [MakerView plugin](https://docs.mapbox.com/android/plugins/overview/markerview/) on Android
+ * and PointAnnotation on iOS.
  */
 class MarkerView extends React.PureComponent {
   static propTypes = {
@@ -31,9 +35,20 @@ class MarkerView extends React.PureComponent {
      * Defaults to the center of the view.
      */
     anchor: PropTypes.shape({
+      /**
+       * `x` of anchor
+       */
       x: PropTypes.number.isRequired,
+      /**
+       * `y` of anchor
+       */
       y: PropTypes.number.isRequired,
     }),
+
+    /**
+     * Expects one child - can be container with multiple elements
+     */
+    children: PropTypes.element.isRequired,
   };
 
   static defaultProps = {
@@ -57,6 +72,7 @@ class MarkerView extends React.PureComponent {
       anchor: this.props.anchor,
       coordinate: this._getCoordinate(),
     };
+
     return (
       <RCTMGLMarkerView {...props}>{this.props.children}</RCTMGLMarkerView>
     );

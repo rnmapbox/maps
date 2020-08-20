@@ -34,8 +34,8 @@ describe('Style', () => {
       },
     };
 
-    const {getByType} = render(<Style json={json} />);
-    const component = getByType(VectorSource);
+    const {UNSAFE_getByType} = render(<Style json={json} />);
+    const component = UNSAFE_getByType(VectorSource);
     const {props} = component;
 
     expect(props.id).toStrictEqual(Object.keys(json.sources)[0]);
@@ -66,8 +66,8 @@ describe('Style', () => {
       },
     };
 
-    const {getByType} = render(<Style json={json} />);
-    const component = getByType(RasterSource);
+    const {UNSAFE_getByType} = render(<Style json={json} />);
+    const component = UNSAFE_getByType(RasterSource);
     const {props} = component;
 
     expect(props.id).toStrictEqual(Object.keys(json.sources)[0]);
@@ -99,8 +99,8 @@ describe('Style', () => {
       },
     };
 
-    const {getByType} = render(<Style json={json} />);
-    const component = getByType(ImageSource);
+    const {UNSAFE_getByType} = render(<Style json={json} />);
+    const component = UNSAFE_getByType(ImageSource);
     const {props} = component;
 
     expect(props.id).toStrictEqual(Object.keys(json.sources)[0]);
@@ -128,8 +128,8 @@ describe('Style', () => {
       },
     };
 
-    const {getByType} = render(<Style json={json} />);
-    const component = getByType(ShapeSource);
+    const {UNSAFE_getByType} = render(<Style json={json} />);
+    const component = UNSAFE_getByType(ShapeSource);
     const {props} = component;
 
     expect(props.id).toStrictEqual(Object.keys(json.sources)[0]);
@@ -158,8 +158,8 @@ describe('Style', () => {
       },
     };
 
-    const {getByType} = render(<Style json={json} />);
-    const component = getByType(ShapeSource);
+    const {UNSAFE_getByType} = render(<Style json={json} />);
+    const component = UNSAFE_getByType(ShapeSource);
     const {props} = component;
 
     expect(props.id).toStrictEqual(Object.keys(json.sources)[0]);
@@ -205,15 +205,15 @@ describe('Style', () => {
       ],
     };
 
-    const {getByType} = render(<Style json={json} />);
-    const circleLayer = getByType(CircleLayer);
-    const symbolLayer = getByType(SymbolLayer);
-    const rasterLayer = getByType(RasterLayer);
-    const lineLayer = getByType(LineLayer);
-    const fillLayer = getByType(FillLayer);
-    const fillExtrusionLayer = getByType(FillExtrusionLayer);
-    const backgroundLayer = getByType(BackgroundLayer);
-    const heatmapLayer = getByType(HeatmapLayer);
+    const {UNSAFE_getByType} = render(<Style json={json} />);
+    const circleLayer = UNSAFE_getByType(CircleLayer);
+    const symbolLayer = UNSAFE_getByType(SymbolLayer);
+    const rasterLayer = UNSAFE_getByType(RasterLayer);
+    const lineLayer = UNSAFE_getByType(LineLayer);
+    const fillLayer = UNSAFE_getByType(FillLayer);
+    const fillExtrusionLayer = UNSAFE_getByType(FillExtrusionLayer);
+    const backgroundLayer = UNSAFE_getByType(BackgroundLayer);
+    const heatmapLayer = UNSAFE_getByType(HeatmapLayer);
 
     expect(circleLayer.props.id).toStrictEqual('circle');
     expect(symbolLayer.props.id).toStrictEqual('symbol');
@@ -245,8 +245,8 @@ describe('Style', () => {
       layers: [circleLayer],
     };
 
-    const {getByType} = render(<Style json={json} />);
-    const layerComponent = getByType(CircleLayer);
+    const {UNSAFE_getByType} = render(<Style json={json} />);
+    const layerComponent = UNSAFE_getByType(CircleLayer);
     const {props} = layerComponent;
     expect(props.sourceID).toStrictEqual(circleLayer.source);
     expect(props.sourceLayerID).toStrictEqual(circleLayer['source-layer']);

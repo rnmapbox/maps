@@ -192,14 +192,14 @@ public class RCTMGLCamera extends AbstractMapFeature {
         if (mDefaultStop != null) {
             mDefaultStop.setDuration(0);
             mDefaultStop.setMode(com.mapbox.rctmgl.components.camera.constants.CameraMode.NONE);
-            CameraUpdateItem item = mDefaultStop.toCameraUpdate(mMapView.getMapboxMap());
+            CameraUpdateItem item = mDefaultStop.toCameraUpdate(mMapView);
             item.run();
         }
     }
 
     private void updateCamera() {
         mCameraUpdateQueue.offer(mCameraStop);
-        mCameraUpdateQueue.execute(mMapView.getMapboxMap());
+        mCameraUpdateQueue.execute(mMapView);
     }
 
     private void updateUserTrackingMode(int userTrackingMode) {
