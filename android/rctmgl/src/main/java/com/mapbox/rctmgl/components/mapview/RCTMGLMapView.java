@@ -118,7 +118,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     private MapboxMap mMap;
 
     private LocalizationPlugin mLocalizationPlugin;
-    
+
     private String mStyleURL;
 
     private Integer mPreferredFramesPerSecond;
@@ -528,7 +528,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     }
 
     public void addQueuedFeatures() {
-        if (mQueuedFeatures.size() > 0) {
+        if (mQueuedFeatures != null && mQueuedFeatures.size() > 0) {
             for (int i = 0; i < mQueuedFeatures.size(); i++) {
                 AbstractMapFeature feature = mQueuedFeatures.get(i);
                 feature.addToMap(this);
@@ -1188,10 +1188,13 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
 
     private WritableMap makeRegionPayload(Boolean isAnimated) {
         CameraPosition position = mMap.getCameraPosition();
+        if(position == null || position.target == null) {
+            return new WritableNativeMap();
+        }
         LatLng latLng = new LatLng(position.target.getLatitude(), position.target.getLongitude());
 
         WritableMap properties = new WritableNativeMap();
-        
+
         properties.putDouble("zoomLevel", position.zoom);
         properties.putDouble("heading", position.bearing);
         properties.putDouble("pitch", position.tilt);
@@ -1199,8 +1202,12 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
                 (null == isAnimated) ? mCameraChangeTracker.isAnimated() : isAnimated.booleanValue());
         properties.putBoolean("isUserInteraction", mCameraChangeTracker.isUserInteraction());
 
-        VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-        properties.putArray("visibleBounds", GeoJSONUtils.fromLatLngBounds(visibleRegion.latLngBounds));
+        try {
+            VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+            properties.putArray("visibleBounds", GeoJSONUtils.fromLatLngBounds(visibleRegion.latLngBounds));
+        } catch(Exception ex) {
+            Logger.e(LOG_TAG, String.format("An error occurred while attempting to make the region: %s", ex.getMessage()));
+        }
 
         return GeoJSONUtils.toPointFeature(latLng, properties);
     }
@@ -1208,7 +1215,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     public void sendRegionChangeEvent(boolean isAnimated) {
         IEvent event = new MapChangeEvent(this, EventTypes.REGION_DID_CHANGE,
                 makeRegionPayload(new Boolean(isAnimated)));
-        
+
                 mManager.handleEvent(event);
         mCameraChangeTracker.setReason(CameraChangeTracker.EMPTY);
     }
