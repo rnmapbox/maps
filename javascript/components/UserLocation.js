@@ -137,13 +137,13 @@ class UserLocation extends React.Component {
   // after component unmount
   _isMounted = null;
 
-  locationManagerRequired = false;
+  _isLocationManagerRequired = false;
 
   async componentDidMount() {
     this._isMounted = true;
 
     await this.setLocationManager({
-      required: this.needsLocationManagerRunning(),
+      required: this.isLocationManagerRequired(),
     });
 
     if (this.renderMode === UserLocation.RenderMode.Native) {
@@ -155,7 +155,7 @@ class UserLocation extends React.Component {
 
   async componentDidUpdate(prevProps) {
     await this.setLocationManager({
-      required: this.needsLocationManagerRunning(),
+      required: this.isLocationManagerRequired(),
     });
 
     if (this.props.minDisplacement !== prevProps.minDisplacement) {
@@ -179,8 +179,8 @@ class UserLocation extends React.Component {
    * @return {Promise<void>}
    */
   async setLocationManager({required}) {
-    if (this.locationManagerRequired !== required) {
-      this.locationManagerRequired = required;
+    if (this._isLocationManagerRequired !== required) {
+      this._isLocationManagerRequired = required;
       if (required) {
         locationManager.addListener(this._onLocationUpdate);
       } else {
@@ -191,11 +191,11 @@ class UserLocation extends React.Component {
 
   /**
    *
-   * If locationManager should be running
+   * If locationManager is required.
    *
    * @return {boolean}
    */
-  needsLocationManagerRunning() {
+  isLocationManagerRequired() {
     if (this.props.renderMode === UserLocation.RenderMode.Native) {
       return false;
     }
