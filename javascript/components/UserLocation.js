@@ -137,15 +137,13 @@ class UserLocation extends React.Component {
   // after component unmount
   _isMounted = null;
 
-  locationManagerRunning = false;
+  _isLocationManagerRequired = false;
 
   async componentDidMount() {
     this._isMounted = true;
 
-    locationManager.addListener(this._onLocationUpdate);
-
     await this.setLocationManager({
-      running: this.needsLocationManagerRunning(),
+      required: this.isLocationManagerRequired(),
     });
 
     if (this.renderMode === UserLocation.RenderMode.Native) {
@@ -157,7 +155,7 @@ class UserLocation extends React.Component {
 
   async componentDidUpdate(prevProps) {
     await this.setLocationManager({
-      running: this.needsLocationManagerRunning(),
+      required: this.isLocationManagerRequired(),
     });
 
     if (this.props.minDisplacement !== prevProps.minDisplacement) {
@@ -167,41 +165,37 @@ class UserLocation extends React.Component {
 
   async componentWillUnmount() {
     this._isMounted = false;
-    locationManager.removeListener(this._onLocationUpdate);
-    await this.setLocationManager({running: false});
+    await this.setLocationManager({required: false});
   }
 
   /**
-   * Whether to start or stop the locationManager
+   * Whether to start or stop listening to the locationManager
    *
-   * Notice, that locationManager will start automatically when
+   * Notice, that listening will start automatically when
    * either `onUpdate` or `visible` are set
    *
    * @async
-   * @param {Object} running - Object with key `running` and `boolean` value
+   * @param {Object} required - Object with key `required` and `boolean` value
    * @return {Promise<void>}
    */
-  async setLocationManager({running}) {
-    if (this.locationManagerRunning !== running) {
-      this.locationManagerRunning = running;
-      if (running) {
-        locationManager.start();
-
-        const location = await locationManager.getLastKnownLocation();
-        this._onLocationUpdate(location);
+  async setLocationManager({required}) {
+    if (this._isLocationManagerRequired !== required) {
+      this._isLocationManagerRequired = required;
+      if (required) {
+        locationManager.addListener(this._onLocationUpdate);
       } else {
-        locationManager.stop();
+        locationManager.removeListener(this._onLocationUpdate);
       }
     }
   }
 
   /**
    *
-   * If locationManager should be running
+   * If locationManager is required.
    *
    * @return {boolean}
    */
-  needsLocationManagerRunning() {
+  isLocationManagerRequired() {
     if (this.props.renderMode === UserLocation.RenderMode.Native) {
       return false;
     }
