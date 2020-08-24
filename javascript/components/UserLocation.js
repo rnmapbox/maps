@@ -183,6 +183,8 @@ class UserLocation extends React.Component {
       this._isLocationManagerRequired = required;
       if (required) {
         locationManager.addListener(this._onLocationUpdate);
+        const location = await locationManager.getLastKnownLocation();
+        this._onLocationUpdate(location);
       } else {
         locationManager.removeListener(this._onLocationUpdate);
       }

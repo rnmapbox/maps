@@ -69,6 +69,7 @@ describe('LocationManager', () => {
 
     describe('#addListener', () => {
       const myListener = jest.fn();
+      MapboxGL.LocationCallbackName = {Update: 'MapboxUserLocationUpdate'};
 
       afterEach(() => {
         locationManager._listeners = [];
@@ -88,17 +89,18 @@ describe('LocationManager', () => {
         expect(myListener).not.toHaveBeenCalled();
       });
 
-      test('calls listener with "lastKnownLocation"', () => {
+      test('listener is not called just after being added', () => {
         locationManager._lastKnownLocation = location;
 
         locationManager.addListener(myListener);
         expect(locationManager._listeners).toStrictEqual([myListener]);
-        expect(myListener).toHaveBeenCalledWith(location);
-        expect(myListener).toHaveBeenCalledTimes(1);
+        expect(myListener).not.toHaveBeenCalled();
       });
     });
 
     describe('#removeListener', () => {
+      MapboxGLLocationManager.stop = jest.fn();
+
       test('removes selected listener', () => {
         // just two different functions
         const listenerA = jest.fn(() => 'listenerA');
@@ -142,7 +144,7 @@ describe('LocationManager', () => {
       jest.spyOn(MapboxGLLocationManager, 'start');
       jest.spyOn(LocationModuleEventEmitter, 'addListener');
 
-      afterEach(() => {
+      beforeEach(() => {
         locationManager._isListening = false;
       });
 

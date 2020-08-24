@@ -43,10 +43,6 @@ class LocationManager {
     }
     if (!this._listeners.includes(listener)) {
       this._listeners.push(listener);
-
-      if (this._lastKnownLocation) {
-        listener(this._lastKnownLocation);
-      }
     }
   }
 
