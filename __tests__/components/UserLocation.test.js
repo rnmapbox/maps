@@ -118,11 +118,12 @@ describe('UserLocation', () => {
       const {UNSAFE_queryByType} = render(
         <UserLocation onPress={onPressCallback} />,
       );
-
-      const shapeSource = UNSAFE_queryByType(ShapeSource);
-      fireEvent(shapeSource, 'onPress');
-      fireEvent(shapeSource, 'onPress');
-      expect(onPressCallback).toHaveBeenCalledTimes(2);
+      setTimeout(() => {
+        const shapeSource = UNSAFE_queryByType(ShapeSource);
+        fireEvent(shapeSource, 'onPress');
+        fireEvent(shapeSource, 'onPress');
+        expect(onPressCallback).toHaveBeenCalledTimes(2);
+      });
     });
 
     test('correctly unmounts', async () => {
