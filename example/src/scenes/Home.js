@@ -7,7 +7,7 @@ import Page from '../examples/common/Page';
 import MapHeader from '../examples/common/MapHeader';
 import sheet from '../styles/sheet';
 import colors from '../styles/colors';
-import ShowMap from '../examples/ShowMap';
+import ShowMap from '../examples/Map/ShowMap';
 import MarkerView from '../examples/MarkerView';
 import SetPitch from '../examples/SetPitch';
 import SetHeading from '../examples/SetHeading';
