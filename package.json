@@ -26,7 +26,7 @@
     "unittest": "jest",
     "unittest:single": "jest --testNamePattern",
     "format": "npm run lint -- --fix",
-    "lint": "eslint . --ignore-pattern 'example' --fix && cd example/ && eslint . --ignore-pattern 'scripts' --fix"
+    "lint": "eslint . --ignore-pattern 'example' --fix && cd example/ && eslint ./src --fix"
   },
   "peerDependencies": {
     "prop-types": ">=15.5.8",
