@@ -724,7 +724,7 @@ export interface CalloutProps extends Omit<ViewProps, 'style'> {
 }
 
 export interface TileSourceProps extends ViewProps {
-  id?: string;
+  id: string;
   url?: string;
   tileUrlTemplates?: Array<string>;
   minZoomLevel?: number;
@@ -740,7 +740,7 @@ export interface VectorSourceProps extends TileSourceProps {
 }
 
 export interface ShapeSourceProps extends ViewProps {
-  id?: string;
+  id: string;
   url?: string;
   shape?: GeoJSON.GeometryCollection | GeoJSON.Feature | GeoJSON.FeatureCollection;
   cluster?: boolean;
@@ -762,7 +762,7 @@ export interface RasterSourceProps extends TileSourceProps {
 }
 
 export interface LayerBaseProps<T = {}> extends Omit<ViewProps, 'style'> {
-  id?: string;
+  id: string;
   sourceID?: MapboxGL.StyleSource;
   sourceLayerID?: string;
   aboveLayerID?: string;
@@ -811,7 +811,7 @@ export interface ImagesProps extends ViewProps {
 }
 
 export interface ImageSourceProps extends ViewProps {
-  id?: string;
+  id: string;
   url?: number | string;
   coordinates: [
     GeoJSON.Position,

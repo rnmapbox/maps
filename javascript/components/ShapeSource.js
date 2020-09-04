@@ -32,7 +32,7 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
     /**
      * A string that uniquely identifies the source.
      */
-    id: PropTypes.string,
+    id: PropTypes.string.isRequired,
 
     /**
      * An HTTP(S) URL, absolute file URL, or local file URL relative to the current application’s resource bundle.
