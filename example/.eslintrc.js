@@ -1,13 +1,19 @@
 module.exports = {
+  root: true,
   parser: '@typescript-eslint/parser',
   env: {
     jest: true,
+    es6: true,
+    browser: true,
+    node: true,
   },
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:react-native/all',
     'prettier',
-    'prettier/@typescript-eslint'
+    'prettier/@typescript-eslint',
+    "eslint:recommended",
+    "plugin:react/recommended"
   ],
   parserOptions: {
     ecmaFeatures: {
@@ -34,11 +40,16 @@ module.exports = {
           ".tsx"
         ]
       }
-    }
+    },
+    "react": {
+      "version": "detect", // React version. "detect" automatically picks the version you have installed.
+                           // You can also use `16.0`, `16.3`, etc, if you want to override the detected value.
+                           // default to latest and warns if missing
+                           // It will default to "detect" in the future
+    },
   },
   rules: {
     camelcase: 0,
-    indent: ['error', 2, { SwitchCase: 1 }],
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
@@ -73,6 +84,7 @@ module.exports = {
     'react/destructuring-assignment': 0,
     'react/no-unescaped-entities': 0,
     'react-native/split-platform-components': 0,
+    'react-native/no-color-literals': 0,
     'react/jsx-filename-extension': [
       1,
       { extensions: ['.js', '.jsx', '.tsx'] }
