@@ -332,10 +332,9 @@ declare namespace MapboxGL {
    * Constants
    */
   enum UserTrackingModes {
-    None = 0,
-    Follow = 1,
-    FollowWithCourse = 2,
-    FollowWithHeading = 3,
+    Follow = 'normal',
+    FollowWithHeading = 'compass',
+    FollowWithCourse = 'course',
   }
 
   enum InterpolationMode {
