@@ -17,18 +17,18 @@ import PulseCircleLayer from './common/PulseCircleLayer';
 const SF_ZOO_COORDINATE = [-122.505412, 37.737463];
 
 const styles = StyleSheet.create({
+  button: {
+    backgroundColor: 'blue',
+    borderRadius: 3,
+  },
   buttonCnt: {
+    backgroundColor: 'transparent',
+    bottom: 16,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    backgroundColor: 'transparent',
-    position: 'absolute',
-    bottom: 16,
     left: 0,
+    position: 'absolute',
     right: 0,
-  },
-  button: {
-    borderRadius: 3,
-    backgroundColor: 'blue',
   },
 });
 

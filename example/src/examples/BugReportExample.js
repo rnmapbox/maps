@@ -6,7 +6,6 @@ import {
   SymbolLayer,
   CircleLayer,
   Camera,
-  Images,
 } from '@react-native-mapbox-gl/maps';
 
 const features = {

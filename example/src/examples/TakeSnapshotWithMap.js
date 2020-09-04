@@ -10,9 +10,9 @@ import Page from './common/Page';
 
 const styles = StyleSheet.create({
   button: {
-    height: 60,
-    backgroundColor: colors.primary.blueLight,
     alignItems: 'center',
+    backgroundColor: colors.primary.blueLight,
+    height: 60,
     justifyContent: 'center',
   },
 });

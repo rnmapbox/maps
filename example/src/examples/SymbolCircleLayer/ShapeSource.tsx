@@ -1,9 +1,9 @@
 import React from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {View} from 'react-native';
-let {MapView, Camera, Images, ShapeSource, SymbolLayer} = MapboxGL;
 
 import exampleIcon from '../../assets/example.png';
+const {MapView, Camera, Images, ShapeSource, SymbolLayer} = MapboxGL;
 
 const styles = {
   icon: {
