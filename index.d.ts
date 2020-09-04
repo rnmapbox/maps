@@ -118,6 +118,7 @@ declare namespace MapboxGL {
 
   const offlineManager: OfflineManager;
   const snapshotManager: SnapshotManager;
+  const locationManager: LocationManager;
 
   /**
    * GeoUtils
@@ -261,6 +262,11 @@ declare namespace MapboxGL {
   class HeatmapLayer extends Component<HeatmapLayerProps> {}
   class Images extends Component<ImagesProps> {}
   class ImageSource extends Component<ImageSourceProps> {}
+
+  class LocationManager extends Component {
+    start(displacement?: number): void;
+    stop(): void;
+  }
 
   /**
    * Offline
