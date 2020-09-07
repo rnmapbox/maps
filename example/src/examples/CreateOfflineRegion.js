@@ -20,25 +20,25 @@ const CENTER_COORD = [-73.970895, 40.723279];
 const MAPBOX_VECTOR_TILE_SIZE = 512;
 
 const styles = StyleSheet.create({
-  percentageText: {
+  button: {
+    alignItems: 'center',
+    backgroundColor: 'blue',
+    borderRadius: 3,
+    flex: 0.4,
+    justifyContent: 'center',
     padding: 8,
-    textAlign: 'center',
   },
   buttonCnt: {
+    alignItems: 'center',
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  button: {
-    flex: 0.4,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 3,
-    backgroundColor: 'blue',
-    padding: 8,
   },
   buttonTxt: {
     color: 'white',
+  },
+  percentageText: {
+    padding: 8,
+    textAlign: 'center',
   },
 });
 

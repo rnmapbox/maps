@@ -1,6 +1,7 @@
 module.exports = {
+  root: true,
   parser: 'babel-eslint',
-  plugins: ['react', 'react-native', 'prettier', 'fp', 'flowtype', 'import'],
+  plugins: ['react', 'react-native', 'prettier', 'fp', 'import'],
   env: {
     jest: true,
   },
@@ -8,7 +9,6 @@ module.exports = {
     react: {
       version: require('./package.json').dependencies.react,
       pragma: 'React',
-      flowVersion: '0.87',
     },
     'import/resolver': {
       node: {
@@ -39,7 +39,6 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'prettier',
-    'plugin:flowtype/recommended',
     '@react-native-community',
   ],
   rules: {
@@ -67,7 +66,7 @@ module.exports = {
     'class-methods-use-this': [0],
     'no-bitwise': [1],
     'prefer-destructuring': [1],
-    'consistent-return': [1],
+    'consistent-return': [0],
     'no-warning-comments': [1],
     'no-mixed-requires': [0],
     'no-return-assign': 0,

@@ -6,12 +6,12 @@ import {Header} from 'react-native-elements';
 import colors from '../../styles/colors';
 
 const styles = StyleSheet.create({
-  label: {
-    fontSize: 24,
-    color: colors.secondary.white,
-  },
   container: {
     borderBottomWidth: 0,
+  },
+  label: {
+    color: colors.secondary.white,
+    fontSize: 24,
   },
 });
 

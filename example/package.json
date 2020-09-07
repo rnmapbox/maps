@@ -7,7 +7,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint .",
+    "lint": "eslint ./src",
     "postinstall": "node ./scripts/set_access_token.js && jetifier"
   },
   "dependencies": {
@@ -52,7 +52,7 @@
     "@types/react-test-renderer": "^16.9.2",
     "babel-jest": "^24.9.0",
     "babel-plugin-module-resolver": "^3.2.0",
-    "eslint": "^6.8.0",
+    "eslint": "^7.3.0",
     "eslint-config-prettier": "^6.11.0",
     "@typescript-eslint/eslint-plugin": "^3.0.0",
     "@typescript-eslint/parser": "^3.0.0",

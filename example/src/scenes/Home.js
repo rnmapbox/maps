@@ -55,30 +55,30 @@ import ShapeSourceTS from '../examples/SymbolCircleLayer/ShapeSource';
 import CacheManagement from '../examples/CacheManagement';
 
 const styles = StyleSheet.create({
-  header: {
-    marginTop: 48,
-    fontSize: 24,
-    textAlign: 'center',
+  exampleBackground: {
+    backgroundColor: colors.primary.pinkFaint,
+    flex: 1,
   },
   exampleList: {
     flex: 1,
   },
-  exampleListItemBorder: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#ccc',
-  },
   exampleListItem: {
-    paddingVertical: 32,
-    paddingHorizontal: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 32,
+  },
+  exampleListItemBorder: {
+    borderBottomColor: '#ccc',
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
   exampleListLabel: {
     fontSize: 18,
   },
-  exampleBackground: {
-    flex: 1,
-    backgroundColor: colors.primary.pinkFaint,
+  header: {
+    fontSize: 24,
+    marginTop: 48,
+    textAlign: 'center',
   },
 });
 
@@ -182,7 +182,7 @@ function ExampleGroupComponent({items, navigation, showBack}) {
     navigation.navigate(item.navigationType, item);
   }
 
-  function renderItem({item, index}) {
+  function renderItem({item}) {
     return (
       <View style={styles.exampleListItemBorder}>
         <TouchableOpacity onPress={() => itemPress(item)}>

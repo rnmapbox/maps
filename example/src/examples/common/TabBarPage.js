@@ -12,12 +12,12 @@ const TAB_BAR_HEIGHT = 70;
 
 const styles = StyleSheet.create({
   buttonGroup: {
+    backgroundColor: colors.secondary.white,
     height: TAB_BAR_HEIGHT,
+    marginBottom: 0,
     marginLeft: 0,
     marginRight: 0,
     marginTop: 0,
-    marginBottom: 0,
-    backgroundColor: colors.secondary.white,
   },
   scrollableButton: {
     paddingHorizontal: 24,
