@@ -18,8 +18,6 @@ public class CustomHeadersInterceptor implements Interceptor {
     private Map<String, String> customHeaders = new HashMap<>();
 
     public void addHeader(@NotNull final String headerName, @NotNull String headerValue) {
-        Log.d("header", String.format("Add custom header headerName=%s headerValue=%s",
-                headerName, headerValue));
         customHeaders.put(headerName, headerValue);
     }
 
@@ -35,8 +33,6 @@ public class CustomHeadersInterceptor implements Interceptor {
         }
 
         Request request = modifiedHeaderBuilder.build();
-        Log.d("header", String.format("Sending request url=%s headers=%s",
-                request.url(), request.headers()));
         return chain.proceed(request);
     }
 }
