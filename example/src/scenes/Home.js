@@ -7,7 +7,7 @@ import Page from '../examples/common/Page';
 import MapHeader from '../examples/common/MapHeader';
 import sheet from '../styles/sheet';
 import ShowMap from '../examples/Map/ShowMap';
-import MarkerView from '../examples/MarkerView';
+import MarkerView from '../examples/Annotations/MarkerView';
 import SetPitch from '../examples/SetPitch';
 import SetHeading from '../examples/SetHeading';
 import ShowClick from '../examples/ShowClick';
@@ -28,7 +28,7 @@ import QueryAtPoint from '../examples/QueryAtPoint';
 import QueryWithRect from '../examples/QueryWithRect';
 import ShapeSourceIcon from '../examples/ShapeSourceIcon';
 import CustomVectorSource from '../examples/CustomVectorSource';
-import ShowPointAnnotation from '../examples/ShowPointAnnotation';
+import ShowPointAnnotation from '../examples/Annotations/ShowPointAnnotation';
 import AnimatedLine from '../examples/AnimatedLine';
 import CreateOfflineRegion from '../examples/CreateOfflineRegion';
 import DriveTheLine from '../examples/DriveTheLine';
@@ -41,7 +41,7 @@ import TakeSnapshotWithMap from '../examples/TakeSnapshotWithMap';
 import GetZoom from '../examples/GetZoom';
 import GetCenter from '../examples/GetCenter';
 import UserLocationChange from '../examples/UserLocationChange';
-import Heatmap from '../examples/Heatmap';
+import Heatmap from '../examples/Annotations/Heatmap';
 import RestrictMapBounds from '../examples/RestrictMapBounds';
 import ShowAndHideLayer from '../examples/ShowAndHideLayer';
 import ChangeLayerColor from '../examples/ChangeLayerColor';
@@ -52,6 +52,7 @@ import BugReportTemplate from '../examples/BugReportExample';
 import StyleJson from '../examples/StyleJson';
 import ShapeSourceTS from '../examples/SymbolCircleLayer/ShapeSource';
 import CacheManagement from '../examples/CacheManagement';
+import CustomCallout from '../examples/Annotations/CustomCallout';
 
 const styles = StyleSheet.create({
   exampleList: {
@@ -157,6 +158,7 @@ const Examples = [
     new ExampleItem('Show Point Annotation', ShowPointAnnotation),
     new ExampleItem('Marker View', MarkerView),
     new ExampleItem('Heatmap', Heatmap),
+    new ExampleItem('Custom Callout', CustomCallout)
   ]),
   new ExampleGroup('Animations', [
     new ExampleItem('Animated Line', AnimatedLine),
