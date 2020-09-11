@@ -472,13 +472,15 @@ export interface CameraSettings {
 }
 
 export interface UserLocationProps {
+  androidRenderMode?: 'normal' | 'compass' | 'gps'
   animated?: boolean;
-  visible?: boolean;
+  children?: ReactNode;
+  minDisplacement?: number;
   onPress?: () => void;
   onUpdate?: (location: MapboxGL.Location) => void;
+  renderMode?: 'normal' | 'native';
   showsUserHeadingIndicator?: boolean,
-  minDisplacement?: number;
-  children?: ReactNode;
+  visible?: boolean;
 }
 
 export type WithExpression<T> = {
