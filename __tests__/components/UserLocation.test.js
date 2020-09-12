@@ -37,12 +37,15 @@ describe('UserLocation', () => {
 
     test('renders with CircleLayers by default', (done) => {
       const {UNSAFE_getAllByType} = render(<UserLocation />);
-      const shapeSource = UNSAFE_getAllByType(ShapeSource);
-      const circleLayer = UNSAFE_getAllByType(CircleLayer);
 
-      expect(shapeSource.length).toBe(1);
-      expect(circleLayer.length).toBe(3);
-      done();
+      setTimeout(() => {
+        const shapeSource = UNSAFE_getAllByType(ShapeSource);
+        const circleLayer = UNSAFE_getAllByType(CircleLayer);
+
+        expect(shapeSource.length).toBe(1);
+        expect(circleLayer.length).toBe(3);
+        done();
+      });
     });
 
     test('does not render with visible set to false', (done) => {
@@ -115,12 +118,11 @@ describe('UserLocation', () => {
       const {UNSAFE_queryByType} = render(
         <UserLocation onPress={onPressCallback} />,
       );
-      setTimeout(() => {
-        const shapeSource = UNSAFE_queryByType(ShapeSource);
-        fireEvent(shapeSource, 'onPress');
-        fireEvent(shapeSource, 'onPress');
-        expect(onPressCallback).toHaveBeenCalledTimes(2);
-      });
+
+      const shapeSource = UNSAFE_queryByType(ShapeSource);
+      fireEvent(shapeSource, 'onPress');
+      fireEvent(shapeSource, 'onPress');
+      expect(onPressCallback).toHaveBeenCalledTimes(2);
     });
 
     test('correctly unmounts', async () => {
