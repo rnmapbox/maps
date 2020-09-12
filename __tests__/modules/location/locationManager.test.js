@@ -89,12 +89,13 @@ describe('LocationManager', () => {
         expect(myListener).not.toHaveBeenCalled();
       });
 
-      test('listener is not called just after being added', () => {
+      test('calls listener with "lastKnownLocation"', () => {
         locationManager._lastKnownLocation = location;
 
         locationManager.addListener(myListener);
         expect(locationManager._listeners).toStrictEqual([myListener]);
-        expect(myListener).not.toHaveBeenCalled();
+        expect(myListener).toHaveBeenCalledWith(location);
+        expect(myListener).toHaveBeenCalledTimes(1);
       });
     });
 
@@ -108,16 +109,22 @@ describe('LocationManager', () => {
 
         locationManager.addListener(listenerA);
         expect(locationManager._listeners).toStrictEqual([listenerA]);
+        expect(MapboxGLLocationManager.stop).not.toHaveBeenCalled();
+
         locationManager.addListener(listenerB);
         expect(locationManager._listeners).toStrictEqual([
           listenerA,
           listenerB,
         ]);
+        expect(MapboxGLLocationManager.stop).not.toHaveBeenCalled();
 
         locationManager.removeListener(listenerB);
         expect(locationManager._listeners).toStrictEqual([listenerA]);
+        expect(MapboxGLLocationManager.stop).not.toHaveBeenCalled();
+
         locationManager.removeListener(listenerA);
         expect(locationManager._listeners).toStrictEqual([]);
+        expect(MapboxGLLocationManager.stop).toHaveBeenCalledTimes(1);
       });
     });
 

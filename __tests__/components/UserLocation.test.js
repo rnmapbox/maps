@@ -37,15 +37,12 @@ describe('UserLocation', () => {
 
     test('renders with CircleLayers by default', (done) => {
       const {UNSAFE_getAllByType} = render(<UserLocation />);
+      const shapeSource = UNSAFE_getAllByType(ShapeSource);
+      const circleLayer = UNSAFE_getAllByType(CircleLayer);
 
-      setTimeout(() => {
-        const shapeSource = UNSAFE_getAllByType(ShapeSource);
-        const circleLayer = UNSAFE_getAllByType(CircleLayer);
-
-        expect(shapeSource.length).toBe(1);
-        expect(circleLayer.length).toBe(3);
-        done();
-      });
+      expect(shapeSource.length).toBe(1);
+      expect(circleLayer.length).toBe(3);
+      done();
     });
 
     test('does not render with visible set to false', (done) => {
@@ -187,7 +184,7 @@ describe('UserLocation', () => {
 
         expect(ul._isLocationManagerRequired).toStrictEqual(true);
         expect(locationManager.start).toHaveBeenCalledTimes(1);
-        expect(locationManager.getLastKnownLocation).toHaveBeenCalledTimes(1);
+        expect(locationManager.getLastKnownLocation).not.toHaveBeenCalled();
         expect(ul.setState).toHaveBeenCalledTimes(1);
         expect(ul.setState).toHaveBeenCalledWith({
           coordinates: lastKnownLocation,
@@ -216,21 +213,21 @@ describe('UserLocation', () => {
     describe('#isLocationManagerRequired', () => {
       test('returns true correctly', () => {
         // default props "onUpdate: undefined, visible: true"
-        expect(ul.isLocationManagerRequired()).toStrictEqual(true);
+        expect(ul.checkLocationManagerRequired()).toStrictEqual(true);
 
         ul.props = {
           onUpdate: () => {},
           visible: true,
         };
 
-        expect(ul.isLocationManagerRequired()).toStrictEqual(true);
+        expect(ul.checkLocationManagerRequired()).toStrictEqual(true);
 
         ul.props = {
           onUpdate: () => {},
           visible: false,
         };
 
-        expect(ul.isLocationManagerRequired()).toStrictEqual(true);
+        expect(ul.checkLocationManagerRequired()).toStrictEqual(true);
       });
 
       test('returns false correctly', () => {
@@ -238,7 +235,7 @@ describe('UserLocation', () => {
           visible: false,
         };
 
-        expect(ul.isLocationManagerRequired()).toStrictEqual(false);
+        expect(ul.checkLocationManagerRequired()).toStrictEqual(false);
       });
     });
 
