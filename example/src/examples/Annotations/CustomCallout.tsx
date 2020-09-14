@@ -1,10 +1,10 @@
-import React, {FC, useState, useEffect} from 'react';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import React, { FC, useState } from 'react';
+import MapboxGL, { SymbolLayerStyle } from '@react-native-mapbox-gl/maps';
 import exampleIcon from '../../assets/pin.png';
 import sheet from '../../styles/sheet';
 import Page from '../common/Page';
 import { Feature } from '@turf/helpers';
-import { View, Text, ViewStyle } from 'react-native';
+import { View, Text, ViewStyle, StyleProp, TextStyle } from 'react-native';
 
 const defaultCamera = {
   centerCoordinate: [12.338, 45.4385],
@@ -33,27 +33,22 @@ type CustomCalloutViewProps = {
   message: String
 };
 
-const calloutContainerStyle: ViewStyle = {
-  backgroundColor: 'white',
-  width: 60,
-  height: 40,
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center'
-};
-
 const CustomCalloutView: FC<CustomCalloutViewProps> = ({ message }) => {
-  return <View style={calloutContainerStyle}>
-    <Text style={{ color: 'black', fontSize: 16 }}>
+  return <View style={styles.calloutContainerStyle}>
+    <Text style={styles.customCalloutText}>
       {message}
     </Text>
   </View>;
 }
 
-const CustomCallout: FC<any> = (props) => {
-  console.log('props: ', props);
+type CustomCalloutProps = {
+  label: String
+  onDismissExample: ()=>any
+};
+
+const CustomCallout: FC<CustomCalloutProps> = (props) => {
   const [selectedFeature, setSelectedFeature] = useState<Feature<{ type: string; coordinates: number[]; }, any>>();
-  const onPinPress = (e:any)=>{
+  const onPinPress = (e:any): void=>{
     if (e?.features?.length > 0) {
       const feature = e?.features[0];
       setSelectedFeature(feature);
@@ -72,11 +67,7 @@ const CustomCallout: FC<any> = (props) => {
         >
           <MapboxGL.SymbolLayer
             id='mapPinsLayer'
-            style={{ iconAllowOverlap: true,
-              iconAnchor: 'bottom',
-              iconSize: 1.0,
-              iconImage: exampleIcon
-            }}
+            style={styles.mapPinLayer}
           />
         </MapboxGL.ShapeSource>
         {selectedFeature && <MapboxGL.MarkerView id='selectedFeatureMarkerView'
@@ -88,6 +79,33 @@ const CustomCallout: FC<any> = (props) => {
       </MapboxGL.MapView>
     </Page>
   );
+};
+
+interface CustomCalloutStyles {
+  mapPinLayer: StyleProp<SymbolLayerStyle>;
+  customCalloutText: StyleProp<TextStyle>;
+  calloutContainerStyle: StyleProp<ViewStyle>;
+}
+
+const styles: CustomCalloutStyles = {
+  mapPinLayer: {
+    iconAllowOverlap: true,
+    iconAnchor: 'bottom',
+    iconSize: 1.0,
+    iconImage: exampleIcon
+  },
+  customCalloutText: {
+    color: 'black',
+    fontSize: 16
+  },
+  calloutContainerStyle: {
+    backgroundColor: 'white',
+    width: 60,
+    height: 40,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 };
 
 export default CustomCallout;
