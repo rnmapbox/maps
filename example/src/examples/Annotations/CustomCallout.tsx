@@ -1,6 +1,5 @@
 import React, {FC, useState, useEffect} from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-
 import exampleIcon from '../../assets/pin.png';
 import sheet from '../../styles/sheet';
 import Page from '../common/Page';
@@ -34,7 +33,7 @@ type CustomCalloutViewProps = {
   message: String
 };
 
-const calloutContainerStyle:ViewStyle = {
+const calloutContainerStyle: ViewStyle = {
   backgroundColor: 'white',
   width: 60,
   height: 40,
@@ -52,6 +51,7 @@ const CustomCalloutView: FC<CustomCalloutViewProps> = ({ message }) => {
 }
 
 const CustomCallout: FC<any> = (props) => {
+  console.log('props: ', props);
   const [selectedFeature, setSelectedFeature] = useState<Feature<{ type: string; coordinates: number[]; }, any>>();
   const onPinPress = (e:any)=>{
     if (e?.features?.length > 0) {
@@ -66,25 +66,25 @@ const CustomCallout: FC<any> = (props) => {
       <MapboxGL.MapView style={sheet.matchParent}>
         <MapboxGL.Camera defaultSettings={defaultCamera} />
         <MapboxGL.ShapeSource
-                    id='mapPinsSource'
-                    shape={featureCollection}
-                    onPress={onPinPress}
-                >
-                    <MapboxGL.SymbolLayer
-                        id='mapPinsLayer'
-                        style={{ iconAllowOverlap: true,
-                            iconAnchor: 'bottom',
-                            iconSize: 1.0,
-                            iconImage: exampleIcon
-                        }}
-                    />
-                </MapboxGL.ShapeSource>
-                {selectedFeature && <MapboxGL.MarkerView id='selectedFeatureMarkerView'
-                    coordinate={selectedFeature.geometry.coordinates}>
-                    <CustomCalloutView
-                        message={selectedFeature?.properties?.message}
-                    />
-                </MapboxGL.MarkerView>}
+          id='mapPinsSource'
+          shape={featureCollection}
+          onPress={onPinPress}
+        >
+          <MapboxGL.SymbolLayer
+            id='mapPinsLayer'
+            style={{ iconAllowOverlap: true,
+              iconAnchor: 'bottom',
+              iconSize: 1.0,
+              iconImage: exampleIcon
+            }}
+          />
+        </MapboxGL.ShapeSource>
+        {selectedFeature && <MapboxGL.MarkerView id='selectedFeatureMarkerView'
+          coordinate={selectedFeature.geometry.coordinates}>
+          <CustomCalloutView
+              message={selectedFeature?.properties?.message}
+          />
+        </MapboxGL.MarkerView>}
       </MapboxGL.MapView>
     </Page>
   );
