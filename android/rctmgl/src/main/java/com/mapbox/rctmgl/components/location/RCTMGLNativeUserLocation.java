@@ -56,7 +56,7 @@ public class RCTMGLNativeUserLocation extends AbstractMapFeature implements OnMa
     }
 
     public void setRenderMode(@RenderMode.Mode int renderMode) {
-        if (mMap != null) {
+        if (mMapView != null) {
             LocationComponentManager locationComponent = mMapView.getLocationComponentManager();
             locationComponent.setRenderMode(renderMode);
         }
