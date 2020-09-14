@@ -151,9 +151,6 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
 
     public void onLocationChanged(Location location) {
         lastLocation = location;
-        Log.d(LOG_TAG, String.format(Locale.ENGLISH, "Tick [%f, %f]", location.getLongitude(), location.getLatitude()));
-        Log.d(LOG_TAG, String.format(Locale.ENGLISH, "Listener count %d", listeners.size()));
-
         for (OnUserLocationChange listener : listeners) {
             listener.onLocationChange(location);
         }
