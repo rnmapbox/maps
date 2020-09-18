@@ -616,6 +616,7 @@ export interface SymbolLayerStyle {
   symbolPlacement?: 'point' | 'line' | Expression;
   symbolSpacing?: number | Expression;
   symbolAvoidEdges?: boolean | Expression;
+  symbolZOrder?: 'auto' | 'viewport-y' | 'source' | Expression;
   iconAllowOverlap?: boolean | Expression;
   iconIgnorePlacement?: boolean | Expression;
   iconOptional?: boolean | Expression;
