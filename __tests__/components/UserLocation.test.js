@@ -171,23 +171,23 @@ describe('UserLocation', () => {
       };
 
       expect(ul.state).toStrictEqual(initialState);
-      expect(ul._isLocationManagerRequired).toStrictEqual(false);
+      expect(ul.locationManagerRunning).toStrictEqual(false);
     });
 
-    // TODO: replace object { required: boolean } argument with simple boolean
+    // TODO: replace object { running: boolean } argument with simple boolean
     describe('#setLocationManager', () => {
-      test('called with "required" true', async () => {
+      test('called with "running" true', async () => {
         const lastKnownLocation = [4.1036916, 51.5462244];
         const heading = 251.5358428955078;
 
-        expect(ul._isLocationManagerRequired).toStrictEqual(false);
+        expect(ul.locationManagerRunning).toStrictEqual(false);
 
-        await ul.setLocationManager({required: true});
+        await ul.setLocationManager({running: true});
 
-        expect(ul._isLocationManagerRequired).toStrictEqual(true);
+        expect(ul.locationManagerRunning).toStrictEqual(true);
         expect(locationManager.start).toHaveBeenCalledTimes(1);
-        expect(locationManager.getLastKnownLocation).not.toHaveBeenCalled();
-        expect(ul.setState).toHaveBeenCalledTimes(1);
+        expect(locationManager.getLastKnownLocation).toHaveBeenCalledTimes(1);
+        expect(ul.setState).toHaveBeenCalledTimes(2);
         expect(ul.setState).toHaveBeenCalledWith({
           coordinates: lastKnownLocation,
           heading,
@@ -195,16 +195,16 @@ describe('UserLocation', () => {
         expect(locationManager.stop).not.toHaveBeenCalled();
       });
 
-      test('called with "required" false', async () => {
+      test('called with "running" false', async () => {
         // start
-        expect(ul._isLocationManagerRequired).toStrictEqual(false);
-        await ul.setLocationManager({required: true});
-        expect(ul._isLocationManagerRequired).toStrictEqual(true);
+        expect(ul.locationManagerRunning).toStrictEqual(false);
+        await ul.setLocationManager({running: true});
+        expect(ul.locationManagerRunning).toStrictEqual(true);
 
         // stop
-        await ul.setLocationManager({required: false});
+        await ul.setLocationManager({running: false});
 
-        expect(ul._isLocationManagerRequired).toStrictEqual(false);
+        expect(ul.locationManagerRunning).toStrictEqual(false);
         // only once from start
         expect(locationManager.start).toHaveBeenCalledTimes(1);
         // stop should not be called
@@ -212,24 +212,24 @@ describe('UserLocation', () => {
       });
     });
 
-    describe('#isLocationManagerRequired', () => {
+    describe('#needsLocationManagerRunning', () => {
       test('returns true correctly', () => {
         // default props "onUpdate: undefined, visible: true"
-        expect(ul.checkLocationManagerRequired()).toStrictEqual(true);
+        expect(ul.needsLocationManagerRunning()).toStrictEqual(true);
 
         ul.props = {
           onUpdate: () => {},
           visible: true,
         };
 
-        expect(ul.checkLocationManagerRequired()).toStrictEqual(true);
+        expect(ul.needsLocationManagerRunning()).toStrictEqual(true);
 
         ul.props = {
           onUpdate: () => {},
           visible: false,
         };
 
-        expect(ul.checkLocationManagerRequired()).toStrictEqual(true);
+        expect(ul.needsLocationManagerRunning()).toStrictEqual(true);
       });
 
       test('returns false correctly', () => {
@@ -237,7 +237,7 @@ describe('UserLocation', () => {
           visible: false,
         };
 
-        expect(ul.checkLocationManagerRequired()).toStrictEqual(false);
+        expect(ul.needsLocationManagerRunning()).toStrictEqual(false);
       });
     });
 

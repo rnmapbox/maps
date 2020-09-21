@@ -16,19 +16,19 @@
 | children | `any` | `none` | `false` | Custom location icon of type mapbox-gl-native components |
 
 ### methods
-#### setLocationManager({required})
+#### setLocationManager({running})
 
 Whether to start or stop listening to the locationManager<br/><br/>Notice, that listening will start automatically when<br/>either `onUpdate` or `visible` are set
 
 ##### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `{required}` | `n/a` | `Yes` | undefined |
+| `{running}` | `n/a` | `Yes` | undefined |
 
 
-#### isLocationManagerRequired()
+#### needsLocationManagerRunning()
 
-If locationManager is required.
+If locationManager should be running
 
 ##### arguments
 | Name | Type | Required | Description  |

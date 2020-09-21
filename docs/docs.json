@@ -5164,13 +5164,13 @@
     "methods": [
       {
         "name": "setLocationManager",
-        "docblock": "Whether to start or stop listening to the locationManager\n\nNotice, that listening will start automatically when\neither `onUpdate` or `visible` are set\n\n@async\n@param {Object} required - Object with key `required` and `boolean` value\n@return {Promise<void>}",
+        "docblock": "Whether to start or stop listening to the locationManager\n\nNotice, that listening will start automatically when\neither `onUpdate` or `visible` are set\n\n@async\n@param {Object} running - Object with key `running` and `boolean` value\n@return {Promise<void>}",
         "modifiers": [
           "async"
         ],
         "params": [
           {
-            "name": "{required}"
+            "name": "{running}"
           }
         ],
         "returns": {
@@ -5188,8 +5188,8 @@
         "examples": []
       },
       {
-        "name": "isLocationManagerRequired",
-        "docblock": "If locationManager is required.\n\n@return {boolean}",
+        "name": "needsLocationManagerRunning",
+        "docblock": "If locationManager should be running\n\n@return {boolean}",
         "modifiers": [],
         "params": [],
         "returns": {
@@ -5198,7 +5198,7 @@
             "name": "boolean"
           }
         },
-        "description": "If locationManager is required.",
+        "description": "If locationManager should be running",
         "examples": []
       }
     ],
