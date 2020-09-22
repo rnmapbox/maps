@@ -151,7 +151,7 @@ describe('LocationManager', () => {
       jest.spyOn(MapboxGLLocationManager, 'start');
       jest.spyOn(LocationModuleEventEmitter, 'addListener');
 
-      beforeEach(() => {
+      afterEach(() => {
         locationManager._isListening = false;
       });
 
