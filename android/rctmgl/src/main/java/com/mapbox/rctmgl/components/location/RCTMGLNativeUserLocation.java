@@ -18,7 +18,7 @@ public class RCTMGLNativeUserLocation extends AbstractMapFeature implements OnMa
     private boolean mEnabled = true;
     private MapboxMap mMap;
     private RCTMGLMapView mMapView;
-    private int mRenderMode = -1;
+    private @RenderMode.Mode int mRenderMode = RenderMode.COMPASS;
 
     public RCTMGLNativeUserLocation(Context context) {
         super(context);
@@ -57,7 +57,7 @@ public class RCTMGLNativeUserLocation extends AbstractMapFeature implements OnMa
         locationComponent.showUserLocation(mEnabled);
     }
 
-    public void setRenderMode(int renderMode) {
+    public void setRenderMode(@RenderMode.Mode int renderMode) {
         mRenderMode = renderMode;
         if (mMapView != null) {
             LocationComponentManager locationComponent = mMapView.getLocationComponentManager();
