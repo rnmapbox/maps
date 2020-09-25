@@ -21,6 +21,21 @@
     }
 }
 
+- (void)setCoordinates:(NSArray<NSArray<NSNumber *> *> *)coordinates
+{
+    CLLocationCoordinate2D topLeft = CLLocationCoordinate2DMake([coordinates[0][1] floatValue], [coordinates[0][0] floatValue]);
+    CLLocationCoordinate2D topRight = CLLocationCoordinate2DMake([coordinates[1][1] floatValue], [coordinates[1][0] floatValue]);
+    CLLocationCoordinate2D bottomRight = CLLocationCoordinate2DMake([coordinates[2][1] floatValue], [coordinates[2][0] floatValue]);
+    CLLocationCoordinate2D bottomLeft = CLLocationCoordinate2DMake([coordinates[3][1] floatValue], [coordinates[3][0] floatValue]);
+
+    MGLCoordinateQuad _coordinates = MGLCoordinateQuadMake(topLeft, bottomLeft, bottomRight, topRight);
+    
+    if (self.source != nil) {
+        MGLImageSource *source = (MGLImageSource *)self.source;
+        source.coordinates = _coordinates;
+    }
+}
+
 - (nullable MGLSource *)makeSource
 {
     NSURL *myURL;
