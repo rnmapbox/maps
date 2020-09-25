@@ -1,25 +1,25 @@
 # Contributing
 
 ## Setup for creating pull requests
+- Fork this project
+- In your fork, create a branch, for example: `fix/camera-update`
+- Add your changes
+- Push and open a PR with your branch
 
-1. You'll first need to go through a normal [react-native setup](https://facebook.github.io/react-native/docs/getting-started.html#content)
-1. Create a new react-native project with `react-native init <YOUR-PROJECT-NAME>`
-1. `cd` into your project
-1. You have 2 options for linking `react-native-mapbox-gl`
-  * Use `react-native link`
-  * Clone `@react-native-mapbox-gl/maps` into the `node_modules` folder
-1. Go through a normal install process for your platform
-
-Once installed, you can edit any file in `@react-native-mapbox-gl/maps`,  
-commit the changes and push them to a fork for creating a pull request.
+## Testing my changes
+The metro bundler under `/example` is set up to use the libraries files under root.
+Which means, when you change something within `javascript/components/UserLocation.js`  
+it will be reflected in any scene in example that uses that component.
 
 ## Best practices for PR's
-
-1. If you add a feature, make sure you add it to the documentation
-1. If you add an objective-c or java method, make sure you update the declaration file: `index.d.ts`.
+- If you add a feature, make sure you add it to the documentation
+- If you add an objective-c or java method, make sure you update the declaration file: `index.d.ts`.
+- Make sure to use small concise commits
+- Use meaningful commit messages
+- Make sure to update/ add new tests for your changes
+- If you add a new feature make sure to add a scene in `/example` for others to see/ test it
 
 ## Documentation
-
 Documentation is generated from code blocks and comments.
 It will be auto-generated when you commit changes.
 If any changes are generated from your edits, the changed files will need to be added using `git add` before attempting the commit again.
