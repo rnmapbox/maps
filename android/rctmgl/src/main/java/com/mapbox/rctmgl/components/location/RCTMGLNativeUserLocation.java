@@ -29,7 +29,7 @@ public class RCTMGLNativeUserLocation extends AbstractMapFeature implements OnMa
         mEnabled = true;
         mMapView = mapView;
         mapView.getMapAsync(this);
-        if (mRenderMode >= 0) { setRenderMode(mRenderMode); }
+        setRenderMode(mRenderMode);
     }
 
     @Override
