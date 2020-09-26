@@ -2,8 +2,10 @@ require 'json'
 
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
-
-REACT_NATIVE_MAPBOX_MAPBOX_IOS_VERSION = ENV["REACT_NATIVE_MAPBOX_MAPBOX_IOS_VERSION"] || '~> 5.8'
+rnmbgl_ios_version = $ReactNativeMapboxGLIOSVersion || ENV["REACT_NATIVE_MAPBOX_MAPBOX_IOS_VERSION"] || '~> 5.8'
+if ENV.has_key?("REACT_NATIVE_MAPBOX_MAPBOX_IOS_VERSION")
+  puts "REACT_NATIVE_MAPBOX_MAPBOX_IOS_VERSION env is deprecated please use `$ReactNativeMapboxGLIOSVersion = \"#{rnmbgl_ios_version}\"`"
+end
 
 Pod::Spec.new do |s|
   s.name		= "react-native-mapbox-gl"
@@ -15,7 +17,7 @@ Pod::Spec.new do |s|
   s.license     	= "MIT"
   s.platform    	= :ios, "8.0"
 
-  s.dependency 'Mapbox-iOS-SDK', REACT_NATIVE_MAPBOX_MAPBOX_IOS_VERSION
+  s.dependency 'Mapbox-iOS-SDK', rnmbgl_ios_version
   s.dependency 'React'
 
   s.subspec 'DynamicLibrary' do |sp|
@@ -26,7 +28,9 @@ Pod::Spec.new do |s|
     s.default_subspecs= ['DynamicLibrary']
   else
     s.subspec 'StaticLibraryFixer' do |sp|
-      s.dependency '@react-native-mapbox-gl-mapbox-static', REACT_NATIVE_MAPBOX_MAPBOX_IOS_VERSION
+      if rnmbgl_ios_version.split('.')[0].to_i == 5
+        s.dependency '@react-native-mapbox-gl-mapbox-static', rnmbgl_ios_version
+      end
     end
 
     s.default_subspecs= ['DynamicLibrary', 'StaticLibraryFixer']
