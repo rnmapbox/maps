@@ -5,7 +5,7 @@ import CircleLayer from '../../javascript/components/CircleLayer';
 
 describe('CircleLayer', () => {
   test('renders correctly with default props', () => {
-    const {queryByTestId} = render(<CircleLayer />);
+    const {queryByTestId} = render(<CircleLayer id="requiredCircleLayerID" />);
     const circleLayer = queryByTestId('rctmglCircleLayer');
     const {props} = circleLayer;
 

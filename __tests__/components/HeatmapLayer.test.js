@@ -5,7 +5,9 @@ import HeatmapLayer from '../../javascript/components/HeatmapLayer';
 
 describe('HeatmapLayer', () => {
   test('renders correctly with default props', () => {
-    const {UNSAFE_getByType} = render(<HeatmapLayer />);
+    const {UNSAFE_getByType} = render(
+      <HeatmapLayer id="requiredHeatmapLayerID" />,
+    );
     const heatmapLayer = UNSAFE_getByType('RCTMGLHeatmapLayer');
     const {props} = heatmapLayer;
     expect(props.sourceID).toStrictEqual('DefaultSourceID');
