@@ -8,7 +8,9 @@ import SymbolLayer, {
 
 describe('SymbolLayer', () => {
   test('renders correctly with default props', () => {
-    const {UNSAFE_getByType} = render(<SymbolLayer />);
+    const {UNSAFE_getByType} = render(
+      <SymbolLayer id="requiredSymbolLayerID" />,
+    );
     const symbolLayer = UNSAFE_getByType(NATIVE_MODULE_NAME);
     const {props} = symbolLayer;
 
