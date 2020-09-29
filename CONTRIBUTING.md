@@ -7,7 +7,7 @@
 - Push and open a PR with your branch
 
 ## Testing my changes
-The metro bundler under `/example` is set up to use the libraries files under root.
+The metro bundler under `/example` is set up to use the libraries files under root.  
 Which means, when you change something within `javascript/components/UserLocation.js`  
 it will be reflected in any scene in example that uses that component.
 
@@ -20,7 +20,11 @@ it will be reflected in any scene in example that uses that component.
 - If you add a new feature make sure to add a scene in `/example` for others to see/ test it
 
 ## Documentation
-Documentation is generated from code blocks and comments.
-It will be auto-generated when you commit changes.
-If any changes are generated from your edits, the changed files will need to be added using `git add` before attempting the commit again.
-To manually generate the changes, run `npm run generate`.
+Documentation is generated from code blocks and comments.  
+It will be auto-generated when you commit changes.  
+If any changes are generated from your edits, the changed files will need to be added using `git add` before attempting the commit again.  
+To manually generate the changes, run `npm run generate`.  
+
+Notice, that changing the documentation in the individual <COMPONENT>.md within `/docs` will not suffice.  
+The correct way is the above described
+ 
