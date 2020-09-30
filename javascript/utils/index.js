@@ -74,7 +74,7 @@ export function runNativeCommand(module, name, nativeRef, args = []) {
   if (isAndroid()) {
     return NativeModules.UIManager.dispatchViewManagerCommand(
       handle,
-      managerInstance.Commands[name],
+      name,
       args,
     );
   }

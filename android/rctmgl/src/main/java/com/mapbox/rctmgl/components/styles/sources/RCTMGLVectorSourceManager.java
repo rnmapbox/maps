@@ -58,20 +58,12 @@ public class RCTMGLVectorSourceManager extends RCTMGLTileSourceManager<RCTMGLVec
     }
 
     //region React Methods
-    public static final int METHOD_FEATURES = 102;
-
-    @Nullable
-    @Override
-    public Map<String, Integer> getCommandsMap() {
-        return MapBuilder.<String, Integer>builder()
-                .put("features", METHOD_FEATURES)
-                .build();
-    }
+    public static final String METHOD_FEATURES = "features";
 
     @Override
-    public void receiveCommand(RCTMGLVectorSource vectorSource, int commandID, @Nullable ReadableArray args) {
+    public void receiveCommand(RCTMGLVectorSource vectorSource, String commandName, @Nullable ReadableArray args) {
 
-        switch (commandID) {
+        switch (commandName) {
             case METHOD_FEATURES:
                 vectorSource.querySourceFeatures(
                         args.getString(0),

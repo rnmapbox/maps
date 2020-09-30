@@ -147,19 +147,11 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
     }
 
     //region React Methods
-    public static final int METHOD_FEATURES = 103;
-
-    @Nullable
+    public static final String METHOD_FEATURES = "features";
+    
     @Override
-    public Map<String, Integer> getCommandsMap() {
-        return MapBuilder.<String, Integer>builder()
-                .put("features", METHOD_FEATURES)
-                .build();
-    }
-
-    @Override
-    public void receiveCommand(RCTMGLShapeSource source, int commandID, @Nullable ReadableArray args) {
-        switch (commandID) {
+    public void receiveCommand(RCTMGLShapeSource source, String commandName, @Nullable ReadableArray args) {
+        switch (commandName) {
             case METHOD_FEATURES:
                 source.querySourceFeatures(
                         args.getString(0),

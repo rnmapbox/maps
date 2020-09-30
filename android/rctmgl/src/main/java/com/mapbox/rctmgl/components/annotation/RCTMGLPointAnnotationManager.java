@@ -37,15 +37,7 @@ public class RCTMGLPointAnnotationManager extends AbstractEventEmitter<RCTMGLPoi
     }
 
     //region React Methods
-    public static final int METHOD_REFRESH = 2;
-
-    @Nullable
-    @Override
-    public Map<String, Integer> getCommandsMap() {
-        return MapBuilder.<String, Integer>builder()
-                .put("refresh", METHOD_REFRESH)
-                .build();
-    }
+    public static final String METHOD_REFRESH = "refresh";
 
     @Override
     public String getName() {
@@ -78,8 +70,8 @@ public class RCTMGLPointAnnotationManager extends AbstractEventEmitter<RCTMGLPoi
     }
 
     @Override
-    public void receiveCommand(RCTMGLPointAnnotation annotation, int commandID, @Nullable ReadableArray args) {
-        switch (commandID) {
+    public void receiveCommand(RCTMGLPointAnnotation annotation, String commandName, @Nullable ReadableArray args) {
+        switch (commandName) {
             case METHOD_REFRESH:
                 annotation.refresh();
                 break;

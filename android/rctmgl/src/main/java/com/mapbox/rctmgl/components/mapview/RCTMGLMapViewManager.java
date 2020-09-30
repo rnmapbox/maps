@@ -204,46 +204,30 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     //endregion
 
     //region React Methods
-    public static final int METHOD_QUERY_FEATURES_POINT = 2;
-    public static final int METHOD_QUERY_FEATURES_RECT = 3;
-    public static final int METHOD_VISIBLE_BOUNDS = 4;
-    public static final int METHOD_GET_POINT_IN_VIEW = 5;
-    public static final int METHOD_GET_COORDINATE_FROM_VIEW = 6;
-    public static final int METHOD_TAKE_SNAP = 7;
-    public static final int METHOD_GET_ZOOM = 8;
-    public static final int METHOD_GET_CENTER = 9;
-    public static final int METHOD_SET_HANDLED_MAP_EVENTS = 10;
-    public static final int METHOD_SHOW_ATTRIBUTION = 11;
-    public static final int METHOD_SET_SOURCE_VISIBILITY = 12;
+    public static final String METHOD_QUERY_FEATURES_POINT = "queryRenderedFeaturesAtPoint";
+    public static final String METHOD_QUERY_FEATURES_RECT = "queryRenderedFeaturesInRect";
+    public static final String METHOD_VISIBLE_BOUNDS = "getVisibleBounds";
+    public static final String METHOD_GET_POINT_IN_VIEW = "getPointInView";
+    public static final String METHOD_GET_COORDINATE_FROM_VIEW = "getCoordinateFromView";
+    public static final String METHOD_TAKE_SNAP = "takeSnap";
+    public static final String METHOD_GET_ZOOM = "getZoom";
+    public static final String METHOD_GET_CENTER = "getCenter";
+    public static final String METHOD_SET_HANDLED_MAP_EVENTS = "setHandledMapChangedEvents";
+    public static final String METHOD_SHOW_ATTRIBUTION = "showAttribution";
+    public static final String METHOD_SET_SOURCE_VISIBILITY = "setSourceVisibility";
 
-    @Nullable
-    @Override
-    public Map<String, Integer> getCommandsMap() {
-        return MapBuilder.<String, Integer>builder()
-                .put("queryRenderedFeaturesAtPoint", METHOD_QUERY_FEATURES_POINT)
-                .put("queryRenderedFeaturesInRect", METHOD_QUERY_FEATURES_RECT)
-                .put("getVisibleBounds", METHOD_VISIBLE_BOUNDS)
-                .put("getPointInView", METHOD_GET_POINT_IN_VIEW)
-                .put("getCoordinateFromView", METHOD_GET_COORDINATE_FROM_VIEW)
-                .put("takeSnap", METHOD_TAKE_SNAP)
-                .put("getZoom", METHOD_GET_ZOOM)
-                .put("getCenter", METHOD_GET_CENTER)
-                .put( "setHandledMapChangedEvents", METHOD_SET_HANDLED_MAP_EVENTS)
-                .put("showAttribution", METHOD_SHOW_ATTRIBUTION)
-                .put("setSourceVisibility", METHOD_SET_SOURCE_VISIBILITY)
-                .build();
-    }
+
 
     @Override
-    public void receiveCommand(RCTMGLMapView mapView, int commandID, @Nullable ReadableArray args) {
+    public void receiveCommand(RCTMGLMapView mapView, String commandName, @Nullable ReadableArray args) {
         // allows method calls to work with componentDidMount
         MapboxMap mapboxMap = mapView.getMapboxMap();
         if (mapboxMap == null) {
-            mapView.enqueuePreRenderMapMethod(commandID, args);
+            mapView.enqueuePreRenderMapMethod(commandName, args);
             return;
         }
 
-        switch (commandID) {
+        switch (commandName) {
             case METHOD_QUERY_FEATURES_POINT:
                 mapView.queryRenderedFeaturesAtPoint(
                         args.getString(0),

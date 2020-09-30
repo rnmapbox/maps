@@ -113,7 +113,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     private List<RCTMGLImages> mImages;
 
     private CameraChangeTracker mCameraChangeTracker = new CameraChangeTracker();
-    private List<Pair<Integer, ReadableArray>> mPreRenderMethods = new ArrayList<>();
+    private List<Pair<String, ReadableArray>> mPreRenderMethods = new ArrayList<>();
 
     private MapboxMap mMap;
 
@@ -202,8 +202,8 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         mDestroyed = true;
     }
 
-    public void enqueuePreRenderMapMethod(Integer methodID, @Nullable ReadableArray args) {
-        mPreRenderMethods.add(new Pair<>(methodID, args));
+    public void enqueuePreRenderMapMethod(String methodName, @Nullable ReadableArray args) {
+        mPreRenderMethods.add(new Pair<>(methodName, args));
     }
 
     public void addFeature(View childView, int childPosition) {
@@ -715,10 +715,10 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     @Override
     public void onDidFinishRenderingMap(boolean fully) {
         if (fully) {
-            for (Pair<Integer, ReadableArray> preRenderMethod : mPreRenderMethods) {
-                Integer methodID = preRenderMethod.first;
+            for (Pair<String, ReadableArray> preRenderMethod : mPreRenderMethods) {
+                String methodName = preRenderMethod.first;
                 ReadableArray args = preRenderMethod.second;
-                mManager.receiveCommand(this, methodID, args);
+                mManager.(this, methodName, args);
             }
             mPreRenderMethods.clear();
             handleMapChangedEvent(EventTypes.DID_FINISH_RENDERING_MAP_FULLY);
@@ -1121,7 +1121,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     public double[] getContentInset() {
         if (mInsets == null) {
             double[] result = {0,0,0,0};
-        
+
             return result;
         }
         double top = 0, right = 0, bottom = 0, left = 0;
@@ -1144,7 +1144,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         }
 
         final DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
-    
+
         double[] result = {left * metrics.scaledDensity, top * metrics.scaledDensity, right * metrics.scaledDensity, bottom * metrics.scaledDensity};
         return result;
     }
