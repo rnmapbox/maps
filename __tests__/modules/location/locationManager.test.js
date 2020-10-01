@@ -81,7 +81,7 @@ describe('LocationManager', () => {
         expect(locationManager._listeners).toStrictEqual([myListener]);
       });
 
-      test('does not read same listener', () => {
+      test('does not re-add same listener', () => {
         locationManager.addListener(myListener);
         expect(locationManager._listeners).toStrictEqual([myListener]);
         locationManager.addListener(myListener);
