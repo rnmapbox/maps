@@ -750,7 +750,7 @@ export interface VectorSourceProps extends TileSourceProps {
 export interface ShapeSourceProps extends ViewProps {
   id: string;
   url?: string;
-  shape?: GeoJSON.GeometryCollection | GeoJSON.Feature | GeoJSON.FeatureCollection;
+  shape?: GeoJSON.GeometryCollection | GeoJSON.Feature | GeoJSON.FeatureCollection | GeoJSON.Geometry;
   cluster?: boolean;
   clusterRadius?: number;
   clusterMaxZoomLevel?: number;
