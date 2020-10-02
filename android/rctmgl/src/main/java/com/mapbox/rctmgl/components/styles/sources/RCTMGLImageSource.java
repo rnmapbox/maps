@@ -70,5 +70,8 @@ public class RCTMGLImageSource extends RCTSource<ImageSource> {
 
     public void setCoordinates(LatLngQuad coordQuad) {
         mCoordQuad = coordQuad;
+        if (mSource != null) {
+            mSource.setCoordinates(this.mCoordQuad);
+        }
     }
 }
