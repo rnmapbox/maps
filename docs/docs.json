@@ -5164,7 +5164,7 @@
     "methods": [
       {
         "name": "setLocationManager",
-        "docblock": "Whether to start or stop the locationManager\n\nNotice, that locationManager will start automatically when\neither `onUpdate` or `visible` are set\n\n@async\n@param {Object} running - Object with key `running` and `boolean` value\n@return {Promise<void>}",
+        "docblock": "Whether to start or stop listening to the locationManager\n\nNotice, that listening will start automatically when\neither `onUpdate` or `visible` are set\n\n@async\n@param {Object} running - Object with key `running` and `boolean` value\n@return {Promise<void>}",
         "modifiers": [
           "async"
         ],
@@ -5184,7 +5184,7 @@
             ]
           }
         },
-        "description": "Whether to start or stop the locationManager\n\nNotice, that locationManager will start automatically when\neither `onUpdate` or `visible` are set",
+        "description": "Whether to start or stop listening to the locationManager\n\nNotice, that listening will start automatically when\neither `onUpdate` or `visible` are set",
         "examples": []
       },
       {

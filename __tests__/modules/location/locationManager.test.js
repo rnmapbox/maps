@@ -69,6 +69,7 @@ describe('LocationManager', () => {
 
     describe('#addListener', () => {
       const myListener = jest.fn();
+      MapboxGL.LocationCallbackName = {Update: 'MapboxUserLocationUpdate'};
 
       afterEach(() => {
         locationManager._listeners = [];
@@ -80,7 +81,7 @@ describe('LocationManager', () => {
         expect(locationManager._listeners).toStrictEqual([myListener]);
       });
 
-      test('does not readd same listener', () => {
+      test('does not re-add same listener', () => {
         locationManager.addListener(myListener);
         expect(locationManager._listeners).toStrictEqual([myListener]);
         locationManager.addListener(myListener);
@@ -99,6 +100,8 @@ describe('LocationManager', () => {
     });
 
     describe('#removeListener', () => {
+      MapboxGLLocationManager.stop = jest.fn();
+
       test('removes selected listener', () => {
         // just two different functions
         const listenerA = jest.fn(() => 'listenerA');
@@ -106,16 +109,22 @@ describe('LocationManager', () => {
 
         locationManager.addListener(listenerA);
         expect(locationManager._listeners).toStrictEqual([listenerA]);
+        expect(MapboxGLLocationManager.stop).not.toHaveBeenCalled();
+
         locationManager.addListener(listenerB);
         expect(locationManager._listeners).toStrictEqual([
           listenerA,
           listenerB,
         ]);
+        expect(MapboxGLLocationManager.stop).not.toHaveBeenCalled();
 
         locationManager.removeListener(listenerB);
         expect(locationManager._listeners).toStrictEqual([listenerA]);
+        expect(MapboxGLLocationManager.stop).not.toHaveBeenCalled();
+
         locationManager.removeListener(listenerA);
         expect(locationManager._listeners).toStrictEqual([]);
+        expect(MapboxGLLocationManager.stop).toHaveBeenCalledTimes(1);
       });
     });
 

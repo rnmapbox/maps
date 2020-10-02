@@ -18,7 +18,7 @@
 ### methods
 #### setLocationManager({running})
 
-Whether to start or stop the locationManager<br/><br/>Notice, that locationManager will start automatically when<br/>either `onUpdate` or `visible` are set
+Whether to start or stop listening to the locationManager<br/><br/>Notice, that listening will start automatically when<br/>either `onUpdate` or `visible` are set
 
 ##### arguments
 | Name | Type | Required | Description  |

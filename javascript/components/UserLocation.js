@@ -142,8 +142,6 @@ class UserLocation extends React.Component {
   async componentDidMount() {
     this._isMounted = true;
 
-    locationManager.addListener(this._onLocationUpdate);
-
     await this.setLocationManager({
       running: this.needsLocationManagerRunning(),
     });
@@ -167,14 +165,13 @@ class UserLocation extends React.Component {
 
   async componentWillUnmount() {
     this._isMounted = false;
-    locationManager.removeListener(this._onLocationUpdate);
     await this.setLocationManager({running: false});
   }
 
   /**
-   * Whether to start or stop the locationManager
+   * Whether to start or stop listening to the locationManager
    *
-   * Notice, that locationManager will start automatically when
+   * Notice, that listening will start automatically when
    * either `onUpdate` or `visible` are set
    *
    * @async
@@ -185,12 +182,11 @@ class UserLocation extends React.Component {
     if (this.locationManagerRunning !== running) {
       this.locationManagerRunning = running;
       if (running) {
-        locationManager.start();
-
+        locationManager.addListener(this._onLocationUpdate);
         const location = await locationManager.getLastKnownLocation();
         this._onLocationUpdate(location);
       } else {
-        locationManager.stop();
+        locationManager.removeListener(this._onLocationUpdate);
       }
     }
   }

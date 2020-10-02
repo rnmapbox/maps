@@ -187,7 +187,7 @@ describe('UserLocation', () => {
         expect(ul.locationManagerRunning).toStrictEqual(true);
         expect(locationManager.start).toHaveBeenCalledTimes(1);
         expect(locationManager.getLastKnownLocation).toHaveBeenCalledTimes(1);
-        expect(ul.setState).toHaveBeenCalledTimes(1);
+        expect(ul.setState).toHaveBeenCalledTimes(2);
         expect(ul.setState).toHaveBeenCalledWith({
           coordinates: lastKnownLocation,
           heading,
@@ -207,7 +207,8 @@ describe('UserLocation', () => {
         expect(ul.locationManagerRunning).toStrictEqual(false);
         // only once from start
         expect(locationManager.start).toHaveBeenCalledTimes(1);
-        expect(locationManager.stop).toHaveBeenCalledTimes(1);
+        // stop should not be called
+        expect(locationManager.stop).not.toHaveBeenCalled();
       });
     });
 
