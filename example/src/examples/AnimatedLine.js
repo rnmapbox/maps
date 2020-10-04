@@ -20,6 +20,26 @@ const lat = 40.73581;
 const delta = 0.001;
 const steps = 300;
 
+const styles = {
+  lineLayerOne: {
+    lineCap: 'round',
+    lineWidth: 6,
+    lineOpacity: 0.84,
+    lineColor: '#514ccd',
+  },
+  circleLayer: {
+    circleOpacity: 0.8,
+    circleColor: '#c62221',
+    circleRadius: 20,
+  },
+  lineLayerTwo: {
+    lineCap: 'round',
+    lineWidth: 6,
+    lineOpacity: 0.84,
+    lineColor: '#314ccd',
+  },
+};
+
 class AnimatedLine extends React.Component {
   static propTypes = {
     ...BaseExamplePropTypes,
@@ -204,15 +224,7 @@ class AnimatedLine extends React.Component {
                 coordinates: this.state.route,
               })
             }>
-            <Animated.LineLayer
-              id={'lineroute'}
-              style={{
-                lineCap: 'round',
-                lineWidth: 6,
-                lineOpacity: 0.84,
-                lineColor: '#514ccd',
-              }}
-            />
+            <Animated.LineLayer id={'lineroute'} style={styles.lineLayerOne} />
           </Animated.ShapeSource>
 
           <Animated.ShapeSource
@@ -225,11 +237,7 @@ class AnimatedLine extends React.Component {
             }>
             <Animated.CircleLayer
               id="currentLocationCircle"
-              style={{
-                circleOpacity: 0.8,
-                circleColor: '#c62221',
-                circleRadius: 20,
-              }}
+              style={styles.circleLayer}
             />
           </Animated.ShapeSource>
 
@@ -241,15 +249,7 @@ class AnimatedLine extends React.Component {
                 coordinates: this.state.shape,
               })
             }>
-            <Animated.LineLayer
-              id={'line'}
-              style={{
-                lineCap: 'round',
-                lineWidth: 6,
-                lineOpacity: 0.84,
-                lineColor: '#314ccd',
-              }}
-            />
+            <Animated.LineLayer id={'line'} style={styles.lineLayerTwo} />
           </Animated.ShapeSource>
         </MapView>
 

@@ -8,6 +8,14 @@ import {
   Camera,
 } from '@react-native-mapbox-gl/maps';
 
+const styles = {
+  mapView: {flex: 1},
+  circleLayer: {
+    circleRadiusTransition: {duration: 5000},
+    circleColor: '#ff0000',
+  },
+};
+
 const features = {
   type: 'FeatureCollection',
   features: [
@@ -54,23 +62,21 @@ class BugReportExample extends React.Component {
   };
 
   render() {
+    const circleLayerStyle = {
+      ...styles.circleLayer,
+      ...{circleRadius: this.state.radius},
+    };
+
     return (
       <>
         <Button
           title="Grow"
           onPress={() => this.setState({radius: this.state.radius + 20})}
         />
-        <MapView style={{flex: 1}}>
+        <MapView style={styles.mapView}>
           <Camera centerCoordinate={[-74.00597, 40.71427]} zoomLevel={14} />
           <ShapeSource id={'shape-source-id-0'} shape={features}>
-            <CircleLayer
-              id={'circle-layer'}
-              style={{
-                circleRadius: this.state.radius,
-                circleRadiusTransition: {duration: 5000},
-                circleColor: '#ff0000',
-              }}
-            />
+            <CircleLayer id={'circle-layer'} style={circleLayerStyle} />
             <SymbolLayer
               id="symbol-id"
               style={{

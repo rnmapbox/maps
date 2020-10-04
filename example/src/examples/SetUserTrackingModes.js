@@ -9,6 +9,12 @@ import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import TabBarPage from './common/TabBarPage';
 import Bubble from './common/Bubble';
 
+const styles = {
+  bubbleOne: {bottom: 80},
+  bubbleTwo: {bottom: 150},
+  bubbleThree: {bottom: 220},
+};
+
 class SetUserTrackingModes extends React.Component {
   static propTypes = {
     ...BaseExamplePropTypes,
@@ -111,18 +117,20 @@ class SetUserTrackingModes extends React.Component {
           />
         </MapboxGL.MapView>
 
-        <Bubble style={{bottom: 80}}>
+        <Bubble style={styles.bubbleOne}>
           <Text>User Tracking Mode: {this.userTrackingModeText}</Text>
         </Bubble>
 
-        <Bubble onPress={this.onToggleUserLocation} style={{bottom: 150}}>
+        <Bubble onPress={this.onToggleUserLocation} style={styles.bubbleTwo}>
           <Text>
             Toggle User Location:{' '}
             {this.state.showUserLocation ? 'true' : 'false'}
           </Text>
         </Bubble>
 
-        <Bubble onPress={this.onToggleHeadingIndicator} style={{bottom: 220}}>
+        <Bubble
+          onPress={this.onToggleHeadingIndicator}
+          style={styles.bubbleThree}>
           <Text>
             Toggle user heading indicator:{' '}
             {this.state.showsUserHeadingIndicator ? 'true' : 'false'}

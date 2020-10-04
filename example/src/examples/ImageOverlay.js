@@ -1,6 +1,6 @@
 import React from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import { Text } from 'react-native';
+import {Text} from 'react-native';
 import Bubble from './common/Bubble';
 
 import sheet from '../styles/sheet';
@@ -10,6 +10,11 @@ import radar2 from '../assets/radar2.png';
 
 import Page from './common/Page';
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
+
+const styles = {
+  rasterLayer: {rasterOpacity: 0.6},
+  bubble: {bottom: 100},
+};
 
 const frames = [radar0, radar1, radar2];
 const coordQuads = [
@@ -35,7 +40,7 @@ class ImageOverlay extends React.Component {
   state = {
     radarFrameIndex: 0,
     coords: coordQuads[0],
-    dynamic: false
+    dynamic: false,
   };
 
   _timeout = null;
@@ -53,9 +58,12 @@ class ImageOverlay extends React.Component {
         }
 
         if (this.state.dynamic) {
-          this.setState({radarFrameIndex: nextFrame, coords: coordQuads[nextFrame]})
+          this.setState({
+            radarFrameIndex: nextFrame,
+            coords: coordQuads[nextFrame],
+          });
         } else {
-          this.setState({radarFrameIndex: nextFrame})
+          this.setState({radarFrameIndex: nextFrame});
         }
         this.heartbeat();
       });
@@ -67,31 +75,30 @@ class ImageOverlay extends React.Component {
   }
 
   render() {
-    const bubbleText = this.state.dynamic ? "Static coordinates" : "Dynamic coordinates"
+    const bubbleText = this.state.dynamic
+      ? 'Static coordinates'
+      : 'Dynamic coordinates';
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
           ref={(ref) => (this.map = ref)}
           style={sheet.matchParent}
           styleURL={MapboxGL.StyleURL.Satellite}>
-          <MapboxGL.Camera
-            zoomLevel={4}
-            centerCoordinate={[-79, 40]}
-          />
+          <MapboxGL.Camera zoomLevel={4} centerCoordinate={[-79, 40]} />
 
           <MapboxGL.Animated.ImageSource
             key="d"
             id="radarSource"
             coordinates={this.state.coords}
             url={frames[this.state.radarFrameIndex]}>
-            <MapboxGL.RasterLayer id="radarLayer"
-            style={{rasterOpacity: .6}} />
+            <MapboxGL.RasterLayer id="radarLayer" style={styles.rasterLayer} />
           </MapboxGL.Animated.ImageSource>
         </MapboxGL.MapView>
         <Bubble
-          onPress={() => { this.setState({ dynamic: !this.state.dynamic})}}
-          style={{bottom: 100}}
-        >
+          onPress={() => {
+            this.setState({dynamic: !this.state.dynamic});
+          }}
+          style={styles.bubble}>
           <Text>{bubbleText}</Text>
         </Bubble>
       </Page>

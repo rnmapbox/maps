@@ -18,6 +18,8 @@ const styles = {
       /* default */ 1,
     ],
   },
+  mapView: {flex: 1},
+  mapContainer: {flex: 1},
 };
 
 const featureCollection = {
@@ -77,12 +79,12 @@ class ShapeSourceIcon extends React.Component {
     },
   };
 
-  render() {
+  render(): JSX.Element {
     const {images} = this.state;
 
     return (
-      <View style={{flex: 1}}>
-        <MapView style={{flex: 1}}>
+      <View style={styles.mapContainer}>
+        <MapView style={styles.mapView}>
           <Camera
             zoomLevel={17}
             centerCoordinate={[-117.20611157485, 52.180961084261]}

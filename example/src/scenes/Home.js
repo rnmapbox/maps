@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import Page from '../examples/common/Page';
 import MapHeader from '../examples/common/MapHeader';
 import sheet from '../styles/sheet';
-import colors from '../styles/colors';
 import ShowMap from '../examples/Map/ShowMap';
 import MarkerView from '../examples/MarkerView';
 import SetPitch from '../examples/SetPitch';
@@ -55,10 +54,6 @@ import ShapeSourceTS from '../examples/SymbolCircleLayer/ShapeSource';
 import CacheManagement from '../examples/CacheManagement';
 
 const styles = StyleSheet.create({
-  exampleBackground: {
-    backgroundColor: colors.primary.pinkFaint,
-    flex: 1,
-  },
   exampleList: {
     flex: 1,
   },
@@ -74,11 +69,6 @@ const styles = StyleSheet.create({
   },
   exampleListLabel: {
     fontSize: 18,
-  },
-  header: {
-    fontSize: 24,
-    marginTop: 48,
-    textAlign: 'center',
   },
 });
 
@@ -203,9 +193,11 @@ function ExampleGroupComponent({items, navigation, showBack}) {
         },
       }
     : {};
+
   const title = showBack
     ? navigation.getParam('label')
     : 'React Native Mapbox GL';
+
   return (
     <View style={sheet.matchParent}>
       <MapHeader label={title} {...back} />
