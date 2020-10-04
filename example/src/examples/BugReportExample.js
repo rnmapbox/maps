@@ -11,7 +11,6 @@ import {
 const styles = {
   mapView: {flex: 1},
   circleLayer: {
-    circleRadius: this.state.radius,
     circleRadiusTransition: {duration: 5000},
     circleColor: '#ff0000',
   },
@@ -72,7 +71,10 @@ class BugReportExample extends React.Component {
         <MapView style={styles.mapView}>
           <Camera centerCoordinate={[-74.00597, 40.71427]} zoomLevel={14} />
           <ShapeSource id={'shape-source-id-0'} shape={features}>
-            <CircleLayer id={'circle-layer'} style={styles.circleLayer} />
+            <CircleLayer
+              id={'circle-layer'}
+              style={[styles.circleLayer, {circleRadius: this.state.radius}]}
+            />
             <SymbolLayer
               id="symbol-id"
               style={{
