@@ -80,6 +80,7 @@ module.exports = {
     'prefer-promise-reject-errors': 0,
     'comma-dangle': 0,
     'class-methods-use-this': 0,
+    'react/display-name': 0,
     'react/prefer-stateless-function': 0,
     'react/destructuring-assignment': 0,
     'react/no-unescaped-entities': 0,
@@ -113,6 +114,7 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off', // don´t want to type every argument again like getState or dispatch (and many more)
   },
   'overrides': [

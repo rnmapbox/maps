@@ -22,13 +22,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     width: ANNOTATION_SIZE,
   },
-  annotationFill: {
-    backgroundColor: 'orange',
-    borderRadius: (ANNOTATION_SIZE - 3) / 2,
-    height: ANNOTATION_SIZE - 3,
-    transform: [{scale: 0.6}],
-    width: ANNOTATION_SIZE - 3,
-  },
 });
 
 class AnnotationWithRemoteImage extends React.Component {
