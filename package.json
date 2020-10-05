@@ -58,7 +58,7 @@
     "eslint": "^7.3.0",
     "@react-native-community/eslint-config": "^2.0.0",
     "eslint-plugin-fp": "^2.3.0",
-    "eslint-plugin-import": "2.22.0",
+    "eslint-plugin-import": "2.22.1",
     "flow-bin": "^0.134.0",
     "husky": "4.3.0",
     "jest": "25.5.4",
