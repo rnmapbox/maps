@@ -1,8 +1,7 @@
 import React from 'react';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL, {SymbolLayerStyle} from '@react-native-mapbox-gl/maps';
 import {View} from 'react-native';
 
-import exampleIcon from '../../assets/example.png';
 const {MapView, Camera, Images, ShapeSource, SymbolLayer} = MapboxGL;
 
 const styles = {
@@ -22,7 +21,9 @@ const styles = {
   mapContainer: {flex: 1},
 };
 
-const featureCollection = {
+const exampleIcon = require('../../assets/example.png');
+
+const featureCollection: GeoJSON.FeatureCollection = {
   type: 'FeatureCollection',
   features: [
     {
@@ -91,7 +92,10 @@ class ShapeSourceIcon extends React.Component {
           />
           <Images images={images} />
           <ShapeSource id="exampleShapeSource" shape={featureCollection}>
-            <SymbolLayer id="exampleIconName" style={styles.icon} />
+            <SymbolLayer
+              id="exampleIconName"
+              style={styles.icon as SymbolLayerStyle}
+            />
           </ShapeSource>
         </MapView>
       </View>
