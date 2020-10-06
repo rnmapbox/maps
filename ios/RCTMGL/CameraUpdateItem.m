@@ -9,6 +9,11 @@
 #import "CameraUpdateItem.h"
 #import "CameraMode.h"
 
+
+@interface MGLMapView(FlyToWithPadding)
+- (void)_flyToCamera:(MGLMapCamera *)camera edgePadding:(UIEdgeInsets)insets withDuration:(NSTimeInterval)duration peakAltitude:(CLLocationDistance)peakAltitude completionHandler:(nullable void (^)(void))completion;
+@end
+
 @interface RCTMGLCameraWithPadding : MGLMapCamera
 
 @property (nonatomic) MGLMapCamera* _Nonnull camera;
@@ -39,10 +44,11 @@
 {
     RCTMGLCameraWithPadding *nextCamera = [self _makeCamera:mapView];
 
-    if (!UIEdgeInsetsEqualToEdgeInsets(nextCamera.boundsPadding, mapView.contentInset)) {
-        [mapView setContentInset:nextCamera.boundsPadding animated:(_cameraStop.duration > 0.0) completionHandler:NULL];
+    if ([mapView respondsToSelector:@selector(_flyToCamera:edgePadding:withDuration:peakAltitude:completionHandler:)]) {
+        [mapView _flyToCamera:nextCamera.camera edgePadding:nextCamera.boundsPadding withDuration:_cameraStop.duration peakAltitude:-1 completionHandler:completionHandler];
+    } else {
+        [mapView flyToCamera:nextCamera.camera withDuration:_cameraStop.duration completionHandler:completionHandler];
     }
-    [mapView flyToCamera:nextCamera.camera withDuration:_cameraStop.duration completionHandler:completionHandler];
 }
 
 - (void)_moveCamera:(RCTMGLMapView*)mapView animated:(BOOL)animated withCompletionHandler:(void (^)(void))completionHandler
@@ -51,9 +57,7 @@
         [self _centerCoordWithZoomCamera:mapView animated:animated withCompletionHandler:completionHandler];
     } else {
         RCTMGLCameraWithPadding *nextCamera = [self _makeCamera:mapView];
-        if (!UIEdgeInsetsEqualToEdgeInsets(nextCamera.boundsPadding, mapView.contentInset)) {
-            [mapView setContentInset:nextCamera.boundsPadding animated:animated completionHandler:NULL];
-        }
+
         [mapView setCamera:nextCamera.camera
                  withDuration:animated ? _cameraStop.duration : 0
                  animationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]
