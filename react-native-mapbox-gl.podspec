@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   s.platform    	= :ios, "8.0"
 
   s.dependency 'Mapbox-iOS-SDK', rnmbgl_ios_version
-  s.dependency 'React'
+  s.dependency 'React-Core'
 
   s.subspec 'DynamicLibrary' do |sp|
     sp.source_files	= "ios/RCTMGL/**/*.{h,m}"
