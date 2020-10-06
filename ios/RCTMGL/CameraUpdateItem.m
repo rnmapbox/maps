@@ -66,6 +66,34 @@
     }
 }
 
+- (UIEdgeInsets)_clippedPadding:(UIEdgeInsets)padding forView:(RCTMGLMapView*)mapView
+{
+    UIEdgeInsets result = padding;
+    if ((result.top + result.bottom) > mapView.frame.size.height) {
+        double extra =  mapView.frame.size.height / 4.0 + (result.top + result.bottom) - mapView.frame.size.height;
+        if (result.top == 0.0) {
+            result.bottom -= extra;
+        } else if (result.bottom == 0.0) {
+            result.top -= extra;
+        } else {
+            result.top -= extra/2.0;
+            result.bottom -= extra/2.0;
+        }
+    }
+    if ((result.left + result.right) > mapView.frame.size.width) {
+        double extra = mapView.frame.size.width / 4.0 + (result.left + result.right) - mapView.frame.size.width;
+        if (result.left == 0.0) {
+            result.right -= extra;
+        } else if (result.right == 0.0) {
+            result.left -= extra;
+        } else {
+            result.left -= extra/2.0;
+            result.right -= extra/2.0;
+        }
+    }
+    return result;
+}
+
 - (void)_fitBoundsCamera:(RCTMGLMapView*)mapView withCompletionHandler:(void (^)(void))completionHandler
 {
     MGLCoordinateBounds bounds = _cameraStop.bounds;
@@ -78,7 +106,7 @@
 
     [mapView setVisibleCoordinates:coordinates
              count:4
-             edgePadding:_cameraStop.boundsPadding
+             edgePadding:[self _clippedPadding:_cameraStop.boundsPadding forView:mapView]
              direction:mapView.direction
              duration:_cameraStop.duration
              animationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]
@@ -112,7 +140,7 @@
     if ([self _isCoordValid:_cameraStop.coordinate]) {
         nextCamera.centerCoordinate = _cameraStop.coordinate;
     } else if ([self _areBoundsValid:_cameraStop.bounds]) {
-        MGLMapCamera *boundsCamera = [mapView camera:nextCamera fittingCoordinateBounds:_cameraStop.bounds edgePadding: _cameraStop.boundsPadding];
+        MGLMapCamera *boundsCamera = [mapView camera:nextCamera fittingCoordinateBounds:_cameraStop.bounds edgePadding: [self _clippedPadding:_cameraStop.boundsPadding forView:mapView]];
         nextCamera.centerCoordinate = boundsCamera.centerCoordinate;
         nextCamera.altitude = boundsCamera.altitude;
     }
@@ -123,7 +151,7 @@
     
     RCTMGLCameraWithPadding* cameraWithPadding = [[RCTMGLCameraWithPadding alloc] init];
     cameraWithPadding.camera = nextCamera;
-    cameraWithPadding.boundsPadding = _cameraStop.boundsPadding;
+    cameraWithPadding.boundsPadding = [self _clippedPadding:_cameraStop.boundsPadding forView:mapView];
     return cameraWithPadding;
 }
 
