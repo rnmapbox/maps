@@ -124,3 +124,5 @@ react-native-mapbox-gl-maps.tgz
 
 # Config plugin
 /plugin/build
+
+/lib

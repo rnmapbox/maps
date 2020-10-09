@@ -30,7 +30,9 @@
     "prepare": "yarn build:plugin",
     "test:plugin": "expo-module test plugin",
     "build:plugin": "tsc --build plugin",
-    "lint:plugin": "eslint plugin/src/*"
+    "lint:plugin": "eslint plugin/src/*",
+    "build": "tsc",
+    "postbuild": "cpy '**/*' '!**/*.ts' ../lib/ --cwd=javascript/ --no-overwrite --parents"
   },
   "peerDependencies": {
     "prop-types": ">=15.5.8",
@@ -42,9 +44,9 @@
     "@mapbox/geo-viewport": ">= 0.4.0",
     "@turf/along": ">= 4.0.0 <7.0.0",
     "@turf/distance": ">= 4.0.0 <7.0.0",
-    "@turf/nearest-point-on-line": ">= 4.0.0 <7.0.0",
     "@turf/helpers": ">= 4.6.0 <7.0.0",
     "@turf/length": ">= 4.6.0 <7.0.0",
+    "@turf/nearest-point-on-line": ">= 4.0.0 <7.0.0",
     "@types/geojson": "^7946.0.7",
     "debounce": "^1.2.0"
   },
@@ -54,13 +56,15 @@
     "@babel/plugin-transform-exponentiation-operator": "7.10.4",
     "@babel/plugin-transform-runtime": "7.11.5",
     "@babel/runtime": "7.11.2",
+    "@react-native-community/eslint-config": "^2.0.0",
+    "@sinonjs/fake-timers": "^6.0.0",
     "babel-core": "6.26.3",
     "babel-eslint": "^10.0.1",
     "documentation": "13.2.5",
+    "cpy-cli": "^3.1.1",
     "ejs": "^3.1.3",
     "ejs-lint": "^1.1.0",
     "eslint": "^7.3.0",
-    "@react-native-community/eslint-config": "^2.0.0",
     "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-import": "2.23.4",
     "expo-module-scripts": "^2.0.0",
@@ -72,15 +76,23 @@
     "metro-react-native-babel-preset": "0.49.1",
     "node-dir": "0.1.17",
     "react": "16.8.3",
+    "prettier": "^2.0.4",
     "react-docgen": "^5.0.0-beta.1",
     "react-native": "0.59.10",
     "typescript": "4.3.2",
     "react-native-testing-library": "^6.0.0",
-    "react-test-renderer": "16.8.3",
-    "prettier": "^2.0.4"
+    "react-test-renderer": "16.8.3"
   },
   "jest": {
     "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
     "collectCoverageFrom": [
       "javascript/**/*.js"
     ],
