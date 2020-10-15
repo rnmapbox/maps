@@ -106,14 +106,21 @@ public class CameraStop {
             int paddingBottom = Double.valueOf(contentInset[3] + mBoundsPaddingBottom).intValue();
 
             int[] cameraPadding = {paddingLeft, paddingTop, paddingRight, paddingBottom};
-            CameraPosition boundsCamera = map.getCameraForLatLngBounds(mBounds, cameraPadding, bearing, tilt);
+            int[] cameraPaddingClipped = clippedPadding(cameraPadding, mapView);
+
+            CameraPosition boundsCamera = map.getCameraForLatLngBounds(mBounds, cameraPaddingClipped, bearing, tilt);
             if (boundsCamera != null) {
                 builder.target(boundsCamera.target);
                 builder.zoom(boundsCamera.zoom);
                 builder.padding(boundsCamera.padding);
             } else {
-                CameraUpdate update = CameraUpdateFactory.newLatLngBounds(mBounds, paddingLeft,
-                        paddingTop, paddingRight, paddingBottom);
+                CameraUpdate update = CameraUpdateFactory.newLatLngBounds(
+                        mBounds,
+                        cameraPaddingClipped[0],
+                        cameraPaddingClipped[1],
+                        cameraPaddingClipped[2],
+                        cameraPaddingClipped[3]
+                );
                 return new CameraUpdateItem(map, update, mDuration, mCallback, mMode);
             }
         }
@@ -182,6 +189,27 @@ public class CameraStop {
 
         stop.setCallback(callback);
         return stop;
+    }
+
+    private static int[] clippedPadding(int[] padding, RCTMGLMapView mapView) {
+        int left = padding[0];
+        int top = padding[1];
+        int right = padding[2];
+        int bottom = padding[3];
+        int height = mapView.getHeight();
+        int width = mapView.getWidth();
+
+        if (top + bottom >= height) {
+            double overflow =  top + bottom - height;
+            top -= overflow / 2.0 + 1;
+            bottom -= overflow / 2.0 + 1;
+        }
+        if (left + right >= width) {
+            double overflow =  left + right - width;
+            left -= overflow / 2.0 + 1;
+            right -= overflow / 2.0 + 1;
+        }
+        return new int[] {left, top, right, bottom};
     }
 
     private static int getBoundsPaddingByKey(ReadableMap map, String key) {
