@@ -69,27 +69,17 @@
 - (UIEdgeInsets)_clippedPadding:(UIEdgeInsets)padding forView:(RCTMGLMapView*)mapView
 {
     UIEdgeInsets result = padding;
-    if ((result.top + result.bottom) > mapView.frame.size.height) {
-        double extra =  mapView.frame.size.height / 4.0 + (result.top + result.bottom) - mapView.frame.size.height;
-        if (result.top == 0.0) {
-            result.bottom -= extra;
-        } else if (result.bottom == 0.0) {
-            result.top -= extra;
-        } else {
-            result.top -= extra/2.0;
-            result.bottom -= extra/2.0;
-        }
+    if ((result.top + result.bottom) >= mapView.frame.size.height) {
+        double totalPadding = result.top + result.bottom;
+        double extra = totalPadding - mapView.frame.size.height + 2.0;
+        result.top -= (result.top * extra) / totalPadding;
+        result.bottom -= (result.bottom * extra) / totalPadding;
     }
-    if ((result.left + result.right) > mapView.frame.size.width) {
-        double extra = mapView.frame.size.width / 4.0 + (result.left + result.right) - mapView.frame.size.width;
-        if (result.left == 0.0) {
-            result.right -= extra;
-        } else if (result.right == 0.0) {
-            result.left -= extra;
-        } else {
-            result.left -= extra/2.0;
-            result.right -= extra/2.0;
-        }
+    if ((result.left + result.right) >= mapView.frame.size.width) {
+        double totalPadding = result.left + result.right;
+        double extra = totalPadding - mapView.frame.size.width + 2.0;
+        result.left -= (result.left * extra) / totalPadding;
+        result.right -= (result.right * extra) / totalPadding;
     }
     return result;
 }
