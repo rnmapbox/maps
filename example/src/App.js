@@ -1,6 +1,6 @@
 import React from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import {StyleSheet, Text, View, YellowBox, SafeAreaView} from 'react-native';
+import {StyleSheet, Text, View, LogBox, SafeAreaView} from 'react-native';
 import {createStackNavigator, TransitionPresets} from 'react-navigation-stack';
 import {createAppContainer} from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -12,8 +12,7 @@ import config from './utils/config';
 import Home from './scenes/Home';
 import Demo from './scenes/Demo';
 
-// :(
-YellowBox.ignoreWarnings([
+LogBox.ignoreLogs([
   'Warning: isMounted(...) is deprecated',
   'Module RCTImageLoader',
 ]);
