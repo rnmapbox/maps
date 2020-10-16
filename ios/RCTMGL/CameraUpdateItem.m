@@ -116,7 +116,7 @@
 
 - (BOOL)_isCoordValid:(CLLocationCoordinate2D)coord
 {
-    BOOL isValid = CLLocationCoordinate2DIsValid(_cameraStop.coordinate);
+    BOOL isValid = CLLocationCoordinate2DIsValid(coord);
     
     if (!isValid) {
         return NO;
