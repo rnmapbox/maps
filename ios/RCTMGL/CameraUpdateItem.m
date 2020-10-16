@@ -122,7 +122,7 @@
         return NO;
     }
     
-    return YES;
+    return coord.latitude != 0.0 && coord.longitude != 0.0;
 }
 
 - (BOOL)_hasCenterCoordAndZoom
