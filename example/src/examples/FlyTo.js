@@ -40,10 +40,6 @@ class FlyTo extends React.Component {
 
   static DC_OFFICE_LOCATION = [-77.036086, 38.910233];
 
-  static ZERO_ZERO = [0, 0];
-  static ZERO_TEN = [0, 10];
-  static TEN_ZERO = [10, 0];
-
   static propTypes = {
     ...BaseExamplePropTypes,
   };
@@ -58,9 +54,6 @@ class FlyTo extends React.Component {
     this._flyToOptions = [
       {label: 'SF', data: FlyTo.SF_OFFICE_LOCATION},
       {label: 'DC', data: FlyTo.DC_OFFICE_LOCATION},
-      {label: '0,0', data: FlyTo.ZERO_ZERO},
-      {label: '0,10', data: FlyTo.ZERO_TEN},
-      {label: '10,0', data: FlyTo.TEN_ZERO},
     ];
 
     this.onFlyToPress = this.onFlyToPress.bind(this);
