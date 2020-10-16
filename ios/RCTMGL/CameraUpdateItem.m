@@ -69,15 +69,17 @@
 - (UIEdgeInsets)_clippedPadding:(UIEdgeInsets)padding forView:(RCTMGLMapView*)mapView
 {
     UIEdgeInsets result = padding;
-    if (result.top + result.bottom >= mapView.frame.size.height) {
-        double overflow =  result.top + result.bottom - mapView.frame.size.height;
-        result.top -= overflow / 2.0 + 1;
-        result.bottom -= overflow / 2.0 + 1;
+    if ((padding.top + padding.bottom) >= mapView.frame.size.height) {
+        double totalPadding = padding.top + padding.bottom;
+        double extra = totalPadding - mapView.frame.size.height + 1.0;
+        result.top -= (padding.top * extra) / totalPadding;
+        result.bottom -= (padding.bottom * extra) / totalPadding;
     }
-    if (result.left + result.right >= mapView.frame.size.width) {
-        double overflow =  result.left + result.right - mapView.frame.size.width;
-        result.left -= overflow / 2.0 + 1;
-        result.right -= overflow / 2.0 + 1;
+    if ((padding.left + padding.right) >= mapView.frame.size.width) {
+        double totalPadding = padding.left + padding.right;
+        double extra = totalPadding - mapView.frame.size.width + 1.0;
+        result.left -= (padding.left * extra) / totalPadding;
+        result.right -= (padding.right * extra) / totalPadding;
     }
     return result;
 }
@@ -157,13 +159,13 @@
 
 - (BOOL)_isCoordValid:(CLLocationCoordinate2D)coord
 {
-    BOOL isValid = CLLocationCoordinate2DIsValid(_cameraStop.coordinate);
+    BOOL isValid = CLLocationCoordinate2DIsValid(coord);
     
     if (!isValid) {
         return NO;
     }
     
-    return coord.latitude != 0.0 && coord.longitude != 0.0;
+    return YES;
 }
 
 - (BOOL)_hasCenterCoordAndZoom
