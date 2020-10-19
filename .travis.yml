@@ -3,7 +3,7 @@ matrix:
   - language: android
     jdk: oraclejdk8
     before_install:
-    - nvm install 10.18.1
+    - nvm install 10.22.1
     - echo yes | sdkmanager "platforms;android-28"
     - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.21.1
     - export PATH=$HOME/.yarn/bin:$PATH
@@ -25,8 +25,8 @@ matrix:
     - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
     - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
   - os: osx
-    osx_image: xcode11.3
-    node_js: 10.18.1
+    osx_image: xcode12.2
+    node_js: 10.22.1
     cache:
       bundler: true
       yarn: true
@@ -39,7 +39,7 @@ matrix:
     - brew cleanup
     podfile: example/ios/Podfile
 before_install:
-- nvm use 10.18.1 
+- nvm use 10.22.1
 - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.21.1
 - export PATH=$HOME/.yarn/bin:$PATH
 install:
@@ -62,7 +62,7 @@ script:
     cd $TRAVIS_BUILD_DIR/example/ios
     set -o pipefail
     rm -f build
-    xcodebuild -arch x86_64 -sdk iphonesimulator13.2  -workspace ./RNMapboxGLExample.xcworkspace -scheme RNMapboxGLExample | xcpretty -c
+    xcodebuild -arch x86_64 -sdk iphonesimulator14.2  -workspace ./RNMapboxGLExample.xcworkspace -scheme RNMapboxGLExample | xcpretty -c
   fi
 - |
   if [ "$TRAVIS_OS_NAME" == "linux" ]; then

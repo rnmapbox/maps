@@ -53,7 +53,7 @@ class Logger {
   }
 
   /**
-   * @type {('error'|'warning'|'info'|'debug'|'verobse')} LogLevel - Supported log levels
+   * @type {('error'|'warning'|'info'|'debug'|'verbose')} LogLevel - Supported log levels
    */
 
   start() {
