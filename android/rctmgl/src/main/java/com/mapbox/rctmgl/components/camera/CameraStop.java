@@ -192,8 +192,8 @@ public class CameraStop {
     }
 
     private static int[] clippedPadding(int[] padding, RCTMGLMapView mapView) {
-        int height = mapView.getHeight();
-        int width = mapView.getWidth();
+        int mapHeight = mapView.getHeight();
+        int mapWidth = mapView.getWidth();
 
         int left = padding[0];
         int top = padding[1];
@@ -205,16 +205,16 @@ public class CameraStop {
         int resultRight = right;
         int resultBottom = bottom;
 
-        if (top + bottom >= height) {
+        if (top + bottom >= mapHeight) {
             double totalPadding = top + bottom;
-            double extra = totalPadding - height + 1.0; // add 1 to compensate for floating point math
+            double extra = totalPadding - mapHeight + 1.0; // add 1 to compensate for floating point math
             resultTop -= (top * extra) / totalPadding;
             resultBottom -= (bottom * extra) / totalPadding;
         }
 
-        if (left + right >= width) {
+        if (left + right >= mapWidth) {
             double totalPadding = left + right;
-            double extra = totalPadding - height + 1.0; // add 1 to compensate for floating point math
+            double extra = totalPadding - mapWidth + 1.0; // add 1 to compensate for floating point math
             resultLeft -= (left * extra) / totalPadding;
             resultRight -= (right * extra) / totalPadding;
         }
