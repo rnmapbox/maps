@@ -20,7 +20,8 @@
 {
     RCTMGLStyle *style = [[RCTMGLStyle alloc] initWithMGLStyle:self.style];
     style.bridge = self.bridge;
-    [style backgroundLayer:(MGLBackgroundStyleLayer*)self.styleLayer withReactStyle:self.reactStyle];
+    [style backgroundLayer:(MGLBackgroundStyleLayer*)self.styleLayer withReactStyle:self.reactStyle isValid:^{ return [self isAddedToMap];
+    }];
 }
 
 @end

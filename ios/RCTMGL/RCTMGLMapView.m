@@ -175,6 +175,9 @@ static double const M2PI = M_PI * 2;
     } else if ([subview isKindOfClass:[RCTMGLNativeUserLocation class]]) {
         RCTMGLNativeUserLocation *nativeUserLocation = (RCTMGLNativeUserLocation *)subview;
         nativeUserLocation.map = nil;
+    } else if ([subview isKindOfClass:[RCTMGLLight class]]) {
+        RCTMGLLight *light = (RCTMGLLight*)subview;
+        light.map = nil;
     }  else {
         NSArray<id<RCTComponent>> *childSubViews = [subview reactSubviews];
         
