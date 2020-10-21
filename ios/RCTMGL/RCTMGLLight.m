@@ -29,11 +29,17 @@
     [self addStyles];
 }
 
+- (BOOL)isAddedToMap {
+    return _map != NULL;
+}
+
 - (void)addStyles
 {
     MGLLight *light = [[MGLLight alloc] init];
     RCTMGLStyle *style = [[RCTMGLStyle alloc] init];
-    [style lightLayer:light withReactStyle:_reactStyle];
+    [style lightLayer:light withReactStyle:_reactStyle isValid:^{
+        return [self isAddedToMap];
+    }];
     _map.style.light = light;
 }
 

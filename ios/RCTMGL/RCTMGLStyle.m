@@ -15,7 +15,7 @@
 }
 
 
-- (void)fillLayer:(MGLFillStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
+- (void)fillLayer:(MGLFillStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid
 {
   if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
@@ -61,8 +61,10 @@
         [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
-              [self->_style setImage:image forName:imageURI];
-              [self setFillPattern:layer withReactStyleValue:styleValue];
+              if (isValid()) {
+                [self->_style setImage:image forName:imageURI];
+                [self setFillPattern:layer withReactStyleValue:styleValue];
+              }
             });
           }
         }];
@@ -75,7 +77,7 @@
   }
 }
 
-- (void)lineLayer:(MGLLineStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
+- (void)lineLayer:(MGLLineStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid
 {
   if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
@@ -143,8 +145,10 @@
         [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
-              [self->_style setImage:image forName:imageURI];
-              [self setLinePattern:layer withReactStyleValue:styleValue];
+              if (isValid()) {
+                [self->_style setImage:image forName:imageURI];
+                [self setLinePattern:layer withReactStyleValue:styleValue];
+              }
             });
           }
         }];
@@ -159,7 +163,7 @@
   }
 }
 
-- (void)symbolLayer:(MGLSymbolStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
+- (void)symbolLayer:(MGLSymbolStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid
 {
   if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
@@ -207,8 +211,10 @@
         [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
-              [self->_style setImage:image forName:imageURI];
-              [self setIconImage:layer withReactStyleValue:styleValue];
+              if (isValid()) {
+                [self->_style setImage:image forName:imageURI];
+                [self setIconImage:layer withReactStyleValue:styleValue];
+              }
             });
           }
         }];
@@ -329,7 +335,7 @@
   }
 }
 
-- (void)circleLayer:(MGLCircleStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
+- (void)circleLayer:(MGLCircleStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid
 {
   if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
@@ -390,7 +396,7 @@
   }
 }
 
-- (void)heatmapLayer:(MGLHeatmapStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
+- (void)heatmapLayer:(MGLHeatmapStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid
 {
   if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
@@ -429,7 +435,7 @@
   }
 }
 
-- (void)fillExtrusionLayer:(MGLFillExtrusionStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
+- (void)fillExtrusionLayer:(MGLFillExtrusionStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid
 {
   if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
@@ -469,8 +475,10 @@
         [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
-              [self->_style setImage:image forName:imageURI];
-              [self setFillExtrusionPattern:layer withReactStyleValue:styleValue];
+              if (isValid()) {
+                [self->_style setImage:image forName:imageURI];
+                [self setFillExtrusionPattern:layer withReactStyleValue:styleValue];
+              }
             });
           }
         }];
@@ -491,7 +499,7 @@
   }
 }
 
-- (void)rasterLayer:(MGLRasterStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
+- (void)rasterLayer:(MGLRasterStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid
 {
   if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
@@ -542,7 +550,7 @@
   }
 }
 
-- (void)hillshadeLayer:(MGLHillshadeStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
+- (void)hillshadeLayer:(MGLHillshadeStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid
 {
   if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
@@ -585,7 +593,7 @@
   }
 }
 
-- (void)backgroundLayer:(MGLBackgroundStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle
+- (void)backgroundLayer:(MGLBackgroundStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid
 {
   if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
@@ -615,8 +623,10 @@
         [RCTMGLUtils fetchImage:_bridge url:imageURI scale:[styleValue getImageScale] callback:^(NSError *error, UIImage *image) {
           if (image != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
-              [self->_style setImage:image forName:imageURI];
-              [self setBackgroundPattern:layer withReactStyleValue:styleValue];
+              if (isValid()) {
+                [self->_style setImage:image forName:imageURI];
+                [self setBackgroundPattern:layer withReactStyleValue:styleValue];
+              }
             });
           }
         }];
@@ -633,7 +643,7 @@
   }
 }
 
-- (void)lightLayer:(MGLLight *)layer withReactStyle:(NSDictionary *)reactStyle
+- (void)lightLayer:(MGLLight *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid
 {
   if (![self _hasReactStyle:reactStyle]) {
     // TODO throw exception
