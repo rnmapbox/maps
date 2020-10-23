@@ -44,7 +44,6 @@
 | followHeading | `number` | `none` | `false` | The heading on map while followUserLocation is set to `true` |
 | triggerKey | `any` | `none` | `false` | Manually update the camera - helpful for when props did not update, however you still want the camera to move |
 | onUserTrackingModeChange | `func` | `none` | `false` | FIX ME NO DESCRIPTION |
-| isUserInteraction | `FIX ME UNKNOWN TYPE` | `false` | `false` | FIX ME NO DESCRIPTION |
 
 ### methods
 #### fitBounds(northEastCoordinates, southWestCoordinates[, padding][, animationDuration])

@@ -730,13 +730,6 @@
         "type": "func",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
-      },
-      {
-        "name": "isUserInteraction",
-        "required": false,
-        "type": "FIX ME UNKNOWN TYPE",
-        "default": "false",
-        "description": "FIX ME NO DESCRIPTION"
       }
     ],
     "composes": [
