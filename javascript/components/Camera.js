@@ -143,7 +143,9 @@ class Camera extends React.Component {
      */
     followHeading: PropTypes.number,
 
-    // manual update
+    /**
+     * Manually update the camera - helpful for when props did not update, however you still want the camera to move
+     */
     triggerKey: PropTypes.any,
 
     // Triggered when the

@@ -722,7 +722,7 @@
         "required": false,
         "type": "any",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Manually update the camera - helpful for when props did not update, however you still want the camera to move"
       },
       {
         "name": "onUserTrackingModeChange",
