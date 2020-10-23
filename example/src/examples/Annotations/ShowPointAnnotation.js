@@ -2,11 +2,11 @@ import React from 'react';
 import {Animated, View, Text, StyleSheet, Image} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
-import sheet from '../styles/sheet';
+import sheet from '../../styles/sheet';
 
-import BaseExamplePropTypes from './common/BaseExamplePropTypes';
-import Page from './common/Page';
-import Bubble from './common/Bubble';
+import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
+import Page from '../common/Page';
+import Bubble from '../common/Bubble';
 
 const ANNOTATION_SIZE = 45;
 
