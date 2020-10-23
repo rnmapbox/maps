@@ -612,6 +612,8 @@ export interface RasterLayerStyle {
   rasterFadeDuration?: number | Expression;
 }
 
+export type TextVariableAnchorValues = "center" |  "left" |  "right" |  "top" |  "bottom" |  "top-left" |  "top-right" |  "bottom-left" |  "bottom-right";
+
 export interface SymbolLayerStyle {
   symbolPlacement?: 'point' | 'line' | Expression;
   symbolSpacing?: number | Expression;
@@ -650,6 +652,8 @@ export interface SymbolLayerStyle {
   textAllowOverlap?: boolean | Expression;
   textIgnorePlacement?: boolean | Expression;
   textOptional?: boolean | Expression;
+  textVariableAnchor?: Array<TextVariableAnchorValues>;
+  textRadialOffset?: number | Expression;
   visibility?: Visibility | Expression;
   iconOpacity?: number | Expression;
   iconOpacityTransition?: Transition | Expression;
