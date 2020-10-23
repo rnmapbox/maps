@@ -141,9 +141,6 @@ class Camera extends React.Component {
     // manual update
     triggerKey: PropTypes.any,
 
-    // position
-    alignment: PropTypes.arrayOf(PropTypes.number),
-
     // Triggered when the
     onUserTrackingModeChange: PropTypes.func,
   };
@@ -503,51 +500,6 @@ class Camera extends React.Component {
       default:
         return MapboxGL.CameraModes.Ease;
     }
-  }
-
-  _getAlignment(coordinate, zoomLevel) {
-    const region = geoUtils.getOrCalculateVisibleRegion(
-      coordinate,
-      zoomLevel,
-      this.props._mapWidth,
-      this.props._mapHeight,
-      this.props._region,
-    );
-
-    const topLeftCorner = [region.sw[0], region.ne[1]];
-    const topRightCorner = [region.ne[0], region.ne[1]];
-    const bottomLeftCorner = [region.sw[0], region.sw[1]];
-
-    const verticalLineString = geoUtils.makeLineString([
-      topLeftCorner,
-      bottomLeftCorner,
-    ]);
-
-    const horizontalLineString = geoUtils.makeLineString([
-      topLeftCorner,
-      topRightCorner,
-    ]);
-
-    const distVertical = geoUtils.calculateDistance(
-      topLeftCorner,
-      bottomLeftCorner,
-    );
-    const distHorizontal = geoUtils.calculateDistance(
-      topLeftCorner,
-      topRightCorner,
-    );
-
-    const verticalPoint = geoUtils.pointAlongLine(
-      verticalLineString,
-      distVertical * this.props.alignment[0],
-    );
-
-    const horizontalPoint = geoUtils.pointAlongLine(
-      horizontalLineString,
-      distHorizontal * this.props.alignment[1],
-    );
-
-    return [verticalPoint[0], horizontalPoint[1]];
   }
 
   _getMaxBounds() {

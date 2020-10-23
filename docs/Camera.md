@@ -41,7 +41,6 @@
 | followPitch | `number` | `none` | `false` | The pitch on map while followUserLocation is set to `true` |
 | followHeading | `number` | `none` | `false` | The heading on map while followUserLocation is set to `true` |
 | triggerKey | `any` | `none` | `false` | FIX ME NO DESCRIPTION |
-| alignment | `array` | `none` | `false` | FIX ME NO DESCRIPTION |
 | onUserTrackingModeChange | `func` | `none` | `false` | FIX ME NO DESCRIPTION |
 | isUserInteraction | `FIX ME UNKNOWN TYPE` | `false` | `false` | FIX ME NO DESCRIPTION |
 

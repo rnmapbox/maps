@@ -711,18 +711,6 @@
         "description": "FIX ME NO DESCRIPTION"
       },
       {
-        "name": "alignment",
-        "required": false,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": "number"
-          }
-        },
-        "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
-      },
-      {
         "name": "onUserTrackingModeChange",
         "required": false,
         "type": "func",
