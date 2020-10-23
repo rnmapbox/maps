@@ -58,6 +58,11 @@ const SettingsPropTypes = {
      * Bottom camera padding for bounds
      */
     paddingBottom: PropTypes.number,
+
+    /**
+     * Callback that is triggered on user tracking mode changes
+     */
+    onUserTrackingModeChange: PropTypes.func,
   }),
 
   /**

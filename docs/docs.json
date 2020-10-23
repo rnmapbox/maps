@@ -505,6 +505,13 @@
                     "type": "number",
                     "default": "none",
                     "description": "Bottom camera padding for bounds"
+                  },
+                  {
+                    "name": "onUserTrackingModeChange",
+                    "required": false,
+                    "type": "func",
+                    "default": "none",
+                    "description": "Callback that is triggered on user tracking mode changes"
                   }
                 ]
               },
@@ -606,6 +613,13 @@
               "type": "number",
               "default": "none",
               "description": "Bottom camera padding for bounds"
+            },
+            {
+              "name": "onUserTrackingModeChange",
+              "required": false,
+              "type": "func",
+              "default": "none",
+              "description": "Callback that is triggered on user tracking mode changes"
             }
           ]
         },
