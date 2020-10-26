@@ -505,6 +505,13 @@
                     "type": "number",
                     "default": "none",
                     "description": "Bottom camera padding for bounds"
+                  },
+                  {
+                    "name": "onUserTrackingModeChange",
+                    "required": false,
+                    "type": "func",
+                    "default": "none",
+                    "description": "Callback that is triggered on user tracking mode changes"
                   }
                 ]
               },
@@ -606,6 +613,13 @@
               "type": "number",
               "default": "none",
               "description": "Bottom camera padding for bounds"
+            },
+            {
+              "name": "onUserTrackingModeChange",
+              "required": false,
+              "type": "func",
+              "default": "none",
+              "description": "Callback that is triggered on user tracking mode changes"
             }
           ]
         },
@@ -708,32 +722,13 @@
         "required": false,
         "type": "any",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
-      },
-      {
-        "name": "alignment",
-        "required": false,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": "number"
-          }
-        },
-        "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Manually update the camera - helpful for when props did not update, however you still want the camera to move"
       },
       {
         "name": "onUserTrackingModeChange",
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
-      },
-      {
-        "name": "isUserInteraction",
-        "required": false,
-        "type": "FIX ME UNKNOWN TYPE",
-        "default": "false",
         "description": "FIX ME NO DESCRIPTION"
       }
     ],
