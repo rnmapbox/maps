@@ -80,6 +80,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Locale;
+import org.json.*;
 
 import javax.annotation.Nullable;
 
@@ -418,11 +419,31 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         }
     }
 
+    // shamelessly stolen from here: https://stackoverflow.com/a/10174938/1892871
+    public boolean isJSONValid(String test) {
+        try {
+            new JSONObject(test);
+        } catch (JSONException ex) {
+            try {
+                new JSONArray(test);
+            } catch (JSONException ex1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
     @Override
     public void onMapReady(final MapboxMap mapboxMap) {
         mMap = mapboxMap;
 
-        mMap.setStyle(new Style.Builder().fromUrl(mStyleURL));
+        if (isJSONValid(mStyleURL)) {
+            mMap.setStyle(new Style.Builder().fromJson(mStyleURL));
+        } else {
+            mMap.setStyle(new Style.Builder().fromUri(mStyleURL));
+        }
+
 
         reflow();
 
