@@ -7,6 +7,7 @@ import Page from '../examples/common/Page';
 import MapHeader from '../examples/common/MapHeader';
 import sheet from '../styles/sheet';
 import ShowMap from '../examples/Map/ShowMap';
+import ShowMapLocalStyle from '../examples/Map/ShowMapLocalStyle';
 import MarkerView from '../examples/Annotations/MarkerView';
 import SetPitch from '../examples/SetPitch';
 import SetHeading from '../examples/SetHeading';
@@ -101,6 +102,7 @@ const BugReportPage = ({...props}) => (
 const Examples = [
   new ExampleGroup('Map', [
     new ExampleItem('Show Map', ShowMap),
+    new ExampleItem('Show Map With Local Style.JSON', ShowMapLocalStyle),
     new ExampleItem('Show Click', ShowClick),
     new ExampleItem('Show Region Did Change', ShowRegionDidChange),
     new ExampleItem('Two Map Views', TwoByTwo),
@@ -158,7 +160,7 @@ const Examples = [
     new ExampleItem('Show Point Annotation', ShowPointAnnotation),
     new ExampleItem('Marker View', MarkerView),
     new ExampleItem('Heatmap', Heatmap),
-    new ExampleItem('Custom Callout', CustomCallout)
+    new ExampleItem('Custom Callout', CustomCallout),
   ]),
   new ExampleGroup('Animations', [
     new ExampleItem('Animated Line', AnimatedLine),

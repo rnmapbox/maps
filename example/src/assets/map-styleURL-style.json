@@ -1,0 +1,28 @@
+{
+  "version": 8,
+  "name": "Basic",
+  "constants": {},
+  "sources": {
+    "mapbox": {
+      "type": "vector",
+      "url": "mapbox://mapbox.mapbox-streets-v6"
+    }
+  },
+  "sprite": "",
+  "glyphs": "",
+  "layers": [{
+    "id": "background",
+    "type": "background",
+    "paint": {
+      "background-color": "rgba(135, 149, 154, 1)"
+    }
+  }, {
+    "id": "water",
+    "type": "fill",
+    "source": "mapbox",
+    "source-layer": "water",
+    "paint": {
+      "fill-color": "rgba(108, 148, 120, 1)"
+    }
+  }]
+}
