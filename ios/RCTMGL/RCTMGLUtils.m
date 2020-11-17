@@ -141,4 +141,60 @@ static double const MS_TO_S = 0.001;
     }
 }
 
++(NSURL*)styleURLFromStyleJSON:(NSString *)styleJSON
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    static NSString *styleJsonTempDirectory;
+    if (!styleJsonTempDirectory) {
+        styleJsonTempDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"RCTMGLStyleJSON"];
+    }
+    
+    // clear cached style json entries from previous app run (once)
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        if ([fileManager fileExistsAtPath:styleJsonTempDirectory]) {
+            [fileManager removeItemAtPath:styleJsonTempDirectory error:NULL];
+        }
+    });
+    
+    // attempt to create the temporary directory
+    if (![fileManager fileExistsAtPath:styleJsonTempDirectory]) {
+        NSError *error = nil;
+        [fileManager createDirectoryAtPath:styleJsonTempDirectory
+               withIntermediateDirectories:YES
+                                attributes:nil
+                                     error:&error];
+        if (error) {
+            RCTLogError(@"Failed to create temporary directory for style json: %@", error);
+            styleJsonTempDirectory = nil;
+        }
+    }
+    
+    // for some (unknown) reason we were unable to create the temporary directory
+    if (!styleJsonTempDirectory) return nil;
+    
+    // determine filename based on the hash of the style json so the written
+    // file can act as a cache entry
+    NSString *hashedFilename = [RCTMD5Hash(styleJSON) stringByAppendingPathExtension:@"json"];
+    
+    // contruct tompary path
+    NSString *styleJsonTempPath = [styleJsonTempDirectory stringByAppendingPathComponent:hashedFilename];
+    NSURL* styleJsonTempURL = [NSURL fileURLWithPath:styleJsonTempPath isDirectory:false];
+    
+    // serve cached style json entry in case it exists
+    if ([fileManager fileExistsAtPath:styleJsonTempPath isDirectory:false]) {
+        return styleJsonTempURL;
+    }
+    
+    // write to temporary file
+    NSError *error = nil;
+    [styleJSON writeToURL:styleJsonTempURL atomically:YES encoding:NSUTF8StringEncoding error:&error];
+    if (error) {
+        RCTLogError(@"Failed to write style json to temporary file: %@", error);
+    }
+    
+    return styleJsonTempURL;
+}
+
 @end
