@@ -2,6 +2,10 @@
 
 @import Mapbox;
 
+@interface RCTMGLLogging()
+@property (nonatomic) BOOL hasListeners;
+@end
+
 @implementation RCTMGLLogging
 
 + (id)allocWithZone:(NSZone *)zone {
@@ -37,8 +41,22 @@ RCT_EXPORT_MODULE();
   return @[@"LogEvent"];
 }
 
+- (void)startObserving
+{
+    [super startObserving];
+    self.hasListeners = true;
+}
+
+- (void)stopObserving
+{
+    [super stopObserving];
+    self.hasListeners = false;
+}
+
 - (void)sendLogWithLevel:(MGLLoggingLevel)loggingLevel filePath:(NSString*)filePath line:(NSUInteger)line message:(NSString*)message
 {
+    if (!self.hasListeners) return;
+
     NSString* level = @"n/a";
     switch (loggingLevel) {
     case MGLLoggingLevelInfo:
