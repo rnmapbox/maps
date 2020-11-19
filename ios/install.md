@@ -45,25 +45,6 @@ $ReactNativeMapboxGLIOSVersion = '~> 6.1'
 
 Check the current version of the SDK [here](https://docs.mapbox.com/ios/maps/overview/).
 
-### Deprecated version
-
-REACT_NATIVE_MAPBOX_MAPBOX_IOS_VERSION="~> 5.7" pod install
-
-```ruby
-REACT_NATIVE_MAPBOX_MAPBOX_IOS_VERSION="~> 5.6.0" pod install --repo-update
-```
-or add
-
-```ruby
-ENV['REACT_NATIVE_MAPBOX_MAPBOX_IOS_VERSION'] = '~> 5.6.0'
-```
-
-to your podfile before
-
-```ruby
-use_native_modules!
-```
-
 ### Mapbox Maps SDK > `v6.0.0`
 
 If you are using version `v6.0.0` of the SDK or later, you will need to authorize your download of the Maps SDK with a secret access token with the `DOWNLOADS:READ` scope. This [guide](https://docs.mapbox.com/ios/maps/overview/#install-the-sdk) explains how to configure the secret token under section `Configure your secret token`.
