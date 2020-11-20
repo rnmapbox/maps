@@ -31,4 +31,20 @@ Mapbox normally [requires](https://github.com/mapbox/mapbox-gl-native-ios/issues
 
 ```
 
+## Mapbox Maps SDK
 
+It is possible to set a custom version of the Mapbox SDK: 
+
+### New version - since `8.1rc5`
+
+Add the following to you `ios/Podfile`:
+
+```ruby
+$ReactNativeMapboxGLIOSVersion = '~> 6.1'
+```
+
+Check the current version of the SDK [here](https://docs.mapbox.com/ios/maps/overview/).
+
+### Mapbox Maps SDK > `v6.0.0`
+
+If you are using version `v6.0.0` of the SDK or later, you will need to authorize your download of the Maps SDK with a secret access token with the `DOWNLOADS:READ` scope. This [guide](https://docs.mapbox.com/ios/maps/overview/#install-the-sdk) explains how to configure the secret token under section `Configure your secret token`.
