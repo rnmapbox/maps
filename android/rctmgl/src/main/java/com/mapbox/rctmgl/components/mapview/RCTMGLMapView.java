@@ -424,11 +424,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         try {
             new JSONObject(test);
         } catch (JSONException ex) {
-            try {
-                new JSONArray(test);
-            } catch (JSONException ex1) {
-                return false;
-            }
+            return false;
         }
         return true;
     }
@@ -1142,7 +1138,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     public double[] getContentInset() {
         if (mInsets == null) {
             double[] result = {0,0,0,0};
-        
+
             return result;
         }
         double top = 0, right = 0, bottom = 0, left = 0;
@@ -1165,7 +1161,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         }
 
         final DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
-    
+
         double[] result = {left * metrics.scaledDensity, top * metrics.scaledDensity, right * metrics.scaledDensity, bottom * metrics.scaledDensity};
         return result;
     }
