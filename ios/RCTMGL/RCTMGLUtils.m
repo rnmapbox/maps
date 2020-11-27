@@ -141,57 +141,75 @@ static double const MS_TO_S = 0.001;
     }
 }
 
-+(NSURL*)styleURLFromStyleJSON:(NSString *)styleJSON
++ (NSString*)getStyleJsonTempDirectory
 {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
     static NSString *styleJsonTempDirectory;
     if (!styleJsonTempDirectory) {
         styleJsonTempDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"RCTMGLStyleJSON"];
     }
+    return styleJsonTempDirectory;
+}
+
+/**
+ * Clears cached style-json entries from previous app runs. Can be safely called multiple times as it will
+ * only perform the action once per app run.
+ *
+ * @see styleURLFromStyleJSON:
+ */
++ (void)cleanCustomStyleJSONCacheIfNeeded
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *styleJsonTempDirectory = [RCTMGLUtils getStyleJsonTempDirectory];
     
-    // clear cached style json entries from previous app run (once)
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         if ([fileManager fileExistsAtPath:styleJsonTempDirectory]) {
             [fileManager removeItemAtPath:styleJsonTempDirectory error:NULL];
         }
     });
+}
+
+/**
+ * Provides a way to convert raw style-json into a file so it can be directly referenced / used as styleURL.
+ * It's a crude / alternative approach to support Android's API: Style.Builder.fromJson().
+ */
++ (NSURL*)styleURLFromStyleJSON:(NSString *)styleJSON
+{
+    [RCTMGLUtils cleanCustomStyleJSONCacheIfNeeded];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *styleJsonTempDirectory = [RCTMGLUtils getStyleJsonTempDirectory];
     
     // attempt to create the temporary directory
     if (![fileManager fileExistsAtPath:styleJsonTempDirectory]) {
-        NSError *error = nil;
+        NSError *error;
         [fileManager createDirectoryAtPath:styleJsonTempDirectory
                withIntermediateDirectories:YES
                                 attributes:nil
                                      error:&error];
         if (error) {
-            RCTLogError(@"Failed to create temporary directory for style json: %@", error);
-            styleJsonTempDirectory = nil;
+            RCTLogError(@"Failed to create temporary directory '%@' for storing style-json. Error: %@", styleJsonTempDirectory, error);
+            return nil;
         }
     }
     
-    // for some (unknown) reason we were unable to create the temporary directory
-    if (!styleJsonTempDirectory) return nil;
-    
-    // determine filename based on the hash of the style json so the written
-    // file can act as a cache entry
+    // Determine filename based on the md5 hash of the style-json.
+    // This way, the written file can also act as a cached entry in case
+    // the same style-json is used again.
     NSString *hashedFilename = [RCTMD5Hash(styleJSON) stringByAppendingPathExtension:@"json"];
     
-    // contruct tompary path
+    // Construct temporary file path (tempdir + md5 hash for filename)
     NSString *styleJsonTempPath = [styleJsonTempDirectory stringByAppendingPathComponent:hashedFilename];
     NSURL* styleJsonTempURL = [NSURL fileURLWithPath:styleJsonTempPath isDirectory:false];
     
-    // serve cached style json entry in case it exists
-    if ([fileManager fileExistsAtPath:styleJsonTempPath isDirectory:false]) {
-        return styleJsonTempURL;
-    }
-    
-    // write to temporary file
-    NSError *error = nil;
-    [styleJSON writeToURL:styleJsonTempURL atomically:YES encoding:NSUTF8StringEncoding error:&error];
-    if (error) {
-        RCTLogError(@"Failed to write style json to temporary file: %@", error);
+    // Write style-json to temporary file in case it doesn't already exist
+    if (![fileManager fileExistsAtPath:styleJsonTempPath isDirectory:false]) {
+        NSError *error;
+        [styleJSON writeToURL:styleJsonTempURL atomically:YES encoding:NSUTF8StringEncoding error:&error];
+        if (error) {
+            RCTLogError(@"Failed to write style-json to temporary file '%@'. Error: %@", styleJsonTempURL, error);
+            return nil;
+        }
     }
     
     return styleJsonTempURL;

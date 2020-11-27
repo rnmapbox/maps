@@ -26,6 +26,6 @@
 + (void)fetchImages:(RCTBridge *)bridge style:(MGLStyle *)style objects:(NSDictionary<NSString *, NSString *>*)objects forceUpdate:(BOOL)forceUpdate callback:(void (^)(void))callback;
 + (CGVector)toCGVector:(NSArray<NSNumber*>*)arr;
 + (UIEdgeInsets)toUIEdgeInsets:(NSArray<NSNumber *> *)arr;
-+(NSURL*)styleURLFromStyleJSON:(NSString *)styleJSON;
++ (NSURL*)styleURLFromStyleJSON:(NSString *)styleJSON;
 
 @end
