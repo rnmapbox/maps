@@ -419,7 +419,6 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         }
     }
 
-    // shamelessly stolen from here: https://stackoverflow.com/a/10174938/1892871
     public boolean isJSONValid(String test) {
         try {
             new JSONObject(test);
