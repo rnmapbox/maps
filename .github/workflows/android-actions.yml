@@ -21,12 +21,12 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - run: yarn install
-      working-directory: example
     - run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
       working-directory: example
       env:
         MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+    - run: yarn install
+      working-directory: example
     - run: yarn install
       working-directory: example
     - run: npm install
