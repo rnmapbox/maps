@@ -27,10 +27,8 @@ jobs:
         MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
     - run: yarn install
       working-directory: example
-    - run: yarn install
+    - run: ./gradlew assemble
       working-directory: example
-    - run: npm install
-    - run: npm run build --if-present
-    - run: npm test
-      env:
-        CI: true
+    - run: yarn install
+    - run: yarn run unittest
+    - run: yarn run generate
