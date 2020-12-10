@@ -28,7 +28,7 @@ jobs:
     - run: yarn install
       working-directory: example
     - run: ./gradlew assemble
-      working-directory: example
+      working-directory: example/android
     - run: yarn install
     - run: yarn run unittest
     - run: yarn run generate
