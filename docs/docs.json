@@ -2736,8 +2736,15 @@
         "name": "styleURL",
         "required": false,
         "type": "string",
-        "default": "MapboxGL.StyleURL.Street",
-        "description": "Style URL for map"
+        "default": "none",
+        "description": "Style URL for map - notice, if non is set it _will_ default to `MapboxGL.StyleURL.Street`"
+      },
+      {
+        "name": "styleJSON",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "StyleJSON for map - according to TileJSON specs: https://github.com/mapbox/tilejson-spec"
       },
       {
         "name": "preferredFramesPerSecond",
