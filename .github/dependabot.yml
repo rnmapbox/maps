@@ -1,0 +1,39 @@
+version: 2
+updates:
+  # root
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "🤖 dependabot 🤖"
+    open-pull-requests-limit: 99
+    pull-request-branch-name:
+      separator: "-"
+    ignore: # ignore updates for react-native deps
+      - dependency-name: "@babel/core"
+      - dependency-name: "@babel/runtime"
+      - dependency-name: "@react-native-community/eslint-config"
+      - dependency-name: "eslint"
+      - dependency-name: "jest"
+      - dependency-name: "metro-react-native-babel-preset"
+      - dependency-name: "react-test-renderer"
+  # example
+  - package-ecosystem: "npm"
+    directory: "/example"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "🤖 dependabot 🤖"
+    open-pull-requests-limit: 99
+    pull-request-branch-name:
+      separator: "-"
+  # gh-actions workflow files
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    pull-request-branch-name:
+      separator: "-"
+    labels:
+      - "🤖 dependabot 🤖"
