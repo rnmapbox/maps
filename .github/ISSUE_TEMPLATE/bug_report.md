@@ -7,6 +7,8 @@ assignees: ''
 
 ---
 
+
+---------
 🚨🚨🚨
 * Please respect and fill out the issue template
 * Before you report, please make sure you tested on a physical device
@@ -20,17 +22,20 @@ Not following the above will lead to the ticket being closed.
 Thanks for understanding. Please understand that the project is run by volunteers on their own free time.
 
 🚨🚨🚨
+---------
 
 
-
-**Describe the bug**
+**Describe the bug**  
 A clear and concise description of what the bug is.
 
-**To Reproduce**
+**To Reproduce**  
 Steps to reproduce the behavior. 
 
-Please include a single standalone React Native component. Use [one of our example](https://github.com/react-native-mapbox-gl/maps/blob/master/example/src/examples/BugReportTemplate.js) screens as a starting point.
-Please simplify the example as much as possible.
+Please include a single standalone React Native component.  
+Use [our BugReportTemplate](https://github.com/react-native-mapbox-gl/maps/blob/master/example/src/examples/BugReportTemplate.js) screens as a starting point.
+Please simplify the example as much as possible!
+
+Changes that a bug report will be investiagete and worked on are exponetially higher with a complete and _working_ repro BugTemplate!
 
 Example:
 ```js
@@ -76,19 +81,23 @@ npm install react-native-mapbox-gl/maps#master --save
 react-native run-android
 ```
 
-**Expected behavior**
+**Expected behavior**  
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
+**Actual behavior**  
+A clear and concise description of what is currently happening.
+
+**Screenshots**  
 If applicable, add screenshots to help explain your problem.
 
-**Versions (please complete the following information):**
+**Versions (please complete the following information):**  
  - Platform: [e.g. Android, iOS]
+ - Platform OS: [e.g. Android 9, iOS 10]
  - Device: [e.g. iPhone6]
  - Emulator/ Simulator: [yes/ no]
- - OS: [e.g. iOS8.1]
+ - Dev OS: [e.g. OSX 11.0.1, Win10]
  - react-native-mapbox-gl Version [e.g. 7.0.9]
  - React Native Version [e.g. 0.59]
 
-**Additional context**
+**Additional context**  
 Add any other context about the problem here.
