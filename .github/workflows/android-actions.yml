@@ -1,16 +1,11 @@
-name: Node.js CI
-
+name: Android Build (Publish)
 on: [push]
-
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        node-version: [12.x]
-
+        node-version: [14.x]
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -32,3 +27,11 @@ jobs:
     - run: yarn install
     - run: yarn run unittest
     - run: yarn run generate
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
