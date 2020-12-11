@@ -8,7 +8,8 @@ assignees: ''
 ---
 
 
----------
+---------  
+
 🚨🚨🚨
 * Please respect and fill out the issue template
 * Before you report, please make sure you tested on a physical device
@@ -19,9 +20,11 @@ assignees: ''
 If you want others to spend time on your issue, please make sure to first spend some time on the ticket. 
 
 Not following the above will lead to the ticket being closed.
-Thanks for understanding. Please understand that the project is run by volunteers on their own free time.
+Thanks for understanding.  
+Please understand that the project is run by volunteers on their own free time.  
 
-🚨🚨🚨
+🚨🚨🚨  
+
 ---------
 
 
@@ -35,7 +38,7 @@ Please include a single standalone React Native component.
 Use [our BugReportTemplate](https://github.com/react-native-mapbox-gl/maps/blob/master/example/src/examples/BugReportTemplate.js) screens as a starting point.
 Please simplify the example as much as possible!
 
-Changes that a bug report will be investiagete and worked on are exponetially higher with a complete and _working_ repro BugTemplate!
+Chances that a bug report will be investiagete and worked on are exponetially higher with a complete and _working_ repro BugTemplate!
 
 Example:
 ```js
