@@ -6,6 +6,16 @@ _An unofficial React Native library for building maps with the [Mapbox Maps SDK 
 ![build_status](https://travis-ci.org/react-native-mapbox-gl/maps.svg?branch=master)
 [![Depfu](https://badges.depfu.com/badges/2eac6b62372619718b7f55ebbf8e9d8f/overview.svg)](https://depfu.com/github/react-native-mapbox-gl/maps?project_id=8248)
 
+
+<img src="./assets/indoor_building_map_android.png"
+     alt="Indoor Building Map Android"
+     height="300"
+      />
+<img src="./assets/indoor_building_map_ios.png"
+     alt="Indoor Building Map iOS"
+     height="300"
+      />
+
 ## Installation
 ### Prerequisit
 On Android we support from version 6 (API 23) upwards  
