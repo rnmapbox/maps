@@ -5,13 +5,16 @@
 //  Created by Nick Italiano on 9/19/17.
 //  Copyright © 2017 Mapbox Inc. All rights reserved.
 //
+#import <React/RCTUIManager.h>
 
 #import "RCTMGLShapeSourceManager.h"
 #import "RCTMGLShapeSource.h"
 
+#import "FilterParser.h"
+
 @implementation RCTMGLShapeSourceManager
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RCTMGLShapeSource)
 
 RCT_EXPORT_VIEW_PROPERTY(id, NSString)
 RCT_EXPORT_VIEW_PROPERTY(url, NSString)
@@ -35,5 +38,33 @@ RCT_REMAP_VIEW_PROPERTY(onMapboxShapeSourcePress, onPress, RCTBubblingEventBlock
     source.bridge = self.bridge;
     return source;
 }
+
+RCT_EXPORT_METHOD(features:(nonnull NSNumber*)reactTag
+                  withFilter:(NSArray *)filter
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
+        RCTMGLShapeSource* shapeSource = viewRegistry[reactTag];
+        
+        if (![shapeSource isKindOfClass:[RCTMGLShapeSource class]]) {
+            RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
+            return;
+        }
+
+        NSPredicate* predicate = [FilterParser parse:filter];
+        NSArray<id<MGLFeature>> *shapes = [shapeSource featuresMatchingPredicate: predicate];
+        
+        NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] initWithCapacity:shapes.count];
+        for (int i = 0; i < shapes.count; i++) {
+            [features addObject:shapes[i].geoJSONDictionary];
+        }
+        
+        resolve(@{
+                  @"data": @{ @"type": @"FeatureCollection", @"features": features }
+                  });
+    }];
+}
+
 
 @end
