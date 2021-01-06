@@ -360,10 +360,6 @@ declare namespace MapboxGL {
     TrafficDay = 'mapbox://styles/mapbox/navigation-preview-day-v4',
     TrafficNight = 'mapbox://styles/mapbox/navigation-preview-night-v4',
   }
-
-  enum StyleSource {
-    DefaultSourceID = 0,
-  }
 }
 
 export type AttributionPosition =
@@ -775,7 +771,7 @@ export interface RasterSourceProps extends TileSourceProps {
 
 export interface LayerBaseProps<T = {}> extends Omit<ViewProps, 'style'> {
   id: string;
-  sourceID?: MapboxGL.StyleSource;
+  sourceID?: string;
   sourceLayerID?: string;
   aboveLayerID?: string;
   belowLayerID?: string;
