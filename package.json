@@ -61,7 +61,7 @@
     "husky": "4.3.0",
     "jest": "25.5.4",
     "@sinonjs/fake-timers": "^6.0.0",
-    "jest-cli": "25.5.4",
+    "jest-cli": "26.6.3",
     "lint-staged": "^10.1.3",
     "metro-react-native-babel-preset": "0.49.1",
     "node-dir": "0.1.17",
