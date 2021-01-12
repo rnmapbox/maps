@@ -198,10 +198,7 @@ class UserLocation extends React.Component {
    * @return {boolean}
    */
   needsLocationManagerRunning() {
-    if (this.props.renderMode === UserLocation.RenderMode.Native) {
-      return false;
-    }
-    return !!this.props.onUpdate || this.props.visible;
+    return !!this.props.onUpdate || (this.props.renderMode === UserLocation.RenderMode.Normal && this.props.visible);
   }
 
   _onLocationUpdate(location) {
