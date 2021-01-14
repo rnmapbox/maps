@@ -477,7 +477,7 @@ export interface UserLocationProps {
   children?: ReactNode;
   minDisplacement?: number;
   onPress?: () => void;
-  onUpdate?: (location: MapboxGL.Location) => void;
+  onUpdate?: (location?: MapboxGL.Location) => void;
   renderMode?: 'normal' | 'native';
   showsUserHeadingIndicator?: boolean,
   visible?: boolean;
