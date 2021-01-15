@@ -29,4 +29,6 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, assign) BOOL hasPressListener;
 
+- (nonnull NSArray<id <MGLFeature>> *)featuresMatchingPredicate:(nullable NSPredicate *)predicate;
+
 @end

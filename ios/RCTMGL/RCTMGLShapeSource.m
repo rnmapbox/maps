@@ -97,4 +97,11 @@ static UIImage * _placeHolderImage;
     return options;
 }
 
+- (nonnull NSArray<id <MGLFeature>> *)featuresMatchingPredicate:(nullable NSPredicate *)predicate
+{
+    MGLShapeSource *shapeSource = (MGLShapeSource *)self.source;
+    
+    return [shapeSource featuresMatchingPredicate:predicate];
+}
+
 @end
