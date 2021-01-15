@@ -80,6 +80,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Locale;
+import org.json.*;
 
 import javax.annotation.Nullable;
 
@@ -418,11 +419,26 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         }
     }
 
+    public boolean isJSONValid(String test) {
+        try {
+            new JSONObject(test);
+        } catch (JSONException ex) {
+            return false;
+        }
+        return true;
+    }
+
+
     @Override
     public void onMapReady(final MapboxMap mapboxMap) {
         mMap = mapboxMap;
 
-        mMap.setStyle(new Style.Builder().fromUrl(mStyleURL));
+        if (isJSONValid(mStyleURL)) {
+            mMap.setStyle(new Style.Builder().fromJson(mStyleURL));
+        } else {
+            mMap.setStyle(new Style.Builder().fromUri(mStyleURL));
+        }
+
 
         reflow();
 
@@ -1121,7 +1137,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     public double[] getContentInset() {
         if (mInsets == null) {
             double[] result = {0,0,0,0};
-        
+
             return result;
         }
         double top = 0, right = 0, bottom = 0, left = 0;
@@ -1144,7 +1160,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         }
 
         final DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
-    
+
         double[] result = {left * metrics.scaledDensity, top * metrics.scaledDensity, right * metrics.scaledDensity, bottom * metrics.scaledDensity};
         return result;
     }

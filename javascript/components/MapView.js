@@ -36,6 +36,8 @@ const styles = StyleSheet.create({
   matchParent: {flex: 1},
 });
 
+const defaultStyleURL = MapboxGL.StyleURL.Street;
+
 /**
  * MapView backed by Mapbox Native GL
  */
@@ -57,9 +59,14 @@ class MapView extends NativeBridgeComponent(React.Component) {
     style: PropTypes.any,
 
     /**
-     * Style URL for map
+     * Style URL for map - notice, if non is set it _will_ default to `MapboxGL.StyleURL.Street`
      */
     styleURL: PropTypes.string,
+
+    /**
+     * StyleJSON for map - according to TileJSON specs: https://github.com/mapbox/tilejson-spec
+     */
+    styleJSON: PropTypes.string,
 
     /**
      * iOS: The preferred frame rate at which the map view is rendered.
@@ -256,7 +263,6 @@ class MapView extends NativeBridgeComponent(React.Component) {
     rotateEnabled: true,
     attributionEnabled: true,
     logoEnabled: true,
-    styleURL: MapboxGL.StyleURL.Street,
     surfaceView: false,
     regionWillChangeDebounceTime: 10,
     regionDidChangeDebounceTime: 500,
@@ -733,12 +739,32 @@ class MapView extends NativeBridgeComponent(React.Component) {
     }
   }
 
+  _setStyleURL(props) {
+    // user set a styleURL, no need to alter props
+    if (props.styleURL) {
+      return;
+    }
+
+    // user set styleJSON pass it to styleURL
+    if (props.styleJSON && !props.styleURL) {
+      props.styleURL = props.styleJSON;
+    }
+
+    // user neither set styleJSON nor styleURL
+    // set defaultStyleUrl
+    if (!props.styleJSON || !props.styleURL) {
+      props.styleURL = defaultStyleURL;
+    }
+  }
+
   render() {
     const props = {
       ...this.props,
       contentInset: this._getContentInset(),
       style: styles.matchParent,
     };
+
+    this._setStyleURL(props);
 
     const callbacks = {
       ref: (nativeRef) => this._setNativeRef(nativeRef),

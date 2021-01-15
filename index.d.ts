@@ -28,28 +28,28 @@ import {
 
 // prettier-ignore
 type ExpressionName =
-    // Types
-    | 'array' | 'boolean' | 'collator' | 'format' | 'literal' | 'number' | 'object' | 'string'
-    | 'to-boolean' | 'to-color' | 'to-number' | 'to-string' | 'typeof'
-    // Feature data
-    | 'feature-state' | 'geometry-type' | 'id' | 'line-progress' | 'properties'
-    // Lookup
-    | 'at' | 'get' | 'has' | 'length'
-    // Decision
-    | '!' | '!=' | '<' | '<=' | '==' | '>' | '>=' | 'all' | 'any' | 'case' | 'match' | 'coalesce'
-    // Ramps, scales, curves
-    | 'interpolate' | 'interpolate-hcl' | 'interpolate-lab' | 'step'
-    // Variable binding
-    | 'let' | 'var'
-    // String
-    | 'concat' | 'downcase' | 'is-supported-script' | 'resolved-locale' | 'upcase'
-    // Color
-    | 'rgb' | 'rgba'
-    // Math
-    | '-' | '*' | '/' | '%' | '^' | '+' | 'abs' | 'acos' | 'asin' | 'atan' | 'ceil' | 'cos' | 'e'
-    | 'floor' | 'ln' | 'ln2' | 'log10' | 'log2' | 'max' | 'min' | 'pi' | 'round' | 'sin' | 'sqrt' | 'tan'
-    // Zoom, Heatmap
-    | 'zoom' | 'heatmap-density';
+  // Types
+  | 'array' | 'boolean' | 'collator' | 'format' | 'literal' | 'number' | 'object' | 'string'
+  | 'to-boolean' | 'to-color' | 'to-number' | 'to-string' | 'typeof'
+  // Feature data
+  | 'feature-state' | 'geometry-type' | 'id' | 'line-progress' | 'properties'
+  // Lookup
+  | 'at' | 'get' | 'has' | 'length'
+  // Decision
+  | '!' | '!=' | '<' | '<=' | '==' | '>' | '>=' | 'all' | 'any' | 'case' | 'match' | 'coalesce'
+  // Ramps, scales, curves
+  | 'interpolate' | 'interpolate-hcl' | 'interpolate-lab' | 'step'
+  // Variable binding
+  | 'let' | 'var'
+  // String
+  | 'concat' | 'downcase' | 'is-supported-script' | 'resolved-locale' | 'upcase'
+  // Color
+  | 'rgb' | 'rgba'
+  // Math
+  | '-' | '*' | '/' | '%' | '^' | '+' | 'abs' | 'acos' | 'asin' | 'atan' | 'ceil' | 'cos' | 'e'
+  | 'floor' | 'ln' | 'ln2' | 'log10' | 'log2' | 'max' | 'min' | 'pi' | 'round' | 'sin' | 'sqrt' | 'tan'
+  // Zoom, Heatmap
+  | 'zoom' | 'heatmap-density';
 
 type ExpressionField = any;
 
@@ -80,20 +80,20 @@ type AutoAlignment = Alignment | 'auto';
 
 type NamedStyles<T> = {
   [P in keyof T]:
-    | SymbolLayerStyle
-    | RasterLayerStyle
-    | LineLayerStyle
-    | FillLayerStyle
-    | FillExtrusionLayerStyle
-    | CircleLayerStyle
-    | BackgroundLayerStyle;
+  | SymbolLayerStyle
+  | RasterLayerStyle
+  | LineLayerStyle
+  | FillLayerStyle
+  | FillExtrusionLayerStyle
+  | CircleLayerStyle
+  | BackgroundLayerStyle;
 };
 
 export type MapboxGLEvent<
   T extends string,
   P = GeoJSON.Feature,
   V = Element
-> = SyntheticEvent<V, {type: T; payload: P}>;
+  > = SyntheticEvent<V, { type: T; payload: P }>;
 
 export type OnPressEvent = {
   features: Array<GeoJSON.Feature>;
@@ -146,17 +146,17 @@ declare namespace MapboxGL {
 
   namespace Animated {
     // sources
-    class ShapeSource extends Component<ShapeSourceProps> {}
-    class ImageSource extends Component<ImageSourceProps> {}
+    class ShapeSource extends Component<ShapeSourceProps> { }
+    class ImageSource extends Component<ImageSourceProps> { }
 
     // layers
-    class FillLayer extends Component<FillLayerProps> {}
-    class FillExtrusionLayer extends Component<FillExtrusionLayerProps> {}
-    class LineLayer extends Component<LineLayerProps> {}
-    class CircleLayer extends Component<CircleLayerProps> {}
-    class SymbolLayer extends Component<SymbolLayerProps> {}
-    class RasterLayer extends Component<RasterLayerProps> {}
-    class BackgroundLayer extends Component<BackgroundLayerProps> {}
+    class FillLayer extends Component<FillLayerProps> { }
+    class FillExtrusionLayer extends Component<FillExtrusionLayerProps> { }
+    class LineLayer extends Component<LineLayerProps> { }
+    class CircleLayer extends Component<CircleLayerProps> { }
+    class SymbolLayer extends Component<SymbolLayerProps> { }
+    class RasterLayer extends Component<RasterLayerProps> { }
+    class BackgroundLayer extends Component<BackgroundLayerProps> { }
   }
 
   /**
@@ -197,7 +197,7 @@ declare namespace MapboxGL {
     setCamera(config: CameraSettings): void;
   }
 
-  class UserLocation extends Component<UserLocationProps> {}
+  class UserLocation extends Component<UserLocationProps> { }
 
   interface Location {
     coords: Coordinates;
@@ -213,21 +213,21 @@ declare namespace MapboxGL {
     altitude?: number;
   }
 
-  class Light extends Component<LightProps> {}
+  class Light extends Component<LightProps> { }
 
   class StyleSheet extends Component {
     static create<T extends NamedStyles<T> | NamedStyles<any>>(styles: T): void;
     camera(
-      stops: {[key: number]: string},
+      stops: { [key: number]: string },
       interpolationMode?: InterpolationMode,
     ): void;
     source(
-      stops: {[key: number]: string},
+      stops: { [key: number]: string },
       attributeName: string,
       interpolationMode?: InterpolationMode,
     ): void;
     composite(
-      stops: {[key: number]: string},
+      stops: { [key: number]: string },
       attributeName: string,
       interpolationMode?: InterpolationMode,
     ): void;
@@ -238,30 +238,30 @@ declare namespace MapboxGL {
   class PointAnnotation extends Component<PointAnnotationProps> {
     refresh(): void;
   }
-  class MarkerView extends Component<MarkerViewProps> {}
-  class Callout extends Component<CalloutProps> {}
-  interface Style extends React.FC<StyleProps> {}
+  class MarkerView extends Component<MarkerViewProps> { }
+  class Callout extends Component<CalloutProps> { }
+  interface Style extends React.FC<StyleProps> { }
 
   /**
    * Sources
    */
-  class VectorSource extends Component<VectorSourceProps> {}
-  class ShapeSource extends Component<ShapeSourceProps> {}
-  class RasterSource extends Component<RasterSourceProps> {}
+  class VectorSource extends Component<VectorSourceProps> { }
+  class ShapeSource extends Component<ShapeSourceProps> { }
+  class RasterSource extends Component<RasterSourceProps> { }
 
   /**
    * Layers
    */
-  class BackgroundLayer extends Component<BackgroundLayerProps> {}
-  class CircleLayer extends Component<CircleLayerProps> {}
-  class FillExtrusionLayer extends Component<FillExtrusionLayerProps> {}
-  class FillLayer extends Component<FillLayerProps> {}
-  class LineLayer extends Component<LineLayerProps> {}
-  class RasterLayer extends Component<RasterLayerProps> {}
-  class SymbolLayer extends Component<SymbolLayerProps> {}
-  class HeatmapLayer extends Component<HeatmapLayerProps> {}
-  class Images extends Component<ImagesProps> {}
-  class ImageSource extends Component<ImageSourceProps> {}
+  class BackgroundLayer extends Component<BackgroundLayerProps> { }
+  class CircleLayer extends Component<CircleLayerProps> { }
+  class FillExtrusionLayer extends Component<FillExtrusionLayerProps> { }
+  class FillLayer extends Component<FillLayerProps> { }
+  class LineLayer extends Component<LineLayerProps> { }
+  class RasterLayer extends Component<RasterLayerProps> { }
+  class SymbolLayer extends Component<SymbolLayerProps> { }
+  class HeatmapLayer extends Component<HeatmapLayerProps> { }
+  class Images extends Component<ImagesProps> { }
+  class ImageSource extends Component<ImageSourceProps> { }
 
   class LocationManager extends Component {
     start(displacement?: number): void;
@@ -367,10 +367,10 @@ declare namespace MapboxGL {
 }
 
 export type AttributionPosition =
-  | {top: number; left: number}
-  | {top: number; right: number}
-  | {bottom: number; left: number}
-  | {bottom: number; right: number};
+  | { top: number; left: number }
+  | { top: number; right: number }
+  | { bottom: number; left: number }
+  | { bottom: number; right: number };
 
 export interface RegionPayload {
   zoomLevel: number;
@@ -388,6 +388,7 @@ export interface MapViewProps extends ViewProps {
   contentInset?: Array<number>;
   style?: StyleProp<ViewStyle>;
   styleURL?: string;
+  styleJSON?: string;
   localizeLabels?: boolean;
   zoomEnabled?: boolean;
   scrollEnabled?: boolean;
@@ -434,7 +435,7 @@ export interface CameraProps extends CameraSettings, ViewProps {
   defaultSettings?: CameraSettings;
   minZoomLevel?: number;
   maxZoomLevel?: number;
-  maxBounds?: {ne: [number, number]; sw: [number, number]};
+  maxBounds?: { ne: [number, number]; sw: [number, number] };
   followUserLocation?: boolean;
   followUserMode?: 'normal' | 'compass' | 'course';
   followZoomLevel?: number;
@@ -612,7 +613,7 @@ export interface RasterLayerStyle {
   rasterFadeDuration?: number | Expression;
 }
 
-export type TextVariableAnchorValues = "center" |  "left" |  "right" |  "top" |  "bottom" |  "top-left" |  "top-right" |  "bottom-left" |  "bottom-right";
+export type TextVariableAnchorValues = "center" | "left" | "right" | "top" | "bottom" | "top-left" | "top-right" | "bottom-left" | "bottom-right";
 
 export interface SymbolLayerStyle {
   symbolPlacement?: 'point' | 'line' | Expression;
@@ -761,7 +762,7 @@ export interface ShapeSourceProps extends ViewProps {
   maxZoomLevel?: number;
   buffer?: number;
   tolerance?: number;
-  images?: {assets?: string[]} & {[key: string]: ImageSourcePropType};
+  images?: { assets?: string[] } & { [key: string]: ImageSourcePropType };
   onPress?: (event: OnPressEvent) => void;
   hitbox?: {
     width: number;
@@ -793,7 +794,7 @@ export interface CircleLayerProps extends LayerBaseProps {
   style?: StyleProp<CircleLayerStyle>;
 }
 
-export interface FillExtrusionLayerProps extends Omit<LayerBaseProps, 'id'>  {
+export interface FillExtrusionLayerProps extends Omit<LayerBaseProps, 'id'> {
   id: string;
   style?: StyleProp<FillExtrusionLayerStyle>;
 }
@@ -819,7 +820,7 @@ export interface HeatmapLayerProps extends LayerBaseProps {
 }
 
 export interface ImagesProps extends ViewProps {
-  images?: {assets?: string[]} & {[key: string]: ImageSourcePropType};
+  images?: { assets?: string[] } & { [key: string]: ImageSourcePropType };
 }
 
 export interface ImageSourceProps extends ViewProps {

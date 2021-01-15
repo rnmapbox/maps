@@ -485,7 +485,13 @@ static double const M2PI = M_PI * 2;
 
 - (NSURL*)_getStyleURLFromKey:(NSString *)styleURL
 {
-    return [NSURL URLWithString:styleURL];
+    NSURL *url = [NSURL URLWithString:styleURL];
+    if (url) {
+        return url;
+    } else if (RCTJSONParse(styleURL, nil)) {
+        return [RCTMGLUtils styleURLFromStyleJSON:styleURL];
+    }
+    return url;
 }
 
 - (void)_removeAllSourcesFromMap
