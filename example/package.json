@@ -30,7 +30,7 @@
     "npm": "^6.13.4",
     "prop-types": "^15.7.2",
     "react": "16.13.1",
-    "react-native": "0.63.3",
+    "react-native": "0.63.4",
     "react-native-elements": "^2.2.1",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-safe-area-context": "^0.7.3",
