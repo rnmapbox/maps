@@ -142,6 +142,7 @@ describe('UserLocation', () => {
 
     beforeEach(() => {
       ul = new UserLocation();
+
       jest.spyOn(locationManager, 'start').mockImplementation(jest.fn());
       jest.spyOn(locationManager, 'stop').mockImplementation(jest.fn());
       jest
@@ -150,11 +151,7 @@ describe('UserLocation', () => {
 
       ul.setState = jest.fn();
 
-      ul.props = {
-        animated: true,
-        visible: true,
-        minDisplacement: 0,
-      };
+      ul.props = UserLocation.defaultProps;
 
       ul._isMounted = true;
     });

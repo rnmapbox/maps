@@ -198,7 +198,11 @@ class UserLocation extends React.Component {
    * @return {boolean}
    */
   needsLocationManagerRunning() {
-    return !!this.props.onUpdate || (this.props.renderMode === UserLocation.RenderMode.Normal && this.props.visible);
+    return (
+      !!this.props.onUpdate ||
+      (this.props.renderMode === UserLocation.RenderMode.Normal &&
+        this.props.visible)
+    );
   }
 
   _onLocationUpdate(location) {
