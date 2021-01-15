@@ -553,28 +553,12 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RNMapboxGLExample/Pods-RNMapboxGLExample-frameworks.sh",
 				"${PODS_ROOT}/@react-native-mapbox-gl-mapbox-static/dynamic/MapboxMobileEvents.framework",
-				"${PODS_ROOT}/@react-native-mapbox-gl-mapbox-static/dynamic/MapboxMobileEvents.framework.dSYM",
-				"${PODS_ROOT}/@react-native-mapbox-gl-mapbox-static/dynamic/BADC3E19-B154-39DA-BE9A-E7C52B45BD0C.bcsymbolmap",
-				"${PODS_ROOT}/@react-native-mapbox-gl-mapbox-static/dynamic/F86F5A50-B0A0-3D96-8330-20AFDAC47DCC.bcsymbolmap",
-				"${PODS_ROOT}/@react-native-mapbox-gl-mapbox-static/dynamic/877E1F78-505A-34B9-A9A0-42F8BFA435B9.bcsymbolmap",
-				"${PODS_ROOT}/@react-native-mapbox-gl-mapbox-static/dynamic/7C38D00F-328F-3E0C-B30E-E47F366F0F3D.bcsymbolmap",
 				"${PODS_ROOT}/Mapbox-iOS-SDK/dynamic/Mapbox.framework",
-				"${PODS_ROOT}/Mapbox-iOS-SDK/dynamic/Mapbox.framework.dSYM",
-				"${PODS_ROOT}/Mapbox-iOS-SDK/dynamic/BADC3E19-B154-39DA-BE9A-E7C52B45BD0C.bcsymbolmap",
-				"${PODS_ROOT}/Mapbox-iOS-SDK/dynamic/F86F5A50-B0A0-3D96-8330-20AFDAC47DCC.bcsymbolmap",
-				"${PODS_ROOT}/Mapbox-iOS-SDK/dynamic/877E1F78-505A-34B9-A9A0-42F8BFA435B9.bcsymbolmap",
-				"${PODS_ROOT}/Mapbox-iOS-SDK/dynamic/7C38D00F-328F-3E0C-B30E-E47F366F0F3D.bcsymbolmap",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MapboxMobileEvents.framework",
-				"${DWARF_DSYM_FOLDER_PATH}/MapboxMobileEvents.framework.dSYM",
-				"${BUILT_PRODUCTS_DIR}/BADC3E19-B154-39DA-BE9A-E7C52B45BD0C.bcsymbolmap",
-				"${BUILT_PRODUCTS_DIR}/F86F5A50-B0A0-3D96-8330-20AFDAC47DCC.bcsymbolmap",
-				"${BUILT_PRODUCTS_DIR}/877E1F78-505A-34B9-A9A0-42F8BFA435B9.bcsymbolmap",
-				"${BUILT_PRODUCTS_DIR}/7C38D00F-328F-3E0C-B30E-E47F366F0F3D.bcsymbolmap",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mapbox.framework",
-				"${DWARF_DSYM_FOLDER_PATH}/Mapbox.framework.dSYM",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
