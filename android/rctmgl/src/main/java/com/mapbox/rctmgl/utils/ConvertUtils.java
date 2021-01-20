@@ -28,7 +28,7 @@ import java.util.Map;
  */
 
 public class ConvertUtils {
-    public static final String LOG_TAG = ConvertUtils.class.getSimpleName();
+    public static final String LOG_TAG = "ConvertUtils";
 
     public static JsonObject toJsonObject(ReadableMap map) {
         if (map == null) return null;

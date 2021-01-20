@@ -38,7 +38,7 @@ import javax.annotation.Nullable;
  */
 
 public class DownloadMapImageTask extends AsyncTask<Map.Entry<String, ImageEntry>, Void, List<Map.Entry<String, Bitmap>>> {
-    public static final String LOG_TAG = DownloadMapImageTask.class.getSimpleName();
+    public static final String LOG_TAG = "DownloadMapImageTask";
 
     private WeakReference<Context> mContext;
     private WeakReference<MapboxMap> mMap;

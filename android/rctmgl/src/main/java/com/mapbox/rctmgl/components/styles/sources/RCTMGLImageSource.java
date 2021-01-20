@@ -19,7 +19,7 @@ import android.net.Uri;
  */
 
 public class RCTMGLImageSource extends RCTSource<ImageSource> {
-    public static final String LOG_TAG = RCTMGLImageSource.class.getSimpleName();
+    public static final String LOG_TAG = "RCTMGLImageSource";
 
     private URL mURL;
     private int mResourceId;

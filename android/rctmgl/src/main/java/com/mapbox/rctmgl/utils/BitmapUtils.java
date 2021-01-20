@@ -25,7 +25,7 @@ import java.net.URL;
  */
 
 public class BitmapUtils {
-    public static final String LOG_TAG = BitmapUtils.class.getSimpleName();
+    public static final String LOG_TAG = "BitmapUtils";
 
     private  static int CACHE_SIZE = 1024 * 1024;
     private static LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(CACHE_SIZE) {

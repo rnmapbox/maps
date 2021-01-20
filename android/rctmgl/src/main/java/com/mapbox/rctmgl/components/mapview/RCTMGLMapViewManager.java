@@ -38,7 +38,7 @@ import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
  */
 
 public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
-    public static final String LOG_TAG = RCTMGLMapViewManager.class.getSimpleName();
+    public static final String LOG_TAG = "RCTMGLMapViewManager";
     public static final String REACT_CLASS = "RCTMGLMapView";
 
     private Map<Integer, RCTMGLMapView> mViews;
@@ -332,7 +332,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                         }
                         catch (Exception ex)
                         {
-                            Log.e(getClass().getSimpleName() , " disposeNativeMapView() exception destroying map view", ex);
+                            Log.e(LOG_TAG , " disposeNativeMapView() exception destroying map view", ex);
                         }
                     }
                 });
