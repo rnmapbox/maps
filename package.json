@@ -60,7 +60,7 @@
     "eslint-plugin-import": "2.22.1",
     "husky": "4.3.0",
     "jest": "25.5.4",
-    "@sinonjs/fake-timers": "^6.0.0",
+    "@sinonjs/fake-timers": "^7.0.1",
     "jest-cli": "25.5.4",
     "lint-staged": "^10.1.3",
     "metro-react-native-babel-preset": "0.49.1",
