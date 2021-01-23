@@ -4,7 +4,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     labels:
       - "🤖 dependabot 🤖"
     open-pull-requests-limit: 99
@@ -25,7 +25,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/example"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     labels:
       - "🤖 dependabot 🤖"
     open-pull-requests-limit: 99
@@ -35,7 +35,7 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     pull-request-branch-name:
       separator: "-"
     labels:
