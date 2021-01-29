@@ -1088,7 +1088,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
                     uiSettings.setCompassGravity(Gravity.TOP | Gravity.END);
                     break;
                 case 2:
-                    uiSettings.setCompassGravity(Gravity.BOTTOM | Gravity.END);
+                    uiSettings.setCompassGravity(Gravity.BOTTOM | Gravity.START);
                     break;
                 case 3:
                     uiSettings.setCompassGravity(Gravity.BOTTOM | Gravity.END);
