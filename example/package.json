@@ -33,7 +33,7 @@
     "react-native": "0.63.4",
     "react-native-elements": "^2.2.1",
     "react-native-gesture-handler": "^1.6.1",
-    "react-native-safe-area-context": "^0.7.3",
+    "react-native-safe-area-context": "^3.1.9",
     "react-native-safe-area-view": "^0.13.1",
     "react-native-screens": "^2.4.0",
     "react-native-svg": "^12.1.0",
