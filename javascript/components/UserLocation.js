@@ -206,7 +206,7 @@ class UserLocation extends React.Component {
   }
 
   _onLocationUpdate(location) {
-    if (!this._isMounted) {
+    if (!this._isMounted || !location) {
       return;
     }
     let coordinates = null;
