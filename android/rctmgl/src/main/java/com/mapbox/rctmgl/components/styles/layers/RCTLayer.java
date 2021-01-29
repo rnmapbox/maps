@@ -25,7 +25,7 @@ import java.util.Set;
  */
 
 public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
-    public static final String LOG_TAG = RCTLayer.class.getSimpleName();
+    public static final String LOG_TAG = "RCTLayer";
 
     protected String mID;
     protected String mSourceID;

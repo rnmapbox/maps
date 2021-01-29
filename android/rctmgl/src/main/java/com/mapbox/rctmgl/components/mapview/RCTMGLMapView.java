@@ -97,7 +97,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         MapView.OnWillStartRenderingFrameListener, MapView.OnDidFinishRenderingFrameListener,
         MapView.OnWillStartRenderingMapListener, MapView.OnDidFinishRenderingMapListener,
         MapView.OnDidFinishLoadingStyleListener, MapView.OnStyleImageMissingListener {
-    public static final String LOG_TAG = RCTMGLMapView.class.getSimpleName();
+    public static final String LOG_TAG = "RCTMGLMapView";
 
     private RCTMGLMapViewManager mManager;
     private Context mContext;

@@ -32,7 +32,7 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
     static final long DEFAULT_FASTEST_INTERVAL_MILLIS = 1000;
     static final long DEFAULT_INTERVAL_MILLIS = 1000;
 
-    public static final String LOG_TAG = LocationManager.class.getSimpleName();
+    public static final String LOG_TAG = "LocationManager";
 
     private LocationEngine locationEngine;
     private Context context;

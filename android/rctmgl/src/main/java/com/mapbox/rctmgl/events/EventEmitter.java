@@ -11,7 +11,7 @@ import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 
 public class EventEmitter {
-    public static final String LOG_TAG = EventEmitter.class.getSimpleName();
+    public static final String LOG_TAG = "EventEmitter";
 
 
     private static ReactContext getCurrentReactContext(ReactApplicationContext reactApplicationContext) {
