@@ -211,6 +211,7 @@ declare namespace MapboxGL {
     longitude: number;
     accuracy?: number;
     altitude?: number;
+    course?: number;
   }
 
   class Light extends Component<LightProps> { }

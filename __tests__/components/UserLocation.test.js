@@ -16,6 +16,7 @@ const position = {
     latitude: 51.5462244,
     longitude: 4.1036916,
     speed: 0.08543474227190018,
+    course: 251.5358428955078,
   },
   timestamp: 1573730357879,
 };
@@ -105,6 +106,7 @@ describe('UserLocation', () => {
           latitude: 51.5462244,
           longitude: 4.1036916,
           speed: 0.08543474227190018,
+          course: 251.5358428955078,
         },
         timestamp: 1573730357879,
       });
