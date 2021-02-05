@@ -23,7 +23,7 @@
     "@turf/line-distance": "^4.7.3",
     "@turf/nearest": "^4.7.3",
     "@turf/nearest-point-on-line": ">= 4.0.0 <7.0.0",
-    "buffer": "^5.1.0",
+    "buffer": "^6.0.3",
     "debounce": "^1.2.0",
     "moment": "^2.24.0",
     "npm": "^6.13.4",
