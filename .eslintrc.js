@@ -44,6 +44,7 @@ module.exports = {
   rules: {
     'react/no-deprecated': 'warn',
     'react/no-string-refs': 'warn',
+    'react-hooks/exhaustive-deps': 'off',
     'import/named': [2],
     'import/no-named-default': [0],
     'import/order': [
@@ -73,7 +74,7 @@ module.exports = {
     'no-underscore-dangle': [0],
     'no-await-in-loop': 0,
     'no-restricted-syntax': 0,
-    'no-use-before-define': ['error', {functions: false}],
+    'no-use-before-define': 0,
     'no-unused-expressions': ['error', {allowTaggedTemplates: true}],
     'no-plusplus': ['error', {allowForLoopAfterthoughts: true}],
     'prettier/prettier': [
