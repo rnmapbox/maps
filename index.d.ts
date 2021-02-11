@@ -210,7 +210,7 @@ declare namespace MapboxGL {
      * The heading (measured in degrees) relative to true north.
      * Heading is used to describe the direction the device is pointing to (the value of the compass).
      * Note that on Android this is incorrectly reporting the course value as mentioned in issue https://github.com/react-native-mapbox-gl/maps/issues/1213
-     * and will be corrected in a feature update.
+     * and will be corrected in a future update.
      */
     heading?: number;
 
