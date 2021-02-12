@@ -9,6 +9,7 @@ const style = {
   iconImage: headingIcon,
   iconAllowOverlap: true,
   iconPitchAlignment: 'map',
+  iconRotationAlignment: 'map',
 };
 
 const HeadingIndicator = (heading) => (
