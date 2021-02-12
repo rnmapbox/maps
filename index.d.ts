@@ -51,16 +51,13 @@ type ExpressionName =
   // Zoom, Heatmap
   | 'zoom' | 'heatmap-density';
 
-type ExpressionField = any;
-
-// After TS 3.7 this can be typed as:
-//    string
-//   | number
-//   | boolean
-//   | Expression
-//   | ExpressionField[]
-//   | {[key: string]: ExpressionField};
-//  See https://github.com/microsoft/TypeScript/pull/33050
+type ExpressionField =
+  | string
+  | number
+  | boolean
+  | Expression
+  | ExpressionField[]
+  | {[key: string]: ExpressionField};
 
 export type Expression = [ExpressionName, ...ExpressionField[]];
 
