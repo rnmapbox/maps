@@ -517,7 +517,10 @@ public class RCTMGLCamera extends AbstractMapFeature {
         coords.putDouble("latitude", location.getLatitude());
         coords.putDouble("altitude", location.getAltitude());
         coords.putDouble("accuracy", location.getAccuracy());
+        // A better solution will be to pull the heading from the compass engine, 
+        // unfortunately the api is not publicly available in the mapbox sdk
         coords.putDouble("heading", location.getBearing());
+        coords.putDouble("course", location.getBearing());
         coords.putDouble("speed", location.getSpeed());
 
         positionProperties.putMap("coords", coords);
