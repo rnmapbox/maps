@@ -120,6 +120,10 @@ coverage
 *.core.prefs
 *.iml
 
+example/accesstoken
+example/env.json
+example/ios/Podfile.lock
+
 react-native-mapbox-gl-maps.tgz
 
 # Config plugin
