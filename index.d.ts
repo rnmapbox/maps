@@ -308,6 +308,7 @@ declare namespace MapboxGL {
       errorListener?: (pack: OfflinePack, err: OfflineProgressError) => void
     ): Promise<void>;
     deletePack(name: string): Promise<void>;
+    invalidatePack(name: string): Promise<void>;
     getPacks(): Promise<Array<OfflinePack>>;
     getPack(name: string): Promise<OfflinePack | undefined>;
     invalidateAmbientCache(): Promise<void>;
