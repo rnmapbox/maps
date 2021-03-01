@@ -59,7 +59,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
     style: PropTypes.any,
 
     /**
-     * Style URL for map - notice, if non is set it _will_ default to `MapboxGL.StyleURL.Street`
+     * Style URL for map - notice, if none is set it _will_ default to `MapboxGL.StyleURL.Street`
      */
     styleURL: PropTypes.string,
 
