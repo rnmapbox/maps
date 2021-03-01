@@ -14,7 +14,7 @@
     "@mapbox/geo-viewport": "^0.4.0",
     "@mapbox/mapbox-sdk": "^0.11.0",
     "@react-native-community/masked-view": "^0.1.7",
-    "@turf/along": "^5.1.5",
+    "@turf/along": "^6.3.0",
     "@turf/bbox-polygon": "^6.0.1",
     "@turf/bearing": "^6.0.1",
     "@turf/distance": "^6.2.0",
