@@ -35,6 +35,9 @@ target 'RNMapboxGLExample' do
 
   use_native_modules!
 
+  pre_install do |installer|
+    $RNMBGL.pre_install(installer)
+  end
   # Enables Flipper.
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
@@ -42,6 +45,7 @@ target 'RNMapboxGLExample' do
   use_flipper!
   post_install do |installer|
     flipper_post_install(installer)
+    $RNMBGL.post_install(installer)
   end
 end
 

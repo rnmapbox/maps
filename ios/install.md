@@ -2,9 +2,28 @@
 
 ## React-Native > `0.60.0`
 
-If you are using autolinking feature introduced in React-Native `0.60.0`, you just need `npm install @react-native-mapbox-gl/maps`, followed by `pod install` from the `ios` directory.
+If you are using autolinking feature introduced in React-Native `0.60.0`, you just need `npm install @react-native-mapbox-gl/maps`, 
 
-## Using CocoaPods
+Add the following to your `ios/Podfile`:
+
+```ruby
+  pre_install do |installer|
+    $RNMBGL.pre_install(installer)
+    ... other pre install hooks
+  end
+```
+
+```ruby
+  post_install do |installer|
+    $RNMBGL.post_install(installer)
+    ... other post install hooks
+  end
+```
+
+
+followed by `pod install` from the `ios` directory. Please also add the pre/post install cocoapods hooks.
+
+## Using CocoaPods without autolink
 
 To install with CocoaPods, add the following to your `Podfile`:
 
@@ -16,20 +35,6 @@ To install with CocoaPods, add the following to your `Podfile`:
 
 Then run `pod install` and rebuild your project.
 
-## use_frameworks!
-
-Mapbox normally [requires](https://github.com/mapbox/mapbox-gl-native-ios/issues/154) `use_frameworks!` in cocoapods. By default we implement a [workaround](https://github.com/react-native-mapbox-gl/maps/pull/714). In case you need `use_frameworks!` for some reason, you can use the mapbox pod without the workaround with the `DynamicLibrary` subspec:
-
-
-```ruby
-  # Mapbox
-  pod 'react-native-mapbox-gl/DynamicLibrary', :path => '../node_modules/@react-native-mapbox-gl/maps'
-
-  ...
-
-  use_frameworks!
-
-```
 
 ## Mapbox Maps SDK
 
