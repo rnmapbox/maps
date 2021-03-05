@@ -19,7 +19,7 @@ import android.net.Uri;
  */
 
 public class RCTMGLImageSource extends RCTSource<ImageSource> {
-    public static final String LOG_TAG = RCTMGLImageSource.class.getSimpleName();
+    public static final String LOG_TAG = "RCTMGLImageSource";
 
     private URL mURL;
     private int mResourceId;
@@ -58,11 +58,11 @@ public class RCTMGLImageSource extends RCTSource<ImageSource> {
                 mURL = new URL(url);
 
                 if (mSource != null) {
-                    mSource.setUrl(mURL);
+                    mSource.setUri(mURL.toURI());
                 }
             }
 
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             Log.w(LOG_TAG, e.getLocalizedMessage());
         }
     }
@@ -70,5 +70,8 @@ public class RCTMGLImageSource extends RCTSource<ImageSource> {
 
     public void setCoordinates(LatLngQuad coordQuad) {
         mCoordQuad = coordQuad;
+        if (mSource != null) {
+            mSource.setCoordinates(this.mCoordQuad);
+        }
     }
 }

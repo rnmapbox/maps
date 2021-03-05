@@ -6,6 +6,10 @@ import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
 import Bubble from './common/Bubble';
 
+const styles = {
+  mapView: {flex: 1},
+};
+
 class GetZoom extends React.Component {
   static propTypes = {
     ...BaseExamplePropTypes,
@@ -33,7 +37,7 @@ class GetZoom extends React.Component {
           onRegionDidChange={this.onRegionDidChange}
           ref={(c) => (this._map = c)}
           onPress={this.onPress}
-          style={{flex: 1}}>
+          style={styles.mapView}>
           <MapboxGL.Camera
             zoomLevel={9}
             centerCoordinate={[-73.970895, 40.723279]}

@@ -133,6 +133,12 @@
     if (_styleLayer != nil) {
         [style removeLayer:_styleLayer];
     }
+    _style = nil;
+}
+
+- (BOOL)isAddedToMap
+{
+    return (_style != nil);
 }
 
 - (nullable MGLStyleLayer*)makeLayer:(MGLStyle*)style

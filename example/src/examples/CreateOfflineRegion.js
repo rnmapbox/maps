@@ -20,22 +20,19 @@ const CENTER_COORD = [-73.970895, 40.723279];
 const MAPBOX_VECTOR_TILE_SIZE = 512;
 
 const styles = StyleSheet.create({
-  percentageText: {
+  bubble: {flex: 1},
+  button: {
+    alignItems: 'center',
+    backgroundColor: 'blue',
+    borderRadius: 3,
+    flex: 0.4,
+    justifyContent: 'center',
     padding: 8,
-    textAlign: 'center',
   },
   buttonCnt: {
+    alignItems: 'center',
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  button: {
-    flex: 0.4,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 3,
-    backgroundColor: 'blue',
-    padding: 8,
   },
   buttonTxt: {
     color: 'white',
@@ -154,7 +151,7 @@ class CreateOfflineRegion extends React.Component {
 
         {offlineRegionStatus !== null ? (
           <Bubble>
-            <View style={{flex: 1}}>
+            <View style={styles.bubble}>
               <Text>
                 Download State:{' '}
                 {this._getRegionDownloadState(offlineRegionStatus.state)}

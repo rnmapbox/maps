@@ -15,16 +15,16 @@
         if([url.scheme isEqualToString:@"ws"]) {
             return [NSMutableURLRequest __swizzle_requestWithURL:url];
         }
-        
+
         NSArray<NSString*>* stack = [NSThread callStackSymbols];
         if ([stack count] < 2) {
             return [NSMutableURLRequest __swizzle_requestWithURL:url];
         }
-        
+
         if ([stack[1] containsString:@"Mapbox"] == NO) {
             return [NSMutableURLRequest __swizzle_requestWithURL:url];
         }
-        
+
         NSMutableURLRequest *req = [NSMutableURLRequest __swizzle_requestWithURL:url];
         NSDictionary<NSString*, NSString*> *currentHeaders = [[[MGLCustomHeaders sharedInstance] currentHeaders] copy];
         if(currentHeaders != nil && [currentHeaders count]>0) {
@@ -32,7 +32,7 @@
                 id headerValue = currentHeaders[headerName];
                 [req setValue:headerValue forHTTPHeaderField:headerName];
             }
-        }        
+        }
         return req;
     }
 
@@ -78,22 +78,20 @@
 }
 
 - (void)addHeader:(NSString *)value forHeaderName:(NSString *)headerName {
-    
+
     if(!areHeadersAdded) {
         areHeadersAdded = YES;
     }
-    
-    NSLog(@"Add custom header %@ %@", headerName, value);
+
     [_currentHeaders setObject:value forKey:headerName];
-    [[[MGLNetworkConfiguration sharedManager] sessionConfiguration] setHTTPAdditionalHeaders:_currentHeaders];    
+    [[[MGLNetworkConfiguration sharedManager] sessionConfiguration] setHTTPAdditionalHeaders:_currentHeaders];
 }
 
 - (void)removeHeader:(NSString *)header {
     if(!areHeadersAdded) {
         return;
     }
-    
-    NSLog(@"Remove custom header %@", header);
+
     [_currentHeaders removeObjectForKey:header];
 }
 

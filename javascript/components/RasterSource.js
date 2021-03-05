@@ -26,7 +26,7 @@ class RasterSource extends AbstractSource {
     /**
      * A string that uniquely identifies the source.
      */
-    id: PropTypes.string,
+    id: PropTypes.string.isRequired,
 
     /**
      * A URL to a TileJSON configuration file describing the source’s contents and other metadata.

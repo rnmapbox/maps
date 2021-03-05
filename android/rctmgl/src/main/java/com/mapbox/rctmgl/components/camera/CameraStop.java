@@ -16,6 +16,8 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.rctmgl.components.camera.constants.CameraMode;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
 
+import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
+
 /**
  * Created by nickitaliano on 9/5/17.
  */
@@ -75,7 +77,8 @@ public class CameraStop {
         mMode = mode;
     }
 
-    public CameraUpdateItem toCameraUpdate(MapboxMap map) {
+    public CameraUpdateItem toCameraUpdate(RCTMGLMapView mapView) {
+        MapboxMap map = mapView.getMapboxMap();
         CameraPosition currentCamera = map.getCameraPosition();
         CameraPosition.Builder builder = new CameraPosition.Builder(currentCamera);
 
@@ -95,21 +98,29 @@ public class CameraStop {
 
             // Adding map padding to the camera padding which is the same behavior as
             // mapbox native does on iOS
-            int[] mapPadding = map.getPadding();
-            int paddingLeft = mapPadding[0] + mBoundsPaddingLeft;
-            int paddingTop = mapPadding[1] + mBoundsPaddingTop;
-            int paddingRight = mapPadding[2] + mBoundsPaddingRight;
-            int paddingBottom = mapPadding[3] + mBoundsPaddingBottom;
+            double[] contentInset = mapView.getContentInset();
+
+            int paddingLeft = Double.valueOf(contentInset[0] + mBoundsPaddingLeft).intValue();
+            int paddingTop = Double.valueOf(contentInset[1] + mBoundsPaddingTop).intValue();
+            int paddingRight = Double.valueOf(contentInset[2] + mBoundsPaddingRight).intValue();
+            int paddingBottom = Double.valueOf(contentInset[3] + mBoundsPaddingBottom).intValue();
 
             int[] cameraPadding = {paddingLeft, paddingTop, paddingRight, paddingBottom};
-            CameraPosition boundsCamera = map.getCameraForLatLngBounds(mBounds, cameraPadding, bearing, tilt);
+            int[] cameraPaddingClipped = clippedPadding(cameraPadding, mapView);
+
+            CameraPosition boundsCamera = map.getCameraForLatLngBounds(mBounds, cameraPaddingClipped, bearing, tilt);
             if (boundsCamera != null) {
                 builder.target(boundsCamera.target);
                 builder.zoom(boundsCamera.zoom);
                 builder.padding(boundsCamera.padding);
             } else {
-                CameraUpdate update = CameraUpdateFactory.newLatLngBounds(mBounds, paddingLeft,
-                        paddingTop, paddingRight, paddingBottom);
+                CameraUpdate update = CameraUpdateFactory.newLatLngBounds(
+                        mBounds,
+                        cameraPaddingClipped[0],
+                        cameraPaddingClipped[1],
+                        cameraPaddingClipped[2],
+                        cameraPaddingClipped[3]
+                );
                 return new CameraUpdateItem(map, update, mDuration, mCallback, mMode);
             }
         }
@@ -178,6 +189,37 @@ public class CameraStop {
 
         stop.setCallback(callback);
         return stop;
+    }
+
+    private static int[] clippedPadding(int[] padding, RCTMGLMapView mapView) {
+        int mapHeight = mapView.getHeight();
+        int mapWidth = mapView.getWidth();
+
+        int left = padding[0];
+        int top = padding[1];
+        int right = padding[2];
+        int bottom = padding[3];
+
+        int resultLeft = left;
+        int resultTop = top;
+        int resultRight = right;
+        int resultBottom = bottom;
+
+        if (top + bottom >= mapHeight) {
+            double totalPadding = top + bottom;
+            double extra = totalPadding - mapHeight + 1.0; // add 1 to compensate for floating point math
+            resultTop -= (top * extra) / totalPadding;
+            resultBottom -= (bottom * extra) / totalPadding;
+        }
+
+        if (left + right >= mapWidth) {
+            double totalPadding = left + right;
+            double extra = totalPadding - mapWidth + 1.0; // add 1 to compensate for floating point math
+            resultLeft -= (left * extra) / totalPadding;
+            resultRight -= (right * extra) / totalPadding;
+        }
+
+        return new int[] {resultLeft, resultTop, resultRight, resultBottom};
     }
 
     private static int getBoundsPaddingByKey(ReadableMap map, String key) {

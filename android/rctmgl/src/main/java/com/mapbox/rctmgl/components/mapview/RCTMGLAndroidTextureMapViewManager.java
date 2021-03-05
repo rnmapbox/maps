@@ -10,7 +10,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
  */
 
 public class RCTMGLAndroidTextureMapViewManager extends RCTMGLMapViewManager {
-    public static final String LOG_TAG = RCTMGLAndroidTextureMapViewManager.class.getSimpleName();
+    public static final String LOG_TAG = "RCTMGLAndroidTextureMapViewManager";
     public static final String REACT_CLASS = "RCTMGLAndroidTextureMapView";
 
     public RCTMGLAndroidTextureMapViewManager(ReactApplicationContext context) {

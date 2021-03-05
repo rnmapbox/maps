@@ -60,6 +60,10 @@ class UserLocation extends React.Component {
      */
     animated: PropTypes.bool,
 
+    /**
+     * Which render mode to use.
+     * Can either be `normal` or `native`
+     */
     renderMode: PropTypes.oneOf(['normal', 'native']),
 
     /**
@@ -93,6 +97,9 @@ class UserLocation extends React.Component {
      */
     showsUserHeadingIndicator: PropTypes.bool,
 
+    /**
+     * Minimum amount of movement before GPS location is updated in meters
+     */
     minDisplacement: PropTypes.number,
 
     /**
@@ -135,8 +142,6 @@ class UserLocation extends React.Component {
   async componentDidMount() {
     this._isMounted = true;
 
-    locationManager.addListener(this._onLocationUpdate);
-
     await this.setLocationManager({
       running: this.needsLocationManagerRunning(),
     });
@@ -160,14 +165,13 @@ class UserLocation extends React.Component {
 
   async componentWillUnmount() {
     this._isMounted = false;
-    locationManager.removeListener(this._onLocationUpdate);
     await this.setLocationManager({running: false});
   }
 
   /**
-   * Whether to start or stop the locationManager
+   * Whether to start or stop listening to the locationManager
    *
-   * Notice, that locationManager will start automatically when
+   * Notice, that listening will start automatically when
    * either `onUpdate` or `visible` are set
    *
    * @async
@@ -178,12 +182,11 @@ class UserLocation extends React.Component {
     if (this.locationManagerRunning !== running) {
       this.locationManagerRunning = running;
       if (running) {
-        locationManager.start();
-
+        locationManager.addListener(this._onLocationUpdate);
         const location = await locationManager.getLastKnownLocation();
         this._onLocationUpdate(location);
       } else {
-        locationManager.stop();
+        locationManager.removeListener(this._onLocationUpdate);
       }
     }
   }
@@ -195,14 +198,15 @@ class UserLocation extends React.Component {
    * @return {boolean}
    */
   needsLocationManagerRunning() {
-    if (this.props.renderMode === UserLocation.RenderMode.Native) {
-      return false;
-    }
-    return !!this.props.onUpdate || this.props.visible;
+    return (
+      !!this.props.onUpdate ||
+      (this.props.renderMode === UserLocation.RenderMode.Normal &&
+        this.props.visible)
+    );
   }
 
   _onLocationUpdate(location) {
-    if (!this._isMounted) {
+    if (!this._isMounted || !location) {
       return;
     }
     let coordinates = null;

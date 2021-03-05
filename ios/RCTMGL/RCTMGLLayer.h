@@ -45,6 +45,8 @@
 - (void)insertLayer;
 - (void)setZoomBounds;
 
+- (BOOL)isAddedToMap;
+
 - (nullable MGLSource*)layerWithSourceIDInStyle:(nonnull MGLStyle*) style;
 
 @end

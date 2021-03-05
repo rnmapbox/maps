@@ -8,7 +8,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 
 @SuppressWarnings({"MissingPermission"})
 public class RCTMGLAndroidTextureMapView extends RCTMGLMapView {
-	public static final String LOG_TAG = RCTMGLAndroidTextureMapView.class.getSimpleName();
+	public static final String LOG_TAG = "RCTMGLAndroidTextureMapView";
 	
     public RCTMGLAndroidTextureMapView(Context context, RCTMGLAndroidTextureMapViewManager manager, MapboxMapOptions options) {
         super(context, manager, options);

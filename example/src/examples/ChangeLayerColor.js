@@ -11,6 +11,10 @@ const defaultCamera = {
   zoomLevel: 17.4,
 };
 
+const styles = {
+  mapView: {flex: 1},
+};
+
 class ChangeLayerColor extends React.Component {
   static propTypes = {
     ...BaseExamplePropTypes,
@@ -32,7 +36,7 @@ class ChangeLayerColor extends React.Component {
         <MapboxGL.MapView
           ref={(c) => (this._map = c)}
           onPress={this.onPress}
-          style={{flex: 1}}>
+          style={styles.mapView}>
           <MapboxGL.Camera defaultSettings={defaultCamera} />
           {!!fillColor && <MapboxGL.FillLayer id="water" style={{fillColor}} />}
         </MapboxGL.MapView>

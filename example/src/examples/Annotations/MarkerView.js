@@ -2,31 +2,33 @@ import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
-import sheet from '../styles/sheet';
+import sheet from '../../styles/sheet';
 
-import BaseExamplePropTypes from './common/BaseExamplePropTypes';
-import Page from './common/Page';
-import Bubble from './common/Bubble';
+import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
+import Page from '../common/Page';
+import Bubble from '../common/Bubble';
+
+const styles = {
+  touchableContainer: {borderColor: 'black', borderWidth: 1.0, width: 60},
+  touchable: {
+    backgroundColor: 'blue',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  touchableText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+};
 
 const AnnotationContent = ({title}) => (
-  <View style={{borderColor: 'black', borderWidth: 1.0, width: 60}}>
+  <View style={styles.touchableContainer}>
     <Text>{title}</Text>
-    <TouchableOpacity
-      style={{
-        backgroundColor: 'blue',
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-      <Text
-        style={{
-          color: 'white',
-          fontWeight: 'bold',
-        }}>
-        Btn
-      </Text>
+    <TouchableOpacity style={styles.touchable}>
+      <Text style={styles.touchableText}>Btn</Text>
     </TouchableOpacity>
   </View>
 );

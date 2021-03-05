@@ -5,7 +5,7 @@
 ### props
 | Prop | Type | Default | Required | Description |
 | ---- | :--: | :-----: | :------: | :----------: |
-| id | `string` | `none` | `false` | A string that uniquely identifies the source in the style to which it is added. |
+| id | `string` | `none` | `true` | A string that uniquely identifies the source in the style to which it is added. |
 | sourceID | `string` | `MapboxGL.StyleSource.DefaultSourceID` | `false` | The source from which to obtain the data to style.<br/>If the source has not yet been added to the current style, the behavior is undefined. |
 | sourceLayerID | `string` | `none` | `false` | Identifier of the layer within the source identified by the sourceID property from which the receiver obtains the data to style. |
 | aboveLayerID | `string` | `none` | `false` | Inserts a layer above aboveLayerID. |

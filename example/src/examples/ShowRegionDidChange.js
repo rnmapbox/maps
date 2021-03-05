@@ -9,6 +9,10 @@ import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import TabBarPage from './common/TabBarPage';
 import Bubble from './common/Bubble';
 
+const styles = {
+  bubble: {marginBottom: 100},
+};
+
 const isValidCoordinate = (geometry) => {
   if (!geometry) {
     return false;
@@ -93,7 +97,7 @@ class ShowRegionDidChange extends React.Component {
       !isValidCoordinate(this.state.regionFeature.geometry)
     ) {
       return (
-        <Bubble style={{marginBottom: 100}}>
+        <Bubble style={styles.bubble}>
           <Text>Move the map!</Text>
         </Bubble>
       );
@@ -109,7 +113,7 @@ class ShowRegionDidChange extends React.Component {
       .join(', ');
 
     return (
-      <Bubble style={{marginBottom: 100}}>
+      <Bubble style={styles.bubble}>
         <Text>{this.state.reason}</Text>
         <Text>Latitude: {geometry.coordinates[1]}</Text>
         <Text>Longitude: {geometry.coordinates[0]}</Text>

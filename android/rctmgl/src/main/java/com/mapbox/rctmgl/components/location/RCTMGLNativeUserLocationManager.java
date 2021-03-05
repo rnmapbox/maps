@@ -8,7 +8,7 @@ import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import javax.annotation.Nonnull;
 
 public class RCTMGLNativeUserLocationManager extends ViewGroupManager<RCTMGLNativeUserLocation> {
-    public static final String REACT_CLASS = RCTMGLNativeUserLocation.class.getSimpleName();
+    public static final String REACT_CLASS = "RCTMGLNativeUserLocation";
 
     @Nonnull
     @Override

@@ -28,39 +28,36 @@ import {
 
 // prettier-ignore
 type ExpressionName =
-    // Types
-    | 'array' | 'boolean' | 'collator' | 'format' | 'literal' | 'number' | 'object' | 'string'
-    | 'to-boolean' | 'to-color' | 'to-number' | 'to-string' | 'typeof'
-    // Feature data
-    | 'feature-state' | 'geometry-type' | 'id' | 'line-progress' | 'properties'
-    // Lookup
-    | 'at' | 'get' | 'has' | 'length'
-    // Decision
-    | '!' | '!=' | '<' | '<=' | '==' | '>' | '>=' | 'all' | 'any' | 'case' | 'match' | 'coalesce'
-    // Ramps, scales, curves
-    | 'interpolate' | 'interpolate-hcl' | 'interpolate-lab' | 'step'
-    // Variable binding
-    | 'let' | 'var'
-    // String
-    | 'concat' | 'downcase' | 'is-supported-script' | 'resolved-locale' | 'upcase'
-    // Color
-    | 'rgb' | 'rgba'
-    // Math
-    | '-' | '*' | '/' | '%' | '^' | '+' | 'abs' | 'acos' | 'asin' | 'atan' | 'ceil' | 'cos' | 'e'
-    | 'floor' | 'ln' | 'ln2' | 'log10' | 'log2' | 'max' | 'min' | 'pi' | 'round' | 'sin' | 'sqrt' | 'tan'
-    // Zoom, Heatmap
-    | 'zoom' | 'heatmap-density';
+  // Types
+  | 'array' | 'boolean' | 'collator' | 'format' | 'literal' | 'number' | 'object' | 'string'
+  | 'to-boolean' | 'to-color' | 'to-number' | 'to-string' | 'typeof'
+  // Feature data
+  | 'feature-state' | 'geometry-type' | 'id' | 'line-progress' | 'properties'
+  // Lookup
+  | 'at' | 'get' | 'has' | 'length'
+  // Decision
+  | '!' | '!=' | '<' | '<=' | '==' | '>' | '>=' | 'all' | 'any' | 'case' | 'match' | 'coalesce'
+  // Ramps, scales, curves
+  | 'interpolate' | 'interpolate-hcl' | 'interpolate-lab' | 'step'
+  // Variable binding
+  | 'let' | 'var'
+  // String
+  | 'concat' | 'downcase' | 'is-supported-script' | 'resolved-locale' | 'upcase'
+  // Color
+  | 'rgb' | 'rgba'
+  // Math
+  | '-' | '*' | '/' | '%' | '^' | '+' | 'abs' | 'acos' | 'asin' | 'atan' | 'ceil' | 'cos' | 'e'
+  | 'floor' | 'ln' | 'ln2' | 'log10' | 'log2' | 'max' | 'min' | 'pi' | 'round' | 'sin' | 'sqrt' | 'tan'
+  // Zoom, Heatmap
+  | 'zoom' | 'heatmap-density';
 
-type ExpressionField = any;
-
-// After TS 3.7 this can be typed as:
-//    string
-//   | number
-//   | boolean
-//   | Expression
-//   | ExpressionField[]
-//   | {[key: string]: ExpressionField};
-//  See https://github.com/microsoft/TypeScript/pull/33050
+type ExpressionField =
+  | string
+  | number
+  | boolean
+  | Expression
+  | ExpressionField[]
+  | {[key: string]: ExpressionField};
 
 export type Expression = [ExpressionName, ...ExpressionField[]];
 
@@ -80,20 +77,20 @@ type AutoAlignment = Alignment | 'auto';
 
 type NamedStyles<T> = {
   [P in keyof T]:
-    | SymbolLayerStyle
-    | RasterLayerStyle
-    | LineLayerStyle
-    | FillLayerStyle
-    | FillExtrusionLayerStyle
-    | CircleLayerStyle
-    | BackgroundLayerStyle;
+  | SymbolLayerStyle
+  | RasterLayerStyle
+  | LineLayerStyle
+  | FillLayerStyle
+  | FillExtrusionLayerStyle
+  | CircleLayerStyle
+  | BackgroundLayerStyle;
 };
 
 export type MapboxGLEvent<
   T extends string,
   P = GeoJSON.Feature,
   V = Element
-> = SyntheticEvent<V, {type: T; payload: P}>;
+  > = SyntheticEvent<V, { type: T; payload: P }>;
 
 export type OnPressEvent = {
   features: Array<GeoJSON.Feature>;
@@ -118,6 +115,7 @@ declare namespace MapboxGL {
 
   const offlineManager: OfflineManager;
   const snapshotManager: SnapshotManager;
+  const locationManager: LocationManager;
 
   /**
    * GeoUtils
@@ -145,17 +143,17 @@ declare namespace MapboxGL {
 
   namespace Animated {
     // sources
-    class ShapeSource extends Component<ShapeSourceProps> {}
-    class ImageSource extends Component<ImageSourceProps> {}
+    class ShapeSource extends Component<ShapeSourceProps> { }
+    class ImageSource extends Component<ImageSourceProps> { }
 
     // layers
-    class FillLayer extends Component<FillLayerProps> {}
-    class FillExtrusionLayer extends Component<FillExtrusionLayerProps> {}
-    class LineLayer extends Component<LineLayerProps> {}
-    class CircleLayer extends Component<CircleLayerProps> {}
-    class SymbolLayer extends Component<SymbolLayerProps> {}
-    class RasterLayer extends Component<RasterLayerProps> {}
-    class BackgroundLayer extends Component<BackgroundLayerProps> {}
+    class FillLayer extends Component<FillLayerProps> { }
+    class FillExtrusionLayer extends Component<FillExtrusionLayerProps> { }
+    class LineLayer extends Component<LineLayerProps> { }
+    class CircleLayer extends Component<CircleLayerProps> { }
+    class SymbolLayer extends Component<SymbolLayerProps> { }
+    class RasterLayer extends Component<RasterLayerProps> { }
+    class BackgroundLayer extends Component<BackgroundLayerProps> { }
   }
 
   /**
@@ -196,7 +194,7 @@ declare namespace MapboxGL {
     setCamera(config: CameraSettings): void;
   }
 
-  class UserLocation extends Component<UserLocationProps> {}
+  class UserLocation extends Component<UserLocationProps> { }
 
   interface Location {
     coords: Coordinates;
@@ -204,29 +202,62 @@ declare namespace MapboxGL {
   }
 
   interface Coordinates {
+
+    /**
+     * The heading (measured in degrees) relative to true north.
+     * Heading is used to describe the direction the device is pointing to (the value of the compass).
+     * Note that on Android this is incorrectly reporting the course value as mentioned in issue https://github.com/react-native-mapbox-gl/maps/issues/1213
+     * and will be corrected in a future update.
+     */
     heading?: number;
+
+    /**
+     * The direction in which the device is traveling, measured in degrees and relative to due north.
+     * The course refers to the direction the device is actually moving (not the same as heading).
+     */
+    course?: number;
+
+    /**
+     * The instantaneous speed of the device, measured in meters per second.
+     */
     speed?: number;
+
+    /**
+     * The latitude in degrees.
+     */
     latitude: number;
+
+    /**
+     * The longitude in degrees.
+     */
     longitude: number;
+
+    /**
+     * The radius of uncertainty for the location, measured in meters.
+     */
     accuracy?: number;
+
+    /**
+     * The altitude, measured in meters.
+     */
     altitude?: number;
   }
 
-  class Light extends Component<LightProps> {}
+  class Light extends Component<LightProps> { }
 
   class StyleSheet extends Component {
     static create<T extends NamedStyles<T> | NamedStyles<any>>(styles: T): void;
     camera(
-      stops: {[key: number]: string},
+      stops: { [key: number]: string },
       interpolationMode?: InterpolationMode,
     ): void;
     source(
-      stops: {[key: number]: string},
+      stops: { [key: number]: string },
       attributeName: string,
       interpolationMode?: InterpolationMode,
     ): void;
     composite(
-      stops: {[key: number]: string},
+      stops: { [key: number]: string },
       attributeName: string,
       interpolationMode?: InterpolationMode,
     ): void;
@@ -237,30 +268,35 @@ declare namespace MapboxGL {
   class PointAnnotation extends Component<PointAnnotationProps> {
     refresh(): void;
   }
-  class MarkerView extends Component<MarkerViewProps> {}
-  class Callout extends Component<CalloutProps> {}
-  interface Style extends React.FC<StyleProps> {}
+  class MarkerView extends Component<MarkerViewProps> { }
+  class Callout extends Component<CalloutProps> { }
+  interface Style extends React.FC<StyleProps> { }
 
   /**
    * Sources
    */
-  class VectorSource extends Component<VectorSourceProps> {}
-  class ShapeSource extends Component<ShapeSourceProps> {}
-  class RasterSource extends Component<RasterSourceProps> {}
+  class VectorSource extends Component<VectorSourceProps> { }
+  class ShapeSource extends Component<ShapeSourceProps> { }
+  class RasterSource extends Component<RasterSourceProps> { }
 
   /**
    * Layers
    */
-  class BackgroundLayer extends Component<BackgroundLayerProps> {}
-  class CircleLayer extends Component<CircleLayerProps> {}
-  class FillExtrusionLayer extends Component<FillExtrusionLayerProps> {}
-  class FillLayer extends Component<FillLayerProps> {}
-  class LineLayer extends Component<LineLayerProps> {}
-  class RasterLayer extends Component<RasterLayerProps> {}
-  class SymbolLayer extends Component<SymbolLayerProps> {}
-  class HeatmapLayer extends Component<HeatmapLayerProps> {}
-  class Images extends Component<ImagesProps> {}
-  class ImageSource extends Component<ImageSourceProps> {}
+  class BackgroundLayer extends Component<BackgroundLayerProps> { }
+  class CircleLayer extends Component<CircleLayerProps> { }
+  class FillExtrusionLayer extends Component<FillExtrusionLayerProps> { }
+  class FillLayer extends Component<FillLayerProps> { }
+  class LineLayer extends Component<LineLayerProps> { }
+  class RasterLayer extends Component<RasterLayerProps> { }
+  class SymbolLayer extends Component<SymbolLayerProps> { }
+  class HeatmapLayer extends Component<HeatmapLayerProps> { }
+  class Images extends Component<ImagesProps> { }
+  class ImageSource extends Component<ImageSourceProps> { }
+
+  class LocationManager extends Component {
+    start(displacement?: number): void;
+    stop(): void;
+  }
 
   /**
    * Offline
@@ -332,10 +368,9 @@ declare namespace MapboxGL {
    * Constants
    */
   enum UserTrackingModes {
-    None = 0,
-    Follow = 1,
-    FollowWithCourse = 2,
-    FollowWithHeading = 3,
+    Follow = 'normal',
+    FollowWithHeading = 'compass',
+    FollowWithCourse = 'course',
   }
 
   enum InterpolationMode {
@@ -355,17 +390,13 @@ declare namespace MapboxGL {
     TrafficDay = 'mapbox://styles/mapbox/navigation-preview-day-v4',
     TrafficNight = 'mapbox://styles/mapbox/navigation-preview-night-v4',
   }
-
-  enum StyleSource {
-    DefaultSourceID = 0,
-  }
 }
 
 export type AttributionPosition =
-  | {top: number; left: number}
-  | {top: number; right: number}
-  | {bottom: number; left: number}
-  | {bottom: number; right: number};
+  | { top: number; left: number }
+  | { top: number; right: number }
+  | { bottom: number; left: number }
+  | { bottom: number; right: number };
 
 export interface RegionPayload {
   zoomLevel: number;
@@ -383,6 +414,7 @@ export interface MapViewProps extends ViewProps {
   contentInset?: Array<number>;
   style?: StyleProp<ViewStyle>;
   styleURL?: string;
+  styleJSON?: string;
   localizeLabels?: boolean;
   zoomEnabled?: boolean;
   scrollEnabled?: boolean;
@@ -429,7 +461,7 @@ export interface CameraProps extends CameraSettings, ViewProps {
   defaultSettings?: CameraSettings;
   minZoomLevel?: number;
   maxZoomLevel?: number;
-  maxBounds?: {ne: [number, number]; sw: [number, number]};
+  maxBounds?: { ne: [number, number]; sw: [number, number] };
   followUserLocation?: boolean;
   followUserMode?: 'normal' | 'compass' | 'course';
   followZoomLevel?: number;
@@ -467,13 +499,15 @@ export interface CameraSettings {
 }
 
 export interface UserLocationProps {
+  androidRenderMode?: 'normal' | 'compass' | 'gps'
   animated?: boolean;
-  visible?: boolean;
+  children?: ReactNode;
+  minDisplacement?: number;
   onPress?: () => void;
   onUpdate?: (location: MapboxGL.Location) => void;
+  renderMode?: 'normal' | 'native';
   showsUserHeadingIndicator?: boolean,
-  minDisplacement?: number;
-  children?: ReactNode;
+  visible?: boolean;
 }
 
 export type WithExpression<T> = {
@@ -605,10 +639,13 @@ export interface RasterLayerStyle {
   rasterFadeDuration?: number | Expression;
 }
 
+export type TextVariableAnchorValues = "center" | "left" | "right" | "top" | "bottom" | "top-left" | "top-right" | "bottom-left" | "bottom-right";
+
 export interface SymbolLayerStyle {
   symbolPlacement?: 'point' | 'line' | Expression;
   symbolSpacing?: number | Expression;
   symbolAvoidEdges?: boolean | Expression;
+  symbolZOrder?: 'auto' | 'viewport-y' | 'source' | Expression;
   iconAllowOverlap?: boolean | Expression;
   iconIgnorePlacement?: boolean | Expression;
   iconOptional?: boolean | Expression;
@@ -642,6 +679,8 @@ export interface SymbolLayerStyle {
   textAllowOverlap?: boolean | Expression;
   textIgnorePlacement?: boolean | Expression;
   textOptional?: boolean | Expression;
+  textVariableAnchor?: Array<TextVariableAnchorValues>;
+  textRadialOffset?: number | Expression;
   visibility?: Visibility | Expression;
   iconOpacity?: number | Expression;
   iconOpacityTransition?: Transition | Expression;
@@ -724,7 +763,7 @@ export interface CalloutProps extends Omit<ViewProps, 'style'> {
 }
 
 export interface TileSourceProps extends ViewProps {
-  id?: string;
+  id: string;
   url?: string;
   tileUrlTemplates?: Array<string>;
   minZoomLevel?: number;
@@ -740,16 +779,16 @@ export interface VectorSourceProps extends TileSourceProps {
 }
 
 export interface ShapeSourceProps extends ViewProps {
-  id?: string;
+  id: string;
   url?: string;
-  shape?: GeoJSON.GeometryCollection | GeoJSON.Feature | GeoJSON.FeatureCollection;
+  shape?: GeoJSON.GeometryCollection | GeoJSON.Feature | GeoJSON.FeatureCollection | GeoJSON.Geometry;
   cluster?: boolean;
   clusterRadius?: number;
   clusterMaxZoomLevel?: number;
   maxZoomLevel?: number;
   buffer?: number;
   tolerance?: number;
-  images?: {assets?: string[]} & {[key: string]: ImageSourcePropType};
+  images?: { assets?: string[] } & { [key: string]: ImageSourcePropType };
   onPress?: (event: OnPressEvent) => void;
   hitbox?: {
     width: number;
@@ -762,8 +801,8 @@ export interface RasterSourceProps extends TileSourceProps {
 }
 
 export interface LayerBaseProps<T = {}> extends Omit<ViewProps, 'style'> {
-  id?: string;
-  sourceID?: MapboxGL.StyleSource;
+  id: string;
+  sourceID?: string;
   sourceLayerID?: string;
   aboveLayerID?: string;
   belowLayerID?: string;
@@ -781,7 +820,8 @@ export interface CircleLayerProps extends LayerBaseProps {
   style?: StyleProp<CircleLayerStyle>;
 }
 
-export interface FillExtrusionLayerProps extends LayerBaseProps {
+export interface FillExtrusionLayerProps extends Omit<LayerBaseProps, 'id'> {
+  id: string;
   style?: StyleProp<FillExtrusionLayerStyle>;
 }
 
@@ -806,11 +846,11 @@ export interface HeatmapLayerProps extends LayerBaseProps {
 }
 
 export interface ImagesProps extends ViewProps {
-  images?: {assets?: string[]} & {[key: string]: ImageSourcePropType};
+  images?: { assets?: string[] } & { [key: string]: ImageSourcePropType };
 }
 
 export interface ImageSourceProps extends ViewProps {
-  id?: string;
+  id: string;
   url?: number | string;
   coordinates: [
     GeoJSON.Position,

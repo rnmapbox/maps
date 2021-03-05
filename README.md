@@ -6,28 +6,41 @@ _An unofficial React Native library for building maps with the [Mapbox Maps SDK 
 ![build_status](https://travis-ci.org/react-native-mapbox-gl/maps.svg?branch=master)
 [![Depfu](https://badges.depfu.com/badges/2eac6b62372619718b7f55ebbf8e9d8f/overview.svg)](https://depfu.com/github/react-native-mapbox-gl/maps?project_id=8248)
 
-## Installation
 
-**Dependencies**
+<img src="./assets/indoor_building_map_android.png"
+     alt="Indoor Building Map Android"
+     height="300"
+      />
+<img src="./assets/indoor_building_map_ios.png"
+     alt="Indoor Building Map iOS"
+     height="300"
+      />
+
+## Installation
+### Prerequisit
+On Android we support from version 6 (API 23) upwards  
+
+
+### Dependencies
 
 - [node](https://nodejs.org)
 - [npm](https://www.npmjs.com/)
 - [React Native](https://facebook.github.io/react-native/) (0.60+)
 
-**Git**
+### Git
 
 ```
 git clone git@github.com:react-native-mapbox-gl/maps.git
 cd maps
 ```
 
-**Yarn**
+### Yarn
 
 ```
 yarn add @react-native-mapbox-gl/maps
 ```
 
-**Npm**
+### Npm
 
 ```
 npm install @react-native-mapbox-gl/maps --save
@@ -39,7 +52,47 @@ npm install @react-native-mapbox-gl/maps --save
 - [iOS](/ios/install.md)
 - [Example](/example)
 
-## [Getting Started](/docs/GettingStarted.md)
+## Getting Started
+For more information, check out our [Getting Started](/docs/GettingStarted.md) section
+
+### Adding a map
+
+```js
+import React, { Component } from "react";
+import { StyleSheet, View } from "react-native";
+import MapboxGL from "@react-native-mapbox-gl/maps";
+
+MapboxGL.setAccessToken("<YOUR_ACCESSTOKEN>");
+
+const styles = StyleSheet.create({
+  page: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F5FCFF"
+  },
+  container: {
+    height: 300,
+    width: 300,
+    backgroundColor: "tomato"
+  },
+  map: {
+    flex: 1
+  }
+});
+
+export default class App extends Component {
+  render() {
+    return (
+      <View style={styles.page}>
+        <View style={styles.container}>
+          <MapboxGL.MapView style={styles.map} />
+        </View>
+      </View>
+    );
+  }
+}
+```
 
 ## Documentation
 

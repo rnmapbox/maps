@@ -10,11 +10,17 @@ import Page from './common/Page';
 
 const styles = StyleSheet.create({
   button: {
-    height: 60,
-    backgroundColor: colors.primary.blueLight,
     alignItems: 'center',
+    backgroundColor: colors.primary.blueLight,
+    height: 60,
     justifyContent: 'center',
   },
+  buttonText: {color: 'white'},
+  imageContainer: {flex: 0.5},
+  map: {
+    flex: 0.5,
+  },
+  mapContainer: {flex: 1},
 });
 
 const layerStyles = {
@@ -46,8 +52,8 @@ class TakeSnapshotWithMap extends React.Component {
   render() {
     return (
       <Page {...this.props}>
-        <View style={{flex: 1}}>
-          <MapboxGL.MapView ref={(ref) => (this.map = ref)} style={{flex: 0.5}}>
+        <View style={styles.mapContainer}>
+          <MapboxGL.MapView ref={(ref) => (this.map = ref)} style={styles.map}>
             <MapboxGL.Camera
               zoomLevel={16}
               pitch={45}
@@ -63,7 +69,7 @@ class TakeSnapshotWithMap extends React.Component {
             </MapboxGL.VectorSource>
           </MapboxGL.MapView>
 
-          <View style={{flex: 0.5}}>
+          <View style={styles.imageContainer}>
             {this.state.uri ? (
               <Image
                 resizeMode="contain"
@@ -76,7 +82,7 @@ class TakeSnapshotWithMap extends React.Component {
 
         <TouchableOpacity onPress={() => this.onTakeSnapshot()}>
           <View style={styles.button}>
-            <Text style={{color: 'white'}}>Take snapshot</Text>
+            <Text style={styles.buttonText}>Take snapshot</Text>
           </View>
         </TouchableOpacity>
       </Page>

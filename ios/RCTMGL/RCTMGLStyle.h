@@ -14,16 +14,16 @@
 
 - (id)initWithMGLStyle:(MGLStyle*)mglStyle;
 
-- (void)fillLayer:(MGLFillStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
-- (void)lineLayer:(MGLLineStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
-- (void)symbolLayer:(MGLSymbolStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
-- (void)circleLayer:(MGLCircleStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
-- (void)heatmapLayer:(MGLHeatmapStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
-- (void)fillExtrusionLayer:(MGLFillExtrusionStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
-- (void)rasterLayer:(MGLRasterStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
-- (void)hillshadeLayer:(MGLHillshadeStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
-- (void)backgroundLayer:(MGLBackgroundStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle;
-- (void)lightLayer:(MGLLight *)layer withReactStyle:(NSDictionary *)reactStyle;
+- (void)fillLayer:(MGLFillStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid;
+- (void)lineLayer:(MGLLineStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid;
+- (void)symbolLayer:(MGLSymbolStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid;
+- (void)circleLayer:(MGLCircleStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid;
+- (void)heatmapLayer:(MGLHeatmapStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid;
+- (void)fillExtrusionLayer:(MGLFillExtrusionStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid;
+- (void)rasterLayer:(MGLRasterStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid;
+- (void)hillshadeLayer:(MGLHillshadeStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid;
+- (void)backgroundLayer:(MGLBackgroundStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid;
+- (void)lightLayer:(MGLLight *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid;
 
 - (void)setFillStyleLayerVisibility:(MGLFillStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setFillAntialias:(MGLFillStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;

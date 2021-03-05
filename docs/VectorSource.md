@@ -14,8 +14,8 @@
 | attribution | `string` | `none` | `false` | An HTML or literal text string defining the buttons to be displayed in an action sheet when the<br/>source is part of a map view’s style and the map view’s attribution button is pressed. |
 | onPress | `func` | `none` | `false` | Source press listener, gets called when a user presses one of the children layers only<br/>if that layer has a higher z-index than another source layers |
 | hitbox | `shape` | `none` | `false` | Overrides the default touch hitbox(44x44 pixels) for the source layers |
-| &nbsp;&nbsp;width | `number` | `none` | `true` | FIX ME NO DESCRIPTION |
-| &nbsp;&nbsp;height | `number` | `none` | `true` | FIX ME NO DESCRIPTION |
+| &nbsp;&nbsp;width | `number` | `none` | `true` | `width` of hitbox |
+| &nbsp;&nbsp;height | `number` | `none` | `true` | `height` of hitbox |
 
 ### methods
 #### features([layerIDs][, filter])

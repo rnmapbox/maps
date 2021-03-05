@@ -29,7 +29,7 @@ class VectorSource extends NativeBridgeComponent(AbstractSource) {
     /**
      * A string that uniquely identifies the source.
      */
-    id: PropTypes.string,
+    id: PropTypes.string.isRequired,
 
     /**
      * A URL to a TileJSON configuration file describing the source’s contents and other metadata.
@@ -82,7 +82,13 @@ class VectorSource extends NativeBridgeComponent(AbstractSource) {
      * Overrides the default touch hitbox(44x44 pixels) for the source layers
      */
     hitbox: PropTypes.shape({
+      /**
+       * `width` of hitbox
+       */
       width: PropTypes.number.isRequired,
+      /**
+       * `height` of hitbox
+       */
       height: PropTypes.number.isRequired,
     }),
   };

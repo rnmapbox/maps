@@ -2,32 +2,25 @@ import React from 'react';
 import {Animated, View, Text, StyleSheet, Image} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
-import sheet from '../styles/sheet';
+import sheet from '../../styles/sheet';
 
-import BaseExamplePropTypes from './common/BaseExamplePropTypes';
-import Page from './common/Page';
-import Bubble from './common/Bubble';
+import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
+import Page from '../common/Page';
+import Bubble from '../common/Bubble';
 
 const ANNOTATION_SIZE = 45;
 
 const styles = StyleSheet.create({
   annotationContainer: {
-    width: ANNOTATION_SIZE,
-    height: ANNOTATION_SIZE,
     alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: 'white',
+    borderColor: 'rgba(0, 0, 0, 0.45)',
     borderRadius: ANNOTATION_SIZE / 2,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(0, 0, 0, 0.45)',
+    height: ANNOTATION_SIZE,
+    justifyContent: 'center',
     overflow: 'hidden',
-  },
-  annotationFill: {
-    width: ANNOTATION_SIZE - 3,
-    height: ANNOTATION_SIZE - 3,
-    borderRadius: (ANNOTATION_SIZE - 3) / 2,
-    backgroundColor: 'orange',
-    transform: [{scale: 0.6}],
+    width: ANNOTATION_SIZE,
   },
 });
 
@@ -42,9 +35,15 @@ class AnnotationWithRemoteImage extends React.Component {
         coordinate={coordinate}
         title={title}
         draggable
-        onDrag={(e) => console.log('onDrag:', e.properties.id, e.geometry.coordinates)}
-        onDragStart={(e) => console.log('onDragStart:', e.properties.id, e.geometry.coordinates)}
-        onDragEnd={(e) => console.log('onDragEnd:', e.properties.id, e.geometry.coordinates)}
+        onDrag={(e) =>
+          console.log('onDrag:', e.properties.id, e.geometry.coordinates)
+        }
+        onDragStart={(e) =>
+          console.log('onDragStart:', e.properties.id, e.geometry.coordinates)
+        }
+        onDragEnd={(e) =>
+          console.log('onDragEnd:', e.properties.id, e.geometry.coordinates)
+        }
         ref={(ref) => (this.annotationRef = ref)}>
         <View style={styles.annotationContainer}>
           <Image

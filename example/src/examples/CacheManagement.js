@@ -16,22 +16,11 @@ import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
 
 const styles = StyleSheet.create({
-  controlsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  control: {
-    width: '40%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: 16,
-    padding: 8,
-  },
   button: {
     alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 3,
     backgroundColor: 'blue',
+    borderRadius: 3,
+    justifyContent: 'center',
     padding: 8,
     width: '100%',
   },
@@ -39,12 +28,23 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
   },
+  control: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 16,
+    padding: 8,
+    width: '40%',
+  },
+  controlsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
   textInput: {
-    width: '100%',
     borderBottomColor: 'grey',
     borderBottomWidth: 1,
     marginBottom: 8,
     padding: 8,
+    width: '100%',
   },
 });
 

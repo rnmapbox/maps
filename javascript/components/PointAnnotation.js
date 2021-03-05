@@ -1,15 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  requireNativeComponent,
-  StyleSheet,
-  findNodeHandle,
-  UIManager,
-  Platform,
-} from 'react-native';
+import {requireNativeComponent, StyleSheet, Platform} from 'react-native';
 
 import {toJSONString, isFunction, viewPropTypes} from '../utils';
 import {makePoint} from '../utils/geoUtils';
+
+import NativeBridgeComponent from './NativeBridgeComponent';
 
 export const NATIVE_MODULE_NAME = 'RCTMGLPointAnnotation';
 
@@ -22,10 +18,16 @@ const styles = StyleSheet.create({
 });
 
 /**
- * PointAnnotation represents a one-dimensional shape located at a single geographical coordinate. Consider using ShapeSource and SymbolLayer instead, if you have many points and you have static images, they'll offer much better performance.
- * If you need interctive views please use MarkerView, as with PointAnnotation on android child views are rendered onto a bitmap for better performance.
+ * PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.
+ *
+ * Consider using ShapeSource and SymbolLayer instead, if you have many points and you have static images,
+ * they'll offer much better performance
+ *
+ * .
+ * If you need interctive views please use MarkerView,
+ * as with PointAnnotation on Android child views are rendered onto a bitmap for better performance.
  */
-class PointAnnotation extends React.PureComponent {
+class PointAnnotation extends NativeBridgeComponent(React.PureComponent) {
   static propTypes = {
     ...viewPropTypes,
 
@@ -68,7 +70,13 @@ class PointAnnotation extends React.PureComponent {
      * Defaults to the center of the view.
      */
     anchor: PropTypes.shape({
+      /**
+       * See anchor
+       */
       x: PropTypes.number.isRequired,
+      /**
+       * See anchor
+       */
       y: PropTypes.number.isRequired,
     }),
 
@@ -104,7 +112,7 @@ class PointAnnotation extends React.PureComponent {
   };
 
   constructor(props) {
-    super(props);
+    super(props, NATIVE_MODULE_NAME);
     this._onSelected = this._onSelected.bind(this);
     this._onDeselected = this._onDeselected.bind(this);
     this._onDragStart = this._onDragStart.bind(this);
@@ -156,13 +164,19 @@ class PointAnnotation extends React.PureComponent {
    */
   refresh() {
     if (Platform.OS === 'android') {
-      UIManager.dispatchViewManagerCommand(findNodeHandle(this), 'refresh', []);
+      this._runNativeCommand('refresh', this._nativeRef, []);
     }
+  }
+
+  _setNativeRef(nativeRef) {
+    this._nativeRef = nativeRef;
+    super._runPendingNativeCommands(nativeRef);
   }
 
   render() {
     const props = {
       ...this.props,
+      ref: (nativeRef) => this._setNativeRef(nativeRef),
       id: this.props.id,
       title: this.props.title,
       snippet: this.props.snippet,

@@ -1,9 +1,8 @@
 import React from 'react';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL, {SymbolLayerStyle} from '@react-native-mapbox-gl/maps';
 import {View} from 'react-native';
-let {MapView, Camera, Images, ShapeSource, SymbolLayer} = MapboxGL;
 
-import exampleIcon from '../../assets/example.png';
+const {MapView, Camera, Images, ShapeSource, SymbolLayer} = MapboxGL;
 
 const styles = {
   icon: {
@@ -18,9 +17,13 @@ const styles = {
       /* default */ 1,
     ],
   },
+  mapView: {flex: 1},
+  mapContainer: {flex: 1},
 };
 
-const featureCollection = {
+const exampleIcon = require('../../assets/example.png');
+
+const featureCollection: GeoJSON.FeatureCollection = {
   type: 'FeatureCollection',
   features: [
     {
@@ -77,19 +80,22 @@ class ShapeSourceIcon extends React.Component {
     },
   };
 
-  render() {
+  render(): JSX.Element {
     const {images} = this.state;
 
     return (
-      <View style={{flex: 1}}>
-        <MapView style={{flex: 1}}>
+      <View style={styles.mapContainer}>
+        <MapView style={styles.mapView}>
           <Camera
             zoomLevel={17}
             centerCoordinate={[-117.20611157485, 52.180961084261]}
           />
           <Images images={images} />
           <ShapeSource id="exampleShapeSource" shape={featureCollection}>
-            <SymbolLayer id="exampleIconName" style={styles.icon} />
+            <SymbolLayer
+              id="exampleIconName"
+              style={styles.icon as SymbolLayerStyle}
+            />
           </ShapeSource>
         </MapView>
       </View>

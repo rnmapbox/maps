@@ -175,6 +175,9 @@ static double const M2PI = M_PI * 2;
     } else if ([subview isKindOfClass:[RCTMGLNativeUserLocation class]]) {
         RCTMGLNativeUserLocation *nativeUserLocation = (RCTMGLNativeUserLocation *)subview;
         nativeUserLocation.map = nil;
+    } else if ([subview isKindOfClass:[RCTMGLLight class]]) {
+        RCTMGLLight *light = (RCTMGLLight*)subview;
+        light.map = nil;
     }  else {
         NSArray<id<RCTComponent>> *childSubViews = [subview reactSubviews];
         
@@ -482,7 +485,13 @@ static double const M2PI = M_PI * 2;
 
 - (NSURL*)_getStyleURLFromKey:(NSString *)styleURL
 {
-    return [NSURL URLWithString:styleURL];
+    NSURL *url = [NSURL URLWithString:styleURL];
+    if (url) {
+        return url;
+    } else if (RCTJSONParse(styleURL, nil)) {
+        return [RCTMGLUtils styleURLFromStyleJSON:styleURL];
+    }
+    return url;
 }
 
 - (void)_removeAllSourcesFromMap

@@ -80,6 +80,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Locale;
+import org.json.*;
 
 import javax.annotation.Nullable;
 
@@ -96,7 +97,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         MapView.OnWillStartRenderingFrameListener, MapView.OnDidFinishRenderingFrameListener,
         MapView.OnWillStartRenderingMapListener, MapView.OnDidFinishRenderingMapListener,
         MapView.OnDidFinishLoadingStyleListener, MapView.OnStyleImageMissingListener {
-    public static final String LOG_TAG = RCTMGLMapView.class.getSimpleName();
+    public static final String LOG_TAG = "RCTMGLMapView";
 
     private RCTMGLMapViewManager mManager;
     private Context mContext;
@@ -118,7 +119,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     private MapboxMap mMap;
 
     private LocalizationPlugin mLocalizationPlugin;
-    
+
     private String mStyleURL;
 
     private Integer mPreferredFramesPerSecond;
@@ -418,11 +419,26 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         }
     }
 
+    public boolean isJSONValid(String test) {
+        try {
+            new JSONObject(test);
+        } catch (JSONException ex) {
+            return false;
+        }
+        return true;
+    }
+
+
     @Override
     public void onMapReady(final MapboxMap mapboxMap) {
         mMap = mapboxMap;
 
-        mMap.setStyle(new Style.Builder().fromUrl(mStyleURL));
+        if (isJSONValid(mStyleURL)) {
+            mMap.setStyle(new Style.Builder().fromJson(mStyleURL));
+        } else {
+            mMap.setStyle(new Style.Builder().fromUri(mStyleURL));
+        }
+
 
         reflow();
 
@@ -528,7 +544,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     }
 
     public void addQueuedFeatures() {
-        if (mQueuedFeatures.size() > 0) {
+        if (mQueuedFeatures != null && mQueuedFeatures.size() > 0) {
             for (int i = 0; i < mQueuedFeatures.size(); i++) {
                 AbstractMapFeature feature = mQueuedFeatures.get(i);
                 feature.addToMap(this);
@@ -1072,7 +1088,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
                     uiSettings.setCompassGravity(Gravity.TOP | Gravity.END);
                     break;
                 case 2:
-                    uiSettings.setCompassGravity(Gravity.BOTTOM | Gravity.END);
+                    uiSettings.setCompassGravity(Gravity.BOTTOM | Gravity.START);
                     break;
                 case 3:
                     uiSettings.setCompassGravity(Gravity.BOTTOM | Gravity.END);
@@ -1118,13 +1134,13 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         setMaximumFps(mPreferredFramesPerSecond);
     }
 
-    private void updateInsets() {
-        if (mMap == null || mInsets == null) {
-            return;
-        }
+    public double[] getContentInset() {
+        if (mInsets == null) {
+            double[] result = {0,0,0,0};
 
-        final DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
-        int top = 0, right = 0, bottom = 0, left = 0;
+            return result;
+        }
+        double top = 0, right = 0, bottom = 0, left = 0;
 
         if (mInsets.size() == 4) {
             top = mInsets.getInt(0);
@@ -1143,10 +1159,24 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
             left = top;
         }
 
-        mMap.setPadding(Float.valueOf(left * metrics.scaledDensity).intValue(),
-                Float.valueOf(top * metrics.scaledDensity).intValue(),
-                Float.valueOf(right * metrics.scaledDensity).intValue(),
-                Float.valueOf(bottom * metrics.scaledDensity).intValue());
+        final DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
+
+        double[] result = {left * metrics.scaledDensity, top * metrics.scaledDensity, right * metrics.scaledDensity, bottom * metrics.scaledDensity};
+        return result;
+    }
+
+    private void updateInsets() {
+        if (mMap == null || mInsets == null) {
+            return;
+        }
+
+        double padding[] = getContentInset();
+        double top = padding[1], right = padding[2], bottom = padding[3], left = padding[0];
+
+        mMap.setPadding(Double.valueOf(left).intValue(),
+                Double.valueOf(top).intValue(),
+                Double.valueOf(right).intValue(),
+                Double.valueOf(bottom).intValue());
     }
 
     private void setLifecycleListeners() {
@@ -1174,10 +1204,13 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
 
     private WritableMap makeRegionPayload(Boolean isAnimated) {
         CameraPosition position = mMap.getCameraPosition();
+        if(position == null || position.target == null) {
+            return new WritableNativeMap();
+        }
         LatLng latLng = new LatLng(position.target.getLatitude(), position.target.getLongitude());
 
         WritableMap properties = new WritableNativeMap();
-        
+
         properties.putDouble("zoomLevel", position.zoom);
         properties.putDouble("heading", position.bearing);
         properties.putDouble("pitch", position.tilt);
@@ -1185,8 +1218,12 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
                 (null == isAnimated) ? mCameraChangeTracker.isAnimated() : isAnimated.booleanValue());
         properties.putBoolean("isUserInteraction", mCameraChangeTracker.isUserInteraction());
 
-        VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
-        properties.putArray("visibleBounds", GeoJSONUtils.fromLatLngBounds(visibleRegion.latLngBounds));
+        try {
+            VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+            properties.putArray("visibleBounds", GeoJSONUtils.fromLatLngBounds(visibleRegion.latLngBounds));
+        } catch(Exception ex) {
+            Logger.e(LOG_TAG, String.format("An error occurred while attempting to make the region: %s", ex.getMessage()));
+        }
 
         return GeoJSONUtils.toPointFeature(latLng, properties);
     }
@@ -1194,7 +1231,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     public void sendRegionChangeEvent(boolean isAnimated) {
         IEvent event = new MapChangeEvent(this, EventTypes.REGION_DID_CHANGE,
                 makeRegionPayload(new Boolean(isAnimated)));
-        
+
                 mManager.handleEvent(event);
         mCameraChangeTracker.setReason(CameraChangeTracker.EMPTY);
     }
@@ -1338,7 +1375,10 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         coords.putDouble("latitude", location.getLatitude());
         coords.putDouble("altitude", location.getAltitude());
         coords.putDouble("accuracy", location.getAccuracy());
-        coords.putDouble("heading", location.getBearing());
+        // A better solution will be to pull the heading from the compass engine, 
+        // unfortunately the api is not publicly available in the mapbox sdk
+        coords.putDouble("heading", location.getBearing()); 
+        coords.putDouble("course", location.getBearing());
         coords.putDouble("speed", location.getSpeed());
 
         positionProperties.putMap("coords", coords);

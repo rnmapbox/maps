@@ -14,10 +14,19 @@
 - (void)setUrl:(NSString *)url
 {
     _url = url;
-    
+
     if (self.source != nil) {
         MGLImageSource *source = (MGLImageSource *)self.source;
         source.URL = [NSURL URLWithString:_url];
+    }
+}
+
+- (void)setCoordinates:(NSArray<NSArray<NSNumber *> *> *)coordinates
+{
+    _coordinates = coordinates;
+    if (self.source != nil) {
+        MGLImageSource *source = (MGLImageSource *)self.source;
+        source.coordinates = [self _makeCoordQuad];
     }
 }
 

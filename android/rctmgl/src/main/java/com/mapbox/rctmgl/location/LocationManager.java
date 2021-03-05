@@ -32,7 +32,7 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
     static final long DEFAULT_FASTEST_INTERVAL_MILLIS = 1000;
     static final long DEFAULT_INTERVAL_MILLIS = 1000;
 
-    public static final String LOG_TAG = LocationManager.class.getSimpleName();
+    public static final String LOG_TAG = "LocationManager";
 
     private LocationEngine locationEngine;
     private Context context;
@@ -151,9 +151,6 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
 
     public void onLocationChanged(Location location) {
         lastLocation = location;
-        Log.d(LOG_TAG, String.format(Locale.ENGLISH, "Tick [%f, %f]", location.getLongitude(), location.getLatitude()));
-        Log.d(LOG_TAG, String.format(Locale.ENGLISH, "Listener count %d", listeners.size()));
-
         for (OnUserLocationChange listener : listeners) {
             listener.onLocationChange(location);
         }

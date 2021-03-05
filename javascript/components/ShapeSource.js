@@ -32,7 +32,7 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
     /**
      * A string that uniquely identifies the source.
      */
-    id: PropTypes.string,
+    id: PropTypes.string.isRequired,
 
     /**
      * An HTTP(S) URL, absolute file URL, or local file URL relative to the current application’s resource bundle.
@@ -101,7 +101,13 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
      * Overrides the default touch hitbox(44x44 pixels) for the source layers
      */
     hitbox: PropTypes.shape({
+      /**
+       * `width` of hitbox
+       */
       width: PropTypes.number.isRequired,
+      /**
+       * `height` of hitbox
+       */
       height: PropTypes.number.isRequired,
     }),
   };

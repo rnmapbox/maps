@@ -26,6 +26,15 @@
     }
 }
 
+-(id)init {
+     if (self = [super init])  {
+         self.coordinate = kCLLocationCoordinate2DInvalid;
+         self.bounds = MGLCoordinateBoundsMake(kCLLocationCoordinate2DInvalid, kCLLocationCoordinate2DInvalid);
+     }
+     return self;
+}
+
+
 + (CameraStop*)fromDictionary:(NSDictionary *)args
 {
     CameraStop *stop = [[CameraStop alloc] init];

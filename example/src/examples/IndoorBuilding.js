@@ -12,8 +12,8 @@ import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 
 const styles = StyleSheet.create({
   slider: {
-    flex: 1,
     alignItems: 'stretch',
+    flex: 1,
     justifyContent: 'center',
     maxHeight: 60,
     paddingHorizontal: 24,

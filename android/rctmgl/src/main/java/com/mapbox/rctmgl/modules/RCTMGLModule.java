@@ -305,7 +305,6 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void addCustomHeader(final String headerName, final String headerValue) {
-        Log.d("header", String.format("add custom header headerName=%s", headerName));
         mReactContext.runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {

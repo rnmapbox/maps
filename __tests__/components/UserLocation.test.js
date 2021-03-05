@@ -16,6 +16,7 @@ const position = {
     latitude: 51.5462244,
     longitude: 4.1036916,
     speed: 0.08543474227190018,
+    course: 251.5358428955078,
   },
   timestamp: 1573730357879,
 };
@@ -105,6 +106,7 @@ describe('UserLocation', () => {
           latitude: 51.5462244,
           longitude: 4.1036916,
           speed: 0.08543474227190018,
+          course: 251.5358428955078,
         },
         timestamp: 1573730357879,
       });
@@ -142,6 +144,7 @@ describe('UserLocation', () => {
 
     beforeEach(() => {
       ul = new UserLocation();
+
       jest.spyOn(locationManager, 'start').mockImplementation(jest.fn());
       jest.spyOn(locationManager, 'stop').mockImplementation(jest.fn());
       jest
@@ -150,11 +153,7 @@ describe('UserLocation', () => {
 
       ul.setState = jest.fn();
 
-      ul.props = {
-        animated: true,
-        visible: true,
-        minDisplacement: 0,
-      };
+      ul.props = UserLocation.defaultProps;
 
       ul._isMounted = true;
     });
@@ -187,7 +186,7 @@ describe('UserLocation', () => {
         expect(ul.locationManagerRunning).toStrictEqual(true);
         expect(locationManager.start).toHaveBeenCalledTimes(1);
         expect(locationManager.getLastKnownLocation).toHaveBeenCalledTimes(1);
-        expect(ul.setState).toHaveBeenCalledTimes(1);
+        expect(ul.setState).toHaveBeenCalledTimes(2);
         expect(ul.setState).toHaveBeenCalledWith({
           coordinates: lastKnownLocation,
           heading,
@@ -207,7 +206,8 @@ describe('UserLocation', () => {
         expect(ul.locationManagerRunning).toStrictEqual(false);
         // only once from start
         expect(locationManager.start).toHaveBeenCalledTimes(1);
-        expect(locationManager.stop).toHaveBeenCalledTimes(1);
+        // stop should not be called
+        expect(locationManager.stop).not.toHaveBeenCalled();
       });
     });
 

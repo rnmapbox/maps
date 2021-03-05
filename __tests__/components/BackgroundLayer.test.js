@@ -7,7 +7,9 @@ export const NATIVE_MODULE_NAME = 'RCTMGLBackgroundLayer';
 
 describe('BackgroundLayer', () => {
   test('renders correctly with default props', () => {
-    const {queryByTestId} = render(<BackgroundLayer />);
+    const {queryByTestId} = render(
+      <BackgroundLayer id="requiredBackgroundLayerID" />,
+    );
 
     const backgroundLayer = queryByTestId('rctmglBackgroundLayer');
     const {props} = backgroundLayer;
