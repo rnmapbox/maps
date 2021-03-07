@@ -52,11 +52,13 @@
     "@typescript-eslint/parser": "^4.14.0",
     "babel-jest": "^26.6.3",
     "babel-plugin-module-resolver": "^4.1.0",
+    "detox": "^18.7.1",
     "eslint": "^7.3.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.22.0",
     "glob-to-regexp": "^0.4.0",
     "jest": "^26.6.3",
+    "jest-circus": "^26.6.3",
     "jetifier": "^1.6.4",
     "metro-react-native-babel-preset": "^0.64.0",
     "react-test-renderer": "16.13.1",
@@ -67,5 +69,44 @@
     "setupFilesAfterEnv": [
       "../setup-jest"
     ]
+  },
+  "detox": {
+    "testRunner": "jest",
+    "runnerConfig": "e2e/config.json",
+    "apps": {
+      "ios": {
+        "type": "ios.app",
+        "build": "xcodebuild CODE_SIGN_IDENTITY=\"\" CODE_SIGNING_REQUIRED=\"NO\" CODE_SIGN_ENTITLEMENTS=\"\" CODE_SIGNING_ALLOWED=\"NO\" -workspace ios/RNMapboxGLExample.xcworkspace -configuration Debug -scheme RNMapboxGLExample -derivedDataPath ios/build",
+        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/RNMapboxGLExample.app"
+      },
+      "android": {
+        "type": "android.apk",
+        "binaryPath": "SPECIFY_PATH_TO_YOUR_APP_BINARY"
+      }
+    },
+    "devices": {
+      "simulator": {
+        "type": "ios.simulator",
+        "device": {
+          "type": "iPhone 11"
+        }
+      },
+      "emulator": {
+        "type": "android.emulator",
+        "device": {
+          "avdName": "Pixel_3a_API_30_x86"
+        }
+      }
+    },
+    "configurations": {
+      "ios": {
+        "device": "simulator",
+        "app": "ios"
+      },
+      "android": {
+        "device": "emulator",
+        "app": "android"
+      }
+    }
   }
 }
