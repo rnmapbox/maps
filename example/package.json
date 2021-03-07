@@ -35,7 +35,7 @@
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.4.0",
     "react-native-svg": "^12.1.0",
-    "react-native-vector-icons": "6.6.0",
+    "react-native-vector-icons": "8.1.0",
     "react-navigation": "^4.3.7",
     "react-navigation-stack": "^2.3.11",
     "url": "^0.11.0"
