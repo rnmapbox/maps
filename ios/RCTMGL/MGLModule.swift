@@ -25,7 +25,15 @@ class MGLModule : NSObject {
             "LineJoin":
                 ["Round": LineJoin.round],
             "LocationCallbackName":
-                ["Update": RCT_MAPBOX_USER_LOCATION_UPDATE]
+                ["Update": RCT_MAPBOX_USER_LOCATION_UPDATE],
+            "CameraModes":
+                [
+                    "Ease": "ease",
+                ],
+            "EventTypes":
+                [
+                    "RegionDidChange" : RCTMGLEvent.EventType.regionDidChange.rawValue
+                ],
         ];
     }
     
