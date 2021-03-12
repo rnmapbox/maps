@@ -4,11 +4,17 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios --simulator=\"iPhone SE (2nd generation)\"",
+    "pod:install": "cd ios && pod install",
+    "preios": "yarn pod:install",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint ./src",
-    "postinstall": "node ./scripts/set_access_token.js && jetifier"
+    "postinstall": "node ./scripts/set_access_token.js && jetifier",
+    "purge:android": "(cd android && ./gradlew --stop) && rm -rf ~/.gradle/caches/ android/app/build",
+    "purge:ios": "rm -rf ios/Pods/* ~/Library/Caches/CocoaPods Pods ~/Library/Developer/Xcode/DerivedData && pod cache clean --all",
+    "purge:js": "rm -rf node_modules && yarn cache clean && watchman watch-del-all",
+    "purge": "yarn purge:js && yarn purge:android && yarn purge:ios"
   },
   "dependencies": {
     "@mapbox/geo-viewport": "^0.4.0",
