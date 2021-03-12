@@ -6,20 +6,20 @@ all changes not yet in a release go here
 
 ### Breaking changes:
 
-* Use `pre_install` hook to support non `use_frameworks!` usage #1262. Please add the following to your `Podfile`:
-   ```ruby
-      pre_install do |installer|
-        $RNMBGL.pre_install(installer)
-        ...
-      end
-   ```
+Use `pre_install` hook to support non `use_frameworks!` usage #1262. Please add the following to your `Podfile`:
+```ruby
+pre_install do |installer|
+  $RNMBGL.pre_install(installer)
+  ...
+end
+```
    and
-   ```ruby
-      post_install do |installer|
-        $RNMBGL.post_install(installer)
-        ...
-      end
-   ```
+```ruby
+post_install do |installer|
+  $RNMBGL.post_install(installer)
+  ...
+end
+```
 
 ### Other changes:
 * Add course to the location events #1209
