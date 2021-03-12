@@ -1,5 +1,128 @@
+## UNRELEASED
+
+
+## 8.2.0-beta1
+
+### Breaking changes:
+
+* Use `pre_install` hook to support non `use_frameworks!` usage #1262. Please add the following to your `Podfile`:
+   ```ruby
+      pre_install do |installer|
+        $RNMBGL.pre_install(installer)
+        ...
+      end
+   ```
+   and
+   ```ruby
+      post_install do |installer|
+        $RNMBGL.post_install(installer)
+        ...
+      end
+   ```
+
+### Other changes:
+* Add course to the location events #1209
+* Fix heading indicator alignment #1215
+* App crash when ProGuard is set to true #1184 
+* [iOS] Implemented ShapeSource.features(...) method #1140
+* style json support on styleURL #1102
+* Fix: onUpdate not called when renderMode is native #1135 
+
+
+## 8.1.0
+
+- By default [use 5.9.0 Mapbox on iOS as 8.1.0rc8 and before](https://github.com/react-native-mapbox-gl/maps/pull/1120)
+- Fix [crash during styleURL change on adroid](https://github.com/react-native-mapbox-gl/maps/pull/1119)
+- Fix [warning Sending LogEvent with no listeners registered.](https://github.com/react-native-mapbox-gl/maps/pull/1108)
+- Fix [race in close map and icon image download](https://github.com/react-native-mapbox-gl/maps/pull/1089)
+- Fix [android padding](https://github.com/react-native-mapbox-gl/maps/pull/1087)
+- Android [custom mapboxgl version](https://github.com/react-native-mapbox-gl/maps/pull/1088)
+- Fix [support 6.* of MapboxGL IOS by setting `$ReactNativeMapboxGLIOSVersion = "6.2.1"` in Podfile](https://github.com/react-native-mapbox-gl/maps/pull/1044)
+- Fix [map rendered at (0,0,0,0) on iOS](https://github.com/react-native-mapbox-gl/maps/pull/1084)
+- Fix [edge Padding + auto limit padding on iOS](https://github.com/react-native-mapbox-gl/maps/pull/1057)
+- Fix [coordinate 0,0 was considered invalid on IOS](https://github.com/react-native-mapbox-gl/maps/pull/1076)
+- Fix [refresh on PointAnnotation on Android](https://github.com/react-native-mapbox-gl/maps/pull/1062)
+- Fix [Image source coordinates update on the fly](https://github.com/react-native-mapbox-gl/maps/pull/1036/files)
+- Upgrade to [ios 5.9.0](https://github.com/mapbox/mapbox-gl-native-ios/releases/tag/ios-v5.9.0)
+- Upgrade to [android 9.1.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.1.0)
+- Set default Mapbox logging verbosity to warning. (Change it using Logger.setLogLevel('verbose'))
+- Error/Warn mapbox log messages are treated as redbox/yellowbox errors/warnings. (Override it using Logger.setLoggerCallback(log => { return true })
+- Native user location [#825](https://github.com/react-native-mapbox-gl/maps/pull/825)
+
+## 8.1.0-rc11
+
+- By default [use 5.9.0 Mapbox on iOS as 8.1.0rc8 and before](https://github.com/react-native-mapbox-gl/maps/pull/1120)
+- Fix [crash during styleURL change on adroid](https://github.com/react-native-mapbox-gl/maps/pull/1119)
+- Fix [warning Sending LogEvent with no listeners registered.](https://github.com/react-native-mapbox-gl/maps/pull/1108)
+- Fix [race in close map and icon image download](https://github.com/react-native-mapbox-gl/maps/pull/1089)
+- Fix [android padding](https://github.com/react-native-mapbox-gl/maps/pull/1087)
+- Android [custom mapboxgl version](https://github.com/react-native-mapbox-gl/maps/pull/1088)
+- Fix [support 6.* of MapboxGL IOS by setting `$ReactNativeMapboxGLIOSVersion = "6.2.1"` in Podfile](https://github.com/react-native-mapbox-gl/maps/pull/1044)
+- Fix [map rendered at (0,0,0,0) on iOS](https://github.com/react-native-mapbox-gl/maps/pull/1084)
+- Fix [edge Padding + auto limit padding on iOS](https://github.com/react-native-mapbox-gl/maps/pull/1057)
+- Fix [coordinate 0,0 was considered invalid on IOS](https://github.com/react-native-mapbox-gl/maps/pull/1076)
+- Fix [refresh on PointAnnotation on Android](https://github.com/react-native-mapbox-gl/maps/pull/1062)
+- Fix [Image source coordinates update on the fly](https://github.com/react-native-mapbox-gl/maps/pull/1036/files)
+- Upgrade to [ios 5.9.0](https://github.com/mapbox/mapbox-gl-native-ios/releases/tag/ios-v5.9.0)
+- Upgrade to [android 9.1.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.1.0)
+- Set default Mapbox logging verbosity to warning. (Change it using Logger.setLogLevel('verbose'))
+- Error/Warn mapbox log messages are treated as redbox/yellowbox errors/warnings. (Override it using Logger.setLoggerCallback(log => { return true })
+- Native user location [#825](https://github.com/react-native-mapbox-gl/maps/pull/825)
+
+## 8.1.0-rc10
+
+- By default [use 5.9.0 Mapbox on iOS as 8.1.0rc8 and before](https://github.com/react-native-mapbox-gl/maps/pull/1120)
+- Fix [crash during styleURL change on adroid](https://github.com/react-native-mapbox-gl/maps/pull/1119)
+- Fix [warning Sending LogEvent with no listeners registered.](https://github.com/react-native-mapbox-gl/maps/pull/1108)
+- Fix [race in close map and icon image download](https://github.com/react-native-mapbox-gl/maps/pull/1089)
+- Fix [android padding](https://github.com/react-native-mapbox-gl/maps/pull/1087)
+- Android [custom mapboxgl version](https://github.com/react-native-mapbox-gl/maps/pull/1088)
+- Fix [support 6.* of MapboxGL IOS by setting `$ReactNativeMapboxGLIOSVersion = "6.2.1"` in Podfile](https://github.com/react-native-mapbox-gl/maps/pull/1044)
+- Fix [map rendered at (0,0,0,0) on iOS](https://github.com/react-native-mapbox-gl/maps/pull/1084)
+- Fix [edge Padding + auto limit padding on iOS](https://github.com/react-native-mapbox-gl/maps/pull/1057)
+- Fix [coordinate 0,0 was considered invalid on IOS](https://github.com/react-native-mapbox-gl/maps/pull/1076)
+- Fix [refresh on PointAnnotation on Android](https://github.com/react-native-mapbox-gl/maps/pull/1062)
+- Fix [Image source coordinates update on the fly](https://github.com/react-native-mapbox-gl/maps/pull/1036/files)
+- Upgrade to [ios 5.9.0](https://github.com/mapbox/mapbox-gl-native-ios/releases/tag/ios-v5.9.0)
+- Upgrade to [android 9.1.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.1.0)
+- Set default Mapbox logging verbosity to warning. (Change it using Logger.setLogLevel('verbose'))
+- Error/Warn mapbox log messages are treated as redbox/yellowbox errors/warnings. (Override it using Logger.setLoggerCallback(log => { return true })
+- Native user location [#825](https://github.com/react-native-mapbox-gl/maps/pull/825)
+
+## 8.1.0.rc10
+
+- By default [use 5.9.0 Mapbox on iOS as 8.1.0rc8 and before](https://github.com/react-native-mapbox-gl/maps/pull/1120)
+- Fix [crash during styleURL change on adroid](https://github.com/react-native-mapbox-gl/maps/pull/1119)
+- Fix [warning Sending LogEvent with no listeners registered.](https://github.com/react-native-mapbox-gl/maps/pull/1108)
+
+## 8.1.0.rc9
+
+- Fix [race in close map and icon image download](https://github.com/react-native-mapbox-gl/maps/pull/1089)
+
+## 8.1.0.rc8
+
+- Fix [android padding](https://github.com/react-native-mapbox-gl/maps/pull/1087)
+- Android [custome mapboxgl version](https://github.com/react-native-mapbox-gl/maps/pull/1088)
+
+## 8.1.0.rc7
+
+- Fix [map rendered at (0,0,0,0) on iOS](https://github.com/react-native-mapbox-gl/maps/pull/1084)
+
+## 8.1.0.rc6
+
+- Fix [edge Padding + auto limit padding on iOS](https://github.com/react-native-mapbox-gl/maps/pull/1057)
+- Fix [coordinate 0,0 was considered invalid on IOS](https://github.com/react-native-mapbox-gl/maps/pull/1076)
+- Fix [refresh on PointAnnotation on Android](https://github.com/react-native-mapbox-gl/maps/pull/1062)
+
+## 8.1.0.rc5
+- Fix [support 6.* of MapboxGL IOS by setting `$ReactNativeMapboxGLIOSVersion = "6.2.1"` in Podfile](https://github.com/react-native-mapbox-gl/maps/pull/1044)
+- Fix [Image source coordinates update on the fly](https://github.com/react-native-mapbox-gl/maps/pull/1036/files)
+
+## 8.1.0.rc4
 ## 8.1.0.rc3
 
+- Fix [android crashes](https://github.com/react-native-mapbox-gl/maps/pull/963)
+- Fix [android padding addition](https://github.com/react-native-mapbox-gl/maps/pull/973)
 - Fix [iOS interface for getAccessToken() on Android](https://github.com/react-native-mapbox-gl/maps/pull/954)
 
 ## 8.1.0.rc2
