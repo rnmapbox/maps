@@ -12,7 +12,7 @@
     "lint": "eslint ./src",
     "postinstall": "node ./scripts/set_access_token.js && jetifier",
     "purge:android": "(cd android && ./gradlew --stop) && rm -rf ~/.gradle/caches/ android/app/build",
-    "purge:ios": "rm -rf ios/Pods/* ~/Library/Caches/CocoaPods Pods ~/Library/Developer/Xcode/DerivedData && pod cache clean --all",
+    "purge:ios": "rm -rf ios/Pods/* ios/build ~/Library/Caches/CocoaPods ~/Library/Developer/Xcode/DerivedData && pod cache clean --all",
     "purge:js": "rm -rf node_modules && yarn cache clean && watchman watch-del-all",
     "purge": "yarn purge:js && yarn purge:android && yarn purge:ios"
   },
@@ -82,12 +82,8 @@
     "apps": {
       "ios": {
         "type": "ios.app",
-        "build": "xcodebuild CODE_SIGN_IDENTITY=\"\" CODE_SIGNING_REQUIRED=\"NO\" CODE_SIGN_ENTITLEMENTS=\"\" CODE_SIGNING_ALLOWED=\"NO\" -workspace ios/RNMapboxGLExample.xcworkspace -configuration Debug -scheme RNMapboxGLExample -derivedDataPath ios/build",
+        "build": "xcodebuild -quiet -workspace ios/RNMapboxGLExample.xcworkspace -configuration Debug -scheme RNMapboxGLExample -sdk iphonesimulator  -derivedDataPath ios/build -arch x86_64",
         "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/RNMapboxGLExample.app"
-      },
-      "android": {
-        "type": "android.apk",
-        "binaryPath": "SPECIFY_PATH_TO_YOUR_APP_BINARY"
       }
     },
     "devices": {
@@ -96,22 +92,12 @@
         "device": {
           "type": "iPhone 11"
         }
-      },
-      "emulator": {
-        "type": "android.emulator",
-        "device": {
-          "avdName": "Pixel_3a_API_30_x86"
-        }
       }
     },
     "configurations": {
       "ios": {
         "device": "simulator",
         "app": "ios"
-      },
-      "android": {
-        "device": "emulator",
-        "app": "android"
       }
     }
   }
