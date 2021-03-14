@@ -51,5 +51,5 @@ jobs:
 
     - run: brew tap wix/brew
     - run: brew install applesimutils
-    - run: yarn detox build --configuration ios
-    - run: yarn detox test --configuration ios --cleanup
+    - run: yarn detox build
+    - run: yarn detox test --cleanup
