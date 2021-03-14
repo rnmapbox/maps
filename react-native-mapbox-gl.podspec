@@ -13,15 +13,7 @@ TargetsToChangeToDynamic = ['MapboxMobileEvents']
 $RNMBGL = Object.new
 
 def $RNMBGL.post_install(installer)
-  installer.pod_targets.each do |pod|
-    if TargetsToChangeToDynamic.include?(pod.name)
-      if pod.send(:build_type) != Pod::BuildType.dynamic_framework
-        pod.instance_variable_set(:@build_type,Pod::BuildType.dynamic_framework)
-        puts "* Changed #{pod.name} to `#{pod.send(:build_type)}`"
-        fail "Unable to change build_type" unless mobile_events_target.send(:build_type) == Pod::BuildType.dynamic_framework
-      end
-    end
-  end
+  # Noop
 end
 
 def $RNMBGL.pre_install(installer)
