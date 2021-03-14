@@ -14,23 +14,26 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Node
-      uses: actions/setup-node@v2.1.5
-
     - name: Access Token
       run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
       env:
         MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
 
-    - name: Install Dependencies      
+    - name: Install Node
+      uses: actions/setup-node@v2.1.5
+      with:
+        node-version: '14'
+    
+    - name: Install Yarn Dependencies
       run: yarn install
 
-    - name: Update Pods
+    - name: Install Pod Dependencies
+      run: cd ios && pod install
+    
+    - name: Install Detox Dependencies
       run: |
-        gem update cocoapods xcodeproj
-        (cd ios && pod install)
+        brew tap wix/brew
+        brew install applesimutils
 
-    - run: brew tap wix/brew
-    - run: brew install applesimutils
     - run: yarn detox build
-    - run: yarn detox test --debug-synchronization 200
+    - run: yarn e2e:ios
