@@ -82,7 +82,7 @@
     "apps": {
       "ios": {
         "type": "ios.app",
-        "build": "xcodebuild -quiet -workspace ios/RNMapboxGLExample.xcworkspace -configuration Debug -scheme RNMapboxGLExample -sdk iphonesimulator  -derivedDataPath ios/build -arch x86_64",
+        "build": "xcodebuild -quiet -workspace ios/RNMapboxGLExample.xcworkspace -configuration Debug -scheme RNMapboxGLExample -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,name=iPhone SE (2nd generation)'",
         "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/RNMapboxGLExample.app"
       }
     },
