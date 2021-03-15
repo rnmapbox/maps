@@ -276,7 +276,9 @@ declare namespace MapboxGL {
    * Sources
    */
   class VectorSource extends Component<VectorSourceProps> { }
-  class ShapeSource extends Component<ShapeSourceProps> { }
+  class ShapeSource extends Component<ShapeSourceProps> {
+    getClusterExpansionZoom(clusterId: number): Promise<number>;
+  }
   class RasterSource extends Component<RasterSourceProps> { }
 
   /**
