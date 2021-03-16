@@ -12,6 +12,7 @@ import {
   StyleProp,
   ImageSourcePropType,
 } from 'react-native';
+import ReactNative from 'react-native';
 
 import {
   Geometry,
@@ -154,6 +155,24 @@ declare namespace MapboxGL {
     class SymbolLayer extends Component<SymbolLayerProps> { }
     class RasterLayer extends Component<RasterLayerProps> { }
     class BackgroundLayer extends Component<BackgroundLayerProps> { }
+  }
+
+  /**
+   * Classes
+   */
+
+   class AnimatedPoint {
+    constructor(point?: GeoJSON.Point);
+    longitude: ReactNative.Animated.Value<number>;
+    latitude: ReactNative.Animated.Value<number>;
+    setValue: (point: GeoJSON.Point) => void;
+    setOffset: (point: GeoJSON.Point) => void;
+    flattenOffset: () => void;
+    stopAnimation: (cb?: () => GeoJSON.Point) => void;
+    addListener: (cb?: () => GeoJSON.Point) => void;
+    removeListener: (id: string) => void;
+    spring: (config: Record<string, any>) => ReactNative.Animated.CompositeAnimation;
+    timing: (config: Record<string, any>) => ReactNative.Animated.CompositeAnimation;
   }
 
   /**
