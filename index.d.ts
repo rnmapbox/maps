@@ -466,6 +466,7 @@ export interface MapViewProps extends ViewProps {
   surfaceView?: boolean;
   regionWillChangeDebounceTime?: number;
   regionDidChangeDebounceTime?: number;
+  tintColor?: string;
 
   onPress?: (feature: GeoJSON.Feature) => void;
   onLongPress?: (feature: GeoJSON.Feature) => void;

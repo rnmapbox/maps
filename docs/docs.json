@@ -2807,7 +2807,7 @@
         "required": false,
         "type": "union",
         "default": "none",
-        "description": "MapView's tintColor - ios only\n@platform ios"
+        "description": "MapView's tintColor"
       },
       {
         "name": "logoEnabled",

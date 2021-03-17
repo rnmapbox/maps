@@ -153,6 +153,8 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
 
     private LocationComponentManager mLocationComponentManager = null;
 
+    private @Nullable Integer mTintColor = null;
+
     public RCTMGLMapView(Context context, RCTMGLMapViewManager manager, MapboxMapOptions options) {
         super(context, options);
 
@@ -1117,6 +1119,10 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
             );
         }
 
+        if (mTintColor != null) {
+            uiSettings.setAttributionTintColor(mTintColor);
+        }
+
         if (mLogoEnabled != null && uiSettings.isLogoEnabled() != mLogoEnabled) {
             uiSettings.setLogoEnabled(mLogoEnabled);
         }
@@ -1440,9 +1446,9 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         coords.putDouble("latitude", location.getLatitude());
         coords.putDouble("altitude", location.getAltitude());
         coords.putDouble("accuracy", location.getAccuracy());
-        // A better solution will be to pull the heading from the compass engine, 
+        // A better solution will be to pull the heading from the compass engine,
         // unfortunately the api is not publicly available in the mapbox sdk
-        coords.putDouble("heading", location.getBearing()); 
+        coords.putDouble("heading", location.getBearing());
         coords.putDouble("course", location.getBearing());
         coords.putDouble("speed", location.getSpeed());
 
@@ -1492,5 +1498,14 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
             mLocationComponentManager = new LocationComponentManager(this, mContext);
         }
         return mLocationComponentManager;
+    }
+
+    public @Nullable Integer getTintColor() {
+        return mTintColor;
+    }
+
+    public void setTintColor(@Nullable Integer tintColor) {
+        mTintColor = tintColor;
+        updateUISettings();
     }
 }
