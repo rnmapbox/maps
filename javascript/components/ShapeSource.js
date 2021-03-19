@@ -147,6 +147,18 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
     return res.data;
   }
 
+  async getClusterLeaves(clusterId, number, offset) {
+    const res = await this._runNativeCommand('getClusterLeaves', this._nativeRef, [
+      clusterId, number, offset
+    ]);
+
+    if (isAndroid()) {
+      return JSON.parse(res.data);
+    }
+
+    return res.data;
+  }
+
   setNativeProps(props) {
     const shallowProps = Object.assign({}, props);
 
