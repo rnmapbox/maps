@@ -147,6 +147,24 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
     return res.data;
   }
 
+  /**
+   * Returns the zoom needed to expand the cluster.
+   *
+   * @example
+   * const zoom = await shapeSource.getClusterExpansionZoom(clusterId);
+   *
+   * @param  {number} clusterId - The id of the cluster to expand.
+   * @return {number}
+   */
+  async getClusterExpansionZoom(clusterId) {
+    const res = await this._runNativeCommand(
+      'getClusterExpansionZoom',
+      this._nativeRef,
+      [clusterId],
+    );
+    return res.data;
+  }
+
   setNativeProps(props) {
     const shallowProps = Object.assign({}, props);
 

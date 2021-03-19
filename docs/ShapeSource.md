@@ -36,6 +36,22 @@ shapeSource.features()
 ```
 
 
+#### getClusterExpansionZoom(clusterId)
+
+Returns the zoom needed to expand the cluster.
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `clusterId` | `number` | `Yes` | The id of the cluster to expand. |
+
+
+
+```javascript
+const zoom = await shapeSource.getClusterExpansionZoom(clusterId);
+```
+
+
 #### onPress(event)
 
 
