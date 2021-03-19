@@ -14,8 +14,7 @@
     "purge:android": "(cd android && ./gradlew --stop) && rm -rf ~/.gradle/caches/ android/app/build",
     "purge:ios": "rm -rf ios/Pods/* ios/build ~/Library/Caches/CocoaPods ~/Library/Developer/Xcode/DerivedData && pod cache clean --all",
     "purge:js": "rm -rf node_modules && yarn cache clean && watchman watch-del-all",
-    "purge": "yarn purge:js && yarn purge:android && yarn purge:ios",
-    "e2e:ios": "yarn start & METRO_BUNDLER_PID=$!; yarn detox test --debug-synchronization 200; DETOX_EXIT_CODE=$?; kill $METRO_BUNDLER_PID; exit $DETOX_EXIT_CODE"
+    "purge": "yarn purge:js && yarn purge:android && yarn purge:ios"
   },
   "dependencies": {
     "@mapbox/geo-viewport": "^0.4.0",
