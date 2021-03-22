@@ -81,7 +81,7 @@ class Camera extends React.Component {
     animationDuration: PropTypes.number,
 
     /**
-     * The animationstyle when the camara updates. One of; `flyTo`, `easeTo`, `linearTo`, `moveTo`
+     * The animationstyle when the camara updates. One of: `flyTo`, `easeTo`, `linearTo`, `moveTo`
      */
     animationMode: PropTypes.oneOf(['flyTo', 'easeTo', 'linearTo', 'moveTo']),
 
