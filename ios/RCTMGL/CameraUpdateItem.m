@@ -32,11 +32,13 @@
     if (_cameraStop.mode == [NSNumber numberWithInt:RCT_MAPBOX_CAMERA_MODE_FLIGHT]) {
         [self _flyToCamera:mapView withCompletionHandler:completionHandler];
     } else if (_cameraStop.mode == [NSNumber numberWithInt:RCT_MAPBOX_CAMERA_MODE_EASE]) {
-        [self _moveCamera:mapView animated:YES withCompletionHandler:completionHandler];
+        [self _moveCamera:mapView animated:YES ease:YES withCompletionHandler:completionHandler];
+    } else if (_cameraStop.mode == [NSNumber numberWithInt:RCT_MAPBOX_CAMERA_MODE_LINEAR]) {
+        [self _moveCamera:mapView animated:YES ease:NO withCompletionHandler:completionHandler];
     } else if ([self _areBoundsValid:_cameraStop.bounds]) {
         [self _fitBoundsCamera:mapView withCompletionHandler:completionHandler];
     } else {
-        [self _moveCamera:mapView animated:NO withCompletionHandler:completionHandler];
+        [self _moveCamera:mapView animated:NO ease:NO withCompletionHandler:completionHandler];
     }
 }
 
@@ -51,16 +53,17 @@
     }
 }
 
-- (void)_moveCamera:(RCTMGLMapView*)mapView animated:(BOOL)animated withCompletionHandler:(void (^)(void))completionHandler
+- (void)_moveCamera:(RCTMGLMapView*)mapView animated:(BOOL)animated ease:(BOOL)ease withCompletionHandler:(void (^)(void))completionHandler
 {
     if ([self _hasCenterCoordAndZoom]) {
         [self _centerCoordWithZoomCamera:mapView animated:animated withCompletionHandler:completionHandler];
     } else {
         RCTMGLCameraWithPadding *nextCamera = [self _makeCamera:mapView];
+        NSString *easeFunctionName = ease ? kCAMediaTimingFunctionEaseInEaseOut : kCAMediaTimingFunctionLinear;
 
         [mapView setCamera:nextCamera.camera
                  withDuration:animated ? _cameraStop.duration : 0
-                 animationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]
+                 animationTimingFunction:[CAMediaTimingFunction functionWithName:easeFunctionName]
                  edgePadding:nextCamera.boundsPadding
                  completionHandler:completionHandler];
     }

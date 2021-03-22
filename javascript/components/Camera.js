@@ -161,6 +161,7 @@ class Camera extends React.Component {
     Flight: 'flyTo',
     Move: 'moveTo',
     Ease: 'easeTo',
+    Linear: 'linearTo',
   };
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -503,6 +504,8 @@ class Camera extends React.Component {
         return MapboxGL.CameraModes.Flight;
       case Camera.Mode.Move:
         return MapboxGL.CameraModes.None;
+      case Camera.Mode.Linear:
+        return MapboxGL.CameraModes.Linear;
       default:
         return MapboxGL.CameraModes.Ease;
     }

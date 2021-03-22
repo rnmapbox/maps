@@ -21,6 +21,8 @@
         _mode = [NSNumber numberWithInt:modeInt];
     } else if (modeInt == RCT_MAPBOX_CAMERA_MODE_NONE) {
         _mode = [NSNumber numberWithInt:modeInt];
+    } else if (modeInt == RCT_MAPBOX_CAMERA_MODE_LINEAR) {
+        _mode = [NSNumber numberWithInt:modeInt];
     } else {
         _mode = [NSNumber numberWithInt:RCT_MAPBOX_CAMERA_MODE_EASE];
     }
