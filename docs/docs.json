@@ -3574,6 +3574,33 @@
         ]
       },
       {
+        "name": "getClusterExpansionZoom",
+        "docblock": "Returns the zoom needed to expand the cluster.\n\n@example\nconst zoom = await shapeSource.getClusterExpansionZoom(clusterId);\n\n@param  {number} clusterId - The id of the cluster to expand.\n@return {number}",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "clusterId",
+            "description": "The id of the cluster to expand.",
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          }
+        ],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "number"
+          }
+        },
+        "description": "Returns the zoom needed to expand the cluster.",
+        "examples": [
+          "\nconst zoom = await shapeSource.getClusterExpansionZoom(clusterId);\n\n"
+        ]
+      },
+      {
         "name": "onPress",
         "docblock": null,
         "modifiers": [],

@@ -34,4 +34,6 @@
                                                 number:(NSUInteger)number
                                                 offset:(NSUInteger)offset;
 
+- (double)getClusterExpansionZoom:(nonnull NSNumber *)clusterId;
+
 @end

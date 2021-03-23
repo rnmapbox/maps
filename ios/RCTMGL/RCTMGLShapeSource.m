@@ -26,7 +26,7 @@ static UIImage * _placeHolderImage;
 - (void)setShape:(NSString *)shape
 {
     _shape = shape;
-    
+
     if (self.source != nil) {
         MGLShapeSource *source = (MGLShapeSource *)self.source;
         [source setShape: shape == nil ? nil : [RCTMGLUtils shapeFromGeoJSON:_shape]];
@@ -46,19 +46,19 @@ static UIImage * _placeHolderImage;
     if (self.map.style == nil) {
         return;
     }
-    
+
     [super removeFromMap];
 }
 
 - (nullable MGLSource*)makeSource
 {
     NSDictionary<MGLShapeSourceOption, id> *options = [self _getOptions];
-    
+
     if (_shape != nil) {
         MGLShape *shape = [RCTMGLUtils shapeFromGeoJSON:_shape];
         return [[MGLShapeSource alloc] initWithIdentifier:self.id shape:shape options:options];
     }
-    
+
     if (_url != nil) {
         NSURL *url = [[NSURL alloc] initWithString:_url];
         return [[MGLShapeSource alloc] initWithIdentifier:self.id URL:url options:options];
@@ -69,39 +69,49 @@ static UIImage * _placeHolderImage;
 - (NSDictionary<MGLShapeSourceOption, id>*)_getOptions
 {
     NSMutableDictionary<MGLShapeSourceOption, id> *options = [[NSMutableDictionary alloc] init];
-    
+
     if (_cluster != nil) {
         options[MGLShapeSourceOptionClustered] = [NSNumber numberWithBool:[_cluster intValue] == 1];
     }
-    
+
     if (_clusterRadius != nil) {
         options[MGLShapeSourceOptionClusterRadius] = _clusterRadius;
     }
-    
+
     if (_clusterMaxZoomLevel != nil) {
         options[MGLShapeSourceOptionMaximumZoomLevelForClustering] = _clusterMaxZoomLevel;
     }
-    
+
     if (_maxZoomLevel != nil) {
         options[MGLShapeSourceOptionMaximumZoomLevel] = _maxZoomLevel;
     }
-    
+
     if (_buffer != nil) {
         options[MGLShapeSourceOptionBuffer] = _buffer;
     }
-    
+
     if (_tolerance != nil) {
         options[MGLShapeSourceOptionSimplificationTolerance] = _tolerance;
     }
-    
+
     return options;
 }
 
 - (nonnull NSArray<id <MGLFeature>> *)featuresMatchingPredicate:(nullable NSPredicate *)predicate
 {
     MGLShapeSource *shapeSource = (MGLShapeSource *)self.source;
-    
+
     return [shapeSource featuresMatchingPredicate:predicate];
+}
+
+- (double)getClusterExpansionZoom:(nonnull NSNumber *)clusterId
+{
+    MGLShapeSource *shapeSource = (MGLShapeSource *)self.source;
+    NSArray<id<MGLFeature>> *features = [shapeSource featuresMatchingPredicate: [NSPredicate predicateWithFormat:@"%K = %i", @"cluster_id", clusterId.intValue]];
+    if (features.count == 0) {
+        return -1;
+    }
+    return [shapeSource zoomLevelForExpandingCluster:(MGLPointFeatureCluster *)features[0]];
 }
 
 - (nonnull NSArray<id <MGLFeature>> *)getClusterLeaves:(nonnull NSNumber *)clusterId

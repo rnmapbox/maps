@@ -46,7 +46,7 @@ RCT_EXPORT_METHOD(features:(nonnull NSNumber*)reactTag
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
         RCTMGLShapeSource* shapeSource = viewRegistry[reactTag];
-        
+
         if (![shapeSource isKindOfClass:[RCTMGLShapeSource class]]) {
             RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
             return;
@@ -54,18 +54,25 @@ RCT_EXPORT_METHOD(features:(nonnull NSNumber*)reactTag
 
         NSPredicate* predicate = [FilterParser parse:filter];
         NSArray<id<MGLFeature>> *shapes = [shapeSource featuresMatchingPredicate: predicate];
-        
+
         NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] initWithCapacity:shapes.count];
         for (int i = 0; i < shapes.count; i++) {
             [features addObject:shapes[i].geoJSONDictionary];
         }
-        
+
         resolve(@{
                   @"data": @{ @"type": @"FeatureCollection", @"features": features }
                   });
     }];
 }
 
+RCT_EXPORT_METHOD(getClusterExpansionZoom:(nonnull NSNumber*)reactTag
+                                clusterId:(nonnull NSNumber*)clusterId
+                                 resolver:(RCTPromiseResolveBlock)resolve
+                                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
+        RCTMGLShapeSource* shapeSource = (RCTMGLShapeSource *)viewRegistry[reactTag];
 RCT_EXPORT_METHOD(getClusterLeaves:(nonnull NSNumber*)reactTag
                   clusterId:(nonnull NSNumber *)clusterId
                   number:(NSUInteger) number
@@ -80,6 +87,20 @@ RCT_EXPORT_METHOD(getClusterLeaves:(nonnull NSNumber*)reactTag
             RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
             return;
         }
+
+        if (![shapeSource isKindOfClass:[RCTMGLShapeSource class]]) {
+            RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
+            return;
+        }
+
+        double zoom = [shapeSource getClusterExpansionZoom:clusterId];
+        if (zoom == -1) {
+          reject(@"zoom_error", [NSString stringWithFormat:@"Could not get zoom for cluster id %@", clusterId], nil);
+          return;
+        }
+        resolve(@{@"data":@(zoom)});
+    }];
+}
 
         NSArray<id<MGLFeature>> *shapes = [shapeSource getClusterLeaves:clusterId number:number offset:offset];
         

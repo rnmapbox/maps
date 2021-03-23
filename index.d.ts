@@ -12,6 +12,7 @@ import {
   StyleProp,
   ImageSourcePropType,
 } from 'react-native';
+import ReactNative from 'react-native';
 
 import {
   Geometry,
@@ -157,6 +158,24 @@ declare namespace MapboxGL {
   }
 
   /**
+   * Classes
+   */
+
+   class AnimatedPoint {
+    constructor(point?: GeoJSON.Point);
+    longitude: ReactNative.Animated.Value<number>;
+    latitude: ReactNative.Animated.Value<number>;
+    setValue: (point: GeoJSON.Point) => void;
+    setOffset: (point: GeoJSON.Point) => void;
+    flattenOffset: () => void;
+    stopAnimation: (cb?: () => GeoJSON.Point) => void;
+    addListener: (cb?: () => GeoJSON.Point) => void;
+    removeListener: (id: string) => void;
+    spring: (config: Record<string, any>) => ReactNative.Animated.CompositeAnimation;
+    timing: (config: Record<string, any>) => ReactNative.Animated.CompositeAnimation;
+  }
+
+  /**
    * Components
    */
   class MapView extends Component<MapViewProps> {
@@ -277,14 +296,15 @@ declare namespace MapboxGL {
    */
   class VectorSource extends Component<VectorSourceProps> { }
   class ShapeSource extends Component<ShapeSourceProps> {
-    /**
+    getClusterExpansionZoom(clusterId: number): Promise<number>;
+        /**
     * Returns all the leaves of a cluster with pagination support.
     * @param clusterId the ID of the cluster
     * @param limit the number of leaves to return
     * @param offset the amount of points to skip (for pagination)
     */
      getClusterLeaves: (clusterId: number, limit: number, offset: number ) => object
-}
+  }
   class RasterSource extends Component<RasterSourceProps> { }
 
   /**

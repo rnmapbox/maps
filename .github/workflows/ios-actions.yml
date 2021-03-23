@@ -1,0 +1,42 @@
+name: iOS Build & Detox
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: ./example
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Access Token
+      run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
+      env:
+        MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+
+    - name: Install Node
+      uses: actions/setup-node@v2.1.5
+      with:
+        node-version: '14'
+    
+    - name: Install Yarn Dependencies
+      run: yarn install
+
+    - name: Install Pod Dependencies
+      run: cd ios && pod install
+    
+    - name: Install Detox Dependencies
+      run: |
+        brew tap wix/brew
+        brew install applesimutils
+
+    - name: Build for detox
+      run: yarn detox build
+
+    - name: Test with detox
+      run: yarn detox test --debug-synchronization 200

@@ -1,6 +1,14 @@
 ## UNRELEASED
-all changes not yet in a release go here
+Please add unreleased changes in the following style:
+PR Title ([#123](link to my pr))
 
+----
+## NEXT
+Fix native UserLocation on Android ([#1284](https://github.com/react-native-mapbox-gl/maps/pull/1284))   
+Add getClusterExpansionZoom to ShapeSource ([#1279](https://github.com/react-native-mapbox-gl/maps/pull/1279))  
+Add type definition for AnimatedPoint ([#1280](https://github.com/react-native-mapbox-gl/maps/pull/1280))  
+
+----
 
 ## 8.2.0-beta1
 

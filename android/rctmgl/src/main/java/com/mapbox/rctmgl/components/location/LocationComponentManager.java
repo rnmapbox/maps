@@ -1,11 +1,8 @@
 package com.mapbox.rctmgl.components.location;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.location.Location;
 
-import androidx.annotation.NonNull;
-
-import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
 import com.mapbox.mapboxsdk.location.LocationComponentOptions;
@@ -17,7 +14,8 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.rctmgl.R;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.location.LocationManager;
-import com.mapbox.rctmgl.location.UserTrackingMode;
+
+import androidx.annotation.NonNull;
 
 /**
  * The LocationComponent on android implements both location tracking and display of user's current location.
@@ -32,8 +30,6 @@ public class LocationComponentManager {
     private LocationComponent mLocationComponent = null;
     private Context mContext = null;
 
-        // state
-    private @CameraMode.Mode int mCameraMode = CameraMode.NONE;
     private @RenderMode.Mode int mRenderMode = RenderMode.COMPASS;
 
     public LocationComponentManager(RCTMGLMapView rctmglMapView, Context context) {
@@ -75,6 +71,7 @@ public class LocationComponentManager {
         mLocationComponent.addOnCameraTrackingChangedListener(onCameraTrackingChangedListener);
     }
 
+    @SuppressLint("MissingPermission")
     private void stateChanged() {
         mLocationComponent.setLocationComponentEnabled((mFollowUserLocation || mShowUserLocation));
 
@@ -98,16 +95,8 @@ public class LocationComponentManager {
         return (mLocationComponent != null);
     }
 
-    public void forceLocationUpdate(Location location) {
-        mLocationComponent.forceLocationUpdate(location);
-    }
-
     public void update(@NonNull Style style) {
-        if (mLocationComponent == null) {
-            update(mShowUserLocation, style);
-        } else {
-            update(mShowUserLocation, style);
-        }
+        update(mShowUserLocation, style);
     }
 
     public void update(boolean displayUserLocation, @NonNull Style style) {
