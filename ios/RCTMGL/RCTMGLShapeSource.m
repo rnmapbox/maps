@@ -104,4 +104,17 @@ static UIImage * _placeHolderImage;
     return [shapeSource featuresMatchingPredicate:predicate];
 }
 
+- (nonnull NSArray<id <MGLFeature>> *)getClusterLeaves:(nonnull NSNumber *)clusterId
+    number:(NSUInteger)number
+    offset:(NSUInteger)offset
+{
+    MGLShapeSource *shapeSource = (MGLShapeSource *)self.source;
+    
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"cluster_id == %@", clusterId];
+    NSArray<id<MGLFeature>> *features = [shapeSource featuresMatchingPredicate:predicate];
+    
+    MGLPointFeatureCluster * cluster = (MGLPointFeatureCluster *)features[0];
+    return [shapeSource leavesOfCluster:cluster offset:offset limit:number];
+}
+
 @end

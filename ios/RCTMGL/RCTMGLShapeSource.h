@@ -30,5 +30,8 @@
 @property (nonatomic, assign) BOOL hasPressListener;
 
 - (nonnull NSArray<id <MGLFeature>> *)featuresMatchingPredicate:(nullable NSPredicate *)predicate;
+- (nonnull NSArray<id <MGLFeature>> *)getClusterLeaves:(nonnull NSNumber *)clusterId
+                                                number:(NSUInteger)number
+                                                offset:(NSUInteger)offset;
 
 @end
