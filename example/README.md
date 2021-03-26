@@ -10,7 +10,7 @@ Demo Application for [React Native Mapbox GL](../README.md)
 
 ## What is Mapbox?
 
-Mapbox is the location data platform for mobile and web applications. We provide [building blocks](https://www.mapbox.com/products/) to add location features like maps, search, and navigation into any experience you create. Use our simple and powerful APIs & SDKs and our open source libraries for interactivity and control.
+[Mapbox](https://www.mapbox.com/) is the location data platform for mobile and web applications.
 
 ## Sign up for Mapbox
 
