@@ -343,8 +343,8 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         mMap.moveCamera(cameraUpdate);
     }
 
-    public void easeCamera(CameraUpdate cameraUpdate, int duration, MapboxMap.CancelableCallback callback) {
-        mMap.easeCamera(cameraUpdate, duration, callback);
+    public void easeCamera(CameraUpdate cameraUpdate, int duration, boolean easingInterpolator, MapboxMap.CancelableCallback callback) {
+        mMap.easeCamera(cameraUpdate, duration, easingInterpolator, callback);
     }
 
     public void easeCamera(CameraUpdate cameraUpdate) {

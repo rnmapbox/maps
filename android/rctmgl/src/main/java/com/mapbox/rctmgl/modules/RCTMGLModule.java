@@ -106,6 +106,7 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         Map<String, Integer> cameraModes = new HashMap<>();
         cameraModes.put("Flight", CameraMode.FLIGHT);
         cameraModes.put("Ease", CameraMode.EASE);
+        cameraModes.put("Linear", CameraMode.LINEAR);
         cameraModes.put("None", CameraMode.NONE);
 
         // style source constants
