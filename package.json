@@ -59,6 +59,7 @@
     "@react-native-community/eslint-config": "^2.0.0",
     "@sinonjs/fake-timers": "^7.0.1",
     "@types/react": "^17.0.1",
+    "@types/react-native": "^0.64.2",
     "babel-core": "6.26.3",
     "babel-eslint": "^10.0.1",
     "documentation": "13.2.5",
