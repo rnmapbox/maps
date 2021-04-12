@@ -100,6 +100,7 @@ If applicable, add screenshots to help explain your problem.
  - Emulator/ Simulator: [yes/ no]
  - Dev OS: [e.g. OSX 11.0.1, Win10]
  - react-native-mapbox-gl Version [e.g. 7.0.9]
+ - Mapbox GL version [e.g. 6.3.0]
  - React Native Version [e.g. 0.59]
 
 **Additional context**  
