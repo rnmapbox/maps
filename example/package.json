@@ -4,17 +4,23 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios --simulator=\"iPhone SE (2nd generation)\"",
+    "pod:install": "cd ios && pod install",
+    "preios": "yarn pod:install",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint ./src",
-    "postinstall": "node ./scripts/set_access_token.js && jetifier"
+    "postinstall": "node ./scripts/set_access_token.js && jetifier",
+    "purge:android": "(cd android && ./gradlew --stop) && rm -rf ~/.gradle/caches/ android/app/build",
+    "purge:ios": "rm -rf ios/Pods/* ios/build ~/Library/Caches/CocoaPods ~/Library/Developer/Xcode/DerivedData && pod cache clean --all",
+    "purge:js": "rm -rf node_modules && yarn cache clean && watchman watch-del-all",
+    "purge": "yarn purge:js && yarn purge:android && yarn purge:ios"
   },
   "dependencies": {
     "@mapbox/geo-viewport": "^0.4.0",
-    "@mapbox/mapbox-sdk": "^0.11.0",
+    "@mapbox/mapbox-sdk": "^0.12.1",
     "@react-native-community/masked-view": "^0.1.7",
-    "@turf/along": "^5.1.5",
+    "@turf/along": "^6.3.0",
     "@turf/bbox-polygon": "^6.0.1",
     "@turf/bearing": "^6.0.1",
     "@turf/distance": "^6.2.0",
@@ -30,12 +36,12 @@
     "prop-types": "^15.7.2",
     "react": "16.13.1",
     "react-native": "0.63.4",
-    "react-native-elements": "^2.2.1",
+    "react-native-elements": "^3.2.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.4.0",
     "react-native-svg": "^12.1.0",
-    "react-native-vector-icons": "6.6.0",
+    "react-native-vector-icons": "8.1.0",
     "react-navigation": "^4.3.7",
     "react-navigation-stack": "^2.3.11",
     "url": "^0.11.0"
@@ -51,12 +57,14 @@
     "@typescript-eslint/eslint-plugin": "^4.0.0",
     "@typescript-eslint/parser": "^4.14.0",
     "babel-jest": "^26.6.3",
-    "babel-plugin-module-resolver": "^3.2.0",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "detox": "^18.7.1",
     "eslint": "^7.3.0",
-    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.22.0",
     "glob-to-regexp": "^0.4.0",
     "jest": "^26.6.3",
+    "jest-circus": "^26.6.3",
     "jetifier": "^1.6.4",
     "metro-react-native-babel-preset": "^0.64.0",
     "react-test-renderer": "16.13.1",
@@ -67,5 +75,30 @@
     "setupFilesAfterEnv": [
       "../setup-jest"
     ]
+  },
+  "detox": {
+    "testRunner": "jest",
+    "runnerConfig": "e2e/config.json",
+    "apps": {
+      "ios": {
+        "type": "ios.app",
+        "build": "xcodebuild -quiet -workspace ios/RNMapboxGLExample.xcworkspace -configuration Release -scheme RNMapboxGLExample -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,name=iPhone SE (2nd generation)'",
+        "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/RNMapboxGLExample.app"
+      }
+    },
+    "devices": {
+      "simulator": {
+        "type": "ios.simulator",
+        "device": {
+          "type": "iPhone 11"
+        }
+      }
+    },
+    "configurations": {
+      "ios": {
+        "device": "simulator",
+        "app": "ios"
+      }
+    }
   }
 }

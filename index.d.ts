@@ -12,6 +12,7 @@ import {
   StyleProp,
   ImageSourcePropType,
 } from 'react-native';
+import ReactNative from 'react-native';
 
 import {
   Geometry,
@@ -157,6 +158,24 @@ declare namespace MapboxGL {
   }
 
   /**
+   * Classes
+   */
+
+   class AnimatedPoint {
+    constructor(point?: GeoJSON.Point);
+    longitude: ReactNative.Animated.Value<number>;
+    latitude: ReactNative.Animated.Value<number>;
+    setValue: (point: GeoJSON.Point) => void;
+    setOffset: (point: GeoJSON.Point) => void;
+    flattenOffset: () => void;
+    stopAnimation: (cb?: () => GeoJSON.Point) => void;
+    addListener: (cb?: () => GeoJSON.Point) => void;
+    removeListener: (id: string) => void;
+    spring: (config: Record<string, any>) => ReactNative.Animated.CompositeAnimation;
+    timing: (config: Record<string, any>) => ReactNative.Animated.CompositeAnimation;
+  }
+
+  /**
    * Components
    */
   class MapView extends Component<MapViewProps> {
@@ -276,7 +295,9 @@ declare namespace MapboxGL {
    * Sources
    */
   class VectorSource extends Component<VectorSourceProps> { }
-  class ShapeSource extends Component<ShapeSourceProps> { }
+  class ShapeSource extends Component<ShapeSourceProps> {
+    getClusterExpansionZoom(clusterId: number): Promise<number>;
+  }
   class RasterSource extends Component<RasterSourceProps> { }
 
   /**
@@ -308,6 +329,7 @@ declare namespace MapboxGL {
       errorListener?: (pack: OfflinePack, err: OfflineProgressError) => void
     ): Promise<void>;
     deletePack(name: string): Promise<void>;
+    invalidatePack(name: string): Promise<void>;
     getPacks(): Promise<Array<OfflinePack>>;
     getPack(name: string): Promise<OfflinePack | undefined>;
     invalidateAmbientCache(): Promise<void>;

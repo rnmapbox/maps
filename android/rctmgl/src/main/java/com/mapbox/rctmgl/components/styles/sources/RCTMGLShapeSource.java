@@ -171,4 +171,33 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
         mManager.handleEvent(event);
     }
+
+    public void getClusterExpansionZoom(String callbackID, int clusterId) {
+        if (mSource == null) {
+            WritableMap payload = new WritableNativeMap();
+            payload.putString("error", "source is not yet loaded");
+            AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+            mManager.handleEvent(event);
+            return;
+        }
+        List<Feature> features = mSource.querySourceFeatures(Expression.eq(Expression.id(), clusterId));
+        int zoom = -1;
+        if (features.size() > 0) {
+            zoom = mSource.getClusterExpansionZoom(features.get(0));
+        }
+
+        if (zoom == -1) {
+            WritableMap payload = new WritableNativeMap();
+            payload.putString("error", "Could not get zoom for cluster id " + clusterId);
+            AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+            mManager.handleEvent(event);
+            return;
+        }
+
+        WritableMap payload = new WritableNativeMap();
+        payload.putInt("data", zoom);
+
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+        mManager.handleEvent(event);
+    }
 }

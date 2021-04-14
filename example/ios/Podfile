@@ -38,14 +38,23 @@ target 'RNMapboxGLExample' do
   pre_install do |installer|
     $RNMBGL.pre_install(installer)
   end
+
   # Enables Flipper.
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable these next few lines.
-  use_flipper!
-  post_install do |installer|
-    flipper_post_install(installer)
+  if !ENV['CI']
+    # local configuration
+    use_flipper!({ 'Flipper-Folly' => '2.3.0' })
+    post_install do |installer|
+      flipper_post_install(installer)
+      $RNMBGL.post_install(installer)
+    end
+  else
+    # CI configuration
+    post_install do |installer|
     $RNMBGL.post_install(installer)
+    end
   end
 end
 

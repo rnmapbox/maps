@@ -5,8 +5,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.mapbox.android.core.permissions.PermissionsManager;
-import com.mapbox.mapboxsdk.location.LocationComponent;
-import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -54,6 +52,7 @@ public class RCTMGLNativeUserLocation extends AbstractMapFeature implements OnMa
         }
 
         LocationComponentManager locationComponent = mMapView.getLocationComponentManager();
+        locationComponent.update(style);
         locationComponent.showUserLocation(mEnabled);
     }
 

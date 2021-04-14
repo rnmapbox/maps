@@ -31,4 +31,6 @@
 
 - (nonnull NSArray<id <MGLFeature>> *)featuresMatchingPredicate:(nullable NSPredicate *)predicate;
 
+- (double)getClusterExpansionZoom:(nonnull NSNumber *)clusterId;
+
 @end

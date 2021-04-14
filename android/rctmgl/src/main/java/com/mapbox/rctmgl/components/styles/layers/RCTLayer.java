@@ -5,6 +5,7 @@ import android.content.Context;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.common.logging.FLog;
+import com.mapbox.mapboxsdk.location.LocationComponentConstants;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
@@ -13,7 +14,6 @@ import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
-import com.mapbox.rctmgl.location.UserLocationLayerConstants;
 import com.mapbox.rctmgl.utils.ExpressionParser;
 
 import java.util.Arrays;
@@ -155,7 +155,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         }
         if (getStyle() == null) return;
 
-        String userBackgroundID = UserLocationLayerConstants.BACKGROUND_LAYER_ID;
+        String userBackgroundID = LocationComponentConstants.BACKGROUND_LAYER;
         Layer userLocationBackgroundLayer = getStyle().getLayer(userBackgroundID);
 
         // place below user location layer
