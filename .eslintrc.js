@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
+  parser: '@typescript-eslint/parser',
   plugins: ['react', 'react-native', 'prettier', 'fp', 'import'],
   env: {
     jest: true,
@@ -75,14 +75,14 @@ module.exports = {
     'no-await-in-loop': 0,
     'no-restricted-syntax': 0,
     'no-use-before-define': 0,
-    'no-unused-expressions': ['error', {allowTaggedTemplates: true}],
-    'no-plusplus': ['error', {allowForLoopAfterthoughts: true}],
+    'no-unused-expressions': ['error', { allowTaggedTemplates: true }],
+    'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'prettier/prettier': [
       'error',
       {
         singleQuote: true,
         trailingComma: 'all',
-        bracketSpacing: false,
+        bracketSpacing: true,
       },
     ],
     'fp/no-mutating-methods': 'warn',
