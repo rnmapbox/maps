@@ -42,3 +42,42 @@ Check the current version of the SDK [here](https://docs.mapbox.com/android/maps
 
 
 If you are using version newer versions of the SDK, you will need to authorize your download of the Maps SDK with a secret access token with the DOWNLOADS:READ scope. This [guide](https://docs.mapbox.com/android/maps/guides/install/#configure-credentials) explains how to configure the secret token under section `Configure your secret token`.
+
+## Using MapLibre
+
+[MapLibre](https://github.com/maplibre/maplibre-gl-native) is an OSS fork of MapboxGL
+
+Overwrite mapbox dependecies within your `android/build.gradle`
+
+```
+buildscript {
+    ext {
+        ...
+
+        rnmbglMapboxLibs = {
+            implementation ("org.maplibre.gl:android-sdk:9.2.1")
+            implementation ("com.mapbox.mapboxsdk:mapbox-sdk-turf:5.3.0")
+        }
+
+        rnmbglMapboxPlugins = {
+            implementation ("com.mapbox.mapboxsdk:mapbox-android-gestures:0.7.0")
+            implementation ("com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v9:0.12.0")    {
+                exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-sdk'
+            }
+            implementation ("com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0")        {
+                exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-sdk'
+            }
+            implementation ("com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v9:0.4.0") {
+                exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-sdk'
+            }
+        }
+    }
+}
+
+repositories {
+    ...
+    maven {
+        url = "https://dl.bintray.com/maplibre/maplibre-gl-native"
+    }
+}
+```
