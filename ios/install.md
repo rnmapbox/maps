@@ -53,3 +53,35 @@ Check the current version of the SDK [here](https://docs.mapbox.com/ios/maps/ove
 ### Mapbox Maps SDK > `v6.0.0`
 
 If you are using version `v6.0.0` of the SDK or later, you will need to authorize your download of the Maps SDK with a secret access token with the `DOWNLOADS:READ` scope. This [guide](https://docs.mapbox.com/ios/maps/overview/#install-the-sdk) explains how to configure the secret token under section `Configure your secret token`.
+
+### Maplibre
+
+## Using MapLibre
+
+[MapLibre](https://github.com/maplibre/maplibre-gl-native) is an OSS fork of MapboxGL
+
+Overwrite mapbox dependecies within your `ios/Podfile`:
+
+
+
+```
+$RNMBGL_Use_SPM = {
+  url: "https://github.com/maplibre/maplibre-gl-native-distribution",
+  requirement: {
+    kind: "upToNextMajorVersion",
+    minimumVersion: "5.11.0"
+  },
+  product_name: "Mapbox"
+}
+
+pre_install do |installer|
+  $RNMBGL.pre_install(installer)
+  ...
+end
+
+post_install do |installer|
+  $RNMBGL.post_install(installer)
+  ...
+end
+
+```
