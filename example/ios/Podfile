@@ -3,6 +3,19 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
+useMapLibre = false
+
+if useMapLibre
+  $RNMBGL_Use_SPM = {
+    url: "https://github.com/maplibre/maplibre-gl-native-distribution",
+    requirement: {
+      kind: "upToNextMajorVersion",
+      minimumVersion: "5.11.0"
+    },
+    product_name: "Mapbox"
+  }
+end
+
 # We ingore warning except for RNMBGL
 INHIBIT_WARNING_BY_DEFAULT = true
 

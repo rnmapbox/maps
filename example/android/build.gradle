@@ -6,6 +6,28 @@ buildscript {
         minSdkVersion = 16
         compileSdkVersion = 29
         targetSdkVersion = 29
+
+        useMapLibre = false
+
+        if (useMapLibre) {
+            rnmbglMapboxLibs = {
+                implementation ("org.maplibre.gl:android-sdk:9.2.1")
+                implementation ("com.mapbox.mapboxsdk:mapbox-sdk-turf:5.3.0")
+            }
+
+            rnmbglMapboxPlugins = {
+                implementation ("com.mapbox.mapboxsdk:mapbox-android-gestures:0.7.0")
+                implementation ("com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v9:0.12.0")    {
+                    exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-sdk'
+                }
+                implementation ("com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0")        {
+                    exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-sdk'
+                }
+                implementation ("com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v9:0.4.0") {
+                    exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-sdk'
+                }
+            }
+        }
     }
     repositories {
         google()
@@ -29,6 +51,12 @@ allprojects {
         maven {
             // Android JSC is installed from npm
             url("$rootDir/../node_modules/jsc-android/dist")
+        }
+
+        if (rootProject.ext.get('useMapLibre')) {
+            maven {
+                url = "https://dl.bintray.com/maplibre/maplibre-gl-native"
+            }
         }
 
         google()

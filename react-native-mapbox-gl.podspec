@@ -12,8 +12,62 @@ TargetsToChangeToDynamic = ['MapboxMobileEvents']
 
 $RNMBGL = Object.new
 
+def $RNMBGL._add_spm_to_target(project, target, url, requirement, product_name)
+  pkg_class = Xcodeproj::Project::Object::XCRemoteSwiftPackageReference
+  ref_class = Xcodeproj::Project::Object::XCSwiftPackageProductDependency
+  pkg = project.root_object.package_references.find { |p| p.class == pkg_class && p.repositoryURL == url }
+  if !pkg
+    pkg = project.new(pkg_class)
+    pkg.repositoryURL = url
+    pkg.requirement = requirement
+    project.root_object.package_references << pkg
+  end
+  ref = target.package_product_dependencies.find { |r| r.class == ref_class && r.package == pkg && r.product_name == product_name }
+  if !ref
+    ref = project.new(ref_class)
+    ref.package = pkg
+    ref.product_name = product_name
+    target.package_product_dependencies << ref
+  end
+end
+
 def $RNMBGL.post_install(installer)
-  # Noop
+  if $RNMBGL_Use_SPM
+    spm_spec = {
+      url: "https://github.com/maplibre/maplibre-gl-native-distribution",
+      requirement: {
+        kind: "upToNextMajorVersion",
+        minimumVersion: "5.11.0"
+      },
+      product_name: "Mapbox"
+    }
+
+    if $RNMBGL_Use_SPM.is_a?(Hash)
+      spm_spec = $RNMBGL_Use_SPM
+    end
+    project = installer.pods_project
+    self._add_spm_to_target(
+      project,
+      project.targets.find { |t| t.name == "react-native-mapbox-gl"},
+      spm_spec[:url],
+      spm_spec[:requirement],
+      spm_spec[:product_name]
+    )
+
+    installer.aggregate_targets.group_by(&:user_project).each do |project, targets|
+      targets.each do |target|
+        target.user_targets.each do |user_target|
+          self._add_spm_to_target(
+            project,
+            user_target,
+            spm_spec[:url],
+            spm_spec[:requirement],
+            spm_spec[:product_name]
+          )
+        end
+      end
+    end
+  end
 end
 
 def $RNMBGL.pre_install(installer)
@@ -36,7 +90,9 @@ Pod::Spec.new do |s|
   s.license     	= "MIT"
   s.platform    	= :ios, "8.0"
 
+  if !$RNMBGL_Use_SPM
   s.dependency 'Mapbox-iOS-SDK', rnmbgl_ios_version
+  end
   s.dependency 'React-Core'
   s.dependency 'React'
 

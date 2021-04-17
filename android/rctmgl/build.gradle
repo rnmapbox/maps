@@ -28,6 +28,23 @@ android {
     }
 }
 
+def customizableDependencies(name, defaultDependencies) {
+    if (rootProject.ext.has(name)) {
+        def libs = rootProject.ext.get(name)
+        if (libs instanceof CharSequence) {
+            libs.split(';').each {
+                implementation it
+            }
+        } else {
+            libs.delegate = defaultDependencies.owner.delegate
+            libs.call()
+        }
+    } else {
+        defaultDependencies.delegate = defaultDependencies.owner.delegate
+        defaultDependencies.call()
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -35,11 +52,7 @@ dependencies {
     implementation "com.facebook.react:react-native:+"
 
     // Mapbox SDK
-    if (rootProject.ext.has('rnmbglMapboxLibs')) {
-        rootProject.ext.get('rnmbglMapboxLibs').split(';').each {
-           implementation it
-        }
-    } else {
+    customizableDependencies('rnmbglMapboxLibs') {
         implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.1.0'
         implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.1.0'
         implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0'
@@ -51,12 +64,9 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${safeExtGet('supportLibVersion', '28.0.0')}"
     implementation "com.squareup.okhttp3:okhttp:${safeExtGet('okhttpVersion', '3.12.1')}"
 
+
     // Mapbox plugins
-    if (rootProject.ext.has('rnmbglMapboxPlugins')) {
-        rootProject.ext.get('rnmbglMapboxPlugins').split(';').each {
-           implementation it
-        }
-    } else {
+    customizableDependencies('rnmbglMapboxPlugins') {
         implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.6.0'
         implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v9:0.12.0'
         implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v9:0.4.0'
