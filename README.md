@@ -1,11 +1,22 @@
 # Mapbox Maps SDK for React Native
 
-_An unofficial React Native library for building maps with the [Mapbox Maps SDK for iOS](https://www.mapbox.com/ios-sdk/) and [Mapbox Maps SDK for Android](https://www.mapbox.com/android-sdk/)_
+_An unofficial React Native library for building maps with   
+the [Mapbox Maps SDK for iOS](https://www.mapbox.com/ios-sdk/) and [Mapbox Maps SDK for Android](https://www.mapbox.com/android-sdk/)_
+
+
+We also support [MapLibre](https://github.com/maplibre/maplibre-gl-native) flavors of Mapbox SDKs now 🎉
+
+<br>
+
+---
 
 [![npm version](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps.svg)](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps)  
 [![Android Build](https://github.com/react-native-mapbox-gl/maps/actions/workflows/android-actions.yml/badge.svg)](https://github.com/react-native-mapbox-gl/maps/actions/workflows/android-actions.yml)  
 [![iOS Build](https://github.com/react-native-mapbox-gl/maps/actions/workflows/ios-actions.yml/badge.svg)](https://github.com/react-native-mapbox-gl/maps/actions/workflows/ios-actions.yml)  
 
+---
+
+<br>
 
 <img src="./assets/indoor_building_map_android.png"
      alt="Indoor Building Map Android"
