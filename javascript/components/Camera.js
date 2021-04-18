@@ -81,9 +81,9 @@ class Camera extends React.Component {
     animationDuration: PropTypes.number,
 
     /**
-     * The animationstyle when the camara updates. One of; `flyTo`, `easeTo`, `moveTo`
+     * The animationstyle when the camara updates. One of; `flyTo`, `easeTo`, `linearTo`, `moveTo`
      */
-    animationMode: PropTypes.oneOf(['flyTo', 'easeTo', 'moveTo']),
+    animationMode: PropTypes.oneOf(['flyTo', 'easeTo', 'linearTo', 'moveTo']),
 
     /**
      * Default view settings applied on camera
@@ -161,6 +161,7 @@ class Camera extends React.Component {
     Flight: 'flyTo',
     Move: 'moveTo',
     Ease: 'easeTo',
+    Linear: 'linearTo',
   };
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -503,6 +504,8 @@ class Camera extends React.Component {
         return MapboxGL.CameraModes.Flight;
       case Camera.Mode.Move:
         return MapboxGL.CameraModes.None;
+      case Camera.Mode.Linear:
+        return MapboxGL.CameraModes.Linear;
       default:
         return MapboxGL.CameraModes.Ease;
     }

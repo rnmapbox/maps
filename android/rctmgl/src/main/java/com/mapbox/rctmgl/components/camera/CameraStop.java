@@ -179,6 +179,9 @@ public class CameraStop {
                 case CameraMode.FLIGHT:
                     stop.setMode(CameraMode.FLIGHT);
                     break;
+                case CameraMode.LINEAR:
+                    stop.setMode(CameraMode.LINEAR);
+                    break;
                 case CameraMode.NONE:
                     stop.setMode(CameraMode.NONE);
                     break;

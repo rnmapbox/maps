@@ -327,7 +327,7 @@ public class RCTMGLCamera extends AbstractMapFeature {
         };
 
         if (isAnimated) {
-            mMapView.easeCamera(cameraUpdate, USER_LOCATION_CAMERA_MOVE_DURATION, callback);
+            mMapView.easeCamera(cameraUpdate, USER_LOCATION_CAMERA_MOVE_DURATION, true, callback);
         } else {
             mMapView.moveCamera(cameraUpdate, callback);
         }
