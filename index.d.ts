@@ -902,4 +902,20 @@ export interface SnapshotOptions {
   writeToDisk?: boolean;
 }
 
+// Logger class
+type LogLevel = "error" | "warning" | "info" | "debug" | "verbose";
+
+interface LogObject {
+  level: string;
+  msg: string;
+  tag: string;
+}
+
+type LogCallback = (object: LogObject) => void;
+
+export class Logger {
+  public static setLogCallback: (cb: LogCallback) => boolean;
+  public static setLogLevel: (level: LogLevel) => void;
+}
+
 export default MapboxGL;
