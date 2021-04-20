@@ -907,7 +907,7 @@ type LogLevel = "error" | "warning" | "info" | "debug" | "verbose";
 
 interface LogObject {
   level: LogLevel;
-  msg: string;
+  message: string;
   tag: string;
 }
 
