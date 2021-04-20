@@ -906,7 +906,7 @@ export interface SnapshotOptions {
 type LogLevel = "error" | "warning" | "info" | "debug" | "verbose";
 
 interface LogObject {
-  level: string;
+  level: LogLevel;
   msg: string;
   tag: string;
 }
