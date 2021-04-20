@@ -143,6 +143,7 @@ export default class App extends Component {
 
 - [MapboxGL](/docs/MapboxGL.md)
 - [CustomHttpHeaders](/docs/CustomHttpHeaders.md)
+- [Logger](/docs/Logger.md)
 
 ## Expo Support
 
