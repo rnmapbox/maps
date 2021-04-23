@@ -4,14 +4,18 @@ PR Title ([#123](link to my pr))
 
 ----
 ## NEXT
-Add types for `Logger` class ([#1316](https://github.com/react-native-mapbox-gl/maps/pull/1316))
+
+
+----
+
+## 8.2.0-beta2
+Add types for `Logger` class ([#1316](https://github.com/react-native-mapbox-gl/maps/pull/1316))  
 Enable linear easing on map camera ([#1281](https://github.com/react-native-mapbox-gl/maps/pull/1281))  
 Allow MapLibre as an option ([#1311](https://github.com/react-native-mapbox-gl/maps/pull/1311))  
 Fix native UserLocation on Android ([#1284](https://github.com/react-native-mapbox-gl/maps/pull/1284))   
 Add getClusterExpansionZoom to ShapeSource ([#1279](https://github.com/react-native-mapbox-gl/maps/pull/1279))  
 Add type definition for AnimatedPoint ([#1280](https://github.com/react-native-mapbox-gl/maps/pull/1280))  
 
-----
 
 ## 8.2.0-beta1
 
