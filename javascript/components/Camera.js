@@ -195,6 +195,21 @@ class Camera extends React.Component {
       });
       return;
     }
+    if (nextCamera.maxBounds) {
+      this.refs.camera.setNativeProps({
+        maxBounds: this._getMaxBounds()
+      });
+    }
+    if (nextCamera.minZoomLevel) {
+      this.refs.camera.setNativeProps({
+        minZoomLevel: this.props.minZoomLevel
+      });
+    }
+    if (nextCamera.maxZoomLevel) {
+      this.refs.camera.setNativeProps({
+        maxZoomLevel: this.props.maxZoomLevel
+      });
+    }
 
     const cameraConfig = {
       animationMode: nextCamera.animationMode,
@@ -239,10 +254,16 @@ class Camera extends React.Component {
       c.animationMode !== n.animationMode ||
       c.animationDuration !== n.animationDuration;
 
+    const hasNavigationConstraintsPropsChanged =
+      this._hasMaxBoundsChanged(c, n) ||
+      c.minZoomLevel !== n.minZoomLevel ||
+      c.maxZoomLevel !== n.maxZoomLevel;
+
     return (
       hasDefaultPropsChanged ||
       hasFollowPropsChanged ||
-      hasAnimationPropsChanged
+      hasAnimationPropsChanged ||
+      hasNavigationConstraintsPropsChanged
     );
   }
 
@@ -286,6 +307,26 @@ class Camera extends React.Component {
       cB.paddingLeft !== nB.paddingLeft ||
       cB.paddingRight !== nB.paddingRight ||
       cB.paddingBottom !== nB.paddingBottom
+    );
+  }
+
+  _hasMaxBoundsChanged(currentCamera, nextCamera) {
+    const cMB = currentCamera.maxBounds;
+    const nMB = nextCamera.maxBounds;
+
+    if (!cMB && !nMB) {
+      return false;
+    }
+
+   if (existenceChange(cMB, nMB)) {
+      return true;
+    }
+
+    return (
+      cMB.ne[0] !== nMB.ne[0] ||
+      cMB.ne[1] !== nMB.ne[1] ||
+      cMB.sw[0] !== nMB.sw[0] ||
+      cMB.sw[1] !== nMB.sw[1]
     );
   }
 
