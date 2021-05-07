@@ -41,11 +41,6 @@ target 'RNMapboxGLExample' do
   # default version
   pod 'react-native-mapbox-gl', :path => '../../', :inhibit_warnings => false
 
-  target 'RNMapboxGLExampleTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
   use_native_modules!
 
   pre_install do |installer|
@@ -69,14 +64,4 @@ target 'RNMapboxGLExample' do
     $RNMBGL.post_install(installer)
     end
   end
-end
-
-target 'RNMapboxGLExample-tvOS' do
-  # Pods for RNMapboxGLExample-tvOS
-
-  target 'RNMapboxGLExample-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
 end
