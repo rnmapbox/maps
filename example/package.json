@@ -31,6 +31,7 @@
     "@turf/nearest-point-on-line": ">= 4.0.0 <7.0.0",
     "buffer": "^5.1.0",
     "debounce": "^1.2.0",
+    "fbjs": "^3.0.0",
     "moment": "^2.24.0",
     "npm": "^6.13.4",
     "prop-types": "^15.7.2",
