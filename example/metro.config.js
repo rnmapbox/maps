@@ -12,7 +12,10 @@ const path = require('path');
   https://medium.com/@dushyant_db/how-to-import-files-from-outside-of-root-directory-with-react-native-metro-bundler-18207a348427
 */
 
-const blacklist = require('metro-config/src/defaults/blacklist');
+// exclusionList is a function that takes an array of regexes and combines
+// them with the default exclusions to return a single regex.
+const exclusionList = require('metro-config/src/defaults/exclusionList');
+
 const glob = require('glob-to-regexp');
 
 const extraNodeModules = {
@@ -36,7 +39,7 @@ function getBlacklist() {
       )}/node_modules/react-native/node_modules/@babel/*`,
     ),
   ];
-  return blacklist(nodeModuleDirs);
+  return exclusionList(nodeModuleDirs);
 }
 
 module.exports = {
