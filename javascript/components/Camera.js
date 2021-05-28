@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {NativeModules, requireNativeComponent} from 'react-native';
+import {NativeModules, requireNativeComponent, AppState} from 'react-native';
 
 import {toJSONString, viewPropTypes, existenceChange} from '../utils';
 import * as geoUtils from '../utils/geoUtils';
@@ -163,6 +163,23 @@ class Camera extends React.Component {
     Ease: 'easeTo',
     Linear: 'linearTo',
   };
+
+  _propsCache = null;
+
+  componentDidMount() {
+    this.appStateSubscription = AppState.addEventListener('change', (state) => {
+      if (state === 'active') {
+        this.refs.camera.setNativeProps(this._propsCache);
+      } else {
+        this.refs.camera.setNativeProps({followUserLocation: false});
+        this._propsCache = this.props;
+      }
+    });
+  }
+
+  async componentWillUnmount() {
+    this.appStateSubscription.remove();
+  }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     this._handleCameraChange(this.props, nextProps);

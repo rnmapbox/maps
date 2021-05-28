@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {AppState} from 'react-native';
 
 import locationManager from '../modules/location/locationManager';
 
@@ -151,6 +152,17 @@ class UserLocation extends React.Component {
     }
 
     locationManager.setMinDisplacement(this.props.minDisplacement);
+
+    this.appStateSubscription = AppState.addEventListener(
+      'change',
+      async (state) => {
+        if (state === 'active') {
+          await this.setLocationManager({running: true});
+        } else {
+          await this.setLocationManager({running: false});
+        }
+      },
+    );
   }
 
   async componentDidUpdate(prevProps) {
@@ -165,6 +177,7 @@ class UserLocation extends React.Component {
 
   async componentWillUnmount() {
     this._isMounted = false;
+    this.appStateSubscription.remove();
     await this.setLocationManager({running: false});
   }
 
