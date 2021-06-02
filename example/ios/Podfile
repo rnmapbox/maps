@@ -36,7 +36,11 @@ end
 
 target 'RNMapboxGLExample' do
   config = use_native_modules!
-  use_react_native!(:path => config["reactNativePath"])
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # to enable hermes on iOS, change `false` to `true` and then install pods
+    :hermes_enabled => false
+  )
 
   # default version
   pod 'react-native-mapbox-gl', :path => '../../', :inhibit_warnings => false
@@ -53,15 +57,16 @@ target 'RNMapboxGLExample' do
   # you should disable these next few lines.
   if !ENV['CI']
     # local configuration
-    use_flipper!({ 'Flipper-Folly' => '2.3.0' })
+    use_flipper!()
     post_install do |installer|
-      flipper_post_install(installer)
+      react_native_post_install(installer)
       $RNMBGL.post_install(installer)
     end
   else
     # CI configuration
     post_install do |installer|
-    $RNMBGL.post_install(installer)
+      react_native_post_install(installer)
+      $RNMBGL.post_install(installer)
     end
   end
 end

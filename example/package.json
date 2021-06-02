@@ -6,7 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios --simulator=\"iPhone SE (2nd generation)\"",
     "pod:install": "cd ios && pod install",
-    "preios": "yarn pod:install",
+    "preios": "yarn pod:install && yarn fix-nvm-ios",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint ./src",
@@ -14,7 +14,8 @@
     "purge:android": "(cd android && ./gradlew --stop) && rm -rf ~/.gradle/caches/ android/app/build",
     "purge:ios": "rm -rf ios/Pods/* ios/build ~/Library/Caches/CocoaPods ~/Library/Developer/Xcode/DerivedData && pod cache clean --all",
     "purge:js": "rm -rf node_modules && yarn cache clean && watchman watch-del-all",
-    "purge": "yarn purge:js && yarn purge:android && yarn purge:ios"
+    "purge": "yarn purge:js && yarn purge:android && yarn purge:ios",
+    "fix-nvm-ios": "node ./scripts/fix_nvm_issue.js"
   },
   "dependencies": {
     "@mapbox/geo-viewport": "^0.4.0",
@@ -31,11 +32,12 @@
     "@turf/nearest-point-on-line": ">= 4.0.0 <7.0.0",
     "buffer": "^5.1.0",
     "debounce": "^1.2.0",
+    "fbjs": "^3.0.0",
     "moment": "^2.24.0",
     "npm": "^6.13.4",
     "prop-types": "^15.7.2",
-    "react": "16.13.1",
-    "react-native": "0.63.4",
+    "react": "17.0.1",
+    "react-native": "0.64.1",
     "react-native-elements": "^3.2.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-safe-area-context": "^3.1.9",
@@ -47,8 +49,8 @@
     "url": "^0.11.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/runtime": "^7.8.4",
+    "@babel/core": "^7.12.9",
+    "@babel/runtime": "^7.12.5",
     "@react-native-community/eslint-config": "^2.0.0",
     "@types/jest": "^26.0.0",
     "@types/react": "^17.0.0",
@@ -59,7 +61,7 @@
     "babel-jest": "^26.6.3",
     "babel-plugin-module-resolver": "^4.1.0",
     "detox": "^18.7.1",
-    "eslint": "^7.3.0",
+    "eslint": "7.14.0 ",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.22.0",
     "glob-to-regexp": "^0.4.0",
@@ -67,7 +69,7 @@
     "jest-circus": "^26.6.3",
     "jetifier": "^1.6.4",
     "metro-react-native-babel-preset": "^0.64.0",
-    "react-test-renderer": "16.13.1",
+    "react-test-renderer": "17.0.1",
     "typescript": "^4.0.3"
   },
   "jest": {
