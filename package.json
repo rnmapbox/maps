@@ -57,7 +57,7 @@
     "eslint": "^7.3.0",
     "@react-native-community/eslint-config": "^2.0.0",
     "eslint-plugin-fp": "^2.3.0",
-    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-import": "2.23.4",
     "husky": "4.3.8",
     "jest": "25.5.4",
     "@sinonjs/fake-timers": "^7.0.1",
