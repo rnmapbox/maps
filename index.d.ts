@@ -667,6 +667,7 @@ export interface SymbolLayerStyle {
   symbolPlacement?: 'point' | 'line' | Expression;
   symbolSpacing?: number | Expression;
   symbolAvoidEdges?: boolean | Expression;
+  symbolSortKey?: number | Expression;
   symbolZOrder?: 'auto' | 'viewport-y' | 'source' | Expression;
   iconAllowOverlap?: boolean | Expression;
   iconIgnorePlacement?: boolean | Expression;
@@ -869,6 +870,8 @@ export interface HeatmapLayerProps extends LayerBaseProps {
 
 export interface ImagesProps extends ViewProps {
   images?: { assets?: string[] } & { [key: string]: ImageSourcePropType };
+  nativeAssetImages?: string[]
+  onImageMissing?: (imageKey: string) => void
 }
 
 export interface ImageSourceProps extends ViewProps {

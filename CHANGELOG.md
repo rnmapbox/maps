@@ -2,6 +2,8 @@
 Please add unreleased changes in the following style:
 PR Title ([#123](link to my pr))
 
+Add some missing props to TypeScript lib def ([#1360](https://github.com/react-native-mapbox-gl/maps/pull/1360))
+
 ----
 ## NEXT
 
