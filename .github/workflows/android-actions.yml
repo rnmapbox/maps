@@ -7,27 +7,33 @@ jobs:
       matrix:
         node-version: [14.x]
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2.1.5
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: set up JDK 1.8
-      uses: actions/setup-java@v2.1.0
-      with:
-        distribution: 'zulu'
-        java-version: '11'
-    - run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
-      working-directory: example
-      env:
-        MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
-    - run: yarn install
-      working-directory: example
-    - run: ./gradlew assemble
-      working-directory: example/android
-    - run: yarn install
-    - run: yarn run unittest
-    - run: yarn run generate
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - run: yarn install --network-timeout 1000000
+      - run: yarn run unittest
+      - run: yarn run generate
+
+      - name: set up JDK zulu 11
+        uses: actions/setup-java@v2.1.0
+        with:
+          distribution: "zulu"
+          java-version: "11"
+
+      - run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
+        working-directory: example
+        env:
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+
+      - run: yarn install --network-timeout 1000000
+        working-directory: example
+
+      - run: ./gradlew assemble
+        working-directory: example/android
+
   publish:
     needs: test
     runs-on: ubuntu-latest

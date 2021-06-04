@@ -11,32 +11,32 @@ jobs:
         working-directory: ./example
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Access Token
-      run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
-      env:
-        MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      - name: Access Token
+        run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
+        env:
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
 
-    - name: Install Node
-      uses: actions/setup-node@v2.1.5
-      with:
-        node-version: '14'
-    
-    - name: Install Yarn Dependencies
-      run: yarn install
+      - name: Install Node
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: "14"
 
-    - name: Install Pod Dependencies
-      run: cd ios && pod install
-    
-    - name: Install Detox Dependencies
-      run: |
-        brew tap wix/brew
-        brew install applesimutils
+      - name: Install Yarn Dependencies
+        run: yarn install --network-timeout 1000000
 
-    - name: Build for detox
-      run: yarn detox build
+      - name: Install Pod Dependencies
+        run: cd ios && pod install
 
-    - name: Test with detox
-      run: yarn detox test --debug-synchronization 200
+      - name: Install Detox Dependencies
+        run: |
+          brew tap wix/brew
+          brew install applesimutils
+
+      - name: Build for detox
+        run: yarn detox build
+
+      - name: Test with detox
+        run: yarn detox test --debug-synchronization 200
