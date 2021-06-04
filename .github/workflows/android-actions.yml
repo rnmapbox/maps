@@ -24,7 +24,6 @@ jobs:
       - run: yarn install --network-timeout 1000000
       - run: yarn run unittest
       - run: yarn run generate
-        working-directory: example
       - run: ./gradlew assemble
         working-directory: example/android
   publish:
