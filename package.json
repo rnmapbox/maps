@@ -26,7 +26,11 @@
     "unittest": "jest",
     "unittest:single": "jest --testNamePattern",
     "format": "npm run lint -- --fix",
-    "lint": "eslint . --ignore-pattern 'example' --fix && cd example/ && eslint ./src --fix"
+    "lint": "eslint . --ignore-pattern 'example' --fix && npm run lint:plugin --fix && cd example/ && eslint ./src --fix",
+    "prepare": "yarn build:plugin",
+    "test:plugin": "expo-module test plugin",
+    "build:plugin": "tsc --build plugin",
+    "lint:plugin": "eslint plugin/src/*"
   },
   "peerDependencies": {
     "prop-types": ">=15.5.8",
@@ -34,6 +38,7 @@
     "react-native": ">=0.59.9"
   },
   "dependencies": {
+    "@expo/config-plugins": "^2.0.2",
     "@mapbox/geo-viewport": ">= 0.4.0",
     "@turf/along": ">= 4.0.0 <7.0.0",
     "@turf/distance": ">= 4.0.0 <7.0.0",
@@ -58,6 +63,7 @@
     "@react-native-community/eslint-config": "^2.0.0",
     "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-import": "2.23.4",
+    "expo-module-scripts": "^2.0.0",
     "husky": "4.3.8",
     "jest": "25.5.4",
     "@sinonjs/fake-timers": "^7.0.1",
