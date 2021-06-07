@@ -59,7 +59,9 @@ npm install @react-native-mapbox-gl/maps --save
 
 - [Android](/android/install.md)
 - [iOS](/ios/install.md)
+- [Expo](/plugin/install.md)
 - [Example](/example)
+
 
 ## Getting Started
 For more information, check out our [Getting Started](/docs/GettingStarted.md) section
@@ -147,7 +149,7 @@ export default class App extends Component {
 
 ## Expo Support
 
-We have a feature request open with Expo if you want to see it get in show your support https://expo.canny.io/feature-requests/p/add-mapbox-gl-support
+This package is not available in the [Expo Go](https://expo.io/client) app. Learn how you can use it with [custom dev clients](/plugin/install.md).
 
 ## Testing with Jest
 
