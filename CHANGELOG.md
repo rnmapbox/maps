@@ -1,6 +1,7 @@
 ## UNRELEASED
 Please add unreleased changes in the following style:
 PR Title ([#123](link to my pr))
+Add Expo config plugin ([#1388](https://github.com/react-native-mapbox-gl/maps/pull/1388))  
 
 
 
