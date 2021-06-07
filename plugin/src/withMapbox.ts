@@ -11,7 +11,7 @@ import {
   removeGeneratedContents,
 } from '@expo/config-plugins/build/utils/generateCode';
 
-const pkg = require('mapbox-config-plugin/package.json');
+const pkg = require('@react-native-mapbox-gl/maps/package.json');
 
 type InstallerBlockName = 'pre' | 'post';
 
