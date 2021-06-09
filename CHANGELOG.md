@@ -2,7 +2,7 @@
 Please add unreleased changes in the following style:
 PR Title ([#123](link to my pr))
 
-
+Add logoPosition props to `MapView` to position the mapbox logo
 
 ----
 ## NEXT

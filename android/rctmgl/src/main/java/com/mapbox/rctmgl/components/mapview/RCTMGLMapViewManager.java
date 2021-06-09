@@ -165,6 +165,11 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         mapView.setReactLogoEnabled(logoEnabled);
     }
 
+    @ReactProp(name="logoPosition")
+    public void setLogoPosition(RCTMGLMapView mapView, ReadableMap logoPosition) {
+        mapView.setReactLogoPosition(logoPosition);
+    }
+
     @ReactProp(name="compassEnabled")
     public void setCompassEnabled(RCTMGLMapView mapView, boolean compassEnabled) {
         mapView.setReactCompassEnabled(compassEnabled);

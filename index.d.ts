@@ -420,6 +420,12 @@ export type AttributionPosition =
   | { bottom: number; left: number }
   | { bottom: number; right: number };
 
+export type LogoPosition =
+  | { top: number; left: number }
+  | { top: number; right: number }
+  | { bottom: number; left: number }
+  | { bottom: number; right: number };
+
 export interface RegionPayload {
   zoomLevel: number;
   heading: number;
@@ -445,6 +451,7 @@ export interface MapViewProps extends ViewProps {
   attributionEnabled?: boolean;
   attributionPosition?: AttributionPosition;
   logoEnabled?: boolean;
+  logoPosition?: LogoPosition;
   compassEnabled?: boolean;
   compassViewPosition?: number;
   compassViewMargins?: Point;
