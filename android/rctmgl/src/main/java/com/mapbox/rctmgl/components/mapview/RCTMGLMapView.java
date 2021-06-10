@@ -770,12 +770,21 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         if (mMap != null) {
             removeAllSourcesFromMap();
 
-            mMap.setStyle(styleURL, new Style.OnStyleLoaded() {
-                @Override
-                public void onStyleLoaded(@NonNull Style style) {
-                    addAllSourcesToMap();
-                }
-            });
+            if (isJSONValid(mStyleURL)) {
+                mMap.setStyle(new Style.Builder().fromJson(mStyleURL), new Style.OnStyleLoaded() {
+                    @Override
+                    public void onStyleLoaded(@NonNull Style style) {
+                        addAllSourcesToMap();
+                    }
+                });
+            } else {
+                mMap.setStyle(styleURL, new Style.OnStyleLoaded() {
+                    @Override
+                    public void onStyleLoaded(@NonNull Style style) {
+                        addAllSourcesToMap();
+                    }
+                });
+            }
         }
     }
 
