@@ -6,6 +6,7 @@ PR Title ([#123](link to my pr))
 
 ----
 ## NEXT
+Support dynamically changing local JSON in styleURL ([#1399](https://github.com/react-native-mapbox-gl/maps/pull/1399))  
 Add missing types to `SymbolLayerStyle` & `ImagesProps` ([#1360](https://github.com/react-native-mapbox-gl/maps/pull/1360))  
 Fix error while updating coordinates of RCTMGLImageSource ([#1310](https://github.com/react-native-mapbox-gl/maps/pull/1310))
 
