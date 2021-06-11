@@ -2,6 +2,8 @@
 Please add unreleased changes in the following style:
 PR Title ([#123](link to my pr))
 
+Android: Bump `okhttp` to `4.9.0` ([#1390](https://github.com/react-native-mapbox-gl/maps/pull/1390))  
+
 
 
 ----
