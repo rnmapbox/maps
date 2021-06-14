@@ -42,3 +42,7 @@ android/local.properties
 example
 __tests__
 coverage
+
+plugin/src
+plugin/jest.config.js
+plugin/tsconfig.json
