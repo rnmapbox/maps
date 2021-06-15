@@ -110,7 +110,7 @@ end
 "
 `;
 
-exports[`applyCocoaPodsModifications doesn't work with revisions to blocks after comments 1`] = `
+exports[`applyCocoaPodsModifications does not work with revisions to blocks after comments 1`] = `
 "
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/react-native-unimodules/cocoapods.rb'
