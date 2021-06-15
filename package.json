@@ -90,7 +90,8 @@
     ],
     "modulePathIgnorePatterns": [
       "example",
-      "__tests__/__mocks__"
+      "__tests__/__mocks__",
+      "fixtures"
     ]
   },
   "husky": {
