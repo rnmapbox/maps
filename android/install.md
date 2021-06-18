@@ -3,6 +3,23 @@
 ## React-Native > `0.60.0` 
 If you are using autolinking feature introduced in React-Native `0.60.0` you do not need any additional steps.
 
+Notice, that if you're using the default Mapbox Android SDK (which is packed in with this lib)  
+and are on newer Android OS version (API 30+),  
+you'll encounter [`Fatal Exception: java.lang.SecurityException: getDataNetworkTypeForSubscriber`](https://github.com/react-native-mapbox-gl/maps/issues/1286).
+
+Either update the Mapbox Android SDK as described below in the [`Mapbox Maps SDK`](https://github.com/react-native-mapbox-gl/maps/blob/master/android/install.md#mapbox-maps-sdk) section,   
+_OR_ add the following line to your `android/app/gradle.build` to pull in the missing dependency.
+
+```
+dependencies {
+    // ...
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-telemetry:6.1.0'
+    // ...
+}
+```
+
+<br>
+
 ## Mapbox Maps SDK
 
 It is possible to set a custom version of the Mapbox SDK
