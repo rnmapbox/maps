@@ -34,7 +34,7 @@
   },
   "peerDependencies": {
     "prop-types": ">=15.5.8",
-    "react": "^16.6.1",
+    "react": ">=16.6.1",
     "react-native": ">=0.59.9"
   },
   "dependencies": {
@@ -71,7 +71,7 @@
     "lint-staged": "^11.0.0",
     "metro-react-native-babel-preset": "0.49.1",
     "node-dir": "0.1.17",
-    "react": "16.8.6",
+    "react": "16.8.3",
     "react-docgen": "^5.0.0-beta.1",
     "react-native": "0.59.10",
     "typescript": "4.3.2",
