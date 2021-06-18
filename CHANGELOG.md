@@ -4,6 +4,7 @@ Please add unreleased changes in the following style:
 PR Title ([#123](link to my pr))
 ```
 
+Add compatibility with React 17/ npm7 ([#1387](https://github.com/react-native-mapbox-gl/maps/pull/1387))  
 Add Expo config plugin ([#1388](https://github.com/react-native-mapbox-gl/maps/pull/1388))  
 Android: Bump `okhttp` to `4.9.0` ([#1390](https://github.com/react-native-mapbox-gl/maps/pull/1390))  
 Support dynamically changing local JSON in styleURL ([#1399](https://github.com/react-native-mapbox-gl/maps/pull/1399))  
