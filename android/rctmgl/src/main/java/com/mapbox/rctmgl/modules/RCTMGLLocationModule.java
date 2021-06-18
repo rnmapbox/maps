@@ -43,7 +43,7 @@ public class RCTMGLLocationModule extends ReactContextBaseJavaModule {
 
         @Override
         public void onHostDestroy() {
-            startLocationManager();
+            stopLocationManager();
         }
     };
 
