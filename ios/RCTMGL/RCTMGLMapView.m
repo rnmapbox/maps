@@ -301,6 +301,31 @@ static double const M2PI = M_PI * 2;
     self.logoView.hidden = !_reactLogoEnabled;
 }
 
+- (void)setReactLogoPosition:(NSDictionary<NSString *,NSNumber *> *)logoPosition
+{
+    NSNumber *left   = [logoPosition valueForKey:@"left"];
+    NSNumber *right  = [logoPosition valueForKey:@"right"];
+    NSNumber *top    = [logoPosition valueForKey:@"top"];
+    NSNumber *bottom = [logoPosition valueForKey:@"bottom"];
+    if (left != nil && top != nil) {
+        [self setLogoViewPosition:MGLOrnamentPositionTopLeft];
+        [self setLogoViewMargins:CGPointMake([left floatValue], [top floatValue])];
+    } else if (right != nil && top != nil) {
+        [self setLogoViewPosition:MGLOrnamentPositionTopRight];
+        [self setLogoViewMargins:CGPointMake([right floatValue], [top floatValue])];
+    } else if (bottom != nil && right != nil) {
+        [self setLogoViewPosition:MGLOrnamentPositionBottomRight];
+        [self setLogoViewMargins:CGPointMake([right floatValue], [bottom floatValue])];
+    } else if (bottom != nil && left != nil) {
+        [self setLogoViewPosition:MGLOrnamentPositionBottomLeft];
+        [self setLogoViewMargins:CGPointMake([left floatValue], [bottom floatValue])];
+    } else {
+        [self setLogoViewPosition:MGLOrnamentPositionBottomRight];
+        [self setLogoViewMargins:CGPointMake(8, 8)];
+    }
+
+}
+
 - (void)setReactCompassEnabled:(BOOL)reactCompassEnabled
 {
     _reactCompassEnabled = reactCompassEnabled;

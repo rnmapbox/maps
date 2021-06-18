@@ -49,6 +49,7 @@ typedef void (^StyleLoadedBlock) (MGLStyle* __nonnull style);
 @property (nonatomic, assign) BOOL reactAttributionEnabled;
 @property (nonatomic, strong) NSDictionary<NSString *, NSNumber *> *reactAttributionPosition;
 @property (nonatomic, assign) BOOL reactLogoEnabled;
+@property (nonatomic, strong) NSDictionary<NSString *, NSNumber *> *reactLogoPosition;
 @property (nonatomic, assign) BOOL reactCompassEnabled;
 @property (nonatomic, assign) BOOL reactZoomEnabled;
 

@@ -140,6 +140,16 @@ class MapView extends NativeBridgeComponent(React.Component) {
     logoEnabled: PropTypes.bool,
 
     /**
+     * Adds logo offset, e.g. `{top: 8, left: 8}` will put the logo in top-left corner of the map
+     */
+    logoPosition: PropTypes.oneOfType([
+      PropTypes.shape({top: PropTypes.number, left: PropTypes.number}),
+      PropTypes.shape({top: PropTypes.number, right: PropTypes.number}),
+      PropTypes.shape({bottom: PropTypes.number, left: PropTypes.number}),
+      PropTypes.shape({bottom: PropTypes.number, right: PropTypes.number}),
+    ]),
+
+    /**
      * Enable/Disable the compass from appearing on the map
      */
     compassEnabled: PropTypes.bool,

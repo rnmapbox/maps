@@ -2817,6 +2817,13 @@
         "description": "Enable/Disable the logo on the map."
       },
       {
+        "name": "logoPosition",
+        "required": false,
+        "type": "union",
+        "default": "none",
+        "description": "Adds logo offset, e.g. `{top: 8, left: 8}` will put the logo in top-left corner of the map"
+      },
+      {
         "name": "compassEnabled",
         "required": false,
         "type": "bool",
