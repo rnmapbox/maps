@@ -22,7 +22,7 @@ INHIBIT_WARNING_BY_DEFAULT = true
 if INHIBIT_WARNING_BY_DEFAULT
   ORIG_POD = method(:pod)
 
-  # Override pods so we default to disbling all warnings
+  # Override pods so we default to disabling all warnings
   def pod(name, *requirements)
     options = requirements.last
     if options.is_a?(Hash)
