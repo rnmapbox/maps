@@ -240,13 +240,8 @@ class UserLocation extends React.Component {
 
   render() {
     const {heading, coordinates} = this.state;
-    const {
-      children,
-      visible,
-      showsUserHeadingIndicator,
-      onPress,
-      animated,
-    } = this.props;
+    const {children, visible, showsUserHeadingIndicator, onPress, animated} =
+      this.props;
 
     if (!visible) {
       return null;

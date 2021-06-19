@@ -108,7 +108,8 @@ MapboxGL.Animated = Animated;
 // utils
 MapboxGL.AnimatedPoint = AnimatedMapPoint;
 MapboxGL.AnimatedCoordinatesArray = AnimatedCoordinatesArray;
-MapboxGL.AnimatedExtractCoordinateFromArray = AnimatedExtractCoordinateFromArray;
+MapboxGL.AnimatedExtractCoordinateFromArray =
+  AnimatedExtractCoordinateFromArray;
 MapboxGL.AnimatedRouteCoordinatesArray = AnimatedRouteCoordinatesArray;
 MapboxGL.AnimatedShape = AnimatedShape;
 MapboxGL.Logger = Logger;
