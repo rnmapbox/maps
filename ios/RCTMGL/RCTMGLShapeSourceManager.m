@@ -73,20 +73,6 @@ RCT_EXPORT_METHOD(getClusterExpansionZoom:(nonnull NSNumber*)reactTag
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
         RCTMGLShapeSource* shapeSource = (RCTMGLShapeSource *)viewRegistry[reactTag];
-RCT_EXPORT_METHOD(getClusterLeaves:(nonnull NSNumber*)reactTag
-                  clusterId:(nonnull NSNumber *)clusterId
-                  number:(NSUInteger) number
-                  offset:(NSUInteger) offset
-                  resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject)
-{
-    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
-        RCTMGLShapeSource* shapeSource = viewRegistry[reactTag];
-        
-        if (![shapeSource isKindOfClass:[RCTMGLShapeSource class]]) {
-            RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
-            return;
-        }
 
         if (![shapeSource isKindOfClass:[RCTMGLShapeSource class]]) {
             RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
@@ -102,13 +88,24 @@ RCT_EXPORT_METHOD(getClusterLeaves:(nonnull NSNumber*)reactTag
     }];
 }
 
+
+RCT_EXPORT_METHOD(getClusterLeaves:(nonnull NSNumber*)reactTag
+                  clusterId:(nonnull NSNumber *)clusterId
+                  number:(NSUInteger) number
+                  offset:(NSUInteger) offset
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
+        RCTMGLShapeSource* shapeSource = (RCTMGLShapeSource *)viewRegistry[reactTag];
+
         NSArray<id<MGLFeature>> *shapes = [shapeSource getClusterLeaves:clusterId number:number offset:offset];
-        
+
         NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] initWithCapacity:shapes.count];
         for (int i = 0; i < shapes.count; i++) {
             [features addObject:shapes[i].geoJSONDictionary];
         }
-        
+
         resolve(@{
                   @"data": @{ @"type": @"FeatureCollection", @"features": features }
                   });

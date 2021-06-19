@@ -51,6 +51,24 @@ Returns the zoom needed to expand the cluster.
 const zoom = await shapeSource.getClusterExpansionZoom(clusterId);
 ```
 
+#### getClusterLeaves(clusterId)
+
+Returns the FeatureCollection from the cluster.
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `clusterId` | `number` | `Yes` | The id of the cluster to get points. |
+| `number` | `number` | `Yes` | The number of points to return. |
+| `offset` | `number` | `Yes` | The amount of points to skip (for pagination). |
+
+
+
+```javascript
+const collection = await shapeSource.getClusterLeaves(clusterId, number, offset);
+```
+
+
 
 #### onPress(event)
 
