@@ -27,7 +27,7 @@
     "unittest:single": "jest --testNamePattern",
     "format": "npm run lint -- --fix",
     "lint": "eslint . --ignore-pattern 'example' --fix && eslint plugin/src/* --fix && cd example/ && eslint ./src --fix",
-    "postinstall": "yarn build:plugin",
+    "prepare": "yarn build:plugin",
     "test:plugin": "expo-module test plugin",
     "build:plugin": "tsc --build plugin",
     "lint:plugin": "eslint plugin/src/*"
