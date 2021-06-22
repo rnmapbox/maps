@@ -7,6 +7,10 @@ PR Title ([#123](link to my pr))
 
 ---
 
+## 8.2.1
+
+fix issue when publishing to npm with `prepare` script
+
 ## 8.2.0
 
 getClusterLeaves method for ShapeSource ([#1411](https://github.com/react-native-mapbox-gl/maps/pull/1411))  
