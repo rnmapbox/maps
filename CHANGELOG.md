@@ -1,9 +1,15 @@
 ## UNRELEASED
+
 ```
-Please add unreleased changes in the following style:  
+Please add unreleased changes in the following style:
 PR Title ([#123](link to my pr))
 ```
 
+---
+
+## 8.2.0
+
+getClusterLeaves method for ShapeSource ([#1411](https://github.com/react-native-mapbox-gl/maps/pull/1411))  
 Add logoPosition props to `MapView` to position the mapbox logo ([#1396](https://github.com/react-native-mapbox-gl/maps/pull/1396))  
 Add compatibility with React 17/ npm7 ([#1387](https://github.com/react-native-mapbox-gl/maps/pull/1387))  
 Add Expo config plugin ([#1388](https://github.com/react-native-mapbox-gl/maps/pull/1388))  
@@ -12,29 +18,30 @@ Support dynamically changing local JSON in styleURL ([#1399](https://github.com/
 Add missing types to `SymbolLayerStyle` & `ImagesProps` ([#1360](https://github.com/react-native-mapbox-gl/maps/pull/1360))  
 Fix error while updating coordinates of RCTMGLImageSource ([#1310](https://github.com/react-native-mapbox-gl/maps/pull/1310))
 
-----
-
 ## 8.2.0-beta2
+
 Add types for `Logger` class ([#1316](https://github.com/react-native-mapbox-gl/maps/pull/1316))  
 Enable linear easing on map camera ([#1281](https://github.com/react-native-mapbox-gl/maps/pull/1281))  
 Allow MapLibre as an option ([#1311](https://github.com/react-native-mapbox-gl/maps/pull/1311))  
-Fix native UserLocation on Android ([#1284](https://github.com/react-native-mapbox-gl/maps/pull/1284))   
+Fix native UserLocation on Android ([#1284](https://github.com/react-native-mapbox-gl/maps/pull/1284))  
 Add getClusterExpansionZoom to ShapeSource ([#1279](https://github.com/react-native-mapbox-gl/maps/pull/1279))  
-Add type definition for AnimatedPoint ([#1280](https://github.com/react-native-mapbox-gl/maps/pull/1280))  
-
+Add type definition for AnimatedPoint ([#1280](https://github.com/react-native-mapbox-gl/maps/pull/1280))
 
 ## 8.2.0-beta1
 
 ### Breaking changes:
 
 Use `pre_install` hook to support non `use_frameworks!` usage #1262. Please add the following to your `Podfile`:
+
 ```ruby
 pre_install do |installer|
   $RNMBGL.pre_install(installer)
   ...
 end
 ```
-   and
+
+and
+
 ```ruby
 post_install do |installer|
   $RNMBGL.post_install(installer)
@@ -43,13 +50,13 @@ end
 ```
 
 ### Other changes:
-* Add course to the location events #1209
-* Fix heading indicator alignment #1215
-* App crash when ProGuard is set to true #1184 
-* [iOS] Implemented ShapeSource.features(...) method #1140
-* style json support on styleURL #1102
-* Fix: onUpdate not called when renderMode is native #1135 
 
+- Add course to the location events #1209
+- Fix heading indicator alignment #1215
+- App crash when ProGuard is set to true #1184
+- [iOS] Implemented ShapeSource.features(...) method #1140
+- style json support on styleURL #1102
+- Fix: onUpdate not called when renderMode is native #1135
 
 ## 8.1.0
 
@@ -59,7 +66,7 @@ end
 - Fix [race in close map and icon image download](https://github.com/react-native-mapbox-gl/maps/pull/1089)
 - Fix [android padding](https://github.com/react-native-mapbox-gl/maps/pull/1087)
 - Android [custom mapboxgl version](https://github.com/react-native-mapbox-gl/maps/pull/1088)
-- Fix [support 6.* of MapboxGL IOS by setting `$ReactNativeMapboxGLIOSVersion = "6.2.1"` in Podfile](https://github.com/react-native-mapbox-gl/maps/pull/1044)
+- Fix [support 6.\* of MapboxGL IOS by setting `$ReactNativeMapboxGLIOSVersion = "6.2.1"` in Podfile](https://github.com/react-native-mapbox-gl/maps/pull/1044)
 - Fix [map rendered at (0,0,0,0) on iOS](https://github.com/react-native-mapbox-gl/maps/pull/1084)
 - Fix [edge Padding + auto limit padding on iOS](https://github.com/react-native-mapbox-gl/maps/pull/1057)
 - Fix [coordinate 0,0 was considered invalid on IOS](https://github.com/react-native-mapbox-gl/maps/pull/1076)
@@ -79,7 +86,7 @@ end
 - Fix [race in close map and icon image download](https://github.com/react-native-mapbox-gl/maps/pull/1089)
 - Fix [android padding](https://github.com/react-native-mapbox-gl/maps/pull/1087)
 - Android [custom mapboxgl version](https://github.com/react-native-mapbox-gl/maps/pull/1088)
-- Fix [support 6.* of MapboxGL IOS by setting `$ReactNativeMapboxGLIOSVersion = "6.2.1"` in Podfile](https://github.com/react-native-mapbox-gl/maps/pull/1044)
+- Fix [support 6.\* of MapboxGL IOS by setting `$ReactNativeMapboxGLIOSVersion = "6.2.1"` in Podfile](https://github.com/react-native-mapbox-gl/maps/pull/1044)
 - Fix [map rendered at (0,0,0,0) on iOS](https://github.com/react-native-mapbox-gl/maps/pull/1084)
 - Fix [edge Padding + auto limit padding on iOS](https://github.com/react-native-mapbox-gl/maps/pull/1057)
 - Fix [coordinate 0,0 was considered invalid on IOS](https://github.com/react-native-mapbox-gl/maps/pull/1076)
@@ -99,7 +106,7 @@ end
 - Fix [race in close map and icon image download](https://github.com/react-native-mapbox-gl/maps/pull/1089)
 - Fix [android padding](https://github.com/react-native-mapbox-gl/maps/pull/1087)
 - Android [custom mapboxgl version](https://github.com/react-native-mapbox-gl/maps/pull/1088)
-- Fix [support 6.* of MapboxGL IOS by setting `$ReactNativeMapboxGLIOSVersion = "6.2.1"` in Podfile](https://github.com/react-native-mapbox-gl/maps/pull/1044)
+- Fix [support 6.\* of MapboxGL IOS by setting `$ReactNativeMapboxGLIOSVersion = "6.2.1"` in Podfile](https://github.com/react-native-mapbox-gl/maps/pull/1044)
 - Fix [map rendered at (0,0,0,0) on iOS](https://github.com/react-native-mapbox-gl/maps/pull/1084)
 - Fix [edge Padding + auto limit padding on iOS](https://github.com/react-native-mapbox-gl/maps/pull/1057)
 - Fix [coordinate 0,0 was considered invalid on IOS](https://github.com/react-native-mapbox-gl/maps/pull/1076)
@@ -137,10 +144,12 @@ end
 - Fix [refresh on PointAnnotation on Android](https://github.com/react-native-mapbox-gl/maps/pull/1062)
 
 ## 8.1.0.rc5
-- Fix [support 6.* of MapboxGL IOS by setting `$ReactNativeMapboxGLIOSVersion = "6.2.1"` in Podfile](https://github.com/react-native-mapbox-gl/maps/pull/1044)
+
+- Fix [support 6.\* of MapboxGL IOS by setting `$ReactNativeMapboxGLIOSVersion = "6.2.1"` in Podfile](https://github.com/react-native-mapbox-gl/maps/pull/1044)
 - Fix [Image source coordinates update on the fly](https://github.com/react-native-mapbox-gl/maps/pull/1036/files)
 
 ## 8.1.0.rc4
+
 ## 8.1.0.rc3
 
 - Fix [android crashes](https://github.com/react-native-mapbox-gl/maps/pull/963)
@@ -172,7 +181,7 @@ end
 ### Breaking changes - [#610](https://github.com/react-native-mapbox-gl/maps/issues/610)
 
 - iOS mapbox libraries updated to [5.7.0](https://github.com/mapbox/mapbox-gl-native-ios/releases/tag/ios-v5.7.0) android libraries updated to [9.0.0](https://github.com/mapbox/mapbox-gl-native-android/releases/tag/android-v9.0.0)
-- ShapeSource#images is now removed (deprecated in 7.*), use Images#images instead. Also special `assets` inside `images` is now deprecated, use `nativeAssetImages` istead.
+- ShapeSource#images is now removed (deprecated in 7.\*), use Images#images instead. Also special `assets` inside `images` is now deprecated, use `nativeAssetImages` istead.
 - iOS now defaults to non `use_frameworks!`, if you want to continue to use `use_frameworks!` please see our iOS installation guidelines
 - [Images#onImagesMissing](docs/Images.md)
 - Android code migrated to AndroidX, RN 60.0+ is recommended.
