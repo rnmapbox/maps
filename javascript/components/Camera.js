@@ -480,14 +480,8 @@ class Camera extends React.Component {
     }
 
     if (config.bounds && config.bounds.ne && config.bounds.sw) {
-      const {
-        ne,
-        sw,
-        paddingLeft,
-        paddingRight,
-        paddingTop,
-        paddingBottom,
-      } = config.bounds;
+      const {ne, sw, paddingLeft, paddingRight, paddingTop, paddingBottom} =
+        config.bounds;
       stopConfig.bounds = toJSONString(geoUtils.makeLatLngBounds(ne, sw));
       stopConfig.boundsPaddingTop = paddingTop || 0;
       stopConfig.boundsPaddingRight = paddingRight || 0;

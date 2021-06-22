@@ -165,6 +165,31 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
     return res.data;
   }
 
+  /**
+   * Returns the FeatureCollection from the cluster.
+   *
+   * @example
+   * const collection = await shapeSource.getClusterLeaves(clusterId, limit, offset);
+   *
+   * @param  {number} clusterId - The id of the cluster to expand.
+   * @param  {number} limit - The number of points to return.
+   * @param  {number} offset - The amount of points to skip (for pagination).
+   * @return {FeatureCollection}
+   */
+  async getClusterLeaves(clusterId, limit, offset) {
+    const res = await this._runNativeCommand(
+      'getClusterLeaves',
+      this._nativeRef,
+      [clusterId, limit, offset],
+    );
+
+    if (isAndroid()) {
+      return JSON.parse(res.data);
+    }
+
+    return res.data;
+  }
+
   setNativeProps(props) {
     const shallowProps = Object.assign({}, props);
 

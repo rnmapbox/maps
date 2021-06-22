@@ -200,4 +200,14 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
         mManager.handleEvent(event);
     }
+
+    public void getClusterLeaves(String callbackID, int clusterId, int number, int offset) {
+        Feature clusterFeature = mSource.querySourceFeatures(Expression.eq(Expression.get("cluster_id"), clusterId)).get(0);
+        FeatureCollection leaves = mSource.getClusterLeaves(clusterFeature, number, offset);
+        WritableMap payload = new WritableNativeMap();
+        payload.putString("data", leaves.toJson());
+
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+        mManager.handleEvent(event);
+    }
 }

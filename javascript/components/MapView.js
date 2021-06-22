@@ -581,14 +581,8 @@ class MapView extends NativeBridgeComponent(React.Component) {
     }
 
     if (config.bounds && config.bounds.ne && config.bounds.sw) {
-      const {
-        ne,
-        sw,
-        paddingLeft,
-        paddingRight,
-        paddingTop,
-        paddingBottom,
-      } = config.bounds;
+      const {ne, sw, paddingLeft, paddingRight, paddingTop, paddingBottom} =
+        config.bounds;
       stopConfig.bounds = toJSONString(makeLatLngBounds(ne, sw));
       stopConfig.boundsPaddingTop = paddingTop || 0;
       stopConfig.boundsPaddingRight = paddingRight || 0;
@@ -626,10 +620,8 @@ class MapView extends NativeBridgeComponent(React.Component) {
   }
 
   _onChange(e) {
-    const {
-      regionWillChangeDebounceTime,
-      regionDidChangeDebounceTime,
-    } = this.props;
+    const {regionWillChangeDebounceTime, regionDidChangeDebounceTime} =
+      this.props;
     const {type, payload} = e.nativeEvent;
     let propName = '';
 

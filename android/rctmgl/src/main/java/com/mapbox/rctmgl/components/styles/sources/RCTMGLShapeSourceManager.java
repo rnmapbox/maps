@@ -149,6 +149,7 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
     //region React Methods
     public static final int METHOD_FEATURES = 103;
     public static final int METHOD_GET_CLUSTER_EXPANSION_ZOOM = 104;
+    public static final int METHOD_GET_CLUSTER_LEAVES = 105;
 
     @Nullable
     @Override
@@ -156,6 +157,7 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
         return MapBuilder.<String, Integer>builder()
                 .put("features", METHOD_FEATURES)
                 .put("getClusterExpansionZoom", METHOD_GET_CLUSTER_EXPANSION_ZOOM)
+                .put("getClusterLeaves", METHOD_GET_CLUSTER_LEAVES)
                 .build();
     }
 
@@ -166,10 +168,18 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
                 source.querySourceFeatures(
                         args.getString(0),
                         ExpressionParser.from(args.getArray(1))
-                        );
+                );
                 break;
             case METHOD_GET_CLUSTER_EXPANSION_ZOOM:
                 source.getClusterExpansionZoom(args.getString(0), args.getInt(1));
+                break;
+            case METHOD_GET_CLUSTER_LEAVES:
+                source.getClusterLeaves(
+                        args.getString(0),
+                        args.getInt(1),
+                        args.getInt(2),
+                        args.getInt((3))
+                );
                 break;
         }
     }
