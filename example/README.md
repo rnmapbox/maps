@@ -1,5 +1,27 @@
+
+<p align="center">
+  <a href="https://github.com/react-native-mapbox-gl/maps/blob/master/example/src/examples/ChoroplethLayerByZoomLevel.js">
+    <img  src="readme_assets/example_choropleth_layer.png"  width="175"/>
+  </a>
+  <a href="https://github.com/react-native-mapbox-gl/maps/blob/master/example/src/examples/EarthQuakes.js">
+    <img  src="readme_assets/example_clustering_earthquakes.png" width="175"/>
+  </a>
+  <a href="https://github.com/react-native-mapbox-gl/maps/blob/master/example/src/examples/Annotations/CustomCallout.tsx">
+    <img  src="readme_assets/example_custom_callout.png" width="175"/>
+  </a>
+  <a href="https://github.com/react-native-mapbox-gl/maps/blob/master/example/src/examples/DataDrivenCircleColors.js">
+    <img  src="readme_assets/example_data_driven_circle_colors.png" width="175"/>
+  </a>
+  <a href="https://github.com/react-native-mapbox-gl/maps/blob/master/example/src/examples/ImageOverlay.js">
+    <img  src="readme_assets/example_image_overlay.png" width="175"/>
+  </a>
+</p>
+
+<br>
+
+
 <a href="https://www.mapbox.com">
-  <img src="/assets/mapbox_logo.png" width="500"/>
+  <img align="right" src="/assets/mapbox_logo.png" width="200"/>
 </a>
 
 # React Native Mapbox GL Demo
@@ -8,13 +30,19 @@ Demo Application for [React Native Mapbox GL](../README.md)
 
 *Note:* this app is using [non trivial babel/metro configs](https://github.com/react-native-mapbox-gl/maps/pull/778), so we can consume the `maps` library from parent directory directly. Regular apps don't need this complicated setup.
 
+<br>
+
 ## What is Mapbox?
 
 [Mapbox](https://www.mapbox.com/) is the location data platform for mobile and web applications.
 
+<br>
+
 ## Sign up for Mapbox
 
 Not a Mapbox user yet? [Sign up for an account here](https://www.mapbox.com/signup/). Once you’re signed in, all you need to start building is a Mapbox access token. Use this same short code with all of our interactive mapping libraries, Python and JavaScript SDKs, and directly against our REST APIs. You can create and manage your access tokens on your [Mapbox Account page](https://www.mapbox.com/account/).
+
+<br>
 
 ## Installation
 
@@ -26,6 +54,8 @@ cd example
 
 * Install our dependencies using `yarn install`.
 
+<br>
+
 ## Start React Native Packager (or not, it starts automatically 🤷‍♀️)
 
 Open up another tab in your Terminal and run
@@ -34,6 +64,8 @@ yarn start
 ```
 
 *Note*: if modules were added to base lib you might need to run `npm start --reset-cache` because we're using `babel` to [rewrite imports](https://github.com/react-native-mapbox-gl/maps/pull/778)
+
+<br>
 
 ## Run Android Simulator
 
@@ -47,6 +79,8 @@ If the build fails make sure gradle has permission to build from cli
 cd android
 chmod +x gradlew
 ```
+
+<br>
 
 ## Run iOS Simulator
 
