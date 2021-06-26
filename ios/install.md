@@ -53,7 +53,7 @@ Check the current version of the SDK [here](https://docs.mapbox.com/ios/maps/ove
 
 ### Mapbox Maps SDK > `v6.0.0`
 
-If you are using version `v6.0.0` of the SDK or later, you will need to authorize your download of the Maps SDK with a secret access token with the `DOWNLOADS:READ` scope. This [guide](https://docs.mapbox.com/ios/maps/overview/#install-the-sdk) explains how to configure the secret token under section `Configure your secret token`.
+If you are using version `v6.0.0` of the SDK or later, you will need to authorize your download of the Maps SDK with a secret access token with the `DOWNLOADS:READ` scope. This [guide](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials) explains how to configure the secret token under section `Configure your secret token`.
 
 <br>
 
