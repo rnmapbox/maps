@@ -10,6 +10,7 @@ import {
   ViewProps,
   ViewStyle,
   StyleProp,
+  TextStyle,
   ImageSourcePropType,
 } from 'react-native';
 import ReactNative from 'react-native';
@@ -796,7 +797,7 @@ export interface CalloutProps extends Omit<ViewProps, 'style'> {
   containerStyle?: StyleProp<WithExpression<ViewStyle>>;
   contentStyle?: StyleProp<WithExpression<ViewStyle>>;
   tipStyle?: StyleProp<WithExpression<ViewStyle>>;
-  textStyle?: StyleProp<WithExpression<ViewStyle>>;
+  textStyle?: StyleProp<WithExpression<TextStyle>>;
 }
 
 export interface TileSourceProps extends ViewProps {

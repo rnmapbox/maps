@@ -5,6 +5,8 @@ Please add unreleased changes in the following style:
 PR Title ([#123](link to my pr))
 ```
 
+Fix TypeScript type for Callout's textStyle prop ([#1450](https://github.com/react-native-mapbox-gl/maps/pull/1450))
+
 ---
 
 ## 8.2.1
