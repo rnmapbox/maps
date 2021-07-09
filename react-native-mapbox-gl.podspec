@@ -36,8 +36,8 @@ def $RNMBGL.post_install(installer)
     spm_spec = {
       url: "https://github.com/maplibre/maplibre-gl-native-distribution",
       requirement: {
-        kind: "upToNextMajorVersion",
-        minimumVersion: "5.11.0"
+        kind: "exactVersion",
+        version: "5.12.0"
       },
       product_name: "Mapbox"
     }
