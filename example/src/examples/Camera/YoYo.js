@@ -31,6 +31,8 @@ class YoYo extends React.Component {
     ...BaseExamplePropTypes,
   };
 
+  timeout = null;
+
   constructor(props) {
     super(props);
 
@@ -43,11 +45,15 @@ class YoYo extends React.Component {
     this.cameraLoop();
   }
 
+  componentWillUnmount() {
+    this.timeout && clearTimeout(this.timeout);
+  }
+
   cameraLoop() {
     requestAnimationFrame(async () => {
       const nextZoomLevel = this.state.zoomLevel === 12 ? 2 : 12;
       this.setState({zoomLevel: nextZoomLevel});
-      setTimeout(() => this.cameraLoop(), 2000);
+      this.timeout = setTimeout(() => this.cameraLoop(), 2000);
     });
   }
 
