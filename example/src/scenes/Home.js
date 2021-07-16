@@ -6,54 +6,70 @@ import PropTypes from 'prop-types';
 import Page from '../examples/common/Page';
 import MapHeader from '../examples/common/MapHeader';
 import sheet from '../styles/sheet';
+
+// ANIMATIONS
+import AnimatedLine from '../examples/Animations/AnimatedLine';
+import DriveTheLine from '../examples/Animations/DriveTheLine';
+
+// ANNOTATIONS
+import CustomCallout from '../examples/Annotations/CustomCallout';
+import Heatmap from '../examples/Annotations/Heatmap';
+import MarkerView from '../examples/Annotations/MarkerView';
+import ShowPointAnnotation from '../examples/Annotations/ShowPointAnnotation';
+
+// CAMERA
+import CompassView from '../examples/Camera/CompassView';
+import FitBounds from '../examples/Camera/FitBounds';
+import FlyTo from '../examples/Camera/FlyTo';
+import GetCenter from '../examples/Camera/GetCenter';
+import GetZoom from '../examples/Camera/GetZoom';
+import RestrictMapBounds from '../examples/Camera/RestrictMapBounds';
+import SetHeading from '../examples/Camera/SetHeading';
+import SetPitch from '../examples/Camera/SetPitch';
+import SetUserTrackingModes from '../examples/Camera/SetUserTrackingModes';
+import TakeSnapshot from '../examples/Camera/TakeSnapshot';
+import TakeSnapshotWithMap from '../examples/Camera/TakeSnapshotWithMap';
+import YoYo from '../examples/Camera/YoYo';
+
+// FILLRASTERLAYER
+import ChoroplethLayerByZoomLevel from '../examples/FillRasterLayer/ChoroplethLayerByZoomLevel';
+import CustomVectorSource from '../examples/FillRasterLayer/CustomVectorSource';
+import GeoJSONSource from '../examples/FillRasterLayer/GeoJSONSource';
+import ImageOverlay from '../examples/FillRasterLayer/ImageOverlay';
+import IndoorBuilding from '../examples/FillRasterLayer/IndoorBuilding';
+import QueryAtPoint from '../examples/FillRasterLayer/QueryAtPoint';
+import QueryWithRect from '../examples/FillRasterLayer/QueryWithRect';
+import WatercolorRasterTiles from '../examples/FillRasterLayer/WatercolorRasterTiles';
+
+// MAP
+import ChangeLayerColor from '../examples/Map/ChangeLayerColor';
+import CreateOfflineRegion from '../examples/Map/CreateOfflineRegion';
+import PointInMapView from '../examples/Map/PointInMapView';
+import ShowAndHideLayer from '../examples/Map/ShowAndHideLayer';
+import ShowClick from '../examples/Map/ShowClick';
 import ShowMap from '../examples/Map/ShowMap';
 import ShowMapLocalStyle from '../examples/Map/ShowMapLocalStyle';
-import MarkerView from '../examples/Annotations/MarkerView';
-import SetPitch from '../examples/SetPitch';
-import SetHeading from '../examples/SetHeading';
-import ShowClick from '../examples/ShowClick';
-import FlyTo from '../examples/FlyTo';
-import FitBounds from '../examples/FitBounds';
-import SetUserTrackingModes from '../examples/SetUserTrackingModes';
-import SetUserLocationVerticalAlignment from '../examples/SetUserLocationVerticalAlignment';
-import SetUserLocationRenderMode from '../examples/SetUserLocationRenderMode';
-import ShowRegionDidChange from '../examples/ShowRegionDidChange';
-import CustomIcon from '../examples/CustomIcon';
-import YoYo from '../examples/YoYo';
-import EarthQuakes from '../examples/EarthQuakes';
-import GeoJSONSource from '../examples/GeoJSONSource';
-import WatercolorRasterTiles from '../examples/WatercolorRasterTiles';
-import TwoByTwo from '../examples/TwoByTwo';
-import IndoorBuilding from '../examples/IndoorBuilding';
-import QueryAtPoint from '../examples/QueryAtPoint';
-import QueryWithRect from '../examples/QueryWithRect';
-import ShapeSourceIcon from '../examples/ShapeSourceIcon';
-import CustomVectorSource from '../examples/CustomVectorSource';
-import ShowPointAnnotation from '../examples/Annotations/ShowPointAnnotation';
-import AnimatedLine from '../examples/AnimatedLine';
-import CreateOfflineRegion from '../examples/CreateOfflineRegion';
-import DriveTheLine from '../examples/DriveTheLine';
-import ImageOverlay from '../examples/ImageOverlay';
-import DataDrivenCircleColors from '../examples/DataDrivenCircleColors';
-import ChoroplethLayerByZoomLevel from '../examples/ChoroplethLayerByZoomLevel';
-import PointInMapView from '../examples/PointInMapView';
-import TakeSnapshot from '../examples/TakeSnapshot';
-import TakeSnapshotWithMap from '../examples/TakeSnapshotWithMap';
-import GetZoom from '../examples/GetZoom';
-import GetCenter from '../examples/GetCenter';
-import UserLocationChange from '../examples/UserLocationChange';
-import Heatmap from '../examples/Annotations/Heatmap';
-import RestrictMapBounds from '../examples/RestrictMapBounds';
-import ShowAndHideLayer from '../examples/ShowAndHideLayer';
-import ChangeLayerColor from '../examples/ChangeLayerColor';
-import SourceLayerVisibility from '../examples/SourceLayerVisibility';
-import SetDisplacement from '../examples/SetDisplacement';
-import CompassView from '../examples/CompassView';
+import ShowRegionDidChange from '../examples/Map/ShowRegionDidChange';
+import SourceLayerVisibility from '../examples/Map/SourceLayerVisibility';
+import StyleJson from '../examples/Map/StyleJson';
+import TwoByTwo from '../examples/Map/TwoByTwo';
+
+// SYMBOLCIRCLELAYER
+import CustomIcon from '../examples/SymbolCircleLayer/CustomIcon';
+import DataDrivenCircleColors from '../examples/SymbolCircleLayer/DataDrivenCircleColors';
+import EarthQuakes from '../examples/SymbolCircleLayer/EarthQuakes';
+import ShapeSourceIcon from '../examples/SymbolCircleLayer/ShapeSourceIcon';
+
+// USERLOCATION
+import SetDisplacement from '../examples/UserLocation/SetDisplacement';
+import SetUserLocationRenderMode from '../examples/UserLocation/SetUserLocationRenderMode';
+import SetUserLocationVerticalAlignment from '../examples/UserLocation/SetUserLocationVerticalAlignment';
+import UserLocationChange from '../examples/UserLocation/UserLocationChange';
+
+// MISC
 import BugReportTemplate from '../examples/BugReportExample';
-import StyleJson from '../examples/StyleJson';
-import ShapeSourceTS from '../examples/SymbolCircleLayer/ShapeSource';
 import CacheManagement from '../examples/CacheManagement';
-import CustomCallout from '../examples/Annotations/CustomCallout';
+
 
 const styles = StyleSheet.create({
   exampleList: {
@@ -100,6 +116,7 @@ const BugReportPage = ({...props}) => (
 );
 
 const Examples = [
+  new ExampleItem('Bug Report Template', BugReportPage),
   new ExampleGroup('Map', [
     new ExampleItem('Show Map', ShowMap),
     new ExampleItem('Show Map With Local Style.JSON', ShowMapLocalStyle),
@@ -141,7 +158,6 @@ const Examples = [
     new ExampleItem('Clustering Earthquakes', EarthQuakes),
     new ExampleItem('Shape Source From Icon', ShapeSourceIcon),
     new ExampleItem('Data Driven Circle Colors', DataDrivenCircleColors),
-    new ExampleItem('Shape Source From Icon.TS', ShapeSourceTS),
   ]),
   new ExampleGroup('Fill/RasterLayer', [
     new ExampleItem('GeoJSON Source', GeoJSONSource),
@@ -165,9 +181,7 @@ const Examples = [
   new ExampleGroup('Animations', [
     new ExampleItem('Animated Line', AnimatedLine),
     new ExampleItem('Animation Along a Line', DriveTheLine),
-    new ExampleItem('Yo Yo Camera', YoYo),
   ]),
-  new ExampleItem('Bug Report Template', BugReportPage),
   new ExampleItem('Cache management', CacheManagement),
 ];
 
