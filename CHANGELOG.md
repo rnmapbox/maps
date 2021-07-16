@@ -6,7 +6,8 @@ PR Title ([#123](link to my pr))
 ```
 
 Fix TypeScript type for Callout's textStyle prop ([#1450](https://github.com/react-native-mapbox-gl/maps/pull/1450))  
-Fix crash with missing okhttp dependency ([#1452](https://github.com/react-native-mapbox-gl/maps/pull/1452))
+Fix crash with missing okhttp dependency ([#1452](https://github.com/react-native-mapbox-gl/maps/pull/1452))  
+Move from react-native-testing-library => @testing-library/react-native ([#1453](https://github.com/react-native-mapbox-gl/maps/pull/1453))  
 
 ---
 
