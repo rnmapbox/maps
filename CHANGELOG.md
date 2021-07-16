@@ -6,7 +6,7 @@ PR Title ([#123](link to my pr))
 ```
 
 Fix TypeScript type for Callout's textStyle prop ([#1450](https://github.com/react-native-mapbox-gl/maps/pull/1450))  
-Update geoUtils helpers types to correspond turf/hepers ([#1455](https://github.com/react-native-mapbox-gl/maps/pull/1455))
+Update geoUtils helpers types to correspond with `turf/helpers` ([#1455](https://github.com/react-native-mapbox-gl/maps/pull/1455))
 
 ---
 
