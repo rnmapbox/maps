@@ -26,7 +26,7 @@ const RestrictMapBounds = (props) => (
       styleURL={MapboxGL.StyleURL.SatelliteStreet}>
       <MapboxGL.Camera
         maxBounds={bounds}
-        zoomLevel={15}
+        zoomLevel={7}
         centerCoordinate={[-4.744276, 50.361239]}
       />
       <MapboxGL.ShapeSource id="bounds" shape={polygon}>
