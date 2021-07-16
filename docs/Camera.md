@@ -18,7 +18,7 @@
 | &nbsp;&nbsp;&nbsp;&nbsp;paddingRight | `number` | `none` | `false` | Right camera padding for bounds |
 | &nbsp;&nbsp;&nbsp;&nbsp;paddingTop | `number` | `none` | `false` | Top camera padding for bounds |
 | &nbsp;&nbsp;&nbsp;&nbsp;paddingBottom | `number` | `none` | `false` | Bottom camera padding for bounds |
-| &nbsp;&nbsp;&nbsp;&nbsp;onUserTrackingModeChange | `func` | `none` | `false` | Callback that is triggered on user tracking mode changes |
+| &nbsp;&nbsp;onUserTrackingModeChange | `func` | `none` | `false` | Callback that is triggered on user tracking mode changes |
 | &nbsp;&nbsp;zoomLevel | `number` | `none` | `false` | Zoom level of the map |
 | centerCoordinate | `array` | `none` | `false` | Center coordinate on map [lng, lat] |
 | heading | `number` | `none` | `false` | Heading on map |
@@ -30,7 +30,7 @@
 | &nbsp;&nbsp;paddingRight | `number` | `none` | `false` | Right camera padding for bounds |
 | &nbsp;&nbsp;paddingTop | `number` | `none` | `false` | Top camera padding for bounds |
 | &nbsp;&nbsp;paddingBottom | `number` | `none` | `false` | Bottom camera padding for bounds |
-| &nbsp;&nbsp;onUserTrackingModeChange | `func` | `none` | `false` | Callback that is triggered on user tracking mode changes |
+| onUserTrackingModeChange | `func` | `none` | `false` | Callback that is triggered on user tracking mode changes |
 | zoomLevel | `number` | `none` | `false` | Zoom level of the map |
 | minZoomLevel | `number` | `none` | `false` | The minimun zoom level of the map |
 | maxZoomLevel | `number` | `none` | `false` | The maximun zoom level of the map |
@@ -43,7 +43,6 @@
 | followPitch | `number` | `none` | `false` | The pitch on map while followUserLocation is set to `true` |
 | followHeading | `number` | `none` | `false` | The heading on map while followUserLocation is set to `true` |
 | triggerKey | `any` | `none` | `false` | Manually update the camera - helpful for when props did not update, however you still want the camera to move |
-| onUserTrackingModeChange | `func` | `none` | `false` | FIX ME NO DESCRIPTION |
 
 ### methods
 #### fitBounds(northEastCoordinates, southWestCoordinates[, padding][, animationDuration])

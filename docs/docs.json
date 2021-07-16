@@ -505,18 +505,18 @@
                     "type": "number",
                     "default": "none",
                     "description": "Bottom camera padding for bounds"
-                  },
-                  {
-                    "name": "onUserTrackingModeChange",
-                    "required": false,
-                    "type": "func",
-                    "default": "none",
-                    "description": "Callback that is triggered on user tracking mode changes"
                   }
                 ]
               },
               "default": "none",
               "description": "Represents a rectangle in geographical coordinates marking the visible area of the map."
+            },
+            {
+              "name": "onUserTrackingModeChange",
+              "required": false,
+              "type": "func",
+              "default": "none",
+              "description": "Callback that is triggered on user tracking mode changes"
             },
             {
               "name": "zoomLevel",
@@ -613,18 +613,18 @@
               "type": "number",
               "default": "none",
               "description": "Bottom camera padding for bounds"
-            },
-            {
-              "name": "onUserTrackingModeChange",
-              "required": false,
-              "type": "func",
-              "default": "none",
-              "description": "Callback that is triggered on user tracking mode changes"
             }
           ]
         },
         "default": "none",
         "description": "Represents a rectangle in geographical coordinates marking the visible area of the map."
+      },
+      {
+        "name": "onUserTrackingModeChange",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "Callback that is triggered on user tracking mode changes"
       },
       {
         "name": "zoomLevel",
@@ -723,13 +723,6 @@
         "type": "any",
         "default": "none",
         "description": "Manually update the camera - helpful for when props did not update, however you still want the camera to move"
-      },
-      {
-        "name": "onUserTrackingModeChange",
-        "required": false,
-        "type": "func",
-        "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
       }
     ],
     "composes": [
