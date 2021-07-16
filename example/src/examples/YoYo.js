@@ -9,9 +9,6 @@ import Page from './common/Page';
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 
 const layerStyles = {
-  background: {
-    backgroundColor: colors.primary.blue,
-  },
   water: {
     fillColor: [
       'interpolate',
@@ -67,10 +64,6 @@ class YoYo extends React.Component {
           />
 
           <MapboxGL.VectorSource>
-            <MapboxGL.BackgroundLayer
-              id="background"
-              style={layerStyles.background}
-            />
             <MapboxGL.FillLayer id="water" style={layerStyles.water} />
           </MapboxGL.VectorSource>
         </MapboxGL.MapView>
