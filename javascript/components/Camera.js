@@ -197,17 +197,17 @@ class Camera extends React.Component {
     }
     if (nextCamera.maxBounds) {
       this.refs.camera.setNativeProps({
-        maxBounds: this._getMaxBounds()
+        maxBounds: this._getMaxBounds(),
       });
     }
     if (nextCamera.minZoomLevel) {
       this.refs.camera.setNativeProps({
-        minZoomLevel: this.props.minZoomLevel
+        minZoomLevel: this.props.minZoomLevel,
       });
     }
     if (nextCamera.maxZoomLevel) {
       this.refs.camera.setNativeProps({
-        maxZoomLevel: this.props.maxZoomLevel
+        maxZoomLevel: this.props.maxZoomLevel,
       });
     }
 
@@ -221,7 +221,7 @@ class Camera extends React.Component {
 
     if (
       nextCamera.bounds &&
-      this._hasBoundsChanged(currentCamera, nextCamera)
+      this._hasBoundsChanged(currentCamera.bounds, nextCamera.bounds)
     ) {
       cameraConfig.bounds = nextCamera.bounds;
     } else {
@@ -238,7 +238,7 @@ class Camera extends React.Component {
     const hasDefaultPropsChanged =
       c.heading !== n.heading ||
       this._hasCenterCoordinateChanged(c, n) ||
-      this._hasBoundsChanged(c, n) ||
+      this._hasBoundsChanged(c.bounds, n.bounds) ||
       c.pitch !== n.pitch ||
       c.zoomLevel !== n.zoomLevel ||
       c.triggerKey !== n.triggerKey;
@@ -255,7 +255,7 @@ class Camera extends React.Component {
       c.animationDuration !== n.animationDuration;
 
     const hasNavigationConstraintsPropsChanged =
-      this._hasMaxBoundsChanged(c, n) ||
+      this._hasBoundsChanged(c.maxBounds, n.maxBounds) ||
       c.minZoomLevel !== n.minZoomLevel ||
       c.maxZoomLevel !== n.maxZoomLevel;
 
@@ -286,10 +286,7 @@ class Camera extends React.Component {
     return isLngDiff || isLatDiff;
   }
 
-  _hasBoundsChanged(currentCamera, nextCamera) {
-    const cB = currentCamera.bounds;
-    const nB = nextCamera.bounds;
-
+  _hasBoundsChanged(cB, nB) {
     if (!cB && !nB) {
       return false;
     }
@@ -307,26 +304,6 @@ class Camera extends React.Component {
       cB.paddingLeft !== nB.paddingLeft ||
       cB.paddingRight !== nB.paddingRight ||
       cB.paddingBottom !== nB.paddingBottom
-    );
-  }
-
-  _hasMaxBoundsChanged(currentCamera, nextCamera) {
-    const cMB = currentCamera.maxBounds;
-    const nMB = nextCamera.maxBounds;
-
-    if (!cMB && !nMB) {
-      return false;
-    }
-
-   if (existenceChange(cMB, nMB)) {
-      return true;
-    }
-
-    return (
-      cMB.ne[0] !== nMB.ne[0] ||
-      cMB.ne[1] !== nMB.ne[1] ||
-      cMB.sw[0] !== nMB.sw[0] ||
-      cMB.sw[1] !== nMB.sw[1]
     );
   }
 
