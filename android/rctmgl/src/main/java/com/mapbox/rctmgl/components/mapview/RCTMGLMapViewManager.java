@@ -190,6 +190,11 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         mapView.setReactContentInset(array);
     }
 
+    @ReactProp(name = "tintColor", customType = "Color")
+    public void setTintColor(RCTMGLMapView mapView, @Nullable Integer tintColor) {
+        mapView.setTintColor(tintColor);
+    }
+
     //endregion
 
     //region Custom Events

@@ -129,8 +129,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
     ]),
 
     /**
-     * MapView's tintColor - ios only
-     * @platform ios
+     * MapView's tintColor
      */
     tintColor: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
 
