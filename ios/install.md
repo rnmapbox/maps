@@ -2,7 +2,13 @@
 
 ## React-Native > `0.60.0`
 
-If you are using autolinking feature introduced in React-Native `0.60.0`, you just need `npm install @react-native-mapbox-gl/maps`, 
+The following assumes, that you're using autolinking and installed
+
+`@react-native-mapbox-gl/maps` via `npm` or `yarn`.
+
+<br>
+
+The following is required for every following setup
 
 Add the following to your `ios/Podfile`:
 
@@ -20,26 +26,17 @@ Add the following to your `ios/Podfile`:
   end
 ```
 
+Running `pod install` will add Mapbox iOS SDK `5.8.0`
 
-followed by `pod install` from the `ios` directory. Please also add the pre/post install cocoapods hooks.
+You are good to go!
 
-## Using CocoaPods without autolink
-
-To install with CocoaPods, add the following to your `Podfile`:
-
-```ruby
-  # Mapbox
-  pod 'react-native-mapbox-gl', :path => '../node_modules/@react-native-mapbox-gl/maps'
-
-```
-
-Then run `pod install` and rebuild your project.
+Read on if you want to edit your Mapbox version or flavor.
 
 <br>
 
 ## Mapbox Maps SDK
 
-It is possible to set a custom version of the Mapbox SDK: 
+It is possible to set a custom version of the Mapbox SDK:
 
 ### New version - since `8.1rc5`
 
@@ -59,32 +56,43 @@ If you are using version `v6.0.0` of the SDK or later, you will need to authoriz
 
 ## Maplibre
 
-### Using MapLibre
-
 [MapLibre](https://github.com/maplibre/maplibre-gl-native) is an OSS fork of MapboxGL
 
-Overwrite mapbox dependecies within your `ios/Podfile`:
+Current default MapLibre version is `5.12.0`
 
+If you want to use that, simply add this to your `ios/Podfile`
 
+```ruby
+$RNMBGL_Use_SPM = true
+```
+
+If you want to adjust/ edit your MapLibre version you can also pass a hash
+
+Example overwrite within your `ios/Podfile`:
 
 ```ruby
 $RNMBGL_Use_SPM = {
   url: "https://github.com/maplibre/maplibre-gl-native-distribution",
   requirement: {
     kind: "upToNextMajorVersion",
-    minimumVersion: "5.11.0"
+    minimumVersion: "5.12.0"
   },
   product_name: "Mapbox"
 }
+```
 
-pre_install do |installer|
-  $RNMBGL.pre_install(installer)
-  ...
-end
+<br>
 
-post_install do |installer|
-  $RNMBGL.post_install(installer)
-  ...
-end
+## React-Native < `0.60.0`
+
+### Using CocoaPods without autolink
+
+To install with CocoaPods, add the following to your `Podfile`:
+
+```ruby
+  # Mapbox
+  pod 'react-native-mapbox-gl', :path => '../node_modules/@react-native-mapbox-gl/maps'
 
 ```
+
+Then run `pod install` and rebuild your project.

@@ -6,12 +6,12 @@ PR Title ([#123](link to my pr))
 ```
 
 Fix TypeScript type for Callout's textStyle prop ([#1450](https://github.com/react-native-mapbox-gl/maps/pull/1450))  
-Update geoUtils helpers types to correspond with `turf/helpers` ([#1455](https://github.com/react-native-mapbox-gl/maps/pull/1455))
+Build(ios): pin maplibre version to 5.12.0 ([#1454](https://github.com/react-native-mapbox-gl/maps/pull/1454))  
+Update geoUtils helpers types to correspond with `turf/helpers` ([#1455](https://github.com/react-native-mapbox-gl/maps/pull/1455))  
 Fix crash with missing okhttp dependency ([#1452](https://github.com/react-native-mapbox-gl/maps/pull/1452))  
 Move from react-native-testing-library => @testing-library/react-native ([#1453](https://github.com/react-native-mapbox-gl/maps/pull/1453))  
-Feat(camera): maxBounds/(min|max)ZoomLevel can be updated dynamically ([#1462](https://github.com/react-native-mapbox-gl/maps/pull/1462))
-Refactor(example): clean up folder structure ([#1464](https://github.com/react-native-mapbox-gl/maps/pull/1464))
-
+Feat(camera): maxBounds/(min|max)ZoomLevel can be updated dynamically ([#1462](https://github.com/react-native-mapbox-gl/maps/pull/1462))  
+Refactor(example): clean up folder structure ([#1464](https://github.com/react-native-mapbox-gl/maps/pull/1464))  
 
 ---
 
