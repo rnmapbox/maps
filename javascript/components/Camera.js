@@ -195,6 +195,21 @@ class Camera extends React.Component {
       });
       return;
     }
+    if (nextCamera.maxBounds) {
+      this.refs.camera.setNativeProps({
+        maxBounds: this._getMaxBounds(),
+      });
+    }
+    if (nextCamera.minZoomLevel) {
+      this.refs.camera.setNativeProps({
+        minZoomLevel: this.props.minZoomLevel,
+      });
+    }
+    if (nextCamera.maxZoomLevel) {
+      this.refs.camera.setNativeProps({
+        maxZoomLevel: this.props.maxZoomLevel,
+      });
+    }
 
     const cameraConfig = {
       animationMode: nextCamera.animationMode,
@@ -206,7 +221,7 @@ class Camera extends React.Component {
 
     if (
       nextCamera.bounds &&
-      this._hasBoundsChanged(currentCamera, nextCamera)
+      this._hasBoundsChanged(currentCamera.bounds, nextCamera.bounds)
     ) {
       cameraConfig.bounds = nextCamera.bounds;
     } else {
@@ -223,7 +238,7 @@ class Camera extends React.Component {
     const hasDefaultPropsChanged =
       c.heading !== n.heading ||
       this._hasCenterCoordinateChanged(c, n) ||
-      this._hasBoundsChanged(c, n) ||
+      this._hasBoundsChanged(c.bounds, n.bounds) ||
       c.pitch !== n.pitch ||
       c.zoomLevel !== n.zoomLevel ||
       c.triggerKey !== n.triggerKey;
@@ -239,10 +254,16 @@ class Camera extends React.Component {
       c.animationMode !== n.animationMode ||
       c.animationDuration !== n.animationDuration;
 
+    const hasNavigationConstraintsPropsChanged =
+      this._hasBoundsChanged(c.maxBounds, n.maxBounds) ||
+      c.minZoomLevel !== n.minZoomLevel ||
+      c.maxZoomLevel !== n.maxZoomLevel;
+
     return (
       hasDefaultPropsChanged ||
       hasFollowPropsChanged ||
-      hasAnimationPropsChanged
+      hasAnimationPropsChanged ||
+      hasNavigationConstraintsPropsChanged
     );
   }
 
@@ -265,10 +286,7 @@ class Camera extends React.Component {
     return isLngDiff || isLatDiff;
   }
 
-  _hasBoundsChanged(currentCamera, nextCamera) {
-    const cB = currentCamera.bounds;
-    const nB = nextCamera.bounds;
-
+  _hasBoundsChanged(cB, nB) {
     if (!cB && !nB) {
       return false;
     }
