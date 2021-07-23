@@ -49,11 +49,15 @@ type CustomCalloutProps = {
 const CustomCallout: FC<CustomCalloutProps> = (props) => {
   const [selectedFeature, setSelectedFeature] =
     useState<Feature<{type: string; coordinates: number[]}, any>>();
+
   const onPinPress = (e: any): void => {
-    if (e?.features?.length > 0) {
+      if(selectedFeature) {
+        setSelectedFeature(undefined);
+        return;
+      }
+
       const feature = e?.features[0];
       setSelectedFeature(feature);
-    }
   };
 
   return (
