@@ -1,5 +1,5 @@
 import React from 'react';
-import {render} from 'react-native-testing-library';
+import {render} from '@testing-library/react-native';
 
 import Camera from '../../javascript/components/Camera';
 
@@ -170,7 +170,7 @@ describe('Camera', () => {
         );
 
         expect(camera._hasCameraChanged).toHaveBeenCalled();
-        expect(camera._hasBoundsChanged).not.toHaveBeenCalled();
+        expect(camera._hasBoundsChanged).toHaveBeenCalled();
         expect(camera._setCamera).toHaveBeenCalledWith({
           animationDuration: 1000,
           animationMode: 'easeTo',
@@ -188,7 +188,7 @@ describe('Camera', () => {
         );
 
         expect(camera._hasCameraChanged).toHaveBeenCalled();
-        expect(camera._hasBoundsChanged).toHaveBeenCalledTimes(1);
+        expect(camera._hasBoundsChanged).toHaveBeenCalledTimes(2);
         expect(camera._setCamera).toHaveBeenCalledWith({
           animationDuration: 2000,
           animationMode: 'easeTo',
@@ -356,18 +356,16 @@ describe('Camera', () => {
     describe('#_hasBoundsChanged', () => {
       const camera = new Camera();
       const bounds = {
-        bounds: {
-          ne: [-74.12641, 40.797968],
-          sw: [-74.143727, 40.772177],
-          paddingTop: 5,
-          paddingLeft: 5,
-          paddingRight: 5,
-          paddingBottom: 5,
-        },
+        ne: [-74.12641, 40.797968],
+        sw: [-74.143727, 40.772177],
+        paddingTop: 5,
+        paddingLeft: 5,
+        paddingRight: 5,
+        paddingBottom: 5,
       };
 
       test('returns false when bounds are missing', () => {
-        expect(camera._hasBoundsChanged({}, {})).toBe(false);
+        expect(camera._hasBoundsChanged(undefined, undefined)).toBe(false);
       });
 
       test('returns false when bounds have not changed', () => {
@@ -378,82 +376,104 @@ describe('Camera', () => {
         // ne[0]
         expect(
           camera._hasBoundsChanged(bounds, {
-            bounds: {
-              ...bounds.bounds,
-              ne: [-34.12641, 40.797968],
-            },
+            ...bounds,
+            ne: [-34.12641, 40.797968],
           }),
         ).toBe(true);
 
         // ne[1]
         expect(
           camera._hasBoundsChanged(bounds, {
-            bounds: {
-              ...bounds.bounds,
-              ne: [-74.12641, 30.797968],
-            },
+            ...bounds,
+            ne: [-74.12641, 30.797968],
           }),
         ).toBe(true);
 
         // sw[0]
         expect(
           camera._hasBoundsChanged(bounds, {
-            bounds: {
-              ...bounds.bounds,
-              sw: [-74.143723, 40.772177],
-            },
+            ...bounds,
+            sw: [-74.143723, 40.772177],
           }),
         ).toBe(true);
 
         // sw[1]
         expect(
           camera._hasBoundsChanged(bounds, {
-            bounds: {
-              ...bounds.bounds,
-              sw: [-74.143727, 40.772137],
-            },
+            ...bounds,
+            sw: [-74.143727, 40.772137],
           }),
         ).toBe(true);
 
         // paddingTop
         expect(
           camera._hasBoundsChanged(bounds, {
-            bounds: {
-              ...bounds.bounds,
-              paddingTop: 3,
-            },
+            ...bounds,
+            paddingTop: 3,
           }),
         ).toBe(true);
 
         // paddingLeft
         expect(
           camera._hasBoundsChanged(bounds, {
-            bounds: {
-              ...bounds.bounds,
-              paddingLeft: 3,
-            },
+            ...bounds,
+            paddingLeft: 3,
           }),
         ).toBe(true);
 
         // paddingRight
         expect(
           camera._hasBoundsChanged(bounds, {
-            bounds: {
-              ...bounds.bounds,
-              paddingRight: 3,
-            },
+            ...bounds,
+            paddingRight: 3,
           }),
         ).toBe(true);
 
         // paddingBottom
         expect(
           camera._hasBoundsChanged(bounds, {
-            bounds: {
-              ...bounds.bounds,
-              paddingBottom: 3,
-            },
+            ...bounds,
+            paddingBottom: 3,
           }),
         ).toBe(true);
+      });
+
+      describe('does work with maxBounds', () => {
+        const currentMaxBounds = {
+          ne: [-74.12641, 40.797968],
+          sw: [-74.143727, 40.772177],
+        };
+
+        const nextMaxBounds = {
+          ne: [-83.12641, 42.797968],
+          sw: [-64.143727, 35.772177],
+        };
+
+        test('returns true if changed', () => {
+          expect(
+            camera._hasBoundsChanged(currentMaxBounds, nextMaxBounds),
+          ).toBe(true);
+        });
+
+        test('returns false if unchanged', () => {
+          expect(
+            camera._hasBoundsChanged(currentMaxBounds, currentMaxBounds),
+          ).toBe(false);
+        });
+
+        test('returns false if both undefined', () => {
+          expect(camera._hasBoundsChanged(undefined, undefined)).toBe(false);
+        });
+
+        test('does work with currentBounds being undefined', () => {
+          expect(camera._hasBoundsChanged(undefined, nextMaxBounds)).toBe(true);
+        });
+
+        test('does work with nextBounds being undefined', () => {
+          expect(camera._hasBoundsChanged(currentMaxBounds, undefined)).toBe(
+            true,
+          );
+        });
       });
     });
 
