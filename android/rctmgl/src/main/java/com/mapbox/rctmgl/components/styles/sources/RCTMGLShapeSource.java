@@ -48,6 +48,7 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
     private Integer mMaxZoom;
     private Integer mBuffer;
     private Double mTolerance;
+    private Boolean mLineMetrics;
 
     private static Bitmap mImagePlaceholder;
     private List<Map.Entry<String, ImageEntry>> mImages;
@@ -121,6 +122,10 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         mTolerance = tolerance;
     }
 
+    public void setLineMetrics(boolean lineMetrics) {
+        mLineMetrics = lineMetrics;
+    }
+
     public void onPress(OnPressEvent event) {
         mManager.handleEvent(FeatureClickEvent.makeShapeSourceEvent(this, event));
     }
@@ -150,6 +155,10 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
 
         if (mTolerance != null) {
             options.withTolerance(mTolerance.floatValue());
+        }
+
+        if (mLineMetrics != null) {
+            options.withLineMetrics(mLineMetrics);
         }
 
         return options;

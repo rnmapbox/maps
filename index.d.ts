@@ -827,6 +827,7 @@ export interface ShapeSourceProps extends ViewProps {
   maxZoomLevel?: number;
   buffer?: number;
   tolerance?: number;
+  lineMetrics?: boolean;
   images?: { assets?: string[] } & { [key: string]: ImageSourcePropType };
   onPress?: (event: OnPressEvent) => void;
   hitbox?: {

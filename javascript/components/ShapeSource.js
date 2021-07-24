@@ -86,6 +86,13 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
     tolerance: PropTypes.number,
 
     /**
+     * Whether to calculate line distance metrics.
+     * This is required for line layers that specify lineGradient values.
+     * The default value is false.
+     */
+    lineMetrics: PropTypes.bool,
+
+    /**
      * Source press listener, gets called when a user presses one of the children layers only
      * if that layer has a higher z-index than another source layers
      *
@@ -251,6 +258,7 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
       maxZoomLevel: this.props.maxZoomLevel,
       buffer: this.props.buffer,
       tolerance: this.props.tolerance,
+      lineMetrics: this.props.lineMetrics,
       onPress: undefined,
       ref: (nativeRef) => this._setNativeRef(nativeRef),
       onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,

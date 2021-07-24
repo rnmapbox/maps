@@ -3721,6 +3721,13 @@
         "description": "Specifies the Douglas-Peucker simplification tolerance.\nA greater value produces simpler geometries and improves performance.\nThe default value is 0.375."
       },
       {
+        "name": "lineMetrics",
+        "required": false,
+        "type": "number",
+        "default": "bool",
+        "description": "Whether to calculate line distance metrics.\nThis is required for line layers that specify lineGradient values.\nThe default value is false."
+      },
+      {
         "name": "onPress",
         "required": false,
         "type": "func",
