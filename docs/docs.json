@@ -3723,8 +3723,8 @@
       {
         "name": "lineMetrics",
         "required": false,
-        "type": "number",
-        "default": "bool",
+        "type": "bool",
+        "default": "none",
         "description": "Whether to calculate line distance metrics.\nThis is required for line layers that specify lineGradient values.\nThe default value is false."
       },
       {
