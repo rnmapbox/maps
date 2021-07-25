@@ -41,6 +41,9 @@ import QueryAtPoint from '../examples/FillRasterLayer/QueryAtPoint';
 import QueryWithRect from '../examples/FillRasterLayer/QueryWithRect';
 import WatercolorRasterTiles from '../examples/FillRasterLayer/WatercolorRasterTiles';
 
+// LINE LAYER
+import GradientLine from '../examples/LineLayer/GradientLine';
+
 // MAP
 import ChangeLayerColor from '../examples/Map/ChangeLayerColor';
 import CreateOfflineRegion from '../examples/Map/CreateOfflineRegion';
@@ -171,6 +174,9 @@ const Examples = [
       'Choropleth Layer By Zoom Level',
       ChoroplethLayerByZoomLevel,
     ),
+  ]),
+  new ExampleGroup('LineLayer', [
+    new ExampleItem('GradientLine', GradientLine),
   ]),
   new ExampleGroup('Annotations', [
     new ExampleItem('Show Point Annotation', ShowPointAnnotation),
