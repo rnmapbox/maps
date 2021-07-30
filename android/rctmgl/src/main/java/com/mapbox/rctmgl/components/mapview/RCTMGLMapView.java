@@ -1505,7 +1505,10 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     }
 
     public void setTintColor(@Nullable Integer tintColor) {
+        if (mTintColor == tintColor) return;
         mTintColor = tintColor;
         updateUISettings();
+        if (mLocationComponentManager == null) return;
+        mLocationComponentManager.update(getMapboxMap().getStyle());
     }
 }

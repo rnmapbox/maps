@@ -28,6 +28,14 @@ Add the following to your `ios/Podfile`:
 
 Running `pod install` will add Mapbox iOS SDK `5.8.0`
 
+```sh
+# Go to the ios folder
+cd ios
+
+# Run Pod Install
+pod install
+```
+
 You are good to go!
 
 Read on if you want to edit your Mapbox version or flavor.

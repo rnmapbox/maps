@@ -100,7 +100,9 @@ public class LocationComponentManager {
     }
 
     public void update(boolean displayUserLocation, @NonNull Style style) {
-        if (mLocationComponent == null) {
+        Integer tintColor = mMapView.getTintColor();
+
+        if (mLocationComponent == null || tintColor != null ) {
             mLocationComponent = mMap.getLocationComponent();
 
             LocationComponentActivationOptions locationComponentActivationOptions = LocationComponentActivationOptions

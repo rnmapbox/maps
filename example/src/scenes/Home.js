@@ -65,6 +65,7 @@ import ShapeSourceIcon from '../examples/SymbolCircleLayer/ShapeSourceIcon';
 
 // USERLOCATION
 import SetDisplacement from '../examples/UserLocation/SetDisplacement';
+import SetTintColor from '../examples/UserLocation/SetTintColor';
 import SetUserLocationRenderMode from '../examples/UserLocation/SetUserLocationRenderMode';
 import SetUserLocationVerticalAlignment from '../examples/UserLocation/SetUserLocationVerticalAlignment';
 import UserLocationChange from '../examples/UserLocation/UserLocationChange';
@@ -132,6 +133,7 @@ const Examples = [
     new ExampleItem('Change Layer Color', ChangeLayerColor),
     new ExampleItem('Source Layer Visiblity', SourceLayerVisibility),
     new ExampleItem('Style JSON', StyleJson),
+    new ExampleItem('Set Tint Color', SetTintColor),
   ]),
   new ExampleGroup('Camera', [
     new ExampleItem('Set Pitch', SetPitch),
