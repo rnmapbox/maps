@@ -12,6 +12,7 @@ Fix crash with missing okhttp dependency ([#1452](https://github.com/react-nativ
 Move from react-native-testing-library => @testing-library/react-native ([#1453](https://github.com/react-native-mapbox-gl/maps/pull/1453))  
 Feat(camera): maxBounds/(min|max)ZoomLevel can be updated dynamically ([#1462](https://github.com/react-native-mapbox-gl/maps/pull/1462))  
 Refactor(example): clean up folder structure ([#1464](https://github.com/react-native-mapbox-gl/maps/pull/1464))  
+Fix lineGradient showing wrong colors ([#1471](https://github.com/react-native-mapbox-gl/maps/pull/1471))
 Support tintColor on Android ([#1465](https://github.com/react-native-mapbox-gl/maps/pull/1465))  
 Feat(android): dynamically update tintColor & add example ([#1469](https://github.com/react-native-mapbox-gl/maps/pull/1469)
 

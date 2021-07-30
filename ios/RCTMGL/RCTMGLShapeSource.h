@@ -25,6 +25,7 @@
 @property (nonatomic, strong) NSNumber *maxZoomLevel;
 @property (nonatomic, strong) NSNumber *buffer;
 @property (nonatomic, strong) NSNumber *tolerance;
+@property (nonatomic, strong) NSNumber *lineMetrics;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 @property (nonatomic, assign) BOOL hasPressListener;

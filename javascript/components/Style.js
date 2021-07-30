@@ -169,6 +169,9 @@ function getShapeSource(id, source) {
   if (source.tolerance !== undefined) {
     sourceProps.tolerance = source.tolerance;
   }
+  if (source.lineMetrics !== undefined) {
+    sourceProps.lineMetrics = source.lineMetrics;
+  }
   return <ShapeSource key={id} id={id} {...sourceProps} />;
 }
 

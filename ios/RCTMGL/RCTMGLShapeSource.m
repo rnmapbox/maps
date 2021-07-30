@@ -94,6 +94,10 @@ static UIImage * _placeHolderImage;
         options[MGLShapeSourceOptionSimplificationTolerance] = _tolerance;
     }
 
+    if (_lineMetrics != nil) {
+        options[MGLShapeSourceOptionLineDistanceMetrics] = _lineMetrics;
+    }
+
     return options;
 }
 

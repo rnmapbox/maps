@@ -128,6 +128,11 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
         source.setTolerance(tolerance);
     }
 
+    @ReactProp(name = "lineMetrics")
+    public void setLineMetrics(RCTMGLShapeSource source, boolean lineMetrics) {
+        source.setLineMetrics(lineMetrics);
+    }
+
     @ReactProp(name = "hasPressListener")
     public void setHasPressListener(RCTMGLShapeSource source, boolean hasPressListener) {
         source.setHasPressListener(hasPressListener);
