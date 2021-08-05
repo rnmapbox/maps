@@ -2,6 +2,12 @@
 #
 .DS_Store
 
+# MAPBOX token ENVs
+# generated on set-up
+#
+accesstoken
+env.json
+
 # Xcode
 #
 build/
