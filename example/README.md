@@ -50,7 +50,7 @@ Not a Mapbox user yet? [Sign up for an account here](https://www.mapbox.com/sign
 ```
 cd example
 ```
-* Create a file called `accesstoken` in the root of the example project and just paste in your [Mapbox access token](https://www.mapbox.com/studio/account/tokens/). (The `accesstoken` file is processed in postinstall, so you need to run `npm install` after adding/changing accesstoken.)
+* Create a file called `accesstoken` in the root of the example project and just paste in your [Mapbox access token](https://www.mapbox.com/studio/account/tokens/). (The `accesstoken` file is processed in postinstall, so you need to run `yarn install` after adding/changing accesstoken.)
 
 * Install our dependencies using `yarn install`.
 
@@ -63,7 +63,7 @@ Open up another tab in your Terminal and run
 yarn start
 ```
 
-*Note*: if modules were added to base lib you might need to run `npm start --reset-cache` because we're using `babel` to [rewrite imports](https://github.com/react-native-mapbox-gl/maps/pull/778)
+*Note*: if modules were added to base lib you might need to run `yarn start --reset-cache` because we're using `babel` to [rewrite imports](https://github.com/react-native-mapbox-gl/maps/pull/778)
 
 <br>
 
