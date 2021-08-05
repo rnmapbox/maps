@@ -15,6 +15,7 @@ Refactor(example): clean up folder structure ([#1464](https://github.com/react-n
 Fix lineGradient showing wrong colors ([#1471](https://github.com/react-native-mapbox-gl/maps/pull/1471))
 Support tintColor on Android ([#1465](https://github.com/react-native-mapbox-gl/maps/pull/1465))  
 Feat(android): dynamically update tintColor & add example ([#1469](https://github.com/react-native-mapbox-gl/maps/pull/1469)
+Docs: make background in example pngs transparent ([#1483](https://github.com/react-native-mapbox-gl/maps/pull/1483)
 
 ---
 
