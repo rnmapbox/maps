@@ -16,6 +16,7 @@ Fix lineGradient showing wrong colors ([#1471](https://github.com/react-native-m
 Support tintColor on Android ([#1465](https://github.com/react-native-mapbox-gl/maps/pull/1465))  
 Feat(android): dynamically update tintColor & add example ([#1469](https://github.com/react-native-mapbox-gl/maps/pull/1469)
 Docs: make background in example pngs transparent ([#1483](https://github.com/react-native-mapbox-gl/maps/pull/1483)
+Examples: align install steps with yarn, ignore created env files ([#1484](https://github.com/react-native-mapbox-gl/maps/pull/1484)
 
 ---
 
