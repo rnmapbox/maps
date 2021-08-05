@@ -67,7 +67,7 @@ yarn start
 
 <br>
 
-## Run Android Simulator
+## Run Android Emulator
 
 * Start Android emulator
 * Run `yarn android` from `example` directory
