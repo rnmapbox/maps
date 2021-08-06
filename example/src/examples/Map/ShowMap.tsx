@@ -6,9 +6,9 @@ import sheet from '../../styles/sheet';
 import {onSortOptions} from '../../utils';
 import TabBarPage from '../common/TabBarPage';
 
-const ShowMap: FC<any> = (props) => {
+const ShowMap: FC<any> = props => {
   const _mapOptions = Object.keys(MapboxGL.StyleURL)
-    .map((key) => {
+    .map(key => {
       return {
         label: key,
         data: (MapboxGL.StyleURL as any)[key], // bad any, because enums

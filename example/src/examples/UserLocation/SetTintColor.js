@@ -16,7 +16,7 @@ class SetTintColor extends React.Component {
 
   state = {tintColor: COLOR[0]};
 
-  onTintColorChange = (index) => {
+  onTintColorChange = index => {
     this.setState({tintColor: COLOR[index]});
   };
 
@@ -26,19 +26,18 @@ class SetTintColor extends React.Component {
         {...this.props}
         options={OPTIONS}
         onOptionPress={this.onTintColorChange}>
-        <MapboxGL.MapView 
+        <MapboxGL.MapView
           style={sheet.matchParent}
-          tintColor={this.state.tintColor} 
-        >
+          tintColor={this.state.tintColor}>
           <MapboxGL.Camera
             followZoomLevel={16}
             followUserMode="compass"
             followUserLocation
           />
 
-          <MapboxGL.UserLocation 
-          renderMode='native' 
-          androidRenderMode='compass'
+          <MapboxGL.UserLocation
+            renderMode="native"
+            androidRenderMode="compass"
           />
         </MapboxGL.MapView>
       </TabBarPage>

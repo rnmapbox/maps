@@ -74,7 +74,6 @@ import UserLocationChange from '../examples/UserLocation/UserLocationChange';
 import BugReportTemplate from '../examples/BugReportExample';
 import CacheManagement from '../examples/CacheManagement';
 
-
 const styles = StyleSheet.create({
   exampleList: {
     flex: 1,
@@ -231,7 +230,7 @@ function ExampleGroupComponent({items, navigation, showBack}) {
         <FlatList
           style={styles.exampleList}
           data={items}
-          keyExtractor={(item) => item.label}
+          keyExtractor={item => item.label}
           renderItem={renderItem}
         />
       </View>

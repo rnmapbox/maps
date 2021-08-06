@@ -35,16 +35,16 @@ class AnnotationWithRemoteImage extends React.Component {
         coordinate={coordinate}
         title={title}
         draggable
-        onDrag={(e) =>
+        onDrag={e =>
           console.log('onDrag:', e.properties.id, e.geometry.coordinates)
         }
-        onDragStart={(e) =>
+        onDragStart={e =>
           console.log('onDragStart:', e.properties.id, e.geometry.coordinates)
         }
-        onDragEnd={(e) =>
+        onDragEnd={e =>
           console.log('onDragEnd:', e.properties.id, e.geometry.coordinates)
         }
-        ref={(ref) => (this.annotationRef = ref)}>
+        ref={ref => (this.annotationRef = ref)}>
         <View style={styles.annotationContainer}>
           <Image
             source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}}
@@ -159,7 +159,7 @@ class ShowPointAnnotation extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          ref={(c) => (this._map = c)}
+          ref={c => (this._map = c)}
           onPress={this.onPress}
           onDidFinishLoadingMap={this.onDidFinishLoadingMap}
           style={sheet.matchParent}>

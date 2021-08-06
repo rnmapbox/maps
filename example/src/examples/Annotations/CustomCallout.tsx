@@ -46,18 +46,18 @@ type CustomCalloutProps = {
   onDismissExample: () => any;
 };
 
-const CustomCallout: FC<CustomCalloutProps> = (props) => {
+const CustomCallout: FC<CustomCalloutProps> = props => {
   const [selectedFeature, setSelectedFeature] =
     useState<Feature<{type: string; coordinates: number[]}, any>>();
 
   const onPinPress = (e: any): void => {
-      if(selectedFeature) {
-        setSelectedFeature(undefined);
-        return;
-      }
+    if (selectedFeature) {
+      setSelectedFeature(undefined);
+      return;
+    }
 
-      const feature = e?.features[0];
-      setSelectedFeature(feature);
+    const feature = e?.features[0];
+    setSelectedFeature(feature);
   };
 
   return (

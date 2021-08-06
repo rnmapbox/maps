@@ -54,7 +54,7 @@ class ShowMarkerView extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          ref={(c) => (this._map = c)}
+          ref={c => (this._map = c)}
           onPress={this.onPress}
           onDidFinishLoadingMap={this.onDidFinishLoadingMap}
           style={sheet.matchParent}>

@@ -24,7 +24,7 @@ class SetUserTrackingModes extends React.Component {
     super(props);
 
     this._trackingOptions = Object.keys(MapboxGL.UserTrackingModes)
-      .map((key) => {
+      .map(key => {
         return {
           label: key,
           data: MapboxGL.UserTrackingModes[key],

@@ -47,7 +47,7 @@ class GetCenter extends React.Component {
       <Page {...this.props}>
         <MapboxGL.MapView
           onRegionDidChange={this.onRegionDidChange}
-          ref={(c) => (this._map = c)}
+          ref={c => (this._map = c)}
           onPress={this.onPress}
           style={styles.mapView}>
           <MapboxGL.Camera
