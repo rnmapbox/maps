@@ -67,16 +67,16 @@ Before you run your project be sure you have completeded the Installation Guides
 
 ### Run iOS Simulator
 ```sh
-# Run with NPM
+# Run with yarn
 yarn run ios
 
 # or Run with NPM
 npm run ios
 ```
 
-### Run Android Simulator
+### Run Android Emulator
 ```sh
-# Run with NPM
+# Run with yarn
 yarn run android
 
 # or Run with NPM
