@@ -7,7 +7,7 @@ import Page from '../common/Page';
 
 const style = JSON.stringify(require('../../assets/map-styleURL-style.json'));
 
-const ShowMap: FC<any> = (props) => {
+const ShowMap: FC<any> = props => {
   useEffect(() => {
     MapboxGL.locationManager.start();
 

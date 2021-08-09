@@ -15,8 +15,13 @@ class GradientLine extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView style={sheet.matchParent}>
-          <MapboxGL.Camera centerCoordinate={[-77.035, 38.875]} zoomLevel={12} />
-          <MapboxGL.ShapeSource id="source1" lineMetrics={true}
+          <MapboxGL.Camera
+            centerCoordinate={[-77.035, 38.875]}
+            zoomLevel={12}
+          />
+          <MapboxGL.ShapeSource
+            id="source1"
+            lineMetrics={true}
             shape={{
               type: 'Feature',
               geometry: {
@@ -42,29 +47,32 @@ class GradientLine extends React.Component {
                 ],
               },
             }}>
-            <MapboxGL.LineLayer id="layer1" style={{
-              lineColor: 'red',
-              lineCap: "round",
-              lineJoin: "round",
-              lineWidth: 14,
-              lineGradient: [
-                'interpolate',
-                ['linear'],
-                ['line-progress'],
-                0,
-                'blue',
-                0.1,
-                'royalblue',
-                0.3,
-                'cyan',
-                0.5,
-                'lime',
-                0.7,
-                'yellow',
-                1,
-                'red'
-              ]
-            }} />
+            <MapboxGL.LineLayer
+              id="layer1"
+              style={{
+                lineColor: 'red',
+                lineCap: 'round',
+                lineJoin: 'round',
+                lineWidth: 14,
+                lineGradient: [
+                  'interpolate',
+                  ['linear'],
+                  ['line-progress'],
+                  0,
+                  'blue',
+                  0.1,
+                  'royalblue',
+                  0.3,
+                  'cyan',
+                  0.5,
+                  'lime',
+                  0.7,
+                  'yellow',
+                  1,
+                  'red',
+                ],
+              }}
+            />
           </MapboxGL.ShapeSource>
         </MapboxGL.MapView>
       </Page>

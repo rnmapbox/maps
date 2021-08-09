@@ -45,7 +45,7 @@ class PointInMapView extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          ref={(c) => (this._map = c)}
+          ref={c => (this._map = c)}
           onPress={this.onPress}
           style={styles.mapView}>
           <MapboxGL.Camera
