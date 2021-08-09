@@ -18,6 +18,7 @@ Feat(android): dynamically update tintColor & add example ([#1469](https://githu
 Docs: make background in example pngs transparent ([#1483](https://github.com/react-native-mapbox-gl/maps/pull/1483)
 Examples: align install steps with yarn, ignore created env files ([#1484](https://github.com/react-native-mapbox-gl/maps/pull/1484)
 Style: run yarn lint ([#1486](https://github.com/react-native-mapbox-gl/maps/pull/1486)
+Test: add unit tests for component light ([#1489](https://github.com/react-native-mapbox-gl/maps/pull/1489))
 
 ---
 
