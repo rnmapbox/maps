@@ -1,0 +1,1 @@
+Copyright (c) 2020 Scout To Hunt, LLC, All rights reserved
