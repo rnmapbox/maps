@@ -1,7 +1,13 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '11.0'
+$RNMBGL_USE_V10 = true
+
+if $RNMBGL_USE_V10
+  platform :ios, '13.0'
+else
+  platform :ios, '11.0'
+end
 
 useMapLibre = false
 
@@ -68,6 +74,31 @@ target 'RNMapboxGLExample' do
       react_native_post_install(installer)
       __apply_Xcode_12_5_M1_post_install_workaround(installer)
       $RNMBGL.post_install(installer)
+    
+      # Work around for issue described here: https://github.com/CocoaPods/CocoaPods/issues/8122#issuecomment-427680543
+      project_path = 'RNMapboxGLExample.xcodeproj'
+      project = Xcodeproj::Project.open(project_path)
+      project.targets.each do |target|
+        build_phase = target.build_phases.find { |bp| bp.display_name == '[CP] Copy Pods Resources' }
+
+        puts "build_phase: #{build_phase}"
+        if build_phase.present?
+          puts "Input paths: #{build_phase.input_paths.join(',')}"
+          build_phase.input_paths.push('${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets.car')
+          build_phase.output_paths.delete('${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets.car')
+        end
+      end
+      project.save(project_path)
+
+      project = Xcodeproj::Project.open(project_path)
+      project.targets.each do |target|
+        build_phase = target.build_phases.find { |bp| bp.display_name == '[CP] Copy Pods Resources' }
+
+        puts "[1] build_phase: #{build_phase}"
+        if build_phase.present?
+          puts "[2] Input paths: #{build_phase.input_paths.join(',')}"
+        end
+      end
     end
   else
     # CI configuration
