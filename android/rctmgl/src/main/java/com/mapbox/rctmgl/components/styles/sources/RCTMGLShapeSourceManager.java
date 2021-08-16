@@ -155,6 +155,7 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
     public static final int METHOD_FEATURES = 103;
     public static final int METHOD_GET_CLUSTER_EXPANSION_ZOOM = 104;
     public static final int METHOD_GET_CLUSTER_LEAVES = 105;
+    public static final int METHOD_GET_CLUSTER_CHILDREN = 106;
 
     @Nullable
     @Override
@@ -163,6 +164,7 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
                 .put("features", METHOD_FEATURES)
                 .put("getClusterExpansionZoom", METHOD_GET_CLUSTER_EXPANSION_ZOOM)
                 .put("getClusterLeaves", METHOD_GET_CLUSTER_LEAVES)
+                .put("getClusterChildren", METHOD_GET_CLUSTER_CHILDREN)
                 .build();
     }
 
@@ -184,6 +186,12 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
                         args.getInt(1),
                         args.getInt(2),
                         args.getInt((3))
+                );
+                break;
+            case METHOD_GET_CLUSTER_CHILDREN:
+                source.getClusterChildren(
+                        args.getString(0),
+                        args.getInt(1)                        
                 );
                 break;
         }

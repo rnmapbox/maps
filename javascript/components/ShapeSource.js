@@ -197,6 +197,29 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
     return res.data;
   }
 
+  /**
+   * Returns the FeatureCollection from the cluster (on the next zoom level).
+   *
+   * @example
+   * const collection = await shapeSource.getClusterChildren(clusterId);
+   *
+   * @param  {number} clusterId - The id of the cluster to expand.
+   * @return {FeatureCollection}
+   */
+  async getClusterChildren(clusterId) {
+    const res = await this._runNativeCommand(
+      'getClusterChildren',
+      this._nativeRef,
+      [clusterId],
+    );
+
+    if (isAndroid()) {
+      return JSON.parse(res.data);
+    }
+
+    return res.data;
+  }
+
   setNativeProps(props) {
     const shallowProps = Object.assign({}, props);
 
