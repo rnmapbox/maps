@@ -5,7 +5,7 @@ def safeExtGet(prop, fallback) {
 }
 
 android {
-    if safeExtGet("mapboxV10") {
+    if (safeExtGet("mapboxV10", false)) {
         sourceSets {
             main {
                 java.srcDirs = ['src/main/java-v10']
@@ -68,7 +68,7 @@ dependencies {
 
     // Mapbox SDK
     customizableDependencies('rnmbglMapboxLibs') {
-        if safeExtGet("mapboxV10", false) {
+        if (safeExtGet("mapboxV10", false)) {
             implementation 'com.mapbox.maps:android:10.0.0-rc.5'
         } else {
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.1.0'
@@ -88,7 +88,7 @@ dependencies {
 
     // Mapbox plugins
     customizableDependencies('rnmbglMapboxPlugins') {
-        if !safeExtGet("mapboxV10", false) {
+        if (!safeExtGet("mapboxV10", false)) {
             implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.6.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v9:0.12.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v9:0.4.0'
