@@ -52,9 +52,16 @@ import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.Property;
 
  */
+import com.mapbox.geojson.Point;
+import com.mapbox.maps.ScreenCoordinate;
+import com.mapbox.maps.plugin.gestures.OnMapClickListener;
+import com.mapbox.maps.plugin.gestures.MapboxMapUtils;
+// import com.mapbox.maps.plugin.gestures.GesturesUtils;
 import com.mapbox.maps.extension.style.layers.LayerUtils;
+import com.mapbox.maps.plugin.delegates.MapPluginExtensionsDelegate;
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener;
 import com.mapbox.maps.plugin.delegates.listeners.eventdata.MapLoadErrorType;
+import com.mapbox.maps.plugin.gestures.OnMapClickListener;
 import com.mapbox.rctmgl.R;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 /*
@@ -73,13 +80,15 @@ import com.mapbox.rctmgl.components.styles.sources.RCTMGLShapeSource;
 import com.mapbox.rctmgl.events.AndroidCallbackEvent;
 import com.mapbox.rctmgl.events.IEvent;
 import com.mapbox.rctmgl.events.MapChangeEvent;
-import com.mapbox.rctmgl.events.MapClickEvent;
 import com.mapbox.rctmgl.events.constants.EventTypes;
 import com.mapbox.rctmgl.utils.BitmapUtils;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.rctmgl.utils.GeoViewport;
 
  */
+
+
+import com.mapbox.rctmgl.events.MapClickEvent;
 
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 
@@ -100,12 +109,14 @@ import com.mapbox.maps.Style;
 import com.mapbox.maps.extension.style.layers.Layer;
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener;
 
+import com.mapbox.rctmgl.utils.LatLng;
 import com.mapbox.rctmgl.utils.Logger;
 
 
 // import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 
-public class RCTMGLMapView extends MapView  {
+public class RCTMGLMapView extends MapView implements OnMapClickListener {
+    RCTMGLMapViewManager mManager;
     private Map<String, RCTSource> mSources;
     private String mStyleURL;
     private MapboxMap mMap;
@@ -113,8 +124,11 @@ public class RCTMGLMapView extends MapView  {
     public RCTMGLMapView(Context context, RCTMGLMapViewManager manager/*, MapboxMapOptions options*/) {
         super(context);
 
+        mManager = manager;
         mMap = this.getMapboxMap();
         mSources = new HashMap<>();
+
+        MapboxMapUtils.addOnMapClickListener(mMap, this);
     }
 
     public void init() {
@@ -194,6 +208,15 @@ public class RCTMGLMapView extends MapView  {
                 );
             }
         }
+    }
+
+    @Override
+    public boolean onMapClick(@NonNull Point point) {
+        ScreenCoordinate screenPoint = mMap.pixelForCoordinate(point);
+
+        MapClickEvent event = new MapClickEvent(this, new LatLng(point), screenPoint);
+        mManager.handleEvent(event);
+        return false;
     }
 
     public interface FoundLayerCallback {
