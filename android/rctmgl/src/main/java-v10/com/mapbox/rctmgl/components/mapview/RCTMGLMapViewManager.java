@@ -19,6 +19,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.maps.MapboxMap;
 
 import com.mapbox.rctmgl.components.AbstractEventEmitter;
+import com.mapbox.rctmgl.events.constants.EventKeys;
 /*
 import com.mapbox.rctmgl.events.constants.EventKeys;
 import com.mapbox.rctmgl.utils.ConvertUtils;
@@ -207,7 +208,6 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
 
     @Override
     public Map<String, String> customEvents() {
-        /*
         return MapBuilder.<String, String>builder()
                 .put(EventKeys.MAP_CLICK, "onPress")
                 .put(EventKeys.MAP_LONG_CLICK,"onLongPress")
@@ -216,9 +216,6 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                 .put(EventKeys.MAP_USER_TRACKING_MODE_CHANGE, "onUserTrackingModeChange")
                 .put(EventKeys.MAP_ANDROID_CALLBACK, "onAndroidCallback")
                 .build();
-
-         */
-        return null;
     }
 
     //endregion

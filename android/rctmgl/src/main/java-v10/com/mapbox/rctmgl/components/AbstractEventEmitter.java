@@ -8,7 +8,9 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.events.EventDispatcher;
+
 import com.mapbox.rctmgl.events.IEvent;
+import com.mapbox.rctmgl.components.AbstractEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +42,7 @@ abstract public class AbstractEventEmitter<T extends ViewGroup> extends ViewGrou
         }
 
         mRateLimitedEvents.put(eventCacheKey, System.currentTimeMillis());
-//        mEventDispatcher.dispatchEvent(new AbstractEvent(event.getID(), event.getKey(), event.canCoalesce(), event.toJSON()));
+        mEventDispatcher.dispatchEvent(new AbstractEvent(event.getID(), event.getKey(), event.canCoalesce(), event.toJSON()));
     }
 
     @Override

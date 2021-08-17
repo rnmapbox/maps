@@ -7,13 +7,14 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.common.MapBuilder;
 
-
 import com.mapbox.maps.extension.style.layers.properties.generated.LineJoin;
-
 
 import com.mapbox.maps.Style;
 import com.mapbox.maps.ResourceOptions;
 import com.mapbox.maps.ResourceOptionsManager;
+
+import com.mapbox.rctmgl.components.camera.constants.CameraMode;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,6 +64,13 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         lineJoin.put("Round", LineJoin.ROUND.getValue());
         lineJoin.put("Miter", LineJoin.MITER.getValue());
 
+        // camera modes
+        Map<String, Integer> cameraModes = new HashMap<>();
+        cameraModes.put("Flight", CameraMode.FLIGHT);
+        cameraModes.put("Ease", CameraMode.EASE);
+        cameraModes.put("Linear", CameraMode.LINEAR);
+        cameraModes.put("None", CameraMode.NONE);
+
         // location module callback names
         Map<String, String> locationModuleCallbackNames = new HashMap<>();
         locationModuleCallbackNames.put("Update", RCTMGLLocationModule.LOCATION_UPDATE);
@@ -70,6 +78,7 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         return MapBuilder.<String, Object>builder()
                 .put("StyleURL", styleURLS)
                 .put("StyleSource", styleSourceConsts)
+                .put("CameraModes", cameraModes)
                 .put("LineJoin", lineJoin)
                 .put("LocationCallbackName", locationModuleCallbackNames)
                 .build();
