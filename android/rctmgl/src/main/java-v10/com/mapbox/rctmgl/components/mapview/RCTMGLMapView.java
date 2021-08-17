@@ -52,6 +52,9 @@ import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.Property;
 
  */
+import com.mapbox.maps.extension.style.layers.LayerUtils;
+import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener;
+import com.mapbox.maps.plugin.delegates.listeners.eventdata.MapLoadErrorType;
 import com.mapbox.rctmgl.R;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 /*
@@ -67,7 +70,6 @@ import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeTracker;
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
 import com.mapbox.rctmgl.components.styles.light.RCTMGLLight;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLShapeSource;
-import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 import com.mapbox.rctmgl.events.AndroidCallbackEvent;
 import com.mapbox.rctmgl.events.IEvent;
 import com.mapbox.rctmgl.events.MapChangeEvent;
@@ -78,6 +80,8 @@ import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.rctmgl.utils.GeoViewport;
 
  */
+
+import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,15 +95,30 @@ import org.json.*;
 import javax.annotation.Nullable;
 
 import com.mapbox.maps.MapView;
+import com.mapbox.maps.MapboxMap;
+import com.mapbox.maps.Style;
+import com.mapbox.maps.extension.style.layers.Layer;
+import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener;
+
+import com.mapbox.rctmgl.utils.Logger;
+
 
 // import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 
 public class RCTMGLMapView extends MapView  {
+    private Map<String, RCTSource> mSources;
+    private String mStyleURL;
+    private MapboxMap mMap;
+
     public RCTMGLMapView(Context context, RCTMGLMapViewManager manager/*, MapboxMapOptions options*/) {
         super(context);
+
+        mMap = this.getMapboxMap();
+        mSources = new HashMap<>();
     }
 
     public void init() {
+
     }
 
     public void addFeature(View childView, int childPosition) {
@@ -116,4 +135,97 @@ public class RCTMGLMapView extends MapView  {
 
     public void removeFeature(int index) {
     }
+
+    private void removeAllSourcesFromMap() {
+        if (mSources.size() == 0) {
+            return;
+        }
+        for (String key : mSources.keySet()) {
+            RCTSource source = mSources.get(key);
+            source.removeFromMap(this);
+        }
+    }
+
+    private void addAllSourcesToMap() {
+        if (mSources.size() == 0) {
+            return;
+        }
+        for (String key : mSources.keySet()) {
+            RCTSource source = mSources.get(key);
+            source.addToMap(this);
+        }
+    }
+
+    public boolean isJSONValid(String test) {
+        try {
+            new JSONObject(test);
+        } catch (JSONException ex) {
+            return false;
+        }
+        return true;
+    }
+
+    public void setReactStyleURL(String styleURL) {
+        mStyleURL = styleURL;
+
+        if (mMap != null) {
+            removeAllSourcesFromMap();
+
+            if (isJSONValid(mStyleURL)) {
+
+                mMap.loadStyleJson(mStyleURL, new Style.OnStyleLoaded() {
+                    @Override
+                    public void onStyleLoaded(@NonNull Style style) {
+                        addAllSourcesToMap();
+                    }
+                });
+            } else {
+                mMap.loadStyleUri(styleURL, new Style.OnStyleLoaded() {
+                    @Override
+                    public void onStyleLoaded(@NonNull Style style) {
+                        addAllSourcesToMap();
+                    }},
+                    new OnMapLoadErrorListener() {
+                        @Override
+                        public void onMapLoadError(@NonNull MapLoadErrorType mapLoadErrorType, @NonNull String s) {
+                            Logger.w("Hello","Hallo", null);
+                        }
+                    }
+                );
+            }
+        }
+    }
+
+    public interface FoundLayerCallback {
+        public void found(Layer layer);
+    }
+
+    private Map<String, List<FoundLayerCallback>> layerWaiters = new HashMap<String, List<FoundLayerCallback>>();
+
+    public void layerAdded(Layer layer) {
+        String layerId = layer.getLayerId();
+
+        List<FoundLayerCallback> callbacks = layerWaiters.get(layerId);
+        if (callbacks != null) {
+            for (FoundLayerCallback callback : callbacks) {
+                callback.found(layer);
+            }
+        }
+        layerWaiters.remove(layerId);
+    }
+
+    public void waitForLayer(String layerID, FoundLayerCallback callback) {
+        Layer layer = LayerUtils.getLayer(mMap.getStyle(), layerID);
+        if (layer != null) {
+            callback.found(layer);
+        } else {
+            List<FoundLayerCallback> waiters = layerWaiters.get(layerID);
+            if (waiters == null) {
+                waiters = new ArrayList<FoundLayerCallback>();
+                layerWaiters.put(layerID, waiters);
+            }
+            waiters.add(callback);
+        }
+    }
+
 }

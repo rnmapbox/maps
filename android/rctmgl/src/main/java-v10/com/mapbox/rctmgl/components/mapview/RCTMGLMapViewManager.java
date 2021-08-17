@@ -12,7 +12,7 @@ import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 /*
-import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+import com.mapbox.mapboxsdk.gqeometry.LatLngBounds;
 import com.mapbox.mapboxsdk.log.Logger;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
  */
@@ -123,7 +123,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
 
     @ReactProp(name="styleURL")
     public void setStyleURL(RCTMGLMapView mapView, String styleURL) {
-        //mapView.setReactStyleURL(styleURL);
+        mapView.setReactStyleURL(styleURL);
     }
 
     @ReactProp(name="preferredFramesPerSecond")
