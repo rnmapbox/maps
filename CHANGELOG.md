@@ -5,6 +5,10 @@ Please add unreleased changes in the following style:
 PR Title ([#123](link to my pr))
 ```
 
+---
+
+## 8.3.0
+
 Fix TypeScript type for Callout's textStyle prop ([#1450](https://github.com/react-native-mapbox-gl/maps/pull/1450))  
 Build(ios): pin maplibre version to 5.12.0 ([#1454](https://github.com/react-native-mapbox-gl/maps/pull/1454))  
 Update geoUtils helpers types to correspond with `turf/helpers` ([#1455](https://github.com/react-native-mapbox-gl/maps/pull/1455))  
@@ -25,8 +29,6 @@ Examples: align install steps with yarn, ignore created env files ([#1484](https
 Style: run yarn lint ([#1486](https://github.com/react-native-mapbox-gl/maps/pull/1486))  
 Test: add unit tests for component light ([#1489](https://github.com/react-native-mapbox-gl/maps/pull/1489))  
 Feat: add Adds getClusterChildren method to ShapeSource ([#1495](https://github.com/react-native-mapbox-gl/maps/pull/1495))
-
----
 
 ## 8.2.1
 
