@@ -6,6 +6,32 @@ import sheet from '../../styles/sheet';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import Page from '../common/Page';
 
+const styles = {
+  lineLayer: {
+    lineColor: 'red',
+    lineCap: 'round',
+    lineJoin: 'round',
+    lineWidth: 14,
+    lineGradient: [
+      'interpolate',
+      ['linear'],
+      ['line-progress'],
+      0,
+      'blue',
+      0.1,
+      'royalblue',
+      0.3,
+      'cyan',
+      0.5,
+      'lime',
+      0.7,
+      'yellow',
+      1,
+      'red',
+    ],
+  },
+};
+
 class GradientLine extends React.Component {
   static propTypes = {
     ...BaseExamplePropTypes,
@@ -47,32 +73,7 @@ class GradientLine extends React.Component {
                 ],
               },
             }}>
-            <MapboxGL.LineLayer
-              id="layer1"
-              style={{
-                lineColor: 'red',
-                lineCap: 'round',
-                lineJoin: 'round',
-                lineWidth: 14,
-                lineGradient: [
-                  'interpolate',
-                  ['linear'],
-                  ['line-progress'],
-                  0,
-                  'blue',
-                  0.1,
-                  'royalblue',
-                  0.3,
-                  'cyan',
-                  0.5,
-                  'lime',
-                  0.7,
-                  'yellow',
-                  1,
-                  'red',
-                ],
-              }}
-            />
+            <MapboxGL.LineLayer id="layer1" style={styles.lineLayer} />
           </MapboxGL.ShapeSource>
         </MapboxGL.MapView>
       </Page>
