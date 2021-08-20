@@ -121,7 +121,7 @@ RCT_EXPORT_METHOD(getClusterChildren:(nonnull NSNumber*)reactTag
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
         RCTMGLShapeSource* shapeSource = (RCTMGLShapeSource *)viewRegistry[reactTag];
 
-        NSArray<id<MGLFeature>> *shapes = [sтвhapeSource getClusterChildren: clusterId];
+        NSArray<id<MGLFeature>> *shapes = [shapeSource getClusterChildren: clusterId];
 
         NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] initWithCapacity:shapes.count];
         for (int i = 0; i < shapes.count; i++) {
