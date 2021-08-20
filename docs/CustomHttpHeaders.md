@@ -20,11 +20,10 @@ Suggested location is `[AppDelegate application: didFinishLaunchingWithOptions:]
 #### Working example (AppDelegate.m)
 
 ```obj-c
-@implementation AppDelegate
-
 // (1) Include the header file
 #import "MGLCustomHeaders.h"
 
+@implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
