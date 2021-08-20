@@ -3644,6 +3644,33 @@
         ]
       },
       {
+        "name": "getClusterChildren",
+        "docblock": "Returns the FeatureCollection from the cluster (on the next zoom level).\n\n@example\nconst collection = await shapeSource.getClusterChildren(clusterId);\n\n@param  {number} clusterId - The id of the cluster to expand.\n@return {FeatureCollection}",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "clusterId",
+            "description": "The id of the cluster to expand.",
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          }
+        ],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "FeatureCollection"
+          }
+        },
+        "description": "Returns the FeatureCollection from the cluster (on the next zoom level).",
+        "examples": [
+          "\nconst collection = await shapeSource.getClusterChildren(clusterId);\n\n"
+        ]
+      },
+      {
         "name": "onPress",
         "docblock": null,
         "modifiers": [],

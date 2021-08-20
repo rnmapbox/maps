@@ -305,6 +305,11 @@ declare namespace MapboxGL {
     * @param offset the amount of points to skip (for pagination)
     */
      getClusterLeaves: (clusterId: number, limit: number, offset: number ) => object
+             /**
+    * Returns the children of a cluster (on the next zoom level).
+    * @param clusterId the ID of the cluster   
+    */
+    getClusterChildren: (clusterId: number) => object
   }
   class RasterSource extends Component<RasterSourceProps> { }
 

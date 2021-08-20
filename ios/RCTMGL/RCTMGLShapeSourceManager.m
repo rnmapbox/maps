@@ -113,4 +113,25 @@ RCT_EXPORT_METHOD(getClusterLeaves:(nonnull NSNumber*)reactTag
     }];
 }
 
+RCT_EXPORT_METHOD(getClusterChildren:(nonnull NSNumber*)reactTag
+                  clusterId:(nonnull NSNumber *)clusterId                  
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
+        RCTMGLShapeSource* shapeSource = (RCTMGLShapeSource *)viewRegistry[reactTag];
+
+        NSArray<id<MGLFeature>> *shapes = [sтвhapeSource getClusterChildren: clusterId];
+
+        NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] initWithCapacity:shapes.count];
+        for (int i = 0; i < shapes.count; i++) {
+            [features addObject:shapes[i].geoJSONDictionary];
+        }
+
+        resolve(@{
+                  @"data": @{ @"type": @"FeatureCollection", @"features": features }
+                  });
+    }];
+}
+
 @end

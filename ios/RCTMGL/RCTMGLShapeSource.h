@@ -34,6 +34,7 @@
 - (nonnull NSArray<id <MGLFeature>> *)getClusterLeaves:(nonnull NSNumber *)clusterId
                                                 number:(NSUInteger)number
                                                 offset:(NSUInteger)offset;
+- (nonnull NSArray<id <MGLFeature>> *)getClusterChildren:(nonnull NSNumber *)clusterId;                                               
 
 - (double)getClusterExpansionZoom:(nonnull NSNumber *)clusterId;
 

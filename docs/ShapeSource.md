@@ -71,6 +71,22 @@ const collection = await shapeSource.getClusterLeaves(clusterId, limit, offset);
 ```
 
 
+#### getClusterChildren(clusterId)
+
+Returns the FeatureCollection from the cluster (on the next zoom level).
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `clusterId` | `number` | `Yes` | The id of the cluster to expand. |
+
+
+
+```javascript
+const collection = await shapeSource.getClusterChildren(clusterId);
+```
+
+
 #### onPress(event)
 
 
