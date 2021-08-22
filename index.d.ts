@@ -297,19 +297,19 @@ declare namespace MapboxGL {
    */
   class VectorSource extends Component<VectorSourceProps> { }
   class ShapeSource extends Component<ShapeSourceProps> {
-    getClusterExpansionZoom(clusterId: number): Promise<number>;
+    getClusterExpansionZoom(feature: Feature<Geometry, Properties>): Promise<number>;
         /**
     * Returns all the leaves of a cluster with pagination support.
-    * @param clusterId the ID of the cluster
+    * @param cluster feature cluster
     * @param limit the number of leaves to return
     * @param offset the amount of points to skip (for pagination)
     */
-     getClusterLeaves: (clusterId: number, limit: number, offset: number ) => object
+     getClusterLeaves: (feature: Feature<Geometry, Properties>, limit: number, offset: number ) => Promise<Array<FeatureCollection<Geometry, Properties>>>
              /**
     * Returns the children of a cluster (on the next zoom level).
-    * @param clusterId the ID of the cluster   
+    * @param cluster feature cluster
     */
-    getClusterChildren: (clusterId: number) => object
+    getClusterChildren: (feature: Feature<Geometry, Properties>) => Promise<Array<FeatureCollection<Geometry, Properties>>>
   }
   class RasterSource extends Component<RasterSourceProps> { }
 

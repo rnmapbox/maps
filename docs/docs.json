@@ -3575,16 +3575,16 @@
       },
       {
         "name": "getClusterExpansionZoom",
-        "docblock": "Returns the zoom needed to expand the cluster.\n\n@example\nconst zoom = await shapeSource.getClusterExpansionZoom(clusterId);\n\n@param  {number} clusterId - The id of the cluster to expand.\n@return {number}",
+        "docblock": "Returns the zoom needed to expand the cluster.\n\n@example\nconst zoom = await shapeSource.getClusterExpansionZoom(clusterId);\n\n@param  {Feature} feature - The feature cluster to expand.\n@return {number}",
         "modifiers": [
           "async"
         ],
         "params": [
           {
-            "name": "clusterId",
-            "description": "The id of the cluster to expand.",
+            "name": "feature",
+            "description": "The feature cluster to expand.",
             "type": {
-              "name": "number"
+              "name": "Feature"
             },
             "optional": false
           }
@@ -3602,16 +3602,16 @@
       },
       {
         "name": "getClusterLeaves",
-        "docblock": "Returns the FeatureCollection from the cluster.\n\n@example\nconst collection = await shapeSource.getClusterLeaves(clusterId, limit, offset);\n\n@param  {number} clusterId - The id of the cluster to expand.\n@param  {number} limit - The number of points to return.\n@param  {number} offset - The amount of points to skip (for pagination).\n@return {FeatureCollection}",
+        "docblock": "Returns the FeatureCollection from the cluster.\n\n@example\nconst collection = await shapeSource.getClusterLeaves(clusterId, limit, offset);\n\n@param  {Feature} feature - The feature cluster to expand.\n@param  {number} limit - The number of points to return.\n@param  {number} offset - The amount of points to skip (for pagination).\n@return {FeatureCollection}",
         "modifiers": [
           "async"
         ],
         "params": [
           {
-            "name": "clusterId",
-            "description": "The id of the cluster to expand.",
+            "name": "feature",
+            "description": "The feature cluster to expand.",
             "type": {
-              "name": "number"
+              "name": "Feature"
             },
             "optional": false
           },
@@ -3645,16 +3645,16 @@
       },
       {
         "name": "getClusterChildren",
-        "docblock": "Returns the FeatureCollection from the cluster (on the next zoom level).\n\n@example\nconst collection = await shapeSource.getClusterChildren(clusterId);\n\n@param  {number} clusterId - The id of the cluster to expand.\n@return {FeatureCollection}",
+        "docblock": "Returns the FeatureCollection from the cluster (on the next zoom level).\n\n@example\nconst collection = await shapeSource.getClusterChildren(clusterId);\n\n@param  {Feature} feature - The feature cluster to expand.\n@return {FeatureCollection}",
         "modifiers": [
           "async"
         ],
         "params": [
           {
-            "name": "clusterId",
-            "description": "The id of the cluster to expand.",
+            "name": "feature",
+            "description": "The feature cluster to expand.",
             "type": {
-              "name": "number"
+              "name": "Feature"
             },
             "optional": false
           }

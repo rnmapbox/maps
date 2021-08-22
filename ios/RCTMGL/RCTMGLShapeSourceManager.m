@@ -68,7 +68,7 @@ RCT_EXPORT_METHOD(features:(nonnull NSNumber*)reactTag
 }
 
 RCT_EXPORT_METHOD(getClusterExpansionZoom:(nonnull NSNumber*)reactTag
-                                clusterId:(nonnull NSNumber*)clusterId
+                                featureJSON:(nonnull NSString*)featureJSON
                                  resolver:(RCTPromiseResolveBlock)resolve
                                  rejecter:(RCTPromiseRejectBlock)reject)
 {
@@ -80,9 +80,9 @@ RCT_EXPORT_METHOD(getClusterExpansionZoom:(nonnull NSNumber*)reactTag
             return;
         }
 
-        double zoom = [shapeSource getClusterExpansionZoom:clusterId];
+        double zoom = [shapeSource getClusterExpansionZoom: featureJSON];
         if (zoom == -1) {
-          reject(@"zoom_error", [NSString stringWithFormat:@"Could not get zoom for cluster id %@", clusterId], nil);
+          reject(@"zoom_error", [NSString stringWithFormat:@"Could not get zoom for cluster %@", featureJSON], nil);
           return;
         }
         resolve(@{@"data":@(zoom)});
@@ -91,7 +91,7 @@ RCT_EXPORT_METHOD(getClusterExpansionZoom:(nonnull NSNumber*)reactTag
 
 
 RCT_EXPORT_METHOD(getClusterLeaves:(nonnull NSNumber*)reactTag
-                  clusterId:(nonnull NSNumber *)clusterId
+                  featureJSON:(nonnull NSString*)featureJSON
                   number:(NSUInteger) number
                   offset:(NSUInteger) offset
                   resolver:(RCTPromiseResolveBlock)resolve
@@ -100,7 +100,7 @@ RCT_EXPORT_METHOD(getClusterLeaves:(nonnull NSNumber*)reactTag
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
         RCTMGLShapeSource* shapeSource = (RCTMGLShapeSource *)viewRegistry[reactTag];
 
-        NSArray<id<MGLFeature>> *shapes = [shapeSource getClusterLeaves:clusterId number:number offset:offset];
+        NSArray<id<MGLFeature>> *shapes = [shapeSource getClusterLeaves:featureJSON number:number offset:offset];
 
         NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] initWithCapacity:shapes.count];
         for (int i = 0; i < shapes.count; i++) {
@@ -114,14 +114,14 @@ RCT_EXPORT_METHOD(getClusterLeaves:(nonnull NSNumber*)reactTag
 }
 
 RCT_EXPORT_METHOD(getClusterChildren:(nonnull NSNumber*)reactTag
-                  clusterId:(nonnull NSNumber *)clusterId                  
+                  featureJSON:(nonnull NSString*)featureJSON                
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 {
     [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
         RCTMGLShapeSource* shapeSource = (RCTMGLShapeSource *)viewRegistry[reactTag];
 
-        NSArray<id<MGLFeature>> *shapes = [shapeSource getClusterChildren: clusterId];
+        NSArray<id<MGLFeature>> *shapes = [shapeSource getClusterChildren: featureJSON];
 
         NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] initWithCapacity:shapes.count];
         for (int i = 0; i < shapes.count; i++) {

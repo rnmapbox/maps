@@ -181,7 +181,7 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         mManager.handleEvent(event);
     }
 
-    public void getClusterExpansionZoom(String callbackID, int clusterId) {
+    public void getClusterExpansionZoom(String callbackID, String featureJSON) {
         if (mSource == null) {
             WritableMap payload = new WritableNativeMap();
             payload.putString("error", "source is not yet loaded");
@@ -189,15 +189,13 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
             mManager.handleEvent(event);
             return;
         }
-        List<Feature> features = mSource.querySourceFeatures(Expression.eq(Expression.id(), clusterId));
-        int zoom = -1;
-        if (features.size() > 0) {
-            zoom = mSource.getClusterExpansionZoom(features.get(0));
-        }
+        Feature feature = Feature.fromJson(featureJSON);
+   
+        int zoom = mSource.getClusterExpansionZoom(feature);
 
         if (zoom == -1) {
             WritableMap payload = new WritableNativeMap();
-            payload.putString("error", "Could not get zoom for cluster id " + clusterId);
+            payload.putString("error", "Could not get zoom for cluster:" + featureJSON);
             AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
             mManager.handleEvent(event);
             return;
@@ -210,8 +208,8 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         mManager.handleEvent(event);
     }
 
-    public void getClusterLeaves(String callbackID, int clusterId, int number, int offset) {
-        Feature clusterFeature = mSource.querySourceFeatures(Expression.eq(Expression.get("cluster_id"), clusterId)).get(0);
+    public void getClusterLeaves(String callbackID, String featureJSON, int number, int offset) {
+        Feature clusterFeature = Feature.fromJson(featureJSON);
         FeatureCollection leaves = mSource.getClusterLeaves(clusterFeature, number, offset);
         WritableMap payload = new WritableNativeMap();
         payload.putString("data", leaves.toJson());
@@ -220,8 +218,8 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         mManager.handleEvent(event);
     }
 
-    public void getClusterChildren(String callbackID, int clusterId) {
-        Feature clusterFeature = mSource.querySourceFeatures(Expression.eq(Expression.get("cluster_id"), clusterId)).get(0);
+    public void getClusterChildren(String callbackID, String featureJSON) {
+        Feature clusterFeature = Feature.fromJson(featureJSON);
         FeatureCollection leaves = mSource.getClusterChildren(clusterFeature);
         WritableMap payload = new WritableNativeMap();
         payload.putString("data", leaves.toJson());
