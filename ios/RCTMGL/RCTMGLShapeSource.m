@@ -139,4 +139,42 @@ static UIImage * _placeHolderImage;
     return [shapeSource childrenOfCluster:cluster];
 }
 
+
+// Deprecated. Will be removed in 9+ ver.
+- (double)getClusterExpansionZoomById:(nonnull NSNumber *)clusterId
+{
+    MGLShapeSource *shapeSource = (MGLShapeSource *)self.source;
+    NSArray<id<MGLFeature>> *features = [shapeSource featuresMatchingPredicate: [NSPredicate predicateWithFormat:@"%K = %i", @"cluster_id", clusterId.intValue]];
+    if (features.count == 0) {
+        return -1;
+    }
+    return [shapeSource zoomLevelForExpandingCluster:(MGLPointFeatureCluster *)features[0]];
+}
+
+// Deprecated. Will be removed in 9+ ver.
+- (nonnull NSArray<id <MGLFeature>> *)getClusterLeavesById:(nonnull NSNumber *)clusterId
+    number:(NSUInteger)number
+    offset:(NSUInteger)offset
+{
+    MGLShapeSource *shapeSource = (MGLShapeSource *)self.source;
+    
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"cluster_id == %@", clusterId];
+    NSArray<id<MGLFeature>> *features = [shapeSource featuresMatchingPredicate:predicate];
+    
+    MGLPointFeatureCluster * cluster = (MGLPointFeatureCluster *)features[0];
+    return [shapeSource leavesOfCluster:cluster offset:offset limit:number];
+}
+
+// Deprecated. Will be removed in 9+ ver.
+- (nonnull NSArray<id <MGLFeature>> *)getClusterChildrenById:(nonnull NSNumber *)clusterId
+{
+    MGLShapeSource *shapeSource = (MGLShapeSource *)self.source;
+    
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"cluster_id == %@", clusterId];
+    NSArray<id<MGLFeature>> *features = [shapeSource featuresMatchingPredicate:predicate];
+    
+    MGLPointFeatureCluster * cluster = (MGLPointFeatureCluster *)features[0];
+    return [shapeSource childrenOfCluster:cluster];
+}
+
 @end

@@ -31,11 +31,22 @@
 @property (nonatomic, assign) BOOL hasPressListener;
 
 - (nonnull NSArray<id <MGLFeature>> *)featuresMatchingPredicate:(nullable NSPredicate *)predicate;
-- (nonnull NSArray<id <MGLFeature>> *)getClusterLeaves:(nonnull NSNumber *)clusterId
+- (nonnull NSArray<id <MGLFeature>> *)getClusterLeaves:(nonnull NSString *)featureJSON
                                                 number:(NSUInteger)number
                                                 offset:(NSUInteger)offset;
-- (nonnull NSArray<id <MGLFeature>> *)getClusterChildren:(nonnull NSNumber *)clusterId;                                               
+- (nonnull NSArray<id <MGLFeature>> *)getClusterChildren:(nonnull NSString *)featureJSON;                                               
 
-- (double)getClusterExpansionZoom:(nonnull NSNumber *)clusterId;
+- (double)getClusterExpansionZoom:(nonnull NSString *)featureJSON;
+
+// Deprecated. Will be removed in 9+ ver.
+- (nonnull NSArray<id <MGLFeature>> *)getClusterLeavesById:(nonnull NSNumber *)clusterId
+                                                number:(NSUInteger)number    
+                                                offset:(NSUInteger)offset;
+
+// Deprecated. Will be removed in 9+ ver.                                                
+- (nonnull NSArray<id <MGLFeature>> *)getClusterChildrenById:(nonnull NSNumber *)clusterId;     
+                                          
+// Deprecated. Will be removed in 9+ ver.
+- (double)getClusterExpansionZoomById:(nonnull NSNumber *)clusterId;
 
 @end

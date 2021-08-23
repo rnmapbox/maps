@@ -134,4 +134,72 @@ RCT_EXPORT_METHOD(getClusterChildren:(nonnull NSNumber*)reactTag
     }];
 }
 
+// Deprecated. Will be removed in 9+ ver.
+RCT_EXPORT_METHOD(getClusterExpansionZoomById:(nonnull NSNumber*)reactTag
+                                clusterId:(nonnull NSNumber*)clusterId
+                                 resolver:(RCTPromiseResolveBlock)resolve
+                                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
+        RCTMGLShapeSource* shapeSource = (RCTMGLShapeSource *)viewRegistry[reactTag];
+
+        if (![shapeSource isKindOfClass:[RCTMGLShapeSource class]]) {
+            RCTLogError(@"Invalid react tag, could not find RCTMGLMapView");
+            return;
+        }
+
+        double zoom = [shapeSource getClusterExpansionZoomById:clusterId];
+        if (zoom == -1) {
+          reject(@"zoom_error", [NSString stringWithFormat:@"Could not get zoom for cluster id %@", clusterId], nil);
+          return;
+        }
+        resolve(@{@"data":@(zoom)});
+    }];
+}
+
+// Deprecated. Will be removed in 9+ ver.
+RCT_EXPORT_METHOD(getClusterLeavesById:(nonnull NSNumber*)reactTag
+                  clusterId:(nonnull NSNumber *)clusterId
+                  number:(NSUInteger) number
+                  offset:(NSUInteger) offset
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
+        RCTMGLShapeSource* shapeSource = (RCTMGLShapeSource *)viewRegistry[reactTag];
+
+        NSArray<id<MGLFeature>> *shapes = [shapeSource getClusterLeavesById:clusterId number:number offset:offset];
+
+        NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] initWithCapacity:shapes.count];
+        for (int i = 0; i < shapes.count; i++) {
+            [features addObject:shapes[i].geoJSONDictionary];
+        }
+
+        resolve(@{
+                  @"data": @{ @"type": @"FeatureCollection", @"features": features }
+                  });
+    }];
+}
+// Deprecated. Will be removed in 9+ ver.
+RCT_EXPORT_METHOD(getClusterChildrenById:(nonnull NSNumber*)reactTag
+                  clusterId:(nonnull NSNumber *)clusterId                  
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *manager, NSDictionary<NSNumber*, UIView*> *viewRegistry) {
+        RCTMGLShapeSource* shapeSource = (RCTMGLShapeSource *)viewRegistry[reactTag];
+
+        NSArray<id<MGLFeature>> *shapes = [shapeSource getClusterChildrenById: clusterId];
+
+        NSMutableArray<NSDictionary*> *features = [[NSMutableArray alloc] initWithCapacity:shapes.count];
+        for (int i = 0; i < shapes.count; i++) {
+            [features addObject:shapes[i].geoJSONDictionary];
+        }
+
+        resolve(@{
+                  @"data": @{ @"type": @"FeatureCollection", @"features": features }
+                  });
+    }];
+}
+
 @end

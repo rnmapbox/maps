@@ -164,6 +164,18 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
    * @return {number}
    */
   async getClusterExpansionZoom(feature) {
+    if (typeof feature === 'number') {
+      console.warn(
+        'Using cluster_id is deprecated and will be removed from the future releases. Please use cluster as an argument instead.',
+      );
+      const res = await this._runNativeCommand(
+        'getClusterExpansionZoomById',
+        this._nativeRef,
+        [feature],
+      );
+      return res.data;
+    }
+
     const res = await this._runNativeCommand(
       'getClusterExpansionZoom',
       this._nativeRef,
@@ -184,6 +196,23 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
    * @return {FeatureCollection}
    */
   async getClusterLeaves(feature, limit, offset) {
+    if (typeof feature === 'number') {
+      console.warn(
+        'Using cluster_id is deprecated and will be removed from the future releases. Please use cluster as an argument instead.',
+      );
+      const res = await this._runNativeCommand(
+        'getClusterLeavesById',
+        this._nativeRef,
+        [feature, limit, offset],
+      );
+
+      if (isAndroid()) {
+        return JSON.parse(res.data);
+      }
+
+      return res.data;
+    }
+
     const res = await this._runNativeCommand(
       'getClusterLeaves',
       this._nativeRef,
@@ -207,6 +236,23 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
    * @return {FeatureCollection}
    */
   async getClusterChildren(feature) {
+    if (typeof feature === 'number') {
+      console.warn(
+        'Using cluster_id is deprecated and will be removed from the future releases. Please use cluster as an argument instead.',
+      );
+      const res = await this._runNativeCommand(
+        'getClusterChildrenById',
+        this._nativeRef,
+        [feature],
+      );
+
+      if (isAndroid()) {
+        return JSON.parse(res.data);
+      }
+
+      return res.data;
+    }
+
     const res = await this._runNativeCommand(
       'getClusterChildren',
       this._nativeRef,

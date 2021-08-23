@@ -3,6 +3,8 @@
 ```
 Please add unreleased changes in the following style:
 PR Title ([#123](link to my pr))
+
+Update ShapeSource methods to make it usable with any cluster ([#1499](https://github.com/react-native-mapbox-gl/maps/pull/1499))
 ```
 
 ---
