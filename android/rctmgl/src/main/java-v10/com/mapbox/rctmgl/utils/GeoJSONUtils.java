@@ -20,6 +20,8 @@ import com.mapbox.geojson.Polygon;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mapbox.maps.CameraBounds;
+import com.mapbox.maps.CoordinateBounds;
 import com.mapbox.rctmgl.utils.ConvertUtils;
 import com.mapbox.rctmgl.utils.LatLng;
 import com.mapbox.rctmgl.utils.LatLngBounds;
@@ -155,6 +157,25 @@ public class GeoJSONUtils {
             return null;
         }
         return (Point)feature.geometry();
+    }
+
+    public static WritableArray fromCoordinateBounds(CoordinateBounds bounds) {
+        WritableArray array = Arguments.createArray();
+        Point ne = bounds.getNortheast();
+        Point sw = bounds.getSouthwest();
+        LatLng[] latLngs = {
+                new LatLng(ne.latitude(),ne.longitude()),
+                new LatLng(ne.latitude(),sw.longitude()),
+                new LatLng(sw.latitude(), sw.longitude()),
+                new LatLng(sw.latitude(), ne.longitude())};
+        for (LatLng latLng : latLngs) {
+            array.pushArray(fromLatLng(latLng));
+        }
+        return array;
+    }
+
+    public static WritableArray fromCameraBounds(CameraBounds bounds) {
+        return fromCoordinateBounds(bounds.getBounds());
     }
 
     public static WritableArray fromLatLngBounds(LatLngBounds latLngBounds) {

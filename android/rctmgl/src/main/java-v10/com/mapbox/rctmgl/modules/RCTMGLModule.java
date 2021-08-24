@@ -14,6 +14,7 @@ import com.mapbox.maps.ResourceOptions;
 import com.mapbox.maps.ResourceOptionsManager;
 
 import com.mapbox.rctmgl.components.camera.constants.CameraMode;
+import com.mapbox.rctmgl.events.constants.EventTypes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +55,25 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         styleURLS.put("TrafficDay", Style.TRAFFIC_DAY);
         styleURLS.put("TrafficNight", Style.TRAFFIC_NIGHT);
 
+        // events
+        Map<String, String> eventTypes = new HashMap<>();
+        eventTypes.put("MapClick", EventTypes.MAP_CLICK);
+        eventTypes.put("MapLongClick", EventTypes.MAP_LONG_CLICK);
+        eventTypes.put("RegionWillChange", EventTypes.REGION_WILL_CHANGE);
+        eventTypes.put("RegionIsChanging", EventTypes.REGION_IS_CHANGING);
+        eventTypes.put("RegionDidChange", EventTypes.REGION_DID_CHANGE);
+        eventTypes.put("UserLocationUpdated", EventTypes.USER_LOCATION_UPDATED);
+        eventTypes.put("WillStartLoadingMap", EventTypes.WILL_START_LOADING_MAP);
+        eventTypes.put("DidFinishLoadingMap", EventTypes.DID_FINISH_LOADING_MAP);
+        eventTypes.put("DidFailLoadingMap", EventTypes.DID_FAIL_LOADING_MAP);
+        eventTypes.put("WillStartRenderingFrame", EventTypes.WILL_START_RENDERING_FRAME);
+        eventTypes.put("DidFinishRenderingFrame", EventTypes.DID_FINISH_RENDERING_FRAME);
+        eventTypes.put("DidFinishRenderingFrameFully", EventTypes.DID_FINISH_RENDERING_FRAME_FULLY);
+        eventTypes.put("WillStartRenderingMap", EventTypes.WILL_START_RENDERING_MAP);
+        eventTypes.put("DidFinishRenderingMap", EventTypes.DID_FINISH_RENDERING_MAP);
+        eventTypes.put("DidFinishRenderingMapFully", EventTypes.DID_FINISH_RENDERING_MAP_FULLY);
+        eventTypes.put("DidFinishLoadingStyle", EventTypes.DID_FINISH_LOADING_STYLE);
+
         // style source constants
         Map<String, String> styleSourceConsts = new HashMap<>();
         styleSourceConsts.put("DefaultSourceID", "TODO-defautl id"); //v10todo
@@ -62,7 +82,7 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         Map<String, String> lineJoin = new HashMap<>();
         lineJoin.put("Bevel", LineJoin.BEVEL.getValue());
         lineJoin.put("Round", LineJoin.ROUND.getValue());
-        lineJoin.put("Miter", LineJoin.MITER.getValue());
+        lineJoin.put("Miter", LineJoin.MITER.getValue());        
 
         // camera modes
         Map<String, Integer> cameraModes = new HashMap<>();
@@ -77,6 +97,7 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
 
         return MapBuilder.<String, Object>builder()
                 .put("StyleURL", styleURLS)
+                .put("EventTypes", eventTypes)
                 .put("StyleSource", styleSourceConsts)
                 .put("CameraModes", cameraModes)
                 .put("LineJoin", lineJoin)

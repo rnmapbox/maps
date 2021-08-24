@@ -53,14 +53,18 @@ import com.mapbox.mapboxsdk.style.layers.Property;
 
  */
 import com.mapbox.geojson.Point;
+import com.mapbox.maps.CameraBounds;
+import com.mapbox.maps.CameraState;
 import com.mapbox.maps.ScreenCoordinate;
 import com.mapbox.maps.plugin.gestures.OnMapClickListener;
+import com.mapbox.maps.plugin.gestures.OnMoveListener;
 import com.mapbox.maps.plugin.gestures.MapboxMapUtils;
 // import com.mapbox.maps.plugin.gestures.GesturesUtils;
 import com.mapbox.maps.extension.style.layers.LayerUtils;
 import com.mapbox.maps.plugin.delegates.MapPluginExtensionsDelegate;
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener;
 import com.mapbox.maps.plugin.delegates.listeners.eventdata.MapLoadErrorType;
+
 import com.mapbox.maps.plugin.gestures.OnMapClickListener;
 import com.mapbox.rctmgl.R;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
@@ -73,23 +77,28 @@ import com.mapbox.rctmgl.components.camera.RCTMGLCamera;
 import com.mapbox.rctmgl.components.images.RCTMGLImages;
 import com.mapbox.rctmgl.components.location.LocationComponentManager;
 import com.mapbox.rctmgl.components.location.RCTMGLNativeUserLocation;
+*/
 import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeTracker;
+/*
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
 import com.mapbox.rctmgl.components.styles.light.RCTMGLLight;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLShapeSource;
 import com.mapbox.rctmgl.events.AndroidCallbackEvent;
+*/
 import com.mapbox.rctmgl.events.IEvent;
 import com.mapbox.rctmgl.events.MapChangeEvent;
 import com.mapbox.rctmgl.events.constants.EventTypes;
+/*
 import com.mapbox.rctmgl.utils.BitmapUtils;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.rctmgl.utils.GeoViewport;
 
  */
 
-
+import com.mapbox.rctmgl.utils.GeoJSONUtils;
+import com.mapbox.rctmgl.utils.LatLng;
+import com.mapbox.rctmgl.utils.Logger;
 import com.mapbox.rctmgl.events.MapClickEvent;
-
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 
 import java.util.ArrayList;
@@ -109,17 +118,21 @@ import com.mapbox.maps.Style;
 import com.mapbox.maps.extension.style.layers.Layer;
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener;
 
-import com.mapbox.rctmgl.utils.LatLng;
-import com.mapbox.rctmgl.utils.Logger;
-
-
 // import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 
 public class RCTMGLMapView extends MapView implements OnMapClickListener {
+    public static final String LOG_TAG = "RCTMGLMapView";
     RCTMGLMapViewManager mManager;
     private Map<String, RCTSource> mSources;
     private String mStyleURL;
+
+    private CameraChangeTracker mCameraChangeTracker = new CameraChangeTracker();
+
     private MapboxMap mMap;
+
+    private HashSet<String> mHandledMapChangedEvents = null;
+
+
 
     public RCTMGLMapView(Context context, RCTMGLMapViewManager manager/*, MapboxMapOptions options*/) {
         super(context);
@@ -128,7 +141,31 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
         mMap = this.getMapboxMap();
         mSources = new HashMap<>();
 
-        MapboxMapUtils.addOnMapClickListener(mMap, this);
+        this.onMapReady(mMap);
+    }
+
+    private void onMapReady(MapboxMap map) {
+        MapboxMapUtils.addOnMapClickListener(map, this);
+        MapboxMapUtils.addOnMoveListener(map, new OnMoveListener() {
+
+            @Override
+            public void onMoveEnd(@NonNull MoveGestureDetector moveGestureDetector) {
+
+            }
+
+            @Override
+            public void onMoveBegin(@NonNull MoveGestureDetector moveGestureDetector) {
+                mCameraChangeTracker.setReason(CameraChangeTracker.USER_GESTURE);
+                handleMapChangedEvent(EventTypes.REGION_WILL_CHANGE);
+            }
+
+            @Override
+            public boolean onMove(@NonNull MoveGestureDetector moveGestureDetector) {
+                mCameraChangeTracker.setReason(CameraChangeTracker.USER_GESTURE);
+                handleMapChangedEvent(EventTypes.REGION_IS_CHANGING);
+                return false;
+            }
+        });
     }
 
     public void init() {
@@ -251,4 +288,52 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
         }
     }
 
+    private void handleMapChangedEvent(String eventType) {
+        if (!canHandleEvent(eventType))
+            return;
+
+        IEvent event;
+
+        switch (eventType) {
+            case EventTypes.REGION_WILL_CHANGE:
+            case EventTypes.REGION_DID_CHANGE:
+            case EventTypes.REGION_IS_CHANGING:
+                event = new MapChangeEvent(this, eventType, makeRegionPayload(null));
+                break;
+            default:
+                event = new MapChangeEvent(this, eventType);
+        }
+
+        mManager.handleEvent(event);
+    }
+
+    private boolean canHandleEvent(String event) {
+        return mHandledMapChangedEvents == null || mHandledMapChangedEvents.contains(event);
+    }
+
+    private WritableMap makeRegionPayload(Boolean isAnimated) {
+        CameraState position = mMap.getCameraState();
+        if(position == null) {
+            return new WritableNativeMap();
+        }
+        LatLng latLng = new LatLng(position.getCenter().latitude(), position.getCenter().longitude());
+
+        WritableMap properties = new WritableNativeMap();
+
+        properties.putDouble("zoomLevel", position.getZoom());
+        properties.putDouble("heading", position.getBearing());
+        properties.putDouble("pitch", position.getPitch());
+        properties.putBoolean("animated",
+                (null == isAnimated) ? mCameraChangeTracker.isAnimated() : isAnimated.booleanValue());
+        properties.putBoolean("isUserInteraction", mCameraChangeTracker.isUserInteraction());
+
+        try {
+            CameraBounds bounds = mMap.getBounds();
+            properties.putArray("visibleBounds", GeoJSONUtils.fromCameraBounds(bounds));
+        } catch(Exception ex) {
+            Logger.e(LOG_TAG, String.format("An error occurred while attempting to make the region: %s", ex.getMessage()));
+        }
+
+        return GeoJSONUtils.toPointFeature(latLng, properties);
+    }
 }
