@@ -132,6 +132,10 @@ global.iosPropName = function(name) {
   return name;
 };
 
+global.iosV10PropName = function(name) {
+  return name;
+}
+
 global.iosPropMethodName = function(layer, name) {
   if (name.indexOf('Visibility') !== -1) {
     return pascelCase(layer.name) + 'StyleLayer' + name;

@@ -21,7 +21,7 @@ function readIosVersion() {
     'react-native-mapbox-gl.podspec',
   );
   const lines = fs.readFileSync(podspecPath, 'utf8').split('\n');
-  const mapboxLineRegex = /^default_ios_mapbox_version\s*=\s*'~>\s+(\d+\.\d+)(\.\d+)?'$/;
+  const mapboxLineRegex = /^\s*default_ios_mapbox_version\s*=\s*'~>\s+(\d+\.\d+)(\.\d+)?'$/;
   const mapboxLine = lines.filter(i => mapboxLineRegex.exec(i))[0];
   return `${mapboxLineRegex.exec(mapboxLine)[1]}.0`;
 }
@@ -64,6 +64,8 @@ const OUTPUT_EXAMPLE_PREFIX = [
 const OUTPUT_PREFIX = outputToExample ? OUTPUT_EXAMPLE_PREFIX : ['..'];
 
 const IOS_OUTPUT_PATH = path.join(__dirname, ...OUTPUT_PREFIX, 'ios', 'RCTMGL');
+const IOS_V10_OUTPUT_PATH = path.join(__dirname, ...OUTPUT_PREFIX, 'ios', 'RCTMGL-v10');
+
 const ANDROID_OUTPUT_PATH = path.join(
   __dirname,
   ...OUTPUT_PREFIX,
@@ -78,6 +80,23 @@ const ANDROID_OUTPUT_PATH = path.join(
   'components',
   'styles',
 );
+
+const ANDROID_V10_OUTPUT_PATH = path.join(
+  __dirname,
+  ...OUTPUT_PREFIX,
+  'android',
+  'rctmgl',
+  'src',
+  'main',
+  'java-v10',
+  'com',
+  'mapbox',
+  'rctmgl',
+  'components',
+  'styles',
+);
+
+
 const JS_OUTPUT_PATH = path.join(
   __dirname,
   ...OUTPUT_PREFIX,
@@ -333,8 +352,16 @@ async function generate() {
       output: path.join(IOS_OUTPUT_PATH, 'RCTMGLStyle.m'),
     },
     {
+      input: path.join(TMPL_PATH, 'RCTMGLStyle.swift.ejs'),
+      output: path.join(IOS_V10_OUTPUT_PATH, 'RCTMGLStyle.swift'),
+    },
+    {
       input: path.join(TMPL_PATH, 'RCTMGLStyleFactory.java.ejs'),
       output: path.join(ANDROID_OUTPUT_PATH, 'RCTMGLStyleFactory.java'),
+    },
+    {
+      input: path.join(TMPL_PATH, 'RCTMGLStyleFactoryv10.java.ejs'),
+      output: path.join(ANDROID_V10_OUTPUT_PATH, 'RCTMGLStyleFactory.java'),
     },
     {
       input: path.join(TMPL_PATH, 'styleMap.js.ejs'),

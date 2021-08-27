@@ -112,4 +112,8 @@ import Turf
     required init (coder: NSCoder) {
         fatalError("not implemented")
     }
+  
+    func layerAdded (_ layer: Layer) {
+        // V10 TODO
+    }
 }
