@@ -78,6 +78,7 @@ import com.mapbox.rctmgl.components.images.RCTMGLImages;
 import com.mapbox.rctmgl.components.location.LocationComponentManager;
 import com.mapbox.rctmgl.components.location.RCTMGLNativeUserLocation;
 */
+import com.mapbox.rctmgl.components.camera.RCTMGLCamera;
 import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeTracker;
 /*
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
@@ -85,6 +86,7 @@ import com.mapbox.rctmgl.components.styles.light.RCTMGLLight;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLShapeSource;
 import com.mapbox.rctmgl.events.AndroidCallbackEvent;
 */
+import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
 import com.mapbox.rctmgl.events.IEvent;
 import com.mapbox.rctmgl.events.MapChangeEvent;
 import com.mapbox.rctmgl.events.constants.EventTypes;
@@ -105,6 +107,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Locale;
@@ -126,9 +129,15 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
     private Map<String, RCTSource> mSources;
     private String mStyleURL;
 
+    private RCTMGLCamera mCamera;
+    private List<AbstractMapFeature> mFeatures = new ArrayList<>();
+    private List<AbstractMapFeature> mQueuedFeatures = new ArrayList<>();
+
     private CameraChangeTracker mCameraChangeTracker = new CameraChangeTracker();
 
     private MapboxMap mMap;
+
+    private Style mSavedStyle;
 
     private HashSet<String> mHandledMapChangedEvents = null;
 
@@ -145,6 +154,17 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
     }
 
     private void onMapReady(MapboxMap map) {
+        map.getStyle(new Style.OnStyleLoaded() {
+            @Override
+            public void onStyleLoaded(@NonNull Style style) {
+                mSavedStyle = style;
+                createSymbolManager(style);
+                setUpImage(style);
+                addQueuedFeatures();
+                setupLocalization(style);
+            }
+        });
+
         MapboxMapUtils.addOnMapClickListener(map, this);
         MapboxMapUtils.addOnMoveListener(map, new OnMoveListener() {
 
@@ -173,15 +193,65 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
     }
 
     public void addFeature(View childView, int childPosition) {
+        AbstractMapFeature feature = null;
 
+        if (childView instanceof RCTSource) {
+            RCTSource source = (RCTSource) childView;
+            mSources.put(source.getID(), source);
+            feature = (AbstractMapFeature) childView;
+            /*
+        } else if (childView instanceof RCTMGLImages) {
+            RCTMGLImages images = (RCTMGLImages) childView;
+            mImages.add(images);
+            feature = (AbstractMapFeature) childView;
+        } else if (childView instanceof RCTMGLLight) {
+            feature = (AbstractMapFeature) childView;
+        } else if (childView instanceof RCTMGLNativeUserLocation) {
+            feature = (AbstractMapFeature) childView;
+        }  else if (childView instanceof RCTMGLPointAnnotation) {
+            RCTMGLPointAnnotation annotation = (RCTMGLPointAnnotation) childView;
+            mPointAnnotations.put(annotation.getID(), annotation);
+            feature = (AbstractMapFeature) childView;
+        } else if (childView instanceof RCTMGLMarkerView) {
+            RCTMGLMarkerView marker = (RCTMGLMarkerView) childView;
+            feature = (AbstractMapFeature) childView; */
+        } else if (childView instanceof RCTMGLCamera) {
+            mCamera = (RCTMGLCamera) childView;
+            feature = (AbstractMapFeature) childView;
+        } else if (childView instanceof RCTLayer) {
+            feature = (RCTLayer) childView;
+        } else if (childView instanceof ViewGroup) {
+            ViewGroup children = (ViewGroup) childView;
+
+            for (int i = 0; i < children.getChildCount(); i++) {
+                addFeature(children.getChildAt(i), childPosition);
+            }
+        }
+
+        if (feature != null) {
+            if (mQueuedFeatures == null) {
+                feature.addToMap(this);
+                mFeatures.add(childPosition, feature);
+            } else {
+                mQueuedFeatures.add(childPosition, feature);
+            }
+        }
+    }
+
+    private List<AbstractMapFeature> features() {
+        if (mQueuedFeatures != null && mQueuedFeatures.size() > 0) {
+            return mQueuedFeatures;
+        } else {
+            return mFeatures;
+        }
     }
 
     public int getFeatureCount() {
-        return 0;
+        return features().size();
     }
 
-    public View getFeatureAt(int index) {
-        return null;
+    public AbstractMapFeature getFeatureAt(int i) {
+        return features().get(i);
     }
 
     public void removeFeature(int index) {
@@ -234,7 +304,9 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
                 mMap.loadStyleUri(styleURL, new Style.OnStyleLoaded() {
                     @Override
                     public void onStyleLoaded(@NonNull Style style) {
+                        mSavedStyle = style;
                         addAllSourcesToMap();
+                        addQueuedFeatures();
                     }},
                     new OnMapLoadErrorListener() {
                         @Override
@@ -335,5 +407,87 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
         }
 
         return GeoJSONUtils.toPointFeature(latLng, properties);
+    }
+
+    public void createSymbolManager(Style style) {
+        /*
+        symbolManager = new SymbolManager(this, mMap, style);
+        symbolManager.setIconAllowOverlap(true);
+        symbolManager.addClickListener(new OnSymbolClickListener() {
+            @Override
+            public void onAnnotationClick(Symbol symbol) {
+                onMarkerClick(symbol);
+            }
+        });
+        symbolManager.addDragListener(new OnSymbolDragListener() {
+            @Override
+            public void onAnnotationDragStarted(Symbol symbol) {
+                mAnnotationClicked = true;
+                final long selectedMarkerID = symbol.getId();
+                RCTMGLPointAnnotation annotation = getPointAnnotationByMarkerID(selectedMarkerID);
+                if (annotation != null) {
+                    annotation.onDragStart();
+                }
+            }
+
+            @Override
+            public void onAnnotationDrag(Symbol symbol) {
+                final long selectedMarkerID = symbol.getId();
+                RCTMGLPointAnnotation annotation = getPointAnnotationByMarkerID(selectedMarkerID);
+                if (annotation != null) {
+                    annotation.onDrag();
+                }
+            }
+
+            @Override
+            public void onAnnotationDragFinished(Symbol symbol) {
+                mAnnotationClicked = false;
+                final long selectedMarkerID = symbol.getId();
+                RCTMGLPointAnnotation annotation = getPointAnnotationByMarkerID(selectedMarkerID);
+                if (annotation != null) {
+                    annotation.onDragEnd();
+                }
+            }
+        });
+        mMap.addOnMapClickListener(this);
+        mMap.addOnMapLongClickListener(this);
+         */
+    }
+
+    public void addQueuedFeatures() {
+        if (mQueuedFeatures != null && mQueuedFeatures.size() > 0) {
+            for (int i = 0; i < mQueuedFeatures.size(); i++) {
+                AbstractMapFeature feature = mQueuedFeatures.get(i);
+                feature.addToMap(this);
+                mFeatures.add(feature);
+            }
+            mQueuedFeatures = null;
+        }
+    }
+
+    private void setupLocalization(Style style) {
+        /*
+        mLocalizationPlugin = new LocalizationPlugin(RCTMGLMapView.this, mMap, style);
+        if (mLocalizeLabels) {
+            try {
+                mLocalizationPlugin.matchMapLanguageWithDeviceDefault();
+            } catch (Exception e) {
+                final String localeString = Locale.getDefault().toString();
+                Logger.w(LOG_TAG, String.format("Could not find matching locale for %s", localeString));
+            }
+        }*/
+    }
+
+    /**
+     * Adds the marker image to the map for use as a SymbolLayer icon
+     */
+    private void setUpImage(@NonNull Style loadedStyle) {
+        loadedStyle.addImage("MARKER_IMAGE_ID", BitmapFactory.decodeResource(
+                this.getResources(), R.drawable.red_marker)
+        );
+    }
+
+    public Style getSavedStyle() {
+        return mSavedStyle;
     }
 }

@@ -282,10 +282,12 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
     }
 
     private Style getStyle() {
+        // v10TOOD: adding anything seems to make getStyle null
         if (mMap == null) {
             return null;
         }
-        return mMap.getStyle();
+        return mMapView.getSavedStyle();
+//        return mMap.getStyle();
     }
 
     public abstract T makeLayer();

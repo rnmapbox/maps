@@ -1,9 +1,12 @@
 package com.mapbox.rctmgl.components.styles.sources;
 
+import com.facebook.react.bridge.ReadableMap;
+import com.mapbox.geojson.Feature;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
 
+import com.mapbox.rctmgl.utils.LatLng;
 import com.mapbox.rctmgl.utils.Logger;
 
 import com.mapbox.maps.extension.style.sources.Source;
@@ -12,13 +15,18 @@ import com.mapbox.maps.Style;
 import com.mapbox.maps.extension.style.sources.SourceUtils;
 
 import android.content.Context;
+import android.graphics.PointF;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
+    public static final String DEFAULT_ID = "composite";
     public static final String LOG_TAG = "RCTSource";
 
     protected RCTMGLMapView mMapView;
@@ -26,6 +34,8 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
 
     protected String mID;
     protected T mSource;
+    protected boolean mHasPressListener;
+    protected Map<String, Double> mTouchHitbox;
 
     protected List<RCTLayer> mLayers;
     private List<RCTLayer> mQueuedLayers;
@@ -35,6 +45,11 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
         mLayers = new ArrayList<>();
         mQueuedLayers = new ArrayList<>();
     }
+
+    public String getID() {
+        return mID;
+    }
+    
     private T getSourceAs(Style style, String id) {
         Source result = SourceUtils.getSource(style, mID);
 
@@ -56,7 +71,31 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
         }
     }
 
-    public abstract T makeSource();
+    public void setHasPressListener (boolean hasPressListener) {
+        mHasPressListener = hasPressListener;
+    }
+
+    public void setHitbox(ReadableMap map) {
+        Map<String, Double> hitbox = new HashMap<>();
+        hitbox.put("width", map.getDouble("width"));
+        hitbox.put("height", map.getDouble("height"));
+        mTouchHitbox = hitbox;
+    }
+
+    public void setID(String id) {
+        mID = id;
+    }
+
+    public int getLayerCount () {
+        int totalCount = 0;
+
+        if (mQueuedLayers != null) {
+            totalCount = mQueuedLayers.size();
+        }
+
+        totalCount += mLayers.size();
+        return totalCount;
+    }
 
     @Override
     public void addToMap(RCTMGLMapView mapView) {
@@ -106,5 +145,66 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
                 Logger.w(LOG_TAG, String.format("RCTSource.removeFromMap: %s - %s", mSource, ex.getMessage()), ex);
             }
         }
+    }
+
+    public void addLayer(View childView, int childPosition) {
+        if (!(childView instanceof RCTLayer)) {
+            return;
+        }
+
+        RCTLayer layer = (RCTLayer) childView;
+        if (mMap == null) {
+            mQueuedLayers.add(childPosition, layer);
+        } else {
+            addLayerToMap(layer, childPosition);
+        }
+    }
+
+    public void removeLayer(int childPosition) {
+        RCTLayer layer;
+        if (mQueuedLayers != null && mQueuedLayers.size() > 0) {
+            layer = mQueuedLayers.get(childPosition);
+        } else {
+            layer = mLayers.get(childPosition);
+        }
+        removeLayerFromMap(layer, childPosition);
+    }
+
+    public RCTLayer getLayerAt(int childPosition) {
+        if (mQueuedLayers != null && mQueuedLayers.size() > 0) {
+            return mQueuedLayers.get(childPosition);
+        }
+        return mLayers.get(childPosition);
+    }
+
+    protected void removeLayerFromMap(RCTLayer layer, int childPosition) {
+        if (mMapView != null && layer != null) {
+            layer.removeFromMap(mMapView);
+        }
+        if (mQueuedLayers != null && mQueuedLayers.size() > 0) {
+            mQueuedLayers.remove(childPosition);
+        } else {
+            mLayers.remove(childPosition);
+        }
+    }
+
+    public abstract T makeSource();
+
+    static public class OnPressEvent {
+        public List<Feature> features;
+        public LatLng latLng;
+        public PointF screenPoint;
+
+        public OnPressEvent(@NonNull List<Feature> features, @NonNull LatLng latLng, @NonNull PointF screenPoint) {
+            this.features = features;
+            this.latLng = latLng;
+            this.screenPoint = screenPoint;
+        }
+    }
+
+    public abstract void onPress(OnPressEvent event);
+
+    public static boolean isDefaultSource(String sourceID) {
+        return DEFAULT_ID.equals(sourceID);
     }
 }

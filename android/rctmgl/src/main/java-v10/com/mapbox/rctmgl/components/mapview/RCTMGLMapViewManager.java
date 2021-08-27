@@ -40,10 +40,6 @@ import javax.annotation.Nullable;
 
 import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
 
-/**
- * Created by nickitaliano on 8/18/17.
- */
-
 public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     public static final String LOG_TAG = "RCTMGLMapViewManager";
     public static final String REACT_CLASS = "RCTMGLMapView";
