@@ -5870,7 +5870,7 @@
       },
       {
         "name": "setTileCountLimit",
-        "description": "Sets the maximum number of Mapbox-hosted tiles that may be downloaded and stored on the current device.\nThe Mapbox Terms of Service prohibits changing or bypassing this limit without permission from Mapbox.",
+        "description": "Sets the maximum number of Mapbox-hosted tiles that may be downloaded and stored on the current device.\nThe Mapbox Terms of Service prohibit changing or bypassing this limit without permission from Mapbox.",
         "params": [
           {
             "name": "limit",
@@ -5893,7 +5893,7 @@
       },
       {
         "name": "setProgressEventThrottle",
-        "description": "Sets the value at which download status events will be sent over the React Native bridge.\nThese events happening very very fast default is 500ms.",
+        "description": "Sets the period at which download status events will be sent over the React Native bridge.\nThe default is 500ms.",
         "params": [
           {
             "name": "throttleValue",
@@ -5905,7 +5905,7 @@
           }
         ],
         "examples": [
-          "MapboxGL.setProgressEventThrottle(500);"
+          "MapboxGL.offlineManager.setProgressEventThrottle(500);"
         ],
         "returns": {
           "description": "",
