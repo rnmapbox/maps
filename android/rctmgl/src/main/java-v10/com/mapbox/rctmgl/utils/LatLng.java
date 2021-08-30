@@ -17,6 +17,11 @@ public class LatLng {
     this.longitude = point.longitude();
   }
 
+
+  public Point getPoint() {
+    return Point.fromLngLat(this.longitude, this.latitude);
+  }
+
   public double getLongitude() {
     return longitude;
   }

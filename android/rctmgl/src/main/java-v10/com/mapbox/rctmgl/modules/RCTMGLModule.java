@@ -82,7 +82,7 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         Map<String, String> lineJoin = new HashMap<>();
         lineJoin.put("Bevel", LineJoin.BEVEL.getValue());
         lineJoin.put("Round", LineJoin.ROUND.getValue());
-        lineJoin.put("Miter", LineJoin.MITER.getValue());        
+        lineJoin.put("Miter", LineJoin.MITER.getValue());
 
         // camera modes
         Map<String, Integer> cameraModes = new HashMap<>();
@@ -112,7 +112,6 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
             @Override
             public void run() {
                 ResourceOptionsManager.Companion.getDefault(getReactApplicationContext(), accessToken);
-                //Mapbox.getInstance(getReactApplicationContext(), accessToken);
             }
         });
     }

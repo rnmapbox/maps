@@ -3,16 +3,15 @@ package com.mapbox.rctmgl.components.styles.layers;
 import android.content.Context;
 
 import com.mapbox.maps.extension.style.expressions.generated.Expression;
-import com.mapbox.maps.extension.style.layers.generated.CircleLayer;
+import com.mapbox.maps.extension.style.layers.generated.FillLayer;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyle;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleFactory;
-import com.mapbox.rctmgl.utils.Logger;
 
-public class RCTMGLCircleLayer extends RCTLayer<CircleLayer> {
+public class RCTMGLFillLayer extends RCTLayer<FillLayer> {
     private String mSourceLayerID;
 
-    public RCTMGLCircleLayer(Context context) {
+    public RCTMGLFillLayer(Context context) {
         super(context);
     }
 
@@ -27,12 +26,11 @@ public class RCTMGLCircleLayer extends RCTLayer<CircleLayer> {
     }
 
     @Override
-    public CircleLayer makeLayer() {
-        CircleLayer layer = new CircleLayer(mID, mSourceID);
+    public FillLayer makeLayer() {
+        FillLayer layer = new FillLayer(mID, mSourceID);
 
         if (mSourceLayerID != null) {
             layer.sourceLayer(mSourceLayerID);
-
         }
 
         return layer;
@@ -40,14 +38,14 @@ public class RCTMGLCircleLayer extends RCTLayer<CircleLayer> {
 
     @Override
     public void addStyles() {
-        RCTMGLStyleFactory.setCircleLayerStyle(mLayer, new RCTMGLStyle(getContext(), mReactStyle, mMap));
+        RCTMGLStyleFactory.setFillLayerStyle(mLayer, new RCTMGLStyle(getContext(), mReactStyle, mMap));
     }
 
     public void setSourceLayerID(String sourceLayerID) {
         mSourceLayerID = sourceLayerID;
 
         if (mLayer != null) {
-            mLayer.sourceLayer(sourceLayerID);
+            mLayer.sourceLayer(mSourceLayerID);
         }
     }
 }
