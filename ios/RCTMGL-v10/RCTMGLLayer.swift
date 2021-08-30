@@ -16,8 +16,10 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent {
   var style: Style? = nil
 
   @objc var filter : Array<Any>? = nil
-  @objc var id: String? = nil
+  @objc var id: String! = nil
   @objc var sourceID: String? = nil
+  @objc var minZoom : NSNumber? = nil
+  @objc var maxZoom : NSNumber? = nil
   
   @objc weak var map: RCTMGLMapView? = nil
   
@@ -32,18 +34,27 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent {
   }
   
   func findLayer(style: Style, id: String) throws -> Layer {
-    return try style._layer(withId: id, type: CircleLayer.self)
+    return try style._layer(withId: id, type: layerType())
   }
   
   func layerType() -> Layer.Type {
     fatalError("Subclasses need to implement the `layerType` method.")
   }
-  
+
+  func apply(style : Style) {
+    fatalError("Subclasses need to implement the `apply` method.")
+  }
+
   func inserLayer(_ map: RCTMGLMapView) {
     if let style = style, let styleLayer = styleLayer {
-      print(":::  StyleLayer: \(styleLayer)")
       try! style.addLayer(styleLayer)
       map.layerAdded(styleLayer)
+    }
+  }
+  
+  func updateLayer(_ map: RCTMGLMapView) {
+    if let style = style, let _ = styleLayer {
+      apply(style: style)
     }
   }
   
@@ -74,6 +85,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent {
     var add = false
     if (style.styleManager.styleLayerExists(forLayerId: id)) {
       self.styleLayer = try? self.findLayer(style: style, id: id)
+      print("xxx found layer: \(self.styleLayer)")
     } else {
       self.styleLayer = try? self.makeLayer(style: style)
       print("StyleLayer after?? :\(self.styleLayer)")
@@ -82,9 +94,34 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent {
     self.addStyles()
     if add {
       self.inserLayer(map)
+    } else {
+      self.updateLayer(map)
     }
     self.addedToMap()
   }
+  
+  func setOptions(_ layer: inout Layer) {
+    if let sourceLayerID = sourceLayerID {
+      layer.sourceLayer = sourceLayerID
+    }
+    
+    if let sourceID = sourceID {
+      layer.source = sourceID
+    }
+    
+    if let filter = filter {
+      // v10todo layer.filter
+    }
+    
+    if let minZoom = minZoom {
+      layer.minZoom = minZoom.doubleValue
+    }
+    
+    if let maxZoom = maxZoom {
+      layer.maxZoom = maxZoom.doubleValue
+    }
+  }
+
   /*
   layerWithSourceIDInStyle:(nonnull MGLStyle*) style
   {

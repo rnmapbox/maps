@@ -1,7 +1,7 @@
+import MapboxMaps
+
 @objc(RCTMGLVectorLayer)
 class RCTMGLVectorLayer: RCTMGLLayer {
-
-
   //@property (nonatomic, copy) NSString *sourceLayerID;
 /*
 - (NSPredicate*)buildFilters
