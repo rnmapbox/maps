@@ -6,6 +6,7 @@ import com.mapbox.maps.extension.style.sources.Source;
 import com.mapbox.maps.extension.style.sources.TileSet;
 import com.mapbox.maps.extension.style.sources.generated.Scheme;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -14,7 +15,7 @@ public abstract class RCTMGLTileSource<T extends Source> extends RCTSource<T> {
     static final String TILE_SPEC_VERSION = "2.1.0";
 
     private String mURL;
-    private Collection<String> mTileUrlTemplates;
+    private Collection<String> mTileUrlTemplates = new ArrayList<>();
     private String mAttribution;
 
     private Integer mMinZoomLevel;

@@ -129,6 +129,8 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
     private Map<String, RCTSource> mSources;
     private String mStyleURL;
 
+    private boolean mDestroyed;
+
     private RCTMGLCamera mCamera;
     private List<AbstractMapFeature> mFeatures = new ArrayList<>();
     private List<AbstractMapFeature> mQueuedFeatures = new ArrayList<>();
@@ -190,6 +192,10 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
 
     public void init() {
 
+    }
+    
+    public boolean isDestroyed() {
+        return mDestroyed;
     }
 
     public void addFeature(View childView, int childPosition) {
@@ -255,6 +261,14 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
     }
 
     public void removeFeature(int index) {
+    }
+
+    public void sendRegionChangeEvent(boolean isAnimated) {
+        IEvent event = new MapChangeEvent(this, EventTypes.REGION_DID_CHANGE,
+                makeRegionPayload(new Boolean(isAnimated)));
+
+        mManager.handleEvent(event);
+        mCameraChangeTracker.setReason(CameraChangeTracker.EMPTY);
     }
 
     private void removeAllSourcesFromMap() {

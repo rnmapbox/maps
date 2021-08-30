@@ -840,7 +840,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.fillTranslateAnchor(styleValue.getExpression());
       } else {
-          layer.fillTranslateAnchor(FillTranslateAnchor.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.fillTranslateAnchor(FillTranslateAnchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -868,7 +868,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.lineCap(styleValue.getExpression());
       } else {
-          layer.lineCap(LineCap.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.lineCap(LineCap.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -876,7 +876,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.lineJoin(styleValue.getExpression());
       } else {
-          layer.lineJoin(LineJoin.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.lineJoin(LineJoin.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -952,7 +952,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.lineTranslateAnchor(styleValue.getExpression());
       } else {
-          layer.lineTranslateAnchor(LineTranslateAnchor.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.lineTranslateAnchor(LineTranslateAnchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -1068,7 +1068,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.symbolPlacement(styleValue.getExpression());
       } else {
-          layer.symbolPlacement(SymbolPlacement.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.symbolPlacement(SymbolPlacement.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -1100,7 +1100,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.symbolZOrder(styleValue.getExpression());
       } else {
-          layer.symbolZOrder(SymbolZOrder.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.symbolZOrder(SymbolZOrder.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -1132,7 +1132,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.iconRotationAlignment(styleValue.getExpression());
       } else {
-          layer.iconRotationAlignment(IconRotationAlignment.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.iconRotationAlignment(IconRotationAlignment.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -1148,7 +1148,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.iconTextFit(styleValue.getExpression());
       } else {
-          layer.iconTextFit(IconTextFit.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.iconTextFit(IconTextFit.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -1208,7 +1208,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.iconAnchor(styleValue.getExpression());
       } else {
-          layer.iconAnchor(IconAnchor.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.iconAnchor(IconAnchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -1216,7 +1216,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.iconPitchAlignment(styleValue.getExpression());
       } else {
-          layer.iconPitchAlignment(IconPitchAlignment.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.iconPitchAlignment(IconPitchAlignment.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -1224,7 +1224,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.textPitchAlignment(styleValue.getExpression());
       } else {
-          layer.textPitchAlignment(TextPitchAlignment.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.textPitchAlignment(TextPitchAlignment.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -1232,7 +1232,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.textRotationAlignment(styleValue.getExpression());
       } else {
-          layer.textRotationAlignment(TextRotationAlignment.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.textRotationAlignment(TextRotationAlignment.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -1288,7 +1288,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.textJustify(styleValue.getExpression());
       } else {
-          layer.textJustify(TextJustify.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.textJustify(TextJustify.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -1312,7 +1312,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.textAnchor(styleValue.getExpression());
       } else {
-          layer.textAnchor(TextAnchor.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.textAnchor(TextAnchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -1360,7 +1360,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.textTransform(styleValue.getExpression());
       } else {
-          layer.textTransform(TextTransform.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.textTransform(TextTransform.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -1500,7 +1500,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.iconTranslateAnchor(styleValue.getExpression());
       } else {
-          layer.iconTranslateAnchor(IconTranslateAnchor.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.iconTranslateAnchor(IconTranslateAnchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -1604,7 +1604,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.textTranslateAnchor(styleValue.getExpression());
       } else {
-          layer.textTranslateAnchor(TextTranslateAnchor.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.textTranslateAnchor(TextTranslateAnchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -1696,7 +1696,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.circleTranslateAnchor(styleValue.getExpression());
       } else {
-          layer.circleTranslateAnchor(CircleTranslateAnchor.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.circleTranslateAnchor(CircleTranslateAnchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -1704,7 +1704,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.circlePitchScale(styleValue.getExpression());
       } else {
-          layer.circlePitchScale(CirclePitchScale.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.circlePitchScale(CirclePitchScale.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -1712,7 +1712,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.circlePitchAlignment(styleValue.getExpression());
       } else {
-          layer.circlePitchAlignment(CirclePitchAlignment.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.circlePitchAlignment(CirclePitchAlignment.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -1888,7 +1888,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.fillExtrusionTranslateAnchor(styleValue.getExpression());
       } else {
-          layer.fillExtrusionTranslateAnchor(FillExtrusionTranslateAnchor.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.fillExtrusionTranslateAnchor(FillExtrusionTranslateAnchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -2048,7 +2048,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.rasterResampling(styleValue.getExpression());
       } else {
-          layer.rasterResampling(RasterResampling.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.rasterResampling(RasterResampling.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -2076,7 +2076,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.hillshadeIlluminationAnchor(styleValue.getExpression());
       } else {
-          layer.hillshadeIlluminationAnchor(HillshadeIlluminationAnchor.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.hillshadeIlluminationAnchor(HillshadeIlluminationAnchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 
@@ -2204,7 +2204,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.anchor(styleValue.getExpression());
       } else {
-          layer.anchor(Anchor.valueOf(styleValue.getString(VALUE_KEY)));
+          layer.anchor(Anchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
       }
     }
 

@@ -86,7 +86,7 @@ public class RCTMGLStyleFactory {
         layer.<%- prop.name -%>(styleValue.getExpression());
       } else {
         <%_ if (prop.type === 'enum') { _%>
-          layer.<%- prop.name -%>(<%- pascelCase(prop.name) %>.valueOf(<%- androidGetConfigType(androidInputType(prop.type, prop.value), prop) -%>));
+          layer.<%- prop.name -%>(<%- pascelCase(prop.name) %>.valueOf(<%- androidGetConfigType(androidInputType(prop.type, prop.value), prop) -%>.toUpperCase()));
         <%_ } else if (prop.name === 'lineGradient' || prop.name === 'heatmapColor') { _%>
           layer.<%- prop.name -%>(styleValue.getIntExpression(VALUE_KEY));
         <%_ } else if (prop.name === 'position') { _%>

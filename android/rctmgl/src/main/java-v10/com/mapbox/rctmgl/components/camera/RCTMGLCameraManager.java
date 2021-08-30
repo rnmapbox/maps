@@ -7,6 +7,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.mapbox.rctmgl.components.AbstractEventEmitter;
+import com.mapbox.rctmgl.utils.GeoJSONUtils;
 //import com.mapbox.rctmgl.utils.GeoJSONUtils;
 
 import java.util.HashMap;
@@ -37,7 +38,6 @@ public class RCTMGLCameraManager extends AbstractEventEmitter<RCTMGLCamera> {
         return new RCTMGLCamera(reactContext, this);
     }
 
-    /*
     @ReactProp(name="stop")
     public void setStop(RCTMGLCamera camera, ReadableMap map) {
         if (map != null) {
@@ -53,7 +53,7 @@ public class RCTMGLCameraManager extends AbstractEventEmitter<RCTMGLCamera> {
             camera.setDefaultStop(stop);
         }
     }
-
+/*v10todo
     @ReactProp(name="maxBounds")
     public void setMaxBounds(RCTMGLCamera camera, String value) {
         if (value != null) {
@@ -61,7 +61,7 @@ public class RCTMGLCameraManager extends AbstractEventEmitter<RCTMGLCamera> {
             camera.setMaxBounds(GeoJSONUtils.toLatLngBounds(collection));
         }
     }
-
+*/
 
     @ReactProp(name="userTrackingMode")
     public void setUserTrackingMode(RCTMGLCamera camera, int userTrackingMode) {
@@ -98,6 +98,5 @@ public class RCTMGLCameraManager extends AbstractEventEmitter<RCTMGLCamera> {
     public void setFollowPitch(RCTMGLCamera camera, double value) {
         camera.setFollowPitch(value);
     }
-    */
 
 }
