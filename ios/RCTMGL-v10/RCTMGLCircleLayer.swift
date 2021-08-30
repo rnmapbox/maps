@@ -4,9 +4,7 @@ import MapboxMaps
 class RCTMGLCircleLayer: RCTMGLVectorLayer {
 
   override func makeLayer(style: Style) throws -> Layer {
-    print("ID: \(id)")
     let vectorSource : VectorSource = try self.layerWithSourceID(in: style)
-    print("ID: \(id)")
     var layer = CircleLayer(id: self.id!)
     layer.sourceLayer = self.sourceLayerID
     layer.source = sourceID
@@ -16,21 +14,23 @@ class RCTMGLCircleLayer: RCTMGLVectorLayer {
   override func layerType() -> Layer.Type {
     return CircleLayer.self
   }
+  
+  override func apply(style : Style) {
+    try! style.updateLayer(withId: id) { (layer : inout CircleLayer) in
+      if let styleLayer = self.styleLayer as? CircleLayer {
+        layer = styleLayer
+      }
+    }
+  }
 
   override func addStyles() {
     if let style : Style = self.style {
       let style =  RCTMGLStyle(style: self.style!)
       style.bridge = self.bridge
-      //V10TODO
-      print("reactStyle: \(self.reactStyle)")
-      print("styleLayer: \(self.styleLayer)")
       if var styleLayer = self.styleLayer as? CircleLayer {
         style.circleLayer(layer: &styleLayer, reactStyle: reactStyle!, isValid: {
           return self.isAddedToMap()
         })
-        print("ooo self.styleLayer: \(self.styleLayer)")
-        print("ooo styleLayer: \(styleLayer)")
-        
         self.styleLayer = styleLayer
       }
     }

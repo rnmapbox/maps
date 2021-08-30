@@ -6,11 +6,18 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
   var source : Source? = nil
   var map : RCTMGLMapView? = nil
   
-  @objc var id: String? = nil
+  @objc var id: String! = nil
+  
+  @objc var hasPressListener: Bool = false
+  @objc var onPress: RCTBubblingEventBlock? = nil
   
   var layers: [RCTMGLLayer] = []
   
   func makeSource() -> Source {
+    fatalError("Subclasses should override makeSource")
+  }
+  
+  func sourceType() -> Source.Type {
     fatalError("Subclasses should override makeSource")
   }
   
@@ -26,12 +33,20 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
   func addToMap(_ map: RCTMGLMapView) {
     self.map = map
     
-    let source = self.makeSource()
+    guard let mapboxMap = map.mapboxMap else {
+      return;
+    }
     
-    map.mapboxMap.onNext(.styleLoaded) {_ in
-      print("??? addSource \(source) id=\(self.id)")
-      try! map.mapboxMap.style.addSource(source, id: self.id!)
-      
+    
+    mapboxMap.onNext(.styleLoaded) {_ in
+      let style = mapboxMap.style
+      if style.sourceExists(withId: self.id) {
+        self.source = try! style._source(withId: self.id, type: self.sourceType())
+      } else {
+        let source = self.makeSource()
+        try! style.addSource(source, id: self.id)
+      }
+           
       for layer in self.layers {
         layer.addToMap(map, style: map.mapboxMap.style)
       }

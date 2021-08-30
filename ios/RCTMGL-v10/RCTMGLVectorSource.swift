@@ -2,14 +2,26 @@ import MapboxMaps
 
 @objc
 class RCTMGLVectorSource : RCTMGLTileSource {
+  
+  @objc var tileUrlTemplates: [String] = []
+  
+  override func sourceType() -> Source.Type {
+    return VectorSource.self
+  }
 
-override func makeSource() -> Source
-{
-  var result = VectorSource()
-  print("[***] VecorSource url \(self.url)")
-  result.url = self.url
-  return result
-}
+  override func makeSource() -> Source
+  {
+    var result = VectorSource()
+    if let url = url {
+      result.url = url
+    } else {
+      result.tiles = tileUrlTemplates
+    }
+    
+    return result
+  }
+  
+  
   
   /*
   - (nullable MGLSource*)makeSource

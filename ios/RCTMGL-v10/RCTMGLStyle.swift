@@ -699,7 +699,7 @@ func setFillOpacityTransition(_ layer: inout FillLayer, styleValue: RCTMGLStyleV
 func setFillColor(_ layer: inout FillLayer, styleValue: RCTMGLStyleValue)
 {
       
-        
+        print("===> SetFillColor: \(styleValue.mglStyleValueColor())")
           layer.fillColor = styleValue.mglStyleValueColor();
         
       

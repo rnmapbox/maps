@@ -61,9 +61,16 @@ class RCTMGLStyleValue {
   func mglStyleValueNumber() -> Value<Double> {
     if let value = value as? Dictionary<String,Any> {
       let value = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
-      print("~~~ after-convert: \(value)")
-      let data = try! JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
+      print("~~~ after-convert: \(value) \(type(of: value))")
+      
+      if let num = value as? Int {
+        return Value.constant(Double(num))
+      } else if let num = value as? Double {
+        return Value.constant(Double(num))
+      }
 
+      let data = try! JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
+      
       print("~~~ data: \(data)")
       let decodedExpression = try! JSONDecoder().decode(Expression.self, from: data)
       print("~~~ decodedExpression: \(decodedExpression)")
@@ -77,10 +84,24 @@ class RCTMGLStyleValue {
     return 1.0
   }
   
+  func uicolor(_ rgbValue: Int) -> UIColor {
+      return UIColor(
+          red: CGFloat((Float((rgbValue & 0xff0000) >> 16)) / 255.0),
+          green: CGFloat((Float((rgbValue & 0x00ff00) >> 8)) / 255.0),
+          blue: CGFloat((Float((rgbValue & 0x0000ff) >> 0)) / 255.0),
+          alpha: 1.0)
+  }
+  
   func mglStyleValueColor() -> Value<ColorRepresentable> {
     if let value = value as? Dictionary<String,Any> {
       let value = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
-      print("~~~ after-convert: \(value)")
+      print("~~~ after-convert: \(value) \(type(of:value))")
+      
+      if let num = value as? Int {
+        let uicolor = uicolor(num)
+        return Value.constant(ColorRepresentable(color: uicolor))
+      }
+      
       let data = try! JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
 
       print("~~~ data: \(data)")
@@ -123,7 +144,14 @@ class RCTMGLStyleValue {
   }
   
   func mglStyleValueEnum<Enum : RawRepresentable>() -> Value<Enum> where Enum.RawValue == String {
-    return Value.constant(Enum(rawValue: "")!)
+    print("Enum: \(value)")
+    if let value = value as? Dictionary<String,Any> {
+      let value = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
+      print("###: \(value)")
+      return Value.constant(Enum(rawValue: value as! String)!)
+    } else {
+      return Value.constant(Enum(rawValue: value as! String)!)
+    }
   }
   
   func mglStyleValueArrayTextWritingMode() -> Value<[TextWritingMode]> {
