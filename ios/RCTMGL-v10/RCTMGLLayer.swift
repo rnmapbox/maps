@@ -20,10 +20,47 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent {
   @objc var sourceID: String? = nil
   @objc var minZoom : NSNumber? = nil
   @objc var maxZoom : NSNumber? = nil
+
+  @objc var aboveLayerID : String? = nil {
+    didSet {
+      if let aboveLayerID = aboveLayerID {
+        if aboveLayerID != oldValue {
+          self.removeAndReaddLayer()
+        }
+      }
+    }
+  }
+
+  @objc var belowLayerID : String? = nil {
+    didSet {
+      if let belowLayerID = belowLayerID {
+        if belowLayerID != oldValue {
+          self.removeAndReaddLayer()
+        }
+      }
+    }
+  }
+  
+  @objc var layerIndex : NSNumber? = nil {
+    didSet {
+      if let layerIndex = layerIndex {
+        if layerIndex != oldValue {
+          self.removeAndReaddLayer()
+        }
+      }
+    }
+  }
   
   @objc weak var map: RCTMGLMapView? = nil
   
   var styleLayer: Layer? = nil
+  
+  func removeAndReaddLayer() {
+    if let style = style {
+      self.removeFromMap(style)
+      self.insert(style, layerPosition: position())
+    }
+  }
     
   func addStyles() {
     fatalError("Subclasses need to implement the `addStyles()` method.")
@@ -45,10 +82,23 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent {
     fatalError("Subclasses need to implement the `apply` method.")
   }
 
+  func position() -> LayerPosition {
+    if let belowLayerID = belowLayerID {
+      return .below(belowLayerID)
+    } else if let aboveLayerID = aboveLayerID {
+      return .above(aboveLayerID)
+    } else if let layerIndex = layerIndex {
+      return .at(layerIndex.intValue)
+    } else {
+      return .default
+    }
+  }
+  
   func inserLayer(_ map: RCTMGLMapView) {
     if let style = style, let styleLayer = styleLayer {
-      try! style.addLayer(styleLayer)
-      map.layerAdded(styleLayer)
+      insert(style, layerPosition: position()) {
+        map.layerAdded(styleLayer)
+      }
     }
   }
   
@@ -85,12 +135,11 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent {
     var add = false
     if (style.styleManager.styleLayerExists(forLayerId: id)) {
       self.styleLayer = try? self.findLayer(style: style, id: id)
-      print("xxx found layer: \(self.styleLayer)")
     } else {
       self.styleLayer = try? self.makeLayer(style: style)
-      print("StyleLayer after?? :\(self.styleLayer)")
       add = true
     }
+    self.setOptions(&self.styleLayer!)
     self.addStyles()
     if add {
       self.inserLayer(map)
@@ -109,8 +158,12 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent {
       layer.source = sourceID
     }
     
-    if let filter = filter {
-      // v10todo layer.filter
+    if let filter = filter, filter.count > 0 {
+      let data = try! JSONSerialization.data(withJSONObject: filter, options: .prettyPrinted)
+      let decodedExpression = try! JSONDecoder().decode(Expression.self, from: data)
+      layer.filter = decodedExpression
+    } else {
+      layer.filter = nil
     }
     
     if let minZoom = minZoom {
@@ -119,6 +172,42 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent {
     
     if let maxZoom = maxZoom {
       layer.maxZoom = maxZoom.doubleValue
+    }
+  }
+  
+  func removeFromMap(_ style: Style) {
+    if (self.styleLayer != nil) {
+      try! style.removeLayer(withId: self.id)
+    }
+    self.styleLayer = nil
+  }
+  
+  
+  func insert(_ style: Style, layerPosition: LayerPosition, inserted: (() -> Void)? = nil) {
+    var idToWaitFor : String? = nil
+    switch layerPosition {
+    case .above(let aboveId):
+      idToWaitFor = aboveId
+    case .below(let belowId):
+      idToWaitFor = belowId
+    case .at(_):
+      idToWaitFor = nil
+    case .default:
+      idToWaitFor = nil
+    }
+    
+    if let idToWaitFor = idToWaitFor {
+      map!.waitForLayerWithID(idToWaitFor) { _ in
+        try! style.addLayer(self.styleLayer!, layerPosition: layerPosition)
+        if let inserted = inserted {
+          inserted()
+        }
+      }
+    } else {
+      try! style.addLayer(styleLayer!, layerPosition: layerPosition)
+      if let inserted = inserted {
+        inserted()
+      }
     }
   }
 
