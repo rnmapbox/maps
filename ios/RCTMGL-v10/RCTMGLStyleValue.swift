@@ -92,7 +92,26 @@ class RCTMGLStyleValue {
           alpha: 1.0)
   }
   
+  // todo remove we don't need it
+  func convertColorLiterals(items: [Any]) -> [Any]
+  {
+    items.map { item in
+      if let sub = item as? [Any] {
+        return convertColorLiterals(items: sub)
+      } else if let str = item as? String {
+        print("Map: \(str) ")
+        if str.hasPrefix("#") {
+          return "rgba(255,255,255,1)"
+        }
+        return str
+      } else {
+        return item
+      }
+    }
+  }
+  
   func mglStyleValueColor() -> Value<ColorRepresentable> {
+    //return Value.constant(ColorRepresentable(color: UIColor.black))
     if let value = value as? Dictionary<String,Any> {
       let value = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
       print("~~~ after-convert: \(value) \(type(of:value))")
@@ -104,9 +123,9 @@ class RCTMGLStyleValue {
       
       let data = try! JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
 
-      print("~~~ data: \(data)")
+      print("~~~ data color: \(data)")
       let decodedExpression = try! JSONDecoder().decode(Expression.self, from: data)
-      print("~~~ decodedExpression: \(decodedExpression)")
+      print("~~~ decodedExpression color: \(decodedExpression)")
       return Value.expression(decodedExpression)
     } else {
       return Value.constant(ColorRepresentable(color: UIColor.red))
@@ -147,7 +166,7 @@ class RCTMGLStyleValue {
     print("Enum: \(value)")
     if let value = value as? Dictionary<String,Any> {
       let value = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
-      print("###: \(value)")
+      print("###: \(value) \(Enum(rawValue: value as! String))")
       return Value.constant(Enum(rawValue: value as! String)!)
     } else {
       return Value.constant(Enum(rawValue: value as! String)!)
@@ -197,7 +216,25 @@ class RCTMGLStyleValue {
   }
   
   func mglStyleValueFormatted() -> Value<String> {
-    return Value.constant("foo")
+    print("Formatted: \(value)")
+
+    if let value = value as? Dictionary<String,Any> {
+      let value = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
+      print("~~~ after-convert: \(value) \(type(of:value))")
+      
+      if let string = value as? String {
+        return Value.constant(string)
+      }
+      
+      let data = try! JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
+
+      print("~~~ data: \(data)")
+      let decodedExpression = try! JSONDecoder().decode(Expression.self, from: data)
+      print("~~~ decodedExpression: \(decodedExpression)")
+      return Value.expression(decodedExpression)
+    } else {
+      fatalError("mglStyleValueFormatted - Unpexected value: \(value)")
+    }
   }
   
   func mglStyleValueLineJoin() -> Value<LineJoin> {
