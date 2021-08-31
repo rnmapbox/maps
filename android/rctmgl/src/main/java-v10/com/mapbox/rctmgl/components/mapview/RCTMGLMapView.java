@@ -79,6 +79,7 @@ import com.mapbox.rctmgl.components.location.LocationComponentManager;
 import com.mapbox.rctmgl.components.location.RCTMGLNativeUserLocation;
 */
 import com.mapbox.rctmgl.components.camera.RCTMGLCamera;
+import com.mapbox.rctmgl.components.images.RCTMGLImages;
 import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeTracker;
 /*
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
@@ -127,6 +128,8 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
     public static final String LOG_TAG = "RCTMGLMapView";
     RCTMGLMapViewManager mManager;
     private Map<String, RCTSource> mSources;
+    private List<RCTMGLImages> mImages;
+
     private String mStyleURL;
 
     private boolean mDestroyed;
@@ -151,6 +154,7 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
         mManager = manager;
         mMap = this.getMapboxMap();
         mSources = new HashMap<>();
+        mImages = new ArrayList<>();
 
         this.onMapReady(mMap);
     }
@@ -191,11 +195,20 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
     }
 
     public void init() {
-
+        // Required for rendering properly in Android Oreo
+        getViewTreeObserver().dispatchOnGlobalLayout();
     }
     
     public boolean isDestroyed() {
         return mDestroyed;
+    }
+
+    public void getStyle(Style.OnStyleLoaded onStyleLoaded) {
+        if (mMap == null) {
+            return;
+        }
+
+        mMap.getStyle(onStyleLoaded);
     }
 
     public void addFeature(View childView, int childPosition) {
@@ -205,11 +218,11 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
             RCTSource source = (RCTSource) childView;
             mSources.put(source.getID(), source);
             feature = (AbstractMapFeature) childView;
-            /*
         } else if (childView instanceof RCTMGLImages) {
             RCTMGLImages images = (RCTMGLImages) childView;
             mImages.add(images);
             feature = (AbstractMapFeature) childView;
+            /*
         } else if (childView instanceof RCTMGLLight) {
             feature = (AbstractMapFeature) childView;
         } else if (childView instanceof RCTMGLNativeUserLocation) {
