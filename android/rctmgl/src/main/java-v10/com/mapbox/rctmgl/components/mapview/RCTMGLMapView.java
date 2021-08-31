@@ -361,17 +361,19 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
     }
 
     public void waitForLayer(String layerID, FoundLayerCallback callback) {
-        Layer layer = LayerUtils.getLayer(mMap.getStyle(), layerID);
-        if (layer != null) {
-            callback.found(layer);
-        } else {
-            List<FoundLayerCallback> waiters = layerWaiters.get(layerID);
-            if (waiters == null) {
-                waiters = new ArrayList<FoundLayerCallback>();
-                layerWaiters.put(layerID, waiters);
+        if (getSavedStyle() != null) {
+            Layer layer = LayerUtils.getLayer(getSavedStyle(), layerID);
+            if (layer != null) {
+                callback.found(layer);
+                return;
             }
-            waiters.add(callback);
         }
+        List<FoundLayerCallback> waiters = layerWaiters.get(layerID);
+        if (waiters == null) {
+            waiters = new ArrayList<FoundLayerCallback>();
+            layerWaiters.put(layerID, waiters);
+        }
+        waiters.add(callback);
     }
 
     private void handleMapChangedEvent(String eventType) {
@@ -502,6 +504,7 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
     }
 
     public Style getSavedStyle() {
+        // v10todo, style gets null if we add anyhing
         return mSavedStyle;
     }
 }

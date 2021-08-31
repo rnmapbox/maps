@@ -166,7 +166,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
         } */
 
         LayerUtils.addLayer(getStyle(), mLayer);
-        // V10TODO: mMapView.layerAdded(mLayer);
+        mMapView.layerAdded(mLayer);
     }
 
     public void addAbove(final String aboveLayerID) {
@@ -189,7 +189,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
                     return;
                 }
                 if (getStyle() == null) return;
-                LayerUtils.addLayerAbove(getStyle(), mLayer, belowLayerID);
+                LayerUtils.addLayerBelow(getStyle(), mLayer, belowLayerID);
                 mMapView.layerAdded(mLayer);
             }
         });

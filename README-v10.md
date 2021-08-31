@@ -126,6 +126,9 @@ Progress:
 ## Camera
 - [x] Basic camera
 
+## MapView
+- [ ] Add stuff below user location on android
+
 ## Sources:
 - [x] VectorSource
 - [x] ShapeSource: android, ios GradientLine: +1
