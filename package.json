@@ -63,7 +63,7 @@
     "ejs-lint": "^1.1.0",
     "eslint": "^7.3.0",
     "eslint-plugin-fp": "^2.3.0",
-    "eslint-plugin-import": "2.23.4",
+    "eslint-plugin-import": "2.24.2",
     "expo-module-scripts": "^2.0.0",
     "husky": "4.3.8",
     "jest": "25.5.4",
