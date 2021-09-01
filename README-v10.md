@@ -88,6 +88,18 @@ code ios/Podfile
 =======
 >>>>>>> b23f5af3 (Update README-v10.md)
 
+code android/app/build.gradle
+# add the following:
+android {
+    packagingOptions {
+        pickFirst 'lib/x86/libc++_shared.so'
+        pickFirst 'lib/x86_64/libc++_shared.so'
+        pickFirst 'lib/arm64-v8a/libc++_shared.so'
+        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+    }
+}
+
+
 npx react-native run-android
 ```
 
