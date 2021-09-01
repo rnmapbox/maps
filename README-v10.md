@@ -104,7 +104,7 @@ code ios/Podfile
 platform :ios, '13.0'
 
   pre_install do |installer|
-    $RNMBLG.pre_install(installer)
+    $RNMBGL.pre_install(installer)
   end
   
   post_install do |installer|
