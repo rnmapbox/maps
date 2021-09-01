@@ -5,7 +5,32 @@ import Turf
 class RCTMGLShapeSource : RCTMGLSource {
 
   @objc var url : String?
-  @objc var shape : String?
+  @objc var shape : String? {
+    didSet {
+      self.doUpdate { (style) in
+        if let shape = shape {
+          let data = shape.data(using: .utf8)!
+          let geojson = try! GeoJSON.parse(data)
+          if let featureCollection = geojson.decodedFeatureCollection {
+            print("Feature collection:\(featureCollection)")
+            doUpdate { (style) in
+              try! style.updateGeoJSONSource(withId: id, geoJSON: featureCollection)
+            }
+//            updateSource(property: "data", value: GeoJSONSourceData.featureCollection(featureCollection))
+          } else if let feature = geojson.decodedFeature {
+            print("Feature :\(feature)")
+            doUpdate { (style) in
+              try! style.updateGeoJSONSource(withId: id, geoJSON: feature)
+            }
+
+//            updateSource(property: "data", value: GeoJSONSourceData.feature(feature))
+          } else {
+            fatalError("shape is neither feature nor featureCollection \(shape)")
+          }
+        }
+      }
+    }
+  }
   
   @objc var cluster : NSNumber?
   @objc var clusterRadius : NSNumber?
@@ -31,6 +56,8 @@ class RCTMGLShapeSource : RCTMGLSource {
         result.data = .featureCollection(featureCollection)
       } else if let feature = geojson.decodedFeature {
         result.data = .feature(feature)
+      } else {
+        fatalError("shape is neither feature nor featureCollection: \(shape)")
       }
     }
     
@@ -67,6 +94,25 @@ class RCTMGLShapeSource : RCTMGLSource {
     }
     
     return result
+  }
+  
+  func doUpdate(_ update:(Style) -> Void) {
+    guard let map = self.map,
+          let _ = self.source,
+          map.mapboxMap.style.sourceExists(withId: id) else {
+      return
+    }
+    
+    let style = map.mapboxMap.style
+    update(style)
+  }
+  
+  func updateSource(property: String, value: Any) {
+    doUpdate { style in
+      print("[[[ Before setSourceProperty \(id) \(value)")
+      try! style.setSourceProperty(for: id, property: property, value: value)
+      print("]]] After setSourceProperty \(id) \(value)")
+    }
   }
 
 }

@@ -18,8 +18,9 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent {
   @objc var filter : Array<Any>? = nil
   @objc var id: String! = nil
   @objc var sourceID: String? = nil
-  @objc var minZoom : NSNumber? = nil
-  @objc var maxZoom : NSNumber? = nil
+  
+  @objc var minZoomLevel : NSNumber? = nil
+  @objc var maxZoomLevel : NSNumber? = nil
 
   @objc var aboveLayerID : String? = nil {
     didSet {
@@ -166,11 +167,11 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent {
       layer.filter = nil
     }
     
-    if let minZoom = minZoom {
+    if let minZoom = minZoomLevel {
       layer.minZoom = minZoom.doubleValue
     }
     
-    if let maxZoom = maxZoom {
+    if let maxZoom = maxZoomLevel {
       layer.maxZoom = maxZoom.doubleValue
     }
   }

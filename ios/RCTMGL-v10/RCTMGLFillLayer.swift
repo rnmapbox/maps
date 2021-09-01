@@ -28,13 +28,16 @@ class RCTMGLFillLayer: RCTMGLVectorLayer {
   override func addStyles() {
     print("::addStyles ")
     if let style : Style = self.style {
-      let style =  RCTMGLStyle(style: self.style!)
-      style.bridge = self.bridge
+      let styler =  RCTMGLStyle(style: self.style!)
+      styler.bridge = self.bridge
       
       if var styleLayer = self.styleLayer as? FillLayer {
-        style.fillLayer(layer: &styleLayer, reactStyle: reactStyle!, isValid: {
-          return self.isAddedToMap()
-        })
+        styler.fillLayer(
+          layer: &styleLayer,
+          reactStyle: reactStyle!,
+          applyUpdater: { (updater) in try! style.updateLayer(withId: self.id) { (layer: inout FillLayer) in updater(&layer) }},
+          isValid: { return self.isAddedToMap() }
+        )
         self.styleLayer = styleLayer
       } else {
         fatalError("[xxx] layer is not fill layer?!!! \(self.styleLayer)")

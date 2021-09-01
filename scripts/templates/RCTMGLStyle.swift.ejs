@@ -15,7 +15,7 @@ class RCTMGLStyle {
   }
 
 <% for (const layer of layers) { %>
-func <%- setLayerMethodName(layer, 'ios') -%>(layer: inout <%- getLayerType(layer, 'ios-v10') -%>, reactStyle:Dictionary<String, Any>, isValid:() -> Bool)
+func <%- setLayerMethodName(layer, 'ios') -%>(layer: inout <%- getLayerType(layer, 'ios-v10') -%>, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout <%- getLayerType(layer, 'ios-v10') -%>)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     fatalError("Invlalid style: \(reactStyle)")
@@ -38,13 +38,17 @@ func <%- setLayerMethodName(layer, 'ios') -%>(layer: inout <%- getLayerType(laye
         let imageURI = styleValue.getImageURI()
 
         RCTMGLUtils.fetchImage(bridge!, url:imageURI, scale:styleValue.getImageScale(), callback:{ (error, image) in
-          if (image != nil) {
+          if let image = image {
             DispatchQueue.main.sync {
               if (isValid()) {
-                try! self.style.addImage(image, id:imageURI);
-                self.set<%- iosPropMethodName(layer, pascelCase(layer.properties[i].name)) -%>(&layer, styleValue:styleValue);
+                try! self.style.addImage(image, id:imageURI!);
+                applyUpdater { (layer: inout <%- getLayerType(layer, 'ios-v10') -%>) in
+                  self.set<%- iosPropMethodName(layer, pascelCase(layer.properties[i].name)) -%>(&layer, styleValue:styleValue);
+                }
               }
             }
+          } else {
+            fatalError("Error during fetchImage: \(error)")
           }
         });
       }

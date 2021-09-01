@@ -128,6 +128,7 @@ Progress:
 
 ## MapView
 - [ ] Add stuff below user location on android
+- [ ] iOS: update zoomLevel on prop changes
 
 ## Sources:
 - [x] VectorSource

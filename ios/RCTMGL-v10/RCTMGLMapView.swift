@@ -5,6 +5,8 @@ import Turf
   var reactOnPress : RCTBubblingEventBlock? = nil
   var reactOnMapChange : RCTBubblingEventBlock? = nil
   
+  var images : [RCTMGLImages] = []
+  
   var layerWaiters : [String:[(String) -> Void]] = [:]
     
   var mapView : MapView {
@@ -105,8 +107,29 @@ import Turf
   }
     
   required init(frame:CGRect) {
-      let resourceOptions = ResourceOptions(accessToken: MGLModule.accessToken!)
-      super.init(frame: frame, mapInitOptions: MapInitOptions(resourceOptions: resourceOptions))
+    let resourceOptions = ResourceOptions(accessToken: MGLModule.accessToken!)
+    super.init(frame: frame, mapInitOptions: MapInitOptions(resourceOptions: resourceOptions))
+
+    setupEvents()
+  }
+  
+  func setupEvents() {
+    self.mapboxMap.onEvery(.styleImageMissing) { (event) in
+      if let data = event.data as? [String:Any] {
+        if let imageName = data["id"] as? String {
+
+          self.images.forEach {
+            if $0.addMissingImageToStyle(style: self.mapboxMap.style, imageName: imageName) {
+              return
+            }
+          }
+          
+          self.images.forEach {
+            $0.sendImageMissingEvent(imageName: imageName, event: event)
+          }
+        }
+      }
+    }
   }
     
   required init (coder: NSCoder) {

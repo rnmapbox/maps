@@ -19,8 +19,9 @@ class RCTMGLEvent : NSObject, RCTMGLEventProtocol {
     }
 
     enum EventType : String {
-        case tap = "press"
-        case regionDidChange = "regiondidchange"
+      case tap = "press"
+      case regionDidChange = "regiondidchange"
+      case imageMissing = "imagesmissingimage"
     }
     
     init(type: EventType, payload: [String:Any]?) {

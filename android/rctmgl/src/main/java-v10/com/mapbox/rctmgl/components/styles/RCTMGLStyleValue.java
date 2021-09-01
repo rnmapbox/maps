@@ -17,10 +17,6 @@ import com.mapbox.rctmgl.utils.ImageEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by nickitaliano on 9/12/17.
- */
-
 public class RCTMGLStyleValue {
 
     private String mType;
@@ -42,7 +38,6 @@ public class RCTMGLStyleValue {
         mPayload = config.getMap("stylevalue");
 
         if ("image".equals(mType)) {
-            /*
             imageScale = ImageEntry.defaultScale;
             if ("hashmap".equals(mPayload.getString("type"))) {
                 ReadableMap map = getMap();
@@ -64,7 +59,6 @@ public class RCTMGLStyleValue {
             }
             isAddImage = imageURI != null;
             if (isAddImage) { return; }
-             */
         }
 
         Dynamic dynamic = mPayload.getDynamic("value");

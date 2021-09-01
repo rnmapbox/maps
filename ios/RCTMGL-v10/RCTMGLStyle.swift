@@ -12,7 +12,7 @@ class RCTMGLStyle {
   }
 
 
-func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, isValid:() -> Bool)
+func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout FillLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     fatalError("Invlalid style: \(reactStyle)")
@@ -55,13 +55,17 @@ func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, isVal
         let imageURI = styleValue.getImageURI()
 
         RCTMGLUtils.fetchImage(bridge!, url:imageURI, scale:styleValue.getImageScale(), callback:{ (error, image) in
-          if (image != nil) {
+          if let image = image {
             DispatchQueue.main.sync {
               if (isValid()) {
-                try! self.style.addImage(image, id:imageURI);
-                self.setFillPattern(&layer, styleValue:styleValue);
+                try! self.style.addImage(image, id:imageURI!);
+                applyUpdater { (layer: inout FillLayer) in
+                  self.setFillPattern(&layer, styleValue:styleValue);
+                }
               }
             }
+          } else {
+            fatalError("Error during fetchImage: \(error)")
           }
         });
       }
@@ -73,7 +77,7 @@ func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, isVal
   }
 }
 
-func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, isValid:() -> Bool)
+func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout LineLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     fatalError("Invlalid style: \(reactStyle)")
@@ -138,13 +142,17 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, isVal
         let imageURI = styleValue.getImageURI()
 
         RCTMGLUtils.fetchImage(bridge!, url:imageURI, scale:styleValue.getImageScale(), callback:{ (error, image) in
-          if (image != nil) {
+          if let image = image {
             DispatchQueue.main.sync {
               if (isValid()) {
-                try! self.style.addImage(image, id:imageURI);
-                self.setLinePattern(&layer, styleValue:styleValue);
+                try! self.style.addImage(image, id:imageURI!);
+                applyUpdater { (layer: inout LineLayer) in
+                  self.setLinePattern(&layer, styleValue:styleValue);
+                }
               }
             }
+          } else {
+            fatalError("Error during fetchImage: \(error)")
           }
         });
       }
@@ -158,7 +166,7 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, isVal
   }
 }
 
-func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, isValid:() -> Bool)
+func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout SymbolLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     fatalError("Invlalid style: \(reactStyle)")
@@ -203,13 +211,17 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, i
         let imageURI = styleValue.getImageURI()
 
         RCTMGLUtils.fetchImage(bridge!, url:imageURI, scale:styleValue.getImageScale(), callback:{ (error, image) in
-          if (image != nil) {
+          if let image = image {
             DispatchQueue.main.sync {
               if (isValid()) {
-                try! self.style.addImage(image, id:imageURI);
-                self.setIconImage(&layer, styleValue:styleValue);
+                try! self.style.addImage(image, id:imageURI!);
+                applyUpdater { (layer: inout SymbolLayer) in
+                  self.setIconImage(&layer, styleValue:styleValue);
+                }
               }
             }
+          } else {
+            fatalError("Error during fetchImage: \(error)")
           }
         });
       }
@@ -329,7 +341,7 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, i
   }
 }
 
-func circleLayer(layer: inout CircleLayer, reactStyle:Dictionary<String, Any>, isValid:() -> Bool)
+func circleLayer(layer: inout CircleLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout CircleLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     fatalError("Invlalid style: \(reactStyle)")
@@ -389,7 +401,7 @@ func circleLayer(layer: inout CircleLayer, reactStyle:Dictionary<String, Any>, i
   }
 }
 
-func heatmapLayer(layer: inout HeatmapLayer, reactStyle:Dictionary<String, Any>, isValid:() -> Bool)
+func heatmapLayer(layer: inout HeatmapLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout HeatmapLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     fatalError("Invlalid style: \(reactStyle)")
@@ -427,7 +439,7 @@ func heatmapLayer(layer: inout HeatmapLayer, reactStyle:Dictionary<String, Any>,
   }
 }
 
-func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<String, Any>, isValid:() -> Bool)
+func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout FillExtrusionLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     fatalError("Invlalid style: \(reactStyle)")
@@ -464,13 +476,17 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
         let imageURI = styleValue.getImageURI()
 
         RCTMGLUtils.fetchImage(bridge!, url:imageURI, scale:styleValue.getImageScale(), callback:{ (error, image) in
-          if (image != nil) {
+          if let image = image {
             DispatchQueue.main.sync {
               if (isValid()) {
-                try! self.style.addImage(image, id:imageURI);
-                self.setFillExtrusionPattern(&layer, styleValue:styleValue);
+                try! self.style.addImage(image, id:imageURI!);
+                applyUpdater { (layer: inout FillExtrusionLayer) in
+                  self.setFillExtrusionPattern(&layer, styleValue:styleValue);
+                }
               }
             }
+          } else {
+            fatalError("Error during fetchImage: \(error)")
           }
         });
       }
@@ -490,7 +506,7 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
   }
 }
 
-func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, isValid:() -> Bool)
+func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout RasterLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     fatalError("Invlalid style: \(reactStyle)")
@@ -540,7 +556,7 @@ func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, i
   }
 }
 
-func hillshadeLayer(layer: inout HillshadeLayer, reactStyle:Dictionary<String, Any>, isValid:() -> Bool)
+func hillshadeLayer(layer: inout HillshadeLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout HillshadeLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     fatalError("Invlalid style: \(reactStyle)")
@@ -582,7 +598,7 @@ func hillshadeLayer(layer: inout HillshadeLayer, reactStyle:Dictionary<String, A
   }
 }
 
-func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String, Any>, isValid:() -> Bool)
+func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout BackgroundLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     fatalError("Invlalid style: \(reactStyle)")
@@ -609,13 +625,17 @@ func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String,
         let imageURI = styleValue.getImageURI()
 
         RCTMGLUtils.fetchImage(bridge!, url:imageURI, scale:styleValue.getImageScale(), callback:{ (error, image) in
-          if (image != nil) {
+          if let image = image {
             DispatchQueue.main.sync {
               if (isValid()) {
-                try! self.style.addImage(image, id:imageURI);
-                self.setBackgroundPattern(&layer, styleValue:styleValue);
+                try! self.style.addImage(image, id:imageURI!);
+                applyUpdater { (layer: inout BackgroundLayer) in
+                  self.setBackgroundPattern(&layer, styleValue:styleValue);
+                }
               }
             }
+          } else {
+            fatalError("Error during fetchImage: \(error)")
           }
         });
       }
@@ -631,7 +651,7 @@ func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String,
   }
 }
 
-func lightLayer(layer: inout Light, reactStyle:Dictionary<String, Any>, isValid:() -> Bool)
+func lightLayer(layer: inout Light, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout Light)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     fatalError("Invlalid style: \(reactStyle)")
