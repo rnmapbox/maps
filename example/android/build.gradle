@@ -79,7 +79,7 @@ allprojects {
             // Android JSC is installed from npm
             url("$rootDir/../node_modules/jsc-android/dist")
         }
-        if (safeExtGet("mapboxV10", false)) {
+        if (safeExtGet("mapboxV10", true)) {
             maven {
                 url 'https://api.mapbox.com/downloads/v2/releases/maven'
                 authentication {
