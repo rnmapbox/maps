@@ -1,6 +1,13 @@
 import MapboxMaps
 import Turf
 
+
+public func dictionaryFrom(_ from: Turf.Feature?) throws -> [String:Any]? {
+  let data = try JSONEncoder().encode(from)
+  let value = try JSONSerialization.jsonObject(with: data) as? [String:Any]
+  return value
+}
+
 @objc class RCTMGLMapView : MapView {
   var reactOnPress : RCTBubblingEventBlock? = nil
   var reactOnMapChange : RCTBubblingEventBlock? = nil
@@ -59,7 +66,7 @@ import Turf
               "screenPointX": Double(tapPoint.x),
               "screenPointY": Double(tapPoint.y)
           ];
-          let event = try!  RCTMGLEvent(type:.tap, payload: GeoJSONManager.dictionaryFrom(geojson)!);
+          let event = try!  RCTMGLEvent(type:.tap, payload: dictionaryFrom(geojson)!);
           self.fireEvent(event: event, callback: reactOnPress)
       }
   }
@@ -77,10 +84,10 @@ import Turf
       ]
   }
     
-    
   func toJSON(geometry: Turf.Geometry, properties: [String: Any]? = nil) -> [String: Any] {
       let geojson = Feature(geometry: geometry);
-      var result = try! GeoJSONManager.dictionaryFrom(geojson)!
+    
+      var result = try! dictionaryFrom(geojson)!
       if let properties = properties {
           result["properties"] = properties
       }
