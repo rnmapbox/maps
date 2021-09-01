@@ -203,7 +203,7 @@ function buildProperties(attributes, attrName) {
     },
     type: attributes[attrName].type,
     value: attributes[attrName].value,
-    image: isImage(attrName),
+    image: isImage(attrName, attributes[attrName].type),
     translate: isTranslate(attrName),
     transition: attributes[attrName].transition,
     expression: attributes[attrName].expression,
@@ -261,10 +261,11 @@ function getDisables(disabledItems) {
   return items;
 }
 
-function isImage(attrName) {
+function isImage(attrName, type) {
   return (
     attrName.toLowerCase().indexOf('pattern') !== -1 ||
-    attrName.toLowerCase().indexOf('image') !== -1
+    attrName.toLowerCase().indexOf('image') !== -1 ||
+    type === "resolvedImage"
   );
 }
 

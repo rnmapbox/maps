@@ -44,6 +44,7 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
         self.source = try! style._source(withId: self.id, type: self.sourceType())
       } else {
         let source = self.makeSource()
+        self.source = source
         try! style.addSource(source, id: self.id)
       }
            

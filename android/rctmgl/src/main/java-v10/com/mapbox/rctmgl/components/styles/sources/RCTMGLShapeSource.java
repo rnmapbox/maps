@@ -11,6 +11,8 @@ import androidx.core.content.res.ResourcesCompat;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.mapbox.bindgen.Expected;
+import com.mapbox.bindgen.None;
+import com.mapbox.bindgen.Value;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.maps.MapboxMap;
@@ -109,6 +111,9 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
 
         if (mSource != null && mMapView != null && !mMapView.isDestroyed() ) {
             mSource.data(mShape);
+
+            Expected<String, None> result = mMap.getStyle().setStyleSourceProperty(mID, "data", Value.valueOf(mShape));
+
         }
     }
 

@@ -2,14 +2,28 @@ import MapboxMaps
 
 class RCTMGLStyleValue {
   var value: Any
+  var styleType: String? = nil
+  var styleValue: [String:Any]? = nil
+  var styleObject: Any? = nil
+  
   
   init(value: Any) {
     self.value = value
+  
+    if let dict = value as? [String:Any] {
+      guard let styleType = dict["styletype"] as? String else {
+        fatalError("StyleType should be string in \(dict)")
+      }
+      self.styleType = styleType
+      guard let styleValue = dict["stylevalue"] as? [String:Any] else {
+        fatalError("StyleValue should be dict in \(dict)")
+      }
+      self.styleValue = styleValue
+      self.styleObject = parse(rawStyleValue: styleValue)
+    }
   }
   
   static func make(_ reactStyleValue: Any) ->RCTMGLStyleValue {
-    print("Convert: \(reactStyleValue)")
-    
     return RCTMGLStyleValue(value: reactStyleValue)
   }
 
@@ -26,7 +40,63 @@ class RCTMGLStyleValue {
   }
   
   func getImageScale() -> Double {
+    if let dict = styleObject as? [String:Any] {
+      if let scale = dict["scale"] as? NSNumber {
+        return scale.doubleValue
+      } else {
+        return 1.0
+      }
+    }
     return 1.0
+  }
+  
+  func parse(rawStyleValue: [String:Any]) -> Any
+  {
+    guard let type = rawStyleValue["type"] as? String else {
+      fatalError("type is not a string in \(rawStyleValue)")
+    }
+    
+    let value = rawStyleValue["value"]
+    if type == "string" {
+      guard let string = value as? String else {
+        fatalError("value is not a string in \(rawStyleValue)")
+      }
+      return string
+    } else if type == "number" {
+      guard let number = value as? NSNumber else {
+        fatalError("value is not a number in \(rawStyleValue)")
+      }
+      return number
+    } else if type == "boolean" {
+      guard let bool = value as? NSNumber else {
+        fatalError("value is not a bool in \(rawStyleValue)")
+      }
+      return bool
+    } else if type == "hashmap" {
+      guard let array = value as? [[[String:Any]]] else {
+        fatalError("value is not a array in \(rawStyleValue)")
+      }
+      var dict : [String:Any] = [:]
+      for kv in array {
+        guard let key = parse(rawStyleValue: kv[0]) as? String else {
+          fatalError("key \(kv[0]) is not string in \(rawStyleValue)")
+        }
+        let value = parse(rawStyleValue: kv[1])
+        dict[key] = value
+      }
+      return dict
+    } else if type == "array" {
+      guard let rawArray = value as? [[String:Any]] else {
+        fatalError("value is not a array in \(rawStyleValue)")
+      }
+      var convertedArray:[Any] = []
+      for i in rawArray {
+        convertedArray.append(parse(rawStyleValue: i))
+      }
+      return convertedArray
+    } else {
+      fatalError("unepxected type: \(type)")
+    }
   }
   
   static func convert(_ from:[String: Any]) -> Any {
@@ -131,6 +201,12 @@ class RCTMGLStyleValue {
       return Value.constant(ColorRepresentable(color: UIColor.red))
     }
   }
+  
+  func asExpression(json: [Any]) -> Expression {
+    let data = try! JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+    let decodedExpression = try! JSONDecoder().decode(Expression.self, from: data)
+    return decodedExpression
+  }
 
   func mglStyleValueColorRaw() -> ColorRepresentable {
     return ColorRepresentable(color: UIColor.red)
@@ -149,7 +225,16 @@ class RCTMGLStyleValue {
   }
   
   func mglStyleValueResolvedImage() -> Value<ResolvedImage> {
-    return Value.constant(.name("foo"))
+    if let exprJSON = styleObject as? [Any] {
+      return Value.expression(asExpression(json: exprJSON))
+    } else if let dict = styleObject as? [String:Any],
+              let uri = dict["uri"] as? String {
+      return Value.constant(.name(uri))
+    } else if let value = styleObject as? String {
+      return Value.constant(.name(value))
+    } else {
+      fatalError("Resolved image is nor expression nor string: \(String(describing: styleObject))!")
+    }
   }
 
   func mglStyleValueFillTranslateAnchor() -> Value<FillTranslateAnchor> {
@@ -182,11 +267,23 @@ class RCTMGLStyleValue {
   }
   
   func shouldAddImage() -> Bool {
-    return true
+    if let uri = getImageURI() {
+      return uri.contains("://")
+    }
+    return false
   }
   
-  func getImageURI() -> String {
-    return ""
+  func getImageURI() -> String? {
+    if let dict = styleObject as? [String:Any] {
+      if let uri = dict["uri"] as? String {
+        return uri
+      } else {
+        return nil
+      }
+    } else if let uri = styleObject as? String {
+      return uri
+    }
+    return nil
   }
   
   /*
