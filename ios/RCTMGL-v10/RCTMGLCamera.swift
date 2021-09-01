@@ -46,7 +46,8 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
         var camera = CameraOptions()
         let feature : String = dictionary["centerCoordinate"] as! String
         
-        let centerFeature : Turf.Feature? = try! GeoJSONManager.decodeKnown(feature.data(using: .utf8)!)
+        let centerFeature : Turf.Feature? = try!
+          GeoJSON.parse(Turf.Feature.self, from: feature.data(using: .utf8)!)
         
         switch centerFeature?.geometry {
         case .point(let centerPoint):
