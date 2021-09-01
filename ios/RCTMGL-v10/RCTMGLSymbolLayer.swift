@@ -33,10 +33,11 @@ class RCTMGLSymbolLayer: RCTMGLVectorLayer {
       let styler =  RCTMGLStyle(style: self.style!)
       styler.bridge = self.bridge
       
-      if var styleLayer = self.styleLayer as? LayerType {
+      if var styleLayer = self.styleLayer as? LayerType,
+         let reactStyle = self.reactStyle {
         styler.symbolLayer(
           layer: &styleLayer,
-          reactStyle: reactStyle!,
+          reactStyle: reactStyle,
           applyUpdater: { (updater) in try! style.updateLayer(withId: self.id) { (layer: inout LayerType) in updater(&layer) }},
           isValid: {
             return self.isAddedToMap()

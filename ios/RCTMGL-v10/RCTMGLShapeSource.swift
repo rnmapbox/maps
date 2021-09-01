@@ -44,21 +44,37 @@ class RCTMGLShapeSource : RCTMGLSource {
   override func sourceType() -> Source.Type {
     return GeoJSONSource.self
   }
+
+  func parseShape(_ shape: String) -> GeoJSONSourceData {
+    guard let data = shape.data(using: .utf8) else {
+      fatalError("shape could not be converted to urf8 \(shape)")
+    }
+    do {
+      let geojson = try GeoJSON.parse(data)
+      if let feature = geojson.decodedFeature {
+        return .feature(feature)
+      } else if let featureCollection = geojson.decodedFeatureCollection {
+        return .featureCollection(featureCollection)
+      } else {
+        fatalError("shape is neither feature nor featureCollection: \(shape)")
+      }
+    } catch {
+      let origError = error
+      do {
+        let feature = Feature(geometry: try JSONDecoder().decode(Geometry.self, from: data))
+        return .feature(feature)
+      } catch {
+        fatalError("Unexpected error: \(error) and \(origError) from \(shape)")
+      }
+    }
+  }
   
   override func makeSource() -> Source
   {
     var result =  GeoJSONSource()
     
     if let shape = shape {
-      let data = shape.data(using: .utf8)!
-      let geojson = try! GeoJSON.parse(data)
-      if let featureCollection = geojson.decodedFeatureCollection {
-        result.data = .featureCollection(featureCollection)
-      } else if let feature = geojson.decodedFeature {
-        result.data = .feature(feature)
-      } else {
-        fatalError("shape is neither feature nor featureCollection: \(shape)")
-      }
+      result.data = parseShape(shape)
     }
     
     if let url = url {
