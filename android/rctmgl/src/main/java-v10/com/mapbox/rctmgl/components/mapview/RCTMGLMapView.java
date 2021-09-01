@@ -56,10 +56,9 @@ import com.mapbox.geojson.Point;
 import com.mapbox.maps.CameraBounds;
 import com.mapbox.maps.CameraState;
 import com.mapbox.maps.ScreenCoordinate;
+import com.mapbox.maps.plugin.gestures.GesturesPlugin;
 import com.mapbox.maps.plugin.gestures.OnMapClickListener;
 import com.mapbox.maps.plugin.gestures.OnMoveListener;
-import com.mapbox.maps.plugin.gestures.MapboxMapUtils;
-// import com.mapbox.maps.plugin.gestures.GesturesUtils;
 import com.mapbox.maps.extension.style.layers.LayerUtils;
 import com.mapbox.maps.plugin.delegates.MapPluginExtensionsDelegate;
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener;
@@ -122,6 +121,8 @@ import com.mapbox.maps.Style;
 import com.mapbox.maps.extension.style.layers.Layer;
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener;
 
+import kotlin.jvm.functions.Function1;
+
 // import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 
 public class RCTMGLMapView extends MapView implements OnMapClickListener {
@@ -171,25 +172,30 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
             }
         });
 
-        MapboxMapUtils.addOnMapClickListener(map, this);
-        MapboxMapUtils.addOnMoveListener(map, new OnMoveListener() {
-
+        RCTMGLMapView _this = this;
+        map.gesturesPlugin(new Function1<GesturesPlugin, Object>() {
             @Override
-            public void onMoveEnd(@NonNull MoveGestureDetector moveGestureDetector) {
+            public Object invoke(GesturesPlugin gesturesPlugin) {
+                gesturesPlugin.addOnMapClickListener(_this);
+                gesturesPlugin.addOnMoveListener(new OnMoveListener() {
+                    @Override
+                    public void onMoveBegin(@NonNull MoveGestureDetector moveGestureDetector) {
+                        mCameraChangeTracker.setReason(CameraChangeTracker.USER_GESTURE);
+                        handleMapChangedEvent(EventTypes.REGION_WILL_CHANGE);
+                    }
 
-            }
+                    @Override
+                    public boolean onMove(@NonNull MoveGestureDetector moveGestureDetector) {
+                        mCameraChangeTracker.setReason(CameraChangeTracker.USER_GESTURE);
+                        handleMapChangedEvent(EventTypes.REGION_IS_CHANGING);
+                        return false;
+                    }
 
-            @Override
-            public void onMoveBegin(@NonNull MoveGestureDetector moveGestureDetector) {
-                mCameraChangeTracker.setReason(CameraChangeTracker.USER_GESTURE);
-                handleMapChangedEvent(EventTypes.REGION_WILL_CHANGE);
-            }
-
-            @Override
-            public boolean onMove(@NonNull MoveGestureDetector moveGestureDetector) {
-                mCameraChangeTracker.setReason(CameraChangeTracker.USER_GESTURE);
-                handleMapChangedEvent(EventTypes.REGION_IS_CHANGING);
-                return false;
+                    @Override
+                    public void onMoveEnd(@NonNull MoveGestureDetector moveGestureDetector) {
+                    }
+                });
+                return null;
             }
         });
     }
