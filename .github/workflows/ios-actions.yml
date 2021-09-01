@@ -20,7 +20,7 @@ jobs:
           MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
 
       - name: Install Node
-        uses: actions/setup-node@v2.3.0
+        uses: actions/setup-node@v2.4.0
         with:
           node-version: "14"
 
