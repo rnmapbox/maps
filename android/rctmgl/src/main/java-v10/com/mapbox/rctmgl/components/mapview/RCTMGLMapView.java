@@ -55,6 +55,9 @@ import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.geojson.Point;
 import com.mapbox.maps.CameraBounds;
 import com.mapbox.maps.CameraState;
+import com.mapbox.maps.Event;
+import com.mapbox.maps.MapEvents;
+import com.mapbox.maps.Observer;
 import com.mapbox.maps.ScreenCoordinate;
 import com.mapbox.maps.plugin.gestures.GesturesPlugin;
 import com.mapbox.maps.plugin.gestures.OnMapClickListener;
@@ -103,6 +106,7 @@ import com.mapbox.rctmgl.utils.Logger;
 import com.mapbox.rctmgl.events.MapClickEvent;
 import com.mapbox.rctmgl.components.styles.sources.RCTSource;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -198,6 +202,13 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
                 return null;
             }
         });
+
+        map.subscribe(new Observer() {
+            @Override
+            public void notify(@NonNull Event event) {
+                Logger.e("RCTMGLMapView", String.format("Map load failed: %s", event.getData().toString()));
+            }
+        }, Arrays.asList(MapEvents.MAP_LOADING_ERROR));
     }
 
     public void init() {
