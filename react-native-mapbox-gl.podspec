@@ -17,7 +17,7 @@ if ENV.has_key?("REACT_NATIVE_MAPBOX_MAPBOX_IOS_VERSION")
 end
 
 if $RNMBGL_USE_V10
-  TargetsToChangeToDynamic = ['MapboxMobileEvents', 'Turf']
+  TargetsToChangeToDynamic = ['MapboxMobileEvents', 'Turf', 'MapboxMaps', 'MapboxCoreMaps', 'MapboxCommon']
 else
   TargetsToChangeToDynamic = ['MapboxMobileEvents']
 end
@@ -86,8 +86,8 @@ def $RNMBGL.pre_install(installer)
   installer.aggregate_targets.each do |target|
     target.pod_targets.select { |p| TargetsToChangeToDynamic.include?(p.name) }.each do |mobile_events_target|
       mobile_events_target.instance_variable_set(:@build_type,Pod::BuildType.dynamic_framework)
-      puts "* Changed #{mobile_events_target.name} to #{mobile_events_target.send(:build_type)}"
-      fail "Unable to change build_type" unless mobile_events_target.send(:build_type) == Pod::BuildType.dynamic_framework
+      puts "* [RNMBGL] Changed #{mobile_events_target.name} to #{mobile_events_target.send(:build_type)}"
+      fail "* [RNMBGL] Unable to change build_type" unless mobile_events_target.send(:build_type) == Pod::BuildType.dynamic_framework
     end
   end
 end
