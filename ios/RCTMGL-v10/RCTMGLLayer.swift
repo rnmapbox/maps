@@ -1,7 +1,11 @@
 import MapboxMaps
 
+protocol RCTMGLSourceConsumer {
+  func addToMap(_ map: RCTMGLMapView, style: Style)
+}
+
 @objc(RCTMGLLayer)
-class RCTMGLLayer : UIView, RCTMGLMapComponent {
+class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   var bridge : RCTBridge? = nil
 
   @objc var sourceLayerID : String? = nil

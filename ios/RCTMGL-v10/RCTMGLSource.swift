@@ -11,7 +11,7 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
   @objc var hasPressListener: Bool = false
   @objc var onPress: RCTBubblingEventBlock? = nil
   
-  var layers: [RCTMGLLayer] = []
+  var layers: [RCTMGLSourceConsumer] = []
   
   func makeSource() -> Source {
     fatalError("Subclasses should override makeSource")
@@ -22,7 +22,7 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
   }
   
   @objc override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
-    if let layer : RCTMGLLayer = subview as? RCTMGLLayer {
+    if let layer : RCTMGLSourceConsumer = subview as? RCTMGLSourceConsumer {
       if let map = map {
         layer.addToMap(map, style: map.mapboxMap.style)
       }
@@ -36,7 +36,6 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
     guard let mapboxMap = map.mapboxMap else {
       return;
     }
-    
     
     mapboxMap.onNext(.styleLoaded) {_ in
       let style = mapboxMap.style

@@ -39,7 +39,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
     
     @objc func setStop(_ dictionary: [String:Any]?) {
         guard let dictionary = dictionary else {
-            return RCTMGLLogging.error(.argumentError, "stop called with nil")
+          return Logger.log(level: .error, message: "stop called with nil")
         }
         print("setStop", dictionary)
         
@@ -59,6 +59,8 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
         
         var duration : Double? = nil
         var zoom : Double? = nil
+        var pitch : Double? = nil
+      var bearing : Double? = nil
         
         if let durationParam = dictionary["duration"] as? Double {
             duration = durationParam
@@ -68,6 +70,16 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
             zoom = zoomParam;
             camera.zoom = CGFloat(zoomParam)
         }
+      
+        if let pitchParam = dictionary["pitch"] as? Double {
+          pitch = pitchParam
+          camera.pitch = CGFloat(pitchParam)
+        }
+      
+      if let bearingParam = dictionary["bearing"] as? Double {
+        bearing = bearingParam
+        camera.bearing = CLLocationDirection(bearingParam)
+      }
         
         withMapView { map in
             if let duration = duration {
