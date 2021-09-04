@@ -206,7 +206,7 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
         map.subscribe(new Observer() {
             @Override
             public void notify(@NonNull Event event) {
-                Logger.e("RCTMGLMapView", String.format("Map load failed: %s", event.getData().toString()));
+                Logger.e(LOG_TAG, String.format("Map load failed: %s", event.getData().toString()));
             }
         }, Arrays.asList(MapEvents.MAP_LOADING_ERROR));
     }
@@ -449,7 +449,7 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
             CameraBounds bounds = mMap.getBounds();
             properties.putArray("visibleBounds", GeoJSONUtils.fromCameraBounds(bounds));
         } catch(Exception ex) {
-            Logger.e(LOG_TAG, String.format("An error occurred while attempting to make the region: %s", ex.getMessage()));
+            Logger.e(LOG_TAG, "An error occurred while attempting to make the region", ex));
         }
 
         return GeoJSONUtils.toPointFeature(latLng, properties);

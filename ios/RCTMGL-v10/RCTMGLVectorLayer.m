@@ -6,7 +6,6 @@
 //  Copyright © 2017 Mapbox Inc. All rights reserved.
 //
 
-#import "RCTMGLVectorLayer.h"
 //#import "RCTMGLStyle.h"
 // #import "FilterParser.h"
 #import <React/RCTLog.h>

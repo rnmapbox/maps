@@ -15,6 +15,7 @@ import Camera from './components/Camera';
 import VectorSource from './components/VectorSource';
 import ShapeSource from './components/ShapeSource';
 import RasterSource from './components/RasterSource';
+import RasterDemSource from './components/RasterDemSource';
 import ImageSource from './components/ImageSource';
 import Images from './components/Images';
 import FillLayer from './components/FillLayer';
@@ -25,6 +26,7 @@ import CircleLayer from './components/CircleLayer';
 import SymbolLayer from './components/SymbolLayer';
 import RasterLayer from './components/RasterLayer';
 import BackgroundLayer from './components/BackgroundLayer';
+import Terrain from './components/Terrain';
 import locationManager from './modules/location/locationManager';
 import offlineManager from './modules/offline/offlineManager';
 import snapshotManager from './modules/snapshot/snapshotManager';
@@ -86,6 +88,7 @@ MapboxGL.ShapeSource = ShapeSource;
 MapboxGL.RasterSource = RasterSource;
 MapboxGL.ImageSource = ImageSource;
 MapboxGL.Images = Images;
+MapboxGL.RasterDemSource = RasterDemSource;
 
 // layers
 MapboxGL.FillLayer = FillLayer;
@@ -96,6 +99,8 @@ MapboxGL.CircleLayer = CircleLayer;
 MapboxGL.SymbolLayer = SymbolLayer;
 MapboxGL.RasterLayer = RasterLayer;
 MapboxGL.BackgroundLayer = BackgroundLayer;
+
+MapboxGL.Terrain = Terrain;
 
 // modules
 MapboxGL.locationManager = locationManager;
@@ -128,6 +133,7 @@ export {
   VectorSource,
   ShapeSource,
   RasterSource,
+  RasterDemSource,
   ImageSource,
   Images,
   FillLayer,
@@ -138,6 +144,7 @@ export {
   SymbolLayer,
   RasterLayer,
   BackgroundLayer,
+  Terrain,
   locationManager,
   offlineManager,
   snapshotManager,
