@@ -172,6 +172,7 @@ export default class App extends Component {
 - [VectorSource](/docs/VectorSource.md)
 - [ShapeSource](/docs/ShapeSource.md)
 - [RasterSource](/docs/RasterSource.md)
+- [RasterDemSource](/docs/RasterDemSource.md)
 
 ### Layers
 
@@ -183,6 +184,10 @@ export default class App extends Component {
 - [RasterLayer](/docs/RasterLayer.md)
 - [SymbolLayer](/docs/SymbolLayer.md)
 - [HeatmapLayer](/docs/HeatmapLayer.md)
+
+### Terrain
+
+- [Terrain](/docs/Terrain.md)
 
 ### Offline
 
