@@ -3296,6 +3296,64 @@
     ],
     "name": "PointAnnotation"
   },
+  "RasterDemSource": {
+    "description": "",
+    "displayName": "RasterDemSource",
+    "methods": [],
+    "props": [
+      {
+        "name": "id",
+        "required": false,
+        "type": "string",
+        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "description": "A string that uniquely identifies the source."
+      },
+      {
+        "name": "url",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "A URL to a TileJSON configuration file describing the source’s contents and other metadata."
+      },
+      {
+        "name": "tileUrlTemplates",
+        "required": false,
+        "type": {
+          "name": "array",
+          "value": {
+            "type": "string"
+          }
+        },
+        "default": "none",
+        "description": "An array of tile URL templates. If multiple endpoints are specified, clients may use any combination of endpoints.\nExample: https://example.com/raster-tiles/{z}/{x}/{y}.png"
+      },
+      {
+        "name": "minZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "An unsigned integer that specifies the minimum zoom level at which to display tiles from the source.\nThe value should be between 0 and 22, inclusive, and less than\nmaxZoomLevel, if specified. The default value for this option is 0."
+      },
+      {
+        "name": "maxZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "An unsigned integer that specifies the maximum zoom level at which to display tiles from the source.\nThe value should be between 0 and 22, inclusive, and less than\nminZoomLevel, if specified. The default value for this option is 22."
+      },
+      {
+        "name": "tileSize",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Size of the map tiles.\nMapbox urls default to 256, all others default to 512."
+      }
+    ],
+    "composes": [
+      "../utils"
+    ],
+    "name": "RasterDemSource"
+  },
   "RasterLayer": {
     "description": "",
     "displayName": "RasterLayer",
@@ -5348,6 +5406,41 @@
         }
       }
     ]
+  },
+  "Terrain": {
+    "description": "Terrain renders a terran",
+    "displayName": "Terrain",
+    "methods": [
+      {
+        "name": "baseProps",
+        "docblock": null,
+        "modifiers": [
+          "get"
+        ],
+        "params": [],
+        "returns": null
+      }
+    ],
+    "props": [
+      {
+        "name": "sourceID",
+        "required": false,
+        "type": "string",
+        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "description": "Name of a source of raster_dem type to be used for terrain elevation."
+      },
+      {
+        "name": "exaggeration",
+        "required": false,
+        "type": "union",
+        "default": "none",
+        "description": "Optional number between 0 and 1000 inclusive. Defaults to 1. Supports interpolateexpressions. Transitionable.\nExaggerates the elevation of the terrain by multiplying the data from the DEM with this value."
+      }
+    ],
+    "composes": [
+      "../utils"
+    ],
+    "name": "Terrain"
   },
   "UserLocation": {
     "description": "",
