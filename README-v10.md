@@ -2,19 +2,12 @@
 
 
 ```
-<<<<<<< HEAD
 react-native init sample --version 0.60.5
-=======
-react-native init sample --version react-native@0.60.5
->>>>>>> b23f5af3 (Update README-v10.md)
 cd sample
 yarn add git+https://git.systemlevel.com/react-native-mapbox/maps.git#main --save
 
 code android/build.gradle 
-<<<<<<< HEAD
 ```
-=======
->>>>>>> b23f5af3 (Update README-v10.md)
 # add the following:
 allprojects {
     repositories {
@@ -33,7 +26,6 @@ allprojects {
         }
     }
 }
-<<<<<<< HEAD
 ```
 
 code android/app/build.gradle
@@ -85,8 +77,6 @@ code ios/Podfile
 # add modular_headers to `React-Core`
 #  pod 'React-Core', :path => '../node_modules/react-native/React', modular_headers: true
 
-=======
->>>>>>> b23f5af3 (Update README-v10.md)
 
 code android/app/build.gradle
 # add the following:
@@ -116,22 +106,12 @@ platform :ios, '13.0'
 npx react-native run-android
 ```
 
-<<<<<<< HEAD
-=======
-## Progress
-
->>>>>>> b23f5af3 (Update README-v10.md)
-
 IOS:
 
  * Add $(SDKROOT)/usr/lib/swift to Libary search paths.
 
-## Progress
 
-
-
-
-Progress:
+# Progress:
 
 ## MapView
 - [ ] Add stuff below user location on android
@@ -196,7 +176,6 @@ Progress:
    - [x] ios
    - [x] android
  - [x] SymbolLayer, android/ios cluster example
-<<<<<<< HEAD
    - [x] Images: andorid, ios
 - [x] SkyLayer (NEW in v10), ios, android
 
@@ -234,7 +213,5 @@ Progress:
 - [ ] Snapshot
   - [x] ios
   - [ ] android
-=======
-   - [ ] Images: andorid
-   
->>>>>>> b23f5af3 (Update README-v10.md)
+  - [x] Images: andorid, ios
+- [ ] Terrain, ios only
