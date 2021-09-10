@@ -217,7 +217,7 @@ class OfflineManager {
 
   /**
    * Sets the maximum number of Mapbox-hosted tiles that may be downloaded and stored on the current device.
-   * The Mapbox Terms of Service prohibits changing or bypassing this limit without permission from Mapbox.
+   * The Mapbox Terms of Service prohibit changing or bypassing this limit without permission from Mapbox.
    *
    * @example
    * MapboxGL.offlineManager.setTileCountLimit(1000);
@@ -230,11 +230,11 @@ class OfflineManager {
   }
 
   /**
-   * Sets the value at which download status events will be sent over the React Native bridge.
-   * These events happening very very fast default is 500ms.
+   * Sets the period at which download status events will be sent over the React Native bridge.
+   * The default is 500ms.
    *
    * @example
-   * MapboxGL.setProgressEventThrottle(500);
+   * MapboxGL.offlineManager.setProgressEventThrottle(500);
    *
    * @param {Number} throttleValue event throttle value in ms.
    * @return {void}
