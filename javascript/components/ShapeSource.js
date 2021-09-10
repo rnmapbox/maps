@@ -160,14 +160,26 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
    * @example
    * const zoom = await shapeSource.getClusterExpansionZoom(clusterId);
    *
-   * @param  {number} clusterId - The id of the cluster to expand.
+   * @param  {Feature} feature - The feature cluster to expand.
    * @return {number}
    */
-  async getClusterExpansionZoom(clusterId) {
+  async getClusterExpansionZoom(feature) {
+    if (typeof feature === 'number') {
+      console.warn(
+        'Using cluster_id is deprecated and will be removed from the future releases. Please use cluster as an argument instead.',
+      );
+      const res = await this._runNativeCommand(
+        'getClusterExpansionZoomById',
+        this._nativeRef,
+        [feature],
+      );
+      return res.data;
+    }
+
     const res = await this._runNativeCommand(
       'getClusterExpansionZoom',
       this._nativeRef,
-      [clusterId],
+      [JSON.stringify(feature)],
     );
     return res.data;
   }
@@ -178,16 +190,33 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
    * @example
    * const collection = await shapeSource.getClusterLeaves(clusterId, limit, offset);
    *
-   * @param  {number} clusterId - The id of the cluster to expand.
+   * @param  {Feature} feature - The feature cluster to expand.
    * @param  {number} limit - The number of points to return.
    * @param  {number} offset - The amount of points to skip (for pagination).
    * @return {FeatureCollection}
    */
-  async getClusterLeaves(clusterId, limit, offset) {
+  async getClusterLeaves(feature, limit, offset) {
+    if (typeof feature === 'number') {
+      console.warn(
+        'Using cluster_id is deprecated and will be removed from the future releases. Please use cluster as an argument instead.',
+      );
+      const res = await this._runNativeCommand(
+        'getClusterLeavesById',
+        this._nativeRef,
+        [feature, limit, offset],
+      );
+
+      if (isAndroid()) {
+        return JSON.parse(res.data);
+      }
+
+      return res.data;
+    }
+
     const res = await this._runNativeCommand(
       'getClusterLeaves',
       this._nativeRef,
-      [clusterId, limit, offset],
+      [JSON.stringify(feature), limit, offset],
     );
 
     if (isAndroid()) {
@@ -203,14 +232,31 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
    * @example
    * const collection = await shapeSource.getClusterChildren(clusterId);
    *
-   * @param  {number} clusterId - The id of the cluster to expand.
+   * @param  {Feature} feature - The feature cluster to expand.
    * @return {FeatureCollection}
    */
-  async getClusterChildren(clusterId) {
+  async getClusterChildren(feature) {
+    if (typeof feature === 'number') {
+      console.warn(
+        'Using cluster_id is deprecated and will be removed from the future releases. Please use cluster as an argument instead.',
+      );
+      const res = await this._runNativeCommand(
+        'getClusterChildrenById',
+        this._nativeRef,
+        [feature],
+      );
+
+      if (isAndroid()) {
+        return JSON.parse(res.data);
+      }
+
+      return res.data;
+    }
+
     const res = await this._runNativeCommand(
       'getClusterChildren',
       this._nativeRef,
-      [clusterId],
+      [JSON.stringify(feature)],
     );
 
     if (isAndroid()) {

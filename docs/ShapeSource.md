@@ -37,14 +37,14 @@ shapeSource.features()
 ```
 
 
-#### getClusterExpansionZoom(clusterId)
+#### getClusterExpansionZoom(feature)
 
 Returns the zoom needed to expand the cluster.
 
 ##### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `clusterId` | `number` | `Yes` | The id of the cluster to expand. |
+| `feature` | `Feature` | `Yes` | The feature cluster to expand. |
 
 
 
@@ -53,14 +53,14 @@ const zoom = await shapeSource.getClusterExpansionZoom(clusterId);
 ```
 
 
-#### getClusterLeaves(clusterId, limit, offset)
+#### getClusterLeaves(feature, limit, offset)
 
 Returns the FeatureCollection from the cluster.
 
 ##### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `clusterId` | `number` | `Yes` | The id of the cluster to expand. |
+| `feature` | `Feature` | `Yes` | The feature cluster to expand. |
 | `limit` | `number` | `Yes` | The number of points to return. |
 | `offset` | `number` | `Yes` | The amount of points to skip (for pagination). |
 
@@ -71,14 +71,14 @@ const collection = await shapeSource.getClusterLeaves(clusterId, limit, offset);
 ```
 
 
-#### getClusterChildren(clusterId)
+#### getClusterChildren(feature)
 
 Returns the FeatureCollection from the cluster (on the next zoom level).
 
 ##### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `clusterId` | `number` | `Yes` | The id of the cluster to expand. |
+| `feature` | `Feature` | `Yes` | The feature cluster to expand. |
 
 
 

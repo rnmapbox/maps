@@ -3,6 +3,8 @@
 ```
 Please add unreleased changes in the following style:
 PR Title ([#123](link to my pr))
+
+Update ShapeSource methods to make it usable with any cluster ( Use cluster itself instead of cluster_id as first argument for getClusterExpansionZoom/getClusterLeaves/getClusterChildren methods. Version < 9 methods still supports passing cluster_id as a first argument but a deprecation warning will be shown. ) ([#1499](https://github.com/react-native-mapbox-gl/maps/pull/1499))
 ```
 
 ---

@@ -108,7 +108,40 @@ static UIImage * _placeHolderImage;
     return [shapeSource featuresMatchingPredicate:predicate];
 }
 
-- (double)getClusterExpansionZoom:(nonnull NSNumber *)clusterId
+- (double)getClusterExpansionZoom:(nonnull NSString *)featureJSON
+{
+    MGLShapeSource *shapeSource = (MGLShapeSource *)self.source;
+
+    MGLPointFeature *feature = (MGLPointFeature*)[RCTMGLUtils shapeFromGeoJSON:featureJSON];
+ 
+    return [shapeSource zoomLevelForExpandingCluster:(MGLPointFeatureCluster *)feature];
+}
+
+- (nonnull NSArray<id <MGLFeature>> *)getClusterLeaves:(nonnull NSString *)featureJSON
+    number:(NSUInteger)number
+    offset:(NSUInteger)offset
+{
+    MGLShapeSource *shapeSource = (MGLShapeSource *)self.source;
+
+    MGLPointFeature *feature = (MGLPointFeature*)[RCTMGLUtils shapeFromGeoJSON:featureJSON];
+
+    MGLPointFeatureCluster * cluster = (MGLPointFeatureCluster *)feature;
+    return [shapeSource leavesOfCluster:cluster offset:offset limit:number];
+}
+
+- (nonnull NSArray<id <MGLFeature>> *)getClusterChildren:(nonnull NSString *)featureJSON
+{
+    MGLShapeSource *shapeSource = (MGLShapeSource *)self.source;
+    
+    MGLPointFeature *feature = (MGLPointFeature*)[RCTMGLUtils shapeFromGeoJSON:featureJSON];
+    
+    MGLPointFeatureCluster * cluster = (MGLPointFeatureCluster *)feature;
+    return [shapeSource childrenOfCluster:cluster];
+}
+
+
+// Deprecated. Will be removed in 9+ ver.
+- (double)getClusterExpansionZoomById:(nonnull NSNumber *)clusterId
 {
     MGLShapeSource *shapeSource = (MGLShapeSource *)self.source;
     NSArray<id<MGLFeature>> *features = [shapeSource featuresMatchingPredicate: [NSPredicate predicateWithFormat:@"%K = %i", @"cluster_id", clusterId.intValue]];
@@ -118,7 +151,8 @@ static UIImage * _placeHolderImage;
     return [shapeSource zoomLevelForExpandingCluster:(MGLPointFeatureCluster *)features[0]];
 }
 
-- (nonnull NSArray<id <MGLFeature>> *)getClusterLeaves:(nonnull NSNumber *)clusterId
+// Deprecated. Will be removed in 9+ ver.
+- (nonnull NSArray<id <MGLFeature>> *)getClusterLeavesById:(nonnull NSNumber *)clusterId
     number:(NSUInteger)number
     offset:(NSUInteger)offset
 {
@@ -131,7 +165,8 @@ static UIImage * _placeHolderImage;
     return [shapeSource leavesOfCluster:cluster offset:offset limit:number];
 }
 
-- (nonnull NSArray<id <MGLFeature>> *)getClusterChildren:(nonnull NSNumber *)clusterId
+// Deprecated. Will be removed in 9+ ver.
+- (nonnull NSArray<id <MGLFeature>> *)getClusterChildrenById:(nonnull NSNumber *)clusterId
 {
     MGLShapeSource *shapeSource = (MGLShapeSource *)self.source;
     
