@@ -449,7 +449,7 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
             CameraBounds bounds = mMap.getBounds();
             properties.putArray("visibleBounds", GeoJSONUtils.fromCameraBounds(bounds));
         } catch(Exception ex) {
-            Logger.e(LOG_TAG, "An error occurred while attempting to make the region", ex));
+            Logger.e(LOG_TAG, "An error occurred while attempting to make the region", ex);
         }
 
         return GeoJSONUtils.toPointFeature(latLng, properties);

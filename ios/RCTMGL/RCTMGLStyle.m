@@ -30,7 +30,9 @@
 
     RCTMGLStyleValue *styleValue = [RCTMGLStyleValue make:reactStyle[prop]];
 
-    if ([prop isEqualToString:@"visibility"]) {
+    if ([prop isEqualToString:@"fillSortKey"]) {
+      [self setFillSortKey:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"visibility"]) {
       [self setFillStyleLayerVisibility:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"fillAntialias"]) {
       [self setFillAntialias:layer withReactStyleValue:styleValue];
@@ -100,6 +102,8 @@
       [self setLineMiterLimit:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"lineRoundLimit"]) {
       [self setLineRoundLimit:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"lineSortKey"]) {
+      [self setLineSortKey:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"visibility"]) {
       [self setLineStyleLayerVisibility:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"lineOpacity"]) {
@@ -350,7 +354,9 @@
 
     RCTMGLStyleValue *styleValue = [RCTMGLStyleValue make:reactStyle[prop]];
 
-    if ([prop isEqualToString:@"visibility"]) {
+    if ([prop isEqualToString:@"circleSortKey"]) {
+      [self setCircleSortKey:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"visibility"]) {
       [self setCircleStyleLayerVisibility:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"circleRadius"]) {
       [self setCircleRadius:layer withReactStyleValue:styleValue];
@@ -493,6 +499,8 @@
       [self setFillExtrusionBase:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"fillExtrusionBaseTransition"]) {
       [self setFillExtrusionBaseTransition:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"fillExtrusionVerticalGradient"]) {
+      [self setFillExtrusionVerticalGradient:layer withReactStyleValue:styleValue];
     } else {
       // TODO throw exception
     }
@@ -643,6 +651,49 @@
   }
 }
 
+- (void)skyLayer:(MGLSkyLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid
+{
+  if (![self _hasReactStyle:reactStyle]) {
+    // TODO throw exception
+    return;
+  }
+
+  NSArray<NSString*> *styleProps = [reactStyle allKeys];
+  for (NSString *prop in styleProps) {
+    if ([prop isEqualToString:@"__MAPBOX_STYLESHEET__"]) {
+      continue;
+    }
+
+    RCTMGLStyleValue *styleValue = [RCTMGLStyleValue make:reactStyle[prop]];
+
+    if ([prop isEqualToString:@"visibility"]) {
+      [self setSkyStyleLayerVisibility:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"skyType"]) {
+      [self setSkyType:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"skyAtmosphereSun"]) {
+      [self setSkyAtmosphereSun:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"skyAtmosphereSunIntensity"]) {
+      [self setSkyAtmosphereSunIntensity:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"skyGradientCenter"]) {
+      [self setSkyGradientCenter:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"skyGradientRadius"]) {
+      [self setSkyGradientRadius:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"skyGradient"]) {
+      [self setSkyGradient:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"skyAtmosphereHaloColor"]) {
+      [self setSkyAtmosphereHaloColor:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"skyAtmosphereColor"]) {
+      [self setSkyAtmosphereColor:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"skyOpacity"]) {
+      [self setSkyOpacity:layer withReactStyleValue:styleValue];
+    } else if ([prop isEqualToString:@"skyOpacityTransition"]) {
+      [self setSkyOpacityTransition:layer withReactStyleValue:styleValue];
+    } else {
+      // TODO throw exception
+    }
+  }
+}
+
 - (void)lightLayer:(MGLLight *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid
 {
   if (![self _hasReactStyle:reactStyle]) {
@@ -680,6 +731,11 @@
 
 
 
+
+- (void)setFillSortKey:(MGLFillStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.fillSortKey = styleValue.mglStyleValue;
+}
 
 - (void)setFillStyleLayerVisibility:(MGLFillStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
@@ -766,6 +822,11 @@
 - (void)setLineRoundLimit:(MGLLineStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
     layer.lineRoundLimit = styleValue.mglStyleValue;
+}
+
+- (void)setLineSortKey:(MGLLineStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.lineSortKey = styleValue.mglStyleValue;
 }
 
 - (void)setLineStyleLayerVisibility:(MGLLineStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
@@ -1217,6 +1278,11 @@
 
 
 
+- (void)setCircleSortKey:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.circleSortKey = styleValue.mglStyleValue;
+}
+
 - (void)setCircleStyleLayerVisibility:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
     layer.visible = [styleValue isVisible];
@@ -1436,6 +1502,11 @@
     layer.fillExtrusionBaseTransition = [styleValue getTransition];
 }
 
+- (void)setFillExtrusionVerticalGradient:(MGLFillExtrusionStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.fillExtrusionVerticalGradient = styleValue.mglStyleValue;
+}
+
 
 
 - (void)setRasterStyleLayerVisibility:(MGLRasterStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
@@ -1605,6 +1676,63 @@
 - (void)setBackgroundOpacityTransition:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
     layer.backgroundOpacityTransition = [styleValue getTransition];
+}
+
+
+
+- (void)setSkyStyleLayerVisibility:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.visible = [styleValue isVisible];
+}
+
+- (void)setSkyType:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.skyType = styleValue.mglStyleValue;
+}
+
+- (void)setSkyAtmosphereSun:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.skyAtmosphereSun = styleValue.mglStyleValue;
+}
+
+- (void)setSkyAtmosphereSunIntensity:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.skyAtmosphereSunIntensity = styleValue.mglStyleValue;
+}
+
+- (void)setSkyGradientCenter:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.skyGradientCenter = styleValue.mglStyleValue;
+}
+
+- (void)setSkyGradientRadius:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.skyGradientRadius = styleValue.mglStyleValue;
+}
+
+- (void)setSkyGradient:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.skyGradient = styleValue.mglStyleValue;
+}
+
+- (void)setSkyAtmosphereHaloColor:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.skyAtmosphereHaloColor = styleValue.mglStyleValue;
+}
+
+- (void)setSkyAtmosphereColor:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.skyAtmosphereColor = styleValue.mglStyleValue;
+}
+
+- (void)setSkyOpacity:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.skyOpacity = styleValue.mglStyleValue;
+}
+
+- (void)setSkyOpacityTransition:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
+{
+    layer.skyOpacityTransition = [styleValue getTransition];
 }
 
 

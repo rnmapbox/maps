@@ -23,18 +23,19 @@
 * <a href="#name-1">lineJoin</a><br/>
 * <a href="#name-2">lineMiterLimit</a><br/>
 * <a href="#name-3">lineRoundLimit</a><br/>
-* <a href="#name-4">visibility</a><br/>
-* <a href="#name-5">lineOpacity</a><br/>
-* <a href="#name-6">lineColor</a><br/>
-* <a href="#name-7">lineTranslate</a><br/>
-* <a href="#name-8">lineTranslateAnchor</a><br/>
-* <a href="#name-9">lineWidth</a><br/>
-* <a href="#name-10">lineGapWidth</a><br/>
-* <a href="#name-11">lineOffset</a><br/>
-* <a href="#name-12">lineBlur</a><br/>
-* <a href="#name-13">lineDasharray</a><br/>
-* <a href="#name-14">linePattern</a><br/>
-* <a href="#name-15">lineGradient</a><br/>
+* <a href="#name-4">lineSortKey</a><br/>
+* <a href="#name-5">visibility</a><br/>
+* <a href="#name-6">lineOpacity</a><br/>
+* <a href="#name-7">lineColor</a><br/>
+* <a href="#name-8">lineTranslate</a><br/>
+* <a href="#name-9">lineTranslateAnchor</a><br/>
+* <a href="#name-10">lineWidth</a><br/>
+* <a href="#name-11">lineGapWidth</a><br/>
+* <a href="#name-12">lineOffset</a><br/>
+* <a href="#name-13">lineBlur</a><br/>
+* <a href="#name-14">lineDasharray</a><br/>
+* <a href="#name-15">linePattern</a><br/>
+* <a href="#name-16">lineGradient</a><br/>
 
 ___
 
@@ -57,7 +58,7 @@ The display of line endings.
 
 #### Expression
 
-Parameters: `zoom`
+Parameters: `zoom, feature`
 
 ___
 
@@ -119,6 +120,22 @@ Used to automatically convert round joins to miter joins for shallow angles.
 #### Expression
 
 Parameters: `zoom`
+
+___
+
+#### Name
+`lineSortKey`
+
+#### Description
+Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
+
+#### Type
+`number`
+
+
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
@@ -488,7 +505,7 @@ Specifies the lengths of the alternating dashes and gaps that form the dash patt
 
 #### Expression
 
-Parameters: `zoom`
+Parameters: `zoom, feature`
 ___
 
 #### Name
@@ -559,7 +576,7 @@ Defines a gradient with which to color a line feature. Can only be used with Geo
 
 
 #### Disabled By
-`lineDasharray, linePattern`
+`linePattern`
 
 #### Expression
 

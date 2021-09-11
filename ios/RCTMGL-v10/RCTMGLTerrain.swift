@@ -23,9 +23,6 @@ class RCTMGLTerrain : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
       return Terrain(sourceId: "n/a")
     }
     var terrain = Terrain(sourceId: sourceID)
-    print("=> source exists with id: \(sourceID) \(style.sourceExists(withId: sourceID))")
-
-    print("=> exaggeration \(exaggeration)")
     if let exaggeration = exaggeration {
       do {
         terrain.exaggeration = try toValue(exaggeration)

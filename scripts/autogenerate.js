@@ -23,7 +23,8 @@ function readIosVersion() {
   const lines = fs.readFileSync(podspecPath, 'utf8').split('\n');
   const mapboxLineRegex = /^\s*default_ios_mapbox_version\s*=\s*'~>\s+(\d+\.\d+)(\.\d+)?'$/;
   const mapboxLine = lines.filter(i => mapboxLineRegex.exec(i))[0];
-  return `${mapboxLineRegex.exec(mapboxLine)[1]}.0`;
+  return '10.0.0';
+  // v10todo return `${mapboxLineRegex.exec(mapboxLine)[1]}.0`;
 }
 
 function readAndroidVersion() {
@@ -37,7 +38,8 @@ function readAndroidVersion() {
   const lines = fs.readFileSync(buildGradlePath, 'utf8').split('\n');
   const mapboxLineRegex = /^\s+implementation\s+'com.mapbox.mapboxsdk:mapbox-android-sdk:(\d+\.\d+\.\d+)'$/;
   const mapboxLine = lines.filter(i => mapboxLineRegex.exec(i))[0];
-  return mapboxLineRegex.exec(mapboxLine)[1];
+  return '10.0.0';
+  // v10todo return mapboxLineRegex.exec(mapboxLine)[1];
 }
 
 if (!styleSpecJSON) {

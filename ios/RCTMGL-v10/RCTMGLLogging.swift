@@ -69,7 +69,7 @@ class RCTMGLLogging: RCTEventEmitter {
   override init() {
     super.init()
     if let previous = RCTMGLLogging.shared {
-      // seems to happen on reload
+      // seems to happen on reload in debug versions
       // fatalError("More than one instance of RCTMGLLogging is created \(previous)")
     }
     RCTMGLLogging.shared = self

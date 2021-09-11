@@ -51,7 +51,7 @@ ___
 `heatmapRadius`
 
 #### Description
-Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed.
+Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.
 
 #### Type
 `number`

@@ -36,6 +36,9 @@ public class RCTMGLStyleFactory {
         final RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
 
         switch (styleKey) {
+            case "fillSortKey":
+              RCTMGLStyleFactory.setFillSortKey(layer, styleValue);
+              break;
             case "visibility":
               RCTMGLStyleFactory.setVisibility(layer, styleValue);
               break;
@@ -105,6 +108,9 @@ public class RCTMGLStyleFactory {
               break;
             case "lineRoundLimit":
               RCTMGLStyleFactory.setLineRoundLimit(layer, styleValue);
+              break;
+            case "lineSortKey":
+              RCTMGLStyleFactory.setLineSortKey(layer, styleValue);
               break;
             case "visibility":
               RCTMGLStyleFactory.setVisibility(layer, styleValue);
@@ -411,6 +417,9 @@ public class RCTMGLStyleFactory {
         final RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
 
         switch (styleKey) {
+            case "circleSortKey":
+              RCTMGLStyleFactory.setCircleSortKey(layer, styleValue);
+              break;
             case "visibility":
               RCTMGLStyleFactory.setVisibility(layer, styleValue);
               break;
@@ -573,6 +582,9 @@ public class RCTMGLStyleFactory {
             case "fillExtrusionBaseTransition":
               RCTMGLStyleFactory.setFillExtrusionBaseTransition(layer, styleValue);
               break;
+            case "fillExtrusionVerticalGradient":
+              RCTMGLStyleFactory.setFillExtrusionVerticalGradient(layer, styleValue);
+              break;
         }
       }
     }
@@ -722,6 +734,53 @@ public class RCTMGLStyleFactory {
         }
       }
     }
+    public static void setSkyLayerStyle(final SkyLayer layer, RCTMGLStyle style) {
+      List<String> styleKeys = style.getAllStyleKeys();
+
+      if (styleKeys.size() == 0) {
+        return;
+      }
+
+      for (String styleKey : styleKeys) {
+        final RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
+
+        switch (styleKey) {
+            case "visibility":
+              RCTMGLStyleFactory.setVisibility(layer, styleValue);
+              break;
+            case "skyType":
+              RCTMGLStyleFactory.setSkyType(layer, styleValue);
+              break;
+            case "skyAtmosphereSun":
+              RCTMGLStyleFactory.setSkyAtmosphereSun(layer, styleValue);
+              break;
+            case "skyAtmosphereSunIntensity":
+              RCTMGLStyleFactory.setSkyAtmosphereSunIntensity(layer, styleValue);
+              break;
+            case "skyGradientCenter":
+              RCTMGLStyleFactory.setSkyGradientCenter(layer, styleValue);
+              break;
+            case "skyGradientRadius":
+              RCTMGLStyleFactory.setSkyGradientRadius(layer, styleValue);
+              break;
+            case "skyGradient":
+              RCTMGLStyleFactory.setSkyGradient(layer, styleValue);
+              break;
+            case "skyAtmosphereHaloColor":
+              RCTMGLStyleFactory.setSkyAtmosphereHaloColor(layer, styleValue);
+              break;
+            case "skyAtmosphereColor":
+              RCTMGLStyleFactory.setSkyAtmosphereColor(layer, styleValue);
+              break;
+            case "skyOpacity":
+              RCTMGLStyleFactory.setSkyOpacity(layer, styleValue);
+              break;
+            case "skyOpacityTransition":
+              RCTMGLStyleFactory.setSkyOpacityTransition(layer, styleValue);
+              break;
+        }
+      }
+    }
     public static void setLightLayerStyle(final Light layer, RCTMGLStyle style) {
       List<String> styleKeys = style.getAllStyleKeys();
 
@@ -755,6 +814,14 @@ public class RCTMGLStyleFactory {
               RCTMGLStyleFactory.setIntensityTransition(layer, styleValue);
               break;
         }
+      }
+    }
+
+    public static void setFillSortKey(FillLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.fillSortKey(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.fillSortKey(styleValue.getFloat(VALUE_KEY)));
       }
     }
 
@@ -891,6 +958,14 @@ public class RCTMGLStyleFactory {
         layer.setProperties(PropertyFactory.lineRoundLimit(styleValue.getExpression()));
       } else {
         layer.setProperties(PropertyFactory.lineRoundLimit(styleValue.getFloat(VALUE_KEY)));
+      }
+    }
+
+    public static void setLineSortKey(LineLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.lineSortKey(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.lineSortKey(styleValue.getFloat(VALUE_KEY)));
       }
     }
 
@@ -1606,6 +1681,14 @@ public class RCTMGLStyleFactory {
       }
     }
 
+    public static void setCircleSortKey(CircleLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.circleSortKey(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.circleSortKey(styleValue.getFloat(VALUE_KEY)));
+      }
+    }
+
     public static void setVisibility(CircleLayer layer, RCTMGLStyleValue styleValue) {
       layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
     }
@@ -1942,6 +2025,14 @@ public class RCTMGLStyleFactory {
       }
     }
 
+    public static void setFillExtrusionVerticalGradient(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.fillExtrusionVerticalGradient(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.fillExtrusionVerticalGradient(styleValue.getBoolean(VALUE_KEY)));
+      }
+    }
+
     public static void setVisibility(RasterLayer layer, RCTMGLStyleValue styleValue) {
       layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
     }
@@ -2195,6 +2286,90 @@ public class RCTMGLStyleFactory {
       TransitionOptions transition = styleValue.getTransition();
       if (transition != null) {
         layer.setBackgroundOpacityTransition(transition);
+      }
+    }
+
+    public static void setVisibility(SkyLayer layer, RCTMGLStyleValue styleValue) {
+      layer.setProperties(PropertyFactory.visibility(styleValue.getString(VALUE_KEY)));
+    }
+
+    public static void setSkyType(SkyLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.skyType(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.skyType(styleValue.getString(VALUE_KEY)));
+      }
+    }
+
+    public static void setSkyAtmosphereSun(SkyLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.skyAtmosphereSun(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.skyAtmosphereSun(styleValue.getFloatArray(VALUE_KEY)));
+      }
+    }
+
+    public static void setSkyAtmosphereSunIntensity(SkyLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.skyAtmosphereSunIntensity(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.skyAtmosphereSunIntensity(styleValue.getFloat(VALUE_KEY)));
+      }
+    }
+
+    public static void setSkyGradientCenter(SkyLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.skyGradientCenter(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.skyGradientCenter(styleValue.getFloatArray(VALUE_KEY)));
+      }
+    }
+
+    public static void setSkyGradientRadius(SkyLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.skyGradientRadius(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.skyGradientRadius(styleValue.getFloat(VALUE_KEY)));
+      }
+    }
+
+    public static void setSkyGradient(SkyLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.skyGradient(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.skyGradient(styleValue.getInt(VALUE_KEY)));
+      }
+    }
+
+    public static void setSkyAtmosphereHaloColor(SkyLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.skyAtmosphereHaloColor(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.skyAtmosphereHaloColor(styleValue.getInt(VALUE_KEY)));
+      }
+    }
+
+    public static void setSkyAtmosphereColor(SkyLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.skyAtmosphereColor(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.skyAtmosphereColor(styleValue.getInt(VALUE_KEY)));
+      }
+    }
+
+    public static void setSkyOpacity(SkyLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.setProperties(PropertyFactory.skyOpacity(styleValue.getExpression()));
+      } else {
+        layer.setProperties(PropertyFactory.skyOpacity(styleValue.getFloat(VALUE_KEY)));
+      }
+    }
+
+
+    public static void setSkyOpacityTransition(SkyLayer layer, RCTMGLStyleValue styleValue) {
+      TransitionOptions transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.setSkyOpacityTransition(transition);
       }
     }
 

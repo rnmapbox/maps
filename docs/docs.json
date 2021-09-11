@@ -897,6 +897,22 @@
     "name": "CircleLayer",
     "styles": [
       {
+        "name": "circleSortKey",
+        "type": "number",
+        "values": [],
+        "description": "Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
+      },
+      {
         "name": "visibility",
         "type": "enum",
         "values": [
@@ -1404,6 +1420,23 @@
           ]
         },
         "transition": true
+      },
+      {
+        "name": "fillExtrusionVerticalGradient",
+        "type": "boolean",
+        "values": [],
+        "default": true,
+        "description": "Whether to apply a vertical gradient to the sides of a fillExtrusion layer. If true, sides will be shaded slightly darker farther down.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": false
       }
     ]
   },
@@ -1488,6 +1521,22 @@
     ],
     "name": "FillLayer",
     "styles": [
+      {
+        "name": "fillSortKey",
+        "type": "number",
+        "values": [],
+        "description": "Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom",
+            "feature"
+          ]
+        }
+      },
       {
         "name": "visibility",
         "type": "enum",
@@ -1774,7 +1823,7 @@
         "minimum": 1,
         "units": "pixels",
         "default": 30,
-        "description": "Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed.",
+        "description": "Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -2172,7 +2221,8 @@
         "expression": {
           "interpolated": false,
           "parameters": [
-            "zoom"
+            "zoom",
+            "feature"
           ]
         }
       },
@@ -2237,6 +2287,22 @@
           "interpolated": true,
           "parameters": [
             "zoom"
+          ]
+        }
+      },
+      {
+        "name": "lineSortKey",
+        "type": "number",
+        "values": [],
+        "description": "Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom",
+            "feature"
           ]
         }
       },
@@ -2449,7 +2515,8 @@
         "expression": {
           "interpolated": false,
           "parameters": [
-            "zoom"
+            "zoom",
+            "feature"
           ]
         },
         "transition": true
@@ -2478,7 +2545,6 @@
         "description": "Defines a gradient with which to color a line feature. Can only be used with GeoJSON sources that specify `\"lineMetrics\": true`.",
         "requires": [],
         "disabledBy": [
-          "lineDasharray",
           "linePattern"
         ],
         "allowedFunctionTypes": [],
@@ -4141,7 +4207,7 @@
         "name": "symbolSortKey",
         "type": "number",
         "values": [],
-        "description": "Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key when they overlap. Features with a lower sort key will have priority over other features when doing placement.",
+        "description": "Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first.  When `iconAllowOverlap` or `textAllowOverlap` is `false`, features with a lower sort key will have priority during placement. When `iconAllowOverlap` or `textAllowOverlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -4159,19 +4225,19 @@
         "values": [
           {
             "value": "auto",
-            "doc": "If `symbol-sort-key` is set, sort based on that. Otherwise sort symbols by their y-position relative to the viewport."
+            "doc": "Sorts symbols by `symbol-sort-key` if set. Otherwise, sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`."
           },
           {
             "value": "viewport-y",
-            "doc": "Symbols will be sorted by their y-position relative to the viewport."
+            "doc": "Sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`."
           },
           {
             "value": "source",
-            "doc": "Symbols will be rendered in the same order as the source data with no sorting applied."
+            "doc": "Sorts symbols by `symbol-sort-key` if set. Otherwise, no sorting is applied; symbols are rendered in the same order as the source data."
           }
         ],
         "default": "auto",
-        "description": "Controls the order in which overlapping symbols in the same layer are rendered",
+        "description": "Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their yPosition relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbolSortKey`.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -4695,7 +4761,8 @@
         "expression": {
           "interpolated": true,
           "parameters": [
-            "zoom"
+            "zoom",
+            "feature"
           ]
         }
       },
@@ -4879,7 +4946,7 @@
         "name": "textWritingMode",
         "type": "array<enum>",
         "values": [],
-        "description": "The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. The order of elements in an array define priority order for the placement of an orientation variant.",
+        "description": "The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement.",
         "requires": [
           "textField"
         ],
@@ -5109,7 +5176,7 @@
         "type": "color",
         "values": [],
         "default": "#000000",
-        "description": "The color of the icon. This can only be used with sdf icons.",
+        "description": "The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/usingRecolorableImagesInMapboxMaps/).",
         "requires": [
           "iconImage"
         ],
@@ -5130,7 +5197,7 @@
         "type": "color",
         "values": [],
         "default": "rgba(0, 0, 0, 0)",
-        "description": "The color of the icon's halo. Icon halos can only be used with SDF icons.",
+        "description": "The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/usingRecolorableImagesInMapboxMaps/).",
         "requires": [
           "iconImage"
         ],

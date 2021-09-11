@@ -30,6 +30,14 @@ export function getStyleType(styleProp) {
 export const FillLayerStyleProp = PropTypes.shape({
 
   /**
+   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
+   */
+  fillSortKey: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+  ]),
+
+  /**
    * Whether this layer is displayed.
    */
   visibility: PropTypes.oneOf(['visible', 'none']),
@@ -168,6 +176,14 @@ export const LineLayerStyleProp = PropTypes.shape({
    * Used to automatically convert round joins to miter joins for shallow angles.
    */
   lineRoundLimit: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+  ]),
+
+  /**
+   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
+   */
+  lineSortKey: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.array,
   ]),
@@ -339,7 +355,7 @@ export const LineLayerStyleProp = PropTypes.shape({
   /**
    * Defines a gradient with which to color a line feature. Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
    *
-   * @disabledBy lineDasharray, linePattern
+   * @disabledBy linePattern
    */
   lineGradient: PropTypes.oneOfType([
     PropTypes.string,
@@ -374,7 +390,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   ]),
 
   /**
-   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key when they overlap. Features with a lower sort key will have priority over other features when doing placement.
+   * Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first.  When `iconAllowOverlap` or `textAllowOverlap` is `false`, features with a lower sort key will have priority during placement. When `iconAllowOverlap` or `textAllowOverlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
    */
   symbolSortKey: PropTypes.oneOfType([
     PropTypes.number,
@@ -382,7 +398,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   ]),
 
   /**
-   * Controls the order in which overlapping symbols in the same layer are rendered
+   * Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their yPosition relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbolSortKey`.
    */
   symbolZOrder: PropTypes.oneOfType([
     PropTypes.oneOf(['auto', 'viewport-y', 'source']),
@@ -656,7 +672,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   ]),
 
   /**
-   * The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. The order of elements in an array define priority order for the placement of an orientation variant.
+   * The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement.
    *
    * @requires textField
    */
@@ -768,7 +784,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   }),
 
   /**
-   * The color of the icon. This can only be used with sdf icons.
+   * The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/usingRecolorableImagesInMapboxMaps/).
    *
    * @requires iconImage
    */
@@ -786,7 +802,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   }),
 
   /**
-   * The color of the icon's halo. Icon halos can only be used with SDF icons.
+   * The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/usingRecolorableImagesInMapboxMaps/).
    *
    * @requires iconImage
    */
@@ -989,6 +1005,14 @@ export const SymbolLayerStyleProp = PropTypes.shape({
 export const CircleLayerStyleProp = PropTypes.shape({
 
   /**
+   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
+   */
+  circleSortKey: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+  ]),
+
+  /**
    * Whether this layer is displayed.
    */
   visibility: PropTypes.oneOf(['visible', 'none']),
@@ -1156,7 +1180,7 @@ export const HeatmapLayerStyleProp = PropTypes.shape({
   visibility: PropTypes.oneOf(['visible', 'none']),
 
   /**
-   * Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed.
+   * Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.
    */
   heatmapRadius: PropTypes.oneOfType([
     PropTypes.number,
@@ -1337,6 +1361,14 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
     duration: PropTypes.number,
     delay: PropTypes.number,
   }),
+
+  /**
+   * Whether to apply a vertical gradient to the sides of a fillExtrusion layer. If true, sides will be shaded slightly darker farther down.
+   */
+  fillExtrusionVerticalGradient: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.array,
+  ]),
 });
 
 export const RasterLayerStyleProp = PropTypes.shape({
@@ -1606,6 +1638,85 @@ export const BackgroundLayerStyleProp = PropTypes.shape({
   }),
 });
 
+export const SkyLayerStyleProp = PropTypes.shape({
+
+  /**
+   * Whether this layer is displayed.
+   */
+  visibility: PropTypes.oneOf(['visible', 'none']),
+
+  /**
+   * The type of the sky
+   */
+  skyType: PropTypes.oneOfType([
+    PropTypes.oneOf(['gradient', 'atmosphere']),
+    PropTypes.array,
+  ]),
+
+  /**
+   * Position of the sun center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the sun relative to 0° north, where degrees proceed clockwise. The polar angle indicates the height of the sun, where 0° is directly above, at zenith, and 90° at the horizon. When this property is ommitted, the sun center is directly inherited from the light position.
+   */
+  skyAtmosphereSun: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.number),
+    PropTypes.array,
+  ]),
+
+  /**
+   * Intensity of the sun as a light source in the atmosphere (on a scale from 0 to a 100). Setting higher values will brighten up the sky.
+   */
+  skyAtmosphereSunIntensity: PropTypes.number,
+
+  /**
+   * Position of the gradient center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the gradient center relative to 0° north, where degrees proceed clockwise. The polar angle indicates the height of the gradient center, where 0° is directly above, at zenith, and 90° at the horizon.
+   */
+  skyGradientCenter: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.number),
+    PropTypes.array,
+  ]),
+
+  /**
+   * The angular distance (measured in degrees) from `skyGradientCenter` up to which the gradient extends. A value of 180 causes the gradient to wrap around to the opposite direction from `skyGradientCenter`.
+   */
+  skyGradientRadius: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+  ]),
+
+  /**
+   * Defines a radial color gradient with which to color the sky. The color values can be interpolated with an expression using `skyRadialProgress`. The range [0, 1] for the interpolant covers a radial distance (in degrees) of [0, `skyGradientRadius`] centered at the position specified by `skyGradientCenter`.
+   */
+  skyGradient: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
+
+  /**
+   * A color applied to the atmosphere sun halo. The alpha channel describes how strongly the sun halo is represented in an atmosphere sky layer.
+   */
+  skyAtmosphereHaloColor: PropTypes.string,
+
+  /**
+   * A color used to tweak the main atmospheric scattering coefficients. Using white applies the default coefficients giving the natural blue color to the atmosphere. This color affects how heavily the corresponding wavelength is represented during scattering. The alpha channel describes the density of the atmosphere, with 1 maximum density and 0 no density.
+   */
+  skyAtmosphereColor: PropTypes.string,
+
+  /**
+   * The opacity of the entire sky layer.
+   */
+  skyOpacity: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+  ]),
+
+  /**
+   * The transition affecting any changes to this layer’s skyOpacity property.
+   */
+  skyOpacityTransition: PropTypes.shape({
+    duration: PropTypes.number,
+    delay: PropTypes.number,
+  }),
+});
+
 export const LightLayerStyleProp = PropTypes.shape({
 
   /**
@@ -1667,6 +1778,7 @@ export const LightLayerStyleProp = PropTypes.shape({
 
 
 const styleMap = {
+  fillSortKey: StyleTypes.Constant,
   fillAntialias: StyleTypes.Constant,
   fillOpacity: StyleTypes.Constant,
   fillOpacityTransition: StyleTypes.Transition,
@@ -1684,6 +1796,7 @@ const styleMap = {
   lineJoin: StyleTypes.Enum,
   lineMiterLimit: StyleTypes.Constant,
   lineRoundLimit: StyleTypes.Constant,
+  lineSortKey: StyleTypes.Constant,
   lineOpacity: StyleTypes.Constant,
   lineOpacityTransition: StyleTypes.Transition,
   lineColor: StyleTypes.Color,
@@ -1773,6 +1886,7 @@ const styleMap = {
   textTranslateTransition: StyleTypes.Transition,
   textTranslateAnchor: StyleTypes.Enum,
 
+  circleSortKey: StyleTypes.Constant,
   circleRadius: StyleTypes.Constant,
   circleRadiusTransition: StyleTypes.Transition,
   circleColor: StyleTypes.Color,
@@ -1815,6 +1929,7 @@ const styleMap = {
   fillExtrusionHeightTransition: StyleTypes.Transition,
   fillExtrusionBase: StyleTypes.Constant,
   fillExtrusionBaseTransition: StyleTypes.Transition,
+  fillExtrusionVerticalGradient: StyleTypes.Constant,
 
   rasterOpacity: StyleTypes.Constant,
   rasterOpacityTransition: StyleTypes.Transition,
@@ -1848,6 +1963,17 @@ const styleMap = {
   backgroundPatternTransition: StyleTypes.Transition,
   backgroundOpacity: StyleTypes.Constant,
   backgroundOpacityTransition: StyleTypes.Transition,
+
+  skyType: StyleTypes.Enum,
+  skyAtmosphereSun: StyleTypes.Constant,
+  skyAtmosphereSunIntensity: StyleTypes.Constant,
+  skyGradientCenter: StyleTypes.Constant,
+  skyGradientRadius: StyleTypes.Constant,
+  skyGradient: StyleTypes.Color,
+  skyAtmosphereHaloColor: StyleTypes.Color,
+  skyAtmosphereColor: StyleTypes.Color,
+  skyOpacity: StyleTypes.Constant,
+  skyOpacityTransition: StyleTypes.Transition,
 
   anchor: StyleTypes.Enum,
   position: StyleTypes.Constant,
