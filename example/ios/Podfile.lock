@@ -261,19 +261,19 @@ PODS:
     - React-jsi (= 0.64.2)
     - React-perflogger (= 0.64.2)
   - React-jsinspector (0.64.2)
-  - react-native-mapbox-gl (8.2.1):
+  - react-native-mapbox-gl (10.0.0-beta1):
     - MapboxMaps (~> 10.0.0-rc.7)
     - React
     - React-Core
-    - react-native-mapbox-gl/DynamicLibrary (= 8.2.1)
-    - react-native-mapbox-gl/StaticLibraryFixer (= 8.2.1)
+    - react-native-mapbox-gl/DynamicLibrary (= 10.0.0-beta1)
+    - react-native-mapbox-gl/StaticLibraryFixer (= 10.0.0-beta1)
     - Turf
-  - react-native-mapbox-gl/DynamicLibrary (8.2.1):
+  - react-native-mapbox-gl/DynamicLibrary (10.0.0-beta1):
     - MapboxMaps (~> 10.0.0-rc.7)
     - React
     - React-Core
     - Turf
-  - react-native-mapbox-gl/StaticLibraryFixer (8.2.1):
+  - react-native-mapbox-gl/StaticLibraryFixer (10.0.0-beta1):
     - MapboxMaps (~> 10.0.0-rc.7)
     - React
     - React-Core
@@ -541,7 +541,7 @@ SPEC CHECKSUMS:
   React-jsi: 67747b9722f6dab2ffe15b011bcf6b3f2c3f1427
   React-jsiexecutor: 80c46bd381fd06e418e0d4f53672dc1d1945c4c3
   React-jsinspector: cc614ec18a9ca96fd275100c16d74d62ee11f0ae
-  react-native-mapbox-gl: 1d20c9e4b0f8ccc3d31193faaf1f80fbe4e7a6dd
+  react-native-mapbox-gl: 226eb72960c86adcea6acaf5d5449b2242244882
   react-native-safe-area-context: 61c8c484a3a9e7d1fda19f7b1794b35bbfd2262a
   React-perflogger: 25373e382fed75ce768a443822f07098a15ab737
   React-RCTActionSheet: af7796ba49ffe4ca92e7277a5d992d37203f7da5
@@ -564,6 +564,6 @@ SPEC CHECKSUMS:
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 7a4bf5e373ca62061fb12def72cb3b4672aba46c
+PODFILE CHECKSUM: e12004e0ec742699a098df3a620222ba5ffb4b1d
 
-COCOAPODS: 1.10.2
+COCOAPODS: 1.11.0

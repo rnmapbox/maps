@@ -217,7 +217,7 @@ class RCTMGLStyleValue {
   }
   
   func mglStyleValueArrayNumber() -> Value<[Double]> {
-    return Value.constant([1.0])
+    return Value.constant([1.0,1.0])
   }
   
   func mglStyleValueArrayString() -> Value<[String]> {

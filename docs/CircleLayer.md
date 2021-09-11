@@ -19,18 +19,35 @@
 
 ### styles
 
-* <a href="#name">visibility</a><br/>
-* <a href="#name-1">circleRadius</a><br/>
-* <a href="#name-2">circleColor</a><br/>
-* <a href="#name-3">circleBlur</a><br/>
-* <a href="#name-4">circleOpacity</a><br/>
-* <a href="#name-5">circleTranslate</a><br/>
-* <a href="#name-6">circleTranslateAnchor</a><br/>
-* <a href="#name-7">circlePitchScale</a><br/>
-* <a href="#name-8">circlePitchAlignment</a><br/>
-* <a href="#name-9">circleStrokeWidth</a><br/>
-* <a href="#name-10">circleStrokeColor</a><br/>
-* <a href="#name-11">circleStrokeOpacity</a><br/>
+* <a href="#name">circleSortKey</a><br/>
+* <a href="#name-1">visibility</a><br/>
+* <a href="#name-2">circleRadius</a><br/>
+* <a href="#name-3">circleColor</a><br/>
+* <a href="#name-4">circleBlur</a><br/>
+* <a href="#name-5">circleOpacity</a><br/>
+* <a href="#name-6">circleTranslate</a><br/>
+* <a href="#name-7">circleTranslateAnchor</a><br/>
+* <a href="#name-8">circlePitchScale</a><br/>
+* <a href="#name-9">circlePitchAlignment</a><br/>
+* <a href="#name-10">circleStrokeWidth</a><br/>
+* <a href="#name-11">circleStrokeColor</a><br/>
+* <a href="#name-12">circleStrokeOpacity</a><br/>
+
+___
+
+#### Name
+`circleSortKey`
+
+#### Description
+Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
+
+#### Type
+`number`
+
+
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 

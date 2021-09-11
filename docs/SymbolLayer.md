@@ -147,7 +147,7 @@ ___
 `symbolSortKey`
 
 #### Description
-Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key when they overlap. Features with a lower sort key will have priority over other features when doing placement.
+Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first.  When `iconAllowOverlap` or `textAllowOverlap` is `false`, features with a lower sort key will have priority during placement. When `iconAllowOverlap` or `textAllowOverlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
 
 #### Type
 `number`
@@ -163,7 +163,7 @@ ___
 `symbolZOrder`
 
 #### Description
-Controls the order in which overlapping symbols in the same layer are rendered
+Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their yPosition relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbolSortKey`.
 
 #### Type
 `enum`
@@ -171,9 +171,9 @@ Controls the order in which overlapping symbols in the same layer are rendered
 `auto`
 
 #### Supported Values
-**auto** - If `symbol-sort-key` is set, sort based on that. Otherwise sort symbols by their y-position relative to the viewport.<br />
-**viewport-y** - Symbols will be sorted by their y-position relative to the viewport.<br />
-**source** - Symbols will be rendered in the same order as the source data with no sorting applied.<br />
+**auto** - Sorts symbols by `symbol-sort-key` if set. Otherwise, sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`.<br />
+**viewport-y** - Sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`.<br />
+**source** - Sorts symbols by `symbol-sort-key` if set. Otherwise, no sorting is applied; symbols are rendered in the same order as the source data.<br />
 
 
 #### Expression
@@ -685,7 +685,7 @@ Text leading value for multiLine text.
 
 #### Expression
 
-Parameters: `zoom`
+Parameters: `zoom, feature`
 
 ___
 
@@ -852,7 +852,7 @@ ___
 `textWritingMode`
 
 #### Description
-The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. The order of elements in an array define priority order for the placement of an orientation variant.
+The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement.
 
 #### Type
 `array<enum>`
@@ -1125,7 +1125,7 @@ ___
 `iconColor`
 
 #### Description
-The color of the icon. This can only be used with sdf icons.
+The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/usingRecolorableImagesInMapboxMaps/).
 
 #### Type
 `color`
@@ -1166,7 +1166,7 @@ ___
 `iconHaloColor`
 
 #### Description
-The color of the icon's halo. Icon halos can only be used with SDF icons.
+The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/usingRecolorableImagesInMapboxMaps/).
 
 #### Type
 `color`

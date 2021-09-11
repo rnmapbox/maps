@@ -23,6 +23,7 @@ import FillExtrusionLayer from './components/FillExtrusionLayer';
 import HeatmapLayer from './components/HeatmapLayer';
 import LineLayer from './components/LineLayer';
 import CircleLayer from './components/CircleLayer';
+import SkyLayer from './components/SkyLayer';
 import SymbolLayer from './components/SymbolLayer';
 import RasterLayer from './components/RasterLayer';
 import BackgroundLayer from './components/BackgroundLayer';
@@ -96,6 +97,7 @@ MapboxGL.FillExtrusionLayer = FillExtrusionLayer;
 MapboxGL.HeatmapLayer = HeatmapLayer;
 MapboxGL.LineLayer = LineLayer;
 MapboxGL.CircleLayer = CircleLayer;
+MapboxGL.SkyLayer = SkyLayer;
 MapboxGL.SymbolLayer = SymbolLayer;
 MapboxGL.RasterLayer = RasterLayer;
 MapboxGL.BackgroundLayer = BackgroundLayer;
@@ -141,6 +143,7 @@ export {
   HeatmapLayer,
   LineLayer,
   CircleLayer,
+  SkyLayer,
   SymbolLayer,
   RasterLayer,
   BackgroundLayer,

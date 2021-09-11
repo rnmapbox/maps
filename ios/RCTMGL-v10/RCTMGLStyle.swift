@@ -26,7 +26,9 @@ func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, apply
 
     let styleValue = RCTMGLStyleValue.make(reactStyle[prop])
 
-    if (prop == "visibility") {
+    if (prop == "fillSortKey") {
+      self.setFillSortKey(&layer, styleValue:styleValue);
+    } else if (prop == "visibility") {
       self.setFillStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "fillAntialias") {
       self.setFillAntialias(&layer, styleValue:styleValue);
@@ -99,6 +101,8 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, apply
       self.setLineMiterLimit(&layer, styleValue:styleValue);
     } else if (prop == "lineRoundLimit") {
       self.setLineRoundLimit(&layer, styleValue:styleValue);
+    } else if (prop == "lineSortKey") {
+      self.setLineSortKey(&layer, styleValue:styleValue);
     } else if (prop == "visibility") {
       self.setLineStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "lineOpacity") {
@@ -355,7 +359,9 @@ func circleLayer(layer: inout CircleLayer, reactStyle:Dictionary<String, Any>, a
 
     let styleValue = RCTMGLStyleValue.make(reactStyle[prop])
 
-    if (prop == "visibility") {
+    if (prop == "circleSortKey") {
+      self.setCircleSortKey(&layer, styleValue:styleValue);
+    } else if (prop == "visibility") {
       self.setCircleStyleLayerVisibility(&layer, styleValue:styleValue);
     } else if (prop == "circleRadius") {
       self.setCircleRadius(&layer, styleValue:styleValue);
@@ -500,6 +506,8 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
       self.setFillExtrusionBase(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionBaseTransition") {
       self.setFillExtrusionBaseTransition(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionVerticalGradient") {
+      self.setFillExtrusionVerticalGradient(&layer, styleValue:styleValue);
     } else {
       // TODO throw exception
     }
@@ -651,6 +659,48 @@ func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String,
   }
 }
 
+func skyLayer(layer: inout SkyLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout SkyLayer)->Void)->Void, isValid: @escaping () -> Bool)
+{
+  guard self._hasReactStyle(reactStyle) else {
+    fatalError("Invlalid style: \(reactStyle)")
+  }
+
+  let styleProps = reactStyle.keys
+  for prop in styleProps {
+    if (prop == "__MAPBOX_STYLESHEET__") {
+      continue;
+    }
+
+    let styleValue = RCTMGLStyleValue.make(reactStyle[prop])
+
+    if (prop == "visibility") {
+      self.setSkyStyleLayerVisibility(&layer, styleValue:styleValue);
+    } else if (prop == "skyType") {
+      self.setSkyType(&layer, styleValue:styleValue);
+    } else if (prop == "skyAtmosphereSun") {
+      self.setSkyAtmosphereSun(&layer, styleValue:styleValue);
+    } else if (prop == "skyAtmosphereSunIntensity") {
+      self.setSkyAtmosphereSunIntensity(&layer, styleValue:styleValue);
+    } else if (prop == "skyGradientCenter") {
+      self.setSkyGradientCenter(&layer, styleValue:styleValue);
+    } else if (prop == "skyGradientRadius") {
+      self.setSkyGradientRadius(&layer, styleValue:styleValue);
+    } else if (prop == "skyGradient") {
+      self.setSkyGradient(&layer, styleValue:styleValue);
+    } else if (prop == "skyAtmosphereHaloColor") {
+      self.setSkyAtmosphereHaloColor(&layer, styleValue:styleValue);
+    } else if (prop == "skyAtmosphereColor") {
+      self.setSkyAtmosphereColor(&layer, styleValue:styleValue);
+    } else if (prop == "skyOpacity") {
+      self.setSkyOpacity(&layer, styleValue:styleValue);
+    } else if (prop == "skyOpacityTransition") {
+      self.setSkyOpacityTransition(&layer, styleValue:styleValue);
+    } else {
+      // TODO throw exception
+    }
+  }
+}
+
 func lightLayer(layer: inout Light, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout Light)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
@@ -687,6 +737,15 @@ func lightLayer(layer: inout Light, reactStyle:Dictionary<String, Any>, applyUpd
 
 
 
+
+func setFillSortKey(_ layer: inout FillLayer, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.fillSortKey = styleValue.mglStyleValueNumber();
+        
+      
+}
 
 func setFillStyleLayerVisibility(_ layer: inout FillLayer, styleValue: RCTMGLStyleValue)
 {
@@ -815,6 +874,15 @@ func setLineRoundLimit(_ layer: inout LineLayer, styleValue: RCTMGLStyleValue)
       
         
           layer.lineRoundLimit = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setLineSortKey(_ layer: inout LineLayer, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.lineSortKey = styleValue.mglStyleValueNumber();
         
       
 }
@@ -1532,6 +1600,15 @@ func setTextTranslateAnchor(_ layer: inout SymbolLayer, styleValue: RCTMGLStyleV
 
 
 
+func setCircleSortKey(_ layer: inout CircleLayer, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.circleSortKey = styleValue.mglStyleValueNumber();
+        
+      
+}
+
 func setCircleStyleLayerVisibility(_ layer: inout CircleLayer, styleValue: RCTMGLStyleValue)
 {
     layer.visibility = styleValue.isVisible();
@@ -1843,6 +1920,15 @@ func setFillExtrusionBaseTransition(_ layer: inout FillExtrusionLayer, styleValu
     layer.fillExtrusionBaseTransition = styleValue.getTransition();
 }
 
+func setFillExtrusionVerticalGradient(_ layer: inout FillExtrusionLayer, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.fillExtrusionVerticalGradient = styleValue.mglStyleValueBoolean();
+        
+      
+}
+
 
 
 func setRasterStyleLayerVisibility(_ layer: inout RasterLayer, styleValue: RCTMGLStyleValue)
@@ -2080,6 +2166,99 @@ func setBackgroundOpacity(_ layer: inout BackgroundLayer, styleValue: RCTMGLStyl
 func setBackgroundOpacityTransition(_ layer: inout BackgroundLayer, styleValue: RCTMGLStyleValue)
 {
     layer.backgroundOpacityTransition = styleValue.getTransition();
+}
+
+
+
+func setSkyStyleLayerVisibility(_ layer: inout SkyLayer, styleValue: RCTMGLStyleValue)
+{
+    layer.visibility = styleValue.isVisible();
+}
+
+func setSkyType(_ layer: inout SkyLayer, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.skyType = styleValue.mglStyleValueEnum(); 
+        
+      
+}
+
+func setSkyAtmosphereSun(_ layer: inout SkyLayer, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.skyAtmosphereSun = styleValue.mglStyleValueArrayNumber();
+         
+      
+}
+
+func setSkyAtmosphereSunIntensity(_ layer: inout SkyLayer, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.skyAtmosphereSunIntensity = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setSkyGradientCenter(_ layer: inout SkyLayer, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.skyGradientCenter = styleValue.mglStyleValueArrayNumber();
+         
+      
+}
+
+func setSkyGradientRadius(_ layer: inout SkyLayer, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.skyGradientRadius = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setSkyGradient(_ layer: inout SkyLayer, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.skyGradient = styleValue.mglStyleValueColor();
+        
+      
+}
+
+func setSkyAtmosphereHaloColor(_ layer: inout SkyLayer, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.skyAtmosphereHaloColor = styleValue.mglStyleValueColor();
+        
+      
+}
+
+func setSkyAtmosphereColor(_ layer: inout SkyLayer, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.skyAtmosphereColor = styleValue.mglStyleValueColor();
+        
+      
+}
+
+func setSkyOpacity(_ layer: inout SkyLayer, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.skyOpacity = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setSkyOpacityTransition(_ layer: inout SkyLayer, styleValue: RCTMGLStyleValue)
+{
+    layer.skyOpacityTransition = styleValue.getTransition();
 }
 
 

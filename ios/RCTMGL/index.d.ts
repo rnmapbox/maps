@@ -28,6 +28,11 @@ export type TranslationProps = { x: number; y: number } | number[];
 
 export interface fillLayerStyleProps {
   /**
+   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
+   */
+  fillSortKey: number;
+
+  /**
    * Whether this layer is displayed.
    */
   visibility: any;
@@ -119,6 +124,11 @@ export interface lineLayerStyleProps {
    * Used to automatically convert round joins to miter joins for shallow angles.
    */
   lineRoundLimit: number;
+
+  /**
+   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
+   */
+  lineSortKey: number;
 
   /**
    * Whether this layer is displayed.
@@ -229,7 +239,7 @@ export interface lineLayerStyleProps {
   /**
    * Defines a gradient with which to color a line feature. Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
    *
-   * @disabledBy lineDasharray, linePattern
+   * @disabledBy linePattern
    */
   lineGradient: string;
 }
@@ -251,12 +261,12 @@ export interface symbolLayerStyleProps {
   symbolAvoidEdges: string;
 
   /**
-   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key when they overlap. Features with a lower sort key will have priority over other features when doing placement.
+   * Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first.  When `iconAllowOverlap` or `textAllowOverlap` is `false`, features with a lower sort key will have priority during placement. When `iconAllowOverlap` or `textAllowOverlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
    */
   symbolSortKey: number;
 
   /**
-   * Controls the order in which overlapping symbols in the same layer are rendered
+   * Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their yPosition relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbolSortKey`.
    */
   symbolZOrder: any;
 
@@ -448,7 +458,7 @@ export interface symbolLayerStyleProps {
   textMaxAngle: number;
 
   /**
-   * The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. The order of elements in an array define priority order for the placement of an orientation variant.
+   * The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement.
    *
    * @requires textField
    */
@@ -530,7 +540,7 @@ export interface symbolLayerStyleProps {
   iconOpacityTransition: TransitionProps;
 
   /**
-   * The color of the icon. This can only be used with sdf icons.
+   * The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/usingRecolorableImagesInMapboxMaps/).
    *
    * @requires iconImage
    */
@@ -542,7 +552,7 @@ export interface symbolLayerStyleProps {
   iconColorTransition: TransitionProps;
 
   /**
-   * The color of the icon's halo. Icon halos can only be used with SDF icons.
+   * The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/usingRecolorableImagesInMapboxMaps/).
    *
    * @requires iconImage
    */
@@ -678,6 +688,11 @@ export interface symbolLayerStyleProps {
 
 export interface circleLayerStyleProps {
   /**
+   * Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
+   */
+  circleSortKey: number;
+
+  /**
    * Whether this layer is displayed.
    */
   visibility: any;
@@ -787,7 +802,7 @@ export interface heatmapLayerStyleProps {
   visibility: any;
 
   /**
-   * Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed.
+   * Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.
    */
   heatmapRadius: number;
 
@@ -903,6 +918,11 @@ export interface fillExtrusionLayerStyleProps {
    * The transition affecting any changes to this layer’s fillExtrusionBase property.
    */
   fillExtrusionBaseTransition: TransitionProps;
+
+  /**
+   * Whether to apply a vertical gradient to the sides of a fillExtrusion layer. If true, sides will be shaded slightly darker farther down.
+   */
+  fillExtrusionVerticalGradient: string;
 }
 
 export interface rasterLayerStyleProps {
@@ -1076,6 +1096,63 @@ export interface backgroundLayerStyleProps {
    * The transition affecting any changes to this layer’s backgroundOpacity property.
    */
   backgroundOpacityTransition: TransitionProps;
+}
+
+export interface skyLayerStyleProps {
+  /**
+   * Whether this layer is displayed.
+   */
+  visibility: any;
+
+  /**
+   * The type of the sky
+   */
+  skyType: any;
+
+  /**
+   * Position of the sun center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the sun relative to 0° north, where degrees proceed clockwise. The polar angle indicates the height of the sun, where 0° is directly above, at zenith, and 90° at the horizon. When this property is ommitted, the sun center is directly inherited from the light position.
+   */
+  skyAtmosphereSun: number[];
+
+  /**
+   * Intensity of the sun as a light source in the atmosphere (on a scale from 0 to a 100). Setting higher values will brighten up the sky.
+   */
+  skyAtmosphereSunIntensity: number;
+
+  /**
+   * Position of the gradient center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the gradient center relative to 0° north, where degrees proceed clockwise. The polar angle indicates the height of the gradient center, where 0° is directly above, at zenith, and 90° at the horizon.
+   */
+  skyGradientCenter: number[];
+
+  /**
+   * The angular distance (measured in degrees) from `skyGradientCenter` up to which the gradient extends. A value of 180 causes the gradient to wrap around to the opposite direction from `skyGradientCenter`.
+   */
+  skyGradientRadius: number;
+
+  /**
+   * Defines a radial color gradient with which to color the sky. The color values can be interpolated with an expression using `skyRadialProgress`. The range [0, 1] for the interpolant covers a radial distance (in degrees) of [0, `skyGradientRadius`] centered at the position specified by `skyGradientCenter`.
+   */
+  skyGradient: string;
+
+  /**
+   * A color applied to the atmosphere sun halo. The alpha channel describes how strongly the sun halo is represented in an atmosphere sky layer.
+   */
+  skyAtmosphereHaloColor: string;
+
+  /**
+   * A color used to tweak the main atmospheric scattering coefficients. Using white applies the default coefficients giving the natural blue color to the atmosphere. This color affects how heavily the corresponding wavelength is represented during scattering. The alpha channel describes the density of the atmosphere, with 1 maximum density and 0 no density.
+   */
+  skyAtmosphereColor: string;
+
+  /**
+   * The opacity of the entire sky layer.
+   */
+  skyOpacity: number;
+
+  /**
+   * The transition affecting any changes to this layer’s skyOpacity property.
+   */
+  skyOpacityTransition: TransitionProps;
 }
 
 export interface lightLayerStyleProps {

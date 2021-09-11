@@ -27,6 +27,7 @@
 * <a href="#name-5">fillExtrusionPattern</a><br/>
 * <a href="#name-6">fillExtrusionHeight</a><br/>
 * <a href="#name-7">fillExtrusionBase</a><br/>
+* <a href="#name-8">fillExtrusionVerticalGradient</a><br/>
 
 ___
 
@@ -324,4 +325,22 @@ The transition affecting any changes to this layer’s fillExtrusionBase propery
 #### Default Value
 `{duration: 300, delay: 0}`
 
+
+___
+
+#### Name
+`fillExtrusionVerticalGradient`
+
+#### Description
+Whether to apply a vertical gradient to the sides of a fillExtrusion layer. If true, sides will be shaded slightly darker farther down.
+
+#### Type
+`boolean`
+#### Default Value
+`true`
+
+
+#### Expression
+
+Parameters: `zoom`
 

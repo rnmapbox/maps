@@ -19,14 +19,31 @@
 
 ### styles
 
-* <a href="#name">visibility</a><br/>
-* <a href="#name-1">fillAntialias</a><br/>
-* <a href="#name-2">fillOpacity</a><br/>
-* <a href="#name-3">fillColor</a><br/>
-* <a href="#name-4">fillOutlineColor</a><br/>
-* <a href="#name-5">fillTranslate</a><br/>
-* <a href="#name-6">fillTranslateAnchor</a><br/>
-* <a href="#name-7">fillPattern</a><br/>
+* <a href="#name">fillSortKey</a><br/>
+* <a href="#name-1">visibility</a><br/>
+* <a href="#name-2">fillAntialias</a><br/>
+* <a href="#name-3">fillOpacity</a><br/>
+* <a href="#name-4">fillColor</a><br/>
+* <a href="#name-5">fillOutlineColor</a><br/>
+* <a href="#name-6">fillTranslate</a><br/>
+* <a href="#name-7">fillTranslateAnchor</a><br/>
+* <a href="#name-8">fillPattern</a><br/>
+
+___
+
+#### Name
+`fillSortKey`
+
+#### Description
+Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
+
+#### Type
+`number`
+
+
+#### Expression
+
+Parameters: `zoom, feature`
 
 ___
 
