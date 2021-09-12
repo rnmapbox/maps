@@ -66,6 +66,9 @@ import UserLocationChange from '../examples/UserLocation/UserLocationChange';
 import BugReportTemplate from '../examples/BugReportExample';
 import CacheManagement from '../examples/CacheManagement';
 
+// V10
+import SkyAndTerran from '../examples/V10/SkyAndTerran';
+
 const styles = StyleSheet.create({
   exampleList: {
     flex: 1,
@@ -113,6 +116,9 @@ const BugReportPage = ({...props}) => (
 
 const Examples = [
   new ExampleItem('Bug Report Template', BugReportPage),
+  new ExampleGroup('V10', [
+    new ExampleItem('Sky and Terrain', SkyAndTerran),
+  ]),
   new ExampleGroup('Map', [
     new ExampleItem('Show Map', ShowMap),
     new ExampleItem('Show Map With Local Style.JSON', ShowMapLocalStyle),
