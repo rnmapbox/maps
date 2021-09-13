@@ -199,61 +199,73 @@ class Camera extends React.Component {
   }
 
   _handleCameraChange(currentCamera, nextCamera) {
-    const hasCameraChanged = this._hasCameraChanged(currentCamera, nextCamera);
+    const c = currentCamera;
+    const n = nextCamera;
+
+    const hasCameraChanged = this._hasCameraChanged(c, n);
     if (!hasCameraChanged) {
       return;
     }
 
-    if (currentCamera.followUserLocation && !nextCamera.followUserLocation) {
+    if (c.followUserLocation && !n.followUserLocation) {
       this.refs.camera.setNativeProps({followUserLocation: false});
       return;
     }
-    if (!currentCamera.followUserLocation && nextCamera.followUserLocation) {
+    if (!c.followUserLocation && n.followUserLocation) {
       this.refs.camera.setNativeProps({followUserLocation: true});
     }
 
-    if (nextCamera.followUserLocation) {
+    if (n.followUserLocation) {
       this.refs.camera.setNativeProps({
-        followUserMode: nextCamera.followUserMode,
-        followPitch: nextCamera.followPitch || nextCamera.pitch,
-        followHeading: nextCamera.followHeading || nextCamera.heading,
-        followZoomLevel: nextCamera.followZoomLevel || nextCamera.zoomLevel,
+        followUserMode: n.followUserMode,
+        followPitch: n.followPitch || n.pitch,
+        followHeading: n.followHeading || n.heading,
+        followZoomLevel: n.followZoomLevel || n.zoomLevel,
       });
       return;
     }
 
-    if (nextCamera.maxBounds) {
+    if (n.maxBounds) {
       this.refs.camera.setNativeProps({
         maxBounds: this._getMaxBounds(),
       });
     }
-    if (nextCamera.minZoomLevel) {
+    if (n.minZoomLevel) {
       this.refs.camera.setNativeProps({
         minZoomLevel: this.props.minZoomLevel,
       });
     }
-    if (nextCamera.maxZoomLevel) {
+    if (n.maxZoomLevel) {
       this.refs.camera.setNativeProps({
         maxZoomLevel: this.props.maxZoomLevel,
       });
     }
 
     const cameraConfig = {
-      animationMode: nextCamera.animationMode,
-      animationDuration: nextCamera.animationDuration,
-      zoomLevel: nextCamera.zoomLevel,
-      pitch: nextCamera.pitch,
-      heading: nextCamera.heading,
-      padding: nextCamera.padding,
+      animationMode: n.animationMode,
+      animationDuration: n.animationDuration,
+      zoomLevel: n.zoomLevel,
+      pitch: n.pitch,
+      heading: n.heading,
+      padding: n.padding,
     };
 
-    if (nextCamera.bounds && this._hasBoundsChanged(currentCamera.bounds, nextCamera.bounds)) {
-      cameraConfig.bounds = nextCamera.bounds;
-    } else {
-      cameraConfig.centerCoordinate = nextCamera.centerCoordinate;
+    const boundsChanged = this._hasBoundsChanged(c.bounds, n.bounds);
+    const centerCoordinateChanged = this._hasCenterCoordinateChanged(c, n);
+    const paddingChanged = this._hasPaddingChanged(c, n);
+    
+    let shouldUpdate = false;
+    if (n.bounds && (boundsChanged || paddingChanged)) {
+      cameraConfig.bounds = n.bounds;
+      shouldUpdate = true;
+    } else if (n.centerCoordinate && (centerCoordinateChanged || paddingChanged)) {
+      cameraConfig.centerCoordinate = n.centerCoordinate;
+      shouldUpdate = true;
     }
 
-    this._setCamera(cameraConfig);
+    if (shouldUpdate) {
+      this._setCamera(cameraConfig);
+    }
   }
 
   _hasCameraChanged(currentCamera, nextCamera) {
