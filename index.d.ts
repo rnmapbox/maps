@@ -536,7 +536,7 @@ export interface CameraSettings {
   centerCoordinate?: GeoJSON.Position;
   heading?: number;
   pitch?: number;
-  padding: CameraPadding;
+  padding?: CameraPadding;
   bounds?: CameraPadding & {
     ne: GeoJSON.Position;
     sw: GeoJSON.Position;
