@@ -19,9 +19,24 @@ const SettingsPropTypes = {
    * Padding around edges of map in points
    */
   padding: PropTypes.shape({
+    /**
+     * Left padding in points
+     */
     paddingLeft: PropTypes.number,
+
+    /**
+     * Right padding in points
+     */
     paddingRight: PropTypes.number,
+
+    /**
+     * Top padding in points
+     */
     paddingTop: PropTypes.number,
+
+    /**
+     * Bottom padding in points
+     */
     paddingBottom: PropTypes.number,
   }),
 
@@ -51,23 +66,23 @@ const SettingsPropTypes = {
     sw: PropTypes.arrayOf(PropTypes.number).isRequired,
 
     /**
-     * Left camera padding for bounds
+     * Left padding in points (deprecated; use root `padding` property instead)
      */
     paddingLeft: PropTypes.number,
 
     /**
-     * Right camera padding for bounds
-     */
+    * Right padding in points (deprecated; use root `padding` property instead)
+    */
     paddingRight: PropTypes.number,
 
     /**
-     * Top camera padding for bounds
-     */
+    * Top padding in points (deprecated; use root `padding` property instead)
+    */
     paddingTop: PropTypes.number,
 
     /**
-     * Bottom camera padding for bounds
-     */
+    * Bottom padding in points (deprecated; use root `padding` property instead)
+    */
     paddingBottom: PropTypes.number,
   }),
 
