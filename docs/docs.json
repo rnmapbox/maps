@@ -4044,6 +4044,268 @@
     ],
     "name": "ShapeSource"
   },
+  "SkyLayer": {
+    "description": "SkyLayer is a spherical dome around the map that is always rendered behind all other layers",
+    "displayName": "SkyLayer",
+    "methods": [],
+    "props": [
+      {
+        "name": "id",
+        "required": true,
+        "type": "string",
+        "default": "none",
+        "description": "A string that uniquely identifies the source in the style to which it is added."
+      },
+      {
+        "name": "sourceID",
+        "required": false,
+        "type": "string",
+        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "description": "The source from which to obtain the data to style.\nIf the source has not yet been added to the current style, the behavior is undefined."
+      },
+      {
+        "name": "aboveLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer above aboveLayerID."
+      },
+      {
+        "name": "belowLayerID",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "Inserts a layer below belowLayerID"
+      },
+      {
+        "name": "layerIndex",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Inserts a layer at a specified index"
+      },
+      {
+        "name": "filter",
+        "required": false,
+        "type": "array",
+        "default": "none",
+        "description": "Filter only the features in the source layer that satisfy a condition that you define"
+      },
+      {
+        "name": "style",
+        "required": false,
+        "type": "union",
+        "default": "none",
+        "description": "Customizable style attributes"
+      }
+    ],
+    "composes": [
+      "../utils"
+    ],
+    "name": "SkyLayer",
+    "styles": [
+      {
+        "name": "visibility",
+        "type": "enum",
+        "values": [
+          {
+            "value": "visible",
+            "doc": "The layer is shown."
+          },
+          {
+            "value": "none",
+            "doc": "The layer is not shown."
+          }
+        ],
+        "default": "visible",
+        "description": "Whether this layer is displayed.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": []
+      },
+      {
+        "name": "skyType",
+        "type": "enum",
+        "values": [
+          {
+            "value": "gradient",
+            "doc": "Renders the sky with a gradient that can be configured with `sky-gradient-radius` and `sky-gradient`."
+          },
+          {
+            "value": "atmosphere",
+            "doc": "Renders the sky with a simulated atmospheric scattering algorithm, the sun direction can be attached to the light position or explicitly set through `sky-atmosphere-sun`."
+          }
+        ],
+        "default": "atmosphere",
+        "description": "The type of the sky",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        }
+      },
+      {
+        "name": "skyAtmosphereSun",
+        "type": "array<number>",
+        "values": [],
+        "minimum": [
+          0,
+          0
+        ],
+        "maximum": [
+          360,
+          180
+        ],
+        "units": "degrees",
+        "description": "Position of the sun center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the sun relative to 0° north, where degrees proceed clockwise. The polar angle indicates the height of the sun, where 0° is directly above, at zenith, and 90° at the horizon. When this property is ommitted, the sun center is directly inherited from the light position.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": false
+      },
+      {
+        "name": "skyAtmosphereSunIntensity",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 100,
+        "default": 10,
+        "description": "Intensity of the sun as a light source in the atmosphere (on a scale from 0 to a 100). Setting higher values will brighten up the sky.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "transition": false
+      },
+      {
+        "name": "skyGradientCenter",
+        "type": "array<number>",
+        "values": [],
+        "minimum": [
+          0,
+          0
+        ],
+        "maximum": [
+          360,
+          180
+        ],
+        "units": "degrees",
+        "default": [
+          0,
+          0
+        ],
+        "description": "Position of the gradient center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the gradient center relative to 0° north, where degrees proceed clockwise. The polar angle indicates the height of the gradient center, where 0° is directly above, at zenith, and 90° at the horizon.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": false
+      },
+      {
+        "name": "skyGradientRadius",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 180,
+        "default": 90,
+        "description": "The angular distance (measured in degrees) from `skyGradientCenter` up to which the gradient extends. A value of 180 causes the gradient to wrap around to the opposite direction from `skyGradientCenter`.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": false,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": false
+      },
+      {
+        "name": "skyGradient",
+        "type": "color",
+        "values": [],
+        "default": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "sky-radial-progress"
+          ],
+          0.8,
+          "#87ceeb",
+          1,
+          "white"
+        ],
+        "description": "Defines a radial color gradient with which to color the sky. The color values can be interpolated with an expression using `skyRadialProgress`. The range [0, 1] for the interpolant covers a radial distance (in degrees) of [0, `skyGradientRadius`] centered at the position specified by `skyGradientCenter`.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "sky-radial-progress"
+          ]
+        },
+        "transition": false
+      },
+      {
+        "name": "skyAtmosphereHaloColor",
+        "type": "color",
+        "values": [],
+        "default": "white",
+        "description": "A color applied to the atmosphere sun halo. The alpha channel describes how strongly the sun halo is represented in an atmosphere sky layer.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "transition": false
+      },
+      {
+        "name": "skyAtmosphereColor",
+        "type": "color",
+        "values": [],
+        "default": "white",
+        "description": "A color used to tweak the main atmospheric scattering coefficients. Using white applies the default coefficients giving the natural blue color to the atmosphere. This color affects how heavily the corresponding wavelength is represented during scattering. The alpha channel describes the density of the atmosphere, with 1 maximum density and 0 no density.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "transition": false
+      },
+      {
+        "name": "skyOpacity",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": 1,
+        "description": "The opacity of the entire sky layer.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true
+      }
+    ]
+  },
   "Style": {
     "description": "Style is a component that automatically adds sources / layers to the map using Mapbox GL Style Spec.\nOnly [`sources`](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) & [`layers`](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/) are supported.\nOther fields such as `sprites`, `glyphs` etc. will be ignored. Not all layer / source attributes from the style spec are supported, in general the supported attributes will mentioned under https://github.com/rnmapbox/maps/tree/master/docs.",
     "displayName": "Style",

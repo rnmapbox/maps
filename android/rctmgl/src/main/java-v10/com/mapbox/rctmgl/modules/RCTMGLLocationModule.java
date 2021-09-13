@@ -18,13 +18,18 @@ import com.mapbox.android.core.location.LocationEngineResult;
 import com.mapbox.rctmgl.events.EventEmitter;
 import com.mapbox.rctmgl.events.IEvent;
 import com.mapbox.rctmgl.events.LocationEvent;
-import com.mapbox.rctmgl.location.LocationManager;
 */
+import com.mapbox.rctmgl.location.LocationManager;
 
 @ReactModule(name = RCTMGLLocationModule.REACT_CLASS)
 public class RCTMGLLocationModule extends ReactContextBaseJavaModule {
     public static final String REACT_CLASS = "RCTMGLLocationModule";
     public static final String LOCATION_UPDATE = "MapboxUserLocationUpdate";
+
+    private boolean isEnabled;
+    private float mMinDisplacement;
+
+    private LocationManager locationManager;
 
     public RCTMGLLocationModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -51,5 +56,19 @@ public class RCTMGLLocationModule extends ReactContextBaseJavaModule {
     @Override
     public String getName() {
         return REACT_CLASS;
+    }
+
+    @ReactMethod
+    public void setMinDisplacement(float minDisplacement) {
+        if (mMinDisplacement == minDisplacement) return;
+        mMinDisplacement = minDisplacement;
+        if (isEnabled) {
+
+            // set minimal displacement in the manager
+            locationManager.setMinDisplacement(mMinDisplacement);
+
+            // refresh values in location engine request
+            locationManager.enable();
+        }
     }
 }

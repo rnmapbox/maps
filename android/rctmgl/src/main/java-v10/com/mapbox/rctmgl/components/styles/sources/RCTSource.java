@@ -37,8 +37,8 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
     protected boolean mHasPressListener;
     protected Map<String, Double> mTouchHitbox;
 
-    protected List<RCTLayer> mLayers;
-    private List<RCTLayer> mQueuedLayers;
+    protected List<AbstractSourceConsumer> mLayers;
+    private List<AbstractSourceConsumer> mQueuedLayers;
 
     public RCTSource(Context context) {
         super(context);
@@ -60,7 +60,7 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
         }
     }
 
-    protected void addLayerToMap(RCTLayer layer, int childPosition) {
+    protected void addLayerToMap(AbstractSourceConsumer layer, int childPosition) {
         if (mMapView == null || layer == null) {
             return;
         }
@@ -131,7 +131,7 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
     public void removeFromMap(RCTMGLMapView mapView) {
         if (mLayers.size() > 0) {
             for (int i = 0; i < mLayers.size(); i++) {
-                RCTLayer layer = mLayers.get(i);
+                AbstractSourceConsumer layer = mLayers.get(i);
                 layer.removeFromMap(mMapView);
             }
         }
@@ -148,11 +148,11 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
     }
 
     public void addLayer(View childView, int childPosition) {
-        if (!(childView instanceof RCTLayer)) {
+        if (!(childView instanceof AbstractSourceConsumer)) {
             return;
         }
 
-        RCTLayer layer = (RCTLayer) childView;
+        AbstractSourceConsumer layer = (AbstractSourceConsumer) childView;
         if (mMap == null) {
             mQueuedLayers.add(childPosition, layer);
         } else {
@@ -161,7 +161,7 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
     }
 
     public void removeLayer(int childPosition) {
-        RCTLayer layer;
+        AbstractSourceConsumer layer;
         if (mQueuedLayers != null && mQueuedLayers.size() > 0) {
             layer = mQueuedLayers.get(childPosition);
         } else {
@@ -170,14 +170,14 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
         removeLayerFromMap(layer, childPosition);
     }
 
-    public RCTLayer getLayerAt(int childPosition) {
+    public AbstractSourceConsumer getLayerAt(int childPosition) {
         if (mQueuedLayers != null && mQueuedLayers.size() > 0) {
             return mQueuedLayers.get(childPosition);
         }
         return mLayers.get(childPosition);
     }
 
-    protected void removeLayerFromMap(RCTLayer layer, int childPosition) {
+    protected void removeLayerFromMap(AbstractSourceConsumer layer, int childPosition) {
         if (mMapView != null && layer != null) {
             layer.removeFromMap(mMapView);
         }

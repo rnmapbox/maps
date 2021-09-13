@@ -36,12 +36,17 @@ import com.mapbox.rctmgl.components.styles.layers.RCTMGLHeatmapLayerManager;
 */
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLLineLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLRasterLayerManager;
+import com.mapbox.rctmgl.components.styles.layers.RCTMGLSkyLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLSymbolLayerManager;
-/*
+
 import com.mapbox.rctmgl.components.styles.light.RCTMGLLightManager;
+import com.mapbox.rctmgl.components.styles.terrain.RCTMGLTerrainManager;
+
+/*
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLImageSourceManager;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLRasterSourceManager;
 */
+import com.mapbox.rctmgl.components.styles.sources.RCTMGLRasterDemSourceManager;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLShapeSourceManager;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLVectorSourceManager;
 
@@ -86,7 +91,9 @@ public class RCTMGLPackage implements ReactPackage {
         managers.add(new RCTMGLMapViewManager(reactApplicationContext));
  /*
         managers.add(new RCTMGLMarkerViewManager(reactApplicationContext));
+*/
         managers.add(new RCTMGLLightManager());
+/*
         managers.add(new RCTMGLPointAnnotationManager(reactApplicationContext));
         managers.add(new RCTMGLCalloutManager());
         managers.add(new RCTMGLNativeUserLocationManager());
@@ -94,6 +101,7 @@ public class RCTMGLPackage implements ReactPackage {
         // sources
         managers.add(new RCTMGLVectorSourceManager(reactApplicationContext));
         managers.add(new RCTMGLShapeSourceManager(reactApplicationContext));
+        managers.add(new RCTMGLRasterDemSourceManager(reactApplicationContext));
 /*
         managers.add(new RCTMGLRasterSourceManager(reactApplicationContext));
         managers.add(new RCTMGLImageSourceManager());
@@ -111,6 +119,8 @@ public class RCTMGLPackage implements ReactPackage {
         managers.add(new RCTMGLCircleLayerManager());
         managers.add(new RCTMGLSymbolLayerManager());   
         managers.add(new RCTMGLRasterLayerManager());
+        managers.add(new RCTMGLSkyLayerManager());
+        managers.add(new RCTMGLTerrainManager());
 /*
         managers.add(new RCTMGLBackgroundLayerManager());
 */

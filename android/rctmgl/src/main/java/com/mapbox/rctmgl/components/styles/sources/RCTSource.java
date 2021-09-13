@@ -42,8 +42,8 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
     protected boolean mHasPressListener;
     protected Map<String, Double> mTouchHitbox;
 
-    protected List<RCTLayer> mLayers;
-    private List<RCTLayer> mQueuedLayers;
+    protected List<AbstractSourceConsumer> mLayers;
+    private List<AbstractSourceConsumer> mQueuedLayers;
 
     public RCTSource(Context context) {
         super(context);
@@ -166,11 +166,11 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
     }
 
     public void addLayer(View childView, int childPosition) {
-        if (!(childView instanceof RCTLayer)) {
+        if (!(childView instanceof AbsractSourceConsumer)) {
             return;
         }
 
-        RCTLayer layer = (RCTLayer) childView;
+        AbsractSourceConsumer layer = (AbsractSourceConsumer) childView;
         if (mMap == null) {
             mQueuedLayers.add(childPosition, layer);
         } else {

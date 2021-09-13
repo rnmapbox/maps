@@ -13,6 +13,9 @@ import {
   Terrain,
   RasterDemSource,
 } from '@react-native-mapbox-gl/maps';
+import Page from '../common/Page';
+
+import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 
 Logger.setLogLevel("verbose");
 
@@ -21,9 +24,13 @@ const styles = {
 };
 
 class SkyAndTerran extends React.Component {
+  static propTypes = {
+    ...BaseExamplePropTypes,
+  };
+
   render() {
     return (
-      <>
+      <Page {...this.props}>
         <Button
           title="Grow 1"
           onPress={() => this.setState({radius: this.state.radius + 20})}
@@ -64,7 +71,7 @@ class SkyAndTerran extends React.Component {
           </RasterDemSource>
 
         </MapView>
-      </>
+      </Page>
     );
   }
 }
