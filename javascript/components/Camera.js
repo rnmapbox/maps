@@ -247,7 +247,7 @@ class Camera extends React.Component {
       padding: nextCamera.padding,
     };
 
-    if (nextCamera.bounds) {
+    if (nextCamera.bounds && this._hasBoundsChanged(currentCamera.bounds, nextCamera.bounds)) {
       cameraConfig.bounds = nextCamera.bounds;
     } else {
       cameraConfig.centerCoordinate = nextCamera.centerCoordinate;
