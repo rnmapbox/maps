@@ -83,13 +83,14 @@ import com.mapbox.rctmgl.components.location.RCTMGLNativeUserLocation;
 import com.mapbox.rctmgl.components.camera.RCTMGLCamera;
 import com.mapbox.rctmgl.components.images.RCTMGLImages;
 import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeTracker;
-/*
+
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
 import com.mapbox.rctmgl.components.styles.light.RCTMGLLight;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLShapeSource;
-import com.mapbox.rctmgl.events.AndroidCallbackEvent;
+/*import com.mapbox.rctmgl.events.AndroidCallbackEvent;
 */
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
+import com.mapbox.rctmgl.components.styles.terrain.RCTMGLTerrain;
 import com.mapbox.rctmgl.events.IEvent;
 import com.mapbox.rctmgl.events.MapChangeEvent;
 import com.mapbox.rctmgl.events.constants.EventTypes;
@@ -239,9 +240,11 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
             RCTMGLImages images = (RCTMGLImages) childView;
             mImages.add(images);
             feature = (AbstractMapFeature) childView;
-            /*
         } else if (childView instanceof RCTMGLLight) {
             feature = (AbstractMapFeature) childView;
+        } else if (childView instanceof RCTMGLTerrain) {
+            feature = (AbstractMapFeature) childView;
+            /*
         } else if (childView instanceof RCTMGLNativeUserLocation) {
             feature = (AbstractMapFeature) childView;
         }  else if (childView instanceof RCTMGLPointAnnotation) {

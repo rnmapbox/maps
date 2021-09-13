@@ -3,11 +3,13 @@
 
 package com.mapbox.rctmgl.components.styles;
 
+import com.mapbox.maps.extension.style.expressions.generated.Expression;
 import com.mapbox.maps.extension.style.layers.generated.BackgroundLayer;
 import com.mapbox.maps.extension.style.layers.generated.CircleLayer;
 import com.mapbox.maps.extension.style.layers.generated.FillExtrusionLayer;
 import com.mapbox.maps.extension.style.layers.generated.FillLayer;
 import com.mapbox.maps.extension.style.layers.generated.LineLayer;
+import com.mapbox.maps.extension.style.layers.generated.SkyLayer;
 // import com.mapbox.maps.extension.style.layers.generated.PropertyFactory;
 // import com.mapbox.maps.extension.style.layers.generated.PropertyValue;
 import com.mapbox.maps.extension.style.layers.generated.RasterLayer;
@@ -2339,7 +2341,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.skyGradient(styleValue.getExpression());
       } else {
-          layer.skyGradient(styleValue.getInt(VALUE_KEY));
+          layer.skyGradient(styleValue.getIntExpression(VALUE_KEY));
       }
     }
 

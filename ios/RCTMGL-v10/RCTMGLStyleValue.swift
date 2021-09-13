@@ -180,7 +180,7 @@ class RCTMGLStyleValue {
     }
   }
   
-  func mglStyleValueColor() -> Value<ColorRepresentable> {
+  func mglStyleValueColor() -> Value<StyleColor> {
     //return Value.constant(ColorRepresentable(color: UIColor.black))
     if let value = value as? Dictionary<String,Any> {
       let value = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
@@ -188,7 +188,7 @@ class RCTMGLStyleValue {
       
       if let num = value as? Int {
         let uicolor = uicolor(num)
-        return Value.constant(ColorRepresentable(color: uicolor))
+        return Value.constant(StyleColor(uicolor))
       }
       
       let data = try! JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
@@ -198,7 +198,7 @@ class RCTMGLStyleValue {
       print("~~~ decodedExpression color: \(decodedExpression)")
       return Value.expression(decodedExpression)
     } else {
-      return Value.constant(ColorRepresentable(color: UIColor.red))
+      return Value.constant(StyleColor(UIColor.red))
     }
   }
   
@@ -208,8 +208,8 @@ class RCTMGLStyleValue {
     return decodedExpression
   }
 
-  func mglStyleValueColorRaw() -> ColorRepresentable {
-    return ColorRepresentable(color: UIColor.red)
+  func mglStyleValueColorRaw() -> StyleColor {
+    return StyleColor(UIColor.red)
   }
   
   func mglStyleValueBoolean() -> Value<Bool> {

@@ -181,6 +181,7 @@ function getSupportedLayers(layerNames) {
     }
   }
 
+  console.log("=> getSupportedLayers", layerNames, supportedLayers);
   return supportedLayers;
 }
 

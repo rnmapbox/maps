@@ -6,11 +6,13 @@
 
 package com.mapbox.rctmgl.components.styles;
 
+import com.mapbox.maps.extension.style.expressions.generated.Expression;
 import com.mapbox.maps.extension.style.layers.generated.BackgroundLayer;
 import com.mapbox.maps.extension.style.layers.generated.CircleLayer;
 import com.mapbox.maps.extension.style.layers.generated.FillExtrusionLayer;
 import com.mapbox.maps.extension.style.layers.generated.FillLayer;
 import com.mapbox.maps.extension.style.layers.generated.LineLayer;
+import com.mapbox.maps.extension.style.layers.generated.SkyLayer;
 // import com.mapbox.maps.extension.style.layers.generated.PropertyFactory;
 // import com.mapbox.maps.extension.style.layers.generated.PropertyValue;
 import com.mapbox.maps.extension.style.layers.generated.RasterLayer;
@@ -87,7 +89,7 @@ public class RCTMGLStyleFactory {
       } else {
         <%_ if (prop.type === 'enum') { _%>
           layer.<%- prop.name -%>(<%- pascelCase(prop.name) %>.valueOf(<%- androidGetConfigType(androidInputType(prop.type, prop.value), prop) -%>.toUpperCase()));
-        <%_ } else if (prop.name === 'lineGradient' || prop.name === 'heatmapColor') { _%>
+        <%_ } else if (prop.name === 'lineGradient' || prop.name === 'heatmapColor' || prop.name === 'skyGradient') { _%>
           layer.<%- prop.name -%>(styleValue.getIntExpression(VALUE_KEY));
         <%_ } else if (prop.name === 'position') { _%>
           layer.<%- prop.name -%>(styleValue.getFloatArrayExpression(VALUE_KEY));

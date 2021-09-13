@@ -16,6 +16,7 @@ import com.mapbox.maps.extension.style.layers.LayerUtils;
 
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
+import com.mapbox.rctmgl.components.styles.sources.AbstractSourceConsumer;
 import com.mapbox.rctmgl.utils.ExpressionParser;
 // import com.mapbox.rctmgl.utils.ExpressionParser;
 
@@ -24,7 +25,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public abstract class RCTLayer<T extends Layer> extends AbstractMapFeature {
+public abstract class RCTLayer<T extends Layer> extends AbstractSourceConsumer {
     public static final String LOG_TAG = "RCTLayer";
 
     protected String mID;
