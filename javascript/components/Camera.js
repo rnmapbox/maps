@@ -14,6 +14,16 @@ const SettingsPropTypes = {
    * Center coordinate on map [lng, lat]
    */
   centerCoordinate: PropTypes.arrayOf(PropTypes.number),
+  
+  /**
+   * Padding around edges of map in points
+   */
+  padding: PropTypes.shape({
+    paddingLeft: PropTypes.number,
+    paddingRight: PropTypes.number,
+    paddingTop: PropTypes.number,
+    paddingBottom: PropTypes.number,
+  }),
 
   /**
    * Heading on map
@@ -27,6 +37,7 @@ const SettingsPropTypes = {
 
   /**
    * Represents a rectangle in geographical coordinates marking the visible area of the map.
+   * The `bounds.padding*` properties are deprecated; use root `padding` property instead.
    */
   bounds: PropTypes.shape({
     /**
@@ -195,6 +206,7 @@ class Camera extends React.Component {
       });
       return;
     }
+
     if (nextCamera.maxBounds) {
       this.refs.camera.setNativeProps({
         maxBounds: this._getMaxBounds(),
@@ -217,12 +229,10 @@ class Camera extends React.Component {
       zoomLevel: nextCamera.zoomLevel,
       pitch: nextCamera.pitch,
       heading: nextCamera.heading,
+      padding: nextCamera.padding,
     };
 
-    if (
-      nextCamera.bounds &&
-      this._hasBoundsChanged(currentCamera.bounds, nextCamera.bounds)
-    ) {
+    if (nextCamera.bounds) {
       cameraConfig.bounds = nextCamera.bounds;
     } else {
       cameraConfig.centerCoordinate = nextCamera.centerCoordinate;
@@ -239,6 +249,7 @@ class Camera extends React.Component {
       c.heading !== n.heading ||
       this._hasCenterCoordinateChanged(c, n) ||
       this._hasBoundsChanged(c.bounds, n.bounds) ||
+      this._hasPaddingChanged(c, n) ||
       c.pitch !== n.pitch ||
       c.zoomLevel !== n.zoomLevel ||
       c.triggerKey !== n.triggerKey;
@@ -253,7 +264,7 @@ class Camera extends React.Component {
     const hasAnimationPropsChanged =
       c.animationMode !== n.animationMode ||
       c.animationDuration !== n.animationDuration;
-
+    
     const hasNavigationConstraintsPropsChanged =
       this._hasBoundsChanged(c.maxBounds, n.maxBounds) ||
       c.minZoomLevel !== n.minZoomLevel ||
@@ -290,11 +301,9 @@ class Camera extends React.Component {
     if (!cB && !nB) {
       return false;
     }
-
     if (existenceChange(cB, nB)) {
       return true;
     }
-
     return (
       cB.ne[0] !== nB.ne[0] ||
       cB.ne[1] !== nB.ne[1] ||
@@ -304,6 +313,26 @@ class Camera extends React.Component {
       cB.paddingLeft !== nB.paddingLeft ||
       cB.paddingRight !== nB.paddingRight ||
       cB.paddingBottom !== nB.paddingBottom
+    );
+  }
+
+  _hasPaddingChanged(currentCamera, nextCamera) {
+    const cP = currentCamera.padding;
+    const nP = nextCamera.padding;
+
+    if (!cP && !nP) {
+      return false;
+    }
+
+    if (existenceChange(cP, nP)) {
+      return true;
+    }
+
+    return (
+      cP.paddingTop !== nP.paddingTop ||
+      cP.paddingLeft !== nP.paddingLeft ||
+      cP.paddingRight !== nP.paddingRight ||
+      cP.paddingBottom !== nP.paddingBottom
     );
   }
 
@@ -358,8 +387,8 @@ class Camera extends React.Component {
       bounds: {
         ne: northEastCoordinates,
         sw: southWestCoordinates,
-        ...pad,
       },
+      padding: pad,
       animationDuration,
       animationMode: Camera.Mode.Ease,
     });
@@ -498,14 +527,14 @@ class Camera extends React.Component {
     }
 
     if (config.bounds && config.bounds.ne && config.bounds.sw) {
-      const {ne, sw, paddingLeft, paddingRight, paddingTop, paddingBottom} =
-        config.bounds;
+      const { ne, sw } = config.bounds;
       stopConfig.bounds = toJSONString(geoUtils.makeLatLngBounds(ne, sw));
-      stopConfig.boundsPaddingTop = paddingTop || 0;
-      stopConfig.boundsPaddingRight = paddingRight || 0;
-      stopConfig.boundsPaddingBottom = paddingBottom || 0;
-      stopConfig.boundsPaddingLeft = paddingLeft || 0;
     }
+    
+    stopConfig.paddingTop = config.padding?.paddingTop || config.bounds?.paddingTop || 0;
+    stopConfig.paddingRight = config.padding?.paddingRight || config.bounds?.paddingRight || 0;
+    stopConfig.paddingBottom = config.padding?.paddingBottom || config.bounds?.paddingBottom || 0;
+    stopConfig.paddingLeft = config.padding?.paddingLeft || config.bounds?.paddingLeft || 0;
 
     return stopConfig;
   }
