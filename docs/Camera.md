@@ -6,7 +6,7 @@
 | Prop | Type | Default | Required | Description |
 | ---- | :--: | :-----: | :------: | :----------: |
 | animationDuration | `number` | `2000` | `false` | The duration a camera update takes (in ms) |
-| animationMode | `enum` | `'easeTo'` | `false` | The animationstyle when the camara updates. One of; `flyTo`, `easeTo`, `linearTo`, `moveTo` |
+| animationMode | `enum` | `'easeTo'` | `false` | The animationstyle when the camara updates. One of: `flyTo`, `easeTo`, `linearTo`, `moveTo` |
 | defaultSettings | `shape` | `none` | `false` | Default view settings applied on camera |
 | &nbsp;&nbsp;centerCoordinate | `array` | `none` | `false` | Center coordinate on map [lng, lat] |
 | &nbsp;&nbsp;padding | `shape` | `none` | `false` | Padding around edges of map in points |

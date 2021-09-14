@@ -414,7 +414,7 @@
         "required": false,
         "type": "enum",
         "default": "'easeTo'",
-        "description": "The animationstyle when the camara updates. One of; `flyTo`, `easeTo`, `linearTo`, `moveTo`"
+        "description": "The animationstyle when the camara updates. One of: `flyTo`, `easeTo`, `linearTo`, `moveTo`"
       },
       {
         "name": "defaultSettings",
