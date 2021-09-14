@@ -9,41 +9,59 @@ import TabBarPage from '../common/TabBarPage';
 class FitBounds extends React.Component {
   static propTypes = {...BaseExamplePropTypes};
 
-  houseBounds = [
-    [-74.135379, 40.795909],
-    [-74.135449, 40.795578],
-  ];
+  houseConfig = {
+    bounds: {
+      ne: [-74.135379, 40.795909],
+      sw: [-74.135449, 40.795578],
+    },
+  };
 
-  townBounds = [
-    [-74.12641, 40.797968],
-    [-74.143727, 40.772177],
-  ];
+  townConfig =  {
+    bounds: {
+      ne: [-74.12641, 40.797968],
+      sw: [-74.143727, 40.772177],
+    },
+  };
+
+  padding = {
+    paddingLeft: 40,
+    paddingRight: 40,
+    paddingTop: 40,
+    paddingBottom: 40,
+  };
 
   constructor(props) {
     super(props);
 
-    this._bounds = [
-      {label: 'Fit House', data: this.houseBounds},
-      {label: 'Fit Town', data: this.townBounds},
+    this.options = [
+      {
+        label: 'House',
+        data: this.houseConfig,
+      },
+      {
+        label: 'Town',
+        data: this.townConfig,
+      },
+      {
+        label: 'House (Padded)',
+        data: { ...this.houseConfig, padding },
+      },
+      {
+        label: 'Town (Padded)',
+        data: { ...this.townConfig, padding },
+      },
     ];
 
-    this.onFitBounds = this.onFitBounds.bind(this);
-
     this.state = {
-      bounds: {
-        ne: this.houseBounds[0],
-        sw: this.houseBounds[1],
-      },
+      ...this.houseConfig,
       animationDuration: 0,
     };
   }
 
-  onFitBounds(i, bounds) {
+  onOptionPress = (i, config) => {
     this.setState({
-      bounds: {
-        ne: bounds[0],
-        sw: bounds[1],
-      },
+      bounds: config.bounds,
+      padding: config.padding,
       animationDuration: 2000,
     });
   }
@@ -52,14 +70,15 @@ class FitBounds extends React.Component {
     return (
       <TabBarPage
         {...this.props}
-        options={this._bounds}
-        onOptionPress={this.onFitBounds}>
+        options={this.options}
+        onOptionPress={this.onOptionPress}>
         <MapboxGL.MapView
           contentInset={10}
           styleURL={MapboxGL.StyleURL.Satellite}
           style={sheet.matchParent}>
           <MapboxGL.Camera
             bounds={this.state.bounds}
+            padding={this.state.padding}
             animationDuration={this.state.animationDuration}
             maxZoomLevel={19}
           />
