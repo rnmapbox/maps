@@ -7,6 +7,8 @@ PR Title ([#123](link to my pr))
 Update ShapeSource methods to make it usable with any cluster ( Use cluster itself instead of cluster_id as first argument for getClusterExpansionZoom/getClusterLeaves/getClusterChildren methods. Version < 9 methods still supports passing cluster_id as a first argument but a deprecation warning will be shown. ) ([#1499](https://github.com/react-native-mapbox-gl/maps/pull/1499))
 ```
 
+fix: revert pinned mapLibre version to `5.11.0` ([8a2b00e67ba6398f3f6e6f52e98b0f0cea437e4d](https://github.com/react-native-mapbox-gl/maps/commit/8a2b00e67ba6398f3f6e6f52e98b0f0cea437e4d))
+
 ---
 
 ## 8.3.0
