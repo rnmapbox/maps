@@ -16,42 +16,42 @@ class FitBounds extends React.Component {
       ne: [-74.135379, 40.795909],
       sw: [-74.135449, 40.795578],
     };
-  
+
     const townBounds = {
       ne: [-74.12641, 40.797968],
       sw: [-74.143727, 40.772177],
-    };  
+    };
 
     const zeroPadding = {
       paddingLeft: 0,
       paddingRight: 0,
       paddingTop: 0,
       paddingBottom: 0,
-    };  
+    };
 
     const somePadding = {
       paddingLeft: 40,
       paddingRight: 40,
       paddingTop: 40,
       paddingBottom: 40,
-    };  
+    };
 
     this.options = [
       {
         label: 'House',
-        data: { bounds: houseBounds, padding: zeroPadding },
+        data: {bounds: houseBounds, padding: zeroPadding},
       },
       {
         label: 'Town',
-        data: { bounds: townBounds, padding: zeroPadding },
+        data: {bounds: townBounds, padding: zeroPadding},
       },
       {
         label: 'House (Padded)',
-        data: { bounds: houseBounds, padding: somePadding },
+        data: {bounds: houseBounds, padding: somePadding},
       },
       {
         label: 'Town (Padded)',
-        data: { bounds: townBounds, padding: somePadding },
+        data: {bounds: townBounds, padding: somePadding},
       },
     ];
 
@@ -68,26 +68,26 @@ class FitBounds extends React.Component {
       padding: config.padding,
       animationDuration: 1000,
     });
-  }
+  };
 
   render() {
+    const {bounds, padding, animationDuration} = this.state;
+
     return (
       <TabBarPage
         {...this.props}
         options={this.options}
-        onOptionPress={this.onOptionPress}
-      >
+        onOptionPress={this.onOptionPress}>
         <MapboxGL.MapView
           styleURL={MapboxGL.StyleURL.Satellite}
-          style={sheet.matchParent}
-        >
+          style={sheet.matchParent}>
           <MapboxGL.Camera
-            bounds={this.state.bounds}
-            padding={this.state.padding}
-            animationDuration={this.state.animationDuration}
+            bounds={bounds}
+            padding={padding}
+            animationDuration={animationDuration}
           />
-          <View style={{ flex: 1, ...this.state.padding }}>
-            <View style={{ flex: 1, borderColor: 'blue', borderWidth: 4 }} />
+          <View style={{flex: 1, ...padding}}>
+            <View style={{flex: 1, borderColor: 'blue', borderWidth: 4}} />
           </View>
         </MapboxGL.MapView>
       </TabBarPage>
