@@ -31,9 +31,9 @@ class FitBounds extends React.Component {
 
     const somePadding = {
       paddingLeft: 40,
-      paddingRight: 40,
+      paddingRight: 100,
       paddingTop: 40,
-      paddingBottom: 40,
+      paddingBottom: 140,
     };
 
     this.options = [
@@ -42,12 +42,12 @@ class FitBounds extends React.Component {
         data: {bounds: houseBounds, padding: zeroPadding},
       },
       {
-        label: 'Town',
-        data: {bounds: townBounds, padding: zeroPadding},
-      },
-      {
         label: 'House (Padded)',
         data: {bounds: houseBounds, padding: somePadding},
+      },
+      {
+        label: 'Town',
+        data: {bounds: townBounds, padding: zeroPadding},
       },
       {
         label: 'Town (Padded)',
