@@ -9,51 +9,55 @@ import TabBarPage from '../common/TabBarPage';
 class FitBounds extends React.Component {
   static propTypes = {...BaseExamplePropTypes};
 
-  houseConfig = {
-    bounds: {
-      ne: [-74.135379, 40.795909],
-      sw: [-74.135449, 40.795578],
-    },
-  };
-
-  townConfig =  {
-    bounds: {
-      ne: [-74.12641, 40.797968],
-      sw: [-74.143727, 40.772177],
-    },
-  };
-
-  padding = {
-    paddingLeft: 40,
-    paddingRight: 40,
-    paddingTop: 40,
-    paddingBottom: 40,
-  };
-
   constructor(props) {
     super(props);
+
+    const houseBounds = {
+      ne: [-74.135379, 40.795909],
+      sw: [-74.135449, 40.795578],
+    };
+  
+    const townBounds = {
+      ne: [-74.12641, 40.797968],
+      sw: [-74.143727, 40.772177],
+    };  
+
+    const zeroPadding = {
+      paddingLeft: 0,
+      paddingRight: 0,
+      paddingTop: 0,
+      paddingBottom: 0,
+    };  
+
+    const somePadding = {
+      paddingLeft: 40,
+      paddingRight: 40,
+      paddingTop: 40,
+      paddingBottom: 40,
+    };  
 
     this.options = [
       {
         label: 'House',
-        data: this.houseConfig,
+        data: { bounds: houseBounds, padding: zeroPadding },
       },
       {
         label: 'Town',
-        data: this.townConfig,
+        data: { bounds: townBounds, padding: zeroPadding },
       },
       {
         label: 'House (Padded)',
-        data: { ...this.houseConfig, padding },
+        data: { bounds: houseBounds, padding: somePadding },
       },
       {
         label: 'Town (Padded)',
-        data: { ...this.townConfig, padding },
+        data: { bounds: townBounds, padding: somePadding },
       },
     ];
 
     this.state = {
-      ...this.houseConfig,
+      bounds: houseBounds,
+      padding: zeroPadding,
       animationDuration: 0,
     };
   }
@@ -62,7 +66,7 @@ class FitBounds extends React.Component {
     this.setState({
       bounds: config.bounds,
       padding: config.padding,
-      animationDuration: 2000,
+      animationDuration: 1000,
     });
   }
 
@@ -71,17 +75,20 @@ class FitBounds extends React.Component {
       <TabBarPage
         {...this.props}
         options={this.options}
-        onOptionPress={this.onOptionPress}>
+        onOptionPress={this.onOptionPress}
+      >
         <MapboxGL.MapView
-          contentInset={10}
           styleURL={MapboxGL.StyleURL.Satellite}
-          style={sheet.matchParent}>
+          style={sheet.matchParent}
+        >
           <MapboxGL.Camera
             bounds={this.state.bounds}
             padding={this.state.padding}
             animationDuration={this.state.animationDuration}
-            maxZoomLevel={19}
           />
+          <View style={{ flex: 1, ...this.state.padding }}>
+            <View style={{ flex: 1, borderColor: 'blue', borderWidth: 4 }} />
+          </View>
         </MapboxGL.MapView>
       </TabBarPage>
     );
