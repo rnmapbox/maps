@@ -4,21 +4,13 @@ import Turf
 @objc class RCTMGLMapView : MapView {
     var reactOnPress : RCTBubblingEventBlock? = nil
     var reactOnMapChange : RCTBubblingEventBlock? = nil
-    
-    var mapView : MapView {
-        get { return self }
-    }
 
     @objc func setReactStyleURL(_ value: String) {
         if let url = URL(string: value) {
-            self.style.styleURL = StyleURL.custom(url: url);
+            mapboxMap.style.uri = StyleURI(url: url);
         } else {
             if RCTJSONParse(value, nil) != nil {
-                do {
-                 try self.style.styleManager.setStyleJSONForJson(value)
-                } catch {
-                    RCTMGLLogging.error(.argumentError, "RCTMGLMapView.setReactStyleURL unexpected error \(error)");
-                }
+                mapboxMap.style.styleManager.setStyleJSONForJson(value)
             }
         }
     }
@@ -30,7 +22,7 @@ import Turf
     @objc func handleTap(_ sender: UITapGestureRecognizer) {
         if let reactOnPress = self.reactOnPress {
             let tapPoint = sender.location(in: self)
-            let location = mapView.coordinate(for: tapPoint)
+            let location = mapboxMap.coordinate(for: tapPoint)
             print("Tap point \(tapPoint) => \(location)")
             
             var geojson = Feature(geometry: .point(Point(location)));
@@ -38,7 +30,7 @@ import Turf
                 "screenPointX": Double(tapPoint.x),
                 "screenPointY": Double(tapPoint.y)
             ];
-            let event = try!  RCTMGLEvent(type:.tap, payload: GeoJSONManager.dictionaryFrom(geojson)!);
+            let event = RCTMGLEvent(type: .tap, payload: toJSONDictionary(geojson: geojson));
             self.fireEvent(event: event, callback: reactOnPress)
         }
     }
@@ -49,46 +41,34 @@ import Turf
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         self.addGestureRecognizer(tapGesture)
     }
-    
-    func _toArray(bounds: CoordinateBounds) -> [[Double]] {
-        return [
-            [
-                Double(bounds.northeast.longitude),
-                Double(bounds.northeast.latitude),
-            ],
-            [
-                Double(bounds.southwest.longitude),
-                Double(bounds.southwest.latitude)
+
+    func toJSONDictionary<T: GeoJSONObject>(geojson: T) -> [String: Any] {
+        let result = try? JSONSerialization.jsonObject(with: JSONEncoder().encode(geojson)) as? [String: Any]
+        return result!
+    }
+
+    func _makeRegionPayload() -> [String:Any] {
+        let cameraState = mapboxMap.cameraState
+        let bounds = mapboxMap.cameraBounds.bounds
+        var feature = Feature(geometry: .point(Point(cameraState.center)));
+
+        feature.properties = [
+            "zoomLevel" : Double(cameraState.zoom),
+            "heading": Double(cameraState.bearing),
+            "bearing": Double(cameraState.bearing),
+            "pitch": Double(cameraState.pitch),
+            "visibleBounds": [
+                [ Double(bounds.northeast.longitude), Double(bounds.northeast.latitude) ],
+                [ Double(bounds.southwest.longitude), Double(bounds.southwest.latitude) ]
             ]
         ]
+
+        return toJSONDictionary(geojson: feature)
     }
-    
-    func toJSON(geometry: Geometry, properties: [String: Any]? = nil) -> [String: Any] {
-        let geojson = Feature(geometry: geometry);
-        var result = try! GeoJSONManager.dictionaryFrom(geojson)!
-        if let properties = properties {
-            result["properties"] = properties
-        }
-        return result
-    }
-    
-    func _makeRegionPayload() -> [String:Any] {
-        return toJSON(
-            geometry: .point(Point(mapView.centerCoordinate)),
-            properties: [
-                "zoomLevel" : Double(mapView.zoom),
-                "heading": Double(mapView.cameraView.bearing),
-                "bearing": Double(mapView.cameraView.bearing),
-                "pitch": Double(mapView.cameraView.pitch),
-                "visibleBounds": _toArray(bounds: mapView.cameraView.visibleCoordinateBounds)
-            ]
-        )
-    }
-    
+
     @objc func setReactOnMapChange(_ value: @escaping RCTBubblingEventBlock) {
         self.reactOnMapChange = value
-        self.mapView.on(.cameraChanged, handler: { cameraEvent in
-            
+        mapboxMap.onEvery(.cameraChanged, handler: { cameraEvent in
             let event = RCTMGLEvent(type:.regionDidChange, payload: self._makeRegionPayload());
             self.fireEvent(event: event, callback: self.reactOnMapChange!)
         })
@@ -96,7 +76,7 @@ import Turf
     
     required init(frame:CGRect) {
         let resourceOptions = ResourceOptions(accessToken: MGLModule.accessToken!)
-        super.init(with: frame, resourceOptions: resourceOptions)
+        super.init(frame: frame, mapInitOptions: MapInitOptions(resourceOptions: resourceOptions))
     }
     
     required init (coder: NSCoder) {

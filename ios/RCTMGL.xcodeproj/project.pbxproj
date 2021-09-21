@@ -53,8 +53,6 @@
 		C4FB11011F707A280055AE1F /* RCTMGLLineLayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FB11001F707A280055AE1F /* RCTMGLLineLayerManager.m */; };
 		C4FB11041F709CDC0055AE1F /* RCTMGLCircleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FB11031F709CDC0055AE1F /* RCTMGLCircleLayer.m */; };
 		C4FB11071F709CEF0055AE1F /* RCTMGLCircleLayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FB11061F709CEF0055AE1F /* RCTMGLCircleLayerManager.m */; };
-		C4FB110A1F71D09E0055AE1F /* RCTMGLShapeSource.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FB11091F71D09E0055AE1F /* RCTMGLShapeSource.m */; };
-		C4FB110D1F71D0B10055AE1F /* RCTMGLShapeSourceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FB110C1F71D0B10055AE1F /* RCTMGLShapeSourceManager.m */; };
 		C4FB11101F71EC8D0055AE1F /* RCTMGLSymbolLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FB110F1F71EC8D0055AE1F /* RCTMGLSymbolLayer.m */; };
 		C4FB11131F71EC9F0055AE1F /* RCTMGLSymbolLayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FB11121F71EC9F0055AE1F /* RCTMGLSymbolLayerManager.m */; };
 		C4FB122D1F7972A00055AE1F /* RCTMGLRasterSource.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FB122C1F7972A00055AE1F /* RCTMGLRasterSource.m */; };
@@ -180,10 +178,6 @@
 		C4FB11031F709CDC0055AE1F /* RCTMGLCircleLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLCircleLayer.m; sourceTree = "<group>"; };
 		C4FB11051F709CEF0055AE1F /* RCTMGLCircleLayerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLCircleLayerManager.h; sourceTree = "<group>"; };
 		C4FB11061F709CEF0055AE1F /* RCTMGLCircleLayerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLCircleLayerManager.m; sourceTree = "<group>"; };
-		C4FB11081F71D09E0055AE1F /* RCTMGLShapeSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLShapeSource.h; sourceTree = "<group>"; };
-		C4FB11091F71D09E0055AE1F /* RCTMGLShapeSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLShapeSource.m; sourceTree = "<group>"; };
-		C4FB110B1F71D0B10055AE1F /* RCTMGLShapeSourceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLShapeSourceManager.h; sourceTree = "<group>"; };
-		C4FB110C1F71D0B10055AE1F /* RCTMGLShapeSourceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLShapeSourceManager.m; sourceTree = "<group>"; };
 		C4FB110E1F71EC8D0055AE1F /* RCTMGLSymbolLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLSymbolLayer.h; sourceTree = "<group>"; };
 		C4FB110F1F71EC8D0055AE1F /* RCTMGLSymbolLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTMGLSymbolLayer.m; sourceTree = "<group>"; };
 		C4FB11111F71EC9F0055AE1F /* RCTMGLSymbolLayerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTMGLSymbolLayerManager.h; sourceTree = "<group>"; };
@@ -431,10 +425,6 @@
 				C4EAF1821F6336E20016DEE8 /* RCTMGLVectorSource.m */,
 				C4EAF1871F633C010016DEE8 /* RCTMGLVectorSourceManager.h */,
 				C4EAF1881F633C010016DEE8 /* RCTMGLVectorSourceManager.m */,
-				C4FB11081F71D09E0055AE1F /* RCTMGLShapeSource.h */,
-				C4FB11091F71D09E0055AE1F /* RCTMGLShapeSource.m */,
-				C4FB110B1F71D0B10055AE1F /* RCTMGLShapeSourceManager.h */,
-				C4FB110C1F71D0B10055AE1F /* RCTMGLShapeSourceManager.m */,
 				DF16042D233BFDD000A4231D /* RCTMGLTileSource.h */,
 				DF16042E233BFDD000A4231D /* RCTMGLTileSource.m */,
 				C4FB122B1F7972A00055AE1F /* RCTMGLRasterSource.h */,
@@ -577,7 +567,6 @@
 				C4C87B7B1F8FEBF50064AE95 /* RCTMGLPointAnnotationManager.m in Sources */,
 				C43CA50A1F50C145000B9CB7 /* RCTMGLEvent.m in Sources */,
 				C4EA22191F675ACE00EF2500 /* RCTMGLStyleValue.m in Sources */,
-				C4FB110A1F71D09E0055AE1F /* RCTMGLShapeSource.m in Sources */,
 				C4FB11101F71EC8D0055AE1F /* RCTMGLSymbolLayer.m in Sources */,
 				C4FB125B1F79C03E0055AE1F /* RCTMGLBackgroundLayerManager.m in Sources */,
 				C4EAF18F1F633E020016DEE8 /* RCTMGLFillLayer.m in Sources */,
@@ -591,7 +580,6 @@
 				C4FD1DC21FCF550E00213AF2 /* RCTMGLImageSourceManager.m in Sources */,
 				C4D1444F1F4E181100396F26 /* RCTMGLMapViewManager.m in Sources */,
 				C4FB12361F799F280055AE1F /* RCTMGLRasterLayerManager.m in Sources */,
-				C4FB110D1F71D0B10055AE1F /* RCTMGLShapeSourceManager.m in Sources */,
 				C490EE0B20DC6B7C00CB2E57 /* RCTMGLLocation.m in Sources */,
 				D8C1903323F5382C00223486 /* RCTMGLImages.m in Sources */,
 				C4EAF1921F6341520016DEE8 /* RCTMGLFillLayerManager.m in Sources */,

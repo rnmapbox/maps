@@ -13,12 +13,12 @@ class MGLModule : NSObject {
         return [
             "StyleURL":
                 [
-                    "Street": StyleURL.streets.url.absoluteString,
-                    "Outdoors": StyleURL.outdoors.url.absoluteString,
-                    "Light": StyleURL.light.url.absoluteString,
-                    "Dark": StyleURL.dark.url.absoluteString,
-                    "Satellite": StyleURL.satellite.url.absoluteString,
-                    "SatelliteStreets": StyleURL.satelliteStreets.url.absoluteString,
+                    "Street": StyleURI.streets.rawValue,
+                    "Outdoors": StyleURI.outdoors.rawValue,
+                    "Light": StyleURI.light.rawValue,
+                    "Dark": StyleURI.dark.rawValue,
+                    "Satellite": StyleURI.satellite.rawValue,
+                    "SatelliteStreets": StyleURI.satelliteStreets.rawValue,
                 ],
             "StyleSource":
                 ["DefaultSourceID": DEFAULT_SOURCE_ID],
