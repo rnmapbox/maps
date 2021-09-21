@@ -103,6 +103,12 @@ platform :ios, '13.0'
   end
 
 
+
+# on RN 0.60 only:
+# add modular_headers to `React-Core`
+#  pod 'React-Core', :path => '../node_modules/react-native/React', modular_headers: true
+
+
 npx react-native run-android
 ```
 
