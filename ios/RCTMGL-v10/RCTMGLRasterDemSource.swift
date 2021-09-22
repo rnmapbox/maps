@@ -19,6 +19,10 @@ class RCTMGLRasterDemSource : RCTMGLSource {
   @objc
   var minZoomLevel : NSNumber? = nil
 
+  @objc
+  static func requiresMainQueueSetup() -> Bool {
+    return true
+  }
   
   override func sourceType() -> Source.Type {
     return SourceType.self
