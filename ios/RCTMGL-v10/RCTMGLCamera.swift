@@ -44,23 +44,24 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
         print("setStop", dictionary)
         
         var camera = CameraOptions()
-        let feature : String = dictionary["centerCoordinate"] as! String
         
-        let centerFeature : Turf.Feature? = try!
-          GeoJSON.parse(Turf.Feature.self, from: feature.data(using: .utf8)!)
-        
-        switch centerFeature?.geometry {
-        case .point(let centerPoint):
-            camera.center = centerPoint.coordinates
-        default:
-            fatalError("Unexpected geometry: \(String(describing: centerFeature?.geometry))")
+        if let feature : String = dictionary["centerCoordinate"] as? String {
+          let centerFeature : Turf.Feature? = try!
+            GeoJSON.parse(Turf.Feature.self, from: feature.data(using: .utf8)!)
+          
+          switch centerFeature?.geometry {
+          case .point(let centerPoint):
+              camera.center = centerPoint.coordinates
+          default:
+              fatalError("Unexpected geometry: \(String(describing: centerFeature?.geometry))")
+          }
+          //camera.center = centerFeature
         }
-        //camera.center = centerFeature
         
         var duration : Double? = nil
         var zoom : Double? = nil
         var pitch : Double? = nil
-      var bearing : Double? = nil
+        var bearing : Double? = nil
         
         if let durationParam = dictionary["duration"] as? Double {
             duration = durationParam
@@ -76,10 +77,10 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
           camera.pitch = CGFloat(pitchParam)
         }
       
-      if let bearingParam = dictionary["bearing"] as? Double {
-        bearing = bearingParam
-        camera.bearing = CLLocationDirection(bearingParam)
-      }
+        if let bearingParam = dictionary["bearing"] as? Double {
+          bearing = bearingParam
+          camera.bearing = CLLocationDirection(bearingParam)
+        }
         
         withMapView { map in
             if let duration = duration {

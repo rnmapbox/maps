@@ -118,6 +118,12 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     let result = try style._source(withId: self.sourceID!, type: T.self)
     return result as! T
   }
+
+  func sourceWithSourceID<T : Source>(in style: Style) throws -> T  {
+    print("=> sourceID: \(self.sourceID ?? "n/a")")
+    let result = try style._source(withId: self.sourceID!, type: T.self)
+    return result as! T
+  }
   
   func addToMap(_ map: RCTMGLMapView) {
     //

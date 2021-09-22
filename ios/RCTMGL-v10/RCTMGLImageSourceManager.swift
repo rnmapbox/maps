@@ -1,11 +1,11 @@
-@objc(RCTMGLShapeSourceManager)
-class RCTMGLShapeSourceManager: RCTViewManager {
+@objc(RCTMGLImageSourceManager)
+class RCTMGLImageSourceManager: RCTViewManager {
   @objc
   override static func requiresMainQueueSetup() -> Bool {
     return true
   }
 
   @objc override func view() -> UIView {
-    return RCTMGLShapeSource()
+    return RCTMGLImageSource()
   }
 }
