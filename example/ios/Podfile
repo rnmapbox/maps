@@ -3,7 +3,6 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '13.0'
 
-
 useMapLibre = false
 
 if useMapLibre
