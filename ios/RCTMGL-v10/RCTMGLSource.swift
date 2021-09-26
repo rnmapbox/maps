@@ -1,4 +1,4 @@
-import MapboxMaps
+@_spi(Experimental) import MapboxMaps
 
 @objc
 class RCTMGLSource : UIView, RCTMGLMapComponent {
@@ -40,7 +40,7 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
     mapboxMap.onNext(.styleLoaded) {_ in
       let style = mapboxMap.style
       if style.sourceExists(withId: self.id) {
-        self.source = try! style._source(withId: self.id, type: self.sourceType())
+        self.source = try! style.source(withId: self.id, type: self.sourceType())
       } else {
         let source = self.makeSource()
         self.source = source

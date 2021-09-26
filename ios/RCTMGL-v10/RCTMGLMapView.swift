@@ -137,6 +137,11 @@ public func dictionaryFrom(_ from: Turf.Feature?) throws -> [String:Any]? {
         }
       }
     }
+    
+    self.mapboxMap.onNext(.mapLoaded, handler: { (event) in
+      let event = RCTMGLEvent(type:.didFinishLoadingMap, payload: nil);
+      self.fireEvent(event: event, callback: self.reactOnMapChange!)
+    })
   }
     
   required init (coder: NSCoder) {

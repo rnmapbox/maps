@@ -39,7 +39,9 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
     
     @objc func setStop(_ dictionary: [String:Any]?) {
         guard let dictionary = dictionary else {
-          return Logger.log(level: .error, message: "stop called with nil")
+          // Seems to be normal when followUserLocation is set
+          //return Logger.log(level: .error, message: "stop called with nil")
+          return
         }
         print("setStop", dictionary)
         

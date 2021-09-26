@@ -93,6 +93,7 @@ code ios/Podfile
 # change these
 platform :ios, '13.0'
 
+
   pre_install do |installer|
     $RNMBGL.pre_install(installer)
   end
@@ -155,6 +156,8 @@ IOS:
 ## MapView
 - [ ] Add stuff below user location on android
 - [ ] iOS: update zoomLevel on prop changes
+- [ ] onDidFinishLoadingMap: 
+- [ ] WillStartLoadingMap, DidFailLoadingMap
 
 ## Sources:
 - [x] VectorSource
