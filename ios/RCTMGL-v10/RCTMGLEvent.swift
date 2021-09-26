@@ -22,6 +22,7 @@ class RCTMGLEvent : NSObject, RCTMGLEventProtocol {
       case tap = "press"
       case regionDidChange = "regiondidchange"
       case imageMissing = "imagesmissingimage"
+      case didFinishLoadingMap = "didfinishloadingmap"
     }
     
     init(type: EventType, payload: [String:Any]?) {

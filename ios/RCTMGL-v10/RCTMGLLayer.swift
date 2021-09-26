@@ -1,4 +1,4 @@
-import MapboxMaps
+ @_spi(Experimental) import MapboxMaps
 
 protocol RCTMGLSourceConsumer {
   func addToMap(_ map: RCTMGLMapView, style: Style)
@@ -76,7 +76,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   }
   
   func findLayer(style: Style, id: String) throws -> Layer {
-    return try style._layer(withId: id, type: layerType())
+    return try style.layer(withId: id, type: layerType())
   }
   
   func layerType() -> Layer.Type {
@@ -115,13 +115,13 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   
   func layerWithSourceID<T : Source>(in style: Style) throws -> T  {
     print("=> sourceID: \(self.sourceID ?? "n/a")")
-    let result = try style._source(withId: self.sourceID!, type: T.self)
+    let result = try style.source(withId: self.sourceID!, type: T.self)
     return result as! T
   }
 
   func sourceWithSourceID<T : Source>(in style: Style) throws -> T  {
     print("=> sourceID: \(self.sourceID ?? "n/a")")
-    let result = try style._source(withId: self.sourceID!, type: T.self)
+    let result = try style.source(withId: self.sourceID!, type: T.self)
     return result as! T
   }
   
