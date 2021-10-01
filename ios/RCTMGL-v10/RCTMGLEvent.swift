@@ -23,6 +23,9 @@ class RCTMGLEvent : NSObject, RCTMGLEventProtocol {
       case regionDidChange = "regiondidchange"
       case imageMissing = "imagesmissingimage"
       case didFinishLoadingMap = "didfinishloadingmap"
+      case offlineProgress = "offlinestatus"
+      case offlineError = "offlineerror"
+      case offlineTileLimit = "offlinetileLimit"
     }
     
     init(type: EventType, payload: [String:Any]?) {

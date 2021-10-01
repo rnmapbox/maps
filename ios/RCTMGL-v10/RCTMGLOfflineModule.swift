@@ -3,10 +3,18 @@ import MapboxMaps
 
 @objc(RCTMGLOfflineModule)
 class RCTMGLOfflineModule: RCTEventEmitter {
+  var hasListeners = false
   
   enum Callbacks : String {
     case error = "MapboOfflineRegionError"
     case progress = "MapboxOfflineRegionProgress"
+  }
+  
+  enum State : String {
+    case invalid
+    case inactive
+    case active
+    case complete
   }
   
   lazy var offlineManager : OfflineManager = {
@@ -17,6 +25,28 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     return TileStore.default
   }()
   
+  struct TileRegionPack {
+    var name: String
+    var cancelable: Cancelable? = nil
+    var progress : TileRegionLoadProgress? = nil
+    var state : State = .inactive
+  }
+  
+  lazy var tileRegionPacks : [String: TileRegionPack] = [:]
+  
+  
+  @objc override
+  func startObserving() {
+    super.startObserving()
+    hasListeners = true
+  }
+  
+  @objc override
+  func stopObserving() {
+    super.stopObserving()
+    hasListeners = false
+  }
+  
   @objc
   override
   static func requiresMainQueueSetup() -> Bool {
@@ -26,9 +56,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
   @objc
   override
   func constantsToExport() -> [AnyHashable: Any]! {
-      return [
-          "foo": "bar"
-      ];
+    return [:]
   }
   
   
@@ -67,38 +95,8 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     packs.map { return convertPackToDict(pack:$0) }
   }
   
-  func boundingBox(geometry: Geometry) -> BoundingBox? {
-    switch geometry {
-    case .polygon(let polygon):
-      return BoundingBox(from:  polygon.outerRing.coordinates)
-    case .lineString(let lineString):
-      return BoundingBox(from: lineString.coordinates)
-    case .point(let point):
-      return BoundingBox(from: [point.coordinates])
-    case .multiPoint(let multiPoint):
-      return BoundingBox(from: multiPoint.coordinates)
-    case .multiPolygon(let multiPolygon):
-      let coordinates : [[[LocationCoordinate2D]]] = multiPolygon.coordinates;
-      return BoundingBox(from: Array(coordinates.joined().joined()))
-    case .geometryCollection(let collection):
-      let geometries = collection.geometries
-      let coordinates : [[LocationCoordinate2D]] = geometries.map { (geometry) in
-        if let bb = boundingBox(geometry: geometry) {
-          return [bb.northEast,bb.southWest]
-        } else {
-          return []
-        }
-      };
-      
-      return BoundingBox(from: Array(coordinates.joined()))
-    case .multiLineString(let multiLineString):
-      let coordinates = multiLineString.coordinates
-      return BoundingBox(from: Array(coordinates.joined()))
-    }
-  }
-  
   func convertRegionToJSON(region: TileRegion, geometry: Geometry) -> [String:Any] {
-    let bb = boundingBox(geometry: geometry)
+    let bb = RCTMGLFeatureUtils.boundingBox(geometry: geometry)
     
     var result : [String:Any] = [:]
     if let bb = bb {
@@ -111,24 +109,6 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     }
     return result
   }
-  
-  /*
-  func convertRegionToJson(regions: [TileRegion]) -> [[String:Any]] {
-    regions.map { (region: TileRegion) in
-      switch result {
-      case .success(let regions):
-        resolve(self.convertRegionToJson(regions: regions))
-      case .failure(let error):
-        rejecter("TileStoreError", error.localizedDescription, error)
-      }
-    }
-  }
-  
-  func allTileRegions() -> [[String:Any]] {
-    tileStore.allTileRegions { result in
-      
-    }
-  }*/
   
   //func convertRegionToJSON(region: TileRegion, geometry: Geometry) -> [String:Any] {
     // BoundingBox(from: geometry.)
@@ -230,40 +210,91 @@ class RCTMGLOfflineModule: RCTEventEmitter {
   }
   
   
-  func convert(_ geometry: Turf.Geometry) -> MapboxCommon.Geometry {
-    switch geometry {
-    case .geometryCollection(let collection):
-      return MapboxCommon.Geometry(geometryCollection: collection.geometries.map { convert($0) })
-    case .lineString(let lineString):
-      return MapboxCommon.Geometry(line: lineString.coordinates)
-    case .multiLineString(let multiLineString):
-      return MapboxCommon.Geometry(multiLine: multiLineString.coordinates)
-    case .multiPoint(let multiPoint):
-      return MapboxCommon.Geometry(multiPoint: multiPoint.coordinates)
-    case .multiPolygon(let multiPolygon):
-      return MapboxCommon.Geometry(multiPolygon: multiPolygon.coordinates)
-    case .point(let point):
-      let value = NSValue(cgPoint: CGPoint(x: point.coordinates.longitude, y: point.coordinates.latitude))
-      return MapboxCommon.Geometry(point: value)
-    case .polygon(let polygon):
-      return MapboxCommon.Geometry(polygon: polygon.coordinates)
+  func convertPointPairToBounds(_ bounds: Geometry) -> Geometry {
+    guard case .geometryCollection(let gc) = bounds else {
+      return bounds
+    }
+    let geometries = gc.geometries
+    guard geometries.count == 2 else {
+      return bounds
+    }
+    guard case .point(let g0) = geometries[0] else {
+      return bounds
+    }
+    guard case .point(let g1) = geometries[1] else {
+      return bounds
+    }
+    let pt0 = g0.coordinates
+    let pt1 = g1.coordinates
+    return .polygon(Polygon([
+      [
+      pt0,
+      CLLocationCoordinate2D(latitude: pt0.latitude, longitude: pt1.longitude),
+      pt1,
+      CLLocationCoordinate2D(latitude: pt1.latitude, longitude: pt0.longitude)
+      ]
+    ]))
+  }
+  
+  func _sendEvent(_ name:String, event: RCTMGLEvent) {
+    if !hasListeners {
+      return
+    }
+    self.sendEvent(withName: name, body: event.toJSON())
+  }
+
+  func _makeRegionStatusPayload(_ name:String, progress: TileRegionLoadProgress?, state: State) -> [String:Any?] {
+    if let progress = progress {
+      let progressPercentage =  Float(progress.completedResourceCount) / Float(progress.requiredResourceCount)
+      
+      return [
+        "state": state.rawValue,
+        "name": name,
+        "percentage": progressPercentage * 100.0,
+        "completedResourceCount": progress.completedResourceCount,
+        "completedResourceSize": progress.completedResourceSize,
+        "erroredResourceCount": progress.erroredResourceCount,
+        "loadedResourceSize": progress.loadedResourceSize,
+        "loadedResourceCount": progress.loadedResourceCount,
+        "requiredResourceCount": progress.requiredResourceCount
+      ]
+    } else {
+      return [
+        "state": state.rawValue,
+        "name": name,
+        "percentage": nil
+      ]
     }
   }
   
-  func asGeometryCollection(_ collection: FeatureCollection) -> Turf.Geometry {
-    return .geometryCollection(GeometryCollection(geometries: collection.features.map { $0.geometry }))
+  func _makeRegionStatusPayload(pack: TileRegionPack) -> [String:Any?] {
+    return _makeRegionStatusPayload(pack.name, progress: pack.progress, state: pack.state)
+  }
+  
+  func makeProgressEvent(_ name: String, progress: TileRegionLoadProgress, state: State) -> RCTMGLEvent {
+    RCTMGLEvent(type: .offlineProgress, payload: self._makeRegionStatusPayload(name, progress: progress, state: state))
+  }
+  
+  func shouldSendProgressEvent() -> Bool {
+    return true
+  }
+  
+  func offlinePackProgressDidChange(progress: TileRegionLoadProgress, metadata: [String:Any], state: State) {
+    if self.shouldSendProgressEvent() {
+      let event = makeProgressEvent(metadata["name"] as! String, progress: progress, state: state)
+      self._sendEvent(Callbacks.progress.rawValue, event: event)
+    }
   }
   
   @objc
   func createPack(_ options: NSDictionary, resolver: @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
     DispatchQueue.main.async {
       do {
-        let bounds = options["bounds"] as! String
-        let boundsData = bounds.data(using: .utf8)
-        
-        //let geometry = try! JSONDecoder().decode(Geometry.self, from: boundsData!)
-        let boundsFC = try! JSONDecoder().decode(FeatureCollection.self, from: boundsData!)
-        
+        let boundsStr = options["bounds"] as! String
+        let boundsData = boundsStr.data(using: .utf8)
+        var boundsFC = try JSONDecoder().decode(FeatureCollection.self, from: boundsData!)
+
+        var bounds = self.convertPointPairToBounds(RCTMGLFeatureUtils.fcToGeomtry(boundsFC))
         
         let descriptorOptions = TilesetDescriptorOptions(
           styleURI: options["styleURL"] as! String,
@@ -276,54 +307,120 @@ class RCTMGLOfflineModule: RCTEventEmitter {
         
         let metadataStr = options["metadata"] as! String
         
-        let metadata = try! JSONSerialization.jsonObject(with: metadataStr.data(using: .utf8)!, options: [])
-        
-        print("Converted: ", self.convert(self.asGeometryCollection(boundsFC)))
-        print("metadata:", metadata)
-        let id = "foo"
+        let metadata = try JSONSerialization.jsonObject(with: metadataStr.data(using: .utf8)!, options: []) as! [String:Any]
+
+        let id = metadata["name"] as! String
         let loadOptions = TileRegionLoadOptions(
-          geometry: self.convert(self.asGeometryCollection(boundsFC)),
+          geometry: RCTMGLFeatureUtils.geometryToGeometry(bounds),
           descriptors: [tilesetDescriptor],
           metadata: metadata,
           acceptExpired: true,
           networkRestriction: .none,
           averageBytesPerSecond: nil)
-        self.tileStore.loadTileRegion(forId: id, loadOptions: loadOptions!) { result in
+
+        print("load options: \(loadOptions?.description ?? "n/a")")
+        let actPack = RCTMGLOfflineModule.TileRegionPack(
+          name: id,
+          progress: nil,
+          state: .inactive
+        )
+        self.tileRegionPacks[id] = actPack
+        
+        resolver([
+          "bounds": boundsStr,
+          "metadata": String(data:try! JSONSerialization.data(withJSONObject: metadata, options: [.prettyPrinted]), encoding: .utf8)
+        ])
+
+        var lastProgress : TileRegionLoadProgress? = nil
+        let task = self.tileStore.loadTileRegion(forId: id, loadOptions: loadOptions!, progress: {
+          progress in
+          lastProgress = progress
+          self.tileRegionPacks[id]!.progress = progress
+          self.tileRegionPacks[id]!.state = .active
+          self.offlinePackProgressDidChange(progress: progress, metadata: metadata, state: .active)
+        }) { result in
           switch result {
           case .success(let value):
-            resolver(["todo":"tood"])
+            print("*** value: \(value)")
+            if let progess = lastProgress {
+              self.offlinePackProgressDidChange(progress: progess, metadata: metadata, state: .complete)
+            }
+            self.tileRegionPacks[id]!.state = .complete
           case .failure(let error):
-            rejecter("LoadTileRegionError", error.localizedDescription, error)
+            self.tileRegionPacks[id]!.state = .inactive
+            rejecter("createPack", error.localizedDescription, error)
           }
         }
-      } catch {
         
+        self.tileRegionPacks[id]!.cancelable = task
+        
+      } catch {
+        rejecter("createPack", error.localizedDescription, error)
       }
     }
+  }
+  
+  func _getPack(fromName: String) -> TileRegionPack? {
+    return self.tileRegionPacks[fromName]
+  }
+  
+  @objc
+  func getPackStatus(_ name: String,
+                     resolver: RCTPromiseResolveBlock,
+                     rejecter: RCTPromiseRejectBlock) {
+    guard let pack = self._getPack(fromName: name) else {
+      resolver(nil)
+      return
+    }
     
-    //offlineManager.createTilesetDescriptor(for: <#T##TilesetDescriptorOptions#>)
+    resolver(self._makeRegionStatusPayload(pack: pack))
+  }
+
+  
+  @objc
+  func resumePackDownload(_ name: String, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock)
+  {
+    //V10todo start download again
+  }
+  
+  @objc
+  func pausePackDownload(_ name: String, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock)
+  {
+    if let pack = _getPack(fromName: name) {
+      pack.cancelable?.cancel()
+      resolver(nil)
+    } else {
+      rejecter("pausePackDownload", "Unknown offline region: \(name)", nil)
+    }
+  }
+  
+  @objc
+  func setTileCountLimit(_ limit: NSNumber) {
+    //v10todo
+  }
+  
+  @objc
+  func setProgressEventThrottle(_ throttleValue: NSNumber) {
+    // v10todo improve progress event listener
+  }
+  
+  
+  @objc
+  func deletePack(_ name: String,
+                  resolver: RCTPromiseResolveBlock,
+                  rejecter: RCTPromiseRejectBlock)
+  {
+    guard let pack = _getPack(fromName: name) else {
+      return resolver(nil)
+    }
     
-    /*
-     
-     NSString *styleURL = options[@"styleURL"];
-         MGLCoordinateBounds bounds = [RCTMGLUtils fromFeatureCollection:options[@"bounds"]];
-         
-         id<MGLOfflineRegion> offlineRegion = [[MGLTilePyramidOfflineRegion alloc] initWithStyleURL:[NSURL URLWithString:styleURL]
-                                                                                   bounds:bounds
-                                                                                   fromZoomLevel:[options[@"minZoom"] doubleValue]
-                                                                                   toZoomLevel:[options[@"maxZoom"] doubleValue]];
-         NSData *context = [self _archiveMetadata:options[@"metadata"]];
-         
-         [[MGLOfflineStorage sharedOfflineStorage] addPackForRegion:offlineRegion
-                                                   withContext:context
-                                                   completionHandler:^(MGLOfflinePack *pack, NSError *error) {
-                                                      if (error != nil) {
-                                                          reject(@"createPack", error.description, error);
-                                                          return;
-                                                      }
-                                                      resolve([self _convertPackToDict:pack]);
-                                                      [pack resume];
-                                                   }];
-     */
+    guard pack.state != .invalid else {
+      let error = NSError(domain:"RCTMGLErororDomain", code: 1, userInfo: [NSLocalizedDescriptionKey: "Pack has already beend deleted"])
+      return rejecter("deletePack", error.description, error)
+    }
+    
+    self.tileStore.removeTileRegion(forId: name)
+    self.tileRegionPacks[name]!.state = .invalid
+    resolver(nil)
   }
 }
