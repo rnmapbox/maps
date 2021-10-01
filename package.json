@@ -76,7 +76,7 @@
     "react-docgen": "^5.0.0-beta.1",
     "react-native": "0.59.10",
     "react-test-renderer": "16.8.3",
-    "typescript": "4.4.2"
+    "typescript": "4.4.3"
   },
   "jest": {
     "preset": "react-native",
