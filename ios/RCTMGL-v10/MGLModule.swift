@@ -20,6 +20,12 @@ class MGLModule : NSObject {
           "Satellite": StyleURI.satellite.rawValue,
           "SatelliteStreets": StyleURI.satelliteStreets.rawValue,
         ],
+      "OfflinePackDownloadState":
+        [
+          "Inactive": RCTMGLOfflineModule.State.inactive.rawValue,
+          "Active": RCTMGLOfflineModule.State.active.rawValue,
+          "Complete": RCTMGLOfflineModule.State.complete.rawValue
+        ],
       "StyleSource":
         ["DefaultSourceID": DEFAULT_SOURCE_ID],
       "LineJoin":
