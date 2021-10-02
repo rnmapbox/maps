@@ -158,6 +158,21 @@ IOS:
 - [ ] iOS: update zoomLevel on prop changes
 - [ ] onDidFinishLoadingMap: 
 - [ ] WillStartLoadingMap, DidFailLoadingMap
+- [ ] getPointInView (Get Pixel Point in MapView)
+- [ ] Show and hida a layer example
+
+## Annotations
+- [ ] PointAnnotation
+- [ ] MarkerView
+
+
+## UserLocation
+- [ ] User location
+  - [ ] ios
+  - [ ] android
+
+## Camera
+- [x] Basic camera
 
 ## Sources:
 - [x] VectorSource
