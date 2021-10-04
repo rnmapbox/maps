@@ -2,6 +2,7 @@
 
 protocol RCTMGLSourceConsumer {
   func addToMap(_ map: RCTMGLMapView, style: Style)
+  func removeFromMap(_ map: RCTMGLMapView, style: Style)
 }
 
 @objc(RCTMGLLayer)
@@ -160,6 +161,10 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     self.addedToMap()
   }
   
+  func removeFromMap(_ map: RCTMGLMapView, style: Style) {
+    removeFromMap(style)
+  }
+  
   func setOptions(_ layer: inout Layer) {
     if let sourceLayerID = sourceLayerID {
       layer.sourceLayer = sourceLayerID
@@ -184,6 +189,10 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     if let maxZoom = maxZoomLevel {
       layer.maxZoom = maxZoom.doubleValue
     }
+  }
+  
+  func removeFromMap(_ map: RCTMGLMapView) {
+    removeFromMap(map.mapboxMap.style)
   }
   
   func removeFromMap(_ style: Style) {

@@ -24,10 +24,14 @@ class RCTMGLLight: UIView, RCTMGLMapComponent {
   }
   
   func isAddedToMap() -> Bool {
-    return true
+    return map != nil
   }
 
   func addToMap(_ map: RCTMGLMapView) {
     self.map = map.mapboxMap
+  }
+  
+  func removeFromMap(_ map: RCTMGLMapView) {
+    self.map = nil
   }
 }

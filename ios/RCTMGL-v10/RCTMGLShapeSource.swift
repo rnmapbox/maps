@@ -5,27 +5,20 @@ import Turf
 class RCTMGLShapeSource : RCTMGLSource {
 
   @objc var url : String?
+
   @objc var shape : String? {
     didSet {
       self.doUpdate { (style) in
         if let shape = shape {
-          let data = shape.data(using: .utf8)!
-          let geojson = try! GeoJSON.parse(data)
-          if let featureCollection = geojson.decodedFeatureCollection {
-            print("Feature collection:\(featureCollection)")
-            doUpdate { (style) in
-              try! style.updateGeoJSONSource(withId: id, geoJSON: featureCollection)
+          let geojsonObject = try! RCTMGLFeatureUtils.parseAsFC(string: shape)
+          doUpdate { (style) in
+            if let geojsonObject = geojsonObject as? Feature {
+              try! style.updateGeoJSONSource(withId: id, geoJSON: geojsonObject)
+            } else if let geojsonObject = geojsonObject as? FeatureCollection {
+              try! style.updateGeoJSONSource(withId: id, geoJSON: geojsonObject)
+            } else {
+              fatalError("GeoJSON is nor feature nor feature collection: \(geojsonObject)")
             }
-//            updateSource(property: "data", value: GeoJSONSourceData.featureCollection(featureCollection))
-          } else if let feature = geojson.decodedFeature {
-            print("Feature :\(feature)")
-            doUpdate { (style) in
-              try! style.updateGeoJSONSource(withId: id, geoJSON: feature)
-            }
-
-//            updateSource(property: "data", value: GeoJSONSourceData.feature(feature))
-          } else {
-            fatalError("shape is neither feature nor featureCollection \(shape)")
           }
         }
       }

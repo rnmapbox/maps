@@ -6,5 +6,6 @@
 
 RCT_EXPORT_VIEW_PROPERTY(stop, NSDictionary)
 RCT_EXPORT_VIEW_PROPERTY(defaultStop, NSDictionary)
+RCT_EXPORT_VIEW_PROPERTY(followUserLocation, BOOL)
 
 @end

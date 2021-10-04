@@ -168,7 +168,7 @@ IOS:
 
 ## UserLocation
 - [ ] User location
-  - [ ] ios
+  - [x] ios
   - [ ] android
 
 ## Camera
