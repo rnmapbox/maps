@@ -76,4 +76,19 @@ class RCTMGLTerrain : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
       }
     }
   }
+  
+  func removeFromMap(_ map: RCTMGLMapView) {
+    self.map = nil
+    
+    guard let mapboxMap = map.mapboxMap else {
+      return
+    }
+    
+    let style = mapboxMap.style
+    removeFromMap(map, style: style)
+  }
+  
+  func removeFromMap(_ map: RCTMGLMapView, style: Style) {
+    try! style.setTerrain(properties: [:])
+  }
 }

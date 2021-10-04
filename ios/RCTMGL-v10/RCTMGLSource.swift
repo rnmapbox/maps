@@ -52,4 +52,12 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
       }
     }
   }
+
+  func removeFromMap(_ map: RCTMGLMapView) {
+    self.map = nil
+    
+    for layer in self.layers {
+      layer.removeFromMap(map, style: map.mapboxMap.style)
+    }
+  }
 }

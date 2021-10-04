@@ -108,9 +108,19 @@ public func dictionaryFrom(_ from: Turf.Feature?) throws -> [String:Any]? {
   }
     
   @objc override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
-      if let mapComponent = subview as? RCTMGLMapComponent {
-          mapComponent.addToMap(self)
-      }
+    if let mapComponent = subview as? RCTMGLMapComponent {
+      mapComponent.addToMap(self)
+    }
+  }
+  
+  @objc override func removeReactSubview(_ subview:UIView!) {
+    removeFromMap(subview)
+  }
+  
+  func removeFromMap(_ subview: UIView!) {
+    if let mapComponent = subview as? RCTMGLMapComponent {
+      mapComponent.addToMap(self)
+    }
   }
     
   required init(frame:CGRect) {

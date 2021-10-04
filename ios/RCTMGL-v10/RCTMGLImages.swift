@@ -23,6 +23,10 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
     self.addRemoteImages(style: map.mapboxMap.style, remoteImages: images)
   }
   
+  func removeFromMap(_ map: RCTMGLMapView) {
+    // v10todo
+  }
+  
   func addRemoteImages(style: Style, remoteImages: [String: Any]) {
     var missingImages : [String:Any] = [:]
     
