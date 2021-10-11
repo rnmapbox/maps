@@ -22,7 +22,7 @@ well...here are some examples:
 * actively help move the project forward by submitting PRs that introduce fixes and features
 
 You don't need to be a full-fledged maintainer to do those things, however,  
-if you are interested in becoming one, don't hesitate to contact us in our Gitter chat. 
+if you are interested in becoming one, don't hesitate to reply in [this discussion](https://github.com/react-native-mapbox-gl/maps/discussions/1551). 
 
 Thanks 🙇
 
