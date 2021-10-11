@@ -12,13 +12,7 @@ class RCTMGLShapeSource : RCTMGLSource {
         if let shape = shape {
           let geojsonObject = try! RCTMGLFeatureUtils.parseAsFC(string: shape)
           doUpdate { (style) in
-            if let geojsonObject = geojsonObject as? Feature {
-              try! style.updateGeoJSONSource(withId: id, geoJSON: geojsonObject)
-            } else if let geojsonObject = geojsonObject as? FeatureCollection {
-              try! style.updateGeoJSONSource(withId: id, geoJSON: geojsonObject)
-            } else {
-              fatalError("GeoJSON is nor feature nor feature collection: \(geojsonObject)")
-            }
+            try! style.updateGeoJSONSource(withId: id, geoJSON: geojsonObject)
           }
         }
       }
@@ -43,13 +37,14 @@ class RCTMGLShapeSource : RCTMGLSource {
       fatalError("shape could not be converted to urf8 \(shape)")
     }
     do {
-      let geojson = try GeoJSON.parse(data)
-      if let feature = geojson.decodedFeature {
+      let geojson = try JSONDecoder().decode(GeoJSONObject.self, from: data)
+      switch geojson {
+      case .feature(let feature):
         return .feature(feature)
-      } else if let featureCollection = geojson.decodedFeatureCollection {
+      case .featureCollection(let featureCollection):
         return .featureCollection(featureCollection)
-      } else {
-        fatalError("shape is neither feature nor featureCollection: \(shape)")
+      case .geometry(let geometry):
+        return .geometry(geometry)
       }
     } catch {
       let origError = error
@@ -118,9 +113,7 @@ class RCTMGLShapeSource : RCTMGLSource {
   
   func updateSource(property: String, value: Any) {
     doUpdate { style in
-      print("[[[ Before setSourceProperty \(id) \(value)")
       try! style.setSourceProperty(for: id, property: property, value: value)
-      print("]]] After setSourceProperty \(id) \(value)")
     }
   }
 

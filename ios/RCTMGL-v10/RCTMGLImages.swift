@@ -40,7 +40,7 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
     
     for imageName in remoteImages.keys {
       if style.styleManager.getStyleImage(forImageId: imageName) == nil {
-        try! style.addImage(placeholderImage, id: imageName)
+        try! style.addImage(placeholderImage, id: imageName, stretchX: [], stretchY: [])
         missingImages[imageName] = remoteImages[imageName]
       }
     }
@@ -76,7 +76,7 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
     for imageName in nativeImages {
       if style.styleManager.getStyleImage(forImageId: imageName) == nil {
         let image = UIImage(named: imageName)!
-        try! style.addImage(image, id: imageName)
+        try! style.addImage(image, id: imageName, stretchX: [], stretchY: [])
       }
     }
   }

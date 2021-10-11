@@ -1,0 +1,3 @@
+class RCTMGLCallout : UIView {
+  
+}

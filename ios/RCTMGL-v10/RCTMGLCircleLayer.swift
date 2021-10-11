@@ -18,7 +18,7 @@ class RCTMGLCircleLayer: RCTMGLVectorLayer {
   }
   
   override func apply(style : Style) {
-    try! style.updateLayer(withId: id) { (layer : inout CircleLayer) in
+    try! style.updateLayer(withId: id, type: LayerType.self) { (layer : inout CircleLayer) in
       if let styleLayer = self.styleLayer as? LayerType {
         layer = styleLayer
       }
@@ -34,7 +34,7 @@ class RCTMGLCircleLayer: RCTMGLVectorLayer {
         styler.circleLayer(
           layer: &styleLayer,
           reactStyle: reactStyle,
-          applyUpdater: { (updater) in try! style.updateLayer(withId: self.id) { (layer: inout LayerType) in updater(&layer) }},
+          applyUpdater: { (updater) in try! style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout LayerType) in updater(&layer) }},
           isValid: { return self.isAddedToMap() })
         self.styleLayer = styleLayer
       }

@@ -1,6 +1,29 @@
 import MapboxMaps
 import Turf
 
+class PointAnnotationManager : AnnotationInteractionDelegate {
+  func annotationManager(_ manager: AnnotationManager, didDetectTappedAnnotations annotations: [Annotation]) {
+    print("Tap: \(annotations)")
+  }
+  
+  var manager : MapboxMaps.PointAnnotationManager
+  
+  init(annotations: AnnotationOrchestrator) {
+    manager = annotations.makePointAnnotationManager()
+    manager.delegate = self
+  }
+  
+  func remove(_ annotation: PointAnnotation) {
+    manager.annotations.removeAll(where: {$0.id == annotation.id})
+  }
+  
+  func add(_ annotation: PointAnnotation) {
+    manager.annotations.append(annotation)
+    manager.syncSourceAndLayerIfNeeded()
+  }
+  
+
+}
 
 public func dictionaryFrom(_ from: Turf.Feature?) throws -> [String:Any]? {
   let data = try JSONEncoder().encode(from)
@@ -15,7 +38,11 @@ public func dictionaryFrom(_ from: Turf.Feature?) throws -> [String:Any]? {
   var images : [RCTMGLImages] = []
   
   var layerWaiters : [String:[(String) -> Void]] = [:]
-    
+  
+  lazy var pointAnnotationManager : PointAnnotationManager = {
+    return PointAnnotationManager(annotations: annotations)
+  }()
+  
   var mapView : MapView {
       get { return self }
   }
@@ -35,10 +62,13 @@ public func dictionaryFrom(_ from: Turf.Feature?) throws -> [String:Any]? {
   }
 
   @objc func setReactOnPress(_ value: @escaping RCTBubblingEventBlock) {
-      self.reactOnPress = value
-      
+    self.reactOnPress = value
+
+    /*
       let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
       self.addGestureRecognizer(tapGesture)
+    */
+    mapView.gestures.singleTapGestureRecognizer.addTarget(self, action: #selector(doHandleTap(_:)))
   }
 
   @objc func setReactOnMapChange(_ value: @escaping RCTBubblingEventBlock) {
@@ -54,8 +84,9 @@ public func dictionaryFrom(_ from: Turf.Feature?) throws -> [String:Any]? {
   func fireEvent(event: RCTMGLEvent, callback: @escaping RCTBubblingEventBlock) {
       callback(event.toJSON())
   }
-    
-  @objc func handleTap(_ sender: UITapGestureRecognizer) {
+  
+  @objc
+  func doHandleTap(_ sender: UITapGestureRecognizer) {
       if let reactOnPress = self.reactOnPress {
           let tapPoint = sender.location(in: self)
           let location = mapboxMap.coordinate(for: tapPoint)
@@ -63,8 +94,8 @@ public func dictionaryFrom(_ from: Turf.Feature?) throws -> [String:Any]? {
           
           var geojson = Feature(geometry: .point(Point(location)));
           geojson.properties = [
-              "screenPointX": Double(tapPoint.x),
-              "screenPointY": Double(tapPoint.y)
+            "screenPointX": .number(Double(tapPoint.x)),
+            "screenPointY": .number(Double(tapPoint.y))
           ];
           let event = try!  RCTMGLEvent(type:.tap, payload: dictionaryFrom(geojson)!);
           self.fireEvent(event: event, callback: reactOnPress)

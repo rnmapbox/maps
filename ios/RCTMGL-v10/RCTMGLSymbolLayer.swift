@@ -18,7 +18,7 @@ class RCTMGLSymbolLayer: RCTMGLVectorLayer {
   }
 
   override func apply(style : Style) {
-    try! style.updateLayer(withId: id) { (layer : inout SymbolLayer) in
+    try! style.updateLayer(withId: id, type: LayerType.self) { (layer : inout SymbolLayer) in
       if self.styleLayer != nil {
         setOptions(&self.styleLayer!)
       }
@@ -38,7 +38,7 @@ class RCTMGLSymbolLayer: RCTMGLVectorLayer {
         styler.symbolLayer(
           layer: &styleLayer,
           reactStyle: reactStyle,
-          applyUpdater: { (updater) in try! style.updateLayer(withId: self.id) { (layer: inout LayerType) in updater(&layer) }},
+          applyUpdater: { (updater) in try! style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout LayerType) in updater(&layer) }},
           isValid: {
             return self.isAddedToMap()
           }

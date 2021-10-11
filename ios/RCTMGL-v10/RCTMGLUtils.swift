@@ -40,7 +40,7 @@ class RCTMGLUtils {
             else {
               DispatchQueue.main.async {
                 if let image = image {
-                  try! style.addImage(image, id: imageName)
+                  try! style.addImage(image, id: imageName, stretchX: [], stretchY: [])
                   imageLoadedBlock()
                 }
               }
