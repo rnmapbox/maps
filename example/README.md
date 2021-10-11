@@ -98,3 +98,5 @@ Print: Entry, ":CFBundleIdentifier", Does Not Exist
 ```
 
 Just run the example from Xcode, it seems to be an [issue](https://github.com/facebook/react-native/issues/14423) with RN.
+
+if you run into build errors involving YogaKit like [this](https://github.com/facebook/react-native/issues/28503), building to a locally connected device instead of Simulator seems to work predictably. There are other available solutions, but no solution seems to work for everybody.
