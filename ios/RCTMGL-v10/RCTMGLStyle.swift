@@ -60,7 +60,7 @@ func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, apply
           if let image = image {
             DispatchQueue.main.sync {
               if (isValid()) {
-                try! self.style.addImage(image, id:imageURI!);
+                try! self.style.addImage(image, id:imageURI!, stretchX: [], stretchY: []);
                 applyUpdater { (layer: inout FillLayer) in
                   self.setFillPattern(&layer, styleValue:styleValue);
                 }
@@ -149,7 +149,7 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, apply
           if let image = image {
             DispatchQueue.main.sync {
               if (isValid()) {
-                try! self.style.addImage(image, id:imageURI!);
+                try! self.style.addImage(image, id:imageURI!, stretchX: [], stretchY: []);
                 applyUpdater { (layer: inout LineLayer) in
                   self.setLinePattern(&layer, styleValue:styleValue);
                 }
@@ -218,7 +218,7 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, a
           if let image = image {
             DispatchQueue.main.sync {
               if (isValid()) {
-                try! self.style.addImage(image, id:imageURI!);
+                try! self.style.addImage(image, id:imageURI!, stretchX: [], stretchY: []);
                 applyUpdater { (layer: inout SymbolLayer) in
                   self.setIconImage(&layer, styleValue:styleValue);
                 }
@@ -485,7 +485,7 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
           if let image = image {
             DispatchQueue.main.sync {
               if (isValid()) {
-                try! self.style.addImage(image, id:imageURI!);
+                try! self.style.addImage(image, id:imageURI!, stretchX: [], stretchY: []);
                 applyUpdater { (layer: inout FillExtrusionLayer) in
                   self.setFillExtrusionPattern(&layer, styleValue:styleValue);
                 }
@@ -636,7 +636,7 @@ func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String,
           if let image = image {
             DispatchQueue.main.sync {
               if (isValid()) {
-                try! self.style.addImage(image, id:imageURI!);
+                try! self.style.addImage(image, id:imageURI!, stretchX: [], stretchY: []);
                 applyUpdater { (layer: inout BackgroundLayer) in
                   self.setBackgroundPattern(&layer, styleValue:styleValue);
                 }

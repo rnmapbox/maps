@@ -158,12 +158,14 @@ class PointAnnotation extends NativeBridgeComponent(React.PureComponent) {
   }
 
   /**
-   * On android point annotation is rendered offscreen with a canvas into an image.
+   * On v10 and pre v10 android point annotation is rendered offscreen with a canvas into an image.
    * To rerender the image from the current state of the view call refresh.
    * Call this for example from Image#onLoad.
    */
   refresh() {
     if (Platform.OS === 'android') {
+      this._runNativeCommand('refresh', this._nativeRef, []);
+    } else {
       this._runNativeCommand('refresh', this._nativeRef, []);
     }
   }

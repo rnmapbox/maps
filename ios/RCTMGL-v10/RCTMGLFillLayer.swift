@@ -2,10 +2,10 @@ import MapboxMaps
 
 @objc(RCTMGLFillLayer)
 class RCTMGLFillLayer: RCTMGLVectorLayer {
+  typealias LayerType = FillLayer
 
   override func makeLayer(style: Style) throws -> Layer {
     let vectorSource : VectorSource = try self.layerWithSourceID(in: style)
-    print("xxx ??? Found source:\(vectorSource)")
     var layer: Layer = FillLayer(id: self.id!)
     
     setOptions(&layer)
@@ -14,12 +14,12 @@ class RCTMGLFillLayer: RCTMGLVectorLayer {
   }
 
   override func layerType() -> Layer.Type {
-    return FillLayer.self
+    return LayerType.self
   }
   
   override func apply(style : Style) {
-    try! style.updateLayer(withId: id) { (layer : inout FillLayer) in
-      if let styleLayer = self.styleLayer as? FillLayer {
+    try! style.updateLayer(withId: id, type: LayerType.self) { (layer : inout FillLayer) in
+      if let styleLayer = self.styleLayer as? LayerType {
         layer = styleLayer
       }
     }
@@ -35,7 +35,7 @@ class RCTMGLFillLayer: RCTMGLVectorLayer {
         styler.fillLayer(
           layer: &styleLayer,
           reactStyle: reactStyle!,
-          applyUpdater: { (updater) in try! style.updateLayer(withId: self.id) { (layer: inout FillLayer) in updater(&layer) }},
+          applyUpdater: { (updater) in try! style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout FillLayer) in updater(&layer) }},
           isValid: { return self.isAddedToMap() }
         )
         self.styleLayer = styleLayer

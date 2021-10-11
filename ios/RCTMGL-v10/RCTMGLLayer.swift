@@ -77,7 +77,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   }
   
   func findLayer(style: Style, id: String) throws -> Layer {
-    return try style.layer(withId: id, type: layerType())
+    return try style.layer(withId: id)
   }
   
   func layerType() -> Layer.Type {

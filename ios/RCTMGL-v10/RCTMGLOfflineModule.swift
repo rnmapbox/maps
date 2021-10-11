@@ -311,7 +311,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
 
         let id = metadata["name"] as! String
         let loadOptions = TileRegionLoadOptions(
-          geometry: RCTMGLFeatureUtils.geometryToGeometry(bounds),
+          geometry: bounds, // RCTMGLFeatureUtils.geometryToGeometry(bounds),
           descriptors: [tilesetDescriptor],
           metadata: metadata,
           acceptExpired: true,
