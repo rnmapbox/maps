@@ -1,10 +1,20 @@
 import React from 'react';
+import { View } from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import sheet from '../../styles/sheet';
 
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import TabBarPage from '../common/TabBarPage';
+
+const buildPadding = ([top, right, bottom, left] = [0, 0, 0, 0]) => {
+  return {
+    paddingLeft: left,
+    paddingRight: right,
+    paddingTop: top,
+    paddingBottom: bottom,
+  };
+}
 
 class FitBounds extends React.Component {
   static propTypes = {...BaseExamplePropTypes};
@@ -22,42 +32,35 @@ class FitBounds extends React.Component {
       sw: [-74.143727, 40.772177],
     };
 
-    const zeroPadding = {
-      paddingLeft: 0,
-      paddingRight: 0,
-      paddingTop: 0,
-      paddingBottom: 0,
-    };
-
-    const somePadding = {
-      paddingLeft: 40,
-      paddingRight: 100,
-      paddingTop: 40,
-      paddingBottom: 140,
-    };
-
     this.options = [
       {
-        label: 'House',
-        data: {bounds: houseBounds, padding: zeroPadding},
+        label: 'House (none)',
+        data: {bounds: houseBounds, padding: buildPadding()},
       },
       {
-        label: 'House (Padded)',
-        data: {bounds: houseBounds, padding: somePadding},
+        label: 'House (bottom)',
+        data: {bounds: houseBounds, padding: buildPadding([40, 40, 200, 40])},
+      },
+      {
+        label: 'House (top)',
+        data: {bounds: houseBounds, padding: buildPadding([200, 40, 40, 40])},
       },
       {
         label: 'Town',
-        data: {bounds: townBounds, padding: zeroPadding},
+        data: {bounds: townBounds, padding: buildPadding()},
       },
       {
-        label: 'Town (Padded)',
-        data: {bounds: townBounds, padding: somePadding},
+        label: 'Town (bottom)',
+        data: {bounds: townBounds, padding: buildPadding([40, 40, 200, 40])},
+      },
+      {
+        label: 'Town (top)',
+        data: {bounds: townBounds, padding: buildPadding([200, 40, 40, 40])},
       },
     ];
 
     this.state = {
-      bounds: houseBounds,
-      padding: zeroPadding,
+      ...this.options[0].data,
       animationDuration: 0,
     };
   }
@@ -66,7 +69,7 @@ class FitBounds extends React.Component {
     this.setState({
       bounds: config.bounds,
       padding: config.padding,
-      animationDuration: 1000,
+      animationDuration: 500,
     });
   };
 
@@ -87,7 +90,7 @@ class FitBounds extends React.Component {
             animationDuration={animationDuration}
           />
           <View style={{flex: 1, ...padding}}>
-            <View style={{flex: 1, borderColor: 'blue', borderWidth: 4}} />
+            <View style={{flex: 1, borderColor: 'white', borderWidth: 4}} />
           </View>
         </MapboxGL.MapView>
       </TabBarPage>
