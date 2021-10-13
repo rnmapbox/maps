@@ -236,7 +236,7 @@ ExampleGroupComponent.propTypes = {
     goBack: PropTypes.func,
   }),
   showBack: PropTypes.bool,
-  items: PropTypes.node,
+  items: PropTypes.any,
 };
 
 class Home extends React.Component {
