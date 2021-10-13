@@ -1,6 +1,5 @@
 import React from 'react';
 import {render} from '@testing-library/react-native';
-import PropTypes from 'prop-types';
 
 import SymbolLayer, {
   NATIVE_MODULE_NAME,
