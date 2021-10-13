@@ -149,6 +149,8 @@ module.exports = {
         // and where arguments of functions are not typed
         '@typescript-eslint/explicit-function-return-type': ['error'],
         '@typescript-eslint/explicit-module-boundary-types': ['error'],
+        'no-use-before-define': 'off',
+        '@typescript-eslint/no-use-before-define': ['warn'],
       },
     },
   ],
