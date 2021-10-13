@@ -70,7 +70,9 @@ class ImageOverlay extends React.Component {
   }
 
   componentWillUnmount() {
-    this._timeout && clearTimeout(this._timeout);
+    if (this._timeout) {
+      clearTimeout(this._timeout);
+    }
   }
 
   render() {

@@ -45,7 +45,9 @@ class YoYo extends React.Component {
   }
 
   componentWillUnmount() {
-    this.timeout && clearTimeout(this.timeout);
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
   }
 
   cameraLoop() {
