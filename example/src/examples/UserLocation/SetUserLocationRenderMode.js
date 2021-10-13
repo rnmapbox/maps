@@ -2,6 +2,7 @@ import React from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Button, View} from 'react-native';
 import {ButtonGroup} from 'react-native-elements';
+import PropTypes from 'prop-types';
 
 import sheet from '../../styles/sheet';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
@@ -67,6 +68,15 @@ class SettingsPane extends React.Component {
     );
   }
 }
+SettingsPane.propTypes = {
+  settings: PropTypes.shape({
+    followUserLocation: PropTypes.bool,
+    showsUserHeadingIndicator: PropTypes.bool,
+    followUserMode: PropTypes.string,
+    androidRenderMode: PropTypes.string,
+  }),
+  onUpdateSettings: PropTypes.func,
+};
 
 class SetUserLocationRenderMode extends React.Component {
   static propTypes = {
