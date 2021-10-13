@@ -1,6 +1,7 @@
 import React from 'react';
 import {Animated, View, Text, StyleSheet, Image} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
+import PropTypes from 'prop-types';
 
 import sheet from '../../styles/sheet';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
@@ -56,6 +57,11 @@ class AnnotationWithRemoteImage extends React.Component {
     );
   }
 }
+AnnotationWithRemoteImage.propTypes = {
+  id: PropTypes.string,
+  title: PropTypes.string,
+  coordinate: PropTypes.arrayOf(PropTypes.number),
+};
 
 class ShowPointAnnotation extends React.Component {
   static propTypes = {
