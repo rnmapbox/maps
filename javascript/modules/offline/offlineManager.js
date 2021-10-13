@@ -287,7 +287,7 @@ class OfflineManager {
         // manually set a listener, since listeners are only set on create flow
         await MapboxGLOfflineManager.setPackObserver(packName);
       } catch (e) {
-        console.log('Unable to set pack observer', e); // eslint-disable-line
+        console.log('Unable to set pack observer', e);
       }
     }
   }
