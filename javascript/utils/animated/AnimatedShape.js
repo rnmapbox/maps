@@ -1,7 +1,5 @@
 import {Animated} from 'react-native';
 
-/* eslint-disable guard-for-in */
-
 // see
 // https://github.com/facebook/react-native/blob/master/Libraries/Animated/src/nodes/AnimatedWithChildren.js
 const AnimatedWithChildren = Object.getPrototypeOf(Animated.ValueXY);
