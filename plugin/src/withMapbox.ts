@@ -18,7 +18,9 @@ let pkg: {name: string; version?: string} = {
 };
 try {
   pkg = require('@react-native-mapbox-gl/maps/package.json');
-} catch {}
+} catch {
+  // empty catch block
+}
 
 type InstallerBlockName = 'pre' | 'post';
 
@@ -33,6 +35,7 @@ type InstallerBlockName = 'pre' | 'post';
 const withCocoaPodsInstallerBlocks: ConfigPlugin = c => {
   return withDangerousMod(c, [
     'ios',
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     async config => {
       const file = path.join(config.modRequest.platformProjectRoot, 'Podfile');
 
@@ -112,6 +115,7 @@ export function addMapboxInstallerBlock(
  */
 export function setExcludedArchitectures(project: XcodeProject): XcodeProject {
   const configurations = project.pbxXCBuildConfigurationSection();
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   for (const {buildSettings} of Object.values(configurations || {})) {
     // Guessing that this is the best way to emulate Xcode.
