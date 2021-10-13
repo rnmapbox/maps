@@ -4,7 +4,6 @@ import {Button, View} from 'react-native';
 import {ButtonGroup} from 'react-native-elements';
 
 import sheet from '../../styles/sheet';
-
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import TabBarPage from '../common/TabBarPage';
 

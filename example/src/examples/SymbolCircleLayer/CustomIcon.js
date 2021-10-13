@@ -5,7 +5,6 @@ import {featureCollection, feature} from '@turf/helpers';
 
 import sheet from '../../styles/sheet';
 import exampleIcon from '../../assets/example.png';
-
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import Page from '../common/Page';
 import Bubble from '../common/Bubble';

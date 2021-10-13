@@ -3,7 +3,6 @@ import {Alert} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import sheet from '../../styles/sheet';
-
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import TabBarPage from '../common/TabBarPage';
 

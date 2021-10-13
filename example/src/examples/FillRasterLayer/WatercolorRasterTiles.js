@@ -6,7 +6,6 @@ import {Slider} from 'react-native-elements';
 import sheet from '../../styles/sheet';
 import colors from '../../styles/colors';
 import {SF_OFFICE_COORDINATE} from '../../utils';
-
 import Page from '../common/Page';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 
