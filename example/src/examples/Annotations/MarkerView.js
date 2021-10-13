@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
+import PropTypes from 'prop-types';
 
 import sheet from '../../styles/sheet';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
@@ -31,6 +32,9 @@ const AnnotationContent = ({title}) => (
     </TouchableOpacity>
   </View>
 );
+AnnotationContent.propTypes = {
+  title: PropTypes.string,
+};
 
 class ShowMarkerView extends React.Component {
   static propTypes = {
