@@ -71,7 +71,7 @@ class Logger {
   }
 
   subscribe() {
-    this.subscription = this.loggerEmitter.addListener('LogEvent', (log) => {
+    this.subscription = this.loggerEmitter.addListener('LogEvent', log => {
       this.onLog(log);
     });
   }

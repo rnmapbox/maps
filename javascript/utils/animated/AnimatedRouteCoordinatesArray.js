@@ -21,7 +21,7 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
    */
   onInitialState(coordinatesArray) {
     return {
-      fullRoute: coordinatesArray.map((coord) => [coord[0], coord[1]]),
+      fullRoute: coordinatesArray.map(coord => [coord[0], coord[1]]),
       end: {from: 0},
     };
   }

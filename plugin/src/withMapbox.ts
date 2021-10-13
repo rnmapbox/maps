@@ -30,10 +30,10 @@ type InstallerBlockName = 'pre' | 'post';
  * @param config
  * @returns
  */
-const withCocoaPodsInstallerBlocks: ConfigPlugin = (c) => {
+const withCocoaPodsInstallerBlocks: ConfigPlugin = c => {
   return withDangerousMod(c, [
     'ios',
-    async (config) => {
+    async config => {
       const file = path.join(config.modRequest.platformProjectRoot, 'Podfile');
 
       const contents = await promises.readFile(file, 'utf8');
@@ -124,14 +124,14 @@ export function setExcludedArchitectures(project: XcodeProject): XcodeProject {
   return project;
 }
 
-const withExcludedSimulatorArchitectures: ConfigPlugin = (c) => {
-  return withXcodeProject(c, (config) => {
+const withExcludedSimulatorArchitectures: ConfigPlugin = c => {
+  return withXcodeProject(c, config => {
     config.modResults = setExcludedArchitectures(config.modResults);
     return config;
   });
 };
 
-const withMapbox: ConfigPlugin = (config) => {
+const withMapbox: ConfigPlugin = config => {
   config = withExcludedSimulatorArchitectures(config);
   return withCocoaPodsInstallerBlocks(config);
 };

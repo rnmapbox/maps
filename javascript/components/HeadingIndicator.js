@@ -12,7 +12,7 @@ const style = {
   iconRotationAlignment: 'map',
 };
 
-const HeadingIndicator = (heading) => (
+const HeadingIndicator = heading => (
   <SymbolLayer
     key="mapboxUserLocationHeadingIndicator"
     id="mapboxUserLocationHeadingIndicator"

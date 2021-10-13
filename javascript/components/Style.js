@@ -15,7 +15,7 @@ import ImageSource from './ImageSource';
 import ShapeSource from './ShapeSource';
 
 function toCamelCase(s) {
-  return s.replace(/([-_][a-z])/gi, ($1) => {
+  return s.replace(/([-_][a-z])/gi, $1 => {
     return $1.toUpperCase().replace('-', '').replace('_', '');
   });
 }
@@ -27,7 +27,7 @@ function toCamelCaseKeys(oldObj) {
     return {};
   }
   const newObj = {};
-  Object.keys(oldObj).forEach((key) => {
+  Object.keys(oldObj).forEach(key => {
     const value = oldObj[key];
     if (key.includes('-')) {
       newObj[toCamelCase(key)] = value;
@@ -197,7 +197,7 @@ function asSourceComponent(id, source) {
  * Only [`sources`](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) & [`layers`](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/) are supported.
  * Other fields such as `sprites`, `glyphs` etc. will be ignored. Not all layer / source attributes from the style spec are supported, in general the supported attributes will mentioned under https://github.com/react-native-mapbox-gl/maps/tree/master/docs.
  */
-const Style = (props) => {
+const Style = props => {
   const [fetchedJson, setFetchedJson] = useState({});
   const json = typeof props.json === 'object' ? props.json : fetchedJson;
 
@@ -231,7 +231,7 @@ const Style = (props) => {
     if (!json.layers) {
       return [];
     }
-    return json.layers.map(asLayerComponent).filter((x) => !!x);
+    return json.layers.map(asLayerComponent).filter(x => !!x);
   }, [json.layers]);
 
   // Extract source components from json
@@ -240,8 +240,8 @@ const Style = (props) => {
       return [];
     }
     return Object.keys(json.sources)
-      .map((id) => asSourceComponent(id, json.sources[id]))
-      .filter((x) => !!x);
+      .map(id => asSourceComponent(id, json.sources[id]))
+      .filter(x => !!x);
   }, [json.sources]);
 
   return (

@@ -183,7 +183,7 @@ class OfflineManager {
   async getPacks() {
     await this._initialize();
     return Object.keys(this._offlinePacks).map(
-      (name) => this._offlinePacks[name],
+      name => this._offlinePacks[name],
     );
   }
 

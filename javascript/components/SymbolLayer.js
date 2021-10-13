@@ -83,7 +83,7 @@ class SymbolLayer extends AbstractLayer {
       return isSnapshot;
     }
 
-    React.Children.forEach(this.props.children, (child) => {
+    React.Children.forEach(this.props.children, child => {
       if (child.type === View) {
         isSnapshot = true;
       }

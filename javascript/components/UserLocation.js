@@ -263,8 +263,7 @@ class UserLocation extends React.Component {
         coordinates={coordinates}
         style={{
           iconRotate: heading,
-        }}
-      >
+        }}>
         {children || normalIcon(showsUserHeadingIndicator, heading)}
       </Annotation>
     );

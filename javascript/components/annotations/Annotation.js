@@ -106,8 +106,7 @@ class Annotation extends React.Component {
         id={this.props.id}
         ref="source"
         onPress={this.onPress}
-        shape={this.state.shape}
-      >
+        shape={this.state.shape}>
         {this.symbolStyle && (
           <SymbolLayer
             id={`${this.props.id}-symbol`}

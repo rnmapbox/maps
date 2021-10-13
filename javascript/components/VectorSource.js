@@ -145,13 +145,13 @@ class VectorSource extends NativeBridgeComponent(AbstractSource) {
     newEvent = copyPropertiesAsDeprecated(
       event,
       newEvent,
-      (key) => {
+      key => {
         console.warn(
           `event.${key} is deprecated on VectorSource#onPress, please use event.features`,
         );
       },
       {
-        nativeEvent: (origNativeEvent) => ({
+        nativeEvent: origNativeEvent => ({
           ...origNativeEvent,
           payload: features[0],
         }),
@@ -173,7 +173,7 @@ class VectorSource extends NativeBridgeComponent(AbstractSource) {
       hasPressListener: isFunction(this.props.onPress),
       onMapboxVectorSourcePress: this.onPress.bind(this),
       onPress: undefined,
-      ref: (nativeRef) => this._setNativeRef(nativeRef),
+      ref: nativeRef => this._setNativeRef(nativeRef),
       onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
     };
     return (
