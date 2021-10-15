@@ -55,7 +55,7 @@
     "@typescript-eslint/eslint-plugin": "^4.0.0",
     "@typescript-eslint/parser": "^4.14.0",
     "babel-plugin-module-resolver": "^4.1.0",
-    "detox": "^18.7.1",
+    "detox": "^18.22.2",
     "eslint": "7.32.0 ",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.22.0",
