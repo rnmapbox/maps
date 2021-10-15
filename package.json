@@ -25,7 +25,6 @@
     "test": "npm run lint && npm run unittest",
     "unittest": "jest",
     "unittest:single": "jest --testNamePattern",
-    "format": "npm run lint -- --fix",
     "lint": "eslint . --fix",
     "prepare": "yarn build:plugin",
     "test:plugin": "expo-module test plugin",
