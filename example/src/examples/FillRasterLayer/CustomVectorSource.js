@@ -3,7 +3,6 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Text} from 'react-native';
 
 import sheet from '../../styles/sheet';
-
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import Page from '../common/Page';
 import Bubble from '../common/Bubble';

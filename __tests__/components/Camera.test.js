@@ -277,7 +277,7 @@ describe('Camera', () => {
           ],
         ];
 
-        testCases.forEach((c) => {
+        testCases.forEach(c => {
           expect(camera._hasCameraChanged(c[0], c[1])).toBe(true);
         });
       });
@@ -291,7 +291,7 @@ describe('Camera', () => {
           [{followPitch: 40}, {followPitch: 49}],
         ];
 
-        testCases.forEach((c) => {
+        testCases.forEach(c => {
           expect(camera._hasCameraChanged(c[0], c[1])).toBe(true);
         });
       });
@@ -302,7 +302,7 @@ describe('Camera', () => {
           [{animationMode: 'flyTo'}, {animationMode: 'easeTo'}],
         ];
 
-        testCases.forEach((c) => {
+        testCases.forEach(c => {
           expect(camera._hasCameraChanged(c[0], c[1])).toBe(true);
         });
       });

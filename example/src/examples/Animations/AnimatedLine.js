@@ -6,7 +6,6 @@ import length from '@turf/length';
 import {point, lineString} from '@turf/helpers';
 
 import sheet from '../../styles/sheet';
-
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import Page from '../common/Page';
 import Bubble from '../common/Bubble';

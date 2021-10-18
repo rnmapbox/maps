@@ -6,17 +6,14 @@ import PropTypes from 'prop-types';
 import Page from '../examples/common/Page';
 import MapHeader from '../examples/common/MapHeader';
 import sheet from '../styles/sheet';
-
 // ANIMATIONS
 import AnimatedLine from '../examples/Animations/AnimatedLine';
 import DriveTheLine from '../examples/Animations/DriveTheLine';
-
 // ANNOTATIONS
 import CustomCallout from '../examples/Annotations/CustomCallout';
 import Heatmap from '../examples/Annotations/Heatmap';
 import MarkerView from '../examples/Annotations/MarkerView';
 import ShowPointAnnotation from '../examples/Annotations/ShowPointAnnotation';
-
 // CAMERA
 import CompassView from '../examples/Camera/CompassView';
 import FitBounds from '../examples/Camera/FitBounds';
@@ -31,7 +28,6 @@ import SetUserTrackingModes from '../examples/Camera/SetUserTrackingModes';
 import TakeSnapshot from '../examples/Camera/TakeSnapshot';
 import TakeSnapshotWithMap from '../examples/Camera/TakeSnapshotWithMap';
 import YoYo from '../examples/Camera/YoYo';
-
 // FILLRASTERLAYER
 import ChoroplethLayerByZoomLevel from '../examples/FillRasterLayer/ChoroplethLayerByZoomLevel';
 import CustomVectorSource from '../examples/FillRasterLayer/CustomVectorSource';
@@ -41,10 +37,8 @@ import IndoorBuilding from '../examples/FillRasterLayer/IndoorBuilding';
 import QueryAtPoint from '../examples/FillRasterLayer/QueryAtPoint';
 import QueryWithRect from '../examples/FillRasterLayer/QueryWithRect';
 import WatercolorRasterTiles from '../examples/FillRasterLayer/WatercolorRasterTiles';
-
 // LINE LAYER
 import GradientLine from '../examples/LineLayer/GradientLine';
-
 // MAP
 import ChangeLayerColor from '../examples/Map/ChangeLayerColor';
 import CreateOfflineRegion from '../examples/Map/CreateOfflineRegion';
@@ -57,20 +51,17 @@ import ShowRegionDidChange from '../examples/Map/ShowRegionDidChange';
 import SourceLayerVisibility from '../examples/Map/SourceLayerVisibility';
 import StyleJson from '../examples/Map/StyleJson';
 import TwoByTwo from '../examples/Map/TwoByTwo';
-
 // SYMBOLCIRCLELAYER
 import CustomIcon from '../examples/SymbolCircleLayer/CustomIcon';
 import DataDrivenCircleColors from '../examples/SymbolCircleLayer/DataDrivenCircleColors';
 import EarthQuakes from '../examples/SymbolCircleLayer/EarthQuakes';
 import ShapeSourceIcon from '../examples/SymbolCircleLayer/ShapeSourceIcon';
-
 // USERLOCATION
 import SetDisplacement from '../examples/UserLocation/SetDisplacement';
 import SetTintColor from '../examples/UserLocation/SetTintColor';
 import SetUserLocationRenderMode from '../examples/UserLocation/SetUserLocationRenderMode';
 import SetUserLocationVerticalAlignment from '../examples/UserLocation/SetUserLocationVerticalAlignment';
 import UserLocationChange from '../examples/UserLocation/UserLocationChange';
-
 // MISC
 import BugReportTemplate from '../examples/BugReportExample';
 import CacheManagement from '../examples/CacheManagement';
@@ -107,6 +98,7 @@ class ExampleGroup {
     this.label = label;
     this.items = items;
     this.navigationType = 'Group';
+    // eslint-disable-next-line react/prop-types
     this.Component = ({navigation}) => (
       <ExampleGroupComponent items={items} navigation={navigation} />
     );
@@ -239,10 +231,22 @@ function ExampleGroupComponent({items, navigation, showBack}) {
     </View>
   );
 }
+ExampleGroupComponent.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func,
+    getParam: PropTypes.func,
+    goBack: PropTypes.func,
+  }),
+  showBack: PropTypes.bool,
+  items: PropTypes.any,
+};
 
 class Home extends React.Component {
   static propTypes = {
-    navigation: PropTypes.shape({navigate: PropTypes.func}),
+    navigation: PropTypes.shape({
+      navigate: PropTypes.func,
+      getParam: PropTypes.func,
+    }),
   };
 
   render() {

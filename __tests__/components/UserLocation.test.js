@@ -1,9 +1,7 @@
 import React from 'react';
 import {render, fireEvent} from '@testing-library/react-native';
 
-import UserLocation, {
-  normalIcon,
-} from '../../javascript/components/UserLocation';
+import UserLocation from '../../javascript/components/UserLocation';
 import ShapeSource from '../../javascript/components/ShapeSource';
 import CircleLayer from '../../javascript/components/CircleLayer';
 import locationManager from '../../javascript/modules/location/locationManager';
@@ -36,7 +34,7 @@ describe('UserLocation', () => {
       jest.clearAllMocks();
     });
 
-    test('renders with CircleLayers by default', (done) => {
+    test('renders with CircleLayers by default', done => {
       const {UNSAFE_getAllByType} = render(<UserLocation />);
 
       setTimeout(() => {
@@ -49,7 +47,7 @@ describe('UserLocation', () => {
       });
     });
 
-    test('does not render with visible set to false', (done) => {
+    test('does not render with visible set to false', done => {
       const {UNSAFE_queryByType} = render(<UserLocation visible={false} />);
 
       setTimeout(() => {
@@ -62,7 +60,7 @@ describe('UserLocation', () => {
       });
     });
 
-    test('renders with CustomChild when provided', (done) => {
+    test('renders with CustomChild when provided', done => {
       const circleLayerProps = {
         key: 'testUserLocationCircle',
         id: 'testUserLocationCircle',

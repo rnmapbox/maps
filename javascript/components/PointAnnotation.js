@@ -176,7 +176,7 @@ class PointAnnotation extends NativeBridgeComponent(React.PureComponent) {
   render() {
     const props = {
       ...this.props,
-      ref: (nativeRef) => this._setNativeRef(nativeRef),
+      ref: nativeRef => this._setNativeRef(nativeRef),
       id: this.props.id,
       title: this.props.title,
       snippet: this.props.snippet,

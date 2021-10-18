@@ -4,7 +4,6 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import StyleJsonExample from '../../assets/style-json-example.json';
 import StyleJsonExample2 from '../../assets/style-json-example2.json';
-
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import Page from '../common/Page';
 import Bubble from '../common/Bubble';

@@ -3,7 +3,6 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import sheet from '../../styles/sheet';
 import smileyFaceGeoJSON from '../../assets/smiley_face.json';
-
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import Page from '../common/Page';
 

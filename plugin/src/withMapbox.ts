@@ -18,7 +18,9 @@ let pkg: {name: string; version?: string} = {
 };
 try {
   pkg = require('@react-native-mapbox-gl/maps/package.json');
-} catch {}
+} catch {
+  // empty catch block
+}
 
 type InstallerBlockName = 'pre' | 'post';
 
@@ -30,10 +32,11 @@ type InstallerBlockName = 'pre' | 'post';
  * @param config
  * @returns
  */
-const withCocoaPodsInstallerBlocks: ConfigPlugin = (c) => {
+const withCocoaPodsInstallerBlocks: ConfigPlugin = c => {
   return withDangerousMod(c, [
     'ios',
-    async (config) => {
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    async config => {
       const file = path.join(config.modRequest.platformProjectRoot, 'Podfile');
 
       const contents = await promises.readFile(file, 'utf8');
@@ -112,6 +115,7 @@ export function addMapboxInstallerBlock(
  */
 export function setExcludedArchitectures(project: XcodeProject): XcodeProject {
   const configurations = project.pbxXCBuildConfigurationSection();
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   for (const {buildSettings} of Object.values(configurations || {})) {
     // Guessing that this is the best way to emulate Xcode.
@@ -124,14 +128,14 @@ export function setExcludedArchitectures(project: XcodeProject): XcodeProject {
   return project;
 }
 
-const withExcludedSimulatorArchitectures: ConfigPlugin = (c) => {
-  return withXcodeProject(c, (config) => {
+const withExcludedSimulatorArchitectures: ConfigPlugin = c => {
+  return withXcodeProject(c, config => {
     config.modResults = setExcludedArchitectures(config.modResults);
     return config;
   });
 };
 
-const withMapbox: ConfigPlugin = (config) => {
+const withMapbox: ConfigPlugin = config => {
   config = withExcludedSimulatorArchitectures(config);
   return withCocoaPodsInstallerBlocks(config);
 };

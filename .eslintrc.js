@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   parser: 'babel-eslint',
-  plugins: ['react', 'react-native', 'prettier', 'fp', 'import'],
+  plugins: ['react', 'react-native', 'fp', 'import', 'prettier'],
   env: {
     jest: true,
   },
@@ -86,4 +86,73 @@ module.exports = {
     ],
     'fp/no-mutating-methods': 'warn',
   },
+  overrides: [
+    // Match TypeScript Files
+    // =================================
+    {
+      files: ['**/*.{ts,tsx}'],
+
+      // Global ESLint Settings
+      // =================================
+      env: {
+        jest: true,
+        es6: true,
+        browser: true,
+        node: true,
+      },
+      globals: {
+        __DEV__: true,
+        element: true,
+        by: true,
+        waitFor: true, // detox e2e
+      },
+      settings: {
+        'import/resolver': {
+          node: {
+            extensions: ['.js', '.jsx', '.ts', '.tsx'],
+          },
+        },
+        react: {
+          version: 'detect', // React version. "detect" automatically picks the version you have installed.
+          // You can also use `16.0`, `16.3`, etc, if you want to override the detected value.
+          // default to latest and warns if missing
+          // It will default to "detect" in the future
+        },
+      },
+
+      // Parser Settings
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        // Lint with Type Information
+        // https://github.com/typescript-eslint/typescript-eslint/blob/master/docs/getting-started/linting/TYPED_LINTING.md
+        tsconfigRootDir: __dirname,
+        project: './tsconfig.json',
+        ecmaFeatures: {
+          experimentalObjectRestSpread: true,
+          jsx: true,
+        },
+        sourceType: 'module',
+      },
+
+      // Extend Other Configs
+      // =================================
+      extends: [
+        'plugin:@typescript-eslint/recommended',
+        'plugin:react-native/all',
+        'eslint:recommended',
+        'plugin:react/recommended',
+        'prettier',
+      ],
+      plugins: ['react', 'react-hooks', '@typescript-eslint', 'prettier'],
+      rules: {
+        // turn these one to check where all the return types are missing
+        // and where arguments of functions are not typed
+        '@typescript-eslint/explicit-function-return-type': ['error'],
+        '@typescript-eslint/explicit-module-boundary-types': ['error'],
+        'no-use-before-define': 'off',
+        '@typescript-eslint/no-use-before-define': ['warn'],
+        'react/prop-types': 'off',
+      },
+    },
+  ],
 };

@@ -4,7 +4,6 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import sheet from '../../styles/sheet';
 import {onSortOptions} from '../../utils';
-
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import TabBarPage from '../common/TabBarPage';
 import Bubble from '../common/Bubble';

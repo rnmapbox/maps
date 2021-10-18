@@ -3,7 +3,6 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import sheet from '../../styles/sheet';
 import {SF_OFFICE_COORDINATE} from '../../utils';
-
 import Page from '../common/Page';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 

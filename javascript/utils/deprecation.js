@@ -2,7 +2,7 @@
  * Copy properties from origObject to newObject, which not exists in newObject,
  * calls onDeprecatedCalled callback in case a copied property is invoked.
  */
-// eslint-disable-next-line class-methods-use-this
+
 export function copyPropertiesAsDeprecated(
   origObject,
   newObject,
