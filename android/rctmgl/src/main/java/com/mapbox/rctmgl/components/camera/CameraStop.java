@@ -29,10 +29,10 @@ public class CameraStop {
     private LatLng mLatLng;
 
     private LatLngBounds mBounds;
-    private int mBoundsPaddingLeft = 0;
-    private int mBoundsPaddingRight = 0;
-    private int mBoundsPaddingBottom = 0;
-    private int mBoundsPaddingTop = 0;
+    private int mPaddingLeft = 0;
+    private int mPaddingRight = 0;
+    private int mPaddingBottom = 0;
+    private int mPaddingTop = 0;
 
     private int mMode = CameraMode.EASE;
     private int mDuration = 2000;
@@ -65,12 +65,15 @@ public class CameraStop {
         mCallback = callback;
     }
 
-    public void setBounds(LatLngBounds bounds, int paddingLeft, int paddingRight, int paddingTop, int paddingBottom) {
+    public void setBounds(LatLngBounds bounds) {
         mBounds = bounds;
-        mBoundsPaddingLeft = paddingLeft;
-        mBoundsPaddingRight = paddingRight;
-        mBoundsPaddingTop = paddingTop;
-        mBoundsPaddingBottom = paddingBottom;
+    }
+
+    public void setPadding(int paddingLeft, int paddingRight, int paddingTop, int paddingBottom) {
+        mPaddingLeft = paddingLeft;
+        mPaddingRight = paddingRight;
+        mPaddingTop = paddingTop;
+        mPaddingBottom = paddingBottom;
     }
 
     public void setMode(@CameraMode.Mode int mode) {
@@ -90,23 +93,32 @@ public class CameraStop {
             builder.tilt(mTilt);
         }
 
+        // Adding map padding to the camera padding which is the same behavior as
+        // mapbox native does on iOS
+        double[] contentInset = mapView.getContentInset();
+
+        int paddingLeft = Double.valueOf(contentInset[0] + mPaddingLeft).intValue();
+        int paddingTop = Double.valueOf(contentInset[1] + mPaddingTop).intValue();
+        int paddingRight = Double.valueOf(contentInset[2] + mPaddingRight).intValue();
+        int paddingBottom = Double.valueOf(contentInset[3] + mPaddingBottom).intValue();
+
+        int[] cameraPadding = {paddingLeft, paddingTop, paddingRight, paddingBottom};
+        int[] cameraPaddingClipped = clippedPadding(cameraPadding, mapView);
+
         if (mLatLng != null) {
             builder.target(mLatLng);
+            builder.padding(
+                cameraPaddingClipped[0],
+                cameraPaddingClipped[1],
+                cameraPaddingClipped[2],
+                cameraPaddingClipped[3]
+            );
+            if (mZoom != null) {
+                builder.zoom(mZoom);
+            }
         } else if (mBounds != null) {
             double tilt = mTilt != null ? mTilt : currentCamera.tilt;
             double bearing = mBearing != null ? mBearing : currentCamera.bearing;
-
-            // Adding map padding to the camera padding which is the same behavior as
-            // mapbox native does on iOS
-            double[] contentInset = mapView.getContentInset();
-
-            int paddingLeft = Double.valueOf(contentInset[0] + mBoundsPaddingLeft).intValue();
-            int paddingTop = Double.valueOf(contentInset[1] + mBoundsPaddingTop).intValue();
-            int paddingRight = Double.valueOf(contentInset[2] + mBoundsPaddingRight).intValue();
-            int paddingBottom = Double.valueOf(contentInset[3] + mBoundsPaddingBottom).intValue();
-
-            int[] cameraPadding = {paddingLeft, paddingTop, paddingRight, paddingBottom};
-            int[] cameraPaddingClipped = clippedPadding(cameraPadding, mapView);
 
             CameraPosition boundsCamera = map.getCameraForLatLngBounds(mBounds, cameraPaddingClipped, bearing, tilt);
             if (boundsCamera != null) {
@@ -115,18 +127,14 @@ public class CameraStop {
                 builder.padding(boundsCamera.padding);
             } else {
                 CameraUpdate update = CameraUpdateFactory.newLatLngBounds(
-                        mBounds,
-                        cameraPaddingClipped[0],
-                        cameraPaddingClipped[1],
-                        cameraPaddingClipped[2],
-                        cameraPaddingClipped[3]
+                    mBounds,
+                    cameraPaddingClipped[0],
+                    cameraPaddingClipped[1],
+                    cameraPaddingClipped[2],
+                    cameraPaddingClipped[3]
                 );
                 return new CameraUpdateItem(map, update, mDuration, mCallback, mMode);
             }
-        }
-
-        if (mZoom != null) {
-            builder.zoom(mZoom);
         }
 
         return new CameraUpdateItem(map, CameraUpdateFactory.newCameraPosition(builder.build()), mDuration, mCallback, mMode);
@@ -143,6 +151,25 @@ public class CameraStop {
             stop.setBearing(readableMap.getDouble("heading"));
         }
 
+        int paddingTop = getPaddingByKey(readableMap, "paddingTop");
+        int paddingRight = getPaddingByKey(readableMap, "paddingRight");
+        int paddingBottom = getPaddingByKey(readableMap, "paddingBottom");
+        int paddingLeft = getPaddingByKey(readableMap, "paddingLeft");
+
+        // scale padding by pixel ratio
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        paddingTop = Float.valueOf(paddingTop * metrics.scaledDensity).intValue();
+        paddingRight = Float.valueOf(paddingRight * metrics.scaledDensity).intValue();
+        paddingBottom = Float.valueOf(paddingBottom * metrics.scaledDensity).intValue();
+        paddingLeft = Float.valueOf(paddingLeft * metrics.scaledDensity).intValue();
+
+        stop.setPadding(
+                paddingLeft,
+                paddingRight,
+                paddingTop,
+                paddingBottom
+        );
+
         if (readableMap.hasKey("centerCoordinate")) {
             Point target = GeoJSONUtils.toPointGeometry(readableMap.getString("centerCoordinate"));
             stop.setLatLng(GeoJSONUtils.toLatLng(target));
@@ -157,21 +184,8 @@ public class CameraStop {
         }
 
         if (readableMap.hasKey("bounds")) {
-            int paddingTop = getBoundsPaddingByKey(readableMap, "boundsPaddingTop");
-            int paddingRight = getBoundsPaddingByKey(readableMap, "boundsPaddingRight");
-            int paddingBottom = getBoundsPaddingByKey(readableMap, "boundsPaddingBottom");
-            int paddingLeft = getBoundsPaddingByKey(readableMap, "boundsPaddingLeft");
-
-            // scale padding by pixel ratio
-            DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-            paddingTop = Float.valueOf(paddingTop * metrics.scaledDensity).intValue();
-            paddingRight = Float.valueOf(paddingRight * metrics.scaledDensity).intValue();
-            paddingBottom = Float.valueOf(paddingBottom * metrics.scaledDensity).intValue();
-            paddingLeft = Float.valueOf(paddingLeft * metrics.scaledDensity).intValue();
-
             FeatureCollection collection = FeatureCollection.fromJson(readableMap.getString("bounds"));
-            stop.setBounds(GeoJSONUtils.toLatLngBounds(collection), paddingLeft, paddingRight,
-                    paddingTop, paddingBottom);
+            stop.setBounds(GeoJSONUtils.toLatLngBounds(collection));
         }
 
         if (readableMap.hasKey("mode")) {
@@ -225,7 +239,7 @@ public class CameraStop {
         return new int[] {resultLeft, resultTop, resultRight, resultBottom};
     }
 
-    private static int getBoundsPaddingByKey(ReadableMap map, String key) {
+    private static int getPaddingByKey(ReadableMap map, String key) {
         return map.hasKey(key) ? map.getInt(key) : 0;
     }
 }

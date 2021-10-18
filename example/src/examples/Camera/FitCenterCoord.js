@@ -16,46 +16,42 @@ const buildPadding = ([top, right, bottom, left] = [0, 0, 0, 0]) => {
   };
 }
 
-class FitBounds extends React.Component {
+class FitCenterCoord extends React.Component {
   static propTypes = {...BaseExamplePropTypes};
 
   constructor(props) {
     super(props);
 
-    const houseBounds = {
-      ne: [-74.135379, 40.795909],
-      sw: [-74.135449, 40.795578],
-    };
-
-    const townBounds = {
-      ne: [-74.12641, 40.797968],
-      sw: [-74.143727, 40.772177],
-    };
+    const houseCenterCoord = [-74.13545, 40.7958];
+    const houseZoom = 20;
+    
+    const townCenterCoord = [-74.12641, 40.797968];
+    const townZoom = 14;
 
     this.options = [
       {
         label: 'House (none)',
-        data: {bounds: houseBounds, padding: buildPadding()},
+        data: {centerCoord: houseCenterCoord, zoom: houseZoom, padding: buildPadding()},
       },
       {
         label: 'House (bottom)',
-        data: {bounds: houseBounds, padding: buildPadding([40, 40, 200, 40])},
+        data: {centerCoord: houseCenterCoord, zoom: houseZoom, padding: buildPadding([40, 40, 200, 40])},
       },
       {
         label: 'House (top)',
-        data: {bounds: houseBounds, padding: buildPadding([200, 40, 40, 40])},
+        data: {centerCoord: houseCenterCoord, zoom: houseZoom, padding: buildPadding([200, 40, 40, 40])},
       },
       {
         label: 'Town',
-        data: {bounds: townBounds, padding: buildPadding()},
+        data: {centerCoord: townCenterCoord, zoom: townZoom, padding: buildPadding()},
       },
       {
         label: 'Town (bottom)',
-        data: {bounds: townBounds, padding: buildPadding([40, 40, 200, 40])},
+        data: {centerCoord: townCenterCoord, zoom: townZoom, padding: buildPadding([40, 40, 200, 40])},
       },
       {
         label: 'Town (top)',
-        data: {bounds: townBounds, padding: buildPadding([200, 40, 40, 40])},
+        data: {centerCoord: townCenterCoord, zoom: townZoom, padding: buildPadding([200, 40, 40, 40])},
       },
     ];
 
@@ -67,14 +63,15 @@ class FitBounds extends React.Component {
 
   onOptionPress = (i, config) => {
     this.setState({
-      bounds: config.bounds,
+      centerCoord: config.centerCoord,
+      zoom: config.zoom,
       padding: config.padding,
       animationDuration: 500,
     });
   };
 
   render() {
-    const {bounds, padding, animationDuration} = this.state;
+    const {centerCoord, zoom, padding, animationDuration} = this.state;
 
     return (
       <TabBarPage
@@ -85,7 +82,8 @@ class FitBounds extends React.Component {
           styleURL={MapboxGL.StyleURL.Satellite}
           style={sheet.matchParent}>
           <MapboxGL.Camera
-            bounds={bounds}
+            centerCoordinate={centerCoord}
+            zoomLevel={zoom}
             padding={padding}
             animationDuration={animationDuration}
           />
@@ -98,4 +96,4 @@ class FitBounds extends React.Component {
   }
 }
 
-export default FitBounds;
+export default FitCenterCoord;

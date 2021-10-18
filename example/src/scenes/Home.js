@@ -20,6 +20,7 @@ import ShowPointAnnotation from '../examples/Annotations/ShowPointAnnotation';
 // CAMERA
 import CompassView from '../examples/Camera/CompassView';
 import FitBounds from '../examples/Camera/FitBounds';
+import FitCenterCoord from '../examples/Camera/FitCenterCoord';
 import FlyTo from '../examples/Camera/FlyTo';
 import GetCenter from '../examples/Camera/GetCenter';
 import GetZoom from '../examples/Camera/GetZoom';
@@ -138,7 +139,8 @@ const Examples = [
     new ExampleItem('Set Pitch', SetPitch),
     new ExampleItem('Set Heading', SetHeading),
     new ExampleItem('Fly To', FlyTo),
-    new ExampleItem('Fit Bounds', FitBounds),
+    new ExampleItem('Fit Bounds With Padding', FitBounds),
+    new ExampleItem('Fit Center Coord With Padding', FitCenterCoord),
     new ExampleItem('Restrict Bounds', RestrictMapBounds),
     new ExampleItem('Set User Tracking Modes', SetUserTrackingModes),
     new ExampleItem('Yo Yo Camera', YoYo),

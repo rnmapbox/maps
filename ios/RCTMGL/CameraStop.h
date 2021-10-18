@@ -19,7 +19,7 @@
 
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 @property (nonatomic, assign) MGLCoordinateBounds bounds;
-@property (nonatomic, assign) UIEdgeInsets boundsPadding;
+@property (nonatomic, assign) UIEdgeInsets padding;
 
 + (CameraStop*)fromDictionary:(NSDictionary*)args;
 

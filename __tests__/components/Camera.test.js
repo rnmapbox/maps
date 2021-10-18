@@ -71,6 +71,10 @@ describe('Camera', () => {
           heading: undefined,
           duration: 2000,
           zoom: undefined,
+          paddingBottom: 0,
+          paddingLeft: 0,
+          paddingRight: 0,
+          paddingTop: 0,
         },
         maxZoomLevel: undefined,
         minZoomLevel: undefined,
@@ -495,11 +499,13 @@ describe('Camera', () => {
             animationMode: 'easeTo',
             bounds: {
               ne: [-63.12641, 39.797968],
+              sw: [-74.143727, 40.772177],
+            },
+            padding: {
               paddingBottom: null,
               paddingLeft: null,
               paddingRight: null,
               paddingTop: null,
-              sw: [-74.143727, 40.772177],
             },
           },
           {
@@ -507,11 +513,13 @@ describe('Camera', () => {
             animationMode: 'easeTo',
             bounds: {
               ne: [-63.12641, 39.797968],
+              sw: [-74.143727, 40.772177],
+            },
+            padding: {
               paddingBottom: null,
               paddingLeft: null,
               paddingRight: null,
               paddingTop: null,
-              sw: [-74.143727, 40.772177],
             },
           },
           {
@@ -519,11 +527,13 @@ describe('Camera', () => {
             animationMode: 'easeTo',
             bounds: {
               ne: [-63.12641, 39.797968],
+              sw: [-74.143727, 40.772177],
+            },
+            padding: {
               paddingBottom: 0,
               paddingLeft: 0,
               paddingRight: 0,
               paddingTop: 0,
-              sw: [-74.143727, 40.772177],
             },
           },
         ];
@@ -547,11 +557,13 @@ describe('Camera', () => {
           animationMode: 'easeTo',
           bounds: {
             ne: [-63.12641, 39.797968],
+            sw: [-74.143727, 40.772177],
+          },
+          padding: {
             paddingBottom: 3,
             paddingLeft: 3,
             paddingRight: 3,
             paddingTop: 3,
-            sw: [-74.143727, 40.772177],
           },
         };
 
@@ -565,11 +577,13 @@ describe('Camera', () => {
           animationMode: 'easeTo',
           bounds: {
             ne: [-63.12641, 39.797968],
+            sw: [-74.143727, 40.772177],
+          },
+          padding: {
             paddingBottom: 3,
             paddingLeft: 5,
             paddingRight: 5,
             paddingTop: 3,
-            sw: [-74.143727, 40.772177],
           },
         };
 
@@ -583,11 +597,13 @@ describe('Camera', () => {
           animationMode: 'easeTo',
           bounds: {
             ne: [-63.12641, 39.797968],
+            sw: [-74.143727, 40.772177],
+          },
+          padding: {
             paddingBottom: 8,
             paddingLeft: 10,
             paddingRight: 5,
             paddingTop: 3,
-            sw: [-74.143727, 40.772177],
           },
         };
 
@@ -781,10 +797,10 @@ describe('Camera', () => {
           stop: {
             bounds:
               '{"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-63.12641,39.797968]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-74.143727,40.772177]}}]}',
-            boundsPaddingBottom: 8,
-            boundsPaddingLeft: 10,
-            boundsPaddingRight: 5,
-            boundsPaddingTop: 3,
+            paddingBottom: 8,
+            paddingLeft: 10,
+            paddingRight: 5,
+            paddingTop: 3,
             duration: 500,
             heading: 100,
             mode: 'Ease',
@@ -871,10 +887,10 @@ describe('Camera', () => {
               {
                 bounds:
                   '{"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-63.12641,39.797968]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-74.143727,40.772177]}}]}',
-                boundsPaddingBottom: 2,
-                boundsPaddingLeft: 2,
-                boundsPaddingRight: 2,
-                boundsPaddingTop: 2,
+                paddingBottom: 2,
+                paddingLeft: 2,
+                paddingRight: 2,
+                paddingTop: 2,
                 duration: 50,
                 heading: 20,
                 mode: 'Ease',
@@ -884,10 +900,10 @@ describe('Camera', () => {
               {
                 bounds:
                   '{"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-63.12641,59.797968]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-71.143727,40.772177]}}]}',
-                boundsPaddingBottom: 8,
-                boundsPaddingLeft: 10,
-                boundsPaddingRight: 5,
-                boundsPaddingTop: 3,
+                paddingBottom: 8,
+                paddingLeft: 10,
+                paddingRight: 5,
+                paddingTop: 3,
                 duration: 3000,
                 heading: 40,
                 mode: 'Flight',
@@ -897,10 +913,10 @@ describe('Camera', () => {
               {
                 bounds:
                   '{"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-63.12641,39.797968]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-74.143727,40.772177]}}]}',
-                boundsPaddingBottom: 8,
-                boundsPaddingLeft: 10,
-                boundsPaddingRight: 5,
-                boundsPaddingTop: 3,
+                paddingBottom: 8,
+                paddingLeft: 10,
+                paddingRight: 5,
+                paddingTop: 3,
                 duration: 500,
                 heading: 100,
                 mode: 'Ease',
@@ -939,6 +955,10 @@ describe('Camera', () => {
           mode: 'None',
           pitch: undefined,
           zoom: 16,
+          paddingBottom: 0,
+          paddingLeft: 0,
+          paddingRight: 0,
+          paddingTop: 0,
         };
 
         expect(camera.defaultCamera).toStrictEqual(undefined);
@@ -998,6 +1018,10 @@ describe('Camera', () => {
           mode: 'Ease',
           pitch: 45,
           zoom: 9,
+          paddingBottom: 0,
+          paddingLeft: 0,
+          paddingRight: 0,
+          paddingTop: 0,
         });
 
         // with centerCoordinate
@@ -1014,6 +1038,10 @@ describe('Camera', () => {
           mode: 'Ease',
           pitch: 45,
           zoom: 9,
+          paddingBottom: 0,
+          paddingLeft: 0,
+          paddingRight: 0,
+          paddingTop: 0,
         });
       });
 
@@ -1025,10 +1053,10 @@ describe('Camera', () => {
         expect(camera._createStopConfig(configWithBounds, true)).toStrictEqual({
           bounds:
             '{"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-63.12641,39.797968]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-74.143727,40.772177]}}]}',
-          boundsPaddingBottom: 8,
-          boundsPaddingLeft: 10,
-          boundsPaddingRight: 5,
-          boundsPaddingTop: 3,
+          paddingBottom: 8,
+          paddingLeft: 10,
+          paddingRight: 5,
+          paddingTop: 3,
           duration: 500,
           heading: 100,
           mode: 'Ease',
@@ -1045,10 +1073,10 @@ describe('Camera', () => {
         ).toStrictEqual({
           bounds:
             '{"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-63.12641,39.797968]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-74.143727,40.772177]}}]}',
-          boundsPaddingBottom: 8,
-          boundsPaddingLeft: 10,
-          boundsPaddingRight: 5,
-          boundsPaddingTop: 3,
+          paddingBottom: 8,
+          paddingLeft: 10,
+          paddingRight: 5,
+          paddingTop: 3,
           centerCoordinate:
             '{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-111.8678,40.2866]}}',
           duration: 500,

@@ -14,6 +14,31 @@ const SettingsPropTypes = {
    * Center coordinate on map [lng, lat]
    */
   centerCoordinate: PropTypes.arrayOf(PropTypes.number),
+  
+  /**
+   * Padding around edges of map in points
+   */
+  padding: PropTypes.shape({
+    /**
+     * Left padding in points
+     */
+    paddingLeft: PropTypes.number,
+
+    /**
+     * Right padding in points
+     */
+    paddingRight: PropTypes.number,
+
+    /**
+     * Top padding in points
+     */
+    paddingTop: PropTypes.number,
+
+    /**
+     * Bottom padding in points
+     */
+    paddingBottom: PropTypes.number,
+  }),
 
   /**
    * Heading on map
@@ -27,6 +52,7 @@ const SettingsPropTypes = {
 
   /**
    * Represents a rectangle in geographical coordinates marking the visible area of the map.
+   * The `bounds.padding*` properties are deprecated; use root `padding` property instead.
    */
   bounds: PropTypes.shape({
     /**
@@ -40,23 +66,23 @@ const SettingsPropTypes = {
     sw: PropTypes.arrayOf(PropTypes.number).isRequired,
 
     /**
-     * Left camera padding for bounds
+     * Left padding in points (deprecated; use root `padding` property instead)
      */
     paddingLeft: PropTypes.number,
 
     /**
-     * Right camera padding for bounds
-     */
+    * Right padding in points (deprecated; use root `padding` property instead)
+    */
     paddingRight: PropTypes.number,
 
     /**
-     * Top camera padding for bounds
-     */
+    * Top padding in points (deprecated; use root `padding` property instead)
+    */
     paddingTop: PropTypes.number,
 
     /**
-     * Bottom camera padding for bounds
-     */
+    * Bottom padding in points (deprecated; use root `padding` property instead)
+    */
     paddingBottom: PropTypes.number,
   }),
 
@@ -81,7 +107,7 @@ class Camera extends React.Component {
     animationDuration: PropTypes.number,
 
     /**
-     * The animationstyle when the camara updates. One of; `flyTo`, `easeTo`, `linearTo`, `moveTo`
+     * The animationstyle when the camara updates. One of: `flyTo`, `easeTo`, `linearTo`, `moveTo`
      */
     animationMode: PropTypes.oneOf(['flyTo', 'easeTo', 'linearTo', 'moveTo']),
 
@@ -173,62 +199,73 @@ class Camera extends React.Component {
   }
 
   _handleCameraChange(currentCamera, nextCamera) {
-    const hasCameraChanged = this._hasCameraChanged(currentCamera, nextCamera);
+    const c = currentCamera;
+    const n = nextCamera;
+
+    const hasCameraChanged = this._hasCameraChanged(c, n);
     if (!hasCameraChanged) {
       return;
     }
 
-    if (currentCamera.followUserLocation && !nextCamera.followUserLocation) {
+    if (c.followUserLocation && !n.followUserLocation) {
       this.refs.camera.setNativeProps({followUserLocation: false});
       return;
     }
-    if (!currentCamera.followUserLocation && nextCamera.followUserLocation) {
+    if (!c.followUserLocation && n.followUserLocation) {
       this.refs.camera.setNativeProps({followUserLocation: true});
     }
 
-    if (nextCamera.followUserLocation) {
+    if (n.followUserLocation) {
       this.refs.camera.setNativeProps({
-        followUserMode: nextCamera.followUserMode,
-        followPitch: nextCamera.followPitch || nextCamera.pitch,
-        followHeading: nextCamera.followHeading || nextCamera.heading,
-        followZoomLevel: nextCamera.followZoomLevel || nextCamera.zoomLevel,
+        followUserMode: n.followUserMode,
+        followPitch: n.followPitch || n.pitch,
+        followHeading: n.followHeading || n.heading,
+        followZoomLevel: n.followZoomLevel || n.zoomLevel,
       });
       return;
     }
-    if (nextCamera.maxBounds) {
+
+    if (n.maxBounds) {
       this.refs.camera.setNativeProps({
         maxBounds: this._getMaxBounds(),
       });
     }
-    if (nextCamera.minZoomLevel) {
+    if (n.minZoomLevel) {
       this.refs.camera.setNativeProps({
         minZoomLevel: this.props.minZoomLevel,
       });
     }
-    if (nextCamera.maxZoomLevel) {
+    if (n.maxZoomLevel) {
       this.refs.camera.setNativeProps({
         maxZoomLevel: this.props.maxZoomLevel,
       });
     }
 
     const cameraConfig = {
-      animationMode: nextCamera.animationMode,
-      animationDuration: nextCamera.animationDuration,
-      zoomLevel: nextCamera.zoomLevel,
-      pitch: nextCamera.pitch,
-      heading: nextCamera.heading,
+      animationMode: n.animationMode,
+      animationDuration: n.animationDuration,
+      zoomLevel: n.zoomLevel,
+      pitch: n.pitch,
+      heading: n.heading,
+      padding: n.padding,
     };
 
-    if (
-      nextCamera.bounds &&
-      this._hasBoundsChanged(currentCamera.bounds, nextCamera.bounds)
-    ) {
-      cameraConfig.bounds = nextCamera.bounds;
-    } else {
-      cameraConfig.centerCoordinate = nextCamera.centerCoordinate;
+    const boundsChanged = this._hasBoundsChanged(c.bounds, n.bounds);
+    const centerCoordinateChanged = this._hasCenterCoordinateChanged(c, n);
+    const paddingChanged = this._hasPaddingChanged(c, n);
+    
+    let shouldUpdate = false;
+    if (n.bounds && (boundsChanged || paddingChanged)) {
+      cameraConfig.bounds = n.bounds;
+      shouldUpdate = true;
+    } else if (n.centerCoordinate && (centerCoordinateChanged || paddingChanged)) {
+      cameraConfig.centerCoordinate = n.centerCoordinate;
+      shouldUpdate = true;
     }
 
-    this._setCamera(cameraConfig);
+    if (shouldUpdate) {
+      this._setCamera(cameraConfig);
+    }
   }
 
   _hasCameraChanged(currentCamera, nextCamera) {
@@ -239,6 +276,7 @@ class Camera extends React.Component {
       c.heading !== n.heading ||
       this._hasCenterCoordinateChanged(c, n) ||
       this._hasBoundsChanged(c.bounds, n.bounds) ||
+      this._hasPaddingChanged(c, n) ||
       c.pitch !== n.pitch ||
       c.zoomLevel !== n.zoomLevel ||
       c.triggerKey !== n.triggerKey;
@@ -253,7 +291,7 @@ class Camera extends React.Component {
     const hasAnimationPropsChanged =
       c.animationMode !== n.animationMode ||
       c.animationDuration !== n.animationDuration;
-
+    
     const hasNavigationConstraintsPropsChanged =
       this._hasBoundsChanged(c.maxBounds, n.maxBounds) ||
       c.minZoomLevel !== n.minZoomLevel ||
@@ -290,11 +328,9 @@ class Camera extends React.Component {
     if (!cB && !nB) {
       return false;
     }
-
     if (existenceChange(cB, nB)) {
       return true;
     }
-
     return (
       cB.ne[0] !== nB.ne[0] ||
       cB.ne[1] !== nB.ne[1] ||
@@ -304,6 +340,26 @@ class Camera extends React.Component {
       cB.paddingLeft !== nB.paddingLeft ||
       cB.paddingRight !== nB.paddingRight ||
       cB.paddingBottom !== nB.paddingBottom
+    );
+  }
+
+  _hasPaddingChanged(currentCamera, nextCamera) {
+    const cP = currentCamera.padding;
+    const nP = nextCamera.padding;
+
+    if (!cP && !nP) {
+      return false;
+    }
+
+    if (existenceChange(cP, nP)) {
+      return true;
+    }
+
+    return (
+      cP.paddingTop !== nP.paddingTop ||
+      cP.paddingLeft !== nP.paddingLeft ||
+      cP.paddingRight !== nP.paddingRight ||
+      cP.paddingBottom !== nP.paddingBottom
     );
   }
 
@@ -358,8 +414,8 @@ class Camera extends React.Component {
       bounds: {
         ne: northEastCoordinates,
         sw: southWestCoordinates,
-        ...pad,
       },
+      padding: pad,
       animationDuration,
       animationMode: Camera.Mode.Ease,
     });
@@ -498,14 +554,14 @@ class Camera extends React.Component {
     }
 
     if (config.bounds && config.bounds.ne && config.bounds.sw) {
-      const {ne, sw, paddingLeft, paddingRight, paddingTop, paddingBottom} =
-        config.bounds;
+      const { ne, sw } = config.bounds;
       stopConfig.bounds = toJSONString(geoUtils.makeLatLngBounds(ne, sw));
-      stopConfig.boundsPaddingTop = paddingTop || 0;
-      stopConfig.boundsPaddingRight = paddingRight || 0;
-      stopConfig.boundsPaddingBottom = paddingBottom || 0;
-      stopConfig.boundsPaddingLeft = paddingLeft || 0;
     }
+    
+    stopConfig.paddingTop = config.padding?.paddingTop || config.bounds?.paddingTop || 0;
+    stopConfig.paddingRight = config.padding?.paddingRight || config.bounds?.paddingRight || 0;
+    stopConfig.paddingBottom = config.padding?.paddingBottom || config.bounds?.paddingBottom || 0;
+    stopConfig.paddingLeft = config.padding?.paddingLeft || config.bounds?.paddingLeft || 0;
 
     return stopConfig;
   }
