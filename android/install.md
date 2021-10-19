@@ -2,13 +2,21 @@
 
 ## React-Native > `0.60.0`
 
-If you are using autolinking feature introduced in React-Native `0.60.0` you do not need any additional steps.
+If you are using React-Native `0.60.0` or greater, you do not need to perform any additional steps due to the RN autolinking feature.
 
 <br>
 
+## Installation FAQ:
+
+Q: I am receiving a `getDataNetworkTypeForSubscriber` error when attempting to display a MapView.
+
+A: You need to add <uses-permission android:name="android.permission.READ_PHONE_STATE"/> to the `app/src/main/AndroidManifest.xml` file. Restart the app after. 
+See this for more info (https://github.com/react-native-mapbox-gl/maps/issues/1286)
+
+
 ## Mapbox Maps SDK
 
-It is possible to set a custom version of the Mapbox SDK
+If you want to set a custom version of the Mapbox SDK perform the following steps:
 
 Add the following to your `android/build.gradle`:
 
