@@ -166,7 +166,7 @@ IOS:
   - [x] ios
   - [ ] android
   - [ ] Callout
-     - [ ] ios
+     - [x] ios
      - [ ] android 
 - [ ] MarkerView
 
