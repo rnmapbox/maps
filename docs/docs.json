@@ -3240,11 +3240,11 @@
     "methods": [
       {
         "name": "refresh",
-        "docblock": "On android point annotation is rendered offscreen with a canvas into an image.\nTo rerender the image from the current state of the view call refresh.\nCall this for example from Image#onLoad.",
+        "docblock": "On v10 and pre v10 android point annotation is rendered offscreen with a canvas into an image.\nTo rerender the image from the current state of the view call refresh.\nCall this for example from Image#onLoad.",
         "modifiers": [],
         "params": [],
         "returns": null,
-        "description": "On android point annotation is rendered offscreen with a canvas into an image.\nTo rerender the image from the current state of the view call refresh.\nCall this for example from Image#onLoad.",
+        "description": "On v10 and pre v10 android point annotation is rendered offscreen with a canvas into an image.\nTo rerender the image from the current state of the view call refresh.\nCall this for example from Image#onLoad.",
         "examples": []
       }
     ],

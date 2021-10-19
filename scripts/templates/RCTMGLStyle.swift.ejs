@@ -41,7 +41,7 @@ func <%- setLayerMethodName(layer, 'ios') -%>(layer: inout <%- getLayerType(laye
           if let image = image {
             DispatchQueue.main.sync {
               if (isValid()) {
-                try! self.style.addImage(image, id:imageURI!);
+                try! self.style.addImage(image, id:imageURI!, stretchX: [], stretchY: []);
                 applyUpdater { (layer: inout <%- getLayerType(layer, 'ios-v10') -%>) in
                   self.set<%- iosPropMethodName(layer, pascelCase(layer.properties[i].name)) -%>(&layer, styleValue:styleValue);
                 }
