@@ -19,7 +19,6 @@ class RCTMGLPointAnnotationManager  : RCTViewManager {
   )
   {
     self.bridge.uiManager.addUIBlock { (manager, viewRegistry) in
-          
       guard let view = viewRegistry?[reactTag] else {
         Logger.log(level: .error, message: "View with tag: \(reactTag) not found")
         return
