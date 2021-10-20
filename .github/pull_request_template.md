@@ -13,16 +13,16 @@ Fixes #<issue-number>
 
 Added `your feature` that allows ...
 
-
 ## Checklist
 
 <!-- Check completed item: [X] -->
 
-* [ ] I have tested this on a device/simulator for each compatible OS
-* [ ] I updated the documentation `yarn generate`
-* [ ] I mentioned this change in `CHANGELOG.md`
-* [ ] I updated the typings files (`index.d.ts`)
-* [ ] I added/ updated a sample  (`/example`)
+- [ ] I have tested this on a device/simulator for each compatible OS
+- [ ] I formatted JS and TS files with `yarn lint`
+- [ ] I updated the documentation `yarn generate`
+- [ ] I mentioned this change in `CHANGELOG.md`
+- [ ] I updated the typings files (`index.d.ts`)
+- [ ] I added/ updated a sample (`/example`)
 
 ## Screenshot OR Video
 
