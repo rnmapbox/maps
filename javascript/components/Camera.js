@@ -14,7 +14,7 @@ const SettingsPropTypes = {
    * Center coordinate on map [lng, lat]
    */
   centerCoordinate: PropTypes.arrayOf(PropTypes.number),
-  
+
   /**
    * Padding around edges of map in points
    */
@@ -71,18 +71,18 @@ const SettingsPropTypes = {
     paddingLeft: PropTypes.number,
 
     /**
-    * Right padding in points (deprecated; use root `padding` property instead)
-    */
+     * Right padding in points (deprecated; use root `padding` property instead)
+     */
     paddingRight: PropTypes.number,
 
     /**
-    * Top padding in points (deprecated; use root `padding` property instead)
-    */
+     * Top padding in points (deprecated; use root `padding` property instead)
+     */
     paddingTop: PropTypes.number,
 
     /**
-    * Bottom padding in points (deprecated; use root `padding` property instead)
-    */
+     * Bottom padding in points (deprecated; use root `padding` property instead)
+     */
     paddingBottom: PropTypes.number,
   }),
 
@@ -253,12 +253,15 @@ class Camera extends React.Component {
     const boundsChanged = this._hasBoundsChanged(c.bounds, n.bounds);
     const centerCoordinateChanged = this._hasCenterCoordinateChanged(c, n);
     const paddingChanged = this._hasPaddingChanged(c, n);
-    
+
     let shouldUpdate = false;
     if (n.bounds && (boundsChanged || paddingChanged)) {
       cameraConfig.bounds = n.bounds;
       shouldUpdate = true;
-    } else if (n.centerCoordinate && (centerCoordinateChanged || paddingChanged)) {
+    } else if (
+      n.centerCoordinate &&
+      (centerCoordinateChanged || paddingChanged)
+    ) {
       cameraConfig.centerCoordinate = n.centerCoordinate;
       shouldUpdate = true;
     }
@@ -291,7 +294,7 @@ class Camera extends React.Component {
     const hasAnimationPropsChanged =
       c.animationMode !== n.animationMode ||
       c.animationDuration !== n.animationDuration;
-    
+
     const hasNavigationConstraintsPropsChanged =
       this._hasBoundsChanged(c.maxBounds, n.maxBounds) ||
       c.minZoomLevel !== n.minZoomLevel ||
@@ -554,14 +557,18 @@ class Camera extends React.Component {
     }
 
     if (config.bounds && config.bounds.ne && config.bounds.sw) {
-      const { ne, sw } = config.bounds;
+      const {ne, sw} = config.bounds;
       stopConfig.bounds = toJSONString(geoUtils.makeLatLngBounds(ne, sw));
     }
-    
-    stopConfig.paddingTop = config.padding?.paddingTop || config.bounds?.paddingTop || 0;
-    stopConfig.paddingRight = config.padding?.paddingRight || config.bounds?.paddingRight || 0;
-    stopConfig.paddingBottom = config.padding?.paddingBottom || config.bounds?.paddingBottom || 0;
-    stopConfig.paddingLeft = config.padding?.paddingLeft || config.bounds?.paddingLeft || 0;
+
+    stopConfig.paddingTop =
+      config.padding?.paddingTop || config.bounds?.paddingTop || 0;
+    stopConfig.paddingRight =
+      config.padding?.paddingRight || config.bounds?.paddingRight || 0;
+    stopConfig.paddingBottom =
+      config.padding?.paddingBottom || config.bounds?.paddingBottom || 0;
+    stopConfig.paddingLeft =
+      config.padding?.paddingLeft || config.bounds?.paddingLeft || 0;
 
     return stopConfig;
   }

@@ -13,6 +13,7 @@ build(android): add telemetry dependency to default build setup ([#1550](https:/
 fix: revert pinned mapLibre version to `5.11.0` ([8a2b00e67ba6398f3f6e6f52e98b0f0cea437e4d](https://github.com/react-native-mapbox-gl/maps/commit/8a2b00e67ba6398f3f6e6f52e98b0f0cea437e4d))
 
 style(eslint): align root and example with the same configuration ([#1575](https://github.com/react-native-mapbox-gl/maps/pull/1575))
+chore(pre-commit): run lint on TS files, change PR template ([#1584](https://github.com/react-native-mapbox-gl/maps/pull/1584))
 
 ---
 

@@ -1,9 +1,8 @@
 import React from 'react';
-import { View } from 'react-native';
+import {View} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import sheet from '../../styles/sheet';
-
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import TabBarPage from '../common/TabBarPage';
 
@@ -14,7 +13,7 @@ const buildPadding = ([top, right, bottom, left] = [0, 0, 0, 0]) => {
     paddingTop: top,
     paddingBottom: bottom,
   };
-}
+};
 
 class FitCenterCoord extends React.Component {
   static propTypes = {...BaseExamplePropTypes};
@@ -24,34 +23,58 @@ class FitCenterCoord extends React.Component {
 
     const houseCenterCoord = [-74.13545, 40.7958];
     const houseZoom = 20;
-    
+
     const townCenterCoord = [-74.12641, 40.797968];
     const townZoom = 14;
 
     this.options = [
       {
         label: 'House (none)',
-        data: {centerCoord: houseCenterCoord, zoom: houseZoom, padding: buildPadding()},
+        data: {
+          centerCoord: houseCenterCoord,
+          zoom: houseZoom,
+          padding: buildPadding(),
+        },
       },
       {
         label: 'House (bottom)',
-        data: {centerCoord: houseCenterCoord, zoom: houseZoom, padding: buildPadding([40, 40, 200, 40])},
+        data: {
+          centerCoord: houseCenterCoord,
+          zoom: houseZoom,
+          padding: buildPadding([40, 40, 200, 40]),
+        },
       },
       {
         label: 'House (top)',
-        data: {centerCoord: houseCenterCoord, zoom: houseZoom, padding: buildPadding([200, 40, 40, 40])},
+        data: {
+          centerCoord: houseCenterCoord,
+          zoom: houseZoom,
+          padding: buildPadding([200, 40, 40, 40]),
+        },
       },
       {
         label: 'Town',
-        data: {centerCoord: townCenterCoord, zoom: townZoom, padding: buildPadding()},
+        data: {
+          centerCoord: townCenterCoord,
+          zoom: townZoom,
+          padding: buildPadding(),
+        },
       },
       {
         label: 'Town (bottom)',
-        data: {centerCoord: townCenterCoord, zoom: townZoom, padding: buildPadding([40, 40, 200, 40])},
+        data: {
+          centerCoord: townCenterCoord,
+          zoom: townZoom,
+          padding: buildPadding([40, 40, 200, 40]),
+        },
       },
       {
         label: 'Town (top)',
-        data: {centerCoord: townCenterCoord, zoom: townZoom, padding: buildPadding([200, 40, 40, 40])},
+        data: {
+          centerCoord: townCenterCoord,
+          zoom: townZoom,
+          padding: buildPadding([200, 40, 40, 40]),
+        },
       },
     ];
 
