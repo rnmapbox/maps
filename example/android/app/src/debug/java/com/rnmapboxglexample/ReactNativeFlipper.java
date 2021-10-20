@@ -40,7 +40,8 @@ public class ReactNativeFlipper {
           new NetworkingModule.CustomClientBuilder() {
             @Override
             public void apply(OkHttpClient.Builder builder) {
-              builder.addNetworkInterceptor(new FlipperOkhttpInterceptor(networkFlipperPlugin));
+              // FIXME: had to disable for RN 0.66 upgrade
+              // builder.addNetworkInterceptor(new FlipperOkhttpInterceptor(networkFlipperPlugin));
             }
           });
       client.addPlugin(networkFlipperPlugin);
@@ -54,7 +55,8 @@ public class ReactNativeFlipper {
             new ReactInstanceManager.ReactInstanceEventListener() {
               @Override
               public void onReactContextInitialized(ReactContext reactContext) {
-                reactInstanceManager.removeReactInstanceEventListener(this);
+                // FIXME: had to disable for RN 0.66 upgrade
+                // reactInstanceManager.removeReactInstanceEventListener(this);
                 reactContext.runOnNativeModulesQueueThread(
                     new Runnable() {
                       @Override
