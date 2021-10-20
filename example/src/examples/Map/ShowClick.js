@@ -4,7 +4,6 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import sheet from '../../styles/sheet';
 import {DEFAULT_CENTER_COORDINATE} from '../../utils';
-
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import Page from '../common/Page';
 import Bubble from '../common/Bubble';

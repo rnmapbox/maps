@@ -35,8 +35,6 @@
         [self _moveCamera:mapView animated:YES ease:YES withCompletionHandler:completionHandler];
     } else if (_cameraStop.mode == [NSNumber numberWithInt:RCT_MAPBOX_CAMERA_MODE_LINEAR]) {
         [self _moveCamera:mapView animated:YES ease:NO withCompletionHandler:completionHandler];
-    } else if ([self _areBoundsValid:_cameraStop.bounds]) {
-        [self _fitBoundsCamera:mapView withCompletionHandler:completionHandler];
     } else {
         [self _moveCamera:mapView animated:NO ease:NO withCompletionHandler:completionHandler];
     }
@@ -47,17 +45,22 @@
     RCTMGLCameraWithPadding *nextCamera = [self _makeCamera:mapView];
 
     if ([mapView respondsToSelector:@selector(_flyToCamera:edgePadding:withDuration:peakAltitude:completionHandler:)]) {
-        [mapView _flyToCamera:nextCamera.camera edgePadding:nextCamera.boundsPadding withDuration:_cameraStop.duration peakAltitude:-1 completionHandler:completionHandler];
+        [mapView
+           _flyToCamera:nextCamera.camera
+           edgePadding:nextCamera.boundsPadding
+           withDuration:_cameraStop.duration
+           peakAltitude:-1
+           completionHandler:completionHandler];
     } else {
-        [mapView flyToCamera:nextCamera.camera withDuration:_cameraStop.duration completionHandler:completionHandler];
+        [mapView
+           flyToCamera:nextCamera.camera
+           withDuration:_cameraStop.duration
+           completionHandler:completionHandler];
     }
 }
 
 - (void)_moveCamera:(RCTMGLMapView*)mapView animated:(BOOL)animated ease:(BOOL)ease withCompletionHandler:(void (^)(void))completionHandler
 {
-    if ([self _hasCenterCoordAndZoom]) {
-        [self _centerCoordWithZoomCamera:mapView animated:animated withCompletionHandler:completionHandler];
-    } else {
         RCTMGLCameraWithPadding *nextCamera = [self _makeCamera:mapView];
         NSString *easeFunctionName = ease ? kCAMediaTimingFunctionEaseInEaseOut : kCAMediaTimingFunctionLinear;
 
@@ -66,7 +69,49 @@
                  animationTimingFunction:[CAMediaTimingFunction functionWithName:easeFunctionName]
                  edgePadding:nextCamera.boundsPadding
                  completionHandler:completionHandler];
+}
+
+- (RCTMGLCameraWithPadding*)_makeCamera:(RCTMGLMapView*)mapView
+{
+    MGLMapCamera *nextCamera = [mapView.camera copy];
+    
+    if (_cameraStop.pitch != nil) {
+        nextCamera.pitch = [_cameraStop.pitch floatValue];
     }
+    
+    if (_cameraStop.heading != nil) {
+        nextCamera.heading = [_cameraStop.heading floatValue];
+    }
+    
+    if ([self _isCoordValid:_cameraStop.coordinate]) {
+        MGLCoordinateBounds boundsFromCoord = { .sw =  _cameraStop.coordinate, .ne =  _cameraStop.coordinate };
+        MGLMapCamera *boundsCamera = [mapView
+            camera:nextCamera
+            fittingCoordinateBounds:boundsFromCoord
+            edgePadding: [self _clippedPadding:_cameraStop.padding forView:mapView]];
+        nextCamera.centerCoordinate = boundsCamera.centerCoordinate;
+    
+        if (_cameraStop.zoom != nil) {
+            nextCamera.altitude = [mapView
+                altitudeFromZoom:[_cameraStop.zoom doubleValue]
+                atLatitude:nextCamera.centerCoordinate.latitude
+                atPitch:nextCamera.pitch];
+        } else {
+            nextCamera.altitude = boundsCamera.altitude;
+        }
+    } else if ([self _areBoundsValid:_cameraStop.bounds]) {
+        MGLMapCamera *boundsCamera = [mapView
+            camera:nextCamera
+            fittingCoordinateBounds:_cameraStop.bounds
+            edgePadding: [self _clippedPadding:_cameraStop.padding forView:mapView]];
+        nextCamera.centerCoordinate = boundsCamera.centerCoordinate;
+        nextCamera.altitude = boundsCamera.altitude;
+    }
+
+    RCTMGLCameraWithPadding* cameraWithPadding = [[RCTMGLCameraWithPadding alloc] init];
+    cameraWithPadding.camera = nextCamera;
+    cameraWithPadding.boundsPadding = [self _clippedPadding:_cameraStop.padding forView:mapView];
+    return cameraWithPadding;
 }
 
 - (UIEdgeInsets)_clippedPadding:(UIEdgeInsets)padding forView:(RCTMGLMapView*)mapView
@@ -85,67 +130,6 @@
         result.right -= (padding.right * extra) / totalPadding;
     }
     return result;
-}
-
-- (void)_fitBoundsCamera:(RCTMGLMapView*)mapView withCompletionHandler:(void (^)(void))completionHandler
-{
-    MGLCoordinateBounds bounds = _cameraStop.bounds;
-    CLLocationCoordinate2D coordinates[] = {
-        { bounds.ne.latitude, bounds.sw.longitude },
-        bounds.sw,
-        { bounds.sw.latitude, bounds.ne.longitude },
-        bounds.ne
-    };
-
-    [mapView setVisibleCoordinates:coordinates
-             count:4
-             edgePadding:[self _clippedPadding:_cameraStop.boundsPadding forView:mapView]
-             direction:mapView.direction
-             duration:_cameraStop.duration
-             animationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]
-             completionHandler:completionHandler];
-}
-
-- (void)_centerCoordWithZoomCamera:(RCTMGLMapView*)mapView animated:(BOOL)animated withCompletionHandler:(void (^)(void))completionHandler
-{
-    MGLMapCamera *camera = [MGLMapCamera cameraLookingAtCenterCoordinate:_cameraStop.coordinate
-                                    fromDistance:[mapView altitudeFromZoom:[_cameraStop.zoom doubleValue] atLatitude:_cameraStop.coordinate.latitude]
-                                    pitch:[_cameraStop.pitch floatValue]
-                                    heading:[_cameraStop.heading floatValue]];
-    [mapView setCamera:camera
-                withDuration:animated ? _cameraStop.duration : 0
-                animationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]
-                completionHandler:completionHandler];
-}
-
-- (RCTMGLCameraWithPadding*)_makeCamera:(RCTMGLMapView*)mapView
-{
-    MGLMapCamera *nextCamera = [mapView.camera copy];
-    
-    if (_cameraStop.pitch != nil) {
-        nextCamera.pitch = [_cameraStop.pitch floatValue];
-    }
-    
-    if (_cameraStop.heading != nil) {
-        nextCamera.heading = [_cameraStop.heading floatValue];
-    }
-    
-    if ([self _isCoordValid:_cameraStop.coordinate]) {
-        nextCamera.centerCoordinate = _cameraStop.coordinate;
-    } else if ([self _areBoundsValid:_cameraStop.bounds]) {
-        MGLMapCamera *boundsCamera = [mapView camera:nextCamera fittingCoordinateBounds:_cameraStop.bounds edgePadding: [self _clippedPadding:_cameraStop.boundsPadding forView:mapView]];
-        nextCamera.centerCoordinate = boundsCamera.centerCoordinate;
-        nextCamera.altitude = boundsCamera.altitude;
-    }
-    
-    if (_cameraStop.zoom != nil) {
-        nextCamera.altitude = [mapView altitudeFromZoom:[_cameraStop.zoom doubleValue] atLatitude:nextCamera.centerCoordinate.latitude atPitch:nextCamera.pitch];
-    }
-    
-    RCTMGLCameraWithPadding* cameraWithPadding = [[RCTMGLCameraWithPadding alloc] init];
-    cameraWithPadding.camera = nextCamera;
-    cameraWithPadding.boundsPadding = [self _clippedPadding:_cameraStop.boundsPadding forView:mapView];
-    return cameraWithPadding;
 }
 
 - (BOOL)_areBoundsValid:(MGLCoordinateBounds)bounds {

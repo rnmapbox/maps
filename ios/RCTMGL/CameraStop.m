@@ -49,6 +49,15 @@
         stop.heading = args[@"heading"];
     }
     
+    if (args[@"padding"]) {
+        NSDictionary * padding = args[@"padding"];
+        CGFloat paddingTop = padding[@"paddingTop"] ? [padding[@"paddingTop"] floatValue] : 0.0;
+        CGFloat paddingRight = padding[@"paddingRight"] ? [padding[@"paddingRight"] floatValue] : 0.0;
+        CGFloat paddingBottom = padding[@"paddingBottom"] ? [padding[@"paddingBottom"] floatValue] : 0.0;
+        CGFloat paddingLeft = padding[@"paddingLeft"] ? [padding[@"paddingLeft"] floatValue] : 0.0;
+        stop.padding = UIEdgeInsetsMake(paddingTop, paddingLeft, paddingBottom, paddingRight);
+    }
+    
     if (args[@"centerCoordinate"]) {
         stop.coordinate = [RCTMGLUtils fromFeature:args[@"centerCoordinate"]];
     }
@@ -63,13 +72,13 @@
     
     if (args[@"bounds"]) {
         stop.bounds = [RCTMGLUtils fromFeatureCollection:args[@"bounds"]];
-        
-        CGFloat paddingTop = args[@"boundsPaddingTop"] ? [args[@"boundsPaddingTop"] floatValue] : 0.0;
-        CGFloat paddingRight = args[@"boundsPaddingRight"] ? [args[@"boundsPaddingRight"] floatValue] : 0.0;
-        CGFloat paddingBottom = args[@"boundsPaddingBottom"] ? [args[@"boundsPaddingBottom"] floatValue] : 0.0;
-        CGFloat paddingLeft = args[@"boundsPaddingLeft"] ? [args[@"boundsPaddingLeft"] floatValue] : 0.0;
-        stop.boundsPadding = UIEdgeInsetsMake(paddingTop, paddingLeft, paddingBottom, paddingRight);
     }
+    
+    CGFloat paddingTop = args[@"paddingTop"] ? [args[@"paddingTop"] floatValue] : 0.0;
+    CGFloat paddingRight = args[@"paddingRight"] ? [args[@"paddingRight"] floatValue] : 0.0;
+    CGFloat paddingBottom = args[@"paddingBottom"] ? [args[@"paddingBottom"] floatValue] : 0.0;
+    CGFloat paddingLeft = args[@"paddingLeft"] ? [args[@"paddingLeft"] floatValue] : 0.0;
+    stop.padding = UIEdgeInsetsMake(paddingTop, paddingLeft, paddingBottom, paddingRight);
     
     NSTimeInterval duration = 2.0;
     if (args[@"duration"]) {

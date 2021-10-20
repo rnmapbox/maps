@@ -11,7 +11,6 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import geoViewport from '@mapbox/geo-viewport';
 
 import sheet from '../../styles/sheet';
-
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import Page from '../common/Page';
 import Bubble from '../common/Bubble';

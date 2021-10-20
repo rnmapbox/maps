@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 describe('Maps Example App', () => {
   beforeAll(async () => {
     await device.launchApp();

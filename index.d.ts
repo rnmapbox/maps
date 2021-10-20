@@ -266,7 +266,7 @@ declare namespace MapboxGL {
   class Light extends Component<LightProps> { }
 
   class StyleSheet extends Component {
-    static create<T extends NamedStyles<T> | NamedStyles<any>>(styles: T): void;
+    static create<T extends NamedStyles<T> | NamedStyles<any>>(styles: T): T;
     camera(
       stops: { [key: number]: string },
       interpolationMode?: InterpolationMode,
@@ -525,17 +525,21 @@ export interface CameraProps extends CameraSettings, ViewProps {
   ) => void;
 }
 
+export interface CameraPadding {
+  paddingLeft?: number;
+  paddingRight?: number;
+  paddingTop?: number;
+  paddingBottom?: number;
+}
+
 export interface CameraSettings {
   centerCoordinate?: GeoJSON.Position;
   heading?: number;
   pitch?: number;
-  bounds?: {
+  padding?: CameraPadding;
+  bounds?: CameraPadding & {
     ne: GeoJSON.Position;
     sw: GeoJSON.Position;
-    paddingLeft?: number;
-    paddingRight?: number;
-    paddingTop?: number;
-    paddingBottom?: number;
   };
   zoomLevel?: number;
   animationDuration?: number;

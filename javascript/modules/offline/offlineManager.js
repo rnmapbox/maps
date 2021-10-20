@@ -183,7 +183,7 @@ class OfflineManager {
   async getPacks() {
     await this._initialize();
     return Object.keys(this._offlinePacks).map(
-      (name) => this._offlinePacks[name],
+      name => this._offlinePacks[name],
     );
   }
 
@@ -287,7 +287,7 @@ class OfflineManager {
         // manually set a listener, since listeners are only set on create flow
         await MapboxGLOfflineManager.setPackObserver(packName);
       } catch (e) {
-        console.log('Unable to set pack observer', e); // eslint-disable-line
+        console.log('Unable to set pack observer', e);
       }
     }
   }

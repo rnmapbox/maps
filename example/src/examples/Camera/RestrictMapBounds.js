@@ -3,7 +3,6 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import bboxPolygon from '@turf/bbox-polygon';
 
 import sheet from '../../styles/sheet';
-
 import Page from '../common/Page';
 
 const boundsStyle = {

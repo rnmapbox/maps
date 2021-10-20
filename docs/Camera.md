@@ -6,30 +6,40 @@
 | Prop | Type | Default | Required | Description |
 | ---- | :--: | :-----: | :------: | :----------: |
 | animationDuration | `number` | `2000` | `false` | The duration a camera update takes (in ms) |
-| animationMode | `enum` | `'easeTo'` | `false` | The animationstyle when the camara updates. One of; `flyTo`, `easeTo`, `linearTo`, `moveTo` |
+| animationMode | `enum` | `'easeTo'` | `false` | The animationstyle when the camara updates. One of: `flyTo`, `easeTo`, `linearTo`, `moveTo` |
 | defaultSettings | `shape` | `none` | `false` | Default view settings applied on camera |
 | &nbsp;&nbsp;centerCoordinate | `array` | `none` | `false` | Center coordinate on map [lng, lat] |
+| &nbsp;&nbsp;padding | `shape` | `none` | `false` | Padding around edges of map in points |
+| &nbsp;&nbsp;&nbsp;&nbsp;paddingLeft | `number` | `none` | `false` | Left padding in points |
+| &nbsp;&nbsp;&nbsp;&nbsp;paddingRight | `number` | `none` | `false` | Right padding in points |
+| &nbsp;&nbsp;&nbsp;&nbsp;paddingTop | `number` | `none` | `false` | Top padding in points |
+| &nbsp;&nbsp;&nbsp;&nbsp;paddingBottom | `number` | `none` | `false` | Bottom padding in points |
 | &nbsp;&nbsp;heading | `number` | `none` | `false` | Heading on map |
 | &nbsp;&nbsp;pitch | `number` | `none` | `false` | Pitch on map |
-| &nbsp;&nbsp;bounds | `shape` | `none` | `false` | Represents a rectangle in geographical coordinates marking the visible area of the map. |
+| &nbsp;&nbsp;bounds | `shape` | `none` | `false` | Represents a rectangle in geographical coordinates marking the visible area of the map.<br/>The `bounds.padding*` properties are deprecated; use root `padding` property instead. |
 | &nbsp;&nbsp;&nbsp;&nbsp;ne | `array` | `none` | `true` | North east coordinate of bound |
 | &nbsp;&nbsp;&nbsp;&nbsp;sw | `array` | `none` | `true` | South west coordinate of bound |
-| &nbsp;&nbsp;&nbsp;&nbsp;paddingLeft | `number` | `none` | `false` | Left camera padding for bounds |
-| &nbsp;&nbsp;&nbsp;&nbsp;paddingRight | `number` | `none` | `false` | Right camera padding for bounds |
-| &nbsp;&nbsp;&nbsp;&nbsp;paddingTop | `number` | `none` | `false` | Top camera padding for bounds |
-| &nbsp;&nbsp;&nbsp;&nbsp;paddingBottom | `number` | `none` | `false` | Bottom camera padding for bounds |
+| &nbsp;&nbsp;&nbsp;&nbsp;paddingLeft | `number` | `none` | `false` | Left padding in points (deprecated; use root `padding` property instead) |
+| &nbsp;&nbsp;&nbsp;&nbsp;paddingRight | `number` | `none` | `false` | Right padding in points (deprecated; use root `padding` property instead) |
+| &nbsp;&nbsp;&nbsp;&nbsp;paddingTop | `number` | `none` | `false` | Top padding in points (deprecated; use root `padding` property instead) |
+| &nbsp;&nbsp;&nbsp;&nbsp;paddingBottom | `number` | `none` | `false` | Bottom padding in points (deprecated; use root `padding` property instead) |
 | &nbsp;&nbsp;onUserTrackingModeChange | `func` | `none` | `false` | Callback that is triggered on user tracking mode changes |
 | &nbsp;&nbsp;zoomLevel | `number` | `none` | `false` | Zoom level of the map |
 | centerCoordinate | `array` | `none` | `false` | Center coordinate on map [lng, lat] |
+| padding | `shape` | `none` | `false` | Padding around edges of map in points |
+| &nbsp;&nbsp;paddingLeft | `number` | `none` | `false` | Left padding in points |
+| &nbsp;&nbsp;paddingRight | `number` | `none` | `false` | Right padding in points |
+| &nbsp;&nbsp;paddingTop | `number` | `none` | `false` | Top padding in points |
+| &nbsp;&nbsp;paddingBottom | `number` | `none` | `false` | Bottom padding in points |
 | heading | `number` | `none` | `false` | Heading on map |
 | pitch | `number` | `none` | `false` | Pitch on map |
-| bounds | `shape` | `none` | `false` | Represents a rectangle in geographical coordinates marking the visible area of the map. |
+| bounds | `shape` | `none` | `false` | Represents a rectangle in geographical coordinates marking the visible area of the map.<br/>The `bounds.padding*` properties are deprecated; use root `padding` property instead. |
 | &nbsp;&nbsp;ne | `array` | `none` | `true` | North east coordinate of bound |
 | &nbsp;&nbsp;sw | `array` | `none` | `true` | South west coordinate of bound |
-| &nbsp;&nbsp;paddingLeft | `number` | `none` | `false` | Left camera padding for bounds |
-| &nbsp;&nbsp;paddingRight | `number` | `none` | `false` | Right camera padding for bounds |
-| &nbsp;&nbsp;paddingTop | `number` | `none` | `false` | Top camera padding for bounds |
-| &nbsp;&nbsp;paddingBottom | `number` | `none` | `false` | Bottom camera padding for bounds |
+| &nbsp;&nbsp;paddingLeft | `number` | `none` | `false` | Left padding in points (deprecated; use root `padding` property instead) |
+| &nbsp;&nbsp;paddingRight | `number` | `none` | `false` | Right padding in points (deprecated; use root `padding` property instead) |
+| &nbsp;&nbsp;paddingTop | `number` | `none` | `false` | Top padding in points (deprecated; use root `padding` property instead) |
+| &nbsp;&nbsp;paddingBottom | `number` | `none` | `false` | Bottom padding in points (deprecated; use root `padding` property instead) |
 | onUserTrackingModeChange | `func` | `none` | `false` | Callback that is triggered on user tracking mode changes |
 | zoomLevel | `number` | `none` | `false` | Zoom level of the map |
 | minZoomLevel | `number` | `none` | `false` | The minimun zoom level of the map |

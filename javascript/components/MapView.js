@@ -768,7 +768,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
     this._setStyleURL(props);
 
     const callbacks = {
-      ref: (nativeRef) => this._setNativeRef(nativeRef),
+      ref: nativeRef => this._setNativeRef(nativeRef),
       onPress: this._onPress,
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
@@ -794,8 +794,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
       <View
         onLayout={this._onLayout}
         style={this.props.style}
-        testID={mapView ? null : this.props.testID}
-      >
+        testID={mapView ? null : this.props.testID}>
         {mapView}
       </View>
     );

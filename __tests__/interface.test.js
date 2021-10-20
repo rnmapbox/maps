@@ -87,6 +87,6 @@ describe('Public Interface', () => {
       'Logger',
       'Style',
     ];
-    actualKeys.forEach((key) => expect(expectedKeys).toContain(key));
+    actualKeys.forEach(key => expect(expectedKeys).toContain(key));
   });
 });

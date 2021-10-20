@@ -1,13 +1,12 @@
 import React from 'react';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import {Text} from 'react-native';
-import Bubble from '../common/Bubble';
 
+import Bubble from '../common/Bubble';
 import sheet from '../../styles/sheet';
 import radar0 from '../../assets/radar.png';
 import radar1 from '../../assets/radar1.png';
 import radar2 from '../../assets/radar2.png';
-
 import Page from '../common/Page';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 
@@ -71,7 +70,9 @@ class ImageOverlay extends React.Component {
   }
 
   componentWillUnmount() {
-    this._timeout && clearTimeout(this._timeout);
+    if (this._timeout) {
+      clearTimeout(this._timeout);
+    }
   }
 
   render() {

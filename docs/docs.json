@@ -414,7 +414,7 @@
         "required": false,
         "type": "enum",
         "default": "'easeTo'",
-        "description": "The animationstyle when the camara updates. One of; `flyTo`, `easeTo`, `linearTo`, `moveTo`"
+        "description": "The animationstyle when the camara updates. One of: `flyTo`, `easeTo`, `linearTo`, `moveTo`"
       },
       {
         "name": "defaultSettings",
@@ -433,6 +433,45 @@
               },
               "default": "none",
               "description": "Center coordinate on map [lng, lat]"
+            },
+            {
+              "name": "padding",
+              "required": false,
+              "type": {
+                "name": "shape",
+                "value": [
+                  {
+                    "name": "paddingLeft",
+                    "required": false,
+                    "type": "number",
+                    "default": "none",
+                    "description": "Left padding in points"
+                  },
+                  {
+                    "name": "paddingRight",
+                    "required": false,
+                    "type": "number",
+                    "default": "none",
+                    "description": "Right padding in points"
+                  },
+                  {
+                    "name": "paddingTop",
+                    "required": false,
+                    "type": "number",
+                    "default": "none",
+                    "description": "Top padding in points"
+                  },
+                  {
+                    "name": "paddingBottom",
+                    "required": false,
+                    "type": "number",
+                    "default": "none",
+                    "description": "Bottom padding in points"
+                  }
+                ]
+              },
+              "default": "none",
+              "description": "Padding around edges of map in points"
             },
             {
               "name": "heading",
@@ -483,33 +522,33 @@
                     "required": false,
                     "type": "number",
                     "default": "none",
-                    "description": "Left camera padding for bounds"
+                    "description": "Left padding in points (deprecated; use root `padding` property instead)"
                   },
                   {
                     "name": "paddingRight",
                     "required": false,
                     "type": "number",
                     "default": "none",
-                    "description": "Right camera padding for bounds"
+                    "description": "Right padding in points (deprecated; use root `padding` property instead)"
                   },
                   {
                     "name": "paddingTop",
                     "required": false,
                     "type": "number",
                     "default": "none",
-                    "description": "Top camera padding for bounds"
+                    "description": "Top padding in points (deprecated; use root `padding` property instead)"
                   },
                   {
                     "name": "paddingBottom",
                     "required": false,
                     "type": "number",
                     "default": "none",
-                    "description": "Bottom camera padding for bounds"
+                    "description": "Bottom padding in points (deprecated; use root `padding` property instead)"
                   }
                 ]
               },
               "default": "none",
-              "description": "Represents a rectangle in geographical coordinates marking the visible area of the map."
+              "description": "Represents a rectangle in geographical coordinates marking the visible area of the map.\nThe `bounds.padding*` properties are deprecated; use root `padding` property instead."
             },
             {
               "name": "onUserTrackingModeChange",
@@ -541,6 +580,45 @@
         },
         "default": "none",
         "description": "Center coordinate on map [lng, lat]"
+      },
+      {
+        "name": "padding",
+        "required": false,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "paddingLeft",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Left padding in points"
+            },
+            {
+              "name": "paddingRight",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Right padding in points"
+            },
+            {
+              "name": "paddingTop",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Top padding in points"
+            },
+            {
+              "name": "paddingBottom",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "Bottom padding in points"
+            }
+          ]
+        },
+        "default": "none",
+        "description": "Padding around edges of map in points"
       },
       {
         "name": "heading",
@@ -591,33 +669,33 @@
               "required": false,
               "type": "number",
               "default": "none",
-              "description": "Left camera padding for bounds"
+              "description": "Left padding in points (deprecated; use root `padding` property instead)"
             },
             {
               "name": "paddingRight",
               "required": false,
               "type": "number",
               "default": "none",
-              "description": "Right camera padding for bounds"
+              "description": "Right padding in points (deprecated; use root `padding` property instead)"
             },
             {
               "name": "paddingTop",
               "required": false,
               "type": "number",
               "default": "none",
-              "description": "Top camera padding for bounds"
+              "description": "Top padding in points (deprecated; use root `padding` property instead)"
             },
             {
               "name": "paddingBottom",
               "required": false,
               "type": "number",
               "default": "none",
-              "description": "Bottom camera padding for bounds"
+              "description": "Bottom padding in points (deprecated; use root `padding` property instead)"
             }
           ]
         },
         "default": "none",
-        "description": "Represents a rectangle in geographical coordinates marking the visible area of the map."
+        "description": "Represents a rectangle in geographical coordinates marking the visible area of the map.\nThe `bounds.padding*` properties are deprecated; use root `padding` property instead."
       },
       {
         "name": "onUserTrackingModeChange",

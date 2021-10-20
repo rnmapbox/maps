@@ -260,13 +260,13 @@ describe('LocationManager', () => {
       test('calls listeners with location', () => {
         const listeners = [jest.fn(), jest.fn(), jest.fn()];
 
-        listeners.forEach((listener) => {
+        listeners.forEach(listener => {
           locationManager.addListener(listener);
         });
 
         locationManager.onUpdate(location);
 
-        listeners.forEach((listener) => {
+        listeners.forEach(listener => {
           expect(listener).toHaveBeenCalledTimes(1);
           expect(listener).toHaveBeenCalledWith(location);
         });

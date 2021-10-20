@@ -177,7 +177,7 @@ await MapboxGL.offlineManager.mergeOfflineRegions(path);
 
 #### setTileCountLimit(limit)
 
-Sets the maximum number of Mapbox-hosted tiles that may be downloaded and stored on the current device.<br/>The Mapbox Terms of Service prohibits changing or bypassing this limit without permission from Mapbox.
+Sets the maximum number of Mapbox-hosted tiles that may be downloaded and stored on the current device.<br/>The Mapbox Terms of Service prohibit changing or bypassing this limit without permission from Mapbox.
 
 ##### arguments
 | Name | Type | Required | Description  |
@@ -193,7 +193,7 @@ MapboxGL.offlineManager.setTileCountLimit(1000);
 
 #### setProgressEventThrottle(throttleValue)
 
-Sets the value at which download status events will be sent over the React Native bridge.<br/>These events happening very very fast default is 500ms.
+Sets the period at which download status events will be sent over the React Native bridge.<br/>The default is 500ms.
 
 ##### arguments
 | Name | Type | Required | Description  |
@@ -203,7 +203,7 @@ Sets the value at which download status events will be sent over the React Nativ
 
 
 ```javascript
-MapboxGL.setProgressEventThrottle(500);
+MapboxGL.offlineManager.setProgressEventThrottle(500);
 ```
 
 

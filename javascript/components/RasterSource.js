@@ -10,7 +10,7 @@ const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLRasterSource';
 
-const isTileTemplateUrl = (url) =>
+const isTileTemplateUrl = url =>
   url &&
   (url.includes('{z}') || url.includes('{bbox-') || url.includes('{quadkey}'));
 
