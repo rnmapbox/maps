@@ -14,6 +14,7 @@ import CustomCallout from '../examples/Annotations/CustomCallout';
 import Heatmap from '../examples/Annotations/Heatmap';
 import MarkerView from '../examples/Annotations/MarkerView';
 import ShowPointAnnotation from '../examples/Annotations/ShowPointAnnotation';
+import PointAnnotationAnchors from '../examples/Annotations/PointAnnotationAnchors';
 // CAMERA
 import CompassView from '../examples/Camera/CompassView';
 import FitBounds from '../examples/Camera/FitBounds';
@@ -175,6 +176,7 @@ const Examples = [
   ]),
   new ExampleGroup('Annotations', [
     new ExampleItem('Show Point Annotation', ShowPointAnnotation),
+    new ExampleItem('Point Annotation Anchors', PointAnnotationAnchors),
     new ExampleItem('Marker View', MarkerView),
     new ExampleItem('Heatmap', Heatmap),
     new ExampleItem('Custom Callout', CustomCallout),
