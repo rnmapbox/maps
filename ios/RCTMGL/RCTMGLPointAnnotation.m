@@ -162,20 +162,19 @@ const float CENTER_Y_OFFSET_BASE = -0.5f;
     float x = [_anchor[@"x"] floatValue];
     float y = [_anchor[@"y"] floatValue];
 
-    // (fullWidthOffset - centerWidthOffset) / 2
-    float dx = -(x * frame.size.width - (frame.size.width / 2)) / 2;
-    float dy = -(y * frame.size.height - (frame.size.height / 2)) / 2;
+    float dx = -(x * frame.size.width - (frame.size.width / 2));
+    float dy = -(y * frame.size.height - (frame.size.height / 2));
 
     // special cases 0 and 1
 
     if (x == 0) {
         dx = frame.size.width / 2;
     } else if (x == 1) {
-        dy = -frame.size.height / 2;
+        dx = -frame.size.width / 2;
     }
 
     if (y == 0) {
-        dy = frame.size.width / 2;
+        dy = frame.size.height / 2;
     } else if (y == 1) {
         dy = -frame.size.height / 2;
     }
