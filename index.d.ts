@@ -266,7 +266,7 @@ declare namespace MapboxGL {
   class Light extends Component<LightProps> { }
 
   class StyleSheet extends Component {
-    static create<T extends NamedStyles<T> | NamedStyles<any>>(styles: T): void;
+    static create<T extends NamedStyles<T> | NamedStyles<any>>(styles: T): T;
     camera(
       stops: { [key: number]: string },
       interpolationMode?: InterpolationMode,
