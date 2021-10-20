@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import {View} from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import sheet from '../../styles/sheet';
@@ -13,7 +13,7 @@ const buildPadding = ([top, right, bottom, left] = [0, 0, 0, 0]) => {
     paddingTop: top,
     paddingBottom: bottom,
   };
-}
+};
 
 class FitBounds extends React.Component {
   static propTypes = {...BaseExamplePropTypes};

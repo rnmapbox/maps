@@ -30,7 +30,7 @@ class SetUserLocationVerticalAlignment extends React.Component {
     });
 
     this.state = {
-      currentAlignmentMode: Alignments['Center'],
+      currentAlignmentMode: Alignments.Center,
     };
 
     this.onAlignmentChange = this.onAlignmentChange.bind(this);
