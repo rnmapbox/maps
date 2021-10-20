@@ -22,14 +22,14 @@ jobs:
 
   call_android_workflow:
     needs: test_lint_generate
-    uses: ./.github/workflows/android-actions.yml@v1
+    uses: lisabaut/maps/.github/workflows/android-actions.yml@chore/pr-workflow
     with:
       node-version: ${{ env.NODE_VERSION }}
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
 
   call_ios_workflow:
     needs: test_lint_generate
-    uses: ./.github/workflows/ios-actions.yml@v1
+    uses: lisabaut/maps/.github/workflows/ios-actions.yml@chore/pr-workflow
     with:
       node-version: ${{ env.NODE_VERSION }}
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
