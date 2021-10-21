@@ -5,6 +5,7 @@ on:
     inputs:
       NVMRC:
         required: true
+        type: string
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
