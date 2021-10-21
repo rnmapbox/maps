@@ -21,12 +21,18 @@ jobs:
         with:
           node-version: ${{ steps.nvm.outputs.NVMRC }}
 
-      - name: Lint Test Generate
+      - name: Install
         run: yarn install --network-timeout 1000000
+
+      - name: Lint
         run: yarn run lint
+
+      - name: Test
         run: yarn run unittest
+
+      - name: Generate
         run: yarn run generate
-      
+
     outputs:
       NVMRC: ${{ steps.nvm.outputs.NVMRC }}
 
