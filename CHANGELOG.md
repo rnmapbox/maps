@@ -7,6 +7,7 @@ PR Title ([#123](link to my pr))
 Update ShapeSource methods to make it usable with any cluster ( Use cluster itself instead of cluster_id as first argument for getClusterExpansionZoom/getClusterLeaves/getClusterChildren methods. Version < 9 methods still supports passing cluster_id as a first argument but a deprecation warning will be shown. ) ([#1499](https://github.com/react-native-mapbox-gl/maps/pull/1499))
 ```
 
+fix(iOS): pin mapLibre back to `5.12.0` ([#1589](https://github.com/react-native-mapbox-gl/maps/pull/1589))  
 feat(camera): Enable `padding` as a root-level prop on the camera, with `bounds.padding*` as fallbacks ([#1538](https://github.com/react-native-mapbox-gl/maps/pull/1538/files))
 feat(example): update vertical alignment example ([#1579](https://github.com/react-native-mapbox-gl/maps/pull/1550))  
 build(android): add telemetry dependency to default build setup ([#1550](https://github.com/react-native-mapbox-gl/maps/pull/1550))  
