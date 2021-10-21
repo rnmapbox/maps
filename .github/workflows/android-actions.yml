@@ -5,13 +5,12 @@ on:
     inputs:
       node-version:
         required: true
-        type: string
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
 
 jobs:
-  lint_test_generate:
+  build_example:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -29,7 +28,7 @@ jobs:
       - run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
         working-directory: example
         env:
-          MAPBOX_ACCESS_TOKEN: ${{ secrets.mapbox_access_token }}
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
 
       - run: yarn install --network-timeout 1000000
         working-directory: example
