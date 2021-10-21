@@ -7,19 +7,22 @@ PR Title ([#123](link to my pr))
 Update ShapeSource methods to make it usable with any cluster ( Use cluster itself instead of cluster_id as first argument for getClusterExpansionZoom/getClusterLeaves/getClusterChildren methods. Version < 9 methods still supports passing cluster_id as a first argument but a deprecation warning will be shown. ) ([#1499](https://github.com/react-native-mapbox-gl/maps/pull/1499))
 ```
 
+---
+
+## 8.4.0
+
 fix(iOS): pin mapLibre back to `5.12.0` ([#1589](https://github.com/react-native-mapbox-gl/maps/pull/1589))  
-feat(camera): Enable `padding` as a root-level prop on the camera, with `bounds.padding*` as fallbacks ([#1538](https://github.com/react-native-mapbox-gl/maps/pull/1538/files))
-feat(example): update vertical alignment example ([#1579](https://github.com/react-native-mapbox-gl/maps/pull/1550))  
+chore: improve GH workflows ([#1588](https://github.com/react-native-mapbox-gl/maps/pull/1588))  
+build(deps): bump @expo/config-plugins from 3.1.0 to 4.0.3 ([#1585](https://github.com/react-native-mapbox-gl/maps/pull/1585))  
+chore(pre-commit): run lint on TS files, change PR template ([#1584](https://github.com/react-native-mapbox-gl/maps/pull/1584))  
+feat(example): update vertical alignment example ([#1579](https://github.com/react-native-mapbox-gl/maps/pull/1579))  
+fix incorrect anchor calculation for PointAnnotation on iOS ([#1576](https://github.com/react-native-mapbox-gl/maps/pull/1576))  
+style(eslint): align root and example with the same configuration ([#1575](https://github.com/react-native-mapbox-gl/maps/pull/1575))  
+fix(mapLibre): support version `5.12.0` upwards ([#1571](https://github.com/react-native-mapbox-gl/maps/pull/1571))  
+build: upgrade to RN `0.66` ([#1570](https://github.com/react-native-mapbox-gl/maps/pull/1570))  
 build(android): add telemetry dependency to default build setup ([#1550](https://github.com/react-native-mapbox-gl/maps/pull/1550))  
-fix: revert pinned mapLibre version to `5.11.0` ([8a2b00e67ba6398f3f6e6f52e98b0f0cea437e4d](https://github.com/react-native-mapbox-gl/maps/commit/8a2b00e67ba6398f3f6e6f52e98b0f0cea437e4d))  
-build: upgrade to RN `0.66` ([#1570](https://github.com/react-native-mapbox-gl/maps/pull/1570))
-
-style(eslint): align root and example with the same configuration ([#1575](https://github.com/react-native-mapbox-gl/maps/pull/1575))
-
-chore(pre-commit): run lint on TS files, change PR template ([#1584](https://github.com/react-native-mapbox-gl/maps/pull/1584))
-fix incorrect anchor calculation for PointAnnotation on iOS ([#1576](https://github.com/react-native-mapbox-gl/maps/pull/1576))
-
-chore: improve GH workflows ([#1588](https://github.com/react-native-mapbox-gl/maps/pull/1588))
+feat(camera): Enable `padding` as a root-level prop on the camera, with `bounds.padding*` as fallbacks ([#1538](https://github.com/react-native-mapbox-gl/maps/pull/1538/files))  
+fix: revert pinned mapLibre version to `5.11.0` ([8a2b00e67ba6398f3f6e6f52e98b0f0cea437e4d](https://github.com/react-native-mapbox-gl/maps/commit/8a2b00e67ba6398f3f6e6f52e98b0f0cea437e4d))
 
 ---
 
