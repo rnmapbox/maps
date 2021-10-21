@@ -14,8 +14,11 @@ fix: revert pinned mapLibre version to `5.11.0` ([8a2b00e67ba6398f3f6e6f52e98b0f
 build: upgrade to RN `0.66` ([#1570](https://github.com/react-native-mapbox-gl/maps/pull/1570))
 
 style(eslint): align root and example with the same configuration ([#1575](https://github.com/react-native-mapbox-gl/maps/pull/1575))
+
 chore(pre-commit): run lint on TS files, change PR template ([#1584](https://github.com/react-native-mapbox-gl/maps/pull/1584))
 fix incorrect anchor calculation for PointAnnotation on iOS ([#1576](https://github.com/react-native-mapbox-gl/maps/pull/1576))
+
+chore: improve GH workflows ([#1588](https://github.com/react-native-mapbox-gl/maps/pull/1588))
 
 ---
 

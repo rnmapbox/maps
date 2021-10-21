@@ -1,11 +1,20 @@
 name: iOS Build & Detox
 
-on: [push]
+on:
+  workflow_call:
+    inputs:
+      NVMRC:
+        required: true
+        type: string
+    secrets:
+      MAPBOX_ACCESS_TOKEN:
+        required: true
 
 jobs:
   build:
     runs-on: macos-latest
     timeout-minutes: 25
+
     defaults:
       run:
         working-directory: ./example
@@ -19,10 +28,10 @@ jobs:
         env:
           MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
 
-      - name: Install Node
+      - name: Setup node ${{ inputs.NVMRC }}
         uses: actions/setup-node@v2.4.1
         with:
-          node-version: "14"
+          node-version: ${{ inputs.NVMRC }}
 
       - name: Install Yarn Dependencies
         run: yarn install --network-timeout 1000000

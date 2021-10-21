@@ -1,27 +1,32 @@
-name: Android Build (Publish)
-on: [push]
+name: Android Build
+
+on:
+  workflow_call:
+    inputs:
+      NVMRC:
+        required: true
+        type: string
+    secrets:
+      MAPBOX_ACCESS_TOKEN:
+        required: true
+
 jobs:
-  test:
+  build_example:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.x]
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup node ${{ inputs.NVMRC }}
         uses: actions/setup-node@v2.4.1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ inputs.NVMRC }}
 
-      - run: yarn install --network-timeout 1000000
-      - run: yarn run unittest
-      - run: yarn run generate
-
-      - name: set up JDK zulu 11
+      - name: Setup JDK zulu 11
         uses: actions/setup-java@v2.3.1
         with:
-          distribution: "zulu"
-          java-version: "11"
+          distribution: 'zulu'
+          java-version: '11'
 
       - run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
         working-directory: example
@@ -33,17 +38,3 @@ jobs:
 
       - run: ./gradlew assemble
         working-directory: example/android
-
-  publish:
-    needs: test
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2.4.1
-        with:
-          node-version: 14
-          registry-url: https://registry.npmjs.org/
-      - run: npm install --force && npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
