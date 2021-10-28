@@ -18,6 +18,19 @@ After installing this npm package, add the [config plugin](https://docs.expo.io/
 }
 ```
 
+Then, in your `app.json` change your android permissions to include `READ_PHONE_STATE`:
+```
+{
+    expo:{
+    ...
+     "android": {
+      "permissions": ["READ_PHONE_STATE"],
+      ...
+      },
+    }
+}
+```
+
 Next, rebuild your app as described in the ["Adding custom native code"](https://docs.expo.io/workflow/customizing/) guide.
 
 ## API
