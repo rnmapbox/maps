@@ -45,9 +45,9 @@ class Fit extends React.Component {
     };
   }
 
-  renderSection = (title, key, buttons) => {
+  renderSection = (title, key, buttons, fade = false) => {
     return (
-      <View style={{paddingBottom: 5}}>
+      <View style={{paddingBottom: 5, opacity: fade ? 0.5 : 1}}>
         <Text>{title}</Text>
         <View style={{flex: 0, flexDirection: 'row', width: '100%', paddingVertical: 10}}>
           {buttons.map(button => (
@@ -104,9 +104,9 @@ class Fit extends React.Component {
             { title: 'House', value: 'house' },
             { title: 'Town', value: 'town' },
           ])}
-          {this.renderSection('Zoom' + (fitType === 'bounds' ? ' (Not used when bounds is set)' : ''), 'zoomLevel', [undefined, 14, 15, 16, 17, 18, 19, 20].map(n => {
+          {this.renderSection('Zoom' + (fitType === 'bounds' ? ' (Not used because bounds is set)' : ''), 'zoomLevel', [undefined, 14, 15, 16, 17, 18, 19, 20].map(n => {
             return { title: `${n}`, value: n };
-          }))}
+          }), fitType === 'bounds')}
           {this.renderSection('Padding', 'padding', [
             { title: 'None', value: buildPadding() },
             { title: 'Top', value: buildPadding([200, 40, 40, 40]) },
