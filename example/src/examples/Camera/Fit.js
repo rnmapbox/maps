@@ -27,38 +27,14 @@ const townBounds = {
   sw: [-74.143727, 40.772177],
 };
 
+const houseCenter = [(houseBounds.ne[0] + houseBounds.sw[0]) / 2, (houseBounds.ne[1] + houseBounds.sw[1]) / 2];
+const townCenter = [(townBounds.ne[0] + townBounds.sw[0]) / 2, (townBounds.ne[1] + townBounds.sw[1]) / 2];
+
 class Fit extends React.Component {
   static propTypes = {...BaseExamplePropTypes};
 
   constructor(props) {
     super(props);
-
-    // this.options = [
-    //   {
-    //     label: 'House (none)',
-    //     data: {bounds: houseBounds, padding: buildPadding()},
-    //   },
-    //   {
-    //     label: 'House (bottom)',
-    //     data: {bounds: houseBounds, padding: buildPadding([40, 40, 200, 40])},
-    //   },
-    //   {
-    //     label: 'House (top)',
-    //     data: {bounds: houseBounds, padding: buildPadding([200, 40, 40, 40])},
-    //   },
-    //   {
-    //     label: 'Town',
-    //     data: {bounds: townBounds, padding: buildPadding()},
-    //   },
-    //   {
-    //     label: 'Town (bottom)',
-    //     data: {bounds: townBounds, padding: buildPadding([40, 40, 200, 40])},
-    //   },
-    //   {
-    //     label: 'Town (top)',
-    //     data: {bounds: townBounds, padding: buildPadding([200, 40, 40, 40])},
-    //   },
-    // ];
 
     this.state = {
       fitType: 'bounds', // 'bounds' | 'centerCoordinate'
@@ -102,7 +78,7 @@ class Fit extends React.Component {
     if (fitType === 'bounds') {
       cameraProps.bounds = containType === 'house' ? houseBounds : townBounds;
     } else if (fitType === 'centerCoordinate') {
-      cameraProps.centerCoordinate = containType === 'house' ? houseBounds.ne : townBounds.ne;
+      cameraProps.centerCoordinate = containType === 'house' ? houseCenter : townCenter;
     }
     if (zoomLevel !== undefined) {
       cameraProps.zoomLevel = zoomLevel;
