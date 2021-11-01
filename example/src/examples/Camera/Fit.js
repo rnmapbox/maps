@@ -64,7 +64,7 @@ class Fit extends React.Component {
           }}>
           {buttons.map(button => (
             <TouchableOpacity
-              key={`${button.value}`}
+              key={button.title}
               style={{
                 flex: 0,
                 padding: 5,
