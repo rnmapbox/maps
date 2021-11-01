@@ -48,16 +48,7 @@
     if (args[@"heading"]) {
         stop.heading = args[@"heading"];
     }
-    
-    if (args[@"padding"]) {
-        NSDictionary * padding = args[@"padding"];
-        CGFloat paddingTop = padding[@"paddingTop"] ? [padding[@"paddingTop"] floatValue] : 0.0;
-        CGFloat paddingRight = padding[@"paddingRight"] ? [padding[@"paddingRight"] floatValue] : 0.0;
-        CGFloat paddingBottom = padding[@"paddingBottom"] ? [padding[@"paddingBottom"] floatValue] : 0.0;
-        CGFloat paddingLeft = padding[@"paddingLeft"] ? [padding[@"paddingLeft"] floatValue] : 0.0;
-        stop.padding = UIEdgeInsetsMake(paddingTop, paddingLeft, paddingBottom, paddingRight);
-    }
-    
+
     if (args[@"centerCoordinate"]) {
         stop.coordinate = [RCTMGLUtils fromFeature:args[@"centerCoordinate"]];
     }
