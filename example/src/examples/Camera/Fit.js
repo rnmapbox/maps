@@ -109,7 +109,7 @@ class Fit extends React.Component {
     }
 
     return (
-      <Page {...this.props} options={[]}>
+      <Page {...this.props}>
         <MapboxGL.MapView
           styleURL={MapboxGL.StyleURL.Satellite}
           style={sheet.matchParent}>
