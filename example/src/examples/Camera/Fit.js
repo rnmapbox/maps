@@ -1,8 +1,8 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import {isEqual} from 'lodash';
-import MapboxGL from '@react-native-mapbox-gl/maps';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import sheet from '../../styles/sheet';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
