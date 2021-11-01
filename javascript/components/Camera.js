@@ -253,6 +253,7 @@ class Camera extends React.Component {
     const boundsChanged = this._hasBoundsChanged(c.bounds, n.bounds);
     const centerCoordinateChanged = this._hasCenterCoordinateChanged(c, n);
     const paddingChanged = this._hasPaddingChanged(c, n);
+    const zoomChanged = c.zoomLevel !== n.zoomLevel;
 
     let shouldUpdate = false;
     if (n.bounds && (boundsChanged || paddingChanged)) {
@@ -260,7 +261,7 @@ class Camera extends React.Component {
       shouldUpdate = true;
     } else if (
       n.centerCoordinate &&
-      (centerCoordinateChanged || paddingChanged)
+      (centerCoordinateChanged || zoomChanged || paddingChanged)
     ) {
       cameraConfig.centerCoordinate = n.centerCoordinate;
       shouldUpdate = true;
