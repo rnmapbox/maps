@@ -96,8 +96,6 @@
                 altitudeFromZoom:[_cameraStop.zoom doubleValue]
                 atLatitude:nextCamera.centerCoordinate.latitude
                 atPitch:nextCamera.pitch];
-        } else {
-            nextCamera.altitude = boundsCamera.altitude;
         }
     } else if ([self _areBoundsValid:_cameraStop.bounds]) {
         MGLMapCamera *boundsCamera = [mapView
