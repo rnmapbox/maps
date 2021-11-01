@@ -82,13 +82,21 @@
     if (_cameraStop.heading != nil) {
         nextCamera.heading = [_cameraStop.heading floatValue];
     }
+  
+    UIEdgeInsets padding = [self _clippedPadding:_cameraStop.padding forView:mapView];
+    if (padding.top <= 0 && padding.bottom <= 0) {
+      // If all padding properties are 0 in the update, and the bounds and centerCoordinate do not
+      // change, the padding doesn't change either. This seems to be a bug in the iOS SDK.
+      padding.top = 1.0;
+      padding.bottom = 1.0;
+    }
     
     if ([self _isCoordValid:_cameraStop.coordinate]) {
         MGLCoordinateBounds boundsFromCoord = { .sw =  _cameraStop.coordinate, .ne =  _cameraStop.coordinate };
         MGLMapCamera *boundsCamera = [mapView
             camera:nextCamera
             fittingCoordinateBounds:boundsFromCoord
-            edgePadding: [self _clippedPadding:_cameraStop.padding forView:mapView]];
+            edgePadding: padding];
         nextCamera.centerCoordinate = boundsCamera.centerCoordinate;
     
         if (_cameraStop.zoom != nil) {
@@ -101,14 +109,14 @@
         MGLMapCamera *boundsCamera = [mapView
             camera:nextCamera
             fittingCoordinateBounds:_cameraStop.bounds
-            edgePadding: [self _clippedPadding:_cameraStop.padding forView:mapView]];
+            edgePadding: padding];
         nextCamera.centerCoordinate = boundsCamera.centerCoordinate;
         nextCamera.altitude = boundsCamera.altitude;
     }
 
     RCTMGLCameraWithPadding* cameraWithPadding = [[RCTMGLCameraWithPadding alloc] init];
     cameraWithPadding.camera = nextCamera;
-    cameraWithPadding.boundsPadding = [self _clippedPadding:_cameraStop.padding forView:mapView];
+    cameraWithPadding.boundsPadding = padding;
     return cameraWithPadding;
 }
 
