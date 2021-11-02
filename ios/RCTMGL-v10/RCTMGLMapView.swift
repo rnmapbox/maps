@@ -116,6 +116,7 @@ public func dictionaryFrom(_ from: Turf.Feature?) throws -> [String:Any]? {
   var reactOnMapChange : RCTBubblingEventBlock? = nil
   
   var images : [RCTMGLImages] = []
+  var sources : [RCTMGLSource] = []
   
   var layerWaiters : [String:[(String) -> Void]] = [:]
   
@@ -168,31 +169,7 @@ public func dictionaryFrom(_ from: Turf.Feature?) throws -> [String:Any]? {
   func fireEvent(event: RCTMGLEvent, callback: @escaping RCTBubblingEventBlock) {
     callback(event.toJSON())
   }
-  /*
-  @objc
-  func handleTap(_ sender: UITapGestureRecognizer) {
-    
-  }*/
   
-  @objc
-  func doHandleTap(_ sender: UITapGestureRecognizer) {
-    let tapPoint = sender.location(in: self)
-    pointAnnotationManager.handleTap(sender) { (_: UITapGestureRecognizer) in
-      DispatchQueue.main.async {
-        if let reactOnPress = self.reactOnPress {
-          let location = self.mapboxMap.coordinate(for: tapPoint)
-          var geojson = Feature(geometry: .point(Point(location)));
-          geojson.properties = [
-            "screenPointX": .number(Double(tapPoint.x)),
-            "screenPointY": .number(Double(tapPoint.y))
-          ]
-          let event = try!  RCTMGLEvent(type:.tap, payload: dictionaryFrom(geojson)!)
-          self.fireEvent(event: event, callback: reactOnPress)
-        }
-      }
-    }
-  }
-        
   func _toArray(bounds: CoordinateBounds) -> [[Double]] {
     return [
       [
@@ -233,18 +210,20 @@ public func dictionaryFrom(_ from: Turf.Feature?) throws -> [String:Any]? {
     if let mapComponent = subview as? RCTMGLMapComponent {
       mapComponent.addToMap(self)
     }
+    if let source = subview as? RCTMGLSource {
+      sources.append(source)
+    }
   }
   
   @objc override func removeReactSubview(_ subview:UIView!) {
-    removeFromMap(subview)
-  }
-  
-  func removeFromMap(_ subview: UIView!) {
     if let mapComponent = subview as? RCTMGLMapComponent {
       mapComponent.addToMap(self)
     }
+    if let source = subview as? RCTMGLSource {
+      sources.removeAll { $0 == source }
+    }
   }
-    
+
   required init(frame:CGRect) {
     let resourceOptions = ResourceOptions(accessToken: MGLModule.accessToken!)
     super.init(frame: frame, mapInitOptions: MapInitOptions(resourceOptions: resourceOptions))
@@ -293,3 +272,77 @@ public func dictionaryFrom(_ from: Turf.Feature?) throws -> [String:Any]? {
     }
   }
 }
+
+// MARK: - Touch
+
+extension RCTMGLMapView {
+  func touchableSources() -> [RCTMGLSource] {
+    return sources.filter { $0.isTouchable() }
+  }
+
+  func doHandleTapInSources(sources: [RCTMGLSource], tapPoint: CGPoint, hits: [String: [QueriedFeature]], callback: @escaping (_ hits: [String: [QueriedFeature]]) -> Void) {
+    DispatchQueue.main.async {
+      if let source = sources.first {
+        let hitbox = source.hitbox;
+        
+        let halfWidth = (hitbox["width"]?.doubleValue ?? RCTMGLSource.hitboxDefault) / 2.0;
+        let halfHeight = (hitbox["height"]?.doubleValue  ?? RCTMGLSource.hitboxDefault) / 2.0;
+
+        let top = tapPoint.y - halfHeight;
+        let left = tapPoint.x - halfWidth;
+        
+        let hitboxRect = CGRect(x: left, y: top, width: halfWidth * 2.0, height: halfHeight * 2.0)
+
+        let options = RenderedQueryOptions(
+          layerIds: nil, filter: nil
+        )
+        self.mapboxMap.queryRenderedFeatures(in: hitboxRect, options: options) {
+          result in
+          
+          var newHits = hits
+          switch result {
+          case .success(let features):
+            if features.count > 0 {
+              newHits[source.id] = features
+            }
+            
+          case .failure(let error):
+            Logger.log(level: .error, message: "Error during handleTapInSources source.id=\(source.id ?? "n/a") error:\(error)")
+          }
+          var nSources = sources
+          nSources.removeFirst()
+          self.doHandleTapInSources(sources: nSources, tapPoint: tapPoint, hits: newHits, callback: callback)
+        }
+      } else {
+        callback(hits)
+      }
+    }
+  }
+  
+  @objc
+  func doHandleTap(_ sender: UITapGestureRecognizer) {
+    let tapPoint = sender.location(in: self)
+    pointAnnotationManager.handleTap(sender) { (_: UITapGestureRecognizer) in
+      DispatchQueue.main.async {
+        let touchableSources = self.touchableSources()
+        var hits : [String: [QueriedFeature]] = [:]
+        self.doHandleTapInSources(sources: touchableSources, tapPoint: tapPoint, hits: hits) { (hits) in
+          
+          if let reactOnPress = self.reactOnPress {
+            let location = self.mapboxMap.coordinate(for: tapPoint)
+            var geojson = Feature(geometry: .point(Point(location)));
+            geojson.properties = [
+              "screenPointX": .number(Double(tapPoint.x)),
+              "screenPointY": .number(Double(tapPoint.y))
+            ]
+            let event = try!  RCTMGLEvent(type:.tap, payload: dictionaryFrom(geojson)!)
+            self.fireEvent(event: event, callback: reactOnPress)
+          }
+        }
+      }
+    }
+  }
+}
+
+
+

@@ -214,7 +214,6 @@ IOS:
   - [x] android
 - [x] LocationLayer
    - [x] ios
-<<<<<<< HEAD
    - [x] android (only basic mode)
      - [x] normal
      - [x] pulse
@@ -228,9 +227,9 @@ IOS:
 - [x] FillExtrusion
   - [x] ios
   - [x] android
-=======
-   - [ ] android
->>>>>>> f798d5b1 (Added PointAnnotation for ios and upgrade to v10 final)
+- [ ] Heatmap
+  - [x] ios
+  - [ ] android
 
 # Offline
 
@@ -243,16 +242,9 @@ IOS:
 
 # Snapshot
 
-<<<<<<< HEAD
 - [ ] Snapshot
   - [x] ios
   - [ ] android
   - [x] Images: andorid, ios
-- [ ] Terrain, ios only
-=======
-# Snapshot
 
-- [ ] Snapshot
-  - [ ] ios
-  - [ ] android
->>>>>>> f798d5b1 (Added PointAnnotation for ios and upgrade to v10 final)
+- [ ] Terrain, ios only

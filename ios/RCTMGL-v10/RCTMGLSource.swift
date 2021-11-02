@@ -6,6 +6,13 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
   var source : Source? = nil
   var map : RCTMGLMapView? = nil
   
+  static let hitboxDefault = 44.0
+
+  @objc var hitbox : [String:NSNumber] = [
+    "width": NSNumber(value: hitboxDefault),
+    "height": NSNumber(value: hitboxDefault)
+  ]
+  
   @objc var id: String! = nil
   
   @objc var hasPressListener: Bool = false
@@ -19,6 +26,10 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
   
   func sourceType() -> Source.Type {
     fatalError("Subclasses should override makeSource")
+  }
+  
+  func isTouchable() -> Bool {
+    return hasPressListener
   }
   
   @objc override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
