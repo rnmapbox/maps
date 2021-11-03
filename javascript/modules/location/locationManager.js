@@ -13,6 +13,7 @@ class LocationManager {
     this._lastKnownLocation = null;
     this._isListening = false;
     this.onUpdate = this.onUpdate.bind(this);
+    this.subscription = null;
   }
 
   async getLastKnownLocation() {
@@ -67,7 +68,7 @@ class LocationManager {
     if (!this._isListening) {
       MapboxGLLocationManager.start(displacement);
 
-      LocationModuleEventEmitter.addListener(
+      this.subscription = LocationModuleEventEmitter.addListener(
         MapboxGL.LocationCallbackName.Update,
         this.onUpdate,
       );
@@ -80,10 +81,7 @@ class LocationManager {
     MapboxGLLocationManager.stop();
 
     if (this._isListening) {
-      LocationModuleEventEmitter.removeListener(
-        MapboxGL.LocationCallbackName.Update,
-        this.onUpdate,
-      );
+      this.subscription.remove();
     }
 
     this._isListening = false;
