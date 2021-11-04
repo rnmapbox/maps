@@ -102,6 +102,11 @@ class Camera extends React.Component {
     ...viewPropTypes,
 
     /**
+     * If false, the camera will not send any props to the native module. Intended to be used to prevent unnecessary tile fetching and improve performance when the map is not visible. Defaults to true.
+     */
+    allowUpdates: PropTypes.bool,
+
+    /**
      * The duration a camera update takes (in ms)
      */
     animationDuration: PropTypes.number,
@@ -179,6 +184,7 @@ class Camera extends React.Component {
   };
 
   static defaultProps = {
+    allowUpdates: true,
     animationMode: 'easeTo',
     animationDuration: 2000,
   };
@@ -201,6 +207,10 @@ class Camera extends React.Component {
   _handleCameraChange(currentCamera, nextCamera) {
     const c = currentCamera;
     const n = nextCamera;
+
+    if (!n.allowUpdates) {
+      return;
+    }
 
     const hasCameraChanged = this._hasCameraChanged(c, n);
     if (!hasCameraChanged) {
