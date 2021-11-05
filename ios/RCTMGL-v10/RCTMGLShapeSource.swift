@@ -117,4 +117,74 @@ class RCTMGLShapeSource : RCTMGLSource {
     }
   }
 
+  func getClusterExpansionZoom(
+    _ clusterId: NSNumber,
+    completion: @escaping (Result<Int, Error>) -> Void)
+  {
+    guard let mapView = map?.mapView else {
+      completion(.failure(RCTMGLError.failed("getClusterExpansionZoom: no mapView")))
+      return
+    }
+
+    let options = SourceQueryOptions(sourceLayerIds: nil, filter: Exp(.eq) {
+      Exp(.get) { "cluster_id" }
+      clusterId.uintValue
+    })
+    mapView.mapboxMap.querySourceFeatures(for: id, options: options) { result in
+      switch result {
+      case .success(let features):
+        let cluster = features[0]
+        mapView.mapboxMap.queryFeatureExtension(for: self.id, feature: cluster.feature, extension: "supercluster", extensionField: "expansion-zoom") { result in
+          switch result {
+          case .success(let features):
+            guard let value = features.value as? NSNumber else {
+              completion(.failure(RCTMGLError.failed("getClusterExpansionZoom: not a number")))
+              return
+            }
+                
+            completion(.success(value.intValue))
+          case .failure(let error):
+            completion(.failure(error))
+          }
+        }
+      case .failure(let error):
+        completion(.failure(error))
+      }
+    }
+  }
+  
+  func getClusterLeaves(_ clusterId: NSNumber,
+                              number: uint,
+                              offset: uint,
+                              completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void)
+  {
+    guard let mapView = map?.mapView else {
+      completion(.failure(RCTMGLError.failed("getClusterLeaves: no mapView")))
+      return
+    }
+    
+    let options = SourceQueryOptions(sourceLayerIds: nil, filter: Exp(.eq) {
+      Exp(.get) { "cluster_id" }
+      clusterId.uintValue
+    })
+    mapView.mapboxMap.querySourceFeatures(for: id, options: options) { result in
+      switch result {
+      case .success(let features):
+        let cluster = features[0]
+        mapView.mapboxMap.queryFeatureExtension(for: self.id, feature: cluster.feature, extension: "supercluster", extensionField: "leaves") {
+          result in
+          switch result {
+          case .success(let features):
+            completion(.success(features))
+          case .failure(let error):
+            completion(.failure(error))
+          }
+        }
+        
+      case .failure(let error):
+        completion(.failure(error))
+      }
+    }
+  }
+
 }

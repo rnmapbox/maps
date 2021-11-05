@@ -2,6 +2,7 @@ import MapboxMaps
 
 enum RCTMGLError: Error {
   case parseError(String)
+  case failed(String)
 }
 
 @objc
