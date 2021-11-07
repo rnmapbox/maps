@@ -59,13 +59,14 @@ import com.mapbox.maps.Event;
 import com.mapbox.maps.MapEvents;
 import com.mapbox.maps.Observer;
 import com.mapbox.maps.ScreenCoordinate;
+import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData;
 import com.mapbox.maps.plugin.gestures.GesturesPlugin;
 import com.mapbox.maps.plugin.gestures.OnMapClickListener;
 import com.mapbox.maps.plugin.gestures.OnMoveListener;
 import com.mapbox.maps.extension.style.layers.LayerUtils;
 import com.mapbox.maps.plugin.delegates.MapPluginExtensionsDelegate;
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener;
-import com.mapbox.maps.plugin.delegates.listeners.eventdata.MapLoadErrorType;
+import com.mapbox.maps.extension.observable.model.MapLoadErrorType;
 
 import com.mapbox.maps.plugin.gestures.OnMapClickListener;
 import com.mapbox.rctmgl.R;
@@ -357,7 +358,7 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
                     }},
                     new OnMapLoadErrorListener() {
                         @Override
-                        public void onMapLoadError(@NonNull MapLoadErrorType mapLoadErrorType, @NonNull String s) {
+                        public void onMapLoadError(@NonNull MapLoadingErrorEventData mapLoadingErrorEventData) {
                             Logger.w("Hello","Hallo", null);
                         }
                     }

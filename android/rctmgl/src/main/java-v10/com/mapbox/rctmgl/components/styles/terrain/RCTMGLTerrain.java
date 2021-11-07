@@ -42,7 +42,7 @@ public class RCTMGLTerrain extends AbstractSourceConsumer {
 
     @Override
     public void removeFromMap(RCTMGLMapView mapView) {
-        Terrain emptyTerrain = new Terrain(null);
+        Terrain emptyTerrain = new Terrain("no-such-source-empty");
         emptyTerrain.bindTo(mapView.getSavedStyle());
     }
 
