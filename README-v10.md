@@ -229,7 +229,7 @@ IOS:
   - [x] android
 - [ ] Heatmap
   - [x] ios
-  - [ ] android
+  - [x] android
 
 # Offline
 
