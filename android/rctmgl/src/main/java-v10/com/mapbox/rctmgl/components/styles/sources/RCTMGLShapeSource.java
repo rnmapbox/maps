@@ -23,7 +23,6 @@ import com.mapbox.maps.Style;
 
 import com.mapbox.maps.extension.style.expressions.generated.Expression;
 // import com.mapbox.rctmgl.R;
-import com.mapbox.maps.extension.style.sources.OnGeoJsonParsed;
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource;
 import com.mapbox.maps.plugin.delegates.MapFeatureQueryDelegate;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
@@ -81,12 +80,7 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
     @Override
     public GeoJsonSource makeSource() {
 
-        GeoJsonSource.Builder builder = new GeoJsonSource.Builder(mID, new OnGeoJsonParsed() {
-            @Override
-            public void onGeoJsonParsed(@NonNull GeoJsonSource geoJsonSource) {
-                // v10TODO
-            }
-        });
+        GeoJsonSource.Builder builder = new GeoJsonSource.Builder(mID);
         getOptions(builder);
 
         if (mShape != null) {

@@ -23,7 +23,6 @@ import com.mapbox.maps.Style;
 
 import com.mapbox.maps.extension.style.expressions.generated.Expression;
 // import com.mapbox.rctmgl.R;
-import com.mapbox.maps.extension.style.sources.OnGeoJsonParsed;
 import com.mapbox.maps.extension.style.sources.SourceUtils;
 import com.mapbox.maps.extension.style.sources.TileSet;
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource;

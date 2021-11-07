@@ -25,7 +25,7 @@ import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
 // import com.mapbox.maps.CameraOptions;
 import com.mapbox.maps.CameraOptions;
 import com.mapbox.maps.CameraState;
-import com.mapbox.maps.ExtensionUtilsKt;
+import com.mapbox.maps.ExtensionUtils;
 import com.mapbox.maps.MapboxMap;
 import com.mapbox.maps.ScreenCoordinate;
 import com.mapbox.maps.plugin.animation.CameraAnimationsPlugin;
@@ -478,9 +478,9 @@ public class RCTMGLCamera extends AbstractMapFeature {
 
     private CameraOptions buildCamera(CameraState previousPosition, boolean shouldUpdateTarget) {
         if (shouldUpdateTarget) {
-            return ExtensionUtilsKt.toCameraOptions(previousPosition, mCenterCoordinate);
+            return ExtensionUtils.toCameraOptions(previousPosition, mCenterCoordinate);
         } else {
-            return ExtensionUtilsKt.toCameraOptions(previousPosition, null);
+            return ExtensionUtils.toCameraOptions(previousPosition, null);
         }
     }
 
