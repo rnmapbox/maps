@@ -31,9 +31,7 @@ import com.mapbox.rctmgl.components.styles.layers.RCTMGLCircleLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLFillExtrusionLayerManager;
 */
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLFillLayerManager;
-/*
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLHeatmapLayerManager;
-*/
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLLineLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLRasterLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLSkyLayerManager;
@@ -42,8 +40,8 @@ import com.mapbox.rctmgl.components.styles.layers.RCTMGLSymbolLayerManager;
 import com.mapbox.rctmgl.components.styles.light.RCTMGLLightManager;
 import com.mapbox.rctmgl.components.styles.terrain.RCTMGLTerrainManager;
 
-/*
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLImageSourceManager;
+/*
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLRasterSourceManager;
 */
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLRasterDemSourceManager;
@@ -104,8 +102,9 @@ public class RCTMGLPackage implements ReactPackage {
         managers.add(new RCTMGLRasterDemSourceManager(reactApplicationContext));
 /*
         managers.add(new RCTMGLRasterSourceManager(reactApplicationContext));
-        managers.add(new RCTMGLImageSourceManager());
 */
+        managers.add(new RCTMGLImageSourceManager());
+
         // images
         managers.add(new RCTMGLImagesManager(reactApplicationContext));
 
@@ -113,8 +112,9 @@ public class RCTMGLPackage implements ReactPackage {
         managers.add(new RCTMGLFillLayerManager());
         /*
         managers.add(new RCTMGLFillExtrusionLayerManager());
-        managers.add(new RCTMGLHeatmapLayerManager());
  */
+        managers.add(new RCTMGLHeatmapLayerManager());
+ 
         managers.add(new RCTMGLLineLayerManager());
         managers.add(new RCTMGLCircleLayerManager());
         managers.add(new RCTMGLSymbolLayerManager());   

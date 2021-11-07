@@ -205,7 +205,7 @@ public class GeoJSONUtils {
 
         return LatLngBounds.from(bbox[3], bbox[2], bbox[1], bbox[0]);
     }*/
-/*
+
     public static LatLngQuad toLatLngQuad(ReadableArray array) {
         // [top left, top right, bottom right, bottom left]
         if (array == null || array.size() < 4) {
@@ -217,7 +217,7 @@ public class GeoJSONUtils {
                 toLatLng(array.getArray(2)),
                 toLatLng(array.getArray(3))
         );
-    }*/
+    }
 
     public static double[] pointToDoubleArray(Point point) {
         if (point == null) {

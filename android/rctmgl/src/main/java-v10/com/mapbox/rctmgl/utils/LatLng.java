@@ -3,6 +3,9 @@ package com.mapbox.rctmgl.utils;
 
 import com.mapbox.geojson.Point;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LatLng {
   double latitude;
   double longitude;
@@ -17,9 +20,15 @@ public class LatLng {
     this.longitude = point.longitude();
   }
 
-
   public Point getPoint() {
     return Point.fromLngLat(this.longitude, this.latitude);
+  }
+
+  public List<Double> getArray() {
+    ArrayList<Double> ret = new ArrayList<>();
+    ret.add(this.longitude);
+    ret.add(this.latitude);
+    return ret;
   }
 
   public double getLongitude() {
