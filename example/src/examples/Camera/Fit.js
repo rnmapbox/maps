@@ -36,6 +36,10 @@ const townCenter = [
   (townBounds.ne[1] + townBounds.sw[1]) / 2,
 ];
 
+const paddingZero = buildPadding();
+const paddingTop = buildPadding([200, 40, 40, 40]);
+const paddingBottom = buildPadding([40, 40, 200, 40]);
+
 class Fit extends React.Component {
   static propTypes = {...BaseExamplePropTypes};
 
@@ -51,7 +55,7 @@ class Fit extends React.Component {
     };
   }
 
-  renderSection = (title, key, buttons, fade = false) => {
+  renderSection = (title, buttons, fade = false) => {
     return (
       <View style={{paddingBottom: 5, opacity: fade ? 0.5 : 1}}>
         <Text>{title}</Text>
@@ -69,12 +73,10 @@ class Fit extends React.Component {
                 flex: 0,
                 padding: 5,
                 marginRight: 5,
-                backgroundColor: isEqual(this.state[key], button.value)
-                  ? 'coral'
-                  : '#d8d8d8',
+                backgroundColor: button.selected ? 'coral' : '#d8d8d8',
                 borderRadius: 5,
               }}
-              onPress={() => this.setState({[key]: button.value})}>
+              onPress={button.onPress}>
               <Text>{button.title}</Text>
             </TouchableOpacity>
           ))}
@@ -83,33 +85,40 @@ class Fit extends React.Component {
     );
   };
 
-  render() {
+  cameraProps = () => {
     const {fitType, containType, zoomLevel, padding, animationDuration} =
       this.state;
 
-    let cameraProps = {
+    let p = {
       bounds: undefined,
       centerCoordinate: undefined,
       zoomLevel: undefined,
       padding,
       animationDuration,
     };
+
     if (fitType === 'bounds') {
-      cameraProps.bounds = containType === 'house' ? houseBounds : townBounds;
+      p.bounds = containType === 'house' ? houseBounds : townBounds;
     } else if (fitType === 'centerCoordinate') {
-      cameraProps.centerCoordinate =
-        containType === 'house' ? houseCenter : townCenter;
+      p.centerCoordinate = containType === 'house' ? houseCenter : townCenter;
     }
+
     if (zoomLevel !== undefined) {
-      cameraProps.zoomLevel = zoomLevel;
+      p.zoomLevel = zoomLevel;
     }
+
+    return p;
+  };
+
+  render() {
+    const {fitType, containType, zoomLevel, padding} = this.state;
 
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
           styleURL={MapboxGL.StyleURL.Satellite}
           style={sheet.matchParent}>
-          <MapboxGL.Camera {...cameraProps} />
+          <MapboxGL.Camera {...this.cameraProps()} />
           <View style={{flex: 1, ...padding}}>
             <View style={{flex: 1, borderColor: 'white', borderWidth: 4}} />
           </View>
@@ -123,27 +132,58 @@ class Fit extends React.Component {
             paddingBottom: 20,
             backgroundColor: 'white',
           }}>
-          {this.renderSection('Fit Type', 'fitType', [
-            {title: 'Bounds', value: 'bounds'},
-            {title: 'Center Coordinate', value: 'centerCoordinate'},
+          {this.renderSection('Fit Type', [
+            {
+              title: 'Bounds',
+              selected: fitType === 'bounds',
+              onPress: () => this.setState({fitType: 'bounds'}),
+            },
+            {
+              title: 'Center Coordinate',
+              selected: fitType === 'centerCoordinate',
+              onPress: () => this.setState({fitType: 'centerCoordinate'}),
+            },
           ])}
-          {this.renderSection('Contain Type', 'containType', [
-            {title: 'House', value: 'house'},
-            {title: 'Town', value: 'town'},
+          {this.renderSection('Contain Type', [
+            {
+              title: 'House',
+              selected: containType === 'house',
+              onPress: () => this.setState({containType: 'house'}),
+            },
+            {
+              title: 'Town',
+              selected: containType === 'town',
+              onPress: () => this.setState({containType: 'town'}),
+            },
           ])}
           {this.renderSection(
             'Zoom' +
               (fitType === 'bounds' ? ' (Not used because bounds is set)' : ''),
-            'zoomLevel',
             [undefined, 14, 15, 16, 17, 18, 19, 20].map(n => {
-              return {title: `${n}`, value: n};
+              return {
+                title: `${n}`,
+                selected: zoomLevel === n,
+                onPress: () => this.setState({zoomLevel: n}),
+              };
             }),
             fitType === 'bounds',
           )}
-          {this.renderSection('Padding', 'padding', [
-            {title: 'None', value: buildPadding()},
-            {title: 'Top', value: buildPadding([200, 40, 40, 40])},
-            {title: 'Bottom', value: buildPadding([40, 40, 200, 40])},
+          {this.renderSection('Padding', [
+            {
+              title: 'None',
+              selected: isEqual(padding, paddingZero),
+              onPress: () => this.setState({padding: paddingZero}),
+            },
+            {
+              title: 'Top',
+              selected: isEqual(padding, paddingTop),
+              onPress: () => this.setState({padding: paddingTop}),
+            },
+            {
+              title: 'Bottom',
+              selected: isEqual(padding, paddingBottom),
+              onPress: () => this.setState({padding: paddingBottom}),
+            },
           ])}
         </View>
       </Page>
