@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import {isEqual} from 'lodash';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import sheet from '../../styles/sheet';
@@ -50,9 +50,13 @@ class Fit extends React.Component {
       fitType: 'bounds', // 'bounds' | 'centerCoordinate'
       containType: 'house', // 'house' | 'town'
       zoomLevel: undefined,
-      padding: buildPadding(),
+      padding: paddingZero,
       animationDuration: 500,
+
+      cachedZoomLevel: undefined, // For updating the UI in this example.
     };
+
+    this.camera = null;
   }
 
   renderSection = (title, buttons, fade = false) => {
@@ -111,27 +115,50 @@ class Fit extends React.Component {
   };
 
   render() {
-    const {fitType, containType, zoomLevel, padding} = this.state;
+    const {fitType, containType, zoomLevel, padding, cachedZoomLevel} =
+      this.state;
+
+    const zoomConfigButtons = [undefined, 14, 15, 16, 17, 18, 19, 20].map(n => {
+      return {
+        title: `${n}`,
+        selected: zoomLevel === n,
+        onPress: () => this.setState({zoomLevel: n}),
+      };
+    });
+
+    const zoomToButtons = [14, 15, 16, 17, 18, 19, 20].map(n => {
+      return {
+        title: `${n}`,
+        selected: cachedZoomLevel === n,
+        onPress: () => {
+          this.camera.zoomTo(n, 1000);
+          this.setState({cachedZoomLevel: n});
+        },
+      };
+    });
 
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
           styleURL={MapboxGL.StyleURL.Satellite}
           style={sheet.matchParent}>
-          <MapboxGL.Camera {...this.cameraProps()} />
+          <MapboxGL.Camera
+            ref={ref => (this.camera = ref)}
+            {...this.cameraProps()}
+          />
           <View style={{flex: 1, ...padding}}>
             <View style={{flex: 1, borderColor: 'white', borderWidth: 4}} />
           </View>
         </MapboxGL.MapView>
 
-        <View
+        <ScrollView
           style={{
             flex: 0,
             width: '100%',
-            padding: 10,
-            paddingBottom: 20,
+            maxHeight: 350,
             backgroundColor: 'white',
-          }}>
+          }}
+          contentContainerStyle={{padding: 10, paddingBottom: 20}}>
           {this.renderSection('Fit Type', [
             {
               title: 'Bounds',
@@ -158,16 +185,11 @@ class Fit extends React.Component {
           ])}
           {this.renderSection(
             'Zoom' +
-              (fitType === 'bounds' ? ' (Not used because bounds is set)' : ''),
-            [undefined, 14, 15, 16, 17, 18, 19, 20].map(n => {
-              return {
-                title: `${n}`,
-                selected: zoomLevel === n,
-                onPress: () => this.setState({zoomLevel: n}),
-              };
-            }),
+              (fitType === 'bounds' ? ' (not used if bounds is set)' : ''),
+            zoomConfigButtons,
             fitType === 'bounds',
           )}
+          {this.renderSection('Zoom to (imperative)', zoomToButtons)}
           {this.renderSection('Padding', [
             {
               title: 'None',
@@ -185,7 +207,7 @@ class Fit extends React.Component {
               onPress: () => this.setState({padding: paddingBottom}),
             },
           ])}
-        </View>
+        </ScrollView>
       </Page>
     );
   }
