@@ -28,11 +28,9 @@
     "@turf/line-distance": "^4.7.3",
     "@turf/nearest": "^4.7.3",
     "@turf/nearest-point-on-line": ">= 4.0.0 <7.0.0",
-    "buffer": "^5.1.0",
     "debounce": "^1.2.0",
     "fbjs": "^3.0.0",
     "moment": "^2.24.0",
-    "npm": "^6.13.4",
     "prop-types": "^15.7.2",
     "react": "17.0.2",
     "react-native": "0.66.0",
@@ -43,8 +41,7 @@
     "react-native-svg": "^12.1.0",
     "react-native-vector-icons": "9.0.0",
     "react-navigation": "^4.3.7",
-    "react-navigation-stack": "^2.3.11",
-    "url": "^0.11.0"
+    "react-navigation-stack": "^2.3.11"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
