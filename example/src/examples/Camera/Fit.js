@@ -47,16 +47,47 @@ class Fit extends React.Component {
     super(props);
 
     this.state = {
-      fitType: 'bounds', // 'bounds' | 'centerCoordinate'
       containType: 'house', // 'house' | 'town'
-      zoomLevel: undefined,
+      fitType: undefined, // 'bounds' | 'centerCoordinate'
+      zoomLevel: undefined, // number
       padding: paddingZero,
       animationDuration: 500,
 
-      cachedZoomLevel: undefined, // For updating the UI in this example.
+      // For updating the UI in this example.
+      cachedFlyTo: undefined, // 'house' | 'town'
+      cachedZoomLevel: undefined, // number
     };
 
     this.camera = null;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const changed = stateKey => {
+      // Checking if final state is `undefined` prevents another round of zeroing out in
+      // second `componentDidUpdate` call.
+      return (
+        !isEqual(prevState[stateKey], this.state[stateKey]) &&
+        this.state[stateKey] !== undefined
+      );
+    };
+
+    if (
+      changed('fitType') ||
+      changed('containType') ||
+      changed('zoomLevel') ||
+      changed('padding')
+    ) {
+      this.setState({
+        cachedFlyTo: undefined,
+        cachedZoomLevel: undefined,
+      });
+    } else if (changed('cachedFlyTo') || changed('cachedZoomLevel')) {
+      this.setState({
+        fitType: undefined,
+        zoomLevel: undefined,
+        padding: paddingZero,
+      });
+    }
   }
 
   renderSection = (title, buttons, fade = false) => {
@@ -115,8 +146,14 @@ class Fit extends React.Component {
   };
 
   render() {
-    const {fitType, containType, zoomLevel, padding, cachedZoomLevel} =
-      this.state;
+    const {
+      fitType,
+      containType,
+      zoomLevel,
+      padding,
+      cachedFlyTo,
+      cachedZoomLevel,
+    } = this.state;
 
     const zoomConfigButtons = [undefined, 14, 15, 16, 17, 18, 19, 20].map(n => {
       return {
@@ -158,20 +195,11 @@ class Fit extends React.Component {
             maxHeight: 350,
             backgroundColor: 'white',
           }}
-          contentContainerStyle={{padding: 10, paddingBottom: 20}}>
-          {this.renderSection('Fit Type', [
-            {
-              title: 'Bounds',
-              selected: fitType === 'bounds',
-              onPress: () => this.setState({fitType: 'bounds'}),
-            },
-            {
-              title: 'Center Coordinate',
-              selected: fitType === 'centerCoordinate',
-              onPress: () => this.setState({fitType: 'centerCoordinate'}),
-            },
-          ])}
-          {this.renderSection('Contain Type', [
+          contentContainerStyle={{
+            padding: 10,
+            paddingBottom: 20,
+          }}>
+          {this.renderSection('Contain type', [
             {
               title: 'House',
               selected: containType === 'house',
@@ -183,13 +211,55 @@ class Fit extends React.Component {
               onPress: () => this.setState({containType: 'town'}),
             },
           ])}
+
+          {this.renderSection('Fit type', [
+            {
+              title: 'undefined',
+              selected: fitType === undefined,
+              onPress: () => this.setState({fitType: undefined}),
+            },
+            {
+              title: 'Bounds',
+              selected: fitType === 'bounds',
+              onPress: () => this.setState({fitType: 'bounds'}),
+            },
+            {
+              title: 'Center coordinate',
+              selected: fitType === 'centerCoordinate',
+              onPress: () => this.setState({fitType: 'centerCoordinate'}),
+            },
+          ])}
+
           {this.renderSection(
             'Zoom' +
-              (fitType === 'bounds' ? ' (not used if bounds is set)' : ''),
+              (fitType !== 'centerCoordinate'
+                ? ' (not used if center coordinate is not set)'
+                : ''),
             zoomConfigButtons,
-            fitType === 'bounds',
+            fitType !== 'centerCoordinate',
           )}
+
+          {this.renderSection('Fly to (imperative)', [
+            {
+              title: 'House',
+              selected: cachedFlyTo === 'house',
+              onPress: () => {
+                this.camera.flyTo(houseCenter);
+                this.setState({cachedFlyTo: 'house'});
+              },
+            },
+            {
+              title: 'Town',
+              selected: cachedFlyTo === 'town',
+              onPress: () => {
+                this.camera.flyTo(townCenter);
+                this.setState({cachedFlyTo: 'town'});
+              },
+            },
+          ])}
+
           {this.renderSection('Zoom to (imperative)', zoomToButtons)}
+
           {this.renderSection('Padding', [
             {
               title: 'None',
