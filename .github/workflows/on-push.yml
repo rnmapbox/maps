@@ -22,13 +22,13 @@ jobs:
         run: yarn install --network-timeout 1000000
 
       - name: Lint
-        run: yarn run lint
+        run: yarn lint
 
       - name: Test
-        run: yarn run unittest
+        run: yarn unittest
 
       - name: Generate
-        run: yarn run generate
+        run: yarn generate
 
     outputs:
       NVMRC: ${{ steps.nvm.outputs.NVMRC }}
