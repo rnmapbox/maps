@@ -135,6 +135,8 @@ public class CameraStop {
                 );
                 return new CameraUpdateItem(map, update, mDuration, mCallback, mMode);
             }
+        } else if (mZoom != null) {
+            builder.zoom(mZoom);
         }
 
         return new CameraUpdateItem(map, CameraUpdateFactory.newCameraPosition(builder.build()), mDuration, mCallback, mMode);
