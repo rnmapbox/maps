@@ -49,6 +49,7 @@ class Fit extends React.Component {
     this.state = {
       locationType: 'houseCenter', // houseCenter | houseBounds | townCenter | townBounds
       zoomLevel: 16, // number
+      followUserLocation: false,
       padding: paddingZero,
       animationDuration: 500,
 
@@ -69,6 +70,16 @@ class Fit extends React.Component {
         this.state[stateKey] !== undefined
       );
     };
+
+    if (changed('followUserLocation') && this.state.followUserLocation) {
+      this.setState({
+        locationType: undefined,
+        zoomLevel: undefined,
+        cachedFlyTo: undefined,
+        cachedZoomLevel: undefined,
+      });
+      return;
+    }
 
     if (
       changed('locationType') || changed('zoomLevel') || changed('padding')
@@ -118,15 +129,15 @@ class Fit extends React.Component {
   };
 
   cameraProps = () => {
-    const {locationType, zoomLevel, padding, animationDuration} = this.state;
+    const {locationType, zoomLevel, followUserLocation, padding, animationDuration} = this.state;
 
     let p = {
       bounds: undefined,
       centerCoordinate: undefined,
       zoomLevel: undefined,
+      followUserLocation,
       padding,
       animationDuration,
-      followUserLocation: false,
     };
 
     if (locationType === 'houseCenter') {
@@ -150,6 +161,7 @@ class Fit extends React.Component {
     const {
       locationType,
       zoomLevel,
+      followUserLocation,
       padding,
       cachedFlyTo,
       cachedZoomLevel,
@@ -215,6 +227,15 @@ class Fit extends React.Component {
             'Zoom' + (centerIsSet ? '' : ' (only used if center coordinate is set)'),
             zoomConfigButtons,
             !centerIsSet,
+          )}
+
+          {this.renderSection(
+            'Follow user location',
+            [{
+              title: followUserLocation ? 'Enabled' : 'Disabled',
+              selected: followUserLocation,
+              onPress: () => this.setState({followUserLocation: !followUserLocation})
+            }],
           )}
 
           {this.renderSection('Fly to (imperative)', [
