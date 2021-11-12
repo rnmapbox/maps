@@ -71,9 +71,7 @@ class Fit extends React.Component {
     };
 
     if (
-      changed('locationType') ||
-      changed('zoomLevel') ||
-      changed('padding')
+      changed('locationType') || changed('zoomLevel') || changed('padding')
     ) {
       this.setState({
         cachedFlyTo: undefined,
@@ -120,8 +118,7 @@ class Fit extends React.Component {
   };
 
   cameraProps = () => {
-    const {locationType, zoomLevel, padding, animationDuration} =
-      this.state;
+    const {locationType, zoomLevel, padding, animationDuration} = this.state;
 
     let p = {
       bounds: undefined,
