@@ -5,6 +5,7 @@
 ### props
 | Prop | Type | Default | Required | Description |
 | ---- | :--: | :-----: | :------: | :----------: |
+| allowUpdates | `bool` | `true` | `false` | If false, the camera will not send any props to the native module. Intended to be used to prevent unnecessary tile fetching and improve performance when the map is not visible. Defaults to true. |
 | animationDuration | `number` | `2000` | `false` | The duration a camera update takes (in ms) |
 | animationMode | `enum` | `'easeTo'` | `false` | The animationstyle when the camara updates. One of: `flyTo`, `easeTo`, `linearTo`, `moveTo` |
 | defaultSettings | `shape` | `none` | `false` | Default view settings applied on camera |
