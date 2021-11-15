@@ -501,6 +501,7 @@ export interface MapViewProps extends ViewProps {
 }
 
 export interface CameraProps extends CameraSettings, ViewProps {
+  allowUpdates?: boolean;
   animationDuration?: number;
   animationMode?: 'flyTo' | 'easeTo' | 'linearTo' | 'moveTo';
   defaultSettings?: CameraSettings;

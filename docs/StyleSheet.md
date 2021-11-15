@@ -228,7 +228,7 @@ const layerStyles = {
     circleColor: [
       'interpolate',
       ['exponential', 1.5],
-      ['get' 'point_count'],
+      ['get','point_count'],
       25, 'yellow',
       50, 'red',
       75, 'blue',
@@ -240,7 +240,7 @@ const layerStyles = {
     circleRadius: [
       'interpolate',
       ['exponential', 1.5],
-      ['get' 'point_count'],
+      ['get','point_count'],
       [0, 15],
       [100, 20],
       [750, 30],
