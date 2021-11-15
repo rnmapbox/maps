@@ -403,6 +403,13 @@
     ],
     "props": [
       {
+        "name": "allowUpdates",
+        "required": false,
+        "type": "bool",
+        "default": "true",
+        "description": "If false, the camera will not send any props to the native module. Intended to be used to prevent unnecessary tile fetching and improve performance when the map is not visible. Defaults to true."
+      },
+      {
         "name": "animationDuration",
         "required": false,
         "type": "number",
