@@ -9,20 +9,23 @@ buildscript {
         ndkVersion = "21.4.7075529"
 
         useMapLibre = false
+        useCustomMapbox = false
 
         // Mapbox deps
-        // rnmbglMapboxLibs = {
-        //     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.1'
-        //     implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.8.0'
-        //     implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.8.0'
-        //     implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.7.0'
-        // }
+        if (useCustomMapbox) {
+            rnmbglMapboxLibs = {
+                implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.1'
+                implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.8.0'
+                implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.8.0'
+                implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.7.0'
+            }
 
-        // rnmbglMapboxPlugins = {
-        //     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0'
-        //     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v9:0.14.0'
-        //     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v9:0.4.0'
-        // }
+            rnmbglMapboxPlugins = {
+                implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0'
+                implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v9:0.14.0'
+                implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v9:0.4.0'
+            }
+        }
 
 
         // MapLibre deps
@@ -72,17 +75,19 @@ allprojects {
             url("$rootDir/../node_modules/jsc-android/dist")
         }
 
-        // maven {
-        //     url 'https://api.mapbox.com/downloads/v2/releases/maven'
-        //     authentication {
-        //         basic(BasicAuthentication)
-        //     }
-        //     credentials {
-        //       username = "mapbox"
-        //       password = "REPLACE WITH YOUR MAPBOX DOWNLOAD TOKEN"
+        if (rootProject.ext.get('useCustomMapbox')) {
+                maven {
+                    url 'https://api.mapbox.com/downloads/v2/releases/maven'
+                    authentication {
+                        basic(BasicAuthentication)
+                    }
+                    credentials {
+                    username = "mapbox"
+                    password = "REPLACE WITH YOUR MAPBOX DOWNLOAD TOKEN"
 
-        //     }
-        // }
+                    }
+                }
+        }
 
 
         if (rootProject.ext.get('useMapLibre')) {
