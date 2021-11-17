@@ -203,7 +203,7 @@ const Style = props => {
 
   // Fetch style when props.json is a URL
   useEffect(() => {
-    const abortController = new window.AbortController();
+    const abortController = new AbortController();
     const fetchStyleJson = async () => {
       try {
         const response = await fetch(props.json, {

@@ -115,8 +115,8 @@ NativeModules.MGLLocationModule = {
   pause: jest.fn(),
 };
 
-// Mock for AbortController. Will probably not be required during testing.
-window = {};
-window.AbortController = class {
+// Mock for global AbortController
+global.AbortController = class {
+  signal = 'test-signal';
   abort = jest.fn();
 };
