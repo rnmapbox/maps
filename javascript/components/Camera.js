@@ -332,12 +332,12 @@ class Camera extends React.Component {
   }
 
   _hasCenterCoordinateChanged(cC, nC) {
-    if (existenceChange(cC, nC)) {
-      return true;
-    }
-
     if (!cC && !nC) {
       return false;
+    }
+
+    if (existenceChange(cC, nC)) {
+      return true;
     }
 
     const isLngDiff = cC[0] !== nC[0];
@@ -349,9 +349,11 @@ class Camera extends React.Component {
     if (!cB && !nB) {
       return false;
     }
+
     if (existenceChange(cB, nB)) {
       return true;
     }
+
     return (
       cB.ne[0] !== nB.ne[0] ||
       cB.ne[1] !== nB.ne[1] ||
