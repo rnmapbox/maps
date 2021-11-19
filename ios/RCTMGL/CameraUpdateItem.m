@@ -74,15 +74,7 @@
 - (RCTMGLCameraWithPadding*)_makeCamera:(RCTMGLMapView*)mapView
 {
     MGLMapCamera *nextCamera = [mapView.camera copy];
-    
-    if (_cameraStop.pitch != nil) {
-        nextCamera.pitch = [_cameraStop.pitch floatValue];
-    }
-    
-    if (_cameraStop.heading != nil) {
-        nextCamera.heading = [_cameraStop.heading floatValue];
-    }
-  
+
     UIEdgeInsets padding = [self _clippedPadding:_cameraStop.padding forView:mapView];
     if (padding.top <= 0 && padding.bottom <= 0) {
       // If all padding properties are 0 in the update, and the bounds and centerCoordinate do not
@@ -90,6 +82,8 @@
       padding.top = 1.0;
       padding.bottom = 1.0;
     }
+  
+    bool hasSetAltitude = false;
     
     if ([self _isCoordValid:_cameraStop.coordinate]) {
         MGLCoordinateBounds boundsFromCoord = { .sw =  _cameraStop.coordinate, .ne =  _cameraStop.coordinate };
@@ -98,13 +92,6 @@
             fittingCoordinateBounds:boundsFromCoord
             edgePadding: padding];
         nextCamera.centerCoordinate = boundsCamera.centerCoordinate;
-    
-        if (_cameraStop.zoom != nil) {
-            nextCamera.altitude = [mapView
-                altitudeFromZoom:[_cameraStop.zoom doubleValue]
-                atLatitude:nextCamera.centerCoordinate.latitude
-                atPitch:nextCamera.pitch];
-        }
     } else if ([self _areBoundsValid:_cameraStop.bounds]) {
         MGLMapCamera *boundsCamera = [mapView
             camera:nextCamera
@@ -112,13 +99,24 @@
             edgePadding: padding];
         nextCamera.centerCoordinate = boundsCamera.centerCoordinate;
         nextCamera.altitude = boundsCamera.altitude;
-    } else if (_cameraStop.zoom != nil) {
-        nextCamera.altitude = [mapView
-            altitudeFromZoom:[_cameraStop.zoom doubleValue]
-            atLatitude:nextCamera.centerCoordinate.latitude
-            atPitch:nextCamera.pitch];
+        hasSetAltitude = true;
     }
-
+  
+    if (_cameraStop.pitch != nil) {
+      nextCamera.pitch = [_cameraStop.pitch floatValue];
+    }
+    
+    if (_cameraStop.heading != nil) {
+      nextCamera.heading = [_cameraStop.heading floatValue];
+    }
+    
+    if (_cameraStop.zoom != nil && hasSetAltitude == false) {
+      nextCamera.altitude = [mapView
+           altitudeFromZoom:[_cameraStop.zoom doubleValue]
+           atLatitude:nextCamera.centerCoordinate.latitude
+           atPitch:nextCamera.pitch];
+    }
+  
     RCTMGLCameraWithPadding* cameraWithPadding = [[RCTMGLCameraWithPadding alloc] init];
     cameraWithPadding.camera = nextCamera;
     cameraWithPadding.boundsPadding = padding;
