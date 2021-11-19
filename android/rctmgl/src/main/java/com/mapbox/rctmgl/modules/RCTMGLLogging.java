@@ -116,6 +116,16 @@ public class RCTMGLLogging extends ReactContextBaseJavaModule {
         Logger.setVerbosity(logLevel);
     }
 
+    @ReactMethod
+    public void addListener(String eventName) {
+        // Set up any upstream listeners or background tasks as necessary
+    }
+
+    @ReactMethod
+    public void removeListeners(Integer count) {
+        // Remove upstream listeners, stop unnecessary background tasks
+    }
+
     public void onLog(String level, String tag, String msg, Throwable tr) {
         WritableMap event = Arguments.createMap();
         event.putString("message", msg);

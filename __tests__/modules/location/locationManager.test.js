@@ -198,8 +198,6 @@ describe('LocationManager', () => {
 
         // native location manager has no #stop exposed in tests?
         MapboxGLLocationManager.stop = jest.fn();
-        jest.spyOn(LocationModuleEventEmitter, 'removeListener');
-
         MapboxGL.LocationCallbackName = {Update: 'MapboxUserLocationUpdate'};
 
         expect(locationManager._isListening).toStrictEqual(true);
@@ -207,10 +205,7 @@ describe('LocationManager', () => {
         locationManager.stop();
 
         expect(MapboxGLLocationManager.stop).toHaveBeenCalledTimes(1);
-        expect(LocationModuleEventEmitter.removeListener).toHaveBeenCalledWith(
-          MapboxGL.LocationCallbackName.Update,
-          locationManager.onUpdate,
-        );
+        expect(locationManager.subscription.remove).toHaveBeenCalled();
 
         expect(locationManager._isListening).toStrictEqual(false);
       });
@@ -221,8 +216,6 @@ describe('LocationManager', () => {
 
         // native location manager has no #stop exposed in tests?
         MapboxGLLocationManager.stop = jest.fn();
-        jest.spyOn(LocationModuleEventEmitter, 'removeListener');
-
         MapboxGL.LocationCallbackName = {Update: 'MapboxUserLocationUpdate'};
 
         expect(locationManager._isListening).toStrictEqual(false);
@@ -230,9 +223,7 @@ describe('LocationManager', () => {
         locationManager.stop();
 
         expect(MapboxGLLocationManager.stop).toHaveBeenCalledTimes(1);
-        expect(
-          LocationModuleEventEmitter.removeListener,
-        ).not.toHaveBeenCalled();
+        expect(locationManager.subscription.remove).not.toHaveBeenCalled();
       });
     });
 

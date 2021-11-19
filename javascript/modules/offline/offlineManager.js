@@ -26,6 +26,9 @@ class OfflineManager {
 
     this._onProgress = this._onProgress.bind(this);
     this._onError = this._onError.bind(this);
+
+    this.subscriptionProgress = null;
+    this.subscriptionError = null;
   }
 
   /**
@@ -261,7 +264,7 @@ class OfflineManager {
     const totalProgressListeners = Object.keys(this._progressListeners).length;
     if (isFunction(progressListener)) {
       if (totalProgressListeners === 0) {
-        OfflineModuleEventEmitter.addListener(
+        this.subscriptionProgress = OfflineModuleEventEmitter.addListener(
           MapboxGL.OfflineCallbackName.Progress,
           this._onProgress,
         );
@@ -272,7 +275,7 @@ class OfflineManager {
     const totalErrorListeners = Object.keys(this._errorListeners).length;
     if (isFunction(errorListener)) {
       if (totalErrorListeners === 0) {
-        OfflineModuleEventEmitter.addListener(
+        this.subscriptionError = OfflineModuleEventEmitter.addListener(
           MapboxGL.OfflineCallbackName.Error,
           this._onError,
         );
@@ -306,18 +309,18 @@ class OfflineManager {
     delete this._progressListeners[packName];
     delete this._errorListeners[packName];
 
-    if (Object.keys(this._progressListeners).length === 0) {
-      OfflineModuleEventEmitter.removeListener(
-        MapboxGL.OfflineCallbackName.Progress,
-        this._onProgress,
-      );
+    if (
+      Object.keys(this._progressListeners).length === 0 &&
+      this.subscriptionProgress
+    ) {
+      this.subscriptionProgress.remove();
     }
 
-    if (Object.keys(this._errorListeners).length === 0) {
-      OfflineModuleEventEmitter.removeListener(
-        MapboxGL.OfflineCallbackName.Error,
-        this._onError,
-      );
+    if (
+      Object.keys(this._errorListeners).length === 0 &&
+      this.subscriptionError
+    ) {
+      this.subscriptionError.remove();
     }
   }
 

@@ -94,7 +94,7 @@ describe('offlineManager', () => {
       const noop = () => {};
       await MapboxGL.offlineManager.createPack(packOptions, noop, noop);
       expect(spy).toHaveBeenCalledTimes(2);
-      spy.mockRestore();
+      spy.mockClear();
     });
 
     it('should call progress listener', async () => {
@@ -133,12 +133,17 @@ describe('offlineManager', () => {
     });
 
     it('should unsubscribe from native events', async () => {
-      const spy = jest.spyOn(OfflineModuleEventEmitter, 'removeListener');
       const noop = () => {};
+
       await MapboxGL.offlineManager.createPack(packOptions, noop, noop);
       MapboxGL.offlineManager.unsubscribe(packOptions.name);
-      expect(spy).toHaveBeenCalledTimes(2);
-      spy.mockRestore();
+
+      expect(
+        MapboxGL.offlineManager.subscriptionProgress.remove,
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        MapboxGL.offlineManager.subscriptionError.remove,
+      ).toHaveBeenCalledTimes(1);
     });
 
     it('should unsubscribe event listeners once a pack download has completed', async () => {

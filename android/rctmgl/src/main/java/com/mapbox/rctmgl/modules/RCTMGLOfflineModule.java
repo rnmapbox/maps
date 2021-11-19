@@ -72,6 +72,16 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void addListener(String eventName) {
+        // Set up any upstream listeners or background tasks as necessary
+    }
+
+    @ReactMethod
+    public void removeListeners(Integer count) {
+        // Remove upstream listeners, stop unnecessary background tasks
+    }
+
+    @ReactMethod
     public void createPack(ReadableMap options, final Promise promise) {
         final String name = ConvertUtils.getString("name", options, "");
         final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
