@@ -8,7 +8,7 @@
     "pod:install": "cd ios && pod install",
     "preios": "yarn pod:install && yarn fix-nvm-ios",
     "start": "react-native start",
-    "postinstall": "node ./scripts/set_access_token.js && jetifier",
+    "postinstall": "node ./scripts/set_access_token.js && jetifier && cd ios && bundle install && bundle exec pod install && cd ..",
     "purge:android": "(cd android && ./gradlew --stop) && rm -rf ~/.gradle/caches/ android/app/build",
     "purge:ios": "rm -rf ios/Pods/* ios/build ~/Library/Caches/CocoaPods ~/Library/Developer/Xcode/DerivedData && pod cache clean --all",
     "purge:js": "rm -rf node_modules && yarn cache clean && watchman watch-del-all",
