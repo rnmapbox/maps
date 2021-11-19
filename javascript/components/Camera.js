@@ -278,7 +278,7 @@ class Camera extends React.Component {
     }
 
     if (shouldUpdate) {
-      this.setCamera(cameraConfig);
+      this._setCamera(cameraConfig);
     }
   }
 
@@ -466,7 +466,7 @@ class Camera extends React.Component {
    *  @return {void}
    */
   moveTo(coordinates, animationDuration = 0) {
-    return this.setCamera({
+    return this._setCamera({
       centerCoordinate: coordinates,
       animationDuration,
     });
@@ -484,7 +484,7 @@ class Camera extends React.Component {
    * @return {void}
    */
   zoomTo(zoomLevel, animationDuration = 2000) {
-    return this.setCamera({
+    return this._setCamera({
       zoomLevel,
       animationDuration,
       animationMode: Camera.Mode.Flight,
