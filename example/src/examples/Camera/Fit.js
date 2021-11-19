@@ -81,9 +81,7 @@ class Fit extends React.Component {
       return;
     }
 
-    if (
-      changed('locationType') || changed('zoomLevel') || changed('padding')
-    ) {
+    if (changed('locationType') || changed('zoomLevel') || changed('padding')) {
       this.setState({
         cachedFlyTo: undefined,
         cachedZoomLevel: undefined,
@@ -129,7 +127,13 @@ class Fit extends React.Component {
   };
 
   cameraProps = () => {
-    const {locationType, zoomLevel, followUserLocation, padding, animationDuration} = this.state;
+    const {
+      locationType,
+      zoomLevel,
+      followUserLocation,
+      padding,
+      animationDuration,
+    } = this.state;
 
     let p = {
       bounds: undefined,
@@ -169,7 +173,13 @@ class Fit extends React.Component {
 
     const centerIsSet = locationType?.toLowerCase().includes('center');
 
-    const locationTypeButtons = [['House (center)', 'houseCenter'], ['House (bounds)', 'houseBounds'], ['Town (center)', 'townCenter'], ['Town (bounds)', 'townBounds'], ['undef', undefined]].map(o => {
+    const locationTypeButtons = [
+      ['House (center)', 'houseCenter'],
+      ['House (bounds)', 'houseBounds'],
+      ['Town (center)', 'townCenter'],
+      ['Town (bounds)', 'townBounds'],
+      ['undef', undefined],
+    ].map(o => {
       return {
         title: `${o[0]}`,
         selected: locationType === o[1],
@@ -224,19 +234,20 @@ class Fit extends React.Component {
           {this.renderSection('Location type', locationTypeButtons)}
 
           {this.renderSection(
-            'Zoom' + (centerIsSet ? '' : ' (only used if center coordinate is set)'),
+            'Zoom' +
+              (centerIsSet ? '' : ' (only used if center coordinate is set)'),
             zoomConfigButtons,
             !centerIsSet,
           )}
 
-          {this.renderSection(
-            'Follow user location',
-            [{
+          {this.renderSection('Follow user location', [
+            {
               title: followUserLocation ? 'Enabled' : 'Disabled',
               selected: followUserLocation,
-              onPress: () => this.setState({followUserLocation: !followUserLocation})
-            }],
-          )}
+              onPress: () =>
+                this.setState({followUserLocation: !followUserLocation}),
+            },
+          ])}
 
           {this.renderSection('Fly to (imperative)', [
             {
