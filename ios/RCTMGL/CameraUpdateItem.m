@@ -112,11 +112,6 @@
             edgePadding: padding];
         nextCamera.centerCoordinate = boundsCamera.centerCoordinate;
         nextCamera.altitude = boundsCamera.altitude;
-    } else if (_cameraStop.zoom != nil) {
-        nextCamera.altitude = [mapView
-            altitudeFromZoom:[_cameraStop.zoom doubleValue]
-            atLatitude:nextCamera.centerCoordinate.latitude
-            atPitch:nextCamera.pitch];
     }
 
     RCTMGLCameraWithPadding* cameraWithPadding = [[RCTMGLCameraWithPadding alloc] init];
