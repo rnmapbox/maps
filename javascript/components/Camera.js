@@ -278,7 +278,7 @@ class Camera extends React.Component {
     }
 
     if (shouldUpdate) {
-      this.setCamera(cameraConfig);
+      this._setCamera(cameraConfig);
     }
   }
 
