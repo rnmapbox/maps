@@ -263,8 +263,11 @@ class Camera extends React.Component {
     };
 
     const boundsChanged = this._hasBoundsChanged(c.bounds, n.bounds);
-    const centerCoordinateChanged = this._hasCenterCoordinateChanged(c, n);
-    const paddingChanged = this._hasPaddingChanged(c, n);
+    const centerCoordinateChanged = this._hasCenterCoordinateChanged(
+      c.centerCoordinate,
+      n.centerCoordinate,
+    );
+    const paddingChanged = this._hasPaddingChanged(c.padding, n.padding);
     const zoomChanged = this._hasNumberChanged(c.zoomLevel, n.zoomLevel);
     const pitchChanged = this._hasNumberChanged(c.pitch, n.pitch);
     const headingChanged = this._hasNumberChanged(c.heading, n.heading);
@@ -294,9 +297,12 @@ class Camera extends React.Component {
 
     const hasDefaultPropsChanged =
       c.heading !== n.heading ||
-      this._hasCenterCoordinateChanged(c, n) ||
+      this._hasCenterCoordinateChanged(
+        c.centerCoordinate,
+        n.centerCoordinate,
+      ) ||
       this._hasBoundsChanged(c.bounds, n.bounds) ||
-      this._hasPaddingChanged(c, n) ||
+      this._hasPaddingChanged(c.padding, n.padding) ||
       c.pitch !== n.pitch ||
       c.zoomLevel !== n.zoomLevel ||
       c.triggerKey !== n.triggerKey;
@@ -325,10 +331,7 @@ class Camera extends React.Component {
     );
   }
 
-  _hasCenterCoordinateChanged(currentCamera, nextCamera) {
-    const cC = currentCamera.centerCoordinate;
-    const nC = nextCamera.centerCoordinate;
-
+  _hasCenterCoordinateChanged(cC, nC) {
     if (existenceChange(cC, nC)) {
       return true;
     }
@@ -337,10 +340,8 @@ class Camera extends React.Component {
       return false;
     }
 
-    const isLngDiff =
-      currentCamera.centerCoordinate[0] !== nextCamera.centerCoordinate[0];
-    const isLatDiff =
-      currentCamera.centerCoordinate[1] !== nextCamera.centerCoordinate[1];
+    const isLngDiff = cC[0] !== nC[0];
+    const isLatDiff = cC[1] !== nC[1];
     return isLngDiff || isLatDiff;
   }
 
@@ -363,10 +364,7 @@ class Camera extends React.Component {
     );
   }
 
-  _hasPaddingChanged(currentCamera, nextCamera) {
-    const cP = currentCamera.padding;
-    const nP = nextCamera.padding;
-
+  _hasPaddingChanged(cP, nP) {
     if (!cP && !nP) {
       return false;
     }
