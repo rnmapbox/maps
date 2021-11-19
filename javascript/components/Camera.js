@@ -252,28 +252,34 @@ class Camera extends React.Component {
     }
 
     const cameraConfig = {
-      animationMode: n.animationMode,
-      animationDuration: n.animationDuration,
+      bounds: undefined,
+      centerCoordinate: undefined,
+      padding: n.padding,
       zoomLevel: n.zoomLevel,
       pitch: n.pitch,
       heading: n.heading,
-      padding: n.padding,
+      animationMode: n.animationMode,
+      animationDuration: n.animationDuration,
     };
 
     const boundsChanged = this._hasBoundsChanged(c.bounds, n.bounds);
     const centerCoordinateChanged = this._hasCenterCoordinateChanged(c, n);
     const paddingChanged = this._hasPaddingChanged(c, n);
-    const zoomChanged = c.zoomLevel !== n.zoomLevel;
+    const zoomChanged = this._hasNumberChanged(c.zoomLevel, n.zoomLevel);
+    const pitchChanged = this._hasNumberChanged(c.pitch, n.pitch);
+    const headingChanged = this._hasNumberChanged(c.heading, n.heading);
 
     let shouldUpdate = false;
-    if (n.bounds && (boundsChanged || paddingChanged)) {
+
+    if (n.bounds && boundsChanged) {
       cameraConfig.bounds = n.bounds;
       shouldUpdate = true;
-    } else if (
-      n.centerCoordinate &&
-      (centerCoordinateChanged || zoomChanged || paddingChanged)
-    ) {
+    } else if (n.centerCoordinate && centerCoordinateChanged) {
       cameraConfig.centerCoordinate = n.centerCoordinate;
+      shouldUpdate = true;
+    }
+
+    if (paddingChanged || zoomChanged || pitchChanged || headingChanged) {
       shouldUpdate = true;
     }
 
@@ -375,6 +381,18 @@ class Camera extends React.Component {
       cP.paddingRight !== nP.paddingRight ||
       cP.paddingBottom !== nP.paddingBottom
     );
+  }
+
+  _hasNumberChanged(prev, next) {
+    if (existenceChange(prev, next)) {
+      return true;
+    }
+
+    if (!prev && !next) {
+      return false;
+    }
+
+    return prev !== next;
   }
 
   /**
