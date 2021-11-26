@@ -252,28 +252,37 @@ class Camera extends React.Component {
     }
 
     const cameraConfig = {
-      animationMode: n.animationMode,
-      animationDuration: n.animationDuration,
+      bounds: undefined,
+      centerCoordinate: undefined,
+      padding: n.padding,
       zoomLevel: n.zoomLevel,
       pitch: n.pitch,
       heading: n.heading,
-      padding: n.padding,
+      animationMode: n.animationMode,
+      animationDuration: n.animationDuration,
     };
 
     const boundsChanged = this._hasBoundsChanged(c.bounds, n.bounds);
-    const centerCoordinateChanged = this._hasCenterCoordinateChanged(c, n);
-    const paddingChanged = this._hasPaddingChanged(c, n);
-    const zoomChanged = c.zoomLevel !== n.zoomLevel;
+    const centerCoordinateChanged = this._hasCenterCoordinateChanged(
+      c.centerCoordinate,
+      n.centerCoordinate,
+    );
+    const paddingChanged = this._hasPaddingChanged(c.padding, n.padding);
+    const zoomChanged = this._hasNumberChanged(c.zoomLevel, n.zoomLevel);
+    const pitchChanged = this._hasNumberChanged(c.pitch, n.pitch);
+    const headingChanged = this._hasNumberChanged(c.heading, n.heading);
 
     let shouldUpdate = false;
-    if (n.bounds && (boundsChanged || paddingChanged)) {
+
+    if (n.bounds && boundsChanged) {
       cameraConfig.bounds = n.bounds;
       shouldUpdate = true;
-    } else if (
-      n.centerCoordinate &&
-      (centerCoordinateChanged || zoomChanged || paddingChanged)
-    ) {
+    } else if (n.centerCoordinate && centerCoordinateChanged) {
       cameraConfig.centerCoordinate = n.centerCoordinate;
+      shouldUpdate = true;
+    }
+
+    if (paddingChanged || zoomChanged || pitchChanged || headingChanged) {
       shouldUpdate = true;
     }
 
@@ -288,9 +297,12 @@ class Camera extends React.Component {
 
     const hasDefaultPropsChanged =
       c.heading !== n.heading ||
-      this._hasCenterCoordinateChanged(c, n) ||
+      this._hasCenterCoordinateChanged(
+        c.centerCoordinate,
+        n.centerCoordinate,
+      ) ||
       this._hasBoundsChanged(c.bounds, n.bounds) ||
-      this._hasPaddingChanged(c, n) ||
+      this._hasPaddingChanged(c.padding, n.padding) ||
       c.pitch !== n.pitch ||
       c.zoomLevel !== n.zoomLevel ||
       c.triggerKey !== n.triggerKey;
@@ -319,22 +331,17 @@ class Camera extends React.Component {
     );
   }
 
-  _hasCenterCoordinateChanged(currentCamera, nextCamera) {
-    const cC = currentCamera.centerCoordinate;
-    const nC = nextCamera.centerCoordinate;
+  _hasCenterCoordinateChanged(cC, nC) {
+    if (!cC && !nC) {
+      return false;
+    }
 
     if (existenceChange(cC, nC)) {
       return true;
     }
 
-    if (!cC && !nC) {
-      return false;
-    }
-
-    const isLngDiff =
-      currentCamera.centerCoordinate[0] !== nextCamera.centerCoordinate[0];
-    const isLatDiff =
-      currentCamera.centerCoordinate[1] !== nextCamera.centerCoordinate[1];
+    const isLngDiff = cC[0] !== nC[0];
+    const isLatDiff = cC[1] !== nC[1];
     return isLngDiff || isLatDiff;
   }
 
@@ -342,9 +349,11 @@ class Camera extends React.Component {
     if (!cB && !nB) {
       return false;
     }
+
     if (existenceChange(cB, nB)) {
       return true;
     }
+
     return (
       cB.ne[0] !== nB.ne[0] ||
       cB.ne[1] !== nB.ne[1] ||
@@ -357,10 +366,7 @@ class Camera extends React.Component {
     );
   }
 
-  _hasPaddingChanged(currentCamera, nextCamera) {
-    const cP = currentCamera.padding;
-    const nP = nextCamera.padding;
-
+  _hasPaddingChanged(cP, nP) {
     if (!cP && !nP) {
       return false;
     }
@@ -375,6 +381,18 @@ class Camera extends React.Component {
       cP.paddingRight !== nP.paddingRight ||
       cP.paddingBottom !== nP.paddingBottom
     );
+  }
+
+  _hasNumberChanged(prev, next) {
+    if (existenceChange(prev, next)) {
+      return true;
+    }
+
+    if (!prev && !next) {
+      return false;
+    }
+
+    return prev !== next;
   }
 
   /**
@@ -466,7 +484,7 @@ class Camera extends React.Component {
    *  @return {void}
    */
   moveTo(coordinates, animationDuration = 0) {
-    return this._setCamera({
+    return this.setCamera({
       centerCoordinate: coordinates,
       animationDuration,
     });
@@ -484,7 +502,7 @@ class Camera extends React.Component {
    * @return {void}
    */
   zoomTo(zoomLevel, animationDuration = 2000) {
-    return this._setCamera({
+    return this.setCamera({
       zoomLevel,
       animationDuration,
       animationMode: Camera.Mode.Flight,

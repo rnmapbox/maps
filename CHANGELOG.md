@@ -5,6 +5,7 @@ Please add unreleased changes in the following style:
 PR Title ([#123](link to my pr))
 ```
 
+fix(Camera) fix `zoomTo` method and expand Fit example ([#1631](https://github.com/react-native-mapbox-gl/maps/pull/1631))
 build: update install guide and `/example` project for android dependencies ([#1640](https://github.com/react-native-mapbox-gl/maps/pull/1640))  
 build(turf): update to version 6.5.0 ([#1638](https://github.com/react-native-mapbox-gl/maps/pull/1638))  
 ci: two scripts for linting with and without fix ([#1630](https://github.com/react-native-mapbox-gl/maps/pull/1630))  
