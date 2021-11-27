@@ -23,14 +23,28 @@ import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
  */
 // import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 // import com.mapbox.maps.CameraOptions;
+import com.mapbox.maps.CameraBounds;
 import com.mapbox.maps.CameraOptions;
 import com.mapbox.maps.CameraState;
+import com.mapbox.maps.CoordinateBounds;
 import com.mapbox.maps.ExtensionUtils;
 import com.mapbox.maps.MapboxMap;
 import com.mapbox.maps.ScreenCoordinate;
+import com.mapbox.maps.Style;
 import com.mapbox.maps.plugin.animation.CameraAnimationsPlugin;
+import com.mapbox.maps.plugin.animation.CameraAnimationsUtils;
+import com.mapbox.maps.plugin.animation.CameraOptionsUtilsKt;
+import com.mapbox.maps.plugin.animation.MapAnimationOptions;
+import com.mapbox.maps.plugin.delegates.MapPluginProviderDelegate;
+import com.mapbox.maps.plugin.gestures.GesturesUtils;
+import com.mapbox.maps.plugin.locationcomponent.LocationComponentPlugin;
+import com.mapbox.maps.plugin.locationcomponent.LocationComponentUtils;
+import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListener;
+import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 // import com.mapbox.rctmgl.components.location.LocationComponentManager;
+import com.mapbox.rctmgl.components.camera.constants.CameraMode;
+import com.mapbox.rctmgl.components.location.LocationComponentManager;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.events.IEvent;
 //import com.mapbox.rctmgl.events.MapUserTrackingModeEvent;
@@ -52,6 +66,15 @@ import com.facebook.react.bridge.WritableNativeMap;
 import com.mapbox.geojson.Point;
 
 import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.rctmgl.events.MapChangeEvent;
+import com.mapbox.rctmgl.events.constants.EventTypes;
+import com.mapbox.rctmgl.location.LocationManager;
+import com.mapbox.rctmgl.location.UserLocation;
+import com.mapbox.rctmgl.location.UserLocationVerticalAlignment;
+import com.mapbox.rctmgl.location.UserTrackingMode;
+import com.mapbox.rctmgl.location.UserTrackingState;
+import com.mapbox.rctmgl.utils.GeoJSONUtils;
+import com.mapbox.rctmgl.utils.LatLng;
 import com.mapbox.rctmgl.utils.LatLngBounds;
 
 import androidx.annotation.NonNull;
@@ -71,19 +94,17 @@ public class RCTMGLCamera extends AbstractMapFeature {
 
     /*
     // private LocationComponent mLocationComponent;
+     */
     private LocationComponentManager mLocationComponentManager;
 
-     */
     private int mUserTrackingMode;
-    //private int mUserTrackingState = UserTrackingState.POSSIBLE;
-    //private int mUserLocationVerticalAlignment = UserLocationVerticalAlignment.CENTER;
+    private int mUserTrackingState = UserTrackingState.POSSIBLE;
+    private int mUserLocationVerticalAlignment = UserLocationVerticalAlignment.CENTER;
 
     public static final int USER_LOCATION_CAMERA_MOVE_DURATION = 1000;
 
-/*
     private LocationManager mLocationManager;
     private UserLocation mUserLocation;
-*/
     private ScreenCoordinate mCenterCoordinate;
 
     private boolean mAnimated;
@@ -101,7 +122,6 @@ public class RCTMGLCamera extends AbstractMapFeature {
 
     private Context mContext;
 
-/*
     private LocationManager.OnUserLocationChange mLocationChangeListener = new LocationManager.OnUserLocationChange() {
         @Override
         public void onLocationChange(Location nextLocation) {
@@ -110,10 +130,31 @@ public class RCTMGLCamera extends AbstractMapFeature {
         }
 
         mUserLocation.setCurrentLocation(nextLocation);
-        sendUserLocationUpdateEvent(nextLocation);
+        sendUserLocationUpdateEvent(GeoJSONUtils.toPoint(nextLocation));
         }
     };
-*/
+
+    private OnIndicatorBearingChangedListener mLocationBearingChangedListener = new OnIndicatorBearingChangedListener() {
+        @Override
+        public void onIndicatorBearingChanged(double v) {
+            if (mFollowUserLocation) {
+                mMapView.getMapboxMap().setCamera(new CameraOptions.Builder().bearing(v).build());
+            }
+        }
+    };
+
+    private OnIndicatorPositionChangedListener mLocationPositionChangeListener = new OnIndicatorPositionChangedListener() {
+        @Override
+        public void onIndicatorPositionChanged(@NonNull Point point) {
+            if (mFollowUserLocation) {
+                mMapView.getMapboxMap().setCamera(new CameraOptions.Builder().center(point).build());
+                GesturesUtils.getGestures(mMapView).setFocalPoint(mMapView.getMapboxMap().pixelForCoordinate(point));
+
+                sendUserLocationUpdateEvent(point);
+            }
+        }
+    };
+
 
     private Animator.AnimatorListener mCameraCallback = new Animator.AnimatorListener() {
         @Override
@@ -148,11 +189,9 @@ public class RCTMGLCamera extends AbstractMapFeature {
         mContext = context;
         mManager = manager;
         mCameraUpdateQueue = new CameraUpdateQueue();
-/*
+
         mUserLocation = new UserLocation();
         mLocationManager = LocationManager.getInstance(context);
-
- */
     }
 
     @Override
@@ -166,10 +205,11 @@ public class RCTMGLCamera extends AbstractMapFeature {
         if (mCameraStop != null) {
             updateCamera();
         }
-/*
+
         if (mFollowUserLocation) {
+            // updateFollowLocation(mFollowUserLocation);
             enableLocation();
-        }*/
+        }
     }
 
     @Override
@@ -247,7 +287,6 @@ public class RCTMGLCamera extends AbstractMapFeature {
          */
     }
 
-    /*
     private void updateUserLocation(boolean isAnimated) {
         if ((!mFollowUserLocation) || mUserLocation.getTrackingMode() == UserTrackingMode.NONE) {
             return;
@@ -258,39 +297,46 @@ public class RCTMGLCamera extends AbstractMapFeature {
         } else if (mUserTrackingState == UserTrackingState.CHANGED) {
             updateUserLocationIncrementally(isAnimated);
         }
-    }*/
+    }
 
-    /*
-    private CameraPosition getUserLocationUpdateCameraPosition(double zoomLevel) {
+    private CameraOptions getUserLocationUpdateCameraOptions(double zoomLevel) {
         LatLng center = mUserLocation.getCoordinate();
 
+        ScreenCoordinate anchor = CameraAnimationsUtils.getCamera(mMapView).getAnchor();
+        CameraState actState = mMapView.getMapboxMap().getCameraState();
         if (mUserLocationVerticalAlignment != UserLocationVerticalAlignment.CENTER) {
-            VisibleRegion region = mMapView.getVisibleRegion(center, zoomLevel);
+            CameraOptions options = ExtensionUtils.toCameraOptions(actState, anchor);
+
+
+            CoordinateBounds bounds = mMapView.getMapboxMap().coordinateBoundsForCamera(options);
+
+            //VisibleRegion region = mMapView.getVisibleRegion(center, zoomLevel);
 
             switch (mUserLocationVerticalAlignment) {
                 case UserLocationVerticalAlignment.TOP:
-                    center = new LatLng(region.nearRight.getLatitude(), center.getLongitude());
+                    center = new LatLng(bounds.getNortheast().latitude(), center.getLongitude());
                     break;
                 case UserLocationVerticalAlignment.BOTTOM:
-                    center = new LatLng(region.farLeft.getLatitude(), center.getLongitude());
+                    center = new LatLng(bounds.getSouthwest().latitude(), center.getLongitude());
                     break;
             }
         }
 
-        return new CameraPosition.Builder()
-                .target(center)
+        return new CameraOptions.Builder()
+                .center(center.getPoint())
                 .bearing(getDirectionForUserLocationUpdate())
-                .tilt(mPitch)
+                .pitch(mPitch)
+                .anchor(anchor)
+                .padding(actState.getPadding())
                 .zoom(zoomLevel)
                 .build();
-    }*/
+    }
 
-    /*
     private double getDirectionForUserLocationUpdate() {
         // NOTE: The direction of this is used for map rotation only, not location layer rotation
 
-        CameraPosition currentCamera = mMapView.getCameraPosition();
-        double direction = currentCamera.bearing;
+        CameraState currentCamera = mMapView.getMapboxMap().getCameraState();
+        double direction = currentCamera.getBearing();
 
         int userTrackingMode = mUserLocation.getTrackingMode();
         if (userTrackingMode == UserTrackingMode.FollowWithHeading || userTrackingMode == UserTrackingMode.FollowWithCourse) {
@@ -300,82 +346,108 @@ public class RCTMGLCamera extends AbstractMapFeature {
         }
 
         return direction;
-    }*/
+    }
 
-    /*
-    private void sendUserLocationUpdateEvent(Location location) {
-        if(location == null){
+
+    private void sendUserLocationUpdateEvent(Point point) {
+        if (point == null) {
             return;
         }
-        IEvent event = new MapChangeEvent(this, EventTypes.USER_LOCATION_UPDATED, makeLocationChangePayload(location));
+        IEvent event = new MapChangeEvent(this, EventTypes.USER_LOCATION_UPDATED, makeLocationChangePayload(GeoJSONUtils.toLocation(point)));
         mManager.handleEvent(event);
-    }*/
-/*
+    }
+
     private boolean hasSetCenterCoordinate() {
-        CameraPosition cameraPosition = mMapView.getCameraPosition();
-        LatLng center = cameraPosition.target;
-        return center.getLatitude() != 0.0 && center.getLongitude() != 0.0;
-    }*/
+        CameraState state = getMapboxMap().getCameraState();
+        Point center = state.getCenter();
+        return center.latitude() != 0.0 && center.longitude() != 0.0;
+    }
 
     static final double minimumZoomLevelForUserTracking = 10.5;
     static final double defaultZoomLevelForUserTracking = 14.0;
-/*
+
     private void updateUserLocationSignificantly(boolean isAnimated) {
         mUserTrackingState = UserTrackingState.BEGAN;
 
         double zoom = mZoomLevel;
         if (zoom < 0) {
-            double camerZoom = mMapView.getMapboxMap().getCameraPosition().zoom;
+            double camerZoom = mMapView.getMapboxMap().getCameraState().getZoom();
             if (camerZoom < minimumZoomLevelForUserTracking) {
                 zoom = defaultZoomLevelForUserTracking;
             } else {
                 zoom = camerZoom;
             }
         }
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(getUserLocationUpdateCameraPosition(zoom));
-        MapboxMap.CancelableCallback cameraCallback = new MapboxMap.CancelableCallback() {
+
+        CameraOptions.Builder builder = new CameraOptions.Builder();
+        CameraState currentCamera = mMapView.getMapboxMap().getCameraState();
+
+        CameraOptions cameraOptions = getUserLocationUpdateCameraOptions(zoom);
+
+        MapAnimationOptions.Builder animationOptions = new MapAnimationOptions.Builder().animatorListener(new Animator.AnimatorListener() {
             @Override
-            public void onCancel() {
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
                 mUserTrackingState = UserTrackingState.CHANGED;
             }
 
             @Override
-            public void onFinish() {
+            public void onAnimationCancel(Animator animation) {
                 mUserTrackingState = UserTrackingState.CHANGED;
             }
-        };
 
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
         if (isAnimated && hasSetCenterCoordinate()) {
-            mMapView.animateCamera(cameraUpdate, cameraCallback);
+            CameraAnimationsUtils.flyTo(getMapboxMap(), cameraOptions, animationOptions.build());
         } else {
-            mMapView.moveCamera(cameraUpdate, cameraCallback);
+            CameraAnimationsUtils.flyTo(getMapboxMap(), cameraOptions, animationOptions.duration(0).build());
         }
+
     }
-*/
-    /*
+
     private void updateUserLocationIncrementally(boolean isAnimated) {
         mUserTrackingState = UserTrackingState.BEGAN;
 
-        CameraPosition cameraPosition = mMapView.getCameraPosition();
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(getUserLocationUpdateCameraPosition(cameraPosition.zoom));
+        CameraState cameraState = getMapboxMap().getCameraState();
 
-        MapboxMap.CancelableCallback callback = new MapboxMap.CancelableCallback() {
+        CameraOptions cameraOptions = getUserLocationUpdateCameraOptions(cameraState.getZoom());
+
+        MapAnimationOptions.Builder animationOptions = new MapAnimationOptions.Builder().animatorListener(new Animator.AnimatorListener() {
             @Override
-            public void onCancel() {
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
                 mUserTrackingState = UserTrackingState.CHANGED;
             }
 
             @Override
-            public void onFinish() {
+            public void onAnimationCancel(Animator animation) {
                 mUserTrackingState = UserTrackingState.CHANGED;
             }
-        };
 
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
         if (isAnimated) {
-            mMapView.easeCamera(cameraUpdate, USER_LOCATION_CAMERA_MOVE_DURATION, true, callback);
+            animationOptions.duration(USER_LOCATION_CAMERA_MOVE_DURATION);
         } else {
-            mMapView.moveCamera(cameraUpdate, callback);
+            animationOptions.duration(0);
         }
+
+        CameraAnimationsUtils.flyTo(getMapboxMap(), cameraOptions, animationOptions.build());
     }
 
     private void enableLocation() {
@@ -394,8 +466,19 @@ public class RCTMGLCamera extends AbstractMapFeature {
             }
         });
     }
-*/
-    /*
+/*
+    void updateFollowLocation(boolean follow) {
+        LocationComponentPlugin locationComponent = LocationComponentUtils.getLocationComponent(mMapView);
+        if (follow) {
+            locationComponent.setEnabled(true);
+            locationComponent.addOnIndicatorBearingChangedListener(mLocationBearingChangedListener);
+            locationComponent.addOnIndicatorPositionChangedListener(mLocationPositionChangeListener);
+        } else {
+            locationComponent.removeOnIndicatorBearingChangedListener(mLocationBearingChangedListener);
+            locationComponent.removeOnIndicatorPositionChangedListener(mLocationPositionChangeListener);
+        }
+    } */
+
     private void enableLocationComponent(@NonNull Style style) {
         updateUserLocation(false);
         updateLocationLayer(style);
@@ -413,10 +496,8 @@ public class RCTMGLCamera extends AbstractMapFeature {
                 }
             }, 200);
         }
+    }
 
-    }*/
-
-    /*
     private void updateLocationLayer(@NonNull Style style) {
         if (mLocationComponentManager == null) {
             mLocationComponentManager = mMapView.getLocationComponentManager();
@@ -431,6 +512,8 @@ public class RCTMGLCamera extends AbstractMapFeature {
 
         if (mFollowUserLocation) {
             mLocationComponentManager.setCameraMode(UserTrackingMode.getCameraMode(mUserTrackingMode));
+
+            /*
             mLocationComponentManager.addOnCameraTrackingChangedListener(new OnCameraTrackingChangedListener() {
                     @Override public void onCameraTrackingChanged(int currentMode) {
                         int userTrackingMode = UserTrackingMode.NONE;
@@ -455,11 +538,11 @@ public class RCTMGLCamera extends AbstractMapFeature {
                     @Override public void onCameraTrackingDismissed() {
                     }
             });
+             */
         } else {
             mLocationComponentManager.setCameraMode(CameraMode.NONE);
         }
     }
-     */
 
     public void setMinZoomLevel(double zoomLevel) {
         mMinZoomLevel = zoomLevel;
@@ -507,7 +590,6 @@ public class RCTMGLCamera extends AbstractMapFeature {
         mUserTrackingMode = userTrackingMode;
         updateUserTrackingMode(userTrackingMode);
 
-        /* v10todo
         switch (mUserTrackingMode) {
             case UserTrackingMode.NONE:
                 mUserTrackingState = UserTrackingState.POSSIBLE;
@@ -524,7 +606,7 @@ public class RCTMGLCamera extends AbstractMapFeature {
 
         if (getMapboxMap() != null) {
             updateLocationLayer(getMapboxMap().getStyle());
-        }*/
+        }
     }
 
 
@@ -539,12 +621,11 @@ public class RCTMGLCamera extends AbstractMapFeature {
     }
 
     private void updatedFollowUserMode() {
-        /* v10todo
         if (mFollowUserLocation) {
             setUserTrackingMode(UserTrackingMode.fromString(mFollowUserMode));
         } else {
             setUserTrackingMode(UserTrackingMode.NONE);
-        } */
+        }
     }
 
     MapboxMap getMapboxMap() {
@@ -557,6 +638,7 @@ public class RCTMGLCamera extends AbstractMapFeature {
     /**
      * Create a payload of the location data per the web api geolocation spec
      * https://dev.w3.org/geo/api/spec-source.html#position
+     *
      * @return
      */
     private WritableMap makeLocationChangePayload(Location location) {

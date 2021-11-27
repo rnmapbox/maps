@@ -1,31 +1,91 @@
 package com.mapbox.rctmgl.location;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Looper;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+
 import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.android.core.location.LocationEngineCallback;
-
-/*
-import com.mapbox.android.core.location.LocationEngineListener;
-import com.mapbox.android.core.location.LocationEnginePriority;
-*/
 
 import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.android.core.location.LocationEngineRequest;
 import com.mapbox.android.core.location.LocationEngineResult;
 import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.geojson.Point;
+import com.mapbox.maps.plugin.locationcomponent.LocationConsumer;
+import com.mapbox.maps.plugin.locationcomponent.LocationProvider;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 
-/**
- * Created by nickitaliano on 12/12/17.
- */
+
+class LocationProviderForEngine implements LocationProvider, LocationEngineCallback<LocationEngineResult> {
+    LocationEngine mEngine;
+    ArrayList<LocationConsumer> mConsumers = new ArrayList<>();
+
+    LocationProviderForEngine(LocationEngine engine) {
+        mEngine = engine;
+    }
+
+    void beforeAddingFirstConsumer() {
+
+    }
+
+    void afterRemovedLastConsumer() {
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void registerLocationConsumer(@NonNull LocationConsumer locationConsumer) {
+        if (mConsumers.isEmpty()) {
+            beforeAddingFirstConsumer();
+        }
+        mConsumers.add(locationConsumer);
+        mEngine.getLastLocation(this);
+    }
+
+    @Override
+    public void unRegisterLocationConsumer(@NonNull LocationConsumer locationConsumer) {
+        mConsumers.remove(locationConsumer);
+        if (mConsumers.isEmpty()) {
+            afterRemovedLastConsumer();
+        }
+    }
+
+    public void notifyLocationUpdates(Location location) {
+        for (LocationConsumer consumer: mConsumers) {
+            Point points[] = new Point[] { Point.fromLngLat(location.getLongitude(),location.getLatitude()) };
+            consumer.onLocationUpdated(points, null);
+            double bearings[] = new double[] { location.getBearing() };
+            consumer.onBearingUpdated(bearings, null);
+        }
+    }
+
+    // * LocationEngineCallback
+
+    @Override
+    public void onSuccess(LocationEngineResult locationEngineResult) {
+        Location location = locationEngineResult.getLastLocation();
+        if (location != null) {
+            notifyLocationUpdates(location);
+        }
+    }
+
+    @Override
+    public void onFailure(@NonNull Exception e) {
+
+    }
+}
 
 @SuppressWarnings({"MissingPermission"})
 public class LocationManager implements LocationEngineCallback<LocationEngineResult> {
@@ -44,6 +104,8 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
 
     private LocationEngineRequest locationEngineRequest = null;
 
+    private LocationProviderForEngine locationProvider = null;
+
     private static WeakReference<LocationManager> INSTANCE = null;
 
     public static LocationManager getInstance(Context context) {
@@ -51,6 +113,13 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
             INSTANCE = new WeakReference<>(new LocationManager(context));
         }
         return INSTANCE.get();
+    }
+
+    public LocationProvider getProvider() {
+        if (locationProvider == null) {
+            locationProvider = new LocationProviderForEngine(locationEngine);
+        }
+        return locationProvider;
     }
 
     public interface OnUserLocationChange {
@@ -82,9 +151,11 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
             listeners.remove(listener);
         }
     }
+
     public void setMinDisplacement(float minDisplacement) {
         mMinDisplacement = minDisplacement;
     }
+
     public void enable() {
         if (!PermissionsManager.areLocationPermissionsGranted(context)) {
             return;
@@ -104,7 +175,6 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
         );
         isActive = true;
     }
-
 
     public void disable() {
         locationEngine.removeLocationUpdates(this);
@@ -164,5 +234,8 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
     @Override
     public void onSuccess(LocationEngineResult result) {
         onLocationChanged(result.getLastLocation());
+        if (locationProvider != null) {
+            locationProvider.onSuccess(result);
+        }
     }
 }

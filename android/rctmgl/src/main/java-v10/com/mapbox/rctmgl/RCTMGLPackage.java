@@ -12,15 +12,13 @@ import java.util.List;
 
 import com.mapbox.rctmgl.components.camera.RCTMGLCameraManager;
 
-/*
 import com.mapbox.rctmgl.components.annotation.RCTMGLCalloutManager;
 import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotationManager;
+/*
 import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerViewManager;
 */
 import com.mapbox.rctmgl.components.images.RCTMGLImagesManager;
-/*
 import com.mapbox.rctmgl.components.location.RCTMGLNativeUserLocationManager;
-*/
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapViewManager;
 import com.mapbox.rctmgl.components.mapview.RCTMGLAndroidTextureMapViewManager;
 /*
@@ -41,9 +39,7 @@ import com.mapbox.rctmgl.components.styles.light.RCTMGLLightManager;
 import com.mapbox.rctmgl.components.styles.terrain.RCTMGLTerrainManager;
 
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLImageSourceManager;
-/*
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLRasterSourceManager;
-*/
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLRasterDemSourceManager;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLShapeSourceManager;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLVectorSourceManager;
@@ -91,18 +87,16 @@ public class RCTMGLPackage implements ReactPackage {
         managers.add(new RCTMGLMarkerViewManager(reactApplicationContext));
 */
         managers.add(new RCTMGLLightManager());
-/*
+
         managers.add(new RCTMGLPointAnnotationManager(reactApplicationContext));
         managers.add(new RCTMGLCalloutManager());
         managers.add(new RCTMGLNativeUserLocationManager());
-*/
+
         // sources
         managers.add(new RCTMGLVectorSourceManager(reactApplicationContext));
         managers.add(new RCTMGLShapeSourceManager(reactApplicationContext));
         managers.add(new RCTMGLRasterDemSourceManager(reactApplicationContext));
-/*
         managers.add(new RCTMGLRasterSourceManager(reactApplicationContext));
-*/
         managers.add(new RCTMGLImageSourceManager());
 
         // images

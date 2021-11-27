@@ -71,6 +71,10 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
         }
     }
 
+    public boolean hasPressListener() {
+        return mHasPressListener;
+    }
+
     public void setHasPressListener (boolean hasPressListener) {
         mHasPressListener = hasPressListener;
     }
