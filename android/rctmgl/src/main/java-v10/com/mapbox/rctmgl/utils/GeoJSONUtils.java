@@ -1,5 +1,8 @@
 package com.mapbox.rctmgl.utils;
 
+import android.location.Location;
+import android.location.LocationManager;
+
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableArray;
@@ -224,5 +227,19 @@ public class GeoJSONUtils {
             return new double[] { 0.0, 0.0 };
         }
         return new double[] { point.longitude(), point.latitude() };
+    }
+
+    public static Point toPoint(Location location) {
+        return Point.fromLngLat(location.getLongitude(), location.getLatitude());
+    }
+
+    public static Location toLocation(Point point) {
+        Location result = new Location(LocationManager.GPS_PROVIDER);
+        result.setLatitude(point.latitude());
+        result.setLongitude(point.longitude());
+        if (point.hasAltitude()) {
+            result.setAltitude(point.altitude());
+        }
+        return result;
     }
 }

@@ -162,19 +162,19 @@ IOS:
 - [ ] Show and hida a layer example
 
 ## Annotations
-- [ ] PointAnnotation
+- [x] PointAnnotation
   - [x] ios
-  - [ ] android
-  - [ ] Callout
+  - [x] android
+  - [x] Callout
      - [x] ios
-     - [ ] android 
+     - [x] android 
 - [ ] MarkerView
 
 
 ## UserLocation
-- [ ] User location
+- [x] User location
   - [x] ios
-  - [ ] android
+  - [x] android
 
 ## Camera
 - [x] Basic camera
