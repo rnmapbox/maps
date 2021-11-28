@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 
 import com.mapbox.geojson.Point;
 import com.mapbox.maps.CameraOptions;
@@ -92,8 +93,6 @@ public class LocationComponentManager {
         stateChanged();
     }
 
-
-
     public void setCameraMode(@CameraMode.Mode int cameraMode) {
         mCameraMode = cameraMode;
         stateChanged();
@@ -111,6 +110,10 @@ public class LocationComponentManager {
         } else {
             locationComponent.addOnIndicatorPositionChangedListener(mLocationPositionChangeListener);
         }
+    }
+
+    public void tintColorChanged() {
+        applyOptions(mShowingUserLocation, mLocationComponent);
     }
 
     public void setRenderMode(@RenderMode.Mode int renderMode) {
@@ -151,10 +154,7 @@ public class LocationComponentManager {
     }
 
     public void update(boolean displayUserLocation, @NonNull Style style) {
-
-        Integer tintColor = mMapView.getSolidColor();
-
-        if (mLocationComponent == null || tintColor != null ) {
+        if (mLocationComponent == null) {
             mLocationComponent = LocationComponentUtils.getLocationComponent(mMapView);
 
             mLocationComponent.setLocationProvider(mLocationManager.getProvider());
@@ -173,7 +173,6 @@ public class LocationComponentManager {
 
     private void applyOptions(boolean displayUserLocation, LocationComponentPlugin locationComponent) {
         locationComponent.setEnabled(true);
-        // Integer tintColor = mMapView.getTintColor();
         if (!displayUserLocation) {
             LocationPuck2D locationPuck = new LocationPuck2D();
 
@@ -183,27 +182,20 @@ public class LocationComponentManager {
             locationPuck.setTopImage(empty);
 
             locationComponent.setLocationPuck(locationPuck);
-        } else /* if (tintColor != null) */ {
-            /*
-            TypedArray typedArray = mContext.obtainStyledAttributes(
-                null, R.styleable.mapbox_MapView, 0,0
-            );
-            Drawable topImage = typedArray.getDrawable(R.styleable.mapbox_MapView_mapbox_locationComponentLocationPuckLocationPuck2DTopImage);
-            */
+            locationComponent.setPulsingEnabled(false);
+        } else {
+            int mapboxBlueColor = Color.parseColor("#4A90E2");
 
             LocationPuck2D locationPuck = new LocationPuck2D();
-
-            // ColorFilter filter = new LightingColorFilter(Color.parseColor("#4A90E2"), Color.RED);
             Drawable topImage = AppCompatResources.getDrawable(mContext, R.drawable.mapbox_user_icon);
 
-            /*
-            topImage.setColorFilter(filter);
+            Integer tintColor = mMapView.getTintColor();
+            if (tintColor != null) {
+                VectorDrawable drawable = (VectorDrawable)topImage;
+                drawable.setTint(tintColor);
 
-            VectorChildFinder vector = new VectorChildFinder(this, R.drawable.my_vector, imageView);
-
-            VectorDrawableCompat.VFullPath path1 = vector.findPathByName("path1");
-            path1.setFillColor(Color.RED);
-            */
+                topImage = drawable;
+            }
 
             locationPuck.setTopImage(topImage);
             Drawable bearingImage = AppCompatResources.getDrawable(mContext, R.drawable.mapbox_user_stroke_icon);
@@ -211,10 +203,13 @@ public class LocationComponentManager {
             Drawable shadowImage = AppCompatResources.getDrawable(mContext, R.drawable.mapbox_user_icon_shadow);
             locationPuck.setShadowImage(shadowImage);
             locationComponent.setLocationPuck(locationPuck);
-            /*
+
             locationComponent.setPulsingEnabled(true);
-            locationComponent.setPulsingColor(Color.RED);
-             */
+            if (tintColor != null) {
+                locationComponent.setPulsingColor(tintColor);
+            } else {
+                locationComponent.setPulsingColor(mapboxBlueColor);
+            }
         }
     }
 }

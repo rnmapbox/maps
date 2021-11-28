@@ -15,8 +15,10 @@ import com.mapbox.bindgen.None;
 import com.mapbox.bindgen.Value;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.maps.FeatureExtensionValue;
 import com.mapbox.maps.MapboxMap;
 import com.mapbox.maps.QueriedFeature;
+import com.mapbox.maps.QueryFeatureExtensionCallback;
 import com.mapbox.maps.QueryFeaturesCallback;
 import com.mapbox.maps.SourceQueryOptions;
 import com.mapbox.maps.Style;
@@ -210,7 +212,13 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         });
     }
 
-    /*
+    private void callbackError(String callbackID, String error, String where) {
+        WritableMap payload = new WritableNativeMap();
+        payload.putString("error",where + ": " + error);
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+        mManager.handleEvent(event);
+    }
+
     public void getClusterExpansionZoom(String callbackID, int clusterId) {
         if (mSource == null) {
             WritableMap payload = new WritableNativeMap();
@@ -219,34 +227,93 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
             mManager.handleEvent(event);
             return;
         }
-        List<Feature> features = mSource.querySourceFeatures(Expression.eq(Expression.id(), clusterId));
-        int zoom = -1;
-        if (features.size() > 0) {
-            zoom = mSource.getClusterExpansionZoom(features.get(0));
-        }
 
-        if (zoom == -1) {
-            WritableMap payload = new WritableNativeMap();
-            payload.putString("error", "Could not get zoom for cluster id " + clusterId);
-            AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
-            mManager.handleEvent(event);
-            return;
-        }
+        SourceQueryOptions options = new SourceQueryOptions(null,
+            Expression.eq(Expression.get("cluster_id"), Expression.literal(clusterId))
+        );
 
-        WritableMap payload = new WritableNativeMap();
-        payload.putInt("data", zoom);
+        RCTMGLShapeSource _this = this;
 
-        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
-        mManager.handleEvent(event);
+        mMap.querySourceFeatures(
+            getID(),
+            options,
+
+            new QueryFeaturesCallback() {
+                @Override
+                public void run(@NonNull Expected<String, List<QueriedFeature>> features) {
+                    if (features.isValue()) {
+                        QueriedFeature cluster = features.getValue().get(0);
+                        mMap.queryFeatureExtensions(getID(),
+                                cluster.getFeature(),
+                                "supercluster",
+                                "expansion-zoom",
+                                null,
+                                new QueryFeatureExtensionCallback() {
+                                    @Override
+                                    public void run(@NonNull Expected<String, FeatureExtensionValue> extension) {
+                                        if (extension.isValue()) {
+                                            Object contents = extension.getValue().getValue().getContents();
+                                            if (contents instanceof Long) {
+                                                WritableMap payload = new WritableNativeMap();
+                                                payload.putInt("data", ((Long)contents).intValue());
+
+                                                AndroidCallbackEvent event = new AndroidCallbackEvent(_this, callbackID, payload);
+                                                mManager.handleEvent(event);
+                                                return;
+                                            } else {
+                                                callbackError(callbackID, "Not a number", "getClusterExpansionZoom/queryFeatureExtensions2");
+                                                return;
+                                            }
+                                        } else {
+                                            callbackError(callbackID, extension.getError(), "getClusterExpansionZoom/queryFeatureExtensions");
+                                            return;
+                                        }
+                                    }
+                                }
+                        );
+                    } else {
+                        callbackError(callbackID, features.getError(), "getClusterExpansionZoom/querySourceFeatures");
+                        return;
+                    }
+                }
+            }
+        );
     }
 
-    public void getClusterLeaves(String callbackID, int clusterId, int number, int offset) {
-        Feature clusterFeature = mSource.querySourceFeatures(Expression.eq(Expression.get("cluster_id"), clusterId)).get(0);
-        FeatureCollection leaves = mSource.getClusterLeaves(clusterFeature, number, offset);
-        WritableMap payload = new WritableNativeMap();
-        payload.putString("data", leaves.toJson());
 
-        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
-        mManager.handleEvent(event);
-    }*/
+    public void getClusterLeaves(String callbackID, int clusterId, int number, int offset) {
+        SourceQueryOptions options = new SourceQueryOptions(null,
+                Expression.eq(Expression.get("cluster_id"), Expression.literal(clusterId))
+        );
+        mMap.querySourceFeatures(
+            getID(),
+            options, new QueryFeaturesCallback() {
+                @Override
+                public void run(@NonNull Expected<String, List<QueriedFeature>> features) {
+                    if (features.isValue()) {
+                        QueriedFeature cluster = features.getValue().get(0);
+                        mMap.queryFeatureExtensions(getID(), cluster.getFeature(), "supercluster", "leaves", null,
+                                new QueryFeatureExtensionCallback() {
+                                    @Override
+                                    public void run(@NonNull Expected<String, FeatureExtensionValue> extension) {
+                                        if (extension.isValue()) {
+                                            List<Feature> leaves = extension.getValue().getFeatureCollection();
+                                            WritableMap payload = new WritableNativeMap();
+                                            payload.putString("data", FeatureCollection.fromFeatures(leaves).toJson());
+                                        } else {
+                                            callbackError(callbackID, features.getError(), "getClusterLeaves/queryFeatureExtensions");
+                                            return;
+                                        }
+                                    }
+                                }
+                        );
+                    } else {
+                        callbackError(callbackID, features.getError(), "getClusterLeaves/querySourceFeatures");
+                        return;
+                    }
+                }
+            }
+        );
+    }
 }
+

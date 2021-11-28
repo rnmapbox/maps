@@ -173,6 +173,8 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
 
     private LocationComponentManager mLocationComponentManager = null;
 
+    private Integer mTintColor = null;
+
     public RCTMGLMapView(Context context, RCTMGLMapViewManager manager/*, MapboxMapOptions options*/) {
         super(context);
         mContext = context;
@@ -700,4 +702,17 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
     public void getMapAsync(OnMapReadyCallback mapReady) {
         mapReady.onMapReady(getMapboxMap());
     }
+
+    public Integer getTintColor() {
+        return mTintColor;
+    }
+
+    void setTintColor(int color) {
+        mTintColor = color;
+
+        if (mLocationComponentManager != null) {
+            mLocationComponentManager.tintColorChanged();
+        }
+    }
+
 }

@@ -171,7 +171,6 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
                         ExpressionParser.from(args.getArray(1))
                 );
                 break;
-                /* v10todo
             case METHOD_GET_CLUSTER_EXPANSION_ZOOM:
                 source.getClusterExpansionZoom(args.getString(0), args.getInt(1));
                 break;
@@ -182,7 +181,7 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
                         args.getInt(2),
                         args.getInt((3))
                 );
-                break; */
+                break;
         }
     }
 }
