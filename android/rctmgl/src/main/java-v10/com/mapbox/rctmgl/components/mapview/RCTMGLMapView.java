@@ -28,6 +28,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.mapbox.android.gestures.MoveGestureDetector;
+import com.mapbox.bindgen.Expected;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 /*
@@ -58,7 +59,12 @@ import com.mapbox.maps.CameraState;
 import com.mapbox.maps.Event;
 import com.mapbox.maps.MapEvents;
 import com.mapbox.maps.Observer;
+import com.mapbox.maps.QueriedFeature;
+import com.mapbox.maps.QueryFeaturesCallback;
+import com.mapbox.maps.RenderedQueryOptions;
+import com.mapbox.maps.ScreenBox;
 import com.mapbox.maps.ScreenCoordinate;
+import com.mapbox.maps.StyleObjectInfo;
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData;
 import com.mapbox.maps.plugin.annotation.AnnotationPlugin;
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener;
@@ -407,6 +413,50 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
         }
     }
 
+    private List<RCTSource> getAllTouchableSources() {
+        List<RCTSource> sources = new ArrayList<>();
+
+        for (String key : mSources.keySet()) {
+            RCTSource source = mSources.get(key);
+            if (source != null && source.hasPressListener()) {
+                sources.add(source);
+            }
+        }
+
+        return sources;
+    }
+
+    private RCTSource getTouchableSourceWithHighestZIndex(List<RCTSource> sources) {
+        if (sources == null || sources.size() == 0) {
+            return null;
+        }
+
+        if (sources.size() == 1) {
+            return sources.get(0);
+        }
+
+        Map<String, RCTSource> layerToSourceMap = new HashMap<>();
+        for (RCTSource source : sources) {
+            List<String> layerIDs = source.getLayerIDs();
+
+            for (String layerID : layerIDs) {
+                layerToSourceMap.put(layerID, source);
+            }
+        }
+
+        List<StyleObjectInfo> mapboxLayers = mMap.getStyle().getStyleLayers();
+        for (int i = mapboxLayers.size() - 1; i >= 0; i--) {
+            StyleObjectInfo mapboxLayer = mapboxLayers.get(i);
+
+            String layerID = mapboxLayer.getId();
+            if (layerToSourceMap.containsKey(layerID)) {
+                return layerToSourceMap.get(layerID);
+            }
+        }
+
+        return null;
+    }
+
     public boolean isJSONValid(String test) {
         try {
             new JSONObject(test);
@@ -449,8 +499,72 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
         }
     }
 
+    interface HandleTap {
+        void run(List<RCTSource> hitTouchableSources, Map<String, List<Feature>> hits);
+    };
+
+    void handleTapInSources(
+            LinkedList<RCTSource> sources, ScreenCoordinate screenPoint,
+            HashMap<String, List<Feature>> hits,
+            ArrayList<RCTSource> hitTouchableSources,
+            HandleTap handleTap
+            ) {
+        if (sources.isEmpty()) {
+            handleTap.run(hitTouchableSources, hits);
+            return;
+        }
+        RCTSource source = sources.removeFirst();
+        Map<String, Double> hitbox = source.getTouchHitbox();
+        if (hitbox != null) {
+
+            double halfWidth = hitbox.get("width").floatValue() / 2.0f;
+            double halfHeight = hitbox.get("height").floatValue() / 2.0f;
+
+            ScreenBox screenBox = new ScreenBox(
+                    new ScreenCoordinate(screenPoint.getX() - halfWidth,
+                            screenPoint.getY() - halfHeight
+                    ),
+                    new ScreenCoordinate(screenPoint.getX() + halfWidth,
+                            screenPoint.getY() + halfHeight)
+            );
+
+            getMapboxMap().queryRenderedFeatures(screenBox,
+                    new RenderedQueryOptions(
+                            source.getLayerIDs(),
+                            null
+                    ),
+                    new QueryFeaturesCallback() {
+                        @Override
+                        public void run(@NonNull Expected<String, List<QueriedFeature>> features) {
+                            HashMap<String, List< Feature>> newHits = hits;
+                            if (features.isValue()) {
+                                if (features.getValue().size() > 0) {
+                                    ArrayList<Feature> featuresList = new ArrayList<>();
+                                    for (QueriedFeature i : features.getValue()) {
+                                        featuresList.add(i.getFeature());
+                                    }
+
+                                    newHits.put(
+                                            source.getID(),
+                                            featuresList
+                                    );
+                                    hitTouchableSources.add(source);
+                                }
+                            } else {
+                                Logger.e("handleTapInSources", features.getError());
+                            }
+                            handleTapInSources(sources, screenPoint, newHits, hitTouchableSources, handleTap);
+                        }
+                    }
+            );
+
+        }
+    }
+
     @Override
     public boolean onMapClick(@NonNull Point point) {
+
+        RCTMGLMapView _this = this;
         /*if (mPointAnnotationManager != nil) {
             getAnnotations()
         }*/
@@ -460,9 +574,28 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
         }
 
         ScreenCoordinate screenPoint = mMap.pixelForCoordinate(point);
+        List<RCTSource> touchableSources = getAllTouchableSources();
+        HashMap<String, List<Feature>> hits = new HashMap<>();
+        handleTapInSources(new LinkedList<>(touchableSources), screenPoint, hits, new ArrayList<>(), new HandleTap() {
+            @Override
+            public void run(List<RCTSource> hitTouchableSources, Map<String, List<Feature>> hits) {
 
-        MapClickEvent event = new MapClickEvent(this, new LatLng(point), screenPoint);
-        mManager.handleEvent(event);
+                if (hits.size() > 0) {
+                    RCTSource source = getTouchableSourceWithHighestZIndex(hitTouchableSources);
+                    if (source != null && source.hasPressListener()) {
+                        source.onPress(new RCTSource.OnPressEvent(
+                                hits.get(source.getID()),
+                                GeoJSONUtils.toLatLng(point),
+                                new PointF((float)screenPoint.getX(), (float)screenPoint.getY())
+                        ));
+                        return;
+                    }
+                }
+
+                MapClickEvent event = new MapClickEvent(_this, new LatLng(point), screenPoint);
+                mManager.handleEvent(event);
+            }
+        });
         return false;
     }
 
