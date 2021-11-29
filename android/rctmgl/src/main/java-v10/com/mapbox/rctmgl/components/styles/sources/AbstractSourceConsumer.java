@@ -8,4 +8,6 @@ public abstract class AbstractSourceConsumer extends AbstractMapFeature {
     public AbstractSourceConsumer(Context context) {
         super(context);
     }
+
+    abstract public String getID();
 }

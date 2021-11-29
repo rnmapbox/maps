@@ -28,6 +28,8 @@ public class RCTMGLTerrain extends AbstractSourceConsumer {
         mID = id;
     }
 
+    public String getID() { return mID; }
+
     public void setSourceID(String sourceID) {
         mSourceID = sourceID;
     }

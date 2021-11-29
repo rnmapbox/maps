@@ -187,7 +187,7 @@ IOS:
     - [x] android
   - [x] onPress
     - [x] ios
-    - [x] androidp
+    - [x] android
 - [x] RasterSource (WaterColorRasterTiles)
   - [x] ios
   - [x] android

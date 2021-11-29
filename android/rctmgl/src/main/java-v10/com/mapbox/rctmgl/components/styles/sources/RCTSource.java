@@ -1,6 +1,7 @@
 package com.mapbox.rctmgl.components.styles.sources;
 
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.common.MapBuilder;
 import com.mapbox.geojson.Feature;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
@@ -29,6 +30,9 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
     public static final String DEFAULT_ID = "composite";
     public static final String LOG_TAG = "RCTSource";
 
+    public static final double DEFAULT_HITBOX_WIDTH = 44.0;
+    public static final double DEFAULT_HITBOX_HEIGHT = 44.0;
+
     protected RCTMGLMapView mMapView;
     protected MapboxMap mMap;
 
@@ -48,6 +52,20 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
 
     public String getID() {
         return mID;
+    }
+
+    public List<String> getLayerIDs() {
+        List<String> layerIDs = new ArrayList<>();
+
+        for (int i = 0; i < mLayers.size(); i++) {
+            AbstractSourceConsumer layer = mLayers.get(i);
+            String id = layer.getID();
+            if (id != null) {
+                layerIDs.add(id);
+            }
+        }
+
+        return layerIDs;
     }
     
     private T getSourceAs(Style style, String id) {
@@ -88,6 +106,21 @@ public abstract class RCTSource<T extends Source> extends AbstractMapFeature {
 
     public void setID(String id) {
         mID = id;
+    }
+
+    public Map<String, Double> getTouchHitbox() {
+        if (!hasPressListener()) {
+            return null;
+        }
+
+        if (mTouchHitbox == null) {
+            return MapBuilder.<String, Double>builder()
+                    .put("width", DEFAULT_HITBOX_WIDTH)
+                    .put("height", DEFAULT_HITBOX_HEIGHT)
+                    .build();
+        }
+
+        return mTouchHitbox;
     }
 
     public int getLayerCount () {
