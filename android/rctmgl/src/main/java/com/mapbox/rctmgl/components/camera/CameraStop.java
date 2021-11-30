@@ -85,14 +85,6 @@ public class CameraStop {
         CameraPosition currentCamera = map.getCameraPosition();
         CameraPosition.Builder builder = new CameraPosition.Builder(currentCamera);
 
-        if (mBearing != null) {
-            builder.bearing(mBearing);
-        }
-
-        if (mTilt != null) {
-            builder.tilt(mTilt);
-        }
-
         // Adding map padding to the camera padding which is the same behavior as
         // mapbox native does on iOS
         double[] contentInset = mapView.getContentInset();
@@ -105,6 +97,8 @@ public class CameraStop {
         int[] cameraPadding = {paddingLeft, paddingTop, paddingRight, paddingBottom};
         int[] cameraPaddingClipped = clippedPadding(cameraPadding, mapView);
 
+        boolean hasSetZoom = false;
+
         if (mLatLng != null) {
             builder.target(mLatLng);
             builder.padding(
@@ -113,9 +107,6 @@ public class CameraStop {
                 cameraPaddingClipped[2],
                 cameraPaddingClipped[3]
             );
-            if (mZoom != null) {
-                builder.zoom(mZoom);
-            }
         } else if (mBounds != null) {
             double tilt = mTilt != null ? mTilt : currentCamera.tilt;
             double bearing = mBearing != null ? mBearing : currentCamera.bearing;
@@ -135,7 +126,18 @@ public class CameraStop {
                 );
                 return new CameraUpdateItem(map, update, mDuration, mCallback, mMode);
             }
-        } else if (mZoom != null) {
+            hasSetZoom = true;
+        }
+
+        if (mBearing != null) {
+            builder.bearing(mBearing);
+        }
+
+        if (mTilt != null) {
+            builder.tilt(mTilt);
+        }
+
+        if (mZoom != null && !hasSetZoom) {
             builder.zoom(mZoom);
         }
 
