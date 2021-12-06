@@ -18,12 +18,12 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup node ${{ inputs.NVMRC }}
-        uses: actions/setup-node@v2.4.1
+        uses: actions/setup-node@v2.5.0
         with:
           node-version: ${{ inputs.NVMRC }}
 
       - name: Setup JDK zulu 11
-        uses: actions/setup-java@v2.3.1
+        uses: actions/setup-java@v2.4.0
         with:
           distribution: 'zulu'
           java-version: '11'
