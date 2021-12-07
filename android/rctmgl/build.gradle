@@ -93,6 +93,8 @@ dependencies {
             implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v9:0.12.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v9:0.4.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.1.0'
+        } else {
+            implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.4.1'
         }
     }
 }

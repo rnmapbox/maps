@@ -106,6 +106,10 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
 
     }
 
+    public static String getAccessToken(ReactApplicationContext reactContext) {
+        return ResourceOptionsManager.Companion.getDefault(reactContext, null).getResourceOptions().getAccessToken();
+    }
+
     @ReactMethod
     public void setAccessToken(final String accessToken) {
         mReactContext.runOnUiQueueThread(new Runnable() {
