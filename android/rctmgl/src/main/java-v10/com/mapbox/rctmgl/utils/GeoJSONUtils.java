@@ -18,7 +18,7 @@ import com.mapbox.geojson.MultiPoint;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
 
-// import com.mapbox.turf.TurfMeasurement;
+import com.mapbox.turf.TurfMeasurement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -192,6 +192,17 @@ public class GeoJSONUtils {
         return array;
     }
 
+    public static Polygon fromLatLngBoundsToPolygon(LatLngBounds latLngBounds) {
+        ArrayList<List<Point>> contours = new ArrayList<>();
+        ArrayList<Point> contour = new ArrayList<>();
+        contour.add(Point.fromLngLat(latLngBounds.lonEast, latLngBounds.latNorth));
+        contour.add(Point.fromLngLat(latLngBounds.lonEast, latLngBounds.latSouth));
+        contour.add(Point.fromLngLat(latLngBounds.lonWest, latLngBounds.latSouth));
+        contour.add(Point.fromLngLat(latLngBounds.lonWest, latLngBounds.latNorth));
+        contours.add(contour);
+        return Polygon.fromLngLats(contours);
+    }
+
     private static GeometryCollection toGeometryCollection(List<Feature> features) {
         ArrayList<Geometry> geometries = new ArrayList<>();
         geometries.ensureCapacity(features.size());
@@ -200,14 +211,14 @@ public class GeoJSONUtils {
         }
         return GeometryCollection.fromGeometries(geometries);
     }
-/*
+
     public static LatLngBounds toLatLngBounds(FeatureCollection featureCollection) {
         List<Feature> features = featureCollection.features();
 
         double[] bbox = TurfMeasurement.bbox(toGeometryCollection(features));
 
         return LatLngBounds.from(bbox[3], bbox[2], bbox[1], bbox[0]);
-    }*/
+    }
 
     public static LatLngQuad toLatLngQuad(ReadableArray array) {
         // [top left, top right, bottom right, bottom left]
