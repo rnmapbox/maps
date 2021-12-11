@@ -65,11 +65,13 @@ import com.mapbox.maps.RenderedQueryOptions;
 import com.mapbox.maps.ScreenBox;
 import com.mapbox.maps.ScreenCoordinate;
 import com.mapbox.maps.StyleObjectInfo;
+import com.mapbox.maps.extension.observable.eventdata.MapLoadedEventData;
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData;
 import com.mapbox.maps.plugin.annotation.AnnotationPlugin;
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener;
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation;
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager;
+import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadedListener;
 import com.mapbox.maps.plugin.gestures.GesturesPlugin;
 import com.mapbox.maps.plugin.gestures.OnMapClickListener;
 import com.mapbox.maps.plugin.gestures.OnMoveListener;
@@ -192,6 +194,15 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
         mPointAnnotations = new HashMap<>();
 
         this.onMapReady(mMap);
+
+
+        RCTMGLMapView _this = this;
+        mMap.addOnMapLoadedListener(new OnMapLoadedListener() {
+            @Override
+            public void onMapLoaded(@NonNull MapLoadedEventData mapLoadedEventData) {
+                _this.handleMapChangedEvent(EventTypes.DID_FINISH_LOADING_MAP);
+            }
+        });
     }
 
     AnnotationPlugin getAnnotations() {

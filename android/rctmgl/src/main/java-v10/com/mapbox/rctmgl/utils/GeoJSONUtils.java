@@ -199,6 +199,7 @@ public class GeoJSONUtils {
         contour.add(Point.fromLngLat(latLngBounds.lonEast, latLngBounds.latSouth));
         contour.add(Point.fromLngLat(latLngBounds.lonWest, latLngBounds.latSouth));
         contour.add(Point.fromLngLat(latLngBounds.lonWest, latLngBounds.latNorth));
+        contour.add(Point.fromLngLat(latLngBounds.lonEast, latLngBounds.latNorth));
         contours.add(contour);
         return Polygon.fromLngLats(contours);
     }
