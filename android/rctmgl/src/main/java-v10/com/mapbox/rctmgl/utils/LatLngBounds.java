@@ -8,10 +8,18 @@ public class LatLngBounds {
     return new LatLngBounds(bbox, bbox1, bbox2, bbox3);
   }
 
-  LatLng[] toLatLngs() {
-    return null;
+  LatLng getSouthWest() {
+    return new LatLng(latSouth, lonWest);
   }
 
+  LatLng getNorthEast() {
+    return new LatLng(latNorth, lonEast);
+  }
+
+  LatLng[] toLatLngs() {
+    return new LatLng[] {getNorthEast(), getSouthWest()};
+  }
+  
   double latNorth;
   double lonEast;
   double latSouth;

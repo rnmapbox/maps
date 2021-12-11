@@ -91,6 +91,17 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         cameraModes.put("Linear", CameraMode.LINEAR);
         cameraModes.put("None", CameraMode.NONE);
 
+        // offline region download states
+        Map<String, String> offlinePackDownloadStates = new HashMap<>();
+        offlinePackDownloadStates.put("Inactive", RCTMGLOfflineModule.INACTIVE_REGION_DOWNLOAD_STATE);
+        offlinePackDownloadStates.put("Active", RCTMGLOfflineModule.ACTIVE_REGION_DOWNLOAD_STATE);
+        offlinePackDownloadStates.put("Complete", RCTMGLOfflineModule.COMPLETE_REGION_DOWNLOAD_STATE);
+
+        // offline module callback names
+        Map<String, String> offlineModuleCallbackNames = new HashMap<>();
+        offlineModuleCallbackNames.put("Error", RCTMGLOfflineModule.OFFLINE_ERROR);
+        offlineModuleCallbackNames.put("Progress", RCTMGLOfflineModule.OFFLINE_PROGRESS);
+
         // location module callback names
         Map<String, String> locationModuleCallbackNames = new HashMap<>();
         locationModuleCallbackNames.put("Update", RCTMGLLocationModule.LOCATION_UPDATE);
@@ -101,6 +112,8 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
                 .put("StyleSource", styleSourceConsts)
                 .put("CameraModes", cameraModes)
                 .put("LineJoin", lineJoin)
+                .put("OfflinePackDownloadState", offlinePackDownloadStates)
+                .put("OfflineCallbackName", offlineModuleCallbackNames)
                 .put("LocationCallbackName", locationModuleCallbackNames)
                 .build();
 

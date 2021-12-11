@@ -1,7 +1,10 @@
 package com.mapbox.rctmgl.modules;
 
+import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
+
 import android.os.Handler;
 import android.os.Looper;
+import android.util.JsonReader;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -23,6 +26,7 @@ import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
 import com.mapbox.bindgen.Expected;
 import com.mapbox.bindgen.Value;
+import com.mapbox.common.Cancelable;
 import com.mapbox.common.NetworkRestriction;
 import com.mapbox.common.TileRegion;
 import com.mapbox.common.TileRegionCallback;
@@ -44,6 +48,7 @@ import com.mapbox.geojson.Point;
 import com.mapbox.maps.OfflineManager;
 import com.mapbox.maps.ResourceOptions;
 import com.mapbox.maps.StylePackLoadOptions;
+import com.mapbox.maps.TileStoreUsageMode;
 import com.mapbox.maps.TilesetDescriptorOptions;
 import com.mapbox.rctmgl.events.IEvent;
 import com.mapbox.rctmgl.events.OfflineEvent;
@@ -51,7 +56,9 @@ import com.mapbox.rctmgl.events.constants.EventTypes;
 import com.mapbox.rctmgl.utils.ConvertUtils;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.rctmgl.utils.LatLngBounds;
+import com.mapbox.rctmgl.utils.Logger;
 import com.mapbox.rctmgl.utils.ReadableMapToValue;
+import com.mapbox.turf.TurfMeasurement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,6 +81,8 @@ class TileRegionPack {
     public String name;
     public TileRegionLoadProgress progress;
     public String state;
+    public Cancelable cancelable;
+    public TileRegionLoadOptions loadOptions;
 
     TileRegionPack(String name, TileRegionLoadProgress progress, String state) {
         this.name = name;
@@ -86,11 +95,10 @@ class TileRegionPack {
 public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
     public static final String REACT_CLASS = "RCTMGLOfflineModule";
 
-    /*
-    public static final int INACTIVE_REGION_DOWNLOAD_STATE = OfflineRegion.STATE_INACTIVE;
-    public static final int ACTIVE_REGION_DOWNLOAD_STATE = OfflineRegion.STATE_ACTIVE;
-     */
-    public static final int COMPLETE_REGION_DOWNLOAD_STATE = 2;
+    public static final String INACTIVE_REGION_DOWNLOAD_STATE = TileRegionPack.INACTIVE; 
+    public static final String ACTIVE_REGION_DOWNLOAD_STATE = TileRegionPack.ACTIVE;
+
+    public static final String COMPLETE_REGION_DOWNLOAD_STATE = TileRegionPack.COMPLETE;
 
     public static final String OFFLINE_ERROR = "MapboxOfflineRegionError";
     public static final String OFFLINE_PROGRESS = "MapboxOfflineRegionProgress";
@@ -99,7 +107,7 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
     public static final Double DEFAULT_MIN_ZOOM_LEVEL = 10.0;
     public static final Double DEFAULT_MAX_ZOOM_LEVEL = 20.0;
 
-    public HashMap<String, TileRegionPack> tileRegionPacks;
+    public HashMap<String, TileRegionPack> tileRegionPacks = new HashMap<>();
 
     private ReactApplicationContext mReactContext;
     private Double mProgressEventThrottle = 300.0;
@@ -132,10 +140,8 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
         return tileStore;
     }
 
-
-
     @ReactMethod
-    public void createPack(ReadableMap options, final Promise promise) {
+    public void createPack(ReadableMap options, final Promise promise) throws JSONException {
         final String name = ConvertUtils.getString("name", options, "");
         final OfflineManager offlineManager = RCTMGLOfflineModule.getOfflineManager(mReactContext);
         LatLngBounds latLngBounds = getBoundsFromOptions(options);
@@ -146,60 +152,52 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
                 maxZoom((byte)options.getInt("maxZoom")).build();
 
         TilesetDescriptor tilesetDescriptor = offlineManager.createTilesetDescriptor(descriptorOptions);
+        ArrayList<TilesetDescriptor> descriptors = new ArrayList<>();
+        descriptors.add(tilesetDescriptor);
 
 
         TileRegionLoadOptions loadOptions = new TileRegionLoadOptions.Builder()
                 .geometry(GeoJSONUtils.fromLatLngBoundsToPolygon(latLngBounds))
-                .metadata(Value.valueOf(ReadableMapToValue.convert(options.getMap("metadata"))))
+                .descriptors(descriptors)
+                .metadata(Value.valueOf(options.getString("metadata")))
                 .acceptExpired(true)
                 .networkRestriction(NetworkRestriction.NONE)
                 .build();
 
-
-        String id = options.getMap("metadata").getString("name");
+        String metadataStr = options.getString("metadata");
+        JSONObject metadata = new JSONObject(metadataStr);
+        String id = metadata.getString("name");
         TileRegionPack pack = new TileRegionPack(id, null, TileRegionPack.INACTIVE);
+        pack.loadOptions = loadOptions;
         tileRegionPacks.put(id, pack);
 
-        getTileStore().loadTileRegion(id, loadOptions, new TileRegionLoadProgressCallback() {
+        promise.resolve(fromOfflineRegion(latLngBounds, metadataStr));
+
+        startPackDownload(pack);
+    }
+
+    void startPackDownload(TileRegionPack pack) {
+        RCTMGLOfflineModule _this = this;
+        pack.cancelable = getTileStore().loadTileRegion(pack.name, pack.loadOptions, new TileRegionLoadProgressCallback() {
             @Override
             public void run(@NonNull TileRegionLoadProgress progress) {
                 pack.progress = progress;
                 pack.state = TileRegionPack.ACTIVE;
+                _this.sendEvent(_this.makeStatusEvent(pack.name, progress, pack));
             }
         }, new TileRegionCallback() {
             @Override
             public void run(@NonNull Expected<TileRegionError, TileRegion> region) {
+                pack.cancelable = null;
                 if (region.isError()) {
                     pack.state = TileRegionPack.INACTIVE;
-                    promise.reject("createPack", region.getError().getMessage());
+                    _this.sendEvent(_this.makeErrorEvent(pack.name, "TileRegionError", region.getError().getMessage()));
                 } else {
                     pack.state = TileRegionPack.COMPLETE;
-
-                    promise.resolve(id);
+                    _this.sendEvent(_this.makeStatusEvent(pack.name, pack.progress, pack));
                 }
             }
         });
-
-/*
-        OfflineRegionDefinition definition = makeDefinition(latLngBounds, options);
-        byte[] metadataBytes = getMetadataBytes(ConvertUtils.getString("metadata", options, ""));
-
-
-        OfflineManager.CreateOfflineRegionCallback callback = new OfflineManager.CreateOfflineRegionCallback() {
-            @Override
-            public void onCreate(OfflineRegion offlineRegion) {
-                promise.resolve(fromOfflineRegion(offlineRegion));
-                setOfflineRegionObserver(name, offlineRegion);
-            }
-
-            @Override
-            public void onError(String error) {
-                sendEvent(makeErrorEvent(name, EventTypes.OFFLINE_ERROR, error));
-            }
-        };
-
-        offlineManager.createOfflineRegion(definition, metadataBytes, callback);
- */
     }
 
     @ReactMethod
@@ -207,27 +205,58 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
         getTileStore().getAllTileRegions(new TileRegionsCallback() {
             @Override
             public void run(@NonNull Expected<TileRegionError, List<TileRegion>> regions) {
-                if (regions.isValue()) {
-                    convertRegionsToJSON(regions.getValue(), promise);
-                } else {
-                    promise.reject("getPacks", regions.getError().getMessage());
-                }
+                runOnUiThread(new Runnable() {
+                   @Override
+                    public void run() {
+                       if (regions.isValue()) {
+                           convertRegionsToJSON(regions.getValue(), promise);
+                       } else {
+                           promise.reject("getPacks", regions.getError().getMessage());
+                       }
+                    }
+                });
+
             }
         });
     }
 
     private void convertRegionsToJSON(List<TileRegion> tileRegions, Promise promise) {
         CountDownLatch countDownLatch = new CountDownLatch(tileRegions.size());
-        for (TileRegion region: tileRegions) {
-            getTileStore().getTileRegionGeometry(region.getId(), new TileRegionGeometryCallback() {
-                @Override
-                public void run(@NonNull Expected<TileRegionError, Geometry> result) {
-                    countDownLatch.countDown();
-                }
-            });
+        ArrayList<TileRegionError> errors = new ArrayList<>();
+        ArrayList<Geometry> geometries = new ArrayList<>();
+        try {
+            for (TileRegion region : tileRegions) {
+                getTileStore().getTileRegionGeometry(region.getId(), new TileRegionGeometryCallback() {
+                    @Override
+                    public void run(@NonNull Expected<TileRegionError, Geometry> result) {
+                        if (result.isValue()) {
+                            geometries.add(result.getValue());
+                        } else {
+                            errors.add(result.getError());
+                        }
+                        countDownLatch.countDown();
+                    }
+                });
+            }
+        } catch(Error error) {
+            Logger.e("OS", "a");
         }
         try {
             countDownLatch.await();
+            WritableArray result = Arguments.createArray();
+            for (Geometry geometry: geometries) {
+                result.pushMap(fromOfflineRegion(geometry));
+            }
+            for (TileRegionError error: errors) {
+                WritableMap errorMap = Arguments.createMap();
+                errorMap.putString("type","error");
+                errorMap.putString("message", error.getMessage());
+                errorMap.putString("errorType", error.getType().toString());
+                result.pushMap(errorMap);
+            }
+            promise.resolve(
+                result
+            );
         } catch (InterruptedException interruptedException) {
             promise.reject(interruptedException);
         }
@@ -308,44 +337,16 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
         });
     }*/
 
-    /*
     @ReactMethod
     public void getPackStatus(final String name, final Promise promise) {
-        activateFileSource();
-
-        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
-
-        offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
-            @Override
-            public void onList(OfflineRegion[] offlineRegions) {
-                OfflineRegion region = getRegionByName(name, offlineRegions);
-
-                if (region == null) {
-                    promise.resolve(null);
-                    Log.w(REACT_CLASS, "getPackStatus - Unknown offline region");
-                    return;
-                }
-
-                region.getStatus(new OfflineRegion.OfflineRegionStatusCallback() {
-                    @Override
-                    public void onStatus(OfflineRegionStatus status) {
-                        promise.resolve(makeRegionStatus(name, status));
-                    }
-
-                    @Override
-                    public void onError(String error) {
-                        promise.reject("getPackStatus", error);
-                    }
-                });
-            }
-
-            @Override
-            public void onError(String error) {
-                promise.reject("getPackStatus", error);
-            }
-        });
+        TileRegionPack pack = this.tileRegionPacks.get(name);
+        if (pack != null) {
+            promise.resolve(makeRegionStatus(name, pack.progress, pack));
+        } else {
+            promise.reject(new Error("Pack not found"));
+            Logger.w(REACT_CLASS, "getPackStatus - Unknown offline region");
+        }
     }
-*/
 
     /*
     @ReactMethod
@@ -453,65 +454,32 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
         });
     }*/
 
-    /*
     @ReactMethod
     public void pausePackDownload(final String name, final Promise promise) {
-        activateFileSource();
-
-        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
-
-        offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
-            @Override
-            public void onList(OfflineRegion[] offlineRegions) {
-                final OfflineRegion offlineRegion = getRegionByName(name, offlineRegions);
-
-                if (offlineRegion == null) {
-                    promise.reject("pauseRegionDownload", "Unknown offline region");
-                    return;
-                }
-
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        offlineRegion.setDownloadState(INACTIVE_REGION_DOWNLOAD_STATE);
-                        promise.resolve(null);
-                    }
-                });
+        TileRegionPack pack = this.tileRegionPacks.get(name);
+        if (pack != null) {
+            if (pack.cancelable != null) {
+                pack.cancelable.cancel();
+                pack.cancelable = null;
+                promise.resolve(null);
+            } else {
+                promise.reject("resumeRegionDownload", "Offline region cancelled already");
             }
+        } else {
+            promise.reject("resumeRegionDownload", "Unknown offline region");
+        }
+    }
 
-            @Override
-            public void onError(String error) {
-                promise.reject("pauseRegionDownload", error);
-            }
-        });
-    }*/
-/*
     @ReactMethod
     public void resumePackDownload(final String name, final Promise promise) {
-        activateFileSource();
-
-        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
-
-        offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
-            @Override
-            public void onList(OfflineRegion[] offlineRegions) {
-                OfflineRegion offlineRegion = getRegionByName(name, offlineRegions);
-
-                if (offlineRegion == null) {
-                    promise.reject("resumeRegionDownload", "Unknown offline region");
-                    return;
-                }
-
-                offlineRegion.setDownloadState(ACTIVE_REGION_DOWNLOAD_STATE);
-                promise.resolve(null);
-            }
-
-            @Override
-            public void onError(String error) {
-                promise.reject("resumeRegionDownload", error);
-            }
-        });
-    }*/
+        TileRegionPack pack = this.tileRegionPacks.get(name);
+        if (pack != null) {
+            startPackDownload(pack);
+            promise.resolve(null);
+        } else {
+            promise.reject("resumeRegionDownload", "Unknown offline region");
+        }
+    }
 /*
     @ReactMethod
     public void mergeOfflineRegions(final String path, final Promise promise) {
@@ -631,37 +599,27 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
         return new OfflineEvent(OFFLINE_ERROR, errorType, payload);
     }
 
-    /*
-    private OfflineEvent makeStatusEvent(String regionName, OfflineRegionStatus status) {
-        return new OfflineEvent(OFFLINE_PROGRESS, EventTypes.OFFLINE_STATUS, makeRegionStatus(regionName, status));
+
+    private OfflineEvent makeStatusEvent(String regionName, TileRegionLoadProgress status, TileRegionPack pack) {
+        return new OfflineEvent(OFFLINE_PROGRESS, EventTypes.OFFLINE_STATUS, makeRegionStatus(regionName, status, pack));
     }
 
-    private WritableMap makeRegionStatus(String regionName, OfflineRegionStatus status) {
+    private WritableMap makeRegionStatus(String regionName, TileRegionLoadProgress status, TileRegionPack pack) {
         WritableMap map = Arguments.createMap();
-
-        int downloadState = status.getDownloadState();
-        double percentage = 0.0;
-
-        if (status.isComplete()) {
-            downloadState = COMPLETE_REGION_DOWNLOAD_STATE;
-            percentage = 100.0;
-        } else {
-            percentage = status.getRequiredResourceCount() >= 0
-                    ? (100.0 * status.getCompletedResourceCount() / status.getRequiredResourceCount()) :
-                    0.0;
-        }
+        double progressPercentage = ((double)status.getCompletedResourceCount()*100.0) / ((double)status.getRequiredResourceCount());
 
         map.putString("name", regionName);
-        map.putInt("state", downloadState);
-        map.putDouble("percentage", percentage);
+        map.putString("state", pack.state);
+        map.putDouble("percentage", progressPercentage);
         map.putInt("completedResourceCount", (int)status.getCompletedResourceCount());
         map.putInt("completedResourceSize", (int)status.getCompletedResourceSize());
-        map.putInt("completedTileSize", (int)status.getCompletedTileSize());
-        map.putInt("completedTileCount", (int)status.getCompletedTileCount());
+        map.putInt("erroredResourceCount", (int)status.getErroredResourceCount());
         map.putInt("requiredResourceCount", (int)status.getRequiredResourceCount());
+        map.putInt("loadedResourceCount", (int)status.getLoadedResourceCount());
+        map.putInt("loadedResourceSize", (int)status.getLoadedResourceSize());
 
         return map;
-    }*/
+    }
 
     private LatLngBounds getBoundsFromOptions(ReadableMap options) {
         String featureCollectionJSONStr = ConvertUtils.getString("bounds", options, "{}");
@@ -669,14 +627,28 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
         return GeoJSONUtils.toLatLngBounds(featureCollection);
     }
 
-    /*
-    private WritableMap fromOfflineRegion(OfflineRegion region) {
+    private WritableMap fromOfflineRegion(LatLngBounds bounds, String metadataStr) {
         WritableMap map = Arguments.createMap();
-        map.putArray("bounds", GeoJSONUtils.fromLatLngBounds(region.getDefinition().getBounds()));
-        map.putString("metadata", new String(region.getMetadata()));
+        map.putArray("bounds", GeoJSONUtils.fromLatLngBounds(bounds));
+        map.putString("metadata", metadataStr);
         return map;
     }
 
+    private WritableMap fromOfflineRegion(Geometry region) {
+        WritableMap map = Arguments.createMap();
+        double[] bbox = TurfMeasurement.bbox(region);
+
+        WritableArray bounds = Arguments.createArray();
+        for (double d: bbox) {
+            bounds.pushDouble(d);
+        }
+        map.putArray("bounds", bounds);
+        map.putMap("geometry", GeoJSONUtils.fromGeometry(region));
+
+        //map.putString("metadata", new String(region.getMetadata()));
+        return map;
+    }
+/*
     private OfflineRegion getRegionByName(String name, OfflineRegion[] offlineRegions) {
         if (name == null || name.isEmpty()) {
             return null;
