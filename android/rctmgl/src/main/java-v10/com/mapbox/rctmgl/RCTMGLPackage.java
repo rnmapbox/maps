@@ -21,13 +21,9 @@ import com.mapbox.rctmgl.components.images.RCTMGLImagesManager;
 import com.mapbox.rctmgl.components.location.RCTMGLNativeUserLocationManager;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapViewManager;
 import com.mapbox.rctmgl.components.mapview.RCTMGLAndroidTextureMapViewManager;
-/*
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLBackgroundLayerManager;
-*/
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLCircleLayerManager;
-/*
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLFillExtrusionLayerManager;
-*/
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLFillLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLHeatmapLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLLineLayerManager;
@@ -105,9 +101,7 @@ public class RCTMGLPackage implements ReactPackage {
 
         // layers
         managers.add(new RCTMGLFillLayerManager());
-        /*
         managers.add(new RCTMGLFillExtrusionLayerManager());
- */
         managers.add(new RCTMGLHeatmapLayerManager());
  
         managers.add(new RCTMGLLineLayerManager());
@@ -116,9 +110,7 @@ public class RCTMGLPackage implements ReactPackage {
         managers.add(new RCTMGLRasterLayerManager());
         managers.add(new RCTMGLSkyLayerManager());
         managers.add(new RCTMGLTerrainManager());
-/*
         managers.add(new RCTMGLBackgroundLayerManager());
-*/
         return managers;
     }
 }
