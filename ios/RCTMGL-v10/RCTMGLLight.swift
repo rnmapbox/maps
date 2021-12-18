@@ -11,18 +11,26 @@ class RCTMGLLight: UIView, RCTMGLMapComponent {
       }
     }
   }
+  
+  func apply(light: Light) {
+    self.map.style
+    let lightData = try! JSONEncoder().encode(light)
+    let lightDictionary = try! JSONSerialization.jsonObject(with: lightData)
+    print("=> lightDictionary \(lightDictionary)")
+    try! self.map.style.setLight(properties: lightDictionary as! [String:Any])
+  }
 
   func addStyles() {
     var light = Light()
     let style = RCTMGLStyle(style: map.style)
     style.lightLayer(layer: &light, reactStyle: reactStyle, applyUpdater: { (updater) in
       updater(&light)
-      let lightData = try! JSONEncoder().encode(light)
-      let lightDictionary = try! JSONSerialization.jsonObject(with: lightData)
-      try! self.map.style.setLight(properties: lightDictionary as! [String:Any])
+      self.apply(light: light)
     }, isValid: {
       return self.isAddedToMap()
     })
+    
+    apply(light: light)
   }
   
   func isAddedToMap() -> Bool {

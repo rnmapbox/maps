@@ -5,7 +5,10 @@ import android.content.Context;
 import com.facebook.react.bridge.ReadableMap;
 import com.mapbox.maps.MapboxMap;
 import com.mapbox.maps.Style;
+import com.mapbox.maps.extension.style.StyleInterface;
 import com.mapbox.maps.extension.style.light.generated.Light;
+import com.mapbox.maps.extension.style.light.generated.LightKt;
+import com.mapbox.maps.extension.style.light.generated.LightUtils;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyle;
@@ -43,6 +46,7 @@ public class RCTMGLLight extends AbstractMapFeature {
 
     private void setLight(Light light) {
         RCTMGLStyleFactory.setLightLayerStyle(light, new RCTMGLStyle(getContext(), mReactStyle, mMap));
+        LightUtils.setLight(getStyle(), light);
     }
 
     private void setLight() {

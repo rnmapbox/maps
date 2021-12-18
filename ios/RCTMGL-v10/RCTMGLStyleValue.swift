@@ -1,5 +1,9 @@
 import MapboxMaps
 
+func deg2rad(_ number: Double) -> Double {
+    return number * .pi / 180
+}
+
 class RCTMGLStyleValue {
   var value: Any
   var styleType: String? = nil
@@ -309,15 +313,18 @@ class RCTMGLStyleValue {
   }
   
   func getSphericalPosition() -> [Double] {
+    if let array = styleObject as? [NSNumber] {
+      var result = array.map { $0.doubleValue }
+      result[0] = deg2rad(result[0])
+      return result
+    }
+    Logger.log(level: .error, message: "Expected array of numbers as position received: \(styleObject)")
     return []
   }
   
   func mglStyleValueFormatted() -> Value<String> {
-    print("Formatted: \(value)")
-
     if let value = value as? Dictionary<String,Any> {
       let value = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
-      print("~~~ after-convert: \(value) \(type(of:value))")
       
       if let string = value as? String {
         return Value.constant(string)
@@ -325,9 +332,7 @@ class RCTMGLStyleValue {
       
       let data = try! JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
 
-      print("~~~ data: \(data)")
       let decodedExpression = try! JSONDecoder().decode(Expression.self, from: data)
-      print("~~~ decodedExpression: \(decodedExpression)")
       return Value.expression(decodedExpression)
     } else {
       fatalError("mglStyleValueFormatted - Unpexected value: \(value)")
