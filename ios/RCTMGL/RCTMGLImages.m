@@ -1,5 +1,5 @@
 #import "RCTMGLImages.h"
-#import "UIView+React.h"
+#import <React/UIView+React.h>
 #import "RCTMGLMapView.h"
 #import "RCTMGLUtils.h"
 #import "RCTMGLEvent.h"

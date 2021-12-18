@@ -11,7 +11,7 @@
 #import "RCTMGLUtils.h"
 #import "RNMBImageUtils.h"
 #import "RCTMGLImages.h"
-#import "UIView+React.h"
+#import <React/UIView+React.h>
 #import "RCTMGLNativeUserLocation.h"
 #import "RCTMGLLogging.h"
 
