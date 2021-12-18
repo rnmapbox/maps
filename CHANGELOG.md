@@ -7,6 +7,7 @@ PR Title ([#123](link to my pr))
 
 docs(example): I am an example CHANGELOG, replace me!
 
+fix(iOS): correct import of UIView+React.h header ([#1672](https://github.com/react-native-mapbox-gl/maps/pull/1672))
 ---
 
 ## 8.5.0

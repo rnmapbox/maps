@@ -7,7 +7,7 @@
 //
 
 #import "RCTMGLCallout.h"
-#import "UIView+React.h"
+#import <React/UIView+React.h>
 
 @implementation RCTMGLCallout
 {
