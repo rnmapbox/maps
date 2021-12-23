@@ -11,7 +11,7 @@ import {
 const styles = {
   mapView: {flex: 1},
   circleLayer: {
-    circleRadiusTransition: {duration: 5000},
+    circleRadiusTransition: {duration: 5000, delay: 0},
     circleColor: '#ff0000',
   },
 };
