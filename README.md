@@ -1,24 +1,6 @@
+<br>
+
 ### 🟥 Future of this repo: participate in the [discussion thread](https://github.com/react-native-mapbox-gl/maps/discussions/1680) 🟥
-
-<br>
-
----
-
-<br>
-
-# Mapbox Maps SDK for React Native
-
-_An unofficial React Native library for building maps with   
-the [Mapbox Maps SDK for iOS](https://www.mapbox.com/ios-sdk/) and [Mapbox Maps SDK for Android](https://www.mapbox.com/android-sdk/)_
-
-
-We also support [MapLibre](https://github.com/maplibre/maplibre-gl-native) flavors of Mapbox SDKs now 🎉
-
-<br>
-
----
-
-<br>
 
 
 ## Call for additional maintainers  
@@ -44,6 +26,18 @@ Thanks 🙇
 ---
 
 <br>
+
+# Mapbox Maps SDK for React Native
+
+_An unofficial React Native library for building maps with   
+the [Mapbox Maps SDK for iOS](https://www.mapbox.com/ios-sdk/) and [Mapbox Maps SDK for Android](https://www.mapbox.com/android-sdk/)_
+
+
+We also support [MapLibre](https://github.com/maplibre/maplibre-gl-native) flavors of Mapbox SDKs now 🎉
+
+
+---
+
 
 [![npm version](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps.svg)](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps)  
 [![Android Build](https://github.com/react-native-mapbox-gl/maps/actions/workflows/android-actions.yml/badge.svg)](https://github.com/react-native-mapbox-gl/maps/actions/workflows/android-actions.yml)  
