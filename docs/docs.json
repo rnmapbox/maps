@@ -4021,6 +4021,13 @@
         "description": "Specifies the maximum zoom level at which to cluster points if clustering is enabled.\nDefaults to one zoom level less than the value of maxZoomLevel so that, at the maximum zoom level,\nthe shapes are not clustered."
       },
       {
+        "name": "clusterProperties",
+        "required": false,
+        "type": "object",
+        "default": "none",
+        "description": "Specifies custom properties on the generated clusters if clustering\nis enabled, aggregating values from clustered points.\n\nHas the form `{ \"property_name\": [operator, map_expression]}`, where\n `operator` is any expression function that accepts at least 2 operands (e.g. `\"+\"` or `\"max\"`) -\n  it accumulates the property value from clusters/points the cluster contains\n `map_expression` produces the value of a single point\n  Example: `{ \"sum\": [\"+\", [\"get\", \"scalerank\"]] }`\n\nExample: `{ \"sum\": [\"+\", [\"get\", \"scalerank\"]] }`\nFor more advanced use cases, in place of `operator`, you can use a custom reduce expression\nthat references a special `[\"accumulated\"]` value, e.g.:\n`{ \"sum\": [[\"+\", [\"accumulated\"], [\"get\", \"sum\"]], [\"get\", \"scalerank\"]] }`"
+      },
+      {
         "name": "maxZoomLevel",
         "required": false,
         "type": "number",
