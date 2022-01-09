@@ -11,6 +11,7 @@ class MGLModule : NSObject {
   @objc
   func constantsToExport() -> [AnyHashable: Any]! {
     return [
+      "MapboxV10":true,
       "StyleURL":
         [
           "Street": StyleURI.streets.rawValue,

@@ -58,12 +58,12 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - glog (0.3.5)
   - libevent (2.1.12)
-  - MapboxCommon (20.1.0)
-  - MapboxCoreMaps (10.1.0):
-    - MapboxCommon (~> 20.1)
-  - MapboxMaps (10.1.0):
-    - MapboxCommon (= 20.1.0)
-    - MapboxCoreMaps (= 10.1.0)
+  - MapboxCommon (21.0.1)
+  - MapboxCoreMaps (10.2.0):
+    - MapboxCommon (~> 21.0)
+  - MapboxMaps (10.2.0):
+    - MapboxCommon (= 21.0.1)
+    - MapboxCoreMaps (= 10.2.0)
     - MapboxMobileEvents (= 1.0.6)
     - Turf (~> 2.0)
   - MapboxMobileEvents (1.0.6)
@@ -262,19 +262,19 @@ PODS:
     - React-perflogger (= 0.64.2)
   - React-jsinspector (0.64.2)
   - react-native-mapbox-gl (10.0.0-beta1):
-    - MapboxMaps (= 10.1.0)
+    - MapboxMaps (~> 10.2.0)
     - React
     - React-Core
     - react-native-mapbox-gl/DynamicLibrary (= 10.0.0-beta1)
     - react-native-mapbox-gl/StaticLibraryFixer (= 10.0.0-beta1)
     - Turf
   - react-native-mapbox-gl/DynamicLibrary (10.0.0-beta1):
-    - MapboxMaps (= 10.1.0)
+    - MapboxMaps (~> 10.2.0)
     - React
     - React-Core
     - Turf
   - react-native-mapbox-gl/StaticLibraryFixer (10.0.0-beta1):
-    - MapboxMaps (= 10.1.0)
+    - MapboxMaps (~> 10.2.0)
     - React
     - React-Core
     - Turf
@@ -355,7 +355,7 @@ PODS:
     - React
   - RNVectorIcons (8.1.0):
     - React-Core
-  - Turf (2.0.0)
+  - Turf (2.1.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -525,9 +525,9 @@ SPEC CHECKSUMS:
   FlipperKit: 8a20b5c5fcf9436cac58551dc049867247f64b00
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  MapboxCommon: 8dd878a6c444b78bc1a819af1920dd1a0bb9f732
-  MapboxCoreMaps: 6ecb358c04600f6a947e52d41b78ac0c2570f930
-  MapboxMaps: c19e24617b7135f87fac7dbad3a4baef657555ae
+  MapboxCommon: fdfdbd4e87a225190913f2f4b4a73ec51ed77eaa
+  MapboxCoreMaps: bdd0115bfd8bf6df402468710cb23c926938b03d
+  MapboxMaps: 1ed477cbe573a9e740801dfc9c636ef33bbc3f54
   MapboxMobileEvents: 14d7ac3ee95b4142c4fec2205dfd48ff453e8871
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
@@ -541,7 +541,7 @@ SPEC CHECKSUMS:
   React-jsi: 67747b9722f6dab2ffe15b011bcf6b3f2c3f1427
   React-jsiexecutor: 80c46bd381fd06e418e0d4f53672dc1d1945c4c3
   React-jsinspector: cc614ec18a9ca96fd275100c16d74d62ee11f0ae
-  react-native-mapbox-gl: 978683bc5c4e6fce159001132dcdff9ae99ff7dc
+  react-native-mapbox-gl: ec9560f12bd3ed5d71159b7326171e53fd994c50
   react-native-safe-area-context: 61c8c484a3a9e7d1fda19f7b1794b35bbfd2262a
   React-perflogger: 25373e382fed75ce768a443822f07098a15ab737
   React-RCTActionSheet: af7796ba49ffe4ca92e7277a5d992d37203f7da5
@@ -560,7 +560,7 @@ SPEC CHECKSUMS:
   RNScreens: 01ab149b5dd5c27f5ff26741b1d2bdf2cee1af35
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
-  Turf: 79ad33d164291444775d83e5db4be199dd1f606f
+  Turf: d1220730a00b50a9fb5862c1fb6a5dd698c9e367
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

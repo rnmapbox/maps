@@ -169,6 +169,8 @@ IOS:
      - [x] ios
      - [x] android 
 - [ ] MarkerView
+  - [x] ios
+  - [ ] android
 
 
 ## UserLocation
