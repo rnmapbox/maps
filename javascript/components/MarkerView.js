@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Platform, requireNativeComponent} from 'react-native';
+import {Platform, NativeModules, requireNativeComponent} from 'react-native';
 
 import {toJSONString, viewPropTypes} from '../utils';
 import {makePoint} from '../utils/geoUtils';
 
 import PointAnnotation from './PointAnnotation';
+
+const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLMarkerView';
 
@@ -63,7 +65,7 @@ class MarkerView extends React.PureComponent {
   }
 
   render() {
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === 'ios' && (!MapboxGL.MapboxV10)) {
       return <PointAnnotation {...this.props} />;
     }
 
@@ -79,8 +81,12 @@ class MarkerView extends React.PureComponent {
   }
 }
 
+console.log('### MapboxGL.MapboxV10', MapboxGL.MapboxV10);
+
 const RCTMGLMarkerView =
   Platform.OS === 'android'
+    ? requireNativeComponent(NATIVE_MODULE_NAME, MarkerView, {})
+    : MapboxGL.MapboxV10
     ? requireNativeComponent(NATIVE_MODULE_NAME, MarkerView, {})
     : undefined;
 
