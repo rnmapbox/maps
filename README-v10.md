@@ -168,9 +168,9 @@ IOS:
   - [x] Callout
      - [x] ios
      - [x] android 
-- [ ] MarkerView
+- [x] MarkerView
   - [x] ios
-  - [ ] android
+  - [x] android
 
 
 ## UserLocation
