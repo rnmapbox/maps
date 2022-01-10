@@ -65,7 +65,7 @@ class MarkerView extends React.PureComponent {
   }
 
   render() {
-    if (Platform.OS === 'ios' && (!MapboxGL.MapboxV10)) {
+    if (Platform.OS === 'ios' && !MapboxGL.MapboxV10) {
       return <PointAnnotation {...this.props} />;
     }
 

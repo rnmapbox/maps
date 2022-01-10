@@ -84,21 +84,19 @@ import com.mapbox.maps.plugin.annotation.AnnotationPluginImplKt;
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManagerKt;
 
 import com.mapbox.maps.plugin.gestures.OnMapClickListener;
+import com.mapbox.maps.viewannotation.ViewAnnotationManager;
 import com.mapbox.rctmgl.R;
 import com.mapbox.rctmgl.components.AbstractMapFeature;
 
 import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotation;
-/*
+
 import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerView;
-import com.mapbox.rctmgl.components.annotation.MarkerView;
-import com.mapbox.rctmgl.components.annotation.MarkerViewManager;
-import com.mapbox.rctmgl.components.camera.RCTMGLCamera;
-import com.mapbox.rctmgl.components.images.RCTMGLImages;*/
-import com.mapbox.rctmgl.components.location.LocationComponentManager;
-import com.mapbox.rctmgl.components.location.RCTMGLNativeUserLocation;
 
 import com.mapbox.rctmgl.components.camera.RCTMGLCamera;
 import com.mapbox.rctmgl.components.images.RCTMGLImages;
+import com.mapbox.rctmgl.components.location.LocationComponentManager;
+import com.mapbox.rctmgl.components.location.RCTMGLNativeUserLocation;
+
 import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeTracker;
 
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
@@ -326,10 +324,9 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
             RCTMGLPointAnnotation annotation = (RCTMGLPointAnnotation) childView;
             mPointAnnotations.put(annotation.getID(), annotation);
             feature = (AbstractMapFeature) childView;
-            /*
         } else if (childView instanceof RCTMGLMarkerView) {
             RCTMGLMarkerView marker = (RCTMGLMarkerView) childView;
-            feature = (AbstractMapFeature) childView; */
+            feature = (AbstractMapFeature) childView;
         } else if (childView instanceof RCTMGLCamera) {
             mCamera = (RCTMGLCamera) childView;
             feature = (AbstractMapFeature) childView;
