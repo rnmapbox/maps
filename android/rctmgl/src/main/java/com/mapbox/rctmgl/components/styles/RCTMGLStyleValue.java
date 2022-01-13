@@ -204,7 +204,7 @@ public class RCTMGLStyleValue {
             duration = config.getMap("duration").getInt("value");
         }
         if (config.hasKey("delay") && ReadableType.Map.equals(config.getType("delay"))) {
-            duration = config.getMap("delay").getInt("value");
+            delay = config.getMap("delay").getInt("value");
         }
 
         return new TransitionOptions(duration, delay, enablePlacementTransitions);
