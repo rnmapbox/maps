@@ -5,7 +5,7 @@ Please add unreleased changes in the following style:
 PR Title ([#123](link to my pr))
 ```
 
-docs(example): I am an example CHANGELOG, replace me!
+fix(example): update `/example` project (iOS only) to work with ARM-based Macs ([#1643](https://github.com/react-native-mapbox-gl/maps/pull/1643))  
 
 ---
 
