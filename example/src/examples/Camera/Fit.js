@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import {isEqual} from 'lodash';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 
 import sheet from '../../styles/sheet';
@@ -36,10 +36,6 @@ const townCenter = [
   (townBounds.ne[1] + townBounds.sw[1]) / 2,
 ];
 
-const paddingZero = buildPadding();
-const paddingTop = buildPadding([200, 40, 40, 40]);
-const paddingBottom = buildPadding([40, 40, 200, 40]);
-
 class Fit extends React.Component {
   static propTypes = {...BaseExamplePropTypes};
 
@@ -47,60 +43,19 @@ class Fit extends React.Component {
     super(props);
 
     this.state = {
-      locationType: 'houseCenter', // houseCenter | houseBounds | townCenter | townBounds
-      zoomLevel: 16, // number
-      followUserLocation: false,
-      padding: paddingZero,
+      fitType: 'bounds', // 'bounds' | 'centerCoordinate'
+      containType: 'house', // 'house' | 'town'
+      zoomLevel: undefined,
+      padding: buildPadding(),
       animationDuration: 500,
-
-      // For updating the UI in this example.
-      cachedFlyTo: undefined, // house | town
-      cachedZoomLevel: undefined, // number
     };
-
-    this.camera = null;
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const changed = stateKey => {
-      // Checking if final state is `undefined` prevents another round of zeroing out in
-      // second `componentDidUpdate` call.
-      return (
-        !isEqual(prevState[stateKey], this.state[stateKey]) &&
-        this.state[stateKey] !== undefined
-      );
-    };
-
-    if (changed('followUserLocation') && this.state.followUserLocation) {
-      this.setState({
-        locationType: undefined,
-        zoomLevel: undefined,
-        cachedFlyTo: undefined,
-        cachedZoomLevel: undefined,
-      });
-      return;
-    }
-
-    if (changed('locationType') || changed('zoomLevel') || changed('padding')) {
-      this.setState({
-        cachedFlyTo: undefined,
-        cachedZoomLevel: undefined,
-      });
-    } else if (changed('cachedFlyTo') || changed('cachedZoomLevel')) {
-      this.setState({
-        locationType: undefined,
-        zoomLevel: undefined,
-        padding: paddingZero,
-      });
-    }
-  }
-
-  renderSection = (title, buttons, fade = false) => {
+  renderSection = (title, key, buttons, fade = false) => {
     return (
       <View style={{paddingBottom: 5, opacity: fade ? 0.5 : 1}}>
         <Text>{title}</Text>
-        <ScrollView
-          horizontal={true}
+        <View
           style={{
             flex: 0,
             flexDirection: 'row',
@@ -114,180 +69,83 @@ class Fit extends React.Component {
                 flex: 0,
                 padding: 5,
                 marginRight: 5,
-                backgroundColor: button.selected ? 'coral' : '#d8d8d8',
+                backgroundColor: isEqual(this.state[key], button.value)
+                  ? 'coral'
+                  : '#d8d8d8',
                 borderRadius: 5,
               }}
-              onPress={button.onPress}>
+              onPress={() => this.setState({[key]: button.value})}>
               <Text>{button.title}</Text>
             </TouchableOpacity>
           ))}
-        </ScrollView>
+        </View>
       </View>
     );
   };
 
-  cameraProps = () => {
-    const {
-      locationType,
-      zoomLevel,
-      followUserLocation,
-      padding,
-      animationDuration,
-    } = this.state;
+  render() {
+    const {fitType, containType, zoomLevel, padding, animationDuration} =
+      this.state;
 
-    let p = {
+    let cameraProps = {
       bounds: undefined,
       centerCoordinate: undefined,
       zoomLevel: undefined,
-      followUserLocation,
       padding,
       animationDuration,
     };
-
-    if (locationType === 'houseCenter') {
-      p.centerCoordinate = houseCenter;
-    } else if (locationType === 'houseBounds') {
-      p.bounds = houseBounds;
-    } else if (locationType === 'townCenter') {
-      p.centerCoordinate = townCenter;
-    } else if (locationType === 'townBounds') {
-      p.bounds = townBounds;
+    if (fitType === 'bounds') {
+      cameraProps.bounds = containType === 'house' ? houseBounds : townBounds;
+    } else if (fitType === 'centerCoordinate') {
+      cameraProps.centerCoordinate =
+        containType === 'house' ? houseCenter : townCenter;
     }
-
     if (zoomLevel !== undefined) {
-      p.zoomLevel = zoomLevel;
+      cameraProps.zoomLevel = zoomLevel;
     }
-
-    return p;
-  };
-
-  render() {
-    const {
-      locationType,
-      zoomLevel,
-      followUserLocation,
-      padding,
-      cachedFlyTo,
-      cachedZoomLevel,
-    } = this.state;
-
-    const centerIsSet = locationType?.toLowerCase().includes('center');
-
-    const locationTypeButtons = [
-      ['House (center)', 'houseCenter'],
-      ['House (bounds)', 'houseBounds'],
-      ['Town (center)', 'townCenter'],
-      ['Town (bounds)', 'townBounds'],
-      ['undef', undefined],
-    ].map(o => {
-      return {
-        title: `${o[0]}`,
-        selected: locationType === o[1],
-        onPress: () => this.setState({locationType: o[1]}),
-      };
-    });
-
-    const zoomConfigButtons = [14, 15, 16, 17, 18, 19, 20, undefined].map(n => {
-      return {
-        title: n ? `${n}` : 'undef',
-        selected: zoomLevel === n,
-        onPress: () => this.setState({zoomLevel: n}),
-      };
-    });
-
-    const zoomToButtons = [14, 15, 16, 17, 18, 19, 20].map(n => {
-      return {
-        title: `${n}`,
-        selected: cachedZoomLevel === n,
-        onPress: () => {
-          this.camera.zoomTo(n, 1000);
-          this.setState({cachedZoomLevel: n});
-        },
-      };
-    });
 
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
           styleURL={MapboxGL.StyleURL.Satellite}
           style={sheet.matchParent}>
-          <MapboxGL.Camera
-            ref={ref => (this.camera = ref)}
-            {...this.cameraProps()}
-          />
+          <MapboxGL.Camera {...cameraProps} />
           <View style={{flex: 1, ...padding}}>
             <View style={{flex: 1, borderColor: 'white', borderWidth: 4}} />
           </View>
         </MapboxGL.MapView>
 
-        <ScrollView
+        <View
           style={{
             flex: 0,
             width: '100%',
-            maxHeight: 350,
-            backgroundColor: 'white',
-          }}
-          contentContainerStyle={{
             padding: 10,
             paddingBottom: 20,
+            backgroundColor: 'white',
           }}>
-          {this.renderSection('Location type', locationTypeButtons)}
-
+          {this.renderSection('Fit Type', 'fitType', [
+            {title: 'Bounds', value: 'bounds'},
+            {title: 'Center Coordinate', value: 'centerCoordinate'},
+          ])}
+          {this.renderSection('Contain Type', 'containType', [
+            {title: 'House', value: 'house'},
+            {title: 'Town', value: 'town'},
+          ])}
           {this.renderSection(
             'Zoom' +
-              (centerIsSet ? '' : ' (only used if center coordinate is set)'),
-            zoomConfigButtons,
-            !centerIsSet,
+              (fitType === 'bounds' ? ' (Not used because bounds is set)' : ''),
+            'zoomLevel',
+            [undefined, 14, 15, 16, 17, 18, 19, 20].map(n => {
+              return {title: `${n}`, value: n};
+            }),
+            fitType === 'bounds',
           )}
-
-          {this.renderSection('Follow user location', [
-            {
-              title: followUserLocation ? 'Enabled' : 'Disabled',
-              selected: followUserLocation,
-              onPress: () =>
-                this.setState({followUserLocation: !followUserLocation}),
-            },
+          {this.renderSection('Padding', 'padding', [
+            {title: 'None', value: buildPadding()},
+            {title: 'Top', value: buildPadding([200, 40, 40, 40])},
+            {title: 'Bottom', value: buildPadding([40, 40, 200, 40])},
           ])}
-
-          {this.renderSection('Fly to (imperative)', [
-            {
-              title: 'House',
-              selected: cachedFlyTo === 'house',
-              onPress: () => {
-                this.camera.flyTo(houseCenter);
-                this.setState({cachedFlyTo: 'house'});
-              },
-            },
-            {
-              title: 'Town',
-              selected: cachedFlyTo === 'town',
-              onPress: () => {
-                this.camera.flyTo(townCenter);
-                this.setState({cachedFlyTo: 'town'});
-              },
-            },
-          ])}
-
-          {this.renderSection('Zoom to (imperative)', zoomToButtons)}
-
-          {this.renderSection('Padding', [
-            {
-              title: 'None',
-              selected: isEqual(padding, paddingZero),
-              onPress: () => this.setState({padding: paddingZero}),
-            },
-            {
-              title: 'Top',
-              selected: isEqual(padding, paddingTop),
-              onPress: () => this.setState({padding: paddingTop}),
-            },
-            {
-              title: 'Bottom',
-              selected: isEqual(padding, paddingBottom),
-              onPress: () => this.setState({padding: paddingBottom}),
-            },
-          ])}
-        </ScrollView>
+        </View>
       </Page>
     );
   }
