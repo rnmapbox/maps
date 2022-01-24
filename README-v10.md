@@ -160,6 +160,9 @@ IOS:
 - [ ] WillStartLoadingMap, DidFailLoadingMap
 - [ ] getPointInView (Get Pixel Point in MapView)
 - [ ] Show and hida a layer example
+- [ ] takeSnap
+  - [x] ios
+  - [ ] android
 
 ## Annotations
 - [x] PointAnnotation

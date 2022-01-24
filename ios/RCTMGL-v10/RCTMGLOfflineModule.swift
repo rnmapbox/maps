@@ -168,9 +168,6 @@ class RCTMGLOfflineModule: RCTEventEmitter {
   @objc
   func getPacks(_ resolve : @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
     DispatchQueue.main.async {
-      
-      
-      
       self.tileStore.allTileRegions { result in
         switch result {
         case .success(let regions):

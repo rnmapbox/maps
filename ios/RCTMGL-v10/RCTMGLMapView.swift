@@ -111,7 +111,9 @@ public func dictionaryFrom(_ from: Turf.Feature?) throws -> [String:Any]? {
   return value
 }
 
-@objc class RCTMGLMapView : MapView {
+
+@objc(RCTMGLMapView)
+class RCTMGLMapView : MapView {
   var reactOnPress : RCTBubblingEventBlock? = nil
   var reactOnMapChange : RCTBubblingEventBlock? = nil
   
@@ -271,6 +273,18 @@ public func dictionaryFrom(_ from: Turf.Feature?) throws -> [String:Any]? {
       layerWaiters[layerId, default: []].append(callback)
     }
   }
+
+  @objc func takeSnap(
+    writeToDisk:Bool) -> URL
+  {
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, true, 0);
+
+    self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
+    let snapshot = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return writeToDisk ? RNMBImageUtils.createTempFile(snapshot!) :  RNMBImageUtils.createBase64(snapshot!)
+  }
 }
 
 // MARK: - Touch
@@ -301,13 +315,10 @@ extension RCTMGLMapView {
           
           var newHits = hits
           switch result {
-          case .success(let features):
-            if features.count > 0 {
-              newHits[source.id] = features
-            }
-            
-          case .failure(let error):
+           case .failure(let error):
             Logger.log(level: .error, message: "Error during handleTapInSources source.id=\(source.id ?? "n/a") error:\(error)")
+          case .success(_):
+              break
           }
           var nSources = sources
           nSources.removeFirst()
