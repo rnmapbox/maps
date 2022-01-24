@@ -106,6 +106,12 @@ public class BitmapUtils {
         return BitmapFactory.decodeResource(resources, resID, options);
     }
 
+    public static String createImgTempFile(Context context, Image image) throws IOException {
+        Bitmap bitmap = Bitmap.createBitmap(image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
+        bitmap.copyPixelsFromBuffer(ByteBuffer.wrap(image.getData()));
+        return createTempFile(context, bitmap);
+    }
+
     public static String createTempFile(Context context, Bitmap bitmap) {
         File tempFile = null;
         FileOutputStream outputStream = null;
@@ -133,6 +139,12 @@ public class BitmapUtils {
         closeSnapshotOutputStream(outputStream);
         String base64Prefix = "data:image/png;base64,";
         return base64Prefix + Base64.encodeToString(bitmapBytes, Base64.NO_WRAP);
+    }
+
+    public static String createImgBase64(Image image) {
+        Bitmap bitmap = Bitmap.createBitmap(image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
+        bitmap.copyPixelsFromBuffer(ByteBuffer.wrap(image.getData()));
+        return createBase64(bitmap);
     }
 
     public static Bitmap viewToBitmap(View v, int left, int top, int right, int bottom) {

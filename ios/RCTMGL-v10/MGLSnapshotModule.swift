@@ -16,6 +16,7 @@ class MGLSnapshotModule : NSObject {
       let (cameraOptions,snapshotterOptions) = try! self._getOptions(jsOptions)
       let snapshotter = Snapshotter(options: snapshotterOptions)
       snapshotter.setCamera(to: cameraOptions)
+      var snapshotterReference : Snapshotter? = snapshotter
       snapshotter.start(overlayHandler: nil, completion: { result in
         do {
           switch (result) {
@@ -25,8 +26,12 @@ class MGLSnapshotModule : NSObject {
             }
             
             let value = writeToDisk.boolValue ? RNMBImageUtils.createTempFile(image) : RNMBImageUtils.createBase64(image)
+            _ = snapshotterReference
+            snapshotterReference = nil
             resolver(value)
           case .failure(let error):
+            _ = snapshotterReference
+            snapshotterReference = nil
             print(":: Error - snapshot failed \(error) \(error.localizedDescription)")
             rejecter("MGLSnapshotModule.start", error.localizedDescription, error)
           }
