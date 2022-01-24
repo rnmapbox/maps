@@ -35,7 +35,7 @@ class MGLSnapshotModule : NSObject {
           case .failure(let error):
             _ = snapshotterReference
             snapshotterReference = nil
-            print(":: Error - snapshot failed \(error) \(error.localizedDescription)")
+            Logger.log(level: .error, message: ":: Error - snapshot failed \(error) \(error.localizedDescription)")
             rejecter("MGLSnapshotModule.start", error.localizedDescription, error)
           }
         } catch let error {
