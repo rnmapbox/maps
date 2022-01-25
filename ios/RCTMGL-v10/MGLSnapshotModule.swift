@@ -16,6 +16,9 @@ class MGLSnapshotModule : NSObject {
       let (cameraOptions,snapshotterOptions) = try! self._getOptions(jsOptions)
       let snapshotter = Snapshotter(options: snapshotterOptions)
       snapshotter.setCamera(to: cameraOptions)
+      if let styleURL = jsOptions["styleURL"] as? String {
+        snapshotter.style.uri = StyleURI(rawValue:styleURL)
+      }
       var snapshotterReference : Snapshotter? = snapshotter
       snapshotter.start(overlayHandler: nil, completion: { result in
         do {
@@ -28,7 +31,7 @@ class MGLSnapshotModule : NSObject {
             let value = writeToDisk.boolValue ? RNMBImageUtils.createTempFile(image) : RNMBImageUtils.createBase64(image)
             _ = snapshotterReference
             snapshotterReference = nil
-            resolver(value)
+            resolver(value.absoluteString)
           case .failure(let error):
             _ = snapshotterReference
             snapshotterReference = nil
