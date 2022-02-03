@@ -355,5 +355,12 @@ extension RCTMGLMapView {
   }
 }
 
+// MARK: - queryTerrainElevation
+
+extension RCTMGLMapView {
+  func queryTerrainElevation(coordinates: [NSNumber]) -> Double? {
+    return self.mapboxMap.elevation(at: CLLocationCoordinate2D(latitude: coordinates[1].doubleValue, longitude: coordinates[0].doubleValue))
+  }
+}
 
 
