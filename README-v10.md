@@ -163,7 +163,9 @@ IOS:
 - [ ] takeSnap
   - [x] ios
   - [ ] android
-
+- [x] queryTerrainElevation (v10)
+  - [x] ios
+  - [x] android
 ## Annotations
 - [x] PointAnnotation
   - [x] ios
