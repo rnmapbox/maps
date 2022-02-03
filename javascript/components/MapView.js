@@ -549,7 +549,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
    */
   async queryTerrainElevation(coordinate) {
     const res = await this._runNativeCommand('queryTerrainElevation',this._nativeRef,  [coordinate])
-    return res;
+    return res.data;
   }
 
   /**

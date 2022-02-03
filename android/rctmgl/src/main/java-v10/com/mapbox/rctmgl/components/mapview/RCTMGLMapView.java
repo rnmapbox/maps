@@ -106,6 +106,7 @@ import com.mapbox.rctmgl.components.styles.sources.RCTMGLShapeSource;
 */
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
 import com.mapbox.rctmgl.components.styles.terrain.RCTMGLTerrain;
+import com.mapbox.rctmgl.events.AndroidCallbackEvent;
 import com.mapbox.rctmgl.events.IEvent;
 import com.mapbox.rctmgl.events.MapChangeEvent;
 import com.mapbox.rctmgl.events.constants.EventTypes;
@@ -854,6 +855,16 @@ public class RCTMGLMapView extends MapView implements OnMapClickListener {
         if (mLocationComponentManager != null) {
             mLocationComponentManager.tintColorChanged();
         }
+    }
+
+    public void queryTerrainElevation(String callbackID, double longitude, double latitude) {
+        Double result = mMap.getElevation(Point.fromLngLat(longitude,latitude));
+
+        WritableMap payload = new WritableNativeMap();
+        payload.putDouble("data", result);
+
+        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
+        mManager.handleEvent(event);
     }
 
 }

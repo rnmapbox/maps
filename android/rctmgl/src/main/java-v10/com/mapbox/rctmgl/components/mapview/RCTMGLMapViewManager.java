@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 
+import com.facebook.react.bridge.NativeArray;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -19,6 +20,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.maps.MapboxMap;
 
 import com.mapbox.rctmgl.components.AbstractEventEmitter;
+import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotation;
 import com.mapbox.rctmgl.events.constants.EventKeys;
 /*
 import com.mapbox.rctmgl.events.constants.EventKeys;
@@ -228,6 +230,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
     public static final int METHOD_SET_HANDLED_MAP_EVENTS = 10;
     public static final int METHOD_SHOW_ATTRIBUTION = 11;
     public static final int METHOD_SET_SOURCE_VISIBILITY = 12;
+    public static final int METHOD_QUERY_TERRAIN_ELEVATION = 13;
 
     @Nullable
     @Override
@@ -244,6 +247,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
                 .put( "setHandledMapChangedEvents", METHOD_SET_HANDLED_MAP_EVENTS)
                 .put("showAttribution", METHOD_SHOW_ATTRIBUTION)
                 .put("setSourceVisibility", METHOD_SET_SOURCE_VISIBILITY)
+                .put("queryTerrainElevation", METHOD_QUERY_TERRAIN_ELEVATION)
                 .build();
     }
 
@@ -255,7 +259,13 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
 //            mapView.enqueuePreRenderMapMethod(commandID, args);
             return;
         }
-/*
+
+        switch (commandID) {
+            case METHOD_QUERY_TERRAIN_ELEVATION:
+                ReadableArray coords = args.getArray(1);
+                mapView.queryTerrainElevation(args.getString(0), coords.getDouble(0), coords.getDouble(1));
+        }
+       /*
         switch (commandID) {
             case METHOD_QUERY_FEATURES_POINT:
                 mapView.queryRenderedFeaturesAtPoint(
