@@ -32,4 +32,28 @@ class RCTMGLMapViewManager: RCTViewManager {
         resolver(["uri": uri.absoluteString])
       }
     }
+  
+    @objc
+    func queryTerrainElevation(_ reactTag: NSNumber,
+                               coordinates: [NSNumber],
+                               resolver: @escaping RCTPromiseResolveBlock,
+                               rejecter: @escaping RCTPromiseRejectBlock
+    ) -> Void {
+      self.bridge.uiManager.addUIBlock { (manager, viewRegistry) in
+        let view = viewRegistry![reactTag]
+        
+        guard let view = view! as? RCTMGLMapView else {
+          RCTLogError("Invalid react tag, could not find RCTMGLMapView");
+          rejecter("queryTerrainElevation", "Unknown find reactTag: \(reactTag)", nil)
+          return;
+        }
+        
+        let result = view.queryTerrainElevation(coordinates: coordinates)
+        if let result = result {
+          resolver(NSNumber(value: result))
+        } else {
+          resolver(nil)
+        }
+      }
+    }
 }

@@ -180,6 +180,16 @@ const center = await this._map.getCenter();
 ```
 
 
+#### queryTerrainElevation(coordinate)
+
+Queries the currently loaded data for elevation at a geographical location. <br/>The elevation is returned in meters relative to mean sea-level. <br/>Returns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `coordinate` | `n/a` | `Yes` | undefined |
+
+
 #### setSourceVisibility(visible, sourceId[, sourceLayerId])
 
 Sets the visibility of all the layers referencing the specified `sourceLayerId` and/or `sourceId`

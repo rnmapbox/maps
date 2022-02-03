@@ -12,4 +12,9 @@ RCT_EXTERN_METHOD(takeSnap:(nonnull NSNumber*)reactTag
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(queryTerrainElevation:(nonnull NSNumber*)reactTag
+                  coordinates: (nonnull NSArray<NSNumber>*)coordinates
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
 @end

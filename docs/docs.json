@@ -2816,6 +2816,21 @@
         ]
       },
       {
+        "name": "queryTerrainElevation",
+        "docblock": "Queries the currently loaded data for elevation at a geographical location. \nThe elevation is returned in meters relative to mean sea-level. \nReturns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.\n\n@param {*} visible \n@param {*} sourceId \n@param {*} sourceLayerId",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "coordinate"
+          }
+        ],
+        "returns": null,
+        "description": "Queries the currently loaded data for elevation at a geographical location. \nThe elevation is returned in meters relative to mean sea-level. \nReturns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.",
+        "examples": []
+      },
+      {
         "name": "setSourceVisibility",
         "docblock": "Sets the visibility of all the layers referencing the specified `sourceLayerId` and/or `sourceId`\n\n@example\nawait this._map.setSourceVisibility(false, 'composite', 'building')\n\n@param {boolean} visible - Visibility of the layers\n@param {String} sourceId - Identifier of the target source (e.g. 'composite')\n@param {String=} sourceLayerId - Identifier of the target source-layer (e.g. 'building')",
         "modifiers": [],
