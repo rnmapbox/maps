@@ -475,6 +475,15 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
             }
         });
 
+        mMap.addOnCameraMoveListener(new MapboxMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+                if (markerViewManager != null) {
+                    markerViewManager.updateMarkers();
+                }
+            }
+        });
+
         mMap.addOnMoveListener(new MapboxMap.OnMoveListener() {
             @Override
             public void onMoveBegin(MoveGestureDetector detector) {
