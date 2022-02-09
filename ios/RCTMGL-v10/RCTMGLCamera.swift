@@ -87,6 +87,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     var zoom : Double? = nil
     var pitch : Double? = nil
     var bearing : Double? = nil
+    var heading : Double? = nil
     
     if let durationParam = dictionary["duration"] as? Double {
       duration = durationParam
@@ -102,6 +103,11 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       camera.pitch = CGFloat(pitchParam)
     }
   
+    if let headingParam = dictionary["heading"] as? Double {
+      heading = headingParam
+      camera.bearing = CLLocationDirection(headingParam)
+    }
+
     if let bearingParam = dictionary["bearing"] as? Double {
       bearing = bearingParam
       camera.bearing = CLLocationDirection(bearingParam)

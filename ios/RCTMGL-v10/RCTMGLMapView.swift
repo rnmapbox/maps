@@ -364,3 +364,20 @@ extension RCTMGLMapView {
 }
 
 
+// MARK: - onMapReady
+extension RCTMGLMapView {
+  func onMapStyleLoaded(block: @escaping (MapboxMap) -> Void) {
+    guard let mapboxMap = mapboxMap else {
+      fatalError("mapboxMap is null")
+    }
+    
+    if mapboxMap.style.isLoaded {
+      block(mapboxMap)
+    } else {
+      mapboxMap.onNext(.styleLoaded) { _ in
+        block(mapboxMap)
+      }
+    }
+  }
+}
+

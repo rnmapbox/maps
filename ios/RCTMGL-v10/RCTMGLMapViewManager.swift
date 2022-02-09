@@ -50,7 +50,7 @@ class RCTMGLMapViewManager: RCTViewManager {
         
         let result = view.queryTerrainElevation(coordinates: coordinates)
         if let result = result {
-          resolver(NSNumber(value: result))
+          resolver(["data": NSNumber(value: result)])
         } else {
           resolver(nil)
         }
