@@ -8,9 +8,7 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
   func addToMap(_ map: RCTMGLMapView) {
     self.map = map
     let point = point()!
-    print("Frame: \(self.bounds)")
-    try! viewAnnotations()?.add(self, options: ViewAnnotationOptions.init(geometry: Geometry.point(point), width: self.bounds.width, height: self.bounds.height, associatedFeatureId: nil, allowOverlap: true, visible: true, anchor: .top, offsetX: 0, offsetY: 0, selected: false))
-    //self.map?.pointAnnotationManager.add(annotation)
+    try! viewAnnotations()?.add(self, options: ViewAnnotationOptions.init(geometry: Geometry.point(point), width: self.bounds.width, height: self.bounds.height, associatedFeatureId: nil, allowOverlap: true, visible: true, anchor: .center, offsetX: 0, offsetY: 0, selected: false))
   }
   
   func viewAnnotations() -> ViewAnnotationManager? {
@@ -24,16 +22,19 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
   
   override func reactSetFrame(_ frame: CGRect) {
     super.reactSetFrame(frame)
-    var options = ViewAnnotationOptions()
-    options.width = frame.size.width
-    options.height = frame.size.height
-    try? viewAnnotations()?.update(self, options: options)
-    print("Frame: \(self.bounds)")
+
+    _updateFrameOrAnchor()
   }
   
   @objc var coordinate : String? {
     didSet {
       _updateCoordinate()
+    }
+  }
+  
+  @objc var anchor : [String:NSNumber]? {
+    didSet {
+      _updateFrameOrAnchor()
     }
   }
   
@@ -65,6 +66,24 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
     var options = ViewAnnotationOptions()
     
     options.geometry = Geometry.point(point()!)
+    try? viewAnnotations()?.update(self, options: options)
+  }
+  
+  func _updateFrameOrAnchor() {
+    var options = ViewAnnotationOptions()
+    let defaultX : CGFloat = 0.5
+    let defaultY : CGFloat = 0.5
+    options.width = bounds.width
+    options.height = bounds.height
+    
+    if let anchor = anchor {
+      if let anchorX = anchor["x"] {
+        options.offsetX = bounds.width * (CGFloat(anchorX.floatValue) - defaultX)
+      }
+      if let anchorY = anchor["y"] {
+        options.offsetY = bounds.height * (CGFloat(anchorY.floatValue) - defaultY)
+      }
+    }
     try? viewAnnotations()?.update(self, options: options)
   }
 }

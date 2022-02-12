@@ -32,7 +32,7 @@ class RCTMGLShapeSource : RCTMGLSource {
     return GeoJSONSource.self
   }
 
-  func parseShape(_ shape: String) -> GeoJSONSourceData {
+  func parseShape(_ shape: String) throws -> GeoJSONSourceData {
     guard let data = shape.data(using: .utf8) else {
       fatalError("shape could not be converted to urf8 \(shape)")
     }
@@ -52,9 +52,14 @@ class RCTMGLShapeSource : RCTMGLSource {
         let feature = Feature(geometry: try JSONDecoder().decode(Geometry.self, from: data))
         return .feature(feature)
       } catch {
-        fatalError("Unexpected error: \(error) and \(origError) from \(shape)")
+        Logger.log(level: .error, message: "Unexpected error: \(error) and \(origError) from \(shape)")
+        throw error
       }
     }
+  }
+  
+  func emptyShape() -> GeoJSONSourceData {
+    return GeoJSONSourceData.featureCollection(FeatureCollection(features:[]))
   }
   
   override func makeSource() -> Source
@@ -62,7 +67,12 @@ class RCTMGLShapeSource : RCTMGLSource {
     var result =  GeoJSONSource()
     
     if let shape = shape {
-      result.data = parseShape(shape)
+      do {
+        result.data = try parseShape(shape)
+      } catch {
+        Logger.log(level: .error, message: "Unable to read shape: \(shape) setting it to empty")
+        result.data = emptyShape()
+      }
     }
     
     if let url = url {
