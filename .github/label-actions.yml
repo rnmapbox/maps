@@ -9,3 +9,9 @@
     :thinking: @{issue-author}, this is rather a question than an issue<br>please use our [discussions](https://github.com/react-native-mapbox-gl/maps/discussions) or [gitter](https://gitter.im/react-native-mapbox-gl/Lobby) or stackoverflow for this.
   # Close the issue
   close: true
+"stale":
+  comment: >
+    :thinking: @{issue-author}, closing the issue for lack of activity, if the issue still persist, pls open a new one with steps to reproduce on recent versions
+  # Close the issue
+  close: true
+
