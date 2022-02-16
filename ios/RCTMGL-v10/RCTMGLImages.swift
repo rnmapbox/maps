@@ -75,8 +75,11 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
   func addNativeImages(style: Style, nativeImages: [String]) {
     for imageName in nativeImages {
       if style.styleManager.getStyleImage(forImageId: imageName) == nil {
-        let image = UIImage(named: imageName)!
-        try! style.addImage(image, id: imageName, stretchX: [], stretchY: [])
+        if let image = UIImage(named: imageName) {
+          try! style.addImage(image, id: imageName, stretchX: [], stretchY: [])
+        } else {
+          Logger.log(level:.error, message: "Cannot find nativeImage named \(imageName)")
+        }
       }
     }
   }

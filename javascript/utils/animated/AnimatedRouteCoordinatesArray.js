@@ -9,16 +9,29 @@ import nearestPointOnLine from '@turf/nearest-point-on-line';
 import length from '@turf/length';
 
 import AnimatedCoordinatesArray from './AnimatedCoordinatesArray';
+
+const convertLength = convertLengthFn || convertDistanceFn;
+
+/**
+ * AnimatedRoutesCoordinatesArray - animates along route.
+ * By default start of route is start, and end of route animated from 100% of route to 0% or route.
+ * Eg we have full route to destination and as we're progressing the remaining route gets shorter and shorter.
+ */
 export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesArray {
   /**
    * Calculate initial state
    *
    * @param {*} args - to value from animate
+   * @param {} options - options, example 
    * @returns {object} - the state object
    */
-  onInitialState(coordinatesArray) {
+  onInitialState(coordinatesArray, options = null) {
+    let end = {from :0};
+    if (options && options.end) {
+      end = options.end;
+    }
     return {
-      fullRoute: coordinatesArray.map(coord => [coord[0], coord[1]]),
+      fullRoute: coordinatesArray.map((coord) => [coord[0], coord[1]]),
       end: {from: 0},
     };
   }
@@ -44,6 +57,7 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
     const {fullRoute, end} = state;
     const currentEnd = end.from * (1.0 - progress) + progress * end.to;
 
+    // console.log("Current end:", end, currentEnd);
     let prevsum = 0;
     let actsum = 0;
     let i = fullRoute.length - 1;
@@ -63,6 +77,7 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
     const r = (currentEnd - prevsum) / (actsum - prevsum);
     const or = 1.0 - r;
 
+    // console.log("i", i+1);
     const actRoute = [
       ...fullRoute.slice(0, i + 1),
       [
@@ -82,6 +97,7 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
    */
   onStart(state, toValue) {
     const {fullRoute, end} = state;
+    console.log("END", end, "STATE", state, "TO", toValue);
     let toDist;
     if (!toValue.end) {
       console.error(
@@ -119,6 +135,7 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
         to: toDist,
       },
     };
+    console.log("RET:", result);
     return result;
   }
 

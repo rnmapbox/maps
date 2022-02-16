@@ -1,4 +1,5 @@
 import MapboxMaps
+import Foundation
 
 func deg2rad(_ number: Double) -> Double {
     return number * .pi / 180
@@ -135,19 +136,20 @@ class RCTMGLStyleValue {
   func mglStyleValueNumber() -> Value<Double> {
     if let value = value as? Dictionary<String,Any> {
       let value = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
-      print("~~~ after-convert: \(value) \(type(of: value))")
       
-      if let num = value as? Int {
-        return Value.constant(Double(num))
+      if let num = value as? NSNumber {
+        return Value.constant(Double(num.doubleValue))
       } else if let num = value as? Double {
         return Value.constant(Double(num))
+      } else if let num = value as? Int {
+        return Value.constant(Double(num))
+      } else {
+        Logger.log(level:.error, message: "mglStyleValueNumber: Cannot convert \(value) to double")
       }
 
       let data = try! JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
       
-      print("~~~ data: \(data)")
       let decodedExpression = try! JSONDecoder().decode(Expression.self, from: data)
-      print("~~~ decodedExpression: \(decodedExpression)")
       return Value.expression(decodedExpression)
     } else {
       return Value.constant(1.0)
@@ -188,7 +190,6 @@ class RCTMGLStyleValue {
     //return Value.constant(ColorRepresentable(color: UIColor.black))
     if let value = value as? Dictionary<String,Any> {
       let value = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
-      print("~~~ after-convert: \(value) \(type(of:value))")
       
       if let num = value as? Int {
         let uicolor = uicolor(num)
@@ -197,9 +198,7 @@ class RCTMGLStyleValue {
       
       let data = try! JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
 
-      print("~~~ data color: \(data)")
       let decodedExpression = try! JSONDecoder().decode(Expression.self, from: data)
-      print("~~~ decodedExpression color: \(decodedExpression)")
       return Value.expression(decodedExpression)
     } else {
       return Value.constant(StyleColor(UIColor.red))
@@ -316,6 +315,7 @@ class RCTMGLStyleValue {
     if let array = styleObject as? [NSNumber] {
       var result = array.map { $0.doubleValue }
       result[0] = deg2rad(result[0])
+      print("REturning: \(result)")
       return result
     }
     Logger.log(level: .error, message: "Expected array of numbers as position received: \(styleObject)")

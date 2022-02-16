@@ -4,8 +4,6 @@ import MapboxMaps
 class RCTMGLRasterLayer: RCTMGLLayer {
   typealias LayerType = RasterLayer
 
-  
-  
   override func makeLayer(style: Style) throws -> Layer {
     // let source : ImageSource = try self.sourceWithSourceID(in: style)
     var layer = LayerType(id: self.id!)
@@ -13,6 +11,13 @@ class RCTMGLRasterLayer: RCTMGLLayer {
     return layer
   }
 
+  override func apply(style : Style) {
+    try! style.updateLayer(withId: id, type: RasterLayer.self) { (layer : inout RasterLayer) in
+      if let styleLayer = self.styleLayer as? RasterLayer {
+        layer = styleLayer
+      }
+    }
+  }
  
   override func addStyles() {
     if let style : Style = self.style {
@@ -26,6 +31,7 @@ class RCTMGLRasterLayer: RCTMGLLayer {
           applyUpdater:{ (updater) in try! style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout LayerType) in updater(&layer) }},
           isValid: { return self.isAddedToMap() }
         )
+        self.styleLayer = styleLayer
       } else {
        fatalError("[xxx] layer is not raster layer?!!! \(self.styleLayer)")
      }
