@@ -2,10 +2,8 @@ require 'json'
 
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
-$RNMBGL_USE_V10 = true
-
 if $RNMBGL_USE_V10
-  default_ios_mapbox_version = '~> 10.2.0'
+  default_ios_mapbox_version = '~> 10.3.0'
 else
   default_ios_mapbox_version = '~> 5.9.0'
 end

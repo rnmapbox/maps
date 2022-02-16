@@ -3,7 +3,6 @@ import Turf
 
 @objc
 class RCTMGLShapeSource : RCTMGLSource {
-
   @objc var url : String?
 
   @objc var shape : String? {

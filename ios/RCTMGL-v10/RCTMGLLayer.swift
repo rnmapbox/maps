@@ -13,7 +13,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   @objc var reactStyle : Dictionary<String, Any>? = nil {
     didSet {
       DispatchQueue.main.async {
-        self.addStyles()
+        self.addStylesAndUpdate()
       }
     }
   }
@@ -67,9 +67,22 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
       self.insert(style, layerPosition: position())
     }
   }
-    
+   
+  /**
+    addStyles - adds the styles defined by reactStyle to the current layer, but does not apply to the style to the map style
+   */
   func addStyles() {
     fatalError("Subclasses need to implement the `addStyles()` method.")
+  }
+  
+  func addStylesAndUpdate() {
+    addStyles()
+    if let style = style,
+       let map = map {
+      if style.styleManager.styleLayerExists(forLayerId: id) {
+        self.updateLayer(map)
+      }
+    }
   }
   
   func makeLayer(style: Style) throws -> Layer {
@@ -128,7 +141,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   
   func addToMap(_ map: RCTMGLMapView) {
     //
-    print("::addToMap[]")
+    print("## layer.addToMap \(self)")
     self.map = map
   }
   
@@ -140,7 +153,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     self.map = map
     self.style = style
     guard let id = id else {
-      RCTLogError("Cannot add layer without id to the map: \(map)")
+      Logger.log(level: .error, message: "Cannot add layer without id to the map: \(map)")
       return
     }
 
