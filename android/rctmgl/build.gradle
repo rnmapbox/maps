@@ -68,8 +68,8 @@ dependencies {
 
     // Mapbox SDK
     customizableDependencies('rnmbglMapboxLibs') {
-        if (safeExtGet("mapboxV10", true)) {
-            implementation 'com.mapbox.maps:android:10.2.0'
+        if (safeExtGet("mapboxV10", false)) {
+            implementation 'com.mapbox.maps:android:10.3.0'
         } else {
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.1.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.1.0'
