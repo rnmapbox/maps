@@ -68,15 +68,11 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
      * is enabled, aggregating values from clustered points.
      *
      * Has the form `{ "property_name": [operator, map_expression]}`, where
-     *  `operator` is any expression function that accepts at least 2 operands (e.g. `"+"` or `"max"`) -
+     *  `operator` is a custom reduce expression that references a special `["accumulated"]` value -
      *   it accumulates the property value from clusters/points the cluster contains
      *  `map_expression` produces the value of a single point
-     *   Example: `{ "sum": ["+", ["get", "scalerank"]] }`
      *
-     * Example: `{ "sum": ["+", ["get", "scalerank"]] }`
-     * For more advanced use cases, in place of `operator`, you can use a custom reduce expression
-     * that references a special `["accumulated"]` value, e.g.:
-     * `{ "sum": [["+", ["accumulated"], ["get", "sum"]], ["get", "scalerank"]] }`
+     * Example: `{ "resultingSum": [["+", ["accumulated"], ["get", "resultingSum"]], ["get", "scalerank"]] }`
      *
      */
     clusterProperties: PropTypes.object,
