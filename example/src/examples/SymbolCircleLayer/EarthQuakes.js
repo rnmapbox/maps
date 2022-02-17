@@ -4,6 +4,7 @@ import {Overlay, ListItem, FAB, Icon} from 'react-native-elements';
 import MapboxGL from '@rnmapbox/maps';
 import moment from 'moment';
 
+import earthQuakesJSON from '../../assets/earthquakes.json';
 import sheet from '../../styles/sheet';
 import {SF_OFFICE_COORDINATE} from '../../utils';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
@@ -132,7 +133,7 @@ class EarthQuakes extends React.Component {
               cluster
               clusterRadius={50}
               clusterMaxZoom={14}
-              url="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson">
+              shape={earthQuakesJSON}>
               <MapboxGL.SymbolLayer
                 id="pointCount"
                 style={layerStyles.clusterCount}
