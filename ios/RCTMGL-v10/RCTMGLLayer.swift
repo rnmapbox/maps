@@ -128,20 +128,17 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   }
   
   func layerWithSourceID<T : Source>(in style: Style) throws -> T  {
-    print("=> sourceID: \(self.sourceID ?? "n/a")")
     let result = try style.source(withId: self.sourceID!, type: T.self)
     return result as! T
   }
 
   func sourceWithSourceID<T : Source>(in style: Style) throws -> T  {
-    print("=> sourceID: \(self.sourceID ?? "n/a")")
     let result = try style.source(withId: self.sourceID!, type: T.self)
     return result as! T
   }
   
   func addToMap(_ map: RCTMGLMapView) {
     //
-    print("## layer.addToMap \(self)")
     self.map = map
   }
   
@@ -158,11 +155,20 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     }
 
     var add = false
-    if (style.styleManager.styleLayerExists(forLayerId: id)) {
-      self.styleLayer = try? self.findLayer(style: style, id: id)
-    } else {
-      self.styleLayer = try? self.makeLayer(style: style)
-      add = true
+    do {
+      if (style.styleManager.styleLayerExists(forLayerId: id)) {
+        self.styleLayer = try self.findLayer(style: style, id: id)
+      } else {
+        self.styleLayer = try self.makeLayer(style: style)
+        add = true
+      }
+    } catch {
+      Logger.log(level: .error, message: "find/makeLayer failed for layer id=\(id)", error: error)
+    }
+    
+    guard self.styleLayer != nil else {
+      Logger.log(level: .error, message: "find/makeLayer retuned nil for layer id=\(id)")
+      return
     }
     self.setOptions(&self.styleLayer!)
     self.addStyles()
