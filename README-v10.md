@@ -79,6 +79,7 @@ code ios/Podfile
 
 
 code android/app/build.gradle
+```
 # add the following:
 android {
     packagingOptions {
@@ -88,11 +89,28 @@ android {
         pickFirst 'lib/armeabi-v7a/libc++_shared.so'
     }
 }
+```
+
+code android/build.gralde
+```
+buildscript {
+    ext {
+      ...
+      mapboxV10 = true
+    }
+}
+```
 
 code ios/Podfile
 # change these
-platform :ios, '13.0'
+```
+  $USE_V10 = true
 
+  platform :ios, '13.0'
+
+  ...
+
+  ...
 
   pre_install do |installer|
     $RNMBGL.pre_install(installer)
@@ -102,7 +120,7 @@ platform :ios, '13.0'
     react_native_post_install(installer)
     $RNMBGL.post_install(installer)
   end
-
+```
 
 
 # on RN 0.60 only:
@@ -116,6 +134,10 @@ npx react-native run-android
 IOS:
 
  * Add $(SDKROOT)/usr/lib/swift to Libary search paths.
+
+## Progress
+
+
 
 
 # Progress:
