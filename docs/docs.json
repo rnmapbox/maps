@@ -2817,17 +2817,22 @@
       },
       {
         "name": "queryTerrainElevation",
-        "docblock": "Queries the currently loaded data for elevation at a geographical location. \nThe elevation is returned in meters relative to mean sea-level. \nReturns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.\n\n@param {*} visible \n@param {*} sourceId \n@param {*} sourceLayerId",
+        "docblock": "Queries the currently loaded data for elevation at a geographical location.\nThe elevation is returned in meters relative to mean sea-level.\nReturns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.\n\n@param {*} coordinate",
         "modifiers": [
           "async"
         ],
         "params": [
           {
-            "name": "coordinate"
+            "name": "coordinate",
+            "description": null,
+            "type": {
+              "name": "mixed"
+            },
+            "optional": false
           }
         ],
         "returns": null,
-        "description": "Queries the currently loaded data for elevation at a geographical location. \nThe elevation is returned in meters relative to mean sea-level. \nReturns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.",
+        "description": "Queries the currently loaded data for elevation at a geographical location.\nThe elevation is returned in meters relative to mean sea-level.\nReturns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.",
         "examples": []
       },
       {

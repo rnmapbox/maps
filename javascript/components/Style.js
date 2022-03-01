@@ -203,6 +203,7 @@ const Style = props => {
 
   // Fetch style when props.json is a URL
   useEffect(() => {
+    // eslint-disable-next-line no-undef
     const abortController = new AbortController();
     const fetchStyleJson = async () => {
       try {

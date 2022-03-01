@@ -26,10 +26,7 @@ class Terrain extends React.PureComponent {
      * Optional number between 0 and 1000 inclusive. Defaults to 1. Supports interpolateexpressions. Transitionable.
      * Exaggerates the elevation of the terrain by multiplying the data from the DEM with this value.
      */
-    exaggeration: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.array,
-    ])
+    exaggeration: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
   };
 
   static defaultProps = {
@@ -39,7 +36,7 @@ class Terrain extends React.PureComponent {
   get baseProps() {
     return {
       ...this.props,
-      sourceID: this.props.sourceID
+      sourceID: this.props.sourceID,
     };
   }
 
@@ -48,7 +45,6 @@ class Terrain extends React.PureComponent {
       ...this.baseProps,
       sourceID: this.props.sourceID,
     };
-    console.log(`++> props: ${props} [] `, props);
     return <RCTMGLTerrain ref="nativeLayer" {...props} />;
   }
 }

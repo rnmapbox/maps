@@ -73,12 +73,8 @@ class SkyLayer extends AbstractLayer {
   }
 }
 
-const RCTMGLSkyLayer = requireNativeComponent(
-  NATIVE_MODULE_NAME,
-  SkyLayer,
-  {
-    nativeOnly: {reactStyle: true},
-  },
-);
+const RCTMGLSkyLayer = requireNativeComponent(NATIVE_MODULE_NAME, SkyLayer, {
+  nativeOnly: {reactStyle: true},
+});
 
 export default SkyLayer;
