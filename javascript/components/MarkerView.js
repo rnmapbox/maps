@@ -81,8 +81,6 @@ class MarkerView extends React.PureComponent {
   }
 }
 
-console.log('### MapboxGL.MapboxV10', MapboxGL.MapboxV10);
-
 const RCTMGLMarkerView =
   Platform.OS === 'android'
     ? requireNativeComponent(NATIVE_MODULE_NAME, MarkerView, {})
