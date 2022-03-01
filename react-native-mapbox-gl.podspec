@@ -118,7 +118,6 @@ Pod::Spec.new do |s|
       sp.public_header_files = 'ios/RCTMGL-v10/Bridge/*.h'
     else
       sp.source_files	= "ios/RCTMGL/**/*.{h,m}"
-      sp.source_files	= "ios/RCTMGL/**/*.{h,m}"
       if $RNMGL_USE_MAPLIBRE
         sp.compiler_flags = '-DRNMGL_USE_MAPLIBRE=1'
       end

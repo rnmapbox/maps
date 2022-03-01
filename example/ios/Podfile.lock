@@ -541,7 +541,7 @@ SPEC CHECKSUMS:
   React-jsi: 67747b9722f6dab2ffe15b011bcf6b3f2c3f1427
   React-jsiexecutor: 80c46bd381fd06e418e0d4f53672dc1d1945c4c3
   React-jsinspector: cc614ec18a9ca96fd275100c16d74d62ee11f0ae
-  react-native-mapbox-gl: 73cd6413793aa784a9e1cb5a3b20ce5802bdb7e5
+  react-native-mapbox-gl: e3787f9278d4ce60a409254ed772f5fa1a4614fd
   react-native-safe-area-context: 61c8c484a3a9e7d1fda19f7b1794b35bbfd2262a
   React-perflogger: 25373e382fed75ce768a443822f07098a15ab737
   React-RCTActionSheet: af7796ba49ffe4ca92e7277a5d992d37203f7da5
@@ -564,6 +564,6 @@ SPEC CHECKSUMS:
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: e12004e0ec742699a098df3a620222ba5ffb4b1d
+PODFILE CHECKSUM: 2b2b81e56e0a06ef5fffd0d4e090e8165a248023
 
 COCOAPODS: 1.10.1
