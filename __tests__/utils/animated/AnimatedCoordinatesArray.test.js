@@ -9,6 +9,7 @@ import AnimatedShape from '../../../javascript/utils/animated/AnimatedShape';
 import ShapeSource from '../../../javascript/components/ShapeSource';
 
 let clock = null;
+let oldNodeEnv = null;
 
 beforeAll(() => {
   clock = FakeTimers.install();
@@ -21,13 +22,23 @@ beforeAll(() => {
     clock._requestedAnimationFrames = [];
     oldRAF.forEach(cb => cb(Date.now()));
   };
+
+  // animated will not call nativeProps in test mode
+  // https://github.com/facebook/react-native/blob/34d3373bb0f7ee405292bf993163f29759ba5205/Libraries/Animated/createAnimatedComponent.js#L150-L156
+  oldNodeEnv = process.env.NODE_ENV;
+  process.env.NODE_ENV = 'dev';
 });
 
 afterAll(() => {
+  process.env.NODE_ENV = oldNodeEnv;
   clock.uninstall();
 });
 
 const AnimatedShapeSource = Animated.createAnimatedComponent(ShapeSource);
+
+function _nativeRef(ref) {
+  return ref._nativeRef;
+}
 
 describe('AnimatedShapeSource', () => {
   test('testSetNativeProps', () => {
@@ -46,7 +57,7 @@ describe('AnimatedShapeSource', () => {
       />,
     );
     const setNativeProps = jest.fn();
-    shapeSourceRef._component._nativeRef.setNativeProps = setNativeProps;
+    _nativeRef(shapeSourceRef).setNativeProps = setNativeProps;
 
     coordinates
       .timing({
@@ -95,7 +106,7 @@ describe('AnimatedShapeSource', () => {
       />,
     );
     const setNativeProps = jest.fn();
-    shapeSourceRef._component._nativeRef.setNativeProps = setNativeProps;
+    _nativeRef(shapeSourceRef).setNativeProps = setNativeProps;
 
     coordinates
       .timing({
@@ -147,7 +158,7 @@ describe('AnimatedShapeSource', () => {
       />,
     );
     const setNativeProps = jest.fn();
-    shapeSourceRef._component._nativeRef.setNativeProps = setNativeProps;
+    _nativeRef(shapeSourceRef).setNativeProps = setNativeProps;
 
     coordinates
       .timing({
