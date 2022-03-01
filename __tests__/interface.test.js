@@ -29,12 +29,15 @@ describe('Public Interface', () => {
       'SymbolLayer',
       'BackgroundLayer',
       'RasterLayer',
+      'SkyLayer',
+      'Terrain',
 
       // sources
       'VectorSource',
       'ShapeSource',
       'RasterSource',
       'ImageSource',
+      'RasterDemSource',
       'Images',
 
       // constants
