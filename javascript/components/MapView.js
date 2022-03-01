@@ -539,16 +539,18 @@ class MapView extends NativeBridgeComponent(React.Component) {
   }
 
   /**
-   * Queries the currently loaded data for elevation at a geographical location. 
-   * The elevation is returned in meters relative to mean sea-level. 
+   * Queries the currently loaded data for elevation at a geographical location.
+   * The elevation is returned in meters relative to mean sea-level.
    * Returns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.
-   * 
-   * @param {*} visible 
-   * @param {*} sourceId 
-   * @param {*} sourceLayerId 
+   *
+   * @param {*} coordinate
    */
   async queryTerrainElevation(coordinate) {
-    const res = await this._runNativeCommand('queryTerrainElevation',this._nativeRef,  [coordinate])
+    const res = await this._runNativeCommand(
+      'queryTerrainElevation',
+      this._nativeRef,
+      [coordinate],
+    );
     return res.data;
   }
 

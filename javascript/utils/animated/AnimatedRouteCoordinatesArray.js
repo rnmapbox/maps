@@ -22,16 +22,16 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
    * Calculate initial state
    *
    * @param {*} args - to value from animate
-   * @param {} options - options, example 
+   * @param {} options - options, example
    * @returns {object} - the state object
    */
   onInitialState(coordinatesArray, options = null) {
-    let end = {from :0};
+    let end = {from: 0};
     if (options && options.end) {
       end = options.end;
     }
     return {
-      fullRoute: coordinatesArray.map((coord) => [coord[0], coord[1]]),
+      fullRoute: coordinatesArray.map(coord => [coord[0], coord[1]]),
       end: {from: 0},
     };
   }
@@ -97,7 +97,6 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
    */
   onStart(state, toValue) {
     const {fullRoute, end} = state;
-    console.log("END", end, "STATE", state, "TO", toValue);
     let toDist;
     if (!toValue.end) {
       console.error(
@@ -135,7 +134,6 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
         to: toDist,
       },
     };
-    console.log("RET:", result);
     return result;
   }
 

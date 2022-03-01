@@ -6,18 +6,18 @@ import {cloneReactChildrenWithProps, viewPropTypes} from '../utils';
 
 import AbstractSource from './AbstractSource';
 
-const isTileTemplateUrl = (url) =>
+const isTileTemplateUrl = url =>
   url &&
   (url.includes('{z}') || url.includes('{bbox-') || url.includes('{quadkey}'));
 
 const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLRasterDemSource';
-  
+
 class RasterDemSource extends AbstractSource {
   static propTypes = {
     ...viewPropTypes,
-  
+
     /**
      * A string that uniquely identifies the source.
      */
@@ -27,7 +27,7 @@ class RasterDemSource extends AbstractSource {
      * A URL to a TileJSON configuration file describing the source’s contents and other metadata.
      */
     url: PropTypes.string,
-   
+
     /**
      * An array of tile URL templates. If multiple endpoints are specified, clients may use any combination of endpoints.
      * Example: https://example.com/raster-tiles/{z}/{x}/{y}.png
@@ -96,7 +96,7 @@ class RasterDemSource extends AbstractSource {
       </RCTMGLRasterDemSource>
     );
   }
-};
+}
 
 const RCTMGLRasterDemSource = requireNativeComponent(
   NATIVE_MODULE_NAME,
