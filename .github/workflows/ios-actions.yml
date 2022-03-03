@@ -9,6 +9,8 @@ on:
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
+      MAPBOX_DOWNLOAD_TOKEN:
+        required: true
 
 jobs:
   build:
@@ -37,7 +39,7 @@ jobs:
         run: yarn install --network-timeout 1000000
 
       - name: Install Pod Dependencies
-        run: cd ios && pod --version && pod install
+        run: cd ios && pod --version && pod update RCT-Folly --no-repo-update && pod install
 
       - name: Install Detox Dependencies
         run: |
