@@ -49,6 +49,7 @@ jobs:
       NVMRC: ${{ needs.lint_test_generate.outputs.NVMRC }}
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
 
   publish:
     if: startsWith(github.ref, 'refs/tags/')
