@@ -37,7 +37,7 @@ jobs:
         run: yarn install --network-timeout 1000000
 
       - name: Install Pod Dependencies
-        run: cd ios && pod install
+        run: cd ios && pod --version && pod install
 
       - name: Install Detox Dependencies
         run: |
