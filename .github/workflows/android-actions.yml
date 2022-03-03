@@ -12,7 +12,6 @@ on:
       MAPBOX_DOWNLOAD_TOKEN:
         required: true
 
-
 jobs:
   build_example:
     runs-on: ubuntu-latest
