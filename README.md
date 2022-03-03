@@ -214,4 +214,4 @@ Example:
 
 ## Developer Group
 
-Have a question or need some help? Join our [Gitter developer group](https://gitter.im/react-native-mapbox-gl/Lobby)!
+Have a question or need some help? Join our [Gitter developer group](https://gitter.im/rnmapbox/Lobby)!
