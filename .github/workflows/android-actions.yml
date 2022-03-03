@@ -9,6 +9,9 @@ on:
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
+      MAPBOX_DOWNLOAD_TOKEN:
+        required: true
+
 
 jobs:
   build_example:
@@ -27,6 +30,11 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '11'
+
+      - run: echo MAPBOX_DOWNLOADS_TOKEN=$MAPBOX_DOWNLOAD_TOKEN > ~/.gradle/gradle.properties
+        working-directory: example
+        env:
+          MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
 
       - run: echo $MAPBOX_ACCESS_TOKEN > ./accesstoken
         working-directory: example
