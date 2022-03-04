@@ -351,6 +351,9 @@ global.replaceNewLine = function(str) {
   if (str === undefined) {
     return undefined;
   }
+  if (str === null) {
+    return null;
+  }
   return str.replace(/\n/g, '<br/>');
 };
 
