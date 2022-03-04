@@ -6,6 +6,16 @@ on:
       NVMRC:
         required: true
         type: string
+      V10:
+        description: "Build example with Mapbox v10"
+        type: boolean
+        required: false
+        default: false
+      MAPLIBRE:
+        description: "Build example with MapLibre"
+        type: boolean
+        required: false
+        default: false
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
