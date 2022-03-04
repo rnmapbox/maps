@@ -38,6 +38,17 @@ jobs:
     uses: ./.github/workflows/android-actions.yml
     with:
       NVMRC: ${{ needs.lint_test_generate.outputs.NVMRC }}
+      V10: true
+    secrets:
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
+
+  call_android_workflow:
+    needs: lint_test_generate
+    uses: ./.github/workflows/android-actions.yml
+    with:
+      NVMRC: ${{ needs.lint_test_generate.outputs.NVMRC }}
+      MAPLIBRE: true
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
@@ -47,6 +58,17 @@ jobs:
     uses: ./.github/workflows/ios-actions.yml
     with:
       NVMRC: ${{ needs.lint_test_generate.outputs.NVMRC }}
+      V10: true
+    secrets:
+      MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+      MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
+
+  call_ios_workflow:
+    needs: lint_test_generate
+    uses: ./.github/workflows/ios-actions.yml
+    with:
+      NVMRC: ${{ needs.lint_test_generate.outputs.NVMRC }}
+      MAPLIBRE: true
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}

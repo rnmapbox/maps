@@ -1,15 +1,21 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-$RNMBGL_USE_V10 = true
+if ENV["V10"] == "true"
+  $RNMBGL_USE_V10 = true
+  useMapLibre = false
+end
+
+if ENV["MAPLIBRE"] == "true"
+  useMapLibre = true
+  $RNMBGL_USE_V10 = false
+end
 
 if $RNMBGL_USE_V10
   platform :ios, '13.0'
 else
   platform :ios, '11.0'
 end
-
-useMapLibre = false
 
 if useMapLibre
   $RNMBGL_Use_SPM = {

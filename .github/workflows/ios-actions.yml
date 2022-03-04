@@ -6,6 +6,16 @@ on:
       NVMRC:
         required: true
         type: string
+      V10:
+        description: "Build example against Mapbox v10"
+        type: boolean
+        required: false
+        default: false
+      MAPLIBRE:
+        description: "Build example against MapLibre"
+        type: boolean
+        required: false
+        default: false
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
@@ -49,6 +59,9 @@ jobs:
 
       - name: Install Pod Dependencies
         run: cd ios && pod --version && pod update RCT-Folly --no-repo-update && pod install
+        env:
+          V10: ${{ inputs.V10 }}
+          MAPLIBRE: ${{ inputs.MAPLIBRE }}
 
       - name: Install Detox Dependencies
         run: |
