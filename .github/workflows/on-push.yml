@@ -43,7 +43,7 @@ jobs:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
 
-  call_android_workflow:
+  call_maplibre_android_workflow:
     needs: lint_test_generate
     uses: ./.github/workflows/android-actions.yml
     with:
@@ -63,7 +63,7 @@ jobs:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
 
-  call_ios_workflow:
+  call_maplibre_ios_workflow:
     needs: lint_test_generate
     uses: ./.github/workflows/ios-actions.yml
     with:
