@@ -11,6 +11,11 @@ if ENV["MAPLIBRE"] == "true"
   $RNMBGL_USE_V10 = false
 end
 
+if ENV["V10"].nil? && ENV["MAPLIBRE"].nil?
+  useMapLibre = true
+  $RNMBGL_USE_V10 = false
+end
+
 if $RNMBGL_USE_V10
   platform :ios, '13.0'
 else
@@ -22,11 +27,11 @@ if useMapLibre
     url: "https://github.com/maplibre/maplibre-gl-native-distribution",
     requirement: {
       kind: "upToNextMajorVersion",
-      minimumVersion: "5.11.0"
+      minimumVersion: "5.12.1"
     },
     product_name: "Mapbox"
   }
-  $RNMGL_USE_MAPLIBRE = true
+  $RNMBGL_USE_MAPLIBRE = true
 end
 
 # We ingore warning except for RNMBGL
@@ -56,7 +61,7 @@ target 'RNMapboxGLExample' do
   )
 
   # default version
-  pod 'react-native-mapbox-gl', :path => '../../', :inhibit_warnings => false
+  pod 'react-native-mapbox', :path => '../../', :inhibit_warnings => false
 
   use_native_modules!
 

@@ -72,7 +72,7 @@ If you want to use that, simply add this to your `ios/Podfile`
 
 ```ruby
 $RNMBGL_Use_SPM = true
-$RNMGL_USE_MAPLIBRE = true
+$RNMBGL_USE_MAPLIBRE = true
 ```
 
 If you want to adjust/ edit your MapLibre version you can also pass a hash

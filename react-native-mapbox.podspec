@@ -2,10 +2,14 @@ require 'json'
 
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
+
+default_ios_mapbox_v10_version = '~> 10.3.0'
+default_ios_mapbox_gl_version = '~> 5.9.0'
+
 if $RNMBGL_USE_V10
-  default_ios_mapbox_version = '~> 10.3.0'
+  default_ios_mapbox_version = default_ios_mapbox_v10_version
 else
-  default_ios_mapbox_version = '~> 5.9.0'
+  default_ios_mapbox_version = default_ios_mapbox_gl_version
 end
 
 
@@ -58,7 +62,7 @@ def $RNMBGL.post_install(installer)
     project = installer.pods_project
     self._add_spm_to_target(
       project,
-      project.targets.find { |t| t.name == "react-native-mapbox-gl"},
+      project.targets.find { |t| t.name == "react-native-mapbox"},
       spm_spec[:url],
       spm_spec[:requirement],
       spm_spec[:product_name]
@@ -91,12 +95,12 @@ def $RNMBGL.pre_install(installer)
 end
 
 Pod::Spec.new do |s|
-  s.name		= "react-native-mapbox-gl"
-  s.summary		= "React Native Component for Mapbox GL"
+  s.name		= "react-native-mapbox"
+  s.summary		= "React Native Component for Mapbox"
   s.version		= package['version']
-  s.authors		= { "Nick Italiano" => "ni6@njit.edu" }
-  s.homepage    	= "https://github.com/@react-native-mapbox-gl/maps#readme"
-  s.source      	= { :git => "https://github.com/@react-native-mapbox-gl/maps.git" }
+  s.authors		= { "Miklós Fazekas" => "mfazekas@szemafor.com" }
+  s.homepage    	= "https://github.com/rnmapbox/maps#readme"
+  s.source      	= { :git => "https://github.com/rnmapbox/maps.git" }
   s.license     	= "MIT"
   s.platform    	= :ios, "11.0"
 
@@ -118,8 +122,8 @@ Pod::Spec.new do |s|
       sp.public_header_files = 'ios/RCTMGL-v10/Bridge/*.h'
     else
       sp.source_files	= "ios/RCTMGL/**/*.{h,m}"
-      if $RNMGL_USE_MAPLIBRE
-        sp.compiler_flags = '-DRNMGL_USE_MAPLIBRE=1'
+      if $RNMBGL_USE_MAPLIBRE
+        sp.compiler_flags = '-DRNMBGL_USE_MAPLIBRE=1'
       end
     end
   end
