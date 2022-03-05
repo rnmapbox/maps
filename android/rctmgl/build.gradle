@@ -4,8 +4,25 @@ def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
 
+def defaultMapboxMapImpl = "maplibre"
+
 android {
-    if (safeExtGet("mapboxV10", true)) {
+    if (safeExtGet("RNMapboxMapImpl", defaultMapboxMapImpl).equals("maplibre")) {
+        
+        sourceSets {
+            main {
+                java.srcDirs = ['src/main/java','src/main/java-maplibre']
+            }
+        }
+    }
+    else if (safeExtGet("RNMapboxMapImpl", defaultMapboxMapImpl).equals("mapbox")) {
+        sourceSets {
+            main {
+                java.srcDirs = ['src/main/java','src/main/java-mapbox']
+            }
+        }
+    }
+    else if (safeExtGet("RNMapboxMapImpl", defaultMapboxMapImpl).equals("v10")) {
         sourceSets {
             main {
                 java.srcDirs = ['src/main/java-v10']
@@ -18,6 +35,11 @@ android {
             pickFirst 'lib/arm64-v8a/libc++_shared.so'
             pickFirst 'lib/armeabi-v7a/libc++_shared.so'
         }
+    }
+    else {
+        msg = "RNMapboxMapImpl should be one of: mapbox, v10, maplibre got: ${safeExtGet("mapboxV10", defaultMapboxMapImpl)}"
+        logger.error(msg)
+        throw new GradleException(msg)
     }
 
     compileSdkVersion safeExtGet("compileSdkVersion", 28)
@@ -67,14 +89,30 @@ dependencies {
     implementation "com.facebook.react:react-native:+"
 
     // Mapbox SDK
-    customizableDependencies('rnmbglMapboxLibs') {
-        if (safeExtGet("mapboxV10", false)) {
-            implementation 'com.mapbox.maps:android:10.3.0'
-        } else {
+    customizableDependencies('RNMapboxMapLibs') {
+        if (safeExtGet("RNMapboxMapImpl", defaultMapboxMapImpl).equals("maplibre")) {
+            implementation ("org.maplibre.gl:android-sdk:9.2.1")
+            implementation ("org.maplibre.gl:android-sdk-turf:5.9.0")
+
+            implementation ("org.maplibre.gl:android-plugin-localization-v9:1.0.0")
+            implementation ("org.maplibre.gl:android-plugin-annotation-v9:1.0.0")
+            implementation ("org.maplibre.gl:android-plugin-markerview-v9:1.0.0")
+        } 
+        else if (safeExtGet("RNMapboxMapImpl", defaultMapboxMapImpl).equals("mapbox")) {
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.1.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.1.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-android-telemetry:6.1.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0'
+
+                // plugins
+            implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.6.0'
+            implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v9:0.12.0'
+            implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v9:0.4.0'
+            implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.1.0'
+        }
+        else if (safeExtGet("RNMapboxMapImpl", defaultMapboxMapImpl).equals("v10")) {
+            implementation 'com.mapbox.maps:android:10.3.0'
+            implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.4.1'
         }
     }
 
@@ -84,17 +122,4 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${safeExtGet('supportLibVersion', '28.0.0')}"
     implementation "com.squareup.okhttp3:okhttp:${safeExtGet('okhttpVersion', '4.9.0')}"
     implementation "com.squareup.okhttp3:okhttp-urlconnection:${safeExtGet('okhttpVersion', '4.9.0')}"
-
-
-    // Mapbox plugins
-    customizableDependencies('rnmbglMapboxPlugins') {
-        if (!safeExtGet("mapboxV10", false)) {
-            implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.6.0'
-            implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v9:0.12.0'
-            implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v9:0.4.0'
-            implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.1.0'
-        } else {
-            implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.4.1'
-        }
-    }
 }

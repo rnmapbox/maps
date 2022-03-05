@@ -110,7 +110,7 @@ public class LocationComponentManager {
                     .locationComponentOptions(options(displayUserLocation))
                     .build();
             mLocationComponent.activateLocationComponent(locationComponentActivationOptions);
-            mLocationComponent.setLocationEngine(mLocationManager.getEngine());
+            mLocationComponent.setLocationEngine(mLocationManager.getEngine().getEngine());
             mShowingUserLocation = displayUserLocation;
         }
 

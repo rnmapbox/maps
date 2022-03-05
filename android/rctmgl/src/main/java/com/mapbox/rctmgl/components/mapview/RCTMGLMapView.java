@@ -73,6 +73,8 @@ import com.mapbox.rctmgl.utils.BitmapUtils;
 import com.mapbox.rctmgl.utils.GeoJSONUtils;
 import com.mapbox.rctmgl.utils.GeoViewport;
 
+import com.mapbox.rctmgl.impl.SymbolClickListenerImpl;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -516,12 +518,14 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
     public void createSymbolManager(Style style) {
         symbolManager = new SymbolManager(this, mMap, style);
         symbolManager.setIconAllowOverlap(true);
-        symbolManager.addClickListener(new OnSymbolClickListener() {
-            @Override
-            public void onAnnotationClick(Symbol symbol) {
-                onMarkerClick(symbol);
-            }
-        });
+        symbolManager.addClickListener(
+            SymbolClickListenerImpl.annotationClickListener(new SymbolClickListenerImpl.Listener() {
+                @Override
+                public boolean onAnnotationClick(Symbol symbol) {
+                    onMarkerClick(symbol); return true;
+                }
+            })
+        );
         symbolManager.addDragListener(new OnSymbolDragListener() {
             @Override
             public void onAnnotationDragStarted(Symbol symbol) {
