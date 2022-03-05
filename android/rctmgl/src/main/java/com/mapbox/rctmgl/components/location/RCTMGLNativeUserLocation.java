@@ -4,7 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import androidx.annotation.NonNull;
 
-import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.rctmgl.impl.PermissionsManagerImpl;
+
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -47,7 +48,7 @@ public class RCTMGLNativeUserLocation extends AbstractMapFeature implements OnMa
     @Override
     public void onStyleLoaded(@NonNull Style style) {
         Context context = getContext();
-        if (!PermissionsManager.areLocationPermissionsGranted(context)) {
+        if (!PermissionsManagerImpl.areLocationPermissionsGranted(context)) {
             return;
         }
 

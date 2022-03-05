@@ -10,9 +10,8 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.module.annotations.ReactModule;
-import com.mapbox.mapboxsdk.maps.TelemetryDefinition;
+import com.mapbox.rctmgl.impl.TelemetryImpl;
 import com.mapbox.mapboxsdk.Mapbox;
-// import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.rctmgl.components.camera.constants.CameraMode;
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleValue;
@@ -337,8 +336,7 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         mReactContext.runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
-                TelemetryDefinition telemetry = Mapbox.getTelemetry();
-                telemetry.setUserTelemetryRequestState(telemetryEnabled);
+                TelemetryImpl.setUserTelemetryRequestState(telemetryEnabled);
             }
         });
     }

@@ -8,46 +8,29 @@ buildscript {
         targetSdkVersion = 30
         ndkVersion = "21.4.7075529"
 
-        useMapLibre = false
+        RNMapboxMapImpl = "maplibre"
+
         useCustomMapbox = false
-        mapboxV10 = true
+
+        if (System.getenv('CI_MAP_IMPL').equals('maplibre')) {
+            RNMapboxMapImpl = "maplibre"
+        } else if (System.getenv('CI_MAP_IMPL').equals('v10')) {
+            RNMapboxMapImpl = "v10"
+        } else if (System.getenv('CI_MAP_IMPL').equals('mapbox')) {
+            RNMapboxMapImpl = "mapbox"
+        }
 
         // Mapbox deps
         if (useCustomMapbox) {
-            rnmbglMapboxLibs = {
+            RNMapboxMapLibs = {
                 implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.1'
                 implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.8.0'
                 implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.8.0'
                 implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.7.0'
-            }
 
-            rnmbglMapboxPlugins = {
                 implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0'
                 implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v9:0.14.0'
                 implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v9:0.4.0'
-            }
-        }
-
-
-        // MapLibre deps
-        if (useMapLibre) {
-            rnmbglMapboxLibs = {
-                implementation ("org.maplibre.gl:android-sdk:9.2.1")
-                implementation ("com.mapbox.mapboxsdk:mapbox-sdk-turf:5.8.0")
-                implementation 'com.mapbox.mapboxsdk:mapbox-android-telemetry:6.1.0'
-            }
-
-            rnmbglMapboxPlugins = {
-                implementation ("com.mapbox.mapboxsdk:mapbox-android-gestures:0.7.0")
-                implementation ("com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v9:0.14.0")    {
-                    exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-sdk'
-                }
-                implementation ("com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0")        {
-                    exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-sdk'
-                }
-                implementation ("com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v9:0.4.0") {
-                    exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-sdk'
-                }
             }
         }
     }
@@ -107,13 +90,6 @@ allprojects {
 
                     }
                 }
-        }
-
-
-        if (rootProject.ext.get('useMapLibre')) {
-            maven {
-                url = "https://dl.bintray.com/maplibre/maplibre-gl-native"
-            }
         }
 
         google()

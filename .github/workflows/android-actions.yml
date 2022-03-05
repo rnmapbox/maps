@@ -6,16 +6,11 @@ on:
       NVMRC:
         required: true
         type: string
-      V10:
-        description: "Build example with Mapbox v10"
-        type: boolean
+      MAP_IMPL:
+        description: "The map implementation to use (v10,maplibre or mapbox)"
+        default: v10
         required: false
-        default: false
-      MAPLIBRE:
-        description: "Build example with MapLibre"
-        type: boolean
-        required: false
-        default: false
+        type: string
     secrets:
       MAPBOX_ACCESS_TOKEN:
         required: true
@@ -57,3 +52,5 @@ jobs:
 
       - run: ./gradlew assemble
         working-directory: example/android
+        env:
+          CI_MAP_IMPL: ${{ inputs.MAP_IMPL }}

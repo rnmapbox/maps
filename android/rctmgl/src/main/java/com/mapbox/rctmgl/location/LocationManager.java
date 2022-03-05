@@ -5,18 +5,10 @@ import android.location.Location;
 import android.os.Looper;
 import android.util.Log;
 
-import com.mapbox.android.core.location.LocationEngine;
-import com.mapbox.android.core.location.LocationEngineCallback;
-
-/*
-import com.mapbox.android.core.location.LocationEngineListener;
-import com.mapbox.android.core.location.LocationEnginePriority;
-*/
-
-import com.mapbox.android.core.location.LocationEngineProvider;
-import com.mapbox.android.core.location.LocationEngineRequest;
-import com.mapbox.android.core.location.LocationEngineResult;
-import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.rctmgl.impl.LocationManagerImpl;
+import com.mapbox.rctmgl.impl.LocationEngineCallbackImpl;
+import com.mapbox.rctmgl.impl.LocationEngineResultImpl;
+import com.mapbox.rctmgl.impl.PermissionsManagerImpl;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -28,13 +20,13 @@ import java.util.Locale;
  */
 
 @SuppressWarnings({"MissingPermission"})
-public class LocationManager implements LocationEngineCallback<LocationEngineResult> {
+public class LocationManager extends LocationEngineCallbackImpl {
     static final long DEFAULT_FASTEST_INTERVAL_MILLIS = 1000;
     static final long DEFAULT_INTERVAL_MILLIS = 1000;
 
     public static final String LOG_TAG = "LocationManager";
 
-    private LocationEngine locationEngine;
+    LocationManagerImpl locationManagerImpl;
     private Context context;
     private List<OnUserLocationChange> listeners = new ArrayList<>();
 
@@ -42,7 +34,6 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
     private boolean isActive = false;
     private Location lastLocation = null;
 
-    private LocationEngineRequest locationEngineRequest = null;
 
     private static WeakReference<LocationManager> INSTANCE = null;
 
@@ -63,12 +54,7 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
 
     }
     private void buildEngineRequest() {
-        locationEngine = LocationEngineProvider.getBestLocationEngine(this.context.getApplicationContext());
-        locationEngineRequest = new LocationEngineRequest.Builder(DEFAULT_INTERVAL_MILLIS)
-                .setFastestInterval(DEFAULT_FASTEST_INTERVAL_MILLIS)
-                .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
-                .setDisplacement(mMinDisplacement)
-                .build();
+        locationManagerImpl = LocationManagerImpl.buildEngineRequest(this.context.getApplicationContext(), DEFAULT_INTERVAL_MILLIS, DEFAULT_FASTEST_INTERVAL_MILLIS, mMinDisplacement);
     }
 
     public void addLocationListener(OnUserLocationChange listener) {
@@ -86,58 +72,51 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
         mMinDisplacement = minDisplacement;
     }
     public void enable() {
-        if (!PermissionsManager.areLocationPermissionsGranted(context)) {
+        if (!PermissionsManagerImpl.areLocationPermissionsGranted(context)) {
             return;
         }
 
         // remove existing listeners
-        locationEngine.removeLocationUpdates(this);
+        locationManagerImpl.removeExistingListeners(this);
 
         // refresh location engine request with new values
         this.buildEngineRequest();
 
         // add new listeners
-        locationEngine.requestLocationUpdates(
-                locationEngineRequest,
-                this,
-                Looper.getMainLooper()
-        );
+        locationManagerImpl.addNewListeners(this);
         isActive = true;
     }
 
 
     public void disable() {
-        locationEngine.removeLocationUpdates(this);
+        locationManagerImpl.removeExistingListeners(this);
         isActive = false;
     }
 
     public void dispose() {
-        if (locationEngine == null) {
-            return;
-        }
-        disable();
-        locationEngine.removeLocationUpdates(this);
+        locationManagerImpl.dispose(this);
+        isActive = false;
     }
 
     public boolean isActive() {
-        return locationEngine != null && this.isActive;
+        return locationManagerImpl.isActive() && this.isActive;
     }
 
     public Location getLastKnownLocation() {
-        if (locationEngine == null) {
+        if (! locationManagerImpl.isActive()) {
             return null;
         }
         return lastLocation;
     }
 
 
-    public void getLastKnownLocation(LocationEngineCallback<LocationEngineResult> callback) {
-        if (locationEngine == null) {
+    public void getLastKnownLocation(LocationEngineCallbackImpl callback) {
+        if (! locationManagerImpl.isActive()) {
             callback.onFailure(new Exception("LocationEngine not initialized"));
         }
 
         try {
-            locationEngine.getLastLocation(callback);
+            locationManagerImpl.getLastLocation(callback);
         }
         catch(Exception exception) {
             Log.w(LOG_TAG, exception);
@@ -145,8 +124,8 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
         }
     }
 
-    public LocationEngine getEngine() {
-        return locationEngine;
+    public LocationManagerImpl getEngine() {
+        return locationManagerImpl;
     }
 
     public void onLocationChanged(Location location) {
@@ -162,7 +141,7 @@ public class LocationManager implements LocationEngineCallback<LocationEngineRes
     }
 
     @Override
-    public void onSuccess(LocationEngineResult result) {
+    public void onSuccess(LocationEngineResultImpl result) {
         onLocationChanged(result.getLastLocation());
     }
 }

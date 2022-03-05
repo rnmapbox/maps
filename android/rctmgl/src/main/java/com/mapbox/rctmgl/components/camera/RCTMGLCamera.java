@@ -40,7 +40,7 @@ import com.facebook.react.bridge.WritableNativeMap;
 
 import com.mapbox.geojson.Point;
 
-import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.rctmgl.impl.PermissionsManagerImpl;
 
 import androidx.annotation.NonNull;
 
@@ -334,7 +334,7 @@ public class RCTMGLCamera extends AbstractMapFeature {
     }
 
     private void enableLocation() {
-        if (!PermissionsManager.areLocationPermissionsGranted(mContext)) {
+        if (!PermissionsManagerImpl.areLocationPermissionsGranted(mContext)) {
             return;
         }
 
