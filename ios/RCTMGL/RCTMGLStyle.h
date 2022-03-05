@@ -23,7 +23,6 @@
 - (void)rasterLayer:(MGLRasterStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid;
 - (void)hillshadeLayer:(MGLHillshadeStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid;
 - (void)backgroundLayer:(MGLBackgroundStyleLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid;
-- (void)skyLayer:(MGLSkyLayer *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid;
 - (void)lightLayer:(MGLLight *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid;
 
 - (void)setFillSortKey:(MGLFillStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
@@ -134,7 +133,6 @@
 - (void)setTextTranslate:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setTextTranslateTransition:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setTextTranslateAnchor:(MGLSymbolStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
-- (void)setCircleSortKey:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setCircleStyleLayerVisibility:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setCircleRadius:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setCircleRadiusTransition:(MGLCircleStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
@@ -212,17 +210,6 @@
 - (void)setBackgroundPatternTransition:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setBackgroundOpacity:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setBackgroundOpacityTransition:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
-- (void)setSkyStyleLayerVisibility:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
-- (void)setSkyType:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
-- (void)setSkyAtmosphereSun:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
-- (void)setSkyAtmosphereSunIntensity:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
-- (void)setSkyGradientCenter:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
-- (void)setSkyGradientRadius:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
-- (void)setSkyGradient:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
-- (void)setSkyAtmosphereHaloColor:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
-- (void)setSkyAtmosphereColor:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
-- (void)setSkyOpacity:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
-- (void)setSkyOpacityTransition:(MGLSkyLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setAnchor:(MGLLight *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setPosition:(MGLLight *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;
 - (void)setPositionTransition:(MGLLight *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue;

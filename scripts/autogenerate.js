@@ -18,13 +18,18 @@ function readIosVersion() {
   const podspecPath = path.join(
     __dirname,
     '..',
-    'react-native-mapbox-gl.podspec',
+    'react-native-mapbox.podspec',
   );
   const lines = fs.readFileSync(podspecPath, 'utf8').split('\n');
-  const mapboxLineRegex = /^\s*default_ios_mapbox_version\s*=\s*'~>\s+(\d+\.\d+)(\.\d+)?'$/;
+  const mapboxLineRegex = /^\s*default_ios_mapbox_v10_version\s*=\s*'~>\s+(\d+\.\d+)(\.\d+)?'$/;
   const mapboxLine = lines.filter(i => mapboxLineRegex.exec(i))[0];
-  return '10.0.0';
-  // v10todo return `${mapboxLineRegex.exec(mapboxLine)[1]}.0`;
+
+  const mapboxGLLineRegex = /^\s*default_ios_mapbox_gl_version\s*=\s*'~>\s+(\d+\.\d+)(\.\d+)?'$/;
+  const mapboxGLLine = lines.filter(i => mapboxGLLineRegex.exec(i))[0];
+  return {
+    v10: `${mapboxLineRegex.exec(mapboxLine)[1]}.0`,
+    gl: `${mapboxLineRegex.exec(mapboxLine)[1]}.0`
+  };
 }
 
 function readAndroidVersion() {
@@ -36,10 +41,14 @@ function readAndroidVersion() {
     'build.gradle',
   );
   const lines = fs.readFileSync(buildGradlePath, 'utf8').split('\n');
-  const mapboxLineRegex = /^\s+implementation\s+'com.mapbox.mapboxsdk:mapbox-android-sdk:(\d+\.\d+\.\d+)'$/;
-  const mapboxLine = lines.filter(i => mapboxLineRegex.exec(i))[0];
-  return '10.0.0';
-  // v10todo return mapboxLineRegex.exec(mapboxLine)[1];
+  const mapboxGLLineRegex = /^\s+implementation\s+'com.mapbox.mapboxsdk:mapbox-android-sdk:(\d+\.\d+\.\d+)'$/;
+  const mapboxGLLine = lines.filter(i => mapboxGLLineRegex.exec(i))[0];
+  const mapboxV10LineRegex = /^\s+implementation\s+'com.mapbox.maps:android:(\d+\.\d+\.\d+)'$/;
+  const mapboxV10Line = lines.filter(i => mapboxV10LineRegex.exec(i))[0];
+  return {
+    gl: mapboxGLLineRegex.exec(mapboxGLLine)[1],
+    v10: mapboxV10LineRegex.exec(mapboxV10Line)[1],
+  }
 }
 
 if (!styleSpecJSON) {
@@ -107,21 +116,34 @@ const JS_OUTPUT_PATH = path.join(
 );
 
 getSupportedLayers(Object.keys(styleSpecJSON.layer.type.values)).forEach(
-  layerName => {
+  ({layerName, support})  => {
     layers.push({
       name: layerName,
       properties: getPropertiesForLayer(layerName),
+      props: {
+        gl: getPropertiesForLayer(layerName, 'gl'),
+        v10: getPropertiesForLayer(layerName, 'v10'),
+      },
+      support
     });
   },
 );
 
 // add light as a layer
-layers.push({name: 'light', properties: getPropertiesForLight()});
+layers.push({
+  name: 'light', 
+  properties: getPropertiesForLight(),
+  props: {
+    gl: getPropertiesForLight('gl'),
+    v10: getPropertiesForLight('v10'),
+  },
+  support: {gl: true, v10: true}
+});
 
-function getPropertiesForLight() {
+function getPropertiesForLight(only) {
   const lightAttributes = styleSpecJSON.light;
 
-  const lightProps = getSupportedProperties(lightAttributes).map(attrName => {
+  const lightProps = getSupportedProperties(lightAttributes, only).map(attrName => {
     return Object.assign({}, buildProperties(lightAttributes, attrName), {
       allowedFunctionTypes: [],
     });
@@ -130,11 +152,11 @@ function getPropertiesForLight() {
   return lightProps;
 }
 
-function getPropertiesForLayer(layerName) {
+function getPropertiesForLayer(layerName, only) {
   const paintAttributes = styleSpecJSON[`paint_${layerName}`];
   const layoutAttributes = styleSpecJSON[`layout_${layerName}`];
 
-  const paintProps = getSupportedProperties(paintAttributes).map(attrName => {
+  const paintProps = getSupportedProperties(paintAttributes, only).map(attrName => {
     const prop = buildProperties(paintAttributes, attrName);
 
     // overrides
@@ -145,7 +167,7 @@ function getPropertiesForLayer(layerName) {
     return prop;
   });
 
-  const layoutProps = getSupportedProperties(layoutAttributes).map(attrName => {
+  const layoutProps = getSupportedProperties(layoutAttributes, only).map(attrName => {
     const prop = buildProperties(layoutAttributes, attrName);
 
     // overrides
@@ -176,18 +198,23 @@ function getSupportedLayers(layerNames) {
     const layer = layerMap[layerName];
     const support = getAttributeSupport(layer['sdk-support']);
 
-    if (support.basic.android && support.basic.ios) {
-      supportedLayers.push(layerName);
+    if (
+      (support.basic.v10.android && support.basic.v10.ios) || 
+      (support.basic.gl.android && support.basic.gl.ios)
+      ) {
+      supportedLayers.push({layerName, support: {
+        v10: (support.basic.v10.android && support.basic.v10.ios),
+        gl: (support.basic.gl.android && support.basic.gl.ios)
+      }});
     }
   }
 
-  console.log("=> getSupportedLayers", layerNames, supportedLayers);
   return supportedLayers;
 }
 
-function getSupportedProperties(attributes) {
+function getSupportedProperties(attributes, only) {
   return Object.keys(attributes).filter(attrName =>
-    isAttrSupported(attributes[attrName]),
+    isAttrSupported(attributes[attrName], only),
   );
 }
 
@@ -276,39 +303,53 @@ function isTranslate(attrName) {
   return attrName.toLowerCase().indexOf('translate') !== -1;
 }
 
-function isAttrSupported(attr) {
+function isAttrSupported(attr, only) {
   const support = getAttributeSupport(attr['sdk-support']);
-  return support.basic.android && support.basic.ios;
+  if (only != null) {
+    return support.basic[only].android && support.basic[only].ios;
+  }
+  return (support.basic.gl.android && support.basic.gl.ios) || (support.basic.v10.android && support.basic.v10.ios);
 }
 
 function getAttributeSupport(sdkSupport) {
   const support = {
-    basic: {android: false, ios: false},
-    data: {android: false, ios: false},
+    basic: {gl: {android: false, ios: false}, v10: {android: false, ios: false}},
+    data: {gl: {android: false, ios: false}, v10: {android: false, ios: false}}
   };
 
   const basicSupport = sdkSupport && sdkSupport['basic functionality'];
   if (basicSupport && basicSupport.android) {
-    support.basic.android = isVersionGTE(androidVersion, basicSupport.android);
+    support.basic.gl.android = isVersionGTE(androidVersion.gl, basicSupport.android);
+    support.basic.v10.android = isVersionGTE(androidVersion.v10, basicSupport.android);
   }
   if (basicSupport && basicSupport.ios) {
-    support.basic.ios = isVersionGTE(iosVersion, basicSupport.ios);
+    support.basic.gl.ios = isVersionGTE(iosVersion.gl, basicSupport.ios);
+    support.basic.v10.ios = isVersionGTE(iosVersion.v10, basicSupport.ios);
   }
 
   const dataDrivenSupport = sdkSupport && sdkSupport['data-driven styling'];
   if (dataDrivenSupport && dataDrivenSupport.android) {
-    support.data.android = isVersionGTE(
-      androidVersion,
+    support.data.gl.android = isVersionGTE(
+      androidVersion.gl,
+      dataDrivenSupport.android,
+    );
+    support.data.v10.android = isVersionGTE(
+      androidVersion.v10,
       dataDrivenSupport.android,
     );
   }
   if (dataDrivenSupport && dataDrivenSupport.ios) {
-    support.data.ios = isVersionGTE(iosVersion, dataDrivenSupport.ios);
+    support.data.gl.ios = isVersionGTE(iosVersion.gl, dataDrivenSupport.ios);
+    support.data.v10.ios = isVersionGTE(iosVersion.v10, dataDrivenSupport.ios);
   }
 
-  if (support.data.ios !== true || support.data.android !== true) {
-    support.data.ios = false;
-    support.data.android = false;
+  if (support.data.v10.ios !== true || support.data.v10.android !== true) {
+    support.data.v10.ios = false;
+    support.data.v10.android = false;
+  }
+  if (support.data.gl.ios !== true || support.data.gl.android !== true) {
+    support.data.gl.ios = false;
+    support.data.gl.android = false;
   }
 
   return support;
@@ -346,6 +387,7 @@ async function generate() {
     {
       input: path.join(TMPL_PATH, 'RCTMGLStyle.h.ejs'),
       output: path.join(IOS_OUTPUT_PATH, 'RCTMGLStyle.h'),
+      only: 'gl',
     },
     {
       input: path.join(TMPL_PATH, 'index.d.ts.ejs'),
@@ -354,18 +396,22 @@ async function generate() {
     {
       input: path.join(TMPL_PATH, 'RCTMGLStyle.m.ejs'),
       output: path.join(IOS_OUTPUT_PATH, 'RCTMGLStyle.m'),
+      only: 'gl',
     },
     {
       input: path.join(TMPL_PATH, 'RCTMGLStyle.swift.ejs'),
       output: path.join(IOS_V10_OUTPUT_PATH, 'RCTMGLStyle.swift'),
+      only: 'v10',
     },
     {
       input: path.join(TMPL_PATH, 'RCTMGLStyleFactory.java.ejs'),
       output: path.join(ANDROID_OUTPUT_PATH, 'RCTMGLStyleFactory.java'),
+      only: 'gl',
     },
     {
       input: path.join(TMPL_PATH, 'RCTMGLStyleFactoryv10.java.ejs'),
       output: path.join(ANDROID_V10_OUTPUT_PATH, 'RCTMGLStyleFactory.java'),
+      only: 'v10',
     },
     {
       input: path.join(TMPL_PATH, 'styleMap.js.ejs'),
@@ -375,11 +421,21 @@ async function generate() {
   const outputPaths = templateMappings.map(m => m.output);
 
   // autogenerate code
-  templateMappings.forEach(({input, output}) => {
+  templateMappings.forEach(({input, output, only}) => {
     const filename = output.split('/').pop();
     console.log(`Generating ${filename}`);
     const tmpl = ejs.compile(fs.readFileSync(input, 'utf8'), {strict: true});
-    let results = tmpl({layers});
+    
+    function filterOnly(layers, only) {
+      if (only != null) {
+        let result = layers.filter((e) => (e.support[only])).map((e) => ({...e, properties: e.props[only]}));
+        return result;
+      } else {
+        return layers;
+      }
+    }
+    
+    let results = tmpl({layers: filterOnly(layers, only)});
     if (filename.endsWith('ts')) {
       results = prettier.format(results, {filepath: filename});
     }

@@ -28,7 +28,7 @@ RCT_EXPORT_MODULE();
     // style urls
     NSMutableDictionary *styleURLS = [[NSMutableDictionary alloc] init];
 
-#ifdef RNMGL_USE_MAPLIBRE
+#ifdef RNMBGL_USE_MAPLIBRE
     for (MGLDefaultStyle* style in [MGLStyle predefinedStyles]) {
       [styleURLS setObject:[style.url absoluteString] forKey:style.name];
     }
@@ -248,7 +248,7 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(setAccessToken:(NSString *)accessToken)
 {
-#ifdef RNMGL_USE_MAPLIBRE
+#ifdef RNMBGL_USE_MAPLIBRE
     if (accessToken.length > 0) {
       [MGLSettings setApiKey:accessToken];
     }
@@ -269,7 +269,7 @@ RCT_EXPORT_METHOD(removeCustomHeader:(NSString *)headerName)
 
 RCT_EXPORT_METHOD(getAccessToken:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
-#ifdef RNMGL_USE_MAPLIBRE
+#ifdef RNMBGL_USE_MAPLIBRE
     NSString* accessToken = MGLSettings.apiKey;
 #else
     NSString *accessToken = MGLAccountManager.accessToken;

@@ -76,7 +76,15 @@
     <%_ } else if (prop.name === 'visibility') { _%>
     layer.visible = [styleValue isVisible];
     <%_ } else { _%>
+    <%_ if (iosMapLibrePropName(prop.name) != null) { _%>
+    #ifdef RNMBGL_USE_MAPLIBRE
+      layer.<%- iosMapLibrePropName(prop.name) -%> = styleValue.mglStyleValue;
+    #else
+      layer.<%- iosPropName(prop.name) -%> = styleValue.mglStyleValue;
+    #endif
+    <%_ } else { _%>
     layer.<%- iosPropName(prop.name) -%> = styleValue.mglStyleValue;
+    <%_ } _%>
     <%_ } _%>
 }
 <%_ if (prop.transition) { _%>

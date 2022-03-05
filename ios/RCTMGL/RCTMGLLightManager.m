@@ -9,8 +9,15 @@
 #import "RCTMGLLightManager.h"
 #import "RCTMGLLight.h"
 
-@interface RCT_EXTERN_MODULE(RCTMGLTerrainManager, RCTViewManager)
+@implementation RCTMGLLightManager
+
+RCT_EXPORT_MODULE()
 
 RCT_EXPORT_VIEW_PROPERTY(reactStyle, NSDictionary);
+
+- (UIView*)view
+{
+    return [RCTMGLLight new];
+}
 
 @end
