@@ -40,8 +40,7 @@ We also support [MapLibre](https://github.com/maplibre/maplibre-gl-native) flavo
 
 
 [![npm version](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps.svg)](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps)  
-[![Android Build](https://github.com/rnmapbox/maps/actions/workflows/android-actions.yml/badge.svg)](https://github.com/rnmapbox/maps/actions/workflows/android-actions.yml)  
-[![iOS Build](https://github.com/rnmapbox/maps/actions/workflows/ios-actions.yml/badge.svg)](https://github.com/rnmapbox/maps/actions/workflows/ios-actions.yml)  
+[![Build status](https://github.com/rnmapbox/maps/actions/workflows/on-push.yml/badge.svg)](https://github.com/rnmapbox/maps/actions/workflows/on-push.yml)
 
 ---
 
