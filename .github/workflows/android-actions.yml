@@ -7,8 +7,8 @@ on:
         required: true
         type: string
       MAP_IMPL:
-        description: "The map implementation to use (v10,maplibre or mapbox)"
-        default: v10
+        description: "The map implementation to use (mapbox,maplibre or mapbox-gl)"
+        default: mapbox
         required: false
         type: string
     secrets:

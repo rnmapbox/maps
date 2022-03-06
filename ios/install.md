@@ -14,19 +14,19 @@ Add the following to your `ios/Podfile`:
 
 ```ruby
   pre_install do |installer|
-    $RNMBGL.pre_install(installer)
+    $RNMapboxMaps.pre_install(installer)
     ... other pre install hooks
   end
 ```
 
 ```ruby
   post_install do |installer|
-    $RNMBGL.post_install(installer)
+    $RNMapboxMaps.post_install(installer)
     ... other post install hooks
   end
 ```
 
-Running `pod install` will add Mapbox iOS SDK `5.8.0`
+Running `pod install` will add MapLibre SDK via SwiftPackageManager
 
 ```sh
 # Go to the ios folder
@@ -42,57 +42,65 @@ Read on if you want to edit your Mapbox version or flavor.
 
 <br>
 
-## Mapbox Maps SDK
-
-It is possible to set a custom version of the Mapbox SDK:
-
-### New version - since `8.1rc5`
-
-Add the following to you `ios/Podfile`:
-
-```ruby
-$ReactNativeMapboxGLIOSVersion = '~> 6.1'
-```
-
-Check the current version of the SDK [here](https://docs.mapbox.com/ios/maps/overview/).
-
-### Mapbox Maps SDK > `v6.0.0`
-
-If you are using version `v6.0.0` of the SDK or later, you will need to authorize your download of the Maps SDK with a secret access token with the `DOWNLOADS:READ` scope. This [guide](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials) explains how to configure the secret token under section `Configure your secret token`.
-
-<br>
-
 ## Maplibre
 
 [MapLibre](https://github.com/maplibre/maplibre-gl-native) is an OSS fork of MapboxGL
 
 Current default MapLibre version is `5.12.0`
 
-If you want to use that, simply add this to your `ios/Podfile`
+This is the dafult and requires no further setup`ios/Podfile`
+
+If you want to change the version used:
 
 ```ruby
-$RNMBGL_Use_SPM = true
-$RNMBGL_USE_MAPLIBRE = true
+$RNMapboxMapsImpl = 'maplibre' # optional as this is the default
+$RNMapboxMapsVersion = 'exactVersion 5.12.1'
 ```
 
-If you want to adjust/ edit your MapLibre version you can also pass a hash
-
-Example overwrite within your `ios/Podfile`:
+MapLibre is consumed via Swift Package Manager, use `RNMapboxMapsSwiftPackageManager` to change other details than version
 
 ```ruby
-$RNMBGL_Use_SPM = {
-  url: "https://github.com/maplibre/maplibre-gl-native-distribution",
-  requirement: {
-    kind: "upToNextMajorVersion",
-    minimumVersion: "5.12.0"
-  },
-  product_name: "Mapbox"
-}
-$RNMGL_USE_MAPLIBRE = true
+$RNMapboxMapsSwiftPackageManager = {
+    url: "https://github.com/maplibre/maplibre-gl-native-distribution",
+    requirement: {
+      kind: "upToNextMajorVersion",
+      minimumVersion: "5.12.1"
+    },
+    product_name: "Mapbox"
+  }
 ```
 
+<br/>
+
+## Mapbox Maps SDK (v10)
+
+Check the current version of the SDK [here](https://docs.mapbox.com/ios/maps/overview/).
+
+```ruby
+$RNMapboxMapsImpl = 'mapbox'
+$RNMapboxMapsVersion = '~> 10.3.0'
+```
+
+You will need to authorize your download of the Maps SDK with a secret access token with the `DOWNLOADS:READ` scope. This [guide](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials) explains how to configure the secret token under section `Configure your secret token`.
+
+<br/>
+
+## Mapbox Maps GL SDK (9.0 or earlies)
+
+This is the old version of mapbox gl (deprecated)
+
+```ruby
+$RNMapboxMapsImpl = 'mapbox-gl'
+$RNMapboxMapsVersion = '~> 5.9.0'
+```
+
+### Mapbox Maps GL SDK > `v6.0.0`
+
+If you are using version `v6.0.0` of the SDK or later, you will need to authorize your download of the Maps SDK with a secret access token with the `DOWNLOADS:READ` scope. This [guide](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials) explains how to configure the secret token under section `Configure your secret token`.
 
 <br>
+
+
 
 ## React-Native < `0.60.0`
 

@@ -1,29 +1,22 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-if ENV["V10"] == "true"
-  $RNMBGL_USE_V10 = true
-  useMapLibre = false
+if ENV['CI_MAP_IMPL']
+  fail "Invalid CI_MAP_IMPL value" unless ["maplibre", "mapbox-gl", "mapbox"].include?(ENV['CI_MAP_IMPL'])
+
+  $RNMapboxMapsImpl = ENV['CI_MAP_IMPL']
 end
 
-if ENV["MAPLIBRE"] == "true"
-  useMapLibre = true
-  $RNMBGL_USE_V10 = false
-end
+$RNMapboxMapsImpl = 'maplibre'
 
-if ENV["V10"].nil? && ENV["MAPLIBRE"].nil?
-  useMapLibre = true
-  $RNMBGL_USE_V10 = false
-end
-
-if $RNMBGL_USE_V10
+if $RNMapboxMapsImpl == 'mapbox'
   platform :ios, '13.0'
 else
   platform :ios, '11.0'
 end
 
-if useMapLibre
-  $RNMBGL_Use_SPM = {
+if $RNMapboxMapsImpl == 'maplibre'
+  $RNMapboxMapsSwiftPackageManager = {
     url: "https://github.com/maplibre/maplibre-gl-native-distribution",
     requirement: {
       kind: "upToNextMajorVersion",
@@ -31,7 +24,6 @@ if useMapLibre
     },
     product_name: "Mapbox"
   }
-  $RNMBGL_USE_MAPLIBRE = true
 end
 
 # We ingore warning except for RNMBGL
@@ -66,7 +58,7 @@ target 'RNMapboxGLExample' do
   use_native_modules!
 
   pre_install do |installer|
-    $RNMBGL.pre_install(installer)
+    $RNMapboxMaps.pre_install(installer)
   end
 
   # Enables Flipper.
@@ -84,14 +76,14 @@ target 'RNMapboxGLExample' do
       end
       react_native_post_install(installer)
       __apply_Xcode_12_5_M1_post_install_workaround(installer) if defined?(__apply_Xcode_12_5_M1_post_install_workaround)
-      $RNMBGL.post_install(installer)
+      $RNMapboxMaps.post_install(installer)
     end
   else
     # CI configuration
     post_install do |installer|
       react_native_post_install(installer)
       __apply_Xcode_12_5_M1_post_install_workaround(installer) if defined?(__apply_Xcode_12_5_M1_post_install_workaround)
-      $RNMBGL.post_install(installer)
+      $RNMapboxMaps.post_install(installer)
     end
   end
 end
