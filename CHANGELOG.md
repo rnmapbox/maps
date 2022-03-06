@@ -5,6 +5,8 @@ Please add unreleased changes in the following style:
 PR Title ([#123](link to my pr))
 ```
 
+## 8.6.0-beta.0
+
 fix: add TypeScript type for MapViews's preferredFramesPerSecond prop ([#1717](https://github.com/react-native-mapbox-gl/maps/pull/1717))
 fix(example): update `/example` project (iOS only) to work with ARM-based Macs ([#1703](https://github.com/react-native-mapbox-gl/maps/pull/1703))
 
