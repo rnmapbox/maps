@@ -17,7 +17,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/react-native-mapbox-gl/maps"
+    "url": "https://github.com/rnmapbox/maps"
   },
   "scripts": {
     "fetch:style:spec": ". ./scripts/download-style-spec.sh",
