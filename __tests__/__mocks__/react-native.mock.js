@@ -7,6 +7,6 @@ jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter', () => {
   MockEventEmitter.prototype.addListener = jest.fn(() => ({remove: jest.fn()}));
   return {
     __esModule: true,
-    default: MockEventEmitter
-  }
-})
+    default: MockEventEmitter,
+  };
+});
