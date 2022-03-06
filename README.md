@@ -1,6 +1,6 @@
 <br>
 
-### 🟥 Future of this repo: participate in the [discussion thread](https://github.com/react-native-mapbox-gl/maps/discussions/1680) 🟥
+### 🟥 Future of this repo: participate in the [discussion thread](https://github.com/rnmapbox/maps/discussions/1680) 🟥
 
 
 ## Call for additional maintainers  
@@ -17,7 +17,7 @@ well...here are some examples:
 * actively help move the project forward by submitting PRs that introduce fixes and features
 
 You don't need to be a full-fledged maintainer to do those things, however,  
-if you are interested in becoming one, don't hesitate to reply in [this discussion](https://github.com/react-native-mapbox-gl/maps/discussions/1551). 
+if you are interested in becoming one, don't hesitate to reply in [this discussion](https://github.com/rnmapbox/maps/discussions/1551). 
 
 Thanks 🙇
 
@@ -40,8 +40,8 @@ We also support [MapLibre](https://github.com/maplibre/maplibre-gl-native) flavo
 
 
 [![npm version](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps.svg)](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps)  
-[![Android Build](https://github.com/react-native-mapbox-gl/maps/actions/workflows/android-actions.yml/badge.svg)](https://github.com/react-native-mapbox-gl/maps/actions/workflows/android-actions.yml)  
-[![iOS Build](https://github.com/react-native-mapbox-gl/maps/actions/workflows/ios-actions.yml/badge.svg)](https://github.com/react-native-mapbox-gl/maps/actions/workflows/ios-actions.yml)  
+[![Android Build](https://github.com/rnmapbox/maps/actions/workflows/android-actions.yml/badge.svg)](https://github.com/rnmapbox/maps/actions/workflows/android-actions.yml)  
+[![iOS Build](https://github.com/rnmapbox/maps/actions/workflows/ios-actions.yml/badge.svg)](https://github.com/rnmapbox/maps/actions/workflows/ios-actions.yml)  
 
 ---
 

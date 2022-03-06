@@ -13,7 +13,7 @@ If you are using autolinking feature introduced in React-Native `0.60.0` you do 
 ## Mapbox Maps SDK (pre v10)
 
 We've set up default Mapbox dependencies for you.  
-Feel free to check em out [here](https://github.com/react-native-mapbox-gl/maps/blob/eca4858744cab134b06ae455bcdacc63233318a5/android/rctmgl/build.gradle#L55-L76)
+Feel free to check em out [here](https://github.com/rnmapbox/maps/blob/eca4858744cab134b06ae455bcdacc63233318a5/android/rctmgl/build.gradle#L55-L76)
 
 However, it is also possible to set a custom version of the [Mapbox SDK](https://github.com/mapbox/mapbox-gl-native-android)  
 Which will overwrite our defaults.
@@ -73,7 +73,7 @@ allprojects {
 }
 ```
 
-Feel free to check out the `/example` projects [`android/build.gradle`](https://github.com/react-native-mapbox-gl/maps/blob/master/example/android/build.gradle) for inspiration!
+Feel free to check out the `/example` projects [`android/build.gradle`](https://github.com/rnmapbox/maps/blob/master/example/android/build.gradle) for inspiration!
 
 <br>
 
@@ -122,4 +122,4 @@ allprojects {
 }
 ```
 
-Feel free to check out the `/example` projects [`android/build.gradle`](https://github.com/react-native-mapbox-gl/maps/blob/master/example/android/build.gradle) for inspiration!
+Feel free to check out the `/example` projects [`android/build.gradle`](https://github.com/rnmapbox/maps/blob/master/example/android/build.gradle) for inspiration!

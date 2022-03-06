@@ -28,7 +28,7 @@ type InstallerBlockName = 'pre' | 'post';
  * Dangerously adds the custom installer hooks to the Podfile.
  * In the future this should be removed in favor of some custom hooks provided by Expo autolinking.
  *
- * https://github.com/react-native-mapbox-gl/maps/blob/master/ios/install.md#react-native--0600
+ * https://github.com/rnmapbox/maps/blob/master/ios/install.md#react-native--0600
  * @param config
  * @returns
  */

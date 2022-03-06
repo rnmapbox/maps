@@ -1,18 +1,18 @@
 
 <p align="center">
-  <a href="https://github.com/react-native-mapbox-gl/maps/blob/master/example/src/examples/ChoroplethLayerByZoomLevel.js">
+  <a href="https://github.com/rnmapbox/maps/blob/master/example/src/examples/ChoroplethLayerByZoomLevel.js">
     <img  src="readme_assets/example_choropleth_layer.png"  width="175"/>
   </a>
-  <a href="https://github.com/react-native-mapbox-gl/maps/blob/master/example/src/examples/EarthQuakes.js">
+  <a href="https://github.com/rnmapbox/maps/blob/master/example/src/examples/EarthQuakes.js">
     <img  src="readme_assets/example_clustering_earthquakes.png" width="175"/>
   </a>
-  <a href="https://github.com/react-native-mapbox-gl/maps/blob/master/example/src/examples/Annotations/CustomCallout.tsx">
+  <a href="https://github.com/rnmapbox/maps/blob/master/example/src/examples/Annotations/CustomCallout.tsx">
     <img  src="readme_assets/example_custom_callout.png" width="175"/>
   </a>
-  <a href="https://github.com/react-native-mapbox-gl/maps/blob/master/example/src/examples/DataDrivenCircleColors.js">
+  <a href="https://github.com/rnmapbox/maps/blob/master/example/src/examples/DataDrivenCircleColors.js">
     <img  src="readme_assets/example_data_driven_circle_colors.png" width="175"/>
   </a>
-  <a href="https://github.com/react-native-mapbox-gl/maps/blob/master/example/src/examples/ImageOverlay.js">
+  <a href="https://github.com/rnmapbox/maps/blob/master/example/src/examples/ImageOverlay.js">
     <img  src="readme_assets/example_image_overlay.png" width="175"/>
   </a>
 </p>
@@ -28,7 +28,7 @@
 
 Demo Application for [React Native Mapbox GL](../README.md)
 
-*Note:* this app is using [non trivial babel/metro configs](https://github.com/react-native-mapbox-gl/maps/pull/778), so we can consume the `maps` library from parent directory directly. Regular apps don't need this complicated setup.
+*Note:* this app is using [non trivial babel/metro configs](https://github.com/rnmapbox/maps/pull/778), so we can consume the `maps` library from parent directory directly. Regular apps don't need this complicated setup.
 
 <br>
 
@@ -63,7 +63,7 @@ Open up another tab in your Terminal and run
 yarn start
 ```
 
-*Note*: if modules were added to base lib you might need to run `yarn start --reset-cache` because we're using `babel` to [rewrite imports](https://github.com/react-native-mapbox-gl/maps/pull/778)
+*Note*: if modules were added to base lib you might need to run `yarn start --reset-cache` because we're using `babel` to [rewrite imports](https://github.com/rnmapbox/maps/pull/778)
 
 <br>
 
