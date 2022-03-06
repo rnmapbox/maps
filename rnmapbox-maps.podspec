@@ -3,11 +3,11 @@ require 'json'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 ## Warning: these lines are scanned by autogenerate.js
-RNMapboxMapsDefaultMapboxVersion = '~> 10.3.0'
-RNMapboxMapsDefaultMapboxGLVersion = '~> 5.9.0'
-RNMapboxMapsDefaultMapLibreVersion = 'exactVersion 5.12.1'
+rnMapboxMapsDefaultMapboxVersion = '~> 10.3.0'
+rnMapboxMapsDefaultMapboxGLVersion = '~> 5.9.0'
+rnMapboxMapsDefaultMapLibreVersion = 'exactVersion 5.12.1'
 
-RNMapboxMapsDefaultImpl = 'maplibre'
+rnMapboxMapsDefaultImpl = 'maplibre'
 
 # DEPRECATIONS
 
@@ -24,8 +24,8 @@ if $RNMBGL_Use_SPM
     $RNMapboxMapsSwiftPackageManager = {
       url: "https://github.com/maplibre/maplibre-gl-native-distribution",
       requirement: {
-        kind: RNMapboxMapsDefaultMapLibreVersion.split.first,
-        version: RNMapboxMapsDefaultMapLibreVersion.split.last,
+        kind: rnMapboxMapsDefaultMapLibreVersion.split.first,
+        version: rnMapboxMapsDefaultMapLibreVersion.split.last,
       },
       product_name: "Mapbox"
     }
@@ -66,25 +66,26 @@ end
 
 # --
 
-$RNMapboxMapsImpl = RNMapboxMapsDefaultImpl unless $RNMapboxMapsImpl
+$RNMapboxMapsImpl = rnMapboxMapsDefaultImpl unless $RNMapboxMapsImpl
 
 case $RNMapboxMapsImpl
 when 'mapbox'
   default_ios_mapbox_version = default_ios_mapbox_v10_version
-  TargetsToChangeToDynamic = ['MapboxMobileEvents', 'Turf', 'MapboxMaps', 'MapboxCoreMaps', 'MapboxCommon']
-  MapboxImplVersion = $RNMapboxMapsVersion || RNMapboxMapsDefaultMapboxVersion
+  rnMapboxMapsTargetsToChangeToDynamic = ['MapboxMobileEvents', 'Turf', 'MapboxMaps', 'MapboxCoreMaps', 'MapboxCommon']
+  MapboxImplVersion = $RNMapboxMapsVersion || rnMapboxMapsDefaultMapboxVersion
 when 'mapbox-gl'
-  TargetsToChangeToDynamic = ['MapboxMobileEvents']
-  MapboxImplVersion = $RNMapboxMapsVersion || RNMapboxMapsDefaultMapboxGLVersion
+  rnMapboxMapsTargetsToChangeToDynamic = ['MapboxMobileEvents']
+  MapboxImplVersion = $RNMapboxMapsVersion || rnMapboxMapsDefaultMapboxGLVersion
 when 'maplibre'
-  TargetsToChangeToDynamic = ['MapboxMobileEvents']
+  rnMapboxMapsTargetsToChangeToDynamic = ['MapboxMobileEvents']
 
-  spm_version = ($RNMapboxMapsVersion || RNMapboxMapsDefaultMapboxGLVersion).split
+  spm_version = ($RNMapboxMapsVersion || rnMapboxMapsDefaultMapLibreVersion).split
   if spm_version.length < 2
     spm_version.prepend('exactVersion')
   end
 
   unless $RNMapboxMapsSwiftPackageManager
+    puts "Init SPM"
     $RNMapboxMapsSwiftPackageManager = {
       url: "https://github.com/maplibre/maplibre-gl-native-distribution",
       requirement: {
@@ -125,7 +126,7 @@ def $RNMapboxMaps.post_install(installer)
     project = installer.pods_project
     self._add_spm_to_target(
       project,
-      project.targets.find { |t| t.name == "react-native-mapbox"},
+      project.targets.find { |t| t.name == "rnmapbox-maps"},
       spm_spec[:url],
       spm_spec[:requirement],
       spm_spec[:product_name]
@@ -147,9 +148,11 @@ def $RNMapboxMaps.post_install(installer)
   end
 end
 
+$rnMapboxMapsTargetsToChangeToDynamic = rnMapboxMapsTargetsToChangeToDynamic
+
 def $RNMapboxMaps.pre_install(installer)
   installer.aggregate_targets.each do |target|
-    target.pod_targets.select { |p| TargetsToChangeToDynamic.include?(p.name) }.each do |mobile_events_target|
+    target.pod_targets.select { |p| $rnMapboxMapsTargetsToChangeToDynamic.include?(p.name) }.each do |mobile_events_target|
       mobile_events_target.instance_variable_set(:@build_type,Pod::BuildType.dynamic_framework)
       puts "* [RNMBGL] Changed #{mobile_events_target.name} to #{mobile_events_target.send(:build_type)}"
       fail "* [RNMBGL] Unable to change build_type" unless mobile_events_target.send(:build_type) == Pod::BuildType.dynamic_framework
@@ -158,7 +161,7 @@ def $RNMapboxMaps.pre_install(installer)
 end
 
 Pod::Spec.new do |s|
-  s.name		= "react-native-mapbox"
+  s.name		= "rnmapbox-maps"
   s.summary		= "React Native Component for Mapbox"
   s.version		= package['version']
   s.authors		= { "Miklós Fazekas" => "mfazekas@szemafor.com (https://github.com/mfazekas/)" }
