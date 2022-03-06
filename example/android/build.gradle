@@ -13,16 +13,12 @@ buildscript {
         useCustomMapbox = false
 
         if (System.getenv('CI_MAP_IMPL').equals('maplibre')) {
-            logger.warn('using maplibre')
             RNMapboxMapsImpl = "maplibre"
-        } else if (System.getenv('CI_MAP_IMPL').equals('v10')) {
-            logger.warn('using v10')
-            RNMapboxMapsImpl = "v10"
         } else if (System.getenv('CI_MAP_IMPL').equals('mapbox')) {
-            logger.warn('using mapbox')
             RNMapboxMapsImpl = "mapbox"
+        } else if (System.getenv('CI_MAP_IMPL').equals('mapbox-gl')) {
+            RNMapboxMapsImpl = "mapbox-gl"
         }
-        logger.warn("impl=${RNMapboxMapsImpl}") 
 
         // Mapbox deps
         if (useCustomMapbox) {
