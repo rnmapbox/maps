@@ -35,7 +35,7 @@ jobs:
 
   call_android_workflow:
     needs: lint_test_generate
-    uses: react-native-mapbox-gl/maps/.github/workflows/android-actions.yml@master
+    uses: ./.github/workflows/android-actions.yml
     with:
       NVMRC: ${{ needs.lint_test_generate.outputs.NVMRC }}
     secrets:
@@ -44,7 +44,7 @@ jobs:
 
   call_ios_workflow:
     needs: lint_test_generate
-    uses: react-native-mapbox-gl/maps/.github/workflows/ios-actions.yml@master
+    uses: ./.github/workflows/ios-actions.yml
     with:
       NVMRC: ${{ needs.lint_test_generate.outputs.NVMRC }}
     secrets:
