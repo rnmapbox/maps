@@ -79,7 +79,7 @@ Example:
 ```sh
 react-native init sample --version react-native@0.60.5
 cd sample
-npm install react-native-mapbox-gl/maps#master --save
+npm install rnmapbox/maps#main --save
 # or released version `npm install @react-native-mapbox-gl/maps@8.0.0-rc1 --save`
 react-native run-android
 ```
