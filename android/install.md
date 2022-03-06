@@ -3,8 +3,8 @@
 ## We're supporting 3 implementations at the moment:
 
   - maplibre: *DEFAULT* open source fork of older open source mapbox libraries with many improvements
-  - v10: latest mapbox implementation - not opensource requires access for download
-  - mapbox: classis mapbox libraries - should work but will be dropped, recent versions are not open source and requires acess for download
+  - mabpox: v10 latest mapbox implementation - not opensource requires access for download
+  - mapbox-gl: classis mapbox libraries - should work but will be dropped, recent versions are not open source and requires acess for download
 
 
 ## Using MapLibre
@@ -20,9 +20,9 @@ Overwrite mapbox dependecies within your `android/build.gradle > buildscript > e
 buildscript {
     ext {
         // ...
-        RNMapboxMapImpl = "maplibre" // optinal - as this is the default
+        RNMapboxMapsImpl = "maplibre" // optinal - as this is the default
 
-        RNMapboxMapLibs = { // optional - only required if you want to customize it
+        RNMapboxMapsLibs = { // optional - only required if you want to customize it
             implementation ("org.maplibre.gl:android-sdk:9.2.1")
             implementation ("com.mapbox.mapboxsdk:mapbox-sdk-turf:5.3.0")
 
@@ -45,7 +45,7 @@ Feel free to check out the `/example` projects [`android/build.gradle`](https://
 
 ## Mapbox Maps SDK v10
 
-Add `RNMapboxMapImpl = "v10"` to your gradle file - see bellow for details.
+Add `RNMapboxMapsImpl = "mapbox"` to your gradle file - see bellow for details.
 
 ### Custom versions
 
@@ -56,9 +56,9 @@ Overwrite mapbox dependecies within your `android/build.gradle > buildscript > e
 buildscript {
     ext {
         // ...
-        RNMapboxMapImpl = "v10" // required for v10
+        RNMapboxMapsImpl = "mapbox" // required for v10
 
-        RNMapboxMapLibs = { // optional - only required if you want to customize it
+        RNMapboxMapsLibs = { // optional - only required if you want to customize it
             implementation 'com.mapbox.maps:android:10.3.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.4.1'
         }
@@ -85,10 +85,10 @@ Add something like the following to your `android/build.gradle > buildscript > e
 buildscript {
     // ... stuff
     ext {
-        RNMapboxMapImpl = "v10"
+        RNMapboxMapsImpl = "mapbox-gl"
 
         // ... stuff
-        RNMapboxMapLibs = {
+        RNMapboxMapsLibs = {
             implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.1'
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.8.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.8.0'

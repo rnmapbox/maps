@@ -8,21 +8,25 @@ buildscript {
         targetSdkVersion = 30
         ndkVersion = "21.4.7075529"
 
-        RNMapboxMapImpl = "maplibre"
+        RNMapboxMapsImpl = "maplibre"
 
         useCustomMapbox = false
 
         if (System.getenv('CI_MAP_IMPL').equals('maplibre')) {
-            RNMapboxMapImpl = "maplibre"
+            logger.warn('using maplibre')
+            RNMapboxMapsImpl = "maplibre"
         } else if (System.getenv('CI_MAP_IMPL').equals('v10')) {
-            RNMapboxMapImpl = "v10"
+            logger.warn('using v10')
+            RNMapboxMapsImpl = "v10"
         } else if (System.getenv('CI_MAP_IMPL').equals('mapbox')) {
-            RNMapboxMapImpl = "mapbox"
+            logger.warn('using mapbox')
+            RNMapboxMapsImpl = "mapbox"
         }
+        logger.warn("impl=${RNMapboxMapsImpl}") 
 
         // Mapbox deps
         if (useCustomMapbox) {
-            RNMapboxMapLibs = {
+            RNMapboxMapsLibs = {
                 implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.1'
                 implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.8.0'
                 implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.8.0'

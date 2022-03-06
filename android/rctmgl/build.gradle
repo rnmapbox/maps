@@ -4,25 +4,24 @@ def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
 
-def defaultMapboxMapImpl = "maplibre"
+def defaultMapboxMapsImpl = "maplibre"
 
 android {
-    if (safeExtGet("RNMapboxMapImpl", defaultMapboxMapImpl).equals("maplibre")) {
-        
+    if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl).equals("maplibre")) {
         sourceSets {
             main {
                 java.srcDirs = ['src/main/java','src/main/java-maplibre']
             }
         }
     }
-    else if (safeExtGet("RNMapboxMapImpl", defaultMapboxMapImpl).equals("mapbox")) {
+    else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl).equals("mapbox-gl")) {
         sourceSets {
             main {
                 java.srcDirs = ['src/main/java','src/main/java-mapbox']
             }
         }
     }
-    else if (safeExtGet("RNMapboxMapImpl", defaultMapboxMapImpl).equals("v10")) {
+    else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl).equals("mapbox")) {
         sourceSets {
             main {
                 java.srcDirs = ['src/main/java-v10']
@@ -37,7 +36,7 @@ android {
         }
     }
     else {
-        msg = "RNMapboxMapImpl should be one of: mapbox, v10, maplibre got: ${safeExtGet("mapboxV10", defaultMapboxMapImpl)}"
+        msg = "RNMapboxMapsImpl should be one of: mapbox, mapbox-gl, maplibre got: ${safeExtGet("mapboxV10", defaultMapboxMapsImpl)}"
         logger.error(msg)
         throw new GradleException(msg)
     }
@@ -89,8 +88,8 @@ dependencies {
     implementation "com.facebook.react:react-native:+"
 
     // Mapbox SDK
-    customizableDependencies('RNMapboxMapLibs') {
-        if (safeExtGet("RNMapboxMapImpl", defaultMapboxMapImpl).equals("maplibre")) {
+    customizableDependencies('RNMapboxMapsLibs') {
+        if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl).equals("maplibre")) {
             implementation ("org.maplibre.gl:android-sdk:9.2.1")
             implementation ("org.maplibre.gl:android-sdk-turf:5.9.0")
 
@@ -98,7 +97,7 @@ dependencies {
             implementation ("org.maplibre.gl:android-plugin-annotation-v9:1.0.0")
             implementation ("org.maplibre.gl:android-plugin-markerview-v9:1.0.0")
         } 
-        else if (safeExtGet("RNMapboxMapImpl", defaultMapboxMapImpl).equals("mapbox")) {
+        else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl).equals("mapbox-gl")) {
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.1.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.1.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-android-telemetry:6.1.0'
@@ -110,16 +109,20 @@ dependencies {
             implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v9:0.4.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.1.0'
         }
-        else if (safeExtGet("RNMapboxMapImpl", defaultMapboxMapImpl).equals("v10")) {
+        else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl).equals("mapbox")) {
             implementation 'com.mapbox.maps:android:10.3.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.4.1'
         }
     }
 
     // Dependencies
-    implementation "com.android.support:support-vector-drawable:${safeExtGet('supportLibVersion', '28.0.0')}"
-    implementation "com.android.support:support-annotations:${safeExtGet('supportLibVersion', '28.0.0')}"
-    implementation "com.android.support:appcompat-v7:${safeExtGet('supportLibVersion', '28.0.0')}"
-    implementation "com.squareup.okhttp3:okhttp:${safeExtGet('okhttpVersion', '4.9.0')}"
-    implementation "com.squareup.okhttp3:okhttp-urlconnection:${safeExtGet('okhttpVersion', '4.9.0')}"
+    customizableDependencies('RNMapboxMapsSupportLibs') {
+        implementation "com.android.support:support-vector-drawable:28.0.0"
+        implementation "com.android.support:support-annotations:28.0.0"
+        implementation "com.android.support:appcompat-v7:28.0.0"
+    }
+    customizableDependencies('RNMapboxMapsOkHTTPLibs') {
+        implementation "com.squareup.okhttp3:okhttp:4.9.0"
+        implementation "com.squareup.okhttp3:okhttp-urlconnection:4.9.0"
+    }
 }
