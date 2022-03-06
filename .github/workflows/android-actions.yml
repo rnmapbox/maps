@@ -31,7 +31,9 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
 
-      - run: echo MAPBOX_DOWNLOADS_TOKEN=$MAPBOX_DOWNLOAD_TOKEN > ~/.gradle/gradle.properties
+      - run: |
+          mkdir -p ~/.gradle/
+          echo MAPBOX_DOWNLOADS_TOKEN=$MAPBOX_DOWNLOAD_TOKEN > ~/.gradle/gradle.properties
         working-directory: example
         env:
           MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
