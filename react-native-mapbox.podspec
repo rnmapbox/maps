@@ -33,8 +33,8 @@ if $RNMBGL_Use_SPM
 end
 
 if $RNMBGL_USE_V10
-  puts "WARNING: $RNMBGL_USE_V10 is deprecated - use $RNMapboxMapsImpl = 'v10'"
-  $RNMapboxMapsImpl = 'v10'
+  puts "WARNING: $RNMBGL_USE_V10 is deprecated - use $RNMapboxMapsImpl = 'mapbox'"
+  $RNMapboxMapsImpl = 'mapbox'
 end
 
 if $RNMBGL_USE_MAPLIBRE
