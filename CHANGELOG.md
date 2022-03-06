@@ -5,6 +5,17 @@ Please add unreleased changes in the following style:
 PR Title ([#123](link to my pr))
 ```
 
+### 10.0.0-beta.0
+
+#### Breaking changes:
+
+The setup was changed - see install instructions for more details. In a nuthsell:
+* On both android and ios to select mapbox implementation use `RNMabpoxMapsImpl` variable which can be one of (`maplibre`,`mapbox`(aka v10),`mapbox-gl`)
+
+#### Changes:
+
+- Initial Mapbox V10 support ([#1750](https://github.com/rnmapbox/maps/pull/1750))
+
 ## 8.6.0-beta.0
 
 fix: add TypeScript type for MapViews's preferredFramesPerSecond prop ([#1717](https://github.com/rnmapbox/maps/pull/1717))
