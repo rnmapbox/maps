@@ -53,7 +53,7 @@ target 'RNMapboxGLExample' do
   )
 
   # default version
-  pod 'react-native-mapbox', :path => '../../', :inhibit_warnings => false
+  pod 'rnmapbox-maps', :path => '../../', :inhibit_warnings => false
 
   use_native_modules!
 
