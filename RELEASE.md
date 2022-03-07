@@ -11,7 +11,7 @@ Once you verified, that `master` isn't broken, go on and increase the `version` 
 
 ## Update the CHANGELOG accordingly
 
-Our [`CHANGELOG.md`](https://github.com/rnmapbox/maps/blob/master/CHANGELOG.md) should be updated whenever a PR is merged/ noteworthy changes are commited to `master`.  
+Our [`CHANGELOG.md`](https://github.com/rnmapbox/maps/blob/main/CHANGELOG.md) should be updated whenever a PR is merged/ noteworthy changes are commited to `master`.  
 Prior to a release, the changes should be documented under the `UNRELEASED` section.  
 Once it's clear, that a release is about to be published, move the items under `UNRELEASED` to _this_ releases sections.  
 Let your actions be guided by the previous release entries.

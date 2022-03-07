@@ -1,18 +1,18 @@
 
 <p align="center">
-  <a href="https://github.com/rnmapbox/maps/blob/master/example/src/examples/ChoroplethLayerByZoomLevel.js">
+  <a href="https://github.com/rnmapbox/maps/blob/main/example/src/examples/ChoroplethLayerByZoomLevel.js">
     <img  src="readme_assets/example_choropleth_layer.png"  width="175"/>
   </a>
-  <a href="https://github.com/rnmapbox/maps/blob/master/example/src/examples/EarthQuakes.js">
+  <a href="https://github.com/rnmapbox/maps/blob/main/example/src/examples/EarthQuakes.js">
     <img  src="readme_assets/example_clustering_earthquakes.png" width="175"/>
   </a>
-  <a href="https://github.com/rnmapbox/maps/blob/master/example/src/examples/Annotations/CustomCallout.tsx">
+  <a href="https://github.com/rnmapbox/maps/blob/main/example/src/examples/Annotations/CustomCallout.tsx">
     <img  src="readme_assets/example_custom_callout.png" width="175"/>
   </a>
-  <a href="https://github.com/rnmapbox/maps/blob/master/example/src/examples/DataDrivenCircleColors.js">
+  <a href="https://github.com/rnmapbox/maps/blob/main/example/src/examples/DataDrivenCircleColors.js">
     <img  src="readme_assets/example_data_driven_circle_colors.png" width="175"/>
   </a>
-  <a href="https://github.com/rnmapbox/maps/blob/master/example/src/examples/ImageOverlay.js">
+  <a href="https://github.com/rnmapbox/maps/blob/main/example/src/examples/ImageOverlay.js">
     <img  src="readme_assets/example_image_overlay.png" width="175"/>
   </a>
 </p>
