@@ -14,7 +14,7 @@ assignees: ''
 * Please respect and fill out the issue template
 * Before you report, please make sure you tested on a physical device
 * For build issues: Can you reproduce it on a clean install of the example app? Please include full steps to reproduce from `react-native init`
-* Please include standalone code sample - a single component with one MapView in it. Use [one of our example](https://github.com/rnmapbox/maps/blob/master/example/src/examples/PointInMapView.js) screens as a starging point.
+* Please include standalone code sample - a single component with one MapView in it. Use [one of our example](https://github.com/rnmapbox/maps/blob/main/example/src/examples/PointInMapView.js) screens as a starging point.
 * Use [discussions](https://github.com/rnmapbox/maps/discussions) or gitter and/or stack overflow for questions.
 
 If you want others to spend time on your issue, please make sure to first spend some time on the ticket. 
@@ -35,7 +35,7 @@ A clear and concise description of what the bug is.
 Steps to reproduce the behavior. 
 
 Please include a single standalone React Native component.  
-Use [our BugReportTemplate](https://github.com/rnmapbox/maps/blob/master/example/src/examples/BugReportTemplate.js) screens as a starting point.
+Use [our BugReportTemplate](https://github.com/rnmapbox/maps/blob/main/example/src/examples/BugReportTemplate.js) screens as a starting point.
 Please simplify the example as much as possible!
 
 Chances that a bug report will be investiagete and worked on are exponetially higher with a complete and _working_ repro BugTemplate!
