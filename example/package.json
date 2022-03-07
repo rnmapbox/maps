@@ -46,7 +46,7 @@
     "@types/react": "^17.0.0",
     "@types/react-native": "^0.66.1",
     "babel-plugin-module-resolver": "^4.1.0",
-    "detox": "^19.1.0",
+    "detox": "^19.1.0 <19.5.2 || >19.5.2",
     "glob-to-regexp": "^0.4.0",
     "jest": "^27.1.0",
     "jest-circus": "^27.1.1",
