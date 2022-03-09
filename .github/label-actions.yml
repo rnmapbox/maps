@@ -4,6 +4,11 @@
     :wave: @{issue-author}, please respect our issue template<br>required fields are missing.
   # Close the issue
   close: true
+"Needs: Standalone component":
+  comment: >
+    :wave: @{issue-author}, please include a [complete, isolated example](https://github.com/rnmapbox/maps/wiki/Issue-missing-standalone-component) 
+  # Close the issue
+  close: true
 "question":
   comment: >
     :thinking: @{issue-author}, this is rather a question than an issue<br>please use our [discussions](https://github.com/rnmapbox/maps/discussions) or [gitter](https://gitter.im/react-native-mapbox-gl/Lobby) or stackoverflow for this.
