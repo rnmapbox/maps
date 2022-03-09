@@ -19,17 +19,17 @@
 
 ### styles
 
-* <a href="#name">visibility</a><br/>
-* <a href="#name-1">heatmapRadius</a><br/>
-* <a href="#name-2">heatmapWeight</a><br/>
-* <a href="#name-3">heatmapIntensity</a><br/>
-* <a href="#name-4">heatmapColor</a><br/>
-* <a href="#name-5">heatmapOpacity</a><br/>
+* <a href="#visibility">visibility</a><br/>
+* <a href="#heatmapradius">heatmapRadius</a><br/>
+* <a href="#heatmapweight">heatmapWeight</a><br/>
+* <a href="#heatmapintensity">heatmapIntensity</a><br/>
+* <a href="#heatmapcolor">heatmapColor</a><br/>
+* <a href="#heatmapopacity">heatmapOpacity</a><br/>
 
 ___
 
-#### Name
-`visibility`
+#### visibility
+Name: `visibility`
 
 #### Description
 Whether this layer is displayed.
@@ -47,8 +47,8 @@ Whether this layer is displayed.
 
 ___
 
-#### Name
-`heatmapRadius`
+#### heatmapRadius
+Name: `heatmapRadius`
 
 #### Description
 Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.
@@ -91,8 +91,8 @@ The transition affecting any changes to this layer’s heatmapRadius propery.
 
 ___
 
-#### Name
-`heatmapWeight`
+#### heatmapWeight
+Name: `heatmapWeight`
 
 #### Description
 A measure of how much an individual point contributes to the heatmap. A value of 10 would be equivalent to having 10 points of weight 1 in the same spot. Especially useful when combined with clustering.
@@ -112,8 +112,8 @@ Parameters: `zoom, feature, feature-state`
 
 ___
 
-#### Name
-`heatmapIntensity`
+#### heatmapIntensity
+Name: `heatmapIntensity`
 
 #### Description
 Similar to `heatmapWeight` but controls the intensity of the heatmap globally. Primarily used for adjusting the heatmap based on zoom level.
@@ -153,8 +153,8 @@ The transition affecting any changes to this layer’s heatmapIntensity propery.
 
 ___
 
-#### Name
-`heatmapColor`
+#### heatmapColor
+Name: `heatmapColor`
 
 #### Description
 Defines the color of each pixel based on its density value in a heatmap.  Should be an expression that uses `["heatmapDensity"]` as input.
@@ -171,8 +171,8 @@ Parameters: `heatmap-density`
 
 ___
 
-#### Name
-`heatmapOpacity`
+#### heatmapOpacity
+Name: `heatmapOpacity`
 
 #### Description
 The global opacity at which the heatmap layer will be drawn.

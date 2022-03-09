@@ -19,20 +19,20 @@
 
 ### styles
 
-* <a href="#name">fillSortKey</a><br/>
-* <a href="#name-1">visibility</a><br/>
-* <a href="#name-2">fillAntialias</a><br/>
-* <a href="#name-3">fillOpacity</a><br/>
-* <a href="#name-4">fillColor</a><br/>
-* <a href="#name-5">fillOutlineColor</a><br/>
-* <a href="#name-6">fillTranslate</a><br/>
-* <a href="#name-7">fillTranslateAnchor</a><br/>
-* <a href="#name-8">fillPattern</a><br/>
+* <a href="#fillsortkey">fillSortKey</a><br/>
+* <a href="#visibility">visibility</a><br/>
+* <a href="#fillantialias">fillAntialias</a><br/>
+* <a href="#fillopacity">fillOpacity</a><br/>
+* <a href="#fillcolor">fillColor</a><br/>
+* <a href="#filloutlinecolor">fillOutlineColor</a><br/>
+* <a href="#filltranslate">fillTranslate</a><br/>
+* <a href="#filltranslateanchor">fillTranslateAnchor</a><br/>
+* <a href="#fillpattern">fillPattern</a><br/>
 
 ___
 
-#### Name
-`fillSortKey`
+#### fillSortKey
+Name: `fillSortKey`
 
 #### Description
 Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
@@ -47,8 +47,8 @@ Parameters: `zoom, feature`
 
 ___
 
-#### Name
-`visibility`
+#### visibility
+Name: `visibility`
 
 #### Description
 Whether this layer is displayed.
@@ -66,8 +66,8 @@ Whether this layer is displayed.
 
 ___
 
-#### Name
-`fillAntialias`
+#### fillAntialias
+Name: `fillAntialias`
 
 #### Description
 Whether or not the fill should be antialiased.
@@ -84,8 +84,8 @@ Parameters: `zoom`
 
 ___
 
-#### Name
-`fillOpacity`
+#### fillOpacity
+Name: `fillOpacity`
 
 #### Description
 The opacity of the entire fill layer. In contrast to the `fillColor`, this value will also affect the 1px stroke around the fill, if the stroke is used.
@@ -128,8 +128,8 @@ The transition affecting any changes to this layer’s fillOpacity propery.
 
 ___
 
-#### Name
-`fillColor`
+#### fillColor
+Name: `fillColor`
 
 #### Description
 The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
@@ -169,8 +169,8 @@ The transition affecting any changes to this layer’s fillColor propery.
 
 ___
 
-#### Name
-`fillOutlineColor`
+#### fillOutlineColor
+Name: `fillOutlineColor`
 
 #### Description
 The outline color of the fill. Matches the value of `fillColor` if unspecified.
@@ -208,8 +208,8 @@ The transition affecting any changes to this layer’s fillOutlineColor propery.
 
 ___
 
-#### Name
-`fillTranslate`
+#### fillTranslate
+Name: `fillTranslate`
 
 #### Description
 The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
@@ -249,8 +249,8 @@ The transition affecting any changes to this layer’s fillTranslate propery.
 
 ___
 
-#### Name
-`fillTranslateAnchor`
+#### fillTranslateAnchor
+Name: `fillTranslateAnchor`
 
 #### Description
 Controls the frame of reference for `fillTranslate`.
@@ -274,8 +274,8 @@ Parameters: `zoom`
 
 ___
 
-#### Name
-`fillPattern`
+#### fillPattern
+Name: `fillPattern`
 
 #### Description
 Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.
