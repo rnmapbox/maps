@@ -14,4 +14,11 @@ describe('Maps Example App', () => {
     await expect(element(by.text('Camera'))).toBeVisible();
     await expect(element(by.text('User Location'))).toBeVisible();
   });
+
+  it('should render MapView', async () => {
+    await expect(element(by.text('Map'))).toBeVisible();
+    await element(by.text('Map')).tap();
+    await expect(element(by.text('Show Map'))).toBeVisible(); 
+    await element(by.text('Show Map')).tap();
+  });
 });
