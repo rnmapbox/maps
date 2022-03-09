@@ -58,15 +58,6 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - glog (0.3.5)
   - libevent (2.1.12)
-  - MapboxCommon (21.1.0)
-  - MapboxCoreMaps (10.3.2):
-    - MapboxCommon (~> 21.1)
-  - MapboxMaps (10.3.0):
-    - MapboxCommon (= 21.1.0)
-    - MapboxCoreMaps (= 10.3.2)
-    - MapboxMobileEvents (= 1.0.7)
-    - Turf (~> 2.0)
-  - MapboxMobileEvents (1.0.7)
   - OpenSSL-Universal (1.1.180)
   - RCT-Folly (2020.01.13.00):
     - boost-for-react-native
@@ -261,23 +252,6 @@ PODS:
     - React-jsi (= 0.64.2)
     - React-perflogger (= 0.64.2)
   - React-jsinspector (0.64.2)
-  - react-native-mapbox-gl (10.0.0-beta1):
-    - MapboxMaps (~> 10.3.0)
-    - React
-    - React-Core
-    - react-native-mapbox-gl/DynamicLibrary (= 10.0.0-beta1)
-    - react-native-mapbox-gl/StaticLibraryFixer (= 10.0.0-beta1)
-    - Turf
-  - react-native-mapbox-gl/DynamicLibrary (10.0.0-beta1):
-    - MapboxMaps (~> 10.3.0)
-    - React
-    - React-Core
-    - Turf
-  - react-native-mapbox-gl/StaticLibraryFixer (10.0.0-beta1):
-    - MapboxMaps (~> 10.3.0)
-    - React
-    - React-Core
-    - Turf
   - react-native-safe-area-context (3.3.0):
     - React-Core
   - React-perflogger (0.64.2)
@@ -348,6 +322,13 @@ PODS:
     - React
   - RNGestureHandler (1.10.3):
     - React-Core
+  - rnmapbox-maps (10.0.0-beta.0):
+    - React
+    - React-Core
+    - rnmapbox-maps/DynamicLibrary (= 10.0.0-beta.0)
+  - rnmapbox-maps/DynamicLibrary (10.0.0-beta.0):
+    - React
+    - React-Core
   - RNScreens (3.5.0):
     - React-Core
     - React-RCTImage
@@ -355,7 +336,6 @@ PODS:
     - React
   - RNVectorIcons (8.1.0):
     - React-Core
-  - Turf (2.2.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -397,7 +377,6 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
-  - react-native-mapbox-gl (from `../../`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -413,6 +392,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - rnmapbox-maps (from `../../`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -430,12 +410,7 @@ SPEC REPOS:
     - Flipper-RSocket
     - FlipperKit
     - libevent
-    - MapboxCommon
-    - MapboxCoreMaps
-    - MapboxMaps
-    - MapboxMobileEvents
     - OpenSSL-Universal
-    - Turf
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -469,8 +444,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
-  react-native-mapbox-gl:
-    :path: "../../"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   React-perflogger:
@@ -501,6 +474,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/masked-view"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  rnmapbox-maps:
+    :path: "../../"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNSVG:
@@ -525,10 +500,6 @@ SPEC CHECKSUMS:
   FlipperKit: 8a20b5c5fcf9436cac58551dc049867247f64b00
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  MapboxCommon: 019dac381fcb3aab115b5d488593261c810253ad
-  MapboxCoreMaps: 418b6e02464c00d7227e778164f6ca67755ae6a1
-  MapboxMaps: fc490ab5b8df6f74a82d35c56bc2ea4d576ad4ee
-  MapboxMobileEvents: f7f3e8daeb4b83688ae62a4172dce79169a97233
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: 6d3e854f0e7260a648badd0d44fc364bc9da9728
@@ -541,7 +512,6 @@ SPEC CHECKSUMS:
   React-jsi: 67747b9722f6dab2ffe15b011bcf6b3f2c3f1427
   React-jsiexecutor: 80c46bd381fd06e418e0d4f53672dc1d1945c4c3
   React-jsinspector: cc614ec18a9ca96fd275100c16d74d62ee11f0ae
-  react-native-mapbox-gl: e3787f9278d4ce60a409254ed772f5fa1a4614fd
   react-native-safe-area-context: 61c8c484a3a9e7d1fda19f7b1794b35bbfd2262a
   React-perflogger: 25373e382fed75ce768a443822f07098a15ab737
   React-RCTActionSheet: af7796ba49ffe4ca92e7277a5d992d37203f7da5
@@ -557,13 +527,13 @@ SPEC CHECKSUMS:
   ReactCommon: 149906e01aa51142707a10665185db879898e966
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+  rnmapbox-maps: 7967bd7d29277012922129eda7e7a9111fb985cf
   RNScreens: 01ab149b5dd5c27f5ff26741b1d2bdf2cee1af35
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
-  Turf: 1a6bc2d0142f84610445159565c3c93d62b83897
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 2b2b81e56e0a06ef5fffd0d4e090e8165a248023
+PODFILE CHECKSUM: 703cbe79aa876cda20a88b726c28c8dbf135b2ed
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2
