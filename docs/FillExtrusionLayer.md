@@ -19,20 +19,20 @@
 
 ### styles
 
-* <a href="#name">visibility</a><br/>
-* <a href="#name-1">fillExtrusionOpacity</a><br/>
-* <a href="#name-2">fillExtrusionColor</a><br/>
-* <a href="#name-3">fillExtrusionTranslate</a><br/>
-* <a href="#name-4">fillExtrusionTranslateAnchor</a><br/>
-* <a href="#name-5">fillExtrusionPattern</a><br/>
-* <a href="#name-6">fillExtrusionHeight</a><br/>
-* <a href="#name-7">fillExtrusionBase</a><br/>
-* <a href="#name-8">fillExtrusionVerticalGradient</a><br/>
+* <a href="#visibility">visibility</a><br/>
+* <a href="#fillextrusionopacity">fillExtrusionOpacity</a><br/>
+* <a href="#fillextrusioncolor">fillExtrusionColor</a><br/>
+* <a href="#fillextrusiontranslate">fillExtrusionTranslate</a><br/>
+* <a href="#fillextrusiontranslateanchor">fillExtrusionTranslateAnchor</a><br/>
+* <a href="#fillextrusionpattern">fillExtrusionPattern</a><br/>
+* <a href="#fillextrusionheight">fillExtrusionHeight</a><br/>
+* <a href="#fillextrusionbase">fillExtrusionBase</a><br/>
+* <a href="#fillextrusionverticalgradient">fillExtrusionVerticalGradient</a><br/>
 
 ___
 
-#### Name
-`visibility`
+#### visibility
+Name: `visibility`
 
 #### Description
 Whether this layer is displayed.
@@ -50,8 +50,8 @@ Whether this layer is displayed.
 
 ___
 
-#### Name
-`fillExtrusionOpacity`
+#### fillExtrusionOpacity
+Name: `fillExtrusionOpacity`
 
 #### Description
 The opacity of the entire fill extrusion layer. This is rendered on a perLayer, not perFeature, basis, and dataDriven styling is not available.
@@ -94,8 +94,8 @@ The transition affecting any changes to this layer’s fillExtrusionOpacity prop
 
 ___
 
-#### Name
-`fillExtrusionColor`
+#### fillExtrusionColor
+Name: `fillExtrusionColor`
 
 #### Description
 The base color of the extruded fill. The extrusion's surfaces will be shaded differently based on this color in combination with the root `light` settings. If this color is specified as `rgba` with an alpha component, the alpha component will be ignored; use `fillExtrusionOpacity` to set layer opacity.
@@ -135,8 +135,8 @@ The transition affecting any changes to this layer’s fillExtrusionColor proper
 
 ___
 
-#### Name
-`fillExtrusionTranslate`
+#### fillExtrusionTranslate
+Name: `fillExtrusionTranslate`
 
 #### Description
 The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively.
@@ -176,8 +176,8 @@ The transition affecting any changes to this layer’s fillExtrusionTranslate pr
 
 ___
 
-#### Name
-`fillExtrusionTranslateAnchor`
+#### fillExtrusionTranslateAnchor
+Name: `fillExtrusionTranslateAnchor`
 
 #### Description
 Controls the frame of reference for `fillExtrusionTranslate`.
@@ -201,8 +201,8 @@ Parameters: `zoom`
 
 ___
 
-#### Name
-`fillExtrusionPattern`
+#### fillExtrusionPattern
+Name: `fillExtrusionPattern`
 
 #### Description
 Name of image in sprite to use for drawing images on extruded fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.
@@ -237,8 +237,8 @@ The transition affecting any changes to this layer’s fillExtrusionPattern prop
 
 ___
 
-#### Name
-`fillExtrusionHeight`
+#### fillExtrusionHeight
+Name: `fillExtrusionHeight`
 
 #### Description
 The height with which to extrude this layer.
@@ -281,8 +281,8 @@ The transition affecting any changes to this layer’s fillExtrusionHeight prope
 
 ___
 
-#### Name
-`fillExtrusionBase`
+#### fillExtrusionBase
+Name: `fillExtrusionBase`
 
 #### Description
 The height with which to extrude the base of this layer. Must be less than or equal to `fillExtrusionHeight`.
@@ -328,8 +328,8 @@ The transition affecting any changes to this layer’s fillExtrusionBase propery
 
 ___
 
-#### Name
-`fillExtrusionVerticalGradient`
+#### fillExtrusionVerticalGradient
+Name: `fillExtrusionVerticalGradient`
 
 #### Description
 Whether to apply a vertical gradient to the sides of a fillExtrusion layer. If true, sides will be shaded slightly darker farther down.

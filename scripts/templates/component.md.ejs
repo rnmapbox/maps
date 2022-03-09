@@ -35,14 +35,14 @@
 <%
 const style = component.styles[i];
 -%>
-* <a href="#name<%- i > 0 ? '-' + i : '' -%>"><%- style.name %></a><br/>
+* <a href="#<%- style.name.toLowerCase() %>"><%- style.name %></a><br/>
 <%_ } _%>
 
 <%_ for (let style of component.styles) { _%>
 ___
 
-#### Name
-`<%- style.name %>`
+#### <%- style.name %>
+Name: `<%- style.name %>`
 
 #### Description
 <%- style.description %>

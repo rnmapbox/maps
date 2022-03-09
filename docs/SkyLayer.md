@@ -16,21 +16,21 @@
 
 ### styles
 
-* <a href="#name">visibility</a><br/>
-* <a href="#name-1">skyType</a><br/>
-* <a href="#name-2">skyAtmosphereSun</a><br/>
-* <a href="#name-3">skyAtmosphereSunIntensity</a><br/>
-* <a href="#name-4">skyGradientCenter</a><br/>
-* <a href="#name-5">skyGradientRadius</a><br/>
-* <a href="#name-6">skyGradient</a><br/>
-* <a href="#name-7">skyAtmosphereHaloColor</a><br/>
-* <a href="#name-8">skyAtmosphereColor</a><br/>
-* <a href="#name-9">skyOpacity</a><br/>
+* <a href="#visibility">visibility</a><br/>
+* <a href="#skytype">skyType</a><br/>
+* <a href="#skyatmospheresun">skyAtmosphereSun</a><br/>
+* <a href="#skyatmospheresunintensity">skyAtmosphereSunIntensity</a><br/>
+* <a href="#skygradientcenter">skyGradientCenter</a><br/>
+* <a href="#skygradientradius">skyGradientRadius</a><br/>
+* <a href="#skygradient">skyGradient</a><br/>
+* <a href="#skyatmospherehalocolor">skyAtmosphereHaloColor</a><br/>
+* <a href="#skyatmospherecolor">skyAtmosphereColor</a><br/>
+* <a href="#skyopacity">skyOpacity</a><br/>
 
 ___
 
-#### Name
-`visibility`
+#### visibility
+Name: `visibility`
 
 #### Description
 Whether this layer is displayed.
@@ -48,8 +48,8 @@ Whether this layer is displayed.
 
 ___
 
-#### Name
-`skyType`
+#### skyType
+Name: `skyType`
 
 #### Description
 The type of the sky
@@ -70,8 +70,8 @@ Parameters: `zoom`
 
 ___
 
-#### Name
-`skyAtmosphereSun`
+#### skyAtmosphereSun
+Name: `skyAtmosphereSun`
 
 #### Description
 Position of the sun center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the sun relative to 0° north, where degrees proceed clockwise. The polar angle indicates the height of the sun, where 0° is directly above, at zenith, and 90° at the horizon. When this property is ommitted, the sun center is directly inherited from the light position.
@@ -95,8 +95,8 @@ Parameters: `zoom`
 
 ___
 
-#### Name
-`skyAtmosphereSunIntensity`
+#### skyAtmosphereSunIntensity
+Name: `skyAtmosphereSunIntensity`
 
 #### Description
 Intensity of the sun as a light source in the atmosphere (on a scale from 0 to a 100). Setting higher values will brighten up the sky.
@@ -116,8 +116,8 @@ Intensity of the sun as a light source in the atmosphere (on a scale from 0 to a
 
 ___
 
-#### Name
-`skyGradientCenter`
+#### skyGradientCenter
+Name: `skyGradientCenter`
 
 #### Description
 Position of the gradient center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the gradient center relative to 0° north, where degrees proceed clockwise. The polar angle indicates the height of the gradient center, where 0° is directly above, at zenith, and 90° at the horizon.
@@ -143,8 +143,8 @@ Parameters: `zoom`
 
 ___
 
-#### Name
-`skyGradientRadius`
+#### skyGradientRadius
+Name: `skyGradientRadius`
 
 #### Description
 The angular distance (measured in degrees) from `skyGradientCenter` up to which the gradient extends. A value of 180 causes the gradient to wrap around to the opposite direction from `skyGradientCenter`.
@@ -167,8 +167,8 @@ Parameters: `zoom`
 
 ___
 
-#### Name
-`skyGradient`
+#### skyGradient
+Name: `skyGradient`
 
 #### Description
 Defines a radial color gradient with which to color the sky. The color values can be interpolated with an expression using `skyRadialProgress`. The range [0, 1] for the interpolant covers a radial distance (in degrees) of [0, `skyGradientRadius`] centered at the position specified by `skyGradientCenter`.
@@ -185,8 +185,8 @@ Parameters: `sky-radial-progress`
 
 ___
 
-#### Name
-`skyAtmosphereHaloColor`
+#### skyAtmosphereHaloColor
+Name: `skyAtmosphereHaloColor`
 
 #### Description
 A color applied to the atmosphere sun halo. The alpha channel describes how strongly the sun halo is represented in an atmosphere sky layer.
@@ -200,8 +200,8 @@ A color applied to the atmosphere sun halo. The alpha channel describes how stro
 
 ___
 
-#### Name
-`skyAtmosphereColor`
+#### skyAtmosphereColor
+Name: `skyAtmosphereColor`
 
 #### Description
 A color used to tweak the main atmospheric scattering coefficients. Using white applies the default coefficients giving the natural blue color to the atmosphere. This color affects how heavily the corresponding wavelength is represented during scattering. The alpha channel describes the density of the atmosphere, with 1 maximum density and 0 no density.
@@ -215,8 +215,8 @@ A color used to tweak the main atmospheric scattering coefficients. Using white 
 
 ___
 
-#### Name
-`skyOpacity`
+#### skyOpacity
+Name: `skyOpacity`
 
 #### Description
 The opacity of the entire sky layer.

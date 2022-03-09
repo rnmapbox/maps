@@ -19,15 +19,15 @@
 
 ### styles
 
-* <a href="#name">visibility</a><br/>
-* <a href="#name-1">backgroundColor</a><br/>
-* <a href="#name-2">backgroundPattern</a><br/>
-* <a href="#name-3">backgroundOpacity</a><br/>
+* <a href="#visibility">visibility</a><br/>
+* <a href="#backgroundcolor">backgroundColor</a><br/>
+* <a href="#backgroundpattern">backgroundPattern</a><br/>
+* <a href="#backgroundopacity">backgroundOpacity</a><br/>
 
 ___
 
-#### Name
-`visibility`
+#### visibility
+Name: `visibility`
 
 #### Description
 Whether this layer is displayed.
@@ -45,8 +45,8 @@ Whether this layer is displayed.
 
 ___
 
-#### Name
-`backgroundColor`
+#### backgroundColor
+Name: `backgroundColor`
 
 #### Description
 The color with which the background will be drawn.
@@ -86,8 +86,8 @@ The transition affecting any changes to this layer’s backgroundColor propery.
 
 ___
 
-#### Name
-`backgroundPattern`
+#### backgroundPattern
+Name: `backgroundPattern`
 
 #### Description
 Name of image in sprite to use for drawing an image background. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.
@@ -122,8 +122,8 @@ The transition affecting any changes to this layer’s backgroundPattern propery
 
 ___
 
-#### Name
-`backgroundOpacity`
+#### backgroundOpacity
+Name: `backgroundOpacity`
 
 #### Description
 The opacity at which the background will be drawn.

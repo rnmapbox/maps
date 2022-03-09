@@ -19,28 +19,28 @@
 
 ### styles
 
-* <a href="#name">lineCap</a><br/>
-* <a href="#name-1">lineJoin</a><br/>
-* <a href="#name-2">lineMiterLimit</a><br/>
-* <a href="#name-3">lineRoundLimit</a><br/>
-* <a href="#name-4">lineSortKey</a><br/>
-* <a href="#name-5">visibility</a><br/>
-* <a href="#name-6">lineOpacity</a><br/>
-* <a href="#name-7">lineColor</a><br/>
-* <a href="#name-8">lineTranslate</a><br/>
-* <a href="#name-9">lineTranslateAnchor</a><br/>
-* <a href="#name-10">lineWidth</a><br/>
-* <a href="#name-11">lineGapWidth</a><br/>
-* <a href="#name-12">lineOffset</a><br/>
-* <a href="#name-13">lineBlur</a><br/>
-* <a href="#name-14">lineDasharray</a><br/>
-* <a href="#name-15">linePattern</a><br/>
-* <a href="#name-16">lineGradient</a><br/>
+* <a href="#linecap">lineCap</a><br/>
+* <a href="#linejoin">lineJoin</a><br/>
+* <a href="#linemiterlimit">lineMiterLimit</a><br/>
+* <a href="#lineroundlimit">lineRoundLimit</a><br/>
+* <a href="#linesortkey">lineSortKey</a><br/>
+* <a href="#visibility">visibility</a><br/>
+* <a href="#lineopacity">lineOpacity</a><br/>
+* <a href="#linecolor">lineColor</a><br/>
+* <a href="#linetranslate">lineTranslate</a><br/>
+* <a href="#linetranslateanchor">lineTranslateAnchor</a><br/>
+* <a href="#linewidth">lineWidth</a><br/>
+* <a href="#linegapwidth">lineGapWidth</a><br/>
+* <a href="#lineoffset">lineOffset</a><br/>
+* <a href="#lineblur">lineBlur</a><br/>
+* <a href="#linedasharray">lineDasharray</a><br/>
+* <a href="#linepattern">linePattern</a><br/>
+* <a href="#linegradient">lineGradient</a><br/>
 
 ___
 
-#### Name
-`lineCap`
+#### lineCap
+Name: `lineCap`
 
 #### Description
 The display of line endings.
@@ -62,8 +62,8 @@ Parameters: `zoom, feature`
 
 ___
 
-#### Name
-`lineJoin`
+#### lineJoin
+Name: `lineJoin`
 
 #### Description
 The display of lines when joining.
@@ -87,8 +87,8 @@ Parameters: `zoom, feature`
 
 ___
 
-#### Name
-`lineMiterLimit`
+#### lineMiterLimit
+Name: `lineMiterLimit`
 
 #### Description
 Used to automatically convert miter joins to bevel joins for sharp angles.
@@ -105,8 +105,8 @@ Parameters: `zoom`
 
 ___
 
-#### Name
-`lineRoundLimit`
+#### lineRoundLimit
+Name: `lineRoundLimit`
 
 #### Description
 Used to automatically convert round joins to miter joins for shallow angles.
@@ -123,8 +123,8 @@ Parameters: `zoom`
 
 ___
 
-#### Name
-`lineSortKey`
+#### lineSortKey
+Name: `lineSortKey`
 
 #### Description
 Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
@@ -139,8 +139,8 @@ Parameters: `zoom, feature`
 
 ___
 
-#### Name
-`visibility`
+#### visibility
+Name: `visibility`
 
 #### Description
 Whether this layer is displayed.
@@ -158,8 +158,8 @@ Whether this layer is displayed.
 
 ___
 
-#### Name
-`lineOpacity`
+#### lineOpacity
+Name: `lineOpacity`
 
 #### Description
 The opacity at which the line will be drawn.
@@ -202,8 +202,8 @@ The transition affecting any changes to this layer’s lineOpacity propery.
 
 ___
 
-#### Name
-`lineColor`
+#### lineColor
+Name: `lineColor`
 
 #### Description
 The color with which the line will be drawn.
@@ -243,8 +243,8 @@ The transition affecting any changes to this layer’s lineColor propery.
 
 ___
 
-#### Name
-`lineTranslate`
+#### lineTranslate
+Name: `lineTranslate`
 
 #### Description
 The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
@@ -284,8 +284,8 @@ The transition affecting any changes to this layer’s lineTranslate propery.
 
 ___
 
-#### Name
-`lineTranslateAnchor`
+#### lineTranslateAnchor
+Name: `lineTranslateAnchor`
 
 #### Description
 Controls the frame of reference for `lineTranslate`.
@@ -309,8 +309,8 @@ Parameters: `zoom`
 
 ___
 
-#### Name
-`lineWidth`
+#### lineWidth
+Name: `lineWidth`
 
 #### Description
 Stroke thickness.
@@ -355,8 +355,8 @@ The transition affecting any changes to this layer’s lineWidth propery.
 
 ___
 
-#### Name
-`lineGapWidth`
+#### lineGapWidth
+Name: `lineGapWidth`
 
 #### Description
 Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
@@ -399,8 +399,8 @@ The transition affecting any changes to this layer’s lineGapWidth propery.
 
 ___
 
-#### Name
-`lineOffset`
+#### lineOffset
+Name: `lineOffset`
 
 #### Description
 The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
@@ -440,8 +440,8 @@ The transition affecting any changes to this layer’s lineOffset propery.
 
 ___
 
-#### Name
-`lineBlur`
+#### lineBlur
+Name: `lineBlur`
 
 #### Description
 Blur applied to the line, in pixels.
@@ -484,8 +484,8 @@ The transition affecting any changes to this layer’s lineBlur propery.
 
 ___
 
-#### Name
-`lineDasharray`
+#### lineDasharray
+Name: `lineDasharray`
 
 #### Description
 Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoomDependent expressions will be evaluated only at integer zoom levels.
@@ -529,8 +529,8 @@ The transition affecting any changes to this layer’s lineDasharray propery.
 
 ___
 
-#### Name
-`linePattern`
+#### linePattern
+Name: `linePattern`
 
 #### Description
 Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.
@@ -565,8 +565,8 @@ The transition affecting any changes to this layer’s linePattern propery.
 
 ___
 
-#### Name
-`lineGradient`
+#### lineGradient
+Name: `lineGradient`
 
 #### Description
 Defines a gradient with which to color a line feature. Can only be used with GeoJSON sources that specify `"lineMetrics": true`.

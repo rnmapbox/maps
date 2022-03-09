@@ -19,20 +19,20 @@
 
 ### styles
 
-* <a href="#name">visibility</a><br/>
-* <a href="#name-1">rasterOpacity</a><br/>
-* <a href="#name-2">rasterHueRotate</a><br/>
-* <a href="#name-3">rasterBrightnessMin</a><br/>
-* <a href="#name-4">rasterBrightnessMax</a><br/>
-* <a href="#name-5">rasterSaturation</a><br/>
-* <a href="#name-6">rasterContrast</a><br/>
-* <a href="#name-7">rasterResampling</a><br/>
-* <a href="#name-8">rasterFadeDuration</a><br/>
+* <a href="#visibility">visibility</a><br/>
+* <a href="#rasteropacity">rasterOpacity</a><br/>
+* <a href="#rasterhuerotate">rasterHueRotate</a><br/>
+* <a href="#rasterbrightnessmin">rasterBrightnessMin</a><br/>
+* <a href="#rasterbrightnessmax">rasterBrightnessMax</a><br/>
+* <a href="#rastersaturation">rasterSaturation</a><br/>
+* <a href="#rastercontrast">rasterContrast</a><br/>
+* <a href="#rasterresampling">rasterResampling</a><br/>
+* <a href="#rasterfadeduration">rasterFadeDuration</a><br/>
 
 ___
 
-#### Name
-`visibility`
+#### visibility
+Name: `visibility`
 
 #### Description
 Whether this layer is displayed.
@@ -50,8 +50,8 @@ Whether this layer is displayed.
 
 ___
 
-#### Name
-`rasterOpacity`
+#### rasterOpacity
+Name: `rasterOpacity`
 
 #### Description
 The opacity at which the image will be drawn.
@@ -94,8 +94,8 @@ The transition affecting any changes to this layer’s rasterOpacity propery.
 
 ___
 
-#### Name
-`rasterHueRotate`
+#### rasterHueRotate
+Name: `rasterHueRotate`
 
 #### Description
 Rotates hues around the color wheel.
@@ -135,8 +135,8 @@ The transition affecting any changes to this layer’s rasterHueRotate propery.
 
 ___
 
-#### Name
-`rasterBrightnessMin`
+#### rasterBrightnessMin
+Name: `rasterBrightnessMin`
 
 #### Description
 Increase or reduce the brightness of the image. The value is the minimum brightness.
@@ -179,8 +179,8 @@ The transition affecting any changes to this layer’s rasterBrightnessMin prope
 
 ___
 
-#### Name
-`rasterBrightnessMax`
+#### rasterBrightnessMax
+Name: `rasterBrightnessMax`
 
 #### Description
 Increase or reduce the brightness of the image. The value is the maximum brightness.
@@ -223,8 +223,8 @@ The transition affecting any changes to this layer’s rasterBrightnessMax prope
 
 ___
 
-#### Name
-`rasterSaturation`
+#### rasterSaturation
+Name: `rasterSaturation`
 
 #### Description
 Increase or reduce the saturation of the image.
@@ -267,8 +267,8 @@ The transition affecting any changes to this layer’s rasterSaturation propery.
 
 ___
 
-#### Name
-`rasterContrast`
+#### rasterContrast
+Name: `rasterContrast`
 
 #### Description
 Increase or reduce the contrast of the image.
@@ -311,8 +311,8 @@ The transition affecting any changes to this layer’s rasterContrast propery.
 
 ___
 
-#### Name
-`rasterResampling`
+#### rasterResampling
+Name: `rasterResampling`
 
 #### Description
 The resampling/interpolation method to use for overscaling, also known as texture magnification filter
@@ -333,8 +333,8 @@ Parameters: `zoom`
 
 ___
 
-#### Name
-`rasterFadeDuration`
+#### rasterFadeDuration
+Name: `rasterFadeDuration`
 
 #### Description
 Fade duration when a new tile is added.

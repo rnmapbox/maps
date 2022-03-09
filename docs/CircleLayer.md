@@ -19,24 +19,24 @@
 
 ### styles
 
-* <a href="#name">circleSortKey</a><br/>
-* <a href="#name-1">visibility</a><br/>
-* <a href="#name-2">circleRadius</a><br/>
-* <a href="#name-3">circleColor</a><br/>
-* <a href="#name-4">circleBlur</a><br/>
-* <a href="#name-5">circleOpacity</a><br/>
-* <a href="#name-6">circleTranslate</a><br/>
-* <a href="#name-7">circleTranslateAnchor</a><br/>
-* <a href="#name-8">circlePitchScale</a><br/>
-* <a href="#name-9">circlePitchAlignment</a><br/>
-* <a href="#name-10">circleStrokeWidth</a><br/>
-* <a href="#name-11">circleStrokeColor</a><br/>
-* <a href="#name-12">circleStrokeOpacity</a><br/>
+* <a href="#circlesortkey">circleSortKey</a><br/>
+* <a href="#visibility">visibility</a><br/>
+* <a href="#circleradius">circleRadius</a><br/>
+* <a href="#circlecolor">circleColor</a><br/>
+* <a href="#circleblur">circleBlur</a><br/>
+* <a href="#circleopacity">circleOpacity</a><br/>
+* <a href="#circletranslate">circleTranslate</a><br/>
+* <a href="#circletranslateanchor">circleTranslateAnchor</a><br/>
+* <a href="#circlepitchscale">circlePitchScale</a><br/>
+* <a href="#circlepitchalignment">circlePitchAlignment</a><br/>
+* <a href="#circlestrokewidth">circleStrokeWidth</a><br/>
+* <a href="#circlestrokecolor">circleStrokeColor</a><br/>
+* <a href="#circlestrokeopacity">circleStrokeOpacity</a><br/>
 
 ___
 
-#### Name
-`circleSortKey`
+#### circleSortKey
+Name: `circleSortKey`
 
 #### Description
 Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
@@ -51,8 +51,8 @@ Parameters: `zoom, feature`
 
 ___
 
-#### Name
-`visibility`
+#### visibility
+Name: `visibility`
 
 #### Description
 Whether this layer is displayed.
@@ -70,8 +70,8 @@ Whether this layer is displayed.
 
 ___
 
-#### Name
-`circleRadius`
+#### circleRadius
+Name: `circleRadius`
 
 #### Description
 Circle radius.
@@ -114,8 +114,8 @@ The transition affecting any changes to this layer’s circleRadius propery.
 
 ___
 
-#### Name
-`circleColor`
+#### circleColor
+Name: `circleColor`
 
 #### Description
 The fill color of the circle.
@@ -152,8 +152,8 @@ The transition affecting any changes to this layer’s circleColor propery.
 
 ___
 
-#### Name
-`circleBlur`
+#### circleBlur
+Name: `circleBlur`
 
 #### Description
 Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
@@ -190,8 +190,8 @@ The transition affecting any changes to this layer’s circleBlur propery.
 
 ___
 
-#### Name
-`circleOpacity`
+#### circleOpacity
+Name: `circleOpacity`
 
 #### Description
 The opacity at which the circle will be drawn.
@@ -234,8 +234,8 @@ The transition affecting any changes to this layer’s circleOpacity propery.
 
 ___
 
-#### Name
-`circleTranslate`
+#### circleTranslate
+Name: `circleTranslate`
 
 #### Description
 The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
@@ -275,8 +275,8 @@ The transition affecting any changes to this layer’s circleTranslate propery.
 
 ___
 
-#### Name
-`circleTranslateAnchor`
+#### circleTranslateAnchor
+Name: `circleTranslateAnchor`
 
 #### Description
 Controls the frame of reference for `circleTranslate`.
@@ -300,8 +300,8 @@ Parameters: `zoom`
 
 ___
 
-#### Name
-`circlePitchScale`
+#### circlePitchScale
+Name: `circlePitchScale`
 
 #### Description
 Controls the scaling behavior of the circle when the map is pitched.
@@ -322,8 +322,8 @@ Parameters: `zoom`
 
 ___
 
-#### Name
-`circlePitchAlignment`
+#### circlePitchAlignment
+Name: `circlePitchAlignment`
 
 #### Description
 Orientation of circle when map is pitched.
@@ -344,8 +344,8 @@ Parameters: `zoom`
 
 ___
 
-#### Name
-`circleStrokeWidth`
+#### circleStrokeWidth
+Name: `circleStrokeWidth`
 
 #### Description
 The width of the circle's stroke. Strokes are placed outside of the `circleRadius`.
@@ -388,8 +388,8 @@ The transition affecting any changes to this layer’s circleStrokeWidth propery
 
 ___
 
-#### Name
-`circleStrokeColor`
+#### circleStrokeColor
+Name: `circleStrokeColor`
 
 #### Description
 The stroke color of the circle.
@@ -426,8 +426,8 @@ The transition affecting any changes to this layer’s circleStrokeColor propery
 
 ___
 
-#### Name
-`circleStrokeOpacity`
+#### circleStrokeOpacity
+Name: `circleStrokeOpacity`
 
 #### Description
 The opacity of the circle's stroke.
