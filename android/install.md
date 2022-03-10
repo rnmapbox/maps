@@ -10,7 +10,7 @@
 ## Using MapLibre
 
 [MapLibre](https://github.com/maplibre/maplibre-gl-native) is an OSS fork of MapboxGL.
-This is the default, and should work without and changes in gradle files.
+This is the default, and should work without any changes in gradle files.
 
 ### Custom versions
 
