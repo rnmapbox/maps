@@ -2,24 +2,7 @@
 
 ### 🟥 Future of this repo: participate in the [discussion thread](https://github.com/rnmapbox/maps/discussions/1680) 🟥
 
-
-## Call for additional maintainers  
-Hey you, yes _you_!  
-Do you like this repo, are you using it (are you using it for production apps?! It's cool, we do too!)?
-  
-If you have some time to spare, we'd love to get your help!  
-I hear you ask "**Yes, _YES_, but How?!**" (in deafening silence),  
-well...here are some examples:
-* check our docs (still up to date? need some edits?)
-* review issue tickets and reply with helpful answers
-* join the Gitter chat and engage with other users
-* review PRs and comment on things you notice
-* actively help move the project forward by submitting PRs that introduce fixes and features
-
-You don't need to be a full-fledged maintainer to do those things, however,  
-if you are interested in becoming one, don't hesitate to reply in [this discussion](https://github.com/rnmapbox/maps/discussions/1551). 
-
-Thanks 🙇
+### 🟥 Call for additional maintainers [discussion thread](https://github.com/rnmapbox/maps/discussions/1551) 🟥
 
 <br>
 
@@ -38,9 +21,8 @@ We also support [MapLibre](https://github.com/maplibre/maplibre-gl-native) flavo
 
 ---
 
-
 [![npm version](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps.svg)](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps)  
-[![Build status](https://github.com/rnmapbox/maps/actions/workflows/on-push.yml/badge.svg)](https://github.com/rnmapbox/maps/actions/workflows/on-push.yml)
+[![iOS & Android Build](https://github.com/rnmapbox/maps/actions/workflows/on-push.yml/badge.svg?branch=main)](https://github.com/rnmapbox/maps/actions/workflows/on-push.yml?branch=main)  
 
 ---
 
@@ -183,6 +165,7 @@ export default class App extends Component {
 - [RasterLayer](/docs/RasterLayer.md)
 - [SymbolLayer](/docs/SymbolLayer.md)
 - [HeatmapLayer](/docs/HeatmapLayer.md)
+- [SkyLayer](/docs/SkyLayer.md)
 
 ### Terrain
 
