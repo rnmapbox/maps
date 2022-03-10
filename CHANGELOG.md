@@ -2,7 +2,7 @@
 
 ```
 Please add unreleased changes in the following style:
-PR Title ([#123](link to my pr))
+Updated MapLibre on Android to 9.5.2 ([#1766](https://github.com/rnmapbox/maps/pull/1766))
 ```
 
 ### 10.0.0-beta.0
