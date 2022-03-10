@@ -1,9 +1,6 @@
 ## UNRELEASED
 
-```
-Please add unreleased changes in the following style:
-Updated MapLibre on Android to 9.5.2 ([#1766](https://github.com/rnmapbox/maps/pull/1766))
-```
+Updated MapLibre on Android to 9.5.2 ([#1780](https://github.com/rnmapbox/maps/pull/1780))
 
 ### 10.0.0-beta.0
 
