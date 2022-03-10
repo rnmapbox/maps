@@ -23,19 +23,12 @@ buildscript {
         RNMapboxMapsImpl = "maplibre" // optinal - as this is the default
 
         RNMapboxMapsLibs = { // optional - only required if you want to customize it
-            implementation ("org.maplibre.gl:android-sdk:9.2.1")
-            implementation ("com.mapbox.mapboxsdk:mapbox-sdk-turf:5.3.0")
+            implementation ("org.maplibre.gl:android-sdk:9.5.2")
+            implementation ("org.maplibre.gl:android-sdk-turf:5.9.0")
 
-            implementation ("com.mapbox.mapboxsdk:mapbox-android-gestures:0.7.0")
-            implementation ("com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v9:0.12.0")    {
-                exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-sdk'
-            }
-            implementation ("com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0")        {
-                exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-sdk'
-            }
-            implementation ("com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v9:0.4.0") {
-                exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-sdk'
-            }
+            implementation ("org.maplibre.gl:android-plugin-localization-v9:1.0.0")
+            implementation ("org.maplibre.gl:android-plugin-annotation-v9:1.0.0")
+            implementation ("org.maplibre.gl:android-plugin-markerview-v9:1.0.0")
         }
     }
 }

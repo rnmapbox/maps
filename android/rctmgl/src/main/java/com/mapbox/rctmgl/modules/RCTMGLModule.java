@@ -11,6 +11,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.module.annotations.ReactModule;
 import com.mapbox.rctmgl.impl.TelemetryImpl;
+import com.mapbox.rctmgl.impl.InstanceManagerImpl;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.rctmgl.components.camera.constants.CameraMode;
@@ -60,14 +61,14 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
     public Map<String, Object> getConstants() {
         // map style urls
         Map<String, String> styleURLS = new HashMap<>();
-        styleURLS.put("Street", Style.MAPBOX_STREETS);
-        styleURLS.put("Dark", Style.DARK);
-        styleURLS.put("Light", Style.LIGHT);
-        styleURLS.put("Outdoors", Style.OUTDOORS);
-        styleURLS.put("Satellite", Style.SATELLITE);
-        styleURLS.put("SatelliteStreet", Style.SATELLITE_STREETS);
-        styleURLS.put("TrafficDay", Style.TRAFFIC_DAY);
-        styleURLS.put("TrafficNight", Style.TRAFFIC_NIGHT);
+        styleURLS.put("Street", "mapbox://styles/mapbox/streets-v11");
+        styleURLS.put("Dark", "mapbox://styles/mapbox/dark-v10");
+        styleURLS.put("Light", "mapbox://styles/mapbox/light-v10");
+        styleURLS.put("Outdoors", "mapbox://styles/mapbox/outdoors-v1");
+        styleURLS.put("Satellite", "mapbox://styles/mapbox/satellite-v9");
+        styleURLS.put("SatelliteStreet", "mapbox://styles/mapbox/satellite-streets-v11");
+        styleURLS.put("TrafficDay", "mapbox://styles/mapbox/navigation-preview-day-v4");
+        styleURLS.put("TrafficNight", "mapbox://styles/mapbox/navigation-preview-night-v4");
 
         // events
         Map<String, String> eventTypes = new HashMap<>();
@@ -288,7 +289,7 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         mReactContext.runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
-                Mapbox.getInstance(getReactApplicationContext(), accessToken);
+                InstanceManagerImpl.getInstance(getReactApplicationContext(), accessToken);
             }
         });
     }
@@ -323,7 +324,7 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getAccessToken(Promise promise) {
-        String token = Mapbox.getAccessToken();
+        String token = InstanceManagerImpl.getAccessToken();
         if(token == null) {
             promise.reject("missing_access_token", "No access token has been set");
         } else {

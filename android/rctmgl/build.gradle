@@ -90,13 +90,13 @@ dependencies {
     // Mapbox SDK
     customizableDependencies('RNMapboxMapsLibs') {
         if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl).equals("maplibre")) {
-            implementation ("org.maplibre.gl:android-sdk:9.2.1")
+            implementation ("org.maplibre.gl:android-sdk:9.5.2")
             implementation ("org.maplibre.gl:android-sdk-turf:5.9.0")
 
             implementation ("org.maplibre.gl:android-plugin-localization-v9:1.0.0")
             implementation ("org.maplibre.gl:android-plugin-annotation-v9:1.0.0")
             implementation ("org.maplibre.gl:android-plugin-markerview-v9:1.0.0")
-        } 
+        }
         else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl).equals("mapbox-gl")) {
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.1.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.1.0'

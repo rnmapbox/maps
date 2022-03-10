@@ -54,7 +54,7 @@ public class RCTMGLOfflineModule extends ReactContextBaseJavaModule {
     public static final String OFFLINE_ERROR = "MapboxOfflineRegionError";
     public static final String OFFLINE_PROGRESS = "MapboxOfflineRegionProgress";
 
-    public static final String DEFAULT_STYLE_URL = Style.MAPBOX_STREETS;
+    public static final String DEFAULT_STYLE_URL = "mapbox://styles/mapbox/streets-v11";
     public static final Double DEFAULT_MIN_ZOOM_LEVEL = 10.0;
     public static final Double DEFAULT_MAX_ZOOM_LEVEL = 20.0;
 
