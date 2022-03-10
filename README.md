@@ -64,11 +64,14 @@ _See [iOS](ios/install.md) & [Android](android/install.md) setup guide for more 
 
 ```sh
 # install with Yarn
-yarn add @react-native-mapbox-gl/maps
+# yarn add @rnmapbox/maps
+yarn add rnmapbox/maps#main
 
 
 # or install with NPM
-npm install @react-native-mapbox-gl/maps --save
+# npm install @rnmapbox/maps --save
+npm install rnmapbox/maps#main --save
+
 ```
 
 ### Step 2 - Installation Guides:
