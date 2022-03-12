@@ -37,12 +37,24 @@ jobs:
     outputs:
       NVMRC: ${{ steps.nvm.outputs.NVMRC }}
 
+  has_mapbox_token:
+    runs-on: ubuntu-latest
+    outputs:
+        has-mapbox-token: ${{ steps.my-key.outputs.defined }}
+    steps:
+        - id: has-mapbox-token
+          env:
+              MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+          if: "${{ env.MAPBOX_ACCESS_TOKEN != '' }}"
+          run: echo "::set-output name=defined::true"
+
   call_android_workflow:
-    needs: lint_test_generate
+    needs: [lint_test_generate,has_mapbox_token]
     uses: ./.github/workflows/android-actions.yml
     with:
       NVMRC: ${{ needs.lint_test_generate.outputs.NVMRC }}
       MAP_IMPL: mapbox
+    if: needs.has_mapbox_token.outputs.has-mapbox-token == 'true'
     secrets:
       MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
@@ -58,8 +70,9 @@ jobs:
       MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
 
   call_ios_workflow:
-    needs: lint_test_generate
+    needs: [lint_test_generate,has_mapbox_token]
     uses: ./.github/workflows/ios-actions.yml
+    if: needs.has_mapbox_token.outputs.has-mapbox-token == 'true'
     with:
       NVMRC: ${{ needs.lint_test_generate.outputs.NVMRC }}
       MAP_IMPL: mapbox
