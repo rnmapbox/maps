@@ -52,8 +52,14 @@ jobs:
       - name: Install Yarn Dependencies
         run: yarn install --network-timeout 1000000
 
+      - name: Check cocapods
+        run: |
+          curl https://cdn.cocoapods.org/CocoaPods-version.yml
+          curl https://cdn.cocoapods.org/all_pods.txt
+          ruby -e 'require "yaml" ; puts YAML.load(`curl https://cdn.cocoapods.org/CocoaPods-version.yml`).inspect'
+
       - name: Install Pod Dependencies
-        run: cd ios && pod --version && pod update RCT-Folly --no-repo-update && pod install
+        run: cd ios && pod --version && pod install --verbose
         env:
           CI_MAP_IMPL: ${{ inputs.MAP_IMPL }}
 
