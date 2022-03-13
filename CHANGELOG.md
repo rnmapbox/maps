@@ -20,10 +20,10 @@ The setup was changed - see install instructions for more details. In a nuthsell
 
 ## 8.6.0-beta.0
 
-fix: add TypeScript type for MapViews's preferredFramesPerSecond prop ([#1717](https://github.com/rnmapbox/maps/pull/1717))
-fix(example): update `/example` project (iOS only) to work with ARM-based Macs ([#1703](https://github.com/rnmapbox/maps/pull/1703))
+fix: add TypeScript type for MapViews's preferredFramesPerSecond prop ([#1717](https://github.com/rnmapbox/maps/pull/1717))  
+fix(example): update `/example` project (iOS only) to work with ARM-based Macs ([#1703](https://github.com/rnmapbox/maps/pull/1703))  
+fix(iOS): correct import of UIView+React.h header ([#1672](https://github.com/rnmapbox/maps/pull/1672))  
 
-fix(iOS): correct import of UIView+React.h header ([#1672](https://github.com/rnmapbox/maps/pull/1672))
 ---
 
 ## 8.5.0
