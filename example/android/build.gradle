@@ -8,7 +8,7 @@ buildscript {
         targetSdkVersion = 30
         ndkVersion = "21.4.7075529"
 
-        RNMapboxMapsImpl = "maplibre"
+        RNMapboxMapsImpl = "mapbox"
 
         useCustomMapbox = false
 
