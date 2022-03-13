@@ -1,27 +1,42 @@
-apply plugin: 'com.android.library'
+def defaultMapboxMapsImpl = "maplibre"
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
 
-def defaultMapboxMapsImpl = "maplibre"
+buildscript {
+  repositories {
+    google()
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${safeExtGet('kotlinVersion', '1.4.10')}"
+  }
+}
+
+apply plugin: 'com.android.library'
+
+if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
+  apply plugin: 'kotlin-android'
+}
 
 android {
-    if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl).equals("maplibre")) {
+    if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "maplibre") {
         sourceSets {
             main {
                 java.srcDirs = ['src/main/java','src/main/java-maplibre']
             }
         }
     }
-    else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl).equals("mapbox-gl")) {
+    else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox-gl") {
         sourceSets {
             main {
                 java.srcDirs = ['src/main/java','src/main/java-mapbox']
             }
         }
     }
-    else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl).equals("mapbox")) {
+    else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
         sourceSets {
             main {
                 java.srcDirs = ['src/main/java-v10']
@@ -89,7 +104,7 @@ dependencies {
 
     // Mapbox SDK
     customizableDependencies('RNMapboxMapsLibs') {
-        if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl).equals("maplibre")) {
+        if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "maplibre") {
             implementation ("org.maplibre.gl:android-sdk:9.5.2")
             implementation ("org.maplibre.gl:android-sdk-turf:5.9.0")
 
@@ -97,7 +112,7 @@ dependencies {
             implementation ("org.maplibre.gl:android-plugin-annotation-v9:1.0.0")
             implementation ("org.maplibre.gl:android-plugin-markerview-v9:1.0.0")
         }
-        else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl).equals("mapbox-gl")) {
+        else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox-gl") {
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.1.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.1.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-android-telemetry:6.1.0'
@@ -109,7 +124,7 @@ dependencies {
             implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v9:0.4.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.1.0'
         }
-        else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl).equals("mapbox")) {
+        else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
             implementation 'com.mapbox.maps:android:10.3.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.4.1'
         }
