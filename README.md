@@ -4,6 +4,8 @@
 
 ### 🟥 Call for additional maintainers [discussion thread](https://github.com/rnmapbox/maps/discussions/1551) 🟥
 
+### 🟥 This README is for the unreleased 10* branch. Please see [v8 branch](https://github.com/rnmapbox/maps/tree/v8) for documentation on 8.* releases 🟥
+
 <br>
 
 ---
