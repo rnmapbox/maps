@@ -16,6 +16,7 @@ buildscript {
             RNMapboxMapsImpl = "maplibre"
         } else if (System.getenv('CI_MAP_IMPL').equals('mapbox')) {
             RNMapboxMapsImpl = "mapbox"
+            kotlinVersion = '1.5.21'
         } else if (System.getenv('CI_MAP_IMPL').equals('mapbox-gl')) {
             RNMapboxMapsImpl = "mapbox-gl"
         }
