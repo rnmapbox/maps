@@ -2,10 +2,9 @@ name: CI
 on:
   push:
     branches:
-    - main
+    - 'main'
+    - 'v8'
   pull_request:
-    branches:
-    - main
 
 concurrency: 
   group: ${{ github.head_ref || github.run_id }}
