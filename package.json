@@ -1,5 +1,5 @@
 {
-  "name": "@react-native-mapbox-gl/maps",
+  "name": "@rnmapbox/maps",
   "description": "A Mapbox react native module for creating custom maps",
   "version": "10.0.0-beta.0",
   "publishConfig": {

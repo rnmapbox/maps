@@ -70,7 +70,6 @@ $RNMapboxMapsImpl = rnMapboxMapsDefaultImpl unless $RNMapboxMapsImpl
 
 case $RNMapboxMapsImpl
 when 'mapbox'
-  default_ios_mapbox_version = default_ios_mapbox_v10_version
   rnMapboxMapsTargetsToChangeToDynamic = ['MapboxMobileEvents', 'Turf', 'MapboxMaps', 'MapboxCoreMaps', 'MapboxCommon']
   MapboxImplVersion = $RNMapboxMapsVersion || rnMapboxMapsDefaultMapboxVersion
 when 'mapbox-gl'
