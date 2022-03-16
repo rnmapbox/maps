@@ -30,7 +30,7 @@
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react": "17.0.2",
-    "react-native": "0.66.0",
+    "react-native": "0.67.3",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-safe-area-context": "^3.1.9",
