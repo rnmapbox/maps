@@ -1,6 +1,6 @@
 # Getting Started
 
-Congratulations, you successfully installed react-native-mapbox-gl/maps! 🎉
+Congratulations, you successfully installed rnmapbox/maps! 🎉
 Where to go from here?
 You can head straight to [examples](/example) folder if you want to jump into the deep end.
 However, if you prefer an easier ramp-up, then make sure to stick around and check out the guides below.
@@ -13,7 +13,7 @@ You can create and manage your access tokens on your [Mapbox Account page](https
 Once you have your accessToken, set it like this
 
 ```js
-import MapboxGL from "@react-native-mapbox-gl/maps";
+import MapboxGL from "@rnmapbox/maps";
 
 MapboxGL.setAccessToken("<YOUR_ACCESSTOKEN>");
 ```
@@ -25,7 +25,7 @@ If you are hosting styles and sources on localhost, you might need to set the co
 Manually sets the connectivity state of the app, bypassing any checks to the ConnectivityManager. Set to `true` for connected, `false` for disconnected, and `null` for ConnectivityManager to determine.
 
 ```js
-import MapboxGL from "@react-native-mapbox-gl/maps";
+import MapboxGL from "@rnmapbox/maps";
 
 MapboxGL.setConnected(true);
 ```
@@ -48,7 +48,7 @@ For more information on mapbox and telemetry: [https://www.mapbox.com/telemetry]
 ```js
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
-import MapboxGL from "@react-native-mapbox-gl/maps";
+import MapboxGL from "@rnmapbox/maps";
 
 MapboxGL.setAccessToken("<YOUR_ACCESSTOKEN>");
 

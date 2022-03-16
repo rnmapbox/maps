@@ -7,7 +7,7 @@ import {
   Logger,
   Terrain,
   RasterDemSource,
-} from '@react-native-mapbox-gl/maps';
+} from '@rnmapbox/maps';
 
 import Page from '../common/Page';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';

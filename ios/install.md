@@ -4,7 +4,7 @@
 
 The following assumes, that you're using autolinking and installed
 
-`@react-native-mapbox-gl/maps` via `npm` or `yarn`.
+`@rnmapbox/maps` via `npm` or `yarn`.
 
 <br>
 
@@ -100,18 +100,3 @@ If you are using version `v6.0.0` of the SDK or later, you will need to authoriz
 
 <br>
 
-
-
-## React-Native < `0.60.0`
-
-### Using CocoaPods without autolink
-
-To install with CocoaPods, add the following to your `Podfile`:
-
-```ruby
-  # Mapbox
-  pod 'react-native-mapbox-gl', :path => '../node_modules/@react-native-mapbox-gl/maps'
-
-```
-
-Then run `pod install` and rebuild your project.

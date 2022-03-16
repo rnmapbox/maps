@@ -1,5 +1,5 @@
 import React, {FC, useState} from 'react';
-import MapboxGL, {SymbolLayerStyle} from '@react-native-mapbox-gl/maps';
+import MapboxGL, {SymbolLayerStyle} from '@rnmapbox/maps';
 import {Feature} from '@turf/helpers/dist/js';
 import {View, Text, ViewStyle, StyleProp, TextStyle} from 'react-native';
 

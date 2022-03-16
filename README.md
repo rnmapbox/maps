@@ -113,7 +113,7 @@ npm run android
 ```js
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL from '@rnmapbox/maps';
 
 MapboxGL.setAccessToken('<YOUR_ACCESSTOKEN>');
 

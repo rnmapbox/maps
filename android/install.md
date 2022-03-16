@@ -34,7 +34,7 @@ buildscript {
 }
 ```
 
-Feel free to check out the `/example` projects [`android/build.gradle`](https://github.com/react-native-mapbox-gl/maps/blob/master/example/android/build.gradle) for inspiration!
+Feel free to check out the `/example` projects [`android/build.gradle`](https://github.com/rnmapbox/maps/blob/master/example/android/build.gradle) for inspiration!
 
 ## Mapbox Maps SDK v10
 

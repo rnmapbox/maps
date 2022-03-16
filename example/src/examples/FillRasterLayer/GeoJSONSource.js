@@ -1,5 +1,5 @@
 import React from 'react';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
 import gridPattern from '../../assets/grid_pattern.png';
