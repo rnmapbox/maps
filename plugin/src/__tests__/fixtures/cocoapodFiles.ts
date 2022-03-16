@@ -95,16 +95,16 @@ target 'HelloWorld' do
 
 # @generated begin pre_installer - expo prebuild (DO NOT MODIFY) sync-00old-id
 INVALID_pre_install do |installer|
-# @generated begin @react-native-mapbox-gl/maps-pre_installer - expo prebuild (DO NOT MODIFY) sync-00
+# @generated begin @rnmapbox/maps-pre_installer - expo prebuild (DO NOT MODIFY) sync-00
   INVALID_$RNMBGL.pre_install(installer)
-# @generated end @react-native-mapbox-gl/maps-pre_installer
+# @generated end @rnmapbox/maps-pre_installer
 end
 # @generated end pre_installer
 # @generated begin post_installer - expo prebuild (DO NOT MODIFY) sync-00old-id-2
 INVALID_post_install do |installer|
-# @generated begin @react-native-mapbox-gl/maps-post_installer - expo prebuild (DO NOT MODIFY) sync-001
+# @generated begin @rnmapbox/maps-post_installer - expo prebuild (DO NOT MODIFY) sync-001
   INVALID_$RNMBGL.post_install(installer)
-# @generated end @react-native-mapbox-gl/maps-post_installer
+# @generated end @rnmapbox/maps-post_installer
 end
 # @generated end post_installer
   use_react_native!(:path => config["reactNativePath"])
@@ -147,16 +147,16 @@ target 'HelloWorld' do
 
 # @generated begin pre_installer - expo prebuild (DO NOT MODIFY) sync-00old-id
 INVALID_pre_install do |installer|
-# @generated begin @react-native-mapbox-gl/maps-pre_installer - expo prebuild (DO NOT MODIFY) sync-00
+# @generated begin @rnmapbox/maps-pre_installer - expo prebuild (DO NOT MODIFY) sync-00
   INVALID_$RNMBGL.pre_install(installer)
-# @generated end @react-native-mapbox-gl/maps-pre_installer
+# @generated end @rnmapbox/maps-pre_installer
 end
 # @generated end pre_installer
 # @generated begin post_installer - expo prebuild (DO NOT MODIFY) sync-00old-id-2
 INVALID_post_install do |installer|
-# @generated begin @react-native-mapbox-gl/maps-post_installer - expo prebuild (DO NOT MODIFY) sync-001
+# @generated begin @rnmapbox/maps-post_installer - expo prebuild (DO NOT MODIFY) sync-001
   INVALID_$RNMBGL.post_install(installer)
-# @generated end @react-native-mapbox-gl/maps-post_installer
+# @generated end @rnmapbox/maps-post_installer
 end
 # @generated end post_installer
   use_react_native!(:path => config["reactNativePath"])

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Easing, Button} from 'react-native';
-import {Animated, MapView, Camera} from '@react-native-mapbox-gl/maps';
+import {Animated, MapView, Camera} from '@rnmapbox/maps';
 import along from '@turf/along';
 import length from '@turf/length';
 import {point, lineString} from '@turf/helpers';

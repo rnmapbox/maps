@@ -1,6 +1,6 @@
 import React, {FC, useEffect} from 'react';
 import {Alert} from 'react-native';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
 import Page from '../common/Page';

@@ -14,7 +14,7 @@ import {
   RasterDemSource,
   Animated,
   MarkerView,
-} from '@react-native-mapbox-gl/maps';
+} from '@rnmapbox/maps';
 
 import Page from '../common/Page';
 

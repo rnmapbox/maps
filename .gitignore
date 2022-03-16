@@ -120,7 +120,7 @@ coverage
 *.core.prefs
 *.iml
 
-react-native-mapbox-gl-maps.tgz
+rnmapbox-maps.tgz
 
 # Config plugin
 /plugin/build

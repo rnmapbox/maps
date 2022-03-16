@@ -6,7 +6,7 @@ import {
   SymbolLayer,
   CircleLayer,
   Camera,
-} from '@react-native-mapbox-gl/maps';
+} from '@rnmapbox/maps';
 
 const styles = {
   mapView: {flex: 1},

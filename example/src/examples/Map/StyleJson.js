@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, StyleSheet} from 'react-native';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL from '@rnmapbox/maps';
 
 import StyleJsonExample from '../../assets/style-json-example.json';
 import StyleJsonExample2 from '../../assets/style-json-example2.json';

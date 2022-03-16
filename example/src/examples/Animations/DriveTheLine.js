@@ -1,5 +1,5 @@
 import React from 'react';
-import MapboxGL from '@react-native-mapbox-gl/maps';
+import MapboxGL from '@rnmapbox/maps';
 import {View, StyleSheet} from 'react-native';
 import {Button} from 'react-native-elements';
 import {lineString as makeLineString} from '@turf/helpers';

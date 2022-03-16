@@ -38,7 +38,7 @@
     "moduleResolution": "node",               /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
     "baseUrl": "./",                          /* Base directory to resolve non-absolute module names. */
     "paths": {                                /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
-      "@react-native-mapbox-gl/maps": ["../index.d.ts"],
+      "@rnmapbox/maps": ["../index.d.ts"],
       "react": ["./node_modules/@types/react"],
       "react-native": ["./node_modules/@types/react-native"],
     },

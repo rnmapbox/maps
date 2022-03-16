@@ -48,7 +48,7 @@ import {
   ShapeSource,
   LineLayer,
   Camera,
-} from '@react-native-mapbox-gl/maps';
+} from '@rnmapbox/maps';
 
 const aLine = {
   type: 'LineString',
@@ -80,7 +80,7 @@ Example:
 react-native init sample --version react-native@0.60.5
 cd sample
 npm install rnmapbox/maps#main --save
-# or released version `npm install @react-native-mapbox-gl/maps@8.0.0-rc1 --save`
+# or released version `npm install @rnmapbox/maps@8.0.0-rc1 --save`
 react-native run-android
 ```
 
@@ -99,7 +99,7 @@ If applicable, add screenshots to help explain your problem.
  - Device: [e.g. iPhone6]
  - Emulator/ Simulator: [yes/ no]
  - Dev OS: [e.g. OSX 11.0.1, Win10]
- - react-native-mapbox-gl Version [e.g. 7.0.9]
+ - @rnmapbox/maps Version [e.g. 10.0.1]
  - Mapbox GL version [e.g. 6.3.0]
  - React Native Version [e.g. 0.59]
 
