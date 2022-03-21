@@ -1,13 +1,15 @@
-## Getting Started
+# Getting Started
 
 
-```
+```shell
 react-native init sample --version 0.60.5
 cd sample
 yarn add https://github.com/rnmapbox/maps#main --save
 
 code android/build.gradle 
 ```
+
+```gradle
 # add the following:
 allprojects {
     repositories {
@@ -29,7 +31,7 @@ allprojects {
 ```
 
 code android/app/build.gradle
-```
+```gradle
 # add the following:
 android {
     packagingOptions {
@@ -41,7 +43,7 @@ android {
 }
 ```
 
-code android/build.gralde
+code android/build.gradle
 ```
 buildscript {
     ext {
@@ -52,8 +54,8 @@ buildscript {
 ```
 
 code ios/Podfile
-# change these
-```
+```pod
+  # change these
   $RNMapboxMapsImpl = 'mapbox'
 
   platform :ios, '13.0'
@@ -72,13 +74,13 @@ code ios/Podfile
   end
 ```
 
-
+```pod
 # on RN 0.60 only:
 # add modular_headers to `React-Core`
-#  pod 'React-Core', :path => '../node_modules/react-native/React', modular_headers: true
-
+pod 'React-Core', :path => '../node_modules/react-native/React', modular_headers: true
+```
 
 IOS:
 
- * Add $(SDKROOT)/usr/lib/swift to Libary search paths.
+ * Add `$(SDKROOT)/usr/lib/swift` to Library search paths.
 
