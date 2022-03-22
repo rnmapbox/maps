@@ -53,7 +53,7 @@ jobs:
         run: yarn install --network-timeout 1000000
 
       - name: Install Pod Dependencies
-        run: cd ios && pod --version && pod update RCT-Folly --no-repo-update && pod install
+        run: cd ios && pod --version && pod install
         env:
           CI_MAP_IMPL: ${{ inputs.MAP_IMPL }}
 
