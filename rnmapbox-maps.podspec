@@ -1,3 +1,19 @@
+# Customization:
+#  $RNMapboxMapsImpl - one of (maplibre, mapbox, mapbox-gl)
+#  $RNMapboxMapsVersion - version specification ("~> 10.4.0", "~> 5.9.0" or "exactVersion 5.12.1" mapblibre/SPM)
+#  $RNMapboxMapsSwiftPackageManager can be either
+#     "manual" - you're responsible for the Mapbox lib dependency either using cocoapods or SPM
+#     Hash - ```
+#         {
+#           url: "https://github.com/maplibre/maplibre-gl-native-distribution",
+#           requirement: {
+#             kind: 'exactVersion',
+#             version: 5.12.1,
+#           },
+#           product_name: "Mapbox"
+#         }
+#         ```
+
 require 'json'
 
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
@@ -84,7 +100,6 @@ when 'maplibre'
   end
 
   unless $RNMapboxMapsSwiftPackageManager
-    puts "Init SPM"
     $RNMapboxMapsSwiftPackageManager = {
       url: "https://github.com/maplibre/maplibre-gl-native-distribution",
       requirement: {
@@ -99,6 +114,18 @@ else
 end
 
 $RNMapboxMaps = Object.new
+
+def $RNMapboxMaps._check_no_mapbox_spm(project)
+  pkg_class = Xcodeproj::Project::Object::XCRemoteSwiftPackageReference
+  ref_class = Xcodeproj::Project::Object::XCSwiftPackageProductDependency
+  pkg = project.root_object.package_references.find { |p| p.class == pkg_class && [
+    "https://github.com/maplibre/maplibre-gl-native-distribution",
+    "https://github.com/mapbox/mapbox-maps-ios.git"
+  ].include?(p.repositoryURL) }
+  if pkg
+    puts "!!! Warning: Duplicate Mapbox dependency found, it's consumed by both SwiftPackageManager and CocoaPods"
+  end
+end
 
 def $RNMapboxMaps._add_spm_to_target(project, target, url, requirement, product_name)
   pkg_class = Xcodeproj::Project::Object::XCRemoteSwiftPackageReference
@@ -121,6 +148,8 @@ end
 
 def $RNMapboxMaps.post_install(installer)
   if $RNMapboxMapsSwiftPackageManager
+    return if $RNMapboxMapsSwiftPackageManager == "manual"
+
     spm_spec = $RNMapboxMapsSwiftPackageManager
     project = installer.pods_project
     self._add_spm_to_target(
@@ -141,6 +170,15 @@ def $RNMapboxMaps.post_install(installer)
             spm_spec[:requirement],
             spm_spec[:product_name]
           )
+        end
+      end
+    end
+  else
+    self._check_no_mapbox_spm(installer.pods_project)
+    installer.aggregate_targets.group_by(&:user_project).each do |project, targets|
+      targets.each do |target|
+        target.user_targets.each do |user_target|
+          self._check_no_mapbox_spm(project)
         end
       end
     end
