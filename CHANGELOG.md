@@ -12,7 +12,7 @@ Updated MapLibre on Android to 9.5.2 ([#1780](https://github.com/rnmapbox/maps/p
 #### Breaking changes:
 
 The setup was changed - see install instructions for more details. In a nuthsell:
-* On both android/ios to select mapbox implementation use `RNMabpoxMapsImpl`/`$RNMapboxMaps` variable which can be one of (`maplibre`,`mapbox`(aka v10),`mapbox-gl`)
+* On both android/ios to select mapbox implementation use `RNMabpoxMapsImpl`/`$RNMapboxMapsImpl` variable which can be one of (`maplibre`,`mapbox`(aka v10),`mapbox-gl`)
 * On Podfile `$RNMBGL.(pre|post)_install` was changed `$RNMapboxMaps.(pre|post)_install`
 * Package name was changed from `@react-native-mapbox-gl/maps` to `@rnmapbox/maps`. If you just testing with the v10 version you can use something like [babel-plugin-transform-rename-import](https://www.npmjs.com/package/babel-plugin-transform-rename-import) to keep using the old imports for a while.
 
