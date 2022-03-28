@@ -88,7 +88,7 @@ npm install rnmapbox/maps#main --save
 For more information, check out our [Getting Started](/docs/GettingStarted.md) section
 
 ## Run Project
-Before you run your project be sure you have completeded the Installation Guides for Android or iOS.
+Before you run your project be sure you have completed the Installation Guides for Android or iOS.
 
 ### Run iOS Simulator
 ```sh
