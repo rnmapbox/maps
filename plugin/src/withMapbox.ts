@@ -24,6 +24,10 @@ try {
 
 type InstallerBlockName = 'pre' | 'post';
 
+export type MapboxPlugProps = {
+  RNMapboxMapsImpl?: string;
+};
+
 /**
  * Dangerously adds the custom installer hooks to the Podfile.
  * In the future this should be removed in favor of some custom hooks provided by Expo autolinking.
@@ -32,7 +36,10 @@ type InstallerBlockName = 'pre' | 'post';
  * @param config
  * @returns
  */
-const withCocoaPodsInstallerBlocks: ConfigPlugin = c => {
+const withCocoaPodsInstallerBlocks: ConfigPlugin<MapboxPlugProps> = (
+  c,
+  {RNMapboxMapsImpl},
+) => {
   return withDangerousMod(c, [
     'ios',
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -43,7 +50,7 @@ const withCocoaPodsInstallerBlocks: ConfigPlugin = c => {
 
       await promises.writeFile(
         file,
-        applyCocoaPodsModifications(contents),
+        applyCocoaPodsModifications(contents, {RNMapboxMapsImpl}),
         'utf-8',
       );
       return config;
@@ -53,13 +60,43 @@ const withCocoaPodsInstallerBlocks: ConfigPlugin = c => {
 
 // Only the preinstaller block is required, the post installer block is
 // used for spm (swift package manager) which Expo doesn't currently support.
-export function applyCocoaPodsModifications(contents: string): string {
+export function applyCocoaPodsModifications(
+  contents: string,
+  {RNMapboxMapsImpl}: MapboxPlugProps,
+): string {
   // Ensure installer blocks exist
-  let src = addInstallerBlock(contents, 'pre');
-  // src = addInstallerBlock(src, "post");
+  let src = addConstantBlock(contents, RNMapboxMapsImpl);
+  src = addInstallerBlock(src, 'pre');
+  src = addInstallerBlock(src, 'post');
   src = addMapboxInstallerBlock(src, 'pre');
-  // src = addMapboxInstallerBlock(src, "post");
+  src = addMapboxInstallerBlock(src, 'post');
   return src;
+}
+
+export function addConstantBlock(
+  src: string,
+  RNMapboxMapsImpl?: string,
+): string {
+  const tag = `@rnmapbox/maps-rnmapboxmapsimpl`;
+
+  if (RNMapboxMapsImpl == null) {
+    const modified = removeGeneratedContents(src, tag);
+    if (!modified) {
+      return src;
+    } else {
+      return modified;
+    }
+  }
+
+  return mergeContents({
+    tag,
+    src,
+    newSrc: `$RNMapboxMapsImpl = '${RNMapboxMapsImpl}'`,
+    anchor: /target .+ do/,
+    // We can't go after the use_react_native block because it might have parameters, causing it to be multi-line (see react-native template).
+    offset: 0,
+    comment: '#',
+  }).contents;
 }
 
 export function addInstallerBlock(
@@ -102,8 +139,8 @@ export function addMapboxInstallerBlock(
   return mergeContents({
     tag: `@rnmapbox/maps-${blockName}_installer`,
     src,
-    newSrc: `    $RNMBGL.${blockName}_install(installer)`,
-    anchor: new RegExp(`${blockName}_install do \\|installer\\|`),
+    newSrc: `    $RNMapboxMaps.${blockName}_install(installer)`,
+    anchor: new RegExp(`^\\s*${blockName}_install do \\|installer\\|`),
     offset: 1,
     comment: '#',
   }).contents;
@@ -135,9 +172,12 @@ const withExcludedSimulatorArchitectures: ConfigPlugin = c => {
   });
 };
 
-const withMapbox: ConfigPlugin = config => {
+const withMapbox: ConfigPlugin<MapboxPlugProps> = (
+  config,
+  {RNMapboxMapsImpl},
+) => {
   config = withExcludedSimulatorArchitectures(config);
-  return withCocoaPodsInstallerBlocks(config);
+  return withCocoaPodsInstallerBlocks(config, {RNMapboxMapsImpl});
 };
 
 export default createRunOncePlugin(withMapbox, pkg.name, pkg.version);

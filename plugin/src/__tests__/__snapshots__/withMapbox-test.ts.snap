@@ -14,11 +14,18 @@ target 'HelloWorld' do
 
 # @generated begin pre_installer - expo prebuild (DO NOT MODIFY) sync-c8812095000d6054b846ce74840f0ffb540c2757
   pre_install do |installer|
-# @generated begin @rnmapbox/maps-pre_installer - expo prebuild (DO NOT MODIFY) sync-5a7ed0a20d5aff2d61639bc5bb4fd5551233d57c
-    $RNMBGL.pre_install(installer)
+# @generated begin @rnmapbox/maps-pre_installer - expo prebuild (DO NOT MODIFY) sync-ea4905840bf9fcea0acc62e92aa2e784f9d760f8
+    $RNMapboxMaps.pre_install(installer)
 # @generated end @rnmapbox/maps-pre_installer
   end
 # @generated end pre_installer
+# @generated begin post_installer - expo prebuild (DO NOT MODIFY) sync-4092f82b887b5b9edb84642c2a56984d69b9a403
+  post_install do |installer|
+# @generated begin @rnmapbox/maps-post_installer - expo prebuild (DO NOT MODIFY) sync-c4e8f90e96f6b6c6ea9241dd7b52ab5f57f7bf36
+    $RNMapboxMaps.post_install(installer)
+# @generated end @rnmapbox/maps-post_installer
+  end
+# @generated end post_installer
   use_react_native!(:path => config[\\"reactNativePath\\"])
 
   # Uncomment to opt-in to using Flipper
@@ -47,11 +54,18 @@ target 'HelloWorld' do
 
 # @generated begin pre_installer - expo prebuild (DO NOT MODIFY) sync-c8812095000d6054b846ce74840f0ffb540c2757
   pre_install do |installer|
-# @generated begin @rnmapbox/maps-pre_installer - expo prebuild (DO NOT MODIFY) sync-5a7ed0a20d5aff2d61639bc5bb4fd5551233d57c
-    $RNMBGL.pre_install(installer)
+# @generated begin @rnmapbox/maps-pre_installer - expo prebuild (DO NOT MODIFY) sync-ea4905840bf9fcea0acc62e92aa2e784f9d760f8
+    $RNMapboxMaps.pre_install(installer)
 # @generated end @rnmapbox/maps-pre_installer
   end
 # @generated end pre_installer
+# @generated begin post_installer - expo prebuild (DO NOT MODIFY) sync-4092f82b887b5b9edb84642c2a56984d69b9a403
+  post_install do |installer|
+# @generated begin @rnmapbox/maps-post_installer - expo prebuild (DO NOT MODIFY) sync-c4e8f90e96f6b6c6ea9241dd7b52ab5f57f7bf36
+    $RNMapboxMaps.post_install(installer)
+# @generated end @rnmapbox/maps-post_installer
+  end
+# @generated end post_installer
   use_react_native!(:path => config[\\"reactNativePath\\"])
 
   # pre_install do |installer|
@@ -81,8 +95,8 @@ target 'HelloWorld' do
 
 # @generated begin pre_installer - expo prebuild (DO NOT MODIFY) sync-c8812095000d6054b846ce74840f0ffb540c2757
   pre_install do |installer|
-# @generated begin @rnmapbox/maps-pre_installer - expo prebuild (DO NOT MODIFY) sync-5a7ed0a20d5aff2d61639bc5bb4fd5551233d57c
-    $RNMBGL.pre_install(installer)
+# @generated begin @rnmapbox/maps-pre_installer - expo prebuild (DO NOT MODIFY) sync-ea4905840bf9fcea0acc62e92aa2e784f9d760f8
+    $RNMapboxMaps.pre_install(installer)
 # @generated end @rnmapbox/maps-pre_installer
   end
 # @generated end pre_installer
@@ -104,6 +118,9 @@ target 'HelloWorld' do
   use_flipper!()
 
   post_install do |installer|
+# @generated begin @rnmapbox/maps-post_installer - expo prebuild (DO NOT MODIFY) sync-c4e8f90e96f6b6c6ea9241dd7b52ab5f57f7bf36
+    $RNMapboxMaps.post_install(installer)
+# @generated end @rnmapbox/maps-post_installer
     react_native_post_install(installer)
   end
 end
@@ -122,9 +139,6 @@ target 'HelloWorld' do
   use_unimodules!
   config = use_native_modules!
   # pre_install do |installer|
-# @generated begin @rnmapbox/maps-pre_installer - expo prebuild (DO NOT MODIFY) sync-5a7ed0a20d5aff2d61639bc5bb4fd5551233d57c
-    $RNMBGL.pre_install(installer)
-# @generated end @rnmapbox/maps-pre_installer
   # end
 
   # Uncomment to opt-in to using Flipper
@@ -136,17 +150,20 @@ target 'HelloWorld' do
   #   end
   # end
 
-# @generated begin post_installer - expo prebuild (DO NOT MODIFY) sync-00old-id-2
-INVALID_post_install do |installer|
-# @generated begin @rnmapbox/maps-post_installer - expo prebuild (DO NOT MODIFY) sync-001
-  INVALID_$RNMBGL.post_install(installer)
-# @generated end @rnmapbox/maps-post_installer
-end
-# @generated end post_installer
 # @generated begin pre_installer - expo prebuild (DO NOT MODIFY) sync-c8812095000d6054b846ce74840f0ffb540c2757
   pre_install do |installer|
+# @generated begin @rnmapbox/maps-pre_installer - expo prebuild (DO NOT MODIFY) sync-ea4905840bf9fcea0acc62e92aa2e784f9d760f8
+    $RNMapboxMaps.pre_install(installer)
+# @generated end @rnmapbox/maps-pre_installer
   end
 # @generated end pre_installer
+# @generated begin post_installer - expo prebuild (DO NOT MODIFY) sync-4092f82b887b5b9edb84642c2a56984d69b9a403
+  post_install do |installer|
+# @generated begin @rnmapbox/maps-post_installer - expo prebuild (DO NOT MODIFY) sync-c4e8f90e96f6b6c6ea9241dd7b52ab5f57f7bf36
+    $RNMapboxMaps.post_install(installer)
+# @generated end @rnmapbox/maps-post_installer
+  end
+# @generated end post_installer
   use_react_native!(:path => config[\\"reactNativePath\\"])
 
 
@@ -166,20 +183,20 @@ target 'HelloWorld' do
   use_unimodules!
   config = use_native_modules!
 
-# @generated begin post_installer - expo prebuild (DO NOT MODIFY) sync-00old-id-2
-INVALID_post_install do |installer|
-# @generated begin @rnmapbox/maps-post_installer - expo prebuild (DO NOT MODIFY) sync-001
-  INVALID_$RNMBGL.post_install(installer)
-# @generated end @rnmapbox/maps-post_installer
-end
-# @generated end post_installer
 # @generated begin pre_installer - expo prebuild (DO NOT MODIFY) sync-c8812095000d6054b846ce74840f0ffb540c2757
   pre_install do |installer|
-# @generated begin @rnmapbox/maps-pre_installer - expo prebuild (DO NOT MODIFY) sync-5a7ed0a20d5aff2d61639bc5bb4fd5551233d57c
-    $RNMBGL.pre_install(installer)
+# @generated begin @rnmapbox/maps-pre_installer - expo prebuild (DO NOT MODIFY) sync-ea4905840bf9fcea0acc62e92aa2e784f9d760f8
+    $RNMapboxMaps.pre_install(installer)
 # @generated end @rnmapbox/maps-pre_installer
   end
 # @generated end pre_installer
+# @generated begin post_installer - expo prebuild (DO NOT MODIFY) sync-4092f82b887b5b9edb84642c2a56984d69b9a403
+  post_install do |installer|
+# @generated begin @rnmapbox/maps-post_installer - expo prebuild (DO NOT MODIFY) sync-c4e8f90e96f6b6c6ea9241dd7b52ab5f57f7bf36
+    $RNMapboxMaps.post_install(installer)
+# @generated end @rnmapbox/maps-post_installer
+  end
+# @generated end post_installer
   use_react_native!(:path => config[\\"reactNativePath\\"])
 
   # pre_install do |installer|
