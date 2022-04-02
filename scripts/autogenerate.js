@@ -442,6 +442,10 @@ async function generate() {
     fs.writeFileSync(output, results);
   });
 
+  // autogenerate expo plugin
+  execSync('yarn build:plugin');
+  outputPaths.push('plugin/build');
+
   // autogenerate docs
   const docBuilder = new DocJSONBuilder(layers);
   const markdownBuilder = new MarkdownBuilder();

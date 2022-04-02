@@ -1454,11 +1454,7 @@
 
 - (void)setFillExtrusionVerticalGradient:(MGLFillExtrusionStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
-    #ifdef RNMBGL_USE_MAPLIBRE
-      layer.fillExtrusionHasVerticalGradient = styleValue.mglStyleValue;
-    #else
-      layer.fillExtrusionVerticalGradient = styleValue.mglStyleValue;
-    #endif
+    layer.fillExtrusionHasVerticalGradient = styleValue.mglStyleValue;
 }
 
 

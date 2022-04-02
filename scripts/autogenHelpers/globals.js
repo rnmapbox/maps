@@ -128,6 +128,9 @@ global.iosPropName = function(name) {
   if (name.indexOf('visibility') !== -1) {
     return 'visible';
   }
+  if (name === 'fillExtrusionVerticalGradient') {
+    return 'fillExtrusionHasVerticalGradient';
+  }
   if (iosPropNameOverrides[name]) {
     return iosPropNameOverrides[name];
   }
