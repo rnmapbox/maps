@@ -1,7 +1,9 @@
 module.exports = {
   dependency: {
     platforms: {
-      ios: {},
+      ios: {
+        project: 'true',
+      },
       android: {
         sourceDir: './android/rctmgl',
       },
