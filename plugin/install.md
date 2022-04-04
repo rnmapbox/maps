@@ -13,7 +13,14 @@ After installing this npm package, add the [config plugin](https://docs.expo.io/
 ```json
 {
   "expo": {
-    "plugins": ["@rnmapbox/maps"]
+    "plugins": [
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsImpl": "maplibre"
+        }
+      ]
+    ]
   }
 }
 ```
