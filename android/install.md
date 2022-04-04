@@ -3,7 +3,7 @@
 ## We're supporting 3 implementations at the moment:
 
   - maplibre: *DEFAULT* open source fork of older open source mapbox libraries with many improvements
-  - mabpox: v10 latest mapbox implementation - not opensource requires access for download
+  - mapbox: v10 latest mapbox implementation - not opensource requires access for download
   - mapbox-gl: classis mapbox libraries - should work but will be dropped, recent versions are not open source and requires acess for download
 
 
