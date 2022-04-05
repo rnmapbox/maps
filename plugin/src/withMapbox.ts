@@ -7,6 +7,10 @@ import {
   withDangerousMod,
   withXcodeProject,
   XcodeProject,
+  withGradleProperties,
+  WarningAggregator,
+  withProjectBuildGradle,
+  withAppBuildGradle,
 } from '@expo/config-plugins';
 import {
   mergeContents,
@@ -26,6 +30,7 @@ type InstallerBlockName = 'pre' | 'post';
 
 export type MapboxPlugProps = {
   RNMapboxMapsImpl?: string;
+  RNMapboxMapsDownloadToken?: string;
 };
 
 /**
@@ -172,11 +177,177 @@ const withExcludedSimulatorArchitectures: ConfigPlugin = c => {
   });
 };
 
-const withMapbox: ConfigPlugin<MapboxPlugProps> = (
+const withAndroidPropertiesDownloadToken: ConfigPlugin<MapboxPlugProps> = (
+  config,
+  {RNMapboxMapsDownloadToken},
+) => {
+  const key = 'MAPBOX_DOWNLOADS_TOKEN';
+  if (RNMapboxMapsDownloadToken) {
+    return withGradleProperties(config, config => {
+      config.modResults = config.modResults.filter(item => {
+        if (item.type === 'property' && item.key === key) {
+          return false;
+        }
+        return true;
+      });
+      // eslint-disable-next-line fp/no-mutating-methods
+      config.modResults.push({
+        type: 'property',
+        key,
+        value: RNMapboxMapsDownloadToken,
+      });
+
+      return config;
+    });
+  } else {
+    return config;
+  }
+};
+
+const withAndroidPropertiesImpl2: ConfigPlugin<MapboxPlugProps> = (
   config,
   {RNMapboxMapsImpl},
 ) => {
+  const key = 'expoRNMapboxMapsImpl';
+  if (RNMapboxMapsImpl) {
+    return withGradleProperties(config, config => {
+      config.modResults = config.modResults.filter(item => {
+        if (item.type === 'property' && item.key === key) {
+          return false;
+        }
+        return true;
+      });
+      // eslint-disable-next-line fp/no-mutating-methods
+      config.modResults.push({
+        type: 'property',
+        key: key,
+        value: RNMapboxMapsImpl,
+      });
+
+      return config;
+    });
+  } else {
+    return config;
+  }
+};
+
+const withAndroidProperties: ConfigPlugin<MapboxPlugProps> = (
+  config,
+  {RNMapboxMapsImpl, RNMapboxMapsDownloadToken},
+) => {
+  config = withAndroidPropertiesDownloadToken(config, {
+    RNMapboxMapsDownloadToken,
+  });
+  config = withAndroidPropertiesImpl2(config, {RNMapboxMapsImpl});
+  return config;
+};
+
+const addLibCppFilter = (appBuildGradle: string): string => {
+  if (appBuildGradle.includes("pickFirst 'lib/x86/libc++_shared.so'"))
+    return appBuildGradle;
+  return mergeContents({
+    tag: `@rnmapbox/maps-libcpp`,
+    src: appBuildGradle,
+    newSrc: `packagingOptions {
+        pickFirst 'lib/x86/libc++_shared.so'
+        pickFirst 'lib/x86_64/libc++_shared.so'
+        pickFirst 'lib/arm64-v8a/libc++_shared.so'
+        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+    }`,
+    anchor: new RegExp(`^\\s*android\\s*{`),
+    offset: 1,
+    comment: '//',
+  }).contents;
+};
+
+const addMapboxMavenRepo = (projectBuildGradle: string): string => {
+  if (projectBuildGradle.includes('api.mapbox.com/downloads/v2/releases/maven'))
+    return projectBuildGradle;
+
+  /*
+  return projectBuildGradle.replace(
+    /repositories \s?{/,
+    `repositories {
+       maven {
+        url 'https://api.mapbox.com/downloads/v2/releases/maven'
+        authentication { basic(BasicAuthentication) }
+        credentials { 
+          username = 'mapbox'
+          password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
+        }
+       }
+  `,
+  );*/
+
+  return mergeContents({
+    tag: `@rnmapbox/maps-v2-maven`,
+    src: projectBuildGradle,
+    newSrc: `maven {
+      url 'https://api.mapbox.com/downloads/v2/releases/maven'
+      authentication { basic(BasicAuthentication) }
+      credentials {
+        username = 'mapbox'
+        password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
+      }
+    }`,
+    anchor: new RegExp(`^\\s*allprojects\\s*{`), // TODO repositories { is needed as well
+    offset: 2,
+    comment: '//',
+  }).contents;
+};
+
+const withAndroidAppGradle: ConfigPlugin<MapboxPlugProps> = config => {
+  return withAppBuildGradle(config, ({modResults, ...config}) => {
+    if (modResults.language !== 'groovy') {
+      WarningAggregator.addWarningAndroid(
+        'withMapbox',
+        `Cannot automatically configure app build.gradle if it's not groovy`,
+      );
+      return {modResults, ...config};
+    }
+
+    modResults.contents = addLibCppFilter(modResults.contents);
+    return {modResults, ...config};
+  });
+};
+
+const withAndroidProjectGradle: ConfigPlugin<MapboxPlugProps> = config => {
+  return withProjectBuildGradle(config, ({modResults, ...config}) => {
+    if (modResults.language !== 'groovy') {
+      WarningAggregator.addWarningAndroid(
+        'withMapbox',
+        `Cannot automatically configure app build.gradle if it's not groovy`,
+      );
+      return {modResults, ...config};
+    }
+
+    modResults.contents = addMapboxMavenRepo(modResults.contents);
+    return {modResults, ...config};
+  });
+};
+
+const withMapboxAndroid: ConfigPlugin<MapboxPlugProps> = (
+  config,
+  {RNMapboxMapsImpl, RNMapboxMapsDownloadToken},
+) => {
+  config = withAndroidProperties(config, {
+    RNMapboxMapsImpl,
+    RNMapboxMapsDownloadToken,
+  });
+  config = withAndroidProjectGradle(config, {RNMapboxMapsImpl});
+  config = withAndroidAppGradle(config, {RNMapboxMapsImpl});
+  return config;
+};
+
+const withMapbox: ConfigPlugin<MapboxPlugProps> = (
+  config,
+  {RNMapboxMapsImpl, RNMapboxMapsDownloadToken},
+) => {
   config = withExcludedSimulatorArchitectures(config);
+  config = withMapboxAndroid(config, {
+    RNMapboxMapsImpl,
+    RNMapboxMapsDownloadToken,
+  });
   return withCocoaPodsInstallerBlocks(config, {RNMapboxMapsImpl});
 };
 

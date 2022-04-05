@@ -4,6 +4,11 @@ def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
 
+// expo plugin
+if (rootProject.ext.has('expoRNMapboxMapsImpl')) {
+    rootProject.ext.set('RNMapboxMapsImpl', rootProject.ext.get('expoRNMapboxMapsImpl'))
+}
+
 buildscript {
   repositories {
     google()
