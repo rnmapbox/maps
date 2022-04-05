@@ -2,6 +2,7 @@ import { ConfigPlugin, XcodeProject } from '@expo/config-plugins';
 declare type InstallerBlockName = 'pre' | 'post';
 export declare type MapboxPlugProps = {
     RNMapboxMapsImpl?: string;
+    RNMapboxMapsDownloadToken?: string;
 };
 export declare function applyCocoaPodsModifications(contents: string, { RNMapboxMapsImpl }: MapboxPlugProps): string;
 export declare function addConstantBlock(src: string, RNMapboxMapsImpl?: string): string;
