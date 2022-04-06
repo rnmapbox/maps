@@ -43,7 +43,7 @@ export type MapboxPlugProps = {
  */
 const withCocoaPodsInstallerBlocks: ConfigPlugin<MapboxPlugProps> = (
   c,
-  {RNMapboxMapsImpl},
+  {RNMapboxMapsImpl, RNMapboxMapsDownloadToken},
 ) => {
   return withDangerousMod(c, [
     'ios',
@@ -55,7 +55,10 @@ const withCocoaPodsInstallerBlocks: ConfigPlugin<MapboxPlugProps> = (
 
       await promises.writeFile(
         file,
-        applyCocoaPodsModifications(contents, {RNMapboxMapsImpl}),
+        applyCocoaPodsModifications(contents, {
+          RNMapboxMapsImpl,
+          RNMapboxMapsDownloadToken,
+        }),
         'utf-8',
       );
       return config;
@@ -67,10 +70,14 @@ const withCocoaPodsInstallerBlocks: ConfigPlugin<MapboxPlugProps> = (
 // used for spm (swift package manager) which Expo doesn't currently support.
 export function applyCocoaPodsModifications(
   contents: string,
-  {RNMapboxMapsImpl}: MapboxPlugProps,
+  {RNMapboxMapsImpl, RNMapboxMapsDownloadToken}: MapboxPlugProps,
 ): string {
   // Ensure installer blocks exist
-  let src = addConstantBlock(contents, RNMapboxMapsImpl);
+  let src = addConstantBlock(
+    contents,
+    RNMapboxMapsImpl,
+    RNMapboxMapsDownloadToken,
+  );
   src = addInstallerBlock(src, 'pre');
   src = addInstallerBlock(src, 'post');
   src = addMapboxInstallerBlock(src, 'pre');
@@ -81,6 +88,7 @@ export function applyCocoaPodsModifications(
 export function addConstantBlock(
   src: string,
   RNMapboxMapsImpl?: string,
+  RNMapboxMapsDownloadToken?: string,
 ): string {
   const tag = `@rnmapbox/maps-rnmapboxmapsimpl`;
 
@@ -96,7 +104,10 @@ export function addConstantBlock(
   return mergeContents({
     tag,
     src,
-    newSrc: `$RNMapboxMapsImpl = '${RNMapboxMapsImpl}'`,
+    newSrc: [
+      `$RNMapboxMapsImpl = '${RNMapboxMapsImpl}'`,
+      `$RNMapboxMapsDownloadToken = '${RNMapboxMapsDownloadToken}'`,
+    ].join('\n'),
     anchor: /target .+ do/,
     // We can't go after the use_react_native block because it might have parameters, causing it to be multi-line (see react-native template).
     offset: 0,
@@ -348,7 +359,10 @@ const withMapbox: ConfigPlugin<MapboxPlugProps> = (
     RNMapboxMapsImpl,
     RNMapboxMapsDownloadToken,
   });
-  return withCocoaPodsInstallerBlocks(config, {RNMapboxMapsImpl});
+  return withCocoaPodsInstallerBlocks(config, {
+    RNMapboxMapsImpl,
+    RNMapboxMapsDownloadToken,
+  });
 };
 
 export default createRunOncePlugin(withMapbox, pkg.name, pkg.version);
