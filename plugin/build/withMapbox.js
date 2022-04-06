@@ -25,23 +25,26 @@ catch (_a) {
  * @param config
  * @returns
  */
-const withCocoaPodsInstallerBlocks = (c, { RNMapboxMapsImpl }) => {
+const withCocoaPodsInstallerBlocks = (c, { RNMapboxMapsImpl, RNMapboxMapsDownloadToken }) => {
     return (0, config_plugins_1.withDangerousMod)(c, [
         'ios',
         // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         async (config) => {
             const file = path_1.default.join(config.modRequest.platformProjectRoot, 'Podfile');
             const contents = await fs_1.promises.readFile(file, 'utf8');
-            await fs_1.promises.writeFile(file, applyCocoaPodsModifications(contents, { RNMapboxMapsImpl }), 'utf-8');
+            await fs_1.promises.writeFile(file, applyCocoaPodsModifications(contents, {
+                RNMapboxMapsImpl,
+                RNMapboxMapsDownloadToken,
+            }), 'utf-8');
             return config;
         },
     ]);
 };
 // Only the preinstaller block is required, the post installer block is
 // used for spm (swift package manager) which Expo doesn't currently support.
-function applyCocoaPodsModifications(contents, { RNMapboxMapsImpl }) {
+function applyCocoaPodsModifications(contents, { RNMapboxMapsImpl, RNMapboxMapsDownloadToken }) {
     // Ensure installer blocks exist
-    let src = addConstantBlock(contents, RNMapboxMapsImpl);
+    let src = addConstantBlock(contents, RNMapboxMapsImpl, RNMapboxMapsDownloadToken);
     src = addInstallerBlock(src, 'pre');
     src = addInstallerBlock(src, 'post');
     src = addMapboxInstallerBlock(src, 'pre');
@@ -49,7 +52,7 @@ function applyCocoaPodsModifications(contents, { RNMapboxMapsImpl }) {
     return src;
 }
 exports.applyCocoaPodsModifications = applyCocoaPodsModifications;
-function addConstantBlock(src, RNMapboxMapsImpl) {
+function addConstantBlock(src, RNMapboxMapsImpl, RNMapboxMapsDownloadToken) {
     const tag = `@rnmapbox/maps-rnmapboxmapsimpl`;
     if (RNMapboxMapsImpl == null) {
         const modified = (0, generateCode_1.removeGeneratedContents)(src, tag);
@@ -63,7 +66,10 @@ function addConstantBlock(src, RNMapboxMapsImpl) {
     return (0, generateCode_1.mergeContents)({
         tag,
         src,
-        newSrc: `$RNMapboxMapsImpl = '${RNMapboxMapsImpl}'`,
+        newSrc: [
+            `$RNMapboxMapsImpl = '${RNMapboxMapsImpl}'`,
+            `$RNMapboxMapsDownloadToken = '${RNMapboxMapsDownloadToken}'`,
+        ].join('\n'),
         anchor: /target .+ do/,
         // We can't go after the use_react_native block because it might have parameters, causing it to be multi-line (see react-native template).
         offset: 0,
@@ -273,6 +279,9 @@ const withMapbox = (config, { RNMapboxMapsImpl, RNMapboxMapsDownloadToken }) => 
         RNMapboxMapsImpl,
         RNMapboxMapsDownloadToken,
     });
-    return withCocoaPodsInstallerBlocks(config, { RNMapboxMapsImpl });
+    return withCocoaPodsInstallerBlocks(config, {
+        RNMapboxMapsImpl,
+        RNMapboxMapsDownloadToken,
+    });
 };
 exports.default = (0, config_plugins_1.createRunOncePlugin)(withMapbox, pkg.name, pkg.version);

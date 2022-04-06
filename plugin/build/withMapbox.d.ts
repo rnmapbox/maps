@@ -4,8 +4,8 @@ export declare type MapboxPlugProps = {
     RNMapboxMapsImpl?: string;
     RNMapboxMapsDownloadToken?: string;
 };
-export declare function applyCocoaPodsModifications(contents: string, { RNMapboxMapsImpl }: MapboxPlugProps): string;
-export declare function addConstantBlock(src: string, RNMapboxMapsImpl?: string): string;
+export declare function applyCocoaPodsModifications(contents: string, { RNMapboxMapsImpl, RNMapboxMapsDownloadToken }: MapboxPlugProps): string;
+export declare function addConstantBlock(src: string, RNMapboxMapsImpl?: string, RNMapboxMapsDownloadToken?: string): string;
 export declare function addInstallerBlock(src: string, blockName: InstallerBlockName): string;
 export declare function addMapboxInstallerBlock(src: string, blockName: InstallerBlockName): string;
 /**

@@ -13,6 +13,7 @@
 #           product_name: "Mapbox"
 #         }
 #         ```
+#  $RNMapboxMapsDownloadToken - *expo only* download token
 
 require 'json'
 
@@ -194,6 +195,28 @@ def $RNMapboxMaps.pre_install(installer)
       puts "* [RNMBGL] Changed #{mobile_events_target.name} to #{mobile_events_target.send(:build_type)}"
       fail "* [RNMBGL] Unable to change build_type" unless mobile_events_target.send(:build_type) == Pod::BuildType.dynamic_framework
     end
+  end
+end
+
+## RNMapboxMapsDownloadToken
+# expo does not supports `.netrc`, so we need to patch curl commend used by cocoapods to pass the credentials
+
+if $RNMapboxMapsDownloadToken
+  module AddCredentialsToCurlWhenDownloadingMapbox
+    def curl!(*args)
+      mapbox_download = args.flatten.any? { |i| i.to_s.start_with?('https://api.mapbox.com') }
+      if mapbox_download
+        arguments = args.flatten
+        arguments.prepend("-u","mapbox:#{$RNMapboxMapsDownloadToken}")
+        super(*arguments)
+      else
+        super
+      end
+    end
+  end
+
+  class Pod::Downloader::Http
+    prepend AddCredentialsToCurlWhenDownloadingMapbox
   end
 end
 
