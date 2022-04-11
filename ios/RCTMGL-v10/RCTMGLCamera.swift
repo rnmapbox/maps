@@ -60,7 +60,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       map.location.addLocationConsumer(newConsumer: self)
     }
   }
-  
+    
   @objc func setStop(_ dictionary: [String:Any]?) {
     guard let dictionary = dictionary else {
       // Seems to be normal when followUserLocation is set
@@ -80,39 +80,55 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       default:
         fatalError("Unexpected geometry: \(String(describing: centerFeature?.geometry))")
       }
-      //camera.center = centerFeature
     }
     
-    var duration : Double? = nil
-    var zoom : Double? = nil
-    var pitch : Double? = nil
-    var bearing : Double? = nil
-    var heading : Double? = nil
-    
-    if let durationParam = dictionary["duration"] as? Double {
-      duration = durationParam
+    if let feature : String = dictionary["bounds"] as? String {
+      let collection : Turf.FeatureCollection? = try!
+        JSONDecoder().decode(Turf.FeatureCollection.self, from: feature.data(using: .utf8)!)
+      let features = collection?.features
+      
+      let ne: CLLocationCoordinate2D
+      switch features?.first?.geometry {
+        case .point(let point):
+          ne = point.coordinates
+        default:
+          fatalError("Unexpected geometry: \(String(describing: features?.first?.geometry))")
+      }
+      
+      let sw: CLLocationCoordinate2D
+      switch features?.last?.geometry {
+        case .point(let point):
+          sw = point.coordinates
+        default:
+          fatalError("Unexpected geometry: \(String(describing: features?.last?.geometry))")
+      }
+      
+      withMapView { map in
+        let bounds = CoordinateBounds(southwest: sw, northeast: ne)
+        let c = map.mapboxMap.camera(for: bounds, padding: .zero, bearing: 0, pitch: 0)
+        camera.center = c.center
+        camera.zoom = c.zoom
+      }
     }
-    
-    if let zoomParam = dictionary["zoom"] as? Double {
-      zoom = zoomParam;
-      camera.zoom = CGFloat(zoomParam)
+        
+    if let zoom = dictionary["zoom"] as? Double {
+      camera.zoom = CGFloat(zoom)
     }
   
-    if let pitchParam = dictionary["pitch"] as? Double {
-      pitch = pitchParam
-      camera.pitch = CGFloat(pitchParam)
+    if let pitch = dictionary["pitch"] as? Double {
+      camera.pitch = CGFloat(pitch)
     }
   
-    if let headingParam = dictionary["heading"] as? Double {
-      heading = headingParam
-      camera.bearing = CLLocationDirection(headingParam)
+    if let heading = dictionary["heading"] as? Double {
+      camera.bearing = CLLocationDirection(heading)
     }
 
-    if let bearingParam = dictionary["bearing"] as? Double {
-      bearing = bearingParam
-      camera.bearing = CLLocationDirection(bearingParam)
+    if let bearing = dictionary["bearing"] as? Double {
+      camera.bearing = CLLocationDirection(bearing)
     }
     
+    let duration = dictionary["duration"] as? Double
+
     withMapView { map in
       if let duration = duration {
         map.camera.fly(to: camera, duration: self.toTimeInterval(duration))
