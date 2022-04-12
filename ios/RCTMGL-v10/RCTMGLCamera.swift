@@ -40,7 +40,7 @@ open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
 }
 
 class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
-  // See MGLModule.swift:constantsToExport.
+  // See MGLModule.swift:constantsToExport:CameraModes.
   enum Mode: String, CaseIterable {
     case flight, move, ease, linear
   }
