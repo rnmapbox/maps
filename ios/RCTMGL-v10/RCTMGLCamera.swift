@@ -1,5 +1,6 @@
 import MapboxMaps
 import Turf
+import Foundation
 
 protocol RCTMGLMapComponent {
   func addToMap(_ map: RCTMGLMapView)
@@ -39,6 +40,11 @@ open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
 }
 
 class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
+  // See MGLModule.swift:constantsToExport.
+  enum Mode: String, CaseIterable {
+    case flight, move, ease, linear
+  }
+  
   @objc
   var followUserLocation : Bool = false {
     didSet {
@@ -55,16 +61,15 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       if let locationModule = RCTMGLLocationModule.shared {
         map.location.overrideLocationProvider(with: locationModule.locationProvider)
       }
-      map.location
       map.location.locationProvider.requestWhenInUseAuthorization()
       map.location.addLocationConsumer(newConsumer: self)
     }
   }
-    
+  
   @objc func setStop(_ dictionary: [String:Any]?) {
     guard let dictionary = dictionary else {
       // Seems to be normal when followUserLocation is set
-      //return Logger.log(level: .error, message: "stop called with nil")
+      // return Logger.log(level: .error, message: "stop called with nil")
       return
     }
     
@@ -127,13 +132,34 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       camera.bearing = CLLocationDirection(bearing)
     }
     
-    let duration = dictionary["duration"] as? Double
+    let duration: TimeInterval? = {
+      if let d = dictionary["duration"] as? Double {
+        return self.toTimeInterval(d)
+      }
+      return nil
+    }()
+    
+    let mode: Mode = {
+      if let m = dictionary["mode"] as? String, let m = Mode(rawValue: m) {
+        return m
+      }
+      return .flight
+    }()
 
     withMapView { map in
-      if let duration = duration {
-        map.camera.fly(to: camera, duration: self.toTimeInterval(duration))
-      } else {
-        map.camera.fly(to: camera)
+      switch mode {
+        case .flight:
+          if let duration = duration {
+            map.camera.fly(to: camera, duration: duration)
+          } else {
+            map.camera.fly(to: camera)
+          }
+        case .move:
+          map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
+        case .ease:
+          map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
+        case .linear:
+          map.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
       }
     }
   }
