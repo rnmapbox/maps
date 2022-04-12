@@ -1,6 +1,6 @@
+import Foundation
 import MapboxMaps
 import Turf
-import Foundation
 
 protocol RCTMGLMapComponent {
   func addToMap(_ map: RCTMGLMapView)
