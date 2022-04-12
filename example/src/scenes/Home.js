@@ -68,6 +68,7 @@ import CacheManagement from '../examples/CacheManagement';
 // V10
 import SkyAndTerran from '../examples/V10/SkyAndTerran';
 import QueryTerrainElevation from '../examples/V10/QueryTerrainElevation';
+import CameraAnimation from '../examples/V10/CameraAnimation';
 
 const styles = StyleSheet.create({
   exampleList: {
@@ -119,6 +120,7 @@ const Examples = [
   new ExampleGroup('V10', [
     new ExampleItem('Sky and Terrain', SkyAndTerran),
     new ExampleItem('Query Terrain Elevation', QueryTerrainElevation),
+    new ExampleItem('Camera Animation', CameraAnimation),
   ]),
   new ExampleGroup('Map', [
     new ExampleItem('Show Map', ShowMap),
