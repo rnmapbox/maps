@@ -72,22 +72,41 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       // return Logger.log(level: .error, message: "stop called with nil")
       return
     }
+        
+    var zoom: CGFloat = 11
+    if let z = dictionary["zoom"] as? Double {
+      zoom = CGFloat(z)
+    }
     
-    var camera = CameraOptions()
+    var pitch: CGFloat = 0
+    if let p = dictionary["pitch"] as? Double {
+      pitch = CGFloat(p)
+    }
     
-    if let feature : String = dictionary["centerCoordinate"] as? String {
+    var heading: CLLocationDirection = 0
+    if let h = dictionary["heading"] as? Double {
+      heading = CLLocationDirection(h)
+    }
+    
+    let padding = UIEdgeInsets(
+      top: dictionary["paddingTop"] as? Double ?? 0,
+      left: dictionary["paddingLeft"] as? Double ?? 0,
+      bottom: dictionary["paddingBottom"] as? Double ?? 0,
+      right: dictionary["paddingRight"] as? Double ?? 0
+    )
+
+    var center: LocationCoordinate2D?
+    if let feature: String = dictionary["centerCoordinate"] as? String {
       let centerFeature : Turf.Feature? = try!
         JSONDecoder().decode(Turf.Feature.self, from: feature.data(using: .utf8)!)
         
       switch centerFeature?.geometry {
       case .point(let centerPoint):
-        camera.center = centerPoint.coordinates
+        center = centerPoint.coordinates
       default:
         fatalError("Unexpected geometry: \(String(describing: centerFeature?.geometry))")
       }
-    }
-    
-    if let feature : String = dictionary["bounds"] as? String {
+    } else if let feature: String = dictionary["bounds"] as? String {
       let collection : Turf.FeatureCollection? = try!
         JSONDecoder().decode(Turf.FeatureCollection.self, from: feature.data(using: .utf8)!)
       let features = collection?.features
@@ -110,28 +129,14 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       
       withMapView { map in
         let bounds = CoordinateBounds(southwest: sw, northeast: ne)
-        let c = map.mapboxMap.camera(for: bounds, padding: .zero, bearing: 0, pitch: 0)
-        camera.center = c.center
-        camera.zoom = c.zoom
+        let camera = map.mapboxMap.camera(for: bounds, padding: padding, bearing: heading, pitch: pitch)
+        if let _center = camera.center, let _zoom = camera.zoom {
+          center = _center
+          zoom = _zoom
+        }
       }
     }
-        
-    if let zoom = dictionary["zoom"] as? Double {
-      camera.zoom = CGFloat(zoom)
-    }
-  
-    if let pitch = dictionary["pitch"] as? Double {
-      camera.pitch = CGFloat(pitch)
-    }
-  
-    if let heading = dictionary["heading"] as? Double {
-      camera.bearing = CLLocationDirection(heading)
-    }
 
-    if let bearing = dictionary["bearing"] as? Double {
-      camera.bearing = CLLocationDirection(bearing)
-    }
-    
     let duration: TimeInterval? = {
       if let d = dictionary["duration"] as? Double {
         return self.toTimeInterval(d)
@@ -145,8 +150,17 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       }
       return .flight
     }()
-
+    
     withMapView { map in
+      let camera = CameraOptions(
+        center: center,
+        padding: padding,
+        anchor: .zero,
+        zoom: zoom,
+        bearing: heading,
+        pitch: pitch
+      )
+      
       switch mode {
         case .flight:
           if let duration = duration {
@@ -161,6 +175,11 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
         case .linear:
           map.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
       }
+      
+      let paddingAnimator = map.camera.makeAnimator(duration: duration ?? 0, curve: .easeInOut) { (transition) in
+        transition.padding.toValue = padding
+      }
+      paddingAnimator.startAnimation()
     }
   }
   
