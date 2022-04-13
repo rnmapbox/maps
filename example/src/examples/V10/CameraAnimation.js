@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, SafeAreaView, StyleSheet} from 'react-native';
+import {Button, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {
   MapView,
   Camera,
@@ -26,6 +26,14 @@ const styles = {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  info: {
+    padding: 10,
+  },
+};
+
+const randPadding = () => {
+  const items = [50, 100, 150, 200];
+  return items[Math.floor(Math.random() * items.length)];
 };
 
 const CameraAnimation = props => {
@@ -36,14 +44,24 @@ const CameraAnimation = props => {
 
   const [animationMode, setAnimationMode] = useState('flyTo');
   const [coordinates, setCoordinates] = useState(initialCoordinates);
+  const [padding, setPadding] = useState({
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+  });
 
   const onPress = _animationMode => {
     setAnimationMode(_animationMode);
-
-    const offset = Math.random() * 0.2;
     setCoordinates({
-      latitude: initialCoordinates.latitude + offset,
-      longitude: initialCoordinates.longitude + offset,
+      latitude: initialCoordinates.latitude + Math.random() * 0.2,
+      longitude: initialCoordinates.longitude + Math.random() * 0.2,
+    });
+    setPadding({
+      paddingTop: randPadding(),
+      paddingBottom: randPadding(),
+      paddingLeft: randPadding(),
+      paddingRight: randPadding(),
     });
   };
 
@@ -64,6 +82,7 @@ const CameraAnimation = props => {
           centerCoordinate={position}
           animationMode={animationMode}
           zoomLevel={12}
+          padding={padding}
         />
 
         <ShapeSource id="source" shape={shape}>
@@ -71,11 +90,23 @@ const CameraAnimation = props => {
         </ShapeSource>
       </MapView>
 
-      <SafeAreaView style={styles.buttonRow}>
-        <Button title="Flight" onPress={() => onPress('flyTo')} />
-        <Button title="Move" onPress={() => onPress('moveTo')} />
-        <Button title="Ease" onPress={() => onPress('easeTo')} />
-        <Button title="Linear" onPress={() => onPress('linearTo')} />
+      <SafeAreaView>
+        <View style={styles.buttonRow}>
+          <Button title="Flight" onPress={() => onPress('flyTo')} />
+          <Button title="Move" onPress={() => onPress('moveTo')} />
+          <Button title="Ease" onPress={() => onPress('easeTo')} />
+          <Button title="Linear" onPress={() => onPress('linearTo')} />
+        </View>
+        <View style={styles.info}>
+          <Text>
+            {`Coordinates: Lon ${coordinates.longitude.toFixed(
+              4,
+            )} | Lat ${coordinates.latitude.toFixed(4)}`}
+          </Text>
+          <Text>
+            {`Padding: L ${padding.paddingLeft} | R ${padding.paddingRight} | ${padding.paddingTop} | B ${padding.paddingBottom}`}
+          </Text>
+        </View>
       </SafeAreaView>
     </Page>
   );
