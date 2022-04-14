@@ -26,6 +26,8 @@ class RCTMGLEvent : NSObject, RCTMGLEventProtocol {
       case offlineProgress = "offlinestatus"
       case offlineError = "offlineerror"
       case offlineTileLimit = "offlinetileLimit"
+      case vectorSourceLayerPress = "vectorsourcelayerpress"
+      case shapeSourceLayerPress = "shapesourcelayerpress"
     }
     
     init(type: EventType, payload: [String:Any]?) {
