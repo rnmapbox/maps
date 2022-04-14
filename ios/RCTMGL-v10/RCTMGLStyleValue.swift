@@ -144,13 +144,16 @@ class RCTMGLStyleValue {
       } else if let num = value as? Int {
         return Value.constant(Double(num))
       } else {
-        Logger.log(level:.error, message: "mglStyleValueNumber: Cannot convert \(value) to double")
-      }
+        do {
+          let data = try! JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
 
-      let data = try! JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
-      
-      let decodedExpression = try! JSONDecoder().decode(Expression.self, from: data)
-      return Value.expression(decodedExpression)
+          let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
+          return Value.expression(decodedExpression)
+        } catch {
+          Logger.log(level:.error, message: "mglStyleValueNumber: Cannot parse \(value) as expression")
+          return Value.constant(0.0)
+        }
+      }
     } else {
       return Value.constant(1.0)
     }
