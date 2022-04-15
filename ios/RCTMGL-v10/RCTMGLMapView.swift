@@ -136,8 +136,47 @@ open class RCTMGLMapView : MapView {
   var mapView : MapView {
     get { return self }
   }
+  
+  // MARK: - React Native properties
+  
+  private func getOrnamentOptionsFromPosition(_ position: [String: Int]!) -> (position: OrnamentPosition, margins: CGPoint)? {
+    let left = position["left"]
+    let right = position["right"]
+    let top = position["top"]
+    let bottom = position["bottom"]
     
-  // -- react native properties
+    if left != nil && top != nil {
+      return (OrnamentPosition.topLeft, CGPoint(x: left!, y: top!))
+    } else if right != nil && top != nil {
+      return (OrnamentPosition.topRight, CGPoint(x: right!, y: top!))
+    } else if bottom != nil && right != nil {
+      return (OrnamentPosition.bottomRight, CGPoint(x: right!, y: bottom!))
+    } else if bottom != nil && left != nil {
+      return (OrnamentPosition.bottomLeft,CGPoint(x: left!, y: bottom!))
+    }
+    
+    return nil
+  }
+  
+  
+  @objc func setReactAttributionPosition(_ position: [String: Int]!) {
+    if let ornamentOptions = self.getOrnamentOptionsFromPosition(position) {
+      mapView.ornaments.options.attributionButton.position = ornamentOptions.position
+      mapView.ornaments.options.attributionButton.margins = ornamentOptions.margins
+    }
+  }
+  
+  @objc func setReactLogoPosition(_ position: [String: Int]!) {
+    if let ornamentOptions = self.getOrnamentOptionsFromPosition(position) {
+      mapView.ornaments.options.logo.position = ornamentOptions.position
+      mapView.ornaments.options.logo.margins = ornamentOptions.margins
+    }
+  }
+  
+  @objc func setReactCompassEnabled(_ value: Bool) {
+    mapView.ornaments.options.compass.visibility = value ? OrnamentVisibility.visible : OrnamentVisibility.hidden
+  }
+  
   
   @objc func setReactStyleURL(_ value: String?) {
     if let value = value {

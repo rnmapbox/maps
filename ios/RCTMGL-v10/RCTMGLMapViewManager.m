@@ -3,6 +3,10 @@
 
 @interface RCT_EXTERN_REMAP_MODULE(RCTMGLMapView, RCTMGLMapViewManager, RCTViewManager)
 
+RCT_REMAP_VIEW_PROPERTY(attributionPosition, reactAttributionPosition, NSDictionary)
+RCT_REMAP_VIEW_PROPERTY(logoPosition, reactLogoPosition, NSDictionary)
+RCT_REMAP_VIEW_PROPERTY(compassEnabled, reactCompassEnabled, BOOL)
+
 RCT_REMAP_VIEW_PROPERTY(styleURL, reactStyleURL, NSString)
 RCT_REMAP_VIEW_PROPERTY(onPress, reactOnPress, RCTBubblingEventBlock)
 RCT_REMAP_VIEW_PROPERTY(onMapChange, reactOnMapChange, RCTBubblingEventBlock)
