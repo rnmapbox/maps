@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {Button, SafeAreaView, Text, View} from 'react-native';
 import {
   MapView,
@@ -21,19 +21,38 @@ const styles = {
     circleRadius: 6,
     circleColor: colors.primary.blue,
   },
+  sheet: {
+    padding: 10,
+  },
+  section: {
+    paddingVertical: 10,
+  },
   buttonRow: {
     flex: 0,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  info: {
-    padding: 10,
+    justifyContent: 'space-around',
   },
 };
 
+const zeroPadding = {
+  paddingTop: 0,
+  paddingBottom: 0,
+  paddingLeft: 0,
+  paddingRight: 0,
+};
+
 const randPadding = () => {
-  const items = [50, 100, 150, 200];
-  return items[Math.floor(Math.random() * items.length)];
+  const randNum = () => {
+    const items = [0, 150, 300];
+    return items[Math.floor(Math.random() * items.length)];
+  };
+
+  return {
+    paddingTop: randNum(),
+    paddingBottom: randNum(),
+    paddingLeft: randNum(),
+    paddingRight: randNum(),
+  };
 };
 
 const CameraAnimation = props => {
@@ -44,25 +63,32 @@ const CameraAnimation = props => {
 
   const [animationMode, setAnimationMode] = useState('flyTo');
   const [coordinates, setCoordinates] = useState(initialCoordinates);
-  const [padding, setPadding] = useState({
-    paddingTop: 0,
-    paddingBottom: 0,
-    paddingLeft: 0,
-    paddingRight: 0,
-  });
+  const [padding, setPadding] = useState(zeroPadding);
 
-  const onPress = _animationMode => {
+  const coordinatesDisplay = useMemo(() => {
+    const lon = coordinates.longitude.toFixed(4);
+    const lat = coordinates.latitude.toFixed(4);
+    return `Lon ${lon} | Lat ${lat}`;
+  }, [coordinates]);
+
+  const paddingDisplay = useMemo(() => {
+    return `L ${padding.paddingLeft} | R ${padding.paddingRight} | ${padding.paddingTop} | B ${padding.paddingBottom}`;
+  }, [padding]);
+
+  const changePosition = _animationMode => {
     setAnimationMode(_animationMode);
     setCoordinates({
       latitude: initialCoordinates.latitude + Math.random() * 0.2,
       longitude: initialCoordinates.longitude + Math.random() * 0.2,
     });
-    setPadding({
-      paddingTop: randPadding(),
-      paddingBottom: randPadding(),
-      paddingLeft: randPadding(),
-      paddingRight: randPadding(),
-    });
+  };
+
+  const changePadding = kind => {
+    if (kind === 'zero') {
+      setPadding(zeroPadding);
+    } else if (kind === 'random') {
+      setPadding(randPadding());
+    }
   };
 
   const position = [coordinates.longitude, coordinates.latitude];
@@ -91,21 +117,27 @@ const CameraAnimation = props => {
       </MapView>
 
       <SafeAreaView>
-        <View style={styles.buttonRow}>
-          <Button title="Flight" onPress={() => onPress('flyTo')} />
-          <Button title="Move" onPress={() => onPress('moveTo')} />
-          <Button title="Ease" onPress={() => onPress('easeTo')} />
-          <Button title="Linear" onPress={() => onPress('linearTo')} />
-        </View>
-        <View style={styles.info}>
-          <Text>
-            {`Coordinates: Lon ${coordinates.longitude.toFixed(
-              4,
-            )} | Lat ${coordinates.latitude.toFixed(4)}`}
-          </Text>
-          <Text>
-            {`Padding: L ${padding.paddingLeft} | R ${padding.paddingRight} | ${padding.paddingTop} | B ${padding.paddingBottom}`}
-          </Text>
+        <View style={styles.sheet}>
+          <View style={styles.section}>
+            <Text>Move ({coordinatesDisplay})</Text>
+            <View style={styles.buttonRow}>
+              <Button title="Flight" onPress={() => changePosition('flyTo')} />
+              <Button title="Move" onPress={() => changePosition('moveTo')} />
+              <Button title="Ease" onPress={() => changePosition('easeTo')} />
+              <Button
+                title="Linear"
+                onPress={() => changePosition('linearTo')}
+              />
+            </View>
+          </View>
+
+          <View style={styles.section}>
+            <Text>Padding ({paddingDisplay})</Text>
+            <View style={styles.buttonRow}>
+              <Button title="Zero" onPress={() => changePadding('zero')} />
+              <Button title="Random" onPress={() => changePadding('random')} />
+            </View>
+          </View>
         </View>
       </SafeAreaView>
     </Page>
