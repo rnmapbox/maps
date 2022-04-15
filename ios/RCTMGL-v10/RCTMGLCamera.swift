@@ -16,6 +16,7 @@ struct CameraUpdateItem {
   var camera: CameraOptions
   var mode: Mode
   var duration: TimeInterval?
+  var padding: UIEdgeInsets?
 
   func execute(map: RCTMGLMapView, cameraAnimator: inout BasicCameraAnimator?) {
     if let duration = duration, duration == 0.0 {
@@ -42,7 +43,7 @@ struct CameraUpdateItem {
       cameraAnimator.stopAnimation()
     }
     cameraAnimator = map.camera.makeAnimator(duration: duration ?? 0, curve: .easeInOut) { (transition) in
-      transition.padding.toValue = camera.padding
+      transition.padding.toValue = padding
     }
     cameraAnimator?.startAnimation()
   }
@@ -251,14 +252,14 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     let result = CameraUpdateItem(
       camera: CameraOptions(
         center: center,
-        padding: padding,
         anchor: .zero,
         zoom: zoom,
         bearing: heading,
         pitch: pitch
       ),
       mode: mode,
-      duration: duration
+      duration: duration,
+      padding: padding
     )
     return result
   }
