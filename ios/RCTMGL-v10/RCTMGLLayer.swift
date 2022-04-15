@@ -61,6 +61,11 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   
   var styleLayer: Layer? = nil
   
+  // MARK: - RCTMGLMapComponent
+  func waitForStyleLoad() -> Bool {
+    return true
+  }
+  
   func removeAndReaddLayer() {
     if let style = style {
       self.removeFromMap(style)
@@ -76,9 +81,13 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   }
   
   func addStylesAndUpdate() {
+    guard styleLayer != nil else {
+      return
+    }
+
     addStyles()
     if let style = style,
-       let map = map {
+      let map = map {
       if style.styleManager.styleLayerExists(forLayerId: id) {
         self.updateLayer(map)
       }
@@ -139,6 +148,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   
   func addToMap(_ map: RCTMGLMapView) {
     //
+    self.style = map.mapboxMap.style
     self.map = map
   }
   
