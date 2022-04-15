@@ -17,7 +17,7 @@ struct CameraUpdateItem {
   var mode: Mode
   var duration: TimeInterval?
 
-  func execute(map: RCTMGLMapView) {
+  func execute(map: RCTMGLMapView, cameraAnimator: inout BasicCameraAnimator?) {
     if let duration = duration, duration == 0.0 {
       map.mapboxMap.setCamera(to: camera)
       return
@@ -38,10 +38,13 @@ struct CameraUpdateItem {
         map.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
     }
 
-    let paddingAnimator = map.camera.makeAnimator(duration: duration ?? 0, curve: .easeInOut) { (transition) in
+    if let cameraAnimator = cameraAnimator {
+      cameraAnimator.stopAnimation()
+    }
+    cameraAnimator = map.camera.makeAnimator(duration: duration ?? 0, curve: .easeInOut) { (transition) in
       transition.padding.toValue = camera.padding
     }
-    paddingAnimator.startAnimation()
+    cameraAnimator?.startAnimation()
   }
 }
 
@@ -59,12 +62,12 @@ class CameraUpdateQueue {
     queue.append(stop)
   }
   
-  func execute(map: RCTMGLMapView) {
+  func execute(map: RCTMGLMapView, cameraAnimator: inout BasicCameraAnimator?) {
     guard let stop = dequeue() else {
       return
     }
     
-    stop.execute(map: map)
+    stop.execute(map: map, cameraAnimator: &cameraAnimator)
   }
 }
 
@@ -106,15 +109,16 @@ open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
 
 class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
   var defaultStop : [String:Any]? = nil
-  
+    
   @objc var stop : [String:Any]? = nil {
     didSet {
       _updateCamera()
     }
   }
   
-  let cameraUpdateQueue : CameraUpdateQueue = CameraUpdateQueue()
-  
+  var cameraAnimator: BasicCameraAnimator?
+  let cameraUpdateQueue = CameraUpdateQueue()
+
   @objc
   var followUserLocation : Bool = false {
     didSet {
@@ -151,7 +155,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     }
 
     if let map = map {
-      cameraUpdateQueue.execute(map: map)
+      cameraUpdateQueue.execute(map: map, cameraAnimator: &cameraAnimator)
     }
   }
   
@@ -281,7 +285,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     var updateItem = toUpdateItem(stop: stop)
     updateItem.mode = .move
     updateItem.duration = 0
-    updateItem.execute(map: map)
+    updateItem.execute(map: map, cameraAnimator: &cameraAnimator)
   }
   
   func initialLayout() {
