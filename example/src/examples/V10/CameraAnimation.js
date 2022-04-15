@@ -73,7 +73,7 @@ const CameraAnimation = props => {
   }, [coordinates]);
 
   const paddingDisplay = useMemo(() => {
-    return `L ${padding.paddingLeft} | R ${padding.paddingRight} | ${padding.paddingTop} | B ${padding.paddingBottom}`;
+    return `L ${padding.paddingLeft} | R ${padding.paddingRight} | T ${padding.paddingTop} | B ${padding.paddingBottom}`;
   }, [padding]);
 
   const changePosition = _animationMode => {
