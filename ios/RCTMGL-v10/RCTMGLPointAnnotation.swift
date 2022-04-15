@@ -175,7 +175,13 @@ class RCTMGLPointAnnotation : UIView, RCTMGLMapComponent {
 
   var map: RCTMGLMapView? = nil
   
-  func addToMap(_ map: RCTMGLMapView) {
+  // MARK: - RCTMGLMapComponent
+
+  func waitForStyleLoad() -> Bool {
+    return true
+  }
+  
+  func addToMap(_ map: RCTMGLMapView, style: Style) {
     self.map = map
     self.map?.pointAnnotationManager.add(annotation)
   }

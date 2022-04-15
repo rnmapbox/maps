@@ -41,11 +41,16 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
     }
   }
   
-  func addToMap(_ map: RCTMGLMapView) {
+  // MARK: - RCTMGLMapComponent
+
+  func waitForStyleLoad() -> Bool {
+    return true
+  }
+  
+  func addToMap(_ map: RCTMGLMapView, style: Style) {
     self.map = map
     
     map.onMapStyleLoaded { mapboxMap in
-      let style = mapboxMap.style
       if style.sourceExists(withId: self.id) {
         self.source = try! style.source(withId: self.id)
       } else {

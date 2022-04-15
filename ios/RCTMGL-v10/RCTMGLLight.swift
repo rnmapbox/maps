@@ -36,8 +36,14 @@ class RCTMGLLight: UIView, RCTMGLMapComponent {
   func isAddedToMap() -> Bool {
     return map != nil
   }
+  
+  // MARK: - RCTMGLMapComponent
 
-  func addToMap(_ map: RCTMGLMapView) {
+  func waitForStyleLoad() -> Bool {
+    return true
+  }
+
+  func addToMap(_ map: RCTMGLMapView, style: Style) {
     self.map = map.mapboxMap
     if (reactStyle != nil) {
       addStyles()
