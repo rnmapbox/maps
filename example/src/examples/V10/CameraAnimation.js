@@ -22,7 +22,8 @@ const styles = {
     circleColor: colors.primary.blue,
   },
   sheet: {
-    padding: 10,
+    paddingTop: 10,
+    paddingHorizontal: 10,
   },
   section: {
     paddingVertical: 10,
