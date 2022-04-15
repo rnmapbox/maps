@@ -26,9 +26,9 @@
 
 # React Native Mapbox GL Demo
 
-Demo Application for [React Native Mapbox GL](../README.md)
+Demo Application for [React Native Mapbox GL](../README.md) using the `maplibre` implementation.
 
-*Note:* this app is using [non trivial babel/metro configs](https://github.com/rnmapbox/maps/pull/778), so we can consume the `maps` library from parent directory directly. Regular apps don't need this complicated setup.
+*Note:* this app is using [non-trivial babel/metro configs](https://github.com/rnmapbox/maps/pull/778), so we can consume the `maps` library from parent directory directly. Regular apps don't need this complicated setup.
 
 <br>
 

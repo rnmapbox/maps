@@ -3265,7 +3265,7 @@
     "name": "NativeUserLocation"
   },
   "PointAnnotation": {
-    "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.\n\nConsider using ShapeSource and SymbolLayer instead, if you have many points and you have static images,\nthey'll offer much better performance\n\n.\nIf you need interctive views please use MarkerView,\nas with PointAnnotation on Android child views are rendered onto a bitmap for better performance.",
+    "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.\n\nConsider using ShapeSource and SymbolLayer instead, if you have many points and you have static images,\nthey'll offer much better performance.\n\nIf you need interactive views please use MarkerView,\nas with PointAnnotation on Android child views are rendered onto a bitmap for better performance.",
     "displayName": "PointAnnotation",
     "methods": [
       {
@@ -4337,7 +4337,7 @@
     ]
   },
   "Style": {
-    "description": "Style is a component that automatically adds sources / layers to the map using Mapbox GL Style Spec.\nOnly [`sources`](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) & [`layers`](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/) are supported.\nOther fields such as `sprites`, `glyphs` etc. will be ignored. Not all layer / source attributes from the style spec are supported, in general the supported attributes will mentioned under https://github.com/rnmapbox/maps/tree/master/docs.",
+    "description": "Style is a component that automatically adds sources / layers to the map using Mapbox GL Style Spec.\nOnly [`sources`](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) & [`layers`](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/) are supported.\nOther fields such as `sprites`, `glyphs` etc. will be ignored. Not all layer / source attributes from the style spec are supported, in general the supported attributes will mentioned under https://github.com/rnmapbox/maps/tree/main/docs.",
     "displayName": "Style",
     "methods": [],
     "props": [

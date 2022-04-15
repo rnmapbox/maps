@@ -48,7 +48,7 @@ Read on if you want to edit your Mapbox version or flavor.
 
 Current default MapLibre version is `5.12.0`
 
-This is the dafult and requires no further setup`ios/Podfile`
+This is the default and requires no further setup`ios/Podfile`
 
 If you want to change the version used:
 
@@ -85,7 +85,7 @@ You will need to authorize your download of the Maps SDK with a secret access to
 
 <br/>
 
-## Mapbox Maps GL SDK (9.0 or earlies)
+## Mapbox Maps GL SDK (9.0 or earlier)
 
 This is the old version of mapbox gl (deprecated)
 

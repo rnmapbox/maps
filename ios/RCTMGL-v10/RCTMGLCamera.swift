@@ -7,9 +7,74 @@ protocol RCTMGLMapComponent {
   func removeFromMap(_ map: RCTMGLMapView)
 }
 
+/// See `MGLModule.swift:constantsToExport:CameraModes.`
+enum Mode: String, CaseIterable {
+  case flight, move, ease, linear
+}
+
+struct CameraUpdateItem {
+  var camera: CameraOptions
+  var mode: Mode
+  var duration: TimeInterval?
+
+  func execute(map: RCTMGLMapView) {
+    if let duration = duration, duration == 0.0 {
+      map.mapboxMap.setCamera(to: camera)
+      return
+    }
+  
+    switch mode {
+      case .flight:
+        if let duration = duration {
+          map.camera.fly(to: camera, duration: duration)
+        } else {
+          map.camera.fly(to: camera)
+        }
+      case .move:
+        map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
+      case .ease:
+        map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
+      case .linear:
+        map.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
+    }
+
+    let paddingAnimator = map.camera.makeAnimator(duration: duration ?? 0, curve: .easeInOut) { (transition) in
+      transition.padding.toValue = camera.padding
+    }
+    paddingAnimator.startAnimation()
+  }
+}
+
+class CameraUpdateQueue {
+  var queue: [CameraUpdateItem] = [];
+  
+  func dequeue() -> CameraUpdateItem? {
+    guard !queue.isEmpty else {
+      return nil
+    }
+    return queue.removeFirst()
+  }
+  
+  func enqueue(stop: CameraUpdateItem) {
+    queue.append(stop)
+  }
+  
+  func execute(map: RCTMGLMapView) {
+    guard let stop = dequeue() else {
+      return
+    }
+    
+    stop.execute(map: map)
+  }
+}
+
 open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
   private var _map: RCTMGLMapView! = nil
   private var _mapCallbacks: [(RCTMGLMapView) -> Void] = []
+  
+  var map : RCTMGLMapView? {
+    return _map;
+  }
 
   func withMapView(_ callback: @escaping (_ mapView: MapView) -> Void) {
     withRCTMGLMapView { mapView in
@@ -40,10 +105,15 @@ open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
 }
 
 class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
-  // See MGLModule.swift:constantsToExport:CameraModes.
-  enum Mode: String, CaseIterable {
-    case flight, move, ease, linear
+  var defaultStop : [String:Any]? = nil
+  
+  @objc var stop : [String:Any]? = nil {
+    didSet {
+      _updateCamera()
+    }
   }
+  
+  let cameraUpdateQueue : CameraUpdateQueue = CameraUpdateQueue()
   
   @objc
   var followUserLocation : Bool = false {
@@ -56,6 +126,35 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     return duration*0.001
   }
   
+  func _updateCameraFromJavascript() {
+    guard !followUserLocation else {
+      return
+    }
+    
+    guard let stop = stop else {
+      return
+    }
+    
+    /*
+    V10 TODO
+    if let map = map, map.userTrackingMode != .none {
+      map.userTrackingMode = .none
+    }
+    */
+
+    if let stops = stop["stops"] as? [[String:Any]] {
+      stops.forEach {
+        cameraUpdateQueue.enqueue(stop: toUpdateItem(stop: $0))
+      }
+    } else {
+      cameraUpdateQueue.enqueue(stop: toUpdateItem(stop: stop))
+    }
+
+    if let map = map {
+      cameraUpdateQueue.execute(map: map)
+    }
+  }
+  
   func _updateCameraFromTrackingMode() {
     withMapView { map in
       if let locationModule = RCTMGLLocationModule.shared {
@@ -66,37 +165,31 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     }
   }
   
-  @objc func setStop(_ dictionary: [String:Any]?) {
-    guard let dictionary = dictionary else {
-      // Seems to be normal when followUserLocation is set
-      // return Logger.log(level: .error, message: "stop called with nil")
-      return
-    }
-        
+  func toUpdateItem(stop: [String:Any]) -> CameraUpdateItem {    
     var zoom: CGFloat = 11
-    if let z = dictionary["zoom"] as? Double {
+    if let z = stop["zoom"] as? Double {
       zoom = CGFloat(z)
     }
     
     var pitch: CGFloat = 0
-    if let p = dictionary["pitch"] as? Double {
+    if let p = stop["pitch"] as? Double {
       pitch = CGFloat(p)
     }
     
     var heading: CLLocationDirection = 0
-    if let h = dictionary["heading"] as? Double {
+    if let h = stop["heading"] as? Double {
       heading = CLLocationDirection(h)
     }
     
     let padding = UIEdgeInsets(
-      top: dictionary["paddingTop"] as? Double ?? 0,
-      left: dictionary["paddingLeft"] as? Double ?? 0,
-      bottom: dictionary["paddingBottom"] as? Double ?? 0,
-      right: dictionary["paddingRight"] as? Double ?? 0
+      top: stop["paddingTop"] as? Double ?? 0,
+      left: stop["paddingLeft"] as? Double ?? 0,
+      bottom: stop["paddingBottom"] as? Double ?? 0,
+      right: stop["paddingRight"] as? Double ?? 0
     )
 
     var center: LocationCoordinate2D?
-    if let feature: String = dictionary["centerCoordinate"] as? String {
+    if let feature: String = stop["centerCoordinate"] as? String {
       let centerFeature : Turf.Feature? = try!
         JSONDecoder().decode(Turf.Feature.self, from: feature.data(using: .utf8)!)
         
@@ -106,7 +199,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       default:
         fatalError("Unexpected geometry: \(String(describing: centerFeature?.geometry))")
       }
-    } else if let feature: String = dictionary["bounds"] as? String {
+    } else if let feature: String = stop["bounds"] as? String {
       let collection : Turf.FeatureCollection? = try!
         JSONDecoder().decode(Turf.FeatureCollection.self, from: feature.data(using: .utf8)!)
       let features = collection?.features
@@ -138,56 +231,70 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     }
 
     let duration: TimeInterval? = {
-      if let d = dictionary["duration"] as? Double {
+      if let d = stop["duration"] as? Double {
         return self.toTimeInterval(d)
       }
       return nil
     }()
     
     let mode: Mode = {
-      if let m = dictionary["mode"] as? String, let m = Mode(rawValue: m) {
+      if let m = stop["mode"] as? String, let m = Mode(rawValue: m) {
         return m
       }
       return .flight
     }()
-    
-    withMapView { map in
-      let camera = CameraOptions(
+
+    let result = CameraUpdateItem(
+      camera: CameraOptions(
         center: center,
         padding: padding,
         anchor: .zero,
         zoom: zoom,
         bearing: heading,
         pitch: pitch
-      )
-      
-      switch mode {
-        case .flight:
-          if let duration = duration {
-            map.camera.fly(to: camera, duration: duration)
-          } else {
-            map.camera.fly(to: camera)
-          }
-        case .move:
-          map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
-        case .ease:
-          map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
-        case .linear:
-          map.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
+      ),
+      mode: mode,
+      duration: duration
+    )
+    return result
+  }
+  
+  @objc func setDefaultStop(_ stop: [String:Any]?) {
+    self.defaultStop = stop
+  }
+
+  func _updateCamera() {
+    if let _ = map {
+      if followUserLocation {
+        self._updateCameraFromTrackingMode()
+      } else {
+        self._updateCameraFromJavascript()
       }
-      
-      let paddingAnimator = map.camera.makeAnimator(duration: duration ?? 0, curve: .easeInOut) { (transition) in
-        transition.padding.toValue = padding
-      }
-      paddingAnimator.startAnimation()
     }
   }
   
-  @objc func setDefaultStop(_ dictionary: [String:Any]?) {
-    print("setDefaultStop", dictionary!)
+  func _setInitialCamera() {
+    guard let stop = self.defaultStop, let map = map else {
+      return
+    }
+    
+    var updateItem = toUpdateItem(stop: stop)
+    updateItem.mode = .move
+    updateItem.duration = 0
+    updateItem.execute(map: map)
   }
   
-    // MARK: - LocationConsumer
+  func initialLayout() {
+    _setInitialCamera()
+    _updateCamera()
+  }
+  
+  override func addToMap(_ map: RCTMGLMapView) {
+    super.addToMap(map)
+    map.reactCamera = self
+  }
+  
+  // MARK: - LocationConsumer
   
   func locationUpdate(newLocation: Location) {
     if followUserLocation {

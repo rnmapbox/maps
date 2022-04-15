@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {Button, SafeAreaView, Text, View} from 'react-native';
 import {
   MapView,
   Camera,

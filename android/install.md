@@ -4,7 +4,7 @@
 
   - maplibre: *DEFAULT* open source fork of older open source mapbox libraries with many improvements
   - mapbox: v10 latest mapbox implementation - not opensource requires access for download
-  - mapbox-gl: classis mapbox libraries - should work but will be dropped, recent versions are not open source and requires acess for download
+  - mapbox-gl: classic mapbox libraries - should work but will be dropped, recent versions are not open source and requires acess for download
 
 
 ## Using MapLibre
@@ -14,7 +14,7 @@ This is the default, and should work without any changes in gradle files.
 
 ### Custom versions
 
-Overwrite mapbox dependecies within your `android/build.gradle > buildscript > ext` section
+Overwrite mapbox dependencies within your `android/build.gradle > buildscript > ext` section
 
 ```groovy
 buildscript {
@@ -34,7 +34,7 @@ buildscript {
 }
 ```
 
-Feel free to check out the `/example` projects [`android/build.gradle`](https://github.com/rnmapbox/maps/blob/master/example/android/build.gradle) for inspiration!
+Feel free to check out the `/example` projects [`android/build.gradle`](https://github.com/rnmapbox/maps/blob/main/example/android/build.gradle) for inspiration!
 
 ## Mapbox Maps SDK v10
 
@@ -42,7 +42,7 @@ Add `RNMapboxMapsImpl = "mapbox"` to your gradle file - see bellow for details.
 
 ### Custom versions
 
-Overwrite mapbox dependecies within your `android/build.gradle > buildscript > ext` section
+Overwrite mapbox dependencies within your `android/build.gradle > buildscript > ext` section
 
 
 ```groovy

@@ -21,10 +21,9 @@ const styles = StyleSheet.create({
  * PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.
  *
  * Consider using ShapeSource and SymbolLayer instead, if you have many points and you have static images,
- * they'll offer much better performance
+ * they'll offer much better performance.
  *
- * .
- * If you need interctive views please use MarkerView,
+ * If you need interactive views please use MarkerView,
  * as with PointAnnotation on Android child views are rendered onto a bitmap for better performance.
  */
 class PointAnnotation extends NativeBridgeComponent(React.PureComponent) {

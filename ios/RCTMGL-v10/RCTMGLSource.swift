@@ -67,4 +67,14 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
       layer.removeFromMap(map, style: map.mapboxMap.style)
     }
   }
+
+  func getLayerIDs() -> [String] {
+    layers.compactMap {
+      if let layer = $0 as? RCTMGLLayer {
+        return layer.id
+      } else {
+        return nil
+      }
+    }
+  }
 }
