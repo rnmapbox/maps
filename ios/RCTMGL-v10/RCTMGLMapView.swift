@@ -122,6 +122,7 @@ open class RCTMGLMapView : MapView {
   var sources : [RCTMGLSource] = []
   
   var onStyleLoadedComponents: [RCTMGLMapComponent] = []
+  var styleLoaded: Bool = false
   
   var _pendingInitialLayout = true
   
@@ -215,7 +216,7 @@ open class RCTMGLMapView : MapView {
     
   @objc open override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     if let mapComponent = subview as? RCTMGLMapComponent {
-      if mapComponent.waitForStyleLoad() {
+      if !styleLoaded && mapComponent.waitForStyleLoad() {
         onStyleLoadedComponents.append(mapComponent)
       } else {
         mapComponent.addToMap(self, style: self.mapboxMap.style)
@@ -269,6 +270,7 @@ open class RCTMGLMapView : MapView {
       self.onStyleLoadedComponents.forEach { (component) in
         component.addToMap(self, style: self.mapboxMap.style)
       }
+      self.styleLoaded = true
       self.onStyleLoadedComponents = []
     })
   }
