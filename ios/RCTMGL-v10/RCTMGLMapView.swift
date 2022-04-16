@@ -224,6 +224,8 @@ open class RCTMGLMapView : MapView {
     if let source = subview as? RCTMGLSource {
       sources.append(source)
     }
+
+    super.insertReactSubview(subview, at: atIndex)
   }
   
   @objc open override func removeReactSubview(_ subview:UIView!) {
@@ -233,6 +235,8 @@ open class RCTMGLMapView : MapView {
     if let source = subview as? RCTMGLSource {
       sources.removeAll { $0 == source }
     }
+
+    super.removeReactSubview(subview)
   }
 
   public required init(frame:CGRect) {
