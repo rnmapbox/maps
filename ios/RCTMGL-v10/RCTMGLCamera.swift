@@ -232,6 +232,15 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       result.camera.bearing = CLLocationDirection(bearing)
     }
 
+    let padding = UIEdgeInsets(
+      top: stop["paddingTop"] as? Double ?? 0.0,
+      left: stop["paddingLeft"] as? Double ?? 0.0,
+      bottom: stop["paddingBottom"] as? Double ?? 0.0,
+      right: stop["paddingRight"] as? Double ?? 0.0
+    )
+    result.camera.padding = padding
+
+
     let duration: TimeInterval? = {
       if let d = stop["duration"] as? Double {
         return self.toTimeInterval(d)
