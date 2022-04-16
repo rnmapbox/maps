@@ -121,7 +121,7 @@ open class RCTMGLMapView : MapView {
   var images : [RCTMGLImages] = []
   var sources : [RCTMGLSource] = []
   
-  var onStyleLoadedComponents: [RCTMGLMapComponent] = []
+  var onStyleLoadedComponents: [RCTMGLMapComponent]? = []
   
   var _pendingInitialLayout = true
   
@@ -215,8 +215,8 @@ open class RCTMGLMapView : MapView {
     
   @objc open override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     if let mapComponent = subview as? RCTMGLMapComponent {
-      if mapComponent.waitForStyleLoad() {
-        onStyleLoadedComponents.append(mapComponent)
+      if mapComponent.waitForStyleLoad(), self.onStyleLoadedComponents != nil {
+        onStyleLoadedComponents!.append(mapComponent)
       } else {
         mapComponent.addToMap(self, style: self.mapboxMap.style)
       }
@@ -243,6 +243,13 @@ open class RCTMGLMapView : MapView {
   }
   
   func setupEvents() {
+    self.mapboxMap.onEvery(.mapLoadingError, handler: {(event) in
+      if let data = event.data as? [String:Any], let message = data["message"] {
+        Logger.log(level: .error, message: "MapLoad error \(message)")
+      } else {
+        Logger.log(level: .error, message: "MapLoad error \(event)")
+      }
+    })
     self.mapboxMap.onEvery(.styleImageMissing) { (event) in
       if let data = event.data as? [String:Any] {
         if let imageName = data["id"] as? String {
@@ -265,11 +272,11 @@ open class RCTMGLMapView : MapView {
       self.fireEvent(event: event, callback: self.reactOnMapChange!)
     })
     
-    self.mapboxMap.onNext(.mapLoaded, handler: { (event) in
-      self.onStyleLoadedComponents.forEach { (component) in
+    self.mapboxMap.onNext(.styleLoaded, handler: { (event) in
+      self.onStyleLoadedComponents?.forEach { (component) in
         component.addToMap(self, style: self.mapboxMap.style)
       }
-      self.onStyleLoadedComponents = []
+      self.onStyleLoadedComponents = nil
     })
   }
     
