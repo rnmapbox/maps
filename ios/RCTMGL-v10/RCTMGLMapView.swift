@@ -176,16 +176,12 @@ open class RCTMGLMapView : MapView {
   @objc func setReactZoomEnabled(_ value: Bool) {
     self.mapView.gestures.options.quickZoomEnabled = value
     self.mapView.gestures.options.doubleTapToZoomInEnabled = value
-
-    // TODO: Introduced in Mapbox Maps SDK v10.4
-    // self.mapView.gestures.options.pinchZoomEnabled = value
+    self.mapView.gestures.options.pinchZoomEnabled = value
   }
 
   @objc func setReactScrollEnabled(_ value: Bool) {
     self.mapView.gestures.options.panEnabled = value
-
-    // TODO: Introduced in Mapbox Maps SDK v10.4
-    // self.mapView.gestures.options.pitchPanEnabled = value
+    self.mapView.gestures.options.pinchPanEnabled = value
   }
 
   @objc func setReactRotateEnabled(_ value: Bool) {
