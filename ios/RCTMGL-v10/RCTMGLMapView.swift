@@ -116,7 +116,12 @@ public func dictionaryFrom(_ from: Turf.Feature?) throws -> [String:Any]? {
 open class RCTMGLMapView : MapView {
   var reactOnPress : RCTBubblingEventBlock? = nil
   var reactOnMapChange : RCTBubblingEventBlock? = nil
-  
+
+  var reactZoomEnabled : Bool = true
+  var reactScrollEnabled : Bool = true
+  var reactRotateEnabled : Bool = true
+  var reactPitchEnabled : Bool = true
+
   var reactCamera : RCTMGLCamera? = nil
   var images : [RCTMGLImages] = []
   var sources : [RCTMGLSource] = []
@@ -172,7 +177,30 @@ open class RCTMGLMapView : MapView {
       self.fireEvent(event: event, callback: self.reactOnMapChange!)
     })
   }
-    
+
+  @objc func setReactZoomEnabled(_ value: Bool) {
+    self.mapView.gestures.options.quickZoomEnabled = value
+    self.mapView.gestures.options.doubleTapToZoomInEnabled = value
+
+    // TODO: Introduced in Mapbox Maps SDK v10.4
+    // self.mapView.gestures.options.pinchZoomEnabled = value
+  }
+
+  @objc func setReactScrollEnabled(_ value: Bool) {
+    self.mapView.gestures.options.panEnabled = value
+
+    // TODO: Introduced in Mapbox Maps SDK v10.4
+    // self.mapView.gestures.options.pitchPanEnabled = value
+  }
+
+  @objc func setReactRotateEnabled(_ value: Bool) {
+    self.mapView.gestures.options.pinchRotateEnabled = value
+  }
+
+  @objc func setReactPitchEnabled(_ value: Bool) {
+    self.mapView.gestures.options.pitchEnabled = value
+  }
+
   func fireEvent(event: RCTMGLEvent, callback: @escaping RCTBubblingEventBlock) {
     callback(event.toJSON())
   }
