@@ -460,6 +460,7 @@ export interface MapViewProps extends ViewProps {
   styleJSON?: string;
   preferredFramesPerSecond?: number;
   localizeLabels?: boolean;
+  scaleBarEnabled?: boolean;
   zoomEnabled?: boolean;
   scrollEnabled?: boolean;
   pitchEnabled?: boolean;
