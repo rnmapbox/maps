@@ -117,11 +117,6 @@ open class RCTMGLMapView : MapView {
   var reactOnPress : RCTBubblingEventBlock? = nil
   var reactOnMapChange : RCTBubblingEventBlock? = nil
 
-  var reactZoomEnabled : Bool = true
-  var reactScrollEnabled : Bool = true
-  var reactRotateEnabled : Bool = true
-  var reactPitchEnabled : Bool = true
-
   var reactCamera : RCTMGLCamera? = nil
   var images : [RCTMGLImages] = []
   var sources : [RCTMGLSource] = []
