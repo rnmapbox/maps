@@ -103,6 +103,7 @@ const CameraAnimation = props => {
           animationMode={animationMode}
           zoomLevel={12}
           padding={padding}
+          animationDuration={800}
         />
 
         <ShapeSource id="source" shape={shape}>
