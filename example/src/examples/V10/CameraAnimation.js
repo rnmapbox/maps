@@ -125,6 +125,13 @@ const CameraAnimation = props => {
                 title="Instant"
                 onPress={() => changePosition('moveTo')}
               />
+              <Button
+                title="Padding"
+                onPress={() => {
+                  setAnimationMode('easeTo');
+                  setPadding(randPadding());
+                }}
+              />
             </View>
             <Text>Position ({coordinatesDisplay})</Text>
             <Text>Padding ({paddingDisplay})</Text>
