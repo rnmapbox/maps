@@ -22,9 +22,8 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
 
   @objc var filter : Array<Any>? = nil {
     didSet {
-      if self.styleLayer != nil {
-        self.setOptions(&self.styleLayer!)
-        self.removeAndReaddLayer()
+      if let map = self.map {
+        self.updateLayer(map)
       }
     }
   }
