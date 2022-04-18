@@ -143,7 +143,7 @@ open class RCTMGLMapView : MapView {
   
   @objc func setReactStyleURL(_ value: String?) {
     if let value = value {
-      if let url = URL(string: value) {
+      if let _ = URL(string: value) {
         mapView.mapboxMap.loadStyleURI(StyleURI(rawValue: value)!)
       } else {
         if RCTJSONParse(value, nil) != nil {
@@ -168,6 +168,7 @@ open class RCTMGLMapView : MapView {
     self.reactOnMapChange = value
 
     self.mapView.mapboxMap.onEvery(.cameraChanged, handler: { cameraEvent in
+      print("Hi????")
       let event = RCTMGLEvent(type:.regionDidChange, payload: self._makeRegionPayload());
       self.fireEvent(event: event, callback: self.reactOnMapChange!)
     })
@@ -425,7 +426,7 @@ extension RCTMGLMapView {
             }
             let features = hitFeatures.map { try! dictionaryFrom($0.feature) }
             let location = self.mapboxMap.coordinate(for: tapPoint)
-            let event = try! RCTMGLEvent(
+            let event = RCTMGLEvent(
               type: (source is RCTMGLVectorSource) ? .vectorSourceLayerPress : .shapeSourceLayerPress,
               payload: [
                 "features": features,
