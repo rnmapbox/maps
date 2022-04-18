@@ -62,7 +62,7 @@ const CameraAnimation = props => {
     longitude: -73.984638,
   };
 
-  const [animationMode, setAnimationMode] = useState('flyTo');
+  const [animationMode, setAnimationMode] = useState('moveTo');
   const [coordinates, setCoordinates] = useState(initialCoordinates);
   const [padding, setPadding] = useState(zeroPadding);
 
@@ -82,14 +82,7 @@ const CameraAnimation = props => {
       latitude: initialCoordinates.latitude + Math.random() * 0.2,
       longitude: initialCoordinates.longitude + Math.random() * 0.2,
     });
-  };
-
-  const changePadding = kind => {
-    if (kind === 'zero') {
-      setPadding(zeroPadding);
-    } else if (kind === 'random') {
-      setPadding(randPadding());
-    }
+    setPadding(randPadding());
   };
 
   const position = [coordinates.longitude, coordinates.latitude];
@@ -120,24 +113,20 @@ const CameraAnimation = props => {
       <SafeAreaView>
         <View style={styles.sheet}>
           <View style={styles.section}>
-            <Text>Move ({coordinatesDisplay})</Text>
             <View style={styles.buttonRow}>
               <Button title="Flight" onPress={() => changePosition('flyTo')} />
-              <Button title="Move" onPress={() => changePosition('moveTo')} />
               <Button title="Ease" onPress={() => changePosition('easeTo')} />
               <Button
                 title="Linear"
                 onPress={() => changePosition('linearTo')}
               />
+              <Button
+                title="Instant"
+                onPress={() => changePosition('moveTo')}
+              />
             </View>
-          </View>
-
-          <View style={styles.section}>
+            <Text>Position ({coordinatesDisplay})</Text>
             <Text>Padding ({paddingDisplay})</Text>
-            <View style={styles.buttonRow}>
-              <Button title="Zero" onPress={() => changePadding('zero')} />
-              <Button title="Random" onPress={() => changePadding('random')} />
-            </View>
           </View>
         </View>
       </SafeAreaView>
