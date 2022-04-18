@@ -20,28 +20,23 @@ struct CameraUpdateItem {
   var duration: TimeInterval?
   
   func execute(map: RCTMGLMapView, cameraAnimator: inout BasicCameraAnimator?) {
-    var _camera = camera
-
     switch mode {
       case .flight:
+        var _camera = camera
         _camera.padding = nil
         map.camera.fly(to: _camera, duration: duration)
         changePadding(map: map, cameraAnimator: &cameraAnimator, curve: .linear)
       case .ease:
-        _camera.padding = nil
-        map.camera.ease(to: _camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
-        changePadding(map: map, cameraAnimator: &cameraAnimator, curve: .easeInOut)
+        map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
       case .linear:
-        _camera.padding = nil
-        map.camera.ease(to: _camera, duration: duration ?? 0, curve: .linear, completion: nil)
-        changePadding(map: map, cameraAnimator: &cameraAnimator, curve: .linear)
+        map.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
       case .none:
-        map.mapboxMap.setCamera(to: _camera)
+        map.mapboxMap.setCamera(to: camera)
     }
   }
   
-  /// Padding is not currently animatable on the camera, so we create a separate animator instead.
-  /// If this changes, remove this and set `camera.padding` directly.
+  /// Padding is not currently animatable on the camera's `fly(to:)` method, so we create a separate animator instead.
+  /// If this changes, remove this and call `fly(to:)` with an unmodified `camera`.
   func changePadding(map: RCTMGLMapView, cameraAnimator: inout BasicCameraAnimator?, curve: UIView.AnimationCurve) {
     if let cameraAnimator = cameraAnimator {
       cameraAnimator.stopAnimation()
