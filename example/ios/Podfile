@@ -1,13 +1,13 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
+$RNMapboxMapsImpl = 'mapbox' # mapbox-gl, maplibre
+
 if ENV['CI_MAP_IMPL']
   fail "Invalid CI_MAP_IMPL value" unless ["maplibre", "mapbox-gl", "mapbox"].include?(ENV['CI_MAP_IMPL'])
 
   $RNMapboxMapsImpl = ENV['CI_MAP_IMPL']
 end
-
-$RNMapboxMapsImpl = 'maplibre'
 
 if $RNMapboxMapsImpl == 'mapbox'
   platform :ios, '13.0'
