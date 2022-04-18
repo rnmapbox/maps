@@ -176,17 +176,17 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
   }
   
   func toUpdateItem(stop: [String:Any]) -> CameraUpdateItem {    
-    var zoom: CGFloat = 11
+    var zoom: CGFloat?
     if let z = stop["zoom"] as? Double {
       zoom = CGFloat(z)
     }
     
-    var pitch: CGFloat = 0
+    var pitch: CGFloat?
     if let p = stop["pitch"] as? Double {
       pitch = CGFloat(p)
     }
     
-    var heading: CLLocationDirection = 0
+    var heading: CLLocationDirection?
     if let h = stop["heading"] as? Double {
       heading = CLLocationDirection(h)
     }
@@ -232,7 +232,12 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       
       withMapView { map in
         let bounds = CoordinateBounds(southwest: sw, northeast: ne)
-        let camera = map.mapboxMap.camera(for: bounds, padding: padding, bearing: heading, pitch: pitch)
+        let camera = map.mapboxMap.camera(
+          for: bounds,
+          padding: padding,
+          bearing: heading ?? map.cameraState.bearing,
+          pitch: pitch ?? map.cameraState.pitch
+        )
         if let _center = camera.center, let _zoom = camera.zoom {
           center = _center
           zoom = _zoom
@@ -257,7 +262,8 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     let result = CameraUpdateItem(
       camera: CameraOptions(
         center: center,
-        anchor: .zero,
+        padding: nil,
+        anchor: nil,
         zoom: zoom,
         bearing: heading,
         pitch: pitch
