@@ -9,40 +9,37 @@ protocol RCTMGLMapComponent {
 
 /// See `MGLModule.swift:constantsToExport:CameraModes.`
 enum Mode: String, CaseIterable {
-  case flight, move, ease, linear
+  case flight, ease, linear, none
 }
 
 struct CameraUpdateItem {
   var camera: CameraOptions
+  var padding: UIEdgeInsets?
   var mode: Mode
   var duration: TimeInterval?
-  var padding: UIEdgeInsets?
 
   func execute(map: RCTMGLMapView, cameraAnimator: inout BasicCameraAnimator?) {
-    if let duration = duration, duration == 0.0 {
-      map.mapboxMap.setCamera(to: camera)
-      return
-    }
-  
     switch mode {
       case .flight:
-        if let duration = duration {
-          map.camera.fly(to: camera, duration: duration)
-        } else {
-          map.camera.fly(to: camera)
-        }
-      case .move:
-        map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
+        map.camera.fly(to: camera, duration: duration)
       case .ease:
         map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
+        changePadding(map: map, cameraAnimator: &cameraAnimator, curve: .easeInOut)
       case .linear:
         map.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
+        changePadding(map: map, cameraAnimator: &cameraAnimator, curve: .linear)
+      case .none:
+        map.mapboxMap.setCamera(to: camera)
     }
-
+  }
+  
+  /// Padding is not currently animatable on the camera, so we create a separate animator instead.
+  /// If this changes, remove this and set `camera.padding` directly.
+  func changePadding(map: RCTMGLMapView, cameraAnimator: inout BasicCameraAnimator?, curve: UIView.AnimationCurve) {
     if let cameraAnimator = cameraAnimator {
       cameraAnimator.stopAnimation()
     }
-    cameraAnimator = map.camera.makeAnimator(duration: duration ?? 0, curve: .easeInOut) { (transition) in
+    cameraAnimator = map.camera.makeAnimator(duration: duration ?? 0, curve: curve) { (transition) in
       transition.padding.toValue = padding
     }
     cameraAnimator?.startAnimation()
@@ -257,9 +254,9 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
         bearing: heading,
         pitch: pitch
       ),
+      padding: padding,
       mode: mode,
-      duration: duration,
-      padding: padding
+      duration: duration
     )
     return result
   }
@@ -284,7 +281,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     }
     
     var updateItem = toUpdateItem(stop: stop)
-    updateItem.mode = .move
+    updateItem.mode = .none
     updateItem.duration = 0
     updateItem.execute(map: map, cameraAnimator: &cameraAnimator)
   }
