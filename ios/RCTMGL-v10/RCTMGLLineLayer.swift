@@ -18,6 +18,9 @@ class RCTMGLLineLayer: RCTMGLVectorLayer {
 
   override func apply(style : Style) {
     try! style.updateLayer(withId: id, type: LayerType.self) { (layer : inout LineLayer) in
+      if self.styleLayer != nil {
+        self.setOptions(&self.styleLayer!)
+      }
       if let styleLayer = self.styleLayer as? LineLayer {
         layer = styleLayer
       }
