@@ -168,7 +168,6 @@ open class RCTMGLMapView : MapView {
     self.reactOnMapChange = value
 
     self.mapView.mapboxMap.onEvery(.cameraChanged, handler: { cameraEvent in
-      print("Hi????")
       let event = RCTMGLEvent(type:.regionDidChange, payload: self._makeRegionPayload());
       self.fireEvent(event: event, callback: self.reactOnMapChange!)
     })
