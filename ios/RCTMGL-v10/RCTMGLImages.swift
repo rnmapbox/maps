@@ -5,7 +5,6 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
   var bridge : RCTBridge! = nil
   var remoteImages : [String:String] = [:]
   
-  
   @objc
   var onImageMissing: RCTBubblingEventBlock? = nil
   
@@ -15,12 +14,18 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
   @objc
   var nativeImages: [String] = []
   
-  func addToMap(_ map: RCTMGLMapView) {
+  // MARK: - RCTMGLMapComponent
+
+  func waitForStyleLoad() -> Bool {
+    return false
+  }
+  
+  func addToMap(_ map: RCTMGLMapView, style: Style) {
     map.images.append(self)
     map.setupEvents()
     
-    self.addNativeImages(style: map.mapboxMap.style, nativeImages: nativeImages)
-    self.addRemoteImages(style: map.mapboxMap.style, remoteImages: images)
+    self.addNativeImages(style: style, nativeImages: nativeImages)
+    self.addRemoteImages(style: style, remoteImages: images)
   }
   
   func removeFromMap(_ map: RCTMGLMapView) {

@@ -3,8 +3,10 @@ import MapboxMaps
 import Turf
 
 protocol RCTMGLMapComponent {
-  func addToMap(_ map: RCTMGLMapView)
+  func addToMap(_ map: RCTMGLMapView, style: Style)
   func removeFromMap(_ map: RCTMGLMapView)
+  
+  func waitForStyleLoad() -> Bool
 }
 
 /// See `MGLModule.swift:constantsToExport:CameraModes.`
@@ -91,7 +93,13 @@ open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
     }
   }
   
-  func addToMap(_ map: RCTMGLMapView) {
+  // MARK: - RCTMGLMapComponent
+
+  func waitForStyleLoad() -> Bool {
+    return false
+  }
+  
+  func addToMap(_ map: RCTMGLMapView, style: Style) {
     _mapCallbacks.forEach { callback in
         callback(map)
     }
@@ -291,8 +299,8 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     _updateCamera()
   }
   
-  override func addToMap(_ map: RCTMGLMapView) {
-    super.addToMap(map)
+  override func addToMap(_ map: RCTMGLMapView, style: Style) {
+    super.addToMap(map, style: style)
     map.reactCamera = self
   }
   

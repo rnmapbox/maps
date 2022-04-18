@@ -37,7 +37,7 @@ class RCTMGLStyleValue {
   }
   
   func isVisible() -> Value<Visibility> {
-    return Value.constant(.visible)
+    return mglStyleValueEnum()
   }
   
   func getTransition() -> StyleTransition {
@@ -254,10 +254,8 @@ class RCTMGLStyleValue {
   }
   
   func mglStyleValueEnum<Enum : RawRepresentable>() -> Value<Enum> where Enum.RawValue == String {
-    print("Enum: \(value)")
     if let value = value as? Dictionary<String,Any> {
       let value = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
-      print("###: \(value) \(Enum(rawValue: value as! String))")
       return Value.constant(Enum(rawValue: value as! String)!)
     } else {
       return Value.constant(Enum(rawValue: value as! String)!)

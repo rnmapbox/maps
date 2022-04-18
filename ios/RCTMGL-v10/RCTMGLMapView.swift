@@ -116,10 +116,12 @@ public func dictionaryFrom(_ from: Turf.Feature?) throws -> [String:Any]? {
 open class RCTMGLMapView : MapView {
   var reactOnPress : RCTBubblingEventBlock? = nil
   var reactOnMapChange : RCTBubblingEventBlock? = nil
-  
+
   var reactCamera : RCTMGLCamera? = nil
   var images : [RCTMGLImages] = []
   var sources : [RCTMGLSource] = []
+  
+  var onStyleLoadedComponents: [RCTMGLMapComponent]? = []
   
   var _pendingInitialLayout = true
   
@@ -170,7 +172,26 @@ open class RCTMGLMapView : MapView {
       self.fireEvent(event: event, callback: self.reactOnMapChange!)
     })
   }
-    
+
+  @objc func setReactZoomEnabled(_ value: Bool) {
+    self.mapView.gestures.options.quickZoomEnabled = value
+    self.mapView.gestures.options.doubleTapToZoomInEnabled = value
+    self.mapView.gestures.options.pinchZoomEnabled = value
+  }
+
+  @objc func setReactScrollEnabled(_ value: Bool) {
+    self.mapView.gestures.options.panEnabled = value
+    self.mapView.gestures.options.pinchPanEnabled = value
+  }
+
+  @objc func setReactRotateEnabled(_ value: Bool) {
+    self.mapView.gestures.options.pinchRotateEnabled = value
+  }
+
+  @objc func setReactPitchEnabled(_ value: Bool) {
+    self.mapView.gestures.options.pitchEnabled = value
+  }
+
   func fireEvent(event: RCTMGLEvent, callback: @escaping RCTBubblingEventBlock) {
     callback(event.toJSON())
   }
@@ -213,20 +234,28 @@ open class RCTMGLMapView : MapView {
     
   @objc open override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     if let mapComponent = subview as? RCTMGLMapComponent {
-      mapComponent.addToMap(self)
+      if mapComponent.waitForStyleLoad(), self.onStyleLoadedComponents != nil {
+        onStyleLoadedComponents!.append(mapComponent)
+      } else {
+        mapComponent.addToMap(self, style: self.mapboxMap.style)
+      }
     }
     if let source = subview as? RCTMGLSource {
       sources.append(source)
     }
+
+    super.insertReactSubview(subview, at: atIndex)
   }
   
   @objc open override func removeReactSubview(_ subview:UIView!) {
     if let mapComponent = subview as? RCTMGLMapComponent {
-      mapComponent.addToMap(self)
+      mapComponent.removeFromMap(self)
     }
     if let source = subview as? RCTMGLSource {
       sources.removeAll { $0 == source }
     }
+
+    super.removeReactSubview(subview)
   }
 
   public required init(frame:CGRect) {
@@ -237,6 +266,13 @@ open class RCTMGLMapView : MapView {
   }
   
   func setupEvents() {
+    self.mapboxMap.onEvery(.mapLoadingError, handler: {(event) in
+      if let data = event.data as? [String:Any], let message = data["message"] {
+        Logger.log(level: .error, message: "MapLoad error \(message)")
+      } else {
+        Logger.log(level: .error, message: "MapLoad error \(event)")
+      }
+    })
     self.mapboxMap.onEvery(.styleImageMissing) { (event) in
       if let data = event.data as? [String:Any] {
         if let imageName = data["id"] as? String {
@@ -257,6 +293,13 @@ open class RCTMGLMapView : MapView {
     self.mapboxMap.onNext(.mapLoaded, handler: { (event) in
       let event = RCTMGLEvent(type:.didFinishLoadingMap, payload: nil);
       self.fireEvent(event: event, callback: self.reactOnMapChange!)
+    })
+    
+    self.mapboxMap.onNext(.styleLoaded, handler: { (event) in
+      self.onStyleLoadedComponents?.forEach { (component) in
+        component.addToMap(self, style: self.mapboxMap.style)
+      }
+      self.onStyleLoadedComponents = nil
     })
   }
     
@@ -442,3 +485,28 @@ extension RCTMGLMapView {
   }
 }
 
+// MARK: - setSourceVisibility
+extension RCTMGLMapView {
+  func setSourceVisibility(_ visible: Bool, sourceId: String, sourceLayerId: String?) -> Void {
+    let style = self.mapboxMap.style
+    
+    style.allLayerIdentifiers.forEach { layerInfo in
+      let layer = try! style.layer(withId: layerInfo.id)
+      if layer.source == sourceId {
+        var good = true
+        if let sourceLayerId = sourceLayerId {
+          if sourceLayerId != layer.sourceLayer {
+            good = false
+          }
+        }
+        if good {
+          do {
+            try style.setLayerProperty(for: layer.id, property: "visibility", value: visible ? "visible" : "none")
+          } catch {
+            Logger.log(level: .error, message: "Cannot change visibility of \(layer.id) with source: \(sourceId)")
+          }
+        }
+      }
+    }
+  }
+}

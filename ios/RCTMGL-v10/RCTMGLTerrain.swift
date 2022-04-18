@@ -17,6 +17,10 @@ class RCTMGLTerrain : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   @objc var sourceID: String? = nil
   
   @objc var exaggeration : Any? = nil
+  
+  func waitForStyleLoad() -> Bool {
+    return true
+  }
 
   func makeTerrain() -> Terrain {
     print("=> sourceID \(sourceID)")
