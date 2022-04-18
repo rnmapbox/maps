@@ -16,22 +16,27 @@ enum Mode: String, CaseIterable {
 
 struct CameraUpdateItem {
   var camera: CameraOptions
-  var padding: UIEdgeInsets?
   var mode: Mode
   var duration: TimeInterval?
-
+  
   func execute(map: RCTMGLMapView, cameraAnimator: inout BasicCameraAnimator?) {
+    var _camera = camera
+
     switch mode {
       case .flight:
-        map.camera.fly(to: camera, duration: duration)
+        _camera.padding = nil
+        map.camera.fly(to: _camera, duration: duration)
+        changePadding(map: map, cameraAnimator: &cameraAnimator, curve: .linear)
       case .ease:
-        map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
+        _camera.padding = nil
+        map.camera.ease(to: _camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
         changePadding(map: map, cameraAnimator: &cameraAnimator, curve: .easeInOut)
       case .linear:
-        map.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
+        _camera.padding = nil
+        map.camera.ease(to: _camera, duration: duration ?? 0, curve: .linear, completion: nil)
         changePadding(map: map, cameraAnimator: &cameraAnimator, curve: .linear)
       case .none:
-        map.mapboxMap.setCamera(to: camera)
+        map.mapboxMap.setCamera(to: _camera)
     }
   }
   
@@ -42,7 +47,7 @@ struct CameraUpdateItem {
       cameraAnimator.stopAnimation()
     }
     cameraAnimator = map.camera.makeAnimator(duration: duration ?? 0, curve: curve) { (transition) in
-      transition.padding.toValue = padding
+      transition.padding.toValue = camera.padding
     }
     cameraAnimator?.startAnimation()
   }
@@ -262,13 +267,12 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     let result = CameraUpdateItem(
       camera: CameraOptions(
         center: center,
-        padding: nil,
+        padding: padding,
         anchor: nil,
         zoom: zoom,
         bearing: heading,
         pitch: pitch
       ),
-      padding: padding,
       mode: mode,
       duration: duration
     )
