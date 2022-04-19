@@ -2972,7 +2972,7 @@
       {
         "name": "attributionPosition",
         "required": false,
-        "type": "union",
+        "type": "custom",
         "default": "none",
         "description": "Adds attribution offset, e.g. `{top: 8, left: 8}` will put attribution button in top-left corner of the map"
       },
@@ -2993,7 +2993,7 @@
       {
         "name": "logoPosition",
         "required": false,
-        "type": "union",
+        "type": "custom",
         "default": "none",
         "description": "Adds logo offset, e.g. `{top: 8, left: 8}` will put the logo in top-left corner of the map"
       },

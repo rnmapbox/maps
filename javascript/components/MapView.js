@@ -15,6 +15,7 @@ import {
   toJSONString,
   isAndroid,
   viewPropTypes,
+  ornamentPositionPropType,
 } from '../utils';
 import {getFilter} from '../utils/filterUtils';
 import Logger from '../utils/Logger';
@@ -121,12 +122,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
     /**
      * Adds attribution offset, e.g. `{top: 8, left: 8}` will put attribution button in top-left corner of the map
      */
-    attributionPosition: PropTypes.oneOfType([
-      PropTypes.shape({top: PropTypes.number, left: PropTypes.number}),
-      PropTypes.shape({top: PropTypes.number, right: PropTypes.number}),
-      PropTypes.shape({bottom: PropTypes.number, left: PropTypes.number}),
-      PropTypes.shape({bottom: PropTypes.number, right: PropTypes.number}),
-    ]),
+    attributionPosition: ornamentPositionPropType,
 
     /**
      * MapView's tintColor
@@ -141,12 +137,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
     /**
      * Adds logo offset, e.g. `{top: 8, left: 8}` will put the logo in top-left corner of the map
      */
-    logoPosition: PropTypes.oneOfType([
-      PropTypes.shape({top: PropTypes.number, left: PropTypes.number}),
-      PropTypes.shape({top: PropTypes.number, right: PropTypes.number}),
-      PropTypes.shape({bottom: PropTypes.number, left: PropTypes.number}),
-      PropTypes.shape({bottom: PropTypes.number, right: PropTypes.number}),
-    ]),
+    logoPosition: ornamentPositionPropType,
 
     /**
      * Enable/Disable the compass from appearing on the map
