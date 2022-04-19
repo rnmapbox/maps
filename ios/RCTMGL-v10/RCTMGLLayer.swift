@@ -20,7 +20,14 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   
   var style: Style? = nil
 
-  @objc var filter : Array<Any>? = nil
+  @objc var filter : Array<Any>? = nil {
+    didSet {
+      if let map = self.map {
+        self.updateLayer(map)
+      }
+    }
+  }
+  
   @objc var id: String! = nil
   @objc var sourceID: String? = nil
   
@@ -129,7 +136,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
       }
     }
   }
-  
+
   func updateLayer(_ map: RCTMGLMapView) {
     if let style = style, let _ = styleLayer {
       apply(style: style)
@@ -204,9 +211,13 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     }
     
     if let filter = filter, filter.count > 0 {
-      let data = try! JSONSerialization.data(withJSONObject: filter, options: .prettyPrinted)
-      let decodedExpression = try! JSONDecoder().decode(Expression.self, from: data)
-      layer.filter = decodedExpression
+      do {
+        let data = try JSONSerialization.data(withJSONObject: filter, options: .prettyPrinted)
+        let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
+        layer.filter = decodedExpression
+      } catch {
+        Logger.log(level: .error, message: "parsing filters failed for layer \(id)")
+      }
     } else {
       layer.filter = nil
     }
@@ -228,9 +239,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     if (self.styleLayer != nil) {
       try! style.removeLayer(withId: self.id)
     }
-    self.styleLayer = nil
   }
-  
   
   func insert(_ style: Style, layerPosition: LayerPosition, inserted: (() -> Void)? = nil) {
     var idToWaitFor : String? = nil
