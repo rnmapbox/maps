@@ -1,12 +1,6 @@
 import MapboxMaps
 import Turf
 
-private extension MapboxMaps.PointAnnotationManager {
- // func doHandleTap(_ tap: UITapGestureRecognizer) {
- //   self.handleTap(tap)
- // }
-}
-
 class PointAnnotationManager : AnnotationInteractionDelegate {
   weak var selected : RCTMGLPointAnnotation? = nil
   
@@ -124,7 +118,9 @@ open class RCTMGLMapView : MapView {
   var onStyleLoadedComponents: [RCTMGLMapComponent]? = []
   
   var _pendingInitialLayout = true
-  
+  var _isUserInteraction = false
+  var _isAnimatingFromUserInteraction = false
+
   var layerWaiters : [String:[(String) -> Void]] = [:]
   
   lazy var pointAnnotationManager : PointAnnotationManager = {
@@ -156,18 +152,19 @@ open class RCTMGLMapView : MapView {
   @objc func setReactOnPress(_ value: @escaping RCTBubblingEventBlock) {
     self.reactOnPress = value
 
-    /*
-      let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-      self.addGestureRecognizer(tapGesture)
-    */
-    mapView.gestures.singleTapGestureRecognizer.removeTarget( pointAnnotationManager.manager, action: nil)
-    mapView.gestures.singleTapGestureRecognizer.addTarget(self, action: #selector(doHandleTap(_:)))
+    self.mapView.gestures.singleTapGestureRecognizer.removeTarget( pointAnnotationManager.manager, action: nil)
+    self.mapView.gestures.singleTapGestureRecognizer.addTarget(self, action: #selector(doHandleTap(_:)))
   }
 
   @objc func setReactOnMapChange(_ value: @escaping RCTBubblingEventBlock) {
     self.reactOnMapChange = value
-
+    
     self.mapView.mapboxMap.onEvery(.cameraChanged, handler: { cameraEvent in
+      let event = RCTMGLEvent(type:.regionIsChanging, payload: self._makeRegionPayload());
+      self.fireEvent(event: event, callback: self.reactOnMapChange!)
+    })
+
+    self.mapView.mapboxMap.onEvery(.mapIdle, handler: { cameraEvent in
       let event = RCTMGLEvent(type:.regionDidChange, payload: self._makeRegionPayload());
       self.fireEvent(event: event, callback: self.reactOnMapChange!)
     })
@@ -219,7 +216,7 @@ open class RCTMGLMapView : MapView {
     return result
   }
     
-  func _makeRegionPayload() -> [String:Any] {
+  func _makeRegionPayload() -> [String: Any] {
     return toJSON(
       geometry: .point(Point(mapView.cameraState.center)),
       properties: [
@@ -227,7 +224,9 @@ open class RCTMGLMapView : MapView {
         "heading": Double(mapView.cameraState.bearing),
         "bearing": Double(mapView.cameraState.bearing),
         "pitch": Double(mapView.cameraState.pitch),
-        "visibleBounds": _toArray(bounds: mapView.mapboxMap.cameraBounds.bounds)
+        "visibleBounds": _toArray(bounds: mapView.mapboxMap.cameraBounds.bounds),
+        "isUserInteraction": _isUserInteraction,
+        "isAnimatingFromUserInteraction": _isAnimatingFromUserInteraction
       ]
     )
   }
@@ -262,6 +261,8 @@ open class RCTMGLMapView : MapView {
     let resourceOptions = ResourceOptions(accessToken: MGLModule.accessToken!)
     super.init(frame: frame, mapInitOptions: MapInitOptions(resourceOptions: resourceOptions))
 
+    self.mapView.gestures.delegate = self
+
     setupEvents()
   }
   
@@ -273,6 +274,7 @@ open class RCTMGLMapView : MapView {
         Logger.log(level: .error, message: "MapLoad error \(event)")
       }
     })
+    
     self.mapboxMap.onEvery(.styleImageMissing) { (event) in
       if let data = event.data as? [String:Any] {
         if let imageName = data["id"] as? String {
@@ -360,7 +362,7 @@ open class RCTMGLMapView : MapView {
 
 // MARK: - Touch
 
-extension RCTMGLMapView {
+extension RCTMGLMapView: GestureManagerDelegate {
   func touchableSources() -> [RCTMGLSource] {
     return sources.filter { $0.isTouchable() }
   }
@@ -456,6 +458,22 @@ extension RCTMGLMapView {
         }
       }
     }
+  }
+  
+  public func gestureManager(_ gestureManager: GestureManager, didBegin gestureType: GestureType) {
+    _isUserInteraction = true
+  }
+  
+  public func gestureManager(_ gestureManager: GestureManager, didEnd gestureType: GestureType, willAnimate: Bool) {
+    _isUserInteraction = false
+    if willAnimate {
+      _isAnimatingFromUserInteraction = true
+    }
+  }
+  
+  public func gestureManager(_ gestureManager: GestureManager, didEndAnimatingFor gestureType: GestureType) {
+    _isUserInteraction = false
+    _isAnimatingFromUserInteraction = false
   }
 }
 

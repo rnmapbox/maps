@@ -42,6 +42,7 @@ class MGLModule : NSObject {
         ],
       "EventTypes":
         [
+          "RegionIsChanging" : RCTMGLEvent.EventType.regionIsChanging.rawValue,
           "RegionDidChange" : RCTMGLEvent.EventType.regionDidChange.rawValue,
           "DidFinishLoadingMap": RCTMGLEvent.EventType.didFinishLoadingMap.rawValue
         ],

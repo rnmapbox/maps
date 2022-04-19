@@ -20,6 +20,7 @@ class RCTMGLEvent : NSObject, RCTMGLEventProtocol {
 
     enum EventType : String {
       case tap = "press"
+      case regionIsChanging = "regionischanging"
       case regionDidChange = "regiondidchange"
       case imageMissing = "imagesmissingimage"
       case didFinishLoadingMap = "didfinishloadingmap"
