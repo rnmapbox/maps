@@ -152,7 +152,7 @@ open class RCTMGLMapView : MapView {
     } else if bottom != nil && right != nil {
       return (OrnamentPosition.bottomRight, CGPoint(x: right!, y: bottom!))
     } else if bottom != nil && left != nil {
-      return (OrnamentPosition.bottomLeft,CGPoint(x: left!, y: bottom!))
+      return (OrnamentPosition.bottomLeft, CGPoint(x: left!, y: bottom!))
     }
     
     return nil
