@@ -13,6 +13,9 @@ class RCTMGLRasterLayer: RCTMGLLayer {
 
   override func apply(style : Style) {
     try! style.updateLayer(withId: id, type: RasterLayer.self) { (layer : inout RasterLayer) in
+      if self.styleLayer != nil {
+        setOptions(&self.styleLayer!)
+      }
       if let styleLayer = self.styleLayer as? RasterLayer {
         layer = styleLayer
       }
