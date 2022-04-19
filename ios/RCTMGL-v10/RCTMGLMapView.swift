@@ -184,6 +184,13 @@ open class RCTMGLMapView : MapView {
     mapView.ornaments.options.compass.visibility = value ? .visible : .hidden
   }
   
+  @objc func setReactCompassPosition(_ position: [String: Int]!) {
+    if let ornamentOptions = self.getOrnamentOptionsFromPosition(position) {
+      mapView.ornaments.options.compass.position = ornamentOptions.position
+      mapView.ornaments.options.compass.margins = ornamentOptions.margins
+    }
+  }
+  
   
   @objc func setReactStyleURL(_ value: String?) {
     if let value = value {

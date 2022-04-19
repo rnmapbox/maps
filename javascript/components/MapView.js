@@ -145,14 +145,9 @@ class MapView extends NativeBridgeComponent(React.Component) {
     compassEnabled: PropTypes.bool,
 
     /**
-     * Change corner of map the compass starts at. 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight
+     * Adds compass offset, e.g. `{top: 8, left: 8}` will put the compass in top-left corner of the map
      */
-    compassViewPosition: PropTypes.number,
-
-    /**
-     * Add margins to the compass with x and y values
-     */
-    compassViewMargins: PropTypes.object,
+    compassPosition: ornamentPositionPropType,
 
     /**
      * [Android only] Enable/Disable use of GLSurfaceView insted of TextureView.

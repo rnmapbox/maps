@@ -3005,18 +3005,11 @@
         "description": "Enable/Disable the compass from appearing on the map"
       },
       {
-        "name": "compassViewPosition",
+        "name": "compassPosition",
         "required": false,
-        "type": "number",
+        "type": "custom",
         "default": "none",
-        "description": "Change corner of map the compass starts at. 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight"
-      },
-      {
-        "name": "compassViewMargins",
-        "required": false,
-        "type": "object",
-        "default": "none",
-        "description": "Add margins to the compass with x and y values"
+        "description": "Adds compass offset, e.g. `{top: 8, left: 8}` will put the compass in top-left corner of the map"
       },
       {
         "name": "surfaceView",
