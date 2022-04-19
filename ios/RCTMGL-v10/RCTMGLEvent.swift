@@ -23,6 +23,8 @@ class RCTMGLEvent : NSObject, RCTMGLEventProtocol {
       case regionWillChange
       case regionIsChanging
       case regionDidChange
+      case cameraChanged
+      case mapIdle
       case imageMissing
       case didFinishLoadingMap
       case offlineProgress
