@@ -429,13 +429,7 @@ declare namespace MapboxGL {
   }
 }
 
-export type AttributionPosition =
-  | { top: number; left: number }
-  | { top: number; right: number }
-  | { bottom: number; left: number }
-  | { bottom: number; right: number };
-
-export type LogoPosition =
+export type OrnamentPosition =
   | { top: number; left: number }
   | { top: number; right: number }
   | { bottom: number; left: number }
@@ -465,9 +459,9 @@ export interface MapViewProps extends ViewProps {
   pitchEnabled?: boolean;
   rotateEnabled?: boolean;
   attributionEnabled?: boolean;
-  attributionPosition?: AttributionPosition;
+  attributionPosition?: OrnamentPosition;
   logoEnabled?: boolean;
-  logoPosition?: LogoPosition;
+  logoPosition?: OrnamentPosition;
   compassEnabled?: boolean;
   compassViewPosition?: number;
   compassViewMargins?: Point;
