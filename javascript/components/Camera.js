@@ -116,9 +116,16 @@ class Camera extends React.Component {
      * `flyTo`: A complex flight animation, affecting both position and zoom.
      * `easeTo`: A standard damped curve.
      * `linearTo`: An even linear transition.
-     * `moveTo`: An instantaneous change.
+     * `none`: An instantaneous change (v10 only).
+     * `moveTo`: An instantaneous change (<v10).
      */
-    animationMode: PropTypes.oneOf(['flyTo', 'easeTo', 'linearTo', 'moveTo']),
+    animationMode: PropTypes.oneOf([
+      'flyTo',
+      'easeTo',
+      'linearTo',
+      'none',
+      'moveTo',
+    ]),
 
     /**
      * Default view settings applied on camera
@@ -197,7 +204,8 @@ class Camera extends React.Component {
     Flight: 'flyTo',
     Ease: 'easeTo',
     Linear: 'linearTo',
-    None: 'moveTo',
+    None: 'none',
+    Move: 'moveTo',
   };
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -615,8 +623,10 @@ class Camera extends React.Component {
       case Camera.Mode.Linear:
         return MapboxGL.CameraModes.Linear;
       case Camera.Mode.None:
-      default:
         return MapboxGL.CameraModes.None;
+      case Camera.Mode.Move:
+      default:
+        return MapboxGL.CameraModes.Move;
     }
   }
 

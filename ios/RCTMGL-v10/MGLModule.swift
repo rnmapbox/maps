@@ -39,6 +39,7 @@ class MGLModule : NSObject {
           "Ease": "ease",
           "Linear": "linear",
           "None": "none",
+          "Move": "move", // Allows backward compatibility with <v10.
         ],
       "EventTypes":
         [

@@ -11,7 +11,7 @@ protocol RCTMGLMapComponent {
 
 /// See `MGLModule.swift:constantsToExport:CameraModes.`
 enum Mode: String, CaseIterable {
-  case flight, ease, linear, none
+  case flight, ease, linear, none, move
 }
 
 struct CameraUpdateItem {
@@ -31,6 +31,8 @@ struct CameraUpdateItem {
       case .linear:
         map.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
       case .none:
+        map.mapboxMap.setCamera(to: camera)
+      default:
         map.mapboxMap.setCamera(to: camera)
     }
   }

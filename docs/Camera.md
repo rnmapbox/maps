@@ -7,7 +7,7 @@
 | ---- | :--: | :-----: | :------: | :----------: |
 | allowUpdates | `bool` | `true` | `false` | If false, the camera will not send any props to the native module. Intended to be used to prevent unnecessary tile fetching and improve performance when the map is not visible. Defaults to true. |
 | animationDuration | `number` | `2000` | `false` | The duration a camera update takes (in ms) |
-| animationMode | `enum` | `'easeTo'` | `false` | The animation style when the camara updates. One of:<br/>`flyTo`: A complex flight animation, affecting both position and zoom.<br/>`easeTo`: A standard damped curve.<br/>`linearTo`: An even linear transition.<br/>`moveTo`: An instantaneous change. |
+| animationMode | `enum` | `'easeTo'` | `false` | The animation style when the camara updates. One of:<br/>`flyTo`: A complex flight animation, affecting both position and zoom.<br/>`easeTo`: A standard damped curve.<br/>`linearTo`: An even linear transition.<br/>`none`: An instantaneous change (v10 only).<br/>`moveTo`: An instantaneous change (<v10). |
 | defaultSettings | `shape` | `none` | `false` | Default view settings applied on camera |
 | &nbsp;&nbsp;centerCoordinate | `array` | `none` | `false` | Center coordinate on map [lng, lat] |
 | &nbsp;&nbsp;padding | `shape` | `none` | `false` | Padding around edges of map in points |
