@@ -1,5 +1,6 @@
 import MapboxMaps
 import Turf
+import MapKit
 
 class PointAnnotationManager : AnnotationInteractionDelegate {
   weak var selected : RCTMGLPointAnnotation? = nil
@@ -160,12 +161,12 @@ open class RCTMGLMapView : MapView {
     self.reactOnMapChange = value
     
     self.mapView.mapboxMap.onEvery(.cameraChanged, handler: { cameraEvent in
-      let event = RCTMGLEvent(type:.regionIsChanging, payload: self._makeRegionPayload());
+      let event = RCTMGLEvent(type:.cameraChanged, payload: self._makeRegionPayload());
       self.fireEvent(event: event, callback: self.reactOnMapChange!)
     })
 
     self.mapView.mapboxMap.onEvery(.mapIdle, handler: { cameraEvent in
-      let event = RCTMGLEvent(type:.regionDidChange, payload: self._makeRegionPayload());
+      let event = RCTMGLEvent(type:.mapIdle, payload: self._makeRegionPayload());
       self.fireEvent(event: event, callback: self.reactOnMapChange!)
     })
   }
