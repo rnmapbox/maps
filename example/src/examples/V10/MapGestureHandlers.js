@@ -18,9 +18,13 @@ const styles = {
   divider: {
     marginVertical: 10,
   },
+  fadedText: {
+    color: 'gray',
+  },
 };
 
 const MapGestureHandlers = props => {
+  const [lastCallback, setLastCallback] = useState('');
   const [region, setRegion] = useState({});
 
   const properties = region?.properties;
@@ -29,19 +33,37 @@ const MapGestureHandlers = props => {
     <Page {...props}>
       <MapView
         style={styles.map}
-        onRegionWillChange={_region => setRegion(_region)}
-        onRegionIsChanging={_region => setRegion(_region)}
-        onRegionDidChange={_region => setRegion(_region)}>
+        onPress={e => {
+          console.log(e);
+        }}
+        onLongPress={e => {
+          console.log(e);
+        }}
+        onCameraChanged={_region => {
+          setLastCallback('onCameraChanged');
+          setRegion(_region);
+        }}
+        onMapIdle={_region => {
+          setLastCallback('onMapIdle');
+          setRegion(_region);
+        }}>
         <Camera centerCoordinate={[-73.984638, 40.759211]} zoomLevel={12} />
       </MapView>
 
       <SafeAreaView>
         <View style={styles.info}>
-          <Text>Interacting:</Text>
-          <Text h4={true}>{properties?.isUserInteraction ? 'Yes' : 'No'}</Text>
+          <Text style={styles.fadedText}>lastCallback</Text>
+          <Text>{lastCallback}</Text>
+
           <Divider style={styles.divider} />
-          <Text>Animating from interaction:</Text>
-          <Text h4={true}>
+
+          <Text style={styles.fadedText}>isUserInteraction</Text>
+          <Text>{properties?.isUserInteraction ? 'Yes' : 'No'}</Text>
+
+          <Divider style={styles.divider} />
+
+          <Text style={styles.fadedText}>isAnimatingFromUserInteraction</Text>
+          <Text>
             {properties?.isAnimatingFromUserInteraction ? 'Yes' : 'No'}
           </Text>
         </View>
