@@ -109,10 +109,11 @@ public func dictionaryFrom(_ from: Turf.Feature?) throws -> [String:Any]? {
 
 @objc(RCTMGLMapView)
 open class RCTMGLMapView : MapView {
-  var reactOnPress : RCTBubblingEventBlock? = nil
-  var reactOnMapChange : RCTBubblingEventBlock? = nil
+  var reactOnPress : RCTBubblingEventBlock?
+  var reactOnLongPress : RCTBubblingEventBlock?
+  var reactOnMapChange : RCTBubblingEventBlock?
 
-  var reactCamera : RCTMGLCamera? = nil
+  var reactCamera : RCTMGLCamera?
   var images : [RCTMGLImages] = []
   var sources : [RCTMGLSource] = []
   
@@ -149,12 +150,19 @@ open class RCTMGLMapView : MapView {
       }
     }
   }
-
+  
   @objc func setReactOnPress(_ value: @escaping RCTBubblingEventBlock) {
     self.reactOnPress = value
-
+    
     self.mapView.gestures.singleTapGestureRecognizer.removeTarget( pointAnnotationManager.manager, action: nil)
     self.mapView.gestures.singleTapGestureRecognizer.addTarget(self, action: #selector(doHandleTap(_:)))
+  }
+
+  @objc func setReactOnLongPress(_ value: @escaping RCTBubblingEventBlock) {
+    self.reactOnLongPress = value
+
+    let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(doHandleLongPress(_:)))
+    self.mapView.addGestureRecognizer(longPressGestureRecognizer)
   }
 
   @objc func setReactOnMapChange(_ value: @escaping RCTBubblingEventBlock) {
@@ -443,7 +451,7 @@ extension RCTMGLMapView: GestureManagerDelegate {
               ]
             )
             self.fireEvent(event: event, callback: onPress)
-        
+            
           } else {
             if let reactOnPress = self.reactOnPress {
               let location = self.mapboxMap.coordinate(for: tapPoint)
@@ -458,6 +466,22 @@ extension RCTMGLMapView: GestureManagerDelegate {
           }
         }
       }
+    }
+  }
+  
+  @objc
+  func doHandleLongPress(_ sender: UILongPressGestureRecognizer) {
+    let position = sender.location(in: self)
+
+    if let reactOnLongPress = self.reactOnLongPress, sender.state == .began {
+      let coordinate = self.mapboxMap.coordinate(for: position)
+      var geojson = Feature(geometry: .point(Point(coordinate)));
+      geojson.properties = [
+        "screenPointX": .number(Double(position.x)),
+        "screenPointY": .number(Double(position.y))
+      ]
+      let event = try! RCTMGLEvent(type:.longPress, payload: dictionaryFrom(geojson)!)
+      self.fireEvent(event: event, callback: reactOnLongPress)
     }
   }
   
