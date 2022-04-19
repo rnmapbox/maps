@@ -47,7 +47,11 @@ const MapGestureHandlers = props => {
           setLastCallback('onMapIdle');
           setRegion(_region);
         }}>
-        <Camera centerCoordinate={[-73.984638, 40.759211]} zoomLevel={12} />
+        <Camera
+          centerCoordinate={[-73.984638, 40.759211]}
+          zoomLevel={12}
+          animationDuration={0}
+        />
       </MapView>
 
       <SafeAreaView>
