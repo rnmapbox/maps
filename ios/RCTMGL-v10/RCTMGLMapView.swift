@@ -1,4 +1,4 @@
-import MapboxMaps
+@_spi(Restricted) import MapboxMaps
 import Turf
 
 private extension MapboxMaps.PointAnnotationManager {
@@ -158,12 +158,19 @@ open class RCTMGLMapView : MapView {
     return nil
   }
   
+  @objc func setReactAttributionEnabled(_ value: Bool) {
+    mapView.ornaments.options.attributionButton.visibility = value ? .visible : .hidden
+  }
   
   @objc func setReactAttributionPosition(_ position: [String: Int]!) {
     if let ornamentOptions = self.getOrnamentOptionsFromPosition(position) {
       mapView.ornaments.options.attributionButton.position = ornamentOptions.position
       mapView.ornaments.options.attributionButton.margins = ornamentOptions.margins
     }
+  }
+  
+  @objc func setReactLogoEnabled(_ value: Bool) {
+    mapView.ornaments.options.logo.visibility = value ? .visible : .hidden
   }
   
   @objc func setReactLogoPosition(_ position: [String: Int]!) {
@@ -174,7 +181,7 @@ open class RCTMGLMapView : MapView {
   }
   
   @objc func setReactCompassEnabled(_ value: Bool) {
-    mapView.ornaments.options.compass.visibility = value ? OrnamentVisibility.visible : OrnamentVisibility.hidden
+    mapView.ornaments.options.compass.visibility = value ? .visible : .hidden
   }
   
   
