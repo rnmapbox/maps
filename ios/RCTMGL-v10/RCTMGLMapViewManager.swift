@@ -56,4 +56,25 @@ class RCTMGLMapViewManager: RCTViewManager {
         }
       }
     }
+  
+  @objc
+  func setSourceVisibility(_ reactTag: NSNumber,
+                      visible: Bool,
+                      sourceId: String,
+                      sourceLayerId: String?,
+                      resolver: @escaping RCTPromiseResolveBlock,
+                      rejecter: @escaping RCTPromiseRejectBlock) -> Void {
+    self.bridge.uiManager.addUIBlock { (manager, viewRegistry) in
+      let view = viewRegistry![reactTag]
+      
+      guard let view = view! as? RCTMGLMapView else {
+        RCTLogError("Invalid react tag, could not find RCTMGLMapView");
+        rejecter("setSourceVisibility", "Unknown find reactTag: \(reactTag)", nil)
+        return;
+      }
+      
+      view.setSourceVisibility(visible, sourceId: sourceId, sourceLayerId:sourceLayerId)
+      resolver(nil)
+    }
+  }
 }

@@ -1,6 +1,6 @@
 # Customization:
 #  $RNMapboxMapsImpl - one of (maplibre, mapbox, mapbox-gl)
-#  $RNMapboxMapsVersion - version specification ("~> 10.4.0", "~> 5.9.0" or "exactVersion 5.12.1" mapblibre/SPM)
+#  $RNMapboxMapsVersion - version specification ("~> 10.4.3", "~> 5.9.0" or "exactVersion 5.12.1" mapblibre/SPM)
 #  $RNMapboxMapsSwiftPackageManager can be either
 #     "manual" - you're responsible for the Mapbox lib dependency either using cocoapods or SPM
 #     Hash - ```
@@ -20,7 +20,7 @@ require 'json'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 ## Warning: these lines are scanned by autogenerate.js
-rnMapboxMapsDefaultMapboxVersion = '~> 10.4.0'
+rnMapboxMapsDefaultMapboxVersion = '~> 10.4.3'
 rnMapboxMapsDefaultMapboxGLVersion = '~> 5.9.0'
 rnMapboxMapsDefaultMapLibreVersion = 'exactVersion 5.12.1'
 

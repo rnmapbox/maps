@@ -87,6 +87,9 @@ export function runNativeCommand(module, name, nativeRef, args = []) {
     );
   }
 
+  if (!managerInstance[name]) {
+    throw new Error(`Could not find ${name} for ${module}`);
+  }
   return managerInstance[name](handle, ...args);
 }
 

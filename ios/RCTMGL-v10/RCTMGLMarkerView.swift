@@ -5,7 +5,13 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
   
   var map: RCTMGLMapView? = nil
   
-  func addToMap(_ map: RCTMGLMapView) {
+  // MARK: - RCTMGLMapComponent
+
+  func waitForStyleLoad() -> Bool {
+    return true
+  }
+  
+  func addToMap(_ map: RCTMGLMapView, style: Style) {
     self.map = map
     let point = point()!
     try! viewAnnotations()?.add(self, options: ViewAnnotationOptions.init(geometry: Geometry.point(point), width: self.bounds.width, height: self.bounds.height, associatedFeatureId: nil, allowOverlap: true, visible: true, anchor: .center, offsetX: 0, offsetY: 0, selected: false))

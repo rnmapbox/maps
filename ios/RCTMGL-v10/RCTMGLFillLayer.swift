@@ -26,9 +26,8 @@ class RCTMGLFillLayer: RCTMGLVectorLayer {
   }
 
   override func addStyles() {
-    print("::addStyles ")
     if let style : Style = self.style {
-      let styler =  RCTMGLStyle(style: self.style!)
+      let styler = RCTMGLStyle(style: self.style!)
       styler.bridge = self.bridge
       
       if var styleLayer = self.styleLayer as? FillLayer {
