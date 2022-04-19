@@ -9,7 +9,9 @@ protocol RCTMGLSourceConsumer {
 class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   var bridge : RCTBridge? = nil
 
-  @objc var sourceLayerID : String? = nil
+  @objc var sourceLayerID : String? = nil {
+    didSet { self.optionsChanged() }
+  }
   @objc var reactStyle : Dictionary<String, Any>? = nil {
     didSet {
       DispatchQueue.main.async {
@@ -21,18 +23,20 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   var style: Style? = nil
 
   @objc var filter : Array<Any>? = nil {
-    didSet {
-      if let map = self.map {
-        self.updateLayer(map)
-      }
-    }
+    didSet { optionsChanged() }
   }
   
   @objc var id: String! = nil
-  @objc var sourceID: String? = nil
+  @objc var sourceID: String? = nil {
+    didSet { optionsChanged() }
+  }
   
-  @objc var minZoomLevel : NSNumber? = nil
-  @objc var maxZoomLevel : NSNumber? = nil
+  @objc var minZoomLevel : NSNumber? = nil {
+    didSet { optionsChanged() }
+  }
+  @objc var maxZoomLevel : NSNumber? = nil {
+    didSet { optionsChanged() }
+  }
 
   @objc var aboveLayerID : String? = nil {
     didSet {
@@ -231,6 +235,13 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     }
   }
   
+  func optionsChanged() {
+    if let style = self.style {
+      self.setOptions(&self.styleLayer!)
+      self.apply(style: style)
+    }
+  }
+
   func removeFromMap(_ map: RCTMGLMapView) {
     removeFromMap(map.mapboxMap.style)
   }
