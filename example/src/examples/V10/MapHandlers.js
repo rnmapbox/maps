@@ -54,7 +54,9 @@ const MapHandlers = props => {
   };
 
   const display = position => {
-    if (!position) return '';
+    if (!position) {
+      return '';
+    }
     return `${position[1].toFixed(3)}, ${position[0].toFixed(3)}`;
   };
 
