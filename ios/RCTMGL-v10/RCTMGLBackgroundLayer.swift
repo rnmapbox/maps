@@ -18,9 +18,6 @@ class RCTMGLBackgroundLayer: RCTMGLLayer {
   
   override func apply(style : Style) {
     try! style.updateLayer(withId: id, type: LayerType.self) { (layer : inout BackgroundLayer) in
-      if self.styleLayer != nil {
-        self.setOptions(&self.styleLayer!)
-      }
       if let styleLayer = self.styleLayer as? LayerType {
         layer = styleLayer
       }
