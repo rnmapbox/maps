@@ -122,7 +122,7 @@ const Examples = [
     new ExampleItem('Sky and Terrain', SkyAndTerran),
     new ExampleItem('Query Terrain Elevation', QueryTerrainElevation),
     new ExampleItem('Camera Animation', CameraAnimation),
-    new ExampleItem('Map Gesture Handlers', MapHandlers),
+    new ExampleItem('Map Handlers', MapHandlers),
   ]),
   new ExampleGroup('Map', [
     new ExampleItem('Show Map', ShowMap),
