@@ -30,7 +30,7 @@ const styles = {
   },
 };
 
-const MapGestureHandlers = props => {
+const MapHandlers = props => {
   const [lastCallback, setLastCallback] = useState('');
   const [mapState, setMapState] = useState({});
   const [features, setFeatures] = useState([]);
@@ -138,4 +138,4 @@ const MapGestureHandlers = props => {
   );
 };
 
-export default MapGestureHandlers;
+export default MapHandlers;
