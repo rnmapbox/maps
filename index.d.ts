@@ -464,6 +464,8 @@ export interface MapViewProps extends ViewProps {
   logoPosition?: OrnamentPosition;
   compassEnabled?: boolean;
   compassPosition?: OrnamentPosition;
+  compassViewPosition?: number;
+  compassViewMargins?: Point;
   surfaceView?: boolean;
   regionWillChangeDebounceTime?: number;
   regionDidChangeDebounceTime?: number;

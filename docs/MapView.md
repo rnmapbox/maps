@@ -21,7 +21,9 @@
 | logoEnabled | `bool` | `true` | `false` | Enable/Disable the logo on the map. |
 | logoPosition | `custom` | `none` | `false` | Adds logo offset, e.g. `{top: 8, left: 8}` will put the logo in top-left corner of the map |
 | compassEnabled | `bool` | `none` | `false` | Enable/Disable the compass from appearing on the map |
-| compassPosition | `custom` | `none` | `false` | Adds compass offset, e.g. `{top: 8, left: 8}` will put the compass in top-left corner of the map |
+| compassPosition | `custom` | `none` | `false` | [`mapbox` (v10) implementation only] Adds compass offset, e.g. `{top: 8, left: 8}` will put the compass in top-left corner of the map |
+| compassViewPosition | `number` | `none` | `false` | [`mapbox-gl` (v8) and `maplibre` implementation only] Change corner of map the compass starts at. 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight |
+| compassViewMargins | `object` | `none` | `false` | [`mapbox-gl` (v8) and `maplibre` implementation only] Add margins to the compass with x and y values |
 | surfaceView | `bool` | `false` | `false` | [Android only] Enable/Disable use of GLSurfaceView insted of TextureView. |
 | onPress | `func` | `none` | `false` | Map press listener, gets called when a user presses the map |
 | onLongPress | `func` | `none` | `false` | Map long press listener, gets called when a user long presses the map |

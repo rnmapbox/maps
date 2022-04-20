@@ -145,9 +145,19 @@ class MapView extends NativeBridgeComponent(React.Component) {
     compassEnabled: PropTypes.bool,
 
     /**
-     * Adds compass offset, e.g. `{top: 8, left: 8}` will put the compass in top-left corner of the map
+     * [`mapbox` (v10) implementation only] Adds compass offset, e.g. `{top: 8, left: 8}` will put the compass in top-left corner of the map
      */
     compassPosition: ornamentPositionPropType,
+
+    /**
+     * [`mapbox-gl` (v8) and `maplibre` implementation only] Change corner of map the compass starts at. 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight
+     */
+    compassViewPosition: PropTypes.number,
+
+    /**
+     * [`mapbox-gl` (v8) and `maplibre` implementation only] Add margins to the compass with x and y values
+     */
+    compassViewMargins: PropTypes.object,
 
     /**
      * [Android only] Enable/Disable use of GLSurfaceView insted of TextureView.
@@ -583,8 +593,14 @@ class MapView extends NativeBridgeComponent(React.Component) {
     }
 
     if (config.bounds && config.bounds.ne && config.bounds.sw) {
-      const {ne, sw, paddingLeft, paddingRight, paddingTop, paddingBottom} =
-        config.bounds;
+      const {
+        ne,
+        sw,
+        paddingLeft,
+        paddingRight,
+        paddingTop,
+        paddingBottom,
+      } = config.bounds;
       stopConfig.bounds = toJSONString(makeLatLngBounds(ne, sw));
       stopConfig.boundsPaddingTop = paddingTop || 0;
       stopConfig.boundsPaddingRight = paddingRight || 0;
@@ -622,8 +638,10 @@ class MapView extends NativeBridgeComponent(React.Component) {
   }
 
   _onChange(e) {
-    const {regionWillChangeDebounceTime, regionDidChangeDebounceTime} =
-      this.props;
+    const {
+      regionWillChangeDebounceTime,
+      regionDidChangeDebounceTime,
+    } = this.props;
     const {type, payload} = e.nativeEvent;
     let propName = '';
 
