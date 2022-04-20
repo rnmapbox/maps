@@ -3044,7 +3044,7 @@
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "This event is triggered whenever the currently displayed map region is about to change.",
+        "description": "<v10 only\n\nThis event is triggered whenever the currently displayed map region is about to change.",
         "params": [
           {
             "name": "feature",
@@ -3061,7 +3061,7 @@
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "This event is triggered whenever the currently displayed map region is changing.",
+        "description": "<v10 only\n\nThis event is triggered whenever the currently displayed map region is changing.",
         "params": [
           {
             "name": "feature",
@@ -3078,13 +3078,47 @@
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "This event is triggered whenever the currently displayed map region finished changing",
+        "description": "<v10 only\n\nThis event is triggered whenever the currently displayed map region finished changing.",
         "params": [
           {
             "name": "feature",
             "description": "The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds",
             "type": {
               "name": "PointFeature"
+            },
+            "optional": false
+          }
+        ]
+      },
+      {
+        "name": "onCameraChanged",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "v10 only\n\nCalled when the currently displayed map area changes.",
+        "params": [
+          {
+            "name": "region",
+            "description": "A payload containing the map center, bounds, and other properties.",
+            "type": {
+              "name": "RegionPayload"
+            },
+            "optional": false
+          }
+        ]
+      },
+      {
+        "name": "onMapIdle",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "v10 only\n\nCalled when the currently displayed map area stops changing.",
+        "params": [
+          {
+            "name": "region",
+            "description": "A payload containing the map center, bounds, and other properties.",
+            "type": {
+              "name": "RegionPayload"
             },
             "optional": false
           }

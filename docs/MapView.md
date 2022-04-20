@@ -26,9 +26,11 @@
 | surfaceView | `bool` | `false` | `false` | [Android only] Enable/Disable use of GLSurfaceView insted of TextureView. |
 | onPress | `func` | `none` | `false` | Map press listener, gets called when a user presses the map |
 | onLongPress | `func` | `none` | `false` | Map long press listener, gets called when a user long presses the map |
-| onRegionWillChange | `func` | `none` | `false` | This event is triggered whenever the currently displayed map region is about to change. |
-| onRegionIsChanging | `func` | `none` | `false` | This event is triggered whenever the currently displayed map region is changing. |
-| onRegionDidChange | `func` | `none` | `false` | This event is triggered whenever the currently displayed map region finished changing |
+| onRegionWillChange | `func` | `none` | `false` | <v10 only<br/><br/>This event is triggered whenever the currently displayed map region is about to change. |
+| onRegionIsChanging | `func` | `none` | `false` | <v10 only<br/><br/>This event is triggered whenever the currently displayed map region is changing. |
+| onRegionDidChange | `func` | `none` | `false` | <v10 only<br/><br/>This event is triggered whenever the currently displayed map region finished changing. |
+| onCameraChanged | `func` | `none` | `false` | v10 only<br/><br/>Called when the currently displayed map area changes. |
+| onMapIdle | `func` | `none` | `false` | v10 only<br/><br/>Called when the currently displayed map area stops changing. |
 | onWillStartLoadingMap | `func` | `none` | `false` | This event is triggered when the map is about to start loading a new map style. |
 | onDidFinishLoadingMap | `func` | `none` | `false` | This is triggered when the map has successfully loaded a new map style. |
 | onDidFailLoadingMap | `func` | `none` | `false` | This event is triggered when the map has failed to load a new map style. |
