@@ -1,3 +1,6 @@
+# System
+.DS_Store
+
 # Xcode
 !**/*.xcodeproj
 !**/*.pbxproj
@@ -58,9 +61,6 @@ yarn.lock
 # Expo
 .expo
 
-# OS X
-.DS_Store
-
 # Test generated files
 /ReactAndroid/src/androidTest/assets/AndroidTestBundle.js
 *.js.meta
@@ -82,10 +82,14 @@ RNTester/build
 /React/CoreModules/**/*.xcodeproj
 /packages/react-native-codegen/**/*.xcodeproj
 
+# Ruby gems/bundle
+Gemfile
+Gemfile.lock
+vendor/
+
 # CocoaPods
 /template/ios/Pods/
 /template/ios/Podfile.lock
-/RNTester/Gemfile.lock
 
 # Ignore RNTester specific Pods, but keep the __offline_mirrors__ here.
 RNTester/Pods/*
@@ -99,7 +103,7 @@ RNTester/Pods/*
 .vscode
 .vs
 
-# project specific
+# Project specific
 ios/Mapbox.framework
 ios/temp.zip
 ios/.framework_version
