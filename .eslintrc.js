@@ -38,8 +38,8 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
-    'prettier',
     '@react-native-community',
+    'prettier',
   ],
   rules: {
     'react/no-deprecated': 'warn',
