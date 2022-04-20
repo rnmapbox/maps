@@ -3101,7 +3101,7 @@
             "name": "region",
             "description": "A payload containing the map center, bounds, and other properties.",
             "type": {
-              "name": "RegionPayload"
+              "name": "MapState"
             },
             "optional": false
           }
@@ -3118,7 +3118,7 @@
             "name": "region",
             "description": "A payload containing the map center, bounds, and other properties.",
             "type": {
-              "name": "RegionPayload"
+              "name": "MapState"
             },
             "optional": false
           }
