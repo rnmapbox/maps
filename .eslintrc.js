@@ -76,14 +76,6 @@ module.exports = {
     'no-use-before-define': ['error', {functions: false}],
     'no-unused-expressions': ['error', {allowTaggedTemplates: true}],
     'no-plusplus': ['error', {allowForLoopAfterthoughts: true}],
-    'prettier/prettier': [
-      'error',
-      {
-        singleQuote: true,
-        trailingComma: 'all',
-        bracketSpacing: false,
-      },
-    ],
     'fp/no-mutating-methods': 'warn',
   },
   overrides: [
