@@ -421,7 +421,7 @@
         "required": false,
         "type": "enum",
         "default": "'easeTo'",
-        "description": "The animationstyle when the camara updates. One of: `flyTo`, `easeTo`, `linearTo`, `moveTo`"
+        "description": "The animation style when the camara updates. One of:\n`flyTo`: A complex flight animation, affecting both position and zoom.\n`easeTo`: A standard damped curve.\n`linearTo`: An even linear transition.\n`none`: An instantaneous change (v10 only).\n`moveTo`: An instantaneous change (<v10)."
       },
       {
         "name": "defaultSettings",
