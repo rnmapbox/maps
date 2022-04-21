@@ -79,7 +79,7 @@ module.exports = {
     'fp/no-mutating-methods': 'warn',
 
     // TODO: Remove after codebase has been reformatted: https://github.com/rnmapbox/maps/issues/1859
-    'prettier/prettier': 'warn',
+    'prettier/prettier': 'off',
   },
   overrides: [
     {
@@ -101,7 +101,7 @@ module.exports = {
         'no-shadow': 'off',
 
         // TODO: Remove after codebase has been reformatted: https://github.com/rnmapbox/maps/issues/1859
-        'prettier/prettier': 'warn',
+        'prettier/prettier': 'off',
       },
     },
   ],
