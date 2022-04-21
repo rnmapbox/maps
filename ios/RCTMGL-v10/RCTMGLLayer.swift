@@ -149,16 +149,15 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   
   func layerWithSourceID<T : Source>(in style: Style) throws -> T  {
     let result = try style.source(withId: self.sourceID!, type: T.self)
-    return result as! T
+    return result
   }
 
   func sourceWithSourceID<T : Source>(in style: Style) throws -> T  {
     let result = try style.source(withId: self.sourceID!, type: T.self)
-    return result as! T
+    return result
   }
   
   func addToMap(_ map: RCTMGLMapView) {
-    //
     self.style = map.mapboxMap.style
     self.map = map
   }
@@ -220,7 +219,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
         let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
         layer.filter = decodedExpression
       } catch {
-        Logger.log(level: .error, message: "parsing filters failed for layer \(id)")
+        Logger.log(level: .error, message: "parsing filters failed for layer \(String(describing: id))")
       }
     } else {
       layer.filter = nil
@@ -247,9 +246,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   }
   
   func removeFromMap(_ style: Style) {
-    if (self.styleLayer != nil) {
-      try! style.removeLayer(withId: self.id)
-    }
+    try? style.removeLayer(withId: self.id)
   }
   
   func insert(_ style: Style, layerPosition: LayerPosition, inserted: (() -> Void)? = nil) {
@@ -265,28 +262,14 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
       idToWaitFor = nil
     }
     
-    if let idToWaitFor = idToWaitFor {
+    if let idToWaitFor = idToWaitFor, let styleLayer = self.styleLayer {
       map!.waitForLayerWithID(idToWaitFor) { _ in
-        try! style.addLayer(self.styleLayer!, layerPosition: layerPosition)
-        if let inserted = inserted {
-          inserted()
-        }
+        try? style.addLayer(styleLayer, layerPosition: layerPosition)
+        inserted?()
       }
     } else {
-      try! style.addLayer(styleLayer!, layerPosition: layerPosition)
-      if let inserted = inserted {
-        inserted()
-      }
+      try? style.addLayer(styleLayer!, layerPosition: layerPosition)
+      inserted?()
     }
   }
-
-  /*
-  layerWithSourceIDInStyle:(nonnull MGLStyle*) style
-  {
-      MGLSource* result = [style sourceWithIdentifier: self.sourceID];
-      if (result == NULL) {
-          RCTLogError(@"Cannot find layer with id: %@ referenced by layer:%@", self.sourceID, _id);
-      }
-      return result;
-  }*/
 }
