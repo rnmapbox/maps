@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   parser: 'babel-eslint',
-  plugins: ['react', 'react-native', 'fp', 'import', 'prettier'],
+  plugins: ['react', 'react-native', 'fp', 'import'],
   env: {
     jest: true,
   },
@@ -79,14 +79,14 @@ module.exports = {
     'fp/no-mutating-methods': 'warn',
   },
   overrides: [
-    // Match TypeScript Files
     {
+      // Match TypeScript Files
       files: ['**/*.{ts,tsx}'],
 
       parserOptions: {
         project: './tsconfig.json',
       },
-      plugins: ['react', '@typescript-eslint', 'prettier'],
+      plugins: ['@typescript-eslint'],
       extends: [
         'eslint:recommended',
         'plugin:react/recommended',
