@@ -487,6 +487,12 @@ export interface MapViewProps extends ViewProps {
   onRegionDidChange?: (
     feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   ) => void;
+  onCameraChanged?: (
+    feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
+  ) => void;
+  onMapIdle?: (
+    feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
+  ) => void;
   onUserLocationUpdate?: (feature: MapboxGL.Location) => void;
   onWillStartLoadingMap?: () => void;
   onDidFinishLoadingMap?: () => void;

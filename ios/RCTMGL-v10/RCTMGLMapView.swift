@@ -1,11 +1,6 @@
 import MapboxMaps
 import Turf
-
-private extension MapboxMaps.PointAnnotationManager {
- // func doHandleTap(_ tap: UITapGestureRecognizer) {
- //   self.handleTap(tap)
- // }
-}
+import MapKit
 
 class PointAnnotationManager : AnnotationInteractionDelegate {
   weak var selected : RCTMGLPointAnnotation? = nil
@@ -114,17 +109,20 @@ public func dictionaryFrom(_ from: Turf.Feature?) throws -> [String:Any]? {
 
 @objc(RCTMGLMapView)
 open class RCTMGLMapView : MapView {
-  var reactOnPress : RCTBubblingEventBlock? = nil
-  var reactOnMapChange : RCTBubblingEventBlock? = nil
+  var reactOnPress : RCTBubblingEventBlock?
+  var reactOnLongPress : RCTBubblingEventBlock?
+  var reactOnMapChange : RCTBubblingEventBlock?
 
-  var reactCamera : RCTMGLCamera? = nil
+  var reactCamera : RCTMGLCamera?
   var images : [RCTMGLImages] = []
   var sources : [RCTMGLSource] = []
   
   var onStyleLoadedComponents: [RCTMGLMapComponent]? = []
   
   var _pendingInitialLayout = true
-  
+  var _isUserInteraction = false
+  var _isAnimatingFromUserInteraction = false
+
   var layerWaiters : [String:[(String) -> Void]] = [:]
   
   lazy var pointAnnotationManager : PointAnnotationManager = {
@@ -143,7 +141,7 @@ open class RCTMGLMapView : MapView {
   
   @objc func setReactStyleURL(_ value: String?) {
     if let value = value {
-      if let url = URL(string: value) {
+      if let _ = URL(string: value) {
         mapView.mapboxMap.loadStyleURI(StyleURI(rawValue: value)!)
       } else {
         if RCTJSONParse(value, nil) != nil {
@@ -152,23 +150,31 @@ open class RCTMGLMapView : MapView {
       }
     }
   }
-
+  
   @objc func setReactOnPress(_ value: @escaping RCTBubblingEventBlock) {
     self.reactOnPress = value
+    
+    self.mapView.gestures.singleTapGestureRecognizer.removeTarget( pointAnnotationManager.manager, action: nil)
+    self.mapView.gestures.singleTapGestureRecognizer.addTarget(self, action: #selector(doHandleTap(_:)))
+  }
 
-    /*
-      let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-      self.addGestureRecognizer(tapGesture)
-    */
-    mapView.gestures.singleTapGestureRecognizer.removeTarget( pointAnnotationManager.manager, action: nil)
-    mapView.gestures.singleTapGestureRecognizer.addTarget(self, action: #selector(doHandleTap(_:)))
+  @objc func setReactOnLongPress(_ value: @escaping RCTBubblingEventBlock) {
+    self.reactOnLongPress = value
+
+    let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(doHandleLongPress(_:)))
+    self.mapView.addGestureRecognizer(longPressGestureRecognizer)
   }
 
   @objc func setReactOnMapChange(_ value: @escaping RCTBubblingEventBlock) {
     self.reactOnMapChange = value
-
+    
     self.mapView.mapboxMap.onEvery(.cameraChanged, handler: { cameraEvent in
-      let event = RCTMGLEvent(type:.regionDidChange, payload: self._makeRegionPayload());
+      let event = RCTMGLEvent(type:.cameraChanged, payload: self._makeRegionPayload());
+      self.fireEvent(event: event, callback: self.reactOnMapChange!)
+    })
+
+    self.mapView.mapboxMap.onEvery(.mapIdle, handler: { cameraEvent in
+      let event = RCTMGLEvent(type:.mapIdle, payload: self._makeRegionPayload());
       self.fireEvent(event: event, callback: self.reactOnMapChange!)
     })
   }
@@ -219,7 +225,7 @@ open class RCTMGLMapView : MapView {
     return result
   }
     
-  func _makeRegionPayload() -> [String:Any] {
+  func _makeRegionPayload() -> [String: Any] {
     return toJSON(
       geometry: .point(Point(mapView.cameraState.center)),
       properties: [
@@ -227,7 +233,9 @@ open class RCTMGLMapView : MapView {
         "heading": Double(mapView.cameraState.bearing),
         "bearing": Double(mapView.cameraState.bearing),
         "pitch": Double(mapView.cameraState.pitch),
-        "visibleBounds": _toArray(bounds: mapView.mapboxMap.cameraBounds.bounds)
+        "visibleBounds": _toArray(bounds: mapView.mapboxMap.cameraBounds.bounds),
+        "isUserInteraction": _isUserInteraction,
+        "isAnimatingFromUserInteraction": _isAnimatingFromUserInteraction
       ]
     )
   }
@@ -262,6 +270,8 @@ open class RCTMGLMapView : MapView {
     let resourceOptions = ResourceOptions(accessToken: MGLModule.accessToken!)
     super.init(frame: frame, mapInitOptions: MapInitOptions(resourceOptions: resourceOptions))
 
+    self.mapView.gestures.delegate = self
+
     setupEvents()
   }
   
@@ -273,6 +283,7 @@ open class RCTMGLMapView : MapView {
         Logger.log(level: .error, message: "MapLoad error \(event)")
       }
     })
+    
     self.mapboxMap.onEvery(.styleImageMissing) { (event) in
       if let data = event.data as? [String:Any] {
         if let imageName = data["id"] as? String {
@@ -360,7 +371,7 @@ open class RCTMGLMapView : MapView {
 
 // MARK: - Touch
 
-extension RCTMGLMapView {
+extension RCTMGLMapView: GestureManagerDelegate {
   func touchableSources() -> [RCTMGLSource] {
     return sources.filter { $0.isTouchable() }
   }
@@ -425,7 +436,7 @@ extension RCTMGLMapView {
             }
             let features = hitFeatures.map { try! dictionaryFrom($0.feature) }
             let location = self.mapboxMap.coordinate(for: tapPoint)
-            let event = try! RCTMGLEvent(
+            let event = RCTMGLEvent(
               type: (source is RCTMGLVectorSource) ? .vectorSourceLayerPress : .shapeSourceLayerPress,
               payload: [
                 "features": features,
@@ -440,7 +451,7 @@ extension RCTMGLMapView {
               ]
             )
             self.fireEvent(event: event, callback: onPress)
-        
+            
           } else {
             if let reactOnPress = self.reactOnPress {
               let location = self.mapboxMap.coordinate(for: tapPoint)
@@ -456,6 +467,38 @@ extension RCTMGLMapView {
         }
       }
     }
+  }
+  
+  @objc
+  func doHandleLongPress(_ sender: UILongPressGestureRecognizer) {
+    let position = sender.location(in: self)
+
+    if let reactOnLongPress = self.reactOnLongPress, sender.state == .began {
+      let coordinate = self.mapboxMap.coordinate(for: position)
+      var geojson = Feature(geometry: .point(Point(coordinate)));
+      geojson.properties = [
+        "screenPointX": .number(Double(position.x)),
+        "screenPointY": .number(Double(position.y))
+      ]
+      let event = try! RCTMGLEvent(type:.longPress, payload: dictionaryFrom(geojson)!)
+      self.fireEvent(event: event, callback: reactOnLongPress)
+    }
+  }
+  
+  public func gestureManager(_ gestureManager: GestureManager, didBegin gestureType: GestureType) {
+    _isUserInteraction = true
+  }
+  
+  public func gestureManager(_ gestureManager: GestureManager, didEnd gestureType: GestureType, willAnimate: Bool) {
+    _isUserInteraction = false
+    if willAnimate {
+      _isAnimatingFromUserInteraction = true
+    }
+  }
+  
+  public func gestureManager(_ gestureManager: GestureManager, didEndAnimatingFor gestureType: GestureType) {
+    _isUserInteraction = false
+    _isAnimatingFromUserInteraction = false
   }
 }
 

@@ -42,7 +42,8 @@ class MGLModule : NSObject {
         ],
       "EventTypes":
         [
-          "RegionDidChange" : RCTMGLEvent.EventType.regionDidChange.rawValue,
+          "CameraChanged" : RCTMGLEvent.EventType.cameraChanged.rawValue,
+          "MapIdle" : RCTMGLEvent.EventType.mapIdle.rawValue,
           "DidFinishLoadingMap": RCTMGLEvent.EventType.didFinishLoadingMap.rawValue
         ],
       "OfflineCallbackName":
