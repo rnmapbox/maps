@@ -103,6 +103,6 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "eslint"
+    "*.{js,jsx,ts,tsx}": "eslint --fix"
   }
 }
