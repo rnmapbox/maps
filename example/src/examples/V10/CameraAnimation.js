@@ -49,13 +49,14 @@ const zeroPadding = {
   paddingLeft: 0,
   paddingRight: 0,
 };
-
 const evenPadding = {
   paddingTop: 40,
   paddingBottom: 40,
   paddingLeft: 40,
   paddingRight: 40,
 };
+const minZoomLevel = 8;
+const maxZoomLevel = 16;
 
 const randPadding = () => {
   const randNum = () => {
@@ -170,6 +171,8 @@ const CameraAnimation = props => {
         <Camera
           {...centerOrBounds}
           zoomLevel={12}
+          minZoomLevel={minZoomLevel}
+          maxZoomLevel={maxZoomLevel}
           padding={padding}
           animationDuration={800}
           animationMode={animationMode}
