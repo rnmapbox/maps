@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 describe('Maps Example App', () => {
   beforeAll(async () => {
     await device.launchApp();
@@ -18,7 +16,7 @@ describe('Maps Example App', () => {
   it('should render MapView', async () => {
     await expect(element(by.text('Map'))).toBeVisible();
     await element(by.text('Map')).tap();
-    await expect(element(by.text('Show Map'))).toBeVisible(); 
+    await expect(element(by.text('Show Map'))).toBeVisible();
     await element(by.text('Show Map')).tap();
   });
 });

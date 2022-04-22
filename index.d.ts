@@ -164,8 +164,8 @@ declare namespace MapboxGL {
 
    class AnimatedPoint {
     constructor(point?: GeoJSON.Point);
-    longitude: ReactNative.Animated.Value<number>;
-    latitude: ReactNative.Animated.Value<number>;
+    longitude: ReactNative.Animated.Value;
+    latitude: ReactNative.Animated.Value;
     setValue: (point: GeoJSON.Point) => void;
     setOffset: (point: GeoJSON.Point) => void;
     flattenOffset: () => void;
