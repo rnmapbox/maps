@@ -264,8 +264,8 @@ class Camera extends React.Component {
     }
 
     const cameraConfig = {
-      bounds: undefined,
-      centerCoordinate: undefined,
+      bounds: n.bounds,
+      centerCoordinate: n.centerCoordinate,
       padding: n.padding,
       zoomLevel: n.zoomLevel,
       pitch: n.pitch,
@@ -284,21 +284,14 @@ class Camera extends React.Component {
     const pitchChanged = this._hasNumberChanged(c.pitch, n.pitch);
     const headingChanged = this._hasNumberChanged(c.heading, n.heading);
 
-    let shouldUpdate = false;
-
-    if (n.bounds && boundsChanged) {
-      cameraConfig.bounds = n.bounds;
-      shouldUpdate = true;
-    } else if (n.centerCoordinate && centerCoordinateChanged) {
-      cameraConfig.centerCoordinate = n.centerCoordinate;
-      shouldUpdate = true;
-    }
-
-    if (paddingChanged || zoomChanged || pitchChanged || headingChanged) {
-      shouldUpdate = true;
-    }
-
-    if (shouldUpdate) {
+    if (
+      boundsChanged ||
+      centerCoordinateChanged ||
+      paddingChanged ||
+      zoomChanged ||
+      pitchChanged ||
+      headingChanged
+    ) {
       this._setCamera(cameraConfig);
     }
   }

@@ -199,6 +199,8 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       bottom: stop["paddingBottom"] as? Double ?? 0,
       right: stop["paddingRight"] as? Double ?? 0
     )
+    
+    print("stop: \(stop)")
 
     var center: LocationCoordinate2D?
     if let feature: String = stop["centerCoordinate"] as? String {
@@ -240,6 +242,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
           bearing: heading ?? map.cameraState.bearing,
           pitch: pitch ?? map.cameraState.pitch
         )
+
         if let _center = camera.center, let _zoom = camera.zoom {
           center = _center
           zoom = _zoom
