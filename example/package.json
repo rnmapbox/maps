@@ -20,6 +20,7 @@
     "@mapbox/mapbox-sdk": "^0.13.0",
     "@react-native-community/masked-view": "^0.1.7",
     "@turf/along": "^6.5.0",
+    "@turf/bbox": "^6.5.0",
     "@turf/bbox-polygon": "^6.5.0",
     "@turf/distance": "^6.5.0",
     "@turf/helpers": "^6.5.0",
