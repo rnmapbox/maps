@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import locationManager from '../modules/location/locationManager';
 
-import Annotation from './annotations/Annotation'; // eslint-disable-line import/no-cycle
+import Annotation from './annotations/Annotation';
 import CircleLayer from './CircleLayer';
 import HeadingIndicator from './HeadingIndicator';
 import NativeUserLocation from './NativeUserLocation';
