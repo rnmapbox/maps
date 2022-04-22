@@ -723,14 +723,14 @@
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "The minimun zoom level of the map"
+        "description": "The minimum zoom level of the map"
       },
       {
         "name": "maxZoomLevel",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "The maximun zoom level of the map"
+        "description": "The maximum zoom level of the map"
       },
       {
         "name": "maxBounds",

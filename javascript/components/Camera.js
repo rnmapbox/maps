@@ -136,12 +136,12 @@ class Camera extends React.Component {
     ...SettingsPropTypes,
 
     /**
-     * The minimun zoom level of the map
+     * The minimum zoom level of the map
      */
     minZoomLevel: PropTypes.number,
 
     /**
-     * The maximun zoom level of the map
+     * The maximum zoom level of the map
      */
     maxZoomLevel: PropTypes.number,
 
@@ -264,8 +264,8 @@ class Camera extends React.Component {
     }
 
     const cameraConfig = {
-      bounds: undefined,
-      centerCoordinate: undefined,
+      bounds: n.bounds,
+      centerCoordinate: n.centerCoordinate,
       padding: n.padding,
       zoomLevel: n.zoomLevel,
       pitch: n.pitch,
@@ -284,21 +284,14 @@ class Camera extends React.Component {
     const pitchChanged = this._hasNumberChanged(c.pitch, n.pitch);
     const headingChanged = this._hasNumberChanged(c.heading, n.heading);
 
-    let shouldUpdate = false;
-
-    if (n.bounds && boundsChanged) {
-      cameraConfig.bounds = n.bounds;
-      shouldUpdate = true;
-    } else if (n.centerCoordinate && centerCoordinateChanged) {
-      cameraConfig.centerCoordinate = n.centerCoordinate;
-      shouldUpdate = true;
-    }
-
-    if (paddingChanged || zoomChanged || pitchChanged || headingChanged) {
-      shouldUpdate = true;
-    }
-
-    if (shouldUpdate) {
+    if (
+      boundsChanged ||
+      centerCoordinateChanged ||
+      paddingChanged ||
+      zoomChanged ||
+      pitchChanged ||
+      headingChanged
+    ) {
       this._setCamera(cameraConfig);
     }
   }
@@ -655,8 +648,8 @@ class Camera extends React.Component {
         followHeading={this.props.followHeading}
         followZoomLevel={this.props.followZoomLevel}
         stop={this._createStopConfig(props)}
-        maxZoomLevel={this.props.maxZoomLevel}
         minZoomLevel={this.props.minZoomLevel}
+        maxZoomLevel={this.props.maxZoomLevel}
         maxBounds={this._getMaxBounds()}
         defaultStop={this._createDefaultCamera()}
         {...callbacks}
