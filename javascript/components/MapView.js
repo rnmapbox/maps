@@ -149,6 +149,11 @@ class MapView extends NativeBridgeComponent(React.Component) {
     ]),
 
     /**
+     * Enable/Disable the scale bar from appearing on the map
+     */
+    scaleBarEnabled: PropTypes.bool,
+
+    /**
      * Enable/Disable the compass from appearing on the map
      */
     compassEnabled: PropTypes.bool,
@@ -296,6 +301,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
     rotateEnabled: true,
     attributionEnabled: true,
     logoEnabled: true,
+    scaleBarEnabled: true,
     surfaceView: false,
     regionWillChangeDebounceTime: 10,
     regionDidChangeDebounceTime: 500,

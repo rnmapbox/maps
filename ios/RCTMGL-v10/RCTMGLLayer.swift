@@ -149,16 +149,15 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   
   func layerWithSourceID<T : Source>(in style: Style) throws -> T  {
     let result = try style.source(withId: self.sourceID!, type: T.self)
-    return result as! T
+    return result
   }
 
   func sourceWithSourceID<T : Source>(in style: Style) throws -> T  {
     let result = try style.source(withId: self.sourceID!, type: T.self)
-    return result as! T
+    return result
   }
   
   func addToMap(_ map: RCTMGLMapView) {
-    //
     self.style = map.mapboxMap.style
     self.map = map
   }
@@ -220,7 +219,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
         let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
         layer.filter = decodedExpression
       } catch {
-        Logger.log(level: .error, message: "parsing filters failed for layer \(id)")
+        Logger.log(level: .error, message: "parsing filters failed for layer \(String(describing: id)): \(error.localizedDescription)")
       }
     } else {
       layer.filter = nil
@@ -235,7 +234,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     }
   }
   
-  func optionsChanged() {
+  private func optionsChanged() {
     if let style = self.style {
       self.setOptions(&self.styleLayer!)
       self.apply(style: style)
@@ -246,14 +245,16 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     removeFromMap(map.mapboxMap.style)
   }
   
-  func removeFromMap(_ style: Style) {
-    if (self.styleLayer != nil) {
-      try! style.removeLayer(withId: self.id)
+  private func removeFromMap(_ style: Style) {
+    do {
+      try style.removeLayer(withId: self.id)
+    } catch {
+      Logger.log(level: .error, message: "removing layer failed for layer \(String(describing: id)): \(error.localizedDescription)")
     }
   }
   
-  func insert(_ style: Style, layerPosition: LayerPosition, inserted: (() -> Void)? = nil) {
-    var idToWaitFor : String? = nil
+  func insert(_ style: Style, layerPosition: LayerPosition, onInsert: (() -> Void)? = nil) {
+    var idToWaitFor: String?
     switch layerPosition {
     case .above(let aboveId):
       idToWaitFor = aboveId
@@ -261,32 +262,29 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
       idToWaitFor = belowId
     case .at(_):
       idToWaitFor = nil
-    case .default:
+    default:
       idToWaitFor = nil
     }
     
     if let idToWaitFor = idToWaitFor {
       map!.waitForLayerWithID(idToWaitFor) { _ in
-        try! style.addLayer(self.styleLayer!, layerPosition: layerPosition)
-        if let inserted = inserted {
-          inserted()
-        }
+        self.attemptInsert(style, layerPosition: layerPosition, onInsert: onInsert)
       }
     } else {
-      try! style.addLayer(styleLayer!, layerPosition: layerPosition)
-      if let inserted = inserted {
-        inserted()
-      }
+      self.attemptInsert(style, layerPosition: layerPosition, onInsert: onInsert)
     }
   }
-
-  /*
-  layerWithSourceIDInStyle:(nonnull MGLStyle*) style
-  {
-      MGLSource* result = [style sourceWithIdentifier: self.sourceID];
-      if (result == NULL) {
-          RCTLogError(@"Cannot find layer with id: %@ referenced by layer:%@", self.sourceID, _id);
-      }
-      return result;
-  }*/
+  
+  private func attemptInsert(_ style: Style, layerPosition: LayerPosition, onInsert: (() -> Void)? = nil) {
+    guard let styleLayer = self.styleLayer else {
+      return
+    }
+    
+    do {
+      try style.addLayer(styleLayer, layerPosition: layerPosition)
+      onInsert?()
+    } catch {
+      Logger.log(level: .error, message: "inserting layer failed at position \(layerPosition): \(error.localizedDescription)")
+    }
+  }
 }

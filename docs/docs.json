@@ -2998,6 +2998,13 @@
         "description": "Adds logo offset, e.g. `{top: 8, left: 8}` will put the logo in top-left corner of the map"
       },
       {
+        "name": "scaleBarEnabled",
+        "required": false,
+        "type": "bool",
+        "default": "true",
+        "description": "Enable/Disable the scale bar from appearing on the map"
+      },
+      {
         "name": "compassEnabled",
         "required": false,
         "type": "bool",

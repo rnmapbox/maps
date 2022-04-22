@@ -91,6 +91,10 @@ open class RCTMGLMapView : MapView {
     self.mapView.gestures.options.pitchEnabled = value
   }
 
+  @objc func setReactScaleBarEnabled(_ value: Bool) {
+    self.mapView.ornaments.options.scaleBar.visibility = value ? .visible : .hidden
+  }
+    
   private func fireEvent(event: RCTMGLEvent, callback: @escaping RCTBubblingEventBlock) {
     callback(event.toJSON())
   }
