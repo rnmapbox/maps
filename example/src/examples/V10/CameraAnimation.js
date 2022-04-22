@@ -89,17 +89,31 @@ const CameraAnimation = props => {
     return `L ${padding.paddingLeft} | R ${padding.paddingRight} | T ${padding.paddingTop} | B ${padding.paddingBottom}`;
   }, [padding]);
 
-  const move = (_animationMode, shouldCreateMultiple = false) => {
+  const move = (_animationMode, shouldCreateMultiple) => {
     setAnimationMode(_animationMode);
 
-    const items = Array(shouldCreateMultiple ? 10 : 1).fill(0);
-    const _coordinates = items.map(_ => {
-      return {
+    if (shouldCreateMultiple) {
+      const _centerCoordinate = {
         latitude: initialCoordinate.latitude + Math.random() * 0.2,
         longitude: initialCoordinate.longitude + Math.random() * 0.2,
       };
-    });
-    setCoordinates(_coordinates);
+      const _coordinates = Array(10)
+        .fill(0)
+        .map(_ => {
+          return {
+            latitude: _centerCoordinate.latitude + Math.random() * 0.2,
+            longitude: _centerCoordinate.longitude + Math.random() * 0.2,
+          };
+        });
+      setCoordinates(_coordinates);
+    } else {
+      setCoordinates([
+        {
+          latitude: initialCoordinate.latitude + Math.random() * 0.2,
+          longitude: initialCoordinate.longitude + Math.random() * 0.2,
+        },
+      ]);
+    }
   };
 
   const features = useMemo(() => {
