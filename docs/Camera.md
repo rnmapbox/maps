@@ -43,8 +43,8 @@
 | &nbsp;&nbsp;paddingBottom | `number` | `none` | `false` | Bottom padding in points (deprecated; use root `padding` property instead) |
 | onUserTrackingModeChange | `func` | `none` | `false` | Callback that is triggered on user tracking mode changes |
 | zoomLevel | `number` | `none` | `false` | Zoom level of the map |
-| minZoomLevel | `number` | `none` | `false` | The minimun zoom level of the map |
-| maxZoomLevel | `number` | `none` | `false` | The maximun zoom level of the map |
+| minZoomLevel | `number` | `none` | `false` | The minimum zoom level of the map |
+| maxZoomLevel | `number` | `none` | `false` | The maximum zoom level of the map |
 | maxBounds | `shape` | `none` | `false` | Restrict map panning so that the center is within these bounds |
 | &nbsp;&nbsp;ne | `array` | `none` | `true` | northEastCoordinates - North east coordinate of bound |
 | &nbsp;&nbsp;sw | `array` | `none` | `true` | southWestCoordinates - South west coordinate of bound |

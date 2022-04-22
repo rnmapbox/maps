@@ -136,12 +136,12 @@ class Camera extends React.Component {
     ...SettingsPropTypes,
 
     /**
-     * The minimun zoom level of the map
+     * The minimum zoom level of the map
      */
     minZoomLevel: PropTypes.number,
 
     /**
-     * The maximun zoom level of the map
+     * The maximum zoom level of the map
      */
     maxZoomLevel: PropTypes.number,
 
@@ -648,8 +648,8 @@ class Camera extends React.Component {
         followHeading={this.props.followHeading}
         followZoomLevel={this.props.followZoomLevel}
         stop={this._createStopConfig(props)}
-        maxZoomLevel={this.props.maxZoomLevel}
         minZoomLevel={this.props.minZoomLevel}
+        maxZoomLevel={this.props.maxZoomLevel}
         maxBounds={this._getMaxBounds()}
         defaultStop={this._createDefaultCamera()}
         {...callbacks}

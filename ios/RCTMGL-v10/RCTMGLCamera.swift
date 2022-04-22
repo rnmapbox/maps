@@ -95,8 +95,6 @@ open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
     }
   }
   
-  // MARK: - RCTMGLMapComponent
-
   func waitForStyleLoad() -> Bool {
     return false
   }
@@ -116,28 +114,31 @@ open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
 }
 
 class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
-  var defaultStop : [String:Any]? = nil
-    
-  @objc var stop : [String:Any]? = nil {
+  var cameraAnimator: BasicCameraAnimator?
+  let cameraUpdateQueue = CameraUpdateQueue()
+
+  // Properties set on RCTMGLCamera in React Native.
+  
+  @objc var defaultStop: [String: Any]?
+  
+  @objc var stop: [String: Any]? {
     didSet {
       _updateCamera()
     }
   }
   
-  var cameraAnimator: BasicCameraAnimator?
-  let cameraUpdateQueue = CameraUpdateQueue()
+  @objc var minZoomLevel: NSNumber?
 
-  @objc
-  var followUserLocation : Bool = false {
+  @objc var maxZoomLevel: NSNumber?
+
+  @objc var followUserLocation : Bool = false {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
-
-  func toTimeInterval(_ duration: Double) -> TimeInterval {
-    return duration*0.001
-  }
   
+  // Update methods.
+
   func _updateCameraFromJavascript() {
     guard !followUserLocation else {
       return
@@ -177,7 +178,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     }
   }
   
-  func toUpdateItem(stop: [String:Any]) -> CameraUpdateItem {    
+  private func toUpdateItem(stop: [String: Any]) -> CameraUpdateItem {
     var zoom: CGFloat?
     if let z = stop["zoom"] as? Double {
       zoom = CGFloat(z)
@@ -199,8 +200,6 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       bottom: stop["paddingBottom"] as? Double ?? 0,
       right: stop["paddingRight"] as? Double ?? 0
     )
-    
-    print("stop: \(stop)")
 
     var center: LocationCoordinate2D?
     if let feature: String = stop["centerCoordinate"] as? String {
@@ -252,7 +251,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
 
     let duration: TimeInterval? = {
       if let d = stop["duration"] as? Double {
-        return self.toTimeInterval(d)
+        return toSeconds(d)
       }
       return nil
     }()
@@ -263,6 +262,14 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       }
       return .flight
     }()
+    
+    if let z1 = minZoomLevel, let z2 = CGFloat(exactly: z1), zoom! < z2 {
+      zoom = z2
+    }
+
+    if let z1 = maxZoomLevel, let z2 = CGFloat(exactly: z1), zoom! > z2 {
+      zoom = z2
+    }
 
     let result = CameraUpdateItem(
       camera: CameraOptions(
@@ -279,10 +286,6 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     return result
   }
   
-  @objc func setDefaultStop(_ stop: [String:Any]?) {
-    self.defaultStop = stop
-  }
-
   func _updateCamera() {
     if let _ = map {
       if followUserLocation {
@@ -323,4 +326,9 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       }
     }
   }
+}
+
+/// Converts milliseconds to seconds.
+private func toSeconds(_ ms: Double) -> TimeInterval {
+  return ms * 0.001
 }
