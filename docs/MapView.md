@@ -20,6 +20,7 @@
 | tintColor | `union` | `none` | `false` | MapView's tintColor |
 | logoEnabled | `bool` | `true` | `false` | Enable/Disable the logo on the map. |
 | logoPosition | `custom` | `none` | `false` | Adds logo offset, e.g. `{top: 8, left: 8}` will put the logo in top-left corner of the map |
+| scaleBarEnabled | `bool` | `true` | `false` | Enable/Disable the scale bar from appearing on the map |
 | compassEnabled | `bool` | `none` | `false` | Enable/Disable the compass from appearing on the map |
 | compassPosition | `custom` | `none` | `false` | [`mapbox` (v10) implementation only] Adds compass offset, e.g. `{top: 8, left: 8}` will put the compass in top-left corner of the map |
 | compassViewPosition | `number` | `none` | `false` | [`mapbox-gl` (v8) and `maplibre` implementation only] Change corner of map the compass starts at. 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight |
@@ -27,9 +28,11 @@
 | surfaceView | `bool` | `false` | `false` | [Android only] Enable/Disable use of GLSurfaceView insted of TextureView. |
 | onPress | `func` | `none` | `false` | Map press listener, gets called when a user presses the map |
 | onLongPress | `func` | `none` | `false` | Map long press listener, gets called when a user long presses the map |
-| onRegionWillChange | `func` | `none` | `false` | This event is triggered whenever the currently displayed map region is about to change. |
-| onRegionIsChanging | `func` | `none` | `false` | This event is triggered whenever the currently displayed map region is changing. |
-| onRegionDidChange | `func` | `none` | `false` | This event is triggered whenever the currently displayed map region finished changing |
+| onRegionWillChange | `func` | `none` | `false` | <v10 only<br/><br/>This event is triggered whenever the currently displayed map region is about to change. |
+| onRegionIsChanging | `func` | `none` | `false` | <v10 only<br/><br/>This event is triggered whenever the currently displayed map region is changing. |
+| onRegionDidChange | `func` | `none` | `false` | <v10 only<br/><br/>This event is triggered whenever the currently displayed map region finished changing. |
+| onCameraChanged | `func` | `none` | `false` | v10 only<br/><br/>Called when the currently displayed map area changes. |
+| onMapIdle | `func` | `none` | `false` | v10 only<br/><br/>Called when the currently displayed map area stops changing. |
 | onWillStartLoadingMap | `func` | `none` | `false` | This event is triggered when the map is about to start loading a new map style. |
 | onDidFinishLoadingMap | `func` | `none` | `false` | This is triggered when the map has successfully loaded a new map style. |
 | onDidFailLoadingMap | `func` | `none` | `false` | This event is triggered when the map has failed to load a new map style. |

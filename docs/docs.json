@@ -421,7 +421,7 @@
         "required": false,
         "type": "enum",
         "default": "'easeTo'",
-        "description": "The animationstyle when the camara updates. One of: `flyTo`, `easeTo`, `linearTo`, `moveTo`"
+        "description": "The animation style when the camara updates. One of:\n`flyTo`: A complex flight animation, affecting both position and zoom.\n`easeTo`: A standard damped curve.\n`linearTo`: An even linear transition.\n`none`: An instantaneous change (v10 only).\n`moveTo`: An instantaneous change (<v10)."
       },
       {
         "name": "defaultSettings",
@@ -723,14 +723,14 @@
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "The minimun zoom level of the map"
+        "description": "The minimum zoom level of the map"
       },
       {
         "name": "maxZoomLevel",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "The maximun zoom level of the map"
+        "description": "The maximum zoom level of the map"
       },
       {
         "name": "maxBounds",
@@ -2998,6 +2998,13 @@
         "description": "Adds logo offset, e.g. `{top: 8, left: 8}` will put the logo in top-left corner of the map"
       },
       {
+        "name": "scaleBarEnabled",
+        "required": false,
+        "type": "bool",
+        "default": "true",
+        "description": "Enable/Disable the scale bar from appearing on the map"
+      },
+      {
         "name": "compassEnabled",
         "required": false,
         "type": "bool",
@@ -3051,7 +3058,7 @@
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "This event is triggered whenever the currently displayed map region is about to change.",
+        "description": "<v10 only\n\nThis event is triggered whenever the currently displayed map region is about to change.",
         "params": [
           {
             "name": "feature",
@@ -3068,7 +3075,7 @@
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "This event is triggered whenever the currently displayed map region is changing.",
+        "description": "<v10 only\n\nThis event is triggered whenever the currently displayed map region is changing.",
         "params": [
           {
             "name": "feature",
@@ -3085,13 +3092,47 @@
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "This event is triggered whenever the currently displayed map region finished changing",
+        "description": "<v10 only\n\nThis event is triggered whenever the currently displayed map region finished changing.",
         "params": [
           {
             "name": "feature",
             "description": "The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds",
             "type": {
               "name": "PointFeature"
+            },
+            "optional": false
+          }
+        ]
+      },
+      {
+        "name": "onCameraChanged",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "v10 only\n\nCalled when the currently displayed map area changes.",
+        "params": [
+          {
+            "name": "region",
+            "description": "A payload containing the map center, bounds, and other properties.",
+            "type": {
+              "name": "MapState"
+            },
+            "optional": false
+          }
+        ]
+      },
+      {
+        "name": "onMapIdle",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "v10 only\n\nCalled when the currently displayed map area stops changing.",
+        "params": [
+          {
+            "name": "region",
+            "description": "A payload containing the map center, bounds, and other properties.",
+            "type": {
+              "name": "MapState"
             },
             "optional": false
           }

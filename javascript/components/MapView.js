@@ -140,6 +140,11 @@ class MapView extends NativeBridgeComponent(React.Component) {
     logoPosition: ornamentPositionPropType,
 
     /**
+     * Enable/Disable the scale bar from appearing on the map
+     */
+    scaleBarEnabled: PropTypes.bool,
+
+    /**
      * Enable/Disable the compass from appearing on the map
      */
     compassEnabled: PropTypes.bool,
@@ -175,6 +180,8 @@ class MapView extends NativeBridgeComponent(React.Component) {
     onLongPress: PropTypes.func,
 
     /**
+     * <v10 only
+     *
      * This event is triggered whenever the currently displayed map region is about to change.
      *
      * @param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
@@ -182,6 +189,8 @@ class MapView extends NativeBridgeComponent(React.Component) {
     onRegionWillChange: PropTypes.func,
 
     /**
+     * <v10 only
+     *
      * This event is triggered whenever the currently displayed map region is changing.
      *
      * @param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
@@ -189,11 +198,31 @@ class MapView extends NativeBridgeComponent(React.Component) {
     onRegionIsChanging: PropTypes.func,
 
     /**
-     * This event is triggered whenever the currently displayed map region finished changing
+     * <v10 only
+     *
+     * This event is triggered whenever the currently displayed map region finished changing.
      *
      * @param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
      */
     onRegionDidChange: PropTypes.func,
+
+    /**
+     * v10 only
+     *
+     * Called when the currently displayed map area changes.
+     *
+     * @param {MapState} region - A payload containing the map center, bounds, and other properties.
+     */
+    onCameraChanged: PropTypes.func,
+
+    /**
+     * v10 only
+     *
+     * Called when the currently displayed map area stops changing.
+     *
+     * @param {MapState} region - A payload containing the map center, bounds, and other properties.
+     */
+    onMapIdle: PropTypes.func,
 
     /**
      * This event is triggered when the map is about to start loading a new map style.
@@ -268,6 +297,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
     rotateEnabled: true,
     attributionEnabled: true,
     logoEnabled: true,
+    scaleBarEnabled: true,
     surfaceView: false,
     regionWillChangeDebounceTime: 10,
     regionDidChangeDebounceTime: 500,
@@ -627,7 +657,11 @@ class MapView extends NativeBridgeComponent(React.Component) {
     if (isFunction(this.props.onRegionWillChange)) {
       this.props.onRegionWillChange(payload);
     }
-    this.setState({isUserInteraction: payload.properties.isUserInteraction});
+    this.setState({
+      isUserInteraction: payload.properties.isUserInteraction,
+      isAnimatingFromUserInteraction:
+        payload.properties.isAnimatingFromUserInteraction,
+    });
   }
 
   _onRegionDidChange(payload) {
@@ -662,6 +696,12 @@ class MapView extends NativeBridgeComponent(React.Component) {
         } else {
           propName = 'onRegionDidChange';
         }
+        break;
+      case MapboxGL.EventTypes.CameraChanged:
+        propName = 'onCameraChanged';
+        break;
+      case MapboxGL.EventTypes.MapIdle:
+        propName = 'onMapIdle';
         break;
       case MapboxGL.EventTypes.UserLocationUpdated:
         propName = 'onUserLocationUpdate';

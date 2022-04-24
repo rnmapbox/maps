@@ -7,7 +7,7 @@
 | ---- | :--: | :-----: | :------: | :----------: |
 | allowUpdates | `bool` | `true` | `false` | If false, the camera will not send any props to the native module. Intended to be used to prevent unnecessary tile fetching and improve performance when the map is not visible. Defaults to true. |
 | animationDuration | `number` | `2000` | `false` | The duration a camera update takes (in ms) |
-| animationMode | `enum` | `'easeTo'` | `false` | The animationstyle when the camara updates. One of: `flyTo`, `easeTo`, `linearTo`, `moveTo` |
+| animationMode | `enum` | `'easeTo'` | `false` | The animation style when the camara updates. One of:<br/>`flyTo`: A complex flight animation, affecting both position and zoom.<br/>`easeTo`: A standard damped curve.<br/>`linearTo`: An even linear transition.<br/>`none`: An instantaneous change (v10 only).<br/>`moveTo`: An instantaneous change (<v10). |
 | defaultSettings | `shape` | `none` | `false` | Default view settings applied on camera |
 | &nbsp;&nbsp;centerCoordinate | `array` | `none` | `false` | Center coordinate on map [lng, lat] |
 | &nbsp;&nbsp;padding | `shape` | `none` | `false` | Padding around edges of map in points |
@@ -43,8 +43,8 @@
 | &nbsp;&nbsp;paddingBottom | `number` | `none` | `false` | Bottom padding in points (deprecated; use root `padding` property instead) |
 | onUserTrackingModeChange | `func` | `none` | `false` | Callback that is triggered on user tracking mode changes |
 | zoomLevel | `number` | `none` | `false` | Zoom level of the map |
-| minZoomLevel | `number` | `none` | `false` | The minimun zoom level of the map |
-| maxZoomLevel | `number` | `none` | `false` | The maximun zoom level of the map |
+| minZoomLevel | `number` | `none` | `false` | The minimum zoom level of the map |
+| maxZoomLevel | `number` | `none` | `false` | The maximum zoom level of the map |
 | maxBounds | `shape` | `none` | `false` | Restrict map panning so that the center is within these bounds |
 | &nbsp;&nbsp;ne | `array` | `none` | `true` | northEastCoordinates - North east coordinate of bound |
 | &nbsp;&nbsp;sw | `array` | `none` | `true` | southWestCoordinates - South west coordinate of bound |

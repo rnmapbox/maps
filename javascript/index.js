@@ -1,16 +1,12 @@
-import {
-  Animated as RNAnimated,
-  NativeModules,
-  PermissionsAndroid,
-} from 'react-native';
+import {NativeModules, PermissionsAndroid} from 'react-native';
 
 import {isAndroid} from './utils';
 import MapView from './components/MapView';
 import Light from './components/Light';
 import PointAnnotation from './components/PointAnnotation';
-import Annotation from './components/annotations/Annotation'; // eslint-disable-line import/no-cycle
+import Annotation from './components/annotations/Annotation';
 import Callout from './components/Callout';
-import UserLocation from './components/UserLocation'; // eslint-disable-line import/no-cycle
+import UserLocation from './components/UserLocation';
 import Camera from './components/Camera';
 import VectorSource from './components/VectorSource';
 import ShapeSource from './components/ShapeSource';

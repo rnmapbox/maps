@@ -18,9 +18,6 @@ class RCTMGLSkyLayer: RCTMGLLayer {
 
   override func apply(style : Style) {
     try! style.updateLayer(withId: id, type: LayerType.self) { (layer : inout LayerType) in
-      if self.styleLayer != nil {
-        setOptions(&self.styleLayer!)
-      }
       if var styleLayer = self.styleLayer as? LayerType {
         layer = styleLayer
       }

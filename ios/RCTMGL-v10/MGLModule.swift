@@ -36,13 +36,15 @@ class MGLModule : NSObject {
       "CameraModes":
         [
           "Flight": "flight",
-          "None": "none",
-          "Linear": "linear",
           "Ease": "ease",
+          "Linear": "linear",
+          "None": "none",
+          "Move": "move", // Allows backward compatibility with <v10.
         ],
       "EventTypes":
         [
-          "RegionDidChange" : RCTMGLEvent.EventType.regionDidChange.rawValue,
+          "CameraChanged" : RCTMGLEvent.EventType.cameraChanged.rawValue,
+          "MapIdle" : RCTMGLEvent.EventType.mapIdle.rawValue,
           "DidFinishLoadingMap": RCTMGLEvent.EventType.didFinishLoadingMap.rawValue
         ],
       "OfflineCallbackName":

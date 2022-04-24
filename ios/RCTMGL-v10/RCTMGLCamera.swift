@@ -9,36 +9,44 @@ protocol RCTMGLMapComponent {
   func waitForStyleLoad() -> Bool
 }
 
-
+/// See `MGLModule.swift:constantsToExport:CameraModes.`
 enum Mode: String, CaseIterable {
-  case flight, move, ease, linear
+  case flight, ease, linear, none, move
 }
 
 struct CameraUpdateItem {
   var camera: CameraOptions
   var mode: Mode
   var duration: TimeInterval?
-
-  func execute(map: RCTMGLMapView) {
-    if let duration = duration, duration == 0.0 {
-      map.mapboxMap.setCamera(to: camera)
-      return
-    }
   
+  func execute(map: RCTMGLMapView, cameraAnimator: inout BasicCameraAnimator?) {
     switch mode {
       case .flight:
-        if let duration = duration {
-          map.camera.fly(to: camera, duration: duration)
-        } else {
-          map.camera.fly(to: camera)
-        }
-      case .move:
-        map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
+        var _camera = camera
+        _camera.padding = nil
+        map.camera.fly(to: _camera, duration: duration)
+        changePadding(map: map, cameraAnimator: &cameraAnimator, curve: .linear)
       case .ease:
         map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
       case .linear:
         map.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
+      case .none:
+        map.mapboxMap.setCamera(to: camera)
+      default:
+        map.mapboxMap.setCamera(to: camera)
     }
+  }
+  
+  /// Padding is not currently animatable on the camera's `fly(to:)` method, so we create a separate animator instead.
+  /// If this changes, remove this and call `fly(to:)` with an unmodified `camera`.
+  func changePadding(map: RCTMGLMapView, cameraAnimator: inout BasicCameraAnimator?, curve: UIView.AnimationCurve) {
+    if let cameraAnimator = cameraAnimator {
+      cameraAnimator.stopAnimation()
+    }
+    cameraAnimator = map.camera.makeAnimator(duration: duration ?? 0, curve: curve) { (transition) in
+      transition.padding.toValue = camera.padding
+    }
+    cameraAnimator?.startAnimation()
   }
 }
 
@@ -56,12 +64,12 @@ class CameraUpdateQueue {
     queue.append(stop)
   }
   
-  func execute(map: RCTMGLMapView) {
+  func execute(map: RCTMGLMapView, cameraAnimator: inout BasicCameraAnimator?) {
     guard let stop = dequeue() else {
       return
     }
     
-    stop.execute(map: map)
+    stop.execute(map: map, cameraAnimator: &cameraAnimator)
   }
 }
 
@@ -87,8 +95,6 @@ open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
     }
   }
   
-  // MARK: - RCTMGLMapComponent
-
   func waitForStyleLoad() -> Bool {
     return false
   }
@@ -108,27 +114,31 @@ open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
 }
 
 class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
-  var defaultStop : [String:Any]? = nil
+  var cameraAnimator: BasicCameraAnimator?
+  let cameraUpdateQueue = CameraUpdateQueue()
+
+  // Properties set on RCTMGLCamera in React Native.
   
-  @objc var stop : [String:Any]? = nil {
+  @objc var defaultStop: [String: Any]?
+  
+  @objc var stop: [String: Any]? {
     didSet {
       _updateCamera()
     }
   }
   
-  let cameraUpdateQueue : CameraUpdateQueue = CameraUpdateQueue()
-  
-  @objc
-  var followUserLocation : Bool = false {
+  @objc var minZoomLevel: NSNumber?
+
+  @objc var maxZoomLevel: NSNumber?
+
+  @objc var followUserLocation : Bool = false {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
-
-  func toTimeInterval(_ duration: Double) -> TimeInterval {
-    return duration*0.001
-  }
   
+  // Update methods.
+
   func _updateCameraFromJavascript() {
     guard !followUserLocation else {
       return
@@ -154,7 +164,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     }
 
     if let map = map {
-      cameraUpdateQueue.execute(map: map)
+      cameraUpdateQueue.execute(map: map, cameraAnimator: &cameraAnimator)
     }
   }
   
@@ -168,91 +178,112 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     }
   }
   
-  func toUpdateItem(stop: [String:Any]) -> CameraUpdateItem {
-    var result = CameraUpdateItem(
-      camera: CameraOptions(),
-      mode: .flight,
-      duration: nil
-    )
-    
-    if let feature : String = stop["bounds"] as? String {
-      let collection : Turf.FeatureCollection? = try!
-       JSONDecoder().decode(Turf.FeatureCollection.self, from: feature.data(using: .utf8)!)
-      let features = collection?.features
-
-      let ne: CLLocationCoordinate2D
-      switch features?.first?.geometry {
-       case .point(let point):
-         ne = point.coordinates
-       default:
-         fatalError("Unexpected geometry: \(String(describing: features?.first?.geometry))")
-      }
-
-      let sw: CLLocationCoordinate2D
-      switch features?.last?.geometry {
-       case .point(let point):
-         sw = point.coordinates
-       default:
-         fatalError("Unexpected geometry: \(String(describing: features?.last?.geometry))")
-      }
-
-      if let map = map {
-        let bounds = CoordinateBounds(southwest: sw, northeast: ne)
-        let c = map.mapboxMap.camera(for: bounds, padding: .zero, bearing: 0, pitch: 0)
-        result.camera.center = c.center
-        result.camera.zoom = c.zoom
-      }
+  private func toUpdateItem(stop: [String: Any]) -> CameraUpdateItem {
+    var zoom: CGFloat?
+    if let z = stop["zoom"] as? Double {
+      zoom = CGFloat(z)
     }
     
-    if let feature : String = stop["centerCoordinate"] as? String {
+    var pitch: CGFloat?
+    if let p = stop["pitch"] as? Double {
+      pitch = CGFloat(p)
+    }
+    
+    var heading: CLLocationDirection?
+    if let h = stop["heading"] as? Double {
+      heading = CLLocationDirection(h)
+    }
+    
+    let padding = UIEdgeInsets(
+      top: stop["paddingTop"] as? Double ?? 0,
+      left: stop["paddingLeft"] as? Double ?? 0,
+      bottom: stop["paddingBottom"] as? Double ?? 0,
+      right: stop["paddingRight"] as? Double ?? 0
+    )
+
+    var center: LocationCoordinate2D?
+    if let feature: String = stop["centerCoordinate"] as? String {
       let centerFeature : Turf.Feature? = try!
         JSONDecoder().decode(Turf.Feature.self, from: feature.data(using: .utf8)!)
         
       switch centerFeature?.geometry {
       case .point(let centerPoint):
-        result.camera.center = centerPoint.coordinates
+        center = centerPoint.coordinates
       default:
         fatalError("Unexpected geometry: \(String(describing: centerFeature?.geometry))")
       }
-    }
-    
-    if let zoom = stop["zoom"] as? Double {
-      result.camera.zoom = CGFloat(zoom)
-    }
+    } else if let feature: String = stop["bounds"] as? String {
+      let collection : Turf.FeatureCollection? = try!
+        JSONDecoder().decode(Turf.FeatureCollection.self, from: feature.data(using: .utf8)!)
+      let features = collection?.features
+      
+      let ne: CLLocationCoordinate2D
+      switch features?.first?.geometry {
+        case .point(let point):
+          ne = point.coordinates
+        default:
+          fatalError("Unexpected geometry: \(String(describing: features?.first?.geometry))")
+      }
+      
+      let sw: CLLocationCoordinate2D
+      switch features?.last?.geometry {
+        case .point(let point):
+          sw = point.coordinates
+        default:
+          fatalError("Unexpected geometry: \(String(describing: features?.last?.geometry))")
+      }
+      
+      withMapView { map in
+        let bounds = CoordinateBounds(southwest: sw, northeast: ne)
+        let camera = map.mapboxMap.camera(
+          for: bounds,
+          padding: padding,
+          bearing: heading ?? map.cameraState.bearing,
+          pitch: pitch ?? map.cameraState.pitch
+        )
 
-    if let pitch = stop["pitch"] as? Double {
-      result.camera.pitch = CGFloat(pitch)
-    }
-
-    if let heading = stop["heading"] as? Double {
-      result.camera.bearing = CLLocationDirection(heading)
-    }
-
-    if let bearing = stop["bearing"] as? Double {
-      result.camera.bearing = CLLocationDirection(bearing)
+        if let _center = camera.center, let _zoom = camera.zoom {
+          center = _center
+          zoom = _zoom
+        }
+      }
     }
 
     let duration: TimeInterval? = {
       if let d = stop["duration"] as? Double {
-        return self.toTimeInterval(d)
+        return toSeconds(d)
       }
       return nil
     }()
-    result.duration = duration
-
+    
     let mode: Mode = {
       if let m = stop["mode"] as? String, let m = Mode(rawValue: m) {
         return m
       }
       return .flight
     }()
-    result.mode = mode
     
+    if let z1 = minZoomLevel, let z2 = CGFloat(exactly: z1), zoom! < z2 {
+      zoom = z2
+    }
+
+    if let z1 = maxZoomLevel, let z2 = CGFloat(exactly: z1), zoom! > z2 {
+      zoom = z2
+    }
+
+    let result = CameraUpdateItem(
+      camera: CameraOptions(
+        center: center,
+        padding: padding,
+        anchor: nil,
+        zoom: zoom,
+        bearing: heading,
+        pitch: pitch
+      ),
+      mode: mode,
+      duration: duration
+    )
     return result
-  }
-  
-  @objc func setDefaultStop(_ stop: [String:Any]?) {
-    self.defaultStop = stop
   }
   
   func _updateCamera() {
@@ -269,11 +300,11 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     guard let stop = self.defaultStop, let map = map else {
       return
     }
-  
+    
     var updateItem = toUpdateItem(stop: stop)
-    updateItem.mode = .move
+    updateItem.mode = .none
     updateItem.duration = 0
-    updateItem.execute(map: map)
+    updateItem.execute(map: map, cameraAnimator: &cameraAnimator)
   }
   
   func initialLayout() {
@@ -286,7 +317,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     map.reactCamera = self
   }
   
-    // MARK: - LocationConsumer
+  // MARK: - LocationConsumer
   
   func locationUpdate(newLocation: Location) {
     if followUserLocation {
@@ -295,4 +326,9 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       }
     }
   }
+}
+
+/// Converts milliseconds to seconds.
+private func toSeconds(_ ms: Double) -> TimeInterval {
+  return ms * 0.001
 }

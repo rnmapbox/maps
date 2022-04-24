@@ -164,8 +164,8 @@ declare namespace MapboxGL {
 
    class AnimatedPoint {
     constructor(point?: GeoJSON.Point);
-    longitude: ReactNative.Animated.Value<number>;
-    latitude: ReactNative.Animated.Value<number>;
+    longitude: ReactNative.Animated.Value;
+    latitude: ReactNative.Animated.Value;
     setValue: (point: GeoJSON.Point) => void;
     setOffset: (point: GeoJSON.Point) => void;
     flattenOffset: () => void;
@@ -435,6 +435,9 @@ export type OrnamentPosition =
   | { bottom: number; left: number }
   | { bottom: number; right: number };
 
+/**
+ * <v10.
+ */
 export interface RegionPayload {
   zoomLevel: number;
   heading: number;
@@ -442,6 +445,26 @@ export interface RegionPayload {
   isUserInteraction: boolean;
   visibleBounds: GeoJSON.Position[];
   pitch: number;
+}
+
+/**
+ * v10 only.
+ */
+export interface MapState {
+  properties: {
+    center: GeoJSON.Position;
+    bounds: {
+      ne: GeoJSON.Position;
+      sw: GeoJSON.Position;
+    };
+    zoom : number;
+    heading: number;
+    pitch: number;
+  };
+  gestures: {
+    isGestureActive: boolean;
+    isAnimatingFromGesture: boolean;
+  };
 }
 
 export interface MapViewProps extends ViewProps {
@@ -454,6 +477,7 @@ export interface MapViewProps extends ViewProps {
   styleJSON?: string;
   preferredFramesPerSecond?: number;
   localizeLabels?: boolean;
+  scaleBarEnabled?: boolean;
   zoomEnabled?: boolean;
   scrollEnabled?: boolean;
   pitchEnabled?: boolean;
@@ -482,6 +506,8 @@ export interface MapViewProps extends ViewProps {
   onRegionDidChange?: (
     feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   ) => void;
+  onCameraChanged?: (state: MapState) => void;
+  onMapIdle?: (state: MapState) => void;
   onUserLocationUpdate?: (feature: MapboxGL.Location) => void;
   onWillStartLoadingMap?: () => void;
   onDidFinishLoadingMap?: () => void;
