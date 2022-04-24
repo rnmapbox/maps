@@ -421,7 +421,7 @@
         "required": false,
         "type": "enum",
         "default": "'easeTo'",
-        "description": "The animationstyle when the camara updates. One of: `flyTo`, `easeTo`, `linearTo`, `moveTo`"
+        "description": "The animation style when the camara updates. One of:\n`flyTo`: A complex flight animation, affecting both position and zoom.\n`easeTo`: A standard damped curve.\n`linearTo`: An even linear transition.\n`none`: An instantaneous change (v10 only).\n`moveTo`: An instantaneous change (<v10)."
       },
       {
         "name": "defaultSettings",
@@ -723,14 +723,14 @@
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "The minimun zoom level of the map"
+        "description": "The minimum zoom level of the map"
       },
       {
         "name": "maxZoomLevel",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "The maximun zoom level of the map"
+        "description": "The maximum zoom level of the map"
       },
       {
         "name": "maxBounds",
@@ -3108,7 +3108,7 @@
             "name": "region",
             "description": "A payload containing the map center, bounds, and other properties.",
             "type": {
-              "name": "RegionPayload"
+              "name": "MapState"
             },
             "optional": false
           }
@@ -3125,7 +3125,7 @@
             "name": "region",
             "description": "A payload containing the map center, bounds, and other properties.",
             "type": {
-              "name": "RegionPayload"
+              "name": "MapState"
             },
             "optional": false
           }

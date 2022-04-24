@@ -441,6 +441,9 @@ export type LogoPosition =
   | { bottom: number; left: number }
   | { bottom: number; right: number };
 
+/**
+ * <v10.
+ */
 export interface RegionPayload {
   zoomLevel: number;
   heading: number;
@@ -448,6 +451,26 @@ export interface RegionPayload {
   isUserInteraction: boolean;
   visibleBounds: GeoJSON.Position[];
   pitch: number;
+}
+
+/**
+ * v10 only.
+ */
+export interface MapState {
+  properties: {
+    center: GeoJSON.Position;
+    bounds: {
+      ne: GeoJSON.Position;
+      sw: GeoJSON.Position;
+    };
+    zoom : number;
+    heading: number;
+    pitch: number;
+  };
+  gestures: {
+    isGestureActive: boolean;
+    isAnimatingFromGesture: boolean;
+  };
 }
 
 export interface MapViewProps extends ViewProps {
@@ -488,12 +511,8 @@ export interface MapViewProps extends ViewProps {
   onRegionDidChange?: (
     feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
   ) => void;
-  onCameraChanged?: (
-    feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
-  ) => void;
-  onMapIdle?: (
-    feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
-  ) => void;
+  onCameraChanged?: (state: MapState) => void;
+  onMapIdle?: (state: MapState) => void;
   onUserLocationUpdate?: (feature: MapboxGL.Location) => void;
   onWillStartLoadingMap?: () => void;
   onDidFinishLoadingMap?: () => void;

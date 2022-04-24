@@ -30,12 +30,15 @@ const styles = {
   },
 };
 
-const MapGestureHandlers = props => {
+const MapHandlers = props => {
   const [lastCallback, setLastCallback] = useState('');
-  const [region, setRegion] = useState({});
+  const [mapState, setMapState] = useState({});
   const [features, setFeatures] = useState([]);
 
-  const properties = region?.properties;
+  const properties = mapState?.properties;
+  const center = properties?.center;
+  const bounds = properties?.bounds;
+  const gestures = mapState?.gestures;
 
   const buildShape = feature => {
     return {
@@ -50,6 +53,13 @@ const MapGestureHandlers = props => {
     setFeatures(prev => [...prev, _feature]);
   };
 
+  const display = position => {
+    if (!position) {
+      return '';
+    }
+    return `${position[1].toFixed(3)}, ${position[0].toFixed(3)}`;
+  };
+
   return (
     <Page {...props}>
       <MapView
@@ -60,13 +70,13 @@ const MapGestureHandlers = props => {
         onLongPress={_feature => {
           addFeature(_feature, 'longPress');
         }}
-        onCameraChanged={_region => {
+        onCameraChanged={_state => {
           setLastCallback('onCameraChanged');
-          setRegion(_region);
+          setMapState(_state);
         }}
-        onMapIdle={_region => {
+        onMapIdle={_state => {
           setLastCallback('onMapIdle');
-          setRegion(_region);
+          setMapState(_state);
         }}>
         <Camera
           centerCoordinate={[-73.984638, 40.759211]}
@@ -101,24 +111,33 @@ const MapGestureHandlers = props => {
 
           <Divider style={styles.divider} />
 
+          <Text style={styles.fadedText}>center</Text>
+          <Text>{display(center)}</Text>
+
+          <Divider style={styles.divider} />
+
+          <Text style={styles.fadedText}>bounds</Text>
+          <Text>NE: {display(bounds?.ne)}</Text>
+          <Text>NE: {display(bounds?.sw)}</Text>
+
+          <Divider style={styles.divider} />
+
           <Text style={styles.fadedText}>lastCallback</Text>
           <Text>{lastCallback}</Text>
 
           <Divider style={styles.divider} />
 
-          <Text style={styles.fadedText}>isUserInteraction</Text>
-          <Text>{properties?.isUserInteraction ? 'Yes' : 'No'}</Text>
+          <Text style={styles.fadedText}>isGestureActive</Text>
+          <Text>{gestures?.isGestureActive ? 'Yes' : 'No'}</Text>
 
           <Divider style={styles.divider} />
 
-          <Text style={styles.fadedText}>isAnimatingFromUserInteraction</Text>
-          <Text>
-            {properties?.isAnimatingFromUserInteraction ? 'Yes' : 'No'}
-          </Text>
+          <Text style={styles.fadedText}>isAnimatingFromGesture</Text>
+          <Text>{gestures?.isAnimatingFromGesture ? 'Yes' : 'No'}</Text>
         </View>
       </SafeAreaView>
     </Page>
   );
 };
 
-export default MapGestureHandlers;
+export default MapHandlers;

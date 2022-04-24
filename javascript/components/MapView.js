@@ -215,7 +215,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
      *
      * Called when the currently displayed map area changes.
      *
-     * @param {RegionPayload} region - A payload containing the map center, bounds, and other properties.
+     * @param {MapState} region - A payload containing the map center, bounds, and other properties.
      */
     onCameraChanged: PropTypes.func,
 
@@ -224,7 +224,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
      *
      * Called when the currently displayed map area stops changing.
      *
-     * @param {RegionPayload} region - A payload containing the map center, bounds, and other properties.
+     * @param {MapState} region - A payload containing the map center, bounds, and other properties.
      */
     onMapIdle: PropTypes.func,
 
