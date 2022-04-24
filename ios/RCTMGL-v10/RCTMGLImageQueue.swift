@@ -73,11 +73,14 @@ class RCTMGLImageQueueOperation : Operation {
         if let completionHandler = weakSelf.completionHandler {
           completionHandler(error, image)
         }
-        weakSelf.setState(state:.Finished, except:.Finished)
+        _ = weakSelf.setState(state:.Finished, except:.Finished)
       }
-      weakSelf.cancellationBlock = cancellationBlock
-      if (weakSelf.setState(state:.Executing, only:.Initial) == .CancelDoNotExecute) {
-        weakSelf.callCancellationBlock()
+
+      if let weakSelf = weakSelf {
+        weakSelf.cancellationBlock = cancellationBlock
+        if (weakSelf.setState(state:.Executing, only:.Initial) == .CancelDoNotExecute) {
+          weakSelf.callCancellationBlock()
+        }
       }
     }
   }
