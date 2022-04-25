@@ -163,6 +163,9 @@ function getShapeSource(id, source) {
   if (source.clusterMaxZoom !== undefined) {
     sourceProps.clusterMaxZoomLevel = source.clusterMaxZoom;
   }
+  if (source.clusterProperties !== undefined) {
+    sourceProps.clusterProperties = source.clusterProperties;
+  }
   if (source.buffer !== undefined) {
     sourceProps.buffer = source.buffer;
   }

@@ -4021,6 +4021,13 @@
         "description": "Specifies the maximum zoom level at which to cluster points if clustering is enabled.\nDefaults to one zoom level less than the value of maxZoomLevel so that, at the maximum zoom level,\nthe shapes are not clustered."
       },
       {
+        "name": "clusterProperties",
+        "required": false,
+        "type": "object",
+        "default": "none",
+        "description": "[`mapbox-gl` (v8) implementation only]\nSpecifies custom properties on the generated clusters if clustering\nis enabled, aggregating values from clustered points.\n\nHas the form `{ \"property_name\": [operator, map_expression]}`, where\n `operator` is a custom reduce expression that references a special `[\"accumulated\"]` value -\n  it accumulates the property value from clusters/points the cluster contains\n `map_expression` produces the value of a single point\n\nExample: `{ \"resultingSum\": [[\"+\", [\"accumulated\"], [\"get\", \"resultingSum\"]], [\"get\", \"scalerank\"]] }`"
+      },
+      {
         "name": "maxZoomLevel",
         "required": false,
         "type": "number",
