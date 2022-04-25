@@ -10,6 +10,9 @@ concurrency:
   group: ${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   lint_test_generate:
     runs-on: ubuntu-latest
@@ -43,6 +46,8 @@ jobs:
       NVMRC: ${{ steps.nvm.outputs.NVMRC }}
 
   has_mapbox_token:
+    permissions:
+      contents: none
     runs-on: ubuntu-latest
     outputs:
       has-mapbox-token: ${{ steps.has-mapbox-token.outputs.defined }}
@@ -54,6 +59,8 @@ jobs:
         run: echo "::set-output name=defined::true"
 
   call_android_workflow:
+    permissions:
+      contents: none
     name: "Android/Mapbox"
     needs: [lint_test_generate,has_mapbox_token]
     uses: ./.github/workflows/android-actions.yml
@@ -66,6 +73,8 @@ jobs:
       MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
 
   call_maplibre_android_workflow:
+    permissions:
+      contents: none
     name: "Android/MapLibre"
     needs: lint_test_generate
     uses: ./.github/workflows/android-actions.yml
@@ -77,6 +86,8 @@ jobs:
       MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
 
   call_ios_workflow:
+    permissions:
+      contents: none
     name: "iOS/Mapbox"
     needs: [lint_test_generate,has_mapbox_token]
     uses: ./.github/workflows/ios-actions.yml
@@ -89,6 +100,8 @@ jobs:
       MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
 
   call_maplibre_ios_workflow:
+    permissions:
+      contents: none
     name: "iOS/MapLibre"
     needs: lint_test_generate
     uses: ./.github/workflows/ios-actions.yml
