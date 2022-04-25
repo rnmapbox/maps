@@ -429,13 +429,7 @@ declare namespace MapboxGL {
   }
 }
 
-export type AttributionPosition =
-  | { top: number; left: number }
-  | { top: number; right: number }
-  | { bottom: number; left: number }
-  | { bottom: number; right: number };
-
-export type LogoPosition =
+export type OrnamentPosition =
   | { top: number; left: number }
   | { top: number; right: number }
   | { bottom: number; left: number }
@@ -483,18 +477,20 @@ export interface MapViewProps extends ViewProps {
   styleJSON?: string;
   preferredFramesPerSecond?: number;
   localizeLabels?: boolean;
-  scaleBarEnabled?: boolean;
   zoomEnabled?: boolean;
   scrollEnabled?: boolean;
   pitchEnabled?: boolean;
   rotateEnabled?: boolean;
   attributionEnabled?: boolean;
-  attributionPosition?: AttributionPosition;
+  attributionPosition?: OrnamentPosition;
   logoEnabled?: boolean;
-  logoPosition?: LogoPosition;
+  logoPosition?: OrnamentPosition;
   compassEnabled?: boolean;
+  compassPosition?: OrnamentPosition;
   compassViewPosition?: number;
   compassViewMargins?: Point;
+  scaleBarEnabled?: boolean;
+  scaleBarPosition?: OrnamentPosition;
   surfaceView?: boolean;
   regionWillChangeDebounceTime?: number;
   regionDidChangeDebounceTime?: number;

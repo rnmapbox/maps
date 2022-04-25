@@ -15,6 +15,7 @@ import {
   toJSONString,
   isAndroid,
   viewPropTypes,
+  ornamentPositionPropType,
 } from '../utils';
 import {getFilter} from '../utils/filterUtils';
 import Logger from '../utils/Logger';
@@ -121,12 +122,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
     /**
      * Adds attribution offset, e.g. `{top: 8, left: 8}` will put attribution button in top-left corner of the map
      */
-    attributionPosition: PropTypes.oneOfType([
-      PropTypes.shape({top: PropTypes.number, left: PropTypes.number}),
-      PropTypes.shape({top: PropTypes.number, right: PropTypes.number}),
-      PropTypes.shape({bottom: PropTypes.number, left: PropTypes.number}),
-      PropTypes.shape({bottom: PropTypes.number, right: PropTypes.number}),
-    ]),
+    attributionPosition: ornamentPositionPropType,
 
     /**
      * MapView's tintColor
@@ -141,17 +137,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
     /**
      * Adds logo offset, e.g. `{top: 8, left: 8}` will put the logo in top-left corner of the map
      */
-    logoPosition: PropTypes.oneOfType([
-      PropTypes.shape({top: PropTypes.number, left: PropTypes.number}),
-      PropTypes.shape({top: PropTypes.number, right: PropTypes.number}),
-      PropTypes.shape({bottom: PropTypes.number, left: PropTypes.number}),
-      PropTypes.shape({bottom: PropTypes.number, right: PropTypes.number}),
-    ]),
-
-    /**
-     * Enable/Disable the scale bar from appearing on the map
-     */
-    scaleBarEnabled: PropTypes.bool,
+    logoPosition: ornamentPositionPropType,
 
     /**
      * Enable/Disable the compass from appearing on the map
@@ -159,14 +145,29 @@ class MapView extends NativeBridgeComponent(React.Component) {
     compassEnabled: PropTypes.bool,
 
     /**
-     * Change corner of map the compass starts at. 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight
+     * [`mapbox` (v10) implementation only] Adds compass offset, e.g. `{top: 8, left: 8}` will put the compass in top-left corner of the map
+     */
+    compassPosition: ornamentPositionPropType,
+
+    /**
+     * [`mapbox-gl` (v8) and `maplibre` implementation only] Change corner of map the compass starts at. 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight
      */
     compassViewPosition: PropTypes.number,
 
     /**
-     * Add margins to the compass with x and y values
+     * [`mapbox-gl` (v8) and `maplibre` implementation only] Add margins to the compass with x and y values
      */
     compassViewMargins: PropTypes.object,
+
+    /**
+     * [`mapbox` (v10) implementation only] Enable/Disable the scale bar from appearing on the map
+     */
+    scaleBarEnabled: PropTypes.bool,
+
+    /**
+     * [`mapbox` (v10) implementation only] Adds scale bar offset, e.g. `{top: 8, left: 8}` will put the scale bar in top-left corner of the map
+     */
+    scaleBarPosition: ornamentPositionPropType,
 
     /**
      * [Android only] Enable/Disable use of GLSurfaceView insted of TextureView.
@@ -627,8 +628,14 @@ class MapView extends NativeBridgeComponent(React.Component) {
     }
 
     if (config.bounds && config.bounds.ne && config.bounds.sw) {
-      const {ne, sw, paddingLeft, paddingRight, paddingTop, paddingBottom} =
-        config.bounds;
+      const {
+        ne,
+        sw,
+        paddingLeft,
+        paddingRight,
+        paddingTop,
+        paddingBottom,
+      } = config.bounds;
       stopConfig.bounds = toJSONString(makeLatLngBounds(ne, sw));
       stopConfig.boundsPaddingTop = paddingTop || 0;
       stopConfig.boundsPaddingRight = paddingRight || 0;
@@ -670,8 +677,10 @@ class MapView extends NativeBridgeComponent(React.Component) {
   }
 
   _onChange(e) {
-    const {regionWillChangeDebounceTime, regionDidChangeDebounceTime} =
-      this.props;
+    const {
+      regionWillChangeDebounceTime,
+      regionDidChangeDebounceTime,
+    } = this.props;
     const {type, payload} = e.nativeEvent;
     let propName = '';
 
