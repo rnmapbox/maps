@@ -10,6 +10,7 @@ enum OrnamentType {
   Logo = 'logo',
   Attribution = 'attribution',
   Compass = 'compass',
+  ScaleBar = 'scaleBar',
 }
 
 enum OrnamentPosition {
@@ -64,12 +65,14 @@ const ShowMap: FC<any> = props => {
     [OrnamentType.Logo]: undefined,
     [OrnamentType.Attribution]: undefined,
     [OrnamentType.Compass]: undefined,
+    [OrnamentType.ScaleBar]: undefined,
   });
 
   const [position, setPosition] = useState({
     [OrnamentType.Logo]: OrnamentPosition.BottomLeft,
     [OrnamentType.Attribution]: OrnamentPosition.BottomRight,
     [OrnamentType.Compass]: OrnamentPosition.TopRight,
+    [OrnamentType.ScaleBar]: OrnamentPosition.TopLeft,
   });
 
   const handlePressVisibility = (ornamentType: OrnamentType): void => {
@@ -115,7 +118,9 @@ const ShowMap: FC<any> = props => {
         attributionEnabled={visibility[OrnamentType.Attribution]}
         attributionPosition={POSITIONS[position[OrnamentType.Attribution]]}
         compassEnabled={visibility[OrnamentType.Compass]}
-        compassPosition={POSITIONS[position[OrnamentType.Compass]]}>
+        compassPosition={POSITIONS[position[OrnamentType.Compass]]}
+        scaleBarEnabled={visibility[OrnamentType.ScaleBar]}
+        scaleBarPosition={POSITIONS[position[OrnamentType.ScaleBar]]}>
         <MapboxGL.Camera />
       </MapboxGL.MapView>
 
@@ -141,6 +146,15 @@ const ShowMap: FC<any> = props => {
         <Text>Compass</Text>
         <OrnamentButtons
           ornamentType={OrnamentType.Compass}
+          visibility={visibility}
+          position={position}
+          onPressVisibility={handlePressVisibility}
+          onPressPosition={handlePressPosition}
+        />
+
+        <Text>ScaleBar</Text>
+        <OrnamentButtons
+          ornamentType={OrnamentType.ScaleBar}
           visibility={visibility}
           position={position}
           onPressVisibility={handlePressVisibility}
