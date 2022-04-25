@@ -86,6 +86,29 @@ open class RCTMGLMapView : MapView {
     }
   }
   
+  @objc func setReactScaleBarEnabled(_ value: Bool) {
+    self.mapView.ornaments.options.scaleBar.visibility = value ? .visible : .hidden
+  }
+
+  @objc func setReactZoomEnabled(_ value: Bool) {
+    self.mapView.gestures.options.quickZoomEnabled = value
+    self.mapView.gestures.options.doubleTapToZoomInEnabled = value
+    self.mapView.gestures.options.pinchZoomEnabled = value
+  }
+
+  @objc func setReactScrollEnabled(_ value: Bool) {
+    self.mapView.gestures.options.panEnabled = value
+    self.mapView.gestures.options.pinchPanEnabled = value
+  }
+
+  @objc func setReactRotateEnabled(_ value: Bool) {
+    self.mapView.gestures.options.pinchRotateEnabled = value
+  }
+
+  @objc func setReactPitchEnabled(_ value: Bool) {
+    self.mapView.gestures.options.pitchEnabled = value
+  }
+  
   @objc func setReactStyleURL(_ value: String?) {
     if let value = value {
       if let _ = URL(string: value) {
@@ -124,29 +147,6 @@ open class RCTMGLMapView : MapView {
       let event = RCTMGLEvent(type:.mapIdle, payload: self.buildStateObject());
       self.fireEvent(event: event, callback: self.reactOnMapChange!)
     })
-  }
-
-  @objc func setReactZoomEnabled(_ value: Bool) {
-    self.mapView.gestures.options.quickZoomEnabled = value
-    self.mapView.gestures.options.doubleTapToZoomInEnabled = value
-    self.mapView.gestures.options.pinchZoomEnabled = value
-  }
-
-  @objc func setReactScrollEnabled(_ value: Bool) {
-    self.mapView.gestures.options.panEnabled = value
-    self.mapView.gestures.options.pinchPanEnabled = value
-  }
-
-  @objc func setReactRotateEnabled(_ value: Bool) {
-    self.mapView.gestures.options.pinchRotateEnabled = value
-  }
-
-  @objc func setReactPitchEnabled(_ value: Bool) {
-    self.mapView.gestures.options.pitchEnabled = value
-  }
-
-  @objc func setReactScaleBarEnabled(_ value: Bool) {
-    self.mapView.ornaments.options.scaleBar.visibility = value ? .visible : .hidden
   }
     
   private func fireEvent(event: RCTMGLEvent, callback: @escaping RCTBubblingEventBlock) {
