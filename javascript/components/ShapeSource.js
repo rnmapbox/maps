@@ -64,6 +64,7 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
     clusterMaxZoomLevel: PropTypes.number,
 
     /**
+     * [`mapbox-gl` (v8) implementation only]
      * Specifies custom properties on the generated clusters if clustering
      * is enabled, aggregating values from clustered points.
      *
