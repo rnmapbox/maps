@@ -140,11 +140,6 @@ class MapView extends NativeBridgeComponent(React.Component) {
     logoPosition: ornamentPositionPropType,
 
     /**
-     * Enable/Disable the scale bar from appearing on the map
-     */
-    scaleBarEnabled: PropTypes.bool,
-
-    /**
      * Enable/Disable the compass from appearing on the map
      */
     compassEnabled: PropTypes.bool,
@@ -163,6 +158,16 @@ class MapView extends NativeBridgeComponent(React.Component) {
      * [`mapbox-gl` (v8) and `maplibre` implementation only] Add margins to the compass with x and y values
      */
     compassViewMargins: PropTypes.object,
+
+    /**
+     * [`mapbox` (v10) implementation only] Enable/Disable the scale bar from appearing on the map
+     */
+    scaleBarEnabled: PropTypes.bool,
+
+    /**
+     * [`mapbox` (v10) implementation only] Adds scale bar offset, e.g. `{top: 8, left: 8}` will put the scale bar in top-left corner of the map
+     */
+    scaleBarPosition: ornamentPositionPropType,
 
     /**
      * [Android only] Enable/Disable use of GLSurfaceView insted of TextureView.

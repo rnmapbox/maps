@@ -89,6 +89,13 @@ open class RCTMGLMapView : MapView {
   @objc func setReactScaleBarEnabled(_ value: Bool) {
     self.mapView.ornaments.options.scaleBar.visibility = value ? .visible : .hidden
   }
+  
+  @objc func setReactScaleBarPosition(_ position: [String: Int]!) {
+    if let ornamentOptions = self.getOrnamentOptionsFromPosition(position) {
+      mapView.ornaments.options.scaleBar.position = ornamentOptions.position
+      mapView.ornaments.options.scaleBar.margins = ornamentOptions.margins
+    }
+  }
 
   @objc func setReactZoomEnabled(_ value: Bool) {
     self.mapView.gestures.options.quickZoomEnabled = value

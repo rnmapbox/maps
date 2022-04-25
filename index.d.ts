@@ -477,7 +477,6 @@ export interface MapViewProps extends ViewProps {
   styleJSON?: string;
   preferredFramesPerSecond?: number;
   localizeLabels?: boolean;
-  scaleBarEnabled?: boolean;
   zoomEnabled?: boolean;
   scrollEnabled?: boolean;
   pitchEnabled?: boolean;
@@ -490,6 +489,8 @@ export interface MapViewProps extends ViewProps {
   compassPosition?: OrnamentPosition;
   compassViewPosition?: number;
   compassViewMargins?: Point;
+  scaleBarEnabled?: boolean;
+  scaleBarPosition?: OrnamentPosition;
   surfaceView?: boolean;
   regionWillChangeDebounceTime?: number;
   regionDidChangeDebounceTime?: number;
