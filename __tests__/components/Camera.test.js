@@ -942,6 +942,7 @@ describe('Camera', () => {
           defaultSettings: {
             centerCoordinate: [-111.8678, 40.2866],
             zoomLevel: 16,
+            animationMode: 'moveTo',
           },
         };
 
@@ -950,7 +951,7 @@ describe('Camera', () => {
             '{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[-111.8678,40.2866]}}',
           duration: 0,
           heading: undefined,
-          mode: 'None',
+          mode: 'Move',
           pitch: undefined,
           zoom: 16,
           paddingBottom: 0,
@@ -969,6 +970,7 @@ describe('Camera', () => {
       const camera = new Camera();
       const configWithoutBounds = {
         animationDuration: 2000,
+        animationMode: 'easeTo',
         pitch: 45,
         heading: 110,
         zoomLevel: 9,
@@ -1098,11 +1100,11 @@ describe('Camera', () => {
       test('returns "None" for "moveTo"', () => {
         expect(
           camera._getNativeCameraMode({animationMode: 'moveTo'}),
-        ).toStrictEqual('None');
+        ).toStrictEqual('Move');
       });
 
-      test('returns "Ease" as default', () => {
-        expect(camera._getNativeCameraMode({})).toStrictEqual('Ease');
+      test('returns "Move" as default (TODO: This should eventually fall back to None)', () => {
+        expect(camera._getNativeCameraMode({})).toStrictEqual('Move');
       });
     });
 

@@ -40,7 +40,7 @@ NativeModules.MGLModule = {
     'DidFinishLoadingStyle',
     'SetCameraComplete',
   ]),
-  CameraModes: keyMirror(['Flight', 'Ease', 'None']),
+  CameraModes: keyMirror(['Flight', 'Ease', 'Linear', 'None', 'Move']),
   StyleSource: keyMirror(['DefaultSourceID']),
   InterpolationMode: keyMirror([
     'Exponential',

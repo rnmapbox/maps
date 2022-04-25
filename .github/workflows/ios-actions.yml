@@ -17,6 +17,9 @@ on:
       MAPBOX_DOWNLOAD_TOKEN:
         required: true
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: macos-latest
