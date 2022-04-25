@@ -40,14 +40,14 @@ open class RCTMGLMapView : MapView {
     let top = position["top"]
     let bottom = position["bottom"]
     
-    if left != nil && top != nil {
-      return (OrnamentPosition.topLeft, CGPoint(x: left!, y: top!))
-    } else if right != nil && top != nil {
-      return (OrnamentPosition.topRight, CGPoint(x: right!, y: top!))
-    } else if bottom != nil && right != nil {
-      return (OrnamentPosition.bottomRight, CGPoint(x: right!, y: bottom!))
-    } else if bottom != nil && left != nil {
-      return (OrnamentPosition.bottomLeft, CGPoint(x: left!, y: bottom!))
+    if let left = left, let top = top {
+      return (OrnamentPosition.topLeft, CGPoint(x: left, y: top))
+    } else if let right = right, let top = top {
+      return (OrnamentPosition.topRight, CGPoint(x: right, y: top))
+    } else if let bottom = bottom, let right = right {
+      return (OrnamentPosition.bottomRight, CGPoint(x: right, y: bottom))
+    } else if let bottom = bottom, let left = left {
+      return (OrnamentPosition.bottomLeft, CGPoint(x: left, y: bottom))
     }
     
     return nil
