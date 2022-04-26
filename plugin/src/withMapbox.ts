@@ -47,7 +47,6 @@ const withCocoaPodsInstallerBlocks: ConfigPlugin<MapboxPlugProps> = (
 ) => {
   return withDangerousMod(c, [
     'ios',
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     async (config) => {
       const file = path.join(config.modRequest.platformProjectRoot, 'Podfile');
 

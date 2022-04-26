@@ -1,4 +1,3 @@
-/* eslint-disable func-names */
 let iosPropNameOverrides = {};
 
 const iosSpecOverrides = {

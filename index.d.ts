@@ -328,7 +328,7 @@ declare namespace MapboxGL {
   }
   class MarkerView extends Component<MarkerViewProps> {}
   class Callout extends Component<CalloutProps> {}
-  interface Style extends React.FC<StyleProps> {}
+  type Style = React.FC<StyleProps>;
 
   /**
    * Sources
@@ -939,7 +939,7 @@ export interface RasterSourceProps extends TileSourceProps {
   tileSize?: number;
 }
 
-export interface LayerBaseProps<T = {}> extends Omit<ViewProps, 'style'> {
+export interface LayerBaseProps<T = object> extends Omit<ViewProps, 'style'> {
   id: string;
   sourceID?: string;
   sourceLayerID?: string;

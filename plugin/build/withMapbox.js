@@ -28,7 +28,6 @@ catch (_a) {
 const withCocoaPodsInstallerBlocks = (c, { RNMapboxMapsImpl, RNMapboxMapsDownloadToken }) => {
     return (0, config_plugins_1.withDangerousMod)(c, [
         'ios',
-        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         async (config) => {
             const file = path_1.default.join(config.modRequest.platformProjectRoot, 'Podfile');
             const contents = await fs_1.promises.readFile(file, 'utf8');
