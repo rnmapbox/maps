@@ -1,4 +1,4 @@
-import MapboxMaps
+@_spi(Restricted) import MapboxMaps
 import Turf
 import MapKit
 
@@ -31,7 +31,91 @@ open class RCTMGLMapView : MapView {
   var mapView : MapView {
     get { return self }
   }
+  
+  // MARK: - React Native properties
+  
+  private func getOrnamentOptionsFromPosition(_ position: [String: Int]!) -> (position: OrnamentPosition, margins: CGPoint)? {
+    let left = position["left"]
+    let right = position["right"]
+    let top = position["top"]
+    let bottom = position["bottom"]
+    
+    if let left = left, let top = top {
+      return (OrnamentPosition.topLeft, CGPoint(x: left, y: top))
+    } else if let right = right, let top = top {
+      return (OrnamentPosition.topRight, CGPoint(x: right, y: top))
+    } else if let bottom = bottom, let right = right {
+      return (OrnamentPosition.bottomRight, CGPoint(x: right, y: bottom))
+    } else if let bottom = bottom, let left = left {
+      return (OrnamentPosition.bottomLeft, CGPoint(x: left, y: bottom))
+    }
+    
+    return nil
+  }
+  
+  @objc func setReactAttributionEnabled(_ value: Bool) {
+    mapView.ornaments.options.attributionButton.visibility = value ? .visible : .hidden
+  }
+  
+  @objc func setReactAttributionPosition(_ position: [String: Int]!) {
+    if let ornamentOptions = self.getOrnamentOptionsFromPosition(position) {
+      mapView.ornaments.options.attributionButton.position = ornamentOptions.position
+      mapView.ornaments.options.attributionButton.margins = ornamentOptions.margins
+    }
+  }
+  
+  @objc func setReactLogoEnabled(_ value: Bool) {
+    mapView.ornaments.options.logo.visibility = value ? .visible : .hidden
+  }
+  
+  @objc func setReactLogoPosition(_ position: [String: Int]!) {
+    if let ornamentOptions = self.getOrnamentOptionsFromPosition(position) {
+      mapView.ornaments.options.logo.position = ornamentOptions.position
+      mapView.ornaments.options.logo.margins = ornamentOptions.margins
+    }
+  }
+  
+  @objc func setReactCompassEnabled(_ value: Bool) {
+    mapView.ornaments.options.compass.visibility = value ? .visible : .hidden
+  }
+  
+  @objc func setReactCompassPosition(_ position: [String: Int]!) {
+    if let ornamentOptions = self.getOrnamentOptionsFromPosition(position) {
+      mapView.ornaments.options.compass.position = ornamentOptions.position
+      mapView.ornaments.options.compass.margins = ornamentOptions.margins
+    }
+  }
+  
+  @objc func setReactScaleBarEnabled(_ value: Bool) {
+    self.mapView.ornaments.options.scaleBar.visibility = value ? .visible : .hidden
+  }
+  
+  @objc func setReactScaleBarPosition(_ position: [String: Int]!) {
+    if let ornamentOptions = self.getOrnamentOptionsFromPosition(position) {
+      mapView.ornaments.options.scaleBar.position = ornamentOptions.position
+      mapView.ornaments.options.scaleBar.margins = ornamentOptions.margins
+    }
+  }
 
+  @objc func setReactZoomEnabled(_ value: Bool) {
+    self.mapView.gestures.options.quickZoomEnabled = value
+    self.mapView.gestures.options.doubleTapToZoomInEnabled = value
+    self.mapView.gestures.options.pinchZoomEnabled = value
+  }
+
+  @objc func setReactScrollEnabled(_ value: Bool) {
+    self.mapView.gestures.options.panEnabled = value
+    self.mapView.gestures.options.pinchPanEnabled = value
+  }
+
+  @objc func setReactRotateEnabled(_ value: Bool) {
+    self.mapView.gestures.options.pinchRotateEnabled = value
+  }
+
+  @objc func setReactPitchEnabled(_ value: Bool) {
+    self.mapView.gestures.options.pitchEnabled = value
+  }
+  
   @objc func setReactStyleURL(_ value: String?) {
     if let value = value {
       if let _ = URL(string: value) {
@@ -70,29 +154,6 @@ open class RCTMGLMapView : MapView {
       let event = RCTMGLEvent(type:.mapIdle, payload: self.buildStateObject());
       self.fireEvent(event: event, callback: self.reactOnMapChange!)
     })
-  }
-
-  @objc func setReactZoomEnabled(_ value: Bool) {
-    self.mapView.gestures.options.quickZoomEnabled = value
-    self.mapView.gestures.options.doubleTapToZoomInEnabled = value
-    self.mapView.gestures.options.pinchZoomEnabled = value
-  }
-
-  @objc func setReactScrollEnabled(_ value: Bool) {
-    self.mapView.gestures.options.panEnabled = value
-    self.mapView.gestures.options.pinchPanEnabled = value
-  }
-
-  @objc func setReactRotateEnabled(_ value: Bool) {
-    self.mapView.gestures.options.pinchRotateEnabled = value
-  }
-
-  @objc func setReactPitchEnabled(_ value: Bool) {
-    self.mapView.gestures.options.pitchEnabled = value
-  }
-
-  @objc func setReactScaleBarEnabled(_ value: Bool) {
-    self.mapView.ornaments.options.scaleBar.visibility = value ? .visible : .hidden
   }
     
   private func fireEvent(event: RCTMGLEvent, callback: @escaping RCTBubblingEventBlock) {

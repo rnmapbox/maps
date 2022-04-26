@@ -51,6 +51,7 @@ import ShowRegionDidChange from '../examples/Map/ShowRegionDidChange';
 import SourceLayerVisibility from '../examples/Map/SourceLayerVisibility';
 import StyleJson from '../examples/Map/StyleJson';
 import TwoByTwo from '../examples/Map/TwoByTwo';
+import Ornaments from '../examples/Map/Ornaments';
 // SYMBOLCIRCLELAYER
 import CustomIcon from '../examples/SymbolCircleLayer/CustomIcon';
 import DataDrivenCircleColors from '../examples/SymbolCircleLayer/DataDrivenCircleColors';
@@ -137,6 +138,7 @@ const Examples = [
     new ExampleItem('Source Layer Visiblity', SourceLayerVisibility),
     new ExampleItem('Style JSON', StyleJson),
     new ExampleItem('Set Tint Color', SetTintColor),
+    new ExampleItem('Ornaments', Ornaments),
   ]),
   new ExampleGroup('Camera', [
     new ExampleItem('Fit (Bounds, Center/Zoom, Padding)', Fit),

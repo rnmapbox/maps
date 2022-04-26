@@ -64,6 +64,21 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
     clusterMaxZoomLevel: PropTypes.number,
 
     /**
+     * [`mapbox-gl` (v8) implementation only]
+     * Specifies custom properties on the generated clusters if clustering
+     * is enabled, aggregating values from clustered points.
+     *
+     * Has the form `{ "property_name": [operator, map_expression]}`, where
+     *  `operator` is a custom reduce expression that references a special `["accumulated"]` value -
+     *   it accumulates the property value from clusters/points the cluster contains
+     *  `map_expression` produces the value of a single point
+     *
+     * Example: `{ "resultingSum": [["+", ["accumulated"], ["get", "resultingSum"]], ["get", "scalerank"]] }`
+     *
+     */
+    clusterProperties: PropTypes.object,
+
+    /**
      * Specifies the maximum zoom level at which to create vector tiles.
      * A greater value produces greater detail at high zoom levels.
      * The default value is 18.
@@ -324,6 +339,7 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
       cluster: this.props.cluster ? 1 : 0,
       clusterRadius: this.props.clusterRadius,
       clusterMaxZoomLevel: this.props.clusterMaxZoomLevel,
+      clusterProperties: this.props.clusterProperties,
       maxZoomLevel: this.props.maxZoomLevel,
       buffer: this.props.buffer,
       tolerance: this.props.tolerance,

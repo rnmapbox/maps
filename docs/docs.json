@@ -2972,7 +2972,7 @@
       {
         "name": "attributionPosition",
         "required": false,
-        "type": "union",
+        "type": "custom",
         "default": "none",
         "description": "Adds attribution offset, e.g. `{top: 8, left: 8}` will put attribution button in top-left corner of the map"
       },
@@ -2993,16 +2993,9 @@
       {
         "name": "logoPosition",
         "required": false,
-        "type": "union",
+        "type": "custom",
         "default": "none",
         "description": "Adds logo offset, e.g. `{top: 8, left: 8}` will put the logo in top-left corner of the map"
-      },
-      {
-        "name": "scaleBarEnabled",
-        "required": false,
-        "type": "bool",
-        "default": "true",
-        "description": "Enable/Disable the scale bar from appearing on the map"
       },
       {
         "name": "compassEnabled",
@@ -3012,18 +3005,39 @@
         "description": "Enable/Disable the compass from appearing on the map"
       },
       {
+        "name": "compassPosition",
+        "required": false,
+        "type": "custom",
+        "default": "none",
+        "description": "[`mapbox` (v10) implementation only] Adds compass offset, e.g. `{top: 8, left: 8}` will put the compass in top-left corner of the map"
+      },
+      {
         "name": "compassViewPosition",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "Change corner of map the compass starts at. 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight"
+        "description": "[`mapbox-gl` (v8) and `maplibre` implementation only] Change corner of map the compass starts at. 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight"
       },
       {
         "name": "compassViewMargins",
         "required": false,
         "type": "object",
         "default": "none",
-        "description": "Add margins to the compass with x and y values"
+        "description": "[`mapbox-gl` (v8) and `maplibre` implementation only] Add margins to the compass with x and y values"
+      },
+      {
+        "name": "scaleBarEnabled",
+        "required": false,
+        "type": "bool",
+        "default": "true",
+        "description": "[`mapbox` (v10) implementation only] Enable/Disable the scale bar from appearing on the map"
+      },
+      {
+        "name": "scaleBarPosition",
+        "required": false,
+        "type": "custom",
+        "default": "none",
+        "description": "[`mapbox` (v10) implementation only] Adds scale bar offset, e.g. `{top: 8, left: 8}` will put the scale bar in top-left corner of the map"
       },
       {
         "name": "surfaceView",
@@ -4005,6 +4019,13 @@
         "type": "number",
         "default": "none",
         "description": "Specifies the maximum zoom level at which to cluster points if clustering is enabled.\nDefaults to one zoom level less than the value of maxZoomLevel so that, at the maximum zoom level,\nthe shapes are not clustered."
+      },
+      {
+        "name": "clusterProperties",
+        "required": false,
+        "type": "object",
+        "default": "none",
+        "description": "[`mapbox-gl` (v8) implementation only]\nSpecifies custom properties on the generated clusters if clustering\nis enabled, aggregating values from clustered points.\n\nHas the form `{ \"property_name\": [operator, map_expression]}`, where\n `operator` is a custom reduce expression that references a special `[\"accumulated\"]` value -\n  it accumulates the property value from clusters/points the cluster contains\n `map_expression` produces the value of a single point\n\nExample: `{ \"resultingSum\": [[\"+\", [\"accumulated\"], [\"get\", \"resultingSum\"]], [\"get\", \"scalerank\"]] }`"
       },
       {
         "name": "maxZoomLevel",

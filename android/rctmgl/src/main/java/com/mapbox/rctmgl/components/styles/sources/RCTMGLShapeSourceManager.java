@@ -18,11 +18,13 @@ import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.rctmgl.components.AbstractEventEmitter;
 import com.mapbox.rctmgl.components.annotation.RCTMGLCallout;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
 import com.mapbox.rctmgl.events.constants.EventKeys;
+import com.mapbox.rctmgl.utils.ClusterPropertyEntry;
 import com.mapbox.rctmgl.utils.ExpressionParser;
 import com.mapbox.rctmgl.utils.ImageEntry;
 import com.mapbox.rctmgl.utils.ResourceUtils;
@@ -113,6 +115,30 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
         source.setClusterMaxZoom(clusterMaxZoom);
     }
 
+    @ReactProp(name = "clusterProperties")
+    public void setClusterProperties(RCTMGLShapeSource source, ReadableMap map) {
+        List<Map.Entry<String, ClusterPropertyEntry>> properties = new ArrayList<>();
+
+        ReadableMapKeySetIterator iterator = map.keySetIterator();
+        while (iterator.hasNextKey()) {
+            String name = iterator.nextKey();
+            ReadableArray expressions = map.getArray(name);
+
+            Expression operator;
+            if (expressions.getType(0) == ReadableType.Array) {
+                operator = ExpressionParser.from(expressions.getArray(0));
+            } else {
+                operator = Expression.literal(expressions.getString(0));
+            }
+
+            Expression mapping = ExpressionParser.from(expressions.getArray(1));
+
+            properties.add(new AbstractMap.SimpleEntry<>(name, new ClusterPropertyEntry(operator, mapping)));
+        }
+
+        source.setClusterProperties(properties);
+    }
+
     @ReactProp(name = "maxZoomLevel")
     public void setMaxZoomLevel(RCTMGLShapeSource source, int maxZoom) {
         source.setMaxZoom(maxZoom);
@@ -175,7 +201,7 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
                 .put("getClusterExpansionZoomById", METHOD_GET_CLUSTER_EXPANSION_ZOOM_BY_ID)
                 .put("getClusterLeavesById", METHOD_GET_CLUSTER_LEAVES_BY_ID)
                 .put("getClusterChildrenById", METHOD_GET_CLUSTER_CHILDREN_BY_ID)
-               
+
                 .build();
     }
 
@@ -202,7 +228,7 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
             case METHOD_GET_CLUSTER_CHILDREN:
                 source.getClusterChildren(
                         args.getString(0),
-                        args.getString(1)                        
+                        args.getString(1)
                 );
                 break;
             case METHOD_GET_CLUSTER_EXPANSION_ZOOM_BY_ID:
@@ -219,7 +245,7 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
             case METHOD_GET_CLUSTER_CHILDREN_BY_ID:
                 source.getClusterChildrenById(
                         args.getString(0),
-                        args.getInt(1)                        
+                        args.getInt(1)
                 );
                 break;
         }
