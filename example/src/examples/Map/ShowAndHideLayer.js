@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text} from 'react-native';
+import { Text } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
@@ -12,7 +12,7 @@ const defaultCamera = {
 };
 
 const styles = {
-  mapView: {flex: 1},
+  mapView: { flex: 1 },
 };
 
 class ShowAndHideLayer extends React.Component {
@@ -35,12 +35,13 @@ class ShowAndHideLayer extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          ref={c => (this._map = c)}
+          ref={(c) => (this._map = c)}
           onPress={this.onPress}
-          style={styles.mapView}>
+          style={styles.mapView}
+        >
           <MapboxGL.Camera defaultSettings={defaultCamera} />
-          <MapboxGL.FillLayer id="building" style={{visibility}} />
-          <MapboxGL.LineLayer id="building-outline" style={{visibility}} />
+          <MapboxGL.FillLayer id="building" style={{ visibility }} />
+          <MapboxGL.LineLayer id="building-outline" style={{ visibility }} />
         </MapboxGL.MapView>
         <Bubble onPress={this.onPress}>
           <Text>{this.state.show ? 'Hide Buildings' : 'Show Buildings'}</Text>

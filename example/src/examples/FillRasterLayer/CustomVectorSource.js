@@ -1,6 +1,6 @@
 import React from 'react';
 import MapboxGL from '@rnmapbox/maps';
-import {Text} from 'react-native';
+import { Text } from 'react-native';
 
 import sheet from '../../styles/sheet';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
@@ -39,11 +39,11 @@ class CustomVectorSource extends React.PureComponent {
     const features = await this._vectorSource.features([
       'react-native-example',
     ]);
-    this.setState({featuresCount: features.features.length});
+    this.setState({ featuresCount: features.features.length });
   };
 
   render() {
-    const {featuresCount} = this.state;
+    const { featuresCount } = this.state;
     return (
       <Page {...this.props}>
         <MapboxGL.MapView style={sheet.matchParent}>
@@ -55,12 +55,13 @@ class CustomVectorSource extends React.PureComponent {
           <MapboxGL.VectorSource
             id="customSourceExample"
             url={VECTOR_SOURCE_URL}
-            ref={source => {
+            ref={(source) => {
               this._vectorSource = source;
             }}
-            onPress={e => {
+            onPress={(e) => {
               console.log(`VectorSource onPress: ${e.features}`, e.features);
-            }}>
+            }}
+          >
             <MapboxGL.FillLayer
               id="customSourceFill"
               sourceLayerID="react-native-example"

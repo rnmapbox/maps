@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text} from 'react-native';
+import { Text } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';

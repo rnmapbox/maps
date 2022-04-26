@@ -73,13 +73,10 @@ module.exports = {
     'no-underscore-dangle': [0],
     'no-await-in-loop': 0,
     'no-restricted-syntax': 0,
-    'no-use-before-define': ['error', {functions: false}],
-    'no-unused-expressions': ['error', {allowTaggedTemplates: true}],
-    'no-plusplus': ['error', {allowForLoopAfterthoughts: true}],
+    'no-use-before-define': ['error', { functions: false }],
+    'no-unused-expressions': ['error', { allowTaggedTemplates: true }],
+    'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'fp/no-mutating-methods': 'warn',
-
-    // TODO: Remove after codebase has been reformatted: https://github.com/rnmapbox/maps/issues/1859
-    'prettier/prettier': 'off',
   },
   overrides: [
     {
@@ -99,9 +96,7 @@ module.exports = {
       ],
       rules: {
         'no-shadow': 'off',
-
-        // TODO: Remove after codebase has been reformatted: https://github.com/rnmapbox/maps/issues/1859
-        'prettier/prettier': 'off',
+        'import/named': 'off',
       },
     },
   ],

@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const {exec} = require('child_process');
+const { exec } = require('child_process');
 
 const dir = require('node-dir');
 const docgen = require('react-docgen');
@@ -80,8 +80,8 @@ class DocJSONBuilder {
         };
 
         if (prop.type === 'enum') {
-          docStyle.values = Object.keys(prop.doc.values).map(value => {
-            return {value, doc: prop.doc.values[value].doc};
+          docStyle.values = Object.keys(prop.doc.values).map((value) => {
+            return { value, doc: prop.doc.values[value].doc };
           });
         } else if (prop.type === 'array') {
           docStyle.type = `${docStyle.type}<${prop.value}>`;
@@ -164,16 +164,16 @@ class DocJSONBuilder {
         propMeta.type.value
       ) {
         const type = propMeta.type.value;
-        const value = Object.keys(type).map(_name =>
+        const value = Object.keys(type).map((_name) =>
           mapProp(mapNestedProp(type[_name]), _name, false),
         );
-        result.type = {name: 'shape', value};
+        result.type = { name: 'shape', value };
       }
       return result;
     }
 
     // props
-    component.props = Object.keys(component.props).map(propName => {
+    component.props = Object.keys(component.props).map((propName) => {
       const propMeta = component.props[propName];
 
       return mapProp(propMeta, propName, false);
@@ -190,8 +190,8 @@ class DocJSONBuilder {
       if (method.docblock) {
         const examples = method.docblock
           .split('@')
-          .filter(block => block.startsWith('example'));
-        method.examples = examples.map(example =>
+          .filter((block) => block.startsWith('example'));
+        method.examples = examples.map((example) =>
           example.substring('example'.length),
         );
       }
@@ -199,7 +199,7 @@ class DocJSONBuilder {
     privateMethods.push(...IGNORE_METHODS);
 
     component.methods = component.methods.filter(
-      method => !privateMethods.includes(method.name),
+      (method) => !privateMethods.includes(method.name),
     );
   }
 

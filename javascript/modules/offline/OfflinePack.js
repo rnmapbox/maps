@@ -1,4 +1,4 @@
-import {NativeModules} from 'react-native';
+import { NativeModules } from 'react-native';
 
 const MapboxGLOfflineManager = NativeModules.MGLOfflineModule;
 
@@ -9,7 +9,7 @@ class OfflinePack {
   }
 
   get name() {
-    const {metadata} = this;
+    const { metadata } = this;
     return metadata && metadata.name;
   }
 

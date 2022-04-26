@@ -1,7 +1,7 @@
 import React from 'react';
-import {Text} from 'react-native';
+import { Text } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
-import {featureCollection, feature} from '@turf/helpers';
+import { featureCollection, feature } from '@turf/helpers';
 
 import sheet from '../../styles/sheet';
 import exampleIcon from '../../assets/example.png';
@@ -44,7 +44,7 @@ class CustomIcon extends React.Component {
     });
   }
 
-  onSourceLayerPress({features, coordinates, point}) {
+  onSourceLayerPress({ features, coordinates, point }) {
     console.log(
       'You pressed a layer here are your features:',
       features,
@@ -57,9 +57,10 @@ class CustomIcon extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          ref={c => (this._map = c)}
+          ref={(c) => (this._map = c)}
           onPress={this.onPress}
-          style={sheet.matchParent}>
+          style={sheet.matchParent}
+        >
           <MapboxGL.Camera
             zoomLevel={9}
             centerCoordinate={[-73.970895, 40.723279]}
@@ -67,9 +68,10 @@ class CustomIcon extends React.Component {
 
           <MapboxGL.ShapeSource
             id="symbolLocationSource"
-            hitbox={{width: 20, height: 20}}
+            hitbox={{ width: 20, height: 20 }}
             onPress={this.onSourceLayerPress}
-            shape={this.state.featureCollection}>
+            shape={this.state.featureCollection}
+          >
             <MapboxGL.SymbolLayer
               id="symbolLocationSymbols"
               minZoomLevel={1}

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text} from 'react-native';
+import { Text } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
@@ -12,7 +12,7 @@ const defaultCamera = {
 };
 
 const styles = {
-  mapView: {flex: 1},
+  mapView: { flex: 1 },
 };
 
 class SourceLayerVisibility extends React.Component {
@@ -39,9 +39,10 @@ class SourceLayerVisibility extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          ref={c => (this._map = c)}
+          ref={(c) => (this._map = c)}
           onPress={this.onPress}
-          style={styles.mapView}>
+          style={styles.mapView}
+        >
           <MapboxGL.Camera defaultSettings={defaultCamera} />
         </MapboxGL.MapView>
         <Bubble onPress={this.onPress}>

@@ -1,17 +1,17 @@
 import React from 'react';
-import {Text} from 'react-native';
+import { Text } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
-import {onSortOptions} from '../../utils';
+import { onSortOptions } from '../../utils';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import TabBarPage from '../common/TabBarPage';
 import Bubble from '../common/Bubble';
 
 const styles = {
-  bubbleOne: {bottom: 80},
-  bubbleTwo: {bottom: 150},
-  bubbleThree: {bottom: 220},
+  bubbleOne: { bottom: 80 },
+  bubbleTwo: { bottom: 150 },
+  bubbleThree: { bottom: 220 },
 };
 
 class SetUserTrackingModes extends React.Component {
@@ -23,7 +23,7 @@ class SetUserTrackingModes extends React.Component {
     super(props);
 
     this._trackingOptions = Object.keys(MapboxGL.UserTrackingModes)
-      .map(key => {
+      .map((key) => {
         return {
           label: key,
           data: MapboxGL.UserTrackingModes[key],
@@ -58,12 +58,12 @@ class SetUserTrackingModes extends React.Component {
   }
 
   onUserTrackingModeChange(e) {
-    const {followUserMode} = e.nativeEvent.payload;
-    this.setState({currentTrackingMode: followUserMode || 'none'});
+    const { followUserMode } = e.nativeEvent.payload;
+    this.setState({ currentTrackingMode: followUserMode || 'none' });
   }
 
   onToggleUserLocation() {
-    this.setState({showUserLocation: !this.state.showUserLocation});
+    this.setState({ showUserLocation: !this.state.showUserLocation });
   }
 
   onToggleHeadingIndicator() {
@@ -92,7 +92,8 @@ class SetUserTrackingModes extends React.Component {
         scrollable
         initialIndex={3}
         options={this._trackingOptions}
-        onOptionPress={this.onTrackingChange}>
+        onOptionPress={this.onTrackingChange}
+      >
         <MapboxGL.MapView style={sheet.matchParent}>
           <MapboxGL.UserLocation
             visible={this.state.showUserLocation}
@@ -129,7 +130,8 @@ class SetUserTrackingModes extends React.Component {
 
         <Bubble
           onPress={this.onToggleHeadingIndicator}
-          style={styles.bubbleThree}>
+          style={styles.bubbleThree}
+        >
           <Text>
             Toggle user heading indicator:{' '}
             {this.state.showsUserHeadingIndicator ? 'true' : 'false'}

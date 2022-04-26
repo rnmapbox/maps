@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {NativeModules, requireNativeComponent} from 'react-native';
+import { NativeModules, requireNativeComponent } from 'react-native';
 
-import {toJSONString, viewPropTypes, existenceChange} from '../utils';
+import { toJSONString, viewPropTypes, existenceChange } from '../utils';
 import * as geoUtils from '../utils/geoUtils';
 
 const MapboxGL = NativeModules.MGLModule;
@@ -230,11 +230,11 @@ class Camera extends React.Component {
     }
 
     if (c.followUserLocation && !n.followUserLocation) {
-      this.refs.camera.setNativeProps({followUserLocation: false});
+      this.refs.camera.setNativeProps({ followUserLocation: false });
       return;
     }
     if (!c.followUserLocation && n.followUserLocation) {
-      this.refs.camera.setNativeProps({followUserLocation: true});
+      this.refs.camera.setNativeProps({ followUserLocation: true });
     }
 
     if (n.followUserLocation) {
@@ -550,7 +550,7 @@ class Camera extends React.Component {
       cameraConfig = this._createStopConfig(config);
     }
 
-    this.refs.camera.setNativeProps({stop: cameraConfig});
+    this.refs.camera.setNativeProps({ stop: cameraConfig });
   }
 
   _createDefaultCamera() {
@@ -591,7 +591,7 @@ class Camera extends React.Component {
     }
 
     if (config.bounds && config.bounds.ne && config.bounds.sw) {
-      const {ne, sw} = config.bounds;
+      const { ne, sw } = config.bounds;
       stopConfig.bounds = toJSONString(geoUtils.makeLatLngBounds(ne, sw));
     }
 

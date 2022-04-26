@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, fireEvent} from '@testing-library/react-native';
+import { render, fireEvent } from '@testing-library/react-native';
 
 import UserLocation from '../../javascript/components/UserLocation';
 import ShapeSource from '../../javascript/components/ShapeSource';
@@ -34,8 +34,8 @@ describe('UserLocation', () => {
       jest.clearAllMocks();
     });
 
-    test('renders with CircleLayers by default', done => {
-      const {UNSAFE_getAllByType} = render(<UserLocation />);
+    test('renders with CircleLayers by default', (done) => {
+      const { UNSAFE_getAllByType } = render(<UserLocation />);
 
       setTimeout(() => {
         const shapeSource = UNSAFE_getAllByType(ShapeSource);
@@ -47,8 +47,8 @@ describe('UserLocation', () => {
       });
     });
 
-    test('does not render with visible set to false', done => {
-      const {UNSAFE_queryByType} = render(<UserLocation visible={false} />);
+    test('does not render with visible set to false', (done) => {
+      const { UNSAFE_queryByType } = render(<UserLocation visible={false} />);
 
       setTimeout(() => {
         const shapeSource = UNSAFE_queryByType(ShapeSource);
@@ -60,7 +60,7 @@ describe('UserLocation', () => {
       });
     });
 
-    test('renders with CustomChild when provided', done => {
+    test('renders with CustomChild when provided', (done) => {
       const circleLayerProps = {
         key: 'testUserLocationCircle',
         id: 'testUserLocationCircle',
@@ -72,7 +72,7 @@ describe('UserLocation', () => {
         },
       };
 
-      const {UNSAFE_queryByType, UNSAFE_queryAllByType} = render(
+      const { UNSAFE_queryByType, UNSAFE_queryAllByType } = render(
         <UserLocation>
           <CircleLayer {...circleLayerProps} />
         </UserLocation>,
@@ -115,7 +115,7 @@ describe('UserLocation', () => {
     test('calls onPress callback when location icon is pressed', () => {
       const onPressCallback = jest.fn();
 
-      const {UNSAFE_queryByType} = render(
+      const { UNSAFE_queryByType } = render(
         <UserLocation onPress={onPressCallback} />,
       );
 
@@ -126,7 +126,7 @@ describe('UserLocation', () => {
     });
 
     test('correctly unmounts', async () => {
-      const {unmount} = render(<UserLocation />);
+      const { unmount } = render(<UserLocation />);
 
       expect(locationManager.addListener).toHaveBeenCalled();
       expect(locationManager.removeListener).not.toHaveBeenCalled();
@@ -179,7 +179,7 @@ describe('UserLocation', () => {
 
         expect(ul.locationManagerRunning).toStrictEqual(false);
 
-        await ul.setLocationManager({running: true});
+        await ul.setLocationManager({ running: true });
 
         expect(ul.locationManagerRunning).toStrictEqual(true);
         expect(locationManager.start).toHaveBeenCalledTimes(1);
@@ -195,11 +195,11 @@ describe('UserLocation', () => {
       test('called with "running" false', async () => {
         // start
         expect(ul.locationManagerRunning).toStrictEqual(false);
-        await ul.setLocationManager({running: true});
+        await ul.setLocationManager({ running: true });
         expect(ul.locationManagerRunning).toStrictEqual(true);
 
         // stop
-        await ul.setLocationManager({running: false});
+        await ul.setLocationManager({ running: false });
 
         expect(ul.locationManagerRunning).toStrictEqual(false);
         // only once from start

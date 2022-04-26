@@ -26,13 +26,13 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
    * @returns {object} - the state object
    */
   onInitialState(coordinatesArray, options = null) {
-    let end = {from: 0};
+    let end = { from: 0 };
     if (options && options.end) {
       end = options.end;
     }
     return {
-      fullRoute: coordinatesArray.map(coord => [coord[0], coord[1]]),
-      end: {from: 0},
+      fullRoute: coordinatesArray.map((coord) => [coord[0], coord[1]]),
+      end: { from: 0 },
     };
   }
 
@@ -54,7 +54,7 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
    * @returns {object} next state
    */
   onCalculate(state, progress) {
-    const {fullRoute, end} = state;
+    const { fullRoute, end } = state;
     const currentEnd = end.from * (1.0 - progress) + progress * end.to;
 
     // console.log("Current end:", end, currentEnd);
@@ -72,7 +72,7 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
     }
     if (actsum <= currentEnd) {
       const actRoute = [...fullRoute.slice(0, i + 1)];
-      return {fullRoute, end: {...end, current: currentEnd}, actRoute};
+      return { fullRoute, end: { ...end, current: currentEnd }, actRoute };
     }
     const r = (currentEnd - prevsum) / (actsum - prevsum);
     const or = 1.0 - r;
@@ -85,7 +85,7 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
         fullRoute[i][1] * r + fullRoute[i + 1][1] * or,
       ],
     ];
-    return {fullRoute, end: {...end, current: currentEnd}, actRoute};
+    return { fullRoute, end: { ...end, current: currentEnd }, actRoute };
   }
 
   /**
@@ -96,7 +96,7 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
    * @returns {object} The state
    */
   onStart(state, toValue) {
-    const {fullRoute, end} = state;
+    const { fullRoute, end } = state;
     let toDist;
     if (!toValue.end) {
       console.error(
@@ -104,7 +104,7 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
       );
     }
     if (toValue.end.along != null) {
-      const {units} = toValue;
+      const { units } = toValue;
       const ls = lineString(fullRoute);
       toDist = convertLength(toValue.end.along, units);
       toDist = length(ls) - toDist;

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import { View } from 'react-native';
 
 import sheet from '../../styles/sheet';
 import colors from '../../styles/colors';
