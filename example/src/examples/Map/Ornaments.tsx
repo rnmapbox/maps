@@ -1,6 +1,6 @@
-import React, {FC, useState} from 'react';
+import React, { FC, useState } from 'react';
 import MapboxGL from '@rnmapbox/maps';
-import {Button, StyleSheet, Text} from 'react-native';
+import { Button, StyleSheet, Text } from 'react-native';
 
 import sheet from '../../styles/sheet';
 import Page from '../common/Page';
@@ -21,10 +21,10 @@ enum OrnamentPosition {
 }
 
 const POSITIONS = {
-  [OrnamentPosition.TopLeft]: {top: 8, left: 8},
-  [OrnamentPosition.TopRight]: {top: 8, right: 8},
-  [OrnamentPosition.BottomRight]: {bottom: 8, right: 8},
-  [OrnamentPosition.BottomLeft]: {bottom: 8, left: 8},
+  [OrnamentPosition.TopLeft]: { top: 8, left: 8 },
+  [OrnamentPosition.TopRight]: { top: 8, right: 8 },
+  [OrnamentPosition.BottomRight]: { bottom: 8, right: 8 },
+  [OrnamentPosition.BottomLeft]: { bottom: 8, left: 8 },
 };
 
 const styles = StyleSheet.create({
@@ -60,7 +60,7 @@ const OrnamentButtons: FC<OrnamentButtonsProps> = ({
   </>
 );
 
-const ShowMap: FC<any> = props => {
+const ShowMap: FC<any> = (props) => {
   const [visibility, setVisibility] = useState({
     [OrnamentType.Logo]: undefined,
     [OrnamentType.Attribution]: undefined,
@@ -76,7 +76,7 @@ const ShowMap: FC<any> = props => {
   });
 
   const handlePressVisibility = (ornamentType: OrnamentType): void => {
-    setVisibility(prevState => {
+    setVisibility((prevState) => {
       let newValue;
 
       if (prevState[ornamentType] === undefined) {
@@ -87,12 +87,12 @@ const ShowMap: FC<any> = props => {
         newValue = undefined;
       }
 
-      return {...prevState, [ornamentType]: newValue};
+      return { ...prevState, [ornamentType]: newValue };
     });
   };
 
   const handlePressPosition = (ornamentType: OrnamentType): void => {
-    setPosition(prevState => {
+    setPosition((prevState) => {
       let newValue;
 
       if (prevState[ornamentType] === OrnamentPosition.TopLeft) {
@@ -105,7 +105,7 @@ const ShowMap: FC<any> = props => {
         newValue = OrnamentPosition.TopLeft;
       }
 
-      return {...prevState, [ornamentType]: newValue};
+      return { ...prevState, [ornamentType]: newValue };
     });
   };
 
@@ -120,7 +120,8 @@ const ShowMap: FC<any> = props => {
         compassEnabled={visibility[OrnamentType.Compass]}
         compassPosition={POSITIONS[position[OrnamentType.Compass]]}
         scaleBarEnabled={visibility[OrnamentType.ScaleBar]}
-        scaleBarPosition={POSITIONS[position[OrnamentType.ScaleBar]]}>
+        scaleBarPosition={POSITIONS[position[OrnamentType.ScaleBar]]}
+      >
         <MapboxGL.Camera />
       </MapboxGL.MapView>
 

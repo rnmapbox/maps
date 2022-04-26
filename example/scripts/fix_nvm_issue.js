@@ -13,7 +13,7 @@ const problemFileContent = fs.readFileSync(problemFilePath, 'utf8');
 fs.writeFileSync(
   problemFilePath,
   problemFileContent.replace(anchorLine, replacementContent),
-  'utf8'
+  'utf8',
 );
 
 console.log('🙏🏻 nvm with iOS should work 🙏🏻');

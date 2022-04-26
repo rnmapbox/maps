@@ -1,11 +1,11 @@
-import {Animated} from 'react-native';
+import { Animated } from 'react-native';
 
 // Used react-native-maps as a reference
 // https://github.com/react-community/react-native-maps/blob/master/lib/components/AnimatedRegion.js
 const AnimatedWithChildren = Object.getPrototypeOf(Animated.ValueXY);
 
 const DEFAULT_COORD = [0, 0];
-const DEFAULT_POINT = {type: 'Point', coordinates: DEFAULT_COORD};
+const DEFAULT_POINT = { type: 'Point', coordinates: DEFAULT_COORD };
 
 let uniqueID = 0;
 
@@ -75,7 +75,7 @@ export class AnimatedPoint extends AnimatedWithChildren {
     delete this._listeners[id];
   }
 
-  spring(config = {coordinates: DEFAULT_COORD}) {
+  spring(config = { coordinates: DEFAULT_COORD }) {
     return Animated.parallel([
       Animated.spring(this.longitude, {
         ...config,
@@ -90,7 +90,7 @@ export class AnimatedPoint extends AnimatedWithChildren {
     ]);
   }
 
-  timing(config = {coordinates: DEFAULT_COORD}) {
+  timing(config = { coordinates: DEFAULT_COORD }) {
     return Animated.parallel([
       Animated.timing(this.longitude, {
         ...config,

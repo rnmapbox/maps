@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {NativeModules, requireNativeComponent} from 'react-native';
+import { NativeModules, requireNativeComponent } from 'react-native';
 
-import {viewPropTypes} from '../utils';
-import {FillLayerStyleProp} from '../utils/styleMap';
+import { viewPropTypes } from '../utils';
+import { FillLayerStyleProp } from '../utils/styleMap';
 
 import AbstractLayer from './AbstractLayer';
 
@@ -88,7 +88,7 @@ class FillLayer extends AbstractLayer {
 }
 
 const RCTMGLFillLayer = requireNativeComponent(NATIVE_MODULE_NAME, FillLayer, {
-  nativeOnly: {reactStyle: true},
+  nativeOnly: { reactStyle: true },
 });
 
 export default FillLayer;

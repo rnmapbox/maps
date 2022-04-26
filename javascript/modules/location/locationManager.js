@@ -1,4 +1,4 @@
-import {NativeModules, NativeEventEmitter} from 'react-native';
+import { NativeModules, NativeEventEmitter } from 'react-native';
 
 const MapboxGL = NativeModules.MGLModule;
 const MapboxGLLocationManager = NativeModules.MGLLocationModule;
@@ -53,7 +53,7 @@ class LocationManager {
   }
 
   removeListener(listener) {
-    this._listeners = this._listeners.filter(l => l !== listener);
+    this._listeners = this._listeners.filter((l) => l !== listener);
     if (this._listeners.length === 0) {
       this.stop();
     }
@@ -94,7 +94,7 @@ class LocationManager {
   onUpdate(location) {
     this._lastKnownLocation = location;
 
-    this._listeners.forEach(l => l(location));
+    this._listeners.forEach((l) => l(location));
   }
 }
 

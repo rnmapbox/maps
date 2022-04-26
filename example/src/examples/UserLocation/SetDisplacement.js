@@ -6,14 +6,18 @@ import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import TabBarPage from '../common/TabBarPage';
 
 const DISPLACEMENT = [0, 5, 10];
-const OPTIONS = [{label: '0 meter'}, {label: '5 meter'}, {label: '10 meter'}];
+const OPTIONS = [
+  { label: '0 meter' },
+  { label: '5 meter' },
+  { label: '10 meter' },
+];
 
 class SetDisplacement extends React.Component {
   static propTypes = {
     ...BaseExamplePropTypes,
   };
 
-  state = {minDisplacement: DISPLACEMENT[0]};
+  state = { minDisplacement: DISPLACEMENT[0] };
 
   componentDidMount() {
     MapboxGL.locationManager.start();
@@ -23,8 +27,8 @@ class SetDisplacement extends React.Component {
     MapboxGL.locationManager.stop();
   }
 
-  onDisplacementChange = index => {
-    this.setState({minDisplacement: DISPLACEMENT[index]});
+  onDisplacementChange = (index) => {
+    this.setState({ minDisplacement: DISPLACEMENT[index] });
   };
 
   render() {
@@ -32,7 +36,8 @@ class SetDisplacement extends React.Component {
       <TabBarPage
         {...this.props}
         options={OPTIONS}
-        onOptionPress={this.onDisplacementChange}>
+        onOptionPress={this.onDisplacementChange}
+      >
         <MapboxGL.MapView style={sheet.matchParent}>
           <MapboxGL.Camera
             followZoomLevel={16}

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {NativeModules, requireNativeComponent} from 'react-native';
+import { NativeModules, requireNativeComponent } from 'react-native';
 
-import {viewPropTypes} from '../utils';
-import {BackgroundLayerStyleProp} from '../utils/styleMap';
+import { viewPropTypes } from '../utils';
+import { BackgroundLayerStyleProp } from '../utils/styleMap';
 
 import AbstractLayer from './AbstractLayer';
 
@@ -90,7 +90,7 @@ const RCTMGLBackgroundLayer = requireNativeComponent(
   NATIVE_MODULE_NAME,
   BackgroundLayer,
   {
-    nativeOnly: {reactStyle: true},
+    nativeOnly: { reactStyle: true },
   },
 );
 

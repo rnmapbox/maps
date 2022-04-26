@@ -1,6 +1,6 @@
 /* eslint-disable fp/no-mutating-methods */
 import FakeTimers from '@sinonjs/fake-timers';
-import {Animated, Easing} from 'react-native';
+import { Animated, Easing } from 'react-native';
 import TestRenderer from 'react-test-renderer';
 import React from 'react';
 
@@ -14,13 +14,13 @@ let oldNodeEnv = null;
 beforeAll(() => {
   clock = FakeTimers.install();
   clock._requestedAnimationFrames = [];
-  clock.requestAnimationFrame = callback => {
+  clock.requestAnimationFrame = (callback) => {
     clock._requestedAnimationFrames.push(callback);
   };
   clock.fireRequestAnimationFrames = () => {
     const oldRAF = clock._requestedAnimationFrames;
     clock._requestedAnimationFrames = [];
-    oldRAF.forEach(cb => cb(Date.now()));
+    oldRAF.forEach((cb) => cb(Date.now()));
   };
 
   // animated will not call nativeProps in test mode
@@ -52,8 +52,8 @@ describe('AnimatedShapeSource', () => {
     // eslint-disable-next-line no-unused-vars
     const testRenderer = TestRenderer.create(
       <AnimatedShapeSource
-        shape={new AnimatedShape({type: 'LineString', coordinates})}
-        ref={ref => (shapeSourceRef = ref)}
+        shape={new AnimatedShape({ type: 'LineString', coordinates })}
+        ref={(ref) => (shapeSourceRef = ref)}
       />,
     );
     const setNativeProps = jest.fn();
@@ -101,8 +101,8 @@ describe('AnimatedShapeSource', () => {
     // eslint-disable-next-line no-unused-vars
     const testRenderer = TestRenderer.create(
       <AnimatedShapeSource
-        shape={new AnimatedShape({type: 'LineString', coordinates})}
-        ref={ref => (shapeSourceRef = ref)}
+        shape={new AnimatedShape({ type: 'LineString', coordinates })}
+        ref={(ref) => (shapeSourceRef = ref)}
       />,
     );
     const setNativeProps = jest.fn();
@@ -153,8 +153,8 @@ describe('AnimatedShapeSource', () => {
     // eslint-disable-next-line no-unused-vars
     const testRenderer = TestRenderer.create(
       <AnimatedShapeSource
-        shape={new AnimatedShape({type: 'LineString', coordinates})}
-        ref={ref => (shapeSourceRef = ref)}
+        shape={new AnimatedShape({ type: 'LineString', coordinates })}
+        ref={(ref) => (shapeSourceRef = ref)}
       />,
     );
     const setNativeProps = jest.fn();

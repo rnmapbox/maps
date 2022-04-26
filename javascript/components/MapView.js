@@ -6,9 +6,9 @@ import {
   NativeModules,
   requireNativeComponent,
 } from 'react-native';
-import {debounce} from 'debounce';
+import { debounce } from 'debounce';
 
-import {makePoint, makeLatLngBounds} from '../utils/geoUtils';
+import { makePoint, makeLatLngBounds } from '../utils/geoUtils';
 import {
   isFunction,
   isNumber,
@@ -17,7 +17,7 @@ import {
   viewPropTypes,
   ornamentPositionPropType,
 } from '../utils';
-import {getFilter} from '../utils/filterUtils';
+import { getFilter } from '../utils/filterUtils';
 import Logger from '../utils/Logger';
 
 import NativeBridgeComponent from './NativeBridgeComponent';
@@ -34,7 +34,7 @@ export const NATIVE_MODULE_NAME = 'RCTMGLMapView';
 export const ANDROID_TEXTURE_NATIVE_MODULE_NAME = 'RCTMGLAndroidTextureMapView';
 
 const styles = StyleSheet.create({
-  matchParent: {flex: 1},
+  matchParent: { flex: 1 },
 });
 
 const defaultStyleURL = MapboxGL.StyleURL.Street;
@@ -628,14 +628,8 @@ class MapView extends NativeBridgeComponent(React.Component) {
     }
 
     if (config.bounds && config.bounds.ne && config.bounds.sw) {
-      const {
-        ne,
-        sw,
-        paddingLeft,
-        paddingRight,
-        paddingTop,
-        paddingBottom,
-      } = config.bounds;
+      const { ne, sw, paddingLeft, paddingRight, paddingTop, paddingBottom } =
+        config.bounds;
       stopConfig.bounds = toJSONString(makeLatLngBounds(ne, sw));
       stopConfig.boundsPaddingTop = paddingTop || 0;
       stopConfig.boundsPaddingRight = paddingRight || 0;
@@ -673,15 +667,13 @@ class MapView extends NativeBridgeComponent(React.Component) {
     if (isFunction(this.props.onRegionDidChange)) {
       this.props.onRegionDidChange(payload);
     }
-    this.setState({region: payload});
+    this.setState({ region: payload });
   }
 
   _onChange(e) {
-    const {
-      regionWillChangeDebounceTime,
-      regionDidChangeDebounceTime,
-    } = this.props;
-    const {type, payload} = e.nativeEvent;
+    const { regionWillChangeDebounceTime, regionDidChangeDebounceTime } =
+      this.props;
+    const { type, payload } = e.nativeEvent;
     let propName = '';
 
     switch (type) {
@@ -834,7 +826,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
     this._setStyleURL(props);
 
     const callbacks = {
-      ref: nativeRef => this._setNativeRef(nativeRef),
+      ref: (nativeRef) => this._setNativeRef(nativeRef),
       onPress: this._onPress,
       onLongPress: this._onLongPress,
       onMapChange: this._onChange,
@@ -860,7 +852,8 @@ class MapView extends NativeBridgeComponent(React.Component) {
       <View
         onLayout={this._onLayout}
         style={this.props.style}
-        testID={mapView ? null : this.props.testID}>
+        testID={mapView ? null : this.props.testID}
+      >
         {mapView}
       </View>
     );
@@ -868,7 +861,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
 }
 
 const RCTMGLMapView = requireNativeComponent(NATIVE_MODULE_NAME, MapView, {
-  nativeOnly: {onMapChange: true, onAndroidCallback: true},
+  nativeOnly: { onMapChange: true, onAndroidCallback: true },
 });
 
 let RCTMGLAndroidTextureMapView;
@@ -877,7 +870,7 @@ if (isAndroid()) {
     ANDROID_TEXTURE_NATIVE_MODULE_NAME,
     MapView,
     {
-      nativeOnly: {onMapChange: true, onAndroidCallback: true},
+      nativeOnly: { onMapChange: true, onAndroidCallback: true },
     },
   );
 }

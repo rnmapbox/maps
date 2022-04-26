@@ -1,4 +1,4 @@
-import {featureCollection, point, feature, lineString} from '@turf/helpers';
+import { featureCollection, point, feature, lineString } from '@turf/helpers';
 import distance from '@turf/distance';
 import along from '@turf/along';
 import geoViewport from '@mapbox/geo-viewport';

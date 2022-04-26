@@ -1,7 +1,7 @@
 import React from 'react';
 import MapboxGL from '@rnmapbox/maps';
-import {Button, View} from 'react-native';
-import {ButtonGroup} from 'react-native-elements';
+import { Button, View } from 'react-native';
+import { ButtonGroup } from 'react-native-elements';
 import PropTypes from 'prop-types';
 
 import sheet from '../../styles/sheet';
@@ -12,15 +12,19 @@ class SettingsPane extends React.Component {
   render() {
     const followModes = ['normal', 'compass', 'course'];
     const renderModes = ['normal', 'compass', 'gps'];
-    let {settings, onUpdateSettings} = this.props;
+    let { settings, onUpdateSettings } = this.props;
     let {
       followUserLocation,
       showsUserHeadingIndicator,
       followUserMode = 'normal',
       androidRenderMode = 'normal',
     } = settings;
-    const selectedModeIndex = followModes.findIndex(i => i === followUserMode);
-    const renderModeIndex = renderModes.findIndex(i => i === androidRenderMode);
+    const selectedModeIndex = followModes.findIndex(
+      (i) => i === followUserMode,
+    );
+    const renderModeIndex = renderModes.findIndex(
+      (i) => i === androidRenderMode,
+    );
 
     return (
       <View>
@@ -31,7 +35,7 @@ class SettingsPane extends React.Component {
               : 'Follow user location'
           }
           onPress={() =>
-            onUpdateSettings({followUserLocation: !followUserLocation})
+            onUpdateSettings({ followUserLocation: !followUserLocation })
           }
         />
         <Button
@@ -49,7 +53,7 @@ class SettingsPane extends React.Component {
         <ButtonGroup
           buttons={followModes}
           selectedIndex={selectedModeIndex}
-          onPress={i =>
+          onPress={(i) =>
             onUpdateSettings({
               followUserMode: followModes[i],
             })
@@ -58,7 +62,7 @@ class SettingsPane extends React.Component {
         <ButtonGroup
           buttons={renderModes}
           selectedIndex={renderModeIndex}
-          onPress={i =>
+          onPress={(i) =>
             onUpdateSettings({
               androidRenderMode: renderModes[i],
             })
@@ -111,7 +115,7 @@ class SetUserLocationRenderMode extends React.Component {
   }
 
   onRenderModeChange(index, renderMode) {
-    this.setState({renderMode});
+    this.setState({ renderMode });
   }
 
   render() {
@@ -125,10 +129,11 @@ class SetUserLocationRenderMode extends React.Component {
       <TabBarPage
         {...this.props}
         options={this._renderModeOptions}
-        onOptionPress={this.onRenderModeChange}>
+        onOptionPress={this.onRenderModeChange}
+      >
         <SettingsPane
           settings={this.state}
-          onUpdateSettings={settings => this.setState(settings)}
+          onUpdateSettings={(settings) => this.setState(settings)}
         />
         <MapboxGL.MapView style={sheet.matchParent} tintColor={'red'}>
           <MapboxGL.Camera

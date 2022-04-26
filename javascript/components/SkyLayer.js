@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {NativeModules, requireNativeComponent} from 'react-native';
+import { NativeModules, requireNativeComponent } from 'react-native';
 
-import {viewPropTypes} from '../utils';
-import {SkyLayerStyleProp} from '../utils/styleMap';
+import { viewPropTypes } from '../utils';
+import { SkyLayerStyleProp } from '../utils/styleMap';
 
 import AbstractLayer from './AbstractLayer';
 
@@ -74,7 +74,7 @@ class SkyLayer extends AbstractLayer {
 }
 
 const RCTMGLSkyLayer = requireNativeComponent(NATIVE_MODULE_NAME, SkyLayer, {
-  nativeOnly: {reactStyle: true},
+  nativeOnly: { reactStyle: true },
 });
 
 export default SkyLayer;

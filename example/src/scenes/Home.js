@@ -1,6 +1,12 @@
 import React from 'react';
-import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
-import {Icon} from 'react-native-elements';
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import { Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
 
 import Page from '../examples/common/Page';
@@ -105,13 +111,13 @@ class ExampleGroup {
     this.items = items;
     this.navigationType = 'Group';
     // eslint-disable-next-line react/prop-types
-    this.Component = ({navigation}) => (
+    this.Component = ({ navigation }) => (
       <ExampleGroupComponent items={items} navigation={navigation} />
     );
   }
 }
 
-const BugReportPage = ({...props}) => (
+const BugReportPage = ({ ...props }) => (
   <Page {...props}>
     <BugReportTemplate />
   </Page>
@@ -199,12 +205,12 @@ const Examples = [
   new ExampleItem('Cache management', CacheManagement),
 ];
 
-function ExampleGroupComponent({items, navigation, showBack}) {
+function ExampleGroupComponent({ items, navigation, showBack }) {
   function itemPress(item) {
     navigation.navigate(item.navigationType, item);
   }
 
-  function renderItem({item}) {
+  function renderItem({ item }) {
     return (
       <View style={styles.exampleListItemBorder}>
         <TouchableOpacity onPress={() => itemPress(item)}>
@@ -237,7 +243,7 @@ function ExampleGroupComponent({items, navigation, showBack}) {
         <FlatList
           style={styles.exampleList}
           data={items}
-          keyExtractor={item => item.label}
+          keyExtractor={(item) => item.label}
           renderItem={renderItem}
         />
       </View>
@@ -263,7 +269,7 @@ class Home extends React.Component {
   };
 
   render() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     const items = navigation.getParam('items') || Examples;
     return (
       <ExampleGroupComponent

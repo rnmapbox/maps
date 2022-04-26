@@ -1,12 +1,12 @@
 import React from 'react';
-import {FlatList} from 'react-native';
-import {Overlay, ListItem, FAB, Icon} from 'react-native-elements';
+import { FlatList } from 'react-native';
+import { Overlay, ListItem, FAB, Icon } from 'react-native-elements';
 import MapboxGL from '@rnmapbox/maps';
 import moment from 'moment';
 
 import earthQuakesJSON from '../../assets/earthquakes.json';
 import sheet from '../../styles/sheet';
-import {SF_OFFICE_COORDINATE} from '../../utils';
+import { SF_OFFICE_COORDINATE } from '../../utils';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import Page from '../common/Page';
 
@@ -56,7 +56,7 @@ const layerStyles = {
           ['get', 'mag5'],
         ],
       ],
-      {'font-scale': 0.8},
+      { 'font-scale': 0.8 },
     ],
     textSize: 12,
     textPitchAlignment: 'map',
@@ -93,7 +93,7 @@ class EarthQuakes extends React.Component {
         <Overlay isVisible={!!this.state.selectedCluster} fullScreen>
           <FAB
             onPress={() => {
-              this.setState({selectedCluster: null});
+              this.setState({ selectedCluster: null });
             }}
             icon={<Icon name="close" />}
             size="large"
@@ -101,11 +101,11 @@ class EarthQuakes extends React.Component {
           />
           {this.state.selectedCluster && (
             <FlatList
-              keyExtractor={({properties: earthquakeInfo}) => {
+              keyExtractor={({ properties: earthquakeInfo }) => {
                 return earthquakeInfo.code;
               }}
               data={this.state.selectedCluster.features}
-              renderItem={({item: {properties: earthquakeInfo}}) => {
+              renderItem={({ item: { properties: earthquakeInfo } }) => {
                 const magnitude = `Magnitude: ${earthquakeInfo.mag}`;
                 const place = `Place: ${earthquakeInfo.place}`;
                 const code = `Code: ${earthquakeInfo.code}`;
@@ -131,7 +131,8 @@ class EarthQuakes extends React.Component {
         <Page {...this.props}>
           <MapboxGL.MapView
             style={sheet.matchParent}
-            styleURL={MapboxGL.StyleURL.Dark}>
+            styleURL={MapboxGL.StyleURL.Dark}
+          >
             <MapboxGL.Camera
               zoomLevel={6}
               pitch={45}
@@ -140,7 +141,7 @@ class EarthQuakes extends React.Component {
 
             <MapboxGL.ShapeSource
               id="earthquakes"
-              onPress={async shape => {
+              onPress={async (shape) => {
                 const cluster = shape.features[0];
                 const collection = await this.shape.getClusterLeaves(
                   cluster,
@@ -148,9 +149,9 @@ class EarthQuakes extends React.Component {
                   0,
                 );
 
-                this.setState({selectedCluster: collection});
+                this.setState({ selectedCluster: collection });
               }}
-              ref={shape => (this.shape = shape)}
+              ref={(shape) => (this.shape = shape)}
               cluster
               clusterRadius={50}
               clusterMaxZoom={14}
@@ -176,7 +177,8 @@ class EarthQuakes extends React.Component {
                   ['case', mag5, 1, 0],
                 ],
               }}
-              shape={earthQuakesJSON}>
+              shape={earthQuakesJSON}
+            >
               <MapboxGL.SymbolLayer
                 id="pointCount"
                 style={layerStyles.clusterCount}

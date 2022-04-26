@@ -1,6 +1,6 @@
 import React from 'react';
 import MapboxGL from '@rnmapbox/maps';
-import {Text} from 'react-native';
+import { Text } from 'react-native';
 
 import Bubble from '../common/Bubble';
 import sheet from '../../styles/sheet';
@@ -11,8 +11,8 @@ import Page from '../common/Page';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 
 const styles = {
-  rasterLayer: {rasterOpacity: 0.6},
-  bubble: {bottom: 100},
+  rasterLayer: { rasterOpacity: 0.6 },
+  bubble: { bottom: 100 },
 };
 
 const frames = [radar0, radar1, radar2];
@@ -62,7 +62,7 @@ class ImageOverlay extends React.Component {
             coords: coordQuads[nextFrame],
           });
         } else {
-          this.setState({radarFrameIndex: nextFrame});
+          this.setState({ radarFrameIndex: nextFrame });
         }
         this.heartbeat();
       });
@@ -82,24 +82,27 @@ class ImageOverlay extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          ref={ref => (this.map = ref)}
+          ref={(ref) => (this.map = ref)}
           style={sheet.matchParent}
-          styleURL={MapboxGL.StyleURL.Satellite}>
+          styleURL={MapboxGL.StyleURL.Satellite}
+        >
           <MapboxGL.Camera zoomLevel={4} centerCoordinate={[-79, 40]} />
 
           <MapboxGL.Animated.ImageSource
             key="d"
             id="radarSource"
             coordinates={this.state.coords}
-            url={frames[this.state.radarFrameIndex]}>
+            url={frames[this.state.radarFrameIndex]}
+          >
             <MapboxGL.RasterLayer id="radarLayer" style={styles.rasterLayer} />
           </MapboxGL.Animated.ImageSource>
         </MapboxGL.MapView>
         <Bubble
           onPress={() => {
-            this.setState({dynamic: !this.state.dynamic});
+            this.setState({ dynamic: !this.state.dynamic });
           }}
-          style={styles.bubble}>
+          style={styles.bubble}
+        >
           <Text>{bubbleText}</Text>
         </Bubble>
       </Page>

@@ -73,9 +73,9 @@ module.exports = {
     'no-underscore-dangle': [0],
     'no-await-in-loop': 0,
     'no-restricted-syntax': 0,
-    'no-use-before-define': ['error', {functions: false}],
-    'no-unused-expressions': ['error', {allowTaggedTemplates: true}],
-    'no-plusplus': ['error', {allowForLoopAfterthoughts: true}],
+    'no-use-before-define': ['error', { functions: false }],
+    'no-unused-expressions': ['error', { allowTaggedTemplates: true }],
+    'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'fp/no-mutating-methods': 'warn',
   },
   overrides: [

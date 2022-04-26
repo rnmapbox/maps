@@ -6,17 +6,17 @@ import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import TabBarPage from '../common/TabBarPage';
 
 const COLOR = ['red', 'yellow', 'green'];
-const OPTIONS = [{label: 'red'}, {label: 'yellow'}, {label: 'green'}];
+const OPTIONS = [{ label: 'red' }, { label: 'yellow' }, { label: 'green' }];
 
 class SetTintColor extends React.Component {
   static propTypes = {
     ...BaseExamplePropTypes,
   };
 
-  state = {tintColor: COLOR[0]};
+  state = { tintColor: COLOR[0] };
 
-  onTintColorChange = index => {
-    this.setState({tintColor: COLOR[index]});
+  onTintColorChange = (index) => {
+    this.setState({ tintColor: COLOR[index] });
   };
 
   render() {
@@ -24,10 +24,12 @@ class SetTintColor extends React.Component {
       <TabBarPage
         {...this.props}
         options={OPTIONS}
-        onOptionPress={this.onTintColorChange}>
+        onOptionPress={this.onTintColorChange}
+      >
         <MapboxGL.MapView
           style={sheet.matchParent}
-          tintColor={this.state.tintColor}>
+          tintColor={this.state.tintColor}
+        >
           <MapboxGL.Camera
             followZoomLevel={16}
             followUserMode="compass"

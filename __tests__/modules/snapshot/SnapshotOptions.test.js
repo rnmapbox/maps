@@ -1,4 +1,4 @@
-import {NativeModules} from 'react-native';
+import { NativeModules } from 'react-native';
 
 import SnapshotOptions from '../../../javascript/modules/snapshot/SnapshotOptions';
 import {
@@ -9,12 +9,12 @@ import {
 describe('SnapshotOptions', () => {
   it('should throw error if no centerCoordinate or bounds are provided', () => {
     expect(() => new SnapshotOptions()).toThrow();
-    expect(() => new SnapshotOptions({styleURL: 'test'})).toThrow();
+    expect(() => new SnapshotOptions({ styleURL: 'test' })).toThrow();
   });
 
   it('should create options with valid defaults', () => {
     const centerCoordinate = [1, 2];
-    const options = new SnapshotOptions({centerCoordinate});
+    const options = new SnapshotOptions({ centerCoordinate });
 
     expect(options.toJSON()).toEqual({
       styleURL: NativeModules.MGLModule.StyleURL.Street,
@@ -65,7 +65,7 @@ describe('SnapshotOptions', () => {
     };
 
     const geoJSONBounds = JSON.stringify(
-      makeFeatureCollection(expectedOptions.bounds.map(c => makePoint(c))),
+      makeFeatureCollection(expectedOptions.bounds.map((c) => makePoint(c))),
     );
 
     const options = new SnapshotOptions(expectedOptions);

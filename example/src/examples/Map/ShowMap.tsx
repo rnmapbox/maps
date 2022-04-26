@@ -1,14 +1,14 @@
-import React, {FC, useState, useEffect} from 'react';
-import {Alert} from 'react-native';
+import React, { FC, useState, useEffect } from 'react';
+import { Alert } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
-import {onSortOptions} from '../../utils';
+import { onSortOptions } from '../../utils';
 import TabBarPage from '../common/TabBarPage';
 
-const ShowMap: FC<any> = props => {
+const ShowMap: FC<any> = (props) => {
   const _mapOptions = Object.keys(MapboxGL.StyleURL)
-    .map(key => {
+    .map((key) => {
       return {
         label: key,
         data: (MapboxGL.StyleURL as any)[key], // bad any, because enums
@@ -16,7 +16,7 @@ const ShowMap: FC<any> = props => {
     })
     .sort(onSortOptions);
 
-  const [styleURL, setStyleURL] = useState({styleURL: _mapOptions[0].data});
+  const [styleURL, setStyleURL] = useState({ styleURL: _mapOptions[0].data });
 
   useEffect(() => {
     MapboxGL.locationManager.start();
@@ -27,7 +27,7 @@ const ShowMap: FC<any> = props => {
   }, []);
 
   const onMapChange = (index: number, newStyleURL: MapboxGL.StyleURL): void => {
-    setStyleURL({styleURL: newStyleURL});
+    setStyleURL({ styleURL: newStyleURL });
   };
 
   const onUserMarkerPress = (): void => {
@@ -39,7 +39,8 @@ const ShowMap: FC<any> = props => {
       {...props}
       scrollable
       options={_mapOptions}
-      onOptionPress={onMapChange}>
+      onOptionPress={onMapChange}
+    >
       <MapboxGL.MapView styleURL={styleURL.styleURL} style={sheet.matchParent}>
         <MapboxGL.Camera followZoomLevel={12} followUserLocation />
 

@@ -2,7 +2,7 @@ import React from 'react';
 import MapboxGL from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
-import {onSortOptions} from '../../utils';
+import { onSortOptions } from '../../utils';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import TabBarPage from '../common/TabBarPage';
 
@@ -20,7 +20,7 @@ class SetUserLocationVerticalAlignment extends React.Component {
   constructor(props) {
     super(props);
 
-    this._alignmentOptions = Object.keys(Alignments).map(key => {
+    this._alignmentOptions = Object.keys(Alignments).map((key) => {
       console.log('key: ', key);
 
       return {
@@ -47,10 +47,12 @@ class SetUserLocationVerticalAlignment extends React.Component {
       <TabBarPage
         {...this.props}
         options={this._alignmentOptions}
-        onOptionPress={this.onAlignmentChange}>
+        onOptionPress={this.onAlignmentChange}
+      >
         <MapboxGL.MapView
           contentInset={this.state.currentAlignmentMode}
-          style={sheet.matchParent}>
+          style={sheet.matchParent}
+        >
           <MapboxGL.Camera followUserLocation />
           <MapboxGL.UserLocation />
         </MapboxGL.MapView>

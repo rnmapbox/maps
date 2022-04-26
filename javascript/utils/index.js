@@ -24,10 +24,10 @@ function getIosManagerInstance(module) {
 export const viewPropTypes = ViewPropTypes || View.props;
 
 export const ornamentPositionPropType = PropTypes.oneOfType([
-  PropTypes.shape({top: PropTypes.number, left: PropTypes.number}),
-  PropTypes.shape({top: PropTypes.number, right: PropTypes.number}),
-  PropTypes.shape({bottom: PropTypes.number, left: PropTypes.number}),
-  PropTypes.shape({bottom: PropTypes.number, right: PropTypes.number}),
+  PropTypes.shape({ top: PropTypes.number, left: PropTypes.number }),
+  PropTypes.shape({ top: PropTypes.number, right: PropTypes.number }),
+  PropTypes.shape({ bottom: PropTypes.number, left: PropTypes.number }),
+  PropTypes.shape({ bottom: PropTypes.number, right: PropTypes.number }),
 ]);
 
 export function isAndroid() {
@@ -106,8 +106,8 @@ export function cloneReactChildrenWithProps(children, propsToAdd = {}) {
     foundChildren = children;
   }
 
-  const filteredChildren = foundChildren.filter(child => !!child); // filter out falsy children, since some can be null
-  return React.Children.map(filteredChildren, child =>
+  const filteredChildren = foundChildren.filter((child) => !!child); // filter out falsy children, since some can be null
+  return React.Children.map(filteredChildren, (child) =>
     React.cloneElement(child, propsToAdd),
   );
 }
