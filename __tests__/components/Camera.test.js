@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
 
-import Camera from '../../javascript/components/Camera';
+import Camera, { UserTrackingModes } from '../../javascript/components/Camera';
 
 const cameraWithoutFollowDefault = {
   ...Camera.defaultProps,
@@ -91,7 +91,7 @@ describe('Camera', () => {
 
   describe('class', () => {
     test('correct "UserTrackingModes" statics', () => {
-      expect(Camera.UserTrackingModes).toStrictEqual({
+      expect(UserTrackingModes).toStrictEqual({
         Follow: 'normal',
         FollowWithCourse: 'course',
         FollowWithHeading: 'compass',
