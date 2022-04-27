@@ -276,6 +276,22 @@ const Camera = memo((props: CameraProps) => {
   //   refs.camera.setNativeProps({ stop: cameraConfig });
   // }
 
+  const nativeAnimationMode = useCallback((_mode: AnimationMode) => {
+    switch (_mode) {
+      case Mode.Flight:
+        return MapboxGL.CameraModes.Flight;
+      case Mode.Ease:
+        return MapboxGL.CameraModes.Ease;
+      case Mode.Linear:
+        return MapboxGL.CameraModes.Linear;
+      case Mode.None:
+        return MapboxGL.CameraModes.None;
+      case Mode.Move:
+      default:
+        return MapboxGL.CameraModes.Move;
+    }
+  }, []);
+
   const buildNativeStop = useCallback(
     (
       stop: CameraStop,
@@ -315,24 +331,8 @@ const Camera = memo((props: CameraProps) => {
 
       return stopConfig;
     },
-    [props.followUserLocation],
+    [props.followUserLocation, nativeAnimationMode],
   );
-
-  const nativeAnimationMode = (_mode: AnimationMode) => {
-    switch (_mode) {
-      case Mode.Flight:
-        return MapboxGL.CameraModes.Flight;
-      case Mode.Ease:
-        return MapboxGL.CameraModes.Ease;
-      case Mode.Linear:
-        return MapboxGL.CameraModes.Linear;
-      case Mode.None:
-        return MapboxGL.CameraModes.None;
-      case Mode.Move:
-      default:
-        return MapboxGL.CameraModes.Move;
-    }
-  };
 
   const nativeMaxBounds = useMemo(() => {
     if (!maxBounds?.ne || !maxBounds?.sw) {
