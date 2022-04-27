@@ -343,7 +343,7 @@ const Camera = memo((props: CameraProps) => {
     );
   }, [maxBounds]);
 
-  const stop = useMemo(() => {
+  const nativeStop = useMemo(() => {
     return buildNativeStop({
       centerCoordinate,
       bounds,
@@ -366,7 +366,7 @@ const Camera = memo((props: CameraProps) => {
     buildNativeStop,
   ]);
 
-  const defaultStop = useMemo((): NativeCameraStop | null => {
+  const nativeDefaultStop = useMemo((): NativeCameraStop | null => {
     if (!defaultSettings) {
       return null;
     }
@@ -377,8 +377,8 @@ const Camera = memo((props: CameraProps) => {
     <RCTMGLCamera
       testID={'Camera'}
       ref={camera}
-      stop={stop}
-      defaultStop={defaultStop}
+      stop={nativeStop}
+      defaultStop={nativeDefaultStop}
       followUserLocation={followUserLocation}
       followUserMode={followUserMode}
       followPitch={followPitch}
