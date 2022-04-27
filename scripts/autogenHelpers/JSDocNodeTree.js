@@ -1,29 +1,32 @@
 class JSDocNodeTree {
-  constructor (root) {
+  constructor(root) {
     this._root = root;
   }
 
-  getChildrenByTag (node, tag) {
+  getChildrenByTag(node, tag) {
     if (!node || !Array.isArray(node.children)) {
       return [];
     }
     return node.children.filter((child) => child.type === tag);
   }
 
-  getName () {
+  getName() {
     if (!this._root) {
       return '';
     }
     return this._root.namespace;
   }
 
-  getText () {
+  getText() {
     if (!this.hasChildren()) {
       return '';
     }
 
     let text = '';
-    for (let paragraph of this.getChildrenByTag(this._root.description, 'paragraph')) {
+    for (let paragraph of this.getChildrenByTag(
+      this._root.description,
+      'paragraph',
+    )) {
       for (let textNode of this.getChildrenByTag(paragraph, 'text')) {
         text += textNode.value;
       }
@@ -32,7 +35,7 @@ class JSDocNodeTree {
     return text;
   }
 
-  getMethods () {
+  getMethods() {
     if (!this._hasArray(this._root.members, 'instance')) {
       return [];
     }
@@ -56,7 +59,7 @@ class JSDocNodeTree {
     return methods;
   }
 
-  getMethodParams (field) {
+  getMethodParams(field) {
     if (!this._hasArray(field, 'params')) {
       return [];
     }
@@ -73,20 +76,20 @@ class JSDocNodeTree {
         description: node.getText(),
         type: { name: this.getType(param.type) },
         optional: param.type.type === 'OptionalType',
-      })
+      });
     }
 
     return methodParams;
   }
 
-  getExamples (field) {
+  getExamples(field) {
     if (!this._hasArray(field, 'examples')) {
       return [];
     }
     return field.examples.map((example) => example.description);
   }
 
-  getReturnValue (field) {
+  getReturnValue(field) {
     if (!this._hasArray(field, 'returns')) {
       return null;
     }
@@ -100,7 +103,7 @@ class JSDocNodeTree {
     };
   }
 
-  getType (typeNode) {
+  getType(typeNode) {
     if (!typeNode) {
       return '';
     }
@@ -112,11 +115,11 @@ class JSDocNodeTree {
     return typeNode.name || '';
   }
 
-  hasChildren () {
+  hasChildren() {
     return this._hasArray(this._root.description, 'children');
   }
 
-  _hasArray (node, propName) {
+  _hasArray(node, propName) {
     if (!this._root) {
       return false;
     }

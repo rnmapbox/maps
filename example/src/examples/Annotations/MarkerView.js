@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 import PropTypes from 'prop-types';
 
@@ -9,7 +9,7 @@ import Page from '../common/Page';
 import Bubble from '../common/Bubble';
 
 const styles = {
-  touchableContainer: {borderColor: 'black', borderWidth: 1.0, width: 60},
+  touchableContainer: { borderColor: 'black', borderWidth: 1.0, width: 60 },
   touchable: {
     backgroundColor: 'blue',
     width: 40,
@@ -24,7 +24,7 @@ const styles = {
   },
 };
 
-const AnnotationContent = ({title}) => (
+const AnnotationContent = ({ title }) => (
   <View style={styles.touchableContainer}>
     <Text>{title}</Text>
     <TouchableOpacity style={styles.touchable}>
@@ -57,10 +57,11 @@ class ShowMarkerView extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          ref={c => (this._map = c)}
+          ref={(c) => (this._map = c)}
           onPress={this.onPress}
           onDidFinishLoadingMap={this.onDidFinishLoadingMap}
-          style={sheet.matchParent}>
+          style={sheet.matchParent}
+        >
           <MapboxGL.Camera
             zoomLevel={16}
             centerCoordinate={this.state.coordinates[0]}
@@ -68,7 +69,8 @@ class ShowMarkerView extends React.Component {
 
           <MapboxGL.PointAnnotation
             coordinate={this.state.coordinates[1]}
-            id="pt-ann">
+            id="pt-ann"
+          >
             <AnnotationContent title={'this is a point annotation'} />
           </MapboxGL.PointAnnotation>
 

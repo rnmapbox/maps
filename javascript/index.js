@@ -1,6 +1,6 @@
-import {NativeModules, PermissionsAndroid} from 'react-native';
+import { NativeModules, PermissionsAndroid } from 'react-native';
 
-import {isAndroid} from './utils';
+import { isAndroid } from './utils';
 import MapView from './components/MapView';
 import Light from './components/Light';
 import PointAnnotation from './components/PointAnnotation';
@@ -37,7 +37,7 @@ import AnimatedRouteCoordinatesArray from './utils/animated/AnimatedRouteCoordin
 import Style from './components/Style';
 import Logger from './utils/Logger';
 
-const MapboxGL = {...NativeModules.MGLModule};
+const MapboxGL = { ...NativeModules.MGLModule };
 
 // static methods
 MapboxGL.requestAndroidLocationPermissions = async function () {
@@ -117,7 +117,7 @@ MapboxGL.AnimatedRouteCoordinatesArray = AnimatedRouteCoordinatesArray;
 MapboxGL.AnimatedShape = AnimatedShape;
 MapboxGL.Logger = Logger;
 
-const {LineJoin} = MapboxGL;
+const { LineJoin } = MapboxGL;
 
 export {
   MapView,

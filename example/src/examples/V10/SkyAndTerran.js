@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button} from 'react-native';
+import { Button } from 'react-native';
 import {
   MapView,
   SkyLayer,
@@ -15,7 +15,7 @@ import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 Logger.setLogLevel('verbose');
 
 const styles = {
-  mapView: {flex: 1},
+  mapView: { flex: 1 },
 };
 
 class SkyAndTerran extends React.Component {
@@ -28,13 +28,14 @@ class SkyAndTerran extends React.Component {
       <Page {...this.props}>
         <Button
           title="Grow 1"
-          onPress={() => this.setState({radius: this.state.radius + 20})}
+          onPress={() => this.setState({ radius: this.state.radius + 20 })}
         />
         <MapView
           style={styles.mapView}
           styleURL={
             'mapbox://styles/mapbox-map-design/ckhqrf2tz0dt119ny6azh975y'
-          }>
+          }
+        >
           <Camera
             centerCoordinate={[
               // -74.00597, 40.71427
@@ -50,7 +51,8 @@ class SkyAndTerran extends React.Component {
             id="mapbox-dem"
             url="mapbox://mapbox.mapbox-terrain-dem-v1"
             tileSize={514}
-            maxZoomLevel={14}>
+            maxZoomLevel={14}
+          >
             <SkyLayer
               id="sky-layer"
               style={{

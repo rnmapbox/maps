@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Platform, NativeModules, requireNativeComponent} from 'react-native';
+import { Platform, NativeModules, requireNativeComponent } from 'react-native';
 
-import {toJSONString, viewPropTypes} from '../utils';
-import {makePoint} from '../utils/geoUtils';
+import { toJSONString, viewPropTypes } from '../utils';
+import { makePoint } from '../utils/geoUtils';
 
 import PointAnnotation from './PointAnnotation';
 
@@ -54,7 +54,7 @@ class MarkerView extends React.PureComponent {
   };
 
   static defaultProps = {
-    anchor: {x: 0.5, y: 0.5},
+    anchor: { x: 0.5, y: 0.5 },
   };
 
   _getCoordinate() {

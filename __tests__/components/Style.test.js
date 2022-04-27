@@ -1,5 +1,5 @@
 import React from 'react';
-import {render} from '@testing-library/react-native';
+import { render } from '@testing-library/react-native';
 
 import VectorSource from '../../javascript/components/VectorSource';
 import RasterSource from '../../javascript/components/RasterSource';
@@ -34,9 +34,9 @@ describe('Style', () => {
       },
     };
 
-    const {UNSAFE_getByType} = render(<Style json={json} />);
+    const { UNSAFE_getByType } = render(<Style json={json} />);
     const component = UNSAFE_getByType(VectorSource);
-    const {props} = component;
+    const { props } = component;
 
     expect(props.id).toStrictEqual(Object.keys(json.sources)[0]);
     expect(props.url).toStrictEqual(vectorSource.url);
@@ -66,9 +66,9 @@ describe('Style', () => {
       },
     };
 
-    const {UNSAFE_getByType} = render(<Style json={json} />);
+    const { UNSAFE_getByType } = render(<Style json={json} />);
     const component = UNSAFE_getByType(RasterSource);
-    const {props} = component;
+    const { props } = component;
 
     expect(props.id).toStrictEqual(Object.keys(json.sources)[0]);
     expect(props.url).toStrictEqual(rasterSource.url);
@@ -99,9 +99,9 @@ describe('Style', () => {
       },
     };
 
-    const {UNSAFE_getByType} = render(<Style json={json} />);
+    const { UNSAFE_getByType } = render(<Style json={json} />);
     const component = UNSAFE_getByType(ImageSource);
-    const {props} = component;
+    const { props } = component;
 
     expect(props.id).toStrictEqual(Object.keys(json.sources)[0]);
     expect(props.url).toStrictEqual(imageSource.url);
@@ -128,9 +128,9 @@ describe('Style', () => {
       },
     };
 
-    const {UNSAFE_getByType} = render(<Style json={json} />);
+    const { UNSAFE_getByType } = render(<Style json={json} />);
     const component = UNSAFE_getByType(ShapeSource);
-    const {props} = component;
+    const { props } = component;
 
     expect(props.id).toStrictEqual(Object.keys(json.sources)[0]);
     expect(props.url).toStrictEqual(shapeSource.data);
@@ -158,9 +158,9 @@ describe('Style', () => {
       },
     };
 
-    const {UNSAFE_getByType} = render(<Style json={json} />);
+    const { UNSAFE_getByType } = render(<Style json={json} />);
     const component = UNSAFE_getByType(ShapeSource);
-    const {props} = component;
+    const { props } = component;
 
     expect(props.id).toStrictEqual(Object.keys(json.sources)[0]);
     expect(props.shape).toStrictEqual(shapeSource.data);
@@ -205,7 +205,7 @@ describe('Style', () => {
       ],
     };
 
-    const {UNSAFE_getByType} = render(<Style json={json} />);
+    const { UNSAFE_getByType } = render(<Style json={json} />);
     const circleLayer = UNSAFE_getByType(CircleLayer);
     const symbolLayer = UNSAFE_getByType(SymbolLayer);
     const rasterLayer = UNSAFE_getByType(RasterLayer);
@@ -245,9 +245,9 @@ describe('Style', () => {
       layers: [circleLayer],
     };
 
-    const {UNSAFE_getByType} = render(<Style json={json} />);
+    const { UNSAFE_getByType } = render(<Style json={json} />);
     const layerComponent = UNSAFE_getByType(CircleLayer);
-    const {props} = layerComponent;
+    const { props } = layerComponent;
     expect(props.sourceID).toStrictEqual(circleLayer.source);
     expect(props.sourceLayerID).toStrictEqual(circleLayer['source-layer']);
     expect(props.filter).toStrictEqual(circleLayer.filter);

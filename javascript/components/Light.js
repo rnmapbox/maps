@@ -1,8 +1,8 @@
 import React from 'react';
-import {requireNativeComponent} from 'react-native';
+import { requireNativeComponent } from 'react-native';
 
-import {viewPropTypes} from '../utils';
-import {LightLayerStyleProp} from '../utils/styleMap';
+import { viewPropTypes } from '../utils';
+import { LightLayerStyleProp } from '../utils/styleMap';
 
 import AbstractLayer from './AbstractLayer';
 
@@ -41,7 +41,7 @@ class Light extends AbstractLayer {
 }
 
 const RCTMGLLight = requireNativeComponent(NATIVE_MODULE_NAME, Light, {
-  nativeOnly: {reactStyle: true},
+  nativeOnly: { reactStyle: true },
 });
 
 export default Light;

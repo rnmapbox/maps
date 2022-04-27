@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   snapshot: {
     flex: 1,
   },
-  spinnerContainer: {alignItems: 'center', flex: 1, justifyContent: 'center'},
+  spinnerContainer: { alignItems: 'center', flex: 1, justifyContent: 'center' },
 });
 
 class TakeSnapshot extends React.Component {
@@ -41,7 +41,7 @@ class TakeSnapshot extends React.Component {
   }
 
   async takeSnapshot() {
-    const {width, height} = Dimensions.get('window');
+    const { width, height } = Dimensions.get('window');
 
     const uri = await MapboxGL.snapshotManager.takeSnap({
       centerCoordinate: [-74.12641, 40.797968],
@@ -54,7 +54,7 @@ class TakeSnapshot extends React.Component {
       writeToDisk: true,
     });
 
-    this.setState({snapshotURI: uri});
+    this.setState({ snapshotURI: uri });
   }
 
   render() {
@@ -71,7 +71,7 @@ class TakeSnapshot extends React.Component {
       childView = (
         <View style={styles.container}>
           <Image
-            source={{uri: this.state.snapshotURI}}
+            source={{ uri: this.state.snapshotURI }}
             resizeMode="contain"
             style={styles.snapshot}
           />

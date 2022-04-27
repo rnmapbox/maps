@@ -1,11 +1,12 @@
 import React from 'react';
-import {FlatList} from 'react-native';
-import {Overlay, ListItem, FAB, Icon} from 'react-native-elements';
+import { FlatList } from 'react-native';
+import { Overlay, ListItem, FAB, Icon } from 'react-native-elements';
 import MapboxGL from '@rnmapbox/maps';
 import moment from 'moment';
 
+import earthQuakesJSON from '../../assets/earthquakes.json';
 import sheet from '../../styles/sheet';
-import {SF_OFFICE_COORDINATE} from '../../utils';
+import { SF_OFFICE_COORDINATE } from '../../utils';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import Page from '../common/Page';
 
@@ -40,7 +41,23 @@ const layerStyles = {
   },
 
   clusterCount: {
-    textField: '{point_count}',
+    textField: [
+      'format',
+      ['concat', ['get', 'point_count'], '\n'],
+      {},
+      [
+        'concat',
+        '>1: ',
+        [
+          '+',
+          ['get', 'mag2'],
+          ['get', 'mag3'],
+          ['get', 'mag4'],
+          ['get', 'mag5'],
+        ],
+      ],
+      { 'font-scale': 0.8 },
+    ],
     textSize: 12,
     textPitchAlignment: 'map',
   },
@@ -56,6 +73,11 @@ const styles = {
   },
 };
 
+const mag1 = ['<', ['get', 'mag'], 2];
+const mag2 = ['all', ['>=', ['get', 'mag'], 2], ['<', ['get', 'mag'], 3]];
+const mag3 = ['all', ['>=', ['get', 'mag'], 3], ['<', ['get', 'mag'], 4]];
+const mag4 = ['all', ['>=', ['get', 'mag'], 4], ['<', ['get', 'mag'], 5]];
+const mag5 = ['>=', ['get', 'mag'], 5];
 class EarthQuakes extends React.Component {
   static propTypes = {
     ...BaseExamplePropTypes,
@@ -71,7 +93,7 @@ class EarthQuakes extends React.Component {
         <Overlay isVisible={!!this.state.selectedCluster} fullScreen>
           <FAB
             onPress={() => {
-              this.setState({selectedCluster: null});
+              this.setState({ selectedCluster: null });
             }}
             icon={<Icon name="close" />}
             size="large"
@@ -79,11 +101,11 @@ class EarthQuakes extends React.Component {
           />
           {this.state.selectedCluster && (
             <FlatList
-              keyExtractor={({properties: earthquakeInfo}) => {
+              keyExtractor={({ properties: earthquakeInfo }) => {
                 return earthquakeInfo.code;
               }}
               data={this.state.selectedCluster.features}
-              renderItem={({item: {properties: earthquakeInfo}}) => {
+              renderItem={({ item: { properties: earthquakeInfo } }) => {
                 const magnitude = `Magnitude: ${earthquakeInfo.mag}`;
                 const place = `Place: ${earthquakeInfo.place}`;
                 const code = `Code: ${earthquakeInfo.code}`;
@@ -109,7 +131,8 @@ class EarthQuakes extends React.Component {
         <Page {...this.props}>
           <MapboxGL.MapView
             style={sheet.matchParent}
-            styleURL={MapboxGL.StyleURL.Dark}>
+            styleURL={MapboxGL.StyleURL.Dark}
+          >
             <MapboxGL.Camera
               zoomLevel={6}
               pitch={45}
@@ -118,7 +141,7 @@ class EarthQuakes extends React.Component {
 
             <MapboxGL.ShapeSource
               id="earthquakes"
-              onPress={async shape => {
+              onPress={async (shape) => {
                 const cluster = shape.features[0];
                 const collection = await this.shape.getClusterLeaves(
                   cluster,
@@ -126,13 +149,36 @@ class EarthQuakes extends React.Component {
                   0,
                 );
 
-                this.setState({selectedCluster: collection});
+                this.setState({ selectedCluster: collection });
               }}
-              ref={shape => (this.shape = shape)}
+              ref={(shape) => (this.shape = shape)}
               cluster
               clusterRadius={50}
               clusterMaxZoom={14}
-              url="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson">
+              clusterProperties={{
+                mag1: [
+                  ['+', ['accumulated'], ['get', 'mag1']],
+                  ['case', mag1, 1, 0],
+                ],
+                mag2: [
+                  ['+', ['accumulated'], ['get', 'mag2']],
+                  ['case', mag2, 1, 0],
+                ],
+                mag3: [
+                  ['+', ['accumulated'], ['get', 'mag3']],
+                  ['case', mag3, 1, 0],
+                ],
+                mag4: [
+                  ['+', ['accumulated'], ['get', 'mag4']],
+                  ['case', mag4, 1, 0],
+                ],
+                mag5: [
+                  ['+', ['accumulated'], ['get', 'mag5']],
+                  ['case', mag5, 1, 0],
+                ],
+              }}
+              shape={earthQuakesJSON}
+            >
               <MapboxGL.SymbolLayer
                 id="pointCount"
                 style={layerStyles.clusterCount}

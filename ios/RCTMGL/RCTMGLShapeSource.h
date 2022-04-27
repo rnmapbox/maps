@@ -21,6 +21,7 @@
 @property (nonatomic, strong) NSNumber *cluster;
 @property (nonatomic, strong) NSNumber *clusterRadius;
 @property (nonatomic, strong) NSNumber *clusterMaxZoomLevel;
+@property (nonatomic, strong) NSDictionary<NSString *, NSArray<NSExpression *> *> *clusterProperties;
 
 @property (nonatomic, strong) NSNumber *maxZoomLevel;
 @property (nonatomic, strong) NSNumber *buffer;

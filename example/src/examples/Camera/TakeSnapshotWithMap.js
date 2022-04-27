@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
@@ -14,12 +14,12 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: 'center',
   },
-  buttonText: {color: 'white'},
-  imageContainer: {flex: 0.5},
+  buttonText: { color: 'white' },
+  imageContainer: { flex: 0.5 },
   map: {
     flex: 0.5,
   },
-  mapContainer: {flex: 1},
+  mapContainer: { flex: 1 },
 });
 
 const layerStyles = {
@@ -45,14 +45,14 @@ class TakeSnapshotWithMap extends React.Component {
 
   async onTakeSnapshot() {
     const uri = await this.map.takeSnap(false);
-    this.setState({uri});
+    this.setState({ uri });
   }
 
   render() {
     return (
       <Page {...this.props}>
         <View style={styles.mapContainer}>
-          <MapboxGL.MapView ref={ref => (this.map = ref)} style={styles.map}>
+          <MapboxGL.MapView ref={(ref) => (this.map = ref)} style={styles.map}>
             <MapboxGL.Camera
               zoomLevel={16}
               pitch={45}
@@ -73,7 +73,7 @@ class TakeSnapshotWithMap extends React.Component {
               <Image
                 resizeMode="contain"
                 style={sheet.matchParent}
-                source={{uri: this.state.uri}}
+                source={{ uri: this.state.uri }}
               />
             ) : null}
           </View>

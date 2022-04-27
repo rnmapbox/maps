@@ -1,9 +1,9 @@
 import React from 'react';
-import {Text} from 'react-native';
+import { Text } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
-import {DEFAULT_CENTER_COORDINATE} from '../../utils';
+import { DEFAULT_CENTER_COORDINATE } from '../../utils';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import Page from '../common/Page';
 import Bubble from '../common/Bubble';
@@ -34,7 +34,7 @@ class ShowClick extends React.Component {
   }
 
   onPress(event) {
-    const {geometry, properties} = event;
+    const { geometry, properties } = event;
 
     this.setState({
       latitude: geometry.coordinates[1],

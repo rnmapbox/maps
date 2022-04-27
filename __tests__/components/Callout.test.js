@@ -1,20 +1,20 @@
 import React from 'react';
-import {render} from '@testing-library/react-native';
-import {Text, View} from 'react-native';
+import { render } from '@testing-library/react-native';
+import { Text, View } from 'react-native';
 
 import Callout from '../../javascript/components/Callout';
 
 describe('Callout', () => {
   test('renders with custom title', () => {
     const testTitle = 'test title';
-    const {getByText} = render(<Callout {...{title: testTitle}} />);
+    const { getByText } = render(<Callout {...{ title: testTitle }} />);
 
     expect(getByText(testTitle)).toBeDefined();
   });
 
   describe('_renderDefaultCallout', () => {
     test('renders default children', () => {
-      const {UNSAFE_getByType, UNSAFE_getAllByType} = render(<Callout />);
+      const { UNSAFE_getByType, UNSAFE_getAllByType } = render(<Callout />);
       const callout = UNSAFE_getByType('RCTMGLCallout');
 
       expect(callout).toBeDefined();
@@ -24,13 +24,13 @@ describe('Callout', () => {
 
     test('renders with custom styles', () => {
       const testProps = {
-        style: {height: 1},
-        containerStyle: {height: 2},
-        contentStyle: {height: 3},
-        tipStyle: {height: 4},
-        textStyle: {height: 5},
+        style: { height: 1 },
+        containerStyle: { height: 2 },
+        contentStyle: { height: 3 },
+        tipStyle: { height: 4 },
+        textStyle: { height: 5 },
       };
-      const {UNSAFE_getByType, UNSAFE_getAllByType} = render(
+      const { UNSAFE_getByType, UNSAFE_getAllByType } = render(
         <Callout {...testProps} />,
       );
 
@@ -56,7 +56,7 @@ describe('Callout', () => {
 
   describe('_renderCustomCallout', () => {
     test('renders custom children', () => {
-      const {getByTestId, UNSAFE_queryByType} = render(
+      const { getByTestId, UNSAFE_queryByType } = render(
         <Callout>
           <View testID="TestChild">{'Foo Bar'}</View>
         </Callout>,
@@ -68,10 +68,10 @@ describe('Callout', () => {
 
     test('renders with custom styles', () => {
       const testProps = {
-        style: {width: 1},
-        containerStyle: {width: 2},
+        style: { width: 1 },
+        containerStyle: { width: 2 },
       };
-      const {UNSAFE_getByType, UNSAFE_getAllByType} = render(
+      const { UNSAFE_getByType, UNSAFE_getAllByType } = render(
         <Callout {...testProps}>
           <View>{'Foo Bar'}</View>
         </Callout>,

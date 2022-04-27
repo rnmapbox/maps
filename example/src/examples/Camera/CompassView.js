@@ -1,5 +1,5 @@
 import React from 'react';
-import {MapView, Camera} from '@rnmapbox/maps';
+import { MapView, Camera } from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
@@ -17,7 +17,8 @@ class CompassView extends React.Component {
           style={sheet.matchParent}
           compassEnabled
           logoEnabled={false}
-          compassViewPosition={2}>
+          compassViewPosition={2}
+        >
           <Camera heading={21} />
         </MapView>
       </Page>

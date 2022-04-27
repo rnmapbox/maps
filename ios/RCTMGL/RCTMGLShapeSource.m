@@ -85,6 +85,20 @@ static UIImage * _placeHolderImage;
     if (_maxZoomLevel != nil) {
         options[MGLShapeSourceOptionMaximumZoomLevel] = _maxZoomLevel;
     }
+    
+    if (_clusterProperties != nil) {
+       NSMutableDictionary<NSString *, NSArray *> *properties = [NSMutableDictionary new];
+
+        for (NSString *propertyName in _clusterProperties.allKeys) {
+            NSArray<NSExpression *> *expressions = [_clusterProperties objectForKey: propertyName];
+            NSExpression *firstExpression = [NSExpression expressionWithMGLJSONObject:[expressions objectAtIndex: 0]];
+            NSExpression *secondExpression = [NSExpression expressionWithMGLJSONObject:[expressions objectAtIndex: 1]];
+
+            [properties setObject:@[firstExpression, secondExpression] forKey:propertyName];
+        }
+
+        options[MGLShapeSourceOptionClusterProperties] = properties;
+    }
 
     if (_buffer != nil) {
         options[MGLShapeSourceOptionBuffer] = _buffer;

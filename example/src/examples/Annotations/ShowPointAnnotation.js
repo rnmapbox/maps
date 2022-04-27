@@ -1,5 +1,5 @@
 import React from 'react';
-import {Animated, View, Text, StyleSheet, Image} from 'react-native';
+import { Animated, View, Text, StyleSheet, Image } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 import PropTypes from 'prop-types';
 
@@ -28,27 +28,28 @@ class AnnotationWithRemoteImage extends React.Component {
   annotationRef = null;
 
   render() {
-    const {id, coordinate, title} = this.props;
+    const { id, coordinate, title } = this.props;
     return (
       <MapboxGL.PointAnnotation
         id={id}
         coordinate={coordinate}
         title={title}
         draggable
-        onDrag={e =>
+        onDrag={(e) =>
           console.log('onDrag:', e.properties.id, e.geometry.coordinates)
         }
-        onDragStart={e =>
+        onDragStart={(e) =>
           console.log('onDragStart:', e.properties.id, e.geometry.coordinates)
         }
-        onDragEnd={e =>
+        onDragEnd={(e) =>
           console.log('onDragEnd:', e.properties.id, e.geometry.coordinates)
         }
-        ref={ref => (this.annotationRef = ref)}>
+        ref={(ref) => (this.annotationRef = ref)}
+      >
         <View style={styles.annotationContainer}>
           <Image
-            source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}}
-            style={{width: ANNOTATION_SIZE, height: ANNOTATION_SIZE}}
+            source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
+            style={{ width: ANNOTATION_SIZE, height: ANNOTATION_SIZE }}
             onLoad={() => this.annotationRef.refresh()}
           />
         </View>
@@ -88,7 +89,7 @@ class ShowPointAnnotation extends React.Component {
   onPress(feature) {
     const coords = Object.assign([], this.state.coordinates);
     coords.push(feature.geometry.coordinates);
-    this.setState({coordinates: coords});
+    this.setState({ coordinates: coords });
   }
 
   onAnnotationSelected(activeIndex, feature) {
@@ -97,8 +98,8 @@ class ShowPointAnnotation extends React.Component {
     }
 
     this._scaleIn = new Animated.Value(0.6);
-    Animated.timing(this._scaleIn, {toValue: 1.0, duration: 200}).start();
-    this.setState({activeAnnotationIndex: activeIndex});
+    Animated.timing(this._scaleIn, { toValue: 1.0, duration: 200 }).start();
+    this.setState({ activeAnnotationIndex: activeIndex });
 
     if (this.state.previousActiveAnnotationIndex !== -1) {
       this._map.moveTo(feature.geometry.coordinates, 500);
@@ -113,7 +114,7 @@ class ShowPointAnnotation extends React.Component {
     }
 
     this._scaleOut = new Animated.Value(1);
-    Animated.timing(this._scaleOut, {toValue: 0.6, duration: 200}).start();
+    Animated.timing(this._scaleOut, { toValue: 0.6, duration: 200 }).start();
     nextState.previousActiveAnnotationIndex = deselectedIndex;
     this.setState(nextState);
   }
@@ -129,9 +130,9 @@ class ShowPointAnnotation extends React.Component {
 
       const animationStyle = {};
       if (i === this.state.activeAnnotationIndex) {
-        animationStyle.transform = [{scale: this._scaleIn}];
+        animationStyle.transform = [{ scale: this._scaleIn }];
       } else if (i === this.state.previousActiveAnnotationIndex) {
-        animationStyle.transform = [{scale: this._scaleOut}];
+        animationStyle.transform = [{ scale: this._scaleOut }];
       }
 
       if (i % 2 === 1) {
@@ -149,7 +150,8 @@ class ShowPointAnnotation extends React.Component {
             key={id}
             id={id}
             coordinate={coordinate}
-            title={title}>
+            title={title}
+          >
             <View style={styles.annotationContainer} />
             <MapboxGL.Callout title="This is a sample with image" />
           </MapboxGL.PointAnnotation>,
@@ -164,10 +166,11 @@ class ShowPointAnnotation extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          ref={c => (this._map = c)}
+          ref={(c) => (this._map = c)}
           onPress={this.onPress}
           onDidFinishLoadingMap={this.onDidFinishLoadingMap}
-          style={sheet.matchParent}>
+          style={sheet.matchParent}
+        >
           <MapboxGL.Camera
             zoomLevel={16}
             centerCoordinate={this.state.coordinates[0]}

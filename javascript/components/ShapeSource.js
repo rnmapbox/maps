@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {NativeModules, requireNativeComponent} from 'react-native';
+import { NativeModules, requireNativeComponent } from 'react-native';
 
-import {getFilter} from '../utils/filterUtils';
+import { getFilter } from '../utils/filterUtils';
 import {
   toJSONString,
   cloneReactChildrenWithProps,
@@ -10,7 +10,7 @@ import {
   isFunction,
   isAndroid,
 } from '../utils';
-import {copyPropertiesAsDeprecated} from '../utils/deprecation';
+import { copyPropertiesAsDeprecated } from '../utils/deprecation';
 
 import AbstractSource from './AbstractSource';
 import NativeBridgeComponent from './NativeBridgeComponent';
@@ -62,6 +62,21 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
      * the shapes are not clustered.
      */
     clusterMaxZoomLevel: PropTypes.number,
+
+    /**
+     * [`mapbox-gl` (v8) implementation only]
+     * Specifies custom properties on the generated clusters if clustering
+     * is enabled, aggregating values from clustered points.
+     *
+     * Has the form `{ "property_name": [operator, map_expression]}`, where
+     *  `operator` is a custom reduce expression that references a special `["accumulated"]` value -
+     *   it accumulates the property value from clusters/points the cluster contains
+     *  `map_expression` produces the value of a single point
+     *
+     * Example: `{ "resultingSum": [["+", ["accumulated"], ["get", "resultingSum"]], ["get", "scalerank"]] }`
+     *
+     */
+    clusterProperties: PropTypes.object,
 
     /**
      * Specifies the maximum zoom level at which to create vector tiles.
@@ -287,7 +302,7 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
   onPress(event) {
     const {
       nativeEvent: {
-        payload: {features, coordinates, point},
+        payload: { features, coordinates, point },
       },
     } = event;
     let newEvent = {
@@ -298,13 +313,13 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
     newEvent = copyPropertiesAsDeprecated(
       event,
       newEvent,
-      key => {
+      (key) => {
         console.warn(
           `event.${key} is deprecated on ShapeSource#onPress, please use event.features`,
         );
       },
       {
-        nativeEvent: origNativeEvent => ({
+        nativeEvent: (origNativeEvent) => ({
           ...origNativeEvent,
           payload: features[0],
         }),
@@ -324,12 +339,13 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
       cluster: this.props.cluster ? 1 : 0,
       clusterRadius: this.props.clusterRadius,
       clusterMaxZoomLevel: this.props.clusterMaxZoomLevel,
+      clusterProperties: this.props.clusterProperties,
       maxZoomLevel: this.props.maxZoomLevel,
       buffer: this.props.buffer,
       tolerance: this.props.tolerance,
       lineMetrics: this.props.lineMetrics,
       onPress: undefined,
-      ref: nativeRef => this._setNativeRef(nativeRef),
+      ref: (nativeRef) => this._setNativeRef(nativeRef),
       onAndroidCallback: isAndroid() ? this._onAndroidCallback : undefined,
     };
 

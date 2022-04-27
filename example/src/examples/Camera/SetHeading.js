@@ -21,9 +21,9 @@ class SetHeading extends React.Component {
     };
 
     this._bearingOptions = [
-      {label: '0', data: 0},
-      {label: '90', data: 90},
-      {label: '180', data: 180},
+      { label: '0', data: 0 },
+      { label: '90', data: 90 },
+      { label: '180', data: 180 },
     ];
 
     this.onHeadingChange = this.onHeadingChange.bind(this);
@@ -35,7 +35,7 @@ class SetHeading extends React.Component {
 
   componentDidUpdate() {
     if (this.state.followUserLocation) {
-      this.setState({followUserLocation: false});
+      this.setState({ followUserLocation: false });
     }
   }
 
@@ -44,7 +44,7 @@ class SetHeading extends React.Component {
   }
 
   onHeadingChange(index, heading) {
-    this.setState({heading});
+    this.setState({ heading });
   }
 
   render() {
@@ -52,10 +52,12 @@ class SetHeading extends React.Component {
       <TabBarPage
         {...this.props}
         options={this._bearingOptions}
-        onOptionPress={this.onHeadingChange}>
+        onOptionPress={this.onHeadingChange}
+      >
         <MapboxGL.MapView
-          ref={ref => (this.map = ref)}
-          style={sheet.matchParent}>
+          ref={(ref) => (this.map = ref)}
+          style={sheet.matchParent}
+        >
           <MapboxGL.Camera {...this.state} />
           <MapboxGL.UserLocation />
         </MapboxGL.MapView>

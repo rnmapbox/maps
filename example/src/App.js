@@ -1,13 +1,16 @@
 import React from 'react';
 import MapboxGL from '@rnmapbox/maps';
-import {StyleSheet, Text, View, LogBox, SafeAreaView} from 'react-native';
-import {createStackNavigator, TransitionPresets} from 'react-navigation-stack';
-import {createAppContainer} from 'react-navigation';
+import { StyleSheet, Text, View, LogBox, SafeAreaView } from 'react-native';
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from 'react-navigation-stack';
+import { createAppContainer } from 'react-navigation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import sheet from './styles/sheet';
 import colors from './styles/colors';
-import {IS_ANDROID} from './utils';
+import { IS_ANDROID } from './utils';
 import config from './utils/config';
 import Home from './scenes/Home';
 import Demo from './scenes/Demo';
@@ -30,9 +33,9 @@ Icon.loadFont();
 
 const AppStackNavigator = createStackNavigator(
   {
-    Home: {screen: Home},
-    Demo: {screen: Demo},
-    Group: {screen: Home},
+    Home: { screen: Home },
+    Demo: { screen: Demo },
+    Group: { screen: Home },
   },
   {
     initialRouteName: 'Home',
@@ -75,8 +78,9 @@ class App extends React.Component {
       }
       return (
         <SafeAreaView
-          style={[sheet.matchParent, {backgroundColor: colors.primary.blue}]}
-          forceInset={{top: 'always'}}>
+          style={[sheet.matchParent, { backgroundColor: colors.primary.blue }]}
+          forceInset={{ top: 'always' }}
+        >
           <View style={sheet.matchParent}>
             <Text style={styles.noPermissionsText}>
               You need to accept location permissions in order to use this

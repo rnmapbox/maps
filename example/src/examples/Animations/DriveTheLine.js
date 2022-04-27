@@ -1,14 +1,14 @@
 import React from 'react';
 import MapboxGL from '@rnmapbox/maps';
-import {View, StyleSheet} from 'react-native';
-import {Button} from 'react-native-elements';
-import {lineString as makeLineString} from '@turf/helpers';
-import {point} from '@turf/helpers';
+import { View, StyleSheet } from 'react-native';
+import { Button } from 'react-native-elements';
+import { lineString as makeLineString } from '@turf/helpers';
+import { point } from '@turf/helpers';
 
 import RouteSimulator from '../../utils/RouteSimulator';
-import {directionsClient} from '../../MapboxClient';
+import { directionsClient } from '../../MapboxClient';
 import sheet from '../../styles/sheet';
-import {SF_OFFICE_COORDINATE} from '../../utils';
+import { SF_OFFICE_COORDINATE } from '../../utils';
 import BaseExamplePropTypes from '../common/BaseExamplePropTypes';
 import Page from '../common/Page';
 import PulseCircleLayer from '../common/PulseCircleLayer';
@@ -71,16 +71,18 @@ class DriveTheLine extends React.Component {
 
   onStart() {
     const routeSimulator = new RouteSimulator(this.state.route);
-    routeSimulator.addListener(currentPoint => this.setState({currentPoint}));
+    routeSimulator.addListener((currentPoint) =>
+      this.setState({ currentPoint }),
+    );
     routeSimulator.start();
-    this.setState({routeSimulator});
+    this.setState({ routeSimulator });
   }
 
   async componentDidMount() {
     const reqOptions = {
       waypoints: [
-        {coordinates: SF_OFFICE_COORDINATE},
-        {coordinates: SF_ZOO_COORDINATE},
+        { coordinates: SF_OFFICE_COORDINATE },
+        { coordinates: SF_ZOO_COORDINATE },
       ],
       profile: 'walking',
       geometries: 'geojson',
@@ -132,7 +134,7 @@ class DriveTheLine extends React.Component {
       return null;
     }
 
-    const {nearestIndex} = this.state.currentPoint.properties;
+    const { nearestIndex } = this.state.currentPoint.properties;
     const coords = this.state.route.geometry.coordinates.filter(
       (c, i) => i <= nearestIndex,
     );
@@ -161,7 +163,7 @@ class DriveTheLine extends React.Component {
       backgroundColor = '#314ccd';
     }
 
-    const style = [layerStyles.origin, {circleColor: backgroundColor}];
+    const style = [layerStyles.origin, { circleColor: backgroundColor }];
 
     return (
       <MapboxGL.ShapeSource id="origin" shape={point(SF_OFFICE_COORDINATE)}>
@@ -191,9 +193,10 @@ class DriveTheLine extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          ref={c => (this._map = c)}
+          ref={(c) => (this._map = c)}
           style={sheet.matchParent}
-          styleURL={MapboxGL.StyleURL.Dark}>
+          styleURL={MapboxGL.StyleURL.Dark}
+        >
           <MapboxGL.Camera
             zoomLevel={11}
             centerCoordinate={[-122.452652, 37.762963]}
@@ -207,7 +210,8 @@ class DriveTheLine extends React.Component {
 
           <MapboxGL.ShapeSource
             id="destination"
-            shape={point(SF_ZOO_COORDINATE)}>
+            shape={point(SF_ZOO_COORDINATE)}
+          >
             <MapboxGL.CircleLayer
               id="destinationInnerCircle"
               style={layerStyles.destination}

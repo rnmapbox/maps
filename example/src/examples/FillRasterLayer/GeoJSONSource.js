@@ -27,9 +27,10 @@ class GeoJSONSource extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          ref={ref => (this.map = ref)}
+          ref={(ref) => (this.map = ref)}
           style={sheet.matchParent}
-          styleURL={MapboxGL.StyleURL.Dark}>
+          styleURL={MapboxGL.StyleURL.Dark}
+        >
           <MapboxGL.Camera
             zoomLevel={2}
             centerCoordinate={[-35.15165038, 40.6235728]}

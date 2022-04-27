@@ -1,10 +1,10 @@
 /* eslint react/prop-types:0  */
 import React from 'react';
-import {processColor} from 'react-native';
+import { processColor } from 'react-native';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
-import {getFilter} from '../utils/filterUtils';
-import {getStyleType} from '../utils/styleMap';
+import { getFilter } from '../utils/filterUtils';
+import { getStyleType } from '../utils/styleMap';
 import BridgeValue from '../utils/BridgeValue';
 
 class AbstractLayer extends React.PureComponent {
@@ -65,7 +65,7 @@ class AbstractLayer extends React.PureComponent {
     if (this.refs.nativeLayer) {
       let propsToPass = props;
       if (props.style) {
-        propsToPass = {...props, reactStyle: this._getStyle(props.style)};
+        propsToPass = { ...props, reactStyle: this._getStyle(props.style) };
       }
       this.refs.nativeLayer.setNativeProps(propsToPass);
     }

@@ -165,7 +165,7 @@ class UserLocation extends React.Component {
 
   async componentWillUnmount() {
     this._isMounted = false;
-    await this.setLocationManager({running: false});
+    await this.setLocationManager({ running: false });
   }
 
   /**
@@ -178,7 +178,7 @@ class UserLocation extends React.Component {
    * @param {Object} running - Object with key `running` and `boolean` value
    * @return {Promise<void>}
    */
-  async setLocationManager({running}) {
+  async setLocationManager({ running }) {
     if (this.locationManagerRunning !== running) {
       this.locationManagerRunning = running;
       if (running) {
@@ -213,8 +213,8 @@ class UserLocation extends React.Component {
     let heading = null;
 
     if (location && location.coords) {
-      const {longitude, latitude} = location.coords;
-      ({heading} = location.coords);
+      const { longitude, latitude } = location.coords;
+      ({ heading } = location.coords);
       coordinates = [longitude, latitude];
     }
 
@@ -229,7 +229,7 @@ class UserLocation extends React.Component {
   }
 
   _renderNative() {
-    const {androidRenderMode, showsUserHeadingIndicator} = this.props;
+    const { androidRenderMode, showsUserHeadingIndicator } = this.props;
 
     let props = {
       androidRenderMode,
@@ -239,8 +239,8 @@ class UserLocation extends React.Component {
   }
 
   render() {
-    const {heading, coordinates} = this.state;
-    const {children, visible, showsUserHeadingIndicator, onPress, animated} =
+    const { heading, coordinates } = this.state;
+    const { children, visible, showsUserHeadingIndicator, onPress, animated } =
       this.props;
 
     if (!visible) {
@@ -263,7 +263,8 @@ class UserLocation extends React.Component {
         coordinates={coordinates}
         style={{
           iconRotate: heading,
-        }}>
+        }}
+      >
         {children || normalIcon(showsUserHeadingIndicator, heading)}
       </Annotation>
     );

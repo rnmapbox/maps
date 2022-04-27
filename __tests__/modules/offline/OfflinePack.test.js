@@ -1,4 +1,4 @@
-import {NativeModules} from 'react-native';
+import { NativeModules } from 'react-native';
 
 import OfflinePack from '../../../javascript/modules/offline/OfflinePack';
 

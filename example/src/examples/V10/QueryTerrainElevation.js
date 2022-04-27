@@ -1,8 +1,8 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {Easing, Button, View, Text} from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Easing, Button, View, Text } from 'react-native';
 import length from '@turf/length';
-import {lineString} from '@turf/helpers';
-import {Animated as RNAnimated} from 'react-native';
+import { lineString } from '@turf/helpers';
+import { Animated as RNAnimated } from 'react-native';
 import {
   MapView,
   ShapeSource,
@@ -23,7 +23,7 @@ Logger.setLogLevel('verbose');
 const AnimatedMarkerView = RNAnimated.createAnimatedComponent(MarkerView);
 
 const styles = {
-  mapView: {flex: 1},
+  mapView: { flex: 1 },
   triangleStyle: (size, color) => ({
     width: 0,
     height: 0,
@@ -38,7 +38,7 @@ const styles = {
   }),
 };
 
-const QueryTerrainElevation = ({...props}) => {
+const QueryTerrainElevation = ({ ...props }) => {
   let [routeGeojson, setRouteGeojson] = useState(null);
   let [animatedRoute, setAnimatedRoute] = useState(null);
   let [actPoint, setActPoint] = useState(null);
@@ -56,13 +56,13 @@ const QueryTerrainElevation = ({...props}) => {
 
   function startAnimation(animatedRoute) {
     const ts = lineString(animatedRoute.__getValue());
-    const total = length(ts, {units: 'meters'});
+    const total = length(ts, { units: 'meters' });
     const points = animatedRoute.__getValue();
     const endPoint = points[points.length - 1];
 
     animatedRoute
       .timing({
-        toValue: {end: {point: endPoint, from: total}},
+        toValue: { end: { point: endPoint, from: total } },
         duration: 20000,
         easing: Easing.linear,
       })
@@ -111,7 +111,8 @@ const QueryTerrainElevation = ({...props}) => {
       <MapView
         style={styles.mapView}
         styleURL={'mapbox://styles/mapbox/satellite-streets-v11'}
-        ref={map}>
+        ref={map}
+      >
         <Camera
           centerCoordinate={[6.58968, 45.39701]}
           zoomLevel={12.3}
@@ -124,7 +125,8 @@ const QueryTerrainElevation = ({...props}) => {
           id="mapbox-dem"
           url="mapbox://mapbox.terrain-rgb"
           tileSize={512}
-          maxZoomLevel={14}>
+          maxZoomLevel={14}
+        >
           <SkyLayer
             id="sky-layer"
             style={{
@@ -157,7 +159,8 @@ const QueryTerrainElevation = ({...props}) => {
                 type: 'LineString',
                 coordinates: animatedRoute,
               })
-            }>
+            }
+          >
             <Animated.LineLayer
               id={'animated-route'}
               style={{
@@ -178,7 +181,8 @@ const QueryTerrainElevation = ({...props}) => {
                 type: 'Point',
                 coordinates: actPoint,
               })
-            }>
+            }
+          >
             <Animated.CircleLayer
               id="currentLocationCircle"
               style={{
@@ -190,8 +194,8 @@ const QueryTerrainElevation = ({...props}) => {
           </Animated.ShapeSource>
         )}
         {actPoint && altitude && (
-          <AnimatedMarkerView coordinate={actPoint} anchor={{x: 0.5, y: 1}}>
-            <View style={{alignItems: 'center'}}>
+          <AnimatedMarkerView coordinate={actPoint} anchor={{ x: 0.5, y: 1 }}>
+            <View style={{ alignItems: 'center' }}>
               <View
                 style={{
                   backgroundColor: 'white',
@@ -199,11 +203,12 @@ const QueryTerrainElevation = ({...props}) => {
                   width: 140,
                   height: 50,
                   borderRadius: 10,
-                }}>
+                }}
+              >
                 <Text>Altitude: {altitude} m</Text>
               </View>
               <View
-                style={[styles.triangleStyle(12, 'white'), {marginTop: -1}]}
+                style={[styles.triangleStyle(12, 'white'), { marginTop: -1 }]}
               />
             </View>
           </AnimatedMarkerView>
