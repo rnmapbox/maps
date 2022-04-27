@@ -93,7 +93,6 @@ interface CameraProps
 }
 
 /**
- *
  * @param {CameraProps} props
  */
 const Camera = memo((props: CameraProps) => {
@@ -104,10 +103,8 @@ const Camera = memo((props: CameraProps) => {
     pitch,
     zoomLevel,
     padding,
-    allowUpdates = true,
     animationDuration = 2000,
     animationMode = 'easeTo',
-    defaultSettings,
     minZoomLevel,
     maxZoomLevel,
     maxBounds,
@@ -116,6 +113,8 @@ const Camera = memo((props: CameraProps) => {
     followZoomLevel,
     followPitch,
     followHeading,
+    defaultSettings,
+    allowUpdates = true,
     triggerKey,
     onUserTrackingModeChange,
   } = props;
@@ -277,11 +276,7 @@ const Camera = memo((props: CameraProps) => {
   //   refs.camera.setNativeProps({ stop: cameraConfig });
   // }
 
-  const _createDefaultStop = (): NativeCameraStop | null => {
-    return null;
-  };
-
-  const _createStop = useCallback(
+  const buildNativeStop = useCallback(
     (
       stop: CameraStop,
       ignoreFollowUserLocation = false,
@@ -291,10 +286,10 @@ const Camera = memo((props: CameraProps) => {
       }
 
       const stopConfig: NativeCameraStop = {
-        mode: _getNativeCameraMode(stop),
+        mode: nativeAnimationMode(stop.animationMode),
         pitch: stop.pitch,
         heading: stop.heading,
-        duration: stop.animationDuration || 0,
+        duration: stop.animationDuration ?? 0,
         zoom: stop.zoomLevel,
       };
 
@@ -323,8 +318,8 @@ const Camera = memo((props: CameraProps) => {
     [props.followUserLocation],
   );
 
-  const _getNativeCameraMode = (config: { animationMode: AnimationMode }) => {
-    switch (config.animationMode) {
+  const nativeAnimationMode = (_mode: AnimationMode) => {
+    switch (_mode) {
       case Mode.Flight:
         return MapboxGL.CameraModes.Flight;
       case Mode.Ease:
@@ -349,7 +344,7 @@ const Camera = memo((props: CameraProps) => {
   }, [maxBounds]);
 
   const stop = useMemo(() => {
-    return _createStop({
+    return buildNativeStop({
       centerCoordinate,
       bounds,
       heading,
@@ -368,15 +363,22 @@ const Camera = memo((props: CameraProps) => {
     padding,
     animationDuration,
     animationMode,
-    _createStop,
+    buildNativeStop,
   ]);
+
+  const defaultStop = useMemo((): NativeCameraStop | null => {
+    if (!defaultSettings) {
+      return null;
+    }
+    return buildNativeStop(defaultSettings);
+  }, [defaultSettings, buildNativeStop]);
 
   return (
     <RCTMGLCamera
       testID={'Camera'}
       ref={camera}
       stop={stop}
-      defaultStop={_createDefaultStop()}
+      defaultStop={defaultStop}
       followUserLocation={followUserLocation}
       followUserMode={followUserMode}
       followPitch={followPitch}
