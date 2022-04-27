@@ -1,4 +1,4 @@
-import {promises} from 'fs';
+import { promises } from 'fs';
 import path from 'path';
 
 import {
@@ -17,7 +17,7 @@ import {
   removeGeneratedContents,
 } from '@expo/config-plugins/build/utils/generateCode';
 
-let pkg: {name: string; version?: string} = {
+let pkg: { name: string; version?: string } = {
   name: '@rnmapbox/maps',
 };
 try {
@@ -43,12 +43,11 @@ export type MapboxPlugProps = {
  */
 const withCocoaPodsInstallerBlocks: ConfigPlugin<MapboxPlugProps> = (
   c,
-  {RNMapboxMapsImpl, RNMapboxMapsDownloadToken},
+  { RNMapboxMapsImpl, RNMapboxMapsDownloadToken },
 ) => {
   return withDangerousMod(c, [
     'ios',
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    async config => {
+    async (config) => {
       const file = path.join(config.modRequest.platformProjectRoot, 'Podfile');
 
       const contents = await promises.readFile(file, 'utf8');
@@ -70,7 +69,7 @@ const withCocoaPodsInstallerBlocks: ConfigPlugin<MapboxPlugProps> = (
 // used for spm (swift package manager) which Expo doesn't currently support.
 export function applyCocoaPodsModifications(
   contents: string,
-  {RNMapboxMapsImpl, RNMapboxMapsDownloadToken}: MapboxPlugProps,
+  { RNMapboxMapsImpl, RNMapboxMapsDownloadToken }: MapboxPlugProps,
 ): string {
   // Ensure installer blocks exist
   let src = addConstantBlock(
@@ -170,7 +169,7 @@ export function setExcludedArchitectures(project: XcodeProject): XcodeProject {
   const configurations = project.pbxXCBuildConfigurationSection();
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  for (const {buildSettings} of Object.values(configurations || {})) {
+  for (const { buildSettings } of Object.values(configurations || {})) {
     // Guessing that this is the best way to emulate Xcode.
     // Using `project.addToBuildSettings` modifies too many targets.
     if (typeof buildSettings?.PRODUCT_NAME !== 'undefined') {
@@ -181,8 +180,8 @@ export function setExcludedArchitectures(project: XcodeProject): XcodeProject {
   return project;
 }
 
-const withExcludedSimulatorArchitectures: ConfigPlugin = c => {
-  return withXcodeProject(c, config => {
+const withExcludedSimulatorArchitectures: ConfigPlugin = (c) => {
+  return withXcodeProject(c, (config) => {
     config.modResults = setExcludedArchitectures(config.modResults);
     return config;
   });
@@ -190,12 +189,12 @@ const withExcludedSimulatorArchitectures: ConfigPlugin = c => {
 
 const withAndroidPropertiesDownloadToken: ConfigPlugin<MapboxPlugProps> = (
   config,
-  {RNMapboxMapsDownloadToken},
+  { RNMapboxMapsDownloadToken },
 ) => {
   const key = 'MAPBOX_DOWNLOADS_TOKEN';
   if (RNMapboxMapsDownloadToken) {
-    return withGradleProperties(config, config => {
-      config.modResults = config.modResults.filter(item => {
+    return withGradleProperties(config, (config) => {
+      config.modResults = config.modResults.filter((item) => {
         if (item.type === 'property' && item.key === key) {
           return false;
         }
@@ -217,12 +216,12 @@ const withAndroidPropertiesDownloadToken: ConfigPlugin<MapboxPlugProps> = (
 
 const withAndroidPropertiesImpl2: ConfigPlugin<MapboxPlugProps> = (
   config,
-  {RNMapboxMapsImpl},
+  { RNMapboxMapsImpl },
 ) => {
   const key = 'expoRNMapboxMapsImpl';
   if (RNMapboxMapsImpl) {
-    return withGradleProperties(config, config => {
-      config.modResults = config.modResults.filter(item => {
+    return withGradleProperties(config, (config) => {
+      config.modResults = config.modResults.filter((item) => {
         if (item.type === 'property' && item.key === key) {
           return false;
         }
@@ -244,12 +243,12 @@ const withAndroidPropertiesImpl2: ConfigPlugin<MapboxPlugProps> = (
 
 const withAndroidProperties: ConfigPlugin<MapboxPlugProps> = (
   config,
-  {RNMapboxMapsImpl, RNMapboxMapsDownloadToken},
+  { RNMapboxMapsImpl, RNMapboxMapsDownloadToken },
 ) => {
   config = withAndroidPropertiesDownloadToken(config, {
     RNMapboxMapsDownloadToken,
   });
-  config = withAndroidPropertiesImpl2(config, {RNMapboxMapsImpl});
+  config = withAndroidPropertiesImpl2(config, { RNMapboxMapsImpl });
   return config;
 };
 
@@ -307,52 +306,52 @@ const addMapboxMavenRepo = (projectBuildGradle: string): string => {
   }).contents;
 };
 
-const withAndroidAppGradle: ConfigPlugin<MapboxPlugProps> = config => {
-  return withAppBuildGradle(config, ({modResults, ...config}) => {
+const withAndroidAppGradle: ConfigPlugin<MapboxPlugProps> = (config) => {
+  return withAppBuildGradle(config, ({ modResults, ...config }) => {
     if (modResults.language !== 'groovy') {
       WarningAggregator.addWarningAndroid(
         'withMapbox',
         `Cannot automatically configure app build.gradle if it's not groovy`,
       );
-      return {modResults, ...config};
+      return { modResults, ...config };
     }
 
     modResults.contents = addLibCppFilter(modResults.contents);
-    return {modResults, ...config};
+    return { modResults, ...config };
   });
 };
 
-const withAndroidProjectGradle: ConfigPlugin<MapboxPlugProps> = config => {
-  return withProjectBuildGradle(config, ({modResults, ...config}) => {
+const withAndroidProjectGradle: ConfigPlugin<MapboxPlugProps> = (config) => {
+  return withProjectBuildGradle(config, ({ modResults, ...config }) => {
     if (modResults.language !== 'groovy') {
       WarningAggregator.addWarningAndroid(
         'withMapbox',
         `Cannot automatically configure app build.gradle if it's not groovy`,
       );
-      return {modResults, ...config};
+      return { modResults, ...config };
     }
 
     modResults.contents = addMapboxMavenRepo(modResults.contents);
-    return {modResults, ...config};
+    return { modResults, ...config };
   });
 };
 
 const withMapboxAndroid: ConfigPlugin<MapboxPlugProps> = (
   config,
-  {RNMapboxMapsImpl, RNMapboxMapsDownloadToken},
+  { RNMapboxMapsImpl, RNMapboxMapsDownloadToken },
 ) => {
   config = withAndroidProperties(config, {
     RNMapboxMapsImpl,
     RNMapboxMapsDownloadToken,
   });
-  config = withAndroidProjectGradle(config, {RNMapboxMapsImpl});
-  config = withAndroidAppGradle(config, {RNMapboxMapsImpl});
+  config = withAndroidProjectGradle(config, { RNMapboxMapsImpl });
+  config = withAndroidAppGradle(config, { RNMapboxMapsImpl });
   return config;
 };
 
 const withMapbox: ConfigPlugin<MapboxPlugProps> = (
   config,
-  {RNMapboxMapsImpl, RNMapboxMapsDownloadToken},
+  { RNMapboxMapsImpl, RNMapboxMapsDownloadToken },
 ) => {
   config = withExcludedSimulatorArchitectures(config);
   config = withMapboxAndroid(config, {

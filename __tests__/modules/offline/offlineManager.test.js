@@ -1,7 +1,7 @@
-import {NativeModules, Platform} from 'react-native';
+import { NativeModules, Platform } from 'react-native';
 
 import MapboxGL from '../../../javascript';
-import {OfflineModuleEventEmitter} from '../../../javascript/modules/offline/offlineManager';
+import { OfflineModuleEventEmitter } from '../../../javascript/modules/offline/offlineManager';
 
 describe('offlineManager', () => {
   const packOptions = {
@@ -190,7 +190,7 @@ describe('offlineManager', () => {
 
       const name = `test-${Date.now()}`;
       const noop = () => {};
-      const options = {...packOptions, name};
+      const options = { ...packOptions, name };
       await MapboxGL.offlineManager.createPack(options);
       await MapboxGL.offlineManager.subscribe(name, noop, noop);
 
@@ -203,7 +203,7 @@ describe('offlineManager', () => {
 
       const name = `test-${Date.now()}`;
       const noop = () => {};
-      const options = {...packOptions, name};
+      const options = { ...packOptions, name };
       await MapboxGL.offlineManager.createPack(options, noop, noop);
 
       expect(spy).not.toHaveBeenCalled();
@@ -219,7 +219,7 @@ describe('offlineManager', () => {
 
       const name = `test-${Date.now()}`;
       const noop = () => {};
-      const options = {...packOptions, name};
+      const options = { ...packOptions, name };
       await MapboxGL.offlineManager.createPack(options);
       await MapboxGL.offlineManager.subscribe(name, noop, noop);
 

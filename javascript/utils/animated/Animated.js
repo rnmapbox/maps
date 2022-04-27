@@ -1,4 +1,4 @@
-﻿import {Animated as RNAnimated} from 'react-native';
+﻿import { Animated as RNAnimated } from 'react-native';
 
 import ShapeSource from '../../components/ShapeSource';
 import ImageSource from '../../components/ImageSource';

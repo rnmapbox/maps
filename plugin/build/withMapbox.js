@@ -28,7 +28,6 @@ catch (_a) {
 const withCocoaPodsInstallerBlocks = (c, { RNMapboxMapsImpl, RNMapboxMapsDownloadToken }) => {
     return (0, config_plugins_1.withDangerousMod)(c, [
         'ios',
-        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         async (config) => {
             const file = path_1.default.join(config.modRequest.platformProjectRoot, 'Podfile');
             const contents = await fs_1.promises.readFile(file, 'utf8');
@@ -135,8 +134,8 @@ function setExcludedArchitectures(project) {
     return project;
 }
 exports.setExcludedArchitectures = setExcludedArchitectures;
-const withExcludedSimulatorArchitectures = c => {
-    return (0, config_plugins_1.withXcodeProject)(c, config => {
+const withExcludedSimulatorArchitectures = (c) => {
+    return (0, config_plugins_1.withXcodeProject)(c, (config) => {
         config.modResults = setExcludedArchitectures(config.modResults);
         return config;
     });
@@ -144,8 +143,8 @@ const withExcludedSimulatorArchitectures = c => {
 const withAndroidPropertiesDownloadToken = (config, { RNMapboxMapsDownloadToken }) => {
     const key = 'MAPBOX_DOWNLOADS_TOKEN';
     if (RNMapboxMapsDownloadToken) {
-        return (0, config_plugins_1.withGradleProperties)(config, config => {
-            config.modResults = config.modResults.filter(item => {
+        return (0, config_plugins_1.withGradleProperties)(config, (config) => {
+            config.modResults = config.modResults.filter((item) => {
                 if (item.type === 'property' && item.key === key) {
                     return false;
                 }
@@ -167,8 +166,8 @@ const withAndroidPropertiesDownloadToken = (config, { RNMapboxMapsDownloadToken 
 const withAndroidPropertiesImpl2 = (config, { RNMapboxMapsImpl }) => {
     const key = 'expoRNMapboxMapsImpl';
     if (RNMapboxMapsImpl) {
-        return (0, config_plugins_1.withGradleProperties)(config, config => {
-            config.modResults = config.modResults.filter(item => {
+        return (0, config_plugins_1.withGradleProperties)(config, (config) => {
+            config.modResults = config.modResults.filter((item) => {
                 if (item.type === 'property' && item.key === key) {
                     return false;
                 }
@@ -244,7 +243,7 @@ const addMapboxMavenRepo = (projectBuildGradle) => {
         comment: '//',
     }).contents;
 };
-const withAndroidAppGradle = config => {
+const withAndroidAppGradle = (config) => {
     return (0, config_plugins_1.withAppBuildGradle)(config, ({ modResults, ...config }) => {
         if (modResults.language !== 'groovy') {
             config_plugins_1.WarningAggregator.addWarningAndroid('withMapbox', `Cannot automatically configure app build.gradle if it's not groovy`);
@@ -254,7 +253,7 @@ const withAndroidAppGradle = config => {
         return { modResults, ...config };
     });
 };
-const withAndroidProjectGradle = config => {
+const withAndroidProjectGradle = (config) => {
     return (0, config_plugins_1.withProjectBuildGradle)(config, ({ modResults, ...config }) => {
         if (modResults.language !== 'groovy') {
             config_plugins_1.WarningAggregator.addWarningAndroid('withMapbox', `Cannot automatically configure app build.gradle if it's not groovy`);

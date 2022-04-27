@@ -1,4 +1,4 @@
-import {NativeModules} from 'react-native';
+import { NativeModules } from 'react-native';
 
 import LocationManager, {
   LocationModuleEventEmitter,
@@ -69,7 +69,7 @@ describe('LocationManager', () => {
 
     describe('#addListener', () => {
       const myListener = jest.fn();
-      MapboxGL.LocationCallbackName = {Update: 'MapboxUserLocationUpdate'};
+      MapboxGL.LocationCallbackName = { Update: 'MapboxUserLocationUpdate' };
 
       afterEach(() => {
         locationManager._listeners = [];
@@ -156,7 +156,7 @@ describe('LocationManager', () => {
       });
 
       test('starts native location manager and adds event emitter listener', () => {
-        MapboxGL.LocationCallbackName = {Update: 'MapboxUserLocationUpdate'};
+        MapboxGL.LocationCallbackName = { Update: 'MapboxUserLocationUpdate' };
 
         expect(locationManager._isListening).toStrictEqual(false);
 
@@ -198,7 +198,7 @@ describe('LocationManager', () => {
 
         // native location manager has no #stop exposed in tests?
         MapboxGLLocationManager.stop = jest.fn();
-        MapboxGL.LocationCallbackName = {Update: 'MapboxUserLocationUpdate'};
+        MapboxGL.LocationCallbackName = { Update: 'MapboxUserLocationUpdate' };
 
         expect(locationManager._isListening).toStrictEqual(true);
 
@@ -216,7 +216,7 @@ describe('LocationManager', () => {
 
         // native location manager has no #stop exposed in tests?
         MapboxGLLocationManager.stop = jest.fn();
-        MapboxGL.LocationCallbackName = {Update: 'MapboxUserLocationUpdate'};
+        MapboxGL.LocationCallbackName = { Update: 'MapboxUserLocationUpdate' };
 
         expect(locationManager._isListening).toStrictEqual(false);
 
@@ -251,13 +251,13 @@ describe('LocationManager', () => {
       test('calls listeners with location', () => {
         const listeners = [jest.fn(), jest.fn(), jest.fn()];
 
-        listeners.forEach(listener => {
+        listeners.forEach((listener) => {
           locationManager.addListener(listener);
         });
 
         locationManager.onUpdate(location);
 
-        listeners.forEach(listener => {
+        listeners.forEach((listener) => {
           expect(listener).toHaveBeenCalledTimes(1);
           expect(listener).toHaveBeenCalledWith(location);
         });

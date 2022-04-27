@@ -1,5 +1,5 @@
-import React, {useMemo, useState} from 'react';
-import {Button, SafeAreaView, View} from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { Button, SafeAreaView, View } from 'react-native';
 import {
   MapView,
   Camera,
@@ -8,7 +8,7 @@ import {
   Logger,
 } from '@rnmapbox/maps';
 import bbox from '@turf/bbox';
-import {Text, Divider} from 'react-native-elements';
+import { Text, Divider } from 'react-native-elements';
 
 import Page from '../common/Page';
 import colors from '../../styles/colors';
@@ -72,11 +72,11 @@ const randPadding = () => {
   };
 };
 
-const toPosition = coordinate => {
+const toPosition = (coordinate) => {
   return [coordinate.longitude, coordinate.latitude];
 };
 
-const CameraAnimation = props => {
+const CameraAnimation = (props) => {
   const initialCoordinate = {
     latitude: 40.759211,
     longitude: -73.984638,
@@ -100,7 +100,7 @@ const CameraAnimation = props => {
       };
       const _coordinates = Array(10)
         .fill(0)
-        .map(_ => {
+        .map((_) => {
           return {
             latitude: _centerCoordinate.latitude + Math.random() * 0.2,
             longitude: _centerCoordinate.longitude + Math.random() * 0.2,
@@ -118,7 +118,7 @@ const CameraAnimation = props => {
   };
 
   const features = useMemo(() => {
-    return coordinates.map(p => {
+    return coordinates.map((p) => {
       return {
         type: 'Feature',
         geometry: {
@@ -155,8 +155,8 @@ const CameraAnimation = props => {
 
   const locationDisplay = useMemo(() => {
     if (coordinates.length > 1) {
-      const ne = centerOrBounds.bounds?.ne.map(n => n.toFixed(3));
-      const sw = centerOrBounds.bounds?.sw.map(n => n.toFixed(3));
+      const ne = centerOrBounds.bounds?.ne.map((n) => n.toFixed(3));
+      const sw = centerOrBounds.bounds?.sw.map((n) => n.toFixed(3));
       return `ne ${ne} | sw ${sw}`;
     } else if (coordinates.length === 1) {
       const lon = coordinates[0].longitude.toFixed(4);
@@ -178,7 +178,7 @@ const CameraAnimation = props => {
           animationMode={animationMode}
         />
 
-        {features.map(f => {
+        {features.map((f) => {
           const id = JSON.stringify(f.geometry.coordinates);
           return (
             <ShapeSource key={id} id={`source-${id}`} shape={f}>

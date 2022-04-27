@@ -1,4 +1,4 @@
-import {isBoolean, isNumber, isString} from './index';
+import { isBoolean, isNumber, isString } from './index';
 
 const Types = {
   Array: 'array',
@@ -35,7 +35,7 @@ export default class BridgeValue {
   }
 
   get value() {
-    const {type} = this;
+    const { type } = this;
 
     let value;
 

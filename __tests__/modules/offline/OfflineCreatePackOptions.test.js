@@ -1,4 +1,4 @@
-import {featureCollection, point} from '@turf/helpers';
+import { featureCollection, point } from '@turf/helpers';
 
 import OfflineCreatePackOptions from '../../../javascript/modules/offline/OfflineCreatePackOptions';
 

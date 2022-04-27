@@ -2,11 +2,9 @@ require('./autogenHelpers/globals');
 
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 const ejs = require('ejs');
-
-const {execSync} = require('child_process');
-
 const prettier = require('prettier');
 
 const styleSpecJSON = require('../style-spec/v8.json');
@@ -15,20 +13,18 @@ const DocJSONBuilder = require('./autogenHelpers/DocJSONBuilder');
 const MarkdownBuilder = require('./autogenHelpers/MarkdownBuilder');
 
 function readIosVersion() {
-  const podspecPath = path.join(
-    __dirname,
-    '..',
-    'rnmapbox-maps.podspec',
-  );
+  const podspecPath = path.join(__dirname, '..', 'rnmapbox-maps.podspec');
   const lines = fs.readFileSync(podspecPath, 'utf8').split('\n');
-  const mapboxLineRegex = /^\s*rnMapboxMapsDefaultMapboxVersion\s*=\s*'~>\s+(\d+\.\d+)(\.\d+)?'$/;
-  const mapboxLine = lines.filter(i => mapboxLineRegex.exec(i))[0];
+  const mapboxLineRegex =
+    /^\s*rnMapboxMapsDefaultMapboxVersion\s*=\s*'~>\s+(\d+\.\d+)(\.\d+)?'$/;
+  const mapboxLine = lines.filter((i) => mapboxLineRegex.exec(i))[0];
 
-  const mapboxGLLineRegex = /^\s*rnMapboxMapsDefaultMapboxGLVersion\s*=\s*'~>\s+(\d+\.\d+)(\.\d+)?'$/;
-  const mapboxGLLine = lines.filter(i => mapboxGLLineRegex.exec(i))[0];
+  const mapboxGLLineRegex =
+    /^\s*rnMapboxMapsDefaultMapboxGLVersion\s*=\s*'~>\s+(\d+\.\d+)(\.\d+)?'$/;
+  const mapboxGLLine = lines.filter((i) => mapboxGLLineRegex.exec(i))[0];
   return {
     v10: `${mapboxLineRegex.exec(mapboxLine)[1]}.0`,
-    gl: `${mapboxLineRegex.exec(mapboxLine)[1]}.0`
+    gl: `${mapboxLineRegex.exec(mapboxLine)[1]}.0`,
   };
 }
 
@@ -41,14 +37,16 @@ function readAndroidVersion() {
     'build.gradle',
   );
   const lines = fs.readFileSync(buildGradlePath, 'utf8').split('\n');
-  const mapboxGLLineRegex = /^\s+implementation\s+'com.mapbox.mapboxsdk:mapbox-android-sdk:(\d+\.\d+\.\d+)'$/;
-  const mapboxGLLine = lines.filter(i => mapboxGLLineRegex.exec(i))[0];
-  const mapboxV10LineRegex = /^\s+implementation\s+'com.mapbox.maps:android:(\d+\.\d+\.\d+)'$/;
-  const mapboxV10Line = lines.filter(i => mapboxV10LineRegex.exec(i))[0];
+  const mapboxGLLineRegex =
+    /^\s+implementation\s+'com.mapbox.mapboxsdk:mapbox-android-sdk:(\d+\.\d+\.\d+)'$/;
+  const mapboxGLLine = lines.filter((i) => mapboxGLLineRegex.exec(i))[0];
+  const mapboxV10LineRegex =
+    /^\s+implementation\s+'com.mapbox.maps:android:(\d+\.\d+\.\d+)'$/;
+  const mapboxV10Line = lines.filter((i) => mapboxV10LineRegex.exec(i))[0];
   return {
     gl: mapboxGLLineRegex.exec(mapboxGLLine)[1],
     v10: mapboxV10LineRegex.exec(mapboxV10Line)[1],
-  }
+  };
 }
 
 if (!styleSpecJSON) {
@@ -75,7 +73,12 @@ const OUTPUT_EXAMPLE_PREFIX = [
 const OUTPUT_PREFIX = outputToExample ? OUTPUT_EXAMPLE_PREFIX : ['..'];
 
 const IOS_OUTPUT_PATH = path.join(__dirname, ...OUTPUT_PREFIX, 'ios', 'RCTMGL');
-const IOS_V10_OUTPUT_PATH = path.join(__dirname, ...OUTPUT_PREFIX, 'ios', 'RCTMGL-v10');
+const IOS_V10_OUTPUT_PATH = path.join(
+  __dirname,
+  ...OUTPUT_PREFIX,
+  'ios',
+  'RCTMGL-v10',
+);
 
 const ANDROID_OUTPUT_PATH = path.join(
   __dirname,
@@ -107,7 +110,6 @@ const ANDROID_V10_OUTPUT_PATH = path.join(
   'styles',
 );
 
-
 const JS_OUTPUT_PATH = path.join(
   __dirname,
   ...OUTPUT_PREFIX,
@@ -116,7 +118,7 @@ const JS_OUTPUT_PATH = path.join(
 );
 
 getSupportedLayers(Object.keys(styleSpecJSON.layer.type.values)).forEach(
-  ({layerName, support})  => {
+  ({ layerName, support }) => {
     layers.push({
       name: layerName,
       properties: getPropertiesForLayer(layerName),
@@ -124,30 +126,32 @@ getSupportedLayers(Object.keys(styleSpecJSON.layer.type.values)).forEach(
         gl: getPropertiesForLayer(layerName, 'gl'),
         v10: getPropertiesForLayer(layerName, 'v10'),
       },
-      support
+      support,
     });
   },
 );
 
 // add light as a layer
 layers.push({
-  name: 'light', 
+  name: 'light',
   properties: getPropertiesForLight(),
   props: {
     gl: getPropertiesForLight('gl'),
     v10: getPropertiesForLight('v10'),
   },
-  support: {gl: true, v10: true}
+  support: { gl: true, v10: true },
 });
 
 function getPropertiesForLight(only) {
   const lightAttributes = styleSpecJSON.light;
 
-  const lightProps = getSupportedProperties(lightAttributes, only).map(attrName => {
-    return Object.assign({}, buildProperties(lightAttributes, attrName), {
-      allowedFunctionTypes: [],
-    });
-  });
+  const lightProps = getSupportedProperties(lightAttributes, only).map(
+    (attrName) => {
+      return Object.assign({}, buildProperties(lightAttributes, attrName), {
+        allowedFunctionTypes: [],
+      });
+    },
+  );
 
   return lightProps;
 }
@@ -156,36 +160,40 @@ function getPropertiesForLayer(layerName, only) {
   const paintAttributes = styleSpecJSON[`paint_${layerName}`];
   const layoutAttributes = styleSpecJSON[`layout_${layerName}`];
 
-  const paintProps = getSupportedProperties(paintAttributes, only).map(attrName => {
-    const prop = buildProperties(paintAttributes, attrName);
+  const paintProps = getSupportedProperties(paintAttributes, only).map(
+    (attrName) => {
+      const prop = buildProperties(paintAttributes, attrName);
 
-    // overrides
-    if (['line-width'].includes(attrName)) {
-      prop.allowedFunctionTypes = ['camera'];
-    }
+      // overrides
+      if (['line-width'].includes(attrName)) {
+        prop.allowedFunctionTypes = ['camera'];
+      }
 
-    return prop;
-  });
+      return prop;
+    },
+  );
 
-  const layoutProps = getSupportedProperties(layoutAttributes, only).map(attrName => {
-    const prop = buildProperties(layoutAttributes, attrName);
+  const layoutProps = getSupportedProperties(layoutAttributes, only).map(
+    (attrName) => {
+      const prop = buildProperties(layoutAttributes, attrName);
 
-    // overrides
-    if (
-      [
-        'line-join',
-        'text-max-width',
-        'text-letter-spacing',
-        'text-anchor',
-        'text-justify',
-        'text-font',
-      ].includes(attrName)
-    ) {
-      prop.allowedFunctionTypes = ['camera'];
-    }
+      // overrides
+      if (
+        [
+          'line-join',
+          'text-max-width',
+          'text-letter-spacing',
+          'text-anchor',
+          'text-justify',
+          'text-font',
+        ].includes(attrName)
+      ) {
+        prop.allowedFunctionTypes = ['camera'];
+      }
 
-    return prop;
-  });
+      return prop;
+    },
+  );
 
   return layoutProps.concat(paintProps);
 }
@@ -199,13 +207,16 @@ function getSupportedLayers(layerNames) {
     const support = getAttributeSupport(layer['sdk-support']);
 
     if (
-      (support.basic.v10.android && support.basic.v10.ios) || 
+      (support.basic.v10.android && support.basic.v10.ios) ||
       (support.basic.gl.android && support.basic.gl.ios)
-      ) {
-      supportedLayers.push({layerName, support: {
-        v10: (support.basic.v10.android && support.basic.v10.ios),
-        gl: (support.basic.gl.android && support.basic.gl.ios)
-      }});
+    ) {
+      supportedLayers.push({
+        layerName,
+        support: {
+          v10: support.basic.v10.android && support.basic.v10.ios,
+          gl: support.basic.gl.android && support.basic.gl.ios,
+        },
+      });
     }
   }
 
@@ -213,7 +224,7 @@ function getSupportedLayers(layerNames) {
 }
 
 function getSupportedProperties(attributes, only) {
-  return Object.keys(attributes).filter(attrName =>
+  return Object.keys(attributes).filter((attrName) =>
     isAttrSupported(attributes[attrName], only),
   );
 }
@@ -295,7 +306,7 @@ function isImage(attrName, type) {
   return (
     attrName.toLowerCase().indexOf('pattern') !== -1 ||
     attrName.toLowerCase().indexOf('image') !== -1 ||
-    type === "resolvedImage"
+    type === 'resolvedImage'
   );
 }
 
@@ -308,19 +319,34 @@ function isAttrSupported(attr, only) {
   if (only != null) {
     return support.basic[only].android && support.basic[only].ios;
   }
-  return (support.basic.gl.android && support.basic.gl.ios) || (support.basic.v10.android && support.basic.v10.ios);
+  return (
+    (support.basic.gl.android && support.basic.gl.ios) ||
+    (support.basic.v10.android && support.basic.v10.ios)
+  );
 }
 
 function getAttributeSupport(sdkSupport) {
   const support = {
-    basic: {gl: {android: false, ios: false}, v10: {android: false, ios: false}},
-    data: {gl: {android: false, ios: false}, v10: {android: false, ios: false}}
+    basic: {
+      gl: { android: false, ios: false },
+      v10: { android: false, ios: false },
+    },
+    data: {
+      gl: { android: false, ios: false },
+      v10: { android: false, ios: false },
+    },
   };
 
   const basicSupport = sdkSupport && sdkSupport['basic functionality'];
   if (basicSupport && basicSupport.android) {
-    support.basic.gl.android = isVersionGTE(androidVersion.gl, basicSupport.android);
-    support.basic.v10.android = isVersionGTE(androidVersion.v10, basicSupport.android);
+    support.basic.gl.android = isVersionGTE(
+      androidVersion.gl,
+      basicSupport.android,
+    );
+    support.basic.v10.android = isVersionGTE(
+      androidVersion.v10,
+      basicSupport.android,
+    );
   }
   if (basicSupport && basicSupport.ios) {
     support.basic.gl.ios = isVersionGTE(iosVersion.gl, basicSupport.ios);
@@ -358,11 +384,11 @@ function getAttributeSupport(sdkSupport) {
 function isVersionGTE(version, otherVersion) {
   const v = +version
     .split('.')
-    .map(i => String(i).padStart(3, '0'))
+    .map((i) => String(i).padStart(3, '0'))
     .join('');
   const ov = +otherVersion
     .split('.')
-    .map(i => String(i).padStart(3, '0'))
+    .map((i) => String(i).padStart(3, '0'))
     .join('');
   return v >= ov;
 }
@@ -418,26 +444,28 @@ async function generate() {
       output: path.join(JS_OUTPUT_PATH, 'styleMap.js'),
     },
   ];
-  const outputPaths = templateMappings.map(m => m.output);
+  const outputPaths = templateMappings.map((m) => m.output);
 
   // autogenerate code
-  templateMappings.forEach(({input, output, only}) => {
+  templateMappings.forEach(({ input, output, only }) => {
     const filename = output.split('/').pop();
     console.log(`Generating ${filename}`);
-    const tmpl = ejs.compile(fs.readFileSync(input, 'utf8'), {strict: true});
-    
+    const tmpl = ejs.compile(fs.readFileSync(input, 'utf8'), { strict: true });
+
     function filterOnly(layers, only) {
       if (only != null) {
-        let result = layers.filter((e) => (e.support[only])).map((e) => ({...e, properties: e.props[only]}));
+        let result = layers
+          .filter((e) => e.support[only])
+          .map((e) => ({ ...e, properties: e.props[only] }));
         return result;
       } else {
         return layers;
       }
     }
-    
-    let results = tmpl({layers: filterOnly(layers, only)});
+
+    let results = tmpl({ layers: filterOnly(layers, only) });
     if (filename.endsWith('ts')) {
-      results = prettier.format(results, {filepath: filename});
+      results = prettier.format(results, { filepath: filename });
     }
     fs.writeFileSync(output, results);
   });

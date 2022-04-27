@@ -1,5 +1,5 @@
-import {NativeEventEmitter, NativeModules} from 'react-native';
-const {MGLLogging} = NativeModules;
+import { NativeEventEmitter, NativeModules } from 'react-native';
+const { MGLLogging } = NativeModules;
 
 class Logger {
   static instance = null;
@@ -71,7 +71,7 @@ class Logger {
   }
 
   subscribe() {
-    this.subscription = this.loggerEmitter.addListener('LogEvent', log => {
+    this.subscription = this.loggerEmitter.addListener('LogEvent', (log) => {
       this.onLog(log);
     });
   }
@@ -82,7 +82,7 @@ class Logger {
   }
 
   effectiveLevel(log) {
-    let {level, message, tag} = log;
+    let { level, message, tag } = log;
 
     if (level === 'warning') {
       if (
@@ -98,7 +98,7 @@ class Logger {
 
   onLog(log) {
     if (!this.logCallback || !this.logCallback(log)) {
-      let {message} = log;
+      let { message } = log;
       let level = this.effectiveLevel(log);
       if (level === 'error') {
         console.error('Mapbox error', message, log);

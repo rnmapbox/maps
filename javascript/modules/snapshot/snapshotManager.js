@@ -1,4 +1,4 @@
-import {NativeModules} from 'react-native';
+import { NativeModules } from 'react-native';
 
 import SnapshotOptions from './SnapshotOptions';
 

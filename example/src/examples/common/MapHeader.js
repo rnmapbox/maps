@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {StyleSheet} from 'react-native';
-import {Header} from 'react-native-elements';
+import { StyleSheet } from 'react-native';
+import { Header } from 'react-native-elements';
 
 import colors from '../../styles/colors';
 
@@ -48,7 +48,7 @@ class MapHeader extends React.PureComponent {
           color: colors.secondary.white,
           underlayColor: this.props.backgroundColor,
         }}
-        centerComponent={{text: this.props.label, style: styles.label}}
+        centerComponent={{ text: this.props.label, style: styles.label }}
       />
     );
   }

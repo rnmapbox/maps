@@ -71,7 +71,8 @@ class GradientLine extends React.Component {
                   [-77.033643, 38.899926],
                 ],
               },
-            }}>
+            }}
+          >
             <MapboxGL.LineLayer id="layer1" style={styles.lineLayer} />
           </MapboxGL.ShapeSource>
         </MapboxGL.MapView>

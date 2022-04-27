@@ -1,7 +1,7 @@
-import React, {FC, useState} from 'react';
-import MapboxGL, {SymbolLayerStyle} from '@rnmapbox/maps';
-import {Feature} from '@turf/helpers/dist/js';
-import {View, Text, ViewStyle, StyleProp, TextStyle} from 'react-native';
+import React, { FC, useState } from 'react';
+import MapboxGL, { SymbolLayerStyle } from '@rnmapbox/maps';
+import { Feature } from '@turf/helpers/dist/js';
+import { View, Text, ViewStyle, StyleProp, TextStyle } from 'react-native';
 
 import exampleIcon from '../../assets/pin.png';
 import sheet from '../../styles/sheet';
@@ -34,7 +34,7 @@ type CustomCalloutViewProps = {
   message: string;
 };
 
-const CustomCalloutView: FC<CustomCalloutViewProps> = ({message}) => {
+const CustomCalloutView: FC<CustomCalloutViewProps> = ({ message }) => {
   return (
     <View style={styles.calloutContainerStyle}>
       <Text style={styles.customCalloutText}>{message}</Text>
@@ -47,9 +47,9 @@ type CustomCalloutProps = {
   onDismissExample: () => any;
 };
 
-const CustomCallout: FC<CustomCalloutProps> = props => {
+const CustomCallout: FC<CustomCalloutProps> = (props) => {
   const [selectedFeature, setSelectedFeature] =
-    useState<Feature<{type: string; coordinates: number[]}, any>>();
+    useState<Feature<{ type: string; coordinates: number[] }, any>>();
 
   const onPinPress = (e: any): void => {
     if (selectedFeature) {
@@ -68,13 +68,15 @@ const CustomCallout: FC<CustomCalloutProps> = props => {
         <MapboxGL.ShapeSource
           id="mapPinsSource"
           shape={featureCollection}
-          onPress={onPinPress}>
+          onPress={onPinPress}
+        >
           <MapboxGL.SymbolLayer id="mapPinsLayer" style={styles.mapPinLayer} />
         </MapboxGL.ShapeSource>
         {selectedFeature && (
           <MapboxGL.MarkerView
             id="selectedFeatureMarkerView"
-            coordinate={selectedFeature.geometry.coordinates}>
+            coordinate={selectedFeature.geometry.coordinates}
+          >
             <CustomCalloutView message={selectedFeature?.properties?.message} />
           </MapboxGL.MarkerView>
         )}

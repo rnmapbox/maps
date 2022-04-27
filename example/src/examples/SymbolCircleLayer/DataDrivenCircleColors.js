@@ -43,7 +43,8 @@ class DataDrivenCircleColors extends React.PureComponent {
       <Page {...this.props}>
         <MapboxGL.MapView
           styleURL={MapboxGL.StyleURL.Light}
-          style={sheet.matchParent}>
+          style={sheet.matchParent}
+        >
           <MapboxGL.Camera
             zoomLevel={10}
             pitch={45}
@@ -52,7 +53,8 @@ class DataDrivenCircleColors extends React.PureComponent {
 
           <MapboxGL.VectorSource
             id="population"
-            url={'mapbox://examples.8fgz4egr'}>
+            url={'mapbox://examples.8fgz4egr'}
+          >
             <MapboxGL.CircleLayer
               id="sf2010CircleFill"
               sourceLayerID="sf2010"

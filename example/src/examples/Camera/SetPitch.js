@@ -20,9 +20,9 @@ class SetPitch extends React.Component {
     };
 
     this._pitchOptions = [
-      {label: '15', data: 15},
-      {label: '45', data: 45},
-      {label: '60', data: 60},
+      { label: '15', data: 15 },
+      { label: '45', data: 45 },
+      { label: '60', data: 60 },
     ];
 
     this.onUpdatePitch = this.onUpdatePitch.bind(this);
@@ -37,7 +37,7 @@ class SetPitch extends React.Component {
   }
 
   onUpdatePitch(index, pitch) {
-    this.setState({followPitch: pitch});
+    this.setState({ followPitch: pitch });
   }
 
   render() {
@@ -45,7 +45,8 @@ class SetPitch extends React.Component {
       <TabBarPage
         {...this.props}
         options={this._pitchOptions}
-        onOptionPress={this.onUpdatePitch}>
+        onOptionPress={this.onUpdatePitch}
+      >
         <MapboxGL.MapView style={sheet.matchParent}>
           <MapboxGL.Camera {...this.state} followUserLocation />
           <MapboxGL.UserLocation />

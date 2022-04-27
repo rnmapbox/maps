@@ -1,5 +1,5 @@
-import {makeLatLngBounds} from '../../utils/geoUtils';
-import {toJSONString} from '../../utils';
+import { makeLatLngBounds } from '../../utils/geoUtils';
+import { toJSONString } from '../../utils';
 
 class OfflineCreatePackOptions {
   constructor(options = {}) {

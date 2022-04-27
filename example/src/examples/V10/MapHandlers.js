@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {SafeAreaView, View} from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView, View } from 'react-native';
 import {
   MapView,
   Camera,
@@ -7,7 +7,7 @@ import {
   ShapeSource,
   Logger,
 } from '@rnmapbox/maps';
-import {Text, Divider} from 'react-native-elements';
+import { Text, Divider } from 'react-native-elements';
 
 import Page from '../common/Page';
 import colors from '../../styles/colors';
@@ -30,7 +30,7 @@ const styles = {
   },
 };
 
-const MapHandlers = props => {
+const MapHandlers = (props) => {
   const [lastCallback, setLastCallback] = useState('');
   const [mapState, setMapState] = useState({});
   const [features, setFeatures] = useState([]);
@@ -40,7 +40,7 @@ const MapHandlers = props => {
   const bounds = properties?.bounds;
   const gestures = mapState?.gestures;
 
-  const buildShape = feature => {
+  const buildShape = (feature) => {
     return {
       type: 'Point',
       coordinates: feature.geometry.coordinates,
@@ -48,12 +48,12 @@ const MapHandlers = props => {
   };
 
   const addFeature = (feature, kind) => {
-    const _feature = {...feature};
+    const _feature = { ...feature };
     _feature.properties.kind = kind;
-    setFeatures(prev => [...prev, _feature]);
+    setFeatures((prev) => [...prev, _feature]);
   };
 
-  const display = position => {
+  const display = (position) => {
     if (!position) {
       return '';
     }
@@ -64,20 +64,21 @@ const MapHandlers = props => {
     <Page {...props}>
       <MapView
         style={styles.map}
-        onPress={_feature => {
+        onPress={(_feature) => {
           addFeature(_feature, 'press');
         }}
-        onLongPress={_feature => {
+        onLongPress={(_feature) => {
           addFeature(_feature, 'longPress');
         }}
-        onCameraChanged={_state => {
+        onCameraChanged={(_state) => {
           setLastCallback('onCameraChanged');
           setMapState(_state);
         }}
-        onMapIdle={_state => {
+        onMapIdle={(_state) => {
           setLastCallback('onMapIdle');
           setMapState(_state);
-        }}>
+        }}
+      >
         <Camera
           centerCoordinate={[-73.984638, 40.759211]}
           zoomLevel={12}

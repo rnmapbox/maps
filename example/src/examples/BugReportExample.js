@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button} from 'react-native';
+import { Button } from 'react-native';
 import {
   MapView,
   ShapeSource,
@@ -9,9 +9,9 @@ import {
 } from '@rnmapbox/maps';
 
 const styles = {
-  mapView: {flex: 1},
+  mapView: { flex: 1 },
   circleLayer: {
-    circleRadiusTransition: {duration: 5000, delay: 0},
+    circleRadiusTransition: { duration: 5000, delay: 0 },
     circleColor: '#ff0000',
   },
 };
@@ -64,14 +64,14 @@ class BugReportExample extends React.Component {
   render() {
     const circleLayerStyle = {
       ...styles.circleLayer,
-      ...{circleRadius: this.state.radius},
+      ...{ circleRadius: this.state.radius },
     };
 
     return (
       <>
         <Button
           title="Grow"
-          onPress={() => this.setState({radius: this.state.radius + 20})}
+          onPress={() => this.setState({ radius: this.state.radius + 20 })}
         />
         <MapView style={styles.mapView}>
           <Camera centerCoordinate={[-74.00597, 40.71427]} zoomLevel={14} />

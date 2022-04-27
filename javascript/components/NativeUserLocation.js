@@ -1,5 +1,5 @@
 import React from 'react';
-import {requireNativeComponent} from 'react-native';
+import { requireNativeComponent } from 'react-native';
 import PropTypes from 'prop-types';
 
 const NATIVE_MODULE_NAME = 'RCTMGLNativeUserLocation';

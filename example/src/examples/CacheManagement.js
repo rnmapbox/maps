@@ -1,5 +1,5 @@
 import React from 'react';
-import MapboxGL, {MapView, Camera} from '@rnmapbox/maps';
+import MapboxGL, { MapView, Camera } from '@rnmapbox/maps';
 import {
   Alert,
   StyleSheet,
@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import sheet from '../styles/sheet';
-import {DEFAULT_CENTER_COORDINATE} from '../utils';
+import { DEFAULT_CENTER_COORDINATE } from '../utils';
 
 import BaseExamplePropTypes from './common/BaseExamplePropTypes';
 import Page from './common/Page';
@@ -78,15 +78,15 @@ class CacheManagement extends React.Component {
     Alert.alert(`Max cache size successfully set to ${newMaxSize} bytes`);
   };
 
-  validateCacheInputValue = value => !isNaN(parseInt(value, 10));
+  validateCacheInputValue = (value) => !isNaN(parseInt(value, 10));
 
-  onChangeCacheSize = cacheSize => this.setState({cacheSize});
+  onChangeCacheSize = (cacheSize) => this.setState({ cacheSize });
 
   render() {
     const validSizeValue = this.validateCacheInputValue(this.state.cacheSize);
     const buttonStyles = validSizeValue
       ? styles.button
-      : [styles.button, {backgroundColor: 'grey'}];
+      : [styles.button, { backgroundColor: 'grey' }];
 
     return (
       <Page {...this.props}>
@@ -99,7 +99,8 @@ class CacheManagement extends React.Component {
             <View style={styles.control}>
               <TouchableOpacity
                 onPress={this.invalidateAmbientCache}
-                style={styles.button}>
+                style={styles.button}
+              >
                 <Text style={styles.buttonTxt}>Invalidate cache</Text>
               </TouchableOpacity>
             </View>
@@ -107,7 +108,8 @@ class CacheManagement extends React.Component {
             <View style={styles.control}>
               <TouchableOpacity
                 onPress={this.resetDatabase}
-                style={styles.button}>
+                style={styles.button}
+              >
                 <Text style={styles.buttonTxt}>Reset database</Text>
               </TouchableOpacity>
             </View>
@@ -123,7 +125,8 @@ class CacheManagement extends React.Component {
               <TouchableOpacity
                 onPress={this.setMaximumAmbientCacheSize}
                 style={buttonStyles}
-                disabled={!validSizeValue}>
+                disabled={!validSizeValue}
+              >
                 <Text style={styles.buttonTxt}>Set ambient max cache</Text>
               </TouchableOpacity>
             </View>
@@ -131,7 +134,8 @@ class CacheManagement extends React.Component {
             <View style={styles.control}>
               <TouchableOpacity
                 onPress={this.clearAmbientCache}
-                style={styles.button}>
+                style={styles.button}
+              >
                 <Text style={styles.buttonTxt}>Clear ambient cache</Text>
               </TouchableOpacity>
             </View>

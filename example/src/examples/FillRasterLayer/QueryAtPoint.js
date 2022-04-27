@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text} from 'react-native';
+import { Text } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
@@ -34,11 +34,11 @@ class QueryAtPoint extends React.Component {
   }
 
   get emptyState() {
-    return {selectedGeoJSON: null, selectedCommunityDistrict: -1};
+    return { selectedGeoJSON: null, selectedCommunityDistrict: -1 };
   }
 
   async onPress(e) {
-    const {screenPointX, screenPointY} = e.properties;
+    const { screenPointX, screenPointY } = e.properties;
 
     const featureCollection = await this._map.queryRenderedFeaturesAtPoint(
       [screenPointX, screenPointY],
@@ -61,10 +61,11 @@ class QueryAtPoint extends React.Component {
     return (
       <Page {...this.props}>
         <MapboxGL.MapView
-          ref={c => (this._map = c)}
+          ref={(c) => (this._map = c)}
           onPress={this.onPress}
           style={sheet.matchParent}
-          styleURL={MapboxGL.StyleURL.Light}>
+          styleURL={MapboxGL.StyleURL.Light}
+        >
           <MapboxGL.Camera
             zoomLevel={9}
             centerCoordinate={[-73.970895, 40.723279]}
@@ -77,7 +78,8 @@ class QueryAtPoint extends React.Component {
           {this.state.selectedGeoJSON ? (
             <MapboxGL.ShapeSource
               id="selectedNYC"
-              shape={this.state.selectedGeoJSON}>
+              shape={this.state.selectedGeoJSON}
+            >
               <MapboxGL.FillLayer
                 id="selectedNYCFill"
                 style={styles.selectedNeighborhood}
