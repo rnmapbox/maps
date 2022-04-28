@@ -64,7 +64,7 @@ type UserTrackingModeChangeCallback = (
  * @param {number} maxZoomLevel
  * @param {CameraBounds} maxBounds
  */
-interface CameraProps
+export interface CameraProps
   extends Omit<CameraStop, 'type'>,
     CameraFollowConfig,
     CameraMinMaxConfig {
