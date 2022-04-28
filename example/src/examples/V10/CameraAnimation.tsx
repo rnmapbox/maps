@@ -132,6 +132,7 @@ const CameraAnimation = (props: any) => {
     if (positions.length === 1) {
       return {
         centerCoordinate: positions[0],
+        bounds: undefined,
       };
     } else {
       console.log('pos:', positions);
@@ -146,6 +147,7 @@ const CameraAnimation = (props: any) => {
       };
       const _bbox = bbox(lineString);
       return {
+        centerCoordinate: undefined,
         bounds: {
           ne: [_bbox[0], _bbox[1]],
           sw: [_bbox[2], _bbox[3]],
@@ -156,13 +158,13 @@ const CameraAnimation = (props: any) => {
 
   const locationDisplay = useMemo(() => {
     if (positions.length > 1) {
-      const ne = centerOrBounds.bounds?.ne.map((n) => n.toFixed(3));
-      const sw = centerOrBounds.bounds?.sw.map((n) => n.toFixed(3));
+      const ne = centerOrBounds.bounds?.ne.map((n: number) => n.toFixed(3));
+      const sw = centerOrBounds.bounds?.sw.map((n: number) => n.toFixed(3));
       return `ne ${ne} | sw ${sw}`;
     } else if (positions.length === 1) {
-      const position = positions[0];
-      const lon = position[0].toFixed(4);
-      const lat = position[1].toFixed(4);
+      const [first] = positions;
+      const lon = first[0].toFixed(4);
+      const lat = first[1].toFixed(4);
       return `lon ${lon} | lat ${lat}`;
     }
   }, [positions, centerOrBounds]);
