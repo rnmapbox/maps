@@ -263,11 +263,11 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       return .flight
     }()
     
-    if let z1 = minZoomLevel, let z2 = CGFloat(exactly: z1), zoom! < z2 {
+    if let z1 = minZoomLevel, let z2 = CGFloat(exactly: z1), let zCurrent = zoom, zCurrent < z2 {
       zoom = z2
     }
 
-    if let z1 = maxZoomLevel, let z2 = CGFloat(exactly: z1), zoom! > z2 {
+    if let z1 = maxZoomLevel, let z2 = CGFloat(exactly: z1), let zCurrent = zoom, zCurrent > z2 {
       zoom = z2
     }
 
