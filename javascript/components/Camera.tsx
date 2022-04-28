@@ -75,7 +75,7 @@ interface CameraProps
 }
 
 interface CameraStop {
-  readonly type: 'CameraStop';
+  readonly type?: 'CameraStop';
   centerCoordinate?: Position;
   bounds?: CameraBoundsWithPadding; // With padding for backwards compatibility.
   heading?: number;
@@ -152,11 +152,93 @@ interface NativeCameraStop {
   mode?: NativeAnimationMode;
 }
 
+export interface CameraRef {
+  /**
+   * Sets any camera properties, with default fallbacks if unspecified.
+   */
+  setCamera: (config: CameraStop | CameraStops) => void;
+
+  /**
+   * Set the camera position to enclose the provided bounds, with optional
+   * padding and duration.
+   *
+   * @example
+   * camera.fitBounds([lon, lat], [lon, lat]);
+   * camera.fitBounds([lon, lat], [lon, lat], 20, 1000);
+   * camera.fitBounds([lon, lat], [lon, lat], [verticalPadding, horizontalPadding], 1000);
+   * camera.fitBounds([lon, lat], [lon, lat], [top, right, bottom, left], 1000);
+   *
+   * @param {Position} ne Northeast coordinate of bounding box
+   * @param {Position} sw Southwest coordinate of bounding box
+   * @param {number} paddingConfig
+   * @param {number} animationDuration
+   */
+  fitBounds: (
+    ne: Position,
+    sw: Position,
+    paddingConfig?: number | number[],
+    animationDuration?: number,
+  ) => void;
+
+  /**
+   * Sets the camera to center around the provided coordinate using a realistic 'travel'
+   * animation, with optional duration.
+   *
+   * @example
+   * camera.flyTo([lon, lat]);
+   * camera.flyTo([lon, lat], 12000);
+   *
+   *  @param {Position} centerCoordinate
+   *  @param {number} animationDuration
+   */
+  flyTo: (centerCoordinate: Position, animationDuration?: number) => void;
+
+  /**
+   * Sets the camera to center around the provided coordinate, with optional duration.
+   *
+   * @example
+   * camera.moveTo([lon, lat], 200);
+   * camera.moveTo([lon, lat]);
+   *
+   *  @param {Position} centerCoordinate
+   *  @param {number} animationDuration
+   */
+  moveTo: (centerCoordinate: Position, animationDuration?: number) => void;
+
+  /**
+   * Zooms the camera to the provided level, with optional duration.
+   *
+   * @example
+   * camera.zoomTo(16);
+   * camera.zoomTo(16, 100);
+   *
+   * @param {number} zoomLevel
+   * @param {number} animationDuration
+   */
+  zoomTo: (zoomLevel: number, animationDuration?: number) => void;
+}
+
 /**
  * @param {CameraProps} props
+ *
+ * @example
+ * To use imperative methods, pass in a ref object:
+ * ```
+ * const camera = useRef<CameraRef>(null);
+ *
+ * useEffect(() => {
+ *   camera.current?.setCamera({
+ *     centerCoordinate: [lon, lat],
+ *   });
+ * }, []);
+ *
+ * return (
+ *   <Camera ref={camera} />
+ * );
+ * ```
  */
 const Camera = memo(
-  forwardRef((props: CameraProps, ref) => {
+  forwardRef((props: CameraProps, ref: React.ForwardedRef<CameraRef>) => {
     const {
       centerCoordinate,
       bounds,
@@ -184,24 +266,10 @@ const Camera = memo(
     // @ts-ignore
     const camera: React.RefObject<RCTMGLCamera> = useRef(null);
 
-    /**
-     * Map camera transitions to fit provided bounds.
-     *
-     * @example
-     * camera.fitBounds([lng, lat], [lng, lat])
-     * camera.fitBounds([lng, lat], [lng, lat], 20, 1000)
-     * camera.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)
-     * camera.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)
-     *
-     * @param {Position} ne Northeast coordinate of bounds
-     * @param {Position} sw Southwest coordinate of bounds
-     * @param {number} paddingConfig Camera padding configuration
-     * @param {number} animationDuration Duration of camera animation
-     */
-    const fitBounds = (
-      ne: Position,
-      sw: Position,
-      paddingConfig: number | number[] = 0,
+    const fitBounds: CameraRef['fitBounds'] = (
+      ne,
+      sw,
+      paddingConfig = 0,
       animationDuration = 0,
     ) => {
       let padding = {
@@ -236,7 +304,7 @@ const Camera = memo(
         };
       }
 
-      return setCamera({
+      setCamera({
         type: 'CameraStop',
         bounds: {
           ne,
@@ -248,17 +316,10 @@ const Camera = memo(
       });
     };
 
-    /**
-     * Map camera will fly to new coordinate.
-     *
-     * @example
-     * camera.flyTo([lng, lat])
-     * camera.flyTo([lng, lat], 12000)
-     *
-     *  @param {Position} centerCoordinate Coordinates that map camera will center around
-     *  @param {number} animationDuration Duration of camera animation
-     */
-    const flyTo = (centerCoordinate: Position, animationDuration = 2000) => {
+    const flyTo: CameraRef['flyTo'] = (
+      centerCoordinate,
+      animationDuration = 2000,
+    ) => {
       setCamera({
         type: 'CameraStop',
         centerCoordinate,
@@ -266,17 +327,10 @@ const Camera = memo(
       });
     };
 
-    /**
-     * Map camera will move to new coordinate at the same zoom level.
-     *
-     * @example
-     * camera.moveTo([lng, lat], 200) // eases camera to new location based on duration
-     * camera.moveTo([lng, lat]) // snaps camera to new location without any easing
-     *
-     *  @param {Position} centerCoordinate Coordinates that map camera will move too
-     *  @param {number} animationDuration Duration of camera animation
-     */
-    const moveTo = (centerCoordinate: Position, animationDuration = 0) => {
+    const moveTo: CameraRef['moveTo'] = (
+      centerCoordinate,
+      animationDuration = 0,
+    ) => {
       setCamera({
         type: 'CameraStop',
         centerCoordinate,
@@ -285,18 +339,11 @@ const Camera = memo(
       });
     };
 
-    /**
-     * Map camera will zoom to specified level.
-     *
-     * @example
-     * camera.zoomTo(16)
-     * camera.zoomTo(16, 100)
-     *
-     * @param {number} zoomLevel Zoom level that the map camera will animate too
-     * @param {number} animationDuration Duration of camera animation
-     */
-    const zoomTo = (zoomLevel: number, animationDuration = 2000) => {
-      return setCamera({
+    const zoomTo: CameraRef['zoomTo'] = (
+      zoomLevel,
+      animationDuration = 2000,
+    ) => {
+      setCamera({
         type: 'CameraStop',
         zoomLevel,
         animationDuration,
@@ -428,12 +475,12 @@ const Camera = memo(
       );
     }, [maxBounds]);
 
-    const setCamera = useCallback(
-      (config: CameraStop | CameraStops) => {
+    const setCamera: CameraRef['setCamera'] = useCallback(
+      (config) => {
         if (!config.type)
+          // @ts-expect-error The compiler doesn't understand that the `config` union type is guaranteed
+          // to be an object type.
           config = {
-            // @ts-expect-error The compiler doesn't understand that the `config` union type is guaranteed
-            // to be an object type
             ...config,
             // @ts-expect-error Allows JS files to pass in an invalid config (lacking the `type` property),
             // which would raise a compilation error in TS files.
