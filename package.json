@@ -6,7 +6,7 @@
     "access": "public"
   },
   "author": "React Native Mapbox Team",
-  "main": "./javascript/index.ts",
+  "main": "index.ts",
   "keywords": [
     "gl",
     "ios",

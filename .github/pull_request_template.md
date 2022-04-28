@@ -20,7 +20,7 @@ Added `your feature` that allows ...
 - [ ] I have tested this on a device/simulator for each compatible OS
 - [ ] I updated the documentation with running `yarn generate` in the root folder
 - [ ] I mentioned this change in `CHANGELOG.md`
-- [ ] I updated the typings files (`index.d.ts`)
+- [ ] I updated the typings files (`definitions.d.ts`)
 - [ ] I added/ updated a sample (`/example`)
 
 ## Screenshot OR Video

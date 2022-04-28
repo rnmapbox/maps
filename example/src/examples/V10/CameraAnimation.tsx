@@ -1,16 +1,14 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { Button, SafeAreaView, StyleSheet, View } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import MapboxGL, {
+  CameraProps,
+  AnimationMode,
+  CameraRef,
+} from '@rnmapbox/maps';
 import bbox from '@turf/bbox';
 import { Feature, LineString, Point, Position } from '@turf/helpers';
 import { Text, Divider } from 'react-native-elements';
 
-import {
-  Camera,
-  CameraRef,
-  CameraProps,
-  AnimationMode,
-} from '../../../../javascript';
 import Page from '../common/Page';
 import colors from '../../styles/colors';
 
@@ -274,7 +272,7 @@ const CameraAnimation = (props: any) => {
   return (
     <Page {...props}>
       <MapboxGL.MapView style={styles.map}>
-        <Camera
+        <MapboxGL.Camera
           ref={camera}
           {...centerOrBounds}
           zoomLevel={12}
