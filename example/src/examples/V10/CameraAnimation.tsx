@@ -1,28 +1,20 @@
 import React, { useMemo, useState } from 'react';
-import { Button, SafeAreaView, View } from 'react-native';
-import {
-  MapView,
-  Camera,
-  ShapeSource,
-  CircleLayer,
-  Logger,
-} from '@rnmapbox/maps';
+import { Button, SafeAreaView, StyleSheet, View } from 'react-native';
+import MapboxGL from '@rnmapbox/maps';
+const { MapView, ShapeSource, CircleLayer } = MapboxGL;
 import bbox from '@turf/bbox';
+import { Feature, LineString, Point, Position } from '@turf/helpers';
 import { Text, Divider } from 'react-native-elements';
 
+import { Camera, CameraProps, AnimationMode } from '../../../../javascript';
 import Page from '../common/Page';
 import colors from '../../styles/colors';
 
-Logger.setLogLevel('verbose');
-
-const styles = {
+const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
-  circle: {
-    circleRadius: 6,
-    circleColor: colors.primary.blue,
-  },
+
   sheet: {
     paddingTop: 10,
     paddingHorizontal: 10,
@@ -40,6 +32,13 @@ const styles = {
   },
   fadedText: {
     color: 'gray',
+  },
+});
+
+const mapStyles = {
+  circle: {
+    circleRadius: 6,
+    circleColor: colors.primary.blue,
   },
 };
 
@@ -72,76 +71,78 @@ const randPadding = () => {
   };
 };
 
-const toPosition = (coordinate) => {
-  return [coordinate.longitude, coordinate.latitude];
-};
+const CameraAnimation = (props: any) => {
+  const initialPosition = [-73.984638, 40.759211];
 
-const CameraAnimation = (props) => {
-  const initialCoordinate = {
-    latitude: 40.759211,
-    longitude: -73.984638,
-  };
-
-  const [animationMode, setAnimationMode] = useState('moveTo');
-  const [coordinates, setCoordinates] = useState([initialCoordinate]);
+  const [animationMode, setAnimationMode] = useState<AnimationMode>('moveTo');
+  const [positions, setPositions] = useState([initialPosition]);
   const [padding, setPadding] = useState(zeroPadding);
 
   const paddingDisplay = useMemo(() => {
     return `L ${padding.paddingLeft} | R ${padding.paddingRight} | T ${padding.paddingTop} | B ${padding.paddingBottom}`;
   }, [padding]);
 
-  const move = (_animationMode, shouldCreateMultiple) => {
+  const move = (
+    _animationMode: AnimationMode,
+    shouldCreateMultiple: boolean,
+  ) => {
     setAnimationMode(_animationMode);
 
     if (shouldCreateMultiple) {
-      const _centerCoordinate = {
-        latitude: initialCoordinate.latitude + Math.random() * 0.2,
-        longitude: initialCoordinate.longitude + Math.random() * 0.2,
-      };
-      const _coordinates = Array(10)
+      const _centerPosition = [
+        initialPosition[0] + Math.random() * 0.2,
+        initialPosition[1] + Math.random() * 0.2,
+      ];
+      const _positions = Array(10)
         .fill(0)
         .map((_) => {
-          return {
-            latitude: _centerCoordinate.latitude + Math.random() * 0.2,
-            longitude: _centerCoordinate.longitude + Math.random() * 0.2,
-          };
+          return [
+            _centerPosition[0] + Math.random() * 0.2,
+            _centerPosition[1] + Math.random() * 0.2,
+          ];
         });
-      setCoordinates(_coordinates);
+      setPositions(_positions);
     } else {
-      setCoordinates([
-        {
-          latitude: initialCoordinate.latitude + Math.random() * 0.2,
-          longitude: initialCoordinate.longitude + Math.random() * 0.2,
-        },
+      setPositions([
+        [
+          initialPosition[0] + Math.random() * 0.2,
+          initialPosition[1] + Math.random() * 0.2,
+        ],
       ]);
     }
   };
 
-  const features = useMemo(() => {
-    return coordinates.map((p) => {
+  const features = useMemo((): Feature<Point>[] => {
+    return positions.map((p: Position) => {
       return {
         type: 'Feature',
         geometry: {
           type: 'Point',
-          coordinates: toPosition(p),
+          coordinates: p,
         },
+        properties: {},
       };
     });
-  }, [coordinates]);
+  }, [positions]);
 
-  const centerOrBounds = useMemo(() => {
-    if (coordinates.length === 1) {
+  const centerOrBounds = useMemo((): Pick<
+    CameraProps,
+    'centerCoordinate' | 'bounds'
+  > => {
+    if (positions.length === 1) {
       return {
-        centerCoordinate: toPosition(coordinates[0]),
+        centerCoordinate: positions[0],
       };
     } else {
-      const positions = coordinates.map(toPosition);
-      const lineString = {
+      console.log('pos:', positions);
+
+      const lineString: Feature<LineString> = {
         type: 'Feature',
         geometry: {
           type: 'LineString',
           coordinates: positions,
         },
+        properties: {},
       };
       const _bbox = bbox(lineString);
       return {
@@ -151,19 +152,20 @@ const CameraAnimation = (props) => {
         },
       };
     }
-  }, [coordinates]);
+  }, [positions]);
 
   const locationDisplay = useMemo(() => {
-    if (coordinates.length > 1) {
+    if (positions.length > 1) {
       const ne = centerOrBounds.bounds?.ne.map((n) => n.toFixed(3));
       const sw = centerOrBounds.bounds?.sw.map((n) => n.toFixed(3));
       return `ne ${ne} | sw ${sw}`;
-    } else if (coordinates.length === 1) {
-      const lon = coordinates[0].longitude.toFixed(4);
-      const lat = coordinates[0].latitude.toFixed(4);
+    } else if (positions.length === 1) {
+      const position = positions[0];
+      const lon = position[0].toFixed(4);
+      const lat = position[1].toFixed(4);
       return `lon ${lon} | lat ${lat}`;
     }
-  }, [coordinates, centerOrBounds]);
+  }, [positions, centerOrBounds]);
 
   return (
     <Page {...props}>
@@ -182,7 +184,7 @@ const CameraAnimation = (props) => {
           const id = JSON.stringify(f.geometry.coordinates);
           return (
             <ShapeSource key={id} id={`source-${id}`} shape={f}>
-              <CircleLayer id={`layer-${id}`} style={styles.circle} />
+              <CircleLayer id={`layer-${id}`} style={mapStyles.circle} />
             </ShapeSource>
           );
         })}
