@@ -34,7 +34,7 @@ import offlineManager from './modules/offline/offlineManager';
 import snapshotManager from './modules/snapshot/snapshotManager';
 import MarkerView from './components/MarkerView';
 import Animated from './utils/animated/Animated';
-import AnimatedMapPoint from './utils/animated/AnimatedPoint';
+import AnimatedPoint from './utils/animated/AnimatedPoint';
 import AnimatedShape from './utils/animated/AnimatedShape';
 import AnimatedCoordinatesArray from './utils/animated/AnimatedCoordinatesArray';
 import AnimatedExtractCoordinateFromArray from './utils/animated/AnimatedExtractCoordinateFromArray';
@@ -42,10 +42,7 @@ import AnimatedRouteCoordinatesArray from './utils/animated/AnimatedRouteCoordin
 import Style from './components/Style';
 import Logger from './utils/Logger';
 
-const MapboxGL = { ...NativeModules.MGLModule };
-
-// static methods
-MapboxGL.requestAndroidLocationPermissions = async function () {
+const requestAndroidLocationPermissions = async function () {
   if (isAndroid()) {
     const res = await PermissionsAndroid.requestMultiple([
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
@@ -58,6 +55,7 @@ MapboxGL.requestAndroidLocationPermissions = async function () {
 
     const permissions = Object.keys(res);
     for (const permission of permissions) {
+      // @ts-expect-error TODO: Use Android permissions type.
       if (res[permission] === PermissionsAndroid.RESULTS.GRANTED) {
         return true;
       }
@@ -69,79 +67,25 @@ MapboxGL.requestAndroidLocationPermissions = async function () {
   throw new Error('You should only call this method on Android!');
 };
 
-MapboxGL.UserTrackingModes = UserTrackingModes;
-
-// components
-MapboxGL.MapView = MapView;
-MapboxGL.Light = Light;
-MapboxGL.PointAnnotation = PointAnnotation;
-MapboxGL.Callout = Callout;
-MapboxGL.UserLocation = UserLocation;
-MapboxGL.Camera = Camera;
-MapboxGL.Style = Style;
-
-// annotations
-MapboxGL.Annotation = Annotation;
-MapboxGL.MarkerView = MarkerView;
-
-// sources
-MapboxGL.VectorSource = VectorSource;
-MapboxGL.ShapeSource = ShapeSource;
-MapboxGL.RasterSource = RasterSource;
-MapboxGL.ImageSource = ImageSource;
-MapboxGL.Images = Images;
-MapboxGL.RasterDemSource = RasterDemSource;
-
-// layers
-MapboxGL.FillLayer = FillLayer;
-MapboxGL.FillExtrusionLayer = FillExtrusionLayer;
-MapboxGL.HeatmapLayer = HeatmapLayer;
-MapboxGL.LineLayer = LineLayer;
-MapboxGL.CircleLayer = CircleLayer;
-MapboxGL.SkyLayer = SkyLayer;
-MapboxGL.SymbolLayer = SymbolLayer;
-MapboxGL.RasterLayer = RasterLayer;
-MapboxGL.BackgroundLayer = BackgroundLayer;
-
-MapboxGL.Terrain = Terrain;
-
-// modules
-MapboxGL.locationManager = locationManager;
-MapboxGL.offlineManager = offlineManager;
-MapboxGL.snapshotManager = snapshotManager;
-
-// animated
-MapboxGL.Animated = Animated;
-
-// utils
-MapboxGL.AnimatedPoint = AnimatedMapPoint;
-MapboxGL.AnimatedCoordinatesArray = AnimatedCoordinatesArray;
-MapboxGL.AnimatedExtractCoordinateFromArray =
-  AnimatedExtractCoordinateFromArray;
-MapboxGL.AnimatedRouteCoordinatesArray = AnimatedRouteCoordinatesArray;
-MapboxGL.AnimatedShape = AnimatedShape;
-MapboxGL.Logger = Logger;
-
-const { LineJoin } = MapboxGL;
-
-export {
+const MapboxGL: Record<string, any> = {
+  ...NativeModules.MGLModule,
+  requestAndroidLocationPermissions,
+  UserTrackingModes,
   MapView,
   Light,
   PointAnnotation,
   Callout,
   UserLocation,
   Camera,
-  CameraRef,
-  CameraProps,
-  AnimationMode,
+  Style,
   Annotation,
   MarkerView,
   VectorSource,
   ShapeSource,
   RasterSource,
-  RasterDemSource,
   ImageSource,
   Images,
+  RasterDemSource,
   FillLayer,
   FillExtrusionLayer,
   HeatmapLayer,
@@ -155,13 +99,55 @@ export {
   locationManager,
   offlineManager,
   snapshotManager,
-  AnimatedMapPoint,
-  AnimatedCoordinatesArray,
-  AnimatedShape,
   Animated,
-  LineJoin,
+  AnimatedPoint,
+  AnimatedCoordinatesArray,
+  AnimatedExtractCoordinateFromArray,
+  AnimatedRouteCoordinatesArray,
+  AnimatedShape,
   Logger,
-  Style,
 };
+
+export {
+  requestAndroidLocationPermissions,
+  UserTrackingModes,
+  MapView,
+  Light,
+  PointAnnotation,
+  Callout,
+  UserLocation,
+  Camera,
+  Style,
+  Annotation,
+  MarkerView,
+  VectorSource,
+  ShapeSource,
+  RasterSource,
+  ImageSource,
+  Images,
+  RasterDemSource,
+  FillLayer,
+  FillExtrusionLayer,
+  HeatmapLayer,
+  LineLayer,
+  CircleLayer,
+  SkyLayer,
+  SymbolLayer,
+  RasterLayer,
+  BackgroundLayer,
+  Terrain,
+  locationManager,
+  offlineManager,
+  snapshotManager,
+  Animated,
+  AnimatedPoint,
+  AnimatedCoordinatesArray,
+  AnimatedExtractCoordinateFromArray,
+  AnimatedRouteCoordinatesArray,
+  AnimatedShape,
+  Logger,
+};
+
+export type { CameraProps, CameraRef, AnimationMode };
 
 export default MapboxGL;
