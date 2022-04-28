@@ -9,6 +9,7 @@ import Callout from './components/Callout';
 import UserLocation from './components/UserLocation';
 import Camera, {
   CameraProps,
+  CameraRef,
   UserTrackingModes,
   AnimationMode,
 } from './components/Camera';
@@ -130,6 +131,7 @@ export {
   Callout,
   UserLocation,
   Camera,
+  CameraRef,
   CameraProps,
   AnimationMode,
   Annotation,
