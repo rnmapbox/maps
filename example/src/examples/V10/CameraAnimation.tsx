@@ -1,7 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { Button, SafeAreaView, StyleSheet, View } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
-const { MapView, ShapeSource, CircleLayer } = MapboxGL;
 import bbox from '@turf/bbox';
 import { Feature, LineString, Point, Position } from '@turf/helpers';
 import { Text, Divider } from 'react-native-elements';
@@ -274,7 +273,7 @@ const CameraAnimation = (props: any) => {
 
   return (
     <Page {...props}>
-      <MapView style={styles.map}>
+      <MapboxGL.MapView style={styles.map}>
         <Camera
           ref={camera}
           {...centerOrBounds}
@@ -290,12 +289,15 @@ const CameraAnimation = (props: any) => {
           features.map((f) => {
             const id = JSON.stringify(f.geometry.coordinates);
             return (
-              <ShapeSource key={id} id={`source-${id}`} shape={f}>
-                <CircleLayer id={`layer-${id}`} style={mapStyles.circle} />
-              </ShapeSource>
+              <MapboxGL.ShapeSource key={id} id={`source-${id}`} shape={f}>
+                <MapboxGL.CircleLayer
+                  id={`layer-${id}`}
+                  style={mapStyles.circle}
+                />
+              </MapboxGL.ShapeSource>
             );
           })}
-      </MapView>
+      </MapboxGL.MapView>
 
       <SafeAreaView>
         <View style={styles.sheet}>
