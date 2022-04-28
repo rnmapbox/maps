@@ -135,8 +135,6 @@ const CameraAnimation = (props: any) => {
         bounds: undefined,
       };
     } else {
-      console.log('pos:', positions);
-
       const lineString: Feature<LineString> = {
         type: 'Feature',
         geometry: {
