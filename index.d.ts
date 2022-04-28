@@ -240,18 +240,18 @@ declare namespace MapboxGL {
   }
 
   type Padding = number | [number, number] | [number, number, number, number];
-  class Camera extends Component<CameraProps> {
-    fitBounds(
-      northEastCoordinates: GeoJSON.Position,
-      southWestCoordinates: GeoJSON.Position,
-      padding?: Padding,
-      duration?: number,
-    ): void;
-    flyTo(coordinates: GeoJSON.Position, duration?: number): void;
-    moveTo(coordinates: GeoJSON.Position, duration?: number): void;
-    zoomTo(zoomLevel: number, duration?: number): void;
-    setCamera(config: CameraSettings): void;
-  }
+  // class Camera extends Component<CameraProps> {
+  //   fitBounds(
+  //     northEastCoordinates: GeoJSON.Position,
+  //     southWestCoordinates: GeoJSON.Position,
+  //     padding?: Padding,
+  //     duration?: number,
+  //   ): void;
+  //   flyTo(coordinates: GeoJSON.Position, duration?: number): void;
+  //   moveTo(coordinates: GeoJSON.Position, duration?: number): void;
+  //   zoomTo(zoomLevel: number, duration?: number): void;
+  //   setCamera(config: CameraSettings): void;
+  // }
 
   class UserLocation extends Component<UserLocationProps> {}
 
@@ -572,54 +572,6 @@ export interface MapViewProps extends ViewProps {
   onDidFinishRenderingMapFully?: () => void;
   onDidFinishLoadingStyle?: () => void;
   onUserTrackingModeChange?: () => void;
-}
-
-export interface CameraProps extends CameraSettings, ViewProps {
-  allowUpdates?: boolean;
-  animationDuration?: number;
-  animationMode?: 'flyTo' | 'easeTo' | 'linearTo' | 'moveTo';
-  defaultSettings?: CameraSettings;
-  minZoomLevel?: number;
-  maxZoomLevel?: number;
-  maxBounds?: { ne: [number, number]; sw: [number, number] };
-  followUserLocation?: boolean;
-  followUserMode?: 'normal' | 'compass' | 'course';
-  followZoomLevel?: number;
-  followPitch?: number;
-  followHeading?: number;
-  triggerKey?: any;
-  alignment?: number[];
-  onUserTrackingModeChange?: (
-    event: MapboxGLEvent<
-      'usertrackingmodechange',
-      {
-        followUserLocation: boolean;
-        followUserMode: 'normal' | 'compass' | 'course' | null;
-      }
-    >,
-  ) => void;
-}
-
-export interface CameraPadding {
-  paddingLeft?: number;
-  paddingRight?: number;
-  paddingTop?: number;
-  paddingBottom?: number;
-}
-
-export interface CameraSettings {
-  centerCoordinate?: GeoJSON.Position;
-  heading?: number;
-  pitch?: number;
-  padding?: CameraPadding;
-  bounds?: CameraPadding & {
-    ne: GeoJSON.Position;
-    sw: GeoJSON.Position;
-  };
-  zoomLevel?: number;
-  animationDuration?: number;
-  animationMode?: 'flyTo' | 'easeTo' | 'linearTo' | 'moveTo';
-  stops?: CameraSettings[];
 }
 
 export interface UserLocationProps {

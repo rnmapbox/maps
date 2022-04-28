@@ -7,7 +7,11 @@ import PointAnnotation from './components/PointAnnotation';
 import Annotation from './components/annotations/Annotation';
 import Callout from './components/Callout';
 import UserLocation from './components/UserLocation';
-import Camera, { UserTrackingModes } from './components/Camera';
+import Camera, {
+  CameraProps,
+  UserTrackingModes,
+  AnimationMode,
+} from './components/Camera';
 import VectorSource from './components/VectorSource';
 import ShapeSource from './components/ShapeSource';
 import RasterSource from './components/RasterSource';
@@ -126,6 +130,8 @@ export {
   Callout,
   UserLocation,
   Camera,
+  CameraProps,
+  AnimationMode,
   Annotation,
   MarkerView,
   VectorSource,
