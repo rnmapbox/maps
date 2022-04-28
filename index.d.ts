@@ -1,4 +1,4 @@
-declare module 'react-native-mapbox-gl__maps';
+declare module 'rnmapbox__maps';
 
 import { Component, ReactNode, SyntheticEvent } from 'react';
 import {
@@ -240,18 +240,6 @@ declare namespace MapboxGL {
   }
 
   type Padding = number | [number, number] | [number, number, number, number];
-  // class Camera extends Component<CameraProps> {
-  //   fitBounds(
-  //     northEastCoordinates: GeoJSON.Position,
-  //     southWestCoordinates: GeoJSON.Position,
-  //     padding?: Padding,
-  //     duration?: number,
-  //   ): void;
-  //   flyTo(coordinates: GeoJSON.Position, duration?: number): void;
-  //   moveTo(coordinates: GeoJSON.Position, duration?: number): void;
-  //   zoomTo(zoomLevel: number, duration?: number): void;
-  //   setCamera(config: CameraSettings): void;
-  // }
 
   class UserLocation extends Component<UserLocationProps> {}
 

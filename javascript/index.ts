@@ -67,7 +67,7 @@ const requestAndroidLocationPermissions = async function () {
   throw new Error('You should only call this method on Android!');
 };
 
-const MapboxGL: Record<string, any> = {
+const MapboxGL = {
   ...NativeModules.MGLModule,
   requestAndroidLocationPermissions,
   UserTrackingModes,
