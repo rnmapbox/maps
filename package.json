@@ -6,7 +6,7 @@
     "access": "public"
   },
   "author": "React Native Mapbox Team",
-  "main": "./javascript/index.js",
+  "main": "./javascript/index.ts",
   "keywords": [
     "gl",
     "ios",
@@ -85,7 +85,9 @@
   "jest": {
     "preset": "react-native",
     "collectCoverageFrom": [
-      "javascript/**/*.js"
+      "javascript/**/*.js",
+      "javascript/**/*.ts",
+      "javascript/**/*.tsx"
     ],
     "setupFiles": [
       "./setup-jest.js",
