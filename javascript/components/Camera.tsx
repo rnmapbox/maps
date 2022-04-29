@@ -16,7 +16,7 @@ const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLCamera';
 
-const Mode: Record<string, AnimationMode> = {
+const Modes: Record<string, AnimationMode> = {
   Flight: 'flyTo',
   Ease: 'easeTo',
   Linear: 'linearTo',
@@ -34,7 +34,7 @@ export const UserTrackingModes: Record<string, UserTrackingMode> = {
 
 export type AnimationMode = 'flyTo' | 'easeTo' | 'linearTo' | 'none' | 'moveTo';
 
-type UserTrackingMode = 'normal' | 'compass' | 'course';
+export type UserTrackingMode = 'normal' | 'compass' | 'course';
 
 type UserTrackingModeChangeCallback = (
   event: MapboxGLEvent<
@@ -354,15 +354,15 @@ const Camera = memo(
     const nativeAnimationMode = useCallback(
       (_mode?: AnimationMode): NativeAnimationMode | undefined => {
         switch (_mode) {
-          case Mode.Flight:
+          case Modes.Flight:
             return MapboxGL.CameraModes.Flight;
-          case Mode.Ease:
+          case Modes.Ease:
             return MapboxGL.CameraModes.Ease;
-          case Mode.Linear:
+          case Modes.Linear:
             return MapboxGL.CameraModes.Linear;
-          case Mode.None:
+          case Modes.None:
             return MapboxGL.CameraModes.None;
-          case Mode.Move:
+          case Modes.Move:
             return MapboxGL.CameraModes.Move;
           default:
             return undefined;
