@@ -47,7 +47,7 @@ type ExpressionName =
   // Zoom, Heatmap
   | 'zoom' | 'heatmap-density';
 
-type ExpressionField =
+export type ExpressionField =
   | string
   | number
   | boolean
@@ -57,7 +57,7 @@ type ExpressionField =
 
 export type Expression = [ExpressionName, ...ExpressionField[]];
 
-type Anchor =
+export type Anchor =
   | 'center'
   | 'left'
   | 'right'
@@ -67,11 +67,11 @@ type Anchor =
   | 'top-right'
   | 'bottom-left'
   | 'bottom-right';
-type Visibility = 'visible' | 'none';
-type Alignment = 'map' | 'viewport';
-type AutoAlignment = Alignment | 'auto';
+export type Visibility = 'visible' | 'none';
+export type Alignment = 'map' | 'viewport';
+export type AutoAlignment = Alignment | 'auto';
 
-type NamedStyles<T> = {
+export type NamedStyles<T> = {
   [P in keyof T]:
     | SymbolLayerStyle
     | RasterLayerStyle
@@ -100,372 +100,369 @@ export type OnPressEvent = {
   };
 };
 
-declare namespace MapboxGL {
-  function removeCustomHeader(headerName: string): void;
-  function addCustomHeader(headerName: string, headerValue: string): void;
-  function setAccessToken(accessToken: string | null): void;
-  function getAccessToken(): Promise<string>;
-  function setTelemetryEnabled(telemetryEnabled: boolean): void;
-  function setConnected(connected: boolean): void;
-  function requestAndroidLocationPermissions(): Promise<boolean>;
+export function removeCustomHeader(headerName: string): void;
+export function addCustomHeader(headerName: string, headerValue: string): void;
+export function setAccessToken(accessToken: string | null): void;
+export function getAccessToken(): Promise<string>;
+export function setTelemetryEnabled(telemetryEnabled: boolean): void;
+export function setConnected(connected: boolean): void;
+export function requestAndroidLocationPermissions(): Promise<boolean>;
 
-  const offlineManager: OfflineManager;
-  const snapshotManager: SnapshotManager;
-  const locationManager: LocationManager;
+export const offlineManager: OfflineManager;
+export const snapshotManager: SnapshotManager;
+export const locationManager: LocationManager;
 
-  /**
-   * GeoUtils
-   */
-  interface UnitsOptions {
-    units?: Units;
-  }
+/**
+ * GeoUtils
+ */
+export interface UnitsOptions {
+  units?: Units;
+}
 
-  interface PositionsOptions {
-    bbox?: BBox;
-    id?: Id;
-  }
+export interface PositionsOptions {
+  bbox?: BBox;
+  id?: Id;
+}
 
-  namespace geoUtils {
-    function makePoint<P = Properties>(
-      coordinates: Position,
-      properties?: P,
-      options?: PositionsOptions,
-    ): Feature<GeoJSON.Point, P>;
-    function makeLineString<P = Properties>(
-      coordinates: Position[],
-      properties?: P,
-      options?: PositionsOptions,
-    ): Feature<LineString, P>;
-    function makeLatLngBounds<G = Geometry, P = Properties>(
-      northEastCoordinates: Position[],
-      southWestCoordinates: Position[],
-    ): FeatureCollection<G, P>;
-    function makeFeature<G = Geometry, P = Properties>(
-      geometry: G,
-      properties?: P,
-    ): Feature<G, P>;
-    function makeFeatureCollection<G = Geometry, P = Properties>(
-      features: Array<Feature<G, P>>,
-      options?: PositionsOptions,
-    ): FeatureCollection<G, P>;
-    function addToFeatureCollection<G = Geometry, P = Properties>(
-      newFeatureCollection: Array<FeatureCollection<G, P>>,
-      newFeature: Feature<G, P>,
-    ): FeatureCollection<G, P>;
-    function calculateDistance(
-      origin: Coord,
-      dest: Coord,
-      options?: UnitsOptions,
-    ): number;
-    function pointAlongLine(
-      newLineString: Feature<LineString> | LineString,
-      distAlong: number,
-      options?: UnitsOptions,
-    ): Feature<GeoJSON.Point>;
-    function getOrCalculateVisibleRegion(
-      coord: { lon: number; lat: number },
-      zoomLevel: number,
-      width: number,
-      height: number,
-      nativeRegion: {
-        properties: { visibleBounds: number[] };
-        visibleBounds: number[];
-      },
-    ): void;
-  }
+export class geoUtils {
+  makePoint<P = Properties>(
+    coordinates: Position,
+    properties?: P,
+    options?: PositionsOptions,
+  ): Feature<GeoJSON.Point, P>;
+  makeLineString<P = Properties>(
+    coordinates: Position[],
+    properties?: P,
+    options?: PositionsOptions,
+  ): Feature<LineString, P>;
+  makeLatLngBounds<G = Geometry, P = Properties>(
+    northEastCoordinates: Position[],
+    southWestCoordinates: Position[],
+  ): FeatureCollection<G, P>;
+  makeFeature<G = Geometry, P = Properties>(
+    geometry: G,
+    properties?: P,
+  ): Feature<G, P>;
+  makeFeatureCollection<G = Geometry, P = Properties>(
+    features: Array<Feature<G, P>>,
+    options?: PositionsOptions,
+  ): FeatureCollection<G, P>;
+  addToFeatureCollection<G = Geometry, P = Properties>(
+    newFeatureCollection: Array<FeatureCollection<G, P>>,
+    newFeature: Feature<G, P>,
+  ): FeatureCollection<G, P>;
+  calculateDistance(origin: Coord, dest: Coord, options?: UnitsOptions): number;
+  pointAlongLine(
+    newLineString: Feature<LineString> | LineString,
+    distAlong: number,
+    options?: UnitsOptions,
+  ): Feature<GeoJSON.Point>;
+  getOrCalculateVisibleRegion(
+    coord: { lon: number; lat: number },
+    zoomLevel: number,
+    width: number,
+    height: number,
+    nativeRegion: {
+      properties: { visibleBounds: number[] };
+      visibleBounds: number[];
+    },
+  ): void;
+}
 
-  namespace Animated {
-    // sources
-    class ShapeSource extends Component<ShapeSourceProps> {}
-    class ImageSource extends Component<ImageSourceProps> {}
-
-    // layers
-    class FillLayer extends Component<FillLayerProps> {}
-    class FillExtrusionLayer extends Component<FillExtrusionLayerProps> {}
-    class LineLayer extends Component<LineLayerProps> {}
-    class CircleLayer extends Component<CircleLayerProps> {}
-    class SymbolLayer extends Component<SymbolLayerProps> {}
-    class RasterLayer extends Component<RasterLayerProps> {}
-    class BackgroundLayer extends Component<BackgroundLayerProps> {}
-  }
-
-  /**
-   * Classes
-   */
-
-  class AnimatedPoint {
-    constructor(point?: GeoJSON.Point);
-    longitude: ReactNative.Animated.Value;
-    latitude: ReactNative.Animated.Value;
-    setValue: (point: GeoJSON.Point) => void;
-    setOffset: (point: GeoJSON.Point) => void;
-    flattenOffset: () => void;
-    stopAnimation: (cb?: () => GeoJSON.Point) => void;
-    addListener: (cb?: () => GeoJSON.Point) => void;
-    removeListener: (id: string) => void;
-    spring: (
-      config: Record<string, any>,
-    ) => ReactNative.Animated.CompositeAnimation;
-    timing: (
-      config: Record<string, any>,
-    ) => ReactNative.Animated.CompositeAnimation;
-  }
-
-  /**
-   * Components
-   */
-  class MapView extends Component<MapViewProps> {
-    getPointInView(coordinate: GeoJSON.Position): Promise<GeoJSON.Position>;
-    getCoordinateFromView(point: GeoJSON.Position): Promise<GeoJSON.Position>;
-    getVisibleBounds(): Promise<GeoJSON.Position[]>;
-    queryRenderedFeaturesAtPoint(
-      coordinate: GeoJSON.Position,
-      filter?: Expression,
-      layerIds?: Array<string>,
-    ): Promise<GeoJSON.FeatureCollection | undefined>;
-    queryRenderedFeaturesInRect(
-      coordinate: GeoJSON.Position,
-      filter?: Expression,
-      layerIds?: Array<string>,
-    ): Promise<GeoJSON.FeatureCollection | undefined>;
-    takeSnap(writeToDisk?: boolean): Promise<string>;
-    getZoom(): Promise<number>;
-    getCenter(): Promise<GeoJSON.Position>;
-    showAttribution(): void;
-    setSourceVisibility(
-      visible: boolean,
-      sourceId: string,
-      sourceLayerId?: string,
-    ): void;
-  }
-
-  type Padding = number | [number, number] | [number, number, number, number];
-
-  class UserLocation extends Component<UserLocationProps> {}
-
-  interface Location {
-    coords: Coordinates;
-    timestamp?: number;
-  }
-
-  interface Coordinates {
-    /**
-     * The heading (measured in degrees) relative to true north.
-     * Heading is used to describe the direction the device is pointing to (the value of the compass).
-     * Note that on Android this is incorrectly reporting the course value as mentioned in issue https://github.com/rnmapbox/maps/issues/1213
-     * and will be corrected in a future update.
-     */
-    heading?: number;
-
-    /**
-     * The direction in which the device is traveling, measured in degrees and relative to due north.
-     * The course refers to the direction the device is actually moving (not the same as heading).
-     */
-    course?: number;
-
-    /**
-     * The instantaneous speed of the device, measured in meters per second.
-     */
-    speed?: number;
-
-    /**
-     * The latitude in degrees.
-     */
-    latitude: number;
-
-    /**
-     * The longitude in degrees.
-     */
-    longitude: number;
-
-    /**
-     * The radius of uncertainty for the location, measured in meters.
-     */
-    accuracy?: number;
-
-    /**
-     * The altitude, measured in meters.
-     */
-    altitude?: number;
-  }
-
-  class Light extends Component<LightProps> {}
-
-  class StyleSheet extends Component {
-    static create<T extends NamedStyles<T> | NamedStyles<any>>(styles: T): T;
-    camera(
-      stops: { [key: number]: string },
-      interpolationMode?: InterpolationMode,
-    ): void;
-    source(
-      stops: { [key: number]: string },
-      attributeName: string,
-      interpolationMode?: InterpolationMode,
-    ): void;
-    composite(
-      stops: { [key: number]: string },
-      attributeName: string,
-      interpolationMode?: InterpolationMode,
-    ): void;
-
-    identity(attributeName: string): number;
-  }
-
-  class PointAnnotation extends Component<PointAnnotationProps> {
-    refresh(): void;
-  }
-  class MarkerView extends Component<MarkerViewProps> {}
-  class Callout extends Component<CalloutProps> {}
-  type Style = React.FC<StyleProps>;
-
-  /**
-   * Sources
-   */
-  class VectorSource extends Component<VectorSourceProps> {}
-  class ShapeSource extends Component<ShapeSourceProps> {
-    features(
-      filter?: Expression,
-    ): Promise<FeatureCollection<Geometry, Properties>>;
-
-    getClusterExpansionZoom(
-      feature: Feature<Geometry, Properties> | number,
-    ): Promise<number>;
-    /**
-     * Returns all the leaves of a cluster with pagination support.
-     * @param cluster feature cluster
-     * @param limit the number of leaves to return
-     * @param offset the amount of points to skip (for pagination)
-     */
-    getClusterLeaves: (
-      feature: Feature<Geometry, Properties> | number,
-      limit: number,
-      offset: number,
-    ) => Promise<FeatureCollection<Geometry, Properties>>;
-    /**
-     * Returns the children of a cluster (on the next zoom level).
-     * @param cluster feature cluster
-     */
-    getClusterChildren: (
-      feature: Feature<Geometry, Properties> | number,
-    ) => Promise<FeatureCollection<Geometry, Properties>>;
-  }
-  class RasterSource extends Component<RasterSourceProps> {}
-
-  /**
-   * Layers
-   */
-  class BackgroundLayer extends Component<BackgroundLayerProps> {}
-  class CircleLayer extends Component<CircleLayerProps> {}
-  class FillExtrusionLayer extends Component<FillExtrusionLayerProps> {}
-  class FillLayer extends Component<FillLayerProps> {}
-  class LineLayer extends Component<LineLayerProps> {}
-  class RasterLayer extends Component<RasterLayerProps> {}
-  class SymbolLayer extends Component<SymbolLayerProps> {}
-  class HeatmapLayer extends Component<HeatmapLayerProps> {}
-  class Images extends Component<ImagesProps> {}
+export namespace Animated {
+  // sources
+  class ShapeSource extends Component<ShapeSourceProps> {}
   class ImageSource extends Component<ImageSourceProps> {}
 
-  class LocationManager extends Component {
-    start(displacement?: number): void;
-    stop(): void;
-  }
+  // layers
+  class FillLayer extends Component<FillLayerProps> {}
+  class FillExtrusionLayer extends Component<FillExtrusionLayerProps> {}
+  class LineLayer extends Component<LineLayerProps> {}
+  class CircleLayer extends Component<CircleLayerProps> {}
+  class SymbolLayer extends Component<SymbolLayerProps> {}
+  class RasterLayer extends Component<RasterLayerProps> {}
+  class BackgroundLayer extends Component<BackgroundLayerProps> {}
+}
+
+/**
+ * Classes
+ */
+
+export class AnimatedPoint {
+  constructor(point?: GeoJSON.Point);
+  longitude: ReactNative.Animated.Value;
+  latitude: ReactNative.Animated.Value;
+  setValue: (point: GeoJSON.Point) => void;
+  setOffset: (point: GeoJSON.Point) => void;
+  flattenOffset: () => void;
+  stopAnimation: (cb?: () => GeoJSON.Point) => void;
+  addListener: (cb?: () => GeoJSON.Point) => void;
+  removeListener: (id: string) => void;
+  spring: (
+    config: Record<string, any>,
+  ) => ReactNative.Animated.CompositeAnimation;
+  timing: (
+    config: Record<string, any>,
+  ) => ReactNative.Animated.CompositeAnimation;
+}
+
+/**
+ * Components
+ */
+export class MapView extends Component<MapViewProps> {
+  getPointInView(coordinate: GeoJSON.Position): Promise<GeoJSON.Position>;
+  getCoordinateFromView(point: GeoJSON.Position): Promise<GeoJSON.Position>;
+  getVisibleBounds(): Promise<GeoJSON.Position[]>;
+  queryRenderedFeaturesAtPoint(
+    coordinate: GeoJSON.Position,
+    filter?: Expression,
+    layerIds?: Array<string>,
+  ): Promise<GeoJSON.FeatureCollection | undefined>;
+  queryRenderedFeaturesInRect(
+    coordinate: GeoJSON.Position,
+    filter?: Expression,
+    layerIds?: Array<string>,
+  ): Promise<GeoJSON.FeatureCollection | undefined>;
+  takeSnap(writeToDisk?: boolean): Promise<string>;
+  getZoom(): Promise<number>;
+  getCenter(): Promise<GeoJSON.Position>;
+  showAttribution(): void;
+  setSourceVisibility(
+    visible: boolean,
+    sourceId: string,
+    sourceLayerId?: string,
+  ): void;
+}
+
+export type Padding =
+  | number
+  | [number, number]
+  | [number, number, number, number];
+
+export class UserLocation extends Component<UserLocationProps> {}
+
+export interface Location {
+  coords: Coordinates;
+  timestamp?: number;
+}
+
+export interface Coordinates {
+  /**
+   * The heading (measured in degrees) relative to true north.
+   * Heading is used to describe the direction the device is pointing to (the value of the compass).
+   * Note that on Android this is incorrectly reporting the course value as mentioned in issue https://github.com/rnmapbox/maps/issues/1213
+   * and will be corrected in a future update.
+   */
+  heading?: number;
 
   /**
-   * Offline
+   * The direction in which the device is traveling, measured in degrees and relative to due north.
+   * The course refers to the direction the device is actually moving (not the same as heading).
    */
-  class OfflineManager extends Component {
-    createPack(
-      options: OfflineCreatePackOptions,
-      progressListener?: (
-        pack: OfflinePack,
-        status: OfflineProgressStatus,
-      ) => void,
-      errorListener?: (pack: OfflinePack, err: OfflineProgressError) => void,
-    ): Promise<void>;
-    deletePack(name: string): Promise<void>;
-    invalidatePack(name: string): Promise<void>;
-    getPacks(): Promise<Array<OfflinePack>>;
-    getPack(name: string): Promise<OfflinePack | undefined>;
-    invalidateAmbientCache(): Promise<void>;
-    clearAmbientCache(): Promise<void>;
-    setMaximumAmbientCacheSize(size: number): Promise<void>;
-    resetDatabase(): Promise<void>;
-    setTileCountLimit(limit: number): void;
-    setProgressEventThrottle(throttleValue: number): void;
-    subscribe(
-      packName: string,
-      progressListener: (pack: OfflinePack, status: object) => void,
-      errorListener?: (pack: OfflinePack, err: object) => void,
-    ): void;
-    unsubscribe(packName: string): void;
-  }
-
-  class SnapshotManager {
-    static takeSnap(options: SnapshotOptions): Promise<string>;
-  }
-
-  interface OfflineProgressStatus {
-    name: string;
-    state: number;
-    percentage: number;
-    completedResourceSize: number;
-    completedTileCount: number;
-    completedResourceCount: number;
-    requiredResourceCount: number;
-    completedTileSize: number;
-  }
-
-  interface OfflineProgressError {
-    message: string;
-    name: string;
-  }
-
-  interface OfflinePack {
-    name: string;
-    bounds: [GeoJSON.Position, GeoJSON.Position];
-    metadata: any;
-    status: () => Promise<OfflinePackStatus>;
-    resume: () => Promise<void>;
-    pause: () => Promise<void>;
-  }
-
-  interface OfflinePackStatus {
-    name: string;
-    state: number;
-    percentage: number;
-    completedResourceCount: number;
-    completedResourceSize: number;
-    completedTileSize: number;
-    completedTileCount: number;
-    requiredResourceCount: number;
-  }
+  course?: number;
 
   /**
-   * Constants
+   * The instantaneous speed of the device, measured in meters per second.
    */
-  enum UserTrackingModes {
-    Follow = 'normal',
-    FollowWithHeading = 'compass',
-    FollowWithCourse = 'course',
-  }
+  speed?: number;
 
-  enum InterpolationMode {
-    Exponential = 0,
-    Categorical = 1,
-    Interval = 2,
-    Identity = 3,
-  }
+  /**
+   * The latitude in degrees.
+   */
+  latitude: number;
 
-  enum StyleURL {
-    Street = 'mapbox://styles/mapbox/streets-v11',
-    Dark = 'mapbox://styles/mapbox/dark-v10',
-    Light = 'mapbox://styles/mapbox/light-v10',
-    Outdoors = 'mapbox://styles/mapbox/outdoors-v11',
-    Satellite = 'mapbox://styles/mapbox/satellite-v9',
-    SatelliteStreet = 'mapbox://styles/mapbox/satellite-streets-v11',
-    TrafficDay = 'mapbox://styles/mapbox/navigation-preview-day-v4',
-    TrafficNight = 'mapbox://styles/mapbox/navigation-preview-night-v4',
-  }
+  /**
+   * The longitude in degrees.
+   */
+  longitude: number;
+
+  /**
+   * The radius of uncertainty for the location, measured in meters.
+   */
+  accuracy?: number;
+
+  /**
+   * The altitude, measured in meters.
+   */
+  altitude?: number;
+}
+
+export class Light extends Component<LightProps> {}
+
+export class StyleSheet extends Component {
+  static create<T extends NamedStyles<T> | NamedStyles<any>>(styles: T): T;
+  camera(
+    stops: { [key: number]: string },
+    interpolationMode?: InterpolationMode,
+  ): void;
+  source(
+    stops: { [key: number]: string },
+    attributeName: string,
+    interpolationMode?: InterpolationMode,
+  ): void;
+  composite(
+    stops: { [key: number]: string },
+    attributeName: string,
+    interpolationMode?: InterpolationMode,
+  ): void;
+
+  identity(attributeName: string): number;
+}
+
+export class PointAnnotation extends Component<PointAnnotationProps> {
+  refresh(): void;
+}
+export class MarkerView extends Component<MarkerViewProps> {}
+export class Callout extends Component<CalloutProps> {}
+export type Style = React.FC<StyleProps>;
+
+/**
+ * Sources
+ */
+export class VectorSource extends Component<VectorSourceProps> {}
+export class ShapeSource extends Component<ShapeSourceProps> {
+  features(
+    filter?: Expression,
+  ): Promise<FeatureCollection<Geometry, Properties>>;
+
+  getClusterExpansionZoom(
+    feature: Feature<Geometry, Properties> | number,
+  ): Promise<number>;
+  /**
+   * Returns all the leaves of a cluster with pagination support.
+   * @param cluster feature cluster
+   * @param limit the number of leaves to return
+   * @param offset the amount of points to skip (for pagination)
+   */
+  getClusterLeaves: (
+    feature: Feature<Geometry, Properties> | number,
+    limit: number,
+    offset: number,
+  ) => Promise<FeatureCollection<Geometry, Properties>>;
+  /**
+   * Returns the children of a cluster (on the next zoom level).
+   * @param cluster feature cluster
+   */
+  getClusterChildren: (
+    feature: Feature<Geometry, Properties> | number,
+  ) => Promise<FeatureCollection<Geometry, Properties>>;
+}
+export class RasterSource extends Component<RasterSourceProps> {}
+
+/**
+ * Layers
+ */
+export class BackgroundLayer extends Component<BackgroundLayerProps> {}
+export class CircleLayer extends Component<CircleLayerProps> {}
+export class FillExtrusionLayer extends Component<FillExtrusionLayerProps> {}
+export class FillLayer extends Component<FillLayerProps> {}
+export class LineLayer extends Component<LineLayerProps> {}
+export class RasterLayer extends Component<RasterLayerProps> {}
+export class SymbolLayer extends Component<SymbolLayerProps> {}
+export class HeatmapLayer extends Component<HeatmapLayerProps> {}
+export class Images extends Component<ImagesProps> {}
+export class ImageSource extends Component<ImageSourceProps> {}
+
+export class LocationManager extends Component {
+  start(displacement?: number): void;
+  stop(): void;
+}
+
+/**
+ * Offline
+ */
+export class OfflineManager extends Component {
+  createPack(
+    options: OfflineCreatePackOptions,
+    progressListener?: (
+      pack: OfflinePack,
+      status: OfflineProgressStatus,
+    ) => void,
+    errorListener?: (pack: OfflinePack, err: OfflineProgressError) => void,
+  ): Promise<void>;
+  deletePack(name: string): Promise<void>;
+  invalidatePack(name: string): Promise<void>;
+  getPacks(): Promise<Array<OfflinePack>>;
+  getPack(name: string): Promise<OfflinePack | undefined>;
+  invalidateAmbientCache(): Promise<void>;
+  clearAmbientCache(): Promise<void>;
+  setMaximumAmbientCacheSize(size: number): Promise<void>;
+  resetDatabase(): Promise<void>;
+  setTileCountLimit(limit: number): void;
+  setProgressEventThrottle(throttleValue: number): void;
+  subscribe(
+    packName: string,
+    progressListener: (pack: OfflinePack, status: object) => void,
+    errorListener?: (pack: OfflinePack, err: object) => void,
+  ): void;
+  unsubscribe(packName: string): void;
+}
+
+export class SnapshotManager {
+  static takeSnap(options: SnapshotOptions): Promise<string>;
+}
+
+export interface OfflineProgressStatus {
+  name: string;
+  state: number;
+  percentage: number;
+  completedResourceSize: number;
+  completedTileCount: number;
+  completedResourceCount: number;
+  requiredResourceCount: number;
+  completedTileSize: number;
+}
+
+export interface OfflineProgressError {
+  message: string;
+  name: string;
+}
+
+export interface OfflinePack {
+  name: string;
+  bounds: [GeoJSON.Position, GeoJSON.Position];
+  metadata: any;
+  status: () => Promise<OfflinePackStatus>;
+  resume: () => Promise<void>;
+  pause: () => Promise<void>;
+}
+
+export interface OfflinePackStatus {
+  name: string;
+  state: number;
+  percentage: number;
+  completedResourceCount: number;
+  completedResourceSize: number;
+  completedTileSize: number;
+  completedTileCount: number;
+  requiredResourceCount: number;
+}
+
+/**
+ * Constants
+ */
+export enum UserTrackingModes {
+  Follow = 'normal',
+  FollowWithHeading = 'compass',
+  FollowWithCourse = 'course',
+}
+
+export enum InterpolationMode {
+  Exponential = 0,
+  Categorical = 1,
+  Interval = 2,
+  Identity = 3,
+}
+
+export enum StyleURL {
+  Street = 'mapbox://styles/mapbox/streets-v11',
+  Dark = 'mapbox://styles/mapbox/dark-v10',
+  Light = 'mapbox://styles/mapbox/light-v10',
+  Outdoors = 'mapbox://styles/mapbox/outdoors-v11',
+  Satellite = 'mapbox://styles/mapbox/satellite-v9',
+  SatelliteStreet = 'mapbox://styles/mapbox/satellite-streets-v11',
+  TrafficDay = 'mapbox://styles/mapbox/navigation-preview-day-v4',
+  TrafficNight = 'mapbox://styles/mapbox/navigation-preview-night-v4',
 }
 
 export type OrnamentPosition =
@@ -508,7 +505,7 @@ export interface MapState {
 
 export interface MapViewProps extends ViewProps {
   animated?: boolean;
-  userTrackingMode?: MapboxGL.UserTrackingModes;
+  userTrackingMode?: UserTrackingModes;
   userLocationVerticalAlignment?: number;
   contentInset?: Array<number>;
   style?: StyleProp<ViewStyle>;
@@ -548,7 +545,7 @@ export interface MapViewProps extends ViewProps {
   ) => void;
   onCameraChanged?: (state: MapState) => void;
   onMapIdle?: (state: MapState) => void;
-  onUserLocationUpdate?: (feature: MapboxGL.Location) => void;
+  onUserLocationUpdate?: (feature: Location) => void;
   onWillStartLoadingMap?: () => void;
   onDidFinishLoadingMap?: () => void;
   onDidFailLoadingMap?: () => void;
@@ -568,7 +565,7 @@ export interface UserLocationProps {
   children?: ReactNode;
   minDisplacement?: number;
   onPress?: () => void;
-  onUpdate?: (location: MapboxGL.Location) => void;
+  onUpdate?: (location: Location) => void;
   renderMode?: 'normal' | 'native';
   showsUserHeadingIndicator?: boolean;
   visible?: boolean;
@@ -961,7 +958,8 @@ export interface SnapshotOptions {
   writeToDisk?: boolean;
 }
 
-// Logger class
+// Logger
+
 type LogLevel = 'error' | 'warning' | 'info' | 'debug' | 'verbose';
 
 interface LogObject {
@@ -977,4 +975,4 @@ export class Logger {
   public static setLogLevel: (level: LogLevel) => void;
 }
 
-export default MapboxGL;
+export as namespace MapboxGL;
