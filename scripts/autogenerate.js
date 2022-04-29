@@ -416,8 +416,8 @@ async function generate() {
       only: 'gl',
     },
     {
-      input: path.join(TMPL_PATH, 'index.d.ts.ejs'),
-      output: path.join(IOS_OUTPUT_PATH, 'index.d.ts'),
+      input: path.join(TMPL_PATH, 'definitions.d.ts.ejs'),
+      output: path.join(IOS_OUTPUT_PATH, 'definitions.d.ts'),
     },
     {
       input: path.join(TMPL_PATH, 'RCTMGLStyle.m.ejs'),
