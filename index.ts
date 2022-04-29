@@ -50,6 +50,7 @@ import AnimatedRouteCoordinatesArray from './javascript/utils/animated/AnimatedR
 import Style from './javascript/components/Style';
 import Logger from './javascript/utils/Logger';
 import { isAndroid } from './javascript/utils';
+import { MapboxGLDefinitions } from './definitions';
 
 // Types
 
@@ -900,7 +901,51 @@ export type {
   StyleURLKey,
 };
 
-const MapboxGL = {
+interface MapboxGLType {
+  // Components
+  MapView: typeof MapboxGLDefinitions.MapView;
+  Light: typeof MapboxGLDefinitions.Light;
+  PointAnnotation: typeof MapboxGLDefinitions.PointAnnotation;
+  Annotation: any; // typeof MapboxGLDefinitions.Annotation; // TODO: Define in .d.ts file.
+  Callout: typeof MapboxGLDefinitions.Callout;
+  UserLocation: typeof MapboxGLDefinitions.UserLocation;
+  Camera: typeof Camera;
+  VectorSource: typeof MapboxGLDefinitions.VectorSource;
+  ShapeSource: typeof MapboxGLDefinitions.ShapeSource;
+  RasterSource: typeof MapboxGLDefinitions.RasterSource;
+  RasterDemSource: any; // typeof MapboxGLDefinitions.RasterDemSource; // TODO: Define in .d.ts file.
+  ImageSource: typeof MapboxGLDefinitions.ImageSource;
+  Images: typeof MapboxGLDefinitions.Images;
+  FillLayer: typeof MapboxGLDefinitions.FillLayer;
+  FillExtrusionLayer: typeof MapboxGLDefinitions.FillExtrusionLayer;
+  HeatmapLayer: typeof MapboxGLDefinitions.HeatmapLayer;
+  LineLayer: typeof MapboxGLDefinitions.LineLayer;
+  CircleLayer: typeof MapboxGLDefinitions.CircleLayer;
+  SkyLayer: any; // typeof MapboxGLDefinitions.SkyLayer; // TODO: Define in .d.ts file.
+  SymbolLayer: typeof MapboxGLDefinitions.SymbolLayer;
+  RasterLayer: typeof MapboxGLDefinitions.RasterLayer;
+  BackgroundLayer: typeof MapboxGLDefinitions.BackgroundLayer;
+  Terrain: any; // typeof MapboxGLDefinitions.Terrain; // TODO: Define in .d.ts file.
+  locationManager: typeof MapboxGLDefinitions.locationManager;
+  offlineManager: typeof MapboxGLDefinitions.offlineManager;
+  snapshotManager: typeof MapboxGLDefinitions.snapshotManager;
+  MarkerView: typeof MapboxGLDefinitions.MarkerView;
+  Animated: typeof MapboxGLDefinitions.Animated;
+  AnimatedPoint: typeof MapboxGLDefinitions.AnimatedPoint;
+  AnimatedShape: any; // typeof MapboxGLDefinitions.AnimatedShape; // TODO: Define in .d.ts file.
+  AnimatedCoordinatesArray: any; // typeof MapboxGLDefinitions.AnimatedCoordinatesArray; // TODO: Define in .d.ts file.
+  AnimatedExtractCoordinateFromArray: any; // typeof MapboxGLDefinitions.AnimatedExtractCoordinateFromArray; // TODO: Define in .d.ts file.
+  AnimatedRouteCoordinatesArray: any; // typeof MapboxGLDefinitions.AnimatedRouteCoordinatesArray; // TODO: Define in .d.ts file.
+  Style: typeof MapboxGLDefinitions.Style;
+  Logger: typeof MapboxGLDefinitions.Logger;
+  // Enums
+  InterpolationMode: typeof InterpolationMode;
+  StyleURL: typeof StyleURL;
+  // Methods
+  requestAndroidLocationPermissions: typeof MapboxGLDefinitions.requestAndroidLocationPermissions;
+}
+
+const MapboxGL: MapboxGLType = {
   ...NativeModules.MGLModule,
   // Components
   MapView,
