@@ -55,7 +55,6 @@ export namespace MapboxGLDefinitions {
   export function getAccessToken(): Promise<string>;
   export function setTelemetryEnabled(telemetryEnabled: boolean): void;
   export function setConnected(connected: boolean): void;
-  export function requestAndroidLocationPermissions(): Promise<boolean>;
 
   export const offlineManager: OfflineManager;
   export const snapshotManager: SnapshotManager;

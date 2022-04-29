@@ -50,6 +50,7 @@ import AnimatedRouteCoordinatesArray from './javascript/utils/animated/AnimatedR
 import Style from './javascript/components/Style';
 import Logger from './javascript/utils/Logger';
 import { isAndroid } from './javascript/utils';
+import geoUtils from './javascript/utils/geoUtils';
 import { MapboxGLDefinitions } from './definitions';
 
 // Types
@@ -941,8 +942,16 @@ interface MapboxGLType {
   // Enums
   InterpolationMode: typeof InterpolationMode;
   StyleURL: typeof StyleURL;
+  // Classes
+  geoUtils: typeof geoUtils;
   // Methods
-  requestAndroidLocationPermissions: typeof MapboxGLDefinitions.requestAndroidLocationPermissions;
+  requestAndroidLocationPermissions: typeof requestAndroidLocationPermissions;
+  removeCustomHeader: typeof MapboxGLDefinitions.removeCustomHeader;
+  addCustomHeader: typeof MapboxGLDefinitions.addCustomHeader;
+  setAccessToken: typeof MapboxGLDefinitions.setAccessToken;
+  getAccessToken: typeof MapboxGLDefinitions.getAccessToken;
+  setTelemetryEnabled: typeof MapboxGLDefinitions.setTelemetryEnabled;
+  setConnected: typeof MapboxGLDefinitions.setConnected;
 }
 
 const MapboxGL: MapboxGLType = {
@@ -983,6 +992,8 @@ const MapboxGL: MapboxGLType = {
   AnimatedRouteCoordinatesArray,
   Style,
   Logger,
+  // Classes
+  geoUtils,
   // Enums
   InterpolationMode,
   StyleURL,

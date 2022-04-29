@@ -71,3 +71,15 @@ export function getOrCalculateVisibleRegion(
 
   return region;
 }
+
+export default {
+  makePoint,
+  makeLineString,
+  makeLatLngBounds,
+  makeFeature,
+  makeFeatureCollection,
+  addToFeatureCollection,
+  calculateDistance,
+  pointAlongLine,
+  getOrCalculateVisibleRegion,
+};
