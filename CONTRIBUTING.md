@@ -16,7 +16,7 @@ it will be reflected in any scene in example that uses that component.
 ## Best practices for PR's
 
 - If you add a feature, make sure you add it to the documentation
-- If you add an objective-c or java method, make sure you update the declaration file: `definitions.d.ts`.
+- If you add an objective-c or java method, make sure you update the declaration file: `index.d.ts`.
 - Make sure to use small concise commits
 - Use meaningful commit messages
 - Make sure to update/ add new tests for your changes

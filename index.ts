@@ -42,7 +42,7 @@ import {
   ImageSourceProps,
   OfflineCreatePackOptions,
   SnapshotOptions,
-} from 'definitions';
+} from 'javascript';
 
 import { isAndroid } from './javascript/utils';
 import MapView from './javascript/components/MapView';
