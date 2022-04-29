@@ -10,9 +10,9 @@ import { NativeModules, requireNativeComponent } from 'react-native';
 import { Position } from 'geojson';
 import { MapboxGLEvent } from '@rnmapbox/maps';
 
-import * as geoUtils from '../utils/geoUtils';
+import geoUtils from '../utils/geoUtils';
 
-const MapboxGL = NativeModules.MGLModule;
+const NativeModule = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLCamera';
 
@@ -355,15 +355,15 @@ const Camera = memo(
       (_mode?: AnimationMode): NativeAnimationMode | undefined => {
         switch (_mode) {
           case Modes.Flight:
-            return MapboxGL.CameraModes.Flight;
+            return NativeModule.CameraModes.Flight;
           case Modes.Ease:
-            return MapboxGL.CameraModes.Ease;
+            return NativeModule.CameraModes.Ease;
           case Modes.Linear:
-            return MapboxGL.CameraModes.Linear;
+            return NativeModule.CameraModes.Linear;
           case Modes.None:
-            return MapboxGL.CameraModes.None;
+            return NativeModule.CameraModes.None;
           case Modes.Move:
-            return MapboxGL.CameraModes.Move;
+            return NativeModule.CameraModes.Move;
           default:
             return undefined;
         }
