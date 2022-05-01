@@ -16,7 +16,7 @@ buildscript {
   }
 
   dependencies {
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : '1.4.10'}"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : '1.6.21'}"
   }
 }
 
@@ -44,7 +44,7 @@ android {
     else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
         sourceSets {
             main {
-                java.srcDirs = ['src/main/kotlin']
+                java.srcDirs = ['src/main/java-v10']
             }
         }
 

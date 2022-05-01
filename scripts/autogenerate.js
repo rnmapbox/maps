@@ -102,7 +102,7 @@ const ANDROID_V10_OUTPUT_PATH = path.join(
   'rctmgl',
   'src',
   'main',
-  'kotlin',
+  'java-v10',
   'com',
   'mapbox',
   'rctmgl',
