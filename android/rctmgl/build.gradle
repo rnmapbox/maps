@@ -44,7 +44,7 @@ android {
     else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
         sourceSets {
             main {
-                java.srcDirs = ['src/main/java-v10']
+                java.srcDirs = ['src/main/kotlin']
             }
         }
 
