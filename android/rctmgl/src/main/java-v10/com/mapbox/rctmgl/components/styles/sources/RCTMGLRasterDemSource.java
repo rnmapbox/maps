@@ -64,19 +64,19 @@ public class RCTMGLRasterDemSource extends RCTMGLTileSource<RasterDemSource> {
 
     @Override
     public RasterDemSource makeSource() {
-        if (isDefaultSource(mID)) {
+        if (isDefaultSource(getID())) {
             return (RasterDemSource)SourceUtils.getSource(mMap.getStyle(), DEFAULT_ID);
         }
 
         String configurationUrl = getURL();
         if (configurationUrl != null) {
             return new RasterDemSource(
-                    new RasterDemSource.Builder(mID)
+                    new RasterDemSource.Builder(getID())
                             .url(getURL())
             );
         }
         return new RasterDemSource(
-                new RasterDemSource.Builder(mID)
+                new RasterDemSource.Builder(getID())
                         .tileSet(buildTileset())
         );
     }
@@ -96,7 +96,7 @@ public class RCTMGLRasterDemSource extends RCTMGLTileSource<RasterDemSource> {
         WritableMap payload = new WritableNativeMap();
 
         mMap.querySourceFeatures(
-                mID,
+                getID(),
                 new SourceQueryOptions(layerIDs, filter),
 
                 new QueryFeaturesCallback() {

@@ -64,16 +64,16 @@ public class FeatureClickEvent extends AbstractEvent {
 
     public static FeatureClickEvent makeShapeSourceEvent(View view, RCTSource.OnPressEvent event) {
         return new FeatureClickEvent(view, EventKeys.SHAPE_SOURCE_LAYER_CLICK,
-                EventTypes.SHAPE_SOURCE_LAYER_CLICK, event.features, event.latLng, event.screenPoint);
+                EventTypes.SHAPE_SOURCE_LAYER_CLICK, event.getFeatures(), event.getLatLng(), event.getScreenPoint());
     }
 
     public static FeatureClickEvent makeVectorSourceEvent(View view, RCTSource.OnPressEvent event) {
         return new FeatureClickEvent(view, EventKeys.VECTOR_SOURCE_LAYER_CLICK,
-                EventTypes.VECTOR_SOURCE_LAYER_CLICK, event.features, event.latLng, event.screenPoint);
+                EventTypes.VECTOR_SOURCE_LAYER_CLICK, event.getFeatures(), event.getLatLng(), event.getScreenPoint());
     }
 
     public static FeatureClickEvent makeRasterSourceEvent(View view, RCTSource.OnPressEvent event) {
         return new FeatureClickEvent(view, EventKeys.RASTER_SOURCE_LAYER_CLICK,
-                EventTypes.RASTER_SOURCE_LAYER_CLICK, event.features, event.latLng, event.screenPoint);
+                EventTypes.RASTER_SOURCE_LAYER_CLICK, event.getFeatures(), event.getLatLng(), event.getScreenPoint());
     }
 }

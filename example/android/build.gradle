@@ -34,7 +34,7 @@ buildscript {
         }
 
         if (RNMapboxMapsImpl == "mapbox") {
-            kotlinVersion = '1.6.10'
+            kotlinVersion = '1.6.21'
         }
 
         // Mapbox deps

@@ -7,7 +7,7 @@ package com.mapbox.rctmgl.components.styles.terrain;
  import com.mapbox.maps.extension.style.expressions.generated.Expression;
  import com.mapbox.maps.extension.style.layers.generated.SkyLayer;
  import com.mapbox.maps.extension.style.terrain.generated.Terrain;
- import com.mapbox.rctmgl.components.AbstractMapFeature;
+ import com.mapbox.rctmgl.components.camera.AbstractMapFeature;
  import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
  import com.mapbox.rctmgl.components.styles.RCTMGLStyle;
  import com.mapbox.rctmgl.components.styles.RCTMGLStyleFactory;

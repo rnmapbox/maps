@@ -45,19 +45,19 @@ public class RCTMGLVectorSource extends RCTMGLTileSource<VectorSource> {
 
     @Override
     public VectorSource makeSource() {
-        if (isDefaultSource(mID)) {
+        if (isDefaultSource(getID())) {
             return (VectorSource)SourceUtils.getSource(mMap.getStyle(), DEFAULT_ID);
         }
 
         String configurationUrl = getURL();
         if (configurationUrl != null) {
             return new VectorSource(
-                    new VectorSource.Builder(mID)
+                    new VectorSource.Builder(getID())
                             .url(getURL())
             );
         }
         return new VectorSource(
-                new VectorSource.Builder(mID)
+                new VectorSource.Builder(getID())
                         .tileSet(buildTileset())
         );
     }
@@ -77,7 +77,7 @@ public class RCTMGLVectorSource extends RCTMGLTileSource<VectorSource> {
         WritableMap payload = new WritableNativeMap();
 
         mMap.querySourceFeatures(
-                mID,
+                getID(),
                 new SourceQueryOptions(layerIDs, filter),
 
                 new QueryFeaturesCallback() {
