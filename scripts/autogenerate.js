@@ -87,7 +87,7 @@ const ANDROID_OUTPUT_PATH = path.join(
   'rctmgl',
   'src',
   'main',
-  'java',
+  'java-legacy',
   'com',
   'mapbox',
   'rctmgl',
