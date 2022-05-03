@@ -48,7 +48,7 @@ func <%- setLayerMethodName(layer, 'ios') -%>(layer: inout <%- getLayerType(laye
               }
             }
           } else {
-            fatalError("Error during fetchImage: \(error)")
+            Logger.log(level: .error, message: "Error during fetchImage: \(optional: error)")
           }
         });
       }
