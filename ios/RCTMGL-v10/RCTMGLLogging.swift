@@ -55,6 +55,15 @@ class Logger {
   }
 }
 
+func logged<T>(_ msg: String, fn : () throws -> T) -> T? {
+  do {
+    return try fn()
+  } catch {
+    Logger.log(level:.error, message: "\(msg) \(error.localizedDescription)")
+    return nil
+  }
+}
+
 @objc(RCTMGLLogging)
 class RCTMGLLogging: RCTEventEmitter {
   static var shared : RCTMGLLogging? = nil
@@ -73,7 +82,7 @@ class RCTMGLLogging: RCTEventEmitter {
   
   override init() {
     super.init()
-    if let previous = RCTMGLLogging.shared {
+    if let _ = RCTMGLLogging.shared {
       // seems to happen on reload in debug versions
       // fatalError("More than one instance of RCTMGLLogging is created \(previous)")
     }

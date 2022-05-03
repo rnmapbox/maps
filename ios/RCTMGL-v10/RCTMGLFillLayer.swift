@@ -39,7 +39,7 @@ class RCTMGLFillLayer: RCTMGLVectorLayer {
         )
         self.styleLayer = styleLayer
       } else {
-        fatalError("[xxx] layer is not fill layer?!!! \(self.styleLayer)")
+        fatalError("[xxx] layer is not fill layer?!!! \(optional: self.styleLayer)")
       }
     }
   }
