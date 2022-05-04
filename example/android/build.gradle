@@ -29,12 +29,9 @@ buildscript {
             RNMapboxMapsImpl = "maplibre"
         } else if (System.getenv('CI_MAP_IMPL').equals('mapbox')) {
             RNMapboxMapsImpl = "mapbox"
+            kotlinVersion = '1.5.21'
         } else if (System.getenv('CI_MAP_IMPL').equals('mapbox-gl')) {
             RNMapboxMapsImpl = "mapbox-gl"
-        }
-
-        if (RNMapboxMapsImpl == "mapbox") {
-            kotlinVersion = '1.6.10'
         }
 
         // Mapbox deps
@@ -74,7 +71,7 @@ allprojects {
             // Android JSC is installed from npm
             url("$rootDir/../node_modules/jsc-android/dist")
         }
-        if (rootProject.ext.get("RNMapboxMapsImpl") == "mapbox") {
+        if (safeExtGet("mapboxV10", true)) {
             maven {
                 url 'https://api.mapbox.com/downloads/v2/releases/maven'
                 authentication {
