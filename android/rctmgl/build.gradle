@@ -30,14 +30,14 @@ android {
     if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "maplibre") {
         sourceSets {
             main {
-                java.srcDirs = ['src/main/java','src/main/java-maplibre']
+                java.srcDirs = ['src/main/java-mapboxgl/common','src/main/java-mapboxgl/maplibre']
             }
         }
     }
     else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox-gl") {
         sourceSets {
             main {
-                java.srcDirs = ['src/main/java','src/main/java-mapbox']
+                java.srcDirs = ['src/main/java-mapboxgl/common','src/main/java-mapboxgl/mapbox']
             }
         }
     }
