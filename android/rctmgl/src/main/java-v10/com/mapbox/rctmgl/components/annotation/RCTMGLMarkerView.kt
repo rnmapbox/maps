@@ -6,7 +6,7 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.ViewAnnotationOptions
 import com.mapbox.rctmgl.components.mapview.OnMapReadyCallback
 import com.mapbox.maps.MapboxMap
-import com.mapbox.rctmgl.components.camera.AbstractMapFeature
+import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 import com.mapbox.rctmgl.utils.GeoJSONUtils
 
