@@ -30,7 +30,7 @@ public class RCTMGLImageSource extends RCTSource<ImageSource> {
         if (this.mURL == null) {
             throw new RuntimeException("ImageSource Resource id not supported in v10");
         }
-        return new ImageSource.Builder(mID).coordinates(mCoordQuad.getCoordinates()).url(mURL.toString()).build();
+        return new ImageSource.Builder(getID()).coordinates(mCoordQuad.getCoordinates()).url(mURL.toString()).build();
     }
 
     @Override

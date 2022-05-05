@@ -12,7 +12,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.mapbox.rctmgl.components.AbstractEventEmitter;
-import com.mapbox.rctmgl.components.AbstractMapFeature;
+import com.mapbox.rctmgl.components.camera.AbstractMapFeature;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLShapeSource;
 import com.mapbox.rctmgl.events.constants.EventKeys;
 import com.mapbox.rctmgl.utils.ImageEntry;

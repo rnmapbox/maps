@@ -1,4 +1,4 @@
-package com.mapbox.rctmgl.components;
+package com.mapbox.rctmgl.components.camera;
 
 import android.content.Context;
 

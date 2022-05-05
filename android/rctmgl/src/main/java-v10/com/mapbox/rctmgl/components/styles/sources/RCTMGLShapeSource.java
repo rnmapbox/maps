@@ -82,7 +82,7 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
     @Override
     public GeoJsonSource makeSource() {
 
-        GeoJsonSource.Builder builder = new GeoJsonSource.Builder(mID);
+        GeoJsonSource.Builder builder = new GeoJsonSource.Builder(getID());
         getOptions(builder);
 
         if (mShape != null) {
@@ -108,7 +108,7 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         if (mSource != null && mMapView != null && !mMapView.isDestroyed() ) {
             mSource.data(mShape);
 
-            Expected<String, None> result = mMap.getStyle().setStyleSourceProperty(mID, "data", Value.valueOf(mShape));
+            Expected<String, None> result = mMap.getStyle().setStyleSourceProperty(getID(), "data", Value.valueOf(mShape));
 
         }
     }
@@ -186,7 +186,7 @@ public class RCTMGLShapeSource extends RCTSource<GeoJsonSource> {
         }
 
         RCTMGLShapeSource _this = this;
-        mMap.querySourceFeatures(mID, new SourceQueryOptions(
+        mMap.querySourceFeatures(getID(), new SourceQueryOptions(
                 null, // v10todo
                 filter
             ),new QueryFeaturesCallback() {

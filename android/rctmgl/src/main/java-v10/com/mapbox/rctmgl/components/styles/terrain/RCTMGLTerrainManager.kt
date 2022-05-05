@@ -22,7 +22,7 @@ class RCTMGLTerrainManager : ViewGroupManager<RCTMGLTerrain>() {
 
     @ReactProp(name = "id")
     fun setId(layer: RCTMGLTerrain, id: String?) {
-        layer.setID(id)
+        layer.iD = id
     }
 
     @ReactProp(name = "sourceID")
