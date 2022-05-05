@@ -6,7 +6,7 @@ import com.mapbox.rctmgl.components.mapview.OnMapReadyCallback
 import com.mapbox.maps.MapboxMap
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.maps.Style
-import com.mapbox.rctmgl.components.camera.AbstractMapFeature
+import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 
 /*

@@ -26,7 +26,7 @@ import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.gestures.*
 import com.mapbox.rctmgl.R
-import com.mapbox.rctmgl.components.camera.AbstractMapFeature
+import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerView
 import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotation
 import com.mapbox.rctmgl.components.camera.RCTMGLCamera

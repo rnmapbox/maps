@@ -2,7 +2,7 @@ package com.mapbox.rctmgl.components.annotation
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.mapbox.rctmgl.components.camera.AbstractMapFeature
+import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.MapboxMap
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView

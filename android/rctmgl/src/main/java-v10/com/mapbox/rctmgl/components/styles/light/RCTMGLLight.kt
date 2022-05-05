@@ -2,7 +2,7 @@ package com.mapbox.rctmgl.components.styles.light
 
 import android.content.Context
 import com.mapbox.maps.extension.style.light.generated.setLight
-import com.mapbox.rctmgl.components.camera.AbstractMapFeature
+import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.maps.MapboxMap
 import com.facebook.react.bridge.ReadableMap
 import com.mapbox.maps.Style

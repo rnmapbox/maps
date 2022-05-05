@@ -3,7 +3,7 @@ package com.mapbox.rctmgl.components.styles.sources
 import android.content.Context
 import com.mapbox.maps.extension.style.sources.getSource
 import com.mapbox.maps.extension.style.sources.addSource
-import com.mapbox.rctmgl.components.camera.AbstractMapFeature
+import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 import com.mapbox.maps.MapboxMap
 import com.mapbox.rctmgl.components.styles.sources.AbstractSourceConsumer

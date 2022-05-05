@@ -15,7 +15,7 @@ import com.mapbox.maps.extension.style.layers.properties.generated.Visibility;
 import com.mapbox.maps.extension.style.layers.LayerUtils;
 
 
-import com.mapbox.rctmgl.components.camera.AbstractMapFeature;
+import com.mapbox.rctmgl.components.AbstractMapFeature;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
 import com.mapbox.rctmgl.components.styles.sources.AbstractSourceConsumer;
 import com.mapbox.rctmgl.utils.ExpressionParser;

@@ -6,7 +6,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.mapbox.rctmgl.components.AbstractEventEmitter;
-import com.mapbox.rctmgl.components.camera.AbstractMapFeature;
+import com.mapbox.rctmgl.components.AbstractMapFeature;
 
 import java.util.Map;
 

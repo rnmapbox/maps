@@ -3,7 +3,7 @@ package com.mapbox.rctmgl.components.images
 import android.content.Context
 import android.graphics.Bitmap
 import com.mapbox.rctmgl.components.images.RCTMGLImagesManager
-import com.mapbox.rctmgl.components.camera.AbstractMapFeature
+import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.utils.ImageEntry
 import android.graphics.drawable.BitmapDrawable
 import androidx.core.content.res.ResourcesCompat
