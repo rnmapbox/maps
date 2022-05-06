@@ -208,6 +208,161 @@
     ],
     "name": "Callout"
   },
+  "Camera": {
+    "description": "@param {CameraProps} props\n\n@example\nTo use imperative methods, pass in a ref object:\n```\nconst camera = useRef<CameraRef>(null);\n\nuseEffect(() => {\n  camera.current?.setCamera({\n    centerCoordinate: [lon, lat],\n  });\n}, []);\n\nreturn (\n  <Camera ref={camera} />\n);\n```",
+    "displayName": "Camera",
+    "methods": [],
+    "props": [
+      {
+        "name": "type",
+        "required": false,
+        "type": "literal",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "centerCoordinate",
+        "required": false,
+        "type": "Position",
+        "default": "none",
+        "description": "The location on which the map should center."
+      },
+      {
+        "name": "bounds",
+        "required": false,
+        "type": "CameraBoundsWithPadding",
+        "default": "none",
+        "description": "The corners of a box around which the map should bound. Contains padding props for backwards\ncompatibility; the root `padding` prop should be used instead."
+      },
+      {
+        "name": "heading",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The heading (orientation) of the map."
+      },
+      {
+        "name": "pitch",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The pitch of the map."
+      },
+      {
+        "name": "zoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The zoom level of the map."
+      },
+      {
+        "name": "padding",
+        "required": false,
+        "type": "CameraPadding",
+        "default": "none",
+        "description": "The viewport padding in points."
+      },
+      {
+        "name": "animationDuration",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The duration the map takes to animate to a new configuration."
+      },
+      {
+        "name": "animationMode",
+        "required": false,
+        "type": "'flyTo' \\| 'easeTo' \\| 'linearTo' \\| 'none' \\| 'moveTo'",
+        "default": "none",
+        "description": "The easing or path the camera uses to animate to a new configuration."
+      },
+      {
+        "name": "followUserMode",
+        "required": false,
+        "type": "'normal' \\| 'compass' \\| 'course'",
+        "default": "none",
+        "description": "The mode used to track the user location on the map."
+      },
+      {
+        "name": "followUserLocation",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Whether the map orientation follows the user location."
+      },
+      {
+        "name": "followZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The zoom level used when following the user location."
+      },
+      {
+        "name": "followPitch",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The pitch used when following the user location."
+      },
+      {
+        "name": "followHeading",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The heading used when following the user location."
+      },
+      {
+        "name": "minZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The lowest allowed zoom level."
+      },
+      {
+        "name": "maxZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The highest allowed zoom level."
+      },
+      {
+        "name": "maxBounds",
+        "required": false,
+        "type": "{ne:Position;sw:Position;}",
+        "default": "none",
+        "description": "The corners of a box defining the limits of where the camera can pan or zoom."
+      },
+      {
+        "name": "defaultSettings",
+        "required": false,
+        "type": "CameraStop",
+        "default": "none",
+        "description": "The configuration that the camera falls back on, if no other values are specified."
+      },
+      {
+        "name": "allowUpdates",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Whether the camera should send any configuration to the native module. Prevents unnecessary tile\nfetching and improves performance when the map is not visible. Defaults to `true`. (Not yet implemented.)"
+      },
+      {
+        "name": "triggerKey",
+        "required": false,
+        "type": "string \\| number",
+        "default": "none",
+        "description": "Any arbitrary primitive value that, when changed, causes the camera to retry moving to its target\nconfiguration. (Not yet implemented.)"
+      },
+      {
+        "name": "onUserTrackingModeChange",
+        "required": false,
+        "type": "(event:MapboxGLEvent<'usertrackingmodechange',{followUserLocation:boolean;followUserMode:UserTrackingMode\\|null;}>,)=>void",
+        "default": "none",
+        "description": "Executes when user tracking mode changes."
+      }
+    ],
+    "name": "Camera"
+  },
   "CircleLayer": {
     "description": "CircleLayer is a style layer that renders one or more filled circles on the map.",
     "displayName": "CircleLayer",
