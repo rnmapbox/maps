@@ -67,7 +67,7 @@ func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, apply
               }
             }
           } else {
-            fatalError("Error during fetchImage: \(error)")
+            Logger.log(level: .error, message: "Error during fetchImage: \(optional: error)")
           }
         });
       }
@@ -156,7 +156,7 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, apply
               }
             }
           } else {
-            fatalError("Error during fetchImage: \(error)")
+            Logger.log(level: .error, message: "Error during fetchImage: \(optional: error)")
           }
         });
       }
@@ -225,7 +225,7 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, a
               }
             }
           } else {
-            fatalError("Error during fetchImage: \(error)")
+            Logger.log(level: .error, message: "Error during fetchImage: \(optional: error)")
           }
         });
       }
@@ -492,7 +492,7 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
               }
             }
           } else {
-            fatalError("Error during fetchImage: \(error)")
+            Logger.log(level: .error, message: "Error during fetchImage: \(optional: error)")
           }
         });
       }
@@ -643,7 +643,7 @@ func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String,
               }
             }
           } else {
-            fatalError("Error during fetchImage: \(error)")
+            Logger.log(level: .error, message: "Error during fetchImage: \(optional: error)")
           }
         });
       }

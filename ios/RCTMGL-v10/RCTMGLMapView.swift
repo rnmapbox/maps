@@ -469,19 +469,23 @@ extension RCTMGLMapView {
     let style = self.mapboxMap.style
     
     style.allLayerIdentifiers.forEach { layerInfo in
-      let layer = try! style.layer(withId: layerInfo.id)
-      if layer.source == sourceId {
-        var good = true
-        if let sourceLayerId = sourceLayerId {
-          if sourceLayerId != layer.sourceLayer {
-            good = false
+      let layer = logged("setSourceVisibility.layer") {
+        try style.layer(withId: layerInfo.id)
+      }
+      if let layer = layer {
+        if layer.source == sourceId {
+          var good = true
+          if let sourceLayerId = sourceLayerId {
+            if sourceLayerId != layer.sourceLayer {
+              good = false
+            }
           }
-        }
-        if good {
-          do {
-            try style.setLayerProperty(for: layer.id, property: "visibility", value: visible ? "visible" : "none")
-          } catch {
-            Logger.log(level: .error, message: "Cannot change visibility of \(layer.id) with source: \(sourceId)")
+          if good {
+            do {
+              try style.setLayerProperty(for: layer.id, property: "visibility", value: visible ? "visible" : "none")
+            } catch {
+              Logger.log(level: .error, message: "Cannot change visibility of \(layer.id) with source: \(sourceId)")
+            }
           }
         }
       }
