@@ -40,7 +40,7 @@ class DocJSONBuilder {
 
   get options() {
     return {
-      match: /.js$/,
+      match: /.(js|tsx)$/,
       shortName: true,
     };
   }
@@ -106,13 +106,36 @@ class DocJSONBuilder {
       return result;
     }
 
+    function tsTypeDesc(tsType) {
+      if (tsType == null) {
+        return;
+      }
+
+      if (tsType.name == null) {
+        return null;
+      }
+
+      if (tsType.name === 'signature') {
+        return `${tsType.raw
+          .replaceAll(/(\n|\s)/g, '')
+          .replaceAll(/(\|)/g, '\\|')}`;
+      } else if (tsType.name === 'union') {
+        return tsType.raw.replace(/\|/g, '\\|');
+      } else {
+        return tsType.name;
+      }
+    }
+
     function mapProp(propMeta, propName, array) {
       let result = {};
       if (!array) {
         result = {
           name: propName || 'FIX ME NO NAME',
           required: propMeta.required || false,
-          type: (propMeta.type && propMeta.type.name) || 'FIX ME UNKNOWN TYPE',
+          type:
+            (propMeta.type && propMeta.type.name) ||
+            tsTypeDesc(propMeta.tsType) ||
+            'FIX ME UNKNOWN TYPE',
           default: !propMeta.defaultValue
             ? 'none'
             : propMeta.defaultValue.value.replace(/\n/g, ''),
@@ -126,7 +149,9 @@ class DocJSONBuilder {
           result.required = propMeta.required;
         }
         result.type =
-          (propMeta.type && propMeta.type.name) || 'FIX ME UNKNOWN TYPE';
+          (propMeta.type && propMeta.type.name) ||
+          tsTypeDesc(propMeta.tsType) ||
+          'FIX ME UNKNOWN TYPE';
         if (propMeta.defaultValue) {
           result.default = propMeta.defaultValue.value.replace(/\n/g, '');
         }
@@ -213,15 +238,19 @@ class DocJSONBuilder {
             return reject(err);
           }
 
-          fileName = fileName.replace('.js', '');
+          fileName = fileName.replace(/.(js)/, '');
           if (IGNORE_FILES.includes(fileName)) {
             next();
             return;
           }
 
-          results[fileName] = docgen.parse(content, undefined, undefined, {
+          content = content.replace(/memo\(forwardRef\((.+?)\)\)/, '$1');
+
+          let parsed = docgen.parse(content, undefined, undefined, {
             filename: fileName,
           });
+          fileName = fileName.replace(/.(tsx)/, '');
+          results[fileName] = parsed;
           this.postprocess(results[fileName], fileName);
 
           next();
