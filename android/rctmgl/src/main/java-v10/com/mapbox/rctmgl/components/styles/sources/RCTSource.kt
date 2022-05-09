@@ -49,7 +49,7 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
         }
 
     private fun getSourceAs(style: Style, id: String?): T? {
-        val result = style.getSource(iD!!)
+        val result = iD?.let { style.getSource(it) }
         return try {
             result as T?
         } catch (exception: ClassCastException) {
@@ -107,7 +107,7 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
     override fun addToMap(mapView: RCTMGLMapView) {
         mMapView = mapView
         mMap = mapView.getMapboxMap()
-        mMap!!.getStyle(object : Style.OnStyleLoaded {
+        mMap?.getStyle(object : Style.OnStyleLoaded {
             override fun onStyleLoaded(style: Style) {
                 val existingSource = getSourceAs(style, iD)
                 if (existingSource != null) {
@@ -142,7 +142,7 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
         }
         if (mMap != null && mSource != null && mMap!!.getStyle() != null) {
             try {
-                mMap!!.getStyle()!!.removeStyleSource(iD!!)
+                iD?.let { mMap?.getStyle()?.removeStyleSource(it) }
             } catch (ex: Throwable) {
                 Logger.w(LOG_TAG, String.format("RCTSource.removeFromMap: %s - %s", mSource, ex.message), ex)
             }
@@ -155,7 +155,7 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
         }
         val layer = childView
         if (mMap == null) {
-            mQueuedLayers!!.add(childPosition, layer)
+            mQueuedLayers?.add(childPosition, layer)
         } else {
             addLayerToMap(layer, childPosition)
         }
@@ -182,7 +182,7 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
             layer.removeFromMap(mMapView)
         }
         if (mQueuedLayers != null && mQueuedLayers!!.size > 0) {
-            mQueuedLayers!!.removeAt(childPosition)
+            mQueuedLayers?.removeAt(childPosition)
         } else {
             mLayers.removeAt(childPosition)
         }

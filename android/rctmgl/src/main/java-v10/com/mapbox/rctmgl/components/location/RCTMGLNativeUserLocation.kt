@@ -31,7 +31,7 @@ import com.mapbox.mapboxsdk.maps.Style;
 
     override fun removeFromMap(mapView: RCTMGLMapView) {
         mEnabled = false
-        if (mMap != null) mMap!!.getStyle(this)
+        mMap?.getStyle(this)
     }
 
     @SuppressLint("MissingPermission")
@@ -46,16 +46,13 @@ import com.mapbox.mapboxsdk.maps.Style;
         if (!PermissionsManager.areLocationPermissionsGranted(context)) {
             return
         }
-        val locationComponent: LocationComponentManager = mMapView!!.locationComponentManager
-        locationComponent.update(style)
-        locationComponent.showUserLocation(mEnabled)
+
+        mMapView?.locationComponentManager?.update(style)
+        mMapView?.locationComponentManager?.showUserLocation(mEnabled)
     }
 
     fun setRenderMode(@RenderMode.Mode renderMode: Int) {
         mRenderMode = renderMode
-        if (mMapView != null) {
-            val locationComponent: LocationComponentManager = mMapView!!.locationComponentManager
-            locationComponent.setRenderMode(renderMode)
-        }
+        mMapView?.locationComponentManager?.setRenderMode(renderMode)
     }
 }

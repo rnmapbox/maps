@@ -30,12 +30,12 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
     fun setImages(images: List<Map.Entry<String, ImageEntry>>) {
         val newImages: MutableMap<String, ImageEntry> = HashMap()
         for ((key, value) in images) {
-            val oldValue = mImages!!.put(key, value)
+            val oldValue = mImages?.put(key, value)
             if (oldValue == null) {
                 newImages[key] = value
             }
         }
-        if (mMap != null && mMap!!.getStyle() != null) {
+        if (mMap != null && mMap?.getStyle() != null) {
             addImagesToStyle(newImages, mMap!!)
         }
     }
@@ -43,12 +43,12 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
     fun setNativeImages(nativeImages: List<Map.Entry<String, BitmapDrawable>>) {
         val newImages: MutableMap<String?, BitmapDrawable?> = HashMap()
         for ((key, value) in nativeImages) {
-            val oldValue = mNativeImages!!.put(key, value)
+            val oldValue = mNativeImages?.put(key, value)
             if (oldValue == null) {
                 newImages[key] = value
             }
         }
-        if (mMap != null && mMap!!.getStyle() != null) {
+        if (mMap != null && mMap?.getStyle() != null) {
             addNativeImagesToStyle(newImages, mMap!!)
         }
     }
@@ -128,7 +128,7 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
 
     private fun hasImage(imageId: String?, map: MapboxMap): Boolean {
         val style = map.getStyle()
-        return style != null && style.getStyleImage(imageId!!) != null
+        return style != null && imageId?.let { style.getStyleImage(it) } != null
     }
 
     override fun addToMap(mapView: RCTMGLMapView) {
@@ -150,8 +150,8 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
         val style = map.getStyle()
         if (style == null || imageEntries == null) return
         for ((key, value) in imageEntries) {
-            if (!hasImage(key, map)) {
-                style.addImage(key!!, BitmapUtils.toImage(value))
+            if (key != null && !hasImage(key, map)) {
+                style.addImage(key, BitmapUtils.toImage(value))
                 mCurrentImages.add(key)
             }
         }
@@ -171,7 +171,7 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
         // See also: https://github.com/mapbox/mapbox-gl-native/pull/14253#issuecomment-478827792
         for (imageEntry in imageEntries) {
             if (!hasImage(imageEntry.key, map)) {
-                style.addImage(imageEntry.key, mImagePlaceholder!!)
+                mImagePlaceholder?.let { style.addImage(imageEntry.key, it) }
                 missingImages.add(imageEntry)
                 mCurrentImages.add(imageEntry.key)
             }

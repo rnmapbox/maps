@@ -34,7 +34,6 @@ class RCTMGLLight(context: Context?) : AbstractMapFeature(context) {
     }
 
     private fun setLight() {
-        val style = style
         if (style != null) {
             val light = Light()
             setLight(light)
