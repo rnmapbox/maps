@@ -77,4 +77,30 @@ class RCTMGLMapViewManager: RCTViewManager {
       resolver(nil)
     }
   }
+
+  @objc
+  func getCenter(_ reactTag: NSNumber,
+                 resolver: @escaping RCTPromiseResolveBlock,
+                 rejecter: @escaping RCTPromiseRejectBlock) -> Void {
+    self.bridge.uiManager.addUIBlock { (manager, viewRegistry) in
+      let view = viewRegistry![reactTag]
+
+      guard let view = view! as? RCTMGLMapView else {
+        RCTLogError("Invalid react tag, could not find RCTMGLMapView");
+        rejecter("getCenter", "Unknown find reactTag: \(reactTag)", nil)
+        return;
+      }
+
+      guard let mapboxMap = view.mapboxMap else {
+        RCTLogError("MapboxMap is not yet available");
+        rejecter("getCenter", "Map not loaded yet", nil)
+        return;
+      }
+
+      resolver(["center": [
+        mapboxMap.cameraState.center.longitude,
+        mapboxMap.cameraState.center.latitude
+      ]])
+    }
+  }
 }
