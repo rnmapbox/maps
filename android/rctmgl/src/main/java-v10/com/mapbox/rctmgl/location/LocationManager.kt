@@ -31,7 +31,7 @@ internal class LocationProviderForEngine(var mEngine: LocationEngine?) : Locatio
             beforeAddingFirstConsumer()
         }
         mConsumers.add(locationConsumer)
-        mEngine!!.getLastLocation(this)
+        mEngine?.getLastLocation(this)
     }
 
     override fun unRegisterLocationConsumer(locationConsumer: LocationConsumer) {
@@ -112,13 +112,13 @@ class LocationManager private constructor(private val context: Context) : Locati
         }
 
         // remove existing listeners
-        engine!!.removeLocationUpdates(this)
+        engine?.removeLocationUpdates(this)
 
         // refresh location engine request with new values
         buildEngineRequest()
 
         // add new listeners
-        engine!!.requestLocationUpdates(
+        engine?.requestLocationUpdates(
                 locationEngineRequest!!,
                 this,
                 Looper.getMainLooper()
@@ -127,7 +127,7 @@ class LocationManager private constructor(private val context: Context) : Locati
     }
 
     fun disable() {
-        engine!!.removeLocationUpdates(this)
+        engine?.removeLocationUpdates(this)
         isActive = false
     }
 
@@ -136,7 +136,7 @@ class LocationManager private constructor(private val context: Context) : Locati
             return
         }
         disable()
-        engine!!.removeLocationUpdates(this)
+        engine?.removeLocationUpdates(this)
     }
 
     fun isActive(): Boolean {
@@ -154,7 +154,7 @@ class LocationManager private constructor(private val context: Context) : Locati
             callback.onFailure(Exception("LocationEngine not initialized"))
         }
         try {
-            engine!!.getLastLocation(callback)
+            engine?.getLastLocation(callback)
         } catch (exception: Exception) {
             Log.w(LOG_TAG, exception)
             callback.onFailure(exception)

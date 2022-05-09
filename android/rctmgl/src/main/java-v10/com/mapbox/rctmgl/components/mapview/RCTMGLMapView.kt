@@ -21,6 +21,7 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.*
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadedListener
 import com.mapbox.maps.extension.style.layers.Layer
+import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.compass.compass
@@ -73,32 +74,24 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     private var mLocationComponentManager: LocationComponentManager? = null
     var tintColor: Int? = null
         private set
-    val annotations: AnnotationPlugin? = null
 
-    val pointAnnotationManager: PointAnnotationManager
+    val pointAnnotationManager: PointAnnotationManager?
         get() {
             if (mPointAnnotationManager == null) {
                 val _this = this
                 val gesturesPlugin: GesturesPlugin = this.gestures
                 gesturesPlugin.removeOnMapClickListener(_this)
-                //mMap!!.gesturesPlugin { gesturesPlugin: GesturesPlugin ->
-                //    gesturesPlugin.removeOnMapClickListener(_this)
-                //    null
-                //}
-                mPointAnnotationManager = annotations!!.createPointAnnotationManager(this)
-                mPointAnnotationManager!!.addClickListener(OnPointAnnotationClickListener { pointAnnotation ->
-                    onMarkerClick(pointAnnotation)
-                    false
-                }
+
+                mPointAnnotationManager = annotations.createPointAnnotationManager()
+                mPointAnnotationManager?.addClickListener(OnPointAnnotationClickListener { pointAnnotation ->
+                        onMarkerClick(pointAnnotation)
+                        false
+                    }
                 )
                 gesturesPlugin.addOnMapClickListener(_this)
 
-                //mMap.gesturesPlugin { gesturesPlugin: GesturesPlugin ->
-                //    gesturesPlugin.addOnMapClickListener(_this)
-                //    null
-                //}
             }
-            return mPointAnnotationManager!!
+            return mPointAnnotationManager
         }
 
     private fun onMapReady(map: MapboxMap) {
@@ -139,11 +132,11 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         viewTreeObserver.dispatchOnGlobalLayout()
     }
 
-    fun getStyle(onStyleLoaded: Style.OnStyleLoaded?) {
+    fun getStyle(onStyleLoaded: Style.OnStyleLoaded) {
         if (mMap == null) {
             return
         }
-        mMap.getStyle(onStyleLoaded!!)
+        mMap.getStyle(onStyleLoaded)
     }
 
     fun addFeature(childView: View?, childPosition: Int) {
@@ -184,7 +177,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 feature.addToMap(this)
                 mFeatures.add(childPosition, feature)
             } else {
-                mQueuedFeatures!!.add(childPosition, feature)
+                mQueuedFeatures?.add(childPosition, feature)
             }
         }
     }
@@ -209,8 +202,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     private fun features(): MutableList<AbstractMapFeature> {
         return if (mQueuedFeatures != null && mQueuedFeatures!!.size > 0) (
-            mQueuedFeatures
-        )!!
+            mQueuedFeatures!!
+        )
          else {
             mFeatures
         }
@@ -235,8 +228,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             return
         }
         for (key in mSources.keys) {
-            val source = mSources[key]!!
-            source.removeFromMap(this)
+            val source = mSources[key]
+            source?.removeFromMap(this)
         }
     }
 
@@ -245,8 +238,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             return
         }
         for (key in mSources.keys) {
-            val source = mSources[key]!!
-            source.addToMap(this)
+            val source = mSources[key]
+            source?.addToMap(this)
         }
     }
 
@@ -278,12 +271,14 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 }
             }
         }
-        val mapboxLayers = mMap!!.getStyle()!!.styleLayers
-        for (i in mapboxLayers.indices.reversed()) {
-            val mapboxLayer = mapboxLayers[i]
-            val layerID = mapboxLayer.id
-            if (layerToSourceMap.containsKey(layerID)) {
-                return layerToSourceMap[layerID]
+        val mapboxLayers = mMap?.getStyle()?.styleLayers
+        if (mapboxLayers != null) {
+            for (i in mapboxLayers.indices.reversed()) {
+                val mapboxLayer = mapboxLayers[i]
+                val layerID = mapboxLayer.id
+                if (layerToSourceMap.containsKey(layerID)) {
+                    return layerToSourceMap[layerID]
+                }
             }
         }
         return null
@@ -298,18 +293,17 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         return true
     }
 
-    fun setReactStyleURL(styleURL: String?) {
-        mStyleURL = styleURL
+    fun setReactStyleURL(styleURL: String) {
         if (mMap != null) {
             removeAllSourcesFromMap()
             if (isJSONValid(mStyleURL)) {
-                mMap.loadStyleJson(mStyleURL!!, object : Style.OnStyleLoaded {
+                mMap.loadStyleJson(styleURL, object : Style.OnStyleLoaded {
                     override fun onStyleLoaded(style: Style) {
                         addAllSourcesToMap()
                     }
                 })
             } else {
-                mMap.loadStyleUri(styleURL!!, object : Style.OnStyleLoaded {
+                mMap.loadStyleUri(styleURL, object : Style.OnStyleLoaded {
                     override fun onStyleLoaded(style: Style) {
                         savedStyle = style
                         addAllSourcesToMap()
@@ -383,27 +377,29 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             mAnnotationClicked = false
             return true
         }
-        val screenPoint = mMap!!.pixelForCoordinate(point)
+        val screenPoint = mMap?.pixelForCoordinate(point)
         val touchableSources = allTouchableSources
         val hits = HashMap<String?, List<Feature?>?>()
-        handleTapInSources(LinkedList(touchableSources), screenPoint, hits, ArrayList(), object : HandleTap {
-            override fun run(hitTouchableSources: List<RCTSource<*>?>?, hits: Map<String?, List<Feature?>?>) {
-                if (hits.size > 0) {
-                    val source = getTouchableSourceWithHighestZIndex(hitTouchableSources as List<RCTSource<*>>?)
-                    if (source != null && source.hasPressListener()) {
-                        source.onPress(RCTSource.OnPressEvent(
-                                hits[source.iD]!! as List<Feature>,
-                                GeoJSONUtils.toLatLng(point),
-                                PointF(screenPoint.x.toFloat(), screenPoint.y.toFloat())
-                        ))
-                        return
+        if (screenPoint != null) {
+            handleTapInSources(LinkedList(touchableSources), screenPoint, hits, ArrayList(), object : HandleTap {
+                override fun run(hitTouchableSources: List<RCTSource<*>?>?, hits: Map<String?, List<Feature?>?>) {
+                    if (hits.size > 0) {
+                        val source = getTouchableSourceWithHighestZIndex(hitTouchableSources as List<RCTSource<*>>?)
+                        if (source != null && source.hasPressListener() && source.iD != null && source.iD in hits) {
+                            source.onPress(RCTSource.OnPressEvent(
+                                    hits[source.iD] as List<Feature>,
+                                    GeoJSONUtils.toLatLng(point),
+                                    PointF(screenPoint.x.toFloat(), screenPoint.y.toFloat())
+                            ))
+                            return
+                        }
                     }
+                    val event = MapClickEvent(_this, LatLng(point), screenPoint)
+                    mManager.handleEvent(event)
                 }
-                val event = MapClickEvent(_this, LatLng(point), screenPoint)
-                mManager.handleEvent(event)
-            }
 
-        })
+            })
+        }
         return false
     }
 
@@ -414,7 +410,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         var nextActiveAnnotation: RCTMGLPointAnnotation? = null
         for (key in mPointAnnotations.keys) {
             val annotation = mPointAnnotations[key]
-            val curMarkerID = annotation!!.mapboxID
+            val curMarkerID = annotation?.mapboxID
             if (mActiveMarkerID == curMarkerID) {
                 activeAnnotation = annotation
             }
@@ -454,7 +450,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     fun waitForLayer(layerID: String, callback: FoundLayerCallback) {
         if (savedStyle != null) {
-            val layer = savedStyle!!.getLayer(layerID)
+            val layer = savedStyle?.getLayer(layerID)
             if (layer != null) {
                 callback.found(layer)
                 return
@@ -488,7 +484,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     private fun makeRegionPayload(isAnimated: Boolean?): WritableMap {
-        val position = mMap!!.cameraState ?: return WritableNativeMap()
+        val position = mMap?.cameraState ?: return WritableNativeMap()
         val latLng = LatLng(position.center.latitude(), position.center.longitude())
         val properties: WritableMap = WritableNativeMap()
         properties.putDouble("zoomLevel", position.zoom)
@@ -508,6 +504,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     fun createSymbolManager(style: Style?) {
         /*
+        v10 TODO
         symbolManager = new SymbolManager(this, mMap, style);
         symbolManager.setIconAllowOverlap(true);
         symbolManager.addClickListener(new OnSymbolClickListener() {
@@ -621,11 +618,13 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     //}
 
     fun queryTerrainElevation(callbackID: String?, longitude: Double, latitude: Double) {
-        val result = mMap!!.getElevation(Point.fromLngLat(longitude, latitude))
+        val result = mMap?.getElevation(Point.fromLngLat(longitude, latitude))
         val payload: WritableMap = WritableNativeMap()
-        payload.putDouble("data", result!!)
-        val event = AndroidCallbackEvent(this, callbackID, payload)
-        mManager.handleEvent(event)
+        if (result != null) {
+            payload.putDouble("data", result)
+            val event = AndroidCallbackEvent(this, callbackID, payload)
+            mManager.handleEvent(event)
+        }
     }
 
     companion object {

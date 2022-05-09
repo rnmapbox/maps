@@ -52,16 +52,16 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
             mChildView = childView
         }
         childView.addOnLayoutChangeListener(this)
-        if (mMapView != null) {
-            mMapView!!.offscreenAnnotationViewContainer().addView(childView)
-        }
+
+        mMapView?.offscreenAnnotationViewContainer()?.addView(childView)
+
     }
 
     override fun removeView(childView: View) {
         if (mChildView != null) {
-            mMap!!.getStyle(object : Style.OnStyleLoaded {
+            mMap?.getStyle(object : Style.OnStyleLoaded {
                 override fun onStyleLoaded(style: Style) {
-                    style.removeStyleImage(mChildBitmapId!!)
+                    mChildBitmapId?.let { style.removeStyleImage(it) }
                     mChildView = null
                     calloutView = null
                     mChildBitmap = null
@@ -70,9 +70,7 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
                 }
             })
         }
-        if (mMapView != null) {
-            mMapView!!.offscreenAnnotationViewContainer().removeView(childView)
-        }
+        mMapView?.offscreenAnnotationViewContainer()?.removeView(childView)
     }
 
     override fun addToMap(mapView: RCTMGLMapView) {
@@ -87,7 +85,7 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
             updateOptions()
         }
         if (calloutView != null) {
-            if (!calloutView!!.isAttachedToWindow) {
+            if (!calloutView!!.isAttachedToWindow && mMapView != null) {
                 mMapView!!.offscreenAnnotationViewContainer().addView(calloutView)
             }
             addBitmapToStyle(mCalloutBitmap, mCalloutBitmapId)
@@ -97,7 +95,7 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
     override fun removeFromMap(mapView: RCTMGLMapView) {
         val map = (if (mMapView != null) mMapView else mapView) ?: return
         if (marker != null) {
-            map.pointAnnotationManager.delete(marker!!)
+            map.pointAnnotationManager?.delete(marker!!)
         }
         if (mChildView != null) {
             map.offscreenAnnotationViewContainer().removeView(mChildView)
@@ -138,15 +136,15 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
     val mapboxID: Long
         get() = if (marker == null) -1 else marker!!.id
 
-    fun setCoordinate(point: Point?) {
+    fun setCoordinate(point: Point) {
         mCoordinate = point
         if (marker != null) {
-            marker!!.point = point!!
-            mMapView!!.pointAnnotationManager.update(marker!!)
+            marker!!.point = point
+            mMapView?.pointAnnotationManager?.update(marker!!)
         }
         if (mCalloutSymbol != null) {
-            mCalloutSymbol!!.point = point!!
-            mMapView!!.pointAnnotationManager.update(mCalloutSymbol!!)
+            mCalloutSymbol!!.point = point
+            mMapView?.pointAnnotationManager?.update(mCalloutSymbol!!)
         }
     }
 
@@ -154,7 +152,7 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
         mAnchor = arrayOf(x, y)
         if (marker != null) {
             updateAnchor()
-            mMapView!!.pointAnnotationManager.update(marker!!)
+            mMapView?.pointAnnotationManager?.update(marker!!)
         }
     }
 
@@ -162,7 +160,7 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
         mDraggable = draggable
         if (marker != null) {
             marker!!.isDraggable = draggable
-            mMapView!!.pointAnnotationManager.update(marker!!)
+            mMapView?.pointAnnotationManager?.update(marker!!)
         }
     }
 
@@ -178,7 +176,7 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
     fun onDeselect() {
         mManager.handleEvent(makeEvent(false))
         if (mCalloutSymbol != null) {
-            mMapView!!.pointAnnotationManager.delete(mCalloutSymbol!!)
+            mMapView?.pointAnnotationManager?.delete(mCalloutSymbol!!)
         }
     }
 
@@ -198,13 +196,15 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
     }
 
     fun makeMarker() {
-        val options = PointAnnotationOptions()
-                .withPoint(mCoordinate!!)
+        val options = mCoordinate?.let {
+            PointAnnotationOptions()
+                .withPoint(it)
                 .withDraggable(mDraggable)
                 .withIconSize(1.0)
                 .withSymbolSortKey(10.0)
-        val symbolManager: PointAnnotationManager = mMapView!!.pointAnnotationManager
-        if (symbolManager != null) {
+        }
+        val symbolManager = mMapView?.pointAnnotationManager
+        if (symbolManager != null && options != null) {
             marker = symbolManager.create(options)
             updateOptions()
         }
@@ -214,30 +214,30 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
         if (marker != null) {
             updateIconImage()
             updateAnchor()
-            mMapView!!.pointAnnotationManager.update(marker!!)
+            mMapView?.pointAnnotationManager?.update(marker!!)
         }
     }
 
     private fun updateIconImage() {
         if (mChildView != null) {
             if (mChildBitmapId != null) {
-                marker!!.iconImage = mChildBitmapId
+                marker?.iconImage = mChildBitmapId
             }
         } else {
-            marker!!.iconImage = MARKER_IMAGE_ID
-            marker!!.iconAnchor = IconAnchor.BOTTOM
+            marker?.iconImage = MARKER_IMAGE_ID
+            marker?.iconAnchor = IconAnchor.BOTTOM
         }
     }
 
     private fun updateAnchor() {
-        if (mAnchor != null && mChildView != null && mChildBitmap != null) {
+        if (mAnchor != null && mChildView != null && mChildBitmap != null && marker != null) {
             var w = mChildBitmap!!.width
             var h = mChildBitmap!!.height
             val scale = resources.displayMetrics.density
             w = (w / scale).toInt()
             h = (h / scale).toInt()
-            marker!!.iconAnchor = IconAnchor.TOP_LEFT
-            marker!!.iconOffset = Arrays.asList(w.toDouble() * mAnchor!![0] * -1.0, h.toDouble() * mAnchor!![1] * -1.0)
+            marker?.iconAnchor = IconAnchor.TOP_LEFT
+            marker?.iconOffset = Arrays.asList(w.toDouble() * mAnchor!![0] * -1.0, h.toDouble() * mAnchor!![1] * -1.0)
         }
     }
 
@@ -251,16 +251,20 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
                 yOffset = h.toFloat() * -1
             }
         }
-        val options = PointAnnotationOptions()
-                .withPoint(mCoordinate!!)
-                .withIconImage(mCalloutBitmapId!!)
-                .withIconSize(1.0)
-                .withIconAnchor(IconAnchor.BOTTOM)
-                .withIconOffset(Arrays.asList(0.0, yOffset.toDouble()))
-                .withSymbolSortKey(11.0)
-                .withDraggable(false)
-        val symbolManager: PointAnnotationManager = mMapView!!.pointAnnotationManager
-        if (symbolManager != null) {
+        val options = mCoordinate?.let {
+            mCalloutBitmapId?.let { _mCalloutBitmapId ->
+                PointAnnotationOptions()
+                    .withPoint(it)
+                    .withIconImage(_mCalloutBitmapId)
+                    .withIconSize(1.0)
+                    .withIconAnchor(IconAnchor.BOTTOM)
+                    .withIconOffset(Arrays.asList(0.0, yOffset.toDouble()))
+                    .withSymbolSortKey(11.0)
+                    .withDraggable(false)
+            }
+        }
+        val symbolManager = mMapView?.pointAnnotationManager
+        if (symbolManager != null && options != null) {
             mCalloutSymbol = symbolManager.create(options)
         }
     }

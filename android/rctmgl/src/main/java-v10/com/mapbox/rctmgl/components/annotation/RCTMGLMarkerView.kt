@@ -23,7 +23,7 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
         mCoordinate = point
         if (mChildView != null) {
             val options = ViewAnnotationOptions.Builder().geometry(mCoordinate).build()
-            mMapView!!.viewAnnotationManager.updateViewAnnotation(mChildView!!, options)
+            mMapView?.viewAnnotationManager?.updateViewAnnotation(mChildView!!, options)
         }
     }
 
@@ -38,14 +38,14 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
             val width = mChildView!!.width
             val height = mChildView!!.height
             val options = ViewAnnotationOptions.Builder().geometry(mCoordinate).width(width).height(height).offsetX(((mAnchor[0] - 0.5) * width).toInt()).offsetY(((mAnchor[1] - 0.5) * height).toInt()).build()
-            mMapView!!.viewAnnotationManager.updateViewAnnotation(mChildView!!, options)
+            mMapView?.viewAnnotationManager?.updateViewAnnotation(mChildView!!, options)
         }
     }
 
     override fun addToMap(mapView: RCTMGLMapView) {
         mMapView = mapView
         val rctmglMarkerView = this
-        mMapView!!.getMapAsync {
+        mMapView?.getMapAsync {
             if (mChildView != null) {
                 GeoJSONUtils.toLatLng(mCoordinate)
                 val width = mChildView!!.width
@@ -53,17 +53,17 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
                 val options = ViewAnnotationOptions.Builder().geometry(mCoordinate).width(width).height(height).offsetX(((mAnchor[0] - 0.5) * width).toInt()).offsetY(((mAnchor[1] - 0.5) * height).toInt()).build()
                 mChildView!!.addOnLayoutChangeListener(rctmglMarkerView)
                 if (mChildView!!.layoutParams == null && !mChildView!!.isAttachedToWindow) {
-                    mMapView!!.offscreenAnnotationViewContainer().addView(mChildView)
-                    mMapView!!.offscreenAnnotationViewContainer().removeView(mChildView)
+                    mMapView?.offscreenAnnotationViewContainer()?.addView(mChildView)
+                    mMapView?.offscreenAnnotationViewContainer()?.removeView(mChildView)
                 }
-                mMapView!!.viewAnnotationManager.addViewAnnotation(mChildView!!, options)
+                mMapView?.viewAnnotationManager?.addViewAnnotation(mChildView!!, options)
             }
         }
     }
 
     override fun removeFromMap(mapView: RCTMGLMapView) {
         if (mChildView != null) {
-            mMapView!!.viewAnnotationManager.removeViewAnnotation(mChildView!!)
+            mMapView?.viewAnnotationManager?.removeViewAnnotation(mChildView!!)
             mChildView!!.removeOnLayoutChangeListener(this)
         }
     }
