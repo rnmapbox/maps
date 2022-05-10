@@ -616,10 +616,10 @@ class Camera extends React.Component {
       case Camera.Mode.Linear:
         return MapboxGL.CameraModes.Linear;
       case Camera.Mode.None:
-        return MapboxGL.CameraModes.None;
       case Camera.Mode.Move:
-      default:
         return MapboxGL.CameraModes.Move;
+      default:
+        return MapboxGL.CameraModes.Ease;
     }
   }
 

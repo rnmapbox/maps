@@ -1103,8 +1103,8 @@ describe('Camera', () => {
         ).toStrictEqual('Move');
       });
 
-      test('returns "Move" as default (TODO: This should eventually fall back to None)', () => {
-        expect(camera._getNativeCameraMode({})).toStrictEqual('Move');
+      test('returns "Ease" as default', () => {
+        expect(camera._getNativeCameraMode({})).toStrictEqual('Ease');
       });
     });
 
