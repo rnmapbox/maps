@@ -214,7 +214,7 @@ declare namespace MapboxGL {
   /**
    * Components
    */
-  class MapView extends Component<MapViewProps> {
+  export class MapView extends Component<MapViewProps> {
     getPointInView(coordinate: GeoJSON.Position): Promise<GeoJSON.Position>;
     getCoordinateFromView(point: GeoJSON.Position): Promise<GeoJSON.Position>;
     getVisibleBounds(): Promise<GeoJSON.Position[]>;
@@ -240,7 +240,7 @@ declare namespace MapboxGL {
   }
 
   type Padding = number | [number, number] | [number, number, number, number];
-  class Camera extends Component<CameraProps> {
+  export class Camera extends Component<CameraProps> {
     fitBounds(
       northEastCoordinates: GeoJSON.Position,
       southWestCoordinates: GeoJSON.Position,
@@ -362,6 +362,7 @@ declare namespace MapboxGL {
     ) => Promise<FeatureCollection<Geometry, Properties>>;
   }
   class RasterSource extends Component<RasterSourceProps> {}
+  class RasterDemSource extends Component<RasterSourceProps> {}
 
   /**
    * Layers
@@ -376,6 +377,7 @@ declare namespace MapboxGL {
   class HeatmapLayer extends Component<HeatmapLayerProps> {}
   class Images extends Component<ImagesProps> {}
   class ImageSource extends Component<ImageSourceProps> {}
+  class SkyLayer extends Component<SkyLayerProps> {}
 
   class LocationManager extends Component {
     start(displacement?: number): void;
@@ -719,6 +721,12 @@ export interface FillLayerStyle {
   fillPatternTransition?: Transition | Expression;
 }
 
+export interface SkyLayerStyle {
+  skyType: string | Expression;
+  skyAtmosphereSun?: Array<number> | Expression;
+  skyAtmosphereSunIntensity: number | Expression;
+}
+
 export interface LineLayerStyle {
   lineCap?: 'butt' | 'round' | 'square' | Expression;
   lineJoin?: 'bevel' | 'round' | 'miter' | Expression;
@@ -1021,6 +1029,11 @@ export interface SnapshotOptions {
   writeToDisk?: boolean;
 }
 
+export interface SkyLayerProps extends LayerBaseProps {
+  id: string;
+  style?: StyleProp<SkyLayerStyle>;
+}
+
 // Logger class
 type LogLevel = 'error' | 'warning' | 'info' | 'debug' | 'verbose';
 
@@ -1037,4 +1050,8 @@ export class Logger {
   public static setLogLevel: (level: LogLevel) => void;
 }
 
-export default MapboxGL;
+export import MapView = MapboxGL.MapView;
+export import Camera = MapboxGL.Camera;
+export import Terrain = MapboxGL.Terrain;
+export import RasterDemSource = MapboxGL.RasterDemSource;
+export import SkyLayer = MapboxGL.SkyLayer;
