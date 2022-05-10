@@ -77,6 +77,7 @@ module.exports = {
     'no-unused-expressions': ['error', { allowTaggedTemplates: true }],
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'fp/no-mutating-methods': 'warn',
+    'react-native/no-inline-styles': 0,
   },
   overrides: [
     {

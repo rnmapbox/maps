@@ -5,4 +5,9 @@ const BaseExamplePropTypes = {
   onDismissExample: PropTypes.func.isRequired,
 };
 
+export interface BaseExampleProps {
+  label: string;
+  onDismissExample: () => void;
+}
+
 export default BaseExamplePropTypes;
