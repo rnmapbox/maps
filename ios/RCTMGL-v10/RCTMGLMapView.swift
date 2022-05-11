@@ -341,8 +341,10 @@ extension RCTMGLMapView: GestureManagerDelegate {
            case .failure(let error):
             Logger.log(level: .error, message: "Error during handleTapInSources source.id=\(source.id ?? "n/a") error:\(error)")
           case .success(let features):
-            newHits[source.id] = features
-            newTouchedSources.append(source)
+            if !features.isEmpty {
+              newHits[source.id] = features
+              newTouchedSources.append(source)
+            }
             break
           }
           var nSources = sources
