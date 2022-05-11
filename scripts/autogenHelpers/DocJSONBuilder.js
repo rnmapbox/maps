@@ -116,9 +116,7 @@ class DocJSONBuilder {
       }
 
       if (tsType.name === 'signature') {
-        return `${tsType.raw
-          .replaceAll(/(\n|\s)/g, '')
-          .replaceAll(/(\|)/g, '\\|')}`;
+        return `${tsType.raw.replace(/(\n|\s)/g, '').replace(/(\|)/g, '\\|')}`;
       } else if (tsType.name === 'union') {
         return tsType.raw.replace(/\|/g, '\\|');
       } else {
