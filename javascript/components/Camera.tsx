@@ -63,6 +63,7 @@ export interface CameraProps
 }
 
 interface CameraStop {
+  /** Allows static check of the data type. For internal use only. */
   readonly type?: 'CameraStop';
   /** The location on which the map should center. */
   centerCoordinate?: Position;

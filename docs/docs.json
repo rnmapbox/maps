@@ -218,7 +218,7 @@
         "required": false,
         "type": "literal",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "Allows static check of the data type. For internal use only."
       },
       {
         "name": "centerCoordinate",

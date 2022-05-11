@@ -5,7 +5,7 @@
 ### props
 | Prop | Type | Default | Required | Description |
 | ---- | :--: | :-----: | :------: | :----------: |
-| type | `literal` | `none` | `false` | FIX ME NO DESCRIPTION |
+| type | `literal` | `none` | `false` | Allows static check of the data type. For internal use only. |
 | centerCoordinate | `Position` | `none` | `false` | The location on which the map should center. |
 | bounds | `CameraBoundsWithPadding` | `none` | `false` | The corners of a box around which the map should bound. Contains padding props for backwards<br/>compatibility; the root `padding` prop should be used instead. |
 | heading | `number` | `none` | `false` | The heading (orientation) of the map. |
