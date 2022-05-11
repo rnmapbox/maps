@@ -74,12 +74,12 @@ PODS:
   - fmt (6.2.1)
   - glog (0.3.5)
   - libevent (2.1.12)
-  - MapboxCommon (21.2.1)
-  - MapboxCoreMaps (10.4.2):
-    - MapboxCommon (~> 21.2)
-  - MapboxMaps (10.4.3):
-    - MapboxCommon (= 21.2.1)
-    - MapboxCoreMaps (= 10.4.2)
+  - MapboxCommon (21.3.0)
+  - MapboxCoreMaps (10.5.1):
+    - MapboxCommon (~> 21.3)
+  - MapboxMaps (10.5.0):
+    - MapboxCommon (= 21.3.0)
+    - MapboxCoreMaps (= 10.5.1)
     - MapboxMobileEvents (= 1.0.7)
     - Turf (~> 2.0)
   - MapboxMobileEvents (1.0.7)
@@ -358,18 +358,16 @@ PODS:
     - React-jsi (= 0.68.1)
     - React-logger (= 0.68.1)
     - React-perflogger (= 0.68.1)
-  - RNCMaskedView (0.1.10):
-    - React
   - RNGestureHandler (1.9.0):
     - React-Core
   - rnmapbox-maps (10.0.0-beta.1):
-    - MapboxMaps (~> 10.4.3)
+    - MapboxMaps (~> 10.5.0)
     - React
     - React-Core
     - rnmapbox-maps/DynamicLibrary (= 10.0.0-beta.1)
     - Turf
   - rnmapbox-maps/DynamicLibrary (10.0.0-beta.1):
-    - MapboxMaps (~> 10.4.3)
+    - MapboxMaps (~> 10.5.0)
     - React
     - React-Core
     - Turf
@@ -442,7 +440,6 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - rnmapbox-maps (from `../../`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -536,8 +533,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  RNCMaskedView:
-    :path: "../node_modules/@react-native-community/masked-view"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   rnmapbox-maps:
@@ -569,9 +564,9 @@ SPEC CHECKSUMS:
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 5337263514dd6f09803962437687240c5dc39aa4
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  MapboxCommon: e518bf4e496722343c77177943cf3c11efe3fc9e
-  MapboxCoreMaps: 227b33943eb5b257fdebc56474007e214981f43d
-  MapboxMaps: d692e7a2ddce3f59eb2b881733c1a8ca18d1d2eb
+  MapboxCommon: a336e40b53e3fda5c419fe093c9c40aff4f4dd2b
+  MapboxCoreMaps: f0c995b043323571ec46d7d9e496390982f6509d
+  MapboxMaps: e85375aa3d6bea94bf9c0221aa59f35ee0b29f29
   MapboxMobileEvents: f7f3e8daeb4b83688ae62a4172dce79169a97233
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
@@ -600,9 +595,8 @@ SPEC CHECKSUMS:
   React-RCTVibration: 9e344c840176b0af9c84d5019eb4fed8b3c105a1
   React-runtimeexecutor: 7285b499d0339104b2813a1f58ad1ada4adbd6c0
   ReactCommon: bf2888a826ceedf54b99ad1b6182d1bc4a8a3984
-  RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
-  rnmapbox-maps: 057ad3432240e69225e50f19e76d8d0f86afd7f1
+  rnmapbox-maps: b205f28ed72f45cfc2f043e1fe5d432692aabaf9
   RNScreens: 6e1ea5787989f92b0671049b808aef64fa1ef98c
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8

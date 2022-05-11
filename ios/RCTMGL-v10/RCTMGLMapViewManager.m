@@ -40,4 +40,8 @@ RCT_EXTERN_METHOD(setSourceVisibility:(nonnull NSNumber *)reactTag
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(getCenter:(nonnull NSNumber*)reactTag
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
 @end

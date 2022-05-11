@@ -35,11 +35,10 @@ class MGLModule : NSObject {
         ["Update": RCT_MAPBOX_USER_LOCATION_UPDATE],
       "CameraModes":
         [
-          "Flight": "flight",
-          "Ease": "ease",
-          "Linear": "linear",
-          "None": "none",
-          "Move": "move", // Allows backward compatibility with <v10.
+          "Flight": CameraMode.flight.rawValue,
+          "Ease": CameraMode.ease.rawValue,
+          "Linear": CameraMode.linear.rawValue,
+          "Move": CameraMode.none.rawValue
         ],
       "EventTypes":
         [

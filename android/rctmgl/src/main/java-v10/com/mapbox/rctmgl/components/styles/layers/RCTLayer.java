@@ -6,6 +6,7 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.common.logging.FLog;
 
+import com.mapbox.maps.extension.style.StyleContract;
 import com.mapbox.maps.extension.style.layers.Layer;
 import com.mapbox.maps.MapboxMap;
 import com.mapbox.maps.Style;
@@ -166,7 +167,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractSourceConsumer {
             return;
         } */
 
-        LayerUtils.addLayer(getStyle(), mLayer);
+        LayerUtils.addLayer(getStyle(), (StyleContract.StyleLayerExtension) mLayer);
         mMapView.layerAdded(mLayer);
     }
 
@@ -177,7 +178,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractSourceConsumer {
                     return;
                 }
                 if (getStyle() == null) return;
-                LayerUtils.addLayerAbove(getStyle(), mLayer, aboveLayerID);
+                LayerUtils.addLayerAbove(getStyle(), (StyleContract.StyleLayerExtension) mLayer, aboveLayerID);
                 mMapView.layerAdded(mLayer);
             }
         });
@@ -190,7 +191,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractSourceConsumer {
                     return;
                 }
                 if (getStyle() == null) return;
-                LayerUtils.addLayerBelow(getStyle(), mLayer, belowLayerID);
+                LayerUtils.addLayerBelow(getStyle(), (StyleContract.StyleLayerExtension) mLayer, belowLayerID);
                 mMapView.layerAdded(mLayer);
             }
         });
@@ -206,7 +207,7 @@ public abstract class RCTLayer<T extends Layer> extends AbstractSourceConsumer {
             FLog.e(LOG_TAG, "Layer index is greater than number of layers on map. Layer inserted at end of layer stack.");
             index = layerSize - 1;
         }
-        LayerUtils.addLayerAt(getStyle(), mLayer, index);
+        LayerUtils.addLayerAt(getStyle(), (StyleContract.StyleLayerExtension) mLayer, index);
         mMapView.layerAdded(mLayer);
     }
 

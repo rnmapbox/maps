@@ -20,9 +20,9 @@ public class RCTMGLRasterSource extends RCTMGLTileSource<RasterSource> {
 
         int tileSize = mTileSize == null ? DEFAULT_TILE_SIZE : mTileSize;
         if (configurationUrl != null) {
-            return new RasterSource.Builder(mID).url(configurationUrl).tileSize(tileSize).build();
+            return new RasterSource.Builder(getID()).url(configurationUrl).tileSize(tileSize).build();
         }
-        return new RasterSource.Builder(mID).tileSet(buildTileset()).
+        return new RasterSource.Builder(getID()).tileSet(buildTileset()).
                 tileSize(tileSize).build();
     }
 

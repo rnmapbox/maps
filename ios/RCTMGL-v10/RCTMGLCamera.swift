@@ -9,14 +9,13 @@ protocol RCTMGLMapComponent {
   func waitForStyleLoad() -> Bool
 }
 
-/// See `MGLModule.swift:constantsToExport:CameraModes.`
-enum Mode: String, CaseIterable {
-  case flight, ease, linear, none, move
+enum CameraMode: String, CaseIterable {
+  case flight, ease, linear, none
 }
 
 struct CameraUpdateItem {
   var camera: CameraOptions
-  var mode: Mode
+  var mode: CameraMode
   var duration: TimeInterval?
   
   func execute(map: RCTMGLMapView, cameraAnimator: inout BasicCameraAnimator?) {
@@ -256,8 +255,8 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       return nil
     }()
     
-    let mode: Mode = {
-      if let m = stop["mode"] as? String, let m = Mode(rawValue: m) {
+    let mode: CameraMode = {
+      if let m = stop["mode"] as? String, let m = CameraMode(rawValue: m) {
         return m
       }
       return .flight

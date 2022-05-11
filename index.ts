@@ -419,6 +419,17 @@ interface HeatmapLayerStyle {
   heatmapOpacityTransition?: Transition | Expression;
 }
 
+interface SkyLayerStyle {
+  skyType: string | Expression;
+  skyAtmosphereSun?: Array<number> | Expression;
+  skyAtmosphereSunIntensity: number | Expression;
+}
+
+interface SkyLayerProps extends LayerBaseProps {
+  id: string;
+  style?: StyleProp<SkyLayerStyle>;
+}
+
 interface Point {
   x: number;
   y: number;
@@ -900,6 +911,8 @@ export type {
   UnitsOptions,
   PositionsOptions,
   StyleURLKey,
+  SkyLayerProps,
+  SkyLayerStyle,
 };
 
 interface MapboxGLType {
