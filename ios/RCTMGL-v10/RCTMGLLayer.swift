@@ -219,7 +219,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
         let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
         layer.filter = decodedExpression
       } catch {
-        Logger.log(level: .error, message: "parsing filters failed for layer \(optional: id): \(error.localizedDescription)")
+        Logger.log(level: .error, message: "parsing filters failed for layer \(String(describing: id)): \(error.localizedDescription)")
       }
     } else {
       layer.filter = nil
@@ -249,7 +249,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     do {
       try style.removeLayer(withId: self.id)
     } catch {
-      Logger.log(level: .error, message: "removing layer failed for layer \(optional: id): \(error.localizedDescription)")
+      Logger.log(level: .error, message: "removing layer failed for layer \(String(describing: id)): \(error.localizedDescription)")
     }
   }
   

@@ -15,7 +15,7 @@ class RCTMGLStyle {
 func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout FillLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
-    fatalError("Invlalid style: \(reactStyle)")
+    fatalError("Invalid style: \(reactStyle)")
   }
 
   let styleProps = reactStyle.keys
@@ -67,7 +67,7 @@ func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, apply
               }
             }
           } else {
-            Logger.log(level: .error, message: "Error during fetchImage: \(optional: error)")
+            Logger.log(level: .error, message: "Error during fetchImage: \(String(describing: error))")
           }
         });
       }
@@ -82,7 +82,7 @@ func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, apply
 func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout LineLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
-    fatalError("Invlalid style: \(reactStyle)")
+    fatalError("Invalid style: \(reactStyle)")
   }
 
   let styleProps = reactStyle.keys
@@ -156,7 +156,7 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, apply
               }
             }
           } else {
-            Logger.log(level: .error, message: "Error during fetchImage: \(optional: error)")
+            Logger.log(level: .error, message: "Error during fetchImage: \(String(describing: error))")
           }
         });
       }
@@ -173,7 +173,7 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, apply
 func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout SymbolLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
-    fatalError("Invlalid style: \(reactStyle)")
+    fatalError("Invalid style: \(reactStyle)")
   }
 
   let styleProps = reactStyle.keys
@@ -225,7 +225,7 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, a
               }
             }
           } else {
-            Logger.log(level: .error, message: "Error during fetchImage: \(optional: error)")
+            Logger.log(level: .error, message: "Error during fetchImage: \(String(describing: error))")
           }
         });
       }
@@ -348,7 +348,7 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, a
 func circleLayer(layer: inout CircleLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout CircleLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
-    fatalError("Invlalid style: \(reactStyle)")
+    fatalError("Invalid style: \(reactStyle)")
   }
 
   let styleProps = reactStyle.keys
@@ -410,7 +410,7 @@ func circleLayer(layer: inout CircleLayer, reactStyle:Dictionary<String, Any>, a
 func heatmapLayer(layer: inout HeatmapLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout HeatmapLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
-    fatalError("Invlalid style: \(reactStyle)")
+    fatalError("Invalid style: \(reactStyle)")
   }
 
   let styleProps = reactStyle.keys
@@ -448,7 +448,7 @@ func heatmapLayer(layer: inout HeatmapLayer, reactStyle:Dictionary<String, Any>,
 func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout FillExtrusionLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
-    fatalError("Invlalid style: \(reactStyle)")
+    fatalError("Invalid style: \(reactStyle)")
   }
 
   let styleProps = reactStyle.keys
@@ -492,7 +492,7 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
               }
             }
           } else {
-            Logger.log(level: .error, message: "Error during fetchImage: \(optional: error)")
+            Logger.log(level: .error, message: "Error during fetchImage: \(String(describing: error))")
           }
         });
       }
@@ -517,7 +517,7 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
 func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout RasterLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
-    fatalError("Invlalid style: \(reactStyle)")
+    fatalError("Invalid style: \(reactStyle)")
   }
 
   let styleProps = reactStyle.keys
@@ -567,7 +567,7 @@ func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, a
 func hillshadeLayer(layer: inout HillshadeLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout HillshadeLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
-    fatalError("Invlalid style: \(reactStyle)")
+    fatalError("Invalid style: \(reactStyle)")
   }
 
   let styleProps = reactStyle.keys
@@ -609,7 +609,7 @@ func hillshadeLayer(layer: inout HillshadeLayer, reactStyle:Dictionary<String, A
 func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout BackgroundLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
-    fatalError("Invlalid style: \(reactStyle)")
+    fatalError("Invalid style: \(reactStyle)")
   }
 
   let styleProps = reactStyle.keys
@@ -643,7 +643,7 @@ func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String,
               }
             }
           } else {
-            Logger.log(level: .error, message: "Error during fetchImage: \(optional: error)")
+            Logger.log(level: .error, message: "Error during fetchImage: \(String(describing: error))")
           }
         });
       }
@@ -662,7 +662,7 @@ func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String,
 func skyLayer(layer: inout SkyLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout SkyLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
-    fatalError("Invlalid style: \(reactStyle)")
+    fatalError("Invalid style: \(reactStyle)")
   }
 
   let styleProps = reactStyle.keys
@@ -704,7 +704,7 @@ func skyLayer(layer: inout SkyLayer, reactStyle:Dictionary<String, Any>, applyUp
 func lightLayer(layer: inout Light, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout Light)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
-    fatalError("Invlalid style: \(reactStyle)")
+    fatalError("Invalid style: \(reactStyle)")
   }
 
   let styleProps = reactStyle.keys
