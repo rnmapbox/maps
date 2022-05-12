@@ -209,9 +209,158 @@
     "name": "Callout"
   },
   "Camera": {
-    "description": "@param {CameraProps} props\n\n@example\nTo use imperative methods, pass in a ref object:\n```\nconst camera = useRef<CameraRef>(null);\n\nuseEffect(() => {\n  camera.current?.setCamera({\n    centerCoordinate: [lon, lat],\n  });\n}, []);\n\nreturn (\n  <Camera ref={camera} />\n);\n```",
+    "description": "Controls the perspective from which the user sees the map.\n\nTo use imperative methods, pass in a ref object:\n\n<pre>const camera = useRef<CameraRef>(null);\n\nuseEffect(() => {\n  camera.current?.setCamera({\n    centerCoordinate: [lon, lat],\n  });\n}, []);\n\nreturn (\n  \\<Camera ref={camera} />\n);</pre>",
     "displayName": "Camera",
-    "methods": [],
+    "methods": [
+      {
+        "name": "setCamera",
+        "docblock": "Sets any camera properties, with default fallbacks if unspecified.\n\n@example\ncamera.current?.setCamera({\n  centerCoordinate: [lon, lat],\n});\n\n@param {CameraStop | CameraStops} config",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "config",
+            "description": null,
+            "type": {
+              "name": "CameraStop \\| CameraStops"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Sets any camera properties, with default fallbacks if unspecified.",
+        "examples": [
+          "\ncamera.current?.setCamera({\n  centerCoordinate: [lon, lat],\n});\n\n"
+        ]
+      },
+      {
+        "name": "fitBounds",
+        "docblock": "Set the camera position to enclose the provided bounds, with optional\npadding and duration.\n\n@example\ncamera.fitBounds([lon, lat], [lon, lat]);\ncamera.fitBounds([lon, lat], [lon, lat], [20, 0], 1000);\n\n@param {Position} ne Northeast coordinate of bounding box\n@param {Position} sw Southwest coordinate of bounding box\n@param {number | number[]} paddingConfig The viewport padding, specified as a number (all sides equal), a 2-item array ([vertical, horizontal]), or a 4-item array ([top, right, bottom, left])\n@param {number} animationDuration The transition duration",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "ne",
+            "description": "Northeast coordinate of bounding box",
+            "type": {
+              "name": "Position"
+            },
+            "optional": false
+          },
+          {
+            "name": "sw",
+            "description": "Southwest coordinate of bounding box",
+            "type": {
+              "name": "Position"
+            },
+            "optional": false
+          },
+          {
+            "name": "paddingConfig",
+            "description": "The viewport padding, specified as a number (all sides equal), a 2-item array ([vertical, horizontal]), or a 4-item array ([top, right, bottom, left])",
+            "type": {
+              "name": "number \\| Array"
+            },
+            "optional": false
+          },
+          {
+            "name": "animationDuration",
+            "description": "The transition duration",
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Set the camera position to enclose the provided bounds, with optional\npadding and duration.",
+        "examples": [
+          "\ncamera.fitBounds([lon, lat], [lon, lat]);\ncamera.fitBounds([lon, lat], [lon, lat], [20, 0], 1000);\n\n"
+        ]
+      },
+      {
+        "name": "flyTo",
+        "docblock": "Sets the camera to center around the provided coordinate using a realistic 'travel'\nanimation, with optional duration.\n\n@example\ncamera.flyTo([lon, lat]);\ncamera.flyTo([lon, lat], 12000);\n\n @param {Position} centerCoordinate The coordinate to center in the view\n @param {number} animationDuration The transition duration",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "centerCoordinate",
+            "description": "The coordinate to center in the view",
+            "type": {
+              "name": "Position"
+            },
+            "optional": false
+          },
+          {
+            "name": "animationDuration",
+            "description": "The transition duration",
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Sets the camera to center around the provided coordinate using a realistic 'travel'\nanimation, with optional duration.",
+        "examples": [
+          "\ncamera.flyTo([lon, lat]);\ncamera.flyTo([lon, lat], 12000);\n\n "
+        ]
+      },
+      {
+        "name": "moveTo",
+        "docblock": "Sets the camera to center around the provided coordinate, with optional duration.\n\n@example\ncamera.moveTo([lon, lat], 200);\ncamera.moveTo([lon, lat]);\n\n @param {Position} centerCoordinate The coordinate to center in the view\n @param {number} animationDuration The transition duration",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "centerCoordinate",
+            "description": "The coordinate to center in the view",
+            "type": {
+              "name": "Position"
+            },
+            "optional": false
+          },
+          {
+            "name": "animationDuration",
+            "description": "The transition duration",
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Sets the camera to center around the provided coordinate, with optional duration.",
+        "examples": [
+          "\ncamera.moveTo([lon, lat], 200);\ncamera.moveTo([lon, lat]);\n\n "
+        ]
+      },
+      {
+        "name": "zoomTo",
+        "docblock": "Zooms the camera to the provided level, with optional duration.\n\n@example\ncamera.zoomTo(16);\ncamera.zoomTo(16, 100);\n\n@param {number} zoomLevel The target zoom\n@param {number} animationDuration The transition duration",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "zoomLevel",
+            "description": "The target zoom",
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          },
+          {
+            "name": "animationDuration",
+            "description": "The transition duration",
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Zooms the camera to the provided level, with optional duration.",
+        "examples": [
+          "\ncamera.zoomTo(16);\ncamera.zoomTo(16, 100);\n\n"
+        ]
+      }
+    ],
     "props": [
       {
         "name": "type",
@@ -2121,12 +2270,7 @@
             "name": "coordinate",
             "description": "A point expressed in the map view's coordinate system.",
             "type": {
-              "name": "Array",
-              "elements": [
-                {
-                  "name": "Number"
-                }
-              ]
+              "name": "Array"
             },
             "optional": false
           }
@@ -2153,12 +2297,7 @@
             "name": "point",
             "description": "A point expressed in the given view’s coordinate system.",
             "type": {
-              "name": "Array",
-              "elements": [
-                {
-                  "name": "Number"
-                }
-              ]
+              "name": "Array"
             },
             "optional": false
           }
@@ -2203,12 +2342,7 @@
             "name": "coordinate",
             "description": "A point expressed in the map view’s coordinate system.",
             "type": {
-              "name": "Array",
-              "elements": [
-                {
-                  "name": "Number"
-                }
-              ]
+              "name": "Array"
             },
             "optional": false
           },
@@ -2251,12 +2385,7 @@
             "name": "bbox",
             "description": "A rectangle expressed in the map view’s coordinate system.",
             "type": {
-              "name": "Array",
-              "elements": [
-                {
-                  "name": "Number"
-                }
-              ]
+              "name": "Array"
             },
             "optional": false
           },
@@ -2374,12 +2503,7 @@
             "name": "coordinate",
             "description": "the coordinates to query elevation at",
             "type": {
-              "name": "Array",
-              "elements": [
-                {
-                  "name": "Number"
-                }
-              ]
+              "name": "Array"
             },
             "optional": false
           }
@@ -3519,7 +3643,7 @@
         "params": [
           {
             "name": "event",
-            "type": null
+            "type": {}
           }
         ],
         "returns": null
@@ -5423,7 +5547,8 @@
         ],
         "params": [
           {
-            "name": "{ running }"
+            "name": "{ running }",
+            "type": {}
           }
         ],
         "returns": {
@@ -5568,7 +5693,7 @@
         "params": [
           {
             "name": "event",
-            "type": null
+            "type": {}
           }
         ],
         "returns": null

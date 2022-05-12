@@ -159,78 +159,24 @@ interface NativeCameraStop {
 }
 
 export interface CameraRef {
-  /**
-   * Sets any camera properties, with default fallbacks if unspecified.
-   */
   setCamera: (config: CameraStop | CameraStops) => void;
-
-  /**
-   * Set the camera position to enclose the provided bounds, with optional
-   * padding and duration.
-   *
-   * @example
-   * camera.fitBounds([lon, lat], [lon, lat]);
-   * camera.fitBounds([lon, lat], [lon, lat], 20, 1000);
-   * camera.fitBounds([lon, lat], [lon, lat], [verticalPadding, horizontalPadding], 1000);
-   * camera.fitBounds([lon, lat], [lon, lat], [top, right, bottom, left], 1000);
-   *
-   * @param {Position} ne Northeast coordinate of bounding box
-   * @param {Position} sw Southwest coordinate of bounding box
-   * @param {number} paddingConfig
-   * @param {number} animationDuration
-   */
   fitBounds: (
     ne: Position,
     sw: Position,
     paddingConfig?: number | number[],
     animationDuration?: number,
   ) => void;
-
-  /**
-   * Sets the camera to center around the provided coordinate using a realistic 'travel'
-   * animation, with optional duration.
-   *
-   * @example
-   * camera.flyTo([lon, lat]);
-   * camera.flyTo([lon, lat], 12000);
-   *
-   *  @param {Position} centerCoordinate
-   *  @param {number} animationDuration
-   */
   flyTo: (centerCoordinate: Position, animationDuration?: number) => void;
-
-  /**
-   * Sets the camera to center around the provided coordinate, with optional duration.
-   *
-   * @example
-   * camera.moveTo([lon, lat], 200);
-   * camera.moveTo([lon, lat]);
-   *
-   *  @param {Position} centerCoordinate
-   *  @param {number} animationDuration
-   */
   moveTo: (centerCoordinate: Position, animationDuration?: number) => void;
-
-  /**
-   * Zooms the camera to the provided level, with optional duration.
-   *
-   * @example
-   * camera.zoomTo(16);
-   * camera.zoomTo(16, 100);
-   *
-   * @param {number} zoomLevel
-   * @param {number} animationDuration
-   */
   zoomTo: (zoomLevel: number, animationDuration?: number) => void;
 }
 
 /**
- * @param {CameraProps} props
+ * Controls the perspective from which the user sees the map.
  *
- * @example
  * To use imperative methods, pass in a ref object:
- * ```
- * const camera = useRef<CameraRef>(null);
+ *
+ * <pre>const camera = useRef<CameraRef>(null);
  *
  * useEffect(() => {
  *   camera.current?.setCamera({
@@ -239,9 +185,8 @@ export interface CameraRef {
  * }, []);
  *
  * return (
- *   <Camera ref={camera} />
- * );
- * ```
+ *   \<Camera ref={camera} />
+ * );</pre>
  */
 const Camera = (props: CameraProps, ref: React.ForwardedRef<CameraRef>) => {
   const {
@@ -270,88 +215,6 @@ const Camera = (props: CameraProps, ref: React.ForwardedRef<CameraRef>) => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const camera: React.RefObject<RCTMGLCamera> = useRef(null);
-
-  const fitBounds: CameraRef['fitBounds'] = (
-    ne,
-    sw,
-    paddingConfig = 0,
-    animationDuration = 0,
-  ) => {
-    let padding = {
-      paddingTop: 0,
-      paddingBottom: 0,
-      paddingLeft: 0,
-      paddingRight: 0,
-    };
-
-    if (Array.isArray(paddingConfig)) {
-      if (paddingConfig.length === 2) {
-        padding = {
-          paddingTop: paddingConfig[0],
-          paddingBottom: paddingConfig[0],
-          paddingLeft: paddingConfig[1],
-          paddingRight: paddingConfig[1],
-        };
-      } else if (paddingConfig.length === 4) {
-        padding = {
-          paddingTop: paddingConfig[0],
-          paddingBottom: paddingConfig[2],
-          paddingLeft: paddingConfig[3],
-          paddingRight: paddingConfig[1],
-        };
-      }
-    } else {
-      padding = {
-        paddingTop: paddingConfig,
-        paddingBottom: paddingConfig,
-        paddingLeft: paddingConfig,
-        paddingRight: paddingConfig,
-      };
-    }
-
-    setCamera({
-      type: 'CameraStop',
-      bounds: {
-        ne,
-        sw,
-      },
-      padding,
-      animationDuration,
-      animationMode: 'easeTo',
-    });
-  };
-
-  const flyTo: CameraRef['flyTo'] = (
-    centerCoordinate,
-    animationDuration = 2000,
-  ) => {
-    setCamera({
-      type: 'CameraStop',
-      centerCoordinate,
-      animationDuration,
-    });
-  };
-
-  const moveTo: CameraRef['moveTo'] = (
-    centerCoordinate,
-    animationDuration = 0,
-  ) => {
-    setCamera({
-      type: 'CameraStop',
-      centerCoordinate,
-      animationDuration,
-      animationMode: 'easeTo',
-    });
-  };
-
-  const zoomTo: CameraRef['zoomTo'] = (zoomLevel, animationDuration = 2000) => {
-    setCamera({
-      type: 'CameraStop',
-      zoomLevel,
-      animationDuration,
-      animationMode: 'flyTo',
-    });
-  };
 
   const nativeAnimationMode = useCallback(
     (_mode?: AnimationMode): NativeAnimationMode | undefined => {
@@ -475,44 +338,185 @@ const Camera = (props: CameraProps, ref: React.ForwardedRef<CameraRef>) => {
     );
   }, [maxBounds]);
 
-  const setCamera: CameraRef['setCamera'] = useCallback(
-    (config) => {
-      if (!config.type)
-        // @ts-expect-error The compiler doesn't understand that the `config` union type is guaranteed
-        // to be an object type.
-        config = {
-          ...config,
-          // @ts-expect-error Allows JS files to pass in an invalid config (lacking the `type` property),
-          // which would raise a compilation error in TS files.
-          type: config.stops ? 'CameraStops' : 'CameraStop',
-        };
+  const _setCamera: CameraRef['setCamera'] = (config) => {
+    if (!config.type)
+      // @ts-expect-error The compiler doesn't understand that the `config` union type is guaranteed
+      // to be an object type.
+      config = {
+        ...config,
+        // @ts-expect-error Allows JS files to pass in an invalid config (lacking the `type` property),
+        // which would raise a compilation error in TS files.
+        type: config.stops ? 'CameraStops' : 'CameraStop',
+      };
 
-      if (config.type === 'CameraStops') {
-        for (const _stop of config.stops) {
-          let _nativeStops: NativeCameraStop[] = [];
-          const _nativeStop = buildNativeStop(_stop);
-          if (_nativeStop) {
-            _nativeStops = [..._nativeStops, _nativeStop];
-          }
-          camera.current.setNativeProps({
-            stop: { stops: _nativeStops },
-          });
-        }
-      } else if (config.type === 'CameraStop') {
-        const _nativeStop = buildNativeStop(config);
+    if (config.type === 'CameraStops') {
+      for (const _stop of config.stops) {
+        let _nativeStops: NativeCameraStop[] = [];
+        const _nativeStop = buildNativeStop(_stop);
         if (_nativeStop) {
-          camera.current.setNativeProps({ stop: _nativeStop });
+          _nativeStops = [..._nativeStops, _nativeStop];
         }
+        camera.current.setNativeProps({
+          stop: { stops: _nativeStops },
+        });
       }
-    },
-    [buildNativeStop],
-  );
+    } else if (config.type === 'CameraStop') {
+      const _nativeStop = buildNativeStop(config);
+      if (_nativeStop) {
+        camera.current.setNativeProps({ stop: _nativeStop });
+      }
+    }
+  };
+  const setCamera = useCallback(_setCamera, [buildNativeStop]);
+
+  const _fitBounds: CameraRef['fitBounds'] = (
+    ne,
+    sw,
+    paddingConfig = 0,
+    animationDuration = 0,
+  ) => {
+    let padding = {
+      paddingTop: 0,
+      paddingBottom: 0,
+      paddingLeft: 0,
+      paddingRight: 0,
+    };
+
+    if (typeof paddingConfig === 'object') {
+      if (paddingConfig.length === 2) {
+        padding = {
+          paddingTop: paddingConfig[0],
+          paddingBottom: paddingConfig[0],
+          paddingLeft: paddingConfig[1],
+          paddingRight: paddingConfig[1],
+        };
+      } else if (paddingConfig.length === 4) {
+        padding = {
+          paddingTop: paddingConfig[0],
+          paddingBottom: paddingConfig[2],
+          paddingLeft: paddingConfig[3],
+          paddingRight: paddingConfig[1],
+        };
+      }
+    } else if (typeof paddingConfig === 'number') {
+      padding = {
+        paddingTop: paddingConfig,
+        paddingBottom: paddingConfig,
+        paddingLeft: paddingConfig,
+        paddingRight: paddingConfig,
+      };
+    }
+
+    setCamera({
+      type: 'CameraStop',
+      bounds: {
+        ne,
+        sw,
+      },
+      padding,
+      animationDuration,
+      animationMode: 'easeTo',
+    });
+  };
+  const fitBounds = useCallback(_fitBounds, [setCamera]);
+
+  const _flyTo: CameraRef['flyTo'] = (
+    centerCoordinate,
+    animationDuration = 2000,
+  ) => {
+    setCamera({
+      type: 'CameraStop',
+      centerCoordinate,
+      animationDuration,
+    });
+  };
+  const flyTo = useCallback(_flyTo, [setCamera]);
+
+  const _moveTo: CameraRef['moveTo'] = (
+    centerCoordinate,
+    animationDuration = 0,
+  ) => {
+    setCamera({
+      type: 'CameraStop',
+      centerCoordinate,
+      animationDuration,
+      animationMode: 'easeTo',
+    });
+  };
+  const moveTo = useCallback(_moveTo, [setCamera]);
+
+  const _zoomTo: CameraRef['zoomTo'] = (
+    zoomLevel,
+    animationDuration = 2000,
+  ) => {
+    setCamera({
+      type: 'CameraStop',
+      zoomLevel,
+      animationDuration,
+      animationMode: 'flyTo',
+    });
+  };
+  const zoomTo = useCallback(_zoomTo, [setCamera]);
 
   useImperativeHandle(ref, () => ({
+    /**
+     * Sets any camera properties, with default fallbacks if unspecified.
+     *
+     * @example
+     * camera.current?.setCamera({
+     *   centerCoordinate: [lon, lat],
+     * });
+     *
+     * @param {CameraStop | CameraStops} config
+     */
     setCamera,
+    /**
+     * Set the camera position to enclose the provided bounds, with optional
+     * padding and duration.
+     *
+     * @example
+     * camera.fitBounds([lon, lat], [lon, lat]);
+     * camera.fitBounds([lon, lat], [lon, lat], [20, 0], 1000);
+     *
+     * @param {Position} ne Northeast coordinate of bounding box
+     * @param {Position} sw Southwest coordinate of bounding box
+     * @param {number | number[]} paddingConfig The viewport padding, specified as a number (all sides equal), a 2-item array ([vertical, horizontal]), or a 4-item array ([top, right, bottom, left])
+     * @param {number} animationDuration The transition duration
+     */
     fitBounds,
+    /**
+     * Sets the camera to center around the provided coordinate using a realistic 'travel'
+     * animation, with optional duration.
+     *
+     * @example
+     * camera.flyTo([lon, lat]);
+     * camera.flyTo([lon, lat], 12000);
+     *
+     *  @param {Position} centerCoordinate The coordinate to center in the view
+     *  @param {number} animationDuration The transition duration
+     */
     flyTo,
+    /**
+     * Sets the camera to center around the provided coordinate, with optional duration.
+     *
+     * @example
+     * camera.moveTo([lon, lat], 200);
+     * camera.moveTo([lon, lat]);
+     *
+     *  @param {Position} centerCoordinate The coordinate to center in the view
+     *  @param {number} animationDuration The transition duration
+     */
     moveTo,
+    /**
+     * Zooms the camera to the provided level, with optional duration.
+     *
+     * @example
+     * camera.zoomTo(16);
+     * camera.zoomTo(16, 100);
+     *
+     * @param {number} zoomLevel The target zoom
+     * @param {number} animationDuration The transition duration
+     */
     zoomTo,
   }));
 
