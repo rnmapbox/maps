@@ -27,4 +27,77 @@
 | triggerKey | `string \| number` | `none` | `false` | Any arbitrary primitive value that, when changed, causes the camera to retry moving to its target<br/>configuration. (Not yet implemented.) |
 | onUserTrackingModeChange | `(event:MapboxGLEvent<'usertrackingmodechange',{followUserLocation:boolean;followUserMode:UserTrackingMode\|null;}>,)=>void` | `none` | `false` | Executes when user tracking mode changes. |
 
+### methods
+#### setCamera(config)
+
+Map camera will perform updates based on provided config. Advanced use only!
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `config` | `n/a` | `Yes` | undefined |
+
+
+#### fitBounds(ne, sw, paddingConfig, animationDuration)
+
+Set the camera position to enclose the provided bounds, with optional<br/>padding and duration.
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `ne` | `Position` | `Yes` | Northeast coordinate of bounding box |
+| `sw` | `Position` | `Yes` | Southwest coordinate of bounding box |
+| `paddingConfig` | `number` | `Yes` | null |
+| `animationDuration` | `number` | `Yes` | null |
+
+
+
+```javascript
+camera.fitBounds([lon, lat], [lon, lat]);
+camera.fitBounds([lon, lat], [lon, lat], 20, 1000);
+camera.fitBounds([lon, lat], [lon, lat], [verticalPadding, horizontalPadding], 1000);
+camera.fitBounds([lon, lat], [lon, lat], [top, right, bottom, left], 1000);
+```
+
+
+#### flyTo(centerCoordinate, animationDuration)
+
+Sets the camera to center around the provided coordinate using a realistic 'travel'<br/>animation, with optional duration.
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `centerCoordinate` | `Position` | `Yes` | null |
+| `animationDuration` | `number` | `Yes` | null |
+
+
+
+```javascript
+camera.flyTo([lon, lat]);
+camera.flyTo([lon, lat], 12000);
+```
+
+
+#### moveTo(centerCoordinate, animationDuration)
+
+
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `centerCoordinate` | `n/a` | `Yes` | undefined |
+| `animationDuration` | `n/a` | `Yes` | undefined |
+
+
+#### zoomTo(zoomLevel, animationDuration)
+
+
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `zoomLevel` | `n/a` | `Yes` | undefined |
+| `animationDuration` | `n/a` | `Yes` | undefined |
+
+
 

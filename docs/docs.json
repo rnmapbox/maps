@@ -211,7 +211,128 @@
   "Camera": {
     "description": "@param {CameraProps} props\n\n@example\nTo use imperative methods, pass in a ref object:\n```\nconst camera = useRef<CameraRef>(null);\n\nuseEffect(() => {\n  camera.current?.setCamera({\n    centerCoordinate: [lon, lat],\n  });\n}, []);\n\nreturn (\n  <Camera ref={camera} />\n);\n```",
     "displayName": "Camera",
-    "methods": [],
+    "methods": [
+      {
+        "name": "setCamera",
+        "docblock": "Map camera will perform updates based on provided config. Advanced use only!",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "config",
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Map camera will perform updates based on provided config. Advanced use only!",
+        "examples": []
+      },
+      {
+        "name": "fitBounds",
+        "docblock": "Set the camera position to enclose the provided bounds, with optional\npadding and duration.\n\n@example\ncamera.fitBounds([lon, lat], [lon, lat]);\ncamera.fitBounds([lon, lat], [lon, lat], 20, 1000);\ncamera.fitBounds([lon, lat], [lon, lat], [verticalPadding, horizontalPadding], 1000);\ncamera.fitBounds([lon, lat], [lon, lat], [top, right, bottom, left], 1000);\n\n@param {Position} ne Northeast coordinate of bounding box\n@param {Position} sw Southwest coordinate of bounding box\n@param {number} paddingConfig\n@param {number} animationDuration",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "ne",
+            "description": "Northeast coordinate of bounding box",
+            "type": {
+              "name": "Position"
+            },
+            "optional": false
+          },
+          {
+            "name": "sw",
+            "description": "Southwest coordinate of bounding box",
+            "type": {
+              "name": "Position"
+            },
+            "optional": false
+          },
+          {
+            "name": "paddingConfig",
+            "description": null,
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          },
+          {
+            "name": "animationDuration",
+            "description": null,
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Set the camera position to enclose the provided bounds, with optional\npadding and duration.",
+        "examples": [
+          "\ncamera.fitBounds([lon, lat], [lon, lat]);\ncamera.fitBounds([lon, lat], [lon, lat], 20, 1000);\ncamera.fitBounds([lon, lat], [lon, lat], [verticalPadding, horizontalPadding], 1000);\ncamera.fitBounds([lon, lat], [lon, lat], [top, right, bottom, left], 1000);\n\n"
+        ]
+      },
+      {
+        "name": "flyTo",
+        "docblock": "Sets the camera to center around the provided coordinate using a realistic 'travel'\nanimation, with optional duration.\n\n@example\ncamera.flyTo([lon, lat]);\ncamera.flyTo([lon, lat], 12000);\n\n @param {Position} centerCoordinate\n @param {number} animationDuration",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "centerCoordinate",
+            "description": null,
+            "type": {
+              "name": "Position"
+            },
+            "optional": false
+          },
+          {
+            "name": "animationDuration",
+            "description": null,
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Sets the camera to center around the provided coordinate using a realistic 'travel'\nanimation, with optional duration.",
+        "examples": [
+          "\ncamera.flyTo([lon, lat]);\ncamera.flyTo([lon, lat], 12000);\n\n "
+        ]
+      },
+      {
+        "name": "moveTo",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "centerCoordinate",
+            "optional": false,
+            "type": null
+          },
+          {
+            "name": "animationDuration",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "zoomTo",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "zoomLevel",
+            "optional": false,
+            "type": null
+          },
+          {
+            "name": "animationDuration",
+            "type": null
+          }
+        ],
+        "returns": null
+      }
+    ],
     "props": [
       {
         "name": "type",

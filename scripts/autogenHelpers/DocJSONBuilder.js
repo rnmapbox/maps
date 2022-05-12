@@ -19,9 +19,9 @@ const MODULES_PATH = path.join(__dirname, '..', '..', 'javascript', 'modules');
 
 const OUTPUT_PATH = path.join(__dirname, '..', '..', 'docs', 'docs.json');
 const IGNORE_FILES = [
-  'AbstractLayer',
-  'AbstractSource',
-  'NativeBridgeComponent',
+  'AbstractLayer.js',
+  'AbstractSource.js',
+  'NativeBridgeComponent.js',
 ];
 
 const IGNORE_METHODS = ['setNativeProps'];
@@ -238,18 +238,22 @@ class DocJSONBuilder {
             return reject(err);
           }
 
-          fileName = fileName.replace(/.(js)/, '');
           if (IGNORE_FILES.includes(fileName)) {
             next();
             return;
           }
 
           content = content.replace(/memo\(forwardRef\((.+?)\)\)/, '$1');
+          content = content.replaceAll(/useCallback\(([^,]+), [^)]+\)/g, '$1');
 
           let parsed = docgen.parse(content, undefined, undefined, {
             filename: fileName,
           });
-          fileName = fileName.replace(/.(tsx)/, '');
+
+          if (fileName === 'Camera.tsx') {
+            console.log('PARSED', parsed);
+          }
+          fileName = fileName.replace(/.(tsx|js)/, '');
           results[fileName] = parsed;
           this.postprocess(results[fileName], fileName);
 

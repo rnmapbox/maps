@@ -179,6 +179,7 @@ export interface CameraRef {
    * @param {number} animationDuration
    */
   fitBounds: (
+    /** Northeast coordinate of bounding box */
     ne: Position,
     sw: Position,
     paddingConfig?: number | number[],
@@ -320,6 +321,17 @@ const Camera = (props: CameraProps, ref: React.ForwardedRef<CameraRef>) => {
     });
   };
 
+  /**
+   * Sets the camera to center around the provided coordinate using a realistic 'travel'
+   * animation, with optional duration.
+   *
+   * @example
+   * camera.flyTo([lon, lat]);
+   * camera.flyTo([lon, lat], 12000);
+   *
+   *  @param {Position} centerCoordinate
+   *  @param {number} animationDuration
+   */
   const flyTo: CameraRef['flyTo'] = (
     centerCoordinate,
     animationDuration = 2000,
@@ -474,42 +486,68 @@ const Camera = (props: CameraProps, ref: React.ForwardedRef<CameraRef>) => {
     );
   }, [maxBounds]);
 
-  const setCamera: CameraRef['setCamera'] = useCallback(
-    (config) => {
-      if (!config.type)
-        // @ts-expect-error The compiler doesn't understand that the `config` union type is guaranteed
-        // to be an object type.
-        config = {
-          ...config,
-          // @ts-expect-error Allows JS files to pass in an invalid config (lacking the `type` property),
-          // which would raise a compilation error in TS files.
-          type: config.stops ? 'CameraStops' : 'CameraStop',
-        };
+  const setCameraFn: CameraRef['setCamera'] = (config) => {
+    if (!config.type)
+      // @ts-expect-error The compiler doesn't understand that the `config` union type is guaranteed
+      // to be an object type.
+      config = {
+        ...config,
+        // @ts-expect-error Allows JS files to pass in an invalid config (lacking the `type` property),
+        // which would raise a compilation error in TS files.
+        type: config.stops ? 'CameraStops' : 'CameraStop',
+      };
 
-      if (config.type === 'CameraStops') {
-        for (const _stop of config.stops) {
-          let _nativeStops: NativeCameraStop[] = [];
-          const _nativeStop = buildNativeStop(_stop);
-          if (_nativeStop) {
-            _nativeStops = [..._nativeStops, _nativeStop];
-          }
-          camera.current.setNativeProps({
-            stop: { stops: _nativeStops },
-          });
-        }
-      } else if (config.type === 'CameraStop') {
-        const _nativeStop = buildNativeStop(config);
+    if (config.type === 'CameraStops') {
+      for (const _stop of config.stops) {
+        let _nativeStops: NativeCameraStop[] = [];
+        const _nativeStop = buildNativeStop(_stop);
         if (_nativeStop) {
-          camera.current.setNativeProps({ stop: _nativeStop });
+          _nativeStops = [..._nativeStops, _nativeStop];
         }
+        camera.current.setNativeProps({
+          stop: { stops: _nativeStops },
+        });
       }
-    },
-    [buildNativeStop],
-  );
+    } else if (config.type === 'CameraStop') {
+      const _nativeStop = buildNativeStop(config);
+      if (_nativeStop) {
+        camera.current.setNativeProps({ stop: _nativeStop });
+      }
+    }
+  };
+  const setCamera = useCallback(setCameraFn, [buildNativeStop]);
 
   useImperativeHandle(ref, () => ({
+    /** Map camera will perform updates based on provided config. Advanced use only! */
     setCamera,
+
+    /**
+     * Set the camera position to enclose the provided bounds, with optional
+     * padding and duration.
+     *
+     * @example
+     * camera.fitBounds([lon, lat], [lon, lat]);
+     * camera.fitBounds([lon, lat], [lon, lat], 20, 1000);
+     * camera.fitBounds([lon, lat], [lon, lat], [verticalPadding, horizontalPadding], 1000);
+     * camera.fitBounds([lon, lat], [lon, lat], [top, right, bottom, left], 1000);
+     *
+     * @param {Position} ne Northeast coordinate of bounding box
+     * @param {Position} sw Southwest coordinate of bounding box
+     * @param {number} paddingConfig
+     * @param {number} animationDuration
+     */
     fitBounds,
+    /**
+     * Sets the camera to center around the provided coordinate using a realistic 'travel'
+     * animation, with optional duration.
+     *
+     * @example
+     * camera.flyTo([lon, lat]);
+     * camera.flyTo([lon, lat], 12000);
+     *
+     *  @param {Position} centerCoordinate
+     *  @param {number} animationDuration
+     */
     flyTo,
     moveTo,
     zoomTo,
