@@ -40,7 +40,7 @@ class DocJSONBuilder {
 
   get options() {
     return {
-      match: /.(js|tsx)$/,
+      match: /.(js|tsx|ts)$/,
       shortName: true,
     };
   }
@@ -118,7 +118,13 @@ class DocJSONBuilder {
       if (tsType.name === 'signature') {
         return `${tsType.raw.replace(/(\n|\s)/g, '').replace(/(\|)/g, '\\|')}`;
       } else if (tsType.name === 'union') {
-        return tsType.raw.replace(/\|/g, '\\|');
+        if (tsType.raw) {
+          // Props
+          return tsType.raw.replace(/\|/g, '\\|');
+        } else if (tsType.elements) {
+          // Methods
+          return tsType.elements.map((e) => e.name).join(' \\| ');
+        }
       } else {
         return tsType.name;
       }
@@ -224,6 +230,12 @@ class DocJSONBuilder {
     component.methods = component.methods.filter(
       (method) => !privateMethods.includes(method.name),
     );
+
+    component.methods.forEach((method) => {
+      method.params.forEach((param) => {
+        param.type = { name: tsTypeDesc(param.type) };
+      });
+    });
   }
 
   generateReactComponentsTask(results, filePath) {
@@ -243,11 +255,12 @@ class DocJSONBuilder {
           }
 
           content = content.replace(/memo\(forwardRef\((.+?)\)\)/, '$1');
+          content = content.replace(/useCallback\(([^,]+), [^)]+\)/g, '$1');
 
           let parsed = docgen.parse(content, undefined, undefined, {
             filename: fileName,
           });
-          fileName = fileName.replace(/.(tsx)/, '');
+          fileName = fileName.replace(/.(js|tsx|ts)+/, '');
           results[fileName] = parsed;
           this.postprocess(results[fileName], fileName);
 
