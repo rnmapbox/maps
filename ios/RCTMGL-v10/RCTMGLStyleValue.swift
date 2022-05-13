@@ -31,10 +31,6 @@ class RCTMGLStyleValue {
   static func make(_ reactStyleValue: Any) ->RCTMGLStyleValue {
     return RCTMGLStyleValue(value: reactStyleValue)
   }
-
-  var mglStyleValue : String {
-    return ""
-  }
   
   func isVisible() -> Value<Visibility> {
     return mglStyleValueEnum()
@@ -106,7 +102,7 @@ class RCTMGLStyleValue {
   
   static func convert(_ from:[String: Any]) -> Any {
     guard let type = from["type"] as? String else {
-      fatalError("Type should be string but was \(from["type"])")
+      fatalError("Type should be string but was \(optional: from["type"])")
     }
     if type == "array" {
       guard let values = from["value"] as? [[String:Any]] else {
@@ -123,11 +119,21 @@ class RCTMGLStyleValue {
       return value
     }
     else if type == "number" {
-      /*guard let value = from["value"] as? String else {
-        fatalError("Value for number should be String")
-      }*/
-      
-      return from["value"]
+      guard let value = from["value"] else {
+        fatalError("Value for number should not be nil")
+      }
+      guard let value = value as? NSNumber else {
+        fatalError("Value for number should be Number")
+      }
+      return value
+    } else if type == "boolean" {
+      guard let value = from["value"] else {
+        fatalError("Value for boolean should not be nil")
+      }
+      guard let value = value as? NSNumber else {
+        fatalError("Value for number should be Number")
+      }
+      return value
     } else {
       fatalError("Unexpected type \(type)")
     }
@@ -160,9 +166,26 @@ class RCTMGLStyleValue {
   }
 
   func mglStyleValueNumberRaw() -> Double {
+    guard let value = value as? Dictionary<String,Any> else {
+      Logger.log(level: .error, message: "Invalid value for number: \(value) retuning 0.0")
+      return 0.0
+    }
+    
+    let valueObj = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
+    
+    if let num = valueObj as? NSNumber {
+      return num.doubleValue
+    } else if let num = valueObj as? Double {
+      return num
+    } else if let num = valueObj as? Int {
+      return Double(num)
+    } else {
+      Logger.log(level: .error, message: "Invalid value for number: \(value) retuning 0.0")
+      return 0.0
+    }
     return 1.0
   }
-  
+
   func uicolor(_ rgbValue: Int) -> UIColor {
       return UIColor(
           red: CGFloat((Float((rgbValue & 0xff0000) >> 16)) / 255.0),
@@ -170,25 +193,7 @@ class RCTMGLStyleValue {
           blue: CGFloat((Float((rgbValue & 0x0000ff) >> 0)) / 255.0),
           alpha: 1.0)
   }
-  
-  // todo remove we don't need it
-  func convertColorLiterals(items: [Any]) -> [Any]
-  {
-    items.map { item in
-      if let sub = item as? [Any] {
-        return convertColorLiterals(items: sub)
-      } else if let str = item as? String {
-        print("Map: \(str) ")
-        if str.hasPrefix("#") {
-          return "rgba(255,255,255,1)"
-        }
-        return str
-      } else {
-        return item
-      }
-    }
-  }
-  
+
   func mglStyleValueColor() -> Value<StyleColor> {
     //return Value.constant(ColorRepresentable(color: UIColor.black))
     if let value = value as? Dictionary<String,Any> {
@@ -215,19 +220,85 @@ class RCTMGLStyleValue {
   }
 
   func mglStyleValueColorRaw() -> StyleColor {
-    return StyleColor(UIColor.red)
+    guard let value = value as? Dictionary<String,Any> else {
+      Logger.log(level: .error, message: "Invalid value for color: \(value) retuning red")
+      return StyleColor(UIColor.red)
+    }
+    let valueObj = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
+
+    if let num = value as? Int {
+      let uicolor = uicolor(num)
+      return StyleColor(uicolor)
+    } else {
+      Logger.log(level: .error, message: "Unexpeted value for color: \(valueObj), retuning red")
+      return StyleColor(UIColor.red)
+    }
   }
   
   func mglStyleValueBoolean() -> Value<Bool> {
-    return Value.constant(false)
+    guard let value = value as? Dictionary<String,Any> else {
+      Logger.log(level: .error, message: "Invalid value for boolean: \(value)")
+      return Value.constant(true)
+    }
+    
+    let valueObj = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
+    
+    if let valueObj = valueObj as? NSNumber {
+      return .constant(valueObj.boolValue)
+    } else {
+      do {
+        let data = try JSONSerialization.data(withJSONObject: valueObj, options: .prettyPrinted)
+        let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
+        return .expression(decodedExpression)
+      } catch {
+        Logger.log(level: .error, message: "Invalid value for array number: \(value) error: \(error) setting dummy value")
+        return .constant(true)
+      }
+    }
   }
   
   func mglStyleValueArrayNumber() -> Value<[Double]> {
-    return Value.constant([1.0,1.0])
+    guard let value = value as? Dictionary<String,Any> else {
+      Logger.log(level: .error, message: "Invalid value for array number: \(value)")
+      return Value.constant([1.0,1.0])
+    }
+  
+    let valueObj = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
+      
+    if let valueObj = valueObj as? [NSNumber] {
+      return .constant(valueObj.map { $0.doubleValue })
+    } else {
+      do {
+        let data = try JSONSerialization.data(withJSONObject: valueObj, options: .prettyPrinted)
+        let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
+        return .expression(decodedExpression)
+      } catch {
+        Logger.log(level: .error, message: "Invalid value for array number: \(value) error: \(error) setting dummy value")
+        return .constant([1.0,1.0])
+      }
+    }
   }
   
   func mglStyleValueArrayString() -> Value<[String]> {
-    return Value.constant([""])
+    guard let value = value as? Dictionary<String,Any> else {
+      Logger.log(level: .error, message: "Invalid value for array of strings: \(value)")
+      return Value.constant([""])
+    }
+
+    let valueObj = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
+      
+    if let valueObj = valueObj as? [String] {
+      return .constant(valueObj)
+    } else {
+      do {
+        let data = try JSONSerialization.data(withJSONObject: valueObj, options: .prettyPrinted)
+        let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
+        return .expression(decodedExpression)
+      } catch {
+        Logger.log(level: .error, message: "Invalid value for array number: \(value) error: \(error) setting dummy value")
+        return .constant([""])
+      }
+    }
   }
   
   func mglStyleValueResolvedImage() -> Value<ResolvedImage> {
@@ -239,18 +310,16 @@ class RCTMGLStyleValue {
     } else if let value = styleObject as? String {
       return Value.constant(.name(value))
     } else {
-      fatalError("Resolved image is nor expression nor string: \(String(describing: styleObject))!")
+      fatalError("Resolved image is nor expression nor string: \(optional: styleObject)!")
     }
   }
 
   func mglStyleValueFillTranslateAnchor() -> Value<FillTranslateAnchor> {
-    return Value.constant(.map)
-    FillTranslateAnchor(rawValue:"foo")
-    
+    return mglStyleValueEnum()
   }
 
   func mglStyleValueLineCap() -> Value<LineCap> {
-    return Value.constant(.butt)
+    return mglStyleValueEnum()
   }
   
   func mglStyleValueEnum<Enum : RawRepresentable>() -> Value<Enum> where Enum.RawValue == String {
@@ -258,7 +327,18 @@ class RCTMGLStyleValue {
       let value = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
       return Value.constant(Enum(rawValue: value as! String)!)
     } else {
+      Logger.log(level: .error, message:"Invalid value for enum: \(value) returning something")
       return Value.constant(Enum(rawValue: value as! String)!)
+    }
+  }
+
+  func mglStyleEnum<Enum : RawRepresentable>() -> Enum where Enum.RawValue == String {
+    if let value = value as? Dictionary<String,Any> {
+      let value = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
+      return Enum(rawValue: value as! String)!
+    } else {
+      Logger.log(level: .error, message:"Invalid value for enum: \(value) returning something")
+      return Enum(rawValue: value as! String)!
     }
   }
   
@@ -267,9 +347,9 @@ class RCTMGLStyleValue {
   }
   
   func mglStyleValueAnchorRaw() -> Anchor {
-    return .map
+    return mglStyleEnum()
   }
-  
+
   func shouldAddImage() -> Bool {
     if let uri = getImageURI() {
       return uri.contains("://")
@@ -290,24 +370,6 @@ class RCTMGLStyleValue {
     return nil
   }
   
-  /*
-  func mglStyleValueArrayTextVariableAnchor() -> Value<[Double]> {
-    return Value.constant([])
-  }
-  
-  func mglStyleValueArrayIconTranslate() -> Value<[Double]> {
-    return Value.constant([])
-  }
-  
-  func mglStyleValueArrayTextOffset() -> Value<[Double]> {
-    return Value.constant([])
-  }
-  
-  func mglStyleValueArrayTextWritingMode() -> Value<[TextWritingMode]> {
-    return Value.constant([])
-  }
- */
-  
   func mglStyleValueArrayTextVariableAnchor() -> Value<[TextAnchor]> {
     return Value.constant([.left])
   }
@@ -319,7 +381,7 @@ class RCTMGLStyleValue {
       print("REturning: \(result)")
       return result
     }
-    Logger.log(level: .error, message: "Expected array of numbers as position received: \(styleObject)")
+    Logger.log(level: .error, message: "Expected array of numbers as position received: \(optional: styleObject)")
     return []
   }
   
@@ -341,14 +403,10 @@ class RCTMGLStyleValue {
   }
   
   func mglStyleValueLineJoin() -> Value<LineJoin> {
-    return Value.constant(.bevel)
+    return mglStyleValueEnum()
   }
   
   func mglStyleValueLineTranslateAnchor() -> Value<LineTranslateAnchor> {
-    return Value.constant(.map)
+    return mglStyleValueEnum()
   }
-  
-  
-  
-
 }

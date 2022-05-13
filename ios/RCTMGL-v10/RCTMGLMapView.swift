@@ -147,15 +147,23 @@ open class RCTMGLMapView : MapView {
     
     self.mapView.mapboxMap.onEvery(.cameraChanged, handler: { cameraEvent in
       let event = RCTMGLEvent(type:.cameraChanged, payload: self.buildStateObject());
-      self.fireEvent(event: event, callback: self.reactOnMapChange!)
+      self.fireEvent(event: event, callback: self.reactOnMapChange)
     })
 
     self.mapView.mapboxMap.onEvery(.mapIdle, handler: { cameraEvent in
       let event = RCTMGLEvent(type:.mapIdle, payload: self.buildStateObject());
-      self.fireEvent(event: event, callback: self.reactOnMapChange!)
+      self.fireEvent(event: event, callback: self.reactOnMapChange)
     })
   }
-    
+
+  private func fireEvent(event: RCTMGLEvent, callback: RCTBubblingEventBlock?) {
+    guard let callback = callback else {
+      Logger.log(level: .error, message: "fireEvent failed: \(event) - callback is null")
+      return
+    }
+    fireEvent(event: event, callback: callback)
+  }
+
   private func fireEvent(event: RCTMGLEvent, callback: @escaping RCTBubblingEventBlock) {
     callback(event.toJSON())
   }
@@ -242,10 +250,23 @@ open class RCTMGLMapView : MapView {
         }
       }
     }
-    
+
+    self.mapboxMap.onEvery(.renderFrameFinished, handler: { (event) in
+      var type = RCTMGLEvent.EventType.didFinishRendering
+      var payload : [String:Any]? = nil
+      if let data = event.data as? [String:Any] {
+        if let renderMode = data["render-mode"], let renderMode = renderMode as? String, renderMode == "full" {
+          type = .didFinishRenderingFully
+        }
+        payload = data
+      }
+      let event = RCTMGLEvent(type: type, payload: payload);
+      self.fireEvent(event: event, callback: self.reactOnMapChange)
+    })
+
     self.mapboxMap.onNext(.mapLoaded, handler: { (event) in
       let event = RCTMGLEvent(type:.didFinishLoadingMap, payload: nil);
-      self.fireEvent(event: event, callback: self.reactOnMapChange!)
+      self.fireEvent(event: event, callback: self.reactOnMapChange)
     })
     
     self.mapboxMap.onNext(.styleLoaded, handler: { (event) in
@@ -253,6 +274,9 @@ open class RCTMGLMapView : MapView {
         component.addToMap(self, style: self.mapboxMap.style)
       }
       self.onStyleLoadedComponents = nil
+
+      let event = RCTMGLEvent(type:.didFinishLoadingStyle, payload: nil)
+      self.fireEvent(event: event, callback: self.reactOnMapChange)
     })
   }
     
