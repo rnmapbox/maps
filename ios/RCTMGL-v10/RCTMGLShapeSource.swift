@@ -7,11 +7,12 @@ class RCTMGLShapeSource : RCTMGLSource {
 
   @objc var shape : String? {
     didSet {
-      self.doUpdate { (style) in
-        if let shape = shape {
-          let geojsonObject = try! RCTMGLFeatureUtils.parseAsFC(string: shape)
-          doUpdate { (style) in
-            try! style.updateGeoJSONSource(withId: id, geoJSON: geojsonObject)
+      logged("RCTMGLShapeSource.updateShape") {
+        let obj : GeoJSONObject = try parse(shape)
+
+        doUpdate { (style) in
+          logged("RCTMGLShapeSource.setShape") {
+            try style.updateGeoJSONSource(withId: id, geoJSON: obj)
           }
         }
       }
@@ -31,45 +32,15 @@ class RCTMGLShapeSource : RCTMGLSource {
     return GeoJSONSource.self
   }
 
-  func parseShape(_ shape: String) throws -> GeoJSONSourceData {
-    guard let data = shape.data(using: .utf8) else {
-      fatalError("shape could not be converted to urf8 \(shape)")
-    }
-    do {
-      let geojson = try JSONDecoder().decode(GeoJSONObject.self, from: data)
-      switch geojson {
-      case .feature(let feature):
-        return .feature(feature)
-      case .featureCollection(let featureCollection):
-        return .featureCollection(featureCollection)
-      case .geometry(let geometry):
-        return .geometry(geometry)
-      }
-    } catch {
-      let origError = error
-      do {
-        let feature = Feature(geometry: try JSONDecoder().decode(Geometry.self, from: data))
-        return .feature(feature)
-      } catch {
-        Logger.log(level: .error, message: "Unexpected error: \(error) and \(origError) from \(shape)")
-        throw error
-      }
-    }
-  }
-  
-  func emptyShape() -> GeoJSONSourceData {
-    return GeoJSONSourceData.featureCollection(FeatureCollection(features:[]))
-  }
-  
   override func makeSource() -> Source
   {
     var result =  GeoJSONSource()
     
     if let shape = shape {
       do {
-        result.data = try parseShape(shape)
+        result.data = try parse(shape)
       } catch {
-        Logger.log(level: .error, message: "Unable to read shape: \(shape) setting it to empty")
+        Logger.log(level: .error, message: "Unable to read shape: \(shape) \(error) setting it to empty")
         result.data = emptyShape()
       }
     }
@@ -108,7 +79,7 @@ class RCTMGLShapeSource : RCTMGLSource {
     
     return result
   }
-  
+
   func doUpdate(_ update:(Style) -> Void) {
     guard let map = self.map,
           let _ = self.source,
@@ -125,7 +96,69 @@ class RCTMGLShapeSource : RCTMGLSource {
       try! style.setSourceProperty(for: id, property: property, value: value)
     }
   }
+}
 
+// MARK: - parse(shape)
+
+extension RCTMGLShapeSource
+{
+  func parse(_ shape: String) throws -> GeoJSONSourceData {
+    guard let data = shape.data(using: .utf8) else {
+      throw RCTMGLError.parseError("shape is not utf8")
+    }
+    return try JSONDecoder().decode(GeoJSONSourceData.self, from: data)
+  }
+
+  func parse(_ shape: String?) throws -> GeoJSONObject {
+    guard let shape = shape else {
+      return emptyGeoJSONObject()
+    }
+    let data : GeoJSONSourceData = try parse(shape)
+    switch data {
+    case .empty:
+      return emptyGeoJSONObject()
+    case .feature(let feature):
+      return .feature(feature)
+    case .featureCollection(let featureColleciton):
+      return .featureCollection(featureColleciton)
+    case .geometry(let geometry):
+      return .geometry(geometry)
+    case .url(_):
+      throw RCTMGLError.parseError("url as shape is not supported when updating a ShapeSource")
+    }
+  }
+
+  func emptyGeoJSONObject() -> GeoJSONObject {
+    return .featureCollection(emptyFeatureCollection())
+  }
+
+  func emptyShape() -> GeoJSONSourceData {
+    return GeoJSONSourceData.featureCollection(FeatureCollection(features:[]))
+  }
+
+  func emptyFeatureCollection() -> FeatureCollection {
+    return FeatureCollection(features:[])
+  }
+
+  func parseAsJSONObject(shape: String?) -> Any? {
+    guard let shape = shape else {
+      return nil
+    }
+    guard let data = shape.data(using: .utf8) else {
+      Logger.log(level: .error, message: "shapeSource.setShape: Shape is not utf8")
+      return nil
+    }
+    let objs = logged("shapeSource.setShape.parseJSON") {
+      try JSONSerialization.jsonObject(with: data)
+    }
+    return objs
+  }
+}
+
+// MARK: - getClusterExpansionZoom/getClusterLeaves
+
+extension RCTMGLShapeSource
+{
   func getClusterExpansionZoom(
     _ clusterId: NSNumber,
     completion: @escaping (Result<Int, Error>) -> Void)
@@ -195,5 +228,4 @@ class RCTMGLShapeSource : RCTMGLSource {
       }
     }
   }
-
 }
