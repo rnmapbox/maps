@@ -1,11 +1,5 @@
 import MapboxMaps
 
-enum RCTMGLError: Error {
-  case parseError(String)
-  case failed(String)
-  case paramError(String)
-}
-
 @objc
 class RCTMGLTerrain : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   weak var map : RCTMGLMapView!
