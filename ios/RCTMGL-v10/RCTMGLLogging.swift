@@ -1,6 +1,12 @@
 import Foundation
 import MapboxMaps
 
+enum RCTMGLError: Error {
+  case parseError(String)
+  case failed(String)
+  case paramError(String)
+}
+
 class Logger {
   enum LogLevel : String, Comparable {
     static func < (lhs: Logger.LogLevel, rhs: Logger.LogLevel) -> Bool {
