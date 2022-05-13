@@ -44,7 +44,10 @@ class MGLModule : NSObject {
         [
           "CameraChanged" : RCTMGLEvent.EventType.cameraChanged.rawValue,
           "MapIdle" : RCTMGLEvent.EventType.mapIdle.rawValue,
-          "DidFinishLoadingMap": RCTMGLEvent.EventType.didFinishLoadingMap.rawValue
+          "DidFinishLoadingStyle": RCTMGLEvent.EventType.didFinishLoadingStyle.rawValue,
+          "DidFinishLoadingMap": RCTMGLEvent.EventType.didFinishLoadingMap.rawValue,
+          "DidFinishRenderingFrameFully":  RCTMGLEvent.EventType.didFinishRenderingFully.rawValue,
+          "DidFinishRenderingFrame": RCTMGLEvent.EventType.didFinishRendering.rawValue,
         ],
       "OfflineCallbackName":
         [

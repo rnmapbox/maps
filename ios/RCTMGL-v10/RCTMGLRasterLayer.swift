@@ -33,8 +33,8 @@ class RCTMGLRasterLayer: RCTMGLLayer {
         )
         self.styleLayer = styleLayer
       } else {
-       fatalError("[xxx] layer is not raster layer?!!! \(self.styleLayer)")
-     }
+        fatalError("[xxx] layer is not raster layer?!!! \(optional: self.styleLayer)")
+      }
     }
   }
    
