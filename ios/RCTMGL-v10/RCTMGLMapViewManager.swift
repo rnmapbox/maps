@@ -111,6 +111,31 @@ extension RCTMGLMapViewManager {
       ]])
     }
   }
+
+  @objc
+  func getCoordinateFromView(
+    _ reactTag: NSNumber,
+    atPoint point: CGPoint,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock) {
+      withMapboxMap(reactTag, name:"getCoordinateFromView", rejecter: rejecter) { mapboxMap in
+        let coordinates = mapboxMap.coordinate(for: point)
+        resolver(["coordinateFromView": [coordinates.longitude, coordinates.latitude]])
+      }
+  }
+
+  @objc
+  func getPointInView(
+    _ reactTag: NSNumber,
+    atCoordinate coordinate: [NSNumber],
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock) {
+      withMapboxMap(reactTag, name:"getPointInView", rejecter: rejecter) { mapboxMap in
+        let coordinate = CLLocationCoordinate2DMake(coordinate[1].doubleValue, coordinate[0].doubleValue)
+        let point = mapboxMap.point(for: coordinate)
+        resolver(["pointInView": [(point.x), (point.y)]])
+      }
+  }
 }
 
 // MARK: - queryRenderedFeatures
