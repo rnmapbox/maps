@@ -360,13 +360,13 @@ PODS:
     - React-perflogger (= 0.68.1)
   - RNGestureHandler (1.9.0):
     - React-Core
-  - rnmapbox-maps (10.0.0-beta.1):
+  - rnmapbox-maps (10.0.0-beta.3):
     - MapboxMaps (~> 10.5.0)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.0.0-beta.1)
+    - rnmapbox-maps/DynamicLibrary (= 10.0.0-beta.3)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.0.0-beta.1):
+  - rnmapbox-maps/DynamicLibrary (10.0.0-beta.3):
     - MapboxMaps (~> 10.5.0)
     - React
     - React-Core
@@ -596,7 +596,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 7285b499d0339104b2813a1f58ad1ada4adbd6c0
   ReactCommon: bf2888a826ceedf54b99ad1b6182d1bc4a8a3984
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
-  rnmapbox-maps: b205f28ed72f45cfc2f043e1fe5d432692aabaf9
+  rnmapbox-maps: 75c78ebf20cbe15a72418cf7b616d45bcf245c2d
   RNScreens: 6e1ea5787989f92b0671049b808aef64fa1ef98c
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8

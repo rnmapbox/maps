@@ -376,7 +376,8 @@ extension RCTMGLMapView: GestureManagerDelegate {
               Logger.log(level:.error, message: "doHandleTap, no hits found when it should have")
               return
             }
-            let features = hitFeatures.map { $0.feature.toJSON() }
+            let features = hitFeatures.compactMap { queriedFeature in
+              logged("doHandleTap.hitFeatures") { try queriedFeature.feature.toJSON() } }
             let location = self.mapboxMap.coordinate(for: tapPoint)
             let event = RCTMGLEvent(
               type: (source is RCTMGLVectorSource) ? .vectorSourceLayerPress : .shapeSourceLayerPress,
@@ -402,7 +403,7 @@ extension RCTMGLMapView: GestureManagerDelegate {
                 "screenPointX": .number(Double(tapPoint.x)),
                 "screenPointY": .number(Double(tapPoint.y))
               ]
-              let event = RCTMGLEvent(type:.tap, payload: geojson.toJSON())
+              let event = RCTMGLEvent(type:.tap, payload: logged("reactOnPress") { try geojson.toJSON() })
               self.fireEvent(event: event, callback: reactOnPress)
             }
           }
@@ -422,7 +423,7 @@ extension RCTMGLMapView: GestureManagerDelegate {
         "screenPointX": .number(Double(position.x)),
         "screenPointY": .number(Double(position.y))
       ]
-      let event = RCTMGLEvent(type:.longPress, payload: geojson.toJSON())
+      let event = RCTMGLEvent(type:.longPress, payload: logged("doHandleLongPress") { try geojson.toJSON() })
       self.fireEvent(event: event, callback: reactOnLongPress)
     }
   }
@@ -591,32 +592,3 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
   }
 }
 
-extension CLLocationCoordinate2D {
-  func toArray() -> [Double] {
-    return [Double(longitude), Double(latitude)]
-  }
-}
-
-extension Point {
-  func toJSON() -> [String: Any] {
-    do {
-      let data = try JSONEncoder().encode(self)
-      let value = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-      return value ?? [:]
-    } catch {
-      return [:]
-    }
-  }
-}
-
-extension Feature {
-  func toJSON() -> [String: Any] {
-    do {
-      let data = try JSONEncoder().encode(self)
-      let value = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-      return value ?? [:]
-    } catch {
-      return [:]
-    }
-  }
-}

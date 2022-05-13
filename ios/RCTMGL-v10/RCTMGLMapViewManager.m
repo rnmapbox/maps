@@ -44,4 +44,18 @@ RCT_EXTERN_METHOD(getCenter:(nonnull NSNumber*)reactTag
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(queryRenderedFeaturesAtPoint:(nonnull NSNumber*)reactTag
+                  atPoint:(NSArray<NSNumber*>*)point
+                  withFilter:(NSArray*)filter
+                  withLayerIDs:(NSArray<NSString*>*)layerIDs
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(queryRenderedFeaturesInRect:(nonnull NSNumber*)reactTag
+                  withBBox:(NSArray<NSNumber*>*)bbox
+                  withFilter:(NSArray*)filter
+                  withLayerIDs:(NSArray<NSString*>*)layerIDs
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
 @end

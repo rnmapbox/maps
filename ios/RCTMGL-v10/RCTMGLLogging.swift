@@ -61,11 +61,12 @@ class Logger {
   }
 }
 
-func logged<T>(_ msg: String, fn : () throws -> T) -> T? {
+func logged<T>(_ msg: String, info: (() -> String)? = nil, level: Logger.LogLevel = .error, rejecter: RCTPromiseRejectBlock? = nil, fn : () throws -> T) -> T? {
   do {
     return try fn()
   } catch {
-    Logger.log(level:.error, message: "\(msg) \(error.localizedDescription)")
+    Logger.log(level:level, message: "\(msg) \(info?() ?? "") \(error.localizedDescription)")
+    rejecter?(msg, "\(info?() ?? "") \(error.localizedDescription)", error)
     return nil
   }
 }
