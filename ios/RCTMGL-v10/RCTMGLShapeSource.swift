@@ -106,7 +106,18 @@ extension RCTMGLShapeSource
     guard let data = shape.data(using: .utf8) else {
       throw RCTMGLError.parseError("shape is not utf8")
     }
-    return try JSONDecoder().decode(GeoJSONSourceData.self, from: data)
+    do {
+      return try JSONDecoder().decode(GeoJSONSourceData.self, from: data)
+    } catch {
+      let origError = error
+      do {
+        // workaround for mapbox issue, GeoJSONSourceData can't decode a single geometry
+        let geometry = try JSONDecoder().decode(Geometry.self, from: data)
+        return .geometry(geometry)
+      } catch {
+        throw origError
+      }
+    }
   }
 
   func parse(_ shape: String?) throws -> GeoJSONObject {

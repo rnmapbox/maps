@@ -44,6 +44,16 @@ RCT_EXTERN_METHOD(getCenter:(nonnull NSNumber*)reactTag
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(getCoordinateFromView:(nonnull NSNumber*)reactTag
+                  atPoint:(CGPoint)point
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(getPointInView:(nonnull NSNumber*)reactTag
+                  atCoordinate:(NSArray<NSNumber*>*)coordinate
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
 RCT_EXTERN_METHOD(queryRenderedFeaturesAtPoint:(nonnull NSNumber*)reactTag
                   atPoint:(NSArray<NSNumber*>*)point
                   withFilter:(NSArray*)filter

@@ -472,7 +472,7 @@ extension RCTMGLMapView {
     let style = self.mapboxMap.style
     
     style.allLayerIdentifiers.forEach { layerInfo in
-      let layer = logged("setSourceVisibility.layer") {
+      let layer = logged("setSourceVisibility.layer", info: { "\(layerInfo.id)" }) {
         try style.layer(withId: layerInfo.id)
       }
       if let layer = layer {
