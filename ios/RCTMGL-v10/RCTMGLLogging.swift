@@ -71,6 +71,15 @@ func logged<T>(_ msg: String, info: (() -> String)? = nil, level: Logger.LogLeve
   }
 }
 
+func logged<T>(_ msg: String, info: (() -> String)? = nil, errorResult: (Error) -> T, level: Logger.LogLevel = .error, fn : () throws -> T) -> T {
+  do {
+    return try fn()
+  } catch {
+    Logger.log(level:level, message: "\(msg) \(info?() ?? "") \(error.localizedDescription)")
+    return errorResult(error)
+  }
+}
+
 @objc(RCTMGLLogging)
 class RCTMGLLogging: RCTEventEmitter {
   static var shared : RCTMGLLogging? = nil

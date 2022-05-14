@@ -58,6 +58,7 @@ extension RCTMGLMapViewManager {
 }
 
 // MARK: - react methods
+
 extension RCTMGLMapViewManager {
     @objc
     func takeSnap(_ reactTag: NSNumber,
@@ -135,6 +136,19 @@ extension RCTMGLMapViewManager {
         let point = mapboxMap.point(for: coordinate)
         resolver(["pointInView": [(point.x), (point.y)]])
       }
+  }
+
+  @objc
+  func setHandledMapChangedEvents(
+    _ reactTag: NSNumber,
+    events: [String],
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock) {
+    withMapView(reactTag, name:"setHandledMapChangedEvents", rejecter: rejecter) { mapView in
+      mapView.handleMapChangedEvents = Set(events.compactMap {
+        RCTMGLEvent.EventType(rawValue: $0)
+      })
+    }
   }
 }
 
