@@ -12,6 +12,8 @@ open class RCTMGLMapView : MapView {
   var images : [RCTMGLImages] = []
   var sources : [RCTMGLSource] = []
   
+  var handleMapChangedEvents = Set<RCTMGLEvent.EventType>()
+  
   var onStyleLoadedComponents: [RCTMGLMapComponent]? = []
   
   private var isPendingInitialLayout = true
@@ -32,26 +34,82 @@ open class RCTMGLMapView : MapView {
     get { return self }
   }
   
-  // MARK: - React Native properties
-  
-  private func getOrnamentOptionsFromPosition(_ position: [String: Int]!) -> (position: OrnamentPosition, margins: CGPoint)? {
-    let left = position["left"]
-    let right = position["right"]
-    let top = position["top"]
-    let bottom = position["bottom"]
-    
-    if let left = left, let top = top {
-      return (OrnamentPosition.topLeft, CGPoint(x: left, y: top))
-    } else if let right = right, let top = top {
-      return (OrnamentPosition.topRight, CGPoint(x: right, y: top))
-    } else if let bottom = bottom, let right = right {
-      return (OrnamentPosition.bottomRight, CGPoint(x: right, y: bottom))
-    } else if let bottom = bottom, let left = left {
-      return (OrnamentPosition.bottomLeft, CGPoint(x: left, y: bottom))
+  @objc open override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
+    if let mapComponent = subview as? RCTMGLMapComponent {
+      if mapComponent.waitForStyleLoad(), self.onStyleLoadedComponents != nil {
+        onStyleLoadedComponents!.append(mapComponent)
+      } else {
+        mapComponent.addToMap(self, style: self.mapboxMap.style)
+      }
     }
-    
-    return nil
+    if let source = subview as? RCTMGLSource {
+      sources.append(source)
+    }
+
+    super.insertReactSubview(subview, at: atIndex)
   }
+  
+  @objc open override func removeReactSubview(_ subview:UIView!) {
+    if let mapComponent = subview as? RCTMGLMapComponent {
+      mapComponent.removeFromMap(self)
+    }
+    if let source = subview as? RCTMGLSource {
+      sources.removeAll { $0 == source }
+    }
+
+    super.removeReactSubview(subview)
+  }
+
+  public required init(frame:CGRect) {
+    let resourceOptions = ResourceOptions(accessToken: MGLModule.accessToken!)
+    super.init(frame: frame, mapInitOptions: MapInitOptions(resourceOptions: resourceOptions))
+
+    self.mapView.gestures.delegate = self
+
+    setupEvents()
+  }
+  
+  public required init (coder: NSCoder) {
+      fatalError("not implemented")
+  }
+  
+  func layerAdded (_ layer: Layer) {
+      // TODO
+  }
+  
+  func waitForLayerWithID(_ layerId: String, _  callback: @escaping (_ layerId: String) -> Void) {
+    let style = mapboxMap.style;
+    if style.layerExists(withId: layerId) {
+      callback(layerId)
+    } else {
+      layerWaiters[layerId, default: []].append(callback)
+    }
+  }
+  
+  @objc public override func layoutSubviews() {
+    super.layoutSubviews()
+    if let camera = reactCamera {
+      if (isPendingInitialLayout) {
+        isPendingInitialLayout = false;
+
+        camera.initialLayout()
+      }
+    }
+  }
+
+  public override func updateConstraints() {
+    super.updateConstraints()
+    if let camera = reactCamera {
+      if (isPendingInitialLayout) {
+        isPendingInitialLayout = false;
+
+        camera.initialLayout()
+      }
+    }
+  }
+
+  
+  // MARK: - React Native properties
   
   @objc func setReactAttributionEnabled(_ value: Bool) {
     mapView.ornaments.options.attributionButton.visibility = value ? .visible : .hidden
@@ -127,32 +185,51 @@ open class RCTMGLMapView : MapView {
       }
     }
   }
-  
-  @objc func setReactOnPress(_ value: @escaping RCTBubblingEventBlock) {
-    self.reactOnPress = value
+
+  private func getOrnamentOptionsFromPosition(_ position: [String: Int]!) -> (position: OrnamentPosition, margins: CGPoint)? {
+    let left = position["left"]
+    let right = position["right"]
+    let top = position["top"]
+    let bottom = position["bottom"]
     
-    self.mapView.gestures.singleTapGestureRecognizer.removeTarget( pointAnnotationManager.manager, action: nil)
-    self.mapView.gestures.singleTapGestureRecognizer.addTarget(self, action: #selector(doHandleTap(_:)))
+    if let left = left, let top = top {
+      return (OrnamentPosition.topLeft, CGPoint(x: left, y: top))
+    } else if let right = right, let top = top {
+      return (OrnamentPosition.topRight, CGPoint(x: right, y: top))
+    } else if let bottom = bottom, let right = right {
+      return (OrnamentPosition.bottomRight, CGPoint(x: right, y: bottom))
+    } else if let bottom = bottom, let left = left {
+      return (OrnamentPosition.bottomLeft, CGPoint(x: left, y: bottom))
+    }
+    
+    return nil
   }
+}
 
-  @objc func setReactOnLongPress(_ value: @escaping RCTBubblingEventBlock) {
-    self.reactOnLongPress = value
+// MARK: - event handlers
 
-    let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(doHandleLongPress(_:)))
-    self.mapView.addGestureRecognizer(longPressGestureRecognizer)
-  }
-
+extension RCTMGLMapView {
   @objc func setReactOnMapChange(_ value: @escaping RCTBubblingEventBlock) {
     self.reactOnMapChange = value
     
     self.mapView.mapboxMap.onEvery(.cameraChanged, handler: { cameraEvent in
-      let event = RCTMGLEvent(type:.cameraChanged, payload: self.buildStateObject());
-      self.fireEvent(event: event, callback: self.reactOnMapChange)
+      if self.handleMapChangedEvents.contains(.regionIsChanging) {
+        let event = RCTMGLEvent(type:.regionIsChanging, payload: self.buildRegionObject());
+        self.fireEvent(event: event, callback: self.reactOnMapChange)
+      } else if self.handleMapChangedEvents.contains(.cameraChanged) {
+        let event = RCTMGLEvent(type:.cameraChanged, payload: self.buildStateObject());
+        self.fireEvent(event: event, callback: self.reactOnMapChange)
+      }
     })
 
     self.mapView.mapboxMap.onEvery(.mapIdle, handler: { cameraEvent in
-      let event = RCTMGLEvent(type:.mapIdle, payload: self.buildStateObject());
-      self.fireEvent(event: event, callback: self.reactOnMapChange)
+      if self.handleMapChangedEvents.contains(.regionDidChange) {
+        let event = RCTMGLEvent(type:.regionDidChange, payload: self.buildRegionObject());
+        self.fireEvent(event: event, callback: self.reactOnMapChange)
+      } else if self.handleMapChangedEvents.contains(.mapIdle) {
+        let event = RCTMGLEvent(type:.mapIdle, payload: self.buildStateObject());
+        self.fireEvent(event: event, callback: self.reactOnMapChange)
+      }
     })
   }
 
@@ -189,40 +266,30 @@ open class RCTMGLMapView : MapView {
       ]
     ]
   }
-    
-  @objc open override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
-    if let mapComponent = subview as? RCTMGLMapComponent {
-      if mapComponent.waitForStyleLoad(), self.onStyleLoadedComponents != nil {
-        onStyleLoadedComponents!.append(mapComponent)
-      } else {
-        mapComponent.addToMap(self, style: self.mapboxMap.style)
-      }
-    }
-    if let source = subview as? RCTMGLSource {
-      sources.append(source)
-    }
-
-    super.insertReactSubview(subview, at: atIndex)
-  }
   
-  @objc open override func removeReactSubview(_ subview:UIView!) {
-    if let mapComponent = subview as? RCTMGLMapComponent {
-      mapComponent.removeFromMap(self)
+  private func buildRegionObject() -> [String: Any] {
+    let cameraOptions = CameraOptions(cameraState: cameraState)
+    let bounds = mapView.mapboxMap.coordinateBounds(for: cameraOptions)
+    let boundsArray : JSONArray = [
+      [.number(bounds.northeast.longitude),.number(bounds.northeast.latitude)],
+      [.number(bounds.southwest.longitude),.number(bounds.southwest.latitude)]
+    ]
+
+    var result = Feature(
+       geometry: .point(Point(mapView.cameraState.center))
+    )
+    result.properties = [
+      "zoomLevel": .number(mapView.cameraState.zoom),
+      "heading": .number(mapView.cameraState.bearing),
+      "bearing": .number(mapView.cameraState.bearing),
+      "pitch": .number(mapView.cameraState.pitch),
+      "visibleBounds": .array(boundsArray),
+      "isUserInteraction": .boolean(isGestureActive),
+      "isAnimatingFromUserInteraction": .boolean(isAnimatingFromGesture),
+    ]
+    return logged("buildRegionObject", errorResult: { ["error":["toJSON":$0.localizedDescription]] }) {
+      try result.toJSON()
     }
-    if let source = subview as? RCTMGLSource {
-      sources.removeAll { $0 == source }
-    }
-
-    super.removeReactSubview(subview)
-  }
-
-  public required init(frame:CGRect) {
-    let resourceOptions = ResourceOptions(accessToken: MGLModule.accessToken!)
-    super.init(frame: frame, mapInitOptions: MapInitOptions(resourceOptions: resourceOptions))
-
-    self.mapView.gestures.delegate = self
-
-    setupEvents()
   }
   
   public func setupEvents() {
@@ -279,68 +346,32 @@ open class RCTMGLMapView : MapView {
       self.fireEvent(event: event, callback: self.reactOnMapChange)
     })
   }
+}
+
+// MARK: - gestures
+
+extension RCTMGLMapView {
+  @objc func setReactOnPress(_ value: @escaping RCTBubblingEventBlock) {
+    self.reactOnPress = value
     
-  public required init (coder: NSCoder) {
-      fatalError("not implemented")
-  }
-  
-  func layerAdded (_ layer: Layer) {
-      // TODO
-  }
-  
-  func waitForLayerWithID(_ layerId: String, _  callback: @escaping (_ layerId: String) -> Void) {
-    let style = mapboxMap.style;
-    if style.layerExists(withId: layerId) {
-      callback(layerId)
-    } else {
-      layerWaiters[layerId, default: []].append(callback)
-    }
+    self.mapView.gestures.singleTapGestureRecognizer.removeTarget( pointAnnotationManager.manager, action: nil)
+    self.mapView.gestures.singleTapGestureRecognizer.addTarget(self, action: #selector(doHandleTap(_:)))
   }
 
-  @objc func takeSnap(
-    writeToDisk:Bool) -> URL
-  {
-    UIGraphicsBeginImageContextWithOptions(self.bounds.size, true, 0);
+  @objc func setReactOnLongPress(_ value: @escaping RCTBubblingEventBlock) {
+    self.reactOnLongPress = value
 
-    self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
-    let snapshot = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-
-    return writeToDisk ? RNMBImageUtils.createTempFile(snapshot!) :  RNMBImageUtils.createBase64(snapshot!)
-  }
-
-/*
-  See https://github.com/mapbox/mapbox-maps-ios/pull/1275
-  @objc public override func layoutSubviews() {
-    super.layoutSubviews()
-    if let camera = reactCamera {
-      if (isPendingInitialLayout) {
-        isPendingInitialLayout = false;
-
-        camera.initialLayout()
-      }
-    }
-  }
-*/
-
-  public override func updateConstraints() {
-    super.updateConstraints()
-    if let camera = reactCamera {
-      if (isPendingInitialLayout) {
-        isPendingInitialLayout = false;
-
-        camera.initialLayout()
-      }
-    }
+    let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(doHandleLongPress(_:)))
+    self.mapView.addGestureRecognizer(longPressGestureRecognizer)
   }
 }
 
 extension RCTMGLMapView: GestureManagerDelegate {
-  func touchableSources() -> [RCTMGLSource] {
+  private func touchableSources() -> [RCTMGLSource] {
     return sources.filter { $0.isTouchable() }
   }
 
-  func doHandleTapInSources(sources: [RCTMGLSource], tapPoint: CGPoint, hits: [String: [QueriedFeature]], touchedSources: [RCTMGLSource], callback: @escaping (_ hits: [String: [QueriedFeature]], _ touchedSources: [RCTMGLSource]) -> Void) {
+  private func doHandleTapInSources(sources: [RCTMGLSource], tapPoint: CGPoint, hits: [String: [QueriedFeature]], touchedSources: [RCTMGLSource], callback: @escaping (_ hits: [String: [QueriedFeature]], _ touchedSources: [RCTMGLSource]) -> Void) {
     DispatchQueue.main.async {
       if let source = sources.first {
         let hitbox = source.hitbox;
@@ -466,6 +497,21 @@ extension RCTMGLMapView: GestureManagerDelegate {
   public func gestureManager(_ gestureManager: GestureManager, didEndAnimatingFor gestureType: GestureType) {
     isGestureActive = false
     isAnimatingFromGesture = false
+  }
+}
+
+extension RCTMGLMapView
+{
+  @objc func takeSnap(
+    writeToDisk:Bool) -> URL
+  {
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, true, 0);
+
+    self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
+    let snapshot = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return writeToDisk ? RNMBImageUtils.createTempFile(snapshot!) :  RNMBImageUtils.createBase64(snapshot!)
   }
 }
 

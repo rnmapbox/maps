@@ -21,7 +21,7 @@ class RCTMGLEvent : NSObject, RCTMGLEventProtocol {
     enum EventType : String {
       case tap
       case longPress
-      case regionWillChange
+      //case regionWillChange
       case regionIsChanging
       case regionDidChange
       case cameraChanged
