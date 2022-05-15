@@ -4,6 +4,9 @@
 class RCTMGLSource : UIView, RCTMGLMapComponent {
   
   var source : Source? = nil
+
+  var ownsSource : Bool = false
+
   var map : RCTMGLMapView? = nil
   
   static let hitboxDefault = 44.0
@@ -55,8 +58,11 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
         self.source = try! style.source(withId: self.id)
       } else {
         let source = self.makeSource()
+        self.ownsSource = true
         self.source = source
-        try! style.addSource(source, id: self.id)
+        logged("SyleSource.addToMap", info: {"id: \(optional: self.id)"}) {
+          try style.addSource(source, id: self.id)
+        }
       }
            
       for layer in self.layers {
@@ -70,6 +76,14 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
     
     for layer in self.layers {
       layer.removeFromMap(map, style: map.mapboxMap.style)
+    }
+
+    if self.ownsSource {
+      let style = map.mapboxMap.style
+      logged("StyleSource.removeFromMap", info: { "id: \(optional: self.id)"}) {
+        try style.removeSource(withId: id)
+      }
+      self.ownsSource = false
     }
   }
 

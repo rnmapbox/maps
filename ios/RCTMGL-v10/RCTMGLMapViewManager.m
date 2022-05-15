@@ -54,6 +54,10 @@ RCT_EXTERN_METHOD(getPointInView:(nonnull NSNumber*)reactTag
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(getZoom:(nonnull NSNumber*)reactTag
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
 RCT_EXTERN_METHOD(queryRenderedFeaturesAtPoint:(nonnull NSNumber*)reactTag
                   atPoint:(NSArray<NSNumber*>*)point
                   withFilter:(NSArray*)filter
