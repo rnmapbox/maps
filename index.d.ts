@@ -488,9 +488,6 @@ export type OrnamentPosition =
   | { bottom: number; left: number }
   | { bottom: number; right: number };
 
-/**
- * <v10.
- */
 export interface RegionPayload {
   zoomLevel: number;
   heading: number;
@@ -501,7 +498,7 @@ export interface RegionPayload {
 }
 
 /**
- * v10 only.
+ * v10 only - experimental
  */
 export interface MapState {
   properties: {
@@ -1055,3 +1052,5 @@ export import Camera = MapboxGL.Camera;
 export import Terrain = MapboxGL.Terrain;
 export import RasterDemSource = MapboxGL.RasterDemSource;
 export import SkyLayer = MapboxGL.SkyLayer;
+
+export default MapboxGL;
