@@ -150,6 +150,16 @@ extension RCTMGLMapViewManager {
       })
     }
   }
+
+  @objc
+  func getZoom(
+    _ reactTag: NSNumber,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock) {
+      withMapboxMap(reactTag, name:"getZoom", rejecter: rejecter) { mapboxMap in
+        resolver(["zoom": mapboxMap.cameraState.zoom])
+      }
+  }
 }
 
 // MARK: - queryRenderedFeatures
