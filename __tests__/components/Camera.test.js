@@ -64,4 +64,9 @@ describe('Camera', () => {
       ...paddingZero,
     });
   });
+  test('animation mode', () => {
+    const result = render(<Camera bounds={bounds1} animationMode={'none'} />);
+    const { props } = result.queryByTestId('Camera');
+    expect(props.stop.mode).toEqual('Move');
+  });
 });

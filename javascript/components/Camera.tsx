@@ -18,14 +18,35 @@ import geoUtils from '../utils/geoUtils';
 
 const NativeModule = NativeModules.MGLModule;
 
+const nativeAnimationMode = (
+  mode?: CameraAnimationMode,
+): NativeAnimationMode => {
+  const NativeCameraModes = NativeModule.CameraModes;
+
+  switch (mode) {
+    case CameraModes.Flight:
+      return NativeCameraModes.Flight;
+    case CameraModes.Ease:
+      return NativeCameraModes.Ease;
+    case CameraModes.Linear:
+      return NativeCameraModes.Linear;
+    case CameraModes.Move:
+      return NativeCameraModes.Move;
+    case CameraModes.None:
+      return NativeCameraModes.Move;
+    default:
+      return NativeCameraModes.Ease;
+  }
+};
+
 export const NATIVE_MODULE_NAME = 'RCTMGLCamera';
 
-const Modes: Record<string, CameraAnimationMode> = {
+const CameraModes: Record<string, CameraAnimationMode> = {
   Flight: 'flyTo',
   Ease: 'easeTo',
   Linear: 'linearTo',
-  None: 'none',
   Move: 'moveTo',
+  None: 'none',
 };
 
 export const UserTrackingModes: Record<string, UserTrackingMode> = {
@@ -206,26 +227,6 @@ const Camera = (props: CameraProps, ref: React.ForwardedRef<CameraRef>) => {
   // @ts-ignore
   const camera: React.RefObject<RCTMGLCamera> = useRef(null);
 
-  const nativeAnimationMode = useCallback(
-    (_mode?: CameraAnimationMode): NativeAnimationMode | undefined => {
-      switch (_mode) {
-        case Modes.Flight:
-          return NativeModule.CameraModes.Flight;
-        case Modes.Ease:
-          return NativeModule.CameraModes.Ease;
-        case Modes.Linear:
-          return NativeModule.CameraModes.Linear;
-        case Modes.None:
-          return NativeModule.CameraModes.None;
-        case Modes.Move:
-          return NativeModule.CameraModes.Move;
-        default:
-          return undefined;
-      }
-    },
-    [],
-  );
-
   const nativeDefaultStop = useMemo((): NativeCameraStop | null => {
     if (!defaultSettings) {
       return null;
@@ -241,10 +242,10 @@ const Camera = (props: CameraProps, ref: React.ForwardedRef<CameraRef>) => {
       paddingLeft: defaultSettings.padding?.paddingLeft ?? 0,
       paddingRight: defaultSettings.padding?.paddingRight ?? 0,
       duration: defaultSettings.animationDuration ?? 2000,
-      mode: nativeAnimationMode(defaultSettings.animationMode) ?? 'flight',
+      mode: nativeAnimationMode(defaultSettings.animationMode),
     };
     return _defaultStop;
-  }, [defaultSettings, nativeAnimationMode]);
+  }, [defaultSettings]);
 
   const buildNativeStop = useCallback(
     (
@@ -292,7 +293,7 @@ const Camera = (props: CameraProps, ref: React.ForwardedRef<CameraRef>) => {
 
       return _nativeStop;
     },
-    [props.followUserLocation, nativeDefaultStop, nativeAnimationMode],
+    [props.followUserLocation, nativeDefaultStop],
   );
 
   const nativeStop = useMemo(() => {

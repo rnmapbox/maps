@@ -4,8 +4,8 @@ export type CameraAnimationMode =
   | 'flyTo'
   | 'easeTo'
   | 'linearTo'
-  | 'none'
-  | 'moveTo';
+  | 'moveTo'
+  | 'none';
 
 export type UserTrackingMode = 'normal' | 'compass' | 'course';
 
