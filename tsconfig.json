@@ -2,12 +2,13 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./lib",
-    "types": ["./types"],
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
     "jsx": "react-native",
-    "lib": ["esnext"],
+    "lib": [
+      "esnext"
+    ],
     "module": "esnext",
     "moduleResolution": "node",
     "allowUnreachableCode": false,
