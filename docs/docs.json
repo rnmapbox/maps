@@ -421,14 +421,14 @@
       {
         "name": "animationMode",
         "required": false,
-        "type": "CameraAnimationMode",
+        "type": "\\| 'flyTo'\n\\| 'easeTo'\n\\| 'linearTo'\n\\| 'moveTo'\n\\| 'none'",
         "default": "none",
         "description": "The easing or path the camera uses to animate to a new configuration."
       },
       {
         "name": "followUserMode",
         "required": false,
-        "type": "UserTrackingMode",
+        "type": "'normal' \\| 'compass' \\| 'course'",
         "default": "none",
         "description": "The mode used to track the user location on the map."
       },
@@ -505,7 +505,7 @@
       {
         "name": "onUserTrackingModeChange",
         "required": false,
-        "type": "UserTrackingModeChangeCallback",
+        "type": "(event:MapboxGLEvent<'usertrackingmodechange',{followUserLocation:boolean;followUserMode:UserTrackingMode\\|null;}>,)=>void",
         "default": "none",
         "description": "Executes when user tracking mode changes."
       }

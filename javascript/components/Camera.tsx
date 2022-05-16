@@ -8,11 +8,7 @@ import React, {
 } from 'react';
 import { NativeModules, requireNativeComponent } from 'react-native';
 import type { Position } from 'geojson';
-import type {
-  CameraAnimationMode,
-  UserTrackingMode,
-  UserTrackingModeChangeCallback,
-} from 'types/Camera';
+import type { MapboxGLEvent } from 'index';
 
 import geoUtils from '../utils/geoUtils';
 
@@ -49,31 +45,26 @@ const CameraModes: Record<string, CameraAnimationMode> = {
   None: 'none',
 };
 
-export const UserTrackingModes: Record<string, UserTrackingMode> = {
-  Follow: 'normal',
-  FollowWithHeading: 'compass',
-  FollowWithCourse: 'course',
-};
+export type CameraAnimationMode =
+  | 'flyTo'
+  | 'easeTo'
+  | 'linearTo'
+  | 'moveTo'
+  | 'none';
 
-// Component types.
+export type UserTrackingMode = 'normal' | 'compass' | 'course';
 
-export interface CameraProps
-  extends CameraStop,
-    CameraFollowConfig,
-    CameraMinMaxConfig {
-  /** The configuration that the camera falls back on, if no other values are specified. */
-  defaultSettings?: CameraStop;
-  /** Whether the camera should send any configuration to the native module. Prevents unnecessary tile
-   * fetching and improves performance when the map is not visible. Defaults to `true`. (Not yet implemented.) */
-  allowUpdates?: boolean;
-  /** Any arbitrary primitive value that, when changed, causes the camera to retry moving to its target
-   * configuration. (Not yet implemented.) */
-  triggerKey?: string | number;
-  /** Executes when user tracking mode changes. */
-  onUserTrackingModeChange?: UserTrackingModeChangeCallback;
-}
+export type UserTrackingModeChangeCallback = (
+  event: MapboxGLEvent<
+    'usertrackingmodechange',
+    {
+      followUserLocation: boolean;
+      followUserMode: UserTrackingMode | null;
+    }
+  >,
+) => void;
 
-interface CameraStop {
+export interface CameraStop {
   /** Allows static check of the data type. For internal use only. */
   readonly type?: 'CameraStop';
   /** The location on which the map should center. */
@@ -95,7 +86,7 @@ interface CameraStop {
   animationMode?: CameraAnimationMode;
 }
 
-interface CameraFollowConfig {
+export interface CameraFollowConfig {
   /** The mode used to track the user location on the map. */
   followUserMode?: UserTrackingMode;
   /** Whether the map orientation follows the user location. */
@@ -108,7 +99,7 @@ interface CameraFollowConfig {
   followHeading?: number;
 }
 
-interface CameraMinMaxConfig {
+export interface CameraMinMaxConfig {
   /** The lowest allowed zoom level. */
   minZoomLevel?: number;
   /** The highest allowed zoom level. */
@@ -120,23 +111,24 @@ interface CameraMinMaxConfig {
   };
 }
 
-interface CameraBounds {
+export interface CameraBounds {
   ne: Position;
   sw: Position;
 }
 
-interface CameraPadding {
+export interface CameraPadding {
   paddingLeft: number;
   paddingRight: number;
   paddingTop: number;
   paddingBottom: number;
 }
 
-interface CameraBoundsWithPadding
+export interface CameraBoundsWithPadding
   extends CameraBounds,
     Partial<CameraPadding> {}
 
-interface CameraStops {
+export interface CameraStops {
+  /** Allows static check of the data type. For internal use only. */
   readonly type: 'CameraStops';
   stops: CameraStop[];
 }
@@ -180,6 +172,22 @@ export interface CameraRef {
   flyTo: (centerCoordinate: Position, animationDuration?: number) => void;
   moveTo: (centerCoordinate: Position, animationDuration?: number) => void;
   zoomTo: (zoomLevel: number, animationDuration?: number) => void;
+}
+
+export interface CameraProps
+  extends CameraStop,
+    CameraFollowConfig,
+    CameraMinMaxConfig {
+  /** The configuration that the camera falls back on, if no other values are specified. */
+  defaultSettings?: CameraStop;
+  /** Whether the camera should send any configuration to the native module. Prevents unnecessary tile
+   * fetching and improves performance when the map is not visible. Defaults to `true`. (Not yet implemented.) */
+  allowUpdates?: boolean;
+  /** Any arbitrary primitive value that, when changed, causes the camera to retry moving to its target
+   * configuration. (Not yet implemented.) */
+  triggerKey?: string | number;
+  /** Executes when user tracking mode changes. */
+  onUserTrackingModeChange?: UserTrackingModeChangeCallback;
 }
 
 /**

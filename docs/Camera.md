@@ -13,8 +13,12 @@
 | zoomLevel | `number` | `none` | `false` | The zoom level of the map. |
 | padding | `CameraPadding` | `none` | `false` | The viewport padding in points. |
 | animationDuration | `number` | `none` | `false` | The duration the map takes to animate to a new configuration. |
-| animationMode | `CameraAnimationMode` | `none` | `false` | The easing or path the camera uses to animate to a new configuration. |
-| followUserMode | `UserTrackingMode` | `none` | `false` | The mode used to track the user location on the map. |
+| animationMode | `\| 'flyTo'
+\| 'easeTo'
+\| 'linearTo'
+\| 'moveTo'
+\| 'none'` | `none` | `false` | The easing or path the camera uses to animate to a new configuration. |
+| followUserMode | `'normal' \| 'compass' \| 'course'` | `none` | `false` | The mode used to track the user location on the map. |
 | followUserLocation | `boolean` | `none` | `false` | Whether the map orientation follows the user location. |
 | followZoomLevel | `number` | `none` | `false` | The zoom level used when following the user location. |
 | followPitch | `number` | `none` | `false` | The pitch used when following the user location. |
@@ -25,7 +29,7 @@
 | defaultSettings | `CameraStop` | `none` | `false` | The configuration that the camera falls back on, if no other values are specified. |
 | allowUpdates | `boolean` | `none` | `false` | Whether the camera should send any configuration to the native module. Prevents unnecessary tile<br/>fetching and improves performance when the map is not visible. Defaults to `true`. (Not yet implemented.) |
 | triggerKey | `string \| number` | `none` | `false` | Any arbitrary primitive value that, when changed, causes the camera to retry moving to its target<br/>configuration. (Not yet implemented.) |
-| onUserTrackingModeChange | `UserTrackingModeChangeCallback` | `none` | `false` | Executes when user tracking mode changes. |
+| onUserTrackingModeChange | `(event:MapboxGLEvent<'usertrackingmodechange',{followUserLocation:boolean;followUserMode:UserTrackingMode\|null;}>,)=>void` | `none` | `false` | Executes when user tracking mode changes. |
 
 ### methods
 #### setCamera(config)
