@@ -2754,7 +2754,7 @@
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "<v10 only\n\nThis event is triggered whenever the currently displayed map region is changing.",
+        "description": "This event is triggered whenever the currently displayed map region is changing.",
         "params": [
           {
             "name": "feature",
@@ -2771,7 +2771,7 @@
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "<v10 only\n\nThis event is triggered whenever the currently displayed map region finished changing.",
+        "description": "This event is triggered whenever the currently displayed map region finished changing.",
         "params": [
           {
             "name": "feature",
@@ -2788,7 +2788,7 @@
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "v10 only\n\nCalled when the currently displayed map area changes.",
+        "description": "iOS, v10 only, experimental.\n\nCalled when the currently displayed map area changes.\nReplaces onRegionIsChanging, so can't set both",
         "params": [
           {
             "name": "region",
@@ -2805,7 +2805,7 @@
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "v10 only\n\nCalled when the currently displayed map area stops changing.",
+        "description": "iOS, v10 only, experimental\n\nCalled when the currently displayed map area stops changing.\nReplaces onRegionDidChange, so can't set both",
         "params": [
           {
             "name": "region",

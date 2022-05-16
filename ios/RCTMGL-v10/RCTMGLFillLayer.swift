@@ -33,7 +33,7 @@ class RCTMGLFillLayer: RCTMGLVectorLayer {
       if var styleLayer = self.styleLayer as? FillLayer {
         styler.fillLayer(
           layer: &styleLayer,
-          reactStyle: reactStyle!,
+          reactStyle: reactStyle ?? [:],
           applyUpdater: { (updater) in try! style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout FillLayer) in updater(&layer) }},
           isValid: { return self.isAddedToMap() }
         )

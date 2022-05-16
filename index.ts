@@ -100,9 +100,6 @@ type OrnamentPosition =
   | { bottom: number; left: number }
   | { bottom: number; right: number };
 
-/**
- * <v10.
- */
 interface RegionPayload {
   zoomLevel: number;
   heading: number;
@@ -113,7 +110,7 @@ interface RegionPayload {
 }
 
 /**
- * v10 only.
+ * v10 only - experimental
  */
 interface MapState {
   properties: {

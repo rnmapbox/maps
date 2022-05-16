@@ -103,7 +103,7 @@ class QueryWithRect extends React.Component {
             >
               <MapboxGL.FillLayer
                 id="selectedNYCFill"
-                style={styles.selectedNeighborhood}
+                style={styles.selectedNeighborhoods}
               />
             </MapboxGL.ShapeSource>
           ) : null}

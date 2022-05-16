@@ -194,7 +194,6 @@ class MapView extends NativeBridgeComponent(React.Component) {
     onRegionWillChange: PropTypes.func,
 
     /**
-     * <v10 only
      *
      * This event is triggered whenever the currently displayed map region is changing.
      *
@@ -203,7 +202,6 @@ class MapView extends NativeBridgeComponent(React.Component) {
     onRegionIsChanging: PropTypes.func,
 
     /**
-     * <v10 only
      *
      * This event is triggered whenever the currently displayed map region finished changing.
      *
@@ -212,18 +210,20 @@ class MapView extends NativeBridgeComponent(React.Component) {
     onRegionDidChange: PropTypes.func,
 
     /**
-     * v10 only
+     * iOS, v10 only, experimental.
      *
      * Called when the currently displayed map area changes.
+     * Replaces onRegionIsChanging, so can't set both
      *
      * @param {MapState} region - A payload containing the map center, bounds, and other properties.
      */
     onCameraChanged: PropTypes.func,
 
     /**
-     * v10 only
+     * iOS, v10 only, experimental
      *
      * Called when the currently displayed map area stops changing.
+     * Replaces onRegionDidChange, so can't set both
      *
      * @param {MapState} region - A payload containing the map center, bounds, and other properties.
      */
@@ -355,57 +355,55 @@ class MapView extends NativeBridgeComponent(React.Component) {
   }
 
   _setHandledMapChangedEvents(props) {
-    if (isAndroid()) {
+    if (isAndroid() || MapboxGL.MapboxV10) {
       const events = [];
 
-      if (props.onRegionWillChange) {
-        events.push(MapboxGL.EventTypes.RegionWillChange);
-      }
-      if (props.onRegionIsChanging) {
-        events.push(MapboxGL.EventTypes.RegionIsChanging);
-      }
-      if (props.onRegionDidChange) {
-        events.push(MapboxGL.EventTypes.RegionDidChange);
-      }
-      if (props.onUserLocationUpdate) {
-        events.push(MapboxGL.EventTypes.UserLocationUpdated);
-      }
-      if (props.onWillStartLoadingMap) {
-        events.push(MapboxGL.EventTypes.WillStartLoadingMap);
-      }
-      if (props.onDidFinishLoadingMap) {
-        events.push(MapboxGL.EventTypes.DidFinishLoadingMap);
-      }
-      if (props.onDidFailLoadingMap) {
-        events.push(MapboxGL.EventTypes.DidFailLoadingMap);
-      }
-      if (props.onWillStartRenderingFrame) {
-        events.push(MapboxGL.EventTypes.WillStartRenderingFrame);
-      }
-      if (props.onDidFinishRenderingFrame) {
-        events.push(MapboxGL.EventTypes.DidFinishRenderingFrame);
-      }
-      if (props.onDidFinishRenderingFrameFully) {
-        events.push(MapboxGL.EventTypes.DidFinishRenderingFrameFully);
-      }
-      if (props.onWillStartRenderingMap) {
-        events.push(MapboxGL.EventTypes.WillStartRenderingMap);
-      }
-      if (props.onDidFinishRenderingMap) {
-        events.push(MapboxGL.EventTypes.DidFinishRenderingMap);
-      }
-      if (props.onDidFinishRenderingMapFully) {
-        events.push(MapboxGL.EventTypes.DidFinishRenderingMapFully);
-      }
-      if (props.onDidFinishLoadingStyle) {
-        events.push(MapboxGL.EventTypes.DidFinishLoadingStyle);
+      function addIfHasHandler(name) {
+        if (props[`on${name}`] != null) {
+          /* eslint-disable fp/no-mutating-methods */
+          if (MapboxGL.EventTypes[name] == null) {
+            console.warn(`rnmapbox maps: ${name} is not supported`);
+          } else {
+            events.push(MapboxGL.EventTypes[name]);
+            return true;
+          }
+        }
+        return false;
       }
 
-      this._runNativeCommand(
-        'setHandledMapChangedEvents',
-        this._nativeRef,
+      addIfHasHandler('RegionWillChange');
+      addIfHasHandler('RegionIsChanging');
+      addIfHasHandler('RegionDidChange');
+      addIfHasHandler('UserLocationUpdate');
+      addIfHasHandler('WillStartLoadingMap');
+      addIfHasHandler('DidFinishLoadingMap');
+      addIfHasHandler('DidFailLoadingMap');
+      addIfHasHandler('WillStartRenderingFrame');
+      addIfHasHandler('DidFinishRenderingFrame');
+      addIfHasHandler('DidFinishRenderingFrameFully');
+      addIfHasHandler('WillStartRenderingMap');
+      addIfHasHandler('DidFinishRenderingMap');
+      addIfHasHandler('DidFinishRenderingMapFully');
+      addIfHasHandler('DidFinishLoadingStyle');
+
+      if (addIfHasHandler('MapIdle')) {
+        if (props.onRegionDidChange) {
+          console.warn(
+            'rnmapbox/maps: only one of  MapView.onRegionDidChange or onMapIdle is supported',
+          );
+        }
+      }
+      if (addIfHasHandler('CameraChanged')) {
+        if (props.onRegionWillChange) {
+          console.warn(
+            'rnmapbox/maps: only one of MapView.onRegionWillChange or onCameraChanged is supported',
+          );
+        }
+      }
+
+      this._runNativeCommand('setHandledMapChangedEvents', this._nativeRef, [
         events,
-      );
+      ]);
     }
   }
 

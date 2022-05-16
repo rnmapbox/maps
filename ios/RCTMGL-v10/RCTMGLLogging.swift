@@ -1,10 +1,14 @@
 import Foundation
 import MapboxMaps
 
-enum RCTMGLError: Error {
+enum RCTMGLError: Error, LocalizedError {
   case parseError(String)
   case failed(String)
   case paramError(String)
+
+  var errorDescription: String? {
+    return String(describing: self)
+  }
 }
 
 class Logger {
@@ -61,12 +65,22 @@ class Logger {
   }
 }
 
-func logged<T>(_ msg: String, fn : () throws -> T) -> T? {
+func logged<T>(_ msg: String, info: (() -> String)? = nil, level: Logger.LogLevel = .error, rejecter: RCTPromiseRejectBlock? = nil, fn : () throws -> T) -> T? {
   do {
     return try fn()
   } catch {
-    Logger.log(level:.error, message: "\(msg) \(error.localizedDescription)")
+    Logger.log(level:level, message: "\(msg) \(info?() ?? "") \(error.localizedDescription)")
+    rejecter?(msg, "\(info?() ?? "") \(error.localizedDescription)", error)
     return nil
+  }
+}
+
+func logged<T>(_ msg: String, info: (() -> String)? = nil, errorResult: (Error) -> T, level: Logger.LogLevel = .error, fn : () throws -> T) -> T {
+  do {
+    return try fn()
+  } catch {
+    Logger.log(level:level, message: "\(msg) \(info?() ?? "") \(error.localizedDescription)")
+    return errorResult(error)
   }
 }
 

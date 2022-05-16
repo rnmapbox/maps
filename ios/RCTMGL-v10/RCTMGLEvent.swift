@@ -21,13 +21,16 @@ class RCTMGLEvent : NSObject, RCTMGLEventProtocol {
     enum EventType : String {
       case tap
       case longPress
-      case regionWillChange
+      //case regionWillChange
       case regionIsChanging
       case regionDidChange
       case cameraChanged
       case mapIdle
       case imageMissing
       case didFinishLoadingMap
+      case didFinishRenderingFully
+      case didFinishRendering
+      case didFinishLoadingStyle
       case offlineProgress
       case offlineError
       case offlineTileLimit

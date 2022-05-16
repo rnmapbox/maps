@@ -285,6 +285,9 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     fun isJSONValid(test: String?): Boolean {
+        if (test == null) {
+            return false
+        }
         try {
             JSONObject(test)
         } catch (ex: JSONException) {
