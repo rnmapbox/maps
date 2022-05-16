@@ -2,7 +2,7 @@ import React, { useMemo, useRef, useState } from 'react';
 import { Button, SafeAreaView, StyleSheet, View } from 'react-native';
 import MapboxGL, {
   CameraProps,
-  AnimationMode,
+  CameraAnimationMode,
   CameraRef,
 } from '@rnmapbox/maps';
 import bbox from '@turf/bbox';
@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
-
   sheet: {
     paddingTop: 10,
     paddingHorizontal: 10,
@@ -84,7 +83,7 @@ const CameraAnimation = (props: any) => {
   );
   const camera = useRef<CameraRef>(null);
 
-  const [animationMode, setAnimationMode] = useState<AnimationMode>('moveTo');
+  const [animationMode, setAnimationMode] = useState<CameraAnimationMode>('moveTo');
   const [positions, setPositions] = useState([initialPosition]);
   const [padding, setPadding] = useState(zeroPadding);
 
@@ -93,7 +92,7 @@ const CameraAnimation = (props: any) => {
   }, [padding]);
 
   const move = (
-    _animationMode: AnimationMode,
+    _animationMode: CameraAnimationMode,
     shouldCreateMultiple: boolean,
   ) => {
     setAnimationMode(_animationMode);

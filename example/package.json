@@ -2,6 +2,7 @@
   "name": "RNMapboxGLExample",
   "version": "1.0.0",
   "private": true,
+  "main": "./lib",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios --simulator=\"iPhone SE (2nd generation)\"",
@@ -18,6 +19,7 @@
   "dependencies": {
     "@mapbox/geo-viewport": "^0.5.0",
     "@mapbox/mapbox-sdk": "^0.13.0",
+    "@rnmapbox/maps": "file:..",
     "@turf/along": "^6.5.0",
     "@turf/bbox": "^6.5.0",
     "@turf/bbox-polygon": "^6.5.0",
