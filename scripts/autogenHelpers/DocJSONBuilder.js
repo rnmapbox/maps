@@ -19,12 +19,15 @@ const MODULES_PATH = path.join(__dirname, '..', '..', 'javascript', 'modules');
 
 const OUTPUT_PATH = path.join(__dirname, '..', '..', 'docs', 'docs.json');
 const IGNORE_FILES = [
+  'index',
   'AbstractLayer',
   'AbstractSource',
   'NativeBridgeComponent',
 ];
 
 const IGNORE_METHODS = ['setNativeProps'];
+
+const fileExtensionsRegex = /.(js|tsx|(?<!d.)ts)$/;
 
 class DocJSONBuilder {
   constructor(styledLayers) {
@@ -40,7 +43,7 @@ class DocJSONBuilder {
 
   get options() {
     return {
-      match: /.(js|tsx|ts)$/,
+      match: fileExtensionsRegex,
       shortName: true,
     };
   }
@@ -260,7 +263,7 @@ class DocJSONBuilder {
           let parsed = docgen.parse(content, undefined, undefined, {
             filename: fileName,
           });
-          fileName = fileName.replace(/.(js|tsx|ts)+/, '');
+          fileName = fileName.replace(fileExtensionsRegex, '');
           results[fileName] = parsed;
           this.postprocess(results[fileName], fileName);
 
@@ -303,7 +306,7 @@ class DocJSONBuilder {
     });
   }
 
-  generate() {
+  async generate() {
     this.generateModulesTask({}, MODULES_PATH);
 
     const results = {};

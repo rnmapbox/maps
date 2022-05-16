@@ -1,5 +1,5 @@
-import { ReactNode, SyntheticEvent } from 'react';
-import {
+import type { ReactNode, SyntheticEvent } from 'react';
+import type {
   ViewProps,
   ViewStyle,
   StyleProp,
@@ -7,51 +7,54 @@ import {
   ImageSourcePropType,
 } from 'react-native';
 import { NativeModules, PermissionsAndroid } from 'react-native';
-import { Units, BBox, Id } from '@turf/helpers';
+import type { Units, BBox, Id } from '@turf/helpers';
 
-import MapView from './javascript/components/MapView';
-import Light from './javascript/components/Light';
-import PointAnnotation from './javascript/components/PointAnnotation';
-import Annotation from './javascript/components/annotations/Annotation';
-import Callout from './javascript/components/Callout';
-import UserLocation from './javascript/components/UserLocation';
+import {
+  MapView,
+  Light,
+  PointAnnotation,
+  Annotation,
+  Callout,
+  UserLocation,
+  VectorSource,
+  ShapeSource,
+  RasterSource,
+  RasterDemSource,
+  ImageSource,
+  Images,
+  FillLayer,
+  FillExtrusionLayer,
+  HeatmapLayer,
+  LineLayer,
+  CircleLayer,
+  SkyLayer,
+  SymbolLayer,
+  RasterLayer,
+  BackgroundLayer,
+  Terrain,
+  MarkerView,
+  Style,
+} from './javascript/components';
 import Camera, {
   CameraProps,
   CameraRef,
   UserTrackingMode,
   AnimationMode,
 } from './javascript/components/Camera';
-import VectorSource from './javascript/components/VectorSource';
-import ShapeSource from './javascript/components/ShapeSource';
-import RasterSource from './javascript/components/RasterSource';
-import RasterDemSource from './javascript/components/RasterDemSource';
-import ImageSource from './javascript/components/ImageSource';
-import Images from './javascript/components/Images';
-import FillLayer from './javascript/components/FillLayer';
-import FillExtrusionLayer from './javascript/components/FillExtrusionLayer';
-import HeatmapLayer from './javascript/components/HeatmapLayer';
-import LineLayer from './javascript/components/LineLayer';
-import CircleLayer from './javascript/components/CircleLayer';
-import SkyLayer from './javascript/components/SkyLayer';
-import SymbolLayer from './javascript/components/SymbolLayer';
-import RasterLayer from './javascript/components/RasterLayer';
-import BackgroundLayer from './javascript/components/BackgroundLayer';
-import Terrain from './javascript/components/Terrain';
 import locationManager from './javascript/modules/location/locationManager';
 import offlineManager from './javascript/modules/offline/offlineManager';
 import snapshotManager from './javascript/modules/snapshot/snapshotManager';
-import MarkerView from './javascript/components/MarkerView';
-import Animated from './javascript/utils/animated/Animated';
-import AnimatedPoint from './javascript/utils/animated/AnimatedPoint';
-import AnimatedShape from './javascript/utils/animated/AnimatedShape';
-import AnimatedCoordinatesArray from './javascript/utils/animated/AnimatedCoordinatesArray';
-import AnimatedExtractCoordinateFromArray from './javascript/utils/animated/AnimatedExtractCoordinateFromArray';
-import AnimatedRouteCoordinatesArray from './javascript/utils/animated/AnimatedRouteCoordinatesArray';
-import Style from './javascript/components/Style';
+import {
+  Animated,
+  AnimatedPoint,
+  AnimatedShape,
+  AnimatedCoordinatesArray,
+  AnimatedExtractCoordinateFromArray,
+  AnimatedRouteCoordinatesArray,
+} from './javascript/utils/animated';
 import Logger from './javascript/utils/Logger';
 import { isAndroid } from './javascript/utils';
 import geoUtils from './javascript/utils/geoUtils';
-import { MapboxGLDefinitions } from './definitions';
 
 // Types
 
@@ -915,59 +918,7 @@ export type {
   SkyLayerStyle,
 };
 
-interface MapboxGLType {
-  // Components
-  MapView: typeof MapboxGLDefinitions.MapView;
-  Light: typeof MapboxGLDefinitions.Light;
-  PointAnnotation: typeof MapboxGLDefinitions.PointAnnotation;
-  Annotation: any; // typeof MapboxGLDefinitions.Annotation; // TODO: Define in .d.ts file.
-  Callout: typeof MapboxGLDefinitions.Callout;
-  UserLocation: typeof MapboxGLDefinitions.UserLocation;
-  Camera: typeof Camera;
-  VectorSource: typeof MapboxGLDefinitions.VectorSource;
-  ShapeSource: typeof MapboxGLDefinitions.ShapeSource;
-  RasterSource: typeof MapboxGLDefinitions.RasterSource;
-  RasterDemSource: any; // typeof MapboxGLDefinitions.RasterDemSource; // TODO: Define in .d.ts file.
-  ImageSource: typeof MapboxGLDefinitions.ImageSource;
-  Images: typeof MapboxGLDefinitions.Images;
-  FillLayer: typeof MapboxGLDefinitions.FillLayer;
-  FillExtrusionLayer: typeof MapboxGLDefinitions.FillExtrusionLayer;
-  HeatmapLayer: typeof MapboxGLDefinitions.HeatmapLayer;
-  LineLayer: typeof MapboxGLDefinitions.LineLayer;
-  CircleLayer: typeof MapboxGLDefinitions.CircleLayer;
-  SkyLayer: any; // typeof MapboxGLDefinitions.SkyLayer; // TODO: Define in .d.ts file.
-  SymbolLayer: typeof MapboxGLDefinitions.SymbolLayer;
-  RasterLayer: typeof MapboxGLDefinitions.RasterLayer;
-  BackgroundLayer: typeof MapboxGLDefinitions.BackgroundLayer;
-  Terrain: any; // typeof MapboxGLDefinitions.Terrain; // TODO: Define in .d.ts file.
-  locationManager: typeof MapboxGLDefinitions.locationManager;
-  offlineManager: typeof MapboxGLDefinitions.offlineManager;
-  snapshotManager: typeof MapboxGLDefinitions.snapshotManager;
-  MarkerView: typeof MapboxGLDefinitions.MarkerView;
-  Animated: typeof MapboxGLDefinitions.Animated;
-  AnimatedPoint: typeof MapboxGLDefinitions.AnimatedPoint;
-  AnimatedShape: any; // typeof MapboxGLDefinitions.AnimatedShape; // TODO: Define in .d.ts file.
-  AnimatedCoordinatesArray: any; // typeof MapboxGLDefinitions.AnimatedCoordinatesArray; // TODO: Define in .d.ts file.
-  AnimatedExtractCoordinateFromArray: any; // typeof MapboxGLDefinitions.AnimatedExtractCoordinateFromArray; // TODO: Define in .d.ts file.
-  AnimatedRouteCoordinatesArray: any; // typeof MapboxGLDefinitions.AnimatedRouteCoordinatesArray; // TODO: Define in .d.ts file.
-  Style: typeof MapboxGLDefinitions.Style;
-  Logger: typeof MapboxGLDefinitions.Logger;
-  // Enums
-  InterpolationMode: typeof InterpolationMode;
-  StyleURL: typeof StyleURL;
-  // Classes
-  geoUtils: typeof geoUtils;
-  // Methods
-  requestAndroidLocationPermissions: typeof requestAndroidLocationPermissions;
-  removeCustomHeader: typeof MapboxGLDefinitions.removeCustomHeader;
-  addCustomHeader: typeof MapboxGLDefinitions.addCustomHeader;
-  setAccessToken: typeof MapboxGLDefinitions.setAccessToken;
-  getAccessToken: typeof MapboxGLDefinitions.getAccessToken;
-  setTelemetryEnabled: typeof MapboxGLDefinitions.setTelemetryEnabled;
-  setConnected: typeof MapboxGLDefinitions.setConnected;
-}
-
-const MapboxGL: MapboxGLType = {
+const MapboxGL = {
   ...NativeModules.MGLModule,
   // Components
   MapView,

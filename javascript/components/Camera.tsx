@@ -7,8 +7,8 @@ import React, {
   useRef,
 } from 'react';
 import { NativeModules, requireNativeComponent } from 'react-native';
-import { Position } from 'geojson';
-import { MapboxGLEvent } from '@rnmapbox/maps';
+import type { Position } from 'geojson';
+import type { MapboxGLEvent } from 'index';
 
 import geoUtils from '../utils/geoUtils';
 
