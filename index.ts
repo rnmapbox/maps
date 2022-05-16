@@ -8,6 +8,7 @@ import type {
 } from 'react-native';
 import { NativeModules, PermissionsAndroid } from 'react-native';
 import type { Units, BBox, Id } from '@turf/helpers';
+import type { CameraAnimationMode, UserTrackingMode } from 'types/Camera';
 
 import {
   MapView,
@@ -35,12 +36,7 @@ import {
   MarkerView,
   Style,
 } from './javascript/components';
-import Camera, {
-  CameraProps,
-  CameraRef,
-  UserTrackingMode,
-  AnimationMode,
-} from './javascript/components/Camera';
+import Camera, { CameraProps, CameraRef } from './javascript/components/Camera';
 import locationManager from './javascript/modules/location/locationManager';
 import offlineManager from './javascript/modules/offline/offlineManager';
 import snapshotManager from './javascript/modules/snapshot/snapshotManager';
@@ -847,7 +843,7 @@ export type {
   // Types
   CameraProps,
   CameraRef,
-  AnimationMode,
+  CameraAnimationMode,
   OfflineProgressStatus,
   OfflineProgressError,
   OfflinePack,
