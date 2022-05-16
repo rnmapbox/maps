@@ -493,7 +493,7 @@
         "required": false,
         "type": "boolean",
         "default": "none",
-        "description": "Whether the camera should send any configuration to the native module. Prevents unnecessary tile\nfetching and improves performance when the map is not visible. Defaults to `true`. (Not yet implemented.)"
+        "description": "Whether the camera should send any configuration to the native module. Prevents unnecessary tile\nfetching and improves performance when the map is not visible. Defaults to `true`."
       },
       {
         "name": "triggerKey",

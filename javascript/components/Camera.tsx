@@ -181,7 +181,7 @@ export interface CameraProps
   /** The configuration that the camera falls back on, if no other values are specified. */
   defaultSettings?: CameraStop;
   /** Whether the camera should send any configuration to the native module. Prevents unnecessary tile
-   * fetching and improves performance when the map is not visible. Defaults to `true`. (Not yet implemented.) */
+   * fetching and improves performance when the map is not visible. Defaults to `true`. */
   allowUpdates?: boolean;
   /** Any arbitrary primitive value that, when changed, causes the camera to retry moving to its target
    * configuration. (Not yet implemented.) */
@@ -338,6 +338,10 @@ const Camera = (props: CameraProps, ref: React.ForwardedRef<CameraRef>) => {
   }, [maxBounds]);
 
   const _setCamera: CameraRef['setCamera'] = (config) => {
+    if (!allowUpdates) {
+      return;
+    }
+
     if (!config.type)
       // @ts-expect-error The compiler doesn't understand that the `config` union type is guaranteed
       // to be an object type.
@@ -366,7 +370,7 @@ const Camera = (props: CameraProps, ref: React.ForwardedRef<CameraRef>) => {
       }
     }
   };
-  const setCamera = useCallback(_setCamera, [buildNativeStop]);
+  const setCamera = useCallback(_setCamera, [allowUpdates, buildNativeStop]);
 
   const _fitBounds: CameraRef['fitBounds'] = (
     ne,

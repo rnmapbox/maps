@@ -27,7 +27,7 @@
 | maxZoomLevel | `number` | `none` | `false` | The highest allowed zoom level. |
 | maxBounds | `{ne:Position;sw:Position;}` | `none` | `false` | The corners of a box defining the limits of where the camera can pan or zoom. |
 | defaultSettings | `CameraStop` | `none` | `false` | The configuration that the camera falls back on, if no other values are specified. |
-| allowUpdates | `boolean` | `none` | `false` | Whether the camera should send any configuration to the native module. Prevents unnecessary tile<br/>fetching and improves performance when the map is not visible. Defaults to `true`. (Not yet implemented.) |
+| allowUpdates | `boolean` | `none` | `false` | Whether the camera should send any configuration to the native module. Prevents unnecessary tile<br/>fetching and improves performance when the map is not visible. Defaults to `true`. |
 | triggerKey | `string \| number` | `none` | `false` | Any arbitrary primitive value that, when changed, causes the camera to retry moving to its target<br/>configuration. (Not yet implemented.) |
 | onUserTrackingModeChange | `(event:MapboxGLEvent<'usertrackingmodechange',{followUserLocation:boolean;followUserMode:UserTrackingMode\|null;}>,)=>void` | `none` | `false` | Executes when user tracking mode changes. |
 
