@@ -8,7 +8,11 @@ import React, {
 } from 'react';
 import { NativeModules, requireNativeComponent } from 'react-native';
 import type { Position } from 'geojson';
-import type { MapboxGLEvent } from 'index';
+import type {
+  CameraAnimationMode,
+  UserTrackingMode,
+  UserTrackingModeChangeCallback,
+} from 'types/Camera';
 
 import geoUtils from '../utils/geoUtils';
 
@@ -16,7 +20,7 @@ const NativeModule = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLCamera';
 
-const Modes: Record<string, AnimationMode> = {
+const Modes: Record<string, CameraAnimationMode> = {
   Flight: 'flyTo',
   Ease: 'easeTo',
   Linear: 'linearTo',
@@ -31,20 +35,6 @@ export const UserTrackingModes: Record<string, UserTrackingMode> = {
 };
 
 // Component types.
-
-export type AnimationMode = 'flyTo' | 'easeTo' | 'linearTo' | 'none' | 'moveTo';
-
-export type UserTrackingMode = 'normal' | 'compass' | 'course';
-
-type UserTrackingModeChangeCallback = (
-  event: MapboxGLEvent<
-    'usertrackingmodechange',
-    {
-      followUserLocation: boolean;
-      followUserMode: UserTrackingMode | null;
-    }
-  >,
-) => void;
 
 export interface CameraProps
   extends CameraStop,
@@ -81,7 +71,7 @@ interface CameraStop {
   /** The duration the map takes to animate to a new configuration. */
   animationDuration?: number;
   /** The easing or path the camera uses to animate to a new configuration. */
-  animationMode?: AnimationMode;
+  animationMode?: CameraAnimationMode;
 }
 
 interface CameraFollowConfig {
@@ -217,7 +207,7 @@ const Camera = (props: CameraProps, ref: React.ForwardedRef<CameraRef>) => {
   const camera: React.RefObject<RCTMGLCamera> = useRef(null);
 
   const nativeAnimationMode = useCallback(
-    (_mode?: AnimationMode): NativeAnimationMode | undefined => {
+    (_mode?: CameraAnimationMode): NativeAnimationMode | undefined => {
       switch (_mode) {
         case Modes.Flight:
           return NativeModule.CameraModes.Flight;

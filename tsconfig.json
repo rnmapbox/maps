@@ -27,5 +27,6 @@
   "include": [
     "javascript",
     "index.ts",
+    "types"
   ],
 }
