@@ -1,10 +1,14 @@
 import Foundation
 import MapboxMaps
 
-enum RCTMGLError: Error {
+enum RCTMGLError: Error, LocalizedError {
   case parseError(String)
   case failed(String)
   case paramError(String)
+
+  var errorDescription: String? {
+    return String(describing: self)
+  }
 }
 
 class Logger {
