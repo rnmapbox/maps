@@ -30,7 +30,9 @@
     "declaration": true
   },
   "include": [
+    "index.ts",
     "javascript/**/*",
+    "types/**/*"
   ],
   "exclude": [
     "example/**/*",

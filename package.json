@@ -30,7 +30,6 @@
     "lint:fix": "eslint . --fix",
     "prepare": "npm run build:plugin",
     "test:plugin": "expo-module test plugin",
-    "build": "rm -rf lib; npx tsc",
     "build:plugin": "tsc --build plugin",
     "lint:plugin": "eslint plugin/src/*"
   },
