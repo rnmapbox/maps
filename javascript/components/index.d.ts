@@ -1,4 +1,30 @@
+import { Properties } from '@turf/helpers';
+import { FeatureCollection, Geometry, Feature } from 'geojson';
+import {
+  BackgroundLayerProps,
+  CalloutProps,
+  CircleLayerProps,
+  Expression,
+  FillExtrusionLayerProps,
+  FillLayerProps,
+  HeatmapLayerProps,
+  ImageSourceProps,
+  ImagesProps,
+  LightProps,
+  LineLayerProps,
+  MapViewProps,
+  MarkerViewProps,
+  PointAnnotationProps,
+  RasterLayerProps,
+  RasterSourceProps,
+  ShapeSourceProps,
+  StyleProps,
+  SymbolLayerProps,
+  UserLocationProps,
+  VectorSourceProps,
+} from 'index';
 import type { Component } from 'react';
+import { ViewPropTypes } from 'react-native';
 
 export class MapView extends Component<MapViewProps> {
   longitude: number;
@@ -25,17 +51,6 @@ export class MapView extends Component<MapViewProps> {
     sourceLayerId?: string,
   ): void;
 }
-
-export class FillLayer extends Component<FillLayerProps> {}
-export class FillExtrusionLayer extends Component<FillExtrusionLayerProps> {}
-export class LineLayer extends Component<LineLayerProps> {}
-export class CircleLayer extends Component<CircleLayerProps> {}
-export class SymbolLayer extends Component<SymbolLayerProps> {}
-export class RasterLayer extends Component<RasterLayerProps> {}
-export class BackgroundLayer extends Component<BackgroundLayerProps> {}
-
-export class ShapeSource extends Component<ShapeSourceProps> {}
-export class ImageSource extends Component<ImageSourceProps> {}
 
 export class UserLocation extends Component<UserLocationProps> {}
 
@@ -82,14 +97,23 @@ export class BackgroundLayer extends Component<BackgroundLayerProps> {}
 export class CircleLayer extends Component<CircleLayerProps> {}
 export class FillExtrusionLayer extends Component<FillExtrusionLayerProps> {}
 export class FillLayer extends Component<FillLayerProps> {}
-export class LineLayer extends Component<LineLayerProps> {}
 export class RasterLayer extends Component<RasterLayerProps> {}
 export class SymbolLayer extends Component<SymbolLayerProps> {}
 export class HeatmapLayer extends Component<HeatmapLayerProps> {}
 export class Images extends Component<ImagesProps> {}
 export class ImageSource extends Component<ImageSourceProps> {}
+export class LineLayer extends Component<LineLayerProps> {}
 
 export class Annotation extends Component {} // TODO
-export class RasterDemSource extends Component {} // TODO
-export class SkyLayer extends Component {} // TODO
-export class Terrain extends Component {} // TODO
+export class RasterDemSource extends Component<ViewPropTypes> {
+  id: string;
+  url: string;
+  tileSize: number;
+  maxZoomLevel: number;
+}
+export class SkyLayer extends Component<ViewPropTypes> {
+  id: string;
+}
+export class Terrain extends Component<ViewPropTypes> {
+  exaggeration: number;
+}

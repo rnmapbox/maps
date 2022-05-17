@@ -1,3 +1,14 @@
+import {
+  Coord,
+  Feature,
+  FeatureCollection,
+  Geometry,
+  LineString,
+  Position,
+  Properties,
+} from '@turf/helpers';
+import { PositionsOptions, UnitsOptions } from 'index';
+
 export function makePoint<P = Properties>(
   coordinates: Position,
   properties?: P,
@@ -9,8 +20,8 @@ export function makeLineString<P = Properties>(
   options?: PositionsOptions,
 ): Feature<LineString, P>;
 export function makeLatLngBounds<G = Geometry, P = Properties>(
-  northEastCoordinates: Position[],
-  southWestCoordinates: Position[],
+  northEastCoordinates: Position,
+  southWestCoordinates: Position,
 ): FeatureCollection<G, P>;
 export function makeFeature<G = Geometry, P = Properties>(
   geometry: G,

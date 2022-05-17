@@ -1,12 +1,28 @@
 {
   "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs",
+    "jsx": "react-native",
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "Node",
+    "lib": [
+      "ESNext"
+    ],
     "rootDir": "./",
+    "outDir": "./lib",
+    "types": [],
     "allowJs": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true
-  }
+  },
+  "files": [
+    "index.js",
+  ],
+  "include": [
+    "../assets/**/*"
+  ],
+  "exclude": [
+    "node_modules/**/*",
+  ]
 }

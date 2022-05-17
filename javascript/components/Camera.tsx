@@ -7,9 +7,9 @@ import React, {
   useRef,
 } from 'react';
 import { NativeModules, requireNativeComponent } from 'react-native';
-import type { Position } from 'geojson';
-import type { MapboxGLEvent } from 'index';
+import { Position } from '@turf/helpers';
 
+import { MapboxGLEvent } from '../..';
 import geoUtils from '../utils/geoUtils';
 
 const NativeModule = NativeModules.MGLModule;
@@ -20,15 +20,15 @@ const nativeAnimationMode = (
   const NativeCameraModes = NativeModule.CameraModes;
 
   switch (mode) {
-    case CameraModes.Flight:
+    case 'flyTo':
       return NativeCameraModes.Flight;
-    case CameraModes.Ease:
+    case 'easeTo':
       return NativeCameraModes.Ease;
-    case CameraModes.Linear:
+    case 'linearTo':
       return NativeCameraModes.Linear;
-    case CameraModes.Move:
+    case 'moveTo':
       return NativeCameraModes.Move;
-    case CameraModes.None:
+    case 'none':
       return NativeCameraModes.Move;
     default:
       return NativeCameraModes.Ease;
@@ -36,14 +36,6 @@ const nativeAnimationMode = (
 };
 
 export const NATIVE_MODULE_NAME = 'RCTMGLCamera';
-
-const CameraModes: Record<string, CameraAnimationMode> = {
-  Flight: 'flyTo',
-  Ease: 'easeTo',
-  Linear: 'linearTo',
-  Move: 'moveTo',
-  None: 'none',
-};
 
 export type CameraAnimationMode =
   | 'flyTo'

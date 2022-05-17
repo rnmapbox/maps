@@ -3,6 +3,7 @@ import { Button } from 'react-native';
 import {
   MapView,
   SkyLayer,
+  CameraRef,
   Camera,
   Logger,
   Terrain,
@@ -19,7 +20,8 @@ const styles = {
 };
 
 function SkyAndTerran(props: BaseExampleProps) {
-  const cameraRef = useRef<Camera>();
+  const cameraRef = useRef<CameraRef>(null);
+  
   return (
     <Page {...props}>
       <Button
@@ -37,14 +39,14 @@ function SkyAndTerran(props: BaseExampleProps) {
         styleURL={'mapbox://styles/mapbox-map-design/ckhqrf2tz0dt119ny6azh975y'}
       >
         <Camera
+          ref={cameraRef}
           centerCoordinate={[
             // -74.00597, 40.71427
             //-122.4189591, 37.6614238,
             -114.34411, 32.6141,
           ]}
-          ref={cameraRef}
           zoomLevel={13.1}
-          bearing={80}
+          heading={80}
           pitch={85}
         />
 

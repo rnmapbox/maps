@@ -11,6 +11,7 @@
     ],
     "module": "esnext",
     "moduleResolution": "node",
+    "target": "esnext",
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "importsNotUsedAsValues": "preserve",
@@ -18,16 +19,19 @@
     "noImplicitReturns": true,
     "noImplicitUseStrict": false,
     "noStrictGenericChecks": false,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "esnext",
   },
+  "files": [
+    "index.ts",
+  ],
   "include": [
     "javascript",
-    "index.ts",
-    "types"
+    "types/**/*"
   ],
+  "exclude": [
+    "example/**/*",
+    "node_modules/**/*",
+  ]
 }
