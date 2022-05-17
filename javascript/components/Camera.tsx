@@ -8,8 +8,8 @@ import React, {
 } from 'react';
 import { NativeModules, requireNativeComponent } from 'react-native';
 import { Position } from '@turf/helpers';
+import { MapboxGLEvent } from 'index';
 
-import { MapboxGLEvent } from '../..';
 import geoUtils from '../utils/geoUtils';
 
 const NativeModule = NativeModules.MGLModule;

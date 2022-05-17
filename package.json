@@ -6,7 +6,18 @@
     "access": "public"
   },
   "author": "React Native Mapbox Team",
-  "main": "./lib/index.js",
+  "main": "./lib/index",
+  "module": "./lib/index",
+  "react-native": "src/index",
+  "source": "src/index",
+  "types": "./types/index.d.ts",
+  "files": [
+    "lib",
+    "android",
+    "!android/build",
+    "ios",
+    "!ios/build"
+  ],
   "keywords": [
     "gl",
     "ios",
