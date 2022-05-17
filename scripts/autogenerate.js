@@ -473,7 +473,7 @@ async function generate() {
 
   // compile TS and JS
   console.log('Compiling ./lib directory');
-  execSync('npx tsc; cp -R ./assets ./lib/assets');
+  execSync('rm -rf ./lib; npx tsc; cp -R ./assets ./lib/assets');
 
   // autogenerate docs
   const docBuilder = new DocJSONBuilder(layers);
