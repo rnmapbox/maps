@@ -8,6 +8,9 @@
   "author": "React Native Mapbox Team",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
   "keywords": [
     "gl",
     "ios",
