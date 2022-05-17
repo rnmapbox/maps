@@ -22,13 +22,15 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
+    "paths": {
+      "types": [
+        "types/index.d.ts"
+      ]
+    },
+    "declaration": true
   },
-  "files": [
-    "index.ts",
-  ],
   "include": [
-    "javascript",
-    "types/**/*"
+    "javascript/**/*",
   ],
   "exclude": [
     "example/**/*",

@@ -6,18 +6,8 @@
     "access": "public"
   },
   "author": "React Native Mapbox Team",
-  "main": "./lib/index",
-  "module": "./lib/index",
-  "react-native": "src/index",
-  "source": "src/index",
-  "types": "./types/index.d.ts",
-  "files": [
-    "lib",
-    "android",
-    "!android/build",
-    "ios",
-    "!ios/build"
-  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "keywords": [
     "gl",
     "ios",
@@ -40,6 +30,7 @@
     "lint:fix": "eslint . --fix",
     "prepare": "npm run build:plugin",
     "test:plugin": "expo-module test plugin",
+    "build": "rm -rf lib; npx tsc",
     "build:plugin": "tsc --build plugin",
     "lint:plugin": "eslint plugin/src/*"
   },
