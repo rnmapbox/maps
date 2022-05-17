@@ -35,6 +35,7 @@
     "types/**/*"
   ],
   "exclude": [
+    "lib/**/*",
     "example/**/*",
     "node_modules/**/*",
   ]
