@@ -8,9 +8,9 @@ import React, {
 } from 'react';
 import { NativeModules, requireNativeComponent } from 'react-native';
 import { Position } from '@turf/helpers';
-import { MapboxGLEvent } from 'index';
 
 import geoUtils from '../utils/geoUtils';
+import { MapboxGLEvent } from '../..';
 
 const NativeModule = NativeModules.MGLModule;
 

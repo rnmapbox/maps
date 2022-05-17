@@ -7,7 +7,8 @@ import {
   Position,
   Properties,
 } from '@turf/helpers';
-import { PositionsOptions, UnitsOptions } from 'index';
+
+import { PositionsOptions, UnitsOptions } from '../..';
 
 export function makePoint<P = Properties>(
   coordinates: Position,

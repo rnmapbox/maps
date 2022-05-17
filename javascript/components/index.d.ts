@@ -1,5 +1,8 @@
 import { Properties } from '@turf/helpers';
 import { FeatureCollection, Geometry, Feature } from 'geojson';
+import type { Component } from 'react';
+import { ViewPropTypes } from 'react-native';
+
 import {
   BackgroundLayerProps,
   CalloutProps,
@@ -22,9 +25,7 @@ import {
   SymbolLayerProps,
   UserLocationProps,
   VectorSourceProps,
-} from 'index';
-import type { Component } from 'react';
-import { ViewPropTypes } from 'react-native';
+} from '.';
 
 export class MapView extends Component<MapViewProps> {
   longitude: number;

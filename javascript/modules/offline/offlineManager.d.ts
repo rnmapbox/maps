@@ -1,8 +1,9 @@
 import { Component } from 'react';
-import { OfflineProgressStatus, OfflineProgressError } from 'index';
 
 import OfflineCreatePackOptions from './OfflineCreatePackOptions';
 import OfflinePack from './OfflinePack';
+
+import { OfflineProgressStatus, OfflineProgressError } from '.';
 
 export class OfflineManager extends Component {
   createPack(
