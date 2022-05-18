@@ -8,7 +8,7 @@ import FillExtrusionLayer from './FillExtrusionLayer';
 import Light from './Light';
 import PointAnnotation from './PointAnnotation';
 import Style from './Style';
-import Annotation from './Annotation';
+import Annotation from './annotations/Annotation';
 import FillLayer from './FillLayer';
 import LineLayer from './LineLayer';
 import RasterDemSource from './RasterDemSource';
