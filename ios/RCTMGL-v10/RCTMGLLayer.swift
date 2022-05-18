@@ -72,6 +72,9 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   
   var styleLayer: Layer? = nil
   
+  /// wearther we inserted the layer or we're referring to an existing layer
+  var existingLayer = false
+
   // MARK: - RCTMGLMapComponent
   func waitForStyleLoad() -> Bool {
     return true
@@ -174,13 +177,13 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
       return
     }
 
-    var add = false
     do {
       if (style.styleManager.styleLayerExists(forLayerId: id)) {
-        self.styleLayer = try self.findLayer(style: style, id: id)
+        styleLayer = try findLayer(style: style, id: id)
+        existingLayer = true
       } else {
-        self.styleLayer = try self.makeLayer(style: style)
-        add = true
+        styleLayer = try makeLayer(style: style)
+        existingLayer = false
       }
     } catch {
       Logger.log(level: .error, message: "find/makeLayer failed for layer id=\(id)", error: error)
@@ -190,14 +193,14 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
       Logger.log(level: .error, message: "find/makeLayer retuned nil for layer id=\(id)")
       return
     }
-    self.setOptions(&self.styleLayer!)
-    self.addStyles()
-    if add {
-      self.inserLayer(map)
+    setOptions(&self.styleLayer!)
+    addStyles()
+    if !existingLayer {
+      inserLayer(map)
     } else {
-      self.updateLayer(map)
+      updateLayer(map)
     }
-    self.addedToMap()
+    addedToMap()
   }
   
   func removeFromMap(_ map: RCTMGLMapView, style: Style) {
@@ -210,7 +213,9 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     }
     
     if let sourceID = sourceID {
-      layer.source = sourceID
+      if !(existingLayer && sourceID == DEFAULT_SOURCE_ID) {
+        layer.source = sourceID
+      }
     }
     
     if let filter = filter, filter.count > 0 {
