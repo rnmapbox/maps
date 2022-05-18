@@ -60,6 +60,7 @@ yarn.lock
 
 # Compiled
 lib
+*.tgz
 
 # Expo
 .expo
