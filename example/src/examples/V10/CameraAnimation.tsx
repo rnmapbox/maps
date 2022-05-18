@@ -281,7 +281,6 @@ const CameraAnimation = (props: any) => {
           animationDuration={1000}
           animationMode={animationMode}
         />
-
         {inputKind === 'declarative' &&
           features.map((f) => {
             const id = JSON.stringify(f.geometry.coordinates);

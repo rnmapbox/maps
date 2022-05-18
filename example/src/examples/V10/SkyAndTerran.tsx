@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Button } from 'react-native';
-import {
+import MapboxGL, {
   MapView,
   SkyLayer,
   CameraRef,
@@ -34,7 +34,7 @@ function SkyAndTerran(props: BaseExampleProps) {
           })
         }
       />
-      <MapView
+      <MapboxGL.MapView
         style={styles.mapView}
         styleURL={'mapbox://styles/mapbox-map-design/ckhqrf2tz0dt119ny6azh975y'}
       >
@@ -67,7 +67,7 @@ function SkyAndTerran(props: BaseExampleProps) {
 
           <Terrain exaggeration={1.5} />
         </RasterDemSource>
-      </MapView>
+      </MapboxGL.MapView>
     </Page>
   );
 }
