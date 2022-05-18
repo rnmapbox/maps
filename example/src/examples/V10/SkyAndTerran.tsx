@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import { Button } from 'react-native';
 import MapboxGL, {
-  MapView,
   SkyLayer,
   CameraRef,
   Camera,
@@ -21,7 +20,7 @@ const styles = {
 
 function SkyAndTerran(props: BaseExampleProps) {
   const cameraRef = useRef<CameraRef>(null);
-  
+
   return (
     <Page {...props}>
       <Button
