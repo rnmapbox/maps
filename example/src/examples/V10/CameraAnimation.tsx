@@ -4,6 +4,7 @@ import MapboxGL, {
   CameraProps,
   CameraAnimationMode,
   CameraRef,
+  Camera,
 } from '@rnmapbox/maps';
 import bbox from '@turf/bbox';
 import { Feature, LineString, Point, Position } from '@turf/helpers';
@@ -271,7 +272,7 @@ const CameraAnimation = (props: any) => {
   return (
     <Page {...props}>
       <MapboxGL.MapView style={styles.map}>
-        <MapboxGL.Camera
+        <Camera
           ref={camera}
           {...centerOrBounds}
           zoomLevel={12}
