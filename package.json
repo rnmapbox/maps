@@ -10,7 +10,10 @@
   "types": "lib/index.d.ts",
   "files": [
     "lib",
-    "javascript"
+    "ios",
+    "android",
+    "scripts",
+    "rnmapbox-maps.podspec"
   ],
   "keywords": [
     "gl",
@@ -74,6 +77,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-import": "2.25.3",
+    "eslint-plugin-react-native": "^4.0.0",
     "expo-module-scripts": "^2.0.0",
     "husky": "4.3.8",
     "jest": "27.5.1",
