@@ -1,4 +1,4 @@
-import MapboxGL from '../javascript';
+import MapboxGL from '..';
 
 describe('Public Interface', () => {
   it('should contain all expected components and utils', () => {
@@ -19,6 +19,9 @@ describe('Public Interface', () => {
       'offlineManager',
       'snapshotManager',
       'locationManager',
+
+      // utils
+      'geoUtils',
 
       // layers
       'FillLayer',

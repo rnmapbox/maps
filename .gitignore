@@ -58,6 +58,10 @@ package-lock.json
 yarn.lock
 /example/yarn.lock
 
+# Compiled
+lib
+*.tgz
+
 # Expo
 .expo
 

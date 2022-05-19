@@ -209,609 +209,306 @@
     "name": "Callout"
   },
   "Camera": {
-    "description": "",
+    "description": "Controls the perspective from which the user sees the map.\n\nTo use imperative methods, pass in a ref object:\n\n<pre>const camera = useRef<CameraRef>(null);\n\nuseEffect(() => {\n  camera.current?.setCamera({\n    centerCoordinate: [lon, lat],\n  });\n}, []);\n\nreturn (\n  \\<Camera ref={camera} />\n);</pre>",
     "displayName": "Camera",
     "methods": [
       {
-        "name": "fitBounds",
-        "docblock": "Map camera transitions to fit provided bounds\n\n@example\nthis.camera.fitBounds([lng, lat], [lng, lat])\nthis.camera.fitBounds([lng, lat], [lng, lat], 20, 1000) // padding for all sides\nthis.camera.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)\nthis.camera.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)\n\n@param {Array<Number>} northEastCoordinates - North east coordinate of bound\n@param {Array<Number>} southWestCoordinates - South west coordinate of bound\n@param {Number=} padding - Camera padding for bound\n@param {Number=} animationDuration - Duration of camera animation\n@return {void}",
-        "modifiers": [],
-        "params": [
-          {
-            "name": "northEastCoordinates",
-            "description": "North east coordinate of bound",
-            "type": {
-              "name": "Array",
-              "elements": [
-                {
-                  "name": "Number"
-                }
-              ]
-            },
-            "optional": false
-          },
-          {
-            "name": "southWestCoordinates",
-            "description": "South west coordinate of bound",
-            "type": {
-              "name": "Array",
-              "elements": [
-                {
-                  "name": "Number"
-                }
-              ]
-            },
-            "optional": false
-          },
-          {
-            "name": "padding",
-            "description": "Camera padding for bound",
-            "type": {
-              "name": "Number"
-            },
-            "optional": true
-          },
-          {
-            "name": "animationDuration",
-            "description": "Duration of camera animation",
-            "type": {
-              "name": "Number"
-            },
-            "optional": true
-          }
-        ],
-        "returns": {
-          "description": null,
-          "type": {
-            "name": "void"
-          }
-        },
-        "description": "Map camera transitions to fit provided bounds",
-        "examples": [
-          "\nthis.camera.fitBounds([lng, lat], [lng, lat])\nthis.camera.fitBounds([lng, lat], [lng, lat], 20, 1000) // padding for all sides\nthis.camera.fitBounds([lng, lat], [lng, lat], [verticalPadding, horizontalPadding], 1000)\nthis.camera.fitBounds([lng, lat], [lng, lat], [top, right, bottom, left], 1000)\n\n"
-        ]
-      },
-      {
-        "name": "flyTo",
-        "docblock": "Map camera will fly to new coordinate\n\n@example\nthis.camera.flyTo([lng, lat])\nthis.camera.flyTo([lng, lat], 12000)\n\n @param {Array<Number>} coordinates - Coordinates that map camera will jump too\n @param {Number=} animationDuration - Duration of camera animation\n @return {void}",
-        "modifiers": [],
-        "params": [
-          {
-            "name": "coordinates",
-            "description": "Coordinates that map camera will jump too",
-            "type": {
-              "name": "Array",
-              "elements": [
-                {
-                  "name": "Number"
-                }
-              ]
-            },
-            "optional": false
-          },
-          {
-            "name": "animationDuration",
-            "description": "Duration of camera animation",
-            "type": {
-              "name": "Number"
-            },
-            "optional": true
-          }
-        ],
-        "returns": {
-          "description": null,
-          "type": {
-            "name": "void"
-          }
-        },
-        "description": "Map camera will fly to new coordinate",
-        "examples": [
-          "\nthis.camera.flyTo([lng, lat])\nthis.camera.flyTo([lng, lat], 12000)\n\n "
-        ]
-      },
-      {
-        "name": "moveTo",
-        "docblock": "Map camera will move to new coordinate at the same zoom level\n\n@example\nthis.camera.moveTo([lng, lat], 200) // eases camera to new location based on duration\nthis.camera.moveTo([lng, lat]) // snaps camera to new location without any easing\n\n @param {Array<Number>} coordinates - Coordinates that map camera will move too\n @param {Number=} animationDuration - Duration of camera animation\n @return {void}",
-        "modifiers": [],
-        "params": [
-          {
-            "name": "coordinates",
-            "description": "Coordinates that map camera will move too",
-            "type": {
-              "name": "Array",
-              "elements": [
-                {
-                  "name": "Number"
-                }
-              ]
-            },
-            "optional": false
-          },
-          {
-            "name": "animationDuration",
-            "description": "Duration of camera animation",
-            "type": {
-              "name": "Number"
-            },
-            "optional": true
-          }
-        ],
-        "returns": {
-          "description": null,
-          "type": {
-            "name": "void"
-          }
-        },
-        "description": "Map camera will move to new coordinate at the same zoom level",
-        "examples": [
-          "\nthis.camera.moveTo([lng, lat], 200) // eases camera to new location based on duration\nthis.camera.moveTo([lng, lat]) // snaps camera to new location without any easing\n\n "
-        ]
-      },
-      {
-        "name": "zoomTo",
-        "docblock": "Map camera will zoom to specified level\n\n@example\nthis.camera.zoomTo(16)\nthis.camera.zoomTo(16, 100)\n\n@param {Number} zoomLevel - Zoom level that the map camera will animate too\n@param {Number=} animationDuration - Duration of camera animation\n@return {void}",
-        "modifiers": [],
-        "params": [
-          {
-            "name": "zoomLevel",
-            "description": "Zoom level that the map camera will animate too",
-            "type": {
-              "name": "Number"
-            },
-            "optional": false
-          },
-          {
-            "name": "animationDuration",
-            "description": "Duration of camera animation",
-            "type": {
-              "name": "Number"
-            },
-            "optional": true
-          }
-        ],
-        "returns": {
-          "description": null,
-          "type": {
-            "name": "void"
-          }
-        },
-        "description": "Map camera will zoom to specified level",
-        "examples": [
-          "\nthis.camera.zoomTo(16)\nthis.camera.zoomTo(16, 100)\n\n"
-        ]
-      },
-      {
         "name": "setCamera",
-        "docblock": "Map camera will perform updates based on provided config. Advanced use only!\n\n@example\nthis.camera.setCamera({\n  centerCoordinate: [lng, lat],\n  zoomLevel: 16,\n  animationDuration: 2000,\n})\n\nthis.camera.setCamera({\n  stops: [\n    { pitch: 45, animationDuration: 200 },\n    { heading: 180, animationDuration: 300 },\n  ]\n})\n\n @param {Object} config - Camera configuration",
+        "docblock": "Sets any camera properties, with default fallbacks if unspecified.\n\n@example\ncamera.current?.setCamera({\n  centerCoordinate: [lon, lat],\n});\n\n@param {CameraStop | CameraStops} config",
         "modifiers": [],
         "params": [
           {
             "name": "config",
-            "description": "Camera configuration",
+            "description": null,
             "type": {
-              "name": "Object"
+              "name": "CameraStop \\| CameraStops"
             },
             "optional": false
           }
         ],
         "returns": null,
-        "description": "Map camera will perform updates based on provided config. Advanced use only!",
+        "description": "Sets any camera properties, with default fallbacks if unspecified.",
         "examples": [
-          "\nthis.camera.setCamera({\n  centerCoordinate: [lng, lat],\n  zoomLevel: 16,\n  animationDuration: 2000,\n})\n\nthis.camera.setCamera({\n  stops: [\n    { pitch: 45, animationDuration: 200 },\n    { heading: 180, animationDuration: 300 },\n  ]\n})\n\n "
+          "\ncamera.current?.setCamera({\n  centerCoordinate: [lon, lat],\n});\n\n"
+        ]
+      },
+      {
+        "name": "fitBounds",
+        "docblock": "Set the camera position to enclose the provided bounds, with optional\npadding and duration.\n\n@example\ncamera.fitBounds([lon, lat], [lon, lat]);\ncamera.fitBounds([lon, lat], [lon, lat], [20, 0], 1000);\n\n@param {Position} ne Northeast coordinate of bounding box\n@param {Position} sw Southwest coordinate of bounding box\n@param {number | number[]} paddingConfig The viewport padding, specified as a number (all sides equal), a 2-item array ([vertical, horizontal]), or a 4-item array ([top, right, bottom, left])\n@param {number} animationDuration The transition duration",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "ne",
+            "description": "Northeast coordinate of bounding box",
+            "type": {
+              "name": "Position"
+            },
+            "optional": false
+          },
+          {
+            "name": "sw",
+            "description": "Southwest coordinate of bounding box",
+            "type": {
+              "name": "Position"
+            },
+            "optional": false
+          },
+          {
+            "name": "paddingConfig",
+            "description": "The viewport padding, specified as a number (all sides equal), a 2-item array ([vertical, horizontal]), or a 4-item array ([top, right, bottom, left])",
+            "type": {
+              "name": "number \\| Array"
+            },
+            "optional": false
+          },
+          {
+            "name": "animationDuration",
+            "description": "The transition duration",
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Set the camera position to enclose the provided bounds, with optional\npadding and duration.",
+        "examples": [
+          "\ncamera.fitBounds([lon, lat], [lon, lat]);\ncamera.fitBounds([lon, lat], [lon, lat], [20, 0], 1000);\n\n"
+        ]
+      },
+      {
+        "name": "flyTo",
+        "docblock": "Sets the camera to center around the provided coordinate using a realistic 'travel'\nanimation, with optional duration.\n\n@example\ncamera.flyTo([lon, lat]);\ncamera.flyTo([lon, lat], 12000);\n\n @param {Position} centerCoordinate The coordinate to center in the view\n @param {number} animationDuration The transition duration",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "centerCoordinate",
+            "description": "The coordinate to center in the view",
+            "type": {
+              "name": "Position"
+            },
+            "optional": false
+          },
+          {
+            "name": "animationDuration",
+            "description": "The transition duration",
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Sets the camera to center around the provided coordinate using a realistic 'travel'\nanimation, with optional duration.",
+        "examples": [
+          "\ncamera.flyTo([lon, lat]);\ncamera.flyTo([lon, lat], 12000);\n\n "
+        ]
+      },
+      {
+        "name": "moveTo",
+        "docblock": "Sets the camera to center around the provided coordinate, with optional duration.\n\n@example\ncamera.moveTo([lon, lat], 200);\ncamera.moveTo([lon, lat]);\n\n @param {Position} centerCoordinate The coordinate to center in the view\n @param {number} animationDuration The transition duration",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "centerCoordinate",
+            "description": "The coordinate to center in the view",
+            "type": {
+              "name": "Position"
+            },
+            "optional": false
+          },
+          {
+            "name": "animationDuration",
+            "description": "The transition duration",
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Sets the camera to center around the provided coordinate, with optional duration.",
+        "examples": [
+          "\ncamera.moveTo([lon, lat], 200);\ncamera.moveTo([lon, lat]);\n\n "
+        ]
+      },
+      {
+        "name": "zoomTo",
+        "docblock": "Zooms the camera to the provided level, with optional duration.\n\n@example\ncamera.zoomTo(16);\ncamera.zoomTo(16, 100);\n\n@param {number} zoomLevel The target zoom\n@param {number} animationDuration The transition duration",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "zoomLevel",
+            "description": "The target zoom",
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          },
+          {
+            "name": "animationDuration",
+            "description": "The transition duration",
+            "type": {
+              "name": "number"
+            },
+            "optional": false
+          }
+        ],
+        "returns": null,
+        "description": "Zooms the camera to the provided level, with optional duration.",
+        "examples": [
+          "\ncamera.zoomTo(16);\ncamera.zoomTo(16, 100);\n\n"
         ]
       }
     ],
     "props": [
       {
-        "name": "allowUpdates",
+        "name": "type",
         "required": false,
-        "type": "bool",
-        "default": "true",
-        "description": "If false, the camera will not send any props to the native module. Intended to be used to prevent unnecessary tile fetching and improve performance when the map is not visible. Defaults to true."
-      },
-      {
-        "name": "animationDuration",
-        "required": false,
-        "type": "number",
-        "default": "2000",
-        "description": "The duration a camera update takes (in ms)"
-      },
-      {
-        "name": "animationMode",
-        "required": false,
-        "type": "enum",
-        "default": "'easeTo'",
-        "description": "The animation style when the camara updates. One of:\n`flyTo`: A complex flight animation, affecting both position and zoom.\n`easeTo`: A standard damped curve.\n`linearTo`: An even linear transition.\n`none`: An instantaneous change (v10 only).\n`moveTo`: An instantaneous change (<v10)."
-      },
-      {
-        "name": "defaultSettings",
-        "required": false,
-        "type": {
-          "name": "shape",
-          "value": [
-            {
-              "name": "centerCoordinate",
-              "required": false,
-              "type": {
-                "name": "array",
-                "value": {
-                  "type": "number"
-                }
-              },
-              "default": "none",
-              "description": "Center coordinate on map [lng, lat]"
-            },
-            {
-              "name": "padding",
-              "required": false,
-              "type": {
-                "name": "shape",
-                "value": [
-                  {
-                    "name": "paddingLeft",
-                    "required": false,
-                    "type": "number",
-                    "default": "none",
-                    "description": "Left padding in points"
-                  },
-                  {
-                    "name": "paddingRight",
-                    "required": false,
-                    "type": "number",
-                    "default": "none",
-                    "description": "Right padding in points"
-                  },
-                  {
-                    "name": "paddingTop",
-                    "required": false,
-                    "type": "number",
-                    "default": "none",
-                    "description": "Top padding in points"
-                  },
-                  {
-                    "name": "paddingBottom",
-                    "required": false,
-                    "type": "number",
-                    "default": "none",
-                    "description": "Bottom padding in points"
-                  }
-                ]
-              },
-              "default": "none",
-              "description": "Padding around edges of map in points"
-            },
-            {
-              "name": "heading",
-              "required": false,
-              "type": "number",
-              "default": "none",
-              "description": "Heading on map"
-            },
-            {
-              "name": "pitch",
-              "required": false,
-              "type": "number",
-              "default": "none",
-              "description": "Pitch on map"
-            },
-            {
-              "name": "bounds",
-              "required": false,
-              "type": {
-                "name": "shape",
-                "value": [
-                  {
-                    "name": "ne",
-                    "required": true,
-                    "type": {
-                      "name": "array",
-                      "value": {
-                        "type": "number"
-                      }
-                    },
-                    "default": "none",
-                    "description": "North east coordinate of bound"
-                  },
-                  {
-                    "name": "sw",
-                    "required": true,
-                    "type": {
-                      "name": "array",
-                      "value": {
-                        "type": "number"
-                      }
-                    },
-                    "default": "none",
-                    "description": "South west coordinate of bound"
-                  },
-                  {
-                    "name": "paddingLeft",
-                    "required": false,
-                    "type": "number",
-                    "default": "none",
-                    "description": "Left padding in points (deprecated; use root `padding` property instead)"
-                  },
-                  {
-                    "name": "paddingRight",
-                    "required": false,
-                    "type": "number",
-                    "default": "none",
-                    "description": "Right padding in points (deprecated; use root `padding` property instead)"
-                  },
-                  {
-                    "name": "paddingTop",
-                    "required": false,
-                    "type": "number",
-                    "default": "none",
-                    "description": "Top padding in points (deprecated; use root `padding` property instead)"
-                  },
-                  {
-                    "name": "paddingBottom",
-                    "required": false,
-                    "type": "number",
-                    "default": "none",
-                    "description": "Bottom padding in points (deprecated; use root `padding` property instead)"
-                  }
-                ]
-              },
-              "default": "none",
-              "description": "Represents a rectangle in geographical coordinates marking the visible area of the map.\nThe `bounds.padding*` properties are deprecated; use root `padding` property instead."
-            },
-            {
-              "name": "onUserTrackingModeChange",
-              "required": false,
-              "type": "func",
-              "default": "none",
-              "description": "Callback that is triggered on user tracking mode changes"
-            },
-            {
-              "name": "zoomLevel",
-              "required": false,
-              "type": "number",
-              "default": "none",
-              "description": "Zoom level of the map"
-            }
-          ]
-        },
+        "type": "literal",
         "default": "none",
-        "description": "Default view settings applied on camera"
+        "description": "Allows static check of the data type. For internal use only."
       },
       {
         "name": "centerCoordinate",
         "required": false,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": "number"
-          }
-        },
+        "type": "Position",
         "default": "none",
-        "description": "Center coordinate on map [lng, lat]"
+        "description": "The location on which the map should center."
       },
       {
-        "name": "padding",
+        "name": "bounds",
         "required": false,
-        "type": {
-          "name": "shape",
-          "value": [
-            {
-              "name": "paddingLeft",
-              "required": false,
-              "type": "number",
-              "default": "none",
-              "description": "Left padding in points"
-            },
-            {
-              "name": "paddingRight",
-              "required": false,
-              "type": "number",
-              "default": "none",
-              "description": "Right padding in points"
-            },
-            {
-              "name": "paddingTop",
-              "required": false,
-              "type": "number",
-              "default": "none",
-              "description": "Top padding in points"
-            },
-            {
-              "name": "paddingBottom",
-              "required": false,
-              "type": "number",
-              "default": "none",
-              "description": "Bottom padding in points"
-            }
-          ]
-        },
+        "type": "CameraBoundsWithPadding",
         "default": "none",
-        "description": "Padding around edges of map in points"
+        "description": "The corners of a box around which the map should bound. Contains padding props for backwards\ncompatibility; the root `padding` prop should be used instead."
       },
       {
         "name": "heading",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "Heading on map"
+        "description": "The heading (orientation) of the map."
       },
       {
         "name": "pitch",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "Pitch on map"
-      },
-      {
-        "name": "bounds",
-        "required": false,
-        "type": {
-          "name": "shape",
-          "value": [
-            {
-              "name": "ne",
-              "required": true,
-              "type": {
-                "name": "array",
-                "value": {
-                  "type": "number"
-                }
-              },
-              "default": "none",
-              "description": "North east coordinate of bound"
-            },
-            {
-              "name": "sw",
-              "required": true,
-              "type": {
-                "name": "array",
-                "value": {
-                  "type": "number"
-                }
-              },
-              "default": "none",
-              "description": "South west coordinate of bound"
-            },
-            {
-              "name": "paddingLeft",
-              "required": false,
-              "type": "number",
-              "default": "none",
-              "description": "Left padding in points (deprecated; use root `padding` property instead)"
-            },
-            {
-              "name": "paddingRight",
-              "required": false,
-              "type": "number",
-              "default": "none",
-              "description": "Right padding in points (deprecated; use root `padding` property instead)"
-            },
-            {
-              "name": "paddingTop",
-              "required": false,
-              "type": "number",
-              "default": "none",
-              "description": "Top padding in points (deprecated; use root `padding` property instead)"
-            },
-            {
-              "name": "paddingBottom",
-              "required": false,
-              "type": "number",
-              "default": "none",
-              "description": "Bottom padding in points (deprecated; use root `padding` property instead)"
-            }
-          ]
-        },
-        "default": "none",
-        "description": "Represents a rectangle in geographical coordinates marking the visible area of the map.\nThe `bounds.padding*` properties are deprecated; use root `padding` property instead."
-      },
-      {
-        "name": "onUserTrackingModeChange",
-        "required": false,
-        "type": "func",
-        "default": "none",
-        "description": "Callback that is triggered on user tracking mode changes"
+        "description": "The pitch of the map."
       },
       {
         "name": "zoomLevel",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "Zoom level of the map"
+        "description": "The zoom level of the map."
       },
       {
-        "name": "minZoomLevel",
+        "name": "padding",
+        "required": false,
+        "type": "CameraPadding",
+        "default": "none",
+        "description": "The viewport padding in points."
+      },
+      {
+        "name": "animationDuration",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "The minimum zoom level of the map"
+        "description": "The duration the map takes to animate to a new configuration."
       },
       {
-        "name": "maxZoomLevel",
+        "name": "animationMode",
         "required": false,
-        "type": "number",
+        "type": "\\| 'flyTo'\n\\| 'easeTo'\n\\| 'linearTo'\n\\| 'moveTo'\n\\| 'none'",
         "default": "none",
-        "description": "The maximum zoom level of the map"
-      },
-      {
-        "name": "maxBounds",
-        "required": false,
-        "type": {
-          "name": "shape",
-          "value": [
-            {
-              "name": "ne",
-              "required": true,
-              "type": {
-                "name": "array",
-                "value": {
-                  "type": "number"
-                }
-              },
-              "default": "none",
-              "description": "northEastCoordinates - North east coordinate of bound"
-            },
-            {
-              "name": "sw",
-              "required": true,
-              "type": {
-                "name": "array",
-                "value": {
-                  "type": "number"
-                }
-              },
-              "default": "none",
-              "description": "southWestCoordinates - South west coordinate of bound"
-            }
-          ]
-        },
-        "default": "none",
-        "description": "Restrict map panning so that the center is within these bounds"
-      },
-      {
-        "name": "followUserLocation",
-        "required": false,
-        "type": "bool",
-        "default": "none",
-        "description": "Should the map orientation follow the user's."
+        "description": "The easing or path the camera uses to animate to a new configuration."
       },
       {
         "name": "followUserMode",
         "required": false,
-        "type": "enum",
+        "type": "'normal' \\| 'compass' \\| 'course'",
         "default": "none",
-        "description": "The mode used to track the user location on the map. One of; \"normal\", \"compass\", \"course\". Each mode string is also available as a member on the `MapboxGL.UserTrackingModes` object. `Follow` (normal), `FollowWithHeading` (compass), `FollowWithCourse` (course). NOTE: `followUserLocation` must be set to `true` for any of the modes to take effect. [Example](../example/src/examples/SetUserTrackingModes.js)"
+        "description": "The mode used to track the user location on the map."
+      },
+      {
+        "name": "followUserLocation",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Whether the map orientation follows the user location."
       },
       {
         "name": "followZoomLevel",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "The zoomLevel on map while followUserLocation is set to `true`"
+        "description": "The zoom level used when following the user location."
       },
       {
         "name": "followPitch",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "The pitch on map while followUserLocation is set to `true`"
+        "description": "The pitch used when following the user location."
       },
       {
         "name": "followHeading",
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "The heading on map while followUserLocation is set to `true`"
+        "description": "The heading used when following the user location."
+      },
+      {
+        "name": "minZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The lowest allowed zoom level."
+      },
+      {
+        "name": "maxZoomLevel",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The highest allowed zoom level."
+      },
+      {
+        "name": "maxBounds",
+        "required": false,
+        "type": "{ne:Position;sw:Position;}",
+        "default": "none",
+        "description": "The corners of a box defining the limits of where the camera can pan or zoom."
+      },
+      {
+        "name": "defaultSettings",
+        "required": false,
+        "type": "CameraStop",
+        "default": "none",
+        "description": "The configuration that the camera falls back on, if no other values are specified."
+      },
+      {
+        "name": "allowUpdates",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Whether the camera should send any configuration to the native module. Prevents unnecessary tile\nfetching and improves performance when the map is not visible. Defaults to `true`."
       },
       {
         "name": "triggerKey",
         "required": false,
-        "type": "any",
+        "type": "string \\| number",
         "default": "none",
-        "description": "Manually update the camera - helpful for when props did not update, however you still want the camera to move"
+        "description": "Any arbitrary primitive value that, when changed, causes the camera to retry moving to its target\nconfiguration. (Not yet implemented.)"
+      },
+      {
+        "name": "onUserTrackingModeChange",
+        "required": false,
+        "type": "(event:MapboxGLEvent<'usertrackingmodechange',{followUserLocation:boolean;followUserMode:UserTrackingMode\\|null;}>,)=>void",
+        "default": "none",
+        "description": "Executes when user tracking mode changes."
       }
-    ],
-    "composes": [
-      "../utils"
     ],
     "name": "Camera"
   },
@@ -2573,12 +2270,7 @@
             "name": "coordinate",
             "description": "A point expressed in the map view's coordinate system.",
             "type": {
-              "name": "Array",
-              "elements": [
-                {
-                  "name": "Number"
-                }
-              ]
+              "name": "Array"
             },
             "optional": false
           }
@@ -2605,12 +2297,7 @@
             "name": "point",
             "description": "A point expressed in the given view’s coordinate system.",
             "type": {
-              "name": "Array",
-              "elements": [
-                {
-                  "name": "Number"
-                }
-              ]
+              "name": "Array"
             },
             "optional": false
           }
@@ -2655,12 +2342,7 @@
             "name": "coordinate",
             "description": "A point expressed in the map view’s coordinate system.",
             "type": {
-              "name": "Array",
-              "elements": [
-                {
-                  "name": "Number"
-                }
-              ]
+              "name": "Array"
             },
             "optional": false
           },
@@ -2703,12 +2385,7 @@
             "name": "bbox",
             "description": "A rectangle expressed in the map view’s coordinate system.",
             "type": {
-              "name": "Array",
-              "elements": [
-                {
-                  "name": "Number"
-                }
-              ]
+              "name": "Array"
             },
             "optional": false
           },
@@ -2826,12 +2503,7 @@
             "name": "coordinate",
             "description": "the coordinates to query elevation at",
             "type": {
-              "name": "Array",
-              "elements": [
-                {
-                  "name": "Number"
-                }
-              ]
+              "name": "Array"
             },
             "optional": false
           }
@@ -3971,7 +3643,7 @@
         "params": [
           {
             "name": "event",
-            "type": null
+            "type": {}
           }
         ],
         "returns": null
@@ -5875,7 +5547,8 @@
         ],
         "params": [
           {
-            "name": "{ running }"
+            "name": "{ running }",
+            "type": {}
           }
         ],
         "returns": {
@@ -6020,7 +5693,7 @@
         "params": [
           {
             "name": "event",
-            "type": null
+            "type": {}
           }
         ],
         "returns": null

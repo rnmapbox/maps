@@ -417,10 +417,6 @@ async function generate() {
       only: 'gl',
     },
     {
-      input: path.join(TMPL_PATH, 'index.d.ts.ejs'),
-      output: path.join(IOS_OUTPUT_PATH, 'index.d.ts'),
-    },
-    {
       input: path.join(TMPL_PATH, 'RCTMGLStyle.m.ejs'),
       output: path.join(IOS_OUTPUT_PATH, 'RCTMGLStyle.m'),
       only: 'gl',
@@ -475,11 +471,15 @@ async function generate() {
   execSync('yarn build:plugin');
   outputPaths.push('plugin/build');
 
+  // compile TS and JS
+  console.log('Compiling ./lib directory');
+  execSync('rm -rf ./lib; npx tsc; cp -R ./assets ./lib/assets');
+
   // autogenerate docs
   const docBuilder = new DocJSONBuilder(layers);
-  const markdownBuilder = new MarkdownBuilder();
   await docBuilder.generate();
-  await markdownBuilder.generate();
+  const markdownBuilder = new MarkdownBuilder();
+  markdownBuilder.generate();
 
   // Check if any generated files changed
   try {

@@ -3,6 +3,7 @@ import MapboxGL, { SymbolLayerStyle } from '@rnmapbox/maps';
 import { Feature } from '@turf/helpers/dist/js';
 import { View, Text, ViewStyle, StyleProp, TextStyle } from 'react-native';
 
+// @ts-ignore
 import exampleIcon from '../../assets/pin.png';
 import sheet from '../../styles/sheet';
 import Page from '../common/Page';

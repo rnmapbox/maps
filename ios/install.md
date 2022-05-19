@@ -2,15 +2,17 @@
 
 ## React-Native > `0.60.0`
 
-The following assumes, that you're using autolinking and installed
-
-`@rnmapbox/maps` via `npm` or `yarn`.
+The following assumes that you're using autolinking and installed `@rnmapbox/maps` via `npm` or `yarn`.
 
 <br>
 
 The following is required for every following setup
 
 Add the following to your `ios/Podfile`:
+
+```ruby
+  pod 'rnmapbox-maps', :path => '../node_modules/@rnmapbox/maps', :inhibit_warnings => false
+```
 
 ```ruby
   pre_install do |installer|
