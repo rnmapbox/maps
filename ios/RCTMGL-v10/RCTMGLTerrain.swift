@@ -55,7 +55,7 @@ class RCTMGLTerrain : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     do {
       try style.setTerrain(terrain)
     } catch {
-      Logger.log(level:.error, message: "Failed to create terrain: \(terrain)")
+      Logger.log(level:.error, message: "Failed to create terrain: \(terrain)", error: error)
     }
   }
   
@@ -89,6 +89,6 @@ class RCTMGLTerrain : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   }
   
   func removeFromMap(_ map: RCTMGLMapView, style: Style) {
-    try! style.setTerrain(properties: [:])
+    style.removeTerrain()
   }
 }

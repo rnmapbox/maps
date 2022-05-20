@@ -22,6 +22,7 @@ class RCTMGLShapeSource : RCTMGLSource {
   @objc var cluster : NSNumber?
   @objc var clusterRadius : NSNumber?
   @objc var clusterMaxZoomLevel : NSNumber?
+  @objc var clusterProperties : [String: [Any]]?;
   
   @objc var maxZoomLevel : NSNumber?
   @objc var buffer : NSNumber?
@@ -59,6 +60,19 @@ class RCTMGLShapeSource : RCTMGLSource {
     
     if let clusterMaxZoomLevel = clusterMaxZoomLevel {
       result.clusterMaxZoom = clusterMaxZoomLevel.doubleValue
+    }
+    
+    do {
+      if let clusterProperties = clusterProperties {
+        result.clusterProperties = try clusterProperties.mapValues { (params : [Any]) in
+          let data = try JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
+          let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
+          
+          return decodedExpression
+        }
+      }
+    } catch {
+      Logger.log(level: .error, message: "RCTMGLShapeSource.parsing clusterProperties failed", error: error)
     }
     
     if let maxZoomLevel = maxZoomLevel {
