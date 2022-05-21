@@ -1,9 +1,5 @@
 package com.mapbox.rctmgl.components.styles.sources;
 
-import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.util.Log;
 import android.view.View;
 
@@ -13,20 +9,14 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
-import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.mapbox.maps.extension.style.expressions.generated.Expression;
 import com.mapbox.rctmgl.components.AbstractEventEmitter;
 // import com.mapbox.rctmgl.components.annotation.RCTMGLCallout;
-import com.mapbox.rctmgl.components.mapview.RCTMGLMapView;
-import com.mapbox.rctmgl.components.styles.layers.RCTLayer;
 import com.mapbox.rctmgl.events.constants.EventKeys;
 import com.mapbox.rctmgl.utils.ClusterPropertyEntry;
 import com.mapbox.rctmgl.utils.ExpressionParser;
-import com.mapbox.rctmgl.utils.ImageEntry;
 // import com.mapbox.rctmgl.utils.ResourceUtils;
 
 import java.net.MalformedURLException;
@@ -120,16 +110,7 @@ public class RCTMGLShapeSourceManager extends AbstractEventEmitter<RCTMGLShapeSo
             String name = iterator.nextKey();
             ReadableArray expressions = map.getArray(name);
 
-            Expression operator;
-            if (expressions.getType(0) == ReadableType.Array) {
-                operator = ExpressionParser.from(expressions.getArray(0));
-            } else {
-                operator = Expression.literal(expressions.getString(0));
-            }
-
-            Expression mapping = ExpressionParser.from(expressions.getArray(1));
-
-            properties.add(new AbstractMap.SimpleEntry<>(name, new ClusterPropertyEntry(operator, mapping)));
+            properties.add(new AbstractMap.SimpleEntry<>(name, new ClusterPropertyEntry(expressions)));
         }
 
         source.setClusterProperties(properties);
