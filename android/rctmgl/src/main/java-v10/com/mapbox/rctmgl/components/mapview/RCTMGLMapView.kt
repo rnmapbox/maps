@@ -1,30 +1,31 @@
 package com.mapbox.rctmgl.components.mapview
 
 import android.content.Context
-import com.mapbox.maps.extension.style.layers.getLayer
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
-import com.mapbox.maps.plugin.annotation.AnnotationPlugin
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
-import com.mapbox.android.gestures.MoveGestureDetector
-import com.mapbox.rctmgl.components.styles.terrain.RCTMGLTerrain
-import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener
-import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
-import android.graphics.PointF
-import com.facebook.react.bridge.WritableMap
-import com.facebook.react.bridge.WritableNativeMap
 import android.graphics.BitmapFactory
+import android.graphics.PointF
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import com.facebook.react.bridge.WritableArray
+import com.facebook.react.bridge.WritableMap
+import com.facebook.react.bridge.WritableNativeArray
+import com.facebook.react.bridge.WritableNativeMap
+import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
 import com.mapbox.maps.*
-import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadedListener
+import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
 import com.mapbox.maps.extension.style.layers.Layer
+import com.mapbox.maps.extension.style.layers.getLayer
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
-import com.mapbox.maps.plugin.compass.compass
+import com.mapbox.maps.plugin.delegates.listeners.OnCameraChangeListener
+import com.mapbox.maps.plugin.delegates.listeners.OnMapIdleListener
+import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener
+import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadedListener
 import com.mapbox.maps.plugin.gestures.*
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.components.AbstractMapFeature
@@ -38,6 +39,7 @@ import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeTracker
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer
 import com.mapbox.rctmgl.components.styles.light.RCTMGLLight
 import com.mapbox.rctmgl.components.styles.sources.RCTSource
+import com.mapbox.rctmgl.components.styles.terrain.RCTMGLTerrain
 import com.mapbox.rctmgl.events.AndroidCallbackEvent
 import com.mapbox.rctmgl.events.IEvent
 import com.mapbox.rctmgl.events.MapChangeEvent
@@ -48,8 +50,8 @@ import com.mapbox.rctmgl.utils.LatLng
 import com.mapbox.rctmgl.utils.Logger
 import org.json.JSONException
 import org.json.JSONObject
-import java.lang.Exception
 import java.util.*
+
 
 open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapViewManager /*, MapboxMapOptions options*/) : MapView(mContext), OnMapClickListener {
     private val mSources: MutableMap<String, RCTSource<*>>
@@ -105,6 +107,14 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             }
         })
         val _this = this
+
+        map.addOnCameraChangeListener(OnCameraChangeListener { cameraChangedEventData ->
+            handleMapChangedEvent(EventTypes.REGION_IS_CHANGING)
+        })
+
+        map.addOnMapIdleListener(OnMapIdleListener { mapIdleEventData ->
+            sendRegionDidChangeEvent()
+        })
 
         val gesturesPlugin: GesturesPlugin = this.gestures
         gesturesPlugin.addOnMapClickListener(_this)
@@ -620,6 +630,30 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     //    }
     //}
 
+    // region Callbacks
+
+    fun getCenter(callbackID: String?) {
+        var center = mMap!!.cameraState!!.center
+        val array: WritableArray = WritableNativeArray()
+        array.pushDouble(center.longitude())
+        array.pushDouble(center.latitude())
+        val payload: WritableMap = WritableNativeMap()
+        payload.putArray("center", array)
+
+        val event = AndroidCallbackEvent(this, callbackID, payload)
+        mManager.handleEvent(event)
+    }
+
+    fun getZoom(callbackID: String?) {
+        var zoom = mMap!!.cameraState!!.zoom
+
+        val payload: WritableMap = WritableNativeMap()
+        payload.putDouble("zoom", zoom)
+
+        val event = AndroidCallbackEvent(this, callbackID, payload)
+        mManager.handleEvent(event)
+    }
+
     fun queryTerrainElevation(callbackID: String?, longitude: Double, latitude: Double) {
         val result = mMap?.getElevation(Point.fromLngLat(longitude, latitude))
         val payload: WritableMap = WritableNativeMap()
@@ -629,6 +663,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             mManager.handleEvent(event)
         }
     }
+
+    // endregion
 
     companion object {
         const val LOG_TAG = "RCTMGLMapView"
