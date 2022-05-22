@@ -14,6 +14,9 @@ import com.mapbox.rctmgl.events.constants.EventKeys
 import com.mapbox.maps.MapboxMap
 import com.facebook.react.bridge.UiThreadUtil
 import com.facebook.react.common.MapBuilder
+import com.mapbox.rctmgl.utils.GeoJSONUtils
+import com.mapbox.rctmgl.utils.extensions.toCoordinate
+import com.mapbox.rctmgl.utils.extensions.toScreenCoordinate
 import java.lang.Exception
 import java.util.HashMap
 
@@ -203,6 +206,19 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
             METHOD_GET_CENTER -> {
                 mapView.getCenter(args!!.getString(0));
             }
+            METHOD_GET_POINT_IN_VIEW -> {
+                mapView.getPointInView(args!!.getString(0), args.getArray(1).toCoordinate())
+            }
+            METHOD_GET_COORDINATE_FROM_VIEW -> {
+                mapView.getCoordinateFromView(args!!.getString(0), args.getArray(1).toScreenCoordinate());
+            }
+            METHOD_SET_SOURCE_VISIBILITY -> {
+                mapView!!.setSourceVisibility(
+                    args!!.getBoolean(1),
+                    args!!.getString(2),
+                    args!!.getString(3)
+                );
+            }
         }
         /*
         switch (commandID) {
@@ -223,12 +239,6 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
             case METHOD_VISIBLE_BOUNDS:
                 mapView.getVisibleBounds(args.getString(0));
                 break;
-            case METHOD_GET_POINT_IN_VIEW:
-                mapView.getPointInView(args.getString(0), GeoJSONUtils.toLatLng(args.getArray(1)));
-                break;
-            case METHOD_GET_COORDINATE_FROM_VIEW:
-                mapView.getCoordinateFromView(args.getString(0), ConvertUtils.toPointF(args.getArray(1)));
-                break;
             case METHOD_TAKE_SNAP:
                 mapView.takeSnap(args.getString(0), args.getBoolean(1));
                 break;
@@ -244,12 +254,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
             case METHOD_SHOW_ATTRIBUTION:
                 mapView.showAttribution();
                 break;
-            case METHOD_SET_SOURCE_VISIBILITY:
-                mapView.setSourceVisibility(
-                        args.getBoolean(1),
-                        args.getString(2),
-                        args.getString(3)
-                );
+
 
         }*/
     }
