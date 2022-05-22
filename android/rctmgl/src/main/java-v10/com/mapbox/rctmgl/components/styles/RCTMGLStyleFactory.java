@@ -1474,7 +1474,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
     }
 
     public static void setIconOpacity(SymbolLayer layer, RCTMGLStyleValue styleValue) {
@@ -1694,7 +1694,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(CircleLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
     }
 
     public static void setCircleRadius(CircleLayer layer, RCTMGLStyleValue styleValue) {
@@ -1850,7 +1850,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(HeatmapLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
     }
 
     public static void setHeatmapRadius(HeatmapLayer layer, RCTMGLStyleValue styleValue) {
@@ -1918,7 +1918,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
     }
 
     public static void setFillExtrusionOpacity(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
@@ -2038,7 +2038,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(RasterLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
     }
 
     public static void setRasterOpacity(RasterLayer layer, RCTMGLStyleValue styleValue) {
@@ -2154,7 +2154,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(HillshadeLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
     }
 
     public static void setHillshadeIlluminationDirection(HillshadeLayer layer, RCTMGLStyleValue styleValue) {
@@ -2238,7 +2238,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(BackgroundLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
     }
 
     public static void setBackgroundColor(BackgroundLayer layer, RCTMGLStyleValue styleValue) {
@@ -2294,7 +2294,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(SkyLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
     }
 
     public static void setSkyType(SkyLayer layer, RCTMGLStyleValue styleValue) {
