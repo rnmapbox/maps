@@ -830,7 +830,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(FillLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
     }
 
     public static void setFillAntialias(FillLayer layer, RCTMGLStyleValue styleValue) {
@@ -974,7 +974,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(LineLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
     }
 
     public static void setLineOpacity(LineLayer layer, RCTMGLStyleValue styleValue) {

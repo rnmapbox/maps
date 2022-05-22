@@ -16,7 +16,10 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
 import com.mapbox.maps.extension.style.layers.Layer
+import com.mapbox.maps.extension.style.layers.generated.*
 import com.mapbox.maps.extension.style.layers.getLayer
+import com.mapbox.maps.extension.style.utils.unwrap
+import com.mapbox.maps.extension.style.layers.properties.generated.Visibility
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
@@ -48,6 +51,7 @@ import com.mapbox.rctmgl.events.constants.EventTypes
 import com.mapbox.rctmgl.utils.GeoJSONUtils
 import com.mapbox.rctmgl.utils.LatLng
 import com.mapbox.rctmgl.utils.Logger
+import com.mapbox.rctmgl.utils.extensions.toReadableArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
@@ -654,6 +658,36 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         mManager.handleEvent(event)
     }
 
+    private fun getDisplayDensity(): Float {
+        return mContext.resources.displayMetrics.density
+    }
+
+    fun getCoordinateFromView(callbackID: String?, pixel: ScreenCoordinate) {
+        val density: Float = getDisplayDensity()
+        val screenCoordinate = ScreenCoordinate(pixel.x * density, pixel.y * density)
+
+        val coordinate = mMap!!.coordinateForPixel(pixel)
+
+        val payload: WritableMap = WritableNativeMap()
+        payload.putArray("coordinateFromView", coordinate.toReadableArray())
+
+        val event = AndroidCallbackEvent(this, callbackID, payload)
+        mManager.handleEvent(event)
+    }
+
+    fun getPointInView(callbackID: String?, coordinate: Point) {
+        val point = mMap!!.pixelForCoordinate(coordinate)
+
+        val array: WritableArray = WritableNativeArray()
+        array.pushDouble(point.x)
+        array.pushDouble(point.y)
+        val payload: WritableMap = WritableNativeMap()
+        payload.putArray("pointInView", array)
+
+        val event = AndroidCallbackEvent(this, callbackID, payload)
+        mManager.handleEvent(event)
+    }
+
     fun queryTerrainElevation(callbackID: String?, longitude: Double, latitude: Double) {
         val result = mMap?.getElevation(Point.fromLngLat(longitude, latitude))
         val payload: WritableMap = WritableNativeMap()
@@ -661,6 +695,49 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             payload.putDouble("data", result)
             val event = AndroidCallbackEvent(this, callbackID, payload)
             mManager.handleEvent(event)
+        }
+    }
+
+    fun match(layer: Layer, sourceId:String, sourceLayerId: String?) : Boolean {
+        fun match(actSourceId: String, actSourceLayerId: String?) : Boolean {
+            return (actSourceId == sourceId && ((sourceLayerId == null) || (sourceLayerId == actSourceLayerId)))
+        }
+        return when (layer) {
+            is BackgroundLayer -> false
+            is LocationIndicatorLayer -> false
+            is SkyLayer -> false
+            is CircleLayer -> match(layer.sourceId, layer.sourceLayer)
+            is FillExtrusionLayer -> match(layer.sourceId, layer.sourceLayer)
+            is FillLayer -> match(layer.sourceId, layer.sourceLayer)
+            is HeatmapLayer -> match(layer.sourceId, layer.sourceLayer)
+            is HillshadeLayer -> match(layer.sourceId, layer.sourceLayer)
+            is LineLayer -> match(layer.sourceId, layer.sourceLayer)
+            is RasterLayer -> match(layer.sourceId, layer.sourceLayer)
+            is SymbolLayer -> match(layer.sourceId, layer.sourceLayer)
+            else -> {
+                logE("MapView", "Layer type: $layer.type unknown.")
+                false
+            }
+        }
+    }
+
+    fun setSourceVisibility(
+        visible: Boolean,
+        sourceId: String,
+        sourceLayerId: String?
+    ) {
+        if (mMap == null) {
+            Logger.e("MapView", "setSourceVisibility, map is null")
+            return
+        }
+        val style = mMap!!.getStyle();
+        style!!.styleLayers.forEach {
+            val layer = style.getLayer(it.id)
+            if ((layer != null) && match(layer, sourceId, sourceLayerId)) {
+                layer.visibility(
+                    if (visible) Visibility.VISIBLE else Visibility.NONE
+                )
+            }
         }
     }
 
