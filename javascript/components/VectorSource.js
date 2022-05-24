@@ -23,7 +23,7 @@ export const NATIVE_MODULE_NAME = 'RCTMGLVectorSource';
  * VectorSource is a map content source that supplies tiled vector data in Mapbox Vector Tile format to be shown
  * on the map. The location of and metadata about the tiles are defined either by an option dictionary or by an
  * external file that conforms to the TileJSON specification.
- * 
+ *
  * @extends {Component<VectorSourceProps>}
  */
 class VectorSource extends NativeBridgeComponent(AbstractSource) {

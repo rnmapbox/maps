@@ -14,7 +14,7 @@ export const NATIVE_MODULE_NAME = 'RCTMGLCircleLayer';
 
 /**
  * CircleLayer is a style layer that renders one or more filled circles on the map.
- * 
+ *
  * @extends {Component<CircleLayerProps>}
  */
 class CircleLayer extends AbstractLayer {

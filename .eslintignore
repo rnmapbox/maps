@@ -1,4 +1,5 @@
-plugin/build
+plugin
 example
 lib
 __tests__
+ios/RCTMGL/index.d.ts

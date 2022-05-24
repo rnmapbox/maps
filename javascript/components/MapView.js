@@ -42,7 +42,7 @@ const defaultStyleURL = MapboxGL.StyleURL.Street;
 
 /**
  * MapView backed by Mapbox Native GL.
- * 
+ *
  * @extends {Component<MapViewProps>}
  */
 class MapView extends NativeBridgeComponent(Component) {

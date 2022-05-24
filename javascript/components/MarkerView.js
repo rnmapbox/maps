@@ -19,7 +19,7 @@ export const NATIVE_MODULE_NAME = 'RCTMGLMarkerView';
  * .
  * This is based on [MakerView plugin](https://docs.mapbox.com/android/plugins/overview/markerview/) on Android
  * and PointAnnotation on iOS.
- * 
+ *
  * @extends {Component<MarkerViewProps>}
  */
 class MarkerView extends PureComponent {
@@ -88,7 +88,7 @@ const RCTMGLMarkerView =
   Platform.OS === 'android'
     ? requireNativeComponent(NATIVE_MODULE_NAME, MarkerView, {})
     : MapboxGL.MapboxV10
-      ? requireNativeComponent(NATIVE_MODULE_NAME, MarkerView, {})
-      : undefined;
+    ? requireNativeComponent(NATIVE_MODULE_NAME, MarkerView, {})
+    : undefined;
 
 export default MarkerView;

@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import locationManager from '../modules/location/locationManager';
+import { UserLocationProps } from '../types';
 
 import Annotation from './annotations/Annotation';
 import CircleLayer from './CircleLayer';
 import HeadingIndicator from './HeadingIndicator';
 import NativeUserLocation from './NativeUserLocation';
-import { UserLocationProps } from '../types';
 
 const mapboxBlue = 'rgba(51, 181, 229, 100)';
 

@@ -62,7 +62,10 @@ class DocJSONBuilder {
     component.name = name;
 
     // Main description
-    component.description = component.description.replace(/(\n*)(@\w+) (\{.*\})/g, '');
+    component.description = component.description.replace(
+      /(\n*)(@\w+) (\{.*\})/g,
+      '',
+    );
 
     // Styles
     if (this._styledLayers[name] && this._styledLayers[name].properties) {

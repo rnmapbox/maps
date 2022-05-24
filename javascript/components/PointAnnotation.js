@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
  *
  * If you need interactive views, please use MarkerView, as with PointAnnotation on Android, child views
  * are rendered onto a bitmap for better performance.
- * 
+ *
  * @extends {Component<PointAnnotationProps>}
  */
 class PointAnnotation extends NativeBridgeComponent(React.PureComponent) {
