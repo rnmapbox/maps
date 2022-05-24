@@ -262,12 +262,8 @@
             "optional": false
           },
           {
-            "name": "animationDuration",
-            "description": "The transition duration",
-            "type": {
-              "name": "number"
-            },
-            "optional": false
+            "name": "_animationDuration",
+            "type": {}
           }
         ],
         "returns": null,
@@ -282,20 +278,13 @@
         "modifiers": [],
         "params": [
           {
-            "name": "centerCoordinate",
-            "description": "The coordinate to center in the view",
-            "type": {
-              "name": "Position"
-            },
-            "optional": false
+            "name": "_centerCoordinate",
+            "optional": false,
+            "type": {}
           },
           {
-            "name": "animationDuration",
-            "description": "The transition duration",
-            "type": {
-              "name": "number"
-            },
-            "optional": false
+            "name": "_animationDuration",
+            "type": {}
           }
         ],
         "returns": null,
@@ -310,20 +299,13 @@
         "modifiers": [],
         "params": [
           {
-            "name": "centerCoordinate",
-            "description": "The coordinate to center in the view",
-            "type": {
-              "name": "Position"
-            },
-            "optional": false
+            "name": "_centerCoordinate",
+            "optional": false,
+            "type": {}
           },
           {
-            "name": "animationDuration",
-            "description": "The transition duration",
-            "type": {
-              "name": "number"
-            },
-            "optional": false
+            "name": "_animationDuration",
+            "type": {}
           }
         ],
         "returns": null,
@@ -338,20 +320,13 @@
         "modifiers": [],
         "params": [
           {
-            "name": "zoomLevel",
-            "description": "The target zoom",
-            "type": {
-              "name": "number"
-            },
-            "optional": false
+            "name": "_zoomLevel",
+            "optional": false,
+            "type": {}
           },
           {
-            "name": "animationDuration",
-            "description": "The transition duration",
-            "type": {
-              "name": "number"
-            },
-            "optional": false
+            "name": "_animationDuration",
+            "type": {}
           }
         ],
         "returns": null,
@@ -421,14 +396,14 @@
       {
         "name": "animationMode",
         "required": false,
-        "type": "\\| 'flyTo'\n\\| 'easeTo'\n\\| 'linearTo'\n\\| 'moveTo'\n\\| 'none'",
+        "type": "CameraAnimationMode",
         "default": "none",
         "description": "The easing or path the camera uses to animate to a new configuration."
       },
       {
         "name": "followUserMode",
         "required": false,
-        "type": "'normal' \\| 'compass' \\| 'course'",
+        "type": "UserTrackingMode",
         "default": "none",
         "description": "The mode used to track the user location on the map."
       },
@@ -505,7 +480,7 @@
       {
         "name": "onUserTrackingModeChange",
         "required": false,
-        "type": "(event:MapboxGLEvent<'usertrackingmodechange',{followUserLocation:boolean;followUserMode:UserTrackingMode\\|null;}>,)=>void",
+        "type": "UserTrackingModeChangeCallback",
         "default": "none",
         "description": "Executes when user tracking mode changes."
       }
@@ -2256,7 +2231,7 @@
     ]
   },
   "MapView": {
-    "description": "MapView backed by Mapbox Native GL",
+    "description": "MapView backed by Mapbox Native GL.",
     "displayName": "MapView",
     "methods": [
       {
@@ -2992,7 +2967,7 @@
     "name": "NativeUserLocation"
   },
   "PointAnnotation": {
-    "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.\n\nConsider using ShapeSource and SymbolLayer instead, if you have many points and you have static images,\nthey'll offer much better performance.\n\nIf you need interactive views please use MarkerView,\nas with PointAnnotation on Android child views are rendered onto a bitmap for better performance.",
+    "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.\n\nConsider using ShapeSource and SymbolLayer instead, if you have many points and you have static images,\nthey'll offer much better performance.\n\nIf you need interactive views, please use MarkerView, as with PointAnnotation on Android, child views\nare rendered onto a bitmap for better performance.",
     "displayName": "PointAnnotation",
     "methods": [
       {
@@ -3509,7 +3484,7 @@
     "name": "RasterSource"
   },
   "ShapeSource": {
-    "description": "ShapeSource is a map content source that supplies vector shapes to be shown on the map.\nThe shape may be a url or a GeoJSON object",
+    "description": "ShapeSource is a map content source that supplies vector shapes to be shown on the map.\nThe shape may be a url or a GeoJSON object.",
     "displayName": "ShapeSource",
     "methods": [
       {
@@ -5648,7 +5623,7 @@
     "name": "UserLocation"
   },
   "VectorSource": {
-    "description": "VectorSource is a map content source that supplies tiled vector data in Mapbox Vector Tile format to be shown on the map.\nThe location of and metadata about the tiles are defined either by an option dictionary or by an external file that conforms to the TileJSON specification.",
+    "description": "VectorSource is a map content source that supplies tiled vector data in Mapbox Vector Tile format to be shown\non the map. The location of and metadata about the tiles are defined either by an option dictionary or by an\nexternal file that conforms to the TileJSON specification.",
     "displayName": "VectorSource",
     "methods": [
       {

@@ -61,7 +61,10 @@ class DocJSONBuilder {
 
     component.name = name;
 
-    // styles
+    // Main description
+    component.description = component.description.replace(/(\n*)(@\w+) (\{.*\})/g, '');
+
+    // Styles
     if (this._styledLayers[name] && this._styledLayers[name].properties) {
       component.styles = [];
 
@@ -81,7 +84,6 @@ class DocJSONBuilder {
           expression: prop.expression,
           transition: prop.transition,
         };
-
         if (prop.type === 'enum') {
           docStyle.values = Object.keys(prop.doc.values).map((value) => {
             return { value, doc: prop.doc.values[value].doc };
@@ -265,6 +267,7 @@ class DocJSONBuilder {
           });
           fileName = fileName.replace(fileExtensionsRegex, '');
           results[fileName] = parsed;
+
           this.postprocess(results[fileName], fileName);
 
           next();

@@ -13,12 +13,8 @@
 | zoomLevel | `number` | `none` | `false` | The zoom level of the map. |
 | padding | `CameraPadding` | `none` | `false` | The viewport padding in points. |
 | animationDuration | `number` | `none` | `false` | The duration the map takes to animate to a new configuration. |
-| animationMode | `\| 'flyTo'
-\| 'easeTo'
-\| 'linearTo'
-\| 'moveTo'
-\| 'none'` | `none` | `false` | The easing or path the camera uses to animate to a new configuration. |
-| followUserMode | `'normal' \| 'compass' \| 'course'` | `none` | `false` | The mode used to track the user location on the map. |
+| animationMode | `CameraAnimationMode` | `none` | `false` | The easing or path the camera uses to animate to a new configuration. |
+| followUserMode | `UserTrackingMode` | `none` | `false` | The mode used to track the user location on the map. |
 | followUserLocation | `boolean` | `none` | `false` | Whether the map orientation follows the user location. |
 | followZoomLevel | `number` | `none` | `false` | The zoom level used when following the user location. |
 | followPitch | `number` | `none` | `false` | The pitch used when following the user location. |
@@ -29,7 +25,7 @@
 | defaultSettings | `CameraStop` | `none` | `false` | The configuration that the camera falls back on, if no other values are specified. |
 | allowUpdates | `boolean` | `none` | `false` | Whether the camera should send any configuration to the native module. Prevents unnecessary tile<br/>fetching and improves performance when the map is not visible. Defaults to `true`. |
 | triggerKey | `string \| number` | `none` | `false` | Any arbitrary primitive value that, when changed, causes the camera to retry moving to its target<br/>configuration. (Not yet implemented.) |
-| onUserTrackingModeChange | `(event:MapboxGLEvent<'usertrackingmodechange',{followUserLocation:boolean;followUserMode:UserTrackingMode\|null;}>,)=>void` | `none` | `false` | Executes when user tracking mode changes. |
+| onUserTrackingModeChange | `UserTrackingModeChangeCallback` | `none` | `false` | Executes when user tracking mode changes. |
 
 ### methods
 #### setCamera(config)
@@ -50,7 +46,7 @@ camera.current?.setCamera({
 ```
 
 
-#### fitBounds(ne, sw, paddingConfig, animationDuration)
+#### fitBounds(ne, sw, paddingConfig, _animationDuration)
 
 Set the camera position to enclose the provided bounds, with optional<br/>padding and duration.
 
@@ -60,7 +56,7 @@ Set the camera position to enclose the provided bounds, with optional<br/>paddin
 | `ne` | `Position` | `Yes` | Northeast coordinate of bounding box |
 | `sw` | `Position` | `Yes` | Southwest coordinate of bounding box |
 | `paddingConfig` | `number \| Array` | `Yes` | The viewport padding, specified as a number (all sides equal), a 2-item array ([vertical, horizontal]), or a 4-item array ([top, right, bottom, left]) |
-| `animationDuration` | `number` | `Yes` | The transition duration |
+| `_animationDuration` | `n/a` | `Yes` | undefined |
 
 
 
@@ -70,15 +66,15 @@ camera.fitBounds([lon, lat], [lon, lat], [20, 0], 1000);
 ```
 
 
-#### flyTo(centerCoordinate, animationDuration)
+#### flyTo(_centerCoordinate, _animationDuration)
 
 Sets the camera to center around the provided coordinate using a realistic 'travel'<br/>animation, with optional duration.
 
 ##### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `centerCoordinate` | `Position` | `Yes` | The coordinate to center in the view |
-| `animationDuration` | `number` | `Yes` | The transition duration |
+| `_centerCoordinate` | `n/a` | `Yes` | undefined |
+| `_animationDuration` | `n/a` | `Yes` | undefined |
 
 
 
@@ -88,15 +84,15 @@ camera.flyTo([lon, lat], 12000);
 ```
 
 
-#### moveTo(centerCoordinate, animationDuration)
+#### moveTo(_centerCoordinate, _animationDuration)
 
 Sets the camera to center around the provided coordinate, with optional duration.
 
 ##### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `centerCoordinate` | `Position` | `Yes` | The coordinate to center in the view |
-| `animationDuration` | `number` | `Yes` | The transition duration |
+| `_centerCoordinate` | `n/a` | `Yes` | undefined |
+| `_animationDuration` | `n/a` | `Yes` | undefined |
 
 
 
@@ -106,15 +102,15 @@ camera.moveTo([lon, lat]);
 ```
 
 
-#### zoomTo(zoomLevel, animationDuration)
+#### zoomTo(_zoomLevel, _animationDuration)
 
 Zooms the camera to the provided level, with optional duration.
 
 ##### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `zoomLevel` | `number` | `Yes` | The target zoom |
-| `animationDuration` | `number` | `Yes` | The transition duration |
+| `_zoomLevel` | `n/a` | `Yes` | undefined |
+| `_animationDuration` | `n/a` | `Yes` | undefined |
 
 
 
