@@ -95,6 +95,10 @@ public class RCTMGLStyleValue {
         return mPayload.getString(key);
     }
 
+    public String getEnumName() {
+        return mPayload.getString("value").toUpperCase().replaceAll("-","_");
+    }
+
     public Double getDouble(String key) {
         return mPayload.getDouble(key);
     }
