@@ -477,7 +477,11 @@ async function generate() {
 
   // autogenerate docs
   const docBuilder = new DocJSONBuilder(layers);
-  await docBuilder.generate();
+  try {
+    await docBuilder.generate();
+  } catch (e) {
+    console.log('Error generating docs:', e);
+  }
   const markdownBuilder = new MarkdownBuilder();
   markdownBuilder.generate();
 

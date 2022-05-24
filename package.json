@@ -35,7 +35,7 @@
     "unittest:single": "jest --testNamePattern",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepare": "npm run build:plugin",
+    "prepare": "npx tsc; cp -R ./assets ./lib/assets; npm run build:plugin",
     "test:plugin": "expo-module test plugin",
     "build:plugin": "tsc --build plugin",
     "lint:plugin": "eslint plugin/src/*"
