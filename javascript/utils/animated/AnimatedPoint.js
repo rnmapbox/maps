@@ -9,6 +9,9 @@ const DEFAULT_POINT = { type: 'Point', coordinates: DEFAULT_COORD };
 
 let uniqueID = 0;
 
+/**
+ * @extends {Component}
+ */
 export class AnimatedPoint extends AnimatedWithChildren {
   constructor(point = DEFAULT_POINT) {
     super();
@@ -42,6 +45,9 @@ export class AnimatedPoint extends AnimatedWithChildren {
     this.latitude.flattenOffset();
   }
 
+  /**
+   * @param {((value: GeoJSON.Point) => void)=} cb Callback that fires with current value.
+   */
   stopAnimation(cb) {
     this.longitude.stopAnimation();
     this.latitude.stopAnimation();
@@ -51,6 +57,9 @@ export class AnimatedPoint extends AnimatedWithChildren {
     }
   }
 
+  /**
+   * @param {((value: GeoJSON.Point) => void)=} cb Callback that fires with current value.
+   */
   addListener(cb) {
     uniqueID += 1;
     const id = `${String(uniqueID)}-${String(Date.now())}`;
@@ -69,12 +78,19 @@ export class AnimatedPoint extends AnimatedWithChildren {
     return id;
   }
 
+  /**
+   * @param {number} id
+   */
   removeListener(id) {
     this.longitude.removeListener(this._listeners[id].longitude);
     this.latitude.removeListener(this._listeners[id].latitude);
     delete this._listeners[id];
   }
 
+  /**
+   * @param {{coordinates: GeoJSON.Position} & Omit<Animated.SpringAnimationConfig, 'toValue'>} config
+   * @returns {Animated.CompositeAnimation}
+   */
   spring(config = { coordinates: DEFAULT_COORD }) {
     return Animated.parallel([
       Animated.spring(this.longitude, {
@@ -90,6 +106,10 @@ export class AnimatedPoint extends AnimatedWithChildren {
     ]);
   }
 
+  /**
+   * @param {{coordinates: GeoJSON.Position} & Omit<Animated.TimingAnimationConfig, 'toValue'>} config
+   * @returns {Animated.CompositeAnimation}
+   */
   timing(config = { coordinates: DEFAULT_COORD }) {
     return Animated.parallel([
       Animated.timing(this.longitude, {
@@ -105,6 +125,9 @@ export class AnimatedPoint extends AnimatedWithChildren {
     ]);
   }
 
+  /**
+   * @returns {GeoJSON.Point}
+   */
   __getValue() {
     return {
       type: 'Point',
