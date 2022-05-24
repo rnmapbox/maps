@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import MapboxGL, { SymbolLayerStyle } from '@rnmapbox/maps';
-import { Feature } from '@turf/helpers/dist/js';
 import { View, Text, ViewStyle, StyleProp, TextStyle } from 'react-native';
+import { Feature, FeatureCollection, Point } from 'geojson';
 
 // @ts-ignore
 import exampleIcon from '../../assets/pin.png';
@@ -13,7 +13,7 @@ const defaultCamera = {
   zoomLevel: 17.4,
 };
 
-const featureCollection = {
+const featureCollection: FeatureCollection = {
   type: 'FeatureCollection',
   features: [
     {
@@ -50,7 +50,7 @@ type CustomCalloutProps = {
 
 const CustomCallout: FC<CustomCalloutProps> = (props) => {
   const [selectedFeature, setSelectedFeature] =
-    useState<Feature<{ type: string; coordinates: number[] }, any>>();
+    useState<Feature<Point, any>>();
 
   const onPinPress = (e: any): void => {
     if (selectedFeature) {

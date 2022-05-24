@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import locationManager from '../modules/location/locationManager';
+import { UserLocationProps } from '../types';
 
 import Annotation from './annotations/Annotation';
 import CircleLayer from './CircleLayer';
@@ -53,7 +54,10 @@ export const normalIcon = (showsUserHeadingIndicator, heading) => [
     : []),
 ];
 
-class UserLocation extends React.Component {
+/**
+ * @extends {Component<UserLocationProps>}
+ */
+class UserLocation extends Component {
   static propTypes = {
     /**
      * Whether location icon is animated between updates

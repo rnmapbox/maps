@@ -9,7 +9,7 @@
     "lib": [
       "esnext"
     ],
-    "module": "esnext",
+    "module": "ES2015",
     "moduleResolution": "node",
     "target": "esnext",
     "allowUnreachableCode": false,
@@ -22,17 +22,11 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "paths": {
-      "types": [
-        "types/index.d.ts"
-      ]
-    },
     "declaration": true
   },
   "include": [
     "index.ts",
     "javascript/**/*",
-    "types/**/*"
   ],
   "exclude": [
     "lib/**/*",

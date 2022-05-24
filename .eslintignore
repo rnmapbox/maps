@@ -1,3 +1,5 @@
-/plugin/build
-/example
-/lib
+plugin
+example
+lib
+__tests__
+ios/RCTMGL/index.d.ts

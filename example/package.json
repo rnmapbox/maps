@@ -70,7 +70,7 @@
       "simulator": {
         "type": "ios.simulator",
         "device": {
-          "type": "iPhone 11"
+          "type": "iPhone SE (2nd generation)"
         }
       }
     },

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   View,
@@ -19,6 +19,7 @@ import {
 } from '../utils';
 import { getFilter } from '../utils/filterUtils';
 import Logger from '../utils/Logger';
+import { MapViewProps } from '../types';
 
 import NativeBridgeComponent from './NativeBridgeComponent';
 
@@ -40,9 +41,11 @@ const styles = StyleSheet.create({
 const defaultStyleURL = MapboxGL.StyleURL.Street;
 
 /**
- * MapView backed by Mapbox Native GL
+ * MapView backed by Mapbox Native GL.
+ *
+ * @extends {Component<MapViewProps>}
  */
-class MapView extends NativeBridgeComponent(React.Component) {
+class MapView extends NativeBridgeComponent(Component) {
   static propTypes = {
     ...viewPropTypes,
 
@@ -120,7 +123,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
     attributionEnabled: PropTypes.bool,
 
     /**
-     * Adds attribution offset, e.g. `{top: 8, left: 8}` will put attribution button in top-left corner of the map
+     * Adds attribution offset, e.g. `{top: 8, left: 8}` will put attribution button in top-left corner of the map. By default on Android, the attribution with information icon (i) will be on the bottom left, while on iOS the mapbox logo will be on bottom left with information icon (i) on bottom right. Read more about mapbox attribution [here](https://docs.mapbox.com/help/getting-started/attribution/)
      */
     attributionPosition: ornamentPositionPropType,
 

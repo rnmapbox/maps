@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
 
@@ -11,6 +11,7 @@ import {
   isAndroid,
 } from '../utils';
 import { copyPropertiesAsDeprecated } from '../utils/deprecation';
+import { ShapeSourceProps } from '../types';
 
 import AbstractSource from './AbstractSource';
 import NativeBridgeComponent from './NativeBridgeComponent';
@@ -21,7 +22,9 @@ export const NATIVE_MODULE_NAME = 'RCTMGLShapeSource';
 
 /**
  * ShapeSource is a map content source that supplies vector shapes to be shown on the map.
- * The shape may be a url or a GeoJSON object
+ * The shape may be a url or a GeoJSON object.
+ *
+ * @extends {Component<ShapeSourceProps>}
  */
 class ShapeSource extends NativeBridgeComponent(AbstractSource) {
   static NATIVE_ASSETS_KEY = 'assets';

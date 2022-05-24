@@ -1,6 +1,6 @@
+import { Component } from 'react';
 import { Properties } from '@turf/helpers';
 import { FeatureCollection, Geometry, Feature } from 'geojson';
-import type { Component } from 'react';
 import { ViewPropTypes } from 'react-native';
 
 import {
@@ -25,10 +25,9 @@ import {
   SymbolLayerProps,
   UserLocationProps,
   VectorSourceProps,
-} from '.';
+} from '../types';
 
 export class MapView extends Component<MapViewProps> {
-  longitude: number;
   getPointInView(coordinate: GeoJSON.Position): Promise<GeoJSON.Position>;
   getCoordinateFromView(point: GeoJSON.Position): Promise<GeoJSON.Position>;
   getVisibleBounds(): Promise<GeoJSON.Position[]>;

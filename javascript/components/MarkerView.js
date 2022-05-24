@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Component, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Platform, NativeModules, requireNativeComponent } from 'react-native';
 
 import { toJSONString, viewPropTypes } from '../utils';
 import { makePoint } from '../utils/geoUtils';
+import { MarkerViewProps } from '../types';
 
 import PointAnnotation from './PointAnnotation';
 
@@ -18,8 +19,10 @@ export const NATIVE_MODULE_NAME = 'RCTMGLMarkerView';
  * .
  * This is based on [MakerView plugin](https://docs.mapbox.com/android/plugins/overview/markerview/) on Android
  * and PointAnnotation on iOS.
+ *
+ * @extends {Component<MarkerViewProps>}
  */
-class MarkerView extends React.PureComponent {
+class MarkerView extends PureComponent {
   static propTypes = {
     ...viewPropTypes,
 

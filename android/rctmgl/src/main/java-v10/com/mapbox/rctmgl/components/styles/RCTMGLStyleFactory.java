@@ -830,7 +830,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(FillLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
     }
 
     public static void setFillAntialias(FillLayer layer, RCTMGLStyleValue styleValue) {
@@ -909,7 +909,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.fillTranslateAnchor(styleValue.getExpression());
       } else {
-          layer.fillTranslateAnchor(FillTranslateAnchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.fillTranslateAnchor(FillTranslateAnchor.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -937,7 +937,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.lineCap(styleValue.getExpression());
       } else {
-          layer.lineCap(LineCap.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.lineCap(LineCap.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -945,7 +945,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.lineJoin(styleValue.getExpression());
       } else {
-          layer.lineJoin(LineJoin.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.lineJoin(LineJoin.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -974,7 +974,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(LineLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
     }
 
     public static void setLineOpacity(LineLayer layer, RCTMGLStyleValue styleValue) {
@@ -1029,7 +1029,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.lineTranslateAnchor(styleValue.getExpression());
       } else {
-          layer.lineTranslateAnchor(LineTranslateAnchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.lineTranslateAnchor(LineTranslateAnchor.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -1145,7 +1145,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.symbolPlacement(styleValue.getExpression());
       } else {
-          layer.symbolPlacement(SymbolPlacement.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.symbolPlacement(SymbolPlacement.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -1177,7 +1177,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.symbolZOrder(styleValue.getExpression());
       } else {
-          layer.symbolZOrder(SymbolZOrder.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.symbolZOrder(SymbolZOrder.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -1209,7 +1209,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.iconRotationAlignment(styleValue.getExpression());
       } else {
-          layer.iconRotationAlignment(IconRotationAlignment.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.iconRotationAlignment(IconRotationAlignment.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -1225,7 +1225,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.iconTextFit(styleValue.getExpression());
       } else {
-          layer.iconTextFit(IconTextFit.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.iconTextFit(IconTextFit.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -1285,7 +1285,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.iconAnchor(styleValue.getExpression());
       } else {
-          layer.iconAnchor(IconAnchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.iconAnchor(IconAnchor.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -1293,7 +1293,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.iconPitchAlignment(styleValue.getExpression());
       } else {
-          layer.iconPitchAlignment(IconPitchAlignment.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.iconPitchAlignment(IconPitchAlignment.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -1301,7 +1301,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.textPitchAlignment(styleValue.getExpression());
       } else {
-          layer.textPitchAlignment(TextPitchAlignment.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.textPitchAlignment(TextPitchAlignment.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -1309,7 +1309,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.textRotationAlignment(styleValue.getExpression());
       } else {
-          layer.textRotationAlignment(TextRotationAlignment.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.textRotationAlignment(TextRotationAlignment.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -1365,7 +1365,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.textJustify(styleValue.getExpression());
       } else {
-          layer.textJustify(TextJustify.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.textJustify(TextJustify.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -1389,7 +1389,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.textAnchor(styleValue.getExpression());
       } else {
-          layer.textAnchor(TextAnchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.textAnchor(TextAnchor.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -1437,7 +1437,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.textTransform(styleValue.getExpression());
       } else {
-          layer.textTransform(TextTransform.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.textTransform(TextTransform.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -1474,7 +1474,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(SymbolLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
     }
 
     public static void setIconOpacity(SymbolLayer layer, RCTMGLStyleValue styleValue) {
@@ -1577,7 +1577,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.iconTranslateAnchor(styleValue.getExpression());
       } else {
-          layer.iconTranslateAnchor(IconTranslateAnchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.iconTranslateAnchor(IconTranslateAnchor.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -1681,7 +1681,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.textTranslateAnchor(styleValue.getExpression());
       } else {
-          layer.textTranslateAnchor(TextTranslateAnchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.textTranslateAnchor(TextTranslateAnchor.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -1694,7 +1694,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(CircleLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
     }
 
     public static void setCircleRadius(CircleLayer layer, RCTMGLStyleValue styleValue) {
@@ -1781,7 +1781,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.circleTranslateAnchor(styleValue.getExpression());
       } else {
-          layer.circleTranslateAnchor(CircleTranslateAnchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.circleTranslateAnchor(CircleTranslateAnchor.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -1789,7 +1789,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.circlePitchScale(styleValue.getExpression());
       } else {
-          layer.circlePitchScale(CirclePitchScale.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.circlePitchScale(CirclePitchScale.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -1797,7 +1797,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.circlePitchAlignment(styleValue.getExpression());
       } else {
-          layer.circlePitchAlignment(CirclePitchAlignment.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.circlePitchAlignment(CirclePitchAlignment.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -1850,7 +1850,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(HeatmapLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
     }
 
     public static void setHeatmapRadius(HeatmapLayer layer, RCTMGLStyleValue styleValue) {
@@ -1918,7 +1918,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
     }
 
     public static void setFillExtrusionOpacity(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
@@ -1973,7 +1973,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.fillExtrusionTranslateAnchor(styleValue.getExpression());
       } else {
-          layer.fillExtrusionTranslateAnchor(FillExtrusionTranslateAnchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.fillExtrusionTranslateAnchor(FillExtrusionTranslateAnchor.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -2038,7 +2038,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(RasterLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
     }
 
     public static void setRasterOpacity(RasterLayer layer, RCTMGLStyleValue styleValue) {
@@ -2141,7 +2141,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.rasterResampling(styleValue.getExpression());
       } else {
-          layer.rasterResampling(RasterResampling.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.rasterResampling(RasterResampling.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -2154,7 +2154,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(HillshadeLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
     }
 
     public static void setHillshadeIlluminationDirection(HillshadeLayer layer, RCTMGLStyleValue styleValue) {
@@ -2169,7 +2169,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.hillshadeIlluminationAnchor(styleValue.getExpression());
       } else {
-          layer.hillshadeIlluminationAnchor(HillshadeIlluminationAnchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.hillshadeIlluminationAnchor(HillshadeIlluminationAnchor.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -2238,7 +2238,7 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(BackgroundLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
     }
 
     public static void setBackgroundColor(BackgroundLayer layer, RCTMGLStyleValue styleValue) {
@@ -2294,14 +2294,14 @@ public class RCTMGLStyleFactory {
     }
 
     public static void setVisibility(SkyLayer layer, RCTMGLStyleValue styleValue) {
-        layer.visibility(Visibility.valueOf(styleValue.getString(VALUE_KEY)));
+        layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
     }
 
     public static void setSkyType(SkyLayer layer, RCTMGLStyleValue styleValue) {
       if (styleValue.isExpression()) {
         layer.skyType(styleValue.getExpression());
       } else {
-          layer.skyType(SkyType.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.skyType(SkyType.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -2381,7 +2381,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.anchor(styleValue.getExpression());
       } else {
-          layer.anchor(Anchor.valueOf(styleValue.getString(VALUE_KEY).toUpperCase()));
+          layer.anchor(Anchor.valueOf(styleValue.getEnumName()));
       }
     }
 
@@ -2389,7 +2389,7 @@ public class RCTMGLStyleFactory {
       if (styleValue.isExpression()) {
         layer.position(styleValue.getExpression());
       } else {
-          layer.position(styleValue.getFloatArrayExpression(VALUE_KEY));
+          layer.position(styleValue.getLightPosition());
       }
     }
 

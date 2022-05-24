@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
 
 import { viewPropTypes } from '../utils';
 import { CircleLayerStyleProp } from '../utils/styleMap';
+import { CircleLayerProps } from '../types';
 
 import AbstractLayer from './AbstractLayer';
 
@@ -13,6 +14,8 @@ export const NATIVE_MODULE_NAME = 'RCTMGLCircleLayer';
 
 /**
  * CircleLayer is a style layer that renders one or more filled circles on the map.
+ *
+ * @extends {Component<CircleLayerProps>}
  */
 class CircleLayer extends AbstractLayer {
   static propTypes = {
