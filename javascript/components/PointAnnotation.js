@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { requireNativeComponent, StyleSheet, Platform } from 'react-native';
 
 import { toJSONString, isFunction, viewPropTypes } from '../utils';
 import { makePoint } from '../utils/geoUtils';
+import { PointAnnotationProps } from '../types';
 
 import NativeBridgeComponent from './NativeBridgeComponent';
 
@@ -23,8 +24,10 @@ const styles = StyleSheet.create({
  * Consider using ShapeSource and SymbolLayer instead, if you have many points and you have static images,
  * they'll offer much better performance.
  *
- * If you need interactive views please use MarkerView,
- * as with PointAnnotation on Android child views are rendered onto a bitmap for better performance.
+ * If you need interactive views, please use MarkerView, as with PointAnnotation on Android, child views
+ * are rendered onto a bitmap for better performance.
+ * 
+ * @extends {Component<PointAnnotationProps>}
  */
 class PointAnnotation extends NativeBridgeComponent(React.PureComponent) {
   static propTypes = {

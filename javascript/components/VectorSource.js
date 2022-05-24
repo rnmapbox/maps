@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NativeModules, requireNativeComponent } from 'react-native';
 
@@ -10,6 +10,7 @@ import {
 } from '../utils';
 import { getFilter } from '../utils/filterUtils';
 import { copyPropertiesAsDeprecated } from '../utils/deprecation';
+import { VectorSourceProps } from '../types';
 
 import AbstractSource from './AbstractSource';
 import NativeBridgeComponent from './NativeBridgeComponent';
@@ -19,8 +20,11 @@ const MapboxGL = NativeModules.MGLModule;
 export const NATIVE_MODULE_NAME = 'RCTMGLVectorSource';
 
 /**
- * VectorSource is a map content source that supplies tiled vector data in Mapbox Vector Tile format to be shown on the map.
- * The location of and metadata about the tiles are defined either by an option dictionary or by an external file that conforms to the TileJSON specification.
+ * VectorSource is a map content source that supplies tiled vector data in Mapbox Vector Tile format to be shown
+ * on the map. The location of and metadata about the tiles are defined either by an option dictionary or by an
+ * external file that conforms to the TileJSON specification.
+ * 
+ * @extends {Component<VectorSourceProps>}
  */
 class VectorSource extends NativeBridgeComponent(AbstractSource) {
   static propTypes = {

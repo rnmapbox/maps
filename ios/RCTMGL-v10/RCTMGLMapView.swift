@@ -86,16 +86,16 @@ open class RCTMGLMapView : MapView {
     }
   }
   
-  @objc public override func layoutSubviews() {
-    super.layoutSubviews()
-    if let camera = reactCamera {
-      if (isPendingInitialLayout) {
-        isPendingInitialLayout = false;
-
-        camera.initialLayout()
-      }
-    }
-  }
+//  @objc public override func layoutSubviews() {
+//    super.layoutSubviews()
+//    if let camera = reactCamera {
+//      if (isPendingInitialLayout) {
+//        isPendingInitialLayout = false;
+//
+//        camera.initialLayout()
+//      }
+//    }
+//  }
 
   public override func updateConstraints() {
     super.updateConstraints()

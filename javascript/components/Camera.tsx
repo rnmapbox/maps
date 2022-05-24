@@ -9,8 +9,12 @@ import React, {
 import { NativeModules, requireNativeComponent } from 'react-native';
 import { Position } from '@turf/helpers';
 
+import {
+  UserTrackingMode,
+  UserTrackingModeChangeCallback,
+  CameraAnimationMode,
+} from '../types';
 import geoUtils from '../utils/geoUtils';
-import { MapboxGLEvent } from '../..';
 
 const NativeModule = NativeModules.MGLModule;
 
@@ -36,25 +40,6 @@ const nativeAnimationMode = (
 };
 
 export const NATIVE_MODULE_NAME = 'RCTMGLCamera';
-
-export type CameraAnimationMode =
-  | 'flyTo'
-  | 'easeTo'
-  | 'linearTo'
-  | 'moveTo'
-  | 'none';
-
-export type UserTrackingMode = 'normal' | 'compass' | 'course';
-
-export type UserTrackingModeChangeCallback = (
-  event: MapboxGLEvent<
-    'usertrackingmodechange',
-    {
-      followUserLocation: boolean;
-      followUserMode: UserTrackingMode | null;
-    }
-  >,
-) => void;
 
 export interface CameraStop {
   /** Allows static check of the data type. For internal use only. */
@@ -368,9 +353,9 @@ const Camera = (props: CameraProps, ref: React.ForwardedRef<CameraRef>) => {
     ne,
     sw,
     paddingConfig = 0,
-    animationDuration = 0,
+    _animationDuration = 0,
   ) => {
-    let padding = {
+    let _padding = {
       paddingTop: 0,
       paddingBottom: 0,
       paddingLeft: 0,
@@ -379,14 +364,14 @@ const Camera = (props: CameraProps, ref: React.ForwardedRef<CameraRef>) => {
 
     if (typeof paddingConfig === 'object') {
       if (paddingConfig.length === 2) {
-        padding = {
+        _padding = {
           paddingTop: paddingConfig[0],
           paddingBottom: paddingConfig[0],
           paddingLeft: paddingConfig[1],
           paddingRight: paddingConfig[1],
         };
       } else if (paddingConfig.length === 4) {
-        padding = {
+        _padding = {
           paddingTop: paddingConfig[0],
           paddingBottom: paddingConfig[2],
           paddingLeft: paddingConfig[3],
@@ -394,7 +379,7 @@ const Camera = (props: CameraProps, ref: React.ForwardedRef<CameraRef>) => {
         };
       }
     } else if (typeof paddingConfig === 'number') {
-      padding = {
+      _padding = {
         paddingTop: paddingConfig,
         paddingBottom: paddingConfig,
         paddingLeft: paddingConfig,
@@ -408,46 +393,46 @@ const Camera = (props: CameraProps, ref: React.ForwardedRef<CameraRef>) => {
         ne,
         sw,
       },
-      padding,
-      animationDuration,
+      padding: _padding,
+      animationDuration: _animationDuration,
       animationMode: 'easeTo',
     });
   };
   const fitBounds = useCallback(_fitBounds, [setCamera]);
 
   const _flyTo: CameraRef['flyTo'] = (
-    centerCoordinate,
-    animationDuration = 2000,
+    _centerCoordinate,
+    _animationDuration = 2000,
   ) => {
     setCamera({
       type: 'CameraStop',
-      centerCoordinate,
-      animationDuration,
+      centerCoordinate: _centerCoordinate,
+      animationDuration: _animationDuration,
     });
   };
   const flyTo = useCallback(_flyTo, [setCamera]);
 
   const _moveTo: CameraRef['moveTo'] = (
-    centerCoordinate,
-    animationDuration = 0,
+    _centerCoordinate,
+    _animationDuration = 0,
   ) => {
     setCamera({
       type: 'CameraStop',
-      centerCoordinate,
-      animationDuration,
+      centerCoordinate: _centerCoordinate,
+      animationDuration: _animationDuration,
       animationMode: 'easeTo',
     });
   };
   const moveTo = useCallback(_moveTo, [setCamera]);
 
   const _zoomTo: CameraRef['zoomTo'] = (
-    zoomLevel,
-    animationDuration = 2000,
+    _zoomLevel,
+    _animationDuration = 2000,
   ) => {
     setCamera({
       type: 'CameraStop',
-      zoomLevel,
-      animationDuration,
+      zoomLevel: _zoomLevel,
+      animationDuration: _animationDuration,
       animationMode: 'flyTo',
     });
   };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   View,
@@ -19,6 +19,7 @@ import {
 } from '../utils';
 import { getFilter } from '../utils/filterUtils';
 import Logger from '../utils/Logger';
+import { MapViewProps } from '../types';
 
 import NativeBridgeComponent from './NativeBridgeComponent';
 
@@ -40,9 +41,11 @@ const styles = StyleSheet.create({
 const defaultStyleURL = MapboxGL.StyleURL.Street;
 
 /**
- * MapView backed by Mapbox Native GL
+ * MapView backed by Mapbox Native GL.
+ * 
+ * @extends {Component<MapViewProps>}
  */
-class MapView extends NativeBridgeComponent(React.Component) {
+class MapView extends NativeBridgeComponent(Component) {
   static propTypes = {
     ...viewPropTypes,
 

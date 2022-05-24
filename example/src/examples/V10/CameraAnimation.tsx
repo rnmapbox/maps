@@ -5,6 +5,9 @@ import MapboxGL, {
   CameraAnimationMode,
   CameraRef,
   Camera,
+  MapView,
+  ShapeSource,
+  CircleLayer,
 } from '@rnmapbox/maps';
 import bbox from '@turf/bbox';
 import { Feature, LineString, Point, Position } from '@turf/helpers';
@@ -82,6 +85,7 @@ const CameraAnimation = (props: any) => {
   const [inputKind, setInputKind] = useState<'declarative' | 'imperative'>(
     'declarative',
   );
+
   const camera = useRef<CameraRef>(null);
 
   const [animationMode, setAnimationMode] = useState<CameraAnimationMode>('moveTo');
@@ -271,7 +275,7 @@ const CameraAnimation = (props: any) => {
 
   return (
     <Page {...props}>
-      <MapboxGL.MapView style={styles.map}>
+      <MapView style={styles.map}>
         <Camera
           ref={camera}
           {...centerOrBounds}
@@ -286,15 +290,15 @@ const CameraAnimation = (props: any) => {
           features.map((f) => {
             const id = JSON.stringify(f.geometry.coordinates);
             return (
-              <MapboxGL.ShapeSource key={id} id={`source-${id}`} shape={f}>
-                <MapboxGL.CircleLayer
+              <ShapeSource key={id} id={`source-${id}`} shape={f}>
+                <CircleLayer
                   id={`layer-${id}`}
                   style={mapStyles.circle}
                 />
-              </MapboxGL.ShapeSource>
+              </ShapeSource>
             );
           })}
-      </MapboxGL.MapView>
+      </MapView>
 
       <SafeAreaView>
         <View style={styles.sheet}>
