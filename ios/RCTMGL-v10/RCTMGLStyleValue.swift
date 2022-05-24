@@ -118,6 +118,24 @@ class RCTMGLStyleValue {
       
       return value
     }
+    else if type == "hashmap" {
+      guard let values = from["value"] as? [[Any]] else {
+        fatalError("Value for hashmap should be array of array")
+      }
+    
+      let result = values.map { items -> (String,Any) in
+        let key = items[0]
+        let value = items[1]
+        guard let key = key as? String else {
+          fatalError("First item should be a string key")
+        }
+        guard let value = value as? [String:Any] else {
+          fatalError("Value should be an array of dicts")
+        }
+        return (key,convert(value))
+      }
+      return Dictionary<String, Any>(uniqueKeysWithValues: result)
+    }
     else if type == "number" {
       guard let value = from["value"] else {
         fatalError("Value for number should not be nil")

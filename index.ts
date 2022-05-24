@@ -259,6 +259,7 @@ type NamedExportsType = {
   removeCustomHeader(headerName: string): void;
   addCustomHeader(headerName: string, headerValue: string): void;
   setAccessToken(accessToken: string | null): void;
+  setWellKnownTileServer(tileServer: string): void;
   getAccessToken(): Promise<string>;
   setTelemetryEnabled(telemetryEnabled: boolean): void;
   setConnected(connected: boolean): void;

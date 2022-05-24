@@ -12,6 +12,8 @@
 #import "CameraMode.h"
 #import "RCTMGLSource.h"
 #import "MGLCustomHeaders.h"
+#import <React/RCTLog.h>
+
 @import Mapbox;
 
 @implementation MGLModule
@@ -27,12 +29,22 @@ RCT_EXPORT_MODULE();
 {
     // style urls
     NSMutableDictionary *styleURLS = [[NSMutableDictionary alloc] init];
+    // tile servers
+    NSMutableDictionary *tileServers =
+      [[NSMutableDictionary alloc] init];
+    // impl
+    const NSMutableDictionary* impl = [[NSMutableDictionary alloc] init];
 
 #ifdef RNMBGL_USE_MAPLIBRE
     for (MGLDefaultStyle* style in [MGLStyle predefinedStyles]) {
       [styleURLS setObject:[style.url absoluteString] forKey:style.name];
     }
     [styleURLS setObject:[[MGLStyle defaultStyleURL] absoluteString] forKey:@"Default"];
+    [tileServers setObject:@"mapbox" forKey:@"Mapbox"];
+    [tileServers setObject:@"maplibre" forKey:@"MapLibre"];
+    [tileServers setObject:@"maptiler" forKey:@"MapTiler"];
+    [impl setObject:@"maplibre" forKey:@"Library"];
+
 #else
     [styleURLS setObject:[MGLStyle.streetsStyleURL absoluteString] forKey:@"Street"];
     [styleURLS setObject:[MGLStyle.darkStyleURL absoluteString] forKey:@"Dark"];
@@ -40,6 +52,8 @@ RCT_EXPORT_MODULE();
     [styleURLS setObject:[MGLStyle.outdoorsStyleURL absoluteString] forKey:@"Outdoors"];
     [styleURLS setObject:[MGLStyle.satelliteStyleURL absoluteString] forKey:@"Satellite"];
     [styleURLS setObject:[MGLStyle.satelliteStreetsStyleURL absoluteString] forKey:@"SatelliteStreet"];
+    [tileServers setObject:@"mapbox" forKey:@"Mapbox"]
+    [impl setObject:@"mapbox-gl" forKey:@"Library"];
 #endif
 
     // event types
@@ -214,6 +228,8 @@ RCT_EXPORT_MODULE();
 
     return @{
          @"StyleURL": styleURLS,
+         @"TileServers": tileServers,
+         @"Implementation": impl,
          @"EventTypes": eventTypes,
          @"UserTrackingModes": userTrackingModes,
          @"UserLocationVerticalAlignment": userLocationVerticalAlignment,
@@ -254,6 +270,32 @@ RCT_EXPORT_METHOD(setAccessToken:(NSString *)accessToken)
     }
 #else
     [MGLAccountManager setAccessToken:accessToken];
+#endif
+}
+
+RCT_EXPORT_METHOD(setWellKnownTileServer:(NSString*)tileServer)
+{
+#ifdef RNMBGL_USE_MAPLIBRE
+  MGLWellKnownTileServer server = MGLMapLibre;
+  
+  if ([tileServer isEqualToString:@"maplibre"]) {
+    server = MGLMapLibre;
+  } else if ([tileServer isEqualToString:@"mapbox"]) {
+    server = MGLMapbox;
+  } else if ([tileServer isEqualToString:@"maptiler"]) {
+    server = MGLMapTiler;
+  } else {
+    RCTLogError(@"setWellKnownTileServer: %@ should be one of maplibre,mapbox,maptiler", tileServer);
+    return;
+  }
+
+  [MGLSettings useWellKnownTileServer: server];
+#else
+  if ([tileServer isEqualToString:@"mapbox"]) {
+    // nothing to do
+  } else {
+    RCTLogError(@"setWellKnownTileServer: %@ should be mapbox", tileServer);
+  }
 #endif
 }
 
