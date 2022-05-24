@@ -1,3 +1,4 @@
-/plugin/build
-/example
-/lib
+plugin/build
+example
+lib
+__tests__
