@@ -183,7 +183,7 @@ class RCTMGLStyleValue(config: ReadableMap) {
     init {
         type = config.getString("styletype")
         mPayload = config.getMap("stylevalue")
-        var isAddImage = false
+        isAddImage = false
         if ("image" == type) {
             imageScale = ImageEntry.defaultScale
             if ("hashmap" == mPayload!!.getString("type")) {
