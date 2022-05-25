@@ -190,39 +190,32 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
             QueryFeaturesCallback { features ->
                 if (features.isValue) {
                     val cluster = features.value!![0]
-                    mMap!!.queryFeatureExtensions(
-                        iD!!,
-                        cluster.feature,
-                        "supercluster",
-                        "expansion-zoom",
-                        null,
-                        QueryFeatureExtensionCallback { extension ->
-                            if (extension.isValue) {
-                                val contents = extension.value!!.value!!.contents
-                                if (contents is Long) {
-                                    val payload: WritableMap = WritableNativeMap()
-                                    payload.putInt("data", contents.toInt())
-                                    val event = AndroidCallbackEvent(_this, callbackID, payload)
-                                    mManager.handleEvent(event)
-                                    return@QueryFeatureExtensionCallback
-                                } else {
-                                    callbackError(
-                                        callbackID,
-                                        "Not a number",
-                                        "getClusterExpansionZoom/queryFeatureExtensions2"
-                                    )
-                                    return@QueryFeatureExtensionCallback
-                                }
+                    QueryFeatureExtensionCallback { extension ->
+                        if (extension.isValue) {
+                            val contents = extension.value!!.value!!.contents
+                            if (contents is Long) {
+                                val payload: WritableMap = WritableNativeMap()
+                                payload.putInt("data", contents.toInt())
+                                val event = AndroidCallbackEvent(_this, callbackID, payload)
+                                mManager.handleEvent(event)
+                                return@QueryFeatureExtensionCallback
                             } else {
                                 callbackError(
                                     callbackID,
-                                    extension.error ?: "Unknown error",
-                                    "getClusterExpansionZoom/queryFeatureExtensions"
+                                    "Not a number",
+                                    "getClusterExpansionZoom/queryFeatureExtensions2"
                                 )
                                 return@QueryFeatureExtensionCallback
                             }
+                        } else {
+                            callbackError(
+                                callbackID,
+                                extension.error ?: "Unknown error",
+                                "getClusterExpansionZoom/queryFeatureExtensions"
+                            )
+                            return@QueryFeatureExtensionCallback
                         }
-                    )
+                    }
                 } else {
                     callbackError(
                         callbackID,
@@ -245,27 +238,24 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
             options, QueryFeaturesCallback { features ->
                 if (features.isValue) {
                     val cluster = features.value!![0]
-                    mMap!!.queryFeatureExtensions(
-                        iD!!, cluster.feature, "supercluster", "leaves", null,
-                        QueryFeatureExtensionCallback { extension ->
-                            if (extension.isValue) {
-                                val leaves = extension.value!!
-                                    .featureCollection
-                                val payload: WritableMap = WritableNativeMap()
-                                payload.putString(
-                                    "data",
-                                    FeatureCollection.fromFeatures(leaves!!).toJson()
-                                )
-                            } else {
-                                callbackError(
-                                    callbackID,
-                                    features.error ?: "Unknown error",
-                                    "getClusterLeaves/queryFeatureExtensions"
-                                )
-                                return@QueryFeatureExtensionCallback
-                            }
+                    QueryFeatureExtensionCallback { extension ->
+                        if (extension.isValue) {
+                            val leaves = extension.value!!
+                                .featureCollection
+                            val payload: WritableMap = WritableNativeMap()
+                            payload.putString(
+                                "data",
+                                FeatureCollection.fromFeatures(leaves!!).toJson()
+                            )
+                        } else {
+                            callbackError(
+                                callbackID,
+                                features.error ?: "Unknown error",
+                                "getClusterLeaves/queryFeatureExtensions"
+                            )
+                            return@QueryFeatureExtensionCallback
                         }
-                    )
+                    }
                 } else {
                     callbackError(
                         callbackID,

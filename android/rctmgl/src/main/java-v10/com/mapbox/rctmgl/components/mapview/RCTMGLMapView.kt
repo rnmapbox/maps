@@ -15,20 +15,17 @@ import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
+import com.mapbox.maps.extension.observable.eventdata.StyleImageMissingEventData
 import com.mapbox.maps.extension.style.layers.Layer
 import com.mapbox.maps.extension.style.layers.generated.*
 import com.mapbox.maps.extension.style.layers.getLayer
-import com.mapbox.maps.extension.style.utils.unwrap
 import com.mapbox.maps.extension.style.layers.properties.generated.Visibility
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
-import com.mapbox.maps.plugin.delegates.listeners.OnCameraChangeListener
-import com.mapbox.maps.plugin.delegates.listeners.OnMapIdleListener
-import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener
-import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadedListener
+import com.mapbox.maps.plugin.delegates.listeners.*
 import com.mapbox.maps.plugin.gestures.*
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.components.AbstractMapFeature
@@ -363,7 +360,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                     ScreenCoordinate(screenPoint.x + halfWidth,
                             screenPoint.y + halfHeight)
             )
-            getMapboxMap().queryRenderedFeatures(screenBox,
+            getMapboxMap().queryRenderedFeatures(RenderedQueryGeometry(screenBox),
                     RenderedQueryOptions(
                             source.layerIDs,
                             null
@@ -755,5 +752,15 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         onMapReady(mMap)
         val _this = this
         mMap.addOnMapLoadedListener(OnMapLoadedListener { (begin, end) -> _this.handleMapChangedEvent(EventTypes.DID_FINISH_LOADING_MAP) })
+        mMap.addOnStyleImageMissingListener(OnStyleImageMissingListener { (begin, end, id) ->
+            for (images in mImages) {
+                if (images.addMissingImageToStyle(id, mMap)) {
+                    return@OnStyleImageMissingListener
+                }
+            }
+            for (images in mImages) {
+                images.sendImageMissingEvent(id, mMap)
+            }
+        })
     }
 }
