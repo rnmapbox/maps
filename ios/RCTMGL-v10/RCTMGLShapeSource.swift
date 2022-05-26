@@ -133,6 +133,13 @@ extension RCTMGLShapeSource
       }
     }
   }
+  
+  func parse(_ shape: String) throws -> Feature {
+    guard let data = shape.data(using: .utf8) else {
+      throw RCTMGLError.parseError("shape is not utf8")
+    }
+    return try JSONDecoder().decode(Feature.self, from: data)
+  }
 
   func parse(_ shape: String?) throws -> GeoJSONObject {
     guard let shape = shape else {
@@ -220,7 +227,7 @@ extension RCTMGLShapeSource
     }
   }
   
-  func getClusterLeaves(_ clusterId: NSNumber,
+  func getClusterLeaves(_ featureJSON: String,
                               number: uint,
                               offset: uint,
                               completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void)
@@ -230,26 +237,18 @@ extension RCTMGLShapeSource
       return
     }
     
-    let options = SourceQueryOptions(sourceLayerIds: nil, filter: Exp(.eq) {
-      Exp(.get) { "cluster_id" }
-      clusterId.uintValue
-    })
-    mapView.mapboxMap.querySourceFeatures(for: id, options: options) { result in
-      switch result {
-      case .success(let features):
-        let cluster = features[0]
-        mapView.mapboxMap.queryFeatureExtension(for: self.id, feature: cluster.feature, extension: "supercluster", extensionField: "leaves") {
-          result in
-          switch result {
-          case .success(let features):
-            completion(.success(features))
-          case .failure(let error):
-            completion(.failure(error))
-          }
+    logged("RCTMGLShapeSource.getClusterLeaves", rejecter: { (_,_,error) in
+      completion(.failure(error!))
+    }) {
+      let cluster : Feature = try parse(featureJSON);
+      mapView.mapboxMap.queryFeatureExtension(for: self.id, feature: cluster, extension: "supercluster", extensionField: "leaves") {
+        result in
+        switch result {
+        case .success(let features):
+          completion(.success(features))
+        case .failure(let error):
+          completion(.failure(error))
         }
-        
-      case .failure(let error):
-        completion(.failure(error))
       }
     }
   }
