@@ -2,15 +2,14 @@
 
 ## We're supporting 3 implementations at the moment:
 
-  - maplibre: *DEFAULT* open source fork of older open source mapbox libraries with many improvements
-  - mapbox: v10 latest mapbox implementation - not opensource requires access for download
-  - mapbox-gl: classic mapbox libraries - should work but will be dropped, recent versions are not open source and requires acess for download
+  - maplibre: open source fork of older open source mapbox libraries with many improvements
+  - mapbox: v10 latest mapbox implementation - not open source, requires access for download
+  - mapbox-gl: classic mapbox libraries - should work but will be dropped, recent versions are not open source and requires access for download
 
 
 ## Using MapLibre
 
 [MapLibre](https://github.com/maplibre/maplibre-gl-native) is an OSS fork of MapboxGL.
-This is the default, and should work without any changes in gradle files.
 
 ### Custom versions
 
@@ -19,10 +18,11 @@ Overwrite mapbox dependencies within your `android/build.gradle > buildscript > 
 ```groovy
 buildscript {
     ext {
-        // ...
-        RNMapboxMapsImpl = "maplibre" // optinal - as this is the default
+        // Required
+        RNMapboxMapsImpl = "maplibre"
 
-        RNMapboxMapsLibs = { // optional - only required if you want to customize it
+        // Optional customization
+        RNMapboxMapsLibs = {
             implementation ("org.maplibre.gl:android-sdk:9.5.2")
             implementation ("org.maplibre.gl:android-sdk-turf:5.9.0")
 
@@ -38,7 +38,7 @@ Feel free to check out the `/example` projects [`android/build.gradle`](https://
 
 ## Mapbox Maps SDK v10
 
-Add `RNMapboxMapsImpl = "mapbox"` to your gradle file - see bellow for details.
+Add `RNMapboxMapsImpl = "mapbox"` to your gradle file - see below for details.
 
 ### Custom versions
 
@@ -48,10 +48,11 @@ Overwrite mapbox dependencies within your `android/build.gradle > buildscript > 
 ```groovy
 buildscript {
     ext {
-        // ...
-        RNMapboxMapsImpl = "mapbox" // required for v10
+        // Required
+        RNMapboxMapsImpl = "mapbox"
 
-        RNMapboxMapsLibs = { // optional - only required if you want to customize it
+        // Optional customization
+        RNMapboxMapsLibs = {
             implementation 'com.mapbox.maps:android:10.5.0-beta1'
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.4.1'
         }
@@ -76,11 +77,11 @@ Add something like the following to your `android/build.gradle > buildscript > e
 // android/build.gradle
 
 buildscript {
-    // ... stuff
     ext {
+        // Required
         RNMapboxMapsImpl = "mapbox-gl"
 
-        // ... stuff
+        // Optional customization
         RNMapboxMapsLibs = {
             implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.1'
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.8.0'
@@ -91,7 +92,6 @@ buildscript {
             implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v9:0.14.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v9:0.4.0'
         }
-    // ... more stuff?
     }
 }
 ```
