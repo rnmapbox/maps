@@ -1,7 +1,8 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTViewManager.h>
 
-@interface RCT_EXTERN_MODULE(RCTMGLShapeSourceManager, RCTViewManager)
+@interface
+RCT_EXTERN_REMAP_MODULE(RCTMGLShapeSource, RCTMGLShapeSourceManager, RCTViewManager)
 
 RCT_EXPORT_VIEW_PROPERTY(id, NSString)
 RCT_EXPORT_VIEW_PROPERTY(url, NSString)
@@ -22,13 +23,14 @@ RCT_EXPORT_VIEW_PROPERTY(hitbox, NSDictionary)
 RCT_REMAP_VIEW_PROPERTY(onMapboxShapeSourcePress, onPress, RCTBubblingEventBlock)
 
 
+
 RCT_EXTERN_METHOD(getClusterExpansionZoom:(nonnull NSNumber*)reactTag
                                 clusterId:(nonnull NSNumber*)clusterId
                                  resolver:(RCTPromiseResolveBlock)resolve
                                  rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(getClusterLeaves:(nonnull NSNumber*)reactTag
-                  clusterId:(nonnull NSNumber *)clusterId
+                  featureJSON:(nonnull NSString*)featureJSON
                   number:(NSUInteger) number
                   offset:(NSUInteger) offset
                   resolver:(RCTPromiseResolveBlock)resolve
