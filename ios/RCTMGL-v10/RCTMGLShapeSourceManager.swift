@@ -32,7 +32,7 @@ class RCTMGLShapeSourceManager: RCTViewManager {
   
   @objc func getClusterLeaves(
     _ reactTag: NSNumber,
-    clusterId: NSNumber,
+    featureJSON: String,
     number: uint,
     offset: uint,
     resolver: @escaping RCTPromiseResolveBlock,
@@ -40,12 +40,15 @@ class RCTMGLShapeSourceManager: RCTViewManager {
   {
     self.bridge.uiManager.addUIBlock { (manager, viewRegistry) in
       let shapeSource = viewRegistry?[reactTag] as! RCTMGLShapeSource
-      let shapes = shapeSource.getClusterLeaves(clusterId, number: number, offset: offset) { result in
+      let shapes = shapeSource.getClusterLeaves(featureJSON, number: number, offset: offset) { result in
         switch result {
         case .success(let features):
-          resolver([
-            "data": ["type":"FeatureCollection", "features": features.features]
-          ])
+          logged("getClusterLeaves", rejecter: rejecter) {
+            let featuresJSON : Any = try features.features.toJSON()
+            resolver([
+              "data": ["type":"FeatureCollection", "features": featuresJSON]
+            ])
+          }
         case .failure(let error):
           rejecter(error.localizedDescription, "Error.getClusterLeaves", error)
         }

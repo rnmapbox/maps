@@ -124,8 +124,13 @@ class RCTMGLStyleValue {
       }
     
       let result = values.map { items -> (String,Any) in
-        let key = items[0]
+        var key = items[0]
         let value = items[1]
+        if let keyd = key as? [String:String],
+          keyd["type"] == "string",
+          let value = keyd["value"] {
+          key = value
+        }
         guard let key = key as? String else {
           fatalError("First item should be a string key")
         }
