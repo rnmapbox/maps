@@ -52,7 +52,7 @@ RCT_EXPORT_MODULE();
     [styleURLS setObject:[MGLStyle.outdoorsStyleURL absoluteString] forKey:@"Outdoors"];
     [styleURLS setObject:[MGLStyle.satelliteStyleURL absoluteString] forKey:@"Satellite"];
     [styleURLS setObject:[MGLStyle.satelliteStreetsStyleURL absoluteString] forKey:@"SatelliteStreet"];
-    [tileServers setObject:@"mapbox" forKey:@"Mapbox"]
+    [tileServers setObject:@"mapbox" forKey:@"Mapbox"];
     [impl setObject:@"mapbox-gl" forKey:@"Library"];
 #endif
 
