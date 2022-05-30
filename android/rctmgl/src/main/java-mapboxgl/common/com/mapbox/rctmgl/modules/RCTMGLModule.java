@@ -249,7 +249,16 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
         Map<String, String> locationModuleCallbackNames = new HashMap<>();
         locationModuleCallbackNames.put("Update", RCTMGLLocationModule.LOCATION_UPDATE);
 
+        // tileServer
+        Map<String, String> tileServers =  InstanceManagerImpl.getTileServers();
+
+        // implementation
+        Map<String, String> implementation = new HashMap<>();
+        implementation.put("Library", InstanceManagerImpl.getLibraryName());
+
         return MapBuilder.<String, Object>builder()
+                .put("TileServers", tileServers)
+                .put("Implementation", implementation)
                 .put("StyleURL", styleURLS)
                 .put("EventTypes", eventTypes)
                 .put("UserTrackingModes", userTrackingModes)
@@ -282,6 +291,11 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
                 .put("OfflineCallbackName", offlineModuleCallbackNames)
                 .put("LocationCallbackName", locationModuleCallbackNames)
                 .build();
+    }
+
+    @ReactMethod
+    public void setWellKnownTileServer(final String tileServer) {
+        InstanceManagerImpl.setWellKnownTileServer(tileServer);
     }
 
     @ReactMethod
