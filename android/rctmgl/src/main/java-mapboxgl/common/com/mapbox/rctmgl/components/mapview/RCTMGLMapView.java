@@ -752,11 +752,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
                 Integer methodID = preRenderMethod.first;
                 ReadableArray args = preRenderMethod.second;
 
-                try {
-                    mManager.receiveCommand(this, methodID, args);
-                } catch (Exception ex) {
-                    Logger.e(LOG_TAG, String.format("Could not execute pre-render method %s: %s", methodID, ex.getMessage()));
-                }
+                mManager.receiveCommand(this, methodID, args);
             }
             mPreRenderMethods.clear();
             handleMapChangedEvent(EventTypes.DID_FINISH_RENDERING_MAP_FULLY);
