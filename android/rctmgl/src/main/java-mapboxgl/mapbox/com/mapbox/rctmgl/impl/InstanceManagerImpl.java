@@ -8,7 +8,24 @@ public class InstanceManagerImpl {
     Mapbox.getInstance(context, accessToken);
   }
 
+  public static void setWellKnownTileServer(String wellKnownTileServer) {
+    if (wellKnownTileServer != "mapbox") {
+      Logger.w("InstanceManagerImpl", "setWellKnownTileServer: only mapbox is supported");
+      return;
+    }
+  }
+
   public static String getAccessToken() {
     return Mapbox.getAccessToken();
+  }
+
+  public static String getLibraryName() {
+    return "mapbox-gl";
+  }
+
+  public static Map<String,String> getTileServers() {
+    HashMap<String, String> result = new HashMap();
+    result.put("Mapbox", "mapbox");
+    return result;
   }
 }
