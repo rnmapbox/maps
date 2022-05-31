@@ -111,4 +111,6 @@ class Logger {
   }
 }
 
+Logger.sharedInstance().start();
+
 export default Logger;
