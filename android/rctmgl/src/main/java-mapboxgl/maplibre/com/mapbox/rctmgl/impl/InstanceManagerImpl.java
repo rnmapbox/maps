@@ -13,7 +13,7 @@ public class InstanceManagerImpl {
   public static void getInstance(Context context, String accessToken) {
     if (wellKnownTileServer == null) {
       Logger.w("InstanceManagerImpl", "setAccessToken requires setWellKnownTileServer for MapLibre, see setWellKnownTileServer docs for implications");
-      wellKnownTileServer = "maplibre";
+      wellKnownTileServer = WellKnownTileServer.MapLibre.name();
     }
     Mapbox.getInstance(context, accessToken,  WellKnownTileServer.valueOf(wellKnownTileServer) );
   }
