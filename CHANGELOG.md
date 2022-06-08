@@ -5,19 +5,22 @@ Please add unreleased changes in the following style:
 PR Title ([#123](link to my pr))
 ```
 
-Implement clustering properties to ShapeSource ([#1745](https://github.com/react-native-mapbox-gl/maps/pull/1745))
-
-### UNRELEASED/10.0.0-beta.0
+### UNRELEASED/10.0.0-beta.10
 
 #### Breaking changes:
 
 The setup was changed - see install instructions for more details. In a nuthsell:
 * On both android/ios to select mapbox implementation use `RNMapboxMapsImpl`/`$RNMapboxMapsImpl` variable which can be one of (`maplibre`,`mapbox`(aka v10),`mapbox-gl`)
+* Default implementation is `maplibre` as it requires not further setup. *WARNING* using mapbox styles from `maplibre` has different pricing than mapbox native sdk-s.
 * On Podfile `$RNMBGL.(pre|post)_install` was changed `$RNMapboxMaps.(pre|post)_install`
 * Package name was changed from `@react-native-mapbox-gl/maps` to `@rnmapbox/maps`. If you just testing with the v10 version you can use something like [babel-plugin-transform-rename-import](https://www.npmjs.com/package/babel-plugin-transform-rename-import) to keep using the old imports for a while.
 
+* `MapboxGL.setAccessToken` now requires `MapboxGL.setWellKnownTileServer` on maplibre.
+
+
 #### Changes:
 
+- Implement clustering properties to ShapeSource ([#1745](https://github.com/react-native-mapbox-gl/maps/pull/1745))
 - Initial Mapbox V10 support ([#1750](https://github.com/rnmapbox/maps/pull/1750))
 - Updated MapLibre on Android to 9.5.2 ([#1780](https://github.com/rnmapbox/maps/pull/1780))
 

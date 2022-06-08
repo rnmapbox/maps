@@ -8,16 +8,42 @@ class RCTMGLShapeSourceManager: RCTViewManager {
   @objc override func view() -> UIView {
     return RCTMGLShapeSource()
   }
-  
+}
+
+// MARK: - helpers
+
+extension RCTMGLShapeSourceManager {
+  func withShapeSource(
+      _ reactTag: NSNumber,
+      name: String,
+      rejecter: @escaping RCTPromiseRejectBlock,
+      fn: @escaping (_: RCTMGLShapeSource) -> Void) -> Void
+  {
+    self.bridge.uiManager.addUIBlock { (manager, viewRegistry) in
+      let view = viewRegistry![reactTag]
+
+      guard let shapeSource = view! as? RCTMGLShapeSource else {
+        RCTLogError("Invalid react tag, could not find RCTMGLShapeSource");
+        rejecter(name, "Unknown find reactTag: \(reactTag)", nil)
+        return;
+      }
+
+      fn(shapeSource)
+    }
+  }
+}
+
+// MARK: - react methods
+
+extension RCTMGLShapeSourceManager {
   @objc func getClusterExpansionZoom(
     _ reactTag: NSNumber,
     clusterId: NSNumber,
     resolver: @escaping RCTPromiseResolveBlock,
     rejecter: @escaping RCTPromiseRejectBlock) -> Void
   {
-    self.bridge.uiManager.addUIBlock { (manager, viewRegistry) in
-      let shapeSource = viewRegistry?[reactTag] as! RCTMGLShapeSource
-      let shapes = shapeSource.getClusterExpansionZoom(clusterId) { result in
+    self.withShapeSource(reactTag, name:"getClusterExpansionZoom", rejecter: rejecter) { shapeSource in
+      shapeSource.getClusterExpansionZoom(clusterId) { result in
         switch result {
         case .success(let zoom):
           resolver([
@@ -38,9 +64,8 @@ class RCTMGLShapeSourceManager: RCTViewManager {
     resolver: @escaping RCTPromiseResolveBlock,
     rejecter: @escaping RCTPromiseRejectBlock) -> Void
   {
-    self.bridge.uiManager.addUIBlock { (manager, viewRegistry) in
-      let shapeSource = viewRegistry?[reactTag] as! RCTMGLShapeSource
-      let shapes = shapeSource.getClusterLeaves(featureJSON, number: number, offset: offset) { result in
+    self.withShapeSource(reactTag, name:"getClusterLeaves", rejecter: rejecter) { shapeSource in
+      shapeSource.getClusterLeaves(featureJSON, number: number, offset: offset) { result in
         switch result {
         case .success(let features):
           logged("getClusterLeaves", rejecter: rejecter) {
@@ -55,4 +80,27 @@ class RCTMGLShapeSourceManager: RCTViewManager {
       }
     }
   }
+  
+  @objc func getClusterChildren(
+    _ reactTag: NSNumber,
+    featureJSON: String,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock) -> Void {
+      self.withShapeSource(reactTag, name:"getClusterChildren", rejecter: rejecter) { shapeSource in
+      shapeSource.getClusterChildren(featureJSON) { result in
+        switch result {
+        case .success(let features):
+          logged("getClusterChildren", rejecter: rejecter) {
+            let featuresJSON : Any = try features.features.toJSON()
+            resolver([
+              "data": ["type":"FeatureCollection", "features": featuresJSON]
+            ])
+          }
+        case .failure(let error):
+          rejecter(error.localizedDescription, "Error.getClusterChildren", error)
+        }
+      }
+    }
+  }
 }
+

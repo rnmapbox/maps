@@ -36,4 +36,9 @@ RCT_EXTERN_METHOD(getClusterLeaves:(nonnull NSNumber*)reactTag
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(getClusterChildren:(nonnull NSNumber*)reactTag
+                  featureJSON:(nonnull NSString*)featureJSON
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
 @end

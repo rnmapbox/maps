@@ -241,7 +241,29 @@ extension RCTMGLShapeSource
       completion(.failure(error!))
     }) {
       let cluster : Feature = try parse(featureJSON);
-      mapView.mapboxMap.queryFeatureExtension(for: self.id, feature: cluster, extension: "supercluster", extensionField: "leaves") {
+      mapView.mapboxMap.queryFeatureExtension(for: self.id, feature: cluster,  extension: "supercluster", extensionField: "leaves", args: ["limit": UInt64(number),"offset": UInt64(offset)]) {
+        result in
+        switch result {
+        case .success(let features):
+          completion(.success(features))
+        case .failure(let error):
+          completion(.failure(error))
+        }
+      }
+    }
+  }
+
+  func getClusterChildren(_ featureJSON: String, completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) {
+    guard let mapView = map?.mapView else {
+      completion(.failure(RCTMGLError.failed("getClusterChildren: no mapView")))
+      return
+    }
+
+    logged("RCTMGLShapeSource.getClusterChildren", rejecter: { (_,_,error) in
+      completion(.failure(error!))
+    }) {
+      let cluster : Feature = try parse(featureJSON);
+      mapView.mapboxMap.queryFeatureExtension(for: self.id, feature: cluster, extension: "supercluster", extensionField: "children") {
         result in
         switch result {
         case .success(let features):

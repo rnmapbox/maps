@@ -246,6 +246,7 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
 
     @Override
     public void receiveCommand(RCTMGLMapView mapView, int commandID, @Nullable ReadableArray args) {
+        String callbackID = args.getString(0);
         // allows method calls to work with componentDidMount
         MapboxMap mapboxMap = mapView.getMapboxMap();
         if (mapboxMap == null) {
@@ -256,41 +257,42 @@ public class RCTMGLMapViewManager extends AbstractEventEmitter<RCTMGLMapView> {
         switch (commandID) {
             case METHOD_QUERY_FEATURES_POINT:
                 mapView.queryRenderedFeaturesAtPoint(
-                        args.getString(0),
+                        callbackID,
                         ConvertUtils.toPointF(args.getArray(1)),
                         ExpressionParser.from(args.getArray(2)),
                         ConvertUtils.toStringList(args.getArray(3)));
                 break;
             case METHOD_QUERY_FEATURES_RECT:
                 mapView.queryRenderedFeaturesInRect(
-                        args.getString(0),
+                        callbackID,
                         ConvertUtils.toRectF(args.getArray(1)),
                         ExpressionParser.from(args.getArray(2)),
                         ConvertUtils.toStringList(args.getArray(3)));
                 break;
             case METHOD_VISIBLE_BOUNDS:
-                mapView.getVisibleBounds(args.getString(0));
+                mapView.getVisibleBounds(callbackID);
                 break;
             case METHOD_GET_POINT_IN_VIEW:
-                mapView.getPointInView(args.getString(0), GeoJSONUtils.toLatLng(args.getArray(1)));
+                mapView.getPointInView(callbackID, GeoJSONUtils.toLatLng(args.getArray(1)));
                 break;
             case METHOD_GET_COORDINATE_FROM_VIEW:
-                mapView.getCoordinateFromView(args.getString(0), ConvertUtils.toPointF(args.getArray(1)));
+                mapView.getCoordinateFromView(callbackID, ConvertUtils.toPointF(args.getArray(1)));
                 break;
             case METHOD_TAKE_SNAP:
-                mapView.takeSnap(args.getString(0), args.getBoolean(1));
+                mapView.takeSnap(callbackID, args.getBoolean(1));
                 break;
             case METHOD_GET_ZOOM:
-                mapView.getZoom(args.getString(0));
+                mapView.getZoom(callbackID);
                 break;
             case METHOD_GET_CENTER:
-                mapView.getCenter(args.getString(0));
+                mapView.getCenter(callbackID);
                 break;
             case METHOD_SET_HANDLED_MAP_EVENTS:
                 if(args != null) {
+                    ReadableArray events = args.getArray(1);
                     ArrayList<String> eventsArray = new ArrayList<>();
-                    for (int i = 1; i < args.size(); i++) {
-                        eventsArray.add(args.getString(i));
+                    for (int i = 0; i < events.size(); i++) {
+                        eventsArray.add(events.getString(i));
                     }
                     mapView.setHandledMapChangedEvents(eventsArray);
                 }
