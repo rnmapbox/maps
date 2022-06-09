@@ -117,11 +117,17 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   }
   
   func layerType() -> Layer.Type {
-    fatalError("Subclasses need to implement the `layerType` method.")
+    fatalError("Subclasses need to implement the `layerType` method. \(self)")
   }
 
-  func apply(style : Style) {
+  func apply(style : Style) throws {
     fatalError("Subclasses need to implement the `apply` method.")
+  }
+
+  final func loggedApply(style: Style) {
+    logged("updateLayer", info: { "\(self.layerType()).\(optional: self.id)" }) {
+      try apply(style: style)
+    }
   }
 
   func position() -> LayerPosition {
@@ -137,6 +143,9 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   }
   
   func inserLayer(_ map: RCTMGLMapView) {
+    if self.style == nil {
+      print("inserLayer but style is nil")
+    }
     if let style = style, let styleLayer = styleLayer {
       insert(style, layerPosition: position()) {
         map.layerAdded(styleLayer)
@@ -146,7 +155,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
 
   func updateLayer(_ map: RCTMGLMapView) {
     if let style = style, let _ = styleLayer {
-      apply(style: style)
+      loggedApply(style: style)
     }
   }
   
@@ -159,12 +168,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     let result = try style.source(withId: self.sourceID!, type: T.self)
     return result
   }
-  
-  func addToMap(_ map: RCTMGLMapView) {
-    self.style = map.mapboxMap.style
-    self.map = map
-  }
-  
+
   func addedToMap() {
     
   }
@@ -242,7 +246,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   private func optionsChanged() {
     if let style = self.style {
       self.setOptions(&self.styleLayer!)
-      self.apply(style: style)
+      self.loggedApply(style: style)
     }
   }
 
