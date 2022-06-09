@@ -14,7 +14,7 @@ open class RCTMGLMapView : MapView {
   
   var handleMapChangedEvents = Set<RCTMGLEvent.EventType>()
   
-  var onStyleLoadedComponents: [RCTMGLMapComponent]? = []
+  var onStyleLoadedComponents: [RCTMGLMapComponent] = []
   
   private var isPendingInitialLayout = true
   private var isGestureActive = false
@@ -36,10 +36,14 @@ open class RCTMGLMapView : MapView {
   
   @objc open override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     if let mapComponent = subview as? RCTMGLMapComponent {
-      if mapComponent.waitForStyleLoad(), self.onStyleLoadedComponents != nil {
-        onStyleLoadedComponents!.append(mapComponent)
+      let style = mapView.mapboxMap.style
+      if mapComponent.waitForStyleLoad() {
+        onStyleLoadedComponents.append(mapComponent)
+        if (style.isLoaded) {
+          mapComponent.addToMap(self, style: style)
+        }
       } else {
-        mapComponent.addToMap(self, style: self.mapboxMap.style)
+        mapComponent.addToMap(self, style: style)
       }
     }
     if let source = subview as? RCTMGLSource {
@@ -51,6 +55,9 @@ open class RCTMGLMapView : MapView {
   
   @objc open override func removeReactSubview(_ subview:UIView!) {
     if let mapComponent = subview as? RCTMGLMapComponent {
+      if mapComponent.waitForStyleLoad() {
+        onStyleLoadedComponents.removeAll { $0 === mapComponent }
+      }
       mapComponent.removeFromMap(self)
     }
     if let source = subview as? RCTMGLSource {
@@ -336,11 +343,10 @@ extension RCTMGLMapView {
       self.fireEvent(event: event, callback: self.reactOnMapChange)
     })
     
-    self.mapboxMap.onNext(.styleLoaded, handler: { (event) in
-      self.onStyleLoadedComponents?.forEach { (component) in
+    self.mapboxMap.onEvery(.styleLoaded, handler: { (event) in
+      self.onStyleLoadedComponents.forEach { (component) in
         component.addToMap(self, style: self.mapboxMap.style)
       }
-      self.onStyleLoadedComponents = nil
 
       let event = RCTMGLEvent(type:.didFinishLoadingStyle, payload: nil)
       self.fireEvent(event: event, callback: self.reactOnMapChange)
