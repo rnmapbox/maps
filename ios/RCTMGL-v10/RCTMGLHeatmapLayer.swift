@@ -17,8 +17,8 @@ class RCTMGLHeatmapLayer: RCTMGLVectorLayer {
     return LayerType.self
   }
   
-  override func apply(style : Style) {
-    try! style.updateLayer(withId: id, type: LayerType.self) { (layer : inout HeatmapLayer) in
+  override func apply(style : Style) throws {
+    try style.updateLayer(withId: id, type: LayerType.self) { (layer : inout HeatmapLayer) in
       if let styleLayer = self.styleLayer as? LayerType {
         layer = styleLayer
       }

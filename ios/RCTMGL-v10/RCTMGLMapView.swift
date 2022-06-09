@@ -8,6 +8,9 @@ open class RCTMGLMapView : MapView {
   var reactOnLongPress : RCTBubblingEventBlock?
   var reactOnMapChange : RCTBubblingEventBlock?
 
+  var styleLoaded: Bool = false
+  var styleLoadWaiters : [(MapboxMap)->Void] = []
+
   var reactCamera : RCTMGLCamera?
   var images : [RCTMGLImages] = []
   var sources : [RCTMGLSource] = []
@@ -33,8 +36,8 @@ open class RCTMGLMapView : MapView {
   var mapView : MapView {
     get { return self }
   }
-  
-  @objc open override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
+
+  func addToMap(_ subview: UIView) {
     if let mapComponent = subview as? RCTMGLMapComponent {
       let style = mapView.mapboxMap.style
       if mapComponent.waitForStyleLoad() {
@@ -45,25 +48,36 @@ open class RCTMGLMapView : MapView {
       } else {
         mapComponent.addToMap(self, style: style)
       }
+    } else {
+      print("addToMap.Subviews: \(subview.reactSubviews())")
+      subview.reactSubviews().forEach { addToMap($0) }
     }
     if let source = subview as? RCTMGLSource {
       sources.append(source)
     }
-
-    super.insertReactSubview(subview, at: atIndex)
   }
   
-  @objc open override func removeReactSubview(_ subview:UIView!) {
+  func removeFromMap(_ subview: UIView) {
     if let mapComponent = subview as? RCTMGLMapComponent {
       if mapComponent.waitForStyleLoad() {
         onStyleLoadedComponents.removeAll { $0 === mapComponent }
       }
       mapComponent.removeFromMap(self)
+    } else {
+      subview.reactSubviews().forEach { removeFromMap($0) }
     }
     if let source = subview as? RCTMGLSource {
       sources.removeAll { $0 == source }
     }
+  }
 
+  @objc open override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
+    addToMap(subview)
+    super.insertReactSubview(subview, at: atIndex)
+  }
+  
+  @objc open override func removeReactSubview(_ subview:UIView!) {
+    removeFromMap(subview)
     super.removeReactSubview(subview)
   }
 
@@ -182,6 +196,7 @@ open class RCTMGLMapView : MapView {
   }
   
   @objc func setReactStyleURL(_ value: String?) {
+    self.styleLoaded = false
     if let value = value {
       if let _ = URL(string: value) {
         mapView.mapboxMap.loadStyleURI(StyleURI(rawValue: value)!)
@@ -346,6 +361,15 @@ extension RCTMGLMapView {
     self.mapboxMap.onEvery(.styleLoaded, handler: { (event) in
       self.onStyleLoadedComponents.forEach { (component) in
         component.addToMap(self, style: self.mapboxMap.style)
+      }
+
+      if !self.styleLoaded {
+        self.styleLoaded = true
+        if let mapboxMap = self.mapboxMap {
+          let waiters = self.styleLoadWaiters
+          self.styleLoadWaiters = []
+          waiters.forEach { $0(mapboxMap) }
+        }
       }
 
       let event = RCTMGLEvent(type:.didFinishLoadingStyle, payload: nil)
@@ -533,12 +557,10 @@ extension RCTMGLMapView {
       fatalError("mapboxMap is null")
     }
     
-    if mapboxMap.style.isLoaded {
+    if styleLoaded {
       block(mapboxMap)
     } else {
-      mapboxMap.onNext(.styleLoaded) { _ in
-        block(mapboxMap)
-      }
+      styleLoadWaiters.append(block)
     }
   }
 }

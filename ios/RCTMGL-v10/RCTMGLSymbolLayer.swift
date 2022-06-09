@@ -17,8 +17,8 @@ class RCTMGLSymbolLayer: RCTMGLVectorLayer {
     return LayerType.self
   }
 
-  override func apply(style : Style) {
-    try! style.updateLayer(withId: id, type: LayerType.self) { (layer : inout SymbolLayer) in
+  override func apply(style : Style) throws {
+    try style.updateLayer(withId: id, type: LayerType.self) { (layer : inout SymbolLayer) in
       if var styleLayer = self.styleLayer as? LayerType {
         layer = styleLayer
       }
