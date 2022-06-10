@@ -4,6 +4,7 @@ import android.content.Context
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.rctmgl.utils.ImageEntry
 import android.graphics.drawable.BitmapDrawable
+import com.facebook.react.bridge.ReadableMap
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 import com.mapbox.rctmgl.events.FeatureClickEvent
 import com.facebook.react.bridge.WritableMap
@@ -164,6 +165,10 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
         }
     }
 
+    private fun callbackSuccess(callbackID: String, payload: WritableMap) {
+        val event = AndroidCallbackEvent(this, callbackID, payload)
+        mManager.handleEvent(event)
+    }
     private fun callbackError(callbackID: String, error: String, where: String) {
         val payload: WritableMap = WritableNativeMap()
         payload.putString("error", "$where: $error")
@@ -171,101 +176,86 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
         mManager.handleEvent(event)
     }
 
-    fun getClusterExpansionZoom(callbackID: String, clusterId: Int) {
-        if (mSource == null) {
-            val payload: WritableMap = WritableNativeMap()
-            payload.putString("error", "source is not yet loaded")
-            val event = AndroidCallbackEvent(this, callbackID, payload)
-            mManager.handleEvent(event)
-            return
-        }
-        val options = SourceQueryOptions(
-            null,
-            Expression.eq(Expression.get("cluster_id"), Expression.literal(clusterId.toLong()))
-        )
-        val _this = this
-        mMap!!.querySourceFeatures(
-            iD!!,
-            options,
-            QueryFeaturesCallback { features ->
-                if (features.isValue) {
-                    val cluster = features.value!![0]
-                    QueryFeatureExtensionCallback { extension ->
-                        if (extension.isValue) {
-                            val contents = extension.value!!.value!!.contents
-                            if (contents is Long) {
-                                val payload: WritableMap = WritableNativeMap()
-                                payload.putInt("data", contents.toInt())
-                                val event = AndroidCallbackEvent(_this, callbackID, payload)
-                                mManager.handleEvent(event)
-                                return@QueryFeatureExtensionCallback
-                            } else {
-                                callbackError(
-                                    callbackID,
-                                    "Not a number",
-                                    "getClusterExpansionZoom/queryFeatureExtensions2"
-                                )
-                                return@QueryFeatureExtensionCallback
-                            }
-                        } else {
-                            callbackError(
-                                callbackID,
-                                extension.error ?: "Unknown error",
-                                "getClusterExpansionZoom/queryFeatureExtensions"
-                            )
-                            return@QueryFeatureExtensionCallback
-                        }
-                    }
+    fun getClusterExpansionZoom(callbackID: String, featureJSON: String) {
+        val feature = Feature.fromJson(featureJSON)
+
+        mMap!!.getGeoJsonClusterExpansionZoom(iD!!, feature, QueryFeatureExtensionCallback { features ->
+            if (features.isValue) {
+                val contents = features.value!!.value!!.contents
+                val payload: WritableMap = WritableNativeMap()
+
+                if (contents is Long) {
+                    val payload: WritableMap = WritableNativeMap()
+                    payload.putInt("data", contents.toInt())
+                    callbackSuccess(callbackID, payload)
+                    return@QueryFeatureExtensionCallback
                 } else {
                     callbackError(
                         callbackID,
-                        features.error ?: "Unknown error",
-                        "getClusterExpansionZoom/querySourceFeatures"
+                        "Not a number: $contents",
+                        "getClusterExpansionZoom/getGeoJsonClusterExpansionZoom"
                     )
-                    return@QueryFeaturesCallback
+                    return@QueryFeatureExtensionCallback
                 }
+            } else {
+                callbackError(
+                    callbackID,
+                    features.error ?: "Unknown error",
+                    "getClusterExpansionZoom/getGeoJsonClusterExpansionZoom"
+                )
+                return@QueryFeatureExtensionCallback
             }
-        )
+        })
     }
 
-    fun getClusterLeaves(callbackID: String, clusterId: Int, number: Int, offset: Int) {
-        val options = SourceQueryOptions(
-            null,
-            Expression.eq(Expression.get("cluster_id"), Expression.literal(clusterId.toLong()))
-        )
-        mMap!!.querySourceFeatures(
-            iD!!,
-            options, QueryFeaturesCallback { features ->
-                if (features.isValue) {
-                    val cluster = features.value!![0]
-                    QueryFeatureExtensionCallback { extension ->
-                        if (extension.isValue) {
-                            val leaves = extension.value!!
-                                .featureCollection
-                            val payload: WritableMap = WritableNativeMap()
-                            payload.putString(
-                                "data",
-                                FeatureCollection.fromFeatures(leaves!!).toJson()
-                            )
-                        } else {
-                            callbackError(
-                                callbackID,
-                                features.error ?: "Unknown error",
-                                "getClusterLeaves/queryFeatureExtensions"
-                            )
-                            return@QueryFeatureExtensionCallback
-                        }
-                    }
-                } else {
-                    callbackError(
-                        callbackID,
-                        features.error ?: "Unknown error",
-                        "getClusterLeaves/querySourceFeatures"
-                    )
-                    return@QueryFeaturesCallback
-                }
+    fun getClusterLeaves(callbackID: String, featureJSON: String, number: Int, offset: Int) {
+        val feature = Feature.fromJson(featureJSON)
+
+        val _this = this
+        mMap!!.getGeoJsonClusterLeaves(iD!!, feature, number.toLong(), offset.toLong(), QueryFeatureExtensionCallback { features ->
+            if (features.isValue) {
+                val leaves = features.value!!
+                    .featureCollection
+                val payload: WritableMap = WritableNativeMap()
+                payload.putString(
+                    "data",
+                    FeatureCollection.fromFeatures(leaves!!).toJson()
+                )
+                callbackSuccess(callbackID, payload)
+            } else {
+                callbackError(
+                    callbackID,
+                    features.error ?: "Unknown error",
+                    "getClusterLeaves/getGeoJsonClusterLeaves"
+                )
+                return@QueryFeatureExtensionCallback
             }
-        )
+        })
+    }
+
+    fun getClusterChildren(callbackID: String, featureJSON: String) {
+        val feature = Feature.fromJson(featureJSON)
+
+        val _this = this
+        mMap!!.getGeoJsonClusterChildren(iD!!, feature, QueryFeatureExtensionCallback { features ->
+            if (features.isValue) {
+                val children = features.value!!
+                    .featureCollection
+                val payload: WritableMap = WritableNativeMap()
+                payload.putString(
+                    "data",
+                    FeatureCollection.fromFeatures(children!!).toJson()
+                )
+                callbackSuccess(callbackID, payload)
+            }else {
+                callbackError(
+                    callbackID,
+                    features.error ?: "Unknown error",
+                    "getClusterLeaves/queryFeatureExtensions"
+                )
+                return@QueryFeatureExtensionCallback
+            }
+        })
     }
 
     /*companion object {

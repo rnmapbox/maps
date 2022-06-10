@@ -179,11 +179,7 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
         if (missingImages.size > 0) {
             val task = DownloadMapImageTask(context, map, null)
             val params = missingImages.toTypedArray()
-            for (param in params) {
-                task.execute(param)
-            }
-
-
+            task.execute(*params)
         }
     }
 

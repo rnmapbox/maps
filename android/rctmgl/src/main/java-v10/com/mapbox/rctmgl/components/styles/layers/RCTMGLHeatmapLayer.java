@@ -27,7 +27,7 @@ public class RCTMGLHeatmapLayer extends RCTLayer<HeatmapLayer> {
 
     @Override
     public HeatmapLayer makeLayer() {
-        HeatmapLayer layer = new HeatmapLayer(mID, mSourceID);
+        HeatmapLayer layer = new HeatmapLayer(getID(), mSourceID);
 
         if (mSourceLayerID != null) {
             layer.sourceLayer(mSourceLayerID);

@@ -14,7 +14,7 @@ public class RCTMGLRasterLayer extends RCTLayer<RasterLayer> {
 
     @Override
     public RasterLayer makeLayer() {
-        return new RasterLayer(mID, mSourceID);
+        return new RasterLayer(getID(), mSourceID);
     }
 
     @Override

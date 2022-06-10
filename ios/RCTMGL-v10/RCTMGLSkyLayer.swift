@@ -5,10 +5,7 @@ class RCTMGLSkyLayer: RCTMGLLayer {
   typealias LayerType = SkyLayer
 
   override func makeLayer(style: Style) throws -> Layer {
-    let vectorSource : VectorSource = try self.layerWithSourceID(in: style)
-    var layer = LayerType(id: self.id!)
-    layer.sourceLayer = self.sourceLayerID
-    layer.source = sourceID
+    let layer = LayerType(id: self.id!)
     return layer
   }
 
@@ -16,9 +13,9 @@ class RCTMGLSkyLayer: RCTMGLLayer {
     return LayerType.self
   }
 
-  override func apply(style : Style) {
-    try! style.updateLayer(withId: id, type: LayerType.self) { (layer : inout LayerType) in
-      if var styleLayer = self.styleLayer as? LayerType {
+  override func apply(style : Style) throws {
+    try style.updateLayer(withId: id, type: LayerType.self) { (layer : inout LayerType) in
+      if let styleLayer = self.styleLayer as? LayerType {
         layer = styleLayer
       }
     }
