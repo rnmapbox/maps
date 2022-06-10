@@ -27,7 +27,7 @@ public class RCTMGLSymbolLayer extends RCTLayer<SymbolLayer> {
 
     @Override
     public SymbolLayer makeLayer() {
-        SymbolLayer layer = new SymbolLayer(mID, mSourceID);
+        SymbolLayer layer = new SymbolLayer(getID(), mSourceID);
 
         if (mSourceLayerID != null) {
             layer.sourceLayer(mSourceLayerID);
