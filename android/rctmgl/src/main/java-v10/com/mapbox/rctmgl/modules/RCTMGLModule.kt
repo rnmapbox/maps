@@ -66,7 +66,7 @@ class RCTMGLModule(private val mReactContext: ReactApplicationContext) : ReactCo
 
         // style source constants
         val styleSourceConsts: MutableMap<String, String> = HashMap()
-        styleSourceConsts["DefaultSourceID"] = "TODO-defautl id" //v10todo
+        styleSourceConsts["DefaultSourceID"] = "composite"
 
         // line layer constants
         val lineJoin: MutableMap<String, String> = HashMap()

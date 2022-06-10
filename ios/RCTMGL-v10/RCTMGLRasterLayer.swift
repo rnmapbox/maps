@@ -11,8 +11,8 @@ class RCTMGLRasterLayer: RCTMGLLayer {
     return layer
   }
 
-  override func apply(style : Style) {
-    try! style.updateLayer(withId: id, type: RasterLayer.self) { (layer : inout RasterLayer) in
+  override func apply(style : Style) throws {
+    try style.updateLayer(withId: id, type: RasterLayer.self) { (layer : inout RasterLayer) in
       if let styleLayer = self.styleLayer as? RasterLayer {
         layer = styleLayer
       }
@@ -40,5 +40,9 @@ class RCTMGLRasterLayer: RCTMGLLayer {
    
   func isAddedToMap() -> Bool {
     return true
+  }
+
+  override func layerType() -> Layer.Type {
+    return LayerType.self
   }
 }

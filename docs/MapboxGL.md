@@ -13,6 +13,16 @@
 sets the accessToken, which is required when you want to use mapbox tiles
 not required when using other tiles
 
+#### setWellKnownTileServer(tileServer)
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `tileServer` | `String` | `Yes` | tile server |
+
+##### Description
+No-op on non MapLibre implemntations. Use MapboxGL.TileServer.Mapbox to consume mapbox tiles with maplibre. *Note*: Consuming mapbox with MapLibre has different pricing than with the official SDK. Other values: MapboxGL.TileServer.MapLibre, MapboxGL.TileServer.MapTiler
+
 #### getAccessToken()
 
 ##### arguments

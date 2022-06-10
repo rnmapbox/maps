@@ -13,7 +13,7 @@ public class RCTMGLBackgroundLayer extends RCTLayer<BackgroundLayer> {
 
     @Override
     public BackgroundLayer makeLayer() {
-        return new BackgroundLayer(mID);
+        return new BackgroundLayer(getID());
     }
 
     @Override

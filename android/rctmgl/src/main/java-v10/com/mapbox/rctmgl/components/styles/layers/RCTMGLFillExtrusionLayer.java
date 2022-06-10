@@ -27,7 +27,7 @@ public class RCTMGLFillExtrusionLayer extends RCTLayer<FillExtrusionLayer> {
 
     @Override
     public FillExtrusionLayer makeLayer() {
-        FillExtrusionLayer layer = new FillExtrusionLayer(mID, mSourceID);
+        FillExtrusionLayer layer = new FillExtrusionLayer(getID(), mSourceID);
 
         if (mSourceLayerID != null) {
             layer.sourceLayer(mSourceLayerID);

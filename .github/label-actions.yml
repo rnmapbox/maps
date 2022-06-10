@@ -19,4 +19,8 @@
     :thinking: @{issue-author}, closing the issue for lack of activity, if the issue still persist, pls open a new one with steps to reproduce on recent versions
   # Close the issue
   close: true
+"Needs: Project setup instructions":
+  comment: >
+    @{issue-author}, sorry for us to look into project setup issues, we require steps to reproduce from `react-native init ...`. If you cannot reproduce starting with a blank project, then compare your setup with a blank working one.
+  close: true
 

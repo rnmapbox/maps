@@ -160,6 +160,16 @@ extension RCTMGLMapViewManager {
         resolver(["zoom": mapboxMap.cameraState.zoom])
       }
   }
+
+  @objc
+  func getVisibleBounds(
+    _ reactTag: NSNumber,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock) {
+      withMapView(reactTag, name:"getVisibleBounds", rejecter: rejecter) { mapView in
+        resolver(["visibleBounds":  mapView.mapboxMap.coordinateBounds(for: mapView.bounds).toArray()])
+      }
+  }
 }
 
 // MARK: - queryRenderedFeatures
