@@ -376,7 +376,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                         hitTouchableSources.add(source)
                     }
                 } else {
-                    Logger.e("handleTapInSources", features.error)
+                    Logger.e("handleTapInSources", features.error ?: "n/a")
                 }
                 handleTapInSources(sources, screenPoint, hits, hitTouchableSources, handleTap)
             }

@@ -27,7 +27,7 @@ public class RCTMGLLineLayer extends RCTLayer<LineLayer> {
 
     @Override
     public LineLayer makeLayer() {
-        LineLayer layer = new LineLayer(mID, mSourceID);
+        LineLayer layer = new LineLayer(getID(), mSourceID);
 
         if (mSourceLayerID != null) {
             layer.sourceLayer(mSourceLayerID);

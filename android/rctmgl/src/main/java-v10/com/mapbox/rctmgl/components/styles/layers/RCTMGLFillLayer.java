@@ -27,7 +27,7 @@ public class RCTMGLFillLayer extends RCTLayer<FillLayer> {
 
     @Override
     public FillLayer makeLayer() {
-        FillLayer layer = new FillLayer(mID, mSourceID);
+        FillLayer layer = new FillLayer(getID(), mSourceID);
 
         if (mSourceLayerID != null) {
             layer.sourceLayer(mSourceLayerID);

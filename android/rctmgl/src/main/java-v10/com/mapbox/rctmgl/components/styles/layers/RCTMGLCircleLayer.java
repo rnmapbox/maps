@@ -28,7 +28,7 @@ public class RCTMGLCircleLayer extends RCTLayer<CircleLayer> {
 
     @Override
     public CircleLayer makeLayer() {
-        CircleLayer layer = new CircleLayer(mID, mSourceID);
+        CircleLayer layer = new CircleLayer(getID(), mSourceID);
 
         if (mSourceLayerID != null) {
             layer.sourceLayer(mSourceLayerID);
