@@ -152,6 +152,7 @@ class RCTMGLShapeSourceManager(private val mContext: ReactApplicationContext) :
             .put("features", METHOD_FEATURES)
             .put("getClusterExpansionZoom", METHOD_GET_CLUSTER_EXPANSION_ZOOM)
             .put("getClusterLeaves", METHOD_GET_CLUSTER_LEAVES)
+            .put("getClusterChildren", METHOD_GET_CLUSTER_CHILDREN)
             .build()
     }
 
@@ -159,19 +160,27 @@ class RCTMGLShapeSourceManager(private val mContext: ReactApplicationContext) :
         if (args == null) {
             return
         }
+
+        val callbackID = args.getString(0);
+
         when (commandID) {
             METHOD_FEATURES -> source.querySourceFeatures(
-                args.getString(0),
+                callbackID,
                 ExpressionParser.from(args.getArray(1))
             )
             METHOD_GET_CLUSTER_EXPANSION_ZOOM -> source.getClusterExpansionZoom(
-                args.getString(0), args.getInt(1)
+                callbackID,
+                args.getString(1)
             )
             METHOD_GET_CLUSTER_LEAVES -> source.getClusterLeaves(
-                args.getString(0),
-                args.getInt(1),
+                callbackID,
+                args.getString(1),
                 args.getInt(2),
                 args.getInt(3)
+            )
+            METHOD_GET_CLUSTER_CHILDREN -> source.getClusterChildren(
+                callbackID,
+                args.getString(1)
             )
         }
     }
@@ -184,5 +193,6 @@ class RCTMGLShapeSourceManager(private val mContext: ReactApplicationContext) :
         const val METHOD_FEATURES = 103
         const val METHOD_GET_CLUSTER_EXPANSION_ZOOM = 104
         const val METHOD_GET_CLUSTER_LEAVES = 105
+        const val METHOD_GET_CLUSTER_CHILDREN = 106
     }
 }
