@@ -23,7 +23,7 @@ jobs:
         id: nvm
 
       - name: Setup node ${{ steps.nvm.outputs.NVMRC }}
-        uses: actions/setup-node@v2.5.0
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ steps.nvm.outputs.NVMRC }}
 
