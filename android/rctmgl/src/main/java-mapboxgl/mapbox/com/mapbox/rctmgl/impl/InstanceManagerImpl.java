@@ -2,6 +2,10 @@ package com.mapbox.rctmgl.impl;
 
 import android.content.Context;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.log.Logger;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class InstanceManagerImpl {
   public static void getInstance(Context context, String accessToken) {
@@ -23,7 +27,7 @@ public class InstanceManagerImpl {
     return "mapbox-gl";
   }
 
-  public static Map<String,String> getTileServers() {
+  public static Map<String, String> getTileServers() {
     HashMap<String, String> result = new HashMap();
     result.put("Mapbox", "mapbox");
     return result;
