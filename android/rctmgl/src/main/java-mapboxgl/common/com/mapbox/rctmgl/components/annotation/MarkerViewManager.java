@@ -53,12 +53,14 @@ public class MarkerViewManager extends com.mapbox.mapboxsdk.plugins.markerview.M
     }
 
     public void updateMarkers(){
-
-        try {          
-            for( int i = 0; i < markers.size(); i++ ){
-                markerUpdate.invoke(markers.get(i));
-            }
-        } 
+        
+        try {   
+            if (markerUpdate != null) {       
+                for( int i = 0; i < markers.size(); i++ ){    
+                    markerUpdate.invoke(markers.get(i));
+                }
+             }
+         } 
         catch (IllegalArgumentException e) { System.out.println(e.toString()); }
         catch (IllegalAccessException e) { System.out.println(e.toString()); }
         catch (InvocationTargetException e) { System.out.println(e.toString()); }
