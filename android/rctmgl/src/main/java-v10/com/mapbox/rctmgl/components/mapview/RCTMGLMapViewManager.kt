@@ -14,6 +14,8 @@ import com.mapbox.rctmgl.events.constants.EventKeys
 import com.mapbox.maps.MapboxMap
 import com.facebook.react.bridge.UiThreadUtil
 import com.facebook.react.common.MapBuilder
+import com.mapbox.rctmgl.utils.ConvertUtils
+import com.mapbox.rctmgl.utils.ExpressionParser
 import com.mapbox.rctmgl.utils.GeoJSONUtils
 import com.mapbox.rctmgl.utils.extensions.toCoordinate
 import com.mapbox.rctmgl.utils.extensions.toScreenCoordinate
@@ -219,16 +221,17 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
                     args!!.getString(3)
                 );
             }
+            METHOD_QUERY_FEATURES_POINT -> {
+                mapView.queryRenderedFeaturesAtPoint(
+                    args!!.getString(0),
+                    ConvertUtils.toPointF(args!!.getArray(1)),
+                    ExpressionParser.from(args!!.getArray(2)),
+                    ConvertUtils.toStringList(args!!.getArray(3))
+                );
+            }
         }
         /*
         switch (commandID) {
-            case METHOD_QUERY_FEATURES_POINT:
-                mapView.queryRenderedFeaturesAtPoint(
-                        args.getString(0),
-                        ConvertUtils.toPointF(args.getArray(1)),
-                        ExpressionParser.from(args.getArray(2)),
-                        ConvertUtils.toStringList(args.getArray(3)));
-                break;
             case METHOD_QUERY_FEATURES_RECT:
                 mapView.queryRenderedFeaturesInRect(
                         args.getString(0),
