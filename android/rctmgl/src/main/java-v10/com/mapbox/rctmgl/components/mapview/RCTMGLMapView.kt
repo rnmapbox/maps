@@ -12,10 +12,12 @@ import com.facebook.react.bridge.WritableNativeArray
 import com.facebook.react.bridge.WritableNativeMap
 import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.geojson.Feature
+import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
 import com.mapbox.maps.extension.observable.eventdata.StyleImageMissingEventData
+import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.Layer
 import com.mapbox.maps.extension.style.layers.generated.*
 import com.mapbox.maps.extension.style.layers.getLayer
@@ -683,6 +685,28 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
         val event = AndroidCallbackEvent(this, callbackID, payload)
         mManager.handleEvent(event)
+    }
+
+    fun queryRenderedFeaturesAtPoint(callbackID: String?, point: PointF, filter: Expression?, layerIDs: List<String>?) {
+        mMap?.queryRenderedFeatures(
+            ScreenCoordinate(point.x.toDouble(), point.y.toDouble()),
+            RenderedQueryOptions(layerIDs, filter)
+        ) { features ->
+            if (features.isValue) {
+                val featuresList = ArrayList<Feature?>()
+                for (i in features.value!!) {
+                    featuresList.add(i.feature)
+                }
+
+                val payload: WritableMap = WritableNativeMap()
+                payload.putString("data", FeatureCollection.fromFeatures(featuresList).toJson())
+
+                var event = AndroidCallbackEvent(this, callbackID, payload)
+                mManager.handleEvent(event)
+            } else {
+                Logger.e("queryRenderedFeaturesAtPoint", features.error ?: "n/a")
+            }
+        }
     }
 
     fun queryTerrainElevation(callbackID: String?, longitude: Double, latitude: Double) {
