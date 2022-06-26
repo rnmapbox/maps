@@ -72,6 +72,7 @@ describe('Public Interface', () => {
       'OfflineCallbackName',
 
       // methods
+      'setWellKnownTileServer',
       'setAccessToken',
       'getAccessToken',
       'setTelemetryEnabled',
