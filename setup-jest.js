@@ -80,6 +80,7 @@ NativeModules.MGLModule = {
   OfflineCallbackName: keyMirror(['Progress', 'Error']),
 
   // methods
+  setWellKnownTileServer: jest.fn(),
   setAccessToken: jest.fn(),
   getAccessToken: () => Promise.resolve('test-token'),
   setTelemetryEnabled: jest.fn(),
