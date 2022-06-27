@@ -72,6 +72,12 @@ NSString *const RCT_MAPBOX_OFFLINE_CALLBACK_ERROR = @"MapboOfflineRegionError";
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
 {
+    if ([keyPath isEqualToString:@"state"] && [object isKindOfClass:[MGLOfflinePack class]]) {
+        MGLOfflinePack* pack = (MGLOfflinePack*)object;
+        [self observerStateForPack:pack context:context];
+        return;
+    }
+
     if (packRequestQueue.count == 0) {
         return;
     }
@@ -213,8 +219,23 @@ RCT_EXPORT_METHOD(getPackStatus:(NSString *)name
         NSLog(@"getPackStatus - Unknown offline region");
         return;
     }
-    
-    resolve([self _makeRegionStatusPayload:name pack:pack]);
+  
+    if (pack.state == MGLOfflinePackStateUnknown) {
+        [pack addObserver:self forKeyPath:@"state" options:NSKeyValueObservingOptionNew context:(__bridge_retained void*)resolve];
+        [pack requestProgress];
+    } else {
+        resolve([self _makeRegionStatusPayload:name pack:pack]);
+    }
+}
+
+-(void)observerStateForPack:(MGLOfflinePack*)pack context:(nullable void*) context {
+    RCTPromiseResolveBlock resolve = (__bridge_transfer RCTPromiseResolveBlock)context;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary* metadata = [self _unarchiveMetadata:pack];
+        NSString* name = metadata[@"name"];
+        resolve([self _makeRegionStatusPayload:name pack:pack]);
+    });
+    [pack removeObserver:self forKeyPath:@"state" context:context];
 }
 
 RCT_EXPORT_METHOD(invalidatePack:(NSString *)name
