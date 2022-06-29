@@ -240,13 +240,6 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
         }
         /*
         switch (commandID) {
-            case METHOD_QUERY_FEATURES_RECT:
-                mapView.queryRenderedFeaturesInRect(
-                        args.getString(0),
-                        ConvertUtils.toRectF(args.getArray(1)),
-                        ExpressionParser.from(args.getArray(2)),
-                        ConvertUtils.toStringList(args.getArray(3)));
-                break;
             case METHOD_VISIBLE_BOUNDS:
                 mapView.getVisibleBounds(args.getString(0));
                 break;
