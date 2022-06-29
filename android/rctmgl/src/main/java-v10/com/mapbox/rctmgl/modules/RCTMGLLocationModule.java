@@ -121,6 +121,16 @@ public class RCTMGLLocationModule extends ReactContextBaseJavaModule {
           }
         );
     }
+    
+    @ReactMethod
+    public void addListener(String eventName) {
+         // Required for rn built in EventEmitter Calls.
+    }
+
+    @ReactMethod
+    public void removeListeners(Integer count) {
+         // Required for rn built in EventEmitter Calls.
+    }
 
     private void startLocationManager() {
         locationManager.addLocationListener(onUserLocationChangeCallback);
@@ -146,4 +156,5 @@ public class RCTMGLLocationModule extends ReactContextBaseJavaModule {
         isEnabled = false;
         isPaused = false;
     }
+    
 }
