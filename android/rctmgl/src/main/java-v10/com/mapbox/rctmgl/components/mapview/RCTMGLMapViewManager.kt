@@ -229,6 +229,14 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
                     ConvertUtils.toStringList(args!!.getArray(3))
                 );
             }
+            METHOD_QUERY_FEATURES_RECT -> {
+                mapView.queryRenderedFeaturesInRect(
+                        args!!.getString(0),
+                        ConvertUtils.toRectF(args.getArray(1)),
+                        ExpressionParser.from(args!!.getArray(2)),
+                        ConvertUtils.toStringList(args!!.getArray(3))
+                );
+            }
         }
         /*
         switch (commandID) {
