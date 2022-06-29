@@ -33,6 +33,7 @@ NativeModules.MGLModule = {
     'RegionDidChange',
     'WillStartLoadingMap',
     'DidFinishLoadingMap',
+    'DidFinishRenderingMapFully',
     'DidFailLoadingMap',
     'WillStartRenderingFrame',
     'DidFinishRenderingFrame',
