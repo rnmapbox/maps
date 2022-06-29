@@ -5,8 +5,6 @@ Please add unreleased changes in the following style:
 PR Title ([#123](link to my pr))
 ```
 
-* Update jest readme instruction for v10 [#2006](https://github.com/rnmapbox/maps/pull/2006)
-
 ### UNRELEASED/10.0.0-beta.10
 
 #### Breaking changes:
