@@ -57,7 +57,7 @@ import org.json.JSONObject
 import java.util.*
 
 
-open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapViewManager /*, MapboxMapOptions options*/) : MapView(mContext), OnMapClickListener {
+open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapViewManager /*, MapboxMapOptions options*/) : MapView(mContext), OnMapClickListener, OnMapLongClickListener {
     private val mSources: MutableMap<String, RCTSource<*>>
     private val mImages: MutableList<RCTMGLImages>
     private var mPointAnnotationManager: PointAnnotationManager? = null
@@ -121,7 +121,9 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         })
 
         val gesturesPlugin: GesturesPlugin = this.gestures
+        gesturesPlugin.addOnMapLongClickListener(_this)
         gesturesPlugin.addOnMapClickListener(_this)
+
         gesturesPlugin.addOnMoveListener(object : OnMoveListener {
             override fun onMoveBegin(moveGestureDetector: MoveGestureDetector) {
                 mCameraChangeTracker.setReason(CameraChangeTracker.USER_GESTURE)
@@ -417,6 +419,17 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
             })
         }
+        return false
+    }
+
+    override fun onMapLongClick(point: Point): Boolean {
+        val _this = this
+        val screenPoint = mMap?.pixelForCoordinate(point)
+        if (screenPoint != null) {
+            val event = MapClickEvent(_this, LatLng(point), screenPoint, EventTypes.MAP_LONG_CLICK)
+            mManager.handleEvent(event)
+        }
+
         return false
     }
 
@@ -814,4 +827,6 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             }
         })
     }
+
+
 }
