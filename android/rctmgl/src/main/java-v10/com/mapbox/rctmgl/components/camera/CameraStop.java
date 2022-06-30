@@ -193,9 +193,9 @@ public class CameraStop {
             paddingLeft = Float.valueOf(paddingLeft * metrics.scaledDensity).intValue();
 
             FeatureCollection collection = FeatureCollection.fromJson(readableMap.getString("bounds"));
-            /* v10todo
+
             stop.setBounds(GeoJSONUtils.toLatLngBounds(collection), paddingLeft, paddingRight,
-                    paddingTop, paddingBottom); */
+                    paddingTop, paddingBottom);
         }
 
         if (readableMap.hasKey("mode")) {
