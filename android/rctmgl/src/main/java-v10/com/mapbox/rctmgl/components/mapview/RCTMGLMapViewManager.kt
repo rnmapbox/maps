@@ -98,7 +98,9 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
 
     @ReactProp(name = "zoomEnabled")
     fun setZoomEnabled(mapView: RCTMGLMapView, zoomEnabled: Boolean) {
-        mapView.gestures.pitchEnabled = zoomEnabled
+        mapView.gestures.pinchToZoomEnabled = zoomEnabled
+        mapView.gestures.doubleTouchToZoomOutEnabled = zoomEnabled
+        mapView.gestures.doubleTapToZoomInEnabled = zoomEnabled
     }
 
     @ReactProp(name = "scrollEnabled")
