@@ -14,6 +14,9 @@ import com.mapbox.rctmgl.events.constants.EventKeys
 import com.mapbox.maps.MapboxMap
 import com.facebook.react.bridge.UiThreadUtil
 import com.facebook.react.common.MapBuilder
+import com.mapbox.maps.plugin.compass.compass
+import com.mapbox.maps.plugin.gestures.gestures
+import com.mapbox.maps.plugin.logo.logo
 import com.mapbox.rctmgl.utils.ConvertUtils
 import com.mapbox.rctmgl.utils.ExpressionParser
 import com.mapbox.rctmgl.utils.GeoJSONUtils
@@ -94,23 +97,23 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
     }
 
     @ReactProp(name = "zoomEnabled")
-    fun setZoomEnabled(mapView: RCTMGLMapView?, zoomEnabled: Boolean) {
-        //mapView.setReactZoomEnabled(zoomEnabled);
+    fun setZoomEnabled(mapView: RCTMGLMapView, zoomEnabled: Boolean) {
+        mapView.gestures.pitchEnabled = zoomEnabled
     }
 
     @ReactProp(name = "scrollEnabled")
-    fun setScrollEnabled(mapView: RCTMGLMapView?, scrollEnabled: Boolean) {
-        //mapView.setReactScrollEnabled(scrollEnabled);
+    fun setScrollEnabled(mapView: RCTMGLMapView, scrollEnabled: Boolean) {
+        mapView.gestures.scrollEnabled = scrollEnabled
     }
 
     @ReactProp(name = "pitchEnabled")
-    fun setPitchEnabled(mapView: RCTMGLMapView?, pitchEnabled: Boolean) {
-        //mapView.setReactPitchEnabled(pitchEnabled);
+    fun setPitchEnabled(mapView: RCTMGLMapView, pitchEnabled: Boolean) {
+        mapView.gestures.pitchEnabled = pitchEnabled
     }
 
     @ReactProp(name = "rotateEnabled")
-    fun setRotateEnabled(mapView: RCTMGLMapView?, rotateEnabled: Boolean) {
-        //mapView.setReactRotateEnabled(rotateEnabled);
+    fun setRotateEnabled(mapView: RCTMGLMapView, rotateEnabled: Boolean) {
+        mapView.gestures.rotateEnabled
     }
 
     @ReactProp(name = "attributionEnabled")
@@ -124,8 +127,8 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
     }
 
     @ReactProp(name = "logoEnabled")
-    fun setLogoEnabled(mapView: RCTMGLMapView?, logoEnabled: Boolean) {
-        //mapView.setReactLogoEnabled(logoEnabled);
+    fun setLogoEnabled(mapView: RCTMGLMapView, logoEnabled: Boolean) {
+        mapView.logo.enabled = logoEnabled
     }
 
     @ReactProp(name = "logoPosition")
@@ -134,7 +137,8 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
     }
 
     @ReactProp(name = "compassEnabled")
-    fun setCompassEnabled(mapView: RCTMGLMapView?, compassEnabled: Boolean) {
+    fun setCompassEnabled(mapView: RCTMGLMapView, compassEnabled: Boolean) {
+        mapView.compass.enabled = compassEnabled
         //mapView.setReactCompassEnabled(compassEnabled);
     }
 
