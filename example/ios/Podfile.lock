@@ -74,15 +74,15 @@ PODS:
   - fmt (6.2.1)
   - glog (0.3.5)
   - libevent (2.1.12)
-  - MapboxCommon (21.3.0)
-  - MapboxCoreMaps (10.5.1):
-    - MapboxCommon (~> 21.3)
-  - MapboxMaps (10.5.0):
-    - MapboxCommon (= 21.3.0)
-    - MapboxCoreMaps (= 10.5.1)
-    - MapboxMobileEvents (= 1.0.7)
+  - MapboxCommon (22.0.0)
+  - MapboxCoreMaps (10.6.0):
+    - MapboxCommon (~> 22.0)
+  - MapboxMaps (10.6.0):
+    - MapboxCommon (= 22.0.0)
+    - MapboxCoreMaps (= 10.6.0)
+    - MapboxMobileEvents (= 1.0.8)
     - Turf (~> 2.0)
-  - MapboxMobileEvents (1.0.7)
+  - MapboxMobileEvents (1.0.8)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
@@ -291,7 +291,7 @@ PODS:
   - React-jsinspector (0.68.1)
   - React-logger (0.68.1):
     - glog
-  - react-native-safe-area-context (3.2.0):
+  - react-native-safe-area-context (3.4.1):
     - React-Core
   - React-perflogger (0.68.1)
   - React-RCTActionSheet (0.68.1):
@@ -358,24 +358,24 @@ PODS:
     - React-jsi (= 0.68.1)
     - React-logger (= 0.68.1)
     - React-perflogger (= 0.68.1)
-  - RNGestureHandler (1.9.0):
+  - RNGestureHandler (1.10.3):
     - React-Core
-  - rnmapbox-maps (10.0.0-beta.3):
-    - MapboxMaps (~> 10.5.0)
+  - rnmapbox-maps (10.0.0-beta.15):
+    - MapboxMaps (~> 10.6.0)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.0.0-beta.3)
+    - rnmapbox-maps/DynamicLibrary (= 10.0.0-beta.15)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.0.0-beta.3):
-    - MapboxMaps (~> 10.5.0)
+  - rnmapbox-maps/DynamicLibrary (10.0.0-beta.15):
+    - MapboxMaps (~> 10.6.0)
     - React
     - React-Core
     - Turf
-  - RNScreens (3.8.0):
+  - RNScreens (3.13.1):
     - React-Core
     - React-RCTImage
-  - RNSVG (12.1.0):
-    - React
+  - RNSVG (12.3.0):
+    - React-Core
   - RNVectorIcons (9.0.0):
     - React-Core
   - SocketRocket (0.6.0)
@@ -562,14 +562,14 @@ SPEC CHECKSUMS:
   Flipper-RSocket: d9d9ade67cbecf6ac10730304bf5607266dd2541
   FlipperKit: cbdee19bdd4e7f05472a66ce290f1b729ba3cb86
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 5337263514dd6f09803962437687240c5dc39aa4
+  glog: 476ee3e89abb49e07f822b48323c51c57124b572
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  MapboxCommon: a336e40b53e3fda5c419fe093c9c40aff4f4dd2b
-  MapboxCoreMaps: f0c995b043323571ec46d7d9e496390982f6509d
-  MapboxMaps: e85375aa3d6bea94bf9c0221aa59f35ee0b29f29
-  MapboxMobileEvents: f7f3e8daeb4b83688ae62a4172dce79169a97233
+  MapboxCommon: 8b10731406d2e4472d52ae6ec3679e6e5c4bd55e
+  MapboxCoreMaps: 2019935caed7e56be1417ff70d3ad0c0cbf0264e
+  MapboxMaps: e078cc1343a0513174869a5e16ae9a18d3977252
+  MapboxMobileEvents: febdd92835daa258ca1c1faad0821c0b3394ef40
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
+  RCT-Folly: 4d8508a426467c48885f1151029bc15fa5d7b3b8
   RCTRequired: 00581111c53531e39e3c6346ef0d2c0cf52a5a37
   RCTTypeSafety: 07e03ee7800e7dd65cba8e52ad0c2edb06c96604
   React: e61f4bf3c573d0c61c56b53dc3eb1d9daf0768a0
@@ -582,7 +582,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 4a4bae5671b064a2248a690cf75957669489d08c
   React-jsinspector: 218a2503198ff28a085f8e16622a8d8f507c8019
   React-logger: f79dd3cc0f9b44f5611c6c7862badd891a862cf8
-  react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
+  react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   React-perflogger: 30ab8d6db10e175626069e742eead3ebe8f24fd5
   React-RCTActionSheet: 4b45da334a175b24dabe75f856b98fed3dfd6201
   React-RCTAnimation: d6237386cb04500889877845b3e9e9291146bc2e
@@ -595,10 +595,10 @@ SPEC CHECKSUMS:
   React-RCTVibration: 9e344c840176b0af9c84d5019eb4fed8b3c105a1
   React-runtimeexecutor: 7285b499d0339104b2813a1f58ad1ada4adbd6c0
   ReactCommon: bf2888a826ceedf54b99ad1b6182d1bc4a8a3984
-  RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
-  rnmapbox-maps: 75c78ebf20cbe15a72418cf7b616d45bcf245c2d
-  RNScreens: 6e1ea5787989f92b0671049b808aef64fa1ef98c
-  RNSVG: ce9d996113475209013317e48b05c21ee988d42e
+  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+  rnmapbox-maps: 6b031c7f878610081bfff73c68469c1534564012
+  RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19
+  RNSVG: 302bfc9905bd8122f08966dc2ce2d07b7b52b9f8
   RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Turf: 60b93cfdc62758526bc7bf1ef191a829aeb9694d
@@ -607,4 +607,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 4b8dadcc679d57c909588d625f8a25f9c79719e3
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3

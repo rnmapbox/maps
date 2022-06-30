@@ -1,12 +1,12 @@
 GEM
-2remote: https://rubygems.org/
-3specs:
-4  CFPropertyList (3.0.5)
-5    rexml
-6  activesupport (6.1.5)
-7    concurrent-ruby (~> 1.0, >= 1.0.2)
-8    i18n (>= 1.6, < 2)
-9    minitest (>= 5.1)
+  remote: https://rubygems.org/
+  specs:
+    CFPropertyList (3.0.5)
+      rexml
+    activesupport (6.1.6)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 1.6, < 2)
+      minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
     addressable (2.8.0)
@@ -85,7 +85,7 @@ GEM
       colored2 (~> 3.1)
       nanaimo (~> 0.3.0)
       rexml (~> 3.2.4)
-    zeitwerk (2.5.4)
+    zeitwerk (2.6.0)
 
 PLATFORMS
   ruby
@@ -97,4 +97,4 @@ RUBY VERSION
    ruby 2.7.4p191
 
 BUNDLED WITH
-   2.2.27
+   2.3.12
