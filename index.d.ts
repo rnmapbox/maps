@@ -577,7 +577,7 @@ export interface MapViewProps extends ViewProps {
 export interface CameraProps extends CameraSettings, ViewProps {
   allowUpdates?: boolean;
   animationDuration?: number;
-  animationMode?: 'flyTo' | 'easeTo' | 'linearTo' | 'moveTo';
+  animationMode?: 'flyTo' | 'easeTo' | 'linearTo' | 'moveTo' | 'none';
   defaultSettings?: CameraSettings;
   minZoomLevel?: number;
   maxZoomLevel?: number;
