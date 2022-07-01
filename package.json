@@ -57,7 +57,7 @@
     "@sinonjs/fake-timers": "^8.0.1",
     "@testing-library/react-native": "^8.0.0",
     "@types/react": "^18.0.5",
-    "@types/react-native": "^0.67.4",
+    "@types/react-native": "^0.69.1",
     "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.20.0",
     "babel-jest": "^27.5.1",
