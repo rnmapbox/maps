@@ -115,7 +115,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
 
     @ReactProp(name = "rotateEnabled")
     fun setRotateEnabled(mapView: RCTMGLMapView, rotateEnabled: Boolean) {
-        mapView.gestures.rotateEnabled
+        mapView.gestures.rotateEnabled = rotateEnabled
     }
 
     @ReactProp(name = "attributionEnabled")
