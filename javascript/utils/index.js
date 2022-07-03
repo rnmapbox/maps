@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  ViewPropTypes,
-  View,
-  NativeModules,
-  findNodeHandle,
-  Platform,
-} from 'react-native';
+import { View, NativeModules, findNodeHandle, Platform } from 'react-native';
+import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import PropTypes from 'prop-types';
 
