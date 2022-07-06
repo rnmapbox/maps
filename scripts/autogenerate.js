@@ -416,10 +416,10 @@ async function generate() {
       output: path.join(IOS_OUTPUT_PATH, 'RCTMGLStyle.h'),
       only: 'gl',
     },
-    {
+    /*{
       input: path.join(TMPL_PATH, 'index.d.ts.ejs'),
       output: path.join(IOS_OUTPUT_PATH, 'index.d.ts'),
-    },
+    },*/
     {
       input: path.join(TMPL_PATH, 'RCTMGLStyle.m.ejs'),
       output: path.join(IOS_OUTPUT_PATH, 'RCTMGLStyle.m'),

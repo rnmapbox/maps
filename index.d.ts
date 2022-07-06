@@ -22,6 +22,8 @@ import {
   FeatureCollection,
 } from '@turf/helpers';
 
+import type { requestAndroidLocationPermissions as _requestAndroidLocationPermissions } from './javascript/requestAndroidLocationPermissions';
+
 // prettier-ignore
 type ExpressionName =
   // Types
@@ -108,7 +110,8 @@ declare namespace MapboxGL {
   function getAccessToken(): Promise<string>;
   function setTelemetryEnabled(telemetryEnabled: boolean): void;
   function setConnected(connected: boolean): void;
-  function requestAndroidLocationPermissions(): Promise<boolean>;
+
+  const requestAndroidLocationPermissions = _requestAndroidLocationPermissions;
 
   const offlineManager: OfflineManager;
   const snapshotManager: SnapshotManager;
