@@ -27,7 +27,7 @@
     "unittest:single": "jest --testNamePattern",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepare": "npm run build:plugin",
+    "type:check": "yarn tsc --noEmit",
     "test:plugin": "expo-module test plugin",
     "build:plugin": "tsc --build plugin",
     "lint:plugin": "eslint plugin/src/*"
