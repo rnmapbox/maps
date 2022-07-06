@@ -1,32 +1,36 @@
-/**
- * Metro configuration for React Native
- * https://github.com/facebook/react-native
- *
- * @format
- */
 const path = require('path');
+const fs = require('fs');
 
-/*
-  See
-
-  https://medium.com/@dushyant_db/how-to-import-files-from-outside-of-root-directory-with-react-native-metro-bundler-18207a348427
-*/
-
-// exclusionList is a function that takes an array of regexes and combines
-// them with the default exclusions to return a single regex.
-const exclusionList = require('metro-config/src/defaults/exclusionList');
+const blacklist = require('metro-config/src/defaults/exclusionList');
 const glob = require('glob-to-regexp');
 
-const extraNodeModules = {
-  '@rnmapbox/maps': path.resolve(__dirname + '/../maps'),
-};
+const assetRegistryPath = fs
+  .realpathSync(require.resolve('react-native/Libraries/Image/AssetRegistry'))
+  .replace('.js', '');
+
+const inlineRequireBlockList = new Proxy(
+  {},
+  {
+    has: (target, name) => {
+      if (
+        name.endsWith('.js') &&
+        name.includes('/react-navigation-stack/lib/module/vendor/views/')
+      ) {
+        return true;
+      }
+      return false;
+    },
+  },
+);
 
 function getBlacklist() {
   const nodeModuleDirs = [
     glob(`${path.resolve(__dirname, '..')}/node_modules/*`),
     glob(`${path.resolve(__dirname, '..')}/docs/*`),
     glob(`${path.resolve(__dirname, '..')}/e2e/*`),
-    glob(`${path.resolve(__dirname)}/node_modules/*/node_modules/fbjs/*`),
+    glob(
+      `${path.resolve(__dirname)}/node_modules/*/node_modules/lodash.isequal/*`,
+    ),
     glob(
       `${path.resolve(
         __dirname,
@@ -38,26 +42,20 @@ function getBlacklist() {
       )}/node_modules/react-native/node_modules/@babel/*`,
     ),
   ];
-  return exclusionList(nodeModuleDirs);
+  return blacklist(nodeModuleDirs);
 }
 
 module.exports = {
   resolver: {
     blacklistRE: getBlacklist(),
-    extraNodeModules: new Proxy(extraNodeModules, {
-      get: (target, name) => {
-        return name in target
-          ? target[name]
-          : path.join(process.cwd(), `node_modules/${name}`);
-      },
-    }),
   },
   watchFolders: [path.resolve(__dirname, '..')],
   transformer: {
+    assetRegistryPath: assetRegistryPath,
     getTransformOptions: async () => ({
       transform: {
         experimentalImportSupport: false,
-        inlineRequires: true,
+        inlineRequires: { blockList: inlineRequireBlockList },
       },
     }),
   },
