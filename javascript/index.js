@@ -1,6 +1,5 @@
-import { NativeModules, PermissionsAndroid } from 'react-native';
+import { NativeModules } from 'react-native';
 
-import { isAndroid } from './utils';
 import MapView from './components/MapView';
 import Light from './components/Light';
 import PointAnnotation from './components/PointAnnotation';
@@ -36,34 +35,12 @@ import AnimatedExtractCoordinateFromArray from './utils/animated/AnimatedExtract
 import AnimatedRouteCoordinatesArray from './utils/animated/AnimatedRouteCoordinatesArray';
 import Style from './components/Style';
 import Logger from './utils/Logger';
+import requestAndroidLocationPermissions from './requestAndroidLocationPermissions';
 
 const MapboxGL = { ...NativeModules.MGLModule };
 
 // static methods
-MapboxGL.requestAndroidLocationPermissions = async function () {
-  if (isAndroid()) {
-    const res = await PermissionsAndroid.requestMultiple([
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
-    ]);
-
-    if (!res) {
-      return false;
-    }
-
-    const permissions = Object.keys(res);
-    for (const permission of permissions) {
-      if (res[permission] === PermissionsAndroid.RESULTS.GRANTED) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  throw new Error('You should only call this method on Android!');
-};
-
+MapboxGL.requestAndroidLocationPermissions = requestAndroidLocationPermissions;
 MapboxGL.UserTrackingModes = Camera.UserTrackingModes;
 
 // components
