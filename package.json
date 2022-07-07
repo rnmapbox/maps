@@ -70,7 +70,7 @@
     "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-import": "2.25.3",
     "expo-module-scripts": "^2.0.0",
-    "husky": "^7.0.4",
+    "husky": "^8.0.1",
     "jest": "27.5.1",
     "jest-cli": "27.5.1",
     "lint-staged": "^12.1.2",
