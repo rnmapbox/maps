@@ -9,6 +9,9 @@ RCT_REMAP_VIEW_PROPERTY(logoEnabled, reactLogoEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(logoPosition, reactLogoPosition, NSDictionary)
 RCT_REMAP_VIEW_PROPERTY(compassEnabled, reactCompassEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(compassPosition, reactCompassPosition, NSDictionary)
+RCT_REMAP_VIEW_PROPERTY(compassViewPosition, reactCompassViewPosition, NSInteger)
+RCT_REMAP_VIEW_PROPERTY(compassViewMargins, reactCompassViewMargins, CGPoint)
+
 RCT_REMAP_VIEW_PROPERTY(scaleBarEnabled, reactScaleBarEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(scaleBarPosition, reactScaleBarPosition, NSDictionary)
 
