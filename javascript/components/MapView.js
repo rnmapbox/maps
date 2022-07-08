@@ -150,12 +150,12 @@ class MapView extends NativeBridgeComponent(React.Component) {
     compassPosition: ornamentPositionPropType,
 
     /**
-     * [`mapbox-gl` (v8) and `maplibre` implementation only] Change corner of map the compass starts at. 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight
+     * Change corner of map the compass starts at. 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight
      */
     compassViewPosition: PropTypes.number,
 
     /**
-     * [`mapbox-gl` (v8) and `maplibre` implementation only] Add margins to the compass with x and y values
+     * Add margins to the compass with x and y values
      */
     compassViewMargins: PropTypes.object,
 
