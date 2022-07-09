@@ -217,7 +217,8 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     }
     
     if let sourceID = sourceID {
-      if !(existingLayer && sourceID == DEFAULT_SOURCE_ID) {
+      if !(existingLayer && sourceID == DEFAULT_SOURCE_ID) && hasSource() {
+        
         layer.source = sourceID
       }
     }
@@ -295,5 +296,9 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     } catch {
       Logger.log(level: .error, message: "inserting layer failed at position \(layerPosition): \(error.localizedDescription)")
     }
+  }
+  
+  internal func hasSource() -> Bool {
+    return true
   }
 }
