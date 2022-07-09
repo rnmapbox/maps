@@ -12,9 +12,14 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
   }
   
   func addToMap(_ map: RCTMGLMapView, style: Style) {
-    self.map = map
-    let point = point()!
-    try! viewAnnotations()?.add(self, options: ViewAnnotationOptions.init(geometry: Geometry.point(point), width: self.bounds.width, height: self.bounds.height, associatedFeatureId: nil, allowOverlap: true, visible: true, anchor: .center, offsetX: 0, offsetY: 0, selected: false))
+    logged("RCTMGLMarkerView.addToMap") {
+      self.map = map
+      let point = point()!
+
+      try point.coordinates.validate()
+
+      try viewAnnotations()?.add(self, options: ViewAnnotationOptions.init(geometry: Geometry.point(point), width: self.bounds.width, height: self.bounds.height, associatedFeatureId: nil, allowOverlap: true, visible: true, anchor: .center, offsetX: 0, offsetY: 0, selected: false))
+    }
   }
   
   func viewAnnotations() -> ViewAnnotationManager? {

@@ -46,4 +46,7 @@ class RCTMGLSkyLayer: RCTMGLLayer {
     return true
   }
 
+  internal override func hasSource() -> Bool {
+    return false
+  }
 }
