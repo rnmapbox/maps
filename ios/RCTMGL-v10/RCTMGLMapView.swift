@@ -180,9 +180,9 @@ open class RCTMGLMapView : MapView {
     case .bottomRight:
       return .bottomRight
     case .topRight:
-      return .bottomRight
+      return .topRight
     case .bottomLeft:
-      return .topLeft
+      return .bottomLeft
     case .none:
       return .topLeft
     }

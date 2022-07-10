@@ -2,17 +2,14 @@ package com.mapbox.rctmgl.components.mapview
 
 import android.util.Log
 import android.view.View
+import com.facebook.react.bridge.*
 
-import com.facebook.react.bridge.ReactApplicationContext
 import com.mapbox.rctmgl.components.AbstractEventEmitter
 import com.facebook.react.uimanager.LayoutShadowNode
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
-import com.facebook.react.bridge.ReadableMap
-import com.facebook.react.bridge.ReadableArray
 import com.mapbox.rctmgl.events.constants.EventKeys
 import com.mapbox.maps.MapboxMap
-import com.facebook.react.bridge.UiThreadUtil
 import com.facebook.react.common.MapBuilder
 import com.mapbox.rctmgl.utils.ConvertUtils
 import com.mapbox.rctmgl.utils.ExpressionParser
@@ -135,17 +132,22 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
 
     @ReactProp(name = "compassEnabled")
     fun setCompassEnabled(mapView: RCTMGLMapView?, compassEnabled: Boolean) {
-        //mapView.setReactCompassEnabled(compassEnabled);
+        mapView!!.setReactCompassEnabled(compassEnabled!!);
     }
 
     @ReactProp(name = "compassViewMargins")
     fun setCompassViewMargins(mapView: RCTMGLMapView?, compassViewMargins: ReadableMap?) {
-        //mapView.setReactCompassViewMargins(compassViewMargins);
+        mapView!!.setReactCompassViewMargins(compassViewMargins!!);
     }
 
     @ReactProp(name = "compassViewPosition")
     fun setCompassViewPosition(mapView: RCTMGLMapView?, compassViewPosition: Int) {
-        //mapView.setReactCompassViewPosition(compassViewPosition);
+        mapView!!.setReactCompassViewPosition(compassViewPosition!!)
+    }
+
+    @ReactProp(name = "compassPosition")
+    fun setCompassMargins(mapView: RCTMGLMapView?, compassMargins: ReadableMap) {
+        mapView!!.setReactCompassMargins(compassMargins)
     }
 
     @ReactProp(name = "contentInset")

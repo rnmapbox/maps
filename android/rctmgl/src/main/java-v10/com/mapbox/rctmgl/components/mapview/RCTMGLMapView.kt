@@ -1,23 +1,21 @@
 package com.mapbox.rctmgl.components.mapview
 
+import android.R.attr.gravity
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.PointF
 import android.graphics.RectF
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import com.facebook.react.bridge.WritableArray
-import com.facebook.react.bridge.WritableMap
-import com.facebook.react.bridge.WritableNativeArray
-import com.facebook.react.bridge.WritableNativeMap
+import com.facebook.react.bridge.*
 import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
-import com.mapbox.maps.extension.observable.eventdata.StyleImageMissingEventData
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.Layer
 import com.mapbox.maps.extension.style.layers.generated.*
@@ -28,6 +26,7 @@ import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListene
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
+import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.delegates.listeners.*
 import com.mapbox.maps.plugin.gestures.*
 import com.mapbox.rctmgl.R
@@ -828,5 +827,109 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         })
     }
 
+    // region Ornaments
+
+    fun toGravity(kind: String, viewPosition: Int): Int {
+        return when (viewPosition) {
+            0 -> (Gravity.TOP or Gravity.START)
+            1 -> (Gravity.TOP or Gravity.END)
+            2 -> (Gravity.BOTTOM or Gravity.START)
+            3 -> (Gravity.BOTTOM or Gravity.END)
+            else -> {
+                Logger.e(
+                    "MapView",
+                    "Unexpected viewPosition for $kind: $viewPosition should be between 0 and 3"
+                )
+                0
+            }
+        }
+    }
+
+    var mCompassEnabled = false
+    var mCompassViewMargins: ReadableMap? = null
+    var mCompassViewPosition: Int = -1
+
+    fun setReactCompassEnabled(compassEnabled: Boolean) {
+        mCompassEnabled = compassEnabled
+        updateCompass()
+    }
+
+    fun setReactCompassViewMargins(compassViewMargins: ReadableMap) {
+        mCompassViewMargins = compassViewMargins
+        updateCompass()
+    }
+
+    fun setReactCompassViewPosition(compassViewPosition: Int) {
+        mCompassViewPosition = compassViewPosition
+        updateCompass()
+    }
+
+    fun setReactCompassMargins(compassMargins: ReadableMap) {
+        val bottom_mask = 1;
+        val right_mask = 2;
+
+        var margins = WritableNativeMap()
+        var position = 0;
+        if (compassMargins.hasKey("bottom")) {
+            margins.putInt("y", compassMargins.getInt("bottom"))
+            position = position or bottom_mask
+        } else {
+            if (compassMargins.hasKey("top")) {
+                margins.putInt("y", compassMargins.getInt("top"))
+            }
+        }
+
+        if (compassMargins.hasKey("left")) {
+            margins.putInt("x", compassMargins.getInt("left"))
+        } else {
+            if (compassMargins.hasKey("right")) {
+                margins.putInt("x", compassMargins.getInt("right"))
+            }
+        }
+        mCompassViewPosition = position
+        mCompassViewMargins = margins
+        updateCompass()
+    }
+
+    private fun updateCompass() {
+        compass.updateSettings {
+            enabled = mCompassEnabled
+            if (mCompassViewPosition >= 0) {
+                position = toGravity("compass", mCompassViewPosition)
+            }
+
+            val compassViewMargins = mCompassViewMargins
+            if (compassViewMargins != null) {
+                val pixelDensity = resources.displayMetrics.density.toInt()
+                val x: Int = compassViewMargins.getInt("x") * pixelDensity
+                val y: Int = compassViewMargins.getInt("y") * pixelDensity
+
+                val horizontalGravity = position and Gravity.HORIZONTAL_GRAVITY_MASK
+                val verticalGravity = position and Gravity.VERTICAL_GRAVITY_MASK
+
+                when (horizontalGravity) {
+                    Gravity.LEFT -> {
+                        marginLeft = x.toFloat()
+                    }
+                    Gravity.RIGHT -> marginRight = x.toFloat()
+                    Gravity.CENTER_HORIZONTAL -> marginLeft = x.toFloat()
+                    else -> Logger.e(
+                        "MapView",
+                        "compassViewMargins: unexpected absolute pos: $horizontalGravity"
+                    )
+                }
+                when (verticalGravity) {
+                    Gravity.TOP -> marginTop = y.toFloat()
+                    Gravity.BOTTOM -> marginBottom = y.toFloat()
+                    Gravity.CENTER_VERTICAL -> marginTop = y.toFloat()
+                    else -> Logger.e(
+                        "MapView",
+                        "compassViewMargins: unexpected vertical pos: $verticalGravity"
+                    )
+                }
+            }
+        }
+    }
+    // endregion
 
 }
