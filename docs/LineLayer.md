@@ -36,6 +36,7 @@
 * <a href="#linedasharray">lineDasharray</a><br/>
 * <a href="#linepattern">linePattern</a><br/>
 * <a href="#linegradient">lineGradient</a><br/>
+* <a href="#linetrimoffset">lineTrimOffset</a><br/>
 
 ___
 
@@ -581,4 +582,25 @@ Defines a gradient with which to color a line feature. Can only be used with Geo
 #### Expression
 
 Parameters: `line-progress`
+
+___
+
+#### lineTrimOffset
+Name: `lineTrimOffset`
+
+#### Description
+The line part between [trimStart, trimEnd] will be marked as transparent to make a route vanishing effect. The line trimOff offset is based on the whole line range [0.0, 1.0].
+
+#### Type
+`array<number>`
+#### Default Value
+`[0,0]`
+
+#### Minimum
+`0,0`
+
+
+#### Maximum
+`1,1`
+
 

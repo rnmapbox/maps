@@ -29,6 +29,7 @@ public class RCTMGLStyleFactory {
     public static final String SHOULD_ADD_IMAGE_KEY = "shouldAddImage";
 
   <%_ for (const layer of layers) { _%>
+    <%_ if (layer.properties.length == 0) { continue } _%>
     public static void <%- setLayerMethodName(layer) -%>(final <%- getLayerType(layer, 'android') -%> layer, RCTMGLStyle style) {
       List<String> styleKeys = style.getAllStyleKeys();
 
