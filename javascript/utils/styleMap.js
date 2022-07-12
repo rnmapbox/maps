@@ -361,6 +361,11 @@ export const LineLayerStyleProp = PropTypes.shape({
     PropTypes.string,
     PropTypes.array,
   ]),
+
+  /**
+   * The line part between [trimStart, trimEnd] will be marked as transparent to make a route vanishing effect. The line trimOff offset is based on the whole line range [0.0, 1.0].
+   */
+  lineTrimOffset: PropTypes.arrayOf(PropTypes.number),
 });
 
 export const SymbolLayerStyleProp = PropTypes.shape({
@@ -565,7 +570,7 @@ export const SymbolLayerStyleProp = PropTypes.shape({
   ]),
 
   /**
-   * Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options.
+   * Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
    */
   textField: PropTypes.oneOfType([
     PropTypes.string,
@@ -1776,6 +1781,105 @@ export const LightLayerStyleProp = PropTypes.shape({
   }),
 });
 
+export const AtmosphereLayerStyleProp = PropTypes.shape({
+
+  /**
+   * The start and end distance range in which fog fades from fully transparent to fully opaque. The distance to the point at the center of the map is defined as zero, so that negative range values are closer to the camera, and positive values are farther away.
+   */
+  range: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.number),
+    PropTypes.array,
+  ]),
+
+  /**
+   * The transition affecting any changes to this layer’s range property.
+   */
+  rangeTransition: PropTypes.shape({
+    duration: PropTypes.number,
+    delay: PropTypes.number,
+  }),
+
+  /**
+   * The color of the atmosphere region immediately below the horizon and within the `range` and above the horizon and within `horizonBlend`. Using opacity is recommended only for smoothly transitioning fog on/off as anything less than 100% opacity results in more tiles loaded and drawn.
+   */
+  color: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
+
+  /**
+   * The transition affecting any changes to this layer’s color property.
+   */
+  colorTransition: PropTypes.shape({
+    duration: PropTypes.number,
+    delay: PropTypes.number,
+  }),
+
+  /**
+   * The color of the atmosphere region above the horizon, `highColor` extends further above the horizon than the `color` property and its spread can be controlled with `horizonBlend`. The opacity can be set to `0` to remove the high atmosphere color contribution.
+   */
+  highColor: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
+
+  /**
+   * The transition affecting any changes to this layer’s highColor property.
+   */
+  highColorTransition: PropTypes.shape({
+    duration: PropTypes.number,
+    delay: PropTypes.number,
+  }),
+
+  /**
+   * The color of the region above the horizon and after the end of the `horizonBlend` contribution. The opacity can be set to `0` to have a transparent background.
+   */
+  spaceColor: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
+
+  /**
+   * The transition affecting any changes to this layer’s spaceColor property.
+   */
+  spaceColorTransition: PropTypes.shape({
+    duration: PropTypes.number,
+    delay: PropTypes.number,
+  }),
+
+  /**
+   * Horizon blend applies a smooth fade from the color of the atmosphere to the color of space. A value of zero leaves a sharp transition from atmosphere to space. Increasing the value blends the color of atmosphere into increasingly high angles of the sky.
+   */
+  horizonBlend: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+  ]),
+
+  /**
+   * The transition affecting any changes to this layer’s horizonBlend property.
+   */
+  horizonBlendTransition: PropTypes.shape({
+    duration: PropTypes.number,
+    delay: PropTypes.number,
+  }),
+
+  /**
+   * A value controlling the star intensity where `0` will show no stars and `1` will show stars at their maximum intensity.
+   */
+  starIntensity: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array,
+  ]),
+
+  /**
+   * The transition affecting any changes to this layer’s starIntensity property.
+   */
+  starIntensityTransition: PropTypes.shape({
+    duration: PropTypes.number,
+    delay: PropTypes.number,
+  }),
+});
+
 
 const styleMap = {
   fillSortKey: StyleTypes.Constant,
@@ -1817,6 +1921,7 @@ const styleMap = {
   linePattern: StyleTypes.Image,
   linePatternTransition: StyleTypes.Transition,
   lineGradient: StyleTypes.Color,
+  lineTrimOffset: StyleTypes.Constant,
 
   symbolPlacement: StyleTypes.Enum,
   symbolSpacing: StyleTypes.Constant,
@@ -1982,6 +2087,19 @@ const styleMap = {
   colorTransition: StyleTypes.Transition,
   intensity: StyleTypes.Constant,
   intensityTransition: StyleTypes.Transition,
+
+  range: StyleTypes.Constant,
+  rangeTransition: StyleTypes.Transition,
+  color: StyleTypes.Color,
+  colorTransition: StyleTypes.Transition,
+  highColor: StyleTypes.Color,
+  highColorTransition: StyleTypes.Transition,
+  spaceColor: StyleTypes.Color,
+  spaceColorTransition: StyleTypes.Transition,
+  horizonBlend: StyleTypes.Constant,
+  horizonBlendTransition: StyleTypes.Transition,
+  starIntensity: StyleTypes.Constant,
+  starIntensityTransition: StyleTypes.Transition,
 
   visibility: StyleTypes.Constant,
 };

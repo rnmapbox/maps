@@ -2555,6 +2555,28 @@
           ]
         },
         "transition": false
+      },
+      {
+        "name": "lineTrimOffset",
+        "type": "array<number>",
+        "values": [],
+        "minimum": [
+          0,
+          0
+        ],
+        "maximum": [
+          1,
+          1
+        ],
+        "default": [
+          0,
+          0
+        ],
+        "description": "The line part between [trimStart, trimEnd] will be marked as transparent to make a route vanishing effect. The line trimOff offset is based on the whole line range [0.0, 1.0].",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "transition": false
       }
     ]
   },
@@ -5020,7 +5042,7 @@
         "type": "formatted",
         "values": [],
         "default": "",
-        "description": "Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options.",
+        "description": "Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.",
         "requires": [],
         "disabledBy": [],
         "allowedFunctionTypes": [],
@@ -5829,7 +5851,7 @@
     ]
   },
   "Terrain": {
-    "description": "Terrain renders a terran",
+    "description": "A global modifier that elevates layers and markers based on a DEM data source.",
     "displayName": "Terrain",
     "methods": [
       {

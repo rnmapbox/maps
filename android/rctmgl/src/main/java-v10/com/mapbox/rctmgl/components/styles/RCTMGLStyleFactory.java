@@ -16,6 +16,7 @@ import com.mapbox.maps.extension.style.layers.generated.RasterLayer;
 import com.mapbox.maps.extension.style.layers.generated.SymbolLayer;
 import com.mapbox.maps.extension.style.layers.generated.HeatmapLayer;
 import com.mapbox.maps.extension.style.layers.generated.HillshadeLayer;
+import com.mapbox.maps.extension.style.atmosphere.generated.Atmosphere;
 // import com.mapbox.maps.extension.style.layers.properties.generated.Visibility;
 import com.mapbox.maps.extension.style.layers.properties.generated.*;
 import com.mapbox.maps.extension.style.types.StyleTransition;
@@ -183,6 +184,9 @@ public class RCTMGLStyleFactory {
               break;
             case "lineGradient":
               RCTMGLStyleFactory.setLineGradient(layer, styleValue);
+              break;
+            case "lineTrimOffset":
+              RCTMGLStyleFactory.setLineTrimOffset(layer, styleValue);
               break;
         }
       }
@@ -820,6 +824,38 @@ public class RCTMGLStyleFactory {
         }
       }
     }
+    public static void setAtmosphereLayerStyle(final Atmosphere layer, RCTMGLStyle style) {
+      List<String> styleKeys = style.getAllStyleKeys();
+
+      if (styleKeys.size() == 0) {
+        return;
+      }
+
+      for (String styleKey : styleKeys) {
+        final RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
+
+        switch (styleKey) {
+            case "range":
+              RCTMGLStyleFactory.setRange(layer, styleValue);
+              break;
+            case "color":
+              RCTMGLStyleFactory.setColor(layer, styleValue);
+              break;
+            case "highColor":
+              RCTMGLStyleFactory.setHighColor(layer, styleValue);
+              break;
+            case "spaceColor":
+              RCTMGLStyleFactory.setSpaceColor(layer, styleValue);
+              break;
+            case "horizonBlend":
+              RCTMGLStyleFactory.setHorizonBlend(layer, styleValue);
+              break;
+            case "starIntensity":
+              RCTMGLStyleFactory.setStarIntensity(layer, styleValue);
+              break;
+        }
+      }
+    }
 
     public static void setFillSortKey(FillLayer layer, RCTMGLStyleValue styleValue) {
       if (styleValue.isExpression()) {
@@ -1138,6 +1174,14 @@ public class RCTMGLStyleFactory {
         layer.lineGradient(styleValue.getExpression());
       } else {
           layer.lineGradient(styleValue.getIntExpression(VALUE_KEY));
+      }
+    }
+
+    public static void setLineTrimOffset(LineLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.lineTrimOffset(styleValue.getExpression());
+      } else {
+          layer.lineTrimOffset(styleValue.getFloatArray(VALUE_KEY));
       }
     }
 
@@ -2430,6 +2474,54 @@ public class RCTMGLStyleFactory {
       StyleTransition transition = styleValue.getTransition();
       if (transition != null) {
         layer.intensityTransition(transition);
+      }
+    }
+
+    public static void setRange(Atmosphere layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.range(styleValue.getExpression());
+      } else {
+          layer.range(styleValue.getFloatArray(VALUE_KEY));
+      }
+    }
+
+    public static void setColor(Atmosphere layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.color(styleValue.getExpression());
+      } else {
+          layer.color(styleValue.getInt(VALUE_KEY));
+      }
+    }
+
+    public static void setHighColor(Atmosphere layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.highColor(styleValue.getExpression());
+      } else {
+          layer.highColor(styleValue.getInt(VALUE_KEY));
+      }
+    }
+
+    public static void setSpaceColor(Atmosphere layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.spaceColor(styleValue.getExpression());
+      } else {
+          layer.spaceColor(styleValue.getInt(VALUE_KEY));
+      }
+    }
+
+    public static void setHorizonBlend(Atmosphere layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.horizonBlend(styleValue.getExpression());
+      } else {
+          layer.horizonBlend(styleValue.getFloat(VALUE_KEY));
+      }
+    }
+
+    public static void setStarIntensity(Atmosphere layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.starIntensity(styleValue.getExpression());
+      } else {
+          layer.starIntensity(styleValue.getFloat(VALUE_KEY));
       }
     }
 

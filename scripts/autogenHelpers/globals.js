@@ -1,3 +1,5 @@
+/* eslint-disable fp/no-mutating-methods */
+
 let iosPropNameOverrides = {};
 
 const iosSpecOverrides = {
@@ -105,6 +107,8 @@ global.getLayerType = function (layer, platform) {
       return isIOS ? 'MGLLight' : 'Light';
     case 'sky':
       return isIOS ? 'MGLSkyLayer' : 'SkyLayer';
+    case 'atmosphere':
+      return isIOS ? 'MGLAtmosphere' : 'Atmosphere';
     default:
       throw new Error(
         `Is ${layer.name} a new layer? We should add support for it!`,
@@ -249,11 +253,30 @@ global.jsDocPropRequires = function (prop) {
   return desc;
 };
 
+global.getEnums = function (layers) {
+  let result = {};
+
+  layers.forEach((layer) => {
+    layer.properties.forEach((property) => {
+      if (
+        property.type === 'enum' ||
+        (property.type === 'array' && property.value === 'enum')
+      ) {
+        result[property.name] = {
+          values: property.doc.values,
+          name: property.name,
+        };
+      }
+    });
+  });
+  return Object.values(result);
+};
+
 global.dtsInterfaceType = function (prop) {
   let propTypes = [];
 
   if (prop.name.indexOf('Translate') !== -1) {
-    propTypes.push('TranslationProps');
+    propTypes.push('Translation');
   } else if (prop.type === 'color') {
     propTypes.push('string');
     // propTypes.push('ConstantPropType');
@@ -267,14 +290,16 @@ global.dtsInterfaceType = function (prop) {
         break;
       case 'string':
         propTypes.push('string[]');
-      default:
-        propTypes.push('any[]');
+        break;
+      case 'enum':
+        propTypes.push(`Enum<${pascelCase(prop.name)}Enum>[]`);
+        break;
     }
     // propTypes.push('ConstantPropType');
   } else if (prop.type === 'number') {
     propTypes.push('number');
   } else if (prop.type === 'enum') {
-    propTypes.push('any');
+    propTypes.push(`Enum<${pascelCase(prop.name)}Enum>`);
   } else {
     // images can be required which result in a number
     if (prop.image) {
@@ -283,16 +308,27 @@ global.dtsInterfaceType = function (prop) {
     propTypes.push('string');
   }
 
-  if (prop.allowedFunctionTypes && prop.allowedFunctionTypes.length) {
+  /*
+  if (prop.allowedFunctionTypes && prop.allowedFunctionTypes.length > 0) {
     propTypes.push('StyleFunctionProps');
   }
+  */
 
   if (propTypes.length > 1) {
-    return `TransitionProps |
-${propTypes.map((p) => startAtSpace(4, p)).join(' | ')},
+    return `${propTypes.map((p) => startAtSpace(4, p)).join(' | ')},
 ${startAtSpace(2, '')}`;
   } else {
-    return propTypes[0];
+    if (prop.expressionSupported) {
+      let params = '';
+      if (prop.expression && prop.expression.parameters) {
+        params = `,[${prop.expression.parameters
+          .map((v) => `'${v}'`)
+          .join(',')}]`;
+      }
+      return `Value<${propTypes[0]}${params}>`;
+    } else {
+      return propTypes[0];
+    }
   }
 };
 
@@ -311,6 +347,7 @@ global.jsDocReactProp = function (prop) {
         break;
       case 'string':
         propTypes.push('PropTypes.arrayOf(PropTypes.string)');
+        break;
       default:
         propTypes.push('PropTypes.array');
     }

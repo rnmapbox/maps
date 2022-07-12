@@ -63,7 +63,7 @@
     },
     "fog": {
       "type": "fog",
-      "doc": "A global effect that fades layers and markers based on their distance to the camera. The fog can be used to approximate the effect of atmosphere on distant objects and enhance the depth perception of the map when used with terrain or 3D features."
+      "doc": "A global effect that fades layers and markers based on their distance to the camera. The fog can be used to approximate the effect of atmosphere on distant objects and enhance the depth perception of the map when used with terrain or 3D features. Note: fog is renamed to atmosphere in the Android and iOS SDKs and planned to be changed in GL-JS v.3.0.0."
     },
     "sources": {
       "required": true,
@@ -92,6 +92,15 @@
       "example": {
         "duration": 300,
         "delay": 0
+      }
+    },
+    "projection": {
+      "type": "projection",
+      "doc": "The projection the map should be rendered in. Supported projections are Mercator, Globe, Albers, Equal Earth, Equirectangular (WGS84), Lambert conformal conic, Natural Earth, and Winkel Tripel. Terrain, sky and fog are supported by only Mercator and globe. CustomLayerInterface is not supported outside of Mercator.",
+      "example": {
+        "name": "albers",
+        "center": [-154, 50],
+        "parallels": [55, 65]
       }
     },
     "layers": {
@@ -652,7 +661,7 @@
     },
     "filter": {
       "type": "filter",
-      "doc": "A expression specifying conditions on source features. Only features that match the filter are displayed. Zoom expressions in filters are only evaluated at integer zoom levels. The `feature-state` expression is not supported in filter expressions."
+      "doc": "An expression specifying conditions on source features. Only features that match the filter are displayed. Zoom expressions in filters are only evaluated at integer zoom levels. The `[\"feature-state\", ...]` expression is not supported in filter expressions.  The `[\"pitch\"]` and `[\"distance-from-center\"]` expressions are supported only for filter expressions on the symbol layer."
     },
     "layout": {
       "type": "layout",
@@ -1738,7 +1747,7 @@
       "type": "formatted",
       "default": "",
       "tokens": true,
-      "doc": "Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options.",
+      "doc": "Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.",
       "sdk-support": {
         "basic functionality": {
           "js": "0.10.0",
@@ -2500,6 +2509,72 @@
     "value": "*",
     "doc": "A filter selects specific features from a layer."
   },
+  "filter_symbol": {
+    "type": "boolean",
+    "doc": "Expression which determines whether or not to display a symbol. Symbols support dynamic filtering, meaning this expression can use the `[\"pitch\"]` and `[\"distance-from-center\"]` expressions to reference the current state of the view.",
+    "default": false,
+    "transition": false,
+    "property-type": "data-driven",
+    "expression": {
+      "interpolated": false,
+      "parameters": ["zoom", "feature", "pitch", "distance-from-center"]
+    }
+  },
+  "filter_fill": {
+    "type": "boolean",
+    "doc": "Expression which determines whether or not to display a polygon. Fill layer does NOT support dynamic filtering, meaning this expression can NOT use the `[\"pitch\"]` and `[\"distance-from-center\"]` expressions to reference the current state of the view.",
+    "default": false,
+    "transition": false,
+    "property-type": "data-driven",
+    "expression": {
+      "interpolated": false,
+      "parameters": ["zoom", "feature"]
+    }
+  },
+  "filter_line": {
+    "type": "boolean",
+    "doc": "Expression which determines whether or not to display a Polygon or LineString. Line layer does NOT support dynamic filtering, meaning this expression can NOT use the `[\"pitch\"]` and `[\"distance-from-center\"]` expressions to reference the current state of the view.",
+    "default": false,
+    "transition": false,
+    "property-type": "data-driven",
+    "expression": {
+      "interpolated": false,
+      "parameters": ["zoom", "feature"]
+    }
+  },
+  "filter_circle": {
+    "type": "boolean",
+    "doc": "Expression which determines whether or not to display a circle. Circle layer does NOT support dynamic filtering, meaning this expression can NOT use the `[\"pitch\"]` and `[\"distance-from-center\"]` expressions to reference the current state of the view.",
+    "default": false,
+    "transition": false,
+    "property-type": "data-driven",
+    "expression": {
+      "interpolated": false,
+      "parameters": ["zoom", "feature"]
+    }
+  },
+  "filter_fill-extrusion": {
+    "type": "boolean",
+    "doc": "Expression which determines whether or not to display a Polygon. Fill-extrusion layer does NOT support dynamic filtering, meaning this expression can NOT use the `[\"pitch\"]` and `[\"distance-from-center\"]` expressions to reference the current state of the view.",
+    "default": false,
+    "transition": false,
+    "property-type": "data-driven",
+    "expression": {
+      "interpolated": false,
+      "parameters": ["zoom", "feature"]
+    }
+  },
+  "filter_heatmap": {
+    "type": "boolean",
+    "doc": "Expression used to determine whether a point is being displayed or not. Heatmap layer does NOT support dynamic filtering, meaning this expression can NOT use the `[\"pitch\"]` and `[\"distance-from-center\"]` expressions to reference the current state of the view.",
+    "default": false,
+    "transition": false,
+    "property-type": "data-driven",
+    "expression": {
+      "interpolated": false,
+      "parameters": ["zoom", "feature"]
+    }
+  },
   "filter_operator": {
     "type": "enum",
     "values": {
@@ -2761,7 +2836,7 @@
         }
       },
       "coalesce": {
-        "doc": "Evaluates each expression in turn until the first non-null value is obtained, and returns that value.",
+        "doc": "Evaluates each expression in turn until the first valid value is obtained. Invalid values are `null` and [`'image'`](#types-image) expressions that are unavailable in the style. If all values are invalid, `coalesce` returns the first value listed.",
         "group": "Decision",
         "sdk-support": {
           "basic functionality": {
@@ -2959,7 +3034,7 @@
         }
       },
       "image": {
-        "doc": "Returns an `image` type for use in `icon-image`, `*-pattern` entries and as a section in the `format` expression. If set, the `image` argument will check that the requested image exists in the style and will return either the resolved image name or `null`, depending on whether or not the image is currently in the style. This validation process is synchronous and requires the image to have been added to the style before requesting it in the `image` argument.",
+        "doc": "Returns a [`ResolvedImage`](/mapbox-gl-js/style-spec/types/#resolvedimage) for use in [`icon-image`](/mapbox-gl-js/style-spec/layers/#layout-symbol-icon-image), `*-pattern` entries, and as a section in the [`'format'`](#types-format) expression. A [`'coalesce'`](#coalesce) expression containing `image` expressions will evaluate to the first listed image that is currently in the style. This validation process is synchronous and requires the image to have been added to the style before requesting it in the `'image'` argument.",
         "group": "Types",
         "sdk-support": {
           "basic functionality": {
@@ -2971,7 +3046,7 @@
         }
       },
       "number-format": {
-        "doc": "Converts the input number into a string representation using the providing formatting rules. If set, the `locale` argument specifies the locale to use, as a BCP 47 language tag. If set, the `currency` argument specifies an ISO 4217 code to use for currency-style formatting. If set, the `min-fraction-digits` and `max-fraction-digits` arguments specify the minimum and maximum number of fractional digits to include.",
+        "doc": "Converts the input number into a string representation using the providing formatting rules. If set, the `locale` argument specifies the locale to use, as a BCP 47 language tag. If set, the `currency` argument specifies an ISO 4217 code to use for currency-style formatting. If set, the `unit` argument specifies a [simple ECMAScript unit](https://tc39.es/proposal-unified-intl-numberformat/section6/locales-currencies-tz_proposed_out.html#sec-issanctionedsimpleunitidentifier) to use for unit-style formatting. If set, the `min-fraction-digits` and `max-fraction-digits` arguments specify the minimum and maximum number of fractional digits to include.",
         "group": "Types",
         "sdk-support": {
           "basic functionality": {
@@ -2983,7 +3058,7 @@
         }
       },
       "to-string": {
-        "doc": "Converts the input value to a string. If the input is `null`, the result is `\"\"`. If the input is a boolean, the result is `\"true\"` or `\"false\"`. If the input is a number, it is converted to a string as specified by the [\"NumberToString\" algorithm](https://tc39.github.io/ecma262/#sec-tostring-applied-to-the-number-type) of the ECMAScript Language Specification. If the input is a color, it is converted to a string of the form `\"rgba(r,g,b,a)\"`, where `r`, `g`, and `b` are numerals ranging from 0 to 255, and `a` ranges from 0 to 1. Otherwise, the input is converted to a string in the format specified by the [`JSON.stringify`](https://tc39.github.io/ecma262/#sec-json.stringify) function of the ECMAScript Language Specification.",
+        "doc": "Converts the input value to a string. If the input is `null`, the result is `\"\"`. If the input is a [`boolean`](#types-boolean), the result is `\"true\"` or `\"false\"`. If the input is a number, it is converted to a string as specified by the [\"NumberToString\" algorithm](https://tc39.github.io/ecma262/#sec-tostring-applied-to-the-number-type) of the ECMAScript Language Specification. If the input is a [`color`](#color), it is converted to a string of the form `\"rgba(r,g,b,a)\"`, where `r`, `g`, and `b` are numerals ranging from 0 to 255, and `a` ranges from 0 to 1. If the input is an [`'image'`](#types-image) expression, `'to-string'` returns the image name. Otherwise, the input is converted to a string in the format specified by the [`JSON.stringify`](https://tc39.github.io/ecma262/#sec-json.stringify) function of the ECMAScript Language Specification.",
         "group": "Types",
         "sdk-support": {
           "basic functionality": {
@@ -3067,7 +3142,7 @@
         }
       },
       "get": {
-        "doc": "Retrieves a property value from the current feature's properties, or from another object if a second argument is provided. Returns null if the requested property is missing.",
+        "doc": "Retrieves a property value from the current feature's properties, or from another object if a second argument is provided. Returns `null` if the requested property is missing.",
         "group": "Lookup",
         "sdk-support": {
           "basic functionality": {
@@ -3091,7 +3166,7 @@
         }
       },
       "length": {
-        "doc": "Gets the length of an array or string.",
+        "doc": "Returns the length of an array or string.",
         "group": "Lookup",
         "sdk-support": {
           "basic functionality": {
@@ -3103,7 +3178,7 @@
         }
       },
       "properties": {
-        "doc": "Gets the feature properties object.  Note that in some cases, it may be more efficient to use [\"get\", \"property_name\"] directly.",
+        "doc": "Returns the feature properties object.  Note that in some cases, it may be more efficient to use `[\"get\", \"property_name\"]` directly.",
         "group": "Feature data",
         "sdk-support": {
           "basic functionality": {
@@ -3115,7 +3190,7 @@
         }
       },
       "feature-state": {
-        "doc": "Retrieves a property value from the current feature's state. Returns null if the requested property is not present on the feature's state. A feature's state is not part of the GeoJSON or vector tile data, and must be set programmatically on each feature. Features are identified by their `id` attribute, which must be an integer or a string that can be cast to an integer. Note that [\"feature-state\"] can only be used with paint properties that support data-driven styling.",
+        "doc": "Retrieves a property value from the current feature's state. Returns `null` if the requested property is not present on the feature's state. A feature's state is not part of the GeoJSON or vector tile data, and must be set programmatically on each feature. Features are identified by their `id` attribute, which must be an integer or a string that can be cast to an integer. Note that [\"feature-state\"] can only be used with paint properties that support data-driven styling.",
         "group": "Feature data",
         "sdk-support": {
           "basic functionality": {
@@ -3124,7 +3199,7 @@
         }
       },
       "geometry-type": {
-        "doc": "Gets the feature's geometry type: `Point`, `MultiPoint`, `LineString`, `MultiLineString`, `Polygon`, `MultiPolygon`. `Multi*` feature types are only returned in GeoJSON sources. When working with vector tile sources, use the singular forms.",
+        "doc": "Returns the feature's geometry type: `Point`, `MultiPoint`, `LineString`, `MultiLineString`, `Polygon`, `MultiPolygon`. `Multi*` feature types are only returned in GeoJSON sources. When working with vector tile sources, use the singular forms.",
         "group": "Feature data",
         "sdk-support": {
           "basic functionality": {
@@ -3136,7 +3211,7 @@
         }
       },
       "id": {
-        "doc": "Gets the feature's id, if it has one.",
+        "doc": "Returns the feature's id, if it has one.",
         "group": "Feature data",
         "sdk-support": {
           "basic functionality": {
@@ -3148,8 +3223,8 @@
         }
       },
       "zoom": {
-        "doc": "Gets the current zoom level.  Note that in style layout and paint properties, [\"zoom\"] may only appear as the input to a top-level \"step\" or \"interpolate\" expression.",
-        "group": "Zoom",
+        "doc": "Returns the current zoom level.  Note that in style layout and paint properties, [\"zoom\"] may only appear as the input to a top-level \"step\" or \"interpolate\" expression.",
+        "group": "Camera",
         "sdk-support": {
           "basic functionality": {
             "js": "0.41.0",
@@ -3159,8 +3234,26 @@
           }
         }
       },
+      "pitch": {
+        "doc": "Returns the current pitch in degrees. `[\"pitch\"]` may only be used in the `filter` expression for a `symbol` layer.",
+        "group": "Camera",
+        "sdk-support": {
+          "basic functionality": {
+            "js": "2.6.0"
+          }
+        }
+      },
+      "distance-from-center": {
+        "doc": "Returns the distance of a `symbol` instance from the center of the map. The distance is measured in pixels divided by the height of the map container. It measures 0 at the center, decreases towards the camera and increase away from the camera. For example, if the height of the map is 1000px, a value of -1 means 1000px away from the center towards the camera, and a value of 1 means a distance of 1000px away from the camera from the center. `[\"distance-from-center\"]` may only be used in the `filter` expression for a `symbol` layer.",
+        "group": "Camera",
+        "sdk-support": {
+          "basic functionality": {
+            "js": "2.6.0"
+          }
+        }
+      },
       "heatmap-density": {
-        "doc": "Gets the kernel density estimation of a pixel in a heatmap layer, which is a relative measure of how many data points are crowded around a particular pixel. Can only be used in the `heatmap-color` property.",
+        "doc": "Returns the kernel density estimation of a pixel in a heatmap layer, which is a relative measure of how many data points are crowded around a particular pixel. Can only be used in the `heatmap-color` property.",
         "group": "Heatmap",
         "sdk-support": {
           "basic functionality": {
@@ -3172,7 +3265,7 @@
         }
       },
       "line-progress": {
-        "doc": "Gets the progress along a gradient line. Can only be used in the `line-gradient` property.",
+        "doc": "Returns the progress along a gradient line. Can only be used in the `line-gradient` property.",
         "group": "Feature data",
         "sdk-support": {
           "basic functionality": {
@@ -3184,7 +3277,7 @@
         }
       },
       "sky-radial-progress": {
-        "doc": "Gets the distance of a point on the sky from the sun position. Returns 0 at sun position and 1 when the distance reaches `sky-gradient-radius`. Can only be used in the `sky-gradient` property.",
+        "doc": "Returns the distance of a point on the sky from the sun position. Returns 0 at sun position and 1 when the distance reaches `sky-gradient-radius`. Can only be used in the `sky-gradient` property.",
         "group": "sky",
         "sdk-support": {
           "basic functionality": {
@@ -3195,7 +3288,7 @@
         }
       },
       "accumulated": {
-        "doc": "Gets the value of a cluster property accumulated so far. Can only be used in the `clusterProperties` option of a clustered GeoJSON source.",
+        "doc": "Returns the value of a cluster property accumulated so far. Can only be used in the `clusterProperties` option of a clustered GeoJSON source.",
         "group": "Feature data",
         "sdk-support": {
           "basic functionality": {
@@ -3723,7 +3816,9 @@
       ],
       "sdk-support": {
         "basic functionality": {
-          "js": "2.3.0"
+          "js": "2.3.0",
+          "android": "10.6.0",
+          "ios": "10.6.0"
         }
       }
     },
@@ -3738,17 +3833,86 @@
         ]
       },
       "transition": true,
-      "doc": "The color of the fog. Using opacity is recommended only for smoothly transitioning fog on/off as anything less than 100% opacity results in more tiles loaded and drawn.",
+      "doc": "The color of the atmosphere region immediately below the horizon and within the `range` and above the horizon and within `horizon-blend`. Using opacity is recommended only for smoothly transitioning fog on/off as anything less than 100% opacity results in more tiles loaded and drawn.",
       "sdk-support": {
         "basic functionality": {
-          "js": "2.3.0"
+          "js": "2.3.0",
+          "android": "10.6.0",
+          "ios": "10.6.0"
+        }
+      }
+    },
+    "high-color": {
+      "type": "color",
+      "property-type": "data-constant",
+      "default": "#245cdf",
+      "expression": {
+        "interpolated": true,
+        "parameters": [
+          "zoom"
+        ]
+      },
+      "transition": true,
+      "doc": "The color of the atmosphere region above the horizon, `high-color` extends further above the horizon than the `color` property and its spread can be controlled with `horizon-blend`. The opacity can be set to `0` to remove the high atmosphere color contribution.",
+      "sdk-support": {
+        "basic functionality": {
+          "js": "2.9.0",
+          "android": "10.6.0",
+          "ios": "10.6.0"
+        }
+      }
+    },
+    "space-color": {
+      "type": "color",
+      "property-type": "data-constant",
+
+      "default":
+      [
+        "interpolate",
+        [
+          "linear"
+        ],
+        [
+          "zoom"
+        ],
+        4,
+        "#010b19",
+        7,
+        "#367ab9"
+      ],
+      "expression": {
+        "interpolated": true,
+        "parameters": [
+          "zoom"
+        ]
+      },
+      "transition": true,
+      "doc": "The color of the region above the horizon and after the end of the `horizon-blend` contribution. The opacity can be set to `0` to have a transparent background.",
+      "sdk-support": {
+        "basic functionality": {
+          "js": "2.9.0",
+          "android": "10.6.0",
+          "ios": "10.6.0"
         }
       }
     },
     "horizon-blend": {
       "type": "number",
       "property-type": "data-constant",
-      "default": 0.1,
+      "default":
+      [
+        "interpolate",
+        [
+          "linear"
+        ],
+        [
+          "zoom"
+        ],
+        4,
+        0.2,
+        7,
+        0.1
+      ],
       "minimum": 0,
       "maximum": 1,
       "expression": {
@@ -3758,10 +3922,47 @@
         ]
       },
       "transition": true,
-      "doc": "Horizon blend applies a smooth fade from the color of the fog to the color of the sky. A value of zero leaves a sharp transition from fog to sky. Increasing the value blends the color of fog into increasingly high angles of the sky.",
+      "doc": "Horizon blend applies a smooth fade from the color of the atmosphere to the color of space. A value of zero leaves a sharp transition from atmosphere to space. Increasing the value blends the color of atmosphere into increasingly high angles of the sky.",
       "sdk-support": {
         "basic functionality": {
-          "js": "2.3.0"
+          "js": "2.3.0",
+          "android": "10.6.0",
+          "ios": "10.6.0"
+        }
+      }
+    },
+    "star-intensity": {
+      "type": "number",
+      "property-type": "data-constant",
+      "default":
+      [
+        "interpolate",
+        [
+          "linear"
+        ],
+        [
+          "zoom"
+        ],
+        5,
+        0.35,
+        6,
+        0
+      ],
+      "minimum": 0,
+      "maximum": 1,
+      "expression": {
+        "interpolated": true,
+        "parameters": [
+          "zoom"
+        ]
+      },
+      "transition": true,
+      "doc": "A value controlling the star intensity where `0` will show no stars and `1` will show stars at their maximum intensity.",
+      "sdk-support": {
+        "basic functionality": {
+          "js": "2.9.0",
+          "android": "10.6.0",
+          "ios": "10.6.0"
         }
       }
     }
@@ -3874,6 +4075,99 @@
       }
     }
   },
+  "projection": {
+    "name": {
+      "type": "enum",
+      "values": {
+        "albers": {
+          "doc": "An Albers equal-area projection centered on the continental United States. You can configure the projection for a different region by setting `center` and `parallels` properties. You may want to set max bounds to constrain the map to the relevant region."
+        },
+        "equalEarth": {
+          "doc": "An Equal Earth projection."
+        },
+        "equirectangular": {
+          "doc": "An Equirectangular projection. This projection is very similar to the Plate Carrée projection."
+        },
+        "lambertConformalConic": {
+          "doc": "A Lambert conformal conic projection. You can configure the projection for a region by setting `center` and `parallels` properties. You may want to set max bounds to constrain the map to the relevant region."
+        },
+        "mercator": {
+          "doc": "The Mercator projection is the default projection."
+        },
+        "naturalEarth": {
+          "doc": "A Natural Earth projection."
+        },
+        "winkelTripel": {
+          "doc": "A Winkel Tripel projection."
+        },
+        "globe": {
+          "doc": "A globe projection."
+        }
+      },
+      "default": "mercator",
+      "doc": "The name of the projection to be used for rendering the map.",
+      "required": true,
+      "sdk-support": {
+        "basic functionality": {
+          "js": "2.6.0"
+        }
+      }
+    },
+    "center": {
+      "type": "array",
+      "length": 2,
+      "value": "number",
+      "property-type": "data-constant",
+      "minimum": [-180, -90],
+      "maximum": [180, 90],
+      "transition": false,
+      "doc": "The reference longitude and latitude of the projection. `center` takes the form of [lng, lat]. This property is only configurable for conic projections (Albers and Lambert Conformal Conic). All other projections are centered on [0, 0].",
+      "example": [
+        -96,
+        37.5
+      ],
+      "requires": [
+        {
+          "name": [
+              "albers",
+              "lambertConformalConic"
+          ]
+        }
+      ],
+      "sdk-support": {
+        "basic functionality": {
+          "js": "2.6.0"
+        }
+      }
+    },
+    "parallels": {
+      "type": "array",
+      "length": 2,
+      "value": "number",
+      "property-type": "data-constant",
+      "minimum": [-90, -90],
+      "maximum": [90, 90],
+      "transition": false,
+      "doc":  "The standard parallels of the projection, denoting the desired latitude range with minimal distortion. `parallels` takes the form of [lat0, lat1]. This property is only configurable for conic projections (Albers and Lambert Conformal Conic).",
+      "example": [
+        29.5,
+        45.5
+      ],
+      "requires": [
+        {
+          "name": [
+              "albers",
+              "lambertConformalConic"
+          ]
+        }
+      ],
+      "sdk-support": {
+        "basic functionality": {
+          "js": "2.6.0"
+        }
+      }
+    }
+  },
   "terrain" : {
     "source": {
       "type": "string",
@@ -3901,6 +4195,9 @@
       },
       "transition": true,
       "doc": "Exaggerates the elevation of the terrain by multiplying the data from the DEM with this value.",
+      "requires": [
+        "source"
+      ],
       "sdk-support": {
         "basic functionality": {
           "js": "2.0.0",
@@ -4358,6 +4655,49 @@
         ]
       },
       "property-type": "data-constant"
+    },
+    "fill-extrusion-ambient-occlusion-intensity": {
+      "property-type": "data-constant",
+      "type": "number",
+      "default": 0.0,
+      "minimum": 0,
+      "maximum": 1,
+      "expression": {
+        "interpolated": true,
+        "parameters": [
+          "zoom"
+        ]
+      },
+      "transition": true,
+      "doc": "Controls the intensity of ambient occlusion (AO) shading. Current AO implementation is a low-cost best-effort approach that shades area near ground and concave angles between walls. Default value 0.0 disables ambient occlusion and values around 0.3 provide the most plausible results for buildings.",
+      "sdk-support": {
+        "basic functionality": {
+          "js": "2.8.3",
+          "android": "10.7.0",
+          "ios": "10.7.0"
+        }
+      }
+    },
+    "fill-extrusion-ambient-occlusion-radius": {
+      "property-type": "data-constant",
+      "type": "number",
+      "default": 3.0,
+      "minimum": 0,
+      "expression": {
+        "interpolated": true,
+        "parameters": [
+          "zoom"
+        ]
+      },
+      "transition": true,
+      "doc": "The radius of ambient occlusion (AO) shading, in meters. Current AO implementation is a low-cost best-effort approach that shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to hight of one floor and brings the most plausible results for buildings.",
+      "sdk-support": {
+        "basic functionality": {
+          "js": "2.8.3",
+          "android": "10.7.0",
+          "ios": "10.7.0"
+        }
+      }
     }
   },
   "paint_line": {
@@ -4697,6 +5037,33 @@
         ]
       },
       "property-type": "color-ramp"
+    },
+    "line-trim-offset": {
+      "type": "array",
+      "value": "number",
+      "doc": "The line part between [trim-start, trim-end] will be marked as transparent to make a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].",
+      "length": 2,
+      "default": [0.0, 0.0],
+      "minimum": [0.0, 0.0],
+      "maximum": [1.0, 1.0],
+      "transition": false,
+      "requires": [
+          {
+              "source": "geojson",
+              "has": {
+                  "lineMetrics": true
+              }
+          }
+      ],
+      "sdk-support": {
+        "basic functionality": {
+          "js": "2.9.0",
+          "android": "10.5.0",
+          "ios": "10.5.0",
+          "macos": "10.5.0"
+        }
+      },
+      "property-type": "constant"
     }
   },
   "paint_circle": {

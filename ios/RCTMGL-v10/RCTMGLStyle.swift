@@ -164,6 +164,8 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, apply
       self.setLinePatternTransition(&layer, styleValue:styleValue);
     } else if (prop == "lineGradient") {
       self.setLineGradient(&layer, styleValue:styleValue);
+    } else if (prop == "lineTrimOffset") {
+      self.setLineTrimOffset(&layer, styleValue:styleValue);
     } else {
       // TODO throw exception
     }
@@ -735,6 +737,38 @@ func lightLayer(layer: inout Light, reactStyle:Dictionary<String, Any>, applyUpd
   }
 }
 
+func atmosphereLayer(layer: inout Atmosphere, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout Atmosphere)->Void)->Void, isValid: @escaping () -> Bool)
+{
+  guard self._hasReactStyle(reactStyle) else {
+    fatalError("Invlalid style: \(reactStyle)")
+  }
+
+  let styleProps = reactStyle.keys
+  for prop in styleProps {
+    if (prop == "__MAPBOX_STYLESHEET__") {
+      continue;
+    }
+
+    let styleValue = RCTMGLStyleValue.make(reactStyle[prop])
+
+    if (prop == "range") {
+      self.setRange(&layer, styleValue:styleValue);
+    } else if (prop == "color") {
+      self.setColor(&layer, styleValue:styleValue);
+    } else if (prop == "highColor") {
+      self.setHighColor(&layer, styleValue:styleValue);
+    } else if (prop == "spaceColor") {
+      self.setSpaceColor(&layer, styleValue:styleValue);
+    } else if (prop == "horizonBlend") {
+      self.setHorizonBlend(&layer, styleValue:styleValue);
+    } else if (prop == "starIntensity") {
+      self.setStarIntensity(&layer, styleValue:styleValue);
+    } else {
+      // TODO throw exception
+    }
+  }
+}
+
 
 
 
@@ -1033,6 +1067,15 @@ func setLineGradient(_ layer: inout LineLayer, styleValue: RCTMGLStyleValue)
         
           layer.lineGradient = styleValue.mglStyleValueColor();
         
+      
+}
+
+func setLineTrimOffset(_ layer: inout LineLayer, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.lineTrimOffset = styleValue.mglStyleValueArrayNumber();
+         
       
 }
 
@@ -2308,6 +2351,62 @@ func setIntensity(_ layer: inout Light, styleValue: RCTMGLStyleValue)
 func setIntensityTransition(_ layer: inout Light, styleValue: RCTMGLStyleValue)
 {
     layer.intensityTransition = styleValue.getTransition();
+}
+
+
+
+func setRange(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.range = styleValue.mglStyleValueArrayNumber();
+         
+      
+}
+
+func setColor(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.color = styleValue.mglStyleValueColor();
+        
+      
+}
+
+func setHighColor(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.highColor = styleValue.mglStyleValueColor();
+        
+      
+}
+
+func setSpaceColor(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.spaceColor = styleValue.mglStyleValueColor();
+        
+      
+}
+
+func setHorizonBlend(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.horizonBlend = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setStarIntensity(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.starIntensity = styleValue.mglStyleValueNumber();
+        
+      
 }
 
 
