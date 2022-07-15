@@ -33,14 +33,17 @@ class DocJSONBuilder {
     for (const styleLayer of styledLayers) {
       const ComponentName = pascelCase(styleLayer.name);
       this._styledLayers[
-        ComponentName + (ComponentName === 'Light' ? '' : 'Layer')
+        ComponentName +
+          (['Light', 'Atmosphere', 'Terrain'].includes(ComponentName)
+            ? ''
+            : 'Layer')
       ] = styleLayer;
     }
   }
 
   get options() {
     return {
-      match: /.js$/,
+      match: /.(js|tsx)$/,
       shortName: true,
     };
   }
@@ -213,16 +216,17 @@ class DocJSONBuilder {
             return reject(err);
           }
 
-          fileName = fileName.replace('.js', '');
-          if (IGNORE_FILES.includes(fileName)) {
+          let componentName = fileName.replace(/.(js|tsx)/, '');
+          if (IGNORE_FILES.includes(componentName)) {
             next();
             return;
           }
 
-          results[fileName] = docgen.parse(content, undefined, undefined, {
+          results[componentName] = docgen.parse(content, undefined, undefined, {
             filename: fileName,
           });
-          this.postprocess(results[fileName], fileName);
+          results[componentName].fileName = fileName;
+          this.postprocess(results[componentName], componentName);
 
           next();
         },
@@ -249,6 +253,7 @@ class DocJSONBuilder {
               .toLowerCase()}${module.name.substring(1)}`;
 
             results[name] = {
+              fileName: `${name}.js`,
               name,
               description: node.getText(),
               props: [],

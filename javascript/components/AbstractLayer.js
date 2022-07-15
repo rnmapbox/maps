@@ -6,6 +6,7 @@ import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource'
 import { getFilter } from '../utils/filterUtils';
 import { getStyleType } from '../utils/styleMap';
 import BridgeValue from '../utils/BridgeValue';
+import { transformStyle } from '../utils/StyleValue';
 
 class AbstractLayer extends React.PureComponent {
   get baseProps() {
@@ -30,35 +31,8 @@ class AbstractLayer extends React.PureComponent {
     }
   }
 
-  _getStyle(style) {
-    if (!style) {
-      return;
-    }
-
-    const nativeStyle = {};
-    const styleProps = Object.keys(style);
-    for (const styleProp of styleProps) {
-      const styleType = getStyleType(styleProp);
-      let rawStyle = style[styleProp];
-
-      if (styleType === 'color' && typeof rawStyle === 'string') {
-        rawStyle = processColor(rawStyle);
-      } else if (styleType === 'image' && typeof rawStyle === 'number') {
-        rawStyle = resolveAssetSource(rawStyle) || {};
-      }
-
-      const bridgeValue = new BridgeValue(rawStyle);
-      nativeStyle[styleProp] = {
-        styletype: styleType,
-        stylevalue: bridgeValue.toJSON(),
-      };
-    }
-
-    return nativeStyle;
-  }
-
   getStyle() {
-    return this._getStyle(this.props.style);
+    return transformStyle(this.props.style);
   }
 
   setNativeProps(props) {

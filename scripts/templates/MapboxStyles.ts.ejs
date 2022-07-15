@@ -88,3 +88,5 @@ type Enum<EnumType> = EnumType | keyof EnumType;
 
   };
 <%_ } _%>
+
+export type AllLayerStyleProps = <%- layers.map(l => `${pascelCase(l.name)}LayerStyleProps`).join("|") -%>;

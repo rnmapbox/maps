@@ -14,6 +14,7 @@ import {
   RasterDemSource,
   Animated,
   MarkerView,
+  Atmosphere,
 } from '@rnmapbox/maps';
 
 import Page from '../common/Page';
@@ -136,6 +137,15 @@ const QueryTerrainElevation = ({ ...props }) => {
           />
 
           <Terrain exaggeration={1.5} />
+          <Atmosphere
+            style={{
+              starIntensity: 1.0,
+              range: [-3.5, 10.0],
+              spaceColor: '#00ffff',
+              color: '#00ff00',
+              highColor: '#ff00ff',
+            }}
+          />
         </RasterDemSource>
 
         {routeGeojson && false && (

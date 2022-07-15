@@ -183,6 +183,7 @@ export default class App extends Component {
 ### Terrain
 
 - [Terrain](/docs/Terrain.md)
+- [Atmosphere](/docs/Atmosphere.md)
 
 ### Offline
 

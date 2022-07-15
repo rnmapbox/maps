@@ -1,4 +1,214 @@
 {
+  "Atmosphere": {
+    "description": "",
+    "displayName": "Atmosphere",
+    "methods": [
+      {
+        "name": "getStyle",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": {
+          "type": {
+            "name": "union",
+            "raw": "{ [key: string]: StyleValue } | undefined",
+            "elements": [
+              {
+                "name": "signature",
+                "type": "object",
+                "raw": "{ [key: string]: StyleValue }",
+                "signature": {
+                  "properties": [
+                    {
+                      "key": {
+                        "name": "string"
+                      },
+                      "value": {
+                        "name": "StyleValue",
+                        "required": true
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "undefined"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "baseProps",
+        "docblock": null,
+        "modifiers": [
+          "get"
+        ],
+        "params": [],
+        "returns": null
+      }
+    ],
+    "props": [
+      {
+        "name": "style",
+        "required": true,
+        "type": "FIX ME UNKNOWN TYPE",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      }
+    ],
+    "fileName": "Atmosphere.tsx",
+    "name": "Atmosphere",
+    "styles": [
+      {
+        "name": "range",
+        "type": "array<number>",
+        "values": [],
+        "minimum": -20,
+        "maximum": 20,
+        "default": [
+          0.5,
+          10
+        ],
+        "description": "The start and end distance range in which fog fades from fully transparent to fully opaque. The distance to the point at the center of the map is defined as zero, so that negative range values are closer to the camera, and positive values are farther away.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true
+      },
+      {
+        "name": "color",
+        "type": "color",
+        "values": [],
+        "default": "#ffffff",
+        "description": "The color of the atmosphere region immediately below the horizon and within the `range` and above the horizon and within `horizonBlend`. Using opacity is recommended only for smoothly transitioning fog on/off as anything less than 100% opacity results in more tiles loaded and drawn.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true
+      },
+      {
+        "name": "highColor",
+        "type": "color",
+        "values": [],
+        "default": "#245cdf",
+        "description": "The color of the atmosphere region above the horizon, `highColor` extends further above the horizon than the `color` property and its spread can be controlled with `horizonBlend`. The opacity can be set to `0` to remove the high atmosphere color contribution.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true
+      },
+      {
+        "name": "spaceColor",
+        "type": "color",
+        "values": [],
+        "default": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          4,
+          "#010b19",
+          7,
+          "#367ab9"
+        ],
+        "description": "The color of the region above the horizon and after the end of the `horizonBlend` contribution. The opacity can be set to `0` to have a transparent background.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true
+      },
+      {
+        "name": "horizonBlend",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          4,
+          0.2,
+          7,
+          0.1
+        ],
+        "description": "Horizon blend applies a smooth fade from the color of the atmosphere to the color of space. A value of zero leaves a sharp transition from atmosphere to space. Increasing the value blends the color of atmosphere into increasingly high angles of the sky.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true
+      },
+      {
+        "name": "starIntensity",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1,
+        "default": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          5,
+          0.35,
+          6,
+          0
+        ],
+        "description": "A value controlling the star intensity where `0` will show no stars and `1` will show stars at their maximum intensity.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true
+      }
+    ]
+  },
   "BackgroundLayer": {
     "description": "",
     "displayName": "BackgroundLayer",
@@ -78,6 +288,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "BackgroundLayer.js",
     "name": "BackgroundLayer",
     "styles": [
       {
@@ -206,6 +417,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "Callout.js",
     "name": "Callout"
   },
   "Camera": {
@@ -813,6 +1025,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "Camera.js",
     "name": "Camera"
   },
   "CircleLayer": {
@@ -894,6 +1107,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "CircleLayer.js",
     "name": "CircleLayer",
     "styles": [
       {
@@ -1251,6 +1465,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "FillExtrusionLayer.js",
     "name": "FillExtrusionLayer",
     "styles": [
       {
@@ -1519,6 +1734,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "FillLayer.js",
     "name": "FillLayer",
     "styles": [
       {
@@ -1714,6 +1930,7 @@
         "description": "FIX ME NO DESCRIPTION"
       }
     ],
+    "fileName": "HeadingIndicator.js",
     "name": "HeadingIndicator"
   },
   "HeatmapLayer": {
@@ -1795,6 +2012,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "HeatmapLayer.js",
     "name": "HeatmapLayer",
     "styles": [
       {
@@ -1973,6 +2191,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "ImageSource.js",
     "name": "ImageSource"
   },
   "Images": {
@@ -2010,6 +2229,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "Images.js",
     "name": "Images"
   },
   "Light": {
@@ -2028,6 +2248,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "Light.js",
     "name": "Light",
     "styles": [
       {
@@ -2194,6 +2415,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "LineLayer.js",
     "name": "LineLayer",
     "styles": [
       {
@@ -3262,6 +3484,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "MapView.js",
     "name": "MapView"
   },
   "MarkerView": {
@@ -3317,6 +3540,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "MarkerView.js",
     "name": "MarkerView"
   },
   "NativeUserLocation": {
@@ -3339,6 +3563,7 @@
         "description": "iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.\n\n@platform ios"
       }
     ],
+    "fileName": "NativeUserLocation.js",
     "name": "NativeUserLocation"
   },
   "PointAnnotation": {
@@ -3467,6 +3692,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "PointAnnotation.js",
     "name": "PointAnnotation"
   },
   "RasterDemSource": {
@@ -3525,6 +3751,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "RasterDemSource.js",
     "name": "RasterDemSource"
   },
   "RasterLayer": {
@@ -3606,6 +3833,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "RasterLayer.js",
     "name": "RasterLayer",
     "styles": [
       {
@@ -3856,6 +4084,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "RasterSource.js",
     "name": "RasterSource"
   },
   "ShapeSource": {
@@ -4156,6 +4385,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "ShapeSource.js",
     "name": "ShapeSource"
   },
   "SkyLayer": {
@@ -4216,6 +4446,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "SkyLayer.js",
     "name": "SkyLayer",
     "styles": [
       {
@@ -4433,6 +4664,7 @@
         "description": "A JSON object conforming to the schema described in the Mapbox Style Specification , or a URL to such JSON."
       }
     ],
+    "fileName": "Style.js",
     "name": "Style"
   },
   "SymbolLayer": {
@@ -4514,6 +4746,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "SymbolLayer.js",
     "name": "SymbolLayer",
     "styles": [
       {
@@ -5883,6 +6116,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "Terrain.js",
     "name": "Terrain"
   },
   "UserLocation": {
@@ -5994,6 +6228,7 @@
         "description": "Custom location icon of type mapbox-gl-native components"
       }
     ],
+    "fileName": "UserLocation.js",
     "name": "UserLocation"
   },
   "VectorSource": {
@@ -6178,6 +6413,7 @@
     "composes": [
       "../utils"
     ],
+    "fileName": "VectorSource.js",
     "name": "VectorSource"
   },
   "Annotation": {
@@ -6271,9 +6507,11 @@
         "description": "FIX ME NO DESCRIPTION"
       }
     ],
+    "fileName": "Annotation.js",
     "name": "Annotation"
   },
   "offlineManager": {
+    "fileName": "offlineManager.js",
     "name": "offlineManager",
     "description": "OfflineManager implements a singleton (shared object) that manages offline packs.\nAll of this class’s instance methods are asynchronous, reflecting the fact that offline resources are stored in a database.\nThe shared object maintains a canonical collection of offline packs.",
     "props": [],
@@ -6600,6 +6838,7 @@
     ]
   },
   "snapshotManager": {
+    "fileName": "snapshotManager.js",
     "name": "snapshotManager",
     "description": "The snapshotManager generates static raster images of the map.\nEach snapshot image depicts a portion of a map defined by an SnapshotOptions object you provide.\nThe snapshotter generates the snapshot asynchronous.",
     "props": [],

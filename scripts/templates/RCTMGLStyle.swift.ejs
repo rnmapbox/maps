@@ -18,7 +18,8 @@ class RCTMGLStyle {
 func <%- setLayerMethodName(layer, 'ios') -%>(layer: inout <%- getLayerType(layer, 'ios-v10') -%>, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout <%- getLayerType(layer, 'ios-v10') -%>)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
-    fatalError("Invlalid style: \(reactStyle)")
+    Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
+    return
   }
 
   let styleProps = reactStyle.keys
@@ -61,7 +62,7 @@ func <%- setLayerMethodName(layer, 'ios') -%>(layer: inout <%- getLayerType(laye
   <%_ } _%>
   <% } -%>
   } else {
-      // TODO throw exception
+      Logger.log(level:.error, message: "Unexpected property \(prop) for layer: <%- layer.name -%>")
     }
   }
 }

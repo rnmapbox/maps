@@ -23,6 +23,7 @@ import SymbolLayer from './components/SymbolLayer';
 import RasterLayer from './components/RasterLayer';
 import BackgroundLayer from './components/BackgroundLayer';
 import Terrain from './components/Terrain';
+import Atmosphere from './components/Atmosphere';
 import locationManager from './modules/location/locationManager';
 import offlineManager from './modules/offline/offlineManager';
 import snapshotManager from './modules/snapshot/snapshotManager';
@@ -76,6 +77,7 @@ MapboxGL.RasterLayer = RasterLayer;
 MapboxGL.BackgroundLayer = BackgroundLayer;
 
 MapboxGL.Terrain = Terrain;
+MapboxGL.Atmosphere = Atmosphere;
 
 // modules
 MapboxGL.locationManager = locationManager;
@@ -121,6 +123,7 @@ export {
   RasterLayer,
   BackgroundLayer,
   Terrain,
+  Atmosphere,
   locationManager,
   offlineManager,
   snapshotManager,
