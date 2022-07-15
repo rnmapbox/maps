@@ -1450,3 +1450,17 @@ export interface AtmosphereLayerStyleProps {
    */
   starIntensityTransition?: Transition;
 }
+
+export type AllLayerStyleProps =
+  | FillLayerStyleProps
+  | LineLayerStyleProps
+  | SymbolLayerStyleProps
+  | CircleLayerStyleProps
+  | HeatmapLayerStyleProps
+  | FillExtrusionLayerStyleProps
+  | RasterLayerStyleProps
+  | HillshadeLayerStyleProps
+  | BackgroundLayerStyleProps
+  | SkyLayerStyleProps
+  | LightLayerStyleProps
+  | AtmosphereLayerStyleProps;

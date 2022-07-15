@@ -22,6 +22,7 @@ import {
   FeatureCollection,
 } from '@turf/helpers';
 
+import type _Atmosphere from './javascript/components/Atmosphere';
 import type { requestAndroidLocationPermissions as _requestAndroidLocationPermissions } from './javascript/requestAndroidLocationPermissions';
 
 // prettier-ignore
@@ -112,6 +113,7 @@ declare namespace MapboxGL {
   function setConnected(connected: boolean): void;
 
   const requestAndroidLocationPermissions = _requestAndroidLocationPermissions;
+  const Atmosphere = _Atmosphere;
 
   const offlineManager: OfflineManager;
   const snapshotManager: SnapshotManager;
@@ -1056,5 +1058,6 @@ export import Camera = MapboxGL.Camera;
 export import Terrain = MapboxGL.Terrain;
 export import RasterDemSource = MapboxGL.RasterDemSource;
 export import SkyLayer = MapboxGL.SkyLayer;
+export import Atmosphere = MapboxGL.Atmosphere;
 
 export default MapboxGL;
