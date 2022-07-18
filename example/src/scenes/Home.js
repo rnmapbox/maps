@@ -225,11 +225,11 @@ function ExampleGroupComponent({ items, navigation, showBack }) {
 
   const back = showBack
     ? {
-      onBack: () => {
-        console.log('GoBACK');
-        navigation.goBack();
-      },
-    }
+        onBack: () => {
+          console.log('GoBACK');
+          navigation.goBack();
+        },
+      }
     : {};
 
   const title = showBack
