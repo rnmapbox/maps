@@ -1,12 +1,12 @@
 import React from 'react';
 import {
-  ViewPropTypes,
   View,
   NativeModules,
   findNodeHandle,
   Platform,
 } from 'react-native';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
+import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 
 function getAndroidManagerInstance(module) {
   const haveViewManagerConfig =
