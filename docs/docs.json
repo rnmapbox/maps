@@ -2,52 +2,7 @@
   "Atmosphere": {
     "description": "",
     "displayName": "Atmosphere",
-    "methods": [
-      {
-        "name": "getStyle",
-        "docblock": null,
-        "modifiers": [],
-        "params": [],
-        "returns": {
-          "type": {
-            "name": "union",
-            "raw": "{ [key: string]: StyleValue } | undefined",
-            "elements": [
-              {
-                "name": "signature",
-                "type": "object",
-                "raw": "{ [key: string]: StyleValue }",
-                "signature": {
-                  "properties": [
-                    {
-                      "key": {
-                        "name": "string"
-                      },
-                      "value": {
-                        "name": "StyleValue",
-                        "required": true
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "name": "undefined"
-              }
-            ]
-          }
-        }
-      },
-      {
-        "name": "baseProps",
-        "docblock": null,
-        "modifiers": [
-          "get"
-        ],
-        "params": [],
-        "returns": null
-      }
-    ],
+    "methods": [],
     "props": [
       {
         "name": "style",
