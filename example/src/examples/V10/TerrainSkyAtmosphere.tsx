@@ -35,13 +35,12 @@ const TerrainSkyAtmosphere = memo((props: BaseExampleProps) => {
         styleURL={'mapbox://styles/mapbox-map-design/ckhqrf2tz0dt119ny6azh975y'}
       >
         <Camera
+          ref={cameraRef}
           centerCoordinate={[
             // -74.00597, 40.71427
             // -122.4189591, 37.6614238,
             -114.34411, 32.6141,
           ]}
-          // @ts-ignore
-          ref={cameraRef}
           zoomLevel={13.1}
           bearing={80}
           pitch={85}
