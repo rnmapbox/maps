@@ -7,27 +7,6 @@
 | ---- | :--: | :-----: | :------: | :----------: |
 | style | `FIX ME UNKNOWN TYPE` | `none` | `true` | FIX ME NO DESCRIPTION |
 
-### methods
-#### getStyle()
-
-
-
-##### arguments
-| Name | Type | Required | Description  |
-| ---- | :--: | :------: | :----------: |
-
-
-
-#### baseProps()
-
-
-
-##### arguments
-| Name | Type | Required | Description  |
-| ---- | :--: | :------: | :----------: |
-
-
-
 
 ### styles
 
