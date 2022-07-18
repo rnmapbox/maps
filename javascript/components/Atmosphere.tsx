@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { HostComponent, requireNativeComponent } from 'react-native';
 
 import type { AtmosphereLayerStyleProps } from '../utils/MapboxStyles';
@@ -6,28 +6,21 @@ import { StyleValue, transformStyle } from '../utils/StyleValue';
 
 export const NATIVE_MODULE_NAME = 'RCTMGLAtmosphere';
 
-class Atmosphere extends React.PureComponent<{
+type Props = {
   style: AtmosphereLayerStyleProps;
-}> {
-  getStyle(): { [key: string]: StyleValue } | undefined {
-    return transformStyle(this.props.style);
-  }
+};
 
-  get baseProps() {
+const Atmosphere = memo((props: Props) => {
+  const baseProps = useMemo(() => {
     return {
-      ...this.props,
-      reactStyle: this.getStyle(),
+      ...props,
+      reactStyle: transformStyle(props.style),
       style: undefined,
     };
-  }
+  }, [props]);
 
-  render() {
-    const props = {
-      ...this.baseProps,
-    };
-    return <RCTMGLAtmosphere {...props} />;
-  }
-}
+  return <RCTMGLAtmosphere {...baseProps} />;
+});
 
 const RCTMGLAtmosphere: HostComponent<{
   reactStyle?: { [key: string]: StyleValue };
