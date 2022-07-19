@@ -114,16 +114,18 @@ class DocJSONBuilder {
     }
 
     function tsTypeDesc(tsType) {
-      if (tsType == null) {
-        return;
-      }
-
-      if (tsType.name == null) {
+      if (!tsType?.name) {
         return null;
       }
 
       if (tsType.name === 'signature') {
-        return `${tsType.raw.replace(/(\n|\s)/g, '').replace(/(\|)/g, '\\|')}`;
+        if (tsType.raw.length < 200) {
+          return `${tsType.raw
+            .replace(/(\n|\s)/g, '')
+            .replace(/(\|)/g, '\\|')}`;
+        } else {
+          return 'FIX ME FORMAT BIG OBJECT';
+        }
       } else if (tsType.name === 'union') {
         if (tsType.raw) {
           // Props
@@ -138,13 +140,15 @@ class DocJSONBuilder {
     }
 
     function mapProp(propMeta, propName, array) {
+      console.log('>>>>', propName, propMeta);
+
       let result = {};
       if (!array) {
         result = {
           name: propName || 'FIX ME NO NAME',
           required: propMeta.required || false,
           type:
-            (propMeta.type && propMeta.type.name) ||
+            propMeta.type?.name ||
             tsTypeDesc(propMeta.tsType) ||
             'FIX ME UNKNOWN TYPE',
           default: !propMeta.defaultValue
