@@ -24,9 +24,8 @@ import {
 
 import type _Camera from './javascript/components/Camera';
 import type _Atmosphere from './javascript/components/Atmosphere';
-import type { CameraRef as _CameraRef } from './javascript/components/Camera';
 import type {
-  MapboxGLEvent as _MapboxGLEvent,
+  CameraRef as _CameraRef,
   CameraStop as _CameraStop,
   CameraFollowConfig as _CameraFollowConfig,
   CameraMinMaxConfig as _CameraMinMaxConfig,
@@ -35,6 +34,9 @@ import type {
   CameraBoundsWithPadding as _CameraBoundsWithPadding,
   CameraStops as _CameraStops,
   CameraAnimationMode as _CameraAnimationMode,
+} from './javascript/components/Camera';
+import type {
+  MapboxGLEvent as _MapboxGLEvent,
   UserTrackingMode as _UserTrackingMode,
   UserTrackingModeChangeCallback as _UserTrackingModeChangeCallback,
 } from './javascript/types/index';
