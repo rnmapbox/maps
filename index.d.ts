@@ -1,6 +1,6 @@
 declare module 'react-native-mapbox-gl__maps';
 
-import { Component, ReactNode, SyntheticEvent } from 'react';
+import { Component, ReactNode } from 'react';
 import {
   ViewProps,
   ViewStyle,
@@ -22,7 +22,21 @@ import {
   FeatureCollection,
 } from '@turf/helpers';
 
+import type _Camera from './javascript/components/Camera';
 import type _Atmosphere from './javascript/components/Atmosphere';
+import type {
+  MapboxGLEvent as _MapboxGLEvent,
+  CameraStop as _CameraStop,
+  CameraFollowConfig as _CameraFollowConfig,
+  CameraMinMaxConfig as _CameraMinMaxConfig,
+  CameraBounds as _CameraBounds,
+  CameraPadding as _CameraPadding,
+  CameraBoundsWithPadding as _CameraBoundsWithPadding,
+  CameraStops as _CameraStops,
+  CameraAnimationMode as _CameraAnimationMode,
+  UserTrackingMode as _UserTrackingMode,
+  UserTrackingModeChangeCallback as _UserTrackingModeChangeCallback,
+} from './javascript/types/index';
 import type { requestAndroidLocationPermissions as _requestAndroidLocationPermissions } from './javascript/requestAndroidLocationPermissions';
 
 // prettier-ignore
@@ -85,12 +99,6 @@ type NamedStyles<T> = {
     | BackgroundLayerStyle;
 };
 
-export type MapboxGLEvent<
-  T extends string,
-  P = GeoJSON.Feature,
-  V = Element,
-> = SyntheticEvent<V, { type: T; payload: P }>;
-
 export type OnPressEvent = {
   features: Array<GeoJSON.Feature>;
   coordinates: {
@@ -113,7 +121,20 @@ declare namespace MapboxGL {
   function setConnected(connected: boolean): void;
 
   const requestAndroidLocationPermissions = _requestAndroidLocationPermissions;
+  const Camera = _Camera;
   const Atmosphere = _Atmosphere;
+
+  type MapboxGLEvent = _MapboxGLEvent;
+  type CameraStop = _CameraStop;
+  type CameraFollowConfig = _CameraFollowConfig;
+  type CameraMinMaxConfig = _CameraMinMaxConfig;
+  type CameraBounds = _CameraBounds;
+  type CameraPadding = _CameraPadding;
+  type CameraBoundsWithPadding = _CameraBoundsWithPadding;
+  type CameraStops = _CameraStops;
+  type CameraAnimationMode = _CameraAnimationMode;
+  type UserTrackingMode = _UserTrackingMode;
+  type UserTrackingModeChangeCallback = _UserTrackingModeChangeCallback;
 
   const offlineManager: OfflineManager;
   const snapshotManager: SnapshotManager;
@@ -246,18 +267,6 @@ declare namespace MapboxGL {
   }
 
   type Padding = number | [number, number] | [number, number, number, number];
-  export class Camera extends Component<CameraProps> {
-    fitBounds(
-      northEastCoordinates: GeoJSON.Position,
-      southWestCoordinates: GeoJSON.Position,
-      padding?: Padding,
-      duration?: number,
-    ): void;
-    flyTo(coordinates: GeoJSON.Position, duration?: number): void;
-    moveTo(coordinates: GeoJSON.Position, duration?: number): void;
-    zoomTo(zoomLevel: number, duration?: number): void;
-    setCamera(config: CameraSettings): void;
-  }
 
   class UserLocation extends Component<UserLocationProps> {}
 
@@ -577,54 +586,6 @@ export interface MapViewProps extends ViewProps {
   onDidFinishRenderingMapFully?: () => void;
   onDidFinishLoadingStyle?: () => void;
   onUserTrackingModeChange?: () => void;
-}
-
-export interface CameraProps extends CameraSettings, ViewProps {
-  allowUpdates?: boolean;
-  animationDuration?: number;
-  animationMode?: 'flyTo' | 'easeTo' | 'linearTo' | 'moveTo';
-  defaultSettings?: CameraSettings;
-  minZoomLevel?: number;
-  maxZoomLevel?: number;
-  maxBounds?: { ne: [number, number]; sw: [number, number] };
-  followUserLocation?: boolean;
-  followUserMode?: 'normal' | 'compass' | 'course';
-  followZoomLevel?: number;
-  followPitch?: number;
-  followHeading?: number;
-  triggerKey?: any;
-  alignment?: number[];
-  onUserTrackingModeChange?: (
-    event: MapboxGLEvent<
-      'usertrackingmodechange',
-      {
-        followUserLocation: boolean;
-        followUserMode: 'normal' | 'compass' | 'course' | null;
-      }
-    >,
-  ) => void;
-}
-
-export interface CameraPadding {
-  paddingLeft?: number;
-  paddingRight?: number;
-  paddingTop?: number;
-  paddingBottom?: number;
-}
-
-export interface CameraSettings {
-  centerCoordinate?: GeoJSON.Position;
-  heading?: number;
-  pitch?: number;
-  padding?: CameraPadding;
-  bounds?: CameraPadding & {
-    ne: GeoJSON.Position;
-    sw: GeoJSON.Position;
-  };
-  zoomLevel?: number;
-  animationDuration?: number;
-  animationMode?: 'flyTo' | 'easeTo' | 'linearTo' | 'moveTo';
-  stops?: CameraSettings[];
 }
 
 export interface UserLocationProps {
@@ -1059,5 +1020,19 @@ export import Terrain = MapboxGL.Terrain;
 export import RasterDemSource = MapboxGL.RasterDemSource;
 export import SkyLayer = MapboxGL.SkyLayer;
 export import Atmosphere = MapboxGL.Atmosphere;
+export import ShapeSource = MapboxGL.ShapeSource;
+export import CircleLayer = MapboxGL.CircleLayer;
+
+export import MapboxGLEvent = MapboxGL.MapboxGLEvent;
+export import CameraStop = MapboxGL.CameraStop;
+export import CameraFollowConfig = MapboxGL.CameraFollowConfig;
+export import CameraMinMaxConfig = MapboxGL.CameraMinMaxConfig;
+export import CameraBounds = MapboxGL.CameraBounds;
+export import CameraPadding = MapboxGL.CameraPadding;
+export import CameraBoundsWithPadding = MapboxGL.CameraBoundsWithPadding;
+export import CameraStops = MapboxGL.CameraStops;
+export import CameraAnimationMode = MapboxGL.CameraAnimationMode;
+export import UserTrackingMode = MapboxGL.UserTrackingMode;
+export import UserTrackingModeChangeCallback = MapboxGL.UserTrackingModeChangeCallback;
 
 export default MapboxGL;
