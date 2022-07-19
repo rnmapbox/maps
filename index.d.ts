@@ -24,6 +24,7 @@ import {
 
 import type _Camera from './javascript/components/Camera';
 import type _Atmosphere from './javascript/components/Atmosphere';
+import type { CameraRef as _CameraRef } from './javascript/components/Camera';
 import type {
   MapboxGLEvent as _MapboxGLEvent,
   CameraStop as _CameraStop,
@@ -124,6 +125,7 @@ declare namespace MapboxGL {
   const Camera = _Camera;
   const Atmosphere = _Atmosphere;
 
+  type CameraRef = _CameraRef;
   type MapboxGLEvent = _MapboxGLEvent;
   type CameraStop = _CameraStop;
   type CameraFollowConfig = _CameraFollowConfig;
@@ -1023,6 +1025,7 @@ export import Atmosphere = MapboxGL.Atmosphere;
 export import ShapeSource = MapboxGL.ShapeSource;
 export import CircleLayer = MapboxGL.CircleLayer;
 
+export import CameraRef = MapboxGL.CameraRef;
 export import MapboxGLEvent = MapboxGL.MapboxGLEvent;
 export import CameraStop = MapboxGL.CameraStop;
 export import CameraFollowConfig = MapboxGL.CameraFollowConfig;

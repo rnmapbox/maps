@@ -6,11 +6,7 @@ import React, {
   useMemo,
   useRef,
 } from 'react';
-import {
-  HostComponent,
-  NativeModules,
-  requireNativeComponent,
-} from 'react-native';
+import { NativeModules, requireNativeComponent } from 'react-native';
 import { Position } from '@turf/helpers';
 
 import {
@@ -121,8 +117,7 @@ export interface CameraProps
  *
  * return (
  *   <Camera ref={camera} />
- * );
- * </pre>
+ * );</pre>
  */
 const Camera = memo(
   forwardRef((props: CameraProps, ref: React.ForwardedRef<CameraRef>) => {
@@ -149,9 +144,8 @@ const Camera = memo(
       onUserTrackingModeChange,
     } = props;
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const camera: React.RefObject<RCTMGLCamera> = useRef(null);
+    // @ts-expect-error This avoids a type/value mismatch.
+    const nativeCamera = useRef<RCTMGLCamera>(null);
 
     const nativeDefaultStop = useMemo((): NativeCameraStop | null => {
       if (!defaultSettings) {
@@ -275,14 +269,14 @@ const Camera = memo(
           if (_nativeStop) {
             _nativeStops = [..._nativeStops, _nativeStop];
           }
-          camera.current.setNativeProps({
+          nativeCamera.current.setNativeProps({
             stop: { stops: _nativeStops },
           });
         }
       } else if (config.type === 'CameraStop') {
         const _nativeStop = buildNativeStop(config);
         if (_nativeStop) {
-          camera.current.setNativeProps({ stop: _nativeStop });
+          nativeCamera.current.setNativeProps({ stop: _nativeStop });
         }
       }
     };
@@ -442,7 +436,7 @@ const Camera = memo(
     return (
       <RCTMGLCamera
         testID={'Camera'}
-        ref={camera}
+        ref={nativeCamera}
         stop={nativeStop}
         defaultStop={nativeDefaultStop}
         followUserLocation={followUserLocation}
@@ -459,7 +453,7 @@ const Camera = memo(
   }),
 );
 
-const RCTMGLCamera: HostComponent<NativeCameraProps> =
-  requireNativeComponent(NATIVE_MODULE_NAME);
+const RCTMGLCamera =
+  requireNativeComponent<NativeCameraProps>(NATIVE_MODULE_NAME);
 
 export default Camera;

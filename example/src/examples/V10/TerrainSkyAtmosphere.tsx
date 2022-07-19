@@ -4,6 +4,7 @@ import {
   MapView,
   SkyLayer,
   Camera,
+  CameraRef,
   Logger,
   Terrain,
   RasterDemSource,
@@ -16,7 +17,7 @@ import { BaseExampleProps } from '../common/BaseExamplePropTypes';
 Logger.setLogLevel('verbose');
 
 const TerrainSkyAtmosphere = memo((props: BaseExampleProps) => {
-  const cameraRef = useRef<Camera>();
+  const cameraRef = useRef<CameraRef>(null);
 
   return (
     <Page {...props}>
@@ -42,7 +43,7 @@ const TerrainSkyAtmosphere = memo((props: BaseExampleProps) => {
             -114.34411, 32.6141,
           ]}
           zoomLevel={13.1}
-          bearing={80}
+          heading={80}
           pitch={85}
         />
         <RasterDemSource
