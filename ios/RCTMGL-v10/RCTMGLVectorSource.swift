@@ -3,7 +3,11 @@ import MapboxMaps
 @objc
 class RCTMGLVectorSource : RCTMGLTileSource {
   
+  @objc var attribution: String?
+  @objc var maxZoomLevel: NSNumber?
+  @objc var minZoomLevel: NSNumber?
   @objc var tileUrlTemplates: [String] = []
+  @objc var tms: Bool = false
   
   override func sourceType() -> Source.Type {
     return VectorSource.self
@@ -17,7 +21,18 @@ class RCTMGLVectorSource : RCTMGLTileSource {
     } else {
       result.tiles = tileUrlTemplates
     }
-    
+    if let attribution = attribution {
+      result.attribution = attribution
+    }
+    if let maxZoomLevel = maxZoomLevel {
+      result.maxzoom = maxZoomLevel.doubleValue
+    }
+    if let minZoomLevel = minZoomLevel {
+      result.minzoom = minZoomLevel.doubleValue
+    }
+    if tms {
+      result.scheme = .tms
+    }
     return result
   }
   
