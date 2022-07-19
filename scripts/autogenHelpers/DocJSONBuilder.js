@@ -140,8 +140,6 @@ class DocJSONBuilder {
     }
 
     function mapProp(propMeta, propName, array) {
-      console.log('>>>>', propName, propMeta);
-
       let result = {};
       if (!array) {
         result = {
