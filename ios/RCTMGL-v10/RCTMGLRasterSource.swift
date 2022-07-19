@@ -8,8 +8,8 @@ class RCTMGLRasterSource : RCTMGLSource {
   
   @objc var tileUrlTemplates: [String]? = nil
   
-  @objc var minzoom: NSNumber?
-  @objc var maxzoom: NSNumber?
+  @objc var minZoomLevel: NSNumber?
+  @objc var maxZoomLevel: NSNumber?
   @objc var tileSize: NSNumber?
   
   @objc var tms: Bool = false
@@ -29,12 +29,12 @@ class RCTMGLRasterSource : RCTMGLSource {
       result.tileSize = tileSize.doubleValue
     }
     
-    if let minzoom = minzoom {
-      result.minzoom = minzoom.doubleValue
+    if let minZoomLevel = minZoomLevel {
+      result.minzoom = minZoomLevel.doubleValue
     }
     
-    if let maxzoom = maxzoom {
-      result.maxzoom = maxzoom.doubleValue
+    if let maxZoomLevel = maxZoomLevel {
+      result.maxzoom = maxZoomLevel.doubleValue
     }
     
     if tms {
