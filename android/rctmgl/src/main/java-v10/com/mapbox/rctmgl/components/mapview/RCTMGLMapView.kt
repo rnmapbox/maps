@@ -26,9 +26,11 @@ import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListene
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
+import com.mapbox.maps.plugin.attribution.attribution
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.delegates.listeners.*
 import com.mapbox.maps.plugin.gestures.*
+import com.mapbox.maps.plugin.logo.logo
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerView
@@ -928,6 +930,36 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                     )
                 }
             }
+        }
+    }
+    // endregion
+
+    // region Attribution
+    private var mAttributionEnabled = false;
+
+    fun setReactAttributionEnabled(attributionEnabled: Boolean) {
+        mAttributionEnabled = attributionEnabled
+        updateAttribution()
+    }
+
+    private fun updateAttribution() {
+        attribution.updateSettings {
+            enabled = mAttributionEnabled
+        }
+    }
+    //endregion
+
+    // region Logo
+    private var mLogoEnabled = false;
+
+    fun setReactLogoEnabled(LogoEnabled: Boolean) {
+        mLogoEnabled = LogoEnabled
+        updateLogo()
+    }
+
+    private fun updateLogo() {
+        logo.updateSettings {
+            enabled = mLogoEnabled
         }
     }
     // endregion

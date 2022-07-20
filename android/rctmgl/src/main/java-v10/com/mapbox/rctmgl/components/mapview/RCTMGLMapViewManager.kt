@@ -112,7 +112,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
 
     @ReactProp(name = "attributionEnabled")
     fun setAttributionEnabled(mapView: RCTMGLMapView?, attributionEnabled: Boolean) {
-        //mapView.setReactAttributionEnabled(attributionEnabled);
+        mapView!!.setReactAttributionEnabled(attributionEnabled);
     }
 
     @ReactProp(name = "attributionPosition")
@@ -122,7 +122,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
 
     @ReactProp(name = "logoEnabled")
     fun setLogoEnabled(mapView: RCTMGLMapView?, logoEnabled: Boolean) {
-        //mapView.setReactLogoEnabled(logoEnabled);
+        mapView!!.setReactLogoEnabled(logoEnabled);
     }
 
     @ReactProp(name = "logoPosition")
