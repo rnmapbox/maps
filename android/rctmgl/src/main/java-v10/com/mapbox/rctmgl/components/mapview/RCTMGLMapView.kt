@@ -932,4 +932,35 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
     // endregion
 
+    // region Attribution
+    private var mAttributionEnabled = false;
+
+    fun setReactAttributionEnabled(attributionEnabled: Boolean) {
+        mAttributionEnabled = attributionEnabled
+        updateAttribution()
+    }
+
+    private fun updateAttribution() {
+        attribution.updateSettings {
+            enabled = mAttributionEnabled
+        }
+    }
+    //endregion
+
+    // region Logo
+    private var mLogoEnabled = false;
+
+    fun setReactLogoEnabled(LogoEnabled: Boolean) {
+        mLogoEnabled = LogoEnabled
+        updateLogo()
+    }
+
+    private fun updateLogo() {
+        logo.updateSettings {
+            enabled = mLogoEnabled
+        }
+    }
+    // endregion
+
+
 }
