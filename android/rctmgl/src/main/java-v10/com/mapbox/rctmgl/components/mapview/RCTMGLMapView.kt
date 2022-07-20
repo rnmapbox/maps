@@ -25,7 +25,10 @@ import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListene
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
+import com.mapbox.maps.plugin.attribution.Attribution
 import com.mapbox.maps.plugin.attribution.attribution
+import com.mapbox.maps.plugin.attribution.generated.AttributionSettings
+import com.mapbox.maps.plugin.attribution.generated.AttributionSettingsBase
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.delegates.listeners.*
 import com.mapbox.maps.plugin.gestures.*
@@ -936,7 +939,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     // region Attribution
     private var mAttributionEnabled = false;
     private var mAttributionGravity: Int? = null
-    private var mAttributionMargin: DoubleArray? = null
+    private var mAttributionMargin: IntArray? = null
 
     fun setReactAttributionEnabled(attributionEnabled: Boolean) {
         mAttributionEnabled = attributionEnabled
@@ -946,12 +949,12 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     fun setReactAttributionPosition(position: ReadableMap?) {
         if (position == null) {
             // reset from explicit to default
-//            if (mAttributionGravity != null) {
-//                val defaultOptions = MapInitOptions.getDefaultMapOptions(mContext).
-//                mAttributionGravity = defaultOptions.
-//                mAttributionMargin = Arrays.copyOf(defaultOptions.getAttributionMargins(), 4)
-//                updateAttribution()
-//            }
+            if (mAttributionGravity != null) {
+                val defaultOptions = AttributionSettings()
+                mAttributionGravity = defaultOptions.position
+                mAttributionMargin = intArrayOf(defaultOptions.marginLeft.toInt(),defaultOptions.marginTop.toInt(),defaultOptions.marginRight.toInt(),defaultOptions.marginBottom.toInt())
+                updateAttribution()
+            }
             return
         }
         var attributionGravity = Gravity.NO_GRAVITY
@@ -969,11 +972,11 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         }
         mAttributionGravity = attributionGravity
         val density = getDisplayDensity()
-        mAttributionMargin = doubleArrayOf(
-            if (position.hasKey("left")) density.toDouble() * position.getDouble("left") else 0.0,
-            if (position.hasKey("top")) density.toDouble() * position.getDouble("top") else 0.0,
-            if (position.hasKey("right")) density.toDouble() * position.getDouble("right") else 0.0,
-            if (position.hasKey("bottom")) density.toDouble() * position.getDouble("bottom") else 0.0
+        mAttributionMargin = intArrayOf(
+            if (position.hasKey("left")) density.toInt() * position.getInt("left") else 0,
+            if (position.hasKey("top")) density.toInt() * position.getInt("top") else 0,
+            if (position.hasKey("right")) density.toInt() * position.getInt("right") else 0,
+            if (position.hasKey("bottom")) density.toInt() * position.getInt("bottom") else 0,
         )
         updateAttribution()
     }
@@ -986,9 +989,9 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             }
             if(mAttributionMargin != null){
                 marginLeft = mAttributionMargin!![0].toFloat()
-                marginLeft = mAttributionMargin!![0].toFloat()
-                marginLeft = mAttributionMargin!![0].toFloat()
-                marginLeft = mAttributionMargin!![0].toFloat()
+                marginTop = mAttributionMargin!![1].toFloat()
+                marginRight = mAttributionMargin!![2].toFloat()
+                marginBottom = mAttributionMargin!![3].toFloat()
             }
         }
     }
