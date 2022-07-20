@@ -117,7 +117,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
 
     @ReactProp(name = "attributionPosition")
     fun setAttributionPosition(mapView: RCTMGLMapView?, attributionPosition: ReadableMap?) {
-        //mapView.setReactAttributionPosition(attributionPosition);
+        mapView!!.setReactAttributionPosition(attributionPosition);
     }
 
     @ReactProp(name = "logoEnabled")

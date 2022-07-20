@@ -1,6 +1,5 @@
 package com.mapbox.rctmgl.components.mapview
 
-import android.R.attr.gravity
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.PointF
@@ -936,15 +935,61 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     // region Attribution
     private var mAttributionEnabled = false;
+    private var mAttributionGravity: Int? = null
+    private var mAttributionMargin: DoubleArray? = null
 
     fun setReactAttributionEnabled(attributionEnabled: Boolean) {
         mAttributionEnabled = attributionEnabled
         updateAttribution()
     }
 
+    fun setReactAttributionPosition(position: ReadableMap?) {
+        if (position == null) {
+            // reset from explicit to default
+//            if (mAttributionGravity != null) {
+//                val defaultOptions = MapInitOptions.getDefaultMapOptions(mContext).
+//                mAttributionGravity = defaultOptions.
+//                mAttributionMargin = Arrays.copyOf(defaultOptions.getAttributionMargins(), 4)
+//                updateAttribution()
+//            }
+            return
+        }
+        var attributionGravity = Gravity.NO_GRAVITY
+        if (position.hasKey("left")) {
+            attributionGravity = attributionGravity or Gravity.START
+        }
+        if (position.hasKey("right")) {
+            attributionGravity = attributionGravity or Gravity.END
+        }
+        if (position.hasKey("top")) {
+            attributionGravity = attributionGravity or Gravity.TOP
+        }
+        if (position.hasKey("bottom")) {
+            attributionGravity = attributionGravity or Gravity.BOTTOM
+        }
+        mAttributionGravity = attributionGravity
+        val density = getDisplayDensity()
+        mAttributionMargin = doubleArrayOf(
+            if (position.hasKey("left")) density.toDouble() * position.getDouble("left") else 0.0,
+            if (position.hasKey("top")) density.toDouble() * position.getDouble("top") else 0.0,
+            if (position.hasKey("right")) density.toDouble() * position.getDouble("right") else 0.0,
+            if (position.hasKey("bottom")) density.toDouble() * position.getDouble("bottom") else 0.0
+        )
+        updateAttribution()
+    }
+
     private fun updateAttribution() {
         attribution.updateSettings {
             enabled = mAttributionEnabled
+            if(mAttributionGravity != null){
+                position = mAttributionGravity!!
+            }
+            if(mAttributionMargin != null){
+                marginLeft = mAttributionMargin!![0].toFloat()
+                marginLeft = mAttributionMargin!![0].toFloat()
+                marginLeft = mAttributionMargin!![0].toFloat()
+                marginLeft = mAttributionMargin!![0].toFloat()
+            }
         }
     }
     //endregion
