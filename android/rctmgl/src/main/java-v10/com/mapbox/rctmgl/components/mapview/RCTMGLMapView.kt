@@ -935,6 +935,30 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
     // endregion
 
+    private fun getGravityAndMargin (position:ReadableMap): Pair<Int, IntArray> {
+        var gravity = Gravity.NO_GRAVITY
+        if (position.hasKey("left")) {
+            gravity = gravity or Gravity.START
+        }
+        if (position.hasKey("right")) {
+            gravity = gravity or Gravity.END
+        }
+        if (position.hasKey("top")) {
+            gravity = gravity or Gravity.TOP
+        }
+        if (position.hasKey("bottom")) {
+            gravity = gravity or Gravity.BOTTOM
+        }
+        val density = getDisplayDensity()
+        val margin = intArrayOf(
+            if (position.hasKey("left")) density.toInt() * position.getInt("left") else 0,
+            if (position.hasKey("top")) density.toInt() * position.getInt("top") else 0,
+            if (position.hasKey("right")) density.toInt() * position.getInt("right") else 0,
+            if (position.hasKey("bottom")) density.toInt() * position.getInt("bottom") else 0,
+        )
+        return Pair(gravity, margin)
+    }
+
     // region Attribution
     private var mAttributionEnabled = false;
     private var mAttributionGravity: Int? = null
@@ -956,27 +980,10 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             }
             return
         }
-        var attributionGravity = Gravity.NO_GRAVITY
-        if (position.hasKey("left")) {
-            attributionGravity = attributionGravity or Gravity.START
-        }
-        if (position.hasKey("right")) {
-            attributionGravity = attributionGravity or Gravity.END
-        }
-        if (position.hasKey("top")) {
-            attributionGravity = attributionGravity or Gravity.TOP
-        }
-        if (position.hasKey("bottom")) {
-            attributionGravity = attributionGravity or Gravity.BOTTOM
-        }
+
+        val (attributionGravity, attributionMargin) = getGravityAndMargin(position)
         mAttributionGravity = attributionGravity
-        val density = getDisplayDensity()
-        mAttributionMargin = intArrayOf(
-            if (position.hasKey("left")) density.toInt() * position.getInt("left") else 0,
-            if (position.hasKey("top")) density.toInt() * position.getInt("top") else 0,
-            if (position.hasKey("right")) density.toInt() * position.getInt("right") else 0,
-            if (position.hasKey("bottom")) density.toInt() * position.getInt("bottom") else 0,
-        )
+        mAttributionMargin = attributionMargin
         updateAttribution()
     }
 
@@ -1017,27 +1024,9 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             }
             return
         }
-        var logoGravity = Gravity.NO_GRAVITY
-        if (position.hasKey("left")) {
-            logoGravity = logoGravity or Gravity.START
-        }
-        if (position.hasKey("right")) {
-            logoGravity = logoGravity or Gravity.END
-        }
-        if (position.hasKey("top")) {
-            logoGravity = logoGravity or Gravity.TOP
-        }
-        if (position.hasKey("bottom")) {
-            logoGravity = logoGravity or Gravity.BOTTOM
-        }
+        val (logoGravity, logoMargin) = getGravityAndMargin(position)
         mLogoGravity = logoGravity
-        val density = getDisplayDensity()
-        mLogoMargin = intArrayOf(
-            if (position.hasKey("left")) density.toInt() * position.getInt("left") else 0,
-            if (position.hasKey("top")) density.toInt() * position.getInt("top") else 0,
-            if (position.hasKey("right")) density.toInt() * position.getInt("right") else 0,
-            if (position.hasKey("bottom")) density.toInt() * position.getInt("bottom") else 0,
-        )
+        mLogoMargin = logoMargin
         updateLogo()
     }
 
