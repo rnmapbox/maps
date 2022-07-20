@@ -849,6 +849,7 @@ export interface PointAnnotationProps {
   draggable?: boolean;
   coordinate: GeoJSON.Position;
   anchor?: Point;
+  children: JSX.Element;
   onSelected?: () => void;
   onDeselected?: () => void;
   onDragStart?: () => void;

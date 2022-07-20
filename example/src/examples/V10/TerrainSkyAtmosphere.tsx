@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { memo, useRef } from 'react';
 import { Button } from 'react-native';
 import {
