@@ -25,13 +25,12 @@ import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListene
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
-import com.mapbox.maps.plugin.attribution.Attribution
 import com.mapbox.maps.plugin.attribution.attribution
 import com.mapbox.maps.plugin.attribution.generated.AttributionSettings
-import com.mapbox.maps.plugin.attribution.generated.AttributionSettingsBase
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.delegates.listeners.*
 import com.mapbox.maps.plugin.gestures.*
+import com.mapbox.maps.plugin.logo.generated.LogoSettings
 import com.mapbox.maps.plugin.logo.logo
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.components.AbstractMapFeature
@@ -999,15 +998,61 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     // region Logo
     private var mLogoEnabled = false;
+    private var mLogoGravity: Int? = null
+    private var mLogoMargin: IntArray? = null
 
-    fun setReactLogoEnabled(LogoEnabled: Boolean) {
-        mLogoEnabled = LogoEnabled
+    fun setReactLogoEnabled(logoEnabled: Boolean) {
+        mLogoEnabled = logoEnabled
+        updateLogo()
+    }
+
+    fun setReactLogoPosition(position: ReadableMap?) {
+        if (position == null) {
+            // reset from explicit to default
+            if (mLogoGravity != null) {
+                val defaultOptions = LogoSettings()
+                mLogoGravity = defaultOptions.position
+                mLogoMargin = intArrayOf(defaultOptions.marginLeft.toInt(),defaultOptions.marginTop.toInt(),defaultOptions.marginRight.toInt(),defaultOptions.marginBottom.toInt())
+                updateLogo()
+            }
+            return
+        }
+        var logoGravity = Gravity.NO_GRAVITY
+        if (position.hasKey("left")) {
+            logoGravity = logoGravity or Gravity.START
+        }
+        if (position.hasKey("right")) {
+            logoGravity = logoGravity or Gravity.END
+        }
+        if (position.hasKey("top")) {
+            logoGravity = logoGravity or Gravity.TOP
+        }
+        if (position.hasKey("bottom")) {
+            logoGravity = logoGravity or Gravity.BOTTOM
+        }
+        mLogoGravity = logoGravity
+        val density = getDisplayDensity()
+        mLogoMargin = intArrayOf(
+            if (position.hasKey("left")) density.toInt() * position.getInt("left") else 0,
+            if (position.hasKey("top")) density.toInt() * position.getInt("top") else 0,
+            if (position.hasKey("right")) density.toInt() * position.getInt("right") else 0,
+            if (position.hasKey("bottom")) density.toInt() * position.getInt("bottom") else 0,
+        )
         updateLogo()
     }
 
     private fun updateLogo() {
         logo.updateSettings {
             enabled = mLogoEnabled
+            if(mLogoGravity != null){
+                position = mLogoGravity!!
+            }
+            if(mLogoMargin != null){
+                marginLeft = mLogoMargin!![0].toFloat()
+                marginTop = mLogoMargin!![1].toFloat()
+                marginRight = mLogoMargin!![2].toFloat()
+                marginBottom = mLogoMargin!![3].toFloat()
+            }
         }
     }
     // endregion

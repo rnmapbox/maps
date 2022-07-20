@@ -127,7 +127,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
 
     @ReactProp(name = "logoPosition")
     fun setLogoPosition(mapView: RCTMGLMapView?, logoPosition: ReadableMap?) {
-        //mapView.setReactLogoPosition(logoPosition);
+        mapView!!.setReactLogoPosition(logoPosition);
     }
 
     @ReactProp(name = "compassEnabled")
