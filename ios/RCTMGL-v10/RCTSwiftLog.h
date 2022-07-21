@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 
-@interface RCTSwiftLog : NSObject
+@interface RCTMGLSwiftLog : NSObject
 
 + (void)error:(NSString * _Nonnull)message file:(NSString * _Nonnull)file line:(NSUInteger)line;
 + (void)warn:(NSString * _Nonnull)message file:(NSString * _Nonnull)file line:(NSUInteger)line;
