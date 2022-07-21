@@ -960,12 +960,12 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     // region Attribution
-    private var mAttributionEnabled = false;
+    private var mAttributionEnabled: Boolean? = null;
     private var mAttributionGravity: Int? = null
     private var mAttributionMargin: IntArray? = null
 
-    fun setReactAttributionEnabled(attributionEnabled: Boolean) {
-        mAttributionEnabled = attributionEnabled
+    fun setReactAttributionEnabled(attributionEnabled: Boolean?) {
+        mAttributionEnabled = attributionEnabled ?: AttributionSettings().enabled
         updateAttribution()
     }
 
@@ -989,7 +989,9 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     private fun updateAttribution() {
         attribution.updateSettings {
-            enabled = mAttributionEnabled
+            if(mAttributionEnabled!= null){
+                enabled = mAttributionEnabled!!
+            }
             if(mAttributionGravity != null){
                 position = mAttributionGravity!!
             }
@@ -1004,12 +1006,12 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     //endregion
 
     // region Logo
-    private var mLogoEnabled = false;
+    private var mLogoEnabled: Boolean? = null;
     private var mLogoGravity: Int? = null
     private var mLogoMargin: IntArray? = null
 
-    fun setReactLogoEnabled(logoEnabled: Boolean) {
-        mLogoEnabled = logoEnabled
+    fun setReactLogoEnabled(logoEnabled: Boolean?) {
+        mLogoEnabled = logoEnabled ?: LogoSettings().enabled
         updateLogo()
     }
 
@@ -1032,7 +1034,9 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     private fun updateLogo() {
         logo.updateSettings {
-            enabled = mLogoEnabled
+            if(mLogoEnabled != null){
+                enabled = mLogoEnabled!!
+            }
             if(mLogoGravity != null){
                 position = mLogoGravity!!
             }
@@ -1045,5 +1049,4 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         }
     }
     // endregion
-
 }
