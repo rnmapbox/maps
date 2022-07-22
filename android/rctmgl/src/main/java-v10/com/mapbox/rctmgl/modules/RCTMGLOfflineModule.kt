@@ -379,6 +379,24 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
+    fun migrateOfflineCache() {
+
+        // Old and new cache file paths
+        val targetPathName = mReactContext.filesDir.absolutePath + "/.mapbox/map_data"
+        val sourcePath = Paths.get(mReactContext.filesDir.absolutePath + "/mbgl-offline.db")
+        val targetPath = Paths.get(targetPathName + "/map_data.db")
+
+        try {
+            val directory = File(targetPathName)
+            directory.mkdirs()
+            Files.move(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING)
+            Log.d("TAG","v10 cache directory created successfully")
+        } catch (e: Exception) {
+            Log.d("TAG", "${e}... file move unsuccessful")
+        }
+    }
+
+    @ReactMethod
     fun pausePackDownload(name: String, promise: Promise) {
         val pack = tileRegionPacks[name]
         if (pack != null) {
