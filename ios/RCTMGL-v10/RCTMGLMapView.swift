@@ -50,7 +50,9 @@ open class RCTMGLMapView : MapView {
       }
     } else {
       print("addToMap.Subviews: \(subview.reactSubviews())")
-      subview.reactSubviews().forEach { addToMap($0) }
+      if (subview.reactSubviews() != nil) {
+        subview.reactSubviews().forEach { addToMap($0) }
+      }
     }
     if let source = subview as? RCTMGLSource {
       sources.append(source)
@@ -64,7 +66,9 @@ open class RCTMGLMapView : MapView {
       }
       mapComponent.removeFromMap(self)
     } else {
-      subview.reactSubviews().forEach { removeFromMap($0) }
+      if (subview.reactSubviews() != nil) {
+        subview.reactSubviews().forEach { removeFromMap($0) }
+      }
     }
     if let source = subview as? RCTMGLSource {
       sources.removeAll { $0 == source }
