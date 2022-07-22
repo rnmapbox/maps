@@ -6586,6 +6586,20 @@
         }
       },
       {
+        "name": "migrateOfflineCache",
+        "description": "Migrates the offline cache from pre-v10 SDKs to the new v10 cache location",
+        "params": [],
+        "examples": [
+          "await MapboxGL.offlineManager.migrateOfflineCache()"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "void"
+          }
+        }
+      },
+      {
         "name": "setMaximumAmbientCacheSize",
         "description": "Sets the maximum size of the ambient cache in bytes. Disables the ambient cache if set to 0.\nThis method may be computationally expensive because it will erase resources from the ambient cache if its size is decreased.",
         "params": [
