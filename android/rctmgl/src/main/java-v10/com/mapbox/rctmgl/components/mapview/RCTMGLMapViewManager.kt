@@ -111,23 +111,23 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
     }
 
     @ReactProp(name = "attributionEnabled")
-    fun setAttributionEnabled(mapView: RCTMGLMapView?, attributionEnabled: Boolean) {
-        //mapView.setReactAttributionEnabled(attributionEnabled);
+    fun setAttributionEnabled(mapView: RCTMGLMapView?, attributionEnabled: Boolean?) {
+        mapView!!.setReactAttributionEnabled(attributionEnabled);
     }
 
     @ReactProp(name = "attributionPosition")
     fun setAttributionPosition(mapView: RCTMGLMapView?, attributionPosition: ReadableMap?) {
-        //mapView.setReactAttributionPosition(attributionPosition);
+        mapView!!.setReactAttributionPosition(attributionPosition);
     }
 
     @ReactProp(name = "logoEnabled")
-    fun setLogoEnabled(mapView: RCTMGLMapView?, logoEnabled: Boolean) {
-        //mapView.setReactLogoEnabled(logoEnabled);
+    fun setLogoEnabled(mapView: RCTMGLMapView?, logoEnabled: Boolean?) {
+        mapView!!.setReactLogoEnabled(logoEnabled);
     }
 
     @ReactProp(name = "logoPosition")
     fun setLogoPosition(mapView: RCTMGLMapView?, logoPosition: ReadableMap?) {
-        //mapView.setReactLogoPosition(logoPosition);
+        mapView!!.setReactLogoPosition(logoPosition);
     }
 
     @ReactProp(name = "compassEnabled")
