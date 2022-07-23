@@ -3200,14 +3200,14 @@
         "name": "compassEnabled",
         "required": false,
         "type": "bool",
-        "default": "none",
+        "default": "false",
         "description": "Enable/Disable the compass from appearing on the map"
       },
       {
         "name": "compassFadeWhenNorth",
         "required": false,
         "type": "bool",
-        "default": "true",
+        "default": "false",
         "description": "Enable/Disable if the compass should fade out when the map is pointing north"
       },
       {

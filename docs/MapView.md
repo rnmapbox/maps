@@ -21,7 +21,7 @@
 | logoEnabled | `bool` | `true` | `false` | Enable/Disable the logo on the map. |
 | logoPosition | `custom` | `none` | `false` | Adds logo offset, e.g. `{top: 8, left: 8}` will put the logo in top-left corner of the map |
 | compassEnabled | `bool` | `none` | `false` | Enable/Disable the compass from appearing on the map |
-| compassFadeWhenNorth | `bool` | `none` | `true` | Enable/Disable if the compass should fade out when the map is pointing north |
+| compassFadeWhenNorth | `bool` | `none` | `false` | Enable/Disable if the compass should fade out when the map is pointing north |
 | compassPosition | `custom` | `none` | `false` | [`mapbox` (v10) implementation only] Adds compass offset, e.g. `{top: 8, left: 8}` will put the compass in top-left corner of the map |
 | compassViewPosition | `number` | `none` | `false` | Change corner of map the compass starts at. 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight |
 | compassViewMargins | `object` | `none` | `false` | Add margins to the compass with x and y values |

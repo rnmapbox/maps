@@ -846,7 +846,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     var mCompassEnabled = false
-    var mCompassFadeWhenNorth = true
+    var mCompassFadeWhenNorth = false
     var mCompassViewMargins: ReadableMap? = null
     var mCompassViewPosition: Int = -1
 

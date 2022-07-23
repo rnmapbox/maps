@@ -4,6 +4,8 @@ import MapKit
 
 @objc(RCTMGLMapView)
 open class RCTMGLMapView : MapView {
+  var compassEnabled: Bool = false
+  var compassFadeWhenNorth: Bool = false
   var reactOnPress : RCTBubblingEventBlock?
   var reactOnLongPress : RCTBubblingEventBlock?
   var reactOnMapChange : RCTBubblingEventBlock?
@@ -155,11 +157,15 @@ open class RCTMGLMapView : MapView {
   }
   
   @objc func setReactCompassEnabled(_ value: Bool) {
-    mapView.ornaments.options.compass.visibility = value ? .adaptive : .hidden
+    compassEnabled = value
+    mapView.ornaments.options.compass.visibility = value ? compassFadeWhenNorth ? .adaptive : .visible : .hidden
   }
   
   @objc func setReactCompassFadeWhenNorth(_ value: Bool) {
-    mapView.ornaments.options.compass.visibility = value ? .adaptive : .visible
+    compassFadeWhenNorth = value
+    if (compassEnabled) {
+      mapView.ornaments.options.compass.visibility = value ? .adaptive : .visible
+    }
   }
   
   @objc func setReactCompassPosition(_ position: [String: Int]!) {
