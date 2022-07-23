@@ -155,7 +155,11 @@ open class RCTMGLMapView : MapView {
   }
   
   @objc func setReactCompassEnabled(_ value: Bool) {
-    mapView.ornaments.options.compass.visibility = value ? .visible : .hidden
+    mapView.ornaments.options.compass.visibility = value ? .adaptive : .hidden
+  }
+  
+  @objc func setReactCompassFadeWhenNorth(_ value: Bool) {
+    mapView.ornaments.options.compass.visibility = value ? .adaptive : .visible
   }
   
   @objc func setReactCompassPosition(_ position: [String: Int]!) {

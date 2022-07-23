@@ -145,6 +145,11 @@ class MapView extends NativeBridgeComponent(React.Component) {
     compassEnabled: PropTypes.bool,
 
     /**
+     * [`mapbox` (v10) implementation only] Enable/Disable whether the compass fades out when the map is pointing north
+     */
+    compassFadeWhenNorth: PropTypes.bool,
+
+    /**
      * [`mapbox` (v10) implementation only] Adds compass offset, e.g. `{top: 8, left: 8}` will put the compass in top-left corner of the map
      */
     compassPosition: ornamentPositionPropType,
