@@ -3208,7 +3208,7 @@
         "required": false,
         "type": "bool",
         "default": "false",
-        "description": "Enable/Disable if the compass should fade out when the map is pointing north"
+        "description": "[`mapbox` (v10) implementation only] Enable/Disable if the compass should fade out when the map is pointing north"
       },
       {
         "name": "compassPosition",

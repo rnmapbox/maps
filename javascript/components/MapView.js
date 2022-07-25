@@ -145,7 +145,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
     compassEnabled: PropTypes.bool,
 
     /**
-     * [`mapbox` (v10) implementation only] Enable/Disable whether the compass fades out when the map is pointing north
+     * [`mapbox` (v10) implementation only] Enable/Disable if the compass should fade out when the map is pointing north
      */
     compassFadeWhenNorth: PropTypes.bool,
 
@@ -306,6 +306,8 @@ class MapView extends NativeBridgeComponent(React.Component) {
     pitchEnabled: true,
     rotateEnabled: true,
     attributionEnabled: true,
+    compassEnabled: false,
+    compassFadeWhenNorth: false,
     logoEnabled: true,
     scaleBarEnabled: true,
     surfaceView: false,
