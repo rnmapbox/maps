@@ -849,11 +849,17 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     var mCompassEnabled = false
+    var mCompassFadeWhenNorth = false
     var mCompassViewMargins: ReadableMap? = null
     var mCompassViewPosition: Int = -1
 
     fun setReactCompassEnabled(compassEnabled: Boolean) {
         mCompassEnabled = compassEnabled
+        updateCompass()
+    }
+
+    fun setReactCompassFadeWhenNorth(compassFadeWhenNorth: Boolean) {
+        mCompassFadeWhenNorth = compassFadeWhenNorth
         updateCompass()
     }
 
@@ -897,6 +903,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     private fun updateCompass() {
         compass.updateSettings {
             enabled = mCompassEnabled
+            fadeWhenFacingNorth = mCompassFadeWhenNorth
             if (mCompassViewPosition >= 0) {
                 position = toGravity("compass", mCompassViewPosition)
             }

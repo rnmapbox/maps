@@ -135,6 +135,11 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
         mapView!!.setReactCompassEnabled(compassEnabled!!);
     }
 
+    @ReactProp(name = "compassFadeWhenNorth")
+    fun setCompassFadeWhenNorth(mapView: RCTMGLMapView?, compassFadeWhenNorth: Boolean) {
+        mapView!!.setReactCompassFadeWhenNorth(compassFadeWhenNorth!!);
+    }
+
     @ReactProp(name = "compassViewMargins")
     fun setCompassViewMargins(mapView: RCTMGLMapView?, compassViewMargins: ReadableMap?) {
         mapView!!.setReactCompassViewMargins(compassViewMargins!!);
