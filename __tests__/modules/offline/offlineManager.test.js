@@ -70,10 +70,13 @@ describe('offlineManager', () => {
   });
 
   it('should migrate offline cache', async () => {
-    const spy = jest.spyOn(NativeModules.MGLOfflineModule, 'migrateOfflineCache');
-    await MapboxGL.migrateOfflineCache()
+    const spy = jest.spyOn(
+      NativeModules.MGLOfflineModule,
+      'migrateOfflineCache',
+    );
+    await MapboxGL.migrateOfflineCache();
     expect(spy).toHaveBeenCalled();
-  })
+  });
 
   it('should set max tile count limit', () => {
     const expectedLimit = 2000;
