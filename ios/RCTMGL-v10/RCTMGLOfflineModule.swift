@@ -15,6 +15,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     case inactive
     case active
     case complete
+    case unkown
   }
   
   lazy var offlineManager : OfflineManager = {
@@ -66,35 +67,6 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     return [Callbacks.error.rawValue, Callbacks.progress.rawValue]
   }
   
-  func convertPackToDict(pack: StylePack) -> [String:Any] {
-    return [:]
-    // format bounds
-    /*
-    MGLTilePyramidOfflineRegion *region = (MGLTilePyramidOfflineRegion *)pack.region;
-    if (region == nil) {
-        return nil;
-    }
-    
-    NSArray *jsonBounds = @[
-      @[@(region.bounds.ne.longitude), @(region.bounds.ne.latitude)],
-      @[@(region.bounds.sw.longitude), @(region.bounds.sw.latitude)]
-    ];
-    
-    // format metadata
-    NSDictionary *metadata = [self _unarchiveMetadata:pack];
-    NSData *jsonMetadata = [NSJSONSerialization dataWithJSONObject:metadata
-                                            options:0
-                                            error:nil];
-    return @{
-      @"metadata": [[NSString alloc] initWithData:jsonMetadata encoding:NSUTF8StringEncoding],
-      @"bounds": jsonBounds
-    };*/
-  }
-  
-  func convertPacksToJson(packs: [StylePack]) -> [[String:Any]] {
-    packs.map { return convertPackToDict(pack:$0) }
-  }
-  
   func convertRegionToJSON(region: TileRegion, geometry: Geometry) -> [String:Any] {
     let bb = RCTMGLFeatureUtils.boundingBox(geometry: geometry)
     
@@ -105,14 +77,30 @@ class RCTMGLOfflineModule: RCTEventEmitter {
         bb.southWest.longitude, bb.southWest.longitude
       ]
       
+
+      var metadata : [String:Any] = [
+        "name": region.id,
+        "requiredResourceCount": region.requiredResourceCount,
+        "completedResourceCount": region.completedResourceCount,
+        "completedResourceSize": region.completedResourceSize,
+        "state": State.unkown.rawValue
+      ]
+      if region.requiredResourceCount > 0 {
+        let percentage = Float(region.completedResourceCount) / Float(region.requiredResourceCount)
+        metadata["percentage"] = percentage
+      } else {
+        metadata["percentage"] = nil
+      }
+      if let expires = region.expires {
+        metadata["expires"] = expires
+      }
+      
+      result["metadata"] = String(data:try! JSONSerialization.data(withJSONObject: metadata, options: [.prettyPrinted]), encoding: .utf8)
+      
       result["bounds"] = jsonBounds
     }
     return result
   }
-  
-  //func convertRegionToJSON(region: TileRegion, geometry: Geometry) -> [String:Any] {
-    // BoundingBox(from: geometry.)
-  //}
   
   func convertRegionToJson(regions: [TileRegion], resolve: @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
     let taskGroup = DispatchGroup()
@@ -159,8 +147,9 @@ class RCTMGLOfflineModule: RCTEventEmitter {
       
       
       
-      resolve(results.map { (id, geometry_region) in
-        self.convertRegionToJSON(region: geometry_region.1, geometry: geometry_region.0)
+      resolve(results.map { (id, geometry_region) -> [String:Any] in
+        let (geometry, region) = geometry_region;
+        return self.convertRegionToJSON(region: region, geometry: geometry)
       })
     }
   }

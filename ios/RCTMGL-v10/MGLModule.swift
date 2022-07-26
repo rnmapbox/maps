@@ -25,7 +25,8 @@ class MGLModule : NSObject {
         [
           "Inactive": RCTMGLOfflineModule.State.inactive.rawValue,
           "Active": RCTMGLOfflineModule.State.active.rawValue,
-          "Complete": RCTMGLOfflineModule.State.complete.rawValue
+          "Complete": RCTMGLOfflineModule.State.complete.rawValue,
+          "Unkown": RCTMGLOfflineModule.State.unkown.rawValue,
         ],
       "StyleSource":
         ["DefaultSourceID": DEFAULT_SOURCE_ID],
