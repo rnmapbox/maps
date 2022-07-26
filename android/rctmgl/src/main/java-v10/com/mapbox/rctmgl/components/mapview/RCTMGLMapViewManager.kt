@@ -126,8 +126,8 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
     }
 
     @ReactProp(name = "logoEnabled")
-    fun setLogoEnabled(mapView: RCTMGLMapView, logoEnabled: Boolean) {
-        mapView.logo.enabled = logoEnabled
+    fun setLogoEnabled(mapView: RCTMGLMapView?, logoEnabled: Boolean?) {
+        mapView!!.setReactLogoEnabled(logoEnabled);
     }
 
     @ReactProp(name = "logoPosition")
@@ -136,8 +136,8 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
     }
 
     @ReactProp(name = "compassEnabled")
-    fun setCompassEnabled(mapView: RCTMGLMapView, compassEnabled: Boolean) {
-        mapView.compass.enabled = compassEnabled
+    fun setCompassEnabled(mapView: RCTMGLMapView?, compassEnabled: Boolean) {
+        mapView!!.setReactCompassEnabled(compassEnabled);
     }
 
     @ReactProp(name = "compassViewMargins")
