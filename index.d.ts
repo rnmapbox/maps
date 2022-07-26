@@ -555,6 +555,7 @@ export interface MapViewProps extends ViewProps {
   logoEnabled?: boolean;
   logoPosition?: OrnamentPosition;
   compassEnabled?: boolean;
+  compassFadeWhenNorth?: boolean;
   compassPosition?: OrnamentPosition;
   compassViewPosition?: number;
   compassViewMargins?: Point;

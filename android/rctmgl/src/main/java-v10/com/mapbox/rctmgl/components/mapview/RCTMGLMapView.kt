@@ -1,6 +1,5 @@
 package com.mapbox.rctmgl.components.mapview
 
-import android.R.attr.gravity
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.PointF
@@ -26,9 +25,13 @@ import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListene
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
+import com.mapbox.maps.plugin.attribution.attribution
+import com.mapbox.maps.plugin.attribution.generated.AttributionSettings
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.delegates.listeners.*
 import com.mapbox.maps.plugin.gestures.*
+import com.mapbox.maps.plugin.logo.generated.LogoSettings
+import com.mapbox.maps.plugin.logo.logo
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerView
@@ -846,11 +849,17 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     var mCompassEnabled = false
+    var mCompassFadeWhenNorth = false
     var mCompassViewMargins: ReadableMap? = null
     var mCompassViewPosition: Int = -1
 
     fun setReactCompassEnabled(compassEnabled: Boolean) {
         mCompassEnabled = compassEnabled
+        updateCompass()
+    }
+
+    fun setReactCompassFadeWhenNorth(compassFadeWhenNorth: Boolean) {
+        mCompassFadeWhenNorth = compassFadeWhenNorth
         updateCompass()
     }
 
@@ -894,6 +903,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     private fun updateCompass() {
         compass.updateSettings {
             enabled = mCompassEnabled
+            fadeWhenFacingNorth = mCompassFadeWhenNorth
             if (mCompassViewPosition >= 0) {
                 position = toGravity("compass", mCompassViewPosition)
             }
@@ -932,4 +942,118 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
     // endregion
 
+    private fun getGravityAndMargin (position:ReadableMap): Pair<Int, IntArray> {
+        var gravity = Gravity.NO_GRAVITY
+        if (position.hasKey("left")) {
+            gravity = gravity or Gravity.START
+        }
+        if (position.hasKey("right")) {
+            gravity = gravity or Gravity.END
+        }
+        if (position.hasKey("top")) {
+            gravity = gravity or Gravity.TOP
+        }
+        if (position.hasKey("bottom")) {
+            gravity = gravity or Gravity.BOTTOM
+        }
+        val density = getDisplayDensity()
+        val margin = intArrayOf(
+            if (position.hasKey("left")) density.toInt() * position.getInt("left") else 0,
+            if (position.hasKey("top")) density.toInt() * position.getInt("top") else 0,
+            if (position.hasKey("right")) density.toInt() * position.getInt("right") else 0,
+            if (position.hasKey("bottom")) density.toInt() * position.getInt("bottom") else 0,
+        )
+        return Pair(gravity, margin)
+    }
+
+    // region Attribution
+    private var mAttributionEnabled: Boolean? = null;
+    private var mAttributionGravity: Int? = null
+    private var mAttributionMargin: IntArray? = null
+
+    fun setReactAttributionEnabled(attributionEnabled: Boolean?) {
+        mAttributionEnabled = attributionEnabled ?: AttributionSettings().enabled
+        updateAttribution()
+    }
+
+    fun setReactAttributionPosition(position: ReadableMap?) {
+        if (position == null) {
+            // reset from explicit to default
+            if (mAttributionGravity != null) {
+                val defaultOptions = AttributionSettings()
+                mAttributionGravity = defaultOptions.position
+                mAttributionMargin = intArrayOf(defaultOptions.marginLeft.toInt(),defaultOptions.marginTop.toInt(),defaultOptions.marginRight.toInt(),defaultOptions.marginBottom.toInt())
+                updateAttribution()
+            }
+            return
+        }
+
+        val (attributionGravity, attributionMargin) = getGravityAndMargin(position)
+        mAttributionGravity = attributionGravity
+        mAttributionMargin = attributionMargin
+        updateAttribution()
+    }
+
+    private fun updateAttribution() {
+        attribution.updateSettings {
+            if(mAttributionEnabled!= null){
+                enabled = mAttributionEnabled!!
+            }
+            if(mAttributionGravity != null){
+                position = mAttributionGravity!!
+            }
+            if(mAttributionMargin != null){
+                marginLeft = mAttributionMargin!![0].toFloat()
+                marginTop = mAttributionMargin!![1].toFloat()
+                marginRight = mAttributionMargin!![2].toFloat()
+                marginBottom = mAttributionMargin!![3].toFloat()
+            }
+        }
+    }
+    //endregion
+
+    // region Logo
+    private var mLogoEnabled: Boolean? = null;
+    private var mLogoGravity: Int? = null
+    private var mLogoMargin: IntArray? = null
+
+    fun setReactLogoEnabled(logoEnabled: Boolean?) {
+        mLogoEnabled = logoEnabled ?: LogoSettings().enabled
+        updateLogo()
+    }
+
+    fun setReactLogoPosition(position: ReadableMap?) {
+        if (position == null) {
+            // reset from explicit to default
+            if (mLogoGravity != null) {
+                val defaultOptions = LogoSettings()
+                mLogoGravity = defaultOptions.position
+                mLogoMargin = intArrayOf(defaultOptions.marginLeft.toInt(),defaultOptions.marginTop.toInt(),defaultOptions.marginRight.toInt(),defaultOptions.marginBottom.toInt())
+                updateLogo()
+            }
+            return
+        }
+        val (logoGravity, logoMargin) = getGravityAndMargin(position)
+        mLogoGravity = logoGravity
+        mLogoMargin = logoMargin
+        updateLogo()
+    }
+
+    private fun updateLogo() {
+        logo.updateSettings {
+            if(mLogoEnabled != null){
+                enabled = mLogoEnabled!!
+            }
+            if(mLogoGravity != null){
+                position = mLogoGravity!!
+            }
+            if(mLogoMargin != null){
+                marginLeft = mLogoMargin!![0].toFloat()
+                marginTop = mLogoMargin!![1].toFloat()
+                marginRight = mLogoMargin!![2].toFloat()
+                marginBottom = mLogoMargin!![3].toFloat()
+            }
+        }
+    }
+    // endregion
 }

@@ -125,27 +125,13 @@ public class CameraStop {
                     mBounds.toBounds(),
                     convert(cameraPaddingClipped),
                     bearing,
-                    mTilt
+                    tilt
             );
-            if (boundsCamera != null) {
-                builder.center(boundsCamera.getCenter());
-                builder.anchor(boundsCamera.getAnchor());
-                builder.zoom(boundsCamera.getZoom());
-                builder.padding(boundsCamera.getPadding());
-            } else {
-                /*
-                CameraUpdate update = CameraUpdateFactory.newLatLngBounds(
-                        mBounds,
-                        cameraPaddingClipped[0],
-                        cameraPaddingClipped[1],
-                        cameraPaddingClipped[2],
-                        cameraPaddingClipped[3]
-                );*/
-                CameraOptions update =
-                        map.cameraForCoordinateBounds(mBounds.toBounds(),convert(cameraPaddingClipped),null, null);
-                        ;
-                return new CameraUpdateItem(map, update, mDuration, mCallback, mMode);
-            }
+
+            builder.center(boundsCamera.getCenter());
+            builder.anchor(boundsCamera.getAnchor());
+            builder.zoom(boundsCamera.getZoom());
+            builder.padding(boundsCamera.getPadding());
         }
 
         if (mZoom != null) {
@@ -180,10 +166,10 @@ public class CameraStop {
         }
 
         if (readableMap.hasKey("bounds")) {
-            int paddingTop = getBoundsPaddingByKey(readableMap, "boundsPaddingTop");
-            int paddingRight = getBoundsPaddingByKey(readableMap, "boundsPaddingRight");
-            int paddingBottom = getBoundsPaddingByKey(readableMap, "boundsPaddingBottom");
-            int paddingLeft = getBoundsPaddingByKey(readableMap, "boundsPaddingLeft");
+            int paddingTop = getBoundsPaddingByKey(readableMap, "paddingTop");
+            int paddingRight = getBoundsPaddingByKey(readableMap, "paddingRight");
+            int paddingBottom = getBoundsPaddingByKey(readableMap, "paddingBottom");
+            int paddingLeft = getBoundsPaddingByKey(readableMap, "paddingLeft");
 
             // scale padding by pixel ratio
             DisplayMetrics metrics = context.getResources().getDisplayMetrics();
@@ -193,9 +179,8 @@ public class CameraStop {
             paddingLeft = Float.valueOf(paddingLeft * metrics.scaledDensity).intValue();
 
             FeatureCollection collection = FeatureCollection.fromJson(readableMap.getString("bounds"));
-            /* v10todo
             stop.setBounds(GeoJSONUtils.toLatLngBounds(collection), paddingLeft, paddingRight,
-                    paddingTop, paddingBottom); */
+                    paddingTop, paddingBottom);
         }
 
         if (readableMap.hasKey("mode")) {

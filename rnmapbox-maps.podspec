@@ -252,7 +252,6 @@ Pod::Spec.new do |s|
     case $RNMapboxMapsImpl
     when 'mapbox'
       sp.source_files = "ios/RCTMGL-v10/**/*.{h,m,swift}"
-      sp.public_header_files = 'ios/RCTMGL-v10/Bridge/*.h'
     when 'mapbox-gl'
       sp.source_files	= "ios/RCTMGL/**/*.{h,m}"
     when 'maplibre'

@@ -11,6 +11,9 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.mapbox.rctmgl.events.constants.EventKeys
 import com.mapbox.maps.MapboxMap
 import com.facebook.react.common.MapBuilder
+import com.mapbox.maps.plugin.compass.compass
+import com.mapbox.maps.plugin.gestures.gestures
+import com.mapbox.maps.plugin.logo.logo
 import com.mapbox.rctmgl.utils.ConvertUtils
 import com.mapbox.rctmgl.utils.ExpressionParser
 import com.mapbox.rctmgl.utils.GeoJSONUtils
@@ -91,48 +94,55 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
     }
 
     @ReactProp(name = "zoomEnabled")
-    fun setZoomEnabled(mapView: RCTMGLMapView?, zoomEnabled: Boolean) {
-        //mapView.setReactZoomEnabled(zoomEnabled);
+    fun setZoomEnabled(mapView: RCTMGLMapView, zoomEnabled: Boolean) {
+        mapView.gestures.pinchToZoomEnabled = zoomEnabled
+        mapView.gestures.doubleTouchToZoomOutEnabled = zoomEnabled
+        mapView.gestures.doubleTapToZoomInEnabled = zoomEnabled
     }
 
     @ReactProp(name = "scrollEnabled")
-    fun setScrollEnabled(mapView: RCTMGLMapView?, scrollEnabled: Boolean) {
-        //mapView.setReactScrollEnabled(scrollEnabled);
+    fun setScrollEnabled(mapView: RCTMGLMapView, scrollEnabled: Boolean) {
+        mapView.gestures.scrollEnabled = scrollEnabled
     }
 
     @ReactProp(name = "pitchEnabled")
-    fun setPitchEnabled(mapView: RCTMGLMapView?, pitchEnabled: Boolean) {
-        //mapView.setReactPitchEnabled(pitchEnabled);
+    fun setPitchEnabled(mapView: RCTMGLMapView, pitchEnabled: Boolean) {
+        mapView.gestures.pitchEnabled = pitchEnabled
     }
 
     @ReactProp(name = "rotateEnabled")
-    fun setRotateEnabled(mapView: RCTMGLMapView?, rotateEnabled: Boolean) {
-        //mapView.setReactRotateEnabled(rotateEnabled);
+    fun setRotateEnabled(mapView: RCTMGLMapView, rotateEnabled: Boolean) {
+        mapView.gestures.rotateEnabled = rotateEnabled
     }
 
     @ReactProp(name = "attributionEnabled")
-    fun setAttributionEnabled(mapView: RCTMGLMapView?, attributionEnabled: Boolean) {
-        //mapView.setReactAttributionEnabled(attributionEnabled);
+    fun setAttributionEnabled(mapView: RCTMGLMapView?, attributionEnabled: Boolean?) {
+        mapView!!.setReactAttributionEnabled(attributionEnabled);
     }
 
     @ReactProp(name = "attributionPosition")
     fun setAttributionPosition(mapView: RCTMGLMapView?, attributionPosition: ReadableMap?) {
-        //mapView.setReactAttributionPosition(attributionPosition);
+        mapView!!.setReactAttributionPosition(attributionPosition);
     }
 
     @ReactProp(name = "logoEnabled")
-    fun setLogoEnabled(mapView: RCTMGLMapView?, logoEnabled: Boolean) {
-        //mapView.setReactLogoEnabled(logoEnabled);
+    fun setLogoEnabled(mapView: RCTMGLMapView?, logoEnabled: Boolean?) {
+        mapView!!.setReactLogoEnabled(logoEnabled);
     }
 
     @ReactProp(name = "logoPosition")
     fun setLogoPosition(mapView: RCTMGLMapView?, logoPosition: ReadableMap?) {
-        //mapView.setReactLogoPosition(logoPosition);
+        mapView!!.setReactLogoPosition(logoPosition);
     }
 
     @ReactProp(name = "compassEnabled")
     fun setCompassEnabled(mapView: RCTMGLMapView?, compassEnabled: Boolean) {
-        mapView!!.setReactCompassEnabled(compassEnabled!!);
+        mapView!!.setReactCompassEnabled(compassEnabled);
+    }
+
+    @ReactProp(name = "compassFadeWhenNorth")
+    fun setCompassFadeWhenNorth(mapView: RCTMGLMapView?, compassFadeWhenNorth: Boolean) {
+        mapView!!.setReactCompassFadeWhenNorth(compassFadeWhenNorth!!);
     }
 
     @ReactProp(name = "compassViewMargins")

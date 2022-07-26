@@ -31,6 +31,8 @@ const nativeAnimationMode = (
       return NativeCameraModes.Linear;
     case 'moveTo':
       return NativeCameraModes.Move;
+    case 'none':
+      return NativeCameraModes.None;
     default:
       return NativeCameraModes.Ease;
   }
@@ -162,7 +164,12 @@ export type CameraStops = {
   stops: CameraStop[];
 };
 
-export type CameraAnimationMode = 'flyTo' | 'easeTo' | 'linearTo' | 'moveTo';
+export type CameraAnimationMode =
+  | 'flyTo'
+  | 'easeTo'
+  | 'linearTo'
+  | 'moveTo'
+  | 'none';
 
 /**
  * Controls the perspective from which the user sees the map.

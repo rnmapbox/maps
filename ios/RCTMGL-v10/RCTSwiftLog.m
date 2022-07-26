@@ -2,7 +2,7 @@
 
 #import "RCTSwiftLog.h"
 
-@implementation RCTSwiftLog
+@implementation RCTMGLSwiftLog
 
 + (void)info:(NSString *)message file:(NSString *)file line:(NSUInteger)line
 {
