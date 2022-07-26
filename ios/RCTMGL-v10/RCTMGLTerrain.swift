@@ -52,10 +52,13 @@ class RCTMGLTerrain : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     
     let terrain = self.makeTerrain()
     self.terrain = terrain
-    do {
-      try style.setTerrain(terrain)
-    } catch {
-      Logger.log(level:.error, message: "Failed to create terrain: \(terrain)", error: error)
+    map.onMapStyleLoaded { _ in
+      if let mapboxMap = map.mapboxMap {
+        let style = mapboxMap.style
+        logged("RCTMGLTerrain.addToMap") {
+          try style.setTerrain(terrain)
+        }
+      }
     }
   }
   

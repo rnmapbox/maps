@@ -18,6 +18,7 @@
 - (id)initWithMGLStyle:(MGLStyle*)mglStyle;
 
 <%_ for (const layer of layers) { _%>
+<%_ if (layer.properties.length == 0) { continue } _%>
 - (void)<%- setLayerMethodName(layer, 'ios') -%>:(<%- getLayerType(layer, 'ios') -%> *)layer withReactStyle:(NSDictionary *)reactStyle isValid:(BOOL (^)(void)) isValid;
 <%_ } _%>
 

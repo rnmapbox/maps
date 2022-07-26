@@ -1,3 +1,4 @@
+/* eslint-disable fp/no-mutating-methods */
 require('./autogenHelpers/globals');
 
 const fs = require('fs');
@@ -7,6 +8,7 @@ const { execSync } = require('child_process');
 const ejs = require('ejs');
 const prettier = require('prettier');
 
+const prettierrc = require('../.prettierrc.js');
 const styleSpecJSON = require('../style-spec/v8.json');
 
 const DocJSONBuilder = require('./autogenHelpers/DocJSONBuilder');
@@ -135,26 +137,43 @@ getSupportedLayers(Object.keys(styleSpecJSON.layer.type.values)).forEach(
 // add light as a layer
 layers.push({
   name: 'light',
-  properties: getPropertiesForLight(),
+  properties: getPropertiesFor('light'),
   props: {
-    gl: getPropertiesForLight('gl'),
-    v10: getPropertiesForLight('v10'),
+    gl: getPropertiesFor('light', 'gl'),
+    v10: getPropertiesFor('light', 'v10'),
   },
   support: { gl: true, v10: true },
 });
 
-function getPropertiesForLight(only) {
-  const lightAttributes = styleSpecJSON.light;
+// add atmosphere as a layer
+layers.push({
+  name: 'atmosphere',
+  properties: getPropertiesFor('fog'),
+  props: {
+    gl: getPropertiesFor('fog', 'gl'),
+    v10: removeTransitionsOnV10Before1070(getPropertiesFor('fog', 'v10')),
+  },
+  support: { gl: false, v10: true },
+});
 
-  const lightProps = getSupportedProperties(lightAttributes, only).map(
-    (attrName) => {
-      return Object.assign({}, buildProperties(lightAttributes, attrName), {
-        allowedFunctionTypes: [],
-      });
-    },
+function getPropertiesFor(kind, only) {
+  const attributes = styleSpecJSON[kind];
+
+  const props = getSupportedProperties(attributes, only).map((attrName) => {
+    return Object.assign({}, buildProperties(attributes, attrName), {
+      allowedFunctionTypes: [],
+    });
+  });
+
+  return props;
+}
+
+function removeTransitionsOnV10Before1070(props) {
+  let isv17orolder = isVersionGTE(iosVersion.v10, '10.7.0');
+
+  return props.map((i) =>
+    !isv17orolder ? { ...i, transition: false } : { ...i },
   );
-
-  return lightProps;
 }
 
 function getPropertiesForLayer(layerName, only) {
@@ -416,9 +435,13 @@ async function generate() {
       output: path.join(IOS_OUTPUT_PATH, 'RCTMGLStyle.h'),
       only: 'gl',
     },
-    {
+    /*{
       input: path.join(TMPL_PATH, 'index.d.ts.ejs'),
       output: path.join(IOS_OUTPUT_PATH, 'index.d.ts'),
+    },*/
+    {
+      input: path.join(TMPL_PATH, 'MapboxStyles.ts.ejs'),
+      output: path.join(JS_OUTPUT_PATH, 'MapboxStyles.ts'),
     },
     {
       input: path.join(TMPL_PATH, 'RCTMGLStyle.m.ejs'),
@@ -466,7 +489,10 @@ async function generate() {
 
     let results = tmpl({ layers: filterOnly(layers, only) });
     if (filename.endsWith('ts')) {
-      results = prettier.format(results, { filepath: filename });
+      results = prettier.format(results, {
+        ...prettierrc,
+        filepath: filename,
+      });
     }
     fs.writeFileSync(output, results);
   });

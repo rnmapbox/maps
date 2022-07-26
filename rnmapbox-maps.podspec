@@ -20,7 +20,7 @@ require 'json'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 ## Warning: these lines are scanned by autogenerate.js
-rnMapboxMapsDefaultMapboxVersion = '~> 10.5.0'
+rnMapboxMapsDefaultMapboxVersion = '~> 10.6.0'
 rnMapboxMapsDefaultMapboxGLVersion = '~> 5.9.0'
 rnMapboxMapsDefaultMapLibreVersion = 'exactVersion 5.12.1'
 
@@ -252,7 +252,6 @@ Pod::Spec.new do |s|
     case $RNMapboxMapsImpl
     when 'mapbox'
       sp.source_files = "ios/RCTMGL-v10/**/*.{h,m,swift}"
-      sp.public_header_files = 'ios/RCTMGL-v10/Bridge/*.h'
     when 'mapbox-gl'
       sp.source_files	= "ios/RCTMGL/**/*.{h,m}"
     when 'maplibre'

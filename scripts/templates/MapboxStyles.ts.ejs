@@ -1,0 +1,92 @@
+<%
+  const layers = locals.layers;
+-%>
+/* This file was generated from MapboxStyle.ts.ejs do not modify */
+
+
+export type Translation = { x: number; y: number } | [number, number];
+
+export interface Transition {
+  duration: number;
+  delay: number;
+}
+
+type ExpressionName =
+  // Types
+  | 'array' | 'boolean' | 'collator' | 'format' | 'image' | 'literal' | 'number' | 'number-format' | 'object' | 'string'
+  | 'to-boolean' | 'to-color' | 'to-number' | 'to-string' | 'typeof'
+  // Feature data
+  | 'accumulated' | 'feature-state' | 'geometry-type' | 'id' | 'line-progress' | 'properties'
+  // Lookup
+  | 'at' | 'get' | 'has' | 'in' | 'index-of' | 'length' | 'slice'
+  // Decision
+  | '!' | '!=' | '<' | '<=' | '==' | '>' | '>=' | 'all' | 'any' | 'case' | 'match' | 'coalesce' | 'within'
+  // Ramps, scales, curves
+  | 'interpolate' | 'interpolate-hcl' | 'interpolate-lab' | 'step'
+  // Variable binding
+  | 'let' | 'var'
+  // String
+  | 'concat' | 'downcase' | 'is-supported-script' | 'resolved-locale' | 'upcase'
+  // Color
+  | 'rgb' | 'rgba' | 'to-rgba'
+  // Math
+  | '-' | '*' | '/' | '%' | '^' | '+' | 'abs' | 'acos' | 'asin' | 'atan' | 'ceil' | 'cos' | 'distance' | 'e'
+  | 'floor' | 'ln' | 'ln2' | 'log10' | 'log2' | 'max' | 'min' | 'pi' | 'round' | 'sin' | 'sqrt' | 'tan'
+  // Zoom, Heatmap
+  | 'zoom' | 'heatmap-density';
+
+type ExpressionField =
+  | string
+  | number
+  | boolean
+  | Expression
+  | ExpressionField[]
+  | { [key: string]: ExpressionField };
+
+export type Expression = [ExpressionName, ...ExpressionField[]];
+
+type ExpressionParameters = 'zoom' | 'feature' | 'feature-state' | 'sky-radial-progress' | 'line-progress' | 'heatmap-density';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type Value<T, AllowedParameters extends ExpressionParameters[] = []> =
+  | T
+  | Expression;
+
+<%_ for (let enumInfo of getEnums(layers)) { _%>
+  enum <%- pascelCase(enumInfo.name) %>Enum {
+    <%_ for (let k of Object.keys(enumInfo.values)) { _%>
+      /** <%- enumInfo.values[k].doc %> */
+      <%- pascelCase(k) %> = '<%- k %>',
+    <%_ } _%>
+  }
+<%_ } _%>
+
+type Enum<EnumType> = EnumType | keyof EnumType;
+
+<%_ for (let layer of layers) { _%>
+  export interface <%- pascelCase(layer.name) %>LayerStyleProps {
+    <%_ for (let prop of layer.properties) { _%>
+      /**
+       * <%- prop.doc.description %>
+      <%_ if (prop.doc.requires.length) { _%>
+       *
+       * @requires <%- prop.doc.requires.join(', ') %>
+      <%_ } _%>
+      <%_ if (prop.doc.disabledBy.length) { _%>
+       *
+       * @disabledBy <%- prop.doc.disabledBy.join(', ') %>
+      <%_ } _%>
+       */
+      <%= prop.name %>?: <%- dtsInterfaceType(prop) %>
+      <%_ if (true && prop.transition) { %>
+      /**
+       * The transition affecting any changes to this layer’s <%= prop.name %> property.
+       */
+      <%= prop.name %>Transition?: Transition,
+      <%_ } _%>
+      <%_ } _%>
+
+  };
+<%_ } _%>
+
+export type AllLayerStyleProps = <%- layers.map(l => `${pascelCase(l.name)}LayerStyleProps`).join("|") -%>;

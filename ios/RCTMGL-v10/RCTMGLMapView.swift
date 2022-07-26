@@ -49,8 +49,7 @@ open class RCTMGLMapView : MapView {
         mapComponent.addToMap(self, style: style)
       }
     } else {
-      print("addToMap.Subviews: \(subview.reactSubviews())")
-      subview.reactSubviews().forEach { addToMap($0) }
+      subview.reactSubviews()?.forEach { addToMap($0) }
     }
     if let source = subview as? RCTMGLSource {
       sources.append(source)
@@ -64,7 +63,7 @@ open class RCTMGLMapView : MapView {
       }
       mapComponent.removeFromMap(self)
     } else {
-      subview.reactSubviews().forEach { removeFromMap($0) }
+      subview.reactSubviews()?.forEach { removeFromMap($0) }
     }
     if let source = subview as? RCTMGLSource {
       sources.removeAll { $0 == source }
@@ -165,6 +164,37 @@ open class RCTMGLMapView : MapView {
     }
   }
   
+  func toOrnamentPositon(_ position: Int) -> OrnamentPosition {
+    enum MapboxGLPosition : Int {
+      case topLeft = 0
+      case topRight = 1
+      case bottomLeft = 2
+      case bottomRight = 3
+    };
+    
+    let glPosition = MapboxGLPosition(rawValue: position)
+    switch glPosition {
+    case .topLeft:
+      return .topLeft
+    case .bottomRight:
+      return .bottomRight
+    case .topRight:
+      return .topRight
+    case .bottomLeft:
+      return .bottomLeft
+    case .none:
+      return .topLeft
+    }
+  }
+  
+  @objc func setReactCompassViewPosition(_ position: Int) {
+    mapView.ornaments.options.compass.position = toOrnamentPositon(position)
+  }
+  
+  @objc func setReactCompassViewMargins(_ margins: CGPoint) {
+    mapView.ornaments.options.compass.margins = margins;
+  }
+
   @objc func setReactScaleBarEnabled(_ value: Bool) {
     self.mapView.ornaments.options.scaleBar.visibility = value ? .visible : .hidden
   }

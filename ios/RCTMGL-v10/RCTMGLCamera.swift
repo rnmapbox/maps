@@ -19,20 +19,25 @@ struct CameraUpdateItem {
   var duration: TimeInterval?
   
   func execute(map: RCTMGLMapView, cameraAnimator: inout BasicCameraAnimator?) {
-    switch mode {
-      case .flight:
-        var _camera = camera
-        _camera.padding = nil
-        map.camera.fly(to: _camera, duration: duration)
-        changePadding(map: map, cameraAnimator: &cameraAnimator, curve: .linear)
-      case .ease:
-        map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
-      case .linear:
-        map.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
-      case .none:
-        map.mapboxMap.setCamera(to: camera)
-      default:
-        map.mapboxMap.setCamera(to: camera)
+    logged("CameraUpdateItem.execute") {
+      if let center = camera.center {
+        try center.validate()
+      }
+      switch mode {
+        case .flight:
+          var _camera = camera
+          _camera.padding = nil
+          map.camera.fly(to: _camera, duration: duration)
+          changePadding(map: map, cameraAnimator: &cameraAnimator, curve: .linear)
+        case .ease:
+          map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
+        case .linear:
+          map.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
+        case .none:
+          map.mapboxMap.setCamera(to: camera)
+        default:
+          map.mapboxMap.setCamera(to: camera)
+      }
     }
   }
   

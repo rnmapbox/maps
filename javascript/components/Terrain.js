@@ -11,7 +11,7 @@ const MapboxGL = NativeModules.MGLModule;
 export const NATIVE_MODULE_NAME = 'RCTMGLTerrain';
 
 /**
- * Terrain renders a terran
+ * A global modifier that elevates layers and markers based on a DEM data source.
  */
 class Terrain extends React.PureComponent {
   static propTypes = {

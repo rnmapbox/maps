@@ -1,7 +1,7 @@
 {
   "name": "@rnmapbox/maps",
   "description": "A Mapbox react native module for creating custom maps",
-  "version": "10.0.0-beta.15",
+  "version": "10.0.0-beta.18",
   "publishConfig": {
     "access": "public"
   },
@@ -27,7 +27,7 @@
     "unittest:single": "jest --testNamePattern",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepare": "npm run build:plugin",
+    "type:check": "yarn tsc --noEmit",
     "test:plugin": "expo-module test plugin",
     "build:plugin": "tsc --build plugin",
     "lint:plugin": "eslint plugin/src/*"
@@ -46,7 +46,8 @@
     "@turf/length": "6.5.0",
     "@turf/nearest-point-on-line": "6.5.0",
     "@types/geojson": "^7946.0.7",
-    "debounce": "^1.2.0"
+    "debounce": "^1.2.0",
+    "deprecated-react-native-prop-types": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "7.17.5",
@@ -56,8 +57,7 @@
     "@react-native-community/eslint-config": "^3.0.1",
     "@sinonjs/fake-timers": "^8.0.1",
     "@testing-library/react-native": "^8.0.0",
-    "@types/react": "^18.0.5",
-    "@types/react-native": "^0.67.4",
+    "@types/react-native": ">=0.59.9",
     "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.20.0",
     "babel-jest": "^27.5.1",
@@ -69,11 +69,11 @@
     "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-import": "2.25.3",
     "expo-module-scripts": "^2.0.0",
-    "husky": "4.3.8",
+    "husky": "^7.0.4",
     "jest": "27.5.1",
     "jest-cli": "27.5.1",
     "lint-staged": "^12.1.2",
-    "metro-react-native-babel-preset": "0.69.0",
+    "metro-react-native-babel-preset": "0.71.1",
     "node-dir": "0.1.17",
     "prettier": "2.6.2",
     "react": "17.0.2",

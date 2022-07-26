@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@rnmapbox/maps": ["../"],
+      "react": ["./node_modules/@types/react"],
+    }
+  },
+  "include": ["index.js", "src/**/*", "../index.ts", "../javascript/**/*"]
+}

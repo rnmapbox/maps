@@ -73,7 +73,7 @@ import UserLocationChange from '../examples/UserLocation/UserLocationChange';
 import BugReportTemplate from '../examples/BugReportExample';
 import CacheManagement from '../examples/CacheManagement';
 // V10
-import SkyAndTerran from '../examples/V10/SkyAndTerran';
+import TerrainSkyAtmosphere from '../examples/V10/TerrainSkyAtmosphere';
 import QueryTerrainElevation from '../examples/V10/QueryTerrainElevation';
 import CameraAnimation from '../examples/V10/CameraAnimation';
 import MapHandlers from '../examples/V10/MapHandlers';
@@ -126,7 +126,7 @@ const BugReportPage = ({ ...props }) => (
 const Examples = [
   new ExampleItem('Bug Report Template', BugReportPage),
   new ExampleGroup('V10', [
-    new ExampleItem('Sky and Terrain', SkyAndTerran),
+    new ExampleItem('Terrain, Sky, & Atmosphere', TerrainSkyAtmosphere),
     new ExampleItem('Query Terrain Elevation', QueryTerrainElevation),
     new ExampleItem('Camera Animation', CameraAnimation),
     new ExampleItem('Map Handlers', MapHandlers),

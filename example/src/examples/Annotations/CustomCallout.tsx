@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 import MapboxGL, { SymbolLayerStyle } from '@rnmapbox/maps';
-import { Feature } from '@turf/helpers/dist/js';
+import { type GeoJSON } from 'geojson';
+import { Feature } from '@turf/helpers';
 import { View, Text, ViewStyle, StyleProp, TextStyle } from 'react-native';
 
 import exampleIcon from '../../assets/pin.png';
@@ -12,7 +13,7 @@ const defaultCamera = {
   zoomLevel: 17.4,
 };
 
-const featureCollection = {
+const featureCollection: GeoJSON.FeatureCollection<GeoJSON.Geometry> = {
   type: 'FeatureCollection',
   features: [
     {

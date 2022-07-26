@@ -572,7 +572,7 @@ ___
 Name: `textField`
 
 #### Description
-Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options.
+Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
 
 #### Type
 `formatted`

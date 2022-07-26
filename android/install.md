@@ -52,7 +52,7 @@ buildscript {
         RNMapboxMapsImpl = "mapbox" // required for v10
 
         RNMapboxMapsLibs = { // optional - only required if you want to customize it
-            implementation 'com.mapbox.maps:android:10.5.0-beta1'
+            implementation 'com.mapbox.maps:android:10.6.0'
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.4.1'
         }
     }
