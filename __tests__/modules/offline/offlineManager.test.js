@@ -74,7 +74,7 @@ describe('offlineManager', () => {
       NativeModules.MGLOfflineModule,
       'migrateOfflineCache',
     );
-    await MapboxGL.migrateOfflineCache();
+    await MapboxGL.offlineManager.migrateOfflineCache();
     expect(spy).toHaveBeenCalled();
   });
 
