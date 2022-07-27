@@ -328,46 +328,34 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
             }
         });
     }*/
-    /*
+
     @ReactMethod
-    public void deletePack(final String name, final Promise promise) {
-        activateFileSource();
-
-        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
-
-        offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
-            @Override
-            public void onList(OfflineRegion[] offlineRegions) {
-                OfflineRegion region = getRegionByName(name, offlineRegions);
-
-                if (region == null) {
-                    promise.resolve(null);
-                    Log.w(REACT_CLASS, "deleteRegion - Unknown offline region");
-                    return;
-                }
-
-                // stop download before deleting (https://github.com/mapbox/mapbox-gl-native/issues/12382#issuecomment-431055103)
-                region.setDownloadState(INACTIVE_REGION_DOWNLOAD_STATE);
-
-                region.delete(new OfflineRegion.OfflineRegionDeleteCallback() {
-                    @Override
-                    public void onDelete() {
+    fun deletePack(name: String, promise: Promise) {
+        getTileStore()!!.getAllTileRegions{ expected ->
+            if (expected.isValue) {
+                expected.value?.let { tileRegionList ->
+                    var downloadedRegionExists = false;
+                    for (tileRegion in tileRegionList) {
+                        if (tileRegion.id == name) {
+                            downloadedRegionExists = true;
+                            getTileStore()!!.removeTileRegion(name, object : TileRegionCallback {
+                                override fun run(region: Expected<TileRegionError, TileRegion>) {
+                                    promise.resolve(null);
+                                }
+                            })
+                        }
+                    }
+                    if (!downloadedRegionExists) {
                         promise.resolve(null);
                     }
-
-                    @Override
-                    public void onError(String error) {
-                        promise.reject("deleteRegion", error);
-                    }
-                });
+                }
             }
-
-            @Override
-            public void onError(String error) {
-                promise.reject("deleteRegion", error);
+            expected.error?.let { tileRegionError ->
+                promise.reject("deletePack", "TileRegionError: $tileRegionError")
             }
-        });
-    }*/
+        }
+    }
+
     @ReactMethod
     fun pausePackDownload(name: String, promise: Promise) {
         val pack = tileRegionPacks[name]
