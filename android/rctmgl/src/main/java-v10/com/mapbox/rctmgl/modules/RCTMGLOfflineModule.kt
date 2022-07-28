@@ -25,8 +25,12 @@ import com.mapbox.rctmgl.utils.ConvertUtils
 import com.mapbox.rctmgl.utils.Logger
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.File
 import java.io.UnsupportedEncodingException
 import java.lang.Error
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.concurrent.CountDownLatch
@@ -353,6 +357,24 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
             expected.error?.let { tileRegionError ->
                 promise.reject("deletePack", "TileRegionError: $tileRegionError")
             }
+        }
+    }
+
+    @ReactMethod
+    fun migrateOfflineCache() {
+
+        // Old and new cache file paths
+        val targetPathName = mReactContext.filesDir.absolutePath + "/.mapbox/map_data"
+        val sourcePath = Paths.get(mReactContext.filesDir.absolutePath + "/mbgl-offline.db")
+        val targetPath = Paths.get(targetPathName + "/map_data.db")
+
+        try {
+            val directory = File(targetPathName)
+            directory.mkdirs()
+            Files.move(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING)
+            Log.d("TAG","v10 cache directory created successfully")
+        } catch (e: Exception) {
+            Log.d("TAG", "${e}... file move unsuccessful")
         }
     }
 

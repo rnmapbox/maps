@@ -26,4 +26,7 @@ RCT_EXTERN_METHOD(getPackStatus:(NSString *)name
 RCT_EXTERN_METHOD(deletePack:(NSString *)name
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(migrateOfflineCache:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+
 @end

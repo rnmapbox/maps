@@ -148,6 +148,19 @@ class OfflineManager {
   }
 
   /**
+   * Migrates the offline cache from pre-v10 SDKs to the new v10 cache location
+   *
+   * @example
+   * await MapboxGL.offlineManager.migrateOfflineCache()
+   *
+   * @return {void}
+   */
+  async migrateOfflineCache() {
+    await this._initialize();
+    await MapboxGLOfflineManager.migrateOfflineCache();
+  }
+
+  /**
    * Sets the maximum size of the ambient cache in bytes. Disables the ambient cache if set to 0.
    * This method may be computationally expensive because it will erase resources from the ambient cache if its size is decreased.
    *

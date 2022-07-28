@@ -409,4 +409,22 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     self.tileRegionPacks[name]!.state = .invalid
     resolver(nil)
   }
+
+  @objc
+  func migrateOfflineCache(_ resolve : @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    // Old and new cache file paths
+    let srcURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("/Library/Application Support/com.mapbox.examples/.mapbox/cache.db")
+
+    let destURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("/Library/Application Support/.mapbox/map_data/map_data.db")
+
+    let fileManager = FileManager.default
+
+    do {
+      try fileManager.createDirectory(at: destURL.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
+      try fileManager.moveItem(at: srcURL, to: destURL)
+      resolve(nil)
+    } catch {
+      reject("migrateOfflineCache", error.localizedDescription, error)
+    }
+  }
 }
