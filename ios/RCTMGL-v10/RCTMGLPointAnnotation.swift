@@ -9,7 +9,6 @@ final class WeakRef<T: AnyObject> {
   }
 }
 
-
 class RCTMGLPointAnnotation : RCTMGLInteractiveElement {
   static let key = "RCTMGLPointAnnotation"
   static var gid = 0;
@@ -177,6 +176,8 @@ class RCTMGLPointAnnotation : RCTMGLInteractiveElement {
       $0.id == calloutId
     }
   }
+  
+  // MARK: - RCTMGLSource
   
   @objc
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {

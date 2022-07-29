@@ -14,6 +14,10 @@ class RCTMGLSource : RCTMGLInteractiveElement {
   func sourceType() -> Source.Type {
     fatalError("Subclasses should override makeSource")
   }
+
+  func isDraggable() -> Bool {
+    return draggable
+  }
   
   @objc override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     if let layer : RCTMGLSourceConsumer = subview as? RCTMGLSourceConsumer {
