@@ -225,6 +225,7 @@ RCT_EXPORT_MODULE();
     [offlinePackDownloadState setObject:@(MGLOfflinePackStateInactive) forKey:@"Inactive"];
     [offlinePackDownloadState setObject:@(MGLOfflinePackStateActive) forKey:@"Active"];
     [offlinePackDownloadState setObject:@(MGLOfflinePackStateComplete) forKey:@"Complete"];
+    [offlinePackDownloadState setObject:@(MGLOfflinePackStateUnknown) forKey:@"Unknown"];
 
     return @{
          @"StyleURL": styleURLS,

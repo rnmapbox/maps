@@ -15,7 +15,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     case inactive
     case active
     case complete
-    case unkown
+    case unknown
   }
   
   lazy var offlineManager : OfflineManager = {
@@ -83,7 +83,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
         "requiredResourceCount": region.requiredResourceCount,
         "completedResourceCount": region.completedResourceCount,
         "completedResourceSize": region.completedResourceSize,
-        "state": State.unkown.rawValue
+        "state": State.unknown.rawValue
       ]
       if region.requiredResourceCount > 0 {
         let percentage = Float(region.completedResourceCount) / Float(region.requiredResourceCount)
