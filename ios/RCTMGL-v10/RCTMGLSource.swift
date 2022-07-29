@@ -19,6 +19,8 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
   @objc var id: String! = nil
   
   @objc var hasPressListener: Bool = false
+  @objc var draggable: Bool = false
+  @objc var onDragStart: RCTBubblingEventBlock? = nil
   @objc var onPress: RCTBubblingEventBlock? = nil
   
   var layers: [RCTMGLSourceConsumer] = []
@@ -29,6 +31,10 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
   
   func sourceType() -> Source.Type {
     fatalError("Subclasses should override makeSource")
+  }
+
+  func isDraggable() -> Bool {
+    return draggable
   }
   
   func isTouchable() -> Bool {
