@@ -526,8 +526,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 if (null == isAnimated) mCameraChangeTracker.isAnimated else isAnimated)
         properties.putBoolean("isUserInteraction", mCameraChangeTracker.isUserInteraction)
         try {
-            val bounds = mMap.getBounds()
-            properties.putArray("visibleBounds", GeoJSONUtils.fromCameraBounds(bounds))
+            val bounds = mMap.coordinateBoundsForCamera(position.toCameraOptions())
+            properties.putArray("visibleBounds", GeoJSONUtils.fromCoordinateBounds(bounds))
         } catch (ex: Exception) {
             Logger.e(LOG_TAG, "An error occurred while attempting to make the region", ex)
         }
@@ -749,6 +749,21 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 Logger.e("queryRenderedFeaturesInRect", features.error ?: "n/a")
             }
         }
+    }
+
+    fun sendResponse(callbackID: String?, buildPayload: (map: WritableMap) -> Unit) {
+        val payload: WritableMap = WritableNativeMap()
+        buildPayload(payload)
+        var event = AndroidCallbackEvent(this, callbackID, payload)
+        mManager.handleEvent(event)
+    }
+
+    fun getVisibleBounds(callbackID: String?) {
+        val bounds = mMap!!.coordinateBoundsForCamera(mMap!!.cameraState.toCameraOptions())
+
+        sendResponse(callbackID, {
+            it.putArray("visibleBounds", GeoJSONUtils.fromCoordinateBounds(bounds))
+        })
     }
 
     fun queryTerrainElevation(callbackID: String?, longitude: Double, latitude: Double) {
