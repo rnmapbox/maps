@@ -249,12 +249,12 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
                         ConvertUtils.toStringList(args!!.getArray(3))
                 );
             }
+            METHOD_VISIBLE_BOUNDS -> {
+                mapView.getVisibleBounds(args!!.getString(0));
+            }
         }
         /*
         switch (commandID) {
-            case METHOD_VISIBLE_BOUNDS:
-                mapView.getVisibleBounds(args.getString(0));
-                break;
             case METHOD_TAKE_SNAP:
                 mapView.takeSnap(args.getString(0), args.getBoolean(1));
                 break;
