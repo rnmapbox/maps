@@ -47,7 +47,6 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
         val rctmglMarkerView = this
         mMapView?.getMapAsync {
             if (mChildView != null) {
-                GeoJSONUtils.toLatLng(mCoordinate)
                 val width = mChildView!!.width
                 val height = mChildView!!.height
                 val options = ViewAnnotationOptions.Builder().geometry(mCoordinate).width(width).height(height).offsetX(((mAnchor[0] - 0.5) * width).toInt()).offsetY(((mAnchor[1] - 0.5) * height).toInt()).build()

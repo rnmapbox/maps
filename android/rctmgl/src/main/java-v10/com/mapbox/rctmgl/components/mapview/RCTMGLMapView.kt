@@ -653,24 +653,21 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     fun getCenter(callbackID: String?) {
         var center = mMap!!.cameraState!!.center
-        val array: WritableArray = WritableNativeArray()
-        array.pushDouble(center.longitude())
-        array.pushDouble(center.latitude())
-        val payload: WritableMap = WritableNativeMap()
-        payload.putArray("center", array)
 
-        val event = AndroidCallbackEvent(this, callbackID, payload)
-        mManager.handleEvent(event)
+        sendResponse(callbackID, {
+            val array: WritableArray = WritableNativeArray()
+            array.pushDouble(center.longitude())
+            array.pushDouble(center.latitude())
+            it.putArray("center", array)
+        })
     }
 
     fun getZoom(callbackID: String?) {
         var zoom = mMap!!.cameraState!!.zoom
 
-        val payload: WritableMap = WritableNativeMap()
-        payload.putDouble("zoom", zoom)
-
-        val event = AndroidCallbackEvent(this, callbackID, payload)
-        mManager.handleEvent(event)
+        sendResponse(callbackID, {
+            it.putDouble("zoom", zoom)
+        })
     }
 
     private fun getDisplayDensity(): Float {
@@ -683,24 +680,20 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
         val coordinate = mMap!!.coordinateForPixel(pixel)
 
-        val payload: WritableMap = WritableNativeMap()
-        payload.putArray("coordinateFromView", coordinate.toReadableArray())
-
-        val event = AndroidCallbackEvent(this, callbackID, payload)
-        mManager.handleEvent(event)
+        sendResponse(callbackID, {
+            it.putArray("coordinateFromView", coordinate.toReadableArray())
+        })
     }
 
     fun getPointInView(callbackID: String?, coordinate: Point) {
         val point = mMap!!.pixelForCoordinate(coordinate)
 
-        val array: WritableArray = WritableNativeArray()
-        array.pushDouble(point.x)
-        array.pushDouble(point.y)
-        val payload: WritableMap = WritableNativeMap()
-        payload.putArray("pointInView", array)
-
-        val event = AndroidCallbackEvent(this, callbackID, payload)
-        mManager.handleEvent(event)
+        sendResponse(callbackID, {
+            val array: WritableArray = WritableNativeArray()
+            array.pushDouble(point.x)
+            array.pushDouble(point.y)
+            it.putArray("pointInView", array)
+        })
     }
 
     fun queryRenderedFeaturesAtPoint(callbackID: String?, point: PointF, filter: Expression?, layerIDs: List<String>?) {
@@ -714,11 +707,9 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                     featuresList.add(i.feature)
                 }
 
-                val payload: WritableMap = WritableNativeMap()
-                payload.putString("data", FeatureCollection.fromFeatures(featuresList).toJson())
-
-                var event = AndroidCallbackEvent(this, callbackID, payload)
-                mManager.handleEvent(event)
+                sendResponse(callbackID, {
+                    it.putString("data", FeatureCollection.fromFeatures(featuresList).toJson())
+                })
             } else {
                 Logger.e("queryRenderedFeaturesAtPoint", features.error ?: "n/a")
             }
@@ -768,12 +759,17 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     fun queryTerrainElevation(callbackID: String?, longitude: Double, latitude: Double) {
         val result = mMap?.getElevation(Point.fromLngLat(longitude, latitude))
-        val payload: WritableMap = WritableNativeMap()
-        if (result != null) {
-            payload.putDouble("data", result)
-            val event = AndroidCallbackEvent(this, callbackID, payload)
-            mManager.handleEvent(event)
-        }
+
+        sendResponse(callbackID, {
+            if (result != null) {
+                it.putDouble("data", result)
+            } else {
+                Logger.e("queryTerrainElevation", "no elevation data")
+
+                it.putNull("data")
+                it.putString("error", "no elevation")
+            }
+        })
     }
 
     fun match(layer: Layer, sourceId:String, sourceLayerId: String?) : Boolean {
