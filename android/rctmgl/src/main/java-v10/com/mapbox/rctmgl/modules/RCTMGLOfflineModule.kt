@@ -392,7 +392,7 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
             Files.move(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING)
             Log.d("TAG","v10 cache directory created successfully")
         } catch (e: Exception) {
-            Log.d("TAG", "${e}... file move unsuccessful")
+            Log.e("RCTMGLOfflineModule", "${e}... file move unsuccessful")
         }
     }
 
