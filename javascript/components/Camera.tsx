@@ -176,7 +176,8 @@ export type CameraAnimationMode =
  *
  * To use imperative methods, pass in a ref object:
  *
- * <pre>const camera = useRef<CameraRef>(null);
+ * ```
+ * const camera = useRef<CameraRef>(null);
  *
  * useEffect(() => {
  *   camera.current?.setCamera({
@@ -186,7 +187,8 @@ export type CameraAnimationMode =
  *
  * return (
  *   <Camera ref={camera} />
- * );</pre>
+ * );
+ * ```
  */
 export const Camera = memo(
   forwardRef<CameraRef, CameraProps>(

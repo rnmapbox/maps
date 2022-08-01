@@ -33,10 +33,11 @@ class DocJSONBuilder {
     this._styledLayers = {};
 
     for (const styleLayer of styledLayers) {
-      const ComponentName = pascelCase(styleLayer.name);
-      this._styledLayers[
-        ComponentName + (ComponentName === 'Light' ? '' : 'Layer')
-      ] = styleLayer;
+      let ComponentName = pascelCase(styleLayer.name);
+      const fakeLayers = ['Light', 'Atmosphere', 'Terrain'];
+      if (!fakeLayers.includes(ComponentName)) {
+        this._styledLayers[ComponentName + 'Layer'] = styleLayer;
+      }
     }
   }
 
@@ -263,9 +264,6 @@ class DocJSONBuilder {
             next();
             return;
           }
-
-          content = content.replace(/memo\(forwardRef\((.+?)\)\)/, '$1');
-          content = content.replace(/useCallback\(([^,]+), [^)]+\)/g, '$1');
 
           let parsed = docgen.parse(content, undefined, undefined, {
             filename: fileName,
