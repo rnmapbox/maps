@@ -35,7 +35,9 @@ class DocJSONBuilder {
     for (const styleLayer of styledLayers) {
       let ComponentName = pascelCase(styleLayer.name);
       const fakeLayers = ['Light', 'Atmosphere', 'Terrain'];
-      if (!fakeLayers.includes(ComponentName)) {
+      if (fakeLayers.includes(ComponentName)) {
+        this._styledLayers[ComponentName] = styleLayer;
+      } else {
         this._styledLayers[ComponentName + 'Layer'] = styleLayer;
       }
     }
@@ -246,6 +248,12 @@ class DocJSONBuilder {
         param.type = { name: tsTypeDesc(param.type) };
       });
     });
+
+    console.log(
+      `Processed ${component.name} (${component.props?.length ?? 0} props, ${
+        component.methods?.length ?? 0
+      } methods)`,
+    );
   }
 
   generateReactComponentsTask(results, filePath) {
