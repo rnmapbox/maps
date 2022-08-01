@@ -1,46 +1,32 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+name: Bug
+about: This template should be used for reporting bugs and defects.
 title: ''
-labels: ''
+labels: 'bug :beetle:'
 assignees: ''
 
 ---
 
 
----------  
+## Environment
 
-🚨🚨🚨
-* Please respect and fill out the issue template
-* Before you report, please make sure you tested on a physical device
-* For build issues: Can you reproduce it on a clean install of the example app? Please include full steps to reproduce from `react-native init`
-* Please include standalone code sample - a single component with one MapView in it. Use [one of our example](https://github.com/rnmapbox/maps/blob/main/example/src/examples/PointInMapView.js) screens as a starging point.
-* Use [discussions](https://github.com/rnmapbox/maps/discussions) or gitter and/or stack overflow for questions.
+- Mapbox (GL) implementation: [e.g. v10, MapLibre, MapboxGL]
+- Mapbox (GL) version: [e.g. 6.3.0]
+- @rnmapbox/maps Version [e.g. #main]
+- Platform: [e.g. Android, iOS]
+- React Native Version [e.g. 0.59]
+- Platform OS: [e.g. Android 9, iOS 10]
+- Device: [e.g. iPhone6]
+- Emulator/ Simulator: [yes/ no]
+- Dev OS: [e.g. OSX 11.0.1, Win10]
 
-If you want others to spend time on your issue, please make sure to first spend some time on the ticket. 
+## Standalone component to reproduce
 
-Not following the above will lead to the ticket being closed.
-Thanks for understanding.  
-Please understand that the project is run by volunteers on their own free time.  
-
-🚨🚨🚨  
-
----------
+<!--- Use [our BugReportTemplate](https://github.com/rnmapbox/maps/blob/main/example/src/examples/BugReportTemplate.js) screens as a starting point. --->
+<!--- Component should be self contained - no extra libraries, external data, no parameters --->
+<!--- Do not include setAccessToken or access token istelf. ---->
 
 
-**Describe the bug**  
-A clear and concise description of what the bug is.
-
-**To Reproduce**  
-Steps to reproduce the behavior. 
-
-Please include a single standalone React Native component.  
-Use [our BugReportTemplate](https://github.com/rnmapbox/maps/blob/main/example/src/examples/BugReportTemplate.js) screens as a starting point.
-Please simplify the example as much as possible!
-
-Chances that a bug report will be investiagete and worked on are exponetially higher with a complete and _working_ repro BugTemplate!
-
-Example:
 ```js
 import React from 'react';
 import {
@@ -72,36 +58,18 @@ class BugReportExample extends React.Component {
 }
 ```
 
-If it's a build/startup issue please include full steps to reproduce from `react-native init ...`
+## Observed behavior and steps to reproduce
 
-Example:
+<!--- Please include as much evidence as possible (traces, videos, screenshots etc.) --->
 
-```sh
-react-native init sample --version react-native@0.60.5
-cd sample
-npm install rnmapbox/maps#main --save
-# or released version `npm install @rnmapbox/maps@8.0.0-rc1 --save`
-react-native run-android
-```
+## Expected behavior
 
-**Expected behavior**  
-A clear and concise description of what you expected to happen.
+<!--- Please include the expected behavior and any resources supporting this expected behavior. --->
 
-**Actual behavior**  
-A clear and concise description of what is currently happening.
+## Notes / preliminary analysis
 
-**Screenshots**  
-If applicable, add screenshots to help explain your problem.
+<!--- include your initial analysis, if available --->
 
-**Versions (please complete the following information):**  
- - Platform: [e.g. Android, iOS]
- - Platform OS: [e.g. Android 9, iOS 10]
- - Device: [e.g. iPhone6]
- - Emulator/ Simulator: [yes/ no]
- - Dev OS: [e.g. OSX 11.0.1, Win10]
- - @rnmapbox/maps Version [e.g. 10.0.1]
- - Mapbox GL version [e.g. 6.3.0]
- - React Native Version [e.g. 0.59]
+## Additional links and references
 
-**Additional context**  
-Add any other context about the problem here.
+<!--- Links to traces, videos et --->

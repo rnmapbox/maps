@@ -58,7 +58,7 @@ class RCTMGLShapeSourceManager(private val mContext: ReactApplicationContext) :
         try {
             source.setURL(URL(urlStr))
         } catch (e: MalformedURLException) {
-            Log.w(LOG_TAG, e.localizedMessage ?: "Unkown URL error")
+            Log.w(LOG_TAG, e.localizedMessage ?: "Unknown URL error")
         }
     }
 

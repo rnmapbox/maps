@@ -25,8 +25,12 @@ import com.mapbox.rctmgl.utils.ConvertUtils
 import com.mapbox.rctmgl.utils.Logger
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.File
 import java.io.UnsupportedEncodingException
 import java.lang.Error
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.concurrent.CountDownLatch
@@ -328,46 +332,52 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
             }
         });
     }*/
-    /*
+
     @ReactMethod
-    public void deletePack(final String name, final Promise promise) {
-        activateFileSource();
-
-        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
-
-        offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
-            @Override
-            public void onList(OfflineRegion[] offlineRegions) {
-                OfflineRegion region = getRegionByName(name, offlineRegions);
-
-                if (region == null) {
-                    promise.resolve(null);
-                    Log.w(REACT_CLASS, "deleteRegion - Unknown offline region");
-                    return;
-                }
-
-                // stop download before deleting (https://github.com/mapbox/mapbox-gl-native/issues/12382#issuecomment-431055103)
-                region.setDownloadState(INACTIVE_REGION_DOWNLOAD_STATE);
-
-                region.delete(new OfflineRegion.OfflineRegionDeleteCallback() {
-                    @Override
-                    public void onDelete() {
+    fun deletePack(name: String, promise: Promise) {
+        getTileStore()!!.getAllTileRegions{ expected ->
+            if (expected.isValue) {
+                expected.value?.let { tileRegionList ->
+                    var downloadedRegionExists = false;
+                    for (tileRegion in tileRegionList) {
+                        if (tileRegion.id == name) {
+                            downloadedRegionExists = true;
+                            getTileStore()!!.removeTileRegion(name, object : TileRegionCallback {
+                                override fun run(region: Expected<TileRegionError, TileRegion>) {
+                                    promise.resolve(null);
+                                }
+                            })
+                        }
+                    }
+                    if (!downloadedRegionExists) {
                         promise.resolve(null);
                     }
-
-                    @Override
-                    public void onError(String error) {
-                        promise.reject("deleteRegion", error);
-                    }
-                });
+                }
             }
-
-            @Override
-            public void onError(String error) {
-                promise.reject("deleteRegion", error);
+            expected.error?.let { tileRegionError ->
+                promise.reject("deletePack", "TileRegionError: $tileRegionError")
             }
-        });
-    }*/
+        }
+    }
+
+    @ReactMethod
+    fun migrateOfflineCache() {
+
+        // Old and new cache file paths
+        val targetPathName = mReactContext.filesDir.absolutePath + "/.mapbox/map_data"
+        val sourcePath = Paths.get(mReactContext.filesDir.absolutePath + "/mbgl-offline.db")
+        val targetPath = Paths.get(targetPathName + "/map_data.db")
+
+        try {
+            val directory = File(targetPathName)
+            directory.mkdirs()
+            Files.move(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING)
+            Log.d("TAG","v10 cache directory created successfully")
+        } catch (e: Exception) {
+            Log.d("TAG", "${e}... file move unsuccessful")
+        }
+    }
+
     @ReactMethod
     fun pausePackDownload(name: String, promise: Promise) {
         val pack = tileRegionPacks[name]

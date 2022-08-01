@@ -39,7 +39,7 @@ class AbstractLayer extends React.PureComponent {
     if (this.refs.nativeLayer) {
       let propsToPass = props;
       if (props.style) {
-        propsToPass = { ...props, reactStyle: this._getStyle(props.style) };
+        propsToPass = { ...props, reactStyle: this.getStyle(props.style) };
       }
       this.refs.nativeLayer.setNativeProps(propsToPass);
     }

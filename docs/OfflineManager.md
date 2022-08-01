@@ -95,6 +95,22 @@ await MapboxGL.offlineManager.clearAmbientCache();
 ```
 
 
+#### migrateOfflineCache()
+
+Migrates the offline cache from pre-v10 SDKs to the new v10 cache location
+
+##### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
+
+```javascript
+await MapboxGL.offlineManager.migrateOfflineCache()
+```
+
+
 #### setMaximumAmbientCacheSize(size)
 
 Sets the maximum size of the ambient cache in bytes. Disables the ambient cache if set to 0.<br/>This method may be computationally expensive because it will erase resources from the ambient cache if its size is decreased.

@@ -36,7 +36,7 @@ import AnimatedExtractCoordinateFromArray from './utils/animated/AnimatedExtract
 import AnimatedRouteCoordinatesArray from './utils/animated/AnimatedRouteCoordinatesArray';
 import Style from './components/Style';
 import Logger from './utils/Logger';
-import requestAndroidLocationPermissions from './requestAndroidLocationPermissions';
+import { requestAndroidLocationPermissions } from './requestAndroidLocationPermissions';
 
 const MapboxGL = { ...NativeModules.MGLModule };
 

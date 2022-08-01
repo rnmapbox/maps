@@ -131,8 +131,8 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
         }
     }
 
-    val latLng: LatLng
-        get() = GeoJSONUtils.toLatLng(mCoordinate)
+    val latLng: LatLng?
+        get() = mCoordinate?.let { GeoJSONUtils.toLatLng(it) }
     val mapboxID: Long
         get() = if (marker == null) -1 else marker!!.id
 
@@ -281,13 +281,13 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
 
     private fun makeEvent(isSelect: Boolean): PointAnnotationClickEvent {
         val type = if (isSelect) EventTypes.ANNOTATION_SELECTED else EventTypes.ANNOTATION_DESELECTED
-        val latLng = GeoJSONUtils.toLatLng(mCoordinate)
+        val latLng = GeoJSONUtils.toLatLng(mCoordinate!!)
         val screenPos = getScreenPosition(latLng)
         return PointAnnotationClickEvent(this, latLng, ScreenCoordinate(screenPos.x.toDouble(), screenPos.y.toDouble()), type)
     }
 
     private fun makeDragEvent(type: String): PointAnnotationDragEvent {
-        val latLng = GeoJSONUtils.toLatLng(mCoordinate)
+        val latLng = GeoJSONUtils.toLatLng(mCoordinate!!)
         val screenPos = getScreenPosition(latLng)
         return PointAnnotationDragEvent(this, latLng, screenPos, type)
     }

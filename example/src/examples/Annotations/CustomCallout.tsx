@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import MapboxGL, { SymbolLayerStyle } from '@rnmapbox/maps';
-import { type GeoJSON } from 'geojson';
+import type { GeoJSON } from 'geojson';
 import { Feature } from '@turf/helpers';
 import { View, Text, ViewStyle, StyleProp, TextStyle } from 'react-native';
 

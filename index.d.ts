@@ -407,6 +407,7 @@ declare namespace MapboxGL {
    * Offline
    */
   class OfflineManager extends Component {
+    clearAmbientCache(): Promise<void>;
     createPack(
       options: OfflineCreatePackOptions,
       progressListener?: (
@@ -416,15 +417,15 @@ declare namespace MapboxGL {
       errorListener?: (pack: OfflinePack, err: OfflineProgressError) => void,
     ): Promise<void>;
     deletePack(name: string): Promise<void>;
-    invalidatePack(name: string): Promise<void>;
-    getPacks(): Promise<Array<OfflinePack>>;
     getPack(name: string): Promise<OfflinePack | undefined>;
+    getPacks(): Promise<Array<OfflinePack>>;
     invalidateAmbientCache(): Promise<void>;
-    clearAmbientCache(): Promise<void>;
-    setMaximumAmbientCacheSize(size: number): Promise<void>;
+    invalidatePack(name: string): Promise<void>;
+    migrateOfflineCache(): Promise<void>;
     resetDatabase(): Promise<void>;
-    setTileCountLimit(limit: number): void;
+    setMaximumAmbientCacheSize(size: number): Promise<void>;
     setProgressEventThrottle(throttleValue: number): void;
+    setTileCountLimit(limit: number): void;
     subscribe(
       packName: string,
       progressListener: (pack: OfflinePack, status: object) => void,
