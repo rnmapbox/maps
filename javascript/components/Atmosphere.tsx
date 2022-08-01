@@ -10,7 +10,7 @@ type Props = {
   style: AtmosphereLayerStyleProps;
 };
 
-const Atmosphere = memo((props: Props) => {
+export const Atmosphere = memo((props: Props) => {
   const baseProps = useMemo(() => {
     return {
       ...props,
@@ -26,5 +26,3 @@ const RCTMGLAtmosphere: HostComponent<{
   reactStyle?: { [key: string]: StyleValue };
   style?: undefined;
 }> = requireNativeComponent(NATIVE_MODULE_NAME);
-
-export default Atmosphere;

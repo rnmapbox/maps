@@ -4,12 +4,11 @@ import { Button } from 'react-native';
 import {
   MapView,
   SkyLayer,
-  Camera,
-  CameraRef,
   Logger,
   Terrain,
   RasterDemSource,
   Atmosphere,
+  Camera,
 } from '@rnmapbox/maps';
 
 import Page from '../common/Page';
@@ -18,7 +17,7 @@ import { BaseExampleProps } from '../common/BaseExamplePropTypes';
 Logger.setLogLevel('verbose');
 
 const TerrainSkyAtmosphere = memo((props: BaseExampleProps) => {
-  const cameraRef = useRef<CameraRef>(null);
+  const cameraRef = useRef<Camera>(null);
 
   return (
     <Page {...props}>

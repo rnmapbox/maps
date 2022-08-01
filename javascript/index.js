@@ -1,12 +1,13 @@
 import { NativeModules } from 'react-native';
 
+import { Camera } from './components/Camera';
+import { Atmosphere } from './components/Atmosphere';
 import MapView from './components/MapView';
 import Light from './components/Light';
 import PointAnnotation from './components/PointAnnotation';
 import Annotation from './components/annotations/Annotation';
 import Callout from './components/Callout';
 import UserLocation from './components/UserLocation';
-import Camera from './components/Camera';
 import VectorSource from './components/VectorSource';
 import ShapeSource from './components/ShapeSource';
 import RasterSource from './components/RasterSource';
@@ -23,7 +24,6 @@ import SymbolLayer from './components/SymbolLayer';
 import RasterLayer from './components/RasterLayer';
 import BackgroundLayer from './components/BackgroundLayer';
 import Terrain from './components/Terrain';
-import Atmosphere from './components/Atmosphere';
 import locationManager from './modules/location/locationManager';
 import offlineManager from './modules/offline/offlineManager';
 import snapshotManager from './modules/snapshot/snapshotManager';

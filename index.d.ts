@@ -22,10 +22,8 @@ import {
   FeatureCollection,
 } from '@turf/helpers';
 
-import type _Camera from './javascript/components/Camera';
-import type _Atmosphere from './javascript/components/Atmosphere';
-import type {
-  CameraRef as _CameraRef,
+import {
+  Camera as _Camera,
   CameraStop as _CameraStop,
   CameraFollowConfig as _CameraFollowConfig,
   CameraMinMaxConfig as _CameraMinMaxConfig,
@@ -35,6 +33,7 @@ import type {
   CameraStops as _CameraStops,
   CameraAnimationMode as _CameraAnimationMode,
 } from './javascript/components/Camera';
+import { Atmosphere as _Atmosphere } from './javascript/components/Atmosphere';
 import type {
   MapboxGLEvent as _MapboxGLEvent,
   UserTrackingMode as _UserTrackingMode,
@@ -124,11 +123,9 @@ declare namespace MapboxGL {
   function setConnected(connected: boolean): void;
 
   const requestAndroidLocationPermissions = _requestAndroidLocationPermissions;
-  const Camera = _Camera;
-  const Atmosphere = _Atmosphere;
 
-  type CameraRef = _CameraRef;
-  type MapboxGLEvent = _MapboxGLEvent;
+  const Camera = _Camera;
+  type Camera = _Camera;
   type CameraStop = _CameraStop;
   type CameraFollowConfig = _CameraFollowConfig;
   type CameraMinMaxConfig = _CameraMinMaxConfig;
@@ -137,6 +134,10 @@ declare namespace MapboxGL {
   type CameraBoundsWithPadding = _CameraBoundsWithPadding;
   type CameraStops = _CameraStops;
   type CameraAnimationMode = _CameraAnimationMode;
+
+  const Atmosphere = _Atmosphere;
+
+  type MapboxGLEvent = _MapboxGLEvent;
   type UserTrackingMode = _UserTrackingMode;
   type UserTrackingModeChangeCallback = _UserTrackingModeChangeCallback;
 
