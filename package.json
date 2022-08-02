@@ -76,7 +76,7 @@
     "lint-staged": "^12.1.2",
     "metro-react-native-babel-preset": "0.71.1",
     "node-dir": "0.1.17",
-    "prettier": "2.6.2",
+    "prettier": "2.7.1",
     "react": "17.0.2",
     "react-docgen": "6.0.0-alpha.3",
     "react-native": "0.67.0",
