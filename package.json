@@ -73,7 +73,7 @@
     "husky": "^7.0.4",
     "jest": "27.5.1",
     "jest-cli": "27.5.1",
-    "lint-staged": "^12.1.2",
+    "lint-staged": "^13.0.3",
     "metro-react-native-babel-preset": "0.71.1",
     "node-dir": "0.1.17",
     "prettier": "2.6.2",
