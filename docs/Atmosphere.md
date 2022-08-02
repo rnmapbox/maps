@@ -5,7 +5,7 @@
 ### props
 | Prop | Type | Default | Required | Description |
 | ---- | :--: | :-----: | :------: | :----------: |
-| style | `FIX ME UNKNOWN TYPE` | `none` | `true` | FIX ME NO DESCRIPTION |
+| style | `AtmosphereLayerStyleProps` | `none` | `true` | FIX ME NO DESCRIPTION |
 
 
 ### styles

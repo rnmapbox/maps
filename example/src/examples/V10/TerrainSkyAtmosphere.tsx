@@ -4,11 +4,11 @@ import { Button } from 'react-native';
 import {
   MapView,
   SkyLayer,
-  Camera,
   Logger,
   Terrain,
   RasterDemSource,
   Atmosphere,
+  Camera,
 } from '@rnmapbox/maps';
 
 import Page from '../common/Page';

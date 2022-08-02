@@ -26,24 +26,26 @@ const IGNORE_FILES = [
 
 const IGNORE_METHODS = ['setNativeProps'];
 
+const fileExtensionsRegex = /.(js|tsx|(?<!d.)ts)$/;
+
 class DocJSONBuilder {
   constructor(styledLayers) {
     this._styledLayers = {};
 
     for (const styleLayer of styledLayers) {
-      const ComponentName = pascelCase(styleLayer.name);
-      this._styledLayers[
-        ComponentName +
-          (['Light', 'Atmosphere', 'Terrain'].includes(ComponentName)
-            ? ''
-            : 'Layer')
-      ] = styleLayer;
+      let ComponentName = pascelCase(styleLayer.name);
+      const fakeLayers = ['Light', 'Atmosphere', 'Terrain'];
+      if (fakeLayers.includes(ComponentName)) {
+        this._styledLayers[ComponentName] = styleLayer;
+      } else {
+        this._styledLayers[ComponentName + 'Layer'] = styleLayer;
+      }
     }
   }
 
   get options() {
     return {
-      match: /.(js|tsx)$/,
+      match: fileExtensionsRegex,
       shortName: true,
     };
   }
@@ -61,7 +63,13 @@ class DocJSONBuilder {
 
     component.name = name;
 
-    // styles
+    // Main description
+    component.description = component.description.replace(
+      /(\n*)(@\w+) (\{.*\})/g,
+      '',
+    );
+
+    // Styles
     if (this._styledLayers[name] && this._styledLayers[name].properties) {
       component.styles = [];
 
@@ -81,7 +89,6 @@ class DocJSONBuilder {
           expression: prop.expression,
           transition: prop.transition,
         };
-
         if (prop.type === 'enum') {
           docStyle.values = Object.keys(prop.doc.values).map((value) => {
             return { value, doc: prop.doc.values[value].doc };
@@ -109,13 +116,42 @@ class DocJSONBuilder {
       return result;
     }
 
+    function tsTypeDesc(tsType) {
+      if (!tsType?.name) {
+        return null;
+      }
+
+      if (tsType.name === 'signature') {
+        if (tsType.raw.length < 200) {
+          return `${tsType.raw
+            .replace(/(\n|\s)/g, '')
+            .replace(/(\|)/g, '\\|')}`;
+        } else {
+          return 'FIX ME FORMAT BIG OBJECT';
+        }
+      } else if (tsType.name === 'union') {
+        if (tsType.raw) {
+          // Props
+          return tsType.raw.replace(/\|/g, '\\|');
+        } else if (tsType.elements) {
+          // Methods
+          return tsType.elements.map((e) => e.name).join(' \\| ');
+        }
+      } else {
+        return tsType.name;
+      }
+    }
+
     function mapProp(propMeta, propName, array) {
       let result = {};
       if (!array) {
         result = {
           name: propName || 'FIX ME NO NAME',
           required: propMeta.required || false,
-          type: (propMeta.type && propMeta.type.name) || 'FIX ME UNKNOWN TYPE',
+          type:
+            propMeta.type?.name ||
+            tsTypeDesc(propMeta.tsType) ||
+            'FIX ME UNKNOWN TYPE',
           default: !propMeta.defaultValue
             ? 'none'
             : propMeta.defaultValue.value.replace(/\n/g, ''),
@@ -129,7 +165,9 @@ class DocJSONBuilder {
           result.required = propMeta.required;
         }
         result.type =
-          (propMeta.type && propMeta.type.name) || 'FIX ME UNKNOWN TYPE';
+          (propMeta.type && propMeta.type.name) ||
+          tsTypeDesc(propMeta.tsType) ||
+          'FIX ME UNKNOWN TYPE';
         if (propMeta.defaultValue) {
           result.default = propMeta.defaultValue.value.replace(/\n/g, '');
         }
@@ -204,6 +242,18 @@ class DocJSONBuilder {
     component.methods = component.methods.filter(
       (method) => !privateMethods.includes(method.name),
     );
+
+    component.methods.forEach((method) => {
+      method.params.forEach((param) => {
+        param.type = { name: tsTypeDesc(param.type) };
+      });
+    });
+
+    console.log(
+      `Processed ${component.name} (${component.props?.length ?? 0} props, ${
+        component.methods?.length ?? 0
+      } methods)`,
+    );
   }
 
   generateReactComponentsTask(results, filePath) {
@@ -211,22 +261,26 @@ class DocJSONBuilder {
       dir.readFiles(
         filePath,
         this.options,
-        (err, content, fileName, next) => {
+        (err, content, fileNameWithExt, next) => {
           if (err) {
             return reject(err);
           }
 
-          let componentName = fileName.replace(/.(js|tsx)/, '');
-          if (IGNORE_FILES.includes(componentName)) {
+          let fileName = fileNameWithExt.replace(/.(js)/, '');
+
+          if (IGNORE_FILES.includes(fileName)) {
             next();
             return;
           }
 
-          results[componentName] = docgen.parse(content, undefined, undefined, {
+          let parsed = docgen.parse(content, undefined, undefined, {
             filename: fileName,
           });
-          results[componentName].fileName = fileName;
-          this.postprocess(results[componentName], componentName);
+          fileName = fileName.replace(fileExtensionsRegex, '');
+          parsed.fileNameWithExt = fileNameWithExt;
+          results[fileName] = parsed;
+
+          this.postprocess(results[fileName], fileName);
 
           next();
         },
@@ -252,9 +306,12 @@ class DocJSONBuilder {
               .charAt(0)
               .toLowerCase()}${module.name.substring(1)}`;
 
+            const pathParts = module.context.file.split('/');
+            const fileNameWithExt = pathParts[pathParts.length - 1];
+
             results[name] = {
-              fileName: `${name}.js`,
               name,
+              fileNameWithExt,
               description: node.getText(),
               props: [],
               styles: [],
@@ -268,7 +325,7 @@ class DocJSONBuilder {
     });
   }
 
-  generate() {
+  async generate() {
     this.generateModulesTask({}, MODULES_PATH);
 
     const results = {};

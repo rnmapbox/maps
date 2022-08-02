@@ -1,55 +1,49 @@
-import React, { useMemo, useState } from 'react';
-import { Button, SafeAreaView, View } from 'react-native';
+import React, { memo, useCallback, useMemo, useState } from 'react';
+import { StyleSheet, Button, SafeAreaView, View } from 'react-native';
 import {
   MapView,
   Camera,
   ShapeSource,
   CircleLayer,
+  CameraAnimationMode,
   Logger,
+  CameraPadding,
+  CameraBounds,
 } from '@rnmapbox/maps';
 import bbox from '@turf/bbox';
 import { Text, Divider } from 'react-native-elements';
+import { Feature, Point, Position } from 'geojson';
 
 import Page from '../common/Page';
 import colors from '../../styles/colors';
+import { BaseExampleProps } from '../common/BaseExamplePropTypes';
 
 Logger.setLogLevel('verbose');
 
-const styles = {
-  map: {
-    flex: 1,
-  },
+type Coordinate = {
+  longitude: number;
+  latitude: number;
+};
+
+const mapStyles = {
   circle: {
     circleRadius: 6,
     circleColor: colors.primary.blue,
   },
-  sheet: {
-    paddingTop: 10,
-    paddingHorizontal: 10,
-  },
-  content: {
-    padding: 10,
-  },
-  buttonRow: {
-    flex: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  divider: {
-    marginVertical: 10,
-  },
-  fadedText: {
-    color: 'gray',
-  },
 };
 
-const zeroPadding = {
+const initialCoordinate: Coordinate = {
+  latitude: 40.759211,
+  longitude: -73.984638,
+};
+
+const zeroPadding: CameraPadding = {
   paddingTop: 0,
   paddingBottom: 0,
   paddingLeft: 0,
   paddingRight: 0,
 };
-const evenPadding = {
+const evenPadding: CameraPadding = {
   paddingTop: 40,
   paddingBottom: 40,
   paddingLeft: 40,
@@ -58,7 +52,7 @@ const evenPadding = {
 const minZoomLevel = 8;
 const maxZoomLevel = 16;
 
-const randPadding = () => {
+const randPadding = (): CameraPadding => {
   const randNum = () => {
     const items = [0, 150, 300];
     return items[Math.floor(Math.random() * items.length)];
@@ -72,64 +66,70 @@ const randPadding = () => {
   };
 };
 
-const toPosition = (coordinate) => {
+const toPosition = (coordinate: Coordinate): Position => {
   return [coordinate.longitude, coordinate.latitude];
 };
 
-const CameraAnimation = (props) => {
-  const initialCoordinate = {
-    latitude: 40.759211,
-    longitude: -73.984638,
-  };
-
-  const [animationMode, setAnimationMode] = useState('moveTo');
-  const [coordinates, setCoordinates] = useState([initialCoordinate]);
-  const [padding, setPadding] = useState(zeroPadding);
+const CameraAnimation = memo((props: BaseExampleProps) => {
+  const [animationMode, setAnimationMode] =
+    useState<CameraAnimationMode>('moveTo');
+  const [coordinates, setCoordinates] = useState<Coordinate[]>([
+    initialCoordinate,
+  ]);
+  const [padding, setPadding] = useState<CameraPadding>(zeroPadding);
 
   const paddingDisplay = useMemo(() => {
     return `L ${padding.paddingLeft} | R ${padding.paddingRight} | T ${padding.paddingTop} | B ${padding.paddingBottom}`;
   }, [padding]);
 
-  const move = (_animationMode, shouldCreateMultiple) => {
-    setAnimationMode(_animationMode);
+  const move = useCallback(
+    (_animationMode: CameraAnimationMode, shouldCreateMultiple: boolean) => {
+      setAnimationMode(_animationMode);
 
-    if (shouldCreateMultiple) {
-      const _centerCoordinate = {
-        latitude: initialCoordinate.latitude + Math.random() * 0.2,
-        longitude: initialCoordinate.longitude + Math.random() * 0.2,
-      };
-      const _coordinates = Array(10)
-        .fill(0)
-        .map((_) => {
-          return {
-            latitude: _centerCoordinate.latitude + Math.random() * 0.2,
-            longitude: _centerCoordinate.longitude + Math.random() * 0.2,
-          };
-        });
-      setCoordinates(_coordinates);
-    } else {
-      setCoordinates([
-        {
+      if (shouldCreateMultiple) {
+        const _centerCoordinate = {
           latitude: initialCoordinate.latitude + Math.random() * 0.2,
           longitude: initialCoordinate.longitude + Math.random() * 0.2,
-        },
-      ]);
-    }
-  };
+        };
+        const _coordinates = Array(10)
+          .fill(0)
+          .map((_) => {
+            return {
+              latitude: _centerCoordinate.latitude + Math.random() * 0.2,
+              longitude: _centerCoordinate.longitude + Math.random() * 0.2,
+            };
+          });
+        setCoordinates(_coordinates);
+      } else {
+        setCoordinates([
+          {
+            latitude: initialCoordinate.latitude + Math.random() * 0.2,
+            longitude: initialCoordinate.longitude + Math.random() * 0.2,
+          },
+        ]);
+      }
+    },
+    [],
+  );
 
-  const features = useMemo(() => {
+  const features = useMemo((): Feature<Point>[] => {
     return coordinates.map((p) => {
-      return {
+      const feature: Feature<Point> = {
         type: 'Feature',
         geometry: {
           type: 'Point',
           coordinates: toPosition(p),
         },
+        properties: {},
       };
+      return feature;
     });
   }, [coordinates]);
 
-  const centerOrBounds = useMemo(() => {
+  const centerOrBounds = useMemo((): {
+    centerCoordinate?: Position;
+    bounds?: CameraBounds;
+  } => {
     if (coordinates.length === 1) {
       return {
         centerCoordinate: toPosition(coordinates[0]),
@@ -178,11 +178,11 @@ const CameraAnimation = (props) => {
           animationMode={animationMode}
         />
 
-        {features.map((f) => {
-          const id = JSON.stringify(f.geometry.coordinates);
+        {features.map((feature) => {
+          const id = JSON.stringify(feature.geometry);
           return (
-            <ShapeSource key={id} id={`source-${id}`} shape={f}>
-              <CircleLayer id={`layer-${id}`} style={styles.circle} />
+            <ShapeSource key={id} id={`source-${id}`} shape={feature}>
+              <CircleLayer id={`layer-${id}`} style={mapStyles.circle} />
             </ShapeSource>
           );
         })}
@@ -243,6 +243,30 @@ const CameraAnimation = (props) => {
       </SafeAreaView>
     </Page>
   );
-};
+});
+
+const styles = StyleSheet.create({
+  map: {
+    flex: 1,
+  },
+  sheet: {
+    paddingTop: 10,
+    paddingHorizontal: 10,
+  },
+  content: {
+    padding: 10,
+  },
+  buttonRow: {
+    flex: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  divider: {
+    marginVertical: 10,
+  },
+  fadedText: {
+    color: 'gray',
+  },
+});
 
 export default CameraAnimation;
