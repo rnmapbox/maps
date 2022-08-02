@@ -1023,16 +1023,8 @@ export class Logger {
 }
 
 export import MapView = MapboxGL.MapView;
-export import Camera = MapboxGL.Camera;
-export import Terrain = MapboxGL.Terrain;
-export import RasterDemSource = MapboxGL.RasterDemSource;
-export import SkyLayer = MapboxGL.SkyLayer;
-export import Atmosphere = MapboxGL.Atmosphere;
-export import ShapeSource = MapboxGL.ShapeSource;
-export import CircleLayer = MapboxGL.CircleLayer;
 
-export import CameraRef = MapboxGL.CameraRef;
-export import MapboxGLEvent = MapboxGL.MapboxGLEvent;
+export import Camera = MapboxGL.Camera;
 export import CameraStop = MapboxGL.CameraStop;
 export import CameraFollowConfig = MapboxGL.CameraFollowConfig;
 export import CameraMinMaxConfig = MapboxGL.CameraMinMaxConfig;
@@ -1041,6 +1033,15 @@ export import CameraPadding = MapboxGL.CameraPadding;
 export import CameraBoundsWithPadding = MapboxGL.CameraBoundsWithPadding;
 export import CameraStops = MapboxGL.CameraStops;
 export import CameraAnimationMode = MapboxGL.CameraAnimationMode;
+
+export import Atmosphere = MapboxGL.Atmosphere;
+export import Terrain = MapboxGL.Terrain;
+export import RasterDemSource = MapboxGL.RasterDemSource;
+export import SkyLayer = MapboxGL.SkyLayer;
+export import ShapeSource = MapboxGL.ShapeSource;
+export import CircleLayer = MapboxGL.CircleLayer;
+
+export import MapboxGLEvent = MapboxGL.MapboxGLEvent;
 export import UserTrackingMode = MapboxGL.UserTrackingMode;
 export import UserTrackingModeChangeCallback = MapboxGL.UserTrackingModeChangeCallback;
 
