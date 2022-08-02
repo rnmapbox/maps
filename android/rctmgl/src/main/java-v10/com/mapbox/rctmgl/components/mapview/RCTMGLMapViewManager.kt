@@ -157,8 +157,8 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
     }
 
     @ReactProp(name = "compassPosition")
-    fun setCompassMargins(mapView: RCTMGLMapView?, compassMargins: ReadableMap) {
-        mapView!!.setReactCompassMargins(compassMargins)
+    fun setCompassPosition(mapView: RCTMGLMapView?, compassMargins: ReadableMap) {
+        mapView!!.setReactCompassPosition(compassMargins)
     }
 
     @ReactProp(name = "contentInset")
