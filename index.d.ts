@@ -1045,4 +1045,6 @@ export import MapboxGLEvent = MapboxGL.MapboxGLEvent;
 export import UserTrackingMode = MapboxGL.UserTrackingMode;
 export import UserTrackingModeChangeCallback = MapboxGL.UserTrackingModeChangeCallback;
 
+export const { offlineManager } = MapboxGL;
+
 export default MapboxGL;

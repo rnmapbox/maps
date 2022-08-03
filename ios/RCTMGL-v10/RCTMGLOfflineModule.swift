@@ -1,6 +1,16 @@
 import Foundation
 import MapboxMaps
 
+extension Date {
+  func toJSONString() -> String {
+    let dateFormatter = DateFormatter()
+    let enUSPosixLocale = Locale(identifier: "en_US_POSIX")
+    dateFormatter.locale = enUSPosixLocale
+    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+    return dateFormatter.string(from: self as Date)
+  }
+}
+
 @objc(RCTMGLOfflineModule)
 class RCTMGLOfflineModule: RCTEventEmitter {
   var hasListeners = false
@@ -31,6 +41,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     var cancelable: Cancelable? = nil
     var progress : TileRegionLoadProgress? = nil
     var state : State = .inactive
+    var metadata : [String:Any]? = nil
   }
   
   lazy var tileRegionPacks : [String: TileRegionPack] = [:]
@@ -67,7 +78,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     return [Callbacks.error.rawValue, Callbacks.progress.rawValue]
   }
   
-  func convertRegionToJSON(region: TileRegion, geometry: Geometry) -> [String:Any] {
+  func convertRegionToJSON(region: TileRegion, geometry: Geometry, metadata: [String:Any]?) -> [String:Any] {
     let bb = RCTMGLFeatureUtils.boundingBox(geometry: geometry)
     
     var result : [String:Any] = [:]
@@ -77,22 +88,24 @@ class RCTMGLOfflineModule: RCTEventEmitter {
         bb.southWest.longitude, bb.southWest.longitude
       ]
       
+      let completed = (region.completedResourceCount == region.requiredResourceCount)
+      
+      result["requiredResourceCount"] = region.requiredResourceCount
+      result["completedResourceCount"] = region.completedResourceCount
+      result["completedResourceSize"] = region.completedResourceSize
+      result["state"] = completed ? State.complete.rawValue : State.unknown.rawValue
 
-      var metadata : [String:Any] = [
-        "name": region.id,
-        "requiredResourceCount": region.requiredResourceCount,
-        "completedResourceCount": region.completedResourceCount,
-        "completedResourceSize": region.completedResourceSize,
-        "state": State.unknown.rawValue
-      ]
+      var metadata : [String:Any] = metadata ?? [:]
+      metadata["name"] = region.id
+      
       if region.requiredResourceCount > 0 {
-        let percentage = Float(region.completedResourceCount) / Float(region.requiredResourceCount)
-        metadata["percentage"] = percentage
+        let percentage = Float(100.0) * Float(region.completedResourceCount) / Float(region.requiredResourceCount)
+        result["percentage"] = percentage
       } else {
-        metadata["percentage"] = nil
+        result["percentage"] = nil
       }
       if let expires = region.expires {
-        metadata["expires"] = expires
+        result["expires"] = expires.toJSONString()
       }
       
       result["metadata"] = String(data:try! JSONSerialization.data(withJSONObject: metadata, options: [.prettyPrinted]), encoding: .utf8)
@@ -102,26 +115,36 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     return result
   }
   
+  func toProgress(region: TileRegion) -> TileRegionLoadProgress? {
+    return TileRegionLoadProgress(completedResourceCount: region.completedResourceCount, completedResourceSize: region.completedResourceSize, erroredResourceCount: 0, requiredResourceCount: region.requiredResourceCount, loadedResourceCount: 0, loadedResourceSize: 0)
+  }
+  
   func convertRegionToJson(regions: [TileRegion], resolve: @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
     let taskGroup = DispatchGroup()
     
-    var results : [String: (Result<Geometry,Error>,TileRegion)] = [:]
+    var geomteryResults : [String: (Result<Geometry,Error>,TileRegion)] = [:]
+    var metadataResults : [String: Result<Any,Error>] = [:]
     
     for region in regions {
       taskGroup.enter()
-      
+      taskGroup.enter()
       tileStore.tileRegionGeometry(forId: region.id) { (result) in
-        results[region.id] = (result, region)
+        geomteryResults[region.id] = (result, region)
+        taskGroup.leave()
+      }
+      
+      tileStore.tileRegionMetadata(forId: region.id) { (result) in
+        metadataResults[region.id] = result
         taskGroup.leave()
       }
     }
     
     taskGroup.notify(queue: .main) {
-      let firstError = results.first { (key,result_and_region) in
+      let firstError = geomteryResults.first { (key,result_and_region) in
         switch result_and_region.0 {
-        case .failure(let error):
+        case .failure:
           return true
-        case .success(let geometry):
+        case .success:
           return false
         }
       }
@@ -131,25 +154,37 @@ class RCTMGLOfflineModule: RCTEventEmitter {
         case .failure(let error):
           rejecter("Error", error.localizedDescription, error)
           return
-        case .success(let geometry):
-          fatalError("Expected failuer but was success")
+        case .success:
+          fatalError("Expected failure but was success")
         }
       }
 
-      let results = results.map { (id, result) -> (String, (Geometry,TileRegion)) in
+      let results = geomteryResults.map { (id, result) -> (String, (Geometry,TileRegion, [String:Any]?)) in
         switch result.0 {
         case .failure(_):
           fatalError("Expected failuer but was success")
         case .success(let geometry):
-          return (id, (geometry,result.1))
+          return (id, (geometry,result.1,(try? metadataResults[id]?.get()) as? [String:Any]))
         }
       }
       
-      
-      
-      resolve(results.map { (id, geometry_region) -> [String:Any] in
-        let (geometry, region) = geometry_region;
-        return self.convertRegionToJSON(region: region, geometry: geometry)
+      resolve(results.map { (id, geometry_region_metadata) -> [String:Any] in
+        let (geometry, region, metadata) = geometry_region_metadata
+        let ret = self.convertRegionToJSON(region: region, geometry: geometry, metadata: metadata)
+        var pack = self.tileRegionPacks[region.id] ?? TileRegionPack(
+          name: region.id,
+          progress: self.toProgress(region: region),
+          state: .unknown,
+          metadata: metadata
+        )
+
+        if ((region.completedResourceCount == region.completedResourceSize)) {
+          pack.state = .complete
+        }
+
+        self.tileRegionPacks[region.id] = pack
+
+        return ret
       })
     }
   }
@@ -229,11 +264,12 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     self.sendEvent(withName: name, body: event.toJSON())
   }
 
-  func _makeRegionStatusPayload(_ name:String, progress: TileRegionLoadProgress?, state: State) -> [String:Any?] {
+  func _makeRegionStatusPayload(_ name:String, progress: TileRegionLoadProgress?, state: State, metadata:[String:Any]?) -> [String:Any?] {
+    var result : [String:Any?] = [:]
     if let progress = progress {
       let progressPercentage =  Float(progress.completedResourceCount) / Float(progress.requiredResourceCount)
       
-      return [
+      result = [
         "state": state.rawValue,
         "name": name,
         "percentage": progressPercentage * 100.0,
@@ -245,20 +281,24 @@ class RCTMGLOfflineModule: RCTEventEmitter {
         "requiredResourceCount": progress.requiredResourceCount
       ]
     } else {
-      return [
+      result = [
         "state": state.rawValue,
         "name": name,
         "percentage": nil
       ]
     }
+    if let metadata = metadata {
+      result["metadata"] = metadata
+    }
+    return result
   }
   
   func _makeRegionStatusPayload(pack: TileRegionPack) -> [String:Any?] {
-    return _makeRegionStatusPayload(pack.name, progress: pack.progress, state: pack.state)
+    return _makeRegionStatusPayload(pack.name, progress: pack.progress, state: pack.state, metadata: pack.metadata)
   }
   
   func makeProgressEvent(_ name: String, progress: TileRegionLoadProgress, state: State) -> RCTMGLEvent {
-    RCTMGLEvent(type: .offlineProgress, payload: self._makeRegionStatusPayload(name, progress: progress, state: state))
+    RCTMGLEvent(type: .offlineProgress, payload: self._makeRegionStatusPayload(name, progress: progress, state: state, metadata: nil))
   }
   
   func shouldSendProgressEvent() -> Bool {
@@ -327,7 +367,6 @@ class RCTMGLOfflineModule: RCTEventEmitter {
         }) { result in
           switch result {
           case .success(let value):
-            print("*** value: \(value)")
             if let progess = lastProgress {
               self.offlinePackProgressDidChange(progress: progess, metadata: metadata, state: .complete)
             }
@@ -352,14 +391,29 @@ class RCTMGLOfflineModule: RCTEventEmitter {
   
   @objc
   func getPackStatus(_ name: String,
-                     resolver: RCTPromiseResolveBlock,
-                     rejecter: RCTPromiseRejectBlock) {
+                     resolver: @escaping RCTPromiseResolveBlock,
+                     rejecter: @escaping RCTPromiseRejectBlock) {
     guard let pack = self._getPack(fromName: name) else {
       resolver(nil)
       return
     }
     
-    resolver(self._makeRegionStatusPayload(pack: pack))
+    tileStore.tileRegionMetadata(forId: name) { result in
+      switch result {
+      case .failure(let error):
+        Logger.log(level:.error, message: "Unable to fetch metadata for \(name)")
+        rejecter("RCTMGLOfflineModule.getPackStatus", error.localizedDescription, error)
+      case .success(let metadata):
+        var pack = self.tileRegionPacks[name] ?? TileRegionPack(name: name)
+        if let metadata = metadata as? [String:Any] {
+          pack.metadata = metadata
+        } else {
+          Logger.log(level:.error, message: "Unexpected metadata format for \(name) \(metadata)")
+        }
+        self.tileRegionPacks[name] = pack
+        resolver(self._makeRegionStatusPayload(pack: pack))
+      }
+    }
   }
 
   

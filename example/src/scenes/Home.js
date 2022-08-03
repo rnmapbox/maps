@@ -48,6 +48,7 @@ import GradientLine from '../examples/LineLayer/GradientLine';
 // MAP
 import ChangeLayerColor from '../examples/Map/ChangeLayerColor';
 import CreateOfflineRegion from '../examples/Map/CreateOfflineRegion';
+import OfflineExample from '../examples/Map/OfflineExample';
 import PointInMapView from '../examples/Map/PointInMapView';
 import ShowAndHideLayer from '../examples/Map/ShowAndHideLayer';
 import ShowClick from '../examples/Map/ShowClick';
@@ -138,6 +139,7 @@ const Examples = [
     new ExampleItem('Show Region Did Change', ShowRegionDidChange),
     new ExampleItem('Two Map Views', TwoByTwo),
     new ExampleItem('Create Offline Region', CreateOfflineRegion),
+    new ExampleItem('Offline example', OfflineExample),
     new ExampleItem('Get Pixel Point in MapView', PointInMapView),
     new ExampleItem('Show and hide a layer', ShowAndHideLayer),
     new ExampleItem('Change Layer Color', ChangeLayerColor),
