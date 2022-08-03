@@ -516,6 +516,14 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
       self.setFillExtrusionBaseTransition(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionVerticalGradient") {
       self.setFillExtrusionVerticalGradient(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionAmbientOcclusionIntensity") {
+      self.setFillExtrusionAmbientOcclusionIntensity(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionAmbientOcclusionIntensityTransition") {
+      self.setFillExtrusionAmbientOcclusionIntensityTransition(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionAmbientOcclusionRadius") {
+      self.setFillExtrusionAmbientOcclusionRadius(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionAmbientOcclusionRadiusTransition") {
+      self.setFillExtrusionAmbientOcclusionRadiusTransition(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: fill-extrusion")
     }
@@ -765,16 +773,28 @@ func atmosphereLayer(layer: inout Atmosphere, reactStyle:Dictionary<String, Any>
 
     if (prop == "range") {
       self.setRange(&layer, styleValue:styleValue);
+    } else if (prop == "rangeTransition") {
+      self.setRangeTransition(&layer, styleValue:styleValue);
     } else if (prop == "color") {
       self.setColor(&layer, styleValue:styleValue);
+    } else if (prop == "colorTransition") {
+      self.setColorTransition(&layer, styleValue:styleValue);
     } else if (prop == "highColor") {
       self.setHighColor(&layer, styleValue:styleValue);
+    } else if (prop == "highColorTransition") {
+      self.setHighColorTransition(&layer, styleValue:styleValue);
     } else if (prop == "spaceColor") {
       self.setSpaceColor(&layer, styleValue:styleValue);
+    } else if (prop == "spaceColorTransition") {
+      self.setSpaceColorTransition(&layer, styleValue:styleValue);
     } else if (prop == "horizonBlend") {
       self.setHorizonBlend(&layer, styleValue:styleValue);
+    } else if (prop == "horizonBlendTransition") {
+      self.setHorizonBlendTransition(&layer, styleValue:styleValue);
     } else if (prop == "starIntensity") {
       self.setStarIntensity(&layer, styleValue:styleValue);
+    } else if (prop == "starIntensityTransition") {
+      self.setStarIntensityTransition(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: atmosphere")
     }
@@ -1984,6 +2004,34 @@ func setFillExtrusionVerticalGradient(_ layer: inout FillExtrusionLayer, styleVa
       
 }
 
+func setFillExtrusionAmbientOcclusionIntensity(_ layer: inout FillExtrusionLayer, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.fillExtrusionAmbientOcclusionIntensity = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setFillExtrusionAmbientOcclusionIntensityTransition(_ layer: inout FillExtrusionLayer, styleValue: RCTMGLStyleValue)
+{
+    layer.fillExtrusionAmbientOcclusionIntensityTransition = styleValue.getTransition();
+}
+
+func setFillExtrusionAmbientOcclusionRadius(_ layer: inout FillExtrusionLayer, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.fillExtrusionAmbientOcclusionRadius = styleValue.mglStyleValueNumber();
+        
+      
+}
+
+func setFillExtrusionAmbientOcclusionRadiusTransition(_ layer: inout FillExtrusionLayer, styleValue: RCTMGLStyleValue)
+{
+    layer.fillExtrusionAmbientOcclusionRadiusTransition = styleValue.getTransition();
+}
+
 
 
 func setRasterStyleLayerVisibility(_ layer: inout RasterLayer, styleValue: RCTMGLStyleValue)
@@ -2376,6 +2424,11 @@ func setRange(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
       
 }
 
+func setRangeTransition(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
+{
+    layer.rangeTransition = styleValue.getTransition();
+}
+
 func setColor(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
 {
       
@@ -2383,6 +2436,11 @@ func setColor(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
           layer.color = styleValue.mglStyleValueColor();
         
       
+}
+
+func setColorTransition(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
+{
+    layer.colorTransition = styleValue.getTransition();
 }
 
 func setHighColor(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
@@ -2394,6 +2452,11 @@ func setHighColor(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
       
 }
 
+func setHighColorTransition(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
+{
+    layer.highColorTransition = styleValue.getTransition();
+}
+
 func setSpaceColor(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
 {
       
@@ -2401,6 +2464,11 @@ func setSpaceColor(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
           layer.spaceColor = styleValue.mglStyleValueColor();
         
       
+}
+
+func setSpaceColorTransition(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
+{
+    layer.spaceColorTransition = styleValue.getTransition();
 }
 
 func setHorizonBlend(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
@@ -2412,6 +2480,11 @@ func setHorizonBlend(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
       
 }
 
+func setHorizonBlendTransition(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
+{
+    layer.horizonBlendTransition = styleValue.getTransition();
+}
+
 func setStarIntensity(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
 {
       
@@ -2419,6 +2492,11 @@ func setStarIntensity(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
           layer.starIntensity = styleValue.mglStyleValueNumber();
         
       
+}
+
+func setStarIntensityTransition(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
+{
+    layer.starIntensityTransition = styleValue.getTransition();
 }
 
 

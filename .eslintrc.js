@@ -102,6 +102,7 @@ module.exports = {
       rules: {
         'no-shadow': 'off',
         'import/named': 'off',
+        'react-native/no-inline-styles': 0,
       },
     },
   ],

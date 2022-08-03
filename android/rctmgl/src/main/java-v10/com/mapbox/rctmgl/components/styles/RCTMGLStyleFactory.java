@@ -593,6 +593,18 @@ public class RCTMGLStyleFactory {
             case "fillExtrusionVerticalGradient":
               RCTMGLStyleFactory.setFillExtrusionVerticalGradient(layer, styleValue);
               break;
+            case "fillExtrusionAmbientOcclusionIntensity":
+              RCTMGLStyleFactory.setFillExtrusionAmbientOcclusionIntensity(layer, styleValue);
+              break;
+            case "fillExtrusionAmbientOcclusionIntensityTransition":
+              RCTMGLStyleFactory.setFillExtrusionAmbientOcclusionIntensityTransition(layer, styleValue);
+              break;
+            case "fillExtrusionAmbientOcclusionRadius":
+              RCTMGLStyleFactory.setFillExtrusionAmbientOcclusionRadius(layer, styleValue);
+              break;
+            case "fillExtrusionAmbientOcclusionRadiusTransition":
+              RCTMGLStyleFactory.setFillExtrusionAmbientOcclusionRadiusTransition(layer, styleValue);
+              break;
         }
       }
     }
@@ -838,20 +850,38 @@ public class RCTMGLStyleFactory {
             case "range":
               RCTMGLStyleFactory.setRange(layer, styleValue);
               break;
+            case "rangeTransition":
+              RCTMGLStyleFactory.setRangeTransition(layer, styleValue);
+              break;
             case "color":
               RCTMGLStyleFactory.setColor(layer, styleValue);
+              break;
+            case "colorTransition":
+              RCTMGLStyleFactory.setColorTransition(layer, styleValue);
               break;
             case "highColor":
               RCTMGLStyleFactory.setHighColor(layer, styleValue);
               break;
+            case "highColorTransition":
+              RCTMGLStyleFactory.setHighColorTransition(layer, styleValue);
+              break;
             case "spaceColor":
               RCTMGLStyleFactory.setSpaceColor(layer, styleValue);
+              break;
+            case "spaceColorTransition":
+              RCTMGLStyleFactory.setSpaceColorTransition(layer, styleValue);
               break;
             case "horizonBlend":
               RCTMGLStyleFactory.setHorizonBlend(layer, styleValue);
               break;
+            case "horizonBlendTransition":
+              RCTMGLStyleFactory.setHorizonBlendTransition(layer, styleValue);
+              break;
             case "starIntensity":
               RCTMGLStyleFactory.setStarIntensity(layer, styleValue);
+              break;
+            case "starIntensityTransition":
+              RCTMGLStyleFactory.setStarIntensityTransition(layer, styleValue);
               break;
         }
       }
@@ -2081,6 +2111,38 @@ public class RCTMGLStyleFactory {
       }
     }
 
+    public static void setFillExtrusionAmbientOcclusionIntensity(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.fillExtrusionAmbientOcclusionIntensity(styleValue.getExpression());
+      } else {
+          layer.fillExtrusionAmbientOcclusionIntensity(styleValue.getFloat(VALUE_KEY));
+      }
+    }
+
+
+    public static void setFillExtrusionAmbientOcclusionIntensityTransition(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
+      StyleTransition transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.fillExtrusionAmbientOcclusionIntensityTransition(transition);
+      }
+    }
+
+    public static void setFillExtrusionAmbientOcclusionRadius(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.fillExtrusionAmbientOcclusionRadius(styleValue.getExpression());
+      } else {
+          layer.fillExtrusionAmbientOcclusionRadius(styleValue.getFloat(VALUE_KEY));
+      }
+    }
+
+
+    public static void setFillExtrusionAmbientOcclusionRadiusTransition(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
+      StyleTransition transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.fillExtrusionAmbientOcclusionRadiusTransition(transition);
+      }
+    }
+
     public static void setVisibility(RasterLayer layer, RCTMGLStyleValue styleValue) {
         layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
     }
@@ -2485,11 +2547,27 @@ public class RCTMGLStyleFactory {
       }
     }
 
+
+    public static void setRangeTransition(Atmosphere layer, RCTMGLStyleValue styleValue) {
+      StyleTransition transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.rangeTransition(transition);
+      }
+    }
+
     public static void setColor(Atmosphere layer, RCTMGLStyleValue styleValue) {
       if (styleValue.isExpression()) {
         layer.color(styleValue.getExpression());
       } else {
           layer.color(styleValue.getInt(VALUE_KEY));
+      }
+    }
+
+
+    public static void setColorTransition(Atmosphere layer, RCTMGLStyleValue styleValue) {
+      StyleTransition transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.colorTransition(transition);
       }
     }
 
@@ -2501,11 +2579,27 @@ public class RCTMGLStyleFactory {
       }
     }
 
+
+    public static void setHighColorTransition(Atmosphere layer, RCTMGLStyleValue styleValue) {
+      StyleTransition transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.highColorTransition(transition);
+      }
+    }
+
     public static void setSpaceColor(Atmosphere layer, RCTMGLStyleValue styleValue) {
       if (styleValue.isExpression()) {
         layer.spaceColor(styleValue.getExpression());
       } else {
           layer.spaceColor(styleValue.getInt(VALUE_KEY));
+      }
+    }
+
+
+    public static void setSpaceColorTransition(Atmosphere layer, RCTMGLStyleValue styleValue) {
+      StyleTransition transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.spaceColorTransition(transition);
       }
     }
 
@@ -2517,11 +2611,27 @@ public class RCTMGLStyleFactory {
       }
     }
 
+
+    public static void setHorizonBlendTransition(Atmosphere layer, RCTMGLStyleValue styleValue) {
+      StyleTransition transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.horizonBlendTransition(transition);
+      }
+    }
+
     public static void setStarIntensity(Atmosphere layer, RCTMGLStyleValue styleValue) {
       if (styleValue.isExpression()) {
         layer.starIntensity(styleValue.getExpression());
       } else {
           layer.starIntensity(styleValue.getFloat(VALUE_KEY));
+      }
+    }
+
+
+    public static void setStarIntensityTransition(Atmosphere layer, RCTMGLStyleValue styleValue) {
+      StyleTransition transition = styleValue.getTransition();
+      if (transition != null) {
+        layer.starIntensityTransition(transition);
       }
     }
 
