@@ -148,6 +148,7 @@ extension RCTMGLMapViewManager {
       mapView.handleMapChangedEvents = Set(events.compactMap {
         RCTMGLEvent.EventType(rawValue: $0)
       })
+      resolver(nil);
     }
   }
 
