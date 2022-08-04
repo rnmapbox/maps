@@ -80,6 +80,11 @@ class PointAnnotation extends NativeBridgeComponent(React.PureComponent) {
     }),
 
     /**
+     * Customizable style attributes
+     */
+    style: PropTypes.any,
+
+    /**
      * This callback is fired once this annotation is selected. Returns a Feature as the first param.
      */
     onSelected: PropTypes.func,

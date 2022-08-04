@@ -14,6 +14,7 @@
 | anchor | `shape` | `{ x: 0.5, y: 0.5 }` | `false` | Specifies the anchor being set on a particular point of the annotation.<br/>The anchor point is specified in the continuous space [0.0, 1.0] x [0.0, 1.0],<br/>where (0, 0) is the top-left corner of the image, and (1, 1) is the bottom-right corner.<br/>Note this is only for custom annotations not the default pin view.<br/>Defaults to the center of the view. |
 | &nbsp;&nbsp;x | `number` | `none` | `true` | See anchor |
 | &nbsp;&nbsp;y | `number` | `none` | `true` | See anchor |
+| style | `any` | `none` | `false` | Customizable style attributes |
 | onSelected | `func` | `none` | `false` | This callback is fired once this annotation is selected. Returns a Feature as the first param. |
 | onDeselected | `func` | `none` | `false` | This callback is fired once this annotation is deselected. |
 | onDragStart | `func` | `none` | `false` | This callback is fired once this annotation has started being dragged. |

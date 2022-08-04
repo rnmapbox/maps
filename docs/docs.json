@@ -3176,6 +3176,13 @@
         "description": "Specifies the anchor being set on a particular point of the annotation.\nThe anchor point is specified in the continuous space [0.0, 1.0] x [0.0, 1.0],\nwhere (0, 0) is the top-left corner of the image, and (1, 1) is the bottom-right corner.\nNote this is only for custom annotations not the default pin view.\nDefaults to the center of the view."
       },
       {
+        "name": "style",
+        "required": false,
+        "type": "any",
+        "default": "none",
+        "description": "Customizable style attributes"
+      },
+      {
         "name": "onSelected",
         "required": false,
         "type": "func",
