@@ -270,7 +270,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
       let progressPercentage =  Float(progress.completedResourceCount) / Float(progress.requiredResourceCount)
       
       result = [
-        "state": state.rawValue,
+        "state": (progress.completedResourceCount == progress.requiredResourceCount) ? State.complete.rawValue : state.rawValue,
         "name": name,
         "percentage": progressPercentage * 100.0,
         "completedResourceCount": progress.completedResourceCount,
