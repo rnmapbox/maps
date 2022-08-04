@@ -224,7 +224,9 @@ export const Camera = memo(
           return null;
         }
         const _defaultStop: NativeCameraStop = {
-          centerCoordinate: JSON.stringify(defaultSettings.centerCoordinate),
+          centerCoordinate: JSON.stringify(
+            makePoint(defaultSettings.centerCoordinate),
+          ),
           bounds: JSON.stringify(defaultSettings.bounds),
           heading: defaultSettings.heading ?? 0,
           pitch: defaultSettings.pitch ?? 0,

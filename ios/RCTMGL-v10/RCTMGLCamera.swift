@@ -161,10 +161,14 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
 
     if let stops = stop["stops"] as? [[String:Any]] {
       stops.forEach {
-        cameraUpdateQueue.enqueue(stop: toUpdateItem(stop: $0))
+        if let stop = toUpdateItem(stop: $0) {
+          cameraUpdateQueue.enqueue(stop: stop)
+        }
       }
     } else {
-      cameraUpdateQueue.enqueue(stop: toUpdateItem(stop: stop))
+      if let stop = toUpdateItem(stop: stop) {
+        cameraUpdateQueue.enqueue(stop: stop)
+      }
     }
 
     if let map = map {
@@ -182,7 +186,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     }
   }
   
-  private func toUpdateItem(stop: [String: Any]) -> CameraUpdateItem {
+  private func toUpdateItem(stop: [String: Any]) -> CameraUpdateItem? {
     var zoom: CGFloat?
     if let z = stop["zoom"] as? Double {
       zoom = CGFloat(z)
@@ -207,18 +211,21 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
 
     var center: LocationCoordinate2D?
     if let feature: String = stop["centerCoordinate"] as? String {
-      let centerFeature : Turf.Feature? = try!
+      
+      let centerFeature : Turf.Feature? = logged("RCTMGLCamera.toUpdateItem.decode.cc") { try
         JSONDecoder().decode(Turf.Feature.self, from: feature.data(using: .utf8)!)
-        
+      }
+      
       switch centerFeature?.geometry {
       case .point(let centerPoint):
         center = centerPoint.coordinates
       default:
-        fatalError("Unexpected geometry: \(String(describing: centerFeature?.geometry))")
+        Logger.log(level: .error, message: "RCTMGLCamera.toUpdateItem: Unexpected geometry: \(String(describing: centerFeature?.geometry))")
+        return nil
       }
     } else if let feature: String = stop["bounds"] as? String {
-      let collection : Turf.FeatureCollection? = try!
-        JSONDecoder().decode(Turf.FeatureCollection.self, from: feature.data(using: .utf8)!)
+      let collection : Turf.FeatureCollection? = logged("RCTMGLCamera.toUpdateItem.decode.bound") { try
+        JSONDecoder().decode(Turf.FeatureCollection.self, from: feature.data(using: .utf8)!) }
       let features = collection?.features
       
       let ne: CLLocationCoordinate2D
@@ -226,7 +233,8 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
         case .point(let point):
           ne = point.coordinates
         default:
-          fatalError("Unexpected geometry: \(String(describing: features?.first?.geometry))")
+          Logger.log(level: .error, message: "RCTMGLCamera.toUpdateItem: Unexpected geometry: \(String(describing: features?.first?.geometry))")
+          return nil
       }
       
       let sw: CLLocationCoordinate2D
@@ -234,7 +242,8 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
         case .point(let point):
           sw = point.coordinates
         default:
-          fatalError("Unexpected geometry: \(String(describing: features?.last?.geometry))")
+          Logger.log(level: .error, message: "RCTMGLCamera.toUpdateItem: Unexpected geometry: \(String(describing: features?.last?.geometry))")
+          return nil
       }
       
       withMapView { map in
@@ -305,10 +314,11 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       return
     }
     
-    var updateItem = toUpdateItem(stop: stop)
-    updateItem.mode = .none
-    updateItem.duration = 0
-    updateItem.execute(map: map, cameraAnimator: &cameraAnimator)
+    if var updateItem = toUpdateItem(stop: stop) {
+      updateItem.mode = .none
+      updateItem.duration = 0
+      updateItem.execute(map: map, cameraAnimator: &cameraAnimator)
+    }
   }
   
   func initialLayout() {
