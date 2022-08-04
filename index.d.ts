@@ -852,6 +852,7 @@ export interface PointAnnotationProps {
   draggable?: boolean;
   coordinate: GeoJSON.Position;
   anchor?: Point;
+  style?: StyleProp<WithExpression<ViewStyle>>;
   children: JSX.Element;
   onSelected?: () => void;
   onDeselected?: () => void;
@@ -859,6 +860,8 @@ export interface PointAnnotationProps {
   onDrag?: () => void;
   onDragEnd?: () => void;
 }
+
+export type PointAnnotationStyle = StyleProp<WithExpression<ViewStyle>>;
 
 export type MarkerViewProps = PointAnnotationProps;
 
