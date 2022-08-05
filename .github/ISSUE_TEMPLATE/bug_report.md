@@ -22,7 +22,7 @@ assignees: ''
 
 ## Standalone component to reproduce
 
-<!--- Use [our BugReportTemplate](https://github.com/rnmapbox/maps/blob/main/example/src/examples/BugReportTemplate.js) screens as a starting point. --->
+<!--- Use [our BugReportTemplate](https://github.com/rnmapbox/maps/blob/main/example/src/examples/BugReportExample.js) screens as a starting point. --->
 <!--- Component should be self contained - no extra libraries, external data, no parameters --->
 <!--- Do not include setAccessToken or access token istelf. ---->
 
