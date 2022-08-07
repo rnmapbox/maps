@@ -1,4 +1,6 @@
 # Mapbox Maps SDK for React Native
+<img src="./assets/mapbox_logo.png" height="75">
+
 _A community-supported, open-source React Native library for building maps with the [Mapbox Maps SDK for iOS](https://www.mapbox.com/ios-sdk/) and [Mapbox Maps SDK for Android](https://www.mapbox.com/android-sdk/)_
 
 ---
