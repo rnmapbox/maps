@@ -1,8 +1,4 @@
-<style>
-table, th, td {
-   border: 0px;
-}
-</style>
+
 
 <table style="border: none; border-width: 0px">
 <tr style="border: none; border-width: 0px">
