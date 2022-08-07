@@ -267,7 +267,9 @@ Help drive this repo forward - be a sponsor. Add a comment [here](https://github
 </tr>
 <tr>
 <td align="center"></a>
-  <a href="https://scouttohunt.com/" target="_blank">ScoutToHunt</a></td>
+
+  <a href="https://scouttohunt.com/" target="_blank">Scout To Hunt</a></td>
+
 <td align="center"><a href="https://terrain.dance/" target="_blank">Terrain Dance</a></td>
 </tr>
 </table>
