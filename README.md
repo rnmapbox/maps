@@ -244,8 +244,6 @@ Help drive this repo forward - be a sponsor. Add a comment [here](https://github
      height="60"
       />
       
-</a>
-  <a href="https://scouttohunt/" target="_blank">STH LLC</a>
 </td>
 <td align="center">
 <a href="https://terrain.dance/" target="_blank">
@@ -255,8 +253,13 @@ Help drive this repo forward - be a sponsor. Add a comment [here](https://github
       />
   </a>
 
-  <a href="https://terrain.dance/" target="_blank">Terrain Dance LLC</a>
+  
 </td>
+</tr>
+<tr>
+<td align="center"></a>
+  <a href="https://scouttohunt/" target="_blank">STH</a></td>
+<td align="center"><a href="https://terrain.dance/" target="_blank">Terrain Dance</a></td>
 </tr>
 </table>
 
