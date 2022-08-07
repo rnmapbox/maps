@@ -1,5 +1,16 @@
 # Mapbox Maps SDK for React Native
+<table style="border: none; border-width: 0px">
+<tr>
+<td>
 <img src="./assets/mapbox_logo.png" height="75">
+</td>
+<td>
+<img src="./assets/React-icon.svg" height="75">
+</td>
+</tr>
+</table>
+
+
 
 _A community-supported, open-source React Native library for building maps with the [Mapbox Maps SDK for iOS](https://www.mapbox.com/ios-sdk/) and [Mapbox Maps SDK for Android](https://www.mapbox.com/android-sdk/)_
 
@@ -237,7 +248,7 @@ Example:
 
 Help drive this repo forward - be a sponsor. Add a comment [here](https://github.com/rnmapbox/maps/discussions/1551) to discuss your sponsorship.
 
-<table style="border: none;">
+<table style="border: none; border-width: 0px">
 <tr>
 <td align="center">
 <a href="https://scouttohunt.com/" target="_blank">
