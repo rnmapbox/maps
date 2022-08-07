@@ -1,4 +1,3 @@
-# Mapbox Maps SDK for React Native
 <table style="border: none; border-width: 0px">
 <tr>
 <td>
@@ -9,6 +8,11 @@
 </td>
 </tr>
 </table>
+
+# Mapbox Maps SDK for React Native
+
+|  [![npm version](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps.svg)](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps)  | [![iOS & Android Build](https://github.com/rnmapbox/maps/actions/workflows/on-push.yml/badge.svg?branch=main)](https://github.com/rnmapbox/maps/actions/workflows/on-push.yml?branch=main)  |
+|---|---|
 
 
 
@@ -22,27 +26,6 @@ _A community-supported, open-source React Native library for building maps with 
 
 #### <span style="color:red">&rarr;</span> This README is for the unreleased 10* branch. Please see [v8 branch](https://github.com/rnmapbox/maps/tree/v8) for documentation on 8.* releases
 ---
-### Supported Implementations 
-At the moment, the following implementations are supported: 
-
-
-|*RNMapboxMapsImpl*|*Notes*|
-|----------------|-----|
-|mapbox|New [Mapbox v10](https://www.mapbox.com/mobile-maps-sdk) implementation (BETA)|
-|maplibre|[MapLibre](https://github.com/maplibre/maplibre-gl-native) opensource fork of Mapbox SDKs|
-|mapbox-gl|Legacy mapbox implementation [iOS](https://docs.mapbox.com/android/legacy/maps/guides/) [Android](https://docs.mapbox.com/ios/legacy/maps/guides/)|
-
-_See [iOS](ios/install.md) & [Android](android/install.md) setup guide for more details on setting `RNMapboxMapsImpl`_
-
-
----
-
-[![npm version](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps.svg)](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps)  
-[![iOS & Android Build](https://github.com/rnmapbox/maps/actions/workflows/on-push.yml/badge.svg?branch=main)](https://github.com/rnmapbox/maps/actions/workflows/on-push.yml?branch=main)  
-
----
-
-<br>
 
 <table>
 <tr>
@@ -71,9 +54,21 @@ _See [iOS](ios/install.md) & [Android](android/install.md) setup guide for more 
 <img src="./assets/maps-examples-data-driven-symbols-960-2e2061a6b8127ef305c1b6c159f8dc65.webp" width="1200"/>
 </td>
 </tr>
-
-
 </table>
+
+---
+
+### Supported Implementations 
+At the moment, the following implementations are supported: 
+
+
+|*RNMapboxMapsImpl*|*Notes*|
+|----------------|-----|
+|mapbox|New [Mapbox v10](https://www.mapbox.com/mobile-maps-sdk) implementation (BETA)|
+|maplibre|[MapLibre](https://github.com/maplibre/maplibre-gl-native) opensource fork of Mapbox SDKs|
+|mapbox-gl|Legacy mapbox implementation [iOS](https://docs.mapbox.com/android/legacy/maps/guides/) [Android](https://docs.mapbox.com/ios/legacy/maps/guides/)|
+
+_See [iOS](ios/install.md) & [Android](android/install.md) setup guide for more details on setting `RNMapboxMapsImpl`_
 
 
 
