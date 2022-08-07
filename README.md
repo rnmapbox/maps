@@ -1,9 +1,9 @@
 <table style="border: none; border-width: 0px">
-<tr>
-<td>
+<tr style="border: none; border-width: 0px">
+<td style="border: none; border-width: 0px">
 <img src="./assets/mapbox_logo.png" height="75">
 </td>
-<td>
+<td style="border: none; border-width: 0px">
 <img src="./assets/React-icon.svg" height="75">
 </td>
 </tr>
