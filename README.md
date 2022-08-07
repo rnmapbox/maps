@@ -1,4 +1,5 @@
 
+# Mapbox Maps SDK for React Native
 
 <table style="border: none; border-width: 0px">
 <tr style="border: none; border-width: 0px">
@@ -10,8 +11,6 @@
 </td>
 </tr>
 </table>
-
-# Mapbox Maps SDK for React Native
 
 |  [![npm version](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps.svg)](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps)  | [![iOS & Android Build](https://github.com/rnmapbox/maps/actions/workflows/on-push.yml/badge.svg?branch=main)](https://github.com/rnmapbox/maps/actions/workflows/on-push.yml?branch=main)  |
 |---|---|
