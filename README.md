@@ -1,23 +1,16 @@
-<br>
-
-### 🟥 Future of this repo: participate in the [discussion thread](https://github.com/rnmapbox/maps/discussions/1680) 🟥
-
-### 🟥 Call for additional maintainers [discussion thread](https://github.com/rnmapbox/maps/discussions/1551) 🟥
-
-### 🟥 This README is for the unreleased 10* branch. Please see [v8 branch](https://github.com/rnmapbox/maps/tree/v8) for documentation on 8.* releases 🟥
-
-<br>
+# Mapbox Maps SDK for React Native
+_A community-supported, open-source React Native library for building maps with the [Mapbox Maps SDK for iOS](https://www.mapbox.com/ios-sdk/) and [Mapbox Maps SDK for Android](https://www.mapbox.com/android-sdk/)_
 
 ---
+## News & Discussions
+#### <span style="color:red">&rarr;</span> Future of this repo: participate in the [discussion thread](https://github.com/rnmapbox/maps/discussions/1680)
 
-<br>
+#### <span style="color:red">&rarr;</span> Call for additional maintainers [discussion thread](https://github.com/rnmapbox/maps/discussions/1551)
 
-# Mapbox Maps SDK for React Native
-
-_An unofficial React Native library for building maps with   
-the [Mapbox Maps SDK for iOS](https://www.mapbox.com/ios-sdk/) and [Mapbox Maps SDK for Android](https://www.mapbox.com/android-sdk/)_
-
-At the moment the following implementations are supported: 
+#### <span style="color:red">&rarr;</span> This README is for the unreleased 10* branch. Please see [v8 branch](https://github.com/rnmapbox/maps/tree/v8) for documentation on 8.* releases
+---
+### Supported Implementations 
+At the moment, the following implementations are supported: 
 
 
 |*RNMapboxMapsImpl*|*Notes*|
@@ -38,14 +31,42 @@ _See [iOS](ios/install.md) & [Android](android/install.md) setup guide for more 
 
 <br>
 
-<img src="./assets/indoor_building_map_android.png"
+<table>
+<tr>
+<td colspan="2" align="center">
+<img src="./assets/intro-examples.png"
      alt="Indoor Building Map Android"
      height="300"
       />
-<img src="./assets/indoor_building_map_ios.png"
-     alt="Indoor Building Map iOS"
-     height="300"
-      />
+</td>
+</tr>
+<tr>
+<td>
+<img src="./assets/beta-maps-example-point-annotation-960-d280759f6a3d8d75458f399c7a044926.webp" width="1200"/>
+</td>
+</tr>
+<tr>
+<td>
+<img src="./assets/beta-maps-guides-migrate-3d-terrain-960-48b1080117817ccfd92e434d0df7546f.webp" width="1200"/>
+</td>
+</tr>
+<tr>
+<td>
+<img src="./assets/maps-examples-building-extrusions-960-aaa140cce77da4e8b2dd216032b191b6.webp" width="1200"/>
+</td>
+</tr>
+
+<tr>
+<td>
+<img src="./assets/maps-examples-data-driven-symbols-960-2e2061a6b8127ef305c1b6c159f8dc65.webp" width="1200"/>
+</td>
+</tr>
+
+
+</table>
+
+
+
 
 ## Prerequisite
 
@@ -146,7 +167,7 @@ export default class App extends Component {
   }
 }
 ```
-
+---
 ## Documentation
 
 ### Components
@@ -212,6 +233,32 @@ Example:
   "setupFilesAfterEnv": ["@rnmapbox/maps/setup-jest"]
 }
 ```
+
+## Sponsors
+
+Help drive this repo forward. Be a sponsor. Add a comment [here](https://github.com/rnmapbox/maps/discussions/1551) to discuss your sponsorship.
+
+<table>
+<tr>
+<td>
+<a href="https://scouttohunt.com/" target="_blank">
+<img src="./assets/sponsors/sth.png"
+     alt="Scout To Hunt"
+     height="60"
+      />
+</a>
+</td>
+<td>
+<a href="https://terrain.dance/" target="_blank">
+<img src="./assets/sponsors/terrain.dance.png"
+     alt="Terrain Dance LLC"
+     height="50"
+      />
+  </a>
+</td>
+</tr>
+</table>
+
 
 ## Developer Group
 
