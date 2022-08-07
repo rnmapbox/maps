@@ -34,10 +34,7 @@ _See [iOS](ios/install.md) & [Android](android/install.md) setup guide for more 
 <table>
 <tr>
 <td colspan="2" align="center">
-<img src="./assets/intro-examples.png"
-     alt="Indoor Building Map Android"
-     height="300"
-      />
+<img src="./assets/intro-examples.png"/>
 </td>
 </tr>
 <tr>
