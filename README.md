@@ -230,33 +230,37 @@ Example:
   "setupFilesAfterEnv": ["@rnmapbox/maps/setup-jest"]
 }
 ```
-
+---
 ## Sponsors
 
-Help drive this repo forward. Be a sponsor. Add a comment [here](https://github.com/rnmapbox/maps/discussions/1551) to discuss your sponsorship.
+Help drive this repo forward - be a sponsor. Add a comment [here](https://github.com/rnmapbox/maps/discussions/1551) to discuss your sponsorship.
 
 <table>
 <tr>
-<td>
+<td align="center">
 <a href="https://scouttohunt.com/" target="_blank">
 <img src="./assets/sponsors/sth.png"
      alt="Scout To Hunt"
-     height="60"
+     height="55"
       />
+      
 </a>
+  <a href="https://scouttohunt/" target="_blank">STH LLC</a>
 </td>
-<td>
+<td align="center">
 <a href="https://terrain.dance/" target="_blank">
 <img src="./assets/sponsors/terrain.dance.png"
      alt="Terrain Dance LLC"
-     height="50"
+     height="60"
       />
   </a>
+
+  <a href="https://terrain.dance/" target="_blank">Terrain Dance LLC</a>
 </td>
 </tr>
 </table>
 
-
+---
 ## Developer Group
 
 Have a question or need some help? Join our [Gitter developer group](https://gitter.im/rnmapbox/Lobby)!
