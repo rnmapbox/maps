@@ -235,13 +235,13 @@ Example:
 
 Help drive this repo forward - be a sponsor. Add a comment [here](https://github.com/rnmapbox/maps/discussions/1551) to discuss your sponsorship.
 
-<table>
+<table style="border: none;">
 <tr>
 <td align="center">
 <a href="https://scouttohunt.com/" target="_blank">
 <img src="./assets/sponsors/sth.png"
      alt="Scout To Hunt"
-     height="55"
+     height="60"
       />
       
 </a>
