@@ -37,7 +37,18 @@ class RCTMGLStyleValue {
   }
   
   func getTransition() -> StyleTransition {
-    return StyleTransition(duration: 1.0, delay: 1.0)
+    guard let dict = styleObject as? [String:Any] else {
+      Logger.log(level:.error, message: "Invalid transition value: \(optional: styleObject)")
+      return StyleTransition(duration: 0.0, delay: 0.0)
+    }
+    let duration = (dict["duration"] as? NSNumber)
+    let delay = (dict["delay"] as? NSNumber)
+
+    if delay == nil && duration == nil {
+      Logger.log(level:.error, message: "Invalid transition value: \(optional: styleObject) no duration or delay")
+    }
+    let millisecondsToSeconds = 1.0/1000.0;
+    return StyleTransition(duration: millisecondsToSeconds * (duration?.doubleValue ?? 0.0), delay: millisecondsToSeconds * (delay?.doubleValue ?? 0.0))
   }
   
   func getImageScale() -> Double {
