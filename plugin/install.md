@@ -5,7 +5,7 @@
 First install the package with yarn, npm, or [`expo install rnmapbox/maps#main`](https://docs.expo.io/workflow/expo-cli/#expo-install).
 
 ```sh
-expo install @rnmapbox/maps
+expo install rnmapbox/maps#main
 ```
 
 After installing this npm package, add the [config plugin](https://docs.expo.io/guides/config-plugins/) to the [`plugins`](https://docs.expo.io/versions/latest/config/app/#plugins) array of your `app.json` or `app.config.js`:
