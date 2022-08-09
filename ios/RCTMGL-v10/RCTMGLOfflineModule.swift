@@ -312,6 +312,11 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     }
   }
   
+  func offlinePackDidReceiveError(name: String, error: Error) {
+    let event = RCTMGLEvent(type: .offlineError, payload: ["name": name, "message": error.localizedDescription])
+    self._sendEvent(Callbacks.error.rawValue, event: event)
+  }
+  
   @objc
   func createPack(_ options: NSDictionary, resolver: @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
     DispatchQueue.main.async {
@@ -344,18 +349,12 @@ class RCTMGLOfflineModule: RCTEventEmitter {
           networkRestriction: .none,
           averageBytesPerSecond: nil)
 
-        print("load options: \(loadOptions?.description ?? "n/a")")
         let actPack = RCTMGLOfflineModule.TileRegionPack(
           name: id,
           progress: nil,
           state: .inactive
         )
         self.tileRegionPacks[id] = actPack
-        
-        resolver([
-          "bounds": boundsStr,
-          "metadata": String(data:try! JSONSerialization.data(withJSONObject: metadata, options: [.prettyPrinted]), encoding: .utf8)
-        ])
 
         var lastProgress : TileRegionLoadProgress? = nil
         let task = self.tileStore.loadTileRegion(forId: id, loadOptions: loadOptions!, progress: {
@@ -373,12 +372,15 @@ class RCTMGLOfflineModule: RCTEventEmitter {
             self.tileRegionPacks[id]!.state = .complete
           case .failure(let error):
             self.tileRegionPacks[id]!.state = .inactive
-            rejecter("createPack", error.localizedDescription, error)
+            self.offlinePackDidReceiveError(name: id, error: error)
           }
         }
         
         self.tileRegionPacks[id]!.cancelable = task
-        
+        resolver([
+          "bounds": boundsStr,
+          "metadata": String(data:try! JSONSerialization.data(withJSONObject: metadata, options: [.prettyPrinted]), encoding: .utf8)
+        ])
       } catch {
         rejecter("createPack", error.localizedDescription, error)
       }
