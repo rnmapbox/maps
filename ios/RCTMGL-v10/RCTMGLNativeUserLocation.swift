@@ -1,36 +1,44 @@
 import MapboxMaps
 
 @objc
-class RCTMGLNativeUserLocation : UIView {
+class RCTMGLNativeUserLocation : UIView, RCTMGLMapComponent {
   weak var map : RCTMGLMapView! = nil
   
   let locationLayerId = "location-layer"
 
   var locationLayer : LocationIndicatorLayer? = nil
 
+  var visible : Bool = false
+
   @objc
   var iosShowsUserHeadingIndicator : Bool = false {
     didSet {
-      
+      if visible {
+        if let map = self.map {
+          map.location.options.puckType = .puck2D(.makeDefault(showBearing: iosShowsUserHeadingIndicator))
+        }
+      }
     }
   }
 
-  func addToMap(map: RCTMGLMapView) {
+  func addToMap(_ map: RCTMGLMapView, style: Style) {
     self.map = map
     
-    let layer = LocationIndicatorLayer(id: locationLayerId)
-    self.locationLayer = layer
-    try! map.mapboxMap.style.addLayer(layer, layerPosition: .default)
+    visible = true
+    
+    map.location.options.puckType = .puck2D(.makeDefault(showBearing: iosShowsUserHeadingIndicator))
   }
 
-  func removeFromMap(map: RCTMGLMapView) {
+  func removeFromMap(_ map: RCTMGLMapView) {
     guard let mapboxMap = map.mapboxMap else {
       return
     }
+    visible = false
     let style = mapboxMap.style
-    if let layer = locationLayer {
-      try! style.removeLayer(withId: layer.id)
-      self.locationLayer = nil
-    }
+    map.location.options.puckType = .none
+  }
+  
+  func waitForStyleLoad() -> Bool {
+    return true
   }
 }
