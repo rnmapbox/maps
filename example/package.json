@@ -31,8 +31,8 @@
     "fbjs": "^3.0.0",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
-    "react": "17.0.2",
-    "react-native": "0.68.1",
+    "react": "18.0.0",
+    "react-native": "0.69.4",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-safe-area-context": "^3.1.9",
@@ -40,7 +40,8 @@
     "react-native-svg": "^12.1.0",
     "react-native-vector-icons": "9.0.0",
     "react-navigation": "^4.4.4",
-    "react-navigation-stack": "^2.10.4"
+    "react-navigation-stack": "^2.10.4",
+    "deprecated-react-native-prop-types": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
