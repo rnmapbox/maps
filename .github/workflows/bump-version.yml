@@ -42,7 +42,6 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '16'
-        cache: false
 
     - name: Setup Git
       run: |
