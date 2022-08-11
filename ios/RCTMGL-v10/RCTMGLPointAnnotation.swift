@@ -118,6 +118,9 @@ class RCTMGLPointAnnotation : UIView, RCTMGLMapComponent {
       self.callout = callout
     } else {
       reactSubviews.insert(subview, at: atIndex)
+      if reactSubviews.count > 1 {
+        Logger.log(level: .error, message: "PointAnnotation supports max 1 subview other than a callout")
+      }
       if annotation.image == nil {
         DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(10)) {
           self.setAnnotationImage()
@@ -129,7 +132,9 @@ class RCTMGLPointAnnotation : UIView, RCTMGLMapComponent {
   @objc
   override func removeReactSubview(_ subview: UIView!) {
     if let callout = subview as? RCTMGLCallout {
-      // TODO
+      if self.callout == callout {
+        self.callout = nil
+      }
     } else {
       reactSubviews.removeAll(where: { $0 == subview })
     }

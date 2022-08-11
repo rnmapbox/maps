@@ -5,6 +5,30 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
   
   var map: RCTMGLMapView? = nil
   
+  
+  // MARK: - react view
+  var reactSubviews : [UIView] = []
+
+  @objc
+  override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
+    if subview is RCTMGLCallout {
+      Logger.log(level: .warn, message: "MarkerView doesn't supports callouts")
+    }
+    reactSubviews.insert(subview, at: atIndex)
+    if reactSubviews.count > 1 {
+      Logger.log(level: .error, message: "MarkerView supports max 1 subview")
+    }
+  }
+
+  @objc
+  override func removeReactSubview(_ subview: UIView!) {
+    reactSubviews.removeAll(where: { $0 == subview })
+  }
+  
+  func view() -> UIView? {
+    return reactSubviews.first
+  }
+  
   // MARK: - RCTMGLMapComponent
 
   func waitForStyleLoad() -> Bool {
@@ -18,7 +42,12 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
 
       try point.coordinates.validate()
 
-      try viewAnnotations()?.add(self, options: ViewAnnotationOptions.init(geometry: Geometry.point(point), width: self.bounds.width, height: self.bounds.height, associatedFeatureId: nil, allowOverlap: true, visible: true, anchor: .center, offsetX: 0, offsetY: 0, selected: false))
+      guard let view = view() else {
+        Logger.log(level: .error, message: "MarkerView: No subview to render")
+        return
+      }
+      let bounds = view.bounds
+      try viewAnnotations()?.add(view, options: ViewAnnotationOptions.init(geometry: Geometry.point(point), width: bounds.width, height: bounds.height, associatedFeatureId: nil, allowOverlap: true, visible: true, anchor: .center, offsetX: 0, offsetY: 0, selected: false))
     }
   }
   
@@ -27,7 +56,11 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
   }
 
   func removeFromMap(_ map: RCTMGLMapView) {
-    viewAnnotations()?.remove(self)
+    guard let view = view() else {
+      Logger.log(level: .error, message: "MarkerView: No subview to render")
+      return
+    }
+    viewAnnotations()?.remove(view)
     self.map = map
   }
   
@@ -81,9 +114,14 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
   }
   
   func _updateFrameOrAnchor() {
+    guard let view = view() else {
+      Logger.log(level:.warn, message: "MarkerView: No subview to render")
+      return
+    }
     var options = ViewAnnotationOptions()
     let defaultX : CGFloat = 0.5
     let defaultY : CGFloat = 0.5
+    let bounds = view.bounds
     options.width = bounds.width
     options.height = bounds.height
     
