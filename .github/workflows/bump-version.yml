@@ -1,0 +1,58 @@
+# This is a basic workflow that is manually triggered
+
+name: Bump version
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      version:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Semver type of new version (major / minor / patch)'
+        # Input has to be provided for the workflow to run
+        required: true
+        type: choice
+        options: 
+        - patch
+        - minor
+        - major
+        - prerelease --preid=beta
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "bump-version"
+  bump-version:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Check out the content (source branch).  Use a deploy key so that
+    # when we push changes, it will trigger the release workflow
+    # run that runs on: tag. (Using the GitHub token would
+    # not run the workflow to prevent infinite recursion.)
+    - name: Check out source
+      uses: actions/checkout@v2
+      with:
+        ssh-key: ${{ secrets.DEPLOY_KEY }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+        cache: 'npm'
+
+    - name: Install npm packages
+      run: npm ci
+
+    - name: Setup Git
+      run: |
+        git config user.name 'RNMapbox robot'
+        git config user.email 'rnmapbox@gmail.com'
+    - name: bump version
+      run: npm version ${{ github.event.inputs.version }}
+
+    - name: Push latest version
+      run: git push origin main --follow-tags
