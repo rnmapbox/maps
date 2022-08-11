@@ -42,10 +42,7 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '16'
-        cache: 'npm'
-
-    - name: Install npm packages
-      run: npm ci
+        cache: false
 
     - name: Setup Git
       run: |
