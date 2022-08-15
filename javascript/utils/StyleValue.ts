@@ -1,5 +1,4 @@
-import { processColor } from 'react-native';
-import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
+import { Image, processColor } from 'react-native';
 
 import { getStyleType } from './styleMap';
 import BridgeValue from './BridgeValue';
@@ -30,7 +29,7 @@ export function transformStyle(
     if (styleType === 'color' && typeof rawStyle === 'string') {
       rawStyle = processColor(rawStyle);
     } else if (styleType === 'image' && typeof rawStyle === 'number') {
-      rawStyle = resolveAssetSource(rawStyle) || {};
+      rawStyle = Image.resolveAssetSource(rawStyle) || {};
     }
 
     const bridgeValue = new BridgeValue(rawStyle);
