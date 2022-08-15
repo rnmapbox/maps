@@ -14,7 +14,7 @@
     "purge:js": "rm -rf node_modules && yarn cache clean && watchman watch-del-all",
     "purge": "yarn purge:js && yarn purge:android && yarn purge:ios",
     "fix-nvm-ios": "node ./scripts/fix_nvm_issue.js",
-    "type:check": "yarn tsc --noEmit"
+    "type:check": "tsc --noEmit"
   },
   "dependencies": {
     "@mapbox/geo-viewport": "^0.5.0",
