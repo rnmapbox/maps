@@ -177,8 +177,6 @@ class RCTMGLPointAnnotation : RCTMGLInteractiveElement {
     }
   }
   
-  // MARK: - RCTMGLSource
-  
   @objc
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     if let callout = subview as? RCTMGLCallout {
