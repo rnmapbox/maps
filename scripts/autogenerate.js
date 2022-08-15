@@ -464,8 +464,8 @@ async function generate() {
       only: 'v10',
     },
     {
-      input: path.join(TMPL_PATH, 'styleMap.js.ejs'),
-      output: path.join(JS_OUTPUT_PATH, 'styleMap.js'),
+      input: path.join(TMPL_PATH, 'styleMap.ts.ejs'),
+      output: path.join(JS_OUTPUT_PATH, 'styleMap.ts'),
     },
   ];
   const outputPaths = templateMappings.map((m) => m.output);
