@@ -72,7 +72,7 @@ yarn start
 * Start Android emulator
 * Run `yarn android` from `example` directory
 
-**NOTE**
+### Common Issues
 
 If the build fails make sure gradle has permission to build from cli
 ```
@@ -88,7 +88,9 @@ You can run this with the react-native cli or Xcode
 
 * Run `yarn ios` from `example` directory
 
-**NOTE**
+### Common Issues
+
+If you are using [`nvm`](https://github.com/nvm-sh/nvm), make sure you copy [ios/.xcode.env](./ios/.xcode.env) as `ios/.xcode.env.local` and modify as described inside the file.
 
 If you run into
 
