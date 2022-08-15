@@ -1,7 +1,7 @@
 @_spi(Experimental) import MapboxMaps
 
 @objc
-class RCTMGLSource : RCTMGLInteractiveComponent {
+class RCTMGLSource : RCTMGLInteractiveElement {
   
   var source : Source? = nil
 
@@ -24,7 +24,7 @@ class RCTMGLSource : RCTMGLInteractiveComponent {
     }
   }
   
-  // MARK: - RCTMGLInteractiveComponent
+  // MARK: - RCTMGLInteractiveElement
   
   override func addToMap(_ map: RCTMGLMapView, style: Style) {
     self.map = map

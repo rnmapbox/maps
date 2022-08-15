@@ -1,7 +1,7 @@
 @_spi(Experimental) import MapboxMaps
 
 @objc
-class RCTMGLInteractiveComponent : UIView, RCTMGLMapComponent {
+class RCTMGLInteractiveElement : UIView, RCTMGLMapComponent {
 
   var map : RCTMGLMapView? = nil
   

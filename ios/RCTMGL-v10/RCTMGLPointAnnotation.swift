@@ -10,7 +10,7 @@ final class WeakRef<T: AnyObject> {
 }
 
 
-class RCTMGLPointAnnotation : RCTMGLInteractiveComponent {
+class RCTMGLPointAnnotation : RCTMGLInteractiveElement {
   static let key = "RCTMGLPointAnnotation"
   static var gid = 0;
   
@@ -222,7 +222,7 @@ class RCTMGLPointAnnotation : RCTMGLInteractiveComponent {
     }
   }
   
-  // MARK: - RCTMGLInteractiveComponent
+  // MARK: - RCTMGLInteractiveElement
   
   override func getLayerIDs() -> [String] {
     return []
