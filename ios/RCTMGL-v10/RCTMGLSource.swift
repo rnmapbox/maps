@@ -1,29 +1,11 @@
 @_spi(Experimental) import MapboxMaps
 
 @objc
-class RCTMGLSource : UIView, RCTMGLMapComponent {
+class RCTMGLSource : RCTMGLInteractiveComponent {
   
   var source : Source? = nil
 
   var ownsSource : Bool = false
-
-  var map : RCTMGLMapView? = nil
-  
-  static let hitboxDefault = 44.0
-
-  @objc var hitbox : [String:NSNumber] = [
-    "width": NSNumber(value: hitboxDefault),
-    "height": NSNumber(value: hitboxDefault)
-  ]
-  
-  @objc var id: String! = nil
-  
-  @objc var hasPressListener: Bool = false
-  @objc var draggable: Bool = false
-  @objc var onDragStart: RCTBubblingEventBlock? = nil
-  @objc var onPress: RCTBubblingEventBlock? = nil
-  
-  var layers: [RCTMGLSourceConsumer] = []
   
   func makeSource() -> Source {
     fatalError("Subclasses should override makeSource")
@@ -31,14 +13,6 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
   
   func sourceType() -> Source.Type {
     fatalError("Subclasses should override makeSource")
-  }
-
-  func isDraggable() -> Bool {
-    return draggable
-  }
-  
-  func isTouchable() -> Bool {
-    return hasPressListener
   }
   
   @objc override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
@@ -50,13 +24,9 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
     }
   }
   
-  // MARK: - RCTMGLMapComponent
-
-  func waitForStyleLoad() -> Bool {
-    return true
-  }
+  // MARK: - RCTMGLInteractiveComponent
   
-  func addToMap(_ map: RCTMGLMapView, style: Style) {
+  override func addToMap(_ map: RCTMGLMapView, style: Style) {
     self.map = map
     
     map.onMapStyleLoaded { mapboxMap in
@@ -77,7 +47,7 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
     }
   }
 
-  func removeFromMap(_ map: RCTMGLMapView) {
+  override func removeFromMap(_ map: RCTMGLMapView) {
     self.map = nil
     
     for layer in self.layers {
@@ -90,16 +60,6 @@ class RCTMGLSource : UIView, RCTMGLMapComponent {
         try style.removeSource(withId: id)
       }
       self.ownsSource = false
-    }
-  }
-
-  func getLayerIDs() -> [String] {
-    layers.compactMap {
-      if let layer = $0 as? RCTMGLLayer {
-        return layer.id
-      } else {
-        return nil
-      }
     }
   }
 }

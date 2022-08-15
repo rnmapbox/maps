@@ -10,7 +10,7 @@ final class WeakRef<T: AnyObject> {
 }
 
 
-class RCTMGLPointAnnotation : RCTMGLSource {
+class RCTMGLPointAnnotation : RCTMGLInteractiveComponent {
   static let key = "RCTMGLPointAnnotation"
   static var gid = 0;
   
@@ -116,36 +116,6 @@ class RCTMGLPointAnnotation : RCTMGLSource {
     }
   }
    
-  var reactSubviews : [UIView] = []
-
-  @objc
-  override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
-    if let callout = subview as? RCTMGLCallout {
-      self.callout = callout
-    } else {
-      reactSubviews.insert(subview, at: atIndex)
-      if reactSubviews.count > 1 {
-        Logger.log(level: .error, message: "PointAnnotation supports max 1 subview other than a callout")
-      }
-      if annotation.image == nil {
-        DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(10)) {
-          self.setAnnotationImage()
-        }
-      }
-    }
-  }
-
-  @objc
-  override func removeReactSubview(_ subview: UIView!) {
-    if let callout = subview as? RCTMGLCallout {
-      if self.callout == callout {
-        self.callout = nil
-      }
-    } else {
-      reactSubviews.removeAll(where: { $0 == subview })
-    }
-  }
-   
   func _createViewSnapshot() -> UIImage? {
     let useDummyImage = false
     if useDummyImage {
@@ -208,14 +178,15 @@ class RCTMGLPointAnnotation : RCTMGLSource {
     }
   }
   
-  // MARK: - RCTMGLSource
-  
   @objc
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     if let callout = subview as? RCTMGLCallout {
       self.callout = callout
     } else {
       reactSubviews.insert(subview, at: atIndex)
+      if reactSubviews.count > 1 {
+        Logger.log(level: .error, message: "PointAnnotation supports max 1 subview other than a callout")
+      }
       if annotation.image == nil {
         DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(10)) {
           self.setAnnotationImage()
@@ -227,11 +198,15 @@ class RCTMGLPointAnnotation : RCTMGLSource {
   @objc
   override func removeReactSubview(_ subview: UIView!) {
     if let callout = subview as? RCTMGLCallout {
-      // TODO
+      if self.callout == callout {
+        self.callout = nil
+      }
     } else {
       reactSubviews.removeAll(where: { $0 == subview })
     }
   }
+  
+  // MARK: - RCTMGLMapComponent
   
   override func addToMap(_ map: RCTMGLMapView, style: Style) {
     self.map = map
@@ -245,6 +220,12 @@ class RCTMGLPointAnnotation : RCTMGLSource {
     if (annotation != nil) {
       self.map?.pointAnnotationManager.remove(annotation)
     }
+  }
+  
+  // MARK: - RCTMGLInteractiveComponent
+  
+  override func getLayerIDs() -> [String] {
+    return []
   }
 }
 
