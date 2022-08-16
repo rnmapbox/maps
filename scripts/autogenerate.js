@@ -516,6 +516,13 @@ async function generate() {
         'Please add them to your commit.\n' +
         'If you would really like to exlude them, run "git commit -n" to skip.\n\n',
     );
+    const showDiff = true;
+    if (showDiff) {
+      console.log(`=> git diff docs/ ${outputPaths.join(' ')}`);
+      execSync(`git diff docs/ ${outputPaths.join(' ')} | head -n 20`, {
+        stdio: 'inherit',
+      });
+    }
     process.exit(1);
   }
 }
