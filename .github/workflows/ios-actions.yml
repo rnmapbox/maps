@@ -61,9 +61,10 @@ jobs:
         run: |
           brew tap wix/brew
           brew install applesimutils
+          brew install xcbeautify
 
       - name: Build for detox
-        run: yarn detox build
+        run: yarn detox build | xcbeautify -qq
 
       - name: Test with detox
         run: yarn detox test --debug-synchronization 200
