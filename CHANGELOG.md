@@ -1,5 +1,7 @@
 ## UNRELEASED
 
+Add aboveLayerID to UserLocation ([#2135](https://github.com/rnmapbox/maps/pull/2135))
+
 ```
 Please add unreleased changes in the following style:
 PR Title ([#123](link to my pr))
