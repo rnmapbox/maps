@@ -34,6 +34,7 @@ class RCTMGLEvent : NSObject, RCTMGLEventProtocol {
       case offlineProgress
       case offlineError
       case offlineTileLimit
+      case onUserTrackingModeChange
       case vectorSourceLayerPress
       case shapeSourceLayerPress
     }
