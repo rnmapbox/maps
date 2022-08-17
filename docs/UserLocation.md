@@ -9,6 +9,7 @@
 | renderMode | `enum` | `'normal'` | `false` | Which render mode to use.<br/>Can either be `normal` or `native` |
 | androidRenderMode | `enum` | `none` | `false` | native/android only render mode<br/><br/> - normal: just a circle<br/> - compass: triangle with heading<br/> - gps: large arrow<br/><br/>@platform android |
 | visible | `bool` | `true` | `false` | Whether location icon is visible |
+| aboveLayerID | `string` | `undefined` | `false` | In `normal` render mode, optional layer above which to render location indicator |
 | onPress | `func` | `none` | `false` | Callback that is triggered on location icon press |
 | onUpdate | `func` | `none` | `false` | Callback that is triggered on location update |
 | showsUserHeadingIndicator | `bool` | `false` | `false` | Show or hide small arrow which indicates direction the device is pointing relative to north. |

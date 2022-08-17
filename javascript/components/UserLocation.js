@@ -31,15 +31,17 @@ const layerStyles = {
   },
 };
 
-export const normalIcon = (showsUserHeadingIndicator, heading) => [
+export const normalIcon = (showsUserHeadingIndicator, heading, aboveLayerID) => [
   <CircleLayer
     key="mapboxUserLocationPluseCircle"
     id="mapboxUserLocationPluseCircle"
+    aboveLayerID={aboveLayerID}
     style={layerStyles.normal.pluse}
   />,
   <CircleLayer
     key="mapboxUserLocationWhiteCircle"
     id="mapboxUserLocationWhiteCircle"
+    aboveLayerID="mapboxUserLocationPluseCircle"
     style={layerStyles.normal.background}
   />,
   <CircleLayer
@@ -83,6 +85,11 @@ class UserLocation extends React.Component {
     visible: PropTypes.bool,
 
     /**
+     * In `normal` render mode, optional layer above which to render location indicator
+     */
+    aboveLayerID: PropTypes.string,
+
+    /**
      * Callback that is triggered on location icon press
      */
     onPress: PropTypes.func,
@@ -111,6 +118,7 @@ class UserLocation extends React.Component {
   static defaultProps = {
     animated: true,
     visible: true,
+    aboveLayerID: undefined,
     showsUserHeadingIndicator: false,
     minDisplacement: 0,
     renderMode: 'normal',
@@ -240,7 +248,7 @@ class UserLocation extends React.Component {
 
   render() {
     const { heading, coordinates } = this.state;
-    const { children, visible, showsUserHeadingIndicator, onPress, animated } =
+    const { children, visible, aboveLayerID, showsUserHeadingIndicator, onPress, animated } =
       this.props;
 
     if (!visible) {
@@ -265,7 +273,7 @@ class UserLocation extends React.Component {
           iconRotate: heading,
         }}
       >
-        {children || normalIcon(showsUserHeadingIndicator, heading)}
+        {children || normalIcon(showsUserHeadingIndicator, heading, aboveLayerID)}
       </Annotation>
     );
   }

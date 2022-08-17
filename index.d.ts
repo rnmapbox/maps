@@ -605,6 +605,7 @@ export interface UserLocationProps {
   renderMode?: 'normal' | 'native';
   showsUserHeadingIndicator?: boolean;
   visible?: boolean;
+  aboveLayerID?: string;
 }
 
 export type WithExpression<T> = {

@@ -5720,6 +5720,13 @@
         "description": "Whether location icon is visible"
       },
       {
+        "name": "aboveLayerID",
+        "required": false,
+        "type": "string",
+        "default": "undefined",
+        "description": "In `normal` render mode, optional layer above which to render location indicator"
+      },
+      {
         "name": "onPress",
         "required": false,
         "type": "func",
