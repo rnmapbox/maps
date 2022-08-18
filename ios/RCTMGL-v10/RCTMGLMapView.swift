@@ -43,9 +43,10 @@ open class RCTMGLMapView : MapView {
     if let mapComponent = subview as? RCTMGLMapComponent {
       let style = mapView.mapboxMap.style
       if mapComponent.waitForStyleLoad() {
-        onStyleLoadedComponents.append(mapComponent)
-        if (style.isLoaded) {
+        if (self.styleLoaded) {
           mapComponent.addToMap(self, style: style)
+        } else {
+          onStyleLoadedComponents.append(mapComponent)
         }
       } else {
         mapComponent.addToMap(self, style: style)
@@ -62,8 +63,9 @@ open class RCTMGLMapView : MapView {
     if let mapComponent = subview as? RCTMGLMapComponent {
       if mapComponent.waitForStyleLoad() {
         onStyleLoadedComponents.removeAll { $0 === mapComponent }
+      } else {
+        mapComponent.removeFromMap(self)
       }
-      mapComponent.removeFromMap(self)
     } else {
       subview.reactSubviews()?.forEach { removeFromMap($0) }
     }
