@@ -74,6 +74,16 @@ target 'RNMapboxGLExample' do
     $RNMapboxMaps.pre_install(installer)
   end
 
+  def disable_optimizations_in_release(installer)
+    installer.pods_project.build_configurations.each do |config|
+      if config.name.include?("Release")
+        config.build_settings['GCC_OPTIMIZATION_LEVEL'] = '0'
+        config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] = '-Onone'
+        config.build_settings['SWIFT_COMPILATION_MODE'] = 'singlefile'
+      end
+    end
+  end
+
   if !ENV['CI']
     post_install do |installer|
       installer.pods_project.targets.each do |target|
@@ -90,6 +100,7 @@ target 'RNMapboxGLExample' do
     post_install do |installer|
       react_native_post_install(installer)
       __apply_Xcode_12_5_M1_post_install_workaround(installer) if defined?(__apply_Xcode_12_5_M1_post_install_workaround)
+      disable_optimizations_in_release(installer)
       $RNMapboxMaps.post_install(installer)
     end
   end

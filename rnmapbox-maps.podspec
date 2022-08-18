@@ -192,8 +192,8 @@ def $RNMapboxMaps.pre_install(installer)
   installer.aggregate_targets.each do |target|
     target.pod_targets.select { |p| $rnMapboxMapsTargetsToChangeToDynamic.include?(p.name) }.each do |mobile_events_target|
       mobile_events_target.instance_variable_set(:@build_type,Pod::BuildType.dynamic_framework)
-      puts "* [RNMBGL] Changed #{mobile_events_target.name} to #{mobile_events_target.send(:build_type)}"
-      fail "* [RNMBGL] Unable to change build_type" unless mobile_events_target.send(:build_type) == Pod::BuildType.dynamic_framework
+      puts "* [RNMapbox] Changed #{mobile_events_target.name} to #{mobile_events_target.send(:build_type)}"
+      fail "* [RNMapbox] Unable to change build_type" unless mobile_events_target.send(:build_type) == Pod::BuildType.dynamic_framework
     end
   end
 end
