@@ -63,9 +63,8 @@ open class RCTMGLMapView : MapView {
     if let mapComponent = subview as? RCTMGLMapComponent {
       if mapComponent.waitForStyleLoad() {
         onStyleLoadedComponents.removeAll { $0 === mapComponent }
-      } else {
-        mapComponent.removeFromMap(self)
       }
+      mapComponent.removeFromMap(self)
     } else {
       subview.reactSubviews()?.forEach { removeFromMap($0) }
     }
