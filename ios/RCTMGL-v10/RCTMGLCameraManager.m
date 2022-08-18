@@ -4,10 +4,17 @@
 
 @interface RCT_EXTERN_MODULE(RCTMGLCameraManager, RCTViewManager)
 
-RCT_EXPORT_VIEW_PROPERTY(stop, NSDictionary)
+RCT_EXPORT_VIEW_PROPERTY(animationDuration, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(animationMode, NSString)
 RCT_EXPORT_VIEW_PROPERTY(defaultStop, NSDictionary)
-RCT_EXPORT_VIEW_PROPERTY(minZoomLevel, NSNumber)
-RCT_EXPORT_VIEW_PROPERTY(maxZoomLevel, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(followHeading, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(followPitch, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(followUserLocation, BOOL)
+RCT_EXPORT_VIEW_PROPERTY(followUserMode, NSString)
+RCT_EXPORT_VIEW_PROPERTY(followZoomLevel, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(maxZoomLevel, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(minZoomLevel, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(onUserTrackingModeChange, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(stop, NSDictionary)
 
 @end

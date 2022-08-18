@@ -47,6 +47,8 @@ type NativeAnimationMode = 'flight' | 'ease' | 'linear' | 'none' | 'move';
 interface NativeCameraProps extends CameraFollowConfig {
   testID?: string;
   stop: NativeCameraStop | null;
+  animationDuration?: number;
+  animationMode?: CameraAnimationMode;
   defaultStop?: NativeCameraStop | null;
   minZoomLevel?: number;
   maxZoomLevel?: number;
@@ -500,6 +502,8 @@ export const Camera = memo(
           testID={'Camera'}
           ref={nativeCamera}
           stop={nativeStop}
+          animationDuration={animationDuration}
+          animationMode={animationMode}
           defaultStop={nativeDefaultStop}
           followUserLocation={followUserLocation}
           followUserMode={followUserMode}
