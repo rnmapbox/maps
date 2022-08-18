@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios --simulator=\"iPhone SE (2nd generation)\"",
+    "ios": "react-native run-ios --simulator=\"iPhone SE (3rd generation)\"",
     "pod:install": "cd ios && pod install",
     "preios": "yarn pod:install && yarn fix-nvm-ios",
     "start": "react-native start",
@@ -62,7 +62,7 @@
     "apps": {
       "ios": {
         "type": "ios.app",
-        "build": "xcodebuild -quiet -workspace ios/RNMapboxGLExample.xcworkspace -configuration Release -scheme RNMapboxGLExample -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,name=iPhone SE (2nd generation)'",
+        "build": "xcodebuild -quiet -workspace ios/RNMapboxGLExample.xcworkspace -configuration Release -scheme RNMapboxGLExample -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,name=iPhone SE (3rd generation)'",
         "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/RNMapboxGLExample.app"
       }
     },
@@ -70,7 +70,7 @@
       "simulator": {
         "type": "ios.simulator",
         "device": {
-          "type": "iPhone SE (2nd generation)"
+          "type": "iPhone SE (3rd generation)"
         }
       }
     },

@@ -363,13 +363,13 @@ PODS:
     - React-perflogger (= 0.69.4)
   - RNGestureHandler (2.5.0):
     - React-Core
-  - rnmapbox-maps (10.0.0-beta.24):
+  - rnmapbox-maps (10.0.0-beta.25):
     - MapboxMaps (~> 10.7.0)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.0.0-beta.24)
+    - rnmapbox-maps/DynamicLibrary (= 10.0.0-beta.25)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.0.0-beta.24):
+  - rnmapbox-maps/DynamicLibrary (10.0.0-beta.25):
     - MapboxMaps (~> 10.7.0)
     - React
     - React-Core
@@ -603,7 +603,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 61ee22a8cdf8b6bb2a7fb7b4ba2cc763e5285196
   ReactCommon: 8f67bd7e0a6afade0f20718f859dc8c2275f2e83
   RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
-  rnmapbox-maps: dcb5ac5ec7c376a2f73126e03e69f33e4f42f76e
+  rnmapbox-maps: 1a68a37f3d28e084423495d23b2a4e4aab6c36e1
   RNScreens: 6e1ea5787989f92b0671049b808aef64fa1ef98c
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
@@ -612,6 +612,6 @@ SPEC CHECKSUMS:
   Yoga: ff994563b2fd98c982ca58e8cd9db2cdaf4dda74
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 41999ef5b51033c2401343c43db2d7633ce10e44
+PODFILE CHECKSUM: 78d3456aa99ae9769f2dd837f9d7959cc74bf5b6
 
 COCOAPODS: 1.11.2
