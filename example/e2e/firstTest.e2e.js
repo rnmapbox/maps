@@ -18,8 +18,7 @@ describe('Maps Example App', () => {
     await element(by.text('Map')).tap();
     await expect(element(by.text('Show Map'))).toBeVisible();
     await element(by.text('Show Map')).tap();
-    await expect(element(by.text('Light'))).toBeVisible();
-    await element(by.text('Light')).tap();
+    await expect(element(by.id('show-map'))).toBeVisible();
   });
 
   it('should show click location', async () => {

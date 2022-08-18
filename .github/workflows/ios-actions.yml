@@ -64,7 +64,8 @@ jobs:
           brew install xcbeautify
 
       - name: Build for detox
-        run: yarn detox build | xcbeautify -qq
+        run: yarn detox build --configuration ios.debug | xcbeautify -qq
 
       - name: Test with detox
-        run: yarn detox test --debug-synchronization 200 --loglevel verbose
+        run: |
+          yarn detox test --configuration ios.debug --debug-synchronization 200 --loglevel verbose
