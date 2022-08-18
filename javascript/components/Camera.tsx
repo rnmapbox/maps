@@ -47,6 +47,8 @@ type NativeAnimationMode = 'flight' | 'ease' | 'linear' | 'none' | 'move';
 interface NativeCameraProps extends CameraFollowConfig {
   testID?: string;
   stop: NativeCameraStop | null;
+  animationDuration?: number;
+  animationMode?: CameraAnimationMode;
   defaultStop?: NativeCameraStop | null;
   minZoomLevel?: number;
   maxZoomLevel?: number;
