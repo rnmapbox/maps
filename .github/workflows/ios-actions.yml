@@ -67,4 +67,4 @@ jobs:
         run: yarn detox build | xcbeautify -qq
 
       - name: Test with detox
-        run: yarn detox test --debug-synchronization 200
+        run: yarn detox test --debug-synchronization 200 --loglevel verbose
