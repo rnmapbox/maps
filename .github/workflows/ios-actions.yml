@@ -68,4 +68,12 @@ jobs:
 
       - name: Test with detox
         run: |
-          yarn detox test --configuration ios.debug --debug-synchronization 200 --loglevel verbose
+          npx detox --version
+          yarn detox test --configuration ios.debug --debug-synchronization 500 --loglevel trace --record-logs all --take-screenshots all
+
+      - name: Store Detox artifacts on test failure
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: detox-artifacts
+          path: example/artifacts
