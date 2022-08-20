@@ -64,7 +64,18 @@ jobs:
           brew install xcbeautify
 
       - name: Build for detox
-        run: yarn detox build | xcbeautify -qq
+        run: yarn detox build --configuration ios.debug | xcbeautify -qq
 
       - name: Test with detox
-        run: yarn detox test --debug-synchronization 200
+        run: |
+          npx detox --version
+          yarn detox test --configuration ios.debug --debug-synchronization 500 --loglevel trace --record-logs all --take-screenshots all
+        env:
+          SKIP_TESTS_NO_METAL: ${{ inputs.MAP_IMPL == 'mapbox' }}
+
+      - name: Store Detox artifacts on test failure
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: detox-artifacts
+          path: example/artifacts

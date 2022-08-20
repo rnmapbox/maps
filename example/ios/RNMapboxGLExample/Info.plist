@@ -24,6 +24,10 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>MetalCaptureEnabled</key>
+	<true/>
+	<key>MetalSimulatorEnabled</key>
+	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
@@ -35,8 +39,12 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Show current location on map</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Show current location on map</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Show current location on map</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

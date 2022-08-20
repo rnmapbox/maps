@@ -41,7 +41,11 @@ const ShowMap: FC<any> = (props) => {
       options={_mapOptions}
       onOptionPress={onMapChange}
     >
-      <MapboxGL.MapView styleURL={styleURL.styleURL} style={sheet.matchParent}>
+      <MapboxGL.MapView
+        styleURL={styleURL.styleURL}
+        style={sheet.matchParent}
+        testID={'show-map'}
+      >
         <MapboxGL.Camera followZoomLevel={12} followUserLocation />
 
         <MapboxGL.UserLocation onPress={onUserMarkerPress} />

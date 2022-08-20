@@ -19,6 +19,9 @@
   "dependencies": {
     "@mapbox/geo-viewport": "^0.5.0",
     "@mapbox/mapbox-sdk": "^0.13.0",
+    "@react-navigation/compat": "^5.3.20",
+    "@react-navigation/native": "^6.0.11",
+    "@react-navigation/native-stack": "^6.7.0",
     "@turf/along": "^6.5.0",
     "@turf/bbox": "^6.5.0",
     "@turf/bbox-polygon": "^6.5.0",
@@ -28,20 +31,18 @@
     "@turf/nearest-point-on-line": "6.5.0",
     "@types/mapbox__geo-viewport": "^0.4.1",
     "debounce": "^1.2.0",
+    "deprecated-react-native-prop-types": "^2.3.0",
     "fbjs": "^3.0.0",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react": "18.0.0",
     "react-native": "0.69.4",
-    "react-native-elements": "^3.4.2",
+    "react-native-elements": "^4.0.0-rc.2",
     "react-native-gesture-handler": "^2.5.0",
-    "react-native-safe-area-context": "^3.1.9",
+    "react-native-safe-area-context": "^4.3.3",
     "react-native-screens": "^3.0.0",
     "react-native-svg": "^12.1.0",
-    "react-native-vector-icons": "9.0.0",
-    "react-navigation": "^4.4.4",
-    "react-navigation-stack": "^2.10.4",
-    "deprecated-react-native-prop-types": "^2.3.0"
+    "react-native-vector-icons": "9.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -64,6 +65,11 @@
         "type": "ios.app",
         "build": "xcodebuild -quiet -workspace ios/RNMapboxGLExample.xcworkspace -configuration Release -scheme RNMapboxGLExample -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,name=iPhone SE (3rd generation)'",
         "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/RNMapboxGLExample.app"
+      },
+      "ios.debug": {
+        "type": "ios.app",
+        "build": "FORCE_BUNDLING=1 xcodebuild -quiet -workspace ios/RNMapboxGLExample.xcworkspace -configuration Debug -scheme RNMapboxGLExample GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS DEBUG_RCT_BUNDLE=1' -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,name=iPhone SE (3rd generation)'",
+        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/RNMapboxGLExample.app"
       }
     },
     "devices": {
@@ -78,6 +84,10 @@
       "ios": {
         "device": "simulator",
         "app": "ios"
+      },
+      "ios.debug": {
+        "device": "simulator",
+        "app": "ios.debug"
       }
     }
   }

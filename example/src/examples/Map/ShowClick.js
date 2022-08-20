@@ -54,9 +54,13 @@ class ShowClick extends React.Component {
     }
 
     return (
-      <Bubble>
-        <Text>Latitude: {this.state.latitude}</Text>
-        <Text>Longitude: {this.state.longitude}</Text>
+      <Bubble testID="location-bubble">
+        <Text testID="location-bubble-latitude">
+          Latitude: {this.state.latitude}
+        </Text>
+        <Text testID="location-bubble-longitude">
+          Longitude: {this.state.longitude}
+        </Text>
         <Text>Screen Point X: {this.state.screenPointX}</Text>
         <Text>Screen Point Y: {this.state.screenPointY}</Text>
       </Bubble>
@@ -66,7 +70,11 @@ class ShowClick extends React.Component {
   render() {
     return (
       <Page {...this.props}>
-        <MapboxGL.MapView style={sheet.matchParent} onPress={this.onPress}>
+        <MapboxGL.MapView
+          style={sheet.matchParent}
+          onPress={this.onPress}
+          testID={'show-click-map-view'}
+        >
           <MapboxGL.Camera centerCoordinate={DEFAULT_CENTER_COORDINATE} />
         </MapboxGL.MapView>
         {this.renderLastClicked()}

@@ -86,7 +86,11 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
 #if DEBUG
-  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
+  #if DEBUG_RCT_BUNDLE
+    return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+  #else
+    return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
+  #endif
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
