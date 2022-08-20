@@ -14,20 +14,28 @@ describe('Maps Example App', () => {
   });
 
   it('should render MapView', async () => {
-    await device.takeScreenshot('t2.0');
+    if (['true', 1, '1'].includes(process.env.SKIP_TESTS_NO_METAL)) {
+      console.debug(
+        '### Skipping tests as Metal is not available in this environment',
+      );
+      return;
+    }
+
     await expect(element(by.text('Map'))).toBeVisible();
-    await device.takeScreenshot('t2.1');
     await element(by.text('Map')).tap();
-    await device.takeScreenshot('t2.2');
     await expect(element(by.text('Show Map'))).toBeVisible();
-    await device.takeScreenshot('t2.3');
     await element(by.text('Show Map')).tap();
-    await device.takeScreenshot('t2.4');
     await expect(element(by.id('show-map'))).toBeVisible();
-    await device.takeScreenshot('t2.5');
   });
 
   it('should show click location', async () => {
+    if (['true', 1, '1'].includes(process.env.SKIP_TESTS_NO_METAL)) {
+      console.debug(
+        '### Skipping tests as Metal is not available in this environment',
+      );
+      return;
+    }
+
     await expect(element(by.text('Map'))).toBeVisible();
     await element(by.text('Map')).tap();
     await expect(element(by.text('Show Click'))).toBeVisible();

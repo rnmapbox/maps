@@ -70,6 +70,8 @@ jobs:
         run: |
           npx detox --version
           yarn detox test --configuration ios.debug --debug-synchronization 500 --loglevel trace --record-logs all --take-screenshots all
+        env:
+          SKIP_TESTS_NO_METAL: ${{ inputs.MAP_IMPL == 'mapbox' }}
 
       - name: Store Detox artifacts on test failure
         uses: actions/upload-artifact@v3
