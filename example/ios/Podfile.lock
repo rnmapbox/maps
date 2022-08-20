@@ -293,8 +293,12 @@ PODS:
   - React-jsinspector (0.69.4)
   - React-logger (0.69.4):
     - glog
-  - react-native-safe-area-context (3.2.0):
+  - react-native-safe-area-context (4.3.3):
+    - RCT-Folly
+    - RCTRequired
+    - RCTTypeSafety
     - React-Core
+    - ReactCommon/turbomodule/core
   - React-perflogger (0.69.4)
   - React-RCTActionSheet (0.69.4):
     - React-Core/RCTActionSheetHeaders (= 0.69.4)
@@ -374,7 +378,7 @@ PODS:
     - React
     - React-Core
     - Turf
-  - RNScreens (3.8.0):
+  - RNScreens (3.16.0):
     - React-Core
     - React-RCTImage
   - RNSVG (12.1.0):
@@ -589,7 +593,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: a27badbbdbc0ff781813370736a2d1c7261181d4
   React-jsinspector: 8a3d3f5dcd23a91e8c80b1bf0e96902cd1dca999
   React-logger: 1088859f145b8f6dd0d3ed051a647ef0e3e80fad
-  react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
+  react-native-safe-area-context: b456e1c40ec86f5593d58b275bd0e9603169daca
   React-perflogger: cb386fd44c97ec7f8199c04c12b22066b0f2e1e0
   React-RCTActionSheet: f803a85e46cf5b4066c2ac5e122447f918e9c6e5
   React-RCTAnimation: 19c80fa950ccce7f4db76a2a7f2cf79baae07fc7
@@ -604,7 +608,7 @@ SPEC CHECKSUMS:
   ReactCommon: 8f67bd7e0a6afade0f20718f859dc8c2275f2e83
   RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
   rnmapbox-maps: 1a68a37f3d28e084423495d23b2a4e4aab6c36e1
-  RNScreens: 6e1ea5787989f92b0671049b808aef64fa1ef98c
+  RNScreens: ee31ecdf23fe81e93c74feaa086cf173d758ab58
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608

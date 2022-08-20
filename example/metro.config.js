@@ -13,8 +13,10 @@ const inlineRequireBlockList = new Proxy(
   {
     has: (target, name) => {
       if (
-        name.endsWith('.js') &&
-        name.includes('/react-navigation-stack/lib/module/vendor/views/')
+        (name.endsWith('.js') &&
+          name.includes('/react-navigation-stack/lib/module/vendor/views/')) ||
+        (name.includes('@react-navigation/elements/src/') &&
+          name.endsWith('.tsx'))
       ) {
         return true;
       }
