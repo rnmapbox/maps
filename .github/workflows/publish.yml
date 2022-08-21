@@ -22,7 +22,7 @@ jobs:
           node-version: '14.x'
           registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies and build 🔧
-        run: npm install --force && npm run build
+        run: npm install --force
       - name: Publish package on NPM 📦
         run: npm publish
         env:
