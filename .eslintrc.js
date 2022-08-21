@@ -79,6 +79,7 @@ module.exports = {
     'fp/no-mutating-methods': 'warn',
     'react-native/no-inline-styles': 0,
   },
+  ignorePatterns: ['**/rnmapbox.symlink'],
   overrides: [
     {
       // Match TypeScript Files

@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { Icon } from 'react-native-elements';
+import { Icon } from '@rneui/base';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import Page from '../examples/common/Page';

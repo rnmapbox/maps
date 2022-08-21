@@ -27,5 +27,7 @@ class Camera extends React.Component {
   }
 }
 Camera.contextType = MapContext;
+Camera.UserTrackingModes = [];
 
+export { Camera };
 export default Camera;

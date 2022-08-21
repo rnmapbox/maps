@@ -1,5 +1,3 @@
-import { NativeModules, Platform } from 'react-native';
-
 import { Camera } from './components/Camera';
 import { Atmosphere } from './components/Atmosphere';
 import MapView from './components/MapView';
@@ -36,14 +34,10 @@ import AnimatedExtractCoordinateFromArray from './utils/animated/AnimatedExtract
 import AnimatedRouteCoordinatesArray from './utils/animated/AnimatedRouteCoordinatesArray';
 import Style from './components/Style';
 import Logger from './utils/Logger';
+import MGLModule from './utils/MGLModule';
 import { requestAndroidLocationPermissions } from './requestAndroidLocationPermissions';
 
-const MapboxGL = Platform.select({
-  native: () => ({ ...NativeModules.MGLModule }),
-  web: () => {
-    return require('./utils/MGLModuleForWeb').default;
-  },
-})();
+const MapboxGL = { ...MGLModule };
 
 // static methods
 MapboxGL.requestAndroidLocationPermissions = requestAndroidLocationPermissions;

@@ -1,7 +1,7 @@
 import React from 'react';
 import MapboxGL from '@rnmapbox/maps';
 import { Button, View } from 'react-native';
-import { ButtonGroup } from 'react-native-elements';
+import { ButtonGroup } from '@rneui/base';
 import PropTypes from 'prop-types';
 
 import sheet from '../../styles/sheet';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
-import { Slider } from 'react-native-elements';
+import { Slider } from '@rneui/base';
 
 import sheet from '../../styles/sheet';
 import colors from '../../styles/colors';

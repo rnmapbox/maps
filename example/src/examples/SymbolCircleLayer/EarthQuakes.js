@@ -1,6 +1,6 @@
 import React from 'react';
 import { FlatList } from 'react-native';
-import { Overlay, ListItem, FAB, Icon } from 'react-native-elements';
+import { Overlay, ListItem, FAB, Icon } from '@rneui/base';
 import MapboxGL from '@rnmapbox/maps';
 import moment from 'moment';
 
