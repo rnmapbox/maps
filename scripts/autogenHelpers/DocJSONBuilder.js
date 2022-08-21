@@ -23,7 +23,7 @@ const IGNORE_FILES = [
   'AbstractSource',
   'NativeBridgeComponent',
 ];
-const IGNORE_PATTERN = /\.web$/;
+const IGNORE_PATTERN = /\.web\./;
 
 const IGNORE_METHODS = ['setNativeProps'];
 

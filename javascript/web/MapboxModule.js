@@ -1,6 +1,6 @@
 import mapboxgl from 'mapbox-gl';
 
-const MGLModule = {
+const MapboxModule = {
   LineJoin: {},
 
   StyleURL: {
@@ -13,4 +13,4 @@ const MGLModule = {
   },
 };
 
-export default MGLModule;
+export default MapboxModule;

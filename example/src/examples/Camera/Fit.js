@@ -117,7 +117,7 @@ class Fit extends React.Component {
                 backgroundColor: button.selected ? 'coral' : '#d8d8d8',
                 borderRadius: 5,
               }}
-            onPress={button.onPress}
+              onPress={button.onPress}
             >
               <Text>{button.title}</Text>
             </TouchableOpacity>
