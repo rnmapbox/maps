@@ -7,7 +7,7 @@ updates:
       interval: "monthly"
     labels:
       - "🤖 dependabot 🤖"
-    open-pull-requests-limit: 99
+    open-pull-requests-limit: 1
     pull-request-branch-name:
       separator: "-"
     ignore: # ignore updates for react-native deps, think about updating, once react-native is updated
@@ -28,7 +28,7 @@ updates:
       interval: "monthly"
     labels:
       - "🤖 dependabot 🤖"
-    open-pull-requests-limit: 99
+    open-pull-requests-limit: 1
     pull-request-branch-name:
       separator: "-"
   # gh-actions workflow files
