@@ -20,8 +20,10 @@ import com.mapbox.maps.extension.style.layers.Layer
 import com.mapbox.maps.extension.style.layers.generated.*
 import com.mapbox.maps.extension.style.layers.getLayer
 import com.mapbox.maps.extension.style.layers.properties.generated.Visibility
+import com.mapbox.maps.plugin.annotation.Annotation
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
+import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationDragListener
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
@@ -79,6 +81,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     private val mHandledMapChangedEvents: HashSet<String>? = null
     private var mOffscreenAnnotationViewContainer: ViewGroup? = null
     private var mAnnotationClicked = false
+    private var mAnnotationDragged = false
     private var mLocationComponentManager: LocationComponentManager? = null
     var tintColor: Int? = null
         private set
@@ -89,6 +92,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 val _this = this
                 val gesturesPlugin: GesturesPlugin = this.gestures
                 gesturesPlugin.removeOnMapClickListener(_this)
+                gesturesPlugin.removeOnMapLongClickListener(_this)
 
                 mPointAnnotationManager = annotations.createPointAnnotationManager()
                 mPointAnnotationManager?.addClickListener(OnPointAnnotationClickListener { pointAnnotation ->
@@ -96,7 +100,47 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                         false
                     }
                 )
+                mPointAnnotationManager?.addDragListener(object : OnPointAnnotationDragListener {
+                    override fun onAnnotationDragStarted(_annotation: Annotation<*>) {
+                        mAnnotationDragged = true;
+                        var reactAnnotation: RCTMGLPointAnnotation? = null
+                        for (key in mPointAnnotations.keys) {
+                            val annotation = mPointAnnotations[key]
+                            val curMarkerID = annotation?.mapboxID
+                            if (_annotation.id == curMarkerID) {
+                                reactAnnotation = annotation
+                            }
+                        }
+                        reactAnnotation?.let { it.onDragStart() }
+                    }
+
+                   override fun onAnnotationDrag(_annotation: Annotation<*>) {
+                        var reactAnnotation: RCTMGLPointAnnotation? = null
+                        for (key in mPointAnnotations.keys) {
+                            val annotation = mPointAnnotations[key]
+                            val curMarkerID = annotation?.mapboxID
+                            if (_annotation.id == curMarkerID) {
+                                reactAnnotation = annotation
+                            }
+                        }
+                        reactAnnotation?.let { it.onDrag() }
+                    }
+
+                    override fun onAnnotationDragFinished(_annotation: Annotation<*>) {
+                        mAnnotationDragged = false;
+                        var reactAnnotation: RCTMGLPointAnnotation? = null
+                        for (key in mPointAnnotations.keys) {
+                            val annotation = mPointAnnotations[key]
+                            val curMarkerID = annotation?.mapboxID
+                            if (_annotation.id == curMarkerID) {
+                                reactAnnotation = annotation
+                            }
+                        }
+                        reactAnnotation?.let { it.onDragEnd() }
+                    }
+                })
                 gesturesPlugin.addOnMapClickListener(_this)
+                gesturesPlugin.addOnMapLongClickListener(_this)
 
             }
             return mPointAnnotationManager
@@ -106,7 +150,6 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         map.getStyle(object : Style.OnStyleLoaded {
             override fun onStyleLoaded(style: Style) {
                 savedStyle = style
-                createSymbolManager(style)
                 setUpImage(style)
                 addQueuedFeatures()
                 setupLocalization(style)
@@ -426,6 +469,10 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     override fun onMapLongClick(point: Point): Boolean {
         val _this = this
+        if (mAnnotationDragged) {
+            mAnnotationDragged = false
+            return true
+        }
         val screenPoint = mMap?.pixelForCoordinate(point)
         if (screenPoint != null) {
             val event = MapClickEvent(_this, LatLng(point), screenPoint, EventTypes.MAP_LONG_CLICK)
@@ -532,52 +579,6 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             Logger.e(LOG_TAG, "An error occurred while attempting to make the region", ex)
         }
         return GeoJSONUtils.toPointFeature(latLng, properties)
-    }
-
-    fun createSymbolManager(style: Style?) {
-        /*
-        v10 TODO
-        symbolManager = new SymbolManager(this, mMap, style);
-        symbolManager.setIconAllowOverlap(true);
-        symbolManager.addClickListener(new OnSymbolClickListener() {
-            @Override
-            public void onAnnotationClick(Symbol symbol) {
-                onMarkerClick(symbol);
-            }
-        });
-        symbolManager.addDragListener(new OnSymbolDragListener() {
-            @Override
-            public void onAnnotationDragStarted(Symbol symbol) {
-                mAnnotationClicked = true;
-                final long selectedMarkerID = symbol.getId();
-                RCTMGLPointAnnotation annotation = getPointAnnotationByMarkerID(selectedMarkerID);
-                if (annotation != null) {
-                    annotation.onDragStart();
-                }
-            }
-
-            @Override
-            public void onAnnotationDrag(Symbol symbol) {
-                final long selectedMarkerID = symbol.getId();
-                RCTMGLPointAnnotation annotation = getPointAnnotationByMarkerID(selectedMarkerID);
-                if (annotation != null) {
-                    annotation.onDrag();
-                }
-            }
-
-            @Override
-            public void onAnnotationDragFinished(Symbol symbol) {
-                mAnnotationClicked = false;
-                final long selectedMarkerID = symbol.getId();
-                RCTMGLPointAnnotation annotation = getPointAnnotationByMarkerID(selectedMarkerID);
-                if (annotation != null) {
-                    annotation.onDragEnd();
-                }
-            }
-        });
-        mMap.addOnMapClickListener(this);
-        mMap.addOnMapLongClickListener(this);
-         */
     }
 
     fun addQueuedFeatures() {
