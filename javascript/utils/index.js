@@ -1,7 +1,12 @@
 import React from 'react';
-import { View, NativeModules, findNodeHandle, Platform } from 'react-native';
+import {
+  View,
+  NativeModules,
+  findNodeHandle,
+  Platform,
+  Image,
+} from 'react-native';
 import { ViewPropTypes } from 'deprecated-react-native-prop-types';
-import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import PropTypes from 'prop-types';
 
 function getAndroidManagerInstance(module) {
@@ -108,7 +113,7 @@ export function cloneReactChildrenWithProps(children, propsToAdd = {}) {
 }
 
 export function resolveImagePath(imageRef) {
-  const res = resolveAssetSource(imageRef);
+  const res = Image.resolveAssetSource(imageRef);
   return res.uri;
 }
 

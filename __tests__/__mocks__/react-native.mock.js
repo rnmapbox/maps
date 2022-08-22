@@ -12,3 +12,16 @@ jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter', () => {
     default: MockEventEmitter,
   };
 });
+
+jest.mock('react-native/Libraries/Utilities/Platform', () => ({
+  OS: 'ios', // or 'android'
+  select: (x) => {
+    if (x.android) {
+      return x.android;
+    } else if (x.native) {
+      return x.native;
+    } else if (x.default) {
+      return x.default;
+    }
+  },
+}));

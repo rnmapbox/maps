@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { requireNativeComponent } from 'react-native';
-import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
+import { requireNativeComponent, Image } from 'react-native';
 
 import { viewPropTypes } from '../utils';
 
@@ -73,7 +72,7 @@ class Images extends React.Component {
         } else if (_isUrlOrPath(value)) {
           images[imageName] = value;
         } else {
-          const res = resolveAssetSource(value);
+          const res = Image.resolveAssetSource(value);
           if (res && res.uri) {
             images[imageName] = res;
           }

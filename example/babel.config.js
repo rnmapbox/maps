@@ -14,7 +14,7 @@ module.exports = (api) => {
             'module-resolver',
             {
               alias: {
-                '@rnmapbox/maps': './maps/',
+                '@rnmapbox/maps': './rnmapbox.web.symlink',
               },
             },
           ]

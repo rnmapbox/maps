@@ -44,7 +44,10 @@ function getBlacklist() {
       )}/node_modules/react-native/node_modules/@babel/*`,
     ),
   ];
-  return blacklist(nodeModuleDirs);
+  const webSupportSources = [
+    glob(`${path.resolve(__dirname, '..')}/javascript/web/*`),
+  ];
+  return blacklist([...nodeModuleDirs, ...webSupportSources]);
 }
 
 module.exports = {

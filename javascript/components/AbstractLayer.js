@@ -1,11 +1,8 @@
 /* eslint react/prop-types:0  */
 import React from 'react';
 import { processColor } from 'react-native';
-import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 import { getFilter } from '../utils/filterUtils';
-import { getStyleType } from '../utils/styleMap';
-import BridgeValue from '../utils/BridgeValue';
 import { transformStyle } from '../utils/StyleValue';
 
 class AbstractLayer extends React.PureComponent {

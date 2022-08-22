@@ -23,6 +23,7 @@ const IGNORE_FILES = [
   'AbstractSource',
   'NativeBridgeComponent',
 ];
+const IGNORE_PATTERN = /\.web\./;
 
 const IGNORE_METHODS = ['setNativeProps'];
 
@@ -267,8 +268,10 @@ class DocJSONBuilder {
           }
 
           let fileName = fileNameWithExt.replace(/.(js)/, '');
-
-          if (IGNORE_FILES.includes(fileName)) {
+          if (
+            IGNORE_FILES.includes(fileName) ||
+            fileName.match(IGNORE_PATTERN)
+          ) {
             next();
             return;
           }
@@ -282,7 +285,7 @@ class DocJSONBuilder {
 
           this.postprocess(results[fileName], fileName);
 
-          next();
+          return next();
         },
         () => resolve(),
       );
