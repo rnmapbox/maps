@@ -65,6 +65,7 @@
     "@react-native-community/eslint-config": "^3.0.1",
     "@sinonjs/fake-timers": "^8.0.1",
     "@testing-library/react-native": "^8.0.0",
+    "@types/mapbox-gl": "^2.7.5",
     "@types/react-native": ">=0.59.9",
     "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.20.0",
@@ -89,7 +90,8 @@
     "react-docgen": "6.0.0-alpha.3",
     "react-native": "0.67.0",
     "react-test-renderer": "17.0.2",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.3",
+    "mapbox-gl": "^ 2.9.0"
   },
   "jest": {
     "preset": "react-native",
