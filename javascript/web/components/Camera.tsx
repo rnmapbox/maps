@@ -2,31 +2,38 @@ import React from 'react';
 
 import MapContext from '../MapContext';
 
-class Camera extends React.Component {
+class Camera extends React.Component<{
+  centerCoordinate: [number, number] | null;
+}> {
+  context!: React.ContextType<typeof MapContext>;
+
+  static contextType = MapContext;
+  static UserTrackingModes = [];
+
   componentDidMount() {
-    let { map } = this.context;
-    let { centerCoordinate } = this.props;
-    if (centerCoordinate) {
+    const { map } = this.context;
+    const { centerCoordinate } = this.props;
+    if (map && centerCoordinate) {
       map.flyTo({ center: centerCoordinate });
     }
   }
 
   fitBounds(
-    northEastCoordinates,
-    southWestCoordinates,
+    northEastCoordinates: [number, number],
+    southWestCoordinates: [number, number],
     padding = 0,
     animationDuration = 0.0,
   ) {
-    let { map } = this.context;
-    map.fitBounds([northEastCoordinates, southWestCoordinates]);
+    const { map } = this.context;
+    if (map) {
+      map.fitBounds([northEastCoordinates, southWestCoordinates]);
+    }
   }
 
   render() {
     return <></>;
   }
 }
-Camera.contextType = MapContext;
-Camera.UserTrackingModes = [];
 
 export { Camera };
 export default Camera;

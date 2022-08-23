@@ -6,11 +6,20 @@ import MapContext from '../MapContext';
 /**
  * MapView backed by Mapbox GL KS
  */
-class MapView extends React.Component {
-  state = {};
+class MapView extends React.Component<
+  { styleURL: string; children: JSX.Element },
+  { map?: object | null }
+> {
+  state = { map: null };
+  mapContainer: HTMLElement | null = null;
+  map: object | null = null;
 
   componentDidMount() {
-    let { styleURL } = this.props;
+    const { styleURL } = this.props;
+    if (!this.mapContainer) {
+      console.error('MapView - mapContainer should is null');
+      return;
+    }
     const map = new mapboxgl.Map({
       container: this.mapContainer,
       style: styleURL || 'mapbox://styles/mapbox/streets-v11',
