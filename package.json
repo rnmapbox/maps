@@ -1,7 +1,7 @@
 {
   "name": "@rnmapbox/maps",
   "description": "A Mapbox react native module for creating custom maps",
-  "version": "10.0.0-beta.29",
+  "version": "10.0.0-beta.30",
   "publishConfig": {
     "access": "public"
   },
@@ -39,7 +39,7 @@
     "react-native": ">=0.59.9",
     "mapbox-gl": "^ 2.9.0"
   },
-  "peerDependenciesMeta" : {
+  "peerDependenciesMeta": {
     "mapbox-gl": {
       "optional": true
     }
