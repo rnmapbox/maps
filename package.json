@@ -8,6 +8,7 @@
   "author": "React Native Mapbox Team",
   "main": "./javascript/index.js",
   "browser": "./javascript/index.web.js",
+  "react-native": "./javascript/index.js",
   "keywords": [
     "gl",
     "ios",
