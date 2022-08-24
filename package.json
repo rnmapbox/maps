@@ -32,7 +32,8 @@
     "type:check": "tsc --noEmit",
     "test:plugin": "expo-module test plugin",
     "build:plugin": "tsc --build plugin",
-    "lint:plugin": "eslint plugin/src/*"
+    "lint:plugin": "eslint plugin/src/*",
+    "prepare": "husky install"
   },
   "peerDependencies": {
     "prop-types": ">=15.5.8",
@@ -79,7 +80,7 @@
     "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-import": "2.25.3",
     "expo-module-scripts": "^2.0.0",
-    "husky": "^7.0.4",
+    "husky": "^8.0.1",
     "jest": "27.5.1",
     "jest-cli": "27.5.1",
     "lint-staged": "^12.1.2",
@@ -107,11 +108,6 @@
       "__tests__/__mocks__",
       "fixtures"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged && npm run generate"
-    }
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --fix"
