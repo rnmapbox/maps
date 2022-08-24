@@ -27,9 +27,11 @@ export type UserTrackingModeChangeCallback = (
 // Animated.
 
 export interface AnimatedPoint extends GeoJsonObject {
+  readonly type: 'Point';
   coordinates: (Animated.Value | number)[];
 }
 
 export interface AnimatedLineString extends GeoJsonObject {
+  readonly type: 'LineString';
   coordinates: (Animated.Value | number)[][];
 }
