@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet } from 'react-native';
-import { Header } from 'react-native-elements';
+import { Header } from '@rneui/base';
 
 import colors from '../../styles/colors';
 

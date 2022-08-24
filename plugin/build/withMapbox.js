@@ -14,7 +14,7 @@ let pkg = {
 try {
     pkg = require('@rnmapbox/maps/package.json');
 }
-catch (_a) {
+catch {
     // empty catch block
 }
 /**

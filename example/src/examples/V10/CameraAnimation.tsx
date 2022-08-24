@@ -11,7 +11,7 @@ import {
   CameraBounds,
 } from '@rnmapbox/maps';
 import bbox from '@turf/bbox';
-import { Text, Divider } from 'react-native-elements';
+import { Text, Divider } from '@rneui/base';
 import { Feature, Point, Position } from 'geojson';
 
 import Page from '../common/Page';

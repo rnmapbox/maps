@@ -1,12 +1,14 @@
 {
   "name": "@rnmapbox/maps",
   "description": "A Mapbox react native module for creating custom maps",
-  "version": "10.0.0-beta.24",
+  "version": "10.0.0-beta.32",
   "publishConfig": {
     "access": "public"
   },
   "author": "React Native Mapbox Team",
   "main": "./javascript/index.js",
+  "browser": "./javascript/index.web.js",
+  "react-native": "./javascript/index.js",
   "keywords": [
     "gl",
     "ios",
@@ -35,7 +37,13 @@
   "peerDependencies": {
     "prop-types": ">=15.5.8",
     "react": ">=16.6.1",
-    "react-native": ">=0.59.9"
+    "react-native": ">=0.59.9",
+    "mapbox-gl": "^ 2.9.0"
+  },
+  "peerDependenciesMeta": {
+    "mapbox-gl": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@expo/config-plugins": "^4.0.3",
@@ -57,6 +65,7 @@
     "@react-native-community/eslint-config": "^3.0.1",
     "@sinonjs/fake-timers": "^8.0.1",
     "@testing-library/react-native": "^8.0.0",
+    "@types/mapbox-gl": "^2.7.5",
     "@types/react-native": ">=0.59.9",
     "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.20.0",
@@ -81,7 +90,8 @@
     "react-docgen": "6.0.0-alpha.3",
     "react-native": "0.67.0",
     "react-test-renderer": "17.0.2",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.3",
+    "mapbox-gl": "^ 2.9.0"
   },
   "jest": {
     "preset": "react-native",

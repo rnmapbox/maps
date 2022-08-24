@@ -112,7 +112,7 @@ jobs:
 
   publish:
     if: startsWith(github.ref, 'refs/tags/') && (github.event_name == 'push')
-    needs: [lint_test_generate, call_android_workflow, call_ios_workflow]
+    needs: [lint_test_generate, call_maplibre_android_workflow, call_maplibre_ios_workflow]
     runs-on: ubuntu-latest
 
     steps:

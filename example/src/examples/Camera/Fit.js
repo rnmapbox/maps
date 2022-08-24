@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { isEqual } from 'lodash';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import MapboxGL from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';

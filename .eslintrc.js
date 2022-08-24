@@ -59,7 +59,7 @@ module.exports = {
     'no-console': [0],
     'import/prefer-default-export': 'off',
     'jsx-a11y/href-no-hash': 'off',
-    'react/prop-types': [2],
+    'react/prop-types': [0],
     quotes: [2, 'single'],
     'eol-last': [0],
     'no-continue': [1],
@@ -79,6 +79,7 @@ module.exports = {
     'fp/no-mutating-methods': 'warn',
     'react-native/no-inline-styles': 0,
   },
+  ignorePatterns: ['**/rnmapbox.web.symlink'],
   overrides: [
     {
       // Match TypeScript Files

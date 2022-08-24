@@ -33,8 +33,6 @@ struct CameraUpdateItem {
           map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
         case .linear:
           map.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
-        case .none:
-          map.mapboxMap.setCamera(to: camera)
         default:
           map.mapboxMap.setCamera(to: camera)
       }
@@ -122,22 +120,40 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
   let cameraUpdateQueue = CameraUpdateQueue()
 
   // Properties set on RCTMGLCamera in React Native.
-  
+  @objc var animationDuration: NSNumber?
+  @objc var animationMode: NSString?
   @objc var defaultStop: [String: Any]?
-  
-  @objc var stop: [String: Any]? {
+  @objc var followHeading: NSNumber? {
     didSet {
-      _updateCamera()
+      _updateCameraFromTrackingMode()
     }
   }
-  
-  @objc var minZoomLevel: NSNumber?
-
-  @objc var maxZoomLevel: NSNumber?
-
+  @objc var followPitch: NSNumber? {
+    didSet {
+      _updateCameraFromTrackingMode()
+    }
+  }
+  @objc var followUserMode: NSString? {
+    didSet {
+      _updateCameraFromTrackingMode()
+    }
+  }
   @objc var followUserLocation : Bool = false {
     didSet {
       _updateCameraFromTrackingMode()
+    }
+  }
+  @objc var followZoomLevel: NSNumber? {
+    didSet {
+      _updateCameraFromTrackingMode()
+    }
+  }
+  @objc var maxZoomLevel: NSNumber?
+  @objc var minZoomLevel: NSNumber?
+  @objc var onUserTrackingModeChange: RCTBubblingEventBlock? = nil
+  @objc var stop: [String: Any]? {
+    didSet {
+      _updateCamera()
     }
   }
   
@@ -183,6 +199,50 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       }
       map.location.locationProvider.requestWhenInUseAuthorization()
       map.location.addLocationConsumer(newConsumer: self)
+      var trackingModeChanged = false
+      if (self.followUserMode == "compass" && map.location.options.puckBearingSource != PuckBearingSource.heading) {
+        map.location.options.puckBearingEnabled = true
+        map.location.options.puckBearingSource = PuckBearingSource.heading
+        trackingModeChanged = true
+      } else if (self.followUserMode == "course" && map.location.options.puckBearingSource != PuckBearingSource.course) {
+        map.location.options.puckBearingEnabled = true
+        map.location.options.puckBearingSource = PuckBearingSource.course
+        trackingModeChanged = true
+      } else if (self.followUserMode == "normal" && map.location.options.puckBearingEnabled) {
+        map.location.options.puckBearingEnabled = false
+        trackingModeChanged = true
+      }
+      if let onUserTrackingModeChange = self.onUserTrackingModeChange {
+        if (trackingModeChanged) {
+          let event = RCTMGLEvent(type: .onUserTrackingModeChange, payload: ["followUserMode": self.followUserMode, "followUserLocation": self.followUserLocation])
+          onUserTrackingModeChange(event.toJSON())
+        }
+      }
+      var _camera = CameraOptions()
+      if let followHeading = self.followHeading as? CGFloat {
+        if (followHeading >= 0.0) {
+          _camera.bearing = followHeading
+        }
+      } else if let stopHeading = self.stop?["heading"] as? CGFloat {
+        if (stopHeading >= 0.0) {
+          _camera.bearing = stopHeading
+        }
+      }
+      if let followPitch = self.followPitch as? CGFloat {
+        if (followPitch >= 0.0) {
+          _camera.pitch = followPitch
+        }
+      } else if let stopPitch = self.stop?["pitch"] as? CGFloat {
+        if (stopPitch >= 0.0) {
+          _camera.pitch = stopPitch
+        }
+      }
+      if let zoom = self.followZoomLevel as? CGFloat {
+        if (zoom >= 0.0) {
+          _camera.zoom = zoom
+        }
+      }
+      map.mapboxMap.setCamera(to: _camera)
     }
   }
   
@@ -276,11 +336,11 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       return .flight
     }()
     
-    if let z1 = minZoomLevel, let z2 = CGFloat(exactly: z1), zoom! < z2 {
+    if let z1 = minZoomLevel, let z2 = CGFloat(exactly: z1), zoom ?? 100 < z2 {
       zoom = z2
     }
 
-    if let z1 = maxZoomLevel, let z2 = CGFloat(exactly: z1), zoom! > z2 {
+    if let z1 = maxZoomLevel, let z2 = CGFloat(exactly: z1), zoom ?? 0 > z2 {
       zoom = z2
     }
 
@@ -336,7 +396,22 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
   func locationUpdate(newLocation: Location) {
     if followUserLocation {
       withMapView { map in
-        map.camera.ease(to: CameraOptions(center: newLocation.coordinate, zoom: 15), duration: 1.3)
+        var animationType = CameraMode.none
+        if let m = self.animationMode as? String, let m = CameraMode(rawValue: m) {
+          animationType = m
+        }
+        let _camera = CameraOptions(center: newLocation.coordinate)
+        let _duration = self.animationDuration as? Double ?? 0.5
+        switch (animationType) {
+          case .flight:
+            map.camera.fly(to: _camera, duration: _duration)
+          case .ease:
+            map.camera.ease(to: _camera, duration: _duration, curve: .easeInOut, completion: nil)
+          case .linear:
+            map.camera.ease(to: _camera, duration: _duration, curve: .linear, completion: nil)
+          default:
+            map.mapboxMap.setCamera(to: CameraOptions(center: newLocation.coordinate))
+        }
       }
     }
   }

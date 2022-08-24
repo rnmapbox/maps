@@ -47,6 +47,8 @@ type NativeAnimationMode = 'flight' | 'ease' | 'linear' | 'none' | 'move';
 interface NativeCameraProps extends CameraFollowConfig {
   testID?: string;
   stop: NativeCameraStop | null;
+  animationDuration?: number;
+  animationMode?: CameraAnimationMode;
   defaultStop?: NativeCameraStop | null;
   minZoomLevel?: number;
   maxZoomLevel?: number;
@@ -219,28 +221,6 @@ export const Camera = memo(
       // @ts-expect-error This avoids a type/value mismatch.
       const nativeCamera = useRef<RCTMGLCamera>(null);
 
-      const nativeDefaultStop = useMemo((): NativeCameraStop | null => {
-        if (!defaultSettings) {
-          return null;
-        }
-        const _defaultStop: NativeCameraStop = {
-          centerCoordinate: JSON.stringify(
-            makePoint(defaultSettings.centerCoordinate),
-          ),
-          bounds: JSON.stringify(defaultSettings.bounds),
-          heading: defaultSettings.heading ?? 0,
-          pitch: defaultSettings.pitch ?? 0,
-          zoom: defaultSettings.zoomLevel ?? 11,
-          paddingTop: defaultSettings.padding?.paddingTop ?? 0,
-          paddingBottom: defaultSettings.padding?.paddingBottom ?? 0,
-          paddingLeft: defaultSettings.padding?.paddingLeft ?? 0,
-          paddingRight: defaultSettings.padding?.paddingRight ?? 0,
-          duration: defaultSettings.animationDuration ?? 2000,
-          mode: nativeAnimationMode(defaultSettings.animationMode),
-        };
-        return _defaultStop;
-      }, [defaultSettings]);
-
       const buildNativeStop = useCallback(
         (
           stop: CameraStop,
@@ -255,7 +235,7 @@ export const Camera = memo(
             return null;
           }
 
-          const _nativeStop: NativeCameraStop = { ...nativeDefaultStop };
+          const _nativeStop: NativeCameraStop = {};
 
           if (stop.pitch !== undefined) _nativeStop.pitch = stop.pitch;
           if (stop.heading !== undefined) _nativeStop.heading = stop.heading;
@@ -287,8 +267,15 @@ export const Camera = memo(
 
           return _nativeStop;
         },
-        [props.followUserLocation, nativeDefaultStop],
+        [props.followUserLocation],
       );
+
+      const nativeDefaultStop = useMemo((): NativeCameraStop | null => {
+        if (!defaultSettings) {
+          return null;
+        }
+        return buildNativeStop(defaultSettings);
+      }, [defaultSettings, buildNativeStop]);
 
       const nativeStop = useMemo(() => {
         return buildNativeStop({
@@ -515,6 +502,8 @@ export const Camera = memo(
           testID={'Camera'}
           ref={nativeCamera}
           stop={nativeStop}
+          animationDuration={animationDuration}
+          animationMode={animationMode}
           defaultStop={nativeDefaultStop}
           followUserLocation={followUserLocation}
           followUserMode={followUserMode}

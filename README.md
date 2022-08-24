@@ -236,7 +236,10 @@ Example:
 ```json
 "jest": {
   "preset": "react-native",
-  "setupFilesAfterEnv": ["@rnmapbox/maps/setup-jest"]
+  "setupFilesAfterEnv": ["@rnmapbox/maps/setup-jest"],
+  "transformIgnorePatterns": [
+      "node_modules/(?!(...|@rnmapbox))"
+  ]
 }
 ```
 ---

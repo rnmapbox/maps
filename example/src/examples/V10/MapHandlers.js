@@ -7,7 +7,7 @@ import {
   ShapeSource,
   Logger,
 } from '@rnmapbox/maps';
-import { Text, Divider } from 'react-native-elements';
+import { Text, Divider } from '@rneui/base';
 
 import Page from '../common/Page';
 import colors from '../../styles/colors';

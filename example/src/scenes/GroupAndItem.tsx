@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   View,
   Text,
@@ -6,8 +6,8 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { Icon } from 'react-native-elements';
-import PropTypes from 'prop-types';
+import { Icon } from '@rneui/base';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import Page from '../examples/common/Page';
 import MapHeader from '../examples/common/MapHeader';
@@ -98,23 +98,89 @@ const styles = StyleSheet.create({
   },
 });
 
-class ExampleItem {
-  constructor(label, Component) {
+type NavigationType = 'Group' | 'Item';
+
+type ItemComponent = React.ComponentType<{
+  label: string;
+  onDismissExample: () => void;
+}>;
+
+interface ExampleNode {
+  label: string;
+  navigationType: NavigationType;
+  path: string[];
+
+  setParent(parent: string[]): void;
+  find(path: string[]): ExampleNode | undefined;
+}
+
+class ExampleItem implements ExampleNode {
+  label: string;
+  Component: ItemComponent;
+  navigationType: NavigationType;
+  path: string[];
+
+  constructor(label: string, Component: unknown) {
     this.label = label;
-    this.Component = Component;
-    this.navigationType = 'Demo';
+    this.Component = Component as ItemComponent;
+    this.navigationType = 'Item';
+    this.path = [label];
+  }
+
+  setParent(parent: string[]) {
+    this.path = [...parent, this.label];
+  }
+
+  find(path: string[]) {
+    if (path.length === 1 && path[0] === this.label) {
+      return this;
+    } else {
+      return undefined;
+    }
   }
 }
 
-class ExampleGroup {
-  constructor(label, items) {
+type RootStackParamList = {
+  Group: { path: string[] };
+  Item: { path: string[] };
+};
+
+type GroupProps = NativeStackScreenProps<RootStackParamList, 'Group'>;
+type ItemProps = NativeStackScreenProps<RootStackParamList, 'Item'>;
+
+class ExampleGroup implements ExampleNode {
+  label: string;
+  navigationType: NavigationType;
+  path: string[];
+  items: ExampleNode[];
+
+  constructor(label: string, items: ExampleNode[]) {
     this.label = label;
     this.items = items;
     this.navigationType = 'Group';
-    // eslint-disable-next-line react/prop-types
-    this.Component = ({ navigation }) => (
-      <ExampleGroupComponent items={items} navigation={navigation} />
-    );
+    this.path = [label];
+    this.setParent([]);
+  }
+
+  setParent(parent: string[]) {
+    this.path = [...parent, this.label];
+    this.items.forEach((i) => i.setParent(this.path));
+  }
+
+  find(path: string[]): ExampleNode | undefined {
+    const [root, ...rest] = path;
+    if (root === this.label) {
+      if (rest.length > 0) {
+        return this.items.reduce<ExampleNode | undefined>(
+          (prev, act) => prev || act.find(rest),
+          undefined,
+        );
+      } else {
+        return this;
+      }
+    } else {
+      return undefined;
+    }
   }
 }
 
@@ -124,7 +190,7 @@ const BugReportPage = ({ ...props }) => (
   </Page>
 );
 
-const Examples = [
+const Examples = new ExampleGroup('React Native Mapbox', [
   new ExampleItem('Bug Report Template', BugReportPage),
   new ExampleGroup('V10', [
     new ExampleItem('Terrain, Sky, & Atmosphere', TerrainSkyAtmosphere),
@@ -205,14 +271,25 @@ const Examples = [
     new ExampleItem('Animation Along a Line', DriveTheLine),
   ]),
   new ExampleItem('Cache management', CacheManagement),
-];
+]);
 
-function ExampleGroupComponent({ items, navigation, showBack }) {
-  function itemPress(item) {
-    navigation.navigate(item.navigationType, item);
+function ExampleGroupComponent({
+  items,
+  navigation,
+  showBack,
+  title,
+}: {
+  items: ExampleNode[];
+  navigation: GroupProps['navigation'];
+  showBack?: boolean;
+  title: string;
+}) {
+  function itemPress(item: ExampleNode) {
+    // eslint-disable-next-line fp/no-mutating-methods
+    navigation.push(item.navigationType, { path: item.path });
   }
 
-  function renderItem({ item }) {
+  function renderItem({ item }: { item: ExampleNode }) {
     return (
       <View style={styles.exampleListItemBorder}>
         <TouchableOpacity onPress={() => itemPress(item)}>
@@ -228,15 +305,10 @@ function ExampleGroupComponent({ items, navigation, showBack }) {
   const back = showBack
     ? {
         onBack: () => {
-          console.log('GoBACK');
           navigation.goBack();
         },
       }
     : {};
-
-  const title = showBack
-    ? navigation.getParam('label')
-    : 'React Native Mapbox GL';
 
   return (
     <View style={sheet.matchParent}>
@@ -252,35 +324,37 @@ function ExampleGroupComponent({ items, navigation, showBack }) {
     </View>
   );
 }
-ExampleGroupComponent.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func,
-    getParam: PropTypes.func,
-    goBack: PropTypes.func,
-  }),
-  showBack: PropTypes.bool,
-  items: PropTypes.any,
+
+export const Group = ({ route, navigation }: GroupProps) => {
+  const path = route?.params?.path || [Examples.label];
+  const item = Examples.find(path);
+  if (!(item instanceof ExampleGroup)) {
+    throw Error(`error:Expected group not node! path:${path} item:${item}`);
+  }
+  const { items } = item;
+  return (
+    <ExampleGroupComponent
+      items={items}
+      navigation={navigation}
+      showBack={path.length > 1}
+      title={item.label}
+    />
+  );
 };
 
-class Home extends React.Component {
-  static propTypes = {
-    navigation: PropTypes.shape({
-      navigate: PropTypes.func,
-      getParam: PropTypes.func,
-    }),
-  };
+export const Item = ({ route, navigation }: ItemProps) => {
+  const onDismissExample = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
 
-  render() {
-    const { navigation } = this.props;
-    const items = navigation.getParam('items') || Examples;
-    return (
-      <ExampleGroupComponent
-        items={items}
-        navigation={navigation}
-        showBack={!!navigation.getParam('items')}
-      />
+  const { path } = route.params;
+  const item = Examples.find(path);
+  if (!(item instanceof ExampleItem)) {
+    throw Error(
+      `error:Expected item not group|undefined! path:${path} item:${item}`,
     );
   }
-}
+  const { label, Component } = item;
 
-export default Home;
+  return <Component label={label} onDismissExample={onDismissExample} />;
+};

@@ -13,8 +13,10 @@ const inlineRequireBlockList = new Proxy(
   {
     has: (target, name) => {
       if (
-        name.endsWith('.js') &&
-        name.includes('/react-navigation-stack/lib/module/vendor/views/')
+        (name.endsWith('.js') &&
+          name.includes('/react-navigation-stack/lib/module/vendor/views/')) ||
+        (name.includes('@react-navigation/elements/src/') &&
+          name.endsWith('.tsx'))
       ) {
         return true;
       }
@@ -42,7 +44,10 @@ function getBlacklist() {
       )}/node_modules/react-native/node_modules/@babel/*`,
     ),
   ];
-  return blacklist(nodeModuleDirs);
+  const webSupportSources = [
+    glob(`${path.resolve(__dirname, '..')}/javascript/web/*`),
+  ];
+  return blacklist([...nodeModuleDirs, ...webSupportSources]);
 }
 
 module.exports = {

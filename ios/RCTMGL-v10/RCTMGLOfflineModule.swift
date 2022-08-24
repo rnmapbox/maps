@@ -85,7 +85,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     if let bb = bb {
       let jsonBounds = [
         bb.northEast.longitude, bb.northEast.latitude,
-        bb.southWest.longitude, bb.southWest.longitude
+        bb.southWest.longitude, bb.southWest.latitude
       ]
       
       let completed = (region.completedResourceCount == region.requiredResourceCount)

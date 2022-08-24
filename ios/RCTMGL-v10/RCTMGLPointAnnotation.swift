@@ -9,13 +9,20 @@ final class WeakRef<T: AnyObject> {
   }
 }
 
-
-class RCTMGLPointAnnotation : UIView, RCTMGLMapComponent {
+class RCTMGLPointAnnotation : RCTMGLInteractiveElement {
   static let key = "RCTMGLPointAnnotation"
+  static var gid = 0;
   
   var annotation : PointAnnotation! = nil
   var callout: RCTMGLCallout? = nil
+  var calloutId : String?
   var image : UIImage? = nil
+  var reactSubviews : [UIView] = []
+
+  @objc var onDeselected: RCTBubblingEventBlock? = nil
+  @objc var onDrag: RCTBubblingEventBlock? = nil
+  @objc var onDragEnd: RCTBubblingEventBlock? = nil
+  @objc var onSelected: RCTBubblingEventBlock? = nil
   
   @objc var coordinate : String? {
     didSet {
@@ -95,8 +102,6 @@ class RCTMGLPointAnnotation : UIView, RCTMGLMapComponent {
       changeImage(image, initial: inital)
     }
   }
-  
-  static var gid = 0;
    
   func gid() -> Int {
     RCTMGLPointAnnotation.gid = RCTMGLPointAnnotation.gid + 1
@@ -107,36 +112,6 @@ class RCTMGLPointAnnotation : UIView, RCTMGLMapComponent {
   func refresh() {
     if let image = _createViewSnapshot() {
       changeImage(image)
-    }
-  }
-   
-  var reactSubviews : [UIView] = []
-
-  @objc
-  override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
-    if let callout = subview as? RCTMGLCallout {
-      self.callout = callout
-    } else {
-      reactSubviews.insert(subview, at: atIndex)
-      if reactSubviews.count > 1 {
-        Logger.log(level: .error, message: "PointAnnotation supports max 1 subview other than a callout")
-      }
-      if annotation.image == nil {
-        DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(10)) {
-          self.setAnnotationImage()
-        }
-      }
-    }
-  }
-
-  @objc
-  override func removeReactSubview(_ subview: UIView!) {
-    if let callout = subview as? RCTMGLCallout {
-      if self.callout == callout {
-        self.callout = nil
-      }
-    } else {
-      reactSubviews.removeAll(where: { $0 == subview })
     }
   }
    
@@ -177,25 +152,6 @@ class RCTMGLPointAnnotation : UIView, RCTMGLMapComponent {
     }
     return image
   }
-
-  var map: RCTMGLMapView? = nil
-  
-  // MARK: - RCTMGLMapComponent
-
-  func waitForStyleLoad() -> Bool {
-    return true
-  }
-  
-  func addToMap(_ map: RCTMGLMapView, style: Style) {
-    self.map = map
-    self.map?.pointAnnotationManager.add(annotation)
-  }
-
-  func removeFromMap(_ map: RCTMGLMapView) {
-    self.map = map
-  }
-  
-  var calloutId : String?
   
   func onSelect() {
     if let callout = callout,
@@ -219,6 +175,56 @@ class RCTMGLPointAnnotation : UIView, RCTMGLMapComponent {
     self.map?.calloutAnnotationManager.annotations.removeAll {
       $0.id == calloutId
     }
+  }
+  
+  @objc
+  override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
+    if let callout = subview as? RCTMGLCallout {
+      self.callout = callout
+    } else {
+      reactSubviews.insert(subview, at: atIndex)
+      if reactSubviews.count > 1 {
+        Logger.log(level: .error, message: "PointAnnotation supports max 1 subview other than a callout")
+      }
+      if annotation.image == nil {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .microseconds(10)) {
+          self.setAnnotationImage()
+        }
+      }
+    }
+  }
+
+  @objc
+  override func removeReactSubview(_ subview: UIView!) {
+    if let callout = subview as? RCTMGLCallout {
+      if self.callout == callout {
+        self.callout = nil
+      }
+    } else {
+      reactSubviews.removeAll(where: { $0 == subview })
+    }
+  }
+  
+  // MARK: - RCTMGLMapComponent
+  
+  override func addToMap(_ map: RCTMGLMapView, style: Style) {
+    self.map = map
+    if (annotation != nil) {
+      self.map?.pointAnnotationManager.add(annotation)
+    }
+  }
+
+  override func removeFromMap(_ map: RCTMGLMapView) {
+    self.map = map
+    if (annotation != nil) {
+      self.map?.pointAnnotationManager.remove(annotation)
+    }
+  }
+  
+  // MARK: - RCTMGLInteractiveElement
+  
+  override func getLayerIDs() -> [String] {
+    return []
   }
 }
 
