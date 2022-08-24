@@ -38,6 +38,8 @@ import type {
   MapboxGLEvent as _MapboxGLEvent,
   UserTrackingMode as _UserTrackingMode,
   UserTrackingModeChangeCallback as _UserTrackingModeChangeCallback,
+  AnimatedPoint as _AnimatedPoint,
+  AnimatedLineString as _AnimatedLineString,
 } from './javascript/types/index';
 import type { requestAndroidLocationPermissions as _requestAndroidLocationPermissions } from './javascript/requestAndroidLocationPermissions';
 
@@ -204,6 +206,28 @@ declare namespace MapboxGL {
         visibleBounds: number[];
       },
     ): void;
+
+    class AnimatedPoint {
+      constructor(point?: AnimatedPoint);
+      longitude: ReactNative.Animated.Value;
+      latitude: ReactNative.Animated.Value;
+      setValue: (point: GeoJSON.Point) => void;
+      setOffset: (point: GeoJSON.Point) => void;
+      flattenOffset: () => void;
+      stopAnimation: (cb?: () => GeoJSON.Point) => void;
+      addListener: (cb?: () => GeoJSON.Point) => void;
+      removeListener: (id: string) => void;
+      spring: (
+        config: Record<string, any>,
+      ) => ReactNative.Animated.CompositeAnimation;
+      timing: (
+        config: Record<string, any>,
+      ) => ReactNative.Animated.CompositeAnimation;
+    }
+
+    class AnimatedShape {
+      constructor(shape: AnimatedLineString);
+    }
   }
 
   namespace Animated {
@@ -219,28 +243,6 @@ declare namespace MapboxGL {
     class SymbolLayer extends Component<SymbolLayerProps> {}
     class RasterLayer extends Component<RasterLayerProps> {}
     class BackgroundLayer extends Component<BackgroundLayerProps> {}
-  }
-
-  /**
-   * Classes
-   */
-
-  class AnimatedPoint {
-    constructor(point?: GeoJSON.Point);
-    longitude: ReactNative.Animated.Value;
-    latitude: ReactNative.Animated.Value;
-    setValue: (point: GeoJSON.Point) => void;
-    setOffset: (point: GeoJSON.Point) => void;
-    flattenOffset: () => void;
-    stopAnimation: (cb?: () => GeoJSON.Point) => void;
-    addListener: (cb?: () => GeoJSON.Point) => void;
-    removeListener: (id: string) => void;
-    spring: (
-      config: Record<string, any>,
-    ) => ReactNative.Animated.CompositeAnimation;
-    timing: (
-      config: Record<string, any>,
-    ) => ReactNative.Animated.CompositeAnimation;
   }
 
   /**
@@ -1044,6 +1046,8 @@ export import CircleLayer = MapboxGL.CircleLayer;
 export import MapboxGLEvent = MapboxGL.MapboxGLEvent;
 export import UserTrackingMode = MapboxGL.UserTrackingMode;
 export import UserTrackingModeChangeCallback = MapboxGL.UserTrackingModeChangeCallback;
+export import AnimatedPoint = MapboxGL.AnimatedPoint;
+export import AnimatedShape = MapboxGL.AnimatedShape;
 
 export const { offlineManager } = MapboxGL;
 
