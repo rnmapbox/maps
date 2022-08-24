@@ -1,4 +1,4 @@
-import { processColor, Image } from 'react-native';
+import { Image, processColor } from 'react-native';
 
 import { getStyleType } from './styleMap';
 import BridgeValue from './BridgeValue';
