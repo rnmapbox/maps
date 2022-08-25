@@ -1,4 +1,6 @@
 import { SyntheticEvent } from 'react';
+import { Animated } from 'react-native';
+import { GeoJsonObject } from 'geojson';
 
 // General.
 
@@ -21,3 +23,15 @@ export type UserTrackingModeChangeCallback = (
     }
   >,
 ) => void;
+
+// Animated.
+
+export interface AnimatedPoint extends GeoJsonObject {
+  readonly type: 'Point';
+  coordinates: (Animated.Value | number)[];
+}
+
+export interface AnimatedLineString extends GeoJsonObject {
+  readonly type: 'LineString';
+  coordinates: (Animated.Value | number)[][];
+}
