@@ -36,10 +36,10 @@
     "prepare": "husky install"
   },
   "peerDependencies": {
+    "mapbox-gl": "^ 2.9.0",
     "prop-types": ">=15.5.8",
     "react": ">=16.6.1",
-    "react-native": ">=0.59.9",
-    "mapbox-gl": "^ 2.9.0"
+    "react-native": ">=0.59.9"
   },
   "peerDependenciesMeta": {
     "mapbox-gl": {
@@ -79,11 +79,13 @@
     "eslint-plugin-flowtype": "^8.0.3",
     "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-import": "2.25.3",
+    "eslint-plugin-jest": "^26.8.7",
     "expo-module-scripts": "^2.0.0",
     "husky": "^8.0.1",
     "jest": "27.5.1",
     "jest-cli": "27.5.1",
     "lint-staged": "^12.1.2",
+    "mapbox-gl": "^ 2.9.0",
     "metro-react-native-babel-preset": "0.71.1",
     "node-dir": "0.1.17",
     "prettier": "2.6.2",
@@ -91,8 +93,7 @@
     "react-docgen": "6.0.0-alpha.3",
     "react-native": "0.67.0",
     "react-test-renderer": "17.0.2",
-    "typescript": "^4.4.3",
-    "mapbox-gl": "^ 2.9.0"
+    "typescript": "^4.4.3"
   },
   "jest": {
     "preset": "react-native",

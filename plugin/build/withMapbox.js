@@ -14,7 +14,7 @@ let pkg = {
 try {
     pkg = require('@rnmapbox/maps/package.json');
 }
-catch {
+catch (_a) {
     // empty catch block
 }
 /**
@@ -48,6 +48,9 @@ function applyCocoaPodsModifications(contents, { RNMapboxMapsImpl, RNMapboxMapsD
     src = addInstallerBlock(src, 'post');
     src = addMapboxInstallerBlock(src, 'pre');
     src = addMapboxInstallerBlock(src, 'post');
+    if (src === '') {
+        return 'no title';
+    }
     return src;
 }
 exports.applyCocoaPodsModifications = applyCocoaPodsModifications;

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import SymbolLayer from '../SymbolLayer';
 import Animated from '../../utils/animated/Animated';
-import AnimatedMapPoint from '../../utils/animated/AnimatedPoint';
+import AnimatedPoint from '../../classes/AnimatedPoint';
 
 class Annotation extends React.Component {
   static propTypes = {
@@ -35,7 +35,7 @@ class Annotation extends React.Component {
     const shape = this._getShapeFromProps(props);
 
     this.state = {
-      shape: props.animated ? new AnimatedMapPoint(shape) : shape,
+      shape: props.animated ? new AnimatedPoint(shape) : shape,
     };
 
     this.onPress = this.onPress.bind(this);
@@ -70,7 +70,7 @@ class Annotation extends React.Component {
       const shape = this._getShapeFromProps(this.props);
 
       this.setState({
-        shape: this.props.animated ? new AnimatedMapPoint(shape) : shape,
+        shape: this.props.animated ? new AnimatedPoint(shape) : shape,
       });
     }
   }

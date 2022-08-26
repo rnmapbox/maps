@@ -29,11 +29,13 @@ import offlineManager from './modules/offline/offlineManager';
 import snapshotManager from './modules/snapshot/snapshotManager';
 import MarkerView from './components/MarkerView';
 import Animated from './utils/animated/Animated';
-import AnimatedMapPoint from './utils/animated/AnimatedPoint';
-import AnimatedShape from './utils/animated/AnimatedShape';
-import AnimatedCoordinatesArray from './utils/animated/AnimatedCoordinatesArray';
-import AnimatedExtractCoordinateFromArray from './utils/animated/AnimatedExtractCoordinateFromArray';
-import AnimatedRouteCoordinatesArray from './utils/animated/AnimatedRouteCoordinatesArray';
+import {
+  AnimatedCoordinatesArray,
+  AnimatedExtractCoordinateFromArray,
+  AnimatedPoint,
+  AnimatedRouteCoordinatesArray,
+  AnimatedShape,
+} from './classes';
 import Style from './components/Style';
 import Logger from './utils/Logger';
 import { requestAndroidLocationPermissions } from './requestAndroidLocationPermissions';
@@ -52,6 +54,14 @@ MapboxGL.Callout = Callout;
 MapboxGL.UserLocation = UserLocation;
 MapboxGL.Camera = Camera;
 MapboxGL.Style = Style;
+
+// classes
+MapboxGL.AnimatedCoordinatesArray = AnimatedCoordinatesArray;
+MapboxGL.AnimatedExtractCoordinateFromArray =
+  AnimatedExtractCoordinateFromArray;
+MapboxGL.AnimatedPoint = AnimatedPoint;
+MapboxGL.AnimatedRouteCoordinatesArray = AnimatedRouteCoordinatesArray;
+MapboxGL.AnimatedShape = AnimatedShape;
 
 // annotations
 MapboxGL.Annotation = Annotation;
@@ -88,12 +98,6 @@ MapboxGL.snapshotManager = snapshotManager;
 MapboxGL.Animated = Animated;
 
 // utils
-MapboxGL.AnimatedPoint = AnimatedMapPoint;
-MapboxGL.AnimatedCoordinatesArray = AnimatedCoordinatesArray;
-MapboxGL.AnimatedExtractCoordinateFromArray =
-  AnimatedExtractCoordinateFromArray;
-MapboxGL.AnimatedRouteCoordinatesArray = AnimatedRouteCoordinatesArray;
-MapboxGL.AnimatedShape = AnimatedShape;
 MapboxGL.Logger = Logger;
 
 const { LineJoin } = MapboxGL;
@@ -124,12 +128,14 @@ export {
   BackgroundLayer,
   Terrain,
   Atmosphere,
+  AnimatedCoordinatesArray,
+  AnimatedExtractCoordinateFromArray,
+  AnimatedPoint,
+  AnimatedRouteCoordinatesArray,
+  AnimatedShape,
   locationManager,
   offlineManager,
   snapshotManager,
-  AnimatedMapPoint,
-  AnimatedCoordinatesArray,
-  AnimatedShape,
   Animated,
   LineJoin,
   Logger,
