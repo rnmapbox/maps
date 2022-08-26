@@ -157,7 +157,6 @@ declare namespace MapboxGL {
   /**
    * Classes
    */
-
   class AnimatedPoint {
     constructor(point?: _AnimatedPoint);
     longitude: ReactNative.Animated.Value;
@@ -175,7 +174,6 @@ declare namespace MapboxGL {
       config: Record<string, any>,
     ) => ReactNative.Animated.CompositeAnimation;
   }
-
   class AnimatedLineString {
     constructor(shape: _AnimatedLineString);
   }
