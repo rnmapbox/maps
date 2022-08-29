@@ -1056,10 +1056,10 @@ export import MapboxGLEvent = MapboxGL.MapboxGLEvent;
 export import UserTrackingMode = MapboxGL.UserTrackingMode;
 export import UserTrackingModeChangeCallback = MapboxGL.UserTrackingModeChangeCallback;
 export import AnimatedPoint = MapboxGL.AnimatedPoint;
+/** @deprecated This will be removed in a future release. Use `AnimatedLineString` instead. */
+export import AnimatedMapPoint = MapboxGL.AnimatedPoint;
 export import AnimatedLineString = MapboxGL.AnimatedLineString;
-/**
- * @deprecated Use `AnimatedLineString`.
- */
+/** @deprecated This will be removed in a future release. Use `AnimatedLineString` instead. */
 export import AnimatedShape = MapboxGL.AnimatedLineString;
 
 export const { offlineManager } = MapboxGL;
