@@ -39,7 +39,7 @@ import {
   AnimatedExtractCoordinateFromArray,
   AnimatedPoint,
   AnimatedRouteCoordinatesArray,
-  AnimatedShape,
+  AnimatedLineString,
 } from './javascript/classes';
 import type {
   MapboxGLEvent as _MapboxGLEvent,
@@ -1058,7 +1058,7 @@ export import UserTrackingModeChangeCallback = MapboxGL.UserTrackingModeChangeCa
 export import AnimatedPoint = MapboxGL.AnimatedPoint;
 export import AnimatedLineString = MapboxGL.AnimatedLineString;
 /**
- * @deprecated Use `AnimatedLineString`
+ * @deprecated Use `AnimatedLineString`.
  */
 export import AnimatedShape = MapboxGL.AnimatedLineString;
 

@@ -6,23 +6,23 @@ const AnimatedWithChildren = Object.getPrototypeOf(Animated.ValueXY);
 if (__DEV__) {
   if (AnimatedWithChildren.name !== 'AnimatedWithChildren') {
     console.error(
-      'AnimatedShape could not obtain AnimatedWithChildren base class',
+      'AnimatedLineString could not obtain AnimatedWithChildren base class',
     );
   }
 }
 
 /**
- * AnimatedShape can be used to have animated properties inside the shape property
+ * AnimatedLineString can be used to display an animated line inside the shape property.
  * @example
- * <AnimatedShapeSource ... shape={new AnimatedShape({type:'LineString', coordinates: animatedCoords})} />
+ * <AnimatedShapeSource ... shape={new AnimatedLineString({type:'LineString', coordinates: animatedCoords})} />
  */
-class AnimatedShape extends AnimatedWithChildren {
+export class AnimatedLineString extends AnimatedWithChildren {
   // equivalent of AnimatedStyle for shapes
   // https://github.com/facebook/react-native/blob/master/Libraries/Animated/src/nodes/AnimatedStyle.js
 
-  constructor(shape) {
+  constructor(lineString) {
     super();
-    this.shape = shape;
+    this.lineString = lineString;
   }
 
   _walkShapeAndGetValues(value) {
@@ -43,7 +43,7 @@ class AnimatedShape extends AnimatedWithChildren {
   }
 
   __getValue() {
-    const result = this._walkShapeAndGetValues(this.shape);
+    const result = this._walkShapeAndGetValues(this.lineString);
     return result;
   }
 
@@ -60,13 +60,13 @@ class AnimatedShape extends AnimatedWithChildren {
   }
 
   __attach() {
-    this._walkAndProcess(this.shape, (v) => v.__addChild(this));
+    this._walkAndProcess(this.lineString, (v) => v.__addChild(this));
   }
 
   __detach() {
-    this._walkAndProcess(this.shape, (v) => v.__removeChild(this));
+    this._walkAndProcess(this.lineString, (v) => v.__removeChild(this));
     super.__detach();
   }
 }
 
-export default AnimatedShape;
+export default AnimatedLineString;
