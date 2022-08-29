@@ -57,9 +57,9 @@ MapboxGL.Style = Style;
 
 // classes
 MapboxGL.AnimatedPoint = AnimatedPoint;
-MapboxGL.AnimatedMapPoint = AnimatedPoint;
+MapboxGL.AnimatedMapPoint = AnimatedPoint; // For backwards compatibiilty.
 MapboxGL.AnimatedLineString = AnimatedLineString;
-MapboxGL.AnimatedShape = AnimatedLineString;
+MapboxGL.AnimatedShape = AnimatedLineString; // For backwards compatibiilty.
 MapboxGL.AnimatedCoordinatesArray = AnimatedCoordinatesArray;
 MapboxGL.AnimatedExtractCoordinateFromArray =
   AnimatedExtractCoordinateFromArray;
@@ -98,15 +98,17 @@ MapboxGL.snapshotManager = snapshotManager;
 
 // animated
 MapboxGL.Animated = Animated;
+MapboxGL.Animated.RouteCoordinatesArray = AnimatedRouteCoordinatesArray; // For backwards compatibiilty.
+MapboxGL.Animated.ExtractCoordinateFromArray =
+  AnimatedExtractCoordinateFromArray; // For backwards compatibiilty.
 
 // utils
 MapboxGL.Logger = Logger;
 
 const { LineJoin } = MapboxGL;
 
-// Supports deprecated component names.
-const AnimatedMapPoint = AnimatedPoint;
-const AnimatedShape = AnimatedLineString;
+const AnimatedMapPoint = AnimatedPoint; // For backwards compatibiilty.
+const AnimatedShape = AnimatedLineString; // For backwards compatibiilty.
 
 export {
   MapView,
