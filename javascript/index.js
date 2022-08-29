@@ -57,6 +57,7 @@ MapboxGL.Style = Style;
 
 // classes
 MapboxGL.AnimatedPoint = AnimatedPoint;
+MapboxGL.AnimatedMapPoint = AnimatedPoint;
 MapboxGL.AnimatedLineString = AnimatedLineString;
 MapboxGL.AnimatedShape = AnimatedLineString;
 MapboxGL.AnimatedCoordinatesArray = AnimatedCoordinatesArray;
