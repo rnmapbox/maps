@@ -1,0 +1,1 @@
+{"version":3,"file":"Atmosphere.d.ts","sourceRoot":"","sources":["../../javascript/components/Atmosphere.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAwB,MAAM,OAAO,CAAC;AAG7C,OAAO,KAAK,EAAE,yBAAyB,EAAE,MAAM,uBAAuB,CAAC;AAGvE,eAAO,MAAM,kBAAkB,qBAAqB,CAAC;AAErD,aAAK,KAAK,GAAG;IACX,KAAK,EAAE,yBAAyB,CAAC;CAClC,CAAC;AAEF,eAAO,MAAM,UAAU,oCAAgB,KAAK,iBAU1C,CAAC"}

@@ -125,3 +125,5 @@ coverage
 *.iml
 
 rnmapbox-maps.tgz
+
+lib
