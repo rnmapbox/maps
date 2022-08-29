@@ -103,7 +103,8 @@ MapboxGL.Logger = Logger;
 
 const { LineJoin } = MapboxGL;
 
-// Supports deprecated component name.
+// Supports deprecated component names.
+const AnimatedMapPoint = AnimatedPoint;
 const AnimatedShape = AnimatedLineString;
 
 export {
@@ -135,6 +136,7 @@ export {
   AnimatedCoordinatesArray,
   AnimatedExtractCoordinateFromArray,
   AnimatedPoint,
+  AnimatedMapPoint,
   AnimatedRouteCoordinatesArray,
   AnimatedLineString,
   AnimatedShape,
