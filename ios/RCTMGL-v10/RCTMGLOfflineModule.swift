@@ -324,7 +324,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
         let metadataStr = options["metadata"] as! String
         let metadata = try JSONSerialization.jsonObject(with: metadataStr.data(using: .utf8)!, options: []) as! [String:Any]
         let id = metadata["name"] as! String
-        let stylePackLoadOptions = StylePackLoadOptions(glyphsRasterizationMode: .ideographsRasterizedLocally, metadata: ["tag": id])!
+        let stylePackLoadOptions = StylePackLoadOptions(glyphsRasterizationMode: .ideographsRasterizedLocally, metadata: metadata)
 
         let boundsStr = options["bounds"] as! String
         let boundsData = boundsStr.data(using: .utf8)
