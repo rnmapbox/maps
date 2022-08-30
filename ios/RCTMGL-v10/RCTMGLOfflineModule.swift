@@ -321,26 +321,24 @@ class RCTMGLOfflineModule: RCTEventEmitter {
   func createPack(_ options: NSDictionary, resolver: @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
     DispatchQueue.main.async {
       do {
+        let metadataStr = options["metadata"] as! String
+        let metadata = try JSONSerialization.jsonObject(with: metadataStr.data(using: .utf8)!, options: []) as! [String:Any]
+        let id = metadata["name"] as! String
+        let stylePackLoadOptions = StylePackLoadOptions(glyphsRasterizationMode: .ideographsRasterizedLocally, metadata: ["tag": id])!
+
         let boundsStr = options["bounds"] as! String
         let boundsData = boundsStr.data(using: .utf8)
         var boundsFC = try JSONDecoder().decode(FeatureCollection.self, from: boundsData!)
 
         var bounds = self.convertPointPairToBounds(RCTMGLFeatureUtils.fcToGeomtry(boundsFC))
-        
+
         let descriptorOptions = TilesetDescriptorOptions(
-          styleURI: options["styleURL"] as! String,
-          minZoom: (options["minZoom"] as! NSNumber).uint8Value,
-          maxZoom: (options["maxZoom"] as! NSNumber).uint8Value,
-          stylePack: nil
+          styleURI: StyleURI(rawValue: options["styleURL"] as! String)!,
+          zoomRange: (options["minZoom"] as! NSNumber).uint8Value...(options["maxZoom"] as! NSNumber).uint8Value,
+          stylePackOptions: stylePackLoadOptions
         )
         let tilesetDescriptor = self.offlineManager.createTilesetDescriptor(for: descriptorOptions)
-        
-        
-        let metadataStr = options["metadata"] as! String
-        
-        let metadata = try JSONSerialization.jsonObject(with: metadataStr.data(using: .utf8)!, options: []) as! [String:Any]
 
-        let id = metadata["name"] as! String
         let loadOptions = TileRegionLoadOptions(
           geometry: bounds, // RCTMGLFeatureUtils.geometryToGeometry(bounds),
           descriptors: [tilesetDescriptor],
@@ -375,7 +373,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
             self.offlinePackDidReceiveError(name: id, error: error)
           }
         }
-        
+
         self.tileRegionPacks[id]!.cancelable = task
         resolver([
           "bounds": boundsStr,
