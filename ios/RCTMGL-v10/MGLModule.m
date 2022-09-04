@@ -4,4 +4,7 @@
 
 RCT_EXTERN_METHOD(setAccessToken:)
 
+RCT_EXTERN_METHOD(addCustomHeader:(NSString *)headerName forHeaderValue:(NSString *) headerValue)
+RCT_EXTERN_METHOD(removeCustomHeader:(NSString *)headerName)
+
 @end
