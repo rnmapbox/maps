@@ -46,7 +46,8 @@
     "mapbox-gl": "^2.9.2",
     "react-dom": "^18.2.0",
     "react-native-web": "0.18.7",
-    "@expo/webpack-config": "^0.17.2"
+    "@expo/webpack-config": "^0.17.2",
+    "@types/responselike": "1.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
