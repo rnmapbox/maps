@@ -1,0 +1,112 @@
+name: Bug Report
+description: This template should be used for reporting bugs and defects.
+title: "[Bug]: "
+labels: 'bug :beetle:'
+body:
+- type: markdown
+  attributes:
+    value: |
+      Thanks for taking the time to fill out this bug report!
+- type: dropdown
+  id: mapbox-implementation
+  attributes:
+    label: Mapbox Implementation
+    description: |-
+      Check `RNMapboxMapsImpl` in your Podfile/gradle files. Defaults to `Maplibre`.
+    options:
+      - Mapbox
+      - Mapbox GL
+      - Maplibre
+  validations:
+    required: true
+- type: input
+  id: mapbox-version
+  attributes:
+    label: Mapbox Version
+    description: |-
+      Check `RNMapboxMapsVersion` in your Podfile/gradle files, set to `default` if you don't cusomize the version
+    placeholder: 10.7.0
+  validations:
+    required: true
+- type: dropdown
+  id: platform
+  attributes:
+    label: Platform
+    multiple: true
+    description: |-
+      The platform where you experience the issue
+    options:
+      - iOS
+      - Android
+  validations:
+    required: true
+- type: input
+  id: rnmapbox-version
+  attributes:
+    label: "`@rnmapbox/maps` version"
+    description: |-
+      The version of `@rnmapbox/maps`, such as `#main`, `10.0.0-beta.32`
+    value: 10.0.0-beta.11
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Standalone component to reproduce
+    description: |-
+      - Use [our BugReportTemplate](https://github.com/rnmapbox/maps/blob/main/example/src/examples/BugReportExample.js) screens as a starting point.
+      - Component should be self contained - no extra libraries, external data, no parameters
+      - Do not include setAccessToken or access token istelf.
+    value: |-
+      ```javascript
+      import React from 'react';
+      import {
+        MapView,
+        ShapeSource,
+        LineLayer,
+        Camera,
+      } from '@rnmapbox/maps';
+      
+      const aLine = {
+        type: 'LineString',
+        coordinates: [
+          [-74.00597, 40.71427],
+          [-74.00697, 40.71527],
+        ],
+      };
+      
+      class BugReportExample extends React.Component {
+        render() {
+          return (
+            <MapView style={{flex: 1}}>
+              <Camera centerCoordinate={[-74.00597, 40.71427]} zoomLevel={14} />
+              <ShapeSource id="idStreetLayer" shape={aLine}>
+                <LineLayer id="idStreetLayer" />
+              </ShapeSource>
+            </MapView>
+          );
+        }
+      }
+      ```
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Observed behavior and steps to reproduce
+    description: |-
+      - Please include as much evidence as possible (traces, videos, screenshots etc.)
+- type: textarea
+  attributes:
+    label: Expected behavior
+    description: |-
+      - Please include the expected behavior and any resources supporting this expected behavior.
+- type: textarea
+  attributes:
+    label: Notes / preliminary analysis
+    description: |-
+      - include your initial analysis, if available
+- type: textarea
+  attributes:
+    label: Additional links and references
+    description: |-
+      - Links to traces, videos et
+
