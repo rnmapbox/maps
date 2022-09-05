@@ -527,7 +527,11 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         layerWaiters.remove(layerId)
     }
 
-    fun waitForLayer(layerID: String, callback: FoundLayerCallback) {
+    fun waitForLayer(layerID: String?, callback: FoundLayerCallback) {
+        if(layerID == null){
+            callback.found(null)
+            return
+        }
         if (savedStyle != null) {
             val layer = savedStyle?.getLayer(layerID)
             if (layer != null) {

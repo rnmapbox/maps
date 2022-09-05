@@ -49,7 +49,7 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
         mSourceID = sourceID
     }
 
-    fun setAboveLayerID(aboveLayerID: String) {
+    fun setAboveLayerID(aboveLayerID: String?) {
         if (mAboveLayerID != null && mAboveLayerID == aboveLayerID) {
             return
         }
@@ -60,7 +60,7 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
         }
     }
 
-    fun setBelowLayerID(belowLayerID: String) {
+    fun setBelowLayerID(belowLayerID: String?) {
         if (mBelowLayerID != null && mBelowLayerID == belowLayerID) {
             return
         }
@@ -147,7 +147,7 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
     }
 
     fun addAbove(aboveLayerID: String?) {
-        mMapView!!.waitForLayer(aboveLayerID!!, object : FoundLayerCallback {
+        mMapView!!.waitForLayer(aboveLayerID, object : FoundLayerCallback {
             override fun found(layer: Layer?) {
                 if (!hasInitialized()) {
                     return
@@ -160,7 +160,7 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
     }
 
     fun addBelow(belowLayerID: String?) {
-        mMapView!!.waitForLayer(belowLayerID!!, object : FoundLayerCallback {
+        mMapView!!.waitForLayer(belowLayerID, object : FoundLayerCallback {
             override fun found(layer: Layer?) {
                 if (!hasInitialized()) {
                     return
