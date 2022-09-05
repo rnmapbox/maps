@@ -196,7 +196,7 @@ const BugReportPage =
 
 const Examples = new ExampleGroup('React Native Mapbox', [
   new ExampleItem('Bug Report Template', BugReportPage(BugReportExample)),
-  new ExampleItem('Bug Report Tempalte TS', BugReportPage(BugReportExampleTS)),
+  new ExampleItem('Bug Report Template TS', BugReportPage(BugReportExampleTS)),
   new ExampleGroup('V10', [
     new ExampleItem('Terrain, Sky, & Atmosphere', TerrainSkyAtmosphere),
     new ExampleItem('Query Terrain Elevation', QueryTerrainElevation),
