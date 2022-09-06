@@ -56,8 +56,7 @@
     "@turf/nearest-point-on-line": "6.5.0",
     "@types/geojson": "^7946.0.7",
     "debounce": "^1.2.0",
-    "deprecated-react-native-prop-types": "^2.3.0",
-    "eslint-plugin-jest": "^27.0.1"
+    "deprecated-react-native-prop-types": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "7.17.5",
@@ -80,7 +79,7 @@
     "eslint-plugin-flowtype": "^8.0.3",
     "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-import": "2.25.3",
-    "eslint-plugin-jest": "^26.8.7",
+    "eslint-plugin-jest": "^27.0.1",
     "expo-module-scripts": "^2.0.0",
     "husky": "^8.0.1",
     "jest": "27.5.1",
