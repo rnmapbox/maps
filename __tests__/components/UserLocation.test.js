@@ -34,7 +34,7 @@ describe('UserLocation', () => {
       jest.clearAllMocks();
     });
 
-    test('renders with CircleLayers by default', (done) => {
+    test('renders with CircleLayers by default', () => {
       const { UNSAFE_getAllByType } = render(<UserLocation />);
 
       setTimeout(() => {
@@ -43,11 +43,10 @@ describe('UserLocation', () => {
 
         expect(shapeSource.length).toBe(1);
         expect(circleLayer.length).toBe(3);
-        done();
       });
-    });
+    }, 100);
 
-    test('does not render with visible set to false', (done) => {
+    test('does not render with visible set to false', () => {
       const { UNSAFE_queryByType } = render(<UserLocation visible={false} />);
 
       setTimeout(() => {
@@ -56,11 +55,10 @@ describe('UserLocation', () => {
 
         expect(shapeSource).toEqual(null);
         expect(circleLayer).toEqual(null);
-        done();
       });
-    });
+    }, 100);
 
-    test('renders with CustomChild when provided', (done) => {
+    test('renders with CustomChild when provided', () => {
       const circleLayerProps = {
         key: 'testUserLocationCircle',
         id: 'testUserLocationCircle',
@@ -87,9 +85,8 @@ describe('UserLocation', () => {
         expect(circleLayer.length).toBe(1);
 
         expect(circleLayer[0].props.style).toEqual(circleLayerProps.style);
-        done();
       });
-    });
+    }, 100);
 
     test('calls onUpdate callback when new location is received', () => {
       const onUpdateCallback = jest.fn();
