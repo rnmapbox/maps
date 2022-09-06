@@ -188,4 +188,4 @@ export class AnimatedCoordinatesArray extends AnimatedWithChildren {
   }
 }
 
-export default {};
+export default AnimatedCoordinatesArray;

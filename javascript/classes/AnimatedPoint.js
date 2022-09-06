@@ -123,4 +123,4 @@ export class AnimatedPoint extends AnimatedWithChildren {
   }
 }
 
-export default {};
+export default AnimatedPoint;

@@ -142,4 +142,4 @@ export class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesArray {
   }
 }
 
-export default {};
+export default AnimatedRouteCoordinatesArray;

@@ -42,4 +42,4 @@ export class AnimatedExtractCoordinateFromArray extends AnimatedWithChildren {
   }
 }
 
-export default {};
+export default AnimatedExtractCoordinateFromArray;
