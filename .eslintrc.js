@@ -77,7 +77,7 @@ module.exports = {
     'no-use-before-define': ['error', { functions: false }],
     'no-unused-expressions': ['error', { allowTaggedTemplates: true }],
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
-    'fp/no-mutating-methods': 'warn',
+    'fp/no-mutating-methods': 0,
     'react-native/no-inline-styles': 0,
   },
   ignorePatterns: ['**/rnmapbox.web.symlink'],

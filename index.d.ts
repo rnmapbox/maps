@@ -1041,9 +1041,16 @@ export import CameraAnimationMode = MapboxGL.CameraAnimationMode;
 export import Atmosphere = MapboxGL.Atmosphere;
 export import Terrain = MapboxGL.Terrain;
 export import RasterDemSource = MapboxGL.RasterDemSource;
-export import SkyLayer = MapboxGL.SkyLayer;
 export import ShapeSource = MapboxGL.ShapeSource;
+export import FillLayer = MapboxGL.FillLayer;
+export import FillExtrusionLayer = MapboxGL.FillExtrusionLayer;
+export import HeatmapLayer = MapboxGL.HeatmapLayer;
+export import LineLayer = MapboxGL.LineLayer;
 export import CircleLayer = MapboxGL.CircleLayer;
+export import SkyLayer = MapboxGL.SkyLayer;
+export import SymbolLayer = MapboxGL.SymbolLayer;
+export import RasterLayer = MapboxGL.RasterLayer;
+export import BackgroundLayer = MapboxGL.BackgroundLayer;
 
 export import MapboxGLEvent = MapboxGL.MapboxGLEvent;
 export import UserTrackingMode = MapboxGL.UserTrackingMode;
