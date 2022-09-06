@@ -1,16 +1,21 @@
-import { Image, processColor } from 'react-native';
+import {
+  Image,
+  ImageResolvedAssetSource,
+  processColor,
+  ProcessedColorValue,
+} from 'react-native';
+import { UsesNonExemptEncryption } from '@expo/config-plugins/build/ios';
 
 import { getStyleType } from './styleMap';
-import BridgeValue from './BridgeValue';
+import BridgeValue, {
+  type StyleValueJSON,
+  type RawValueType,
+} from './BridgeValue';
 import { AllLayerStyleProps } from './MapboxStyles';
-
-type StyleValueArray = { type: 'array'; value: [any] };
-type StyleValueNumber = { type: 'number'; value: number };
-type StyleValueString = { type: 'string'; value: string };
 
 export type StyleValue = {
   styletype: string;
-  stylevalue: StyleValueArray | StyleValueNumber | StyleValueString;
+  stylevalue: StyleValueJSON;
 };
 
 export function transformStyle(
@@ -24,12 +29,19 @@ export function transformStyle(
   const styleProps = Object.keys(style) as Array<keyof typeof style>;
   for (const styleProp of styleProps) {
     const styleType = getStyleType(styleProp);
-    let rawStyle: unknown = style[styleProp];
+    let rawStyle: RawValueType = style[styleProp];
 
     if (styleType === 'color' && typeof rawStyle === 'string') {
-      rawStyle = processColor(rawStyle);
+      const color = processColor(rawStyle);
+      if (color === null || color === undefined || typeof color === 'symbol') {
+        console.error(`RNMapbox: Invalid color value: ${rawStyle} using red`);
+        rawStyle = 'ff0000';
+      } else {
+        rawStyle = color;
+      }
     } else if (styleType === 'image' && typeof rawStyle === 'number') {
-      rawStyle = Image.resolveAssetSource(rawStyle) || {};
+      rawStyle =
+        (Image.resolveAssetSource(rawStyle) as unknown as RawValueType) || {};
     }
 
     const bridgeValue = new BridgeValue(rawStyle);
