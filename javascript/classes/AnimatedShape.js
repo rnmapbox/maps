@@ -75,4 +75,4 @@ export class AnimatedShape extends AnimatedWithChildren {
   }
 }
 
-export default AnimatedShape;
+export default {};

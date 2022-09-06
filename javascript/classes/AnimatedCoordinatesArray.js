@@ -15,7 +15,7 @@ const defaultConfig = {
   useNativeDriver: false,
 };
 
-class AnimatedCoordinatesArray extends AnimatedWithChildren {
+export class AnimatedCoordinatesArray extends AnimatedWithChildren {
   constructor(...args) {
     super();
 
@@ -188,4 +188,4 @@ class AnimatedCoordinatesArray extends AnimatedWithChildren {
   }
 }
 
-export default AnimatedCoordinatesArray;
+export default {};
