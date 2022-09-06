@@ -5,7 +5,7 @@
     "preserveSymlinks": true,
     "target": "es6",
     "module": "es6",
-    "allowJs": true,
+    "allowJs": false,
     "jsx": "react-native",
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
