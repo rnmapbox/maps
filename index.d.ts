@@ -34,19 +34,12 @@ import {
   CameraAnimationMode as _CameraAnimationMode,
 } from './javascript/components/Camera';
 import { Atmosphere as _Atmosphere } from './javascript/components/Atmosphere';
-import {
-  AnimatedCoordinatesArray,
-  AnimatedExtractCoordinateFromArray,
-  AnimatedPoint,
-  AnimatedRouteCoordinatesArray,
-  AnimatedLineString,
-} from './javascript/classes';
 import type {
   MapboxGLEvent as _MapboxGLEvent,
   UserTrackingMode as _UserTrackingMode,
   UserTrackingModeChangeCallback as _UserTrackingModeChangeCallback,
   AnimatedPoint as _AnimatedPoint,
-  AnimatedLineString as _AnimatedLineString,
+  AnimatedShape as _AnimatedShape,
 } from './javascript/types/index';
 import type { requestAndroidLocationPermissions as _requestAndroidLocationPermissions } from './javascript/requestAndroidLocationPermissions';
 
@@ -174,8 +167,8 @@ declare namespace MapboxGL {
       config: Record<string, any>,
     ) => ReactNative.Animated.CompositeAnimation;
   }
-  class AnimatedLineString {
-    constructor(shape: _AnimatedLineString);
+  class AnimatedShape {
+    constructor(shape: _AnimatedShape);
   }
 
   /**
@@ -1056,11 +1049,9 @@ export import MapboxGLEvent = MapboxGL.MapboxGLEvent;
 export import UserTrackingMode = MapboxGL.UserTrackingMode;
 export import UserTrackingModeChangeCallback = MapboxGL.UserTrackingModeChangeCallback;
 export import AnimatedPoint = MapboxGL.AnimatedPoint;
-/** @deprecated This will be removed in a future release. Use `AnimatedLineString` instead. */
+/** @deprecated This will be removed in a future release. Use `AnimatedPoint` instead. */
 export import AnimatedMapPoint = MapboxGL.AnimatedPoint;
-export import AnimatedLineString = MapboxGL.AnimatedLineString;
-/** @deprecated This will be removed in a future release. Use `AnimatedLineString` instead. */
-export import AnimatedShape = MapboxGL.AnimatedLineString;
+export import AnimatedShape = MapboxGL.AnimatedShape;
 
 export const { offlineManager } = MapboxGL;
 

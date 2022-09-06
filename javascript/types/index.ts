@@ -31,7 +31,7 @@ export interface AnimatedPoint extends GeoJsonObject {
   coordinates: (Animated.Value | number)[];
 }
 
-export interface AnimatedLineString extends GeoJsonObject {
+export interface AnimatedShape extends GeoJsonObject {
   readonly type: 'LineString';
   coordinates: (Animated.Value | number)[][];
 }

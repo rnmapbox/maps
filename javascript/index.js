@@ -34,7 +34,7 @@ import {
   AnimatedExtractCoordinateFromArray,
   AnimatedPoint,
   AnimatedRouteCoordinatesArray,
-  AnimatedLineString,
+  AnimatedShape,
 } from './classes';
 import Style from './components/Style';
 import Logger from './utils/Logger';
@@ -58,8 +58,7 @@ MapboxGL.Style = Style;
 // classes
 MapboxGL.AnimatedPoint = AnimatedPoint;
 MapboxGL.AnimatedMapPoint = AnimatedPoint; // For backwards compatibiilty.
-MapboxGL.AnimatedLineString = AnimatedLineString;
-MapboxGL.AnimatedShape = AnimatedLineString; // For backwards compatibiilty.
+MapboxGL.AnimatedShape = AnimatedShape;
 MapboxGL.AnimatedCoordinatesArray = AnimatedCoordinatesArray;
 MapboxGL.AnimatedExtractCoordinateFromArray =
   AnimatedExtractCoordinateFromArray;
@@ -108,7 +107,6 @@ MapboxGL.Logger = Logger;
 const { LineJoin } = MapboxGL;
 
 const AnimatedMapPoint = AnimatedPoint; // For backwards compatibiilty.
-const AnimatedShape = AnimatedLineString; // For backwards compatibiilty.
 
 export {
   MapView,
@@ -141,7 +139,6 @@ export {
   AnimatedPoint,
   AnimatedMapPoint,
   AnimatedRouteCoordinatesArray,
-  AnimatedLineString,
   AnimatedShape,
   locationManager,
   offlineManager,

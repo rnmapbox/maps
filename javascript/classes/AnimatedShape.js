@@ -6,23 +6,29 @@ const AnimatedWithChildren = Object.getPrototypeOf(Animated.ValueXY);
 if (__DEV__) {
   if (AnimatedWithChildren.name !== 'AnimatedWithChildren') {
     console.error(
-      'AnimatedLineString could not obtain AnimatedWithChildren base class',
+      'AnimatedShape could not obtain AnimatedWithChildren base class',
     );
   }
 }
 
 /**
- * AnimatedLineString can be used to display an animated line inside the shape property.
+ * AnimatedShape can be used to display an animated LineString, FeatureCollection, Point, or other struture inside the shape property.
  * @example
- * <AnimatedShapeSource ... shape={new AnimatedLineString({type:'LineString', coordinates: animatedCoords})} />
+ * const animatedLon = useRef(new Animated.Value(-73.984638)).current;
+ * const animatedLat = useRef(new Animated.Value(40.759211)).current;
+ * const animatedShape = new AnimatedShape({
+ *   type: 'LineString',
+ *   coordinates: [animatedLon, animatedLat],
+ * });
+ * return <AnimatedShapeSource shape={animatedShape} />
  */
-export class AnimatedLineString extends AnimatedWithChildren {
+export class AnimatedShape extends AnimatedWithChildren {
   // equivalent of AnimatedStyle for shapes
   // https://github.com/facebook/react-native/blob/master/Libraries/Animated/src/nodes/AnimatedStyle.js
 
-  constructor(lineString) {
+  constructor(shape) {
     super();
-    this.lineString = lineString;
+    this.shape = shape;
   }
 
   _walkShapeAndGetValues(value) {
@@ -43,7 +49,7 @@ export class AnimatedLineString extends AnimatedWithChildren {
   }
 
   __getValue() {
-    const result = this._walkShapeAndGetValues(this.lineString);
+    const result = this._walkShapeAndGetValues(this.shape);
     return result;
   }
 
@@ -60,13 +66,13 @@ export class AnimatedLineString extends AnimatedWithChildren {
   }
 
   __attach() {
-    this._walkAndProcess(this.lineString, (v) => v.__addChild(this));
+    this._walkAndProcess(this.shape, (v) => v.__addChild(this));
   }
 
   __detach() {
-    this._walkAndProcess(this.lineString, (v) => v.__removeChild(this));
+    this._walkAndProcess(this.shape, (v) => v.__removeChild(this));
     super.__detach();
   }
 }
 
-export default AnimatedLineString;
+export default AnimatedShape;
