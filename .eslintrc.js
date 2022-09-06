@@ -40,6 +40,7 @@ module.exports = {
     'plugin:react/recommended',
     '@react-native-community',
     'prettier',
+    'plugin:jest/recommended',
   ],
   rules: {
     'react/no-deprecated': 'warn',
