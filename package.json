@@ -56,7 +56,8 @@
     "@turf/nearest-point-on-line": "6.5.0",
     "@types/geojson": "^7946.0.7",
     "debounce": "^1.2.0",
-    "deprecated-react-native-prop-types": "^2.3.0"
+    "deprecated-react-native-prop-types": "^2.3.0",
+    "eslint-plugin-jest": "^27.0.1"
   },
   "devDependencies": {
     "@babel/core": "7.17.5",
