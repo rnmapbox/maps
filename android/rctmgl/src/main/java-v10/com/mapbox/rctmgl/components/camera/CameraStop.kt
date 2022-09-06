@@ -34,10 +34,10 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
     private var mZoom: Double? = null
     private var mLatLng: LatLng? = null
     private var mBounds: LatLngBounds? = null
-    private var mBoundsPaddingLeft = 0
-    private var mBoundsPaddingRight = 0
-    private var mBoundsPaddingBottom = 0
-    private var mBoundsPaddingTop = 0
+    private var mBoundsPaddingLeft : Int? = null
+    private var mBoundsPaddingRight : Int? = null
+    private var mBoundsPaddingBottom : Int? = null
+    private var mBoundsPaddingTop : Int? = null
     private var mMode = CameraMode.EASE
     private var mDuration = 2000
     private var mCallback: Animator.AnimatorListener? = null
@@ -67,10 +67,10 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 
     fun setBounds(
         bounds: LatLngBounds?,
-        paddingLeft: Int,
-        paddingRight: Int,
-        paddingTop: Int,
-        paddingBottom: Int
+        paddingLeft: Int?,
+        paddingRight: Int?,
+        paddingTop: Int?,
+        paddingBottom: Int?
     ) {
         mBounds = bounds
         mBoundsPaddingLeft = paddingLeft
@@ -95,6 +95,9 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
         val builder = CameraOptions.Builder()
         builder.center(currentCamera.center)
         builder.bearing(currentCamera.bearing)
+
+        val currentPadding = currentCamera.padding;
+
         builder.padding(currentCamera.padding)
         builder.zoom(currentCamera.zoom)
         if (mBearing != null) {
@@ -109,16 +112,11 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
             val tilt = if (mTilt != null) mTilt!! else currentCamera.pitch
             val bearing = if (mBearing != null) mBearing!! else currentCamera.bearing
 
-            // Adding map padding to the camera padding which is the same behavior as
-            // mapbox native does on iOS
-            val contentInset = map.cameraState.padding
-            val paddingLeft =
-                java.lang.Double.valueOf(contentInset.left + mBoundsPaddingLeft).toInt()
-            val paddingTop = java.lang.Double.valueOf(contentInset.top + mBoundsPaddingTop).toInt()
-            val paddingRight =
-                java.lang.Double.valueOf(contentInset.right + mBoundsPaddingRight).toInt()
-            val paddingBottom =
-                java.lang.Double.valueOf(contentInset.bottom + mBoundsPaddingBottom).toInt()
+            val paddingLeft: Int = mBoundsPaddingLeft ?: currentPadding.left.toInt()
+            val paddingTop: Int = mBoundsPaddingTop ?: currentPadding.top.toInt()
+            val paddingRight: Int = mBoundsPaddingRight ?: currentPadding.right.toInt()
+            val paddingBottom: Int = mBoundsPaddingBottom ?: currentPadding.bottom.toInt()
+
             val cameraPadding = intArrayOf(paddingLeft, paddingTop, paddingRight, paddingBottom)
             val cameraPaddingClipped = clippedPadding(cameraPadding, mapView)
             val boundsCamera = map.cameraForCoordinateBounds(
@@ -163,18 +161,12 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
                 stop.setDuration(readableMap.getInt("duration"))
             }
             if (readableMap.hasKey("bounds")) {
-                var paddingTop = getBoundsPaddingByKey(readableMap, "paddingTop")
-                var paddingRight = getBoundsPaddingByKey(readableMap, "paddingRight")
-                var paddingBottom = getBoundsPaddingByKey(readableMap, "paddingBottom")
-                var paddingLeft = getBoundsPaddingByKey(readableMap, "paddingLeft")
-
-                // scale padding by pixel ratio
                 val metrics = context.resources.displayMetrics
-                paddingTop = java.lang.Float.valueOf(paddingTop * metrics.scaledDensity).toInt()
-                paddingRight = java.lang.Float.valueOf(paddingRight * metrics.scaledDensity).toInt()
-                paddingBottom =
-                    java.lang.Float.valueOf(paddingBottom * metrics.scaledDensity).toInt()
-                paddingLeft = java.lang.Float.valueOf(paddingLeft * metrics.scaledDensity).toInt()
+                var paddingTop = getBoundsPaddingByKey(readableMap, metrics.scaledDensity, "paddingTop")
+                var paddingRight = getBoundsPaddingByKey(readableMap, metrics.scaledDensity, "paddingRight")
+                var paddingBottom = getBoundsPaddingByKey(readableMap, metrics.scaledDensity, "paddingBottom")
+                var paddingLeft = getBoundsPaddingByKey(readableMap, metrics.scaledDensity, "paddingLeft")
+
                 val collection = FeatureCollection.fromJson(readableMap.getString("bounds")!!)
                 stop.setBounds(
                     toLatLngBounds(collection), paddingLeft, paddingRight,
@@ -221,8 +213,12 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
             return intArrayOf(resultLeft, resultTop, resultRight, resultBottom)
         }
 
-        private fun getBoundsPaddingByKey(map: ReadableMap, key: String): Int {
-            return if (map.hasKey(key)) map.getInt(key) else 0
+        private fun getBoundsPaddingByKey(map: ReadableMap, scaledDensity: Float, key: String): Int? {
+            if (map.hasKey(key)) {
+                return (map.getInt(key) * scaledDensity).toInt()
+            } else {
+                return null;
+            }
         }
     }
 }

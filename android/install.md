@@ -20,7 +20,7 @@ Overwrite mapbox dependencies within your `android/build.gradle > buildscript > 
 buildscript {
     ext {
         // ...
-        RNMapboxMapsImpl = "maplibre" // optinal - as this is the default
+        RNMapboxMapsImpl = "maplibre" // optional - as this is the default
 
         RNMapboxMapsLibs = { // optional - only required if you want to customize it
             implementation ("org.maplibre.gl:android-sdk:9.5.2")

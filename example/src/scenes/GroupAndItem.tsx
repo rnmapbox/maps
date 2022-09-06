@@ -71,7 +71,8 @@ import SetUserLocationRenderMode from '../examples/UserLocation/SetUserLocationR
 import SetUserLocationVerticalAlignment from '../examples/UserLocation/SetUserLocationVerticalAlignment';
 import UserLocationChange from '../examples/UserLocation/UserLocationChange';
 // MISC
-import BugReportTemplate from '../examples/BugReportExample';
+import BugReportExample from '../examples/BugReportExample';
+import BugReportExampleTS from '../examples/BugReportExampleTS';
 import CacheManagement from '../examples/CacheManagement';
 // V10
 import TerrainSkyAtmosphere from '../examples/V10/TerrainSkyAtmosphere';
@@ -184,14 +185,18 @@ class ExampleGroup implements ExampleNode {
   }
 }
 
-const BugReportPage = ({ ...props }) => (
-  <Page {...props}>
-    <BugReportTemplate />
-  </Page>
-);
+const BugReportPage =
+  (Klass: React.ComponentType) =>
+  ({ ...props }) =>
+    (
+      <Page {...props}>
+        <Klass />
+      </Page>
+    );
 
 const Examples = new ExampleGroup('React Native Mapbox', [
-  new ExampleItem('Bug Report Template', BugReportPage),
+  new ExampleItem('Bug Report Template', BugReportPage(BugReportExample)),
+  new ExampleItem('Bug Report Template TS', BugReportPage(BugReportExampleTS)),
   new ExampleGroup('V10', [
     new ExampleItem('Terrain, Sky, & Atmosphere', TerrainSkyAtmosphere),
     new ExampleItem('Query Terrain Elevation', QueryTerrainElevation),

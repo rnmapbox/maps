@@ -68,4 +68,12 @@ class MGLModule : NSObject {
   @objc func setAccessToken(_ token: String) {
       MGLModule.accessToken = token
   }
+
+  @objc func addCustomHeader(_ headerName: String, forHeaderValue headerValue: String ) {
+    CustomHttpHeaders.shared.customHeaders[headerName] = headerValue
+  }
+
+  @objc func removeCustomHeader(_ headerName: String) {
+    CustomHttpHeaders.shared.customHeaders[headerName] = nil
+  }
 }
