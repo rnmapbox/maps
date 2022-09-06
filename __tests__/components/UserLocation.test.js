@@ -34,31 +34,29 @@ describe('UserLocation', () => {
       jest.clearAllMocks();
     });
 
-    test('renders with CircleLayers by default', () => {
-      const { UNSAFE_getAllByType } = render(<UserLocation />);
+    test('renders with CircleLayers by default', async () => {
+      const { UNSAFE_getAllByType } = await render(<UserLocation />);
 
-      setTimeout(() => {
-        const shapeSource = UNSAFE_getAllByType(ShapeSource);
-        const circleLayer = UNSAFE_getAllByType(CircleLayer);
+      const shapeSource = UNSAFE_getAllByType(ShapeSource);
+      const circleLayer = UNSAFE_getAllByType(CircleLayer);
 
-        expect(shapeSource.length).toBe(1);
-        expect(circleLayer.length).toBe(3);
-      });
-    }, 100);
+      expect(shapeSource.length).toBe(1);
+      expect(circleLayer.length).toBe(3);
+    }, 1000);
 
-    test('does not render with visible set to false', () => {
-      const { UNSAFE_queryByType } = render(<UserLocation visible={false} />);
+    test('does not render with visible set to false', async () => {
+      const { UNSAFE_queryByType } = await render(
+        <UserLocation visible={false} />,
+      );
 
-      setTimeout(() => {
-        const shapeSource = UNSAFE_queryByType(ShapeSource);
-        const circleLayer = UNSAFE_queryByType(CircleLayer);
+      const shapeSource = UNSAFE_queryByType(ShapeSource);
+      const circleLayer = UNSAFE_queryByType(CircleLayer);
 
-        expect(shapeSource).toEqual(null);
-        expect(circleLayer).toEqual(null);
-      });
-    }, 100);
+      expect(shapeSource).toEqual(null);
+      expect(circleLayer).toEqual(null);
+    }, 1000);
 
-    test('renders with CustomChild when provided', () => {
+    test('renders with CustomChild when provided', async () => {
       const circleLayerProps = {
         key: 'testUserLocationCircle',
         id: 'testUserLocationCircle',
@@ -70,23 +68,21 @@ describe('UserLocation', () => {
         },
       };
 
-      const { UNSAFE_queryByType, UNSAFE_queryAllByType } = render(
+      const { UNSAFE_queryByType, UNSAFE_queryAllByType } = await render(
         <UserLocation>
           <CircleLayer {...circleLayerProps} />
         </UserLocation>,
       );
 
-      setTimeout(() => {
-        const shapeSource = UNSAFE_queryByType(ShapeSource);
-        const circleLayer = UNSAFE_queryAllByType(CircleLayer);
+      const shapeSource = UNSAFE_queryByType(ShapeSource);
+      const circleLayer = UNSAFE_queryAllByType(CircleLayer);
 
-        expect(shapeSource).toBeDefined();
-        expect(circleLayer[0]).toBeDefined();
-        expect(circleLayer.length).toBe(1);
+      expect(shapeSource).toBeDefined();
+      expect(circleLayer[0]).toBeDefined();
+      expect(circleLayer.length).toBe(1);
 
-        expect(circleLayer[0].props.style).toEqual(circleLayerProps.style);
-      });
-    }, 100);
+      expect(circleLayer[0].props.style).toEqual(circleLayerProps.style);
+    });
 
     test('calls onUpdate callback when new location is received', () => {
       const onUpdateCallback = jest.fn();
