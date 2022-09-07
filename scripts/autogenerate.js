@@ -498,7 +498,7 @@ async function generate() {
   });
 
   // autogenerate expo plugin
-  execSync('yarn build:plugin', { stdio: 'inherit'});
+  execSync('yarn build:plugin', { stdio: 'inherit' });
   outputPaths.push('plugin/build');
 
   // autogenerate docs
