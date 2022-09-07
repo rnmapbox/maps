@@ -42,7 +42,7 @@ describe('UserLocation', () => {
 
       expect(shapeSource.length).toBe(1);
       expect(circleLayer.length).toBe(3);
-    }, 1000);
+    });
 
     test('does not render with visible set to false', async () => {
       const { UNSAFE_queryByType } = await render(
@@ -54,7 +54,7 @@ describe('UserLocation', () => {
 
       expect(shapeSource).toEqual(null);
       expect(circleLayer).toEqual(null);
-    }, 1000);
+    });
 
     test('renders with CustomChild when provided', async () => {
       const circleLayerProps = {
