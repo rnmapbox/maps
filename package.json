@@ -31,7 +31,7 @@
     "lint:fix": "eslint . --fix",
     "type:check": "tsc --noEmit",
     "test:plugin": "expo-module test plugin",
-    "build:plugin": "tsc --build plugin",
+    "build:plugin": "tsc --version && tsc --build plugin",
     "lint:plugin": "eslint plugin/src/*",
     "prepare": "husky install"
   },
