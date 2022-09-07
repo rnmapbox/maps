@@ -17,7 +17,7 @@ const convertLength = convertLengthFn || convertDistanceFn;
  * By default start of route is start, and end of route animated from 100% of route to 0% or route.
  * Eg we have full route to destination and as we're progressing the remaining route gets shorter and shorter.
  */
-export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesArray {
+export class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesArray {
   /**
    * Calculate initial state
    *
@@ -141,3 +141,5 @@ export default class AnimatedRouteCoordinatesArray extends AnimatedCoordinatesAr
     return this.state.fullRoute;
   }
 }
+
+export default AnimatedRouteCoordinatesArray;

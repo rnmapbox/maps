@@ -40,7 +40,7 @@ end
 "
 `;
 
-exports[`applyCocoaPodsModifications adds blocks to a expo prebuild template podfile with custom modifications  1`] = `
+exports[`applyCocoaPodsModifications adds blocks to a expo prebuild template podfile with custom modifications 1`] = `
 "
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/react-native-unimodules/cocoapods.rb'

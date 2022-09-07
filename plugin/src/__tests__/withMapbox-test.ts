@@ -2,7 +2,7 @@ import { applyCocoaPodsModifications } from '../withMapbox';
 
 import * as fixtures from './fixtures/cocoapodFiles';
 
-describe(applyCocoaPodsModifications, () => {
+describe('applyCocoaPodsModifications', () => {
   it('adds blocks to a react native template podfile', () => {
     expect(
       applyCocoaPodsModifications(fixtures.reactNativeTemplatePodfile, {}),
@@ -13,7 +13,7 @@ describe(applyCocoaPodsModifications, () => {
       applyCocoaPodsModifications(fixtures.expoTemplatePodfile, {}),
     ).toMatchSnapshot();
   });
-  it('adds blocks to a expo prebuild template podfile with custom modifications ', () => {
+  it('adds blocks to a expo prebuild template podfile with custom modifications', () => {
     expect(
       applyCocoaPodsModifications(fixtures.customExpoTemplatePodfile, {}),
     ).toMatchSnapshot();
