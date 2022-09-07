@@ -135,8 +135,7 @@ yarn run android
 npm run android
 ```
 
-## Adding a map
-
+## Adding a map - Functional component
 ```js
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -144,22 +143,39 @@ import MapboxGL from '@rnmapbox/maps';
 
 MapboxGL.setAccessToken('<YOUR_ACCESSTOKEN>');
 
+export default const App = () => {
+  return (
+    <View style={styles.page}>
+      <View style={styles.container}>
+        <MapboxGL.MapView style={styles.map} />
+      </View>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   page: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF'
   },
   container: {
     height: 300,
     width: 300,
-    backgroundColor: 'tomato'
   },
   map: {
     flex: 1
   }
 });
+```
+
+## Adding a map - Class component
+```js
+import React, { Component } from 'react';
+import { StyleSheet, View } from 'react-native';
+import MapboxGL from '@rnmapbox/maps';
+
+MapboxGL.setAccessToken('<YOUR_ACCESSTOKEN>');
 
 export default class App extends Component {
   render() {
@@ -172,6 +188,21 @@ export default class App extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  page: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  container: {
+    height: 300,
+    width: 300,
+  },
+  map: {
+    flex: 1
+  }
+});
 ```
 ---
 ## Documentation
