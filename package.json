@@ -29,9 +29,9 @@
     "unittest:single": "jest --testNamePattern",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "type:check": "tsc --noEmit",
+    "type:check": "npx tsc --noEmit",
     "test:plugin": "expo-module test plugin",
-    "build:plugin": "tsc --build plugin",
+    "build:plugin": "npx tsc --build plugin",
     "lint:plugin": "eslint plugin/src/*",
     "prepare": "husky install"
   },
