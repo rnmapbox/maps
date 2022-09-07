@@ -22,7 +22,9 @@ let pkg: { name: string; version?: string } = {
 };
 try {
   pkg = require('@rnmapbox/maps/package.json');
-} catch {}
+} catch (e) {
+  console.warn('Could not find an existing package.json file');
+}
 
 type InstallerBlockName = 'pre' | 'post';
 
