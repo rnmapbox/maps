@@ -150,7 +150,6 @@ const withAndroidPropertiesDownloadToken = (config, { RNMapboxMapsDownloadToken 
                 }
                 return true;
             });
-            // eslint-disable-next-line fp/no-mutating-methods
             config.modResults.push({
                 type: 'property',
                 key,
@@ -173,7 +172,6 @@ const withAndroidPropertiesImpl2 = (config, { RNMapboxMapsImpl }) => {
                 }
                 return true;
             });
-            // eslint-disable-next-line fp/no-mutating-methods
             config.modResults.push({
                 type: 'property',
                 key: key,

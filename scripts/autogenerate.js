@@ -1,4 +1,3 @@
-/* eslint-disable fp/no-mutating-methods */
 require('./autogenHelpers/globals');
 
 const fs = require('fs');
