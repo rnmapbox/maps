@@ -22,9 +22,7 @@ let pkg: { name: string; version?: string } = {
 };
 try {
   pkg = require('@rnmapbox/maps/package.json');
-} catch {
-  // empty catch block
-}
+} catch {}
 
 type InstallerBlockName = 'pre' | 'post';
 
@@ -200,7 +198,7 @@ const withAndroidPropertiesDownloadToken: ConfigPlugin<MapboxPlugProps> = (
         }
         return true;
       });
-      // eslint-disable-next-line fp/no-mutating-methods
+
       config.modResults.push({
         type: 'property',
         key,
@@ -227,7 +225,7 @@ const withAndroidPropertiesImpl2: ConfigPlugin<MapboxPlugProps> = (
         }
         return true;
       });
-      // eslint-disable-next-line fp/no-mutating-methods
+
       config.modResults.push({
         type: 'property',
         key: key,

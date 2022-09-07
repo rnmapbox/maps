@@ -14,9 +14,7 @@ let pkg = {
 try {
     pkg = require('@rnmapbox/maps/package.json');
 }
-catch (_a) {
-    // empty catch block
-}
+catch (_a) { }
 /**
  * Dangerously adds the custom installer hooks to the Podfile.
  * In the future this should be removed in favor of some custom hooks provided by Expo autolinking.
@@ -150,7 +148,6 @@ const withAndroidPropertiesDownloadToken = (config, { RNMapboxMapsDownloadToken 
                 }
                 return true;
             });
-            // eslint-disable-next-line fp/no-mutating-methods
             config.modResults.push({
                 type: 'property',
                 key,
@@ -173,7 +170,6 @@ const withAndroidPropertiesImpl2 = (config, { RNMapboxMapsImpl }) => {
                 }
                 return true;
             });
-            // eslint-disable-next-line fp/no-mutating-methods
             config.modResults.push({
                 type: 'property',
                 key: key,
