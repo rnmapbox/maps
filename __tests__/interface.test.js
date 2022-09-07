@@ -83,12 +83,15 @@ describe('Public Interface', () => {
       // animated
       'Animated',
 
-      // helpers
+      // classes
       'AnimatedPoint',
+      'AnimatedMapPoint',
       'AnimatedCoordinatesArray',
       'AnimatedShape',
       'AnimatedExtractCoordinateFromArray',
       'AnimatedRouteCoordinatesArray',
+
+      // helpers
       'Logger',
       'Style',
     ];

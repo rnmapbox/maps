@@ -11,6 +11,6 @@ describe('MapView', () => {
 
     expect(() => {
       getByTestId(expectedTestId);
-    }).not.toThrowError();
+    }).not.toThrow();
   });
 });

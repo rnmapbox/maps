@@ -12,11 +12,17 @@ if (__DEV__) {
 }
 
 /**
- * AnimatedShape can be used to have animated properties inside the shape property
+ * AnimatedShape can be used to display an animated LineString, FeatureCollection, Point, or other struture inside the shape property.
  * @example
- * <AnimatedShapeSource ... shape={new AnimatedShape({type:'LineString', coordinates: animatedCoords})} />
+ * const animatedLon = useRef(new Animated.Value(-73.984638)).current;
+ * const animatedLat = useRef(new Animated.Value(40.759211)).current;
+ * const animatedShape = new AnimatedShape({
+ *   type: 'LineString',
+ *   coordinates: [animatedLon, animatedLat],
+ * });
+ * return <AnimatedShapeSource shape={animatedShape} />
  */
-class AnimatedShape extends AnimatedWithChildren {
+export class AnimatedShape extends AnimatedWithChildren {
   // equivalent of AnimatedStyle for shapes
   // https://github.com/facebook/react-native/blob/master/Libraries/Animated/src/nodes/AnimatedStyle.js
 

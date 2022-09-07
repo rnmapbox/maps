@@ -11,7 +11,7 @@ if (__DEV__) {
   }
 }
 
-export default class AnimatedExtractCoordinateFromArray extends AnimatedWithChildren {
+export class AnimatedExtractCoordinateFromArray extends AnimatedWithChildren {
   _array = null;
 
   _index = 0;
@@ -41,3 +41,5 @@ export default class AnimatedExtractCoordinateFromArray extends AnimatedWithChil
     super.__detach();
   }
 }
+
+export default AnimatedExtractCoordinateFromArray;

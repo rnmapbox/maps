@@ -29,11 +29,13 @@ import offlineManager from './modules/offline/offlineManager';
 import snapshotManager from './modules/snapshot/snapshotManager';
 import MarkerView from './components/MarkerView';
 import Animated from './utils/animated/Animated';
-import AnimatedMapPoint from './utils/animated/AnimatedPoint';
-import AnimatedShape from './utils/animated/AnimatedShape';
-import AnimatedCoordinatesArray from './utils/animated/AnimatedCoordinatesArray';
-import AnimatedExtractCoordinateFromArray from './utils/animated/AnimatedExtractCoordinateFromArray';
-import AnimatedRouteCoordinatesArray from './utils/animated/AnimatedRouteCoordinatesArray';
+import {
+  AnimatedCoordinatesArray,
+  AnimatedExtractCoordinateFromArray,
+  AnimatedPoint,
+  AnimatedRouteCoordinatesArray,
+  AnimatedShape,
+} from './classes';
 import Style from './components/Style';
 import Logger from './utils/Logger';
 import { requestAndroidLocationPermissions } from './requestAndroidLocationPermissions';
@@ -52,6 +54,15 @@ MapboxGL.Callout = Callout;
 MapboxGL.UserLocation = UserLocation;
 MapboxGL.Camera = Camera;
 MapboxGL.Style = Style;
+
+// classes
+MapboxGL.AnimatedPoint = AnimatedPoint;
+MapboxGL.AnimatedMapPoint = AnimatedPoint; // For backwards compatibiilty.
+MapboxGL.AnimatedShape = AnimatedShape;
+MapboxGL.AnimatedCoordinatesArray = AnimatedCoordinatesArray;
+MapboxGL.AnimatedExtractCoordinateFromArray =
+  AnimatedExtractCoordinateFromArray;
+MapboxGL.AnimatedRouteCoordinatesArray = AnimatedRouteCoordinatesArray;
 
 // annotations
 MapboxGL.Annotation = Annotation;
@@ -86,17 +97,16 @@ MapboxGL.snapshotManager = snapshotManager;
 
 // animated
 MapboxGL.Animated = Animated;
+MapboxGL.Animated.RouteCoordinatesArray = AnimatedRouteCoordinatesArray; // For backwards compatibiilty.
+MapboxGL.Animated.ExtractCoordinateFromArray =
+  AnimatedExtractCoordinateFromArray; // For backwards compatibiilty.
 
 // utils
-MapboxGL.AnimatedPoint = AnimatedMapPoint;
-MapboxGL.AnimatedCoordinatesArray = AnimatedCoordinatesArray;
-MapboxGL.AnimatedExtractCoordinateFromArray =
-  AnimatedExtractCoordinateFromArray;
-MapboxGL.AnimatedRouteCoordinatesArray = AnimatedRouteCoordinatesArray;
-MapboxGL.AnimatedShape = AnimatedShape;
 MapboxGL.Logger = Logger;
 
 const { LineJoin } = MapboxGL;
+
+const AnimatedMapPoint = AnimatedPoint; // For backwards compatibiilty.
 
 export {
   MapView,
@@ -124,12 +134,15 @@ export {
   BackgroundLayer,
   Terrain,
   Atmosphere,
+  AnimatedCoordinatesArray,
+  AnimatedExtractCoordinateFromArray,
+  AnimatedPoint,
+  AnimatedMapPoint,
+  AnimatedRouteCoordinatesArray,
+  AnimatedShape,
   locationManager,
   offlineManager,
   snapshotManager,
-  AnimatedMapPoint,
-  AnimatedCoordinatesArray,
-  AnimatedShape,
   Animated,
   LineJoin,
   Logger,

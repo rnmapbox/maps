@@ -3,8 +3,10 @@ import { Animated, Easing } from 'react-native';
 import TestRenderer from 'react-test-renderer';
 import React from 'react';
 
-import AnimatedCoordinatesArray from '../../../javascript/utils/animated/AnimatedCoordinatesArray';
-import AnimatedShape from '../../../javascript/utils/animated/AnimatedShape';
+import {
+  AnimatedShape,
+  AnimatedCoordinatesArray,
+} from '../../../javascript/classes';
 import ShapeSource from '../../../javascript/components/ShapeSource';
 
 let clock = null;

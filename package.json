@@ -65,11 +65,11 @@
     "@babel/runtime": "7.17.2",
     "@react-native-community/eslint-config": "^3.0.1",
     "@sinonjs/fake-timers": "^8.0.1",
-    "@testing-library/react-native": "^8.0.0",
+    "@testing-library/react-native": "^11.0.0",
     "@types/mapbox-gl": "^2.7.5",
     "@types/react-native": ">=0.59.9",
-    "@typescript-eslint/eslint-plugin": "^5.20.0",
-    "@typescript-eslint/parser": "^5.20.0",
+    "@typescript-eslint/eslint-plugin": "^5.36.2",
+    "@typescript-eslint/parser": "^5.36.2",
     "babel-jest": "^27.5.1",
     "documentation": "13.2.5",
     "ejs": "^3.1.3",
@@ -78,6 +78,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-ft-flow": "^2.0.1",
     "eslint-plugin-import": "2.25.3",
+    "eslint-plugin-jest": "^27.0.1",
     "expo-module-scripts": "^2.0.0",
     "husky": "^8.0.1",
     "jest": "27.5.1",
@@ -91,7 +92,7 @@
     "react-docgen": "6.0.0-alpha.3",
     "react-native": "0.67.0",
     "react-test-renderer": "17.0.2",
-    "typescript": "^4.4.3"
+    "typescript": "^4.8.0"
   },
   "jest": {
     "preset": "react-native",
