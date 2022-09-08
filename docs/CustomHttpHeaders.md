@@ -10,11 +10,11 @@ Custom headers are implemented using OkHttp interceptor for android and method s
 
 None
 
-### IOS with Mapbox-v10
+### iOS with Mapbox-v10
 
 None
 
-### IOS with Mapbox GL or Mapblibre
+### iOS with Mapbox GL or Mapblibre
 
 To enable this on iOS you need to call `[[MGLCustomHeaders sharedInstance] initHeaders]` pretty early in the lifecycle of the application. This will swizzle the custom method.
 Suggested location is `[AppDelegate application: didFinishLaunchingWithOptions:]`
