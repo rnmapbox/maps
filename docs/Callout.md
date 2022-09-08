@@ -5,7 +5,7 @@ Callout that displays information about a selected annotation near the annotatio
 ## props
 | Prop | Type | Default | Required | Description |
 | ---- | :--: | :-----: | :------: | :----------: |
-| title | `string` | `none` | `false` | String that get's displayed in the default callout. |
+| title | `string` | `none` | `false` | String that gets displayed in the default callout. |
 | style | `any` | `none` | `false` | Style property for the Animated.View wrapper, apply animations to this |
 | containerStyle | `any` | `none` | `false` | Style property for the native RCTMGLCallout container, set at your own risk. |
 | contentStyle | `any` | `none` | `false` | Style property for the content bubble. |

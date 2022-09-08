@@ -9,7 +9,7 @@ MapView backed by Mapbox Native GL
 | style | `any` | `none` | `false` | Style for wrapping React Native View |
 | styleURL | `string` | `none` | `false` | Style URL for map - notice, if non is set it _will_ default to `MapboxGL.StyleURL.Street` |
 | styleJSON | `string` | `none` | `false` | StyleJSON for map - according to TileJSON specs: https://github.com/mapbox/tilejson-spec |
-| preferredFramesPerSecond | `number` | `none` | `false` | iOS: The preferred frame rate at which the map view is rendered.<br/>The default value for this property is MGLMapViewPreferredFramesPerSecondDefault,<br/>which will adaptively set the preferred frame rate based on the capability of<br/>the user’s device to maintain a smooth experience. This property can be set to arbitrary integer values.<br/><br/>Android: The maximum frame rate at which the map view is rendered, but it can't excess the ability of device hardware.<br/>This property can be set to arbitrary integer values. |
+| preferredFramesPerSecond | `number` | `none` | `false` | iOS: The preferred frame rate at which the map view is rendered.<br/>The default value for this property is MGLMapViewPreferredFramesPerSecondDefault,<br/>which will adaptively set the preferred frame rate based on the capability of<br/>the user’s device to maintain a smooth experience. This property can be set to arbitrary integer values.<br/><br/>Android: The maximum frame rate at which the map view is rendered, but it can't exceed the ability of device hardware.<br/>This property can be set to arbitrary integer values. |
 | localizeLabels | `bool` | `false` | `false` | Automatically change the language of the map labels to the system’s preferred language,<br/>this is not something that can be toggled on/off |
 | zoomEnabled | `bool` | `none` | `false` | Enable/Disable zoom on the map |
 | scrollEnabled | `bool` | `true` | `false` | Enable/Disable scroll on the map |
@@ -27,7 +27,7 @@ MapView backed by Mapbox Native GL
 | compassViewMargins | `object` | `none` | `false` | Add margins to the compass with x and y values |
 | scaleBarEnabled | `bool` | `true` | `false` | [`mapbox` (v10) implementation only] Enable/Disable the scale bar from appearing on the map |
 | scaleBarPosition | `custom` | `none` | `false` | [`mapbox` (v10) implementation only] Adds scale bar offset, e.g. `{top: 8, left: 8}` will put the scale bar in top-left corner of the map |
-| surfaceView | `bool` | `false` | `false` | [Android only] Enable/Disable use of GLSurfaceView insted of TextureView. |
+| surfaceView | `bool` | `false` | `false` | [Android only] Enable/Disable use of GLSurfaceView instead of TextureView. |
 | onPress | `func` | `none` | `false` | Map press listener, gets called when a user presses the map |
 | onLongPress | `func` | `none` | `false` | Map long press listener, gets called when a user long presses the map |
 | onRegionWillChange | `func` | `none` | `false` | <v10 only<br/><br/>This event is triggered whenever the currently displayed map region is about to change. |
@@ -84,7 +84,7 @@ const coordinate = await this._map.getCoordinateFromView([100, 100]);
 
 ### getVisibleBounds()
 
-The coordinate bounds(ne, sw) visible in the users’s viewport.
+The coordinate bounds (ne, sw) visible in the user’s viewport.
 
 #### arguments
 | Name | Type | Required | Description  |

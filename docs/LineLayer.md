@@ -188,7 +188,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s lineOpacity propery.
+The transition affecting any changes to this layer’s lineOpacity property.
 
 ### Type
 
@@ -229,7 +229,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s lineColor propery.
+The transition affecting any changes to this layer’s lineColor property.
 
 ### Type
 
@@ -270,7 +270,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s lineTranslate propery.
+The transition affecting any changes to this layer’s lineTranslate property.
 
 ### Type
 
@@ -341,7 +341,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s lineWidth propery.
+The transition affecting any changes to this layer’s lineWidth property.
 
 ### Type
 
@@ -385,7 +385,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s lineGapWidth propery.
+The transition affecting any changes to this layer’s lineGapWidth property.
 
 ### Type
 
@@ -426,7 +426,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s lineOffset propery.
+The transition affecting any changes to this layer’s lineOffset property.
 
 ### Type
 
@@ -470,7 +470,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s lineBlur propery.
+The transition affecting any changes to this layer’s lineBlur property.
 
 ### Type
 
@@ -515,7 +515,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s lineDasharray propery.
+The transition affecting any changes to this layer’s lineDasharray property.
 
 ### Type
 
@@ -551,7 +551,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s linePattern propery.
+The transition affecting any changes to this layer’s linePattern property.
 
 ### Type
 

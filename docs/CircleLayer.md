@@ -99,7 +99,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s circleRadius propery.
+The transition affecting any changes to this layer’s circleRadius property.
 
 ### Type
 
@@ -137,7 +137,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s circleColor propery.
+The transition affecting any changes to this layer’s circleColor property.
 
 ### Type
 
@@ -175,7 +175,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s circleBlur propery.
+The transition affecting any changes to this layer’s circleBlur property.
 
 ### Type
 
@@ -219,7 +219,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s circleOpacity propery.
+The transition affecting any changes to this layer’s circleOpacity property.
 
 ### Type
 
@@ -260,7 +260,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s circleTranslate propery.
+The transition affecting any changes to this layer’s circleTranslate property.
 
 ### Type
 
@@ -373,7 +373,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s circleStrokeWidth propery.
+The transition affecting any changes to this layer’s circleStrokeWidth property.
 
 ### Type
 
@@ -411,7 +411,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s circleStrokeColor propery.
+The transition affecting any changes to this layer’s circleStrokeColor property.
 
 ### Type
 
@@ -455,7 +455,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s circleStrokeOpacity propery.
+The transition affecting any changes to this layer’s circleStrokeOpacity property.
 
 ### Type
 

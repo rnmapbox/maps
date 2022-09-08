@@ -244,7 +244,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s skyOpacity propery.
+The transition affecting any changes to this layer’s skyOpacity property.
 
 ### Type
 

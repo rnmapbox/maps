@@ -48,7 +48,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s range propery.
+The transition affecting any changes to this layer’s range property.
 
 ### Type
 
@@ -86,7 +86,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s color propery.
+The transition affecting any changes to this layer’s color property.
 
 ### Type
 
@@ -124,7 +124,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s highColor propery.
+The transition affecting any changes to this layer’s highColor property.
 
 ### Type
 
@@ -162,7 +162,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s spaceColor propery.
+The transition affecting any changes to this layer’s spaceColor property.
 
 ### Type
 
@@ -206,7 +206,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s horizonBlend propery.
+The transition affecting any changes to this layer’s horizonBlend property.
 
 ### Type
 
@@ -250,7 +250,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s starIntensity propery.
+The transition affecting any changes to this layer’s starIntensity property.
 
 ### Type
 

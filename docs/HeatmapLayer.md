@@ -76,7 +76,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s heatmapRadius propery.
+The transition affecting any changes to this layer’s heatmapRadius property.
 
 ### Type
 
@@ -138,7 +138,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s heatmapIntensity propery.
+The transition affecting any changes to this layer’s heatmapIntensity property.
 
 ### Type
 
@@ -200,7 +200,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s heatmapOpacity propery.
+The transition affecting any changes to this layer’s heatmapOpacity property.
 
 ### Type
 

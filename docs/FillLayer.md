@@ -113,7 +113,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s fillOpacity propery.
+The transition affecting any changes to this layer’s fillOpacity property.
 
 ### Type
 
@@ -154,7 +154,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s fillColor propery.
+The transition affecting any changes to this layer’s fillColor property.
 
 ### Type
 
@@ -193,7 +193,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s fillOutlineColor propery.
+The transition affecting any changes to this layer’s fillOutlineColor property.
 
 ### Type
 
@@ -234,7 +234,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s fillTranslate propery.
+The transition affecting any changes to this layer’s fillTranslate property.
 
 ### Type
 
@@ -295,7 +295,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s fillPattern propery.
+The transition affecting any changes to this layer’s fillPattern property.
 
 ### Type
 

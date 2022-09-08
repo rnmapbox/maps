@@ -81,7 +81,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s fillExtrusionOpacity propery.
+The transition affecting any changes to this layer’s fillExtrusionOpacity property.
 
 ### Type
 
@@ -122,7 +122,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s fillExtrusionColor propery.
+The transition affecting any changes to this layer’s fillExtrusionColor property.
 
 ### Type
 
@@ -163,7 +163,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s fillExtrusionTranslate propery.
+The transition affecting any changes to this layer’s fillExtrusionTranslate property.
 
 ### Type
 
@@ -224,7 +224,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s fillExtrusionPattern propery.
+The transition affecting any changes to this layer’s fillExtrusionPattern property.
 
 ### Type
 
@@ -268,7 +268,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s fillExtrusionHeight propery.
+The transition affecting any changes to this layer’s fillExtrusionHeight property.
 
 ### Type
 
@@ -315,7 +315,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s fillExtrusionBase propery.
+The transition affecting any changes to this layer’s fillExtrusionBase property.
 
 ### Type
 
@@ -377,7 +377,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s fillExtrusionAmbientOcclusionIntensity propery.
+The transition affecting any changes to this layer’s fillExtrusionAmbientOcclusionIntensity property.
 
 ### Type
 
@@ -418,7 +418,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s fillExtrusionAmbientOcclusionRadius propery.
+The transition affecting any changes to this layer’s fillExtrusionAmbientOcclusionRadius property.
 
 ### Type
 

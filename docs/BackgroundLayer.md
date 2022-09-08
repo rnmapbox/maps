@@ -71,7 +71,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s backgroundColor propery.
+The transition affecting any changes to this layer’s backgroundColor property.
 
 ### Type
 
@@ -107,7 +107,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s backgroundPattern propery.
+The transition affecting any changes to this layer’s backgroundPattern property.
 
 ### Type
 
@@ -151,7 +151,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s backgroundOpacity propery.
+The transition affecting any changes to this layer’s backgroundOpacity property.
 
 ### Type
 

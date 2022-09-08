@@ -1106,7 +1106,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s iconOpacity propery.
+The transition affecting any changes to this layer’s iconOpacity property.
 
 ### Type
 
@@ -1147,7 +1147,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s iconColor propery.
+The transition affecting any changes to this layer’s iconColor property.
 
 ### Type
 
@@ -1188,7 +1188,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s iconHaloColor propery.
+The transition affecting any changes to this layer’s iconHaloColor property.
 
 ### Type
 
@@ -1235,7 +1235,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s iconHaloWidth propery.
+The transition affecting any changes to this layer’s iconHaloWidth property.
 
 ### Type
 
@@ -1282,7 +1282,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s iconHaloBlur propery.
+The transition affecting any changes to this layer’s iconHaloBlur property.
 
 ### Type
 
@@ -1326,7 +1326,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s iconTranslate propery.
+The transition affecting any changes to this layer’s iconTranslate property.
 
 ### Type
 
@@ -1398,7 +1398,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s textOpacity propery.
+The transition affecting any changes to this layer’s textOpacity property.
 
 ### Type
 
@@ -1439,7 +1439,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s textColor propery.
+The transition affecting any changes to this layer’s textColor property.
 
 ### Type
 
@@ -1480,7 +1480,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s textHaloColor propery.
+The transition affecting any changes to this layer’s textHaloColor property.
 
 ### Type
 
@@ -1527,7 +1527,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s textHaloWidth propery.
+The transition affecting any changes to this layer’s textHaloWidth property.
 
 ### Type
 
@@ -1574,7 +1574,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s textHaloBlur propery.
+The transition affecting any changes to this layer’s textHaloBlur property.
 
 ### Type
 
@@ -1618,7 +1618,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s textTranslate propery.
+The transition affecting any changes to this layer’s textTranslate property.
 
 ### Type
 

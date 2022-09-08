@@ -79,7 +79,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s rasterOpacity propery.
+The transition affecting any changes to this layer’s rasterOpacity property.
 
 ### Type
 
@@ -120,7 +120,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s rasterHueRotate propery.
+The transition affecting any changes to this layer’s rasterHueRotate property.
 
 ### Type
 
@@ -164,7 +164,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s rasterBrightnessMin propery.
+The transition affecting any changes to this layer’s rasterBrightnessMin property.
 
 ### Type
 
@@ -208,7 +208,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s rasterBrightnessMax propery.
+The transition affecting any changes to this layer’s rasterBrightnessMax property.
 
 ### Type
 
@@ -252,7 +252,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s rasterSaturation propery.
+The transition affecting any changes to this layer’s rasterSaturation property.
 
 ### Type
 
@@ -296,7 +296,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s rasterContrast propery.
+The transition affecting any changes to this layer’s rasterContrast property.
 
 ### Type
 

@@ -62,7 +62,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s position propery.
+The transition affecting any changes to this layer’s position property.
 
 ### Type
 
@@ -100,7 +100,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s color propery.
+The transition affecting any changes to this layer’s color property.
 
 ### Type
 
@@ -144,7 +144,7 @@ ___
 
 ### Description
 
-The transition affecting any changes to this layer’s intensity propery.
+The transition affecting any changes to this layer’s intensity property.
 
 ### Type
 
