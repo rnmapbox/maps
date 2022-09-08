@@ -376,7 +376,7 @@
     "name": "Callout"
   },
   "Camera": {
-    "description": "Controls the perspective from which the user sees the map.\n\nTo use imperative methods, pass in a ref object:\n\n```typescript\nconst camera = useRef<Camera>(null);\n\nuseEffect(() => {\n  camera.current?.setCamera({\n    centerCoordinate: [lon, lat],\n  });\n}, []);\n\nreturn (\n  <Camera ref={camera} />\n);\n```",
+    "description": "Controls the perspective from which the user sees the map.\n\nTo use imperative methods, pass in a ref object:\n\n```tsx\nconst camera = useRef<Camera>(null);\n\nuseEffect(() => {\n  camera.current?.setCamera({\n    centerCoordinate: [lon, lat],\n  });\n}, []);\n\nreturn (\n  <Camera ref={camera} />\n);\n```",
     "displayName": "Camera",
     "methods": [],
     "props": [

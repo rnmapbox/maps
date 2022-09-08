@@ -4,7 +4,7 @@ Controls the perspective from which the user sees the map.
 
 To use imperative methods, pass in a ref object:
 
-```typescript
+```tsx
 const camera = useRef<Camera>(null);
 
 useEffect(() => {
