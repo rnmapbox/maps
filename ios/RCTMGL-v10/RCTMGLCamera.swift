@@ -1,5 +1,5 @@
 import Foundation
-import MapboxMaps
+@_spi(Experimental) import MapboxMaps
 import Turf
 
 protocol RCTMGLMapComponent : class {
@@ -200,21 +200,25 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       map.location.locationProvider.requestWhenInUseAuthorization()
       map.location.addLocationConsumer(newConsumer: self)
       var trackingModeChanged = false
-      if (self.followUserMode == "compass" && map.location.options.puckBearingSource != PuckBearingSource.heading) {
+      var followOptions = FollowPuckViewportStateOptions()
+      if (self.followUserMode == "compass") {
         map.location.options.puckBearingEnabled = true
         map.location.options.puckBearingSource = PuckBearingSource.heading
+        followOptions.bearing = FollowPuckViewportStateBearing.heading
         trackingModeChanged = true
-      } else if (self.followUserMode == "course" && map.location.options.puckBearingSource != PuckBearingSource.course) {
+      } else if (self.followUserMode == "course") {
         map.location.options.puckBearingEnabled = true
         map.location.options.puckBearingSource = PuckBearingSource.course
+        followOptions.bearing = FollowPuckViewportStateBearing.course
         trackingModeChanged = true
-      } else if (self.followUserMode == "normal" && map.location.options.puckBearingEnabled) {
+      } else if (self.followUserMode == "normal") {
         map.location.options.puckBearingEnabled = false
+        followOptions.bearing = nil
         trackingModeChanged = true
       }
       if let onUserTrackingModeChange = self.onUserTrackingModeChange {
         if (trackingModeChanged) {
-          let event = RCTMGLEvent(type: .onUserTrackingModeChange, payload: ["followUserMode": self.followUserMode, "followUserLocation": self.followUserLocation])
+          let event = RCTMGLEvent(type: .onUserTrackingModeChange, payload: ["followUserMode": self.followUserMode ?? "normal", "followUserLocation": self.followUserLocation])
           onUserTrackingModeChange(event.toJSON())
         }
       }
@@ -231,17 +235,22 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       if let followPitch = self.followPitch as? CGFloat {
         if (followPitch >= 0.0) {
           _camera.pitch = followPitch
+          followOptions.pitch = followPitch
         }
       } else if let stopPitch = self.stop?["pitch"] as? CGFloat {
         if (stopPitch >= 0.0) {
           _camera.pitch = stopPitch
+          followOptions.pitch = stopPitch
         }
       }
       if let zoom = self.followZoomLevel as? CGFloat {
         if (zoom >= 0.0) {
           _camera.zoom = zoom
+          followOptions.zoom = zoom
         }
       }
+      let followState = map.viewport.makeFollowPuckViewportState(options: followOptions)
+      map.viewport.transition(to: followState)
       map.mapboxMap.setCamera(to: _camera)
     }
   }
