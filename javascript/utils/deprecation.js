@@ -12,7 +12,6 @@ export function copyPropertiesAsDeprecated(
   const result = newObject;
   for (const [key, value] of Object.entries(origObject)) {
     if (!newObject[key]) {
-      // eslint-disable-next-line fp/no-mutating-methods
       Object.defineProperty(result, key, {
         get() {
           onDeprecatedCalled(key);
