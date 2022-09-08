@@ -136,42 +136,39 @@ npm run android
 ```
 
 ## Adding a map
-
 ```js
-import React, { Component } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 
 MapboxGL.setAccessToken('<YOUR_ACCESSTOKEN>');
+
+const App = () => {
+  return (
+    <View style={styles.page}>
+      <View style={styles.container}>
+        <MapboxGL.MapView style={styles.map} />
+      </View>
+    </View>
+  );
+}
+
+export default App;
 
 const styles = StyleSheet.create({
   page: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF'
   },
   container: {
     height: 300,
     width: 300,
-    backgroundColor: 'tomato'
   },
   map: {
     flex: 1
   }
 });
-
-export default class App extends Component {
-  render() {
-    return (
-      <View style={styles.page}>
-        <View style={styles.container}>
-          <MapboxGL.MapView style={styles.map} />
-        </View>
-      </View>
-    );
-  }
-}
 ```
 ---
 ## Documentation

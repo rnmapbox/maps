@@ -22,9 +22,7 @@ let pkg: { name: string; version?: string } = {
 };
 try {
   pkg = require('@rnmapbox/maps/package.json');
-} catch (e) {
-  console.warn('Could not find an existing package.json file');
-}
+} catch {}
 
 type InstallerBlockName = 'pre' | 'post';
 
@@ -200,7 +198,6 @@ const withAndroidPropertiesDownloadToken: ConfigPlugin<MapboxPlugProps> = (
         }
         return true;
       });
-
       config.modResults.push({
         type: 'property',
         key,
@@ -227,7 +224,6 @@ const withAndroidPropertiesImpl2: ConfigPlugin<MapboxPlugProps> = (
         }
         return true;
       });
-
       config.modResults.push({
         type: 'property',
         key: key,

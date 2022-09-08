@@ -1,5 +1,3 @@
-/* eslint-disable fp/no-mutating-methods */
-
 let iosPropNameOverrides = {};
 
 const iosSpecOverrides = {

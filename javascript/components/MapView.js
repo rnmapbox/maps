@@ -367,7 +367,6 @@ class MapView extends NativeBridgeComponent(React.Component) {
 
       function addIfHasHandler(name) {
         if (props[`on${name}`] != null) {
-          /* eslint-disable fp/no-mutating-methods */
           if (MapboxGL.EventTypes[name] == null) {
             console.warn(`rnmapbox maps: ${name} is not supported`);
           } else {

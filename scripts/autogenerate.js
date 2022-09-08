@@ -1,4 +1,3 @@
-/* eslint-disable fp/no-mutating-methods */
 require('./autogenHelpers/globals');
 
 const fs = require('fs');
@@ -498,7 +497,7 @@ async function generate() {
   });
 
   // autogenerate expo plugin
-  execSync('yarn build:plugin');
+  execSync('yarn build:plugin', { stdio: 'inherit' });
   outputPaths.push('plugin/build');
 
   // autogenerate docs

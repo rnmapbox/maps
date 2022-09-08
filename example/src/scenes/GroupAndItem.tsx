@@ -290,7 +290,6 @@ function ExampleGroupComponent({
   title: string;
 }) {
   function itemPress(item: ExampleNode) {
-    // eslint-disable-next-line fp/no-mutating-methods
     navigation.push(item.navigationType, { path: item.path });
   }
 

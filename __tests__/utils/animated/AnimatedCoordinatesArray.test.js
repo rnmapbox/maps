@@ -1,4 +1,3 @@
-/* eslint-disable fp/no-mutating-methods */
 import FakeTimers from '@sinonjs/fake-timers';
 import { Animated, Easing } from 'react-native';
 import TestRenderer from 'react-test-renderer';
