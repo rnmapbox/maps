@@ -155,9 +155,7 @@ const layerStyles = {
     textField: ['get', 'point_count'],
     textSize: 12,
   },
-}
-)
-;
+};
 
 // ...
 
