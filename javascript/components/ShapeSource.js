@@ -21,7 +21,7 @@ export const NATIVE_MODULE_NAME = 'RCTMGLShapeSource';
 
 /**
  * ShapeSource is a map content source that supplies vector shapes to be shown on the map.
- * The shape may be a url or a GeoJSON object
+ * The shape may be an url or a GeoJSON object
  */
 class ShapeSource extends NativeBridgeComponent(AbstractSource) {
   static NATIVE_ASSETS_KEY = 'assets';
@@ -40,7 +40,7 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
     url: PropTypes.string,
 
     /**
-     * The contents of the source. A shape can represent a GeoJSON geometry, a feature, or a feature colllection.
+     * The contents of the source. A shape can represent a GeoJSON geometry, a feature, or a feature collection.
      */
     shape: PropTypes.object,
 
@@ -148,8 +148,8 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
   }
 
   /**
-   * Returns all features from the source that match the query parameters regardless of whether or not the feature is
-   * currently rendered on the map.
+   * Returns all features from the source that match the query parameters whether the feature is currently
+   * rendered on the map.
    *
    * @example
    * shapeSource.features()

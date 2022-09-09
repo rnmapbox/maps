@@ -1,84 +1,83 @@
-## MapboxGL
-###
+# MapboxGL
 
-### methods
-#### setAccessToken(accessToken)
+## methods
+### setAccessToken(accessToken)
 
-##### arguments
+#### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `accessToken` | `String` | `Yes` | required acessToken to pull mapbox tiles, can be `null` if other tiles are used |
 
-##### Description
+#### Description
 sets the accessToken, which is required when you want to use mapbox tiles
 not required when using other tiles
 
-#### setWellKnownTileServer(tileServer)
+### setWellKnownTileServer(tileServer)
 
-##### arguments
+#### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `tileServer` | `String` | `Yes` | tile server |
 
-##### Description
+#### Description
 No-op on non MapLibre implemntations. Use MapboxGL.TileServer.Mapbox to consume mapbox tiles with maplibre. *Note*: Consuming mapbox with MapLibre has different pricing than with the official SDK. Other values: MapboxGL.TileServer.MapLibre, MapboxGL.TileServer.MapTiler
 
-#### getAccessToken()
+### getAccessToken()
 
-##### arguments
+#### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `accessToken` | `String` | `Yes` | required acessToken to pull mapbox tiles, can be `null` if other tiles are used |
 
-##### Description
+#### Description
 gets the accessToken
 
 
-#### addCustomHeader(headerName, headerValue)
+### addCustomHeader(headerName, headerValue)
 
-##### arguments
+#### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `headerName` | `String` | `Yes` | name for customHeader |
 | `headerValue` | `String` | `Yes` | value for customHeader |
 
-##### Description
+#### Description
 also see [CustomHttpHeaders](/docs/CustomHttpHeaders.md)
 
 
-#### removeCustomHeader(headerName)
+### removeCustomHeader(headerName)
 
-##### arguments
+#### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `headerName` | `String` | `Yes` | name of customHeader to be removed |
 
-##### Description
+#### Description
 also see [CustomHttpHeaders](/docs/CustomHttpHeaders.md)
 
-#### setTelemetryEnabled(telemetryEnabled)
+### setTelemetryEnabled(telemetryEnabled)
 
-##### arguments
+#### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `telemetryEnabled` | `Boolean` | `Yes` |  |
 
-##### Description
+#### Description
 If mapbox' telemetry should be enabled or not
 
-### Android only
-#### requestAndroidLocationPermissions()
-##### Description
+## Android only
+### requestAndroidLocationPermissions()
+#### Description
 Opens Android Location Permission prompt.
 Returns a Promise which resolves into a boolean.
 Either permission was granted or denied.
 
 
-#### setConnected(connected)
-##### arguments
+### setConnected(connected)
+#### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
 | `connected` | `Boolean` | `Yes` | whether or not mapbox is told to be connected or not |
 
-#### Description
+### Description
 If you want to fully block online map - maybe to force offline maps

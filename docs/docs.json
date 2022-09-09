@@ -331,7 +331,7 @@
         "required": false,
         "type": "string",
         "default": "none",
-        "description": "String that get's displayed in the default callout."
+        "description": "String that gets displayed in the default callout."
       },
       {
         "name": "style",
@@ -376,7 +376,7 @@
     "name": "Callout"
   },
   "Camera": {
-    "description": "Controls the perspective from which the user sees the map.\n\nTo use imperative methods, pass in a ref object:\n\n```\nconst camera = useRef<Camera>(null);\n\nuseEffect(() => {\n  camera.current?.setCamera({\n    centerCoordinate: [lon, lat],\n  });\n}, []);\n\nreturn (\n  <Camera ref={camera} />\n);\n```",
+    "description": "Controls the perspective from which the user sees the map.\n\nTo use imperative methods, pass in a ref object:\n\n```tsx\nconst camera = useRef<Camera>(null);\n\nuseEffect(() => {\n  camera.current?.setCamera({\n    centerCoordinate: [lon, lat],\n  });\n}, []);\n\nreturn (\n  <Camera ref={camera} />\n);\n```",
     "displayName": "Camera",
     "methods": [],
     "props": [
@@ -1735,7 +1735,7 @@
     "name": "ImageSource"
   },
   "Images": {
-    "description": "Images defines the images used in Symbol etc layers",
+    "description": "Images defines the images used in Symbol etc. layers.",
     "displayName": "Images",
     "methods": [],
     "props": [
@@ -2402,7 +2402,7 @@
       },
       {
         "name": "getVisibleBounds",
-        "docblock": "The coordinate bounds(ne, sw) visible in the users’s viewport.\n\n@example\nconst visibleBounds = await this._map.getVisibleBounds();\n\n@return {Array}",
+        "docblock": "The coordinate bounds (ne, sw) visible in the user’s viewport.\n\n@example\nconst visibleBounds = await this._map.getVisibleBounds();\n\n@return {Array}",
         "modifiers": [
           "async"
         ],
@@ -2413,7 +2413,7 @@
             "name": "Array"
           }
         },
-        "description": "The coordinate bounds(ne, sw) visible in the users’s viewport.",
+        "description": "The coordinate bounds (ne, sw) visible in the user’s viewport.",
         "examples": [
           "\nconst visibleBounds = await this._map.getVisibleBounds();\n\n"
         ]
@@ -2684,7 +2684,7 @@
         "required": false,
         "type": "number",
         "default": "none",
-        "description": "iOS: The preferred frame rate at which the map view is rendered.\nThe default value for this property is MGLMapViewPreferredFramesPerSecondDefault,\nwhich will adaptively set the preferred frame rate based on the capability of\nthe user’s device to maintain a smooth experience. This property can be set to arbitrary integer values.\n\nAndroid: The maximum frame rate at which the map view is rendered, but it can't excess the ability of device hardware.\nThis property can be set to arbitrary integer values."
+        "description": "iOS: The preferred frame rate at which the map view is rendered.\nThe default value for this property is MGLMapViewPreferredFramesPerSecondDefault,\nwhich will adaptively set the preferred frame rate based on the capability of\nthe user’s device to maintain a smooth experience. This property can be set to arbitrary integer values.\n\nAndroid: The maximum frame rate at which the map view is rendered, but it can't exceed the ability of device hardware.\nThis property can be set to arbitrary integer values."
       },
       {
         "name": "localizeLabels",
@@ -2810,7 +2810,7 @@
         "required": false,
         "type": "bool",
         "default": "false",
-        "description": "[Android only] Enable/Disable use of GLSurfaceView insted of TextureView."
+        "description": "[Android only] Enable/Disable use of GLSurfaceView instead of TextureView."
       },
       {
         "name": "onPress",
@@ -3010,7 +3010,7 @@
     "name": "MapView"
   },
   "MarkerView": {
-    "description": "MarkerView allows you to place a interactive react native marker to the map.\n\nIf you have static view consider using PointAnnotation or SymbolLayer they'll offer much better performance\n.\nThis is based on [MakerView plugin](https://docs.mapbox.com/android/plugins/overview/markerview/) on Android\nand PointAnnotation on iOS.",
+    "description": "MarkerView allows you to place an interactive React Native marker to the map.\n\nIf you have static view consider using PointAnnotation or SymbolLayer they'll offer much better performance.\n\nThis is based on [MakerView plugin](https://docs.mapbox.com/android/plugins/overview/markerview/) on Android\nand PointAnnotation on iOS.",
     "displayName": "MarkerView",
     "methods": [],
     "props": [
@@ -3610,12 +3610,12 @@
     "name": "RasterSource"
   },
   "ShapeSource": {
-    "description": "ShapeSource is a map content source that supplies vector shapes to be shown on the map.\nThe shape may be a url or a GeoJSON object",
+    "description": "ShapeSource is a map content source that supplies vector shapes to be shown on the map.\nThe shape may be an url or a GeoJSON object",
     "displayName": "ShapeSource",
     "methods": [
       {
         "name": "features",
-        "docblock": "Returns all features from the source that match the query parameters regardless of whether or not the feature is\ncurrently rendered on the map.\n\n@example\nshapeSource.features()\n\n@param  {Array=} filter - an optional filter statement to filter the returned Features.\n@return {FeatureCollection}",
+        "docblock": "Returns all features from the source that match the query parameters whether the feature is currently\nrendered on the map.\n\n@example\nshapeSource.features()\n\n@param  {Array=} filter - an optional filter statement to filter the returned Features.\n@return {FeatureCollection}",
         "modifiers": [
           "async"
         ],
@@ -3635,7 +3635,7 @@
             "name": "FeatureCollection"
           }
         },
-        "description": "Returns all features from the source that match the query parameters regardless of whether or not the feature is\ncurrently rendered on the map.",
+        "description": "Returns all features from the source that match the query parameters whether the feature is currently\nrendered on the map.",
         "examples": [
           "\nshapeSource.features()\n\n"
         ]
@@ -3772,7 +3772,7 @@
         "required": false,
         "type": "object",
         "default": "none",
-        "description": "The contents of the source. A shape can represent a GeoJSON geometry, a feature, or a feature colllection."
+        "description": "The contents of the source. A shape can represent a GeoJSON geometry, a feature, or a feature collection."
       },
       {
         "name": "cluster",
@@ -4176,7 +4176,7 @@
     ]
   },
   "Style": {
-    "description": "Style is a component that automatically adds sources / layers to the map using Mapbox GL Style Spec.\nOnly [`sources`](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) & [`layers`](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/) are supported.\nOther fields such as `sprites`, `glyphs` etc. will be ignored. Not all layer / source attributes from the style spec are supported, in general the supported attributes will mentioned under https://github.com/rnmapbox/maps/tree/main/docs.",
+    "description": "Style is a component that automatically adds sources / layers to the map using Mapbox GL Style Spec.\nOnly [`sources`](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) & [`layers`](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/) are supported.\nOther fields such as `sprites`, `glyphs` etc. will be ignored. Not all layer / source attributes from the style spec are supported, in general the supported attributes will be mentioned under https://github.com/rnmapbox/maps/tree/main/docs.",
     "displayName": "Style",
     "methods": [],
     "props": [

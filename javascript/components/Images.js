@@ -21,7 +21,7 @@ function _isUrlOrPath(value) {
 }
 
 /**
- * Images defines the images used in Symbol etc layers
+ * Images defines the images used in Symbol etc. layers.
  */
 class Images extends React.Component {
   static NATIVE_ASSETS_KEY = 'assets';
