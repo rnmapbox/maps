@@ -1,6 +1,6 @@
 # Expo installation
 
-> This package cannot be used in the "Expo Go" app because [it requires custom native code](https://docs.expo.io/workflow/customizing/).
+> :warning: This package cannot be used in the "Expo Go" app because [it requires custom native code](https://docs.expo.io/workflow/customizing/).
 
 First install the package with [`expo`](https://docs.expo.io/workflow/expo-cli/#expo-install), `yarn` or `npm`. If you want to install the latest source from git you have to use [`yarn`& `npm`](../README.md#step-1---install-package).
 
