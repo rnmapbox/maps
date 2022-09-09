@@ -91,17 +91,26 @@ _See [iOS](ios/install.md) & [Android](android/install.md) setup guide for more 
 
 ### Step 1 - Install Package:
 
+### Using `yarn`
+Install from the current `#main` branch:
 ```sh
-# install with Yarn
-# yarn add @rnmapbox/maps
 yarn add rnmapbox/maps#main
+``` 
+
+### Using `npm`
+Install from the current `#main` branch:
+```sh
+npm install --save rnmapbox/maps#main
+``` 
+
+### Installing other versions
+Replace the `rnmapbox/maps#main` with the following to install specific versions:
+- `@rnmapbox/maps@10.0.0-beta.33` installs a v10 beta ([find the latest beta release](https://github.com/rnmapbox/maps/releases))
+- `@rnmapbox/maps` installs the latest stable version (v8)
 
 
-# or install with NPM
-# npm install @rnmapbox/maps --save
-npm install rnmapbox/maps#main --save
-
-```
+### Using `expo`
+Please follow the [Expo Guide](/plugin/install.md).
 
 ### Step 2 - Installation Guides:
 

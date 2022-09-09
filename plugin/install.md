@@ -2,13 +2,16 @@
 
 > This package cannot be used in the "Expo Go" app because [it requires custom native code](https://docs.expo.io/workflow/customizing/).
 
-First install the package with yarn, npm, or [`expo install rnmapbox/maps#main`](https://docs.expo.io/workflow/expo-cli/#expo-install).
+First install the package with [`expo`](https://docs.expo.io/workflow/expo-cli/#expo-install), `yarn` or `npm`. Installing from the `#main` branch is only possible with [`yarn`& `npm`](../README.md#step-1---install-package).
 
+Installing a v10 beta ([find the latest beta release](https://github.com/rnmapbox/maps/releases)):
 ```sh
-expo install rnmapbox/maps#main
+expo install @rnmapbox/maps@10.0.0-beta.33
 ```
 
-After installing this npm package, add the [config plugin](https://docs.expo.io/guides/config-plugins/) to the [`plugins`](https://docs.expo.io/versions/latest/config/app/#plugins) array of your `app.json` or `app.config.js`:
+If you want to install the latest source directly from git you have to use `yarn` or `npm`
+
+After installing this package, add the [config plugin](https://docs.expo.io/guides/config-plugins/) to the [`plugins`](https://docs.expo.io/versions/latest/config/app/#plugins) array of your `app.json` or `app.config.js`:
 
 ```json
 {
@@ -36,7 +39,7 @@ For `mapbox` or `mapbox-gl` you'll need to provide `RNMapboxMapsDownloadToken` a
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsImpl": "maplibre",
+          "RNMapboxMapsImpl": "mapbox",
           "RNMapboxMapsDownloadToken": "sk.ey...qg"
         }
       ]
