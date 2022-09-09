@@ -12,7 +12,7 @@
 </tr>
 </table>
 
-|  [![npm version](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps.svg)](https://badge.fury.io/js/%40react-native-mapbox-gl%2Fmaps)  | [![iOS & Android Build](https://github.com/rnmapbox/maps/actions/workflows/on-push.yml/badge.svg?branch=main)](https://github.com/rnmapbox/maps/actions/workflows/on-push.yml?branch=main)  |
+|  [![npm version](https://badge.fury.io/js/%40rnmapbox%2Fmaps.svg)](https://badge.fury.io/js/%40rnmapbox%2Fmaps)  | [![iOS & Android Build](https://github.com/rnmapbox/maps/actions/workflows/on-push.yml/badge.svg?branch=main)](https://github.com/rnmapbox/maps/actions/workflows/on-push.yml?branch=main)  |
 |---|---|
 
 
