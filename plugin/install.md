@@ -1,4 +1,4 @@
-# Expo installation
+# Expo Installation
 
 > :warning: This package cannot be used in the "Expo Go" app because [it requires custom native code](https://docs.expo.io/workflow/customizing/).
 
@@ -12,6 +12,8 @@ expo install @rnmapbox/maps
 ## Installing other versions
 Replace `@rnmapbox/maps` with the following to install other versions:
 - `rnmapbox/maps#main` installs the latest source from git
+
+## Plugin Configuration
 
 After installing this package, add the [config plugin](https://docs.expo.io/guides/config-plugins/) to the [`plugins`](https://docs.expo.io/versions/latest/config/app/#plugins) array of your `app.{json,config.js,config.ts}`:
 
