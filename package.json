@@ -36,18 +36,21 @@
     "prepare": "husky install"
   },
   "peerDependencies": {
+    "expo": "*",
     "mapbox-gl": "^ 2.9.0",
     "prop-types": ">=15.5.8",
     "react": ">=16.6.1",
     "react-native": ">=0.59.9"
   },
   "peerDependenciesMeta": {
+    "expo": {
+      "optional": true
+    },
     "mapbox-gl": {
       "optional": true
     }
   },
   "dependencies": {
-    "@expo/config-plugins": "^5.0.1",
     "@mapbox/geo-viewport": ">= 0.4.0",
     "@turf/along": "6.5.0",
     "@turf/distance": "6.5.0",
