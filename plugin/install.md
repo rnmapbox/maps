@@ -4,14 +4,14 @@
 
 First install the package with [`expo`](https://docs.expo.io/workflow/expo-cli/#expo-install), [`yarn`or `npm`](../README.md#step-1---install-package).
 
-Install the latest source from git:
+Install the latest release:
 ```sh
-expo install rnmapbox/maps#main
+expo install @rnmapbox/maps
 ```
 
 ## Installing other versions
-Replace `rnmapbox/maps#main` with the following to install other versions:
-- `@rnmapbox/maps` installs the latest v10 release
+Replace `@rnmapbox/maps` with the following to install other versions:
+- `rnmapbox/maps#main` installs the latest source from git
 
 After installing this package, add the [config plugin](https://docs.expo.io/guides/config-plugins/) to the [`plugins`](https://docs.expo.io/versions/latest/config/app/#plugins) array of your `app.{json,config.js,config.ts}`:
 

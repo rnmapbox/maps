@@ -105,7 +105,7 @@ npm install --save rnmapbox/maps#main
 
 #### Installing other versions
 Replace `rnmapbox/maps#main` with the following to install other versions:
-- `@rnmapbox/maps` installs the latest v10 release
+- `@rnmapbox/maps` installs the latest release
 
 
 #### Using `expo`
