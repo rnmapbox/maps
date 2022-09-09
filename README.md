@@ -91,7 +91,7 @@ _See [iOS](ios/install.md) & [Android](android/install.md) setup guide for more 
 
 ### Step 1 - Install Package:
 
-### Using `yarn`
+#### Using `yarn`
 Install the latest source from git:
 ```sh
 yarn add rnmapbox/maps#main
