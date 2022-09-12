@@ -378,7 +378,63 @@
   "Camera": {
     "description": "Controls the perspective from which the user sees the map.\n\nTo use imperative methods, pass in a ref object:\n\n```tsx\nconst camera = useRef<Camera>(null);\n\nuseEffect(() => {\n  camera.current?.setCamera({\n    centerCoordinate: [lon, lat],\n  });\n}, []);\n\nreturn (\n  <Camera ref={camera} />\n);\n```",
     "displayName": "Camera",
-    "methods": [],
+    "methods": [
+      {
+        "name": "setCamera",
+        "docblock": "Sets any camera properties, with default fallbacks if unspecified.\n\n@example\ncamera.current?.setCamera({\n  centerCoordinate: [lon, lat],\n});\n\n@param {CameraStop | CameraStops} config",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Sets any camera properties, with default fallbacks if unspecified.",
+        "examples": [
+          "\ncamera.current?.setCamera({\n  centerCoordinate: [lon, lat],\n});\n\n"
+        ]
+      },
+      {
+        "name": "fitBounds",
+        "docblock": "Set the camera position to enclose the provided bounds, with optional\npadding and duration.\n\n@example\ncamera.fitBounds([lon, lat], [lon, lat]);\ncamera.fitBounds([lon, lat], [lon, lat], [20, 0], 1000);\n\n@param {Position} ne Northeast coordinate of bounding box\n@param {Position} sw Southwest coordinate of bounding box\n@param {number | number[]} paddingConfig The viewport padding, specified as a number (all sides equal), a 2-item array ([vertical, horizontal]), or a 4-item array ([top, right, bottom, left])\n@param {number} animationDuration The transition duration",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Set the camera position to enclose the provided bounds, with optional\npadding and duration.",
+        "examples": [
+          "\ncamera.fitBounds([lon, lat], [lon, lat]);\ncamera.fitBounds([lon, lat], [lon, lat], [20, 0], 1000);\n\n"
+        ]
+      },
+      {
+        "name": "flyTo",
+        "docblock": "Sets the camera to center around the provided coordinate using a realistic 'travel'\nanimation, with optional duration.\n\n@example\ncamera.flyTo([lon, lat]);\ncamera.flyTo([lon, lat], 12000);\n\n @param {Position} centerCoordinate The coordinate to center in the view\n @param {number} animationDuration The transition duration",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Sets the camera to center around the provided coordinate using a realistic 'travel'\nanimation, with optional duration.",
+        "examples": [
+          "\ncamera.flyTo([lon, lat]);\ncamera.flyTo([lon, lat], 12000);\n\n "
+        ]
+      },
+      {
+        "name": "moveTo",
+        "docblock": "Sets the camera to center around the provided coordinate, with optional duration.\n\n@example\ncamera.moveTo([lon, lat], 200);\ncamera.moveTo([lon, lat]);\n\n @param {Position} centerCoordinate The coordinate to center in the view\n @param {number} animationDuration The transition duration",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Sets the camera to center around the provided coordinate, with optional duration.",
+        "examples": [
+          "\ncamera.moveTo([lon, lat], 200);\ncamera.moveTo([lon, lat]);\n\n "
+        ]
+      },
+      {
+        "name": "zoomTo",
+        "docblock": "Zooms the camera to the provided level, with optional duration.\n\n@example\ncamera.zoomTo(16);\ncamera.zoomTo(16, 100);\n\n@param {number} zoomLevel The target zoom\n@param {number} animationDuration The transition duration",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Zooms the camera to the provided level, with optional duration.",
+        "examples": [
+          "\ncamera.zoomTo(16);\ncamera.zoomTo(16, 100);\n\n"
+        ]
+      }
+    ],
     "props": [
       {
         "name": "type",
@@ -425,7 +481,39 @@
       {
         "name": "padding",
         "required": false,
-        "type": "{paddingLeft:number;paddingRight:number;paddingTop:number;paddingBottom:number;}",
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "paddingLeft",
+              "required": true,
+              "type": "number",
+              "default": "none",
+              "description": "Left padding in points"
+            },
+            {
+              "name": "paddingRight",
+              "required": true,
+              "type": "number",
+              "default": "none",
+              "description": "Right padding in points"
+            },
+            {
+              "name": "paddingTop",
+              "required": true,
+              "type": "number",
+              "default": "none",
+              "description": "Top padding in points"
+            },
+            {
+              "name": "paddingBottom",
+              "required": true,
+              "type": "number",
+              "default": "none",
+              "description": "Bottom padding in points"
+            }
+          ]
+        },
         "default": "none",
         "description": "The viewport padding in points."
       },
@@ -495,14 +583,99 @@
       {
         "name": "maxBounds",
         "required": false,
-        "type": "{ne:Position;sw:Position;}",
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "ne",
+              "required": true,
+              "type": "Position",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "sw",
+              "required": true,
+              "type": "Position",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            }
+          ]
+        },
         "default": "none",
         "description": "The corners of a box defining the limits of where the camera can pan or zoom."
       },
       {
         "name": "defaultSettings",
         "required": false,
-        "type": "FIX ME FORMAT BIG OBJECT",
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "type",
+              "required": false,
+              "type": "literal",
+              "default": "none",
+              "description": "Allows static check of the data type. For internal use only."
+            },
+            {
+              "name": "centerCoordinate",
+              "required": false,
+              "type": "Position",
+              "default": "none",
+              "description": "The location on which the map should center."
+            },
+            {
+              "name": "bounds",
+              "required": false,
+              "type": "intersection",
+              "default": "none",
+              "description": "The corners of a box around which the map should bound. Contains padding props for backwards\ncompatibility; the root `padding` prop should be used instead."
+            },
+            {
+              "name": "heading",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "The heading (orientation) of the map."
+            },
+            {
+              "name": "pitch",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "The pitch of the map."
+            },
+            {
+              "name": "zoomLevel",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "The zoom level of the map."
+            },
+            {
+              "name": "padding",
+              "required": false,
+              "type": "signature",
+              "default": "none",
+              "description": "The viewport padding in points."
+            },
+            {
+              "name": "animationDuration",
+              "required": false,
+              "type": "number",
+              "default": "none",
+              "description": "The duration the map takes to animate to a new configuration."
+            },
+            {
+              "name": "animationMode",
+              "required": false,
+              "type": "union",
+              "default": "none",
+              "description": "The easing or path the camera uses to animate to a new configuration."
+            }
+          ]
+        },
         "default": "none",
         "description": "The configuration that the camera falls back on, if no other values are specified."
       },
@@ -2526,7 +2699,7 @@
             "type": {
               "name": "Boolean"
             },
-            "optional": false
+            "optional": true
           }
         ],
         "returns": {
@@ -3010,19 +3183,14 @@
     "name": "MapView"
   },
   "MarkerView": {
-    "description": "MarkerView allows you to place an interactive React Native marker to the map.\n\nIf you have static view consider using PointAnnotation or SymbolLayer they'll offer much better performance.\n\nThis is based on [MakerView plugin](https://docs.mapbox.com/android/plugins/overview/markerview/) on Android\nand PointAnnotation on iOS.",
+    "description": "MarkerView allows you to place a interactive react native marker to the map.\n\nIf you have static view consider using PointAnnotation or SymbolLayer they'll offer much better performance\n.\nThis is based on [MakerView plugin](https://docs.mapbox.com/android/plugins/overview/markerview/) on Android\nand PointAnnotation on iOS.",
     "displayName": "MarkerView",
     "methods": [],
     "props": [
       {
         "name": "coordinate",
         "required": true,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": "number"
-          }
-        },
+        "type": "tuple",
         "default": "none",
         "description": "The center point (specified as a map coordinate) of the marker.\nSee also #anchor."
       },
@@ -3054,15 +3222,12 @@
       {
         "name": "children",
         "required": true,
-        "type": "element",
+        "type": "ReactComponentType",
         "default": "none",
         "description": "Expects one child - can be container with multiple elements"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "MarkerView.js",
+    "fileNameWithExt": "MarkerView.tsx",
     "name": "MarkerView"
   },
   "NativeUserLocation": {
@@ -3744,6 +3909,7 @@
         "params": [
           {
             "name": "event",
+            "optional": false,
             "type": {
               "name": null
             }
@@ -5656,6 +5822,7 @@
         "params": [
           {
             "name": "{ running }",
+            "optional": false,
             "type": {
               "name": null
             }
@@ -5804,6 +5971,7 @@
         "params": [
           {
             "name": "event",
+            "optional": false,
             "type": {
               "name": null
             }

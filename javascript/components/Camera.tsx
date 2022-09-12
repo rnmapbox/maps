@@ -152,9 +152,13 @@ export type CameraBounds = {
 };
 
 export type CameraPadding = {
+  /** Left padding in points */
   paddingLeft: number;
+  /** Right padding in points */
   paddingRight: number;
+  /** Top padding in points */
   paddingTop: number;
+  /** Bottom padding in points */
   paddingBottom: number;
 };
 
