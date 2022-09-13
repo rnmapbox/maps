@@ -4,7 +4,6 @@ import {
   processColor,
   ProcessedColorValue,
 } from 'react-native';
-import { UsesNonExemptEncryption } from '@expo/config-plugins/build/ios';
 
 import { getStyleType } from './styleMap';
 import BridgeValue, {
