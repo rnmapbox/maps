@@ -80,7 +80,7 @@ code ios/Podfile
 pod 'React-Core', :path => '../node_modules/react-native/React', modular_headers: true
 ```
 
-IOS:
+iOS:
 
  * Add `$(SDKROOT)/usr/lib/swift` to Library search paths.
 

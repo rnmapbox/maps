@@ -75,7 +75,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
      * which will adaptively set the preferred frame rate based on the capability of
      * the user’s device to maintain a smooth experience. This property can be set to arbitrary integer values.
      *
-     * Android: The maximum frame rate at which the map view is rendered, but it can't excess the ability of device hardware.
+     * Android: The maximum frame rate at which the map view is rendered, but it can't exceed the ability of device hardware.
      * This property can be set to arbitrary integer values.
      */
     preferredFramesPerSecond: PropTypes.number,
@@ -175,7 +175,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
     scaleBarPosition: ornamentPositionPropType,
 
     /**
-     * [Android only] Enable/Disable use of GLSurfaceView insted of TextureView.
+     * [Android only] Enable/Disable use of GLSurfaceView instead of TextureView.
      */
     surfaceView: PropTypes.bool,
 
@@ -450,7 +450,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
   }
 
   /**
-   * The coordinate bounds(ne, sw) visible in the users’s viewport.
+   * The coordinate bounds (ne, sw) visible in the user’s viewport.
    *
    * @example
    * const visibleBounds = await this._map.getVisibleBounds();

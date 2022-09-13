@@ -4,17 +4,15 @@ import android.content.Context
 import android.view.View
 import com.mapbox.geojson.Point
 import com.mapbox.maps.ViewAnnotationOptions
-import com.mapbox.rctmgl.components.mapview.OnMapReadyCallback
-import com.mapbox.maps.MapboxMap
 import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
-import com.mapbox.rctmgl.utils.GeoJSONUtils
 
 class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerViewManager) : AbstractMapFeature(context), View.OnLayoutChangeListener {
     private var mMapView: RCTMGLMapView? = null
     private var mChildView: View? = null
     private var mCoordinate: Point? = null
     private lateinit var mAnchor: Array<Float>
+
     override fun addView(childView: View, childPosition: Int) {
         mChildView = childView
     }
@@ -61,15 +59,26 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
     }
 
     override fun removeFromMap(mapView: RCTMGLMapView) {
-        if (mChildView != null) {
-            mMapView?.viewAnnotationManager?.removeViewAnnotation(mChildView!!)
-            mChildView!!.removeOnLayoutChangeListener(this)
+        val childView = mChildView
+        if (childView != null) {
+            childView.removeOnLayoutChangeListener(this)
+            childView.visibility = INVISIBLE;
+            mMapView?.viewAnnotationManager?.removeViewAnnotation(childView)
         }
     }
 
     override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int,
                                 oldRight: Int, oldBottom: Int) {
         if (left != oldLeft || right != oldRight || top != oldTop || bottom != oldBottom) {
+            val centerX = oldLeft + (oldRight-oldLeft)*mAnchor[0];
+            val centerY = oldTop + (oldBottom-oldTop)*mAnchor[1];
+
+            val newLeft = (centerX - (mAnchor[0] * (right - left))).toInt();
+            val newTop =  (centerY - (mAnchor[1] * (bottom - top))).toInt();
+
+            val childView = mChildView!!
+            childView.x = (newLeft - oldLeft) + childView.x;
+            childView.y = (newTop-oldTop) + childView.y;
             refresh()
         }
     }

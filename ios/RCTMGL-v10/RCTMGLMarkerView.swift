@@ -5,7 +5,6 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
   
   var map: RCTMGLMapView? = nil
   
-  
   // MARK: - react view
   var reactSubviews : [UIView] = []
 
@@ -38,7 +37,7 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
   func addToMap(_ map: RCTMGLMapView, style: Style) {
     logged("RCTMGLMarkerView.addToMap") {
       self.map = map
-      let point = point()!
+      let point = try point()
 
       try point.coordinates.validate()
 
@@ -47,7 +46,8 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
         return
       }
       let bounds = view.bounds
-      try viewAnnotations()?.add(view, options: ViewAnnotationOptions.init(geometry: Geometry.point(point), width: bounds.width, height: bounds.height, associatedFeatureId: nil, allowOverlap: true, visible: true, anchor: .center, offsetX: 0, offsetY: 0, selected: false))
+      view.isHidden = true
+      try viewAnnotations()?.add(view, options: ViewAnnotationOptions.init(geometry: Geometry.point(point), width: bounds.width, height: bounds.height, associatedFeatureId: nil, allowOverlap: true, anchor: .center, offsetX: 0, offsetY: 0, selected: false))
     }
   }
   
@@ -82,40 +82,44 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
     }
   }
   
-  func point() -> Point? {
+  func point() throws -> Point {
     guard let coordinate = coordinate else {
-      return nil
+      throw RCTMGLError.failed("no coordinates were set")
     }
      
     guard let data = coordinate.data(using: .utf8) else {
-      return nil
+      throw RCTMGLError.failed("cannot serialize coordiante")
     }
      
     guard let feature = try? JSONDecoder().decode(Feature.self, from: data) else {
-      return nil
+      throw RCTMGLError.failed("cannot parse serialized coordiante")
     }
      
     guard let geometry : Geometry = feature.geometry else {
-      return nil
+      throw RCTMGLError.failed("is not a geometry")
     }
 
     guard case .point(let point) = geometry else {
-      return nil
+      throw RCTMGLError.failed("is not a point")
     }
 
     return point
   }
   
   func _updateCoordinate() {
-    var options = ViewAnnotationOptions()
+    guard let view = view() else {
+      return
+    }
     
-    options.geometry = Geometry.point(point()!)
-    try? viewAnnotations()?.update(self, options: options)
+    logged("MarkerView.updateCoordinate") {
+      let point = try point()
+
+      try viewAnnotations()?.update(view, options: ViewAnnotationOptions(geometry: Geometry.point(point)))
+    }
   }
   
   func _updateFrameOrAnchor() {
     guard let view = view() else {
-      Logger.log(level:.warn, message: "MarkerView: No subview to render")
       return
     }
     var options = ViewAnnotationOptions()
@@ -132,7 +136,17 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
       if let anchorY = anchor["y"] {
         options.offsetY = bounds.height * (CGFloat(anchorY.floatValue) - defaultY)
       }
+      if let view = view as? RCTMGLMarkerViewWrapper {
+        if let anchorX = anchor["x"] {
+          view.anchorX = CGFloat(anchorX.floatValue)
+        }
+        if let anchorY = anchor["y"] {
+          view.anchorY = CGFloat(anchorY.floatValue)
+        }
+      }
     }
-    try? viewAnnotations()?.update(self, options: options)
+    logged("MarkerView.updateFrame") {
+      try viewAnnotations()?.update(view, options: options)
+    }
   }
 }

@@ -72,7 +72,7 @@ class RasterDemSource extends AbstractSource {
     let { url } = this.props;
     let { tileUrlTemplates } = this.props;
 
-    // Swapping url for tileUrlTemplates to provide backward compatiblity
+    // Swapping url for tileUrlTemplates to provide backward compatibility
     // when RasterSource supported only tile url as url prop
     if (isTileTemplateUrl(url)) {
       tileUrlTemplates = [url];

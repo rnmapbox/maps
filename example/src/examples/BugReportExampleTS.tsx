@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Button } from 'react-native';
+import { Button, View } from 'react-native';
 import {
   MapView,
   ShapeSource,
   SymbolLayer,
   CircleLayer,
+  MarkerView,
   Camera,
 } from '@rnmapbox/maps';
 import { FeatureCollection } from 'geojson';

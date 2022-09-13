@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerViewWrapperManager;
 import com.mapbox.rctmgl.components.camera.RCTMGLCameraManager;
 
 import com.mapbox.rctmgl.components.annotation.RCTMGLCalloutManager;
@@ -76,12 +77,13 @@ public class RCTMGLPackage implements ReactPackage {
         managers.add(new RCTMGLCameraManager(reactApplicationContext));
         managers.add(new RCTMGLAndroidTextureMapViewManager(reactApplicationContext));
         managers.add(new RCTMGLMapViewManager(reactApplicationContext));
+
+        // annotations
         managers.add(new RCTMGLMarkerViewManager(reactApplicationContext));
-
-        managers.add(new RCTMGLLightManager());
-
+        managers.add(new RCTMGLMarkerViewWrapperManager(reactApplicationContext));
         managers.add(new RCTMGLPointAnnotationManager(reactApplicationContext));
         managers.add(new RCTMGLCalloutManager());
+
         managers.add(new RCTMGLNativeUserLocationManager());
 
         // sources
@@ -106,6 +108,9 @@ public class RCTMGLPackage implements ReactPackage {
         managers.add(new RCTMGLSkyLayerManager());
         managers.add(new RCTMGLTerrainManager());
         managers.add(new RCTMGLBackgroundLayerManager());
+
+        managers.add(new RCTMGLLightManager());
+
         return managers;
     }
 }
