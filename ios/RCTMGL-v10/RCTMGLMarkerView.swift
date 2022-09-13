@@ -5,7 +5,6 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
   
   var map: RCTMGLMapView? = nil
   
-  
   // MARK: - react view
   var reactSubviews : [UIView] = []
 
@@ -38,7 +37,7 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
   func addToMap(_ map: RCTMGLMapView, style: Style) {
     logged("RCTMGLMarkerView.addToMap") {
       self.map = map
-      let point = point()!
+      let point = try point()
 
       try point.coordinates.validate()
 
@@ -83,35 +82,40 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
     }
   }
   
-  func point() -> Point? {
+  func point() throws -> Point {
     guard let coordinate = coordinate else {
-      return nil
+      throw RCTMGLError.failed("no coordinates were set")
     }
      
     guard let data = coordinate.data(using: .utf8) else {
-      return nil
+      throw RCTMGLError.failed("cannot serialize coordiante")
     }
      
     guard let feature = try? JSONDecoder().decode(Feature.self, from: data) else {
-      return nil
+      throw RCTMGLError.failed("cannot parse serialized coordiante")
     }
      
     guard let geometry : Geometry = feature.geometry else {
-      return nil
+      throw RCTMGLError.failed("is not a geometry")
     }
 
     guard case .point(let point) = geometry else {
-      return nil
+      throw RCTMGLError.failed("is not a point")
     }
 
     return point
   }
   
   func _updateCoordinate() {
-    var options = ViewAnnotationOptions()
+    guard let view = view() else {
+      return
+    }
     
-    options.geometry = Geometry.point(point()!)
-    try? viewAnnotations()?.update(self, options: options)
+    logged("MarkerView.updateCoordinate") {
+      let point = try point()
+
+      try viewAnnotations()?.update(view, options: ViewAnnotationOptions(geometry: Geometry.point(point)))
+    }
   }
   
   func _updateFrameOrAnchor() {
