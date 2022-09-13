@@ -3222,7 +3222,7 @@
       {
         "name": "children",
         "required": true,
-        "type": "ReactComponentType",
+        "type": "ReactReactElement",
         "default": "none",
         "description": "Expects one child - can be container with multiple elements"
       }

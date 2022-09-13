@@ -144,7 +144,6 @@ class DocJSONBuilder {
     }
 
     function tsTypeDescType(tsType) {
-      console.log('+++ tsType', tsType);
       if (!tsType?.name) {
         return null;
       }
@@ -152,7 +151,6 @@ class DocJSONBuilder {
       if (tsType.name === 'signature') {
         const { properties } = tsType.signature;
         const value = properties.map((kv) => {
-          console.log('KV', kv);
           return mapProp(
             mapNestedProp({ ...kv.value, description: kv.description }),
             kv.key,

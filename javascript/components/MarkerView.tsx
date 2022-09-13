@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { ReactNode, ReactElement } from 'react';
 import {
   Platform,
   NativeModules,
   requireNativeComponent,
   HostComponent,
+  type ViewProps,
 } from 'react-native';
 
 import { toJSONString } from '../utils';
@@ -51,7 +52,7 @@ class MarkerView extends React.PureComponent<{
   /**
    * Expects one child - can be container with multiple elements
    */
-  children: React.ComponentType;
+  children: React.ReactElement;
 }> {
   static defaultProps = {
     anchor: { x: 0.5, y: 0.5 },
@@ -59,7 +60,7 @@ class MarkerView extends React.PureComponent<{
 
   render() {
     const { props } = this;
-    if (Platform.OS === 'ios' && !MapboxGL.MapboxV10) {
+    if (Platform.OS === 'ios' && !Mapbox.MapboxV10) {
       return <PointAnnotation {...props} />;
     }
 
@@ -80,9 +81,15 @@ class MarkerView extends React.PureComponent<{
 
     const wrapChildern =
       RCTMGLMarkerViewWrapper === undefined
-        ? (child: React.ComponentType) => child
-        : (child: React.ComponentType) => (
-            <RCTMGLMarkerViewWrapper>{child}</RCTMGLMarkerViewWrapper>
+        ? (child: ReactNode | ReactNode[]) => child
+        : (child: ReactNode | ReactNode[]) => (
+            <RCTMGLMarkerViewWrapper
+              style={{
+                alignSelf: 'flex-start',
+              }}
+            >
+              {child}
+            </RCTMGLMarkerViewWrapper>
           );
 
     if (RCTMGLMarkerView === undefined) {
@@ -110,7 +117,7 @@ const RCTMGLMarkerView:
     ? requireNativeComponent(NATIVE_MODULE_NAME)
     : undefined;
 
-const RCTMGLMarkerViewWrapper: HostComponent<unknown> | undefined =
+const RCTMGLMarkerViewWrapper: HostComponent<ViewProps> | undefined =
   Mapbox.MapboxV10
     ? requireNativeComponent('RCTMGLMarkerViewWrapper')
     : undefined;

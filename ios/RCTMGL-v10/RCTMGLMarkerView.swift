@@ -115,13 +115,12 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
   
   func _updateFrameOrAnchor() {
     guard let view = view() else {
-      Logger.log(level:.warn, message: "MarkerView: No subview to render")
       return
     }
     var options = ViewAnnotationOptions()
     let defaultX : CGFloat = 0.5
     let defaultY : CGFloat = 0.5
-    let bounds = view.bounds
+    var bounds = view.bounds
     options.width = bounds.width
     options.height = bounds.height
     
@@ -132,7 +131,17 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
       if let anchorY = anchor["y"] {
         options.offsetY = bounds.height * (CGFloat(anchorY.floatValue) - defaultY)
       }
+      if let view = view as? RCTMGLMarkerViewWrapper {
+        if let anchorX = anchor["x"] {
+          view.anchorX = CGFloat(anchorX.floatValue)
+        }
+        if let anchorY = anchor["y"] {
+          view.anchorY = CGFloat(anchorY.floatValue)
+        }
+      }
     }
-    try? viewAnnotations()?.update(self, options: options)
+    logged("MarkerView.updateFrame") {
+      try viewAnnotations()?.update(view, options: options)
+    }
   }
 }
