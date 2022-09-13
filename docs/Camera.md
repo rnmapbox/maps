@@ -27,7 +27,11 @@ return (
 | heading | `number` | `none` | `false` | The heading (orientation) of the map. |
 | pitch | `number` | `none` | `false` | The pitch of the map. |
 | zoomLevel | `number` | `none` | `false` | The zoom level of the map. |
-| padding | `{paddingLeft:number;paddingRight:number;paddingTop:number;paddingBottom:number;}` | `none` | `false` | The viewport padding in points. |
+| padding | `shape` | `none` | `false` | The viewport padding in points. |
+| &nbsp;&nbsp;paddingLeft | `number` | `none` | `true` | Left padding in points |
+| &nbsp;&nbsp;paddingRight | `number` | `none` | `true` | Right padding in points |
+| &nbsp;&nbsp;paddingTop | `number` | `none` | `true` | Top padding in points |
+| &nbsp;&nbsp;paddingBottom | `number` | `none` | `true` | Bottom padding in points |
 | animationDuration | `number` | `none` | `false` | The duration the map takes to animate to a new configuration. |
 | animationMode | `\| 'flyTo'
 \| 'easeTo'
@@ -41,10 +45,108 @@ return (
 | followHeading | `number` | `none` | `false` | The heading used when following the user location. |
 | minZoomLevel | `number` | `none` | `false` | The lowest allowed zoom level. |
 | maxZoomLevel | `number` | `none` | `false` | The highest allowed zoom level. |
-| maxBounds | `{ne:Position;sw:Position;}` | `none` | `false` | The corners of a box defining the limits of where the camera can pan or zoom. |
-| defaultSettings | `FIX ME FORMAT BIG OBJECT` | `none` | `false` | The configuration that the camera falls back on, if no other values are specified. |
+| maxBounds | `shape` | `none` | `false` | The corners of a box defining the limits of where the camera can pan or zoom. |
+| &nbsp;&nbsp;ne | `Position` | `none` | `true` | FIX ME NO DESCRIPTION |
+| &nbsp;&nbsp;sw | `Position` | `none` | `true` | FIX ME NO DESCRIPTION |
+| defaultSettings | `shape` | `none` | `false` | The configuration that the camera falls back on, if no other values are specified. |
+| &nbsp;&nbsp;type | `literal` | `none` | `false` | Allows static check of the data type. For internal use only. |
+| &nbsp;&nbsp;centerCoordinate | `Position` | `none` | `false` | The location on which the map should center. |
+| &nbsp;&nbsp;bounds | `intersection` | `none` | `false` | The corners of a box around which the map should bound. Contains padding props for backwards<br/>compatibility; the root `padding` prop should be used instead. |
+| &nbsp;&nbsp;heading | `number` | `none` | `false` | The heading (orientation) of the map. |
+| &nbsp;&nbsp;pitch | `number` | `none` | `false` | The pitch of the map. |
+| &nbsp;&nbsp;zoomLevel | `number` | `none` | `false` | The zoom level of the map. |
+| &nbsp;&nbsp;padding | `signature` | `none` | `false` | The viewport padding in points. |
+| &nbsp;&nbsp;animationDuration | `number` | `none` | `false` | The duration the map takes to animate to a new configuration. |
+| &nbsp;&nbsp;animationMode | `union` | `none` | `false` | The easing or path the camera uses to animate to a new configuration. |
 | allowUpdates | `boolean` | `none` | `false` | Whether the camera should send any configuration to the native module. Prevents unnecessary tile<br/>fetching and improves performance when the map is not visible. Defaults to `true`. |
 | triggerKey | `string \| number` | `none` | `false` | Any arbitrary primitive value that, when changed, causes the camera to retry moving to its target<br/>configuration. (Not yet implemented.) |
 | onUserTrackingModeChange | `UserTrackingModeChangeCallback` | `none` | `false` | Executes when user tracking mode changes. |
+
+## methods
+### setCamera()
+
+Sets any camera properties, with default fallbacks if unspecified.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
+
+```javascript
+camera.current?.setCamera({
+  centerCoordinate: [lon, lat],
+});
+```
+
+
+### fitBounds()
+
+Set the camera position to enclose the provided bounds, with optional<br/>padding and duration.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
+
+```javascript
+camera.fitBounds([lon, lat], [lon, lat]);
+camera.fitBounds([lon, lat], [lon, lat], [20, 0], 1000);
+```
+
+
+### flyTo()
+
+Sets the camera to center around the provided coordinate using a realistic 'travel'<br/>animation, with optional duration.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
+
+```javascript
+camera.flyTo([lon, lat]);
+camera.flyTo([lon, lat], 12000);
+```
+
+
+### moveTo()
+
+Sets the camera to center around the provided coordinate, with optional duration.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
+
+```javascript
+camera.moveTo([lon, lat], 200);
+camera.moveTo([lon, lat]);
+```
+
+
+### zoomTo()
+
+Zooms the camera to the provided level, with optional duration.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
+
+```javascript
+camera.zoomTo(16);
+camera.zoomTo(16, 100);
+```
+
 
 

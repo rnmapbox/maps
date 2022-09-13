@@ -143,6 +143,42 @@ class DocJSONBuilder {
       }
     }
 
+    function tsTypeDescType(tsType) {
+      if (!tsType?.name) {
+        return null;
+      }
+
+      if (tsType.name === 'signature') {
+        const { properties } = tsType.signature;
+        const value = properties.map((kv) => {
+          return mapProp(
+            mapNestedProp({ ...kv.value, description: kv.description }),
+            kv.key,
+            false,
+          );
+        });
+        return { name: 'shape', value };
+        /*
+        if (tsType.raw.length < 200) {
+          return `${tsType.raw
+            .replace(/(\n|\s)/g, '')
+            .replace(/(\|)/g, '\\|')}`;
+        } else {
+          return 'FIX ME FORMAT BIG OBJECT';
+        } */
+      } else if (tsType.name === 'union') {
+        if (tsType.raw) {
+          // Props
+          return tsType.raw.replace(/\|/g, '\\|');
+        } else if (tsType.elements) {
+          // Methods
+          return tsType.elements.map((e) => e.name).join(' \\| ');
+        }
+      } else {
+        return tsType.name;
+      }
+    }
+
     function mapProp(propMeta, propName, array) {
       let result = {};
       if (!array) {
@@ -151,7 +187,7 @@ class DocJSONBuilder {
           required: propMeta.required || false,
           type:
             propMeta.type?.name ||
-            tsTypeDesc(propMeta.tsType) ||
+            tsTypeDescType(propMeta.tsType) ||
             'FIX ME UNKNOWN TYPE',
           default: !propMeta.defaultValue
             ? 'none'
@@ -167,7 +203,7 @@ class DocJSONBuilder {
         }
         result.type =
           (propMeta.type && propMeta.type.name) ||
-          tsTypeDesc(propMeta.tsType) ||
+          tsTypeDescType(propMeta.tsType) ||
           'FIX ME UNKNOWN TYPE';
         if (propMeta.defaultValue) {
           result.default = propMeta.defaultValue.value.replace(/\n/g, '');
@@ -276,9 +312,12 @@ class DocJSONBuilder {
             return;
           }
 
-          let parsed = docgen.parse(content, undefined, undefined, {
-            filename: fileName,
+          let parsedComponents = docgen.parse(content, {
+            babelOptions: {
+              filename: fileName,
+            },
           });
+          let [parsed] = parsedComponents;
           fileName = fileName.replace(fileExtensionsRegex, '');
           parsed.fileNameWithExt = fileNameWithExt;
           results[fileName] = parsed;

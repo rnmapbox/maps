@@ -144,14 +144,14 @@ Map camera will perform updates based on provided config. Deprecated use Camera#
 
 
 
-### takeSnap(writeToDisk)
+### takeSnap([writeToDisk])
 
 Takes snapshot of map with current tiles and returns a URI to the image
 
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `writeToDisk` | `Boolean` | `Yes` | If true will create a temp file, otherwise it is in base64 |
+| `writeToDisk` | `Boolean` | `No` | If true will create a temp file, otherwise it is in base64 |
 
 
 ### getZoom()
