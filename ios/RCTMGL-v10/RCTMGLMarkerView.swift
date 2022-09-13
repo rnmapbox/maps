@@ -47,7 +47,8 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
         return
       }
       let bounds = view.bounds
-      try viewAnnotations()?.add(view, options: ViewAnnotationOptions.init(geometry: Geometry.point(point), width: bounds.width, height: bounds.height, associatedFeatureId: nil, allowOverlap: true, visible: true, anchor: .center, offsetX: 0, offsetY: 0, selected: false))
+      view.isHidden = true
+      try viewAnnotations()?.add(view, options: ViewAnnotationOptions.init(geometry: Geometry.point(point), width: bounds.width, height: bounds.height, associatedFeatureId: nil, allowOverlap: true, anchor: .center, offsetX: 0, offsetY: 0, selected: false))
     }
   }
   
@@ -120,7 +121,7 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
     var options = ViewAnnotationOptions()
     let defaultX : CGFloat = 0.5
     let defaultY : CGFloat = 0.5
-    var bounds = view.bounds
+    let bounds = view.bounds
     options.width = bounds.width
     options.height = bounds.height
     
