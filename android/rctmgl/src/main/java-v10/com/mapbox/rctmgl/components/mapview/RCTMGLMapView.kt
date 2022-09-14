@@ -8,6 +8,10 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
+import androidx.lifecycle.ViewTreeLifecycleOwner
 import com.facebook.react.bridge.*
 import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.geojson.Feature
@@ -465,6 +469,23 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             })
         }
         return false
+    }
+
+    override fun onAttachedToWindow() {
+        val hostingLifecycleOwner = ViewTreeLifecycleOwner.get(this)
+        if (hostingLifecycleOwner == null) {
+            ViewTreeLifecycleOwner.set(this, object : LifecycleOwner {
+                private lateinit var lifecycleRegistry: LifecycleRegistry
+                init {
+                    lifecycleRegistry = LifecycleRegistry(this)
+                    lifecycleRegistry.currentState = Lifecycle.State.CREATED
+                }
+                override fun getLifecycle(): Lifecycle {
+                    return lifecycleRegistry
+                }
+            })
+        }
+        super.onAttachedToWindow()
     }
 
     override fun onMapLongClick(point: Point): Boolean {
