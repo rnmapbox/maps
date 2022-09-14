@@ -65,9 +65,9 @@ At the moment, the following implementations are supported:
 
 |*RNMapboxMapsImpl*|*Notes*|
 |----------------|-----|
-|mapbox|New [Mapbox v10](https://www.mapbox.com/mobile-maps-sdk) implementation (BETA)|
-|maplibre|[MapLibre](https://github.com/maplibre/maplibre-gl-native) opensource fork of Mapbox SDKs|
-|mapbox-gl|Legacy mapbox implementation [iOS](https://docs.mapbox.com/android/legacy/maps/guides/) [Android](https://docs.mapbox.com/ios/legacy/maps/guides/)|
+|mapbox|New [Mapbox v10](https://www.mapbox.com/mobile-maps-sdk) implementation - recommended|
+|maplibre|[MapLibre](https://github.com/maplibre/maplibre-gl-native) opensource fork of Mapbox SDKs - will be dropped in next version|
+|mapbox-gl|Legacy mapbox implementation [iOS](https://docs.mapbox.com/android/legacy/maps/guides/) [Android](https://docs.mapbox.com/ios/legacy/maps/guides/) - legacy, will be dropped in next version|
 
 _See [iOS](ios/install.md) & [Android](android/install.md) setup guide for more details on setting `RNMapboxMapsImpl`_
 
