@@ -15,7 +15,7 @@ class RCTMGLVectorLayer: RCTMGLLayer {
         ((MGLVectorStyleLayer *) self.styleLayer).predicate = predicate;
     }
     @catch (NSException* exception) {
-        RCTLogError(@"Invalid predicate: %@ on layer %@ - %@ reason: %@", predicate, self, exception.name, exception.reason);
+        RCTMGLLogError(@"Invalid predicate: %@ on layer %@ - %@ reason: %@", predicate, self, exception.name, exception.reason);
     }
 }
 

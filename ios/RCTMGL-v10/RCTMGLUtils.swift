@@ -35,7 +35,7 @@ class RCTMGLUtils {
           RCTMGLImageQueue.sharedInstance.addImage(objects[imageName], scale: scale, bridge:bridge) {
             (error,image) in
             if image == nil {
-              RCTLogWarn("Failed to fetch image: \(imageName) error:\(error)")
+              RCTMGLLogWarn("Failed to fetch image: \(imageName) error:\(error)")
             }
             else {
               DispatchQueue.main.async {
