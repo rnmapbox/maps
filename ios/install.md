@@ -78,7 +78,12 @@ Check the current version of the SDK [here](https://docs.mapbox.com/ios/maps/ove
 
 ```ruby
 $RNMapboxMapsImpl = 'mapbox'
-$RNMapboxMapsVersion = '~> 10.6.0'
+```
+
+You can also specify the version to use. *Warning:* if you set a version, then later update, the `rnamapbox/maps` library it's possible that you'll end up using Mapbox older version than supported. Make sure you revise this value with `rnmapbox/maps` updates.
+
+```ruby
+$RNMapboxMapsVersion = '~> 10.9.0'
 ```
 
 You will need to authorize your download of the Maps SDK with a secret access token with the `DOWNLOADS:READ` scope. This [guide](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials) explains how to configure the secret token under section `Configure your secret token`.
