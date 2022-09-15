@@ -3055,7 +3055,7 @@
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "iOS, v10 only, experimental.\n\nCalled when the currently displayed map area changes.\nReplaces onRegionIsChanging, so can't set both",
+        "description": "v10 only, experimental.\n\nCalled when the currently displayed map area changes.\nReplaces onRegionIsChanging, so can't set both",
         "params": [
           {
             "name": "region",
