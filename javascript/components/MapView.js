@@ -215,7 +215,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
     onRegionDidChange: PropTypes.func,
 
     /**
-     * iOS, v10 only, experimental.
+     * v10 only, experimental.
      *
      * Called when the currently displayed map area changes.
      * Replaces onRegionIsChanging, so can't set both

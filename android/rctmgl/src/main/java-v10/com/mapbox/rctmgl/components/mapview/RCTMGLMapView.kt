@@ -163,6 +163,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
         map.addOnCameraChangeListener(OnCameraChangeListener { cameraChangedEventData ->
             handleMapChangedEvent(EventTypes.REGION_IS_CHANGING)
+            handleMapChangedEvent(EventTypes.CAMERA_CHANGED)
         })
 
         map.addOnMapIdleListener(OnMapIdleListener { mapIdleEventData ->
@@ -578,6 +579,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         val event: IEvent
         event = when (eventType) {
             EventTypes.REGION_WILL_CHANGE, EventTypes.REGION_DID_CHANGE, EventTypes.REGION_IS_CHANGING -> MapChangeEvent(this, eventType, makeRegionPayload(null))
+            EventTypes.CAMERA_CHANGED -> MapChangeEvent(this, eventType, makeCameraPayload())
             else -> MapChangeEvent(this, eventType)
         }
         mManager.handleEvent(event)
@@ -585,6 +587,35 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     private fun canHandleEvent(event: String): Boolean {
         return mHandledMapChangedEvents == null || mHandledMapChangedEvents.contains(event)
+    }
+
+    private fun makeCameraPayload(): WritableMap {
+        val position = mMap?.cameraState ?: return WritableNativeMap()
+        val properties = WritableNativeMap()
+        properties.putDouble("zoom", position.zoom)
+        properties.putDouble("heading", position.bearing)
+        properties.putDouble("pitch", position.pitch)
+        properties.putArray("center", GeoJSONUtils.getCoordinates(position.center))
+        try {
+            val bounds = mMap.coordinateBoundsForCamera(position.toCameraOptions())
+
+            val boundsMap = WritableNativeMap()
+            boundsMap.putArray("ne", bounds.northeast.toReadableArray())
+            boundsMap.putArray("sw", bounds.southwest.toReadableArray())
+            
+            properties.putMap("bounds", boundsMap)
+        } catch (ex: Exception) {
+            Logger.e(LOG_TAG, "An error occurred while attempting to make the region", ex)
+        }
+        val gestures = WritableNativeMap()
+        gestures.putBoolean("isGestureActive", false)
+        gestures.putBoolean("isAnimatingFromGesture", false)
+
+        val state: WritableMap = WritableNativeMap()
+        state.putMap("properties", properties)
+        state.putMap("gestures", gestures)
+
+        return state
     }
 
     private fun makeRegionPayload(isAnimated: Boolean?): WritableMap {
