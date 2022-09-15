@@ -65,6 +65,10 @@ import org.json.JSONObject
 import java.util.*
 
 
+interface RCTMGLMapViewLifecycleOwner : LifecycleOwner {
+    fun handleLifecycleEvent(event: Lifecycle.Event)
+}
+
 open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapViewManager /*, MapboxMapOptions options*/) : MapView(mContext), OnMapClickListener, OnMapLongClickListener {
     private val mSources: MutableMap<String, RCTSource<*>>
     private val mImages: MutableList<RCTMGLImages>
@@ -471,19 +475,33 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         return false
     }
 
+    private var lifecycleOwner : RCTMGLMapViewLifecycleOwner? = null
+
+    override fun onDetachedFromWindow() {
+        lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+        super.onDetachedFromWindow();
+    }
+
     override fun onAttachedToWindow() {
-        val hostingLifecycleOwner = ViewTreeLifecycleOwner.get(this)
-        if (hostingLifecycleOwner == null) {
-            ViewTreeLifecycleOwner.set(this, object : LifecycleOwner {
+        if (lifecycleOwner == null) {
+            lifecycleOwner = object : RCTMGLMapViewLifecycleOwner {
                 private lateinit var lifecycleRegistry: LifecycleRegistry
                 init {
                     lifecycleRegistry = LifecycleRegistry(this)
                     lifecycleRegistry.currentState = Lifecycle.State.CREATED
                 }
+
+                override fun handleLifecycleEvent(event: Lifecycle.Event) {
+                    lifecycleRegistry.handleLifecycleEvent(event)
+                }
+
                 override fun getLifecycle(): Lifecycle {
                     return lifecycleRegistry
                 }
-            })
+            }
+            ViewTreeLifecycleOwner.set(this, lifecycleOwner);
+        } else {
+            lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
         }
         super.onAttachedToWindow()
     }
