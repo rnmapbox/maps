@@ -104,6 +104,7 @@ type NavigationType = 'Group' | 'Item';
 type ItemComponent = React.ComponentType<{
   label: string;
   onDismissExample: () => void;
+  navigation: ItemProps['navigation'];
 }>;
 
 interface ExampleNode {
@@ -190,7 +191,7 @@ const BugReportPage =
   ({ ...props }) =>
     (
       <Page {...props}>
-        <Klass />
+        <Klass {...props} />
       </Page>
     );
 
@@ -360,5 +361,11 @@ export const Item = ({ route, navigation }: ItemProps) => {
   }
   const { label, Component } = item;
 
-  return <Component label={label} onDismissExample={onDismissExample} />;
+  return (
+    <Component
+      label={label}
+      onDismissExample={onDismissExample}
+      navigation={navigation}
+    />
+  );
 };
