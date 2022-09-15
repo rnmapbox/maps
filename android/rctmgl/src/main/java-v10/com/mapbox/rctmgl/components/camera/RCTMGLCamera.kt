@@ -78,7 +78,7 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
 
         override fun onAnimationCancel(animator: Animator) {
             if (!hasSentFirstRegion) {
-                mMapView!!.sendRegionChangeEvent(false)
+                mMapView?.sendRegionChangeEvent(false)
                 hasSentFirstRegion = true
             }
         }

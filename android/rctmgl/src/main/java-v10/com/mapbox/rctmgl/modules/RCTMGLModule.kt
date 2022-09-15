@@ -52,8 +52,10 @@ class RCTMGLModule(private val mReactContext: ReactApplicationContext) : ReactCo
         eventTypes["MapClick"] = EventTypes.MAP_CLICK
         eventTypes["MapLongClick"] = EventTypes.MAP_LONG_CLICK
         eventTypes["RegionWillChange"] = EventTypes.REGION_WILL_CHANGE
-        eventTypes["RegionIsChanging"] = EventTypes.REGION_IS_CHANGING
-        eventTypes["RegionDidChange"] = EventTypes.REGION_DID_CHANGE
+        eventTypes["RegionIsChanging"] = EventTypes.REGION_IS_CHANGING // deprecated
+        eventTypes["CameraChanged"] = EventTypes.CAMERA_CHANGED
+        eventTypes["RegionDidChange"] = EventTypes.REGION_DID_CHANGE // deprecated
+        eventTypes["MapIdle"] = EventTypes.MAP_IDLE
         eventTypes["UserLocationUpdated"] = EventTypes.USER_LOCATION_UPDATED
         eventTypes["WillStartLoadingMap"] = EventTypes.WILL_START_LOADING_MAP
         eventTypes["DidFinishLoadingMap"] = EventTypes.DID_FINISH_LOADING_MAP

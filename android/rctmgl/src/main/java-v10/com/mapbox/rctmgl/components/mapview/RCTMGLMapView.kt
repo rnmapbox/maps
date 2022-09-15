@@ -66,10 +66,7 @@ import com.mapbox.rctmgl.events.IEvent
 import com.mapbox.rctmgl.events.MapChangeEvent
 import com.mapbox.rctmgl.events.MapClickEvent
 import com.mapbox.rctmgl.events.constants.EventTypes
-import com.mapbox.rctmgl.utils.BitmapUtils
-import com.mapbox.rctmgl.utils.GeoJSONUtils
-import com.mapbox.rctmgl.utils.LatLng
-import com.mapbox.rctmgl.utils.Logger
+import com.mapbox.rctmgl.utils.*
 import com.mapbox.rctmgl.utils.extensions.toReadableArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -178,7 +175,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     private var styleLoaded = false
 
-    private val mHandledMapChangedEvents: HashSet<String>? = null
+    private var mHandledMapChangedEvents: HashSet<String>? = null
     private var mAnnotationClicked = false
     private var mAnnotationDragged = false
     private var mLocationComponentManager: LocationComponentManager? = null
@@ -267,10 +264,12 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
         map.addOnCameraChangeListener(OnCameraChangeListener { cameraChangedEventData ->
             handleMapChangedEvent(EventTypes.REGION_IS_CHANGING)
+            handleMapChangedEvent(EventTypes.CAMERA_CHANGED)
         })
 
         map.addOnMapIdleListener(OnMapIdleListener { mapIdleEventData ->
             sendRegionDidChangeEvent()
+            handleMapChangedEvent(EventTypes.MAP_IDLE);
         })
 
         val gesturesPlugin: GesturesPlugin = this.gestures
@@ -426,9 +425,9 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     // endregion
 
     fun sendRegionChangeEvent(isAnimated: Boolean) {
-        val event: IEvent = MapChangeEvent(this, EventTypes.REGION_DID_CHANGE,
+        val didChangeEvent = MapChangeEvent(this, EventTypes.REGION_DID_CHANGE,
                 makeRegionPayload(isAnimated))
-        mManager.handleEvent(event)
+        mManager.handleEvent(didChangeEvent)
         mCameraChangeTracker.setReason(CameraChangeReason.NONE)
     }
 
@@ -719,6 +718,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         waiters.add(callback)
     }
 
+    // region Events
+
     fun sendRegionDidChangeEvent() {
         handleMapChangedEvent(EventTypes.REGION_DID_CHANGE)
         mCameraChangeTracker.setReason(CameraChangeReason.NONE)
@@ -726,16 +727,52 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     private fun handleMapChangedEvent(eventType: String) {
         if (!canHandleEvent(eventType)) return
+
         val event: IEvent
         event = when (eventType) {
             EventTypes.REGION_WILL_CHANGE, EventTypes.REGION_DID_CHANGE, EventTypes.REGION_IS_CHANGING -> MapChangeEvent(this, eventType, makeRegionPayload(null))
+            EventTypes.CAMERA_CHANGED, EventTypes.MAP_IDLE -> MapChangeEvent(this, eventType, makeCameraPayload())
             else -> MapChangeEvent(this, eventType)
         }
         mManager.handleEvent(event)
     }
 
+    fun setHandledMapChangedEvents(events: Array<String>) {
+        mHandledMapChangedEvents = HashSet<String>(events.asList())
+    }
+
     private fun canHandleEvent(event: String): Boolean {
-        return mHandledMapChangedEvents == null || mHandledMapChangedEvents.contains(event)
+        val changedEvents = mHandledMapChangedEvents
+        return changedEvents == null || changedEvents.contains(event)
+    }
+
+    private fun makeCameraPayload(): WritableMap {
+        val position = mMap?.cameraState ?: return WritableNativeMap()
+        val properties = WritableNativeMap()
+        properties.putDouble("zoom", position.zoom)
+        properties.putDouble("heading", position.bearing)
+        properties.putDouble("pitch", position.pitch)
+        properties.putArray("center", position.center.toReadableArray())
+        try {
+            val bounds = mMap.coordinateBoundsForCamera(position.toCameraOptions())
+
+            val boundsMap = WritableNativeMap()
+            boundsMap.putArray("ne", bounds.northeast.toReadableArray())
+            boundsMap.putArray("sw", bounds.southwest.toReadableArray())
+            
+            properties.putMap("bounds", boundsMap)
+        } catch (ex: Exception) {
+            Logger.e(LOG_TAG, "An error occurred while attempting to make the region", ex)
+        }
+        val gestures = WritableNativeMap()
+        gestures.putBoolean("isGestureActive", mCameraChangeTracker.isUserInteraction)
+        // gestures.putBoolean("isAnimatingFromGesture", if (null == isAnimated) mCameraChangeTracker.isAnimated else isAnimated)
+
+        val state: WritableMap = WritableNativeMap()
+        state.putMap("properties", properties)
+        state.putMap("gestures", gestures)
+
+        return state
     }
 
     private fun makeRegionPayload(isAnimated: Boolean?): WritableMap {
@@ -756,6 +793,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         }
         return GeoJSONUtils.toPointFeature(latLng, properties)
     }
+
+    // endregion
 
     /**
      * Adds the marker image to the map for use as a SymbolLayer icon
@@ -1270,6 +1309,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         lifecycle.onAttachedToWindow(this)
         super.onAttachedToWindow()
     }
+
 
     // endregion
 }

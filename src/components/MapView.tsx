@@ -59,7 +59,7 @@ export type RegionPayload = {
 };
 
 /**
- * v10 only - experimental
+ * v10 only
  */
 export type MapState = {
   properties: {
@@ -74,7 +74,6 @@ export type MapState = {
   };
   gestures: {
     isGestureActive: boolean;
-    isAnimatingFromGesture: boolean;
   };
 };
 
@@ -266,12 +265,12 @@ type Props = ViewProps & {
   ) => void;
 
   /**
-   * iOS, v10 only, deprecated will be removed in next version - please use onRegionIsChanging.
+   * v10 only, replaces onRegionIsChanging
    */
   onCameraChanged?: (state: MapState) => void;
 
   /**
-   * iOS, v10 only, deprecated will be removed in next version - please use onRegionDidChange
+   * v10 only, replaces onRegionDidChange
    */
   onMapIdle?: (state: MapState) => void;
 
@@ -504,9 +503,9 @@ class MapView extends NativeBridgeComponent(
       addIfHasHandler('DidFinishRenderingMapFully');
       addIfHasHandler('DidFinishLoadingStyle');
 
-      if (addIfHasHandler('MapIdle')) {
+      if (addIfHasHandler('RegionDidChange')) {
         console.warn(
-          'onMapIdle is deprecated and will be removed in next beta - please use onRegionDidChange',
+          'onRegionDidChange is deprecated and will be removed in next beta - please use onMapIdle',
         );
         if (props.onRegionDidChange) {
           console.warn(
@@ -514,11 +513,11 @@ class MapView extends NativeBridgeComponent(
           );
         }
       }
-      if (addIfHasHandler('CameraChanged')) {
+      if (addIfHasHandler('RegionIsChanging')) {
         console.warn(
-          'onCameraChanged is deprecated and will be removed in next beta - please use onRegionIsChanging',
+          'onRegionIsChanging is deprecated and will be removed in next beta - please use onCameraChanged',
         );
-        if (props.onRegionIsChanging) {
+        if (props.onCameraChanged) {
           console.warn(
             'rnmapbox/maps: only one of MapView.onRegionIsChanging or onCameraChanged is supported',
           );

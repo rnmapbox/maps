@@ -3346,20 +3346,20 @@
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean, isAnimatingFromGesture: boolean}}) => void"
+          "funcSignature": "(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean}}) => void"
         },
         "default": "none",
-        "description": "iOS, v10 only, deprecated will be removed in next version - please use onRegionIsChanging.\n*signature:*`(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean, isAnimatingFromGesture: boolean}}) => void`"
+        "description": "v10 only, replaces onRegionIsChanging\n*signature:*`(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean}}) => void`"
       },
       {
         "name": "onMapIdle",
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean, isAnimatingFromGesture: boolean}}) => void"
+          "funcSignature": "(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean}}) => void"
         },
         "default": "none",
-        "description": "iOS, v10 only, deprecated will be removed in next version - please use onRegionDidChange\n*signature:*`(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean, isAnimatingFromGesture: boolean}}) => void`"
+        "description": "v10 only, replaces onRegionDidChange\n*signature:*`(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean}}) => void`"
       },
       {
         "name": "onWillStartLoadingMap",
