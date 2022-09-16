@@ -127,15 +127,9 @@ object GeoJSONUtils {
         val array = Arguments.createArray()
         val ne = bounds.northeast
         val sw = bounds.southwest
-        val latLngs = arrayOf(
-            LatLng(ne.latitude(), ne.longitude()),
-            LatLng(ne.latitude(), sw.longitude()),
-            LatLng(sw.latitude(), sw.longitude()),
-            LatLng(sw.latitude(), ne.longitude())
-        )
-        for (latLng in latLngs) {
-            array.pushArray(fromLatLng(latLng))
-        }
+
+        array.pushArray(fromLatLng(LatLng(ne.latitude(), ne.longitude())));
+        array.pushArray(fromLatLng(LatLng(sw.latitude(), sw.longitude())));
         return array
     }
 
