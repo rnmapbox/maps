@@ -285,7 +285,7 @@ class ShapeSource extends NativeBridgeComponent(AbstractSource) {
     const shallowProps = Object.assign({}, props);
 
     // Adds support for Animated
-    if (shallowProps.shape && typeof shallowProps !== 'string') {
+    if (shallowProps.shape && typeof shallowProps.shape !== 'string') {
       shallowProps.shape = JSON.stringify(shallowProps.shape);
     }
 

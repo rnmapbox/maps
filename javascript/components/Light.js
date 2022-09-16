@@ -34,7 +34,7 @@ class Light extends AbstractLayer {
         testID="rctmglLight"
         {...this.props}
         style={undefined}
-        reactStyle={this.getStyle()}
+        reactStyle={this.getStyle(this.props.style)}
       />
     );
   }
