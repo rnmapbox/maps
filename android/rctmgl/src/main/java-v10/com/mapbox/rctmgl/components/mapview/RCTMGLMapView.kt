@@ -208,6 +208,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         mMap.getStyle(onStyleLoaded)
     }
 
+    // region features
     fun addFeature(childView: View?, childPosition: Int) {
         var feature: AbstractMapFeature? = null
         if (childView is RCTSource<*>) {
@@ -284,6 +285,18 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     fun getFeatureAt(i: Int): AbstractMapFeature {
         return features()[i]
     }
+
+    fun removeAllFeatures() {
+        mFeatures.forEach {
+            it.removeFromMap(this)
+        }
+        mFeatures.clear()
+        val queuedFeatures = mQueuedFeatures
+        if (queuedFeatures != null) {
+            queuedFeatures.clear()
+        }
+    }
+    // endregion
 
     fun sendRegionChangeEvent(isAnimated: Boolean) {
         val event: IEvent = MapChangeEvent(this, EventTypes.REGION_DID_CHANGE,
@@ -473,37 +486,6 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             })
         }
         return false
-    }
-
-    private var lifecycleOwner : RCTMGLMapViewLifecycleOwner? = null
-
-    override fun onDetachedFromWindow() {
-        lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-        super.onDetachedFromWindow();
-    }
-
-    override fun onAttachedToWindow() {
-        if (lifecycleOwner == null) {
-            lifecycleOwner = object : RCTMGLMapViewLifecycleOwner {
-                private lateinit var lifecycleRegistry: LifecycleRegistry
-                init {
-                    lifecycleRegistry = LifecycleRegistry(this)
-                    lifecycleRegistry.currentState = Lifecycle.State.CREATED
-                }
-
-                override fun handleLifecycleEvent(event: Lifecycle.Event) {
-                    lifecycleRegistry.handleLifecycleEvent(event)
-                }
-
-                override fun getLifecycle(): Lifecycle {
-                    return lifecycleRegistry
-                }
-            }
-            ViewTreeLifecycleOwner.set(this, lifecycleOwner);
-        } else {
-            lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
-        }
-        super.onAttachedToWindow()
     }
 
     override fun onMapLongClick(point: Point): Boolean {
@@ -1110,5 +1092,50 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             }
         }
     }
+    // endregion
+
+    // region lifecycle
+    private var lifecycleOwner : RCTMGLMapViewLifecycleOwner? = null
+
+    override fun onDetachedFromWindow() {
+        lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+        super.onDetachedFromWindow();
+    }
+
+    override fun onDestroy() {
+        removeAllFeatures()
+        lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+        super.onDestroy()
+    }
+
+    fun onDropViewInstance() {
+        removeAllFeatures()
+        lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    }
+
+    override fun onAttachedToWindow() {
+        if (lifecycleOwner == null) {
+            lifecycleOwner = object : RCTMGLMapViewLifecycleOwner {
+                private lateinit var lifecycleRegistry: LifecycleRegistry
+                init {
+                    lifecycleRegistry = LifecycleRegistry(this)
+                    lifecycleRegistry.currentState = Lifecycle.State.CREATED
+                }
+
+                override fun handleLifecycleEvent(event: Lifecycle.Event) {
+                    lifecycleRegistry.handleLifecycleEvent(event)
+                }
+
+                override fun getLifecycle(): Lifecycle {
+                    return lifecycleRegistry
+                }
+            }
+            ViewTreeLifecycleOwner.set(this, lifecycleOwner);
+        } else {
+            lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
+        }
+        super.onAttachedToWindow()
+    }
+
     // endregion
 }
