@@ -70,6 +70,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
         if (mViews.containsKey(reactTag)) {
             mViews.remove(reactTag)
         }
+        mapView.onDropViewInstance()
         super.onDropViewInstance(mapView)
     }
 
