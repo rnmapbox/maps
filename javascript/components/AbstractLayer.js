@@ -11,7 +11,7 @@ class AbstractLayer extends React.PureComponent {
       ...this.props,
       id: this.props.id,
       sourceID: this.props.sourceID,
-      reactStyle: this.getStyle(),
+      reactStyle: this.getStyle(this.props.style),
       minZoomLevel: this.props.minZoomLevel,
       maxZoomLevel: this.props.maxZoomLevel,
       aboveLayerID: this.props.aboveLayerID,
@@ -28,8 +28,8 @@ class AbstractLayer extends React.PureComponent {
     }
   }
 
-  getStyle() {
-    return transformStyle(this.props.style);
+  getStyle(style) {
+    return transformStyle(style);
   }
 
   setNativeProps(props) {
