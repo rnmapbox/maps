@@ -1,27 +1,46 @@
+import React from 'react';
+
 import { runNativeCommand, isAndroid } from '../utils';
 
 let callbackIncrement = 0;
 
-const NativeBridgeComponent = (B) =>
+export type RNMBEvent<PayloadType = { [key: string]: string }> = {
+  payload: PayloadType;
+  type: string;
+};
+
+const NativeBridgeComponent = <T,>(B: React.ComponentClass<T>) =>
   class extends B {
-    constructor(props, nativeModuleName) {
+    _nativeModuleName: string;
+    _onAndroidCallback: (e: any) => void;
+    _callbackMap: Map<string, any>;
+    _preRefMapMethodQueue: Array<{
+      method: { name: string; args: Array<string> };
+      resolver: (value: unknown) => void;
+    }>;
+
+    constructor(props: T, nativeModuleName: string) {
       super(props);
 
       this._nativeModuleName = nativeModuleName;
-      this._onAndroidCallback = this._onAndroidCallback.bind(this);
+      this._onAndroidCallback = this._onAndroidCallbackO.bind(this);
       this._callbackMap = new Map();
       this._preRefMapMethodQueue = [];
     }
 
-    _addAddAndroidCallback(id, resolve, reject) {
+    _addAddAndroidCallback(
+      id: string,
+      resolve: (value: string) => void,
+      reject: (error: Error) => void,
+    ) {
       this._callbackMap.set(id, { resolve, reject });
     }
 
-    _removeAndroidCallback(id) {
-      this._callbackMap.remove(id);
+    _removeAndroidCallback(id: string) {
+      this._callbackMap.delete(id);
     }
 
-    _onAndroidCallback(e) {
+    _onAndroidCallbackO(e: React.SyntheticEvent<Element, RNMBEvent>) {
       const callbackID = e.nativeEvent.type;
       const callback = this._callbackMap.get(callbackID);
 
@@ -30,7 +49,7 @@ const NativeBridgeComponent = (B) =>
       }
 
       this._callbackMap.delete(callbackID);
-      let { payload } = e.nativeEvent;
+      const { payload } = e.nativeEvent;
       if (payload.error) {
         callback.reject.call(null, new Error(payload.error));
       } else {
@@ -38,7 +57,7 @@ const NativeBridgeComponent = (B) =>
       }
     }
 
-    async _runPendingNativeCommands(nativeRef) {
+    async _runPendingNativeCommands<RefType>(nativeRef: RefType) {
       if (nativeRef) {
         while (this._preRefMapMethodQueue.length > 0) {
           const item = this._preRefMapMethodQueue.pop();
@@ -55,7 +74,11 @@ const NativeBridgeComponent = (B) =>
       }
     }
 
-    _runNativeCommand(methodName, nativeRef, args = []) {
+    _runNativeCommand<RefType>(
+      methodName: string,
+      nativeRef: RefType,
+      args: string[] = [],
+    ) {
       if (!nativeRef) {
         return new Promise((resolve) => {
           this._preRefMapMethodQueue.push({

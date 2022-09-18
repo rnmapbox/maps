@@ -9,7 +9,7 @@ and PointAnnotation on iOS.
 
 ## props
 | Prop | Type | Default | Required | Description |
-| ---- | :--: | :-----: | :------: | :----------: |
+| ---- | :-- | :----- | :------ | :---------- |
 | coordinate | `tuple` | `none` | `true` | The center point (specified as a map coordinate) of the marker.<br/>See also #anchor. |
 | anchor | `shape` | `{ x: 0.5, y: 0.5 }` | `false` | Specifies the anchor being set on a particular point of the annotation.<br/>The anchor point is specified in the continuous space [0.0, 1.0] x [0.0, 1.0],<br/>where (0, 0) is the top-left corner of the image, and (1, 1) is the bottom-right corner.<br/>Note this is only for custom annotations not the default pin view.<br/>Defaults to the center of the view. |
 | &nbsp;&nbsp;x | `number` | `none` | `true` | `x` of anchor |

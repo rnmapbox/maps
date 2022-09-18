@@ -4,7 +4,7 @@
 
 ## props
 | Prop | Type | Default | Required | Description |
-| ---- | :--: | :-----: | :------: | :----------: |
+| ---- | :-- | :----- | :------ | :---------- |
 | androidRenderMode | `enum` | `none` | `false` | Android render mode.<br/><br/> - normal: just a circle<br/> - compass: triangle with heading<br/> - gps: large arrow<br/><br/>@platform android |
 | iosShowsUserHeadingIndicator | `bool` | `none` | `false` | iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.<br/><br/>@platform ios |
 

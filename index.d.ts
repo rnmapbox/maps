@@ -34,6 +34,7 @@ import {
   CameraAnimationMode as _CameraAnimationMode,
 } from './javascript/components/Camera';
 import { MarkerView as _MarkerView } from './javascript/components/MarkerView';
+import { PointAnnotation as _PointAnnotation } from './javascript/components/PointAnnotation';
 import { Atmosphere as _Atmosphere } from './javascript/components/Atmosphere';
 import type {
   MapboxGLEvent as _MapboxGLEvent,
@@ -140,6 +141,7 @@ declare namespace MapboxGL {
 
   const Atmosphere = _Atmosphere;
   const MarkerView = _MarkerView;
+  const PointAnnotation = _PointAnnotation;
 
   type MapboxGLEvent = _MapboxGLEvent;
   type UserTrackingMode = _UserTrackingMode;
@@ -349,9 +351,6 @@ declare namespace MapboxGL {
     identity(attributeName: string): number;
   }
 
-  class PointAnnotation extends Component<PointAnnotationProps> {
-    refresh(): void;
-  }
   class Callout extends Component<CalloutProps> {}
   type Style = React.FC<StyleProps>;
 
@@ -849,22 +848,6 @@ export interface LightProps extends Omit<ViewProps, 'style'> {
   style?: LightStyle;
 }
 
-export interface PointAnnotationProps {
-  id: string;
-  title?: string;
-  snippet?: string;
-  selected?: boolean;
-  draggable?: boolean;
-  coordinate: GeoJSON.Position;
-  anchor?: Point;
-  children: JSX.Element;
-  onSelected?: () => void;
-  onDeselected?: () => void;
-  onDragStart?: () => void;
-  onDrag?: () => void;
-  onDragEnd?: () => void;
-}
-
 export interface StyleProps {
   json: any;
 }
@@ -1051,6 +1034,7 @@ export import SymbolLayer = MapboxGL.SymbolLayer;
 export import RasterLayer = MapboxGL.RasterLayer;
 export import BackgroundLayer = MapboxGL.BackgroundLayer;
 export import MarkerView = MapboxGL.MarkerView;
+export import PointAnnotation = MapboxGL.PointAnnotation;
 
 export import MapboxGLEvent = MapboxGL.MapboxGLEvent;
 export import UserTrackingMode = MapboxGL.UserTrackingMode;

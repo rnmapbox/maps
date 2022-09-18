@@ -4,7 +4,7 @@
 
 ## props
 | Prop | Type | Default | Required | Description |
-| ---- | :--: | :-----: | :------: | :----------: |
+| ---- | :-- | :----- | :------ | :---------- |
 | style | `AtmosphereLayerStyleProps` | `none` | `true` | FIX ME NO DESCRIPTION |
 
 
