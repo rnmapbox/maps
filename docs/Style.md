@@ -6,7 +6,7 @@ Other fields such as `sprites`, `glyphs` etc. will be ignored. Not all layer / s
 
 ## props
 | Prop | Type | Default | Required | Description |
-| ---- | :--: | :-----: | :------: | :----------: |
+| ---- | :-- | :----- | :------ | :---------- |
 | json | `any` | `none` | `false` | A JSON object conforming to the schema described in the Mapbox Style Specification , or a URL to such JSON. |
 
 

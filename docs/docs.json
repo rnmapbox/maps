@@ -3292,26 +3292,21 @@
       {
         "name": "selected",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "none",
-        "description": "Manually selects/deselects annotation\n@type {[type]}"
+        "description": "Manually selects/deselects annotation"
       },
       {
         "name": "draggable",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "false",
         "description": "Enable or disable dragging. Defaults to false."
       },
       {
         "name": "coordinate",
         "required": true,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": "number"
-          }
-        },
+        "type": "tuple",
         "default": "none",
         "description": "The center point (specified as a map coordinate) of the annotation."
       },
@@ -3343,43 +3338,69 @@
       {
         "name": "onSelected",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(payload:{feature: Feature}) => void"
+        },
         "default": "none",
-        "description": "This callback is fired once this annotation is selected. Returns a Feature as the first param."
+        "description": "This callback is fired once this annotation is selected. Returns a Feature as the first param.\n*signature:*`(payload:{feature: Feature}) => void`"
       },
       {
         "name": "onDeselected",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(payload:{feature: Feature}) => void"
+        },
         "default": "none",
-        "description": "This callback is fired once this annotation is deselected."
+        "description": "This callback is fired once this annotation is deselected.\n*signature:*`(payload:{feature: Feature}) => void`"
       },
       {
         "name": "onDragStart",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(payload:{feature: Feature}) => void"
+        },
         "default": "none",
-        "description": "This callback is fired once this annotation has started being dragged."
+        "description": "This callback is fired once this annotation has started being dragged.\n*signature:*`(payload:{feature: Feature}) => void`"
       },
       {
         "name": "onDragEnd",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(payload:{feature: Feature}) => void"
+        },
         "default": "none",
-        "description": "This callback is fired once this annotation has stopped being dragged."
+        "description": "This callback is fired once this annotation has stopped being dragged.\n*signature:*`(payload:{feature: Feature}) => void`"
       },
       {
         "name": "onDrag",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(payload:{feature: Feature}) => void"
+        },
         "default": "none",
-        "description": "This callback is fired while this annotation is being dragged."
+        "description": "This callback is fired while this annotation is being dragged.\n*signature:*`(payload:{feature: Feature}) => void`"
+      },
+      {
+        "name": "children",
+        "required": true,
+        "type": "ReactReactElement",
+        "default": "none",
+        "description": "Expects one child, and an optional callout can be added as well"
+      },
+      {
+        "name": "style",
+        "required": false,
+        "type": "ViewProps['style']",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "PointAnnotation.js",
+    "fileNameWithExt": "PointAnnotation.tsx",
     "name": "PointAnnotation"
   },
   "RasterDemSource": {

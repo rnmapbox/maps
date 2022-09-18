@@ -4,7 +4,7 @@
 
 ## props
 | Prop | Type | Default | Required | Description |
-| ---- | :--: | :-----: | :------: | :----------: |
+| ---- | :-- | :----- | :------ | :---------- |
 | heading | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
 
 

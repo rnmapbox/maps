@@ -58,10 +58,21 @@ class MarkerView extends React.PureComponent<{
     anchor: { x: 0.5, y: 0.5 },
   };
 
+  static lastId = 0;
+  __idForPointAnnotation?: string;
+
+  _idForPointAnnotation(): string {
+    if (this.__idForPointAnnotation === undefined) {
+      MarkerView.lastId = MarkerView.lastId + 1;
+      this.__idForPointAnnotation = `MV-${MarkerView.lastId}`;
+    }
+    return this.__idForPointAnnotation;
+  }
+
   render() {
     const { props } = this;
     if (Platform.OS === 'ios' && !Mapbox.MapboxV10) {
-      return <PointAnnotation {...props} />;
+      return <PointAnnotation id={this._idForPointAnnotation()} {...props} />;
     }
 
     function _getCoordinate(coordinate: [number, number]): string | undefined {

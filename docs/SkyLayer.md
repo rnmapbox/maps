@@ -4,7 +4,7 @@ SkyLayer is a spherical dome around the map that is always rendered behind all o
 
 ## props
 | Prop | Type | Default | Required | Description |
-| ---- | :--: | :-----: | :------: | :----------: |
+| ---- | :-- | :----- | :------ | :---------- |
 | id | `string` | `none` | `true` | A string that uniquely identifies the source in the style to which it is added. |
 | sourceID | `string` | `MapboxGL.StyleSource.DefaultSourceID` | `false` | The source from which to obtain the data to style.<br/>If the source has not yet been added to the current style, the behavior is undefined. |
 | aboveLayerID | `string` | `none` | `false` | Inserts a layer above aboveLayerID. |

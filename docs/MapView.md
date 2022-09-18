@@ -4,7 +4,7 @@ MapView backed by Mapbox Native GL
 
 ## props
 | Prop | Type | Default | Required | Description |
-| ---- | :--: | :-----: | :------: | :----------: |
+| ---- | :-- | :----- | :------ | :---------- |
 | contentInset | `union` | `none` | `false` | The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport. |
 | style | `any` | `none` | `false` | Style for wrapping React Native View |
 | styleURL | `string` | `none` | `false` | Style URL for map - notice, if non is set it _will_ default to `MapboxGL.StyleURL.Street` |

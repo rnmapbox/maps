@@ -4,7 +4,7 @@ Light represents the light source for extruded geometries
 
 ## props
 | Prop | Type | Default | Required | Description |
-| ---- | :--: | :-----: | :------: | :----------: |
+| ---- | :-- | :----- | :------ | :---------- |
 | style | `custom` | `none` | `false` | Customizable style attributes |
 
 

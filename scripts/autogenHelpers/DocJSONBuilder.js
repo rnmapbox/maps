@@ -22,6 +22,7 @@ const IGNORE_FILES = [
   'AbstractLayer',
   'AbstractSource',
   'NativeBridgeComponent',
+  'NativeBridgeComponent.tsx',
 ];
 const IGNORE_PATTERN = /\.web\./;
 
@@ -143,29 +144,77 @@ class DocJSONBuilder {
       }
     }
 
+    /**
+     * @typedef {{arguments: {type:TSType,name:string}[], return: TSType]}} TSFuncSignature
+     * @typedef {{key:string, value:TSType}[]} TSKVProperties
+     * @typedef {{properties: TSKVProperties}} TSObjectSignature
+     * @typedef {{name: 'void'}} TSVoidType
+     * @typedef {{name: string}} TSTypeType
+     * @typedef {{name: 'signature', type:'function', raw:string, signature: TSFuncSignature}} TSFunctionType
+     * @typedef {{name: 'signature', type:'object', raw:string, signature: TSObjectSignature}} TSObjectType
+     * @typedef {TSVoidType | TSFunctionType | TSTypeType | TSObjectType} TSType
+     */
+
+    /**
+     * @params {TSType} tsType
+     * @returns {tsType is TSFunctionType}
+     */
+    function tsTypeIsFunction(tsType) {
+      return tsType.type === 'function';
+    }
+
+    /**
+     * @params {TSType} tsType
+     * @returns {tsType is TSObjectType}
+     */
+    function tsTypeIsObject(tsType) {
+      return tsType.type === 'object';
+    }
+
+    /**
+     * @param {TSType} tsType
+     */
+    function tsTypeDump(tsType) {
+      if (tsTypeIsFunction(tsType)) {
+        let { signature } = tsType;
+        return `(${signature.arguments
+          .map(({ name, type }) => `${name}:${tsTypeDump(type)}`)
+          .join(', ')}) => ${tsTypeDump(signature.return)}`;
+      } else if (tsTypeIsObject(tsType)) {
+        let { signature } = tsType;
+        return `{${signature.properties
+          .map(({ key, value }) => `${key}: ${tsTypeDump(value)}`)
+          .join(', ')}}`;
+      } else {
+        return tsType.name;
+      }
+    }
+
     function tsTypeDescType(tsType) {
       if (!tsType?.name) {
         return null;
       }
 
-      if (tsType.name === 'signature') {
+      if (tsType.name === 'signature' && tsType.type === 'object') {
         const { properties } = tsType.signature;
-        const value = properties.map((kv) => {
-          return mapProp(
-            mapNestedProp({ ...kv.value, description: kv.description }),
-            kv.key,
-            false,
-          );
-        });
-        return { name: 'shape', value };
-        /*
-        if (tsType.raw.length < 200) {
+        if (properties) {
+          const value = properties.map((kv) => {
+            return mapProp(
+              mapNestedProp({ ...kv.value, description: kv.description }),
+              kv.key,
+              false,
+            );
+          });
+          return { name: 'shape', value };
+        } else if (tsType.raw.length < 200) {
           return `${tsType.raw
             .replace(/(\n|\s)/g, '')
             .replace(/(\|)/g, '\\|')}`;
         } else {
           return 'FIX ME FORMAT BIG OBJECT';
-        } */
+        }
+      } else if (tsType.name === 'signature' && tsType.type === 'function') {
+        return { name: 'func', funcSignature: tsTypeDump(tsType) };
       } else if (tsType.name === 'union') {
         if (tsType.raw) {
           // Props
@@ -194,6 +243,13 @@ class DocJSONBuilder {
             : propMeta.defaultValue.value.replace(/\n/g, ''),
           description: propMeta.description || 'FIX ME NO DESCRIPTION',
         };
+        if (
+          result.type &&
+          result.type.name === 'func' &&
+          result.type.funcSignature
+        ) {
+          result.description = `${result.description}\n*signature:*\`${result.type.funcSignature}\``;
+        }
       } else {
         if (propName) {
           result.name = propName;
