@@ -5795,40 +5795,66 @@
     ]
   },
   "Terrain": {
-    "description": "A global modifier that elevates layers and markers based on a DEM data source.",
+    "description": "",
     "displayName": "Terrain",
-    "methods": [
-      {
-        "name": "baseProps",
-        "docblock": null,
-        "modifiers": [
-          "get"
-        ],
-        "params": [],
-        "returns": null
-      }
-    ],
+    "methods": [],
     "props": [
       {
         "name": "sourceID",
-        "required": false,
+        "required": true,
         "type": "string",
-        "default": "MapboxGL.StyleSource.DefaultSourceID",
+        "default": "none",
         "description": "Name of a source of raster_dem type to be used for terrain elevation."
       },
       {
         "name": "exaggeration",
         "required": false,
-        "type": "union",
+        "type": "Value",
         "default": "none",
-        "description": "Optional number between 0 and 1000 inclusive. Defaults to 1. Supports interpolateexpressions. Transitionable.\nExaggerates the elevation of the terrain by multiplying the data from the DEM with this value."
+        "description": "Deprecated, use exaggeration in style instead"
+      },
+      {
+        "name": "style",
+        "required": true,
+        "type": "TerrainLayerStyleProps",
+        "default": "none",
+        "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "Terrain.js",
-    "name": "Terrain"
+    "fileNameWithExt": "Terrain.tsx",
+    "name": "Terrain",
+    "styles": [
+      {
+        "name": "source",
+        "type": "string",
+        "values": [],
+        "description": "Name of a source of `raster_dem` type to be used for terrain elevation.",
+        "requires": [],
+        "disabledBy": [],
+        "allowedFunctionTypes": []
+      },
+      {
+        "name": "exaggeration",
+        "type": "number",
+        "values": [],
+        "minimum": 0,
+        "maximum": 1000,
+        "default": 1,
+        "description": "Exaggerates the elevation of the terrain by multiplying the data from the DEM with this value.",
+        "requires": [
+          "source"
+        ],
+        "disabledBy": [],
+        "allowedFunctionTypes": [],
+        "expression": {
+          "interpolated": true,
+          "parameters": [
+            "zoom"
+          ]
+        },
+        "transition": true
+      }
+    ]
   },
   "UserLocation": {
     "description": "",

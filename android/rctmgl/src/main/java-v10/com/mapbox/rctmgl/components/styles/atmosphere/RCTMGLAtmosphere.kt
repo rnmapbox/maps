@@ -1,8 +1,9 @@
-package com.mapbox.rctmgl.components.styles.terrain
+package com.mapbox.rctmgl.components.styles.atmosphere
 
 import android.content.Context
 import com.facebook.react.bridge.ReadableMap
 import com.mapbox.maps.MapboxMap
+import com.mapbox.maps.extension.style.atmosphere.generated.Atmosphere
 import com.mapbox.maps.extension.style.terrain.generated.Terrain
 import com.mapbox.maps.extension.style.terrain.generated.removeTerrain
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
@@ -11,10 +12,10 @@ import com.mapbox.rctmgl.components.styles.RCTMGLStyleFactory
 import com.mapbox.rctmgl.components.styles.sources.AbstractSourceConsumer
 import com.mapbox.rctmgl.utils.Logger
 
-class RCTMGLTerrain(context: Context?) : AbstractSourceConsumer(context) {
+class RCTMGLAtmosphere(context: Context?) : AbstractSourceConsumer(context) {
     override var iD: String? = null
     protected var mSourceID: String? = null
-    protected var mTerrain: Terrain? = null
+    protected var mAtmosphere: Atmosphere? = null
 
     // beginregion RCTLayer
     @JvmField
@@ -25,7 +26,7 @@ class RCTMGLTerrain(context: Context?) : AbstractSourceConsumer(context) {
 
     fun setReactStyle(reactStyle: ReadableMap?) {
         mReactStyle = reactStyle
-        if (mTerrain != null) {
+        if (mAtmosphere != null) {
             addStyles()
         }
     }
@@ -37,10 +38,10 @@ class RCTMGLTerrain(context: Context?) : AbstractSourceConsumer(context) {
 
     override fun addToMap(mapView: RCTMGLMapView) {
         mMap = mapView.getMapboxMap()
-        val terrain = makeTerrain()
-        mTerrain = terrain
+        val atmosphere = makeAtmosphere()
+        mAtmosphere = atmosphere
         addStyles()
-        mapView.savedStyle?.let { terrain.bindTo(it) }
+        mapView.savedStyle?.let { atmosphere.bindTo(it) }
     }
 
     override fun removeFromMap(mapView: RCTMGLMapView) {
@@ -48,13 +49,13 @@ class RCTMGLTerrain(context: Context?) : AbstractSourceConsumer(context) {
         mMap = null
     }
 
-    fun makeTerrain(): Terrain {
-        return Terrain(mSourceID!!)
+    fun makeAtmosphere(): Atmosphere {
+        return Atmosphere()
     }
 
     fun addStyles() {
-        RCTMGLStyleFactory.setTerrainLayerStyle(
-            mTerrain, RCTMGLStyle(
+        RCTMGLStyleFactory.setAtmosphereLayerStyle(
+            mAtmosphere, RCTMGLStyle(
                 context, mReactStyle!!,
                 mMap!!
             )

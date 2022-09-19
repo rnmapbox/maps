@@ -10,7 +10,6 @@
 
 RCT_EXPORT_VIEW_PROPERTY(sourceID, NSString);
 
-RCT_CUSTOM_VIEW_PROPERTY(exaggeration, NSObject, RCTMGLTerrain) {
-  view.exaggeration = json;
-}
+RCT_EXPORT_VIEW_PROPERTY(reactStyle, NSDictionary);
+
 @end

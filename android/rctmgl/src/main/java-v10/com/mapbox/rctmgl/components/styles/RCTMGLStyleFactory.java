@@ -17,6 +17,7 @@ import com.mapbox.maps.extension.style.layers.generated.SymbolLayer;
 import com.mapbox.maps.extension.style.layers.generated.HeatmapLayer;
 import com.mapbox.maps.extension.style.layers.generated.HillshadeLayer;
 import com.mapbox.maps.extension.style.atmosphere.generated.Atmosphere;
+import com.mapbox.maps.extension.style.terrain.generated.Terrain;
 // import com.mapbox.maps.extension.style.layers.properties.generated.Visibility;
 import com.mapbox.maps.extension.style.layers.properties.generated.*;
 import com.mapbox.maps.extension.style.types.StyleTransition;
@@ -882,6 +883,23 @@ public class RCTMGLStyleFactory {
               break;
             case "starIntensityTransition":
               RCTMGLStyleFactory.setStarIntensityTransition(layer, styleValue);
+              break;
+        }
+      }
+    }
+    public static void setTerrainLayerStyle(final Terrain layer, RCTMGLStyle style) {
+      List<String> styleKeys = style.getAllStyleKeys();
+
+      if (styleKeys.size() == 0) {
+        return;
+      }
+
+      for (String styleKey : styleKeys) {
+        final RCTMGLStyleValue styleValue = style.getStyleValueForKey(styleKey);
+
+        switch (styleKey) {
+            case "exaggeration":
+              RCTMGLStyleFactory.setExaggeration(layer, styleValue);
               break;
         }
       }
@@ -2632,6 +2650,14 @@ public class RCTMGLStyleFactory {
       StyleTransition transition = styleValue.getTransition();
       if (transition != null) {
         layer.starIntensityTransition(transition);
+      }
+    }
+
+    public static void setExaggeration(Terrain layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.exaggeration(styleValue.getExpression());
+      } else {
+          layer.exaggeration(styleValue.getFloat(VALUE_KEY));
       }
     }
 

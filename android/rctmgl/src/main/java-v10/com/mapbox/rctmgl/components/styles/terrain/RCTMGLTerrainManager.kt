@@ -1,14 +1,8 @@
 package com.mapbox.rctmgl.components.styles.terrain
 
-import com.facebook.react.bridge.Dynamic
-import com.mapbox.rctmgl.components.styles.sources.AbstractSourceConsumer
-import com.mapbox.maps.extension.style.terrain.generated.Terrain
-import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
-import com.facebook.react.bridge.ReadableType
-import com.facebook.react.uimanager.ViewGroupManager
-import com.mapbox.rctmgl.components.styles.terrain.RCTMGLTerrain
-import com.mapbox.rctmgl.components.styles.terrain.RCTMGLTerrainManager
+import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.ViewGroupManager
 import com.facebook.react.uimanager.annotations.ReactProp
 
 class RCTMGLTerrainManager : ViewGroupManager<RCTMGLTerrain>() {
@@ -30,9 +24,9 @@ class RCTMGLTerrainManager : ViewGroupManager<RCTMGLTerrain>() {
         layer.setSourceID(sourceID)
     }
 
-    @ReactProp(name = "exaggeration")
-    fun setExaggeration(layer: RCTMGLTerrain, exaggeration: Dynamic?) {
-        layer.setExaggeration(exaggeration)
+    @ReactProp(name = "reactStyle")
+    fun setReactStyle(terrain: RCTMGLTerrain, reactStyle: ReadableMap?) {
+        terrain.setReactStyle(reactStyle)
     }
 
     companion object {
