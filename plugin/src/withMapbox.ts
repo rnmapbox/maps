@@ -22,7 +22,9 @@ let pkg: { name: string; version?: string } = {
 };
 try {
   pkg = require('@rnmapbox/maps/package.json');
-} catch {}
+} catch {
+  // empty catch block
+}
 
 type InstallerBlockName = 'pre' | 'post';
 
