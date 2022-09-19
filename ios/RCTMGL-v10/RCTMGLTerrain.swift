@@ -10,7 +10,17 @@ class RCTMGLTerrain : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   
   @objc var sourceID: String? = nil
   
-  @objc var exaggeration : Any? = nil
+  @objc var exaggeration : Any? = nil {
+    didSet {
+      if (style != nil && terrain != nil) {
+        do {
+          try style.setTerrain(self.makeTerrain())
+        } catch {
+          Logger.log(level: .error, message: "setTerrain failed: \(error)")
+        }
+      }
+    }
+  }
   
   func waitForStyleLoad() -> Bool {
     return true
