@@ -22,7 +22,9 @@ open class RCTMGLMapView : MapView {
   var onStyleLoadedComponents: [RCTMGLMapComponent] = []
   
   private var isPendingInitialLayout = true
+  private var wasGestureActive = false
   private var isGestureActive = false
+  private var wasAnimatingFromGesture = false
   private var isAnimatingFromGesture = false
 
   var layerWaiters : [String:[(String) -> Void]] = [:]
@@ -274,7 +276,7 @@ open class RCTMGLMapView : MapView {
 extension RCTMGLMapView {
   @objc func setReactOnMapChange(_ value: @escaping RCTBubblingEventBlock) {
     self.reactOnMapChange = value
-    
+
     self.mapView.mapboxMap.onEvery(.cameraChanged, handler: { cameraEvent in
       if self.handleMapChangedEvents.contains(.regionIsChanging) {
         let event = RCTMGLEvent(type:.regionIsChanging, payload: self.buildRegionObject());
@@ -283,6 +285,9 @@ extension RCTMGLMapView {
         let event = RCTMGLEvent(type:.cameraChanged, payload: self.buildStateObject());
         self.fireEvent(event: event, callback: self.reactOnMapChange)
       }
+        
+        self.resetWasGestureIndicators();
+        
     })
 
     self.mapView.mapboxMap.onEvery(.mapIdle, handler: { cameraEvent in
@@ -293,6 +298,7 @@ extension RCTMGLMapView {
         let event = RCTMGLEvent(type:.mapIdle, payload: self.buildStateObject());
         self.fireEvent(event: event, callback: self.reactOnMapChange)
       }
+        self.resetWasGestureIndicators();
     })
   }
 
@@ -324,8 +330,8 @@ extension RCTMGLMapView {
         "pitch": Double(mapView.cameraState.pitch),
       ],
       "gestures": [
-        "isGestureActive": isGestureActive,
-        "isAnimatingFromGesture": isAnimatingFromGesture
+        "isGestureActive": isGestureActive || wasGestureActive,
+        "isAnimatingFromGesture": isAnimatingFromGesture || wasAnimatingFromGesture
       ]
     ]
   }
@@ -347,8 +353,8 @@ extension RCTMGLMapView {
       "bearing": .number(mapView.cameraState.bearing),
       "pitch": .number(mapView.cameraState.pitch),
       "visibleBounds": .array(boundsArray),
-      "isUserInteraction": .boolean(isGestureActive),
-      "isAnimatingFromUserInteraction": .boolean(isAnimatingFromGesture),
+      "isUserInteraction": .boolean(isGestureActive || wasGestureActive),
+      "isAnimatingFromUserInteraction": .boolean(isAnimatingFromGesture || wasAnimatingFromGesture),
     ]
     return logged("buildRegionObject", errorResult: { ["error":["toJSON":$0.localizedDescription]] }) {
       try result.toJSON()
@@ -589,21 +595,38 @@ extension RCTMGLMapView: GestureManagerDelegate {
       }
     }
   }
-  
+    
+    private func resetWasGestureIndicators() {
+        if (self.wasGestureActive) {
+            self.wasGestureActive = false
+        }
+        if (self.wasAnimatingFromGesture) {
+            self.wasAnimatingFromGesture = false
+        }
+    }
+    
   public func gestureManager(_ gestureManager: GestureManager, didBegin gestureType: GestureType) {
     isGestureActive = true
   }
   
   public func gestureManager(_ gestureManager: GestureManager, didEnd gestureType: GestureType, willAnimate: Bool) {
-    isGestureActive = false
+     
     if willAnimate {
       isAnimatingFromGesture = true
+    } else {
+        wasGestureActive = true;
+        isGestureActive = false;
     }
   }
   
   public func gestureManager(_ gestureManager: GestureManager, didEndAnimatingFor gestureType: GestureType) {
-    isGestureActive = false
-    isAnimatingFromGesture = false
+      
+      wasGestureActive = true;
+      isGestureActive = false;
+      
+      wasAnimatingFromGesture = true;
+      isAnimatingFromGesture = false;
+    
   }
 }
 
@@ -922,4 +945,3 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
     }
   }
 }
-
