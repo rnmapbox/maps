@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
 import MapboxGL, { MapView, Camera, Logger } from '@rnmapbox/maps';
 import { Position } from 'geojson';
@@ -10,9 +10,10 @@ const centerCoord = [-73.99155, 40.72];
 
 const Markers = memo(() => {
   const [coords, setCoords] = useState<Position[]>([]);
+  const [show, setShow] = useState(false);
 
-  const resetMarkers = useCallback(() => {
-    const newCoords = new Array(10).fill(0).map(() => {
+  const shuffleMarkers = useCallback(() => {
+    const newCoords = new Array(show ? 10 : 0).fill(0).map(() => {
       return [
         centerCoord[0] + (Math.random() - 0.5) * 0.01,
         centerCoord[1] + (Math.random() - 0.5) * 0.01,
@@ -20,11 +21,17 @@ const Markers = memo(() => {
     });
 
     setCoords(newCoords);
+  }, [show]);
+
+  useEffect(() => {
+    shuffleMarkers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    resetMarkers();
-  }, [resetMarkers]);
+    shuffleMarkers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [show]);
 
   return (
     <MapView style={{ flex: 1 }}>
@@ -51,7 +58,14 @@ const Markers = memo(() => {
         <Button
           style={styles.button}
           title={'Rearrange'}
-          onPress={resetMarkers}
+          onPress={shuffleMarkers}
+        />
+        <Button
+          style={styles.button}
+          title={show ? 'Hide markers' : 'Show markers'}
+          onPress={() => {
+            setShow(!show);
+          }}
         />
       </SafeAreaView>
     </MapView>
@@ -81,6 +95,7 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 0,
+    marginTop: 12,
     marginHorizontal: 12,
   },
 });
