@@ -22,8 +22,8 @@ open class RCTMGLMapView : MapView {
   var onStyleLoadedComponents: [RCTMGLMapComponent] = []
   
   private var isPendingInitialLayout = true
+  private var wasGestureActive = false
   private var isGestureActive = false
-  private var isAnimatingFromGesture = false
 
   var layerWaiters : [String:[(String) -> Void]] = [:]
   
@@ -274,8 +274,9 @@ open class RCTMGLMapView : MapView {
 extension RCTMGLMapView {
   @objc func setReactOnMapChange(_ value: @escaping RCTBubblingEventBlock) {
     self.reactOnMapChange = value
-    
-    self.mapView.mapboxMap.onEvery(.cameraChanged, handler: { cameraEvent in
+
+    self.mapView.mapboxMap.onEvery(event: .cameraChanged, handler: { cameraEvent in
+      self.wasGestureActive = self.isGestureActive
       if self.handleMapChangedEvents.contains(.regionIsChanging) {
         let event = RCTMGLEvent(type:.regionIsChanging, payload: self.buildRegionObject());
         self.fireEvent(event: event, callback: self.reactOnMapChange)
@@ -285,7 +286,7 @@ extension RCTMGLMapView {
       }
     })
 
-    self.mapView.mapboxMap.onEvery(.mapIdle, handler: { cameraEvent in
+    self.mapView.mapboxMap.onEvery(event: .mapIdle, handler: { cameraEvent in
       if self.handleMapChangedEvents.contains(.regionDidChange) {
         let event = RCTMGLEvent(type:.regionDidChange, payload: self.buildRegionObject());
         self.fireEvent(event: event, callback: self.reactOnMapChange)
@@ -293,6 +294,8 @@ extension RCTMGLMapView {
         let event = RCTMGLEvent(type:.mapIdle, payload: self.buildStateObject());
         self.fireEvent(event: event, callback: self.reactOnMapChange)
       }
+      
+      self.wasGestureActive = false
     })
   }
 
@@ -324,8 +327,7 @@ extension RCTMGLMapView {
         "pitch": Double(mapView.cameraState.pitch),
       ],
       "gestures": [
-        "isGestureActive": isGestureActive,
-        "isAnimatingFromGesture": isAnimatingFromGesture
+        "isGestureActive": wasGestureActive
       ]
     ]
   }
@@ -347,8 +349,7 @@ extension RCTMGLMapView {
       "bearing": .number(mapView.cameraState.bearing),
       "pitch": .number(mapView.cameraState.pitch),
       "visibleBounds": .array(boundsArray),
-      "isUserInteraction": .boolean(isGestureActive),
-      "isAnimatingFromUserInteraction": .boolean(isAnimatingFromGesture),
+      "isUserInteraction": .boolean(wasGestureActive),
     ]
     return logged("buildRegionObject", errorResult: { ["error":["toJSON":$0.localizedDescription]] }) {
       try result.toJSON()
@@ -356,7 +357,7 @@ extension RCTMGLMapView {
   }
   
   public func setupEvents() {
-    self.mapboxMap.onEvery(.mapLoadingError, handler: {(event) in
+    self.mapboxMap.onEvery(event: .mapLoadingError, handler: {(event) in
       if let data = event.data as? [String:Any], let message = data["message"] {
         Logger.log(level: .error, message: "MapLoad error \(message)")
       } else {
@@ -364,7 +365,7 @@ extension RCTMGLMapView {
       }
     })
     
-    self.mapboxMap.onEvery(.styleImageMissing) { (event) in
+    self.mapboxMap.onEvery(event: .styleImageMissing) { (event) in
       if let data = event.data as? [String:Any] {
         if let imageName = data["id"] as? String {
 
@@ -381,7 +382,7 @@ extension RCTMGLMapView {
       }
     }
 
-    self.mapboxMap.onEvery(.renderFrameFinished, handler: { (event) in
+    self.mapboxMap.onEvery(event: .renderFrameFinished, handler: { (event) in
       var type = RCTMGLEvent.EventType.didFinishRendering
       var payload : [String:Any]? = nil
       if let data = event.data as? [String:Any] {
@@ -394,12 +395,12 @@ extension RCTMGLMapView {
       self.fireEvent(event: event, callback: self.reactOnMapChange)
     })
 
-    self.mapboxMap.onNext(.mapLoaded, handler: { (event) in
+    self.mapboxMap.onNext(event: .mapLoaded, handler: { (event) in
       let event = RCTMGLEvent(type:.didFinishLoadingMap, payload: nil);
       self.fireEvent(event: event, callback: self.reactOnMapChange)
     })
     
-    self.mapboxMap.onEvery(.styleLoaded, handler: { (event) in
+    self.mapboxMap.onEvery(event: .styleLoaded, handler: { (event) in
       self.onStyleLoadedComponents.forEach { (component) in
         component.addToMap(self, style: self.mapboxMap.style)
       }
@@ -589,21 +590,19 @@ extension RCTMGLMapView: GestureManagerDelegate {
       }
     }
   }
-  
+
   public func gestureManager(_ gestureManager: GestureManager, didBegin gestureType: GestureType) {
     isGestureActive = true
   }
   
   public func gestureManager(_ gestureManager: GestureManager, didEnd gestureType: GestureType, willAnimate: Bool) {
-    isGestureActive = false
-    if willAnimate {
-      isAnimatingFromGesture = true
+    if !willAnimate {
+      isGestureActive = false;
     }
   }
   
   public func gestureManager(_ gestureManager: GestureManager, didEndAnimatingFor gestureType: GestureType) {
-    isGestureActive = false
-    isAnimatingFromGesture = false
+    isGestureActive = false;
   }
 }
 
@@ -922,4 +921,3 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
     }
   }
 }
-
