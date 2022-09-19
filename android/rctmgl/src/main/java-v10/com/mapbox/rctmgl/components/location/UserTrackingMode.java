@@ -1,4 +1,4 @@
-package com.mapbox.rctmgl.location;
+package com.mapbox.rctmgl.components.location;
 
 import com.mapbox.rctmgl.components.location.CameraMode;
 
