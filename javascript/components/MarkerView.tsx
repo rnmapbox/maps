@@ -1,4 +1,4 @@
-import React, { ReactNode, ReactElement } from 'react';
+import React, { ReactNode } from 'react';
 import {
   Platform,
   NativeModules,
@@ -90,7 +90,7 @@ class MarkerView extends React.PureComponent<{
       coordinate: _getCoordinate(props.coordinate),
     };
 
-    const wrapChildern =
+    const wrapChildren =
       RCTMGLMarkerViewWrapper === undefined
         ? (child: ReactNode | ReactNode[]) => child
         : (child: ReactNode | ReactNode[]) => (
@@ -110,7 +110,7 @@ class MarkerView extends React.PureComponent<{
     }
     return (
       <RCTMGLMarkerView {...actProps}>
-        {wrapChildern(children)}
+        {wrapChildren(children)}
       </RCTMGLMarkerView>
     );
   }
