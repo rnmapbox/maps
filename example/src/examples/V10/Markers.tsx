@@ -4,11 +4,14 @@ import MapboxGL, { MapView, Camera, Logger } from '@rnmapbox/maps';
 import { Position } from 'geojson';
 import { Button } from '@rneui/base';
 
+import Page from '../common/Page';
+import { BaseExampleProps } from '../common/BaseExamplePropTypes';
+
 Logger.setLogLevel('verbose');
 
 const centerCoord = [-73.99155, 40.72];
 
-const Markers = memo(() => {
+const Markers = memo((props: BaseExampleProps) => {
   const [coords, setCoords] = useState<Position[]>([]);
   const [show, setShow] = useState(false);
 
@@ -34,41 +37,43 @@ const Markers = memo(() => {
   }, [show]);
 
   return (
-    <MapView style={{ flex: 1 }}>
-      <Camera
-        defaultSettings={{ centerCoordinate: centerCoord, zoomLevel: 14 }}
-        centerCoordinate={centerCoord}
-        zoomLevel={14}
-      />
-
-      {coords.map((c, i) => {
-        return (
-          <MapboxGL.MarkerView
-            key={`MarkerView-${JSON.stringify(c)}`}
-            coordinate={c}
-          >
-            <View style={styles.markerBox}>
-              <Text style={styles.markerText}>MarkerView {i + 1}</Text>
-            </View>
-          </MapboxGL.MarkerView>
-        );
-      })}
-
-      <SafeAreaView style={styles.buttonWrap}>
-        <Button
-          style={styles.button}
-          title={'Rearrange'}
-          onPress={shuffleMarkers}
+    <Page {...props}>
+      <MapView style={{ flex: 1 }}>
+        <Camera
+          defaultSettings={{ centerCoordinate: centerCoord, zoomLevel: 14 }}
+          centerCoordinate={centerCoord}
+          zoomLevel={14}
         />
-        <Button
-          style={styles.button}
-          title={show ? 'Hide markers' : 'Show markers'}
-          onPress={() => {
-            setShow(!show);
-          }}
-        />
-      </SafeAreaView>
-    </MapView>
+
+        {coords.map((c, i) => {
+          return (
+            <MapboxGL.MarkerView
+              key={`MarkerView-${JSON.stringify(c)}`}
+              coordinate={c}
+            >
+              <View style={styles.markerBox}>
+                <Text style={styles.markerText}>MarkerView {i + 1}</Text>
+              </View>
+            </MapboxGL.MarkerView>
+          );
+        })}
+
+        <SafeAreaView style={styles.buttonWrap}>
+          <Button
+            style={styles.button}
+            title={'Rearrange'}
+            onPress={shuffleMarkers}
+          />
+          <Button
+            style={styles.button}
+            title={show ? 'Hide markers' : 'Show markers'}
+            onPress={() => {
+              setShow(!show);
+            }}
+          />
+        </SafeAreaView>
+      </MapView>
+    </Page>
   );
 });
 
