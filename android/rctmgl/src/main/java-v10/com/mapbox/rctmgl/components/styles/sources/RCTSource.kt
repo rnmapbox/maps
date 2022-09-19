@@ -58,12 +58,14 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
     }
 
     protected fun addLayerToMap(layer: AbstractSourceConsumer?, childPosition: Int) {
-        if (mMapView == null || layer == null) {
-            return
-        }
-        layer.addToMap(mMapView)
-        if (!mLayers.contains(layer)) {
-            mLayers.add(childPosition, layer)
+        mMapView?.let {
+            val mapView = it
+            layer?.let {
+                it.addToMap(mapView)
+                if (!mLayers.contains(it)) {
+                    mLayers.add(childPosition, it)
+                }
+            }
         }
     }
 
@@ -134,7 +136,7 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
         if (mLayers.size > 0) {
             for (i in mLayers.indices) {
                 val layer = mLayers[i]
-                layer.removeFromMap(mMapView)
+                layer.removeFromMap(mapView)
             }
         }
         if (mQueuedLayers != null) {
@@ -178,8 +180,11 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
     }
 
     protected fun removeLayerFromMap(layer: AbstractSourceConsumer?, childPosition: Int) {
-        if (mMapView != null && layer != null) {
-            layer.removeFromMap(mMapView)
+        mMapView?.let {
+            val mapView = it
+            layer?.let {
+                it.removeFromMap(mapView)
+            }
         }
         if (mQueuedLayers != null && mQueuedLayers!!.size > 0) {
             mQueuedLayers?.removeAt(childPosition)
