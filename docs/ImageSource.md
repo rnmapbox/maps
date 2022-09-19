@@ -5,7 +5,7 @@ The georeferenced image scales and rotates as the user zooms and rotates the map
 
 ## props
 | Prop | Type | Default | Required | Description |
-| ---- | :--: | :-----: | :------: | :----------: |
+| ---- | :-- | :----- | :------ | :---------- |
 | id | `string` | `none` | `true` | A string that uniquely identifies the source. |
 | url | `union` | `none` | `false` | An HTTP(S) URL, absolute file URL, or local file URL to the source image.<br/>Gifs are currently not supported. |
 | coordinates | `array` | `none` | `true` | The top left, top right, bottom right, and bottom left coordinates for the image. |

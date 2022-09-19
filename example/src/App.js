@@ -1,6 +1,13 @@
 import React from 'react';
 import MapboxGL from '@rnmapbox/maps';
-import { StyleSheet, Text, View, LogBox, SafeAreaView } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  LogBox,
+  SafeAreaView,
+  Button,
+} from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createCompatNavigatorFactory } from '@react-navigation/compat';
 import { NavigationContainer } from '@react-navigation/native';
@@ -11,6 +18,7 @@ import colors from './styles/colors';
 import { IS_ANDROID } from './utils';
 import config from './utils/config';
 import { Group, Item } from './scenes/GroupAndItem';
+import { ScreenWithoutMap } from './scenes/ScreenWithoutMap';
 
 LogBox.ignoreLogs([
   'Warning: isMounted(...) is deprecated',
@@ -28,8 +36,6 @@ MapboxGL.setAccessToken(config.get('accessToken'));
 
 Icon.loadFont();
 
-//console.log("=> [5*] 2", TransitionPresets);
-
 const Stack = createNativeStackNavigator();
 
 function AppStackNavigator() {
@@ -40,29 +46,10 @@ function AppStackNavigator() {
     >
       <Stack.Screen name="Group" component={Group} />
       <Stack.Screen name="Item" component={Item} />
+      <Stack.Screen name="ScreenWithoutMap" component={ScreenWithoutMap} />
     </Stack.Navigator>
   );
 }
-
-const AppStackNavigatorOld = createCompatNavigatorFactory(
-  createNativeStackNavigator,
-)(
-  {
-    Home: { screen: Group },
-    Demo: { screen: Item },
-    Group: { screen: Group },
-  },
-  {
-    initialRouteName: 'Home',
-
-    /*navigationOptions: {
-      ...TransitionPresets.SlideFromRightIOS,
-    },*/
-    defaultNavigationOptions: {
-      headerShown: false,
-    },
-  },
-);
 
 const AppContainer = () => (
   <NavigationContainer>

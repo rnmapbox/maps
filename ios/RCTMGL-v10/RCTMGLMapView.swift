@@ -910,5 +910,16 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
     manager.annotations.append(annotation)
     manager.syncSourceAndLayerIfNeeded()
   }
+
+  func refresh(_ annotation: PointAnnotation) {
+    let index = manager.annotations.firstIndex { $0.id == annotation.id }
+    if let index = index {
+      manager.annotations[index] = annotation
+      manager.syncSourceAndLayerIfNeeded()
+    } else {
+      Logger.log(level: .warn, message: "RCTMGL - PointAnnotation.refresh: expected annotation already there - adding")
+      add(annotation)
+    }
+  }
 }
 

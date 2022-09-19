@@ -4,7 +4,7 @@
 
 ## props
 | Prop | Type | Default | Required | Description |
-| ---- | :--: | :-----: | :------: | :----------: |
+| ---- | :-- | :----- | :------ | :---------- |
 | animated | `bool` | `true` | `false` | Whether location icon is animated between updates |
 | renderMode | `enum` | `'normal'` | `false` | Which render mode to use.<br/>Can either be `normal` or `native` |
 | androidRenderMode | `enum` | `none` | `false` | native/android only render mode<br/><br/> - normal: just a circle<br/> - compass: triangle with heading<br/> - gps: large arrow<br/><br/>@platform android |

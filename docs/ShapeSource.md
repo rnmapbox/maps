@@ -5,7 +5,7 @@ The shape may be an url or a GeoJSON object
 
 ## props
 | Prop | Type | Default | Required | Description |
-| ---- | :--: | :-----: | :------: | :----------: |
+| ---- | :-- | :----- | :------ | :---------- |
 | id | `string` | `MapboxGL.StyleSource.DefaultSourceID` | `false` | A string that uniquely identifies the source. |
 | url | `string` | `none` | `false` | An HTTP(S) URL, absolute file URL, or local file URL relative to the current application’s resource bundle. |
 | shape | `object` | `none` | `false` | The contents of the source. A shape can represent a GeoJSON geometry, a feature, or a feature collection. |

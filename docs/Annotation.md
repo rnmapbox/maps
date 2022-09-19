@@ -4,7 +4,7 @@
 
 ## props
 | Prop | Type | Default | Required | Description |
-| ---- | :--: | :-----: | :------: | :----------: |
+| ---- | :-- | :----- | :------ | :---------- |
 | id | `string` | `none` | `true` | FIX ME NO DESCRIPTION |
 | animated | `bool` | `false` | `false` | FIX ME NO DESCRIPTION |
 | animationDuration | `number` | `1000` | `false` | FIX ME NO DESCRIPTION |

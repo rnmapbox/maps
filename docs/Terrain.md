@@ -4,7 +4,7 @@ A global modifier that elevates layers and markers based on a DEM data source.
 
 ## props
 | Prop | Type | Default | Required | Description |
-| ---- | :--: | :-----: | :------: | :----------: |
+| ---- | :-- | :----- | :------ | :---------- |
 | sourceID | `string` | `MapboxGL.StyleSource.DefaultSourceID` | `false` | Name of a source of raster_dem type to be used for terrain elevation. |
 | exaggeration | `union` | `none` | `false` | Optional number between 0 and 1000 inclusive. Defaults to 1. Supports interpolateexpressions. Transitionable.<br/>Exaggerates the elevation of the terrain by multiplying the data from the DEM with this value. |
 

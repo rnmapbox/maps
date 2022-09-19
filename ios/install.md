@@ -12,6 +12,7 @@ The following is required for every following setup
 
 Add the following to your `ios/Podfile`:
 
+
 ```ruby
   pre_install do |installer|
     $RNMapboxMaps.pre_install(installer)
@@ -26,7 +27,9 @@ Add the following to your `ios/Podfile`:
   end
 ```
 
-Running `pod install` will add MapLibre SDK via SwiftPackageManager
+We also recommend setting the `$RNMapboxMapsImpl` to `mapbox` aka v10 implementation [see bellow for detailed instructions](#mapbox-maps-sdk-v10)
+
+Running `pod install` download the proper mapbox dependency
 
 ```sh
 # Go to the ios folder
@@ -41,6 +44,27 @@ You are good to go!
 Read on if you want to edit your Mapbox version or flavor.
 
 <br>
+
+## Mapbox Maps SDK (v10)
+
+This is the version we recommend, while other implementations should work, we don't plan to support them in next version.
+
+Check the current version of the SDK [here](https://docs.mapbox.com/ios/maps/overview/).
+
+Add the following to the beginning of your podfile
+```ruby
+$RNMapboxMapsImpl = 'mapbox'
+```
+
+You can also specify the version to use. *Warning:* if you set a version, then later update, the `rnamapbox/maps` library it's possible that you'll end up using Mapbox older version than supported. Make sure you revise this value with `rnmapbox/maps` updates.
+
+```ruby
+$RNMapboxMapsVersion = '~> 10.9.0'
+```
+
+You will need to authorize your download of the Maps SDK with a secret access token with the `DOWNLOADS:READ` scope. This [guide](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials) explains how to configure the secret token under section `Configure your secret token`.
+
+<br/>
 
 ## Maplibre
 
@@ -69,19 +93,6 @@ $RNMapboxMapsSwiftPackageManager = {
     product_name: "Mapbox"
   }
 ```
-
-<br/>
-
-## Mapbox Maps SDK (v10)
-
-Check the current version of the SDK [here](https://docs.mapbox.com/ios/maps/overview/).
-
-```ruby
-$RNMapboxMapsImpl = 'mapbox'
-$RNMapboxMapsVersion = '~> 10.6.0'
-```
-
-You will need to authorize your download of the Maps SDK with a secret access token with the `DOWNLOADS:READ` scope. This [guide](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials) explains how to configure the secret token under section `Configure your secret token`.
 
 <br/>
 

@@ -194,6 +194,12 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
   
   func _updateCameraFromTrackingMode() {
     withMapView { map in
+      guard self.followUserLocation else {
+        map.viewport.idle()
+        map.location.removeLocationConsumer(consumer: self)
+        return
+      }
+
       if let locationModule = RCTMGLLocationModule.shared {
         map.location.overrideLocationProvider(with: locationModule.locationProvider)
       }
@@ -242,7 +248,10 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
           _camera.pitch = stopPitch
           followOptions.pitch = stopPitch
         }
+      } else {
+        followOptions.pitch = nil
       }
+
       if let zoom = self.followZoomLevel as? CGFloat {
         if (zoom >= 0.0) {
           _camera.zoom = zoom
@@ -403,7 +412,8 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
   // MARK: - LocationConsumer
   
   func locationUpdate(newLocation: Location) {
-    if followUserLocation {
+    // viewport manages following user location
+    if false && followUserLocation {
       withMapView { map in
         var animationType = CameraMode.none
         if let m = self.animationMode as? String, let m = CameraMode(rawValue: m) {

@@ -36,12 +36,17 @@ class RCTMGLPointAnnotation : RCTMGLInteractiveElement {
     return result
   }
 
+  func _refresh(_ annotation: PointAnnotation) {
+    map?.pointAnnotationManager.refresh(annotation)
+  }
+
   func _updateCoordinate() {
     guard let point = point() else {
       return
     }
     if var annotation = annotation {
       annotation.point = point
+      _refresh(annotation)
     } else {
       annotation = _create(point: point)
       setAnnotationImage(inital: true)
