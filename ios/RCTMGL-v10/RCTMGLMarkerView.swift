@@ -29,7 +29,7 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
     
   var firstSubview: UIView? {
       reactSubviews.first
-    }
+  }
     
   var firstSubviewBounds: CGRect {
       guard let subview = firstSubview else {
@@ -44,7 +44,7 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
           // erroring and failing to handle the updated frame.
           return CGRect(x: subview.frame.minX, y: subview.frame.minY, width: 1, height: 1)
       }
-    }
+  }
     
   // MARK: - RCTMGLMapComponent
 
