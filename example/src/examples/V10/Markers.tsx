@@ -20,14 +20,14 @@ const allColors = ['red', 'green', 'blue', 'purple'];
 
 const Markers = memo((props: BaseExampleProps) => {
   const [markers, setMarkers] = useState<MarkerConfig[]>([]);
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
 
   const randomize = useCallback(() => {
     const newMarkers = new Array(show ? markerCount : 0).fill(0).map((o, i) => {
       return {
         coords: [
-          centerCoord[0] + (Math.random() - 0.5) * 0.01,
-          centerCoord[1] + (Math.random() - 0.5) * 0.01,
+          centerCoord[0] + (Math.random() - 0.5) * 0.008,
+          centerCoord[1] + (Math.random() - 0.5) * 0.008,
         ],
         color: allColors[i % allColors.length],
       };
@@ -54,6 +54,12 @@ const Markers = memo((props: BaseExampleProps) => {
           defaultSettings={{ centerCoordinate: centerCoord, zoomLevel: 14 }}
           centerCoordinate={centerCoord}
           zoomLevel={14}
+          padding={{
+            paddingTop: 0,
+            paddingBottom: 80,
+            paddingLeft: 0,
+            paddingRight: 0,
+          }}
         />
 
         {markers.map((marker, i) => {
@@ -61,11 +67,12 @@ const Markers = memo((props: BaseExampleProps) => {
             <MapboxGL.MarkerView
               key={`MarkerView-${JSON.stringify(marker)}`}
               coordinate={marker.coords}
+              anchor={{ x: 0.5, y: 0.5 }}
             >
               <View
                 style={[styles.markerBox, { backgroundColor: marker.color }]}
               >
-                <Text style={styles.markerText}>MarkerView {i + 1}</Text>
+                <Text style={styles.markerText}>Marker {i + 1}</Text>
               </View>
             </MapboxGL.MarkerView>
           );
@@ -93,7 +100,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'red',
     borderRadius: 6,
-    padding: 8,
+    padding: 4,
     borderWidth: 2,
     borderColor: 'white',
   },
