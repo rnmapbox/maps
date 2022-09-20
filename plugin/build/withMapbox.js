@@ -14,7 +14,9 @@ let pkg = {
 try {
     pkg = require('@rnmapbox/maps/package.json');
 }
-catch { }
+catch {
+    // empty catch block
+}
 /**
  * Dangerously adds the custom installer hooks to the Podfile.
  * In the future this should be removed in favor of some custom hooks provided by Expo autolinking.
