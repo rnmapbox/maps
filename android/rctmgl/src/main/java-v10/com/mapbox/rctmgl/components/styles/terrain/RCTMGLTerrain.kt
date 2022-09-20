@@ -37,6 +37,13 @@ class RCTMGLTerrain(context: Context?) : AbstractSourceConsumer(context) {
 
     fun setExaggeration(exaggeration: Dynamic?) {
         mExaggeration = exaggeration
+        if (exaggeration != null) {
+            when (exaggeration!!.type) {
+                ReadableType.Number -> mTerrain?.exaggeration(exaggeration!!.asDouble())
+                ReadableType.Array -> mTerrain?.exaggeration(ExpressionParser.from(exaggeration!!.asArray())!!)
+                else -> mTerrain?.exaggeration(0.0)
+            }
+        }
     }
 
     fun addStyles(terrain: Terrain) {
