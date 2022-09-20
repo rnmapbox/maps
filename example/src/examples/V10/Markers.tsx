@@ -9,30 +9,45 @@ import { BaseExampleProps } from '../common/BaseExamplePropTypes';
 
 Logger.setLogLevel('verbose');
 
+type MarkerConfig = {
+  coords: Position;
+  color: string;
+};
+
+const markerCount = 20;
 const centerCoord = [-73.99155, 40.72];
+const allColors = ['red', 'green', 'blue', 'purple'];
 
 const Markers = memo((props: BaseExampleProps) => {
-  const [coords, setCoords] = useState<Position[]>([]);
+  const [markers, setMarkers] = useState<MarkerConfig[]>([]);
   const [show, setShow] = useState(false);
 
-  const shuffleMarkers = useCallback(() => {
-    const newCoords = new Array(show ? 10 : 0).fill(0).map(() => {
-      return [
-        centerCoord[0] + (Math.random() - 0.5) * 0.01,
-        centerCoord[1] + (Math.random() - 0.5) * 0.01,
-      ];
+  const randomize = useCallback(() => {
+    const newMarkers = new Array(show ? markerCount : 0).fill(0).map((o, i) => {
+      return {
+        coords: [
+          centerCoord[0] + (Math.random() - 0.5) * 0.01,
+          centerCoord[1] + (Math.random() - 0.5) * 0.01,
+        ],
+        color: allColors[i % allColors.length],
+      };
     });
 
-    setCoords(newCoords);
+    setMarkers(newMarkers);
   }, [show]);
 
+  const onPressMarker = useCallback((marker: MarkerConfig) => {
+    console.log('Hi', marker.coords);
+  }, []);
+
   useEffect(() => {
-    shuffleMarkers();
+    randomize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    shuffleMarkers();
+    randomize();
+    randomize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
 
@@ -45,34 +60,33 @@ const Markers = memo((props: BaseExampleProps) => {
           zoomLevel={14}
         />
 
-        {coords.map((c, i) => {
+        {markers.map((marker, i) => {
           return (
             <MapboxGL.MarkerView
-              key={`MarkerView-${JSON.stringify(c)}`}
-              coordinate={c}
+              key={`MarkerView-${JSON.stringify(marker)}`}
+              coordinate={marker.coords}
+              onPress={() => onPressMarker(marker)}
             >
-              <View style={styles.markerBox}>
+              <View
+                style={[styles.markerBox, { backgroundColor: marker.color }]}
+              >
                 <Text style={styles.markerText}>MarkerView {i + 1}</Text>
               </View>
             </MapboxGL.MarkerView>
           );
         })}
-
-        <SafeAreaView style={styles.buttonWrap}>
-          <Button
-            style={styles.button}
-            title={'Rearrange'}
-            onPress={shuffleMarkers}
-          />
-          <Button
-            style={styles.button}
-            title={show ? 'Hide markers' : 'Show markers'}
-            onPress={() => {
-              setShow(!show);
-            }}
-          />
-        </SafeAreaView>
       </MapView>
+
+      <SafeAreaView style={styles.buttonWrap} pointerEvents={'box-none'}>
+        <Button style={styles.button} title={'Rearrange'} onPress={randomize} />
+        <Button
+          style={styles.button}
+          title={show ? 'Hide markers' : 'Show markers'}
+          onPress={() => {
+            setShow(!show);
+          }}
+        />
+      </SafeAreaView>
     </Page>
   );
 });
@@ -94,6 +108,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   buttonWrap: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
     flex: 1,
     justifyContent: 'flex-end',
     alignContent: 'center',
