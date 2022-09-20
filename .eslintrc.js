@@ -79,7 +79,7 @@ module.exports = {
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'react-native/no-inline-styles': 0,
   },
-  ignorePatterns: ['**/rnmapbox.web.symlink'],
+  ignorePatterns: ['**/rnmapbox.web.symlink', 'plugin/build/'],
   overrides: [
     {
       // Match TypeScript Files
