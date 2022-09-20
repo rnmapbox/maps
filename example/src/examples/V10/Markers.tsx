@@ -36,10 +36,6 @@ const Markers = memo((props: BaseExampleProps) => {
     setMarkers(newMarkers);
   }, [show]);
 
-  const onPressMarker = useCallback((marker: MarkerConfig) => {
-    console.log('Hi', marker.coords);
-  }, []);
-
   useEffect(() => {
     randomize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -65,7 +61,6 @@ const Markers = memo((props: BaseExampleProps) => {
             <MapboxGL.MarkerView
               key={`MarkerView-${JSON.stringify(marker)}`}
               coordinate={marker.coords}
-              onPress={() => onPressMarker(marker)}
             >
               <View
                 style={[styles.markerBox, { backgroundColor: marker.color }]}
