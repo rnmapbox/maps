@@ -239,4 +239,33 @@ extension RCTMGLMapViewManager {
         }
       }
    }
+  
+   @objc
+   func queryRenderedFeaturesInView(
+     _ reactTag: NSNumber,
+     withFilter filter: [Any]?,
+     withLayerIDs layerIDs: [String]?,
+     resolver: @escaping RCTPromiseResolveBlock,
+     rejecter: @escaping RCTPromiseRejectBlock) -> Void {
+       withMapView(reactTag, name:"queryRenderedFeaturesInRect", rejecter: rejecter) { mapView in
+         let rect = CGRect(x: 0.0, y: 0.0, width: mapView.bounds.size.width, height: mapView.bounds.size.height)
+        
+         logged("queryRenderedFeaturesInView.option", rejecter: rejecter) {
+           let options = try RenderedQueryOptions(layerIds: layerIDs, filter: filter?.asExpression())
+          
+           mapView.mapboxMap.queryRenderedFeatures(with: rect, options: options) { result in
+             switch result {
+             case .success(let features):
+               resolver([
+                 "data": ["type": "FeatureCollection", "features": features.compactMap { queriedFeature in
+                   logged("queryRenderedFeaturesInView.queriedfeature.map") { try queriedFeature.feature.toJSON() }
+                 }]
+               ])
+             case .failure(let error):
+               rejecter("queryRenderedFeaturesInView","failed to query features", error)
+             }
+           }
+         }
+       }
+    }
 }

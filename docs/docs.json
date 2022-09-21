@@ -2678,6 +2678,41 @@
         ]
       },
       {
+        "name": "queryRenderedFeaturesInView",
+        "docblock": "Returns an array of rendered map features within the visible map bounds,\nrestricted to the given style layers and filtered by the given predicate.\n\n@example\nthis._map.queryRenderedFeaturesInView(['==', 'type', 'Point'], ['id1', 'id2'])\n\n@param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.\n@param  {Array=} layerIDs -  A array of layer id's to filter the features by\n@return {FeatureCollection}",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "filter",
+            "description": "A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.",
+            "type": {
+              "name": "Array"
+            },
+            "optional": true
+          },
+          {
+            "name": "layerIDs",
+            "description": " A array of layer id's to filter the features by",
+            "type": {
+              "name": "Array"
+            },
+            "optional": true
+          }
+        ],
+        "returns": {
+          "description": null,
+          "type": {
+            "name": "FeatureCollection"
+          }
+        },
+        "description": "Returns an array of rendered map features within the visible map bounds,\nrestricted to the given style layers and filtered by the given predicate.",
+        "examples": [
+          "\nthis._map.queryRenderedFeaturesInView(['==', 'type', 'Point'], ['id1', 'id2'])\n\n"
+        ]
+      },
+      {
         "name": "setCamera",
         "docblock": "Map camera will perform updates based on provided config. Deprecated use Camera#setCamera.",
         "modifiers": [],

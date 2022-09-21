@@ -526,6 +526,31 @@ class MapView extends NativeBridgeComponent(React.Component) {
   }
 
   /**
+   * Returns an array of rendered map features within the visible map bounds,
+   * restricted to the given style layers and filtered by the given predicate.
+   *
+   * @example
+   * this._map.queryRenderedFeaturesInView(['==', 'type', 'Point'], ['id1', 'id2'])
+   *
+   * @param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.
+   * @param  {Array=} layerIDs -  A array of layer id's to filter the features by
+   * @return {FeatureCollection}
+   */
+  async queryRenderedFeaturesInView(filter = [], layerIDs = []) {
+    const res = await this._runNativeCommand(
+      'queryRenderedFeaturesInView',
+      this._nativeRef,
+      [getFilter(filter), layerIDs],
+    );
+
+    if (isAndroid()) {
+      return JSON.parse(res.data);
+    }
+
+    return res.data;
+  }
+
+  /**
    * Map camera will perform updates based on provided config. Deprecated use Camera#setCamera.
    */
   setCamera() {

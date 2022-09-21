@@ -188,6 +188,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
         return MapBuilder.builder<String, Int>()
             .put("queryRenderedFeaturesAtPoint", METHOD_QUERY_FEATURES_POINT)
             .put("queryRenderedFeaturesInRect", METHOD_QUERY_FEATURES_RECT)
+            .put("queryRenderedFeaturesInView", METHOD_QUERY_FEATURES_VIEW)
             .put("getVisibleBounds", METHOD_VISIBLE_BOUNDS)
             .put("getPointInView", METHOD_GET_POINT_IN_VIEW)
             .put("getCoordinateFromView", METHOD_GET_COORDINATE_FROM_VIEW)
@@ -248,6 +249,13 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
                         ConvertUtils.toRectF(args.getArray(1)),
                         ExpressionParser.from(args!!.getArray(2)),
                         ConvertUtils.toStringList(args!!.getArray(3))
+                );
+            }
+            METHOD_QUERY_FEATURES_VIEW -> {
+                mapView.queryRenderedFeaturesInView(
+                        args!!.getString(0),
+                        ExpressionParser.from(args!!.getArray(1)),
+                        ConvertUtils.toStringList(args!!.getArray(2))
                 );
             }
             METHOD_VISIBLE_BOUNDS -> {
@@ -320,6 +328,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
         const val METHOD_SHOW_ATTRIBUTION = 11
         const val METHOD_SET_SOURCE_VISIBILITY = 12
         const val METHOD_QUERY_TERRAIN_ELEVATION = 13
+        const val METHOD_QUERY_FEATURES_VIEW = 14
     }
 
     init {

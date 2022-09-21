@@ -768,6 +768,30 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         }
     }
 
+    fun queryRenderedFeaturesInView(callbackID: String?, filter: Expression?, layerIDs: List<String>?) {
+        val size = mMap!!.getMapOptions().size
+        val screenBox = ScreenBox(ScreenCoordinate(0.0, 0.0), ScreenCoordinate(size?.width!!.toDouble(), size?.height!!.toDouble()))
+        mMap?.queryRenderedFeatures(
+                RenderedQueryGeometry(screenBox),
+                RenderedQueryOptions(layerIDs, filter)
+        ) { features ->
+            if (features.isValue) {
+                val featuresList = ArrayList<Feature?>()
+                for (i in features.value!!) {
+                    featuresList.add(i.feature)
+                }
+
+                val payload: WritableMap = WritableNativeMap()
+                payload.putString("data", FeatureCollection.fromFeatures(featuresList).toJson())
+
+                var event = AndroidCallbackEvent(this, callbackID, payload)
+                mManager.handleEvent(event)
+            } else {
+                Logger.e("queryRenderedFeaturesInView", features.error ?: "n/a")
+            }
+        }
+    }
+
     fun sendResponse(callbackID: String?, buildPayload: (map: WritableMap) -> Unit) {
         val payload: WritableMap = WritableNativeMap()
         buildPayload(payload)
