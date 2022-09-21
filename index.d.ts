@@ -268,6 +268,10 @@ declare namespace MapboxGL {
       filter?: Expression,
       layerIds?: Array<string>,
     ): Promise<GeoJSON.FeatureCollection | undefined>;
+    queryRenderedFeaturesInView(
+      filter?: Expression,
+      layerIds?: Array<string>,
+    ): Promise<GeoJSON.FeatureCollection | undefined>;
     takeSnap(writeToDisk?: boolean): Promise<string>;
     getZoom(): Promise<number>;
     getCenter(): Promise<GeoJSON.Position>;
