@@ -38,6 +38,7 @@ import {
 } from './classes';
 import Style from './components/Style';
 import Logger from './utils/Logger';
+import { deprecatedClass } from './utils/deprecation';
 import { requestAndroidLocationPermissions } from './requestAndroidLocationPermissions';
 
 const MapboxGL = { ...NativeModules.MGLModule };
@@ -57,7 +58,10 @@ MapboxGL.Style = Style;
 
 // classes
 MapboxGL.AnimatedPoint = AnimatedPoint;
-MapboxGL.AnimatedMapPoint = AnimatedPoint; // For backwards compatibiilty.
+MapboxGL.AnimatedMapPoint = deprecatedClass(
+  AnimatedPoint,
+  'AnimatedMapPoint is deprecated please use AnimatedPoint',
+);
 MapboxGL.AnimatedShape = AnimatedShape;
 MapboxGL.AnimatedCoordinatesArray = AnimatedCoordinatesArray;
 MapboxGL.AnimatedExtractCoordinateFromArray =
