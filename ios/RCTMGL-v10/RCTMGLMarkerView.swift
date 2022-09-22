@@ -5,7 +5,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   // MARK: - Instance variables
   
   static let key = "RCTMGLMarkerView"
-  let id: String = "marker-\(arc4random_uniform(100))"
+  let id: String = "marker-\(UUID().uuidString)"
   
   var map: RCTMGLMapView?
   
@@ -23,7 +23,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
 
   @objc var coordinate: String? {
     didSet {
-      print("[Test] coordinate didSet")
+      updateIfPossible()
     }
   }
   
@@ -58,24 +58,15 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   
   @objc var anchor: [String: NSNumber]? {
     didSet {
-      print("[Test] anchor didSet")
+      updateIfPossible()
     }
   }
   
   // MARK: - UIView methods
-  
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-    print("[Test] ------------")
-  }
-  
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-  
+
   override func layoutSubviews() {
     super.layoutSubviews()
-  
+    
     // Set the first grandchild view as a view with a usable frame, skipping the first
     // child, which is a wrapper view defined in the MarkerView component on the React Native
     // side. The method `layoutSubviews` is used instead of a React method because this is
@@ -86,7 +77,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     }
     
     // Immediately hide the custom content, and wait until the annotation is added to the map
-    // before showing it.
+    // before showing it. (See `add()` method.)
     grandchild.layer.opacity = 0
     
     firstCustomView = grandchild
@@ -130,13 +121,19 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       return
     }
     
-    if let firstCustomView = firstCustomView, let annotationManager = annotationManager, let point = point {
-      do {
-        try add(firstCustomView: firstCustomView, annotationManager: annotationManager, point: point)
-        isAdded = true
-      } catch {
-        Logger.log(level: .error, message: "[MarkerView] Error adding to map", error: error)
-      }
+    guard let firstCustomView = firstCustomView, let annotationManager = annotationManager, let point = point else {
+      return
+    }
+    
+    do {
+      try add(
+        firstCustomView: firstCustomView,
+        annotationManager: annotationManager,
+        point: point
+      )
+      isAdded = true
+    } catch {
+      Logger.log(level: .error, message: "[MarkerView] Error adding annotation", error: error)
     }
   }
   
@@ -151,6 +148,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       geometry: Geometry.point(point),
       width: firstCustomView.frame.width,
       height: firstCustomView.frame.height,
+      allowOverlap: true,
       anchor: .center
     )
     try annotationManager.add(firstCustomView, id: id, options: options)
@@ -161,5 +159,52 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     Timer.scheduledTimer(withTimeInterval: 0.05, repeats: false) { _ in
       self.firstCustomView?.layer.opacity = 1
     }
+  }
+  
+  private func updateIfPossible() {
+    if !isAdded {
+      return
+    }
+    
+    guard let firstCustomView = firstCustomView, let annotationManager = annotationManager else {
+      return
+    }
+    
+    var geometry: GeometryConvertible?
+    if let point = point {
+      geometry = Geometry.point(point)
+    }
+    
+    var offset: CGVector?
+    if let anchor = anchor, let anchorX = anchor["x"]?.CGFloat, let anchorY = anchor["y"]?.CGFloat {
+      // Create a modified offset:
+      // - Normalize from [(0, 0), (1, 1)] to [(-1, -1), (1, 1)].
+      // - Scale to the view size.
+      // - Invert `y` so that higher values are lower on the screen.
+      offset = CGVector(
+        dx: (anchorX * 2 - 1) * (firstCustomView.frame.width / 2),
+        dy: (anchorY * 2 - 1) * (firstCustomView.frame.height / 2) * -1
+      )
+    }
+    
+    do {
+      try update(
+        firstCustomView: firstCustomView,
+        annotationManager: annotationManager,
+        geometry: geometry,
+        offset: offset
+      )
+    } catch {
+      Logger.log(level: .error, message: "[MarkerView] Error updating annotation", error: error)
+    }
+  }
+  
+  private func update(firstCustomView: UIView, annotationManager: ViewAnnotationManager, geometry: GeometryConvertible?, offset: CGVector?) throws {
+    let options = ViewAnnotationOptions(
+      geometry: geometry,
+      offsetX: offset?.dx,
+      offsetY: offset?.dy
+    )
+    try annotationManager.update(firstCustomView, options: options)
   }
 }

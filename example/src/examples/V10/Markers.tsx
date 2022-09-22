@@ -1,8 +1,8 @@
 import React, { memo, useCallback, useEffect, useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import MapboxGL, { MapView, Camera, Logger } from '@rnmapbox/maps';
 import { Position } from 'geojson';
-import { Button } from '@rneui/base';
+import { Text, Button, Divider } from '@rneui/base';
 
 import Page from '../common/Page';
 import { BaseExampleProps } from '../common/BaseExamplePropTypes';
@@ -14,7 +14,7 @@ type MarkerConfig = {
   color: string;
 };
 
-const markerCount = 1;
+const markerCount = 20;
 const centerCoord = [-73.99155, 40.72];
 const allColors = ['red', 'green', 'blue', 'purple'];
 
@@ -23,7 +23,7 @@ const Markers = memo((props: BaseExampleProps) => {
   const [show, setShow] = useState(true);
   const [anchor, setAnchor] = useState({ x: 0.5, y: 0.5 });
 
-  const changeCoordinatesAndColors = useCallback(() => {
+  const randomizeCoordinatesAndColors = useCallback(() => {
     const newMarkers = new Array(show ? markerCount : 0).fill(0).map((o, i) => {
       return {
         coords: [
@@ -37,19 +37,13 @@ const Markers = memo((props: BaseExampleProps) => {
     setMarkers(newMarkers);
   }, [show]);
 
-  const changeAnchor = useCallback(() => {
-    const x = Math.floor((Math.random() * 2 - 1) * 10) / 10;
-    const y = Math.floor((Math.random() * 2 - 1) * 10) / 10;
-    setAnchor({ x, y });
-  }, []);
-
   useEffect(() => {
-    changeCoordinatesAndColors();
+    randomizeCoordinatesAndColors();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    changeCoordinatesAndColors();
+    randomizeCoordinatesAndColors();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
 
@@ -84,16 +78,45 @@ const Markers = memo((props: BaseExampleProps) => {
           <Button
             style={styles.button}
             title={'Rearrange'}
-            onPress={changeCoordinatesAndColors}
+            onPress={randomizeCoordinatesAndColors}
           />
         </View>
+
+        <Divider />
+
         <View style={styles.buttonWrap}>
-          <Button
-            style={styles.button}
-            title={`Change anchor (${anchor.x}, ${anchor.y})`}
-            onPress={changeAnchor}
-          />
+          <Text>
+            Anchor: {anchor.x}, {anchor.y}
+          </Text>
+          <ScrollView
+            style={{ flex: 0, flexDirection: 'row' }}
+            horizontal={true}
+          >
+            {[
+              [0, 0],
+              [0.5, 0],
+              [1, 0],
+              [0, 0.5],
+              [0.5, 0.5],
+              [1, 0.5],
+              [0, 1],
+              [0.5, 1],
+              [1, 1],
+            ].map(([x, y]) => {
+              return (
+                <Button
+                  key={`${x}-${y}`}
+                  style={[styles.button, { marginRight: 8 }]}
+                  title={`${x}, ${y}`}
+                  onPress={() => setAnchor({ x, y })}
+                />
+              );
+            })}
+          </ScrollView>
         </View>
+
+        <Divider />
+
         <View style={styles.buttonWrap}>
           <Button
             style={styles.button}

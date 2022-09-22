@@ -30,7 +30,6 @@ export const NATIVE_MODULE_NAME = 'RCTMGLMarkerView';
 class MarkerView extends React.PureComponent<{
   /**
    * The center point (specified as a map coordinate) of the marker.
-   * See also #anchor.
    */
   coordinate: [number, number];
 
@@ -42,6 +41,7 @@ class MarkerView extends React.PureComponent<{
     x: number;
     y: number;
   };
+
   /**
    * One or more valid React Native views.
    */
@@ -70,6 +70,17 @@ class MarkerView extends React.PureComponent<{
   }
 
   render() {
+    if (
+      this.props.anchor.x < 0 ||
+      this.props.anchor.y < 0 ||
+      this.props.anchor.x > 1 ||
+      this.props.anchor.y > 1
+    ) {
+      console.warn(
+        `[MarkerView] Anchor with value (${this.props.anchor.x}, ${this.props.anchor.y}) should not be outside the range [(0, 0), (1, 1)]`,
+      );
+    }
+
     if (Platform.OS === 'ios' && !Mapbox.MapboxV10) {
       return (
         <PointAnnotation id={this._idForPointAnnotation()} {...this.props} />
