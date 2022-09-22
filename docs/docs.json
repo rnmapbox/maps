@@ -3055,34 +3055,14 @@
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "iOS, v10 only, experimental.\n\nCalled when the currently displayed map area changes.\nReplaces onRegionIsChanging, so can't set both",
-        "params": [
-          {
-            "name": "region",
-            "description": "A payload containing the map center, bounds, and other properties.",
-            "type": {
-              "name": "MapState"
-            },
-            "optional": false
-          }
-        ]
+        "description": "iOS, v10 only, deprecated will be removed in next version - please use onRegionIsChanging."
       },
       {
         "name": "onMapIdle",
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "iOS, v10 only, experimental\n\nCalled when the currently displayed map area stops changing.\nReplaces onRegionDidChange, so can't set both",
-        "params": [
-          {
-            "name": "region",
-            "description": "A payload containing the map center, bounds, and other properties.",
-            "type": {
-              "name": "MapState"
-            },
-            "optional": false
-          }
-        ]
+        "description": "iOS, v10 only, deprecated will be removed in next version - please use onRegionDidChange"
       },
       {
         "name": "onWillStartLoadingMap",
