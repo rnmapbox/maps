@@ -68,7 +68,7 @@ const TerrainSkyAtmosphere = memo((props: BaseExampleProps) => {
               skyAtmosphereSunIntensity: 15.0,
             }}
           />
-          <Terrain exaggeration={1.5} />
+          <Terrain style={{ exaggeration: 1.5 }} />
         </RasterDemSource>
       </MapView>
     </Page>

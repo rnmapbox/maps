@@ -20,8 +20,8 @@ class RCTMGLAtmosphereManager : ViewGroupManager<RCTMGLAtmosphere>() {
     }
 
     @ReactProp(name = "reactStyle")
-    fun setReactStyle(terrain: RCTMGLAtmosphere, reactStyle: ReadableMap?) {
-        terrain.setReactStyle(reactStyle)
+    fun setReactStyle(atmosphere: RCTMGLAtmosphere, reactStyle: ReadableMap?) {
+        atmosphere.setReactStyle(reactStyle)
     }
 
     companion object {

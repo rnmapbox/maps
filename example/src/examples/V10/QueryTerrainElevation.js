@@ -136,7 +136,7 @@ const QueryTerrainElevation = ({ ...props }) => {
             }}
           />
 
-          <Terrain exaggeration={1.5} />
+          <Terrain style={{ exaggeration: 1.5 }} />
           <Atmosphere
             style={{
               starIntensity: 1.0,
