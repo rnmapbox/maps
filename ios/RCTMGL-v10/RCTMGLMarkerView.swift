@@ -1,189 +1,165 @@
 import MapboxMaps
-import CoreGraphics
+import UIKit
 
-class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
+class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
+  // MARK: - Instance variables
+  
   static let key = "RCTMGLMarkerView"
+  let id: String = "marker-\(arc4random_uniform(100))"
   
   var map: RCTMGLMapView?
   
-  // MARK: - React views
-    
-  var reactSubviews : [UIView] = []
-
-  @objc
-  override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
-    if subview is RCTMGLCallout {
-      Logger.log(level: .warn, message: "[MarkerView] Callouts are not supported")
-    }
-      
-    reactSubviews.insert(subview, at: atIndex)
-    if reactSubviews.count > 1 {
-      Logger.log(level: .error, message: "[MarkerView] Maximum of 1 subview allowed")
-    }
-  }
-
-  @objc
-  override func removeReactSubview(_ subview: UIView) {
-      reactSubviews.removeAll(where: { $0 == subview })
-  }
-    
-  var firstSubview: UIView? {
-      reactSubviews.first
-  }
-    
-  var firstSubviewBounds: CGRect {
-      guard let subview = firstSubview else {
-          return CGRect(x: 0, y: 0, width: 0, height: 0)
-      }
-      
-      if subview.bounds.width > 0 && subview.bounds.height > 0 {
-          return subview.frame
-      } else {
-          // It's possible for the subview to have an initial width and height of 0, as insertReactSubview
-          // is typically called before reactSetFrame. The fallback to 1 x 1 prevents the component from
-          // erroring and failing to handle the updated frame.
-          return CGRect(x: subview.frame.minX, y: subview.frame.minY, width: 1, height: 1)
-      }
-  }
-    
-  // MARK: - RCTMGLMapComponent
-
-  func waitForStyleLoad() -> Bool {
-    return true
-  }
+  /// The view in the hierarchy matching the first element in the `children` prop in React Native.
+  var firstCustomView: UIView?
   
-  func addToMap(_ map: RCTMGLMapView, style: Style) {
-    logged("[MarkerView] addToMap") {
-      self.map = map
-      let point = try point()
-
-      try point.coordinates.validate()
-
-      guard let view = firstSubview else {
-        Logger.log(level: .error, message: "[MarkerView] No subview to render")
-        return
-      }
-        
-      view.isHidden = true
-      try viewAnnotations()?.add(
-        view,
-        options: ViewAnnotationOptions.init(
-            geometry: Geometry.point(point),
-            width: firstSubviewBounds.width,
-            height: firstSubviewBounds.height,
-            associatedFeatureId: nil,
-            allowOverlap: true,
-            anchor: .center,
-            offsetX: 0,
-            offsetY: 0,
-            selected: false
-        )
-      )
-    }
-  }
+  /// Whether this annotation instance has been added to the map.
+  var isAdded = false
   
-  func viewAnnotations() -> ViewAnnotationManager? {
+  // MARK: - Derived variables
+  
+  var annotationManager: ViewAnnotationManager? {
     self.map?.viewAnnotations
   }
 
-  func removeFromMap(_ map: RCTMGLMapView) {
-    guard let view = firstSubview else {
-      Logger.log(level: .error, message: "[MarkerView] No subview to render")
+  @objc var coordinate: String? {
+    didSet {
+      print("[Test] coordinate didSet")
+    }
+  }
+  
+  var point: Point? {
+    guard let _coordinate = coordinate else {
+      Logger.log(level: .error, message: "[getPoint] No coordinates were set")
+      return nil
+    }
+     
+    guard let _data = _coordinate.data(using: .utf8) else {
+      Logger.log(level: .error, message: "[getPoint] Cannot serialize coordinate")
+      return nil
+    }
+     
+    guard let _feature = try? JSONDecoder().decode(Feature.self, from: _data) else {
+      Logger.log(level: .error, message: "[getPoint] Cannot parse serialized coordinate")
+      return nil
+    }
+     
+    guard let _geometry = _feature.geometry else {
+      Logger.log(level: .error, message: "[getPoint] Invalid geometry")
+      return nil
+    }
+
+    guard case .point(let _point) = _geometry else {
+      Logger.log(level: .error, message: "[getPoint] Invalid point")
+      return nil
+    }
+
+    return _point
+  }
+  
+  @objc var anchor: [String: NSNumber]? {
+    didSet {
+      print("[Test] anchor didSet")
+    }
+  }
+  
+  // MARK: - UIView methods
+  
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    print("[Test] ------------")
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  override func layoutSubviews() {
+    super.layoutSubviews()
+  
+    // Set the first grandchild view as a view with a usable frame, skipping the first
+    // child, which is a wrapper view defined in the MarkerView component on the React Native
+    // side. The method `layoutSubviews` is used instead of a React method because this is
+    // the only callback where layout values are always accurate - in `reactSetFrame` etc.,
+    // the grandchild view's size is often incorrectly described as (0, 0).
+    guard let child = self.subviews.first, let grandchild = child.subviews.first else {
       return
     }
-    viewAnnotations()?.remove(view)
-    self.map = map
+    
+    // Immediately hide the custom content, and wait until the annotation is added to the map
+    // before showing it.
+    grandchild.layer.opacity = 0
+    
+    firstCustomView = grandchild
+    addIfPossible()
   }
+
+  // MARK: - RCTMGLMapComponent methods
+
+  func addToMap(_ map: RCTMGLMapView, style: Style) {
+    self.map = map
+    addIfPossible()
+  }
+
+  func removeFromMap(_ map: RCTMGLMapView) {
+    removeIfPossible()
+  }
+  
+  // MARK: - React methods
   
   override func reactSetFrame(_ frame: CGRect) {
     super.reactSetFrame(frame)
+  }
+  
+  override func insertReactSubview(_ subview: UIView, at atIndex: Int) {
+    super.insertReactSubview(subview, at: atIndex)
+  }
+  
+  override func removeReactSubview(_ subview: UIView) {
+    super.removeReactSubview(subview)
+  }
+  
+  func waitForStyleLoad() -> Bool {
+    true
+  }
+  
+  // MARK: - Create, update, and remove methods
 
-    _updateFrameOrAnchor()
-  }
-  
-  @objc var coordinate : String? {
-    didSet {
-      _updateCoordinate()
-    }
-  }
-  
-  @objc var anchor : [String:NSNumber]? {
-    didSet {
-      _updateFrameOrAnchor()
-    }
-  }
-  
-  func point() throws -> Point {
-    guard let coordinate = coordinate else {
-      throw RCTMGLError.failed("[MarkerView] No coordinates were set")
-    }
-     
-    guard let data = coordinate.data(using: .utf8) else {
-      throw RCTMGLError.failed("[MarkerView] Cannot serialize coordiante")
-    }
-     
-    guard let feature = try? JSONDecoder().decode(Feature.self, from: data) else {
-      throw RCTMGLError.failed("[MarkerView] Cannot parse serialized coordinate")
-    }
-     
-    guard let geometry : Geometry = feature.geometry else {
-      throw RCTMGLError.failed("[MarkerView] Invalid geometry")
-    }
-
-    guard case .point(let point) = geometry else {
-      throw RCTMGLError.failed("[MarkerView] Invalid point")
-    }
-
-    return point
-  }
-  
-  func _updateCoordinate() {
-    guard let view = firstSubview else {
+  /// Because the necessary data to add an annotation arrives from different sources at unpredictable times, we let the arrival of each value trigger an attempt to add the annotation, which we only do if all of the data exists, and the annotation not been added already.
+  private func addIfPossible() {
+    if isAdded {
       return
     }
-
-    logged("[MarkerView] updateCoordinate") {
-      let point = try point()
-
-      try viewAnnotations()?.update(
-        view,
-        options: ViewAnnotationOptions(geometry: Geometry.point(point))
-      )
-    }
-  }
-  
-  func _updateFrameOrAnchor() {
-    guard let view = firstSubview else {
-      return
-    }
-      
-    var options = ViewAnnotationOptions(
-        width: firstSubviewBounds.width,
-        height: firstSubviewBounds.height
-    )
-    let defaultAnchor = CGPoint(x: 0.5, y: 0.5)
     
-    if let anchor = anchor {
-        if let anchorX = anchor["x"]?.CGFloat {
-            options.offsetX = options.width! * (anchorX - defaultAnchor.x)
-      }
-        
-        if let anchorY = anchor["y"]?.CGFloat {
-            options.offsetY = options.height! * (anchorY - defaultAnchor.y)
-      }
-        
-      if let view = view as? RCTMGLMarkerViewWrapper {
-        if let anchorX = anchor["x"] {
-          view.anchorX = CGFloat(anchorX.floatValue)
-        }
-        if let anchorY = anchor["y"] {
-          view.anchorY = CGFloat(anchorY.floatValue)
-        }
+    if let firstCustomView = firstCustomView, let annotationManager = annotationManager, let point = point {
+      do {
+        try add(firstCustomView: firstCustomView, annotationManager: annotationManager, point: point)
+        isAdded = true
+      } catch {
+        Logger.log(level: .error, message: "[MarkerView] Error adding to map", error: error)
       }
     }
-      
-    logged("[MarkerView] updateFrame") {
-      try viewAnnotations()?.update(view, options: options)
+  }
+  
+  private func removeIfPossible() {
+    if let firstCustomView = firstCustomView {
+      annotationManager?.remove(firstCustomView)
+    }
+  }
+  
+  private func add(firstCustomView: UIView, annotationManager: ViewAnnotationManager, point: Point) throws {
+    let options = ViewAnnotationOptions(
+      geometry: Geometry.point(point),
+      width: firstCustomView.frame.width,
+      height: firstCustomView.frame.height,
+      anchor: .center
+    )
+    try annotationManager.add(firstCustomView, id: id, options: options)
+    
+    // If the annotation view is made visible the instant it is added to the map, it occasionally
+    // appears in the default top-left corner for an instant before moving to the correct location
+    // on the map. Waiting for a tiny delay fixes this.
+    Timer.scheduledTimer(withTimeInterval: 0.05, repeats: false) { _ in
+      self.firstCustomView?.layer.opacity = 1
     }
   }
 }

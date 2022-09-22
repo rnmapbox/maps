@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect, useState } from 'react';
-import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import MapboxGL, { MapView, Camera, Logger } from '@rnmapbox/maps';
 import { Position } from 'geojson';
 import { Button } from '@rneui/base';
@@ -14,15 +14,16 @@ type MarkerConfig = {
   color: string;
 };
 
-const markerCount = 20;
+const markerCount = 1;
 const centerCoord = [-73.99155, 40.72];
 const allColors = ['red', 'green', 'blue', 'purple'];
 
 const Markers = memo((props: BaseExampleProps) => {
   const [markers, setMarkers] = useState<MarkerConfig[]>([]);
   const [show, setShow] = useState(true);
+  const [anchor, setAnchor] = useState({ x: 0.5, y: 0.5 });
 
-  const randomize = useCallback(() => {
+  const changeCoordinatesAndColors = useCallback(() => {
     const newMarkers = new Array(show ? markerCount : 0).fill(0).map((o, i) => {
       return {
         coords: [
@@ -36,14 +37,19 @@ const Markers = memo((props: BaseExampleProps) => {
     setMarkers(newMarkers);
   }, [show]);
 
+  const changeAnchor = useCallback(() => {
+    const x = Math.floor((Math.random() * 2 - 1) * 10) / 10;
+    const y = Math.floor((Math.random() * 2 - 1) * 10) / 10;
+    setAnchor({ x, y });
+  }, []);
+
   useEffect(() => {
-    randomize();
+    changeCoordinatesAndColors();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    randomize();
-    randomize();
+    changeCoordinatesAndColors();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
 
@@ -54,20 +60,14 @@ const Markers = memo((props: BaseExampleProps) => {
           defaultSettings={{ centerCoordinate: centerCoord, zoomLevel: 14 }}
           centerCoordinate={centerCoord}
           zoomLevel={14}
-          padding={{
-            paddingTop: 0,
-            paddingBottom: 80,
-            paddingLeft: 0,
-            paddingRight: 0,
-          }}
         />
 
         {markers.map((marker, i) => {
           return (
             <MapboxGL.MarkerView
-              key={`MarkerView-${JSON.stringify(marker)}`}
+              key={`MarkerView-${marker.coords.join('-')}`}
               coordinate={marker.coords}
-              anchor={{ x: 0.5, y: 0.5 }}
+              anchor={anchor}
             >
               <View
                 style={[styles.markerBox, { backgroundColor: marker.color }]}
@@ -79,16 +79,31 @@ const Markers = memo((props: BaseExampleProps) => {
         })}
       </MapView>
 
-      <SafeAreaView style={styles.buttonWrap} pointerEvents={'box-none'}>
-        <Button style={styles.button} title={'Rearrange'} onPress={randomize} />
-        <Button
-          style={styles.button}
-          title={show ? 'Hide markers' : 'Show markers'}
-          onPress={() => {
-            setShow(!show);
-          }}
-        />
-      </SafeAreaView>
+      <View style={styles.buttonsHolder}>
+        <View style={styles.buttonWrap}>
+          <Button
+            style={styles.button}
+            title={'Rearrange'}
+            onPress={changeCoordinatesAndColors}
+          />
+        </View>
+        <View style={styles.buttonWrap}>
+          <Button
+            style={styles.button}
+            title={`Change anchor (${anchor.x}, ${anchor.y})`}
+            onPress={changeAnchor}
+          />
+        </View>
+        <View style={styles.buttonWrap}>
+          <Button
+            style={styles.button}
+            title={show ? 'Hide markers' : 'Show markers'}
+            onPress={() => {
+              setShow(!show);
+            }}
+          />
+        </View>
+      </View>
     </Page>
   );
 });
@@ -109,18 +124,18 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: 'bold',
   },
+  buttonsHolder: {
+    flex: 0,
+    marginBottom: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
   buttonWrap: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignContent: 'center',
+    flex: 0,
+    paddingVertical: 4,
   },
   button: {
     flex: 0,
-    marginTop: 12,
-    marginHorizontal: 12,
   },
 });
 
