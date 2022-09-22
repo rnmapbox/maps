@@ -23,7 +23,7 @@ import SkyLayer from './components/SkyLayer';
 import SymbolLayer from './components/SymbolLayer';
 import RasterLayer from './components/RasterLayer';
 import BackgroundLayer from './components/BackgroundLayer';
-import Terrain from './components/Terrain';
+import { Terrain } from './components/Terrain';
 import locationManager from './modules/location/locationManager';
 import offlineManager from './modules/offline/offlineManager';
 import snapshotManager from './modules/snapshot/snapshotManager';

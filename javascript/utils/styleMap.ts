@@ -1671,6 +1671,28 @@ export const AtmosphereLayerStyleProp = PropTypes.shape({
   }),
 });
 
+export const TerrainLayerStyleProp = PropTypes.shape({
+  /**
+   * Name of a source of `raster_dem` type to be used for terrain elevation.
+   */
+  source: PropTypes.string,
+
+  /**
+   * Exaggerates the elevation of the terrain by multiplying the data from the DEM with this value.
+   *
+   * @requires source
+   */
+  exaggeration: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
+
+  /**
+   * The transition affecting any changes to this layer’s exaggeration property.
+   */
+  exaggerationTransition: PropTypes.shape({
+    duration: PropTypes.number,
+    delay: PropTypes.number,
+  }),
+});
+
 const styleMap = {
   fillSortKey: StyleTypes.Constant,
   fillAntialias: StyleTypes.Constant,
@@ -1890,6 +1912,10 @@ const styleMap = {
   horizonBlendTransition: StyleTypes.Transition,
   starIntensity: StyleTypes.Constant,
   starIntensityTransition: StyleTypes.Transition,
+
+  source: StyleTypes.Constant,
+  exaggeration: StyleTypes.Constant,
+  exaggerationTransition: StyleTypes.Transition,
 
   color: StyleTypes.Color,
   colorTransition: StyleTypes.Transition,

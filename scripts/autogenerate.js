@@ -155,6 +155,19 @@ layers.push({
   support: { gl: false, v10: true },
 });
 
+// add terrain as a layer
+layers.push({
+  name: 'terrain',
+  properties: getPropertiesFor('terrain'),
+  props: {
+    gl: getPropertiesFor('terrain', 'gl'),
+    v10: getPropertiesFor('terrain', 'v10')
+      .filter(({ name }) => name !== 'source')
+      .map((i) => ({ ...i, transition: false })),
+  },
+  support: { gl: false, v10: true },
+});
+
 function getPropertiesFor(kind, only) {
   const attributes = styleSpecJSON[kind];
 

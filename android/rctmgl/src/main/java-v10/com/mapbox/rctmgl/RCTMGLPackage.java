@@ -20,6 +20,7 @@ import com.mapbox.rctmgl.components.images.RCTMGLImagesManager;
 import com.mapbox.rctmgl.components.location.RCTMGLNativeUserLocationManager;
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapViewManager;
 import com.mapbox.rctmgl.components.mapview.RCTMGLAndroidTextureMapViewManager;
+import com.mapbox.rctmgl.components.styles.atmosphere.RCTMGLAtmosphereManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLBackgroundLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLCircleLayerManager;
 import com.mapbox.rctmgl.components.styles.layers.RCTMGLFillExtrusionLayerManager;
@@ -107,6 +108,7 @@ public class RCTMGLPackage implements ReactPackage {
         managers.add(new RCTMGLRasterLayerManager());
         managers.add(new RCTMGLSkyLayerManager());
         managers.add(new RCTMGLTerrainManager());
+        managers.add(new RCTMGLAtmosphereManager());
         managers.add(new RCTMGLBackgroundLayerManager());
 
         managers.add(new RCTMGLLightManager());

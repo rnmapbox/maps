@@ -1,59 +1,16 @@
 import MapboxMaps
 
 @objc
-class RCTMGLTerrain : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
-  weak var map : RCTMGLMapView!
-  var style : Style! = nil
-  
-  var bridge : RCTBridge? = nil
+class RCTMGLTerrain : RCTMGLSingletonLayer, RCTMGLMapComponent, RCTMGLSourceConsumer {
   var terrain : Terrain? = nil
   
-  @objc var sourceID: String? = nil
-  
-  @objc var exaggeration : Any? = nil {
-    didSet {
-      if (style != nil && terrain != nil) {
-        do {
-          try style.setTerrain(self.makeTerrain())
-        } catch {
-          Logger.log(level: .error, message: "setTerrain failed: \(error)")
-        }
-      }
-    }
-  }
-  
-  func waitForStyleLoad() -> Bool {
-    return true
-  }
-
   func makeTerrain() -> Terrain {
-    print("=> sourceID \(sourceID)")
     guard let sourceID = sourceID else {
       Logger.log(level: .error, message: "Terrain should have a sourceID")
       return Terrain(sourceId: "n/a")
     }
-    var terrain = Terrain(sourceId: sourceID)
-    if let exaggeration = exaggeration {
-      do {
-        terrain.exaggeration = try toValue(exaggeration)
-      } catch {
-        Logger.log(level: .error, message: "Faied to parse exaggeration value: \(exaggeration) \(error)")
-      }
-    }
-    
-    return terrain
-  }
-  
-  func toValue(_ value: Any) throws -> Value<Double>? {
-    if let value = value as? NSNumber {
-      return .constant(value.doubleValue)
-    } else if let value = value as? [Any] {
-      let data = try JSONSerialization.data(withJSONObject: value, options: .prettyPrinted)
-      let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
-      return .expression(decodedExpression)
-    } else {
-      throw RCTMGLError.parseError("failed to parse value")
-    }
+
+    return Terrain(sourceId: sourceID)
   }
   
   func addToMap(_ map: RCTMGLMapView, style: Style) {
@@ -62,32 +19,7 @@ class RCTMGLTerrain : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     
     let terrain = self.makeTerrain()
     self.terrain = terrain
-    map.onMapStyleLoaded { _ in
-      if let mapboxMap = map.mapboxMap {
-        let style = mapboxMap.style
-        logged("RCTMGLTerrain.addToMap") {
-          try style.setTerrain(terrain)
-        }
-      }
-    }
-  }
-  
-  func addToMap(_ map: RCTMGLMapView) {
-    self.map = map
-  
-    guard let mapboxMap = map.mapboxMap else {
-      return
-    }
-    
-    mapboxMap.onNext(.styleLoaded) {_ in
-      let style = mapboxMap.style
- 
-      do {
-        try style.setTerrain(self.makeTerrain())
-      } catch {
-        Logger.log(level: .error, message: "setTerrain failed: \(error)")
-      }
-    }
+    addStylesAndUpdate()
   }
   
   func removeFromMap(_ map: RCTMGLMapView) {
@@ -101,7 +33,58 @@ class RCTMGLTerrain : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     removeFromMap(map, style: style)
   }
   
+  func waitForStyleLoad() -> Bool {
+    return true
+  }
+  
   func removeFromMap(_ map: RCTMGLMapView, style: Style) {
-    style.removeTerrain()
+    logged("RCTMGLTerrain.removeFromMap") {
+      style.removeTerrain()
+    }
+  }
+
+  @objc var sourceID: String? = nil {
+    didSet {
+      guard let sourceID = sourceID else {
+        Logger.log(level: .error, message: "RCTMGLTerrain cannot set source to nil")
+        return
+      }
+      
+      terrain?.source = sourceID
+      self.update()
+    }
+  }
+  
+  override func addStylesAndUpdate() {
+    guard terrain != nil else {
+      return
+    }
+
+    super.addStylesAndUpdate()
+  }
+  
+  override func addStyles() {
+    if let style : Style = self.style {
+      let styler = RCTMGLStyle(style: style)
+      styler.bridge = self.bridge
+      
+      if var terrain = terrain {
+        styler.terrainLayer(
+          layer: &terrain,
+          reactStyle: reactStyle ?? [:],
+          applyUpdater: { (updater) in fatalError("Terrain: TODO - implement apply updater")},
+          isValid: { fatalError("Terrain: TODO - no isValid") }
+        )
+        self.terrain = terrain
+      } else {
+        fatalError("[xxx] terrain is nil \(optional: self.terrain)")
+      }
+    }
+  }
+  
+  override func apply(style : Style) throws {
+    if let terrain = terrain {
+      try style.setTerrain(terrain)
+    }
   }
 }
