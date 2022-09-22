@@ -14,7 +14,6 @@ import com.mapbox.rctmgl.utils.Logger
 
 class RCTMGLAtmosphere(context: Context?) : AbstractSourceConsumer(context) {
     override var iD: String? = null
-    protected var mSourceID: String? = null
     protected var mAtmosphere: Atmosphere? = null
 
     // beginregion RCTLayer
@@ -31,10 +30,6 @@ class RCTMGLAtmosphere(context: Context?) : AbstractSourceConsumer(context) {
         }
     }
     // endregion RCTLayer
-
-    fun setSourceID(sourceID: String?) {
-        mSourceID = sourceID
-    }
 
     override fun addToMap(mapView: RCTMGLMapView) {
         mMap = mapView.getMapboxMap()
