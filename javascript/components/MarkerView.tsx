@@ -44,6 +44,8 @@ type Props = {
    * One or more valid React Native views.
    */
   children: React.ReactElement;
+
+  onPress: () => void;
 };
 
 /**
@@ -105,6 +107,7 @@ class MarkerView extends React.PureComponent<Props> {
         coordinate={this._getCoordinate(this.props.coordinate)}
         anchor={anchor}
         allowOverlap={this.props.allowOverlap}
+        onPress={this.props.onPress}
       >
         <View
           // This styled wrapper view is necessary for allowing children to { flex: 0 }.
@@ -128,6 +131,7 @@ type NativeProps = ViewProps & {
   coordinate: string | undefined;
   anchor: { x: number; y: number };
   allowOverlap: boolean;
+  onPress: () => void;
 };
 
 const RCTMGLMarkerView: HostComponent<NativeProps> =

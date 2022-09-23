@@ -20,6 +20,7 @@ const allColors = ['red', 'green', 'blue', 'purple'];
 
 const Markers = memo((props: BaseExampleProps) => {
   const [markers, setMarkers] = useState<MarkerConfig[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState<number | undefined>();
   const [show, setShow] = useState(true);
   const [anchor, setAnchor] = useState({ x: 0.5, y: 0.5 });
   const [allowOverlap, setAllowOverlap] = useState(true);
@@ -64,9 +65,14 @@ const Markers = memo((props: BaseExampleProps) => {
               coordinate={marker.coords}
               anchor={anchor}
               allowOverlap={allowOverlap}
+              onPress={() => setSelectedIndex(i)}
             >
               <View
-                style={[styles.markerBox, { backgroundColor: marker.color }]}
+                style={[
+                  styles.markerBox,
+                  { backgroundColor: marker.color },
+                  // i === selectedIndex && styles.markerBoxSelected,
+                ]}
               >
                 <Text style={styles.markerText}>Marker {i + 1}</Text>
               </View>
@@ -139,11 +145,13 @@ const styles = StyleSheet.create({
     flex: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'red',
     borderRadius: 6,
     padding: 4,
     borderWidth: 2,
     borderColor: 'white',
+  },
+  markerBoxSelected: {
+    padding: 12,
   },
   markerText: {
     color: 'white',

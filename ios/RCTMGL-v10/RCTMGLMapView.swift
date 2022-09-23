@@ -445,7 +445,7 @@ extension RCTMGLMapView: GestureManagerDelegate {
   private func touchableSources() -> [RCTMGLInteractiveElement] {
     return sources.filter { $0.isTouchable() }
   }
-
+  
   private func doHandleTapInSources(sources: [RCTMGLInteractiveElement], tapPoint: CGPoint, hits: [String: [QueriedFeature]], touchedSources: [RCTMGLInteractiveElement], callback: @escaping (_ hits: [String: [QueriedFeature]], _ touchedSources: [RCTMGLInteractiveElement]) -> Void) {
     DispatchQueue.main.async {
       if let source = sources.first {
@@ -505,7 +505,6 @@ extension RCTMGLMapView: GestureManagerDelegate {
     pointAnnotationManager.handleTap(sender) { (_: UITapGestureRecognizer) in
       DispatchQueue.main.async {
         let touchableSources = self.touchableSources()
-        print("sources: \(touchableSources.count)")
 
         self.doHandleTapInSources(
           sources: touchableSources,
@@ -513,13 +512,10 @@ extension RCTMGLMapView: GestureManagerDelegate {
           hits: [:],
           touchedSources: [])
         { (hits, touchedSources) in
-          print("result: \(touchedSources.count), \(hits.count)")
           let topSource = self.withHighestZIndex(sources: touchedSources)
           
-          if let source = topSource, /* source.hasPressListener, */ let onPress = source.onPress {
+          if let source = topSource, source.hasPressListener, let onPress = source.onPress {
             // If the individual source has a tap gesture recognizer, trigger it.
-            print("tapped source: \(source)")
-            
             guard let hitFeatures = hits[source.id] else {
               Logger.log(level:.error, message: "doHandleTap, no hits found when it should have")
               return
@@ -545,11 +541,9 @@ extension RCTMGLMapView: GestureManagerDelegate {
             self.fireEvent(event: event, callback: onPress)
           } else if let reactOnPress = self.reactOnPress {
             // If no individual gesture recognizer was found, register a press on the map.
-            print("tapped map")
-            
             let location = self.mapboxMap.coordinate(for: tapPoint)
             
-            var geojson = Feature(geometry: .point(Point(location)));
+            var geojson = Feature(geometry: .point(Point(location)))
             geojson.properties = [
               "screenPointX": .number(Double(tapPoint.x)),
               "screenPointY": .number(Double(tapPoint.y))

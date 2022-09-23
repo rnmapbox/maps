@@ -7,6 +7,9 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   static let key = "RCTMGLMarkerView"
   let id: String = "marker-\(UUID().uuidString)"
   
+  /// `MarkerView` must handle gestures on its own, because Mapbox `ViewAnnotations` do not have a gesture delegate.
+  var tap: UIGestureRecognizer!
+  
   var map: RCTMGLMapView?
   
   /// The view in the hierarchy matching the first element in the `children` prop in React Native.
@@ -14,6 +17,8 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   
   /// Whether this annotation instance has been added to the map.
   var isAdded = false
+  
+  var reactOnPress: RCTBubblingEventBlock?
   
   // MARK: - Derived variables
   
@@ -67,11 +72,14 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       updateIfPossible()
     }
   }
-  
+
   // MARK: - UIView methods
   
   override init(frame: CGRect) {
     super.init(frame: frame)
+    
+    tap = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
+    self.addGestureRecognizer(tap)
   }
 
   required init?(coder: NSCoder) {
@@ -90,12 +98,25 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       return
     }
     
+    // Make the top-level view adopt the React Native subview's size.
+    self.frame.size = grandchild.frame.size
+    
+    // Reposition all children to fill the resized top-level view.
+    child.frame = self.bounds
+    grandchild.frame = child.bounds
+    
     // Immediately hide the custom content, and wait until the annotation is added to the map
     // before showing it. (See `add()` method.)
-    grandchild.layer.opacity = 0
+    if !isAdded {
+      grandchild.layer.opacity = 0
+    }
     
     firstCustomView = grandchild
     addIfPossible()
+  }
+  
+  @objc func onTap(_ rec: UITapGestureRecognizer) {
+    onSelect()
   }
 
   // MARK: - RCTMGLMapComponent methods
@@ -110,6 +131,10 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   }
   
   // MARK: - React methods
+  
+  @objc func setReactOnPress(_ value: @escaping RCTBubblingEventBlock) {
+    self.reactOnPress = value
+  }
   
   override func reactSetFrame(_ frame: CGRect) {
     super.reactSetFrame(frame)
@@ -126,7 +151,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   func waitForStyleLoad() -> Bool {
     true
   }
-  
+
   // MARK: - Create, update, and remove methods
 
   /// Because the necessary data to add an annotation arrives from different sources at unpredictable times, we let the arrival of each value trigger an attempt to add the annotation, which we only do if all of the data exists, and the annotation not been added already.
@@ -159,7 +184,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       allowOverlap: allowOverlap,
       anchor: .center
     )
-    try annotationManager.add(firstCustomView, id: id, options: options)
+    try annotationManager.add(self, id: id, options: options)
     
     // If the annotation view is made visible the instant it is added to the map, it occasionally
     // appears in the default top-left corner for an instant before moving to the correct location
@@ -197,7 +222,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     
     do {
       try update(
-        firstCustomView: firstCustomView,
+        firstCustomView: self,
         annotationManager: annotationManager,
         geometry: geometry,
         offset: offset
@@ -214,12 +239,28 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       offsetX: offset?.dx,
       offsetY: offset?.dy
     )
-    try annotationManager.update(firstCustomView, options: options)
+    try annotationManager.update(self, options: options)
+  }
+  
+  /// There seems to be a Mapbox bug where `selected` does not cause the marker to move to the front, so this forces that effect.
+  private func onSelect() {
+    guard let annotationManager = annotationManager else {
+      return
+    }
+    
+    if let options = annotationManager.options(for: self) {
+      do {
+        annotationManager.remove(self)
+        try annotationManager.add(self, id: id, options: options)
+      } catch {
+        Logger.log(level: .error, message: "[MarkerView] Error selecting annotation", error: error)
+      }
+    }
+    
+    reactOnPress?([:])
   }
   
   private func removeIfPossible() {
-    if let firstCustomView = firstCustomView {
-      annotationManager?.remove(firstCustomView)
-    }
+    annotationManager?.remove(self)
   }
 }

@@ -8,5 +8,6 @@ RCT_EXPORT_VIEW_PROPERTY(coordinate, NSString)
 RCT_EXPORT_VIEW_PROPERTY(anchor, NSDictionary)
 RCT_EXPORT_VIEW_PROPERTY(allowOverlap, BOOL)
 
-@end
+RCT_REMAP_VIEW_PROPERTY(onPress, reactOnPress, RCTBubblingEventBlock)
 
+@end
