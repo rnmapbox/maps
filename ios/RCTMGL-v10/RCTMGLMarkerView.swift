@@ -64,13 +64,20 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   
   @objc var allowOverlap: Bool = false {
     didSet {
-      print("[Test] \(allowOverlap)")
       updateIfPossible()
     }
   }
   
   // MARK: - UIView methods
+  
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+  }
 
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
   override func layoutSubviews() {
     super.layoutSubviews()
     
@@ -143,13 +150,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       Logger.log(level: .error, message: "[MarkerView] Error adding annotation", error: error)
     }
   }
-  
-  private func removeIfPossible() {
-    if let firstCustomView = firstCustomView {
-      annotationManager?.remove(firstCustomView)
-    }
-  }
-  
+
   private func add(firstCustomView: UIView, annotationManager: ViewAnnotationManager, point: Point) throws {
     let options = ViewAnnotationOptions(
       geometry: Geometry.point(point),
@@ -214,5 +215,11 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       offsetY: offset?.dy
     )
     try annotationManager.update(firstCustomView, options: options)
+  }
+  
+  private func removeIfPossible() {
+    if let firstCustomView = firstCustomView {
+      annotationManager?.remove(firstCustomView)
+    }
   }
 }
