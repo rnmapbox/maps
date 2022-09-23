@@ -107,6 +107,8 @@ global.getLayerType = function (layer, platform) {
       return isIOS ? 'MGLSkyLayer' : 'SkyLayer';
     case 'atmosphere':
       return isIOS ? 'MGLAtmosphere' : 'Atmosphere';
+    case 'terrain':
+      return isIOS ? 'MGLTerrain' : 'Terrain';
     default:
       throw new Error(
         `Is ${layer.name} a new layer? We should add support for it!`,

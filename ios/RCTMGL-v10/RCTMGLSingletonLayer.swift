@@ -15,8 +15,14 @@ class RCTMGLSingletonLayer : UIView {
     }
   }
 
+  /// apply style updates to our copy and copy the changes to the map style
   func addStylesAndUpdate() {
     addStyles()
+    update()
+  }
+  
+  /// apply the changes made to our copy to the map style
+  func update() {
     if let style = style,
       let map = map {
       self.update(map, style)

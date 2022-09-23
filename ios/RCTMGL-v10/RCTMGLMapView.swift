@@ -3,7 +3,7 @@ import Turf
 import MapKit
 
 @objc(RCTMGLMapView)
-open class RCTMGLMapView: MapView {
+open class RCTMGLMapView : MapView {
   var compassEnabled: Bool = false
   var compassFadeWhenNorth: Bool = false
   var reactOnPress : RCTBubblingEventBlock?
@@ -22,8 +22,8 @@ open class RCTMGLMapView: MapView {
   var onStyleLoadedComponents: [RCTMGLMapComponent] = []
   
   private var isPendingInitialLayout = true
+  private var wasGestureActive = false
   private var isGestureActive = false
-  private var isAnimatingFromGesture = false
 
   var layerWaiters : [String:[(String) -> Void]] = [:]
   
@@ -274,8 +274,9 @@ open class RCTMGLMapView: MapView {
 extension RCTMGLMapView {
   @objc func setReactOnMapChange(_ value: @escaping RCTBubblingEventBlock) {
     self.reactOnMapChange = value
-    
-    self.mapView.mapboxMap.onEvery(.cameraChanged, handler: { cameraEvent in
+
+    self.mapView.mapboxMap.onEvery(event: .cameraChanged, handler: { cameraEvent in
+      self.wasGestureActive = self.isGestureActive
       if self.handleMapChangedEvents.contains(.regionIsChanging) {
         let event = RCTMGLEvent(type:.regionIsChanging, payload: self.buildRegionObject());
         self.fireEvent(event: event, callback: self.reactOnMapChange)
@@ -285,7 +286,7 @@ extension RCTMGLMapView {
       }
     })
 
-    self.mapView.mapboxMap.onEvery(.mapIdle, handler: { cameraEvent in
+    self.mapView.mapboxMap.onEvery(event: .mapIdle, handler: { cameraEvent in
       if self.handleMapChangedEvents.contains(.regionDidChange) {
         let event = RCTMGLEvent(type:.regionDidChange, payload: self.buildRegionObject());
         self.fireEvent(event: event, callback: self.reactOnMapChange)
@@ -293,6 +294,8 @@ extension RCTMGLMapView {
         let event = RCTMGLEvent(type:.mapIdle, payload: self.buildStateObject());
         self.fireEvent(event: event, callback: self.reactOnMapChange)
       }
+      
+      self.wasGestureActive = false
     })
   }
 
@@ -324,8 +327,7 @@ extension RCTMGLMapView {
         "pitch": Double(mapView.cameraState.pitch),
       ],
       "gestures": [
-        "isGestureActive": isGestureActive,
-        "isAnimatingFromGesture": isAnimatingFromGesture
+        "isGestureActive": wasGestureActive
       ]
     ]
   }
@@ -347,8 +349,7 @@ extension RCTMGLMapView {
       "bearing": .number(mapView.cameraState.bearing),
       "pitch": .number(mapView.cameraState.pitch),
       "visibleBounds": .array(boundsArray),
-      "isUserInteraction": .boolean(isGestureActive),
-      "isAnimatingFromUserInteraction": .boolean(isAnimatingFromGesture),
+      "isUserInteraction": .boolean(wasGestureActive),
     ]
     return logged("buildRegionObject", errorResult: { ["error":["toJSON":$0.localizedDescription]] }) {
       try result.toJSON()
@@ -356,50 +357,48 @@ extension RCTMGLMapView {
   }
   
   public func setupEvents() {
-    self.mapboxMap.onEvery(.mapLoadingError, handler: {(event) in
-      if let data = event.data as? [String:Any], let message = data["message"] {
+    self.mapboxMap.onEvery(event: .mapLoadingError, handler: {(event) in
+      if let message = event.payload.error.errorDescription {
         Logger.log(level: .error, message: "MapLoad error \(message)")
       } else {
         Logger.log(level: .error, message: "MapLoad error \(event)")
       }
     })
     
-    self.mapboxMap.onEvery(.styleImageMissing) { (event) in
-      if let data = event.data as? [String:Any] {
-        if let imageName = data["id"] as? String {
-
-          self.images.forEach {
-            if $0.addMissingImageToStyle(style: self.mapboxMap.style, imageName: imageName) {
-              return
-            }
-          }
-          
-          self.images.forEach {
-            $0.sendImageMissingEvent(imageName: imageName, event: event)
-          }
+    self.mapboxMap.onEvery(event: .styleImageMissing) { (event) in
+      let imageName = event.payload.id
+      
+      self.images.forEach {
+        if $0.addMissingImageToStyle(style: self.mapboxMap.style, imageName: imageName) {
+          return
         }
+      }
+
+      self.images.forEach {
+        $0.sendImageMissingEvent(imageName: imageName, payload: event.payload)
       }
     }
 
-    self.mapboxMap.onEvery(.renderFrameFinished, handler: { (event) in
+    self.mapboxMap.onEvery(event: .renderFrameFinished, handler: { (event) in
       var type = RCTMGLEvent.EventType.didFinishRendering
-      var payload : [String:Any]? = nil
-      if let data = event.data as? [String:Any] {
-        if let renderMode = data["render-mode"], let renderMode = renderMode as? String, renderMode == "full" {
-          type = .didFinishRenderingFully
-        }
-        payload = data
+      if event.payload.renderMode == .full {
+        type = .didFinishRenderingFully
       }
+      let payload : [String:Any] = [
+        "renderMode": event.payload.renderMode.rawValue,
+        "needsRepaint": event.payload.needsRepaint,
+        "placementChanged": event.payload.placementChanged
+      ]
       let event = RCTMGLEvent(type: type, payload: payload);
       self.fireEvent(event: event, callback: self.reactOnMapChange)
     })
 
-    self.mapboxMap.onNext(.mapLoaded, handler: { (event) in
+    self.mapboxMap.onNext(event: .mapLoaded, handler: { (event) in
       let event = RCTMGLEvent(type:.didFinishLoadingMap, payload: nil);
       self.fireEvent(event: event, callback: self.reactOnMapChange)
     })
     
-    self.mapboxMap.onEvery(.styleLoaded, handler: { (event) in
+    self.mapboxMap.onEvery(event: .styleLoaded, handler: { (event) in
       self.onStyleLoadedComponents.forEach { (component) in
         component.addToMap(self, style: self.mapboxMap.style)
       }
@@ -441,11 +440,10 @@ extension RCTMGLMapView: GestureManagerDelegate {
   private func draggableSources() -> [RCTMGLInteractiveElement] {
     return sources.filter { $0.isDraggable() }
   }
-  
   private func touchableSources() -> [RCTMGLInteractiveElement] {
     return sources.filter { $0.isTouchable() }
   }
-  
+
   private func doHandleTapInSources(sources: [RCTMGLInteractiveElement], tapPoint: CGPoint, hits: [String: [QueriedFeature]], touchedSources: [RCTMGLInteractiveElement], callback: @escaping (_ hits: [String: [QueriedFeature]], _ touchedSources: [RCTMGLInteractiveElement]) -> Void) {
     DispatchQueue.main.async {
       if let source = sources.first {
@@ -462,11 +460,11 @@ extension RCTMGLMapView: GestureManagerDelegate {
         let options = RenderedQueryOptions(
           layerIds: source.getLayerIDs(), filter: nil
         )
-        
-        self.mapboxMap.queryRenderedFeatures(with: hitboxRect, options: options) { result in
+        self.mapboxMap.queryRenderedFeatures(in: hitboxRect, options: options) {
+          result in
+          
           var newHits = hits
           var newTouchedSources = touchedSources;
-          
           switch result {
            case .failure(let error):
             Logger.log(level: .error, message: "Error during handleTapInSources source.id=\(source.id ?? "n/a") error:\(error)")
@@ -477,17 +475,9 @@ extension RCTMGLMapView: GestureManagerDelegate {
             }
             break
           }
-          
           var nSources = sources
           nSources.removeFirst()
-          
-          self.doHandleTapInSources(
-            sources: nSources,
-            tapPoint: tapPoint,
-            hits: newHits,
-            touchedSources: newTouchedSources,
-            callback: callback
-          )
+          self.doHandleTapInSources(sources: nSources, tapPoint: tapPoint, hits: newHits, touchedSources: newTouchedSources, callback: callback)
         }
       } else {
         callback(hits, touchedSources)
@@ -495,35 +485,28 @@ extension RCTMGLMapView: GestureManagerDelegate {
     }
   }
   
-  func withHighestZIndex(sources: [RCTMGLInteractiveElement]) -> RCTMGLInteractiveElement? {
+  func highestZIndex(sources: [RCTMGLInteractiveElement]) -> RCTMGLInteractiveElement? {
     return sources.first
   }
   
-  @objc func doHandleTap(_ sender: UITapGestureRecognizer) {
+  @objc
+  func doHandleTap(_ sender: UITapGestureRecognizer) {
     let tapPoint = sender.location(in: self)
-    
     pointAnnotationManager.handleTap(sender) { (_: UITapGestureRecognizer) in
       DispatchQueue.main.async {
         let touchableSources = self.touchableSources()
-
-        self.doHandleTapInSources(
-          sources: touchableSources,
-          tapPoint: tapPoint,
-          hits: [:],
-          touchedSources: [])
-        { (hits, touchedSources) in
-          let topSource = self.withHighestZIndex(sources: touchedSources)
+        self.doHandleTapInSources(sources: touchableSources, tapPoint: tapPoint, hits: [:], touchedSources: []) { (hits, touchedSources) in
           
-          if let source = topSource, source.hasPressListener, let onPress = source.onPress {
-            // If the individual source has a tap gesture recognizer, trigger it.
+          if let source = self.highestZIndex(sources: touchedSources),
+             source.hasPressListener,
+             let onPress = source.onPress {
             guard let hitFeatures = hits[source.id] else {
               Logger.log(level:.error, message: "doHandleTap, no hits found when it should have")
               return
             }
-            
-            let features = hitFeatures.map { try? $0.feature.toJSON() }
+            let features = hitFeatures.compactMap { queriedFeature in
+              logged("doHandleTap.hitFeatures") { try queriedFeature.feature.toJSON() } }
             let location = self.mapboxMap.coordinate(for: tapPoint)
-            
             let event = RCTMGLEvent(
               type: (source is RCTMGLVectorSource) ? .vectorSourceLayerPress : .shapeSourceLayerPress,
               payload: [
@@ -539,18 +522,18 @@ extension RCTMGLMapView: GestureManagerDelegate {
               ]
             )
             self.fireEvent(event: event, callback: onPress)
-          } else if let reactOnPress = self.reactOnPress {
-            // If no individual gesture recognizer was found, register a press on the map.
-            let location = self.mapboxMap.coordinate(for: tapPoint)
             
-            var geojson = Feature(geometry: .point(Point(location)))
-            geojson.properties = [
-              "screenPointX": .number(Double(tapPoint.x)),
-              "screenPointY": .number(Double(tapPoint.y))
-            ]
-            
-            let event = RCTMGLEvent(type:.tap, payload: logged("reactOnPress") { try geojson.toJSON() })
-            self.fireEvent(event: event, callback: reactOnPress)
+          } else {
+            if let reactOnPress = self.reactOnPress {
+              let location = self.mapboxMap.coordinate(for: tapPoint)
+              var geojson = Feature(geometry: .point(Point(location)));
+              geojson.properties = [
+                "screenPointX": .number(Double(tapPoint.x)),
+                "screenPointY": .number(Double(tapPoint.y))
+              ]
+              let event = RCTMGLEvent(type:.tap, payload: logged("reactOnPress") { try geojson.toJSON() })
+              self.fireEvent(event: event, callback: reactOnPress)
+            }
           }
         }
       }
@@ -564,7 +547,7 @@ extension RCTMGLMapView: GestureManagerDelegate {
       DispatchQueue.main.async {
         let draggableSources = self.draggableSources()
         self.doHandleTapInSources(sources: draggableSources, tapPoint: position, hits: [:], touchedSources: []) { (hits, draggedSources) in
-          if let source = self.withHighestZIndex(sources: draggedSources),
+          if let source = self.highestZIndex(sources: draggedSources),
              source.draggable,
              let onDragStart = source.onDragStart {
             guard let hitFeatures = hits[source.id] else {
@@ -605,21 +588,19 @@ extension RCTMGLMapView: GestureManagerDelegate {
       }
     }
   }
-  
+
   public func gestureManager(_ gestureManager: GestureManager, didBegin gestureType: GestureType) {
     isGestureActive = true
   }
   
   public func gestureManager(_ gestureManager: GestureManager, didEnd gestureType: GestureType, willAnimate: Bool) {
-    isGestureActive = false
-    if willAnimate {
-      isAnimatingFromGesture = true
+    if !willAnimate {
+      isGestureActive = false;
     }
   }
   
   public func gestureManager(_ gestureManager: GestureManager, didEndAnimatingFor gestureType: GestureType) {
-    isGestureActive = false
-    isAnimatingFromGesture = false
+    isGestureActive = false;
   }
 }
 
@@ -683,6 +664,258 @@ extension RCTMGLMapView {
           }
         }
       }
+    }
+  }
+}
+
+class PointAnnotationManager : AnnotationInteractionDelegate {
+  weak var selected : RCTMGLPointAnnotation? = nil
+  private var draggedAnnotation: PointAnnotation?
+  
+  func annotationManager(_ manager: AnnotationManager, didDetectTappedAnnotations annotations: [Annotation]) {
+    guard annotations.count > 0 else {
+      fatalError("didDetectTappedAnnotations: No annotations found")
+    }
+    
+    for annotation in annotations {
+      if let pointAnnotation = annotation as? PointAnnotation,
+         let userInfo = pointAnnotation.userInfo {
+        
+        if let rctmglPointAnnotation = userInfo[RCTMGLPointAnnotation.key] as? WeakRef<RCTMGLPointAnnotation> {
+          if let pt = rctmglPointAnnotation.object {
+            let position = pt.superview?.convert(pt.layer.position, to: nil)
+            let location = pt.map?.mapboxMap.coordinate(for: position!)
+            var geojson = Feature(geometry: .point(Point(location!)));
+            geojson.properties = [
+              "screenPointX": .number(Double(position!.x)),
+              "screenPointY": .number(Double(position!.y))
+            ]
+            let event = RCTMGLEvent(type:.tap, payload: logged("doHandleTap") { try geojson.toJSON() })
+            if let selected = selected {
+              guard let onDeselected = pt.onDeselected else {
+                return
+              }
+              onDeselected(event.toJSON())
+              selected.onDeselect()
+            }
+            guard let onSelected = pt.onSelected else {
+              return
+            }
+            onSelected(event.toJSON())
+            pt.onSelect()
+            selected = pt
+          }
+        }
+      }
+      /*
+      
+         let rctmglPointAnnotation = userInfo[RCTMGLPointAnnotation.key] as? WeakRef<RCTMGLPointAnnotation>,
+         let rctmglPointAnnotation = rctmglPointAnnotation.object {
+        rctmglPointAnnotation.didTap()
+      }*/
+    }
+  }
+  
+  func handleTap(_ tap: UITapGestureRecognizer,  noAnnotationFound: @escaping (UITapGestureRecognizer) -> Void) {
+    let layerId = manager.layerId
+    guard let mapFeatureQueryable = mapView?.mapboxMap else {
+      noAnnotationFound(tap)
+      return
+    }
+    let options = RenderedQueryOptions(layerIds: [layerId], filter: nil)
+    mapFeatureQueryable.queryRenderedFeatures(
+        at: tap.location(in: tap.view),
+        options: options) { [weak self] (result) in
+
+        guard let self = self else { return }
+
+        switch result {
+
+        case .success(let queriedFeatures):
+
+            // Get the identifiers of all the queried features
+            let queriedFeatureIds: [String] = queriedFeatures.compactMap {
+                guard case let .string(featureId) = $0.feature.identifier else {
+                    return nil
+                }
+                return featureId
+            }
+
+            // Find if any `queriedFeatureIds` match an annotation's `id`
+            let tappedAnnotations = self.manager.annotations.filter { queriedFeatureIds.contains($0.id) }
+
+            // If `tappedAnnotations` is not empty, call delegate
+            if !tappedAnnotations.isEmpty {
+              self.annotationManager(
+                self.manager,
+                didDetectTappedAnnotations: tappedAnnotations)
+              
+            } else {
+              noAnnotationFound(tap)
+            }
+
+        case .failure(let error):
+          noAnnotationFound(tap)
+          Logger.log(level:.warn, message:"Failed to query map for annotations due to error: \(error)")
+          
+        }
+    }
+  }
+  
+  var manager : MapboxMaps.PointAnnotationManager
+  weak var mapView : MapView? = nil
+  
+  init(annotations: AnnotationOrchestrator, mapView: MapView) {
+    manager = annotations.makePointAnnotationManager()
+    manager.delegate = self
+    self.mapView = mapView
+  }
+
+  func onDragHandler(_ manager: AnnotationManager, didDetectDraggedAnnotations annotations: [Annotation], dragState: UILongPressGestureRecognizer.State, targetPoint: CLLocationCoordinate2D) {
+    guard annotations.count > 0 else {
+      fatalError("didDetectDraggedAnnotations: No annotations found")
+    }
+    
+    for annotation in annotations {
+      if let pointAnnotation = annotation as? PointAnnotation,
+         let userInfo = pointAnnotation.userInfo {
+        
+        if let rctmglPointAnnotation = userInfo[RCTMGLPointAnnotation.key] as? WeakRef<RCTMGLPointAnnotation> {
+          if let pt = rctmglPointAnnotation.object {
+            let position = pt.superview?.convert(pt.layer.position, to: nil)
+            var geojson = Feature(geometry: .point(Point(targetPoint)));
+            geojson.properties = [
+              "screenPointX": .number(Double(position!.x)),
+              "screenPointY": .number(Double(position!.y))
+            ]
+            let event = RCTMGLEvent(type:.longPress, payload: logged("doHandleLongPress") { try geojson.toJSON() })
+            switch (dragState) {
+            case .began:
+              guard let onDragStart = pt.onDragStart else {
+                return
+              }
+              onDragStart(event.toJSON())
+            case .changed:
+              guard let onDrag = pt.onDrag else {
+                return
+              }
+              onDrag(event.toJSON())
+              return
+            case .ended:
+              guard let onDragEnd = pt.onDragEnd else {
+                return
+              }
+              onDragEnd(event.toJSON())
+              return
+            default:
+              return
+            }
+          }
+        }
+      }
+      /*
+      
+         let rctmglPointAnnotation = userInfo[RCTMGLPointAnnotation.key] as? WeakRef<RCTMGLPointAnnotation>,
+         let rctmglPointAnnotation = rctmglPointAnnotation.object {
+        rctmglPointAnnotation.didTap()
+      }*/
+    }
+  }
+  
+  // Used for handling panning to detect annotation dragging
+  func handleLongPress(_ sender: UILongPressGestureRecognizer, noAnnotationFound: @escaping (UILongPressGestureRecognizer) -> Void) {
+    let layerId = manager.layerId
+    guard let mapFeatureQueryable = mapView?.mapboxMap else {
+      noAnnotationFound(sender)
+      return
+    }
+    let options = RenderedQueryOptions(layerIds: [layerId], filter: nil)
+    guard let targetPoint = self.mapView?.mapboxMap.coordinate(for: sender.location(in: sender.view)) else {
+      return
+    }
+      switch sender.state {
+        case .began:
+          mapFeatureQueryable.queryRenderedFeatures(
+            at: sender.location(in: sender.view),
+            options: options) { [weak self] (result) in
+              
+              guard let self = self else { return }
+              switch result {
+                case .success(let queriedFeatures):
+                  // Get the identifiers of all the queried features
+                  let queriedFeatureIds: [String] = queriedFeatures.compactMap {
+                      guard case let .string(featureId) = $0.feature.identifier else {
+                          return nil
+                      }
+                      return featureId
+                  }
+
+                  // Find if any `queriedFeatureIds` match an annotation's `id`
+                let draggedAnnotations = self.manager.annotations.filter { queriedFeatureIds.contains($0.id) }
+                let enabledAnnotations = draggedAnnotations.filter { ($0.userInfo?[RCTMGLPointAnnotation.key] as? WeakRef<RCTMGLPointAnnotation>)?.object?.draggable ?? false }
+                  // If `tappedAnnotations` is not empty, call delegate
+                  if !enabledAnnotations.isEmpty {
+                    self.draggedAnnotation = enabledAnnotations.first!
+                    self.onDragHandler(self.manager, didDetectDraggedAnnotations: enabledAnnotations, dragState: .began, targetPoint: targetPoint)
+                  } else {
+                    noAnnotationFound(sender)
+                  }
+                case .failure(let error):
+                  noAnnotationFound(sender)
+                  Logger.log(level:.warn, message:"Failed to query map for annotations due to error: \(error)")
+                }
+              }
+
+      case .changed:
+          guard let annotation = self.draggedAnnotation else {
+              return
+          }
+        
+          self.onDragHandler(self.manager, didDetectDraggedAnnotations: [annotation], dragState: .changed, targetPoint: targetPoint)
+
+          // For some reason Mapbox doesn't let us update the geometry of an existing annotation
+          // so we have to create a whole new one.
+          var newAnnotation = PointAnnotation(id: annotation.id, coordinate: targetPoint)
+          newAnnotation.image = annotation.image
+          newAnnotation.userInfo = annotation.userInfo
+          
+          var newAnnotations = self.manager.annotations.filter { an in
+              return an.id != annotation.id
+          }
+          newAnnotations.append(newAnnotation)
+          manager.annotations = newAnnotations
+      case .cancelled, .ended:
+        guard let annotation = self.draggedAnnotation else {
+            return
+        }
+        // Optionally notify some other delegate to tell them the drag finished.
+        self.onDragHandler(self.manager, didDetectDraggedAnnotations: [annotation], dragState: .ended, targetPoint: targetPoint)
+        // Reset our global var containing the annotation currently being dragged
+        self.draggedAnnotation = nil
+        return
+      default:
+          return
+      }
+  }
+  
+  
+  func remove(_ annotation: PointAnnotation) {
+    manager.annotations.removeAll(where: {$0.id == annotation.id})
+  }
+  
+  func add(_ annotation: PointAnnotation) {
+    manager.annotations.append(annotation)
+    manager.syncSourceAndLayerIfNeeded()
+  }
+
+  func refresh(_ annotation: PointAnnotation) {
+    let index = manager.annotations.firstIndex { $0.id == annotation.id }
+    if let index = index {
+      manager.annotations[index] = annotation
+      manager.syncSourceAndLayerIfNeeded()
+    } else {
+      Logger.log(level: .warn, message: "RCTMGL - PointAnnotation.refresh: expected annotation already there - adding")
+      add(annotation)
     }
   }
 }

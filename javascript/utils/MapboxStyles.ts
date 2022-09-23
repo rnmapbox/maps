@@ -121,7 +121,7 @@ type ExpressionParameters =
   | 'heatmap-density';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-type Value<T, AllowedParameters extends ExpressionParameters[] = []> =
+export type Value<T, AllowedParameters extends ExpressionParameters[] = []> =
   | T
   | Expression;
 
@@ -1468,6 +1468,23 @@ export interface AtmosphereLayerStyleProps {
    */
   starIntensityTransition?: Transition;
 }
+export interface TerrainLayerStyleProps {
+  /**
+   * Name of a source of `raster_dem` type to be used for terrain elevation.
+   */
+  source?: string;
+  /**
+   * Exaggerates the elevation of the terrain by multiplying the data from the DEM with this value.
+   *
+   * @requires source
+   */
+  exaggeration?: Value<number, ['zoom']>;
+
+  /**
+   * The transition affecting any changes to this layer’s exaggeration property.
+   */
+  exaggerationTransition?: Transition;
+}
 
 export type AllLayerStyleProps =
   | FillLayerStyleProps
@@ -1481,4 +1498,5 @@ export type AllLayerStyleProps =
   | BackgroundLayerStyleProps
   | SkyLayerStyleProps
   | LightLayerStyleProps
-  | AtmosphereLayerStyleProps;
+  | AtmosphereLayerStyleProps
+  | TerrainLayerStyleProps;

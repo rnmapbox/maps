@@ -215,22 +215,12 @@ class MapView extends NativeBridgeComponent(React.Component) {
     onRegionDidChange: PropTypes.func,
 
     /**
-     * iOS, v10 only, experimental.
-     *
-     * Called when the currently displayed map area changes.
-     * Replaces onRegionIsChanging, so can't set both
-     *
-     * @param {MapState} region - A payload containing the map center, bounds, and other properties.
+     * iOS, v10 only, deprecated will be removed in next version - please use onRegionIsChanging.
      */
     onCameraChanged: PropTypes.func,
 
     /**
-     * iOS, v10 only, experimental
-     *
-     * Called when the currently displayed map area stops changing.
-     * Replaces onRegionDidChange, so can't set both
-     *
-     * @param {MapState} region - A payload containing the map center, bounds, and other properties.
+     * iOS, v10 only, deprecated will be removed in next version - please use onRegionDidChange
      */
     onMapIdle: PropTypes.func,
 
@@ -393,6 +383,9 @@ class MapView extends NativeBridgeComponent(React.Component) {
       addIfHasHandler('DidFinishLoadingStyle');
 
       if (addIfHasHandler('MapIdle')) {
+        console.warn(
+          'onMapIdle is deprecated and will be removed in next beta - please use onRegionDidChange',
+        );
         if (props.onRegionDidChange) {
           console.warn(
             'rnmapbox/maps: only one of  MapView.onRegionDidChange or onMapIdle is supported',
@@ -400,6 +393,9 @@ class MapView extends NativeBridgeComponent(React.Component) {
         }
       }
       if (addIfHasHandler('CameraChanged')) {
+        console.warn(
+          'onCameraChanged is deprecated and will be removed in next beta - please use onRegionWillChange',
+        );
         if (props.onRegionWillChange) {
           console.warn(
             'rnmapbox/maps: only one of MapView.onRegionWillChange or onCameraChanged is supported',

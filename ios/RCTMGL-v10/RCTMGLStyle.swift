@@ -801,6 +801,29 @@ func atmosphereLayer(layer: inout Atmosphere, reactStyle:Dictionary<String, Any>
   }
 }
 
+func terrainLayer(layer: inout Terrain, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout Terrain)->Void)->Void, isValid: @escaping () -> Bool)
+{
+  guard self._hasReactStyle(reactStyle) else {
+    Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
+    return
+  }
+
+  let styleProps = reactStyle.keys
+  for prop in styleProps {
+    if (prop == "__MAPBOX_STYLESHEET__") {
+      continue;
+    }
+
+    let styleValue = RCTMGLStyleValue.make(reactStyle[prop])
+
+    if (prop == "exaggeration") {
+      self.setExaggeration(&layer, styleValue:styleValue);
+    } else {
+      Logger.log(level:.error, message: "Unexpected property \(prop) for layer: terrain")
+    }
+  }
+}
+
 
 
 
@@ -2497,6 +2520,17 @@ func setStarIntensity(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
 func setStarIntensityTransition(_ layer: inout Atmosphere, styleValue: RCTMGLStyleValue)
 {
     layer.starIntensityTransition = styleValue.getTransition();
+}
+
+
+
+func setExaggeration(_ layer: inout Terrain, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.exaggeration = styleValue.mglStyleValueNumber();
+        
+      
 }
 
 

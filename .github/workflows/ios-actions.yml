@@ -64,7 +64,7 @@ jobs:
           brew install xcbeautify
 
       - name: Build for detox
-        run: yarn detox build --configuration ios.debug | xcbeautify -qq
+        run: set -o pipefail && NSUnbufferedIO=YES  yarn detox build --configuration ios.debug 2>&1 | xcbeautify -qq
 
       - name: Test with detox
         run: |

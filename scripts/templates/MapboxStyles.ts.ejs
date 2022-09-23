@@ -48,7 +48,7 @@ export type Expression = [ExpressionName, ...ExpressionField[]];
 type ExpressionParameters = 'zoom' | 'feature' | 'feature-state' | 'sky-radial-progress' | 'line-progress' | 'heatmap-density';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-type Value<T, AllowedParameters extends ExpressionParameters[] = []> =
+export type Value<T, AllowedParameters extends ExpressionParameters[] = []> =
   | T
   | Expression;
 

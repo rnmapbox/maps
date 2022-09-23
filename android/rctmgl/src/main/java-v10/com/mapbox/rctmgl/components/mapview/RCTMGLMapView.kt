@@ -159,7 +159,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             override fun onStyleLoaded(style: Style) {
                 savedStyle = style
                 setUpImage(style)
-                addQueuedFeatures()
+                addQueuedFeaturesToMap()
                 setupLocalization(style)
             }
         })
@@ -305,26 +305,28 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         mCameraChangeTracker.setReason(CameraChangeTracker.EMPTY)
     }
 
-    private fun removeAllSourcesFromMap() {
-        if (mSources.size == 0) {
-            return
-        }
-        for (key in mSources.keys) {
-            val source = mSources[key]
-            source?.removeFromMap(this)
+    private fun removeAllFeaturesFromMap() {
+        mFeatures.forEach { it -> it.removeFromMap(this) }
+    }
+
+    private fun addQueuedFeaturesToMap() {
+        mQueuedFeatures?.let { queuedFeatures ->
+            queuedFeatures.forEach {
+                it.addToMap(this)
+                mFeatures.add(it)
+            }
+            queuedFeatures.clear()
         }
     }
 
-    private fun addAllSourcesToMap() {
-        if (mSources.size == 0) {
-            return
-        }
-        for (key in mSources.keys) {
-            val source = mSources[key]
-            source?.addToMap(this)
+    private fun addAllFeaturesToMap() {
+        mQueuedFeatures?.also {
+            this.addQueuedFeaturesToMap()
+        } ?: run {
+            mFeatures.forEach { it.addToMap(this) }
         }
     }
-
+    
     private val allTouchableSources: List<RCTSource<*>>
         private get() {
             val sources: MutableList<RCTSource<*>> = ArrayList()
@@ -380,19 +382,18 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     fun setReactStyleURL(styleURL: String) {
         if (mMap != null) {
-            removeAllSourcesFromMap()
+            removeAllFeaturesFromMap()
             if (isJSONValid(mStyleURL)) {
                 mMap.loadStyleJson(styleURL, object : Style.OnStyleLoaded {
                     override fun onStyleLoaded(style: Style) {
-                        addAllSourcesToMap()
+                        addAllFeaturesToMap()
                     }
                 })
             } else {
                 mMap.loadStyleUri(styleURL, object : Style.OnStyleLoaded {
                     override fun onStyleLoaded(style: Style) {
                         savedStyle = style
-                        addAllSourcesToMap()
-                        addQueuedFeatures()
+                        addAllFeaturesToMap()
                     }
                 },
                         object : OnMapLoadErrorListener {
@@ -604,17 +605,6 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             Logger.e(LOG_TAG, "An error occurred while attempting to make the region", ex)
         }
         return GeoJSONUtils.toPointFeature(latLng, properties)
-    }
-
-    fun addQueuedFeatures() {
-        if (mQueuedFeatures != null && mQueuedFeatures!!.size > 0) {
-            for (i in mQueuedFeatures!!.indices) {
-                val feature = mQueuedFeatures!![i]
-                feature.addToMap(this)
-                mFeatures.add(feature)
-            }
-            mQueuedFeatures = null
-        }
     }
 
     private fun setupLocalization(style: Style) {
