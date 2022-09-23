@@ -17,17 +17,7 @@ const Mapbox = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLMarkerView';
 
-/**
- * MarkerView represents an interactive React Native marker on the map.
- *
- * If you have static views, consider using PointAnnotation or SymbolLayer to display
- * an image, as they'll offer much better performance. Mapbox suggests using this
- * component for a maximum of around 100 views displayed at one time.
- *
- * This is implemented with view annotations on [Android](https://docs.mapbox.com/android/maps/guides/annotations/view-annotations/)
- * and [iOS](https://docs.mapbox.com/ios/maps/guides/annotations/view-annotations).
- */
-class MarkerView extends React.PureComponent<{
+type Props = {
   /**
    * The center point (specified as a map coordinate) of the marker.
    */
@@ -43,12 +33,33 @@ class MarkerView extends React.PureComponent<{
   };
 
   /**
+   * @v10
+   *
+   * Whether or not nearby markers on the map should all be displayed. If false, adjacent
+   * markers will 'collapse' and only one will be shown. Defaults to false.
+   */
+  allowOverlap: boolean;
+
+  /**
    * One or more valid React Native views.
    */
   children: React.ReactElement;
-}> {
-  static defaultProps = {
+};
+
+/**
+ * MarkerView represents an interactive React Native marker on the map.
+ *
+ * If you have static views, consider using PointAnnotation or SymbolLayer to display
+ * an image, as they'll offer much better performance. Mapbox suggests using this
+ * component for a maximum of around 100 views displayed at one time.
+ *
+ * This is implemented with view annotations on [Android](https://docs.mapbox.com/android/maps/guides/annotations/view-annotations/)
+ * and [iOS](https://docs.mapbox.com/ios/maps/guides/annotations/view-annotations).
+ */
+class MarkerView extends React.PureComponent<Props> {
+  static defaultProps: Partial<Props> = {
     anchor: { x: 0.5, y: 0.5 },
+    allowOverlap: false,
   };
 
   static lastId = 0;
@@ -93,6 +104,7 @@ class MarkerView extends React.PureComponent<{
       <RCTMGLMarkerView
         coordinate={this._getCoordinate(this.props.coordinate)}
         anchor={anchor}
+        allowOverlap={this.props.allowOverlap}
       >
         <View
           // This styled wrapper view is necessary for allowing children to { flex: 0 }.
@@ -115,6 +127,7 @@ class MarkerView extends React.PureComponent<{
 type NativeProps = ViewProps & {
   coordinate: string | undefined;
   anchor: { x: number; y: number };
+  allowOverlap: boolean;
 };
 
 const RCTMGLMarkerView: HostComponent<NativeProps> =

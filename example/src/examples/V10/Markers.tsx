@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import MapboxGL, { MapView, Camera, Logger } from '@rnmapbox/maps';
+import { MapView, Camera, Logger, MarkerView } from '@rnmapbox/maps';
 import { Position } from 'geojson';
 import { Text, Button, Divider } from '@rneui/base';
 
@@ -22,6 +22,7 @@ const Markers = memo((props: BaseExampleProps) => {
   const [markers, setMarkers] = useState<MarkerConfig[]>([]);
   const [show, setShow] = useState(true);
   const [anchor, setAnchor] = useState({ x: 0.5, y: 0.5 });
+  const [allowOverlap, setAllowOverlap] = useState(true);
 
   const randomizeCoordinatesAndColors = useCallback(() => {
     const newMarkers = new Array(show ? markerCount : 0).fill(0).map((o, i) => {
@@ -58,74 +59,76 @@ const Markers = memo((props: BaseExampleProps) => {
 
         {markers.map((marker, i) => {
           return (
-            <MapboxGL.MarkerView
+            <MarkerView
               key={`MarkerView-${marker.coords.join('-')}`}
               coordinate={marker.coords}
               anchor={anchor}
+              allowOverlap={allowOverlap}
             >
               <View
                 style={[styles.markerBox, { backgroundColor: marker.color }]}
               >
                 <Text style={styles.markerText}>Marker {i + 1}</Text>
               </View>
-            </MapboxGL.MarkerView>
+            </MarkerView>
           );
         })}
       </MapView>
 
       <View style={styles.buttonsHolder}>
-        <View style={styles.buttonWrap}>
-          <Button
-            style={styles.button}
-            title={'Rearrange'}
-            onPress={randomizeCoordinatesAndColors}
-          />
-        </View>
+        <Button
+          style={styles.button}
+          title={'Rearrange'}
+          onPress={randomizeCoordinatesAndColors}
+        />
 
-        <Divider />
+        <Divider style={styles.divider} />
 
-        <View style={styles.buttonWrap}>
-          <Text>
-            Anchor: {anchor.x}, {anchor.y}
-          </Text>
-          <ScrollView
-            style={{ flex: 0, flexDirection: 'row' }}
-            horizontal={true}
-          >
-            {[
-              [0, 0],
-              [0.5, 0],
-              [1, 0],
-              [0, 0.5],
-              [0.5, 0.5],
-              [1, 0.5],
-              [0, 1],
-              [0.5, 1],
-              [1, 1],
-            ].map(([x, y]) => {
-              return (
-                <Button
-                  key={`${x}-${y}`}
-                  style={[styles.button, { marginRight: 8 }]}
-                  title={`${x}, ${y}`}
-                  onPress={() => setAnchor({ x, y })}
-                />
-              );
-            })}
-          </ScrollView>
-        </View>
+        <ScrollView
+          style={{ flex: 0, flexDirection: 'row', overflow: 'visible' }}
+          horizontal={true}
+        >
+          {[
+            [0, 0],
+            [0.5, 0],
+            [1, 0],
+            [0, 0.5],
+            [0.5, 0.5],
+            [1, 0.5],
+            [0, 1],
+            [0.5, 1],
+            [1, 1],
+          ].map(([x, y]) => {
+            return (
+              <Button
+                key={`${x}-${y}`}
+                style={[styles.button, { marginRight: 8 }]}
+                title={`${x}, ${y}`}
+                onPress={() => setAnchor({ x, y })}
+              />
+            );
+          })}
+        </ScrollView>
 
-        <Divider />
+        <Divider style={styles.divider} />
 
-        <View style={styles.buttonWrap}>
-          <Button
-            style={styles.button}
-            title={show ? 'Hide markers' : 'Show markers'}
-            onPress={() => {
-              setShow(!show);
-            }}
-          />
-        </View>
+        <Button
+          style={styles.button}
+          title={show ? 'Hide markers' : 'Show markers'}
+          onPress={() => {
+            setShow(!show);
+          }}
+        />
+
+        <Divider style={styles.divider} />
+
+        <Button
+          style={styles.button}
+          title={allowOverlap ? 'Disallow overlap' : 'Allow overlap'}
+          onPress={() => {
+            setAllowOverlap(!allowOverlap);
+          }}
+        />
       </View>
     </Page>
   );
@@ -149,16 +152,15 @@ const styles = StyleSheet.create({
   },
   buttonsHolder: {
     flex: 0,
-    marginBottom: 16,
-    paddingHorizontal: 16,
+    marginBottom: 20,
+    paddingHorizontal: 20,
     paddingVertical: 12,
-  },
-  buttonWrap: {
-    flex: 0,
-    paddingVertical: 4,
   },
   button: {
     flex: 0,
+  },
+  divider: {
+    marginVertical: 10,
   },
 });
 

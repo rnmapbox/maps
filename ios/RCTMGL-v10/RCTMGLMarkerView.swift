@@ -62,6 +62,13 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     }
   }
   
+  @objc var allowOverlap: Bool = false {
+    didSet {
+      print("[Test] \(allowOverlap)")
+      updateIfPossible()
+    }
+  }
+  
   // MARK: - UIView methods
 
   override func layoutSubviews() {
@@ -148,7 +155,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       geometry: Geometry.point(point),
       width: firstCustomView.frame.width,
       height: firstCustomView.frame.height,
-      allowOverlap: true,
+      allowOverlap: allowOverlap,
       anchor: .center
     )
     try annotationManager.add(firstCustomView, id: id, options: options)
@@ -202,6 +209,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   private func update(firstCustomView: UIView, annotationManager: ViewAnnotationManager, geometry: GeometryConvertible?, offset: CGVector?) throws {
     let options = ViewAnnotationOptions(
       geometry: geometry,
+      allowOverlap: allowOverlap,
       offsetX: offset?.dx,
       offsetY: offset?.dy
     )
