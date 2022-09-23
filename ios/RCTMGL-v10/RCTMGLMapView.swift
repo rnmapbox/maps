@@ -358,7 +358,7 @@ extension RCTMGLMapView {
   
   public func setupEvents() {
     self.mapboxMap.onEvery(event: .mapLoadingError, handler: {(event) in
-      if let data = event.data as? [String:Any], let message = data["message"] {
+      if let message = event.payload.error.errorDescription {
         Logger.log(level: .error, message: "MapLoad error \(message)")
       } else {
         Logger.log(level: .error, message: "MapLoad error \(event)")
@@ -366,31 +366,29 @@ extension RCTMGLMapView {
     })
     
     self.mapboxMap.onEvery(event: .styleImageMissing) { (event) in
-      if let data = event.data as? [String:Any] {
-        if let imageName = data["id"] as? String {
-
-          self.images.forEach {
-            if $0.addMissingImageToStyle(style: self.mapboxMap.style, imageName: imageName) {
-              return
-            }
-          }
-          
-          self.images.forEach {
-            $0.sendImageMissingEvent(imageName: imageName, event: event)
-          }
+      let imageName = event.payload.id
+      
+      self.images.forEach {
+        if $0.addMissingImageToStyle(style: self.mapboxMap.style, imageName: imageName) {
+          return
         }
+      }
+
+      self.images.forEach {
+        $0.sendImageMissingEvent(imageName: imageName, payload: event.payload)
       }
     }
 
     self.mapboxMap.onEvery(event: .renderFrameFinished, handler: { (event) in
       var type = RCTMGLEvent.EventType.didFinishRendering
-      var payload : [String:Any]? = nil
-      if let data = event.data as? [String:Any] {
-        if let renderMode = data["render-mode"], let renderMode = renderMode as? String, renderMode == "full" {
-          type = .didFinishRenderingFully
-        }
-        payload = data
+      if event.payload.renderMode == .full {
+        type = .didFinishRenderingFully
       }
+      let payload : [String:Any] = [
+        "renderMode": event.payload.renderMode.rawValue,
+        "needsRepaint": event.payload.needsRepaint,
+        "placementChanged": event.payload.placementChanged
+      ]
       let event = RCTMGLEvent(type: type, payload: payload);
       self.fireEvent(event: event, callback: self.reactOnMapChange)
     })
