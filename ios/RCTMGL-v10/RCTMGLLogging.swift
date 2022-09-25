@@ -63,6 +63,14 @@ class Logger {
   static func log(level: LogLevel, message: String, error: Error) {
     sharedInstance.log(level: level, message: "\(message) - error: \(error.localizedDescription) \(error)")
   }
+
+  static func error(_ message: String) {
+    log(level: .error, message: message)
+  }
+
+  static func assert(_ message: String) {
+    log(level: .error, message: "Assertion failure: \(message)")
+  }
 }
 
 func logged<T>(_ msg: String, info: (() -> String)? = nil, level: Logger.LogLevel = .error, rejecter: RCTPromiseRejectBlock? = nil, fn : () throws -> T) -> T? {

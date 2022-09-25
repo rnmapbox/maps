@@ -9,10 +9,26 @@ import React, {
 import { NativeModules, requireNativeComponent } from 'react-native';
 import { Position } from '@turf/helpers';
 
-import { UserTrackingModeChangeCallback, UserTrackingMode } from '../types';
+import { MapboxGLEvent } from '../types';
 import { makeLatLngBounds, makePoint } from '../utils/geoUtils';
 
 const NativeModule = NativeModules.MGLModule;
+
+export const enum UserTrackingMode {
+  Follow = 'normal',
+  FollowWithHeading = 'compass',
+  FollowWithCourse = 'course',
+}
+
+export type UserTrackingModeChangeCallback = (
+  event: MapboxGLEvent<
+    'usertrackingmodechange',
+    {
+      followUserLocation: boolean;
+      followUserMode: UserTrackingMode | null;
+    }
+  >,
+) => void;
 
 /**
  * Converts the provided React Native animation mode into the corresponding native enum value.

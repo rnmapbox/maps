@@ -696,9 +696,12 @@
       {
         "name": "onUserTrackingModeChange",
         "required": false,
-        "type": "UserTrackingModeChangeCallback",
+        "type": {
+          "name": "func",
+          "funcSignature": "(event:MapboxGLEvent) => void"
+        },
         "default": "none",
-        "description": "Executes when user tracking mode changes."
+        "description": "Executes when user tracking mode changes.\n*signature:*`(event:MapboxGLEvent) => void`"
       }
     ],
     "fileNameWithExt": "Camera.tsx",
