@@ -4,6 +4,7 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
   static let key = "RCTMGLMarkerView"
   
   var map: RCTMGLMapView? = nil
+  var added = false
   
   // MARK: - react view
   var reactSubviews : [UIView] = []
@@ -24,8 +25,17 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
     reactSubviews.removeAll(where: { $0 == subview })
   }
   
-  func view() -> UIView? {
-    return reactSubviews.first
+  func view() -> RCTMGLMarkerViewWrapper? {
+    guard let view = reactSubviews.first else {
+      return nil
+    }
+
+    guard let view = view as? RCTMGLMarkerViewWrapper else {
+      Logger.log(level: .error, message: "MarkerView: Subview should be RCTMGLMarkerViewWrapper but was \(view)")
+      return nil
+    }
+
+    return view
   }
   
   // MARK: - RCTMGLMapComponent
@@ -45,9 +55,14 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
         Logger.log(level: .error, message: "MarkerView: No subview to render")
         return
       }
-      let bounds = view.bounds
-      view.isHidden = true
-      try viewAnnotations()?.add(view, options: ViewAnnotationOptions.init(geometry: Geometry.point(point), width: bounds.width, height: bounds.height, associatedFeatureId: nil, allowOverlap: true, anchor: .center, offsetX: 0, offsetY: 0, selected: false))
+
+      view.afterSized {
+        logged("RCTMGLMarkerView.addToMap/insert") {
+          let bounds = view.bounds
+          try self.viewAnnotations()?.add(view, options: ViewAnnotationOptions.init(geometry: Geometry.point(point), width: bounds.width, height: bounds.height, associatedFeatureId: nil, allowOverlap: true, anchor: .center, offsetX: 0, offsetY: 0, selected: false))
+          self.added = true
+        }
+      }
     }
   }
   
@@ -136,15 +151,15 @@ class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
       if let anchorY = anchor["y"] {
         options.offsetY = bounds.height * (CGFloat(anchorY.floatValue) - defaultY)
       }
-      if let view = view as? RCTMGLMarkerViewWrapper {
-        if let anchorX = anchor["x"] {
-          view.anchorX = CGFloat(anchorX.floatValue)
-        }
-        if let anchorY = anchor["y"] {
-          view.anchorY = CGFloat(anchorY.floatValue)
-        }
+
+      if let anchorX = anchor["x"] {
+        view.anchorX = CGFloat(anchorX.floatValue)
+      }
+      if let anchorY = anchor["y"] {
+        view.anchorY = CGFloat(anchorY.floatValue)
       }
     }
+    guard added else { return }
     logged("MarkerView.updateFrame") {
       try viewAnnotations()?.update(view, options: options)
     }

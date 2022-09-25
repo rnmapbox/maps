@@ -9,6 +9,7 @@ class RCTMGLMarkerViewWrapperManager : RCTViewManager {
   }
   
   override func view() -> UIView! {
-    return RCTMGLMarkerViewWrapper()
+    let offscreenLocation = CGPoint(x:-1000, y:-1000)
+    return RCTMGLMarkerViewWrapper(frame: CGRect(origin: offscreenLocation, size: CGSize.zero))
   }
 }
