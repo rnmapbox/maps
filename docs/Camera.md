@@ -60,7 +60,7 @@ return (
 | &nbsp;&nbsp;animationMode | `union` | `none` | `false` | The easing or path the camera uses to animate to a new configuration. |
 | allowUpdates | `boolean` | `none` | `false` | Whether the camera should send any configuration to the native module. Prevents unnecessary tile<br/>fetching and improves performance when the map is not visible. Defaults to `true`. |
 | triggerKey | `string \| number` | `none` | `false` | Any arbitrary primitive value that, when changed, causes the camera to retry moving to its target<br/>configuration. (Not yet implemented.) |
-| onUserTrackingModeChange | `UserTrackingModeChangeCallback` | `none` | `false` | Executes when user tracking mode changes. |
+| onUserTrackingModeChange | `func` | `none` | `false` | Executes when user tracking mode changes.<br/>*signature:*`(event:MapboxGLEvent) => void` |
 
 ## methods
 ### setCamera()

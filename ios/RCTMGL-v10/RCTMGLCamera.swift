@@ -13,6 +13,10 @@ enum CameraMode: String, CaseIterable {
   case flight, ease, linear, none
 }
 
+enum UserTrackingMode: String {
+  case none,compass, course, normal
+}
+
 struct CameraUpdateItem {
   var camera: CameraOptions
   var mode: CameraMode
@@ -133,7 +137,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       _updateCameraFromTrackingMode()
     }
   }
-  @objc var followUserMode: NSString? {
+  @objc var followUserMode: String? {
     didSet {
       _updateCameraFromTrackingMode()
     }
@@ -192,11 +196,22 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     }
   }
   
+  func _disableUsetTracking(_ map: MapView) {
+    map.viewport.idle()
+    map.location.removeLocationConsumer(consumer: self)
+  }
+
   func _updateCameraFromTrackingMode() {
     withMapView { map in
-      guard self.followUserLocation else {
-        map.viewport.idle()
-        map.location.removeLocationConsumer(consumer: self)
+      let userTrackingMode = UserTrackingMode(rawValue: self.followUserMode ?? "none")
+      guard let userTrackingMode = userTrackingMode else {
+        Logger.error("RCTMGLCamera: Unexpected followUserMode \(optional: self.followUserMode)")
+        self._disableUsetTracking(map)
+        return
+      }
+
+      guard self.followUserLocation && userTrackingMode != .none else {
+        self._disableUsetTracking(map)
         return
       }
 
@@ -207,17 +222,20 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       map.location.addLocationConsumer(newConsumer: self)
       var trackingModeChanged = false
       var followOptions = FollowPuckViewportStateOptions()
-      if (self.followUserMode == "compass") {
+      switch userTrackingMode {
+      case .none:
+        Logger.assert("RCTMGLCamera, userTrackingModes should not be none here")
+      case .compass:
         map.location.options.puckBearingEnabled = true
         map.location.options.puckBearingSource = PuckBearingSource.heading
         followOptions.bearing = FollowPuckViewportStateBearing.heading
         trackingModeChanged = true
-      } else if (self.followUserMode == "course") {
+      case .course:
         map.location.options.puckBearingEnabled = true
         map.location.options.puckBearingSource = PuckBearingSource.course
         followOptions.bearing = FollowPuckViewportStateBearing.course
         trackingModeChanged = true
-      } else if (self.followUserMode == "normal") {
+      case .normal:
         map.location.options.puckBearingEnabled = false
         followOptions.bearing = nil
         trackingModeChanged = true

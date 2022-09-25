@@ -32,14 +32,14 @@ import {
   CameraBoundsWithPadding as _CameraBoundsWithPadding,
   CameraStops as _CameraStops,
   CameraAnimationMode as _CameraAnimationMode,
+  type UserTrackingMode as _UserTrackingMode,
+  type UserTrackingModeChangeCallback as _UserTrackingModeChangeCallback,
 } from './javascript/components/Camera';
 import { MarkerView as _MarkerView } from './javascript/components/MarkerView';
 import { PointAnnotation as _PointAnnotation } from './javascript/components/PointAnnotation';
 import { Atmosphere as _Atmosphere } from './javascript/components/Atmosphere';
 import type {
   MapboxGLEvent as _MapboxGLEvent,
-  UserTrackingMode as _UserTrackingMode,
-  UserTrackingModeChangeCallback as _UserTrackingModeChangeCallback,
   AnimatedPoint as _AnimatedPoint,
   AnimatedShape as _AnimatedShape,
 } from './javascript/types/index';
@@ -482,11 +482,6 @@ declare namespace MapboxGL {
   /**
    * Constants
    */
-  enum UserTrackingModes {
-    Follow = 'normal',
-    FollowWithHeading = 'compass',
-    FollowWithCourse = 'course',
-  }
 
   enum InterpolationMode {
     Exponential = 0,
