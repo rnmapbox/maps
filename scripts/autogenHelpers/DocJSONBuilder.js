@@ -22,7 +22,6 @@ const IGNORE_FILES = [
   'AbstractLayer',
   'AbstractSource',
   'NativeBridgeComponent',
-  'NativeBridgeComponent.tsx',
 ];
 const IGNORE_PATTERN = /\.web\./;
 
@@ -359,7 +358,7 @@ class DocJSONBuilder {
             return reject(err);
           }
 
-          let fileName = fileNameWithExt.replace(/.(js)/, '');
+          let fileName = fileNameWithExt.replace(/\.(js|tsx|ts$)/, '');
           if (
             IGNORE_FILES.includes(fileName) ||
             fileName.match(IGNORE_PATTERN)
@@ -370,7 +369,7 @@ class DocJSONBuilder {
 
           let parsedComponents = docgen.parse(content, {
             babelOptions: {
-              filename: fileName,
+              filename: fileNameWithExt,
             },
           });
           let [parsed] = parsedComponents;

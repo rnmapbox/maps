@@ -2,7 +2,7 @@
   const layers = locals.layers;
 -%>
 /* This file was generated from MapboxStyle.ts.ejs do not modify */
-
+import { type ImageSourcePropType } from 'react-native';
 
 export type Translation = { x: number; y: number } | [number, number];
 
@@ -10,6 +10,8 @@ export interface Transition {
   duration: number;
   delay: number;
 }
+
+export type FormattedString = string; /* TODO */
 
 type ExpressionName =
   // Types
@@ -47,6 +49,8 @@ export type Expression = [ExpressionName, ...ExpressionField[]];
 
 type ExpressionParameters = 'zoom' | 'feature' | 'feature-state' | 'sky-radial-progress' | 'line-progress' | 'heatmap-density';
 
+type ResolvedImageType = ImageSourcePropType;
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type Value<T, AllowedParameters extends ExpressionParameters[] = []> =
   | T
@@ -59,9 +63,10 @@ export type Value<T, AllowedParameters extends ExpressionParameters[] = []> =
       <%- pascelCase(k) %> = '<%- k %>',
     <%_ } _%>
   }
+  type <%- pascelCase(enumInfo.name) %>EnumValues = <%- Object.keys(enumInfo.values).map(k => `'${k}'`).join(' | ') %>; 
 <%_ } _%>
 
-type Enum<EnumType> = EnumType | keyof EnumType;
+type Enum<EnumType, EnumValues> = EnumType | EnumValues;
 
 <%_ for (let layer of layers) { _%>
   export interface <%- pascelCase(layer.name) %>LayerStyleProps {

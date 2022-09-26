@@ -1,4 +1,5 @@
 /* This file was generated from MapboxStyle.ts.ejs do not modify */
+import { type ImageSourcePropType } from 'react-native';
 
 export type Translation = { x: number; y: number } | [number, number];
 
@@ -6,6 +7,8 @@ export interface Transition {
   duration: number;
   delay: number;
 }
+
+export type FormattedString = string; /* TODO */
 
 type ExpressionName =
   // Types
@@ -120,6 +123,8 @@ type ExpressionParameters =
   | 'line-progress'
   | 'heatmap-density';
 
+type ResolvedImageType = ImageSourcePropType;
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type Value<T, AllowedParameters extends ExpressionParameters[] = []> =
   | T
@@ -131,12 +136,14 @@ enum VisibilityEnum {
   /** The layer is not shown. */
   None = 'none',
 }
+type VisibilityEnumValues = 'visible' | 'none';
 enum FillTranslateAnchorEnum {
   /** The fill is translated relative to the map. */
   Map = 'map',
   /** The fill is translated relative to the viewport. */
   Viewport = 'viewport',
 }
+type FillTranslateAnchorEnumValues = 'map' | 'viewport';
 enum LineCapEnum {
   /** A cap with a squared-off end which is drawn to the exact endpoint of the line. */
   Butt = 'butt',
@@ -145,6 +152,7 @@ enum LineCapEnum {
   /** A cap with a squared-off end which is drawn beyond the endpoint of the line at a distance of one-half of the line's width. */
   Square = 'square',
 }
+type LineCapEnumValues = 'butt' | 'round' | 'square';
 enum LineJoinEnum {
   /** A join with a squared-off end which is drawn beyond the endpoint of the line at a distance of one-half of the line's width. */
   Bevel = 'bevel',
@@ -153,12 +161,14 @@ enum LineJoinEnum {
   /** A join with a sharp, angled corner which is drawn with the outer sides beyond the endpoint of the path until they meet. */
   Miter = 'miter',
 }
+type LineJoinEnumValues = 'bevel' | 'round' | 'miter';
 enum LineTranslateAnchorEnum {
   /** The line is translated relative to the map. */
   Map = 'map',
   /** The line is translated relative to the viewport. */
   Viewport = 'viewport',
 }
+type LineTranslateAnchorEnumValues = 'map' | 'viewport';
 enum SymbolPlacementEnum {
   /** The label is placed at the point where the geometry is located. */
   Point = 'point',
@@ -167,6 +177,7 @@ enum SymbolPlacementEnum {
   /** The label is placed at the center of the line of the geometry. Can only be used on `LineString` and `Polygon` geometries. Note that a single feature in a vector tile may contain multiple line geometries. */
   LineCenter = 'line-center',
 }
+type SymbolPlacementEnumValues = 'point' | 'line' | 'line-center';
 enum SymbolZOrderEnum {
   /** Sorts symbols by `symbol-sort-key` if set. Otherwise, sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`. */
   Auto = 'auto',
@@ -175,6 +186,7 @@ enum SymbolZOrderEnum {
   /** Sorts symbols by `symbol-sort-key` if set. Otherwise, no sorting is applied; symbols are rendered in the same order as the source data. */
   Source = 'source',
 }
+type SymbolZOrderEnumValues = 'auto' | 'viewport-y' | 'source';
 enum IconRotationAlignmentEnum {
   /** When `symbol-placement` is set to `point`, aligns icons east-west. When `symbol-placement` is set to `line` or `line-center`, aligns icon x-axes with the line. */
   Map = 'map',
@@ -183,6 +195,7 @@ enum IconRotationAlignmentEnum {
   /** When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line` or `line-center`, this is equivalent to `map`. */
   Auto = 'auto',
 }
+type IconRotationAlignmentEnumValues = 'map' | 'viewport' | 'auto';
 enum IconTextFitEnum {
   /** The icon is displayed at its intrinsic aspect ratio. */
   None = 'none',
@@ -193,6 +206,7 @@ enum IconTextFitEnum {
   /** The icon is scaled in both x- and y-dimensions. */
   Both = 'both',
 }
+type IconTextFitEnumValues = 'none' | 'width' | 'height' | 'both';
 enum IconAnchorEnum {
   /** The center of the icon is placed closest to the anchor. */
   Center = 'center',
@@ -213,6 +227,16 @@ enum IconAnchorEnum {
   /** The bottom right corner of the icon is placed closest to the anchor. */
   BottomRight = 'bottom-right',
 }
+type IconAnchorEnumValues =
+  | 'center'
+  | 'left'
+  | 'right'
+  | 'top'
+  | 'bottom'
+  | 'top-left'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-right';
 enum IconPitchAlignmentEnum {
   /** The icon is aligned to the plane of the map. */
   Map = 'map',
@@ -221,6 +245,7 @@ enum IconPitchAlignmentEnum {
   /** Automatically matches the value of `icon-rotation-alignment`. */
   Auto = 'auto',
 }
+type IconPitchAlignmentEnumValues = 'map' | 'viewport' | 'auto';
 enum TextPitchAlignmentEnum {
   /** The text is aligned to the plane of the map. */
   Map = 'map',
@@ -229,6 +254,7 @@ enum TextPitchAlignmentEnum {
   /** Automatically matches the value of `text-rotation-alignment`. */
   Auto = 'auto',
 }
+type TextPitchAlignmentEnumValues = 'map' | 'viewport' | 'auto';
 enum TextRotationAlignmentEnum {
   /** When `symbol-placement` is set to `point`, aligns text east-west. When `symbol-placement` is set to `line` or `line-center`, aligns text x-axes with the line. */
   Map = 'map',
@@ -237,6 +263,7 @@ enum TextRotationAlignmentEnum {
   /** When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line` or `line-center`, this is equivalent to `map`. */
   Auto = 'auto',
 }
+type TextRotationAlignmentEnumValues = 'map' | 'viewport' | 'auto';
 enum TextJustifyEnum {
   /** The text is aligned towards the anchor position. */
   Auto = 'auto',
@@ -247,6 +274,7 @@ enum TextJustifyEnum {
   /** The text is aligned to the right. */
   Right = 'right',
 }
+type TextJustifyEnumValues = 'auto' | 'left' | 'center' | 'right';
 enum TextVariableAnchorEnum {
   /** The center of the text is placed closest to the anchor. */
   Center = 'center',
@@ -267,6 +295,16 @@ enum TextVariableAnchorEnum {
   /** The bottom right corner of the text is placed closest to the anchor. */
   BottomRight = 'bottom-right',
 }
+type TextVariableAnchorEnumValues =
+  | 'center'
+  | 'left'
+  | 'right'
+  | 'top'
+  | 'bottom'
+  | 'top-left'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-right';
 enum TextAnchorEnum {
   /** The center of the text is placed closest to the anchor. */
   Center = 'center',
@@ -287,12 +325,23 @@ enum TextAnchorEnum {
   /** The bottom right corner of the text is placed closest to the anchor. */
   BottomRight = 'bottom-right',
 }
+type TextAnchorEnumValues =
+  | 'center'
+  | 'left'
+  | 'right'
+  | 'top'
+  | 'bottom'
+  | 'top-left'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-right';
 enum TextWritingModeEnum {
   /** If a text's language supports horizontal writing mode, symbols would be laid out horizontally. */
   Horizontal = 'horizontal',
   /** If a text's language supports vertical writing mode, symbols would be laid out vertically. */
   Vertical = 'vertical',
 }
+type TextWritingModeEnumValues = 'horizontal' | 'vertical';
 enum TextTransformEnum {
   /** The text is not altered. */
   None = 'none',
@@ -301,68 +350,79 @@ enum TextTransformEnum {
   /** Forces all letters to be displayed in lowercase. */
   Lowercase = 'lowercase',
 }
+type TextTransformEnumValues = 'none' | 'uppercase' | 'lowercase';
 enum IconTranslateAnchorEnum {
   /** Icons are translated relative to the map. */
   Map = 'map',
   /** Icons are translated relative to the viewport. */
   Viewport = 'viewport',
 }
+type IconTranslateAnchorEnumValues = 'map' | 'viewport';
 enum TextTranslateAnchorEnum {
   /** The text is translated relative to the map. */
   Map = 'map',
   /** The text is translated relative to the viewport. */
   Viewport = 'viewport',
 }
+type TextTranslateAnchorEnumValues = 'map' | 'viewport';
 enum CircleTranslateAnchorEnum {
   /** The circle is translated relative to the map. */
   Map = 'map',
   /** The circle is translated relative to the viewport. */
   Viewport = 'viewport',
 }
+type CircleTranslateAnchorEnumValues = 'map' | 'viewport';
 enum CirclePitchScaleEnum {
   /** Circles are scaled according to their apparent distance to the camera. */
   Map = 'map',
   /** Circles are not scaled. */
   Viewport = 'viewport',
 }
+type CirclePitchScaleEnumValues = 'map' | 'viewport';
 enum CirclePitchAlignmentEnum {
   /** The circle is aligned to the plane of the map. */
   Map = 'map',
   /** The circle is aligned to the plane of the viewport. */
   Viewport = 'viewport',
 }
+type CirclePitchAlignmentEnumValues = 'map' | 'viewport';
 enum FillExtrusionTranslateAnchorEnum {
   /** The fill extrusion is translated relative to the map. */
   Map = 'map',
   /** The fill extrusion is translated relative to the viewport. */
   Viewport = 'viewport',
 }
+type FillExtrusionTranslateAnchorEnumValues = 'map' | 'viewport';
 enum RasterResamplingEnum {
   /** (Bi)linear filtering interpolates pixel values using the weighted average of the four closest original source pixels creating a smooth but blurry look when overscaled */
   Linear = 'linear',
   /** Nearest neighbor filtering interpolates pixel values using the nearest original source pixel creating a sharp but pixelated look when overscaled */
   Nearest = 'nearest',
 }
+type RasterResamplingEnumValues = 'linear' | 'nearest';
 enum HillshadeIlluminationAnchorEnum {
   /** The hillshade illumination is relative to the north direction. */
   Map = 'map',
   /** The hillshade illumination is relative to the top of the viewport. */
   Viewport = 'viewport',
 }
+type HillshadeIlluminationAnchorEnumValues = 'map' | 'viewport';
 enum SkyTypeEnum {
   /** Renders the sky with a gradient that can be configured with `sky-gradient-radius` and `sky-gradient`. */
   Gradient = 'gradient',
   /** Renders the sky with a simulated atmospheric scattering algorithm, the sun direction can be attached to the light position or explicitly set through `sky-atmosphere-sun`. */
   Atmosphere = 'atmosphere',
 }
+type SkyTypeEnumValues = 'gradient' | 'atmosphere';
 enum AnchorEnum {
   /** The position of the light source is aligned to the rotation of the map. */
   Map = 'map',
   /** The position of the light source is aligned to the rotation of the viewport. */
   Viewport = 'viewport',
 }
+type AnchorEnumValues = 'map' | 'viewport';
 
-type Enum<EnumType> = EnumType | keyof EnumType;
+type Enum<EnumType, EnumValues> = EnumType | EnumValues;
 
 export interface FillLayerStyleProps {
   /**
@@ -372,11 +432,11 @@ export interface FillLayerStyleProps {
   /**
    * Whether this layer is displayed.
    */
-  visibility?: Enum<VisibilityEnum>;
+  visibility?: Enum<VisibilityEnum, VisibilityEnumValues>;
   /**
    * Whether or not the fill should be antialiased.
    */
-  fillAntialias?: Value<string, ['zoom']>;
+  fillAntialias?: Value<boolean, ['zoom']>;
   /**
    * The opacity of the entire fill layer. In contrast to the `fillColor`, this value will also affect the 1px stroke around the fill, if the stroke is used.
    */
@@ -426,7 +486,7 @@ export interface FillLayerStyleProps {
   /**
    * Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.
    */
-  fillPattern?: number | string;
+  fillPattern?: Value<ResolvedImageType, ['zoom', 'feature']>;
 
   /**
    * The transition affecting any changes to this layer’s fillPattern property.
@@ -437,11 +497,11 @@ export interface LineLayerStyleProps {
   /**
    * The display of line endings.
    */
-  lineCap?: Value<Enum<LineCapEnum>, ['zoom', 'feature']>;
+  lineCap?: Value<Enum<LineCapEnum, LineCapEnumValues>, ['zoom', 'feature']>;
   /**
    * The display of lines when joining.
    */
-  lineJoin?: Value<Enum<LineJoinEnum>, ['zoom', 'feature']>;
+  lineJoin?: Value<Enum<LineJoinEnum, LineJoinEnumValues>, ['zoom', 'feature']>;
   /**
    * Used to automatically convert miter joins to bevel joins for sharp angles.
    */
@@ -457,7 +517,7 @@ export interface LineLayerStyleProps {
   /**
    * Whether this layer is displayed.
    */
-  visibility?: Enum<VisibilityEnum>;
+  visibility?: Enum<VisibilityEnum, VisibilityEnumValues>;
   /**
    * The opacity at which the line will be drawn.
    */
@@ -543,7 +603,7 @@ export interface LineLayerStyleProps {
   /**
    * Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.
    */
-  linePattern?: number | string;
+  linePattern?: Value<ResolvedImageType, ['zoom', 'feature']>;
 
   /**
    * The transition affecting any changes to this layer’s linePattern property.
@@ -564,7 +624,10 @@ export interface SymbolLayerStyleProps {
   /**
    * Label placement relative to its geometry.
    */
-  symbolPlacement?: Value<Enum<SymbolPlacementEnum>, ['zoom']>;
+  symbolPlacement?: Value<
+    Enum<SymbolPlacementEnum, SymbolPlacementEnumValues>,
+    ['zoom']
+  >;
   /**
    * Distance between two symbol anchors.
    */
@@ -572,7 +635,7 @@ export interface SymbolLayerStyleProps {
   /**
    * If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries.
    */
-  symbolAvoidEdges?: Value<string, ['zoom']>;
+  symbolAvoidEdges?: Value<boolean, ['zoom']>;
   /**
    * Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first.  When `iconAllowOverlap` or `textAllowOverlap` is `false`, features with a lower sort key will have priority during placement. When `iconAllowOverlap` or `textAllowOverlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
    */
@@ -580,31 +643,37 @@ export interface SymbolLayerStyleProps {
   /**
    * Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their yPosition relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbolSortKey`.
    */
-  symbolZOrder?: Value<Enum<SymbolZOrderEnum>, ['zoom']>;
+  symbolZOrder?: Value<
+    Enum<SymbolZOrderEnum, SymbolZOrderEnumValues>,
+    ['zoom']
+  >;
   /**
    * If true, the icon will be visible even if it collides with other previously drawn symbols.
    *
    * @requires iconImage
    */
-  iconAllowOverlap?: Value<string, ['zoom']>;
+  iconAllowOverlap?: Value<boolean, ['zoom']>;
   /**
    * If true, other symbols can be visible even if they collide with the icon.
    *
    * @requires iconImage
    */
-  iconIgnorePlacement?: Value<string, ['zoom']>;
+  iconIgnorePlacement?: Value<boolean, ['zoom']>;
   /**
    * If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not.
    *
    * @requires iconImage, textField
    */
-  iconOptional?: Value<string, ['zoom']>;
+  iconOptional?: Value<boolean, ['zoom']>;
   /**
    * In combination with `symbolPlacement`, determines the rotation behavior of icons.
    *
    * @requires iconImage
    */
-  iconRotationAlignment?: Value<Enum<IconRotationAlignmentEnum>, ['zoom']>;
+  iconRotationAlignment?: Value<
+    Enum<IconRotationAlignmentEnum, IconRotationAlignmentEnumValues>,
+    ['zoom']
+  >;
   /**
    * Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `iconSize`. 1 is the original size; 3 triples the size of the image.
    *
@@ -616,7 +685,7 @@ export interface SymbolLayerStyleProps {
    *
    * @requires iconImage, textField
    */
-  iconTextFit?: Value<Enum<IconTextFitEnum>, ['zoom']>;
+  iconTextFit?: Value<Enum<IconTextFitEnum, IconTextFitEnumValues>, ['zoom']>;
   /**
    * Size of the additional area added to dimensions determined by `iconTextFit`, in clockwise order: top, right, bottom, left.
    *
@@ -626,8 +695,7 @@ export interface SymbolLayerStyleProps {
   /**
    * Name of image in sprite to use for drawing an image background.
    */
-  iconImage?: number | string;
-
+  iconImage?: Value<ResolvedImageType, ['zoom', 'feature']>;
   /**
    * Rotates the icon clockwise.
    *
@@ -645,7 +713,7 @@ export interface SymbolLayerStyleProps {
    *
    * @requires iconImage
    */
-  iconKeepUpright?: Value<string, ['zoom']>;
+  iconKeepUpright?: Value<boolean, ['zoom']>;
   /**
    * Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `iconSize` to obtain the final offset in pixels. When combined with `iconRotate` the offset will be as if the rotated direction was up.
    *
@@ -657,29 +725,41 @@ export interface SymbolLayerStyleProps {
    *
    * @requires iconImage
    */
-  iconAnchor?: Value<Enum<IconAnchorEnum>, ['zoom', 'feature']>;
+  iconAnchor?: Value<
+    Enum<IconAnchorEnum, IconAnchorEnumValues>,
+    ['zoom', 'feature']
+  >;
   /**
    * Orientation of icon when map is pitched.
    *
    * @requires iconImage
    */
-  iconPitchAlignment?: Value<Enum<IconPitchAlignmentEnum>, ['zoom']>;
+  iconPitchAlignment?: Value<
+    Enum<IconPitchAlignmentEnum, IconPitchAlignmentEnumValues>,
+    ['zoom']
+  >;
   /**
    * Orientation of text when map is pitched.
    *
    * @requires textField
    */
-  textPitchAlignment?: Value<Enum<TextPitchAlignmentEnum>, ['zoom']>;
+  textPitchAlignment?: Value<
+    Enum<TextPitchAlignmentEnum, TextPitchAlignmentEnumValues>,
+    ['zoom']
+  >;
   /**
    * In combination with `symbolPlacement`, determines the rotation behavior of the individual glyphs forming the text.
    *
    * @requires textField
    */
-  textRotationAlignment?: Value<Enum<TextRotationAlignmentEnum>, ['zoom']>;
+  textRotationAlignment?: Value<
+    Enum<TextRotationAlignmentEnum, TextRotationAlignmentEnumValues>,
+    ['zoom']
+  >;
   /**
    * Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
    */
-  textField?: Value<string, ['zoom', 'feature']>;
+  textField?: Value<FormattedString, ['zoom', 'feature']>;
   /**
    * Font stack to use for displaying text.
    *
@@ -715,7 +795,10 @@ export interface SymbolLayerStyleProps {
    *
    * @requires textField
    */
-  textJustify?: Value<Enum<TextJustifyEnum>, ['zoom', 'feature']>;
+  textJustify?: Value<
+    Enum<TextJustifyEnum, TextJustifyEnumValues>,
+    ['zoom', 'feature']
+  >;
   /**
    * Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `textVariableAnchor`, which defaults to using the twoDimensional `textOffset` if present.
    *
@@ -727,7 +810,10 @@ export interface SymbolLayerStyleProps {
    *
    * @requires textField
    */
-  textVariableAnchor?: Value<Enum<TextVariableAnchorEnum>[], ['zoom']>;
+  textVariableAnchor?: Value<
+    Enum<TextVariableAnchorEnum, TextVariableAnchorEnumValues>[],
+    ['zoom']
+  >;
   /**
    * Part of the text placed closest to the anchor.
    *
@@ -735,7 +821,10 @@ export interface SymbolLayerStyleProps {
    *
    * @disabledBy textVariableAnchor
    */
-  textAnchor?: Value<Enum<TextAnchorEnum>, ['zoom', 'feature']>;
+  textAnchor?: Value<
+    Enum<TextAnchorEnum, TextAnchorEnumValues>,
+    ['zoom', 'feature']
+  >;
   /**
    * Maximum angle change between adjacent characters.
    *
@@ -747,7 +836,10 @@ export interface SymbolLayerStyleProps {
    *
    * @requires textField
    */
-  textWritingMode?: Value<Enum<TextWritingModeEnum>[], ['zoom']>;
+  textWritingMode?: Value<
+    Enum<TextWritingModeEnum, TextWritingModeEnumValues>[],
+    ['zoom']
+  >;
   /**
    * Rotates the text clockwise.
    *
@@ -765,13 +857,16 @@ export interface SymbolLayerStyleProps {
    *
    * @requires textField
    */
-  textKeepUpright?: Value<string, ['zoom']>;
+  textKeepUpright?: Value<boolean, ['zoom']>;
   /**
    * Specifies how to capitalize text, similar to the CSS `textTransform` property.
    *
    * @requires textField
    */
-  textTransform?: Value<Enum<TextTransformEnum>, ['zoom', 'feature']>;
+  textTransform?: Value<
+    Enum<TextTransformEnum, TextTransformEnumValues>,
+    ['zoom', 'feature']
+  >;
   /**
    * Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with textVariableAnchor, input values will be taken as absolute values. Offsets along the x and yAxis will be applied automatically based on the anchor position.
    *
@@ -785,23 +880,23 @@ export interface SymbolLayerStyleProps {
    *
    * @requires textField
    */
-  textAllowOverlap?: Value<string, ['zoom']>;
+  textAllowOverlap?: Value<boolean, ['zoom']>;
   /**
    * If true, other symbols can be visible even if they collide with the text.
    *
    * @requires textField
    */
-  textIgnorePlacement?: Value<string, ['zoom']>;
+  textIgnorePlacement?: Value<boolean, ['zoom']>;
   /**
    * If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not.
    *
    * @requires textField, iconImage
    */
-  textOptional?: Value<string, ['zoom']>;
+  textOptional?: Value<boolean, ['zoom']>;
   /**
    * Whether this layer is displayed.
    */
-  visibility?: Enum<VisibilityEnum>;
+  visibility?: Enum<VisibilityEnum, VisibilityEnumValues>;
   /**
    * The opacity at which the icon will be drawn.
    *
@@ -955,7 +1050,7 @@ export interface CircleLayerStyleProps {
   /**
    * Whether this layer is displayed.
    */
-  visibility?: Enum<VisibilityEnum>;
+  visibility?: Enum<VisibilityEnum, VisibilityEnumValues>;
   /**
    * Circle radius.
    */
@@ -1010,11 +1105,17 @@ export interface CircleLayerStyleProps {
   /**
    * Controls the scaling behavior of the circle when the map is pitched.
    */
-  circlePitchScale?: Value<Enum<CirclePitchScaleEnum>, ['zoom']>;
+  circlePitchScale?: Value<
+    Enum<CirclePitchScaleEnum, CirclePitchScaleEnumValues>,
+    ['zoom']
+  >;
   /**
    * Orientation of circle when map is pitched.
    */
-  circlePitchAlignment?: Value<Enum<CirclePitchAlignmentEnum>, ['zoom']>;
+  circlePitchAlignment?: Value<
+    Enum<CirclePitchAlignmentEnum, CirclePitchAlignmentEnumValues>,
+    ['zoom']
+  >;
   /**
    * The width of the circle's stroke. Strokes are placed outside of the `circleRadius`.
    */
@@ -1047,7 +1148,7 @@ export interface HeatmapLayerStyleProps {
   /**
    * Whether this layer is displayed.
    */
-  visibility?: Enum<VisibilityEnum>;
+  visibility?: Enum<VisibilityEnum, VisibilityEnumValues>;
   /**
    * Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.
    */
@@ -1088,7 +1189,7 @@ export interface FillExtrusionLayerStyleProps {
   /**
    * Whether this layer is displayed.
    */
-  visibility?: Enum<VisibilityEnum>;
+  visibility?: Enum<VisibilityEnum, VisibilityEnumValues>;
   /**
    * The opacity of the entire fill extrusion layer. This is rendered on a perLayer, not perFeature, basis, and dataDriven styling is not available.
    */
@@ -1127,7 +1228,7 @@ export interface FillExtrusionLayerStyleProps {
   /**
    * Name of image in sprite to use for drawing images on extruded fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.
    */
-  fillExtrusionPattern?: number | string;
+  fillExtrusionPattern?: Value<ResolvedImageType, ['zoom', 'feature']>;
 
   /**
    * The transition affecting any changes to this layer’s fillExtrusionPattern property.
@@ -1156,7 +1257,7 @@ export interface FillExtrusionLayerStyleProps {
   /**
    * Whether to apply a vertical gradient to the sides of a fillExtrusion layer. If true, sides will be shaded slightly darker farther down.
    */
-  fillExtrusionVerticalGradient?: Value<string, ['zoom']>;
+  fillExtrusionVerticalGradient?: Value<boolean, ['zoom']>;
   /**
    * Controls the intensity of ambient occlusion (AO) shading. Current AO implementation is a lowCost bestEffort approach that shades area near ground and concave angles between walls. Default value 0.0 disables ambient occlusion and values around 0.3 provide the most plausible results for buildings.
    */
@@ -1180,7 +1281,7 @@ export interface RasterLayerStyleProps {
   /**
    * Whether this layer is displayed.
    */
-  visibility?: Enum<VisibilityEnum>;
+  visibility?: Enum<VisibilityEnum, VisibilityEnumValues>;
   /**
    * The opacity at which the image will be drawn.
    */
@@ -1238,7 +1339,10 @@ export interface RasterLayerStyleProps {
   /**
    * The resampling/interpolation method to use for overscaling, also known as texture magnification filter
    */
-  rasterResampling?: Value<Enum<RasterResamplingEnum>, ['zoom']>;
+  rasterResampling?: Value<
+    Enum<RasterResamplingEnum, RasterResamplingEnumValues>,
+    ['zoom']
+  >;
   /**
    * Fade duration when a new tile is added.
    */
@@ -1248,7 +1352,7 @@ export interface HillshadeLayerStyleProps {
   /**
    * Whether this layer is displayed.
    */
-  visibility?: Enum<VisibilityEnum>;
+  visibility?: Enum<VisibilityEnum, VisibilityEnumValues>;
   /**
    * The direction of the light source used to generate the hillshading with 0 as the top of the viewport if `hillshadeIlluminationAnchor` is set to `viewport` and due north if `hillshadeIlluminationAnchor` is set to `map`.
    */
@@ -1257,7 +1361,10 @@ export interface HillshadeLayerStyleProps {
    * Direction of light source when map is rotated.
    */
   hillshadeIlluminationAnchor?: Value<
-    Enum<HillshadeIlluminationAnchorEnum>,
+    Enum<
+      HillshadeIlluminationAnchorEnum,
+      HillshadeIlluminationAnchorEnumValues
+    >,
     ['zoom']
   >;
   /**
@@ -1301,7 +1408,7 @@ export interface BackgroundLayerStyleProps {
   /**
    * Whether this layer is displayed.
    */
-  visibility?: Enum<VisibilityEnum>;
+  visibility?: Enum<VisibilityEnum, VisibilityEnumValues>;
   /**
    * The color with which the background will be drawn.
    *
@@ -1316,7 +1423,7 @@ export interface BackgroundLayerStyleProps {
   /**
    * Name of image in sprite to use for drawing an image background. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.
    */
-  backgroundPattern?: number | string;
+  backgroundPattern?: Value<ResolvedImageType, ['zoom']>;
 
   /**
    * The transition affecting any changes to this layer’s backgroundPattern property.
@@ -1336,11 +1443,11 @@ export interface SkyLayerStyleProps {
   /**
    * Whether this layer is displayed.
    */
-  visibility?: Enum<VisibilityEnum>;
+  visibility?: Enum<VisibilityEnum, VisibilityEnumValues>;
   /**
    * The type of the sky
    */
-  skyType?: Value<Enum<SkyTypeEnum>, ['zoom']>;
+  skyType?: Value<Enum<SkyTypeEnum, SkyTypeEnumValues>, ['zoom']>;
   /**
    * Position of the sun center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the sun relative to 0° north, where degrees proceed clockwise. The polar angle indicates the height of the sun, where 0° is directly above, at zenith, and 90° at the horizon. When this property is ommitted, the sun center is directly inherited from the light position.
    */
@@ -1383,7 +1490,7 @@ export interface LightLayerStyleProps {
   /**
    * Whether extruded geometries are lit relative to the map or viewport.
    */
-  anchor?: Value<Enum<AnchorEnum>, ['zoom']>;
+  anchor?: Value<Enum<AnchorEnum, AnchorEnumValues>, ['zoom']>;
   /**
    * Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0° (0° when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0° when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0°, directly above, to 180°, directly below).
    */

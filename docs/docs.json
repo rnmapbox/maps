@@ -1646,7 +1646,7 @@
         "description": "FIX ME NO DESCRIPTION"
       }
     ],
-    "fileNameWithExt": "HeadingIndicator.js",
+    "fileNameWithExt": "HeadingIndicator.tsx",
     "name": "HeadingIndicator"
   },
   "HeatmapLayer": {
@@ -4411,7 +4411,7 @@
       {
         "name": "filter",
         "required": false,
-        "type": "array",
+        "type": "Array",
         "default": "none",
         "description": "Filter only the features in the source layer that satisfy a condition that you define"
       },
@@ -4431,16 +4431,20 @@
       },
       {
         "name": "style",
-        "required": false,
-        "type": "union",
+        "required": true,
+        "type": "SymbolLayerStyleProps",
         "default": "none",
-        "description": "Customizable style attributes"
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "children",
+        "required": false,
+        "type": "JSX.Element \\| JSX.Element[]",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "SymbolLayer.js",
+    "fileNameWithExt": "SymbolLayer.tsx",
     "name": "SymbolLayer",
     "styles": [
       {
