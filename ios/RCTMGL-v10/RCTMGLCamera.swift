@@ -1,8 +1,8 @@
 import Foundation
-@_spi(Experimental) import MapboxMaps
+import MapboxMaps
 import Turf
 
-protocol RCTMGLMapComponent : class {
+protocol RCTMGLMapComponent : AnyObject {
   func addToMap(_ map: RCTMGLMapView, style: Style)
   func removeFromMap(_ map: RCTMGLMapView)
   
@@ -29,10 +29,7 @@ struct CameraUpdateItem {
       }
       switch mode {
         case .flight:
-          var _camera = camera
-          _camera.padding = nil
-          map.camera.fly(to: _camera, duration: duration)
-          changePadding(map: map, cameraAnimator: &cameraAnimator, curve: .linear)
+          map.camera.fly(to: camera, duration: duration)
         case .ease:
           map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
         case .linear:
@@ -41,18 +38,6 @@ struct CameraUpdateItem {
           map.mapboxMap.setCamera(to: camera)
       }
     }
-  }
-  
-  /// Padding is not currently animatable on the camera's `fly(to:)` method, so we create a separate animator instead.
-  /// If this changes, remove this and call `fly(to:)` with an unmodified `camera`.
-  func changePadding(map: RCTMGLMapView, cameraAnimator: inout BasicCameraAnimator?, curve: UIView.AnimationCurve) {
-    if let cameraAnimator = cameraAnimator {
-      cameraAnimator.stopAnimation()
-    }
-    cameraAnimator = map.camera.makeAnimator(duration: duration ?? 0, curve: curve) { (transition) in
-      transition.padding.toValue = camera.padding
-    }
-    cameraAnimator?.startAnimation()
   }
 }
 
@@ -454,7 +439,6 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
   }
 }
 
-/// Converts milliseconds to seconds.
 private func toSeconds(_ ms: Double) -> TimeInterval {
   return ms * 0.001
 }
