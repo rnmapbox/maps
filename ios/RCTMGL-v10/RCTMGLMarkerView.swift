@@ -8,25 +8,39 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   let id: String = "marker-\(UUID().uuidString)"
   
   var map: RCTMGLMapView?
-  
-  /// The view in the hierarchy matching the first element in the `children` prop in React Native.
-  var firstCustomView: UIView?
-  
-  /// Whether this annotation instance has been added to the map.
+  var reactChildrenView: UIView?
   var isAdded = false
   
-  // MARK: - Derived variables
-  
-  var annotationManager: ViewAnnotationManager? {
-    self.map?.viewAnnotations
-  }
-
   @objc var coordinate: String? {
     didSet {
       updateIfPossible()
     }
   }
   
+  @objc var anchor: [String: NSNumber]? {
+    didSet {
+      updateIfPossible()
+    }
+  }
+  
+  @objc var allowOverlap: Bool = false {
+    didSet {
+      updateIfPossible()
+    }
+  }
+  
+  @objc var isSelected: Bool = false {
+    didSet {
+      updateIfPossible()
+    }
+  }
+
+  // MARK: - Derived variables
+  
+  var annotationManager: ViewAnnotationManager? {
+    self.map?.viewAnnotations
+  }
+
   var point: Point? {
     guard let _coordinate = coordinate else {
       Logger.log(level: .error, message: "[getPoint] No coordinates were set")
@@ -56,24 +70,6 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     return _point
   }
   
-  @objc var anchor: [String: NSNumber]? {
-    didSet {
-      updateIfPossible()
-    }
-  }
-  
-  @objc var allowOverlap: Bool = false {
-    didSet {
-      updateIfPossible()
-    }
-  }
-  
-  @objc var isSelected: Bool = false {
-    didSet {
-      updateIfPossible()
-    }
-  }
-
   // MARK: - UIView methods
   
   override init(frame: CGRect) {
@@ -87,10 +83,8 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   override func layoutSubviews() {
     super.layoutSubviews()
     
-    // Set the first grandchild view as a view with a usable frame, skipping the first
-    // child, which is a wrapper view defined in the MarkerView component on the React Native
-    // side. The method `layoutSubviews` is used instead of a React method because this is
-    // the only callback where layout values are always accurate - in `reactSetFrame` etc.,
+    // The method `layoutSubviews` is used instead of a React method because this is the
+    // only callback where layout values are always accurate - in `reactSetFrame` etc.,
     // the grandchild view's size is often incorrectly described as (0, 0).
     guard let child = self.subviews.first, let grandchild = child.subviews.first else {
       return
@@ -109,7 +103,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       grandchild.layer.opacity = 0
     }
     
-    firstCustomView = grandchild
+    reactChildrenView = grandchild
     addIfPossible()
   }
 
@@ -150,13 +144,13 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       return
     }
     
-    guard let firstCustomView = firstCustomView, let annotationManager = annotationManager, let point = point else {
+    guard let reactChildrenView = reactChildrenView, let annotationManager = annotationManager, let point = point else {
       return
     }
     
     do {
       try add(
-        firstCustomView: firstCustomView,
+        reactChildrenView: reactChildrenView,
         annotationManager: annotationManager,
         point: point
       )
@@ -166,11 +160,11 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     }
   }
 
-  private func add(firstCustomView: UIView, annotationManager: ViewAnnotationManager, point: Point) throws {
+  private func add(reactChildrenView: UIView, annotationManager: ViewAnnotationManager, point: Point) throws {
     let options = ViewAnnotationOptions(
       geometry: Geometry.point(point),
-      width: firstCustomView.frame.width,
-      height: firstCustomView.frame.height,
+      width: reactChildrenView.frame.width,
+      height: reactChildrenView.frame.height,
       allowOverlap: allowOverlap,
       anchor: .center
     )
@@ -180,7 +174,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     // appears in the default top-left corner for an instant before moving to the correct location
     // on the map. Waiting for a tiny delay fixes this.
     Timer.scheduledTimer(withTimeInterval: 0.05, repeats: false) { _ in
-      self.firstCustomView?.layer.opacity = 1
+      self.reactChildrenView?.layer.opacity = 1
     }
   }
   
@@ -189,7 +183,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       return
     }
     
-    guard let firstCustomView = firstCustomView, let annotationManager = annotationManager else {
+    guard let reactChildrenView = reactChildrenView, let annotationManager = annotationManager else {
       return
     }
     
@@ -205,14 +199,14 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       // - Scale to the view size.
       // - Invert `y` so that higher values are lower on the screen.
       offset = CGVector(
-        dx: (anchorX * 2 - 1) * (firstCustomView.frame.width / 2),
-        dy: (anchorY * 2 - 1) * (firstCustomView.frame.height / 2) * -1
+        dx: (anchorX * 2 - 1) * (reactChildrenView.frame.width / 2),
+        dy: (anchorY * 2 - 1) * (reactChildrenView.frame.height / 2) * -1
       )
     }
     
     do {
       try update(
-        firstCustomView: self,
+        reactChildrenView: self,
         annotationManager: annotationManager,
         geometry: geometry,
         offset: offset
@@ -222,9 +216,11 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     }
   }
   
-  private func update(firstCustomView: UIView, annotationManager: ViewAnnotationManager, geometry: GeometryConvertible?, offset: CGVector?) throws {
-    /// There is a Mapbox bug where `selected` does not cause the marker to move to the front, so this forces that effect.
+  private func update(reactChildrenView: UIView, annotationManager: ViewAnnotationManager, geometry: GeometryConvertible?, offset: CGVector?) throws {
     if isSelected, let options = annotationManager.options(for: self) {
+      // There is a Mapbox bug where `selected` does not cause the marker to move to the front, so
+      // this forces that effect. See https://github.com/mapbox/mapbox-maps-ios/issues/1599.
+      
       do {
         annotationManager.remove(self)
         try annotationManager.add(self, id: id, options: options)
