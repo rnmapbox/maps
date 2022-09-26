@@ -204,7 +204,6 @@ const Examples = new ExampleGroup('React Native Mapbox', [
     new ExampleItem('Query Terrain Elevation', QueryTerrainElevation),
     new ExampleItem('Camera Animation', CameraAnimation),
     new ExampleItem('Map Handlers', MapHandlers),
-    new ExampleItem('Markers', Markers),
   ]),
   new ExampleGroup('Map', [
     new ExampleItem('Show Map', ShowMap),
@@ -268,6 +267,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
     new ExampleItem('GradientLine', GradientLine),
   ]),
   new ExampleGroup('Annotations', [
+    new ExampleItem('Marker Positions & Anchors', Markers),
     new ExampleItem('Show Point Annotation', ShowPointAnnotation),
     new ExampleItem('Point Annotation Anchors', PointAnnotationAnchors),
     new ExampleItem('Marker View', MarkerView),
