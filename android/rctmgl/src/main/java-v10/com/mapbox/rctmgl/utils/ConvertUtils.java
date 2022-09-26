@@ -217,7 +217,7 @@ public class ConvertUtils {
     public static RectF toRectF(ReadableArray array) {
         RectF rectF = new RectF();
 
-        if (array == null) {
+        if (array == null || array.size() == 0) {
             return rectF;
         }
 
