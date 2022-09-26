@@ -7,9 +7,6 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   static let key = "RCTMGLMarkerView"
   let id: String = "marker-\(UUID().uuidString)"
   
-  /// `MarkerView` must handle gestures on its own, because Mapbox `ViewAnnotations` do not have a gesture delegate.
-  var tap: UIGestureRecognizer!
-  
   var map: RCTMGLMapView?
   
   /// The view in the hierarchy matching the first element in the `children` prop in React Native.
@@ -17,8 +14,6 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   
   /// Whether this annotation instance has been added to the map.
   var isAdded = false
-  
-  var reactOnPress: RCTBubblingEventBlock?
   
   // MARK: - Derived variables
   
@@ -72,14 +67,17 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       updateIfPossible()
     }
   }
+  
+  @objc var isSelected: Bool = false {
+    didSet {
+      updateIfPossible()
+    }
+  }
 
   // MARK: - UIView methods
   
   override init(frame: CGRect) {
     super.init(frame: frame)
-    
-    tap = UITapGestureRecognizer(target: self, action: #selector(onTap(_:)))
-    self.addGestureRecognizer(tap)
   }
 
   required init?(coder: NSCoder) {
@@ -114,10 +112,6 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     firstCustomView = grandchild
     addIfPossible()
   }
-  
-  @objc func onTap(_ rec: UITapGestureRecognizer) {
-    onSelect()
-  }
 
   // MARK: - RCTMGLMapComponent methods
 
@@ -131,10 +125,6 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   }
   
   // MARK: - React methods
-  
-  @objc func setReactOnPress(_ value: @escaping RCTBubblingEventBlock) {
-    self.reactOnPress = value
-  }
   
   override func reactSetFrame(_ frame: CGRect) {
     super.reactSetFrame(frame)
@@ -233,31 +223,23 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   }
   
   private func update(firstCustomView: UIView, annotationManager: ViewAnnotationManager, geometry: GeometryConvertible?, offset: CGVector?) throws {
-    let options = ViewAnnotationOptions(
-      geometry: geometry,
-      allowOverlap: allowOverlap,
-      offsetX: offset?.dx,
-      offsetY: offset?.dy
-    )
-    try annotationManager.update(self, options: options)
-  }
-  
-  /// There seems to be a Mapbox bug where `selected` does not cause the marker to move to the front, so this forces that effect.
-  private func onSelect() {
-    guard let annotationManager = annotationManager else {
-      return
-    }
-    
-    if let options = annotationManager.options(for: self) {
+    /// There is a Mapbox bug where `selected` does not cause the marker to move to the front, so this forces that effect.
+    if isSelected, let options = annotationManager.options(for: self) {
       do {
         annotationManager.remove(self)
         try annotationManager.add(self, id: id, options: options)
       } catch {
         Logger.log(level: .error, message: "[MarkerView] Error selecting annotation", error: error)
       }
+    } else {
+      let options = ViewAnnotationOptions(
+        geometry: geometry,
+        allowOverlap: allowOverlap,
+        offsetX: offset?.dx,
+        offsetY: offset?.dy
+      )
+      try annotationManager.update(self, options: options)
     }
-    
-    reactOnPress?([:])
   }
   
   private func removeIfPossible() {

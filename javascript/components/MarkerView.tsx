@@ -40,12 +40,12 @@ type Props = {
    */
   allowOverlap: boolean;
 
+  isSelected: boolean;
+
   /**
    * One or more valid React Native views.
    */
   children: React.ReactElement;
-
-  onPress: () => void;
 };
 
 /**
@@ -57,11 +57,15 @@ type Props = {
  *
  * This is implemented with view annotations on [Android](https://docs.mapbox.com/android/maps/guides/annotations/view-annotations/)
  * and [iOS](https://docs.mapbox.com/ios/maps/guides/annotations/view-annotations).
+ *
+ * This component has no dedicated `onPress` method. Instead, you should handle gestures
+ * with the React views passed in as `children`.
  */
 class MarkerView extends React.PureComponent<Props> {
   static defaultProps: Partial<Props> = {
     anchor: { x: 0.5, y: 0.5 },
     allowOverlap: false,
+    isSelected: false,
   };
 
   static lastId = 0;
@@ -107,7 +111,7 @@ class MarkerView extends React.PureComponent<Props> {
         coordinate={this._getCoordinate(this.props.coordinate)}
         anchor={anchor}
         allowOverlap={this.props.allowOverlap}
-        onPress={this.props.onPress}
+        isSelected={this.props.isSelected}
       >
         <View
           // This styled wrapper view is necessary for allowing children to { flex: 0 }.
@@ -131,7 +135,7 @@ type NativeProps = ViewProps & {
   coordinate: string | undefined;
   anchor: { x: number; y: number };
   allowOverlap: boolean;
-  onPress: () => void;
+  isSelected: boolean;
 };
 
 const RCTMGLMarkerView: HostComponent<NativeProps> =

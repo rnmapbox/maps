@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { MapView, Camera, Logger, MarkerView } from '@rnmapbox/maps';
 import { Position } from 'geojson';
 import { Text, Button, Divider } from '@rneui/base';
@@ -65,17 +65,14 @@ const Markers = memo((props: BaseExampleProps) => {
               coordinate={marker.coords}
               anchor={anchor}
               allowOverlap={allowOverlap}
-              onPress={() => setSelectedIndex(i)}
+              isSelected={i === selectedIndex}
             >
-              <View
-                style={[
-                  styles.markerBox,
-                  { backgroundColor: marker.color },
-                  // i === selectedIndex && styles.markerBoxSelected,
-                ]}
+              <Pressable
+                style={[styles.markerBox, { backgroundColor: marker.color }]}
+                onPress={() => setSelectedIndex(i)}
               >
                 <Text style={styles.markerText}>Marker {i + 1}</Text>
-              </View>
+              </Pressable>
             </MarkerView>
           );
         })}
