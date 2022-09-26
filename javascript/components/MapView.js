@@ -496,12 +496,13 @@ class MapView extends NativeBridgeComponent(React.Component) {
 
   /**
    * Returns an array of rendered map features that intersect with the given rectangle,
-   * restricted to the given style layers and filtered by the given predicate.
+   * restricted to the given style layers and filtered by the given predicate. In v10,
+   * passing an empty array will query the entire visible bounds of the map.
    *
    * @example
    * this._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'], ['id1', 'id2'])
    *
-   * @param  {Array<Number>} bbox - A rectangle expressed in the map view’s coordinate system.
+   * @param  {Array<Number>} bbox - A rectangle expressed in the map view’s coordinate system. For v10, this can be an empty array to query the visible map area.
    * @param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.
    * @param  {Array=} layerIDs -  A array of layer id's to filter the features by
    * @return {FeatureCollection}
