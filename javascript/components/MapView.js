@@ -507,47 +507,26 @@ class MapView extends NativeBridgeComponent(React.Component) {
    * @return {FeatureCollection}
    */
   async queryRenderedFeaturesInRect(bbox, filter = [], layerIDs = []) {
-    if (!bbox || bbox.length !== 4) {
+    if (
+      bbox != null &&
+      (bbox.length === 4 || (MapboxGL.MapboxV10 && bbox.length === 0))
+    ) {
+      const res = await this._runNativeCommand(
+        'queryRenderedFeaturesInRect',
+        this._nativeRef,
+        [bbox, getFilter(filter), layerIDs],
+      );
+
+      if (isAndroid()) {
+        return JSON.parse(res.data);
+      }
+
+      return res.data;
+    } else {
       throw new Error(
-        'Must pass in a valid bounding box[top, right, bottom, left]',
+        'Must pass in a valid bounding box: [top, right, bottom, left]. An empty array [] is also acceptable in v10.',
       );
     }
-    const res = await this._runNativeCommand(
-      'queryRenderedFeaturesInRect',
-      this._nativeRef,
-      [bbox, getFilter(filter), layerIDs],
-    );
-
-    if (isAndroid()) {
-      return JSON.parse(res.data);
-    }
-
-    return res.data;
-  }
-
-  /**
-   * Returns an array of rendered map features within the visible map bounds,
-   * restricted to the given style layers and filtered by the given predicate.
-   *
-   * @example
-   * this._map.queryRenderedFeaturesInView(['==', 'type', 'Point'], ['id1', 'id2'])
-   *
-   * @param  {Array=} filter - A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array.
-   * @param  {Array=} layerIDs -  A array of layer id's to filter the features by
-   * @return {FeatureCollection}
-   */
-  async queryRenderedFeaturesInView(filter = [], layerIDs = []) {
-    const res = await this._runNativeCommand(
-      'queryRenderedFeaturesInView',
-      this._nativeRef,
-      [getFilter(filter), layerIDs],
-    );
-
-    if (isAndroid()) {
-      return JSON.parse(res.data);
-    }
-
-    return res.data;
   }
 
   /**

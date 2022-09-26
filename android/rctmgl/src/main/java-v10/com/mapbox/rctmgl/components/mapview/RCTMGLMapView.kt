@@ -743,7 +743,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     fun queryRenderedFeaturesInRect(callbackID: String?, rect: RectF, filter: Expression?, layerIDs: List<String>?) {
-        val screenBox = ScreenBox(
+        val size = mMap!!.getMapOptions().size
+        val screenBox = if (rect.isEmpty()) ScreenBox(ScreenCoordinate(0.0, 0.0), ScreenCoordinate(size?.width!!.toDouble(), size?.height!!.toDouble())) else ScreenBox(
                 ScreenCoordinate(rect.right.toDouble(), rect.bottom.toDouble() ),
                 ScreenCoordinate(rect.left.toDouble(), rect.top.toDouble()),
         )
@@ -764,30 +765,6 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 mManager.handleEvent(event)
             } else {
                 Logger.e("queryRenderedFeaturesInRect", features.error ?: "n/a")
-            }
-        }
-    }
-
-    fun queryRenderedFeaturesInView(callbackID: String?, filter: Expression?, layerIDs: List<String>?) {
-        val size = mMap!!.getMapOptions().size
-        val screenBox = ScreenBox(ScreenCoordinate(0.0, 0.0), ScreenCoordinate(size?.width!!.toDouble(), size?.height!!.toDouble()))
-        mMap?.queryRenderedFeatures(
-                RenderedQueryGeometry(screenBox),
-                RenderedQueryOptions(layerIDs, filter)
-        ) { features ->
-            if (features.isValue) {
-                val featuresList = ArrayList<Feature?>()
-                for (i in features.value!!) {
-                    featuresList.add(i.feature)
-                }
-
-                val payload: WritableMap = WritableNativeMap()
-                payload.putString("data", FeatureCollection.fromFeatures(featuresList).toJson())
-
-                var event = AndroidCallbackEvent(this, callbackID, payload)
-                mManager.handleEvent(event)
-            } else {
-                Logger.e("queryRenderedFeaturesInView", features.error ?: "n/a")
             }
         }
     }

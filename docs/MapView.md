@@ -134,23 +134,6 @@ this._map.queryRenderedFeaturesInRect([30, 40, 20, 10], ['==', 'type', 'Point'],
 ```
 
 
-### queryRenderedFeaturesInView([filter][, layerIDs])
-
-Returns an array of rendered map features within the visible map bounds,<br/>restricted to the given style layers and filtered by the given predicate.
-
-#### arguments
-| Name | Type | Required | Description  |
-| ---- | :--: | :------: | :----------: |
-| `filter` | `Array` | `No` | A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array. |
-| `layerIDs` | `Array` | `No` |  A array of layer id's to filter the features by |
-
-
-
-```javascript
-this._map.queryRenderedFeaturesInView(['==', 'type', 'Point'], ['id1', 'id2'])
-```
-
-
 ### setCamera()
 
 Map camera will perform updates based on provided config. Deprecated use Camera#setCamera.
