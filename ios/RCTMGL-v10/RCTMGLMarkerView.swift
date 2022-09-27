@@ -31,7 +31,12 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   
   @objc var isSelected: Bool = false {
     didSet {
-      updateIfPossible()
+      let hasBecomeSelected = isSelected && !oldValue
+      if hasBecomeSelected {
+        try? setSelected()
+      } else {
+        updateIfPossible()
+      }
     }
   }
 
@@ -97,12 +102,6 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     child.frame = self.bounds
     grandchild.frame = child.bounds
     
-    // Immediately hide the custom content, and wait until the annotation is added to the map
-    // before showing it. (See `add()` method.)
-    if !isAdded {
-      grandchild.layer.opacity = 0
-    }
-    
     reactChildrenView = grandchild
     addIfPossible()
   }
@@ -121,7 +120,10 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   // MARK: - React methods
   
   override func reactSetFrame(_ frame: CGRect) {
-    super.reactSetFrame(frame)
+    // Starting the view offscreen allows it to be invisible until the annotation manager
+    // sets it to the correct point on the map.
+    let offscreenFrame = frame.offsetBy(dx: -10000, dy: -10000)
+    super.reactSetFrame(offscreenFrame)
   }
   
   override func insertReactSubview(_ subview: UIView, at atIndex: Int) {
@@ -169,13 +171,6 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       anchor: .center
     )
     try annotationManager.add(self, id: id, options: options)
-    
-    // If the annotation view is made visible the instant it is added to the map, it occasionally
-    // appears in the default top-left corner for an instant before moving to the correct location
-    // on the map. Waiting for a tiny delay fixes this.
-    Timer.scheduledTimer(withTimeInterval: 0.05, repeats: false) { _ in
-      self.reactChildrenView?.layer.opacity = 1
-    }
   }
   
   private func updateIfPossible() {
@@ -217,24 +212,25 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   }
   
   private func update(reactChildrenView: UIView, annotationManager: ViewAnnotationManager, geometry: GeometryConvertible?, offset: CGVector?) throws {
-    if isSelected, let options = annotationManager.options(for: self) {
-      // There is a Mapbox bug where `selected` does not cause the marker to move to the front, so
-      // this forces that effect. See https://github.com/mapbox/mapbox-maps-ios/issues/1599.
-      
+    let options = ViewAnnotationOptions(
+      geometry: geometry,
+      allowOverlap: allowOverlap,
+      offsetX: offset?.dx,
+      offsetY: offset?.dy
+    )
+    try annotationManager.update(self, options: options)
+  }
+  
+  /// There is a Mapbox bug where `selected` does not cause the marker to move to the front, so we can't simply update the component.
+  /// This forces that effect. See https://github.com/mapbox/mapbox-maps-ios/issues/1599.
+  private func setSelected() throws {
+    if let options = annotationManager?.options(for: self) {
       do {
-        annotationManager.remove(self)
-        try annotationManager.add(self, id: id, options: options)
+        annotationManager?.remove(self)
+        try annotationManager?.add(self, id: id, options: options)
       } catch {
         Logger.log(level: .error, message: "[MarkerView] Error selecting annotation", error: error)
       }
-    } else {
-      let options = ViewAnnotationOptions(
-        geometry: geometry,
-        allowOverlap: allowOverlap,
-        offsetX: offset?.dx,
-        offsetY: offset?.dy
-      )
-      try annotationManager.update(self, options: options)
     }
   }
   
