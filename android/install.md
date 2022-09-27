@@ -10,7 +10,36 @@
 
 Add `RNMapboxMapsImpl = "mapbox"` to your gradle file - see bellow for details.
 
-### Custom versions
+You will need to authorize your download of the Maps SDK via a secret access token with the `DOWNLOADS:READ` scope.  
+This [guide](https://docs.mapbox.com/android/maps/guides/install/#configure-credentials) explains how to `Configure credentials` and `Configure your secret token`.
+
+Then under section `allprojects/repositories` add your data:
+
+```groovy
+// android/build.gradle
+
+allprojects {
+    repositories {
+        // ...other repos
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/releases/maven'
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                // Do not change the username below.
+                // This should always be `mapbox` (not your username).
+                username = 'mapbox'
+                // Use the secret token you stored in gradle.properties as the password
+                password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
+            }
+        }
+        // ...even more repos?
+    }
+}
+```
+
+### Custom versions of v10
 
 *Warning*: If you set a custom version, make sure you revisit, any time you update @rnmapbox/maps. Setting it to earlier version than what we exepect will likely result in a build error.
 
