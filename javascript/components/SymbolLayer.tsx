@@ -10,7 +10,7 @@ const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLSymbolLayer';
 
-type Props = {
+export type Props = {
   /**
    * A string that uniquely identifies the source in the style to which it is added.
    */
