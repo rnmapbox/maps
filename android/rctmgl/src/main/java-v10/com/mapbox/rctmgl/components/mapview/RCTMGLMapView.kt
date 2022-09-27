@@ -317,6 +317,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             }
             queuedFeatures.clear()
         }
+        mQueuedFeatures = null;
     }
 
     private fun addAllFeaturesToMap() {
