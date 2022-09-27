@@ -292,20 +292,31 @@ global.dtsInterfaceType = function (prop) {
         propTypes.push('string[]');
         break;
       case 'enum':
-        propTypes.push(`Enum<${pascelCase(prop.name)}Enum>[]`);
+        propTypes.push(
+          `Enum<${pascelCase(prop.name)}Enum, ${pascelCase(
+            prop.name,
+          )}EnumValues>[]`,
+        );
         break;
     }
     // propTypes.push('ConstantPropType');
   } else if (prop.type === 'number') {
     propTypes.push('number');
   } else if (prop.type === 'enum') {
-    propTypes.push(`Enum<${pascelCase(prop.name)}Enum>`);
-  } else {
-    // images can be required which result in a number
-    if (prop.image) {
-      propTypes.push('number');
-    }
+    propTypes.push(
+      `Enum<${pascelCase(prop.name)}Enum, ${pascelCase(prop.name)}EnumValues>`,
+    );
+  } else if (prop.type === 'boolean') {
+    propTypes.push('boolean');
+  } else if (prop.type === 'resolvedImage') {
+    propTypes.push('ResolvedImageType');
+  } else if (prop.type === 'formatted') {
+    propTypes.push('FormattedString');
+  } else if (prop.type === 'string') {
     propTypes.push('string');
+  } else {
+    console.error('Unexpected type:', prop.type);
+    throw new Error(`Unexpected type: ${prop.type} for ${prop.name}`);
   }
 
   /*

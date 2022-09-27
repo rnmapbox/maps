@@ -28,7 +28,7 @@ export function transformStyle(
   const styleProps = Object.keys(style) as Array<keyof typeof style>;
   for (const styleProp of styleProps) {
     const styleType = getStyleType(styleProp);
-    let rawStyle: RawValueType = style[styleProp];
+    let rawStyle: RawValueType | undefined = style[styleProp];
 
     if (styleType === 'color' && typeof rawStyle === 'string') {
       const color = processColor(rawStyle);
@@ -43,11 +43,13 @@ export function transformStyle(
         (Image.resolveAssetSource(rawStyle) as unknown as RawValueType) || {};
     }
 
-    const bridgeValue = new BridgeValue(rawStyle);
-    nativeStyle[styleProp] = {
-      styletype: styleType,
-      stylevalue: bridgeValue.toJSON(),
-    };
+    if (rawStyle !== undefined) {
+      const bridgeValue = new BridgeValue(rawStyle);
+      nativeStyle[styleProp] = {
+        styletype: styleType,
+        stylevalue: bridgeValue.toJSON(),
+      };
+    }
   }
 
   return nativeStyle;

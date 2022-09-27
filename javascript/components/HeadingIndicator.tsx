@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import headingIcon from '../../assets/heading.png';
 
@@ -10,9 +9,13 @@ const style = {
   iconAllowOverlap: true,
   iconPitchAlignment: 'map',
   iconRotationAlignment: 'map',
+} as const;
+
+type Props = {
+  heading?: number;
 };
 
-const HeadingIndicator = (heading) => (
+const HeadingIndicator = ({ heading }: Props) => (
   <SymbolLayer
     key="mapboxUserLocationHeadingIndicator"
     id="mapboxUserLocationHeadingIndicator"
@@ -23,9 +26,5 @@ const HeadingIndicator = (heading) => (
     }}
   />
 );
-
-HeadingIndicator.propTypes = {
-  heading: PropTypes.number,
-};
 
 export default HeadingIndicator;

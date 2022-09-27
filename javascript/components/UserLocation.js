@@ -49,7 +49,7 @@ export const normalIcon = (showsUserHeadingIndicator, heading) => [
     style={layerStyles.normal.foreground}
   />,
   ...(showsUserHeadingIndicator && heading !== null
-    ? [HeadingIndicator(heading)]
+    ? [HeadingIndicator({ heading })]
     : []),
 ];
 
