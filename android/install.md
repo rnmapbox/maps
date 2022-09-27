@@ -22,11 +22,6 @@ buildscript {
     ext {
         // ...
         RNMapboxMapsImpl = "mapbox" // required for v10
-
-        RNMapboxMapsLibs = { // optional - only required if you want to customize it
-            implementation 'com.mapbox.maps:android:10.6.0'
-            implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.4.1'
-        }
     }
 }
 ```
@@ -62,6 +57,26 @@ allprojects {
 }
 ```
 
+### Using non default mapbox version
+
+*Warning*: If you set a custom version, make sure you revisit, any time you update @rnmapbox/maps. Setting it to earlier version than what we exepect will likely result in a build error.
+
+Set `RNMapboxMapsLibs` in `android/build.gradle > buildscript > ext` section
+
+
+```groovy
+buildscript {
+    ext {
+        // ...
+        RNMapboxMapsImpl = "mapbox"
+
+        RNMapboxMapsLibs = { // optional - only required if you want to customize it
+            implementation 'com.mapbox.maps:android:10.6.0'
+            implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.4.1'
+        }
+    }
+}
+```
 
 
 
