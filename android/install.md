@@ -12,7 +12,7 @@ Add `RNMapboxMapsImpl = "mapbox"` to your gradle file - see bellow for details.
 
 ### Custom versions
 
-*Warning*: If you set a custome version make sure you revisit, any time you update @rnmapbox/maps. Setting it to earlier version to what we exepect will likely result in a build error.
+*Warning*: If you set a custom version, make sure you revisit, any time you update @rnmapbox/maps. Setting it to earlier version than what we exepect will likely result in a build error.
 
 Overwrite mapbox dependencies within your `android/build.gradle > buildscript > ext` section
 
@@ -32,6 +32,7 @@ buildscript {
 ```
 
 
+If you see `2 files found with path 'lib/arm64-v8a/libc++_shared.so' from inputs` issue see [possible workaround](#workaround-for-2-files-found-with-path-libarm64-v8alibc_sharedso-from-inputs).
 
 ## Using MapLibre
 
@@ -137,5 +138,23 @@ Feel free to check out the `/example` projects [`android/build.gradle`](https://
 
 <br>
 
+
+### Workaround for 2 files found with path 'lib/arm64-v8a/libc++_shared.so' from inputs
+
+```sh
+code android/app/build.gradle
+```
+
+add the following
+```gradle
+android {
+    packagingOptions {
+        pickFirst 'lib/x86/libc++_shared.so'
+        pickFirst 'lib/x86_64/libc++_shared.so'
+        pickFirst 'lib/arm64-v8a/libc++_shared.so'
+        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+    }
+}
+```
 
 
