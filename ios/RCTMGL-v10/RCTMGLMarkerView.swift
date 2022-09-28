@@ -9,33 +9,35 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   
   var map: RCTMGLMapView?
   var reactChildrenView: UIView?
-  var isAdded = false
+  
+  var didAddToMap = false
   
   @objc var coordinate: String? {
     didSet {
-      updateIfPossible()
+      update()
     }
   }
   
   @objc var anchor: [String: NSNumber]? {
     didSet {
-      updateIfPossible()
+      update()
     }
   }
   
   @objc var allowOverlap: Bool = false {
     didSet {
-      updateIfPossible()
+      update()
     }
   }
   
   @objc var isSelected: Bool = false {
     didSet {
       let hasBecomeSelected = isSelected && !oldValue
+      
       if hasBecomeSelected {
         try? setSelected()
       } else {
-        updateIfPossible()
+        update()
       }
     }
   }
@@ -87,43 +89,38 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   
   override func layoutSubviews() {
     super.layoutSubviews()
-    
-    // The method `layoutSubviews` is used instead of a React method because this is the
-    // only callback where layout values are always accurate - in `reactSetFrame` etc.,
-    // the grandchild view's size is often incorrectly described as (0, 0).
-    guard let child = self.subviews.first, let grandchild = child.subviews.first else {
-      return
-    }
-    
-    // Make the top-level view adopt the React Native subview's size.
-    self.frame.size = grandchild.frame.size
-    
-    // Reposition all children to fill the resized top-level view.
-    child.frame = self.bounds
-    grandchild.frame = child.bounds
-    
-    reactChildrenView = grandchild
-    addIfPossible()
   }
 
   // MARK: - RCTMGLMapComponent methods
 
   func addToMap(_ map: RCTMGLMapView, style: Style) {
     self.map = map
-    addIfPossible()
+    add()
   }
 
   func removeFromMap(_ map: RCTMGLMapView) {
-    removeIfPossible()
+    remove()
   }
   
   // MARK: - React methods
   
   override func reactSetFrame(_ frame: CGRect) {
+    let frameDidChange = !self.frame.equalTo(frame)
+
     // Starting the view offscreen allows it to be invisible until the annotation manager
     // sets it to the correct point on the map.
-    let offscreenFrame = frame.offsetBy(dx: -10000, dy: -10000)
-    super.reactSetFrame(offscreenFrame)
+    if (frameDidChange) {
+      super.reactSetFrame(frame.offsetBy(dx: -10000, dy: -10000))
+    } else {
+      super.reactSetFrame(frame)
+    }
+    
+    guard let child = self.subviews.first else {
+      return
+    }
+    
+    reactChildrenView = child
+    addOrUpdate()
   }
   
   override func insertReactSubview(_ subview: UIView, at atIndex: Int) {
@@ -140,45 +137,45 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
 
   // MARK: - Create, update, and remove methods
 
+    private func addOrUpdate() {
+      if didAddToMap {
+        update()
+      } else {
+        add()
+      }
+    }
+  
   /// Because the necessary data to add an annotation arrives from different sources at unpredictable times, we let the arrival of each value trigger an attempt to add the annotation, which we only do if all of the data exists, and the annotation not been added already.
-  private func addIfPossible() {
-    if isAdded {
+  private func add() {
+    if didAddToMap {
       return
     }
     
-    guard let reactChildrenView = reactChildrenView, let annotationManager = annotationManager, let point = point else {
+    guard let annotationManager = annotationManager, let point = point else {
       return
     }
     
     do {
-      try add(
-        reactChildrenView: reactChildrenView,
-        annotationManager: annotationManager,
-        point: point
+      let options = ViewAnnotationOptions(
+        geometry: Geometry.point(point),
+        width: self.bounds.width,
+        height: self.bounds.height,
+        allowOverlap: allowOverlap,
+        anchor: .center
       )
-      isAdded = true
+      try annotationManager.add(self, id: id, options: options)
+      didAddToMap = true
     } catch {
       Logger.log(level: .error, message: "[MarkerView] Error adding annotation", error: error)
     }
   }
 
-  private func add(reactChildrenView: UIView, annotationManager: ViewAnnotationManager, point: Point) throws {
-    let options = ViewAnnotationOptions(
-      geometry: Geometry.point(point),
-      width: reactChildrenView.frame.width,
-      height: reactChildrenView.frame.height,
-      allowOverlap: allowOverlap,
-      anchor: .center
-    )
-    try annotationManager.add(self, id: id, options: options)
-  }
-  
-  private func updateIfPossible() {
-    if !isAdded {
+  private func update() {
+    if !didAddToMap {
       return
     }
     
-    guard let reactChildrenView = reactChildrenView, let annotationManager = annotationManager else {
+    guard let annotationManager = annotationManager else {
       return
     }
     
@@ -194,31 +191,24 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       // - Scale to the view size.
       // - Invert `y` so that higher values are lower on the screen.
       offset = CGVector(
-        dx: (anchorX * 2 - 1) * (reactChildrenView.frame.width / 2),
-        dy: (anchorY * 2 - 1) * (reactChildrenView.frame.height / 2) * -1
+        dx: (anchorX * 2 - 1) * (self.bounds.width / 2),
+        dy: (anchorY * 2 - 1) * (self.bounds.height / 2) * -1
       )
     }
     
     do {
-      try update(
-        reactChildrenView: self,
-        annotationManager: annotationManager,
+      let options = ViewAnnotationOptions(
         geometry: geometry,
-        offset: offset
+        width: self.bounds.width,
+        height: self.bounds.height,
+        allowOverlap: allowOverlap,
+        offsetX: offset?.dx,
+        offsetY: offset?.dy
       )
+      try annotationManager.update(self, options: options)
     } catch {
       Logger.log(level: .error, message: "[MarkerView] Error updating annotation", error: error)
     }
-  }
-  
-  private func update(reactChildrenView: UIView, annotationManager: ViewAnnotationManager, geometry: GeometryConvertible?, offset: CGVector?) throws {
-    let options = ViewAnnotationOptions(
-      geometry: geometry,
-      allowOverlap: allowOverlap,
-      offsetX: offset?.dx,
-      offsetY: offset?.dy
-    )
-    try annotationManager.update(self, options: options)
   }
   
   /// There is a Mapbox bug where `selected` does not cause the marker to move to the front, so we can't simply update the component.
@@ -234,7 +224,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     }
   }
   
-  private func removeIfPossible() {
+  private func remove() {
     annotationManager?.remove(self)
   }
 }

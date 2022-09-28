@@ -21,12 +21,14 @@ const allColors = ['red', 'green', 'blue', 'purple'];
 const Markers = memo((props: BaseExampleProps) => {
   const [markers, setMarkers] = useState<MarkerConfig[]>([]);
   const [selectedIndex, setSelectedIndex] = useState<number | undefined>();
-  const [show, setShow] = useState(true);
   const [anchor, setAnchor] = useState({ x: 0.5, y: 0.5 });
   const [allowOverlap, setAllowOverlap] = useState(true);
 
+  const [show, setShow] = useState(true);
+  const [size, setSize] = useState(1);
+
   const randomizeCoordinatesAndColors = useCallback(() => {
-    const newMarkers = new Array(show ? markerCount : 0).fill(0).map((o, i) => {
+    const newMarkers = new Array(markerCount).fill(0).map((o, i) => {
       return {
         coords: [
           centerCoord[0] + (Math.random() - 0.5) * 0.008,
@@ -37,17 +39,12 @@ const Markers = memo((props: BaseExampleProps) => {
     });
 
     setMarkers(newMarkers);
-  }, [show]);
-
-  useEffect(() => {
-    randomizeCoordinatesAndColors();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     randomizeCoordinatesAndColors();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [show]);
+  }, []);
 
   return (
     <Page {...props}>
@@ -66,9 +63,13 @@ const Markers = memo((props: BaseExampleProps) => {
               anchor={anchor}
               allowOverlap={allowOverlap}
               isSelected={i === selectedIndex}
+              style={{ display: show ? 'flex' : 'none' }}
             >
               <Pressable
-                style={[styles.markerBox, { backgroundColor: marker.color }]}
+                style={[
+                  styles.markerBox,
+                  { backgroundColor: marker.color, padding: 4 * size },
+                ]}
                 onPress={() => setSelectedIndex(i)}
               >
                 <Text style={styles.markerText}>Marker {i + 1}</Text>
@@ -132,6 +133,31 @@ const Markers = memo((props: BaseExampleProps) => {
             setAllowOverlap(!allowOverlap);
           }}
         />
+
+        <Divider style={styles.divider} />
+
+        <View
+          style={{
+            flex: 0,
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+          }}
+        >
+          <Button
+            style={styles.button}
+            title={'Decrease size'}
+            onPress={() => {
+              setSize((s) => s - 1);
+            }}
+          />
+          <Button
+            style={styles.button}
+            title={'Increase size'}
+            onPress={() => {
+              setSize((s) => s + 1);
+            }}
+          />
+        </View>
       </View>
     </Page>
   );

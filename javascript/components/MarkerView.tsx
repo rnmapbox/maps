@@ -17,7 +17,7 @@ const Mapbox = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLMarkerView';
 
-type Props = {
+type Props = ViewProps & {
   /**
    * The center point (specified as a map coordinate) of the marker.
    */
@@ -108,22 +108,19 @@ class MarkerView extends React.PureComponent<Props> {
 
     return (
       <RCTMGLMarkerView
+        style={[
+          {
+            flex: 0,
+            alignSelf: 'flex-start',
+          },
+          this.props.style,
+        ]}
         coordinate={this._getCoordinate(this.props.coordinate)}
         anchor={anchor}
         allowOverlap={this.props.allowOverlap}
         isSelected={this.props.isSelected}
       >
-        <View
-          // This styled wrapper view is necessary for allowing children to { flex: 0 }.
-          // Otherwise, children fill the map width.
-          style={{
-            flex: 0,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          // Children should receive touches, but the wrapper is invisible and should not.
-          pointerEvents={'box-none'}
-        >
+        <View style={{ flex: 0, alignSelf: 'flex-start' }}>
           {this.props.children}
         </View>
       </RCTMGLMarkerView>
