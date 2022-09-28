@@ -8,7 +8,6 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   let id: String = "marker-\(UUID().uuidString)"
   
   var map: RCTMGLMapView?
-  var reactChildrenView: UIView?
   
   var didAddToMap = false
   
