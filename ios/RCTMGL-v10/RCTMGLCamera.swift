@@ -1,8 +1,8 @@
 import Foundation
-@_spi(Experimental) import MapboxMaps
+import MapboxMaps
 import Turf
 
-protocol RCTMGLMapComponent : class {
+protocol RCTMGLMapComponent : AnyObject {
   func addToMap(_ map: RCTMGLMapView, style: Style)
   func removeFromMap(_ map: RCTMGLMapView)
   
@@ -11,6 +11,10 @@ protocol RCTMGLMapComponent : class {
 
 enum CameraMode: String, CaseIterable {
   case flight, ease, linear, none
+}
+
+enum UserTrackingMode: String {
+  case none,compass, course, normal
 }
 
 struct CameraUpdateItem {
@@ -25,10 +29,7 @@ struct CameraUpdateItem {
       }
       switch mode {
         case .flight:
-          var _camera = camera
-          _camera.padding = nil
-          map.camera.fly(to: _camera, duration: duration)
-          changePadding(map: map, cameraAnimator: &cameraAnimator, curve: .linear)
+          map.camera.fly(to: camera, duration: duration)
         case .ease:
           map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
         case .linear:
@@ -37,18 +38,6 @@ struct CameraUpdateItem {
           map.mapboxMap.setCamera(to: camera)
       }
     }
-  }
-  
-  /// Padding is not currently animatable on the camera's `fly(to:)` method, so we create a separate animator instead.
-  /// If this changes, remove this and call `fly(to:)` with an unmodified `camera`.
-  func changePadding(map: RCTMGLMapView, cameraAnimator: inout BasicCameraAnimator?, curve: UIView.AnimationCurve) {
-    if let cameraAnimator = cameraAnimator {
-      cameraAnimator.stopAnimation()
-    }
-    cameraAnimator = map.camera.makeAnimator(duration: duration ?? 0, curve: curve) { (transition) in
-      transition.padding.toValue = camera.padding
-    }
-    cameraAnimator?.startAnimation()
   }
 }
 
@@ -133,7 +122,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       _updateCameraFromTrackingMode()
     }
   }
-  @objc var followUserMode: NSString? {
+  @objc var followUserMode: String? {
     didSet {
       _updateCameraFromTrackingMode()
     }
@@ -192,11 +181,22 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     }
   }
   
+  func _disableUsetTracking(_ map: MapView) {
+    map.viewport.idle()
+    map.location.removeLocationConsumer(consumer: self)
+  }
+
   func _updateCameraFromTrackingMode() {
     withMapView { map in
-      guard self.followUserLocation else {
-        map.viewport.idle()
-        map.location.removeLocationConsumer(consumer: self)
+      let userTrackingMode = UserTrackingMode(rawValue: self.followUserMode ?? "none")
+      guard let userTrackingMode = userTrackingMode else {
+        Logger.error("RCTMGLCamera: Unexpected followUserMode \(optional: self.followUserMode)")
+        self._disableUsetTracking(map)
+        return
+      }
+
+      guard self.followUserLocation && userTrackingMode != .none else {
+        self._disableUsetTracking(map)
         return
       }
 
@@ -207,17 +207,20 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       map.location.addLocationConsumer(newConsumer: self)
       var trackingModeChanged = false
       var followOptions = FollowPuckViewportStateOptions()
-      if (self.followUserMode == "compass") {
+      switch userTrackingMode {
+      case .none:
+        Logger.assert("RCTMGLCamera, userTrackingModes should not be none here")
+      case .compass:
         map.location.options.puckBearingEnabled = true
         map.location.options.puckBearingSource = PuckBearingSource.heading
         followOptions.bearing = FollowPuckViewportStateBearing.heading
         trackingModeChanged = true
-      } else if (self.followUserMode == "course") {
+      case .course:
         map.location.options.puckBearingEnabled = true
         map.location.options.puckBearingSource = PuckBearingSource.course
         followOptions.bearing = FollowPuckViewportStateBearing.course
         trackingModeChanged = true
-      } else if (self.followUserMode == "normal") {
+      case .normal:
         map.location.options.puckBearingEnabled = false
         followOptions.bearing = nil
         trackingModeChanged = true
@@ -436,7 +439,6 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
   }
 }
 
-/// Converts milliseconds to seconds.
 private func toSeconds(_ ms: Double) -> TimeInterval {
   return ms * 0.001
 }

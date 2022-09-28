@@ -83,7 +83,7 @@ class FillExtrusionLayer extends AbstractLayer {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
     };
-    return <RCTMGLFillExtrusionLayer ref="nativeLayer" {...props} />;
+    return <RCTMGLFillExtrusionLayer ref={this.setNativeLayer} {...props} />;
   }
 }
 

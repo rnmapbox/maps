@@ -79,7 +79,7 @@ class BackgroundLayer extends AbstractLayer {
     return (
       <RCTMGLBackgroundLayer
         testID="rctmglBackgroundLayer"
-        ref="nativeLayer"
+        ref={this.setNativeLayer}
         {...this.baseProps}
       />
     );

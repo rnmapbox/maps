@@ -22,6 +22,7 @@ import {
   FeatureCollection,
 } from '@turf/helpers';
 
+import type { SymbolLayerStyleProps } from './javascript/utils/MapboxStyles';
 import {
   Camera as _Camera,
   CameraStop as _CameraStop,
@@ -32,14 +33,18 @@ import {
   CameraBoundsWithPadding as _CameraBoundsWithPadding,
   CameraStops as _CameraStops,
   CameraAnimationMode as _CameraAnimationMode,
+  type UserTrackingMode as _UserTrackingMode,
+  type UserTrackingModeChangeCallback as _UserTrackingModeChangeCallback,
 } from './javascript/components/Camera';
 import { MarkerView as _MarkerView } from './javascript/components/MarkerView';
 import { PointAnnotation as _PointAnnotation } from './javascript/components/PointAnnotation';
 import { Atmosphere as _Atmosphere } from './javascript/components/Atmosphere';
+import {
+  SymbolLayer as _SymbolLayer,
+  Props as _SymbolLayerProps,
+} from './javascript/components/SymbolLayer';
 import type {
   MapboxGLEvent as _MapboxGLEvent,
-  UserTrackingMode as _UserTrackingMode,
-  UserTrackingModeChangeCallback as _UserTrackingModeChangeCallback,
   AnimatedPoint as _AnimatedPoint,
   AnimatedShape as _AnimatedShape,
 } from './javascript/types/index';
@@ -96,7 +101,7 @@ type AutoAlignment = Alignment | 'auto';
 
 type NamedStyles<T> = {
   [P in keyof T]:
-    | SymbolLayerStyle
+    | SymbolLayerStyleProps
     | RasterLayerStyle
     | LineLayerStyle
     | FillLayerStyle
@@ -142,6 +147,7 @@ declare namespace MapboxGL {
   const Atmosphere = _Atmosphere;
   const MarkerView = _MarkerView;
   const PointAnnotation = _PointAnnotation;
+  const SymbolLayer = _SymbolLayer;
 
   type MapboxGLEvent = _MapboxGLEvent;
   type UserTrackingMode = _UserTrackingMode;
@@ -246,7 +252,7 @@ declare namespace MapboxGL {
     class FillExtrusionLayer extends Component<FillExtrusionLayerProps> {}
     class LineLayer extends Component<LineLayerProps> {}
     class CircleLayer extends Component<CircleLayerProps> {}
-    class SymbolLayer extends Component<SymbolLayerProps> {}
+    class SymbolLayer extends Component<_SymbolLayerProps> {}
     class RasterLayer extends Component<RasterLayerProps> {}
     class BackgroundLayer extends Component<BackgroundLayerProps> {}
   }
@@ -397,7 +403,6 @@ declare namespace MapboxGL {
   class FillLayer extends Component<FillLayerProps> {}
   class LineLayer extends Component<LineLayerProps> {}
   class RasterLayer extends Component<RasterLayerProps> {}
-  class SymbolLayer extends Component<SymbolLayerProps> {}
   class HeatmapLayer extends Component<HeatmapLayerProps> {}
   class Images extends Component<ImagesProps> {}
   class ImageSource extends Component<ImageSourceProps> {}
@@ -482,11 +487,6 @@ declare namespace MapboxGL {
   /**
    * Constants
    */
-  enum UserTrackingModes {
-    Follow = 'normal',
-    FollowWithHeading = 'compass',
-    FollowWithCourse = 'course',
-  }
 
   enum InterpolationMode {
     Exponential = 0,
@@ -757,75 +757,8 @@ export type TextVariableAnchorValues =
   | 'bottom-left'
   | 'bottom-right';
 
-export interface SymbolLayerStyle {
-  symbolPlacement?: 'point' | 'line' | Expression;
-  symbolSpacing?: number | Expression;
-  symbolAvoidEdges?: boolean | Expression;
-  symbolSortKey?: number | Expression;
-  symbolZOrder?: 'auto' | 'viewport-y' | 'source' | Expression;
-  iconAllowOverlap?: boolean | Expression;
-  iconIgnorePlacement?: boolean | Expression;
-  iconOptional?: boolean | Expression;
-  iconRotationAlignment?: AutoAlignment | Expression;
-  iconSize?: number | Expression;
-  iconTextFit?: 'none' | 'width' | 'height' | 'both' | Expression;
-  iconTextFitPadding?: Array<number> | Expression;
-  iconImage?: string | Expression;
-  iconRotate?: number | Expression;
-  iconPadding?: number | Expression;
-  iconKeepUpright?: boolean | Expression;
-  iconOffset?: Array<number> | Expression;
-  iconAnchor?: Anchor | Expression;
-  iconPitchAlignment?: AutoAlignment | Expression;
-  textPitchAlignment?: AutoAlignment | Expression;
-  textRotationAlignment?: AutoAlignment | Expression;
-  textField?: string | Expression;
-  textFont?: Array<string> | Expression;
-  textSize?: number | Expression;
-  textMaxWidth?: number | Expression;
-  textLineHeight?: number | Expression;
-  textLetterSpacing?: number | Expression;
-  textJustify?: 'left' | 'center' | 'right' | Expression;
-  textAnchor?: Anchor | Expression;
-  textMaxAngle?: number | Expression;
-  textRotate?: number | Expression;
-  textPadding?: number | Expression;
-  textKeepUpright?: boolean | Expression;
-  textTransform?: 'none' | 'uppercase' | 'lowercase' | Expression;
-  textOffset?: Array<number> | Expression;
-  textAllowOverlap?: boolean | Expression;
-  textIgnorePlacement?: boolean | Expression;
-  textOptional?: boolean | Expression;
-  textVariableAnchor?: Array<TextVariableAnchorValues>;
-  textRadialOffset?: number | Expression;
-  visibility?: Visibility | Expression;
-  iconOpacity?: number | Expression;
-  iconOpacityTransition?: Transition | Expression;
-  iconColor?: string | Expression;
-  iconColorTransition?: Transition | Expression;
-  iconHaloColor?: string | Expression;
-  iconHaloColorTransition?: Transition | Expression;
-  iconHaloWidth?: number | Expression;
-  iconHaloWidthTransition?: Transition | Expression;
-  iconHaloBlur?: number | Expression;
-  iconHaloBlurTransition?: Transition | Expression;
-  iconTranslate?: Array<number> | Expression;
-  iconTranslateTransition?: Transition | Expression;
-  iconTranslateAnchor?: Alignment | Expression;
-  textOpacity?: number | Expression;
-  textOpacityTransition?: Transition | Expression;
-  textColor?: string | Expression;
-  textColorTransition?: Transition | Expression;
-  textHaloColor?: string | Expression;
-  textHaloColorTransition?: Transition | Expression;
-  textHaloWidth?: number | Expression;
-  textHaloWidthTransition?: Transition | Expression;
-  textHaloBlur?: number | Expression;
-  textHaloBlurTransition?: Transition | Expression;
-  textTranslate?: Array<number> | Expression;
-  textTranslateTransition?: Transition | Expression;
-  textTranslateAnchor?: Alignment | Expression;
-}
+/** @deprecated Will be removed in next betas */
+export type SymbolLayerStyle = SymbolLayerStyleProps;
 
 export interface HeatmapLayerStyle {
   visibility?: Visibility | Expression;
@@ -943,7 +876,7 @@ export interface RasterLayerProps extends LayerBaseProps {
 }
 
 export interface SymbolLayerProps extends LayerBaseProps {
-  style?: StyleProp<SymbolLayerStyle>;
+  style?: SymbolLayerStyleProps;
 }
 
 export interface HeatmapLayerProps extends LayerBaseProps {

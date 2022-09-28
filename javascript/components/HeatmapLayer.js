@@ -84,7 +84,7 @@ class HeatmapLayer extends AbstractLayer {
       ...this.baseProps,
       sourceLayerID: this.props.sourceLayerID,
     };
-    return <RCTMGLHeatmapLayer ref="nativeLayer" {...props} />;
+    return <RCTMGLHeatmapLayer ref={this.setNativeLayer} {...props} />;
   }
 }
 

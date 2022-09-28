@@ -132,7 +132,7 @@ public class RCTMGLSnapshotModule extends ReactContextBaseJavaModule {
                         (int) jsOptions.getDouble("height")
                 )
         );
-        builder.pixelRatio(Float.valueOf(mContext.getResources().getDisplayMetrics().scaledDensity).intValue());
+        builder.pixelRatio(Float.valueOf(mContext.getResources().getDisplayMetrics().density).intValue());
 
         builder.resourceOptions(new ResourceOptions.Builder().accessToken(RCTMGLModule.getAccessToken(mContext)).build());
         return builder.build();

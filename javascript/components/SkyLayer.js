@@ -66,7 +66,7 @@ class SkyLayer extends AbstractLayer {
     return (
       <RCTMGLSkyLayer
         testID="rctmglSkyLayer"
-        ref="nativeLayer"
+        ref={this.setNativeLayer}
         {...this.baseProps}
       />
     );

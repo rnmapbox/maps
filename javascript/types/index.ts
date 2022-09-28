@@ -10,20 +10,6 @@ export type MapboxGLEvent<
   V = Element,
 > = SyntheticEvent<V, { type: T; payload: P }>;
 
-// Camera.
-
-export type UserTrackingMode = 'normal' | 'compass' | 'course';
-
-export type UserTrackingModeChangeCallback = (
-  event: MapboxGLEvent<
-    'usertrackingmodechange',
-    {
-      followUserLocation: boolean;
-      followUserMode: UserTrackingMode | null;
-    }
-  >,
-) => void;
-
 // Animated.
 
 export interface AnimatedPoint extends GeoJsonObject {
