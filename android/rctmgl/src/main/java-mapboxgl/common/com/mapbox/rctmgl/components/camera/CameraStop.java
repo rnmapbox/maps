@@ -162,10 +162,10 @@ public class CameraStop {
 
         // scale padding by pixel ratio
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        paddingTop = Float.valueOf(paddingTop * metrics.scaledDensity).intValue();
-        paddingRight = Float.valueOf(paddingRight * metrics.scaledDensity).intValue();
-        paddingBottom = Float.valueOf(paddingBottom * metrics.scaledDensity).intValue();
-        paddingLeft = Float.valueOf(paddingLeft * metrics.scaledDensity).intValue();
+        paddingTop = Float.valueOf(paddingTop * metrics.density).intValue();
+        paddingRight = Float.valueOf(paddingRight * metrics.density).intValue();
+        paddingBottom = Float.valueOf(paddingBottom * metrics.density).intValue();
+        paddingLeft = Float.valueOf(paddingLeft * metrics.density).intValue();
 
         stop.setPadding(
                 paddingLeft,

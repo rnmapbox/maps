@@ -326,9 +326,9 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         int[] contentPadding = mMap.getPadding();
 
         int mapWidth = (int) ((mMap.getWidth() * 0.75 - (contentPadding[0] + contentPadding[2]))
-                / metrics.scaledDensity);
+                / metrics.density);
         int mapHeight = (int) ((mMap.getHeight() * 0.75 - (contentPadding[1] + contentPadding[3]))
-                / metrics.scaledDensity);
+                / metrics.density);
         VisibleRegion region = GeoViewport.getRegion(center, (int) zoomLevel, mapWidth, mapHeight);
         return region;
     }
@@ -1246,7 +1246,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
 
         final DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
 
-        double[] result = {left * metrics.scaledDensity, top * metrics.scaledDensity, right * metrics.scaledDensity, bottom * metrics.scaledDensity};
+        double[] result = {left * metrics.density, top * metrics.density, right * metrics.density, bottom * metrics.density};
         return result;
     }
 
