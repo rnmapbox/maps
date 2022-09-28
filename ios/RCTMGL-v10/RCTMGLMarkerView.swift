@@ -76,20 +76,6 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
 
     return _point
   }
-  
-  // MARK: - UIView methods
-  
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-  }
-
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-  
-  override func layoutSubviews() {
-    super.layoutSubviews()
-  }
 
   // MARK: - RCTMGLMapComponent methods
 
