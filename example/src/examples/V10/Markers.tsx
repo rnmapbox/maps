@@ -104,12 +104,13 @@ const Markers = memo((props: BaseExampleProps) => {
             [1, 1],
           ].map(([x, y]) => {
             return (
-              <Button
-                key={`${x}-${y}`}
-                style={[styles.button, { marginRight: 8 }]}
-                title={`${x}, ${y}`}
-                onPress={() => setAnchor({ x, y })}
-              />
+              <View key={`${x}-${y}`} style={{ paddingRight: 8 }}>
+                <Button
+                  style={styles.button}
+                  title={`${x}, ${y}`}
+                  onPress={() => setAnchor({ x, y })}
+                />
+              </View>
             );
           })}
         </ScrollView>
