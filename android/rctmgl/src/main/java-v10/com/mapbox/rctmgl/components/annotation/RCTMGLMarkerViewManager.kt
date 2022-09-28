@@ -25,6 +25,16 @@ class RCTMGLMarkerViewManager(reactApplicationContext: ReactApplicationContext?)
         markerView.setAnchor(map.getDouble("x").toFloat(), map.getDouble("y").toFloat())
     }
 
+    @ReactProp(name = "allowOverlap")
+    fun setAllowOverlap(markerView: RCTMGLMarkerView, allowOverlap: Boolean) {
+        markerView.setAllowOverlap(allowOverlap)
+    }
+
+    @ReactProp(name = "isSelected")
+    fun setIsSelected(markerView: RCTMGLMarkerView, isSelected: Boolean) {
+        markerView.setIsSelected(isSelected)
+    }
+
     override fun createViewInstance(reactContext: ThemedReactContext): RCTMGLMarkerView {
         return RCTMGLMarkerView(reactContext, this)
     }
