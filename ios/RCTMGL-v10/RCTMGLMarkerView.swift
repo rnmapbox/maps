@@ -99,11 +99,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     } else {
       super.reactSetFrame(frame)
     }
-    
-    guard let child = self.subviews.first else {
-      return
-    }
-    
+
     addOrUpdate()
   }
   
