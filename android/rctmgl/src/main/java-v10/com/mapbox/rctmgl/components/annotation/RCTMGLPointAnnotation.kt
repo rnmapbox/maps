@@ -53,7 +53,7 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
         }
         childView.addOnLayoutChangeListener(this)
 
-        mMapView?.offscreenAnnotationViewContainer()?.addView(childView)
+        mMapView?.offscreenAnnotationViewContainer?.addView(childView)
 
     }
 
@@ -70,7 +70,7 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
                 }
             })
         }
-        mMapView?.offscreenAnnotationViewContainer()?.removeView(childView)
+        mMapView?.offscreenAnnotationViewContainer?.removeView(childView)
     }
 
     override fun addToMap(mapView: RCTMGLMapView) {
@@ -79,14 +79,14 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
         makeMarker()
         if (mChildView != null) {
             if (!mChildView!!.isAttachedToWindow) {
-                mMapView!!.offscreenAnnotationViewContainer().addView(mChildView)
+                mMapView!!.offscreenAnnotationViewContainer?.addView(mChildView)
             }
             addBitmapToStyle(mChildBitmap, mChildBitmapId)
             updateOptions()
         }
         if (calloutView != null) {
             if (!calloutView!!.isAttachedToWindow && mMapView != null) {
-                mMapView!!.offscreenAnnotationViewContainer().addView(calloutView)
+                mMapView!!.offscreenAnnotationViewContainer?.addView(calloutView)
             }
             addBitmapToStyle(mCalloutBitmap, mCalloutBitmapId)
         }
@@ -98,10 +98,10 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
             map.pointAnnotationManager?.delete(marker!!)
         }
         if (mChildView != null) {
-            map.offscreenAnnotationViewContainer().removeView(mChildView)
+            map.offscreenAnnotationViewContainer?.removeView(mChildView)
         }
         if (calloutView != null) {
-            map.offscreenAnnotationViewContainer().removeView(calloutView)
+            map.offscreenAnnotationViewContainer?.removeView(calloutView)
         }
     }
 
