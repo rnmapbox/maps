@@ -105,7 +105,6 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       return
     }
     
-    reactChildrenView = child
     addOrUpdate()
   }
   
