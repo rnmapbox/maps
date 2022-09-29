@@ -179,12 +179,10 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
         val width = view.width
         val height = view.height
 
-        // Create a modified offset:
-        // - Normalize from [(0, 0), (1, 1)] to [(-1, -1), (1, 1)].
-        // - Scale to the view size.
-        // - Invert `y` so that higher values are lower on the screen.
-        val offsetX = (mAnchor.dx * 2 - 1) * (width / 2)
-        val offsetY = (mAnchor.dy * 2 - 1) * (height / 2) * -1
+        // Create a modified offset, normalized from 0..1 to -1..1 and scaled to
+        // the view size.
+        val offsetX = (mAnchor.dx * 2 - 1) * (width / 2) * -1
+        val offsetY = (mAnchor.dy * 2 - 1) * (height / 2)
 
         return Vec2(offsetX, offsetY)
     }
