@@ -34,7 +34,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       let hasBecomeSelected = isSelected && !oldValue
       
       if hasBecomeSelected {
-        try? setSelected()
+        setSelected()
       } else {
         update()
       }
@@ -131,18 +131,12 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       return
     }
     
-    guard let annotationManager = annotationManager, let point = point else {
+    guard let annotationManager = annotationManager, let _ = point else {
       return
     }
-    
+
     do {
-      let options = ViewAnnotationOptions(
-        geometry: Geometry.point(point),
-        width: self.bounds.width,
-        height: self.bounds.height,
-        allowOverlap: allowOverlap,
-        anchor: .center
-      )
+      let options = getOptions()
       try annotationManager.add(self, id: id, options: options)
       didAddToMap = true
     } catch {
@@ -159,32 +153,8 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       return
     }
     
-    var geometry: GeometryConvertible?
-    if let point = point {
-      geometry = Geometry.point(point)
-    }
-    
-    var offset: CGVector?
-    if let anchor = anchor, let anchorX = anchor["x"]?.CGFloat, let anchorY = anchor["y"]?.CGFloat {
-      // Create a modified offset:
-      // - Normalize from [(0, 0), (1, 1)] to [(-1, -1), (1, 1)].
-      // - Scale to the view size.
-      // - Invert `y` so that higher values are lower on the screen.
-      offset = CGVector(
-        dx: (anchorX * 2 - 1) * (self.bounds.width / 2),
-        dy: (anchorY * 2 - 1) * (self.bounds.height / 2) * -1
-      )
-    }
-    
     do {
-      let options = ViewAnnotationOptions(
-        geometry: geometry,
-        width: self.bounds.width,
-        height: self.bounds.height,
-        allowOverlap: allowOverlap,
-        offsetX: offset?.dx,
-        offsetY: offset?.dy
-      )
+      let options = getOptions()
       try annotationManager.update(self, options: options)
     } catch {
       Logger.log(level: .error, message: "[MarkerView] Error updating annotation", error: error)
@@ -206,5 +176,41 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   
   private func remove() {
     annotationManager?.remove(self)
+  }
+  
+  // MARK: - Helper functions
+  
+  private func getOptions() -> ViewAnnotationOptions {
+    var geometry: GeometryConvertible?
+    if let point = point {
+      geometry = Geometry.point(point)
+    }
+    
+    let offset = getOffset()
+  
+    let options = ViewAnnotationOptions(
+      geometry: geometry,
+      width: self.bounds.width,
+      height: self.bounds.height,
+      allowOverlap: allowOverlap,
+      offsetX: offset.dx,
+      offsetY: offset.dy
+    )
+    return options
+  }
+  
+  private func getOffset() -> CGVector {
+    guard let anchor = anchor, let anchorX = anchor["x"]?.CGFloat, let anchorY = anchor["y"]?.CGFloat else {
+      return .zero
+    }
+          
+    // Create a modified offset:
+    // - Normalize from [(0, 0), (1, 1)] to [(-1, -1), (1, 1)].
+    // - Scale to the view size.
+    // - Invert `y` so that higher values are lower on the screen.
+    let x = (anchorX * 2 - 1) * (self.bounds.width / 2)
+    let y = (anchorY * 2 - 1) * (self.bounds.height / 2) * -1
+
+    return CGVector(dx: x, dy: y)
   }
 }
