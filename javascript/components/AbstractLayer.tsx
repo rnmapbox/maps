@@ -42,11 +42,11 @@ class AbstractLayer<
     | (React.Component<NativePropsType> & Readonly<NativeMethods>)
     | undefined = undefined;
 
-  setNativeLayer(
+  setNativeLayer = (
     instance: React.Component<NativePropsType> & Readonly<NativeMethods>,
-  ) {
+  ) => {
     this.nativeLayer = instance;
-  }
+  };
 
   getStyleTypeFormatter(styleType: string) {
     if (styleType === 'color') {
