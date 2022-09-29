@@ -166,6 +166,7 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
             allowOverlap(mAllowOverlap)
             offsetX(offset.dx.toInt())
             offsetY(offset.dy.toInt())
+            selected(mIsSelected)
         }
         return options
     }
