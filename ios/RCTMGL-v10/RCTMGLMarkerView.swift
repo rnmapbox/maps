@@ -90,16 +90,35 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   // MARK: - React methods
   
   override func reactSetFrame(_ frame: CGRect) {
-    let frameDidChange = !self.frame.equalTo(frame)
-
-    // Starting the view offscreen allows it to be invisible until the annotation manager
-    // sets it to the correct point on the map.
+    let prev = self.frame
+    var next = frame
+    
+    let frameDidChange = !next.equalTo(prev)
     if (frameDidChange) {
-      super.reactSetFrame(frame.offsetBy(dx: -10000, dy: -10000))
-    } else {
-      super.reactSetFrame(frame)
+      if prev.minX == 0 || prev.minY == 0 {
+        // Start the view offscreen to make it invisible until the annotation manager sets it to
+        // the correct point on the map.
+        next = CGRect(
+          x: -10000,
+          y: -10000,
+          width: next.width,
+          height: next.height
+        )
+      } else {
+        // Calculate the next position to temporarily place the view before the annotation manager
+        // sets it to the correct point on the map.
+        let dx = (next.width - prev.width) / 2
+        let dy = (next.height - prev.height) / 2
+        next = CGRect(
+          x: prev.minX - dx,
+          y: prev.minY - dy,
+          width: next.width,
+          height: next.height
+        )
+      }
     }
-
+    
+    super.reactSetFrame(next)
     addOrUpdate()
   }
   
