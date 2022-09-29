@@ -88,32 +88,50 @@ const Markers = memo((props: BaseExampleProps) => {
 
         <Divider style={styles.divider} />
 
-        <ScrollView
-          style={{ flex: 0, flexDirection: 'row', overflow: 'visible' }}
-          horizontal={true}
-        >
+        <View>
           {[
-            [0, 0],
-            [0.5, 0],
-            [1, 0],
-            [0, 0.5],
-            [0.5, 0.5],
-            [1, 0.5],
-            [0, 1],
-            [0.5, 1],
-            [1, 1],
-          ].map(([x, y]) => {
+            [
+              [0, 0],
+              [0.5, 0],
+              [1, 0],
+            ],
+            [
+              [0, 0.5],
+              [0.5, 0.5],
+              [1, 0.5],
+            ],
+            [
+              [0, 1],
+              [0.5, 1],
+              [1, 1],
+            ],
+          ].map((anchors, index) => {
             return (
-              <View key={`${x}-${y}`} style={{ paddingRight: 8 }}>
-                <Button
-                  style={styles.button}
-                  title={`${x}, ${y}`}
-                  onPress={() => setAnchor({ x, y })}
-                />
+              <View
+                key={index}
+                style={{
+                  flex: 0,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}
+              >
+                {anchors.map(([x, y]) => {
+                  const isSelected = anchor.x === x && anchor.y === y;
+                  return (
+                    <View key={`${x}-${y}`}>
+                      <Button
+                        type={isSelected ? 'solid' : 'outline'}
+                        style={styles.button}
+                        title={`${x}, ${y}`}
+                        onPress={() => setAnchor({ x, y })}
+                      />
+                    </View>
+                  );
+                })}
               </View>
             );
           })}
-        </ScrollView>
+        </View>
 
         <Divider style={styles.divider} />
 
@@ -141,7 +159,7 @@ const Markers = memo((props: BaseExampleProps) => {
           style={{
             flex: 0,
             flexDirection: 'row',
-            justifyContent: 'space-evenly',
+            justifyContent: 'space-between',
           }}
         >
           <Button
@@ -190,6 +208,7 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 0,
+    alignSelf: 'stretch',
   },
   divider: {
     marginVertical: 10,
