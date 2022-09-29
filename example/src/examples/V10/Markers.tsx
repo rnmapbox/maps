@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { MapView, Camera, Logger, MarkerView } from '@rnmapbox/maps';
 import { Position } from 'geojson';
 import { Text, Button, Divider } from '@rneui/base';
