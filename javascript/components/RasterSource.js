@@ -107,7 +107,7 @@ class RasterSource extends AbstractSource {
       attribution: this.props.attribution,
     };
     return (
-      <RCTMGLRasterSource ref="nativeSource" {...props}>
+      <RCTMGLRasterSource ref={this.setNativeRef} {...props}>
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}

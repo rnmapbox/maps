@@ -42,7 +42,10 @@ const defaultStyleURL = MapboxGL.StyleURL.Street;
 /**
  * MapView backed by Mapbox Native GL
  */
-class MapView extends NativeBridgeComponent(React.Component) {
+class MapView extends NativeBridgeComponent(
+  React.Component,
+  NATIVE_MODULE_NAME,
+) {
   static propTypes = {
     ...viewPropTypes,
 
@@ -306,7 +309,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
   };
 
   constructor(props) {
-    super(props, NATIVE_MODULE_NAME);
+    super(props);
 
     this.logger = Logger.sharedInstance();
     this.logger.start();
