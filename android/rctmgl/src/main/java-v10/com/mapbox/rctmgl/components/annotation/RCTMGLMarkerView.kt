@@ -5,9 +5,13 @@ import android.util.Log
 import android.view.View
 import com.mapbox.geojson.Point
 import com.mapbox.maps.ViewAnnotationAnchor
+import com.mapbox.maps.ViewAnnotationOptions
 import com.mapbox.maps.viewannotation.viewAnnotationOptions
 import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
+import java.util.Vector
+
+private data class Vec2(val dx: Double, val dy: Double)
 
 class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerViewManager):
     AbstractMapFeature(context),
@@ -20,8 +24,7 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
     private var didAddToMap = false
 
     private var mCoordinate: Point? = null
-    private var mAnchorX: Float = 0.5.toFloat()
-    private var mAnchorY: Float = 0.5.toFloat()
+    private var mAnchor: Vec2 = Vec2(0.5, 0.5)
     private var mAllowOverlap = false
     private var mIsSelected = false
 
@@ -31,8 +34,7 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
     }
 
     fun setAnchor(x: Float, y: Float) {
-        mAnchorX = x
-        mAnchorY = y
+        mAnchor = Vec2(x.toDouble(), y.toDouble())
         update()
     }
 
@@ -99,12 +101,7 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
         if (mView == null || mCoordinate == null) {
             return
         }
-
         val view = mView!!
-
-        val coordinate = mCoordinate
-        val width = view.width
-        val height = view.height
 
         view.addOnLayoutChangeListener(this)
 
@@ -113,13 +110,8 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
             mMapView?.offscreenAnnotationViewContainer?.removeView(view)
         }
 
-        val options = viewAnnotationOptions {
-            geometry(coordinate)
-            width(width)
-            height(height)
-            allowOverlap(mAllowOverlap)
-            anchor(ViewAnnotationAnchor.CENTER)
-        }
+        val options = getOptions()
+
         val annotation = mMapView?.viewAnnotationManager?.addViewAnnotation(
             view,
             options
@@ -135,28 +127,10 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
         if (mView == null || mCoordinate == null) {
             return
         }
-
         val view = mView!!
 
-        val coordinate = mCoordinate
-        val width = view.width
-        val height = view.height
+        val options = getOptions()
 
-        // Create a modified offset:
-        // - Normalize from [(0, 0), (1, 1)] to [(-1, -1), (1, 1)].
-        // - Scale to the view size.
-        // - Invert `y` so that higher values are lower on the screen.
-        val offsetX = (mAnchorX * 2 - 1) * (width / 2)
-        val offsetY = (mAnchorY * 2 - 1) * (height / 2) * -1
-
-        val options = viewAnnotationOptions {
-            geometry(coordinate)
-            width(width)
-            height(height)
-            allowOverlap(mAllowOverlap)
-            offsetX(offsetX.toInt())
-            offsetY(offsetY.toInt())
-        }
         val annotation = mMapView?.viewAnnotationManager?.updateViewAnnotation(
             view,
             options
@@ -174,6 +148,48 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
         if (removed == false) {
             Log.d("[MarkerView]", "Unable to remove view")
         }
+    }
+
+    // endregion
+
+    // region Helper functions
+
+    private fun getOptions(): ViewAnnotationOptions {
+        val view = mView!!
+        val width = view.width
+        val height = view.height
+        val coordinate = mCoordinate
+
+        val offset = getOffset()
+
+        val options = viewAnnotationOptions {
+            geometry(coordinate)
+            width(width)
+            height(height)
+            allowOverlap(mAllowOverlap)
+            offsetX(offset.dx.toInt())
+            offsetY(offset.dy.toInt())
+        }
+        return options
+    }
+
+    private fun getOffset(): Vec2 {
+        if (mView == null) {
+            return Vec2(0.0, 0.0)
+        }
+        val view = mView!!
+
+        val width = view.width
+        val height = view.height
+
+        // Create a modified offset:
+        // - Normalize from [(0, 0), (1, 1)] to [(-1, -1), (1, 1)].
+        // - Scale to the view size.
+        // - Invert `y` so that higher values are lower on the screen.
+        val offsetX = (mAnchor.dx * 2 - 1) * (width / 2)
+        val offsetY = (mAnchor.dy * 2 - 1) * (height / 2) * -1
+
+        return Vec2(offsetX, offsetY)
     }
 
     // endregion
