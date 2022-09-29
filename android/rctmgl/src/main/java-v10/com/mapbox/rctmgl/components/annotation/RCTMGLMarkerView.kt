@@ -62,10 +62,7 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
         left: Int, top: Int, right: Int, bottom: Int,
         oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int
     ) {
-        val frameDidChange = left != oldLeft || right != oldRight || top != oldTop || bottom != oldBottom;
-        if (frameDidChange) {
-            addOrUpdate()
-        }
+        addOrUpdate()
     }
 
     // endregion
