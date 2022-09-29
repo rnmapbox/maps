@@ -14,7 +14,7 @@ enum CameraMode: String, CaseIterable {
 }
 
 enum UserTrackingMode: String {
-  case none,compass, course, normal
+  case none, compass, course, normal
 }
 
 struct CameraUpdateItem {
@@ -188,7 +188,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
 
   func _updateCameraFromTrackingMode() {
     withMapView { map in
-      let userTrackingMode = UserTrackingMode(rawValue: self.followUserMode ?? "none")
+      let userTrackingMode = UserTrackingMode(rawValue: self.followUserMode ?? UserTrackingMode.normal.rawValue)
       guard let userTrackingMode = userTrackingMode else {
         Logger.error("RCTMGLCamera: Unexpected followUserMode \(optional: self.followUserMode)")
         self._disableUsetTracking(map)
