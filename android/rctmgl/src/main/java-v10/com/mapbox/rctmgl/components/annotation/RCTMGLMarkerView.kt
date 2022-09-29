@@ -13,7 +13,7 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
     AbstractMapFeature(context),
     View.OnLayoutChangeListener
 {
-    // MARK: - Instance variables
+    // region Instance variables
 
     private var mMapView: RCTMGLMapView? = null
     private var mView: View? = null
@@ -46,7 +46,9 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
         update()
     }
 
-    // View methods
+    // endregion
+
+    // region View methods
 
     override fun addView(childView: View, childPosition: Int) {
         mView = childView
@@ -64,7 +66,9 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
         }
     }
 
-    // RCTMGLMapComponent methods
+    // endregion
+
+    // region RCTMGLMapComponent methods
 
     override fun addToMap(mapView: RCTMGLMapView) {
         mMapView = mapView
@@ -75,7 +79,9 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
         remove()
     }
 
-    // Create, update, and remove methods
+    // endregion
+
+    // region Create, update, and remove methods
 
     private fun addOrUpdate() {
         if (didAddToMap) {
@@ -169,4 +175,6 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
             Log.d("[MarkerView]", "Unable to remove view")
         }
     }
+
+    // endregion
 }
