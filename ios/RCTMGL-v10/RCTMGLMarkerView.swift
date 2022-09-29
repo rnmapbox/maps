@@ -193,7 +193,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   
   /// There is a Mapbox bug where `selected` does not cause the marker to move to the front, so we can't simply update the component.
   /// This forces that effect. See https://github.com/mapbox/mapbox-maps-ios/issues/1599.
-  private func setSelected() throws {
+  private func setSelected() {
     if let options = annotationManager?.options(for: self) {
       do {
         annotationManager?.remove(self)
