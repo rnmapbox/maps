@@ -3820,7 +3820,7 @@
             "name": "feature",
             "description": "The feature cluster to expand.",
             "type": {
-              "name": "Feature"
+              "name": "string \\| GeoJSON.Feature"
             },
             "optional": false
           }
@@ -3828,7 +3828,13 @@
         "returns": {
           "description": null,
           "type": {
-            "name": "number"
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "string"
+              }
+            ],
+            "raw": "Promise<string>"
           }
         },
         "description": "Returns the zoom needed to expand the cluster.",
@@ -3838,7 +3844,7 @@
       },
       {
         "name": "getClusterLeaves",
-        "docblock": "Returns the FeatureCollection from the cluster.\n\n@example\nconst collection = await shapeSource.getClusterLeaves(clusterId, limit, offset);\n\n@param  {Feature} feature - The feature cluster to expand.\n@param  {number} limit - The number of points to return.\n@param  {number} offset - The amount of points to skip (for pagination).\n@return {FeatureCollection}",
+        "docblock": "Returns the FeatureCollection from the cluster.\n\n@example\nconst collection = await shapeSource.getClusterLeaves(clusterId, limit, offset);\n\n@param  {GeoJSON.Feature} feature - The feature cluster to expand.\n@param  {number} limit - The number of points to return.\n@param  {number} offset - The amount of points to skip (for pagination).\n@return {FeatureCollection}",
         "modifiers": [
           "async"
         ],
@@ -3847,7 +3853,7 @@
             "name": "feature",
             "description": "The feature cluster to expand.",
             "type": {
-              "name": "Feature"
+              "name": "number \\| GeoJSON.Feature"
             },
             "optional": false
           },
@@ -3881,7 +3887,7 @@
       },
       {
         "name": "getClusterChildren",
-        "docblock": "Returns the FeatureCollection from the cluster (on the next zoom level).\n\n@example\nconst collection = await shapeSource.getClusterChildren(clusterId);\n\n@param  {Feature} feature - The feature cluster to expand.\n@return {FeatureCollection}",
+        "docblock": "Returns the FeatureCollection from the cluster (on the next zoom level).\n\n@example\nconst collection = await shapeSource.getClusterChildren(clusterId);\n\n@param  {GeoJSON.Feature} feature - The feature cluster to expand.\n@return {FeatureCollection}",
         "modifiers": [
           "async"
         ],
@@ -3890,7 +3896,7 @@
             "name": "feature",
             "description": "The feature cluster to expand.",
             "type": {
-              "name": "Feature"
+              "name": "number \\| GeoJSON.Feature"
             },
             "optional": false
           }
@@ -3915,7 +3921,7 @@
             "name": "event",
             "optional": false,
             "type": {
-              "name": null
+              "name": "NativeSyntheticEvent"
             }
           }
         ],
@@ -3940,14 +3946,14 @@
       {
         "name": "shape",
         "required": false,
-        "type": "object",
+        "type": "\\| GeoJSON.GeometryCollection\n\\| GeoJSON.Feature\n\\| GeoJSON.FeatureCollection\n\\| GeoJSON.Geometry",
         "default": "none",
         "description": "The contents of the source. A shape can represent a GeoJSON geometry, a feature, or a feature collection."
       },
       {
         "name": "cluster",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "none",
         "description": "Enables clustering on the source for point shapes."
       },
@@ -3996,59 +4002,19 @@
       {
         "name": "lineMetrics",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "none",
         "description": "Whether to calculate line distance metrics.\nThis is required for line layers that specify lineGradient values.\nThe default value is false."
       },
       {
         "name": "onPress",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(event:{features: Array, coordinates: {latitude: number, longitude: number}, point: {x: number, y: number}}) => void"
+        },
         "default": "none",
-        "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers",
-        "params": [
-          {
-            "name": "event",
-            "description": null,
-            "type": {
-              "name": "Object"
-            },
-            "optional": false
-          },
-          {
-            "name": "event.features",
-            "description": "the geojson features that have hit by the press (might be multiple)",
-            "type": {
-              "name": "Array",
-              "elements": [
-                {
-                  "name": "Object"
-                }
-              ]
-            },
-            "optional": false
-          },
-          {
-            "name": "event.coordinates",
-            "description": "the coordinates of the click",
-            "type": {
-              "name": "Object"
-            },
-            "optional": false
-          },
-          {
-            "name": "event.point",
-            "description": "the point of the click",
-            "type": {
-              "name": "Object"
-            },
-            "optional": false
-          }
-        ],
-        "returns": {
-          "description": "void",
-          "type": null
-        }
+        "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers\n\n@param {Object} event\n@param {Object[]} event.features - the geojson features that have hit by the press (might be multiple)\n@param {Object} event.coordinates - the coordinates of the click\n@param {Object} event.point - the point of the click\n@return void\n*signature:*`(event:{features: Array, coordinates: {latitude: number, longitude: number}, point: {x: number, y: number}}) => void`"
       },
       {
         "name": "hitbox",
@@ -4074,12 +4040,16 @@
         },
         "default": "none",
         "description": "Overrides the default touch hitbox(44x44 pixels) for the source layers"
+      },
+      {
+        "name": "children",
+        "required": true,
+        "type": "React.ReactElement \\| React.ReactElement[]",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "ShapeSource.js",
+    "fileNameWithExt": "ShapeSource.tsx",
     "name": "ShapeSource"
   },
   "SkyLayer": {
