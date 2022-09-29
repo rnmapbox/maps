@@ -18,12 +18,15 @@ export function deprecatedClass<C extends new (...args: any[]) => object>(
  * Copy properties from origObject to newObject, which not exists in newObject,
  * calls onDeprecatedCalled callback in case a copied property is invoked.
  */
-export function copyPropertiesAsDeprecated(
-  origObject: { [key: string]: unknown },
-  newObject: { [key: string]: unknown },
+export function copyPropertiesAsDeprecated<
+  DeprecatedType extends Record<string, unknown>,
+  WithDeprecatedType extends Record<string, unknown>,
+>(
+  origObject: DeprecatedType,
+  newObject: WithDeprecatedType,
   onDeprecatedCalled: (key: string) => void,
   accessors: { [key: string]: (value: unknown) => unknown } = {},
-): { [key: string]: unknown } {
+): WithDeprecatedType {
   const result = newObject;
   for (const [key, value] of Object.entries(origObject)) {
     if (!newObject[key]) {

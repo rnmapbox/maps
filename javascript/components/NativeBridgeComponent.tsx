@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { runNativeCommand, isAndroid } from '../utils';
+import { type NativeArg, runNativeCommand, isAndroid } from '../utils';
 
 let callbackIncrement = 0;
 
@@ -9,18 +9,24 @@ export type RNMBEvent<PayloadType = { [key: string]: string }> = {
   type: string;
 };
 
-const NativeBridgeComponent = <T,>(B: React.ComponentClass<T>) =>
-  class extends B {
+const NativeBridgeComponent = <
+  Props extends object,
+  BaseComponent extends new (...ags: any[]) => React.Component<Props>,
+>(
+  Base: BaseComponent,
+  nativeModuleName: string,
+) =>
+  class extends Base {
     _nativeModuleName: string;
     _onAndroidCallback: (e: any) => void;
     _callbackMap: Map<string, any>;
     _preRefMapMethodQueue: Array<{
-      method: { name: string; args: Array<string> };
-      resolver: (value: unknown) => void;
+      method: { name: string; args: NativeArg[] };
+      resolver: (value: NativeArg) => void;
     }>;
 
-    constructor(props: T, nativeModuleName: string) {
-      super(props);
+    constructor(...args: any[]) {
+      super(...args);
 
       this._nativeModuleName = nativeModuleName;
       this._onAndroidCallback = this._onAndroidCallbackO.bind(this);
@@ -28,9 +34,9 @@ const NativeBridgeComponent = <T,>(B: React.ComponentClass<T>) =>
       this._preRefMapMethodQueue = [];
     }
 
-    _addAddAndroidCallback(
+    _addAddAndroidCallback<ReturnType>(
       id: string,
-      resolve: (value: string) => void,
+      resolve: (value: ReturnType) => void,
       reject: (error: Error) => void,
     ) {
       this._callbackMap.set(id, { resolve, reject });
@@ -74,16 +80,16 @@ const NativeBridgeComponent = <T,>(B: React.ComponentClass<T>) =>
       }
     }
 
-    _runNativeCommand<RefType>(
+    _runNativeCommand<RefType, ReturnType = NativeArg>(
       methodName: string,
       nativeRef: RefType,
-      args: string[] = [],
-    ) {
+      args: NativeArg[] = [],
+    ): Promise<ReturnType> {
       if (!nativeRef) {
-        return new Promise((resolve) => {
+        return new Promise<ReturnType>((resolve) => {
           this._preRefMapMethodQueue.push({
             method: { name: methodName, args },
-            resolver: resolve,
+            resolver: resolve as (args: NativeArg) => void,
           });
         });
       }

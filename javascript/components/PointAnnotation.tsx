@@ -120,6 +120,7 @@ type PointAnnotationProps = {
  */
 class PointAnnotation extends NativeBridgeComponent(
   React.PureComponent<PointAnnotationProps>,
+  NATIVE_MODULE_NAME,
 ) {
   static defaultProps = {
     anchor: { x: 0.5, y: 0.5 },
@@ -129,7 +130,7 @@ class PointAnnotation extends NativeBridgeComponent(
   _nativeRef: NativePointAnnotationRef | null = null;
 
   constructor(props: PointAnnotationProps) {
-    super(props, NATIVE_MODULE_NAME);
+    super(props);
     this._onSelected = this._onSelected.bind(this);
     this._onDeselected = this._onDeselected.bind(this);
     this._onDragStart = this._onDragStart.bind(this);

@@ -97,6 +97,7 @@ class MarkerView extends React.PureComponent<{
             <RCTMGLMarkerViewWrapper
               style={{
                 alignSelf: 'flex-start',
+                position: 'absolute',
               }}
             >
               {child}
