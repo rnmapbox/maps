@@ -56,10 +56,11 @@ Add the following to the beginning of your podfile
 $RNMapboxMapsImpl = 'mapbox'
 ```
 
-You can also specify the version to use. *Warning:* if you set a version, then later update, the `rnamapbox/maps` library it's possible that you'll end up using Mapbox older version than supported. Make sure you revise this value with `rnmapbox/maps` updates.
+You can also override the version to use. *Warning:* if you set a version, then later update, the `rnamapbox/maps` library it's possible that you'll end up using Mapbox older version than supported. Make sure you revise this value with `rnmapbox/maps` updates.
 
 ```ruby
-$RNMapboxMapsVersion = '~> 10.9.0'
+# Warning: only for advanced use cases, only do this if you know what you're doing.
+# $RNMapboxMapsVersion = '~> 10.9.0'
 ```
 
 You will need to authorize your download of the Maps SDK with a secret access token with the `DOWNLOADS:READ` scope. This [guide](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials) explains how to configure the secret token under section `Configure your secret token`.
