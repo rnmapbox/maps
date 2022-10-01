@@ -43,6 +43,10 @@ import {
   SymbolLayer as _SymbolLayer,
   Props as _SymbolLayerProps,
 } from './javascript/components/SymbolLayer';
+import {
+  ShapeSource as _ShapeSource,
+  Props as _ShapeSourceProps,
+} from './javascript/components/ShapeSource';
 import type {
   MapboxGLEvent as _MapboxGLEvent,
   AnimatedPoint as _AnimatedPoint,
@@ -148,6 +152,7 @@ declare namespace MapboxGL {
   const MarkerView = _MarkerView;
   const PointAnnotation = _PointAnnotation;
   const SymbolLayer = _SymbolLayer;
+  const ShapeSource = _ShapeSource;
 
   type MapboxGLEvent = _MapboxGLEvent;
   type UserTrackingMode = _UserTrackingMode;
@@ -244,7 +249,7 @@ declare namespace MapboxGL {
 
   namespace Animated {
     // sources
-    class ShapeSource extends Component<ShapeSourceProps> {}
+    class ShapeSource extends Component<_ShapeSourceProps> {}
     class ImageSource extends Component<ImageSourceProps> {}
 
     // layers
@@ -364,33 +369,6 @@ declare namespace MapboxGL {
    * Sources
    */
   class VectorSource extends Component<VectorSourceProps> {}
-  class ShapeSource extends Component<ShapeSourceProps> {
-    features(
-      filter?: Expression,
-    ): Promise<FeatureCollection<Geometry, Properties>>;
-
-    getClusterExpansionZoom(
-      feature: Feature<Geometry, Properties> | number,
-    ): Promise<number>;
-    /**
-     * Returns all the leaves of a cluster with pagination support.
-     * @param cluster feature cluster
-     * @param limit the number of leaves to return
-     * @param offset the amount of points to skip (for pagination)
-     */
-    getClusterLeaves: (
-      feature: Feature<Geometry, Properties> | number,
-      limit: number,
-      offset: number,
-    ) => Promise<FeatureCollection<Geometry, Properties>>;
-    /**
-     * Returns the children of a cluster (on the next zoom level).
-     * @param cluster feature cluster
-     */
-    getClusterChildren: (
-      feature: Feature<Geometry, Properties> | number,
-    ) => Promise<FeatureCollection<Geometry, Properties>>;
-  }
   class RasterSource extends Component<RasterSourceProps> {}
   class RasterDemSource extends Component<RasterSourceProps> {}
 
@@ -810,30 +788,6 @@ export interface VectorSourceProps extends TileSourceProps {
   };
 }
 
-export interface ShapeSourceProps extends ViewProps {
-  id: string;
-  url?: string;
-  shape?:
-    | GeoJSON.GeometryCollection
-    | GeoJSON.Feature
-    | GeoJSON.FeatureCollection
-    | GeoJSON.Geometry;
-  cluster?: boolean;
-  clusterRadius?: number;
-  clusterMaxZoomLevel?: number;
-  clusterProperties?: object;
-  maxZoomLevel?: number;
-  buffer?: number;
-  tolerance?: number;
-  lineMetrics?: boolean;
-  images?: { assets?: string[] } & { [key: string]: ImageSourcePropType };
-  onPress?: (event: OnPressEvent) => void;
-  hitbox?: {
-    width: number;
-    height: number;
-  };
-}
-
 export interface RasterSourceProps extends TileSourceProps {
   tileSize?: number;
 }
@@ -873,10 +827,6 @@ export interface LineLayerProps extends LayerBaseProps {
 
 export interface RasterLayerProps extends LayerBaseProps {
   style?: StyleProp<RasterLayerStyle>;
-}
-
-export interface SymbolLayerProps extends LayerBaseProps {
-  style?: SymbolLayerStyleProps;
 }
 
 export interface HeatmapLayerProps extends LayerBaseProps {
