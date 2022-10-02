@@ -20,7 +20,7 @@ not required when using other tiles
 | `tileServer` | `String` | `Yes` | tile server |
 
 #### Description
-No-op on non MapLibre implemntations. Use MapboxGL.TileServer.Mapbox to consume mapbox tiles with maplibre. *Note*: Consuming mapbox with MapLibre has different pricing than with the official SDK. Other values: MapboxGL.TileServer.MapLibre, MapboxGL.TileServer.MapTiler
+No-op on non MapLibre implemntations. Use MapboxGL.TileServers.Mapbox to consume mapbox tiles with maplibre. *Note*: Consuming mapbox with MapLibre has different pricing than with the official SDK. Other values: MapboxGL.TileServers.MapLibre, MapboxGL.TileServers.MapTiler
 
 ### getAccessToken()
 
