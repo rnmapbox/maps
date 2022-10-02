@@ -4,7 +4,7 @@ import { requireNativeComponent, Image } from 'react-native';
 
 import { viewPropTypes } from '../utils';
 
-import ShapeSource from './ShapeSource';
+import { ShapeSource } from './ShapeSource';
 
 export const NATIVE_MODULE_NAME = 'RCTMGLImages';
 

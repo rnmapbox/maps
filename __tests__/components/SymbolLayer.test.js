@@ -1,7 +1,8 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
 
-import SymbolLayer, {
+import {
+  SymbolLayer,
   NATIVE_MODULE_NAME,
 } from '../../javascript/components/SymbolLayer';
 

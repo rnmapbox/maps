@@ -87,7 +87,7 @@ const CustomCallout: FC<CustomCalloutProps> = (props) => {
 };
 
 interface CustomCalloutStyles {
-  mapPinLayer: StyleProp<SymbolLayerStyle>;
+  mapPinLayer: SymbolLayerStyle;
   customCalloutText: StyleProp<TextStyle>;
   calloutContainerStyle: StyleProp<ViewStyle>;
 }

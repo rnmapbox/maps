@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import CircleLayer from './CircleLayer';
 import RasterLayer from './RasterLayer';
-import SymbolLayer from './SymbolLayer';
+import { SymbolLayer } from './SymbolLayer';
 import LineLayer from './LineLayer';
 import FillLayer from './FillLayer';
 import FillExtrusionLayer from './FillExtrusionLayer';
@@ -12,7 +12,7 @@ import HeatmapLayer from './HeatmapLayer';
 import VectorSource from './VectorSource';
 import RasterSource from './RasterSource';
 import ImageSource from './ImageSource';
-import ShapeSource from './ShapeSource';
+import { ShapeSource } from './ShapeSource';
 
 function toCamelCase(s) {
   return s.replace(/([-_][a-z])/gi, ($1) => {

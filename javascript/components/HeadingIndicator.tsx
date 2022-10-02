@@ -2,7 +2,7 @@ import React from 'react';
 
 import headingIcon from '../../assets/heading.png';
 
-import SymbolLayer from './SymbolLayer';
+import { SymbolLayer } from './SymbolLayer';
 
 const style = {
   iconImage: headingIcon,
