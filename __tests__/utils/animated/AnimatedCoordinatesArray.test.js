@@ -7,7 +7,7 @@ import {
   AnimatedShape,
   AnimatedCoordinatesArray,
 } from '../../../javascript/classes';
-import ShapeSource from '../../../javascript/components/ShapeSource';
+import { ShapeSource } from '../../../javascript/components/ShapeSource';
 
 let clock = null;
 let oldNodeEnv = null;

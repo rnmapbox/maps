@@ -2,7 +2,7 @@ import React from 'react';
 import { Easing } from 'react-native';
 import PropTypes from 'prop-types';
 
-import SymbolLayer from '../SymbolLayer';
+import { SymbolLayer } from '../SymbolLayer';
 import Animated from '../../utils/animated/Animated';
 import { AnimatedPoint } from '../../classes';
 

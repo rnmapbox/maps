@@ -74,7 +74,7 @@ const RCTMGLSymbolLayer =
 /**
  * SymbolLayer is a style layer that renders icon and text labels at points or along lines on the map.
  */
-class SymbolLayer extends AbstractLayer<Props, NativeTypeProps> {
+export class SymbolLayer extends AbstractLayer<Props, NativeTypeProps> {
   static defaultProps = {
     sourceID: MapboxGL.StyleSource.DefaultSourceID,
   };
@@ -109,5 +109,3 @@ class SymbolLayer extends AbstractLayer<Props, NativeTypeProps> {
     );
   }
 }
-
-export default SymbolLayer;

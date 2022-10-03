@@ -1,19 +1,19 @@
-func RCTLogError(_ message: String, _ file: String=#file, _ line: UInt=#line) {
+func RCTMGLLogError(_ message: String, _ file: String=#file, _ line: UInt=#line) {
   RCTMGLSwiftLog.error(message, file: file, line: line)
 }
 
-func RCTLogWarn(_ message: String, _ file: String=#file, _ line: UInt=#line) {
+func RCTMGLLogWarn(_ message: String, _ file: String=#file, _ line: UInt=#line) {
   RCTMGLSwiftLog.warn(message, file: file, line: line)
 }
 
-func RCTLogInfo(_ message: String, _ file: String=#file, _ line: UInt=#line) {
+func RCTMGLLogInfo(_ message: String, _ file: String=#file, _ line: UInt=#line) {
   RCTMGLSwiftLog.info(message, file: file, line: line)
 }
 
-func RCTLog(_ message: String, _ file: String=#file, _ line: UInt=#line) {
+func RCTMGLLog(_ message: String, _ file: String=#file, _ line: UInt=#line) {
   RCTMGLSwiftLog.log(message, file: file, line: line)
 }
 
-func RCTLogTrace(_ message: String, _ file: String=#file, _ line: UInt=#line) {
+func RCTMGLLogTrace(_ message: String, _ file: String=#file, _ line: UInt=#line) {
   RCTMGLSwiftLog.trace(message, file: file, line: line)
 }

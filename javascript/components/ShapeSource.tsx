@@ -154,7 +154,7 @@ export type Props = {
  * ShapeSource is a map content source that supplies vector shapes to be shown on the map.
  * The shape may be an url or a GeoJSON object
  */
-class ShapeSource extends NativeBridgeComponent(
+export class ShapeSource extends NativeBridgeComponent(
   AbstractSource<Props, NativeProps>,
   NATIVE_MODULE_NAME,
 ) {
@@ -410,5 +410,3 @@ type NativeProps = {
 type NativeShapeSource = HostComponent<NativeProps>;
 const RCTMGLShapeSource: NativeShapeSource =
   requireNativeComponent(NATIVE_MODULE_NAME);
-
-export default ShapeSource;
