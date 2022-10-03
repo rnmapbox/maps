@@ -30,7 +30,7 @@ extension RCTMGLMapViewManager {
         let view = viewRegistry![reactTag]
 
         guard let view = view! as? RCTMGLMapView else {
-          RCTLogError("Invalid react tag, could not find RCTMGLMapView");
+          RCTMGLLogError("Invalid react tag, could not find RCTMGLMapView");
           rejecter(name, "Unknown find reactTag: \(reactTag)", nil)
           return;
         }
@@ -47,7 +47,7 @@ extension RCTMGLMapViewManager {
     {
       withMapView(reactTag, name: name, rejecter: rejecter) { view in
         guard let mapboxMap = view.mapboxMap else {
-          RCTLogError("MapboxMap is not yet available");
+          RCTMGLLogError("MapboxMap is not yet available");
           rejecter(name, "Map not loaded yet", nil)
           return;
         }

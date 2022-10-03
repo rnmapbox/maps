@@ -23,7 +23,7 @@ extension RCTMGLShapeSourceManager {
       let view = viewRegistry![reactTag]
 
       guard let shapeSource = view! as? RCTMGLShapeSource else {
-        RCTLogError("Invalid react tag, could not find RCTMGLShapeSource");
+        RCTMGLLogError("Invalid react tag, could not find RCTMGLShapeSource");
         rejecter(name, "Unknown find reactTag: \(reactTag)", nil)
         return;
       }
