@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerViewWrapperManager;
 import com.mapbox.rctmgl.components.camera.RCTMGLCameraManager;
 
 import com.mapbox.rctmgl.components.annotation.RCTMGLCalloutManager;
@@ -81,7 +80,6 @@ public class RCTMGLPackage implements ReactPackage {
 
         // annotations
         managers.add(new RCTMGLMarkerViewManager(reactApplicationContext));
-        managers.add(new RCTMGLMarkerViewWrapperManager(reactApplicationContext));
         managers.add(new RCTMGLPointAnnotationManager(reactApplicationContext));
         managers.add(new RCTMGLCalloutManager());
 

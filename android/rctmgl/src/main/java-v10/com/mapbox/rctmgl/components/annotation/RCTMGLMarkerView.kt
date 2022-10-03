@@ -1,85 +1,192 @@
 package com.mapbox.rctmgl.components.annotation
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import com.mapbox.geojson.Point
+import com.mapbox.maps.ViewAnnotationAnchor
 import com.mapbox.maps.ViewAnnotationOptions
+import com.mapbox.maps.viewannotation.viewAnnotationOptions
 import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
+import java.util.Vector
 
-class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerViewManager) : AbstractMapFeature(context), View.OnLayoutChangeListener {
+private data class Vec2(val dx: Double, val dy: Double)
+
+class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerViewManager):
+    AbstractMapFeature(context),
+    View.OnLayoutChangeListener
+{
+    // region Instance variables
+
     private var mMapView: RCTMGLMapView? = null
-    private var mChildView: View? = null
-    private var mCoordinate: Point? = null
-    private lateinit var mAnchor: Array<Float>
+    private var mView: View? = null
+    private var didAddToMap = false
 
-    override fun addView(childView: View, childPosition: Int) {
-        mChildView = childView
-    }
+    private var mCoordinate: Point? = null
+    private var mAnchor: Vec2 = Vec2(0.5, 0.5)
+    private var mAllowOverlap = false
+    private var mIsSelected = false
 
     fun setCoordinate(point: Point?) {
         mCoordinate = point
-        if (mChildView != null) {
-            val options = ViewAnnotationOptions.Builder().geometry(mCoordinate).build()
-            mMapView?.viewAnnotationManager?.updateViewAnnotation(mChildView!!, options)
-        }
+        update()
     }
 
     fun setAnchor(x: Float, y: Float) {
-        mAnchor = arrayOf(x, y)
-        refresh()
+        mAnchor = Vec2(x.toDouble(), y.toDouble())
+        update()
     }
 
-    fun refresh() {
-        // this will cause position to be recalculated
-        if (mChildView != null) {
-            val width = mChildView!!.width
-            val height = mChildView!!.height
-            val options = ViewAnnotationOptions.Builder().geometry(mCoordinate).width(width).height(height).offsetX(((mAnchor[0] - 0.5) * width).toInt()).offsetY(((mAnchor[1] - 0.5) * height).toInt()).build()
-            mMapView?.viewAnnotationManager?.updateViewAnnotation(mChildView!!, options)
-        }
+    fun setAllowOverlap(allowOverlap: Boolean) {
+        mAllowOverlap = allowOverlap
+        update()
     }
+
+    fun setIsSelected(isSelected: Boolean) {
+        mIsSelected = isSelected
+        update()
+    }
+
+    // endregion
+
+    // region View methods
+
+    override fun addView(childView: View, childPosition: Int) {
+        mView = childView
+        // Note: Do not call this method on `super`. The view is added manually.
+    }
+
+    override fun onLayoutChange(
+        v: View,
+        left: Int, top: Int, right: Int, bottom: Int,
+        oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int
+    ) {
+        addOrUpdate()
+    }
+
+    // endregion
+
+    // region RCTMGLMapComponent methods
 
     override fun addToMap(mapView: RCTMGLMapView) {
         mMapView = mapView
-        val rctmglMarkerView = this
-        mMapView?.getMapAsync {
-            if (mChildView != null) {
-                val width = mChildView!!.width
-                val height = mChildView!!.height
-                val options = ViewAnnotationOptions.Builder().geometry(mCoordinate).width(width).height(height).offsetX(((mAnchor[0] - 0.5) * width).toInt()).offsetY(((mAnchor[1] - 0.5) * height).toInt()).build()
-                mChildView!!.addOnLayoutChangeListener(rctmglMarkerView)
-                if (mChildView!!.layoutParams == null && !mChildView!!.isAttachedToWindow) {
-                    mMapView?.offscreenAnnotationViewContainer()?.addView(mChildView)
-                    mMapView?.offscreenAnnotationViewContainer()?.removeView(mChildView)
-                }
-                mMapView?.viewAnnotationManager?.addViewAnnotation(mChildView!!, options)
-            }
-        }
+        add()
     }
 
     override fun removeFromMap(mapView: RCTMGLMapView) {
-        val childView = mChildView
-        if (childView != null) {
-            childView.removeOnLayoutChangeListener(this)
-            childView.visibility = INVISIBLE;
-            mMapView?.viewAnnotationManager?.removeViewAnnotation(childView)
+        remove()
+    }
+
+    // endregion
+
+    // region Create, update, and remove methods
+
+    private fun addOrUpdate() {
+        if (didAddToMap) {
+            update()
+        } else {
+            add()
         }
     }
 
-    override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int,
-                                oldRight: Int, oldBottom: Int) {
-        if (left != oldLeft || right != oldRight || top != oldTop || bottom != oldBottom) {
-            val centerX = oldLeft + (oldRight-oldLeft)*mAnchor[0];
-            val centerY = oldTop + (oldBottom-oldTop)*mAnchor[1];
+    private fun add() {
+        if (didAddToMap) {
+            return
+        }
 
-            val newLeft = (centerX - (mAnchor[0] * (right - left))).toInt();
-            val newTop =  (centerY - (mAnchor[1] * (bottom - top))).toInt();
+        if (mView == null || mCoordinate == null) {
+            return
+        }
+        val view = mView!!
 
-            val childView = mChildView!!
-            childView.x = (newLeft - oldLeft) + childView.x;
-            childView.y = (newTop-oldTop) + childView.y;
-            refresh()
+        view.addOnLayoutChangeListener(this)
+
+        if (view.layoutParams == null && !view.isAttachedToWindow) {
+            mMapView?.offscreenAnnotationViewContainer?.addView(view)
+            mMapView?.offscreenAnnotationViewContainer?.removeView(view)
+        }
+
+        val options = getOptions()
+
+        val annotation = mMapView?.viewAnnotationManager?.addViewAnnotation(
+            view,
+            options
+        )
+        didAddToMap = true
+    }
+
+    fun update() {
+        if (!didAddToMap) {
+            return
+        }
+
+        if (mView == null || mCoordinate == null) {
+            return
+        }
+        val view = mView!!
+
+        val options = getOptions()
+
+        val annotation = mMapView?.viewAnnotationManager?.updateViewAnnotation(
+            view,
+            options
+        )
+    }
+
+    private fun remove() {
+        this.removeOnLayoutChangeListener(this)
+
+        if (mView == null) {
+            return
+        }
+
+        val removed = mMapView?.viewAnnotationManager?.removeViewAnnotation(mView!!)
+        if (removed == false) {
+            Log.d("[MarkerView]", "Unable to remove view")
         }
     }
+
+    // endregion
+
+    // region Helper functions
+
+    private fun getOptions(): ViewAnnotationOptions {
+        val view = mView!!
+        val width = view.width
+        val height = view.height
+        val coordinate = mCoordinate
+
+        val offset = getOffset()
+
+        val options = viewAnnotationOptions {
+            geometry(coordinate)
+            width(width)
+            height(height)
+            allowOverlap(mAllowOverlap)
+            offsetX(offset.dx.toInt())
+            offsetY(offset.dy.toInt())
+            selected(mIsSelected)
+        }
+        return options
+    }
+
+    private fun getOffset(): Vec2 {
+        if (mView == null) {
+            return Vec2(0.0, 0.0)
+        }
+        val view = mView!!
+
+        val width = view.width
+        val height = view.height
+
+        // Create a modified offset, normalized from 0..1 to -1..1 and scaled to
+        // the view size.
+        val offsetX = (mAnchor.dx * 2 - 1) * (width / 2) * -1
+        val offsetY = (mAnchor.dy * 2 - 1) * (height / 2)
+
+        return Vec2(offsetX, offsetY)
+    }
+
+    // endregion
 }

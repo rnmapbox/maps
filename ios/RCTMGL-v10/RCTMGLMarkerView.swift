@@ -1,152 +1,233 @@
 import MapboxMaps
+import UIKit
 
-class RCTMGLMarkerView : UIView, RCTMGLMapComponent {
+class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
+  // MARK: - Instance variables
+  
   static let key = "RCTMGLMarkerView"
+  let id: String = "marker-\(UUID().uuidString)"
   
-  var map: RCTMGLMapView? = nil
+  var map: RCTMGLMapView?
   
-  // MARK: - react view
-  var reactSubviews : [UIView] = []
-
-  @objc
-  override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
-    if subview is RCTMGLCallout {
-      Logger.log(level: .warn, message: "MarkerView doesn't supports callouts")
-    }
-    reactSubviews.insert(subview, at: atIndex)
-    if reactSubviews.count > 1 {
-      Logger.log(level: .error, message: "MarkerView supports max 1 subview")
+  var didAddToMap = false
+  
+  @objc var coordinate: String? {
+    didSet {
+      update()
     }
   }
-
-  @objc
-  override func removeReactSubview(_ subview: UIView!) {
-    reactSubviews.removeAll(where: { $0 == subview })
+  
+  @objc var anchor: [String: NSNumber]? {
+    didSet {
+      update()
+    }
   }
   
-  func view() -> UIView? {
-    return reactSubviews.first
+  @objc var allowOverlap: Bool = false {
+    didSet {
+      update()
+    }
   }
   
-  // MARK: - RCTMGLMapComponent
-
-  func waitForStyleLoad() -> Bool {
-    return true
-  }
-  
-  func addToMap(_ map: RCTMGLMapView, style: Style) {
-    logged("RCTMGLMarkerView.addToMap") {
-      self.map = map
-      let point = try point()
-
-      try point.coordinates.validate()
-
-      guard let view = view() else {
-        Logger.log(level: .error, message: "MarkerView: No subview to render")
-        return
+  @objc var isSelected: Bool = false {
+    didSet {
+      let hasBecomeSelected = isSelected && !oldValue
+      
+      if hasBecomeSelected {
+        setSelected()
+      } else {
+        update()
       }
-      let bounds = view.bounds
-      view.isHidden = true
-      try viewAnnotations()?.add(view, options: ViewAnnotationOptions.init(geometry: Geometry.point(point), width: bounds.width, height: bounds.height, associatedFeatureId: nil, allowOverlap: true, anchor: .center, offsetX: 0, offsetY: 0, selected: false))
     }
   }
+
+  // MARK: - Derived variables
   
-  func viewAnnotations() -> ViewAnnotationManager? {
+  var annotationManager: ViewAnnotationManager? {
     self.map?.viewAnnotations
   }
 
-  func removeFromMap(_ map: RCTMGLMapView) {
-    guard let view = view() else {
-      Logger.log(level: .error, message: "MarkerView: No subview to render")
-      return
+  var point: Point? {
+    guard let _coordinate = coordinate else {
+      Logger.log(level: .error, message: "[getPoint] No coordinates were set")
+      return nil
     }
-    viewAnnotations()?.remove(view)
-    self.map = map
+     
+    guard let _data = _coordinate.data(using: .utf8) else {
+      Logger.log(level: .error, message: "[getPoint] Cannot serialize coordinate")
+      return nil
+    }
+     
+    guard let _feature = try? JSONDecoder().decode(Feature.self, from: _data) else {
+      Logger.log(level: .error, message: "[getPoint] Cannot parse serialized coordinate")
+      return nil
+    }
+     
+    guard let _geometry = _feature.geometry else {
+      Logger.log(level: .error, message: "[getPoint] Invalid geometry")
+      return nil
+    }
+
+    guard case .point(let _point) = _geometry else {
+      Logger.log(level: .error, message: "[getPoint] Invalid point")
+      return nil
+    }
+
+    return _point
   }
+
+  // MARK: - RCTMGLMapComponent methods
+
+  func addToMap(_ map: RCTMGLMapView, style: Style) {
+    self.map = map
+    add()
+  }
+
+  func removeFromMap(_ map: RCTMGLMapView) {
+    remove()
+  }
+  
+  // MARK: - React methods
   
   override func reactSetFrame(_ frame: CGRect) {
-    super.reactSetFrame(frame)
+    let prev = self.frame
+    var next = frame
+    
+    let frameDidChange = !next.equalTo(prev)
+    if (frameDidChange) {
+      if prev.minX == 0 || prev.minY == 0 {
+        // Start the view offscreen to make it invisible until the annotation manager sets it to
+        // the correct point on the map.
+        next = CGRect(
+          x: -10000,
+          y: -10000,
+          width: next.width,
+          height: next.height
+        )
+      } else {
+        // Calculate the next position to temporarily place the view before the annotation manager
+        // sets it to the correct point on the map.
+        let dx = (next.width - prev.width) / 2
+        let dy = (next.height - prev.height) / 2
+        next = CGRect(
+          x: prev.minX - dx,
+          y: prev.minY - dy,
+          width: next.width,
+          height: next.height
+        )
+      }
+    }
+    
+    super.reactSetFrame(next)
+    addOrUpdate()
+  }
+  
+  override func insertReactSubview(_ subview: UIView, at atIndex: Int) {
+    super.insertReactSubview(subview, at: atIndex)
+  }
+  
+  override func removeReactSubview(_ subview: UIView) {
+    super.removeReactSubview(subview)
+  }
+  
+  func waitForStyleLoad() -> Bool {
+    true
+  }
 
-    _updateFrameOrAnchor()
-  }
-  
-  @objc var coordinate : String? {
-    didSet {
-      _updateCoordinate()
-    }
-  }
-  
-  @objc var anchor : [String:NSNumber]? {
-    didSet {
-      _updateFrameOrAnchor()
-    }
-  }
-  
-  func point() throws -> Point {
-    guard let coordinate = coordinate else {
-      throw RCTMGLError.failed("no coordinates were set")
-    }
-     
-    guard let data = coordinate.data(using: .utf8) else {
-      throw RCTMGLError.failed("cannot serialize coordiante")
-    }
-     
-    guard let feature = try? JSONDecoder().decode(Feature.self, from: data) else {
-      throw RCTMGLError.failed("cannot parse serialized coordiante")
-    }
-     
-    guard let geometry : Geometry = feature.geometry else {
-      throw RCTMGLError.failed("is not a geometry")
-    }
+  // MARK: - Create, update, and remove methods
 
-    guard case .point(let point) = geometry else {
-      throw RCTMGLError.failed("is not a point")
+    private func addOrUpdate() {
+      if didAddToMap {
+        update()
+      } else {
+        add()
+      }
     }
-
-    return point
-  }
   
-  func _updateCoordinate() {
-    guard let view = view() else {
+  /// Because the necessary data to add an annotation arrives from different sources at unpredictable times, we let the arrival of each value trigger an attempt to add the annotation, which we only do if all of the data exists, and the annotation not been added already.
+  private func add() {
+    if didAddToMap {
       return
     }
     
-    logged("MarkerView.updateCoordinate") {
-      let point = try point()
+    guard let annotationManager = annotationManager, let _ = point else {
+      return
+    }
 
-      try viewAnnotations()?.update(view, options: ViewAnnotationOptions(geometry: Geometry.point(point)))
+    do {
+      let options = getOptions()
+      try annotationManager.add(self, id: id, options: options)
+      didAddToMap = true
+    } catch {
+      Logger.log(level: .error, message: "[MarkerView] Error adding annotation", error: error)
+    }
+  }
+
+  private func update() {
+    if !didAddToMap {
+      return
+    }
+    
+    guard let annotationManager = annotationManager else {
+      return
+    }
+    
+    do {
+      let options = getOptions()
+      try annotationManager.update(self, options: options)
+    } catch {
+      Logger.log(level: .error, message: "[MarkerView] Error updating annotation", error: error)
     }
   }
   
-  func _updateFrameOrAnchor() {
-    guard let view = view() else {
-      return
+  /// There is a Mapbox bug where `selected` does not cause the marker to move to the front, so we can't simply update the component.
+  /// This forces that effect. See https://github.com/mapbox/mapbox-maps-ios/issues/1599.
+  private func setSelected() {
+    if let options = annotationManager?.options(for: self) {
+      do {
+        annotationManager?.remove(self)
+        try annotationManager?.add(self, id: id, options: options)
+      } catch {
+        Logger.log(level: .error, message: "[MarkerView] Error selecting annotation", error: error)
+      }
     }
-    var options = ViewAnnotationOptions()
-    let defaultX : CGFloat = 0.5
-    let defaultY : CGFloat = 0.5
-    let bounds = view.bounds
-    options.width = bounds.width
-    options.height = bounds.height
+  }
+  
+  private func remove() {
+    annotationManager?.remove(self)
+  }
+  
+  // MARK: - Helper functions
+  
+  private func getOptions() -> ViewAnnotationOptions {
+    var geometry: GeometryConvertible?
+    if let point = point {
+      geometry = Geometry.point(point)
+    }
     
-    if let anchor = anchor {
-      if let anchorX = anchor["x"] {
-        options.offsetX = bounds.width * (CGFloat(anchorX.floatValue) - defaultX)
-      }
-      if let anchorY = anchor["y"] {
-        options.offsetY = bounds.height * (CGFloat(anchorY.floatValue) - defaultY)
-      }
-      if let view = view as? RCTMGLMarkerViewWrapper {
-        if let anchorX = anchor["x"] {
-          view.anchorX = CGFloat(anchorX.floatValue)
-        }
-        if let anchorY = anchor["y"] {
-          view.anchorY = CGFloat(anchorY.floatValue)
-        }
-      }
+    let offset = getOffset()
+  
+    let options = ViewAnnotationOptions(
+      geometry: geometry,
+      width: self.bounds.width,
+      height: self.bounds.height,
+      allowOverlap: allowOverlap,
+      offsetX: offset.dx,
+      offsetY: offset.dy
+    )
+    return options
+  }
+  
+  private func getOffset() -> CGVector {
+    guard let anchor = anchor, let anchorX = anchor["x"]?.CGFloat, let anchorY = anchor["y"]?.CGFloat else {
+      return .zero
     }
-    logged("MarkerView.updateFrame") {
-      try viewAnnotations()?.update(view, options: options)
-    }
+          
+    // Create a modified offset, normalized from 0..1 to -1..1 and scaled to
+    // the view size.
+    let x = (anchorX * 2 - 1) * (self.bounds.width / 2) * -1
+    let y = (anchorY * 2 - 1) * (self.bounds.height / 2)
+
+    return CGVector(dx: x, dy: y)
   }
 }

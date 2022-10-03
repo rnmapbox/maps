@@ -38,6 +38,7 @@ import com.mapbox.maps.plugin.delegates.listeners.*
 import com.mapbox.maps.plugin.gestures.*
 import com.mapbox.maps.plugin.logo.generated.LogoSettings
 import com.mapbox.maps.plugin.logo.logo
+import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerView
@@ -70,6 +71,14 @@ interface RCTMGLMapViewLifecycleOwner : LifecycleOwner {
 }
 
 open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapViewManager /*, MapboxMapOptions options*/) : MapView(mContext), OnMapClickListener, OnMapLongClickListener {
+    /**
+     * `PointAnnotations` are rendered to a canvas, but the React Native `Image` component is
+     * implemented on top of Fresco (https://frescolib.org), which does not load images for
+     * views not attached to the window. This provides an offscreen view where views can
+     * be rendered to the canvas before being added as annotations.
+     */
+    public var offscreenAnnotationViewContainer: ViewGroup? = null
+
     private val mSources: MutableMap<String, RCTSource<*>>
     private val mImages: MutableList<RCTMGLImages>
     private var mPointAnnotationManager: PointAnnotationManager? = null
@@ -87,7 +96,6 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     var savedStyle: Style? = null
         private set
     private val mHandledMapChangedEvents: HashSet<String>? = null
-    private var mOffscreenAnnotationViewContainer: ViewGroup? = null
     private var mAnnotationClicked = false
     private var mAnnotationDragged = false
     private var mLocationComponentManager: LocationComponentManager? = null
@@ -229,7 +237,6 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             mPointAnnotations[annotation.iD.toString()] = annotation
             feature = childView
         } else if (childView is RCTMGLMarkerView) {
-            val marker = childView
             feature = childView
         } else if (childView is RCTMGLCamera) {
             mCamera = childView
@@ -630,23 +637,6 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         )
     }
 
-    /**
-     * PointAnnotations are rendered to a canvas, but react native Image component is
-     * implemented on top of Fresco, and fresco will not load images when their view is
-     * not attached to the window. So we'll have an offscreen view where we add those views
-     * so they can rendered full to canvas.
-     */
-    fun offscreenAnnotationViewContainer(): ViewGroup {
-        if (mOffscreenAnnotationViewContainer == null) {
-            mOffscreenAnnotationViewContainer = FrameLayout(context)
-            val flParams = LayoutParams(0, 0)
-            flParams.setMargins(-10000, -10000, -10000, -10000)
-            (mOffscreenAnnotationViewContainer as FrameLayout).setLayoutParams(flParams)
-            addView(mOffscreenAnnotationViewContainer)
-        }
-        return mOffscreenAnnotationViewContainer!!
-    }
-
     val locationComponentManager: LocationComponentManager
         get() {
             if (mLocationComponentManager == null) {
@@ -839,11 +829,19 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     init {
+        offscreenAnnotationViewContainer = FrameLayout(getContext())
+        val p = FrameLayout.LayoutParams(0, 0)
+        p.setMargins(-10000, -10000, -10000, -10000)
+        offscreenAnnotationViewContainer?.setLayoutParams(p)
+        addView(offscreenAnnotationViewContainer)
+
         mMap = getMapboxMap()
         mSources = HashMap()
         mImages = ArrayList()
         mPointAnnotations = HashMap()
+
         onMapReady(mMap)
+
         val _this = this
         mMap.addOnMapLoadedListener(OnMapLoadedListener { (begin, end) -> _this.handleMapChangedEvent(EventTypes.DID_FINISH_LOADING_MAP) })
         mMap.addOnStyleImageMissingListener(OnStyleImageMissingListener { (begin, end, id) ->

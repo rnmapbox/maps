@@ -1,10 +1,11 @@
-import React, { ReactNode, ReactElement } from 'react';
+import React from 'react';
 import {
   Platform,
   NativeModules,
   requireNativeComponent,
   HostComponent,
   type ViewProps,
+  View,
 } from 'react-native';
 
 import { toJSONString } from '../utils';
@@ -16,46 +17,55 @@ const Mapbox = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLMarkerView';
 
-/**
- * MarkerView allows you to place a interactive react native marker to the map.
- *
- * If you have static view consider using PointAnnotation or SymbolLayer they'll offer much better performance
- * .
- * This is based on [MakerView plugin](https://docs.mapbox.com/android/plugins/overview/markerview/) on Android
- * and PointAnnotation on iOS.
- */
-class MarkerView extends React.PureComponent<{
+type Props = ViewProps & {
   /**
    * The center point (specified as a map coordinate) of the marker.
-   * See also #anchor.
    */
   coordinate: [number, number];
 
   /**
-   * Specifies the anchor being set on a particular point of the annotation.
-   * The anchor point is specified in the continuous space [0.0, 1.0] x [0.0, 1.0],
-   * where (0, 0) is the top-left corner of the image, and (1, 1) is the bottom-right corner.
-   * Note this is only for custom annotations not the default pin view.
-   * Defaults to the center of the view.
+   * Any coordinate between (0, 0) and (1, 1), where (0, 0) is the top-left corner of
+   * the view, and (1, 1) is the bottom-right corner. Defaults to the center at (0.5, 0.5).
    */
   anchor: {
-    /**
-     * `x` of anchor
-     */
     x: number;
-    /**
-     * `y` of anchor
-     */
     y: number;
   };
 
   /**
-   * Expects one child - can be container with multiple elements
+   * @v10
+   *
+   * Whether or not nearby markers on the map should all be displayed. If false, adjacent
+   * markers will 'collapse' and only one will be shown. Defaults to false.
+   */
+  allowOverlap: boolean;
+
+  isSelected: boolean;
+
+  /**
+   * One or more valid React Native views.
    */
   children: React.ReactElement;
-}> {
-  static defaultProps = {
+};
+
+/**
+ * MarkerView represents an interactive React Native marker on the map.
+ *
+ * If you have static views, consider using PointAnnotation or SymbolLayer to display
+ * an image, as they'll offer much better performance. Mapbox suggests using this
+ * component for a maximum of around 100 views displayed at one time.
+ *
+ * This is implemented with view annotations on [Android](https://docs.mapbox.com/android/maps/guides/annotations/view-annotations/)
+ * and [iOS](https://docs.mapbox.com/ios/maps/guides/annotations/view-annotations).
+ *
+ * This component has no dedicated `onPress` method. Instead, you should handle gestures
+ * with the React views passed in as `children`.
+ */
+class MarkerView extends React.PureComponent<Props> {
+  static defaultProps: Partial<Props> = {
     anchor: { x: 0.5, y: 0.5 },
+    allowOverlap: false,
+    isSelected: false,
   };
 
   static lastId = 0;
@@ -69,69 +79,63 @@ class MarkerView extends React.PureComponent<{
     return this.__idForPointAnnotation;
   }
 
+  _getCoordinate(coordinate: [number, number]): string | undefined {
+    if (!coordinate) {
+      return undefined;
+    }
+    return toJSONString(makePoint(coordinate));
+  }
+
   render() {
-    const { props } = this;
-    if (Platform.OS === 'ios' && !Mapbox.MapboxV10) {
-      return <PointAnnotation id={this._idForPointAnnotation()} {...props} />;
-    }
-
-    function _getCoordinate(coordinate: [number, number]): string | undefined {
-      if (!coordinate) {
-        return undefined;
-      }
-      return toJSONString(makePoint(coordinate));
-    }
-
-    const { anchor = { x: 0.5, y: 0.5 } } = props;
-    const { children } = props;
-
-    const actProps = {
-      anchor,
-      coordinate: _getCoordinate(props.coordinate),
-    };
-
-    const wrapChildern =
-      RCTMGLMarkerViewWrapper === undefined
-        ? (child: ReactNode | ReactNode[]) => child
-        : (child: ReactNode | ReactNode[]) => (
-            <RCTMGLMarkerViewWrapper
-              style={{
-                alignSelf: 'flex-start',
-                position: 'absolute',
-              }}
-            >
-              {child}
-            </RCTMGLMarkerViewWrapper>
-          );
-
-    if (RCTMGLMarkerView === undefined) {
-      throw new Error(
-        'internal error RCTMGLMarkerView should not be null on v10 or non ios',
+    if (
+      this.props.anchor.x < 0 ||
+      this.props.anchor.y < 0 ||
+      this.props.anchor.x > 1 ||
+      this.props.anchor.y > 1
+    ) {
+      console.warn(
+        `[MarkerView] Anchor with value (${this.props.anchor.x}, ${this.props.anchor.y}) should not be outside the range [(0, 0), (1, 1)]`,
       );
     }
+
+    if (Platform.OS === 'ios' && !Mapbox.MapboxV10) {
+      return (
+        <PointAnnotation id={this._idForPointAnnotation()} {...this.props} />
+      );
+    }
+
+    const { anchor = { x: 0.5, y: 0.5 } } = this.props;
+
     return (
-      <RCTMGLMarkerView {...actProps}>
-        {wrapChildern(children)}
+      <RCTMGLMarkerView
+        style={[
+          {
+            flex: 0,
+            alignSelf: 'flex-start',
+          },
+          this.props.style,
+        ]}
+        coordinate={this._getCoordinate(this.props.coordinate)}
+        anchor={anchor}
+        allowOverlap={this.props.allowOverlap}
+        isSelected={this.props.isSelected}
+      >
+        <View style={{ flex: 0, alignSelf: 'flex-start' }}>
+          {this.props.children}
+        </View>
       </RCTMGLMarkerView>
     );
   }
 }
 
-const RCTMGLMarkerView:
-  | HostComponent<{
-      anchor: { x: number; y: number };
-      coordinate: string | undefined;
-    }>
-  | undefined =
-  Platform.OS === 'android'
-    ? requireNativeComponent(NATIVE_MODULE_NAME)
-    : Mapbox.MapboxV10
-    ? requireNativeComponent(NATIVE_MODULE_NAME)
-    : undefined;
+type NativeProps = ViewProps & {
+  coordinate: string | undefined;
+  anchor: { x: number; y: number };
+  allowOverlap: boolean;
+  isSelected: boolean;
+};
 
-const RCTMGLMarkerViewWrapper: HostComponent<ViewProps> | undefined =
-  Mapbox.MapboxV10
-    ? requireNativeComponent('RCTMGLMarkerViewWrapper')
-    : undefined;
+const RCTMGLMarkerView: HostComponent<NativeProps> =
+  requireNativeComponent(NATIVE_MODULE_NAME);
 
 export default MarkerView;
