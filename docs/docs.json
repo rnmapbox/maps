@@ -3166,7 +3166,7 @@
     "name": "MapView"
   },
   "MarkerView": {
-    "description": "MarkerView allows you to place a interactive react native marker to the map.\n\nIf you have static view consider using PointAnnotation or SymbolLayer they'll offer much better performance\n.\nThis is based on [MakerView plugin](https://docs.mapbox.com/android/plugins/overview/markerview/) on Android\nand PointAnnotation on iOS.",
+    "description": "MarkerView represents an interactive React Native marker on the map.\n\nIf you have static views, consider using PointAnnotation or SymbolLayer to display\nan image, as they'll offer much better performance. Mapbox suggests using this\ncomponent for a maximum of around 100 views displayed at one time.\n\nThis is implemented with view annotations on [Android](https://docs.mapbox.com/android/maps/guides/annotations/view-annotations/)\nand [iOS](https://docs.mapbox.com/ios/maps/guides/annotations/view-annotations).\n\nThis component has no dedicated `onPress` method. Instead, you should handle gestures\nwith the React views passed in as `children`.",
     "displayName": "MarkerView",
     "methods": [],
     "props": [
@@ -3175,7 +3175,7 @@
         "required": true,
         "type": "tuple",
         "default": "none",
-        "description": "The center point (specified as a map coordinate) of the marker.\nSee also #anchor."
+        "description": "The center point (specified as a map coordinate) of the marker."
       },
       {
         "name": "anchor",
@@ -3188,26 +3188,40 @@
               "required": true,
               "type": "number",
               "default": "none",
-              "description": "`x` of anchor"
+              "description": "FIX ME NO DESCRIPTION"
             },
             {
               "name": "y",
               "required": true,
               "type": "number",
               "default": "none",
-              "description": "`y` of anchor"
+              "description": "FIX ME NO DESCRIPTION"
             }
           ]
         },
         "default": "{ x: 0.5, y: 0.5 }",
-        "description": "Specifies the anchor being set on a particular point of the annotation.\nThe anchor point is specified in the continuous space [0.0, 1.0] x [0.0, 1.0],\nwhere (0, 0) is the top-left corner of the image, and (1, 1) is the bottom-right corner.\nNote this is only for custom annotations not the default pin view.\nDefaults to the center of the view."
+        "description": "Any coordinate between (0, 0) and (1, 1), where (0, 0) is the top-left corner of\nthe view, and (1, 1) is the bottom-right corner. Defaults to the center at (0.5, 0.5)."
+      },
+      {
+        "name": "allowOverlap",
+        "required": false,
+        "type": "boolean",
+        "default": "false",
+        "description": "@v10\n\nWhether or not nearby markers on the map should all be displayed. If false, adjacent\nmarkers will 'collapse' and only one will be shown. Defaults to false."
+      },
+      {
+        "name": "isSelected",
+        "required": false,
+        "type": "boolean",
+        "default": "false",
+        "description": "FIX ME NO DESCRIPTION"
       },
       {
         "name": "children",
         "required": true,
         "type": "ReactReactElement",
         "default": "none",
-        "description": "Expects one child - can be container with multiple elements"
+        "description": "One or more valid React Native views."
       }
     ],
     "fileNameWithExt": "MarkerView.tsx",
