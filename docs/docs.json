@@ -3251,7 +3251,7 @@
     "name": "NativeUserLocation"
   },
   "PointAnnotation": {
-    "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.\n\nConsider using ShapeSource and SymbolLayer instead, if you have many points and you have static images,\nthey'll offer much better performance.\n\nIf you need interactive views please use MarkerView,\nas with PointAnnotation on Android child views are rendered onto a bitmap for better performance.",
+    "description": "PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.\n\nConsider using ShapeSource and SymbolLayer instead, if you have many points and you have static images,\nthey'll offer much better performance.\n\nIf you need interactive views please use MarkerView,\nas with PointAnnotation child views are rendered onto a bitmap",
     "displayName": "PointAnnotation",
     "methods": [
       {
