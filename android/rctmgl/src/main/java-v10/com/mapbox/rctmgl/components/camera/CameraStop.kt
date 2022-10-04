@@ -84,8 +84,12 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
     }
 
     fun convert(value: IntArray): EdgeInsets {
+        val left = value[0].toDouble();
+        val top = value[1].toDouble();
+        val right = value[2].toDouble();
+        val bottom = value[3].toDouble();
         return EdgeInsets(
-            value[0].toDouble(), value[1].toDouble(), value[2].toDouble(), value[3].toDouble()
+            top, left, bottom, right
         )
     }
 
