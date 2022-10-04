@@ -1,14 +1,19 @@
 package com.mapbox.rctmgl.components.annotation
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.FrameLayout
 import com.mapbox.geojson.Point
 import com.mapbox.maps.ViewAnnotationAnchor
 import com.mapbox.maps.ViewAnnotationOptions
 import com.mapbox.maps.viewannotation.viewAnnotationOptions
 import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
+import com.mapbox.rctmgl.modules.RCTMGLLogging
+import com.mapbox.rctmgl.utils.Logger
 import java.util.Vector
 
 private data class Vec2(val dx: Double, val dy: Double)
@@ -75,7 +80,7 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
     }
 
     override fun removeFromMap(mapView: RCTMGLMapView) {
-        remove()
+        remove(mapView)
     }
 
     // endregion
@@ -134,16 +139,15 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
         )
     }
 
-    private fun remove() {
+    private fun remove(mapView: RCTMGLMapView) {
         this.removeOnLayoutChangeListener(this)
 
-        if (mView == null) {
-            return
-        }
-
-        val removed = mMapView?.viewAnnotationManager?.removeViewAnnotation(mView!!)
-        if (removed == false) {
-            Log.d("[MarkerView]", "Unable to remove view")
+        mView?.let { view ->
+            mapView.endViewTransition(view) // https://github.com/mapbox/mapbox-maps-android/issues/1723
+            val removed = mapView.viewAnnotationManager?.removeViewAnnotation(view)
+            if (removed == false) {
+                Logger.w("RCTMGLMarkerView", "Unable to remove view")
+            }
         }
     }
 
