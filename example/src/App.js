@@ -1,15 +1,7 @@
 import React from 'react';
 import MapboxGL from '@rnmapbox/maps';
-import {
-  StyleSheet,
-  Text,
-  View,
-  LogBox,
-  SafeAreaView,
-  Button,
-} from 'react-native';
+import { StyleSheet, Text, View, LogBox, SafeAreaView } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createCompatNavigatorFactory } from '@react-navigation/compat';
 import { NavigationContainer } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
