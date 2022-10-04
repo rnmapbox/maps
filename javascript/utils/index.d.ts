@@ -7,9 +7,9 @@ export type NativeArg =
   | NativeArg[];
 
 export function isAndroid(): boolean;
-export function isBoolean(_: unknown): argument is boolean;
-export function isNumber(_: unknown): argument is number;
-export function isString(_: unknown): argument is string;
+export function isBoolean(argument: unknown): argument is boolean;
+export function isNumber(argument: unknown): argument is number;
+export function isString(argument: unknown): argument is string;
 // eslint-disable-next-line @typescript-eslint/ban-types
 export function isFunction(argument: unknown): argument is Function;
 

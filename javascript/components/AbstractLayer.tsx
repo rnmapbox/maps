@@ -62,7 +62,10 @@ class AbstractLayer<
     if (this.nativeLayer) {
       let propsToPass = props;
       if (props.style) {
-        propsToPass = { ...props, reactStyle: this.getStyle(props.style) };
+        propsToPass = {
+          ...props,
+          reactStyle: this.getStyle(props.style as AllLayerStyleProps),
+        };
       }
       this.nativeLayer?.setNativeProps(propsToPass);
     }

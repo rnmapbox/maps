@@ -48,6 +48,7 @@ class DocJSONBuilder {
     return {
       match: fileExtensionsRegex,
       shortName: true,
+      sort: true,
     };
   }
 

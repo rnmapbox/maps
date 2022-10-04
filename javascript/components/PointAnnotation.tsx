@@ -116,7 +116,7 @@ type PointAnnotationProps = {
  * they'll offer much better performance.
  *
  * If you need interactive views please use MarkerView,
- * as with PointAnnotation on Android child views are rendered onto a bitmap for better performance.
+ * as with PointAnnotation child views are rendered onto a bitmap
  */
 class PointAnnotation extends NativeBridgeComponent(
   React.PureComponent<PointAnnotationProps>,
