@@ -62,7 +62,7 @@ import Ornaments from '../examples/Map/Ornaments';
 // SYMBOLCIRCLELAYER
 import CustomIcon from '../examples/SymbolCircleLayer/CustomIcon';
 import DataDrivenCircleColors from '../examples/SymbolCircleLayer/DataDrivenCircleColors';
-import EarthQuakes from '../examples/SymbolCircleLayer/EarthQuakes';
+import Earthquakes from '../examples/SymbolCircleLayer/Earthquakes';
 import ShapeSourceIcon from '../examples/SymbolCircleLayer/ShapeSourceIcon';
 // USERLOCATION
 import SetDisplacement from '../examples/UserLocation/SetDisplacement';
@@ -246,7 +246,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   ]),
   new ExampleGroup('Symbol/CircleLayer', [
     new ExampleItem('Custom Icon', CustomIcon),
-    new ExampleItem('Clustering Earthquakes', EarthQuakes),
+    new ExampleItem('Clustering Earthquakes', Earthquakes),
     new ExampleItem('Shape Source From Icon', ShapeSourceIcon),
     new ExampleItem('Data Driven Circle Colors', DataDrivenCircleColors),
   ]),

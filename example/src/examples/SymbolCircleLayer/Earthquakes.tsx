@@ -88,7 +88,7 @@ const mag3 = ['all', ['>=', ['get', 'mag'], 3], ['<', ['get', 'mag'], 4]];
 const mag4 = ['all', ['>=', ['get', 'mag'], 4], ['<', ['get', 'mag'], 5]];
 const mag5 = ['>=', ['get', 'mag'], 5];
 
-const EarthQuakes = ({ label, onDismissExample }: BaseExampleProps) => {
+const Earthquakes = ({ label, onDismissExample }: BaseExampleProps) => {
   const shape = useRef<typeof ShapeSource>(null);
   const [selectedCluster, setSelectedCluster] = useState<FeatureCollection>();
 
@@ -218,4 +218,4 @@ const EarthQuakes = ({ label, onDismissExample }: BaseExampleProps) => {
   );
 };
 
-export default EarthQuakes;
+export default Earthquakes;
