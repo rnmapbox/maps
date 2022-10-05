@@ -153,6 +153,7 @@ declare namespace MapboxGL {
   const PointAnnotation = _PointAnnotation;
   const SymbolLayer = _SymbolLayer;
   const ShapeSource = _ShapeSource;
+  type ShapeSource = _ShapeSource;
 
   type MapboxGLEvent = _MapboxGLEvent;
   type UserTrackingMode = _UserTrackingMode;
