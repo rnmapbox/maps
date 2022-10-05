@@ -8,7 +8,7 @@ import com.mapbox.rctmgl.utils.DownloadMapImageTask
 import java.util.AbstractMap
 import java.util.ArrayList
 
-class RCTMGLStyle(private val mContext: Context, reactStyle: ReadableMap, map: MapboxMap) {
+class RCTMGLStyle(private val mContext: Context, reactStyle: ReadableMap?, map: MapboxMap) {
     private val mReactStyle: ReadableMap?
     private val mMap: MapboxMap
     val allStyleKeys: List<String>
