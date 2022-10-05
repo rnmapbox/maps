@@ -2,8 +2,12 @@ import React, { useRef, useState } from 'react';
 import { FlatList } from 'react-native';
 import { Overlay, ListItem, FAB, Icon } from '@rneui/base';
 import MapboxGL, {
+  Camera,
+  CircleLayer,
   CircleLayerStyle,
+  MapView,
   ShapeSource,
+  SymbolLayer,
   SymbolLayerStyle,
 } from '@rnmapbox/maps';
 import moment from 'moment';
@@ -133,16 +137,10 @@ const Earthquakes = ({ label, onDismissExample }: BaseExampleProps) => {
         )}
       </Overlay>
       <Page label={label} onDismissExample={onDismissExample}>
-        <MapboxGL.MapView
-          style={sheet.matchParent}
-          styleURL={MapboxGL.StyleURL.Dark}
-        >
-          <MapboxGL.Camera
-            zoomLevel={6}
-            centerCoordinate={SF_OFFICE_COORDINATE}
-          />
+        <MapView style={sheet.matchParent} styleURL={MapboxGL.StyleURL.Dark}>
+          <Camera zoomLevel={6} centerCoordinate={SF_OFFICE_COORDINATE} />
 
-          <MapboxGL.ShapeSource
+          <ShapeSource
             id="earthquakes"
             onPress={async (pressedShape) => {
               if (shape.current) {
@@ -194,25 +192,22 @@ const Earthquakes = ({ label, onDismissExample }: BaseExampleProps) => {
             }}
             shape={earthQuakesJSON as unknown as FeatureCollection}
           >
-            <MapboxGL.SymbolLayer
-              id="pointCount"
-              style={layerStyles.clusterCount}
-            />
+            <SymbolLayer id="pointCount" style={layerStyles.clusterCount} />
 
-            <MapboxGL.CircleLayer
+            <CircleLayer
               id="clusteredPoints"
               belowLayerID="pointCount"
               filter={['has', 'point_count']}
               style={layerStyles.clusteredPoints}
             />
 
-            <MapboxGL.CircleLayer
+            <CircleLayer
               id="singlePoint"
               filter={['!', ['has', 'point_count']]}
               style={layerStyles.singlePoint}
             />
-          </MapboxGL.ShapeSource>
-        </MapboxGL.MapView>
+          </ShapeSource>
+        </MapView>
       </Page>
     </>
   );
