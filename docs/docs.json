@@ -1,4 +1,98 @@
 {
+  "Annotation": {
+    "description": "",
+    "displayName": "Annotation",
+    "methods": [
+      {
+        "name": "onPress",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "symbolStyle",
+        "docblock": null,
+        "modifiers": [
+          "get"
+        ],
+        "params": [],
+        "returns": null
+      }
+    ],
+    "props": [
+      {
+        "name": "id",
+        "required": true,
+        "type": "string",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "animated",
+        "required": false,
+        "type": "bool",
+        "default": "false",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "animationDuration",
+        "required": false,
+        "type": "number",
+        "default": "1000",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "animationEasingFunction",
+        "required": false,
+        "type": "func",
+        "default": "Easing.linear",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "coordinates",
+        "required": false,
+        "type": {
+          "name": "array",
+          "value": {
+            "type": "number"
+          }
+        },
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "onPress",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "children",
+        "required": false,
+        "type": "any",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "style",
+        "required": false,
+        "type": "any",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "icon",
+        "required": false,
+        "type": "union",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      }
+    ],
+    "fileNameWithExt": "Annotation.js",
+    "name": "Annotation"
+  },
   "Atmosphere": {
     "description": "",
     "displayName": "Atmosphere",
@@ -6130,100 +6224,6 @@
     ],
     "fileNameWithExt": "VectorSource.js",
     "name": "VectorSource"
-  },
-  "Annotation": {
-    "description": "",
-    "displayName": "Annotation",
-    "methods": [
-      {
-        "name": "onPress",
-        "docblock": null,
-        "modifiers": [],
-        "params": [],
-        "returns": null
-      },
-      {
-        "name": "symbolStyle",
-        "docblock": null,
-        "modifiers": [
-          "get"
-        ],
-        "params": [],
-        "returns": null
-      }
-    ],
-    "props": [
-      {
-        "name": "id",
-        "required": true,
-        "type": "string",
-        "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
-      },
-      {
-        "name": "animated",
-        "required": false,
-        "type": "bool",
-        "default": "false",
-        "description": "FIX ME NO DESCRIPTION"
-      },
-      {
-        "name": "animationDuration",
-        "required": false,
-        "type": "number",
-        "default": "1000",
-        "description": "FIX ME NO DESCRIPTION"
-      },
-      {
-        "name": "animationEasingFunction",
-        "required": false,
-        "type": "func",
-        "default": "Easing.linear",
-        "description": "FIX ME NO DESCRIPTION"
-      },
-      {
-        "name": "coordinates",
-        "required": false,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": "number"
-          }
-        },
-        "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
-      },
-      {
-        "name": "onPress",
-        "required": false,
-        "type": "func",
-        "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
-      },
-      {
-        "name": "children",
-        "required": false,
-        "type": "any",
-        "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
-      },
-      {
-        "name": "style",
-        "required": false,
-        "type": "any",
-        "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
-      },
-      {
-        "name": "icon",
-        "required": false,
-        "type": "union",
-        "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
-      }
-    ],
-    "fileNameWithExt": "Annotation.js",
-    "name": "Annotation"
   },
   "offlineManager": {
     "name": "offlineManager",
