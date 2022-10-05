@@ -138,7 +138,12 @@ const Earthquakes = ({ label, onDismissExample }: BaseExampleProps) => {
       </Overlay>
       <Page label={label} onDismissExample={onDismissExample}>
         <MapView style={sheet.matchParent} styleURL={MapboxGL.StyleURL.Dark}>
-          <Camera zoomLevel={6} centerCoordinate={SF_OFFICE_COORDINATE} />
+          <Camera
+            defaultSettings={{
+              centerCoordinate: SF_OFFICE_COORDINATE,
+              zoomLevel: 6,
+            }}
+          />
 
           <ShapeSource
             id="earthquakes"
