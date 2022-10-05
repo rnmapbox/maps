@@ -93,7 +93,7 @@ const mag4 = ['all', ['>=', ['get', 'mag'], 4], ['<', ['get', 'mag'], 5]];
 const mag5 = ['>=', ['get', 'mag'], 5];
 
 const Earthquakes = ({ label, onDismissExample }: BaseExampleProps) => {
-  const shape = useRef<typeof ShapeSource>(null);
+  const shapeSource = useRef<ShapeSource>(null);
   const [selectedCluster, setSelectedCluster] = useState<FeatureCollection>();
 
   return (
@@ -143,11 +143,11 @@ const Earthquakes = ({ label, onDismissExample }: BaseExampleProps) => {
           <ShapeSource
             id="earthquakes"
             onPress={async (pressedShape) => {
-              if (shape.current) {
+              if (shapeSource.current) {
                 try {
                   const [cluster] = pressedShape.features;
 
-                  const collection = await shape.current.getClusterLeaves(
+                  const collection = await shapeSource.current.getClusterLeaves(
                     cluster,
                     999,
                     0,
@@ -164,7 +164,7 @@ const Earthquakes = ({ label, onDismissExample }: BaseExampleProps) => {
                 }
               }
             }}
-            ref={shape}
+            ref={shapeSource}
             cluster
             clusterRadius={50}
             clusterMaxZoomLevel={14}
