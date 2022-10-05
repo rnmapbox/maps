@@ -167,7 +167,7 @@ const Earthquakes = ({ label, onDismissExample }: BaseExampleProps) => {
             ref={shape}
             cluster
             clusterRadius={50}
-            clusterMaxZoom={14}
+            clusterMaxZoomLevel={14}
             clusterProperties={{
               mag1: [
                 ['+', ['accumulated'], ['get', 'mag1']],
