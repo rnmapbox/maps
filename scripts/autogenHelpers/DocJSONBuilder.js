@@ -423,6 +423,18 @@ class DocJSONBuilder {
     });
   }
 
+  sortObject(not_sorted) {
+    return Object.keys(not_sorted)
+      .sort()
+      .reduce(
+        (acc, key) => ({
+          ...acc,
+          [key]: not_sorted[key],
+        }),
+        {},
+      );
+  }
+
   async generate() {
     this.generateModulesTask({}, MODULES_PATH);
 
@@ -434,7 +446,10 @@ class DocJSONBuilder {
     ];
 
     return Promise.all(tasks).then(() => {
-      fs.writeFileSync(OUTPUT_PATH, JSON.stringify(results, null, 2));
+      fs.writeFileSync(
+        OUTPUT_PATH,
+        JSON.stringify(this.sortObject(results), null, 2),
+      );
       return true;
     });
   }
