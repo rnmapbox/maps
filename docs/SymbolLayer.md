@@ -11,7 +11,7 @@ SymbolLayer is a style layer that renders icon and text labels at points or alon
 | aboveLayerID | `string` | `none` | `false` | Inserts a layer above aboveLayerID. |
 | belowLayerID | `string` | `none` | `false` | Inserts a layer below belowLayerID |
 | layerIndex | `number` | `none` | `false` | Inserts a layer at a specified index |
-| filter | `Array` | `none` | `false` | Filter only the features in the source layer that satisfy a condition that you define |
+| filter | `Expression` | `none` | `false` | Filter only the features in the source layer that satisfy a condition that you define |
 | minZoomLevel | `number` | `none` | `false` | The minimum zoom level at which the layer gets parsed and appears. |
 | maxZoomLevel | `number` | `none` | `false` | The maximum zoom level at which the layer gets parsed and appears. |
 | style | `SymbolLayerStyleProps` | `none` | `true` | FIX ME NO DESCRIPTION |

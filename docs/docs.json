@@ -4395,7 +4395,7 @@
       {
         "name": "filter",
         "required": false,
-        "type": "Array",
+        "type": "Expression",
         "default": "none",
         "description": "Filter only the features in the source layer that satisfy a condition that you define"
       },
