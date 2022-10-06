@@ -20,6 +20,7 @@
     "@react-navigation/compat": "^5.3.20",
     "@react-navigation/native": "^6.0.11",
     "@react-navigation/native-stack": "^6.7.0",
+    "@rneui/base": "^4.0.0-rc.6",
     "@turf/along": "^6.5.0",
     "@turf/bbox": "^6.5.0",
     "@turf/bbox-polygon": "^6.5.0",
@@ -35,19 +36,18 @@
     "prop-types": "^15.7.2",
     "react": "18.0.0",
     "react-native": "0.69.4",
-    "@rneui/base": "^4.0.0-rc.6",
     "react-native-safe-area-context": "^4.3.3",
     "react-native-screens": "^3.0.0",
     "react-native-svg": "^12.1.0",
-    "react-native-vector-icons": "9.0.0"
+    "react-native-vector-icons": "9.2.0"
   },
   "optionalDependencies": {
+    "@expo/webpack-config": "^0.17.2",
+    "@types/responselike": "1.0.0",
     "expo": "46.0.0",
     "mapbox-gl": "^2.9.2",
     "react-dom": "^18.2.0",
-    "react-native-web": "0.18.7",
-    "@expo/webpack-config": "^0.17.2",
-    "@types/responselike": "1.0.0"
+    "react-native-web": "0.18.7"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

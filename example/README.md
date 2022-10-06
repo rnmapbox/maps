@@ -3,7 +3,7 @@
   <a href="https://github.com/rnmapbox/maps/blob/main/example/src/examples/FillRasterLayer/ChoroplethLayerByZoomLevel.js">
     <img  src="readme_assets/example_choropleth_layer.png"  width="175"/>
   </a>
-  <a href="https://github.com/rnmapbox/maps/blob/main/example/src/examples/SymbolCircleLayer/EarthQuakes.js">
+  <a href="https://github.com/rnmapbox/maps/blob/main/example/src/examples/SymbolCircleLayer/Earthquakes.tsx">
     <img  src="readme_assets/example_clustering_earthquakes.png" width="175"/>
   </a>
   <a href="https://github.com/rnmapbox/maps/blob/main/example/src/examples/Annotations/CustomCallout.tsx">
