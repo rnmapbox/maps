@@ -7,6 +7,9 @@ import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.utils.ImageEntry
 import android.graphics.drawable.BitmapDrawable
 import androidx.core.content.res.ResourcesCompat
+import com.mapbox.bindgen.Expected
+import com.mapbox.bindgen.None
+import com.mapbox.maps.Image
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
 import com.mapbox.rctmgl.R
@@ -15,10 +18,26 @@ import com.mapbox.rctmgl.components.images.RCTMGLImages
 import com.mapbox.rctmgl.events.ImageMissingEvent
 import com.mapbox.rctmgl.utils.BitmapUtils
 import com.mapbox.rctmgl.utils.DownloadMapImageTask
+import java.nio.ByteBuffer
 import java.util.AbstractMap
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.HashSet
+
+fun Style.addBitmapImage(imageId: String, bitmap: Bitmap) : Expected<String, None> {
+    val byteBuffer = ByteBuffer.allocate(bitmap.byteCount)
+    bitmap.copyPixelsToBuffer(byteBuffer)
+    val sdf = false
+    return this.addStyleImage(
+        imageId,
+        (1.0/((160.0/bitmap.density))).toFloat(),
+        Image(bitmap.width, bitmap.height, byteBuffer.array()),
+        sdf,
+        listOf(),
+        listOf(),
+        null
+    )
+}
 
 class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) : AbstractMapFeature(context) {
     var mCurrentImages: MutableSet<String?>
@@ -151,7 +170,8 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
         if (style == null || imageEntries == null) return
         for ((key, value) in imageEntries) {
             if (key != null && !hasImage(key, map)) {
-                style.addImage(key, BitmapUtils.toImage(value))
+                val bitmap = value!!.bitmap
+                style.addBitmapImage(key, bitmap)
                 mCurrentImages.add(key)
             }
         }
@@ -171,7 +191,7 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
         // See also: https://github.com/mapbox/mapbox-gl-native/pull/14253#issuecomment-478827792
         for (imageEntry in imageEntries) {
             if (!hasImage(imageEntry.key, map)) {
-                mImagePlaceholder?.let { style.addImage(imageEntry.key, it) }
+                mImagePlaceholder?.let { style.addBitmapImage(imageEntry.key, it) }
                 missingImages.add(imageEntry)
                 mCurrentImages.add(imageEntry.key)
             }
