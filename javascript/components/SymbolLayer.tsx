@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, NativeModules, requireNativeComponent } from 'react-native';
 
-import { type SymbolLayerStyleProps } from '../utils/MapboxStyles';
+import { Expression, type SymbolLayerStyleProps } from '../utils/MapboxStyles';
 import { type StyleValue } from '../utils/StyleValue';
 
 import AbstractLayer from './AbstractLayer';
@@ -46,7 +46,7 @@ export type Props = {
   /**
    *  Filter only the features in the source layer that satisfy a condition that you define
    */
-  filter?: string[];
+  filter?: Expression;
 
   /**
    * The minimum zoom level at which the layer gets parsed and appears.

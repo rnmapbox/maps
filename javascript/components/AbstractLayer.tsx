@@ -4,7 +4,7 @@ import { NativeMethods, processColor } from 'react-native';
 
 import { getFilter } from '../utils/filterUtils';
 import { transformStyle } from '../utils/StyleValue';
-import { AllLayerStyleProps } from '../utils/MapboxStyles';
+import { AllLayerStyleProps, Expression } from '../utils/MapboxStyles';
 
 type PropsBase = {
   id: string;
@@ -14,7 +14,7 @@ type PropsBase = {
   aboveLayerID?: string;
   belowLayerID?: string;
   layerIndex?: number;
-  filter?: string[];
+  filter?: Expression;
   style: AllLayerStyleProps;
 };
 
