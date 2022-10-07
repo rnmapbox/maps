@@ -21,6 +21,7 @@ import com.facebook.imagepipeline.image.CloseableImage
 import com.facebook.imagepipeline.image.CloseableStaticBitmap
 import com.facebook.imagepipeline.request.ImageRequestBuilder
 import com.facebook.react.views.imagehelper.ImageSource
+import com.mapbox.rctmgl.components.images.addBitmapImage
 import java.io.File
 import java.lang.ref.WeakReference
 import java.util.AbstractMap
@@ -120,7 +121,7 @@ class DownloadMapImageTask(context: Context, map: MapboxMap, callback: OnAllImag
                 val bitmapImages = HashMap<String, Bitmap>()
                 for ((key, value) in images) {
                     bitmapImages[key] = value
-                    style.addImage(key, value)
+                    style.addBitmapImage(key, value)
                 }
                 // style.addImages(bitmapImages);
             }
