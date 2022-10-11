@@ -4,6 +4,8 @@ import MapKit
 
 @objc(RCTMGLMapView)
 open class RCTMGLMapView : MapView {
+  var tapDelegate: IgnoreRCTMGLMakerViewGestureDelegate? = nil
+
   var compassEnabled: Bool = false
   var compassFadeWhenNorth: Bool = false
   var reactOnPress : RCTBubblingEventBlock?
@@ -420,12 +422,70 @@ extension RCTMGLMapView {
 
 // MARK: - gestures
 
+class IgnoreRCTMGLMakerViewGestureDelegate : NSObject, UIGestureRecognizerDelegate {
+  var originalDelegate: UIGestureRecognizerDelegate?
+
+  init(originalDelegate: UIGestureRecognizerDelegate?) {
+    self.originalDelegate = originalDelegate
+  }
+  
+  func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+    return originalDelegate?.gestureRecognizerShouldBegin?(gestureRecognizer) ?? true
+  }
+
+  func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    return originalDelegate?.gestureRecognizer?(gestureRecognizer,shouldRecognizeSimultaneouslyWith: otherGestureRecognizer) ?? false
+  }
+  
+  func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    return originalDelegate?.gestureRecognizer?(gestureRecognizer,shouldRequireFailureOf: otherGestureRecognizer) ?? false
+  }
+
+  func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    return originalDelegate?.gestureRecognizer?(gestureRecognizer,shouldBeRequiredToFailBy: otherGestureRecognizer) ?? false
+  }
+
+  private func isMarkerViewSubview(_ view: UIView) -> Bool {
+    var current : UIView? = view
+    while let act = current {
+      if (act is RCTMGLMarkerView) {
+        return true
+      }
+      current = act.superview
+    }
+    return false
+  }
+  
+  func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+    if let view = touch.view, isMarkerViewSubview(view) {
+      return false
+    }
+    return originalDelegate?.gestureRecognizer?(gestureRecognizer,shouldReceive: touch) ?? true
+  }
+  
+  func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive press: UIPress) -> Bool {
+    return originalDelegate?.gestureRecognizer?(gestureRecognizer,shouldReceive: press) ?? true
+  }
+
+  
+  @available(iOS 13.4, *)
+  func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive event: UIEvent) -> Bool {
+        return originalDelegate?.gestureRecognizer?(gestureRecognizer,shouldReceive: event) ?? true
+  }
+}
+
 extension RCTMGLMapView {
+  
   @objc func setReactOnPress(_ value: @escaping RCTBubblingEventBlock) {
     self.reactOnPress = value
-    
-    self.mapView.gestures.singleTapGestureRecognizer.removeTarget( pointAnnotationManager.manager, action: nil)
-    self.mapView.gestures.singleTapGestureRecognizer.addTarget(self, action: #selector(doHandleTap(_:)))
+
+    let singleTapGestureRecognizer = self.mapView.gestures.singleTapGestureRecognizer
+
+    singleTapGestureRecognizer.removeTarget(pointAnnotationManager.manager, action: nil)
+    singleTapGestureRecognizer.addTarget(self, action: #selector(doHandleTap(_:)))
+
+    self.tapDelegate = IgnoreRCTMGLMakerViewGestureDelegate(originalDelegate: singleTapGestureRecognizer.delegate)
+    singleTapGestureRecognizer.delegate = tapDelegate
   }
 
   @objc func setReactOnLongPress(_ value: @escaping RCTBubblingEventBlock) {
