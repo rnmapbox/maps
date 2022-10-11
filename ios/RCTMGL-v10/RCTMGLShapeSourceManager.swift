@@ -38,12 +38,12 @@ extension RCTMGLShapeSourceManager {
 extension RCTMGLShapeSourceManager {
   @objc func getClusterExpansionZoom(
     _ reactTag: NSNumber,
-    clusterId: NSNumber,
+    featureJSON: String,
     resolver: @escaping RCTPromiseResolveBlock,
     rejecter: @escaping RCTPromiseRejectBlock) -> Void
   {
-    self.withShapeSource(reactTag, name:"getClusterExpansionZoom", rejecter: rejecter) { shapeSource in
-      shapeSource.getClusterExpansionZoom(clusterId) { result in
+    self.withShapeSource(reactTag, name:"getCluster   ExpansionZoom", rejecter: rejecter) { shapeSource in
+      shapeSource.getClusterExpansionZoom(featureJSON) { result in
         switch result {
         case .success(let zoom):
           resolver([
