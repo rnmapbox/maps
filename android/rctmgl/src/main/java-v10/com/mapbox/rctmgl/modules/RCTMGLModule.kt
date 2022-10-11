@@ -12,6 +12,7 @@ import com.mapbox.rctmgl.modules.RCTMGLOfflineModule
 import com.mapbox.rctmgl.modules.RCTMGLLocationModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.common.MapBuilder
+import com.mapbox.common.*
 import com.mapbox.maps.Style
 import com.mapbox.rctmgl.components.camera.constants.CameraMode
 import java.util.HashMap
@@ -122,6 +123,16 @@ class RCTMGLModule(private val mReactContext: ReactApplicationContext) : ReactCo
     @ReactMethod
     fun setWellKnownTileServer(tileServer: String?) {
         // NO-OP
+    }
+
+    @ReactMethod
+    fun addCustomHeader(headerName: String, headerValue: String) {
+        CustomHttpHeaders.addCustomHeader(headerName, headerValue)
+    }
+
+    @ReactMethod
+    fun removeCustomHeader(headerName: String) {
+        CustomHttpHeaders.removeCustomHeader(headerName)
     }
 
     companion object {
