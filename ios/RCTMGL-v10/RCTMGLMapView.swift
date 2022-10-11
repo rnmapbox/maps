@@ -733,6 +733,11 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
   private var draggedAnnotation: PointAnnotation?
   
   func annotationManager(_ manager: AnnotationManager, didDetectTappedAnnotations annotations: [Annotation]) {
+    // We handle taps ourselfs
+    //   onTap(annotations: annotations)
+  }
+
+  func onTap(annotations: [Annotation]) {
     guard annotations.count > 0 else {
       fatalError("didDetectTappedAnnotations: No annotations found")
     }
@@ -784,7 +789,7 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
     }
     let options = RenderedQueryOptions(layerIds: [layerId], filter: nil)
     mapFeatureQueryable.queryRenderedFeatures(
-        at: tap.location(in: tap.view),
+      with: tap.location(in: tap.view),
         options: options) { [weak self] (result) in
 
         guard let self = self else { return }
@@ -806,10 +811,7 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
 
             // If `tappedAnnotations` is not empty, call delegate
             if !tappedAnnotations.isEmpty {
-              self.annotationManager(
-                self.manager,
-                didDetectTappedAnnotations: tappedAnnotations)
-              
+              self.onTap(annotations: tappedAnnotations)
             } else {
               noAnnotationFound(tap)
             }
@@ -817,7 +819,6 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
         case .failure(let error):
           noAnnotationFound(tap)
           Logger.log(level:.warn, message:"Failed to query map for annotations due to error: \(error)")
-          
         }
     }
   }
