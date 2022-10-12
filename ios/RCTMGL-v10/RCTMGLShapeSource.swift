@@ -192,7 +192,7 @@ extension RCTMGLShapeSource
 extension RCTMGLShapeSource
 {
   func getClusterExpansionZoom(
-    _ clusterId: NSNumber,
+    _ featureJSON: String,
     completion: @escaping (Result<Int, Error>) -> Void)
   {
     guard let mapView = map?.mapView else {
@@ -200,29 +200,23 @@ extension RCTMGLShapeSource
       return
     }
 
-    let options = SourceQueryOptions(sourceLayerIds: nil, filter: Exp(.eq) {
-      Exp(.get) { "cluster_id" }
-      clusterId.uintValue
-    })
-    mapView.mapboxMap.querySourceFeatures(for: id, options: options) { result in
-      switch result {
-      case .success(let features):
-        let cluster = features[0]
-        mapView.mapboxMap.queryFeatureExtension(for: self.id, feature: cluster.feature, extension: "supercluster", extensionField: "expansion-zoom") { result in
-          switch result {
-          case .success(let features):
-            guard let value = features.value as? NSNumber else {
-              completion(.failure(RCTMGLError.failed("getClusterExpansionZoom: not a number")))
-              return
-            }
-                
-            completion(.success(value.intValue))
-          case .failure(let error):
-            completion(.failure(error))
+    logged("RCTMGLShapeSource.getClusterExpansionZoom", rejecter: { (_,_,error) in
+      completion(.failure(error!))
+    }) {
+      let cluster : Feature = try parse(featureJSON);
+
+      mapView.mapboxMap.queryFeatureExtension(for: self.id, feature: cluster, extension: "supercluster", extensionField: "expansion-zoom") { result in
+        switch result {
+        case .success(let features):
+          guard let value = features.value as? NSNumber else {
+            completion(.failure(RCTMGLError.failed("getClusterExpansionZoom: not a number")))
+            return
           }
+          
+          completion(.success(value.intValue))
+        case .failure(let error):
+          completion(.failure(error))
         }
-      case .failure(let error):
-        completion(.failure(error))
       }
     }
   }

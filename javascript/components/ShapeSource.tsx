@@ -210,12 +210,12 @@ export class ShapeSource extends NativeBridgeComponent(
    */
   async getClusterExpansionZoom(
     feature: string | GeoJSON.Feature,
-  ): Promise<string> {
+  ): Promise<number> {
     if (typeof feature === 'number') {
       console.warn(
         'Using cluster_id is deprecated and will be removed from the future releases. Please use cluster as an argument instead.',
       );
-      const res: { data: string } = await this._runNativeCommand(
+      const res: { data: number } = await this._runNativeCommand(
         'getClusterExpansionZoomById',
         this._nativeRef,
         [feature],
@@ -223,7 +223,7 @@ export class ShapeSource extends NativeBridgeComponent(
       return res.data;
     }
 
-    const res: { data: string } = await this._runNativeCommand(
+    const res: { data: number } = await this._runNativeCommand(
       'getClusterExpansionZoom',
       this._nativeRef,
       [JSON.stringify(feature)],

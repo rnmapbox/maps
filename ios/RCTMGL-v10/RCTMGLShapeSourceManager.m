@@ -25,9 +25,9 @@ RCT_REMAP_VIEW_PROPERTY(onMapboxShapeSourcePress, onPress, RCTBubblingEventBlock
 
 
 RCT_EXTERN_METHOD(getClusterExpansionZoom:(nonnull NSNumber*)reactTag
-                                clusterId:(nonnull NSNumber*)clusterId
-                                 resolver:(RCTPromiseResolveBlock)resolve
-                                 rejecter:(RCTPromiseRejectBlock)reject)
+                                featureJSON:(nonnull NSString*)featureJSON
+                                resolver:(RCTPromiseResolveBlock)resolve
+                                rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(getClusterLeaves:(nonnull NSNumber*)reactTag
                   featureJSON:(nonnull NSString*)featureJSON
