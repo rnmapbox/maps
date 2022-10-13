@@ -1,4 +1,4 @@
-import React, { memo, useRef, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { Button } from 'react-native';
 import {
   MapView,
@@ -16,13 +16,17 @@ import { BaseExampleProps } from '../common/BaseExamplePropTypes';
 Logger.setLogLevel('verbose');
 
 const GlobeProjection = memo((props: BaseExampleProps) => {
-  const [projection, setProjection] = useState('globe');
+  const [projection, setProjection] = useState<'globe' | 'mercator'>('globe');
 
   return (
     <Page {...props}>
       <Button
-        title={`Change projection to ${projection === 'globe' ? 'mercator' : 'globe'}`}
-        onPress={() => setProjection(projection === 'globe' ? 'mercator' : 'globe')}
+        title={`Change projection to ${
+          projection === 'globe' ? 'mercator' : 'globe'
+        }`}
+        onPress={() =>
+          setProjection(projection === 'globe' ? 'mercator' : 'globe')
+        }
       />
       <MapView
         style={{ flex: 1 }}
@@ -30,9 +34,7 @@ const GlobeProjection = memo((props: BaseExampleProps) => {
         styleURL={'mapbox://styles/mapbox-map-design/ckhqrf2tz0dt119ny6azh975y'}
       >
         <Camera
-          centerCoordinate={[
-            13, 59,
-          ]}
+          centerCoordinate={[13, 59]}
           zoomLevel={3}
           heading={220}
           pitch={40}
