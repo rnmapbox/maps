@@ -42,7 +42,6 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
     protected var mMap: MapboxMap? = null
     @JvmField
     protected var mLayer: T? = null
-    protected var mMapView: RCTMGLMapView? = null
     protected var mHadFilter = false
 
     fun setSourceID(sourceID: String?) {
@@ -230,8 +229,8 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
     }
 
     override fun addToMap(mapView: RCTMGLMapView) {
+        super.addToMap(mapView)
         mMap = mapView.getMapboxMap()
-        mMapView = mapView
         if (style == null) return
         val existingLayer = getLayerAs(style, iD)
         if (existingLayer != null) {
@@ -251,6 +250,7 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
         if (style != null) {
             style!!.removeStyleLayer(mLayer!!.layerId)
         }
+        super.removeFromMap(mapView)
     }
 
     // v10TOOD: adding anything seems to make getStyle null

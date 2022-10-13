@@ -36,6 +36,7 @@ class RCTMGLTerrain(context: Context?) : AbstractSourceConsumer(context) {
     }
 
     override fun addToMap(mapView: RCTMGLMapView) {
+        super.addToMap(mapView)
         mMap = mapView.getMapboxMap()
         val terrain = makeTerrain()
         mTerrain = terrain
@@ -46,6 +47,7 @@ class RCTMGLTerrain(context: Context?) : AbstractSourceConsumer(context) {
     override fun removeFromMap(mapView: RCTMGLMapView) {
         mapView.savedStyle?.let { it.removeTerrain() }
         mMap = null
+        super.removeFromMap(mapView)
     }
 
     fun makeTerrain(): Terrain {

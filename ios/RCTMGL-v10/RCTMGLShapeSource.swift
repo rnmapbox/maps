@@ -21,7 +21,19 @@ class RCTMGLShapeSource : RCTMGLSource {
   
   @objc var cluster : NSNumber?
   @objc var clusterRadius : NSNumber?
-  @objc var clusterMaxZoomLevel : NSNumber?
+  @objc var clusterMaxZoomLevel : NSNumber? {
+    didSet {
+      logged("RCTMGLShapeSource.clusterMaxZoomLevel") {
+        if let number = clusterMaxZoomLevel?.doubleValue {
+          doUpdate { (style) in
+            logged("RCTMGLShapeSource.doUpdate") {
+              try style.setSourceProperty(for: id, property: "clusterMaxZoom", value: number)
+            }
+          }
+        }
+      }
+    }
+  }
   @objc var clusterProperties : [String: [Any]]?;
   
   @objc var maxZoomLevel : NSNumber?

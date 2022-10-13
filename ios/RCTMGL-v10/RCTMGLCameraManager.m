@@ -4,6 +4,7 @@
 
 @interface RCT_EXTERN_MODULE(RCTMGLCameraManager, RCTViewManager)
 
+RCT_EXPORT_VIEW_PROPERTY(maxBounds, NSString)
 RCT_EXPORT_VIEW_PROPERTY(animationDuration, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(animationMode, NSString)
 RCT_EXPORT_VIEW_PROPERTY(defaultStop, NSDictionary)
