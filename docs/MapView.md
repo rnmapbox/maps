@@ -6,6 +6,7 @@ MapView backed by Mapbox Native GL
 | Prop | Type | Default | Required | Description |
 | ---- | :-- | :----- | :------ | :---------- |
 | contentInset | `union` | `none` | `false` | The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport. |
+| projection | `enum` | `'mercator'` | `false` | The projection used when rendering the map |
 | style | `any` | `none` | `false` | Style for wrapping React Native View |
 | styleURL | `string` | `none` | `false` | Style URL for map - notice, if non is set it _will_ default to `MapboxGL.StyleURL.Street` |
 | styleJSON | `string` | `none` | `false` | StyleJSON for map - according to TileJSON specs: https://github.com/mapbox/tilejson-spec |

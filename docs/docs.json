@@ -2931,8 +2931,8 @@
       {
         "name": "projection",
         "required": false,
-        "type": "\"mercatator\" | \"globe\"",
-        "default": "mercator",
+        "type": "enum",
+        "default": "'mercator'",
         "description": "The projection used when rendering the map"
       },
       {
