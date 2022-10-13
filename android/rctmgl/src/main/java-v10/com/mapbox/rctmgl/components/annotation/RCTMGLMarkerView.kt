@@ -23,8 +23,6 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
     View.OnLayoutChangeListener
 {
     // region Instance variables
-
-    private var mMapView: RCTMGLMapView? = null
     private var mView: View? = null
     private var didAddToMap = false
 
@@ -72,14 +70,15 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
 
     // endregion
 
-    // region RCTMGLMapComponent methods
+    // region AbstractMapFeature methods
 
     override fun addToMap(mapView: RCTMGLMapView) {
-        mMapView = mapView
+        super.addToMap(mapView)
         add()
     }
 
     override fun removeFromMap(mapView: RCTMGLMapView) {
+        super.removeFromMap(mapView)
         remove(mapView)
     }
 

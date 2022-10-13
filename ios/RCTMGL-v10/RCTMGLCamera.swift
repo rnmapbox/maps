@@ -108,7 +108,8 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
   var cameraAnimator: BasicCameraAnimator?
   let cameraUpdateQueue = CameraUpdateQueue()
 
-  // Properties set on RCTMGLCamera in React Native.
+  // MARK: React properties
+  
   @objc var animationDuration: NSNumber?
   @objc var animationMode: NSString?
   @objc var defaultStop: [String: Any]?
@@ -145,8 +146,19 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       _updateCamera()
     }
   }
+
+  @objc var maxBounds: String? {
+    didSet {
+      if let maxBounds = maxBounds {
+        logged("RCTMGLCamera.maxBounds") {
+          let maxBoundsFeature = try JSONDecoder().decode(FeatureCollection.self, from: maxBounds.data(using: .utf8)!)
+          try _updateMaxBounds(maxBoundsFeature)
+        }
+      }
+    }
+  }
   
-  // Update methods.
+  // MARK: Update methods
 
   func _updateCameraFromJavascript() {
     guard !followUserLocation else {
@@ -184,6 +196,29 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
   func _disableUsetTracking(_ map: MapView) {
     map.viewport.idle()
     map.location.removeLocationConsumer(consumer: self)
+  }
+  
+  func _toCoordinateBounds(_ bounds: FeatureCollection) throws -> CoordinateBounds  {
+    guard bounds.features.count == 2 else {
+      throw RCTMGLError.paramError("Expected two Points in FeatureColletion")
+    }
+    let swFeature = bounds.features[0]
+    let neFeature = bounds.features[1]
+    
+    guard case let .point(sw) = swFeature.geometry,
+          case let .point(ne) = neFeature.geometry else {
+      throw RCTMGLError.paramError("Expected two Points in FeatureColletion")
+    }
+
+    return CoordinateBounds(southwest: sw.coordinates, northeast: ne.coordinates)
+  }
+  
+  func _updateMaxBounds(_ bounds: FeatureCollection) throws {
+    withMapView { map in
+      logged("RCTMGLCamera._updateMaxBounds") {
+        try map.mapboxMap.setCameraBounds(with: CameraBoundsOptions(bounds: try self._toCoordinateBounds(bounds)))
+      }
+    }
   }
 
   func _updateCameraFromTrackingMode() {

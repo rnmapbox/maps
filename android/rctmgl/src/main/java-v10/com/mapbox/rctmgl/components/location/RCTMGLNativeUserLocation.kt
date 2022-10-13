@@ -17,13 +17,12 @@ import com.mapbox.mapboxsdk.maps.Style;
  */   class RCTMGLNativeUserLocation(context: Context?) : AbstractMapFeature(context), OnMapReadyCallback, Style.OnStyleLoaded {
     private var mEnabled = true
     private var mMap: MapboxMap? = null
-    private var mMapView: RCTMGLMapView? = null
 
     @RenderMode.Mode
     private var mRenderMode = RenderMode.COMPASS
     override fun addToMap(mapView: RCTMGLMapView) {
+        super.addToMap(mapView)
         mEnabled = true
-        mMapView = mapView
         mapView.getMapboxMap()
         mapView.getMapAsync(this)
         setRenderMode(mRenderMode)
@@ -32,6 +31,7 @@ import com.mapbox.mapboxsdk.maps.Style;
     override fun removeFromMap(mapView: RCTMGLMapView) {
         mEnabled = false
         mMap?.getStyle(this)
+        super.removeFromMap(mapView)
     }
 
     @SuppressLint("MissingPermission")

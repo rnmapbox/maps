@@ -32,6 +32,7 @@ class RCTMGLAtmosphere(context: Context?) : AbstractSourceConsumer(context) {
     // endregion RCTLayer
 
     override fun addToMap(mapView: RCTMGLMapView) {
+        super.addToMap(mapView)
         mMap = mapView.getMapboxMap()
         val atmosphere = makeAtmosphere()
         mAtmosphere = atmosphere
@@ -42,6 +43,7 @@ class RCTMGLAtmosphere(context: Context?) : AbstractSourceConsumer(context) {
     override fun removeFromMap(mapView: RCTMGLMapView) {
         mapView.savedStyle?.let { it.removeTerrain() }
         mMap = null
+        super.removeFromMap(mapView)
     }
 
     fun makeAtmosphere(): Atmosphere {

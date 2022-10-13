@@ -28,7 +28,6 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
     var marker: PointAnnotation? = null
         private set
     private var mMap: MapboxMap? = null
-    private var mMapView: RCTMGLMapView? = null
     private val mHasChildren = false
     private var mCoordinate: Point? = null
     var iD: String? = null
@@ -74,7 +73,7 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
     }
 
     override fun addToMap(mapView: RCTMGLMapView) {
-        mMapView = mapView
+        super.addToMap(mapView)
         mMap = mapView.getMapboxMap()
         makeMarker()
         if (mChildView != null) {
@@ -103,6 +102,7 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
         if (calloutView != null) {
             map.offscreenAnnotationViewContainer?.removeView(calloutView)
         }
+        super.removeFromMap(mapView)
     }
 
     override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int,

@@ -25,8 +25,6 @@ import java.util.HashMap
 
 abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(context) {
     @JvmField
-    protected var mMapView: RCTMGLMapView? = null
-    @JvmField
     protected var mMap: MapboxMap? = null
     var iD: String? = null
     @JvmField
@@ -107,7 +105,7 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
         }
 
     override fun addToMap(mapView: RCTMGLMapView) {
-        mMapView = mapView
+        super.addToMap(mapView)
         mMap = mapView.getMapboxMap()
         mMap?.getStyle(object : Style.OnStyleLoaded {
             override fun onStyleLoaded(style: Style) {
@@ -149,6 +147,7 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
                 Logger.w(LOG_TAG, String.format("RCTSource.removeFromMap: %s - %s", mSource, ex.message), ex)
             }
         }
+        super.removeFromMap(mapView)
     }
 
     fun addLayer(childView: View?, childPosition: Int) {
