@@ -136,6 +136,11 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
         mapView!!.setReactLogoPosition(logoPosition);
     }
 
+    @ReactProp(name = "scaleBarEnabled")
+    fun setScaleBarEnabled(mapView: RCTMGLMapView?, scaleBarEnabled: Boolean) {
+        mapView!!.setReactScaleBarEnabled(scaleBarEnabled);
+    }
+
     @ReactProp(name = "compassEnabled")
     fun setCompassEnabled(mapView: RCTMGLMapView?, compassEnabled: Boolean) {
         mapView!!.setReactCompassEnabled(compassEnabled);

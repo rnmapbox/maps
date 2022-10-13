@@ -33,6 +33,7 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.attribution.attribution
 import com.mapbox.maps.plugin.attribution.generated.AttributionSettings
+import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.delegates.listeners.*
 import com.mapbox.maps.plugin.gestures.*
@@ -871,6 +872,21 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 )
                 0
             }
+        }
+    }
+
+    var mScaleBarEnabled = false
+
+    fun setReactScaleBarEnabled(scaleBarEnabled: Boolean) {
+        mScaleBarEnabled = scaleBarEnabled
+        updateScaleBar()
+    }
+
+    fun updateScaleBar() {
+        // TODO: Add more options
+        // https://docs.mapbox.com/android/maps/api/10.8.1/mapbox-maps-android/com.mapbox.maps.plugin.scalebar.generated/-scale-bar-settings/
+        scalebar.updateSettings {
+            enabled = mScaleBarEnabled
         }
     }
 
