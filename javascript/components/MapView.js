@@ -58,6 +58,11 @@ class MapView extends NativeBridgeComponent(
     ]),
 
     /**
+     * The projection used when rendering the map
+     */
+    projection: PropTypes.oneOf(['mercator', 'globe']),
+
+    /**
      * Style for wrapping React Native View
      */
     style: PropTypes.any,
@@ -294,6 +299,7 @@ class MapView extends NativeBridgeComponent(
   };
 
   static defaultProps = {
+    projection: 'mercator',
     localizeLabels: false,
     scrollEnabled: true,
     pitchEnabled: true,
