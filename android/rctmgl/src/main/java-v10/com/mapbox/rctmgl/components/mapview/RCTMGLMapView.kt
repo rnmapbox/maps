@@ -34,6 +34,7 @@ import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.attribution.attribution
 import com.mapbox.maps.plugin.attribution.generated.AttributionSettings
 import com.mapbox.maps.plugin.compass.compass
+import com.mapbox.maps.plugin.compass.generated.CompassSettings
 import com.mapbox.maps.plugin.delegates.listeners.*
 import com.mapbox.maps.plugin.gestures.*
 import com.mapbox.maps.plugin.logo.generated.LogoSettings
@@ -64,6 +65,12 @@ import com.mapbox.rctmgl.utils.extensions.toReadableArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
+
+data class OrnamentSettings(
+    var enabled : Boolean? = false,
+    var margins: ReadableMap? =null,
+    var position: Int = -1
+)
 
 
 interface RCTMGLMapViewLifecycleOwner : LifecycleOwner {
@@ -608,7 +615,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         properties.putBoolean("isUserInteraction", mCameraChangeTracker.isUserInteraction)
         try {
             val bounds = mMap.coordinateBoundsForCamera(position.toCameraOptions())
-            properties.putArray("visibleBounds", GeoJSONUtils.fromCoordinateBounds(bounds))
+            properties.putArray("visibleBounds", bounds.toReadableArray())
         } catch (ex: Exception) {
             Logger.e(LOG_TAG, "An error occurred while attempting to make the region", ex)
         }
@@ -760,7 +767,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         val bounds = mMap!!.coordinateBoundsForCamera(mMap!!.cameraState.toCameraOptions())
 
         sendResponse(callbackID, {
-            it.putArray("visibleBounds", GeoJSONUtils.fromCoordinateBounds(bounds))
+            it.putArray("visibleBounds", bounds.toReadableArray())
         })
     }
 
@@ -860,10 +867,10 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     fun toGravity(kind: String, viewPosition: Int): Int {
         return when (viewPosition) {
-            0 -> (Gravity.TOP or Gravity.START)
-            1 -> (Gravity.TOP or Gravity.END)
-            2 -> (Gravity.BOTTOM or Gravity.START)
-            3 -> (Gravity.BOTTOM or Gravity.END)
+            0 -> (Gravity.TOP or Gravity.LEFT)
+            1 -> (Gravity.BOTTOM or Gravity.LEFT)
+            2 -> (Gravity.TOP or Gravity.RIGHT)
+            3 -> (Gravity.BOTTOM or Gravity.RIGHT)
             else -> {
                 Logger.e(
                     "MapView",
@@ -874,13 +881,46 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         }
     }
 
-    var mCompassEnabled = false
+    private fun updateOrnament(kind: String, from: OrnamentSettings, to: GenericOrnamentSettings) {
+        from.enabled?.let { to.enabled = it }
+        if (from.position >= 0) {
+            to.position = toGravity(kind, from.position)
+        }
+
+        from.margins?.let {
+            val pixelDensity = resources.displayMetrics.density
+            val x: Int? = it.getDouble("x")?.let { (it * pixelDensity).toInt() }
+            val y: Int? = it.getDouble("y")?.let { (it * pixelDensity).toInt() }
+
+            val horizontalGravity = to.position and Gravity.HORIZONTAL_GRAVITY_MASK
+            val verticalGravity = to.position and Gravity.VERTICAL_GRAVITY_MASK
+
+            when (horizontalGravity) {
+                Gravity.LEFT -> { to.setHMargins(x?.toFloat(), 0f)  }
+                Gravity.RIGHT -> { to.setHMargins(0f, x?.toFloat())  }
+                Gravity.CENTER_HORIZONTAL ->{ to.setHMargins(x?.toFloat(), x?.toFloat())  }
+                else -> Logger.e(
+                    "MapView",
+                    "${kind}ViewMargins: unexpected absolute pos: $horizontalGravity"
+                )
+            }
+            when (verticalGravity) {
+                Gravity.TOP -> { to.setVMargins(y?.toFloat(), 0f)  }
+                Gravity.BOTTOM -> { to.setVMargins(0f, y?.toFloat())  }
+                Gravity.CENTER_VERTICAL -> { to.setVMargins(y?.toFloat(), y?.toFloat())  }
+                else -> Logger.e(
+                    "MapView",
+                    "${kind}ViewMargins: unexpected vertical pos: $verticalGravity"
+                )
+            }
+        }
+    }
+
+    var mCompassSettings = OrnamentSettings(enabled = false)
     var mCompassFadeWhenNorth = false
-    var mCompassViewMargins: ReadableMap? = null
-    var mCompassViewPosition: Int = -1
 
     fun setReactCompassEnabled(compassEnabled: Boolean) {
-        mCompassEnabled = compassEnabled
+        mCompassSettings.enabled = compassEnabled
         updateCompass()
     }
 
@@ -890,80 +930,24 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     fun setReactCompassViewMargins(compassViewMargins: ReadableMap) {
-        mCompassViewMargins = compassViewMargins
+        mCompassSettings.margins = compassViewMargins
         updateCompass()
     }
 
     fun setReactCompassViewPosition(compassViewPosition: Int) {
-        mCompassViewPosition = compassViewPosition
+        mCompassSettings.position = compassViewPosition
         updateCompass()
     }
 
-    fun setReactCompassMargins(compassMargins: ReadableMap) {
-        val bottom_mask = 1;
-        val right_mask = 2;
-
-        var margins = WritableNativeMap()
-        var position = 0;
-        if (compassMargins.hasKey("bottom")) {
-            margins.putInt("y", compassMargins.getInt("bottom"))
-            position = position or bottom_mask
-        } else {
-            if (compassMargins.hasKey("top")) {
-                margins.putInt("y", compassMargins.getInt("top"))
-            }
-        }
-
-        if (compassMargins.hasKey("left")) {
-            margins.putInt("x", compassMargins.getInt("left"))
-        } else {
-            if (compassMargins.hasKey("right")) {
-                margins.putInt("x", compassMargins.getInt("right"))
-            }
-        }
-        mCompassViewPosition = position
-        mCompassViewMargins = margins
+    fun setReactCompassPosition(compassPosition: ReadableMap) {
+        mCompassSettings.setPosAndMargins(compassPosition)
         updateCompass()
     }
 
     private fun updateCompass() {
         compass.updateSettings {
-            enabled = mCompassEnabled
             fadeWhenFacingNorth = mCompassFadeWhenNorth
-            if (mCompassViewPosition >= 0) {
-                position = toGravity("compass", mCompassViewPosition)
-            }
-
-            val compassViewMargins = mCompassViewMargins
-            if (compassViewMargins != null) {
-                val pixelDensity = resources.displayMetrics.density.toInt()
-                val x: Int = compassViewMargins.getInt("x") * pixelDensity
-                val y: Int = compassViewMargins.getInt("y") * pixelDensity
-
-                val horizontalGravity = position and Gravity.HORIZONTAL_GRAVITY_MASK
-                val verticalGravity = position and Gravity.VERTICAL_GRAVITY_MASK
-
-                when (horizontalGravity) {
-                    Gravity.LEFT -> {
-                        marginLeft = x.toFloat()
-                    }
-                    Gravity.RIGHT -> marginRight = x.toFloat()
-                    Gravity.CENTER_HORIZONTAL -> marginLeft = x.toFloat()
-                    else -> Logger.e(
-                        "MapView",
-                        "compassViewMargins: unexpected absolute pos: $horizontalGravity"
-                    )
-                }
-                when (verticalGravity) {
-                    Gravity.TOP -> marginTop = y.toFloat()
-                    Gravity.BOTTOM -> marginBottom = y.toFloat()
-                    Gravity.CENTER_VERTICAL -> marginTop = y.toFloat()
-                    else -> Logger.e(
-                        "MapView",
-                        "compassViewMargins: unexpected vertical pos: $verticalGravity"
-                    )
-                }
-            }
+            updateOrnament("compass", mCompassSettings, this.toGenericOrnamentSettings())
         }
     }
     // endregion
@@ -1043,6 +1027,44 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     private var mLogoGravity: Int? = null
     private var mLogoMargin: IntArray? = null
 
+    var mLogoSettings = OrnamentSettings(enabled = null)
+
+    fun setReactLogoEnabled(enabled: Boolean?) {
+        mLogoSettings.enabled = enabled
+        updateLogo()
+    }
+
+    fun setReactLogoMargins(margins: ReadableMap) {
+        mLogoSettings.margins = margins
+        updateLogo()
+    }
+
+    fun setReactLogoViewPosition(position: Int) {
+        mLogoSettings.position = position
+        updateLogo()
+    }
+
+    fun setReactLogoPosition(position: ReadableMap?) {
+        mLogoSettings.setPosAndMargins(position)
+        updateLogo()
+    }
+
+    private fun updateLogo() {
+        logo.updateSettings {
+            updateOrnament("logo", mLogoSettings, this.toGenericOrnamentSettings())
+        }
+
+        logo.updateSettings {
+            println(String.format("logo :: position - before 0x%08x", position))
+            //position = Gravity.BOTTOM or Gravity.RIGHT
+            println(String.format("eq bottom|right %b", position == (Gravity.BOTTOM or Gravity.RIGHT)))
+            if (position == Gravity.BOTTOM or Gravity.RIGHT) {
+                position = Gravity.BOTTOM or Gravity.RIGHT
+            }
+            println(String.format("logo :: position - after 0x%08x", position))
+        }
+    }
+/*
     fun setReactLogoEnabled(logoEnabled: Boolean?) {
         mLogoEnabled = logoEnabled ?: LogoSettings().enabled
         updateLogo()
@@ -1081,6 +1103,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             }
         }
     }
+ */
     // endregion
 
     // region lifecycle
@@ -1127,4 +1150,80 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     // endregion
+}
+
+fun OrnamentSettings.setPosAndMargins(posAndMargins: ReadableMap?) {
+    if (posAndMargins == null) { return }
+
+    val bottom_mask = 1;
+    val right_mask = 2;
+
+    var margins = WritableNativeMap()
+    var position = 0;
+    if (posAndMargins
+            .hasKey("bottom")) {
+        margins.putInt("y", posAndMargins.getInt("bottom"))
+        position = position or bottom_mask
+    } else {
+        if (posAndMargins.hasKey("top")) {
+            margins.putInt("y", posAndMargins.getInt("top"))
+        }
+    }
+
+    if (posAndMargins.hasKey("left")) {
+        margins.putInt("x", posAndMargins.getInt("left"))
+    } else {
+        if (posAndMargins.hasKey("right")) {
+            position = position or right_mask
+            margins.putInt("x", posAndMargins.getInt("right"))
+        }
+    }
+    this.position = position
+    this.margins = margins
+}
+
+interface GenericOrnamentSettings {
+    fun setHMargins(left: Float?, right: Float?)
+    fun setVMargins(top: Float?, bottom: Float?)
+    var enabled: Boolean
+    var position: Int
+}
+
+fun CompassSettings.toGenericOrnamentSettings() = object : GenericOrnamentSettings {
+    private val settings = this@toGenericOrnamentSettings
+    override fun setHMargins(left: Float?, right: Float?) {
+        left?.let { settings.marginLeft = it }
+        right?.let { settings.marginRight = it }
+    }
+    override fun setVMargins(top: Float?, bottom: Float?) {
+        top?.let { settings.marginTop = it }
+        bottom?.let { settings.marginBottom = it }
+    }
+    override var enabled: Boolean
+        get() = settings.enabled
+        set(value) { settings.enabled = value }
+    override var position: Int
+        get() = settings.position
+        set(value) { settings.position = value }
+}
+
+fun LogoSettings.toGenericOrnamentSettings() = object : GenericOrnamentSettings {
+    private val settings = this@toGenericOrnamentSettings
+    override fun setHMargins(left: Float?, right: Float?) {
+        left?.let { settings.marginLeft = it }
+        right?.let { settings.marginRight = it }
+    }
+    override fun setVMargins(top: Float?, bottom: Float?) {
+        top?.let { settings.marginTop = it }
+        bottom?.let { settings.marginBottom = it }
+    }
+    override var enabled: Boolean
+        get() = settings.enabled
+        set(value) { settings.enabled = value }
+    override var position: Int
+        get() = settings.position
+        set(value) {
+            println(String.format("logo :: position: 0x%08x", value))
+            settings.position = value
+        }
 }
