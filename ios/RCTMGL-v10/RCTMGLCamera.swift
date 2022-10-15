@@ -138,8 +138,12 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       _updateCameraFromTrackingMode()
     }
   }
-  @objc var maxZoomLevel: NSNumber?
-  @objc var minZoomLevel: NSNumber?
+  @objc var maxZoomLevel: NSNumber? {
+    didSet { _updateMaxBounds() }
+  }
+  @objc var minZoomLevel: NSNumber? {
+    didSet { _updateMaxBounds() }
+  }
   @objc var onUserTrackingModeChange: RCTBubblingEventBlock? = nil
   @objc var stop: [String: Any]? {
     didSet {
@@ -151,12 +155,15 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     didSet {
       if let maxBounds = maxBounds {
         logged("RCTMGLCamera.maxBounds") {
-          let maxBoundsFeature = try JSONDecoder().decode(FeatureCollection.self, from: maxBounds.data(using: .utf8)!)
-          try _updateMaxBounds(maxBoundsFeature)
+          maxBoundsFeature = try JSONDecoder().decode(FeatureCollection.self, from: maxBounds.data(using: .utf8)!)
         }
+      } else {
+        maxBoundsFeature = nil
       }
+      _updateMaxBounds()
     }
   }
+  var maxBoundsFeature : FeatureCollection? = nil
   
   // MARK: Update methods
 
@@ -213,10 +220,24 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     return CoordinateBounds(southwest: sw.coordinates, northeast: ne.coordinates)
   }
   
-  func _updateMaxBounds(_ bounds: FeatureCollection) throws {
+  func _updateMaxBounds() {
     withMapView { map in
+      var options = CameraBoundsOptions()
+      
+      if let maxBounds = self.maxBoundsFeature {
+        logged("RCTMGLCamera._updateMaxBounds._toCoordinateBounds") {
+          options.bounds = try self._toCoordinateBounds(maxBounds)
+        }
+      }
+      if let minZoomLevel = self.minZoomLevel {
+        options.minZoom = minZoomLevel.CGFloat
+      }
+      if let maxZoomLevel = self.maxZoomLevel {
+        options.maxZoom = maxZoomLevel.CGFloat
+      }
+
       logged("RCTMGLCamera._updateMaxBounds") {
-        try map.mapboxMap.setCameraBounds(with: CameraBoundsOptions(bounds: try self._toCoordinateBounds(bounds)))
+        try map.mapboxMap.setCameraBounds(with: options)
       }
     }
   }

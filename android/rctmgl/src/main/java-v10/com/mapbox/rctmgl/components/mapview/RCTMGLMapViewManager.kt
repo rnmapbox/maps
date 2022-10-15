@@ -273,6 +273,9 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
             METHOD_VISIBLE_BOUNDS -> {
                 mapView.getVisibleBounds(args!!.getString(0));
             }
+            METHOD_TAKE_SNAP -> {
+                mapView.takeSnap(args!!.getString(0), args!!.getBoolean(1))
+            }
         }
         /*
         switch (commandID) {
