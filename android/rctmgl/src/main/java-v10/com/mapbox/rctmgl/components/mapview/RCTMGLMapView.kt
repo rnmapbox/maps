@@ -33,12 +33,14 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.attribution.attribution
 import com.mapbox.maps.plugin.attribution.generated.AttributionSettings
+import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.compass.generated.CompassSettings
 import com.mapbox.maps.plugin.delegates.listeners.*
 import com.mapbox.maps.plugin.gestures.*
 import com.mapbox.maps.plugin.logo.generated.LogoSettings
 import com.mapbox.maps.plugin.logo.logo
+import com.mapbox.maps.plugin.scalebar.generated.ScaleBarSettings
 import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.components.AbstractMapFeature
@@ -865,7 +867,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     // region Ornaments
 
-    fun toGravity(kind: String, viewPosition: Int): Int {
+    private fun toGravity(kind: String, viewPosition: Int): Int {
         return when (viewPosition) {
             0 -> (Gravity.TOP or Gravity.LEFT)
             1 -> (Gravity.BOTTOM or Gravity.LEFT)
@@ -950,6 +952,35 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             updateOrnament("compass", mCompassSettings, this.toGenericOrnamentSettings())
         }
     }
+
+    var mScaleBarSettings = OrnamentSettings(enabled = false)
+
+    fun setReactScaleBarEnabled(scaleBarEnabled: Boolean) {
+        mScaleBarSettings.enabled = scaleBarEnabled
+        updateScaleBar()
+    }
+    
+    fun setReactScaleBarViewMargins(scaleBarMargins: ReadableMap) {
+        mScaleBarSettings.margins = scaleBarMargins
+        updateScaleBar()
+    }
+
+    fun setReactScaleBarViewPosition(scaleBarPosition: Int) {
+        mScaleBarSettings.position = scaleBarPosition
+        updateScaleBar()
+    }
+
+    fun setReactScaleBarPosition(scaleBarPosition: ReadableMap) {
+        mScaleBarSettings.setPosAndMargins(scaleBarPosition)
+        updateScaleBar()
+    }
+
+    private fun updateScaleBar() {
+        scalebar.updateSettings {
+            updateOrnament("scaleBar", mScaleBarSettings, this.toGenericOrnamentSettings())
+        }
+    }
+
     // endregion
 
     private fun getGravityAndMargin (position:ReadableMap): Pair<Int, IntArray> {
@@ -1187,6 +1218,24 @@ interface GenericOrnamentSettings {
     fun setVMargins(top: Float?, bottom: Float?)
     var enabled: Boolean
     var position: Int
+}
+
+fun ScaleBarSettings.toGenericOrnamentSettings() = object : GenericOrnamentSettings {
+    private val settings = this@toGenericOrnamentSettings
+    override fun setHMargins(left: Float?, right: Float?) {
+        left?.let { settings.marginLeft = it }
+        right?.let { settings.marginRight = it }
+    }
+    override fun setVMargins(top: Float?, bottom: Float?) {
+        top?.let { settings.marginTop = it }
+        bottom?.let { settings.marginBottom = it }
+    }
+    override var enabled: Boolean
+        get() = settings.enabled
+        set(value) { settings.enabled = value }
+    override var position: Int
+        get() = settings.position
+        set(value) { settings.position = value }
 }
 
 fun CompassSettings.toGenericOrnamentSettings() = object : GenericOrnamentSettings {
