@@ -72,8 +72,8 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
     private var mFollowZoomLevel : Double? = null
     private var mFollowHeading : Double? = null
     private var mZoomLevel = -1.0
-    private var mMinZoomLevel = -1.0
-    private var mMaxZoomLevel = -1.0
+    private var mMinZoomLevel : Double? = null
+    private var mMaxZoomLevel : Double? = null
     private var mMaxBounds: LatLngBounds? = null
     private var mFollowUserLocation = false
     private var mFollowUserMode: String? = null
@@ -120,7 +120,6 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
     override fun addToMap(mapView: RCTMGLMapView) {
         super.addToMap(mapView)
         setInitialCamera()
-        updateMaxMinZoomLevel()
         updateMaxBounds()
         mCameraStop?.let { updateCamera(it) }
         if (mFollowUserLocation) {
@@ -169,28 +168,15 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         withMapView { mapView ->
             val map = mapView.getMapboxMap()
             val maxBounds = mMaxBounds
+            val builder = CameraBoundsOptions.Builder()
+
             if (maxBounds != null) {
-                map.setBounds(CameraBoundsOptions.Builder().bounds(
-                    maxBounds.toBounds()
-                ).build())
-            } else {
-                map.setBounds(CameraBoundsOptions.Builder().build())
+                builder.bounds(maxBounds.toBounds())
             }
-
+            mMinZoomLevel?.let { builder.minZoom(it) }
+            mMaxZoomLevel?.let { builder.maxZoom(it) }
+            map.setBounds(builder.build())
         }
-    }
-
-    private fun updateMaxMinZoomLevel() {
-        /*
-        MapboxMap map = getMapboxMap();
-        if (map != null) {
-            if (mMinZoomLevel >= 0.0) {
-                map.setMinZoomPreference(mMinZoomLevel);
-            }
-            if (mMaxZoomLevel >= 0.0) {
-                map.setMaxZoomPreference(mMaxZoomLevel);
-            }
-        }*/
     }
 
     private fun setInitialCamera() {
@@ -332,14 +318,14 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         }
     }
 
-    fun setMinZoomLevel(zoomLevel: Double) {
+    fun setMinZoomLevel(zoomLevel: Double?) {
         mMinZoomLevel = zoomLevel
-        updateMaxMinZoomLevel()
+        updateMaxBounds()
     }
 
-    fun setMaxZoomLevel(zoomLevel: Double) {
+    fun setMaxZoomLevel(zoomLevel: Double?) {
         mMaxZoomLevel = zoomLevel
-        updateMaxMinZoomLevel()
+        updateMaxBounds()
     }
 
     fun setZoomLevel(zoomLevel: Double) {

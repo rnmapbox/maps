@@ -26,14 +26,9 @@ import com.mapbox.maps.extension.style.layers.getLayer
 import com.mapbox.maps.extension.style.layers.properties.generated.Visibility
 import com.mapbox.maps.plugin.annotation.Annotation
 import com.mapbox.maps.plugin.annotation.annotations
-import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
-import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationDragListener
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
-import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
+import com.mapbox.maps.plugin.annotation.generated.*
 import com.mapbox.maps.plugin.attribution.attribution
 import com.mapbox.maps.plugin.attribution.generated.AttributionSettings
-import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.compass.generated.CompassSettings
 import com.mapbox.maps.plugin.delegates.listeners.*
@@ -41,7 +36,7 @@ import com.mapbox.maps.plugin.gestures.*
 import com.mapbox.maps.plugin.logo.generated.LogoSettings
 import com.mapbox.maps.plugin.logo.logo
 import com.mapbox.maps.plugin.scalebar.generated.ScaleBarSettings
-import com.mapbox.maps.viewannotation.ViewAnnotationManager
+import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerView
@@ -60,6 +55,7 @@ import com.mapbox.rctmgl.events.IEvent
 import com.mapbox.rctmgl.events.MapChangeEvent
 import com.mapbox.rctmgl.events.MapClickEvent
 import com.mapbox.rctmgl.events.constants.EventTypes
+import com.mapbox.rctmgl.utils.BitmapUtils
 import com.mapbox.rctmgl.utils.GeoJSONUtils
 import com.mapbox.rctmgl.utils.LatLng
 import com.mapbox.rctmgl.utils.Logger
@@ -67,6 +63,7 @@ import com.mapbox.rctmgl.utils.extensions.toReadableArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
+
 
 data class OrnamentSettings(
     var enabled : Boolean? = false,
@@ -773,6 +770,28 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         })
     }
 
+    fun takeSnap(callbackID: String?, writeToDisk: Boolean) {
+        this.snapshot { snapshot ->
+            if (snapshot == null) {
+                Logger.e("takeSnap", "snapshot failed")
+
+                sendResponse(callbackID, {
+                    it.putNull("data")
+                    it.putString("error", "no snapshot")
+                })
+            } else {
+                val uri: String = if (writeToDisk) BitmapUtils.createTempFile(
+                    mContext,
+                    snapshot
+                ) else BitmapUtils.createBase64(snapshot)
+
+                sendResponse(callbackID, {
+                    it.putString("uri", uri)
+                })
+            }
+        }
+    }
+
     fun queryTerrainElevation(callbackID: String?, longitude: Double, latitude: Double) {
         val result = mMap?.getElevation(Point.fromLngLat(longitude, latitude))
 
@@ -959,7 +978,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         mScaleBarSettings.enabled = scaleBarEnabled
         updateScaleBar()
     }
-    
+
     fun setReactScaleBarViewMargins(scaleBarMargins: ReadableMap) {
         mScaleBarSettings.margins = scaleBarMargins
         updateScaleBar()
