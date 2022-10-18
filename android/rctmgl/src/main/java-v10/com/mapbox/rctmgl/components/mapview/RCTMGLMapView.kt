@@ -890,8 +890,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     private fun toGravity(kind: String, viewPosition: Int): Int {
         return when (viewPosition) {
             0 -> (Gravity.TOP or Gravity.LEFT)
-            1 -> (Gravity.BOTTOM or Gravity.LEFT)
-            2 -> (Gravity.TOP or Gravity.RIGHT)
+            1 -> (Gravity.TOP or Gravity.RIGHT)
+            2 -> (Gravity.BOTTOM or Gravity.LEFT)
             3 -> (Gravity.BOTTOM or Gravity.RIGHT)
             else -> {
                 Logger.e(
