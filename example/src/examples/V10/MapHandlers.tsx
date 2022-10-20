@@ -6,11 +6,22 @@ import {
   CircleLayer,
   ShapeSource,
   Logger,
+  MapState,
 } from '@rnmapbox/maps';
 import { Text, Divider } from '@rneui/base';
+import {
+  GeoJsonProperties,
+  Geometry,
+  GeometryCollection,
+  MultiPoint,
+  Point,
+  Position,
+} from 'geojson';
+import { Feature } from 'geojson';
 
 import Page from '../common/Page';
 import colors from '../../styles/colors';
+import { BaseExampleProps } from '../common/BaseExamplePropTypes';
 
 Logger.setLogLevel('verbose');
 
@@ -30,10 +41,25 @@ const styles = {
   },
 };
 
-const MapHandlers = (props) => {
+const MapHandlers = (props: BaseExampleProps) => {
   const [lastCallback, setLastCallback] = useState('');
-  const [mapState, setMapState] = useState({});
-  const [features, setFeatures] = useState([]);
+  const [mapState, setMapState] = useState<MapState>({
+    properties: {
+      center: [0, 0],
+      bounds: {
+        ne: [0, 0],
+        sw: [0, 0],
+      },
+      zoom: 0,
+      heading: 0,
+      pitch: 0,
+    },
+    gestures: {
+      isGestureActive: false,
+      isAnimatingFromGesture: false,
+    },
+  });
+  const [features, setFeatures] = useState<Feature<Geometry>[]>([]);
 
   const properties = mapState?.properties;
   const center = properties?.center;
@@ -41,20 +67,23 @@ const MapHandlers = (props) => {
   const heading = properties?.heading;
   const gestures = mapState?.gestures;
 
-  const buildShape = (feature) => {
+  const buildShape = (feature: Feature<Geometry>) => {
     return {
       type: 'Point',
+      // @ts-expect-error TODO
       coordinates: feature.geometry.coordinates,
     };
   };
 
-  const addFeature = (feature, kind) => {
-    const _feature = { ...feature };
-    _feature.properties.kind = kind;
+  const addFeature = (feature: Feature<Geometry>, kind: string) => {
+    const _feature: Feature<Geometry> = { ...feature };
+    if (_feature.properties) {
+      _feature.properties.kind = kind;
+    }
     setFeatures((prev) => [...prev, _feature]);
   };
 
-  const displayCoord = (position) => {
+  const displayCoord = (position: Position) => {
     if (!position) {
       return '';
     }
@@ -65,10 +94,10 @@ const MapHandlers = (props) => {
     <Page {...props}>
       <MapView
         style={styles.map}
-        onPress={(_feature) => {
+        onPress={(_feature: Feature<Geometry, GeoJsonProperties>) => {
           addFeature(_feature, 'press');
         }}
-        onLongPress={(_feature) => {
+        onLongPress={(_feature: Feature<Geometry, GeoJsonProperties>) => {
           addFeature(_feature, 'longPress');
         }}
         onCameraChanged={(_state) => {
@@ -86,9 +115,10 @@ const MapHandlers = (props) => {
           animationDuration={0}
         />
         {features.map((f, i) => {
+          // @ts-expect-error TODO
           const id = JSON.stringify(f.geometry.coordinates);
           const circleStyle =
-            f.properties.kind === 'press'
+            f.properties?.kind === 'press'
               ? {
                   circleColor: colors.primary.blue,
                   circleRadius: 6,
@@ -98,6 +128,7 @@ const MapHandlers = (props) => {
                   circleRadius: 12,
                 };
           return (
+            // @ts-expect-error TODO
             <ShapeSource key={id} id={`source-${id}`} shape={buildShape(f)}>
               <CircleLayer id={`layer-${id}`} style={circleStyle} />
             </ShapeSource>
@@ -125,7 +156,7 @@ const MapHandlers = (props) => {
           <Divider style={styles.divider} />
 
           <Text style={styles.fadedText}>heading</Text>
-          <Text>{heading.toFixed(2)}</Text>
+          <Text>{heading?.toFixed(2)}</Text>
 
           <Divider style={styles.divider} />
 
