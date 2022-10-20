@@ -399,11 +399,17 @@ class MapView extends NativeBridgeComponent(
         console.warn(
           'onCameraChanged is deprecated and will be removed in next beta - please use onRegionIsChanging',
         );
-        if (props.onRegionWillChange) {
+        if (props.onRegionIsChanging) {
           console.warn(
             'rnmapbox/maps: only one of MapView.onRegionIsChanging or onCameraChanged is supported',
           );
         }
+      }
+
+      if (props.onRegionWillChange) {
+        console.warn(
+          'onRegionWillChange is deprecated and will be removed in v10 - please use onRegionIsChanging',
+        );
       }
 
       this._runNativeCommand('setHandledMapChangedEvents', this._nativeRef, [
