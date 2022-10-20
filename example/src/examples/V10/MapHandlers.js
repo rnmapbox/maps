@@ -23,7 +23,7 @@ const styles = {
     padding: 10,
   },
   divider: {
-    marginVertical: 10,
+    marginVertical: 6,
   },
   fadedText: {
     color: 'gray',
@@ -38,6 +38,7 @@ const MapHandlers = (props) => {
   const properties = mapState?.properties;
   const center = properties?.center;
   const bounds = properties?.bounds;
+  const heading = properties?.heading;
   const gestures = mapState?.gestures;
 
   const buildShape = (feature) => {
@@ -53,7 +54,7 @@ const MapHandlers = (props) => {
     setFeatures((prev) => [...prev, _feature]);
   };
 
-  const display = (position) => {
+  const displayCoord = (position) => {
     if (!position) {
       return '';
     }
@@ -113,13 +114,18 @@ const MapHandlers = (props) => {
           <Divider style={styles.divider} />
 
           <Text style={styles.fadedText}>center</Text>
-          <Text>{display(center)}</Text>
+          <Text>{displayCoord(center)}</Text>
 
           <Divider style={styles.divider} />
 
           <Text style={styles.fadedText}>bounds</Text>
-          <Text>NE: {display(bounds?.ne)}</Text>
-          <Text>NE: {display(bounds?.sw)}</Text>
+          <Text>NE: {displayCoord(bounds?.ne)}</Text>
+          <Text>SW: {displayCoord(bounds?.sw)}</Text>
+
+          <Divider style={styles.divider} />
+
+          <Text style={styles.fadedText}>heading</Text>
+          <Text>{heading.toFixed(2)}</Text>
 
           <Divider style={styles.divider} />
 
@@ -128,13 +134,23 @@ const MapHandlers = (props) => {
 
           <Divider style={styles.divider} />
 
-          <Text style={styles.fadedText}>isGestureActive</Text>
-          <Text>{gestures?.isGestureActive ? 'Yes' : 'No'}</Text>
+          <View
+            style={{
+              flex: 0,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}
+          >
+            <View>
+              <Text style={styles.fadedText}>isGestureActive</Text>
+              <Text>{gestures?.isGestureActive ? 'Yes' : 'No'}</Text>
+            </View>
 
-          <Divider style={styles.divider} />
-
-          <Text style={styles.fadedText}>isAnimatingFromGesture</Text>
-          <Text>{gestures?.isAnimatingFromGesture ? 'Yes' : 'No'}</Text>
+            <View>
+              <Text style={styles.fadedText}>isAnimatingFromGesture</Text>
+              <Text>{gestures?.isAnimatingFromGesture ? 'Yes' : 'No'}</Text>
+            </View>
+          </View>
         </View>
       </SafeAreaView>
     </Page>
