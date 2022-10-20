@@ -52,7 +52,6 @@ For `mapbox` or `mapbox-gl` you'll need to provide `RNMapboxMapsDownloadToken` a
 
 Next, rebuild your app as described in the ["Adding custom native code"](https://docs.expo.io/workflow/customizing/) guide.
 
-
 ## Manual Setup
 
 For bare workflow projects, you can follow the manual setup guides:
