@@ -142,6 +142,26 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
         mapView!!.setReactLogoPosition(logoPosition);
     }
 
+    @ReactProp(name = "scaleBarEnabled")
+    fun setScaleBarEnabled(mapView: RCTMGLMapView?, scaleBarEnabled: Boolean) {
+        mapView!!.setReactScaleBarEnabled(scaleBarEnabled);
+    }
+
+    @ReactProp(name = "scaleBarViewMargins")
+    fun setScaleBarViewMargins(mapView: RCTMGLMapView?, scaleBarMargins: ReadableMap?) {
+        mapView!!.setReactScaleBarViewMargins(scaleBarMargins!!);
+    }
+
+    @ReactProp(name = "scaleBarViewPosition")
+    fun setScaleBarViewPosition(mapView: RCTMGLMapView?, scaleBarPosition: Int) {
+        mapView!!.setReactScaleBarViewPosition(scaleBarPosition!!)
+    }
+
+    @ReactProp(name = "scaleBarPosition")
+    fun scaleBarViewPosition(mapView: RCTMGLMapView?, scaleBarPosition: ReadableMap) {
+        mapView!!.setReactScaleBarPosition(scaleBarPosition)
+    }
+
     @ReactProp(name = "compassEnabled")
     fun setCompassEnabled(mapView: RCTMGLMapView?, compassEnabled: Boolean) {
         mapView!!.setReactCompassEnabled(compassEnabled);
@@ -163,8 +183,8 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
     }
 
     @ReactProp(name = "compassPosition")
-    fun setCompassMargins(mapView: RCTMGLMapView?, compassMargins: ReadableMap) {
-        mapView!!.setReactCompassMargins(compassMargins)
+    fun setCompassPosition(mapView: RCTMGLMapView?, compassMargins: ReadableMap) {
+        mapView!!.setReactCompassPosition(compassMargins)
     }
 
     @ReactProp(name = "contentInset")
@@ -258,6 +278,9 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
             }
             METHOD_VISIBLE_BOUNDS -> {
                 mapView.getVisibleBounds(args!!.getString(0));
+            }
+            METHOD_TAKE_SNAP -> {
+                mapView.takeSnap(args!!.getString(0), args!!.getBoolean(1))
             }
         }
         /*

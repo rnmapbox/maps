@@ -82,6 +82,7 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
         mNativeImages = HashMap()
         mImages = HashMap()
         mCurrentImages = HashSet()
+        super.removeFromMap(mapView)
     }
 
     private fun removeImages(mapView: RCTMGLMapView) {
@@ -151,6 +152,7 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
     }
 
     override fun addToMap(mapView: RCTMGLMapView) {
+        super.addToMap(mapView)
         // Wait for style before adding the source to the map
         // only then we can pre-load required images / placeholders into the style
         // before we add the ShapeSource to the map

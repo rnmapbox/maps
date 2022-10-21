@@ -201,15 +201,15 @@ open class RCTMGLMapView : MapView {
     let glPosition = MapboxGLPosition(rawValue: position)
     switch glPosition {
     case .topLeft:
-      return .topLeft
+      return .topLeading
     case .bottomRight:
-      return .bottomRight
+      return .bottomTrailing
     case .topRight:
-      return .topRight
+      return .topTrailing
     case .bottomLeft:
-      return .bottomLeft
+      return .bottomLeading
     case .none:
-      return .topLeft
+      return .topLeading
     }
   }
   
@@ -244,7 +244,7 @@ open class RCTMGLMapView : MapView {
   }
 
   @objc func setReactRotateEnabled(_ value: Bool) {
-    self.mapView.gestures.options.pinchRotateEnabled = value
+    self.mapView.gestures.options.rotateEnabled = value
   }
 
   @objc func setReactPitchEnabled(_ value: Bool) {
@@ -264,20 +264,20 @@ open class RCTMGLMapView : MapView {
     }
   }
 
-  private func getOrnamentOptionsFromPosition(_ position: [String: Int]!) -> (position: OrnamentPosition, margins: CGPoint)? {
+  private func getOrnamentOptionsFromPosition(_ position: [String: Int]) -> (position: OrnamentPosition, margins: CGPoint)? {
     let left = position["left"]
     let right = position["right"]
     let top = position["top"]
     let bottom = position["bottom"]
     
     if let left = left, let top = top {
-      return (OrnamentPosition.topLeft, CGPoint(x: left, y: top))
+      return (OrnamentPosition.topLeading, CGPoint(x: left, y: top))
     } else if let right = right, let top = top {
-      return (OrnamentPosition.topRight, CGPoint(x: right, y: top))
+      return (OrnamentPosition.topTrailing, CGPoint(x: right, y: top))
     } else if let bottom = bottom, let right = right {
-      return (OrnamentPosition.bottomRight, CGPoint(x: right, y: bottom))
+      return (OrnamentPosition.bottomTrailing, CGPoint(x: right, y: bottom))
     } else if let bottom = bottom, let left = left {
-      return (OrnamentPosition.bottomLeft, CGPoint(x: left, y: bottom))
+      return (OrnamentPosition.bottomLeading, CGPoint(x: left, y: bottom))
     }
     
     return nil
@@ -533,7 +533,7 @@ extension RCTMGLMapView: GestureManagerDelegate {
         let options = RenderedQueryOptions(
           layerIds: source.getLayerIDs(), filter: nil
         )
-        self.mapboxMap.queryRenderedFeatures(in: hitboxRect, options: options) {
+        self.mapboxMap.queryRenderedFeatures(with: hitboxRect, options: options) {
           result in
           
           var newHits = hits
@@ -785,12 +785,6 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
           }
         }
       }
-      /*
-      
-         let rctmglPointAnnotation = userInfo[RCTMGLPointAnnotation.key] as? WeakRef<RCTMGLPointAnnotation>,
-         let rctmglPointAnnotation = rctmglPointAnnotation.object {
-        rctmglPointAnnotation.didTap()
-      }*/
     }
   }
   
@@ -887,12 +881,6 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
           }
         }
       }
-      /*
-      
-         let rctmglPointAnnotation = userInfo[RCTMGLPointAnnotation.key] as? WeakRef<RCTMGLPointAnnotation>,
-         let rctmglPointAnnotation = rctmglPointAnnotation.object {
-        rctmglPointAnnotation.didTap()
-      }*/
     }
   }
   
@@ -909,8 +897,8 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
     }
       switch sender.state {
         case .began:
-          mapFeatureQueryable.queryRenderedFeatures(
-            at: sender.location(in: sender.view),
+        mapFeatureQueryable.queryRenderedFeatures(
+          with: sender.location(in: sender.view),
             options: options) { [weak self] (result) in
               
               guard let self = self else { return }

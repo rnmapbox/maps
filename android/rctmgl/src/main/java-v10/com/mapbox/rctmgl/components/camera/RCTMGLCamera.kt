@@ -45,11 +45,12 @@ import com.mapbox.rctmgl.modules.RCTMGLLogging
 import com.mapbox.rctmgl.utils.LatLng
 import com.mapbox.rctmgl.utils.Logger
 
+
+
 class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCameraManager) :
     AbstractMapFeature(
         mContext
     ) {
-    private var mMapView: RCTMGLMapView? = null
     private var hasSentFirstRegion = false
     private var mDefaultStop: CameraStop? = null
     private var mCameraStop: CameraStop? = null
@@ -71,8 +72,8 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
     private var mFollowZoomLevel : Double? = null
     private var mFollowHeading : Double? = null
     private var mZoomLevel = -1.0
-    private var mMinZoomLevel = -1.0
-    private var mMaxZoomLevel = -1.0
+    private var mMinZoomLevel : Double? = null
+    private var mMaxZoomLevel : Double? = null
     private var mMaxBounds: LatLngBounds? = null
     private var mFollowUserLocation = false
     private var mFollowUserMode: String? = null
@@ -117,9 +118,8 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
     }
 
     override fun addToMap(mapView: RCTMGLMapView) {
-        mMapView = mapView
+        super.addToMap(mapView)
         setInitialCamera()
-        updateMaxMinZoomLevel()
         updateMaxBounds()
         mCameraStop?.let { updateCamera(it) }
         if (mFollowUserLocation) {
@@ -128,7 +128,9 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         }
     }
 
-    override fun removeFromMap(mapView: RCTMGLMapView) {}
+    override fun removeFromMap(mapView: RCTMGLMapView) {
+        super.removeFromMap(mapView)
+    }
     fun setStop(stop: CameraStop) {
         mCameraStop = stop
         mCameraStop!!.setCallback(mCameraCallback)
@@ -161,27 +163,20 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         updateMaxBounds()
     }
 
+
     private fun updateMaxBounds() {
-        /*
-        MapboxMap map = getMapboxMap();
-        if (map != null && mMaxBounds != null) {
-            map.setLatLngBoundsForCameraTarget(mMaxBounds);
+        withMapView { mapView ->
+            val map = mapView.getMapboxMap()
+            val maxBounds = mMaxBounds
+            val builder = CameraBoundsOptions.Builder()
+
+            if (maxBounds != null) {
+                builder.bounds(maxBounds.toBounds())
+            }
+            mMinZoomLevel?.let { builder.minZoom(it) }
+            mMaxZoomLevel?.let { builder.maxZoom(it) }
+            map.setBounds(builder.build())
         }
-
-         */
-    }
-
-    private fun updateMaxMinZoomLevel() {
-        /*
-        MapboxMap map = getMapboxMap();
-        if (map != null) {
-            if (mMinZoomLevel >= 0.0) {
-                map.setMinZoomPreference(mMinZoomLevel);
-            }
-            if (mMaxZoomLevel >= 0.0) {
-                map.setMaxZoomPreference(mMaxZoomLevel);
-            }
-        }*/
     }
 
     private fun setInitialCamera() {
@@ -319,18 +314,18 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
             });
              */
         } else {
-            mLocationComponentManager!!.setCameraMode(CameraMode.NONE)
+            mLocationComponentManager!!.setCameraMode(com.mapbox.rctmgl.components.location.CameraMode.NONE)
         }
     }
 
-    fun setMinZoomLevel(zoomLevel: Double) {
+    fun setMinZoomLevel(zoomLevel: Double?) {
         mMinZoomLevel = zoomLevel
-        updateMaxMinZoomLevel()
+        updateMaxBounds()
     }
 
-    fun setMaxZoomLevel(zoomLevel: Double) {
+    fun setMaxZoomLevel(zoomLevel: Double?) {
         mMaxZoomLevel = zoomLevel
-        updateMaxMinZoomLevel()
+        updateMaxBounds()
     }
 
     fun setZoomLevel(zoomLevel: Double) {

@@ -77,6 +77,10 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
 
     fun setClusterMaxZoom(clusterMaxZoom: Long) {
         mClusterMaxZoom = clusterMaxZoom
+        if (mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
+            val result = mMap!!.getStyle()!!
+                .setStyleSourceProperty(iD!!, "clusterMaxZoom", Value.valueOf(clusterMaxZoom))
+        }
     }
 
     fun setClusterProperties(clusterProperties: HashMap<String, Any>) {

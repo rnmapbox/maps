@@ -1,24 +1,14 @@
 package com.mapbox.rctmgl.components.camera
 
-import com.mapbox.rctmgl.components.camera.CameraStop.Companion.fromReadableMap
-import com.mapbox.maps.MapboxMap
-import com.mapbox.maps.CameraOptions
-import com.mapbox.maps.plugin.animation.CameraAnimationsPlugin
-import android.view.animation.LinearInterpolator
-import android.view.animation.AccelerateDecelerateInterpolator
-import com.mapbox.rctmgl.components.camera.CameraStop
-import com.mapbox.rctmgl.components.camera.CameraUpdateQueue.OnCompleteAllListener
-import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
-import com.mapbox.rctmgl.components.camera.CameraUpdateItem
 import com.facebook.react.bridge.ReactApplicationContext
-import com.mapbox.rctmgl.components.AbstractEventEmitter
-import com.mapbox.rctmgl.components.camera.RCTMGLCamera
-import com.mapbox.rctmgl.components.camera.RCTMGLCameraManager
+import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
-import com.facebook.react.bridge.ReadableMap
-import java.lang.AssertionError
-import java.util.HashMap
+import com.mapbox.geojson.FeatureCollection
+import com.mapbox.rctmgl.components.AbstractEventEmitter
+import com.mapbox.rctmgl.components.camera.CameraStop.Companion.fromReadableMap
+import com.mapbox.rctmgl.utils.GeoJSONUtils.toLatLngBounds
+
 
 //import com.mapbox.rctmgl.utils.GeoJSONUtils;
 class RCTMGLCameraManager(private val mContext: ReactApplicationContext) :
@@ -53,15 +43,6 @@ class RCTMGLCameraManager(private val mContext: ReactApplicationContext) :
         }
     }
 
-    /*v10todo
-    @ReactProp(name="maxBounds")
-    public void setMaxBounds(RCTMGLCamera camera, String value) {
-        if (value != null) {
-            FeatureCollection collection = FeatureCollection.fromJson(value);
-            camera.setMaxBounds(GeoJSONUtils.toLatLngBounds(collection));
-        }
-    }
-*/
     @ReactProp(name = "userTrackingMode")
     fun setUserTrackingMode(camera: RCTMGLCamera, userTrackingMode: Int) {
         camera.setUserTrackingMode(userTrackingMode)
@@ -106,6 +87,16 @@ class RCTMGLCameraManager(private val mContext: ReactApplicationContext) :
     @ReactProp(name = "followZoomLevel")
     fun setFollowZoomLevel(camera: RCTMGLCamera, value: Double) {
         camera.setFollowZoomLevel(value)
+    }
+
+    @ReactProp(name = "maxBounds")
+    fun setMaxBounds(camera: RCTMGLCamera, value: String?) {
+        if (value != null) {
+            val collection = FeatureCollection.fromJson(value)
+            camera.setMaxBounds(toLatLngBounds(collection))
+        } else {
+            camera.setMaxBounds(null)
+        }
     }
 
     companion object {
