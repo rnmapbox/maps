@@ -23,7 +23,10 @@ import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.Layer
 import com.mapbox.maps.extension.style.layers.generated.*
 import com.mapbox.maps.extension.style.layers.getLayer
+import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.extension.style.layers.properties.generated.Visibility
+import com.mapbox.maps.extension.style.projection.generated.Projection
+import com.mapbox.maps.extension.style.projection.generated.setProjection
 import com.mapbox.maps.plugin.annotation.Annotation
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
@@ -83,6 +86,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     private val mImages: MutableList<RCTMGLImages>
     private var mPointAnnotationManager: PointAnnotationManager? = null
     private var mActiveMarkerID: Long = -1
+    private var mProjection: ProjectionName = ProjectionName.MERCATOR
     private var mStyleURL: String? = null
     val isDestroyed = false
     private var mCamera: RCTMGLCamera? = null
@@ -388,12 +392,23 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         return true
     }
 
+    fun setReactProjection(projection: ProjectionName) {
+        if (projection != null) {
+            mProjection = projection
+        }
+
+        if (mMap != null) {
+            mMap.getStyle()?.setProjection(Projection(projection))
+        }
+    }
+
     fun setReactStyleURL(styleURL: String) {
         if (mMap != null) {
             removeAllFeaturesFromMap()
             if (isJSONValid(mStyleURL)) {
                 mMap.loadStyleJson(styleURL, object : Style.OnStyleLoaded {
                     override fun onStyleLoaded(style: Style) {
+                        style.setProjection(Projection(mProjection))
                         addAllFeaturesToMap()
                     }
                 })
@@ -401,6 +416,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 mMap.loadStyleUri(styleURL, object : Style.OnStyleLoaded {
                     override fun onStyleLoaded(style: Style) {
                         savedStyle = style
+                        style.setProjection(Projection(mProjection))
                         addAllFeaturesToMap()
                     }
                 },
