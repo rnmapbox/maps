@@ -82,12 +82,12 @@ export class SymbolLayer extends AbstractLayer<Props, NativeTypeProps> {
   _shouldSnapshot() {
     let isSnapshot = false;
 
-    if (React.Children.count(this.props.children) <= 0) {
+    if (React.Children.count(this.baseProps.children) <= 0) {
       return isSnapshot;
     }
 
-    React.Children.forEach(this.props.children, (child) => {
-      if (child !== undefined && 'type' in child && child.type === View) {
+    React.Children.forEach(this.baseProps.children, (child) => {
+      if (child?.type === View) {
         isSnapshot = true;
       }
     });
