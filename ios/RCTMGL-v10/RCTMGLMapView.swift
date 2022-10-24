@@ -12,8 +12,6 @@ open class RCTMGLMapView : MapView {
   var reactOnLongPress : RCTBubblingEventBlock?
   var reactOnMapChange : RCTBubblingEventBlock?
 
-  var projection : StyleProjection = StyleProjection(name: .mercator)
-
   var styleLoaded: Bool = false
   var styleLoadWaiters : [(MapboxMap)->Void] = []
 
@@ -140,11 +138,8 @@ open class RCTMGLMapView : MapView {
 
   @objc func setReactProjection(_ value: String?) {
     if let value = value {
-      if value == "mercator" {
-        try! self.mapboxMap.style.setProjection(StyleProjection(name: .mercator))
-      } else if value == "globe" {
-        try! self.mapboxMap.style.setProjection(StyleProjection(name: .globe))
-      }
+      var projection = StyleProjection(name: value == "globe" ? .globe : .mercator)
+      try! self.mapboxMap.style.setProjection(projection)
     }
   }
   
