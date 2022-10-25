@@ -74,12 +74,12 @@ PODS:
   - fmt (6.2.1)
   - glog (0.3.5)
   - libevent (2.1.12)
-  - MapboxCommon (23.0.0)
-  - MapboxCoreMaps (10.8.0):
-    - MapboxCommon (~> 23.0)
-  - MapboxMaps (10.8.1):
-    - MapboxCommon (= 23.0.0)
-    - MapboxCoreMaps (= 10.8.0)
+  - MapboxCommon (23.1.0)
+  - MapboxCoreMaps (10.9.0):
+    - MapboxCommon (~> 23.1)
+  - MapboxMaps (10.9.0):
+    - MapboxCommon (= 23.1.0)
+    - MapboxCoreMaps (= 10.9.0)
     - MapboxMobileEvents (= 1.0.8)
     - Turf (~> 2.0)
   - MapboxMobileEvents (1.0.8)
@@ -365,14 +365,14 @@ PODS:
     - React-jsi (= 0.69.4)
     - React-logger (= 0.69.4)
     - React-perflogger (= 0.69.4)
-  - rnmapbox-maps (10.0.0-beta.46):
-    - MapboxMaps (~> 10.8.1)
+  - rnmapbox-maps (10.0.0-beta.48):
+    - MapboxMaps (~> 10.9.0)
     - React
     - React-Core
     - rnmapbox-maps/DynamicLibrary (= 10.0.0-beta.46)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.0.0-beta.46):
-    - MapboxMaps (~> 10.8.1)
+  - rnmapbox-maps/DynamicLibrary (10.0.0-beta.48):
+    - MapboxMaps (~> 10.9.0)
     - React
     - React-Core
     - Turf

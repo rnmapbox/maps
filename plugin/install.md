@@ -32,8 +32,6 @@ After installing this package, add the [config plugin](https://docs.expo.io/guid
 }
 ```
 
-Next, rebuild your app as described in the ["Adding custom native code"](https://docs.expo.io/workflow/customizing/) guide.
-
 For `mapbox` or `mapbox-gl` you'll need to provide `RNMapboxMapsDownloadToken` as well.
 
 ```json
@@ -51,6 +49,8 @@ For `mapbox` or `mapbox-gl` you'll need to provide `RNMapboxMapsDownloadToken` a
   }
 }
 ```
+
+Next, rebuild your app as described in the ["Adding custom native code"](https://docs.expo.io/workflow/customizing/) guide.
 
 ## Manual Setup
 

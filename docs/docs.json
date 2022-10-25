@@ -1425,43 +1425,6 @@
           ]
         },
         "transition": false
-      },
-      {
-        "name": "fillExtrusionAmbientOcclusionIntensity",
-        "type": "number",
-        "values": [],
-        "minimum": 0,
-        "maximum": 1,
-        "default": 0,
-        "description": "Controls the intensity of ambient occlusion (AO) shading. Current AO implementation is a lowCost bestEffort approach that shades area near ground and concave angles between walls. Default value 0.0 disables ambient occlusion and values around 0.3 provide the most plausible results for buildings.",
-        "requires": [],
-        "disabledBy": [],
-        "allowedFunctionTypes": [],
-        "expression": {
-          "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
-        },
-        "transition": true
-      },
-      {
-        "name": "fillExtrusionAmbientOcclusionRadius",
-        "type": "number",
-        "values": [],
-        "minimum": 0,
-        "default": 3,
-        "description": "The radius of ambient occlusion (AO) shading, in meters. Current AO implementation is a lowCost bestEffort approach that shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to hight of one floor and brings the most plausible results for buildings.",
-        "requires": [],
-        "disabledBy": [],
-        "allowedFunctionTypes": [],
-        "expression": {
-          "interpolated": true,
-          "parameters": [
-            "zoom"
-          ]
-        },
-        "transition": true
       }
     ]
   },
