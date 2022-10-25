@@ -1196,38 +1196,6 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
     PropTypes.bool,
     PropTypes.array,
   ]),
-
-  /**
-   * Controls the intensity of ambient occlusion (AO) shading. Current AO implementation is a lowCost bestEffort approach that shades area near ground and concave angles between walls. Default value 0.0 disables ambient occlusion and values around 0.3 provide the most plausible results for buildings.
-   */
-  fillExtrusionAmbientOcclusionIntensity: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.array,
-  ]),
-
-  /**
-   * The transition affecting any changes to this layer’s fillExtrusionAmbientOcclusionIntensity property.
-   */
-  fillExtrusionAmbientOcclusionIntensityTransition: PropTypes.shape({
-    duration: PropTypes.number,
-    delay: PropTypes.number,
-  }),
-
-  /**
-   * The radius of ambient occlusion (AO) shading, in meters. Current AO implementation is a lowCost bestEffort approach that shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to hight of one floor and brings the most plausible results for buildings.
-   */
-  fillExtrusionAmbientOcclusionRadius: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.array,
-  ]),
-
-  /**
-   * The transition affecting any changes to this layer’s fillExtrusionAmbientOcclusionRadius property.
-   */
-  fillExtrusionAmbientOcclusionRadiusTransition: PropTypes.shape({
-    duration: PropTypes.number,
-    delay: PropTypes.number,
-  }),
 });
 
 export const RasterLayerStyleProp = PropTypes.shape({
@@ -1847,10 +1815,6 @@ const styleMap = {
   fillExtrusionBase: StyleTypes.Constant,
   fillExtrusionBaseTransition: StyleTypes.Transition,
   fillExtrusionVerticalGradient: StyleTypes.Constant,
-  fillExtrusionAmbientOcclusionIntensity: StyleTypes.Constant,
-  fillExtrusionAmbientOcclusionIntensityTransition: StyleTypes.Transition,
-  fillExtrusionAmbientOcclusionRadius: StyleTypes.Constant,
-  fillExtrusionAmbientOcclusionRadiusTransition: StyleTypes.Transition,
 
   rasterOpacity: StyleTypes.Constant,
   rasterOpacityTransition: StyleTypes.Transition,
