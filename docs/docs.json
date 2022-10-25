@@ -2892,6 +2892,13 @@
         "description": "The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport."
       },
       {
+        "name": "projection",
+        "required": false,
+        "type": "enum",
+        "default": "'mercator'",
+        "description": "The projection used when rendering the map"
+      },
+      {
         "name": "style",
         "required": false,
         "type": "any",

@@ -21,6 +21,7 @@ RCT_REMAP_VIEW_PROPERTY(scrollEnabled, reactScrollEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(rotateEnabled, reactRotateEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(pitchEnabled, reactPitchEnabled, BOOL)
 
+RCT_REMAP_VIEW_PROPERTY(projection, reactProjection, NSString)
 
 RCT_REMAP_VIEW_PROPERTY(styleURL, reactStyleURL, NSString)
 RCT_REMAP_VIEW_PROPERTY(onPress, reactOnPress, RCTBubblingEventBlock)

@@ -135,6 +135,14 @@ open class RCTMGLMapView : MapView {
 
   
   // MARK: - React Native properties
+
+  @objc func setReactProjection(_ value: String?) {
+    if let value = value {
+      var projection = StyleProjection(name: value == "globe" ? .globe : .mercator)
+      try! self.mapboxMap.style.setProjection(projection)
+    }
+  }
+  
   
   @objc func setReactAttributionEnabled(_ value: Bool) {
     mapView.ornaments.options.attributionButton.visibility = value ? .visible : .hidden

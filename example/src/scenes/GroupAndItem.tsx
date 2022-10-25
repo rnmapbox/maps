@@ -80,6 +80,7 @@ import QueryTerrainElevation from '../examples/V10/QueryTerrainElevation';
 import CameraAnimation from '../examples/V10/CameraAnimation';
 import MapHandlers from '../examples/V10/MapHandlers';
 import Markers from '../examples/V10/Markers';
+import GlobeProjection from '../examples/V10/GlobeProjection';
 
 const styles = StyleSheet.create({
   exampleList: {
@@ -201,6 +202,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   new ExampleItem('Bug Report Template TS', BugReportPage(BugReportExampleTS)),
   new ExampleGroup('V10', [
     new ExampleItem('Terrain, Sky, & Atmosphere', TerrainSkyAtmosphere),
+    new ExampleItem('Globe Projection', GlobeProjection),
     new ExampleItem('Query Terrain Elevation', QueryTerrainElevation),
     new ExampleItem('Camera Animation', CameraAnimation),
     new ExampleItem('Map Handlers', MapHandlers),

@@ -11,6 +11,7 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.mapbox.rctmgl.events.constants.EventKeys
 import com.mapbox.maps.MapboxMap
 import com.facebook.react.common.MapBuilder
+import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.logo.logo
@@ -78,7 +79,12 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
         return mViews[reactTag]
     }
 
-    //region React Props
+    // region React Props
+    @ReactProp(name = "projection")
+    fun setProjection(mapView: RCTMGLMapView, projection: String?) {
+        mapView.setReactProjection( if (projection == "globe") ProjectionName.GLOBE else ProjectionName.MERCATOR )
+    }
+
     @ReactProp(name = "styleURL")
     fun setStyleURL(mapView: RCTMGLMapView, styleURL: String?) {
         mapView.setReactStyleURL(styleURL!!)
