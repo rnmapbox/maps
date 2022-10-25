@@ -20,6 +20,7 @@ FillExtrusionLayer is a style layer that renders one or more 3D extruded polygon
 ## styles
 
 * <a href="#visibility">visibility</a><br/>
+* <a href="#fillextrusionedgeradius">fillExtrusionEdgeRadius</a><br/>
 * <a href="#fillextrusionopacity">fillExtrusionOpacity</a><br/>
 * <a href="#fillextrusioncolor">fillExtrusionColor</a><br/>
 * <a href="#fillextrusiontranslate">fillExtrusionTranslate</a><br/>
@@ -48,6 +49,27 @@ Whether this layer is displayed.
 **visible** - The layer is shown.<br />
 **none** - The layer is not shown.<br />
 
+
+
+___
+
+### fillExtrusionEdgeRadius
+Name: `fillExtrusionEdgeRadius`
+
+### Description
+Radius of a fill extrusion edge in meters. If not zero, rounds extrusion edges for a smoother appearance.
+
+### Type
+`number`
+### Default Value
+`0`
+
+### Minimum
+`0`
+
+
+### Maximum
+`1`
 
 
 ___
@@ -352,7 +374,7 @@ ___
 Name: `fillExtrusionAmbientOcclusionIntensity`
 
 ### Description
-Controls the intensity of ambient occlusion (AO) shading. Current AO implementation is a lowCost bestEffort approach that shades area near ground and concave angles between walls. Default value 0.0 disables ambient occlusion and values around 0.3 provide the most plausible results for buildings.
+Controls the intensity of shading near ground and concave angles between walls. Default value 0.0 disables ambient occlusion and values around 0.3 provide the most plausible results for buildings.
 
 ### Type
 `number`
@@ -396,7 +418,7 @@ ___
 Name: `fillExtrusionAmbientOcclusionRadius`
 
 ### Description
-The radius of ambient occlusion (AO) shading, in meters. Current AO implementation is a lowCost bestEffort approach that shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to hight of one floor and brings the most plausible results for buildings.
+Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings.
 
 ### Type
 `number`
@@ -406,6 +428,9 @@ The radius of ambient occlusion (AO) shading, in meters. Current AO implementati
 ### Minimum
 `0`
 
+
+### Requires
+`fillExtrusionEdgeRadius`
 
 ### Expression
 

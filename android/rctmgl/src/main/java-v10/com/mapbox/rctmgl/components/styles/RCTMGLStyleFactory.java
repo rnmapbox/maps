@@ -547,6 +547,9 @@ public class RCTMGLStyleFactory {
             case "visibility":
               RCTMGLStyleFactory.setVisibility(layer, styleValue);
               break;
+            case "fillExtrusionEdgeRadius":
+              RCTMGLStyleFactory.setFillExtrusionEdgeRadius(layer, styleValue);
+              break;
             case "fillExtrusionOpacity":
               RCTMGLStyleFactory.setFillExtrusionOpacity(layer, styleValue);
               break;
@@ -2011,6 +2014,14 @@ public class RCTMGLStyleFactory {
 
     public static void setVisibility(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
         layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
+    }
+
+    public static void setFillExtrusionEdgeRadius(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
+      if (styleValue.isExpression()) {
+        layer.fillExtrusionEdgeRadius(styleValue.getExpression());
+      } else {
+          layer.fillExtrusionEdgeRadius(styleValue.getFloat(VALUE_KEY));
+      }
     }
 
     public static void setFillExtrusionOpacity(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {

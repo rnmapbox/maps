@@ -1088,6 +1088,11 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
   visibility: PropTypes.oneOf(['visible', 'none']),
 
   /**
+   * Radius of a fill extrusion edge in meters. If not zero, rounds extrusion edges for a smoother appearance.
+   */
+  fillExtrusionEdgeRadius: PropTypes.number,
+
+  /**
    * The opacity of the entire fill extrusion layer. This is rendered on a perLayer, not perFeature, basis, and dataDriven styling is not available.
    */
   fillExtrusionOpacity: PropTypes.oneOfType([
@@ -1198,7 +1203,7 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
   ]),
 
   /**
-   * Controls the intensity of ambient occlusion (AO) shading. Current AO implementation is a lowCost bestEffort approach that shades area near ground and concave angles between walls. Default value 0.0 disables ambient occlusion and values around 0.3 provide the most plausible results for buildings.
+   * Controls the intensity of shading near ground and concave angles between walls. Default value 0.0 disables ambient occlusion and values around 0.3 provide the most plausible results for buildings.
    */
   fillExtrusionAmbientOcclusionIntensity: PropTypes.oneOfType([
     PropTypes.number,
@@ -1214,7 +1219,9 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
   }),
 
   /**
-   * The radius of ambient occlusion (AO) shading, in meters. Current AO implementation is a lowCost bestEffort approach that shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to hight of one floor and brings the most plausible results for buildings.
+   * Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings.
+   *
+   * @requires fillExtrusionEdgeRadius
    */
   fillExtrusionAmbientOcclusionRadius: PropTypes.oneOfType([
     PropTypes.number,
@@ -1833,6 +1840,7 @@ const styleMap = {
   heatmapOpacity: StyleTypes.Constant,
   heatmapOpacityTransition: StyleTypes.Transition,
 
+  fillExtrusionEdgeRadius: StyleTypes.Constant,
   fillExtrusionOpacity: StyleTypes.Constant,
   fillExtrusionOpacityTransition: StyleTypes.Transition,
   fillExtrusionColor: StyleTypes.Color,

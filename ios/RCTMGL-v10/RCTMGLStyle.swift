@@ -469,6 +469,8 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
 
     if (prop == "visibility") {
       self.setFillExtrusionStyleLayerVisibility(&layer, styleValue:styleValue);
+    } else if (prop == "fillExtrusionEdgeRadius") {
+      self.setFillExtrusionEdgeRadius(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionOpacity") {
       self.setFillExtrusionOpacity(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionOpacityTransition") {
@@ -1923,6 +1925,15 @@ func setHeatmapOpacityTransition(_ layer: inout HeatmapLayer, styleValue: RCTMGL
 func setFillExtrusionStyleLayerVisibility(_ layer: inout FillExtrusionLayer, styleValue: RCTMGLStyleValue)
 {
     layer.visibility = styleValue.isVisible();
+}
+
+func setFillExtrusionEdgeRadius(_ layer: inout FillExtrusionLayer, styleValue: RCTMGLStyleValue)
+{
+      
+        
+          layer.fillExtrusionEdgeRadius = styleValue.mglStyleValueNumber();
+        
+      
 }
 
 func setFillExtrusionOpacity(_ layer: inout FillExtrusionLayer, styleValue: RCTMGLStyleValue)
