@@ -348,6 +348,9 @@ function isTranslate(attrName) {
 
 function isAttrSupported(attr, only) {
   const support = getAttributeSupport(attr['sdk-support']);
+  if (attr.private === true) {
+    return false;
+  }
   if (only != null) {
     return support.basic[only].android && support.basic[only].ios;
   }

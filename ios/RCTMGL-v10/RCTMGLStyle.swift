@@ -469,8 +469,6 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
 
     if (prop == "visibility") {
       self.setFillExtrusionStyleLayerVisibility(&layer, styleValue:styleValue);
-    } else if (prop == "fillExtrusionEdgeRadius") {
-      self.setFillExtrusionEdgeRadius(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionOpacity") {
       self.setFillExtrusionOpacity(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionOpacityTransition") {
@@ -518,14 +516,6 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
       self.setFillExtrusionBaseTransition(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionVerticalGradient") {
       self.setFillExtrusionVerticalGradient(&layer, styleValue:styleValue);
-    } else if (prop == "fillExtrusionAmbientOcclusionIntensity") {
-      self.setFillExtrusionAmbientOcclusionIntensity(&layer, styleValue:styleValue);
-    } else if (prop == "fillExtrusionAmbientOcclusionIntensityTransition") {
-      self.setFillExtrusionAmbientOcclusionIntensityTransition(&layer, styleValue:styleValue);
-    } else if (prop == "fillExtrusionAmbientOcclusionRadius") {
-      self.setFillExtrusionAmbientOcclusionRadius(&layer, styleValue:styleValue);
-    } else if (prop == "fillExtrusionAmbientOcclusionRadiusTransition") {
-      self.setFillExtrusionAmbientOcclusionRadiusTransition(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: fill-extrusion")
     }
@@ -1927,15 +1917,6 @@ func setFillExtrusionStyleLayerVisibility(_ layer: inout FillExtrusionLayer, sty
     layer.visibility = styleValue.isVisible();
 }
 
-func setFillExtrusionEdgeRadius(_ layer: inout FillExtrusionLayer, styleValue: RCTMGLStyleValue)
-{
-      
-        
-          layer.fillExtrusionEdgeRadius = styleValue.mglStyleValueNumber();
-        
-      
-}
-
 func setFillExtrusionOpacity(_ layer: inout FillExtrusionLayer, styleValue: RCTMGLStyleValue)
 {
       
@@ -2036,34 +2017,6 @@ func setFillExtrusionVerticalGradient(_ layer: inout FillExtrusionLayer, styleVa
           layer.fillExtrusionVerticalGradient = styleValue.mglStyleValueBoolean();
         
       
-}
-
-func setFillExtrusionAmbientOcclusionIntensity(_ layer: inout FillExtrusionLayer, styleValue: RCTMGLStyleValue)
-{
-      
-        
-          layer.fillExtrusionAmbientOcclusionIntensity = styleValue.mglStyleValueNumber();
-        
-      
-}
-
-func setFillExtrusionAmbientOcclusionIntensityTransition(_ layer: inout FillExtrusionLayer, styleValue: RCTMGLStyleValue)
-{
-    layer.fillExtrusionAmbientOcclusionIntensityTransition = styleValue.getTransition();
-}
-
-func setFillExtrusionAmbientOcclusionRadius(_ layer: inout FillExtrusionLayer, styleValue: RCTMGLStyleValue)
-{
-      
-        
-          layer.fillExtrusionAmbientOcclusionRadius = styleValue.mglStyleValueNumber();
-        
-      
-}
-
-func setFillExtrusionAmbientOcclusionRadiusTransition(_ layer: inout FillExtrusionLayer, styleValue: RCTMGLStyleValue)
-{
-    layer.fillExtrusionAmbientOcclusionRadiusTransition = styleValue.getTransition();
 }
 
 

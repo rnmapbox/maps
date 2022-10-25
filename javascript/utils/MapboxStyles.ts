@@ -1191,10 +1191,6 @@ export interface FillExtrusionLayerStyleProps {
    */
   visibility?: Enum<VisibilityEnum, VisibilityEnumValues>;
   /**
-   * Radius of a fill extrusion edge in meters. If not zero, rounds extrusion edges for a smoother appearance.
-   */
-  fillExtrusionEdgeRadius?: number;
-  /**
    * The opacity of the entire fill extrusion layer. This is rendered on a perLayer, not perFeature, basis, and dataDriven styling is not available.
    */
   fillExtrusionOpacity?: Value<number, ['zoom']>;
@@ -1262,26 +1258,6 @@ export interface FillExtrusionLayerStyleProps {
    * Whether to apply a vertical gradient to the sides of a fillExtrusion layer. If true, sides will be shaded slightly darker farther down.
    */
   fillExtrusionVerticalGradient?: Value<boolean, ['zoom']>;
-  /**
-   * Controls the intensity of shading near ground and concave angles between walls. Default value 0.0 disables ambient occlusion and values around 0.3 provide the most plausible results for buildings.
-   */
-  fillExtrusionAmbientOcclusionIntensity?: Value<number, ['zoom']>;
-
-  /**
-   * The transition affecting any changes to this layer’s fillExtrusionAmbientOcclusionIntensity property.
-   */
-  fillExtrusionAmbientOcclusionIntensityTransition?: Transition;
-  /**
-   * Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings.
-   *
-   * @requires fillExtrusionEdgeRadius
-   */
-  fillExtrusionAmbientOcclusionRadius?: Value<number, ['zoom']>;
-
-  /**
-   * The transition affecting any changes to this layer’s fillExtrusionAmbientOcclusionRadius property.
-   */
-  fillExtrusionAmbientOcclusionRadiusTransition?: Transition;
 }
 export interface RasterLayerStyleProps {
   /**

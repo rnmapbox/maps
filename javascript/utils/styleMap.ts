@@ -1088,11 +1088,6 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
   visibility: PropTypes.oneOf(['visible', 'none']),
 
   /**
-   * Radius of a fill extrusion edge in meters. If not zero, rounds extrusion edges for a smoother appearance.
-   */
-  fillExtrusionEdgeRadius: PropTypes.number,
-
-  /**
    * The opacity of the entire fill extrusion layer. This is rendered on a perLayer, not perFeature, basis, and dataDriven styling is not available.
    */
   fillExtrusionOpacity: PropTypes.oneOfType([
@@ -1201,40 +1196,6 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
     PropTypes.bool,
     PropTypes.array,
   ]),
-
-  /**
-   * Controls the intensity of shading near ground and concave angles between walls. Default value 0.0 disables ambient occlusion and values around 0.3 provide the most plausible results for buildings.
-   */
-  fillExtrusionAmbientOcclusionIntensity: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.array,
-  ]),
-
-  /**
-   * The transition affecting any changes to this layer’s fillExtrusionAmbientOcclusionIntensity property.
-   */
-  fillExtrusionAmbientOcclusionIntensityTransition: PropTypes.shape({
-    duration: PropTypes.number,
-    delay: PropTypes.number,
-  }),
-
-  /**
-   * Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings.
-   *
-   * @requires fillExtrusionEdgeRadius
-   */
-  fillExtrusionAmbientOcclusionRadius: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.array,
-  ]),
-
-  /**
-   * The transition affecting any changes to this layer’s fillExtrusionAmbientOcclusionRadius property.
-   */
-  fillExtrusionAmbientOcclusionRadiusTransition: PropTypes.shape({
-    duration: PropTypes.number,
-    delay: PropTypes.number,
-  }),
 });
 
 export const RasterLayerStyleProp = PropTypes.shape({
@@ -1840,7 +1801,6 @@ const styleMap = {
   heatmapOpacity: StyleTypes.Constant,
   heatmapOpacityTransition: StyleTypes.Transition,
 
-  fillExtrusionEdgeRadius: StyleTypes.Constant,
   fillExtrusionOpacity: StyleTypes.Constant,
   fillExtrusionOpacityTransition: StyleTypes.Transition,
   fillExtrusionColor: StyleTypes.Color,
@@ -1855,10 +1815,6 @@ const styleMap = {
   fillExtrusionBase: StyleTypes.Constant,
   fillExtrusionBaseTransition: StyleTypes.Transition,
   fillExtrusionVerticalGradient: StyleTypes.Constant,
-  fillExtrusionAmbientOcclusionIntensity: StyleTypes.Constant,
-  fillExtrusionAmbientOcclusionIntensityTransition: StyleTypes.Transition,
-  fillExtrusionAmbientOcclusionRadius: StyleTypes.Constant,
-  fillExtrusionAmbientOcclusionRadiusTransition: StyleTypes.Transition,
 
   rasterOpacity: StyleTypes.Constant,
   rasterOpacityTransition: StyleTypes.Transition,

@@ -547,9 +547,6 @@ public class RCTMGLStyleFactory {
             case "visibility":
               RCTMGLStyleFactory.setVisibility(layer, styleValue);
               break;
-            case "fillExtrusionEdgeRadius":
-              RCTMGLStyleFactory.setFillExtrusionEdgeRadius(layer, styleValue);
-              break;
             case "fillExtrusionOpacity":
               RCTMGLStyleFactory.setFillExtrusionOpacity(layer, styleValue);
               break;
@@ -596,18 +593,6 @@ public class RCTMGLStyleFactory {
               break;
             case "fillExtrusionVerticalGradient":
               RCTMGLStyleFactory.setFillExtrusionVerticalGradient(layer, styleValue);
-              break;
-            case "fillExtrusionAmbientOcclusionIntensity":
-              RCTMGLStyleFactory.setFillExtrusionAmbientOcclusionIntensity(layer, styleValue);
-              break;
-            case "fillExtrusionAmbientOcclusionIntensityTransition":
-              RCTMGLStyleFactory.setFillExtrusionAmbientOcclusionIntensityTransition(layer, styleValue);
-              break;
-            case "fillExtrusionAmbientOcclusionRadius":
-              RCTMGLStyleFactory.setFillExtrusionAmbientOcclusionRadius(layer, styleValue);
-              break;
-            case "fillExtrusionAmbientOcclusionRadiusTransition":
-              RCTMGLStyleFactory.setFillExtrusionAmbientOcclusionRadiusTransition(layer, styleValue);
               break;
         }
       }
@@ -2016,14 +2001,6 @@ public class RCTMGLStyleFactory {
         layer.visibility(Visibility.valueOf(styleValue.getEnumName()));
     }
 
-    public static void setFillExtrusionEdgeRadius(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isExpression()) {
-        layer.fillExtrusionEdgeRadius(styleValue.getExpression());
-      } else {
-          layer.fillExtrusionEdgeRadius(styleValue.getFloat(VALUE_KEY));
-      }
-    }
-
     public static void setFillExtrusionOpacity(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
       if (styleValue.isExpression()) {
         layer.fillExtrusionOpacity(styleValue.getExpression());
@@ -2137,38 +2114,6 @@ public class RCTMGLStyleFactory {
         layer.fillExtrusionVerticalGradient(styleValue.getExpression());
       } else {
           layer.fillExtrusionVerticalGradient(styleValue.getBoolean(VALUE_KEY));
-      }
-    }
-
-    public static void setFillExtrusionAmbientOcclusionIntensity(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isExpression()) {
-        layer.fillExtrusionAmbientOcclusionIntensity(styleValue.getExpression());
-      } else {
-          layer.fillExtrusionAmbientOcclusionIntensity(styleValue.getFloat(VALUE_KEY));
-      }
-    }
-
-
-    public static void setFillExtrusionAmbientOcclusionIntensityTransition(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
-      StyleTransition transition = styleValue.getTransition();
-      if (transition != null) {
-        layer.fillExtrusionAmbientOcclusionIntensityTransition(transition);
-      }
-    }
-
-    public static void setFillExtrusionAmbientOcclusionRadius(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
-      if (styleValue.isExpression()) {
-        layer.fillExtrusionAmbientOcclusionRadius(styleValue.getExpression());
-      } else {
-          layer.fillExtrusionAmbientOcclusionRadius(styleValue.getFloat(VALUE_KEY));
-      }
-    }
-
-
-    public static void setFillExtrusionAmbientOcclusionRadiusTransition(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
-      StyleTransition transition = styleValue.getTransition();
-      if (transition != null) {
-        layer.fillExtrusionAmbientOcclusionRadiusTransition(transition);
       }
     }
 
