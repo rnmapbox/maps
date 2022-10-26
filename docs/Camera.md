@@ -33,11 +33,7 @@ return (
 | &nbsp;&nbsp;paddingTop | `number` | `none` | `true` | Top padding in points |
 | &nbsp;&nbsp;paddingBottom | `number` | `none` | `true` | Bottom padding in points |
 | animationDuration | `number` | `none` | `false` | The duration the map takes to animate to a new configuration. |
-| animationMode | `\| 'flyTo'
-\| 'easeTo'
-\| 'linearTo'
-\| 'moveTo'
-\| 'none'` | `none` | `false` | The easing or path the camera uses to animate to a new configuration. |
+| animationMode | `'flyTo' \| 'easeTo' \| 'linearTo' \| 'moveTo' \| 'none'` | `none` | `false` | The easing or path the camera uses to animate to a new configuration. |
 | followUserMode | `UserTrackingMode` | `none` | `false` | The mode used to track the user location on the map. |
 | followUserLocation | `boolean` | `none` | `false` | Whether the map orientation follows the user location. |
 | followZoomLevel | `number` | `none` | `false` | The zoom level used when following the user location. |
