@@ -1,16 +1,11 @@
-import {
-  Image,
-  ImageResolvedAssetSource,
-  processColor,
-  ProcessedColorValue,
-} from 'react-native';
+import { Image, processColor } from 'react-native';
 
-import { getStyleType } from './styleMap';
 import BridgeValue, {
-  type StyleValueJSON,
   type RawValueType,
+  type StyleValueJSON,
 } from './BridgeValue';
 import { AllLayerStyleProps } from './MapboxStyles';
+import { getStyleType } from './styleMap';
 
 export type StyleValue = {
   styletype: string;

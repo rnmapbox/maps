@@ -456,7 +456,7 @@ async function generate() {
     },*/
     {
       input: path.join(TMPL_PATH, 'MapboxStyles.ts.ejs'),
-      output: path.join(JS_OUTPUT_PATH, 'MapboxStyles.ts'),
+      output: path.join(JS_OUTPUT_PATH, 'MapboxStyles.d.ts'),
     },
     {
       input: path.join(TMPL_PATH, 'RCTMGLStyle.m.ejs'),
