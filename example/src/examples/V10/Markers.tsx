@@ -1,11 +1,11 @@
+import { Button, Divider, Text } from '@rneui/base';
+import { Camera, Logger, MapView, MarkerView } from '@rnmapbox/maps';
+import { Position } from 'geojson';
 import React, { memo, useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { MapView, Camera, Logger, MarkerView } from '@rnmapbox/maps';
-import { Position } from 'geojson';
-import { Text, Button, Divider } from '@rneui/base';
 
-import Page from '../common/Page';
 import { BaseExampleProps } from '../common/BaseExamplePropTypes';
+import Page from '../common/Page';
 
 Logger.setLogLevel('verbose');
 

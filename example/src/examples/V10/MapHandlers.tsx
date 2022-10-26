@@ -1,27 +1,19 @@
-import React, { useState } from 'react';
-import { SafeAreaView, View } from 'react-native';
+import { Divider, Text } from '@rneui/base';
 import {
-  MapView,
   Camera,
   CircleLayer,
-  ShapeSource,
   Logger,
   MapState,
+  MapView,
+  ShapeSource,
 } from '@rnmapbox/maps';
-import { Text, Divider } from '@rneui/base';
-import {
-  GeoJsonProperties,
-  Geometry,
-  GeometryCollection,
-  MultiPoint,
-  Point,
-  Position,
-} from 'geojson';
-import { Feature } from 'geojson';
+import { Feature, GeoJsonProperties, Geometry, Position } from 'geojson';
+import React, { useState } from 'react';
+import { SafeAreaView, View } from 'react-native';
 
-import Page from '../common/Page';
 import colors from '../../styles/colors';
 import { BaseExampleProps } from '../common/BaseExamplePropTypes';
+import Page from '../common/Page';
 
 Logger.setLogLevel('verbose');
 

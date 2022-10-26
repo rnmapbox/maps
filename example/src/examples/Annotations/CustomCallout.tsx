@@ -1,8 +1,7 @@
-import React, { FC, useState } from 'react';
 import MapboxGL, { SymbolLayerStyle } from '@rnmapbox/maps';
-import type { GeoJSON } from 'geojson';
 import { Feature } from '@turf/helpers';
-import { View, Text, ViewStyle, StyleProp, TextStyle } from 'react-native';
+import React, { FC, useState } from 'react';
+import { StyleProp, Text, TextStyle, View, ViewStyle } from 'react-native';
 
 import exampleIcon from '../../assets/pin.png';
 import sheet from '../../styles/sheet';

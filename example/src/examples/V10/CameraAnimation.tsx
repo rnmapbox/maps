@@ -1,22 +1,22 @@
-import React, { memo, useCallback, useMemo, useState } from 'react';
-import { StyleSheet, Button, SafeAreaView, View } from 'react-native';
+import { Divider, Text } from '@rneui/base';
 import {
-  MapView,
   Camera,
-  ShapeSource,
-  CircleLayer,
   CameraAnimationMode,
-  Logger,
-  CameraPadding,
   CameraBounds,
+  CameraPadding,
+  CircleLayer,
+  Logger,
+  MapView,
+  ShapeSource,
 } from '@rnmapbox/maps';
 import bbox from '@turf/bbox';
-import { Text, Divider } from '@rneui/base';
 import { Feature, Point, Position } from 'geojson';
+import React, { memo, useCallback, useMemo, useState } from 'react';
+import { Button, SafeAreaView, StyleSheet, View } from 'react-native';
 
-import Page from '../common/Page';
 import colors from '../../styles/colors';
 import { BaseExampleProps } from '../common/BaseExamplePropTypes';
+import Page from '../common/Page';
 
 Logger.setLogLevel('verbose');
 
@@ -162,6 +162,8 @@ const CameraAnimation = memo((props: BaseExampleProps) => {
       const lon = coordinates[0].longitude.toFixed(4);
       const lat = coordinates[0].latitude.toFixed(4);
       return `lon ${lon} | lat ${lat}`;
+    } else {
+      throw new Error('invalid location passed');
     }
   }, [coordinates, centerOrBounds]);
 

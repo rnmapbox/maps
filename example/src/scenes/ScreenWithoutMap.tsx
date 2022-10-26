@@ -1,6 +1,6 @@
-import React from 'react';
-import { Text, View, Button } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React from 'react';
+import { Button, Text, View } from 'react-native';
 
 type StackParamsList = {
   ScreenWithoutMap: Record<string, never>;

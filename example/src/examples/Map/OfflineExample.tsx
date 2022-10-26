@@ -1,7 +1,7 @@
+import geoViewport from '@mapbox/geo-viewport';
+import Mapbox, { Camera, MapView, offlineManager } from '@rnmapbox/maps';
 import React, { useState } from 'react';
 import { Button, Dimensions, TextInput } from 'react-native';
-import geoViewport from '@mapbox/geo-viewport';
-import Mapbox, { MapView, Camera, offlineManager } from '@rnmapbox/maps';
 
 import Page from '../common/Page';
 
