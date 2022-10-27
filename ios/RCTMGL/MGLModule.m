@@ -263,7 +263,7 @@ RCT_EXPORT_MODULE();
     };
 }
 
-RCT_EXPORT_METHOD(setAccessToken:(NSString *)accessToken)
+RCT_EXPORT_METHOD(setAccessToken:(NSString *)accessToken  resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
 #ifdef RNMBGL_USE_MAPLIBRE
     if (accessToken.length > 0) {
@@ -272,6 +272,7 @@ RCT_EXPORT_METHOD(setAccessToken:(NSString *)accessToken)
 #else
     [MGLAccountManager setAccessToken:accessToken];
 #endif
+  resolve(accessToken)
 }
 
 RCT_EXPORT_METHOD(setWellKnownTileServer:(NSString*)tileServer)
