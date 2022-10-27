@@ -97,7 +97,7 @@
     "react-native": "0.67.0",
     "react-native-builder-bob": "^0.20.0",
     "react-test-renderer": "17.0.2",
-    "typescript": "4.8.3"
+    "typescript": "4.8.4"
   },
   "jest": {
     "preset": "react-native",
