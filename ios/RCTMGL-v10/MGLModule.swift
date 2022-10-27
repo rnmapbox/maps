@@ -70,8 +70,12 @@ class MGLModule : NSObject {
       return true
   }
 
-  @objc func setAccessToken(_ token: String) {
+  @objc func setAccessToken(
+    _ token: String, 
+    resolver: RCTPromiseResolveBlock,
+    rejecter: RCTPromiseRejectBlock) {
       MGLModule.accessToken = token
+      resolver(token)
   }
 
   @objc func addCustomHeader(_ headerName: String, forHeaderValue headerValue: String ) {

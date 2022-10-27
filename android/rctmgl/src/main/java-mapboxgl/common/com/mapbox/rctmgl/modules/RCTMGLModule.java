@@ -299,11 +299,12 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setAccessToken(final String accessToken) {
+    public void setAccessToken(final String accessToken, Promise promise) {
         mReactContext.runOnUiQueueThread(new Runnable() {
             @Override
             public void run() {
                 InstanceManagerImpl.getInstance(getReactApplicationContext(), accessToken);
+                promise.resolve(accessToken);
             }
         });
     }

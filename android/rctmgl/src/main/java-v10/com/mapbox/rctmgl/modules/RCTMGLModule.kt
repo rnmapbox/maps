@@ -112,11 +112,12 @@ class RCTMGLModule(private val mReactContext: ReactApplicationContext) : ReactCo
     }
 
     @ReactMethod
-    fun setAccessToken(accessToken: String?) {
+    fun setAccessToken(accessToken: String?, promise: Promise) {
         mReactContext.runOnUiQueueThread(Runnable {
             getDefault(
                 reactApplicationContext, accessToken
             )
+            promise.resolve(accessToken)
         })
     }
 
