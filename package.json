@@ -6,9 +6,9 @@
     "access": "public"
   },
   "author": "React Native Mapbox Team",
-  "main": "./javascript/index.js",
+  "main": "lib/commonjs/index.js",
   "browser": "./javascript/index.web.js",
-  "react-native": "./javascript/index.js",
+  "react-native": "javascript/index.js",
   "keywords": [
     "gl",
     "ios",
@@ -32,8 +32,9 @@
     "type:check": "npx tsc --noEmit",
     "test:plugin": "expo-module test plugin",
     "build:plugin": "npx tsc --build plugin",
+    "build": "bob build",
     "lint:plugin": "eslint plugin/src/*",
-    "prepare": "husky install"
+    "prepare": "bob build && husky install"
   },
   "peerDependencies": {
     "expo": "*",
@@ -94,6 +95,7 @@
     "react": "17.0.2",
     "react-docgen": "rnmapbox/react-docgen#rnmapbox-dist",
     "react-native": "0.67.0",
+    "react-native-builder-bob": "^0.20.0",
     "react-test-renderer": "17.0.2",
     "typescript": "4.8.3"
   },
@@ -109,10 +111,33 @@
     "modulePathIgnorePatterns": [
       "example",
       "__tests__/__mocks__",
-      "fixtures"
+      "fixtures",
+      "<rootDir>/lib/"
     ]
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --fix"
-  }
+  },
+  "module": "lib/module/index.js",
+  "types": "lib/typescript/javascript/index.d.ts",
+  "files": [
+    "javascript",
+    "lib",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__"
+  ],
+  "react-native-builder-bob": {
+    "source": "javascript",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      "typescript"
+    ]
+  },
+  "eslintIgnore": [
+    "node_modules/",
+    "lib/"
+  ]
 }
