@@ -1,16 +1,16 @@
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Icon } from '@rneui/base';
 import React, { useCallback } from 'react';
 import {
-  View,
-  Text,
   FlatList,
   StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import { Icon } from '@rneui/base';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import Page from '../examples/common/Page';
 import MapHeader from '../examples/common/MapHeader';
+import Page from '../examples/common/Page';
 import sheet from '../styles/sheet';
 // ANIMATIONS
 import AnimatedLine from '../examples/Animations/AnimatedLine';
@@ -19,8 +19,8 @@ import DriveTheLine from '../examples/Animations/DriveTheLine';
 import CustomCallout from '../examples/Annotations/CustomCallout';
 import Heatmap from '../examples/Annotations/Heatmap';
 import MarkerView from '../examples/Annotations/MarkerView';
-import ShowPointAnnotation from '../examples/Annotations/ShowPointAnnotation';
 import PointAnnotationAnchors from '../examples/Annotations/PointAnnotationAnchors';
+import ShowPointAnnotation from '../examples/Annotations/ShowPointAnnotation';
 // CAMERA
 import CompassView from '../examples/Camera/CompassView';
 import Fit from '../examples/Camera/Fit';
@@ -49,6 +49,7 @@ import GradientLine from '../examples/LineLayer/GradientLine';
 import ChangeLayerColor from '../examples/Map/ChangeLayerColor';
 import CreateOfflineRegion from '../examples/Map/CreateOfflineRegion';
 import OfflineExample from '../examples/Map/OfflineExample';
+import Ornaments from '../examples/Map/Ornaments';
 import PointInMapView from '../examples/Map/PointInMapView';
 import ShowAndHideLayer from '../examples/Map/ShowAndHideLayer';
 import ShowClick from '../examples/Map/ShowClick';
@@ -58,7 +59,6 @@ import ShowRegionDidChange from '../examples/Map/ShowRegionDidChange';
 import SourceLayerVisibility from '../examples/Map/SourceLayerVisibility';
 import StyleJson from '../examples/Map/StyleJson';
 import TwoByTwo from '../examples/Map/TwoByTwo';
-import Ornaments from '../examples/Map/Ornaments';
 // SYMBOLCIRCLELAYER
 import CustomIcon from '../examples/SymbolCircleLayer/CustomIcon';
 import DataDrivenCircleColors from '../examples/SymbolCircleLayer/DataDrivenCircleColors';
@@ -75,12 +75,12 @@ import BugReportExample from '../examples/BugReportExample';
 import BugReportExampleTS from '../examples/BugReportExampleTS';
 import CacheManagement from '../examples/CacheManagement';
 // V10
-import TerrainSkyAtmosphere from '../examples/V10/TerrainSkyAtmosphere';
-import QueryTerrainElevation from '../examples/V10/QueryTerrainElevation';
 import CameraAnimation from '../examples/V10/CameraAnimation';
+import GlobeProjection from '../examples/V10/GlobeProjection';
 import MapHandlers from '../examples/V10/MapHandlers';
 import Markers from '../examples/V10/Markers';
-import GlobeProjection from '../examples/V10/GlobeProjection';
+import QueryTerrainElevation from '../examples/V10/QueryTerrainElevation';
+import TerrainSkyAtmosphere from '../examples/V10/TerrainSkyAtmosphere';
 
 const styles = StyleSheet.create({
   exampleList: {

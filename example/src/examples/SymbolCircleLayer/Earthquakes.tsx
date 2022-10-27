@@ -1,6 +1,4 @@
-import React, { useRef, useState } from 'react';
-import { FlatList } from 'react-native';
-import { Overlay, ListItem, FAB, Icon } from '@rneui/base';
+import { FAB, Icon, ListItem, Overlay } from '@rneui/base';
 import MapboxGL, {
   Camera,
   CircleLayer,
@@ -10,8 +8,10 @@ import MapboxGL, {
   SymbolLayer,
   SymbolLayerStyle,
 } from '@rnmapbox/maps';
-import moment from 'moment';
 import { FeatureCollection } from 'geojson';
+import moment from 'moment';
+import React, { useRef, useState } from 'react';
+import { FlatList } from 'react-native';
 
 import earthQuakesJSON from '../../assets/earthquakes.json';
 import sheet from '../../styles/sheet';

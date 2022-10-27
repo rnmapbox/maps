@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
-import { Button, View } from 'react-native';
 import {
+  Camera,
+  CircleLayer,
   MapView,
   ShapeSource,
   SymbolLayer,
-  CircleLayer,
-  MarkerView,
-  Camera,
 } from '@rnmapbox/maps';
 import { FeatureCollection } from 'geojson';
+import React, { useState } from 'react';
+import { Button } from 'react-native';
 
 const styles = {
   mapView: { flex: 1 },

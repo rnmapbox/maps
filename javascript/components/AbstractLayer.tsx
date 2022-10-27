@@ -3,8 +3,8 @@ import React from 'react';
 import { NativeMethods, processColor } from 'react-native';
 
 import { getFilter } from '../utils/filterUtils';
-import { transformStyle } from '../utils/StyleValue';
 import { AllLayerStyleProps, Expression } from '../utils/MapboxStyles';
+import { transformStyle } from '../utils/StyleValue';
 
 type PropsBase = {
   id: string;
@@ -52,6 +52,7 @@ class AbstractLayer<
     if (styleType === 'color') {
       return processColor;
     }
+    return undefined;
   }
 
   getStyle(style: AllLayerStyleProps) {

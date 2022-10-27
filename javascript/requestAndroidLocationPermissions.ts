@@ -1,5 +1,4 @@
-import { number } from 'prop-types';
-import { PermissionsAndroid, Permission } from 'react-native';
+import { Permission, PermissionsAndroid } from 'react-native';
 
 import { isAndroid } from './utils';
 
