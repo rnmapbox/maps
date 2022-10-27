@@ -272,7 +272,7 @@ RCT_EXPORT_METHOD(setAccessToken:(NSString *)accessToken  resolver:(RCTPromiseRe
 #else
     [MGLAccountManager setAccessToken:accessToken];
 #endif
-  resolve(accessToken)
+  resolve(accessToken);
 }
 
 RCT_EXPORT_METHOD(setWellKnownTileServer:(NSString*)tileServer)
