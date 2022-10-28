@@ -240,6 +240,8 @@ open class RCTMGLMapView : MapView {
         self.mapView.ornaments.options.compass.image = img
       }
     } else {
+      // Does not currently reset the image to the default.
+      // See https://github.com/mapbox/mapbox-maps-ios/issues/1673.
       self.mapView.ornaments.options.compass.image = nil
     }
   }
