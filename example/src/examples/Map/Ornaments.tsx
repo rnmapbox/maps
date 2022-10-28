@@ -6,6 +6,13 @@ import { Divider } from '@rneui/base';
 import sheet from '../../styles/sheet';
 import Page from '../common/Page';
 import Bubble from '../common/Bubble';
+import { Images } from '../../../../javascript';
+
+type CompassImage = 'compass1' | 'compass2';
+const images: Record<CompassImage, NodeRequire> = {
+  compass1: require('../../assets/compass1.png'),
+  compass2: require('../../assets/compass2.png'),
+};
 
 enum OrnamentType {
   Logo = 'logo',
@@ -70,6 +77,8 @@ const ShowMap: FC<any> = (props) => {
     [OrnamentType.ScaleBar]: OrnamentPosition.TopLeft,
   });
 
+  const [compassImage, setCompassImage] = useState<CompassImage | undefined>();
+
   const handlePressVisibility = (ornamentType: OrnamentType): void => {
     setVisibility((prevState) => {
       let newValue;
@@ -114,9 +123,11 @@ const ShowMap: FC<any> = (props) => {
         attributionPosition={POSITIONS[position[OrnamentType.Attribution]]}
         compassEnabled={visibility[OrnamentType.Compass]}
         compassPosition={POSITIONS[position[OrnamentType.Compass]]}
+        compassImage={compassImage}
         scaleBarEnabled={visibility[OrnamentType.ScaleBar]}
         scaleBarPosition={POSITIONS[position[OrnamentType.ScaleBar]]}
       >
+        <Images images={images} />
         <MapboxGL.Camera />
       </MapboxGL.MapView>
 
@@ -150,6 +161,18 @@ const ShowMap: FC<any> = (props) => {
           position={position}
           onPressVisibility={handlePressVisibility}
           onPressPosition={handlePressPosition}
+        />
+        <Button
+          title={'Image: ' + compassImage}
+          onPress={() => {
+            if (!compassImage) {
+              setCompassImage('compass1');
+            } else if (compassImage === 'compass1') {
+              setCompassImage('compass2');
+            } else {
+              setCompassImage(undefined);
+            }
+          }}
         />
 
         <Divider style={styles.divider} />

@@ -173,6 +173,11 @@ class MapView extends NativeBridgeComponent(
     compassViewMargins: PropTypes.object,
 
     /**
+     * [`mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component.
+     */
+    compassImage: PropTypes.string,
+
+    /**
      * [`mapbox` (v10) implementation only] Enable/Disable the scale bar from appearing on the map
      */
     scaleBarEnabled: PropTypes.bool,

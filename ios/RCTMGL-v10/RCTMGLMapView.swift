@@ -8,21 +8,22 @@ open class RCTMGLMapView : MapView {
 
   var compassEnabled: Bool = false
   var compassFadeWhenNorth: Bool = false
+  var compassImage: String?
+  
   var reactOnPress : RCTBubblingEventBlock?
   var reactOnLongPress : RCTBubblingEventBlock?
   var reactOnMapChange : RCTBubblingEventBlock?
 
   var styleLoaded: Bool = false
   var styleLoadWaiters : [(MapboxMap)->Void] = []
+  var onStyleLoadedComponents: [RCTMGLMapComponent] = []
 
   var reactCamera : RCTMGLCamera?
   var images : [RCTMGLImages] = []
   var sources : [RCTMGLInteractiveElement] = []
   
   var handleMapChangedEvents = Set<RCTMGLEvent.EventType>()
-  
-  var onStyleLoadedComponents: [RCTMGLMapComponent] = []
-  
+
   private var isPendingInitialLayout = true
   private var wasGestureActive = false
   private var isGestureActive = false
@@ -138,7 +139,7 @@ open class RCTMGLMapView : MapView {
 
   @objc func setReactProjection(_ value: String?) {
     if let value = value {
-      var projection = StyleProjection(name: value == "globe" ? .globe : .mercator)
+      let projection = StyleProjection(name: value == "globe" ? .globe : .mercator)
       try! self.mapboxMap.style.setProjection(projection)
     }
   }
@@ -168,12 +169,23 @@ open class RCTMGLMapView : MapView {
   
   @objc func setReactCompassEnabled(_ value: Bool) {
     compassEnabled = value
-    mapView.ornaments.options.compass.visibility = value ? compassFadeWhenNorth ? .adaptive : .visible : .hidden
+    
+    var visibility: OrnamentVisibility = .hidden
+    if value {
+      visibility = compassFadeWhenNorth ? .adaptive : .visible
+    }
+    
+    mapView.ornaments.options.compass.visibility = visibility
+    
+    if visibility != .hidden {
+      refreshCompassImage()
+    }
   }
   
   @objc func setReactCompassFadeWhenNorth(_ value: Bool) {
     compassFadeWhenNorth = value
-    if (compassEnabled) {
+    
+    if compassEnabled {
       mapView.ornaments.options.compass.visibility = value ? .adaptive : .visible
     }
   }
@@ -214,6 +226,22 @@ open class RCTMGLMapView : MapView {
   
   @objc func setReactCompassViewMargins(_ margins: CGPoint) {
     mapView.ornaments.options.compass.margins = margins;
+  }
+
+  @objc func setReactCompassImage(_ image: String) {
+    compassImage = image.isEmpty ? nil : image
+    refreshCompassImage()
+  }
+  
+  private func refreshCompassImage() {
+    if let compassImage = compassImage {
+      onMapStyleLoaded { map in
+        let img = map.style.image(withId: compassImage)
+        self.mapView.ornaments.options.compass.image = img
+      }
+    } else {
+      self.mapView.ornaments.options.compass.image = nil
+    }
   }
 
   @objc func setReactScaleBarEnabled(_ value: Bool) {
@@ -412,7 +440,7 @@ extension RCTMGLMapView {
       self.onStyleLoadedComponents.forEach { (component) in
         component.addToMap(self, style: self.mapboxMap.style)
       }
-
+      
       if !self.styleLoaded {
         self.styleLoaded = true
         if let mapboxMap = self.mapboxMap {
