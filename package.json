@@ -124,6 +124,7 @@
     "javascript",
     "lib",
     "plugin",
+    "assets",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__"
