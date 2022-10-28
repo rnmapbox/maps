@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 import MapboxGL from '@rnmapbox/maps';
 import { Button, StyleSheet, Text } from 'react-native';
+import { Divider } from '@rneui/base';
 
 import sheet from '../../styles/sheet';
 import Page from '../common/Page';
@@ -26,12 +27,6 @@ const POSITIONS = {
   [OrnamentPosition.BottomRight]: { bottom: 8, right: 8 },
   [OrnamentPosition.BottomLeft]: { bottom: 8, left: 8 },
 };
-
-const styles = StyleSheet.create({
-  bubble: {
-    marginBottom: 96,
-  },
-});
 
 type OrnamentButtonsProps = {
   ornamentType: OrnamentType;
@@ -135,6 +130,8 @@ const ShowMap: FC<any> = (props) => {
           onPressPosition={handlePressPosition}
         />
 
+        <Divider style={styles.divider} />
+
         <Text>Attribution</Text>
         <OrnamentButtons
           ornamentType={OrnamentType.Attribution}
@@ -144,6 +141,8 @@ const ShowMap: FC<any> = (props) => {
           onPressPosition={handlePressPosition}
         />
 
+        <Divider style={styles.divider} />
+
         <Text>Compass</Text>
         <OrnamentButtons
           ornamentType={OrnamentType.Compass}
@@ -152,6 +151,8 @@ const ShowMap: FC<any> = (props) => {
           onPressVisibility={handlePressVisibility}
           onPressPosition={handlePressPosition}
         />
+
+        <Divider style={styles.divider} />
 
         <Text>ScaleBar</Text>
         <OrnamentButtons
@@ -165,5 +166,19 @@ const ShowMap: FC<any> = (props) => {
     </Page>
   );
 };
+
+const styles = StyleSheet.create({
+  divider: {
+    width: '100%',
+    marginTop: 5,
+    marginBottom: 10,
+  },
+  bubble: {
+    flex: 0,
+    alignItems: 'flex-start',
+    padding: 10,
+    marginBottom: 96,
+  },
+});
 
 export default ShowMap;
