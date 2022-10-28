@@ -1,6 +1,6 @@
 import { NativeModules } from 'react-native';
 
-import { Camera, UserTrackingModes } from './components/Camera';
+import { Camera, UserTrackingMode } from './components/Camera';
 import { Atmosphere } from './components/Atmosphere';
 import MapView from './components/MapView';
 import Light from './components/Light';
@@ -45,7 +45,7 @@ const MapboxGL = { ...NativeModules.MGLModule };
 
 // static methods
 MapboxGL.requestAndroidLocationPermissions = requestAndroidLocationPermissions;
-MapboxGL.UserTrackingModes = UserTrackingModes;
+MapboxGL.UserTrackingModes = UserTrackingMode;
 
 // components
 MapboxGL.MapView = MapView;
