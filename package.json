@@ -125,6 +125,11 @@
     "lib",
     "plugin",
     "assets",
+    "index.d.ts",
+    "rnmapbox-maps.podspec",
+    "ios",
+    "android",
+    "react-native.config.js",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__"
