@@ -2159,7 +2159,7 @@
       {
         "name": "filter",
         "required": false,
-        "type": "array",
+        "type": "FilterExpression",
         "default": "none",
         "description": "Filter only the features in the source layer that satisfy a condition that you define"
       },
@@ -2180,15 +2180,12 @@
       {
         "name": "style",
         "required": false,
-        "type": "union",
+        "type": "LineLayerStyleProps",
         "default": "none",
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "LineLayer.js",
+    "fileNameWithExt": "LineLayer.tsx",
     "name": "LineLayer",
     "styles": [
       {
@@ -4479,7 +4476,7 @@
       },
       {
         "name": "style",
-        "required": true,
+        "required": false,
         "type": "SymbolLayerStyleProps",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
