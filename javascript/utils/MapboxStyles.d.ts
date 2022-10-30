@@ -115,6 +115,8 @@ type ExpressionField =
 
 export type Expression = [ExpressionName, ...ExpressionField[]];
 
+export type FilterExpression = Expression;
+
 type ExpressionParameters =
   | 'zoom'
   | 'feature'
