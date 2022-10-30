@@ -187,6 +187,21 @@ declare namespace MapboxGL {
     constructor(shape: _AnimatedShape);
   }
 
+  class _TileServers {
+    Mapbox: string;
+    MapLibre?: string;
+    MapTiler?: string;
+  }
+  const TileServers: _TileServers;
+
+  class _OfflinePackDownloadState {
+    Inactive: string | number;
+    Active: string | number;
+    Complete: string | number;
+    Unknown?: string | number;
+  }
+  const OfflinePackDownloadState: _OfflinePackDownloadState;
+
   /**
    * GeoUtils
    */

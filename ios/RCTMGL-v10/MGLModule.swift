@@ -61,7 +61,9 @@ class MGLModule : NSObject {
         [
           "Error": RCTMGLOfflineModule.Callbacks.error.rawValue,
           "Progress": RCTMGLOfflineModule.Callbacks.progress.rawValue
-        ]
+        ],
+      "TileServers":
+        ["Mapbox": "mapbox"]
     ];
   }
 
@@ -88,5 +90,11 @@ class MGLModule : NSObject {
   
   @objc func setTelemetryEnabled(_ telemetryEnabled: Bool) {
     UserDefaults.mme_configuration().mme_isCollectionEnabled = telemetryEnabled
+  }
+
+  @objc func setWellKnownTileServer(_ tileServer: String) {
+    if tileServer != "mapbox" {
+      Logger.error("setWellKnownTileServer: \(tileServer) should be mapbox")
+    }
   }
 }
