@@ -7,6 +7,8 @@ RCT_EXTERN_METHOD(setAccessToken:(NSString *)accessToken resolver:(RCTPromiseRes
 RCT_EXTERN_METHOD(addCustomHeader:(NSString *)headerName forHeaderValue:(NSString *) headerValue)
 RCT_EXTERN_METHOD(removeCustomHeader:(NSString *)headerName)
 
-RCT_EXTERN_METHOD(setTelemetryEnabled:(BOOL)telemetryEnabled )
+RCT_EXTERN_METHOD(setTelemetryEnabled:(BOOL)telemetryEnabled)
+RCT_EXTERN_METHOD(setWellKnownTileServer:(NSString *)tileServer)
+
 
 @end
