@@ -125,6 +125,7 @@
     "lib",
     "plugin",
     "assets",
+    "app.plugin.js",
     "index.d.ts",
     "rnmapbox-maps.podspec",
     "ios",
