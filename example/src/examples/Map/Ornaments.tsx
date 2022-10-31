@@ -78,6 +78,9 @@ const ShowMap: FC<any> = (props) => {
   });
 
   const [compassImage, setCompassImage] = useState<CompassImage | undefined>();
+  const [compassFadeWhenNorth, setCompassFadeWhenNorth] = useState<
+    boolean | undefined
+  >(undefined);
 
   const handlePressVisibility = (ornamentType: OrnamentType): void => {
     setVisibility((prevState) => {
@@ -124,6 +127,7 @@ const ShowMap: FC<any> = (props) => {
         compassEnabled={visibility[OrnamentType.Compass]}
         compassPosition={POSITIONS[position[OrnamentType.Compass]]}
         compassImage={compassImage}
+        compassFadeWhenNorth={compassFadeWhenNorth}
         scaleBarEnabled={visibility[OrnamentType.ScaleBar]}
         scaleBarPosition={POSITIONS[position[OrnamentType.ScaleBar]]}
       >
@@ -171,6 +175,18 @@ const ShowMap: FC<any> = (props) => {
               setCompassImage('compass2');
             } else {
               setCompassImage(undefined);
+            }
+          }}
+        />
+        <Button
+          title={'Fade when north: ' + compassFadeWhenNorth}
+          onPress={() => {
+            if (compassFadeWhenNorth === undefined) {
+              setCompassFadeWhenNorth(true);
+            } else if (compassFadeWhenNorth === true) {
+              setCompassFadeWhenNorth(false);
+            } else {
+              setCompassFadeWhenNorth(undefined);
             }
           }}
         />
