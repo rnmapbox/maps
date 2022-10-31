@@ -13,7 +13,7 @@ export type StyleValue = {
 };
 
 export function transformStyle(
-  style: AllLayerStyleProps,
+  style: AllLayerStyleProps | undefined,
 ): undefined | { [key: string]: StyleValue } {
   if (!style) {
     return;

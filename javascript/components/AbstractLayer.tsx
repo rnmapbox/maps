@@ -3,7 +3,7 @@ import React from 'react';
 import { NativeMethods, processColor } from 'react-native';
 
 import { getFilter } from '../utils/filterUtils';
-import { AllLayerStyleProps, Expression } from '../utils/MapboxStyles';
+import { AllLayerStyleProps, FilterExpression } from '../utils/MapboxStyles';
 import { transformStyle } from '../utils/StyleValue';
 
 type PropsBase = {
@@ -14,8 +14,8 @@ type PropsBase = {
   aboveLayerID?: string;
   belowLayerID?: string;
   layerIndex?: number;
-  filter?: Expression;
-  style: AllLayerStyleProps;
+  filter?: FilterExpression;
+  style?: AllLayerStyleProps;
 };
 
 class AbstractLayer<
@@ -55,7 +55,7 @@ class AbstractLayer<
     return undefined;
   }
 
-  getStyle(style: AllLayerStyleProps) {
+  getStyle(style: AllLayerStyleProps | undefined) {
     return transformStyle(style);
   }
 

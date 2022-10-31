@@ -22,7 +22,10 @@ import {
   FeatureCollection,
 } from '@turf/helpers';
 
-import type { SymbolLayerStyleProps } from './javascript/utils/MapboxStyles';
+import type {
+  SymbolLayerStyleProps,
+  LineLayerStyleProps,
+} from './javascript/utils/MapboxStyles';
 import {
   Camera as _Camera,
   CameraStop as _CameraStop,
@@ -43,6 +46,10 @@ import {
   SymbolLayer as _SymbolLayer,
   Props as _SymbolLayerProps,
 } from './javascript/components/SymbolLayer';
+import {
+  LineLayer as _LineLayer,
+  Props as _LineLayerProps,
+} from './javascript/components/LineLayer';
 import {
   ShapeSource as _ShapeSource,
   Props as _ShapeSourceProps,
@@ -107,7 +114,7 @@ type NamedStyles<T> = {
   [P in keyof T]:
     | SymbolLayerStyleProps
     | RasterLayerStyle
-    | LineLayerStyle
+    | LineLayerStyleProps
     | FillLayerStyle
     | FillExtrusionLayerStyle
     | CircleLayerStyle
@@ -152,6 +159,7 @@ declare namespace MapboxGL {
   const MarkerView = _MarkerView;
   const PointAnnotation = _PointAnnotation;
   const SymbolLayer = _SymbolLayer;
+  const LineLayer = _LineLayer;
   const ShapeSource = _ShapeSource;
   type ShapeSource = _ShapeSource;
 
@@ -186,6 +194,21 @@ declare namespace MapboxGL {
   class AnimatedShape {
     constructor(shape: _AnimatedShape);
   }
+
+  class _TileServers {
+    Mapbox: string;
+    MapLibre?: string;
+    MapTiler?: string;
+  }
+  const TileServers: _TileServers;
+
+  class _OfflinePackDownloadState {
+    Inactive: string | number;
+    Active: string | number;
+    Complete: string | number;
+    Unknown?: string | number;
+  }
+  const OfflinePackDownloadState: _OfflinePackDownloadState;
 
   /**
    * GeoUtils
@@ -256,7 +279,7 @@ declare namespace MapboxGL {
     // layers
     class FillLayer extends Component<FillLayerProps> {}
     class FillExtrusionLayer extends Component<FillExtrusionLayerProps> {}
-    class LineLayer extends Component<LineLayerProps> {}
+    class LineLayer extends Component<_LineLayerProps> {}
     class CircleLayer extends Component<CircleLayerProps> {}
     class SymbolLayer extends Component<_SymbolLayerProps> {}
     class RasterLayer extends Component<RasterLayerProps> {}
@@ -738,8 +761,8 @@ export type TextVariableAnchorValues =
   | 'bottom-left'
   | 'bottom-right';
 
-/** @deprecated Will be removed in next betas */
 export type SymbolLayerStyle = SymbolLayerStyleProps;
+export type LineLayerStyle = LineLayerStyleProps;
 
 export interface HeatmapLayerStyle {
   visibility?: Visibility | Expression;

@@ -1,14 +1,14 @@
 import React from 'react';
-import { View, NativeModules, requireNativeComponent } from 'react-native';
+import { NativeModules, requireNativeComponent } from 'react-native';
 
-import { Expression, type SymbolLayerStyleProps } from '../utils/MapboxStyles';
-import { type StyleValue } from '../utils/StyleValue';
+import { FilterExpression, LineLayerStyleProps } from '../utils/MapboxStyles';
+import { StyleValue } from '../utils/StyleValue';
 
 import AbstractLayer from './AbstractLayer';
 
 const MapboxGL = NativeModules.MGLModule;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLSymbolLayer';
+export const NATIVE_MODULE_NAME = 'RCTMGLLineLayer';
 
 export type Props = {
   /**
@@ -46,7 +46,7 @@ export type Props = {
   /**
    *  Filter only the features in the source layer that satisfy a condition that you define
    */
-  filter?: Expression;
+  filter?: FilterExpression;
 
   /**
    * The minimum zoom level at which the layer gets parsed and appears.
@@ -58,54 +58,34 @@ export type Props = {
    */
   maxZoomLevel?: number;
 
-  style?: SymbolLayerStyleProps;
-
-  children?: JSX.Element | JSX.Element[];
+  /**
+   * Customizable style attributes
+   */
+  style?: LineLayerStyleProps;
 };
 
 type NativeTypeProps = Omit<Props, 'style'> & {
-  snapshot: boolean;
   reactStyle?: { [key: string]: StyleValue };
 };
 
-const RCTMGLSymbolLayer =
-  requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
-
 /**
- * SymbolLayer is a style layer that renders icon and text labels at points or along lines on the map.
+ * LineLayer is a style layer that renders one or more stroked polylines on the map.
  */
-export class SymbolLayer extends AbstractLayer<Props, NativeTypeProps> {
+class LineLayer extends AbstractLayer<Props, NativeTypeProps> {
   static defaultProps = {
     sourceID: MapboxGL.StyleSource.DefaultSourceID,
   };
 
-  _shouldSnapshot() {
-    let isSnapshot = false;
-
-    if (React.Children.count(this.baseProps.children) <= 0) {
-      return isSnapshot;
-    }
-
-    React.Children.forEach(this.baseProps.children, (child) => {
-      if (child?.type === View) {
-        isSnapshot = true;
-      }
-    });
-
-    return isSnapshot;
-  }
-
   render() {
     const props = {
       ...this.baseProps,
-      snapshot: this._shouldSnapshot(),
       sourceLayerID: this.props.sourceLayerID,
     };
-
-    return (
-      <RCTMGLSymbolLayer ref={this.setNativeLayer} {...props}>
-        {this.props.children}
-      </RCTMGLSymbolLayer>
-    );
+    return <RCTMGLLineLayer ref={this.setNativeLayer} {...props} />;
   }
 }
+
+const RCTMGLLineLayer =
+  requireNativeComponent<NativeTypeProps>(NATIVE_MODULE_NAME);
+
+export default LineLayer;

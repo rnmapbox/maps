@@ -14,7 +14,7 @@ SymbolLayer is a style layer that renders icon and text labels at points or alon
 | filter | `Expression` | `none` | `false` | Filter only the features in the source layer that satisfy a condition that you define |
 | minZoomLevel | `number` | `none` | `false` | The minimum zoom level at which the layer gets parsed and appears. |
 | maxZoomLevel | `number` | `none` | `false` | The maximum zoom level at which the layer gets parsed and appears. |
-| style | `SymbolLayerStyleProps` | `none` | `true` | FIX ME NO DESCRIPTION |
+| style | `SymbolLayerStyleProps` | `none` | `false` | FIX ME NO DESCRIPTION |
 | children | `JSX.Element \| JSX.Element[]` | `none` | `false` | FIX ME NO DESCRIPTION |
 
 

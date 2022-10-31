@@ -1,7 +1,7 @@
 {
   "name": "@rnmapbox/maps",
   "description": "A Mapbox react native module for creating custom maps",
-  "version": "10.0.0-beta.52",
+  "version": "10.0.0-beta.54",
   "publishConfig": {
     "access": "public"
   },
@@ -125,6 +125,12 @@
     "lib",
     "plugin",
     "assets",
+    "app.plugin.js",
+    "index.d.ts",
+    "rnmapbox-maps.podspec",
+    "ios",
+    "android",
+    "react-native.config.js",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__"

@@ -47,6 +47,8 @@ type ExpressionField =
 
 export type Expression = [ExpressionName, ...ExpressionField[]];
 
+export type FilterExpression = Expression;
+
 type ExpressionParameters = 'zoom' | 'feature' | 'feature-state' | 'sky-radial-progress' | 'line-progress' | 'heatmap-density';
 
 type ResolvedImageType = ImageSourcePropType;
