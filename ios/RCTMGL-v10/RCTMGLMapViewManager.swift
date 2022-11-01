@@ -215,10 +215,10 @@ extension RCTMGLMapViewManager {
     resolver: @escaping RCTPromiseResolveBlock,
     rejecter: @escaping RCTPromiseRejectBlock) -> Void {
       withMapView(reactTag, name:"queryRenderedFeaturesInRect", rejecter: rejecter) { mapView in
-        let left = bbox.isEmpty ? 0.0 : CGFloat(bbox[0].floatValue)
-        let bottom = bbox.isEmpty ? 0.0 : CGFloat(bbox[1].floatValue)
-        let right = bbox.isEmpty ? 0.0 : CGFloat(bbox[2].floatValue)
-        let top = bbox.isEmpty ? 0.0 : CGFloat(bbox[3].floatValue)
+        let top = bbox.isEmpty ? 0.0 : CGFloat(bbox[0].floatValue)
+        let right = bbox.isEmpty ? 0.0 : CGFloat(bbox[1].floatValue)
+        let bottom = bbox.isEmpty ? 0.0 : CGFloat(bbox[2].floatValue)
+        let left = bbox.isEmpty ? 0.0 : CGFloat(bbox[3].floatValue)
         let rect = bbox.isEmpty ? CGRect(x: 0.0, y: 0.0, width: mapView.bounds.size.width, height: mapView.bounds.size.height) : CGRect(x: [left,right].min()!, y: [top,bottom].min()!, width: abs(right-left), height: abs(bottom-top))
         logged("queryRenderedFeaturesInRect.option", rejecter: rejecter) {
           let options = try RenderedQueryOptions(layerIds: layerIDs, filter: filter?.asExpression())
