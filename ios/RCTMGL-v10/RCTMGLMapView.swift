@@ -15,7 +15,7 @@ open class RCTMGLMapView : MapView {
   var styleLoaded: Bool = false
   var styleLoadWaiters : [(MapboxMap)->Void] = []
 
-  var reactCamera : RCTMGLCamera?
+  weak var reactCamera : RCTMGLCamera?
   var images : [RCTMGLImages] = []
   var sources : [RCTMGLInteractiveElement] = []
   
@@ -282,10 +282,26 @@ open class RCTMGLMapView : MapView {
 // MARK: - event handlers
 
 extension RCTMGLMapView {
+  private func onEvery<Payload>(event: MapEvents.Event<Payload>, handler: @escaping  (RCTMGLMapView, MapEvent<Payload>) -> Void) {
+    self.mapView.mapboxMap.onEvery(event: event) { [weak self](mapEvent) in
+      guard let self = self else { return }
+
+      handler(self, mapEvent)
+    }
+  }
+
+  private func onNext<Payload>(event: MapEvents.Event<Payload>, handler: @escaping  (RCTMGLMapView, MapEvent<Payload>) -> Void) {
+    self.mapView.mapboxMap.onNext(event: event) { [weak self](mapEvent) in
+      guard let self = self else { return }
+
+      handler(self, mapEvent)
+    }
+  }
+
   @objc func setReactOnMapChange(_ value: @escaping RCTBubblingEventBlock) {
     self.reactOnMapChange = value
 
-    self.mapView.mapboxMap.onEvery(event: .cameraChanged, handler: { cameraEvent in
+    self.onEvery(event: .cameraChanged, handler: { (self, cameraEvent) in
       self.wasGestureActive = self.isGestureActive
       if self.handleMapChangedEvents.contains(.regionIsChanging) {
         let event = RCTMGLEvent(type:.regionIsChanging, payload: self.buildRegionObject());
@@ -296,7 +312,7 @@ extension RCTMGLMapView {
       }
     })
 
-    self.mapView.mapboxMap.onEvery(event: .mapIdle, handler: { cameraEvent in
+    self.onEvery(event: .mapIdle, handler: { (self, cameraEvent) in
       if self.handleMapChangedEvents.contains(.regionDidChange) {
         let event = RCTMGLEvent(type:.regionDidChange, payload: self.buildRegionObject());
         self.fireEvent(event: event, callback: self.reactOnMapChange)
@@ -367,7 +383,7 @@ extension RCTMGLMapView {
   }
   
   public func setupEvents() {
-    self.mapboxMap.onEvery(event: .mapLoadingError, handler: {(event) in
+    self.onEvery(event: .mapLoadingError, handler: {(self, event) in
       if let message = event.payload.error.errorDescription {
         Logger.log(level: .error, message: "MapLoad error \(message)")
       } else {
@@ -375,7 +391,7 @@ extension RCTMGLMapView {
       }
     })
     
-    self.mapboxMap.onEvery(event: .styleImageMissing) { (event) in
+    self.onEvery(event: .styleImageMissing) { (self, event) in
       let imageName = event.payload.id
       
       self.images.forEach {
@@ -389,7 +405,7 @@ extension RCTMGLMapView {
       }
     }
 
-    self.mapboxMap.onEvery(event: .renderFrameFinished, handler: { (event) in
+    self.onEvery(event: .renderFrameFinished, handler: { (self, event) in
       var type = RCTMGLEvent.EventType.didFinishRendering
       if event.payload.renderMode == .full {
         type = .didFinishRenderingFully
@@ -403,12 +419,12 @@ extension RCTMGLMapView {
       self.fireEvent(event: event, callback: self.reactOnMapChange)
     })
 
-    self.mapboxMap.onNext(event: .mapLoaded, handler: { (event) in
+    self.onNext(event: .mapLoaded, handler: { (self, event) in
       let event = RCTMGLEvent(type:.didFinishLoadingMap, payload: nil);
       self.fireEvent(event: event, callback: self.reactOnMapChange)
     })
     
-    self.mapboxMap.onEvery(event: .styleLoaded, handler: { (event) in
+    self.onEvery(event: .styleLoaded, handler: { (self, event) in
       self.onStyleLoadedComponents.forEach { (component) in
         component.addToMap(self, style: self.mapboxMap.style)
       }
