@@ -36,7 +36,7 @@ internal class EmptyLocationProviderDelegate: LocationProviderDelegate {
     func locationProviderDidChangeAuthorization(_ provider: LocationProvider) {}
 }
 
-protocol RCTMGLLocationManagerDelegate {
+protocol RCTMGLLocationManagerDelegate : AnyObject {
   func locationManager(_ locationManager: RCTMGLLocationManager, didUpdateLocation: RCTMGLLocation)
 }
 
@@ -46,7 +46,7 @@ class RCTMGLLocationManager : LocationProviderDelegate {
   weak var lastKnownLocation : CLLocation?
   weak var lastKnownHeading : CLHeading?
   
-  var delegate: RCTMGLLocationManagerDelegate?
+  weak var delegate: RCTMGLLocationManagerDelegate?
   weak var locationProviderDelage: LocationProviderDelegate?
   
   var listeners: [RCTMGLLocationBlock] = []
