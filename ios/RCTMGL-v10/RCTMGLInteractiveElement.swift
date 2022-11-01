@@ -3,7 +3,7 @@
 @objc
 class RCTMGLInteractiveElement : UIView, RCTMGLMapComponent {
 
-  var map : RCTMGLMapView? = nil
+  weak var map : RCTMGLMapView? = nil
   
   var layers: [RCTMGLSourceConsumer] = []
   
