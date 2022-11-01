@@ -221,7 +221,7 @@ extension RCTMGLMapViewManager {
         let top = bbox.isEmpty ? 0.0 : CGFloat(bbox[3].floatValue)
         let rect = bbox.isEmpty ? CGRect(x: 0.0, y: 0.0, width: mapView.bounds.size.width, height: mapView.bounds.size.height) : CGRect(x: [left,right].min()!, y: [top,bottom].min()!, width: abs(right-left), height: abs(bottom-top))
         logged("queryRenderedFeaturesInRect.option", rejecter: rejecter) {
-          let options = try RenderedQueryOptions(layerIds: layerIDs, filter: filter?.asExpression())
+          let options = try RenderedQueryOptions(layerIds: layerIDs?.isEmpty ?? true ? nil : layerIDs, filter: filter?.asExpression())
           mapView.mapboxMap.queryRenderedFeatures(with: rect, options: options) { result in
             switch result {
             case .success(let features):
