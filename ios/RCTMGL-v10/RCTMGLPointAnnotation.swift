@@ -14,7 +14,7 @@ class RCTMGLPointAnnotation : RCTMGLInteractiveElement {
   static var gid = 0;
   
   var annotation : PointAnnotation! = nil
-  var callout: RCTMGLCallout? = nil
+  weak var callout: RCTMGLCallout? = nil
   var calloutId : String?
   var image : UIImage? = nil
   var reactSubviews : [UIView] = []

@@ -7,7 +7,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   static let key = "RCTMGLMarkerView"
   let id: String = "marker-\(UUID().uuidString)"
   
-  var map: RCTMGLMapView?
+  weak var map: RCTMGLMapView?
   
   var didAddToMap = false
   

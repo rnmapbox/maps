@@ -27,8 +27,16 @@ typealias RCTMGLLocationBlock = (RCTMGLLocation?) -> Void
 
 let RCT_MAPBOX_USER_LOCATION_UPDATE = "MapboxUserLocationUpdate";
 
+/// This implementation of LocationProviderDelegate is used by `LocationManager` to work around
+/// the fact that the `LocationProvider` API does not allow the delegate to be set to `nil`.
+internal class EmptyLocationProviderDelegate: LocationProviderDelegate {
+    func locationProvider(_ provider: LocationProvider, didFailWithError error: Error) {}
+    func locationProvider(_ provider: LocationProvider, didUpdateHeading newHeading: CLHeading) {}
+    func locationProvider(_ provider: LocationProvider, didUpdateLocations locations: [CLLocation]) {}
+    func locationProviderDidChangeAuthorization(_ provider: LocationProvider) {}
+}
 
-protocol RCTMGLLocationManagerDelegate {
+protocol RCTMGLLocationManagerDelegate : AnyObject {
   func locationManager(_ locationManager: RCTMGLLocationManager, didUpdateLocation: RCTMGLLocation)
 }
 
@@ -38,8 +46,8 @@ class RCTMGLLocationManager : LocationProviderDelegate {
   var lastKnownLocation : CLLocation?
   var lastKnownHeading : CLHeading?
   
-  var delegate: RCTMGLLocationManagerDelegate?
-  var locationProviderDelage: LocationProviderDelegate?
+  weak var delegate: RCTMGLLocationManagerDelegate?
+  weak var locationProviderDelage: LocationProviderDelegate?
   
   var listeners: [RCTMGLLocationBlock] = []
   
@@ -58,6 +66,12 @@ class RCTMGLLocationManager : LocationProviderDelegate {
     provider.setDelegate(self)
     provider.startUpdatingHeading()
     provider.startUpdatingLocation()
+  }
+  
+  func stop() {
+    provider.stopUpdatingHeading()
+    provider.stopUpdatingLocation()
+    provider.setDelegate(EmptyLocationProviderDelegate())
   }
   
   func _convertToMapboxLocation(_ location: CLLocation?) -> RCTMGLLocation {
@@ -192,7 +206,7 @@ extension RCTMGLLocationManager: LocationProvider {
 @objc(RCTMGLLocationModule)
 class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
 
-  static var shared : RCTMGLLocationModule? = nil
+  static weak var shared : RCTMGLLocationModule? = nil
   
   var locationManager : RCTMGLLocationManager
   var hasListener = false
@@ -233,7 +247,7 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
   }
   
   @objc func stop() {
-    print("TODO implement RCTMGLLocationModule.stop!")
+    locationManager.stop()
   }
   
   @objc func getLastKnownLocation() -> RCTMGLLocation? {
