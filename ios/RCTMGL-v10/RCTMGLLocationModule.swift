@@ -43,8 +43,8 @@ protocol RCTMGLLocationManagerDelegate : AnyObject {
 class RCTMGLLocationManager : LocationProviderDelegate {
   var provider: LocationProvider
   
-  weak var lastKnownLocation : CLLocation?
-  weak var lastKnownHeading : CLHeading?
+  var lastKnownLocation : CLLocation?
+  var lastKnownHeading : CLHeading?
   
   weak var delegate: RCTMGLLocationManagerDelegate?
   weak var locationProviderDelage: LocationProviderDelegate?
