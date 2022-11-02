@@ -12,6 +12,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   @objc var sourceLayerID : String? = nil {
     didSet { self.optionsChanged() }
   }
+
   @objc var reactStyle : Dictionary<String, Any>? = nil {
     didSet {
       DispatchQueue.main.async {
