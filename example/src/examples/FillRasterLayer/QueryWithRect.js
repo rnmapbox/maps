@@ -68,7 +68,8 @@ class QueryWithRect extends React.Component {
     const minX = Math.min(screenCoords[0][0], screenCoords[1][0]);
     const maxY = Math.max(screenCoords[0][1], screenCoords[1][1]);
     const minY = Math.min(screenCoords[0][1], screenCoords[1][1]);
-    return [maxY, maxX, minY, minX];
+    // Rect -> [top, right, bottom, left]
+    return [minY, maxX, maxY, minX];
   }
 
   get message() {

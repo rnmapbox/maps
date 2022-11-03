@@ -65,10 +65,10 @@ class CameraUpdateQueue {
 }
 
 open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
-  private var _map: RCTMGLMapView! = nil
+  private weak var _map: RCTMGLMapView! = nil
   private var _mapCallbacks: [(RCTMGLMapView) -> Void] = []
   
-  var map : RCTMGLMapView? {
+  weak var map : RCTMGLMapView? {
     return _map;
   }
 

@@ -1,12 +1,10 @@
-@_spi(Experimental) import MapboxMaps
+import MapboxMaps
 
 @objc
 class RCTMGLInteractiveElement : UIView, RCTMGLMapComponent {
 
-  var map : RCTMGLMapView? = nil
-  
-  var layers: [RCTMGLSourceConsumer] = []
-  
+  weak var map : RCTMGLMapView? = nil
+
   static let hitboxDefault = 44.0
 
   @objc var draggable: Bool = false
@@ -25,13 +23,7 @@ class RCTMGLInteractiveElement : UIView, RCTMGLMapComponent {
   @objc var onPress: RCTBubblingEventBlock? = nil
   
   func getLayerIDs() -> [String] {
-    layers.compactMap {
-      if let layer = $0 as? RCTMGLLayer {
-        return layer.id
-      } else {
-        return nil
-      }
-    }
+    return []
   }
 
   func isDraggable() -> Bool {
