@@ -6,7 +6,7 @@ class RCTMGLCircleLayer: RCTMGLVectorLayer {
   typealias LayerType = CircleLayer
 
   override func makeLayer(style: Style) throws -> Layer {
-    let vectorSource : VectorSource = try self.layerWithSourceID(in: style)
+    let _ : VectorSource = try self.layerWithSourceID(in: style)
     var layer = LayerType(id: self.id!)
     layer.sourceLayer = self.sourceLayerID
     layer.source = sourceID
@@ -44,23 +44,4 @@ class RCTMGLCircleLayer: RCTMGLVectorLayer {
   func isAddedToMap() -> Bool {
     return true
   }
-/*
-- (MGLCircleStyleLayer*)makeLayer:(MGLStyle*)style
-{
-    MGLSource *source = [self layerWithSourceIDInStyle:style];
-    if (source == nil) { return nil; }
-    MGLCircleStyleLayer *layer = [[MGLCircleStyleLayer alloc] initWithIdentifier:self.id source:source];
-    layer.sourceLayerIdentifier = self.sourceLayerID;
-    return layer;
-}
-
-- (void)addStyles
-{
-    RCTMGLStyle *style = [[RCTMGLStyle alloc] initWithMGLStyle:self.style];
-    style.bridge = self.bridge;
-    [style circleLayer:(MGLCircleStyleLayer*)self.styleLayer withReactStyle:self.reactStyle isValid:^{
-        return [self isAddedToMap];
-    }];
-}*/
-
 }

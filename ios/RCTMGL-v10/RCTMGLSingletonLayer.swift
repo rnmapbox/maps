@@ -3,8 +3,8 @@ import MapboxMaps
 /// RCTMGLSingletonLayer is absract superclass for Light, Atmosphere, Terrain
 @objc
 class RCTMGLSingletonLayer : UIView {
-  var bridge : RCTBridge? = nil
-  var map : RCTMGLMapView? = nil
+  weak var bridge : RCTBridge? = nil
+  weak var map : RCTMGLMapView? = nil
   var style: Style? = nil
   
   @objc var reactStyle : Dictionary<String, Any>? = nil {

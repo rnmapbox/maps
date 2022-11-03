@@ -68,7 +68,7 @@ open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
   private weak var _map: RCTMGLMapView! = nil
   private var _mapCallbacks: [(RCTMGLMapView) -> Void] = []
   
-  var map : RCTMGLMapView? {
+  weak var map : RCTMGLMapView? {
     return _map;
   }
 
