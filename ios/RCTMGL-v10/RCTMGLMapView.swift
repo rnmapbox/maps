@@ -81,7 +81,7 @@ open class RCTMGLMapView : MapView {
     super.insertReactSubview(subview, at: atIndex)
   }
   
-  @objc open override func removeReactSubview(_ subview:UIView!) {
+  @objc open override func removeReactSubview(_ subview: UIView!) {
     removeFromMap(subview)
     super.removeReactSubview(subview)
   }
@@ -149,7 +149,7 @@ open class RCTMGLMapView : MapView {
     mapView.ornaments.options.attributionButton.visibility = value ? .visible : .hidden
   }
   
-  @objc func setReactAttributionPosition(_ position: [String: Int]!) {
+  @objc func setReactAttributionPosition(_ position: [String: NSNumber]) {
     if let ornamentOptions = self.getOrnamentOptionsFromPosition(position) {
       mapView.ornaments.options.attributionButton.position = ornamentOptions.position
       mapView.ornaments.options.attributionButton.margins = ornamentOptions.margins
@@ -160,7 +160,7 @@ open class RCTMGLMapView : MapView {
     mapView.ornaments.options.logo.visibility = value ? .visible : .hidden
   }
   
-  @objc func setReactLogoPosition(_ position: [String: Int]!) {
+  @objc func setReactLogoPosition(_ position: [String: NSNumber]) {
     if let ornamentOptions = self.getOrnamentOptionsFromPosition(position) {
       mapView.ornaments.options.logo.position = ornamentOptions.position
       mapView.ornaments.options.logo.margins = ornamentOptions.margins
@@ -187,7 +187,7 @@ open class RCTMGLMapView : MapView {
     refreshCompassImage()
   }
   
-  @objc func setReactCompassPosition(_ position: [String: Int]!) {
+  @objc func setReactCompassPosition(_ position: [String: NSNumber]) {
     if let ornamentOptions = self.getOrnamentOptionsFromPosition(position) {
       mapView.ornaments.options.compass.position = ornamentOptions.position
       mapView.ornaments.options.compass.margins = ornamentOptions.margins
@@ -217,8 +217,8 @@ open class RCTMGLMapView : MapView {
     }
   }
   
-  @objc func setReactCompassViewPosition(_ position: Int) {
-    mapView.ornaments.options.compass.position = toOrnamentPositon(position)
+  @objc func setReactCompassViewPosition(_ position: NSNumber) {
+    mapView.ornaments.options.compass.position = toOrnamentPositon(Int(truncating: position))
   }
   
   @objc func setReactCompassViewMargins(_ margins: CGPoint) {
@@ -247,7 +247,7 @@ open class RCTMGLMapView : MapView {
     self.mapView.ornaments.options.scaleBar.visibility = value ? .visible : .hidden
   }
   
-  @objc func setReactScaleBarPosition(_ position: [String: Int]!) {
+  @objc func setReactScaleBarPosition(_ position: [String: NSNumber]) {
     if let ornamentOptions = self.getOrnamentOptionsFromPosition(position) {
       mapView.ornaments.options.scaleBar.position = ornamentOptions.position
       mapView.ornaments.options.scaleBar.margins = ornamentOptions.margins
@@ -286,20 +286,20 @@ open class RCTMGLMapView : MapView {
     }
   }
 
-  private func getOrnamentOptionsFromPosition(_ position: [String: Int]) -> (position: OrnamentPosition, margins: CGPoint)? {
+  private func getOrnamentOptionsFromPosition(_ position: [String: NSNumber]) -> (position: OrnamentPosition, margins: CGPoint)? {
     let left = position["left"]
     let right = position["right"]
     let top = position["top"]
     let bottom = position["bottom"]
     
     if let left = left, let top = top {
-      return (OrnamentPosition.topLeading, CGPoint(x: left, y: top))
+      return (OrnamentPosition.topLeading, CGPoint(x: Int(truncating: left), y: Int(truncating: top)))
     } else if let right = right, let top = top {
-      return (OrnamentPosition.topTrailing, CGPoint(x: right, y: top))
+      return (OrnamentPosition.topTrailing, CGPoint(x: Int(truncating: right), y: Int(truncating: top)))
     } else if let bottom = bottom, let right = right {
-      return (OrnamentPosition.bottomTrailing, CGPoint(x: right, y: bottom))
+      return (OrnamentPosition.bottomTrailing, CGPoint(x: Int(truncating: right), y: Int(truncating: bottom)))
     } else if let bottom = bottom, let left = left {
-      return (OrnamentPosition.bottomLeading, CGPoint(x: left, y: bottom))
+      return (OrnamentPosition.bottomLeading, CGPoint(x: Int(truncating: left), y: Int(truncating: bottom)))
     }
     
     return nil
