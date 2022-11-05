@@ -212,33 +212,42 @@ const addMapboxMavenRepo = (projectBuildGradle) => {
     if (projectBuildGradle.includes('api.mapbox.com/downloads/v2/releases/maven'))
         return projectBuildGradle;
     /*
-    return projectBuildGradle.replace(
-      /repositories \s?{/,
-      `repositories {
-         maven {
-          url 'https://api.mapbox.com/downloads/v2/releases/maven'
-          authentication { basic(BasicAuthentication) }
-          credentials {
-            username = 'mapbox'
-            password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
+    Should look like this:
+      allprojects {
+        // ...
+        repositories {
+          maven {
+            url 'https://api.mapbox.com/downloads/v2/releases/maven'
+            authentication { basic(BasicAuthentication) }
+            credentials {
+              username = 'mapbox'
+              password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
+            }
           }
-         }
-    `,
-    );*/
+        // ...
+    */
+    /*
+      Since mergeContents checks the anchor for each line, we can't do a "correct"
+      RegExp for allprojects...repositories and have to insert a second repositories
+      for now
+    */
     return (0, generateCode_1.mergeContents)({
         tag: `@rnmapbox/maps-v2-maven`,
         src: projectBuildGradle,
-        newSrc: `maven {
+        newSrc: `
+        repositories {
+        maven {
       url 'https://api.mapbox.com/downloads/v2/releases/maven'
       authentication { basic(BasicAuthentication) }
       credentials {
         username = 'mapbox'
         password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
       }
-    }`,
-        anchor: new RegExp(`^\\s*allprojects\\s*{`),
-        offset: 2,
-        comment: '//',
+    }
+}`,
+        anchor: new RegExp("^\\s*allprojects\\s*{"),
+        offset: 1,
+        comment: '//'
     }).contents;
 };
 const withAndroidAppGradle = (config) => {
