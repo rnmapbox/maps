@@ -244,7 +244,7 @@ const addMapboxMavenRepo = (projectBuildGradle) => {
   }
 }
 }`,
-        anchor: new RegExp("^\\s*allprojects\\s*{"),
+        anchor: new RegExp(`^\\s*allprojects\\s*{`),
         offset: 1,
         comment: '//'
     }).contents;
