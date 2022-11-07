@@ -131,6 +131,7 @@
     "ios",
     "android",
     "react-native.config.js",
+    "setup-jest.js",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__"
