@@ -43,6 +43,7 @@ import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerView
+import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerViewManager
 import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotation
 import com.mapbox.rctmgl.components.camera.RCTMGLCamera
 import com.mapbox.rctmgl.components.images.RCTMGLImages
@@ -900,6 +901,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 images.sendImageMissingEvent(id, mMap)
             }
         })
+
+        RCTMGLMarkerViewManager.markerViewContainerSizeFixer(this, viewAnnotationManager)
     }
 
     // region Ornaments
