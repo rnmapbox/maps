@@ -234,16 +234,15 @@ const addMapboxMavenRepo = (projectBuildGradle) => {
     return (0, generateCode_1.mergeContents)({
         tag: `@rnmapbox/maps-v2-maven`,
         src: projectBuildGradle,
-        newSrc: `
-        repositories {
-        maven {
-      url 'https://api.mapbox.com/downloads/v2/releases/maven'
-      authentication { basic(BasicAuthentication) }
-      credentials {
-        username = 'mapbox'
-        password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
-      }
-    }
+        newSrc: `repositories {
+    maven {
+  url 'https://api.mapbox.com/downloads/v2/releases/maven'
+  authentication { basic(BasicAuthentication) }
+  credentials {
+    username = 'mapbox'
+    password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
+  }
+}
 }`,
         anchor: new RegExp("^\\s*allprojects\\s*{"),
         offset: 1,
