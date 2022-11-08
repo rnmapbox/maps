@@ -1,6 +1,7 @@
 package com.mapbox.rctmgl.components.annotation
 
 import android.view.View
+import android.widget.FrameLayout
 import com.mapbox.rctmgl.utils.GeoJSONUtils.toPointGeometry
 import com.facebook.react.bridge.ReactApplicationContext
 import com.mapbox.rctmgl.components.AbstractEventEmitter
@@ -8,6 +9,10 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.common.MapBuilder
 import com.facebook.react.uimanager.ThemedReactContext
+import com.mapbox.maps.ScreenCoordinate
+import com.mapbox.maps.viewannotation.OnViewAnnotationUpdatedListener
+import com.mapbox.maps.viewannotation.ViewAnnotationManager
+import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 
 class RCTMGLMarkerViewManager(reactApplicationContext: ReactApplicationContext?) :
     AbstractEventEmitter<RCTMGLMarkerView?>(reactApplicationContext) {
@@ -46,5 +51,28 @@ class RCTMGLMarkerViewManager(reactApplicationContext: ReactApplicationContext?)
 
     companion object {
         const val REACT_CLASS = "RCTMGLMarkerView"
+
+        fun markerViewContainerSizeFixer(mapView: RCTMGLMapView, viewAnnotationManager: ViewAnnotationManager) {
+            // see https://github.com/rnmapbox/maps/issues/2376
+            viewAnnotationManager.addOnViewAnnotationUpdatedListener(object :
+                OnViewAnnotationUpdatedListener {
+                override fun onViewAnnotationVisibilityUpdated(view: View, visible: Boolean) {
+                    val parent = view.parent
+                    if (parent is FrameLayout) {
+                        if ((parent.width == 0 && parent.height == 0) && (mapView.width != 0 || mapView.height != 0)) {
+                            parent.layout(0,0,mapView.width, mapView.height)
+                        }
+                    }
+                }
+
+                override fun onViewAnnotationPositionUpdated(
+                    view: View,
+                    leftTopCoordinate: ScreenCoordinate,
+                    width: Int,
+                    height: Int
+                ) {
+                }
+            })
+        }
     }
 }
