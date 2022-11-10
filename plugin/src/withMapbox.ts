@@ -274,41 +274,65 @@ const addMapboxMavenRepo = (projectBuildGradle: string): string => {
 
   /*
   Should look like this:
-    allprojects {
-      // ...
-      repositories {
+  
+  allprojects {
+    configurations.all {
+        resolutionStrategy {
+            force \\"com.facebook.react:react-native:\\" + REACT_NATIVE_VERSION
+        }
+    }
+
+    repositories {
         maven {
           url 'https://api.mapbox.com/downloads/v2/releases/maven'
           authentication { basic(BasicAuthentication) }
-          credentials { 
+          credentials {
             username = 'mapbox'
             password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
           }
         }
-      // ...
+        mavenLocal()
+        maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url(new File(['node', '--print', \\"require.resolve('react-native/package.json')\\"].execute(null, rootDir).text.trim(), '../android'))
+        }
+        // ...
   */
 
   /*
     Since mergeContents checks the anchor for each line, we can't do a "correct"
-    RegExp for allprojects...repositories and have to insert a second repositories
-    for now
+    RegExp for allprojects...repositories.
+    Instead, we check for the first `allprojects`, and then count the # of lines to the next `repositories` block.
   */
+  let offset = 0;
+  const anchor = new RegExp(`^\\s*allprojects\\s*{`, 'gm');
+  // hack to count offset
+  const allProjectSplit = projectBuildGradle.split(anchor);
+  if (allProjectSplit.length <= 1)
+    throw new Error('Could not find `allprojects` block');
+
+  const allProjectLines =
+    allProjectSplit[allProjectSplit.length - 1].split('\n');
+  const allProjectReposOffset = allProjectLines.findIndex((line) =>
+    line.includes('repositories'),
+  );
+  anchor.lastIndex = 0;
+  offset = allProjectReposOffset + 1;
 
   return mergeContents({
     tag: `@rnmapbox/maps-v2-maven`,
     src: projectBuildGradle,
-    newSrc: `repositories {
-    maven {
-  url 'https://api.mapbox.com/downloads/v2/releases/maven'
-  authentication { basic(BasicAuthentication) }
-  credentials {
-    username = 'mapbox'
-    password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
-  }
-}
-}`,
-    anchor: new RegExp(`^\\s*allprojects\\s*{`),
-    offset: 1,
+    newSrc: `
+        maven {
+          url 'https://api.mapbox.com/downloads/v2/releases/maven'
+          authentication { basic(BasicAuthentication) }
+          credentials {
+            username = 'mapbox'
+            password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
+          }
+        }\n`,
+    anchor,
+    offset,
     comment: '//',
   }).contents;
 };
@@ -372,3 +396,17 @@ const withMapbox: ConfigPlugin<MapboxPlugProps> = (
 };
 
 export default createRunOncePlugin(withMapbox, pkg.name, pkg.version);
+
+// TODO: export internal functions for testing purposes
+export {
+  // the following methods accept a string and return a string
+  addMapboxMavenRepo as _addMapboxMavenRepo,
+  // addLibCppFilter as _addLibCppFilter,
+  // Following methods accept a config object
+  // withAndroidProperties as _withAndroidProperties,
+  // withAndroidPropertiesDownloadToken as _withAndroidPropertiesDownloadToken,
+  // withAndroidPropertiesImpl2 as _withAndroidPropertiesImpl2,
+  // withAndroidAppGradle as _withAndroidAppGradle,
+  // withAndroidProjectGradle as _withAndroidProjectGradle,
+  // withMapboxAndroid as _withMapboxAndroid,
+};
