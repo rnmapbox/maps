@@ -227,7 +227,7 @@ const addMapboxMavenRepo = (projectBuildGradle) => {
             authentication { basic(BasicAuthentication) }
             credentials {
               username = 'mapbox'
-              password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: \\"\\"
+              password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
             }
           }
           mavenLocal()
