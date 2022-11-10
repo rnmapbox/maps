@@ -3033,7 +3033,7 @@
         "required": false,
         "type": "string",
         "default": "none",
-        "description": "[`mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component."
+        "description": "[iOS, `mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component."
       },
       {
         "name": "scaleBarEnabled",

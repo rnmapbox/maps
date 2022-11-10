@@ -173,7 +173,7 @@ class MapView extends NativeBridgeComponent(
     compassViewMargins: PropTypes.object,
 
     /**
-     * [`mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component.
+     * [iOS, `mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component.
      */
     compassImage: PropTypes.string,
 
