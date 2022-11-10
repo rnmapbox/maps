@@ -13,5 +13,7 @@ export declare function addMapboxInstallerBlock(src: string, blockName: Installe
  * Without this, production builds targeting simulators will fail.
  */
 export declare function setExcludedArchitectures(project: XcodeProject): XcodeProject;
+declare const addMapboxMavenRepo: (projectBuildGradle: string) => string;
 declare const _default: ConfigPlugin<MapboxPlugProps>;
 export default _default;
+export { addMapboxMavenRepo as _addMapboxMavenRepo, };

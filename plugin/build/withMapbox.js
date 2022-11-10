@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setExcludedArchitectures = exports.addMapboxInstallerBlock = exports.addInstallerBlock = exports.addConstantBlock = exports.applyCocoaPodsModifications = void 0;
+exports._addMapboxMavenRepo = exports.setExcludedArchitectures = exports.addMapboxInstallerBlock = exports.addInstallerBlock = exports.addConstantBlock = exports.applyCocoaPodsModifications = void 0;
 const fs_1 = require("fs");
 const path_1 = __importDefault(require("path"));
 const config_plugins_1 = require("@expo/config-plugins");
@@ -213,42 +213,72 @@ const addMapboxMavenRepo = (projectBuildGradle) => {
         return projectBuildGradle;
     /*
     Should look like this:
-      allprojects {
-        // ...
-        repositories {
+    
+    allprojects {
+      configurations.all {
+          resolutionStrategy {
+              force \\"com.facebook.react:react-native:\\" + REACT_NATIVE_VERSION
+          }
+      }
+  
+      repositories {
           maven {
             url 'https://api.mapbox.com/downloads/v2/releases/maven'
             authentication { basic(BasicAuthentication) }
             credentials {
               username = 'mapbox'
-              password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
+              password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: \\"\\"
             }
           }
-        // ...
+          mavenLocal()
+          maven {
+              // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+              url(new File(['node', '--print', \\"require.resolve('react-native/package.json')\\"].execute(null, rootDir).text.trim(), '../android'))
+          }
+          // ...
     */
     /*
       Since mergeContents checks the anchor for each line, we can't do a "correct"
-      RegExp for allprojects...repositories and have to insert a second repositories
-      for now
+      RegExp for allprojects...repositories.
+      Instead, we check for the first line of `mavenLocal` or `allprojects`, and then insert the block after some content inspection.
     */
+    let offset = 1;
+    let anchor;
+    const allProjectsPattern = new RegExp(`^\\s*allprojects\\s*{`, 'gm');
+    const mavenLocalPattern = new RegExp(`^\\s*mavenLocal\\(\\)`, 'gm');
+    const mavenLocalMatch = projectBuildGradle.match(mavenLocalPattern);
+    if (mavenLocalMatch) {
+        mavenLocalPattern.lastIndex = 0;
+        anchor = mavenLocalPattern;
+        offset = 1;
+    }
+    else {
+        // hack to count offset
+        const allProjectSplit = projectBuildGradle.split(allProjectsPattern);
+        const allProjectLines = allProjectSplit[allProjectSplit.length - 1].split('\n');
+        const allProjectReposOffset = allProjectLines.findIndex((line) => line.includes('repositories'));
+        allProjectsPattern.lastIndex = 0;
+        anchor = allProjectsPattern;
+        offset = allProjectReposOffset + 1;
+    }
     return (0, generateCode_1.mergeContents)({
         tag: `@rnmapbox/maps-v2-maven`,
         src: projectBuildGradle,
-        newSrc: `repositories {
-    maven {
-  url 'https://api.mapbox.com/downloads/v2/releases/maven'
-  authentication { basic(BasicAuthentication) }
-  credentials {
-    username = 'mapbox'
-    password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
-  }
-}
-}`,
-        anchor: new RegExp(`^\\s*allprojects\\s*{`),
-        offset: 1,
+        newSrc: `
+        maven {
+          url 'https://api.mapbox.com/downloads/v2/releases/maven'
+          authentication { basic(BasicAuthentication) }
+          credentials {
+            username = 'mapbox'
+            password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
+          }
+        }\n`,
+        anchor,
+        offset,
         comment: '//',
     }).contents;
 };
+exports._addMapboxMavenRepo = addMapboxMavenRepo;
 const withAndroidAppGradle = (config) => {
     return (0, config_plugins_1.withAppBuildGradle)(config, ({ modResults, ...config }) => {
         if (modResults.language !== 'groovy') {
