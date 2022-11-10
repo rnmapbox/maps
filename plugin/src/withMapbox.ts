@@ -302,29 +302,22 @@ const addMapboxMavenRepo = (projectBuildGradle: string): string => {
   /*
     Since mergeContents checks the anchor for each line, we can't do a "correct"
     RegExp for allprojects...repositories.
-    Instead, we check for the first line of `mavenLocal` or `allprojects`, and then insert the block after some content inspection.
+    Instead, we check for the first `allprojects`, and then count the # of lines to the next `repositories` block.
   */
-  let offset = 1;
-  let anchor: RegExp;
-  const allProjectsPattern = new RegExp(`^\\s*allprojects\\s*{`, 'gm');
-  const mavenLocalPattern = new RegExp(`^\\s*mavenLocal\\(\\)`, 'gm');
-  const mavenLocalMatch = projectBuildGradle.match(mavenLocalPattern);
-  if (mavenLocalMatch) {
-    mavenLocalPattern.lastIndex = 0;
-    anchor = mavenLocalPattern;
-    offset = 1;
-  } else {
-    // hack to count offset
-    const allProjectSplit = projectBuildGradle.split(allProjectsPattern);
-    const allProjectLines =
-      allProjectSplit[allProjectSplit.length - 1].split('\n');
-    const allProjectReposOffset = allProjectLines.findIndex((line) =>
-      line.includes('repositories'),
-    );
-    allProjectsPattern.lastIndex = 0;
-    anchor = allProjectsPattern;
-    offset = allProjectReposOffset + 1;
-  }
+  let offset = 0;
+  const anchor = new RegExp(`^\\s*allprojects\\s*{`, 'gm');
+  // hack to count offset
+  const allProjectSplit = projectBuildGradle.split(anchor);
+  if (allProjectSplit.length <= 1)
+    throw new Error('Could not find `allprojects` block');
+
+  const allProjectLines =
+    allProjectSplit[allProjectSplit.length - 1].split('\n');
+  const allProjectReposOffset = allProjectLines.findIndex((line) =>
+    line.includes('repositories'),
+  );
+  anchor.lastIndex = 0;
+  offset = allProjectReposOffset + 1;
 
   return mergeContents({
     tag: `@rnmapbox/maps-v2-maven`,

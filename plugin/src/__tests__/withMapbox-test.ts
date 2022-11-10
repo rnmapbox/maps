@@ -1,6 +1,5 @@
 import {
   applyCocoaPodsModifications,
-  _addLibCppFilter,
   _addMapboxMavenRepo,
 } from '../withMapbox';
 
@@ -12,11 +11,25 @@ describe('applyAndroidGradleModifications', () => {
     const result = _addMapboxMavenRepo(androidFixtures.expoTemplateBuildGradle);
     expect(result).toMatchSnapshot();
   });
+
   it(`adds the correct maven repo under allProjects to build.gradle`, () => {
     const result = _addMapboxMavenRepo(
       androidFixtures.expoTemplateBuildGradleWithoutMavenLocal,
     );
     expect(result).toMatchSnapshot();
+  });
+
+  it('throws on missing allprojects', () => {
+    expect(() => {
+      _addMapboxMavenRepo(`
+      repositories {
+        mavenLocal()
+        maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url(new File(['node', '--print', "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim(), '../android'))
+        }
+      }`);
+    }).toThrow();
   });
 });
 

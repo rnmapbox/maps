@@ -133,7 +133,6 @@ allprojects {
     }
 
     repositories {
-        mavenLocal()
 // @generated begin @rnmapbox/maps-v2-maven - expo prebuild (DO NOT MODIFY) sync-0e526367eddae0ed29455795568b1e03640a4087
 
         maven {
@@ -146,6 +145,7 @@ allprojects {
         }
 
 // @generated end @rnmapbox/maps-v2-maven
+        mavenLocal()
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url(new File(['node', '--print', \\"require.resolve('react-native/package.json')\\"].execute(null, rootDir).text.trim(), '../android'))
