@@ -3029,6 +3029,13 @@
         "description": "Add margins to the compass with x and y values"
       },
       {
+        "name": "compassImage",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "[iOS, `mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component."
+      },
+      {
         "name": "scaleBarEnabled",
         "required": false,
         "type": "bool",

@@ -26,6 +26,7 @@ MapView backed by Mapbox Native GL
 | compassPosition | `custom` | `none` | `false` | [`mapbox` (v10) implementation only] Adds compass offset, e.g. `{top: 8, left: 8}` will put the compass in top-left corner of the map |
 | compassViewPosition | `number` | `none` | `false` | Change corner of map the compass starts at. 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight |
 | compassViewMargins | `object` | `none` | `false` | Add margins to the compass with x and y values |
+| compassImage | `string` | `none` | `false` | [iOS, `mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component. |
 | scaleBarEnabled | `bool` | `true` | `false` | [`mapbox` (v10) implementation only] Enable/Disable the scale bar from appearing on the map |
 | scaleBarPosition | `custom` | `none` | `false` | [`mapbox` (v10) implementation only] Adds scale bar offset, e.g. `{top: 8, left: 8}` will put the scale bar in top-left corner of the map |
 | surfaceView | `bool` | `false` | `false` | [Android only] Enable/Disable use of GLSurfaceView instead of TextureView. |

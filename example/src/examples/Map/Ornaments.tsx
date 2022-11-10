@@ -1,10 +1,18 @@
 import React, { FC, useState } from 'react';
 import MapboxGL from '@rnmapbox/maps';
 import { Button, StyleSheet, Text } from 'react-native';
+import { Divider } from '@rneui/base';
 
 import sheet from '../../styles/sheet';
 import Page from '../common/Page';
 import Bubble from '../common/Bubble';
+import { Images } from '../../../../javascript';
+
+type CompassImage = 'compass1' | 'compass2';
+const images: Record<CompassImage, NodeRequire> = {
+  compass1: require('../../assets/compass1.png'),
+  compass2: require('../../assets/compass2.png'),
+};
 
 enum OrnamentType {
   Logo = 'logo',
@@ -26,12 +34,6 @@ const POSITIONS = {
   [OrnamentPosition.BottomRight]: { bottom: 8, right: 8 },
   [OrnamentPosition.BottomLeft]: { bottom: 8, left: 8 },
 };
-
-const styles = StyleSheet.create({
-  bubble: {
-    marginBottom: 96,
-  },
-});
 
 type OrnamentButtonsProps = {
   ornamentType: OrnamentType;
@@ -74,6 +76,11 @@ const ShowMap: FC<any> = (props) => {
     [OrnamentType.Compass]: OrnamentPosition.TopRight,
     [OrnamentType.ScaleBar]: OrnamentPosition.TopLeft,
   });
+
+  const [compassImage, setCompassImage] = useState<CompassImage | undefined>();
+  const [compassFadeWhenNorth, setCompassFadeWhenNorth] = useState<
+    boolean | undefined
+  >(undefined);
 
   const handlePressVisibility = (ornamentType: OrnamentType): void => {
     setVisibility((prevState) => {
@@ -119,9 +126,12 @@ const ShowMap: FC<any> = (props) => {
         attributionPosition={POSITIONS[position[OrnamentType.Attribution]]}
         compassEnabled={visibility[OrnamentType.Compass]}
         compassPosition={POSITIONS[position[OrnamentType.Compass]]}
+        compassImage={compassImage}
+        compassFadeWhenNorth={compassFadeWhenNorth}
         scaleBarEnabled={visibility[OrnamentType.ScaleBar]}
         scaleBarPosition={POSITIONS[position[OrnamentType.ScaleBar]]}
       >
+        <Images images={images} />
         <MapboxGL.Camera />
       </MapboxGL.MapView>
 
@@ -135,6 +145,8 @@ const ShowMap: FC<any> = (props) => {
           onPressPosition={handlePressPosition}
         />
 
+        <Divider style={styles.divider} />
+
         <Text>Attribution</Text>
         <OrnamentButtons
           ornamentType={OrnamentType.Attribution}
@@ -144,6 +156,8 @@ const ShowMap: FC<any> = (props) => {
           onPressPosition={handlePressPosition}
         />
 
+        <Divider style={styles.divider} />
+
         <Text>Compass</Text>
         <OrnamentButtons
           ornamentType={OrnamentType.Compass}
@@ -152,6 +166,32 @@ const ShowMap: FC<any> = (props) => {
           onPressVisibility={handlePressVisibility}
           onPressPosition={handlePressPosition}
         />
+        <Button
+          title={'Image: ' + compassImage}
+          onPress={() => {
+            if (!compassImage) {
+              setCompassImage('compass1');
+            } else if (compassImage === 'compass1') {
+              setCompassImage('compass2');
+            } else {
+              setCompassImage(undefined);
+            }
+          }}
+        />
+        <Button
+          title={'Fade when north: ' + compassFadeWhenNorth}
+          onPress={() => {
+            if (compassFadeWhenNorth === undefined) {
+              setCompassFadeWhenNorth(true);
+            } else if (compassFadeWhenNorth === true) {
+              setCompassFadeWhenNorth(false);
+            } else {
+              setCompassFadeWhenNorth(undefined);
+            }
+          }}
+        />
+
+        <Divider style={styles.divider} />
 
         <Text>ScaleBar</Text>
         <OrnamentButtons
@@ -165,5 +205,19 @@ const ShowMap: FC<any> = (props) => {
     </Page>
   );
 };
+
+const styles = StyleSheet.create({
+  divider: {
+    width: '100%',
+    marginTop: 5,
+    marginBottom: 10,
+  },
+  bubble: {
+    flex: 0,
+    alignItems: 'flex-start',
+    padding: 10,
+    marginBottom: 96,
+  },
+});
 
 export default ShowMap;
