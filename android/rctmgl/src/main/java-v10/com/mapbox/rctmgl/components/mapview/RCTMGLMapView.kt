@@ -1187,12 +1187,14 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     override fun onDestroy() {
         removeAllFeatures()
+        viewAnnotationManager.removeAllViewAnnotations()
         lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         super.onDestroy()
     }
 
     fun onDropViewInstance() {
         removeAllFeatures()
+        viewAnnotationManager.removeAllViewAnnotations()
         lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     }
 

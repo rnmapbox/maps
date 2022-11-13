@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.mapbox.geojson.Point
 import com.mapbox.maps.ViewAnnotationAnchor
@@ -142,7 +143,10 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
         this.removeOnLayoutChangeListener(this)
 
         mView?.let { view ->
-            mapView.endViewTransition(view) // https://github.com/mapbox/mapbox-maps-android/issues/1723
+            val parent = view.parent
+            if (parent is ViewGroup) {
+                parent.endViewTransition(view) // https://github.com/mapbox/mapbox-maps-android/issues/1723
+            }
             val removed = mapView.viewAnnotationManager?.removeViewAnnotation(view)
             if (removed == false) {
                 Logger.w("RCTMGLMarkerView", "Unable to remove view")
