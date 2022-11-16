@@ -3,7 +3,6 @@ import {
   Platform,
   NativeModules,
   requireNativeComponent,
-  HostComponent,
   type ViewProps,
   View,
 } from 'react-native';
