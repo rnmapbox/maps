@@ -1021,6 +1021,21 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         }
     }
 
+    fun updateOrnaments() {
+        (0..this.childCount - 1).map {
+            val view = this.getChildAt(it)
+            if (view.javaClass.toString().contains(".maps.plugin.")) {
+                view.invalidate()
+                view.forceLayout()
+            }
+        }
+    }
+
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        updateOrnaments()
+        super.onLayout(changed, left, top, right, bottom)
+    }
+
     // endregion
 
     private fun getGravityAndMargin (position:ReadableMap): Pair<Int, IntArray> {
