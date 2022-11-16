@@ -3,7 +3,6 @@ import {
   requireNativeComponent,
   StyleSheet,
   Platform,
-  type HostComponent,
   type ViewProps,
 } from 'react-native';
 import { type Feature } from 'geojson';
@@ -27,7 +26,7 @@ type FeaturePayload = {
   feature: Feature;
 };
 
-type PointAnnotationProps = {
+type Props = {
   /**
    * A string that uniquely identifies the annotation
    */
@@ -119,7 +118,7 @@ type PointAnnotationProps = {
  * as with PointAnnotation child views are rendered onto a bitmap
  */
 class PointAnnotation extends NativeBridgeComponent(
-  React.PureComponent<PointAnnotationProps>,
+  React.PureComponent<Props>,
   NATIVE_MODULE_NAME,
 ) {
   static defaultProps = {
@@ -129,7 +128,7 @@ class PointAnnotation extends NativeBridgeComponent(
 
   _nativeRef: NativePointAnnotationRef | null = null;
 
-  constructor(props: PointAnnotationProps) {
+  constructor(props: Props) {
     super(props);
     this._onSelected = this._onSelected.bind(this);
     this._onDeselected = this._onDeselected.bind(this);
@@ -219,14 +218,13 @@ class PointAnnotation extends NativeBridgeComponent(
     );
   }
 }
-type NativePointAnnotationProps = Omit<PointAnnotationProps, 'coordinate'> & {
+type NativeProps = Omit<Props, 'coordinate'> & {
   coordinate: string | undefined;
 };
 
-type NativePointAnnotationRef = Component<NativePointAnnotationProps>;
-type NativePointAnnotation = HostComponent<NativePointAnnotationProps>;
+type NativePointAnnotationRef = Component<NativeProps>;
 
-const RCTMGLPointAnnotation: NativePointAnnotation =
-  requireNativeComponent(NATIVE_MODULE_NAME);
+const RCTMGLPointAnnotation =
+  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default PointAnnotation;

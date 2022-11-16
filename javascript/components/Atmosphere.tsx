@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from 'react';
-import { HostComponent, requireNativeComponent } from 'react-native';
+import { requireNativeComponent } from 'react-native';
 
 import type { AtmosphereLayerStyleProps } from '../utils/MapboxStyles';
 import { StyleValue, transformStyle } from '../utils/StyleValue';
@@ -22,7 +22,10 @@ export const Atmosphere = memo((props: Props) => {
   return <RCTMGLAtmosphere {...baseProps} />;
 });
 
-const RCTMGLAtmosphere: HostComponent<{
+type NativeProps = {
   reactStyle?: { [key: string]: StyleValue };
   style?: undefined;
-}> = requireNativeComponent(NATIVE_MODULE_NAME);
+};
+
+const RCTMGLAtmosphere =
+  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);

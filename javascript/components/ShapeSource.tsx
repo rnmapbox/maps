@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  HostComponent,
   NativeMethods,
   NativeModules,
   NativeSyntheticEvent,
@@ -407,6 +406,5 @@ type NativeProps = {
   shape?: string;
 };
 
-type NativeShapeSource = HostComponent<NativeProps>;
-const RCTMGLShapeSource: NativeShapeSource =
-  requireNativeComponent(NATIVE_MODULE_NAME);
+const RCTMGLShapeSource =
+  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);

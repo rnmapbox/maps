@@ -3,7 +3,6 @@ import {
   Platform,
   NativeModules,
   requireNativeComponent,
-  HostComponent,
   type ViewProps,
   View,
 } from 'react-native';
@@ -146,7 +145,7 @@ type NativeProps = ViewProps & {
   isSelected: boolean;
 };
 
-const RCTMGLMarkerView: HostComponent<NativeProps> =
-  requireNativeComponent(NATIVE_MODULE_NAME);
+const RCTMGLMarkerView =
+  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 export default MarkerView;
