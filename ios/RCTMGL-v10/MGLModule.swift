@@ -20,7 +20,7 @@ class MGLModule : NSObject {
           "Light": StyleURI.light.rawValue,
           "Dark": StyleURI.dark.rawValue,
           "Satellite": StyleURI.satellite.rawValue,
-          "SatelliteStreets": StyleURI.satelliteStreets.rawValue,
+          "SatelliteStreet": StyleURI.satelliteStreets.rawValue,
         ],
       "OfflinePackDownloadState":
         [
