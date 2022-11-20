@@ -713,7 +713,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         val density: Float = getDisplayDensity()
         val screenCoordinate = ScreenCoordinate(pixel.x * density, pixel.y * density)
 
-        val coordinate = mMap!!.coordinateForPixel(pixel)
+        val coordinate = mMap!!.coordinateForPixel(screenCoordinate)
 
         sendResponse(callbackID, {
             it.putArray("coordinateFromView", coordinate.toReadableArray())
