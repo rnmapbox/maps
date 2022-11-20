@@ -17,9 +17,9 @@ import android.os.Looper
 import android.util.Log
 import com.mapbox.geojson.Point
 import com.mapbox.maps.plugin.locationcomponent.LocationProvider
-import java.lang.Exception
 import java.lang.ref.WeakReference
 import java.util.ArrayList
+import kotlin.Exception
 
 internal class LocationProviderForEngine(var mEngine: LocationEngine?) : LocationProvider, LocationEngineCallback<LocationEngineResult> {
     var mConsumers = ArrayList<LocationConsumer>()
@@ -51,8 +51,8 @@ internal class LocationProviderForEngine(var mEngine: LocationEngine?) : Locatio
     }
 
     // * LocationEngineCallback
-    override fun onSuccess(locationEngineResult: LocationEngineResult) {
-        val location = locationEngineResult.lastLocation
+    override fun onSuccess(locationEngineResult: LocationEngineResult?) {
+        val location = locationEngineResult?.lastLocation
         location?.let { notifyLocationUpdates(it) }
     }
 
@@ -154,7 +154,19 @@ class LocationManager private constructor(private val context: Context) : Locati
             callback.onFailure(Exception("LocationEngine not initialized"))
         }
         try {
-            engine?.getLastLocation(callback)
+            engine?.getLastLocation(object : LocationEngineCallback<LocationEngineResult> {
+                override fun onSuccess(result: LocationEngineResult?) {
+                    if (result == null) {
+                        callback.onFailure( NullPointerException("LocationEngineResult is null"))
+                    } else {
+                        callback.onSuccess(result)
+                    }
+                }
+
+                override fun onFailure(exception: Exception) {
+                    callback.onFailure(exception)
+                }
+            })
         } catch (exception: Exception) {
             Log.w(LOG_TAG, exception)
             callback.onFailure(exception)
@@ -172,8 +184,8 @@ class LocationManager private constructor(private val context: Context) : Locati
         // FMTODO handle this.
     }
 
-    override fun onSuccess(result: LocationEngineResult) {
-        onLocationChanged(result.lastLocation)
+    override fun onSuccess(result: LocationEngineResult?) {
+        onLocationChanged(result?.lastLocation)
         if (locationProvider != null) {
             locationProvider!!.onSuccess(result)
         }
