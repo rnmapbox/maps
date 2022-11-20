@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.PointF
 import android.graphics.RectF
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -112,6 +113,9 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     private var mLocationComponentManager: LocationComponentManager? = null
     var tintColor: Int? = null
         private set
+
+    val mapView: MapView
+        get() = this
 
     val pointAnnotationManager: PointAnnotationManager?
         get() {
@@ -902,17 +906,17 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             }
         })
 
-        RCTMGLMarkerViewManager.markerViewContainerSizeFixer(this, viewAnnotationManager)
+        RCTMGLMarkerViewManager.markerViewContainerSizeFixer(this, this.viewAnnotationManager)
     }
 
     // region Ornaments
 
     private fun toGravity(kind: String, viewPosition: Int): Int {
         return when (viewPosition) {
-            0 -> (Gravity.TOP or Gravity.LEFT)
-            1 -> (Gravity.TOP or Gravity.RIGHT)
-            2 -> (Gravity.BOTTOM or Gravity.LEFT)
-            3 -> (Gravity.BOTTOM or Gravity.RIGHT)
+            0 -> (Gravity.TOP or Gravity.START)
+            1 -> (Gravity.TOP or Gravity.END)
+            2 -> (Gravity.BOTTOM or Gravity.START)
+            3 -> (Gravity.BOTTOM or Gravity.END)
             else -> {
                 Logger.e(
                     "MapView",
@@ -991,6 +995,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             fadeWhenFacingNorth = mCompassFadeWhenNorth
             updateOrnament("compass", mCompassSettings, this.toGenericOrnamentSettings())
         }
+        workaroundToRelayoutChildOfMapView()
     }
 
     var mScaleBarSettings = OrnamentSettings(enabled = false)
@@ -1016,9 +1021,25 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     private fun updateScaleBar() {
-        scalebar.updateSettings {
+        mapView.scalebar.updateSettings {
             updateOrnament("scaleBar", mScaleBarSettings, this.toGenericOrnamentSettings())
         }
+        workaroundToRelayoutChildOfMapView()
+    }
+
+    fun workaroundToRelayoutChildOfMapView() {
+        if (mapView.width == 0 && mapView.height == 0) {
+            return
+        }
+
+        mapView.requestLayout();
+        mapView.forceLayout();
+
+        mapView.measure(
+            MeasureSpec.makeMeasureSpec(mapView.measuredWidth, MeasureSpec.EXACTLY),
+            MeasureSpec.makeMeasureSpec(mapView.measuredHeight, MeasureSpec.EXACTLY)
+        );
+        mapView.layout(mapView.left, mapView.top, mapView.right, mapView.bottom)
     }
 
     // endregion
@@ -1124,16 +1145,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         logo.updateSettings {
             updateOrnament("logo", mLogoSettings, this.toGenericOrnamentSettings())
         }
-
-        logo.updateSettings {
-            println(String.format("logo :: position - before 0x%08x", position))
-            //position = Gravity.BOTTOM or Gravity.RIGHT
-            println(String.format("eq bottom|right %b", position == (Gravity.BOTTOM or Gravity.RIGHT)))
-            if (position == Gravity.BOTTOM or Gravity.RIGHT) {
-                position = Gravity.BOTTOM or Gravity.RIGHT
-            }
-            println(String.format("logo :: position - after 0x%08x", position))
-        }
+        workaroundToRelayoutChildOfMapView()
     }
 /*
     fun setReactLogoEnabled(logoEnabled: Boolean?) {
@@ -1208,7 +1220,11 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 }
 
                 override fun handleLifecycleEvent(event: Lifecycle.Event) {
-                    lifecycleRegistry.handleLifecycleEvent(event)
+                    try {
+                        lifecycleRegistry.handleLifecycleEvent(event)
+                    } catch (e: RuntimeException) {
+                        Log.e("RCTMGLMapView", "onAttachedToWindow error: $e")
+                    }
                 }
 
                 override fun getLifecycle(): Lifecycle {
@@ -1228,8 +1244,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 fun OrnamentSettings.setPosAndMargins(posAndMargins: ReadableMap?) {
     if (posAndMargins == null) { return }
 
-    val bottom_mask = 1;
-    val right_mask = 2;
+    val bottom_mask = 2;
+    val right_mask = 1;
 
     var margins = WritableNativeMap()
     var position = 0;
@@ -1281,7 +1297,7 @@ fun ScaleBarSettings.toGenericOrnamentSettings() = object : GenericOrnamentSetti
 }
 
 fun CompassSettings.toGenericOrnamentSettings() = object : GenericOrnamentSettings {
-    private val settings = this@toGenericOrnamentSettings
+    private var settings = this@toGenericOrnamentSettings
     override fun setHMargins(left: Float?, right: Float?) {
         left?.let { settings.marginLeft = it }
         right?.let { settings.marginRight = it }
@@ -1295,11 +1311,13 @@ fun CompassSettings.toGenericOrnamentSettings() = object : GenericOrnamentSettin
         set(value) { settings.enabled = value }
     override var position: Int
         get() = settings.position
-        set(value) { settings.position = value }
+        set(value) {
+            settings.position = value
+        }
 }
 
 fun LogoSettings.toGenericOrnamentSettings() = object : GenericOrnamentSettings {
-    private val settings = this@toGenericOrnamentSettings
+    private var settings = this@toGenericOrnamentSettings
     override fun setHMargins(left: Float?, right: Float?) {
         left?.let { settings.marginLeft = it }
         right?.let { settings.marginRight = it }
