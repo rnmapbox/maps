@@ -132,6 +132,16 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
         mapView!!.setReactAttributionPosition(attributionPosition);
     }
 
+    @ReactProp(name = "attributionViewMargins")
+    fun setAttributionViewMargins(mapView: RCTMGLMapView?, scaleBarMargins: ReadableMap?) {
+        mapView!!.setReactAttributionViewMargins(scaleBarMargins!!);
+    }
+
+    @ReactProp(name = "attributionViewPosition")
+    fun setAttributionViewPosition(mapView: RCTMGLMapView?, scaleBarPosition: Int) {
+        mapView!!.setReactAttributionViewPosition(scaleBarPosition!!)
+    }
+
     @ReactProp(name = "logoEnabled")
     fun setLogoEnabled(mapView: RCTMGLMapView?, logoEnabled: Boolean?) {
         mapView!!.setReactLogoEnabled(logoEnabled);
