@@ -1,6 +1,6 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Icon } from '@rneui/base';
-import React, { useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import MapHeader from '../examples/common/MapHeader';
 import Page from '../examples/common/Page';
@@ -82,6 +83,8 @@ import Markers from '../examples/V10/Markers';
 import QueryTerrainElevation from '../examples/V10/QueryTerrainElevation';
 import TerrainSkyAtmosphere from '../examples/V10/TerrainSkyAtmosphere';
 
+const MostRecentExampleKey = '@recent_example';
+
 const styles = StyleSheet.create({
   exampleList: {
     flex: 1,
@@ -90,7 +93,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 32,
+    paddingVertical: 16,
   },
   exampleListItemBorder: {
     borderBottomColor: '#ccc',
@@ -114,8 +117,45 @@ interface ExampleNode {
   navigationType: NavigationType;
   path: string[];
 
+  updateIfNeeded(updated: () => void): void;
   setParent(parent: string[]): void;
   find(path: string[]): ExampleNode | undefined;
+}
+
+class MostRecentExampleItem implements ExampleNode {
+  label: string;
+  navigationType: NavigationType;
+  path: string[];
+
+  constructor() {
+    this.label = 'Most recent';
+    this.navigationType = 'Item';
+    this.path = [];
+  }
+
+  setParent(parent: string[]) {
+    this.path = [...parent, this.label];
+  }
+
+  find(path: string[]) {
+    if (path.length === 1 && path[0] === this.label) {
+      return this;
+    } else {
+      return undefined;
+    }
+  }
+
+  updateIfNeeded(updated: () => void): void {
+    (async () => {
+      const pathJSON = await AsyncStorage.getItem(MostRecentExampleKey);
+      if (pathJSON) {
+        const path = JSON.parse(pathJSON);
+        this.label = `Most recent: ${path.slice(-1)}`;
+        this.path = path;
+        updated();
+      }
+    })();
+  }
 }
 
 class ExampleItem implements ExampleNode {
@@ -142,6 +182,13 @@ class ExampleItem implements ExampleNode {
       return undefined;
     }
   }
+
+  async getPath(): Promise<string[]> {
+    return this.path;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  updateIfNeeded(_updated: () => void): void {}
 }
 
 type RootStackParamList = {
@@ -186,6 +233,13 @@ class ExampleGroup implements ExampleNode {
       return undefined;
     }
   }
+
+  async getPath(): Promise<string[]> {
+    return this.path;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  updateIfNeeded(_updated: () => void): void {}
 }
 
 const BugReportPage =
@@ -198,6 +252,7 @@ const BugReportPage =
     );
 
 const Examples = new ExampleGroup('React Native Mapbox', [
+  new MostRecentExampleItem(),
   new ExampleItem('Bug Report Template', BugReportPage(BugReportExample)),
   new ExampleItem('Bug Report Template TS', BugReportPage(BugReportExampleTS)),
   new ExampleGroup('V10', [
@@ -294,8 +349,11 @@ function ExampleGroupComponent({
   showBack?: boolean;
   title: string;
 }) {
-  function itemPress(item: ExampleNode) {
-    navigation.push(item.navigationType, { path: item.path });
+  async function itemPress(item: ExampleNode) {
+    const { path } = item;
+    if (path.length > 0) {
+      navigation.push(item.navigationType, { path });
+    }
   }
 
   function renderItem({ item }: { item: ExampleNode }) {
@@ -318,6 +376,15 @@ function ExampleGroupComponent({
         },
       }
     : {};
+
+  const [, updateState] = useState<object>();
+  const forceUpdate = useCallback(() => updateState({}), []);
+
+  useEffect(() => {
+    items.forEach((item) => {
+      item.updateIfNeeded(forceUpdate);
+    });
+  }, [items, forceUpdate]);
 
   return (
     <View style={sheet.matchParent}>
@@ -356,6 +423,12 @@ export const Item = ({ route, navigation }: ItemProps) => {
     navigation.goBack();
   }, [navigation]);
 
+  useEffect(() => {
+    AsyncStorage.setItem(
+      MostRecentExampleKey,
+      JSON.stringify(route.params.path),
+    );
+  }, [route.params.path]);
   const { path } = route.params;
   const item = Examples.find(path);
   if (!(item instanceof ExampleItem)) {
