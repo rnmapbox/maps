@@ -10,14 +10,8 @@ fun CoordinateBounds.toReadableArray() : ReadableArray {
     val array = Arguments.createArray()
     val ne = northeast
     val sw = southwest
-    val latLngs = arrayOf(
-        LatLng(ne.latitude(), ne.longitude()),
-        LatLng(ne.latitude(), sw.longitude()),
-        LatLng(sw.latitude(), sw.longitude()),
-        LatLng(sw.latitude(), ne.longitude())
-    )
-    for (latLng in latLngs) {
-        array.pushArray(GeoJSONUtils.fromLatLng(latLng))
-    }
+
+    array.pushArray(GeoJSONUtils.fromLatLng(LatLng(ne.latitude(), ne.longitude())));
+    array.pushArray(GeoJSONUtils.fromLatLng(LatLng(sw.latitude(), sw.longitude())));
     return array
 }
