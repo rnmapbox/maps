@@ -1069,48 +1069,33 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     // region Attribution
-    private var mAttributionEnabled: Boolean? = null;
-    private var mAttributionGravity: Int? = null
-    private var mAttributionMargin: IntArray? = null
+    var mAttributionSettings = OrnamentSettings(enabled = AttributionSettings().enabled)
 
     fun setReactAttributionEnabled(attributionEnabled: Boolean?) {
-        mAttributionEnabled = attributionEnabled ?: AttributionSettings().enabled
+        mAttributionSettings.enabled = attributionEnabled
+        updateAttribution()
+    }
+
+    fun setReactAttributionViewMargins(margins: ReadableMap) {
+        mAttributionSettings.margins = margins
+        updateAttribution()
+    }
+
+    fun setReactAttributionViewPosition(position: Int) {
+        mAttributionSettings.position = position
         updateAttribution()
     }
 
     fun setReactAttributionPosition(position: ReadableMap?) {
-        if (position == null) {
-            // reset from explicit to default
-            if (mAttributionGravity != null) {
-                val defaultOptions = AttributionSettings()
-                mAttributionGravity = defaultOptions.position
-                mAttributionMargin = intArrayOf(defaultOptions.marginLeft.toInt(),defaultOptions.marginTop.toInt(),defaultOptions.marginRight.toInt(),defaultOptions.marginBottom.toInt())
-                updateAttribution()
-            }
-            return
-        }
-
-        val (attributionGravity, attributionMargin) = getGravityAndMargin(position)
-        mAttributionGravity = attributionGravity
-        mAttributionMargin = attributionMargin
+        mAttributionSettings.setPosAndMargins(position)
         updateAttribution()
     }
 
     private fun updateAttribution() {
         attribution.updateSettings {
-            if(mAttributionEnabled!= null){
-                enabled = mAttributionEnabled!!
-            }
-            if(mAttributionGravity != null){
-                position = mAttributionGravity!!
-            }
-            if(mAttributionMargin != null){
-                marginLeft = mAttributionMargin!![0].toFloat()
-                marginTop = mAttributionMargin!![1].toFloat()
-                marginRight = mAttributionMargin!![2].toFloat()
-                marginBottom = mAttributionMargin!![3].toFloat()
-            }
+            updateOrnament("attribution", mAttributionSettings, this.toGenericOrnamentSettings())
         }
+        workaroundToRelayoutChildOfMapView()
     }
     //endregion
 
@@ -1147,46 +1132,6 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         }
         workaroundToRelayoutChildOfMapView()
     }
-/*
-    fun setReactLogoEnabled(logoEnabled: Boolean?) {
-        mLogoEnabled = logoEnabled ?: LogoSettings().enabled
-        updateLogo()
-    }
-
-    fun setReactLogoPosition(position: ReadableMap?) {
-        if (position == null) {
-            // reset from explicit to default
-            if (mLogoGravity != null) {
-                val defaultOptions = LogoSettings()
-                mLogoGravity = defaultOptions.position
-                mLogoMargin = intArrayOf(defaultOptions.marginLeft.toInt(),defaultOptions.marginTop.toInt(),defaultOptions.marginRight.toInt(),defaultOptions.marginBottom.toInt())
-                updateLogo()
-            }
-            return
-        }
-        val (logoGravity, logoMargin) = getGravityAndMargin(position)
-        mLogoGravity = logoGravity
-        mLogoMargin = logoMargin
-        updateLogo()
-    }
-
-    private fun updateLogo() {
-        logo.updateSettings {
-            if(mLogoEnabled != null){
-                enabled = mLogoEnabled!!
-            }
-            if(mLogoGravity != null){
-                position = mLogoGravity!!
-            }
-            if(mLogoMargin != null){
-                marginLeft = mLogoMargin!![0].toFloat()
-                marginTop = mLogoMargin!![1].toFloat()
-                marginRight = mLogoMargin!![2].toFloat()
-                marginBottom = mLogoMargin!![3].toFloat()
-            }
-        }
-    }
- */
     // endregion
 
     // region lifecycle
@@ -1332,7 +1277,26 @@ fun LogoSettings.toGenericOrnamentSettings() = object : GenericOrnamentSettings 
     override var position: Int
         get() = settings.position
         set(value) {
-            println(String.format("logo :: position: 0x%08x", value))
+            settings.position = value
+        }
+}
+
+fun AttributionSettings.toGenericOrnamentSettings() = object : GenericOrnamentSettings {
+    private var settings = this@toGenericOrnamentSettings;
+    override fun setHMargins(left: Float?, right: Float?) {
+        left?.let { settings.marginLeft = it }
+        right?.let { settings.marginRight = it }
+    }
+    override fun setVMargins(top: Float?, bottom: Float?) {
+        top?.let { settings.marginTop = it }
+        bottom?.let { settings.marginBottom = it }
+    }
+    override var enabled: Boolean
+        get() = settings.enabled
+        set(value) { settings.enabled = value }
+    override var position: Int
+        get() = settings.position
+        set(value) {
             settings.position = value
         }
 }
