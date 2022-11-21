@@ -18,7 +18,7 @@ class RCTMGLLocation: NSObject {
         "course": location.course,
         "speed": location.speed,
       ],
-      "timestamp": location.timestamp.timeIntervalSince1970
+      "timestamp": location.timestamp.timeIntervalSince1970 * 1000
     ]
   }
 }
