@@ -32,7 +32,9 @@ class RCTMGLSkyLayer: RCTMGLLayer {
         styler.skyLayer(
           layer: &styleLayer,
           reactStyle: reactStyle,
-          applyUpdater: { (updater) in try! style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout LayerType) in updater(&layer) }},
+          applyUpdater: { (updater) in logged("RCTMGLSkyLayer.addStyles") {
+            try style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout LayerType) in updater(&layer) }
+          }},
           isValid: {
             return self.isAddedToMap()
           }

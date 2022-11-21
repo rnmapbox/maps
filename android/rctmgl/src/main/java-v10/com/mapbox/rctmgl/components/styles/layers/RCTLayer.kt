@@ -21,8 +21,6 @@ import com.mapbox.rctmgl.utils.ExpressionParser
 import java.lang.ClassCastException
 import com.mapbox.rctmgl.utils.Logger
 
-
-// import com.mapbox.rctmgl.utils.ExpressionParser;
 abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractSourceConsumer(
     mContext
 ) {
@@ -253,15 +251,12 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
         super.removeFromMap(mapView)
     }
 
-    // v10TOOD: adding anything seems to make getStyle null
-    //        return mMap.getStyle();
     private val style: Style?
-        private get() =// v10TOOD: adding anything seems to make getStyle null
+        private get() =
             if (mMap == null) {
                 null
-            } else mMapView!!.savedStyle
+            } else mMapView?.savedStyle
 
-    //        return mMap.getStyle();
     abstract fun makeLayer(): T
     abstract fun addStyles()
     private fun hasInitialized(): Boolean {
