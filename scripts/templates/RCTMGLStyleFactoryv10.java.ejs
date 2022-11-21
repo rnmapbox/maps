@@ -27,6 +27,7 @@ import com.mapbox.maps.extension.style.types.StyleTransition;
 import com.mapbox.maps.extension.style.light.generated.Light;
 import com.mapbox.maps.extension.style.light.LightPosition;
 import com.mapbox.rctmgl.utils.DownloadMapImageTask;
+import com.mapbox.rctmgl.utils.Logger;
 
 import java.util.List;
 
@@ -52,7 +53,11 @@ public class RCTMGLStyleFactory {
               style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
                   @Override
                   public void onAllImagesLoaded() {
-                      RCTMGLStyleFactory.set<%- pascelCase(prop.name) -%>(layer, styleValue);
+                      try {
+                          RCTMGLStyleFactory.set<%- pascelCase(prop.name) -%>(layer, styleValue);
+                      } catch (RuntimeException exception) {
+                          Logger.INSTANCE.e("RCTMGL<%- pascelCase(layer.name) %>",String.format("Exception failed during set<%- pascelCase(prop.name) -%>: %s", exception.getMessage()));
+                      }
                   }
               });
               <%_ } else { _%>

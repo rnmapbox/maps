@@ -24,6 +24,7 @@ import com.mapbox.maps.extension.style.types.StyleTransition;
 import com.mapbox.maps.extension.style.light.generated.Light;
 import com.mapbox.maps.extension.style.light.LightPosition;
 import com.mapbox.rctmgl.utils.DownloadMapImageTask;
+import com.mapbox.rctmgl.utils.Logger;
 
 import java.util.List;
 
@@ -82,7 +83,11 @@ public class RCTMGLStyleFactory {
               style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
                   @Override
                   public void onAllImagesLoaded() {
-                      RCTMGLStyleFactory.setFillPattern(layer, styleValue);
+                      try {
+                          RCTMGLStyleFactory.setFillPattern(layer, styleValue);
+                      } catch (RuntimeException exception) {
+                          Logger.INSTANCE.e("RCTMGLFill",String.format("Exception failed during setFillPattern: %s", exception.getMessage()));
+                      }
                   }
               });
               break;
@@ -176,7 +181,11 @@ public class RCTMGLStyleFactory {
               style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
                   @Override
                   public void onAllImagesLoaded() {
-                      RCTMGLStyleFactory.setLinePattern(layer, styleValue);
+                      try {
+                          RCTMGLStyleFactory.setLinePattern(layer, styleValue);
+                      } catch (RuntimeException exception) {
+                          Logger.INSTANCE.e("RCTMGLLine",String.format("Exception failed during setLinePattern: %s", exception.getMessage()));
+                      }
                   }
               });
               break;
@@ -243,7 +252,11 @@ public class RCTMGLStyleFactory {
               style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
                   @Override
                   public void onAllImagesLoaded() {
-                      RCTMGLStyleFactory.setIconImage(layer, styleValue);
+                      try {
+                          RCTMGLStyleFactory.setIconImage(layer, styleValue);
+                      } catch (RuntimeException exception) {
+                          Logger.INSTANCE.e("RCTMGLSymbol",String.format("Exception failed during setIconImage: %s", exception.getMessage()));
+                      }
                   }
               });
               break;
@@ -572,7 +585,11 @@ public class RCTMGLStyleFactory {
               style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
                   @Override
                   public void onAllImagesLoaded() {
-                      RCTMGLStyleFactory.setFillExtrusionPattern(layer, styleValue);
+                      try {
+                          RCTMGLStyleFactory.setFillExtrusionPattern(layer, styleValue);
+                      } catch (RuntimeException exception) {
+                          Logger.INSTANCE.e("RCTMGLFillExtrusion",String.format("Exception failed during setFillExtrusionPattern: %s", exception.getMessage()));
+                      }
                   }
               });
               break;
@@ -727,7 +744,11 @@ public class RCTMGLStyleFactory {
               style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
                   @Override
                   public void onAllImagesLoaded() {
-                      RCTMGLStyleFactory.setBackgroundPattern(layer, styleValue);
+                      try {
+                          RCTMGLStyleFactory.setBackgroundPattern(layer, styleValue);
+                      } catch (RuntimeException exception) {
+                          Logger.INSTANCE.e("RCTMGLBackground",String.format("Exception failed during setBackgroundPattern: %s", exception.getMessage()));
+                      }
                   }
               });
               break;
