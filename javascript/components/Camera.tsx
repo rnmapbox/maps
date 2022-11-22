@@ -14,7 +14,7 @@ import { makeLatLngBounds, makePoint } from '../utils/geoUtils';
 
 const NativeModule = NativeModules.MGLModule;
 
-export const enum UserTrackingMode {
+export enum UserTrackingMode {
   Follow = 'normal',
   FollowWithHeading = 'compass',
   FollowWithCourse = 'course',
