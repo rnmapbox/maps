@@ -24,7 +24,7 @@
     coords[@"speed"] = @(_location.speed);
     
     json[@"coords"] = coords;
-    json[@"timestamp"] = @([_location.timestamp timeIntervalSince1970]);
+    json[@"timestamp"] = @([_location.timestamp timeIntervalSince1970] * 1000);
     
     return json;
 }
