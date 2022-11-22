@@ -1,6 +1,6 @@
 import React from 'react';
 
-import headingIcon from '../../assets/heading.png';
+import headingIcon from '../assets/heading.png';
 
 import { SymbolLayer } from './SymbolLayer';
 
