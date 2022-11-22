@@ -55,46 +55,12 @@
     "@babel/preset-typescript": "^7.12.17",
     "@babel/runtime": "^7.12.5",
     "babel-plugin-module-resolver": "^4.1.0",
-    "detox": "^19.1.0 <19.5.2 || >19.5.2",
+    "detox": "^20.0.3",
     "glob-to-regexp": "^0.4.0",
     "jest": "^27.1.0",
     "jest-circus": "^29.2.2",
     "jetifier": "^2.0.0",
     "metro-react-native-babel-preset": "^0.64.0",
     "typescript": "^4.4.3"
-  },
-  "detox": {
-    "testRunner": "jest",
-    "runnerConfig": "e2e/config.json",
-    "apps": {
-      "ios": {
-        "type": "ios.app",
-        "build": "xcodebuild -quiet -workspace ios/RNMapboxGLExample.xcworkspace -configuration Release -scheme RNMapboxGLExample -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,name=iPhone SE (3rd generation)'",
-        "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/RNMapboxGLExample.app"
-      },
-      "ios.debug": {
-        "type": "ios.app",
-        "build": "FORCE_BUNDLING=1 xcodebuild -quiet -workspace ios/RNMapboxGLExample.xcworkspace -configuration Debug -scheme RNMapboxGLExample GCC_PREPROCESSOR_DEFINITIONS='$GCC_PREPROCESSOR_DEFINITIONS DEBUG_RCT_BUNDLE=1' -sdk iphonesimulator -derivedDataPath ios/build -destination 'platform=iOS Simulator,name=iPhone SE (3rd generation)'",
-        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/RNMapboxGLExample.app"
-      }
-    },
-    "devices": {
-      "simulator": {
-        "type": "ios.simulator",
-        "device": {
-          "type": "iPhone SE (3rd generation)"
-        }
-      }
-    },
-    "configurations": {
-      "ios": {
-        "device": "simulator",
-        "app": "ios"
-      },
-      "ios.debug": {
-        "device": "simulator",
-        "app": "ios.debug"
-      }
-    }
   }
 }
