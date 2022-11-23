@@ -12,10 +12,8 @@ import {
   withProjectBuildGradle,
   withAppBuildGradle,
 } from 'expo/config-plugins';
-import {
-  mergeContents,
-  removeGeneratedContents,
-} from '@expo/config-plugins/build/utils/generateCode';
+
+import { mergeContents, removeGeneratedContents } from './generateCode';
 
 let pkg: { name: string; version?: string } = {
   name: '@rnmapbox/maps',
