@@ -1,4 +1,4 @@
-import { ConfigPlugin, XcodeProject } from '@expo/config-plugins';
+import { ConfigPlugin, XcodeProject } from 'expo/config-plugins';
 declare type InstallerBlockName = 'pre' | 'post';
 export declare type MapboxPlugProps = {
     RNMapboxMapsImpl?: string;

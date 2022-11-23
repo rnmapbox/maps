@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports._addMapboxMavenRepo = exports.setExcludedArchitectures = exports.addMapboxInstallerBlock = exports.addInstallerBlock = exports.addConstantBlock = exports.applyCocoaPodsModifications = void 0;
 const fs_1 = require("fs");
 const path_1 = __importDefault(require("path"));
-const config_plugins_1 = require("@expo/config-plugins");
+const config_plugins_1 = require("expo/config-plugins");
 const generateCode_1 = require("@expo/config-plugins/build/utils/generateCode");
 let pkg = {
     name: '@rnmapbox/maps',
@@ -127,7 +127,7 @@ function setExcludedArchitectures(project) {
     for (const { buildSettings } of Object.values(configurations || {})) {
         // Guessing that this is the best way to emulate Xcode.
         // Using `project.addToBuildSettings` modifies too many targets.
-        if (typeof (buildSettings === null || buildSettings === void 0 ? void 0 : buildSettings.PRODUCT_NAME) !== 'undefined') {
+        if (typeof buildSettings?.PRODUCT_NAME !== 'undefined') {
             buildSettings['"EXCLUDED_ARCHS[sdk=iphonesimulator*]"'] = '"arm64"';
         }
     }

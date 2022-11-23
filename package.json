@@ -37,8 +37,8 @@
     "prepare": "bob build && husky install"
   },
   "peerDependencies": {
-    "expo": "*",
-    "mapbox-gl": "^ 2.9.0",
+    "expo": ">=47.0.0",
+    "mapbox-gl": "^2.9.0",
     "prop-types": ">=15.5.8",
     "react": ">=16.6.1",
     "react-native": ">=0.59.9"
@@ -83,7 +83,8 @@
     "eslint-plugin-ft-flow": "^2.0.1",
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-jest": "^27.0.1",
-    "expo-module-scripts": "^2.0.0",
+    "expo": "^47.0.0",
+    "expo-module-scripts": "3.0.3",
     "husky": "^8.0.1",
     "jest": "27.5.1",
     "jest-cli": "27.5.1",

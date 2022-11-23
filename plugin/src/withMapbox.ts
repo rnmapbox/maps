@@ -11,7 +11,7 @@ import {
   WarningAggregator,
   withProjectBuildGradle,
   withAppBuildGradle,
-} from '@expo/config-plugins';
+} from 'expo/config-plugins';
 import {
   mergeContents,
   removeGeneratedContents,
