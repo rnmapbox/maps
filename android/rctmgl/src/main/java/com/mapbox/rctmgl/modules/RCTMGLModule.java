@@ -11,6 +11,7 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.module.annotations.ReactModule;
 import com.mapbox.mapboxsdk.maps.TelemetryDefinition;
+import com.mapbox.android.telemetry.TelemetryEnabler;
 import com.mapbox.mapboxsdk.Mapbox;
 // import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.style.layers.Property;
@@ -338,7 +339,12 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
             @Override
             public void run() {
                 TelemetryDefinition telemetry = Mapbox.getTelemetry();
-                telemetry.setUserTelemetryRequestState(telemetryEnabled);
+                if (telemetry != null) {
+                    telemetry.setUserTelemetryRequestState(telemetryEnabled);
+                }
+                TelemetryEnabler.State state = telemetryEnabled ? TelemetryEnabler.State.ENABLED
+                        : TelemetryEnabler.State.DISABLED;
+                TelemetryEnabler.updateTelemetryState(state);
             }
         });
     }
