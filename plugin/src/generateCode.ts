@@ -1,4 +1,11 @@
 /**
+ * Taken from @expo/config-plugins
+ *
+ * Sourcecode: https://github.com/expo/expo/blob/59ece3cb1d5a7aaea42f4c7fe9d1f4f825b338f8/packages/@expo/config-plugins/src/utils/generateCode.ts
+ * LICENSE: https://github.com/expo/expo/blob/59ece3cb1d5a7aaea42f4c7fe9d1f4f825b338f8/packages/@expo/config-plugins/LICENSE
+ */
+
+/**
  * Get line indexes for the generated section of a file.
  *
  * @param src
