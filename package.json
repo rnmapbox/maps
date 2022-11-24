@@ -52,7 +52,7 @@
     }
   },
   "dependencies": {
-    "@mapbox/geo-viewport": ">= 0.4.0",
+    "@mapbox/geo-viewport": ">=0.4.0",
     "@turf/along": "6.5.0",
     "@turf/distance": "6.5.0",
     "@turf/helpers": "6.5.0",
@@ -84,7 +84,7 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-jest": "^27.0.1",
     "expo": "^47.0.0",
-    "expo-module-scripts": "3.0.3",
+    "expo-module-scripts": "^3.0.4",
     "husky": "^8.0.1",
     "jest": "27.5.1",
     "jest-cli": "27.5.1",
