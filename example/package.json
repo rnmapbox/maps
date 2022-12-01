@@ -48,7 +48,7 @@
     "expo": "46.0.0",
     "mapbox-gl": "^2.9.2",
     "react-dom": "^18.2.0",
-    "react-native-web": "0.18.7"
+    "react-native-web": "0.18.10"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
