@@ -19,17 +19,11 @@ describe('applyAndroidGradleModifications', () => {
     expect(result).toMatchSnapshot();
   });
 
-  it('throws on missing allprojects', () => {
-    expect(() => {
-      _addMapboxMavenRepo(`
-      repositories {
-        mavenLocal()
-        maven {
-            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-            url(new File(['node', '--print', "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim(), '../android'))
-        }
-      }`);
-    }).toThrow();
+  it(`adds the correct maven repo under allProjects to build.gradle with expo-camera`, () => {
+    const result = _addMapboxMavenRepo(
+      androidFixtures.expoTemplateBuildGradleWithExpoCamera,
+    );
+    expect(result).toMatchSnapshot();
   });
 });
 

@@ -13,7 +13,12 @@ import {
   withAppBuildGradle,
 } from 'expo/config-plugins';
 
-import { mergeContents, removeGeneratedContents } from './generateCode';
+import {
+  mergeContents,
+  createGeneratedHeaderComment,
+  removeGeneratedContents,
+  MergeResults,
+} from './generateCode';
 
 let pkg: { name: string; version?: string } = {
   name: '@rnmapbox/maps',
@@ -266,74 +271,66 @@ const addLibCppFilter = (appBuildGradle: string): string => {
   }).contents;
 };
 
-const addMapboxMavenRepo = (projectBuildGradle: string): string => {
-  if (projectBuildGradle.includes('api.mapbox.com/downloads/v2/releases/maven'))
-    return projectBuildGradle;
-
-  /*
-  Should look like this:
-  
-  allprojects {
-    configurations.all {
-        resolutionStrategy {
-            force \\"com.facebook.react:react-native:\\" + REACT_NATIVE_VERSION
-        }
+// Because we need the package to be added AFTER the React and Google maven packages, we create a new allprojects.
+// It's ok to have multiple allprojects.repositories, so we create a new one since it's cheaper than tokenizing
+// the existing block to find the correct place to insert our camera maven.
+const gradleMaven = `
+allprojects {
+  repositories {
+    maven {
+      url 'https://api.mapbox.com/downloads/v2/releases/maven'
+      authentication { basic(BasicAuthentication) }
+      credentials {
+        username = 'mapbox'
+        password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
+      }
     }
+  }
+}
+`;
 
-    repositories {
-        maven {
-          url 'https://api.mapbox.com/downloads/v2/releases/maven'
-          authentication { basic(BasicAuthentication) }
-          credentials {
-            username = 'mapbox'
-            password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
-          }
-        }
-        mavenLocal()
-        maven {
-            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-            url(new File(['node', '--print', \\"require.resolve('react-native/package.json')\\"].execute(null, rootDir).text.trim(), '../android'))
-        }
-        // ...
-  */
+// Fork of config-plugins mergeContents, but appends the contents to the end of the file.
+function appendContents({
+  src,
+  newSrc,
+  tag,
+  comment,
+}: {
+  src: string;
+  newSrc: string;
+  tag: string;
+  comment: string;
+}): MergeResults {
+  const header = createGeneratedHeaderComment(newSrc, tag, comment);
+  if (!src.includes(header)) {
+    // Ensure the old generated contents are removed.
+    const sanitizedTarget = removeGeneratedContents(src, tag);
+    const contentsToAdd = [
+      // @something
+      header,
+      // contents
+      newSrc,
+      // @end
+      `${comment} @generated end ${tag}`,
+    ].join('\n');
 
-  /*
-    Since mergeContents checks the anchor for each line, we can't do a "correct"
-    RegExp for allprojects...repositories.
-    Instead, we check for the first `allprojects`, and then count the # of lines to the next `repositories` block.
-  */
-  let offset = 0;
-  const anchor = new RegExp(`^\\s*allprojects\\s*{`, 'gm');
-  // hack to count offset
-  const allProjectSplit = projectBuildGradle.split(anchor);
-  if (allProjectSplit.length <= 1)
-    throw new Error('Could not find `allprojects` block');
+    return {
+      contents: sanitizedTarget ?? src + contentsToAdd,
+      didMerge: true,
+      didClear: !!sanitizedTarget,
+    };
+  }
+  return { contents: src, didClear: false, didMerge: false };
+}
 
-  const allProjectLines =
-    allProjectSplit[allProjectSplit.length - 1].split('\n');
-  const allProjectReposOffset = allProjectLines.findIndex((line) =>
-    line.includes('repositories'),
-  );
-  anchor.lastIndex = 0;
-  offset = allProjectReposOffset + 1;
-
-  return mergeContents({
-    tag: `@rnmapbox/maps-v2-maven`,
-    src: projectBuildGradle,
-    newSrc: `
-        maven {
-          url 'https://api.mapbox.com/downloads/v2/releases/maven'
-          authentication { basic(BasicAuthentication) }
-          credentials {
-            username = 'mapbox'
-            password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
-          }
-        }\n`,
-    anchor,
-    offset,
+export function addMapboxMavenRepo(src: string): string {
+  return appendContents({
+    tag: '@rnmapbox/maps-v2-maven',
+    src,
+    newSrc: gradleMaven,
     comment: '//',
   }).contents;
-};
+}
 
 const withAndroidAppGradle: ConfigPlugin<MapboxPlugProps> = (config) => {
   return withAppBuildGradle(config, ({ modResults, ...config }) => {
