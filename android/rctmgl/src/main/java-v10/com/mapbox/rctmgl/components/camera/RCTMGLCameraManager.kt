@@ -49,7 +49,7 @@ class RCTMGLCameraManager(private val mContext: ReactApplicationContext) :
         throw AssertionError("Unused code")
     }
 
-    @ReactProp(name = "followZoomLevel")
+    @ReactProp(name = "zoomLevel")
     fun setZoomLevel(camera: RCTMGLCamera, zoomLevel: Double) {
         camera.setZoomLevel(zoomLevel)
     }

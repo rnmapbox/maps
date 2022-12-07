@@ -77,15 +77,7 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
     private var mMaxBounds: LatLngBounds? = null
     private var mFollowUserLocation = false
     private var mFollowUserMode: String? = null
-    private val mLocationChangeListener: OnUserLocationChange = object : OnUserLocationChange {
-        override fun onLocationChange(nextLocation: Location?) {
-            if (mapboxMap == null || mLocationComponentManager == null || !mLocationComponentManager!!.hasLocationComponent() || !mFollowUserLocation) {
-                return
-            }
-            mUserLocation.currentLocation = nextLocation
-            sendUserLocationUpdateEvent(toPoint(nextLocation!!))
-        }
-    }
+
     private val mLocationBearingChangedListener = OnIndicatorBearingChangedListener { v ->
         if (mFollowUserLocation) {
             mMapView!!.getMapboxMap().setCamera(CameraOptions.Builder().bearing(v).build())
@@ -95,7 +87,6 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         if (mFollowUserLocation) {
             mMapView!!.getMapboxMap().setCamera(CameraOptions.Builder().center(point).build())
             mMapView!!.gestures.focalPoint = mMapView!!.getMapboxMap().pixelForCoordinate(point)
-            sendUserLocationUpdateEvent(point)
         }
     }
     private val mCameraCallback: Animator.AnimatorListener = object : Animator.AnimatorListener {
@@ -122,10 +113,7 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         setInitialCamera()
         updateMaxBounds()
         mCameraStop?.let { updateCamera(it) }
-        if (mFollowUserLocation) {
-            // updateFollowLocation(mFollowUserLocation);
-            enableLocation()
-        }
+        _updateViewportState();
     }
 
     override fun removeFromMap(mapView: RCTMGLMapView) {
@@ -221,18 +209,6 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
             return direction
         }
 
-    private fun sendUserLocationUpdateEvent(point: Point?) {
-        if (point == null) {
-            return
-        }
-        val event: IEvent = MapChangeEvent(
-            this, EventTypes.USER_LOCATION_UPDATED, makeLocationChangePayload(
-                toLocation(point)
-            )
-        )
-        mManager.handleEvent(event)
-    }
-
     private fun hasSetCenterCoordinate(): Boolean {
         val state = mapboxMap!!.cameraState
         val center = state.center
@@ -244,78 +220,11 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         mLocationManager = getInstance(mContext)
     }
 
-    private fun enableLocation() {
-        if (!PermissionsManager.areLocationPermissionsGranted(mContext)) {
-            return
-        }
-        if (!mLocationManager!!.isActive()) {
-            mLocationManager.enable()
-        }
-        mMapView!!.getMapboxMap().getStyle {
-            enableLocationComponent(it)
-        }
-    }
-
-    private fun enableLocationComponent(style: Style) {
-        updateUserLocation(false)
-        updateLocationLayer(style)
-        val lastKnownLocation = mLocationManager!!.lastKnownLocation
-        mLocationManager.addLocationListener(mLocationChangeListener)
-        if (lastKnownLocation != null) {
-            mLocationChangeListener.onLocationChange(lastKnownLocation)
-            postDelayed({ mMapView!!.sendRegionDidChangeEvent() }, 200)
-        }
-    }
-
     private fun updateLocationLayer(style: Style) {
         if (mLocationComponentManager == null) {
             mLocationComponentManager = mMapView!!.locationComponentManager
         }
         mLocationComponentManager!!.update(style)
-        if (mFollowUserLocation) {
-            mLocationComponentManager!!.setCameraMode(
-                UserTrackingMode.getCameraMode(
-                    mUserTrackingMode
-                )
-            )
-        }
-        mLocationComponentManager!!.setFollowUserLocation(mFollowUserLocation)
-        if (mFollowUserLocation) {
-            mLocationComponentManager!!.setCameraMode(
-                UserTrackingMode.getCameraMode(
-                    mUserTrackingMode
-                )
-            )
-
-            /*
-            mLocationComponentManager.addOnCameraTrackingChangedListener(new OnCameraTrackingChangedListener() {
-                    @Override public void onCameraTrackingChanged(int currentMode) {
-                        int userTrackingMode = UserTrackingMode.NONE;
-                        switch (currentMode) {
-                            case CameraMode.NONE:
-                                userTrackingMode = UserTrackingMode.NONE;
-                                break;
-                            case CameraMode.TRACKING:
-                                userTrackingMode = UserTrackingMode.FOLLOW;
-                                break;
-                            case CameraMode.TRACKING_COMPASS:
-                                userTrackingMode = UserTrackingMode.FollowWithHeading;
-                                break;
-                            case CameraMode.TRACKING_GPS:
-                                userTrackingMode = UserTrackingMode.FollowWithCourse;
-                                break;
-                            default:
-                                userTrackingMode = UserTrackingMode.NONE;
-                        }
-                        updateUserTrackingMode(userTrackingMode);
-                    }
-                    @Override public void onCameraTrackingDismissed() {
-                    }
-            });
-             */
-        } else {
-            mLocationComponentManager!!.setCameraMode(com.mapbox.rctmgl.components.location.CameraMode.NONE)
-        }
     }
 
     fun setMinZoomLevel(zoomLevel: Double?) {
@@ -383,16 +292,16 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
             val viewport = map.viewport;
             if (mFollowUserLocation == false) {
                 viewport.idle()
-                mLocationManager?.disable()
+                mLocationComponentManager?.setFollowLocation(false)
                 return;
             }
 
+            mLocationComponentManager?.setFollowLocation(true)
             mLocationManager?.let {
-                val provider = it.provider
 
+                val provider = it.provider
                 map.location.setLocationProvider(provider);
                 map.location2.setLocationProvider(provider);
-                it.enable();
             }
 
             val location = map.location2
