@@ -35,7 +35,7 @@ open class RCTMGLMapView : MapView {
   }()
 
   lazy var calloutAnnotationManager : MapboxMaps.PointAnnotationManager = {
-    return annotations.makePointAnnotationManager(id: "rctmlg-callout")
+    return annotations.makePointAnnotationManager(id: "rctmgl-mapview-callouts")
   }()
   
   var mapView : MapView {
@@ -872,7 +872,7 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
   weak var mapView : MapView? = nil
   
   init(annotations: AnnotationOrchestrator, mapView: MapView) {
-    manager = annotations.makePointAnnotationManager()
+    manager = annotations.makePointAnnotationManager(id: "rctmgl-mapview-point-annotations")
     manager.delegate = self
     self.mapView = mapView
   }
