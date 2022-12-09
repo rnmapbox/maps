@@ -9,27 +9,23 @@ import com.mapbox.maps.Style
 import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 
-/*
-import com.mapbox.mapboxsdk.location.modes.RenderMode;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.mapbox.mapboxsdk.maps.Style;
- */   class RCTMGLNativeUserLocation(context: Context?) : AbstractMapFeature(context), OnMapReadyCallback, Style.OnStyleLoaded {
+class RCTMGLNativeUserLocation(context: Context?) : AbstractMapFeature(context), OnMapReadyCallback, Style.OnStyleLoaded {
     private var mEnabled = true
     private var mMap: MapboxMap? = null
 
-    @RenderMode.Mode
-    private var mRenderMode = RenderMode.COMPASS
+    private var mRenderMode : RenderMode = RenderMode.COMPASS
     override fun addToMap(mapView: RCTMGLMapView) {
         super.addToMap(mapView)
         mEnabled = true
         mapView.getMapboxMap()
         mapView.getMapAsync(this)
         setRenderMode(mRenderMode)
+        mMapView?.locationComponentManager?.showNativeUserLocation(true)
     }
 
     override fun removeFromMap(mapView: RCTMGLMapView) {
         mEnabled = false
+        mMapView?.locationComponentManager?.showNativeUserLocation(false)
         mMap?.getStyle(this)
         super.removeFromMap(mapView)
     }
@@ -48,10 +44,10 @@ import com.mapbox.mapboxsdk.maps.Style;
         }
 
         mMapView?.locationComponentManager?.update(style)
-        mMapView?.locationComponentManager?.showUserLocation(mEnabled)
+        mMapView?.locationComponentManager?.showNativeUserLocation(mEnabled)
     }
 
-    fun setRenderMode(@RenderMode.Mode renderMode: Int) {
+    fun setRenderMode(renderMode: RenderMode) {
         mRenderMode = renderMode
         mMapView?.locationComponentManager?.setRenderMode(renderMode)
     }

@@ -232,8 +232,6 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
       } catch {
         Logger.log(level: .error, message: "parsing filters failed for layer \(optional: id): \(error.localizedDescription)")
       }
-    } else {
-      layer.filter = nil
     }
     
     if let minZoom = minZoomLevel {
