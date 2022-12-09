@@ -40,6 +40,7 @@ import Style from './components/Style';
 import Logger from './utils/Logger';
 import { deprecatedClass } from './utils/deprecation';
 import { requestAndroidLocationPermissions } from './requestAndroidLocationPermissions';
+import { getAnnotationsLayerID } from './utils/getAnnotationsLayerID';
 
 const MapboxGL = { ...NativeModules.MGLModule };
 
@@ -107,6 +108,7 @@ MapboxGL.Animated.ExtractCoordinateFromArray =
 
 // utils
 MapboxGL.Logger = Logger;
+MapboxGL.getAnnotationsLayerID = getAnnotationsLayerID;
 
 const { LineJoin } = MapboxGL;
 
@@ -150,6 +152,7 @@ export {
   Animated,
   LineJoin,
   Logger,
+  getAnnotationsLayerID,
   Style,
 };
 
