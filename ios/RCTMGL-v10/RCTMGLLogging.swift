@@ -73,12 +73,20 @@ class Logger {
   }
 }
 
+func errorMessage(_ error: Error) -> String {
+  if case DecodingError.typeMismatch(let type, let context) = error {
+    return "\(error.localizedDescription) \(context.codingPath) \(context.debugDescription)"
+  } else {
+    return "\(error.localizedDescription)"
+  }
+}
+
 func logged<T>(_ msg: String, info: (() -> String)? = nil, level: Logger.LogLevel = .error, rejecter: RCTPromiseRejectBlock? = nil, fn : () throws -> T) -> T? {
   do {
     return try fn()
   } catch {
-    Logger.log(level:level, message: "\(msg) \(info?() ?? "") \(error.localizedDescription)")
-    rejecter?(msg, "\(info?() ?? "") \(error.localizedDescription)", error)
+    Logger.log(level:level, message: "\(msg) \(info?() ?? "") \(errorMessage(error))")
+    rejecter?(msg, "\(info?() ?? "") \(errorMessage(error))", error)
     return nil
   }
 }
