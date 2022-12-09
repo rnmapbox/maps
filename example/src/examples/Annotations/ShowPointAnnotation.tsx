@@ -1,7 +1,16 @@
 import React, { FC, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import { Callout, Camera, MapView, PointAnnotation } from '@rnmapbox/maps';
+import {
+  Callout,
+  Camera,
+  FillLayer,
+  MapView,
+  PointAnnotation,
+  ShapeSource,
+  getAnnotationsLayerID,
+} from '@rnmapbox/maps';
 import { Feature, Point, Position } from 'geojson';
+import { Button } from '@rneui/base';
 
 import sheet from '../../styles/sheet';
 import Page from '../common/Page';
@@ -34,7 +43,7 @@ const AnnotationWithRemoteImage = ({
   coordinate,
   title,
 }: AnnotationWithRemoteImageProps) => {
-  const pointAnnotation = useRef<PointAnnotation>(null);
+  const pointAnnotation = useRef<{ refresh: () => void }>(null);
 
   return (
     <PointAnnotation
@@ -79,6 +88,9 @@ const AnnotationWithRemoteImage = ({
 
 const ShowPointAnnotation: FC = (props) => {
   const [coordinates, setCoordinates] = useState([[-73.99155, 40.73581]]);
+  const [layerRendering, setLayerRendering] = useState<'below' | 'above'>(
+    'below',
+  );
 
   const renderAnnotations = () => {
     const items = [];
@@ -122,8 +134,6 @@ const ShowPointAnnotation: FC = (props) => {
     <Page {...props}>
       <MapView
         onPress={(feature) => {
-          console.log('ADD NEW ANNOTATION');
-
           setCoordinates((prevState) => [
             ...prevState,
             (feature.geometry as Point).coordinates,
@@ -136,10 +146,50 @@ const ShowPointAnnotation: FC = (props) => {
         />
 
         {renderAnnotations()}
+
+        <ShapeSource
+          id="polygon"
+          shape={{
+            coordinates: [
+              [
+                [-73.98813787946587, 40.73199795542578],
+                [-73.98313197853199, 40.7388685230859],
+                [-73.98962548210226, 40.74155214586244],
+                [-73.9945841575561, 40.73468185536569],
+                [-73.98813787946587, 40.73199795542578],
+              ],
+            ],
+            type: 'Polygon',
+          }}
+        >
+          <FillLayer
+            id="polygon"
+            {...{
+              [layerRendering + 'LayerID']:
+                getAnnotationsLayerID('PointAnnotations'),
+            }}
+            style={{
+              fillColor: 'rgba(255, 0, 0, 0.5)',
+              fillOutlineColor: 'red',
+            }}
+          />
+        </ShapeSource>
       </MapView>
 
       <Bubble>
-        <Text>Click to add a point annotation</Text>
+        <Text style={{ marginBottom: 10 }}>
+          Click to add a point annotation
+        </Text>
+        <Button
+          onPress={() =>
+            setLayerRendering(
+              (prevState) =>
+                (({ above: 'below', below: 'above' } as const)[prevState]),
+            )
+          }
+        >
+          Render Polygon {{ above: 'below', below: 'above' }[layerRendering]}
+        </Button>
       </Bubble>
     </Page>
   );
