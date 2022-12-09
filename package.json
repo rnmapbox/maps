@@ -120,7 +120,7 @@
     "*.{js,jsx,ts,tsx}": "eslint --fix"
   },
   "module": "lib/module/index.js",
-  "types": "lib/typescript/javascript/index.d.ts",
+  "types": "index.d.ts",
   "files": [
     "javascript",
     "lib",
