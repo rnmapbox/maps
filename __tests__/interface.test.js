@@ -79,6 +79,7 @@ describe('Public Interface', () => {
       'setTelemetryEnabled',
       'setConnected',
       'requestAndroidLocationPermissions',
+      'getAnnotationsLayerID',
 
       // animated
       'Animated',
