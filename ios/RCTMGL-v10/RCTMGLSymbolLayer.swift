@@ -6,7 +6,7 @@ class RCTMGLSymbolLayer: RCTMGLVectorLayer {
   typealias LayerType = SymbolLayer
 
   override func makeLayer(style: Style) throws -> Layer {
-    let vectorSource : VectorSource = try self.layerWithSourceID(in: style)
+    let _ : VectorSource = try self.layerWithSourceID(in: style)
     var layer = LayerType(id: self.id!)
     layer.sourceLayer = self.sourceLayerID
     layer.source = sourceID

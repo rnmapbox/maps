@@ -47,14 +47,15 @@ class RCTMGLAtmosphere : RCTMGLSingletonLayer, RCTMGLMapComponent, RCTMGLSourceC
   }
   
   override func addStyles() {
-    if let style : Style = self.style {
+    if let style : Style = self.style,
+       let reactStyle = self.reactStyle {
       let styler = RCTMGLStyle(style: style)
       styler.bridge = self.bridge
       
       if var atmosphere = atmosphere {
         styler.atmosphereLayer(
           layer: &atmosphere,
-          reactStyle: reactStyle ?? [:],
+          reactStyle: reactStyle,
           applyUpdater: { (updater) in fatalError("Atmosphere: TODO - implement apply updater")},
           isValid: { fatalError("Atmosphere: TODO - no isValid") }
         )

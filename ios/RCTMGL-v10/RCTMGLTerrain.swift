@@ -64,14 +64,15 @@ class RCTMGLTerrain : RCTMGLSingletonLayer, RCTMGLMapComponent, RCTMGLSourceCons
   }
   
   override func addStyles() {
-    if let style : Style = self.style {
+    if let style : Style = self.style,
+       let reactStyle = reactStyle {
       let styler = RCTMGLStyle(style: style)
       styler.bridge = self.bridge
       
       if var terrain = terrain {
         styler.terrainLayer(
           layer: &terrain,
-          reactStyle: reactStyle ?? [:],
+          reactStyle: reactStyle,
           applyUpdater: { (updater) in fatalError("Terrain: TODO - implement apply updater")},
           isValid: { fatalError("Terrain: TODO - no isValid") }
         )

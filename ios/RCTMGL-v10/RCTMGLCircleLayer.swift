@@ -26,11 +26,11 @@ class RCTMGLCircleLayer: RCTMGLVectorLayer {
   }
 
   override func addStyles() {
-    if let style : Style = self.style {
+    if let style : Style = self.style,
+       let reactStyle = self.reactStyle {
       let styler =  RCTMGLStyle(style: self.style!)
       styler.bridge = self.bridge
-      if var styleLayer = self.styleLayer as? LayerType,
-         let reactStyle = self.reactStyle {
+      if var styleLayer = self.styleLayer as? LayerType {
         styler.circleLayer(
           layer: &styleLayer,
           reactStyle: reactStyle,
