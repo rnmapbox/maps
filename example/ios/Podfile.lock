@@ -74,15 +74,15 @@ PODS:
   - fmt (6.2.1)
   - glog (0.3.5)
   - libevent (2.1.12)
-  - MapboxCommon (23.1.0)
-  - MapboxCoreMaps (10.9.1):
-    - MapboxCommon (~> 23.1)
-  - MapboxMaps (10.9.1):
-    - MapboxCommon (= 23.1.0)
-    - MapboxCoreMaps (= 10.9.1)
-    - MapboxMobileEvents (= 1.0.8)
+  - MapboxCommon (23.2.1)
+  - MapboxCoreMaps (10.10.0):
+    - MapboxCommon (~> 23.2)
+  - MapboxMaps (10.10.0):
+    - MapboxCommon (= 23.2.1)
+    - MapboxCoreMaps (= 10.10.0)
+    - MapboxMobileEvents (= 1.0.10)
     - Turf (~> 2.0)
-  - MapboxMobileEvents (1.0.8)
+  - MapboxMobileEvents (1.0.10)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
@@ -367,14 +367,14 @@ PODS:
     - React-perflogger (= 0.69.7)
   - RNCAsyncStorage (1.17.11):
     - React-Core
-  - rnmapbox-maps (10.0.0-beta.58):
-    - MapboxMaps (~> 10.9.1)
+  - rnmapbox-maps (10.0.0-beta.59):
+    - MapboxMaps (~> 10.10.0)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.0.0-beta.58)
+    - rnmapbox-maps/DynamicLibrary (= 10.0.0-beta.59)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.0.0-beta.58):
-    - MapboxMaps (~> 10.9.1)
+  - rnmapbox-maps/DynamicLibrary (10.0.0-beta.59):
+    - MapboxMaps (~> 10.10.0)
     - React
     - React-Core
     - Turf
@@ -574,10 +574,10 @@ SPEC CHECKSUMS:
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 5337263514dd6f09803962437687240c5dc39aa4
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  MapboxCommon: bfffb68226f650df065cf24e307576267ebc75e8
-  MapboxCoreMaps: c74e3dd1d7d2b8c0ca5503d8c3e8ef79a8feccd5
-  MapboxMaps: f5e3858e71a923f0e2fc168a93397cfd98341dc5
-  MapboxMobileEvents: febdd92835daa258ca1c1faad0821c0b3394ef40
+  MapboxCommon: 235bb9c27a8985d982e17f216795b1f7ab526782
+  MapboxCoreMaps: 4075a9e415b9b3ab6229d09623fef5f791826a5b
+  MapboxMaps: a5ad1977764731f97ba04bb7815b6b367e56039c
+  MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
   RCTRequired: 54bff6aa61efd9598ab59d2a823c382b4fe13d27
@@ -607,7 +607,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 65cd2782a57e1d59a68aa5d504edf94278578e41
   ReactCommon: 1e783348b9aa73ae68236271df972ba898560a95
   RNCAsyncStorage: 8616bd5a58af409453ea4e1b246521bb76578d60
-  rnmapbox-maps: e756b5660cca186975efa6406e28485f836c1baf
+  rnmapbox-maps: a5a755abf3edd8a5a0e1e8f02e44dcf9c80596d4
   RNScreens: 0df01424e9e0ed7827200d6ed1087ddd06c493f9
   RNSVG: ecd661f380a07ba690c9c5929c475a44f432d674
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
