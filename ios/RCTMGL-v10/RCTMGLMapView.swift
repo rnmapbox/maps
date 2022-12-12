@@ -284,6 +284,8 @@ open class RCTMGLMapView : MapView {
         }
       }
     }
+    let event = RCTMGLEvent(type:.willStartLoadingMap, payload: nil);
+    self.fireEvent(event: event, callback: self.reactOnMapChange)
   }
 
   private func getOrnamentOptionsFromPosition(_ position: [String: NSNumber]) -> (position: OrnamentPosition, margins: CGPoint)? {

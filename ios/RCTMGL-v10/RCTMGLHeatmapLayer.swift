@@ -5,7 +5,7 @@ class RCTMGLHeatmapLayer: RCTMGLVectorLayer {
   typealias LayerType = HeatmapLayer
 
   override func makeLayer(style: Style) throws -> Layer {
-    let vectorSource : VectorSource = try self.layerWithSourceID(in: style)
+    let _ : VectorSource = try self.layerWithSourceID(in: style)
     var layer: Layer = LayerType(id: self.id!)
     
     setOptions(&layer)
@@ -26,14 +26,15 @@ class RCTMGLHeatmapLayer: RCTMGLVectorLayer {
   }
 
   override func addStyles() {
-    if let style : Style = self.style {
-      let styler =  RCTMGLStyle(style: self.style!)
+    if let style : Style = self.style,
+       let reactStyle = reactStyle {
+      let styler =  RCTMGLStyle(style: style)
       styler.bridge = self.bridge
       
       if var styleLayer = self.styleLayer as? HeatmapLayer {
         styler.heatmapLayer(
           layer: &styleLayer,
-          reactStyle: reactStyle!,
+          reactStyle: reactStyle,
           applyUpdater: { (updater) in logged("RCTMGLHeatmapLayer.updateLayer") {
             try style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout HeatmapLayer) in updater(&layer) }
           }},

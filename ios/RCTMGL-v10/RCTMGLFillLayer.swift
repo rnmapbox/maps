@@ -5,7 +5,7 @@ class RCTMGLFillLayer: RCTMGLVectorLayer {
   typealias LayerType = FillLayer
 
   override func makeLayer(style: Style) throws -> Layer {
-    let vectorSource : VectorSource = try self.layerWithSourceID(in: style)
+    let _ : VectorSource = try self.layerWithSourceID(in: style)
     var layer: Layer = FillLayer(id: self.id!)
     
     setOptions(&layer)
@@ -26,14 +26,15 @@ class RCTMGLFillLayer: RCTMGLVectorLayer {
   }
 
   override func addStyles() {
-    if let style : Style = self.style {
+    if let style : Style = self.style,
+       let reactStyle = reactStyle {
       let styler = RCTMGLStyle(style: self.style!)
       styler.bridge = self.bridge
       
       if var styleLayer = self.styleLayer as? FillLayer {
         styler.fillLayer(
           layer: &styleLayer,
-          reactStyle: reactStyle ?? [:],
+          reactStyle: reactStyle,
           applyUpdater: { (updater) in logged("RCTMGLFillLayer.updateLayer") {
             try style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout FillLayer) in updater(&layer) }
           }},

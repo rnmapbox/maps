@@ -5,7 +5,7 @@ class RCTMGLFillExtrusionLayer: RCTMGLVectorLayer {
   typealias LayerType = FillExtrusionLayer
 
   override func makeLayer(style: Style) throws -> Layer {
-    let vectorSource : VectorSource = try self.layerWithSourceID(in: style)
+    let _ : VectorSource = try self.layerWithSourceID(in: style)
     var layer = LayerType(id: self.id!)
     layer.sourceLayer = self.sourceLayerID
     layer.source = sourceID
@@ -25,11 +25,11 @@ class RCTMGLFillExtrusionLayer: RCTMGLVectorLayer {
   }
 
   override func addStyles() {
-    if let style : Style = self.style {
+    if let style : Style = self.style,
+       let reactStyle = self.reactStyle {
       let styler =  RCTMGLStyle(style: self.style!)
       styler.bridge = self.bridge
-      if var styleLayer = self.styleLayer as? LayerType,
-         let reactStyle = self.reactStyle  {
+      if var styleLayer = self.styleLayer as? LayerType {
         styler.fillExtrusionLayer(
           layer: &styleLayer,
           reactStyle: reactStyle,
