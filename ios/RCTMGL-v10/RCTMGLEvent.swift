@@ -31,6 +31,7 @@ class RCTMGLEvent : NSObject, RCTMGLEventProtocol {
       case didFinishRenderingFully
       case didFinishRendering
       case didFinishLoadingStyle
+      case willStartLoadingMap
       case offlineProgress
       case offlineError
       case offlineTileLimit

@@ -69,5 +69,13 @@ allprojects {
 }
 `;
 
+export const expoTemplateBuildGradleWithExpoCamera = `
+${expoTemplateBuildGradle}
+// @generated begin expo-camera-import - expo prebuild (DO NOT MODIFY) sync-f244f4f3d8bf7229102e8f992b525b8602c74770
+def expoCameraMavenPath = new File(["node", "--print", "require.resolve('expo-camera/package.json')"].execute(null, rootDir).text.trim(), "../android/maven")
+allprojects { repositories { maven { url(expoCameraMavenPath) } } }
+// @generated end expo-camera-import
+`;
+
 export const expoTemplateBuildGradleWithoutMavenLocal =
   expoTemplateBuildGradle.replace(`        mavenLocal()\n`, ``);
