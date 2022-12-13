@@ -17,6 +17,8 @@ open class RCTMGLMapView : MapView {
   var styleLoaded: Bool = false
   var styleLoadWaiters : [(MapboxMap)->Void] = []
   var onStyleLoadedComponents: [RCTMGLMapComponent] = []
+  
+  var componentsToRefreshOnStyleChange: [RCTMGLMapComponent] = []
 
   weak var reactCamera : RCTMGLCamera?
   var images : [RCTMGLImages] = []
@@ -46,6 +48,7 @@ open class RCTMGLMapView : MapView {
     if let mapComponent = subview as? RCTMGLMapComponent {
       let style = mapView.mapboxMap.style
       if mapComponent.waitForStyleLoad() {
+        componentsToRefreshOnStyleChange.append(mapComponent)
         if (self.styleLoaded) {
           mapComponent.addToMap(self, style: style)
         } else {
@@ -66,6 +69,7 @@ open class RCTMGLMapView : MapView {
     if let mapComponent = subview as? RCTMGLMapComponent {
       if mapComponent.waitForStyleLoad() {
         onStyleLoadedComponents.removeAll { $0 === mapComponent }
+        componentsToRefreshOnStyleChange.removeAll { $0 === mapComponent }
       }
       mapComponent.removeFromMap(self)
     } else {
@@ -273,7 +277,21 @@ open class RCTMGLMapView : MapView {
     self.mapView.gestures.options.pitchEnabled = value
   }
   
+  func refreshComponentsBeforeStyleChange() {
+    componentsToRefreshOnStyleChange.forEach {
+      $0.removeFromMap(self)
+    }
+  }
+  
+  func refreshComponentsAfterStyleChange(style: Style) {
+    componentsToRefreshOnStyleChange.forEach {
+      $0.addToMap(self, style: style)
+    }
+  }
+  
   @objc func setReactStyleURL(_ value: String?) {
+    var initialLoad = !self.styleLoaded
+    if !initialLoad { refreshComponentsBeforeStyleChange() }
     self.styleLoaded = false
     if let value = value {
       if let _ = URL(string: value) {
@@ -281,6 +299,11 @@ open class RCTMGLMapView : MapView {
       } else {
         if RCTJSONParse(value, nil) != nil {
           mapView.mapboxMap.loadStyleJSON(value)
+        }
+      }
+      if !initialLoad {
+        self.onNext(event: .styleLoaded) {_,_ in
+          self.refreshComponentsAfterStyleChange(style: self.mapboxMap.style)
         }
       }
     }
