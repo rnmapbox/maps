@@ -29,6 +29,7 @@ import com.mapbox.maps.extension.style.layers.properties.generated.Visibility
 import com.mapbox.maps.extension.style.projection.generated.Projection
 import com.mapbox.maps.extension.style.projection.generated.setProjection
 import com.mapbox.maps.plugin.annotation.Annotation
+import com.mapbox.maps.plugin.annotation.AnnotationConfig
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.*
 import com.mapbox.maps.plugin.attribution.attribution
@@ -125,7 +126,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 gesturesPlugin.removeOnMapClickListener(_this)
                 gesturesPlugin.removeOnMapLongClickListener(_this)
 
-                mPointAnnotationManager = annotations.createPointAnnotationManager()
+                mPointAnnotationManager = annotations.createPointAnnotationManager(AnnotationConfig(layerId = "rctmgl-mapview-annotations"))
                 mPointAnnotationManager?.addClickListener(OnPointAnnotationClickListener { pointAnnotation ->
                         onMarkerClick(pointAnnotation)
                         false

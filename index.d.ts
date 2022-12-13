@@ -26,6 +26,7 @@ import type {
   SymbolLayerStyleProps,
   LineLayerStyleProps,
 } from './javascript/utils/MapboxStyles';
+import { getAnnotationsLayerID as _getAnnotationsLayerID } from './javascript/utils/getAnnotationsLayerID';
 import {
   Camera as _Camera,
   CameraStop as _CameraStop,
@@ -143,6 +144,9 @@ declare namespace MapboxGL {
   function setConnected(connected: boolean): void;
 
   const requestAndroidLocationPermissions = _requestAndroidLocationPermissions;
+
+  const getAnnotationsLayerID = _getAnnotationsLayerID;
+  type getAnnotationsLayerID = _getAnnotationsLayerID;
 
   const Camera = _Camera;
   type Camera = _Camera;
@@ -944,6 +948,7 @@ export import RasterLayer = MapboxGL.RasterLayer;
 export import BackgroundLayer = MapboxGL.BackgroundLayer;
 export import MarkerView = MapboxGL.MarkerView;
 export import PointAnnotation = MapboxGL.PointAnnotation;
+export import Callout = MapboxGL.Callout;
 
 export import MapboxGLEvent = MapboxGL.MapboxGLEvent;
 export import UserTrackingMode = MapboxGL.UserTrackingMode;
@@ -954,5 +959,7 @@ export import AnimatedMapPoint = MapboxGL.AnimatedPoint;
 export import AnimatedShape = MapboxGL.AnimatedShape;
 
 export const { offlineManager } = MapboxGL;
+
+export const { getAnnotationsLayerID } = MapboxGL;
 
 export default MapboxGL;
