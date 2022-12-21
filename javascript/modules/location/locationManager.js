@@ -15,10 +15,15 @@ class LocationManager {
     this.onUpdate = this.onUpdate.bind(this);
     this.subscription = null;
 
+    this._listensToLocationInBackground = false;
+
     this._appStateListener = AppState.addEventListener(
       'change',
       this._handleAppStateChange.bind(this),
     );
+
+    this.setListensToLocationInBackground =
+      this.setListensToLocationInBackground.bind(this);
   }
 
   async getLastKnownLocation() {
@@ -33,7 +38,7 @@ class LocationManager {
         lastKnownLocation =
           await MapboxGLLocationManager.getLastKnownLocation();
       } catch (error) {
-        console.log('locationManager Error: ', error);
+        console.warn('locationManager Error: ', error);
       }
 
       if (!this._lastKnownLocation && lastKnownLocation) {
@@ -70,10 +75,12 @@ class LocationManager {
   }
 
   _handleAppStateChange(appState) {
-    if (appState === 'background') {
-      this.stop();
-    } else if (appState === 'active') {
-      this.start();
+    if (!this._listensToLocationInBackground) {
+      if (appState === 'background') {
+        this.stop();
+      } else if (appState === 'active') {
+        this.start();
+      }
     }
   }
 
@@ -117,7 +124,10 @@ class LocationManager {
   }
 
   setListensToLocationInBackground(listensToLocationInBackground) {
-    MapboxGLLocationManager.setListensToLocationInBackground(listensToLocationInBackground);
+    MapboxGLLocationManager.setListensToLocationInBackground(
+      listensToLocationInBackground,
+    );
+    this._listensToLocationInBackground = listensToLocationInBackground;
   }
 
   onUpdate(location) {

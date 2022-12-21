@@ -289,7 +289,6 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
     hasListener = false
   }
   
-  
   func locationManager(_ locationManager: RCTMGLLocationManager, didUpdateLocation location: RCTMGLLocation) {
     guard hasListener else {
       return
@@ -301,5 +300,4 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
 
     self.sendEvent(withName: RCT_MAPBOX_USER_LOCATION_UPDATE, body: location.toJSON())
   }
-
 }
