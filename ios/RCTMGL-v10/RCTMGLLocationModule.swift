@@ -52,6 +52,7 @@ class RCTMGLLocationManager : LocationProviderDelegate {
   
   var lastKnownLocation : CLLocation?
   var lastKnownHeading : CLHeading?
+  var shouldRequestAlwaysAuthorization: Bool?
   
   weak var delegate: RCTMGLLocationManagerDelegate?
   weak var locationProviderDelage: LocationProviderDelegate?
@@ -67,8 +68,14 @@ class RCTMGLLocationManager : LocationProviderDelegate {
     provider.locationProviderOptions = options
   }
   
+  func setListensToLocationInBackground(_ listensToLocationInBackground: Bool) {
+    shouldRequestAlwaysAuthorization = listensToLocationInBackground;
+  }
+
   func start() {
-    provider.requestAlwaysAuthorization()
+    if shouldRequestAlwaysAuthorization == true {
+      provider.requestAlwaysAuthorization()
+    }
     provider.requestWhenInUseAuthorization()
     provider.setDelegate(self)
     provider.startUpdatingHeading()
@@ -266,6 +273,10 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
     locationManager.setDistanceFilter(minDisplacement)
   }
   
+  @objc func setListensToLocationInBackground(_ listensToLocationInBackground: Bool) {
+    locationManager.setListensToLocationInBackground(listensToLocationInBackground);
+  }
+
   @objc
   override func startObserving() {
     super.startObserving()
