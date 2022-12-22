@@ -392,7 +392,7 @@
             "zoom"
           ]
         },
-        "transition": true
+        "transition": false
       },
       {
         "name": "backgroundOpacity",
@@ -1363,7 +1363,7 @@
             "feature"
           ]
         },
-        "transition": true
+        "transition": false
       },
       {
         "name": "fillExtrusionHeight",
@@ -1686,7 +1686,7 @@
             "feature"
           ]
         },
-        "transition": true
+        "transition": false
       }
     ]
   },
@@ -2511,7 +2511,7 @@
             "feature"
           ]
         },
-        "transition": true
+        "transition": false
       },
       {
         "name": "linePattern",
@@ -2528,7 +2528,7 @@
             "feature"
           ]
         },
-        "transition": true
+        "transition": false
       },
       {
         "name": "lineGradient",

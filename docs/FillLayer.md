@@ -287,24 +287,4 @@ Name of image in sprite to use for drawing image fills. For seamless patterns, i
 ### Expression
 
 Parameters: `zoom, feature`
-___
-
-### Name
-
-`fillPatternTransition`
-
-### Description
-
-The transition affecting any changes to this layer’s fillPattern property.
-
-### Type
-
-`{ duration, delay }`
-
-### Units
-`milliseconds`
-
-### Default Value
-`{duration: 300, delay: 0}`
-
 
