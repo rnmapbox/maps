@@ -99,26 +99,6 @@ Name of image in sprite to use for drawing an image background. For seamless pat
 ### Expression
 
 Parameters: `zoom`
-___
-
-### Name
-
-`backgroundPatternTransition`
-
-### Description
-
-The transition affecting any changes to this layer’s backgroundPattern property.
-
-### Type
-
-`{ duration, delay }`
-
-### Units
-`milliseconds`
-
-### Default Value
-`{duration: 300, delay: 0}`
-
 
 ___
 

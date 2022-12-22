@@ -275,7 +275,7 @@ global.getEnums = function (layers) {
 global.dtsInterfaceType = function (prop) {
   let propTypes = [];
 
-  if (prop.name.indexOf('Translate') !== -1) {
+  if (prop.name.indexOf('Translate') !== -1 && prop.type !== 'enum') {
     propTypes.push('Translation');
   } else if (prop.type === 'color') {
     propTypes.push('string');

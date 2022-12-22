@@ -74,8 +74,6 @@ func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, apply
           }
         });
       }
-    } else if (prop == "fillPatternTransition") {
-      self.setFillPatternTransition(&layer, styleValue:styleValue);
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: fill")
     }
@@ -141,8 +139,6 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, apply
       self.setLineBlurTransition(&layer, styleValue:styleValue);
     } else if (prop == "lineDasharray") {
       self.setLineDasharray(&layer, styleValue:styleValue);
-    } else if (prop == "lineDasharrayTransition") {
-      self.setLineDasharrayTransition(&layer, styleValue:styleValue);
     } else if (prop == "linePattern") {
       if (!styleValue.shouldAddImage()) {
         self.setLinePattern(&layer, styleValue:styleValue);
@@ -166,8 +162,6 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, apply
           }
         });
       }
-    } else if (prop == "linePatternTransition") {
-      self.setLinePatternTransition(&layer, styleValue:styleValue);
     } else if (prop == "lineGradient") {
       self.setLineGradient(&layer, styleValue:styleValue);
     } else if (prop == "lineTrimOffset") {
@@ -512,8 +506,6 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
           }
         });
       }
-    } else if (prop == "fillExtrusionPatternTransition") {
-      self.setFillExtrusionPatternTransition(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionHeight") {
       self.setFillExtrusionHeight(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionHeightTransition") {
@@ -668,8 +660,6 @@ func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String,
           }
         });
       }
-    } else if (prop == "backgroundPatternTransition") {
-      self.setBackgroundPatternTransition(&layer, styleValue:styleValue);
     } else if (prop == "backgroundOpacity") {
       self.setBackgroundOpacity(&layer, styleValue:styleValue);
     } else if (prop == "backgroundOpacityTransition") {
@@ -926,11 +916,6 @@ func setFillPattern(_ layer: inout FillLayer, styleValue: RCTMGLStyleValue)
       
 }
 
-func setFillPatternTransition(_ layer: inout FillLayer, styleValue: RCTMGLStyleValue)
-{
-    layer.fillPatternTransition = styleValue.getTransition();
-}
-
 
 
 func setLineCap(_ layer: inout LineLayer, styleValue: RCTMGLStyleValue)
@@ -1099,11 +1084,6 @@ func setLineDasharray(_ layer: inout LineLayer, styleValue: RCTMGLStyleValue)
       
 }
 
-func setLineDasharrayTransition(_ layer: inout LineLayer, styleValue: RCTMGLStyleValue)
-{
-    layer.lineDasharrayTransition = styleValue.getTransition();
-}
-
 func setLinePattern(_ layer: inout LineLayer, styleValue: RCTMGLStyleValue)
 {
       
@@ -1111,11 +1091,6 @@ func setLinePattern(_ layer: inout LineLayer, styleValue: RCTMGLStyleValue)
           layer.linePattern = styleValue.mglStyleValueResolvedImage();
         
       
-}
-
-func setLinePatternTransition(_ layer: inout LineLayer, styleValue: RCTMGLStyleValue)
-{
-    layer.linePatternTransition = styleValue.getTransition();
 }
 
 func setLineGradient(_ layer: inout LineLayer, styleValue: RCTMGLStyleValue)
@@ -1987,11 +1962,6 @@ func setFillExtrusionPattern(_ layer: inout FillExtrusionLayer, styleValue: RCTM
       
 }
 
-func setFillExtrusionPatternTransition(_ layer: inout FillExtrusionLayer, styleValue: RCTMGLStyleValue)
-{
-    layer.fillExtrusionPatternTransition = styleValue.getTransition();
-}
-
 func setFillExtrusionHeight(_ layer: inout FillExtrusionLayer, styleValue: RCTMGLStyleValue)
 {
       
@@ -2247,11 +2217,6 @@ func setBackgroundPattern(_ layer: inout BackgroundLayer, styleValue: RCTMGLStyl
           layer.backgroundPattern = styleValue.mglStyleValueResolvedImage();
         
       
-}
-
-func setBackgroundPatternTransition(_ layer: inout BackgroundLayer, styleValue: RCTMGLStyleValue)
-{
-    layer.backgroundPatternTransition = styleValue.getTransition();
 }
 
 func setBackgroundOpacity(_ layer: inout BackgroundLayer, styleValue: RCTMGLStyleValue)

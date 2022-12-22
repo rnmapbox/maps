@@ -484,16 +484,14 @@ export interface FillLayerStyleProps {
    *
    * @requires fillTranslate
    */
-  fillTranslateAnchor?: Value<Translation, ['zoom']>;
+  fillTranslateAnchor?: Value<
+    Enum<FillTranslateAnchorEnum, FillTranslateAnchorEnumValues>,
+    ['zoom']
+  >;
   /**
    * Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.
    */
   fillPattern?: Value<ResolvedImageType, ['zoom', 'feature']>;
-
-  /**
-   * The transition affecting any changes to this layer’s fillPattern property.
-   */
-  fillPatternTransition?: Transition;
 }
 export interface LineLayerStyleProps {
   /**
@@ -554,7 +552,10 @@ export interface LineLayerStyleProps {
    *
    * @requires lineTranslate
    */
-  lineTranslateAnchor?: Value<Translation, ['zoom']>;
+  lineTranslateAnchor?: Value<
+    Enum<LineTranslateAnchorEnum, LineTranslateAnchorEnumValues>,
+    ['zoom']
+  >;
   /**
    * Stroke thickness.
    */
@@ -597,20 +598,10 @@ export interface LineLayerStyleProps {
    * @disabledBy linePattern
    */
   lineDasharray?: Value<number[], ['zoom', 'feature']>;
-
-  /**
-   * The transition affecting any changes to this layer’s lineDasharray property.
-   */
-  lineDasharrayTransition?: Transition;
   /**
    * Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.
    */
   linePattern?: Value<ResolvedImageType, ['zoom', 'feature']>;
-
-  /**
-   * The transition affecting any changes to this layer’s linePattern property.
-   */
-  linePatternTransition?: Transition;
   /**
    * Defines a gradient with which to color a line feature. Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
    *
@@ -970,7 +961,10 @@ export interface SymbolLayerStyleProps {
    *
    * @requires iconImage, iconTranslate
    */
-  iconTranslateAnchor?: Value<Translation, ['zoom']>;
+  iconTranslateAnchor?: Value<
+    Enum<IconTranslateAnchorEnum, IconTranslateAnchorEnumValues>,
+    ['zoom']
+  >;
   /**
    * The opacity at which the text will be drawn.
    *
@@ -1042,7 +1036,10 @@ export interface SymbolLayerStyleProps {
    *
    * @requires textField, textTranslate
    */
-  textTranslateAnchor?: Value<Translation, ['zoom']>;
+  textTranslateAnchor?: Value<
+    Enum<TextTranslateAnchorEnum, TextTranslateAnchorEnumValues>,
+    ['zoom']
+  >;
 }
 export interface CircleLayerStyleProps {
   /**
@@ -1103,7 +1100,10 @@ export interface CircleLayerStyleProps {
    *
    * @requires circleTranslate
    */
-  circleTranslateAnchor?: Value<Translation, ['zoom']>;
+  circleTranslateAnchor?: Value<
+    Enum<CircleTranslateAnchorEnum, CircleTranslateAnchorEnumValues>,
+    ['zoom']
+  >;
   /**
    * Controls the scaling behavior of the circle when the map is pitched.
    */
@@ -1226,16 +1226,17 @@ export interface FillExtrusionLayerStyleProps {
    *
    * @requires fillExtrusionTranslate
    */
-  fillExtrusionTranslateAnchor?: Value<Translation, ['zoom']>;
+  fillExtrusionTranslateAnchor?: Value<
+    Enum<
+      FillExtrusionTranslateAnchorEnum,
+      FillExtrusionTranslateAnchorEnumValues
+    >,
+    ['zoom']
+  >;
   /**
    * Name of image in sprite to use for drawing images on extruded fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.
    */
   fillExtrusionPattern?: Value<ResolvedImageType, ['zoom', 'feature']>;
-
-  /**
-   * The transition affecting any changes to this layer’s fillExtrusionPattern property.
-   */
-  fillExtrusionPatternTransition?: Transition;
   /**
    * The height with which to extrude this layer.
    */
@@ -1408,11 +1409,6 @@ export interface BackgroundLayerStyleProps {
    * Name of image in sprite to use for drawing an image background. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.
    */
   backgroundPattern?: Value<ResolvedImageType, ['zoom']>;
-
-  /**
-   * The transition affecting any changes to this layer’s backgroundPattern property.
-   */
-  backgroundPatternTransition?: Transition;
   /**
    * The opacity at which the background will be drawn.
    */

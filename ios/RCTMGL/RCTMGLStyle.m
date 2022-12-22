@@ -71,8 +71,6 @@
           }
         }];
       }
-    } else if ([prop isEqualToString:@"fillPatternTransition"]) {
-      [self setFillPatternTransition:layer withReactStyleValue:styleValue];
     } else {
       // TODO throw exception
     }
@@ -138,8 +136,6 @@
       [self setLineBlurTransition:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"lineDasharray"]) {
       [self setLineDasharray:layer withReactStyleValue:styleValue];
-    } else if ([prop isEqualToString:@"lineDasharrayTransition"]) {
-      [self setLineDasharrayTransition:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"linePattern"]) {
       if (![styleValue shouldAddImage]) {
         [self setLinePattern:layer withReactStyleValue:styleValue];
@@ -157,8 +153,6 @@
           }
         }];
       }
-    } else if ([prop isEqualToString:@"linePatternTransition"]) {
-      [self setLinePatternTransition:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"lineGradient"]) {
       [self setLineGradient:layer withReactStyleValue:styleValue];
     } else {
@@ -487,8 +481,6 @@
           }
         }];
       }
-    } else if ([prop isEqualToString:@"fillExtrusionPatternTransition"]) {
-      [self setFillExtrusionPatternTransition:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"fillExtrusionHeight"]) {
       [self setFillExtrusionHeight:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"fillExtrusionHeightTransition"]) {
@@ -637,8 +629,6 @@
           }
         }];
       }
-    } else if ([prop isEqualToString:@"backgroundPatternTransition"]) {
-      [self setBackgroundPatternTransition:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"backgroundOpacity"]) {
       [self setBackgroundOpacity:layer withReactStyleValue:styleValue];
     } else if ([prop isEqualToString:@"backgroundOpacityTransition"]) {
@@ -750,11 +740,6 @@
 - (void)setFillPattern:(MGLFillStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
     layer.fillPattern = styleValue.mglStyleValue;
-}
-
-- (void)setFillPatternTransition:(MGLFillStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
-{
-    layer.fillPatternTransition = [styleValue getTransition];
 }
 
 
@@ -869,19 +854,9 @@
     layer.lineDashPattern = styleValue.mglStyleValue;
 }
 
-- (void)setLineDasharrayTransition:(MGLLineStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
-{
-    layer.lineDashPatternTransition = [styleValue getTransition];
-}
-
 - (void)setLinePattern:(MGLLineStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
     layer.linePattern = styleValue.mglStyleValue;
-}
-
-- (void)setLinePatternTransition:(MGLLineStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
-{
-    layer.linePatternTransition = [styleValue getTransition];
 }
 
 - (void)setLineGradient:(MGLLineStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
@@ -1427,11 +1402,6 @@
     layer.fillExtrusionPattern = styleValue.mglStyleValue;
 }
 
-- (void)setFillExtrusionPatternTransition:(MGLFillExtrusionStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
-{
-    layer.fillExtrusionPatternTransition = [styleValue getTransition];
-}
-
 - (void)setFillExtrusionHeight:(MGLFillExtrusionStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
     layer.fillExtrusionHeight = styleValue.mglStyleValue;
@@ -1611,11 +1581,6 @@
 - (void)setBackgroundPattern:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
 {
     layer.backgroundPattern = styleValue.mglStyleValue;
-}
-
-- (void)setBackgroundPatternTransition:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue
-{
-    layer.backgroundPatternTransition = [styleValue getTransition];
 }
 
 - (void)setBackgroundOpacity:(MGLBackgroundStyleLayer *)layer withReactStyleValue:(RCTMGLStyleValue *)styleValue

@@ -91,9 +91,6 @@ public class RCTMGLStyleFactory {
                   }
               });
               break;
-            case "fillPatternTransition":
-              RCTMGLStyleFactory.setFillPatternTransition(layer, styleValue);
-              break;
         }
       }
     }
@@ -174,9 +171,6 @@ public class RCTMGLStyleFactory {
             case "lineDasharray":
               RCTMGLStyleFactory.setLineDasharray(layer, styleValue);
               break;
-            case "lineDasharrayTransition":
-              RCTMGLStyleFactory.setLineDasharrayTransition(layer, styleValue);
-              break;
             case "linePattern":
               style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
                   @Override
@@ -188,9 +182,6 @@ public class RCTMGLStyleFactory {
                       }
                   }
               });
-              break;
-            case "linePatternTransition":
-              RCTMGLStyleFactory.setLinePatternTransition(layer, styleValue);
               break;
             case "lineGradient":
               RCTMGLStyleFactory.setLineGradient(layer, styleValue);
@@ -593,9 +584,6 @@ public class RCTMGLStyleFactory {
                   }
               });
               break;
-            case "fillExtrusionPatternTransition":
-              RCTMGLStyleFactory.setFillExtrusionPatternTransition(layer, styleValue);
-              break;
             case "fillExtrusionHeight":
               RCTMGLStyleFactory.setFillExtrusionHeight(layer, styleValue);
               break;
@@ -751,9 +739,6 @@ public class RCTMGLStyleFactory {
                       }
                   }
               });
-              break;
-            case "backgroundPatternTransition":
-              RCTMGLStyleFactory.setBackgroundPatternTransition(layer, styleValue);
               break;
             case "backgroundOpacity":
               RCTMGLStyleFactory.setBackgroundOpacity(layer, styleValue);
@@ -1018,14 +1003,6 @@ public class RCTMGLStyleFactory {
       }
     }
 
-
-    public static void setFillPatternTransition(FillLayer layer, RCTMGLStyleValue styleValue) {
-      StyleTransition transition = styleValue.getTransition();
-      if (transition != null) {
-        layer.fillPatternTransition(transition);
-      }
-    }
-
     public static void setLineCap(LineLayer layer, RCTMGLStyleValue styleValue) {
       if (styleValue.isExpression()) {
         layer.lineCap(styleValue.getExpression());
@@ -1198,14 +1175,6 @@ public class RCTMGLStyleFactory {
       }
     }
 
-
-    public static void setLineDasharrayTransition(LineLayer layer, RCTMGLStyleValue styleValue) {
-      StyleTransition transition = styleValue.getTransition();
-      if (transition != null) {
-        layer.lineDasharrayTransition(transition);
-      }
-    }
-
     public static void setLinePattern(LineLayer layer, RCTMGLStyleValue styleValue) {
       if (styleValue.isExpression()) {
         if (styleValue.isImageStringValue()) {
@@ -1215,14 +1184,6 @@ public class RCTMGLStyleFactory {
         }
       } else {
         layer.linePattern(styleValue.getImageURI());
-      }
-    }
-
-
-    public static void setLinePatternTransition(LineLayer layer, RCTMGLStyleValue styleValue) {
-      StyleTransition transition = styleValue.getTransition();
-      if (transition != null) {
-        layer.linePatternTransition(transition);
       }
     }
 
@@ -2090,14 +2051,6 @@ public class RCTMGLStyleFactory {
       }
     }
 
-
-    public static void setFillExtrusionPatternTransition(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
-      StyleTransition transition = styleValue.getTransition();
-      if (transition != null) {
-        layer.fillExtrusionPatternTransition(transition);
-      }
-    }
-
     public static void setFillExtrusionHeight(FillExtrusionLayer layer, RCTMGLStyleValue styleValue) {
       if (styleValue.isExpression()) {
         layer.fillExtrusionHeight(styleValue.getExpression());
@@ -2367,14 +2320,6 @@ public class RCTMGLStyleFactory {
         }
       } else {
         layer.backgroundPattern(styleValue.getImageURI());
-      }
-    }
-
-
-    public static void setBackgroundPatternTransition(BackgroundLayer layer, RCTMGLStyleValue styleValue) {
-      StyleTransition transition = styleValue.getTransition();
-      if (transition != null) {
-        layer.backgroundPatternTransition(transition);
       }
     }
 

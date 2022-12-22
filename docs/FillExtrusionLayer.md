@@ -214,26 +214,6 @@ Name of image in sprite to use for drawing images on extruded fills. For seamles
 ### Expression
 
 Parameters: `zoom, feature`
-___
-
-### Name
-
-`fillExtrusionPatternTransition`
-
-### Description
-
-The transition affecting any changes to this layer’s fillExtrusionPattern property.
-
-### Type
-
-`{ duration, delay }`
-
-### Units
-`milliseconds`
-
-### Default Value
-`{duration: 300, delay: 0}`
-
 
 ___
 

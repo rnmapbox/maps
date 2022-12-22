@@ -120,14 +120,6 @@ export const FillLayerStyleProp = PropTypes.shape({
     PropTypes.string,
     PropTypes.array,
   ]),
-
-  /**
-   * The transition affecting any changes to this layer’s fillPattern property.
-   */
-  fillPatternTransition: PropTypes.shape({
-    duration: PropTypes.number,
-    delay: PropTypes.number,
-  }),
 });
 
 export const LineLayerStyleProp = PropTypes.shape({
@@ -284,14 +276,6 @@ export const LineLayerStyleProp = PropTypes.shape({
   ]),
 
   /**
-   * The transition affecting any changes to this layer’s lineDasharray property.
-   */
-  lineDasharrayTransition: PropTypes.shape({
-    duration: PropTypes.number,
-    delay: PropTypes.number,
-  }),
-
-  /**
    * Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoomDependent expressions will be evaluated only at integer zoom levels.
    */
   linePattern: PropTypes.oneOfType([
@@ -299,14 +283,6 @@ export const LineLayerStyleProp = PropTypes.shape({
     PropTypes.string,
     PropTypes.array,
   ]),
-
-  /**
-   * The transition affecting any changes to this layer’s linePattern property.
-   */
-  linePatternTransition: PropTypes.shape({
-    duration: PropTypes.number,
-    delay: PropTypes.number,
-  }),
 
   /**
    * Defines a gradient with which to color a line feature. Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
@@ -1154,14 +1130,6 @@ export const FillExtrusionLayerStyleProp = PropTypes.shape({
   ]),
 
   /**
-   * The transition affecting any changes to this layer’s fillExtrusionPattern property.
-   */
-  fillExtrusionPatternTransition: PropTypes.shape({
-    duration: PropTypes.number,
-    delay: PropTypes.number,
-  }),
-
-  /**
    * The height with which to extrude this layer.
    */
   fillExtrusionHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.array]),
@@ -1412,14 +1380,6 @@ export const BackgroundLayerStyleProp = PropTypes.shape({
     PropTypes.string,
     PropTypes.array,
   ]),
-
-  /**
-   * The transition affecting any changes to this layer’s backgroundPattern property.
-   */
-  backgroundPatternTransition: PropTypes.shape({
-    duration: PropTypes.number,
-    delay: PropTypes.number,
-  }),
 
   /**
    * The opacity at which the background will be drawn.
@@ -1674,7 +1634,6 @@ const styleMap = {
   fillTranslateTransition: StyleTypes.Transition,
   fillTranslateAnchor: StyleTypes.Enum,
   fillPattern: StyleTypes.Image,
-  fillPatternTransition: StyleTypes.Transition,
 
   lineCap: StyleTypes.Enum,
   lineJoin: StyleTypes.Enum,
@@ -1697,9 +1656,7 @@ const styleMap = {
   lineBlur: StyleTypes.Constant,
   lineBlurTransition: StyleTypes.Transition,
   lineDasharray: StyleTypes.Constant,
-  lineDasharrayTransition: StyleTypes.Transition,
   linePattern: StyleTypes.Image,
-  linePatternTransition: StyleTypes.Transition,
   lineGradient: StyleTypes.Color,
   lineTrimOffset: StyleTypes.Constant,
 
@@ -1809,7 +1766,6 @@ const styleMap = {
   fillExtrusionTranslateTransition: StyleTypes.Transition,
   fillExtrusionTranslateAnchor: StyleTypes.Enum,
   fillExtrusionPattern: StyleTypes.Image,
-  fillExtrusionPatternTransition: StyleTypes.Transition,
   fillExtrusionHeight: StyleTypes.Constant,
   fillExtrusionHeightTransition: StyleTypes.Transition,
   fillExtrusionBase: StyleTypes.Constant,
@@ -1845,7 +1801,6 @@ const styleMap = {
   backgroundColor: StyleTypes.Color,
   backgroundColorTransition: StyleTypes.Transition,
   backgroundPattern: StyleTypes.Image,
-  backgroundPatternTransition: StyleTypes.Transition,
   backgroundOpacity: StyleTypes.Constant,
   backgroundOpacityTransition: StyleTypes.Transition,
 

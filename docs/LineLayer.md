@@ -507,26 +507,6 @@ Specifies the lengths of the alternating dashes and gaps that form the dash patt
 ### Expression
 
 Parameters: `zoom, feature`
-___
-
-### Name
-
-`lineDasharrayTransition`
-
-### Description
-
-The transition affecting any changes to this layer’s lineDasharray property.
-
-### Type
-
-`{ duration, delay }`
-
-### Units
-`milliseconds`
-
-### Default Value
-`{duration: 300, delay: 0}`
-
 
 ___
 
@@ -543,26 +523,6 @@ Name of image in sprite to use for drawing image lines. For seamless patterns, i
 ### Expression
 
 Parameters: `zoom, feature`
-___
-
-### Name
-
-`linePatternTransition`
-
-### Description
-
-The transition affecting any changes to this layer’s linePattern property.
-
-### Type
-
-`{ duration, delay }`
-
-### Units
-`milliseconds`
-
-### Default Value
-`{duration: 300, delay: 0}`
-
 
 ___
 
