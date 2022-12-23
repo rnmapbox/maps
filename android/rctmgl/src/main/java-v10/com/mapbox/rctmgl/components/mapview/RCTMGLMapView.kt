@@ -733,19 +733,23 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     fun queryRenderedFeaturesAtPoint(callbackID: String?, point: PointF, filter: Expression?, layerIDs: List<String>?) {
-        mMap?.queryRenderedFeatures(
-            ScreenCoordinate(point.x.toDouble(), point.y.toDouble()),
-            RenderedQueryOptions(layerIDs, filter)
-        ) { features ->
+        if (mMap == null) {
+            Logger.e("queryRenderedFeaturesAtPoint", "mapbox map is null")
+            return
+        }
+        val screenCoordinate = ScreenCoordinate(point.x.toDouble(), point.y.toDouble())
+        val queryGeometry = RenderedQueryGeometry(screenCoordinate)
+        val layers = layerIDs?.takeUnless { it.isEmpty() } ?: null;
+        val queryOptions = RenderedQueryOptions(layers, filter)
+        mMap.queryRenderedFeatures(queryGeometry, queryOptions) { features ->
             if (features.isValue) {
                 val featuresList = ArrayList<Feature?>()
                 for (i in features.value!!) {
                     featuresList.add(i.feature)
                 }
-
-                sendResponse(callbackID, {
+                sendResponse(callbackID) {
                     it.putString("data", FeatureCollection.fromFeatures(featuresList).toJson())
-                })
+                }
             } else {
                 Logger.e("queryRenderedFeaturesAtPoint", features.error ?: "n/a")
             }
