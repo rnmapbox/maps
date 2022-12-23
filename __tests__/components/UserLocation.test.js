@@ -29,6 +29,9 @@ describe('UserLocation', () => {
     jest.spyOn(locationManager, 'addListener');
 
     jest.spyOn(locationManager, 'removeListener');
+    jest
+      .spyOn(locationManager, 'setMinDisplacement')
+      .mockImplementation(jest.fn());
 
     beforeEach(() => {
       jest.clearAllMocks();
