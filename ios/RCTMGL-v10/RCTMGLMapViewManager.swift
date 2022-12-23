@@ -29,7 +29,7 @@ extension RCTMGLMapViewManager {
       self.bridge.uiManager.addUIBlock { (manager, viewRegistry) in
         let view = viewRegistry![reactTag]
 
-        guard let view, let view = view as? RCTMGLMapView else {
+        guard let view = view, let view = view as? RCTMGLMapView else {
           RCTMGLLogError("Invalid react tag, could not find RCTMGLMapView");
           rejecter(name, "Unknown find reactTag: \(reactTag)", nil)
           return;
