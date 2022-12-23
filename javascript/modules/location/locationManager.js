@@ -64,7 +64,18 @@ class LocationManager {
     this.stop();
   }
 
-  start(displacement = 0) {
+  start(displacement = -1) {
+    if (
+      displacement === -1 ||
+      displacement === null ||
+      displacement === undefined
+    ) {
+      displacement = this._minDisplacement;
+    }
+    if (displacement == null) {
+      displacement = -1;
+    }
+
     if (!this._isListening) {
       MapboxGLLocationManager.start(displacement);
 
@@ -88,6 +99,7 @@ class LocationManager {
   }
 
   setMinDisplacement(minDisplacement) {
+    this._minDisplacement = minDisplacement;
     MapboxGLLocationManager.setMinDisplacement(minDisplacement);
   }
 

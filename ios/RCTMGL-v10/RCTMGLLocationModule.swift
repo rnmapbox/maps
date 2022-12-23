@@ -57,7 +57,9 @@ class RCTMGLLocationManager : LocationProviderDelegate {
   }
   
   func setDistanceFilter(_ distanceFilter: CLLocationDistance) {
-    provider.locationProviderOptions.distanceFilter = distanceFilter
+    var options = provider.locationProviderOptions
+    options.distanceFilter = distanceFilter
+    provider.locationProviderOptions = options
   }
   
   func start() {
@@ -242,8 +244,8 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
   }
   
   @objc func start(_ minDisplacement: CLLocationDistance) {
+    if minDisplacement >= 0.0 { locationManager.setDistanceFilter(minDisplacement) }
     locationManager.start()
-    locationManager.setDistanceFilter(minDisplacement)
   }
   
   @objc func stop() {

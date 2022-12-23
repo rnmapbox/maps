@@ -142,6 +142,8 @@ class UserLocation extends React.Component {
   async componentDidMount() {
     this._isMounted = true;
 
+    locationManager.setMinDisplacement(this.props.minDisplacement);
+
     await this.setLocationManager({
       running: this.needsLocationManagerRunning(),
     });
@@ -149,8 +151,6 @@ class UserLocation extends React.Component {
     if (this.renderMode === UserLocation.RenderMode.Native) {
       return;
     }
-
-    locationManager.setMinDisplacement(this.props.minDisplacement);
   }
 
   async componentDidUpdate(prevProps) {
