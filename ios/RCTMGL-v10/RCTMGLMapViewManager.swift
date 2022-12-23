@@ -29,7 +29,7 @@ extension RCTMGLMapViewManager {
       self.bridge.uiManager.addUIBlock { (manager, viewRegistry) in
         let view = viewRegistry![reactTag]
 
-        guard let view = view! as? RCTMGLMapView else {
+        guard let view, let view = view as? RCTMGLMapView else {
           RCTMGLLogError("Invalid react tag, could not find RCTMGLMapView");
           rejecter(name, "Unknown find reactTag: \(reactTag)", nil)
           return;
@@ -188,7 +188,7 @@ extension RCTMGLMapViewManager {
         let point = CGPoint(x: CGFloat(point[0].floatValue), y: CGFloat(point[1].floatValue))
 
         logged("queryRenderedFeaturesAtPoint.option", rejecter: rejecter) {
-          let options = try RenderedQueryOptions(layerIds: layerIDs, filter: filter?.asExpression())
+          let options = try RenderedQueryOptions(layerIds: (layerIDs ?? []).isEmpty ? nil : layerIDs, filter: filter?.asExpression())
           
           mapboxMap.queryRenderedFeatures(with: point, options: options) { result in
             switch result {
