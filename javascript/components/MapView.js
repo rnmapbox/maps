@@ -523,7 +523,7 @@ class MapView extends NativeBridgeComponent(
    * @param  {Array=} layerIDs -  A array of layer id's to filter the features by
    * @return {FeatureCollection}
    */
-  async queryRenderedFeaturesInRect(bbox, filter = [], layerIDs = []) {
+  async queryRenderedFeaturesInRect(bbox, filter = [], layerIDs = null) {
     if (
       bbox != null &&
       (bbox.length === 4 || (MapboxGL.MapboxV10 && bbox.length === 0))
