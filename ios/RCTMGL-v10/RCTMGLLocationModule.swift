@@ -7,6 +7,8 @@ class RCTMGLLocation: NSObject {
   
   var heading : CLHeading? = nil
 
+  var timestamp: Date? = nil
+
   func toJSON() -> [String:Any] {
     return [
       "coords": [
@@ -18,7 +20,7 @@ class RCTMGLLocation: NSObject {
         "course": location.course,
         "speed": location.speed,
       ],
-      "timestamp": location.timestamp.timeIntervalSince1970 * 1000
+      "timestamp": (timestamp ?? location.timestamp).timeIntervalSince1970 * 1000
     ]
   }
 }
@@ -41,6 +43,11 @@ protocol RCTMGLLocationManagerDelegate : AnyObject {
 }
 
 class RCTMGLLocationManager : LocationProviderDelegate {
+  enum LocationUpdateType {
+    case heading
+    case location
+  }
+
   var provider: LocationProvider
   
   var lastKnownLocation : CLLocation?
@@ -48,8 +55,6 @@ class RCTMGLLocationManager : LocationProviderDelegate {
   
   weak var delegate: RCTMGLLocationManagerDelegate?
   weak var locationProviderDelage: LocationProviderDelegate?
-  
-  var listeners: [RCTMGLLocationBlock] = []
   
   init() {
     provider = AppleLocationProvider()
@@ -76,7 +81,7 @@ class RCTMGLLocationManager : LocationProviderDelegate {
     provider.setDelegate(EmptyLocationProviderDelegate())
   }
   
-  func _convertToMapboxLocation(_ location: CLLocation?) -> RCTMGLLocation {
+  func _convertToMapboxLocation(_ location: CLLocation?, type: LocationUpdateType) -> RCTMGLLocation {
     guard let location = location else {
       return RCTMGLLocation()
     }
@@ -84,19 +89,22 @@ class RCTMGLLocationManager : LocationProviderDelegate {
     let userLocation = RCTMGLLocation()
     userLocation.location = location;
     userLocation.heading = lastKnownHeading
+    switch type {
+    case .location:
+      userLocation.timestamp = location.timestamp
+    case .heading:
+      userLocation.timestamp = lastKnownHeading!.timestamp
+    }
     return userLocation;
   }
   
-  func _updateDelegate() {
+  func _updateDelegate(type: LocationUpdateType) {
     if delegate == nil {
       return;
     }
 
-    let userLocation = _convertToMapboxLocation(lastKnownLocation)
+    let userLocation = _convertToMapboxLocation(lastKnownLocation, type: type)
 
-    for listener in listeners {
-      listener(userLocation)
-    }
     delegate?.locationManager(self, didUpdateLocation: userLocation)
   }
   
@@ -104,14 +112,14 @@ class RCTMGLLocationManager : LocationProviderDelegate {
   
   func locationProvider(_ provider: LocationProvider, didUpdateLocations locations: [CLLocation]) {
     lastKnownLocation = locations.last
-    self._updateDelegate()
+    self._updateDelegate(type: .location)
     
     locationProviderDelage?.locationProvider(provider, didUpdateLocations: locations)
   }
   
   func locationProvider(_ provider: LocationProvider, didUpdateHeading newHeading: CLHeading) {
     lastKnownHeading = newHeading
-    self._updateDelegate()
+    self._updateDelegate(type: .heading)
     
     locationProviderDelage?.locationProvider(provider, didUpdateHeading: newHeading)
   }
@@ -233,9 +241,7 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
   
   @objc
   override func constantsToExport() -> [AnyHashable: Any]! {
-    return [
-      "foo": "bar"
-    ];
+    return [:];
   }
 
   @objc override func supportedEvents() -> [String]
@@ -281,7 +287,7 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
     guard let _ = bridge else {
       return
     }
-   
+
     self.sendEvent(withName: RCT_MAPBOX_USER_LOCATION_UPDATE, body: location.toJSON())
   }
 
