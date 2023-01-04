@@ -4,7 +4,7 @@
 
   - mapbox: v10 latest mapbox implementation - *recommended*, not opensource requires access for download
   - maplibre: *DEFAULT* open source fork of older open source mapbox libraries with many improvements, will be removed in next version
-  - mapbox-gl: classic mapbox libraries - should work but will be dropped, recent versions are not open source and requires acess for download, will be removed in next version
+  - mapbox-gl: classic mapbox libraries - should work but will be dropped, recent versions are not open source and requires access for download, will be removed in next version
 
 ## Mapbox Maps SDK v10
 
