@@ -221,8 +221,8 @@ open class RCTMGLMapView : MapView {
     }
   }
   
-  @objc func setReactCompassViewPosition(_ position: NSNumber) {
-    mapView.ornaments.options.compass.position = toOrnamentPositon(Int(truncating: position))
+  @objc func setReactCompassViewPosition(_ position: NSInteger) {
+    mapView.ornaments.options.compass.position = toOrnamentPositon(Int(truncating: NSNumber(value: position)))
   }
   
   @objc func setReactCompassViewMargins(_ margins: CGPoint) {
