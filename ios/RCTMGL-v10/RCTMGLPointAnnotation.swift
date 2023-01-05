@@ -32,6 +32,7 @@ class RCTMGLPointAnnotation : RCTMGLInteractiveElement {
   
   func _create(point: Point) -> PointAnnotation {
     var result = PointAnnotation(point: point)
+    result.isDraggable = false // we implement our own drag logic
     result.userInfo = [RCTMGLPointAnnotation.key:WeakRef(self)]
     return result
   }
