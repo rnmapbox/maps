@@ -33,7 +33,9 @@ open class RCTMGLMapView : MapView {
   var layerWaiters : [String:[(String) -> Void]] = [:]
   
   lazy var pointAnnotationManager : PointAnnotationManager = {
-    return PointAnnotationManager(annotations: annotations, mapView: mapView)
+    let result = PointAnnotationManager(annotations: annotations, mapView: mapView)
+    self._removeMapboxLongPressGestureRecognizer()
+    return result
   }()
 
   lazy var calloutAnnotationManager : MapboxMaps.PointAnnotationManager = {
@@ -328,6 +330,14 @@ open class RCTMGLMapView : MapView {
     }
     
     return nil
+  }
+
+  func _removeMapboxLongPressGestureRecognizer() {
+    mapView.gestureRecognizers?.forEach { recognizer in
+      if (String(describing: type(of:recognizer)) == "MapboxLongPressGestureRecognizer") {
+        mapView.removeGestureRecognizer(recognizer)
+      }
+    }
   }
 }
 
@@ -992,23 +1002,16 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
               }
 
       case .changed:
-          guard let annotation = self.draggedAnnotation else {
+          guard var annotation = self.draggedAnnotation else {
               return
           }
         
           self.onDragHandler(self.manager, didDetectDraggedAnnotations: [annotation], dragState: .changed, targetPoint: targetPoint)
 
-          // For some reason Mapbox doesn't let us update the geometry of an existing annotation
-          // so we have to create a whole new one.
-          var newAnnotation = PointAnnotation(id: annotation.id, coordinate: targetPoint)
-          newAnnotation.image = annotation.image
-          newAnnotation.userInfo = annotation.userInfo
-          
-          var newAnnotations = self.manager.annotations.filter { an in
-              return an.id != annotation.id
+          let idx = self.manager.annotations.firstIndex { an in return an.id == annotation.id }
+          if let idx = idx {
+            self.manager.annotations[idx].point = Point(targetPoint)
           }
-          newAnnotations.append(newAnnotation)
-          manager.annotations = newAnnotations
       case .cancelled, .ended:
         guard let annotation = self.draggedAnnotation else {
             return
