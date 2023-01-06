@@ -43,7 +43,7 @@ const AnnotationWithRemoteImage = ({
   coordinate,
   title,
 }: AnnotationWithRemoteImageProps) => {
-  const pointAnnotation = useRef<{ refresh: () => void }>(null);
+  const pointAnnotation = useRef<PointAnnotation>(null);
 
   return (
     <PointAnnotation

@@ -160,9 +160,13 @@ declare namespace MapboxGL {
 
   const Atmosphere = _Atmosphere;
   const MarkerView = _MarkerView;
+  type MarkerView = _MarkerView;
   const PointAnnotation = _PointAnnotation;
+  type PointAnnotation = _PointAnnotation;
   const SymbolLayer = _SymbolLayer;
+  type SymbolLayer = _SymbolLayer;
   const LineLayer = _LineLayer;
+  type LineLayer = _LineLayer;
   const ShapeSource = _ShapeSource;
   type ShapeSource = _ShapeSource;
 
