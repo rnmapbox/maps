@@ -5,7 +5,7 @@ import {
   Platform,
   type ViewProps,
 } from 'react-native';
-import { type Feature } from 'geojson';
+import type { Feature, Point } from 'geojson';
 
 import { toJSONString, isFunction } from '../utils';
 import { makePoint } from '../utils/geoUtils';
@@ -22,9 +22,7 @@ const styles = StyleSheet.create({
   },
 });
 
-type FeaturePayload = {
-  feature: Feature;
-};
+type FeaturePayload = Feature<Point>;
 
 type Props = {
   /**
