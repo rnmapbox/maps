@@ -55,7 +55,7 @@ type Props = {
   /**
    * The center point (specified as a map coordinate) of the annotation.
    */
-  coordinate: [number, number];
+  coordinate: number[];
 
   /**
    * Specifies the anchor being set on a particular point of the annotation.
