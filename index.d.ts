@@ -23,11 +23,11 @@ import {
 } from '@turf/helpers';
 
 import type {
-  SymbolLayerStyleProps,
-  LineLayerStyleProps,
-} from './javascript/utils/MapboxStyles';
-import { getAnnotationsLayerID as _getAnnotationsLayerID } from './javascript/utils/getAnnotationsLayerID';
-import {
+  SymbolLayerStyleProp as SymbolLayerStyleProps,
+  LineLayerStyleProp as LineLayerStyleProps,
+} from './lib/typescript/utils/styleMap';
+import { getAnnotationsLayerID as _getAnnotationsLayerID } from './lib/typescript/utils/getAnnotationsLayerID';
+import type {
   Camera as _Camera,
   CameraStop as _CameraStop,
   CameraFollowConfig as _CameraFollowConfig,
@@ -37,30 +37,30 @@ import {
   CameraBoundsWithPadding as _CameraBoundsWithPadding,
   CameraStops as _CameraStops,
   CameraAnimationMode as _CameraAnimationMode,
-  type UserTrackingMode as _UserTrackingMode,
-  type UserTrackingModeChangeCallback as _UserTrackingModeChangeCallback,
-} from './javascript/components/Camera';
-import { MarkerView as _MarkerView } from './javascript/components/MarkerView';
-import { PointAnnotation as _PointAnnotation } from './javascript/components/PointAnnotation';
-import { Atmosphere as _Atmosphere } from './javascript/components/Atmosphere';
-import {
+  UserTrackingMode as _UserTrackingMode,
+  UserTrackingModeChangeCallback as _UserTrackingModeChangeCallback,
+} from './lib/typescript/components/Camera';
+import type { default as _MarkerView } from './lib/typescript/components/MarkerView';
+import type { default as _PointAnnotation } from './lib/typescript/components/PointAnnotation';
+import type { Atmosphere as _Atmosphere } from './lib/typescript/components/Atmosphere';
+import type {
   SymbolLayer as _SymbolLayer,
   Props as _SymbolLayerProps,
-} from './javascript/components/SymbolLayer';
-import {
-  LineLayer as _LineLayer,
+} from './lib/typescript/components/SymbolLayer';
+import type {
+  default as _LineLayer,
   Props as _LineLayerProps,
-} from './javascript/components/LineLayer';
-import {
+} from './lib/typescript/components/LineLayer';
+import type {
   ShapeSource as _ShapeSource,
   Props as _ShapeSourceProps,
-} from './javascript/components/ShapeSource';
+} from './lib/typescript/components/ShapeSource';
 import type {
   MapboxGLEvent as _MapboxGLEvent,
   AnimatedPoint as _AnimatedPoint,
   AnimatedShape as _AnimatedShape,
-} from './javascript/types/index';
-import type { requestAndroidLocationPermissions as _requestAndroidLocationPermissions } from './javascript/requestAndroidLocationPermissions';
+} from './lib/typescript/types';
+import type { requestAndroidLocationPermissions as _requestAndroidLocationPermissions } from './lib/typescript/requestAndroidLocationPermissions';
 
 // prettier-ignore
 type ExpressionName =
@@ -113,9 +113,9 @@ type AutoAlignment = Alignment | 'auto';
 
 type NamedStyles<T> = {
   [P in keyof T]:
-    | SymbolLayerStyleProps
+    | typeof SymbolLayerStyleProps
     | RasterLayerStyle
-    | LineLayerStyleProps
+    | typeof LineLayerStyleProps
     | FillLayerStyle
     | FillExtrusionLayerStyle
     | CircleLayerStyle
@@ -143,10 +143,9 @@ declare namespace MapboxGL {
   function setTelemetryEnabled(telemetryEnabled: boolean): void;
   function setConnected(connected: boolean): void;
 
-  const requestAndroidLocationPermissions = _requestAndroidLocationPermissions;
+  const requestAndroidLocationPermissions: typeof _requestAndroidLocationPermissions;
 
-  const getAnnotationsLayerID = _getAnnotationsLayerID;
-  type getAnnotationsLayerID = _getAnnotationsLayerID;
+  const getAnnotationsLayerID: typeof _getAnnotationsLayerID;
 
   const Camera = _Camera;
   type Camera = _Camera;
