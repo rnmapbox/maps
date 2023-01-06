@@ -25,7 +25,7 @@ as with PointAnnotation child views are rendered onto a bitmap
 | onDragStart | `func` | `none` | `false` | This callback is fired once this annotation has started being dragged.<br/>*signature:*`(payload:Feature) => void` |
 | onDragEnd | `func` | `none` | `false` | This callback is fired once this annotation has stopped being dragged.<br/>*signature:*`(payload:Feature) => void` |
 | onDrag | `func` | `none` | `false` | This callback is fired while this annotation is being dragged.<br/>*signature:*`(payload:Feature) => void` |
-| children | `ReactReactNode` | `none` | `true` | Expects one child, and an optional callout can be added as well |
+| children | `React.ReactElement \| React.ReactElement[]` | `none` | `true` | Expects one child, and an optional callout can be added as well |
 | style | `ViewProps['style']` | `none` | `false` | FIX ME NO DESCRIPTION |
 
 ## methods

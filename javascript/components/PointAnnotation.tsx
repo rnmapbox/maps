@@ -103,7 +103,7 @@ type Props = {
   /**
    * Expects one child, and an optional callout can be added as well
    */
-  children: React.ReactElement;
+  children: React.ReactElement | React.ReactElement[];
 
   style?: ViewProps['style'];
 };

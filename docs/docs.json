@@ -3453,7 +3453,7 @@
       {
         "name": "children",
         "required": true,
-        "type": "ReactReactNode",
+        "type": "React.ReactElement \\| React.ReactElement[]",
         "default": "none",
         "description": "Expects one child, and an optional callout can be added as well"
       },
