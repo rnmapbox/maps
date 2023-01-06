@@ -74,7 +74,6 @@ const CustomCallout: FC<CustomCalloutProps> = (props) => {
         </MapboxGL.ShapeSource>
         {selectedFeature && (
           <MapboxGL.MarkerView
-            id="selectedFeatureMarkerView"
             coordinate={selectedFeature.geometry.coordinates}
           >
             <CustomCalloutView message={selectedFeature?.properties?.message} />
