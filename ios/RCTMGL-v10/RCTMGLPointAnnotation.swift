@@ -13,7 +13,14 @@ class RCTMGLPointAnnotation : RCTMGLInteractiveElement {
   static let key = "RCTMGLPointAnnotation"
   static var gid = 0;
   
-  var annotation : PointAnnotation! = nil
+  lazy var annotation : PointAnnotation = {
+    var result = PointAnnotation(coordinate: CLLocationCoordinate2D())
+    result.isDraggable = false // we implement our own drag logic
+    result.userInfo = [RCTMGLPointAnnotation.key:WeakRef(self)]
+    return result
+  }()
+  var added = false
+
   weak var callout: RCTMGLCallout? = nil
   var calloutId : String?
   var image : UIImage? = nil
@@ -30,27 +37,30 @@ class RCTMGLPointAnnotation : RCTMGLInteractiveElement {
     }
   }
   
-  func _create(point: Point) -> PointAnnotation {
-    var result = PointAnnotation(point: point)
-    result.isDraggable = false // we implement our own drag logic
-    result.userInfo = [RCTMGLPointAnnotation.key:WeakRef(self)]
-    return result
+  @objc var anchor: [String:NSNumber] = [:] {
+    didSet {
+      update { annotation in
+        _updateAnchor(&annotation)
+      }
+    }
   }
-
-  func _refresh(_ annotation: PointAnnotation) {
-    map?.pointAnnotationManager.refresh(annotation)
+  
+  func _updateAnchor(_ annotation: inout PointAnnotation) {
+    if !anchor.isEmpty {
+      if let image = annotation.image {
+        let size = image.image.size
+        annotation.iconAnchor = .topLeft
+        annotation.iconOffset = [size.width * (anchor["x"]?.CGFloat ?? 0.0) * -1.0, size.height * (anchor["y"]?.CGFloat ?? 0.0) * -1.0]
+      }
+    }
   }
 
   func _updateCoordinate() {
     guard let point = point() else {
       return
     }
-    if var annotation = annotation {
+    update { annotation in
       annotation.point = point
-      _refresh(annotation)
-    } else {
-      annotation = _create(point: point)
-      setAnnotationImage(inital: true)
     }
   }
    
@@ -80,28 +90,13 @@ class RCTMGLPointAnnotation : RCTMGLInteractiveElement {
    
   func changeImage(_ image: UIImage, initial: Bool = false) {
     self.image = image
-    if initial {
-      doChangeImage(image)
-    } else {
-      let oldAnnotation = annotation
-      if let map = self.map, let oldAnnotation = oldAnnotation {
-        map.pointAnnotationManager.remove(oldAnnotation)
-      }
-      guard let point = oldAnnotation?.point ?? point() else {
-        return
-      }
-      self.annotation = _create(point: point)
-      doChangeImage(image)
+
+    update { annotation in
+      let name =  "rnview-\(gid())-\(annotation.id)"
+      annotation.image = PointAnnotation.Image(image: image , name: name)
+      _updateAnchor(&annotation)
     }
   }
-  
-   func doChangeImage(_ image: UIImage) {
-     let name =  "rnview-\(gid())-\(annotation.id)"
-     annotation.image = PointAnnotation.Image(image: image , name: name)
-     if let map = self.map {
-       map.pointAnnotationManager.add(annotation)
-     }
-   }
    
   func setAnnotationImage(inital: Bool = false) {
     if let image = _createViewSnapshot() {
@@ -171,9 +166,7 @@ class RCTMGLPointAnnotation : RCTMGLInteractiveElement {
       if let size = image?.size {
         calloutPtAnnotation.iconOffset = [0, -size.height]
       }
-      self.map?.calloutAnnotationManager.annotations.append(
-        
-        calloutPtAnnotation)
+      self.map?.calloutAnnotationManager.annotations.append(calloutPtAnnotation)
     }
   }
   
@@ -215,22 +208,50 @@ class RCTMGLPointAnnotation : RCTMGLInteractiveElement {
   
   override func addToMap(_ map: RCTMGLMapView, style: Style) {
     self.map = map
-    if (annotation != nil) {
-      self.map?.pointAnnotationManager.add(annotation)
-    }
+    addIfPossible()
   }
 
   override func removeFromMap(_ map: RCTMGLMapView) {
-    self.map = map
-    if (annotation != nil) {
-      self.map?.pointAnnotationManager.remove(annotation)
-    }
+    removeIfAdded()
+    self.map = nil
   }
   
   // MARK: - RCTMGLInteractiveElement
   
   override func getLayerIDs() -> [String] {
     return []
+  }
+}
+
+// MARK: - add/remove/update of point annotation
+
+extension RCTMGLPointAnnotation {
+  func removeIfAdded() {
+    if added, let pointAnnotationManager = map?.pointAnnotationManager {
+      pointAnnotationManager.remove(annotation)
+      added = false
+    }
+  }
+  
+  @discardableResult
+  func addIfPossible() -> Bool {
+    if !added && annotation.point.coordinates.isValid(), let pointAnnotationManager = map?.pointAnnotationManager {
+      pointAnnotationManager.add(annotation)
+      added = true
+      return true
+    }
+    return false
+  }
+  
+  func update(callback: (_ annotation: inout PointAnnotation) -> Void) {
+    callback(&annotation)
+    if let pointAnnotationManager = map?.pointAnnotationManager {
+      if added {
+        pointAnnotationManager.update(annotation)
+      } else if !added {
+        addIfPossible()
+      }
+    }
   }
 }
 
