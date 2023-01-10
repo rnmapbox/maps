@@ -88,6 +88,11 @@ class RCTMGLLocationModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
+    fun setRequestsAlwaysUse(requestsAlwaysUse: Bool) {
+        // IOS only. Ignored on Android.
+    }
+
+    @ReactMethod
     fun stop() {
         stopLocationManager()
     }

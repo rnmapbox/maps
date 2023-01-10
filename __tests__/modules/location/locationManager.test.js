@@ -237,6 +237,16 @@ describe('LocationManager', () => {
       });
     });
 
+    describe('#setRequestsAlwaysUse', () => {
+      test('calls native "setRequestsAlwaysUse"', () => {
+        MapboxGLLocationManager.setRequestsAlwaysUse = jest.fn();
+        locationManager.setRequestsAlwaysUse(true);
+        expect(
+          MapboxGLLocationManager.setRequestsAlwaysUse,
+        ).toHaveBeenCalledWith(true);
+      });
+    });
+
     describe('#onUpdate', () => {
       beforeEach(() => {
         locationManager._lastKnownLocation = null;

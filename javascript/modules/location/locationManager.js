@@ -12,17 +12,14 @@ class LocationManager {
     this._listeners = [];
     this._lastKnownLocation = null;
     this._isListening = false;
+    this._requestsAlwaysUse = false;
     this.onUpdate = this.onUpdate.bind(this);
     this.subscription = null;
-
-    this._requestsAlwaysUse = false;
 
     this._appStateListener = AppState.addEventListener(
       'change',
       this._handleAppStateChange.bind(this),
     );
-
-    this.setRequestsAlwaysUse = this.setRequestsAlwaysUse.bind(this);
   }
 
   async getLastKnownLocation() {
