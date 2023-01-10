@@ -15,15 +15,14 @@ class LocationManager {
     this.onUpdate = this.onUpdate.bind(this);
     this.subscription = null;
 
-    this._listensToLocationInBackground = false;
+    this._requestsAlwaysUse = false;
 
     this._appStateListener = AppState.addEventListener(
       'change',
       this._handleAppStateChange.bind(this),
     );
 
-    this.setListensToLocationInBackground =
-      this.setListensToLocationInBackground.bind(this);
+    this.setRequestsAlwaysUse = this.setRequestsAlwaysUse.bind(this);
   }
 
   async getLastKnownLocation() {
@@ -75,7 +74,7 @@ class LocationManager {
   }
 
   _handleAppStateChange(appState) {
-    if (!this._listensToLocationInBackground) {
+    if (!this._requestsAlwaysUse) {
       if (appState === 'background') {
         this.stop();
       } else if (appState === 'active') {
@@ -123,11 +122,9 @@ class LocationManager {
     MapboxGLLocationManager.setMinDisplacement(minDisplacement);
   }
 
-  setListensToLocationInBackground(listensToLocationInBackground) {
-    MapboxGLLocationManager.setListensToLocationInBackground(
-      listensToLocationInBackground,
-    );
-    this._listensToLocationInBackground = listensToLocationInBackground;
+  setRequestsAlwaysUse(requestsAlwaysUse) {
+    MapboxGLLocationManager.setRequestsAlwaysUse(requestsAlwaysUse);
+    this._requestsAlwaysUse = requestsAlwaysUse;
   }
 
   onUpdate(location) {

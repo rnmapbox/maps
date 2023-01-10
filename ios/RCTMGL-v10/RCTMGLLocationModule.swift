@@ -68,8 +68,8 @@ class RCTMGLLocationManager : LocationProviderDelegate {
     provider.locationProviderOptions = options
   }
   
-  func setListensToLocationInBackground(_ listensToLocationInBackground: Bool) {
-    shouldRequestAlwaysAuthorization = listensToLocationInBackground;
+  func setRequestsAlwaysUse(_ requestsAlwaysUse: Bool) {
+    shouldRequestAlwaysAuthorization = requestsAlwaysUse;
   }
 
   func start() {
@@ -273,8 +273,8 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
     locationManager.setDistanceFilter(minDisplacement)
   }
   
-  @objc func setListensToLocationInBackground(_ listensToLocationInBackground: Bool) {
-    locationManager.setListensToLocationInBackground(listensToLocationInBackground);
+  @objc func setRequestsAlwaysUse(_ requestsAlwaysUse: Bool) {
+    locationManager.setRequestsAlwaysUse(requestsAlwaysUse);
   }
 
   @objc

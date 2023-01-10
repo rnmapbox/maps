@@ -5994,11 +5994,11 @@
         "description": "Show or hide small arrow which indicates direction the device is pointing relative to north."
       },
       {
-        "name": "listensToLocationInBackground",
+        "name": "requestsAlwaysUse",
         "required": false,
         "type": "bool",
         "default": "false",
-        "description": "Request the always location permission, and listen to the location even when the app is in background"
+        "description": "Request the always location permission, and listen to the location even when the app is in background\n\n@platform ios"
       },
       {
         "name": "minDisplacement",
