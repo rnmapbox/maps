@@ -5,6 +5,10 @@ func deg2rad(_ number: Double) -> Double {
     return number * .pi / 180
 }
 
+enum StyleConversionError: Error {
+  case unexpectedType(message: String)
+}
+
 class RCTMGLStyleValue {
   var value: Any
   var styleType: String? = nil
@@ -325,11 +329,14 @@ class RCTMGLStyleValue {
       return .constant(valueObj)
     } else {
       do {
+        if valueObj is String {
+          throw StyleConversionError.unexpectedType(message: "should be array constant or expression")
+        }
         let data = try JSONSerialization.data(withJSONObject: valueObj, options: .prettyPrinted)
         let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
         return .expression(decodedExpression)
       } catch {
-        Logger.log(level: .error, message: "Invalid value for array number: \(value) error: \(error) setting dummy value")
+        Logger.log(level: .error, message: "Invalid value for array => value: \(value) error: \(error) setting dummy value")
         return .constant([""])
       }
     }
