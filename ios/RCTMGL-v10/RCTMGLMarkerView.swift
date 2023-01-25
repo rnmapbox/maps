@@ -195,6 +195,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   
   private func remove() {
     annotationManager?.remove(self)
+    didAddToMap = false
   }
   
   // MARK: - Helper functions
