@@ -247,7 +247,7 @@ class OfflineManager {
 
   /**
    * Sets the period at which download status events will be sent over the React Native bridge.
-   * The default is 500ms.
+   * The default is 300ms.
    *
    * @example
    * MapboxGL.offlineManager.setProgressEventThrottle(500);
