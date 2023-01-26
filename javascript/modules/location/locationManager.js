@@ -1,4 +1,4 @@
-import { NativeModules, NativeEventEmitter } from 'react-native';
+import { NativeModules, NativeEventEmitter, AppState } from 'react-native';
 
 const MapboxGL = NativeModules.MGLModule;
 const MapboxGLLocationManager = NativeModules.MGLLocationModule;
@@ -12,8 +12,14 @@ class LocationManager {
     this._listeners = [];
     this._lastKnownLocation = null;
     this._isListening = false;
+    this._requestsAlwaysUse = false;
     this.onUpdate = this.onUpdate.bind(this);
     this.subscription = null;
+
+    this._appStateListener = AppState.addEventListener(
+      'change',
+      this._handleAppStateChange.bind(this),
+    );
   }
 
   async getLastKnownLocation() {
@@ -28,7 +34,7 @@ class LocationManager {
         lastKnownLocation =
           await MapboxGLLocationManager.getLastKnownLocation();
       } catch (error) {
-        console.log('locationManager Error: ', error);
+        console.warn('locationManager Error: ', error);
       }
 
       if (!this._lastKnownLocation && lastKnownLocation) {
@@ -62,6 +68,16 @@ class LocationManager {
   removeAllListeners() {
     this._listeners = [];
     this.stop();
+  }
+
+  _handleAppStateChange(appState) {
+    if (!this._requestsAlwaysUse) {
+      if (appState === 'background') {
+        this.stop();
+      } else if (appState === 'active') {
+        this.start();
+      }
+    }
   }
 
   start(displacement = -1) {
@@ -101,6 +117,11 @@ class LocationManager {
   setMinDisplacement(minDisplacement) {
     this._minDisplacement = minDisplacement;
     MapboxGLLocationManager.setMinDisplacement(minDisplacement);
+  }
+
+  setRequestsAlwaysUse(requestsAlwaysUse) {
+    MapboxGLLocationManager.setRequestsAlwaysUse(requestsAlwaysUse);
+    this._requestsAlwaysUse = requestsAlwaysUse;
   }
 
   onUpdate(location) {

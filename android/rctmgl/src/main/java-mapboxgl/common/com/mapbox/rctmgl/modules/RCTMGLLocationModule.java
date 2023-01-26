@@ -95,6 +95,11 @@ public class RCTMGLLocationModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void setRequestsAlwaysUse(boolean requestsAlwaysUse) {
+        // IOS only. Ignored on Android.
+    }
+
+    @ReactMethod
     public void stop() {
         stopLocationManager();
     }
