@@ -6462,7 +6462,7 @@
       },
       {
         "name": "setProgressEventThrottle",
-        "description": "Sets the period at which download status events will be sent over the React Native bridge.\nThe default is 500ms.",
+        "description": "Sets the period at which download status events will be sent over the React Native bridge.\nThe default is 300ms.",
         "params": [
           {
             "name": "throttleValue",

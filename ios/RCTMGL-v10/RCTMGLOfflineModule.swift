@@ -46,6 +46,15 @@ class RCTMGLOfflineModule: RCTEventEmitter {
   
   lazy var tileRegionPacks : [String: TileRegionPack] = [:]
   
+  var progressEventThrottle : (
+    waitBetweenEvents: Double?,
+    lastSentTimestamp: Double?,
+    lastSentState: State?
+  ) = (
+    300,
+    nil,
+    nil
+  )
   
   @objc override
   func startObserving() {
@@ -301,12 +310,8 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     RCTMGLEvent(type: .offlineProgress, payload: self._makeRegionStatusPayload(name, progress: progress, state: state, metadata: nil))
   }
   
-  func shouldSendProgressEvent() -> Bool {
-    return true
-  }
-  
   func offlinePackProgressDidChange(progress: TileRegionLoadProgress, metadata: [String:Any], state: State) {
-    if self.shouldSendProgressEvent() {
+    if self.shouldSendProgressEvent(progress: progress, state: state) {
       let event = makeProgressEvent(metadata["name"] as! String, progress: progress, state: state)
       self._sendEvent(Callbacks.progress.rawValue, event: event)
     }
@@ -440,12 +445,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
   
   @objc
   func setTileCountLimit(_ limit: NSNumber) {
-    //v10todo
-  }
-  
-  @objc
-  func setProgressEventThrottle(_ throttleValue: NSNumber) {
-    // v10todo improve progress event listener
+    RCTMGLLogWarn("setTileCountLimit is not yet implemented on v10")
   }
   
   
@@ -486,3 +486,38 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     }
   }
 }
+
+// MARK: progress throttle
+
+extension RCTMGLOfflineModule {
+  @objc
+  func setProgressEventThrottle(_ throttleValue: NSNumber) {
+    progressEventThrottle.waitBetweenEvents = throttleValue.doubleValue
+  }
+  
+
+  func shouldSendProgressEvent(progress: TileRegionLoadProgress, state: State) -> Bool
+  {
+    let currentTimestamp: Double = CACurrentMediaTime() * 1000.0
+    
+    guard let lastSentState = progressEventThrottle.lastSentState, lastSentState == state else {
+      progressEventThrottle.lastSentState = state
+      progressEventThrottle.lastSentTimestamp = currentTimestamp
+      return true
+    }
+    
+    guard let waitBetweenEvents = progressEventThrottle.waitBetweenEvents,
+          let lastSentTimestamp = progressEventThrottle.lastSentTimestamp else {
+      progressEventThrottle.lastSentTimestamp = currentTimestamp
+      return true;
+    }
+    
+    if (currentTimestamp - lastSentTimestamp > waitBetweenEvents) {
+      progressEventThrottle.lastSentTimestamp = currentTimestamp
+      return true;
+    }
+     
+    return false;
+  }
+}
+
