@@ -3300,19 +3300,19 @@
       {
         "name": "androidRenderMode",
         "required": false,
-        "type": "enum",
+        "type": "'normal' \\| 'compass' \\| 'gps'",
         "default": "none",
         "description": "Android render mode.\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@platform android"
       },
       {
         "name": "iosShowsUserHeadingIndicator",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "none",
         "description": "iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.\n\n@platform ios"
       }
     ],
-    "fileNameWithExt": "NativeUserLocation.js",
+    "fileNameWithExt": "NativeUserLocation.tsx",
     "name": "NativeUserLocation"
   },
   "PointAnnotation": {
