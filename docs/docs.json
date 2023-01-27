@@ -308,7 +308,7 @@
       {
         "name": "filter",
         "required": false,
-        "type": "array",
+        "type": "FilterExpression",
         "default": "none",
         "description": "Filter only the features in the source layer that satisfy a condition that you define"
       },
@@ -329,15 +329,12 @@
       {
         "name": "style",
         "required": false,
-        "type": "union",
+        "type": "BackgroundLayerStyleProps",
         "default": "none",
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "BackgroundLayer.js",
+    "fileNameWithExt": "BackgroundLayer.tsx",
     "name": "BackgroundLayer",
     "styles": [
       {

@@ -25,6 +25,7 @@ import {
 import type {
   SymbolLayerStyleProps,
   LineLayerStyleProps,
+  BackgroundLayerStyleProps,
 } from './javascript/utils/MapboxStyles';
 import { getAnnotationsLayerID as _getAnnotationsLayerID } from './javascript/utils/getAnnotationsLayerID';
 import {
@@ -51,6 +52,7 @@ import {
   LineLayer as _LineLayer,
   Props as _LineLayerProps,
 } from './javascript/components/LineLayer';
+import { Props as _BackgroundLayerProps } from './javascript/components/BackgroundLayer';
 import {
   ShapeSource as _ShapeSource,
   Props as _ShapeSourceProps,
@@ -119,7 +121,7 @@ type NamedStyles<T> = {
     | FillLayerStyle
     | FillExtrusionLayerStyle
     | CircleLayerStyle
-    | BackgroundLayerStyle;
+    | BackgroundLayerStyleProps;
 };
 
 export type OnPressEvent = {
@@ -287,7 +289,7 @@ declare namespace MapboxGL {
     class CircleLayer extends Component<CircleLayerProps> {}
     class SymbolLayer extends Component<_SymbolLayerProps> {}
     class RasterLayer extends Component<RasterLayerProps> {}
-    class BackgroundLayer extends Component<BackgroundLayerProps> {}
+    class BackgroundLayer extends Component<_BackgroundLayerProps> {}
   }
 
   /**
