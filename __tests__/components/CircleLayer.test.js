@@ -5,10 +5,9 @@ import CircleLayer from '../../javascript/components/CircleLayer';
 
 describe('CircleLayer', () => {
   test('renders correctly with default props', () => {
-    const { queryByTestId } = render(
+    const { container: circleLayer } = render(
       <CircleLayer id="requiredCircleLayerID" />,
     );
-    const circleLayer = queryByTestId('rctmglCircleLayer');
     const { props } = circleLayer;
 
     expect(props.sourceID).toStrictEqual('DefaultSourceID');
@@ -28,8 +27,7 @@ describe('CircleLayer', () => {
       style: { visibility: 'none' },
     };
 
-    const { queryByTestId } = render(<CircleLayer {...customProps} />);
-    const circleLayer = queryByTestId('rctmglCircleLayer');
+    const { container: circleLayer } = render(<CircleLayer {...customProps} />);
     const { props } = circleLayer;
 
     expect(props.id).toStrictEqual(customProps.id);
@@ -41,11 +39,6 @@ describe('CircleLayer', () => {
     expect(props.filter).toStrictEqual(customProps.filter);
     expect(props.minZoomLevel).toStrictEqual(customProps.minZoomLevel);
     expect(props.maxZoomLevel).toStrictEqual(customProps.maxZoomLevel);
-    expect(props.reactStyle).toStrictEqual({
-      visibility: {
-        styletype: 'constant',
-        stylevalue: { type: 'string', value: customProps.style.visibility },
-      },
-    });
+    expect(props.style).toStrictEqual(customProps.style);
   });
 });
