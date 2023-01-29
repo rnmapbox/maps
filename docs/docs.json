@@ -3562,7 +3562,7 @@
       {
         "name": "filter",
         "required": false,
-        "type": "array",
+        "type": "FilterExpression",
         "default": "none",
         "description": "Filter only the features in the source layer that satisfy a condition that you define"
       },
@@ -3582,16 +3582,13 @@
       },
       {
         "name": "style",
-        "required": false,
-        "type": "union",
+        "required": true,
+        "type": "RasterLayerStyleProps",
         "default": "none",
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "RasterLayer.js",
+    "fileNameWithExt": "RasterLayer.tsx",
     "name": "RasterLayer",
     "styles": [
       {
