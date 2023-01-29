@@ -1747,7 +1747,7 @@
       {
         "name": "filter",
         "required": false,
-        "type": "array",
+        "type": "FilterExpression",
         "default": "none",
         "description": "Filter only the features in the source layer that satisfy a condition that you define"
       },
@@ -1768,15 +1768,12 @@
       {
         "name": "style",
         "required": false,
-        "type": "union",
+        "type": "HeatmapLayerStyleProps",
         "default": "none",
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "HeatmapLayer.js",
+    "fileNameWithExt": "HeatmapLayer.tsx",
     "name": "HeatmapLayer",
     "styles": [
       {
