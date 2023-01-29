@@ -1203,20 +1203,20 @@
       {
         "name": "filter",
         "required": false,
-        "type": "array",
+        "type": "FilterExpression",
         "default": "none",
         "description": "Filter only the features in the source layer that satisfy a condition that you define"
       },
       {
         "name": "minZoomLevel",
-        "required": false,
+        "required": true,
         "type": "number",
         "default": "none",
         "description": "The minimum zoom level at which the layer gets parsed and appears."
       },
       {
         "name": "maxZoomLevel",
-        "required": false,
+        "required": true,
         "type": "number",
         "default": "none",
         "description": "The maximum zoom level at which the layer gets parsed and appears."
@@ -1224,15 +1224,12 @@
       {
         "name": "style",
         "required": false,
-        "type": "union",
+        "type": "FillExtrusionLayerStyleProps",
         "default": "none",
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "FillExtrusionLayer.js",
+    "fileNameWithExt": "FillExtrusionLayer.tsx",
     "name": "FillExtrusionLayer",
     "styles": [
       {
