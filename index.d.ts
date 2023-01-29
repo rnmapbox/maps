@@ -48,11 +48,16 @@ import {
   SymbolLayer as _SymbolLayer,
   Props as _SymbolLayerProps,
 } from './javascript/components/SymbolLayer';
-import {
-  LineLayer as _LineLayer,
+import _LineLayer, {
   Props as _LineLayerProps,
 } from './javascript/components/LineLayer';
 import { Props as _BackgroundLayerProps } from './javascript/components/BackgroundLayer';
+import { Props as _CircleLayerProps } from './javascript/components/CircleLayer';
+import { Props as _FillLayerProps } from './javascript/components/FillLayer';
+import { Props as _FillExtrusionLayerProps } from './javascript/components/FillExtrusionLayer';
+import { Props as _RasterLayerProps } from './javascript/components/RasterLayer';
+import { Props as _HeatmapLayerProps } from './javascript/components/HeatmapLayer';
+import { Props as _SkyLayerProps } from './javascript/components/SkyLayer';
 import {
   ShapeSource as _ShapeSource,
   Props as _ShapeSourceProps,
@@ -283,12 +288,12 @@ declare namespace MapboxGL {
     class ImageSource extends Component<ImageSourceProps> {}
 
     // layers
-    class FillLayer extends Component<FillLayerProps> {}
-    class FillExtrusionLayer extends Component<FillExtrusionLayerProps> {}
+    class FillLayer extends Component<_FillLayerProps> {}
+    class FillExtrusionLayer extends Component<_FillExtrusionLayerProps> {}
     class LineLayer extends Component<_LineLayerProps> {}
-    class CircleLayer extends Component<CircleLayerProps> {}
+    class CircleLayer extends Component<_CircleLayerProps> {}
     class SymbolLayer extends Component<_SymbolLayerProps> {}
-    class RasterLayer extends Component<RasterLayerProps> {}
+    class RasterLayer extends Component<_RasterLayerProps> {}
     class BackgroundLayer extends Component<_BackgroundLayerProps> {}
   }
 
@@ -405,16 +410,16 @@ declare namespace MapboxGL {
   /**
    * Layers
    */
-  class BackgroundLayer extends Component<BackgroundLayerProps> {}
-  class CircleLayer extends Component<CircleLayerProps> {}
-  class FillExtrusionLayer extends Component<FillExtrusionLayerProps> {}
-  class FillLayer extends Component<FillLayerProps> {}
-  class LineLayer extends Component<LineLayerProps> {}
-  class RasterLayer extends Component<RasterLayerProps> {}
-  class HeatmapLayer extends Component<HeatmapLayerProps> {}
+  class BackgroundLayer extends Component<_BackgroundLayerProps> {}
+  class CircleLayer extends Component<_CircleLayerProps> {}
+  class FillExtrusionLayer extends Component<_FillExtrusionLayerProps> {}
+  class FillLayer extends Component<_FillLayerProps> {}
+  class LineLayer extends Component<_LineLayerProps> {}
+  class RasterLayer extends Component<_RasterLayerProps> {}
+  class HeatmapLayer extends Component<_HeatmapLayerProps> {}
   class Images extends Component<ImagesProps> {}
   class ImageSource extends Component<ImageSourceProps> {}
-  class SkyLayer extends Component<SkyLayerProps> {}
+  class SkyLayer extends Component<_SkyLayerProps> {}
 
   class LocationManager extends Component {
     start(displacement?: number): void;
