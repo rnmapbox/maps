@@ -1469,7 +1469,7 @@
       {
         "name": "filter",
         "required": false,
-        "type": "array",
+        "type": "FilterExpression",
         "default": "none",
         "description": "Filter only the features in the source layer that satisfy a condition that you define"
       },
@@ -1490,15 +1490,12 @@
       {
         "name": "style",
         "required": false,
-        "type": "union",
+        "type": "FillLayerStyleProps",
         "default": "none",
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "FillLayer.js",
+    "fileNameWithExt": "FillLayer.tsx",
     "name": "FillLayer",
     "styles": [
       {
