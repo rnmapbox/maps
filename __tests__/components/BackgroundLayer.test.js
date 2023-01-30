@@ -43,5 +43,13 @@ describe('BackgroundLayer', () => {
     expect(props.minZoomLevel).toStrictEqual(testProps.minZoomLevel);
     expect(props.maxZoomLevel).toStrictEqual(testProps.maxZoomLevel);
     expect(props.style).toStrictEqual(testProps.style);
+
+    // abstract layer props
+    expect(backgroundLayer.children[0].props.reactStyle).toStrictEqual({
+      visibility: {
+        styletype: 'constant',
+        stylevalue: { type: 'string', value: testProps.style.visibility },
+      },
+    });
   });
 });

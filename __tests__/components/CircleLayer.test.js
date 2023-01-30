@@ -40,5 +40,13 @@ describe('CircleLayer', () => {
     expect(props.minZoomLevel).toStrictEqual(customProps.minZoomLevel);
     expect(props.maxZoomLevel).toStrictEqual(customProps.maxZoomLevel);
     expect(props.style).toStrictEqual(customProps.style);
+
+    // abstract layer props
+    expect(circleLayer.children[0].props.reactStyle).toStrictEqual({
+      visibility: {
+        styletype: 'constant',
+        stylevalue: { type: 'string', value: customProps.style.visibility },
+      },
+    });
   });
 });
