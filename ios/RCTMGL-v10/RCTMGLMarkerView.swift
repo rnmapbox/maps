@@ -92,10 +92,31 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   override func reactSetFrame(_ frame: CGRect) {
     let prev = self.frame
     var next = frame
+    var visibleOnMap = false
     
+    if (self.map != nil) {
+      let cameraOptions = CameraOptions(cameraState: self.map!.cameraState)
+      guard let bounds = self.map?.mapView.mapboxMap.coordinateBounds(for: cameraOptions) else {
+        Logger.log(level: .error, message: "reactSetFrame failed: mapView coordinate bounds is empty")
+        return
+      }
+      guard let pointCoordinates = self.point?.coordinates else {
+        Logger.log(level: .error, message: "reactSetFrame failed: marker coordinates is empty")
+        return
+      }
+
+      if (pointCoordinates.latitude > bounds.northeast.latitude
+      || pointCoordinates.latitude < bounds.southwest.latitude
+      || pointCoordinates.longitude < bounds.southwest.longitude
+      || pointCoordinates.longitude > bounds.northeast.longitude) {
+        visibleOnMap = false
+      } else {
+        visibleOnMap = true
+      }
+    }
     let frameDidChange = !next.equalTo(prev)
     if (frameDidChange) {
-      if prev.minX == 0 || prev.minY == 0 {
+      if (visibleOnMap == false || prev.minX == 0 || prev.minY == 0) {
         // Start the view offscreen to make it invisible until the annotation manager sets it to
         // the correct point on the map.
         next = CGRect(
@@ -136,14 +157,14 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
 
   // MARK: - Create, update, and remove methods
 
-    private func addOrUpdate() {
-      if didAddToMap {
-        update()
-      } else {
-        add()
-      }
+  private func addOrUpdate() {
+    if didAddToMap {
+      update()
+    } else {
+      add()
     }
-  
+  }
+
   /// Because the necessary data to add an annotation arrives from different sources at unpredictable times, we let the arrival of each value trigger an attempt to add the annotation, which we only do if all of the data exists, and the annotation not been added already.
   private func add() {
     if didAddToMap {
