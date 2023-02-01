@@ -5,11 +5,10 @@ import BackgroundLayer from '../../javascript/components/BackgroundLayer';
 
 describe('BackgroundLayer', () => {
   test('renders correctly with default props', () => {
-    const { queryByTestId } = render(
+    const { container: backgroundLayer } = render(
       <BackgroundLayer id="requiredBackgroundLayerID" />,
     );
 
-    const backgroundLayer = queryByTestId('rctmglBackgroundLayer');
     const { props } = backgroundLayer;
 
     expect(props.sourceID).toStrictEqual('DefaultSourceID');
@@ -29,8 +28,9 @@ describe('BackgroundLayer', () => {
       style: { visibility: 'none' },
     };
 
-    const { queryByTestId } = render(<BackgroundLayer {...testProps} />);
-    const backgroundLayer = queryByTestId('rctmglBackgroundLayer');
+    const { container: backgroundLayer } = render(
+      <BackgroundLayer {...testProps} />,
+    );
     const { props } = backgroundLayer;
 
     expect(props.id).toStrictEqual(testProps.id);
@@ -42,7 +42,10 @@ describe('BackgroundLayer', () => {
     expect(props.filter).toStrictEqual(testProps.filter);
     expect(props.minZoomLevel).toStrictEqual(testProps.minZoomLevel);
     expect(props.maxZoomLevel).toStrictEqual(testProps.maxZoomLevel);
-    expect(props.reactStyle).toStrictEqual({
+    expect(props.style).toStrictEqual(testProps.style);
+
+    // abstract layer props
+    expect(backgroundLayer.children[0].props.reactStyle).toStrictEqual({
       visibility: {
         styletype: 'constant',
         stylevalue: { type: 'string', value: testProps.style.visibility },

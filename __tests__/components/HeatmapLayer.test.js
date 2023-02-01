@@ -5,10 +5,9 @@ import HeatmapLayer from '../../javascript/components/HeatmapLayer';
 
 describe('HeatmapLayer', () => {
   test('renders correctly with default props', () => {
-    const { UNSAFE_getByType } = render(
+    const { container: heatmapLayer } = render(
       <HeatmapLayer id="requiredHeatmapLayerID" />,
     );
-    const heatmapLayer = UNSAFE_getByType('RCTMGLHeatmapLayer');
     const { props } = heatmapLayer;
     expect(props.sourceID).toStrictEqual('DefaultSourceID');
   });
@@ -26,8 +25,8 @@ describe('HeatmapLayer', () => {
       maxZoomLevel: 8,
       style: { visibility: 'none' },
     };
-    const { UNSAFE_getByType } = render(<HeatmapLayer {...testProps} />);
-    const { props } = UNSAFE_getByType('RCTMGLHeatmapLayer');
+    const { container: heatmapLayer } = render(<HeatmapLayer {...testProps} />);
+    const { props } = heatmapLayer;
 
     expect(props.id).toStrictEqual(testProps.id);
     expect(props.sourceID).toStrictEqual(testProps.sourceID);
@@ -38,7 +37,10 @@ describe('HeatmapLayer', () => {
     expect(props.filter).toStrictEqual(testProps.filter);
     expect(props.minZoomLevel).toStrictEqual(testProps.minZoomLevel);
     expect(props.maxZoomLevel).toStrictEqual(testProps.maxZoomLevel);
-    expect(props.reactStyle).toStrictEqual({
+    expect(props.style).toStrictEqual(testProps.style);
+
+    // abstract layer props
+    expect(heatmapLayer.children[0].props.reactStyle).toStrictEqual({
       visibility: {
         styletype: 'constant',
         stylevalue: { type: 'string', value: testProps.style.visibility },
