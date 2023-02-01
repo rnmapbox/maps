@@ -24,6 +24,12 @@ import {
 
 import type {
   SymbolLayerStyleProps,
+  CircleLayerStyleProps,
+  FillExtrusionLayerStyleProps,
+  SkyLayerStyleProps,
+  RasterLayerStyleProps,
+  HeatmapLayerStyleProps,
+  FillLayerStyleProps,
   LineLayerStyleProps,
   BackgroundLayerStyleProps,
 } from './javascript/utils/MapboxStyles';
@@ -646,121 +652,19 @@ export interface Transition {
   delay: number;
 }
 
-export interface BackgroundLayerStyle {
-  visibility?: Visibility | Expression;
-  backgroundColor?: string | Expression;
-  backgroundColorTransition?: Transition | Expression;
-  backgroundPattern?: string | Expression;
-  backgroundPatternTransition?: Transition | Expression;
-  backgroundOpacity?: number | Expression;
-  backgroundOpacityTransition?: Transition | Expression;
-}
+export type BackgroundLayerStyle = BackgroundLayerStyleProps;
 
-export interface CircleLayerStyle {
-  visibility?: Visibility | Expression;
-  circleRadius?: number | Expression;
-  circleRadiusTransition?: Transition | Expression;
-  circleColor?: string | Expression;
-  circleColorTransition?: Transition | Expression;
-  circleBlur?: number | Expression;
-  circleBlurTransition?: Transition | Expression;
-  circleOpacity?: number | Expression;
-  circleOpacityTransition?: Transition | Expression;
-  circleTranslate?: Array<number> | Expression;
-  circleTranslateTransition?: Transition | Expression;
-  circleTranslateAnchor?: Alignment | Expression;
-  circlePitchScale?: Alignment | Expression;
-  circlePitchAlignment?: Alignment | Expression;
-  circleStrokeWidth?: number | Expression;
-  circleStrokeWidthTransition?: Transition | Expression;
-  circleStrokeColor?: string | Expression;
-  circleStrokeColorTransition?: Transition | Expression;
-  circleStrokeOpacity?: number | Expression;
-  circleStrokeOpacityTransition?: Transition | Expression;
-}
+export type CircleLayerStyle = CircleLayerStyleProps;
 
-export interface FillExtrusionLayerStyle {
-  visibility?: Visibility | Expression;
-  fillExtrusionOpacity?: number | Expression;
-  fillExtrusionOpacityTransition?: Transition | Expression;
-  fillExtrusionColor?: string | Expression;
-  fillExtrusionColorTransition?: Transition | Expression;
-  fillExtrusionTranslate?: Array<number> | Expression;
-  fillExtrusionTranslateTransition?: Transition | Expression;
-  fillExtrusionTranslateAnchor?: Alignment | Expression;
-  fillExtrusionPattern?: string | Expression;
-  fillExtrusionPatternTransition?: Transition | Expression;
-  fillExtrusionHeight?: number | Expression;
-  fillExtrusionHeightTransition?: Transition | Expression;
-  fillExtrusionBase?: number | Expression;
-  fillExtrusionBaseTransition?: Transition | Expression;
-}
+export type FillExtrusionLayerStyle = FillExtrusionLayerStyleProps;
 
-export interface FillLayerStyle {
-  visibility?: Visibility | Expression;
-  fillAntialias?: boolean | Expression;
-  fillOpacity?: number | Expression;
-  fillExtrusionOpacityTransition?: Transition | Expression;
-  fillColor?: string | Expression;
-  fillColorTransition?: Transition | Expression;
-  fillOutlineColor?: string | Expression;
-  fillOutlineColorTransition?: Transition | Expression;
-  fillTranslate?: Array<number> | Expression;
-  fillTranslateTransition?: Transition | Expression;
-  fillTranslateAnchor?: Alignment | Expression;
-  fillPattern?: string | Expression;
-  fillPatternTransition?: Transition | Expression;
-}
+export type FillLayerStyle = FillLayerStyleProps;
 
-export interface SkyLayerStyle {
-  skyType: string | Expression;
-  skyAtmosphereSun?: Array<number> | Expression;
-  skyAtmosphereSunIntensity: number | Expression;
-}
+export type SkyLayerStyle = SkyLayerStyleProps;
 
-export interface LineLayerStyle {
-  lineCap?: 'butt' | 'round' | 'square' | Expression;
-  lineJoin?: 'bevel' | 'round' | 'miter' | Expression;
-  lineMiterLimit?: number | Expression;
-  lineRoundLimit?: number | Expression;
-  visibility?: Visibility | Expression;
-  lineOpacity?: number | Expression;
-  lineOpacityTransition?: Transition | Expression;
-  lineColor?: string | Expression;
-  lineColorTransition?: Transition | Expression;
-  lineTranslate?: Array<number> | Expression;
-  lineTranslateTransition?: Transition | Expression;
-  lineTranslateAnchor?: Alignment | Expression;
-  lineWidth?: number | Expression;
-  lineWidthTransition?: Transition | Expression;
-  lineGapWidth?: number | Expression;
-  lineGapWidthTransition?: Transition | Expression;
-  lineOffset?: number | Expression;
-  lineOffsetTransition?: Transition | Expression;
-  lineBlur?: number | Expression;
-  lineBlurTransition?: Transition | Expression;
-  lineDasharray?: Array<number> | Expression;
-  lineDasharrayTransition?: Transition | Expression;
-  linePattern?: string | Expression;
-  linePatternTransition?: Transition | Expression;
-}
+export type LineLayerStyle = LineLayerStyleProps;
 
-export interface RasterLayerStyle {
-  visibility?: Visibility | Expression;
-  rasterOpacity?: number | Expression;
-  rasterOpacityTransition?: Transition | Expression;
-  rasterHueRotate?: Expression;
-  rasterHueRotateTransition?: Transition | Expression;
-  rasterBrightnessMin?: number | Expression;
-  rasterBrightnessMinTransition?: Transition | Expression;
-  rasterBrightnessMax?: number | Expression;
-  rasterBrightnessMaxTransition?: Transition | Expression;
-  rasterSaturation?: number | Expression;
-  rasterSaturationTransition?: Transition | Expression;
-  rasterContrast?: number | Expression;
-  rasterContrastTransition?: Transition | Expression;
-  rasterFadeDuration?: number | Expression;
-}
+export type RasterLayerStyle = RasterLayerStyleProps;
 
 export type TextVariableAnchorValues =
   | 'center'
@@ -776,17 +680,7 @@ export type TextVariableAnchorValues =
 export type SymbolLayerStyle = SymbolLayerStyleProps;
 export type LineLayerStyle = LineLayerStyleProps;
 
-export interface HeatmapLayerStyle {
-  visibility?: Visibility | Expression;
-  heatmapRadius?: number | Expression;
-  heatmapRadiusTransition?: Transition | Expression;
-  heatmapWeight?: number | Expression;
-  heatmapIntensity?: number | Expression;
-  heatmapIntensityTransition?: Transition | Expression;
-  heatmapColor?: string | Expression;
-  heatmapOpacity?: number | Expression;
-  heatmapOpacityTransition?: Transition | Expression;
-}
+export type HeatmapLayerStyle = HeatmapLayerStyleProps;
 
 export interface Point {
   x: number;
