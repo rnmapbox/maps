@@ -81,6 +81,19 @@ func errorMessage(_ error: Error) -> String {
   }
 }
 
+/// log message if optional returned by `fn` is nil
+func logged<T>(_ msg: String, info: (() -> String)? = nil, level: Logger.LogLevel = .error, rejecter: RCTPromiseRejectBlock? = nil, fn: () -> T?) ->T? {
+  let ret = fn()
+  if ret == nil {
+    Logger.log(level:level, message: "\(msg) \(info?() ?? "")")
+    rejecter?(msg, "\(info?() ?? "")", NSError(domain:"is null", code: 0))
+    return nil
+  } else {
+    return ret
+  }
+}
+
+/// log message if `fn` throws and return nil
 func logged<T>(_ msg: String, info: (() -> String)? = nil, level: Logger.LogLevel = .error, rejecter: RCTPromiseRejectBlock? = nil, fn : () throws -> T) -> T? {
   do {
     return try fn()

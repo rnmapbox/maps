@@ -53,6 +53,7 @@ class CreateOfflineRegion extends React.Component {
     };
 
     this.onDownloadProgress = this.onDownloadProgress.bind(this);
+    this.errorListener = this.errorListener.bind(this);
     this.onDidFinishLoadingStyle = this.onDidFinishLoadingStyle.bind(this);
 
     this.onResume = this.onResume.bind(this);
@@ -87,7 +88,15 @@ class CreateOfflineRegion extends React.Component {
     };
 
     // start download
-    MapboxGL.offlineManager.createPack(options, this.onDownloadProgress);
+    MapboxGL.offlineManager.createPack(
+      options,
+      this.onDownloadProgress,
+      this.errorListener,
+    );
+  }
+
+  errorListener(offlineRegion, error) {
+    console.log('Error:', error);
   }
 
   onDownloadProgress(offlineRegion, offlineRegionStatus) {
