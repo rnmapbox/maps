@@ -131,4 +131,4 @@ class LocationManager {
   }
 }
 
-export default new LocationManager();
+export default LocationManager;
