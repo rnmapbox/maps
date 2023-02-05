@@ -38,6 +38,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   let id: String = "marker-\(UUID().uuidString)"
   
   weak var map: RCTMGLMapView?
+  weak var _annotationView: RCTMGLMarkerViewParentViewAnnotation?
   
   var didAddToMap = false
   
@@ -61,13 +62,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   
   @objc var isSelected: Bool = false {
     didSet {
-      let hasBecomeSelected = isSelected && !oldValue
-      
-      if hasBecomeSelected {
-        setSelected()
-      } else {
-        update()
-      }
+      update()
     }
   }
 
@@ -207,19 +202,6 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     }
   }
   
-  /// There is a Mapbox bug where `selected` does not cause the marker to move to the front, so we can't simply update the component.
-  /// This forces that effect. See https://github.com/mapbox/mapbox-maps-ios/issues/1599.
-  private func setSelected() {
-    if let options = annotationManager?.options(for: annotationView) {
-      do {
-        annotationManager?.remove(annotationView)
-        try annotationManager?.add(annotationView, id: id, options: options)
-      } catch {
-        Logger.log(level: .error, message: "[MarkerView] Error selecting annotation", error: error)
-      }
-    }
-  }
-  
   private func remove() {
     annotationManager?.remove(annotationView)
     annotationView.remove(marker: self)
@@ -244,7 +226,8 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       height: size.height,
       allowOverlap: allowOverlap,
       offsetX: offset.dx,
-      offsetY: offset.dy
+      offsetY: offset.dy,
+      selected: isSelected
     )
     return options
   }
