@@ -1,6 +1,36 @@
 import MapboxMaps
 import UIKit
 
+/// dummy parent of RCTMGLMarkerView, so react-native changes visibility on RCTMGLMarkerView,
+/// and Mapbox changes visibility on RCTMGLMarkerViewParentViewAnnotation
+class RCTMGLMarkerViewParentViewAnnotation : UIView {
+  required init(marker: RCTMGLMarkerView) {
+    super.init(frame: marker.bounds)
+    insertSubview(marker, at: 0)
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("not implented")
+  }
+
+  func remove(marker: RCTMGLMarkerView) {
+    marker.removeFromSuperview()
+  }
+
+  func updateSize(_ size: CGSize, oldOffset: CGVector, newOffset: CGVector) {
+    let actSize = self.frame.size
+    if actSize.width != size.width || actSize.height != size.height {
+      let dx = ((size.width/2.0) - newOffset.dx) - ((actSize.width/2.0) - oldOffset.dx)
+      let dy = ((size.height/2.0) + newOffset.dy) - ((actSize.height/2.0) + oldOffset.dy)
+      print(" => size=\(size) actSize=\(actSize) newOffset=\(newOffset) oldOffset=\(oldOffset)  dx=\(dx) dy=\(dy)")
+      var frame = self.frame
+      frame = frame.offsetBy(dx: -dx, dy: -dy)
+      frame.size = size
+      self.frame = frame
+    }
+  }
+}
+
 class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   // MARK: - Instance variables
   
@@ -89,36 +119,33 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   
   // MARK: - React methods
   
+  override var isHidden: Bool {
+    get {
+      return super.isHidden
+    }
+    set {
+      super.isHidden = newValue
+    }
+  }
+  
   override func reactSetFrame(_ frame: CGRect) {
     let prev = self.frame
     var next = frame
     
     let frameDidChange = !next.equalTo(prev)
-    if (frameDidChange) {
-      if prev.minX == 0 || prev.minY == 0 {
-        // Start the view offscreen to make it invisible until the annotation manager sets it to
-        // the correct point on the map.
-        next = CGRect(
-          x: -10000,
-          y: -10000,
-          width: next.width,
-          height: next.height
-        )
-      } else {
-        // Calculate the next position to temporarily place the view before the annotation manager
-        // sets it to the correct point on the map.
-        let dx = (next.width - prev.width) / 2
-        let dy = (next.height - prev.height) / 2
-        next = CGRect(
-          x: prev.minX - dx,
-          y: prev.minY - dy,
-          width: next.width,
-          height: next.height
-        )
-      }
+    if frameDidChange {
+      next = CGRect(
+        x: 0,
+        y: 0,
+        width: next.width,
+        height: next.height
+      )
     }
-    
+
     super.reactSetFrame(next)
+    if frameDidChange {
+      annotationView.updateSize(next.size, oldOffset:calcOffset(size: prev.size), newOffset: calcOffset(size: next.size))
+    }
     addOrUpdate()
   }
   
@@ -156,7 +183,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
 
     do {
       let options = getOptions()
-      try annotationManager.add(self, id: id, options: options)
+      try annotationManager.add(annotationView, id: id, options: options)
       didAddToMap = true
     } catch {
       Logger.log(level: .error, message: "[MarkerView] Error adding annotation", error: error)
@@ -174,7 +201,7 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     
     do {
       let options = getOptions()
-      try annotationManager.update(self, options: options)
+      try annotationManager.update(annotationView, options: options)
     } catch {
       Logger.log(level: .error, message: "[MarkerView] Error updating annotation", error: error)
     }
@@ -183,10 +210,10 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   /// There is a Mapbox bug where `selected` does not cause the marker to move to the front, so we can't simply update the component.
   /// This forces that effect. See https://github.com/mapbox/mapbox-maps-ios/issues/1599.
   private func setSelected() {
-    if let options = annotationManager?.options(for: self) {
+    if let options = annotationManager?.options(for: annotationView) {
       do {
-        annotationManager?.remove(self)
-        try annotationManager?.add(self, id: id, options: options)
+        annotationManager?.remove(annotationView)
+        try annotationManager?.add(annotationView, id: id, options: options)
       } catch {
         Logger.log(level: .error, message: "[MarkerView] Error selecting annotation", error: error)
       }
@@ -194,7 +221,9 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
   }
   
   private func remove() {
-    annotationManager?.remove(self)
+    annotationManager?.remove(annotationView)
+    annotationView.remove(marker: self)
+    self._annotationView = nil
     didAddToMap = false
   }
   
@@ -206,12 +235,13 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
       geometry = Geometry.point(point)
     }
     
-    let offset = getOffset()
+    let size = self.bounds.size
+    let offset = calcOffset(size: size)
   
     let options = ViewAnnotationOptions(
       geometry: geometry,
-      width: self.bounds.width,
-      height: self.bounds.height,
+      width: size.width,
+      height: size.height,
       allowOverlap: allowOverlap,
       offsetX: offset.dx,
       offsetY: offset.dy
@@ -219,16 +249,34 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     return options
   }
   
-  private func getOffset() -> CGVector {
+  private func calcOffset(size: CGSize) -> CGVector {
     guard let anchor = anchor, let anchorX = anchor["x"]?.CGFloat, let anchorY = anchor["y"]?.CGFloat else {
       return .zero
     }
           
-    // Create a modified offset, normalized from 0..1 to -1..1 and scaled to
-    // the view size.
-    let x = (anchorX * 2 - 1) * (self.bounds.width / 2) * -1
-    let y = (anchorY * 2 - 1) * (self.bounds.height / 2)
+    let x = (anchorX * 2 - 1) * (size.width / 2) * -1
+    let y = (anchorY * 2 - 1) * (size.height / 2)
 
     return CGVector(dx: x, dy: y)
+  }
+  
+  var annotationView : RCTMGLMarkerViewParentViewAnnotation {
+    if let result = _annotationView {
+      return result
+    }
+    let result = RCTMGLMarkerViewParentViewAnnotation(marker: self)
+    _annotationView = result
+    return result
+  }
+
+  @objc override func didMoveToSuperview() {
+    // React tends to add back us to our original superview,
+    // https://github.com/facebook/react-native/blob/11ece22fc6955d169def9ef9f2809c24bc457ba8/React/Views/UIView%2BReact.m#L172-L177
+    // fix that if we see that
+    if let expectedParent = _annotationView {
+      if superview != nil && superview != expectedParent {
+        expectedParent.addSubview(self)
+      }
+    }
   }
 }
