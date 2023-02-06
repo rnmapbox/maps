@@ -71,11 +71,13 @@ class LocationManager {
   }
 
   _handleAppStateChange(appState) {
-    if (this._requestsAlwaysUse) {
+    if (!this._requestsAlwaysUse) {
       if (appState === 'background') {
         this.stop();
       } else if (appState === 'active') {
-        this.start();
+        if (this._listeners.length > 0) {
+          this.start();
+        }
       }
     }
   }
