@@ -71,7 +71,7 @@ class LocationManager {
   }
 
   _handleAppStateChange(appState) {
-    if (!this._requestsAlwaysUse) {
+    if (this._requestsAlwaysUse) {
       if (appState === 'background') {
         this.stop();
       } else if (appState === 'active') {
@@ -131,4 +131,4 @@ class LocationManager {
   }
 }
 
-export default LocationManager;
+export default new LocationManager();
