@@ -151,6 +151,7 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
             if (removed == false) {
                 Logger.w("RCTMGLMarkerView", "Unable to remove view")
             }
+            didAddToMap = false
         }
     }
 
