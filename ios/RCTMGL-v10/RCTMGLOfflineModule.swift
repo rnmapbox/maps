@@ -36,6 +36,10 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     return OfflineManager(resourceOptions: .init(accessToken: MGLModule.accessToken!))
   }()
   
+  lazy var offlineRegionManager: OfflineRegionManager = {
+    return OfflineRegionManager(resourceOptions: .init(accessToken: MGLModule.accessToken!))
+  }()
+
   lazy var tileStore : TileStore = {
     return TileStore.default
   }()
@@ -51,13 +55,13 @@ class RCTMGLOfflineModule: RCTEventEmitter {
         if let styleURI = rnMetadata["styleURI"] as? String {
           self.styleURI = StyleURI(rawValue: styleURI)
         }
-        if let bounds = rnMetadata["bounds"] as? JSONObject {
+        if let bounds = rnMetadata["bounds"] as? [String:Any] {
           self.bounds = logged("RCTMGLOfflineModule.TileRegionPack: cannot decode bounds") {
             let jsonData = try JSONSerialization.data(withJSONObject: bounds)
             return try JSONDecoder().decode(Geometry.self, from: jsonData)
           }
         }
-        if let zoomRange = rnMetadata["zoomRange"] as? JSONObject {
+        if let zoomRange = rnMetadata["zoomRange"] as? Any {
           self.zoomRange = logged("RCTMGLOfflineModule.TileRegionPack: cannot decode zoomRange") {
             let jsonData = try JSONSerialization.data(withJSONObject: zoomRange)
             return try JSONDecoder().decode(ClosedRange<UInt8>.self, from: jsonData)
@@ -528,7 +532,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
   
   @objc
   func setTileCountLimit(_ limit: NSNumber) {
-    RCTMGLLogWarn("setTileCountLimit is not yet implemented on v10")
+    self.offlineRegionManager.setOfflineMapboxTileCountLimitForLimit(limit.uint64Value)
   }
   
   
