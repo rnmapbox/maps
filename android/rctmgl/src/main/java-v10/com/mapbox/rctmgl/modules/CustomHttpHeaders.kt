@@ -11,6 +11,7 @@ object CustomHttpHeaders : HttpServiceInterceptorInterface {
         HttpServiceFactory.getInstance().setInterceptor(
             this
         )
+        map.put(headerName, headerValue)
     }
 
     fun removeCustomHeader(headerName: String) {
