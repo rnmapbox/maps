@@ -3139,7 +3139,14 @@
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "This event is triggered when the map has failed to load a new map style."
+        "description": "This event is triggered when the map has failed to load a new map style. On v10 it's deprecated and replaced by onMapLoadingError"
+      },
+      {
+        "name": "onMapLoadingError",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap."
       },
       {
         "name": "onWillStartRenderingFrame",

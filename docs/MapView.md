@@ -39,7 +39,8 @@ MapView backed by Mapbox Native GL
 | onMapIdle | `func` | `none` | `false` | iOS, v10 only, deprecated will be removed in next version - please use onRegionDidChange |
 | onWillStartLoadingMap | `func` | `none` | `false` | This event is triggered when the map is about to start loading a new map style. |
 | onDidFinishLoadingMap | `func` | `none` | `false` | This is triggered when the map has successfully loaded a new map style. |
-| onDidFailLoadingMap | `func` | `none` | `false` | This event is triggered when the map has failed to load a new map style. |
+| onDidFailLoadingMap | `func` | `none` | `false` | This event is triggered when the map has failed to load a new map style. On v10 it's deprecated and replaced by onMapLoadingError |
+| onMapLoadingError | `func` | `none` | `false` | This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap. |
 | onWillStartRenderingFrame | `func` | `none` | `false` | This event is triggered when the map will start rendering a frame. |
 | onDidFinishRenderingFrame | `func` | `none` | `false` | This event is triggered when the map finished rendering a frame. |
 | onDidFinishRenderingFrameFully | `func` | `none` | `false` | This event is triggered when the map fully finished rendering a frame. |

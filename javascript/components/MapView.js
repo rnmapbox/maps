@@ -248,9 +248,14 @@ class MapView extends NativeBridgeComponent(
     onDidFinishLoadingMap: PropTypes.func,
 
     /**
-     * This event is triggered when the map has failed to load a new map style.
+     * This event is triggered when the map has failed to load a new map style. On v10 it's deprecated and replaced by onMapLoadingError
      */
     onDidFailLoadingMap: PropTypes.func,
+
+    /**
+     * This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.
+     */
+    onMapLoadingError: PropTypes.func,
 
     /**
      * This event is triggered when the map will start rendering a frame.
@@ -372,7 +377,13 @@ class MapView extends NativeBridgeComponent(
       function addIfHasHandler(name) {
         if (props[`on${name}`] != null) {
           if (MapboxGL.EventTypes[name] == null) {
-            console.warn(`rnmapbox maps: ${name} is not supported`);
+            if (name === 'DidFailLoadingMap') {
+              console.warn(
+                `rnmapbox maps: on${name} is deprecated, please use onMapLoadingError`,
+              );
+            } else {
+              console.warn(`rnmapbox maps: ${name} is not supported`);
+            }
           } else {
             events.push(MapboxGL.EventTypes[name]);
             return true;
@@ -387,6 +398,7 @@ class MapView extends NativeBridgeComponent(
       addIfHasHandler('UserLocationUpdate');
       addIfHasHandler('WillStartLoadingMap');
       addIfHasHandler('DidFinishLoadingMap');
+      addIfHasHandler('MapLoadingError');
       addIfHasHandler('DidFailLoadingMap');
       addIfHasHandler('WillStartRenderingFrame');
       addIfHasHandler('DidFinishRenderingFrame');
@@ -700,6 +712,7 @@ class MapView extends NativeBridgeComponent(
       this.props;
     const { type, payload } = e.nativeEvent;
     let propName = '';
+    let deprecatedPropName = '';
 
     switch (type) {
       case MapboxGL.EventTypes.RegionWillChange:
@@ -737,6 +750,10 @@ class MapView extends NativeBridgeComponent(
       case MapboxGL.EventTypes.DidFailLoadingMap:
         propName = 'onDidFailLoadingMap';
         break;
+      case MapboxGL.EventTypes.MapLoadingError:
+        propName = 'onMapLoadingError';
+        deprecatedPropName = 'onDidFailLoadingMap';
+        break;
       case MapboxGL.EventTypes.WillStartRenderingFrame:
         propName = 'onWillStartRenderingFrame';
         break;
@@ -764,6 +781,9 @@ class MapView extends NativeBridgeComponent(
 
     if (propName.length) {
       this._handleOnChange(propName, payload);
+    }
+    if (deprecatedPropName.length) {
+      this._handleOnChange(deprecatedPropName, payload);
     }
   }
 
