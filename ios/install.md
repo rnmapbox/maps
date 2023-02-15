@@ -60,7 +60,7 @@ You can also override the version to use. *Warning:* if you set a version, then 
 
 ```ruby
 # Warning: only for advanced use cases, only do this if you know what you're doing.
-# $RNMapboxMapsVersion = '~> 10.9.0'
+# $RNMapboxMapsVersion = '~> 10.11.0'
 ```
 
 You will need to authorize your download of the Maps SDK with a secret access token with the `DOWNLOADS:READ` scope. This [guide](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials) explains how to configure the secret token under section `Configure your secret token`.
