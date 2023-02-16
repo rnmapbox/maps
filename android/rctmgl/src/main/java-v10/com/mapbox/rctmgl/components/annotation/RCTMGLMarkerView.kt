@@ -13,7 +13,6 @@ import com.mapbox.maps.ViewAnnotationOptions
 import com.mapbox.maps.viewannotation.viewAnnotationOptions
 import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
-import com.mapbox.rctmgl.modules.RCTMGLLogging
 import com.mapbox.rctmgl.utils.Logger
 import java.util.Vector
 

@@ -13,13 +13,11 @@ class RCTMGLNativeUserLocation(context: Context?) : AbstractMapFeature(context),
     private var mEnabled = true
     private var mMap: MapboxMap? = null
 
-    private var mRenderMode : RenderMode = RenderMode.COMPASS
     override fun addToMap(mapView: RCTMGLMapView) {
         super.addToMap(mapView)
         mEnabled = true
         mapView.getMapboxMap()
         mapView.getMapAsync(this)
-        setRenderMode(mRenderMode)
         mMapView?.locationComponentManager?.showNativeUserLocation(true)
     }
 
@@ -45,10 +43,5 @@ class RCTMGLNativeUserLocation(context: Context?) : AbstractMapFeature(context),
 
         mMapView?.locationComponentManager?.update(style)
         mMapView?.locationComponentManager?.showNativeUserLocation(mEnabled)
-    }
-
-    fun setRenderMode(renderMode: RenderMode) {
-        mRenderMode = renderMode
-        mMapView?.locationComponentManager?.setRenderMode(renderMode)
     }
 }
