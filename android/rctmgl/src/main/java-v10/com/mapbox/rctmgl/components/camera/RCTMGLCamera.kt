@@ -290,6 +290,11 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         mMapView?.let {
             val map = it
             val viewport = map.viewport;
+
+            if (mLocationComponentManager == null) {
+                mLocationComponentManager = it.locationComponentManager
+            }
+
             if (mFollowUserLocation == false) {
                 viewport.idle()
                 mLocationComponentManager?.setFollowLocation(false)
@@ -298,10 +303,10 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
 
             mLocationComponentManager?.setFollowLocation(true)
             mLocationManager?.let {
-
-                val provider = it.provider
-                map.location.setLocationProvider(provider);
-                map.location2.setLocationProvider(provider);
+                val provider = map.location.getLocationProvider()
+                if (provider != null) {
+                    it.provider = provider
+                }
             }
 
             val location = map.location2

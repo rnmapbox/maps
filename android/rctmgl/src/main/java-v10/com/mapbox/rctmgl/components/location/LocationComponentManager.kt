@@ -8,6 +8,7 @@ import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.LocationPuck2D
+import com.mapbox.maps.plugin.PuckBearingSource
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.location.LocationManager
 
@@ -20,6 +21,7 @@ import com.mapbox.rctmgl.location.LocationManager
 class LocationComponentManager(mapView: RCTMGLMapView, context: Context) {
     private var mShowNativeUserLocation = false
     private var mFollowLocation = false
+    private var mPuckBearingSource: PuckBearingSource? = null
     var mMapView = mapView
     var mContext = context
     var mState = State(enabled=true, hidden=false, tintColor= null)
@@ -44,10 +46,6 @@ class LocationComponentManager(mapView: RCTMGLMapView, context: Context) {
     }
 
     fun update(style: Style) {
-        _applyChanges()
-    }
-
-    fun setRenderMode(renderMode: RenderMode) {
         _applyChanges()
     }
 
@@ -107,9 +105,9 @@ class LocationComponentManager(mapView: RCTMGLMapView, context: Context) {
                 if (newState.enabled != mState.enabled) {
                     if (newState.enabled) {
                         mLocationManager?.startCounted()
-                        val provider = mLocationManager?.provider
+                        val provider = it.location.getLocationProvider()
                         if (provider != null) {
-                            it.location.setLocationProvider(provider)
+                            mLocationManager?.provider = provider
                         }
                     } else {
                         mLocationManager?.stopCounted()

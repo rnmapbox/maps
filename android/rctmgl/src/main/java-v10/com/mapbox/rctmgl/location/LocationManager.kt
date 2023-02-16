@@ -3,8 +3,6 @@ package com.mapbox.rctmgl.location
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
-//import com.mapbox.maps.plugin.locationcomponent.LocationConsumer.onLocationUpdated
-//import com.mapbox.maps.plugin.locationcomponent.LocationConsumer.onBearingUpdated
 import com.mapbox.android.core.location.LocationEngine
 import com.mapbox.android.core.location.LocationEngineCallback
 import com.mapbox.android.core.location.LocationEngineResult
@@ -20,9 +18,27 @@ import java.lang.ref.WeakReference
 import java.util.ArrayList
 import kotlin.Exception
 
-internal class LocationProviderForEngine(var mEngine: LocationEngine?) : LocationProvider, LocationEngineCallback<LocationEngineResult> {
+internal class LocationProviderForEngine(var mEngine: LocationEngine?, val context: Context) : LocationProvider, LocationEngineCallback<LocationEngineResult> {
     var mConsumers = ArrayList<LocationConsumer>()
-    fun beforeAddingFirstConsumer() {}
+    @SuppressLint("MissingPermission")
+    fun beforeAddingFirstConsumer() {
+        val request = LocationEngineRequest.Builder(LocationManager.DEFAULT_INTERVAL_MILLIS
+        )
+            .setFastestInterval(LocationManager.DEFAULT_FASTEST_INTERVAL_MILLIS)
+            .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
+            .build();
+
+        if (!PermissionsManager.areLocationPermissionsGranted(context)) {
+            return
+        }
+
+        mEngine?.requestLocationUpdates(
+          request,
+          this,
+          Looper.getMainLooper()
+        )
+
+    }
     fun afterRemovedLastConsumer() {}
     @SuppressLint("MissingPermission")
     override fun registerLocationConsumer(locationConsumer: LocationConsumer) {
@@ -66,24 +82,28 @@ class LocationManager private constructor(private val context: Context) : Locati
     private var isActive = false
     private var lastLocation: Location? = null
     private var locationEngineRequest: LocationEngineRequest? = null
-    private var locationProvider: LocationProviderForEngine? = null
-    private var nStarts : Int = 0;
-    private var isPaused : Boolean = false;
+    private var locationProvider: LocationProvider? = null
+    private var nStarts : Int = 0
+    private var isPaused : Boolean = false
 
-
-
-    val provider: LocationProvider
+    var provider: LocationProvider
         get() {
-            if (locationProvider == null) {
-                locationProvider = LocationProviderForEngine(engine)
+            var ret = locationProvider
+            if (ret == null) {
+                val engine = LocationProviderForEngine(engine, context)
+                locationProvider = engine
+                return engine
+            } else {
+                return ret
             }
-            return locationProvider!!
+        }
+        set(value) {
+            locationProvider = value
         }
 
     interface OnUserLocationChange {
         fun onLocationChange(location: Location?)
     }
-
 
     /// public interface
 
@@ -228,8 +248,9 @@ class LocationManager private constructor(private val context: Context) : Locati
 
     override fun onSuccess(result: LocationEngineResult?) {
         onLocationChanged(result?.lastLocation)
-        if (locationProvider != null) {
-            locationProvider!!.onSuccess(result)
+        val provider = locationProvider
+        if (provider != null && provider is LocationProviderForEngine) {
+            provider.onSuccess(result)
         }
     }
 
