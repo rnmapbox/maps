@@ -445,8 +445,21 @@ extension RCTMGLMapView {
   }
   
   public func setupEvents() {
-    self.onEvery(event: .mapLoadingError, handler: {(self, event) in
-      if let message = event.payload.error.errorDescription {
+    self.onEvery(event: .mapLoadingError, handler: { (self, event) in
+      let eventPayload : MapLoadingErrorPayload = event.payload
+      var payload : [String:String] = [
+        "error": eventPayload.error.errorDescription ?? eventPayload.error.localizedDescription
+      ]
+      if let tileId = eventPayload.tileId {
+        payload["tileId"] = "x:\(tileId.x) y:\(tileId.y) z:\(tileId.z)"
+      }
+      if let sourceId = eventPayload.sourceId {
+        payload["sourceId"] = sourceId
+      }
+      let rctmglEvent = RCTMGLEvent(type: .mapLoadingError, payload: payload);
+      self.fireEvent(event: rctmglEvent, callback: self.reactOnMapChange)
+
+      if let message = eventPayload.error.errorDescription {
         Logger.log(level: .error, message: "MapLoad error \(message)")
       } else {
         Logger.log(level: .error, message: "MapLoad error \(event)")

@@ -55,6 +55,7 @@ class MGLModule : NSObject {
           "WillStartLoadingMap": RCTMGLEvent.EventType.willStartLoadingMap.rawValue,
           "DidFinishLoadingStyle": RCTMGLEvent.EventType.didFinishLoadingStyle.rawValue,
           "DidFinishLoadingMap": RCTMGLEvent.EventType.didFinishLoadingMap.rawValue,
+          "MapLoadingError": RCTMGLEvent.EventType.mapLoadingError.rawValue,
           "DidFinishRenderingFrameFully":  RCTMGLEvent.EventType.didFinishRenderingFully.rawValue,
           "DidFinishRenderingFrame": RCTMGLEvent.EventType.didFinishRendering.rawValue,
         ],
