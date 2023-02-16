@@ -71,6 +71,7 @@
     "@sinonjs/fake-timers": "^8.0.1",
     "@testing-library/react-native": "^11.0.0",
     "@types/mapbox-gl": "^2.7.5",
+    "@types/mapbox__geo-viewport": "^0.4.1",
     "@types/react-native": ">=0.59.9",
     "@typescript-eslint/eslint-plugin": "^5.37.0",
     "@typescript-eslint/parser": "^5.37.0",
