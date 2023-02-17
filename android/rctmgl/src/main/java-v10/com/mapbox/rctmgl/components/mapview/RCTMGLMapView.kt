@@ -28,6 +28,7 @@ import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionNam
 import com.mapbox.maps.extension.style.layers.properties.generated.Visibility
 import com.mapbox.maps.extension.style.projection.generated.Projection
 import com.mapbox.maps.extension.style.projection.generated.setProjection
+import com.mapbox.maps.plugin.animation.camera
 import com.mapbox.maps.plugin.annotation.Annotation
 import com.mapbox.maps.plugin.annotation.AnnotationConfig
 import com.mapbox.maps.plugin.annotation.annotations
@@ -38,10 +39,13 @@ import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.compass.generated.CompassSettings
 import com.mapbox.maps.plugin.delegates.listeners.*
 import com.mapbox.maps.plugin.gestures.*
+import com.mapbox.maps.plugin.locationcomponent.location
+import com.mapbox.maps.plugin.locationcomponent.location2
 import com.mapbox.maps.plugin.logo.generated.LogoSettings
 import com.mapbox.maps.plugin.logo.logo
 import com.mapbox.maps.plugin.scalebar.generated.ScaleBarSettings
 import com.mapbox.maps.plugin.scalebar.scalebar
+import com.mapbox.maps.plugin.viewport.viewport
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerView
@@ -1150,6 +1154,10 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     override fun onDestroy() {
         removeAllFeatures()
         viewAnnotationManager.removeAllViewAnnotations()
+        mLocationComponentManager?.onDestroy();
+        location.enabled = false
+        location.pulsingEnabled = false
+        location2.enabled = false
         lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         super.onDestroy()
     }

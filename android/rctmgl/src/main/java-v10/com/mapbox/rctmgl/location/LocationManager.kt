@@ -18,6 +18,31 @@ import java.lang.ref.WeakReference
 import java.util.ArrayList
 import kotlin.Exception
 
+
+open class SingletonHolder<out T, in A>(creator: (A) -> T) {
+    private var creator: ((A) -> T)? = creator
+    @Volatile private var instance: T? = null
+
+    fun getInstance(arg: A): T {
+        val i = instance
+        if (i != null) {
+            return i
+        }
+
+        return synchronized(this) {
+            val i2 = instance
+            if (i2 != null) {
+                i2
+            } else {
+                val created = creator!!(arg)
+                instance = created
+                creator = null
+                created
+            }
+        }
+    }
+}
+
 internal class LocationProviderForEngine(var mEngine: LocationEngine?, val context: Context) : LocationProvider, LocationEngineCallback<LocationEngineResult> {
     var mConsumers = ArrayList<LocationConsumer>()
     @SuppressLint("MissingPermission")
@@ -254,18 +279,11 @@ class LocationManager private constructor(private val context: Context) : Locati
         }
     }
 
-    companion object {
+    companion object : SingletonHolder<LocationManager, Context>(::LocationManager) {
         const val DEFAULT_FASTEST_INTERVAL_MILLIS: Long = 1000
         const val DEFAULT_INTERVAL_MILLIS: Long = 1000
         const val LOG_TAG = "LocationManager"
-        private var INSTANCE: WeakReference<LocationManager>? = null
-        @JvmStatic
-        fun getInstance(context: Context): LocationManager? {
-            if (INSTANCE == null) {
-                INSTANCE = WeakReference(LocationManager(context))
-            }
-            return INSTANCE!!.get()
-        }
+
     }
 
     init {
