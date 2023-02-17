@@ -1,8 +1,24 @@
 import { makeLatLngBounds } from '../../utils/geoUtils';
 import { toJSONString } from '../../utils';
 
+export type OfflineCreatePackOptionsArgs = {
+  name: string;
+  styleURL: string;
+  bounds: [GeoJSON.Position, GeoJSON.Position];
+  minZoom?: number;
+  maxZoom?: number;
+  metadata?: Record<string, unknown>;
+};
+
 class OfflineCreatePackOptions {
-  constructor(options = {}) {
+  public readonly name: string;
+  public readonly styleURL: string;
+  public readonly bounds: string;
+  public readonly minZoom: number | undefined;
+  public readonly maxZoom: number | undefined;
+  public readonly metadata: string | undefined;
+
+  constructor(options: OfflineCreatePackOptionsArgs) {
     this._assert(options);
 
     this.name = options.name;
@@ -13,7 +29,7 @@ class OfflineCreatePackOptions {
     this.metadata = this._makeMetadata(options.metadata);
   }
 
-  _assert(options) {
+  _assert(options: OfflineCreatePackOptionsArgs) {
     if (!options.styleURL) {
       throw new Error(
         'Style URL must be provided for creating an offline pack',
@@ -29,13 +45,12 @@ class OfflineCreatePackOptions {
     }
   }
 
-  _makeLatLngBounds(bounds) {
-    const ne = bounds[0];
-    const sw = bounds[1];
+  _makeLatLngBounds(bounds: [GeoJSON.Position, GeoJSON.Position]): string {
+    const [ne, sw] = bounds;
     return toJSONString(makeLatLngBounds(ne, sw));
   }
 
-  _makeMetadata(metadata) {
+  _makeMetadata(metadata: Record<string, unknown> | undefined) {
     return JSON.stringify({
       ...metadata,
       name: this.name,
