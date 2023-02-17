@@ -13,8 +13,12 @@ class RCTMGLNativeUserLocationManager : ViewGroupManager<RCTMGLNativeUserLocatio
     }
 
     @ReactProp(name = "androidRenderMode")
-    fun setAndroidRenderMode(userLocation: RCTMGLNativeUserLocation?, mode: String?) {
-        Logger.w("RCTMGLNativeUserLocationManager", "setAndroidRenderMode is deprecated in v10");
+    fun setAndroidRenderMode(userLocation: RCTMGLNativeUserLocation, mode: String) {
+        when (mode) {
+            "compass" -> userLocation.setAndroidRenderMode(RenderMode.COMPASS);
+            "gps" -> userLocation.setAndroidRenderMode(RenderMode.GPS);
+            "normal" -> userLocation.setAndroidRenderMode(RenderMode.NORMAL);
+        }
     }
 
     @Nonnull
