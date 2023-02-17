@@ -5,8 +5,32 @@ import { makePoint, makeFeatureCollection } from '../../utils/geoUtils';
 
 const MapboxGL = NativeModules.MGLModule;
 
+export type SnapshotOptionsArgs = {
+  centerCoordinate?: GeoJSON.Position;
+  width?: number;
+  height?: number;
+  zoomLevel?: number;
+  pitch?: number;
+  heading?: number;
+  styleURL?: string;
+  writeToDisk?: boolean;
+  bounds?: number[][];
+  withLogo?: boolean;
+};
+
 class SnapshotOptions {
-  constructor(options = {}) {
+  public readonly styleURL: string;
+  public readonly heading: number;
+  public readonly pitch: number;
+  public readonly zoomLevel: number;
+  public readonly width: number;
+  public readonly height: number;
+  public readonly writeToDisk: boolean;
+  public readonly withLogo: boolean;
+  public readonly centerCoordinate: string | undefined;
+  public readonly bounds: string | undefined;
+
+  constructor(options: SnapshotOptionsArgs = {}) {
     if (!options.centerCoordinate && !options.bounds) {
       throw new Error(
         'Center coordinate or bounds must be supplied in order to take a snapshot',
@@ -48,12 +72,12 @@ class SnapshotOptions {
     };
   }
 
-  _createCenterCoordPoint(centerCoordinate) {
+  _createCenterCoordPoint(centerCoordinate: number[]) {
     const point = makePoint(centerCoordinate);
     return toJSONString(point);
   }
 
-  _createBoundsCollection(bounds) {
+  _createBoundsCollection(bounds: number[][]) {
     const features = [];
 
     for (const bound of bounds) {
