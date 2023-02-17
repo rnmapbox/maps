@@ -1,8 +1,14 @@
-import { NativeModules, NativeEventEmitter } from 'react-native';
+import {
+  NativeModules,
+  NativeEventEmitter,
+  EventSubscription,
+} from 'react-native';
 
 import { isUndefined, isFunction, isAndroid } from '../../utils';
 
-import OfflineCreatePackOptions from './OfflineCreatePackOptions';
+import OfflineCreatePackOptions, {
+  OfflineCreatePackOptionsArgs,
+} from './OfflineCreatePackOptions';
 import OfflinePack from './OfflinePack';
 
 const MapboxGL = NativeModules.MGLModule;
@@ -11,12 +17,49 @@ export const OfflineModuleEventEmitter = new NativeEventEmitter(
   MapboxGLOfflineManager,
 );
 
+export type OfflineProgressStatus = {
+  name: string;
+  state: number;
+  percentage: number;
+  completedResourceSize: number;
+  completedTileCount: number;
+  completedResourceCount: number;
+  requiredResourceCount: number;
+  completedTileSize: number;
+};
+
+export type OfflinePackError = {
+  name: string;
+  message: string;
+};
+
+type ErrorEvent = {
+  payload: OfflinePackError;
+};
+
+type ProgressEvent = {
+  payload: OfflineProgressStatus;
+};
+
+type ProgressListener = (
+  pack: OfflinePack,
+  status: OfflineProgressStatus,
+) => void;
+type ErrorListener = (pack: OfflinePack, err: OfflinePackError) => void;
+
 /**
  * OfflineManager implements a singleton (shared object) that manages offline packs.
  * All of this class’s instance methods are asynchronous, reflecting the fact that offline resources are stored in a database.
  * The shared object maintains a canonical collection of offline packs.
  */
 class OfflineManager {
+  private _hasInitialized: boolean;
+  private _offlinePacks: Record<string, OfflinePack>;
+  private _progressListeners: Record<string, ProgressListener>;
+  private _errorListeners: Record<string, ErrorListener>;
+  public subscriptionProgress: EventSubscription | null;
+  public subscriptionError: EventSubscription | null;
+
   constructor() {
     this._hasInitialized = false;
     this._offlinePacks = {};
@@ -52,7 +95,11 @@ class OfflineManager {
    * @param  {Callback=} errorListener Callback that listens for status events while downloading the offline resource.
    * @return {void}
    */
-  async createPack(options, progressListener, errorListener) {
+  async createPack(
+    options: OfflineCreatePackOptionsArgs,
+    progressListener: ProgressListener,
+    errorListener?: ErrorListener,
+  ): Promise<void> {
     await this._initialize();
 
     const packOptions = new OfflineCreatePackOptions(options);
@@ -81,7 +128,7 @@ class OfflineManager {
    * @param  {String}  name  Name of the offline pack.
    * @return {void}
    */
-  async invalidatePack(name) {
+  async invalidatePack(name: string): Promise<void> {
     if (!name) {
       return;
     }
@@ -103,7 +150,7 @@ class OfflineManager {
    * @param  {String}  name  Name of the offline pack.
    * @return {void}
    */
-  async deletePack(name) {
+  async deletePack(name: string): Promise<void> {
     if (!name) {
       return;
     }
@@ -128,7 +175,7 @@ class OfflineManager {
    *
    * @return {void}
    */
-  async invalidateAmbientCache() {
+  async invalidateAmbientCache(): Promise<void> {
     await this._initialize();
     await MapboxGLOfflineManager.invalidateAmbientCache();
   }
@@ -142,7 +189,7 @@ class OfflineManager {
    *
    * @return {void}
    */
-  async clearAmbientCache() {
+  async clearAmbientCache(): Promise<void> {
     await this._initialize();
     await MapboxGLOfflineManager.clearAmbientCache();
   }
@@ -155,7 +202,7 @@ class OfflineManager {
    *
    * @return {void}
    */
-  async migrateOfflineCache() {
+  async migrateOfflineCache(): Promise<void> {
     await this._initialize();
     await MapboxGLOfflineManager.migrateOfflineCache();
   }
@@ -170,7 +217,7 @@ class OfflineManager {
    * @param  {Number}  size  Size of ambient cache.
    * @return {void}
    */
-  async setMaximumAmbientCacheSize(size) {
+  async setMaximumAmbientCacheSize(size: number): Promise<void> {
     await this._initialize();
     await MapboxGLOfflineManager.setMaximumAmbientCacheSize(size);
   }
@@ -183,7 +230,7 @@ class OfflineManager {
    *
    * @return {void}
    */
-  async resetDatabase() {
+  async resetDatabase(): Promise<void> {
     await this._initialize();
     await MapboxGLOfflineManager.resetDatabase();
   }
@@ -196,7 +243,7 @@ class OfflineManager {
    *
    * @return {Array<OfflinePack>}
    */
-  async getPacks() {
+  async getPacks(): Promise<OfflinePack[]> {
     await this._initialize();
     return Object.keys(this._offlinePacks).map(
       (name) => this._offlinePacks[name],
@@ -212,7 +259,7 @@ class OfflineManager {
    * @param  {String}  name  Name of the offline pack.
    * @return {OfflinePack}
    */
-  async getPack(name) {
+  async getPack(name: string): Promise<OfflinePack | undefined> {
     await this._initialize();
     return this._offlinePacks[name];
   }
@@ -226,7 +273,7 @@ class OfflineManager {
    * @param {String} path Path to offline tile db on file system.
    * @return {void}
    */
-  async mergeOfflineRegions(path) {
+  async mergeOfflineRegions(path: string): Promise<void> {
     await this._initialize();
     return MapboxGLOfflineManager.mergeOfflineRegions(path);
   }
@@ -241,7 +288,7 @@ class OfflineManager {
    * @param {Number} limit Map tile limit count.
    * @return {void}
    */
-  setTileCountLimit(limit) {
+  setTileCountLimit(limit: number): void {
     MapboxGLOfflineManager.setTileCountLimit(limit);
   }
 
@@ -255,7 +302,7 @@ class OfflineManager {
    * @param {Number} throttleValue event throttle value in ms.
    * @return {void}
    */
-  setProgressEventThrottle(throttleValue) {
+  setProgressEventThrottle(throttleValue: number): void {
     MapboxGLOfflineManager.setProgressEventThrottle(throttleValue);
   }
 
@@ -273,7 +320,11 @@ class OfflineManager {
    * @param  {Callback} errorListener      Callback that listens for status events while downloading the offline resource.
    * @return {void}
    */
-  async subscribe(packName, progressListener, errorListener) {
+  async subscribe(
+    packName: string,
+    progressListener: ProgressListener,
+    errorListener?: ErrorListener,
+  ): Promise<void> {
     const totalProgressListeners = Object.keys(this._progressListeners).length;
     if (isFunction(progressListener)) {
       if (totalProgressListeners === 0) {
@@ -318,7 +369,7 @@ class OfflineManager {
    * @param  {String} packName Name of the offline pack.
    * @return {void}
    */
-  unsubscribe(packName) {
+  unsubscribe(packName: string): void {
     delete this._progressListeners[packName];
     delete this._errorListeners[packName];
 
@@ -337,7 +388,7 @@ class OfflineManager {
     }
   }
 
-  async _initialize() {
+  async _initialize(): Promise<boolean> {
     if (this._hasInitialized) {
       return true;
     }
@@ -353,7 +404,7 @@ class OfflineManager {
     return true;
   }
 
-  _onProgress(e) {
+  _onProgress(e: ProgressEvent): void {
     const { name, state } = e.payload;
 
     if (!this._hasListeners(name, this._progressListeners)) {
@@ -369,7 +420,7 @@ class OfflineManager {
     }
   }
 
-  _onError(e) {
+  _onError(e: ErrorEvent): void {
     const { name } = e.payload;
 
     if (!this._hasListeners(name, this._errorListeners)) {
@@ -380,7 +431,12 @@ class OfflineManager {
     this._errorListeners[name](pack, e.payload);
   }
 
-  _hasListeners(name, listenerMap) {
+  _hasListeners(
+    name: string,
+    listenerMap:
+      | Record<string, ProgressListener>
+      | Record<string, ErrorListener>,
+  ): boolean {
     return (
       !isUndefined(this._offlinePacks[name]) && isFunction(listenerMap[name])
     );

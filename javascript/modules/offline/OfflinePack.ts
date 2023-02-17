@@ -1,9 +1,24 @@
 import { NativeModules } from 'react-native';
 
+import OfflineCreatePackOptions from './OfflineCreatePackOptions';
+
 const MapboxGLOfflineManager = NativeModules.MGLOfflineModule;
 
+type OfflinePackStatus = {
+  name: string;
+  state: number;
+  percentage: number;
+  completedResourceCount: number;
+  completedResourceSize: number;
+  completedTileSize: number;
+  completedTileCount: number;
+  requiredResourceCount: number;
+};
+
 class OfflinePack {
-  constructor(pack) {
+  private pack: OfflineCreatePackOptions;
+  private _metadata: any;
+  constructor(pack: OfflineCreatePackOptions) {
     this.pack = pack;
     this._metadata = null;
   }
@@ -24,15 +39,15 @@ class OfflinePack {
     return this._metadata;
   }
 
-  status() {
+  status(): Promise<OfflinePackStatus> {
     return MapboxGLOfflineManager.getPackStatus(this.name);
   }
 
-  resume() {
+  resume(): Promise<void> {
     return MapboxGLOfflineManager.resumePackDownload(this.name);
   }
 
-  pause() {
+  pause(): Promise<void> {
     return MapboxGLOfflineManager.pausePackDownload(this.name);
   }
 }
