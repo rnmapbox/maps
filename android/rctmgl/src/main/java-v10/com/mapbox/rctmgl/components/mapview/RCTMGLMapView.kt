@@ -81,9 +81,62 @@ data class OrnamentSettings(
     var position: Int = -1
 )
 
-
-interface RCTMGLMapViewLifecycleOwner : LifecycleOwner {
+/***
+ * Mapbox's MapView observers lifecycle events see MapboxLifecyclePluginImpl - (ON_START, ON_STOP, ON_DESTROY)
+ * We need to emulate those.
+ */
+interface RCTMGLLifeCycleOwner : LifecycleOwner {
     fun handleLifecycleEvent(event: Lifecycle.Event)
+}
+
+class RCTMGLLifeCycle {
+    private var lifecycleOwner : RCTMGLLifeCycleOwner? = null
+
+    fun onAttachedToWindow(view: View) {
+        if (lifecycleOwner == null) {
+            lifecycleOwner = object : RCTMGLLifeCycleOwner {
+                private lateinit var lifecycleRegistry: LifecycleRegistry
+                init {
+                    lifecycleRegistry = LifecycleRegistry(this)
+                    lifecycleRegistry.currentState = Lifecycle.State.CREATED
+                }
+
+                override fun handleLifecycleEvent(event: Lifecycle.Event) {
+                    try {
+                        lifecycleRegistry.handleLifecycleEvent(event)
+                    } catch (e: RuntimeException) {
+                        Log.e("RCTMGLMapView", "handleLifecycleEvent, handleLifecycleEvent error: $e")
+                    }
+                }
+
+                override fun getLifecycle(): Lifecycle {
+                    return lifecycleRegistry
+                }
+            }
+            ViewTreeLifecycleOwner.set(view, lifecycleOwner);
+        }
+        lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_START)
+    }
+
+    fun onDetachedFromWindow() {
+        if (lifecycleOwner?.lifecycle?.currentState == Lifecycle.State.DESTROYED) {
+            return
+        }
+        lifecycleOwner?.handleLifecycleEvent(androidx.lifecycle.Lifecycle.Event.ON_STOP)
+    }
+
+    fun onDestroy() {
+        if (lifecycleOwner?.lifecycle?.currentState == Lifecycle.State.STARTED || lifecycleOwner?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+            lifecycleOwner?.handleLifecycleEvent(androidx.lifecycle.Lifecycle.Event.ON_STOP)
+        }
+        if (lifecycleOwner?.lifecycle?.currentState != Lifecycle.State.DESTROYED) {
+            lifecycleOwner?.handleLifecycleEvent(androidx.lifecycle.Lifecycle.Event.ON_DESTROY)
+        }
+    }
+
+    fun getState() : Lifecycle.State {
+        return lifecycleOwner?.lifecycle?.currentState ?: Lifecycle.State.INITIALIZED;
+    }
 }
 
 open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapViewManager /*, MapboxMapOptions options*/) : MapView(mContext), OnMapClickListener, OnMapLongClickListener {
@@ -1144,10 +1197,14 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     // endregion
 
     // region lifecycle
-    private var lifecycleOwner : RCTMGLMapViewLifecycleOwner? = null
+    private val lifecycle : RCTMGLLifeCycle by lazy { RCTMGLLifeCycle() }
+
+    fun getLifecycleState() : Lifecycle.State {
+        return this.lifecycle.getState()
+    }
 
     override fun onDetachedFromWindow() {
-        lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+        lifecycle.onDetachedFromWindow()
         super.onDetachedFromWindow();
     }
 
@@ -1155,44 +1212,19 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         removeAllFeatures()
         viewAnnotationManager.removeAllViewAnnotations()
         mLocationComponentManager?.onDestroy();
-        location.enabled = false
-        location.pulsingEnabled = false
-        location2.enabled = false
-        lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+
+        lifecycle.onDestroy()
         super.onDestroy()
     }
 
     fun onDropViewInstance() {
         removeAllFeatures()
         viewAnnotationManager.removeAllViewAnnotations()
-        lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+        lifecycle.onDestroy()
     }
 
     override fun onAttachedToWindow() {
-        if (lifecycleOwner == null) {
-            lifecycleOwner = object : RCTMGLMapViewLifecycleOwner {
-                private lateinit var lifecycleRegistry: LifecycleRegistry
-                init {
-                    lifecycleRegistry = LifecycleRegistry(this)
-                    lifecycleRegistry.currentState = Lifecycle.State.CREATED
-                }
-
-                override fun handleLifecycleEvent(event: Lifecycle.Event) {
-                    try {
-                        lifecycleRegistry.handleLifecycleEvent(event)
-                    } catch (e: RuntimeException) {
-                        Log.e("RCTMGLMapView", "onAttachedToWindow error: $e")
-                    }
-                }
-
-                override fun getLifecycle(): Lifecycle {
-                    return lifecycleRegistry
-                }
-            }
-            ViewTreeLifecycleOwner.set(this, lifecycleOwner);
-        } else {
-            lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
-        }
+        lifecycle.onAttachedToWindow(this)
         super.onAttachedToWindow()
     }
 
