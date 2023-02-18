@@ -5,10 +5,12 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.VectorDrawable
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.lifecycle.Lifecycle
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.PuckBearingSource
+import com.mapbox.maps.plugin.lifecycle.lifecycle
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.location.LocationManager
 
@@ -60,6 +62,14 @@ class LocationComponentManager(mapView: RCTMGLMapView, context: Context) {
     }
 
     private fun applyStateChanges(map: RCTMGLMapView, oldState: State, newState: State, fullUpdate: Boolean) {
+        if (map.getLifecycleState() != Lifecycle.State.STARTED) {
+            // In case lifecycle was already stopped, so we're part of shutdown, do not call updateSettings as it'll just restart
+            // the loationComponent that will not be stopped. See https://github.com/mapbox/mapbox-maps-android/issues/2017
+            if (!newState.enabled) {
+                stopLocationManager()
+            }
+            return
+        }
         map.location.updateSettings {
             enabled = newState.enabled
 

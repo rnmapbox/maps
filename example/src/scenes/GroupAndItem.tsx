@@ -60,6 +60,7 @@ import ShowRegionDidChange from '../examples/Map/ShowRegionDidChange';
 import SourceLayerVisibility from '../examples/Map/SourceLayerVisibility';
 import StyleJson from '../examples/Map/StyleJson';
 import TwoByTwo from '../examples/Map/TwoByTwo';
+import MapAndRNNavigation from '../examples/Map/MapAndRNNavigation';
 // SYMBOLCIRCLELAYER
 import CustomIcon from '../examples/SymbolCircleLayer/CustomIcon';
 import DataDrivenCircleColors from '../examples/SymbolCircleLayer/DataDrivenCircleColors';
@@ -277,6 +278,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
     new ExampleItem('Style JSON', StyleJson),
     new ExampleItem('Set Tint Color', SetTintColor),
     new ExampleItem('Ornaments', Ornaments),
+    new ExampleItem('Map and rn-navigation', MapAndRNNavigation),
   ]),
   new ExampleGroup('Camera', [
     new ExampleItem('Fit (Bounds, Center/Zoom, Padding)', Fit),
