@@ -131,6 +131,10 @@ class LocationManager {
 
     this._listeners.forEach((l) => l(location));
   }
+
+  _simulateHeading(changesPerSecond, increment) {
+    MapboxGLLocationManager.simulateHeading(changesPerSecond, increment);
+  }
 }
 
 export default new LocationManager();

@@ -37,6 +37,7 @@ class RCTMGLLineLayer: RCTMGLVectorLayer {
         styler.lineLayer(
           layer: &styleLayer,
           reactStyle: reactStyle,
+          oldReactStyle: oldReatStyle,
           applyUpdater: { (updater) in logged("RCTMGLLineLayer.updateLayer") {
             try style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout LayerType) in updater(&layer) }
           }},

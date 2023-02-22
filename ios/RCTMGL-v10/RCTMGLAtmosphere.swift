@@ -56,6 +56,7 @@ class RCTMGLAtmosphere : RCTMGLSingletonLayer, RCTMGLMapComponent, RCTMGLSourceC
         styler.atmosphereLayer(
           layer: &atmosphere,
           reactStyle: reactStyle,
+          oldReactStyle: oldReactStyle,
           applyUpdater: { (updater) in fatalError("Atmosphere: TODO - implement apply updater")},
           isValid: { fatalError("Atmosphere: TODO - no isValid") }
         )

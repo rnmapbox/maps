@@ -15,7 +15,7 @@ class RCTMGLStyle {
   }
 
 <% for (const layer of layers) { %>
-func <%- setLayerMethodName(layer, 'ios') -%>(layer: inout <%- getLayerType(layer, 'ios-v10') -%>, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout <%- getLayerType(layer, 'ios-v10') -%>)->Void)->Void, isValid: @escaping () -> Bool)
+func <%- setLayerMethodName(layer, 'ios') -%>(layer: inout <%- getLayerType(layer, 'ios-v10') -%>, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout <%- getLayerType(layer, 'ios-v10') -%>)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
@@ -33,28 +33,15 @@ func <%- setLayerMethodName(layer, 'ios') -%>(layer: inout <%- getLayerType(laye
   <% for (let i = 0; i < layer.properties.length; i++) { -%>
   <%- ifOrElseIf(i) -%> (prop == "<%= layer.properties[i].name %>") {
   <%_ if (layer.properties[i].image) { _%>
-      if (!styleValue.shouldAddImage()) {
-        self.set<%- iosPropMethodName(layer, pascelCase(layer.properties[i].name)) -%>(&layer, styleValue:styleValue);
-      } else {
-        let imageURI = styleValue.getImageURI()
-
-        RCTMGLUtils.fetchImage(bridge!, url:imageURI, scale:styleValue.getImageScale(), callback:{ (error, image) in
-          if let image = image {
-            DispatchQueue.main.sync {
-              if (isValid()) {
-                logged("<%- pascelCase(layer.name) %>.<%- pascelCase(layer.properties[i].name) %>.addImage") {
-                  try self.style.addImage(image, id:imageURI!, stretchX: [], stretchY: []);
-                  applyUpdater { (layer: inout <%- getLayerType(layer, 'ios-v10') -%>) in
-                    self.set<%- iosPropMethodName(layer, pascelCase(layer.properties[i].name)) -%>(&layer, styleValue:styleValue);
-                  }
-                }
-              }
-            }
-          } else {
-            Logger.log(level: .error, message: "Error during fetchImage: \(optional: error)")
-          }
-        });
-      }
+      styleValue.setImage(
+        bridge: bridge!,
+        style: style,
+        oldValue: oldReactStyle?[prop],
+        setImageOnLayer: { (_) in self.set<%- iosPropMethodName(layer, pascelCase(layer.properties[i].name)) -%>(&layer, styleValue:styleValue) },
+        isLayerStillValid: isValid,
+        setImageOnLayerLater: { (_) in applyUpdater { (layer: inout <%- getLayerType(layer, 'ios-v10') -%>) in self.set<%- iosPropMethodName(layer, pascelCase(layer.properties[i].name)) -%>(&layer, styleValue: styleValue) } },
+        name: "<%- pascelCase(layer.name) %>.\(prop)"
+      )
   <%_ } else { _%>
       self.set<%- iosPropMethodName(layer, pascelCase(layer.properties[i].name)) -%>(&layer, styleValue:styleValue);
   <%_ } _%>
