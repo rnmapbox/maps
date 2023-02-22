@@ -135,6 +135,20 @@ class LocationManager {
   _simulateHeading(changesPerSecond, increment) {
     MapboxGLLocationManager.simulateHeading(changesPerSecond, increment);
   }
+
+  /**
+   * Sets the period at which location events will be sent over the React Native bridge.
+   * The default is 0, aka no limit
+   *
+   * @example
+   * locationManager.setLocationEventThrottle(500);
+   *
+   * @param {Number} throttleValue event throttle value in ms.
+   * @return {void}
+   */
+  setLocationEventThrottle(throttleValue) {
+    MapboxGLLocationManager.setLocationEventThrottle(throttleValue);
+  }
 }
 
 export default new LocationManager();
