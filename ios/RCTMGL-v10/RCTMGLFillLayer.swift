@@ -35,6 +35,7 @@ class RCTMGLFillLayer: RCTMGLVectorLayer {
         styler.fillLayer(
           layer: &styleLayer,
           reactStyle: reactStyle,
+          oldReactStyle: oldReatStyle,
           applyUpdater: { (updater) in logged("RCTMGLFillLayer.updateLayer") {
             try style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout FillLayer) in updater(&layer) }
           }},

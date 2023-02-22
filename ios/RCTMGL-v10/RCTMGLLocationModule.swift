@@ -57,6 +57,10 @@ class RCTMGLLocationManager : LocationProviderDelegate {
   weak var delegate: RCTMGLLocationManagerDelegate?
   weak var locationProviderDelage: LocationProviderDelegate?
   
+  var headingSimulator: Timer? = nil
+  var simulatedHeading: Double = 0.0
+  var simulatedHeadingIncrement: Double = 1.0
+
   init() {
     provider = AppleLocationProvider()
     provider.setDelegate(self)
@@ -219,6 +223,54 @@ extension RCTMGLLocationManager: LocationProvider {
   }
 }
 
+// MARK: heading simulation
+
+final public class SimulatedHeading: CLHeading {
+  init(trueHeading: CLLocationDirection, timestamp: Date) {
+    _trueHeading = trueHeading
+    _timestamp = timestamp
+    super.init()
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+    private var _trueHeading: CLLocationDirection = 0
+    private var _timestamp: Date
+
+    public override var trueHeading: CLLocationDirection {
+        get {  _trueHeading }
+        set { _trueHeading = newValue }
+    }
+
+    public override var timestamp: Date{
+      get {  _timestamp }
+      set { _timestamp = newValue }
+    }
+}
+
+extension RCTMGLLocationManager {
+  func simulateHeading(changesPerSecond: Int, increment: Double) {
+    self.simulatedHeadingIncrement = increment
+    DispatchQueue.main.async {
+      if let headingSimulator = self.headingSimulator {
+        headingSimulator.invalidate()
+      }
+      self.headingSimulator = nil
+
+      if (changesPerSecond > 0) {
+        self.headingSimulator = Timer.scheduledTimer(withTimeInterval: 1.0/Double(changesPerSecond), repeats: true) { [weak self] (_) in
+          guard let self = self else { return }
+
+          self.simulatedHeading = (self.simulatedHeading + self.simulatedHeadingIncrement).truncatingRemainder(dividingBy: 360.0)
+          self.locationProvider(self.provider, didUpdateHeading: SimulatedHeading(trueHeading: self.simulatedHeading, timestamp: Date()) )
+        }
+      }
+    }
+  }
+}
+
 
 @objc(RCTMGLLocationModule)
 class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
@@ -275,6 +327,10 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
   
   @objc func setRequestsAlwaysUse(_ requestsAlwaysUse: Bool) {
     locationManager.setRequestsAlwaysUse(requestsAlwaysUse);
+  }
+
+  @objc func simulateHeading(_ changesPerSecond: NSNumber, increment: NSNumber) {
+    locationManager.simulateHeading(changesPerSecond: changesPerSecond.intValue, increment: increment.doubleValue)
   }
 
   @objc

@@ -4,7 +4,11 @@ import MapboxMaps
 class RCTMGLLight: UIView, RCTMGLMapComponent {
   weak var bridge : RCTBridge! = nil
   weak var map: MapboxMap! = nil
+  var oldReactStyle: [String:Any]?
   @objc var reactStyle : [String:Any]! = nil {
+    willSet {
+      oldReactStyle = reactStyle
+    }
     didSet {
       if map != nil {
         addStyles()
@@ -13,17 +17,15 @@ class RCTMGLLight: UIView, RCTMGLMapComponent {
   }
   
   func apply(light: Light) {
-    self.map.style
     let lightData = try! JSONEncoder().encode(light)
     let lightDictionary = try! JSONSerialization.jsonObject(with: lightData)
-    print("=> lightDictionary \(lightDictionary)")
     try! self.map.style.setLight(properties: lightDictionary as! [String:Any])
   }
 
   func addStyles() {
     var light = Light()
     let style = RCTMGLStyle(style: map.style)
-    style.lightLayer(layer: &light, reactStyle: reactStyle, applyUpdater: { (updater) in
+    style.lightLayer(layer: &light, reactStyle: reactStyle, oldReactStyle: oldReactStyle, applyUpdater: { (updater) in
       updater(&light)
       self.apply(light: light)
     }, isValid: {

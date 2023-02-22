@@ -398,13 +398,59 @@ class RCTMGLStyleValue {
     return false
   }
   
+  func setImage(
+    bridge: RCTBridge,
+    style: Style,
+    oldValue: Any?,
+    setImageOnLayer: (_: RCTMGLStyleValue) -> Void,
+    isLayerStillValid: @escaping () -> Bool, // check if layer/map still valid in case we try to set the image after downloaded
+    setImageOnLayerLater: @escaping (_: RCTMGLStyleValue) -> Void, // called in case we need to set the image later just after downloaded
+    name: String
+  ) {
+    if (!shouldAddImage()) {
+      setImageOnLayer(self)
+    } else {
+      let imageURI = getImageURI()
+      
+      if let oldRawValue = oldValue as? [String:Any] {
+        if let oldRawValue = oldRawValue["stylevalue"] as? [String:Any] {
+          if let oldValue = parse(rawStyleValue: oldRawValue) as? [String:Any] {
+            if getImageURI(oldValue) == imageURI {
+              setImageOnLayer(self)
+              return
+            }
+          }
+        }
+      }
+
+      RCTMGLUtils.fetchImage(bridge, url:imageURI, scale:getImageScale(), callback:{ (error, image) in
+        if let image = image {
+          DispatchQueue.main.sync {
+            if (isLayerStillValid()) {
+              logged("\(name).addImage") {
+                try style.addImage(image, id:imageURI!, stretchX: [], stretchY: []);
+                setImageOnLayerLater(self)
+              }
+            }
+          }
+        } else {
+          Logger.log(level: .error, message: "Error during fetchImage: \(optional: error)")
+        }
+      });
+    }
+  }
+  
+  func getImageURI(_ dict: [String:Any]) -> String? {
+    if let uri = dict["uri"] as? String {
+      return uri
+    } else {
+      return nil
+    }
+  }
+  
   func getImageURI() -> String? {
     if let dict = styleObject as? [String:Any] {
-      if let uri = dict["uri"] as? String {
-        return uri
-      } else {
-        return nil
-      }
+      return getImageURI(dict)
     } else if let uri = styleObject as? String {
       return uri
     }

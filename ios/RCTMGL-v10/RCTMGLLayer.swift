@@ -13,7 +13,11 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     didSet { self.optionsChanged() }
   }
 
+  var oldReatStyle: Dictionary<String, Any>? = nil
   @objc var reactStyle : Dictionary<String, Any>? = nil {
+    willSet {
+      oldReatStyle = reactStyle
+    }
     didSet {
       DispatchQueue.main.async {
         self.addStylesAndUpdate()

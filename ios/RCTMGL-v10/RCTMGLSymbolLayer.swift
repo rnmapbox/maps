@@ -35,6 +35,7 @@ class RCTMGLSymbolLayer: RCTMGLVectorLayer {
         styler.symbolLayer(
           layer: &styleLayer,
           reactStyle: reactStyle,
+          oldReactStyle: oldReatStyle,
           applyUpdater: { (updater) in logged("RCTMGLSymbolLayer.updateLayer") {
             try style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout LayerType) in updater(&layer) }
           }},
