@@ -286,6 +286,14 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
     }
   }
   
+  var locationEventThrottle : (
+    waitBetweenEvents: Double?,
+    lastSentTimestamp: Double?
+  ) = (
+    nil,
+    nil
+  )
+
   override init() {
     locationManager = RCTMGLLocationManager()
     super.init()
@@ -346,14 +354,46 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
   }
   
   func locationManager(_ locationManager: RCTMGLLocationManager, didUpdateLocation location: RCTMGLLocation) {
-    guard hasListener else {
-      return
-    }
-    
-    guard let _ = bridge else {
+    guard hasListener, let _ = bridge else {
       return
     }
 
-    self.sendEvent(withName: RCT_MAPBOX_USER_LOCATION_UPDATE, body: location.toJSON())
+    if shouldSendLocationEvent() {
+      self.sendEvent(withName: RCT_MAPBOX_USER_LOCATION_UPDATE, body: location.toJSON())
+    }
   }
+  
+  // MARK: - location event throttle
+  @objc
+  func setLocationEventThrottle(_ throttleValue:NSNumber) {
+    let throttleValue = throttleValue.doubleValue
+    if throttleValue > 0.0 {
+      locationEventThrottle.waitBetweenEvents = throttleValue
+    } else {
+      locationEventThrottle.waitBetweenEvents = nil
+    }
+  }
+
+  func shouldSendLocationEvent() -> Bool {
+    guard let waitBetweenEvents = locationEventThrottle.waitBetweenEvents, waitBetweenEvents > 0 else {
+      return true
+    }
+  
+    let currentTimestamp: Double = CACurrentMediaTime() * 1000.0
+    
+    guard let lastSentTimestamp = locationEventThrottle.lastSentTimestamp else {
+      locationEventThrottle.lastSentTimestamp = currentTimestamp
+      return true;
+    }
+    
+    if (currentTimestamp - lastSentTimestamp > waitBetweenEvents) {
+      locationEventThrottle.lastSentTimestamp = currentTimestamp
+      return true;
+    }
+     
+    return false;
+  }
+
 }
+
+

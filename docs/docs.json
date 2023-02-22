@@ -6533,6 +6533,14 @@
       }
     ]
   },
+  "setLocationEventThrottle": {
+    "name": "setLocationEventThrottle",
+    "fileNameWithExt": "locationManager.js",
+    "description": "Sets the period at which location events will be sent over the React Native bridge.\nThe default is 0, aka no limit",
+    "props": [],
+    "styles": [],
+    "methods": []
+  },
   "snapshotManager": {
     "name": "snapshotManager",
     "fileNameWithExt": "snapshotManager.js",
