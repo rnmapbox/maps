@@ -92,7 +92,7 @@ describe('UserLocation', () => {
 
       render(<UserLocation onUpdate={onUpdateCallback} />);
 
-      locationManager.onUpdate({
+      locationManager._onUpdate({
         coords: {
           accuracy: 9.977999687194824,
           altitude: 44.64373779296875,

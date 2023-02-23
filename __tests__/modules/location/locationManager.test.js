@@ -165,7 +165,7 @@ describe('LocationManager', () => {
         expect(MapboxGLLocationManager.start).toHaveBeenCalledTimes(1);
         expect(LocationModuleEventEmitter.addListener).toHaveBeenCalledWith(
           MapboxGL.LocationCallbackName.Update,
-          locationManager.onUpdate,
+          locationManager._onUpdate,
         );
 
         expect(locationManager._isListening).toStrictEqual(true);
@@ -253,7 +253,7 @@ describe('LocationManager', () => {
       });
 
       test('sets "_lastKnownLocation"', () => {
-        locationManager.onUpdate(location);
+        locationManager._onUpdate(location);
 
         expect(locationManager._lastKnownLocation).toStrictEqual(location);
       });
@@ -265,7 +265,7 @@ describe('LocationManager', () => {
           locationManager.addListener(listener);
         });
 
-        locationManager.onUpdate(location);
+        locationManager._onUpdate(location);
 
         listeners.forEach((listener) => {
           expect(listener).toHaveBeenCalledTimes(1);
