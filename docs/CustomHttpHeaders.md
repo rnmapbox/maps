@@ -1,8 +1,53 @@
 # Custom http headers
 
-Custom headers are implemented using OkHttp interceptor for android and method swizzling for iOS.
+Custom headers are implemented using [HttpServiceFactory](https://docs.mapbox.com/ios/maps/api/10.10.1/common/Classes/MBXHttpServiceFactory.html) on iOS and  android.
 
-[Method swizzling](https://en.wikipedia.org/wiki/Monkey_patch) is done on the `[NSMutableURLRequest requestWithURL:]` to allow adding headers during runtime.
+On deprecated version (classic Mapbox GL iOS) it's implemented using [Method swizzling](https://en.wikipedia.org/wiki/Monkey_patch) is done on the `[NSMutableURLRequest requestWithURL:]` to allow adding headers during runtime.
+
+## Usage
+
+## Sending custom http headers with the tile requests
+
+You can configure sending of custom http headers to your tile server. This is to support custom authentication or custom metadata which can't be included in the url.
+
+You can add and remove headers at runtime.
+
+### To add a header
+
+```javascript
+    MapboxGL.addCustomHeader('Authorization', '{auth header}');
+```
+
+### To remove a header
+
+```javascript
+    MapboxGL.removeCustomHeader('Authorization');
+```
+
+### Working example
+
+```tsx
+export default class HelloWorldApp extends Component {
+  componentDidMount() {
+    MapboxGL.addCustomHeader('Authorization', '{auth header}');
+  }
+
+  render() {
+    MapboxGL.addCustomHeader('X-Some-Header', 'my-value');
+    return (
+      <View style={styles.page}>
+        <View style={styles.container}>
+          <MapboxGL.MapView 
+            style={styles.map} 
+            styleURL={STYLE_URL} />
+        </View>
+      </View>
+    );
+  }
+}
+```
+
+
 
 ## Prerequisites
 
@@ -47,43 +92,3 @@ Suggested location is `[AppDelegate application: didFinishLaunchingWithOptions:]
 @end
 ```
 
-## Sending custom http headers with the tile requests
-
-You can configure sending of custom http headers to your tile server. This is to support custom authentication or custom metadata which can't be included in the url.
-
-You can add and remove headers at runtime.
-
-### To add a header
-
-```javascript
-    MapboxGL.addCustomHeader('Authorization', '{auth header}');
-```
-
-### To remove a header
-
-```javascript
-    MapboxGL.removeCustomHeader('Authorization');
-```
-
-### Working example
-
-```tsx
-export default class HelloWorldApp extends Component {
-  componentDidMount() {
-    MapboxGL.addCustomHeader('Authorization', '{auth header}');
-  }
-
-  render() {
-    MapboxGL.addCustomHeader('X-Some-Header', 'my-value');
-    return (
-      <View style={styles.page}>
-        <View style={styles.container}>
-          <MapboxGL.MapView 
-            style={styles.map} 
-            styleURL={STYLE_URL} />
-        </View>
-      </View>
-    );
-  }
-}
-```
