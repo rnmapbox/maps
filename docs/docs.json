@@ -623,18 +623,18 @@
         "description": "The easing or path the camera uses to animate to a new configuration."
       },
       {
-        "name": "followUserMode",
-        "required": false,
-        "type": "UserTrackingMode",
-        "default": "none",
-        "description": "The mode used to track the user location on the map."
-      },
-      {
         "name": "followUserLocation",
         "required": false,
         "type": "boolean",
         "default": "none",
         "description": "Whether the map orientation follows the user location."
+      },
+      {
+        "name": "followUserMode",
+        "required": false,
+        "type": "UserTrackingMode",
+        "default": "none",
+        "description": "The mode used to track the user location on the map."
       },
       {
         "name": "followZoomLevel",
@@ -656,6 +656,13 @@
         "type": "number",
         "default": "none",
         "description": "The heading used when following the user location."
+      },
+      {
+        "name": "followPadding",
+        "required": false,
+        "type": "Partial",
+        "default": "none",
+        "description": "The padding used to position the user location when following."
       },
       {
         "name": "minZoomLevel",

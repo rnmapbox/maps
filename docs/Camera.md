@@ -38,11 +38,12 @@ return (
 \| 'linearTo'
 \| 'moveTo'
 \| 'none'` | `none` | `false` | The easing or path the camera uses to animate to a new configuration. |
-| followUserMode | `UserTrackingMode` | `none` | `false` | The mode used to track the user location on the map. |
 | followUserLocation | `boolean` | `none` | `false` | Whether the map orientation follows the user location. |
+| followUserMode | `UserTrackingMode` | `none` | `false` | The mode used to track the user location on the map. |
 | followZoomLevel | `number` | `none` | `false` | The zoom level used when following the user location. |
 | followPitch | `number` | `none` | `false` | The pitch used when following the user location. |
 | followHeading | `number` | `none` | `false` | The heading used when following the user location. |
+| followPadding | `Partial` | `none` | `false` | The padding used to position the user location when following. |
 | minZoomLevel | `number` | `none` | `false` | The lowest allowed zoom level. |
 | maxZoomLevel | `number` | `none` | `false` | The highest allowed zoom level. |
 | maxBounds | `shape` | `none` | `false` | The corners of a box defining the limits of where the camera can pan or zoom. |
