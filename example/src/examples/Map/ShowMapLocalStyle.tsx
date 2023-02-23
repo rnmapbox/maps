@@ -1,14 +1,15 @@
-import React, { FC, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Alert } from 'react-native';
 import MapboxGL from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
 import Page from '../common/Page';
+import { BaseExampleProps } from '../common/BaseExamplePropTypes';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const style = JSON.stringify(require('../../assets/map-styleURL-style.json'));
 
-const ShowMap: FC<any> = (props) => {
+const ShowMap = (props: BaseExampleProps) => {
   useEffect(() => {
     MapboxGL.locationManager.start();
 

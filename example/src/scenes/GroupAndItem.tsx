@@ -11,7 +11,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import MapHeader from '../examples/common/MapHeader';
-import Page from '../examples/common/Page';
+import Page, { PageProps } from '../examples/common/Page';
 import sheet from '../styles/sheet';
 // ANIMATIONS
 import AnimatedLine from '../examples/Animations/AnimatedLine';
@@ -244,8 +244,8 @@ class ExampleGroup implements ExampleNode {
 }
 
 const BugReportPage =
-  (Klass: React.ComponentType) =>
-  ({ ...props }) =>
+  (Klass: React.ComponentType<PageProps>) =>
+  ({ ...props }: PageProps) =>
     (
       <Page {...props}>
         <Klass {...props} />
