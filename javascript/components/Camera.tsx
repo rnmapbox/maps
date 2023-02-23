@@ -122,16 +122,18 @@ export type CameraStop = {
 };
 
 export type CameraFollowConfig = {
-  /** The mode used to track the user location on the map. */
-  followUserMode?: UserTrackingMode;
   /** Whether the map orientation follows the user location. */
   followUserLocation?: boolean;
+  /** The mode used to track the user location on the map. */
+  followUserMode?: UserTrackingMode;
   /** The zoom level used when following the user location. */
   followZoomLevel?: number;
   /** The pitch used when following the user location. */
   followPitch?: number;
   /** The heading used when following the user location. */
   followHeading?: number;
+  /** The padding used to position the user location when following. */
+  followPadding?: Partial<CameraPadding>;
 };
 
 export type CameraMinMaxConfig = {
@@ -232,6 +234,7 @@ export const Camera = memo(
         followZoomLevel,
         followPitch,
         followHeading,
+        followPadding,
         defaultSettings,
         allowUpdates = true,
         onUserTrackingModeChange,
@@ -526,9 +529,10 @@ export const Camera = memo(
           defaultStop={nativeDefaultStop}
           followUserLocation={followUserLocation}
           followUserMode={followUserMode}
+          followZoomLevel={followZoomLevel}
           followPitch={followPitch}
           followHeading={followHeading}
-          followZoomLevel={followZoomLevel}
+          followPadding={followPadding}
           minZoomLevel={minZoomLevel}
           maxZoomLevel={maxZoomLevel}
           maxBounds={nativeMaxBounds}

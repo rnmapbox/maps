@@ -70,7 +70,7 @@ import ShapeSourceIcon from '../examples/SymbolCircleLayer/ShapeSourceIcon';
 import SetDisplacement from '../examples/UserLocation/SetDisplacement';
 import SetTintColor from '../examples/UserLocation/SetTintColor';
 import SetUserLocationRenderMode from '../examples/UserLocation/SetUserLocationRenderMode';
-import SetUserLocationVerticalAlignment from '../examples/UserLocation/SetUserLocationVerticalAlignment';
+import UserLocationPadding from '../examples/UserLocation/UserLocationPadding';
 import UserLocationChange from '../examples/UserLocation/UserLocationChange';
 // MISC
 import BugReportExample from '../examples/BugReportExample';
@@ -295,10 +295,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
     new ExampleItem('Compass View', CompassView),
   ]),
   new ExampleGroup('User Location', [
-    new ExampleItem(
-      'Set User Location Vertical Alignment',
-      SetUserLocationVerticalAlignment,
-    ),
+    new ExampleItem('User Location Padding', UserLocationPadding),
     new ExampleItem('User Location Updates', UserLocationChange),
     new ExampleItem('Set Displacement', SetDisplacement),
     new ExampleItem('Set User Location Render Mode', SetUserLocationRenderMode),
