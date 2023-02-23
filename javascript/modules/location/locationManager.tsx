@@ -14,11 +14,17 @@ export const LocationModuleEventEmitter = new NativeEventEmitter(
   MapboxGLLocationManager,
 );
 
+/**
+ * Location sent by locationManager
+ */
 interface Location {
   coords: Coordinates;
   timestamp?: number;
 }
 
+/**
+ * Coorinates sent by locationManager
+ */
 interface Coordinates {
   /**
    * The heading (measured in degrees) relative to true north.
@@ -60,6 +66,9 @@ interface Coordinates {
   altitude?: number;
 }
 
+/**
+ * LocationManager is a singleton, see `locationManager`
+ */
 class LocationManager {
   _listeners: ((location: Location) => void)[];
   _lastKnownLocation: Location | null;
