@@ -74,6 +74,10 @@ import type {
   AnimatedShape as _AnimatedShape,
 } from './javascript/types/index';
 import type { requestAndroidLocationPermissions as _requestAndroidLocationPermissions } from './javascript/requestAndroidLocationPermissions';
+import type {
+  Location as _Location,
+  LocationManager,
+} from './javascript/locationManager';
 
 // prettier-ignore
 type ExpressionName =
@@ -172,6 +176,7 @@ declare namespace MapboxGL {
   type MapboxGLEvent = _MapboxGLEvent;
   type UserTrackingMode = _UserTrackingMode;
   type UserTrackingModeChangeCallback = _UserTrackingModeChangeCallback;
+  type Location = _Location;
 
   const offlineManager: OfflineManager;
   const snapshotManager: SnapshotManager;
@@ -324,52 +329,6 @@ declare namespace MapboxGL {
 
   class UserLocation extends Component<UserLocationProps> {}
 
-  interface Location {
-    coords: Coordinates;
-    timestamp?: number;
-  }
-
-  interface Coordinates {
-    /**
-     * The heading (measured in degrees) relative to true north.
-     * Heading is used to describe the direction the device is pointing to (the value of the compass).
-     * Note that on Android this is incorrectly reporting the course value as mentioned in issue https://github.com/rnmapbox/maps/issues/1213
-     * and will be corrected in a future update.
-     */
-    heading?: number;
-
-    /**
-     * The direction in which the device is traveling, measured in degrees and relative to due north.
-     * The course refers to the direction the device is actually moving (not the same as heading).
-     */
-    course?: number;
-
-    /**
-     * The instantaneous speed of the device, measured in meters per second.
-     */
-    speed?: number;
-
-    /**
-     * The latitude in degrees.
-     */
-    latitude: number;
-
-    /**
-     * The longitude in degrees.
-     */
-    longitude: number;
-
-    /**
-     * The radius of uncertainty for the location, measured in meters.
-     */
-    accuracy?: number;
-
-    /**
-     * The altitude, measured in meters.
-     */
-    altitude?: number;
-  }
-
   class Light extends Component<LightProps> {}
 
   class Callout extends Component<CalloutProps> {}
@@ -396,10 +355,7 @@ declare namespace MapboxGL {
   class ImageSource extends Component<ImageSourceProps> {}
   class SkyLayer extends Component<_SkyLayerProps> {}
 
-  class LocationManager extends Component {
-    start(displacement?: number): void;
-    stop(): void;
-  }
+  type Location = _Location;
 
   /**
    * Offline
@@ -575,7 +531,7 @@ export interface MapViewProps extends ViewProps {
   ) => void;
   onCameraChanged?: (state: MapState) => void;
   onMapIdle?: (state: MapState) => void;
-  onUserLocationUpdate?: (feature: MapboxGL.Location) => void;
+  onUserLocationUpdate?: (feature: Location) => void;
   onWillStartLoadingMap?: () => void;
   onDidFinishLoadingMap?: () => void;
   onDidFailLoadingMap?: () => void;
@@ -596,7 +552,7 @@ export interface UserLocationProps {
   minDisplacement?: number;
   requestsAlwaysUse?: boolean;
   onPress?: () => void;
-  onUpdate?: (location: MapboxGL.Location) => void;
+  onUpdate?: (location: Location) => void;
   renderMode?: 'normal' | 'native';
   showsUserHeadingIndicator?: boolean;
   visible?: boolean;

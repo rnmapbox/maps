@@ -1,4 +1,11 @@
-import { NativeModules, NativeEventEmitter, AppState } from 'react-native';
+import {
+  NativeModules,
+  NativeEventEmitter,
+  AppState,
+  NativeEventSubscription,
+  EmitterSubscription,
+  type AppStateStatus,
+} from 'react-native';
 
 const MapboxGL = NativeModules.MGLModule;
 const MapboxGLLocationManager = NativeModules.MGLLocationModule;
@@ -7,13 +14,67 @@ export const LocationModuleEventEmitter = new NativeEventEmitter(
   MapboxGLLocationManager,
 );
 
+interface Location {
+  coords: Coordinates;
+  timestamp?: number;
+}
+
+interface Coordinates {
+  /**
+   * The heading (measured in degrees) relative to true north.
+   * Heading is used to describe the direction the device is pointing to (the value of the compass).
+   * Note that on Android this is incorrectly reporting the course value as mentioned in issue https://github.com/rnmapbox/maps/issues/1213
+   * and will be corrected in a future update.
+   */
+  heading?: number;
+
+  /**
+   * The direction in which the device is traveling, measured in degrees and relative to due north.
+   * The course refers to the direction the device is actually moving (not the same as heading).
+   */
+  course?: number;
+
+  /**
+   * The instantaneous speed of the device, measured in meters per second.
+   */
+  speed?: number;
+
+  /**
+   * The latitude in degrees.
+   */
+  latitude: number;
+
+  /**
+   * The longitude in degrees.
+   */
+  longitude: number;
+
+  /**
+   * The radius of uncertainty for the location, measured in meters.
+   */
+  accuracy?: number;
+
+  /**
+   * The altitude, measured in meters.
+   */
+  altitude?: number;
+}
+
 class LocationManager {
+  _listeners: ((location: Location) => void)[];
+  _lastKnownLocation: Location | null;
+  _isListening: boolean;
+  _requestsAlwaysUse: boolean;
+  subscription: EmitterSubscription | null;
+  _appStateListener: NativeEventSubscription;
+  _minDisplacement?: number;
+
   constructor() {
     this._listeners = [];
     this._lastKnownLocation = null;
     this._isListening = false;
     this._requestsAlwaysUse = false;
-    this.onUpdate = this.onUpdate.bind(this);
+    this._onUpdate = this._onUpdate.bind(this);
     this.subscription = null;
 
     this._appStateListener = AppState.addEventListener(
@@ -45,7 +106,7 @@ class LocationManager {
     return this._lastKnownLocation;
   }
 
-  addListener(listener) {
+  addListener(listener: (location: Location) => void) {
     if (!this._isListening) {
       this.start();
     }
@@ -58,7 +119,7 @@ class LocationManager {
     }
   }
 
-  removeListener(listener) {
+  removeListener(listener: (location: Location) => void) {
     this._listeners = this._listeners.filter((l) => l !== listener);
     if (this._listeners.length === 0) {
       this.stop();
@@ -70,7 +131,7 @@ class LocationManager {
     this.stop();
   }
 
-  _handleAppStateChange(appState) {
+  _handleAppStateChange(appState: AppStateStatus) {
     if (!this._requestsAlwaysUse) {
       if (appState === 'background') {
         this.stop();
@@ -83,23 +144,23 @@ class LocationManager {
   }
 
   start(displacement = -1) {
+    let validDisplacement = 1;
     if (
       displacement === -1 ||
       displacement === null ||
       displacement === undefined
     ) {
-      displacement = this._minDisplacement;
-    }
-    if (displacement == null) {
-      displacement = -1;
+      validDisplacement = this._minDisplacement || -1;
+    } else {
+      validDisplacement = displacement;
     }
 
     if (!this._isListening) {
-      MapboxGLLocationManager.start(displacement);
+      MapboxGLLocationManager.start(validDisplacement);
 
       this.subscription = LocationModuleEventEmitter.addListener(
         MapboxGL.LocationCallbackName.Update,
-        this.onUpdate,
+        this._onUpdate,
       );
 
       this._isListening = true;
@@ -109,36 +170,39 @@ class LocationManager {
   stop() {
     MapboxGLLocationManager.stop();
 
-    if (this._isListening) {
+    if (this._isListening && this.subscription) {
       this.subscription.remove();
     }
 
     this._isListening = false;
   }
 
-  setMinDisplacement(minDisplacement) {
+  setMinDisplacement(minDisplacement: number) {
     this._minDisplacement = minDisplacement;
     MapboxGLLocationManager.setMinDisplacement(minDisplacement);
   }
 
-  setRequestsAlwaysUse(requestsAlwaysUse) {
+  setRequestsAlwaysUse(requestsAlwaysUse: boolean) {
     MapboxGLLocationManager.setRequestsAlwaysUse(requestsAlwaysUse);
     this._requestsAlwaysUse = requestsAlwaysUse;
   }
 
-  onUpdate(location) {
+  _onUpdate(location: Location) {
     this._lastKnownLocation = location;
 
     this._listeners.forEach((l) => l(location));
   }
 
-  _simulateHeading(changesPerSecond, increment) {
+  /**
+   * simulates location updates, experimental  [V10, iOS only]
+   */
+  _simulateHeading(changesPerSecond: number, increment: number) {
     MapboxGLLocationManager.simulateHeading(changesPerSecond, increment);
   }
 
   /**
    * Sets the period at which location events will be sent over the React Native bridge.
-   * The default is 0, aka no limit
+   * The default is 0, aka no limit. [V10, iOS only]
    *
    * @example
    * locationManager.setLocationEventThrottle(500);
@@ -146,7 +210,7 @@ class LocationManager {
    * @param {Number} throttleValue event throttle value in ms.
    * @return {void}
    */
-  setLocationEventThrottle(throttleValue) {
+  setLocationEventThrottle(throttleValue: number) {
     MapboxGLLocationManager.setLocationEventThrottle(throttleValue);
   }
 }
