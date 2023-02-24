@@ -3035,6 +3035,13 @@
         "description": "[`mapbox` (v10) implementation only] Adds scale bar offset, e.g. `{top: 8, left: 8}` will put the scale bar in top-left corner of the map"
       },
       {
+        "name": "locale",
+        "required": false,
+        "type": "custom",
+        "default": "none",
+        "description": "[`mapbox` (v10) implementation only] Set the locale for the map. This will change the language of the labels on the map"
+      },
+      {
         "name": "surfaceView",
         "required": false,
         "type": "bool",

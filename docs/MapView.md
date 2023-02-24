@@ -29,6 +29,7 @@ MapView backed by Mapbox Native GL
 | compassImage | `string` | `none` | `false` | [iOS, `mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component. |
 | scaleBarEnabled | `bool` | `true` | `false` | [`mapbox` (v10) implementation only] Enable/Disable the scale bar from appearing on the map |
 | scaleBarPosition | `custom` | `none` | `false` | [`mapbox` (v10) implementation only] Adds scale bar offset, e.g. `{top: 8, left: 8}` will put the scale bar in top-left corner of the map |
+| locale | `custom` | `none` | `false` | [`mapbox` (v10) implementation only] Set the locale for the map. This will change the language of the labels on the map |
 | surfaceView | `bool` | `false` | `false` | [Android only] Enable/Disable use of GLSurfaceView instead of TextureView. |
 | onPress | `func` | `none` | `false` | Map press listener, gets called when a user presses the map |
 | onLongPress | `func` | `none` | `false` | Map long press listener, gets called when a user long presses the map |

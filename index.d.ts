@@ -469,6 +469,14 @@ export interface RegionPayload {
 /**
  * v10 only - experimental
  */
+export interface Locale {
+  locale: string;
+  layerIds?: string[];
+}
+
+/**
+ * v10 only - experimental
+ */
 export interface MapState {
   properties: {
     center: GeoJSON.Position;
@@ -517,6 +525,7 @@ export interface MapViewProps extends ViewProps {
   regionWillChangeDebounceTime?: number;
   regionDidChangeDebounceTime?: number;
   tintColor?: string;
+  locale?: Locale;
 
   onPress?: (feature: GeoJSON.Feature) => void;
   onLongPress?: (feature: GeoJSON.Feature) => void;

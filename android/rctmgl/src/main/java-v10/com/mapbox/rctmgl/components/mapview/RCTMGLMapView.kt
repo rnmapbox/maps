@@ -153,6 +153,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     private var mPointAnnotationManager: PointAnnotationManager? = null
     private var mActiveMarkerID: Long = -1
     private var mProjection: ProjectionName = ProjectionName.MERCATOR
+    private var mLocaleString: String? = null
+    private var mLocaleLayerIds: List<String>? = null
     private var mStyleURL: String? = null
     val isDestroyed = false
     private var mCamera: RCTMGLCamera? = null
@@ -242,6 +244,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 setUpImage(style)
                 addQueuedFeaturesToMap()
                 setupLocalization(style)
+                setReactLocale(mLocaleString, mLocaleLayerIds)
             }
         })
         val _this = this
@@ -470,6 +473,16 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             mMap.getStyle()?.setProjection(Projection(projection))
         }
     }
+
+    fun setReactLocale(locale: String?, layerIds: List<String>?) {
+    if (locale != null) {
+        mLocaleString = locale
+        mLocaleLayerIds = layerIds
+    }
+    if (locale != null && mMap != null) {
+        mMap.getStyle()?.localizeLabels(Locale(locale), layerIds)
+    }
+    
 
     fun setReactStyleURL(styleURL: String) {
         mStyleURL = styleURL
