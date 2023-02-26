@@ -15,6 +15,8 @@ import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import com.facebook.react.bridge.*
 import com.mapbox.android.gestures.MoveGestureDetector
+import com.mapbox.android.gestures.RotateGestureDetector
+import com.mapbox.android.gestures.StandardScaleGestureDetector
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
@@ -28,7 +30,6 @@ import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionNam
 import com.mapbox.maps.extension.style.layers.properties.generated.Visibility
 import com.mapbox.maps.extension.style.projection.generated.Projection
 import com.mapbox.maps.extension.style.projection.generated.setProjection
-import com.mapbox.maps.plugin.animation.camera
 import com.mapbox.maps.plugin.annotation.Annotation
 import com.mapbox.maps.plugin.annotation.AnnotationConfig
 import com.mapbox.maps.plugin.annotation.annotations
@@ -39,13 +40,10 @@ import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.compass.generated.CompassSettings
 import com.mapbox.maps.plugin.delegates.listeners.*
 import com.mapbox.maps.plugin.gestures.*
-import com.mapbox.maps.plugin.locationcomponent.location
-import com.mapbox.maps.plugin.locationcomponent.location2
 import com.mapbox.maps.plugin.logo.generated.LogoSettings
 import com.mapbox.maps.plugin.logo.logo
 import com.mapbox.maps.plugin.scalebar.generated.ScaleBarSettings
 import com.mapbox.maps.plugin.scalebar.scalebar
-import com.mapbox.maps.plugin.viewport.viewport
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerView
@@ -55,6 +53,7 @@ import com.mapbox.rctmgl.components.camera.RCTMGLCamera
 import com.mapbox.rctmgl.components.images.RCTMGLImages
 import com.mapbox.rctmgl.components.location.LocationComponentManager
 import com.mapbox.rctmgl.components.location.RCTMGLNativeUserLocation
+import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeReason
 import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeTracker
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer
 import com.mapbox.rctmgl.components.styles.light.RCTMGLLight
@@ -80,6 +79,10 @@ data class OrnamentSettings(
     var margins: ReadableMap? =null,
     var position: Int = -1
 )
+
+enum class MapGestureType {
+    Move,Scale,Rotate
+}
 
 /***
  * Mapbox's MapView observers lifecycle events see MapboxLifecyclePluginImpl - (ON_START, ON_STOP, ON_DESTROY)
@@ -258,24 +261,57 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         gesturesPlugin.addOnMapLongClickListener(_this)
         gesturesPlugin.addOnMapClickListener(_this)
 
+        gesturesPlugin.addOnScaleListener(object: OnScaleListener{
+            override fun onScale(detector: StandardScaleGestureDetector) {
+                mapGesture(MapGestureType.Scale, detector)
+            }
+            override fun onScaleBegin(detector: StandardScaleGestureDetector) {
+                mapGestureBegin(MapGestureType.Scale, detector)
+            }
+            override fun onScaleEnd(detector: StandardScaleGestureDetector) {
+                mapGestureEnd(MapGestureType.Scale, detector)
+            }
+        })
+
+        gesturesPlugin.addOnRotateListener(object: OnRotateListener{
+            override fun onRotate(detector: RotateGestureDetector) {
+                mapGesture(MapGestureType.Rotate, detector)
+            }
+            override fun onRotateBegin(detector: RotateGestureDetector) {
+                mapGestureBegin(MapGestureType.Rotate, detector)
+            }
+            override fun onRotateEnd(detector: RotateGestureDetector) {
+                mapGestureEnd(MapGestureType.Rotate, detector)
+            }
+        })
+
         gesturesPlugin.addOnMoveListener(object : OnMoveListener {
             override fun onMoveBegin(moveGestureDetector: MoveGestureDetector) {
-                mCameraChangeTracker.setReason(CameraChangeTracker.USER_GESTURE)
-                handleMapChangedEvent(EventTypes.REGION_WILL_CHANGE)
+                mapGestureBegin(MapGestureType.Move, moveGestureDetector)
             }
 
             override fun onMove(moveGestureDetector: MoveGestureDetector): Boolean {
-                mCameraChangeTracker.setReason(CameraChangeTracker.USER_GESTURE)
-                handleMapChangedEvent(EventTypes.REGION_IS_CHANGING)
-                return false
+                return mapGesture(MapGestureType.Move, moveGestureDetector)
             }
 
-            override fun onMoveEnd(moveGestureDetector: MoveGestureDetector) {}
+            override fun onMoveEnd(moveGestureDetector: MoveGestureDetector) {
+                mapGestureEnd(MapGestureType.Move, moveGestureDetector)
+            }
         })
-
 
         map.subscribe({ event -> Logger.e(LOG_TAG, String.format("Map load failed: %s", event.data.toString())) }, Arrays.asList(MapEvents.MAP_LOADING_ERROR))
     }
+
+    fun<T> mapGestureBegin(type:MapGestureType, gesture: T) {
+        mCameraChangeTracker.setReason(CameraChangeReason.USER_GESTURE)
+        handleMapChangedEvent(EventTypes.REGION_WILL_CHANGE)
+    }
+    fun<T> mapGesture(type: MapGestureType, gesture: T): Boolean {
+        mCameraChangeTracker.setReason(CameraChangeReason.USER_GESTURE)
+        handleMapChangedEvent(EventTypes.REGION_IS_CHANGING)
+        return false
+    }
+    fun<T> mapGestureEnd(type: MapGestureType, gesture: T) {}
 
     fun init() {
         // Required for rendering properly in Android Oreo
@@ -382,7 +418,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         val event: IEvent = MapChangeEvent(this, EventTypes.REGION_DID_CHANGE,
                 makeRegionPayload(isAnimated))
         mManager.handleEvent(event)
-        mCameraChangeTracker.setReason(CameraChangeTracker.EMPTY)
+        mCameraChangeTracker.setReason(CameraChangeReason.NONE)
     }
 
     private fun removeAllFeaturesFromMap() {
@@ -665,7 +701,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     fun sendRegionDidChangeEvent() {
         handleMapChangedEvent(EventTypes.REGION_DID_CHANGE)
-        mCameraChangeTracker.setReason(CameraChangeTracker.EMPTY)
+        mCameraChangeTracker.setReason(CameraChangeReason.NONE)
     }
 
     private fun handleMapChangedEvent(eventType: String) {
