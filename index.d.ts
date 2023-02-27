@@ -467,7 +467,7 @@ export interface RegionPayload {
 }
 
 /**
- * v10 only - experimental
+ * v10 only
  */
 export interface Locale {
   locale: string;
