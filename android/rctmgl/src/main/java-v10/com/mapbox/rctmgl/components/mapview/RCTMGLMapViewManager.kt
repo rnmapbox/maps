@@ -85,11 +85,11 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
         mapView.setReactProjection( if (projection == "globe") ProjectionName.GLOBE else ProjectionName.MERCATOR )
     }
 
-    @ReactProp(name = "locale")
-    fun setLocale(mapView: RCTMGLMapView, localeMap: ReadableMap?) {
+    @ReactProp(name = "localizeLabels")
+    fun setLocalizeLabels(mapView: RCTMGLMapView, localeMap: ReadableMap?) {
         val locale = localeMap?.getString("locale")
         val layerIds = localeMap?.getArray("layerIds")?.toArrayList()?.mapNotNull {it?.toString()}
-        mapView.setReactLocale(locale, layerIds)
+        mapView.setReactLocalizeLabels(locale, layerIds)
     }
 
     @ReactProp(name = "styleURL")

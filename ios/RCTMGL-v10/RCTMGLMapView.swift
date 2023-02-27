@@ -150,10 +150,10 @@ open class RCTMGLMapView : MapView {
     }
   }
 
-    @objc func setReactLocale(_ value: NSDictionary?) {
+    @objc func setReactLocalizeLabels(_ value: NSDictionary?) {
       onMapStyleLoaded { _ in
         if let value = value {
-          logged("RCTMGLMapVIew.setReactLocale") {
+          logged("RCTMGLMapVIew.setReactLocalizeLabels") {
             let locale = value["locale"] as! String
             let layerIds = value["layerIds"] as! [String]?
             try self.mapboxMap.style.localizeLabels(into: Locale(identifier: locale), forLayerIds: layerIds)

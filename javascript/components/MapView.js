@@ -861,6 +861,18 @@ class MapView extends NativeBridgeComponent(
     }
   }
 
+  _setLocalizeLabels(props) {
+    if (!props.localizeLabels) {
+      return;
+    }
+    // if localizeLabels is a truthy value and not object, set it to the default locale
+    if (localizeLabels !== "object") {
+      props.localizeLabels = {
+        locale: "en"
+      }
+    }
+  }
+
   render() {
     const props = {
       ...this.props,
@@ -869,6 +881,7 @@ class MapView extends NativeBridgeComponent(
     };
 
     this._setStyleURL(props);
+    this._setLocalizeLabels(props);
 
     const callbacks = {
       ref: (nativeRef) => this._setNativeRef(nativeRef),

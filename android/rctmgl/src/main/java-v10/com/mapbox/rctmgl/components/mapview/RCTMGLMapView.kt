@@ -244,7 +244,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 setUpImage(style)
                 addQueuedFeaturesToMap()
                 setupLocalization(style)
-                setReactLocale(mLocaleString, mLocaleLayerIds)
+                setReactLocalizeLabels(mLocaleString, mLocaleLayerIds)
             }
         })
         val _this = this
@@ -474,7 +474,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         }
     }
 
-    fun setReactLocale(locale: String?, layerIds: List<String>?) {
+    fun setReactLocalizeLabels(locale: String?, layerIds: List<String>?) {
     if (locale != null) {
         mLocaleString = locale
         mLocaleLayerIds = layerIds

@@ -525,7 +525,7 @@ export interface MapViewProps extends ViewProps {
   regionWillChangeDebounceTime?: number;
   regionDidChangeDebounceTime?: number;
   tintColor?: string;
-  locale?: Locale;
+  localizeLabels?: Locale | boolean;
 
   onPress?: (feature: GeoJSON.Feature) => void;
   onLongPress?: (feature: GeoJSON.Feature) => void;
