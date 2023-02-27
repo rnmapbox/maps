@@ -11,10 +11,14 @@ extension Date {
   }
 }
 
+
+
 @objc(RCTMGLOfflineModule)
 class RCTMGLOfflineModule: RCTEventEmitter {
   var hasListeners = false
   
+  static let RNMapboxInfoMetadataKey = "_rnmapbox"
+
   enum Callbacks : String {
     case error = "MapboOfflineRegionError"
     case progress = "MapboxOfflineRegionProgress"
@@ -32,20 +36,87 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     return OfflineManager(resourceOptions: .init(accessToken: MGLModule.accessToken!))
   }()
   
+  lazy var offlineRegionManager: OfflineRegionManager = {
+    return OfflineRegionManager(resourceOptions: .init(accessToken: MGLModule.accessToken!))
+  }()
+
   lazy var tileStore : TileStore = {
     return TileStore.default
   }()
   
   struct TileRegionPack {
+    init(name: String, state: State = .unknown, progress: TileRegionLoadProgress? = nil, metadata: [String:Any]) {
+      self.name = name
+      self.progress = progress
+      self.metadata = metadata
+      self.state = state
+
+      if let rnMetadata = metadata[RNMapboxInfoMetadataKey] as? [String:Any] {
+        if let styleURI = rnMetadata["styleURI"] as? String {
+          self.styleURI = StyleURI(rawValue: styleURI)
+        }
+        if let bounds = rnMetadata["bounds"] as? [String:Any] {
+          self.bounds = logged("RCTMGLOfflineModule.TileRegionPack: cannot decode bounds") {
+            let jsonData = try JSONSerialization.data(withJSONObject: bounds)
+            return try JSONDecoder().decode(Geometry.self, from: jsonData)
+          }
+        }
+        if let zoomRange = rnMetadata["zoomRange"] as? Any {
+          self.zoomRange = logged("RCTMGLOfflineModule.TileRegionPack: cannot decode zoomRange") {
+            let jsonData = try JSONSerialization.data(withJSONObject: zoomRange)
+            return try JSONDecoder().decode(ClosedRange<UInt8>.self, from: jsonData)
+          }
+        }
+      }
+    }
+    
+    init(name: String,
+         state: State = .unknown,
+         styleURI: StyleURI,
+         bounds: Geometry,
+         zoomRange: ClosedRange<UInt8>,
+         metadata: [String:Any]) {
+      self.name = name
+      self.progress = nil
+      self.cancelable = nil
+      self.state = state
+      
+      self.styleURI = styleURI
+      self.bounds = bounds
+      self.zoomRange = zoomRange
+      
+      var metadata = metadata
+      metadata[RNMapboxInfoMetadataKey] = [
+        "styleURI": styleURI.rawValue,
+        "bounds": logged("RCTMGLOfflineModule.TileRegionPack: cannot encode bounds") { try JSONSerialization.jsonObject(with: try! JSONEncoder().encode(bounds)) },
+        "zoomRange": logged("RCTMGLOfflineModule.TileRegionPack: cannot encode zoomRange") { try JSONSerialization.jsonObject(with: try! JSONEncoder().encode(zoomRange))}
+      ]
+      self.metadata = metadata
+    }
+
     var name: String
     var cancelable: Cancelable? = nil
     var progress : TileRegionLoadProgress? = nil
     var state : State = .inactive
     var metadata : [String:Any]? = nil
+
+      // Stored in metadata for resume functionality:
+    var bounds: Geometry? = nil
+    var zoomRange: ClosedRange<UInt8>? = nil
+    var styleURI: StyleURI? = nil
   }
   
   lazy var tileRegionPacks : [String: TileRegionPack] = [:]
   
+  var progressEventThrottle : (
+    waitBetweenEvents: Double?,
+    lastSentTimestamp: Double?,
+    lastSentState: State?
+  ) = (
+    300,
+    nil,
+    nil
+  )
   
   @objc override
   func startObserving() {
@@ -107,7 +178,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
       if let expires = region.expires {
         result["expires"] = expires.toJSONString()
       }
-      
+
       result["metadata"] = String(data:try! JSONSerialization.data(withJSONObject: metadata, options: [.prettyPrinted]), encoding: .utf8)
       
       result["bounds"] = jsonBounds
@@ -173,9 +244,9 @@ class RCTMGLOfflineModule: RCTEventEmitter {
         let ret = self.convertRegionToJSON(region: region, geometry: geometry, metadata: metadata)
         var pack = self.tileRegionPacks[region.id] ?? TileRegionPack(
           name: region.id,
-          progress: self.toProgress(region: region),
           state: .unknown,
-          metadata: metadata
+          progress: self.toProgress(region: region),
+          metadata: logged("RCTMGLOfflineModule.getPacks metadata is null") { metadata } ?? [:]
         )
 
         if ((region.completedResourceCount == region.completedResourceSize)) {
@@ -301,12 +372,8 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     RCTMGLEvent(type: .offlineProgress, payload: self._makeRegionStatusPayload(name, progress: progress, state: state, metadata: nil))
   }
   
-  func shouldSendProgressEvent() -> Bool {
-    return true
-  }
-  
   func offlinePackProgressDidChange(progress: TileRegionLoadProgress, metadata: [String:Any], state: State) {
-    if self.shouldSendProgressEvent() {
+    if self.shouldSendProgressEvent(progress: progress, state: state) {
       let event = makeProgressEvent(metadata["name"] as! String, progress: progress, state: state)
       self._sendEvent(Callbacks.progress.rawValue, event: event)
     }
@@ -322,9 +389,9 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     DispatchQueue.main.async {
       do {
         let metadataStr = options["metadata"] as! String
-        let metadata = try JSONSerialization.jsonObject(with: metadataStr.data(using: .utf8)!, options: []) as! [String:Any]
+        var metadata = try JSONSerialization.jsonObject(with: metadataStr.data(using: .utf8)!, options: []) as! [String:Any]
+        metadata["styleURI"] = options["styleURL"]
         let id = metadata["name"] as! String
-        let stylePackLoadOptions = StylePackLoadOptions(glyphsRasterizationMode: .ideographsRasterizedLocally, metadata: metadata)
 
         let boundsStr = options["bounds"] as! String
         let boundsData = boundsStr.data(using: .utf8)
@@ -332,49 +399,16 @@ class RCTMGLOfflineModule: RCTEventEmitter {
 
         var bounds = self.convertPointPairToBounds(RCTMGLFeatureUtils.fcToGeomtry(boundsFC))
 
-        let descriptorOptions = TilesetDescriptorOptions(
-          styleURI: StyleURI(rawValue: options["styleURL"] as! String)!,
-          zoomRange: (options["minZoom"] as! NSNumber).uint8Value...(options["maxZoom"] as! NSNumber).uint8Value,
-          stylePackOptions: stylePackLoadOptions
-        )
-        let tilesetDescriptor = self.offlineManager.createTilesetDescriptor(for: descriptorOptions)
-
-        let loadOptions = TileRegionLoadOptions(
-          geometry: bounds, // RCTMGLFeatureUtils.geometryToGeometry(bounds),
-          descriptors: [tilesetDescriptor],
-          metadata: metadata,
-          acceptExpired: true,
-          networkRestriction: .none,
-          averageBytesPerSecond: nil)
-
         let actPack = RCTMGLOfflineModule.TileRegionPack(
           name: id,
-          progress: nil,
-          state: .inactive
+          styleURI: StyleURI(rawValue: options["styleURL"] as! String)!,
+          bounds: bounds,
+          zoomRange: (options["minZoom"] as! NSNumber).uint8Value...(options["maxZoom"] as! NSNumber).uint8Value,
+          metadata: metadata
         )
         self.tileRegionPacks[id] = actPack
+        self.startLoading(pack: actPack)
 
-        var lastProgress : TileRegionLoadProgress? = nil
-        let task = self.tileStore.loadTileRegion(forId: id, loadOptions: loadOptions!, progress: {
-          progress in
-          lastProgress = progress
-          self.tileRegionPacks[id]!.progress = progress
-          self.tileRegionPacks[id]!.state = .active
-          self.offlinePackProgressDidChange(progress: progress, metadata: metadata, state: .active)
-        }) { result in
-          switch result {
-          case .success(let value):
-            if let progess = lastProgress {
-              self.offlinePackProgressDidChange(progress: progess, metadata: metadata, state: .complete)
-            }
-            self.tileRegionPacks[id]!.state = .complete
-          case .failure(let error):
-            self.tileRegionPacks[id]!.state = .inactive
-            self.offlinePackDidReceiveError(name: id, error: error)
-          }
-        }
-
-        self.tileRegionPacks[id]!.cancelable = task
         resolver([
           "bounds": boundsStr,
           "metadata": String(data:try! JSONSerialization.data(withJSONObject: metadata, options: [.prettyPrinted]), encoding: .utf8)
@@ -385,10 +419,72 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     }
   }
   
+  func startLoading(pack: TileRegionPack) {
+    let id = pack.name
+    guard let bounds = pack.bounds else {
+      RCTMGLLogError("RCTMGLOfflineModule.startLoading failed as there are no bounds in pack")
+      return
+    }
+    guard let zoomRange = pack.zoomRange else {
+      RCTMGLLogError("RCTMGLOfflineModule.startLoading failed as there is no zoom range in pack")
+      return
+    }
+    guard let styleURI = pack.styleURI else {
+      RCTMGLLogError("RCTMGLOfflineModule.startLoading failed as there is no styleURI in pack")
+      return
+    }
+    guard let metadata = pack.metadata else {
+      RCTMGLLogError("RCTMGLOfflineModule.startLoading failed as there is no metadata in pack")
+      return
+    }
+    
+    let stylePackLoadOptions = StylePackLoadOptions(glyphsRasterizationMode: .ideographsRasterizedLocally, metadata: pack.metadata)
+    
+    let descriptorOptions = TilesetDescriptorOptions(
+      styleURI: styleURI,
+      zoomRange: zoomRange,
+      stylePackOptions: stylePackLoadOptions
+    )
+    let tilesetDescriptor = self.offlineManager.createTilesetDescriptor(for: descriptorOptions)
+
+    let loadOptions = TileRegionLoadOptions(
+      geometry: bounds, // RCTMGLFeatureUtils.geometryToGeometry(bounds),
+      descriptors: [tilesetDescriptor],
+      metadata: metadata,
+      acceptExpired: true,
+      networkRestriction: .none,
+      averageBytesPerSecond: nil)
+
+    var lastProgress : TileRegionLoadProgress? = nil
+    let task = self.tileStore.loadTileRegion(forId: id, loadOptions: loadOptions!, progress: {
+      progress in
+      lastProgress = progress
+      self.tileRegionPacks[id]!.progress = progress
+      self.tileRegionPacks[id]!.state = .active
+      self.offlinePackProgressDidChange(progress: progress, metadata: metadata, state: .active)
+    }) { result in
+      switch result {
+      case .success(let value):
+        DispatchQueue.main.async {
+          if let progess = lastProgress {
+            self.offlinePackProgressDidChange(progress: progess, metadata: metadata, state: .complete)
+          }
+          self.tileRegionPacks[id]!.state = .complete
+        }
+      case .failure(let error):
+        DispatchQueue.main.async {
+          self.tileRegionPacks[id]!.state = .inactive
+          self.offlinePackDidReceiveError(name: id, error: error)
+        }
+      }
+    }
+    self.tileRegionPacks[id]!.cancelable = task
+  }
+
   func _getPack(fromName: String) -> TileRegionPack? {
     return self.tileRegionPacks[fromName]
   }
-  
+
   @objc
   func getPackStatus(_ name: String,
                      resolver: @escaping RCTPromiseResolveBlock,
@@ -404,12 +500,10 @@ class RCTMGLOfflineModule: RCTEventEmitter {
         Logger.log(level:.error, message: "Unable to fetch metadata for \(name)")
         rejecter("RCTMGLOfflineModule.getPackStatus", error.localizedDescription, error)
       case .success(let metadata):
-        var pack = self.tileRegionPacks[name] ?? TileRegionPack(name: name)
-        if let metadata = metadata as? [String:Any] {
-          pack.metadata = metadata
-        } else {
-          Logger.log(level:.error, message: "Unexpected metadata format for \(name) \(metadata)")
-        }
+        var pack = self.tileRegionPacks[name] ?? TileRegionPack(
+          name: name,
+          metadata: logged("RCTMGLOfflineModule.getPackStatus") { metadata as? [String:Any] } ?? [:]
+        )
         self.tileRegionPacks[name] = pack
         resolver(self._makeRegionStatusPayload(pack: pack))
       }
@@ -420,7 +514,9 @@ class RCTMGLOfflineModule: RCTEventEmitter {
   @objc
   func resumePackDownload(_ name: String, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock)
   {
-    //V10todo start download again
+    if let pack = _getPack(fromName: name) {
+      self.startLoading(pack: pack)
+    }
   }
   
   @objc
@@ -436,12 +532,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
   
   @objc
   func setTileCountLimit(_ limit: NSNumber) {
-    //v10todo
-  }
-  
-  @objc
-  func setProgressEventThrottle(_ throttleValue: NSNumber) {
-    // v10todo improve progress event listener
+    self.offlineRegionManager.setOfflineMapboxTileCountLimitForLimit(limit.uint64Value)
   }
   
   
@@ -482,3 +573,38 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     }
   }
 }
+
+// MARK: progress throttle
+
+extension RCTMGLOfflineModule {
+  @objc
+  func setProgressEventThrottle(_ throttleValue: NSNumber) {
+    progressEventThrottle.waitBetweenEvents = throttleValue.doubleValue
+  }
+  
+
+  func shouldSendProgressEvent(progress: TileRegionLoadProgress, state: State) -> Bool
+  {
+    let currentTimestamp: Double = CACurrentMediaTime() * 1000.0
+    
+    guard let lastSentState = progressEventThrottle.lastSentState, lastSentState == state else {
+      progressEventThrottle.lastSentState = state
+      progressEventThrottle.lastSentTimestamp = currentTimestamp
+      return true
+    }
+    
+    guard let waitBetweenEvents = progressEventThrottle.waitBetweenEvents,
+          let lastSentTimestamp = progressEventThrottle.lastSentTimestamp else {
+      progressEventThrottle.lastSentTimestamp = currentTimestamp
+      return true;
+    }
+    
+    if (currentTimestamp - lastSentTimestamp > waitBetweenEvents) {
+      progressEventThrottle.lastSentTimestamp = currentTimestamp
+      return true;
+    }
+     
+    return false;
+  }
+}
+

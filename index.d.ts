@@ -23,11 +23,18 @@ import {
 } from '@turf/helpers';
 
 import type {
-  SymbolLayerStyleProp as SymbolLayerStyleProps,
-  LineLayerStyleProp as LineLayerStyleProps,
-} from './lib/typescript/utils/styleMap';
+  SymbolLayerStyleProps,
+  CircleLayerStyleProps,
+  FillExtrusionLayerStyleProps,
+  SkyLayerStyleProps,
+  RasterLayerStyleProps,
+  HeatmapLayerStyleProps,
+  FillLayerStyleProps,
+  LineLayerStyleProps,
+  BackgroundLayerStyleProps,
+} from './javascript/utils/MapboxStyles';
 import { getAnnotationsLayerID as _getAnnotationsLayerID } from './lib/typescript/utils/getAnnotationsLayerID';
-import type {
+import {
   Camera as _Camera,
   CameraStop as _CameraStop,
   CameraFollowConfig as _CameraFollowConfig,
@@ -47,11 +54,17 @@ import type {
   SymbolLayer as _SymbolLayer,
   Props as _SymbolLayerProps,
 } from './lib/typescript/components/SymbolLayer';
-import type {
-  default as _LineLayer,
+import _LineLayer, {
   Props as _LineLayerProps,
 } from './lib/typescript/components/LineLayer';
-import type {
+import { Props as _BackgroundLayerProps } from './lib/typescript/components/BackgroundLayer';
+import { Props as _CircleLayerProps } from './lib/typescript/components/CircleLayer';
+import { Props as _FillLayerProps } from './lib/typescript/components/FillLayer';
+import { Props as _FillExtrusionLayerProps } from './lib/typescript/components/FillExtrusionLayer';
+import { Props as _RasterLayerProps } from './lib/typescript/components/RasterLayer';
+import { Props as _HeatmapLayerProps } from './lib/typescript/components/HeatmapLayer';
+import { Props as _SkyLayerProps } from './lib/typescript/components/SkyLayer';
+import {
   ShapeSource as _ShapeSource,
   Props as _ShapeSourceProps,
 } from './lib/typescript/components/ShapeSource';
@@ -59,8 +72,12 @@ import type {
   MapboxGLEvent as _MapboxGLEvent,
   AnimatedPoint as _AnimatedPoint,
   AnimatedShape as _AnimatedShape,
-} from './lib/typescript/types';
+} from './lib/typescript/types/index';
 import type { requestAndroidLocationPermissions as _requestAndroidLocationPermissions } from './lib/typescript/requestAndroidLocationPermissions';
+import type {
+  Location as _Location,
+  LocationManager,
+} from './lib/typescript/modules/location/locationManager';
 
 // prettier-ignore
 type ExpressionName =
@@ -110,17 +127,6 @@ type Anchor =
 type Visibility = 'visible' | 'none';
 type Alignment = 'map' | 'viewport';
 type AutoAlignment = Alignment | 'auto';
-
-type NamedStyles<T> = {
-  [P in keyof T]:
-    | typeof SymbolLayerStyleProps
-    | RasterLayerStyle
-    | typeof LineLayerStyleProps
-    | FillLayerStyle
-    | FillExtrusionLayerStyle
-    | CircleLayerStyle
-    | BackgroundLayerStyle;
-};
 
 export type OnPressEvent = {
   features: Array<GeoJSON.Feature>;
@@ -173,6 +179,7 @@ declare namespace MapboxGL {
   type MapboxGLEvent = _MapboxGLEvent;
   type UserTrackingMode = _UserTrackingMode;
   type UserTrackingModeChangeCallback = _UserTrackingModeChangeCallback;
+  type Location = _Location;
 
   const offlineManager: OfflineManager;
   const snapshotManager: SnapshotManager;
@@ -284,13 +291,13 @@ declare namespace MapboxGL {
     class ImageSource extends Component<ImageSourceProps> {}
 
     // layers
-    class FillLayer extends Component<FillLayerProps> {}
-    class FillExtrusionLayer extends Component<FillExtrusionLayerProps> {}
+    class FillLayer extends Component<_FillLayerProps> {}
+    class FillExtrusionLayer extends Component<_FillExtrusionLayerProps> {}
     class LineLayer extends Component<_LineLayerProps> {}
-    class CircleLayer extends Component<CircleLayerProps> {}
+    class CircleLayer extends Component<_CircleLayerProps> {}
     class SymbolLayer extends Component<_SymbolLayerProps> {}
-    class RasterLayer extends Component<RasterLayerProps> {}
-    class BackgroundLayer extends Component<BackgroundLayerProps> {}
+    class RasterLayer extends Component<_RasterLayerProps> {}
+    class BackgroundLayer extends Component<_BackgroundLayerProps> {}
   }
 
   /**
@@ -325,73 +332,7 @@ declare namespace MapboxGL {
 
   class UserLocation extends Component<UserLocationProps> {}
 
-  interface Location {
-    coords: Coordinates;
-    timestamp?: number;
-  }
-
-  interface Coordinates {
-    /**
-     * The heading (measured in degrees) relative to true north.
-     * Heading is used to describe the direction the device is pointing to (the value of the compass).
-     * Note that on Android this is incorrectly reporting the course value as mentioned in issue https://github.com/rnmapbox/maps/issues/1213
-     * and will be corrected in a future update.
-     */
-    heading?: number;
-
-    /**
-     * The direction in which the device is traveling, measured in degrees and relative to due north.
-     * The course refers to the direction the device is actually moving (not the same as heading).
-     */
-    course?: number;
-
-    /**
-     * The instantaneous speed of the device, measured in meters per second.
-     */
-    speed?: number;
-
-    /**
-     * The latitude in degrees.
-     */
-    latitude: number;
-
-    /**
-     * The longitude in degrees.
-     */
-    longitude: number;
-
-    /**
-     * The radius of uncertainty for the location, measured in meters.
-     */
-    accuracy?: number;
-
-    /**
-     * The altitude, measured in meters.
-     */
-    altitude?: number;
-  }
-
   class Light extends Component<LightProps> {}
-
-  class StyleSheet extends Component {
-    static create<T extends NamedStyles<T> | NamedStyles<any>>(styles: T): T;
-    camera(
-      stops: { [key: number]: string },
-      interpolationMode?: InterpolationMode,
-    ): void;
-    source(
-      stops: { [key: number]: string },
-      attributeName: string,
-      interpolationMode?: InterpolationMode,
-    ): void;
-    composite(
-      stops: { [key: number]: string },
-      attributeName: string,
-      interpolationMode?: InterpolationMode,
-    ): void;
-
-    identity(attributeName: string): number;
-  }
 
   class Callout extends Component<CalloutProps> {}
   type Style = React.FC<StyleProps>;
@@ -406,21 +347,18 @@ declare namespace MapboxGL {
   /**
    * Layers
    */
-  class BackgroundLayer extends Component<BackgroundLayerProps> {}
-  class CircleLayer extends Component<CircleLayerProps> {}
-  class FillExtrusionLayer extends Component<FillExtrusionLayerProps> {}
-  class FillLayer extends Component<FillLayerProps> {}
-  class LineLayer extends Component<LineLayerProps> {}
-  class RasterLayer extends Component<RasterLayerProps> {}
-  class HeatmapLayer extends Component<HeatmapLayerProps> {}
+  class BackgroundLayer extends Component<_BackgroundLayerProps> {}
+  class CircleLayer extends Component<_CircleLayerProps> {}
+  class FillExtrusionLayer extends Component<_FillExtrusionLayerProps> {}
+  class FillLayer extends Component<_FillLayerProps> {}
+  class LineLayer extends Component<_LineLayerProps> {}
+  class RasterLayer extends Component<_RasterLayerProps> {}
+  class HeatmapLayer extends Component<_HeatmapLayerProps> {}
   class Images extends Component<ImagesProps> {}
   class ImageSource extends Component<ImageSourceProps> {}
-  class SkyLayer extends Component<SkyLayerProps> {}
+  class SkyLayer extends Component<_SkyLayerProps> {}
 
-  class LocationManager extends Component {
-    start(displacement?: number): void;
-    stop(): void;
-  }
+  type Location = _Location;
 
   /**
    * Offline
@@ -596,7 +534,7 @@ export interface MapViewProps extends ViewProps {
   ) => void;
   onCameraChanged?: (state: MapState) => void;
   onMapIdle?: (state: MapState) => void;
-  onUserLocationUpdate?: (feature: MapboxGL.Location) => void;
+  onUserLocationUpdate?: (feature: Location) => void;
   onWillStartLoadingMap?: () => void;
   onDidFinishLoadingMap?: () => void;
   onDidFailLoadingMap?: () => void;
@@ -615,8 +553,9 @@ export interface UserLocationProps {
   animated?: boolean;
   children?: ReactNode;
   minDisplacement?: number;
+  requestsAlwaysUse?: boolean;
   onPress?: () => void;
-  onUpdate?: (location: MapboxGL.Location) => void;
+  onUpdate?: (location: Location) => void;
   renderMode?: 'normal' | 'native';
   showsUserHeadingIndicator?: boolean;
   visible?: boolean;
@@ -641,121 +580,19 @@ export interface Transition {
   delay: number;
 }
 
-export interface BackgroundLayerStyle {
-  visibility?: Visibility | Expression;
-  backgroundColor?: string | Expression;
-  backgroundColorTransition?: Transition | Expression;
-  backgroundPattern?: string | Expression;
-  backgroundPatternTransition?: Transition | Expression;
-  backgroundOpacity?: number | Expression;
-  backgroundOpacityTransition?: Transition | Expression;
-}
+export type BackgroundLayerStyle = BackgroundLayerStyleProps;
 
-export interface CircleLayerStyle {
-  visibility?: Visibility | Expression;
-  circleRadius?: number | Expression;
-  circleRadiusTransition?: Transition | Expression;
-  circleColor?: string | Expression;
-  circleColorTransition?: Transition | Expression;
-  circleBlur?: number | Expression;
-  circleBlurTransition?: Transition | Expression;
-  circleOpacity?: number | Expression;
-  circleOpacityTransition?: Transition | Expression;
-  circleTranslate?: Array<number> | Expression;
-  circleTranslateTransition?: Transition | Expression;
-  circleTranslateAnchor?: Alignment | Expression;
-  circlePitchScale?: Alignment | Expression;
-  circlePitchAlignment?: Alignment | Expression;
-  circleStrokeWidth?: number | Expression;
-  circleStrokeWidthTransition?: Transition | Expression;
-  circleStrokeColor?: string | Expression;
-  circleStrokeColorTransition?: Transition | Expression;
-  circleStrokeOpacity?: number | Expression;
-  circleStrokeOpacityTransition?: Transition | Expression;
-}
+export type CircleLayerStyle = CircleLayerStyleProps;
 
-export interface FillExtrusionLayerStyle {
-  visibility?: Visibility | Expression;
-  fillExtrusionOpacity?: number | Expression;
-  fillExtrusionOpacityTransition?: Transition | Expression;
-  fillExtrusionColor?: string | Expression;
-  fillExtrusionColorTransition?: Transition | Expression;
-  fillExtrusionTranslate?: Array<number> | Expression;
-  fillExtrusionTranslateTransition?: Transition | Expression;
-  fillExtrusionTranslateAnchor?: Alignment | Expression;
-  fillExtrusionPattern?: string | Expression;
-  fillExtrusionPatternTransition?: Transition | Expression;
-  fillExtrusionHeight?: number | Expression;
-  fillExtrusionHeightTransition?: Transition | Expression;
-  fillExtrusionBase?: number | Expression;
-  fillExtrusionBaseTransition?: Transition | Expression;
-}
+export type FillExtrusionLayerStyle = FillExtrusionLayerStyleProps;
 
-export interface FillLayerStyle {
-  visibility?: Visibility | Expression;
-  fillAntialias?: boolean | Expression;
-  fillOpacity?: number | Expression;
-  fillExtrusionOpacityTransition?: Transition | Expression;
-  fillColor?: string | Expression;
-  fillColorTransition?: Transition | Expression;
-  fillOutlineColor?: string | Expression;
-  fillOutlineColorTransition?: Transition | Expression;
-  fillTranslate?: Array<number> | Expression;
-  fillTranslateTransition?: Transition | Expression;
-  fillTranslateAnchor?: Alignment | Expression;
-  fillPattern?: string | Expression;
-  fillPatternTransition?: Transition | Expression;
-}
+export type FillLayerStyle = FillLayerStyleProps;
 
-export interface SkyLayerStyle {
-  skyType: string | Expression;
-  skyAtmosphereSun?: Array<number> | Expression;
-  skyAtmosphereSunIntensity: number | Expression;
-}
+export type SkyLayerStyle = SkyLayerStyleProps;
 
-export interface LineLayerStyle {
-  lineCap?: 'butt' | 'round' | 'square' | Expression;
-  lineJoin?: 'bevel' | 'round' | 'miter' | Expression;
-  lineMiterLimit?: number | Expression;
-  lineRoundLimit?: number | Expression;
-  visibility?: Visibility | Expression;
-  lineOpacity?: number | Expression;
-  lineOpacityTransition?: Transition | Expression;
-  lineColor?: string | Expression;
-  lineColorTransition?: Transition | Expression;
-  lineTranslate?: Array<number> | Expression;
-  lineTranslateTransition?: Transition | Expression;
-  lineTranslateAnchor?: Alignment | Expression;
-  lineWidth?: number | Expression;
-  lineWidthTransition?: Transition | Expression;
-  lineGapWidth?: number | Expression;
-  lineGapWidthTransition?: Transition | Expression;
-  lineOffset?: number | Expression;
-  lineOffsetTransition?: Transition | Expression;
-  lineBlur?: number | Expression;
-  lineBlurTransition?: Transition | Expression;
-  lineDasharray?: Array<number> | Expression;
-  lineDasharrayTransition?: Transition | Expression;
-  linePattern?: string | Expression;
-  linePatternTransition?: Transition | Expression;
-}
+export type LineLayerStyle = LineLayerStyleProps;
 
-export interface RasterLayerStyle {
-  visibility?: Visibility | Expression;
-  rasterOpacity?: number | Expression;
-  rasterOpacityTransition?: Transition | Expression;
-  rasterHueRotate?: Expression;
-  rasterHueRotateTransition?: Transition | Expression;
-  rasterBrightnessMin?: number | Expression;
-  rasterBrightnessMinTransition?: Transition | Expression;
-  rasterBrightnessMax?: number | Expression;
-  rasterBrightnessMaxTransition?: Transition | Expression;
-  rasterSaturation?: number | Expression;
-  rasterSaturationTransition?: Transition | Expression;
-  rasterContrast?: number | Expression;
-  rasterContrastTransition?: Transition | Expression;
-  rasterFadeDuration?: number | Expression;
-}
+export type RasterLayerStyle = RasterLayerStyleProps;
 
 export type TextVariableAnchorValues =
   | 'center'
@@ -771,17 +608,7 @@ export type TextVariableAnchorValues =
 export type SymbolLayerStyle = SymbolLayerStyleProps;
 export type LineLayerStyle = LineLayerStyleProps;
 
-export interface HeatmapLayerStyle {
-  visibility?: Visibility | Expression;
-  heatmapRadius?: number | Expression;
-  heatmapRadiusTransition?: Transition | Expression;
-  heatmapWeight?: number | Expression;
-  heatmapIntensity?: number | Expression;
-  heatmapIntensityTransition?: Transition | Expression;
-  heatmapColor?: string | Expression;
-  heatmapOpacity?: number | Expression;
-  heatmapOpacityTransition?: Transition | Expression;
-}
+export type HeatmapLayerStyle = HeatmapLayerStyleProps;
 
 export interface Point {
   x: number;

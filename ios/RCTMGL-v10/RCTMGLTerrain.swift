@@ -73,6 +73,7 @@ class RCTMGLTerrain : RCTMGLSingletonLayer, RCTMGLMapComponent, RCTMGLSourceCons
         styler.terrainLayer(
           layer: &terrain,
           reactStyle: reactStyle,
+          oldReactStyle: oldReactStyle,
           applyUpdater: { (updater) in fatalError("Terrain: TODO - implement apply updater")},
           isValid: { fatalError("Terrain: TODO - no isValid") }
         )

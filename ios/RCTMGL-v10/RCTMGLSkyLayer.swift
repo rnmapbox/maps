@@ -32,6 +32,7 @@ class RCTMGLSkyLayer: RCTMGLLayer {
         styler.skyLayer(
           layer: &styleLayer,
           reactStyle: reactStyle,
+          oldReactStyle: oldReatStyle,
           applyUpdater: { (updater) in logged("RCTMGLSkyLayer.addStyles") {
             try style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout LayerType) in updater(&layer) }
           }},

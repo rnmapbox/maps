@@ -33,6 +33,7 @@ class RCTMGLBackgroundLayer: RCTMGLLayer {
         styler.backgroundLayer(
           layer: &styleLayer,
           reactStyle: reactStyle,
+          oldReactStyle: oldReatStyle,
           applyUpdater: { (updater) in logged("RCTMGLBackgroundLayer.addStyles") {
             try style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout LayerType) in updater(&layer) }
           }},

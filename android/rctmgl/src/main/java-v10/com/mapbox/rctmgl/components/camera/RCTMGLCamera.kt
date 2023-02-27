@@ -3,34 +3,17 @@ package com.mapbox.rctmgl.components.camera
 import android.animation.Animator
 import android.content.Context
 import android.location.Location
-import com.mapbox.rctmgl.utils.GeoJSONUtils.toPoint
 import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.rctmgl.location.LocationManager.Companion.getInstance
-import com.mapbox.maps.plugin.animation.camera
-import com.mapbox.rctmgl.utils.GeoJSONUtils.toLocation
-import com.mapbox.maps.plugin.animation.MapAnimationOptions.Builder
 import com.mapbox.maps.plugin.animation.flyTo
-import com.mapbox.rctmgl.components.camera.RCTMGLCameraManager
 import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
-import com.mapbox.rctmgl.components.camera.CameraStop
-import com.mapbox.rctmgl.components.camera.CameraUpdateQueue
 import com.mapbox.rctmgl.components.location.LocationComponentManager
 import com.mapbox.rctmgl.utils.LatLngBounds
-import com.mapbox.rctmgl.location.LocationManager.OnUserLocationChange
-import com.mapbox.rctmgl.utils.GeoJSONUtils
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListener
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
-import com.mapbox.rctmgl.components.camera.CameraUpdateItem
-import com.mapbox.rctmgl.events.IEvent
-import com.mapbox.rctmgl.events.MapChangeEvent
-import com.mapbox.rctmgl.events.constants.EventTypes
-import com.mapbox.rctmgl.components.camera.RCTMGLCamera
-import com.mapbox.android.core.permissions.PermissionsManager
-import com.mapbox.maps.plugin.animation.CameraAnimationsPlugin
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
-import com.mapbox.geojson.Point
 import com.mapbox.maps.*
 import com.mapbox.maps.plugin.PuckBearingSource
 import com.mapbox.maps.plugin.locationcomponent.location
@@ -41,8 +24,6 @@ import com.mapbox.maps.plugin.viewport.viewport
 import com.mapbox.rctmgl.components.camera.constants.CameraMode
 import com.mapbox.rctmgl.components.location.*
 import com.mapbox.rctmgl.location.*
-import com.mapbox.rctmgl.modules.RCTMGLLogging
-import com.mapbox.rctmgl.utils.LatLng
 import com.mapbox.rctmgl.utils.Logger
 
 
@@ -93,7 +74,7 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         override fun onAnimationStart(animator: Animator) {}
         override fun onAnimationEnd(animator: Animator) {
             if (!hasSentFirstRegion) {
-                mMapView!!.sendRegionChangeEvent(false)
+                mMapView?.sendRegionChangeEvent(false)
                 hasSentFirstRegion = true
             }
         }
@@ -224,7 +205,7 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         if (mLocationComponentManager == null) {
             mLocationComponentManager = mMapView!!.locationComponentManager
         }
-        mLocationComponentManager!!.update(style)
+        mLocationComponentManager!!.update()
     }
 
     fun setMinZoomLevel(zoomLevel: Double?) {
@@ -290,6 +271,11 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         mMapView?.let {
             val map = it
             val viewport = map.viewport;
+
+            if (mLocationComponentManager == null) {
+                mLocationComponentManager = it.locationComponentManager
+            }
+
             if (mFollowUserLocation == false) {
                 viewport.idle()
                 mLocationComponentManager?.setFollowLocation(false)
@@ -298,10 +284,10 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
 
             mLocationComponentManager?.setFollowLocation(true)
             mLocationManager?.let {
-
-                val provider = it.provider
-                map.location.setLocationProvider(provider);
-                map.location2.setLocationProvider(provider);
+                val provider = map.location.getLocationProvider()
+                if (provider != null) {
+                    it.provider = provider
+                }
             }
 
             val location = map.location2

@@ -35,6 +35,7 @@ class RCTMGLHeatmapLayer: RCTMGLVectorLayer {
         styler.heatmapLayer(
           layer: &styleLayer,
           reactStyle: reactStyle,
+          oldReactStyle: oldReatStyle,
           applyUpdater: { (updater) in logged("RCTMGLHeatmapLayer.updateLayer") {
             try style.updateLayer(withId: self.id, type: LayerType.self) { (layer: inout HeatmapLayer) in updater(&layer) }
           }},

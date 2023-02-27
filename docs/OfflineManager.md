@@ -211,7 +211,7 @@ MapboxGL.offlineManager.setTileCountLimit(1000);
 
 ### setProgressEventThrottle(throttleValue)
 
-Sets the period at which download status events will be sent over the React Native bridge.<br/>The default is 500ms.
+Sets the period at which download status events will be sent over the React Native bridge.<br/>The default is 300ms.
 
 #### arguments
 | Name | Type | Required | Description  |

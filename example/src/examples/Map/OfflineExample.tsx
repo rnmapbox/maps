@@ -68,6 +68,15 @@ export default function OfflineExample({ ...props }): JSX.Element {
         }}
       />
       <Button
+        title="Resume pack"
+        onPress={async () => {
+          const pack = await offlineManager.getPack(packName);
+          if (pack) {
+            await pack.resume();
+          }
+        }}
+      />
+      <Button
         title="Create Pack"
         onPress={() => {
           const { width, height } = Dimensions.get('window');

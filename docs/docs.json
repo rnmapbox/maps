@@ -308,7 +308,7 @@
       {
         "name": "filter",
         "required": false,
-        "type": "array",
+        "type": "FilterExpression",
         "default": "none",
         "description": "Filter only the features in the source layer that satisfy a condition that you define"
       },
@@ -329,15 +329,12 @@
       {
         "name": "style",
         "required": false,
-        "type": "union",
+        "type": "BackgroundLayerStyleProps",
         "default": "none",
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "BackgroundLayer.js",
+    "fileNameWithExt": "BackgroundLayer.tsx",
     "name": "BackgroundLayer",
     "styles": [
       {
@@ -851,7 +848,7 @@
       {
         "name": "filter",
         "required": false,
-        "type": "array",
+        "type": "FilterExpression",
         "default": "none",
         "description": "Filter only the features in the source layer that satisfy a condition that you define"
       },
@@ -872,15 +869,12 @@
       {
         "name": "style",
         "required": false,
-        "type": "union",
+        "type": "CircleLayerStyleProps",
         "default": "none",
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "CircleLayer.js",
+    "fileNameWithExt": "CircleLayer.tsx",
     "name": "CircleLayer",
     "styles": [
       {
@@ -1209,20 +1203,20 @@
       {
         "name": "filter",
         "required": false,
-        "type": "array",
+        "type": "FilterExpression",
         "default": "none",
         "description": "Filter only the features in the source layer that satisfy a condition that you define"
       },
       {
         "name": "minZoomLevel",
-        "required": false,
+        "required": true,
         "type": "number",
         "default": "none",
         "description": "The minimum zoom level at which the layer gets parsed and appears."
       },
       {
         "name": "maxZoomLevel",
-        "required": false,
+        "required": true,
         "type": "number",
         "default": "none",
         "description": "The maximum zoom level at which the layer gets parsed and appears."
@@ -1230,15 +1224,12 @@
       {
         "name": "style",
         "required": false,
-        "type": "union",
+        "type": "FillExtrusionLayerStyleProps",
         "default": "none",
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "FillExtrusionLayer.js",
+    "fileNameWithExt": "FillExtrusionLayer.tsx",
     "name": "FillExtrusionLayer",
     "styles": [
       {
@@ -1478,7 +1469,7 @@
       {
         "name": "filter",
         "required": false,
-        "type": "array",
+        "type": "FilterExpression",
         "default": "none",
         "description": "Filter only the features in the source layer that satisfy a condition that you define"
       },
@@ -1499,15 +1490,12 @@
       {
         "name": "style",
         "required": false,
-        "type": "union",
+        "type": "FillLayerStyleProps",
         "default": "none",
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "FillLayer.js",
+    "fileNameWithExt": "FillLayer.tsx",
     "name": "FillLayer",
     "styles": [
       {
@@ -1756,7 +1744,7 @@
       {
         "name": "filter",
         "required": false,
-        "type": "array",
+        "type": "FilterExpression",
         "default": "none",
         "description": "Filter only the features in the source layer that satisfy a condition that you define"
       },
@@ -1777,15 +1765,12 @@
       {
         "name": "style",
         "required": false,
-        "type": "union",
+        "type": "HeatmapLayerStyleProps",
         "default": "none",
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "HeatmapLayer.js",
+    "fileNameWithExt": "HeatmapLayer.tsx",
     "name": "HeatmapLayer",
     "styles": [
       {
@@ -3154,7 +3139,14 @@
         "required": false,
         "type": "func",
         "default": "none",
-        "description": "This event is triggered when the map has failed to load a new map style."
+        "description": "This event is triggered when the map has failed to load a new map style. On v10 it's deprecated and replaced by onMapLoadingError"
+      },
+      {
+        "name": "onMapLoadingError",
+        "required": false,
+        "type": "func",
+        "default": "none",
+        "description": "This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap."
       },
       {
         "name": "onWillStartRenderingFrame",
@@ -3303,19 +3295,19 @@
       {
         "name": "androidRenderMode",
         "required": false,
-        "type": "enum",
+        "type": "'normal' \\| 'compass' \\| 'gps'",
         "default": "none",
         "description": "Android render mode.\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@platform android"
       },
       {
         "name": "iosShowsUserHeadingIndicator",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "none",
         "description": "iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.\n\n@platform ios"
       }
     ],
-    "fileNameWithExt": "NativeUserLocation.js",
+    "fileNameWithExt": "NativeUserLocation.tsx",
     "name": "NativeUserLocation"
   },
   "PointAnnotation": {
@@ -3577,7 +3569,7 @@
       {
         "name": "filter",
         "required": false,
-        "type": "array",
+        "type": "FilterExpression",
         "default": "none",
         "description": "Filter only the features in the source layer that satisfy a condition that you define"
       },
@@ -3597,16 +3589,13 @@
       },
       {
         "name": "style",
-        "required": false,
-        "type": "union",
+        "required": true,
+        "type": "RasterLayerStyleProps",
         "default": "none",
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "RasterLayer.js",
+    "fileNameWithExt": "RasterLayer.tsx",
     "name": "RasterLayer",
     "styles": [
       {
@@ -4177,22 +4166,19 @@
       {
         "name": "filter",
         "required": false,
-        "type": "array",
+        "type": "FilterExpression",
         "default": "none",
         "description": "Filter only the features in the source layer that satisfy a condition that you define"
       },
       {
         "name": "style",
         "required": false,
-        "type": "union",
+        "type": "SkyLayerStyleProps",
         "default": "none",
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "SkyLayer.js",
+    "fileNameWithExt": "SkyLayer.tsx",
     "name": "SkyLayer",
     "styles": [
       {
@@ -5994,6 +5980,13 @@
         "description": "Show or hide small arrow which indicates direction the device is pointing relative to north."
       },
       {
+        "name": "requestsAlwaysUse",
+        "required": false,
+        "type": "bool",
+        "default": "false",
+        "description": "Request the always location permission, and listen to the location even when the app is in background\n\n@platform ios"
+      },
+      {
         "name": "minDisplacement",
         "required": false,
         "type": "number",
@@ -6198,6 +6191,54 @@
     ],
     "fileNameWithExt": "VectorSource.js",
     "name": "VectorSource"
+  },
+  "coordinates": {
+    "name": "coordinates",
+    "fileNameWithExt": "locationManager.tsx",
+    "description": "Coorinates sent by locationManager",
+    "props": [],
+    "styles": [],
+    "methods": []
+  },
+  "location": {
+    "name": "location",
+    "fileNameWithExt": "locationManager.tsx",
+    "description": "Location sent by locationManager",
+    "props": [],
+    "styles": [],
+    "methods": []
+  },
+  "locationManager": {
+    "name": "locationManager",
+    "fileNameWithExt": "locationManager.tsx",
+    "description": "LocationManager is a singleton, see ",
+    "props": [],
+    "styles": [],
+    "methods": [
+      {
+        "name": "setLocationEventThrottle",
+        "description": "Sets the period at which location events will be sent over the React Native bridge.\nThe default is 0, aka no limit. [V10, iOS only]",
+        "params": [
+          {
+            "name": "throttleValue",
+            "description": "event throttle value in ms.",
+            "type": {
+              "name": "Number"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "locationManager.setLocationEventThrottle(500);"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "void"
+          }
+        }
+      }
+    ]
   },
   "offlineManager": {
     "name": "offlineManager",
@@ -6455,7 +6496,7 @@
       },
       {
         "name": "setProgressEventThrottle",
-        "description": "Sets the period at which download status events will be sent over the React Native bridge.\nThe default is 500ms.",
+        "description": "Sets the period at which download status events will be sent over the React Native bridge.\nThe default is 300ms.",
         "params": [
           {
             "name": "throttleValue",

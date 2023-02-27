@@ -445,8 +445,21 @@ extension RCTMGLMapView {
   }
   
   public func setupEvents() {
-    self.onEvery(event: .mapLoadingError, handler: {(self, event) in
-      if let message = event.payload.error.errorDescription {
+    self.onEvery(event: .mapLoadingError, handler: { (self, event) in
+      let eventPayload : MapLoadingErrorPayload = event.payload
+      var payload : [String:String] = [
+        "error": eventPayload.error.errorDescription ?? eventPayload.error.localizedDescription
+      ]
+      if let tileId = eventPayload.tileId {
+        payload["tileId"] = "x:\(tileId.x) y:\(tileId.y) z:\(tileId.z)"
+      }
+      if let sourceId = eventPayload.sourceId {
+        payload["sourceId"] = sourceId
+      }
+      let rctmglEvent = RCTMGLEvent(type: .mapLoadingError, payload: payload);
+      self.fireEvent(event: rctmglEvent, callback: self.reactOnMapChange)
+
+      if let message = eventPayload.error.errorDescription {
         Logger.log(level: .error, message: "MapLoad error \(message)")
       } else {
         Logger.log(level: .error, message: "MapLoad error \(event)")
@@ -1026,7 +1039,6 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
       }
   }
   
-  
   func remove(_ annotation: PointAnnotation) {
     manager.annotations.removeAll(where: {$0.id == annotation.id})
   }
@@ -1035,15 +1047,16 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
     manager.annotations.append(annotation)
     manager.syncSourceAndLayerIfNeeded()
   }
-
-  func refresh(_ annotation: PointAnnotation) {
+  
+  func update(_ annotation: PointAnnotation) {
     let index = manager.annotations.firstIndex { $0.id == annotation.id }
-    if let index = index {
-      manager.annotations[index] = annotation
-      manager.syncSourceAndLayerIfNeeded()
-    } else {
-      Logger.log(level: .warn, message: "RCTMGL - PointAnnotation.refresh: expected annotation already there - adding")
-      add(annotation)
+    
+    guard let index = index else {
+      Logger.log(level: .warn, message: "RCTMGL - PointAnnotation.refresh: annotation not found")
+      return
     }
+    
+    manager.annotations[index] = annotation
+    manager.syncSourceAndLayerIfNeeded()
   }
 }

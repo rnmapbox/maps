@@ -52,10 +52,15 @@ class RCTMGLLocationManager : LocationProviderDelegate {
   
   var lastKnownLocation : CLLocation?
   var lastKnownHeading : CLHeading?
+  var shouldRequestAlwaysAuthorization: Bool?
   
   weak var delegate: RCTMGLLocationManagerDelegate?
   weak var locationProviderDelage: LocationProviderDelegate?
   
+  var headingSimulator: Timer? = nil
+  var simulatedHeading: Double = 0.0
+  var simulatedHeadingIncrement: Double = 1.0
+
   init() {
     provider = AppleLocationProvider()
     provider.setDelegate(self)
@@ -67,8 +72,14 @@ class RCTMGLLocationManager : LocationProviderDelegate {
     provider.locationProviderOptions = options
   }
   
+  func setRequestsAlwaysUse(_ requestsAlwaysUse: Bool) {
+    shouldRequestAlwaysAuthorization = requestsAlwaysUse;
+  }
+
   func start() {
-    provider.requestAlwaysAuthorization()
+    if shouldRequestAlwaysAuthorization == true {
+      provider.requestAlwaysAuthorization()
+    }
     provider.requestWhenInUseAuthorization()
     provider.setDelegate(self)
     provider.startUpdatingHeading()
@@ -212,6 +223,54 @@ extension RCTMGLLocationManager: LocationProvider {
   }
 }
 
+// MARK: heading simulation
+
+final public class SimulatedHeading: CLHeading {
+  init(trueHeading: CLLocationDirection, timestamp: Date) {
+    _trueHeading = trueHeading
+    _timestamp = timestamp
+    super.init()
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+    private var _trueHeading: CLLocationDirection = 0
+    private var _timestamp: Date
+
+    public override var trueHeading: CLLocationDirection {
+        get {  _trueHeading }
+        set { _trueHeading = newValue }
+    }
+
+    public override var timestamp: Date{
+      get {  _timestamp }
+      set { _timestamp = newValue }
+    }
+}
+
+extension RCTMGLLocationManager {
+  func simulateHeading(changesPerSecond: Int, increment: Double) {
+    self.simulatedHeadingIncrement = increment
+    DispatchQueue.main.async {
+      if let headingSimulator = self.headingSimulator {
+        headingSimulator.invalidate()
+      }
+      self.headingSimulator = nil
+
+      if (changesPerSecond > 0) {
+        self.headingSimulator = Timer.scheduledTimer(withTimeInterval: 1.0/Double(changesPerSecond), repeats: true) { [weak self] (_) in
+          guard let self = self else { return }
+
+          self.simulatedHeading = (self.simulatedHeading + self.simulatedHeadingIncrement).truncatingRemainder(dividingBy: 360.0)
+          self.locationProvider(self.provider, didUpdateHeading: SimulatedHeading(trueHeading: self.simulatedHeading, timestamp: Date()) )
+        }
+      }
+    }
+  }
+}
+
 
 @objc(RCTMGLLocationModule)
 class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
@@ -227,6 +286,14 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
     }
   }
   
+  var locationEventThrottle : (
+    waitBetweenEvents: Double?,
+    lastSentTimestamp: Double?
+  ) = (
+    nil,
+    nil
+  )
+
   override init() {
     locationManager = RCTMGLLocationManager()
     super.init()
@@ -266,6 +333,14 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
     locationManager.setDistanceFilter(minDisplacement)
   }
   
+  @objc func setRequestsAlwaysUse(_ requestsAlwaysUse: Bool) {
+    locationManager.setRequestsAlwaysUse(requestsAlwaysUse);
+  }
+
+  @objc func simulateHeading(_ changesPerSecond: NSNumber, increment: NSNumber) {
+    locationManager.simulateHeading(changesPerSecond: changesPerSecond.intValue, increment: increment.doubleValue)
+  }
+
   @objc
   override func startObserving() {
     super.startObserving()
@@ -278,17 +353,47 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
     hasListener = false
   }
   
-  
   func locationManager(_ locationManager: RCTMGLLocationManager, didUpdateLocation location: RCTMGLLocation) {
-    guard hasListener else {
-      return
-    }
-    
-    guard let _ = bridge else {
+    guard hasListener, let _ = bridge else {
       return
     }
 
-    self.sendEvent(withName: RCT_MAPBOX_USER_LOCATION_UPDATE, body: location.toJSON())
+    if shouldSendLocationEvent() {
+      self.sendEvent(withName: RCT_MAPBOX_USER_LOCATION_UPDATE, body: location.toJSON())
+    }
+  }
+  
+  // MARK: - location event throttle
+  @objc
+  func setLocationEventThrottle(_ throttleValue:NSNumber) {
+    let throttleValue = throttleValue.doubleValue
+    if throttleValue > 0.0 {
+      locationEventThrottle.waitBetweenEvents = throttleValue
+    } else {
+      locationEventThrottle.waitBetweenEvents = nil
+    }
+  }
+
+  func shouldSendLocationEvent() -> Bool {
+    guard let waitBetweenEvents = locationEventThrottle.waitBetweenEvents, waitBetweenEvents > 0 else {
+      return true
+    }
+  
+    let currentTimestamp: Double = CACurrentMediaTime() * 1000.0
+    
+    guard let lastSentTimestamp = locationEventThrottle.lastSentTimestamp else {
+      locationEventThrottle.lastSentTimestamp = currentTimestamp
+      return true;
+    }
+    
+    if (currentTimestamp - lastSentTimestamp > waitBetweenEvents) {
+      locationEventThrottle.lastSentTimestamp = currentTimestamp
+      return true;
+    }
+     
+    return false;
   }
 
 }
+
+

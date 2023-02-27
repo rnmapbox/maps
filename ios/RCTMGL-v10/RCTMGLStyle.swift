@@ -12,7 +12,7 @@ class RCTMGLStyle {
   }
 
 
-func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout FillLayer)->Void)->Void, isValid: @escaping () -> Bool)
+func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout FillLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
@@ -52,35 +52,22 @@ func fillLayer(layer: inout FillLayer, reactStyle:Dictionary<String, Any>, apply
     } else if (prop == "fillTranslateAnchor") {
       self.setFillTranslateAnchor(&layer, styleValue:styleValue);
     } else if (prop == "fillPattern") {
-      if (!styleValue.shouldAddImage()) {
-        self.setFillPattern(&layer, styleValue:styleValue);
-      } else {
-        let imageURI = styleValue.getImageURI()
-
-        RCTMGLUtils.fetchImage(bridge!, url:imageURI, scale:styleValue.getImageScale(), callback:{ (error, image) in
-          if let image = image {
-            DispatchQueue.main.sync {
-              if (isValid()) {
-                logged("Fill.FillPattern.addImage") {
-                  try self.style.addImage(image, id:imageURI!, stretchX: [], stretchY: []);
-                  applyUpdater { (layer: inout FillLayer) in
-                    self.setFillPattern(&layer, styleValue:styleValue);
-                  }
-                }
-              }
-            }
-          } else {
-            Logger.log(level: .error, message: "Error during fetchImage: \(optional: error)")
-          }
-        });
-      }
+      styleValue.setImage(
+        bridge: bridge!,
+        style: style,
+        oldValue: oldReactStyle?[prop],
+        setImageOnLayer: { (_) in self.setFillPattern(&layer, styleValue:styleValue) },
+        isLayerStillValid: isValid,
+        setImageOnLayerLater: { (_) in applyUpdater { (layer: inout FillLayer) in self.setFillPattern(&layer, styleValue: styleValue) } },
+        name: "Fill.\(prop)"
+      )
     } else {
       Logger.log(level:.error, message: "Unexpected property \(prop) for layer: fill")
     }
   }
 }
 
-func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout LineLayer)->Void)->Void, isValid: @escaping () -> Bool)
+func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout LineLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
@@ -140,28 +127,15 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, apply
     } else if (prop == "lineDasharray") {
       self.setLineDasharray(&layer, styleValue:styleValue);
     } else if (prop == "linePattern") {
-      if (!styleValue.shouldAddImage()) {
-        self.setLinePattern(&layer, styleValue:styleValue);
-      } else {
-        let imageURI = styleValue.getImageURI()
-
-        RCTMGLUtils.fetchImage(bridge!, url:imageURI, scale:styleValue.getImageScale(), callback:{ (error, image) in
-          if let image = image {
-            DispatchQueue.main.sync {
-              if (isValid()) {
-                logged("Line.LinePattern.addImage") {
-                  try self.style.addImage(image, id:imageURI!, stretchX: [], stretchY: []);
-                  applyUpdater { (layer: inout LineLayer) in
-                    self.setLinePattern(&layer, styleValue:styleValue);
-                  }
-                }
-              }
-            }
-          } else {
-            Logger.log(level: .error, message: "Error during fetchImage: \(optional: error)")
-          }
-        });
-      }
+      styleValue.setImage(
+        bridge: bridge!,
+        style: style,
+        oldValue: oldReactStyle?[prop],
+        setImageOnLayer: { (_) in self.setLinePattern(&layer, styleValue:styleValue) },
+        isLayerStillValid: isValid,
+        setImageOnLayerLater: { (_) in applyUpdater { (layer: inout LineLayer) in self.setLinePattern(&layer, styleValue: styleValue) } },
+        name: "Line.\(prop)"
+      )
     } else if (prop == "lineGradient") {
       self.setLineGradient(&layer, styleValue:styleValue);
     } else if (prop == "lineTrimOffset") {
@@ -172,7 +146,7 @@ func lineLayer(layer: inout LineLayer, reactStyle:Dictionary<String, Any>, apply
   }
 }
 
-func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout SymbolLayer)->Void)->Void, isValid: @escaping () -> Bool)
+func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout SymbolLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
@@ -212,28 +186,15 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, a
     } else if (prop == "iconTextFitPadding") {
       self.setIconTextFitPadding(&layer, styleValue:styleValue);
     } else if (prop == "iconImage") {
-      if (!styleValue.shouldAddImage()) {
-        self.setIconImage(&layer, styleValue:styleValue);
-      } else {
-        let imageURI = styleValue.getImageURI()
-
-        RCTMGLUtils.fetchImage(bridge!, url:imageURI, scale:styleValue.getImageScale(), callback:{ (error, image) in
-          if let image = image {
-            DispatchQueue.main.sync {
-              if (isValid()) {
-                logged("Symbol.IconImage.addImage") {
-                  try self.style.addImage(image, id:imageURI!, stretchX: [], stretchY: []);
-                  applyUpdater { (layer: inout SymbolLayer) in
-                    self.setIconImage(&layer, styleValue:styleValue);
-                  }
-                }
-              }
-            }
-          } else {
-            Logger.log(level: .error, message: "Error during fetchImage: \(optional: error)")
-          }
-        });
-      }
+      styleValue.setImage(
+        bridge: bridge!,
+        style: style,
+        oldValue: oldReactStyle?[prop],
+        setImageOnLayer: { (_) in self.setIconImage(&layer, styleValue:styleValue) },
+        isLayerStillValid: isValid,
+        setImageOnLayerLater: { (_) in applyUpdater { (layer: inout SymbolLayer) in self.setIconImage(&layer, styleValue: styleValue) } },
+        name: "Symbol.\(prop)"
+      )
     } else if (prop == "iconRotate") {
       self.setIconRotate(&layer, styleValue:styleValue);
     } else if (prop == "iconPadding") {
@@ -350,7 +311,7 @@ func symbolLayer(layer: inout SymbolLayer, reactStyle:Dictionary<String, Any>, a
   }
 }
 
-func circleLayer(layer: inout CircleLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout CircleLayer)->Void)->Void, isValid: @escaping () -> Bool)
+func circleLayer(layer: inout CircleLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout CircleLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
@@ -413,7 +374,7 @@ func circleLayer(layer: inout CircleLayer, reactStyle:Dictionary<String, Any>, a
   }
 }
 
-func heatmapLayer(layer: inout HeatmapLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout HeatmapLayer)->Void)->Void, isValid: @escaping () -> Bool)
+func heatmapLayer(layer: inout HeatmapLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout HeatmapLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
@@ -452,7 +413,7 @@ func heatmapLayer(layer: inout HeatmapLayer, reactStyle:Dictionary<String, Any>,
   }
 }
 
-func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout FillExtrusionLayer)->Void)->Void, isValid: @escaping () -> Bool)
+func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout FillExtrusionLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
@@ -484,28 +445,15 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
     } else if (prop == "fillExtrusionTranslateAnchor") {
       self.setFillExtrusionTranslateAnchor(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionPattern") {
-      if (!styleValue.shouldAddImage()) {
-        self.setFillExtrusionPattern(&layer, styleValue:styleValue);
-      } else {
-        let imageURI = styleValue.getImageURI()
-
-        RCTMGLUtils.fetchImage(bridge!, url:imageURI, scale:styleValue.getImageScale(), callback:{ (error, image) in
-          if let image = image {
-            DispatchQueue.main.sync {
-              if (isValid()) {
-                logged("FillExtrusion.FillExtrusionPattern.addImage") {
-                  try self.style.addImage(image, id:imageURI!, stretchX: [], stretchY: []);
-                  applyUpdater { (layer: inout FillExtrusionLayer) in
-                    self.setFillExtrusionPattern(&layer, styleValue:styleValue);
-                  }
-                }
-              }
-            }
-          } else {
-            Logger.log(level: .error, message: "Error during fetchImage: \(optional: error)")
-          }
-        });
-      }
+      styleValue.setImage(
+        bridge: bridge!,
+        style: style,
+        oldValue: oldReactStyle?[prop],
+        setImageOnLayer: { (_) in self.setFillExtrusionPattern(&layer, styleValue:styleValue) },
+        isLayerStillValid: isValid,
+        setImageOnLayerLater: { (_) in applyUpdater { (layer: inout FillExtrusionLayer) in self.setFillExtrusionPattern(&layer, styleValue: styleValue) } },
+        name: "FillExtrusion.\(prop)"
+      )
     } else if (prop == "fillExtrusionHeight") {
       self.setFillExtrusionHeight(&layer, styleValue:styleValue);
     } else if (prop == "fillExtrusionHeightTransition") {
@@ -522,7 +470,7 @@ func fillExtrusionLayer(layer: inout FillExtrusionLayer, reactStyle:Dictionary<S
   }
 }
 
-func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout RasterLayer)->Void)->Void, isValid: @escaping () -> Bool)
+func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout RasterLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
@@ -573,7 +521,7 @@ func rasterLayer(layer: inout RasterLayer, reactStyle:Dictionary<String, Any>, a
   }
 }
 
-func hillshadeLayer(layer: inout HillshadeLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout HillshadeLayer)->Void)->Void, isValid: @escaping () -> Bool)
+func hillshadeLayer(layer: inout HillshadeLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout HillshadeLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
@@ -616,7 +564,7 @@ func hillshadeLayer(layer: inout HillshadeLayer, reactStyle:Dictionary<String, A
   }
 }
 
-func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout BackgroundLayer)->Void)->Void, isValid: @escaping () -> Bool)
+func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout BackgroundLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
@@ -638,28 +586,15 @@ func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String,
     } else if (prop == "backgroundColorTransition") {
       self.setBackgroundColorTransition(&layer, styleValue:styleValue);
     } else if (prop == "backgroundPattern") {
-      if (!styleValue.shouldAddImage()) {
-        self.setBackgroundPattern(&layer, styleValue:styleValue);
-      } else {
-        let imageURI = styleValue.getImageURI()
-
-        RCTMGLUtils.fetchImage(bridge!, url:imageURI, scale:styleValue.getImageScale(), callback:{ (error, image) in
-          if let image = image {
-            DispatchQueue.main.sync {
-              if (isValid()) {
-                logged("Background.BackgroundPattern.addImage") {
-                  try self.style.addImage(image, id:imageURI!, stretchX: [], stretchY: []);
-                  applyUpdater { (layer: inout BackgroundLayer) in
-                    self.setBackgroundPattern(&layer, styleValue:styleValue);
-                  }
-                }
-              }
-            }
-          } else {
-            Logger.log(level: .error, message: "Error during fetchImage: \(optional: error)")
-          }
-        });
-      }
+      styleValue.setImage(
+        bridge: bridge!,
+        style: style,
+        oldValue: oldReactStyle?[prop],
+        setImageOnLayer: { (_) in self.setBackgroundPattern(&layer, styleValue:styleValue) },
+        isLayerStillValid: isValid,
+        setImageOnLayerLater: { (_) in applyUpdater { (layer: inout BackgroundLayer) in self.setBackgroundPattern(&layer, styleValue: styleValue) } },
+        name: "Background.\(prop)"
+      )
     } else if (prop == "backgroundOpacity") {
       self.setBackgroundOpacity(&layer, styleValue:styleValue);
     } else if (prop == "backgroundOpacityTransition") {
@@ -670,7 +605,7 @@ func backgroundLayer(layer: inout BackgroundLayer, reactStyle:Dictionary<String,
   }
 }
 
-func skyLayer(layer: inout SkyLayer, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout SkyLayer)->Void)->Void, isValid: @escaping () -> Bool)
+func skyLayer(layer: inout SkyLayer, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout SkyLayer)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
@@ -713,7 +648,7 @@ func skyLayer(layer: inout SkyLayer, reactStyle:Dictionary<String, Any>, applyUp
   }
 }
 
-func lightLayer(layer: inout Light, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout Light)->Void)->Void, isValid: @escaping () -> Bool)
+func lightLayer(layer: inout Light, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout Light)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
@@ -748,7 +683,7 @@ func lightLayer(layer: inout Light, reactStyle:Dictionary<String, Any>, applyUpd
   }
 }
 
-func atmosphereLayer(layer: inout Atmosphere, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout Atmosphere)->Void)->Void, isValid: @escaping () -> Bool)
+func atmosphereLayer(layer: inout Atmosphere, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout Atmosphere)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     Logger.log(level:.error, message: "Invalid style: \(reactStyle)")
@@ -793,7 +728,7 @@ func atmosphereLayer(layer: inout Atmosphere, reactStyle:Dictionary<String, Any>
   }
 }
 
-func terrainLayer(layer: inout Terrain, reactStyle:Dictionary<String, Any>, applyUpdater: @escaping  ((inout Terrain)->Void)->Void, isValid: @escaping () -> Bool)
+func terrainLayer(layer: inout Terrain, reactStyle:Dictionary<String, Any>, oldReactStyle:Dictionary<String, Any>?, applyUpdater: @escaping  ((inout Terrain)->Void)->Void, isValid: @escaping () -> Bool)
 {
   guard self._hasReactStyle(reactStyle) else {
     Logger.log(level:.error, message: "Invalid style: \(reactStyle)")

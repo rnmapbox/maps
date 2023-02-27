@@ -70,7 +70,9 @@ const Markers = memo((props: BaseExampleProps) => {
                   styles.markerBox,
                   { backgroundColor: marker.color, padding: 4 * size },
                 ]}
-                onPress={() => setSelectedIndex(i)}
+                onPress={() =>
+                  setSelectedIndex((index) => (index === i ? -1 : i))
+                }
               >
                 <Text style={styles.markerText}>Marker {i + 1}</Text>
               </Pressable>

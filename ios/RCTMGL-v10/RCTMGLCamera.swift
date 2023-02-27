@@ -123,28 +123,35 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       _updateCameraFromTrackingMode()
     }
   }
+
   @objc var followUserMode: String? {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
+
   @objc var followUserLocation : Bool = false {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
+
   @objc var followZoomLevel: NSNumber? {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
+
   @objc var maxZoomLevel: NSNumber? {
     didSet { _updateMaxBounds() }
   }
+
   @objc var minZoomLevel: NSNumber? {
     didSet { _updateMaxBounds() }
   }
+
   @objc var onUserTrackingModeChange: RCTBubblingEventBlock? = nil
+
   @objc var stop: [String: Any]? {
     didSet {
       _updateCamera()
@@ -319,6 +326,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       }
       let followState = map.viewport.makeFollowPuckViewportState(options: followOptions)
       map.viewport.transition(to: followState)
+      map.viewport.addStatusObserver(self)
       map.mapboxMap.setCamera(to: _camera)
     }
   }
@@ -468,6 +476,11 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
     map.reactCamera = self
   }
   
+  override func removeFromMap(_ map: RCTMGLMapView) {
+    map.viewport.removeStatusObserver(self)
+    super.removeFromMap(map)
+  }
+
   // MARK: - LocationConsumer
   
   func locationUpdate(newLocation: Location) {
@@ -495,6 +508,106 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
   }
 }
 
+// MARK: - ViewportStatusObserver
+
+extension RCTMGLCamera : ViewportStatusObserver {
+  func toDict(_ status: ViewportStatus) -> [String: Any] {
+    switch (status) {
+    case .idle:
+      return ["state":"idle"]
+    case .state(let state):
+      return ["state":String(describing: type(of: state))]
+    case .transition(let transition, toState: let toState):
+      return [
+        "transition": String(describing: type(of: transition)),
+        "state":String(describing: type(of: toState))
+      ]
+    }
+  }
+
+  func toFollowUserLocation(_ status: ViewportStatus) -> Bool {
+    switch status {
+    case .idle:
+      return false
+    case .state(_):
+      return true
+    case .transition(_, toState: _):
+      return true
+    }
+  }
+
+  func toFollowUserMode(_ state: ViewportState) -> String? {
+    if let state = state as? FollowPuckViewportState {
+      switch state.options.bearing {
+      case .heading:
+        return "compass"
+      case .course:
+        return "course"
+      case .some(let bearing):
+        return "constant"
+      case .none:
+        return "normal"
+      }
+    } else if let state = state as? OverviewViewportState {
+      return "overview"
+    } else {
+      return "custom"
+    }
+  }
+
+  func toFollowUserMode(_ status: ViewportStatus) -> String? {
+    switch status {
+    case .idle:
+      return nil
+    case .state(let state):
+      return toFollowUserMode(state)
+    case .transition(_, toState: let state):
+      return toFollowUserMode(state)
+    }
+  }
+
+  func toString(_ reason: ViewportStatusChangeReason) -> String {
+    if reason == .idleRequested {
+      return "idleRequested"
+    } else if reason == .transitionFailed {
+      return "transitionFailied"
+    } else if reason == .transitionStarted {
+      return "transitionStarted"
+    } else if reason == .transitionSucceeded {
+      return "transitionSucceeded"
+    } else if reason == .userInteraction {
+      return "userInteraction"
+    } else {
+      return "unkown \(reason)"
+    }
+  }
+
+  func viewportStatusDidChange(from fromStatus: ViewportStatus,
+                               to toStatus: ViewportStatus,
+                               reason: ViewportStatusChangeReason)
+  {
+    if (reason == .userInteraction) {
+      followUserLocation = toFollowUserLocation(toStatus)
+
+      if let onUserTrackingModeChange = onUserTrackingModeChange {
+        let event = RCTMGLEvent(
+          type: .onUserTrackingModeChange,
+          payload: [
+            "followUserMode": toFollowUserMode(toStatus) as Any,
+            "followUserLocation": followUserLocation,
+            "fromViewportStatus": toDict(fromStatus),
+            "toViewportState": toDict(toStatus),
+            "reason": toString(reason)
+          ]
+        )
+
+        onUserTrackingModeChange(event.toJSON())
+      }
+    }
+  }
+}
+
 private func toSeconds(_ ms: Double) -> TimeInterval {
   return ms * 0.001
 }
+

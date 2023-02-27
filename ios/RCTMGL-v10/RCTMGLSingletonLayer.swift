@@ -7,7 +7,11 @@ class RCTMGLSingletonLayer : UIView {
   weak var map : RCTMGLMapView? = nil
   var style: Style? = nil
   
+  var oldReactStyle: [String:Any]?
   @objc var reactStyle : Dictionary<String, Any>? = nil {
+    willSet {
+      oldReactStyle = reactStyle
+    }
     didSet {
       DispatchQueue.main.async {
         self.addStylesAndUpdate()

@@ -73,9 +73,6 @@ public class RCTMGLVectorSource extends RCTMGLTileSource<VectorSource> {
             return;
         }
 
-
-        WritableMap payload = new WritableNativeMap();
-
         mMap.querySourceFeatures(
                 getID(),
                 new SourceQueryOptions(layerIDs, filter),
@@ -83,6 +80,7 @@ public class RCTMGLVectorSource extends RCTMGLTileSource<VectorSource> {
                 new QueryFeaturesCallback() {
                     @Override
                     public void run(@NonNull Expected<String, List<QueriedFeature>> queriedFeatures) {
+                        WritableMap payload = new WritableNativeMap();
                         if (queriedFeatures.isError()) {
                             //V10todo
                             payload.putString("error", queriedFeatures.getError());
@@ -93,11 +91,10 @@ public class RCTMGLVectorSource extends RCTMGLTileSource<VectorSource> {
                             }
                             payload.putString("data", FeatureCollection.fromFeatures(features).toJson());
                         }
+                        AndroidCallbackEvent event = new AndroidCallbackEvent(RCTMGLVectorSource.this, callbackID, payload);
+                        mManager.handleEvent(event);
                     }
                 }
         );
-
-        AndroidCallbackEvent event = new AndroidCallbackEvent(this, callbackID, payload);
-        mManager.handleEvent(event);
     }
 }

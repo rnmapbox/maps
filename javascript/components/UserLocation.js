@@ -98,6 +98,13 @@ class UserLocation extends React.Component {
     showsUserHeadingIndicator: PropTypes.bool,
 
     /**
+     * Request the always location permission, and listen to the location even when the app is in background
+     *
+     * @platform ios
+     */
+    requestsAlwaysUse: PropTypes.bool,
+
+    /**
      * Minimum amount of movement before GPS location is updated in meters
      */
     minDisplacement: PropTypes.number,
@@ -112,6 +119,7 @@ class UserLocation extends React.Component {
     animated: true,
     visible: true,
     showsUserHeadingIndicator: false,
+    requestsAlwaysUse: false,
     minDisplacement: 0,
     renderMode: 'normal',
   };
@@ -160,6 +168,9 @@ class UserLocation extends React.Component {
 
     if (this.props.minDisplacement !== prevProps.minDisplacement) {
       locationManager.setMinDisplacement(this.props.minDisplacement);
+    }
+    if (this.props.requestsAlwaysUse !== prevProps.requestsAlwaysUse) {
+      locationManager.setRequestsAlwaysUse(this.props.requestsAlwaysUse);
     }
   }
 

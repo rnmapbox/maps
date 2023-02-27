@@ -12,6 +12,7 @@
 | onPress | `func` | `none` | `false` | Callback that is triggered on location icon press |
 | onUpdate | `func` | `none` | `false` | Callback that is triggered on location update |
 | showsUserHeadingIndicator | `bool` | `false` | `false` | Show or hide small arrow which indicates direction the device is pointing relative to north. |
+| requestsAlwaysUse | `bool` | `false` | `false` | Request the always location permission, and listen to the location even when the app is in background<br/><br/>@platform ios |
 | minDisplacement | `number` | `0` | `false` | Minimum amount of movement before GPS location is updated in meters |
 | children | `any` | `none` | `false` | Custom location icon of type mapbox-gl-native components |
 

@@ -28,6 +28,7 @@ class RCTMGLEvent : NSObject, RCTMGLEventProtocol {
       case mapIdle
       case imageMissing
       case didFinishLoadingMap
+      case mapLoadingError
       case didFinishRenderingFully
       case didFinishRendering
       case didFinishLoadingStyle

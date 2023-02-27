@@ -15,6 +15,8 @@ import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import com.facebook.react.bridge.*
 import com.mapbox.android.gestures.MoveGestureDetector
+import com.mapbox.android.gestures.RotateGestureDetector
+import com.mapbox.android.gestures.StandardScaleGestureDetector
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
@@ -51,6 +53,7 @@ import com.mapbox.rctmgl.components.camera.RCTMGLCamera
 import com.mapbox.rctmgl.components.images.RCTMGLImages
 import com.mapbox.rctmgl.components.location.LocationComponentManager
 import com.mapbox.rctmgl.components.location.RCTMGLNativeUserLocation
+import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeReason
 import com.mapbox.rctmgl.components.mapview.helpers.CameraChangeTracker
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer
 import com.mapbox.rctmgl.components.styles.light.RCTMGLLight
@@ -77,9 +80,66 @@ data class OrnamentSettings(
     var position: Int = -1
 )
 
+enum class MapGestureType {
+    Move,Scale,Rotate
+}
 
-interface RCTMGLMapViewLifecycleOwner : LifecycleOwner {
+/***
+ * Mapbox's MapView observers lifecycle events see MapboxLifecyclePluginImpl - (ON_START, ON_STOP, ON_DESTROY)
+ * We need to emulate those.
+ */
+interface RCTMGLLifeCycleOwner : LifecycleOwner {
     fun handleLifecycleEvent(event: Lifecycle.Event)
+}
+
+class RCTMGLLifeCycle {
+    private var lifecycleOwner : RCTMGLLifeCycleOwner? = null
+
+    fun onAttachedToWindow(view: View) {
+        if (lifecycleOwner == null) {
+            lifecycleOwner = object : RCTMGLLifeCycleOwner {
+                private lateinit var lifecycleRegistry: LifecycleRegistry
+                init {
+                    lifecycleRegistry = LifecycleRegistry(this)
+                    lifecycleRegistry.currentState = Lifecycle.State.CREATED
+                }
+
+                override fun handleLifecycleEvent(event: Lifecycle.Event) {
+                    try {
+                        lifecycleRegistry.handleLifecycleEvent(event)
+                    } catch (e: RuntimeException) {
+                        Log.e("RCTMGLMapView", "handleLifecycleEvent, handleLifecycleEvent error: $e")
+                    }
+                }
+
+                override fun getLifecycle(): Lifecycle {
+                    return lifecycleRegistry
+                }
+            }
+            ViewTreeLifecycleOwner.set(view, lifecycleOwner);
+        }
+        lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_START)
+    }
+
+    fun onDetachedFromWindow() {
+        if (lifecycleOwner?.lifecycle?.currentState == Lifecycle.State.DESTROYED) {
+            return
+        }
+        lifecycleOwner?.handleLifecycleEvent(androidx.lifecycle.Lifecycle.Event.ON_STOP)
+    }
+
+    fun onDestroy() {
+        if (lifecycleOwner?.lifecycle?.currentState == Lifecycle.State.STARTED || lifecycleOwner?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
+            lifecycleOwner?.handleLifecycleEvent(androidx.lifecycle.Lifecycle.Event.ON_STOP)
+        }
+        if (lifecycleOwner?.lifecycle?.currentState != Lifecycle.State.DESTROYED) {
+            lifecycleOwner?.handleLifecycleEvent(androidx.lifecycle.Lifecycle.Event.ON_DESTROY)
+        }
+    }
+
+    fun getState() : Lifecycle.State {
+        return lifecycleOwner?.lifecycle?.currentState ?: Lifecycle.State.INITIALIZED;
+    }
 }
 
 open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapViewManager /*, MapboxMapOptions options*/) : MapView(mContext), OnMapClickListener, OnMapLongClickListener {
@@ -201,24 +261,57 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         gesturesPlugin.addOnMapLongClickListener(_this)
         gesturesPlugin.addOnMapClickListener(_this)
 
+        gesturesPlugin.addOnScaleListener(object: OnScaleListener{
+            override fun onScale(detector: StandardScaleGestureDetector) {
+                mapGesture(MapGestureType.Scale, detector)
+            }
+            override fun onScaleBegin(detector: StandardScaleGestureDetector) {
+                mapGestureBegin(MapGestureType.Scale, detector)
+            }
+            override fun onScaleEnd(detector: StandardScaleGestureDetector) {
+                mapGestureEnd(MapGestureType.Scale, detector)
+            }
+        })
+
+        gesturesPlugin.addOnRotateListener(object: OnRotateListener{
+            override fun onRotate(detector: RotateGestureDetector) {
+                mapGesture(MapGestureType.Rotate, detector)
+            }
+            override fun onRotateBegin(detector: RotateGestureDetector) {
+                mapGestureBegin(MapGestureType.Rotate, detector)
+            }
+            override fun onRotateEnd(detector: RotateGestureDetector) {
+                mapGestureEnd(MapGestureType.Rotate, detector)
+            }
+        })
+
         gesturesPlugin.addOnMoveListener(object : OnMoveListener {
             override fun onMoveBegin(moveGestureDetector: MoveGestureDetector) {
-                mCameraChangeTracker.setReason(CameraChangeTracker.USER_GESTURE)
-                handleMapChangedEvent(EventTypes.REGION_WILL_CHANGE)
+                mapGestureBegin(MapGestureType.Move, moveGestureDetector)
             }
 
             override fun onMove(moveGestureDetector: MoveGestureDetector): Boolean {
-                mCameraChangeTracker.setReason(CameraChangeTracker.USER_GESTURE)
-                handleMapChangedEvent(EventTypes.REGION_IS_CHANGING)
-                return false
+                return mapGesture(MapGestureType.Move, moveGestureDetector)
             }
 
-            override fun onMoveEnd(moveGestureDetector: MoveGestureDetector) {}
+            override fun onMoveEnd(moveGestureDetector: MoveGestureDetector) {
+                mapGestureEnd(MapGestureType.Move, moveGestureDetector)
+            }
         })
-
 
         map.subscribe({ event -> Logger.e(LOG_TAG, String.format("Map load failed: %s", event.data.toString())) }, Arrays.asList(MapEvents.MAP_LOADING_ERROR))
     }
+
+    fun<T> mapGestureBegin(type:MapGestureType, gesture: T) {
+        mCameraChangeTracker.setReason(CameraChangeReason.USER_GESTURE)
+        handleMapChangedEvent(EventTypes.REGION_WILL_CHANGE)
+    }
+    fun<T> mapGesture(type: MapGestureType, gesture: T): Boolean {
+        mCameraChangeTracker.setReason(CameraChangeReason.USER_GESTURE)
+        handleMapChangedEvent(EventTypes.REGION_IS_CHANGING)
+        return false
+    }
+    fun<T> mapGestureEnd(type: MapGestureType, gesture: T) {}
 
     fun init() {
         // Required for rendering properly in Android Oreo
@@ -325,7 +418,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         val event: IEvent = MapChangeEvent(this, EventTypes.REGION_DID_CHANGE,
                 makeRegionPayload(isAnimated))
         mManager.handleEvent(event)
-        mCameraChangeTracker.setReason(CameraChangeTracker.EMPTY)
+        mCameraChangeTracker.setReason(CameraChangeReason.NONE)
     }
 
     private fun removeAllFeaturesFromMap() {
@@ -608,7 +701,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     fun sendRegionDidChangeEvent() {
         handleMapChangedEvent(EventTypes.REGION_DID_CHANGE)
-        mCameraChangeTracker.setReason(CameraChangeTracker.EMPTY)
+        mCameraChangeTracker.setReason(CameraChangeReason.NONE)
     }
 
     private fun handleMapChangedEvent(eventType: String) {
@@ -1140,51 +1233,34 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     // endregion
 
     // region lifecycle
-    private var lifecycleOwner : RCTMGLMapViewLifecycleOwner? = null
+    private val lifecycle : RCTMGLLifeCycle by lazy { RCTMGLLifeCycle() }
+
+    fun getLifecycleState() : Lifecycle.State {
+        return this.lifecycle.getState()
+    }
 
     override fun onDetachedFromWindow() {
-        lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+        lifecycle.onDetachedFromWindow()
         super.onDetachedFromWindow();
     }
 
     override fun onDestroy() {
         removeAllFeatures()
         viewAnnotationManager.removeAllViewAnnotations()
-        lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+        mLocationComponentManager?.onDestroy();
+
+        lifecycle.onDestroy()
         super.onDestroy()
     }
 
     fun onDropViewInstance() {
         removeAllFeatures()
         viewAnnotationManager.removeAllViewAnnotations()
-        lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+        lifecycle.onDestroy()
     }
 
     override fun onAttachedToWindow() {
-        if (lifecycleOwner == null) {
-            lifecycleOwner = object : RCTMGLMapViewLifecycleOwner {
-                private lateinit var lifecycleRegistry: LifecycleRegistry
-                init {
-                    lifecycleRegistry = LifecycleRegistry(this)
-                    lifecycleRegistry.currentState = Lifecycle.State.CREATED
-                }
-
-                override fun handleLifecycleEvent(event: Lifecycle.Event) {
-                    try {
-                        lifecycleRegistry.handleLifecycleEvent(event)
-                    } catch (e: RuntimeException) {
-                        Log.e("RCTMGLMapView", "onAttachedToWindow error: $e")
-                    }
-                }
-
-                override fun getLifecycle(): Lifecycle {
-                    return lifecycleRegistry
-                }
-            }
-            ViewTreeLifecycleOwner.set(this, lifecycleOwner);
-        } else {
-            lifecycleOwner?.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
-        }
+        lifecycle.onAttachedToWindow(this)
         super.onAttachedToWindow()
     }
 
