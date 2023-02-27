@@ -19,6 +19,7 @@ import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
 import com.mapbox.maps.*
+import com.mapbox.maps.extension.localization.localizeLabels
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.Layer
@@ -475,12 +476,13 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     fun setReactLocalizeLabels(locale: String?, layerIds: List<String>?) {
-    if (locale != null) {
-        mLocaleString = locale
-        mLocaleLayerIds = layerIds
-    }
-    if (locale != null && mMap != null) {
-        mMap.getStyle()?.localizeLabels(Locale(locale), layerIds)
+        if (locale != null) {
+            mLocaleString = locale
+            mLocaleLayerIds = layerIds
+        }
+        if (locale != null && mMap != null) {
+            mMap.getStyle()?.localizeLabels(Locale(locale), layerIds)
+        }
     }
     
 

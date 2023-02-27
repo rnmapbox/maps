@@ -866,7 +866,7 @@ class MapView extends NativeBridgeComponent(
       return;
     }
     // if localizeLabels is a truthy value and not object, set it to the default locale
-    if (localizeLabels !== "object") {
+    if (props.localizeLabels !== "object") {
       props.localizeLabels = {
         locale: "en"
       }
