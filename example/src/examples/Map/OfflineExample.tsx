@@ -4,11 +4,12 @@ import React, { useState } from 'react';
 import { Button, Dimensions, TextInput } from 'react-native';
 
 import Page from '../common/Page';
+import { BaseExampleProps } from '../common/BaseExamplePropTypes';
 
 const CENTER_COORD: [number, number] = [-73.970895, 40.723279];
 const MAPBOX_VECTOR_TILE_SIZE = 512;
 
-export default function OfflineExample({ ...props }): JSX.Element {
+const OfflineExample = (props: BaseExampleProps) => {
   const [packName, setPackName] = useState('pack-1');
   const [showEditTitle, setShowEditTitle] = useState(false);
 
@@ -115,4 +116,6 @@ export default function OfflineExample({ ...props }): JSX.Element {
       </MapView>
     </Page>
   );
-}
+};
+
+export default OfflineExample;
