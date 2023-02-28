@@ -6201,7 +6201,7 @@
   },
   "coordinates": {
     "name": "coordinates",
-    "fileNameWithExt": "locationManager.tsx",
+    "fileNameWithExt": "locationManager.ts",
     "description": "Coorinates sent by locationManager",
     "props": [],
     "styles": [],
@@ -6209,7 +6209,7 @@
   },
   "location": {
     "name": "location",
-    "fileNameWithExt": "locationManager.tsx",
+    "fileNameWithExt": "locationManager.ts",
     "description": "Location sent by locationManager",
     "props": [],
     "styles": [],
@@ -6217,7 +6217,7 @@
   },
   "locationManager": {
     "name": "locationManager",
-    "fileNameWithExt": "locationManager.tsx",
+    "fileNameWithExt": "locationManager.ts",
     "description": "LocationManager is a singleton, see ",
     "props": [],
     "styles": [],
