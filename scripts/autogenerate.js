@@ -293,8 +293,15 @@ function formatDescription(description) {
   for (let i = 0; i < words.length; i++) {
     const word = words[i];
 
-    if (word.includes('-')) {
-      words[i] = camelCase(word);
+    const docMatch = word.match(/^\[(.+)\]\((.+)\)$/);
+    if (docMatch) {
+      if (docMatch[2].startsWith('/')) {
+        words[i] = `[${docMatch[1]}](https://doc.mapbox.com/${docMatch[2]})`;
+      }
+    } else {
+      if (word.includes('-')) {
+        words[i] = camelCase(word);
+      }
     }
   }
 
