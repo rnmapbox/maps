@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import MapboxGL from '@rnmapbox/maps';
-import { Button, StyleSheet, Text } from 'react-native';
+import { Button, StyleSheet, Text, ImageSourcePropType } from 'react-native';
 import { Divider } from '@rneui/base';
 
 import sheet from '../../styles/sheet';
@@ -10,7 +10,7 @@ import { Images } from '../../../../javascript';
 import { BaseExampleProps } from '../common/BaseExamplePropTypes';
 
 type CompassImage = 'compass1' | 'compass2';
-const images: Record<CompassImage, NodeRequire> = {
+const images: Record<CompassImage, ImageSourcePropType> = {
   compass1: require('../../assets/compass1.png'),
   compass2: require('../../assets/compass2.png'),
 };

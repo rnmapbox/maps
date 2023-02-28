@@ -47,6 +47,7 @@ import {
   type UserTrackingMode as _UserTrackingMode,
   type UserTrackingModeChangeCallback as _UserTrackingModeChangeCallback,
 } from './javascript/components/Camera';
+import { Images as _Images } from './javascript/components/Images';
 import { MarkerView as _MarkerView } from './javascript/components/MarkerView';
 import { PointAnnotation as _PointAnnotation } from './javascript/components/PointAnnotation';
 import { Atmosphere as _Atmosphere } from './javascript/components/Atmosphere';
@@ -351,11 +352,12 @@ declare namespace MapboxGL {
   class LineLayer extends Component<_LineLayerProps> {}
   class RasterLayer extends Component<_RasterLayerProps> {}
   class HeatmapLayer extends Component<_HeatmapLayerProps> {}
-  class Images extends Component<ImagesProps> {}
   class ImageSource extends Component<ImageSourceProps> {}
   class SkyLayer extends Component<_SkyLayerProps> {}
 
   type Location = _Location;
+  type Images = _Images;
+  const Images = _Images;
 
   /**
    * Offline
@@ -689,12 +691,6 @@ export interface HeatmapLayerProps extends LayerBaseProps {
   style?: StyleProp<HeatmapLayerStyle>;
 }
 
-export interface ImagesProps extends ViewProps {
-  images?: { assets?: string[] } & { [key: string]: ImageSourcePropType };
-  nativeAssetImages?: string[];
-  onImageMissing?: (imageKey: string) => void;
-}
-
 export interface ImageSourceProps extends ViewProps {
   id: string;
   url?: number | string;
@@ -783,6 +779,7 @@ export import AnimatedPoint = MapboxGL.AnimatedPoint;
 /** @deprecated This will be removed in a future release. Use `AnimatedPoint` instead. */
 export import AnimatedMapPoint = MapboxGL.AnimatedPoint;
 export import AnimatedShape = MapboxGL.AnimatedShape;
+export import Images = MapboxGL.Images;
 
 export const { offlineManager } = MapboxGL;
 

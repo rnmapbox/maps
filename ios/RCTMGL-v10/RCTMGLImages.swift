@@ -12,7 +12,14 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
   var images : [String:Any] = [:]
   
   @objc
-  var nativeImages: [String] = []
+  var nativeImages: [Any] = [] {
+    didSet {
+      nativeImageInfos = nativeImages.compactMap { decodeImage($0) }
+    }
+  };
+
+  typealias NativeImageInfo = (name:String, sdf: Bool, stretchX:[(from:Float, to:Float)], stretchY:[(from:Float, to:Float)]);
+  var nativeImageInfos: [NativeImageInfo] = []
   
   // MARK: - RCTMGLMapComponent
 
@@ -24,7 +31,7 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
     map.images.append(self)
     map.setupEvents()
     
-    self.addNativeImages(style: style, nativeImages: nativeImages)
+    self.addNativeImages(style: style, nativeImages: nativeImageInfos)
     self.addRemoteImages(style: style, remoteImages: images)
   }
   
@@ -57,8 +64,8 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
   }
   
   public func addMissingImageToStyle(style: Style, imageName: String) -> Bool {
-    if nativeImages.contains(imageName) {
-      addNativeImages(style: style, nativeImages: [imageName])
+    if let nativeImage = nativeImageInfos.first(where: { $0.name == imageName }) {
+      addNativeImages(style: style, nativeImages: [nativeImage])
       return true
     }
     
@@ -77,11 +84,50 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
     }
   }
   
-  func addNativeImages(style: Style, nativeImages: [String]) {
-    for imageName in nativeImages {
-      if style.styleManager.getStyleImage(forImageId: imageName) == nil {
+  func decodeImage(_ imageNameOrInfo: Any) -> NativeImageInfo? {
+    if let imageName = imageNameOrInfo as? String {
+      return (name: imageName, sdf: false, stretchX:[],stretchY:[])
+    } else if let imageInfo = imageNameOrInfo as? [String:Any] {
+      guard let name = imageInfo["name"] as? String else {
+        Logger.log(level: .warn, message: "NativeImage: \(imageInfo) has no name key")
+        return nil
+      }
+      var sdf = false
+      var stretchX : [(from:Float, to:Float)] = []
+      var stretchY : [(from:Float, to:Float)] = []
+      if let sdfV = imageInfo["sdf"] as? NSNumber {
+        sdf = sdfV.boolValue
+      }
+      
+      if let stretchXV = imageInfo["stretchX"] as? [[NSNumber]] {
+        stretchX = stretchXV.map{ pair in
+          return (from: pair[0].floatValue, to: pair[1].floatValue)
+        }
+      }
+      
+      if let stretchYV = imageInfo["stretchY"] as? [[NSNumber]] {
+        stretchY = stretchYV.map{ pair in
+          return (from: pair[0].floatValue, to: pair[1].floatValue)
+        }
+      }
+      
+      return (name: name, sdf: sdf, stretchX:stretchX,stretchY:stretchY)
+    } else {
+      Logger.log(level: .warn, message: "RCTMGLImage.nativeImage, unexpected image: \(imageNameOrInfo)")
+      return nil
+    }
+  }
+  
+  func addNativeImages(style: Style, nativeImages: [NativeImageInfo]) {
+    for imageInfo in nativeImages {
+      let imageName = imageInfo.name
+      if style.styleManager.getStyleImage(forImageId: imageInfo.name) == nil {
         if let image = UIImage(named: imageName) {
-          try! style.addImage(image, id: imageName, stretchX: [], stretchY: [])
+          logged("RCTMGLImage.addNativeImage: \(imageName)") {
+            try style.addImage(image, id: imageName, sdf: imageInfo.sdf,
+                               stretchX: imageInfo.stretchX.map { v in ImageStretches(first: v.from, second: v.to) },
+                               stretchY: imageInfo.stretchY.map { v in ImageStretches(first: v.from, second: v.to) } )
+          }
         } else {
           Logger.log(level:.error, message: "Cannot find nativeImage named \(imageName)")
         }
