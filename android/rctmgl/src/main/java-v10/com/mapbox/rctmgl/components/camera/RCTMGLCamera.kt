@@ -19,11 +19,15 @@ import com.mapbox.maps.*
 import com.mapbox.maps.plugin.PuckBearingSource
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.locationcomponent.location2
+import com.mapbox.maps.plugin.viewport.ViewportStatus
+import com.mapbox.maps.plugin.viewport.ViewportStatusObserver
 import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateBearing
 import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateOptions
+import com.mapbox.maps.plugin.viewport.data.ViewportStatusChangeReason
 import com.mapbox.maps.plugin.viewport.viewport
 import com.mapbox.rctmgl.components.camera.constants.CameraMode
 import com.mapbox.rctmgl.components.location.*
+import com.mapbox.rctmgl.events.MapUserTrackingModeEvent
 import com.mapbox.rctmgl.location.*
 import com.mapbox.rctmgl.utils.Logger
 
@@ -97,7 +101,8 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         setInitialCamera()
         updateMaxBounds()
         mCameraStop?.let { updateCamera(it) }
-        _updateViewportState();
+        _observeViewportState(mapView)
+        _updateViewportState()
     }
 
     override fun removeFromMap(mapView: RCTMGLMapView) {
@@ -190,14 +195,6 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         mCameraUpdateQueue.execute(mMapView)
     }
 
-    private fun updateUserTrackingMode(userTrackingMode: Int) {
-        /* v10todo
-        mUserLocation.setTrackingMode(userTrackingMode);
-        IEvent event = new MapUserTrackingModeEvent(this, userTrackingMode);
-        mManager.handleEvent(event);
-         */
-    }
-
     private fun updateUserLocation(isAnimated: Boolean) {
 
     }
@@ -277,7 +274,7 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
     fun setUserTrackingMode(userTrackingMode: Int) {
         val oldTrackingMode = mUserTrackingMode
         mUserTrackingMode = userTrackingMode
-        updateUserTrackingMode(userTrackingMode)
+        mManager.handleEvent(MapUserTrackingModeEvent(this@RCTMGLCamera, userTrackingMode))
         when (mUserTrackingMode) {
             UserTrackingMode.NONE -> mUserTrackingState = UserTrackingState.POSSIBLE
             UserTrackingMode.FOLLOW, UserTrackingMode.FollowWithCourse, UserTrackingMode.FollowWithHeading -> if (oldTrackingMode == UserTrackingMode.NONE) {
@@ -287,6 +284,24 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         if (mapboxMap != null) {
             updateLocationLayer(mapboxMap!!.getStyle()!!)
         }
+    }
+
+    fun _observeViewportState(mapView: MapView) {
+        mapView.viewport.addStatusObserver(object: ViewportStatusObserver {
+            override fun onViewportStatusChanged(
+                from: ViewportStatus,
+                to: ViewportStatus,
+                reason: ViewportStatusChangeReason
+            ) {
+                if (to == ViewportStatus.Idle) {
+                    mManager.handleEvent(MapUserTrackingModeEvent(this@RCTMGLCamera, UserTrackingMode.NONE))
+                } else if (to is ViewportStatus.Transition) {
+
+                } else if (to is ViewportStatus.State){
+                    //mManager.handleEvent(MapUserTrackingModeEvent(this@RCTMGLCamera, UserTrackingMode.FOLLOW))
+                }
+            }
+        })
     }
 
     fun _updateViewportState() {
