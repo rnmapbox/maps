@@ -6199,61 +6199,53 @@
     "fileNameWithExt": "VectorSource.js",
     "name": "VectorSource"
   },
-  "_simulateHeading": {
-    "name": "_simulateHeading",
+  "coordinates": {
+    "name": "coordinates",
     "fileNameWithExt": "locationManager.tsx",
-    "description": "simulates location updates, experimental  [V10, iOS only]",
+    "description": "Coorinates sent by locationManager",
     "props": [],
     "styles": [],
     "methods": []
   },
-  "accuracy": {
-    "name": "accuracy",
+  "location": {
+    "name": "location",
     "fileNameWithExt": "locationManager.tsx",
-    "description": "The radius of uncertainty for the location, measured in meters.",
+    "description": "Location sent by locationManager",
     "props": [],
     "styles": [],
     "methods": []
   },
-  "altitude": {
-    "name": "altitude",
+  "locationManager": {
+    "name": "locationManager",
     "fileNameWithExt": "locationManager.tsx",
-    "description": "The altitude, measured in meters.",
+    "description": "LocationManager is a singleton, see ",
     "props": [],
     "styles": [],
-    "methods": []
-  },
-  "course": {
-    "name": "course",
-    "fileNameWithExt": "locationManager.tsx",
-    "description": "The direction in which the device is traveling, measured in degrees and relative to due north.\nThe course refers to the direction the device is actually moving (not the same as heading).",
-    "props": [],
-    "styles": [],
-    "methods": []
-  },
-  "heading": {
-    "name": "heading",
-    "fileNameWithExt": "locationManager.tsx",
-    "description": "The heading (measured in degrees) relative to true north.\nHeading is used to describe the direction the device is pointing to (the value of the compass).\nNote that on Android this is incorrectly reporting the course value as mentioned in issue \nand will be corrected in a future update.",
-    "props": [],
-    "styles": [],
-    "methods": []
-  },
-  "latitude": {
-    "name": "latitude",
-    "fileNameWithExt": "locationManager.tsx",
-    "description": "The latitude in degrees.",
-    "props": [],
-    "styles": [],
-    "methods": []
-  },
-  "longitude": {
-    "name": "longitude",
-    "fileNameWithExt": "locationManager.tsx",
-    "description": "The longitude in degrees.",
-    "props": [],
-    "styles": [],
-    "methods": []
+    "methods": [
+      {
+        "name": "setLocationEventThrottle",
+        "description": "Sets the period at which location events will be sent over the React Native bridge.\nThe default is 0, aka no limit. [V10, iOS only]",
+        "params": [
+          {
+            "name": "throttleValue",
+            "description": "event throttle value in ms.",
+            "type": {
+              "name": "Number"
+            },
+            "optional": false
+          }
+        ],
+        "examples": [
+          "locationManager.setLocationEventThrottle(500);"
+        ],
+        "returns": {
+          "description": "",
+          "type": {
+            "name": "void"
+          }
+        }
+      }
+    ]
   },
   "offlineManager": {
     "name": "offlineManager",
@@ -6596,14 +6588,6 @@
       }
     ]
   },
-  "setLocationEventThrottle": {
-    "name": "setLocationEventThrottle",
-    "fileNameWithExt": "locationManager.tsx",
-    "description": "Sets the period at which location events will be sent over the React Native bridge.\nThe default is 0, aka no limit. [V10, iOS only]",
-    "props": [],
-    "styles": [],
-    "methods": []
-  },
   "snapshotManager": {
     "name": "snapshotManager",
     "fileNameWithExt": "snapshotManager.js",
@@ -6635,13 +6619,5 @@
         }
       }
     ]
-  },
-  "speed": {
-    "name": "speed",
-    "fileNameWithExt": "locationManager.tsx",
-    "description": "The instantaneous speed of the device, measured in meters per second.",
-    "props": [],
-    "styles": [],
-    "methods": []
   }
 }
