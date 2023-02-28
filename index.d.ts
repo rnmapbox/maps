@@ -489,7 +489,6 @@ export interface MapState {
 export interface MapViewProps extends ViewProps {
   animated?: boolean;
   userTrackingMode?: MapboxGL.UserTrackingModes;
-  userLocationVerticalAlignment?: number;
   contentInset?: Array<number>;
   projection?: 'mercator' | 'globe';
   style?: StyleProp<ViewStyle>;

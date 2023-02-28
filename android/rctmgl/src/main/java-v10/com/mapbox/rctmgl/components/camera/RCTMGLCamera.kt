@@ -43,7 +43,6 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
     private var mLocationComponentManager: LocationComponentManager? = null
     private var mUserTrackingMode = 0
     private var mUserTrackingState = UserTrackingState.POSSIBLE
-    private val mUserLocationVerticalAlignment = UserLocationVerticalAlignment.CENTER
     private val mLocationManager: LocationManager?
     private val mUserLocation: UserLocation = UserLocation()
     private val mCenterCoordinate: ScreenCoordinate? = null
