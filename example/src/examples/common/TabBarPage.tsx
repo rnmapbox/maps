@@ -32,7 +32,7 @@ type TabBarPageProps<DataT> = BaseExampleProps & {
   initialIndex?: number;
 };
 
-const TabBarPage = <DataT extends unknown>({
+const TabBarPage = <DataT,>({
   children,
   scrollable = false,
   options,
