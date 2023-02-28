@@ -1,11 +1,12 @@
 import MapboxGL, { SymbolLayerStyle } from '@rnmapbox/maps';
 import { Feature } from '@turf/helpers';
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleProp, Text, TextStyle, View, ViewStyle } from 'react-native';
 
 import exampleIcon from '../../assets/pin.png';
 import sheet from '../../styles/sheet';
 import Page from '../common/Page';
+import { BaseExampleProps } from '../common/BaseExamplePropTypes';
 
 const defaultCamera = {
   centerCoordinate: [12.338, 45.4385],
@@ -34,7 +35,7 @@ type CustomCalloutViewProps = {
   message: string;
 };
 
-const CustomCalloutView: FC<CustomCalloutViewProps> = ({ message }) => {
+const CustomCalloutView = ({ message }: CustomCalloutViewProps) => {
   return (
     <View style={styles.calloutContainerStyle}>
       <Text style={styles.customCalloutText}>{message}</Text>
@@ -42,12 +43,7 @@ const CustomCalloutView: FC<CustomCalloutViewProps> = ({ message }) => {
   );
 };
 
-type CustomCalloutProps = {
-  label: string;
-  onDismissExample: () => any;
-};
-
-const CustomCallout: FC<CustomCalloutProps> = (props) => {
+const CustomCallout = (props: BaseExampleProps) => {
   const [selectedFeature, setSelectedFeature] =
     useState<Feature<{ type: string; coordinates: number[] }, any>>();
 

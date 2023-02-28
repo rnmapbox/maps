@@ -1,6 +1,6 @@
 declare module 'react-native-mapbox-gl__maps';
 
-import { Component, ReactNode } from 'react';
+import { Component, FC, ReactNode } from 'react';
 import {
   ViewProps,
   ViewStyle,
@@ -332,7 +332,7 @@ declare namespace MapboxGL {
   class Light extends Component<LightProps> {}
 
   class Callout extends Component<CalloutProps> {}
-  type Style = React.FC<StyleProps>;
+  type Style = FC<StyleProps>;
 
   /**
    * Sources
@@ -489,7 +489,6 @@ export interface MapState {
 export interface MapViewProps extends ViewProps {
   animated?: boolean;
   userTrackingMode?: MapboxGL.UserTrackingModes;
-  userLocationVerticalAlignment?: number;
   contentInset?: Array<number>;
   projection?: 'mercator' | 'globe';
   style?: StyleProp<ViewStyle>;

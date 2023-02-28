@@ -107,57 +107,67 @@ open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
 class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
   var cameraAnimator: BasicCameraAnimator?
   let cameraUpdateQueue = CameraUpdateQueue()
-
+  
   // MARK: React properties
   
   @objc var animationDuration: NSNumber?
+  
   @objc var animationMode: NSString?
+  
   @objc var defaultStop: [String: Any]?
-  @objc var followHeading: NSNumber? {
-    didSet {
-      _updateCameraFromTrackingMode()
-    }
-  }
-  @objc var followPitch: NSNumber? {
-    didSet {
-      _updateCameraFromTrackingMode()
-    }
-  }
-
-  @objc var followUserMode: String? {
-    didSet {
-      _updateCameraFromTrackingMode()
-    }
-  }
-
+  
   @objc var followUserLocation : Bool = false {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
-
+  
+  @objc var followUserMode: String? {
+    didSet {
+      _updateCameraFromTrackingMode()
+    }
+  }
+  
   @objc var followZoomLevel: NSNumber? {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
-
+  
+  @objc var followPitch: NSNumber? {
+    didSet {
+      _updateCameraFromTrackingMode()
+    }
+  }
+  
+  @objc var followHeading: NSNumber? {
+    didSet {
+      _updateCameraFromTrackingMode()
+    }
+  }
+  
+  @objc var followPadding: NSDictionary? {
+    didSet {
+      _updateCameraFromTrackingMode()
+    }
+  }
+  
   @objc var maxZoomLevel: NSNumber? {
     didSet { _updateMaxBounds() }
   }
-
+  
   @objc var minZoomLevel: NSNumber? {
     didSet { _updateMaxBounds() }
   }
-
+  
   @objc var onUserTrackingModeChange: RCTBubblingEventBlock? = nil
-
+  
   @objc var stop: [String: Any]? {
     didSet {
       _updateCamera()
     }
   }
-
+  
   @objc var maxBounds: String? {
     didSet {
       if let maxBounds = maxBounds {
@@ -288,22 +298,23 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
         followOptions.bearing = nil
         trackingModeChanged = true
       }
+      
       if let onUserTrackingModeChange = self.onUserTrackingModeChange {
         if (trackingModeChanged) {
           let event = RCTMGLEvent(type: .onUserTrackingModeChange, payload: ["followUserMode": self.followUserMode ?? "normal", "followUserLocation": self.followUserLocation])
           onUserTrackingModeChange(event.toJSON())
         }
       }
+      
       var _camera = CameraOptions()
-      if let followHeading = self.followHeading as? CGFloat {
-        if (followHeading >= 0.0) {
-          _camera.bearing = followHeading
-        }
-      } else if let stopHeading = self.stop?["heading"] as? CGFloat {
-        if (stopHeading >= 0.0) {
-          _camera.bearing = stopHeading
+      
+      if let zoom = self.followZoomLevel as? CGFloat {
+        if (zoom >= 0.0) {
+          _camera.zoom = zoom
+          followOptions.zoom = zoom
         }
       }
+      
       if let followPitch = self.followPitch as? CGFloat {
         if (followPitch >= 0.0) {
           _camera.pitch = followPitch
@@ -317,14 +328,29 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       } else {
         followOptions.pitch = nil
       }
-
-      if let zoom = self.followZoomLevel as? CGFloat {
-        if (zoom >= 0.0) {
-          _camera.zoom = zoom
-          followOptions.zoom = zoom
+      
+      if let followHeading = self.followHeading as? CGFloat {
+        if (followHeading >= 0.0) {
+          _camera.bearing = followHeading
+        }
+      } else if let stopHeading = self.stop?["heading"] as? CGFloat {
+        if (stopHeading >= 0.0) {
+          _camera.bearing = stopHeading
         }
       }
+      
+      if let padding = self.followPadding {
+        let edgeInsets = UIEdgeInsets(
+          top: padding["paddingTop"] as? Double ?? 0,
+          left: padding["paddingLeft"] as? Double ?? 0,
+          bottom: padding["paddingBottom"] as? Double ?? 0,
+          right: padding["paddingRight"] as? Double ?? 0
+        )
+        followOptions.padding = edgeInsets
+      }
+      
       let followState = map.viewport.makeFollowPuckViewportState(options: followOptions)
+      
       map.viewport.transition(to: followState)
       map.viewport.addStatusObserver(self)
       map.mapboxMap.setCamera(to: _camera)
