@@ -1126,7 +1126,7 @@ ___
 Name: `iconColor`
 
 ### Description
-The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/usingRecolorableImagesInMapboxMaps/).
+The color of the icon. This can only be used with [SDF icons](https://docs.mapbox.com/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
 
 ### Type
 `color`
@@ -1167,7 +1167,7 @@ ___
 Name: `iconHaloColor`
 
 ### Description
-The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/usingRecolorableImagesInMapboxMaps/).
+The color of the icon's halo. Icon halos can only be used with [SDF icons](https://docs.mapbox.com/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
 
 ### Type
 `color`

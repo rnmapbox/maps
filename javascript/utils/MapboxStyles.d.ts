@@ -902,7 +902,7 @@ export interface SymbolLayerStyleProps {
    */
   iconOpacityTransition?: Transition;
   /**
-   * The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/usingRecolorableImagesInMapboxMaps/).
+   * The color of the icon. This can only be used with [SDF icons](https://docs.mapbox.com/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
    *
    * @requires iconImage
    */
@@ -913,7 +913,7 @@ export interface SymbolLayerStyleProps {
    */
   iconColorTransition?: Transition;
   /**
-   * The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/usingRecolorableImagesInMapboxMaps/).
+   * The color of the icon's halo. Icon halos can only be used with [SDF icons](https://docs.mapbox.com/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
    *
    * @requires iconImage
    */
