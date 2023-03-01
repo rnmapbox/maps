@@ -192,6 +192,7 @@ const styles = StyleSheet.create({
 - [Camera](docs/Camera.md)
 - [UserLocation](docs/UserLocation.md)
 - [Images](docs/Images.md)
+- [Image](docs/Image.md)
 
 ### Sources
 

@@ -1,9 +1,9 @@
 import React from 'react';
+import { View } from 'react-native';
 import Mapbox from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
 import exampleIcon from '../../assets/example.png';
-import pinIcon from '../../assets/pin.png';
 import { BaseExampleProps } from '../common/BaseExamplePropTypes';
 import Page from '../common/Page';
 
@@ -11,7 +11,7 @@ const styles = {
   icon: {
     iconImage: ['get', 'icon'],
 
-    iconColor: '#f0c',
+    iconColor: ['get', 'color'],
 
     iconSize: [
       'match',
@@ -32,7 +32,8 @@ const featureCollection: GeoJSON.FeatureCollection = {
       type: 'Feature',
       id: '9d10456e-bdda-4aa9-9269-04c1667d4552',
       properties: {
-        icon: 'example',
+        icon: 'rn-image',
+        color: '#f0c',
       },
       geometry: {
         type: 'Point',
@@ -43,7 +44,8 @@ const featureCollection: GeoJSON.FeatureCollection = {
       type: 'Feature',
       id: '9d10456e-bdda-4aa9-9269-04c1667d4552',
       properties: {
-        icon: 'airport-15',
+        icon: 'rn-image',
+        color: '#0fc',
       },
       geometry: {
         type: 'Point',
@@ -54,7 +56,8 @@ const featureCollection: GeoJSON.FeatureCollection = {
       type: 'Feature',
       id: '9d10456e-bdda-4aa9-9269-04c1667d4552',
       properties: {
-        icon: 'pin',
+        icon: 'rn-image',
+        color: '#cf0',
       },
       geometry: {
         type: 'Point',
@@ -65,7 +68,8 @@ const featureCollection: GeoJSON.FeatureCollection = {
       type: 'Feature',
       id: '9d10456e-bdda-4aa9-9269-04c1667d4553',
       properties: {
-        icon: 'pin3',
+        icon: 'rn-image',
+        color: '#c00',
       },
       geometry: {
         type: 'Point',
@@ -96,11 +100,20 @@ class SdfIcons extends React.PureComponent<BaseExampleProps> {
             nativeAssetImages={[{ name: 'pin', sdf: true }]}
             images={images}
             onImageMissing={(imageKey: string) =>
-              this.setState({
-                images: { ...this.state.images, [imageKey]: pinIcon },
-              })
+              console.log('=> on image missing', imageKey)
             }
-          />
+          >
+            <Mapbox.Image name="rn-image" sdf>
+              <View
+                style={{
+                  backgroundColor: 'red',
+                  width: 40,
+                  height: 40,
+                  borderRadius: 10,
+                }}
+              />
+            </Mapbox.Image>
+          </Mapbox.Images>
           <Mapbox.ShapeSource id="exampleShapeSource" shape={featureCollection}>
             <Mapbox.SymbolLayer id="exampleIconName" style={styles.icon} />
           </Mapbox.ShapeSource>

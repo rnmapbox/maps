@@ -1916,6 +1916,50 @@
       }
     ]
   },
+  "Image": {
+    "description": "",
+    "displayName": "Image",
+    "methods": [],
+    "props": [
+      {
+        "name": "name",
+        "required": true,
+        "type": "string",
+        "default": "none",
+        "description": "Image name"
+      },
+      {
+        "name": "sdf",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Make image an sdf optional - see [SDF icons](https://docs.mapbox.com/help/troubleshooting/using-recolorable-images-in-mapbox-maps/)"
+      },
+      {
+        "name": "stretchX",
+        "required": false,
+        "type": "Array",
+        "default": "none",
+        "description": "stretch along x axis - optional"
+      },
+      {
+        "name": "stretchY",
+        "required": false,
+        "type": "Array",
+        "default": "none",
+        "description": "stretch along y axis - optional"
+      },
+      {
+        "name": "children",
+        "required": true,
+        "type": "ReactElement",
+        "default": "none",
+        "description": "Single react native view generating the image"
+      }
+    ],
+    "fileNameWithExt": "Image.tsx",
+    "name": "Image"
+  },
   "ImageSource": {
     "description": "ImageSource is a content source that is used for a georeferenced raster image to be shown on the map.\nThe georeferenced image scales and rotates as the user zooms and rotates the map",
     "displayName": "ImageSource",
@@ -2011,7 +2055,7 @@
       {
         "name": "children",
         "required": false,
-        "type": "ReactReactElement",
+        "type": "ReactElement<T> \\| Array<TypedReactNode<T>> \\| never",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       }
