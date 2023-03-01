@@ -17,7 +17,7 @@ export const LocationModuleEventEmitter = new NativeEventEmitter(
 /**
  * Location sent by locationManager
  */
-interface Location {
+export interface Location {
   coords: Coordinates;
   timestamp?: number;
 }
@@ -25,7 +25,7 @@ interface Location {
 /**
  * Coorinates sent by locationManager
  */
-interface Coordinates {
+export interface Coordinates {
   /**
    * The heading (measured in degrees) relative to true north.
    * Heading is used to describe the direction the device is pointing to (the value of the compass).

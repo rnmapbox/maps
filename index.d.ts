@@ -77,8 +77,9 @@ import type {
 import type { requestAndroidLocationPermissions as _requestAndroidLocationPermissions } from './javascript/requestAndroidLocationPermissions';
 import type {
   Location as _Location,
+  Coordinates as _Coordinates,
   LocationManager,
-} from './javascript/locationManager';
+} from './javascript/modules/location/locationManager';
 
 // prettier-ignore
 type ExpressionName =
@@ -178,6 +179,7 @@ declare namespace MapboxGL {
   type UserTrackingMode = _UserTrackingMode;
   type UserTrackingModeChangeCallback = _UserTrackingModeChangeCallback;
   type Location = _Location;
+  type Coordinates = _Coordinates;
 
   const offlineManager: OfflineManager;
   const snapshotManager: SnapshotManager;
@@ -355,7 +357,6 @@ declare namespace MapboxGL {
   class ImageSource extends Component<ImageSourceProps> {}
   class SkyLayer extends Component<_SkyLayerProps> {}
 
-  type Location = _Location;
   type Images = _Images;
   const Images = _Images;
 
@@ -773,6 +774,7 @@ export import PointAnnotation = MapboxGL.PointAnnotation;
 export import Callout = MapboxGL.Callout;
 
 export import Location = MapboxGL.Location;
+export import Coordinates = MapboxGL.Coordinates;
 
 export import MapboxGLEvent = MapboxGL.MapboxGLEvent;
 export import UserTrackingMode = MapboxGL.UserTrackingMode;
