@@ -47,7 +47,8 @@ import {
   type UserTrackingMode as _UserTrackingMode,
   type UserTrackingModeChangeCallback as _UserTrackingModeChangeCallback,
 } from './javascript/components/Camera';
-import { Images as _Images } from './javascript/components/Images';
+import _Images from './javascript/components/Images';
+import _Image from './javascript/components/Image';
 import { MarkerView as _MarkerView } from './javascript/components/MarkerView';
 import { PointAnnotation as _PointAnnotation } from './javascript/components/PointAnnotation';
 import { Atmosphere as _Atmosphere } from './javascript/components/Atmosphere';
@@ -358,6 +359,8 @@ declare namespace MapboxGL {
   type Location = _Location;
   type Images = _Images;
   const Images = _Images;
+  type Image = _Image;
+  const Image = _Image;
 
   /**
    * Offline
@@ -780,6 +783,7 @@ export import AnimatedPoint = MapboxGL.AnimatedPoint;
 export import AnimatedMapPoint = MapboxGL.AnimatedPoint;
 export import AnimatedShape = MapboxGL.AnimatedShape;
 export import Images = MapboxGL.Images;
+export import Image = MapboxGL.Image;
 
 export const { offlineManager } = MapboxGL;
 

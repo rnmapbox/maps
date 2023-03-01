@@ -1,8 +1,9 @@
-import React from 'react';
-import { requireNativeComponent, Image } from 'react-native';
+import React, { ReactNode, ReactElement } from 'react';
+import { requireNativeComponent, Image as RNImage } from 'react-native';
 import { ImageSourcePropType, ImageResolvedAssetSource } from 'react-native';
 
 import { ShapeSource } from './ShapeSource';
+import Image from './Image';
 
 export const NATIVE_MODULE_NAME = 'RCTMGLImages';
 
@@ -23,14 +24,22 @@ function _isUrlOrPath(value: string | ImageSourcePropType): value is string {
   );
 }
 
+type TypedReactNode<T> = ReactElement<T> | Array<TypedReactNode<T>> | never;
+
 type NativeImage =
   | string
   | {
       name: string;
       sdf?: boolean;
-      strechX: [number, number][];
-      streacY: [number, number][];
+      stretchX?: [number, number][];
+      stretchY?: [number, number][];
     };
+
+const isChildAnImage = (
+  child: ReactNode,
+): child is React.ReactElement<typeof Image> => {
+  return React.isValidElement(child) && child.type === Image;
+};
 
 interface Props {
   /**
@@ -54,7 +63,7 @@ interface Props {
   onImageMissing?: (imageKey: string) => void;
 
   id?: string;
-  children?: React.ReactElement;
+  children?: TypedReactNode<typeof Image>;
 }
 
 /**
@@ -85,11 +94,25 @@ class Images extends React.Component<Props> {
         } else if (_isUrlOrPath(value)) {
           images[imageName] = value;
         } else {
-          const res = Image.resolveAssetSource(value);
+          const res = RNImage.resolveAssetSource(value);
           if (res && res.uri) {
             images[imageName] = res;
           }
         }
+      }
+    }
+
+    const { children } = this.props;
+    if (children) {
+      const childrenWithWrongType = React.Children.toArray(children).find(
+        (child) => !isChildAnImage(child),
+      );
+      if (childrenWithWrongType) {
+        console.error(
+          `Images component on accepts Image a children passed in: ${
+            (childrenWithWrongType as any).type || 'n/a'
+          }`,
+        );
       }
     }
 

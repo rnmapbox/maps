@@ -40,6 +40,7 @@ describe('Public Interface', () => {
       'ImageSource',
       'RasterDemSource',
       'Images',
+      'Image',
 
       // constants
       'UserTrackingModes',
