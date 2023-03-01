@@ -772,6 +772,8 @@ export import MarkerView = MapboxGL.MarkerView;
 export import PointAnnotation = MapboxGL.PointAnnotation;
 export import Callout = MapboxGL.Callout;
 
+export import Location = MapboxGL.Location;
+
 export import MapboxGLEvent = MapboxGL.MapboxGLEvent;
 export import UserTrackingMode = MapboxGL.UserTrackingMode;
 export import UserTrackingModeChangeCallback = MapboxGL.UserTrackingModeChangeCallback;
