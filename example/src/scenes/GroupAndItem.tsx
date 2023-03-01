@@ -66,6 +66,7 @@ import CustomIcon from '../examples/SymbolCircleLayer/CustomIcon';
 import DataDrivenCircleColors from '../examples/SymbolCircleLayer/DataDrivenCircleColors';
 import Earthquakes from '../examples/SymbolCircleLayer/Earthquakes';
 import ShapeSourceIcon from '../examples/SymbolCircleLayer/ShapeSourceIcon';
+import SdfIcons from '../examples/SymbolCircleLayer/SdfIcons';
 // USERLOCATION
 import SetDisplacement from '../examples/UserLocation/SetDisplacement';
 import SetTintColor from '../examples/UserLocation/SetTintColor';
@@ -305,6 +306,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
     new ExampleItem('Clustering Earthquakes', Earthquakes),
     new ExampleItem('Shape Source From Icon', ShapeSourceIcon),
     new ExampleItem('Data Driven Circle Colors', DataDrivenCircleColors),
+    new ExampleItem('SDF Icons', SdfIcons),
   ]),
   new ExampleGroup('Fill/RasterLayer', [
     new ExampleItem('GeoJSON Source', GeoJSONSource),

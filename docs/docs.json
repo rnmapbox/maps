@@ -1967,34 +1967,56 @@
       {
         "name": "images",
         "required": false,
-        "type": "object",
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": {
+                "name": "string"
+              },
+              "required": true,
+              "type": "ImageSourcePropType",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            }
+          ]
+        },
         "default": "none",
         "description": "Specifies the external images in key-value pairs required for the shape source.\nKeys are names - see iconImage expressions, values can be either urls-s objects\nwith format {uri: 'http://...'}` or `require('image.png')` or `import 'image.png'`"
       },
       {
         "name": "nativeAssetImages",
         "required": false,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": "string"
-          }
-        },
+        "type": "Array",
         "default": "none",
-        "description": "If you have an asset under Image.xcassets on iOS and the drawables directory on android\nyou can specify an array of string names with assets as the key `['pin']`."
+        "description": "If you have an asset under Image.xcassets on iOS and the drawables directory on android\nyou can specify an array of string names with assets as the key `['pin']`.\nAdditionally object with keys sdf, and strechX, strechY is supported for [SDF icons](https://docs.mapbox.com/help/troubleshooting/using-recolorable-images-in-mapbox-maps/)"
       },
       {
         "name": "onImageMissing",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(imageKey:string) => void"
+        },
         "default": "none",
-        "description": "Gets called when a Layer is trying to render an image whose key is not present in\nany of the `Images` component of the Map."
+        "description": "Gets called when a Layer is trying to render an image whose key is not present in\nany of the `Images` component of the Map.\n*signature:*`(imageKey:string) => void`"
+      },
+      {
+        "name": "id",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "children",
+        "required": false,
+        "type": "ReactReactElement",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "Images.js",
+    "fileNameWithExt": "Images.tsx",
     "name": "Images"
   },
   "Light": {
