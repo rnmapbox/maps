@@ -774,6 +774,7 @@ export import PointAnnotation = MapboxGL.PointAnnotation;
 export import Callout = MapboxGL.Callout;
 
 export import Location = MapboxGL.Location;
+/** @deprecated This will be removed in a future release. Use `Location['coords']` instead. */
 export import Coordinates = MapboxGL.Coordinates;
 
 export import MapboxGLEvent = MapboxGL.MapboxGLEvent;
