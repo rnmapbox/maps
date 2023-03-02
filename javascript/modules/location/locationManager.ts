@@ -25,7 +25,7 @@ export interface Location {
 /**
  * Coorinates sent by locationManager
  */
-export interface Coordinates {
+interface Coordinates {
   /**
    * The heading (measured in degrees) relative to true north.
    * Heading is used to describe the direction the device is pointing to (the value of the compass).

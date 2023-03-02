@@ -78,7 +78,6 @@ import type {
 import type { requestAndroidLocationPermissions as _requestAndroidLocationPermissions } from './javascript/requestAndroidLocationPermissions';
 import type {
   Location as _Location,
-  Coordinates as _Coordinates,
   LocationManager,
 } from './javascript/modules/location/locationManager';
 
@@ -180,7 +179,9 @@ declare namespace MapboxGL {
   type UserTrackingMode = _UserTrackingMode;
   type UserTrackingModeChangeCallback = _UserTrackingModeChangeCallback;
   type Location = _Location;
-  type Coordinates = _Coordinates;
+
+  /** @deprecated This will be removed in a future release. Use `Location['coords']` instead. */
+  type Coordinates = Location['coords'];
 
   const offlineManager: OfflineManager;
   const snapshotManager: SnapshotManager;
