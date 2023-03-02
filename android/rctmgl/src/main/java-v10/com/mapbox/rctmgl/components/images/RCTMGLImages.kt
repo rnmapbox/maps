@@ -10,6 +10,8 @@ import androidx.core.content.res.ResourcesCompat
 import com.mapbox.bindgen.Expected
 import com.mapbox.bindgen.None
 import com.mapbox.maps.Image
+import com.mapbox.maps.ImageContent
+import com.mapbox.maps.ImageStretches
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
 import com.mapbox.rctmgl.R
@@ -24,28 +26,40 @@ import java.util.ArrayList
 import java.util.HashMap
 import java.util.HashSet
 
-fun Style.addBitmapImage(imageId: String, bitmap: Bitmap) : Expected<String, None> {
+fun Style.addBitmapImage(imageId: String, bitmap: Bitmap, sdf: Boolean = false, stretchX: List<ImageStretches> = listOf(), stretchY: List<ImageStretches> = listOf(), content: ImageContent? = null, scale: Double = 1.0) : Expected<String, None> {
     val byteBuffer = ByteBuffer.allocate(bitmap.byteCount)
     bitmap.copyPixelsToBuffer(byteBuffer)
-    val sdf = false
     return this.addStyleImage(
         imageId,
-        (1.0/((160.0/bitmap.density))).toFloat(),
+        (1.0/((160.0/bitmap.density)) * scale).toFloat() ,
         Image(bitmap.width, bitmap.height, byteBuffer.array()),
         sdf,
-        listOf(),
-        listOf(),
-        null
+        stretchX,
+        stretchY,
+        content,
     )
 }
 
-class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) : AbstractMapFeature(context) {
+fun Style.addBitmapImage(nativeImage: NativeImage) : Expected<String, None> {
+    return addBitmapImage(nativeImage.name, nativeImage.drawable.bitmap, nativeImage.sdf, nativeImage.stretchX, nativeImage.stretchY, nativeImage.content, nativeImage.scale)
+}
+
+data class NativeImage(val name: String, val drawable: BitmapDrawable, val scale: Double = 1.0, val sdf: Boolean = false, val stretchX: List<ImageStretches> = listOf(),
+                       val stretchY: List<ImageStretches> = listOf(), val content: ImageContent? = null
+);
+
+interface NativeImageUpdater {
+    fun updateImage(imageId: String, bitmap: Bitmap, sdf: Boolean = false, stretchX: List<ImageStretches> = listOf(), stretchY: List<ImageStretches> = listOf(), content: ImageContent? = null, scale: Double = 1.0)
+}
+
+class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) : AbstractMapFeature(context), NativeImageUpdater {
     var mCurrentImages: MutableSet<String?>
+    var mImageViews = mutableListOf<RCTMGLImage>();
     private var mImages: MutableMap<String, ImageEntry>?
-    private var mNativeImages: MutableMap<String?, BitmapDrawable?>?
+    private var mNativeImages = mutableMapOf<String, NativeImage>()
     private var mSendMissingImageEvents = false
     private var mMap: MapboxMap? = null
-    var iD: String? = null
+
     fun setImages(images: List<Map.Entry<String, ImageEntry>>) {
         val newImages: MutableMap<String, ImageEntry> = HashMap()
         for ((key, value) in images) {
@@ -59,16 +73,18 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
         }
     }
 
-    fun setNativeImages(nativeImages: List<Map.Entry<String, BitmapDrawable>>) {
-        val newImages: MutableMap<String?, BitmapDrawable?> = HashMap()
-        for ((key, value) in nativeImages) {
-            val oldValue = mNativeImages?.put(key, value)
+    fun setNativeImages(nativeImages: List<NativeImage>) {
+        val newImages: MutableMap<String, NativeImage> = HashMap()
+        for (nativeImage in nativeImages) {
+            val oldValue = mNativeImages.put(nativeImage.name, nativeImage)
             if (oldValue == null) {
-                newImages[key] = value
+                newImages[nativeImage.name] = nativeImage
             }
         }
-        if (mMap != null && mMap?.getStyle() != null) {
-            addNativeImagesToStyle(newImages, mMap!!)
+        mMap?.let {
+            if (it.getStyle() != null) {
+                addNativeImagesToStyle(newImages, it)
+            }
         }
     }
 
@@ -79,7 +95,7 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
     override fun removeFromMap(mapView: RCTMGLMapView) {
         removeImages(mapView)
         mMap = null
-        mNativeImages = HashMap()
+        mNativeImages = mutableMapOf()
         mImages = HashMap()
         mCurrentImages = HashSet()
         super.removeFromMap(mapView)
@@ -111,12 +127,10 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
     }
 
     fun addMissingImageToStyle(id: String, map: MapboxMap): Boolean {
-        if (mNativeImages != null) {
-            val drawable = mNativeImages!![id]
-            if (drawable != null) {
-                addNativeImages(entry<String?, BitmapDrawable?>(id, drawable), map)
-                return true
-            }
+        val nativeImage = mNativeImages.get(id)
+        if (nativeImage != null) {
+            addNativeImages(listOf(nativeImage), map)
+            return true
         }
         if (mImages != null) {
             val entry = mImages!![id]
@@ -134,10 +148,8 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
         }
     }
 
-    fun addNativeImagesToStyle(images: Map<String?, BitmapDrawable?>?, map: MapboxMap) {
-        if (images != null) {
-            addNativeImages(ArrayList(images.entries), map)
-        }
+    fun addNativeImagesToStyle(images: Map<String, NativeImage>, map: MapboxMap) {
+        addNativeImages(images.values.toList(), map)
     }
 
     fun sendImageMissingEvent(id: String, map: MapboxMap) {
@@ -153,6 +165,10 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
 
     override fun addToMap(mapView: RCTMGLMapView) {
         super.addToMap(mapView)
+
+        mImageViews.forEach {
+            it.addToMap(mapView)
+        }
         // Wait for style before adding the source to the map
         // only then we can pre-load required images / placeholders into the style
         // before we add the ShapeSource to the map
@@ -163,18 +179,22 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
                 addNativeImagesToStyle(mNativeImages, map)
                 addImagesToStyle(mImages, map)
                 // super.addToMap(mapView);
+
+                mImageViews.forEach {
+                    it.refresh()
+                }
             }
         })
     }
 
-    private fun addNativeImages(imageEntries: List<Map.Entry<String?, BitmapDrawable?>>?, map: MapboxMap) {
+    private fun addNativeImages(imageEntries: List<NativeImage>, map: MapboxMap) {
         val style = map.getStyle()
-        if (style == null || imageEntries == null) return
-        for ((key, value) in imageEntries) {
-            if (key != null && !hasImage(key, map)) {
-                val bitmap = value!!.bitmap
-                style.addBitmapImage(key, bitmap)
-                mCurrentImages.add(key)
+        if (style == null) return
+        for (nativeImage in imageEntries) {
+            if (!hasImage(nativeImage.name, map)) {
+                val bitmap = nativeImage.drawable
+                style.addBitmapImage(nativeImage)
+                mCurrentImages.add(nativeImage.name)
             }
         }
     }
@@ -193,7 +213,7 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
         // See also: https://github.com/mapbox/mapbox-gl-native/pull/14253#issuecomment-478827792
         for (imageEntry in imageEntries) {
             if (!hasImage(imageEntry.key, map)) {
-                mImagePlaceholder?.let { style.addBitmapImage(imageEntry.key, it) }
+                mImagePlaceholder?.let { style.addBitmapImage(imageEntry.key, it, false, listOf(), listOf(), null,1.0) }
                 missingImages.add(imageEntry)
                 mCurrentImages.add(imageEntry.key)
             }
@@ -218,6 +238,13 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
         mNativeImages = HashMap()
         if (mImagePlaceholder == null) {
             mImagePlaceholder = BitmapUtils.getBitmapFromDrawable(ResourcesCompat.getDrawable(context.resources, R.drawable.empty_drawable, null))
+        }
+    }
+
+    override fun updateImage(imageId: String, bitmap: Bitmap, sdf: Boolean, stretchX: List<ImageStretches>, stretchY: List<ImageStretches>, content: ImageContent?, scale: Double)
+    {
+        mMap?.getStyle()?.let {
+            it.addBitmapImage(imageId, bitmap, sdf, stretchX, stretchY, content, scale);
         }
     }
 }
