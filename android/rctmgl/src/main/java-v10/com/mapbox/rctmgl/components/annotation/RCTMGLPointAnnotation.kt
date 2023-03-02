@@ -53,7 +53,6 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
         childView.addOnLayoutChangeListener(this)
 
         mMapView?.offscreenAnnotationViewContainer?.addView(childView)
-
     }
 
     override fun removeView(childView: View) {
