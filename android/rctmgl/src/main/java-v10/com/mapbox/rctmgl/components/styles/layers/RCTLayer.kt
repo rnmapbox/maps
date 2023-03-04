@@ -246,8 +246,13 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
     }
 
     override fun removeFromMap(mapView: RCTMGLMapView) {
-        if (style != null) {
-            style!!.removeStyleLayer(mLayer!!.layerId)
+        style?.let {
+            val layer = mLayer
+            if (layer != null) {
+                it.removeStyleLayer(layer.layerId)
+            } else {
+                Logger.e("RCTLayer","mLayer is null on removal layer from map")
+            }
         }
         super.removeFromMap(mapView)
     }

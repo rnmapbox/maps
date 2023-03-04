@@ -69,7 +69,7 @@ interface Props {
 /**
  * Images defines the images used in Symbol etc. layers.
  */
-class Images extends React.Component<Props> {
+class Images extends React.PureComponent<Props> {
   static NATIVE_ASSETS_KEY = 'assets';
 
   _getImages() {

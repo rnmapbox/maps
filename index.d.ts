@@ -1,13 +1,7 @@
 declare module 'react-native-mapbox-gl__maps';
 
 import { Component, FC, ReactNode } from 'react';
-import {
-  ViewProps,
-  ViewStyle,
-  StyleProp,
-  TextStyle,
-  ImageSourcePropType,
-} from 'react-native';
+import { ViewProps, ViewStyle, StyleProp, TextStyle } from 'react-native';
 import ReactNative from 'react-native';
 import {
   Geometry,
