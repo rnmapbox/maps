@@ -3,10 +3,11 @@ import { requireNativeComponent } from 'react-native';
 
 import type { AtmosphereLayerStyleProps } from '../utils/MapboxStyles';
 import { StyleValue, transformStyle } from '../utils/StyleValue';
+import type { BaseProps } from '../types/BaseProps';
 
 export const NATIVE_MODULE_NAME = 'RCTMGLAtmosphere';
 
-type Props = {
+type Props = BaseProps & {
   style: AtmosphereLayerStyleProps;
 };
 
