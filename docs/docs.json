@@ -2079,21 +2079,17 @@
   },
   "Light": {
     "description": "Light represents the light source for extruded geometries",
-    "displayName": "Light",
     "methods": [],
     "props": [
       {
         "name": "style",
-        "required": false,
-        "type": "custom",
+        "required": true,
+        "type": "LightLayerStyleProps",
         "default": "none",
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "Light.js",
+    "fileNameWithExt": "Light.tsx",
     "name": "Light",
     "styles": [
       {
