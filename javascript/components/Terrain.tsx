@@ -3,10 +3,11 @@ import { HostComponent, requireNativeComponent } from 'react-native';
 
 import type { TerrainLayerStyleProps, Value } from '../utils/MapboxStyles';
 import { StyleValue, transformStyle } from '../utils/StyleValue';
+import type { BaseProps } from '../types/BaseProps';
 
 export const NATIVE_MODULE_NAME = 'RCTMGLTerrain';
 
-type Props = {
+type Props = BaseProps & {
   /**
    * Name of a source of raster_dem type to be used for terrain elevation.
    */

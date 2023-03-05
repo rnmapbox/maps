@@ -125,7 +125,7 @@ type ExpressionParameters =
   | 'line-progress'
   | 'heatmap-density';
 
-type ResolvedImageType = ImageSourcePropType;
+type ResolvedImageType = ImageSourcePropType | string;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type Value<T, AllowedParameters extends ExpressionParameters[] = []> =
