@@ -1,21 +1,11 @@
-import React, {
-  Component,
-  forwardRef,
-  memo,
-  useImperativeHandle,
-  useRef,
-} from 'react';
-import {
-  HostComponent,
-  NativeMethods,
-  requireNativeComponent,
-} from 'react-native';
-import { MutableRefObject } from 'react';
+import React, { forwardRef, memo, useImperativeHandle, useRef } from 'react';
+import { requireNativeComponent } from 'react-native';
 
 import { LightLayerStyleProps } from '../utils/MapboxStyles';
 import { StyleValue } from '../utils/StyleValue';
 import { type BaseProps } from '../types/BaseProps';
 import { transformStyle } from '../utils/StyleValue';
+import nativeRef from '../utils/nativeRef';
 
 export const NATIVE_MODULE_NAME = 'RCTMGLLight';
 
@@ -30,14 +20,6 @@ type NativeProps = Omit<Props, 'style'> & {
   reactStyle?: { [key: string]: StyleValue };
 };
 
-function useNativeRef<P>(): MutableRefObject<
-  (Component<P> & Readonly<NativeMethods>) | null
-> {
-  return useRef<HostComponent<P>>(null) as MutableRefObject<
-    (Component<P> & Readonly<NativeMethods>) | null
-  >;
-}
-
 interface LightMethods {
   setNativeProps(props: { [key: string]: unknown }): void;
 }
@@ -48,7 +30,7 @@ interface LightMethods {
 function Light(props: Props, ref: React.ForwardedRef<LightMethods>) {
   const { style, ...propWithoutStyle } = props;
 
-  const nativeLightRef = useNativeRef<NativeProps>();
+  const nativeLightRef = nativeRef(useRef<typeof RCTMGLLight>(null));
 
   useImperativeHandle(ref, () => ({
     setNativeProps(_props: { [key: string]: unknown }) {

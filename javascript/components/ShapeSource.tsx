@@ -14,6 +14,7 @@ import {
   isAndroid,
 } from '../utils';
 import { copyPropertiesAsDeprecated } from '../utils/deprecation';
+import { OnPressEvent } from '../types/OnPressEvent';
 
 import AbstractSource from './AbstractSource';
 import NativeBridgeComponent from './NativeBridgeComponent';
@@ -22,17 +23,6 @@ const MapboxGL = NativeModules.MGLModule;
 
 export const NATIVE_MODULE_NAME = 'RCTMGLShapeSource';
 
-export type OnPressEvent = {
-  features: Array<GeoJSON.Feature>;
-  coordinates: {
-    latitude: number;
-    longitude: number;
-  };
-  point: {
-    x: number;
-    y: number;
-  };
-};
 type OnPressEventDeprecated = OnPressEvent & {
   nativeEvent?: OnPressEvent;
 };

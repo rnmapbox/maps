@@ -15,11 +15,11 @@ export function deprecatedClass<C extends new (...args: any[]) => object>(
 }
 
 /**
- * Copy properties from origObject to newObject, which not exists in newObject,
- * calls onDeprecatedCalled callback in case a copied property is invoked.
+ * Copy properties from origObject to newObject, but only those which not exists in newObject.
+ * Calls onDeprecatedCalled callback in case a copied property is invoked.
  */
 export function copyPropertiesAsDeprecated<
-  DeprecatedType extends Record<string, unknown>,
+  DeprecatedType extends object, // Record<string, unknown>,
   WithDeprecatedType extends Record<string, unknown>,
 >(
   origObject: DeprecatedType,

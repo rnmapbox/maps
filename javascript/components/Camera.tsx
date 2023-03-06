@@ -11,6 +11,7 @@ import { NativeModules, requireNativeComponent } from 'react-native';
 
 import { MapboxGLEvent } from '../types';
 import { makeLatLngBounds, makePoint } from '../utils/geoUtils';
+import { type NativeRefType } from '../utils/nativeRef';
 
 const NativeModule = NativeModules.MGLModule;
 
@@ -240,8 +241,9 @@ export const Camera = memo(
         onUserTrackingModeChange,
       } = props;
 
-      // @ts-expect-error This avoids a type/value mismatch.
-      const nativeCamera = useRef<RCTMGLCamera>(null);
+      const nativeCamera = useRef<typeof RCTMGLCamera>(
+        null,
+      ) as NativeRefType<NativeCameraProps>;
 
       const buildNativeStop = useCallback(
         (
@@ -352,14 +354,14 @@ export const Camera = memo(
             if (_nativeStop) {
               _nativeStops = [..._nativeStops, _nativeStop];
             }
-            nativeCamera.current.setNativeProps({
+            nativeCamera.current?.setNativeProps({
               stop: { stops: _nativeStops },
             });
           }
         } else if (config.type === 'CameraStop') {
           const _nativeStop = buildNativeStop(config);
           if (_nativeStop) {
-            nativeCamera.current.setNativeProps({ stop: _nativeStop });
+            nativeCamera.current?.setNativeProps({ stop: _nativeStop });
           }
         }
       };

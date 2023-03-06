@@ -4165,10 +4165,10 @@
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "(event:{features: Array, coordinates: {latitude: number, longitude: number}, point: {x: number, y: number}}) => void"
+          "funcSignature": "(event:OnPressEvent) => void"
         },
         "default": "none",
-        "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers\n\n@param {Object} event\n@param {Object[]} event.features - the geojson features that have hit by the press (might be multiple)\n@param {Object} event.coordinates - the coordinates of the click\n@param {Object} event.point - the point of the click\n@return void\n*signature:*`(event:{features: Array, coordinates: {latitude: number, longitude: number}, point: {x: number, y: number}}) => void`"
+        "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers\n\n@param {Object} event\n@param {Object[]} event.features - the geojson features that have hit by the press (might be multiple)\n@param {Object} event.coordinates - the coordinates of the click\n@param {Object} event.point - the point of the click\n@return void\n*signature:*`(event:OnPressEvent) => void`"
       },
       {
         "name": "hitbox",
@@ -6135,7 +6135,7 @@
             "name": "event",
             "optional": false,
             "type": {
-              "name": null
+              "name": "NativeSyntheticEvent"
             }
           }
         ],
@@ -6160,12 +6160,7 @@
       {
         "name": "tileUrlTemplates",
         "required": false,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": "string"
-          }
-        },
+        "type": "Array",
         "default": "none",
         "description": "An array of tile URL templates. If multiple endpoints are specified, clients may use any combination of endpoints.\nExample: https://example.com/vector-tiles/{z}/{x}/{y}.pbf"
       },
@@ -6186,7 +6181,7 @@
       {
         "name": "tms",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "none",
         "description": "Influences the y direction of the tile coordinates. (tms inverts y axis)"
       },
@@ -6200,48 +6195,12 @@
       {
         "name": "onPress",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(event:OnPressEvent) => void"
+        },
         "default": "none",
-        "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers",
-        "params": [
-          {
-            "name": "event",
-            "description": null,
-            "type": {
-              "name": "Object"
-            },
-            "optional": false
-          },
-          {
-            "name": "event.features",
-            "description": "the geojson features that have hit by the press (might be multiple)",
-            "type": {
-              "name": "Array",
-              "elements": [
-                {
-                  "name": "Object"
-                }
-              ]
-            },
-            "optional": false
-          },
-          {
-            "name": "event.coordinates",
-            "description": "the coordinates of the click",
-            "type": {
-              "name": "Object"
-            },
-            "optional": false
-          },
-          {
-            "name": "event.point",
-            "description": "the point of the click",
-            "type": {
-              "name": "Object"
-            },
-            "optional": false
-          }
-        ]
+        "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers\n\n@param {Object} event\n@param {Object[]} event.features - the geojson features that have hit by the press (might be multiple)\n@param {Object} event.coordinates - the coordinates of the click\n@param {Object} event.point - the point of the click\n*signature:*`(event:OnPressEvent) => void`"
       },
       {
         "name": "hitbox",
@@ -6267,12 +6226,16 @@
         },
         "default": "none",
         "description": "Overrides the default touch hitbox(44x44 pixels) for the source layers"
+      },
+      {
+        "name": "children",
+        "required": true,
+        "type": "React.ReactElement \\| React.ReactElement[]",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "VectorSource.js",
+    "fileNameWithExt": "VectorSource.tsx",
     "name": "VectorSource"
   },
   "coordinates": {
