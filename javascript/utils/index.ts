@@ -43,7 +43,7 @@ export function isFunction(fn: unknown): fn is boolean {
   return typeof fn === 'function';
 }
 
-export function isNumber(num: unknown): num is boolean {
+export function isNumber(num: unknown): num is number {
   return typeof num === 'number' && !Number.isNaN(num);
 }
 

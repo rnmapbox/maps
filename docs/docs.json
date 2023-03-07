@@ -1989,32 +1989,26 @@
       {
         "name": "url",
         "required": false,
-        "type": "union",
+        "type": "number \\| string",
         "default": "none",
         "description": "An HTTP(S) URL, absolute file URL, or local file URL to the source image.\nGifs are currently not supported."
       },
       {
         "name": "coordinates",
         "required": true,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": {
-              "name": "array",
-              "value": {
-                "type": "number"
-              }
-            }
-          }
-        },
+        "type": "tuple",
         "default": "none",
         "description": "The top left, top right, bottom right, and bottom left coordinates for the image."
+      },
+      {
+        "name": "children",
+        "required": false,
+        "type": "React.ReactElement \\| React.ReactElement[]",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "ImageSource.js",
+    "fileNameWithExt": "ImageSource.tsx",
     "name": "ImageSource"
   },
   "Images": {
@@ -3721,12 +3715,7 @@
       {
         "name": "tileUrlTemplates",
         "required": false,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": "string"
-          }
-        },
+        "type": "Array",
         "default": "none",
         "description": "An array of tile URL templates. If multiple endpoints are specified, clients may use any combination of endpoints.\nExample: https://example.com/raster-tiles/{z}/{x}/{y}.png"
       },
@@ -3750,12 +3739,16 @@
         "type": "number",
         "default": "none",
         "description": "Size of the map tiles.\nMapbox urls default to 256, all others default to 512."
+      },
+      {
+        "name": "children",
+        "required": false,
+        "type": "React.ReactElement \\| React.ReactElement[]",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "RasterDemSource.js",
+    "fileNameWithExt": "RasterDemSource.tsx",
     "name": "RasterDemSource"
   },
   "RasterLayer": {
@@ -4037,12 +4030,7 @@
       {
         "name": "tileUrlTemplates",
         "required": false,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": "string"
-          }
-        },
+        "type": "Array",
         "default": "none",
         "description": "An array of tile URL templates. If multiple endpoints are specified, clients may use any combination of endpoints.\nExample: https://example.com/raster-tiles/{z}/{x}/{y}.png"
       },
@@ -4070,7 +4058,7 @@
       {
         "name": "tms",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "none",
         "description": "Influences the y direction of the tile coordinates. (tms inverts y axis)"
       },
@@ -4080,12 +4068,16 @@
         "type": "string",
         "default": "none",
         "description": "An HTML or literal text string defining the buttons to be displayed in an action sheet when the\nsource is part of a map view’s style and the map view’s attribution button is pressed."
+      },
+      {
+        "name": "children",
+        "required": false,
+        "type": "React.ReactElement \\| React.ReactElement[]",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "RasterSource.js",
+    "fileNameWithExt": "RasterSource.tsx",
     "name": "RasterSource"
   },
   "ShapeSource": {
