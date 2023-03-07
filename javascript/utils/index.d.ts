@@ -3,7 +3,9 @@ import React from 'react';
 export type NativeArg =
   | string
   | number
+  | boolean
   | { [k: string]: NativeArg }
+  | null
   | NativeArg[];
 
 export function isAndroid(): boolean;
@@ -25,3 +27,9 @@ export function cloneReactChildrenWithProps(
   children: React.ReactElement | React.ReactElement[],
   propsToAdd: { [key: string]: string } = {},
 ): React.ReactElement | React.ReactElement[];
+
+export type OrnamentPositonProp =
+  | { top: number; left: number }
+  | { top: number; right: number }
+  | { bottom: number; left: number }
+  | { bottom: number; right: number };
