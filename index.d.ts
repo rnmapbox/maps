@@ -43,6 +43,7 @@ import {
 } from './javascript/components/Camera';
 import _Images from './javascript/components/Images';
 import _Image from './javascript/components/Image';
+import _MapView, { _MapState } from './javascript/components/MapView';
 import { MarkerView as _MarkerView } from './javascript/components/MarkerView';
 import { PointAnnotation as _PointAnnotation } from './javascript/components/PointAnnotation';
 import { Atmosphere as _Atmosphere } from './javascript/components/Atmosphere';
@@ -59,7 +60,9 @@ import { Props as _FillLayerProps } from './javascript/components/FillLayer';
 import { Props as _FillExtrusionLayerProps } from './javascript/components/FillExtrusionLayer';
 import { Props as _RasterLayerProps } from './javascript/components/RasterLayer';
 import { Props as _HeatmapLayerProps } from './javascript/components/HeatmapLayer';
-import { Props as _SkyLayerProps } from './javascript/components/SkyLayer';
+import _SkyLayer, {
+  Props as _SkyLayerProps,
+} from './javascript/components/SkyLayer';
 import {
   ShapeSource as _ShapeSource,
   Props as _ShapeSourceProps,
@@ -83,41 +86,6 @@ import {
   type LogCallback,
   Logger as _Logger,
 } from './javascript/utils/Logger';
-
-// prettier-ignore
-type ExpressionName =
-  // Types
-  | 'array' | 'boolean' | 'collator' | 'format' | 'image' | 'literal' | 'number' | 'number-format' | 'object' | 'string'
-  | 'to-boolean' | 'to-color' | 'to-number' | 'to-string' | 'typeof'
-  // Feature data
-  | 'accumulated' | 'feature-state' | 'geometry-type' | 'id' | 'line-progress' | 'properties'
-  // Lookup
-  | 'at' | 'get' | 'has' | 'in' | 'index-of' | 'length' | 'slice'
-  // Decision
-  | '!' | '!=' | '<' | '<=' | '==' | '>' | '>=' | 'all' | 'any' | 'case' | 'match' | 'coalesce' | 'within'
-  // Ramps, scales, curves
-  | 'interpolate' | 'interpolate-hcl' | 'interpolate-lab' | 'step'
-  // Variable binding
-  | 'let' | 'var'
-  // String
-  | 'concat' | 'downcase' | 'is-supported-script' | 'resolved-locale' | 'upcase'
-  // Color
-  | 'rgb' | 'rgba' | 'to-rgba'
-  // Math
-  | '-' | '*' | '/' | '%' | '^' | '+' | 'abs' | 'acos' | 'asin' | 'atan' | 'ceil' | 'cos' | 'distance' | 'e'
-  | 'floor' | 'ln' | 'ln2' | 'log10' | 'log2' | 'max' | 'min' | 'pi' | 'round' | 'sin' | 'sqrt' | 'tan'
-  // Zoom, Heatmap
-  | 'zoom' | 'heatmap-density';
-
-type ExpressionField =
-  | string
-  | number
-  | boolean
-  | Expression
-  | ExpressionField[]
-  | { [key: string]: ExpressionField };
-
-export type Expression = [ExpressionName, ...ExpressionField[]];
 
 type Anchor =
   | 'center'
@@ -169,6 +137,9 @@ declare namespace MapboxGL {
   const LineLayer = _LineLayer;
   const ShapeSource = _ShapeSource;
   type ShapeSource = _ShapeSource;
+
+  const MapView = _MapView;
+  type MapView = _MapView;
 
   type MapboxGLEvent = _MapboxGLEvent;
   type UserTrackingMode = _UserTrackingMode;
@@ -297,34 +268,6 @@ declare namespace MapboxGL {
     class BackgroundLayer extends Component<_BackgroundLayerProps> {}
   }
 
-  /**
-   * Components
-   */
-  export class MapView extends Component<MapViewProps> {
-    getPointInView(coordinate: GeoJSON.Position): Promise<GeoJSON.Position>;
-    getCoordinateFromView(point: GeoJSON.Position): Promise<GeoJSON.Position>;
-    getVisibleBounds(): Promise<GeoJSON.Position[]>;
-    queryRenderedFeaturesAtPoint(
-      coordinate: GeoJSON.Position,
-      filter?: Expression,
-      layerIds?: Array<string>,
-    ): Promise<GeoJSON.FeatureCollection | undefined>;
-    queryRenderedFeaturesInRect(
-      coordinate: GeoJSON.Position,
-      filter?: Expression,
-      layerIds?: Array<string>,
-    ): Promise<GeoJSON.FeatureCollection | undefined>;
-    takeSnap(writeToDisk?: boolean): Promise<string>;
-    getZoom(): Promise<number>;
-    getCenter(): Promise<GeoJSON.Position>;
-    showAttribution(): void;
-    setSourceVisibility(
-      visible: boolean,
-      sourceId: string,
-      sourceLayerId?: string,
-    ): void;
-  }
-
   type Padding = number | [number, number] | [number, number, number, number];
 
   class UserLocation extends Component<UserLocationProps> {}
@@ -353,7 +296,8 @@ declare namespace MapboxGL {
   class RasterLayer extends Component<_RasterLayerProps> {}
   class HeatmapLayer extends Component<_HeatmapLayerProps> {}
   class ImageSource extends Component<ImageSourceProps> {}
-  class SkyLayer extends Component<_SkyLayerProps> {}
+  type SkyLayer = _SkyLayer;
+  const SkyLayer = _SkyLayer;
 
   type Images = _Images;
   const Images = _Images;
@@ -454,99 +398,6 @@ declare namespace MapboxGL {
   }
 }
 
-export type OrnamentPosition =
-  | { top: number; left: number }
-  | { top: number; right: number }
-  | { bottom: number; left: number }
-  | { bottom: number; right: number };
-
-export interface RegionPayload {
-  zoomLevel: number;
-  heading: number;
-  animated: boolean;
-  isUserInteraction: boolean;
-  visibleBounds: GeoJSON.Position[];
-  pitch: number;
-}
-
-/**
- * v10 only - experimental
- */
-export interface MapState {
-  properties: {
-    center: GeoJSON.Position;
-    bounds: {
-      ne: GeoJSON.Position;
-      sw: GeoJSON.Position;
-    };
-    zoom: number;
-    heading: number;
-    pitch: number;
-  };
-  gestures: {
-    isGestureActive: boolean;
-    isAnimatingFromGesture: boolean;
-  };
-}
-
-export interface MapViewProps extends ViewProps {
-  animated?: boolean;
-  userTrackingMode?: MapboxGL.UserTrackingModes;
-  contentInset?: Array<number>;
-  projection?: 'mercator' | 'globe';
-  style?: StyleProp<ViewStyle>;
-  styleURL?: string;
-  styleJSON?: string;
-  preferredFramesPerSecond?: number;
-  localizeLabels?: boolean;
-  zoomEnabled?: boolean;
-  scrollEnabled?: boolean;
-  pitchEnabled?: boolean;
-  rotateEnabled?: boolean;
-  attributionEnabled?: boolean;
-  attributionPosition?: OrnamentPosition;
-  logoEnabled?: boolean;
-  logoPosition?: OrnamentPosition;
-  compassEnabled?: boolean;
-  compassFadeWhenNorth?: boolean;
-  compassPosition?: OrnamentPosition;
-  compassViewPosition?: number;
-  compassViewMargins?: Point;
-  compassImage?: string;
-  scaleBarEnabled?: boolean;
-  scaleBarPosition?: OrnamentPosition;
-  surfaceView?: boolean;
-  regionWillChangeDebounceTime?: number;
-  regionDidChangeDebounceTime?: number;
-  tintColor?: string;
-
-  onPress?: (feature: GeoJSON.Feature) => void;
-  onLongPress?: (feature: GeoJSON.Feature) => void;
-  onRegionWillChange?: (
-    feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
-  ) => void;
-  onRegionIsChanging?: (
-    feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
-  ) => void;
-  onRegionDidChange?: (
-    feature: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
-  ) => void;
-  onCameraChanged?: (state: MapState) => void;
-  onMapIdle?: (state: MapState) => void;
-  onUserLocationUpdate?: (feature: Location) => void;
-  onWillStartLoadingMap?: () => void;
-  onDidFinishLoadingMap?: () => void;
-  onDidFailLoadingMap?: () => void;
-  onWillStartRenderingFrame?: () => void;
-  onDidFinishRenderingFrame?: () => void;
-  onDidFinishRenderingFrameFully?: () => void;
-  onWillStartRenderingMap?: () => void;
-  onDidFinishRenderingMap?: () => void;
-  onDidFinishRenderingMapFully?: () => void;
-  onDidFinishLoadingStyle?: () => void;
-  onUserTrackingModeChange?: () => void;
-}
-
 export interface UserLocationProps {
   androidRenderMode?: 'normal' | 'compass' | 'gps';
   animated?: boolean;
@@ -558,20 +409,6 @@ export interface UserLocationProps {
   renderMode?: 'normal' | 'native';
   showsUserHeadingIndicator?: boolean;
   visible?: boolean;
-}
-
-export type WithExpression<T> = {
-  [P in keyof T]: T[P] | Expression;
-};
-
-export interface LightStyle {
-  anchor?: Alignment | Expression;
-  position?: GeoJSON.Position | Expression;
-  positionTransition?: Transition | Expression;
-  color?: string | Expression;
-  colorTransition?: Transition | Expression;
-  intensity?: number | Expression;
-  intensityTransition?: Transition | Expression;
 }
 
 export interface Transition {
@@ -614,21 +451,17 @@ export interface Point {
   y: number;
 }
 
-export interface LightProps extends Omit<ViewProps, 'style'> {
-  style?: LightStyle;
-}
-
 export interface StyleProps {
   json: any;
 }
 
 export interface CalloutProps extends Omit<ViewProps, 'style'> {
   title?: string;
-  style?: StyleProp<WithExpression<ViewStyle>>;
-  containerStyle?: StyleProp<WithExpression<ViewStyle>>;
-  contentStyle?: StyleProp<WithExpression<ViewStyle>>;
-  tipStyle?: StyleProp<WithExpression<ViewStyle>>;
-  textStyle?: StyleProp<WithExpression<TextStyle>>;
+  style?: StyleProp<ViewStyle>;
+  containerStyle?: StyleProp<ViewStyle>;
+  contentStyle?: StyleProp<ViewStyle>;
+  tipStyle?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
 }
 
 export interface TileSourceProps extends ViewProps {
@@ -641,18 +474,6 @@ export interface TileSourceProps extends ViewProps {
 
 export interface RasterSourceProps extends TileSourceProps {
   tileSize?: number;
-}
-
-export interface LayerBaseProps<T = object> extends Omit<ViewProps, 'style'> {
-  id: string;
-  sourceID?: string;
-  sourceLayerID?: string;
-  aboveLayerID?: string;
-  belowLayerID?: string;
-  layerIndex?: number;
-  filter?: Expression;
-  minZoomLevel?: number;
-  maxZoomLevel?: number;
 }
 
 export interface ImageSourceProps extends ViewProps {
@@ -737,6 +558,9 @@ export import Images = MapboxGL.Images;
 export import Image = MapboxGL.Image;
 export import Light = MapboxGL.Light;
 export import VectorSource = MapboxGL.VectorSource;
+export import MapView = MapboxGL.MapView;
+export import SkyLayer = MapboxGL.SkyLayer;
+export import MapState = _MapState;
 
 export const { offlineManager } = MapboxGL;
 
