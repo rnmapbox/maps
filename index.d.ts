@@ -20,7 +20,6 @@ import type {
   SymbolLayerStyleProps,
   CircleLayerStyleProps,
   FillExtrusionLayerStyleProps,
-  SkyLayerStyleProps,
   RasterLayerStyleProps,
   HeatmapLayerStyleProps,
   FillLayerStyleProps,
@@ -54,6 +53,7 @@ import {
 import _LineLayer, {
   Props as _LineLayerProps,
 } from './javascript/components/LineLayer';
+import _SkyLater from './javascript/components/SkyLayer';
 import { Props as _BackgroundLayerProps } from './javascript/components/BackgroundLayer';
 import { Props as _CircleLayerProps } from './javascript/components/CircleLayer';
 import { Props as _FillLayerProps } from './javascript/components/FillLayer';
@@ -67,6 +67,8 @@ import {
   ShapeSource as _ShapeSource,
   Props as _ShapeSourceProps,
 } from './javascript/components/ShapeSource';
+import _RasterSource from './javascript/components/RasterSource';
+import _RasterDemSource from './javascript/components/RasterDemSource';
 import _VectorSource from './javascript/components/VectorSource';
 import _Light from './javascript/components/Light';
 import type {
@@ -86,20 +88,6 @@ import {
   type LogCallback,
   Logger as _Logger,
 } from './javascript/utils/Logger';
-
-type Anchor =
-  | 'center'
-  | 'left'
-  | 'right'
-  | 'top'
-  | 'bottom'
-  | 'top-left'
-  | 'top-right'
-  | 'bottom-left'
-  | 'bottom-right';
-type Visibility = 'visible' | 'none';
-type Alignment = 'map' | 'viewport';
-type AutoAlignment = Alignment | 'auto';
 
 export type OnPressEvent = _OnPressEvent;
 
@@ -135,8 +123,11 @@ declare namespace MapboxGL {
   const PointAnnotation = _PointAnnotation;
   const SymbolLayer = _SymbolLayer;
   const LineLayer = _LineLayer;
+  type LineLayer = _LineLayer;
   const ShapeSource = _ShapeSource;
   type ShapeSource = _ShapeSource;
+  const SkyLayer = _SkyLayer;
+  type SkyLayer = _SkyLayer;
 
   const MapView = _MapView;
   type MapView = _MapView;
@@ -261,7 +252,6 @@ declare namespace MapboxGL {
     // layers
     class FillLayer extends Component<_FillLayerProps> {}
     class FillExtrusionLayer extends Component<_FillExtrusionLayerProps> {}
-    class LineLayer extends Component<_LineLayerProps> {}
     class CircleLayer extends Component<_CircleLayerProps> {}
     class SymbolLayer extends Component<_SymbolLayerProps> {}
     class RasterLayer extends Component<_RasterLayerProps> {}
@@ -275,15 +265,16 @@ declare namespace MapboxGL {
   const Light = _Light;
 
   class Callout extends Component<CalloutProps> {}
-  type Style = FC<StyleProps>;
 
   /**
    * Sources
    */
-  type VectorSource = typeof _VectorSource;
+  type VectorSource = _VectorSource;
   const VectorSource = _VectorSource;
-  class RasterSource extends Component<RasterSourceProps> {}
-  class RasterDemSource extends Component<RasterSourceProps> {}
+  type RasterSource = _RasterSource;
+  const RasterSource = _RasterSource;
+  type RasterDemSource = RasterDemSource;
+  const RasterDemSource = _RasterDemSource;
 
   /**
    * Layers
@@ -292,7 +283,6 @@ declare namespace MapboxGL {
   class CircleLayer extends Component<_CircleLayerProps> {}
   class FillExtrusionLayer extends Component<_FillExtrusionLayerProps> {}
   class FillLayer extends Component<_FillLayerProps> {}
-  class LineLayer extends Component<_LineLayerProps> {}
   class RasterLayer extends Component<_RasterLayerProps> {}
   class HeatmapLayer extends Component<_HeatmapLayerProps> {}
   class ImageSource extends Component<ImageSourceProps> {}
@@ -430,17 +420,6 @@ export type LineLayerStyle = LineLayerStyleProps;
 
 export type RasterLayerStyle = RasterLayerStyleProps;
 
-export type TextVariableAnchorValues =
-  | 'center'
-  | 'left'
-  | 'right'
-  | 'top'
-  | 'bottom'
-  | 'top-left'
-  | 'top-right'
-  | 'bottom-left'
-  | 'bottom-right';
-
 export type SymbolLayerStyle = SymbolLayerStyleProps;
 export type LineLayerStyle = LineLayerStyleProps;
 
@@ -451,10 +430,6 @@ export interface Point {
   y: number;
 }
 
-export interface StyleProps {
-  json: any;
-}
-
 export interface CalloutProps extends Omit<ViewProps, 'style'> {
   title?: string;
   style?: StyleProp<ViewStyle>;
@@ -462,29 +437,6 @@ export interface CalloutProps extends Omit<ViewProps, 'style'> {
   contentStyle?: StyleProp<ViewStyle>;
   tipStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
-}
-
-export interface TileSourceProps extends ViewProps {
-  id: string;
-  url?: string;
-  tileUrlTemplates?: Array<string>;
-  minZoomLevel?: number;
-  maxZoomLevel?: number;
-}
-
-export interface RasterSourceProps extends TileSourceProps {
-  tileSize?: number;
-}
-
-export interface ImageSourceProps extends ViewProps {
-  id: string;
-  url?: number | string;
-  coordinates: [
-    GeoJSON.Position,
-    GeoJSON.Position,
-    GeoJSON.Position,
-    GeoJSON.Position,
-  ];
 }
 
 export interface OfflineCreatePackOptions {
@@ -505,11 +457,6 @@ export interface SnapshotOptions {
   heading?: number;
   styleURL?: string;
   writeToDisk?: boolean;
-}
-
-export interface SkyLayerProps extends LayerBaseProps {
-  id: string;
-  style?: StyleProp<SkyLayerStyle>;
 }
 
 export import Logger = MapboxGL.Logger;
