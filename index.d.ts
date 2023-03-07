@@ -77,6 +77,12 @@ import type {
   LocationManager,
 } from './javascript/modules/location/locationManager';
 import type { OnPressEvent as _OnPressEvent } from './javascript/types/OnPressEvent';
+import {
+  type LogLevel,
+  type LogObject,
+  type LogCallback,
+  Logger as _Logger,
+} from './javascript/utils/Logger';
 
 // prettier-ignore
 type ExpressionName =
@@ -143,6 +149,8 @@ declare namespace MapboxGL {
   const getAnnotationsLayerID = _getAnnotationsLayerID;
   type getAnnotationsLayerID = _getAnnotationsLayerID;
 
+  const Logger = _Logger;
+  type Logger = _Logger;
   const Camera = _Camera;
   type Camera = _Camera;
   type CameraStop = _CameraStop;
@@ -683,21 +691,7 @@ export interface SkyLayerProps extends LayerBaseProps {
   style?: StyleProp<SkyLayerStyle>;
 }
 
-// Logger class
-type LogLevel = 'error' | 'warning' | 'info' | 'debug' | 'verbose';
-
-interface LogObject {
-  level: LogLevel;
-  message: string;
-  tag: string;
-}
-
-type LogCallback = (object: LogObject) => void;
-
-export class Logger {
-  public static setLogCallback: (cb: LogCallback) => boolean;
-  public static setLogLevel: (level: LogLevel) => void;
-}
+export import Logger = MapboxGL.Logger;
 
 export import MapView = MapboxGL.MapView;
 
