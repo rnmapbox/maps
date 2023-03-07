@@ -5,9 +5,9 @@
 ## props
 | Prop | Type | Default | Required | Description |
 | ---- | :-- | :----- | :------ | :---------- |
-| sourceID | `string` | `none` | `true` | Name of a source of raster_dem type to be used for terrain elevation. |
+| sourceID | `string` | `none` | `false` | Name of a source of raster_dem type to be used for terrain elevation. |
 | exaggeration | `Value` | `none` | `false` | Deprecated, use exaggeration in style instead |
-| style | `TerrainLayerStyleProps` | `none` | `true` | Customizable style attributes |
+| style | `TerrainLayerStyleProps` | `none` | `false` | Customizable style attributes |
 
 
 ## styles

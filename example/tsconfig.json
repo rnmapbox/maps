@@ -5,9 +5,9 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "@rnmapbox/maps": ["../"],
+      "@rnmapbox/maps": ["../javascript"],
       "react": ["./node_modules/@types/react"],
     }
   },
-  "include": ["index.js", "src/**/*", "../index.ts", "../javascript/**/*"]
+  "include": ["global.d.ts", "index.js"]
 }

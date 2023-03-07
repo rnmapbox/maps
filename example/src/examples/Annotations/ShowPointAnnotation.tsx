@@ -39,12 +39,14 @@ type AnnotationWithRemoteImageProps = {
   coordinate: Position;
 };
 
+type PointFeature = Feature<GeoJSON.Point, { id: string }>;
+
 const AnnotationWithRemoteImage = ({
   id,
   coordinate,
   title,
 }: AnnotationWithRemoteImageProps) => {
-  const pointAnnotation = useRef<{ refresh: () => void }>(null);
+  const pointAnnotation = useRef<PointAnnotation>(null);
 
   return (
     <PointAnnotation
@@ -52,25 +54,25 @@ const AnnotationWithRemoteImage = ({
       coordinate={coordinate}
       title={title}
       draggable
-      onDrag={(feature: Feature<Point, { id: string }>) =>
+      onDrag={(payload: { feature: PointFeature }) =>
         console.log(
           'onDrag:',
-          feature.properties.id,
-          feature.geometry.coordinates,
+          payload.feature.properties.id,
+          payload.feature.geometry.coordinates,
         )
       }
-      onDragStart={(feature: Feature<Point, { id: string }>) =>
+      onDragStart={(payload: { feature: PointFeature }) =>
         console.log(
           'onDragStart:',
-          feature.properties.id,
-          feature.geometry.coordinates,
+          payload.feature.properties.id,
+          payload.feature.geometry.coordinates,
         )
       }
-      onDragEnd={(feature: Feature<Point, { id: string }>) =>
+      onDragEnd={(payload: { feature: PointFeature }) =>
         console.log(
           'onDragEnd:',
-          feature.properties.id,
-          feature.geometry.coordinates,
+          payload.feature.properties.id,
+          payload.feature.geometry.coordinates,
         )
       }
       ref={pointAnnotation}

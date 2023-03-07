@@ -10,6 +10,7 @@ import { type Feature } from 'geojson';
 import { toJSONString, isFunction } from '../utils';
 import { makePoint } from '../utils/geoUtils';
 import { type BaseProps } from '../types/BaseProps';
+import { Position } from '../types/Position';
 
 import NativeBridgeComponent, { type RNMBEvent } from './NativeBridgeComponent';
 
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
 });
 
 type FeaturePayload = {
-  feature: Feature;
+  feature: Feature<GeoJSON.Point, { id: string }>;
 };
 
 type Props = BaseProps & {
@@ -56,7 +57,7 @@ type Props = BaseProps & {
   /**
    * The center point (specified as a map coordinate) of the annotation.
    */
-  coordinate: [number, number];
+  coordinate: Position;
 
   /**
    * Specifies the anchor being set on a particular point of the annotation.
@@ -104,7 +105,7 @@ type Props = BaseProps & {
   /**
    * Expects one child, and an optional callout can be added as well
    */
-  children: React.ReactElement;
+  children: React.ReactElement | [React.ReactElement, React.ReactElement];
 
   style?: ViewProps['style'];
 };

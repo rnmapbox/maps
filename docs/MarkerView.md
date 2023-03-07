@@ -15,7 +15,7 @@ with the React views passed in as `children`.
 ## props
 | Prop | Type | Default | Required | Description |
 | ---- | :-- | :----- | :------ | :---------- |
-| coordinate | `tuple` | `none` | `true` | The center point (specified as a map coordinate) of the marker. |
+| coordinate | `Position` | `none` | `true` | The center point (specified as a map coordinate) of the marker. |
 | anchor | `shape` | `{ x: 0.5, y: 0.5 }` | `false` | Any coordinate between (0, 0) and (1, 1), where (0, 0) is the top-left corner of<br/>the view, and (1, 1) is the bottom-right corner. Defaults to the center at (0.5, 0.5). |
 | &nbsp;&nbsp;x | `number` | `none` | `true` | FIX ME NO DESCRIPTION |
 | &nbsp;&nbsp;y | `number` | `none` | `true` | FIX ME NO DESCRIPTION |
