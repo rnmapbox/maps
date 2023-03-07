@@ -20,7 +20,6 @@ import {
 } from '../utils';
 import { getFilter } from '../utils/filterUtils';
 import Logger from '../utils/Logger';
-import { type OnPressEvent } from '../types/OnPressEvent';
 import { FilterExpression } from '../utils/MapboxStyles';
 
 import NativeBridgeComponent from './NativeBridgeComponent';
@@ -218,12 +217,12 @@ type Props = ViewProps & {
   /**
    * Map press listener, gets called when a user presses the map
    */
-  onPress?: (event: OnPressEvent) => void;
+  onPress?: (feature: GeoJSON.Feature) => void;
 
   /**
    * Map long press listener, gets called when a user long presses the map
    */
-  onLongPress?: (event: OnPressEvent) => void;
+  onLongPress?: (feature: GeoJSON.Feature) => void;
 
   /**
    * <v10 only
@@ -756,13 +755,13 @@ class MapView extends NativeBridgeComponent(
     return this._runNativeCommand('showAttribution', this._nativeRef);
   }
 
-  _onPress(e: NativeSyntheticEvent<{ payload: OnPressEvent }>) {
+  _onPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>) {
     if (isFunction(this.props.onPress)) {
       this.props.onPress(e.nativeEvent.payload);
     }
   }
 
-  _onLongPress(e: NativeSyntheticEvent<{ payload: OnPressEvent }>) {
+  _onLongPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>) {
     if (isFunction(this.props.onLongPress)) {
       this.props.onLongPress(e.nativeEvent.payload);
     }
@@ -980,8 +979,8 @@ class MapView extends NativeBridgeComponent(
 }
 
 type NativeProps = Omit<Props, 'onPress' | 'onLongPress'> & {
-  onPress(event: NativeSyntheticEvent<{ payload: OnPressEvent }>): void;
-  onLongPress(event: NativeSyntheticEvent<{ payload: OnPressEvent }>): void;
+  onPress(event: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>): void;
+  onLongPress(event: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>): void;
 };
 
 type RCTMGLMapViewRefType = Component<NativeProps> & Readonly<NativeMethods>;

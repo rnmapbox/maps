@@ -3261,20 +3261,20 @@
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "(event:OnPressEvent) => void"
+          "funcSignature": "(feature:GeoJSON.Feature) => void"
         },
         "default": "none",
-        "description": "Map press listener, gets called when a user presses the map\n*signature:*`(event:OnPressEvent) => void`"
+        "description": "Map press listener, gets called when a user presses the map\n*signature:*`(feature:GeoJSON.Feature) => void`"
       },
       {
         "name": "onLongPress",
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "(event:OnPressEvent) => void"
+          "funcSignature": "(feature:GeoJSON.Feature) => void"
         },
         "default": "none",
-        "description": "Map long press listener, gets called when a user long presses the map\n*signature:*`(event:OnPressEvent) => void`"
+        "description": "Map long press listener, gets called when a user long presses the map\n*signature:*`(feature:GeoJSON.Feature) => void`"
       },
       {
         "name": "onRegionWillChange",
