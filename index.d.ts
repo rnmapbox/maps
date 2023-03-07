@@ -64,6 +64,8 @@ import {
   ShapeSource as _ShapeSource,
   Props as _ShapeSourceProps,
 } from './javascript/components/ShapeSource';
+import _VectorSource from './javascript/components/VectorSource';
+import _Light from './javascript/components/Light';
 import type {
   MapboxGLEvent as _MapboxGLEvent,
   AnimatedPoint as _AnimatedPoint,
@@ -74,6 +76,7 @@ import type {
   Location as _Location,
   LocationManager,
 } from './javascript/modules/location/locationManager';
+import type { OnPressEvent as _OnPressEvent } from './javascript/types/OnPressEvent';
 
 // prettier-ignore
 type ExpressionName =
@@ -124,17 +127,7 @@ type Visibility = 'visible' | 'none';
 type Alignment = 'map' | 'viewport';
 type AutoAlignment = Alignment | 'auto';
 
-export type OnPressEvent = {
-  features: Array<GeoJSON.Feature>;
-  coordinates: {
-    latitude: number;
-    longitude: number;
-  };
-  point: {
-    x: number;
-    y: number;
-  };
-};
+export type OnPressEvent = _OnPressEvent;
 
 declare namespace MapboxGL {
   function removeCustomHeader(headerName: string): void;
@@ -328,7 +321,7 @@ declare namespace MapboxGL {
 
   class UserLocation extends Component<UserLocationProps> {}
 
-  class Light extends Component<LightProps> {}
+  const Light = _Light;
 
   class Callout extends Component<CalloutProps> {}
   type Style = FC<StyleProps>;
@@ -336,7 +329,8 @@ declare namespace MapboxGL {
   /**
    * Sources
    */
-  class VectorSource extends Component<VectorSourceProps> {}
+  type VectorSource = typeof _VectorSource;
+  const VectorSource = _VectorSource;
   class RasterSource extends Component<RasterSourceProps> {}
   class RasterDemSource extends Component<RasterSourceProps> {}
 
@@ -637,14 +631,6 @@ export interface TileSourceProps extends ViewProps {
   maxZoomLevel?: number;
 }
 
-export interface VectorSourceProps extends TileSourceProps {
-  onPress?: (event: OnPressEvent) => void;
-  hitbox?: {
-    width: number;
-    height: number;
-  };
-}
-
 export interface RasterSourceProps extends TileSourceProps {
   tileSize?: number;
 }
@@ -659,35 +645,6 @@ export interface LayerBaseProps<T = object> extends Omit<ViewProps, 'style'> {
   filter?: Expression;
   minZoomLevel?: number;
   maxZoomLevel?: number;
-}
-
-export interface BackgroundLayerProps extends LayerBaseProps {
-  style?: StyleProp<BackgroundLayerStyle>;
-}
-
-export interface CircleLayerProps extends LayerBaseProps {
-  style?: StyleProp<CircleLayerStyle>;
-}
-
-export interface FillExtrusionLayerProps extends Omit<LayerBaseProps, 'id'> {
-  id: string;
-  style?: StyleProp<FillExtrusionLayerStyle>;
-}
-
-export interface FillLayerProps extends LayerBaseProps {
-  style?: StyleProp<FillLayerStyle>;
-}
-
-export interface LineLayerProps extends LayerBaseProps {
-  style?: StyleProp<LineLayerStyle>;
-}
-
-export interface RasterLayerProps extends LayerBaseProps {
-  style?: StyleProp<RasterLayerStyle>;
-}
-
-export interface HeatmapLayerProps extends LayerBaseProps {
-  style?: StyleProp<HeatmapLayerStyle>;
 }
 
 export interface ImageSourceProps extends ViewProps {
@@ -784,6 +741,8 @@ export import AnimatedMapPoint = MapboxGL.AnimatedPoint;
 export import AnimatedShape = MapboxGL.AnimatedShape;
 export import Images = MapboxGL.Images;
 export import Image = MapboxGL.Image;
+export import Light = MapboxGL.Light;
+export import VectorSource = MapboxGL.VectorSource;
 
 export const { offlineManager } = MapboxGL;
 
