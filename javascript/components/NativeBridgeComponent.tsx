@@ -82,7 +82,7 @@ const NativeBridgeComponent = <
 
     _runNativeCommand<RefType, ReturnType = NativeArg>(
       methodName: string,
-      nativeRef: RefType,
+      nativeRef: RefType | undefined,
       args: NativeArg[] = [],
     ): Promise<ReturnType> {
       if (!nativeRef) {
