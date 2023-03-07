@@ -6444,7 +6444,7 @@
   },
   "offlineManager": {
     "name": "offlineManager",
-    "fileNameWithExt": "offlineManager.js",
+    "fileNameWithExt": "offlineManager.ts",
     "description": "OfflineManager implements a singleton (shared object) that manages offline packs.\nAll of this class’s instance methods are asynchronous, reflecting the fact that offline resources are stored in a database.\nThe shared object maintains a canonical collection of offline packs.",
     "props": [],
     "styles": [],
@@ -6785,7 +6785,7 @@
   },
   "snapshotManager": {
     "name": "snapshotManager",
-    "fileNameWithExt": "snapshotManager.js",
+    "fileNameWithExt": "snapshotManager.ts",
     "description": "The snapshotManager generates static raster images of the map.\nEach snapshot image depicts a portion of a map defined by an SnapshotOptions object you provide.\nThe snapshotter generates the snapshot asynchronous.",
     "props": [],
     "styles": [],
