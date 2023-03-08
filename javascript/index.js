@@ -14,6 +14,7 @@ import RasterSource from './components/RasterSource';
 import RasterDemSource from './components/RasterDemSource';
 import ImageSource from './components/ImageSource';
 import Images from './components/Images';
+import Image from './components/Image';
 import FillLayer from './components/FillLayer';
 import FillExtrusionLayer from './components/FillExtrusionLayer';
 import HeatmapLayer from './components/HeatmapLayer';
@@ -79,6 +80,7 @@ MapboxGL.ShapeSource = ShapeSource;
 MapboxGL.RasterSource = RasterSource;
 MapboxGL.ImageSource = ImageSource;
 MapboxGL.Images = Images;
+MapboxGL.Image = Image;
 MapboxGL.RasterDemSource = RasterDemSource;
 
 // layers
@@ -129,6 +131,7 @@ export {
   RasterDemSource,
   ImageSource,
   Images,
+  Image,
   FillLayer,
   FillExtrusionLayer,
   HeatmapLayer,

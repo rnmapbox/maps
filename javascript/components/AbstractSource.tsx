@@ -1,10 +1,12 @@
 import React from 'react';
 import { NativeMethods } from 'react-native';
 
+import type { BaseProps } from '../types/BaseProps';
+
 class AbstractSource<
   PropsType,
   NativePropsType extends object,
-> extends React.PureComponent<PropsType> {
+> extends React.PureComponent<PropsType & BaseProps> {
   _nativeRef?: React.Component<NativePropsType> & Readonly<NativeMethods>;
 
   setNativeProps(props: NativePropsType) {

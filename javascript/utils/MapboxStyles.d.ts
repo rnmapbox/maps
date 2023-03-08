@@ -113,7 +113,7 @@ type ExpressionField =
   | ExpressionField[]
   | { [key: string]: ExpressionField };
 
-export type Expression = [ExpressionName, ...ExpressionField[]];
+export type Expression = readonly [ExpressionName, ...ExpressionField[]];
 
 export type FilterExpression = Expression;
 
@@ -125,7 +125,7 @@ type ExpressionParameters =
   | 'line-progress'
   | 'heatmap-density';
 
-type ResolvedImageType = ImageSourcePropType;
+type ResolvedImageType = ImageSourcePropType | string;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type Value<T, AllowedParameters extends ExpressionParameters[] = []> =
@@ -902,7 +902,7 @@ export interface SymbolLayerStyleProps {
    */
   iconOpacityTransition?: Transition;
   /**
-   * The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/usingRecolorableImagesInMapboxMaps/).
+   * The color of the icon. This can only be used with [SDF icons](https://docs.mapbox.com/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
    *
    * @requires iconImage
    */
@@ -913,7 +913,7 @@ export interface SymbolLayerStyleProps {
    */
   iconColorTransition?: Transition;
   /**
-   * The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/usingRecolorableImagesInMapboxMaps/).
+   * The color of the icon's halo. Icon halos can only be used with [SDF icons](https://docs.mapbox.com/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
    *
    * @requires iconImage
    */

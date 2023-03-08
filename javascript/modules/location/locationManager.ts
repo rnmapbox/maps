@@ -17,7 +17,7 @@ export const LocationModuleEventEmitter = new NativeEventEmitter(
 /**
  * Location sent by locationManager
  */
-interface Location {
+export interface Location {
   coords: Coordinates;
   timestamp?: number;
 }
@@ -69,7 +69,7 @@ interface Coordinates {
 /**
  * LocationManager is a singleton, see `locationManager`
  */
-class LocationManager {
+export class LocationManager {
   _listeners: ((location: Location) => void)[];
   _lastKnownLocation: Location | null;
   _isListening: boolean;

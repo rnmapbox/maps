@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import {
   Callout,
@@ -15,6 +15,7 @@ import { Button } from '@rneui/base';
 import sheet from '../../styles/sheet';
 import Page from '../common/Page';
 import Bubble from '../common/Bubble';
+import { BaseExampleProps } from '../common/BaseExamplePropTypes';
 
 const ANNOTATION_SIZE = 40;
 
@@ -86,7 +87,7 @@ const AnnotationWithRemoteImage = ({
   );
 };
 
-const ShowPointAnnotation: FC = (props) => {
+const ShowPointAnnotation = (props: BaseExampleProps) => {
   const [coordinates, setCoordinates] = useState([[-73.99155, 40.73581]]);
   const [layerRendering, setLayerRendering] = useState<'below' | 'above'>(
     'below',

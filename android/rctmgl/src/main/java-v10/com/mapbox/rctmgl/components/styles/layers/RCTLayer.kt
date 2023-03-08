@@ -11,6 +11,7 @@ import com.mapbox.maps.MapboxMap
 import com.facebook.react.bridge.ReadableArray
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView.FoundLayerCallback
 import com.facebook.common.logging.FLog
+import com.mapbox.maps.extension.style.expressions.dsl.generated.all
 import com.mapbox.maps.extension.style.expressions.dsl.generated.literal
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.*
@@ -115,7 +116,7 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
                 mHadFilter = true
                 updateFilter(mFilter)
             } else if (mHadFilter) {
-                updateFilter(literal(true))
+                updateFilter(/* literal(true)*/all {} )
             }
         }
     }
@@ -245,8 +246,13 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
     }
 
     override fun removeFromMap(mapView: RCTMGLMapView) {
-        if (style != null) {
-            style!!.removeStyleLayer(mLayer!!.layerId)
+        style?.let {
+            val layer = mLayer
+            if (layer != null) {
+                it.removeStyleLayer(layer.layerId)
+            } else {
+                Logger.e("RCTLayer","mLayer is null on removal layer from map")
+            }
         }
         super.removeFromMap(mapView)
     }

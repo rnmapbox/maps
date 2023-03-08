@@ -11,6 +11,7 @@ import { NativeModules, requireNativeComponent } from 'react-native';
 
 import { MapboxGLEvent } from '../types';
 import { makeLatLngBounds, makePoint } from '../utils/geoUtils';
+import { type NativeRefType } from '../utils/nativeRef';
 
 const NativeModule = NativeModules.MGLModule;
 
@@ -122,16 +123,18 @@ export type CameraStop = {
 };
 
 export type CameraFollowConfig = {
-  /** The mode used to track the user location on the map. */
-  followUserMode?: UserTrackingMode;
   /** Whether the map orientation follows the user location. */
   followUserLocation?: boolean;
+  /** The mode used to track the user location on the map. */
+  followUserMode?: UserTrackingMode;
   /** The zoom level used when following the user location. */
   followZoomLevel?: number;
   /** The pitch used when following the user location. */
   followPitch?: number;
   /** The heading used when following the user location. */
   followHeading?: number;
+  /** The padding used to position the user location when following. */
+  followPadding?: Partial<CameraPadding>;
 };
 
 export type CameraMinMaxConfig = {
@@ -232,13 +235,15 @@ export const Camera = memo(
         followZoomLevel,
         followPitch,
         followHeading,
+        followPadding,
         defaultSettings,
         allowUpdates = true,
         onUserTrackingModeChange,
       } = props;
 
-      // @ts-expect-error This avoids a type/value mismatch.
-      const nativeCamera = useRef<RCTMGLCamera>(null);
+      const nativeCamera = useRef<typeof RCTMGLCamera>(
+        null,
+      ) as NativeRefType<NativeCameraProps>;
 
       const buildNativeStop = useCallback(
         (
@@ -349,14 +354,14 @@ export const Camera = memo(
             if (_nativeStop) {
               _nativeStops = [..._nativeStops, _nativeStop];
             }
-            nativeCamera.current.setNativeProps({
+            nativeCamera.current?.setNativeProps({
               stop: { stops: _nativeStops },
             });
           }
         } else if (config.type === 'CameraStop') {
           const _nativeStop = buildNativeStop(config);
           if (_nativeStop) {
-            nativeCamera.current.setNativeProps({ stop: _nativeStop });
+            nativeCamera.current?.setNativeProps({ stop: _nativeStop });
           }
         }
       };
@@ -526,9 +531,10 @@ export const Camera = memo(
           defaultStop={nativeDefaultStop}
           followUserLocation={followUserLocation}
           followUserMode={followUserMode}
+          followZoomLevel={followZoomLevel}
           followPitch={followPitch}
           followHeading={followHeading}
-          followZoomLevel={followZoomLevel}
+          followPadding={followPadding}
           minZoomLevel={minZoomLevel}
           maxZoomLevel={maxZoomLevel}
           maxBounds={nativeMaxBounds}

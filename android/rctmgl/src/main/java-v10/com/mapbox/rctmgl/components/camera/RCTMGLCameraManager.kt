@@ -1,5 +1,4 @@
 package com.mapbox.rctmgl.components.camera
-
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.uimanager.ThemedReactContext
@@ -10,7 +9,6 @@ import com.mapbox.rctmgl.components.camera.CameraStop.Companion.fromReadableMap
 import com.mapbox.rctmgl.utils.GeoJSONUtils.toLatLngBounds
 
 
-//import com.mapbox.rctmgl.utils.GeoJSONUtils;
 class RCTMGLCameraManager(private val mContext: ReactApplicationContext) :
     AbstractEventEmitter<RCTMGLCamera?>(
         mContext
@@ -54,6 +52,16 @@ class RCTMGLCameraManager(private val mContext: ReactApplicationContext) :
         camera.setZoomLevel(zoomLevel)
     }
 
+    @ReactProp(name = "minZoomLevel")
+    fun setMinZoomLevel(camera: RCTMGLCamera, value: Double) {
+        camera.setMinZoomLevel(value)
+    }
+
+    @ReactProp(name = "maxZoomLevel")
+    fun setMaxZoomLevel(camera: RCTMGLCamera, value: Double) {
+        camera.setMaxZoomLevel(value)
+    }
+
     @ReactProp(name = "followUserLocation")
     fun setFollowUserLocation(camera: RCTMGLCamera, value: Boolean) {
         camera.setFollowUserLocation(value)
@@ -64,14 +72,9 @@ class RCTMGLCameraManager(private val mContext: ReactApplicationContext) :
         camera.setFollowUserMode(value)
     }
 
-    @ReactProp(name = "minZoomLevel")
-    fun setMinZoomLevel(camera: RCTMGLCamera, value: Double) {
-        camera.setMinZoomLevel(value)
-    }
-
-    @ReactProp(name = "maxZoomLevel")
-    fun setMaxZoomLevel(camera: RCTMGLCamera, value: Double) {
-        camera.setMaxZoomLevel(value)
+    @ReactProp(name = "followZoomLevel")
+    fun setFollowZoomLevel(camera: RCTMGLCamera, value: Double) {
+        camera.setFollowZoomLevel(value)
     }
 
     @ReactProp(name = "followPitch")
@@ -84,9 +87,9 @@ class RCTMGLCameraManager(private val mContext: ReactApplicationContext) :
         camera.setFollowHeading(value)
     }
 
-    @ReactProp(name = "followZoomLevel")
-    fun setFollowZoomLevel(camera: RCTMGLCamera, value: Double) {
-        camera.setFollowZoomLevel(value)
+    @ReactProp(name = "followPadding")
+    fun setFollowPadding(camera: RCTMGLCamera, value: ReadableMap) {
+        camera.setFollowPadding(value)
     }
 
     @ReactProp(name = "maxBounds")

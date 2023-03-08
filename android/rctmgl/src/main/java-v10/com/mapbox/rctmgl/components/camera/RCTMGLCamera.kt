@@ -3,6 +3,7 @@ package com.mapbox.rctmgl.components.camera
 import android.animation.Animator
 import android.content.Context
 import android.location.Location
+import com.facebook.react.bridge.ReadableMap
 import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.rctmgl.location.LocationManager.Companion.getInstance
 import com.mapbox.maps.plugin.animation.flyTo
@@ -18,14 +19,17 @@ import com.mapbox.maps.*
 import com.mapbox.maps.plugin.PuckBearingSource
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.locationcomponent.location2
+import com.mapbox.maps.plugin.viewport.ViewportStatus
+import com.mapbox.maps.plugin.viewport.ViewportStatusObserver
 import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateBearing
 import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateOptions
+import com.mapbox.maps.plugin.viewport.data.ViewportStatusChangeReason
 import com.mapbox.maps.plugin.viewport.viewport
 import com.mapbox.rctmgl.components.camera.constants.CameraMode
 import com.mapbox.rctmgl.components.location.*
+import com.mapbox.rctmgl.events.MapUserTrackingModeEvent
 import com.mapbox.rctmgl.location.*
 import com.mapbox.rctmgl.utils.Logger
-
 
 
 class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCameraManager) :
@@ -43,21 +47,24 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
     private var mLocationComponentManager: LocationComponentManager? = null
     private var mUserTrackingMode = 0
     private var mUserTrackingState = UserTrackingState.POSSIBLE
-    private val mUserLocationVerticalAlignment = UserLocationVerticalAlignment.CENTER
     private val mLocationManager: LocationManager?
     private val mUserLocation: UserLocation = UserLocation()
     private val mCenterCoordinate: ScreenCoordinate? = null
     private val mAnimated = false
     private val mHeading = 0.0
-    private var mFollowPitch : Double? = null
+
+    private var mFollowUserLocation = false
+    private var mFollowUserMode: String? = null
     private var mFollowZoomLevel : Double? = null
+    private var mFollowPitch : Double? = null
     private var mFollowHeading : Double? = null
+    private var mFollowPadding : EdgeInsets? = null
+
     private var mZoomLevel = -1.0
     private var mMinZoomLevel : Double? = null
     private var mMaxZoomLevel : Double? = null
     private var mMaxBounds: LatLngBounds? = null
-    private var mFollowUserLocation = false
-    private var mFollowUserMode: String? = null
+
 
     private val mLocationBearingChangedListener = OnIndicatorBearingChangedListener { v ->
         if (mFollowUserLocation) {
@@ -94,7 +101,8 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         setInitialCamera()
         updateMaxBounds()
         mCameraStop?.let { updateCamera(it) }
-        _updateViewportState();
+        _observeViewportState(mapView)
+        _updateViewportState()
     }
 
     override fun removeFromMap(mapView: RCTMGLMapView) {
@@ -112,9 +120,14 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         mDefaultStop = stop
     }
 
-    fun setFollowPitch(pitch: Double) {
-        mFollowPitch = pitch
-        _updateViewportState();
+    fun setFollowUserMode(mode: String?) {
+        mFollowUserMode = mode
+        _updateViewportState()
+    }
+
+    fun setFollowUserLocation(value: Boolean) {
+        mFollowUserLocation = value
+        _updateViewportState()
     }
 
     fun setFollowZoomLevel(zoomLevel: Double) {
@@ -122,8 +135,27 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         _updateViewportState();
     }
 
+    fun setFollowPitch(pitch: Double) {
+        mFollowPitch = pitch
+        _updateViewportState();
+    }
+
     fun setFollowHeading(heading: Double) {
         mFollowHeading = heading
+        _updateViewportState();
+    }
+
+    fun setFollowPadding(padding: ReadableMap) {
+        // scale padding by pixel ratio
+        val metrics = context.resources.displayMetrics
+        val edgeInsets = EdgeInsets(
+            if (padding.hasKey("paddingTop")) padding.getDouble("paddingTop") * metrics.density else 0.0,
+            if (padding.hasKey("paddingLeft")) padding.getDouble("paddingLeft") * metrics.density else 0.0,
+            if (padding.hasKey("paddingBottom")) padding.getDouble("paddingBottom") * metrics.density else 0.0,
+            if (padding.hasKey("paddingRight")) padding.getDouble("paddingRight") * metrics.density else 0.0,
+        )
+
+        mFollowPadding = edgeInsets
         _updateViewportState();
     }
 
@@ -161,14 +193,6 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
     private fun updateCamera(cameraStop: CameraStop) {
         mCameraUpdateQueue.offer(cameraStop)
         mCameraUpdateQueue.execute(mMapView)
-    }
-
-    private fun updateUserTrackingMode(userTrackingMode: Int) {
-        /* v10todo
-        mUserLocation.setTrackingMode(userTrackingMode);
-        IEvent event = new MapUserTrackingModeEvent(this, userTrackingMode);
-        mManager.handleEvent(event);
-         */
     }
 
     private fun updateUserLocation(isAnimated: Boolean) {
@@ -250,7 +274,7 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
     fun setUserTrackingMode(userTrackingMode: Int) {
         val oldTrackingMode = mUserTrackingMode
         mUserTrackingMode = userTrackingMode
-        updateUserTrackingMode(userTrackingMode)
+        mManager.handleEvent(MapUserTrackingModeEvent(this@RCTMGLCamera, userTrackingMode))
         when (mUserTrackingMode) {
             UserTrackingMode.NONE -> mUserTrackingState = UserTrackingState.POSSIBLE
             UserTrackingMode.FOLLOW, UserTrackingMode.FollowWithCourse, UserTrackingMode.FollowWithHeading -> if (oldTrackingMode == UserTrackingMode.NONE) {
@@ -262,9 +286,22 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         }
     }
 
-    fun setFollowUserLocation(value: Boolean) {
-        mFollowUserLocation = value
-        _updateViewportState()
+    fun _observeViewportState(mapView: MapView) {
+        mapView.viewport.addStatusObserver(object: ViewportStatusObserver {
+            override fun onViewportStatusChanged(
+                from: ViewportStatus,
+                to: ViewportStatus,
+                reason: ViewportStatusChangeReason
+            ) {
+                if (to == ViewportStatus.Idle) {
+                    mManager.handleEvent(MapUserTrackingModeEvent(this@RCTMGLCamera, UserTrackingMode.NONE))
+                } else if (to is ViewportStatus.Transition) {
+
+                } else if (to is ViewportStatus.State){
+                    //mManager.handleEvent(MapUserTrackingModeEvent(this@RCTMGLCamera, UserTrackingMode.FOLLOW))
+                }
+            }
+        })
     }
 
     fun _updateViewportState() {
@@ -320,14 +357,21 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
                 }
             }
 
+            when(val it=mFollowZoomLevel) {
+                null -> followOptions.zoom(cameraState.zoom)
+                else -> followOptions.zoom(it)
+            }
+
             when(val it=mFollowPitch) {
                 null -> followOptions.pitch(cameraState.pitch)
                 else -> followOptions.pitch(it)
             }
-            when(val it=mFollowZoomLevel) {
-                null -> followOptions.zoom(cameraState.zoom)
-                else -> followOptions.zoom(mFollowZoomLevel)
+
+            when(val it=mFollowPadding) {
+                null -> followOptions.padding(cameraState.padding)
+                else -> followOptions.padding(it)
             }
+
 
             val followState = viewport.makeFollowPuckViewportState(followOptions.build())
             viewport.transitionTo(followState)
@@ -337,11 +381,6 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
                 updateLocationLayer(it)
             }
         }
-    }
-
-    fun setFollowUserMode(mode: String?) {
-        mFollowUserMode = mode
-        _updateViewportState()
     }
 
     private fun updatedFollowUserMode() {

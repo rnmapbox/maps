@@ -9,6 +9,7 @@ import { type Feature } from 'geojson';
 
 import { toJSONString, isFunction } from '../utils';
 import { makePoint } from '../utils/geoUtils';
+import { type BaseProps } from '../types/BaseProps';
 
 import NativeBridgeComponent, { type RNMBEvent } from './NativeBridgeComponent';
 
@@ -26,7 +27,7 @@ type FeaturePayload = {
   feature: Feature;
 };
 
-type Props = {
+type Props = BaseProps & {
   /**
    * A string that uniquely identifies the annotation
    */

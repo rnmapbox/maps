@@ -51,11 +51,16 @@ class Annotation extends React.Component {
       prevProps.coordinates[0] !== this.props.coordinates[0] ||
       prevProps.coordinates[1] !== this.props.coordinates[1];
 
-    if (!hasCoordChanged) {
-      return;
-    }
+    if (
+      prevProps.animated !== this.props.animated ||
+      (hasCoordChanged && (!this.state.shape || !this.props.animated))
+    ) {
+      const shape = this._getShapeFromProps(this.props);
 
-    if (this.props.animated && this.state.shape) {
+      this.setState({
+        shape: this.props.animated ? new AnimatedPoint(shape) : shape,
+      });
+    } else if (hasCoordChanged && this.props.animated && this.state.shape) {
       // flush current animations
       this.state.shape.stopAnimation();
 
@@ -66,12 +71,6 @@ class Annotation extends React.Component {
           duration: this.props.animationDuration,
         })
         .start();
-    } else if (!this.state.shape || !this.props.animated) {
-      const shape = this._getShapeFromProps(this.props);
-
-      this.setState({
-        shape: this.props.animated ? new AnimatedPoint(shape) : shape,
-      });
     }
   }
 

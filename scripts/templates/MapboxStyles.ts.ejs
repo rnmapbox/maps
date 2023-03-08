@@ -45,13 +45,13 @@ type ExpressionField =
   | ExpressionField[]
   | { [key: string]: ExpressionField };
 
-export type Expression = [ExpressionName, ...ExpressionField[]];
+export type Expression = readonly [ExpressionName, ...ExpressionField[]];
 
 export type FilterExpression = Expression;
 
 type ExpressionParameters = 'zoom' | 'feature' | 'feature-state' | 'sky-radial-progress' | 'line-progress' | 'heatmap-density';
 
-type ResolvedImageType = ImageSourcePropType;
+type ResolvedImageType = ImageSourcePropType | string;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type Value<T, AllowedParameters extends ExpressionParameters[] = []> =

@@ -1,8 +1,27 @@
-import { NativeEventEmitter, NativeModules } from 'react-native';
+import {
+  EmitterSubscription,
+  NativeEventEmitter,
+  NativeModules,
+} from 'react-native';
 const { MGLLogging } = NativeModules;
 
+type LogLevel = 'error' | 'warning' | 'info' | 'debug' | 'verbose';
+
+export interface LogObject {
+  level: LogLevel;
+  message: string;
+  tag: string;
+}
+
+type LogCallback = (object: LogObject) => boolean;
+
 class Logger {
-  static instance = null;
+  static instance: Logger | null = null;
+
+  loggerEmitter: NativeEventEmitter;
+  startedCount: number;
+  logCallback?: LogCallback;
+  subscription?: EmitterSubscription;
 
   static sharedInstance() {
     if (this.instance === null) {
@@ -14,7 +33,7 @@ class Logger {
   constructor() {
     this.loggerEmitter = new NativeEventEmitter(MGLLogging);
     this.startedCount = 0;
-    this.logCallback = null;
+    this.logCallback = undefined;
   }
 
   /**
@@ -22,7 +41,7 @@ class Logger {
    * @param {Logger~logCallback} logCallback - callback taking a log object as param. If callback return falsy value then
    * default logging will take place.
    */
-  static setLogCallback(logCallback) {
+  static setLogCallback(logCallback: LogCallback) {
     this.sharedInstance().setLogCallback(logCallback);
   }
 
@@ -31,7 +50,7 @@ class Logger {
    * @param {Logger~logCallback} logCallback - callback taking a log object as param. If callback return falsy value then
    * default logging will take place.
    */
-  setLogCallback(logCallback) {
+  setLogCallback(logCallback: LogCallback) {
     this.logCallback = logCallback;
   }
 
@@ -48,14 +67,13 @@ class Logger {
    * setLogLevel
    * @param {LogLevel} level
    */
-  static setLogLevel(level) {
+  static setLogLevel(level: LogLevel) {
     MGLLogging.setLogLevel(level);
   }
 
   /**
    * @type {('error'|'warning'|'info'|'debug'|'verbose')} LogLevel - Supported log levels
    */
-
   start() {
     if (this.startedCount === 0) {
       this.subscribe();
@@ -77,12 +95,12 @@ class Logger {
   }
 
   unsubscribe() {
-    this.subscription.remove();
-    this.subscription = null;
+    this.subscription?.remove();
+    this.subscription = undefined;
   }
 
-  effectiveLevel(log) {
-    let { level, message, tag } = log;
+  effectiveLevel(log: LogObject) {
+    const { level, message, tag } = log;
 
     if (level === 'warning') {
       if (
@@ -96,10 +114,10 @@ class Logger {
     return level;
   }
 
-  onLog(log) {
+  onLog(log: LogObject) {
     if (!this.logCallback || !this.logCallback(log)) {
-      let { message } = log;
-      let level = this.effectiveLevel(log);
+      const { message } = log;
+      const level = this.effectiveLevel(log);
       if (level === 'error') {
         console.error('Mapbox error', message, log);
       } else if (level === 'warning') {

@@ -623,18 +623,18 @@
         "description": "The easing or path the camera uses to animate to a new configuration."
       },
       {
-        "name": "followUserMode",
-        "required": false,
-        "type": "UserTrackingMode",
-        "default": "none",
-        "description": "The mode used to track the user location on the map."
-      },
-      {
         "name": "followUserLocation",
         "required": false,
         "type": "boolean",
         "default": "none",
         "description": "Whether the map orientation follows the user location."
+      },
+      {
+        "name": "followUserMode",
+        "required": false,
+        "type": "UserTrackingMode",
+        "default": "none",
+        "description": "The mode used to track the user location on the map."
       },
       {
         "name": "followZoomLevel",
@@ -656,6 +656,13 @@
         "type": "number",
         "default": "none",
         "description": "The heading used when following the user location."
+      },
+      {
+        "name": "followPadding",
+        "required": false,
+        "type": "Partial",
+        "default": "none",
+        "description": "The padding used to position the user location when following."
       },
       {
         "name": "minZoomLevel",
@@ -1909,6 +1916,64 @@
       }
     ]
   },
+  "Image": {
+    "description": "",
+    "displayName": "Image",
+    "methods": [],
+    "props": [
+      {
+        "name": "name",
+        "required": true,
+        "type": "string",
+        "default": "none",
+        "description": "ID of the image"
+      },
+      {
+        "name": "sdf",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "Make image an sdf optional - see [SDF icons](https://docs.mapbox.com/help/troubleshooting/using-recolorable-images-in-mapbox-maps/)"
+      },
+      {
+        "name": "stretchX",
+        "required": false,
+        "type": "Array",
+        "default": "none",
+        "description": "An array of two-element arrays, consisting of two numbers that represent, the from position and the to position of areas that can be stretched horizontally."
+      },
+      {
+        "name": "stretchY",
+        "required": false,
+        "type": "Array",
+        "default": "none",
+        "description": "An array of two-element arrays, consisting of two numbers that represent, the from position and the to position of areas that can be stretched vertically."
+      },
+      {
+        "name": "content",
+        "required": false,
+        "type": "tuple",
+        "default": "none",
+        "description": "An array of four numbers, with the first two specifying the left, top\ncorner, and the last two specifying the right, bottom corner. If present, and if the\nicon uses icon-text-fit, the symbol's text will be fit inside the content box."
+      },
+      {
+        "name": "scale",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "Scale factor for the image."
+      },
+      {
+        "name": "children",
+        "required": true,
+        "type": "ReactElement",
+        "default": "none",
+        "description": "Single react native view rendering the image"
+      }
+    ],
+    "fileNameWithExt": "Image.tsx",
+    "name": "Image"
+  },
   "ImageSource": {
     "description": "ImageSource is a content source that is used for a georeferenced raster image to be shown on the map.\nThe georeferenced image scales and rotates as the user zooms and rotates the map",
     "displayName": "ImageSource",
@@ -1924,32 +1989,26 @@
       {
         "name": "url",
         "required": false,
-        "type": "union",
+        "type": "number \\| string",
         "default": "none",
         "description": "An HTTP(S) URL, absolute file URL, or local file URL to the source image.\nGifs are currently not supported."
       },
       {
         "name": "coordinates",
         "required": true,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": {
-              "name": "array",
-              "value": {
-                "type": "number"
-              }
-            }
-          }
-        },
+        "type": "tuple",
         "default": "none",
         "description": "The top left, top right, bottom right, and bottom left coordinates for the image."
+      },
+      {
+        "name": "children",
+        "required": false,
+        "type": "React.ReactElement \\| React.ReactElement[]",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "ImageSource.js",
+    "fileNameWithExt": "ImageSource.tsx",
     "name": "ImageSource"
   },
   "Images": {
@@ -1960,53 +2019,71 @@
       {
         "name": "images",
         "required": false,
-        "type": "object",
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": {
+                "name": "string"
+              },
+              "required": true,
+              "type": "ImageSourcePropType",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            }
+          ]
+        },
         "default": "none",
         "description": "Specifies the external images in key-value pairs required for the shape source.\nKeys are names - see iconImage expressions, values can be either urls-s objects\nwith format {uri: 'http://...'}` or `require('image.png')` or `import 'image.png'`"
       },
       {
         "name": "nativeAssetImages",
         "required": false,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": "string"
-          }
-        },
+        "type": "Array",
         "default": "none",
-        "description": "If you have an asset under Image.xcassets on iOS and the drawables directory on android\nyou can specify an array of string names with assets as the key `['pin']`."
+        "description": "If you have an asset under Image.xcassets on iOS and the drawables directory on android\nyou can specify an array of string names with assets as the key `['pin']`.\nAdditionally object with keys sdf, and strechX, strechY is supported for [SDF icons](https://docs.mapbox.com/help/troubleshooting/using-recolorable-images-in-mapbox-maps/)"
       },
       {
         "name": "onImageMissing",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(imageKey:string) => void"
+        },
         "default": "none",
-        "description": "Gets called when a Layer is trying to render an image whose key is not present in\nany of the `Images` component of the Map."
+        "description": "Gets called when a Layer is trying to render an image whose key is not present in\nany of the `Images` component of the Map.\n*signature:*`(imageKey:string) => void`"
+      },
+      {
+        "name": "id",
+        "required": false,
+        "type": "string",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
+      },
+      {
+        "name": "children",
+        "required": false,
+        "type": "ReactElement<T> \\| Array<TypedReactNode<T>> \\| never",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "Images.js",
+    "fileNameWithExt": "Images.tsx",
     "name": "Images"
   },
   "Light": {
     "description": "Light represents the light source for extruded geometries",
-    "displayName": "Light",
     "methods": [],
     "props": [
       {
         "name": "style",
-        "required": false,
-        "type": "custom",
+        "required": true,
+        "type": "LightLayerStyleProps",
         "default": "none",
         "description": "Customizable style attributes"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "Light.js",
+    "fileNameWithExt": "Light.tsx",
     "name": "Light",
     "styles": [
       {
@@ -2563,7 +2640,7 @@
     "methods": [
       {
         "name": "getPointInView",
-        "docblock": "Converts a geographic coordinate to a point in the given view’s coordinate system.\n\n@example\nconst pointInView = await this._map.getPointInView([-37.817070, 144.949901]);\n\n@param {Array<Number>} coordinate - A point expressed in the map view's coordinate system.\n@return {Array}",
+        "docblock": "Converts a geographic coordinate to a point in the given view’s coordinate system.\n\n@example\nconst pointInView = await this._map.getPointInView([-37.817070, 144.949901]);\n\n@param {Array<number>} coordinate - A point expressed in the map view's coordinate system.\n@return {Array}",
         "modifiers": [
           "async"
         ],
@@ -2572,7 +2649,7 @@
             "name": "coordinate",
             "description": "A point expressed in the map view's coordinate system.",
             "type": {
-              "name": "Array"
+              "name": "tuple"
             },
             "optional": false
           }
@@ -2580,7 +2657,22 @@
         "returns": {
           "description": null,
           "type": {
-            "name": "Array"
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "tuple",
+                "raw": "[number, number]",
+                "elements": [
+                  {
+                    "name": "number"
+                  },
+                  {
+                    "name": "number"
+                  }
+                ]
+              }
+            ],
+            "raw": "Promise<Position>"
           }
         },
         "description": "Converts a geographic coordinate to a point in the given view’s coordinate system.",
@@ -2590,7 +2682,7 @@
       },
       {
         "name": "getCoordinateFromView",
-        "docblock": "Converts a point in the given view’s coordinate system to a geographic coordinate.\n\n@example\nconst coordinate = await this._map.getCoordinateFromView([100, 100]);\n\n@param {Array<Number>} point - A point expressed in the given view’s coordinate system.\n@return {Array}",
+        "docblock": "Converts a point in the given view’s coordinate system to a geographic coordinate.\n\n@example\nconst coordinate = await this._map.getCoordinateFromView([100, 100]);\n\n@param {Array<number>} point - A point expressed in the given view’s coordinate system.\n@return {Array}",
         "modifiers": [
           "async"
         ],
@@ -2599,7 +2691,7 @@
             "name": "point",
             "description": "A point expressed in the given view’s coordinate system.",
             "type": {
-              "name": "Array"
+              "name": "tuple"
             },
             "optional": false
           }
@@ -2607,7 +2699,22 @@
         "returns": {
           "description": null,
           "type": {
-            "name": "Array"
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "tuple",
+                "raw": "[number, number]",
+                "elements": [
+                  {
+                    "name": "number"
+                  },
+                  {
+                    "name": "number"
+                  }
+                ]
+              }
+            ],
+            "raw": "Promise<Position>"
           }
         },
         "description": "Converts a point in the given view’s coordinate system to a geographic coordinate.",
@@ -2625,7 +2732,40 @@
         "returns": {
           "description": null,
           "type": {
-            "name": "Array"
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "tuple",
+                "raw": "[Position, Position]",
+                "elements": [
+                  {
+                    "name": "tuple",
+                    "raw": "[number, number]",
+                    "elements": [
+                      {
+                        "name": "number"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "tuple",
+                    "raw": "[number, number]",
+                    "elements": [
+                      {
+                        "name": "number"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "raw": "Promise<[Position, Position]>"
           }
         },
         "description": "The coordinate bounds (ne, sw) visible in the user’s viewport.",
@@ -2644,7 +2784,7 @@
             "name": "coordinate",
             "description": "A point expressed in the map view’s coordinate system.",
             "type": {
-              "name": "Array"
+              "name": "tuple"
             },
             "optional": false
           },
@@ -2668,7 +2808,22 @@
         "returns": {
           "description": null,
           "type": {
-            "name": "FeatureCollection"
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "union",
+                "raw": "GeoJSON.FeatureCollection | undefined",
+                "elements": [
+                  {
+                    "name": "GeoJSON.FeatureCollection"
+                  },
+                  {
+                    "name": "undefined"
+                  }
+                ]
+              }
+            ],
+            "raw": "Promise<GeoJSON.FeatureCollection | undefined>"
           }
         },
         "description": "Returns an array of rendered map features that intersect with a given point.",
@@ -2687,7 +2842,7 @@
             "name": "bbox",
             "description": "A rectangle expressed in the map view’s coordinate system. For v10, this can be an empty array to query the visible map area.",
             "type": {
-              "name": "Array"
+              "name": "BBox \\| []"
             },
             "optional": false
           },
@@ -2711,7 +2866,22 @@
         "returns": {
           "description": null,
           "type": {
-            "name": "FeatureCollection"
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "union",
+                "raw": "GeoJSON.FeatureCollection | undefined",
+                "elements": [
+                  {
+                    "name": "GeoJSON.FeatureCollection"
+                  },
+                  {
+                    "name": "undefined"
+                  }
+                ]
+              }
+            ],
+            "raw": "Promise<GeoJSON.FeatureCollection | undefined>"
           }
         },
         "description": "Returns an array of rendered map features that intersect with the given rectangle,\nrestricted to the given style layers and filtered by the given predicate. In v10,\npassing an empty array will query the entire visible bounds of the map.",
@@ -2721,7 +2891,7 @@
       },
       {
         "name": "setCamera",
-        "docblock": "Map camera will perform updates based on provided config. Deprecated use Camera#setCamera.",
+        "docblock": "Map camera will perform updates based on provided config. Deprecated use Camera#setCamera.\n@deprecated use Camera#setCamera",
         "modifiers": [],
         "params": [],
         "returns": null,
@@ -2747,7 +2917,13 @@
         "returns": {
           "description": null,
           "type": {
-            "name": "String"
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "string"
+              }
+            ],
+            "raw": "Promise<string>"
           }
         },
         "description": "Takes snapshot of map with current tiles and returns a URI to the image",
@@ -2763,7 +2939,13 @@
         "returns": {
           "description": null,
           "type": {
-            "name": "Number"
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "number"
+              }
+            ],
+            "raw": "Promise<number>"
           }
         },
         "description": "Returns the current zoom of the map view.",
@@ -2781,12 +2963,22 @@
         "returns": {
           "description": "Coordinates",
           "type": {
-            "name": "Array",
+            "name": "Promise",
             "elements": [
               {
-                "name": "Number"
+                "name": "tuple",
+                "raw": "[number, number]",
+                "elements": [
+                  {
+                    "name": "number"
+                  },
+                  {
+                    "name": "number"
+                  }
+                ]
               }
-            ]
+            ],
+            "raw": "Promise<Position>"
           }
         },
         "description": "Returns the map's geographical centerpoint",
@@ -2805,7 +2997,7 @@
             "name": "coordinate",
             "description": "the coordinates to query elevation at",
             "type": {
-              "name": "Array"
+              "name": "tuple"
             },
             "optional": false
           }
@@ -2813,7 +3005,13 @@
         "returns": {
           "description": null,
           "type": {
-            "name": "Number"
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "number"
+              }
+            ],
+            "raw": "Promise<number>"
           }
         },
         "description": "Queries the currently loaded data for elevation at a geographical location.\nThe elevation is returned in meters relative to mean sea-level.\nReturns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.",
@@ -2836,7 +3034,7 @@
             "name": "sourceId",
             "description": "Identifier of the target source (e.g. 'composite')",
             "type": {
-              "name": "String"
+              "name": "string"
             },
             "optional": false
           },
@@ -2869,23 +3067,16 @@
       {
         "name": "contentInset",
         "required": false,
-        "type": "union",
+        "type": "number \\| number[]",
         "default": "none",
         "description": "The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport."
       },
       {
         "name": "projection",
         "required": false,
-        "type": "enum",
+        "type": "'mercator' \\| 'globe'",
         "default": "'mercator'",
         "description": "The projection used when rendering the map"
-      },
-      {
-        "name": "style",
-        "required": false,
-        "type": "any",
-        "default": "none",
-        "description": "Style for wrapping React Native View"
       },
       {
         "name": "styleURL",
@@ -2911,91 +3102,91 @@
       {
         "name": "localizeLabels",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "false",
         "description": "Automatically change the language of the map labels to the system’s preferred language,\nthis is not something that can be toggled on/off"
       },
       {
         "name": "zoomEnabled",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "none",
         "description": "Enable/Disable zoom on the map"
       },
       {
         "name": "scrollEnabled",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "true",
         "description": "Enable/Disable scroll on the map"
       },
       {
         "name": "pitchEnabled",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "true",
         "description": "Enable/Disable pitch on map"
       },
       {
         "name": "rotateEnabled",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "true",
         "description": "Enable/Disable rotation on map"
       },
       {
         "name": "attributionEnabled",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "true",
         "description": "The Mapbox terms of service, which governs the use of Mapbox-hosted vector tiles and styles,\n[requires](https://www.mapbox.com/help/how-attribution-works/) these copyright notices to accompany any map that features Mapbox-designed styles, OpenStreetMap data, or other Mapbox data such as satellite or terrain data.\nIf that applies to this map view, do not hide this view or remove any notices from it.\n\nYou are additionally [required](https://www.mapbox.com/help/how-mobile-apps-work/#telemetry) to provide users with the option to disable anonymous usage and location sharing (telemetry).\nIf this view is hidden, you must implement this setting elsewhere in your app. See our website for [Android](https://www.mapbox.com/android-docs/map-sdk/overview/#telemetry-opt-out) and [iOS](https://www.mapbox.com/ios-sdk/#telemetry_opt_out) for implementation details.\n\nEnable/Disable attribution on map. For iOS you need to add MGLMapboxMetricsEnabledSettingShownInApp=YES\nto your Info.plist"
       },
       {
         "name": "attributionPosition",
         "required": false,
-        "type": "custom",
+        "type": "OrnamentPositonProp",
         "default": "none",
         "description": "Adds attribution offset, e.g. `{top: 8, left: 8}` will put attribution button in top-left corner of the map. By default on Android, the attribution with information icon (i) will be on the bottom left, while on iOS the mapbox logo will be on bottom left with information icon (i) on bottom right. Read more about mapbox attribution [here](https://docs.mapbox.com/help/getting-started/attribution/)"
       },
       {
         "name": "tintColor",
         "required": false,
-        "type": "union",
+        "type": "string \\| number[]",
         "default": "none",
         "description": "MapView's tintColor"
       },
       {
         "name": "logoEnabled",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "true",
         "description": "Enable/Disable the logo on the map."
       },
       {
         "name": "logoPosition",
         "required": false,
-        "type": "custom",
+        "type": "OrnamentPositonProp",
         "default": "none",
         "description": "Adds logo offset, e.g. `{top: 8, left: 8}` will put the logo in top-left corner of the map"
       },
       {
         "name": "compassEnabled",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "false",
         "description": "Enable/Disable the compass from appearing on the map"
       },
       {
         "name": "compassFadeWhenNorth",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "false",
         "description": "[`mapbox` (v10) implementation only] Enable/Disable if the compass should fade out when the map is pointing north"
       },
       {
         "name": "compassPosition",
         "required": false,
-        "type": "custom",
+        "type": "OrnamentPositonProp",
         "default": "none",
         "description": "[`mapbox` (v10) implementation only] Adds compass offset, e.g. `{top: 8, left: 8}` will put the compass in top-left corner of the map"
       },
@@ -3009,7 +3200,25 @@
       {
         "name": "compassViewMargins",
         "required": false,
-        "type": "object",
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "x",
+              "required": true,
+              "type": "number",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            },
+            {
+              "name": "y",
+              "required": true,
+              "type": "number",
+              "default": "none",
+              "description": "FIX ME NO DESCRIPTION"
+            }
+          ]
+        },
         "default": "none",
         "description": "Add margins to the compass with x and y values"
       },
@@ -3023,14 +3232,14 @@
       {
         "name": "scaleBarEnabled",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "true",
         "description": "[`mapbox` (v10) implementation only] Enable/Disable the scale bar from appearing on the map"
       },
       {
         "name": "scaleBarPosition",
         "required": false,
-        "type": "custom",
+        "type": "OrnamentPositonProp",
         "default": "none",
         "description": "[`mapbox` (v10) implementation only] Adds scale bar offset, e.g. `{top: 8, left: 8}` will put the scale bar in top-left corner of the map"
       },
@@ -3044,172 +3253,199 @@
       {
         "name": "surfaceView",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "false",
         "description": "[Android only] Enable/Disable use of GLSurfaceView instead of TextureView."
       },
       {
         "name": "onPress",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(feature:GeoJSON.Feature) => void"
+        },
         "default": "none",
-        "description": "Map press listener, gets called when a user presses the map"
+        "description": "Map press listener, gets called when a user presses the map\n*signature:*`(feature:GeoJSON.Feature) => void`"
       },
       {
         "name": "onLongPress",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(feature:GeoJSON.Feature) => void"
+        },
         "default": "none",
-        "description": "Map long press listener, gets called when a user long presses the map"
+        "description": "Map long press listener, gets called when a user long presses the map\n*signature:*`(feature:GeoJSON.Feature) => void`"
       },
       {
         "name": "onRegionWillChange",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(feature:GeoJSON.Feature) => void"
+        },
         "default": "none",
-        "description": "<v10 only\n\nThis event is triggered whenever the currently displayed map region is about to change.",
-        "params": [
-          {
-            "name": "feature",
-            "description": "The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds",
-            "type": {
-              "name": "PointFeature"
-            },
-            "optional": false
-          }
-        ]
+        "description": "<v10 only\n\nThis event is triggered whenever the currently displayed map region is about to change.\n\n@param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds\n*signature:*`(feature:GeoJSON.Feature) => void`"
       },
       {
         "name": "onRegionIsChanging",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(feature:GeoJSON.Feature) => void"
+        },
         "default": "none",
-        "description": "This event is triggered whenever the currently displayed map region is changing.",
-        "params": [
-          {
-            "name": "feature",
-            "description": "The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds",
-            "type": {
-              "name": "PointFeature"
-            },
-            "optional": false
-          }
-        ]
+        "description": "This event is triggered whenever the currently displayed map region is changing.\n\n@param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds\n*signature:*`(feature:GeoJSON.Feature) => void`"
       },
       {
         "name": "onRegionDidChange",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(feature:GeoJSON.Feature) => void"
+        },
         "default": "none",
-        "description": "This event is triggered whenever the currently displayed map region finished changing.",
-        "params": [
-          {
-            "name": "feature",
-            "description": "The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds",
-            "type": {
-              "name": "PointFeature"
-            },
-            "optional": false
-          }
-        ]
+        "description": "This event is triggered whenever the currently displayed map region finished changing.\n\n@param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds\n*signature:*`(feature:GeoJSON.Feature) => void`"
       },
       {
         "name": "onCameraChanged",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean, isAnimatingFromGesture: boolean}}) => void"
+        },
         "default": "none",
-        "description": "iOS, v10 only, deprecated will be removed in next version - please use onRegionIsChanging."
+        "description": "iOS, v10 only, deprecated will be removed in next version - please use onRegionIsChanging.\n*signature:*`(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean, isAnimatingFromGesture: boolean}}) => void`"
       },
       {
         "name": "onMapIdle",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean, isAnimatingFromGesture: boolean}}) => void"
+        },
         "default": "none",
-        "description": "iOS, v10 only, deprecated will be removed in next version - please use onRegionDidChange"
+        "description": "iOS, v10 only, deprecated will be removed in next version - please use onRegionDidChange\n*signature:*`(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean, isAnimatingFromGesture: boolean}}) => void`"
       },
       {
         "name": "onWillStartLoadingMap",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "() => void"
+        },
         "default": "none",
-        "description": "This event is triggered when the map is about to start loading a new map style."
+        "description": "This event is triggered when the map is about to start loading a new map style.\n*signature:*`() => void`"
       },
       {
         "name": "onDidFinishLoadingMap",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "() => void"
+        },
         "default": "none",
-        "description": "This is triggered when the map has successfully loaded a new map style."
+        "description": "This is triggered when the map has successfully loaded a new map style.\n*signature:*`() => void`"
       },
       {
         "name": "onDidFailLoadingMap",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "() => void"
+        },
         "default": "none",
-        "description": "This event is triggered when the map has failed to load a new map style. On v10 it's deprecated and replaced by onMapLoadingError"
+        "description": "This event is triggered when the map has failed to load a new map style. On v10 it's deprecated and replaced by onMapLoadingError\n@deprecated use onMapLoadingError\n*signature:*`() => void`"
       },
       {
         "name": "onMapLoadingError",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "() => void"
+        },
         "default": "none",
-        "description": "This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap."
+        "description": "This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.\n*signature:*`() => void`"
       },
       {
         "name": "onWillStartRenderingFrame",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "() => void"
+        },
         "default": "none",
-        "description": "This event is triggered when the map will start rendering a frame."
+        "description": "This event is triggered when the map will start rendering a frame.\n*signature:*`() => void`"
       },
       {
         "name": "onDidFinishRenderingFrame",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "() => void"
+        },
         "default": "none",
-        "description": "This event is triggered when the map finished rendering a frame."
+        "description": "This event is triggered when the map finished rendering a frame.\n*signature:*`() => void`"
       },
       {
         "name": "onDidFinishRenderingFrameFully",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "() => void"
+        },
         "default": "none",
-        "description": "This event is triggered when the map fully finished rendering a frame."
+        "description": "This event is triggered when the map fully finished rendering a frame.\n*signature:*`() => void`"
       },
       {
         "name": "onWillStartRenderingMap",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "() => void"
+        },
         "default": "none",
-        "description": "This event is triggered when the map will start rendering the map."
+        "description": "This event is triggered when the map will start rendering the map.\n*signature:*`() => void`"
       },
       {
         "name": "onDidFinishRenderingMap",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "() => void"
+        },
         "default": "none",
-        "description": "This event is triggered when the map finished rendering the map."
+        "description": "This event is triggered when the map finished rendering the map.\n*signature:*`() => void`"
       },
       {
         "name": "onDidFinishRenderingMapFully",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "() => void"
+        },
         "default": "none",
-        "description": "This event is triggered when the map fully finished rendering the map."
+        "description": "This event is triggered when the map fully finished rendering the map.\n*signature:*`() => void`"
       },
       {
         "name": "onUserLocationUpdate",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(feature:Location) => void"
+        },
         "default": "none",
-        "description": "This event is triggered when the user location is updated."
+        "description": "This event is triggered when the user location is updated.\n*signature:*`(feature:Location) => void`"
       },
       {
         "name": "onDidFinishLoadingStyle",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "() => void"
+        },
         "default": "none",
-        "description": "This event is triggered when a style has finished loading."
+        "description": "This event is triggered when a style has finished loading.\n*signature:*`() => void`"
       },
       {
         "name": "regionWillChangeDebounceTime",
@@ -3226,10 +3462,7 @@
         "description": "The emitted frequency of regiondidchange events"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "MapView.js",
+    "fileNameWithExt": "MapView.tsx",
     "name": "MapView"
   },
   "MarkerView": {
@@ -3489,12 +3722,7 @@
       {
         "name": "tileUrlTemplates",
         "required": false,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": "string"
-          }
-        },
+        "type": "Array",
         "default": "none",
         "description": "An array of tile URL templates. If multiple endpoints are specified, clients may use any combination of endpoints.\nExample: https://example.com/raster-tiles/{z}/{x}/{y}.png"
       },
@@ -3518,12 +3746,16 @@
         "type": "number",
         "default": "none",
         "description": "Size of the map tiles.\nMapbox urls default to 256, all others default to 512."
+      },
+      {
+        "name": "children",
+        "required": false,
+        "type": "React.ReactElement \\| React.ReactElement[]",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "RasterDemSource.js",
+    "fileNameWithExt": "RasterDemSource.tsx",
     "name": "RasterDemSource"
   },
   "RasterLayer": {
@@ -3805,12 +4037,7 @@
       {
         "name": "tileUrlTemplates",
         "required": false,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": "string"
-          }
-        },
+        "type": "Array",
         "default": "none",
         "description": "An array of tile URL templates. If multiple endpoints are specified, clients may use any combination of endpoints.\nExample: https://example.com/raster-tiles/{z}/{x}/{y}.png"
       },
@@ -3838,7 +4065,7 @@
       {
         "name": "tms",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "none",
         "description": "Influences the y direction of the tile coordinates. (tms inverts y axis)"
       },
@@ -3848,12 +4075,16 @@
         "type": "string",
         "default": "none",
         "description": "An HTML or literal text string defining the buttons to be displayed in an action sheet when the\nsource is part of a map view’s style and the map view’s attribution button is pressed."
+      },
+      {
+        "name": "children",
+        "required": false,
+        "type": "React.ReactElement \\| React.ReactElement[]",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "RasterSource.js",
+    "fileNameWithExt": "RasterSource.tsx",
     "name": "RasterSource"
   },
   "ShapeSource": {
@@ -4089,10 +4320,10 @@
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "(event:{features: Array, coordinates: {latitude: number, longitude: number}, point: {x: number, y: number}}) => void"
+          "funcSignature": "(event:OnPressEvent) => void"
         },
         "default": "none",
-        "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers\n\n@param {Object} event\n@param {Object[]} event.features - the geojson features that have hit by the press (might be multiple)\n@param {Object} event.coordinates - the coordinates of the click\n@param {Object} event.point - the point of the click\n@return void\n*signature:*`(event:{features: Array, coordinates: {latitude: number, longitude: number}, point: {x: number, y: number}}) => void`"
+        "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers\n\n@param {Object} event\n@param {Object[]} event.features - the geojson features that have hit by the press (might be multiple)\n@param {Object} event.coordinates - the coordinates of the click\n@param {Object} event.point - the point of the click\n@return void\n*signature:*`(event:OnPressEvent) => void`"
       },
       {
         "name": "hitbox",
@@ -5528,7 +5759,7 @@
         "type": "color",
         "values": [],
         "default": "#000000",
-        "description": "The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/usingRecolorableImagesInMapboxMaps/).",
+        "description": "The color of the icon. This can only be used with [SDF icons](https://docs.mapbox.com/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).",
         "requires": [
           "iconImage"
         ],
@@ -5549,7 +5780,7 @@
         "type": "color",
         "values": [],
         "default": "rgba(0, 0, 0, 0)",
-        "description": "The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/usingRecolorableImagesInMapboxMaps/).",
+        "description": "The color of the icon's halo. Icon halos can only be used with [SDF icons](https://docs.mapbox.com/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).",
         "requires": [
           "iconImage"
         ],
@@ -6059,7 +6290,7 @@
             "name": "event",
             "optional": false,
             "type": {
-              "name": null
+              "name": "NativeSyntheticEvent"
             }
           }
         ],
@@ -6084,12 +6315,7 @@
       {
         "name": "tileUrlTemplates",
         "required": false,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": "string"
-          }
-        },
+        "type": "Array",
         "default": "none",
         "description": "An array of tile URL templates. If multiple endpoints are specified, clients may use any combination of endpoints.\nExample: https://example.com/vector-tiles/{z}/{x}/{y}.pbf"
       },
@@ -6110,7 +6336,7 @@
       {
         "name": "tms",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "none",
         "description": "Influences the y direction of the tile coordinates. (tms inverts y axis)"
       },
@@ -6124,48 +6350,12 @@
       {
         "name": "onPress",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(event:OnPressEvent) => void"
+        },
         "default": "none",
-        "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers",
-        "params": [
-          {
-            "name": "event",
-            "description": null,
-            "type": {
-              "name": "Object"
-            },
-            "optional": false
-          },
-          {
-            "name": "event.features",
-            "description": "the geojson features that have hit by the press (might be multiple)",
-            "type": {
-              "name": "Array",
-              "elements": [
-                {
-                  "name": "Object"
-                }
-              ]
-            },
-            "optional": false
-          },
-          {
-            "name": "event.coordinates",
-            "description": "the coordinates of the click",
-            "type": {
-              "name": "Object"
-            },
-            "optional": false
-          },
-          {
-            "name": "event.point",
-            "description": "the point of the click",
-            "type": {
-              "name": "Object"
-            },
-            "optional": false
-          }
-        ]
+        "description": "Source press listener, gets called when a user presses one of the children layers only\nif that layer has a higher z-index than another source layers\n\n@param {Object} event\n@param {Object[]} event.features - the geojson features that have hit by the press (might be multiple)\n@param {Object} event.coordinates - the coordinates of the click\n@param {Object} event.point - the point of the click\n*signature:*`(event:OnPressEvent) => void`"
       },
       {
         "name": "hitbox",
@@ -6191,17 +6381,21 @@
         },
         "default": "none",
         "description": "Overrides the default touch hitbox(44x44 pixels) for the source layers"
+      },
+      {
+        "name": "children",
+        "required": true,
+        "type": "React.ReactElement \\| React.ReactElement[]",
+        "default": "none",
+        "description": "FIX ME NO DESCRIPTION"
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "VectorSource.js",
+    "fileNameWithExt": "VectorSource.tsx",
     "name": "VectorSource"
   },
   "coordinates": {
     "name": "coordinates",
-    "fileNameWithExt": "locationManager.tsx",
+    "fileNameWithExt": "locationManager.ts",
     "description": "Coorinates sent by locationManager",
     "props": [],
     "styles": [],
@@ -6209,7 +6403,7 @@
   },
   "location": {
     "name": "location",
-    "fileNameWithExt": "locationManager.tsx",
+    "fileNameWithExt": "locationManager.ts",
     "description": "Location sent by locationManager",
     "props": [],
     "styles": [],
@@ -6217,7 +6411,7 @@
   },
   "locationManager": {
     "name": "locationManager",
-    "fileNameWithExt": "locationManager.tsx",
+    "fileNameWithExt": "locationManager.ts",
     "description": "LocationManager is a singleton, see ",
     "props": [],
     "styles": [],
@@ -6249,7 +6443,7 @@
   },
   "offlineManager": {
     "name": "offlineManager",
-    "fileNameWithExt": "offlineManager.js",
+    "fileNameWithExt": "offlineManager.ts",
     "description": "OfflineManager implements a singleton (shared object) that manages offline packs.\nAll of this class’s instance methods are asynchronous, reflecting the fact that offline resources are stored in a database.\nThe shared object maintains a canonical collection of offline packs.",
     "props": [],
     "styles": [],
@@ -6590,7 +6784,7 @@
   },
   "snapshotManager": {
     "name": "snapshotManager",
-    "fileNameWithExt": "snapshotManager.js",
+    "fileNameWithExt": "snapshotManager.ts",
     "description": "The snapshotManager generates static raster images of the map.\nEach snapshot image depicts a portion of a map defined by an SnapshotOptions object you provide.\nThe snapshotter generates the snapshot asynchronous.",
     "props": [],
     "styles": [],

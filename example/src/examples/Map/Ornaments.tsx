@@ -1,15 +1,16 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import MapboxGL from '@rnmapbox/maps';
-import { Button, StyleSheet, Text } from 'react-native';
+import { Button, StyleSheet, Text, ImageSourcePropType } from 'react-native';
 import { Divider } from '@rneui/base';
 
 import sheet from '../../styles/sheet';
 import Page from '../common/Page';
 import Bubble from '../common/Bubble';
 import { Images } from '../../../../javascript';
+import { BaseExampleProps } from '../common/BaseExamplePropTypes';
 
 type CompassImage = 'compass1' | 'compass2';
-const images: Record<CompassImage, NodeRequire> = {
+const images: Record<CompassImage, ImageSourcePropType> = {
   compass1: require('../../assets/compass1.png'),
   compass2: require('../../assets/compass2.png'),
 };
@@ -43,13 +44,13 @@ type OrnamentButtonsProps = {
   onPressPosition: (ornamentType: OrnamentType) => void;
 };
 
-const OrnamentButtons: FC<OrnamentButtonsProps> = ({
+const OrnamentButtons = ({
   ornamentType,
   visibility,
   position,
   onPressVisibility,
   onPressPosition,
-}) => (
+}: OrnamentButtonsProps) => (
   <>
     <Button
       title={'Visiblity: ' + visibility[ornamentType]}
@@ -62,7 +63,7 @@ const OrnamentButtons: FC<OrnamentButtonsProps> = ({
   </>
 );
 
-const ShowMap: FC<any> = (props) => {
+const Ornaments = (props: BaseExampleProps) => {
   const [visibility, setVisibility] = useState({
     [OrnamentType.Logo]: undefined,
     [OrnamentType.Attribution]: undefined,
@@ -183,7 +184,7 @@ const ShowMap: FC<any> = (props) => {
           onPress={() => {
             if (compassFadeWhenNorth === undefined) {
               setCompassFadeWhenNorth(true);
-            } else if (compassFadeWhenNorth === true) {
+            } else if (compassFadeWhenNorth) {
               setCompassFadeWhenNorth(false);
             } else {
               setCompassFadeWhenNorth(undefined);
@@ -220,4 +221,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ShowMap;
+export default Ornaments;

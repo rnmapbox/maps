@@ -5,8 +5,9 @@ import { NativeMethods, processColor } from 'react-native';
 import { getFilter } from '../utils/filterUtils';
 import { AllLayerStyleProps, FilterExpression } from '../utils/MapboxStyles';
 import { transformStyle } from '../utils/StyleValue';
+import type { BaseProps } from '../types/BaseProps';
 
-type PropsBase = {
+type PropsBase = BaseProps & {
   id: string;
   sourceID?: string;
   minZoomLevel?: number;
