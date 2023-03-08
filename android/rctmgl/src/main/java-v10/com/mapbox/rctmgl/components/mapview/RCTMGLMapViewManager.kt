@@ -102,11 +102,6 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
         //mapView.setReactPreferredFramesPerSecond(preferredFramesPerSecond);
     }
 
-    @ReactProp(name = "localizeLabels")
-    fun setLocalizeLabels(mapView: RCTMGLMapView?, localizeLabels: Boolean) {
-        //mapView.setLocalizeLabels(localizeLabels);
-    }
-
     @ReactProp(name = "zoomEnabled")
     fun setZoomEnabled(mapView: RCTMGLMapView, zoomEnabled: Boolean) {
         mapView.gestures.pinchToZoomEnabled = zoomEnabled

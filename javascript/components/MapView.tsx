@@ -78,6 +78,16 @@ export type MapState = {
   };
 };
 
+/**
+ * v10 only
+ */
+export interface Locale {
+  // locale code or "current" for the device's current locale
+  locale: string;
+  // layer id to localize. If not specified, all layers will be localized
+  layerIds?: string[];
+}
+
 type Props = ViewProps & {
   /**
    * The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport.
@@ -109,12 +119,6 @@ type Props = ViewProps & {
    * This property can be set to arbitrary integer values.
    */
   preferredFramesPerSecond?: number;
-
-  /**
-   * Automatically change the language of the map labels to the system’s preferred language,
-   * this is not something that can be toggled on/off
-   */
-  localizeLabels?: boolean;
 
   /**
    * Enable/Disable zoom on the map
@@ -213,6 +217,12 @@ type Props = ViewProps & {
    * [Android only] Enable/Disable use of GLSurfaceView instead of TextureView.
    */
   surfaceView?: boolean;
+
+  /**
+   * [`mapbox` (v10) implementation only]
+   * Set map's label locale, e.g. { "locale": "es" } will localize labels to Spanish, { "locale": "current" } will localize labels to system locale.
+   */
+  localizeLabels?: Locale;
 
   /**
    * Map press listener, gets called when a user presses the map
@@ -371,7 +381,6 @@ class MapView extends NativeBridgeComponent(
 ) {
   static defaultProps: Props = {
     projection: 'mercator',
-    localizeLabels: false,
     scrollEnabled: true,
     pitchEnabled: true,
     rotateEnabled: true,
@@ -934,15 +943,20 @@ class MapView extends NativeBridgeComponent(
     }
   }
 
-  _setLocalizeLabels(props) {
-    if (!props.localizeLabels) {
+  _setLocalizeLabels(props: Props) {
+    if (!MapboxGL.MapboxV10) {
       return;
     }
-    // if localizeLabels is a truthy value and not object, set it to the default locale
-    if (props.localizeLabels !== "object") {
+    if (typeof props.localizeLabels === 'boolean') {
+      console.warn(
+        'boolean value of localizeLabels is deprecated. Please set this as Locale object instead',
+      );
+      props.localizeLabels = undefined;
+    }
+    if (!props.localizeLabels) {
       props.localizeLabels = {
-        locale: "en"
-      }
+        locale: 'current',
+      };
     }
   }
 

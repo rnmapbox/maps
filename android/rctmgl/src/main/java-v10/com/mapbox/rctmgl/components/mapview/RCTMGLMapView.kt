@@ -247,7 +247,6 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 savedStyle = style
                 setUpImage(style)
                 addQueuedFeaturesToMap()
-                setupLocalization(style)
                 setReactLocalizeLabels(mLocaleString, mLocaleLayerIds)
             }
         })
@@ -511,16 +510,16 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         }
     }
 
-    fun setReactLocalizeLabels(locale: String?, layerIds: List<String>?) {
-        if (locale != null) {
-            mLocaleString = locale
+    fun setReactLocalizeLabels(localeStr: String?, layerIds: List<String>?) {
+        if (localeStr != null) {
+            mLocaleString = localeStr
             mLocaleLayerIds = layerIds
         }
-        if (locale != null && mMap != null) {
-            mMap.getStyle()?.localizeLabels(Locale(locale), layerIds)
+        if (localeStr != null && mMap != null) {
+            val locale = if (localeStr == "current") Locale.getDefault() else Locale(localeStr)
+            mMap.getStyle()?.localizeLabels(locale, layerIds)
         }
     }
-    
 
     fun setReactStyleURL(styleURL: String) {
         mStyleURL = styleURL
@@ -750,19 +749,6 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             Logger.e(LOG_TAG, "An error occurred while attempting to make the region", ex)
         }
         return GeoJSONUtils.toPointFeature(latLng, properties)
-    }
-
-    private fun setupLocalization(style: Style) {
-        /*
-        mLocalizationPlugin = new LocalizationPlugin(RCTMGLMapView.this, mMap, style);
-        if (mLocalizeLabels) {
-            try {
-                mLocalizationPlugin.matchMapLanguageWithDeviceDefault();
-            } catch (Exception e) {
-                final String localeString = Locale.getDefault().toString();
-                Logger.w(LOG_TAG, String.format("Could not find matching locale for %s", localeString));
-            }
-        }*/
     }
 
     /**
