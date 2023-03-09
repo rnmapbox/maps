@@ -4,7 +4,7 @@ import locationManager from '../modules/location/locationManager';
 import { type Location } from '../modules/location/locationManager';
 import { CircleLayerStyle } from '../Mapbox';
 
-import Annotation from './annotations/Annotation';
+import Annotation from './Annotation';
 import CircleLayer from './CircleLayer';
 import HeadingIndicator from './HeadingIndicator';
 import NativeUserLocation from './NativeUserLocation';
