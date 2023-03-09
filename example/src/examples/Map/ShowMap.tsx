@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Alert } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import Mapbox from '@rnmapbox/maps';
 
 import sheet from '../../styles/sheet';
 import { onSortOptions } from '../../utils';
@@ -8,11 +8,11 @@ import TabBarPage from '../common/TabBarPage';
 import { BaseExampleProps } from '../common/BaseExamplePropTypes';
 
 const ShowMap = (props: BaseExampleProps) => {
-  const _mapOptions = Object.keys(MapboxGL.StyleURL)
+  const _mapOptions = Object.keys(Mapbox.StyleURL)
     .map((key) => {
       return {
         label: key,
-        data: (MapboxGL.StyleURL as any)[key], // bad any, because enums
+        data: (Mapbox.StyleURL as any)[key], // bad any, because enums
       };
     })
     .sort(onSortOptions);
@@ -20,14 +20,14 @@ const ShowMap = (props: BaseExampleProps) => {
   const [styleURL, setStyleURL] = useState({ styleURL: _mapOptions[0].data });
 
   useEffect(() => {
-    MapboxGL.locationManager.start();
+    Mapbox.locationManager.start();
 
     return (): void => {
-      MapboxGL.locationManager.stop();
+      Mapbox.locationManager.stop();
     };
   }, []);
 
-  const onMapChange = (index: number, newStyleURL: MapboxGL.StyleURL): void => {
+  const onMapChange = (index: number, newStyleURL: Mapbox.StyleURL): void => {
     setStyleURL({ styleURL: newStyleURL });
   };
 
@@ -42,15 +42,15 @@ const ShowMap = (props: BaseExampleProps) => {
       options={_mapOptions}
       onOptionPress={onMapChange}
     >
-      <MapboxGL.MapView
+      <Mapbox.MapView
         styleURL={styleURL.styleURL}
         style={sheet.matchParent}
         testID={'show-map'}
       >
-        <MapboxGL.Camera followZoomLevel={12} followUserLocation />
+        <Mapbox.Camera followZoomLevel={12} followUserLocation />
 
-        <MapboxGL.UserLocation onPress={onUserMarkerPress} />
-      </MapboxGL.MapView>
+        <Mapbox.UserLocation onPress={onUserMarkerPress} />
+      </Mapbox.MapView>
     </TabBarPage>
   );
 };

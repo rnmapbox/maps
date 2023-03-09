@@ -1995,7 +1995,7 @@
       },
       {
         "name": "coordinates",
-        "required": true,
+        "required": false,
         "type": "tuple",
         "default": "none",
         "description": "The top left, top right, bottom right, and bottom left coordinates for the image."
@@ -2649,7 +2649,7 @@
             "name": "coordinate",
             "description": "A point expressed in the map view's coordinate system.",
             "type": {
-              "name": "tuple"
+              "name": "Position"
             },
             "optional": false
           }
@@ -2660,16 +2660,7 @@
             "name": "Promise",
             "elements": [
               {
-                "name": "tuple",
-                "raw": "[number, number]",
-                "elements": [
-                  {
-                    "name": "number"
-                  },
-                  {
-                    "name": "number"
-                  }
-                ]
+                "name": "Position"
               }
             ],
             "raw": "Promise<Position>"
@@ -2691,7 +2682,7 @@
             "name": "point",
             "description": "A point expressed in the given view’s coordinate system.",
             "type": {
-              "name": "tuple"
+              "name": "Position"
             },
             "optional": false
           }
@@ -2702,16 +2693,7 @@
             "name": "Promise",
             "elements": [
               {
-                "name": "tuple",
-                "raw": "[number, number]",
-                "elements": [
-                  {
-                    "name": "number"
-                  },
-                  {
-                    "name": "number"
-                  }
-                ]
+                "name": "Position"
               }
             ],
             "raw": "Promise<Position>"
@@ -2739,28 +2721,10 @@
                 "raw": "[Position, Position]",
                 "elements": [
                   {
-                    "name": "tuple",
-                    "raw": "[number, number]",
-                    "elements": [
-                      {
-                        "name": "number"
-                      },
-                      {
-                        "name": "number"
-                      }
-                    ]
+                    "name": "Position"
                   },
                   {
-                    "name": "tuple",
-                    "raw": "[number, number]",
-                    "elements": [
-                      {
-                        "name": "number"
-                      },
-                      {
-                        "name": "number"
-                      }
-                    ]
+                    "name": "Position"
                   }
                 ]
               }
@@ -2784,7 +2748,7 @@
             "name": "coordinate",
             "description": "A point expressed in the map view’s coordinate system.",
             "type": {
-              "name": "tuple"
+              "name": "Position"
             },
             "optional": false
           },
@@ -2966,16 +2930,7 @@
             "name": "Promise",
             "elements": [
               {
-                "name": "tuple",
-                "raw": "[number, number]",
-                "elements": [
-                  {
-                    "name": "number"
-                  },
-                  {
-                    "name": "number"
-                  }
-                ]
+                "name": "Position"
               }
             ],
             "raw": "Promise<Position>"
@@ -2997,7 +2952,7 @@
             "name": "coordinate",
             "description": "the coordinates to query elevation at",
             "type": {
-              "name": "tuple"
+              "name": "Position"
             },
             "optional": false
           }
@@ -3466,7 +3421,7 @@
       {
         "name": "coordinate",
         "required": true,
-        "type": "tuple",
+        "type": "Position",
         "default": "none",
         "description": "The center point (specified as a map coordinate) of the marker."
       },
@@ -3596,7 +3551,7 @@
       {
         "name": "coordinate",
         "required": true,
-        "type": "tuple",
+        "type": "Position",
         "default": "none",
         "description": "The center point (specified as a map coordinate) of the annotation."
       },
@@ -3678,7 +3633,7 @@
       {
         "name": "children",
         "required": true,
-        "type": "ReactReactElement",
+        "type": "React.ReactElement \\| [React.ReactElement, React.ReactElement]",
         "default": "none",
         "description": "Expects one child, and an optional callout can be added as well"
       },
@@ -4345,7 +4300,7 @@
       },
       {
         "name": "children",
-        "required": true,
+        "required": false,
         "type": "React.ReactElement \\| React.ReactElement[]",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
@@ -4621,13 +4576,13 @@
     "props": [
       {
         "name": "json",
-        "required": false,
-        "type": "any",
+        "required": true,
+        "type": "MapboxJSON \\| URL",
         "default": "none",
         "description": "A JSON object conforming to the schema described in the Mapbox Style Specification , or a URL to such JSON."
       }
     ],
-    "fileNameWithExt": "Style.js",
+    "fileNameWithExt": "Style.tsx",
     "name": "Style"
   },
   "SymbolLayer": {
@@ -6057,7 +6012,7 @@
     "props": [
       {
         "name": "sourceID",
-        "required": true,
+        "required": false,
         "type": "string",
         "default": "none",
         "description": "Name of a source of raster_dem type to be used for terrain elevation."
@@ -6071,7 +6026,7 @@
       },
       {
         "name": "style",
-        "required": true,
+        "required": false,
         "type": "TerrainLayerStyleProps",
         "default": "none",
         "description": "Customizable style attributes"
@@ -6377,7 +6332,7 @@
       },
       {
         "name": "children",
-        "required": true,
+        "required": false,
         "type": "React.ReactElement \\| React.ReactElement[]",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"

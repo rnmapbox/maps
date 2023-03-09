@@ -136,7 +136,7 @@ export type Props = {
     height: number;
   };
 
-  children: React.ReactElement | React.ReactElement[];
+  children?: React.ReactElement | React.ReactElement[];
 };
 
 /**

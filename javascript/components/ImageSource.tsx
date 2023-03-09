@@ -29,7 +29,7 @@ type Props = BaseProps & {
   /**
    * The top left, top right, bottom right, and bottom left coordinates for the image.
    */
-  coordinates: [Position, Position, Position, Position];
+  coordinates?: [Position, Position, Position, Position];
 
   children?: React.ReactElement | React.ReactElement[];
 };

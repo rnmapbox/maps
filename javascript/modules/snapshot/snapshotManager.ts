@@ -1,5 +1,6 @@
 import { NativeModules } from 'react-native';
 
+export type { default as SnapshotOptions } from './SnapshotOptions';
 import SnapshotOptions from './SnapshotOptions';
 
 const MapboxGLSnapshotManger = NativeModules.MGLSnapshotModule;

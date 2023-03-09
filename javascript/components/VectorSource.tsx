@@ -85,7 +85,7 @@ interface Props {
     height: number;
   };
 
-  children: React.ReactElement | React.ReactElement[];
+  children?: React.ReactElement | React.ReactElement[];
 }
 
 //interface NativeProps extends Omit<Props, 'children'> {}

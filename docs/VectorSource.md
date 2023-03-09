@@ -17,7 +17,7 @@ The location of and metadata about the tiles are defined either by an option dic
 | hitbox | `shape` | `none` | `false` | Overrides the default touch hitbox(44x44 pixels) for the source layers |
 | &nbsp;&nbsp;width | `number` | `none` | `true` | `width` of hitbox |
 | &nbsp;&nbsp;height | `number` | `none` | `true` | `height` of hitbox |
-| children | `React.ReactElement \| React.ReactElement[]` | `none` | `true` | FIX ME NO DESCRIPTION |
+| children | `React.ReactElement \| React.ReactElement[]` | `none` | `false` | FIX ME NO DESCRIPTION |
 
 ## methods
 ### features([layerIDs][, filter])

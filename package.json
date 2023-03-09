@@ -8,7 +8,7 @@
   "author": "React Native Mapbox Team",
   "main": "lib/commonjs/index.js",
   "browser": "./javascript/index.web.js",
-  "react-native": "javascript/index.js",
+  "react-native": "javascript/index.ts",
   "keywords": [
     "gl",
     "ios",
@@ -122,7 +122,7 @@
     "*.{js,jsx,ts,tsx}": "eslint --fix"
   },
   "module": "lib/module/index.js",
-  "types": "index.d.ts",
+  "types": "lib/typescript/index.d.ts",
   "files": [
     "javascript",
     "lib",

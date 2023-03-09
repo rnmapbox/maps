@@ -11,7 +11,7 @@ type Props = BaseProps & {
   /**
    * Name of a source of raster_dem type to be used for terrain elevation.
    */
-  sourceID: string;
+  sourceID?: string;
 
   /**
    * Deprecated, use exaggeration in style instead
@@ -21,7 +21,11 @@ type Props = BaseProps & {
   /**
    * Customizable style attributes
    */
-  style: TerrainLayerStyleProps;
+  style?: TerrainLayerStyleProps;
+};
+
+type NativeProps = Omit<Props, 'style'> & {
+  reactStyle?: { [key: string]: StyleValue };
 };
 
 export const Terrain = memo((props: Props) => {
@@ -46,8 +50,5 @@ export const Terrain = memo((props: Props) => {
   return <RCTMGLTerrain {...baseProps} />;
 });
 
-const RCTMGLTerrain: HostComponent<{
-  sourceID: string;
-  reactStyle?: { [key: string]: StyleValue };
-  style?: undefined;
-}> = requireNativeComponent(NATIVE_MODULE_NAME);
+const RCTMGLTerrain: HostComponent<NativeProps> =
+  requireNativeComponent(NATIVE_MODULE_NAME);

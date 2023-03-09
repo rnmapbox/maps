@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+
+import { FilterExpression } from '../utils/MapboxStyles';
 
 import CircleLayer from './CircleLayer';
 import RasterLayer from './RasterLayer';
@@ -14,7 +15,7 @@ import RasterSource from './RasterSource';
 import ImageSource from './ImageSource';
 import { ShapeSource } from './ShapeSource';
 
-function toCamelCase(s) {
+function toCamelCase(s: string): string {
   return s.replace(/([-_][a-z])/gi, ($1) => {
     return $1.toUpperCase().replace('-', '').replace('_', '');
   });
@@ -22,11 +23,13 @@ function toCamelCase(s) {
 
 // Patches the Mapbox Style Specification keys into the style props attributes:
 // icon-allow-overlap -> iconAllowOverlap
-function toCamelCaseKeys(oldObj) {
+function toCamelCaseKeys(oldObj?: { [key: string]: unknown }): {
+  [key: string]: unknown;
+} {
   if (!oldObj) {
     return {};
   }
-  const newObj = {};
+  const newObj: { [key: string]: unknown } = {};
   Object.keys(oldObj).forEach((key) => {
     const value = oldObj[key];
     if (key.includes('-')) {
@@ -38,7 +41,7 @@ function toCamelCaseKeys(oldObj) {
   return newObj;
 }
 
-function getLayerComponentType(layer) {
+function getLayerComponentType(layer: { type: string }) {
   const { type } = layer;
 
   switch (type) {
@@ -65,8 +68,10 @@ function getLayerComponentType(layer) {
   return null;
 }
 
-function asLayerComponent(layer) {
-  const LayerComponent = getLayerComponentType(layer);
+function asLayerComponent(layer: MapboxJSONLayer) {
+  type GenericProps = { key?: string; id: string };
+  const LayerComponent: typeof React.PureComponent<GenericProps> | null =
+    getLayerComponentType(layer) as typeof React.PureComponent<GenericProps>;
   if (!LayerComponent) {
     return null;
   }
@@ -76,7 +81,14 @@ function asLayerComponent(layer) {
     ...toCamelCaseKeys(layer.layout),
   };
 
-  const layerProps = {};
+  const layerProps: {
+    sourceID?: string;
+    sourceLayerID?: string;
+    minZoomLevel?: number;
+    maxZoomLevel?: number;
+    filter?: FilterExpression;
+    style?: object;
+  } = {};
 
   if (layer.source) {
     layerProps.sourceID = layer.source;
@@ -100,8 +112,17 @@ function asLayerComponent(layer) {
   return <LayerComponent key={layer.id} id={layer.id} {...layerProps} />;
 }
 
-function getTileSourceProps(source) {
-  const sourceProps = {};
+type SourceProps = {
+  url?: string;
+  tileUrlTemplates?: string[];
+  minZoomLevel?: number;
+  maxZoomLevel?: number;
+  attribution?: string;
+  tms?: boolean;
+};
+
+function getTileSourceProps(source: MapboxJSONSource): SourceProps {
+  const sourceProps: SourceProps = {};
   if (source.url) {
     sourceProps.url = source.url;
   }
@@ -123,20 +144,22 @@ function getTileSourceProps(source) {
   return sourceProps;
 }
 
-function getVectorSource(id, source) {
+function getVectorSource(id: string, source: MapboxJSONSource) {
   const sourceProps = { ...getTileSourceProps(source) };
   return <VectorSource key={id} id={id} {...sourceProps} />;
 }
 
-function getRasterSource(id, source) {
-  const sourceProps = { ...getTileSourceProps(source) };
+function getRasterSource(id: string, source: MapboxJSONSource) {
+  const sourceProps: { tileSize?: number } & SourceProps = {
+    ...getTileSourceProps(source),
+  };
   if (source.tileSize) {
     sourceProps.tileSize = source.tileSize;
   }
   return <RasterSource key={id} id={id} {...sourceProps} />;
 }
 
-function getImageSource(id, source) {
+function getImageSource(id: string, source: MapboxJSONSource) {
   const sourceProps = {
     url: source.url,
     coordinates: source.coordinates,
@@ -144,12 +167,24 @@ function getImageSource(id, source) {
   return <ImageSource key={id} id={id} {...sourceProps} />;
 }
 
-function getShapeSource(id, source) {
-  const sourceProps = {};
+type ShapeShourceShape = typeof ShapeSource.prototype.props['shape'];
+
+function getShapeSource(id: string, source: MapboxJSONSource) {
+  const sourceProps: {
+    url?: string;
+    shape?: ShapeShourceShape;
+    cluster?: boolean;
+    clusterRadius?: number;
+    clusterMaxZoomLevel?: number;
+    clusterProperties?: object;
+    buffer?: number;
+    tolerance?: number;
+    lineMetrics?: boolean;
+  } & SourceProps = {};
   if (source.data && typeof source.data === 'string') {
     sourceProps.url = source.data;
   } else if (source.data && typeof source.data === 'object') {
-    sourceProps.shape = source.data;
+    sourceProps.shape = source.data as ShapeShourceShape;
   }
   if (source.cluster !== undefined) {
     sourceProps.cluster = source.cluster;
@@ -178,7 +213,7 @@ function getShapeSource(id, source) {
   return <ShapeSource key={id} id={id} {...sourceProps} />;
 }
 
-function asSourceComponent(id, source) {
+function asSourceComponent(id: string, source: MapboxJSONSource) {
   switch (source.type) {
     case 'vector':
       return getVectorSource(id, source);
@@ -195,26 +230,79 @@ function asSourceComponent(id, source) {
   return null;
 }
 
+type MapboxJSONLayer = {
+  type: string;
+  id: string;
+  paint?: { [k: string]: unknown };
+  layout?: { [k: string]: unknown };
+  source?: string;
+  minzoom?: number;
+  maxzoom?: number;
+  filter?: FilterExpression;
+  style?: object;
+  ['source-layer']: string;
+};
+
+type MapboxJSONSource = {
+  type: string;
+  url?: string;
+  tiles?: string[];
+  minzoom?: number;
+  maxzoom?: number;
+  attribution?: string;
+  scheme?: string;
+  tileSize?: number;
+  coordinates?: [
+    [number, number],
+    [number, number],
+    [number, number],
+    [number, number],
+  ];
+  data?: string | object;
+
+  buffer: number;
+  cluster?: boolean;
+  clusterRadius?: number;
+  clusterMaxZoom?: number;
+  clusterProperties?: object;
+  tolerance?: number;
+  lineMetrics?: boolean;
+};
+
+type MapboxJSON = {
+  layers?: MapboxJSONLayer[];
+  sources?: { [key: string]: MapboxJSONSource };
+};
+
+type Props = {
+  /**
+   * A JSON object conforming to the schema described in the Mapbox Style Specification , or a URL to such JSON.
+   */
+  json: MapboxJSON | URL;
+};
+
 /**
  * Style is a component that automatically adds sources / layers to the map using Mapbox GL Style Spec.
  * Only [`sources`](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) & [`layers`](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/) are supported.
  * Other fields such as `sprites`, `glyphs` etc. will be ignored. Not all layer / source attributes from the style spec are supported, in general the supported attributes will be mentioned under https://github.com/rnmapbox/maps/tree/main/docs.
  */
-const Style = (props) => {
+const Style = (props: Props) => {
   const [fetchedJson, setFetchedJson] = useState({});
-  const json = typeof props.json === 'object' ? props.json : fetchedJson;
+  const json: MapboxJSON =
+    typeof props.json === 'object' ? props.json : fetchedJson;
 
   // Fetch style when props.json is a URL
   useEffect(() => {
     const abortController = new AbortController();
-    const fetchStyleJson = async () => {
+    const fetchStyleJson = async (json: string) => {
       try {
-        const response = await fetch(props.json, {
+        const response = await fetch(json, {
           signal: abortController.signal,
         });
         const responseJson = await response.json();
         setFetchedJson(responseJson);
-      } catch (e) {
+      } catch (error: unknown) {
+        const e = error as { name?: string };
         if (e.name === 'AbortError') {
           return;
         }
@@ -222,7 +310,7 @@ const Style = (props) => {
       }
     };
     if (typeof props.json === 'string') {
-      fetchStyleJson();
+      fetchStyleJson(props.json);
     }
     return function cleanup() {
       abortController.abort();
@@ -238,14 +326,15 @@ const Style = (props) => {
   }, [json.layers]);
 
   // Extract source components from json
+  const { sources } = json;
   const sourceComponents = useMemo(() => {
-    if (!json.sources || !Object.keys(json.sources)) {
+    if (!sources || !Object.keys(sources)) {
       return [];
     }
-    return Object.keys(json.sources)
-      .map((id) => asSourceComponent(id, json.sources[id]))
+    return Object.keys(sources)
+      .map((id) => asSourceComponent(id, sources[id]))
       .filter((x) => !!x);
-  }, [json.sources]);
+  }, [sources]);
 
   return (
     <>
@@ -253,13 +342,6 @@ const Style = (props) => {
       {layerComponents}
     </>
   );
-};
-
-Style.propTypes = {
-  /**
-   * A JSON object conforming to the schema described in the Mapbox Style Specification , or a URL to such JSON.
-   */
-  json: PropTypes.any,
 };
 
 export default Style;
