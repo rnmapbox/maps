@@ -6,9 +6,6 @@
     "access": "public"
   },
   "author": "React Native Mapbox Team",
-  "main": "lib/commonjs/index.js",
-  "browser": "./javascript/index.web.js",
-  "react-native": "javascript/index.ts",
   "keywords": [
     "gl",
     "ios",
@@ -21,6 +18,28 @@
     "type": "git",
     "url": "https://github.com/rnmapbox/maps"
   },
+  "main": "lib/commonjs/index",
+  "module": "lib/module/index",
+  "types": "lib/typescript/index.d.ts",
+  "browser": "./javascript/index.web.js",
+  "react-native": "javascript/index",
+  "source": "javascript/index",
+  "files": [
+    "javascript",
+    "lib",
+    "plugin",
+    "assets",
+    "app.plugin.js",
+    "index.d.ts",
+    "rnmapbox-maps.podspec",
+    "ios",
+    "android",
+    "react-native.config.js",
+    "setup-jest.js",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__"
+  ],
   "scripts": {
     "fetch:style:spec": ". ./scripts/download-style-spec.sh",
     "generate": "node ./scripts/autogenerate",
@@ -39,7 +58,6 @@
   "peerDependencies": {
     "expo": ">=47.0.0",
     "mapbox-gl": "^2.9.0",
-    "prop-types": ">=15.5.8",
     "react": ">=16.6.1",
     "react-native": ">=0.59.9"
   },
@@ -58,8 +76,7 @@
     "@turf/length": "6.5.0",
     "@turf/nearest-point-on-line": "6.5.0",
     "@types/geojson": "^7946.0.7",
-    "debounce": "^1.2.0",
-    "deprecated-react-native-prop-types": "^2.3.0"
+    "debounce": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "7.19.1",
@@ -80,7 +97,6 @@
     "ejs-lint": "^1.1.0",
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-ft-flow": "^2.0.1",
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-jest": "^27.0.1",
     "expo": "^47.0.0",
@@ -119,24 +135,6 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --fix"
   },
-  "module": "lib/module/index.js",
-  "types": "lib/typescript/index.d.ts",
-  "files": [
-    "javascript",
-    "lib",
-    "plugin",
-    "assets",
-    "app.plugin.js",
-    "index.d.ts",
-    "rnmapbox-maps.podspec",
-    "ios",
-    "android",
-    "react-native.config.js",
-    "setup-jest.js",
-    "!**/__tests__",
-    "!**/__fixtures__",
-    "!**/__mocks__"
-  ],
   "react-native-builder-bob": {
     "source": "javascript",
     "output": "lib",

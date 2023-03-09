@@ -7,7 +7,6 @@ import {
   Image,
   ImageSourcePropType,
 } from 'react-native';
-import PropTypes from 'prop-types';
 
 function getAndroidManagerInstance(module: string) {
   const haveViewManagerConfig =
@@ -20,13 +19,6 @@ function getAndroidManagerInstance(module: string) {
 function getIosManagerInstance(module: string): any {
   return NativeModules[getIOSModuleName(module)];
 }
-
-export const ornamentPositionPropType = PropTypes.oneOfType([
-  PropTypes.shape({ top: PropTypes.number, left: PropTypes.number }),
-  PropTypes.shape({ top: PropTypes.number, right: PropTypes.number }),
-  PropTypes.shape({ bottom: PropTypes.number, left: PropTypes.number }),
-  PropTypes.shape({ bottom: PropTypes.number, right: PropTypes.number }),
-]);
 
 export function isAndroid(): boolean {
   return Platform.OS === 'android';

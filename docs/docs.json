@@ -441,7 +441,7 @@
     "props": [
       {
         "name": "title",
-        "required": false,
+        "required": true,
         "type": "string",
         "default": "none",
         "description": "String that gets displayed in the default callout."
@@ -449,43 +449,40 @@
       {
         "name": "style",
         "required": false,
-        "type": "any",
+        "type": "ViewStyle",
         "default": "none",
         "description": "Style property for the Animated.View wrapper, apply animations to this"
       },
       {
         "name": "containerStyle",
         "required": false,
-        "type": "any",
+        "type": "ViewStyle",
         "default": "none",
         "description": "Style property for the native RCTMGLCallout container, set at your own risk."
       },
       {
         "name": "contentStyle",
         "required": false,
-        "type": "any",
+        "type": "ViewStyle",
         "default": "none",
         "description": "Style property for the content bubble."
       },
       {
         "name": "tipStyle",
         "required": false,
-        "type": "any",
+        "type": "ViewStyle",
         "default": "none",
         "description": "Style property for the triangle tip under the content."
       },
       {
         "name": "textStyle",
         "required": false,
-        "type": "any",
+        "type": "ViewStyle",
         "default": "none",
         "description": "Style property for the title in the content bubble."
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "Callout.js",
+    "fileNameWithExt": "Callout.tsx",
     "name": "Callout"
   },
   "Camera": {
