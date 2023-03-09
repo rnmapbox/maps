@@ -99,7 +99,6 @@
     "ejs-lint": "^1.1.0",
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-ft-flow": "^2.0.1",
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-jest": "^27.0.1",
     "expo": "^47.0.0",
