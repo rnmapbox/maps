@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactElement } from 'react';
 
 import locationManager from '../modules/location/locationManager';
 import { type Location } from '../modules/location/locationManager';
@@ -35,7 +35,7 @@ const layerStyles: Record<'normal', Record<string, CircleLayerStyle>> = {
 export const normalIcon = (
   showsUserHeadingIndicator?: boolean,
   heading?: number | null,
-) => [
+): ReactElement[] => [
   <CircleLayer
     key="mapboxUserLocationPulseCircle"
     id="mapboxUserLocationPulseCircle"
@@ -82,7 +82,7 @@ export type UserLocationProps = {
   /**
    * Custom location icon of type mapbox-gl-native components
    */
-  children?: ReactNode;
+  children?: ReactElement;
 
   /**
    * Minimum amount of movement before GPS location is updated in meters

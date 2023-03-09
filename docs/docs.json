@@ -93,7 +93,7 @@
       {
         "name": "children",
         "required": true,
-        "type": "ReactNode",
+        "type": "ReactElement \\| ReactElement[]",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       },
@@ -6155,7 +6155,7 @@
       {
         "name": "children",
         "required": false,
-        "type": "ReactNode",
+        "type": "ReactElement",
         "default": "none",
         "description": "Custom location icon of type mapbox-gl-native components"
       },

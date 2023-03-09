@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactElement } from 'react';
 import { Animated as RNAnimated, Easing } from 'react-native';
 import { Point } from 'geojson';
 
@@ -18,7 +18,7 @@ export type AnnotationProps = {
   animationEasingFunction?: (x: number) => number;
   coordinates: number[];
   onPress?: (event: OnPressEvent) => void;
-  children: ReactNode;
+  children: ReactElement | ReactElement[];
   style?: object;
   icon?: string | number | object;
 };
@@ -109,21 +109,32 @@ class Annotation extends React.Component<AnnotationProps, AnnotationState> {
       return null;
     }
 
+    const children = [];
+
+    if (this.symbolStyle) {
+      children.push(
+        <SymbolLayer
+          id={`${this.props.id}-symbol`}
+          style={this.symbolStyle as SymbolLayerStyle}
+        />,
+      );
+    }
+
+    if (this.props.children) {
+      if (Array.isArray(this.props.children)) {
+        children.push(...this.props.children);
+      } else {
+        children.push(this.props.children);
+      }
+    }
+
     return (
       <Animated.ShapeSource
         id={this.props.id}
         onPress={this.onPress}
         shape={this.state.shape as WithAnimatedObject<Point>}
       >
-        <>
-          {this.symbolStyle && (
-            <SymbolLayer
-              id={`${this.props.id}-symbol`}
-              style={this.symbolStyle as SymbolLayerStyle}
-            />
-          )}
-          {this.props.children}
-        </>
+        {children}
       </Animated.ShapeSource>
     );
   }

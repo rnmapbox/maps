@@ -11,7 +11,7 @@
 | animationEasingFunction | `func` | `Easing.linear` | `false` | FIX ME NO DESCRIPTION<br/>*signature:*`(x:number) => number` |
 | coordinates | `Array` | `none` | `true` | FIX ME NO DESCRIPTION |
 | onPress | `func` | `none` | `false` | FIX ME NO DESCRIPTION<br/>*signature:*`(event:OnPressEvent) => void` |
-| children | `ReactNode` | `none` | `true` | FIX ME NO DESCRIPTION |
+| children | `ReactElement \| ReactElement[]` | `none` | `true` | FIX ME NO DESCRIPTION |
 | style | `object` | `none` | `false` | FIX ME NO DESCRIPTION |
 | icon | `string \| number \| object` | `none` | `false` | FIX ME NO DESCRIPTION |
 
