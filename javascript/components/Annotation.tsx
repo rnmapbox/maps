@@ -9,8 +9,6 @@ import { SymbolLayerStyle } from '../Mapbox';
 
 import { SymbolLayer } from './SymbolLayer';
 
-import WithAnimatedObject = RNAnimated.WithAnimatedObject;
-
 type Props = {
   id: string;
   animated?: boolean;
@@ -132,7 +130,7 @@ class Annotation extends React.Component<Props, AnnotationState> {
       <Animated.ShapeSource
         id={this.props.id}
         onPress={this.onPress}
-        shape={this.state.shape as WithAnimatedObject<Point>}
+        shape={this.state.shape as RNAnimated.WithAnimatedObject<Point>}
       >
         {children}
       </Animated.ShapeSource>
