@@ -7,7 +7,15 @@
         "name": "onPress",
         "docblock": null,
         "modifiers": [],
-        "params": [],
+        "params": [
+          {
+            "name": "event",
+            "optional": false,
+            "type": {
+              "name": "OnPressEvent"
+            }
+          }
+        ],
         "returns": null
       },
       {
@@ -17,7 +25,20 @@
           "get"
         ],
         "params": [],
-        "returns": null
+        "returns": {
+          "type": {
+            "name": "union",
+            "raw": "SymbolLayerStyle | undefined",
+            "elements": [
+              {
+                "name": "SymbolLayerStyle"
+              },
+              {
+                "name": "undefined"
+              }
+            ]
+          }
+        }
       }
     ],
     "props": [
@@ -31,7 +52,7 @@
       {
         "name": "animated",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "false",
         "description": "FIX ME NO DESCRIPTION"
       },
@@ -45,52 +66,53 @@
       {
         "name": "animationEasingFunction",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(x:number) => number"
+        },
         "default": "Easing.linear",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "FIX ME NO DESCRIPTION\n*signature:*`(x:number) => number`"
       },
       {
         "name": "coordinates",
-        "required": false,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": "number"
-          }
-        },
+        "required": true,
+        "type": "Array",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       },
       {
         "name": "onPress",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(event:OnPressEvent) => void"
+        },
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "FIX ME NO DESCRIPTION\n*signature:*`(event:OnPressEvent) => void`"
       },
       {
         "name": "children",
-        "required": false,
-        "type": "any",
+        "required": true,
+        "type": "ReactNode",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       },
       {
         "name": "style",
         "required": false,
-        "type": "any",
+        "type": "object",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       },
       {
         "name": "icon",
         "required": false,
-        "type": "union",
+        "type": "string \\| number \\| object",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       }
     ],
-    "fileNameWithExt": "Annotation.js",
+    "fileNameWithExt": "Annotation.tsx",
     "name": "Annotation"
   },
   "Atmosphere": {
