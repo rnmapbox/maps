@@ -11,7 +11,7 @@ import { SymbolLayer } from './SymbolLayer';
 
 import WithAnimatedObject = RNAnimated.WithAnimatedObject;
 
-export type AnnotationProps = {
+type Props = {
   id: string;
   animated?: boolean;
   animationDuration?: number;
@@ -27,14 +27,14 @@ type AnnotationState = {
   shape: Point | AnimatedPoint | null;
 };
 
-class Annotation extends React.Component<AnnotationProps, AnnotationState> {
+class Annotation extends React.Component<Props, AnnotationState> {
   static defaultProps = {
     animated: false,
     animationDuration: 1000,
     animationEasingFunction: Easing.linear,
   };
 
-  constructor(props: AnnotationProps) {
+  constructor(props: Props) {
     super(props);
 
     const shape = this._getShapeFromProps(props);
@@ -46,7 +46,7 @@ class Annotation extends React.Component<AnnotationProps, AnnotationState> {
     this.onPress = this.onPress.bind(this);
   }
 
-  componentDidUpdate(prevProps: AnnotationProps) {
+  componentDidUpdate(prevProps: Props) {
     if (!Array.isArray(this.props.coordinates)) {
       this.setState({ shape: null });
       return;
@@ -89,7 +89,7 @@ class Annotation extends React.Component<AnnotationProps, AnnotationState> {
     }
   }
 
-  _getShapeFromProps(props: Partial<AnnotationProps> = {}): Point {
+  _getShapeFromProps(props: Partial<Props> = {}): Point {
     const lng = props.coordinates?.[0] || 0;
     const lat = props.coordinates?.[1] || 0;
     return { type: 'Point', coordinates: [lng, lat] };

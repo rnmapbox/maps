@@ -32,7 +32,7 @@ const layerStyles: Record<'normal', Record<string, CircleLayerStyle>> = {
   },
 };
 
-export const normalIcon = (
+const normalIcon = (
   showsUserHeadingIndicator?: boolean,
   heading?: number | null,
 ): ReactElement[] => [
@@ -62,7 +62,7 @@ export enum UserLocationRenderMode {
   Normal = 'normal',
 }
 
-export type UserLocationProps = {
+type Props = {
   /**
    * native/android only render mode
    *
@@ -128,10 +128,7 @@ type UserLocationState = {
   heading: number | null;
 };
 
-class UserLocation extends React.Component<
-  UserLocationProps,
-  UserLocationState
-> {
+class UserLocation extends React.Component<Props, UserLocationState> {
   static defaultProps = {
     animated: true,
     visible: true,
@@ -141,7 +138,7 @@ class UserLocation extends React.Component<
     renderMode: UserLocationRenderMode.Normal,
   };
 
-  constructor(props: UserLocationProps) {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -173,7 +170,7 @@ class UserLocation extends React.Component<
     }
   }
 
-  async componentDidUpdate(prevProps: UserLocationProps) {
+  async componentDidUpdate(prevProps: Props) {
     await this.setLocationManager({
       running: this.needsLocationManagerRunning(),
     });
