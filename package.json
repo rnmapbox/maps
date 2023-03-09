@@ -58,7 +58,6 @@
   "peerDependencies": {
     "expo": ">=47.0.0",
     "mapbox-gl": "^2.9.0",
-    "prop-types": ">=15.5.8",
     "react": ">=16.6.1",
     "react-native": ">=0.59.9"
   },
@@ -78,8 +77,7 @@
     "@turf/length": "6.5.0",
     "@turf/nearest-point-on-line": "6.5.0",
     "@types/geojson": "^7946.0.7",
-    "debounce": "^1.2.0",
-    "deprecated-react-native-prop-types": "^2.3.0"
+    "debounce": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "7.19.1",

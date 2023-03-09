@@ -31,7 +31,6 @@
     "@turf/nearest-point-on-line": "6.5.0",
     "@types/mapbox__geo-viewport": "^0.4.1",
     "debounce": "^1.2.0",
-    "deprecated-react-native-prop-types": "^2.3.0",
     "fbjs": "^3.0.0",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
