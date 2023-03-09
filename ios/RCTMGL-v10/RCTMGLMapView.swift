@@ -645,7 +645,17 @@ extension RCTMGLMapView: GestureManagerDelegate {
   }
   
   func highestZIndex(sources: [RCTMGLInteractiveElement]) -> RCTMGLInteractiveElement? {
-    return sources.first
+    var layersToSource : [String:RCTMGLInteractiveElement] = [:]
+    
+    sources.forEach { source in
+      source.getLayerIDs().forEach { layerId in
+        if layersToSource[layerId] == nil {
+          layersToSource[layerId] = source
+        }
+      }
+    }
+    let orderedLayers = mapboxMap.style.allLayerIdentifiers
+    return orderedLayers.lazy.reversed().compactMap { layersToSource[$0.id] }.first ?? sources.first
   }
   
   @objc
