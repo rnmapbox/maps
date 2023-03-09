@@ -18,7 +18,7 @@ export { ShapeSource } from './components/ShapeSource';
 export { default as RasterSource } from './components/RasterSource';
 export { default as RasterDemSource } from './components/RasterDemSource';
 export { default as ImageSource } from './components/ImageSource';
-export { default as Images } from './components/Images';
+export { default as Images, type ImageEntry } from './components/Images';
 export { default as Image } from './components/Image';
 export { default as FillLayer } from './components/FillLayer';
 export { default as FillExtrusionLayer } from './components/FillExtrusionLayer';
