@@ -10,7 +10,7 @@ export { Atmosphere } from './components/Atmosphere';
 export { default as MapView, type MapState } from './components/MapView';
 export { default as Light } from './components/Light';
 export { default as PointAnnotation } from './components/PointAnnotation';
-export { default as Annotation } from './components/annotations/Annotation';
+export { default as Annotation } from './components/Annotation';
 export { default as Callout } from './components/Callout';
 export { default as UserLocation } from './components/UserLocation';
 export { default as VectorSource } from './components/VectorSource';

@@ -7,7 +7,15 @@
         "name": "onPress",
         "docblock": null,
         "modifiers": [],
-        "params": [],
+        "params": [
+          {
+            "name": "event",
+            "optional": false,
+            "type": {
+              "name": "OnPressEvent"
+            }
+          }
+        ],
         "returns": null
       },
       {
@@ -17,7 +25,20 @@
           "get"
         ],
         "params": [],
-        "returns": null
+        "returns": {
+          "type": {
+            "name": "union",
+            "raw": "SymbolLayerStyle | undefined",
+            "elements": [
+              {
+                "name": "SymbolLayerStyle"
+              },
+              {
+                "name": "undefined"
+              }
+            ]
+          }
+        }
       }
     ],
     "props": [
@@ -31,7 +52,7 @@
       {
         "name": "animated",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "false",
         "description": "FIX ME NO DESCRIPTION"
       },
@@ -45,52 +66,53 @@
       {
         "name": "animationEasingFunction",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(x:number) => number"
+        },
         "default": "Easing.linear",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "FIX ME NO DESCRIPTION\n*signature:*`(x:number) => number`"
       },
       {
         "name": "coordinates",
-        "required": false,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": "number"
-          }
-        },
+        "required": true,
+        "type": "Array",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       },
       {
         "name": "onPress",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(event:OnPressEvent) => void"
+        },
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "FIX ME NO DESCRIPTION\n*signature:*`(event:OnPressEvent) => void`"
       },
       {
         "name": "children",
-        "required": false,
-        "type": "any",
+        "required": true,
+        "type": "ReactElement \\| ReactElement[]",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       },
       {
         "name": "style",
         "required": false,
-        "type": "any",
+        "type": "object",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       },
       {
         "name": "icon",
         "required": false,
-        "type": "union",
+        "type": "string \\| number \\| object",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       }
     ],
-    "fileNameWithExt": "Annotation.js",
+    "fileNameWithExt": "Annotation.tsx",
     "name": "Annotation"
   },
   "Atmosphere": {
@@ -6079,10 +6101,10 @@
         ],
         "params": [
           {
-            "name": "{ running }",
+            "name": "{ running }: { running?: boolean }",
             "optional": false,
             "type": {
-              "name": null
+              "name": "{running?:boolean}"
             }
           }
         ],
@@ -6117,60 +6139,25 @@
     ],
     "props": [
       {
-        "name": "animated",
-        "required": false,
-        "type": "bool",
-        "default": "true",
-        "description": "Whether location icon is animated between updates"
-      },
-      {
-        "name": "renderMode",
-        "required": false,
-        "type": "enum",
-        "default": "'normal'",
-        "description": "Which render mode to use.\nCan either be `normal` or `native`"
-      },
-      {
         "name": "androidRenderMode",
         "required": false,
-        "type": "enum",
+        "type": "'normal' \\| 'compass' \\| 'gps'",
         "default": "none",
         "description": "native/android only render mode\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@platform android"
       },
       {
-        "name": "visible",
+        "name": "animated",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "true",
-        "description": "Whether location icon is visible"
+        "description": "Whether location icon is animated between updates"
       },
       {
-        "name": "onPress",
+        "name": "children",
         "required": false,
-        "type": "func",
+        "type": "ReactElement",
         "default": "none",
-        "description": "Callback that is triggered on location icon press"
-      },
-      {
-        "name": "onUpdate",
-        "required": false,
-        "type": "func",
-        "default": "none",
-        "description": "Callback that is triggered on location update"
-      },
-      {
-        "name": "showsUserHeadingIndicator",
-        "required": false,
-        "type": "bool",
-        "default": "false",
-        "description": "Show or hide small arrow which indicates direction the device is pointing relative to north."
-      },
-      {
-        "name": "requestsAlwaysUse",
-        "required": false,
-        "type": "bool",
-        "default": "false",
-        "description": "Request the always location permission, and listen to the location even when the app is in background\n\n@platform ios"
+        "description": "Custom location icon of type mapbox-gl-native components"
       },
       {
         "name": "minDisplacement",
@@ -6180,14 +6167,55 @@
         "description": "Minimum amount of movement before GPS location is updated in meters"
       },
       {
-        "name": "children",
+        "name": "onPress",
         "required": false,
-        "type": "any",
+        "type": {
+          "name": "func",
+          "funcSignature": "() => void"
+        },
         "default": "none",
-        "description": "Custom location icon of type mapbox-gl-native components"
+        "description": "Callback that is triggered on location icon press\n*signature:*`() => void`"
+      },
+      {
+        "name": "onUpdate",
+        "required": false,
+        "type": {
+          "name": "func",
+          "funcSignature": "(location:Location) => void"
+        },
+        "default": "none",
+        "description": "Callback that is triggered on location update\n*signature:*`(location:Location) => void`"
+      },
+      {
+        "name": "renderMode",
+        "required": false,
+        "type": "UserLocationRenderMode",
+        "default": "UserLocationRenderMode.Normal",
+        "description": "Which render mode to use."
+      },
+      {
+        "name": "requestsAlwaysUse",
+        "required": false,
+        "type": "boolean",
+        "default": "false",
+        "description": "Request the always location permission, and listen to the location even when the app is in background\n\n@platform ios"
+      },
+      {
+        "name": "showsUserHeadingIndicator",
+        "required": false,
+        "type": "boolean",
+        "default": "false",
+        "description": "Show or hide small arrow which indicates direction the device is pointing relative to north."
+      },
+      {
+        "name": "visible",
+        "required": false,
+        "type": "boolean",
+        "default": "true",
+        "description": "Whether location icon is visible"
       }
     ],
-    "fileNameWithExt": "UserLocation.js",
+    "fileNameWithExt": "UserLocation.tsx",
     "name": "UserLocation"
   },
   "VectorSource": {
