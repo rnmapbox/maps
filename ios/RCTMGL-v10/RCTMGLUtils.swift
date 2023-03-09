@@ -30,9 +30,15 @@ class RCTMGLUtils {
       if (forceUpdate || foundImage == nil) {
         let image = objects[imageName]
         if let image = image as? [String:Any] {
-          let hasScale = image["scale"] != nil
-          let scale = hasScale ? (image["scale"] as! NSNumber).doubleValue : 1.0
-          RCTMGLImageQueue.sharedInstance.addImage(objects[imageName], scale: scale, bridge:bridge) {
+          let scale = (image["scale"] as? NSNumber)?.floatValue ?? 1.0
+          let sdf = (image["sdf"] as? NSNumber)?.boolValue ?? false
+          let imageStretchX = image["stretchX"] as? [[NSNumber]]
+          let stretchX: [ImageStretches] = imageStretchX != nil ? RCTMGLImages.convert(stretch: imageStretchX!, scale: scale) : []
+          let imageStretchY = image["stretchY"] as? [[NSNumber]]
+          let stretchY: [ImageStretches] = imageStretchY != nil ? RCTMGLImages.convert(stretch: imageStretchY!, scale: scale) : []
+          let content: ImageContent? = RCTMGLImages.convert(content: image["content"] as? [NSNumber], scale: scale)
+          
+          RCTMGLImageQueue.sharedInstance.addImage(objects[imageName], scale: Double(scale), bridge:bridge) {
             (error,image) in
             if image == nil {
               RCTMGLLogWarn("Failed to fetch image: \(imageName) error:\(error)")
@@ -40,8 +46,11 @@ class RCTMGLUtils {
             else {
               DispatchQueue.main.async {
                 if let image = image {
-                  try! style.addImage(image, id: imageName, stretchX: [], stretchY: [])
-                  imageLoadedBlock()
+                  logged("RCTMGLUtils.fetchImage-\(imageName)") {
+                    print("width=\(image.size.width) height=\(image.size.height) scale=\(image.scale) scale2=\(scale)")
+                    try style.addImage(image, id: imageName, sdf:sdf, stretchX: stretchX, stretchY: stretchY, content: content)
+                    imageLoadedBlock()
+                  }
                 }
               }
             }

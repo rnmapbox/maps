@@ -2027,7 +2027,7 @@
                 "name": "string"
               },
               "required": true,
-              "type": "ImageSourcePropType",
+              "type": "union",
               "default": "none",
               "description": "FIX ME NO DESCRIPTION"
             }

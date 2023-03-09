@@ -1,7 +1,7 @@
 import MapboxMaps
 
 protocol RCTMGLImageSetter : AnyObject {
-  func addImage(name: String, image: UIImage, sdf: Bool?, stretchX: [[NSNumber]], stretchY: [[NSNumber]], log: String) -> Bool
+  func addImage(name: String, image: UIImage, sdf: Bool?, stretchX: [[NSNumber]], stretchY: [[NSNumber]], content: [NSNumber]?, log: String) -> Bool
 }
 
 class RCTMGLImages : UIView, RCTMGLMapComponent {
@@ -26,7 +26,7 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
     }
   };
 
-  typealias NativeImageInfo = (name:String, sdf: Bool, stretchX:[(from:Float, to:Float)], stretchY:[(from:Float, to:Float)]);
+  typealias NativeImageInfo = (name:String, sdf: Bool, stretchX:[(from:Float, to:Float)], stretchY:[(from:Float, to:Float)], content: (left:Float,top:Float,right:Float,bottom:Float)? );
   var nativeImageInfos: [NativeImageInfo] = []
   
   @objc open override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
@@ -80,14 +80,15 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
     
     for imageName in remoteImages.keys {
       if style.styleManager.getStyleImage(forImageId: imageName) == nil {
-        try! style.addImage(placeholderImage, id: imageName, stretchX: [], stretchY: [])
-        missingImages[imageName] = remoteImages[imageName]
+        logged("RCTMGLImages.addImagePlaceholder") {
+          try? style.addImage(placeholderImage, id: imageName, stretchX: [], stretchY: [])
+          missingImages[imageName] = remoteImages[imageName]
+        }
       }
     }
     
     if missingImages.count > 0 {
       RCTMGLUtils.fetchImages(bridge, style: style, objects: missingImages, forceUpdate: true, callback: { })
-      
     }
   }
   
@@ -118,19 +119,51 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
     }
   }
   
-  func convert(stretch: [[NSNumber]]) -> [(from: Float, to: Float)] {
+  static func convert(stretch: [[NSNumber]], scale: Float = 1.0) -> [(from: Float, to: Float)] {
     return stretch.map{ pair in
-      return (from: pair[0].floatValue, to: pair[1].floatValue)
+      return (from: pair[0].floatValue * scale, to: pair[1].floatValue * scale)
     }
   }
   
-  func convert(stretch: [(from: Float, to: Float)]) -> [ImageStretches] {
+  static func convert(stretch: [(from: Float, to: Float)]) -> [ImageStretches] {
     return stretch.map { v in ImageStretches(first: v.from, second: v.to) }
+  }
+  
+  static func convert(stretch: [[NSNumber]], scale: Float = 1.0) -> [ImageStretches] {
+    return convert(stretch: convert(stretch: stretch, scale: scale))
+  }
+
+  static func convert(content: (left:Float, top:Float, right:Float, bottom:Float)?) -> ImageContent? {
+    guard let content = content else {
+      return nil
+    }
+    
+    return ImageContent(left:content.left, top:content.top, right:content.right, bottom:content.bottom)
+  }
+
+  static func convert(content: [NSNumber]?, scale: Float = 1.0) -> (left:Float,top:Float,right:Float,bottom:Float)? {
+    guard let content = content else {
+      return nil
+    }
+    guard content.count == 4 else {
+      Logger.log(level: .error, message: "Image content should have 4 elements got \(content)")
+      return nil
+    }
+    return (
+      left: content[0].floatValue*scale,
+      top: content[1].floatValue*scale,
+      right: content[2].floatValue*scale,
+      bottom: content[3].floatValue*scale
+    )
+  }
+  
+  static func convert(content: [NSNumber]?, scale: Float = 1.0) -> ImageContent? {
+    return convert(content: convert(content: content, scale: scale))
   }
   
   func decodeImage(_ imageNameOrInfo: Any) -> NativeImageInfo? {
     if let imageName = imageNameOrInfo as? String {
-      return (name: imageName, sdf: false, stretchX:[],stretchY:[])
+      return (name: imageName, sdf: false, stretchX:[],stretchY:[],content:nil)
     } else if let imageInfo = imageNameOrInfo as? [String:Any] {
       guard let name = imageInfo["name"] as? String else {
         Logger.log(level: .warn, message: "NativeImage: \(imageInfo) has no name key")
@@ -144,14 +177,19 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
       }
       
       if let stretchXV = imageInfo["stretchX"] as? [[NSNumber]] {
-        stretchX = convert(stretch: stretchXV)
+        stretchX = RCTMGLImages.convert(stretch: stretchXV)
       }
       
       if let stretchYV = imageInfo["stretchY"] as? [[NSNumber]] {
-        stretchY = convert(stretch: stretchYV)
+        stretchY = RCTMGLImages.convert(stretch: stretchYV)
       }
       
-      return (name: name, sdf: sdf, stretchX: stretchX, stretchY: stretchY)
+      var content : (left:Float, top:Float, right:Float, bottom:Float)? = nil
+      if let contentV = imageInfo["content"] as? [NSNumber] {
+        content = RCTMGLImages.convert(content: contentV)
+      }
+      
+      return (name: name, sdf: sdf, stretchX: stretchX, stretchY: stretchY, content: content)
     } else {
       Logger.log(level: .warn, message: "RCTMGLImage.nativeImage, unexpected image: \(imageNameOrInfo)")
       return nil
@@ -165,8 +203,9 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
         if let image = UIImage(named: imageName) {
           logged("RCTMGLImage.addNativeImage: \(imageName)") {
             try style.addImage(image, id: imageName, sdf: imageInfo.sdf,
-                               stretchX: convert(stretch: imageInfo.stretchX),
-                               stretchY: convert(stretch: imageInfo.stretchY)
+                               stretchX: RCTMGLImages.convert(stretch: imageInfo.stretchX),
+                               stretchY: RCTMGLImages.convert(stretch: imageInfo.stretchY),
+                               content: RCTMGLImages.convert(content: imageInfo.content)
             )
           }
         } else {
@@ -185,15 +224,16 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
 }
 
 extension RCTMGLImages : RCTMGLImageSetter {
-  func addImage(name: String, image: UIImage, sdf: Bool?, stretchX: [[NSNumber]], stretchY: [[NSNumber]], log: String) -> Bool
+  func addImage(name: String, image: UIImage, sdf: Bool?, stretchX: [[NSNumber]], stretchY: [[NSNumber]], content: [NSNumber]?, log: String) -> Bool
   {
      return logged("\(log).addImage") {
        if let style = style {
          try style.addImage(image,
                             id:name,
                             sdf: sdf ?? false,
-                            stretchX: convert(stretch: convert(stretch: stretchX)),
-                            stretchY: convert(stretch: convert(stretch: stretchY))
+                            stretchX: RCTMGLImages.convert(stretch: stretchX),
+                            stretchY: RCTMGLImages.convert(stretch: stretchY),
+                            content: RCTMGLImages.convert(content: content)
          )
          return true
        } else {

@@ -9,6 +9,7 @@ class RCTMGLImage : UIView {
   var sdf: Bool? = nil
   var stretchX: [[NSNumber]] = []
   var stretchY: [[NSNumber]] = []
+  var content: [NSNumber]? = nil
 
   weak var images: RCTMGLImageSetter? = nil {
     didSet {
@@ -42,7 +43,7 @@ class RCTMGLImage : UIView {
   
   func changeImage(_ image: UIImage, name: String) {
     if let images = images {
-      let _ = images.addImage(name: name, image: image, sdf: sdf, stretchX:stretchX, stretchY:stretchY, log: "RCTMGLImage.addImage")
+      let _ = images.addImage(name: name, image: image, sdf: sdf, stretchX:stretchX, stretchY:stretchY, content:content, log: "RCTMGLImage.addImage")
     }
   }
   
