@@ -54,9 +54,6 @@ node_modules
 .nvm
 /bots/node_modules/
 package-lock.json
-/example/package-lock.json
-yarn.lock
-/example/yarn.lock
 
 # Expo
 .expo
