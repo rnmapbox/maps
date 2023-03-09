@@ -6079,10 +6079,10 @@
         ],
         "params": [
           {
-            "name": "{ running }",
+            "name": "{ running }: { running?: boolean }",
             "optional": false,
             "type": {
-              "name": null
+              "name": "{running?:boolean}"
             }
           }
         ],
@@ -6117,60 +6117,25 @@
     ],
     "props": [
       {
-        "name": "animated",
-        "required": false,
-        "type": "bool",
-        "default": "true",
-        "description": "Whether location icon is animated between updates"
-      },
-      {
-        "name": "renderMode",
-        "required": false,
-        "type": "enum",
-        "default": "'normal'",
-        "description": "Which render mode to use.\nCan either be `normal` or `native`"
-      },
-      {
         "name": "androidRenderMode",
         "required": false,
-        "type": "enum",
+        "type": "'normal' \\| 'compass' \\| 'gps'",
         "default": "none",
         "description": "native/android only render mode\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@platform android"
       },
       {
-        "name": "visible",
+        "name": "animated",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "true",
-        "description": "Whether location icon is visible"
+        "description": "Whether location icon is animated between updates"
       },
       {
-        "name": "onPress",
+        "name": "children",
         "required": false,
-        "type": "func",
+        "type": "ReactNode",
         "default": "none",
-        "description": "Callback that is triggered on location icon press"
-      },
-      {
-        "name": "onUpdate",
-        "required": false,
-        "type": "func",
-        "default": "none",
-        "description": "Callback that is triggered on location update"
-      },
-      {
-        "name": "showsUserHeadingIndicator",
-        "required": false,
-        "type": "bool",
-        "default": "false",
-        "description": "Show or hide small arrow which indicates direction the device is pointing relative to north."
-      },
-      {
-        "name": "requestsAlwaysUse",
-        "required": false,
-        "type": "bool",
-        "default": "false",
-        "description": "Request the always location permission, and listen to the location even when the app is in background\n\n@platform ios"
+        "description": "Custom location icon of type mapbox-gl-native components"
       },
       {
         "name": "minDisplacement",
@@ -6180,14 +6145,55 @@
         "description": "Minimum amount of movement before GPS location is updated in meters"
       },
       {
-        "name": "children",
+        "name": "onPress",
         "required": false,
-        "type": "any",
+        "type": {
+          "name": "func",
+          "funcSignature": "() => void"
+        },
         "default": "none",
-        "description": "Custom location icon of type mapbox-gl-native components"
+        "description": "Callback that is triggered on location icon press\n*signature:*`() => void`"
+      },
+      {
+        "name": "onUpdate",
+        "required": false,
+        "type": {
+          "name": "func",
+          "funcSignature": "(location:Location) => void"
+        },
+        "default": "none",
+        "description": "Callback that is triggered on location update\n*signature:*`(location:Location) => void`"
+      },
+      {
+        "name": "renderMode",
+        "required": false,
+        "type": "UserLocationRenderMode",
+        "default": "UserLocationRenderMode.Normal",
+        "description": "Which render mode to use."
+      },
+      {
+        "name": "requestsAlwaysUse",
+        "required": false,
+        "type": "boolean",
+        "default": "false",
+        "description": "Request the always location permission, and listen to the location even when the app is in background\n\n@platform ios"
+      },
+      {
+        "name": "showsUserHeadingIndicator",
+        "required": false,
+        "type": "boolean",
+        "default": "false",
+        "description": "Show or hide small arrow which indicates direction the device is pointing relative to north."
+      },
+      {
+        "name": "visible",
+        "required": false,
+        "type": "boolean",
+        "default": "true",
+        "description": "Whether location icon is visible"
       }
     ],
-    "fileNameWithExt": "UserLocation.js",
+    "fileNameWithExt": "UserLocation.tsx",
     "name": "UserLocation"
   },
   "VectorSource": {
