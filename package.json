@@ -24,14 +24,14 @@
   "scripts": {
     "fetch:style:spec": ". ./scripts/download-style-spec.sh",
     "generate": "node ./scripts/autogenerate",
-    "test": "npm run lint && npm run unittest",
+    "test": "yarn lint && yarn unittest",
     "unittest": "jest",
     "unittest:single": "jest --testNamePattern",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "type:check": "npx tsc --noEmit",
+    "type:check": "tsc --noEmit",
     "test:plugin": "expo-module test plugin",
-    "build:plugin": "npx tsc --build plugin",
+    "build:plugin": "tsc --build plugin",
     "build": "bob build",
     "lint:plugin": "eslint plugin/src/*",
     "prepare": "bob build && husky install"
