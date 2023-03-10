@@ -61,6 +61,9 @@ class RCTMGLLocationManager : LocationProviderDelegate {
   var simulatedHeading: Double = 0.0
   var simulatedHeadingIncrement: Double = 1.0
 
+  var startUpdatingLocationCalled = false
+  var startUpdatingHeadingCalled = false
+
   init() {
     provider = AppleLocationProvider()
     provider.setDelegate(self)
@@ -87,9 +90,19 @@ class RCTMGLLocationManager : LocationProviderDelegate {
   }
   
   func stop() {
-    provider.stopUpdatingHeading()
-    provider.stopUpdatingLocation()
-    provider.setDelegate(EmptyLocationProviderDelegate())
+    if !startUpdatingHeadingCalled {
+      provider.stopUpdatingHeading()
+    }
+    if !startUpdatingLocationCalled {
+      provider.stopUpdatingLocation()
+    }
+    _clearProviderDelegateIfNotListening()
+  }
+
+  func _clearProviderDelegateIfNotListening() {
+    if !startUpdatingHeadingCalled && !startUpdatingLocationCalled {
+      provider.setDelegate(EmptyLocationProviderDelegate())
+    }
   }
   
   func _convertToMapboxLocation(_ location: CLLocation?, type: LocationUpdateType) -> RCTMGLLocation {
@@ -144,6 +157,8 @@ class RCTMGLLocationManager : LocationProviderDelegate {
   }
 }
 
+// MARK: LocationProvider
+
 extension RCTMGLLocationManager: LocationProvider {
   var locationProviderOptions: LocationOptions {
     get {
@@ -194,11 +209,15 @@ extension RCTMGLLocationManager: LocationProvider {
   }
   
   func startUpdatingLocation() {
+    startUpdatingLocationCalled = true
     provider.startUpdatingLocation()
   }
   
   func stopUpdatingLocation() {
     provider.stopUpdatingLocation()
+    startUpdatingLocationCalled = false
+
+    _clearProviderDelegateIfNotListening()
   }
   
   var headingOrientation: CLDeviceOrientation {
@@ -211,11 +230,15 @@ extension RCTMGLLocationManager: LocationProvider {
   }
   
   func startUpdatingHeading() {
+    startUpdatingHeadingCalled = true
     provider.startUpdatingHeading()
   }
   
   func stopUpdatingHeading() {
+    startUpdatingHeadingCalled = false
     provider.stopUpdatingHeading()
+
+    _clearProviderDelegateIfNotListening()
   }
   
   func dismissHeadingCalibrationDisplay() {
@@ -276,7 +299,7 @@ extension RCTMGLLocationManager {
 class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
 
   static weak var shared : RCTMGLLocationModule? = nil
-  
+
   var locationManager : RCTMGLLocationManager
   var hasListener = false
   

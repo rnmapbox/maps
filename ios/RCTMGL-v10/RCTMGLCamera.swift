@@ -104,7 +104,7 @@ open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
   }
 }
 
-class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
+class RCTMGLCamera : RCTMGLMapComponentBase {
   var cameraAnimator: BasicCameraAnimator?
   let cameraUpdateQueue = CameraUpdateQueue()
   
@@ -219,7 +219,6 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
   
   func _disableUsetTracking(_ map: MapView) {
     map.viewport.idle()
-    map.location.removeLocationConsumer(consumer: self)
   }
   
   func _toCoordinateBounds(_ bounds: FeatureCollection) throws -> CoordinateBounds  {
@@ -274,10 +273,17 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
       }
 
       if let locationModule = RCTMGLLocationModule.shared {
-        map.location.overrideLocationProvider(with: locationModule.locationProvider)
+        var isSameProvider = false
+        if let currentProvider = map.location.locationProvider as? AnyObject, let newProvider = locationModule.locationProvider as? AnyObject {
+          if currentProvider === newProvider {
+            isSameProvider = true
+          }
+        }
+        if !isSameProvider {
+          map.location.overrideLocationProvider(with: locationModule.locationProvider)
+        }
       }
       map.location.locationProvider.requestWhenInUseAuthorization()
-      map.location.addLocationConsumer(newConsumer: self)
       var trackingModeChanged = false
       var followOptions = FollowPuckViewportStateOptions()
       switch userTrackingMode {
@@ -505,32 +511,6 @@ class RCTMGLCamera : RCTMGLMapComponentBase, LocationConsumer {
   override func removeFromMap(_ map: RCTMGLMapView) {
     map.viewport.removeStatusObserver(self)
     super.removeFromMap(map)
-  }
-
-  // MARK: - LocationConsumer
-  
-  func locationUpdate(newLocation: Location) {
-    // viewport manages following user location
-    if false && followUserLocation {
-      withMapView { map in
-        var animationType = CameraMode.none
-        if let m = self.animationMode as? String, let m = CameraMode(rawValue: m) {
-          animationType = m
-        }
-        let _camera = CameraOptions(center: newLocation.coordinate)
-        let _duration = self.animationDuration as? Double ?? 0.5
-        switch (animationType) {
-          case .flight:
-            map.camera.fly(to: _camera, duration: _duration)
-          case .ease:
-            map.camera.ease(to: _camera, duration: _duration, curve: .easeInOut, completion: nil)
-          case .linear:
-            map.camera.ease(to: _camera, duration: _duration, curve: .linear, completion: nil)
-          default:
-            map.mapboxMap.setCamera(to: CameraOptions(center: newLocation.coordinate))
-        }
-      }
-    }
   }
 }
 
