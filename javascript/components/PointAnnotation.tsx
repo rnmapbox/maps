@@ -27,11 +27,6 @@ const styles = StyleSheet.create({
 type FeaturePayload = Feature<
   Point,
   {
-    /**
-     * @platform android
-     */
-    id?: string;
-
     screenPointX: number;
     screenPointY: number;
   }

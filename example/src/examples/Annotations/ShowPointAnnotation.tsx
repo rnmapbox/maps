@@ -52,26 +52,17 @@ const AnnotationWithRemoteImage = ({
       coordinate={coordinate}
       title={title}
       draggable
+      onSelected={(feature) =>
+        console.log('onSelected:', feature.id, feature.geometry.coordinates)
+      }
       onDrag={(feature) =>
-        console.log(
-          'onDrag:',
-          feature.properties.id,
-          feature.geometry.coordinates,
-        )
+        console.log('onDrag:', feature.id, feature.geometry.coordinates)
       }
       onDragStart={(feature) =>
-        console.log(
-          'onDragStart:',
-          feature.properties.id,
-          feature.geometry.coordinates,
-        )
+        console.log('onDragStart:', feature.id, feature.geometry.coordinates)
       }
       onDragEnd={(feature) =>
-        console.log(
-          'onDragEnd:',
-          feature.properties.id,
-          feature.geometry.coordinates,
-        )
+        console.log('onDragEnd:', feature.id, feature.geometry.coordinates)
       }
       ref={pointAnnotation}
     >
