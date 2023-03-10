@@ -3604,50 +3604,50 @@
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "(payload:{feature: Feature}) => void"
+          "funcSignature": "(payload:Feature) => void"
         },
         "default": "none",
-        "description": "This callback is fired once this annotation is selected. Returns a Feature as the first param.\n*signature:*`(payload:{feature: Feature}) => void`"
+        "description": "This callback is fired once this annotation is selected. Returns a Feature as the first param.\n*signature:*`(payload:Feature) => void`"
       },
       {
         "name": "onDeselected",
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "(payload:{feature: Feature}) => void"
+          "funcSignature": "(payload:Feature) => void"
         },
         "default": "none",
-        "description": "This callback is fired once this annotation is deselected.\n*signature:*`(payload:{feature: Feature}) => void`"
+        "description": "This callback is fired once this annotation is deselected.\n*signature:*`(payload:Feature) => void`"
       },
       {
         "name": "onDragStart",
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "(payload:{feature: Feature}) => void"
+          "funcSignature": "(payload:Feature) => void"
         },
         "default": "none",
-        "description": "This callback is fired once this annotation has started being dragged.\n*signature:*`(payload:{feature: Feature}) => void`"
+        "description": "This callback is fired once this annotation has started being dragged.\n*signature:*`(payload:Feature) => void`"
       },
       {
         "name": "onDragEnd",
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "(payload:{feature: Feature}) => void"
+          "funcSignature": "(payload:Feature) => void"
         },
         "default": "none",
-        "description": "This callback is fired once this annotation has stopped being dragged.\n*signature:*`(payload:{feature: Feature}) => void`"
+        "description": "This callback is fired once this annotation has stopped being dragged.\n*signature:*`(payload:Feature) => void`"
       },
       {
         "name": "onDrag",
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "(payload:{feature: Feature}) => void"
+          "funcSignature": "(payload:Feature) => void"
         },
         "default": "none",
-        "description": "This callback is fired while this annotation is being dragged.\n*signature:*`(payload:{feature: Feature}) => void`"
+        "description": "This callback is fired while this annotation is being dragged.\n*signature:*`(payload:Feature) => void`"
       },
       {
         "name": "children",

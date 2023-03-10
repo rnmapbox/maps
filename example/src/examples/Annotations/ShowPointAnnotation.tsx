@@ -9,7 +9,7 @@ import {
   ShapeSource,
   getAnnotationsLayerID,
 } from '@rnmapbox/maps';
-import { Feature, Point, Position } from 'geojson';
+import { Point, Position } from 'geojson';
 import { Button } from '@rneui/base';
 
 import sheet from '../../styles/sheet';
@@ -39,8 +39,6 @@ type AnnotationWithRemoteImageProps = {
   coordinate: Position;
 };
 
-type PointFeature = Feature<GeoJSON.Point, { id: string }>;
-
 const AnnotationWithRemoteImage = ({
   id,
   coordinate,
@@ -54,25 +52,25 @@ const AnnotationWithRemoteImage = ({
       coordinate={coordinate}
       title={title}
       draggable
-      onDrag={(payload: { feature: PointFeature }) =>
+      onDrag={(feature) =>
         console.log(
           'onDrag:',
-          payload.feature.properties.id,
-          payload.feature.geometry.coordinates,
+          feature.properties.id,
+          feature.geometry.coordinates,
         )
       }
-      onDragStart={(payload: { feature: PointFeature }) =>
+      onDragStart={(feature) =>
         console.log(
           'onDragStart:',
-          payload.feature.properties.id,
-          payload.feature.geometry.coordinates,
+          feature.properties.id,
+          feature.geometry.coordinates,
         )
       }
-      onDragEnd={(payload: { feature: PointFeature }) =>
+      onDragEnd={(feature) =>
         console.log(
           'onDragEnd:',
-          payload.feature.properties.id,
-          payload.feature.geometry.coordinates,
+          feature.properties.id,
+          feature.geometry.coordinates,
         )
       }
       ref={pointAnnotation}
