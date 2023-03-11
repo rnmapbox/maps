@@ -41,7 +41,7 @@ jobs:
           echo 'login mapbox' >> ~/.netrc
           echo "password $MAPBOX_DOWNLOAD_TOKEN" >> ~/.netrc
           chmod 0600 ~/.netrc
-        if: steps.has_mapbox_token.outputs.has-mapbox-token == 'true' 
+        if: "${{ env.MAPBOX_DOWNLOAD_TOKEN != '' }}"
         env:
           MAPBOX_DOWNLOAD_TOKEN: ${{ secrets.MAPBOX_DOWNLOAD_TOKEN }}
 
