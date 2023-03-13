@@ -33,6 +33,7 @@ type InstallerBlockName = 'pre' | 'post';
 
 export type MapboxPlugProps = {
   RNMapboxMapsImpl?: string;
+  RNMapboxMapsVersion?: string;
   RNMapboxMapsDownloadToken?: string;
 };
 
@@ -72,8 +73,11 @@ export const addInstallerBlock = (
 
 export const addConstantBlock = (
   src: string,
-  RNMapboxMapsImpl?: string,
-  RNMapboxMapsDownloadToken?: string,
+  {
+    RNMapboxMapsImpl,
+    RNMapboxMapsVersion,
+    RNMapboxMapsDownloadToken,
+  }: MapboxPlugProps,
 ): string => {
   const tag = `@rnmapbox/maps-rnmapboxmapsimpl`;
 
@@ -91,6 +95,7 @@ export const addConstantBlock = (
     src,
     newSrc: [
       `$RNMapboxMapsImpl = '${RNMapboxMapsImpl}'`,
+      `$RNMapboxMapsVersion = '${RNMapboxMapsVersion}'`,
       `$RNMapboxMapsDownloadToken = '${RNMapboxMapsDownloadToken}'`,
     ].join('\n'),
     anchor: /target .+ do/,
@@ -104,14 +109,18 @@ export const addConstantBlock = (
 // used for spm (swift package manager) which Expo doesn't currently support.
 export const applyCocoaPodsModifications = (
   contents: string,
-  { RNMapboxMapsImpl, RNMapboxMapsDownloadToken }: MapboxPlugProps,
+  {
+    RNMapboxMapsImpl,
+    RNMapboxMapsVersion,
+    RNMapboxMapsDownloadToken,
+  }: MapboxPlugProps,
 ): string => {
   // Ensure installer blocks exist
-  let src = addConstantBlock(
-    contents,
+  let src = addConstantBlock(contents, {
     RNMapboxMapsImpl,
+    RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
-  );
+  });
   src = addInstallerBlock(src, 'pre');
   src = addInstallerBlock(src, 'post');
   src = addMapboxInstallerBlock(src, 'pre');
@@ -141,7 +150,7 @@ export const addMapboxInstallerBlock = (
  */
 const withCocoaPodsInstallerBlocks: ConfigPlugin<MapboxPlugProps> = (
   config,
-  { RNMapboxMapsImpl, RNMapboxMapsDownloadToken },
+  { RNMapboxMapsImpl, RNMapboxMapsVersion, RNMapboxMapsDownloadToken },
 ) =>
   withDangerousMod(config, [
     'ios',
@@ -156,6 +165,7 @@ const withCocoaPodsInstallerBlocks: ConfigPlugin<MapboxPlugProps> = (
         file,
         applyCocoaPodsModifications(contents, {
           RNMapboxMapsImpl,
+          RNMapboxMapsVersion,
           RNMapboxMapsDownloadToken,
         }),
         'utf-8',
@@ -386,15 +396,17 @@ const withMapboxAndroid: ConfigPlugin<MapboxPlugProps> = (
 
 const withMapbox: ConfigPlugin<MapboxPlugProps> = (
   config,
-  { RNMapboxMapsImpl, RNMapboxMapsDownloadToken },
+  { RNMapboxMapsImpl, RNMapboxMapsVersion, RNMapboxMapsDownloadToken },
 ) => {
   config = withExcludedSimulatorArchitectures(config);
   config = withMapboxAndroid(config, {
     RNMapboxMapsImpl,
+    RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
   });
   config = withCocoaPodsInstallerBlocks(config, {
     RNMapboxMapsImpl,
+    RNMapboxMapsVersion,
     RNMapboxMapsDownloadToken,
   });
 

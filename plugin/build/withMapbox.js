@@ -46,7 +46,7 @@ const addInstallerBlock = (src, blockName) => {
     }).contents;
 };
 exports.addInstallerBlock = addInstallerBlock;
-const addConstantBlock = (src, RNMapboxMapsImpl, RNMapboxMapsDownloadToken) => {
+const addConstantBlock = (src, { RNMapboxMapsImpl, RNMapboxMapsVersion, RNMapboxMapsDownloadToken, }) => {
     const tag = `@rnmapbox/maps-rnmapboxmapsimpl`;
     if (RNMapboxMapsImpl == null) {
         const modified = (0, generateCode_1.removeGeneratedContents)(src, tag);
@@ -62,6 +62,7 @@ const addConstantBlock = (src, RNMapboxMapsImpl, RNMapboxMapsDownloadToken) => {
         src,
         newSrc: [
             `$RNMapboxMapsImpl = '${RNMapboxMapsImpl}'`,
+            `$RNMapboxMapsVersion = '${RNMapboxMapsVersion}'`,
             `$RNMapboxMapsDownloadToken = '${RNMapboxMapsDownloadToken}'`,
         ].join('\n'),
         anchor: /target .+ do/,
@@ -73,9 +74,13 @@ const addConstantBlock = (src, RNMapboxMapsImpl, RNMapboxMapsDownloadToken) => {
 exports.addConstantBlock = addConstantBlock;
 // Only the preinstaller block is required, the post installer block is
 // used for spm (swift package manager) which Expo doesn't currently support.
-const applyCocoaPodsModifications = (contents, { RNMapboxMapsImpl, RNMapboxMapsDownloadToken }) => {
+const applyCocoaPodsModifications = (contents, { RNMapboxMapsImpl, RNMapboxMapsVersion, RNMapboxMapsDownloadToken, }) => {
     // Ensure installer blocks exist
-    let src = (0, exports.addConstantBlock)(contents, RNMapboxMapsImpl, RNMapboxMapsDownloadToken);
+    let src = (0, exports.addConstantBlock)(contents, {
+        RNMapboxMapsImpl,
+        RNMapboxMapsVersion,
+        RNMapboxMapsDownloadToken,
+    });
     src = (0, exports.addInstallerBlock)(src, 'pre');
     src = (0, exports.addInstallerBlock)(src, 'post');
     src = (0, exports.addMapboxInstallerBlock)(src, 'pre');
@@ -98,13 +103,14 @@ exports.addMapboxInstallerBlock = addMapboxInstallerBlock;
  *
  * https://github.com/rnmapbox/maps/blob/main/ios/install.md#react-native--0600
  */
-const withCocoaPodsInstallerBlocks = (config, { RNMapboxMapsImpl, RNMapboxMapsDownloadToken }) => (0, config_plugins_1.withDangerousMod)(config, [
+const withCocoaPodsInstallerBlocks = (config, { RNMapboxMapsImpl, RNMapboxMapsVersion, RNMapboxMapsDownloadToken }) => (0, config_plugins_1.withDangerousMod)(config, [
     'ios',
     async (exportedConfig) => {
         const file = path_1.default.join(exportedConfig.modRequest.platformProjectRoot, 'Podfile');
         const contents = await fs_1.promises.readFile(file, 'utf8');
         await fs_1.promises.writeFile(file, (0, exports.applyCocoaPodsModifications)(contents, {
             RNMapboxMapsImpl,
+            RNMapboxMapsVersion,
             RNMapboxMapsDownloadToken,
         }), 'utf-8');
         return exportedConfig;
@@ -259,14 +265,16 @@ const withMapboxAndroid = (config, { RNMapboxMapsImpl, RNMapboxMapsDownloadToken
     config = withAndroidAppGradle(config, { RNMapboxMapsImpl });
     return config;
 };
-const withMapbox = (config, { RNMapboxMapsImpl, RNMapboxMapsDownloadToken }) => {
+const withMapbox = (config, { RNMapboxMapsImpl, RNMapboxMapsVersion, RNMapboxMapsDownloadToken }) => {
     config = withExcludedSimulatorArchitectures(config);
     config = withMapboxAndroid(config, {
         RNMapboxMapsImpl,
+        RNMapboxMapsVersion,
         RNMapboxMapsDownloadToken,
     });
     config = withCocoaPodsInstallerBlocks(config, {
         RNMapboxMapsImpl,
+        RNMapboxMapsVersion,
         RNMapboxMapsDownloadToken,
     });
     return config;
