@@ -859,7 +859,8 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
           if let pt = rctmglPointAnnotation.object {
             let position = pt.superview?.convert(pt.layer.position, to: nil)
             let location = pt.map?.mapboxMap.coordinate(for: position!)
-            var geojson = Feature(geometry: .point(Point(location!)));
+            var geojson = Feature(geometry: .point(Point(location!)))
+            geojson.identifier = .string(pt.id)
             geojson.properties = [
               "screenPointX": .number(Double(position!.x)),
               "screenPointY": .number(Double(position!.y))
@@ -947,7 +948,8 @@ class PointAnnotationManager : AnnotationInteractionDelegate {
         if let rctmglPointAnnotation = userInfo[RCTMGLPointAnnotation.key] as? WeakRef<RCTMGLPointAnnotation> {
           if let pt = rctmglPointAnnotation.object {
             let position = pt.superview?.convert(pt.layer.position, to: nil)
-            var geojson = Feature(geometry: .point(Point(targetPoint)));
+            var geojson = Feature(geometry: .point(Point(targetPoint)))
+            geojson.identifier = .string(pt.id)
             geojson.properties = [
               "screenPointX": .number(Double(position!.x)),
               "screenPointY": .number(Double(position!.y))
