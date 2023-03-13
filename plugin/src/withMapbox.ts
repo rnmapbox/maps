@@ -33,7 +33,12 @@ type InstallerBlockName = 'pre' | 'post';
 
 export type MapboxPlugProps = {
   RNMapboxMapsImpl?: string;
+
+  /**
+   * @platform ios
+   */
   RNMapboxMapsVersion?: string;
+
   RNMapboxMapsDownloadToken?: string;
 };
 

@@ -2,6 +2,9 @@ import { ConfigPlugin, XcodeProject } from 'expo/config-plugins';
 declare type InstallerBlockName = 'pre' | 'post';
 export declare type MapboxPlugProps = {
     RNMapboxMapsImpl?: string;
+    /**
+     * @platform ios
+     */
     RNMapboxMapsVersion?: string;
     RNMapboxMapsDownloadToken?: string;
 };
