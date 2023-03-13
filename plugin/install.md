@@ -52,6 +52,27 @@ For `mapbox` or `mapbox-gl` you'll need to provide `RNMapboxMapsDownloadToken` a
 
 Next, rebuild your app as described in the ["Adding custom native code"](https://docs.expo.io/workflow/customizing/) guide.
 
+### Advanced Configuration
+
+For `mapbox` or `mapbox-gl` on iOS it's possible to overwrite the native SDK version with `RNMapboxMapsVersion`:
+
+```json
+{
+  "expo": {
+    "plugins": [
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsImpl": "mapbox",
+          "RNMapboxMapsVersion": "10.XX.XX",
+          "RNMapboxMapsDownloadToken": "sk.ey...qg"
+        }
+      ]
+    ]
+  }
+}
+```
+
 ## Manual Setup
 
 For bare workflow projects, you can follow the manual setup guides:
