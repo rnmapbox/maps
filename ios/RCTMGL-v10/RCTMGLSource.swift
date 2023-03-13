@@ -39,6 +39,12 @@ class RCTMGLSource : RCTMGLInteractiveElement {
   }
   
   @objc override func removeReactSubview(_ subview: UIView!) {
+    if let layer : RCTMGLSourceConsumer = subview as? RCTMGLSourceConsumer {
+      if let map = map {
+        layer.removeFromMap(map, style: map.mapboxMap.style)
+      }
+      layers.removeAll { $0 as AnyObject === layer as AnyObject }
+    }
     super.removeReactSubview(subview)
   }
   

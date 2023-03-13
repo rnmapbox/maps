@@ -31,7 +31,20 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     didSet { optionsChanged() }
   }
   
-  @objc var id: String! = nil
+  @objc var id: String! = nil {
+    willSet {
+      if id != nil && newValue != id {
+        Logger.log(level:.warn, message: "Changing id from: \(optional: id) to \(optional: newValue), changing of id is supported")
+        if let style = style { self.removeFromMap(style) }
+      }
+    }
+    didSet {
+      if oldValue != nil && oldValue != id {
+        if let map = map, let style = style { self.addToMap(map, style: style) }
+      }
+    }
+  }
+
   @objc var sourceID: String? = nil {
     didSet { optionsChanged() }
   }
@@ -86,9 +99,9 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   }
   
   func removeAndReaddLayer() {
-    if let style = style {
+    if let map = map, let style = style {
       self.removeFromMap(style)
-      self.insert(style, layerPosition: position())
+      self.addToMap(map, style:style)
     }
   }
    
