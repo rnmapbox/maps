@@ -5,7 +5,8 @@ HeatmapLayer is a style layer that renders one or more filled circles on the map
 ## props
 | Prop | Type | Default | Required | Description |
 | ---- | :-- | :----- | :------ | :---------- |
-| id | `string` | `none` | `true` | A string that uniquely identifies the source in the style to which it is added. |
+| id | `string` | `none` | `true` | A string that uniquely identifies the layer in the style to which it is added. |
+| existing | `boolean` | `none` | `false` | The id refers to en existing layer in the style. Does not create a new layer. |
 | sourceID | `string` | `MapboxGL.StyleSource.DefaultSourceID` | `false` | The source from which to obtain the data to style.<br/>If the source has not yet been added to the current style, the behavior is undefined.<br/>Inferred from parent source only if the layer is a direct child to it. |
 | sourceLayerID | `string` | `none` | `false` | Identifier of the layer within the source identified by the sourceID property<br/>from which the receiver obtains the data to style. |
 | aboveLayerID | `string` | `none` | `false` | Inserts a layer above aboveLayerID. |

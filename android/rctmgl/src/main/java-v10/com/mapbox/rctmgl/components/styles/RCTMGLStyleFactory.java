@@ -80,7 +80,7 @@ public class RCTMGLStyleFactory {
               RCTMGLStyleFactory.setFillTranslateAnchor(layer, styleValue);
               break;
             case "fillPattern":
-              style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
+              style.addImage(styleValue, styleKey, new DownloadMapImageTask.OnAllImagesLoaded() {
                   @Override
                   public void onAllImagesLoaded() {
                       try {
@@ -172,7 +172,7 @@ public class RCTMGLStyleFactory {
               RCTMGLStyleFactory.setLineDasharray(layer, styleValue);
               break;
             case "linePattern":
-              style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
+              style.addImage(styleValue, styleKey, new DownloadMapImageTask.OnAllImagesLoaded() {
                   @Override
                   public void onAllImagesLoaded() {
                       try {
@@ -240,7 +240,7 @@ public class RCTMGLStyleFactory {
               RCTMGLStyleFactory.setIconTextFitPadding(layer, styleValue);
               break;
             case "iconImage":
-              style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
+              style.addImage(styleValue, styleKey, new DownloadMapImageTask.OnAllImagesLoaded() {
                   @Override
                   public void onAllImagesLoaded() {
                       try {
@@ -573,7 +573,7 @@ public class RCTMGLStyleFactory {
               RCTMGLStyleFactory.setFillExtrusionTranslateAnchor(layer, styleValue);
               break;
             case "fillExtrusionPattern":
-              style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
+              style.addImage(styleValue, styleKey, new DownloadMapImageTask.OnAllImagesLoaded() {
                   @Override
                   public void onAllImagesLoaded() {
                       try {
@@ -729,7 +729,7 @@ public class RCTMGLStyleFactory {
               RCTMGLStyleFactory.setBackgroundColorTransition(layer, styleValue);
               break;
             case "backgroundPattern":
-              style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
+              style.addImage(styleValue, styleKey, new DownloadMapImageTask.OnAllImagesLoaded() {
                   @Override
                   public void onAllImagesLoaded() {
                       try {

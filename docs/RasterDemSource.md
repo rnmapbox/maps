@@ -6,6 +6,7 @@
 | Prop | Type | Default | Required | Description |
 | ---- | :-- | :----- | :------ | :---------- |
 | id | `string` | `MapboxGL.StyleSource.DefaultSourceID` | `false` | A string that uniquely identifies the source. |
+| existing | `boolean` | `none` | `false` | The id refers to en existing source in the style. Does not create a new source. |
 | url | `string` | `none` | `false` | A URL to a TileJSON configuration file describing the source’s contents and other metadata. |
 | tileUrlTemplates | `Array` | `none` | `false` | An array of tile URL templates. If multiple endpoints are specified, clients may use any combination of endpoints.<br/>Example: https://example.com/raster-tiles/{z}/{x}/{y}.png |
 | minZoomLevel | `number` | `none` | `false` | An unsigned integer that specifies the minimum zoom level at which to display tiles from the source.<br/>The value should be between 0 and 22, inclusive, and less than<br/>maxZoomLevel, if specified. The default value for this option is 0. |

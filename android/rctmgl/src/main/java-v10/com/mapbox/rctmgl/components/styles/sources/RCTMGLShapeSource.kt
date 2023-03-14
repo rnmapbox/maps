@@ -34,6 +34,11 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
     private var mLineMetrics: Boolean? = null
     private val mImages: List<Map.Entry<String, ImageEntry>>? = null
     private val mNativeImages: List<Map.Entry<String, BitmapDrawable>>? = null
+
+    override fun hasNoDataSoRefersToExisting(): Boolean {
+        return (mURL == null) && (mShape == null)
+    }
+
     override fun addToMap(mapView: RCTMGLMapView) {
         // Wait for style before adding the source to the map
         mapView.getMapboxMap().getStyle {

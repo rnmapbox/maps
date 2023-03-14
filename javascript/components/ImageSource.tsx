@@ -21,6 +21,11 @@ type Props = BaseProps & {
   id: string;
 
   /**
+   * The id refers to en existing source in the style. Does not create a new source.
+   */
+  existing?: boolean;
+
+  /**
    * An HTTP(S) URL, absolute file URL, or local file URL to the source image.
    * Gifs are currently not supported.
    */
