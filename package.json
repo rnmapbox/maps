@@ -43,17 +43,17 @@
   "scripts": {
     "fetch:style:spec": ". ./scripts/download-style-spec.sh",
     "generate": "node ./scripts/autogenerate",
-    "test": "npm run lint && npm run unittest",
-    "unittest": "jest",
-    "unittest:single": "jest --testNamePattern",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "type:check": "npx tsc --noEmit",
-    "test:plugin": "expo-module test plugin",
-    "build:plugin": "npx tsc --build plugin",
-    "build": "bob build",
-    "lint:plugin": "eslint plugin/src/*",
-    "prepare": "bob build && husky install"
+    "test": "yarn lint && yarn unittest",
+    "unittest": "yarn jest",
+    "unittest:single": "yarn jest --testNamePattern",
+    "lint": "yarn eslint .",
+    "lint:fix": "yarn eslint . --fix",
+    "type:check": "yarn tsc --noEmit",
+    "test:plugin": "yarn expo-module test plugin",
+    "build:plugin": "yarn tsc --build plugin",
+    "lint:plugin": "yarn eslint plugin/src/*",
+    "build": "yarn bob build",
+    "prepare": "yarn bob build && yarn husky install"
   },
   "peerDependencies": {
     "expo": ">=47.0.0",
