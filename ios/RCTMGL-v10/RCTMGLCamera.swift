@@ -2,7 +2,7 @@ import Foundation
 import MapboxMaps
 import Turf
 
-protocol RCTMGLMapComponent : AnyObject {
+protocol RCTMGLMapComponent : class {
   func addToMap(_ map: RCTMGLMapView, style: Style)
   func removeFromMap(_ map: RCTMGLMapView)
   

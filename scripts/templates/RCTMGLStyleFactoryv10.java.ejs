@@ -50,7 +50,7 @@ public class RCTMGLStyleFactory {
           <%_ for (const prop of layer.properties) { _%>
             case "<%= prop.name %>":
               <%_ if (prop.image) { _%>
-              style.addImage(styleValue, new DownloadMapImageTask.OnAllImagesLoaded() {
+              style.addImage(styleValue, styleKey, new DownloadMapImageTask.OnAllImagesLoaded() {
                   @Override
                   public void onAllImagesLoaded() {
                       try {

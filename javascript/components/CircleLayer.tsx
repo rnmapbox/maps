@@ -19,6 +19,11 @@ export type Props = {
   id: string;
 
   /**
+   * The id refers to en existing layer in the style. Does not create a new layer.
+   */
+  existing?: boolean;
+
+  /**
    * The source from which to obtain the data to style.
    * If the source has not yet been added to the current style, the behavior is undefined.
    * Inferred from parent source only if the layer is a direct child to it.

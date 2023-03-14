@@ -290,7 +290,14 @@
         "required": true,
         "type": "string",
         "default": "none",
-        "description": "A string that uniquely identifies the source in the style to which it is added."
+        "description": "A string that uniquely identifies the layer in the style to which it is added."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -837,6 +844,13 @@
         "description": "A string that uniquely identifies the source in the style to which it is added."
       },
       {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+      },
+      {
         "name": "sourceID",
         "required": false,
         "type": "string",
@@ -1189,7 +1203,14 @@
         "required": true,
         "type": "string",
         "default": "none",
-        "description": "A string that uniquely identifies the source in the style to which it is added."
+        "description": "A string that uniquely identifies the layer in the style to which it is added."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -1456,6 +1477,13 @@
         "type": "string",
         "default": "none",
         "description": "A string that uniquely identifies the source in the style to which it is added."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -1730,7 +1758,14 @@
         "required": true,
         "type": "string",
         "default": "none",
-        "description": "A string that uniquely identifies the source in the style to which it is added."
+        "description": "A string that uniquely identifies the layer in the style to which it is added."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -2006,6 +2041,13 @@
         "description": "A string that uniquely identifies the source."
       },
       {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing source in the style. Does not create a new source."
+      },
+      {
         "name": "url",
         "required": false,
         "type": "number \\| string",
@@ -2201,6 +2243,13 @@
         "type": "string",
         "default": "none",
         "description": "A string that uniquely identifies the source in the style to which it is added."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -3680,6 +3729,13 @@
         "description": "A string that uniquely identifies the source."
       },
       {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing source in the style. Does not create a new source."
+      },
+      {
         "name": "url",
         "required": false,
         "type": "string",
@@ -3735,7 +3791,14 @@
         "required": true,
         "type": "string",
         "default": "none",
-        "description": "A string that uniquely identifies the source in the style to which it is added."
+        "description": "A string that uniquely identifies the layer in the style to which it is added."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -3995,6 +4058,13 @@
         "description": "A string that uniquely identifies the source."
       },
       {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing source in the style. Does not create a new source."
+      },
+      {
         "name": "url",
         "required": false,
         "type": "string",
@@ -4213,6 +4283,13 @@
         "description": "A string that uniquely identifies the source."
       },
       {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing source in the style. Does not create a new source."
+      },
+      {
         "name": "url",
         "required": false,
         "type": "string",
@@ -4339,6 +4416,13 @@
         "type": "string",
         "default": "none",
         "description": "A string that uniquely identifies the source in the style to which it is added."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -4614,7 +4698,14 @@
         "required": true,
         "type": "string",
         "default": "none",
-        "description": "A string that uniquely identifies the source in the style to which it is added."
+        "description": "A string that uniquely identifies the layer in the style to which it is added."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -6277,6 +6368,13 @@
         "type": "string",
         "default": "MapboxGL.StyleSource.DefaultSourceID",
         "description": "A string that uniquely identifies the source."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing source in the style. Does not create a new source."
       },
       {
         "name": "url",

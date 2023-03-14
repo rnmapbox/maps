@@ -7,6 +7,7 @@ The shape may be an url or a GeoJSON object
 | Prop | Type | Default | Required | Description |
 | ---- | :-- | :----- | :------ | :---------- |
 | id | `string` | `MapboxGL.StyleSource.DefaultSourceID` | `false` | A string that uniquely identifies the source. |
+| existing | `boolean` | `none` | `false` | The id refers to en existing source in the style. Does not create a new source. |
 | url | `string` | `none` | `false` | An HTTP(S) URL, absolute file URL, or local file URL relative to the current application’s resource bundle. |
 | shape | `\| GeoJSON.GeometryCollection
 \| GeoJSON.Feature

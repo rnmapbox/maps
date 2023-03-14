@@ -14,6 +14,7 @@ import com.mapbox.bindgen.Value
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.rctmgl.events.constants.EventKeys
 import com.mapbox.rctmgl.utils.ExpressionParser
+import com.mapbox.rctmgl.utils.Logger
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.ArrayList
@@ -33,11 +34,11 @@ class RCTMGLShapeSourceManager(private val mContext: ReactApplicationContext) :
     }
 
     override fun getChildAt(source: RCTMGLShapeSource, childPosition: Int): View {
-        return source.getLayerAt(childPosition)
+        return source.getChildAt(childPosition)
     }
 
     override fun getChildCount(source: RCTMGLShapeSource): Int {
-        return source.layerCount
+        return source.childCount
     }
 
     override fun addView(source: RCTMGLShapeSource, childView: View, childPosition: Int) {
@@ -53,12 +54,17 @@ class RCTMGLShapeSourceManager(private val mContext: ReactApplicationContext) :
         source.iD = id
     }
 
+    @ReactProp(name = "existing")
+    fun setExisting(source: RCTMGLShapeSource, existing: Boolean) {
+        source.mExisting = existing;
+    }
+
     @ReactProp(name = "url")
     fun setURL(source: RCTMGLShapeSource, urlStr: String) {
         try {
             source.setURL(URL(urlStr))
         } catch (e: MalformedURLException) {
-            Log.w(LOG_TAG, e.localizedMessage ?: "Unknown URL error")
+            Logger.w(LOG_TAG, e.localizedMessage ?: "Unknown URL error")
         }
     }
 
@@ -186,7 +192,7 @@ class RCTMGLShapeSourceManager(private val mContext: ReactApplicationContext) :
     }
 
     companion object {
-        const val LOG_TAG = "RCTMGLShapeSourceManager"
+        const val LOG_TAG = "RCTMGLShapeSourceMgr"
         const val REACT_CLASS = "RCTMGLShapeSource"
 
         //region React Methods

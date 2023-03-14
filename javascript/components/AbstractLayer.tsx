@@ -8,6 +8,7 @@ import type { BaseProps } from '../types/BaseProps';
 
 type PropsBase = BaseProps & {
   id: string;
+  existing?: boolean;
   sourceID?: string;
   minZoomLevel?: number;
   maxZoomLevel?: number;
@@ -26,6 +27,7 @@ class AbstractLayer<
     return {
       ...this.props,
       id: this.props.id,
+      existing: this.props.existing,
       sourceID: this.props.sourceID,
       reactStyle: this.getStyle(this.props.style),
       minZoomLevel: this.props.minZoomLevel,

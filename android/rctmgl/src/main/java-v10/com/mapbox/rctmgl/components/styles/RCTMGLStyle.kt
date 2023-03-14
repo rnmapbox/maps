@@ -5,6 +5,7 @@ import com.facebook.react.bridge.ReadableMap
 import com.mapbox.maps.MapboxMap
 import com.mapbox.rctmgl.utils.ImageEntry
 import com.mapbox.rctmgl.utils.DownloadMapImageTask
+import com.mapbox.rctmgl.utils.Logger
 import java.util.AbstractMap
 import java.util.ArrayList
 
@@ -39,11 +40,12 @@ class RCTMGLStyle(private val mContext: Context, reactStyle: ReadableMap?, map: 
     }
 
     @JvmOverloads
-    fun addImage(styleValue: RCTMGLStyleValue, callback: DownloadMapImageTask.OnAllImagesLoaded? = null) {
+    fun addImage(styleValue: RCTMGLStyleValue, styleKey: String, callback: DownloadMapImageTask.OnAllImagesLoaded? = null) {
         if (!styleValue.shouldAddImage()) {
             callback?.onAllImagesLoaded()
             return
         }
+        Logger.w(LOG_TAG,"Deprecated: Image in style is deprecated, use images component instead. key: $styleKey [image-in-style-deprecated]")
         val uriStr = styleValue.imageURI
         val images = arrayOf<Map.Entry<String, ImageEntry>>(
             AbstractMap.SimpleEntry<String, ImageEntry>(
@@ -58,5 +60,9 @@ class RCTMGLStyle(private val mContext: Context, reactStyle: ReadableMap?, map: 
     init {
         mReactStyle = reactStyle
         mMap = map
+    }
+
+    companion object {
+        const val LOG_TAG = "RCTMGLStyle"
     }
 }

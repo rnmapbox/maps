@@ -15,9 +15,14 @@ export const NATIVE_MODULE_NAME = 'RCTMGLHeatmapLayer';
 
 export type Props = {
   /**
-   * A string that uniquely identifies the source in the style to which it is added.
+   * A string that uniquely identifies the layer in the style to which it is added.
    */
   id: string;
+
+  /**
+   * The id refers to en existing layer in the style. Does not create a new layer.
+   */
+  existing?: boolean;
 
   /**
    * The source from which to obtain the data to style.
