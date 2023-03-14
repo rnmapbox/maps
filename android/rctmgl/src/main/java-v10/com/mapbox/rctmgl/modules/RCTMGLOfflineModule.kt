@@ -147,14 +147,14 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
     private fun convertRegionsToJSON(tileRegions: List<TileRegion>, promise: Promise) {
         val countDownLatch = CountDownLatch(tileRegions.size)
         val errors = ArrayList<TileRegionError?>()
-        val geometries = ArrayList<Geometry?>()
+        val geometries = ArrayList<Geometry>()
         try {
             for (region: TileRegion in tileRegions) {
                 getTileStore()!!
                     .getTileRegionGeometry(region.id, object : TileRegionGeometryCallback {
                         override fun run(result: Expected<TileRegionError, Geometry>) {
                             if (result.isValue) {
-                                geometries.add(result.value)
+                                geometries.add(result.value!!)
                             } else {
                                 errors.add(result.error)
                             }
@@ -168,7 +168,7 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
         try {
             countDownLatch.await()
             val result = Arguments.createArray()
-            for (geometry: Geometry? in geometries) {
+            for (geometry: Geometry in geometries) {
                 result.pushMap(fromOfflineRegion(geometry))
             }
             for (error: TileRegionError? in errors) {
@@ -567,7 +567,7 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
         return map
     }
 
-    private fun fromOfflineRegion(region: Geometry?): WritableMap {
+    private fun fromOfflineRegion(region: Geometry): WritableMap {
         val map = Arguments.createMap()
         val bbox = TurfMeasurement.bbox(region)
         val bounds = Arguments.createArray()

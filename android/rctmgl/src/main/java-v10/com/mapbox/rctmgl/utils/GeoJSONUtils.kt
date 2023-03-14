@@ -18,69 +18,75 @@ object GeoJSONUtils {
         val map = Arguments.createMap()
         map.putString("type", "Feature")
         map.putString("id", feature.id())
-        val geometry = fromGeometry(feature.geometry())
-        map.putMap("geometry", geometry)
+        feature.geometry()?.also {
+            val geometry = fromGeometry(it)
+            map.putMap("geometry", geometry)
+        } ?: {
+            Logger.w(LOG_TAG, "GeoJSONUtils.fromFeature geometry was null for feature: ${feature.toJson()}")
+        }
         val properties = ConvertUtils.toWritableMap(feature.properties())
         map.putMap("properties", properties)
         return map
     }
 
-    fun fromGeometry(geometry: Geometry?): WritableMap? {
-        val type = geometry!!.type()
-        return when (type) {
-            "Point" -> fromPoint(geometry as Point?)
-            "LineString" -> fromLineString(geometry as LineString?)
-            "Polygon" -> fromPolygon(geometry as Polygon?)
-            else -> null
+    fun fromGeometry(geometry: Geometry): WritableMap? {
+        val type = geometry.type()
+        val coordinates : WritableArray = when (type) {
+            "Point" -> coordinates(geometry as Point)
+            "LineString" -> coordinatesL((geometry as LineString).coordinates())
+            "Polygon" -> coordinatesLL((geometry as Polygon).coordinates())
+            "MultiLineString" -> coordinatesLL((geometry as MultiLineString).coordinates())
+            "MultiPolygon" -> coordinatesLLL((geometry as MultiPolygon).coordinates())
+            "GeometryCollection" -> {
+                return multiGeometry(type,
+                    Arguments.fromList((geometry as GeometryCollection).geometries().map {
+                        fromGeometry(it)
+                    })
+                )
+            }
+            else -> {
+                Logger.w(LOG_TAG, "GeoJSONUtils.fromGeometry unsupported type:$type")
+                return null
+            }
         }
+        return geometry(type, coordinates);
     }
 
-    fun fromPoint(point: Point?): WritableMap {
-        val map = Arguments.createMap()
-        map.putString("type", "Point")
-        map.putArray("coordinates", getCoordinates(point))
+    private fun multiGeometry(type: String, geometries: WritableArray):WritableMap {
+        val map = Arguments.createMap();
+        map.putString("type", type);
+        map.putArray("geometries", geometries);
+        return map
+    }
+    private fun geometry(type: String, coordinates: WritableArray):WritableMap {
+        val map = Arguments.createMap();
+        map.putString("type", type);
+        map.putArray("coordinates", coordinates);
         return map
     }
 
-    fun fromLineString(lineString: LineString?): WritableMap {
-        val map = Arguments.createMap()
-        map.putString("type", "LineString")
-        map.putArray("coordinates", getCoordinates(lineString))
-        return map
-    }
-
-    fun fromPolygon(polygon: Polygon?): WritableMap {
-        val map = Arguments.createMap()
-        map.putString("type", "Polygon")
-        map.putArray("coordinates", getCoordinates(polygon))
-        return map
-    }
-
-    fun getCoordinates(point: Point?): WritableArray {
+    private fun coordinates(point: Point): WritableArray {
         return Arguments.fromArray(pointToDoubleArray(point))
     }
 
-    fun getCoordinates(lineString: LineString?): WritableArray {
-        val array = Arguments.createArray()
-        val points = lineString!!.coordinates()
-        for (point in points) {
-            array.pushArray(Arguments.fromArray(pointToDoubleArray(point)))
+    private fun fromList(items: List<ReadableArray>): WritableArray {
+        val ret = WritableNativeArray();
+        items.forEach {
+            ret.pushArray(it)
         }
-        return array
+        return ret;
     }
 
-    fun getCoordinates(polygon: Polygon?): WritableArray {
-        val array = Arguments.createArray()
-        val points = polygon!!.coordinates()
-            ?: return array
-        for (curPoint in points) {
-            val innerArray = Arguments.createArray()
-            for (point in curPoint) {
-                innerArray.pushArray(Arguments.fromArray(pointToDoubleArray(point)))
-            }
-            array.pushArray(innerArray)
-        }
-        return array
+    private fun coordinatesL(points: List<Point>): WritableArray {
+        return fromList(points.map { coordinates(it) })
+    }
+
+    private fun coordinatesLL(points: List<List<Point>>): WritableArray {
+        return fromList(points.map { coordinatesL(it) })
+    }
+
+    private fun coordinatesLLL(points: List<List<List<Point>>>): WritableArray {
+        return fromList(points.map { coordinatesLL(it) })
     }
 
     @JvmStatic
@@ -208,4 +214,6 @@ object GeoJSONUtils {
         }
         return result
     }
+
+    const val LOG_TAG = "GeoJSONUtils"
 }
