@@ -72,7 +72,7 @@ import SetDisplacement from '../examples/UserLocation/SetDisplacement';
 import SetTintColor from '../examples/UserLocation/SetTintColor';
 import SetUserLocationRenderMode from '../examples/UserLocation/SetUserLocationRenderMode';
 import UserLocationPadding from '../examples/UserLocation/UserLocationPadding';
-import UserLocationChange from '../examples/UserLocation/UserLocationChange';
+import UserLocationUpdates from '../examples/UserLocation/UserLocationUpdates';
 // MISC
 import BugReportExample from '../examples/BugReportExample';
 import BugReportExampleTS from '../examples/BugReportExampleTS';
@@ -297,7 +297,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
   ]),
   new ExampleGroup('User Location', [
     new ExampleItem('User Location Padding', UserLocationPadding),
-    new ExampleItem('User Location Updates', UserLocationChange),
+    new ExampleItem('User Location Updates', UserLocationUpdates),
     new ExampleItem('Set Displacement', SetDisplacement),
     new ExampleItem('Set User Location Render Mode', SetUserLocationRenderMode),
   ]),
