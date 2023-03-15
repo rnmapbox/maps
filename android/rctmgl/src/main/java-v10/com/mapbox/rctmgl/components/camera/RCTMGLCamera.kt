@@ -39,7 +39,7 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
     private var hasSentFirstRegion = false
     private var mDefaultStop: CameraStop? = null
     private var mCameraStop: CameraStop? = null
-    private val mCameraUpdateQueue: CameraUpdateQueue
+    private val mCameraUpdateQueue = CameraUpdateQueue()
 
     /*
     // private LocationComponent mLocationComponent;
@@ -66,17 +66,6 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
     private var mMaxBounds: LatLngBounds? = null
 
 
-    private val mLocationBearingChangedListener = OnIndicatorBearingChangedListener { v ->
-        if (mFollowUserLocation) {
-            mMapView!!.getMapboxMap().setCamera(CameraOptions.Builder().bearing(v).build())
-        }
-    }
-    private val mLocationPositionChangeListener = OnIndicatorPositionChangedListener { point ->
-        if (mFollowUserLocation) {
-            mMapView!!.getMapboxMap().setCamera(CameraOptions.Builder().center(point).build())
-            mMapView!!.gestures.focalPoint = mMapView!!.getMapboxMap().pixelForCoordinate(point)
-        }
-    }
     private val mCameraCallback: Animator.AnimatorListener = object : Animator.AnimatorListener {
         override fun onAnimationStart(animator: Animator) {}
         override fun onAnimationEnd(animator: Animator) {
@@ -110,9 +99,9 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
     }
     fun setStop(stop: CameraStop) {
         mCameraStop = stop
-        mCameraStop!!.setCallback(mCameraCallback)
+        stop.setCallback(mCameraCallback)
         if (mMapView != null) {
-            mCameraStop?.let { updateCamera(it) }
+            stop.let { updateCamera(it) }
         }
     }
 
@@ -221,7 +210,6 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
     }
 
     init {
-        mCameraUpdateQueue = CameraUpdateQueue()
         mLocationManager = getInstance(mContext)
     }
 

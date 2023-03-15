@@ -59,7 +59,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
     }
 
     override fun removeViewAt(mapView: RCTMGLMapView?, index: Int) {
-        mapView!!.removeFeature(index)
+        mapView!!.removeFeatureAt(index)
     }
 
     override fun createViewInstance(themedReactContext: ThemedReactContext): RCTMGLMapView {

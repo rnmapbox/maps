@@ -55,9 +55,7 @@ class CameraUpdateQueue {
 
     fun execute(map: RCTMGLMapView?) {
         if (mQueue.isEmpty()) {
-            if (mCompleteListener != null) {
-                mCompleteListener!!.onCompleteAll()
-            }
+            mCompleteListener?.let { it.onCompleteAll() }
             return
         }
         val stop = mQueue.poll() ?: return
