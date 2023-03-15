@@ -7,7 +7,7 @@
 | ---- | :-- | :----- | :------ | :---------- |
 | androidRenderMode | `'normal' \| 'compass' \| 'gps'` | `none` | `false` | native/android only render mode<br/><br/> - normal: just a circle<br/> - compass: triangle with heading<br/> - gps: large arrow<br/><br/>@platform android |
 | animated | `boolean` | `true` | `false` | Whether location icon is animated between updates |
-| children | `ReactElement` | `none` | `false` | Custom location icon of type mapbox-gl-native components |
+| children | `ReactElement \| ReactElement[]` | `none` | `false` | Custom location icon of type mapbox-gl-native components |
 | minDisplacement | `number` | `0` | `false` | Minimum amount of movement before GPS location is updated in meters |
 | onPress | `func` | `none` | `false` | Callback that is triggered on location icon press<br/>*signature:*`() => void` |
 | onUpdate | `func` | `none` | `false` | Callback that is triggered on location update<br/>*signature:*`(location:Location) => void` |
