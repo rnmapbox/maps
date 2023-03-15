@@ -8,7 +8,7 @@
 
 ## Testing my changes
 The metro bundler under `/example` is set up to use the libraries files under root.  
-Which means, when you change something within `javascript/components/UserLocation.js`  
+Which means, when you change something within `src/components/UserLocation.js`  
 it will be reflected in any scene in example that uses that component.
 
 ## Best practices for PR's

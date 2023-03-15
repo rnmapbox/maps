@@ -2,7 +2,7 @@ import { NativeModules } from 'react-native';
 
 import LocationManager, {
   LocationModuleEventEmitter,
-} from '../../../javascript/modules/location/locationManager';
+} from '../../../src/modules/location/locationManager';
 
 const MapboxGL = NativeModules.MGLModule;
 const MapboxGLLocationManager = NativeModules.MGLLocationModule;

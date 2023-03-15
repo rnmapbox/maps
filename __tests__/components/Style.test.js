@@ -1,19 +1,19 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
 
-import VectorSource from '../../javascript/components/VectorSource';
-import RasterSource from '../../javascript/components/RasterSource';
-import ImageSource from '../../javascript/components/ImageSource';
-import { ShapeSource } from '../../javascript/components/ShapeSource';
-import Style from '../../javascript/components/Style';
-import HeatmapLayer from '../../javascript/components/HeatmapLayer';
-import CircleLayer from '../../javascript/components/CircleLayer';
-import { SymbolLayer } from '../../javascript/components/SymbolLayer';
-import RasterLayer from '../../javascript/components/RasterLayer';
-import LineLayer from '../../javascript/components/LineLayer';
-import FillLayer from '../../javascript/components/FillLayer';
-import FillExtrusionLayer from '../../javascript/components/FillExtrusionLayer';
-import BackgroundLayer from '../../javascript/components/BackgroundLayer';
+import VectorSource from '../../src/components/VectorSource';
+import RasterSource from '../../src/components/RasterSource';
+import ImageSource from '../../src/components/ImageSource';
+import { ShapeSource } from '../../src/components/ShapeSource';
+import Style from '../../src/components/Style';
+import HeatmapLayer from '../../src/components/HeatmapLayer';
+import CircleLayer from '../../src/components/CircleLayer';
+import { SymbolLayer } from '../../src/components/SymbolLayer';
+import RasterLayer from '../../src/components/RasterLayer';
+import LineLayer from '../../src/components/LineLayer';
+import FillLayer from '../../src/components/FillLayer';
+import FillExtrusionLayer from '../../src/components/FillExtrusionLayer';
+import BackgroundLayer from '../../src/components/BackgroundLayer';
 
 describe('Style', () => {
   test('renders vectory source correctly', () => {

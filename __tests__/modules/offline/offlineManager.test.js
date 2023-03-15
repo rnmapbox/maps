@@ -1,7 +1,7 @@
 import { NativeModules, Platform } from 'react-native';
 
-import MapboxGL from '../../../javascript';
-import { OfflineModuleEventEmitter } from '../../../javascript/modules/offline/offlineManager';
+import MapboxGL from '../../../src';
+import { OfflineModuleEventEmitter } from '../../../src/modules/offline/offlineManager';
 
 describe('offlineManager', () => {
   const packOptions = {

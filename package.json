@@ -21,11 +21,11 @@
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/index.d.ts",
-  "browser": "./javascript/index.web.js",
-  "react-native": "javascript/index",
-  "source": "javascript/index",
+  "browser": "./src/index.web.js",
+  "react-native": "src/index",
+  "source": "src/index",
   "files": [
-    "javascript",
+    "src",
     "lib",
     "plugin",
     "assets",
@@ -119,7 +119,7 @@
   "jest": {
     "preset": "react-native",
     "collectCoverageFrom": [
-      "javascript/**/*.js"
+      "src/**/*.js"
     ],
     "setupFiles": [
       "./setup-jest.js",
@@ -136,7 +136,7 @@
     "*.{js,jsx,ts,tsx}": "eslint --fix"
   },
   "react-native-builder-bob": {
-    "source": "javascript",
+    "source": "src",
     "output": "lib",
     "targets": [
       "commonjs",
