@@ -12,6 +12,7 @@ import com.mapbox.maps.ViewAnnotationAnchor
 import com.mapbox.maps.ViewAnnotationOptions
 import com.mapbox.maps.viewannotation.viewAnnotationOptions
 import com.mapbox.rctmgl.components.AbstractMapFeature
+import com.mapbox.rctmgl.components.RemovalReason
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 import com.mapbox.rctmgl.utils.Logger
 import java.util.Vector
@@ -77,9 +78,10 @@ class RCTMGLMarkerView(context: Context?, private val mManager: RCTMGLMarkerView
         add()
     }
 
-    override fun removeFromMap(mapView: RCTMGLMapView) {
-        super.removeFromMap(mapView)
+    override fun removeFromMap(mapView: RCTMGLMapView, reason: RemovalReason): Boolean {
+        super.removeFromMap(mapView, reason)
         remove(mapView)
+        return true
     }
 
     // endregion

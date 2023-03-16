@@ -47,6 +47,7 @@ import com.mapbox.maps.plugin.scalebar.generated.ScaleBarSettings
 import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.components.AbstractMapFeature
+import com.mapbox.rctmgl.components.RemovalReason
 import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerView
 import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerViewManager
 import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotation
@@ -401,8 +402,9 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             mImages.remove(feature)
         }
         if (entry.addedToMap) {
-            feature?.removeFromMap(this)
-            entry.addedToMap = false
+            if (feature?.removeFromMap(this, RemovalReason.VIEW_REMOVAL) == true) {
+                entry.addedToMap = false
+            }
         }
         mFeatures.removeAt(childPosition)
     }
@@ -414,10 +416,11 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         return mFeatures[i].view
     }
 
-    fun removeAllFeatureFromMap() {
+    fun removeAllFeatureFromMap(reason: RemovalReason) {
         mFeatures.forEach {
-            it.feature?.removeFromMap(this)
-            it.addedToMap = false
+            if (it.feature?.removeFromMap(this, reason) == true) {
+                it.addedToMap = false
+            }
         }
     }
     // endregion
@@ -429,10 +432,11 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         mCameraChangeTracker.setReason(CameraChangeReason.NONE)
     }
 
-    private fun removeAllFeaturesFromMap() {
+    private fun removeAllFeaturesFromMap(reason: RemovalReason) {
         mFeatures.forEach { it ->
-            it.feature?.removeFromMap(this)
-            it.addedToMap = false
+            if (it.feature?.removeFromMap(this, reason) == true) {
+                it.addedToMap = false
+            }
         }
     }
 
@@ -527,7 +531,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     fun setReactStyleURL(styleURL: String) {
         mStyleURL = styleURL
         if (mMap != null) {
-            removeAllFeatureFromMap()
+            removeAllFeatureFromMap(RemovalReason.STYLE_CHANGE)
             if (isJSONValid(mStyleURL)) {
                 styleLoaded = false
                 mMap.loadStyleJson(styleURL, object : Style.OnStyleLoaded {
@@ -1248,7 +1252,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     override fun onDestroy() {
-        removeAllFeaturesFromMap()
+        removeAllFeaturesFromMap(RemovalReason.ON_DESTROY)
         viewAnnotationManager.removeAllViewAnnotations()
         mLocationComponentManager?.onDestroy();
 
@@ -1257,7 +1261,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     fun onDropViewInstance() {
-        removeAllFeaturesFromMap()
+        removeAllFeaturesFromMap(RemovalReason.ON_DESTROY)
         viewAnnotationManager.removeAllViewAnnotations()
         lifecycle.onDestroy()
     }

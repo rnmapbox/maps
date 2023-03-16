@@ -25,6 +25,7 @@ import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateBearing
 import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateOptions
 import com.mapbox.maps.plugin.viewport.data.ViewportStatusChangeReason
 import com.mapbox.maps.plugin.viewport.viewport
+import com.mapbox.rctmgl.components.RemovalReason
 import com.mapbox.rctmgl.components.camera.constants.CameraMode
 import com.mapbox.rctmgl.components.location.*
 import com.mapbox.rctmgl.events.MapUserTrackingModeEvent
@@ -94,8 +95,12 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         _updateViewportState()
     }
 
-    override fun removeFromMap(mapView: RCTMGLMapView) {
-        super.removeFromMap(mapView)
+    override fun removeFromMap(mapView: RCTMGLMapView, reason: RemovalReason) : Boolean {
+        if (reason == RemovalReason.STYLE_CHANGE) {
+            return false
+        } else {
+            return super.removeFromMap(mapView, reason);
+        }
     }
     fun setStop(stop: CameraStop) {
         mCameraStop = stop
@@ -170,11 +175,13 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
     }
 
     private fun setInitialCamera() {
-        val map = mMapView!!.getMapboxMap()
-        if (mDefaultStop != null) {
-            mDefaultStop!!.setDuration(0)
-            mDefaultStop!!.setMode(CameraMode.NONE)
-            val item = mDefaultStop!!.toCameraUpdate(mMapView!!)
+        mDefaultStop?.let {
+            val mapView = mMapView!!
+            val map = mapView.getMapboxMap()
+
+            it.setDuration(0)
+            it.setMode(CameraMode.NONE)
+            val item = it.toCameraUpdate(mapView)
             item.run()
         }
     }

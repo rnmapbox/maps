@@ -15,6 +15,7 @@ import com.mapbox.maps.ImageStretches
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
 import com.mapbox.rctmgl.R
+import com.mapbox.rctmgl.components.RemovalReason
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 import com.mapbox.rctmgl.components.images.RCTMGLImages
 import com.mapbox.rctmgl.events.ImageMissingEvent
@@ -92,13 +93,13 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
         mSendMissingImageEvents = value
     }
 
-    override fun removeFromMap(mapView: RCTMGLMapView) {
+    override fun removeFromMap(mapView: RCTMGLMapView, reason: RemovalReason): Boolean {
         removeImages(mapView)
         mMap = null
         mNativeImages = mutableMapOf()
         mImages = HashMap()
         mCurrentImages = HashSet()
-        super.removeFromMap(mapView)
+        return super.removeFromMap(mapView, reason)
     }
 
     private fun removeImages(mapView: RCTMGLMapView) {

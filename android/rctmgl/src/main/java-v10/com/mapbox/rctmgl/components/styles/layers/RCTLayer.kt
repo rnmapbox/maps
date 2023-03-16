@@ -16,6 +16,7 @@ import com.mapbox.maps.extension.style.expressions.dsl.generated.literal
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.*
 import com.mapbox.maps.extension.style.layers.properties.generated.Visibility
+import com.mapbox.rctmgl.components.RemovalReason
 import com.mapbox.rctmgl.components.styles.layers.RCTLayer
 import com.mapbox.rctmgl.components.styles.sources.RCTSource
 import com.mapbox.rctmgl.modules.RCTMGLLogging
@@ -63,7 +64,7 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
         }
         mAboveLayerID = aboveLayerID
         if (mLayer != null) {
-            removeFromMap(mMapView!!)
+            removeFromMap(mMapView!!, RemovalReason.REORDER)
             addAbove(mAboveLayerID)
         }
     }
@@ -74,7 +75,7 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
         }
         mBelowLayerID = belowLayerID
         if (mLayer != null) {
-            removeFromMap(mMapView!!)
+            removeFromMap(mMapView!!,RemovalReason.REORDER)
             addBelow(mBelowLayerID)
         }
     }
@@ -85,7 +86,7 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
         }
         mLayerIndex = layerIndex
         if (mLayer != null) {
-            removeFromMap(mMapView!!)
+            removeFromMap(mMapView!!,RemovalReason.REORDER)
             addAtIndex(layerIndex)
         }
     }
@@ -272,7 +273,7 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
         }
     }
 
-    override fun removeFromMap(mapView: RCTMGLMapView) {
+    override fun removeFromMap(mapView: RCTMGLMapView, reason: RemovalReason): Boolean {
         style?.let {
             val layer = mLayer
             if (layer != null) {
@@ -281,7 +282,7 @@ abstract class RCTLayer<T : Layer?>(protected var mContext: Context) : AbstractS
                 Logger.e("RCTLayer","mLayer is null on removal layer from map")
             }
         }
-        super.removeFromMap(mapView)
+        return super.removeFromMap(mapView, reason)
     }
 
     private val style: Style?
