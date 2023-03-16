@@ -16,6 +16,7 @@ import com.mapbox.geojson.Feature
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.style.StyleContract
 import com.mapbox.maps.extension.style.sources.Source
+import com.mapbox.rctmgl.components.RemovalReason
 import com.mapbox.rctmgl.components.styles.sources.RCTSource.OnPressEvent
 import com.mapbox.rctmgl.utils.LatLng
 import com.mapbox.rctmgl.utils.Logger
@@ -150,12 +151,15 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
 
     }
 
-    override fun removeFromMap(mapView: RCTMGLMapView) {
+    override fun removeFromMap(mapView: RCTMGLMapView, reason: RemovalReason): Boolean {
+
         mSubFeatures.forEach { it
-            it.feature?.let {
-                it.removeFromMap(mapView)
+            var featureInfo = it
+            featureInfo.feature?.let {
+                if (it.removeFromMap(mapView, reason)) {
+                    featureInfo.added = false
+                }
             }
-            it.added = false
         }
         if (mMap != null && mSource != null && mMap!!.getStyle() != null) {
             try {
@@ -164,7 +168,7 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
                 Logger.w(LOG_TAG, String.format("RCTSource.removeFromMap: %s - %s", mSource, ex.message), ex)
             }
         }
-        super.removeFromMap(mapView)
+        return super.removeFromMap(mapView, reason)
     }
 
     fun addLayer(childView: View?, childPosition: Int) {
@@ -191,7 +195,7 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
         if (featureInfo.added) {
             val mapView = mMapView
             if (mapView != null) {
-                featureInfo.feature?.let { it.removeFromMap(mapView) }
+                featureInfo.feature?.let { it.removeFromMap(mapView, RemovalReason.VIEW_REMOVAL) }
             }
             featureInfo.added = false
         }

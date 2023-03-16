@@ -19,6 +19,7 @@ import android.view.View
 import com.mapbox.geojson.Point
 import com.mapbox.maps.ScreenCoordinate
 import com.mapbox.maps.Style
+import com.mapbox.rctmgl.components.RemovalReason
 import com.mapbox.rctmgl.events.PointAnnotationDragEvent
 import com.mapbox.rctmgl.utils.BitmapUtils
 import com.mapbox.rctmgl.utils.LatLng
@@ -90,8 +91,8 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
         }
     }
 
-    override fun removeFromMap(mapView: RCTMGLMapView) {
-        val map = (if (mMapView != null) mMapView else mapView) ?: return
+    override fun removeFromMap(mapView: RCTMGLMapView, reason: RemovalReason): Boolean {
+        val map = (if (mMapView != null) mMapView else mapView) ?: return true
         if (marker != null) {
             map.pointAnnotationManager?.delete(marker!!)
         }
@@ -101,7 +102,7 @@ class RCTMGLPointAnnotation(private val mContext: Context, private val mManager:
         if (calloutView != null) {
             map.offscreenAnnotationViewContainer?.removeView(calloutView)
         }
-        super.removeFromMap(mapView)
+        return super.removeFromMap(mapView, reason)
     }
 
     override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int,
