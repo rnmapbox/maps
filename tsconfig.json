@@ -14,12 +14,11 @@
     "esModuleInterop": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "lib/javascript",
     "noUnusedLocals": true,
     "noImplicitReturns": true,
   },
   "include": [
     "index.ts",
-    "javascript/**/*"
+    "src/**/*"
   ]
 }

@@ -293,7 +293,7 @@ PODS:
   - React-jsinspector (0.69.7)
   - React-logger (0.69.7):
     - glog
-  - react-native-safe-area-context (4.3.3):
+  - react-native-safe-area-context (4.5.0):
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
@@ -367,21 +367,21 @@ PODS:
     - React-perflogger (= 0.69.7)
   - RNCAsyncStorage (1.17.11):
     - React-Core
-  - rnmapbox-maps (10.0.0-beta.70):
+  - rnmapbox-maps (10.0.0-beta.77):
     - MapboxMaps (~> 10.11.1)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.0.0-beta.70)
+    - rnmapbox-maps/DynamicLibrary (= 10.0.0-beta.77)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.0.0-beta.70):
+  - rnmapbox-maps/DynamicLibrary (10.0.0-beta.77):
     - MapboxMaps (~> 10.11.1)
     - React
     - React-Core
     - Turf
-  - RNScreens (3.17.0):
+  - RNScreens (3.20.0):
     - React-Core
     - React-RCTImage
-  - RNSVG (12.4.4):
+  - RNSVG (12.5.1):
     - React-Core
   - RNVectorIcons (9.2.0):
     - React-Core
@@ -593,7 +593,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: a73bec0218ba959fc92f811b581ad6c2270c6b6f
   React-jsinspector: 8134ee22182b8dd98dc0973db6266c398103ce6c
   React-logger: 1e7ac909607ee65fd5c4d8bea8c6e644f66b8843
-  react-native-safe-area-context: b456e1c40ec86f5593d58b275bd0e9603169daca
+  react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
   React-perflogger: 8e832d4e21fdfa613033c76d58d7e617341e804b
   React-RCTActionSheet: 9ca778182a9523991bff6381045885b6e808bb73
   React-RCTAnimation: 9ced26ad20b96e532ac791a8ab92a7b1ce2266b8
@@ -607,9 +607,9 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 65cd2782a57e1d59a68aa5d504edf94278578e41
   ReactCommon: 1e783348b9aa73ae68236271df972ba898560a95
   RNCAsyncStorage: 8616bd5a58af409453ea4e1b246521bb76578d60
-  rnmapbox-maps: d43651cdc9f34d7d5cddf572beb78386040a928d
-  RNScreens: 0df01424e9e0ed7827200d6ed1087ddd06c493f9
-  RNSVG: ecd661f380a07ba690c9c5929c475a44f432d674
+  rnmapbox-maps: 638be71712078e4fa2c6558786bb88d2de89cf9d
+  RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
+  RNSVG: d7d7bc8229af3842c9cfc3a723c815a52cdd1105
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Turf: 60b93cfdc62758526bc7bf1ef191a829aeb9694d
@@ -618,4 +618,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 504114e3a9291acf8720cba70a4a27db8d3269b4
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
