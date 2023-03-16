@@ -61,7 +61,7 @@ Converts a geographic coordinate to a point in the given view’s coordinate sys
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `coordinate` | `tuple` | `Yes` | A point expressed in the map view's coordinate system. |
+| `coordinate` | `Position` | `Yes` | A point expressed in the map view's coordinate system. |
 
 
 
@@ -77,7 +77,7 @@ Converts a point in the given view’s coordinate system to a geographic coordin
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `point` | `tuple` | `Yes` | A point expressed in the given view’s coordinate system. |
+| `point` | `Position` | `Yes` | A point expressed in the given view’s coordinate system. |
 
 
 
@@ -109,7 +109,7 @@ Returns an array of rendered map features that intersect with a given point.
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `coordinate` | `tuple` | `Yes` | A point expressed in the map view’s coordinate system. |
+| `coordinate` | `Position` | `Yes` | A point expressed in the map view’s coordinate system. |
 | `filter` | `Array` | `No` | A set of strings that correspond to the names of layers defined in the current style. Only the features contained in these layers are included in the returned array. |
 | `layerIDs` | `Array` | `No` | A array of layer id's to filter the features by |
 
@@ -197,7 +197,7 @@ Queries the currently loaded data for elevation at a geographical location.<br/>
 #### arguments
 | Name | Type | Required | Description  |
 | ---- | :--: | :------: | :----------: |
-| `coordinate` | `tuple` | `Yes` | the coordinates to query elevation at |
+| `coordinate` | `Position` | `Yes` | the coordinates to query elevation at |
 
 
 ### setSourceVisibility(visible, sourceId[, sourceLayerId])

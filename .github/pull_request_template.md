@@ -19,8 +19,7 @@ Added `your feature` that allows ...
 
 - [ ] I have tested this on a device/simulator for each compatible OS
 - [ ] I updated the documentation with running `yarn generate` in the root folder
-- [ ] I updated the typings files - if js interface was changed (`index.d.ts`)
-- [ ] I added/ updated a sample - if a new feature was implemented (`/example`)
+- [ ] I added/updated a sample - if a new feature was implemented (`/example`)
 
 ## Screenshot OR Video
 

@@ -3,6 +3,7 @@
 @objc
 class RCTMGLSource : RCTMGLInteractiveElement {
   var layers: [RCTMGLSourceConsumer] = []
+  var components: [RCTMGLMapComponent] = []
 
   var source : Source? = nil
 
@@ -29,16 +30,32 @@ class RCTMGLSource : RCTMGLInteractiveElement {
   // MARK: - UIView+React
 
   @objc override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
-    if let layer : RCTMGLSourceConsumer = subview as? RCTMGLSourceConsumer {
+    if let layer = subview as? RCTMGLSourceConsumer {
       if let map = map {
         layer.addToMap(map, style: map.mapboxMap.style)
       }
       layers.append(layer)
+    } else if let component = subview as? RCTMGLMapComponent {
+      if let map = map {
+        component.addToMap(map, style: map.mapboxMap.style)
+      }
+      components.append(component)
     }
     super.insertReactSubview(subview, at: atIndex)
   }
   
   @objc override func removeReactSubview(_ subview: UIView!) {
+    if let layer : RCTMGLSourceConsumer = subview as? RCTMGLSourceConsumer {
+      if let map = map {
+        layer.removeFromMap(map, style: map.mapboxMap.style)
+      }
+      layers.removeAll { $0 as AnyObject === layer }
+    } else if let component = subview as? RCTMGLMapComponent {
+      if let map = map {
+        component.removeFromMap(map)
+      }
+      layers.removeAll { $0 as AnyObject === component }
+    }
     super.removeReactSubview(subview)
   }
   
@@ -50,28 +67,29 @@ class RCTMGLSource : RCTMGLInteractiveElement {
   
   override func addToMap(_ map: RCTMGLMapView, style: Style) {
     self.map = map
-    
-    map.onMapStyleLoaded { mapboxMap in
-      if style.sourceExists(withId: self.id) {
-        self.source = try! style.source(withId: self.id)
-      } else {
-        let source = self.makeSource()
-        self.ownsSource = true
-        self.source = source
-        logged("SyleSource.addToMap", info: {"id: \(optional: self.id)"}) {
-          try style.addSource(source, id: self.id)
-        }
+
+    if style.sourceExists(withId: self.id) {
+      self.source = try! style.source(withId: self.id)
+    } else {
+      let source = self.makeSource()
+      self.ownsSource = true
+      self.source = source
+      logged("SyleSource.addToMap", info: {"id: \(optional: self.id)"}) {
+        try style.addSource(source, id: self.id)
       }
-           
-      for layer in self.layers {
-        layer.addToMap(map, style: map.mapboxMap.style)
-      }
+    }
+
+    for layer in self.layers {
+      layer.addToMap(map, style: map.mapboxMap.style)
+    }
+    for component in self.components {
+      component.addToMap(map, style: map.mapboxMap.style)
     }
   }
 
   override func removeFromMap(_ map: RCTMGLMapView) {
     self.map = nil
-    
+
     for layer in self.layers {
       layer.removeFromMap(map, style: map.mapboxMap.style)
     }

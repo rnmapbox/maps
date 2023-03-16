@@ -17,6 +17,7 @@ describe('Public Interface', () => {
 
       // modules
       'offlineManager',
+      'OfflineCreatePackOptions',
       'snapshotManager',
       'locationManager',
 
@@ -43,7 +44,9 @@ describe('Public Interface', () => {
       'Image',
 
       // constants
-      'UserTrackingModes',
+      'UserTrackingModes', // deprecated
+      'UserTrackingMode',
+      'UserLocationRenderMode',
       'StyleURL',
       'EventTypes',
       'CameraModes',
@@ -72,6 +75,7 @@ describe('Public Interface', () => {
       'LightAnchor',
       'OfflinePackDownloadState',
       'OfflineCallbackName',
+      'TileServers',
 
       // methods
       'setWellKnownTileServer',
@@ -81,6 +85,8 @@ describe('Public Interface', () => {
       'setConnected',
       'requestAndroidLocationPermissions',
       'getAnnotationsLayerID',
+      'addCustomHeader',
+      'removeCustomHeader',
 
       // animated
       'Animated',

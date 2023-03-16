@@ -147,15 +147,15 @@ npm run android
 ```js
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import MapboxGL from '@rnmapbox/maps';
+import Mapbox from '@rnmapbox/maps';
 
-MapboxGL.setAccessToken('<YOUR_ACCESSTOKEN>');
+Mapbox.setAccessToken('<YOUR_ACCESSTOKEN>');
 
 const App = () => {
   return (
     <View style={styles.page}>
       <View style={styles.container}>
-        <MapboxGL.MapView style={styles.map} />
+        <Mapbox.MapView style={styles.map} />
       </View>
     </View>
   );

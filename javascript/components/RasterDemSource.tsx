@@ -20,6 +20,11 @@ type Props = {
   id: string;
 
   /**
+   * The id refers to en existing source in the style. Does not create a new source.
+   */
+  existing?: boolean;
+
+  /**
    * A URL to a TileJSON configuration file describing the source’s contents and other metadata.
    */
   url?: string;

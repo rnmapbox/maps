@@ -40,8 +40,12 @@ class ShowAndHideLayer extends React.Component {
           style={styles.mapView}
         >
           <MapboxGL.Camera defaultSettings={defaultCamera} />
-          <MapboxGL.FillLayer id="building" style={{ visibility }} />
-          <MapboxGL.LineLayer id="building-outline" style={{ visibility }} />
+          <MapboxGL.FillLayer id="building" existing style={{ visibility }} />
+          <MapboxGL.LineLayer
+            id="building-outline"
+            existing
+            style={{ visibility }}
+          />
         </MapboxGL.MapView>
         <Bubble onPress={this.onPress}>
           <Text>{this.state.show ? 'Hide Buildings' : 'Show Buildings'}</Text>

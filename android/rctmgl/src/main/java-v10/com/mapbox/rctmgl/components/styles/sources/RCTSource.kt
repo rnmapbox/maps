@@ -23,6 +23,9 @@ import java.lang.ClassCastException
 import java.util.ArrayList
 import java.util.HashMap
 
+data class FeatureInfo(val feature: AbstractMapFeature?, var added: Boolean) {
+}
+
 abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(context) {
     @JvmField
     protected var mMap: MapboxMap? = null
@@ -31,19 +34,40 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
     protected var mSource: T? = null
     protected var mHasPressListener = false
     protected var mTouchHitbox: Map<String, Double>? = null
-    protected var mLayers: MutableList<AbstractSourceConsumer>
-    private var mQueuedLayers: MutableList<AbstractSourceConsumer>?
+    private var mSubFeatures = mutableListOf<FeatureInfo>()
+
     val layerIDs: List<String>
         get() {
-            val layerIDs: MutableList<String> = ArrayList()
-            for (i in mLayers.indices) {
-                val layer = mLayers[i]
-                val id = layer.iD
-                if (id != null) {
-                    layerIDs.add(id)
+           return mSubFeatures.mapIndexed { index, featureInfo ->
+                if (featureInfo.added && featureInfo.feature is AbstractSourceConsumer)  {
+                    featureInfo.feature.iD
+                } else {
+                    null
+                }
+            }.filterNotNull()
+        }
+
+    abstract fun hasNoDataSoRefersToExisting(): Boolean;
+
+    public var mExisting: Boolean? = null
+
+    val existing: Boolean
+        get() {
+            var result: Boolean = false
+            mExisting?.also {
+                result = it
+            } ?: run {
+                if (hasNoDataSoRefersToExisting()) {
+                    Logger.w(
+                        LOG_TAG,
+                        "RCTSource: soure with id: $id seems to refer to existing value but existing flag is not set. This is deprecated."
+                    )
+                    result = true
+                } else {
+                    result = false
                 }
             }
-            return layerIDs
+            return result
         }
 
     private fun getSourceAs(style: Style, id: String?): T? {
@@ -52,18 +76,6 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
             result as T?
         } catch (exception: ClassCastException) {
             null
-        }
-    }
-
-    protected fun addLayerToMap(layer: AbstractSourceConsumer?, childPosition: Int) {
-        mMapView?.let {
-            val mapView = it
-            layer?.let {
-                it.addToMap(mapView)
-                if (!mLayers.contains(it)) {
-                    mLayers.add(childPosition, it)
-                }
-            }
         }
     }
 
@@ -94,51 +106,56 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
                         .build()
             } else mTouchHitbox
         }
-    val layerCount: Int
-        get() {
-            var totalCount = 0
-            if (mQueuedLayers != null) {
-                totalCount = mQueuedLayers!!.size
+
+    fun addToMap(existings: Boolean, style: Style, mapView: RCTMGLMapView) {
+        mSource = null
+        if (existings) {
+            val existingSource = getSourceAs(style, iD)
+            if (existingSource != null) {
+                mSource = existingSource
+            } else {
+                Logger.w(LOG_TAG, "Source $iD was makred as existing but was not found in style")
             }
-            totalCount += mLayers.size
-            return totalCount
         }
+        if (mSource == null) {
+            mSource = makeSource()
+            style.addSource(mSource as StyleContract.StyleSourceExtension)
+        }
+        mSubFeatures?.forEach {
+            it.feature?.let {
+                it.addToMap(mapView)
+            }
+            it.added = true
+        }
+    }
 
     override fun addToMap(mapView: RCTMGLMapView) {
         super.addToMap(mapView)
         mMap = mapView.getMapboxMap()
-        mMap?.getStyle(object : Style.OnStyleLoaded {
-            override fun onStyleLoaded(style: Style) {
-                val existingSource = getSourceAs(style, iD)
-                if (existingSource != null) {
-                    mSource = existingSource
-                } else {
-                    mSource = makeSource()
-                    style.addSource(mSource as StyleContract.StyleSourceExtension)
+        val map = mMap
+        if (map == null) {
+            Logger.e("RCTSource", "map is exepted to be valid but was null, $iD")
+            return
+        }
+        val style = map.getStyle()
+        if (existing || style == null) {
+            map.getStyle(object : Style.OnStyleLoaded {
+                override fun onStyleLoaded(style: Style) {
+                    addToMap(existing, style, mapView)
                 }
-                if (mQueuedLayers != null && mQueuedLayers!!.size > 0) { // first load
-                    for (i in mQueuedLayers!!.indices) {
-                        addLayerToMap(mQueuedLayers!![i], i)
-                    }
-                    mQueuedLayers = null
-                } else if (mLayers.size > 0) { // handles the case of switching style url, but keeping layers on map
-                    for (i in mLayers.indices) {
-                        addLayerToMap(mLayers[i], i)
-                    }
-                }
-            }
-        })
+            })
+        } else {
+            addToMap(existing, style, mapView)
+        }
+
     }
 
     override fun removeFromMap(mapView: RCTMGLMapView) {
-        if (mLayers.size > 0) {
-            for (i in mLayers.indices) {
-                val layer = mLayers[i]
-                layer.removeFromMap(mapView)
+        mSubFeatures.forEach { it
+            it.feature?.let {
+                it.removeFromMap(mapView)
             }
-        }
-        if (mQueuedLayers != null) {
-            mQueuedLayers!!.clear()
+            it.added = false
         }
         if (mMap != null && mSource != null && mMap!!.getStyle() != null) {
             try {
@@ -151,46 +168,47 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
     }
 
     fun addLayer(childView: View?, childPosition: Int) {
-        if (childView !is AbstractSourceConsumer) {
-            return
-        }
-        val layer = childView
-        if (mMap == null) {
-            mQueuedLayers?.add(childPosition, layer)
+        var feature: AbstractMapFeature? = null
+        if (childView !is AbstractMapFeature) {
+            Logger.w(LOG_TAG, "Attempted to insert view: $childView to shape source: $iD, since it's not a MapFeature it will not be added")
         } else {
-            addLayerToMap(layer, childPosition)
+            feature = childView
         }
+
+        val mapView = mMapView
+
+        val added = if (mapView != null && feature != null) {
+            feature.addToMap(mapView)
+            true
+        } else {
+            false
+        }
+        mSubFeatures.add(childPosition, FeatureInfo(feature, added))
     }
 
     fun removeLayer(childPosition: Int) {
-        val layer: AbstractSourceConsumer
-        layer = if (mQueuedLayers != null && mQueuedLayers!!.size > 0) {
-            mQueuedLayers!![childPosition]
-        } else {
-            mLayers[childPosition]
-        }
-        removeLayerFromMap(layer, childPosition)
-    }
-
-    fun getLayerAt(childPosition: Int): AbstractSourceConsumer {
-        return if (mQueuedLayers != null && mQueuedLayers!!.size > 0) {
-            mQueuedLayers!![childPosition]
-        } else mLayers[childPosition]
-    }
-
-    protected fun removeLayerFromMap(layer: AbstractSourceConsumer?, childPosition: Int) {
-        mMapView?.let {
-            val mapView = it
-            layer?.let {
-                it.removeFromMap(mapView)
+        var featureInfo = mSubFeatures[childPosition]
+        if (featureInfo.added) {
+            val mapView = mMapView
+            if (mapView != null) {
+                featureInfo.feature?.let { it.removeFromMap(mapView) }
             }
+            featureInfo.added = false
         }
-        if (mQueuedLayers != null && mQueuedLayers!!.size > 0) {
-            mQueuedLayers?.removeAt(childPosition)
-        } else {
-            mLayers.removeAt(childPosition)
-        }
+        mSubFeatures.removeAt(childPosition)
     }
+
+    val childViews: List<AbstractMapFeature>
+        get() = mSubFeatures.map { it.feature }.filterNotNull()
+
+    override fun getChildAt(childPosition: Int): View {
+        return childViews[childPosition]
+    }
+
+    override fun getChildCount(): Int {
+        return childViews.size;
+    }
+
 
     abstract fun makeSource(): T
     class OnPressEvent(var features: List<Feature>, var latLng: LatLng, var screenPoint: PointF)
@@ -209,7 +227,5 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
     }
 
     init {
-        mLayers = ArrayList()
-        mQueuedLayers = ArrayList()
     }
 }

@@ -1,30 +1,41 @@
 import React from 'react';
 
 import headingIcon from '../assets/heading.png';
+import { BaseProps } from '../types/BaseProps';
 
 import { SymbolLayer } from './SymbolLayer';
+import Images from './Images';
 
 const style = {
-  iconImage: headingIcon,
+  iconImage: 'userLocationHeading',
   iconAllowOverlap: true,
   iconPitchAlignment: 'map',
   iconRotationAlignment: 'map',
 } as const;
 
-type Props = {
+type Props = BaseProps & {
   heading?: number;
 };
 
-const HeadingIndicator = ({ heading }: Props) => (
-  <SymbolLayer
-    key="mapboxUserLocationHeadingIndicator"
-    id="mapboxUserLocationHeadingIndicator"
-    belowLayerID="mapboxUserLocationWhiteCircle"
-    style={{
-      iconRotate: heading,
-      ...style,
-    }}
-  />
-);
+const HeadingIndicator = ({ heading }: Props) => {
+  return (
+    <React.Fragment key="mapboxUserLocationHeadingIndicatorWrapper">
+      <Images
+        images={{ userLocationHeading: headingIcon }}
+        key="mapboxUserLocationHeadingImages"
+      />
+      <SymbolLayer
+        key="mapboxUserLocationHeadingIndicator"
+        id="mapboxUserLocationHeadingIndicator"
+        sourceID="mapboxUserLocation"
+        belowLayerID="mapboxUserLocationWhiteCircle"
+        style={{
+          iconRotate: heading,
+          ...style,
+        }}
+      />
+    </React.Fragment>
+  );
+};
 
 export default HeadingIndicator;

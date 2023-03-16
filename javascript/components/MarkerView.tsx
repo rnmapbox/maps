@@ -9,6 +9,7 @@ import {
 
 import { toJSONString } from '../utils';
 import { makePoint } from '../utils/geoUtils';
+import { type Position } from '../types/Position';
 
 import PointAnnotation from './PointAnnotation';
 
@@ -20,7 +21,7 @@ type Props = ViewProps & {
   /**
    * The center point (specified as a map coordinate) of the marker.
    */
-  coordinate: [number, number];
+  coordinate: Position;
 
   /**
    * Any coordinate between (0, 0) and (1, 1), where (0, 0) is the top-left corner of
@@ -78,7 +79,7 @@ class MarkerView extends React.PureComponent<Props> {
     return this.__idForPointAnnotation;
   }
 
-  _getCoordinate(coordinate: [number, number]): string | undefined {
+  _getCoordinate(coordinate: Position): string | undefined {
     if (!coordinate) {
       return undefined;
     }

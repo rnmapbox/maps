@@ -63,9 +63,9 @@ class RCTMGLImagesManager(private val mContext: ReactApplicationContext) :
                 val drawable =
                     ResourceUtils.getDrawableByName(mContext, resourceName) as BitmapDrawable
                 if (drawable != null) {
-                    return NativeImage(name, drawable)
+                    return NativeImage(resourceName, drawable)
                 } else {
-                    Logger.e("RCTMGLImages", "cound not get native drawable with name: $name")
+                    Logger.e("RCTMGLImages", "cound not get native drawable with name: $resourceName")
                     return null
                 }
             }
@@ -98,10 +98,10 @@ class RCTMGLImagesManager(private val mContext: ReactApplicationContext) :
                 }
                 val drawable =
                     ResourceUtils.getDrawableByName(mContext, resourceName) as BitmapDrawable
-                if (drawable != null) {
-                    return NativeImage(name, drawable, scale, sdf, stretchX, stretchY)
+                if (drawable != null && resourceName != null) {
+                    return NativeImage(resourceName, drawable, scale, sdf, stretchX, stretchY)
                 } else {
-                    Logger.e("RCTMGLImages", "cound not get native drawable with name: $name")
+                    Logger.e("RCTMGLImages", "cound not get native drawable with name: $resourceName")
                     return null
                 }
             }

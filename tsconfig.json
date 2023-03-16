@@ -19,8 +19,7 @@
     "noImplicitReturns": true,
   },
   "include": [
-    "index.js",
-    "javascript/**/*",
-    "index.d.ts"
+    "index.ts",
+    "javascript/**/*"
   ]
 }

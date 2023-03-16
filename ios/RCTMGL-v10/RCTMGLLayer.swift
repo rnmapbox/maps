@@ -1,6 +1,6 @@
 @_spi(Experimental) import MapboxMaps
 
-protocol RCTMGLSourceConsumer {
+protocol RCTMGLSourceConsumer : class {
   func addToMap(_ map: RCTMGLMapView, style: Style)
   func removeFromMap(_ map: RCTMGLMapView, style: Style)
 }
@@ -8,6 +8,8 @@ protocol RCTMGLSourceConsumer {
 @objc(RCTMGLLayer)
 class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   weak var bridge : RCTBridge? = nil
+
+  var waitingForID: String? = nil
 
   @objc var sourceLayerID : String? = nil {
     didSet { self.optionsChanged() }
@@ -31,7 +33,20 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     didSet { optionsChanged() }
   }
   
-  @objc var id: String! = nil
+  @objc var id: String! = nil {
+    willSet {
+      if id != nil && newValue != id {
+        Logger.log(level:.warn, message: "Changing id from: \(optional: id) to \(optional: newValue), changing of id is supported")
+        if let style = style { self.removeFromMap(style) }
+      }
+    }
+    didSet {
+      if oldValue != nil && oldValue != id {
+        if let map = map, let style = style { self.addToMap(map, style: style) }
+      }
+    }
+  }
+
   @objc var sourceID: String? = nil {
     didSet { optionsChanged() }
   }
@@ -74,6 +89,13 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   }
   
   @objc weak var map: RCTMGLMapView? = nil
+
+  deinit {
+    if let waitingForID = waitingForID {
+      Logger.log(level:.warn, message: "RCTMGLLayer.removeFromMap - unmetPositionDependency: layer: \(optional: id) was waiting for layer: \(optional: waitingForID) but it hasn't added to map")
+      self.waitingForID = nil
+    }
+  }
   
   var styleLayer: Layer? = nil
   
@@ -86,9 +108,9 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   }
   
   func removeAndReaddLayer() {
-    if let style = style {
+    if let map = map, let style = style {
       self.removeFromMap(style)
-      self.insert(style, layerPosition: position())
+      self.addToMap(map, style:style)
     }
   }
    
@@ -248,7 +270,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   }
   
   private func optionsChanged() {
-    if let style = self.style {
+    if let style = self.style, self.styleLayer != nil {
       self.setOptions(&self.styleLayer!)
       self.loggedApply(style: style)
     }
@@ -259,10 +281,14 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   }
   
   private func removeFromMap(_ style: Style) {
+    if let waitingForID = waitingForID {
+      Logger.log(level:.warn, message: "RCTMGLLayer.removeFromMap - unmetPositionDependency: layer: \(optional: id) was waiting for layer: \(optional: waitingForID) but it hasn't added to map")
+    }
+
     do {
       try style.removeLayer(withId: self.id)
     } catch {
-      Logger.log(level: .error, message: "removing layer failed for layer \(optional: id): \(error.localizedDescription)")
+      Logger.log(level: .error, message: "RCTMGLLayer.removeFromMap: removing layer failed for layer \(optional: id): \(error.localizedDescription)")
     }
   }
   
@@ -279,8 +305,11 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
       idToWaitFor = nil
     }
     
+    
     if let idToWaitFor = idToWaitFor {
+      self.waitingForID = idToWaitFor
       map!.waitForLayerWithID(idToWaitFor) { _ in
+        self.waitingForID = nil
         self.attemptInsert(style, layerPosition: layerPosition, onInsert: onInsert)
       }
     } else {

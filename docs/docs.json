@@ -7,7 +7,15 @@
         "name": "onPress",
         "docblock": null,
         "modifiers": [],
-        "params": [],
+        "params": [
+          {
+            "name": "event",
+            "optional": false,
+            "type": {
+              "name": "OnPressEvent"
+            }
+          }
+        ],
         "returns": null
       },
       {
@@ -17,7 +25,20 @@
           "get"
         ],
         "params": [],
-        "returns": null
+        "returns": {
+          "type": {
+            "name": "union",
+            "raw": "SymbolLayerStyle | undefined",
+            "elements": [
+              {
+                "name": "SymbolLayerStyle"
+              },
+              {
+                "name": "undefined"
+              }
+            ]
+          }
+        }
       }
     ],
     "props": [
@@ -31,7 +52,7 @@
       {
         "name": "animated",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "false",
         "description": "FIX ME NO DESCRIPTION"
       },
@@ -45,52 +66,53 @@
       {
         "name": "animationEasingFunction",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(x:number) => number"
+        },
         "default": "Easing.linear",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "FIX ME NO DESCRIPTION\n*signature:*`(x:number) => number`"
       },
       {
         "name": "coordinates",
-        "required": false,
-        "type": {
-          "name": "array",
-          "value": {
-            "type": "number"
-          }
-        },
+        "required": true,
+        "type": "Array",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       },
       {
         "name": "onPress",
         "required": false,
-        "type": "func",
+        "type": {
+          "name": "func",
+          "funcSignature": "(event:OnPressEvent) => void"
+        },
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "FIX ME NO DESCRIPTION\n*signature:*`(event:OnPressEvent) => void`"
       },
       {
         "name": "children",
-        "required": false,
-        "type": "any",
+        "required": true,
+        "type": "ReactElement \\| ReactElement[]",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       },
       {
         "name": "style",
         "required": false,
-        "type": "any",
+        "type": "object",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       },
       {
         "name": "icon",
         "required": false,
-        "type": "union",
+        "type": "string \\| number \\| object",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
       }
     ],
-    "fileNameWithExt": "Annotation.js",
+    "fileNameWithExt": "Annotation.tsx",
     "name": "Annotation"
   },
   "Atmosphere": {
@@ -268,7 +290,14 @@
         "required": true,
         "type": "string",
         "default": "none",
-        "description": "A string that uniquely identifies the source in the style to which it is added."
+        "description": "A string that uniquely identifies the layer in the style to which it is added."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -419,7 +448,7 @@
     "props": [
       {
         "name": "title",
-        "required": false,
+        "required": true,
         "type": "string",
         "default": "none",
         "description": "String that gets displayed in the default callout."
@@ -427,43 +456,40 @@
       {
         "name": "style",
         "required": false,
-        "type": "any",
+        "type": "ViewStyle",
         "default": "none",
         "description": "Style property for the Animated.View wrapper, apply animations to this"
       },
       {
         "name": "containerStyle",
         "required": false,
-        "type": "any",
+        "type": "ViewStyle",
         "default": "none",
         "description": "Style property for the native RCTMGLCallout container, set at your own risk."
       },
       {
         "name": "contentStyle",
         "required": false,
-        "type": "any",
+        "type": "ViewStyle",
         "default": "none",
         "description": "Style property for the content bubble."
       },
       {
         "name": "tipStyle",
         "required": false,
-        "type": "any",
+        "type": "ViewStyle",
         "default": "none",
         "description": "Style property for the triangle tip under the content."
       },
       {
         "name": "textStyle",
         "required": false,
-        "type": "any",
+        "type": "ViewStyle",
         "default": "none",
         "description": "Style property for the title in the content bubble."
       }
     ],
-    "composes": [
-      "../utils"
-    ],
-    "fileNameWithExt": "Callout.js",
+    "fileNameWithExt": "Callout.tsx",
     "name": "Callout"
   },
   "Camera": {
@@ -818,6 +844,13 @@
         "description": "A string that uniquely identifies the source in the style to which it is added."
       },
       {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
+      },
+      {
         "name": "sourceID",
         "required": false,
         "type": "string",
@@ -1170,7 +1203,14 @@
         "required": true,
         "type": "string",
         "default": "none",
-        "description": "A string that uniquely identifies the source in the style to which it is added."
+        "description": "A string that uniquely identifies the layer in the style to which it is added."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -1437,6 +1477,13 @@
         "type": "string",
         "default": "none",
         "description": "A string that uniquely identifies the source in the style to which it is added."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -1711,7 +1758,14 @@
         "required": true,
         "type": "string",
         "default": "none",
-        "description": "A string that uniquely identifies the source in the style to which it is added."
+        "description": "A string that uniquely identifies the layer in the style to which it is added."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -1987,6 +2041,13 @@
         "description": "A string that uniquely identifies the source."
       },
       {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing source in the style. Does not create a new source."
+      },
+      {
         "name": "url",
         "required": false,
         "type": "number \\| string",
@@ -1995,7 +2056,7 @@
       },
       {
         "name": "coordinates",
-        "required": true,
+        "required": false,
         "type": "tuple",
         "default": "none",
         "description": "The top left, top right, bottom right, and bottom left coordinates for the image."
@@ -2027,7 +2088,7 @@
                 "name": "string"
               },
               "required": true,
-              "type": "ImageSourcePropType",
+              "type": "union",
               "default": "none",
               "description": "FIX ME NO DESCRIPTION"
             }
@@ -2182,6 +2243,13 @@
         "type": "string",
         "default": "none",
         "description": "A string that uniquely identifies the source in the style to which it is added."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -2649,7 +2717,7 @@
             "name": "coordinate",
             "description": "A point expressed in the map view's coordinate system.",
             "type": {
-              "name": "tuple"
+              "name": "Position"
             },
             "optional": false
           }
@@ -2660,16 +2728,7 @@
             "name": "Promise",
             "elements": [
               {
-                "name": "tuple",
-                "raw": "[number, number]",
-                "elements": [
-                  {
-                    "name": "number"
-                  },
-                  {
-                    "name": "number"
-                  }
-                ]
+                "name": "Position"
               }
             ],
             "raw": "Promise<Position>"
@@ -2691,7 +2750,7 @@
             "name": "point",
             "description": "A point expressed in the given view’s coordinate system.",
             "type": {
-              "name": "tuple"
+              "name": "Position"
             },
             "optional": false
           }
@@ -2702,16 +2761,7 @@
             "name": "Promise",
             "elements": [
               {
-                "name": "tuple",
-                "raw": "[number, number]",
-                "elements": [
-                  {
-                    "name": "number"
-                  },
-                  {
-                    "name": "number"
-                  }
-                ]
+                "name": "Position"
               }
             ],
             "raw": "Promise<Position>"
@@ -2739,28 +2789,10 @@
                 "raw": "[Position, Position]",
                 "elements": [
                   {
-                    "name": "tuple",
-                    "raw": "[number, number]",
-                    "elements": [
-                      {
-                        "name": "number"
-                      },
-                      {
-                        "name": "number"
-                      }
-                    ]
+                    "name": "Position"
                   },
                   {
-                    "name": "tuple",
-                    "raw": "[number, number]",
-                    "elements": [
-                      {
-                        "name": "number"
-                      },
-                      {
-                        "name": "number"
-                      }
-                    ]
+                    "name": "Position"
                   }
                 ]
               }
@@ -2784,7 +2816,7 @@
             "name": "coordinate",
             "description": "A point expressed in the map view’s coordinate system.",
             "type": {
-              "name": "tuple"
+              "name": "Position"
             },
             "optional": false
           },
@@ -2966,16 +2998,7 @@
             "name": "Promise",
             "elements": [
               {
-                "name": "tuple",
-                "raw": "[number, number]",
-                "elements": [
-                  {
-                    "name": "number"
-                  },
-                  {
-                    "name": "number"
-                  }
-                ]
+                "name": "Position"
               }
             ],
             "raw": "Promise<Position>"
@@ -2997,7 +3020,7 @@
             "name": "coordinate",
             "description": "the coordinates to query elevation at",
             "type": {
-              "name": "tuple"
+              "name": "Position"
             },
             "optional": false
           }
@@ -3466,7 +3489,7 @@
       {
         "name": "coordinate",
         "required": true,
-        "type": "tuple",
+        "type": "Position",
         "default": "none",
         "description": "The center point (specified as a map coordinate) of the marker."
       },
@@ -3596,7 +3619,7 @@
       {
         "name": "coordinate",
         "required": true,
-        "type": "tuple",
+        "type": "Position",
         "default": "none",
         "description": "The center point (specified as a map coordinate) of the annotation."
       },
@@ -3630,55 +3653,55 @@
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "(payload:{feature: Feature}) => void"
+          "funcSignature": "(payload:Feature) => void"
         },
         "default": "none",
-        "description": "This callback is fired once this annotation is selected. Returns a Feature as the first param.\n*signature:*`(payload:{feature: Feature}) => void`"
+        "description": "This callback is fired once this annotation is selected. Returns a Feature as the first param.\n*signature:*`(payload:Feature) => void`"
       },
       {
         "name": "onDeselected",
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "(payload:{feature: Feature}) => void"
+          "funcSignature": "(payload:Feature) => void"
         },
         "default": "none",
-        "description": "This callback is fired once this annotation is deselected.\n*signature:*`(payload:{feature: Feature}) => void`"
+        "description": "This callback is fired once this annotation is deselected.\n*signature:*`(payload:Feature) => void`"
       },
       {
         "name": "onDragStart",
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "(payload:{feature: Feature}) => void"
+          "funcSignature": "(payload:Feature) => void"
         },
         "default": "none",
-        "description": "This callback is fired once this annotation has started being dragged.\n*signature:*`(payload:{feature: Feature}) => void`"
+        "description": "This callback is fired once this annotation has started being dragged.\n*signature:*`(payload:Feature) => void`"
       },
       {
         "name": "onDragEnd",
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "(payload:{feature: Feature}) => void"
+          "funcSignature": "(payload:Feature) => void"
         },
         "default": "none",
-        "description": "This callback is fired once this annotation has stopped being dragged.\n*signature:*`(payload:{feature: Feature}) => void`"
+        "description": "This callback is fired once this annotation has stopped being dragged.\n*signature:*`(payload:Feature) => void`"
       },
       {
         "name": "onDrag",
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "(payload:{feature: Feature}) => void"
+          "funcSignature": "(payload:Feature) => void"
         },
         "default": "none",
-        "description": "This callback is fired while this annotation is being dragged.\n*signature:*`(payload:{feature: Feature}) => void`"
+        "description": "This callback is fired while this annotation is being dragged.\n*signature:*`(payload:Feature) => void`"
       },
       {
         "name": "children",
         "required": true,
-        "type": "ReactReactElement",
+        "type": "React.ReactElement \\| [React.ReactElement, React.ReactElement]",
         "default": "none",
         "description": "Expects one child, and an optional callout can be added as well"
       },
@@ -3704,6 +3727,13 @@
         "type": "string",
         "default": "MapboxGL.StyleSource.DefaultSourceID",
         "description": "A string that uniquely identifies the source."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing source in the style. Does not create a new source."
       },
       {
         "name": "url",
@@ -3761,7 +3791,14 @@
         "required": true,
         "type": "string",
         "default": "none",
-        "description": "A string that uniquely identifies the source in the style to which it is added."
+        "description": "A string that uniquely identifies the layer in the style to which it is added."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -4021,6 +4058,13 @@
         "description": "A string that uniquely identifies the source."
       },
       {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing source in the style. Does not create a new source."
+      },
+      {
         "name": "url",
         "required": false,
         "type": "string",
@@ -4239,6 +4283,13 @@
         "description": "A string that uniquely identifies the source."
       },
       {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing source in the style. Does not create a new source."
+      },
+      {
         "name": "url",
         "required": false,
         "type": "string",
@@ -4345,7 +4396,7 @@
       },
       {
         "name": "children",
-        "required": true,
+        "required": false,
         "type": "React.ReactElement \\| React.ReactElement[]",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"
@@ -4365,6 +4416,13 @@
         "type": "string",
         "default": "none",
         "description": "A string that uniquely identifies the source in the style to which it is added."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -4621,13 +4679,13 @@
     "props": [
       {
         "name": "json",
-        "required": false,
-        "type": "any",
+        "required": true,
+        "type": "MapboxJSON \\| URL",
         "default": "none",
         "description": "A JSON object conforming to the schema described in the Mapbox Style Specification , or a URL to such JSON."
       }
     ],
-    "fileNameWithExt": "Style.js",
+    "fileNameWithExt": "Style.tsx",
     "name": "Style"
   },
   "SymbolLayer": {
@@ -4640,7 +4698,14 @@
         "required": true,
         "type": "string",
         "default": "none",
-        "description": "A string that uniquely identifies the source in the style to which it is added."
+        "description": "A string that uniquely identifies the layer in the style to which it is added."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing layer in the style. Does not create a new layer."
       },
       {
         "name": "sourceID",
@@ -6057,7 +6122,7 @@
     "props": [
       {
         "name": "sourceID",
-        "required": true,
+        "required": false,
         "type": "string",
         "default": "none",
         "description": "Name of a source of raster_dem type to be used for terrain elevation."
@@ -6071,7 +6136,7 @@
       },
       {
         "name": "style",
-        "required": true,
+        "required": false,
         "type": "TerrainLayerStyleProps",
         "default": "none",
         "description": "Customizable style attributes"
@@ -6124,10 +6189,10 @@
         ],
         "params": [
           {
-            "name": "{ running }",
+            "name": "{ running }: { running?: boolean }",
             "optional": false,
             "type": {
-              "name": null
+              "name": "{running?:boolean}"
             }
           }
         ],
@@ -6162,60 +6227,25 @@
     ],
     "props": [
       {
-        "name": "animated",
-        "required": false,
-        "type": "bool",
-        "default": "true",
-        "description": "Whether location icon is animated between updates"
-      },
-      {
-        "name": "renderMode",
-        "required": false,
-        "type": "enum",
-        "default": "'normal'",
-        "description": "Which render mode to use.\nCan either be `normal` or `native`"
-      },
-      {
         "name": "androidRenderMode",
         "required": false,
-        "type": "enum",
+        "type": "'normal' \\| 'compass' \\| 'gps'",
         "default": "none",
         "description": "native/android only render mode\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@platform android"
       },
       {
-        "name": "visible",
+        "name": "animated",
         "required": false,
-        "type": "bool",
+        "type": "boolean",
         "default": "true",
-        "description": "Whether location icon is visible"
+        "description": "Whether location icon is animated between updates"
       },
       {
-        "name": "onPress",
+        "name": "children",
         "required": false,
-        "type": "func",
+        "type": "ReactElement",
         "default": "none",
-        "description": "Callback that is triggered on location icon press"
-      },
-      {
-        "name": "onUpdate",
-        "required": false,
-        "type": "func",
-        "default": "none",
-        "description": "Callback that is triggered on location update"
-      },
-      {
-        "name": "showsUserHeadingIndicator",
-        "required": false,
-        "type": "bool",
-        "default": "false",
-        "description": "Show or hide small arrow which indicates direction the device is pointing relative to north."
-      },
-      {
-        "name": "requestsAlwaysUse",
-        "required": false,
-        "type": "bool",
-        "default": "false",
-        "description": "Request the always location permission, and listen to the location even when the app is in background\n\n@platform ios"
+        "description": "Custom location icon of type mapbox-gl-native components"
       },
       {
         "name": "minDisplacement",
@@ -6225,14 +6255,55 @@
         "description": "Minimum amount of movement before GPS location is updated in meters"
       },
       {
-        "name": "children",
+        "name": "onPress",
         "required": false,
-        "type": "any",
+        "type": {
+          "name": "func",
+          "funcSignature": "() => void"
+        },
         "default": "none",
-        "description": "Custom location icon of type mapbox-gl-native components"
+        "description": "Callback that is triggered on location icon press\n*signature:*`() => void`"
+      },
+      {
+        "name": "onUpdate",
+        "required": false,
+        "type": {
+          "name": "func",
+          "funcSignature": "(location:Location) => void"
+        },
+        "default": "none",
+        "description": "Callback that is triggered on location update\n*signature:*`(location:Location) => void`"
+      },
+      {
+        "name": "renderMode",
+        "required": false,
+        "type": "UserLocationRenderMode",
+        "default": "UserLocationRenderMode.Normal",
+        "description": "Which render mode to use."
+      },
+      {
+        "name": "requestsAlwaysUse",
+        "required": false,
+        "type": "boolean",
+        "default": "false",
+        "description": "Request the always location permission, and listen to the location even when the app is in background\n\n@platform ios"
+      },
+      {
+        "name": "showsUserHeadingIndicator",
+        "required": false,
+        "type": "boolean",
+        "default": "false",
+        "description": "Show or hide small arrow which indicates direction the device is pointing relative to north."
+      },
+      {
+        "name": "visible",
+        "required": false,
+        "type": "boolean",
+        "default": "true",
+        "description": "Whether location icon is visible"
       }
     ],
-    "fileNameWithExt": "UserLocation.js",
+    "fileNameWithExt": "UserLocation.tsx",
     "name": "UserLocation"
   },
   "VectorSource": {
@@ -6297,6 +6368,13 @@
         "type": "string",
         "default": "MapboxGL.StyleSource.DefaultSourceID",
         "description": "A string that uniquely identifies the source."
+      },
+      {
+        "name": "existing",
+        "required": false,
+        "type": "boolean",
+        "default": "none",
+        "description": "The id refers to en existing source in the style. Does not create a new source."
       },
       {
         "name": "url",
@@ -6377,7 +6455,7 @@
       },
       {
         "name": "children",
-        "required": true,
+        "required": false,
         "type": "React.ReactElement \\| React.ReactElement[]",
         "default": "none",
         "description": "FIX ME NO DESCRIPTION"

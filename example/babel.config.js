@@ -30,8 +30,6 @@ module.exports = (api) => {
                 '@mapbox': './node_modules/@mapbox',
                 debounce: './node_modules/debounce',
                 'prop-types': './node_modules/prop-types',
-                'deprecated-react-native-prop-types':
-                  './node_modules/deprecated-react-native-prop-types',
               },
             },
           ],

@@ -16,16 +16,16 @@ as with PointAnnotation child views are rendered onto a bitmap
 | snippet | `string` | `none` | `false` | The string containing the annotation’s snippet(subtitle). Not displayed in the default callout. |
 | selected | `boolean` | `none` | `false` | Manually selects/deselects annotation |
 | draggable | `boolean` | `false` | `false` | Enable or disable dragging. Defaults to false. |
-| coordinate | `tuple` | `none` | `true` | The center point (specified as a map coordinate) of the annotation. |
+| coordinate | `Position` | `none` | `true` | The center point (specified as a map coordinate) of the annotation. |
 | anchor | `shape` | `{ x: 0.5, y: 0.5 }` | `false` | Specifies the anchor being set on a particular point of the annotation.<br/>The anchor point is specified in the continuous space [0.0, 1.0] x [0.0, 1.0],<br/>where (0, 0) is the top-left corner of the image, and (1, 1) is the bottom-right corner.<br/>Note this is only for custom annotations not the default pin view.<br/>Defaults to the center of the view. |
 | &nbsp;&nbsp;x | `number` | `none` | `true` | See anchor |
 | &nbsp;&nbsp;y | `number` | `none` | `true` | See anchor |
-| onSelected | `func` | `none` | `false` | This callback is fired once this annotation is selected. Returns a Feature as the first param.<br/>*signature:*`(payload:{feature: Feature}) => void` |
-| onDeselected | `func` | `none` | `false` | This callback is fired once this annotation is deselected.<br/>*signature:*`(payload:{feature: Feature}) => void` |
-| onDragStart | `func` | `none` | `false` | This callback is fired once this annotation has started being dragged.<br/>*signature:*`(payload:{feature: Feature}) => void` |
-| onDragEnd | `func` | `none` | `false` | This callback is fired once this annotation has stopped being dragged.<br/>*signature:*`(payload:{feature: Feature}) => void` |
-| onDrag | `func` | `none` | `false` | This callback is fired while this annotation is being dragged.<br/>*signature:*`(payload:{feature: Feature}) => void` |
-| children | `ReactReactElement` | `none` | `true` | Expects one child, and an optional callout can be added as well |
+| onSelected | `func` | `none` | `false` | This callback is fired once this annotation is selected. Returns a Feature as the first param.<br/>*signature:*`(payload:Feature) => void` |
+| onDeselected | `func` | `none` | `false` | This callback is fired once this annotation is deselected.<br/>*signature:*`(payload:Feature) => void` |
+| onDragStart | `func` | `none` | `false` | This callback is fired once this annotation has started being dragged.<br/>*signature:*`(payload:Feature) => void` |
+| onDragEnd | `func` | `none` | `false` | This callback is fired once this annotation has stopped being dragged.<br/>*signature:*`(payload:Feature) => void` |
+| onDrag | `func` | `none` | `false` | This callback is fired while this annotation is being dragged.<br/>*signature:*`(payload:Feature) => void` |
+| children | `React.ReactElement \| [React.ReactElement, React.ReactElement]` | `none` | `true` | Expects one child, and an optional callout can be added as well |
 | style | `ViewProps['style']` | `none` | `false` | FIX ME NO DESCRIPTION |
 
 ## methods

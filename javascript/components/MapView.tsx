@@ -21,6 +21,7 @@ import {
 import { getFilter } from '../utils/filterUtils';
 import Logger from '../utils/Logger';
 import { FilterExpression } from '../utils/MapboxStyles';
+import { type Position } from '../types/Position';
 
 import NativeBridgeComponent from './NativeBridgeComponent';
 
@@ -46,7 +47,6 @@ export type Point = {
   y: number;
 };
 
-export type Position = [number, number];
 type BBox = [number, number, number, number];
 
 export type RegionPayload = {

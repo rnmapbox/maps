@@ -1,5 +1,9 @@
 import React, { ReactNode, ReactElement } from 'react';
-import { requireNativeComponent, Image as RNImage } from 'react-native';
+import {
+  requireNativeComponent,
+  Image as RNImage,
+  ImageURISource,
+} from 'react-native';
 import { ImageSourcePropType, ImageResolvedAssetSource } from 'react-native';
 
 import { ShapeSource } from './ShapeSource';
@@ -12,7 +16,7 @@ export type RNMBEvent<PayloadType = { [key: string]: string }> = {
   type: string;
 };
 
-function _isUrlOrPath(value: string | ImageSourcePropType): value is string {
+function _isUrlOrPath(value: ImageEntry): value is string {
   return (
     (typeof value === 'string' || value instanceof String) &&
     (value.startsWith('file://') ||
@@ -24,6 +28,16 @@ function _isUrlOrPath(value: string | ImageSourcePropType): value is string {
   );
 }
 
+function isImageSourcePropType(
+  value: ImageEntry,
+): value is ImageSourcePropType {
+  if (typeof value === 'number' || value instanceof Number) {
+    return true;
+  }
+  const valueAsSource = value as ImageURISource;
+  return !!valueAsSource.uri && typeof valueAsSource.uri === 'string';
+}
+
 type TypedReactNode<T> = ReactElement<T> | Array<TypedReactNode<T>> | never;
 
 type NativeImage =
@@ -33,7 +47,32 @@ type NativeImage =
       sdf?: boolean;
       stretchX?: [number, number][];
       stretchY?: [number, number][];
+      content?: [number, number, number, number];
+      scale?: number;
     };
+
+export type ImageEntryData = {
+  url?: string;
+  image?: ImageSourcePropType;
+  resolvedImage?: ImageResolvedAssetSource;
+  sdf?: boolean;
+  stretchX?: [number, number][];
+  stretchY?: [number, number][];
+  content?: [number, number, number, number];
+  scale?: number;
+};
+
+type ResolvedImageEntryData = {
+  url?: string;
+  resolvedImage?: ImageResolvedAssetSource;
+  sdf?: boolean;
+  stretchX?: [number, number][];
+  stretchY?: [number, number][];
+  content?: [number, number, number, number];
+  scale?: number;
+};
+
+export type ImageEntry = string | ImageSourcePropType | ImageEntryData;
 
 const isChildAnImage = (
   child: ReactNode,
@@ -47,7 +86,7 @@ interface Props {
    * Keys are names - see iconImage expressions, values can be either urls-s objects
    * with format {uri: 'http://...'}` or `require('image.png')` or `import 'image.png'`
    */
-  images?: { [key: string]: ImageSourcePropType };
+  images?: { [key: string]: ImageEntry };
 
   /**
    * If you have an asset under Image.xcassets on iOS and the drawables directory on android
@@ -77,7 +116,9 @@ class Images extends React.PureComponent<Props> {
       return {};
     }
 
-    const images: { [key: string]: string | ImageResolvedAssetSource } = {};
+    const images: {
+      [key: string]: string | ImageResolvedAssetSource | ResolvedImageEntryData;
+    } = {};
     let nativeImages: NativeImage[] = [];
 
     if (this.props.images) {
@@ -93,11 +134,20 @@ class Images extends React.PureComponent<Props> {
           );
         } else if (_isUrlOrPath(value)) {
           images[imageName] = value;
-        } else {
+        } else if (isImageSourcePropType(value)) {
           const res = RNImage.resolveAssetSource(value);
           if (res && res.uri) {
             images[imageName] = res;
           }
+        } else {
+          let imageEntry = value as ImageEntryData;
+          if (imageEntry.image) {
+            imageEntry = {
+              ...imageEntry,
+              resolvedImage: RNImage.resolveAssetSource(imageEntry.image),
+            };
+          }
+          images[imageName] = imageEntry;
         }
       }
     }
@@ -147,7 +197,9 @@ class Images extends React.PureComponent<Props> {
 type NativeProps = {
   hasOnImageMissing: boolean;
   onImageMissing?: (event: React.SyntheticEvent<Element, RNMBEvent>) => void;
-  images?: { [key: string]: string | ImageResolvedAssetSource };
+  images?: {
+    [key: string]: string | ImageResolvedAssetSource | ResolvedImageEntryData;
+  };
   nativeImages?: NativeImage[];
 };
 

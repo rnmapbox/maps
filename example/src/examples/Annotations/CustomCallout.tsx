@@ -1,4 +1,4 @@
-import MapboxGL, { SymbolLayerStyle } from '@rnmapbox/maps';
+import MapboxGL, { type SymbolLayerStyle } from '@rnmapbox/maps';
 import { Feature } from '@turf/helpers';
 import React, { useState } from 'react';
 import { StyleProp, Text, TextStyle, View, ViewStyle } from 'react-native';
@@ -70,7 +70,6 @@ const CustomCallout = (props: BaseExampleProps) => {
         </MapboxGL.ShapeSource>
         {selectedFeature && (
           <MapboxGL.MarkerView
-            id="selectedFeatureMarkerView"
             coordinate={selectedFeature.geometry.coordinates}
           >
             <CustomCalloutView message={selectedFeature?.properties?.message} />

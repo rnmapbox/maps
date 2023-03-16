@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 const { MGLLogging } = NativeModules;
 
-type LogLevel = 'error' | 'warning' | 'info' | 'debug' | 'verbose';
+export type LogLevel = 'error' | 'warning' | 'info' | 'debug' | 'verbose';
 
 export interface LogObject {
   level: LogLevel;
