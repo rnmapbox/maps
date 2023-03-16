@@ -1,5 +1,5 @@
-import { getFilter } from '../../javascript/utils/filterUtils';
-import BridgeValue from '../../javascript/utils/BridgeValue';
+import { getFilter } from '../../src/utils/filterUtils';
+import BridgeValue from '../../src/utils/BridgeValue';
 
 const FilterItem = BridgeValue;
 

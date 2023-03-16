@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
 
-import { Camera } from '../../javascript/components/Camera';
+import { Camera } from '../../src/components/Camera';
 
 const coordinate1 = [-111.8678, 40.2866];
 

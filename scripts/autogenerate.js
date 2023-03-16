@@ -112,12 +112,7 @@ const ANDROID_V10_OUTPUT_PATH = path.join(
   'styles',
 );
 
-const JS_OUTPUT_PATH = path.join(
-  __dirname,
-  ...OUTPUT_PREFIX,
-  'javascript',
-  'utils',
-);
+const JS_OUTPUT_PATH = path.join(__dirname, ...OUTPUT_PREFIX, 'src', 'utils');
 
 getSupportedLayers(Object.keys(styleSpecJSON.layer.type.values)).forEach(
   ({ layerName, support }) => {

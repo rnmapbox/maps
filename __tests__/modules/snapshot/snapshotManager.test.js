@@ -1,4 +1,4 @@
-import MapboxGL from '../../../javascript';
+import MapboxGL from '../../../src';
 
 describe('snapshotManager', () => {
   it('should resolve uri', async () => {

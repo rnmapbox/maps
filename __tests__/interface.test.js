@@ -1,4 +1,4 @@
-import MapboxGL from '../javascript';
+import MapboxGL from '../src';
 
 describe('Public Interface', () => {
   it('should contain all expected components and utils', () => {

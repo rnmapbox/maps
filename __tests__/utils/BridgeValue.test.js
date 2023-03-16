@@ -1,4 +1,4 @@
-import BridgeValue from '../../javascript/utils/BridgeValue';
+import BridgeValue from '../../src/utils/BridgeValue';
 
 describe('BridgeValue', () => {
   it('should convert to array of numbers', () => {

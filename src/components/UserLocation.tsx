@@ -82,7 +82,7 @@ type Props = {
   /**
    * Custom location icon of type mapbox-gl-native components
    */
-  children?: ReactElement;
+  children?: ReactElement | ReactElement[];
 
   /**
    * Minimum amount of movement before GPS location is updated in meters
