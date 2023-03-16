@@ -95,14 +95,19 @@ export const addConstantBlock = (
     }
   }
 
+  const newSrc = [
+    `$RNMapboxMapsImpl = '${RNMapboxMapsImpl}'`,
+    `$RNMapboxMapsDownloadToken = '${RNMapboxMapsDownloadToken}'`,
+  ];
+
+  if (RNMapboxMapsVersion) {
+    newSrc.push(`$RNMapboxMapsVersion = '${RNMapboxMapsVersion}'`);
+  }
+
   return mergeContents({
     tag,
     src,
-    newSrc: [
-      `$RNMapboxMapsImpl = '${RNMapboxMapsImpl}'`,
-      `$RNMapboxMapsVersion = '${RNMapboxMapsVersion}'`,
-      `$RNMapboxMapsDownloadToken = '${RNMapboxMapsDownloadToken}'`,
-    ].join('\n'),
+    newSrc: newSrc.join('\n'),
     anchor: /target .+ do/,
     // We can't go after the use_react_native block because it might have parameters, causing it to be multi-line (see react-native template).
     offset: 0,

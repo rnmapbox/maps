@@ -6243,7 +6243,7 @@
       {
         "name": "children",
         "required": false,
-        "type": "ReactElement",
+        "type": "ReactElement \\| ReactElement[]",
         "default": "none",
         "description": "Custom location icon of type mapbox-gl-native components"
       },
