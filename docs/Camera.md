@@ -22,7 +22,7 @@ return (
 | Prop | Type | Default | Required | Description |
 | ---- | :-- | :----- | :------ | :---------- |
 | type | `literal` | `none` | `false` | Allows static check of the data type. For internal use only. |
-| centerCoordinate | `Position` | `none` | `false` | The location on which the map should center. |
+| centerCoordinate | `number[] \| [number, number]` | `none` | `false` | The location on which the map should center. |
 | bounds | `intersection` | `none` | `false` | The corners of a box around which the map should bound. Contains padding props for backwards<br/>compatibility; the root `padding` prop should be used instead. |
 | heading | `number` | `none` | `false` | The heading (orientation) of the map. |
 | pitch | `number` | `none` | `false` | The pitch of the map. |
@@ -47,11 +47,11 @@ return (
 | minZoomLevel | `number` | `none` | `false` | The lowest allowed zoom level. |
 | maxZoomLevel | `number` | `none` | `false` | The highest allowed zoom level. |
 | maxBounds | `shape` | `none` | `false` | The corners of a box defining the limits of where the camera can pan or zoom. |
-| &nbsp;&nbsp;ne | `Position` | `none` | `true` | FIX ME NO DESCRIPTION |
-| &nbsp;&nbsp;sw | `Position` | `none` | `true` | FIX ME NO DESCRIPTION |
+| &nbsp;&nbsp;ne | `union` | `none` | `true` | FIX ME NO DESCRIPTION |
+| &nbsp;&nbsp;sw | `union` | `none` | `true` | FIX ME NO DESCRIPTION |
 | defaultSettings | `shape` | `none` | `false` | The configuration that the camera falls back on, if no other values are specified. |
 | &nbsp;&nbsp;type | `literal` | `none` | `false` | Allows static check of the data type. For internal use only. |
-| &nbsp;&nbsp;centerCoordinate | `Position` | `none` | `false` | The location on which the map should center. |
+| &nbsp;&nbsp;centerCoordinate | `union` | `none` | `true` | The location on which the map should center. |
 | &nbsp;&nbsp;bounds | `intersection` | `none` | `false` | The corners of a box around which the map should bound. Contains padding props for backwards<br/>compatibility; the root `padding` prop should be used instead. |
 | &nbsp;&nbsp;heading | `number` | `none` | `false` | The heading (orientation) of the map. |
 | &nbsp;&nbsp;pitch | `number` | `none` | `false` | The pitch of the map. |

@@ -61,6 +61,7 @@ import SourceLayerVisibility from '../examples/Map/SourceLayerVisibility';
 import StyleJson from '../examples/Map/StyleJson';
 import TwoByTwo from '../examples/Map/TwoByTwo';
 import MapAndRNNavigation from '../examples/Map/MapAndRNNavigation';
+import LocalizeLabels from '../examples/Map/LocalizeLabels';
 // SYMBOLCIRCLELAYER
 import CustomIcon from '../examples/SymbolCircleLayer/CustomIcon';
 import DataDrivenCircleColors from '../examples/SymbolCircleLayer/DataDrivenCircleColors';
@@ -272,6 +273,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
     new ExampleItem('Two Map Views', TwoByTwo),
     new ExampleItem('Create Offline Region', CreateOfflineRegion),
     new ExampleItem('Offline example', OfflineExample),
+    new ExampleItem('Localize labels', LocalizeLabels),
     new ExampleItem('Get Pixel Point in MapView', PointInMapView),
     new ExampleItem('Show and hide a layer', ShowAndHideLayer),
     new ExampleItem('Change Layer Color', ChangeLayerColor),

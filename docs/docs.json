@@ -563,7 +563,7 @@
       {
         "name": "centerCoordinate",
         "required": false,
-        "type": "Position",
+        "type": "number[] \\| [number, number]",
         "default": "none",
         "description": "The location on which the map should center."
       },
@@ -713,14 +713,14 @@
             {
               "name": "ne",
               "required": true,
-              "type": "Position",
+              "type": "union",
               "default": "none",
               "description": "FIX ME NO DESCRIPTION"
             },
             {
               "name": "sw",
               "required": true,
-              "type": "Position",
+              "type": "union",
               "default": "none",
               "description": "FIX ME NO DESCRIPTION"
             }
@@ -744,8 +744,8 @@
             },
             {
               "name": "centerCoordinate",
-              "required": false,
-              "type": "Position",
+              "required": true,
+              "type": "union",
               "default": "none",
               "description": "The location on which the map should center."
             },
@@ -3123,13 +3123,6 @@
         "description": "iOS: The preferred frame rate at which the map view is rendered.\nThe default value for this property is MGLMapViewPreferredFramesPerSecondDefault,\nwhich will adaptively set the preferred frame rate based on the capability of\nthe user’s device to maintain a smooth experience. This property can be set to arbitrary integer values.\n\nAndroid: The maximum frame rate at which the map view is rendered, but it can't exceed the ability of device hardware.\nThis property can be set to arbitrary integer values."
       },
       {
-        "name": "localizeLabels",
-        "required": false,
-        "type": "boolean",
-        "default": "false",
-        "description": "Automatically change the language of the map labels to the system’s preferred language,\nthis is not something that can be toggled on/off"
-      },
-      {
         "name": "zoomEnabled",
         "required": false,
         "type": "boolean",
@@ -3272,6 +3265,31 @@
         "type": "boolean",
         "default": "false",
         "description": "[Android only] Enable/Disable use of GLSurfaceView instead of TextureView."
+      },
+      {
+        "name": "localizeLabels",
+        "required": false,
+        "type": {
+          "name": "shape",
+          "value": [
+            {
+              "name": "locale",
+              "required": true,
+              "type": "string",
+              "default": "none",
+              "description": "locale code like `es` or `current` for the device's current locale"
+            },
+            {
+              "name": "layerIds",
+              "required": false,
+              "type": "Array",
+              "default": "none",
+              "description": "layer id to localize. If not specified, all layers will be localized"
+            }
+          ]
+        },
+        "default": "none",
+        "description": "[`mapbox` (v10) implementation only]\nSet map's label locale, e.g. { \"locale\": \"es\" } will localize labels to Spanish, { \"locale\": \"current\" } will localize labels to system locale."
       },
       {
         "name": "onPress",

@@ -85,6 +85,13 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
         mapView.setReactProjection( if (projection == "globe") ProjectionName.GLOBE else ProjectionName.MERCATOR )
     }
 
+    @ReactProp(name = "localizeLabels")
+    fun setLocalizeLabels(mapView: RCTMGLMapView, localeMap: ReadableMap?) {
+        val locale = localeMap?.getString("locale")
+        val layerIds = localeMap?.getArray("layerIds")?.toArrayList()?.mapNotNull {it?.toString()}
+        mapView.setReactLocalizeLabels(locale, layerIds)
+    }
+
     @ReactProp(name = "styleURL")
     fun setStyleURL(mapView: RCTMGLMapView, styleURL: String?) {
         mapView.setReactStyleURL(styleURL!!)
@@ -93,11 +100,6 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
     @ReactProp(name = "preferredFramesPerSecond")
     fun setPreferredFramesPerSecond(mapView: RCTMGLMapView?, preferredFramesPerSecond: Int) {
         //mapView.setReactPreferredFramesPerSecond(preferredFramesPerSecond);
-    }
-
-    @ReactProp(name = "localizeLabels")
-    fun setLocalizeLabels(mapView: RCTMGLMapView?, localizeLabels: Boolean) {
-        //mapView.setLocalizeLabels(localizeLabels);
     }
 
     @ReactProp(name = "zoomEnabled")

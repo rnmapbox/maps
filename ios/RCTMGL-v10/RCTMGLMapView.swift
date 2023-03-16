@@ -149,6 +149,19 @@ open class RCTMGLMapView : MapView {
       try! self.mapboxMap.style.setProjection(projection)
     }
   }
+
+  @objc func setReactLocalizeLabels(_ value: NSDictionary?) {
+    onMapStyleLoaded { _ in
+      if let value = value {
+        logged("RCTMGLMapVIew.setReactLocalizeLabels") {
+          let localeString = value["locale"] as! String
+          let layerIds = value["layerIds"] as! [String]?
+          let locale = localeString == "current" ? Locale.current : Locale(identifier: localeString)
+          try self.mapboxMap.style.localizeLabels(into: locale, forLayerIds: layerIds)
+        }
+      }
+    }
+  }
   
   
   @objc func setReactAttributionEnabled(_ value: Bool) {

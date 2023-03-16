@@ -1,4 +1,3 @@
-import { Position } from '@turf/helpers';
 import React, {
   forwardRef,
   memo,
@@ -14,6 +13,8 @@ import { makeLatLngBounds, makePoint } from '../utils/geoUtils';
 import { type NativeRefType } from '../utils/nativeRef';
 
 const NativeModule = NativeModules.MGLModule;
+
+type Position = number[] | [number, number];
 
 export enum UserTrackingMode {
   Follow = 'normal',

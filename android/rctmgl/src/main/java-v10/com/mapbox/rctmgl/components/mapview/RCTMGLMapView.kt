@@ -21,6 +21,7 @@ import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
 import com.mapbox.maps.*
+import com.mapbox.maps.extension.localization.localizeLabels
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.Layer
@@ -160,6 +161,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     private var mPointAnnotationManager: PointAnnotationManager? = null
     private var mActiveMarkerID: Long = -1
     private var mProjection: ProjectionName = ProjectionName.MERCATOR
+    private var mLocaleString: String? = null
+    private var mLocaleLayerIds: List<String>? = null
     private var mStyleURL: String? = null
     val isDestroyed = false
     private var mCamera: RCTMGLCamera? = null
@@ -244,14 +247,19 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             return mPointAnnotationManager
         }
 
+    private fun styleLoaded(style: Style) {
+        savedStyle = style
+        styleLoaded = true
+        setUpImage(style)
+        addFeaturesToMap()
+        applyLocalizeLabels()
+        style.setProjection(Projection(mProjection))
+    }
+
     private fun onMapReady(map: MapboxMap) {
         map.getStyle(object : Style.OnStyleLoaded {
             override fun onStyleLoaded(style: Style) {
-                savedStyle = style
-                styleLoaded = true
-                setUpImage(style)
-                addFeaturesToMap()
-                setupLocalization(style)
+                styleLoaded(style)
             }
         })
         val _this = this
@@ -501,6 +509,21 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         }
     }
 
+    fun applyLocalizeLabels() {
+        val localeStr = mLocaleString
+        if (localeStr != null) {
+            val locale = if (localeStr == "current") Locale.getDefault() else Locale(localeStr)
+            savedStyle?.localizeLabels(locale, mLocaleLayerIds)
+        }
+    }
+    fun setReactLocalizeLabels(localeStr: String?, layerIds: List<String>?) {
+        if (localeStr != null) {
+            mLocaleString = localeStr
+            mLocaleLayerIds = layerIds
+        }
+        applyLocalizeLabels()
+    }
+
     fun setReactStyleURL(styleURL: String) {
         mStyleURL = styleURL
         if (mMap != null) {
@@ -509,20 +532,14 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                 styleLoaded = false
                 mMap.loadStyleJson(styleURL, object : Style.OnStyleLoaded {
                     override fun onStyleLoaded(style: Style) {
-                        savedStyle = style
-                        styleLoaded = true
-                        style.setProjection(Projection(mProjection))
-                        addFeaturesToMap()
+                        styleLoaded(style)
                     }
                 })
             } else {
                 styleLoaded = false
                 mMap.loadStyleUri(styleURL, object : Style.OnStyleLoaded {
                     override fun onStyleLoaded(style: Style) {
-                        savedStyle = style
-                        styleLoaded = true
-                        style.setProjection(Projection(mProjection))
-                        addFeaturesToMap()
+                        styleLoaded(style)
                     }
                 },
                         object : OnMapLoadErrorListener {
@@ -734,19 +751,6 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             Logger.e(LOG_TAG, "An error occurred while attempting to make the region", ex)
         }
         return GeoJSONUtils.toPointFeature(latLng, properties)
-    }
-
-    private fun setupLocalization(style: Style) {
-        /*
-        mLocalizationPlugin = new LocalizationPlugin(RCTMGLMapView.this, mMap, style);
-        if (mLocalizeLabels) {
-            try {
-                mLocalizationPlugin.matchMapLanguageWithDeviceDefault();
-            } catch (Exception e) {
-                final String localeString = Locale.getDefault().toString();
-                Logger.w(LOG_TAG, String.format("Could not find matching locale for %s", localeString));
-            }
-        }*/
     }
 
     /**
