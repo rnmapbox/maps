@@ -25,10 +25,17 @@ import { type Position } from '../types/Position';
 
 import NativeBridgeComponent from './NativeBridgeComponent';
 
-const MapboxGL = NativeModules.MGLModule;
-if (MapboxGL == null) {
+const { MGLModule } = NativeModules;
+const { EventTypes } = MGLModule;
+
+if (MGLModule == null) {
   console.error(
     'Native part of Mapbox React Native libraries were not registered properly, double check our native installation guides.',
+  );
+}
+if (!MGLModule.MapboxV10) {
+  console.warn(
+    '@rnmapbox/maps: Non v10 implementations are deprecated and will be removed in next version - see https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Maplibre',
   );
 }
 
@@ -40,7 +47,7 @@ const styles = StyleSheet.create({
   matchParent: { flex: 1 },
 });
 
-const defaultStyleURL = MapboxGL.StyleURL.Street;
+const defaultStyleURL = MGLModule.StyleURL.Street;
 
 export type Point = {
   x: number;
@@ -79,14 +86,16 @@ export type MapState = {
 };
 
 /**
- * label localization settings (v10 only)
+ * label localization settings (v10 only). `true` is equivalent to current locale.
  */
-type LocalizeLabels = {
-  /** locale code like `es` or `current` for the device's current locale */
-  locale: string;
-  /** layer id to localize. If not specified, all layers will be localized */
-  layerIds?: string[];
-};
+type LocalizeLabels =
+  | {
+      /** locale code like `es` or `current` for the device's current locale */
+      locale: string;
+      /** layer id to localize. If not specified, all layers will be localized */
+      layerIds?: string[];
+    }
+  | true;
 
 type Props = ViewProps & {
   /**
@@ -100,7 +109,7 @@ type Props = ViewProps & {
   projection?: 'mercator' | 'globe';
 
   /**
-   * Style URL for map - notice, if non is set it _will_ default to `MapboxGL.StyleURL.Street`
+   * Style URL for map - notice, if non is set it _will_ default to `Mapbox.StyleURL.Street`
    */
   styleURL?: string;
 
@@ -467,12 +476,12 @@ class MapView extends NativeBridgeComponent(
   }
 
   _setHandledMapChangedEvents(props: Props) {
-    if (isAndroid() || MapboxGL.MapboxV10) {
+    if (isAndroid() || MGLModule.MapboxV10) {
       const events: string[] = [];
 
       function addIfHasHandler(name: CallbablePropKeysWithoutOn) {
         if (props[`on${name}`] != null) {
-          if (MapboxGL.EventTypes[name] == null) {
+          if (EventTypes[name] == null) {
             if (name === 'DidFailLoadingMap') {
               console.warn(
                 `rnmapbox maps: on${name} is deprecated, please use onMapLoadingError`,
@@ -481,7 +490,7 @@ class MapView extends NativeBridgeComponent(
               console.warn(`rnmapbox maps: ${name} is not supported`);
             }
           } else {
-            events.push(MapboxGL.EventTypes[name]);
+            events.push(EventTypes[name]);
             return true;
           }
         }
@@ -639,7 +648,7 @@ class MapView extends NativeBridgeComponent(
   ): Promise<GeoJSON.FeatureCollection | undefined> {
     if (
       bbox != null &&
-      (bbox.length === 4 || (MapboxGL.MapboxV10 && bbox.length === 0))
+      (bbox.length === 4 || (MGLModule.MapboxV10 && bbox.length === 0))
     ) {
       const res = await this._runNative<{ data: GeoJSON.FeatureCollection }>(
         'queryRenderedFeaturesInRect',
@@ -815,64 +824,64 @@ class MapView extends NativeBridgeComponent(
     let deprecatedPropName: CallbablePropKeys | '' = '';
 
     switch (type) {
-      case MapboxGL.EventTypes.RegionWillChange:
+      case EventTypes.RegionWillChange:
         if (regionWillChangeDebounceTime && regionWillChangeDebounceTime > 0) {
           this._onDebouncedRegionWillChange(payload);
         } else {
           propName = 'onRegionWillChange';
         }
         break;
-      case MapboxGL.EventTypes.RegionIsChanging:
+      case EventTypes.RegionIsChanging:
         propName = 'onRegionIsChanging';
         break;
-      case MapboxGL.EventTypes.RegionDidChange:
+      case EventTypes.RegionDidChange:
         if (regionDidChangeDebounceTime && regionDidChangeDebounceTime > 0) {
           this._onDebouncedRegionDidChange(payload);
         } else {
           propName = 'onRegionDidChange';
         }
         break;
-      case MapboxGL.EventTypes.CameraChanged:
+      case EventTypes.CameraChanged:
         propName = 'onCameraChanged';
         break;
-      case MapboxGL.EventTypes.MapIdle:
+      case EventTypes.MapIdle:
         propName = 'onMapIdle';
         break;
-      case MapboxGL.EventTypes.UserLocationUpdated:
+      case EventTypes.UserLocationUpdated:
         propName = 'onUserLocationUpdate';
         break;
-      case MapboxGL.EventTypes.WillStartLoadingMap:
+      case EventTypes.WillStartLoadingMap:
         propName = 'onWillStartLoadingMap';
         break;
-      case MapboxGL.EventTypes.DidFinishLoadingMap:
+      case EventTypes.DidFinishLoadingMap:
         propName = 'onDidFinishLoadingMap';
         break;
-      case MapboxGL.EventTypes.DidFailLoadingMap:
+      case EventTypes.DidFailLoadingMap:
         propName = 'onDidFailLoadingMap';
         break;
-      case MapboxGL.EventTypes.MapLoadingError:
+      case EventTypes.MapLoadingError:
         propName = 'onMapLoadingError';
         deprecatedPropName = 'onDidFailLoadingMap';
         break;
-      case MapboxGL.EventTypes.WillStartRenderingFrame:
+      case EventTypes.WillStartRenderingFrame:
         propName = 'onWillStartRenderingFrame';
         break;
-      case MapboxGL.EventTypes.DidFinishRenderingFrame:
+      case EventTypes.DidFinishRenderingFrame:
         propName = 'onDidFinishRenderingFrame';
         break;
-      case MapboxGL.EventTypes.DidFinishRenderingFrameFully:
+      case EventTypes.DidFinishRenderingFrameFully:
         propName = 'onDidFinishRenderingFrameFully';
         break;
-      case MapboxGL.EventTypes.WillStartRenderingMap:
+      case EventTypes.WillStartRenderingMap:
         propName = 'onWillStartRenderingMap';
         break;
-      case MapboxGL.EventTypes.DidFinishRenderingMap:
+      case EventTypes.DidFinishRenderingMap:
         propName = 'onDidFinishRenderingMap';
         break;
-      case MapboxGL.EventTypes.DidFinishRenderingMapFully:
+      case EventTypes.DidFinishRenderingMapFully:
         propName = 'onDidFinishRenderingMapFully';
         break;
-      case MapboxGL.EventTypes.DidFinishLoadingStyle:
+      case EventTypes.DidFinishLoadingStyle:
         propName = 'onDidFinishLoadingStyle';
         break;
       default:
@@ -944,13 +953,10 @@ class MapView extends NativeBridgeComponent(
   }
 
   _setLocalizeLabels(props: Props) {
-    if (!MapboxGL.MapboxV10) {
+    if (!MGLModule.MapboxV10) {
       return;
     }
     if (typeof props.localizeLabels === 'boolean') {
-      console.warn(
-        'boolean value of localizeLabels is deprecated. Please set this as Locale object instead',
-      );
       props.localizeLabels = {
         locale: 'current',
       };

@@ -28,6 +28,7 @@ rnMapboxMapsDefaultImpl = 'maplibre'
 
 # DEPRECATIONS
 
+
 if ENV["REACT_NATIVE_MAPBOX_GL_USE_FRAMEWORKS"]
   puts "REACT_NATIVE_MAPBOX_GL_USE_FRAMEWORKS is now deprecated!"
 end
@@ -90,9 +91,11 @@ when 'mapbox'
   rnMapboxMapsTargetsToChangeToDynamic = ['MapboxMobileEvents', 'Turf', 'MapboxMaps', 'MapboxCoreMaps', 'MapboxCommon']
   MapboxImplVersion = $RNMapboxMapsVersion || rnMapboxMapsDefaultMapboxVersion
 when 'mapbox-gl'
+  puts 'WARNING: mapbox-gl in @rnmapbox/maps is deprecated. Set $RNMapboxMapsImpl=mapbox in your Podfile. See https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Maplibre#ios'
   rnMapboxMapsTargetsToChangeToDynamic = ['MapboxMobileEvents']
   MapboxImplVersion = $RNMapboxMapsVersion || rnMapboxMapsDefaultMapboxGLVersion
 when 'maplibre'
+  puts 'WARNING: maplibre in @rnmapbox/maps is deprecated. Set $RNMapboxMapsImpl=mapbox in your Podfile. See https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-MapboxGL#ios'
   rnMapboxMapsTargetsToChangeToDynamic = ['MapboxMobileEvents']
 
   spm_version = ($RNMapboxMapsVersion || rnMapboxMapsDefaultMapLibreVersion).split
