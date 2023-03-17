@@ -42,7 +42,7 @@ function readAndroidVersion() {
     /^\s+implementation\s+'com.mapbox.mapboxsdk:mapbox-android-sdk:(\d+\.\d+\.\d+)'$/;
   const mapboxGLLine = lines.filter((i) => mapboxGLLineRegex.exec(i))[0];
   const mapboxV10LineRegex =
-    /^\s+implementation\s+'com.mapbox.maps:android:(\d+\.\d+\.\d+)'$/;
+    /^\s*def\s+defaultMapboxMapsVersion\s+=\s+"(\d+\.\d+\.\d+)"$/;
   const mapboxV10Line = lines.filter((i) => mapboxV10LineRegex.exec(i))[0];
   return {
     gl: mapboxGLLineRegex.exec(mapboxGLLine)[1],

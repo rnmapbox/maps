@@ -74,8 +74,10 @@ class Logger {
 }
 
 func errorMessage(_ error: Error) -> String {
-  if case DecodingError.typeMismatch(let type, let context) = error {
+  if case DecodingError.typeMismatch(let _, let context) = error {
     return "\(error.localizedDescription) \(context.codingPath) \(context.debugDescription)"
+  } else if let mapError = error as? MapError {
+    return "MapError: \(mapError.errorDescription)"
   } else {
     return "\(error.localizedDescription)"
   }

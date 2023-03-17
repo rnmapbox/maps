@@ -1,4 +1,5 @@
 def defaultMapboxMapsImpl = "maplibre"
+def defaultMapboxMapsVersion = "10.11.2"
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
@@ -8,6 +9,10 @@ def safeExtGet(prop, fallback) {
 if (rootProject.ext.has('expoRNMapboxMapsImpl')) {
     rootProject.ext.set('RNMapboxMapsImpl', rootProject.ext.get('expoRNMapboxMapsImpl'))
 }
+if (rootProject.ext.has('expoRNMapboxMapsVersion')) {
+    rootProject.ext.set('RNMapboxMapsVersion', rootProject.ext.get('expoRNMapboxMapsVersion'))
+}
+
 
 buildscript {
   repositories {
@@ -28,6 +33,7 @@ if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
 
 android {
     if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "maplibre") {
+        logger.warn('@rnmapbox/maps: Maplibre implementation is DEPRECATED and will be removed, set RNMapboxMapsImpl to mapbox- see https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Maplibre#android')
         sourceSets {
             main {
                 java.srcDirs = ['src/main/java-mapboxgl/common','src/main/java-mapboxgl/maplibre']
@@ -35,6 +41,7 @@ android {
         }
     }
     else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox-gl") {
+        logger.warn('@rnmapbox/maps: Maplibre implementation is DEPRECATED and will be removed, set RNMapboxMapsImpl to mapbox  - see https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Maplibre#android')
         sourceSets {
             main {
                 java.srcDirs = ['src/main/java-mapboxgl/common','src/main/java-mapboxgl/mapbox']
@@ -130,7 +137,7 @@ dependencies {
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.1.0'
         }
         else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
-            implementation 'com.mapbox.maps:android:10.11.1'
+            implementation "com.mapbox.maps:android:${safeExtGet("RNMapboxMapsVersion", defaultMapboxMapsVersion)}"
             implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:6.10.0'
             implementation 'androidx.asynclayoutinflater:asynclayoutinflater:1.0.0'
         }
