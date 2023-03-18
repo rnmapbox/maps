@@ -8,6 +8,7 @@ import {
 import { Feature, Point } from 'geojson';
 
 import { toJSONString, isFunction } from '../utils';
+import checkRequiredProps from '../utils/checkRequiredProps';
 import { makePoint } from '../utils/geoUtils';
 import { type BaseProps } from '../types/BaseProps';
 import { Position } from '../types/Position';
@@ -136,6 +137,7 @@ class PointAnnotation extends NativeBridgeComponent(
 
   constructor(props: Props) {
     super(props);
+    checkRequiredProps('PointAnnotation', props, ['id', 'coordinate']);
     this._onSelected = this._onSelected.bind(this);
     this._onDeselected = this._onDeselected.bind(this);
     this._onDragStart = this._onDragStart.bind(this);
