@@ -48,6 +48,9 @@ class RCTMGLInteractiveElement : UIView, RCTMGLMapComponent {
   
   // MARK: - RCTMGLMapComponent
   func addToMap(_ map: RCTMGLMapView, style: Style) {
+    if (self.id == nil) {
+      Logger.log(level: .error, message: "id is required on \(self) but not specified")
+    }
     self.map = map
   }
 

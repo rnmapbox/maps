@@ -207,6 +207,7 @@ class RCTMGLPointAnnotation : RCTMGLInteractiveElement {
   // MARK: - RCTMGLMapComponent
   
   override func addToMap(_ map: RCTMGLMapView, style: Style) {
+    super.addToMap(map, style: style)
     self.map = map
     addIfPossible()
   }
