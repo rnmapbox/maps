@@ -11,3 +11,7 @@ fun Point.toReadableArray() : ReadableArray {
     array.pushDouble(this.latitude())
     return array
 }
+
+fun Point.toDoubleArray() : DoubleArray {
+    return doubleArrayOf(this.longitude(), this.latitude())
+}

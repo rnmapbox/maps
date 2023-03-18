@@ -10,7 +10,10 @@ import com.mapbox.maps.CameraBounds
 import com.mapbox.rctmgl.utils.LatLngBounds
 import com.mapbox.turf.TurfMeasurement
 import com.mapbox.rctmgl.utils.LatLngQuad
+import com.mapbox.rctmgl.utils.extensions.toReadableArray
 import java.util.ArrayList
+
+
 
 object GeoJSONUtils {
     @JvmStatic
@@ -78,7 +81,7 @@ object GeoJSONUtils {
     }
 
     private fun coordinatesL(points: List<Point>): WritableArray {
-        return fromList(points.map { coordinates(it) })
+        return fromList(points.map { it.toReadableArray() })
     }
 
     private fun coordinatesLL(points: List<List<Point>>): WritableArray {
