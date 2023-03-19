@@ -2,7 +2,6 @@ import MapboxMaps
 
 @objc
 class RCTMGLInteractiveElement : UIView, RCTMGLMapComponent {
-
   weak var map : RCTMGLMapView? = nil
 
   static let hitboxDefault = 44.0
