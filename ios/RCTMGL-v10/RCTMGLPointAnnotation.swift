@@ -236,7 +236,10 @@ extension RCTMGLPointAnnotation {
   
   @discardableResult
   func addIfPossible() -> Bool {
-    if !added && annotation.point.coordinates.isValid(), let pointAnnotationManager = map?.pointAnnotationManager {
+    if !added
+        && annotation.point.coordinates.isValid()
+        && (logged("PointAnnotation: missing id attribute") { return id }) != nil,
+        let pointAnnotationManager = map?.pointAnnotationManager {
       pointAnnotationManager.add(annotation)
       added = true
       return true

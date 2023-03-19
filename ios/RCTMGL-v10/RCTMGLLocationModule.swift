@@ -38,31 +38,50 @@ internal class EmptyLocationProviderDelegate: LocationProviderDelegate {
     func locationProviderDidChangeAuthorization(_ provider: LocationProvider) {}
 }
 
-protocol RCTMGLLocationManagerDelegate : AnyObject {
-  func locationManager(_ locationManager: RCTMGLLocationManager, didUpdateLocation: RCTMGLLocation)
+protocol LocationProviderRCTMGLDelegate : AnyObject {
+  func locationManager(_ locationManager: LocationProviderRCTMGL, didUpdateLocation: RCTMGLLocation)
 }
 
-class RCTMGLLocationManager : LocationProviderDelegate {
+/// LocationProviderRCTMGL listens to updates from a locationProvider and implements the LocationProvider interface itself
+/// So it can be source of both updates to Mapbox mapView.location, and camera location updates as well as source to updates
+/// to RCTMGLLocationModules.
+class LocationProviderRCTMGL : LocationProviderDelegate {
   enum LocationUpdateType {
     case heading
     case location
   }
-
+  
   var provider: LocationProvider
   
   var lastKnownLocation : CLLocation?
   var lastKnownHeading : CLHeading?
   var shouldRequestAlwaysAuthorization: Bool?
   
-  weak var delegate: RCTMGLLocationManagerDelegate?
+  weak var delegate: LocationProviderRCTMGLDelegate?
   weak var locationProviderDelage: LocationProviderDelegate?
   
   var headingSimulator: Timer? = nil
   var simulatedHeading: Double = 0.0
   var simulatedHeadingIncrement: Double = 1.0
+  
+  
+  struct Status {
+    var provider = (updatingLocation: false, updatingHeading: false)
+    var rctmglModule = false
+    
+    var shouldUpdateLocation: Bool {
+      return provider.updatingLocation || rctmglModule
+    }
+    var shouldUpdateHeading: Bool {
+      return provider.updatingHeading || rctmglModule
+    }
+  }
 
-  var startUpdatingLocationCalled = false
-  var startUpdatingHeadingCalled = false
+  var started = Status(provider: (updatingLocation: false, updatingHeading: false), rctmglModule: false) {
+    didSet {
+      _syncStarted(oldValue: oldValue, started: started)
+    }
+  }
 
   init() {
     provider = AppleLocationProvider()
@@ -84,23 +103,36 @@ class RCTMGLLocationManager : LocationProviderDelegate {
       provider.requestAlwaysAuthorization()
     }
     provider.requestWhenInUseAuthorization()
-    provider.setDelegate(self)
-    provider.startUpdatingHeading()
-    provider.startUpdatingLocation()
+    started.rctmglModule = true
   }
   
   func stop() {
-    if !startUpdatingHeadingCalled {
-      provider.stopUpdatingHeading()
-    }
-    if !startUpdatingLocationCalled {
-      provider.stopUpdatingLocation()
-    }
-    _clearProviderDelegateIfNotListening()
+    started.rctmglModule = false
   }
 
-  func _clearProviderDelegateIfNotListening() {
-    if !startUpdatingHeadingCalled && !startUpdatingLocationCalled {
+  func _syncStarted(oldValue: Status, started: Status) {
+    var stoppedSomething = false
+    if (oldValue.shouldUpdateLocation != started.shouldUpdateLocation) {
+      if started.shouldUpdateLocation {
+        provider.setDelegate(self)
+        provider.startUpdatingLocation()
+      } else {
+        provider.stopUpdatingLocation()
+        stoppedSomething = true
+      }
+    }
+    
+    if (oldValue.shouldUpdateHeading != started.shouldUpdateHeading) {
+      if started.shouldUpdateHeading {
+        provider.setDelegate(self)
+        provider.startUpdatingHeading()
+      } else {
+        provider.stopUpdatingHeading()
+        stoppedSomething = true
+      }
+    }
+    
+    if stoppedSomething && !started.shouldUpdateLocation && !started.shouldUpdateHeading {
       provider.setDelegate(EmptyLocationProviderDelegate())
     }
   }
@@ -159,7 +191,7 @@ class RCTMGLLocationManager : LocationProviderDelegate {
 
 // MARK: LocationProvider
 
-extension RCTMGLLocationManager: LocationProvider {
+extension LocationProviderRCTMGL: LocationProvider {
   var locationProviderOptions: LocationOptions {
     get {
       provider.locationProviderOptions
@@ -209,15 +241,11 @@ extension RCTMGLLocationManager: LocationProvider {
   }
   
   func startUpdatingLocation() {
-    startUpdatingLocationCalled = true
-    provider.startUpdatingLocation()
+    started.provider.updatingLocation = true
   }
   
   func stopUpdatingLocation() {
-    provider.stopUpdatingLocation()
-    startUpdatingLocationCalled = false
-
-    _clearProviderDelegateIfNotListening()
+    started.provider.updatingLocation = false
   }
   
   var headingOrientation: CLDeviceOrientation {
@@ -230,15 +258,11 @@ extension RCTMGLLocationManager: LocationProvider {
   }
   
   func startUpdatingHeading() {
-    startUpdatingHeadingCalled = true
-    provider.startUpdatingHeading()
+    started.provider.updatingHeading = true
   }
   
   func stopUpdatingHeading() {
-    startUpdatingHeadingCalled = false
-    provider.stopUpdatingHeading()
-
-    _clearProviderDelegateIfNotListening()
+    started.provider.updatingHeading = false
   }
   
   func dismissHeadingCalibrationDisplay() {
@@ -273,7 +297,7 @@ final public class SimulatedHeading: CLHeading {
     }
 }
 
-extension RCTMGLLocationManager {
+extension LocationProviderRCTMGL {
   func simulateHeading(changesPerSecond: Int, increment: Double) {
     self.simulatedHeadingIncrement = increment
     DispatchQueue.main.async {
@@ -294,18 +318,18 @@ extension RCTMGLLocationManager {
   }
 }
 
-
+// LocationModule is a sigleton class
 @objc(RCTMGLLocationModule)
-class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
+class RCTMGLLocationModule: RCTEventEmitter, LocationProviderRCTMGLDelegate {
 
   static weak var shared : RCTMGLLocationModule? = nil
 
-  var locationManager : RCTMGLLocationManager
+  var locationProviderRCTMGL : LocationProviderRCTMGL
   var hasListener = false
   
   var locationProvider : LocationProvider {
     get {
-      return locationManager
+      return locationProviderRCTMGL
     }
   }
   
@@ -318,9 +342,9 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
   )
 
   override init() {
-    locationManager = RCTMGLLocationManager()
+    locationProviderRCTMGL = LocationProviderRCTMGL()
     super.init()
-    locationManager.delegate = self
+    locationProviderRCTMGL.delegate = self
     RCTMGLLocationModule.shared = self
   }
   
@@ -340,12 +364,12 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
   }
   
   @objc func start(_ minDisplacement: CLLocationDistance) {
-    if minDisplacement >= 0.0 { locationManager.setDistanceFilter(minDisplacement) }
-    locationManager.start()
+    if minDisplacement >= 0.0 { locationProviderRCTMGL.setDistanceFilter(minDisplacement) }
+    locationProviderRCTMGL.start()
   }
   
   @objc func stop() {
-    locationManager.stop()
+    locationProviderRCTMGL.stop()
   }
   
   @objc func getLastKnownLocation() -> RCTMGLLocation? {
@@ -353,15 +377,15 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
   }
   
   @objc func setMinDisplacement(_ minDisplacement: CLLocationDistance) {
-    locationManager.setDistanceFilter(minDisplacement)
+    locationProviderRCTMGL.setDistanceFilter(minDisplacement)
   }
   
   @objc func setRequestsAlwaysUse(_ requestsAlwaysUse: Bool) {
-    locationManager.setRequestsAlwaysUse(requestsAlwaysUse);
+    locationProviderRCTMGL.setRequestsAlwaysUse(requestsAlwaysUse);
   }
 
   @objc func simulateHeading(_ changesPerSecond: NSNumber, increment: NSNumber) {
-    locationManager.simulateHeading(changesPerSecond: changesPerSecond.intValue, increment: increment.doubleValue)
+    locationProviderRCTMGL.simulateHeading(changesPerSecond: changesPerSecond.intValue, increment: increment.doubleValue)
   }
 
   @objc
@@ -376,7 +400,7 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
     hasListener = false
   }
   
-  func locationManager(_ locationManager: RCTMGLLocationManager, didUpdateLocation location: RCTMGLLocation) {
+  func locationManager(_ locationManager: LocationProviderRCTMGL, didUpdateLocation location: RCTMGLLocation) {
     guard hasListener, let _ = bridge else {
       return
     }
@@ -416,7 +440,6 @@ class RCTMGLLocationModule: RCTEventEmitter, RCTMGLLocationManagerDelegate {
      
     return false;
   }
-
 }
 
 

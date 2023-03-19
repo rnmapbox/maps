@@ -217,7 +217,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
     }
   }
   
-  func _disableUsetTracking(_ map: MapView) {
+  func _disableUserTracking(_ map: MapView) {
     map.viewport.idle()
   }
   
@@ -263,12 +263,12 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
       let userTrackingMode = UserTrackingMode(rawValue: self.followUserMode ?? UserTrackingMode.normal.rawValue)
       guard let userTrackingMode = userTrackingMode else {
         Logger.error("RCTMGLCamera: Unexpected followUserMode \(optional: self.followUserMode)")
-        self._disableUsetTracking(map)
+        self._disableUserTracking(map)
         return
       }
 
       guard self.followUserLocation && userTrackingMode != .none else {
-        self._disableUsetTracking(map)
+        self._disableUserTracking(map)
         return
       }
 
