@@ -512,6 +512,9 @@ class MapView extends NativeBridgeComponent(
       addIfHasHandler('DidFinishRenderingMapFully');
       addIfHasHandler('DidFinishLoadingStyle');
 
+      addIfHasHandler('CameraChanged');
+      addIfHasHandler('MapIdle');
+
       if (addIfHasHandler('RegionDidChange')) {
         console.warn(
           'onRegionDidChange is deprecated and will be removed in next beta - please use onMapIdle',
