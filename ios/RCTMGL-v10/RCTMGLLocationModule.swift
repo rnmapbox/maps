@@ -43,7 +43,7 @@ protocol LocationProviderRCTMGLDelegate : AnyObject {
 }
 
 /// LocationProviderRCTMGL listens to updates from a locationProvider and implements the LocationProvider interface itself
-/// So it can be source of both updates to Mapbox mapView.location, and camera location updates as well as source to updates
+/// So it can be source of Mapbox locationProduces (which updates location pluck and viewport if configured) as well as source to updates
 /// to RCTMGLLocationModules.
 class LocationProviderRCTMGL : LocationProviderDelegate {
   enum LocationUpdateType {

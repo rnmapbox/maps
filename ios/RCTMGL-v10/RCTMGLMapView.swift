@@ -129,17 +129,6 @@ open class RCTMGLMapView : MapView {
     }
   }
 
-  public override func updateConstraints() {
-    super.updateConstraints()
-    if let camera = reactCamera {
-      if (isPendingInitialLayout) {
-        isPendingInitialLayout = false;
-
-        camera.initialLayout()
-      }
-    }
-  }
-
   
   // MARK: - React Native properties
 
