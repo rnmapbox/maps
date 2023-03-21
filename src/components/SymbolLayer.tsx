@@ -65,6 +65,10 @@ export type Props = {
 
   style?: SymbolLayerStyleProps;
 
+  /**
+   * @deprecated passed children used to create an image with id of symbol in style and also set the iconImageName property accordingly.
+   * This is now deprecated, use Image component instead.
+   */
   children?: JSX.Element | JSX.Element[];
 };
 
@@ -83,6 +87,7 @@ export class SymbolLayer extends AbstractLayer<Props, NativeTypeProps> {
   static defaultProps = {
     sourceID: MapboxGL.StyleSource.DefaultSourceID,
   };
+  deprecationLogged: { snapshot: boolean } = { snapshot: false };
 
   _shouldSnapshot() {
     let isSnapshot = false;
@@ -96,6 +101,12 @@ export class SymbolLayer extends AbstractLayer<Props, NativeTypeProps> {
         isSnapshot = true;
       }
     });
+    if (isSnapshot && !this.deprecationLogged.snapshot) {
+      console.warn(
+        'SymbolLayer: passing children for symbol layer is deprecated, please use @rnmapbox/maps Image component instead. https://github.com/rnmapbox/maps/wiki/Deprecated-SymbolLayerChildren',
+      );
+      this.deprecationLogged.snapshot = true;
+    }
 
     return isSnapshot;
   }

@@ -24,8 +24,11 @@ object GeoJSONUtils {
         feature.geometry()?.also {
             val geometry = fromGeometry(it)
             map.putMap("geometry", geometry)
-        } ?: {
-            Logger.w(LOG_TAG, "GeoJSONUtils.fromFeature geometry was null for feature: ${feature.toJson()}")
+        } ?: run {
+            Logger.w(
+                LOG_TAG,
+                "GeoJSONUtils.fromFeature geometry was null for feature: ${feature.toJson()}"
+            )
         }
         val properties = ConvertUtils.toWritableMap(feature.properties())
         map.putMap("properties", properties)
