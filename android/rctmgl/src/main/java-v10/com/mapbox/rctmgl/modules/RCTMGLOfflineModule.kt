@@ -18,6 +18,7 @@ import com.mapbox.rctmgl.events.OfflineEvent
 import com.mapbox.common.*
 import com.mapbox.rctmgl.events.constants.EventTypes
 import com.mapbox.geojson.FeatureCollection
+import com.mapbox.maps.OfflineRegionManager
 import com.mapbox.turf.TurfMeasurement
 import com.mapbox.maps.ResourceOptions
 import com.mapbox.rctmgl.modules.RCTMGLModule
@@ -77,7 +78,7 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
             (options.getString("styleURL"))!!
         ).minZoom(options.getInt("minZoom").toByte()).maxZoom(options.getInt("maxZoom").toByte())
             .build()
-        val tilesetDescriptor = offlineManager!!.createTilesetDescriptor(descriptorOptions)
+        val tilesetDescriptor = offlineManager.createTilesetDescriptor(descriptorOptions)
         val descriptors = ArrayList<TilesetDescriptor>()
         descriptors.add(tilesetDescriptor)
         val loadOptions = TileRegionLoadOptions.Builder()
@@ -99,7 +100,7 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
 
     fun startPackDownload(pack: TileRegionPack) {
         val _this = this
-        pack.cancelable = getTileStore()!!
+        pack.cancelable = getTileStore()
             .loadTileRegion(
                 pack.name,
                 (pack.loadOptions)!!,
@@ -129,7 +130,7 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun getPacks(promise: Promise) {
-        getTileStore()!!.getAllTileRegions(object : TileRegionsCallback {
+        getTileStore().getAllTileRegions(object : TileRegionsCallback {
             override fun run(regions: Expected<TileRegionError, List<TileRegion>>) {
                 UiThreadUtil.runOnUiThread(object : Runnable {
                     override fun run() {
@@ -150,7 +151,7 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
         val geometries = ArrayList<Geometry>()
         try {
             for (region: TileRegion in tileRegions) {
-                getTileStore()!!
+                getTileStore()
                     .getTileRegionGeometry(region.id, object : TileRegionGeometryCallback {
                         override fun run(result: Expected<TileRegionError, Geometry>) {
                             if (result.isValue) {
@@ -186,78 +187,37 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
         }
     }
 
-    /*
     @ReactMethod
-    public void invalidateAmbientCache(final Promise promise) {
-        activateFileSource();
-        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
-        offlineManager.invalidateAmbientCache(new OfflineManager.FileSourceCallback() {
-            @Override
-            public void onSuccess() {
-                promise.resolve(null);
-            }
+    fun resetDatabase(promise: Promise) {
+        val tileStore = getTileStore()
+        tileStore.getAllTileRegions { expected ->
+            expected.value?.also { tileRegions ->
+                tileRegions.forEach { tileRegion ->
+                    tileStore.removeTileRegion(tileRegion.id);
+                }
 
-            @Override
-            public void onError(String error) {
-                promise.reject("invalidateAmbientCache", error);
+                val offlineManager = getOfflineManager(mReactContext)
+                offlineManager.getAllStylePacks { expected ->
+                    expected.value?.also { stylePacks ->
+                        stylePacks.forEach { stylePack ->
+                            offlineManager.removeStylePack(stylePack.styleURI)
+                        }
+                        promise.resolve(null)
+                    } ?: run {
+                        Logger.w(LOG_TAG, "resetDatabase: error: ${expected.error}")
+                        promise.reject(Error(expected.error?.message ?: "n/a"))
+                    }
+                }
+
+                promise.resolve(null);
+            }?: run {
+                Logger.w(LOG_TAG, "resetDatabase: error: ${expected.error}")
+                promise.reject(Error(expected.error?.message ?: "n/a"))
             }
-        });
+        }
+
     }
 
-    @ReactMethod
-    public void clearAmbientCache(final Promise promise) {
-        activateFileSource();
-
-        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
-
-        offlineManager.clearAmbientCache(new OfflineManager.FileSourceCallback() {
-            @Override
-            public void onSuccess() {
-                promise.resolve(null);
-            }
-
-            @Override
-            public void onError(String error) {
-                promise.reject("clearAmbientCache", error);
-            }
-        });
-    }
-
-    @ReactMethod
-    public void setMaximumAmbientCacheSize(int size, final Promise promise) {
-        activateFileSource();
-
-        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
-
-        offlineManager.setMaximumAmbientCacheSize(size, new OfflineManager.FileSourceCallback() {
-            @Override
-            public void onSuccess() {
-                promise.resolve(null);
-            }
-
-            @Override
-            public void onError(String error) {
-                promise.reject("setMaximumAmbientCacheSize", error);
-            }
-        });
-    }*/
-    /*
-    @ReactMethod
-    public void resetDatabase(final Promise promise) {
-        activateFileSource();
-        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
-        offlineManager.resetDatabase(new OfflineManager.FileSourceCallback() {
-            @Override
-            public void onSuccess() {
-                promise.resolve(null);
-            }
-
-            @Override
-            public void onError(String error) {
-                promise.reject("resetDatabase", error);
-            }
-        });
-    }*/
     @ReactMethod
     fun getPackStatus(name: String, promise: Promise) {
         val pack = tileRegionPacks[name]
@@ -335,7 +295,7 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun deletePack(name: String, promise: Promise) {
-        getTileStore()!!.getAllTileRegions{ expected ->
+        getTileStore().getAllTileRegions{ expected ->
             if (expected.isValue) {
                 expected.value?.let { tileRegionList ->
                     var downloadedRegionExists = false;
@@ -405,30 +365,10 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
         }
     }
 
-    /*
-    @ReactMethod
-    public void mergeOfflineRegions(final String path, final Promise promise) {
-        activateFileSource();
-
-        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
-
-        offlineManager.mergeOfflineRegions(path, new OfflineManager.MergeOfflineRegionsCallback() {
-            @Override
-            public void onMerge(OfflineRegion[] offlineRegions) {
-                promise.resolve(null);
-            }
-
-            @Override
-            public void onError(String error) {
-                promise.reject("mergeOfflineRegions", error);
-            }
-        });
-    }*/
     @ReactMethod
     fun setTileCountLimit(tileCountLimit: Int) {
-        val offlineManager = getOfflineManager(mReactContext)
-        //v10todo
-        //offlineManager.setOfflineMapboxTileCountLimit(tileCountLimit);
+        val offlineRegionManager = OfflineRegionManager(ResourceOptions.Builder().accessToken(RCTMGLModule.getAccessToken(mReactContext)).build())
+        offlineRegionManager.setOfflineMapboxTileCountLimit(tileCountLimit.toLong())
     }
 
     @ReactMethod
@@ -614,6 +554,7 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
     }*/
     companion object {
         const val REACT_CLASS = "RCTMGLOfflineModule"
+        const val LOG_TAG = REACT_CLASS
         @JvmField
         val INACTIVE_REGION_DOWNLOAD_STATE = TileRegionPack.INACTIVE
         @JvmField
@@ -630,24 +571,30 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
         val DEFAULT_MAX_ZOOM_LEVEL = 20.0
         var offlineManager: OfflineManager? = null
         var _tileStore: TileStore? = null
-        fun getOfflineManager(mReactContext: ReactApplicationContext?): OfflineManager? {
-            if (offlineManager == null) {
-                offlineManager = OfflineManager(
+        fun getOfflineManager(mReactContext: ReactApplicationContext?): OfflineManager {
+            val manager = offlineManager
+            if (manager == null) {
+                val result = OfflineManager(
                     ResourceOptions.Builder()
                         .accessToken(RCTMGLModule.getAccessToken(mReactContext)).tileStore(
                         getTileStore()
                     ).build()
                 )
+                offlineManager = result
+                return result
+            } else {
+                return manager
             }
-            return offlineManager
         }
 
-        fun getTileStore(): TileStore? {
-            if (_tileStore == null) {
-                _tileStore = TileStore.create()
-                return _tileStore
+        fun getTileStore(): TileStore {
+            val store = _tileStore
+            if (store == null) {
+                val result = TileStore.create()
+                _tileStore = result
+                return result
             }
-            return _tileStore
+            return store
         }
     }
 }

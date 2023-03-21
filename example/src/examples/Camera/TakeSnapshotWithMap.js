@@ -59,13 +59,12 @@ class TakeSnapshotWithMap extends React.Component {
               centerCoordinate={[-122.400021, 37.789085]}
             />
 
-            <MapboxGL.VectorSource>
-              <MapboxGL.FillExtrusionLayer
-                id="building3d"
-                sourceLayerID="building"
-                style={layerStyles.building}
-              />
-            </MapboxGL.VectorSource>
+            <MapboxGL.FillExtrusionLayer
+              id="building3d"
+              existing
+              sourceLayerID="building"
+              style={layerStyles.building}
+            />
           </MapboxGL.MapView>
 
           <View style={styles.imageContainer}>
