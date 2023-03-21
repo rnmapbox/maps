@@ -402,6 +402,10 @@ class MapView extends NativeBridgeComponent(
     regionDidChangeDebounceTime: 500,
   };
 
+  deprecationLogged: { regionDidChange: boolean; regionIsChanging: boolean } = {
+    regionDidChange: false,
+    regionIsChanging: false,
+  };
   logger: Logger;
   _onDebouncedRegionWillChange: Debounced<
     (
@@ -516,9 +520,12 @@ class MapView extends NativeBridgeComponent(
       addIfHasHandler('MapIdle');
 
       if (addIfHasHandler('RegionDidChange')) {
-        console.warn(
-          'onRegionDidChange is deprecated and will be removed in next beta - please use onMapIdle',
-        );
+        if (!this.deprecationLogged.regionDidChange) {
+          console.warn(
+            'onRegionDidChange is deprecated and will be removed in next beta - please use onMapIdle. https://github.com/rnmapbox/maps/wiki/Deprecated-RegionIsDidChange',
+          );
+          this.deprecationLogged.regionDidChange = true;
+        }
         if (props.onRegionDidChange) {
           console.warn(
             'rnmapbox/maps: only one of MapView.onRegionDidChange or onMapIdle is supported',
@@ -526,9 +533,12 @@ class MapView extends NativeBridgeComponent(
         }
       }
       if (addIfHasHandler('RegionIsChanging')) {
-        console.warn(
-          'onRegionIsChanging is deprecated and will be removed in next beta - please use onCameraChanged',
-        );
+        if (!this.deprecationLogged.regionIsChanging) {
+          console.warn(
+            'onRegionIsChanging is deprecated and will be removed in next beta - please use onCameraChanged. https://github.com/rnmapbox/maps/wiki/Deprecated-RegionIsDidChange',
+          );
+          this.deprecationLogged.regionIsChanging = true;
+        }
         if (props.onCameraChanged) {
           console.warn(
             'rnmapbox/maps: only one of MapView.onRegionIsChanging or onCameraChanged is supported',
