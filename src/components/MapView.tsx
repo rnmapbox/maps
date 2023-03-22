@@ -184,7 +184,7 @@ type Props = ViewProps & {
   /**
    * Enable/Disable the compass from appearing on the map
    */
-  compassEnabled: boolean;
+  compassEnabled?: boolean;
 
   /**
    * [`mapbox` (v10) implementation only] Enable/Disable if the compass should fade out when the map is pointing north
