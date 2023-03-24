@@ -290,17 +290,12 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
       case .none:
         Logger.assert("RCTMGLCamera, userTrackingModes should not be none here")
       case .compass:
-        map.location.options.puckBearingEnabled = true
-        map.location.options.puckBearingSource = PuckBearingSource.heading
         followOptions.bearing = FollowPuckViewportStateBearing.heading
         trackingModeChanged = true
       case .course:
-        map.location.options.puckBearingEnabled = true
-        map.location.options.puckBearingSource = PuckBearingSource.course
         followOptions.bearing = FollowPuckViewportStateBearing.course
         trackingModeChanged = true
       case .normal:
-        map.location.options.puckBearingEnabled = false
         followOptions.bearing = nil
         trackingModeChanged = true
       }
