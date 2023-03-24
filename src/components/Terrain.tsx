@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from 'react';
-import { HostComponent, requireNativeComponent } from 'react-native';
+import { requireNativeComponent } from 'react-native';
 
 import type { TerrainLayerStyleProps, Value } from '../utils/MapboxStyles';
 import { StyleValue, transformStyle } from '../utils/StyleValue';
@@ -50,5 +50,4 @@ export const Terrain = memo((props: Props) => {
   return <RCTMGLTerrain {...baseProps} />;
 });
 
-const RCTMGLTerrain: HostComponent<NativeProps> =
-  requireNativeComponent(NATIVE_MODULE_NAME);
+const RCTMGLTerrain = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);

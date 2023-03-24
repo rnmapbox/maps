@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { HostComponent, requireNativeComponent } from 'react-native';
+import { requireNativeComponent } from 'react-native';
 
 const NATIVE_MODULE_NAME = 'RCTMGLNativeUserLocation';
 
@@ -23,8 +23,10 @@ export type Props = {
   iosShowsUserHeadingIndicator?: boolean;
 };
 
-const RCTMGLNativeUserLocation: HostComponent<Props> =
-  requireNativeComponent(NATIVE_MODULE_NAME);
+type NativeProps = Props;
+
+const RCTMGLNativeUserLocation =
+  requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 const NativeUserLocation = memo((props: Props) => {
   return <RCTMGLNativeUserLocation {...props} />;
