@@ -1,5 +1,5 @@
 def defaultMapboxMapsImpl = "maplibre"
-def defaultMapboxMapsVersion = "10.11.2"
+def defaultMapboxMapsVersion = "10.12.0"
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
