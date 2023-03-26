@@ -36,8 +36,8 @@ fun ReadableArray.asArrayString(): Array<String> {
     return result
 }
 
-open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
-    AbstractEventEmitter<RCTMGLMapView?>(context) {
+open class RCTMGLMapViewManager(context: ReactApplicationContext) :
+    AbstractEventEmitter<RCTMGLMapView>(context) {
     private val mViews: MutableMap<Int, RCTMGLMapView>
     override fun getName(): String {
         return REACT_CLASS
@@ -76,7 +76,8 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
     }
 
     override fun createViewInstance(themedReactContext: ThemedReactContext): RCTMGLMapView {
-        return RCTMGLMapView(themedReactContext, this /*, null*/)
+        val context = activity ?: themedReactContext
+        return RCTMGLMapView(context, this /*, null*/)
     }
 
     override fun onDropViewInstance(mapView: RCTMGLMapView) {
