@@ -8,7 +8,7 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.mapbox.rctmgl.components.AbstractEventEmitter
 
 abstract class RCTMGLTileSourceManager<T : RCTMGLTileSource<*>?> internal constructor(
-    reactApplicationContext: ReactApplicationContext?
+    reactApplicationContext: ReactApplicationContext
 ) : AbstractEventEmitter<T>(reactApplicationContext) {
     override fun getChildAt(source: T, childPosition: Int): View {
         return source!!.getChildAt(childPosition)

@@ -11,7 +11,7 @@ import com.mapbox.rctmgl.utils.ConvertUtils
 import com.mapbox.rctmgl.utils.ExpressionParser
 import javax.annotation.Nonnull
 
-class RCTMGLVectorSourceManager(reactApplicationContext: ReactApplicationContext?) :
+class RCTMGLVectorSourceManager(reactApplicationContext: ReactApplicationContext) :
     RCTMGLTileSourceManager<RCTMGLVectorSource?>(reactApplicationContext) {
     @Nonnull
     override fun getName(): String {
