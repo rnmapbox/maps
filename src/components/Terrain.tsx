@@ -45,7 +45,6 @@ export const Terrain = memo((props: Props) => {
       style: undefined,
     };
   }, [props, style]);
-  console.log('BASE PROPS', baseProps);
 
   return <RCTMGLTerrain {...baseProps} />;
 });
