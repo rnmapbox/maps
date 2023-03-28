@@ -527,7 +527,7 @@ class MapView extends NativeBridgeComponent(
           );
           this.deprecationLogged.regionDidChange = true;
         }
-        if (props.onRegionDidChange) {
+        if (props.onMapIdle) {
           console.warn(
             'rnmapbox/maps: only one of MapView.onRegionDidChange or onMapIdle is supported',
           );
