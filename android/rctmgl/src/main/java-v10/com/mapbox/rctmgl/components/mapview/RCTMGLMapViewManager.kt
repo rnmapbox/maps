@@ -311,7 +311,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
             }
             METHOD_SET_HANDLED_MAP_EVENTS -> {
                 args?.let {
-                    mapView.setHandledMapChangedEvents(args.asArrayString());
+                    mapView.setHandledMapChangedEvents(it.getArray(1).asArrayString());
                 }
             }
         }
