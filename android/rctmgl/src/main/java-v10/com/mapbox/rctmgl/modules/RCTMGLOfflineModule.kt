@@ -1,49 +1,92 @@
 package com.mapbox.rctmgl.modules
 
+import android.R.array
+import android.os.Build
 import android.util.Log
 import com.facebook.react.bridge.*
 import com.facebook.react.module.annotations.ReactModule
-import com.mapbox.rctmgl.modules.RCTMGLOfflineModule
-import com.mapbox.rctmgl.modules.TileRegionPack
-import com.mapbox.maps.OfflineManager
-import com.mapbox.rctmgl.utils.LatLngBounds
-import com.mapbox.maps.TilesetDescriptorOptions
-import com.mapbox.rctmgl.utils.GeoJSONUtils
-import com.mapbox.bindgen.Expected
-import com.mapbox.geojson.Geometry
-import com.mapbox.rctmgl.events.IEvent
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter
+import com.mapbox.bindgen.Expected
 import com.mapbox.bindgen.Value
-import com.mapbox.rctmgl.events.OfflineEvent
 import com.mapbox.common.*
+import com.mapbox.geojson.*
+import com.mapbox.maps.*
+import com.mapbox.rctmgl.events.IEvent
+import com.mapbox.rctmgl.events.OfflineEvent
 import com.mapbox.rctmgl.events.constants.EventTypes
-import com.mapbox.geojson.FeatureCollection
-import com.mapbox.maps.OfflineRegionManager
-import com.mapbox.turf.TurfMeasurement
-import com.mapbox.maps.ResourceOptions
-import com.mapbox.rctmgl.modules.RCTMGLModule
-import com.mapbox.rctmgl.utils.ConvertUtils
+import com.mapbox.rctmgl.utils.*
 import com.mapbox.rctmgl.utils.Logger
+import com.mapbox.rctmgl.utils.extensions.*
+import com.mapbox.turf.TurfMeasurement
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.File
 import java.io.UnsupportedEncodingException
-import java.lang.Error
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
-import java.util.ArrayList
-import java.util.HashMap
 import java.util.concurrent.CountDownLatch
 
-class TileRegionPack(var name: String, var progress: TileRegionLoadProgress?, var state: String) {
+data class ZoomRange(val minZoom: Byte, val maxZoom: Byte) {
+
+}
+
+const val RNMapboxInfoMetadataKey = "_rnmapbox"
+
+enum class TileRegionPackState(val rawValue: String) {
+    INVALID("invalid"),
+    INACTIVE("inactive"),
+    ACTIVE("active"),
+    COMPLETE("complete"),
+    UNKNOWN("unkown")
+}
+class TileRegionPack(var name: String, var progress: TileRegionLoadProgress?, var state: TileRegionPackState, var metadata: JSONObject) {
     var cancelable: Cancelable? = null
     var loadOptions: TileRegionLoadOptions? = null
 
-    companion object {
-        val ACTIVE = "active"
-        val INACTIVE = "inactive"
-        val COMPLETE = "complete"
+        // stored in metadata for resume functionality
+    var styleURI: String? = null
+    var bounds: Geometry? = null
+    var zoomRange: ZoomRange? = null
+
+    init {
+        val rnMetadata = metadata.optJSONObject(RNMapboxInfoMetadataKey)
+        if (rnMetadata != null) {
+            val styleURI = rnMetadata.optString("styleURI")
+            if (styleURI != null) {
+                this.styleURI = styleURI
+            }
+
+            val bounds = rnMetadata.optJSONObject("bounds")
+            if (bounds != null) {
+                this.bounds = bounds.toGeometry()
+            }
+
+            val zoomRange = rnMetadata.optJSONArray("zoomRange")
+            if (zoomRange != null) {
+                this.zoomRange =
+                    ZoomRange(zoomRange.getInt(0).toByte(), zoomRange.getInt(1).toByte())
+            }
+        }
+    }
+
+    public constructor(
+        name: String,
+        state: TileRegionPackState = TileRegionPackState.UNKNOWN,
+        styleURI: String,
+        bounds: Geometry,
+        zoomRange: ZoomRange,
+        metadata: JSONObject
+    ) : this(name, null, state, metadata) {
+        val rnmeta = JSONObject()
+        rnmeta.put("styleURI", styleURI)
+        this.styleURI = styleURI
+        rnmeta.put("bounds", bounds.toJSONObject())
+        this.bounds = bounds
+        rnmeta.put("zoomRange", JSONArray(arrayOf(zoomRange.minZoom, zoomRange.maxZoom)))
+        this.zoomRange = zoomRange
+        this.metadata.put(RNMapboxInfoMetadataKey, rnmeta);
     }
 }
 
@@ -54,6 +97,21 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
     ) {
     var tileRegionPacks = HashMap<String, TileRegionPack>()
     private var mProgressEventThrottle = 300.0
+
+
+    val tileStore: TileStore by lazy {
+        TileStore.create()
+    }
+
+    val offlineManager: OfflineManager by lazy {
+        OfflineManager(
+            ResourceOptions.Builder()
+                .accessToken(RCTMGLModule.getAccessToken(mReactContext)).tileStore(
+                    tileStore
+                ).build()
+        )
+    }
+
     override fun getName(): String {
         return REACT_CLASS
     }
@@ -68,76 +126,120 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
         // Remove upstream listeners, stop unnecessary background tasks
     }
 
+    // region React methods
     @ReactMethod
     @Throws(JSONException::class)
     fun createPack(options: ReadableMap, promise: Promise) {
-        val name = ConvertUtils.getString("name", options, "")
-        val offlineManager = getOfflineManager(mReactContext)
-        val latLngBounds = getBoundsFromOptions(options)
-        val descriptorOptions = TilesetDescriptorOptions.Builder().styleURI(
-            (options.getString("styleURL"))!!
-        ).minZoom(options.getInt("minZoom").toByte()).maxZoom(options.getInt("maxZoom").toByte())
-            .build()
-        val tilesetDescriptor = offlineManager.createTilesetDescriptor(descriptorOptions)
-        val descriptors = ArrayList<TilesetDescriptor>()
-        descriptors.add(tilesetDescriptor)
-        val loadOptions = TileRegionLoadOptions.Builder()
-            .geometry(GeoJSONUtils.fromLatLngBoundsToPolygon(latLngBounds))
-            .descriptors(descriptors)
-            .metadata(Value.valueOf((options.getString("metadata"))!!))
-            .acceptExpired(true)
-            .networkRestriction(NetworkRestriction.NONE)
-            .build()
-        val metadataStr = options.getString("metadata")
-        val metadata = JSONObject(metadataStr)
-        val id = metadata.getString("name")
-        val pack = TileRegionPack(id, null, TileRegionPack.INACTIVE)
-        pack.loadOptions = loadOptions
-        tileRegionPacks[id] = pack
-        promise.resolve(fromOfflineRegion(latLngBounds, metadataStr))
-        startPackDownload(pack)
+        try {
+            val metadataStr = options.getString("metadata")!!
+            val metadata = JSONObject(metadataStr)
+            val metadataValue = Value.valueOf(metadataStr)
+            val id = metadata.getString("name")!!
+
+            val boundsStr = options.getString("bounds")!!
+            val boundsFC = FeatureCollection.fromJson(boundsStr)
+            val bounds = convertPointPairToBounds(boundsFC)
+
+            val actPack = TileRegionPack(
+                name = id,
+                styleURI = options.getString("styleURL")!!,
+                bounds = bounds,
+                zoomRange = ZoomRange(
+                    minZoom = options.getInt("minZoom").toByte(),
+                    maxZoom = options.getInt("maxZoom").toByte()
+                ),
+                metadata = metadata
+            )
+            tileRegionPacks[id] = actPack
+            startLoading(pack = actPack)
+            promise.resolve(
+                writableMapOf("bounds" to boundsStr, "metadata" to metadataStr)
+            )
+        } catch (e: Throwable) {
+            promise.reject("createPack", e)
+        }
     }
 
-    fun startPackDownload(pack: TileRegionPack) {
-        val _this = this
-        pack.cancelable = getTileStore()
-            .loadTileRegion(
-                pack.name,
-                (pack.loadOptions)!!,
-                TileRegionLoadProgressCallback { progress ->
-                    pack.progress = progress
-                    pack.state = TileRegionPack.ACTIVE
-                    _this.sendEvent(_this.makeStatusEvent(pack.name, progress, pack))
-                },
-                object : TileRegionCallback {
-                    override fun run(region: Expected<TileRegionError, TileRegion>) {
-                        pack.cancelable = null
-                        if (region.isError) {
-                            pack.state = TileRegionPack.INACTIVE
-                            _this.sendEvent(
-                                _this.makeErrorEvent(
-                                    pack.name, "TileRegionError", region.error!!
-                                        .message
-                                )
-                            )
-                        } else {
-                            pack.state = TileRegionPack.COMPLETE
-                            _this.sendEvent(_this.makeStatusEvent(pack.name, pack.progress, pack))
-                        }
-                    }
-                })
+    @ReactMethod
+    fun getPackStatus(name: String, promise: Promise) {
+        val pack = tileRegionPacks[name]
+        if (pack != null) {
+            promise.resolve(makeRegionStatus(name, pack.progress, pack))
+        } else {
+            promise.reject(Error("Pack not found"))
+            Logger.w(REACT_CLASS, "getPackStatus - Unknown offline region")
+        }
+    }
+
+    @ReactMethod
+    fun resumePackDownload(name: String, promise: Promise) {
+        val pack = tileRegionPacks[name]
+        if (pack != null) {
+            startLoading(pack)
+            promise.resolve(null)
+        } else {
+            promise.reject("resumePackDownload", "Unknown offline pack: $name")
+        }
+    }
+
+    @ReactMethod
+    fun pausePackDownload(name: String, promise: Promise) {
+        val pack = tileRegionPacks[name]
+        if (pack != null) {
+            if (pack.cancelable != null) {
+                pack.cancelable?.cancel()
+                pack.cancelable = null
+                promise.resolve(null)
+            } else {
+                promise.reject("resumeRegionDownload", "Offline pack: $name already cancelled")
+            }
+        } else {
+            promise.reject("resumeRegionDownload", "Unknown offline region")
+        }
+    }
+
+    @ReactMethod
+    fun setTileCountLimit(tileCountLimit: Int) {
+        val offlineRegionManager = OfflineRegionManager(ResourceOptions.Builder().accessToken(RCTMGLModule.getAccessToken(mReactContext)).build())
+        offlineRegionManager.setOfflineMapboxTileCountLimit(tileCountLimit.toLong())
+    }
+
+    @ReactMethod
+    fun deletePack(name: String, promise: Promise) {
+        val pack = tileRegionPacks[name]
+
+        if (pack == null) {
+            promise.resolve(null)
+            return
+        }
+
+        if (pack.state == TileRegionPackState.INVALID) {
+            promise.reject("deletePack", "Pack: $name has already been deleted")
+            return
+        }
+
+        tileStore.removeTileRegion(name, object: TileRegionCallback {
+            override fun run(expected: Expected<TileRegionError, TileRegion>) {
+                expected.value.also {
+                    tileRegionPacks[name]!!.state = TileRegionPackState.INVALID
+                    promise.resolve(null);
+                } ?: run {
+                    promise.reject("deletePack", expected.error?.message ?: "n/a")
+                }
+            }
+        })
     }
 
     @ReactMethod
     fun getPacks(promise: Promise) {
-        getTileStore().getAllTileRegions(object : TileRegionsCallback {
-            override fun run(regions: Expected<TileRegionError, List<TileRegion>>) {
+        tileStore.getAllTileRegions(object : TileRegionsCallback {
+            override fun run(expected: Expected<TileRegionError, List<TileRegion>>) {
                 UiThreadUtil.runOnUiThread(object : Runnable {
                     override fun run() {
-                        if (regions.isValue) {
-                            convertRegionsToJSON((regions.value)!!, promise)
-                        } else {
-                            promise.reject("getPacks", regions.error!!.message)
+                        expected.value?.also { regions ->
+                            convertRegionsToJSON(regions, promise)
+                        } ?: run {
+                            promise.reject("getPacks", expected.error!!.message)
                         }
                     }
                 })
@@ -145,58 +247,302 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
         })
     }
 
+    // endregion
+
+    fun startLoading(pack: TileRegionPack) {
+        val id = pack.name
+        val bounds = pack.bounds
+        if (bounds == null) {
+            throw IllegalArgumentException("startLoading failed as there are no bounds in pack")
+        }
+        val zoomRange = pack.zoomRange
+        if (zoomRange == null) {
+            throw IllegalArgumentException("startLoading failed as there is no zoomRange in pack")
+        }
+        val styleURI = pack.styleURI
+        if (styleURI == null) {
+            throw IllegalArgumentException("startLoading failed as there is no styleURI in pack")
+        }
+        val metadata = pack.metadata
+        if (metadata == null) {
+            throw IllegalArgumentException("startLoading failed as there is no metadata in pack")
+        }
+        val stylePackOptions = StylePackLoadOptions.Builder()
+            .glyphsRasterizationMode(GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY)
+            .metadata(metadata.toMapboxValue())
+            .build()
+
+        val descriptorOptions = TilesetDescriptorOptions.Builder()
+            .styleURI(styleURI)
+            .minZoom(zoomRange.minZoom)
+            .maxZoom(zoomRange.maxZoom)
+            .stylePackOptions(stylePackOptions)
+            .build()
+        val tilesetDescriptor = offlineManager.createTilesetDescriptor(descriptorOptions)
+
+        val loadOptions = TileRegionLoadOptions.Builder()
+            .geometry(bounds)
+            .descriptors(arrayListOf(tilesetDescriptor))
+            .metadata(metadata.toMapboxValue())
+            .acceptExpired(true)
+            .networkRestriction(NetworkRestriction.NONE)
+            .averageBytesPerSecond(null)
+            .build()
+
+        var lastProgress: TileRegionLoadProgress? = null
+        val task = this.tileStore.loadTileRegion(
+            id, loadOptions,
+            { progress ->
+                lastProgress = progress
+                tileRegionPacks[id]!!.progress = progress
+                tileRegionPacks[id]!!.state = TileRegionPackState.ACTIVE
+
+                offlinePackProgressDidChange(progress, metadata, TileRegionPackState.ACTIVE)
+            }, { expected ->
+                expected.value?.also {
+                    val progress = lastProgress
+                    if (progress != null) {
+                        offlinePackProgressDidChange(progress, metadata, TileRegionPackState.COMPLETE)
+                    } else {
+                        Logger.w(LOG_TAG, "startLoading: tile region completed, but got no progress information")
+                    }
+                    tileRegionPacks[id]!!.state = TileRegionPackState.COMPLETE
+                } ?: run {
+                    val error = expected.error ?: TileRegionError(TileRegionErrorType.OTHER, "$LOG_TAG neither value nor error in expected")
+
+                    tileRegionPacks[id]!!.state = TileRegionPackState.INACTIVE
+                    offlinePackDidReceiveError(name=id, error=error)
+                }
+            },
+        )
+        tileRegionPacks[id]!!.cancelable = task
+    }
+
     private fun convertRegionsToJSON(tileRegions: List<TileRegion>, promise: Promise) {
-        val countDownLatch = CountDownLatch(tileRegions.size)
+        val countDownLatch = CountDownLatch(tileRegions.size * 2)
+        val foo = mutableMapOf<String,Pair<Expected<TileRegionError,Geometry>, TileRegion>>()
+        val geometryResults = mutableMapOf<String, Pair<Expected<TileRegionError, Geometry>,TileRegion>>();
+        val metadataResults = mutableMapOf<String, Expected<TileRegionError, Value>>()
         val errors = ArrayList<TileRegionError?>()
-        val geometries = ArrayList<Geometry>()
         try {
             for (region: TileRegion in tileRegions) {
-                getTileStore()
-                    .getTileRegionGeometry(region.id, object : TileRegionGeometryCallback {
-                        override fun run(result: Expected<TileRegionError, Geometry>) {
-                            if (result.isValue) {
-                                geometries.add(result.value!!)
-                            } else {
-                                errors.add(result.error)
-                            }
-                            countDownLatch.countDown()
-                        }
-                    })
+                tileStore.getTileRegionGeometry(region.id
+                    ) { result ->
+                        geometryResults[region.id] = Pair(result, region)
+                        countDownLatch.countDown()
+                    }
+                tileStore.getTileRegionMetadata(region.id) { result ->
+                    metadataResults[region.id] = result
+                    countDownLatch.countDown()
+                }
             }
         } catch (error: Error) {
-            Logger.e("OS", "a")
+            Logger.e(LOG_TAG, "convertRegionsToJSON. failed to iterate regions")
         }
+
         try {
             countDownLatch.await()
-            val result = Arguments.createArray()
-            for (geometry: Geometry in geometries) {
-                result.pushMap(fromOfflineRegion(geometry))
+
+            val firstError = geometryResults.firstNotNullOfOrNull { (id,pair) -> pair.first.error }
+            if (firstError != null) {
+                promise.reject("convertRegionsToJSON", firstError.message)
+                return
             }
-            for (error: TileRegionError? in errors) {
-                val errorMap = Arguments.createMap()
-                errorMap.putString("type", "error")
-                errorMap.putString("message", error!!.message)
-                errorMap.putString("errorType", error.type.toString())
-                result.pushMap(errorMap)
+
+            val results = geometryResults.map { (id, pair) ->
+                val (expected, region) = pair
+                val geometry = expected.value!!
+                return@map Pair(id, Triple(geometry, region, metadataResults[id]?.value))
             }
+
             promise.resolve(
-                result
+                writableArrayOf(
+                *results.map { (id,geometry_region_metadata) ->
+                    val (geometry, region, metadata) = geometry_region_metadata
+                    val metadataJSON = metadata?.toJSONObject()
+                    val ret = convertRegionToJSON(region, geometry, metadataJSON)
+                    val pack = tileRegionPacks[region.id] ?: TileRegionPack(
+                        name= region.id,
+                        state= TileRegionPackState.UNKNOWN,
+                        progress= toProgress(region),
+                        metadata= metadataJSON ?: JSONObject()
+                    )
+
+                    if (region.completedResourceCount == region.requiredResourceCount) {
+                        pack.state = TileRegionPackState.COMPLETE
+                    }
+                    tileRegionPacks[region.id] = pack
+                    return@map ret
+                }.toTypedArray())
             )
         } catch (interruptedException: InterruptedException) {
             promise.reject(interruptedException)
         }
     }
 
+    private fun convertRegionToJSON(region: TileRegion, geometry: Geometry, metadata: JSONObject?): ReadableMap {
+        val bb = geometry.calculateBoundingBox()
+
+        val jsonBounds = writableArrayOf(
+            bb.northeast().longitude(),
+            bb.northeast().latitude(),
+            bb.southwest().longitude(),
+            bb.southwest().latitude()
+        )
+        val completed = (region.completedResourceCount == region.requiredResourceCount)
+
+        val metadataOrEmpty = metadata ?: JSONObject()
+        val metadataWithName = metadataOrEmpty.put("name", region.id)
+
+        var result = writableMapOf(
+            "requiredResourceCount" to region.requiredResourceCount,
+            "completedResourceCount" to region.completedResourceCount,
+            "completedResourceSize" to region.completedResourceSize,
+            "state" to (if (completed) TileRegionPackState.COMPLETE.rawValue else TileRegionPackState.UNKNOWN ),
+            "metadata" to metadataWithName.toString(),
+            "bounds" to jsonBounds,
+        );
+
+        if (region.requiredResourceCount > 0) {
+            val percentage = 100.0 * region.completedResourceCount.toDouble() / region.requiredResourceCount.toDouble()
+            result.putDouble("percentage", percentage)
+        } else {
+            result.putNull("percentage")
+        }
+
+        val expires = region.expires
+        if (expires != null) {
+            result.putString("expires", expires.toString())
+        }
+
+        return result
+    }
+
+    private fun toProgress(region: TileRegion): TileRegionLoadProgress {
+        return TileRegionLoadProgress(
+            region.completedResourceCount,
+            region.completedResourceSize,
+            0,
+            region.requiredResourceCount,
+            0,
+           0
+        )
+    }
+
+    private fun _makeRegionStatusPayload(name:String, progress: TileRegionLoadProgress?,state: TileRegionPackState, metadata: JSONObject?) : WritableMap {
+        var result = Arguments.createMap()
+        if (progress != null) {
+            val progressPercentage =  progress.completedResourceCount.toDouble() / progress.requiredResourceCount.toDouble()
+            result = writableMapOf(
+                "state" to (if (progress.completedResourceCount == progress.requiredResourceCount) TileRegionPackState.COMPLETE.rawValue else state.rawValue),
+                "name" to name,
+                "perentage" to progressPercentage * 100.0,
+                "completedResourceCount" to progress.completedResourceCount,
+                "completedResourceSize" to progress.completedResourceSize,
+                "erroredResourceCount" to progress.erroredResourceCount,
+                "loadedResourceSize" to progress.loadedResourceSize,
+                "loadedResourceCount" to progress.loadedResourceCount,
+                "requiredResourceCount" to progress.requiredResourceCount
+            )
+        } else {
+            result = writableMapOf(
+                "state" to state.rawValue,
+                "name" to name,
+                "perentage" to null,
+            )
+        }
+        if (metadata != null) {
+            result.putMap("metadata", metadata.toReadableMap())
+        }
+        return result
+    }
+    private fun makeProgresEvent(name: String, progress: TileRegionLoadProgress, state: TileRegionPackState): OfflineEvent {
+        return OfflineEvent(
+            OFFLINE_PROGRESS,
+            EventTypes.OFFLINE_STATUS,
+            _makeRegionStatusPayload(name, progress, state, null)
+        )
+    }
+    private fun offlinePackProgressDidChange(progress: TileRegionLoadProgress, metadata: JSONObject, state: TileRegionPackState) {
+        // TODO throttle
+        sendEvent(this.makeProgresEvent(metadata.getString("name"), progress, state))
+    }
+
+    private fun offlinePackDidReceiveError(name: String, error: TileRegionError) {
+        val event = OfflineEvent(
+            OFFLINE_ERROR,
+            EventTypes.OFFLINE_ERROR,
+            writableMapOf(
+                "name" to name,
+                "message" to error.message
+            )
+        )
+        sendEvent(event)
+    }
+
+    private fun convertPointPairToBounds(boundsFC: FeatureCollection): Geometry {
+        val geometryCollection = boundsFC.toGeometryCollection()
+        val geometries = geometryCollection.geometries()
+        if (geometries.size != 2) {
+            return geometryCollection
+        }
+        val g0 = geometries.get(0) as Point?
+        val g1 = geometries.get(1) as Point?
+        if (g0 == null || g1 == null) {
+            return geometryCollection
+        }
+        val pt0 = g0
+        val pt1 = g1
+        return Polygon.fromLngLats(
+            listOf(
+            listOf(
+                pt0,
+                Point.fromLngLat(pt1.longitude(), pt0.latitude()),
+                pt1,
+                Point.fromLngLat(pt0.longitude(), pt1.latitude()),
+                pt0
+            ))
+        )
+    }
+
+    fun startPackDownload(pack: TileRegionPack) {
+        val _this = this
+        pack.cancelable = tileStore
+            .loadTileRegion(
+                pack.name,
+                (pack.loadOptions)!!,
+                TileRegionLoadProgressCallback { progress ->
+                    pack.progress = progress
+                    pack.state = TileRegionPackState.ACTIVE
+                    _this.sendEvent(_this.makeStatusEvent(pack.name, progress, pack))
+                },
+                object : TileRegionCallback {
+                    override fun run(region: Expected<TileRegionError, TileRegion>) {
+                        pack.cancelable = null
+                        if (region.isError) {
+                            pack.state = TileRegionPackState.INACTIVE
+                            _this.sendEvent(
+                                _this.makeErrorEvent(
+                                    pack.name, "TileRegionError", region.error!!
+                                        .message
+                                )
+                            )
+                        } else {
+                            pack.state = TileRegionPackState.COMPLETE
+                            _this.sendEvent(_this.makeStatusEvent(pack.name, pack.progress, pack))
+                        }
+                    }
+                })
+    }
+
     @ReactMethod
     fun resetDatabase(promise: Promise) {
-        val tileStore = getTileStore()
         tileStore.getAllTileRegions { expected ->
             expected.value?.also { tileRegions ->
                 tileRegions.forEach { tileRegion ->
                     tileStore.removeTileRegion(tileRegion.id);
                 }
 
-                val offlineManager = getOfflineManager(mReactContext)
                 offlineManager.getAllStylePacks { expected ->
                     expected.value?.also { stylePacks ->
                         stylePacks.forEach { stylePack ->
@@ -219,156 +565,24 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun getPackStatus(name: String, promise: Promise) {
-        val pack = tileRegionPacks[name]
-        if (pack != null) {
-            promise.resolve(makeRegionStatus(name, pack.progress, pack))
-        } else {
-            promise.reject(Error("Pack not found"))
-            Logger.w(REACT_CLASS, "getPackStatus - Unknown offline region")
-        }
-    }
-
-    /*
-    @ReactMethod
-    public void setPackObserver(final String name, final Promise promise) {
-        activateFileSource();
-
-        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
-
-        offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
-            @Override
-            public void onList(OfflineRegion[] offlineRegions) {
-                OfflineRegion region = getRegionByName(name, offlineRegions);
-                boolean hasRegion = region != null;
-
-                if (hasRegion) {
-                    setOfflineRegionObserver(name, region);
-                }
-
-                promise.resolve(hasRegion);
-            }
-
-            @Override
-            public void onError(String error) {
-                promise.reject("setPackObserver", error);
-            }
-        });
-    }*/
-    /*
-    @ReactMethod
-    public void invalidatePack(final String name, final Promise promise) {
-        activateFileSource();
-
-        final OfflineManager offlineManager = OfflineManager.getInstance(mReactContext);
-
-        offlineManager.listOfflineRegions(new OfflineManager.ListOfflineRegionsCallback() {
-            @Override
-            public void onList(OfflineRegion[] offlineRegions) {
-                OfflineRegion region = getRegionByName(name, offlineRegions);
-
-                if (region == null) {
-                    promise.resolve(null);
-                    Log.w(REACT_CLASS, "invalidateRegion - Unknown offline region");
-                    return;
-                }
-
-                region.invalidate(new OfflineRegion.OfflineRegionInvalidateCallback() {
-                    @Override
-                    public void onInvalidate() {
-                        promise.resolve(null);
-                    }
-
-                    @Override
-                    public void onError(String error) {
-                        promise.reject("invalidateRegion", error);
-                    }
-                });
-            }
-
-            @Override
-            public void onError(String error) {
-                promise.reject("invalidateRegion", error);
-            }
-        });
-    }*/
-
-    @ReactMethod
-    fun deletePack(name: String, promise: Promise) {
-        getTileStore().getAllTileRegions{ expected ->
-            if (expected.isValue) {
-                expected.value?.let { tileRegionList ->
-                    var downloadedRegionExists = false;
-                    for (tileRegion in tileRegionList) {
-                        if (tileRegion.id == name) {
-                            downloadedRegionExists = true;
-                            getTileStore()!!.removeTileRegion(name, object : TileRegionCallback {
-                                override fun run(region: Expected<TileRegionError, TileRegion>) {
-                                    promise.resolve(null);
-                                }
-                            })
-                        }
-                    }
-                    if (!downloadedRegionExists) {
-                        promise.resolve(null);
-                    }
-                }
-            }
-            expected.error?.let { tileRegionError ->
-                promise.reject("deletePack", "TileRegionError: $tileRegionError")
-            }
-        }
-    }
-
-    @ReactMethod
     fun migrateOfflineCache() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Old and new cache file paths
+            val targetPathName = mReactContext.filesDir.absolutePath + "/.mapbox/map_data"
+            val sourcePath = Paths.get(mReactContext.filesDir.absolutePath + "/mbgl-offline.db")
+            val targetPath = Paths.get(targetPathName + "/map_data.db")
 
-        // Old and new cache file paths
-        val targetPathName = mReactContext.filesDir.absolutePath + "/.mapbox/map_data"
-        val sourcePath = Paths.get(mReactContext.filesDir.absolutePath + "/mbgl-offline.db")
-        val targetPath = Paths.get(targetPathName + "/map_data.db")
-
-        try {
-            val directory = File(targetPathName)
-            directory.mkdirs()
-            Files.move(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING)
-            Log.d("TAG","v10 cache directory created successfully")
-        } catch (e: Exception) {
-            Log.d("TAG", "${e}... file move unsuccessful")
-        }
-    }
-
-    @ReactMethod
-    fun pausePackDownload(name: String, promise: Promise) {
-        val pack = tileRegionPacks[name]
-        if (pack != null) {
-            if (pack.cancelable != null) {
-                pack.cancelable!!.cancel()
-                pack.cancelable = null
-                promise.resolve(null)
-            } else {
-                promise.reject("resumeRegionDownload", "Offline region cancelled already")
+            try {
+                val directory = File(targetPathName)
+                directory.mkdirs()
+                Files.move(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING)
+                Log.d(LOG_TAG, "v10 cache directory created successfully")
+            } catch (e: Exception) {
+                Log.d(LOG_TAG, "${e}... file move unsuccessful")
             }
         } else {
-            promise.reject("resumeRegionDownload", "Unknown offline region")
+            Logger.w(LOG_TAG, "migrateOfflineCache only supported on api level 26 or later")
         }
-    }
-
-    @ReactMethod
-    fun resumePackDownload(name: String, promise: Promise) {
-        val pack = tileRegionPacks[name]
-        if (pack != null) {
-            startPackDownload(pack)
-            promise.resolve(null)
-        } else {
-            promise.reject("resumeRegionDownload", "Unknown offline region")
-        }
-    }
-
-    @ReactMethod
-    fun setTileCountLimit(tileCountLimit: Int) {
-        val offlineRegionManager = OfflineRegionManager(ResourceOptions.Builder().accessToken(RCTMGLModule.getAccessToken(mReactContext)).build())
-        offlineRegionManager.setOfflineMapboxTileCountLimit(tileCountLimit.toLong())
     }
 
     @ReactMethod
@@ -376,15 +590,6 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
         mProgressEventThrottle = eventThrottle
     }
 
-    /*
-    private OfflineRegionDefinition makeDefinition(LatLngBounds latLngBounds, ReadableMap options) {
-        return new OfflineTilePyramidRegionDefinition(
-                ConvertUtils.getString("styleURL", options, DEFAULT_STYLE_URL),
-                latLngBounds,
-                ConvertUtils.getDouble("minZoom", options, DEFAULT_MIN_ZOOM_LEVEL),
-                ConvertUtils.getDouble("maxZoom", options, DEFAULT_MAX_ZOOM_LEVEL),
-                mReactContext.getResources().getDisplayMetrics().density);
-    }*/
     private fun getMetadataBytes(metadata: String?): ByteArray? {
         var metadataBytes: ByteArray? = null
         if (metadata == null || metadata.isEmpty()) {
@@ -398,51 +603,6 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
         return metadataBytes
     }
 
-    /*
-    private void setOfflineRegionObserver(final String name, final OfflineRegion region) {
-        region.setObserver(new OfflineRegion.OfflineRegionObserver() {
-            OfflineRegionStatus prevStatus = null;
-            long timestamp = System.currentTimeMillis();
-
-            @Override
-            public void onStatusChanged(OfflineRegionStatus status) {
-                if (shouldSendUpdate(System.currentTimeMillis(), status)) {
-                    sendEvent(makeStatusEvent(name, status));
-                    timestamp = System.currentTimeMillis();
-                }
-                prevStatus = status;
-            }
-
-            @Override
-            public void onError(OfflineRegionError error) {
-                sendEvent(makeErrorEvent(name, EventTypes.OFFLINE_ERROR, error.getMessage()));
-            }
-
-            @Override
-            public void mapboxTileCountLimitExceeded(long limit) {
-                String message = String.format(Locale.getDefault(), "Mapbox tile limit exceeded %d", limit);
-                sendEvent(makeErrorEvent(name, EventTypes.OFFLINE_TILE_LIMIT, message));
-            }
-
-            private boolean shouldSendUpdate (long currentTimestamp, OfflineRegionStatus curStatus) {
-                if (prevStatus == null) {
-                    return false;
-                }
-
-                if (prevStatus.getDownloadState() != curStatus.getDownloadState()) {
-                    return true;
-                }
-
-                if (currentTimestamp - timestamp > mProgressEventThrottle) {
-                    return true;
-                }
-
-                return false;
-            }
-        });
-
-        region.setDownloadState(ACTIVE_REGION_DOWNLOAD_STATE);
-    }*/
     private fun sendEvent(event: IEvent) {
         val eventEmitter = eventEmitter
         eventEmitter.emit(event.key, event.toJSON())
@@ -483,7 +643,7 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
         val progressPercentage =
             (status!!.completedResourceCount.toDouble() * 100.0) / (status.requiredResourceCount.toDouble())
         map.putString("name", regionName)
-        map.putString("state", pack.state)
+        map.putString("state", pack.state.rawValue)
         map.putDouble("percentage", progressPercentage)
         map.putInt("completedResourceCount", status.completedResourceCount.toInt())
         map.putInt("completedResourceSize", status.completedResourceSize.toInt())
@@ -494,107 +654,16 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
         return map
     }
 
-    private fun getBoundsFromOptions(options: ReadableMap): LatLngBounds {
-        val featureCollectionJSONStr = ConvertUtils.getString("bounds", options, "{}")
-        val featureCollection = FeatureCollection.fromJson(featureCollectionJSONStr)
-        return GeoJSONUtils.toLatLngBounds(featureCollection)
-    }
-
-    private fun fromOfflineRegion(bounds: LatLngBounds, metadataStr: String?): WritableMap {
-        val map = Arguments.createMap()
-        map.putArray("bounds", GeoJSONUtils.fromLatLngBounds(bounds))
-        map.putString("metadata", metadataStr)
-        return map
-    }
-
-    private fun fromOfflineRegion(region: Geometry): WritableMap {
-        val map = Arguments.createMap()
-        val bbox = TurfMeasurement.bbox(region)
-        val bounds = Arguments.createArray()
-        for (d: Double in bbox) {
-            bounds.pushDouble(d)
-        }
-        map.putArray("bounds", bounds)
-        map.putMap("geometry", GeoJSONUtils.fromGeometry(region))
-
-        //map.putString("metadata", new String(region.getMetadata()));
-        return map
-    } /*
-    private OfflineRegion getRegionByName(String name, OfflineRegion[] offlineRegions) {
-        if (name == null || name.isEmpty()) {
-            return null;
-        }
-
-        for (OfflineRegion region : offlineRegions) {
-            boolean isRegion = false;
-
-            try {
-                byte[] byteMetadata = region.getMetadata();
-
-                if (byteMetadata != null) {
-                    JSONObject metadata = new JSONObject(new String(byteMetadata));
-                    isRegion = name.equals(metadata.getString("name"));
-                }
-            } catch (JSONException e) {
-                Log.w(REACT_CLASS, e.getLocalizedMessage());
-            }
-
-            if (isRegion) {
-                return region;
-            }
-        }
-
-        return null;
-    }*/
-
-    /*
-    private void activateFileSource() {
-        FileSource fileSource = FileSource.getInstance(mReactContext);
-        fileSource.activate();
-    }*/
     companion object {
         const val REACT_CLASS = "RCTMGLOfflineModule"
         const val LOG_TAG = REACT_CLASS
-        @JvmField
-        val INACTIVE_REGION_DOWNLOAD_STATE = TileRegionPack.INACTIVE
-        @JvmField
-        val ACTIVE_REGION_DOWNLOAD_STATE = TileRegionPack.ACTIVE
-        @JvmField
-        val COMPLETE_REGION_DOWNLOAD_STATE = TileRegionPack.COMPLETE
-        @JvmField
-        val OFFLINE_ERROR = "MapboxOfflineRegionError"
-        @JvmField
-        val OFFLINE_PROGRESS = "MapboxOfflineRegionProgress"
+        const val OFFLINE_ERROR = "MapboxOfflineRegionError"
+        const val OFFLINE_PROGRESS = "MapboxOfflineRegionProgress"
 
-        //    public static final String DEFAULT_STYLE_URL = Style.MAPBOX_STREETS;
-        val DEFAULT_MIN_ZOOM_LEVEL = 10.0
-        val DEFAULT_MAX_ZOOM_LEVEL = 20.0
-        var offlineManager: OfflineManager? = null
-        var _tileStore: TileStore? = null
-        fun getOfflineManager(mReactContext: ReactApplicationContext?): OfflineManager {
-            val manager = offlineManager
-            if (manager == null) {
-                val result = OfflineManager(
-                    ResourceOptions.Builder()
-                        .accessToken(RCTMGLModule.getAccessToken(mReactContext)).tileStore(
-                        getTileStore()
-                    ).build()
-                )
-                offlineManager = result
-                return result
-            } else {
-                return manager
-            }
-        }
-
-        fun getTileStore(): TileStore {
-            val store = _tileStore
-            if (store == null) {
-                val result = TileStore.create()
-                _tileStore = result
-                return result
-            }
-            return store
-        }
     }
 }
+
+
+
+
+
