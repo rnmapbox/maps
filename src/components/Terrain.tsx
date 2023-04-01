@@ -33,7 +33,7 @@ export const Terrain = memo((props: Props) => {
 
   if (props.exaggeration) {
     console.warn(
-      `Tarrain: exaggeration property is deprecated pls use style.exaggeration instead!`,
+      `Terrain: exaggeration property is deprecated pls use style.exaggeration instead!`,
     );
     style = { exaggeration: props.exaggeration, ...style };
   }
