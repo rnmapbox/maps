@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
 
 ### Misc
 
-- [MapboxGL](/docs/MapboxGL.md)
+- [Mapbox](/docs/MapboxGL.md)
 - [CustomHttpHeaders](/docs/CustomHttpHeaders.md)
 - [Logger](/docs/Logger.md)
 

@@ -87,9 +87,10 @@ class RCTMGLModule(private val mReactContext: ReactApplicationContext) : ReactCo
 
         // offline region download states
         val offlinePackDownloadStates: MutableMap<String, String> = HashMap()
-        offlinePackDownloadStates["Inactive"] = RCTMGLOfflineModule.INACTIVE_REGION_DOWNLOAD_STATE
-        offlinePackDownloadStates["Active"] = RCTMGLOfflineModule.ACTIVE_REGION_DOWNLOAD_STATE
-        offlinePackDownloadStates["Complete"] = RCTMGLOfflineModule.COMPLETE_REGION_DOWNLOAD_STATE
+        offlinePackDownloadStates["Inactive"] = TileRegionPackState.INACTIVE.rawValue
+        offlinePackDownloadStates["Active"] = TileRegionPackState.ACTIVE.rawValue
+        offlinePackDownloadStates["Complete"] = TileRegionPackState.COMPLETE.rawValue
+        offlinePackDownloadStates["Unknown"] = TileRegionPackState.UNKNOWN.rawValue
 
         // offline module callback names
         val offlineModuleCallbackNames: MutableMap<String, String> = HashMap()

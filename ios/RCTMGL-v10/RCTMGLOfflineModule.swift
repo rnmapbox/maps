@@ -100,7 +100,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     var state : State = .inactive
     var metadata : [String:Any]? = nil
 
-      // Stored in metadata for resume functionality:
+    // Stored in metadata for resume functionality:
     var bounds: Geometry? = nil
     var zoomRange: ClosedRange<UInt8>? = nil
     var styleURI: StyleURI? = nil
@@ -133,7 +133,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
   @objc
   override
   static func requiresMainQueueSetup() -> Bool {
-      return true
+    return true
   }
   
   @objc
@@ -141,56 +141,254 @@ class RCTMGLOfflineModule: RCTEventEmitter {
   func constantsToExport() -> [AnyHashable: Any]! {
     return [:]
   }
-  
-  
+
   @objc
   override
   func supportedEvents() -> [String] {
     return [Callbacks.error.rawValue, Callbacks.progress.rawValue]
   }
   
-  func convertRegionToJSON(region: TileRegion, geometry: Geometry, metadata: [String:Any]?) -> [String:Any] {
-    let bb = RCTMGLFeatureUtils.boundingBox(geometry: geometry)
-    
-    var result : [String:Any] = [:]
-    if let bb = bb {
-      let jsonBounds = [
-        bb.northEast.longitude, bb.northEast.latitude,
-        bb.southWest.longitude, bb.southWest.latitude
-      ]
-      
-      let completed = (region.completedResourceCount == region.requiredResourceCount)
-      
-      result["requiredResourceCount"] = region.requiredResourceCount
-      result["completedResourceCount"] = region.completedResourceCount
-      result["completedResourceSize"] = region.completedResourceSize
-      result["state"] = completed ? State.complete.rawValue : State.unknown.rawValue
-
-      var metadata : [String:Any] = metadata ?? [:]
-      metadata["name"] = region.id
-      
-      if region.requiredResourceCount > 0 {
-        let percentage = Float(100.0) * Float(region.completedResourceCount) / Float(region.requiredResourceCount)
-        result["percentage"] = percentage
-      } else {
-        result["percentage"] = nil
+  // MARK: react methods
+  
+  @objc
+  func createPack(_ options: NSDictionary, resolver: @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
+    DispatchQueue.main.async {
+      do {
+        let metadataStr = options["metadata"] as! String
+        var metadata = try JSONSerialization.jsonObject(with: metadataStr.data(using: .utf8)!, options: []) as! [String:Any]
+        metadata["styleURI"] = options["styleURL"]
+        let id = metadata["name"] as! String
+        
+        let boundsStr = options["bounds"] as! String
+        let boundsData = boundsStr.data(using: .utf8)
+        var boundsFC = try JSONDecoder().decode(FeatureCollection.self, from: boundsData!)
+        
+        var bounds = self.convertPointPairToBounds(RCTMGLFeatureUtils.fcToGeomtry(boundsFC))
+        
+        let actPack = RCTMGLOfflineModule.TileRegionPack(
+          name: id,
+          styleURI: StyleURI(rawValue: options["styleURL"] as! String)!,
+          bounds: bounds,
+          zoomRange: (options["minZoom"] as! NSNumber).uint8Value...(options["maxZoom"] as! NSNumber).uint8Value,
+          metadata: metadata
+        )
+        self.tileRegionPacks[id] = actPack
+        self.startLoading(pack: actPack)
+        
+        resolver([
+          "bounds": boundsStr,
+          "metadata": String(data:try! JSONSerialization.data(withJSONObject: metadata, options: [.prettyPrinted]), encoding: .utf8)
+        ])
+      } catch {
+        rejecter("createPack", error.localizedDescription, error)
       }
-      if let expires = region.expires {
-        result["expires"] = expires.toJSONString()
-      }
-
-      result["metadata"] = String(data:try! JSONSerialization.data(withJSONObject: metadata, options: [.prettyPrinted]), encoding: .utf8)
-      
-      result["bounds"] = jsonBounds
     }
-    return result
   }
   
-  func toProgress(region: TileRegion) -> TileRegionLoadProgress? {
-    return TileRegionLoadProgress(completedResourceCount: region.completedResourceCount, completedResourceSize: region.completedResourceSize, erroredResourceCount: 0, requiredResourceCount: region.requiredResourceCount, loadedResourceCount: 0, loadedResourceSize: 0)
+  @objc
+  func getPackStatus(_ name: String,
+                     resolver: @escaping RCTPromiseResolveBlock,
+                     rejecter: @escaping RCTPromiseRejectBlock) {
+    guard let pack = tileRegionPacks[name] else {
+      resolver(nil)
+      return
+    }
+    
+    tileStore.tileRegionMetadata(forId: name) { result in
+      switch result {
+      case .failure(let error):
+        Logger.log(level:.error, message: "Unable to fetch metadata for \(name)")
+        rejecter("RCTMGLOfflineModule.getPackStatus", error.localizedDescription, error)
+      case .success(let metadata):
+        var pack = self.tileRegionPacks[name] ?? TileRegionPack(
+          name: name,
+          metadata: logged("RCTMGLOfflineModule.getPackStatus") { metadata as? [String:Any] } ?? [:]
+        )
+        self.tileRegionPacks[name] = pack
+        resolver(self._makeRegionStatusPayload(pack: pack))
+      }
+    }
   }
   
-  func convertRegionToJson(regions: [TileRegion], resolve: @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
+  @objc
+  func resumePackDownload(_ name: String, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock)
+  {
+    if let pack = tileRegionPacks[name] {
+      startLoading(pack: pack)
+      resolver(nil)
+    } else {
+      rejecter("resumePackDownload", "Unknown offline pack: \(name)", nil)
+    }
+  }
+  
+  @objc
+  func pausePackDownload(_ name: String, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock)
+  {
+    if let pack = tileRegionPacks[name] {
+      if let cancelable = pack.cancelable {
+        cancelable.cancel()
+        tileRegionPacks[name]?.cancelable = nil
+        resolver(nil)
+      } else {
+        rejecter("pausePackDownload", "Offline pack: \(name) already cancelled", nil)
+      }
+    } else {
+      rejecter("pausePackDownload", "Unknown offline region: \(name)", nil)
+    }
+  }
+  
+  @objc
+  func setTileCountLimit(_ limit: NSNumber) {
+    self.offlineRegionManager.setOfflineMapboxTileCountLimitForLimit(limit.uint64Value)
+  }
+  
+  
+  @objc
+  func deletePack(_ name: String,
+                  resolver: RCTPromiseResolveBlock,
+                  rejecter: RCTPromiseRejectBlock)
+  {
+    guard let pack = tileRegionPacks[name] else {
+      return resolver(nil)
+    }
+    
+    guard pack.state != .invalid else {
+      return rejecter("deletePack", "Pack: \(name) has already been deleted", nil)
+    }
+    
+    tileStore.removeTileRegion(forId: name)
+    tileRegionPacks[name]!.state = .invalid
+    resolver(nil)
+  }
+  
+  @objc
+  func migrateOfflineCache(_ resolve : @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    // Old and new cache file paths
+    let srcURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("/Library/Application Support/com.mapbox.examples/.mapbox/cache.db")
+    
+    let destURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("/Library/Application Support/.mapbox/map_data/map_data.db")
+    
+    let fileManager = FileManager.default
+    
+    do {
+      try fileManager.createDirectory(at: destURL.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
+      try fileManager.moveItem(at: srcURL, to: destURL)
+      resolve(nil)
+    } catch {
+      reject("migrateOfflineCache", error.localizedDescription, error)
+    }
+  }
+  
+  @objc
+  func resetDatabase(_ resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    self.tileStore.allTileRegions { result in
+      switch result {
+      case .success(let regions):
+        regions.forEach { region in
+          self.tileStore.removeTileRegion(forId: region.id)
+        }
+        self.offlineManager.allStylePacks { result in
+          switch result {
+          case .success(let packs):
+            packs.forEach { pack in
+              if let url = logged("RCTMGLOfflineModule.resetDatabase invalid styleURI",fn: { return URL(string: pack.styleURI) }),
+                 let styleUri = logged("RCTMGLOfflineModule.resetDatabase invalid styleURI2", fn: { return StyleURI(url: url) }) {
+                self.offlineManager.removeStylePack(for: styleUri)
+              }
+            }
+            resolve(nil)
+          case .failure(let error):
+            Logger.log(level:.error, message: "RCTMGLOfflineModule.resetDatabase/allStylePacks \(error.localizedDescription) \(error)")
+            reject("RCTMGLOfflineModule.resetDatabase/allStylePacks", error.localizedDescription, error)
+          }
+        }
+      case .failure(let error):
+        Logger.log(level:.error, message: "RCTMGLOfflineModule.resetDatabase/allTileRegions \(error.localizedDescription) \(error)")
+        reject("RCTMGLOfflineModule.resetDatabase/allTileRegions", error.localizedDescription, error)
+      }
+    }
+  }
+  
+  @objc
+  func getPacks(_ resolve : @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
+    DispatchQueue.main.async {
+      self.tileStore.allTileRegions { result in
+        switch result {
+        case .success(let regions):
+          self.convertRegionsToJSON(regions: regions, resolve: resolve, rejecter: rejecter)
+        case .failure(let error):
+          rejecter("TileStoreError", error.localizedDescription, error)
+        }
+      }
+    }
+  }
+  
+  func startLoading(pack: TileRegionPack) {
+    let id = pack.name
+    guard let bounds = pack.bounds else {
+      RCTMGLLogError("RCTMGLOfflineModule.startLoading failed as there are no bounds in pack")
+      return
+    }
+    guard let zoomRange = pack.zoomRange else {
+      RCTMGLLogError("RCTMGLOfflineModule.startLoading failed as there is no zoom range in pack")
+      return
+    }
+    guard let styleURI = pack.styleURI else {
+      RCTMGLLogError("RCTMGLOfflineModule.startLoading failed as there is no styleURI in pack")
+      return
+    }
+    guard let metadata = pack.metadata else {
+      RCTMGLLogError("RCTMGLOfflineModule.startLoading failed as there is no metadata in pack")
+      return
+    }
+    
+    let stylePackLoadOptions = StylePackLoadOptions(glyphsRasterizationMode: .ideographsRasterizedLocally, metadata: pack.metadata)
+    
+    let descriptorOptions = TilesetDescriptorOptions(
+      styleURI: styleURI,
+      zoomRange: zoomRange,
+      stylePackOptions: stylePackLoadOptions
+    )
+    let tilesetDescriptor = self.offlineManager.createTilesetDescriptor(for: descriptorOptions)
+    
+    let loadOptions = TileRegionLoadOptions(
+      geometry: bounds, // RCTMGLFeatureUtils.geometryToGeometry(bounds),
+      descriptors: [tilesetDescriptor],
+      metadata: metadata,
+      acceptExpired: true,
+      networkRestriction: .none,
+      averageBytesPerSecond: nil)
+    
+    var lastProgress : TileRegionLoadProgress? = nil
+    let task = self.tileStore.loadTileRegion(forId: id, loadOptions: loadOptions!, progress: {
+      progress in
+      lastProgress = progress
+      self.tileRegionPacks[id]!.progress = progress
+      self.tileRegionPacks[id]!.state = .active
+      self.offlinePackProgressDidChange(progress: progress, metadata: metadata, state: .active)
+    }) { result in
+      switch result {
+      case .success(let _):
+        DispatchQueue.main.async {
+          if let progess = lastProgress {
+            self.offlinePackProgressDidChange(progress: progess, metadata: metadata, state: .complete)
+          } else {
+            Logger.log(level: .warn,
+                       message: "RCTMGLOfflineModule: startLoading: tile region completed, but got no progress information")
+          }
+          self.tileRegionPacks[id]!.state = .complete
+        }
+      case .failure(let error):
+        DispatchQueue.main.async {
+          self.tileRegionPacks[id]!.state = .inactive
+          self.offlinePackDidReceiveError(name: id, error: error)
+        }
+      }
+    }
+    self.tileRegionPacks[id]!.cancelable = task
+  }
+  
+  func convertRegionsToJSON(regions: [TileRegion], resolve: @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
     let taskGroup = DispatchGroup()
     
     var geomteryResults : [String: (Result<Geometry,Error>,TileRegion)] = [:]
@@ -219,21 +417,21 @@ class RCTMGLOfflineModule: RCTEventEmitter {
           return false
         }
       }
-  
+      
       if let firstError = firstError {
         switch firstError.value.0 {
         case .failure(let error):
-          rejecter("Error", error.localizedDescription, error)
+          rejecter("convertRegionsToJSON", error.localizedDescription, error)
           return
         case .success:
-          fatalError("Expected failure but was success")
+          fatalError("convertRegionsToJson:Expected failure but was success")
         }
       }
-
+      
       let results = geomteryResults.map { (id, result) -> (String, (Geometry,TileRegion, [String:Any]?)) in
         switch result.0 {
         case .failure(_):
-          fatalError("Expected failuer but was success")
+          fatalError("convertRegionsToJson:Expected success but was failure")
         case .success(let geometry):
           return (id, (geometry,result.1,(try? metadataResults[id]?.get()) as? [String:Any]))
         }
@@ -248,59 +446,58 @@ class RCTMGLOfflineModule: RCTEventEmitter {
           progress: self.toProgress(region: region),
           metadata: logged("RCTMGLOfflineModule.getPacks metadata is null") { metadata } ?? [:]
         )
-
-        if ((region.completedResourceCount == region.completedResourceSize)) {
+        
+        if ((region.completedResourceCount == region.requiredResourceCount)) {
           pack.state = .complete
         }
-
+        
         self.tileRegionPacks[region.id] = pack
-
+        
         return ret
       })
     }
   }
   
-  @objc
-  func getPacks(_ resolve : @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
-    DispatchQueue.main.async {
-      self.tileStore.allTileRegions { result in
-        switch result {
-        case .success(let regions):
-          self.convertRegionToJson(regions: regions, resolve: resolve, rejecter: rejecter)
-          // self.convertRegionToJson(regions: regions, resolve: resolve)
-          // resolve(self.convertRegionToJson(regions: regions))
-        case .failure(let error):
-          rejecter("TileStoreError", error.localizedDescription, error)
-        }
+  func convertRegionToJSON(region: TileRegion, geometry: Geometry, metadata: [String:Any]?) -> [String:Any] {
+    let bb = RCTMGLFeatureUtils.boundingBox(geometry: geometry)
+    
+    if let bb = bb {
+      let jsonBounds = [
+        bb.northEast.longitude, bb.northEast.latitude,
+        bb.southWest.longitude, bb.southWest.latitude
+      ]
+      
+      let completed = (region.completedResourceCount == region.requiredResourceCount)
+
+      var metadata : [String:Any] = metadata ?? [:]
+      metadata["name"] = region.id
+      
+      var result : [String:Any] = [
+        "requiredResourceCount": region.requiredResourceCount,
+        "completedResourceCount": region.completedResourceCount,
+        "completedResourceSize": region.completedResourceSize,
+        "state": completed ? State.complete.rawValue : State.unknown.rawValue,
+        "metadata": String(data:try! JSONSerialization.data(withJSONObject: metadata, options: [.prettyPrinted]), encoding: .utf8),
+        "bounds": jsonBounds
+      ]
+
+      if region.requiredResourceCount > 0 {
+        let percentage = Float(100.0) * Float(region.completedResourceCount) / Float(region.requiredResourceCount)
+        result["percentage"] = percentage
+      } else {
+        result["percentage"] = nil
+      }
+      if let expires = region.expires {
+        result["expires"] = expires.toJSONString()
       }
       
-/*
-      self.offlineManager.allStylePacks { (result) in
-        switch result {
-        case .success(let packs):
-          resolve(self.convertPacksToJson(packs: packs))
-        case .failure(let error):
-          rejecter(error.localizedDescription, error.localizedDescription, error)
-        }
-      }*/
     }
-    
-    
-    
-//    dispatch_async(dispatch_get_main_queue(), ^{
-      /*
-            NSArray<MGLOfflinePack *> *packs = [[MGLOfflineStorage sharedOfflineStorage] packs];
-            
-            if (packs == nil) {
-                // packs have not loaded yet
-                [self->packRequestQueue addObject:resolve];
-                return;
-            }
-
-            resolve([self _convertPacksToJson:packs]);
-        });*/
+    return [:]
   }
-  
+    
+  func toProgress(region: TileRegion) -> TileRegionLoadProgress? {
+    return TileRegionLoadProgress(completedResourceCount: region.completedResourceCount, completedResourceSize: region.completedResourceSize, erroredResourceCount: 0, requiredResourceCount: region.requiredResourceCount, loadedResourceCount: 0, loadedResourceSize: 0)
+  }
   
   func convertPointPairToBounds(_ bounds: Geometry) -> Geometry {
     guard case .geometryCollection(let gc) = bounds else {
@@ -320,10 +517,10 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     let pt1 = g1.coordinates
     return .polygon(Polygon([
       [
-      pt0,
-      CLLocationCoordinate2D(latitude: pt0.latitude, longitude: pt1.longitude),
-      pt1,
-      CLLocationCoordinate2D(latitude: pt1.latitude, longitude: pt0.longitude)
+        pt0,
+        CLLocationCoordinate2D(latitude: pt0.latitude, longitude: pt1.longitude),
+        pt1,
+        CLLocationCoordinate2D(latitude: pt1.latitude, longitude: pt0.longitude)
       ]
     ]))
   }
@@ -383,228 +580,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     let event = RCTMGLEvent(type: .offlineError, payload: ["name": name, "message": error.localizedDescription])
     self._sendEvent(Callbacks.error.rawValue, event: event)
   }
-  
-  @objc
-  func createPack(_ options: NSDictionary, resolver: @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
-    DispatchQueue.main.async {
-      do {
-        let metadataStr = options["metadata"] as! String
-        var metadata = try JSONSerialization.jsonObject(with: metadataStr.data(using: .utf8)!, options: []) as! [String:Any]
-        metadata["styleURI"] = options["styleURL"]
-        let id = metadata["name"] as! String
-
-        let boundsStr = options["bounds"] as! String
-        let boundsData = boundsStr.data(using: .utf8)
-        var boundsFC = try JSONDecoder().decode(FeatureCollection.self, from: boundsData!)
-
-        var bounds = self.convertPointPairToBounds(RCTMGLFeatureUtils.fcToGeomtry(boundsFC))
-
-        let actPack = RCTMGLOfflineModule.TileRegionPack(
-          name: id,
-          styleURI: StyleURI(rawValue: options["styleURL"] as! String)!,
-          bounds: bounds,
-          zoomRange: (options["minZoom"] as! NSNumber).uint8Value...(options["maxZoom"] as! NSNumber).uint8Value,
-          metadata: metadata
-        )
-        self.tileRegionPacks[id] = actPack
-        self.startLoading(pack: actPack)
-
-        resolver([
-          "bounds": boundsStr,
-          "metadata": String(data:try! JSONSerialization.data(withJSONObject: metadata, options: [.prettyPrinted]), encoding: .utf8)
-        ])
-      } catch {
-        rejecter("createPack", error.localizedDescription, error)
-      }
-    }
-  }
-  
-  func startLoading(pack: TileRegionPack) {
-    let id = pack.name
-    guard let bounds = pack.bounds else {
-      RCTMGLLogError("RCTMGLOfflineModule.startLoading failed as there are no bounds in pack")
-      return
-    }
-    guard let zoomRange = pack.zoomRange else {
-      RCTMGLLogError("RCTMGLOfflineModule.startLoading failed as there is no zoom range in pack")
-      return
-    }
-    guard let styleURI = pack.styleURI else {
-      RCTMGLLogError("RCTMGLOfflineModule.startLoading failed as there is no styleURI in pack")
-      return
-    }
-    guard let metadata = pack.metadata else {
-      RCTMGLLogError("RCTMGLOfflineModule.startLoading failed as there is no metadata in pack")
-      return
-    }
-    
-    let stylePackLoadOptions = StylePackLoadOptions(glyphsRasterizationMode: .ideographsRasterizedLocally, metadata: pack.metadata)
-    
-    let descriptorOptions = TilesetDescriptorOptions(
-      styleURI: styleURI,
-      zoomRange: zoomRange,
-      stylePackOptions: stylePackLoadOptions
-    )
-    let tilesetDescriptor = self.offlineManager.createTilesetDescriptor(for: descriptorOptions)
-
-    let loadOptions = TileRegionLoadOptions(
-      geometry: bounds, // RCTMGLFeatureUtils.geometryToGeometry(bounds),
-      descriptors: [tilesetDescriptor],
-      metadata: metadata,
-      acceptExpired: true,
-      networkRestriction: .none,
-      averageBytesPerSecond: nil)
-
-    var lastProgress : TileRegionLoadProgress? = nil
-    let task = self.tileStore.loadTileRegion(forId: id, loadOptions: loadOptions!, progress: {
-      progress in
-      lastProgress = progress
-      self.tileRegionPacks[id]!.progress = progress
-      self.tileRegionPacks[id]!.state = .active
-      self.offlinePackProgressDidChange(progress: progress, metadata: metadata, state: .active)
-    }) { result in
-      switch result {
-      case .success(let value):
-        DispatchQueue.main.async {
-          if let progess = lastProgress {
-            self.offlinePackProgressDidChange(progress: progess, metadata: metadata, state: .complete)
-          }
-          self.tileRegionPacks[id]!.state = .complete
-        }
-      case .failure(let error):
-        DispatchQueue.main.async {
-          self.tileRegionPacks[id]!.state = .inactive
-          self.offlinePackDidReceiveError(name: id, error: error)
-        }
-      }
-    }
-    self.tileRegionPacks[id]!.cancelable = task
-  }
-
-  func _getPack(fromName: String) -> TileRegionPack? {
-    return self.tileRegionPacks[fromName]
-  }
-
-  @objc
-  func getPackStatus(_ name: String,
-                     resolver: @escaping RCTPromiseResolveBlock,
-                     rejecter: @escaping RCTPromiseRejectBlock) {
-    guard let pack = self._getPack(fromName: name) else {
-      resolver(nil)
-      return
-    }
-    
-    tileStore.tileRegionMetadata(forId: name) { result in
-      switch result {
-      case .failure(let error):
-        Logger.log(level:.error, message: "Unable to fetch metadata for \(name)")
-        rejecter("RCTMGLOfflineModule.getPackStatus", error.localizedDescription, error)
-      case .success(let metadata):
-        var pack = self.tileRegionPacks[name] ?? TileRegionPack(
-          name: name,
-          metadata: logged("RCTMGLOfflineModule.getPackStatus") { metadata as? [String:Any] } ?? [:]
-        )
-        self.tileRegionPacks[name] = pack
-        resolver(self._makeRegionStatusPayload(pack: pack))
-      }
-    }
-  }
-
-  
-  @objc
-  func resumePackDownload(_ name: String, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock)
-  {
-    if let pack = _getPack(fromName: name) {
-      self.startLoading(pack: pack)
-    }
-  }
-  
-  @objc
-  func pausePackDownload(_ name: String, resolver: RCTPromiseResolveBlock, rejecter: RCTPromiseRejectBlock)
-  {
-    if let pack = _getPack(fromName: name) {
-      pack.cancelable?.cancel()
-      resolver(nil)
-    } else {
-      rejecter("pausePackDownload", "Unknown offline region: \(name)", nil)
-    }
-  }
-  
-  @objc
-  func setTileCountLimit(_ limit: NSNumber) {
-    self.offlineRegionManager.setOfflineMapboxTileCountLimitForLimit(limit.uint64Value)
-  }
-  
-  
-  @objc
-  func deletePack(_ name: String,
-                  resolver: RCTPromiseResolveBlock,
-                  rejecter: RCTPromiseRejectBlock)
-  {
-    guard let pack = _getPack(fromName: name) else {
-      return resolver(nil)
-    }
-    
-    guard pack.state != .invalid else {
-      let error = NSError(domain:"RCTMGLErororDomain", code: 1, userInfo: [NSLocalizedDescriptionKey: "Pack has already beend deleted"])
-      return rejecter("deletePack", error.description, error)
-    }
-    
-    self.tileStore.removeTileRegion(forId: name)
-    self.tileRegionPacks[name]!.state = .invalid
-    resolver(nil)
-  }
-
-  @objc
-  func migrateOfflineCache(_ resolve : @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    // Old and new cache file paths
-    let srcURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("/Library/Application Support/com.mapbox.examples/.mapbox/cache.db")
-
-    let destURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("/Library/Application Support/.mapbox/map_data/map_data.db")
-
-    let fileManager = FileManager.default
-
-    do {
-      try fileManager.createDirectory(at: destURL.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
-      try fileManager.moveItem(at: srcURL, to: destURL)
-      resolve(nil)
-    } catch {
-      reject("migrateOfflineCache", error.localizedDescription, error)
-    }
-  }
-  
-  @objc
-  func resetDatabase(_ resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-    self.tileStore.allTileRegions { result in
-      switch result {
-      case .success(let regions):
-        regions.forEach { region in
-          self.tileStore.removeTileRegion(forId: region.id)
-        }
-        self.offlineManager.allStylePacks { result in
-          switch result {
-          case .success(let packs):
-            packs.forEach { pack in
-              if let url = logged("RCTMGLOfflineModule.resetDatabase invalid styleURI",fn: { return URL(string: pack.styleURI) }),
-                 let styleUri = logged("RCTMGLOfflineModule.resetDatabase invalid styleURI2", fn: { return StyleURI(url: url) }) {
-                self.offlineManager.removeStylePack(for: styleUri)
-              }
-            }
-            resolve(nil)
-          case .failure(let error):
-            Logger.log(level:.error, message: "RCTMGLOfflineModule.resetDatabase/allStylePacks \(error.localizedDescription) \(error)")
-            reject("RCTMGLOfflineModule.resetDatabase/allStylePacks", error.localizedDescription, error)
-          }
-        }
-      case .failure(let error):
-        Logger.log(level:.error, message: "RCTMGLOfflineModule.resetDatabase/allTileRegions \(error.localizedDescription) \(error)")
-        reject("RCTMGLOfflineModule.resetDatabase/allTileRegions", error.localizedDescription, error)
-      }
-      
-    }
-  }
 }
-
 // MARK: progress throttle
 
 extension RCTMGLOfflineModule {
