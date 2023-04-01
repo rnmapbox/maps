@@ -30,13 +30,7 @@ MapView backed by Mapbox Native GL
 | scaleBarEnabled | `boolean` | `true` | `false` | [`mapbox` (v10) implementation only] Enable/Disable the scale bar from appearing on the map |
 | scaleBarPosition | `OrnamentPositonProp` | `none` | `false` | [`mapbox` (v10) implementation only] Adds scale bar offset, e.g. `{top: 8, left: 8}` will put the scale bar in top-left corner of the map |
 | surfaceView | `boolean` | `false` | `false` | [Android only] Enable/Disable use of GLSurfaceView instead of TextureView. |
-| localizeLabels | `\| {
-    /** locale code like `es` or `current` for the device's current locale */
-    locale: string;
-    /** layer id to localize. If not specified, all layers will be localized */
-    layerIds?: string[];
-  }
-\| true` | `none` | `false` | [`mapbox` (v10) implementation only]<br/>Set map's label locale, e.g. { "locale": "es" } will localize labels to Spanish, { "locale": "current" } will localize labels to system locale. |
+| localizeLabels | `string` | `none` | `false` | [`mapbox` (v10) implementation only]<br/>Set map's label locale, e.g. { "locale": "es" } will localize labels to Spanish, { "locale": "current" } will localize labels to system locale. |
 | onPress | `func` | `none` | `false` | Map press listener, gets called when a user presses the map<br/>*signature:*`(feature:GeoJSON.Feature) => void` |
 | onLongPress | `func` | `none` | `false` | Map long press listener, gets called when a user long presses the map<br/>*signature:*`(feature:GeoJSON.Feature) => void` |
 | onRegionWillChange | `func` | `none` | `false` | <v10 only<br/><br/>This event is triggered whenever the currently displayed map region is about to change.<br/><br/>@param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds<br/>*signature:*`(feature:GeoJSON.Feature) => void` |
