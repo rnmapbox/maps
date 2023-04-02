@@ -64,6 +64,7 @@ class LocationComponentManager(mapView: RCTMGLMapView, context: Context) {
     }
 
     private fun applyStateChanges(map: RCTMGLMapView, oldState: State, newState: State, fullUpdate: Boolean) {
+        val mapView = map.mapView
         if (map.getLifecycleState() != Lifecycle.State.STARTED) {
             // In case lifecycle was already stopped, so we're part of shutdown, do not call updateSettings as it'll just restart
             // the loationComponent that will not be stopped. See https://github.com/mapbox/mapbox-maps-android/issues/2017
@@ -72,7 +73,7 @@ class LocationComponentManager(mapView: RCTMGLMapView, context: Context) {
             }
             return
         }
-        map.location.updateSettings {
+        mapView.location.updateSettings {
             enabled = newState.enabled
 
             if (fullUpdate || (newState.hidden != oldState.hidden) || (newState.tintColor != oldState.tintColor) || (newState.bearingImage != oldState.bearingImage)) {
@@ -140,7 +141,7 @@ class LocationComponentManager(mapView: RCTMGLMapView, context: Context) {
     }
 
     private fun useMapLocationProvider(mapView: RCTMGLMapView) {
-        val provider = mapView.location.getLocationProvider()
+        val provider = mapView.mapView.location.getLocationProvider()
         if (provider != null) {
             mLocationManager.provider = provider
         }

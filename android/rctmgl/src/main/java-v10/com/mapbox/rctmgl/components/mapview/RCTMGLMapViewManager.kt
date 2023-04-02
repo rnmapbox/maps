@@ -117,24 +117,28 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
     }
 
     @ReactProp(name = "zoomEnabled")
-    fun setZoomEnabled(mapView: RCTMGLMapView, zoomEnabled: Boolean) {
+    fun setZoomEnabled(map: RCTMGLMapView, zoomEnabled: Boolean) {
+        val mapView = map.mapView
         mapView.gestures.pinchToZoomEnabled = zoomEnabled
         mapView.gestures.doubleTouchToZoomOutEnabled = zoomEnabled
         mapView.gestures.doubleTapToZoomInEnabled = zoomEnabled
     }
 
     @ReactProp(name = "scrollEnabled")
-    fun setScrollEnabled(mapView: RCTMGLMapView, scrollEnabled: Boolean) {
+    fun setScrollEnabled(map: RCTMGLMapView, scrollEnabled: Boolean) {
+        val mapView = map.mapView
         mapView.gestures.scrollEnabled = scrollEnabled
     }
 
     @ReactProp(name = "pitchEnabled")
-    fun setPitchEnabled(mapView: RCTMGLMapView, pitchEnabled: Boolean) {
+    fun setPitchEnabled(map: RCTMGLMapView, pitchEnabled: Boolean) {
+        val mapView = map.mapView
         mapView.gestures.pitchEnabled = pitchEnabled
     }
 
     @ReactProp(name = "rotateEnabled")
-    fun setRotateEnabled(mapView: RCTMGLMapView, rotateEnabled: Boolean) {
+    fun setRotateEnabled(map: RCTMGLMapView, rotateEnabled: Boolean) {
+        val mapView = map.mapView
         mapView.gestures.rotateEnabled = rotateEnabled
     }
 
