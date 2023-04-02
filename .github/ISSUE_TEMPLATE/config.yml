@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+    - name: 🤔 Questions and Help
+      url: https://github.com/rnmapbox/maps/discussions/categories/q-a
+      about: Looking for help with your app? Please use discussions or gitter or stack overflow
+    - name: 🚀 Discussions and Proposals
+      url: https://github.com/rnmapbox/maps/discussions/categories/ideas
+      about: Discuss the future of RNMapbox, submit feature requests
