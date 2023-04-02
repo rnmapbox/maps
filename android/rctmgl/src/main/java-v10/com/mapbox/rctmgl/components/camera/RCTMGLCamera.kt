@@ -91,7 +91,7 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         setInitialCamera()
         updateMaxBounds()
         mCameraStop?.let { updateCamera(it) }
-        _observeViewportState(mapView)
+        _observeViewportState(mapView.mapView)
         _updateViewportState()
     }
 
@@ -301,7 +301,7 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
 
     fun _updateViewportState() {
         mMapView?.let {
-            val map = it
+            val map = it.mapView
             val viewport = map.viewport;
 
             if (mLocationComponentManager == null) {

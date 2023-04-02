@@ -7,6 +7,7 @@ import android.graphics.RectF
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.View.OnLayoutChangeListener
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.lifecycle.Lifecycle
@@ -45,6 +46,7 @@ import com.mapbox.maps.plugin.logo.generated.LogoSettings
 import com.mapbox.maps.plugin.logo.logo
 import com.mapbox.maps.plugin.scalebar.generated.ScaleBarSettings
 import com.mapbox.maps.plugin.scalebar.scalebar
+import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.components.AbstractMapFeature
 import com.mapbox.rctmgl.components.RemovalReason
@@ -145,7 +147,7 @@ data class FeatureEntry(val feature: AbstractMapFeature?, val view: View?, var a
 
 }
 
-open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapViewManager /*, MapboxMapOptions options*/) : MapView(mContext), OnMapClickListener, OnMapLongClickListener {
+open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapViewManager /*, MapboxMapOptions options*/) : FrameLayout(mContext), OnMapClickListener, OnMapLongClickListener, OnLayoutChangeListener {
     /**
      * `PointAnnotations` are rendered to a canvas, but the React Native `Image` component is
      * implemented on top of Fresco (https://frescolib.org), which does not load images for
@@ -170,6 +172,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     private val mCameraChangeTracker = CameraChangeTracker()
     private val mMap: MapboxMap?
 
+    private val mMapView: MapView
+
     var savedStyle: Style? = null
         private set
 
@@ -183,17 +187,24 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         private set
 
     val mapView: MapView
-        get() = this
+        get() = this.mMapView
+
+    val viewAnnotationManager: ViewAnnotationManager
+        get() = mapView.viewAnnotationManager
+
+    fun getMapboxMap(): MapboxMap {
+        return mapView.getMapboxMap()
+    }
 
     val pointAnnotationManager: PointAnnotationManager?
         get() {
             if (mPointAnnotationManager == null) {
                 val _this = this
-                val gesturesPlugin: GesturesPlugin = this.gestures
+                val gesturesPlugin: GesturesPlugin = mapView.gestures
                 gesturesPlugin.removeOnMapClickListener(_this)
                 gesturesPlugin.removeOnMapLongClickListener(_this)
 
-                mPointAnnotationManager = annotations.createPointAnnotationManager(AnnotationConfig(layerId = "rctmgl-mapview-annotations"))
+                mPointAnnotationManager = mapView.annotations.createPointAnnotationManager(AnnotationConfig(layerId = "rctmgl-mapview-annotations"))
                 mPointAnnotationManager?.addClickListener(OnPointAnnotationClickListener { pointAnnotation ->
                         onMarkerClick(pointAnnotation)
                         false
@@ -272,7 +283,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             handleMapChangedEvent(EventTypes.MAP_IDLE);
         })
 
-        val gesturesPlugin: GesturesPlugin = this.gestures
+        val gesturesPlugin: GesturesPlugin = mapView.gestures
         gesturesPlugin.addOnMapLongClickListener(_this)
         gesturesPlugin.addOnMapClickListener(_this)
 
@@ -581,7 +592,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                     ScreenCoordinate(screenPoint.x + halfWidth,
                             screenPoint.y + halfHeight)
             )
-            getMapboxMap().queryRenderedFeatures(RenderedQueryGeometry(screenBox),
+            mapView.getMapboxMap().queryRenderedFeatures(RenderedQueryGeometry(screenBox),
                     RenderedQueryOptions(
                             source.layerIDs,
                             null
@@ -814,7 +825,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         }
 
     fun getMapAsync(mapReady: OnMapReadyCallback) {
-        mapReady.onMapReady(getMapboxMap())
+        mapReady.onMapReady(mapView.getMapboxMap())
     }
 
     //fun setTintColor(color: Int) {
@@ -938,7 +949,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     fun takeSnap(callbackID: String?, writeToDisk: Boolean) {
-        this.snapshot { snapshot ->
+        mapView.snapshot { snapshot ->
             if (snapshot == null) {
                 Logger.e("takeSnap", "snapshot failed")
 
@@ -1030,7 +1041,13 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         offscreenAnnotationViewContainer?.setLayoutParams(p)
         addView(offscreenAnnotationViewContainer)
 
-        mMap = getMapboxMap()
+        mMapView = MapView(mContext)
+
+        val matchParent = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        mMapView.setLayoutParams(matchParent)
+        addView(mMapView)
+
+        mMap = mapView.getMapboxMap()
         mSources = HashMap()
         mImages = ArrayList()
         mPointAnnotations = HashMap()
@@ -1050,7 +1067,9 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             }
         })
 
-        RCTMGLMarkerViewManager.markerViewContainerSizeFixer(this, this.viewAnnotationManager)
+        RCTMGLMarkerViewManager.markerViewContainerSizeFixer(this, mapView.viewAnnotationManager)
+
+        this.addOnLayoutChangeListener(this)
     }
 
     // region Ornaments
@@ -1135,7 +1154,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     private fun updateCompass() {
-        compass.updateSettings {
+        mapView.compass.updateSettings {
             fadeWhenFacingNorth = mCompassFadeWhenNorth
             updateOrnament("compass", mCompassSettings, this.toGenericOrnamentSettings())
         }
@@ -1180,8 +1199,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         mapView.forceLayout();
 
         mapView.measure(
-            MeasureSpec.makeMeasureSpec(mapView.measuredWidth, MeasureSpec.EXACTLY),
-            MeasureSpec.makeMeasureSpec(mapView.measuredHeight, MeasureSpec.EXACTLY)
+            MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+            MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
         );
         mapView.layout(mapView.left, mapView.top, mapView.right, mapView.bottom)
     }
@@ -1236,7 +1255,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     private fun updateAttribution() {
-        attribution.updateSettings {
+        mapView.attribution.updateSettings {
             updateOrnament("attribution", mAttributionSettings, this.toGenericOrnamentSettings())
         }
         workaroundToRelayoutChildOfMapView()
@@ -1271,7 +1290,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     private fun updateLogo() {
-        logo.updateSettings {
+        mapView.logo.updateSettings {
             updateOrnament("logo", mLogoSettings, this.toGenericOrnamentSettings())
         }
         workaroundToRelayoutChildOfMapView()
@@ -1290,24 +1309,47 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         super.onDetachedFromWindow();
     }
 
+    /* FMTODO
     override fun onDestroy() {
+        this.removeOnLayoutChangeListener(this)
         removeAllFeaturesFromMap(RemovalReason.ON_DESTROY)
-        viewAnnotationManager.removeAllViewAnnotations()
+        mapView.viewAnnotationManager.removeAllViewAnnotations()
         mLocationComponentManager?.onDestroy();
 
         lifecycle.onDestroy()
         super.onDestroy()
     }
+     */
 
     fun onDropViewInstance() {
         removeAllFeaturesFromMap(RemovalReason.ON_DESTROY)
-        viewAnnotationManager.removeAllViewAnnotations()
+        mapView.viewAnnotationManager.removeAllViewAnnotations()
         lifecycle.onDestroy()
     }
 
     override fun onAttachedToWindow() {
         lifecycle.onAttachedToWindow(this)
         super.onAttachedToWindow()
+    }
+
+    override fun onLayoutChange(
+        v: View?,
+        left: Int,
+        top: Int,
+        right: Int,
+        bottom: Int,
+        oldLeft: Int,
+        oldTop: Int,
+        oldRight: Int,
+        oldBottom: Int
+    ) {
+        mapView.post {
+            mapView.measure(
+                MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
+            )
+            mapView.layout(mapView.left, mapView.top, mapView.right, mapView.bottom)
+        }
     }
 
 
