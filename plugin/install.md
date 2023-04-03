@@ -50,7 +50,7 @@ For `mapbox` or `mapbox-gl` you'll need to provide `RNMapboxMapsDownloadToken` a
 }
 ```
 
-If you want to show the user's current location on the map with the [UserLocation](https://github.com/rnmapbox/maps/blob/main/docs/UserLocation.md) component, you can use the [expo-location](https://docs.expo.dev/versions/latest/sdk/location/) plugin to configure the required `NSLocationWhenInUseUsageDescription` property. Install the plugin with `npx expo install expo-location` and add its config plugin to the plugins array of your `app.{json,config.js,config.ts}`:
+If you want to show the user's current location on the map with the [UserLocation](../docs/UserLocation.md) component, you can use the [expo-location](https://docs.expo.dev/versions/latest/sdk/location/) plugin to configure the required `NSLocationWhenInUseUsageDescription` property. Install the plugin with `npx expo install expo-location` and add its config plugin to the plugins array of your `app.{json,config.js,config.ts}`:
 
 ```json
 {
