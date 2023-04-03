@@ -43,7 +43,7 @@ If you want to show the user's current location on the map with the [UserLocatio
 
 ```
 <key>NSLocationWhenInUseUsageDescription</key>
-<string>Message that tells the user why you need to access their location (e.g. "Show current location on map.")</string>
+<string>Show current location on map.</string>
 ```
 
 You are good to go!
