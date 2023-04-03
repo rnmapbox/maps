@@ -39,6 +39,13 @@ cd ios
 pod install
 ```
 
+If you want to show the user's current location on the map with the [UserLocation](https://github.com/rnmapbox/maps/blob/main/docs/UserLocation.md) component, you'll need to add the following property to your `Info.plist`:
+
+```
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>Message that tells the user why you need to access their location (e.g. "Show current location on map.")</string>
+```
+
 You are good to go!
 
 Read on if you want to edit your Mapbox version or flavor.
