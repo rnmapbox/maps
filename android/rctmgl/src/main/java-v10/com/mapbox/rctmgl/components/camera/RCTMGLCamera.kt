@@ -24,6 +24,9 @@ import com.mapbox.maps.plugin.viewport.ViewportStatusObserver
 import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateBearing
 import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateOptions
 import com.mapbox.maps.plugin.viewport.data.ViewportStatusChangeReason
+import com.mapbox.maps.plugin.viewport.state.FollowPuckViewportState
+import com.mapbox.maps.plugin.viewport.state.OverviewViewportState
+import com.mapbox.maps.plugin.viewport.state.ViewportState
 import com.mapbox.maps.plugin.viewport.viewport
 import com.mapbox.rctmgl.components.RemovalReason
 import com.mapbox.rctmgl.components.camera.constants.CameraMode
@@ -31,6 +34,7 @@ import com.mapbox.rctmgl.components.location.*
 import com.mapbox.rctmgl.events.MapUserTrackingModeEvent
 import com.mapbox.rctmgl.location.*
 import com.mapbox.rctmgl.utils.Logger
+import com.mapbox.rctmgl.utils.writableMapOf
 
 
 class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCameraManager) :
@@ -281,22 +285,100 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         }
     }
 
+    fun toFollowUserLocation(toStatus: ViewportStatus): Boolean {
+        when (toStatus) {
+            ViewportStatus.Idle -> return false
+            is ViewportStatus.State -> return true
+            is ViewportStatus.Transition -> return true
+        }
+    }
+
+    fun toFollowUserMode(state: ViewportState): String? {
+        if (state is FollowPuckViewportState) {
+            when (state.options.bearing) {
+                is FollowPuckViewportStateBearing.SyncWithLocationPuck ->
+                    return "normal"
+                is FollowPuckViewportStateBearing.Constant ->
+                    return "constant"
+                else -> {
+                    Logger.w(LOG_TAG, "Unexpected bearing: ${state.options.bearing}")
+                    return "normal"
+                }
+            }
+        } else if (state is OverviewViewportState) {
+            return "overview"
+        } else {
+            return "custom"
+        }
+    }
+
+    fun toFollowUserMode(status: ViewportStatus): String? {
+        when (status) {
+            ViewportStatus.Idle -> return null
+            is ViewportStatus.State ->
+                return toFollowUserMode(status)
+            is ViewportStatus.Transition ->
+                return toFollowUserMode(status.toState)
+        }
+    }
+
+    fun toReadableMap(status: ViewportStatus): ReadableMap {
+        when (status) {
+            ViewportStatus.Idle -> return writableMapOf("state" to "idle")
+            is ViewportStatus.State ->
+                return writableMapOf(
+                    "state" to status.toString()
+                )
+            is ViewportStatus.Transition ->
+                return writableMapOf(
+                    "transition" to status.toString()
+                )
+        }
+    }
+
     fun _observeViewportState(mapView: MapView) {
         mapView.viewport.addStatusObserver(object: ViewportStatusObserver {
             override fun onViewportStatusChanged(
-                from: ViewportStatus,
-                to: ViewportStatus,
+                fromStatus: ViewportStatus,
+                toStatus: ViewportStatus,
                 reason: ViewportStatusChangeReason
             ) {
-                if (to == ViewportStatus.Idle) {
-                    mManager.handleEvent(MapUserTrackingModeEvent(this@RCTMGLCamera, UserTrackingMode.NONE))
-                } else if (to is ViewportStatus.Transition) {
+                if (reason == ViewportStatusChangeReason.USER_INTERACTION) {
+                    val followUserLocation = toFollowUserLocation(toStatus)
 
-                } else if (to is ViewportStatus.State){
-                    //mManager.handleEvent(MapUserTrackingModeEvent(this@RCTMGLCamera, UserTrackingMode.FOLLOW))
+
+
+                    mManager.handleEvent(MapUserTrackingModeEvent(this@RCTMGLCamera, UserTrackingMode.NONE,
+                    writableMapOf(
+                        "followUserMode" to toFollowUserMode(toStatus),
+                        "followUserLocation" to followUserLocation,
+                        "fromViewportState" to toReadableMap(fromStatus),
+                        "toViewportState" to toReadableMap(toStatus),
+                        "reason" to toString(reason),
+                    )
+                    ))
                 }
             }
         })
+    }
+
+    fun toString(reason: ViewportStatusChangeReason): String {
+        when (reason) {
+            ViewportStatusChangeReason.IDLE_REQUESTED ->
+                return "idleRequested"
+            ViewportStatusChangeReason.TRANSITION_FAILED ->
+                return "transitionFailed"
+            ViewportStatusChangeReason.TRANSITION_STARTED ->
+                return "transitionStarted"
+            ViewportStatusChangeReason.TRANSITION_SUCCEEDED ->
+                return "transitionSucceeded"
+            ViewportStatusChangeReason.USER_INTERACTION ->
+                return "userInteraction"
+            else -> {
+                Logger.w(LOG_TAG, "toString; unkown reason: ${reason}")
+                return "unkown: $reason"
+            }
+        }
     }
 
     fun _updateViewportState() {
@@ -418,5 +500,6 @@ class RCTMGLCamera(private val mContext: Context, private val mManager: RCTMGLCa
         const val USER_LOCATION_CAMERA_MOVE_DURATION = 1000
         const val minimumZoomLevelForUserTracking = 10.5
         const val defaultZoomLevelForUserTracking = 14.0
+        const val LOG_TAG = "RCTMGLCamera"
     }
 }

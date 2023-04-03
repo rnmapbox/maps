@@ -38,7 +38,7 @@ abstract class AbstractEventEmitter<T : ViewGroup?>(reactApplicationContext: Rea
         mRateLimitedEvents[eventCacheKey] = System.currentTimeMillis()
         mEventDispatcher!!.dispatchEvent(
             AbstractEvent(
-                event.id,
+                event.iD,
                 event.key,
                 event.canCoalesce(),
                 event.toJSON()
