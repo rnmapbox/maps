@@ -12,6 +12,9 @@ import com.mapbox.rctmgl.events.EventEmitter
 import com.mapbox.rctmgl.location.LocationManager.Companion.getInstance
 import java.lang.Exception
 
+data class LocationEventThrottle(var waitBetweenEvents: Double? = null, var lastSentTimestamp: Long? = null) {
+}
+
 @ReactModule(name = RCTMGLLocationModule.REACT_CLASS)
 class RCTMGLLocationModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
@@ -19,6 +22,7 @@ class RCTMGLLocationModule(reactContext: ReactApplicationContext) :
     private var mMinDisplacement = 0f
     private val locationManager: LocationManager? = getInstance(reactContext)
     private var mLastLocation: Location? = null
+    private var locationEventThrottle: LocationEventThrottle = LocationEventThrottle()
 
     private val lifecycleEventListener: LifecycleEventListener = object : LifecycleEventListener {
         override fun onHostResume() {
@@ -52,7 +56,7 @@ class RCTMGLLocationModule(reactContext: ReactApplicationContext) :
                 }
             }
             mLastLocation = location
-            if (changed && (location != null)) {
+            if (changed && (location != null) && shouldSendLocationEvent()) {
                 val locationEvent = LocationEvent(location)
                 val emitter = EventEmitter.getModuleEmitter(reactApplicationContext)
                 emitter?.emit(LOCATION_UPDATE, locationEvent.payload)
@@ -144,6 +148,37 @@ class RCTMGLLocationModule(reactContext: ReactApplicationContext) :
         isEnabled = false
         mLastLocation = null
     }
+
+    // region Location event throttle
+    @ReactMethod
+    fun setLocationEventThrottle(throttleValue: Double) {
+        if (throttleValue > 0) {
+            locationEventThrottle.waitBetweenEvents = throttleValue;
+        } else {
+            locationEventThrottle.waitBetweenEvents = null
+        }
+    }
+
+    fun shouldSendLocationEvent(): Boolean {
+        val waitBetweenEvents = locationEventThrottle.waitBetweenEvents
+        if (waitBetweenEvents == null) {
+            return true
+        }
+
+        val currentTimestamp = System.nanoTime()
+        val lastSentTimestamp = locationEventThrottle.lastSentTimestamp
+        if (lastSentTimestamp == null) {
+            return true
+        }
+
+        if ((currentTimestamp - lastSentTimestamp) > 1000.0*waitBetweenEvents) {
+            return true
+        }
+
+        return false
+    }
+    // endregion
+
 
     companion object {
         const val REACT_CLASS = "RCTMGLLocationModule"
