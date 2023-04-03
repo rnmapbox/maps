@@ -39,7 +39,7 @@ cd ios
 pod install
 ```
 
-If you want to show the user's current location on the map with the [UserLocation](../docs/UserLocation.md) component, you'll need to add the following property to your `Info.plist`:
+If you want to show the user's current location on the map with the [UserLocation](../docs/UserLocation.md) component, you'll need to add the following property to your `Info.plist` (see [Mapbox iOS docs](https://docs.mapbox.com/ios/maps/guides/user-location/#request-temporary-access-to-full-accuracy-location) for more info):
 
 ```
 <key>NSLocationWhenInUseUsageDescription</key>
