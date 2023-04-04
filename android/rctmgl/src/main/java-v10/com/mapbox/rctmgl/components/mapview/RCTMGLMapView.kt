@@ -147,7 +147,7 @@ data class FeatureEntry(val feature: AbstractMapFeature?, val view: View?, var a
 
 }
 
-open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapViewManager /*, MapboxMapOptions options*/) : FrameLayout(mContext), OnMapClickListener, OnMapLongClickListener, OnLayoutChangeListener {
+open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapViewManager, options: MapInitOptions?) : FrameLayout(mContext), OnMapClickListener, OnMapLongClickListener, OnLayoutChangeListener {
     /**
      * `PointAnnotations` are rendered to a canvas, but the React Native `Image` component is
      * implemented on top of Fresco (https://frescolib.org), which does not load images for
@@ -191,6 +191,13 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     val viewAnnotationManager: ViewAnnotationManager
         get() = mapView.viewAnnotationManager
+
+    var requestDisallowInterceptTouchEvent: Boolean = false
+        set(value) {
+            val oldValue = field
+            field = value
+            updateRequestDisallowInterceptTouchEvent(oldValue, value)
+        }
 
     fun getMapboxMap(): MapboxMap {
         return mapView.getMapboxMap()
@@ -1041,7 +1048,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         offscreenAnnotationViewContainer?.setLayoutParams(p)
         addView(offscreenAnnotationViewContainer)
 
-        mMapView = MapView(mContext)
+        mMapView = if (options != null) MapView(mContext, options) else MapView(mContext)
 
         val matchParent = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         mMapView.setLayoutParams(matchParent)
@@ -1355,6 +1362,26 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     // endregion
 }
+
+// region requestDisallowInterceptTouchEvent
+fun RCTMGLMapView.updateRequestDisallowInterceptTouchEvent(oldValue: Boolean, value: Boolean) {
+    if (oldValue == value) {
+        return
+    }
+    if (value) {
+        mapView.setOnTouchListener { view, event ->
+            this.requestDisallowInterceptTouchEvent(true)
+            mapView.onTouchEvent(event)
+            true
+        }
+    } else {
+        mapView.setOnTouchListener { view, event ->
+            mapView.onTouchEvent(event)
+        }
+    }
+}
+// endregion
+
 
 fun OrnamentSettings.setPosAndMargins(posAndMargins: ReadableMap?) {
     if (posAndMargins == null) { return }

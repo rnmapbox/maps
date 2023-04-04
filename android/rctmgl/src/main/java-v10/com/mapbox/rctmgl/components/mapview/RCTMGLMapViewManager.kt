@@ -1,5 +1,6 @@
 package com.mapbox.rctmgl.components.mapview
 
+import android.content.Context
 import android.util.Log
 import android.view.View
 import com.facebook.react.bridge.*
@@ -11,6 +12,7 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.mapbox.rctmgl.events.constants.EventKeys
 import com.mapbox.maps.MapboxMap
 import com.facebook.react.common.MapBuilder
+import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.gestures.gestures
@@ -75,9 +77,13 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
         mapView!!.removeFeatureAt(index)
     }
 
+    fun getMapViewContext(themedReactContext: ThemedReactContext): Context {
+        return activity ?: themedReactContext
+    }
+
     override fun createViewInstance(themedReactContext: ThemedReactContext): RCTMGLMapView {
-        val context = activity ?: themedReactContext
-        return RCTMGLMapView(context, this /*, null*/)
+        val context = getMapViewContext(themedReactContext)
+        return RCTMGLMapView(context, this, options=null)
     }
 
     override fun onDropViewInstance(mapView: RCTMGLMapView) {
@@ -225,6 +231,11 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
     @ReactProp(name = "tintColor", customType = "Color")
     fun setTintColor(mapView: RCTMGLMapView?, tintColor: Int?) {
         //mapView.setTintColor(tintColor);
+    }
+
+    @ReactProp(name = "requestDisallowInterceptTouchEvent")
+    fun setRequestDisallowInterceptTouchEvent(mapView: RCTMGLMapView, requestDisallowInterceptTouchEvent: Boolean) {
+        mapView.requestDisallowInterceptTouchEvent = requestDisallowInterceptTouchEvent
     }
 
     //endregion
