@@ -61,7 +61,7 @@ class RCTMGLImagesManager(private val mContext: ReactApplicationContext) :
             ReadableType.String -> {
                 val resourceName = dynamic.asString();
                 val drawable =
-                    ResourceUtils.getDrawableByName(mContext, resourceName) as BitmapDrawable
+                    ResourceUtils.getDrawableByName(mContext, resourceName) as BitmapDrawable?
                 if (drawable != null) {
                     return NativeImage(resourceName, drawable)
                 } else {
@@ -97,7 +97,7 @@ class RCTMGLImagesManager(private val mContext: ReactApplicationContext) :
                     scale = map.getDouble("scale")
                 }
                 val drawable =
-                    ResourceUtils.getDrawableByName(mContext, resourceName) as BitmapDrawable
+                    ResourceUtils.getDrawableByName(mContext, resourceName) as BitmapDrawable?
                 if (drawable != null && resourceName != null) {
                     return NativeImage(resourceName, drawable, scale, sdf, stretchX, stretchY)
                 } else {
