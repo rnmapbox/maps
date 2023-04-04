@@ -7,12 +7,11 @@ import {
   resolveImagePath,
 } from '../utils';
 import { BaseProps } from '../types/BaseProps';
+import { Position } from '../types/Position';
 
 import AbstractSource from './AbstractSource';
 
 export const NATIVE_MODULE_NAME = 'RCTMGLImageSource';
-
-type Position = [number, number];
 
 type Props = BaseProps & {
   /**

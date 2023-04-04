@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 
 import { FilterExpression } from '../utils/MapboxStyles';
+import { Position } from '../types/Position';
 
 import CircleLayer from './CircleLayer';
 import RasterLayer from './RasterLayer';
@@ -252,12 +253,7 @@ type MapboxJSONSource = {
   attribution?: string;
   scheme?: string;
   tileSize?: number;
-  coordinates?: [
-    [number, number],
-    [number, number],
-    [number, number],
-    [number, number],
-  ];
+  coordinates?: [Position, Position, Position, Position];
   data?: string | object;
 
   buffer: number;

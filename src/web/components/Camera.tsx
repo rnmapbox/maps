@@ -1,9 +1,10 @@
 import React from 'react';
 
+import { Position } from '../../types/Position';
 import MapContext from '../MapContext';
 
 class Camera extends React.Component<{
-  centerCoordinate: [number, number] | null;
+  centerCoordinate: Position | null;
 }> {
   context!: React.ContextType<typeof MapContext>;
 
@@ -19,8 +20,8 @@ class Camera extends React.Component<{
   }
 
   fitBounds(
-    northEastCoordinates: [number, number],
-    southWestCoordinates: [number, number],
+    northEastCoordinates: Position,
+    southWestCoordinates: Position,
     padding = 0,
     animationDuration = 0.0,
   ) {
