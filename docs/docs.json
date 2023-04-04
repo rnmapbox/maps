@@ -3263,8 +3263,15 @@
         "name": "surfaceView",
         "required": false,
         "type": "boolean",
-        "default": "false",
+        "default": "MGLModule.MapboxV10 ? true : false",
         "description": "[Android only] Enable/Disable use of GLSurfaceView instead of TextureView."
+      },
+      {
+        "name": "requestDisallowInterceptTouchEvent",
+        "required": false,
+        "type": "boolean",
+        "default": "false",
+        "description": "[Android only] Experimental, call requestDisallowInterceptTouchEvent on parent with onTochEvent, this allows touch interaction to work\nwhen embedded into a scroll view"
       },
       {
         "name": "localizeLabels",

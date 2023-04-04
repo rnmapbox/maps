@@ -228,6 +228,12 @@ type Props = ViewProps & {
   surfaceView?: boolean;
 
   /**
+   * [Android only] Experimental, call requestDisallowInterceptTouchEvent on parent with onTochEvent, this allows touch interaction to work
+   * when embedded into a scroll view
+   */
+  requestDisallowInterceptTouchEvent?: boolean;
+
+  /**
    * [`mapbox` (v10) implementation only]
    * Set map's label locale, e.g. { "locale": "es" } will localize labels to Spanish, { "locale": "current" } will localize labels to system locale.
    */
@@ -398,7 +404,8 @@ class MapView extends NativeBridgeComponent(
     compassFadeWhenNorth: false,
     logoEnabled: true,
     scaleBarEnabled: true,
-    surfaceView: false,
+    surfaceView: MGLModule.MapboxV10 ? true : false,
+    requestDisallowInterceptTouchEvent: false,
     regionWillChangeDebounceTime: 10,
     regionDidChangeDebounceTime: 500,
   };

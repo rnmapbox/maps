@@ -34,7 +34,8 @@ MapView backed by Mapbox Native GL
 | compassImage | `string` | `none` | `false` | [iOS, `mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component. |
 | scaleBarEnabled | `boolean` | `true` | `false` | [`mapbox` (v10) implementation only] Enable/Disable the scale bar from appearing on the map |
 | scaleBarPosition | `OrnamentPositonProp` | `none` | `false` | [`mapbox` (v10) implementation only] Adds scale bar offset, e.g. `{top: 8, left: 8}` will put the scale bar in top-left corner of the map |
-| surfaceView | `boolean` | `false` | `false` | [Android only] Enable/Disable use of GLSurfaceView instead of TextureView. |
+| surfaceView | `boolean` | `MGLModule.MapboxV10 ? true : false` | `false` | [Android only] Enable/Disable use of GLSurfaceView instead of TextureView. |
+| requestDisallowInterceptTouchEvent | `boolean` | `false` | `false` | [Android only] Experimental, call requestDisallowInterceptTouchEvent on parent with onTochEvent, this allows touch interaction to work<br/>when embedded into a scroll view |
 | localizeLabels | `\| {
     /** locale code like `es` or `current` for the device's current locale */
     locale: string;
