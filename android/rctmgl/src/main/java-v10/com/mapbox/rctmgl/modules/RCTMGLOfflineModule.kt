@@ -41,7 +41,7 @@ enum class TileRegionPackState(val rawValue: String) {
     COMPLETE("complete"),
     UNKNOWN("unkown")
 }
-class TileRegionPack(var name: String, var progress: TileRegionLoadProgress?, var state: TileRegionPackState, var metadata: JSONObject) {
+class TileRegionPack(var name: String, var state: TileRegionPackState = TileRegionPackState.UNKNOWN, var progress: TileRegionLoadProgress? = null, var metadata: JSONObject) {
     var cancelable: Cancelable? = null
     var loadOptions: TileRegionLoadOptions? = null
 
@@ -78,7 +78,7 @@ class TileRegionPack(var name: String, var progress: TileRegionLoadProgress?, va
         bounds: Geometry,
         zoomRange: ZoomRange,
         metadata: JSONObject
-    ) : this(name, null, state, metadata) {
+    ) : this(name= name, state= state,progress= null, metadata= metadata) {
         val rnmeta = JSONObject()
         rnmeta.put("styleURI", styleURI)
         this.styleURI = styleURI
@@ -163,12 +163,23 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
     @ReactMethod
     fun getPackStatus(name: String, promise: Promise) {
         val pack = tileRegionPacks[name]
-        if (pack != null) {
-            promise.resolve(makeRegionStatus(name, pack.progress, pack))
-        } else {
-            promise.reject(Error("Pack not found"))
-            Logger.w(REACT_CLASS, "getPackStatus - Unknown offline region")
+        if (pack == null) {
+            promise.reject(Error("Pack: $name not found"))
+            return
         }
+        tileStore.getTileRegionMetadata(name) { expected ->
+            expected.value?.also {
+                val pack = TileRegionPack(
+                    name= name,
+                    metadata= it.toJSONObject() ?: JSONObject()
+                )
+                tileRegionPacks[name] = pack
+                promise.resolve(_makeRegionStatusPayload(pack))
+            } ?: run {
+                promise.reject(LOG_TAG, expected.error!!.message)
+            }
+        }
+
     }
 
     @ReactMethod
@@ -246,7 +257,6 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
             }
         })
     }
-
     // endregion
 
     fun startLoading(pack: TileRegionPack) {
@@ -368,7 +378,7 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
                         metadata= metadataJSON ?: JSONObject()
                     )
 
-                    if (region.completedResourceCount == region.requiredResourceCount) {
+                    if (region.hasCompleted()) {
                         pack.state = TileRegionPackState.COMPLETE
                     }
                     tileRegionPacks[region.id] = pack
@@ -404,8 +414,7 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
         );
 
         if (region.requiredResourceCount > 0) {
-            val percentage = 100.0 * region.completedResourceCount.toDouble() / region.requiredResourceCount.toDouble()
-            result.putDouble("percentage", percentage)
+            result.putDouble("percentage", region.toPercentage())
         } else {
             result.putNull("percentage")
         }
@@ -429,14 +438,17 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
         )
     }
 
-    private fun _makeRegionStatusPayload(name:String, progress: TileRegionLoadProgress?,state: TileRegionPackState, metadata: JSONObject?) : WritableMap {
+    private fun _makeRegionStatusPayload(pack: TileRegionPack): WritableMap {
+        return _makeRegionStatusPayload(pack.name, pack.progress, pack.state, pack.metadata)
+    }
+
+    private fun _makeRegionStatusPayload(name:String, progress: TileRegionLoadProgress?,state: TileRegionPackState, metadata: JSONObject?): WritableMap {
         var result = Arguments.createMap()
         if (progress != null) {
-            val progressPercentage =  progress.completedResourceCount.toDouble() / progress.requiredResourceCount.toDouble()
             result = writableMapOf(
-                "state" to (if (progress.completedResourceCount == progress.requiredResourceCount) TileRegionPackState.COMPLETE.rawValue else state.rawValue),
+                "state" to (if (progress.hasCompleted()) TileRegionPackState.COMPLETE.rawValue else state.rawValue),
                 "name" to name,
-                "perentage" to progressPercentage * 100.0,
+                "percentage" to progress.toPercentage(),
                 "completedResourceCount" to progress.completedResourceCount,
                 "completedResourceSize" to progress.completedResourceSize,
                 "erroredResourceCount" to progress.erroredResourceCount,
@@ -448,7 +460,7 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
             result = writableMapOf(
                 "state" to state.rawValue,
                 "name" to name,
-                "perentage" to null,
+                "percentage" to null,
             )
         }
         if (metadata != null) {
@@ -456,16 +468,10 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
         }
         return result
     }
-    private fun makeProgresEvent(name: String, progress: TileRegionLoadProgress, state: TileRegionPackState): OfflineEvent {
-        return OfflineEvent(
-            OFFLINE_PROGRESS,
-            EventTypes.OFFLINE_STATUS,
-            _makeRegionStatusPayload(name, progress, state, null)
-        )
-    }
+
     private fun offlinePackProgressDidChange(progress: TileRegionLoadProgress, metadata: JSONObject, state: TileRegionPackState) {
         // TODO throttle
-        sendEvent(this.makeProgresEvent(metadata.getString("name"), progress, state))
+        sendEvent(this.makeProgressEvent(metadata.getString("name"), progress, state))
     }
 
     private fun offlinePackDidReceiveError(name: String, error: TileRegionError) {
@@ -503,36 +509,6 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
                 pt0
             ))
         )
-    }
-
-    fun startPackDownload(pack: TileRegionPack) {
-        val _this = this
-        pack.cancelable = tileStore
-            .loadTileRegion(
-                pack.name,
-                (pack.loadOptions)!!,
-                TileRegionLoadProgressCallback { progress ->
-                    pack.progress = progress
-                    pack.state = TileRegionPackState.ACTIVE
-                    _this.sendEvent(_this.makeStatusEvent(pack.name, progress, pack))
-                },
-                object : TileRegionCallback {
-                    override fun run(region: Expected<TileRegionError, TileRegion>) {
-                        pack.cancelable = null
-                        if (region.isError) {
-                            pack.state = TileRegionPackState.INACTIVE
-                            _this.sendEvent(
-                                _this.makeErrorEvent(
-                                    pack.name, "TileRegionError", region.error!!
-                                        .message
-                                )
-                            )
-                        } else {
-                            pack.state = TileRegionPackState.COMPLETE
-                            _this.sendEvent(_this.makeStatusEvent(pack.name, pack.progress, pack))
-                        }
-                    }
-                })
     }
 
     @ReactMethod
@@ -622,36 +598,12 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
         return OfflineEvent(OFFLINE_ERROR, errorType, payload)
     }
 
-    private fun makeStatusEvent(
-        regionName: String,
-        status: TileRegionLoadProgress?,
-        pack: TileRegionPack
-    ): OfflineEvent {
+    private fun makeProgressEvent(name: String, progress: TileRegionLoadProgress, state: TileRegionPackState): OfflineEvent {
         return OfflineEvent(
             OFFLINE_PROGRESS,
             EventTypes.OFFLINE_STATUS,
-            makeRegionStatus(regionName, status, pack)
+            _makeRegionStatusPayload(name, progress, state, null)
         )
-    }
-
-    private fun makeRegionStatus(
-        regionName: String,
-        status: TileRegionLoadProgress?,
-        pack: TileRegionPack
-    ): WritableMap {
-        val map = Arguments.createMap()
-        val progressPercentage =
-            (status!!.completedResourceCount.toDouble() * 100.0) / (status.requiredResourceCount.toDouble())
-        map.putString("name", regionName)
-        map.putString("state", pack.state.rawValue)
-        map.putDouble("percentage", progressPercentage)
-        map.putInt("completedResourceCount", status.completedResourceCount.toInt())
-        map.putInt("completedResourceSize", status.completedResourceSize.toInt())
-        map.putInt("erroredResourceCount", status.erroredResourceCount.toInt())
-        map.putInt("requiredResourceCount", status.requiredResourceCount.toInt())
-        map.putInt("loadedResourceCount", status.loadedResourceCount.toInt())
-        map.putInt("loadedResourceSize", status.loadedResourceSize.toInt())
-        return map
     }
 
     companion object {
@@ -663,6 +615,21 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
     }
 }
 
+fun TileRegionLoadProgress.toPercentage(): Double {
+    return (completedResourceCount.toDouble() * 100.0) / (requiredResourceCount.toDouble())
+}
+
+fun TileRegionLoadProgress.hasCompleted(): Boolean {
+    return (completedResourceCount == requiredResourceCount)
+}
+
+fun TileRegion.toPercentage(): Double {
+    return (completedResourceCount.toDouble() * 100.0) / (requiredResourceCount.toDouble())
+}
+
+fun TileRegion.hasCompleted(): Boolean {
+    return (completedResourceCount == requiredResourceCount)
+}
 
 
 
