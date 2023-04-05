@@ -98,7 +98,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     var cancelable: Cancelable? = nil
     var progress : TileRegionLoadProgress? = nil
     var state : State = .inactive
-    var metadata : [String:Any]? = nil
+    var metadata : [String:Any]
 
     // Stored in metadata for resume functionality:
     var bounds: Geometry? = nil
@@ -190,22 +190,22 @@ class RCTMGLOfflineModule: RCTEventEmitter {
                      resolver: @escaping RCTPromiseResolveBlock,
                      rejecter: @escaping RCTPromiseRejectBlock) {
     guard let pack = tileRegionPacks[name] else {
-      resolver(nil)
+      rejecter("RCTMGLOfflineModule.getPackStatus", "pack \(name) not found", nil)
       return
     }
     
     tileStore.tileRegionMetadata(forId: name) { result in
       switch result {
-      case .failure(let error):
-        Logger.log(level:.error, message: "Unable to fetch metadata for \(name)")
-        rejecter("RCTMGLOfflineModule.getPackStatus", error.localizedDescription, error)
       case .success(let metadata):
-        var pack = self.tileRegionPacks[name] ?? TileRegionPack(
+        var pack = TileRegionPack(
           name: name,
           metadata: logged("RCTMGLOfflineModule.getPackStatus") { metadata as? [String:Any] } ?? [:]
         )
         self.tileRegionPacks[name] = pack
         resolver(self._makeRegionStatusPayload(pack: pack))
+      case .failure(let error):
+        Logger.log(level:.error, message: "Unable to fetch metadata for \(name)")
+        rejecter("RCTMGLOfflineModule.getPackStatus", error.localizedDescription, error)
       }
     }
   }
@@ -325,6 +325,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
   
   func startLoading(pack: TileRegionPack) {
     let id = pack.name
+    let metadata = pack.metadata
     guard let bounds = pack.bounds else {
       RCTMGLLogError("RCTMGLOfflineModule.startLoading failed as there are no bounds in pack")
       return
@@ -335,10 +336,6 @@ class RCTMGLOfflineModule: RCTEventEmitter {
     }
     guard let styleURI = pack.styleURI else {
       RCTMGLLogError("RCTMGLOfflineModule.startLoading failed as there is no styleURI in pack")
-      return
-    }
-    guard let metadata = pack.metadata else {
-      RCTMGLLogError("RCTMGLOfflineModule.startLoading failed as there is no metadata in pack")
       return
     }
     
@@ -447,7 +444,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
           metadata: logged("RCTMGLOfflineModule.getPacks metadata is null") { metadata } ?? [:]
         )
         
-        if ((region.completedResourceCount == region.requiredResourceCount)) {
+        if ((region.hasCompleted())) {
           pack.state = .complete
         }
         
@@ -482,8 +479,7 @@ class RCTMGLOfflineModule: RCTEventEmitter {
       ]
 
       if region.requiredResourceCount > 0 {
-        let percentage = Float(100.0) * Float(region.completedResourceCount) / Float(region.requiredResourceCount)
-        result["percentage"] = percentage
+        result["percentage"] = region.toPercentage()
       } else {
         result["percentage"] = nil
       }
@@ -535,12 +531,10 @@ class RCTMGLOfflineModule: RCTEventEmitter {
   func _makeRegionStatusPayload(_ name:String, progress: TileRegionLoadProgress?, state: State, metadata:[String:Any]?) -> [String:Any?] {
     var result : [String:Any?] = [:]
     if let progress = progress {
-      let progressPercentage =  Float(progress.completedResourceCount) / Float(progress.requiredResourceCount)
-      
       result = [
-        "state": (progress.completedResourceCount == progress.requiredResourceCount) ? State.complete.rawValue : state.rawValue,
+        "state": (progress.hasCompleted()) ? State.complete.rawValue : state.rawValue,
         "name": name,
-        "percentage": progressPercentage * 100.0,
+        "percentage": progress.toPercentage(),
         "completedResourceCount": progress.completedResourceCount,
         "completedResourceSize": progress.completedResourceSize,
         "erroredResourceCount": progress.erroredResourceCount,
@@ -615,3 +609,20 @@ extension RCTMGLOfflineModule {
   }
 }
 
+extension TileRegionLoadProgress {
+  func toPercentage() -> Float {
+    return Float(100.0) * Float(completedResourceCount) / Float(requiredResourceCount);
+  }
+  func hasCompleted() -> Bool {
+    return (completedResourceCount == requiredResourceCount)
+  }
+}
+
+extension TileRegion {
+  func toPercentage() -> Float {
+    return Float(100.0) * Float(completedResourceCount) / Float(requiredResourceCount)
+  }
+  func hasCompleted() -> Bool {
+    return (completedResourceCount == requiredResourceCount)
+  }
+}
