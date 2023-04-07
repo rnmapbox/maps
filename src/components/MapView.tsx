@@ -530,7 +530,7 @@ class MapView extends NativeBridgeComponent(
       if (addIfHasHandler('RegionDidChange')) {
         if (!this.deprecationLogged.regionDidChange) {
           console.warn(
-            'onRegionDidChange is deprecated and will be removed in next beta - please use onMapIdle. https://github.com/rnmapbox/maps/wiki/Deprecated-RegionIsDidChange',
+            'onRegionDidChange is deprecated and will be removed in next release - please use onMapIdle. https://github.com/rnmapbox/maps/wiki/Deprecated-RegionIsDidChange',
           );
           this.deprecationLogged.regionDidChange = true;
         }
@@ -543,7 +543,7 @@ class MapView extends NativeBridgeComponent(
       if (addIfHasHandler('RegionIsChanging')) {
         if (!this.deprecationLogged.regionIsChanging) {
           console.warn(
-            'onRegionIsChanging is deprecated and will be removed in next beta - please use onCameraChanged. https://github.com/rnmapbox/maps/wiki/Deprecated-RegionIsDidChange',
+            'onRegionIsChanging is deprecated and will be removed in next release - please use onCameraChanged. https://github.com/rnmapbox/maps/wiki/Deprecated-RegionIsDidChange',
           );
           this.deprecationLogged.regionIsChanging = true;
         }

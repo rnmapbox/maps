@@ -84,7 +84,10 @@ end
 
 # --
 
-$RNMapboxMapsImpl = rnMapboxMapsDefaultImpl unless $RNMapboxMapsImpl
+unless $RNMapboxMapsImpl
+  raise "Setting $RNMapboxMapsImpl is now required - https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Unset#ios"
+end
+# $RNMapboxMapsImpl = rnMapboxMapsDefaultImpl unless $RNMapboxMapsImpl
 
 case $RNMapboxMapsImpl
 when 'mapbox'
