@@ -366,6 +366,7 @@ export class ShapeSource extends NativeBridgeComponent(
   render() {
     const props = {
       id: this.props.id,
+      existing: this.props.existing,
       url: this.props.url,
       shape: this._getShape(),
       hitbox: this.props.hitbox,

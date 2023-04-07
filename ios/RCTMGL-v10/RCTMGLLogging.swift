@@ -20,7 +20,7 @@ class Logger {
     case verbose = "verbose"
     case debug = "debug"
     case info = "info"
-    case warn = "warn"
+    case warn = "warning"
     case error = "error"
   
     var intValue : Int {

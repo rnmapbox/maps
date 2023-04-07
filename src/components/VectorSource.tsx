@@ -186,6 +186,7 @@ class VectorSource extends NativeBridgeComponent(
   render() {
     const props = {
       id: this.props.id,
+      existing: this.props.existing,
       url: this.props.url,
       tileUrlTemplates: this.props.tileUrlTemplates,
       minZoomLevel: this.props.minZoomLevel,
