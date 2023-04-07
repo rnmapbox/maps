@@ -37,6 +37,16 @@ export function transformStyle(
       rawStyle =
         (Image.resolveAssetSource(rawStyle) as unknown as RawValueType) || {};
     }
+    if (
+      styleType === 'image' &&
+      (typeof rawStyle !== 'string' ||
+        rawStyle.startsWith('http://') ||
+        rawStyle.startsWith('https://'))
+    ) {
+      console.warn(
+        `RNMapbox: Image or URL in ${styleProp} is deprecated, use Images component. See https://github.com/rnmapbox/maps/wiki/Deprecated-URLInIconImages`,
+      );
+    }
 
     if (rawStyle !== undefined) {
       const bridgeValue = new BridgeValue(rawStyle);
