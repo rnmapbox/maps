@@ -105,6 +105,7 @@ class RasterSource extends AbstractSource<Props, NativeProps> {
     const props = {
       ...this.props,
       id: this.props.id,
+      existing: this.props.existing,
       url,
       tileUrlTemplates,
       minZoomLevel: this.props.minZoomLevel,
