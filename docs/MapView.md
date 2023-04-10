@@ -8,62 +8,487 @@ MapView
 MapView backed by Mapbox Native GL
 
 ## props
-| Prop | Type | Default | Required | Description |
-| ---- | :-- | :----- | :------ | :---------- |
-| contentInset | `number \| number[]` | `none` | `false` | The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport. |
-| projection | `'mercator' \| 'globe'` | `'mercator'` | `false` | The projection used when rendering the map |
-| styleURL | `string` | `none` | `false` | Style URL for map - notice, if non is set it _will_ default to `Mapbox.StyleURL.Street` |
-| styleJSON | `string` | `none` | `false` | StyleJSON for map - according to TileJSON specs: https://github.com/mapbox/tilejson-spec |
-| preferredFramesPerSecond | `number` | `none` | `false` | iOS: The preferred frame rate at which the map view is rendered.<br/>The default value for this property is MGLMapViewPreferredFramesPerSecondDefault,<br/>which will adaptively set the preferred frame rate based on the capability of<br/>the user’s device to maintain a smooth experience. This property can be set to arbitrary integer values.<br/><br/>Android: The maximum frame rate at which the map view is rendered, but it can't exceed the ability of device hardware.<br/>This property can be set to arbitrary integer values. |
-| zoomEnabled | `boolean` | `none` | `false` | Enable/Disable zoom on the map |
-| scrollEnabled | `boolean` | `true` | `false` | Enable/Disable scroll on the map |
-| pitchEnabled | `boolean` | `true` | `false` | Enable/Disable pitch on map |
-| rotateEnabled | `boolean` | `true` | `false` | Enable/Disable rotation on map |
-| attributionEnabled | `boolean` | `true` | `false` | The Mapbox terms of service, which governs the use of Mapbox-hosted vector tiles and styles,<br/>[requires](https://www.mapbox.com/help/how-attribution-works/) these copyright notices to accompany any map that features Mapbox-designed styles, OpenStreetMap data, or other Mapbox data such as satellite or terrain data.<br/>If that applies to this map view, do not hide this view or remove any notices from it.<br/><br/>You are additionally [required](https://www.mapbox.com/help/how-mobile-apps-work/#telemetry) to provide users with the option to disable anonymous usage and location sharing (telemetry).<br/>If this view is hidden, you must implement this setting elsewhere in your app. See our website for [Android](https://www.mapbox.com/android-docs/map-sdk/overview/#telemetry-opt-out) and [iOS](https://www.mapbox.com/ios-sdk/#telemetry_opt_out) for implementation details.<br/><br/>Enable/Disable attribution on map. For iOS you need to add MGLMapboxMetricsEnabledSettingShownInApp=YES<br/>to your Info.plist |
-| attributionPosition | `OrnamentPositonProp` | `none` | `false` | Adds attribution offset, e.g. `{top: 8, left: 8}` will put attribution button in top-left corner of the map. By default on Android, the attribution with information icon (i) will be on the bottom left, while on iOS the mapbox logo will be on bottom left with information icon (i) on bottom right. Read more about mapbox attribution [here](https://docs.mapbox.com/help/getting-started/attribution/) |
-| tintColor | `string \| number[]` | `none` | `false` | MapView's tintColor |
-| logoEnabled | `boolean` | `true` | `false` | Enable/Disable the logo on the map. |
-| logoPosition | `OrnamentPositonProp` | `none` | `false` | Adds logo offset, e.g. `{top: 8, left: 8}` will put the logo in top-left corner of the map |
-| compassEnabled | `boolean` | `false` | `false` | Enable/Disable the compass from appearing on the map |
-| compassFadeWhenNorth | `boolean` | `false` | `false` | [`mapbox` (v10) implementation only] Enable/Disable if the compass should fade out when the map is pointing north |
-| compassPosition | `OrnamentPositonProp` | `none` | `false` | [`mapbox` (v10) implementation only] Adds compass offset, e.g. `{top: 8, left: 8}` will put the compass in top-left corner of the map |
-| compassViewPosition | `number` | `none` | `false` | Change corner of map the compass starts at. 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight |
-| compassViewMargins | `shape` | `none` | `false` | Add margins to the compass with x and y values |
-| &nbsp;&nbsp;x | `number` | `none` | `true` | FIX ME NO DESCRIPTION |
-| &nbsp;&nbsp;y | `number` | `none` | `true` | FIX ME NO DESCRIPTION |
-| compassImage | `string` | `none` | `false` | [iOS, `mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component. |
-| scaleBarEnabled | `boolean` | `true` | `false` | [`mapbox` (v10) implementation only] Enable/Disable the scale bar from appearing on the map |
-| scaleBarPosition | `OrnamentPositonProp` | `none` | `false` | [`mapbox` (v10) implementation only] Adds scale bar offset, e.g. `{top: 8, left: 8}` will put the scale bar in top-left corner of the map |
-| surfaceView | `boolean` | `MGLModule.MapboxV10 ? true : false` | `false` | [Android only] Enable/Disable use of GLSurfaceView instead of TextureView. |
-| requestDisallowInterceptTouchEvent | `boolean` | `false` | `false` | [Android only] Experimental, call requestDisallowInterceptTouchEvent on parent with onTochEvent, this allows touch interaction to work<br/>when embedded into a scroll view |
-| localizeLabels | `\| {
+
+  
+### contentInset
+
+```tsx
+number | number[]
+```
+The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport.
+
+
+  
+### projection
+
+```tsx
+'mercator' | 'globe'
+```
+The projection used when rendering the map
+
+  _defaults to:_ `'mercator'`
+
+  
+### styleURL
+
+```tsx
+string
+```
+Style URL for map - notice, if non is set it _will_ default to `Mapbox.StyleURL.Street`
+
+
+  
+### styleJSON
+
+```tsx
+string
+```
+StyleJSON for map - according to TileJSON specs: https://github.com/mapbox/tilejson-spec
+
+
+  
+### preferredFramesPerSecond
+
+```tsx
+number
+```
+iOS: The preferred frame rate at which the map view is rendered.
+The default value for this property is MGLMapViewPreferredFramesPerSecondDefault,
+which will adaptively set the preferred frame rate based on the capability of
+the user’s device to maintain a smooth experience. This property can be set to arbitrary integer values.
+
+Android: The maximum frame rate at which the map view is rendered, but it can't exceed the ability of device hardware.
+This property can be set to arbitrary integer values.
+
+
+  
+### zoomEnabled
+
+```tsx
+boolean
+```
+Enable/Disable zoom on the map
+
+
+  
+### scrollEnabled
+
+```tsx
+boolean
+```
+Enable/Disable scroll on the map
+
+  _defaults to:_ `true`
+
+  
+### pitchEnabled
+
+```tsx
+boolean
+```
+Enable/Disable pitch on map
+
+  _defaults to:_ `true`
+
+  
+### rotateEnabled
+
+```tsx
+boolean
+```
+Enable/Disable rotation on map
+
+  _defaults to:_ `true`
+
+  
+### attributionEnabled
+
+```tsx
+boolean
+```
+The Mapbox terms of service, which governs the use of Mapbox-hosted vector tiles and styles,
+[requires](https://www.mapbox.com/help/how-attribution-works/) these copyright notices to accompany any map that features Mapbox-designed styles, OpenStreetMap data, or other Mapbox data such as satellite or terrain data.
+If that applies to this map view, do not hide this view or remove any notices from it.
+
+You are additionally [required](https://www.mapbox.com/help/how-mobile-apps-work/#telemetry) to provide users with the option to disable anonymous usage and location sharing (telemetry).
+If this view is hidden, you must implement this setting elsewhere in your app. See our website for [Android](https://www.mapbox.com/android-docs/map-sdk/overview/#telemetry-opt-out) and [iOS](https://www.mapbox.com/ios-sdk/#telemetry_opt_out) for implementation details.
+
+Enable/Disable attribution on map. For iOS you need to add MGLMapboxMetricsEnabledSettingShownInApp=YES
+to your Info.plist
+
+  _defaults to:_ `true`
+
+  
+### attributionPosition
+
+```tsx
+OrnamentPositonProp
+```
+Adds attribution offset, e.g. `{top: 8, left: 8}` will put attribution button in top-left corner of the map. By default on Android, the attribution with information icon (i) will be on the bottom left, while on iOS the mapbox logo will be on bottom left with information icon (i) on bottom right. Read more about mapbox attribution [here](https://docs.mapbox.com/help/getting-started/attribution/)
+
+
+  
+### tintColor
+
+```tsx
+string | number[]
+```
+MapView's tintColor
+
+
+  
+### logoEnabled
+
+```tsx
+boolean
+```
+Enable/Disable the logo on the map.
+
+  _defaults to:_ `true`
+
+  
+### logoPosition
+
+```tsx
+OrnamentPositonProp
+```
+Adds logo offset, e.g. `{top: 8, left: 8}` will put the logo in top-left corner of the map
+
+
+  
+### compassEnabled
+
+```tsx
+boolean
+```
+Enable/Disable the compass from appearing on the map
+
+  _defaults to:_ `false`
+
+  
+### compassFadeWhenNorth
+
+```tsx
+boolean
+```
+[`mapbox` (v10) implementation only] Enable/Disable if the compass should fade out when the map is pointing north
+
+  _defaults to:_ `false`
+
+  
+### compassPosition
+
+```tsx
+OrnamentPositonProp
+```
+[`mapbox` (v10) implementation only] Adds compass offset, e.g. `{top: 8, left: 8}` will put the compass in top-left corner of the map
+
+
+  
+### compassViewPosition
+
+```tsx
+number
+```
+Change corner of map the compass starts at. 0: TopLeft, 1: TopRight, 2: BottomLeft, 3: BottomRight
+
+
+  
+### compassViewMargins
+
+TODO
+Add margins to the compass with x and y values
+
+
+  
+### compassImage
+
+```tsx
+string
+```
+[iOS, `mapbox` (v10) implementation only] A string referencing an image key. Requires an `Images` component.
+
+
+  
+### scaleBarEnabled
+
+```tsx
+boolean
+```
+[`mapbox` (v10) implementation only] Enable/Disable the scale bar from appearing on the map
+
+  _defaults to:_ `true`
+
+  
+### scaleBarPosition
+
+```tsx
+OrnamentPositonProp
+```
+[`mapbox` (v10) implementation only] Adds scale bar offset, e.g. `{top: 8, left: 8}` will put the scale bar in top-left corner of the map
+
+
+  
+### surfaceView
+
+```tsx
+boolean
+```
+[Android only] Enable/Disable use of GLSurfaceView instead of TextureView.
+
+  _defaults to:_ `MGLModule.MapboxV10 ? true : false`
+
+  
+### requestDisallowInterceptTouchEvent
+
+```tsx
+boolean
+```
+[Android only] Experimental, call requestDisallowInterceptTouchEvent on parent with onTochEvent, this allows touch interaction to work
+when embedded into a scroll view
+
+  _defaults to:_ `false`
+
+  
+### localizeLabels
+
+```tsx
+| {
     /** locale code like `es` or `current` for the device's current locale */
     locale: string;
     /** layer id to localize. If not specified, all layers will be localized */
     layerIds?: string[];
   }
-\| true` | `none` | `false` | [`mapbox` (v10) implementation only]<br/>Set map's label locale, e.g. { "locale": "es" } will localize labels to Spanish, { "locale": "current" } will localize labels to system locale. |
-| onPress | `func` | `none` | `false` | Map press listener, gets called when a user presses the map<br/>*signature:*`(feature:GeoJSON.Feature) => void` |
-| onLongPress | `func` | `none` | `false` | Map long press listener, gets called when a user long presses the map<br/>*signature:*`(feature:GeoJSON.Feature) => void` |
-| onRegionWillChange | `func` | `none` | `false` | <v10 only<br/><br/>This event is triggered whenever the currently displayed map region is about to change.<br/><br/>@param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds<br/>*signature:*`(feature:GeoJSON.Feature) => void` |
-| onRegionIsChanging | `func` | `none` | `false` | This event is triggered whenever the currently displayed map region is changing.<br/><br/>@param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds<br/>*signature:*`(feature:GeoJSON.Feature) => void` |
-| onRegionDidChange | `func` | `none` | `false` | This event is triggered whenever the currently displayed map region finished changing.<br/><br/>@param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds<br/>*signature:*`(feature:GeoJSON.Feature) => void` |
-| onCameraChanged | `func` | `none` | `false` | v10 only, replaces onRegionIsChanging<br/>*signature:*`(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean}}) => void` |
-| onMapIdle | `func` | `none` | `false` | v10 only, replaces onRegionDidChange<br/>*signature:*`(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean}}) => void` |
-| onWillStartLoadingMap | `func` | `none` | `false` | This event is triggered when the map is about to start loading a new map style.<br/>*signature:*`() => void` |
-| onDidFinishLoadingMap | `func` | `none` | `false` | This is triggered when the map has successfully loaded a new map style.<br/>*signature:*`() => void` |
-| onDidFailLoadingMap | `func` | `none` | `false` | This event is triggered when the map has failed to load a new map style. On v10 it's deprecated and replaced by onMapLoadingError<br/>@deprecated use onMapLoadingError<br/>*signature:*`() => void` |
-| onMapLoadingError | `func` | `none` | `false` | This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.<br/>*signature:*`() => void` |
-| onWillStartRenderingFrame | `func` | `none` | `false` | This event is triggered when the map will start rendering a frame.<br/>*signature:*`() => void` |
-| onDidFinishRenderingFrame | `func` | `none` | `false` | This event is triggered when the map finished rendering a frame.<br/>*signature:*`() => void` |
-| onDidFinishRenderingFrameFully | `func` | `none` | `false` | This event is triggered when the map fully finished rendering a frame.<br/>*signature:*`() => void` |
-| onWillStartRenderingMap | `func` | `none` | `false` | This event is triggered when the map will start rendering the map.<br/>*signature:*`() => void` |
-| onDidFinishRenderingMap | `func` | `none` | `false` | This event is triggered when the map finished rendering the map.<br/>*signature:*`() => void` |
-| onDidFinishRenderingMapFully | `func` | `none` | `false` | This event is triggered when the map fully finished rendering the map.<br/>*signature:*`() => void` |
-| onUserLocationUpdate | `func` | `none` | `false` | This event is triggered when the user location is updated.<br/>*signature:*`(feature:Location) => void` |
-| onDidFinishLoadingStyle | `func` | `none` | `false` | This event is triggered when a style has finished loading.<br/>*signature:*`() => void` |
-| regionWillChangeDebounceTime | `number` | `10` | `false` | The emitted frequency of regionwillchange events |
-| regionDidChangeDebounceTime | `number` | `500` | `false` | The emitted frequency of regiondidchange events |
+| true
+```
+[`mapbox` (v10) implementation only]
+Set map's label locale, e.g. { "locale": "es" } will localize labels to Spanish, { "locale": "current" } will localize labels to system locale.
+
+
+  
+### onPress
+
+```tsx
+func
+```
+Map press listener, gets called when a user presses the map
+*signature:*`(feature:GeoJSON.Feature) => void`
+
+
+  
+### onLongPress
+
+```tsx
+func
+```
+Map long press listener, gets called when a user long presses the map
+*signature:*`(feature:GeoJSON.Feature) => void`
+
+
+  
+### onRegionWillChange
+
+```tsx
+func
+```
+<v10 only
+
+This event is triggered whenever the currently displayed map region is about to change.
+
+@param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
+*signature:*`(feature:GeoJSON.Feature) => void`
+
+
+  
+### onRegionIsChanging
+
+```tsx
+func
+```
+This event is triggered whenever the currently displayed map region is changing.
+
+@param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
+*signature:*`(feature:GeoJSON.Feature) => void`
+
+
+  
+### onRegionDidChange
+
+```tsx
+func
+```
+This event is triggered whenever the currently displayed map region finished changing.
+
+@param {PointFeature} feature - The geojson point feature at the camera center, properties contains zoomLevel, visibleBounds
+*signature:*`(feature:GeoJSON.Feature) => void`
+
+
+  
+### onCameraChanged
+
+```tsx
+func
+```
+v10 only, replaces onRegionIsChanging
+*signature:*`(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean}}) => void`
+
+
+  
+### onMapIdle
+
+```tsx
+func
+```
+v10 only, replaces onRegionDidChange
+*signature:*`(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean}}) => void`
+
+
+  
+### onWillStartLoadingMap
+
+```tsx
+func
+```
+This event is triggered when the map is about to start loading a new map style.
+*signature:*`() => void`
+
+
+  
+### onDidFinishLoadingMap
+
+```tsx
+func
+```
+This is triggered when the map has successfully loaded a new map style.
+*signature:*`() => void`
+
+
+  
+### onDidFailLoadingMap
+
+```tsx
+func
+```
+This event is triggered when the map has failed to load a new map style. On v10 it's deprecated and replaced by onMapLoadingError
+@deprecated use onMapLoadingError
+*signature:*`() => void`
+
+
+  
+### onMapLoadingError
+
+```tsx
+func
+```
+This event is tiggered when there is an error during map load. V10 only, replaces onDidFailLoadingMap, might be called multiple times and not exclusive with onDidFinishLoadingMap.
+*signature:*`() => void`
+
+
+  
+### onWillStartRenderingFrame
+
+```tsx
+func
+```
+This event is triggered when the map will start rendering a frame.
+*signature:*`() => void`
+
+
+  
+### onDidFinishRenderingFrame
+
+```tsx
+func
+```
+This event is triggered when the map finished rendering a frame.
+*signature:*`() => void`
+
+
+  
+### onDidFinishRenderingFrameFully
+
+```tsx
+func
+```
+This event is triggered when the map fully finished rendering a frame.
+*signature:*`() => void`
+
+
+  
+### onWillStartRenderingMap
+
+```tsx
+func
+```
+This event is triggered when the map will start rendering the map.
+*signature:*`() => void`
+
+
+  
+### onDidFinishRenderingMap
+
+```tsx
+func
+```
+This event is triggered when the map finished rendering the map.
+*signature:*`() => void`
+
+
+  
+### onDidFinishRenderingMapFully
+
+```tsx
+func
+```
+This event is triggered when the map fully finished rendering the map.
+*signature:*`() => void`
+
+
+  
+### onUserLocationUpdate
+
+```tsx
+func
+```
+This event is triggered when the user location is updated.
+*signature:*`(feature:Location) => void`
+
+
+  
+### onDidFinishLoadingStyle
+
+```tsx
+func
+```
+This event is triggered when a style has finished loading.
+*signature:*`() => void`
+
+
+  
+### regionWillChangeDebounceTime
+
+```tsx
+number
+```
+The emitted frequency of regionwillchange events
+
+  _defaults to:_ `10`
+
+  
+### regionDidChangeDebounceTime
+
+```tsx
+number
+```
+The emitted frequency of regiondidchange events
+
+  _defaults to:_ `500`
+
+  
+
+
+
+
 
 ## methods
 ### getPointInView(coordinate)

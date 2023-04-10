@@ -10,6 +10,7 @@ Each snapshot image depicts a portion of a map defined by an SnapshotOptions obj
 The snapshotter generates the snapshot asynchronous.
 
 
+
 ## methods
 ### takeSnap(options)
 

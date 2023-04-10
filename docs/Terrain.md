@@ -8,11 +8,39 @@ Terrain
 
 
 ## props
-| Prop | Type | Default | Required | Description |
-| ---- | :-- | :----- | :------ | :---------- |
-| sourceID | `string` | `none` | `false` | Name of a source of raster_dem type to be used for terrain elevation. |
-| exaggeration | `Value` | `none` | `false` | Deprecated, use exaggeration in style instead |
-| style | `TerrainLayerStyleProps` | `none` | `false` | Customizable style attributes |
+
+  
+### sourceID
+
+```tsx
+string
+```
+Name of a source of raster_dem type to be used for terrain elevation.
+
+
+  
+### exaggeration
+
+```tsx
+Value
+```
+Deprecated, use exaggeration in style instead
+
+
+  
+### style
+
+```tsx
+TerrainLayerStyleProps
+```
+Customizable style attributes
+
+
+  
+
+
+
+
 
 
 ## styles

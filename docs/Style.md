@@ -10,8 +10,21 @@ Only [`sources`](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources) & [`la
 Other fields such as `sprites`, `glyphs` etc. will be ignored. Not all layer / source attributes from the style spec are supported, in general the supported attributes will be mentioned under https://github.com/rnmapbox/maps/tree/main/docs.
 
 ## props
-| Prop | Type | Default | Required | Description |
-| ---- | :-- | :----- | :------ | :---------- |
-| json | `MapboxJSON \| URL` | `none` | `true` | A JSON object conforming to the schema described in the Mapbox Style Specification , or a URL to such JSON. |
+
+  
+### json
+
+```tsx
+MapboxJSON | URL
+```
+_required_
+A JSON object conforming to the schema described in the Mapbox Style Specification , or a URL to such JSON.
+
+
+  
+
+
+
+
 
 

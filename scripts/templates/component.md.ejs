@@ -12,10 +12,37 @@ import { <%- component.name %> } from '@rnmapbox/maps';
 
 <%_ if (component.props && component.props.length) { _%>
 ## props
-| Prop | Type | Default | Required | Description |
-| ---- | :-- | :----- | :------ | :---------- |
-<%- propMarkdownTableRows(component) %>
+
+<%_ if (true) { _%>
+  <% for (let prop of component.props) { %>
+### <%- prop.name %>
+
+<%- propType(prop) %>
+<%_ if (prop.required) { _%>
+_required_
 <%_ } _%>
+<%- propDescription(prop) %>
+
+<%_ if (prop.default && (prop.default != 'none')) { _%>
+  _defaults to:_ `<%- prop.default %>`
+<%_ } _%>
+
+  <% } %>
+<% } else { %>
+<table>
+<tr>
+<th>Prop</th>
+<th>Type</th>
+<th>Default</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+<%- propTableRows(component) %>
+</table>
+<% } %>
+
+
+<% } %>
 
 <%_ if (component.methods && component.methods.length) { _%>
 ## methods

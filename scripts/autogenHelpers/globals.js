@@ -408,13 +408,50 @@ global.startAtSpace = function (spaceCount, str) {
 };
 
 global.replaceNewLine = function (str) {
-  if (str === undefined) {
-    return undefined;
-  }
-  if (str === null) {
-    return null;
+  if (str === undefined || str === null) {
+    return str;
   }
   return str.replace(/\n/g, '<br/>');
+};
+
+function splitSingleLineOnWordBoundaries(str, maxlength) {
+  let words = str.split(' ');
+  let result = [];
+  let current = '';
+  let m = str.match(/^(\s*)/);
+  let [prefix] = m;
+  for (let word of words) {
+    if (current.length + word.length > maxlength) {
+      result.push(current);
+      current = prefix + '  ' + word;
+    } else {
+      current += ' ' + word;
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+function splitMultilineOnWordBoundaries(str, maxlength) {
+  let lines = str.split(/\n/);
+  let result = [];
+  for (let line of lines) {
+    result = [...result, ...splitSingleLineOnWordBoundaries(line, maxlength)];
+  }
+  return result;
+}
+
+global.codeQuote = function (str, maxwidth) {
+  if (str === undefined || str === null) {
+    return str;
+  }
+  if (str.match(/\n/)) {
+    return `\n\n\`\`\`tsx\n${splitMultilineOnWordBoundaries(str, maxwidth).join(
+      '\n',
+    )}\n\`\`\`\n\n`;
+  } else {
+    return `<pre>${str}</pre>`;
+  }
 };
 
 global.styleMarkdownTableRow = function (style) {
@@ -437,6 +474,32 @@ global.methodMarkdownTableRow = function (method) {
     .join('\n');
 };
 
+function _propTableRows(props, prefix = '') {
+  return props
+    .map((prop) => {
+      let { type } = prop;
+      if (typeof type === 'object') {
+        type = type.name;
+      }
+      let defaultValue = prop.default || '';
+      let { description = '' } = prop;
+      let result = `<tr><td>${prefix}${prop.name}</td><td>${codeQuote(
+        type,
+        26,
+      )}</td><td><pre>${defaultValue}</pre></td><td>\`${
+        prop.required
+      }\`</td><td>${replaceNewLine(description)}</td></tr>`;
+      if (type === 'shape') {
+        result = `${result}\n${_propTableRows(
+          prop.type.value,
+          `&nbsp;&nbsp;${prefix}`,
+        )}`;
+      }
+      return result;
+    })
+    .join('\n');
+}
+
 function _propMarkdownTableRows(props, prefix = '') {
   return props
     .map((prop) => {
@@ -446,12 +509,13 @@ function _propMarkdownTableRows(props, prefix = '') {
       }
       let defaultValue = prop.default || '';
       let { description = '' } = prop;
-      let result = `| ${prefix}${
-        prop.name
-      } | \`${type}\` | \`${defaultValue}\` | \`${
-        prop.required
-      }\` | ${replaceNewLine(description)} |`;
-      if (type == 'shape') {
+      let result = `| ${prefix}${prop.name} | ${codeQuote(
+        type,
+        26,
+      )} | \`${defaultValue}\` | \`${prop.required}\` | ${replaceNewLine(
+        description,
+      )} |`;
+      if (type === 'shape') {
         result = `${result}\n${_propMarkdownTableRows(
           prop.type.value,
           `&nbsp;&nbsp;${prefix}`,
@@ -461,8 +525,28 @@ function _propMarkdownTableRows(props, prefix = '') {
     })
     .join('\n');
 }
+
 global.propMarkdownTableRows = function (component) {
   return _propMarkdownTableRows(component.props, '');
+};
+
+global.propTableRows = function (component) {
+  return _propTableRows(component.props, '');
+};
+
+global.propType = function (prop) {
+  let { type } = prop;
+  if (typeof type === 'object') {
+    type = type.name;
+  }
+  if (type === 'shape') {
+    return 'TODO';
+  }
+  return `\`\`\`tsx\n${type.replace(/(\\\|)/g, '|')}\n\`\`\``;
+};
+
+global.propDescription = function (prop) {
+  return prop.description;
 };
 
 global.getMarkdownMethodSignature = function (method) {
