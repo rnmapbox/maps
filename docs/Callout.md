@@ -8,13 +8,66 @@ Callout
 Callout that displays information about a selected annotation near the annotation.
 
 ## props
-| Prop | Type | Default | Required | Description |
-| ---- | :-- | :----- | :------ | :---------- |
-| title | `string` | `none` | `true` | String that gets displayed in the default callout. |
-| style | `ViewStyle` | `none` | `false` | Style property for the Animated.View wrapper, apply animations to this |
-| containerStyle | `ViewStyle` | `none` | `false` | Style property for the native RCTMGLCallout container, set at your own risk. |
-| contentStyle | `ViewStyle` | `none` | `false` | Style property for the content bubble. |
-| tipStyle | `ViewStyle` | `none` | `false` | Style property for the triangle tip under the content. |
-| textStyle | `ViewStyle` | `none` | `false` | Style property for the title in the content bubble. |
+
+  
+### title
+
+```tsx
+string
+```
+_required_
+String that gets displayed in the default callout.
+
+
+  
+### style
+
+```tsx
+ViewStyle
+```
+Style property for the Animated.View wrapper, apply animations to this
+
+
+  
+### containerStyle
+
+```tsx
+ViewStyle
+```
+Style property for the native RCTMGLCallout container, set at your own risk.
+
+
+  
+### contentStyle
+
+```tsx
+ViewStyle
+```
+Style property for the content bubble.
+
+
+  
+### tipStyle
+
+```tsx
+ViewStyle
+```
+Style property for the triangle tip under the content.
+
+
+  
+### textStyle
+
+```tsx
+ViewStyle
+```
+Style property for the title in the content bubble.
+
+
+  
+
+
+
+
 
 

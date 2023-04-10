@@ -8,9 +8,37 @@ NativeUserLocation
 
 
 ## props
-| Prop | Type | Default | Required | Description |
-| ---- | :-- | :----- | :------ | :---------- |
-| androidRenderMode | `'normal' \| 'compass' \| 'gps'` | `none` | `false` | Android render mode.<br/><br/> - normal: just a circle<br/> - compass: triangle with heading<br/> - gps: large arrow<br/><br/>@platform android |
-| iosShowsUserHeadingIndicator | `boolean` | `none` | `false` | iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.<br/><br/>@platform ios |
+
+  
+### androidRenderMode
+
+```tsx
+'normal' | 'compass' | 'gps'
+```
+Android render mode.
+
+ - normal: just a circle
+ - compass: triangle with heading
+ - gps: large arrow
+
+@platform android
+
+
+  
+### iosShowsUserHeadingIndicator
+
+```tsx
+boolean
+```
+iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.
+
+@platform ios
+
+
+  
+
+
+
+
 
 

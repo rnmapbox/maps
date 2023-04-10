@@ -8,8 +8,20 @@ HeadingIndicator
 
 
 ## props
-| Prop | Type | Default | Required | Description |
-| ---- | :-- | :----- | :------ | :---------- |
-| heading | `number` | `none` | `false` | FIX ME NO DESCRIPTION |
+
+  
+### heading
+
+```tsx
+number
+```
+FIX ME NO DESCRIPTION
+
+
+  
+
+
+
+
 
 

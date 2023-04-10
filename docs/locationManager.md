@@ -8,6 +8,7 @@ locationManager
 LocationManager is a singleton, see 
 
 
+
 ## methods
 ### setLocationEventThrottle(throttleValue)
 

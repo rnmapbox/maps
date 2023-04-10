@@ -8,18 +8,118 @@ UserLocation
 
 
 ## props
-| Prop | Type | Default | Required | Description |
-| ---- | :-- | :----- | :------ | :---------- |
-| androidRenderMode | `'normal' \| 'compass' \| 'gps'` | `none` | `false` | native/android only render mode<br/><br/> - normal: just a circle<br/> - compass: triangle with heading<br/> - gps: large arrow<br/><br/>@platform android |
-| animated | `boolean` | `true` | `false` | Whether location icon is animated between updates |
-| children | `ReactElement \| ReactElement[]` | `none` | `false` | Custom location icon of type mapbox-gl-native components |
-| minDisplacement | `number` | `0` | `false` | Minimum amount of movement before GPS location is updated in meters |
-| onPress | `func` | `none` | `false` | Callback that is triggered on location icon press<br/>*signature:*`() => void` |
-| onUpdate | `func` | `none` | `false` | Callback that is triggered on location update<br/>*signature:*`(location:Location) => void` |
-| renderMode | `UserLocationRenderMode` | `UserLocationRenderMode.Normal` | `false` | Which render mode to use. |
-| requestsAlwaysUse | `boolean` | `false` | `false` | Request the always location permission, and listen to the location even when the app is in background<br/><br/>@platform ios |
-| showsUserHeadingIndicator | `boolean` | `false` | `false` | Show or hide small arrow which indicates direction the device is pointing relative to north. |
-| visible | `boolean` | `true` | `false` | Whether location icon is visible |
+
+  
+### androidRenderMode
+
+```tsx
+'normal' | 'compass' | 'gps'
+```
+native/android only render mode
+
+ - normal: just a circle
+ - compass: triangle with heading
+ - gps: large arrow
+
+@platform android
+
+
+  
+### animated
+
+```tsx
+boolean
+```
+Whether location icon is animated between updates
+
+  _defaults to:_ `true`
+
+  
+### children
+
+```tsx
+ReactElement | ReactElement[]
+```
+Custom location icon of type mapbox-gl-native components
+
+
+  
+### minDisplacement
+
+```tsx
+number
+```
+Minimum amount of movement before GPS location is updated in meters
+
+  _defaults to:_ `0`
+
+  
+### onPress
+
+```tsx
+func
+```
+Callback that is triggered on location icon press
+*signature:*`() => void`
+
+
+  
+### onUpdate
+
+```tsx
+func
+```
+Callback that is triggered on location update
+*signature:*`(location:Location) => void`
+
+
+  
+### renderMode
+
+```tsx
+UserLocationRenderMode
+```
+Which render mode to use.
+
+  _defaults to:_ `UserLocationRenderMode.Normal`
+
+  
+### requestsAlwaysUse
+
+```tsx
+boolean
+```
+Request the always location permission, and listen to the location even when the app is in background
+
+@platform ios
+
+  _defaults to:_ `false`
+
+  
+### showsUserHeadingIndicator
+
+```tsx
+boolean
+```
+Show or hide small arrow which indicates direction the device is pointing relative to north.
+
+  _defaults to:_ `false`
+
+  
+### visible
+
+```tsx
+boolean
+```
+Whether location icon is visible
+
+  _defaults to:_ `true`
+
+  
+
+
+
+
 
 ## methods
 ### setLocationManager({ running }: { running?: boolean })

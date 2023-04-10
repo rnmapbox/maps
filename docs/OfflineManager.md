@@ -10,6 +10,7 @@ All of this class’s instance methods are asynchronous, reflecting the fact tha
 The shared object maintains a canonical collection of offline packs.
 
 
+
 ## methods
 ### createPack(options[, progressListener][, errorListener])
 

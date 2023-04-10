@@ -8,20 +8,125 @@ SymbolLayer
 SymbolLayer is a style layer that renders icon and text labels at points or along lines on the map.
 
 ## props
-| Prop | Type | Default | Required | Description |
-| ---- | :-- | :----- | :------ | :---------- |
-| id | `string` | `none` | `true` | A string that uniquely identifies the layer in the style to which it is added. |
-| existing | `boolean` | `none` | `false` | The id refers to en existing layer in the style. Does not create a new layer. |
-| sourceID | `string` | `MapboxGL.StyleSource.DefaultSourceID` | `false` | The source from which to obtain the data to style.<br/>If the source has not yet been added to the current style, the behavior is undefined.<br/>Inferred from parent source only if the layer is a direct child to it. |
-| sourceLayerID | `string` | `none` | `false` | Identifier of the layer within the source identified by the sourceID property from which the receiver obtains the data to style. |
-| aboveLayerID | `string` | `none` | `false` | Inserts a layer above aboveLayerID. |
-| belowLayerID | `string` | `none` | `false` | Inserts a layer below belowLayerID |
-| layerIndex | `number` | `none` | `false` | Inserts a layer at a specified index |
-| filter | `Expression` | `none` | `false` | Filter only the features in the source layer that satisfy a condition that you define |
-| minZoomLevel | `number` | `none` | `false` | The minimum zoom level at which the layer gets parsed and appears. |
-| maxZoomLevel | `number` | `none` | `false` | The maximum zoom level at which the layer gets parsed and appears. |
-| style | `SymbolLayerStyleProps` | `none` | `false` | FIX ME NO DESCRIPTION |
-| children | `JSX.Element \| JSX.Element[]` | `none` | `false` | @deprecated passed children used to create an image with id of symbol in style and also set the iconImageName property accordingly.<br/>This is now deprecated, use Image component instead. |
+
+  
+### id
+
+```tsx
+string
+```
+_required_
+A string that uniquely identifies the layer in the style to which it is added.
+
+
+  
+### existing
+
+```tsx
+boolean
+```
+The id refers to en existing layer in the style. Does not create a new layer.
+
+
+  
+### sourceID
+
+```tsx
+string
+```
+The source from which to obtain the data to style.
+If the source has not yet been added to the current style, the behavior is undefined.
+Inferred from parent source only if the layer is a direct child to it.
+
+  _defaults to:_ `MapboxGL.StyleSource.DefaultSourceID`
+
+  
+### sourceLayerID
+
+```tsx
+string
+```
+Identifier of the layer within the source identified by the sourceID property from which the receiver obtains the data to style.
+
+
+  
+### aboveLayerID
+
+```tsx
+string
+```
+Inserts a layer above aboveLayerID.
+
+
+  
+### belowLayerID
+
+```tsx
+string
+```
+Inserts a layer below belowLayerID
+
+
+  
+### layerIndex
+
+```tsx
+number
+```
+Inserts a layer at a specified index
+
+
+  
+### filter
+
+```tsx
+Expression
+```
+Filter only the features in the source layer that satisfy a condition that you define
+
+
+  
+### minZoomLevel
+
+```tsx
+number
+```
+The minimum zoom level at which the layer gets parsed and appears.
+
+
+  
+### maxZoomLevel
+
+```tsx
+number
+```
+The maximum zoom level at which the layer gets parsed and appears.
+
+
+  
+### style
+
+```tsx
+SymbolLayerStyleProps
+```
+FIX ME NO DESCRIPTION
+
+
+  
+### children
+
+```tsx
+JSX.Element | JSX.Element[]
+```
+@deprecated passed children used to create an image with id of symbol in style and also set the iconImageName property accordingly.
+This is now deprecated, use Image component instead.
+
+
+  
+
+
+
+
 
 
 ## styles

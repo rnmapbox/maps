@@ -8,9 +8,22 @@ Light
 Light represents the light source for extruded geometries
 
 ## props
-| Prop | Type | Default | Required | Description |
-| ---- | :-- | :----- | :------ | :---------- |
-| style | `LightLayerStyleProps` | `none` | `true` | Customizable style attributes |
+
+  
+### style
+
+```tsx
+LightLayerStyleProps
+```
+_required_
+Customizable style attributes
+
+
+  
+
+
+
+
 
 
 ## styles
