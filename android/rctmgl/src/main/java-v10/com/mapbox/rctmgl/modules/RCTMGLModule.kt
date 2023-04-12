@@ -14,7 +14,9 @@ import com.mapbox.rctmgl.modules.RCTMGLLocationModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.common.MapBuilder
 import com.mapbox.common.*
+import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
+import com.mapbox.maps.plugin.attribution.attribution
 import com.mapbox.rctmgl.components.camera.constants.CameraMode
 import java.util.HashMap
 
@@ -113,6 +115,15 @@ class RCTMGLModule(private val mReactContext: ReactApplicationContext) : ReactCo
             .put("TileServers", tileServers)
             .put("Implementation", impl)
             .build()
+    }
+
+    @ReactMethod
+    fun setTelemetryEnabled(telemetryEnabled: Boolean) {
+        mReactContext.runOnUiQueueThread {
+            val dummyView = MapView(mReactContext)
+            val telemetry = dummyView.attribution.getMapAttributionDelegate().telemetry()
+            telemetry.userTelemetryRequestState = telemetryEnabled
+        }
     }
 
     @ReactMethod
