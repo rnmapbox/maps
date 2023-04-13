@@ -287,6 +287,7 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
             .minZoom(zoomRange.minZoom)
             .maxZoom(zoomRange.maxZoom)
             .stylePackOptions(stylePackOptions)
+            .pixelRatio(2.0f)
             .build()
         val tilesetDescriptor = offlineManager.createTilesetDescriptor(descriptorOptions)
 
