@@ -3,7 +3,27 @@ import Turf
 
 @objc
 class RCTMGLShapeSource : RCTMGLSource {
-  @objc var url : String?
+  @objc var url : String? {
+    didSet {
+      logged("RCTMGLShapeSource.updateUrl") {
+        parseJSON(url) { [weak self] result in
+          guard let self = self else { return }
+
+          switch result {
+            case .success(let obj):
+              doUpdate { (style) in
+                logged("RCTMGLShapeSource.setUrl") {
+                  try style.updateGeoJSONSource(withId: self.id, geoJSON: obj)
+                }
+              }
+
+            case .failure(let error):
+              Logger.log(level: .error, message: ":: Error - update url failed \(error) \(error.localizedDescription)")
+          }
+        }
+      }
+    }
+  }
 
   @objc var shape : String? {
     didSet {
@@ -18,7 +38,7 @@ class RCTMGLShapeSource : RCTMGLSource {
       }
     }
   }
-  
+
   @objc var cluster : NSNumber?
   @objc var clusterRadius : NSNumber?
   @objc var clusterMaxZoomLevel : NSNumber? {
@@ -35,12 +55,12 @@ class RCTMGLShapeSource : RCTMGLSource {
     }
   }
   @objc var clusterProperties : [String: [Any]]?;
-  
+
   @objc var maxZoomLevel : NSNumber?
   @objc var buffer : NSNumber?
   @objc var tolerance : NSNumber?
   @objc var lineMetrics : NSNumber?
-  
+
   override func sourceType() -> Source.Type {
     return GeoJSONSource.self
   }
@@ -48,7 +68,7 @@ class RCTMGLShapeSource : RCTMGLSource {
   override func makeSource() -> Source
   {
     var result =  GeoJSONSource()
-    
+
     if let shape = shape {
       do {
         result.data = try parse(shape)
@@ -57,52 +77,52 @@ class RCTMGLShapeSource : RCTMGLSource {
         result.data = emptyShape()
       }
     }
-    
+
     if let url = url {
       result.data = .url(URL(string: url)!)
     }
-    
+
     if let cluster = cluster {
       result.cluster = cluster.boolValue
     }
-    
+
     if let clusterRadius = clusterRadius {
       result.clusterRadius = clusterRadius.doubleValue
     }
-    
+
     if let clusterMaxZoomLevel = clusterMaxZoomLevel {
       result.clusterMaxZoom = clusterMaxZoomLevel.doubleValue
     }
-    
+
     do {
       if let clusterProperties = clusterProperties {
         result.clusterProperties = try clusterProperties.mapValues { (params : [Any]) in
           let data = try JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
           let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
-          
+
           return decodedExpression
         }
       }
     } catch {
       Logger.log(level: .error, message: "RCTMGLShapeSource.parsing clusterProperties failed", error: error)
     }
-    
+
     if let maxZoomLevel = maxZoomLevel {
       result.maxzoom = maxZoomLevel.doubleValue
     }
-    
+
     if let buffer = buffer {
       result.buffer = buffer.doubleValue
     }
-    
+
     if let tolerance = tolerance {
       result.tolerance = tolerance.doubleValue
     }
-    
+
     if let lineMetrics = lineMetrics {
       result.lineMetrics = lineMetrics.boolValue
     }
-    
+
     return result
   }
 
@@ -112,14 +132,40 @@ class RCTMGLShapeSource : RCTMGLSource {
           map.mapboxMap.style.sourceExists(withId: id) else {
       return
     }
-    
+
     let style = map.mapboxMap.style
     update(style)
   }
-  
+
   func updateSource(property: String, value: Any) {
     doUpdate { style in
       try! style.setSourceProperty(for: id, property: property, value: value)
+    }
+  }
+}
+
+// MARK: - parseJSON(url)
+
+extension RCTMGLShapeSource
+{
+  func parseJSON(_ url: String?, completion: @escaping (Result<GeoJSONObject, Error>) -> Void) {
+    guard let url = url else { return }
+
+    DispatchQueue.global().async { [url] in
+      let result: Result<GeoJSONObject, Error>
+
+      do {
+        let data = try Data(contentsOf: URL(string: url)!)
+        let obj = try JSONDecoder().decode(GeoJSONObject.self, from: data)
+
+        result = .success(obj)
+      } catch {
+        result = .failure(error)
+      }
+
+      DispatchQueue.main.async {
+        completion(result)
+      }
     }
   }
 }
@@ -145,7 +191,7 @@ extension RCTMGLShapeSource
       }
     }
   }
-  
+
   func parse(_ shape: String) throws -> Feature {
     guard let data = shape.data(using: .utf8) else {
       throw RCTMGLError.parseError("shape is not utf8")
@@ -224,7 +270,7 @@ extension RCTMGLShapeSource
             completion(.failure(RCTMGLError.failed("getClusterExpansionZoom: not a number")))
             return
           }
-          
+
           completion(.success(value.intValue))
         case .failure(let error):
           completion(.failure(error))
@@ -232,7 +278,7 @@ extension RCTMGLShapeSource
       }
     }
   }
-  
+
   func getClusterLeaves(_ featureJSON: String,
                               number: uint,
                               offset: uint,
@@ -242,7 +288,7 @@ extension RCTMGLShapeSource
       completion(.failure(RCTMGLError.failed("getClusterLeaves: no mapView")))
       return
     }
-    
+
     logged("RCTMGLShapeSource.getClusterLeaves", rejecter: { (_,_,error) in
       completion(.failure(error!))
     }) {
