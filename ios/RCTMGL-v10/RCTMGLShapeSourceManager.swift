@@ -14,18 +14,17 @@ class RCTMGLShapeSourceManager: RCTViewManager {
 
 extension RCTMGLShapeSourceManager {
   func withShapeSource(
-      _ reactTag: NSNumber,
-      name: String,
-      rejecter: @escaping RCTPromiseRejectBlock,
-      fn: @escaping (_: RCTMGLShapeSource) -> Void) -> Void
-  {
-    self.bridge.uiManager.addUIBlock { (manager, viewRegistry) in
+    _ reactTag: NSNumber,
+    name: String,
+    rejecter: @escaping RCTPromiseRejectBlock,
+    fn: @escaping (_: RCTMGLShapeSource) -> Void) {
+    self.bridge.uiManager.addUIBlock { (_, viewRegistry) in
       let view = viewRegistry![reactTag]
 
       guard let shapeSource = view! as? RCTMGLShapeSource else {
-        RCTMGLLogError("Invalid react tag, could not find RCTMGLShapeSource");
+        RCTMGLLogError("Invalid react tag, could not find RCTMGLShapeSource")
         rejecter(name, "Unknown find reactTag: \(reactTag)", nil)
-        return;
+        return
       }
 
       fn(shapeSource)
@@ -40,62 +39,63 @@ extension RCTMGLShapeSourceManager {
     _ reactTag: NSNumber,
     featureJSON: String,
     resolver: @escaping RCTPromiseResolveBlock,
-    rejecter: @escaping RCTPromiseRejectBlock) -> Void
-  {
-    self.withShapeSource(reactTag, name:"getCluster   ExpansionZoom", rejecter: rejecter) { shapeSource in
+    rejecter: @escaping RCTPromiseRejectBlock) {
+    self.withShapeSource(reactTag, name: "getCluster   ExpansionZoom", rejecter: rejecter) { shapeSource in
       shapeSource.getClusterExpansionZoom(featureJSON) { result in
         switch result {
         case .success(let zoom):
           resolver([
             "data": NSNumber(value: zoom)
           ])
+
         case .failure(let error):
           rejecter(error.localizedDescription, "Error.getClusterExpansionZoom", error)
         }
       }
     }
   }
-  
+
   @objc func getClusterLeaves(
     _ reactTag: NSNumber,
     featureJSON: String,
     number: uint,
     offset: uint,
     resolver: @escaping RCTPromiseResolveBlock,
-    rejecter: @escaping RCTPromiseRejectBlock) -> Void
-  {
-    self.withShapeSource(reactTag, name:"getClusterLeaves", rejecter: rejecter) { shapeSource in
+    rejecter: @escaping RCTPromiseRejectBlock) {
+    self.withShapeSource(reactTag, name: "getClusterLeaves", rejecter: rejecter) { shapeSource in
       shapeSource.getClusterLeaves(featureJSON, number: number, offset: offset) { result in
         switch result {
         case .success(let features):
           logged("getClusterLeaves", rejecter: rejecter) {
-            let featuresJSON : Any = try features.features.toJSON()
+            let featuresJSON: Any = try features.features.toJSON()
             resolver([
-              "data": ["type":"FeatureCollection", "features": featuresJSON]
+              "data": ["type": "FeatureCollection", "features": featuresJSON]
             ])
           }
+
         case .failure(let error):
           rejecter(error.localizedDescription, "Error.getClusterLeaves", error)
         }
       }
     }
   }
-  
+
   @objc func getClusterChildren(
     _ reactTag: NSNumber,
     featureJSON: String,
     resolver: @escaping RCTPromiseResolveBlock,
-    rejecter: @escaping RCTPromiseRejectBlock) -> Void {
-      self.withShapeSource(reactTag, name:"getClusterChildren", rejecter: rejecter) { shapeSource in
+    rejecter: @escaping RCTPromiseRejectBlock) {
+    self.withShapeSource(reactTag, name: "getClusterChildren", rejecter: rejecter) { shapeSource in
       shapeSource.getClusterChildren(featureJSON) { result in
         switch result {
         case .success(let features):
           logged("getClusterChildren", rejecter: rejecter) {
-            let featuresJSON : Any = try features.features.toJSON()
+            let featuresJSON: Any = try features.features.toJSON()
             resolver([
-              "data": ["type":"FeatureCollection", "features": featuresJSON]
+              "data": ["type": "FeatureCollection", "features": featuresJSON]
             ])
           }
+
         case .failure(let error):
           rejecter(error.localizedDescription, "Error.getClusterChildren", error)
         }
@@ -103,4 +103,3 @@ extension RCTMGLShapeSourceManager {
     }
   }
 }
-

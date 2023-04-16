@@ -5,7 +5,7 @@ class RCTMGLLineLayer: RCTMGLVectorLayer {
   typealias LayerType = LineLayer
 
   override func makeLayer(style: Style) throws -> Layer {
-    let vectorSource : VectorSource = try self.layerWithSourceID(in: style)
+    let vectorSource: VectorSource = try self.layerWithSourceID(in: style)
     var layer = LayerType(id: self.id!)
     layer.sourceLayer = self.sourceLayerID
     layer.source = sourceID
@@ -16,8 +16,8 @@ class RCTMGLLineLayer: RCTMGLVectorLayer {
     return LayerType.self
   }
 
-  override func apply(style : Style) throws {
-    try style.updateLayer(withId: id, type: LayerType.self) { (layer : inout LineLayer) in
+  override func apply(style: Style) throws {
+    try style.updateLayer(withId: id, type: LayerType.self) { (layer: inout LineLayer) in
       if self.styleLayer != nil {
         self.setOptions(&self.styleLayer!)
       }
@@ -26,12 +26,12 @@ class RCTMGLLineLayer: RCTMGLVectorLayer {
       }
     }
   }
-  
+
   override func addStyles() {
-    if let style : Style = self.style {
-      let styler =  RCTMGLStyle(style: self.style!)
+    if let style: Style = self.style {
+      let styler = RCTMGLStyle(style: self.style!)
       styler.bridge = self.bridge
-      
+
       if var styleLayer = self.styleLayer as? LayerType,
          let reactStyle = reactStyle {
         styler.lineLayer(
@@ -48,7 +48,7 @@ class RCTMGLLineLayer: RCTMGLVectorLayer {
       }
     }
   }
-  
+
   func isAddedToMap() -> Bool {
     return true
   }

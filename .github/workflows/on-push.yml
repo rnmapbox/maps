@@ -30,6 +30,9 @@ jobs:
       - name: Install
         run: yarn install --network-timeout 1000000
 
+      - name: SwiftLint
+        run: swiftlint lint --config .swiftlint.yml ios/**/*.swift
+
       - name: Lint
         run: yarn lint
 

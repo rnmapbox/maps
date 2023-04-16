@@ -13,22 +13,21 @@ class RCTMGLSkyLayer: RCTMGLLayer {
     return LayerType.self
   }
 
-  override func apply(style : Style) throws {
-    try style.updateLayer(withId: id, type: LayerType.self) { (layer : inout LayerType) in
+  override func apply(style: Style) throws {
+    try style.updateLayer(withId: id, type: LayerType.self) { (layer: inout LayerType) in
       if let styleLayer = self.styleLayer as? LayerType {
         layer = styleLayer
       }
     }
   }
-  
+
   override func addStyles() {
-    if let style : Style = self.style {
-      let styler =  RCTMGLStyle(style: self.style!)
+    if let style: Style = self.style {
+      let styler = RCTMGLStyle(style: self.style!)
       styler.bridge = self.bridge
-      
+
       if var styleLayer = self.styleLayer as? LayerType,
          let reactStyle = self.reactStyle {
-        
         styler.skyLayer(
           layer: &styleLayer,
           reactStyle: reactStyle,
@@ -44,7 +43,7 @@ class RCTMGLSkyLayer: RCTMGLLayer {
       }
     }
   }
-  
+
   func isAddedToMap() -> Bool {
     return true
   }

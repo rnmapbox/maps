@@ -1,6 +1,5 @@
-
 @objc(RCTMGLImageManager)
-class RCTMGLImageManager : RCTViewManager {
+class RCTMGLImageManager: RCTViewManager {
   @objc
   override static func requiresMainQueueSetup() -> Bool {
     return true

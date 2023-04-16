@@ -2,10 +2,10 @@ import MapboxMaps
 
 @objc(RCTMGLLight)
 class RCTMGLLight: UIView, RCTMGLMapComponent {
-  weak var bridge : RCTBridge! = nil
+  weak var bridge: RCTBridge! = nil
   weak var map: MapboxMap! = nil
-  var oldReactStyle: [String:Any]?
-  @objc var reactStyle : [String:Any]! = nil {
+  var oldReactStyle: [String: Any]?
+  @objc var reactStyle: [String: Any]! = nil {
     willSet {
       oldReactStyle = reactStyle
     }
@@ -15,11 +15,11 @@ class RCTMGLLight: UIView, RCTMGLMapComponent {
       }
     }
   }
-  
+
   func apply(light: Light) {
     let lightData = try! JSONEncoder().encode(light)
     let lightDictionary = try! JSONSerialization.jsonObject(with: lightData)
-    try! self.map.style.setLight(properties: lightDictionary as! [String:Any])
+    try! self.map.style.setLight(properties: lightDictionary as! [String: Any])
   }
 
   func addStyles() {
@@ -31,14 +31,14 @@ class RCTMGLLight: UIView, RCTMGLMapComponent {
     }, isValid: {
       return self.isAddedToMap()
     })
-    
+
     apply(light: light)
   }
-  
+
   func isAddedToMap() -> Bool {
     return map != nil
   }
-  
+
   // MARK: - RCTMGLMapComponent
 
   func waitForStyleLoad() -> Bool {
@@ -47,11 +47,11 @@ class RCTMGLLight: UIView, RCTMGLMapComponent {
 
   func addToMap(_ map: RCTMGLMapView, style: Style) {
     self.map = map.mapboxMap
-    if (reactStyle != nil) {
+    if reactStyle != nil {
       addStyles()
     }
   }
-  
+
   func removeFromMap(_ map: RCTMGLMapView) {
     self.map = nil
   }

@@ -1,5 +1,4 @@
 @objc
-class RCTMGLTileSource : RCTMGLSource {
-  @objc var url: String? = nil
-  
+class RCTMGLTileSource: RCTMGLSource {
+  @objc var url: String?
 }

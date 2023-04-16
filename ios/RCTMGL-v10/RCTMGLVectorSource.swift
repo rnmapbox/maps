@@ -1,20 +1,18 @@
 import MapboxMaps
 
 @objc
-class RCTMGLVectorSource : RCTMGLTileSource {
-  
+class RCTMGLVectorSource: RCTMGLTileSource {
   @objc var attribution: String?
   @objc var maxZoomLevel: NSNumber?
   @objc var minZoomLevel: NSNumber?
   @objc var tileUrlTemplates: [String] = []
-  @objc var tms: Bool = false
-  
+  @objc var tms = false
+
   override func sourceType() -> Source.Type {
     return VectorSource.self
   }
 
-  override func makeSource() -> Source
-  {
+  override func makeSource() -> Source {
     var result = VectorSource()
     if let url = url {
       result.url = url
@@ -35,23 +33,20 @@ class RCTMGLVectorSource : RCTMGLTileSource {
     }
     return result
   }
-  
-  
-  
+
   /*
-  - (nullable MGLSource*)makeSource
-{
-    if (self.url != nil) {
-        return [[MGLVectorTileSource alloc] initWithIdentifier:self.id configurationURL:[NSURL URLWithString:self.url]];
-    }
-    return [[MGLVectorTileSource alloc] initWithIdentifier:self.id tileURLTemplates:self.tileUrlTemplates options:[self getOptions]];
-}
+   - (nullable MGLSource*)makeSource
+   {
+   if (self.url != nil) {
+   return [[MGLVectorTileSource alloc] initWithIdentifier:self.id configurationURL:[NSURL URLWithString:self.url]];
+   }
+   return [[MGLVectorTileSource alloc] initWithIdentifier:self.id tileURLTemplates:self.tileUrlTemplates options:[self getOptions]];
+   }
 
-- (nonnull NSArray<id <MGLFeature>> *)featuresInSourceLayersWithIdentifiers:(nonnull NSSet<NSString *> *)sourceLayerIdentifiers predicate:(nullable NSPredicate *)predicate
-{
-    MGLVectorTileSource* vectorSource = (MGLVectorTileSource*)self.source;
-    
-    return [vectorSource featuresInSourceLayersWithIdentifiers:sourceLayerIdentifiers predicate: predicate];
-}*/
+   - (nonnull NSArray<id <MGLFeature>> *)featuresInSourceLayersWithIdentifiers:(nonnull NSSet<NSString *> *)sourceLayerIdentifiers predicate:(nullable NSPredicate *)predicate
+   {
+   MGLVectorTileSource* vectorSource = (MGLVectorTileSource*)self.source;
 
+   return [vectorSource featuresInSourceLayersWithIdentifiers:sourceLayerIdentifiers predicate: predicate];
+   }*/
 }
