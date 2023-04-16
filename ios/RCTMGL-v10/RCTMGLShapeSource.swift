@@ -11,7 +11,7 @@ class RCTMGLShapeSource : RCTMGLSource {
 
           switch result {
             case .success(let obj):
-              doUpdate { (style) in
+              self.doUpdate { (style) in
                 logged("RCTMGLShapeSource.setUrl") {
                   try style.updateGeoJSONSource(withId: self.id, geoJSON: obj)
                 }
