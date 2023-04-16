@@ -2,10 +2,10 @@ import Foundation
 import MapboxMaps
 import Turf
 
-protocol RCTMGLMapComponent : class {
+protocol RCTMGLMapComponent: class {
   func addToMap(_ map: RCTMGLMapView, style: Style)
   func removeFromMap(_ map: RCTMGLMapView)
-  
+
   func waitForStyleLoad() -> Bool
 }
 
@@ -21,55 +21,58 @@ struct CameraUpdateItem {
   var camera: CameraOptions
   var mode: CameraMode
   var duration: TimeInterval?
-  
+
   func execute(map: RCTMGLMapView, cameraAnimator: inout BasicCameraAnimator?) {
     logged("CameraUpdateItem.execute") {
       if let center = camera.center {
         try center.validate()
       }
       switch mode {
-        case .flight:
-          map.camera.fly(to: camera, duration: duration)
-        case .ease:
-          map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
-        case .linear:
-          map.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
-        default:
-          map.mapboxMap.setCamera(to: camera)
+      case .flight:
+        map.camera.fly(to: camera, duration: duration)
+
+      case .ease:
+        map.camera.ease(to: camera, duration: duration ?? 0, curve: .easeInOut, completion: nil)
+
+      case .linear:
+        map.camera.ease(to: camera, duration: duration ?? 0, curve: .linear, completion: nil)
+
+      default:
+        map.mapboxMap.setCamera(to: camera)
       }
     }
   }
 }
 
 class CameraUpdateQueue {
-  var queue: [CameraUpdateItem] = [];
-  
+  var queue: [CameraUpdateItem] = []
+
   func dequeue() -> CameraUpdateItem? {
     guard !queue.isEmpty else {
       return nil
     }
     return queue.removeFirst()
   }
-  
+
   func enqueue(stop: CameraUpdateItem) {
     queue.append(stop)
   }
-  
+
   func execute(map: RCTMGLMapView, cameraAnimator: inout BasicCameraAnimator?) {
     guard let stop = dequeue() else {
       return
     }
-    
+
     stop.execute(map: map, cameraAnimator: &cameraAnimator)
   }
 }
 
-open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
+open class RCTMGLMapComponentBase: UIView, RCTMGLMapComponent {
   private weak var _map: RCTMGLMapView! = nil
   private var _mapCallbacks: [(RCTMGLMapView) -> Void] = []
-  
-  weak var map : RCTMGLMapView? {
-    return _map;
+
+  weak var map: RCTMGLMapView? {
+    return _map
   }
 
   func withMapView(_ callback: @escaping (_ mapView: MapView) -> Void) {
@@ -85,89 +88,89 @@ open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
       _mapCallbacks.append(callback)
     }
   }
-  
+
   func waitForStyleLoad() -> Bool {
     return false
   }
-  
+
   func addToMap(_ map: RCTMGLMapView, style: Style) {
     _mapCallbacks.forEach { callback in
-        callback(map)
+      callback(map)
     }
     _mapCallbacks = []
     _map = map
   }
-  
+
   func removeFromMap(_ map: RCTMGLMapView) {
     _mapCallbacks = []
     _map = nil
   }
 }
 
-class RCTMGLCamera : RCTMGLMapComponentBase {
+class RCTMGLCamera: RCTMGLMapComponentBase {
   var cameraAnimator: BasicCameraAnimator?
   let cameraUpdateQueue = CameraUpdateQueue()
-  
+
   // MARK: React properties
-  
+
   @objc var animationDuration: NSNumber?
-  
+
   @objc var animationMode: NSString?
-  
+
   @objc var defaultStop: [String: Any]?
-  
-  @objc var followUserLocation : Bool = false {
+
+  @objc var followUserLocation = false {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
-  
+
   @objc var followUserMode: String? {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
-  
+
   @objc var followZoomLevel: NSNumber? {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
-  
+
   @objc var followPitch: NSNumber? {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
-  
+
   @objc var followHeading: NSNumber? {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
-  
+
   @objc var followPadding: NSDictionary? {
     didSet {
       _updateCameraFromTrackingMode()
     }
   }
-  
+
   @objc var maxZoomLevel: NSNumber? {
     didSet { _updateMaxBounds() }
   }
-  
+
   @objc var minZoomLevel: NSNumber? {
     didSet { _updateMaxBounds() }
   }
-  
-  @objc var onUserTrackingModeChange: RCTBubblingEventBlock? = nil
-  
+
+  @objc var onUserTrackingModeChange: RCTBubblingEventBlock?
+
   @objc var stop: [String: Any]? {
     didSet {
       _updateCamera()
     }
   }
-  
+
   @objc var maxBounds: String? {
     didSet {
       if let maxBounds = maxBounds {
@@ -180,27 +183,27 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
       _updateMaxBounds()
     }
   }
-  var maxBoundsFeature : FeatureCollection? = nil
-  
+  var maxBoundsFeature: FeatureCollection?
+
   // MARK: Update methods
 
   func _updateCameraFromJavascript() {
     guard !followUserLocation else {
       return
     }
-    
+
     guard let stop = stop else {
       return
     }
-    
-    /*
-    V10 TODO
-    if let map = map, map.userTrackingMode != .none {
-      map.userTrackingMode = .none
-    }
-    */
 
-    if let stops = stop["stops"] as? [[String:Any]] {
+    /*
+     V10 TODO
+     if let map = map, map.userTrackingMode != .none {
+     map.userTrackingMode = .none
+     }
+     */
+
+    if let stops = stop["stops"] as? [[String: Any]] {
       stops.forEach {
         if let stop = toUpdateItem(stop: $0) {
           cameraUpdateQueue.enqueue(stop: stop)
@@ -216,18 +219,18 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
       cameraUpdateQueue.execute(map: map, cameraAnimator: &cameraAnimator)
     }
   }
-  
+
   func _disableUserTracking(_ map: MapView) {
     map.viewport.idle()
   }
-  
-  func _toCoordinateBounds(_ bounds: FeatureCollection) throws -> CoordinateBounds  {
+
+  func _toCoordinateBounds(_ bounds: FeatureCollection) throws -> CoordinateBounds {
     guard bounds.features.count == 2 else {
       throw RCTMGLError.paramError("Expected two Points in FeatureColletion")
     }
     let swFeature = bounds.features[0]
     let neFeature = bounds.features[1]
-    
+
     guard case let .point(sw) = swFeature.geometry,
           case let .point(ne) = neFeature.geometry else {
       throw RCTMGLError.paramError("Expected two Points in FeatureColletion")
@@ -235,11 +238,11 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
 
     return CoordinateBounds(southwest: sw.coordinates, northeast: ne.coordinates)
   }
-  
+
   func _updateMaxBounds() {
     withMapView { map in
       var options = CameraBoundsOptions()
-      
+
       if let maxBounds = self.maxBoundsFeature {
         logged("RCTMGLCamera._updateMaxBounds._toCoordinateBounds") {
           options.bounds = try self._toCoordinateBounds(maxBounds)
@@ -289,57 +292,60 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
       switch userTrackingMode {
       case .none:
         Logger.assert("RCTMGLCamera, userTrackingModes should not be none here")
+
       case .compass:
         followOptions.bearing = FollowPuckViewportStateBearing.heading
         trackingModeChanged = true
+
       case .course:
         followOptions.bearing = FollowPuckViewportStateBearing.course
         trackingModeChanged = true
+
       case .normal:
         followOptions.bearing = nil
         trackingModeChanged = true
       }
-      
+
       if let onUserTrackingModeChange = self.onUserTrackingModeChange {
-        if (trackingModeChanged) {
+        if trackingModeChanged {
           let event = RCTMGLEvent(type: .onUserTrackingModeChange, payload: ["followUserMode": self.followUserMode ?? "normal", "followUserLocation": self.followUserLocation])
           onUserTrackingModeChange(event.toJSON())
         }
       }
-      
+
       var _camera = CameraOptions()
-      
+
       if let zoom = self.followZoomLevel as? CGFloat {
-        if (zoom >= 0.0) {
+        if zoom >= 0.0 {
           _camera.zoom = zoom
           followOptions.zoom = zoom
         }
       }
-      
+
       if let followPitch = self.followPitch as? CGFloat {
-        if (followPitch >= 0.0) {
+        if followPitch >= 0.0 {
           _camera.pitch = followPitch
           followOptions.pitch = followPitch
         }
       } else if let stopPitch = self.stop?["pitch"] as? CGFloat {
-        if (stopPitch >= 0.0) {
+        if stopPitch >= 0.0 {
           _camera.pitch = stopPitch
           followOptions.pitch = stopPitch
         }
       } else {
         followOptions.pitch = nil
       }
-      
+
       if let followHeading = self.followHeading as? CGFloat {
-        if (followHeading >= 0.0) {
+        if followHeading >= 0.0 {
           _camera.bearing = followHeading
         }
       } else if let stopHeading = self.stop?["heading"] as? CGFloat {
-        if (stopHeading >= 0.0) {
+        if stopHeading >= 0.0 {
           _camera.bearing = stopHeading
         }
       }
-      
+
       if let padding = self.followPadding {
         let edgeInsets = UIEdgeInsets(
           top: padding["paddingTop"] as? Double ?? 0,
@@ -349,31 +355,31 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
         )
         followOptions.padding = edgeInsets
       }
-      
+
       let followState = map.viewport.makeFollowPuckViewportState(options: followOptions)
-      
+
       map.viewport.transition(to: followState)
       map.viewport.addStatusObserver(self)
       map.mapboxMap.setCamera(to: _camera)
     }
   }
-  
+
   private func toUpdateItem(stop: [String: Any]) -> CameraUpdateItem? {
     var zoom: CGFloat?
     if let z = stop["zoom"] as? Double {
       zoom = CGFloat(z)
     }
-    
+
     var pitch: CGFloat?
     if let p = stop["pitch"] as? Double {
       pitch = CGFloat(p)
     }
-    
+
     var heading: CLLocationDirection?
     if let h = stop["heading"] as? Double {
       heading = CLLocationDirection(h)
     }
-    
+
     let padding = UIEdgeInsets(
       top: stop["paddingTop"] as? Double ?? 0,
       left: stop["paddingLeft"] as? Double ?? 0,
@@ -383,41 +389,43 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
 
     var center: LocationCoordinate2D?
     if let feature: String = stop["centerCoordinate"] as? String {
-      
-      let centerFeature : Turf.Feature? = logged("RCTMGLCamera.toUpdateItem.decode.cc") { try
+      let centerFeature: Turf.Feature? = logged("RCTMGLCamera.toUpdateItem.decode.cc") { try
         JSONDecoder().decode(Turf.Feature.self, from: feature.data(using: .utf8)!)
       }
-      
+
       switch centerFeature?.geometry {
       case .point(let centerPoint):
         center = centerPoint.coordinates
+
       default:
         Logger.log(level: .error, message: "RCTMGLCamera.toUpdateItem: Unexpected geometry: \(String(describing: centerFeature?.geometry))")
         return nil
       }
     } else if let feature: String = stop["bounds"] as? String {
-      let collection : Turf.FeatureCollection? = logged("RCTMGLCamera.toUpdateItem.decode.bound") { try
+      let collection: Turf.FeatureCollection? = logged("RCTMGLCamera.toUpdateItem.decode.bound") { try
         JSONDecoder().decode(Turf.FeatureCollection.self, from: feature.data(using: .utf8)!) }
       let features = collection?.features
-      
+
       let ne: CLLocationCoordinate2D
       switch features?.first?.geometry {
-        case .point(let point):
-          ne = point.coordinates
-        default:
-          Logger.log(level: .error, message: "RCTMGLCamera.toUpdateItem: Unexpected geometry: \(String(describing: features?.first?.geometry))")
-          return nil
+      case .point(let point):
+        ne = point.coordinates
+
+      default:
+        Logger.log(level: .error, message: "RCTMGLCamera.toUpdateItem: Unexpected geometry: \(String(describing: features?.first?.geometry))")
+        return nil
       }
-      
+
       let sw: CLLocationCoordinate2D
       switch features?.last?.geometry {
-        case .point(let point):
-          sw = point.coordinates
-        default:
-          Logger.log(level: .error, message: "RCTMGLCamera.toUpdateItem: Unexpected geometry: \(String(describing: features?.last?.geometry))")
-          return nil
+      case .point(let point):
+        sw = point.coordinates
+
+      default:
+        Logger.log(level: .error, message: "RCTMGLCamera.toUpdateItem: Unexpected geometry: \(String(describing: features?.last?.geometry))")
+        return nil
       }
-      
+
       withMapView { map in
         let bounds = CoordinateBounds(southwest: sw, northeast: ne)
         let camera = map.mapboxMap.camera(
@@ -440,14 +448,14 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
       }
       return nil
     }()
-    
+
     let mode: CameraMode = {
       if let m = stop["mode"] as? String, let m = CameraMode(rawValue: m) {
         return m
       }
       return .flight
     }()
-    
+
     if let z1 = minZoomLevel, let z2 = CGFloat(exactly: z1), zoom ?? 100 < z2 {
       zoom = z2
     }
@@ -470,7 +478,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
     )
     return result
   }
-  
+
   func _updateCamera() {
     if let _ = map {
       if followUserLocation {
@@ -480,29 +488,29 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
       }
     }
   }
-  
+
   func _setInitialCamera() {
     guard let stop = self.defaultStop, let map = map else {
       return
     }
-    
+
     if var updateItem = toUpdateItem(stop: stop) {
       updateItem.mode = .none
       updateItem.duration = 0
       updateItem.execute(map: map, cameraAnimator: &cameraAnimator)
     }
   }
-  
+
   func initialLayout() {
     _setInitialCamera()
     _updateCamera()
   }
-  
+
   override func addToMap(_ map: RCTMGLMapView, style: Style) {
     super.addToMap(map, style: style)
     map.reactCamera = self
   }
-  
+
   override func removeFromMap(_ map: RCTMGLMapView) {
     map.viewport.removeStatusObserver(self)
     super.removeFromMap(map)
@@ -511,17 +519,19 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
 
 // MARK: - ViewportStatusObserver
 
-extension RCTMGLCamera : ViewportStatusObserver {
+extension RCTMGLCamera: ViewportStatusObserver {
   func toDict(_ status: ViewportStatus) -> [String: Any] {
-    switch (status) {
+    switch status {
     case .idle:
-      return ["state":"idle"]
+      return ["state": "idle"]
+
     case .state(let state):
-      return ["state":String(describing: type(of: state))]
+      return ["state": String(describing: type(of: state))]
+
     case .transition(let transition, toState: let toState):
       return [
         "transition": String(describing: type(of: transition)),
-        "state":String(describing: type(of: toState))
+        "state": String(describing: type(of: toState))
       ]
     }
   }
@@ -530,9 +540,11 @@ extension RCTMGLCamera : ViewportStatusObserver {
     switch status {
     case .idle:
       return false
-    case .state(_):
+
+    case .state:
       return true
-    case .transition(_, toState: _):
+
+    case .transition:
       return true
     }
   }
@@ -560,8 +572,10 @@ extension RCTMGLCamera : ViewportStatusObserver {
     switch status {
     case .idle:
       return nil
+
     case .state(let state):
       return toFollowUserMode(state)
+
     case .transition(_, toState: let state):
       return toFollowUserMode(state)
     }
@@ -585,9 +599,8 @@ extension RCTMGLCamera : ViewportStatusObserver {
 
   func viewportStatusDidChange(from fromStatus: ViewportStatus,
                                to toStatus: ViewportStatus,
-                               reason: ViewportStatusChangeReason)
-  {
-    if (reason == .userInteraction) {
+                               reason: ViewportStatusChangeReason) {
+    if reason == .userInteraction {
       followUserLocation = toFollowUserLocation(toStatus)
 
       if let onUserTrackingModeChange = onUserTrackingModeChange {
@@ -611,4 +624,3 @@ extension RCTMGLCamera : ViewportStatusObserver {
 private func toSeconds(_ ms: Double) -> TimeInterval {
   return ms * 0.001
 }
-

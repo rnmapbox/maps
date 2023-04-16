@@ -1,23 +1,23 @@
 import MapboxMaps
 
 @objc
-class RCTMGLNativeUserLocation : UIView, RCTMGLMapComponent {
-  weak var map : RCTMGLMapView! = nil
-  
+class RCTMGLNativeUserLocation: UIView, RCTMGLMapComponent {
+  weak var map: RCTMGLMapView! = nil
+
   let locationLayerId = "location-layer"
 
-  var locationLayer : LocationIndicatorLayer? = nil
+  var locationLayer: LocationIndicatorLayer?
 
   @objc
-  var iosShowsUserHeadingIndicator : Bool = false {
+  var iosShowsUserHeadingIndicator = false {
     didSet {
       if let map = self.map { _applySettings(map) }
     }
   }
-  
+
   func _applySettings(_ map: RCTMGLMapView) {
     map.location.options.puckType = .puck2D(.makeDefault(showBearing: iosShowsUserHeadingIndicator))
-    if (iosShowsUserHeadingIndicator) {
+    if iosShowsUserHeadingIndicator {
       map.location.options.puckBearingSource = .heading
       map.location.options.puckBearingEnabled = true
     } else {
@@ -39,7 +39,7 @@ class RCTMGLNativeUserLocation : UIView, RCTMGLMapComponent {
     map.location.options.puckType = .none
     self.map = nil
   }
-  
+
   func waitForStyleLoad() -> Bool {
     return true
   }

@@ -1,13 +1,13 @@
 import MapboxMaps
 
-class CustomHttpHeaders : HttpServiceInterceptorInterface {
-  static var shared : CustomHttpHeaders = {
+class CustomHttpHeaders: HttpServiceInterceptorInterface {
+  static var shared: CustomHttpHeaders = {
     let headers = CustomHttpHeaders()
     headers.install()
     return headers
   }()
 
-  var customHeaders : [String:String] = [:]
+  var customHeaders: [String: String] = [:]
 
   func install() {
     HttpServiceFactory.getInstance().setInterceptorForInterceptor(self)
@@ -27,7 +27,7 @@ class CustomHttpHeaders : HttpServiceInterceptorInterface {
   }
 
   func onDownload(forDownload download: DownloadOptions) -> DownloadOptions {
-    customHeaders.forEach {(key,value) in
+    customHeaders.forEach {(key, value) in
       download.request.headers[key] = value
     }
     return download

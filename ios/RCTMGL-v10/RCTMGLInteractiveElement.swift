@@ -1,24 +1,24 @@
 import MapboxMaps
 
 @objc
-class RCTMGLInteractiveElement : UIView, RCTMGLMapComponent {
-  weak var map : RCTMGLMapView? = nil
+class RCTMGLInteractiveElement: UIView, RCTMGLMapComponent {
+  weak var map: RCTMGLMapView?
 
   static let hitboxDefault = 44.0
 
-  @objc var draggable: Bool = false
-  
-  @objc var hasPressListener: Bool = false
-  
-  @objc var hitbox : [String:NSNumber] = [
+  @objc var draggable = false
+
+  @objc var hasPressListener = false
+
+  @objc var hitbox: [String: NSNumber] = [
     "width": NSNumber(value: hitboxDefault),
     "height": NSNumber(value: hitboxDefault)
   ]
-  
+
   @objc var id: String! = nil {
     willSet {
       if id != nil && newValue != id {
-        Logger.log(level:.warn, message: "Changing id from: \(optional: id) to \(optional: newValue), changing of id is supported")
+        Logger.log(level: .warn, message: "Changing id from: \(optional: id) to \(optional: newValue), changing of id is supported")
         if let map = map { removeFromMap(map) }
       }
     }
@@ -28,11 +28,11 @@ class RCTMGLInteractiveElement : UIView, RCTMGLMapComponent {
       }
     }
   }
-  
-  @objc var onDragStart: RCTBubblingEventBlock? = nil
-  
-  @objc var onPress: RCTBubblingEventBlock? = nil
-  
+
+  @objc var onDragStart: RCTBubblingEventBlock?
+
+  @objc var onPress: RCTBubblingEventBlock?
+
   func getLayerIDs() -> [String] {
     return []
   }
@@ -40,14 +40,14 @@ class RCTMGLInteractiveElement : UIView, RCTMGLMapComponent {
   func isDraggable() -> Bool {
     return draggable
   }
-  
+
   func isTouchable() -> Bool {
     return hasPressListener
   }
-  
+
   // MARK: - RCTMGLMapComponent
   func addToMap(_ map: RCTMGLMapView, style: Style) {
-    if (self.id == nil) {
+    if self.id == nil {
       Logger.log(level: .error, message: "id is required on \(self) but not specified")
     }
     self.map = map
@@ -56,7 +56,7 @@ class RCTMGLInteractiveElement : UIView, RCTMGLMapComponent {
   func removeFromMap(_ map: RCTMGLMapView) {
     self.map = nil
   }
-  
+
   func waitForStyleLoad() -> Bool {
     return true
   }

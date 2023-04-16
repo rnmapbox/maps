@@ -12,19 +12,19 @@ enum RCTMGLError: Error, LocalizedError {
 }
 
 class Logger {
-  enum LogLevel : String, Comparable {
+  enum LogLevel: String, Comparable {
     static func < (lhs: Logger.LogLevel, rhs: Logger.LogLevel) -> Bool {
       return lhs.intValue < rhs.intValue
     }
-    
+
     case verbose = "verbose"
     case debug = "debug"
     case info = "info"
     case warn = "warning"
     case error = "error"
-  
-    var intValue : Int {
-      let values : [LogLevel:Int] = [
+
+    var intValue: Int {
+      let values: [LogLevel: Int] = [
         .verbose: 0,
         .debug: 1,
         .info: 2,
@@ -36,30 +36,30 @@ class Logger {
       }
       return result
     }
-    
-    var stringValue : String {
+
+    var stringValue: String {
       return rawValue
     }
   }
-  
+
   static let sharedInstance = Logger()
-  
+
   var level: LogLevel = .info
-  var handler : (LogLevel, String) -> Void = { (level, message) in
+  var handler: (LogLevel, String) -> Void = { (_, _) in
     fatalError("Handler not yet installed")
   }
-  
+
   func log(level: LogLevel, message: String) {
     print("LOG \(level) \(message)")
     if self.level <= level {
       handler(level, message)
     }
   }
-  
+
   static func log(level: LogLevel, message: String) {
     sharedInstance.log(level: level, message: message)
   }
-  
+
   static func log(level: LogLevel, message: String, error: Error) {
     sharedInstance.log(level: level, message: "\(message) - error: \(error.localizedDescription) \(error)")
   }
@@ -84,11 +84,11 @@ func errorMessage(_ error: Error) -> String {
 }
 
 /// log message if optional returned by `fn` is nil
-func logged<T>(_ msg: String, info: (() -> String)? = nil, level: Logger.LogLevel = .error, rejecter: RCTPromiseRejectBlock? = nil, fn: () -> T?) ->T? {
+func logged<T>(_ msg: String, info: (() -> String)? = nil, level: Logger.LogLevel = .error, rejecter: RCTPromiseRejectBlock? = nil, fn: () -> T?) -> T? {
   let ret = fn()
   if ret == nil {
-    Logger.log(level:level, message: "\(msg) \(info?() ?? "")")
-    rejecter?(msg, "\(info?() ?? "")", NSError(domain:"is null", code: 0))
+    Logger.log(level: level, message: "\(msg) \(info?() ?? "")")
+    rejecter?(msg, "\(info?() ?? "")", NSError(domain: "is null", code: 0))
     return nil
   } else {
     return ret
@@ -96,31 +96,31 @@ func logged<T>(_ msg: String, info: (() -> String)? = nil, level: Logger.LogLeve
 }
 
 /// log message if `fn` throws and return nil
-func logged<T>(_ msg: String, info: (() -> String)? = nil, level: Logger.LogLevel = .error, rejecter: RCTPromiseRejectBlock? = nil, fn : () throws -> T) -> T? {
+func logged<T>(_ msg: String, info: (() -> String)? = nil, level: Logger.LogLevel = .error, rejecter: RCTPromiseRejectBlock? = nil, fn: () throws -> T) -> T? {
   do {
     return try fn()
   } catch {
-    Logger.log(level:level, message: "\(msg) \(info?() ?? "") \(errorMessage(error))")
+    Logger.log(level: level, message: "\(msg) \(info?() ?? "") \(errorMessage(error))")
     rejecter?(msg, "\(info?() ?? "") \(errorMessage(error))", error)
     return nil
   }
 }
 
-func logged<T>(_ msg: String, info: (() -> String)? = nil, errorResult: (Error) -> T, level: Logger.LogLevel = .error, fn : () throws -> T) -> T {
+func logged<T>(_ msg: String, info: (() -> String)? = nil, errorResult: (Error) -> T, level: Logger.LogLevel = .error, fn: () throws -> T) -> T {
   do {
     return try fn()
   } catch {
-    Logger.log(level:level, message: "\(msg) \(info?() ?? "") \(error.localizedDescription)")
+    Logger.log(level: level, message: "\(msg) \(info?() ?? "") \(error.localizedDescription)")
     return errorResult(error)
   }
 }
 
 @objc(RCTMGLLogging)
 class RCTMGLLogging: RCTEventEmitter {
-  static var shared : RCTMGLLogging? = nil
-  
+  static var shared: RCTMGLLogging?
+
   enum ErrorType {
-      case argumentError
+    case argumentError
   }
 
   @objc
@@ -130,7 +130,7 @@ class RCTMGLLogging: RCTEventEmitter {
     }
     Logger.sharedInstance.level = logLevel
   }
-  
+
   override init() {
     super.init()
     if let _ = RCTMGLLogging.shared {
@@ -150,15 +150,14 @@ class RCTMGLLogging: RCTEventEmitter {
       self.sendEvent(withName: "LogEvent", body: body)
     }
   }
-  
+
   @objc
   static override func requiresMainQueueSetup() -> Bool {
-      return true
+    return true
   }
-  
+
   @objc
-  override func supportedEvents() -> [String]
-  {
-      return ["LogEvent"];
+  override func supportedEvents() -> [String] {
+    return ["LogEvent"]
   }
 }

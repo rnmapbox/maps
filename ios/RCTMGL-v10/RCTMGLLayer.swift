@@ -1,22 +1,22 @@
 @_spi(Experimental) import MapboxMaps
 
-protocol RCTMGLSourceConsumer : class {
+protocol RCTMGLSourceConsumer: class {
   func addToMap(_ map: RCTMGLMapView, style: Style)
   func removeFromMap(_ map: RCTMGLMapView, style: Style)
 }
 
 @objc(RCTMGLLayer)
-class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
-  weak var bridge : RCTBridge? = nil
+class RCTMGLLayer: UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
+  weak var bridge: RCTBridge?
 
-  var waitingForID: String? = nil
+  var waitingForID: String?
 
-  @objc var sourceLayerID : String? = nil {
+  @objc var sourceLayerID: String? {
     didSet { self.optionsChanged() }
   }
 
-  var oldReatStyle: Dictionary<String, Any>? = nil
-  @objc var reactStyle : Dictionary<String, Any>? = nil {
+  var oldReatStyle: [String: Any]?
+  @objc var reactStyle: [String: Any]? {
     willSet {
       oldReatStyle = reactStyle
     }
@@ -26,17 +26,17 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
       }
     }
   }
-  
-  var style: Style? = nil
 
-  @objc var filter : Array<Any>? = nil {
+  var style: Style?
+
+  @objc var filter: [Any]? {
     didSet { optionsChanged() }
   }
-  
+
   @objc var id: String! = nil {
     willSet {
       if id != nil && newValue != id {
-        Logger.log(level:.warn, message: "Changing id from: \(optional: id) to \(optional: newValue), changing of id is supported")
+        Logger.log(level: .warn, message: "Changing id from: \(optional: id) to \(optional: newValue), changing of id is supported")
         if let style = style { self.removeFromMap(style) }
       }
     }
@@ -47,18 +47,18 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     }
   }
 
-  @objc var sourceID: String? = nil {
-    didSet { optionsChanged() }
-  }
-  
-  @objc var minZoomLevel : NSNumber? = nil {
-    didSet { optionsChanged() }
-  }
-  @objc var maxZoomLevel : NSNumber? = nil {
+  @objc var sourceID: String? {
     didSet { optionsChanged() }
   }
 
-  @objc var aboveLayerID : String? = nil {
+  @objc var minZoomLevel: NSNumber? {
+    didSet { optionsChanged() }
+  }
+  @objc var maxZoomLevel: NSNumber? {
+    didSet { optionsChanged() }
+  }
+
+  @objc var aboveLayerID: String? {
     didSet {
       if let aboveLayerID = aboveLayerID {
         if aboveLayerID != oldValue {
@@ -68,7 +68,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     }
   }
 
-  @objc var belowLayerID : String? = nil {
+  @objc var belowLayerID: String? {
     didSet {
       if let belowLayerID = belowLayerID {
         if belowLayerID != oldValue {
@@ -77,8 +77,8 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
       }
     }
   }
-  
-  @objc var layerIndex : NSNumber? = nil {
+
+  @objc var layerIndex: NSNumber? {
     didSet {
       if let layerIndex = layerIndex {
         if layerIndex != oldValue {
@@ -87,18 +87,18 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
       }
     }
   }
-  
-  @objc weak var map: RCTMGLMapView? = nil
+
+  @objc weak var map: RCTMGLMapView?
 
   deinit {
     if let waitingForID = waitingForID {
-      Logger.log(level:.warn, message: "RCTMGLLayer.removeFromMap - unmetPositionDependency: layer: \(optional: id) was waiting for layer: \(optional: waitingForID) but it hasn't added to map")
+      Logger.log(level: .warn, message: "RCTMGLLayer.removeFromMap - unmetPositionDependency: layer: \(optional: id) was waiting for layer: \(optional: waitingForID) but it hasn't added to map")
       self.waitingForID = nil
     }
   }
-  
-  var styleLayer: Layer? = nil
-  
+
+  var styleLayer: Layer?
+
   /// wearther we inserted the layer or we're referring to an existing layer
   var existingLayer = false
 
@@ -106,21 +106,21 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   func waitForStyleLoad() -> Bool {
     return true
   }
-  
+
   func removeAndReaddLayer() {
     if let map = map, let style = style {
       self.removeFromMap(style)
-      self.addToMap(map, style:style)
+      self.addToMap(map, style: style)
     }
   }
-   
+
   /**
-    addStyles - adds the styles defined by reactStyle to the current layer, but does not apply to the style to the map style
+   addStyles - adds the styles defined by reactStyle to the current layer, but does not apply to the style to the map style
    */
   func addStyles() {
     fatalError("Subclasses need to implement the `addStyles()` method.")
   }
-  
+
   func addStylesAndUpdate() {
     guard styleLayer != nil else {
       return
@@ -128,26 +128,26 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
 
     addStyles()
     if let style = style,
-      let map = map {
+       let map = map {
       if style.styleManager.styleLayerExists(forLayerId: id) {
         self.updateLayer(map)
       }
     }
   }
-  
+
   func makeLayer(style: Style) throws -> Layer {
     fatalError("Subclasses need to implement the `makeLayer(style:)` method.")
   }
-  
+
   func findLayer(style: Style, id: String) throws -> Layer {
     return try style.layer(withId: id)
   }
-  
+
   func layerType() -> Layer.Type {
     fatalError("Subclasses need to implement the `layerType` method. \(self)")
   }
 
-  func apply(style : Style) throws {
+  func apply(style: Style) throws {
     fatalError("Subclasses need to implement the `apply` method.")
   }
 
@@ -168,7 +168,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
       return .default
     }
   }
-  
+
   func inserLayer(_ map: RCTMGLMapView) {
     if self.style == nil {
       print("inserLayer but style is nil")
@@ -185,21 +185,20 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
       loggedApply(style: style)
     }
   }
-  
-  func layerWithSourceID<T : Source>(in style: Style) throws -> T  {
+
+  func layerWithSourceID<T: Source>(in style: Style) throws -> T {
     let result = try style.source(withId: self.sourceID!, type: T.self)
     return result
   }
 
-  func sourceWithSourceID<T : Source>(in style: Style) throws -> T  {
+  func sourceWithSourceID<T: Source>(in style: Style) throws -> T {
     let result = try style.source(withId: self.sourceID!, type: T.self)
     return result
   }
 
   func addedToMap() {
-    
   }
-  
+
   func addToMap(_ map: RCTMGLMapView, style: Style) {
     self.map = map
     self.style = style
@@ -209,7 +208,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     }
 
     do {
-      if (style.styleManager.styleLayerExists(forLayerId: id)) {
+      if style.styleManager.styleLayerExists(forLayerId: id) {
         styleLayer = try findLayer(style: style, id: id)
         existingLayer = true
       } else {
@@ -219,7 +218,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     } catch {
       Logger.log(level: .error, message: "find/makeLayer failed for layer id=\(id)", error: error)
     }
-    
+
     guard self.styleLayer != nil else {
       Logger.log(level: .error, message: "find/makeLayer retuned nil for layer id=\(id)")
       return
@@ -233,23 +232,22 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     }
     addedToMap()
   }
-  
+
   func removeFromMap(_ map: RCTMGLMapView, style: Style) {
     removeFromMap(style)
   }
-  
+
   func setOptions(_ layer: inout Layer) {
     if let sourceLayerID = sourceLayerID {
       layer.sourceLayer = sourceLayerID
     }
-    
+
     if let sourceID = sourceID {
       if !(existingLayer && sourceID == DEFAULT_SOURCE_ID) && hasSource() {
-        
         layer.source = sourceID
       }
     }
-    
+
     if let filter = filter, filter.count > 0 {
       do {
         let data = try JSONSerialization.data(withJSONObject: filter, options: .prettyPrinted)
@@ -259,16 +257,16 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
         Logger.log(level: .error, message: "parsing filters failed for layer \(optional: id): \(error.localizedDescription)")
       }
     }
-    
+
     if let minZoom = minZoomLevel {
       layer.minZoom = minZoom.doubleValue
     }
-    
+
     if let maxZoom = maxZoomLevel {
       layer.maxZoom = maxZoom.doubleValue
     }
   }
-  
+
   private func optionsChanged() {
     if let style = self.style, self.styleLayer != nil {
       self.setOptions(&self.styleLayer!)
@@ -279,10 +277,10 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
   func removeFromMap(_ map: RCTMGLMapView) {
     removeFromMap(map.mapboxMap.style)
   }
-  
+
   private func removeFromMap(_ style: Style) {
     if let waitingForID = waitingForID {
-      Logger.log(level:.warn, message: "RCTMGLLayer.removeFromMap - unmetPositionDependency: layer: \(optional: id) was waiting for layer: \(optional: waitingForID) but it hasn't added to map")
+      Logger.log(level: .warn, message: "RCTMGLLayer.removeFromMap - unmetPositionDependency: layer: \(optional: id) was waiting for layer: \(optional: waitingForID) but it hasn't added to map")
     }
 
     do {
@@ -291,21 +289,23 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
       Logger.log(level: .error, message: "RCTMGLLayer.removeFromMap: removing layer failed for layer \(optional: id): \(error.localizedDescription)")
     }
   }
-  
+
   func insert(_ style: Style, layerPosition: LayerPosition, onInsert: (() -> Void)? = nil) {
     var idToWaitFor: String?
     switch layerPosition {
     case .above(let aboveId):
       idToWaitFor = aboveId
+
     case .below(let belowId):
       idToWaitFor = belowId
-    case .at(_):
+
+    case .at:
       idToWaitFor = nil
+
     default:
       idToWaitFor = nil
     }
-    
-    
+
     if let idToWaitFor = idToWaitFor {
       self.waitingForID = idToWaitFor
       map!.waitForLayerWithID(idToWaitFor) { _ in
@@ -316,12 +316,12 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
       self.attemptInsert(style, layerPosition: layerPosition, onInsert: onInsert)
     }
   }
-  
+
   private func attemptInsert(_ style: Style, layerPosition: LayerPosition, onInsert: (() -> Void)? = nil) {
     guard let styleLayer = self.styleLayer else {
       return
     }
-    
+
     do {
       try style.addLayer(styleLayer, layerPosition: layerPosition)
       onInsert?()
@@ -329,7 +329,7 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
       Logger.log(level: .error, message: "inserting layer failed at position \(layerPosition): \(error.localizedDescription)")
     }
   }
-  
+
   internal func hasSource() -> Bool {
     return true
   }

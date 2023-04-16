@@ -2,11 +2,10 @@ import MapboxMaps
 
 @objc(RCTMGLSymbolLayer)
 class RCTMGLSymbolLayer: RCTMGLVectorLayer {
-  
   typealias LayerType = SymbolLayer
 
   override func makeLayer(style: Style) throws -> Layer {
-    let _ : VectorSource = try self.layerWithSourceID(in: style)
+    let _: VectorSource = try self.layerWithSourceID(in: style)
     var layer = LayerType(id: self.id!)
     layer.sourceLayer = self.sourceLayerID
     layer.source = sourceID
@@ -17,19 +16,19 @@ class RCTMGLSymbolLayer: RCTMGLVectorLayer {
     return LayerType.self
   }
 
-  override func apply(style : Style) throws {
-    try style.updateLayer(withId: id, type: LayerType.self) { (layer : inout SymbolLayer) in
+  override func apply(style: Style) throws {
+    try style.updateLayer(withId: id, type: LayerType.self) { (layer: inout SymbolLayer) in
       if var styleLayer = self.styleLayer as? LayerType {
         layer = styleLayer
       }
     }
   }
-  
+
   override func addStyles() {
-    if let style : Style = self.style {
-      let styler =  RCTMGLStyle(style: self.style!)
+    if let style: Style = self.style {
+      let styler = RCTMGLStyle(style: self.style!)
       styler.bridge = self.bridge
-      
+
       if var styleLayer = self.styleLayer as? LayerType,
          let reactStyle = self.reactStyle {
         styler.symbolLayer(
@@ -47,7 +46,7 @@ class RCTMGLSymbolLayer: RCTMGLVectorLayer {
       }
     }
   }
-  
+
   func isAddedToMap() -> Bool {
     return true
   }

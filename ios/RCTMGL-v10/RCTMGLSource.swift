@@ -1,16 +1,16 @@
 @_spi(Experimental) import MapboxMaps
 
 @objc
-class RCTMGLSource : RCTMGLInteractiveElement {
+class RCTMGLSource: RCTMGLInteractiveElement {
   var layers: [RCTMGLSourceConsumer] = []
   var components: [RCTMGLMapComponent] = []
 
-  var source : Source? = nil
+  var source: Source?
 
-  var ownsSource : Bool = false
+  var ownsSource = false
 
-  @objc var existing: Bool = false
-  
+  @objc var existing = false
+
   override func getLayerIDs() -> [String] {
     layers.compactMap {
       if let layer = $0 as? RCTMGLLayer {
@@ -24,11 +24,11 @@ class RCTMGLSource : RCTMGLInteractiveElement {
   func makeSource() -> Source {
     fatalError("Subclasses should override makeSource")
   }
-  
+
   func sourceType() -> Source.Type {
     fatalError("Subclasses should override makeSource")
   }
-  
+
   // MARK: - UIView+React
 
   @objc override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
@@ -45,9 +45,9 @@ class RCTMGLSource : RCTMGLInteractiveElement {
     }
     super.insertReactSubview(subview, at: atIndex)
   }
-  
+
   @objc override func removeReactSubview(_ subview: UIView!) {
-    if let layer : RCTMGLSourceConsumer = subview as? RCTMGLSourceConsumer {
+    if let layer: RCTMGLSourceConsumer = subview as? RCTMGLSourceConsumer {
       if let map = map {
         layer.removeFromMap(map, style: map.mapboxMap.style)
       }
@@ -60,23 +60,23 @@ class RCTMGLSource : RCTMGLInteractiveElement {
     }
     super.removeReactSubview(subview)
   }
-  
+
   @objc override func didUpdateReactSubviews() {
     // do nothing to prevent inserting layers to UIView hierarchy
   }
-  
+
   // MARK: - RCTMGLInteractiveElement
-  
+
   override func addToMap(_ map: RCTMGLMapView, style: Style) {
     self.map = map
 
     if style.sourceExists(withId: self.id) {
-      if (!existing) {
+      if !existing {
         Logger.log(level: .warn, message: "Warning source with id:\(optional: id) referred to existing source but `existing` attibute was missing. https://github.com/rnmapbox/maps/wiki/Deprecated-ExistingSourceLayer")
       }
       self.source = try! style.source(withId: self.id)
     } else {
-      if (existing) {
+      if existing {
         Logger.log(level: .warn, message: "Warning source with id:\(optional: id) marked as existing, but could not find in style, source identifiers: \(style.allSourceIdentifiers.map { [$0.id, $0.type.rawValue] })")
       }
       let source = self.makeSource()
