@@ -5,21 +5,19 @@ import Turf
 class RCTMGLShapeSource : RCTMGLSource {
   @objc var url : String? {
     didSet {
-      logged("RCTMGLShapeSource.updateUrl") {
-        parseJSON(url) { [weak self] result in
-          guard let self = self else { return }
+      parseJSON(url) { [weak self] result in
+        guard let self = self else { return }
 
-          switch result {
-            case .success(let obj):
-              self.doUpdate { (style) in
-                logged("RCTMGLShapeSource.setUrl") {
-                  try style.updateGeoJSONSource(withId: self.id, geoJSON: obj)
-                }
+        switch result {
+          case .success(let obj):
+            self.doUpdate { (style) in
+              logged("RCTMGLShapeSource.setUrl") {
+                try style.updateGeoJSONSource(withId: self.id, geoJSON: obj)
               }
+            }
 
-            case .failure(let error):
-              Logger.log(level: .error, message: ":: Error - update url failed \(error) \(error.localizedDescription)")
-          }
+          case .failure(let error):
+            Logger.log(level: .error, message: ":: Error - update url failed \(error) \(error.localizedDescription)")
         }
       }
     }
