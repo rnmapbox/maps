@@ -163,8 +163,8 @@ extension RCTMGLShapeSource
       return emptyGeoJSONObject()
     case .feature(let feature):
       return .feature(feature)
-    case .featureCollection(let featureColleciton):
-      return .featureCollection(featureColleciton)
+    case .featureCollection(let featureCollection):
+      return .featureCollection(featureCollection)
     case .geometry(let geometry):
       return .geometry(geometry)
     case .url(_):
