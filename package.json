@@ -48,10 +48,11 @@
     "unittest:single": "yarn jest --testNamePattern",
     "lint": "yarn eslint .",
     "lint:fix": "yarn eslint . --fix",
+    "lint:plugin": "yarn eslint plugin/src/*",
+    "lint:swift": "swiftlint lint --fix --format --config .swiftlint.yml ios/**/*.swift",
     "type:check": "yarn tsc --noEmit",
     "test:plugin": "yarn expo-module test plugin",
     "build:plugin": "yarn tsc --build plugin",
-    "lint:plugin": "yarn eslint plugin/src/*",
     "build": "yarn bob build",
     "prepare": "yarn bob build && yarn husky install"
   },
