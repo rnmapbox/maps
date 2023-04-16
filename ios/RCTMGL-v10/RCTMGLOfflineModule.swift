@@ -486,7 +486,8 @@ class RCTMGLOfflineModule: RCTEventEmitter {
       if let expires = region.expires {
         result["expires"] = expires.toJSONString()
       }
-      
+
+      return result
     }
     return [:]
   }
