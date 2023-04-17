@@ -1,6 +1,7 @@
 import {
   Camera,
   CircleLayer,
+  Images,
   MapView,
   ShapeSource,
   SymbolLayer,
@@ -70,6 +71,7 @@ const BugReportExample = () => {
       <Button title="Grow" onPress={() => setRadius(radius + 20)} />
       <MapView style={styles.mapView}>
         <Camera centerCoordinate={[-74.00597, 40.71427]} zoomLevel={14} />
+        <Images images={{ example: require('../assets/example.png') }} />
         <ShapeSource id={'shape-source-id-0'} shape={features}>
           <CircleLayer id={'circle-layer'} style={circleLayerStyle} />
           <SymbolLayer
