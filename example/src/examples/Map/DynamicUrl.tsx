@@ -40,9 +40,9 @@ const DynamicUrl = (props: BaseExampleProps) => {
   const [country, setCountry] = useState(randomCountries[0]);
 
   const handleUpdate = () => {
-    const value = Math.floor(Math.random() * randomCountries.length);
+    const index = Math.floor(Math.random() * randomCountries.length);
 
-    setCountry(randomCountries[value]);
+    setCountry(randomCountries[index]);
   };
 
   return (
@@ -59,9 +59,9 @@ const DynamicUrl = (props: BaseExampleProps) => {
           }}
         />
 
-        <ShapeSource url={country.url}>
+        <ShapeSource id="countryShapeSource" url={country.url}>
           <FillLayer
-            id="earthquakes"
+            id="countryFillLayer"
             existing
             style={{
               fillColor: 'blue',
