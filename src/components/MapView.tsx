@@ -97,7 +97,7 @@ type LocalizeLabels =
     }
   | true;
 
-type Props = ViewProps & {
+export type Props = ViewProps & {
   /**
    * The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport.
    */
