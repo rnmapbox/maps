@@ -21,11 +21,8 @@ _A community-supported, open-source React Native library for building maps with 
 
 ---
 ## News & Discussions
-#### <span style="color:red">&rarr;</span> Future of this repo: participate in the [discussion thread](https://github.com/rnmapbox/maps/discussions/1680)
-
 #### <span style="color:red">&rarr;</span> Call for additional maintainers [discussion thread](https://github.com/rnmapbox/maps/discussions/1551)
 
-#### <span style="color:red">&rarr;</span> This README is for the unreleased 10* branch. Please see [v8 branch](https://github.com/rnmapbox/maps/tree/v8) for documentation on 8.* releases
 ---
 
 <table>
