@@ -24,9 +24,9 @@
   <img align="right" src="/assets/mapbox_logo.png" width="200"/>
 </a>
 
-# React Native Mapbox GL Demo
+# React Native Mapbox Demo
 
-Demo Application for [React Native Mapbox GL](../README.md) using the `maplibre` implementation.
+Demo Application for [React Native Mapbox](../README.md)
 
 *Note:* this app is using [non-trivial babel/metro configs](https://github.com/rnmapbox/maps/pull/778), so we can consume the `maps` library from parent directory directly. Regular apps don't need this complicated setup.
 
@@ -54,7 +54,13 @@ cd example
 
 * Install our dependencies using `yarn install`.
 
+* Android: Set up your Mapbox developer keys as described in https://github.com/rnmapbox/maps/blob/main/android/install.md#adding-mapbox-maven-repo (no need to change build.gradle, just set up gradle.properties)
+
+* iOS: Set up your Mapbox developer keys as described in [https://github.com/rnmapbox/maps/blob/main/ios/install.md#adding-mapbox-maven-repo](https://github.com/rnmapbox/maps/blob/main/ios/install.md#mapbox-maps-sdk-v10) (add your cerdentials to .netrc as described)
+
+
 <br>
+
 
 ## Start React Native Packager (or not, it starts automatically 🤷‍♀️)
 
