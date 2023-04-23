@@ -13,7 +13,7 @@ import org.json.JSONObject
 
 fun JSONObject.toGeometry(): Geometry? {
     when (this.optString("type")) {
-        "polygon" -> return Polygon.fromJson(this.toString())
+        "polygon", "Polygon" -> return Polygon.fromJson(this.toString())
         else -> {
             Logger.w("JSONObject", "Unexpected geometry: ${this.toString()}")
             return null

@@ -138,7 +138,7 @@ dependencies {
         }
         else if (safeExtGet("RNMapboxMapsImpl", defaultMapboxMapsImpl) == "mapbox") {
             implementation "com.mapbox.maps:android:${safeExtGet("RNMapboxMapsVersion", defaultMapboxMapsVersion)}"
-            implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:6.10.0'
+            implementation 'com.mapbox.mapboxsdk:mapbox-sdk-turf:6.11.0'
             implementation 'androidx.asynclayoutinflater:asynclayoutinflater:1.0.0'
         }
     }
