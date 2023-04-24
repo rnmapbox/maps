@@ -167,19 +167,26 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
             promise.reject(Error("Pack: $name not found"))
             return
         }
-        tileStore.getTileRegionMetadata(name) { expected ->
+        tileStore.getTileRegion(name) { expected ->
             expected.value?.also {
-                val pack = TileRegionPack(
-                    name= name,
-                    metadata= it.toJSONObject() ?: JSONObject()
-                )
-                tileRegionPacks[name] = pack
-                promise.resolve(_makeRegionStatusPayload(pack))
+                val region = it
+                tileStore.getTileRegionMetadata(name) { expected ->
+                    expected.value?.also {
+                        val pack = TileRegionPack(
+                            name= name,
+                            progress= toProgress(region),
+                            metadata= toJSONObjectSupportingLegacyMetadata(it) ?: JSONObject()
+                        )
+                        tileRegionPacks[name] = pack
+                        promise.resolve(_makeRegionStatusPayload(pack))
+                    } ?: run {
+                        promise.reject(LOG_TAG, expected.error!!.message)
+                    }
+                }
             } ?: run {
                 promise.reject(LOG_TAG, expected.error!!.message)
             }
         }
-
     }
 
     @ReactMethod
@@ -370,7 +377,7 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
                 writableArrayOf(
                 *results.map { (id,geometry_region_metadata) ->
                     val (geometry, region, metadata) = geometry_region_metadata
-                    val metadataJSON = metadata?.toJSONObject()
+                    val metadataJSON = if (metadata != null) { toJSONObjectSupportingLegacyMetadata(metadata) } else { null }
                     val ret = convertRegionToJSON(region, geometry, metadataJSON)
                     val pack = tileRegionPacks[region.id] ?: TileRegionPack(
                         name= region.id,
@@ -605,6 +612,19 @@ class RCTMGLOfflineModule(private val mReactContext: ReactApplicationContext) :
             EventTypes.OFFLINE_STATUS,
             _makeRegionStatusPayload(name, progress, state, null)
         )
+    }
+
+    private fun toJSONObjectSupportingLegacyMetadata(value: Value): JSONObject? {
+        // see https://github.com/rnmapbox/maps/issues/2803
+        try {
+            return value.toJSONObject()
+        } catch (err: org.json.JSONException) {
+            try {
+                return JSONObject(value.toString());
+            } catch (_: org.json.JSONException) {
+               throw err;
+            }
+        }
     }
 
     companion object {
