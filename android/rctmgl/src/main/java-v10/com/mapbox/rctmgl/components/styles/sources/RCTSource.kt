@@ -110,13 +110,14 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
 
     fun addToMap(existings: Boolean, style: Style, mapView: RCTMGLMapView) {
         mSource = null
-        if (existings) {
-            val existingSource = getSourceAs(style, iD)
-            if (existingSource != null) {
-                mSource = existingSource
-            } else {
-                Logger.w(LOG_TAG, "Source $iD was makred as existing but was not found in style")
+        val existingSource = getSourceAs(style, iD)
+        if (existingSource != null) {
+            mSource = existingSource
+            if (!existings) {
+                Logger.w(LOG_TAG, "Source $iD was not marked as existing but found in style, it's deprecated: https://github.com/rnmapbox/maps/wiki/Deprecated-ExistingSourceLayer")
             }
+        } else {
+            Logger.w(LOG_TAG, "Source $iD was marked as existing but was not found in style, it's deprecated: https://github.com/rnmapbox/maps/wiki/Deprecated-ExistingSourceLayer")
         }
         if (mSource == null) {
             mSource = makeSource()
