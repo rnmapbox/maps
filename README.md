@@ -73,8 +73,7 @@ _See [iOS](ios/install.md) & [Android](android/install.md) setup guide for more 
 
 ## Prerequisite
 
-1. On Android we support from version 6 (API 23) upwards
-2. Please [Sign Up to Mapbox](https://account.mapbox.com/auth/signup/) to get the Mapbox Access Token.
+1. Please [Sign Up to Mapbox](https://account.mapbox.com/auth/signup/) to get the Mapbox Access Token.
 
 
 ## Dependencies
