@@ -627,6 +627,16 @@ const center = await this._map.getCenter();
 ```
 
 
+### clearData()
+
+Clears temporary map data from the data path defined in the given resource<br/>options. Useful to reduce the disk usage or in case the disk cache contains<br/>invalid data.<br/><br/>v10 only
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
 ### queryTerrainElevation(coordinate)
 
 Queries the currently loaded data for elevation at a geographical location.<br/>The elevation is returned in meters relative to mean sea-level.<br/>Returns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.

@@ -3010,6 +3010,27 @@
         ]
       },
       {
+        "name": "clearData",
+        "docblock": "Clears temporary map data from the data path defined in the given resource\noptions. Useful to reduce the disk usage or in case the disk cache contains\ninvalid data.\n\nv10 only",
+        "modifiers": [
+          "async"
+        ],
+        "params": [],
+        "returns": {
+          "type": {
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "void"
+              }
+            ],
+            "raw": "Promise<void>"
+          }
+        },
+        "description": "Clears temporary map data from the data path defined in the given resource\noptions. Useful to reduce the disk usage or in case the disk cache contains\ninvalid data.\n\nv10 only",
+        "examples": []
+      },
+      {
         "name": "queryTerrainElevation",
         "docblock": "Queries the currently loaded data for elevation at a geographical location.\nThe elevation is returned in meters relative to mean sea-level.\nReturns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.\n\n@param {Array<Number>} coordinate - the coordinates to query elevation at\n@return {Number}",
         "modifiers": [
@@ -6556,7 +6577,7 @@
           }
         ],
         "examples": [
-          "const progressListener = (offlineRegion, status) => console.log(offlineRegion, status);\nconst errorListener = (offlineRegion, err) => console.log(offlineRegion, err);\n\nawait MapboxGL.offlineManager.createPack({\n  name: 'offlinePack',\n  styleURL: 'mapbox://...',\n  minZoom: 14,\n  maxZoom: 20,\n  bounds: [[neLng, neLat], [swLng, swLat]]\n}, progressListener, errorListener)"
+          "const progressListener = (offlineRegion, status) => console.log(offlineRegion, status);\nconst errorListener = (offlineRegion, err) => console.log(offlineRegion, err);\n\nawait Mapbox.offlineManager.createPack({\n  name: 'offlinePack',\n  styleURL: 'mapbox://...',\n  minZoom: 14,\n  maxZoom: 20,\n  bounds: [[neLng, neLat], [swLng, swLat]]\n}, progressListener, errorListener)"
         ],
         "returns": {
           "description": "",
@@ -6579,7 +6600,7 @@
           }
         ],
         "examples": [
-          "await MapboxGL.offlineManager.invalidatePack('packName')"
+          "await Mapbox.offlineManager.invalidatePack('packName')"
         ],
         "returns": {
           "description": "",
@@ -6602,7 +6623,7 @@
           }
         ],
         "examples": [
-          "await MapboxGL.offlineManager.deletePack('packName')"
+          "await Mapbox.offlineManager.deletePack('packName')"
         ],
         "returns": {
           "description": "",
@@ -6616,7 +6637,7 @@
         "description": "Forces a revalidation of the tiles in the ambient cache and downloads a fresh version of the tiles from the tile server.\nThis is the recommend method for clearing the cache.\nThis is the most efficient method because tiles in the ambient cache are re-downloaded to remove outdated data from a device.\nIt does not erase resources from the ambient cache or delete the database, which can be computationally expensive operations that may carry unintended side effects.",
         "params": [],
         "examples": [
-          "await MapboxGL.offlineManager.invalidateAmbientCache();"
+          "await Mapbox.offlineManager.invalidateAmbientCache();"
         ],
         "returns": {
           "description": "",
@@ -6630,7 +6651,7 @@
         "description": "Erases resources from the ambient cache.\nThis method clears the cache and decreases the amount of space that map resources take up on the device.",
         "params": [],
         "examples": [
-          "await MapboxGL.offlineManager.clearAmbientCache();"
+          "await Mapbox.offlineManager.clearAmbientCache();"
         ],
         "returns": {
           "description": "",
@@ -6644,7 +6665,7 @@
         "description": "Migrates the offline cache from pre-v10 SDKs to the new v10 cache location",
         "params": [],
         "examples": [
-          "await MapboxGL.offlineManager.migrateOfflineCache()"
+          "await Mapbox.offlineManager.migrateOfflineCache()"
         ],
         "returns": {
           "description": "",
@@ -6667,7 +6688,7 @@
           }
         ],
         "examples": [
-          "await MapboxGL.offlineManager.setMaximumAmbientCacheSize(5000000);"
+          "await Mapbox.offlineManager.setMaximumAmbientCacheSize(5000000);"
         ],
         "returns": {
           "description": "",
@@ -6681,7 +6702,7 @@
         "description": "Deletes the existing database, which includes both the ambient cache and offline packs, then reinitializes it.",
         "params": [],
         "examples": [
-          "await MapboxGL.offlineManager.resetDatabase();"
+          "await Mapbox.offlineManager.resetDatabase();"
         ],
         "returns": {
           "description": "",
@@ -6695,7 +6716,7 @@
         "description": "Retrieves all the current offline packs that are stored in the database.",
         "params": [],
         "examples": [
-          "const offlinePacks = await MapboxGL.offlineManager.getPacks();"
+          "const offlinePacks = await Mapbox.offlineManager.getPacks();"
         ],
         "returns": {
           "description": "",
@@ -6718,7 +6739,7 @@
           }
         ],
         "examples": [
-          "const offlinePack = await MapboxGL.offlineManager.getPack();"
+          "const offlinePack = await Mapbox.offlineManager.getPack();"
         ],
         "returns": {
           "description": "",
@@ -6741,7 +6762,7 @@
           }
         ],
         "examples": [
-          "await MapboxGL.offlineManager.mergeOfflineRegions(path);"
+          "await Mapbox.offlineManager.mergeOfflineRegions(path);"
         ],
         "returns": {
           "description": "",
@@ -6764,7 +6785,7 @@
           }
         ],
         "examples": [
-          "MapboxGL.offlineManager.setTileCountLimit(1000);"
+          "Mapbox.offlineManager.setTileCountLimit(1000);"
         ],
         "returns": {
           "description": "",
@@ -6787,7 +6808,7 @@
           }
         ],
         "examples": [
-          "MapboxGL.offlineManager.setProgressEventThrottle(500);"
+          "Mapbox.offlineManager.setProgressEventThrottle(500);"
         ],
         "returns": {
           "description": "",
@@ -6826,7 +6847,7 @@
           }
         ],
         "examples": [
-          "const progressListener = (offlinePack, status) => console.log(offlinePack, status)\nconst errorListener = (offlinePack, err) => console.log(offlinePack, err)\nMapboxGL.offlineManager.subscribe('packName', progressListener, errorListener)"
+          "const progressListener = (offlinePack, status) => console.log(offlinePack, status)\nconst errorListener = (offlinePack, err) => console.log(offlinePack, err)\nMapbox.offlineManager.subscribe('packName', progressListener, errorListener)"
         ],
         "returns": {
           "description": "",
@@ -6849,7 +6870,7 @@
           }
         ],
         "examples": [
-          "MapboxGL.offlineManager.unsubscribe('packName')"
+          "Mapbox.offlineManager.unsubscribe('packName')"
         ],
         "returns": {
           "description": "",

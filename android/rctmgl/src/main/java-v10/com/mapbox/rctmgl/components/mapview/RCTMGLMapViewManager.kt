@@ -20,7 +20,9 @@ import com.mapbox.maps.plugin.logo.logo
 import com.mapbox.rctmgl.utils.ConvertUtils
 import com.mapbox.rctmgl.utils.ExpressionParser
 import com.mapbox.rctmgl.utils.GeoJSONUtils
+import com.mapbox.rctmgl.utils.Logger
 import com.mapbox.rctmgl.utils.extensions.toCoordinate
+import com.mapbox.rctmgl.utils.extensions.toReadableArray
 import com.mapbox.rctmgl.utils.extensions.toScreenCoordinate
 import java.lang.Exception
 import java.util.HashMap
@@ -252,29 +254,18 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
     }
 
     override fun getCommandsMap(): Map<String, Int>? {
-        return MapBuilder.builder<String, Int>()
-            .put("queryRenderedFeaturesAtPoint", METHOD_QUERY_FEATURES_POINT)
-            .put("queryRenderedFeaturesInRect", METHOD_QUERY_FEATURES_RECT)
-            .put("getVisibleBounds", METHOD_VISIBLE_BOUNDS)
-            .put("getPointInView", METHOD_GET_POINT_IN_VIEW)
-            .put("getCoordinateFromView", METHOD_GET_COORDINATE_FROM_VIEW)
-            .put("takeSnap", METHOD_TAKE_SNAP)
-            .put("getZoom", METHOD_GET_ZOOM)
-            .put("getCenter", METHOD_GET_CENTER)
-            .put("setHandledMapChangedEvents", METHOD_SET_HANDLED_MAP_EVENTS)
-            .put("showAttribution", METHOD_SHOW_ATTRIBUTION)
-            .put("setSourceVisibility", METHOD_SET_SOURCE_VISIBILITY)
-            .put("queryTerrainElevation", METHOD_QUERY_TERRAIN_ELEVATION)
-            .build()
+        return mapOf(
+            "_useCommandName" to 1
+        );
     }
 
-    override fun receiveCommand(mapView: RCTMGLMapView, commandID: Int, args: ReadableArray?) {
+    override fun receiveCommand(mapView: RCTMGLMapView, command: String, args: ReadableArray?) {
         // allows method calls to work with componentDidMount
         val mapboxMap = mapView.getMapboxMap()
             ?: //            mapView.enqueuePreRenderMapMethod(commandID, args);
             return
-        when (commandID) {
-            METHOD_QUERY_TERRAIN_ELEVATION -> {
+        when (command) {
+            "queryTerrainElevation" -> {
                 val coords = args!!.getArray(1)
                 mapView.queryTerrainElevation(
                     args.getString(0),
@@ -282,26 +273,26 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
                     coords.getDouble(1)
                 )
             }
-            METHOD_GET_ZOOM -> {
+            "getZoom" -> {
                 mapView.getZoom(args!!.getString(0));
             }
-            METHOD_GET_CENTER -> {
+            "getCenter" -> {
                 mapView.getCenter(args!!.getString(0));
             }
-            METHOD_GET_POINT_IN_VIEW -> {
+            "getPointInView" -> {
                 mapView.getPointInView(args!!.getString(0), args.getArray(1).toCoordinate())
             }
-            METHOD_GET_COORDINATE_FROM_VIEW -> {
+            "getCoordinateFromView" -> {
                 mapView.getCoordinateFromView(args!!.getString(0), args.getArray(1).toScreenCoordinate());
             }
-            METHOD_SET_SOURCE_VISIBILITY -> {
+            "setSourceVisibility" -> {
                 mapView!!.setSourceVisibility(
                     args!!.getBoolean(1),
                     args!!.getString(2),
                     args!!.getString(3)
                 );
             }
-            METHOD_QUERY_FEATURES_POINT -> {
+            "queryRenderedFeaturesAtPoint" -> {
                 mapView.queryRenderedFeaturesAtPoint(
                     args!!.getString(0),
                     ConvertUtils.toPointF(args!!.getArray(1)),
@@ -309,7 +300,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
                     ConvertUtils.toStringList(args!!.getArray(3))
                 );
             }
-            METHOD_QUERY_FEATURES_RECT -> {
+            "queryRenderedFeaturesInRect" -> {
                 val layerIds = ConvertUtils.toStringList(args!!.getArray(3))
                 mapView.queryRenderedFeaturesInRect(
                         args!!.getString(0),
@@ -318,16 +309,22 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
                         if (layerIds.size == 0) null else layerIds
                 );
             }
-            METHOD_VISIBLE_BOUNDS -> {
+            "getVisibleBounds" -> {
                 mapView.getVisibleBounds(args!!.getString(0));
             }
-            METHOD_TAKE_SNAP -> {
+            "takeSnap" -> {
                 mapView.takeSnap(args!!.getString(0), args!!.getBoolean(1))
             }
-            METHOD_SET_HANDLED_MAP_EVENTS -> {
+            "setHandledMapChangedEvents" -> {
                 args?.let {
                     mapView.setHandledMapChangedEvents(it.getArray(1).asArrayString());
                 }
+            }
+            "clearData" -> {
+                mapView.clearData(args!!.getString(0))
+            }
+            else -> {
+                Logger.w("RCTMGLMapView.receiveCommand", "unexpected command: ${command}")
             }
         }
         /*
@@ -381,21 +378,6 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
     companion object {
         const val LOG_TAG = "RCTMGLMapViewManager"
         const val REACT_CLASS = "RCTMGLMapView"
-
-        //endregion
-        //region React Methods
-        const val METHOD_QUERY_FEATURES_POINT = 2
-        const val METHOD_QUERY_FEATURES_RECT = 3
-        const val METHOD_VISIBLE_BOUNDS = 4
-        const val METHOD_GET_POINT_IN_VIEW = 5
-        const val METHOD_GET_COORDINATE_FROM_VIEW = 6
-        const val METHOD_TAKE_SNAP = 7
-        const val METHOD_GET_ZOOM = 8
-        const val METHOD_GET_CENTER = 9
-        const val METHOD_SET_HANDLED_MAP_EVENTS = 10
-        const val METHOD_SHOW_ATTRIBUTION = 11
-        const val METHOD_SET_SOURCE_VISIBILITY = 12
-        const val METHOD_QUERY_TERRAIN_ELEVATION = 13
     }
 
     init {
