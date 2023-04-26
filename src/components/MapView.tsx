@@ -23,8 +23,11 @@ import Logger from '../utils/Logger';
 import { FilterExpression } from '../utils/MapboxStyles';
 import { type Position } from '../types/Position';
 import { type Location } from '../modules/location/locationManager';
+import MBXMapView from '../components/MBXMapViewNativeComponent';
 
 import NativeBridgeComponent from './NativeBridgeComponent';
+
+const RNMBXFabric = true;
 
 const { MGLModule } = NativeModules;
 const { EventTypes } = MGLModule;
@@ -40,7 +43,9 @@ if (!MGLModule.MapboxV10) {
   );
 }
 
-export const NATIVE_MODULE_NAME = 'RCTMGLMapView';
+export const NATIVE_MODULE_NAME = RNMBXFabric
+  ? 'RNMBGLMapView'
+  : 'RCTMGLMapView';
 
 export const ANDROID_TEXTURE_NATIVE_MODULE_NAME = 'RCTMGLAndroidTextureMapView';
 
@@ -1052,7 +1057,10 @@ type NativeProps = Omit<Props, 'onPress' | 'onLongPress'> & {
 };
 
 type RCTMGLMapViewRefType = Component<NativeProps> & Readonly<NativeMethods>;
-const RCTMGLMapView = requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
+
+const RCTMGLMapView = RNMBXFabric
+  ? MBXMapView
+  : requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
 
 let RCTMGLAndroidTextureMapView: typeof RCTMGLMapView;
 if (isAndroid()) {

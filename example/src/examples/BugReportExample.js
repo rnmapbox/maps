@@ -1,4 +1,14 @@
 import React from 'react';
+import { MapView } from '@rnmapbox/maps';
+
+function BugReportExample() {
+  return <MapView style={{ flex: 1 }} />;
+}
+
+export default BugReportExample;
+
+/*
+import React from 'react';
 import { Button } from 'react-native';
 import {
   Images,
@@ -93,3 +103,4 @@ class BugReportExample extends React.Component {
 }
 
 export default BugReportExample;
+*/

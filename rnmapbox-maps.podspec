@@ -257,11 +257,12 @@ Pod::Spec.new do |s|
   s.subspec 'DynamicLibrary' do |sp|
     case $RNMapboxMapsImpl
     when 'mapbox'
-      sp.source_files = "ios/RCTMGL-v10/**/*.{h,m,swift}"
+      sp.source_files = "ios/RCTMGL-v10/**/*.{h,m,mm,swift}"
+      install_modules_dependencies(sp)
     when 'mapbox-gl'
-      sp.source_files	= "ios/RCTMGL/**/*.{h,m}"
+      sp.source_files	= "ios/RCTMGL/**/*.{h,m,mm}"
     when 'maplibre'
-      sp.source_files	= "ios/RCTMGL/**/*.{h,m}"
+      sp.source_files	= "ios/RCTMGL/**/*.{h,m,mm}"
       sp.compiler_flags = '-DRNMBGL_USE_MAPLIBRE=1'
     end
   end
