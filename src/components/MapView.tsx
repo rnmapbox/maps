@@ -748,6 +748,24 @@ class MapView extends NativeBridgeComponent(
   }
 
   /**
+   *
+   * Clears temporary map data from the data path defined in the given resource
+   * options. Useful to reduce the disk usage or in case the disk cache contains
+   * invalid data.
+   *
+   * v10 only
+   */
+  async clearData(): Promise<void> {
+    if (!MGLModule.MapboxV10) {
+      console.warn(
+        'RNMapbox: clearData is only implemented in v10 implementation or later',
+      );
+      return;
+    }
+    await this._runNative<void>('clearData');
+  }
+
+  /**
    * Queries the currently loaded data for elevation at a geographical location.
    * The elevation is returned in meters relative to mean sea-level.
    * Returns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.

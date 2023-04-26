@@ -15,10 +15,11 @@ import OfflineCreatePackOptions, {
 } from './OfflineCreatePackOptions';
 import OfflinePack from './OfflinePack';
 
-const MapboxGL = NativeModules.MGLModule;
-const MapboxGLOfflineManager = NativeModules.MGLOfflineModule;
+const { MGLModule } = NativeModules;
+
+const MapboxOfflineManager = NativeModules.MGLOfflineModule;
 export const OfflineModuleEventEmitter = new NativeEventEmitter(
-  MapboxGLOfflineManager,
+  MapboxOfflineManager,
 );
 
 export type OfflineProgressStatus = {
@@ -86,7 +87,7 @@ class OfflineManager {
    * const progressListener = (offlineRegion, status) => console.log(offlineRegion, status);
    * const errorListener = (offlineRegion, err) => console.log(offlineRegion, err);
    *
-   * await MapboxGL.offlineManager.createPack({
+   * await Mapbox.offlineManager.createPack({
    *   name: 'offlinePack',
    *   styleURL: 'mapbox://...',
    *   minZoom: 14,
@@ -115,7 +116,7 @@ class OfflineManager {
     }
 
     this.subscribe(packOptions.name, progressListener, errorListener);
-    const nativeOfflinePack = await MapboxGLOfflineManager.createPack(
+    const nativeOfflinePack = await MapboxOfflineManager.createPack(
       packOptions,
     );
     this._offlinePacks[packOptions.name] = new OfflinePack(nativeOfflinePack);
@@ -127,7 +128,7 @@ class OfflineManager {
    * This is more efficient than deleting the offline pack and downloading it again. If the data stored locally matches that on the server, new data will not be downloaded.
    *
    * @example
-   * await MapboxGL.offlineManager.invalidatePack('packName')
+   * await Mapbox.offlineManager.invalidatePack('packName')
    *
    * @param  {String}  name  Name of the offline pack.
    * @return {void}
@@ -141,7 +142,7 @@ class OfflineManager {
 
     const offlinePack = this._offlinePacks[name];
     if (offlinePack) {
-      await MapboxGLOfflineManager.invalidatePack(name);
+      await MapboxOfflineManager.invalidatePack(name);
     }
   }
 
@@ -149,7 +150,7 @@ class OfflineManager {
    * Unregisters the given offline pack and allows resources that are no longer required by any remaining packs to be potentially freed.
    *
    * @example
-   * await MapboxGL.offlineManager.deletePack('packName')
+   * await Mapbox.offlineManager.deletePack('packName')
    *
    * @param  {String}  name  Name of the offline pack.
    * @return {void}
@@ -163,7 +164,7 @@ class OfflineManager {
 
     const offlinePack = this._offlinePacks[name];
     if (offlinePack) {
-      await MapboxGLOfflineManager.deletePack(name);
+      await MapboxOfflineManager.deletePack(name);
       delete this._offlinePacks[name];
     }
   }
@@ -174,41 +175,55 @@ class OfflineManager {
    * This is the most efficient method because tiles in the ambient cache are re-downloaded to remove outdated data from a device.
    * It does not erase resources from the ambient cache or delete the database, which can be computationally expensive operations that may carry unintended side effects.
    *
+   * @deprecated Not implemented in v10
+   *
    * @example
-   * await MapboxGL.offlineManager.invalidateAmbientCache();
+   * await Mapbox.offlineManager.invalidateAmbientCache();
    *
    * @return {void}
    */
   async invalidateAmbientCache(): Promise<void> {
+    if (MGLModule.MapboxV10) {
+      console.warn(
+        'RNMapbox: invalidateAmbientCache is not implemented on v10',
+      );
+      return;
+    }
     await this._initialize();
-    await MapboxGLOfflineManager.invalidateAmbientCache();
+    await MapboxOfflineManager.invalidateAmbientCache();
   }
 
   /**
    * Erases resources from the ambient cache.
    * This method clears the cache and decreases the amount of space that map resources take up on the device.
    *
+   * @deprecated Not implemented in v10
+   *
    * @example
-   * await MapboxGL.offlineManager.clearAmbientCache();
+   * await Mapbox.offlineManager.clearAmbientCache();
    *
    * @return {void}
    */
   async clearAmbientCache(): Promise<void> {
+    if (MGLModule.MapboxV10) {
+      console.warn('RNMapbox: clearAmbientCache is not implemented on v10');
+      return;
+    }
     await this._initialize();
-    await MapboxGLOfflineManager.clearAmbientCache();
+    await MapboxOfflineManager.clearAmbientCache();
   }
 
   /**
    * Migrates the offline cache from pre-v10 SDKs to the new v10 cache location
    *
    * @example
-   * await MapboxGL.offlineManager.migrateOfflineCache()
+   * await Mapbox.offlineManager.migrateOfflineCache()
    *
    * @return {void}
    */
   async migrateOfflineCache(): Promise<void> {
     await this._initialize();
-    await MapboxGLOfflineManager.migrateOfflineCache();
+    await MapboxOfflineManager.migrateOfflineCache();
   }
 
   /**
@@ -216,34 +231,34 @@ class OfflineManager {
    * This method may be computationally expensive because it will erase resources from the ambient cache if its size is decreased.
    *
    * @example
-   * await MapboxGL.offlineManager.setMaximumAmbientCacheSize(5000000);
+   * await Mapbox.offlineManager.setMaximumAmbientCacheSize(5000000);
    *
    * @param  {Number}  size  Size of ambient cache.
    * @return {void}
    */
   async setMaximumAmbientCacheSize(size: number): Promise<void> {
     await this._initialize();
-    await MapboxGLOfflineManager.setMaximumAmbientCacheSize(size);
+    await MapboxOfflineManager.setMaximumAmbientCacheSize(size);
   }
 
   /**
    * Deletes the existing database, which includes both the ambient cache and offline packs, then reinitializes it.
    *
    * @example
-   * await MapboxGL.offlineManager.resetDatabase();
+   * await Mapbox.offlineManager.resetDatabase();
    *
    * @return {void}
    */
   async resetDatabase(): Promise<void> {
     await this._initialize();
-    await MapboxGLOfflineManager.resetDatabase();
+    await MapboxOfflineManager.resetDatabase();
   }
 
   /**
    * Retrieves all the current offline packs that are stored in the database.
    *
    * @example
-   * const offlinePacks = await MapboxGL.offlineManager.getPacks();
+   * const offlinePacks = await Mapbox.offlineManager.getPacks();
    *
    * @return {Array<OfflinePack>}
    */
@@ -258,7 +273,7 @@ class OfflineManager {
    * Retrieves an offline pack that is stored in the database by name.
    *
    * @example
-   * const offlinePack = await MapboxGL.offlineManager.getPack();
+   * const offlinePack = await Mapbox.offlineManager.getPack();
    *
    * @param  {String}  name  Name of the offline pack.
    * @return {OfflinePack}
@@ -272,14 +287,14 @@ class OfflineManager {
    * Sideloads offline db
    *
    * @example
-   * await MapboxGL.offlineManager.mergeOfflineRegions(path);
+   * await Mapbox.offlineManager.mergeOfflineRegions(path);
    *
    * @param {String} path Path to offline tile db on file system.
    * @return {void}
    */
   async mergeOfflineRegions(path: string): Promise<void> {
     await this._initialize();
-    return MapboxGLOfflineManager.mergeOfflineRegions(path);
+    return MapboxOfflineManager.mergeOfflineRegions(path);
   }
 
   /**
@@ -287,13 +302,13 @@ class OfflineManager {
    * The Mapbox Terms of Service prohibit changing or bypassing this limit without permission from Mapbox.
    *
    * @example
-   * MapboxGL.offlineManager.setTileCountLimit(1000);
+   * Mapbox.offlineManager.setTileCountLimit(1000);
    *
    * @param {Number} limit Map tile limit count.
    * @return {void}
    */
   setTileCountLimit(limit: number): void {
-    MapboxGLOfflineManager.setTileCountLimit(limit);
+    MapboxOfflineManager.setTileCountLimit(limit);
   }
 
   /**
@@ -301,13 +316,13 @@ class OfflineManager {
    * The default is 300ms.
    *
    * @example
-   * MapboxGL.offlineManager.setProgressEventThrottle(500);
+   * Mapbox.offlineManager.setProgressEventThrottle(500);
    *
    * @param {Number} throttleValue event throttle value in ms.
    * @return {void}
    */
   setProgressEventThrottle(throttleValue: number): void {
-    MapboxGLOfflineManager.setProgressEventThrottle(throttleValue);
+    MapboxOfflineManager.setProgressEventThrottle(throttleValue);
   }
 
   /**
@@ -317,7 +332,7 @@ class OfflineManager {
    * @example
    * const progressListener = (offlinePack, status) => console.log(offlinePack, status)
    * const errorListener = (offlinePack, err) => console.log(offlinePack, err)
-   * MapboxGL.offlineManager.subscribe('packName', progressListener, errorListener)
+   * Mapbox.offlineManager.subscribe('packName', progressListener, errorListener)
    *
    * @param  {String} packName           Name of the offline pack.
    * @param  {Callback} progressListener Callback that listens for status events while downloading the offline resource.
@@ -333,7 +348,7 @@ class OfflineManager {
     if (isFunction(progressListener)) {
       if (totalProgressListeners === 0) {
         this.subscriptionProgress = OfflineModuleEventEmitter.addListener(
-          MapboxGL.OfflineCallbackName.Progress,
+          MGLModule.OfflineCallbackName.Progress,
           this._onProgress,
         );
       }
@@ -344,7 +359,7 @@ class OfflineManager {
     if (isFunction(errorListener)) {
       if (totalErrorListeners === 0) {
         this.subscriptionError = OfflineModuleEventEmitter.addListener(
-          MapboxGL.OfflineCallbackName.Error,
+          MGLModule.OfflineCallbackName.Error,
           this._onError,
         );
       }
@@ -356,7 +371,7 @@ class OfflineManager {
     if (isAndroid() && this._offlinePacks[packName]) {
       try {
         // manually set a listener, since listeners are only set on create flow
-        await MapboxGLOfflineManager.setPackObserver(packName);
+        await MapboxOfflineManager.setPackObserver(packName);
       } catch (e) {
         console.log('Unable to set pack observer', e);
       }
@@ -368,7 +383,7 @@ class OfflineManager {
    * It's a good idea to call this on componentWillUnmount.
    *
    * @example
-   * MapboxGL.offlineManager.unsubscribe('packName')
+   * Mapbox.offlineManager.unsubscribe('packName')
    *
    * @param  {String} packName Name of the offline pack.
    * @return {void}
@@ -397,7 +412,7 @@ class OfflineManager {
       return true;
     }
 
-    const nativeOfflinePacks = await MapboxGLOfflineManager.getPacks();
+    const nativeOfflinePacks = await MapboxOfflineManager.getPacks();
 
     for (const nativeOfflinePack of nativeOfflinePacks) {
       const offlinePack = new OfflinePack(nativeOfflinePack);
@@ -419,7 +434,7 @@ class OfflineManager {
     this._progressListeners[name](pack, e.payload);
 
     // cleanup listeners now that they are no longer needed
-    if (state === MapboxGL.OfflinePackDownloadState.Complete) {
+    if (state === MGLModule.OfflinePackDownloadState.Complete) {
       this.unsubscribe(name);
     }
   }

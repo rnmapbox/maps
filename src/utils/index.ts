@@ -85,9 +85,10 @@ export function runNativeCommand<ReturnType = NativeArg>(
   }
 
   if (isAndroid()) {
+    const { Commands } = managerInstance;
     return NativeModules.UIManager.dispatchViewManagerCommand(
       handle,
-      managerInstance.Commands[name],
+      Commands._useCommandName ? name : Commands[name],
       args,
     );
   }

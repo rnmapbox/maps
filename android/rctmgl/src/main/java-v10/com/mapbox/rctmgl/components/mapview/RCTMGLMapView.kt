@@ -980,16 +980,30 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     fun queryTerrainElevation(callbackID: String?, longitude: Double, latitude: Double) {
         val result = mMap?.getElevation(Point.fromLngLat(longitude, latitude))
 
-        sendResponse(callbackID, {
+        sendResponse(callbackID, {response ->
             if (result != null) {
-                it.putDouble("data", result)
+                response.putDouble("data", result)
             } else {
                 Logger.e("queryTerrainElevation", "no elevation data")
 
-                it.putNull("data")
-                it.putString("error", "no elevation")
+                response.putNull("data")
+                response.putString("error", "no elevation")
             }
         })
+    }
+
+    fun clearData(callbackID: String?) {
+        mapView.getMapboxMap().clearData { expected ->
+            sendResponse(callbackID) { response ->
+                if (expected.isError()) {
+                    response.putNull("data")
+                    response.putString("error", expected.error!!.toString())
+                }   else {
+                    response.putBoolean("data", true)
+                }
+            }
+
+        }
     }
 
     fun match(layer: Layer, sourceId:String, sourceLayerId: String?) : Boolean {

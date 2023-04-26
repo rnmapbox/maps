@@ -90,4 +90,9 @@ RCT_EXTERN_METHOD(setHandledMapChangedEvents:(nonnull NSNumber*)reactTag
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(clearData: (nonnull NSNumber*)reactTag
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject
+                  )
+
 @end

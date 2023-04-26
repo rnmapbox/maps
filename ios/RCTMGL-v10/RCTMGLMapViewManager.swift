@@ -237,4 +237,21 @@ extension RCTMGLMapViewManager {
         }
       }
    }
+  
+  @objc
+  func clearData(
+    _ reactTag: NSNumber,
+    resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock
+  ) {
+    withMapView(reactTag, name:"clearDataPath", rejecter: rejecter) { mapView in
+      mapView.mapboxMap.clearData { error in
+        if let error = error {
+          rejecter("clearData","failed to clearData: \(error.localizedDescription)", error)
+        } else {
+          resolver(nil)
+        }
+      }
+    }
+  }
 }
