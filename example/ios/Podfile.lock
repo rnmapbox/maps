@@ -78,11 +78,11 @@ PODS:
   - hermes-engine/Pre-built (0.71.7)
   - libevent (2.1.12)
   - MapboxCommon (23.4.0)
-  - MapboxCoreMaps (10.12.0):
+  - MapboxCoreMaps (10.12.2):
     - MapboxCommon (~> 23.4)
-  - MapboxMaps (10.12.0):
+  - MapboxMaps (10.12.2):
     - MapboxCommon (= 23.4.0)
-    - MapboxCoreMaps (= 10.12.0)
+    - MapboxCoreMaps (= 10.12.2)
     - MapboxMobileEvents (= 1.0.10)
     - Turf (~> 2.0)
   - MapboxMobileEvents (1.0.10)
@@ -430,14 +430,14 @@ PODS:
     - React-perflogger (= 0.71.7)
   - RNCAsyncStorage (1.18.1):
     - React-Core
-  - rnmapbox-maps (10.0.2):
-    - MapboxMaps (~> 10.12.0)
+  - rnmapbox-maps (10.0.4-rc.0):
+    - MapboxMaps (~> 10.12.2)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.0.2)
+    - rnmapbox-maps/DynamicLibrary (= 10.0.4-rc.0)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.0.2):
-    - MapboxMaps (~> 10.12.0)
+  - rnmapbox-maps/DynamicLibrary (10.0.4-rc.0):
+    - MapboxMaps (~> 10.12.2)
     - React
     - React-Core
     - Turf
@@ -646,8 +646,8 @@ SPEC CHECKSUMS:
   hermes-engine: 4438d2b8bf8bebaba1b1ac0451160bab59e491f8
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   MapboxCommon: 2945d39158111455f353524f3c2ad356bd8d546a
-  MapboxCoreMaps: 511ba1f7876e635431b741cab5e9278219d906f6
-  MapboxMaps: a9978d13d1cba0403c5bdd2ab3b71418924075d2
+  MapboxCoreMaps: 8f355514ac5b573967badd9cf8e482561d6e8e2d
+  MapboxMaps: 9e0873d7f8bddf5751791da7be2560b4157f3c95
   MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
@@ -679,7 +679,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: c5c89f8f543842dd864b63ded1b0bbb9c9445328
   ReactCommon: dbfbe2f7f3c5ce4ce44f43f2fd0d5950d1eb67c5
   RNCAsyncStorage: b90b71f45b8b97be43bc4284e71a6af48ac9f547
-  rnmapbox-maps: db661c0b1034d8227ff659e291cca4c188b6c704
+  rnmapbox-maps: d8466e9458e7fbb5aa0f6614d18a72d1a71b2cb3
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
   RNSVG: d7d7bc8229af3842c9cfc3a723c815a52cdd1105
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
@@ -688,6 +688,6 @@ SPEC CHECKSUMS:
   Yoga: d56980c8914db0b51692f55533409e844b66133c
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 504114e3a9291acf8720cba70a4a27db8d3269b4
+PODFILE CHECKSUM: 105db21db7de6890b4a89bb1869656fee962cbd3
 
 COCOAPODS: 1.11.2
