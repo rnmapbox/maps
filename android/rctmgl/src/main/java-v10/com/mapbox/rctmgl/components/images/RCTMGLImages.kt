@@ -96,9 +96,11 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
     override fun removeFromMap(mapView: RCTMGLMapView, reason: RemovalReason): Boolean {
         removeImages(mapView)
         mMap = null
-        mNativeImages = mutableMapOf()
-        mImages = HashMap()
-        mCurrentImages = HashSet()
+        if (reason == RemovalReason.ON_DESTROY) {
+            mNativeImages = mutableMapOf()
+            mImages = HashMap()
+            mCurrentImages = HashSet()
+        }
         return super.removeFromMap(mapView, reason)
     }
 
