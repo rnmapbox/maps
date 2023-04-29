@@ -117,7 +117,12 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
                 Logger.w(LOG_TAG, "Source $iD was not marked as existing but found in style, it's deprecated: https://github.com/rnmapbox/maps/wiki/Deprecated-ExistingSourceLayer")
             }
         } else {
-            Logger.w(LOG_TAG, "Source $iD was marked as existing but was not found in style, it's deprecated: https://github.com/rnmapbox/maps/wiki/Deprecated-ExistingSourceLayer")
+            if (existings) {
+                Logger.w(
+                    LOG_TAG,
+                    "Source $iD was marked as existing but was not found in style, it's deprecated: https://github.com/rnmapbox/maps/wiki/Deprecated-ExistingSourceLayer"
+                )
+            }
         }
         if (mSource == null) {
             mSource = makeSource()
@@ -129,7 +134,7 @@ abstract class RCTSource<T : Source?>(context: Context?) : AbstractMapFeature(co
             }
             it.added = true
         }
-    }
+     }
 
     override fun addToMap(mapView: RCTMGLMapView) {
         super.addToMap(mapView)
