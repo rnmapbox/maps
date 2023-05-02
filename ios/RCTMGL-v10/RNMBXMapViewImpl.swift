@@ -2,6 +2,10 @@
 
 @objc(RNMBXMapViewImpl)
 open class RNMBXMapViewImpl : MapView, RNMBXMapViewImplProtocol {
+  public func sayHello(_ message: String) {
+    print("Hello: \(message)")
+  }
+  
   init(frame: CGRect) {
     let resourceOptions = ResourceOptions(accessToken: MGLModule.accessToken!)
     super.init(frame: frame, mapInitOptions: MapInitOptions(resourceOptions: resourceOptions))

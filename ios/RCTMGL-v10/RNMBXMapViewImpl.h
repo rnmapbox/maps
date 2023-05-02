@@ -1,5 +1,6 @@
 @protocol RNMBXMapViewImplProtocol
 NS_ASSUME_NONNULL_BEGIN
+- (void)sayHello:(NSString *)message;
 @end
 
 @interface RNMBXMapViewImplFactory

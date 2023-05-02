@@ -1,4 +1,5 @@
 import type { HostComponent, ViewProps } from 'react-native';
+import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import {
   WithDefault,
@@ -25,6 +26,21 @@ export interface NativeProps extends ViewProps {
   onPress?: DirectEventHandler<OnPressEventType>;
   //
 }
+
+type MapViewViewType = HostComponent<NativeProps>;
+
+export interface NativeCommands {
+  sayHello: (
+    viewRef: React.ElementRef<MapViewViewType>,
+    message: string,
+  ) => void;
+}
+
+export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
+  supportedCommands: [
+    'sayHello',
+  ],
+});
 
 export default codegenNativeComponent<NativeProps>(
   'RNMBXMapView',

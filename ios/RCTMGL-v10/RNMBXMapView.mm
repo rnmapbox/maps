@@ -15,11 +15,16 @@ using namespace facebook::react;
 
 @interface RNMBXMapView () <RCTRNMBXMapViewViewProtocol>
 
+@property (nonatomic, strong, nullable) UIView<RNMBXMapViewImplProtocol> *contentView;
+
+
 @end
 
 @implementation RNMBXMapView {
     UIView<RNMBXMapViewImplProtocol> * _view;
 }
+
+@dynamic contentView;
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
 {
@@ -40,6 +45,10 @@ if (self = [super initWithFrame:frame]) {
 return self;
 }
 
+- (void)sayHello:(NSString *)message {
+  [self.contentView sayHello: message];
+}
+
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
   const auto &oldViewProps = *std::static_pointer_cast<RNMBXMapViewProps const>(_props);
@@ -58,6 +67,11 @@ return self;
 Class<RCTComponentViewProtocol> RNMBXMapViewCls(void)
 {
 return RNMBXMapView.class;
+}
+
+- (void)handleCommand:(const NSString *)commandName args:(const NSArray *)args
+{
+  RCTRNMBXMapViewHandleCommand(self, commandName, args);
 }
 
 - hexStringToColor:(NSString *)stringToConvert

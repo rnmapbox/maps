@@ -23,7 +23,9 @@ import Logger from '../utils/Logger';
 import { FilterExpression } from '../utils/MapboxStyles';
 import { type Position } from '../types/Position';
 import { type Location } from '../modules/location/locationManager';
-import MBXMapView from '../components/MBXMapViewNativeComponent';
+import MBXMapView, {
+  Commands as MBXMapViewCommands,
+} from '../components/MBXMapViewNativeComponent';
 
 import NativeBridgeComponent from './NativeBridgeComponent';
 
@@ -968,6 +970,13 @@ class MapView extends NativeBridgeComponent(
 
   _setNativeRef(nativeRef: RCTMGLMapViewRefType) {
     this._nativeRef = nativeRef;
+    if (nativeRef != null) {
+      console.log('Sending say hello to:', nativeRef);
+      MBXMapViewCommands.sayHello(
+        this._nativeRef as unknown as React.ElementRef<typeof MBXMapView>,
+        'hello fabric!!!',
+      );
+    }
     super._runPendingNativeCommands(nativeRef);
   }
 
