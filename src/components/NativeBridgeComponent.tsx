@@ -1,8 +1,12 @@
 import React from 'react';
+import { NativeModules } from 'react-native';
 
 import { type NativeArg, runNativeCommand, isAndroid } from '../utils';
 
 let callbackIncrement = 0;
+
+const { MGLModule } = NativeModules;
+const RNMBXFabric: boolean = MGLModule.Fabric;
 
 export type RNMBEvent<PayloadType = { [key: string]: string }> = {
   payload: PayloadType;
@@ -12,12 +16,15 @@ export type RNMBEvent<PayloadType = { [key: string]: string }> = {
 const NativeBridgeComponent = <
   Props extends object,
   BaseComponent extends new (...ags: any[]) => React.Component<Props>,
+  NativeCommandType extends object,
 >(
   Base: BaseComponent,
   nativeModuleName: string,
+  FabricNativeCommands?: NativeCommandType,
 ) =>
   class extends Base {
     _nativeModuleName: string;
+    _fabricNativeCommands?: NativeCommandType;
     _onAndroidCallback: (e: any) => void;
     _callbackMap: Map<string, any>;
     _preRefMapMethodQueue: Array<{
@@ -29,6 +36,7 @@ const NativeBridgeComponent = <
       super(...args);
 
       this._nativeModuleName = nativeModuleName;
+      this._fabricNativeCommands = FabricNativeCommands;
       this._onAndroidCallback = this._onAndroidCallbackO.bind(this);
       this._callbackMap = new Map();
       this._preRefMapMethodQueue = [];
@@ -93,6 +101,39 @@ const NativeBridgeComponent = <
           });
         });
       }
+
+      if (RNMBXFabric) {
+        const { _fabricNativeCommands } = this;
+        if (_fabricNativeCommands == null) {
+          console.warn('Running in fabric, but no NativeModules passed');
+          return new Promise((_, reject) => {
+            reject('Running in fabric, but no NativeModules passed');
+          });
+        }
+
+        const method = (
+          _fabricNativeCommands as Record<
+            string,
+            (ref: RefType, ...aargs: NativeArg[]) => ReturnType
+          >
+        )[methodName];
+
+        if (method) {
+          const result: ReturnType = method(nativeRef, ...args);
+          return new Promise((resolve, _) => {
+            resolve(result);
+          });
+        } else {
+          return new Promise((_, reject) => {
+            reject(
+              `Command ${methodName} not implemented in native commands, implemented commands are: ${Object.keys(
+                _fabricNativeCommands,
+              )}`,
+            );
+          });
+        }
+      }
+      
 
       if (isAndroid()) {
         return new Promise((resolve, reject) => {

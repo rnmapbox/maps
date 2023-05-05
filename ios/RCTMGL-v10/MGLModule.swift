@@ -12,6 +12,7 @@ class MGLModule : NSObject {
   @objc
   func constantsToExport() -> [AnyHashable: Any]! {
     return [
+      "Fabric": RNMBXModule.fabricEnabled(),
       "MapboxV10":true,
       "StyleURL":
         [

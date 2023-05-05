@@ -34,12 +34,14 @@ export interface NativeCommands {
     viewRef: React.ElementRef<MapViewViewType>,
     message: string,
   ) => void;
+  setHandledMapChangedEvents: (
+    viewRef: React.ElementRef<MapViewViewType>,
+    events: string, // ReadonlyArray<string>,
+  ) => void;
 }
 
 export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
-  supportedCommands: [
-    'sayHello',
-  ],
+  supportedCommands: ['sayHello', 'setHandledMapChangedEvents'],
 });
 
 export default codegenNativeComponent<NativeProps>(

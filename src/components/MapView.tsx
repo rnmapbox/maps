@@ -29,10 +29,10 @@ import MBXMapView, {
 
 import NativeBridgeComponent from './NativeBridgeComponent';
 
-const RNMBXFabric = true;
-
 const { MGLModule } = NativeModules;
 const { EventTypes } = MGLModule;
+
+const RNMBXFabric: boolean = MGLModule.Fabric;
 
 if (MGLModule == null) {
   console.error(
@@ -400,6 +400,7 @@ type Debounced<F> = F & { clear(): void; flush(): void };
 class MapView extends NativeBridgeComponent(
   React.PureComponent<Props>,
   NATIVE_MODULE_NAME,
+  MBXMapViewCommands,
 ) {
   static defaultProps: Props = {
     projection: 'mercator',
