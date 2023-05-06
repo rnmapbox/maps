@@ -15,9 +15,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import com.facebook.react.bridge.*
-import com.mapbox.android.gestures.MoveGestureDetector
-import com.mapbox.android.gestures.RotateGestureDetector
-import com.mapbox.android.gestures.StandardScaleGestureDetector
+import com.mapbox.android.gestures.*
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
@@ -82,7 +80,7 @@ data class OrnamentSettings(
 )
 
 enum class MapGestureType {
-    Move,Scale,Rotate
+    Move,Scale,Rotate,Fling,Shove
 }
 
 /***
@@ -185,6 +183,9 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     private var mLocationComponentManager: LocationComponentManager? = null
     var tintColor: Int? = null
         private set
+
+    private var wasGestureActive = false
+    private var isGestureActive = false
 
     val mapView: MapView
         get() = this.mMapView
@@ -294,6 +295,26 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         gesturesPlugin.addOnMapLongClickListener(_this)
         gesturesPlugin.addOnMapClickListener(_this)
 
+        gesturesPlugin.addOnFlingListener(object: OnFlingListener {
+            override fun onFling() {
+                mapGesture(MapGestureType.Fling, true)
+            }
+        })
+
+        gesturesPlugin.addOnShoveListener(object: OnShoveListener {
+            override fun onShove(detector: ShoveGestureDetector) {
+                mapGesture(MapGestureType.Shove, detector)
+            }
+
+            override fun onShoveBegin(detector: ShoveGestureDetector) {
+                mapGestureBegin(MapGestureType.Shove, detector)
+            }
+
+            override fun onShoveEnd(detector: ShoveGestureDetector) {
+                mapGestureEnd(MapGestureType.Shove, detector)
+            }
+        })
+
         gesturesPlugin.addOnScaleListener(object: OnScaleListener{
             override fun onScale(detector: StandardScaleGestureDetector) {
                 mapGesture(MapGestureType.Scale, detector)
@@ -336,6 +357,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     fun<T> mapGestureBegin(type:MapGestureType, gesture: T) {
+        isGestureActive = true
         mCameraChangeTracker.setReason(CameraChangeReason.USER_GESTURE)
         handleMapChangedEvent(EventTypes.REGION_WILL_CHANGE)
     }
@@ -344,7 +366,9 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         handleMapChangedEvent(EventTypes.REGION_IS_CHANGING)
         return false
     }
-    fun<T> mapGestureEnd(type: MapGestureType, gesture: T) {}
+    fun<T> mapGestureEnd(type: MapGestureType, gesture: T) {
+        isGestureActive = false
+    }
 
     fun init() {
         // Required for rendering properly in Android Oreo
@@ -744,6 +768,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     private fun handleMapChangedEvent(eventType: String) {
+        this.wasGestureActive = isGestureActive
         if (!canHandleEvent(eventType)) return
 
         val event: IEvent
@@ -783,7 +808,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             Logger.e(LOG_TAG, "An error occurred while attempting to make the region", ex)
         }
         val gestures = WritableNativeMap()
-        gestures.putBoolean("isGestureActive", mCameraChangeTracker.isUserInteraction)
+        gestures.putBoolean("isGestureActive", wasGestureActive/*mCameraChangeTracker.isUserInteraction*/)
         // gestures.putBoolean("isAnimatingFromGesture", if (null == isAnimated) mCameraChangeTracker.isAnimated else isAnimated)
 
         val state: WritableMap = WritableNativeMap()
