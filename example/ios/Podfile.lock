@@ -77,12 +77,12 @@ PODS:
     - hermes-engine/Pre-built (= 0.71.7)
   - hermes-engine/Pre-built (0.71.7)
   - libevent (2.1.12)
-  - MapboxCommon (23.4.0)
-  - MapboxCoreMaps (10.12.2):
-    - MapboxCommon (~> 23.4)
-  - MapboxMaps (10.12.2):
-    - MapboxCommon (= 23.4.0)
-    - MapboxCoreMaps (= 10.12.2)
+  - MapboxCommon (23.5.0)
+  - MapboxCoreMaps (10.13.1):
+    - MapboxCommon (~> 23.5)
+  - MapboxMaps (10.13.1):
+    - MapboxCommon (= 23.5.0)
+    - MapboxCoreMaps (= 10.13.1)
     - MapboxMobileEvents (= 1.0.10)
     - Turf (~> 2.0)
   - MapboxMobileEvents (1.0.10)
@@ -430,14 +430,14 @@ PODS:
     - React-perflogger (= 0.71.7)
   - RNCAsyncStorage (1.18.1):
     - React-Core
-  - rnmapbox-maps (10.0.4-rc.0):
-    - MapboxMaps (~> 10.12.2)
+  - rnmapbox-maps (10.0.4):
+    - MapboxMaps (~> 10.13.1)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.0.4-rc.0)
+    - rnmapbox-maps/DynamicLibrary (= 10.0.4)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.0.4-rc.0):
-    - MapboxMaps (~> 10.12.2)
+  - rnmapbox-maps/DynamicLibrary (10.0.4):
+    - MapboxMaps (~> 10.13.1)
     - React
     - React-Core
     - Turf
@@ -645,9 +645,9 @@ SPEC CHECKSUMS:
   glog: 85ecdd10ee8d8ec362ef519a6a45ff9aa27b2e85
   hermes-engine: 4438d2b8bf8bebaba1b1ac0451160bab59e491f8
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  MapboxCommon: 2945d39158111455f353524f3c2ad356bd8d546a
-  MapboxCoreMaps: 8f355514ac5b573967badd9cf8e482561d6e8e2d
-  MapboxMaps: 9e0873d7f8bddf5751791da7be2560b4157f3c95
+  MapboxCommon: fdf7fd31c90b7b607cd9c63e37797f023c01d860
+  MapboxCoreMaps: 24270c7c6b8cb71819fc2f3c549db9620ee4d019
+  MapboxMaps: cb76511b98d3b95c74b0771ed105bc69f30ace6b
   MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
@@ -679,7 +679,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: c5c89f8f543842dd864b63ded1b0bbb9c9445328
   ReactCommon: dbfbe2f7f3c5ce4ce44f43f2fd0d5950d1eb67c5
   RNCAsyncStorage: b90b71f45b8b97be43bc4284e71a6af48ac9f547
-  rnmapbox-maps: d8466e9458e7fbb5aa0f6614d18a72d1a71b2cb3
+  rnmapbox-maps: 7cacb0c31bda7a56517dc44bebd2c3dbb1ff30c1
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
   RNSVG: d7d7bc8229af3842c9cfc3a723c815a52cdd1105
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
