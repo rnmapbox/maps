@@ -96,12 +96,13 @@ yarn add rnmapbox/maps#main
 #### Using `npm`
 Install the latest source from git:
 ```sh
-npm install --save rnmapbox/maps#main
+npm install --save @rnmapbox/maps
 ``` 
 
 #### Installing other versions
-Replace `rnmapbox/maps#main` with the following to install other versions:
-- `@rnmapbox/maps` installs the latest release
+
+- `@rnmapbox/maps` installs the latest release from npm
+- to install current `main` from github replace `@rnmapbox/maps` with `rnmapbox/maps#main`. To install specific version use `@rnmapbox/maps@10.0.4`
 
 
 #### Using `expo`
