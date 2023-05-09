@@ -18,6 +18,7 @@ export {
 } from './components/UserLocation';
 export { default as VectorSource } from './components/VectorSource';
 export { ShapeSource } from './components/ShapeSource';
+export { PointSource } from './components/PointSource';
 export { LineSource } from './components/LineSource';
 export { default as RasterSource } from './components/RasterSource';
 export { default as RasterDemSource } from './components/RasterDemSource';
