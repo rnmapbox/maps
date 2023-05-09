@@ -38,9 +38,7 @@ describe('Camera', () => {
   test('defaults are set', () => {
     const result = render(<Camera />);
     const { props } = result.queryByTestId('Camera');
-    expect(props.stop).toStrictEqual({
-      ...paddingZero,
-    });
+    expect(props.stop).toStrictEqual({});
   });
   test('set location by center', () => {
     const result = render(
@@ -51,7 +49,6 @@ describe('Camera', () => {
     expect(props.stop).toStrictEqual({
       centerCoordinate: toFeature(coordinate1),
       zoom: 14,
-      ...paddingZero,
     });
   });
   test('set location by bounds', () => {
@@ -60,7 +57,6 @@ describe('Camera', () => {
     props.stop.bounds = JSON.parse(props.stop.bounds);
     expect(props.stop).toStrictEqual({
       bounds: toFeatureCollection(bounds1),
-      ...paddingZero,
     });
   });
   test('animation mode', () => {

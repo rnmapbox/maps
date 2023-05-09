@@ -6,7 +6,7 @@
   close: true
 "Needs: Standalone component":
   comment: >
-    :wave: @{issue-author}, please include a [complete, isolated example](https://github.com/rnmapbox/maps/wiki/Issue-missing-standalone-component) 
+    :wave: @{issue-author}, please include a [complete, isolated example](https://github.com/rnmapbox/maps/wiki/Issue-missing-standalone-component), if you included a component make sure that it's complete, so contains an `MapView`, also all variables etc should be defined. Please note that this is a community project and we have very limited resources - please see our notes on [Support](https://github.com/rnmapbox/maps/wiki/Support).  
   # Close the issue
   close: true
 "question":
@@ -23,4 +23,5 @@
   comment: >
     @{issue-author}, sorry for us to look into project setup issues, we require steps to reproduce from `react-native init ...`. If you cannot reproduce starting with a blank project, then compare your setup with a blank working one.
   close: true
+
 
