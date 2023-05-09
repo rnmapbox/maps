@@ -281,14 +281,29 @@ export const Camera = memo(
             _nativeStop.bounds = JSON.stringify(makeLatLngBounds(ne, sw));
           }
 
-          _nativeStop.paddingTop =
-            stop.padding?.paddingTop ?? stop.bounds?.paddingTop ?? 0;
-          _nativeStop.paddingRight =
-            stop.padding?.paddingRight ?? stop.bounds?.paddingRight ?? 0;
-          _nativeStop.paddingBottom =
-            stop.padding?.paddingBottom ?? stop.bounds?.paddingBottom ?? 0;
-          _nativeStop.paddingLeft =
-            stop.padding?.paddingLeft ?? stop.bounds?.paddingLeft ?? 0;
+          const paddingTop =
+            stop.padding?.paddingTop ?? stop.bounds?.paddingTop;
+          if (paddingTop !== undefined) {
+            _nativeStop.paddingTop = paddingTop;
+          }
+
+          const paddingRight =
+            stop.padding?.paddingRight ?? stop.bounds?.paddingRight;
+          if (paddingRight !== undefined) {
+            _nativeStop.paddingRight = paddingRight;
+          }
+
+          const paddingBottom =
+            stop.padding?.paddingBottom ?? stop.bounds?.paddingBottom;
+          if (paddingBottom != undefined) {
+            _nativeStop.paddingBottom = paddingBottom;
+          }
+
+          const paddingLeft =
+            stop.padding?.paddingLeft ?? stop.bounds?.paddingLeft;
+          if (paddingLeft !== undefined) {
+            _nativeStop.paddingLeft = paddingLeft;
+          }
 
           return _nativeStop;
         },

@@ -100,6 +100,7 @@ type LocalizeLabels =
 type Props = ViewProps & {
   /**
    * The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport.
+   * @deprecated use Camera `padding` instead
    */
   contentInset?: number | number[];
 
@@ -410,7 +411,12 @@ class MapView extends NativeBridgeComponent(
     regionDidChangeDebounceTime: 500,
   };
 
-  deprecationLogged: { regionDidChange: boolean; regionIsChanging: boolean } = {
+  deprecationLogged: {
+    contentInset: boolean;
+    regionDidChange: boolean;
+    regionIsChanging: boolean;
+  } = {
+    contentInset: false,
     regionDidChange: false,
     regionIsChanging: false,
   };
@@ -952,6 +958,15 @@ class MapView extends NativeBridgeComponent(
   _getContentInset() {
     if (!this.props.contentInset) {
       return;
+    }
+
+    if (MGLModule.MapboxV10) {
+      if (!this.deprecationLogged.contentInset) {
+        console.warn(
+          '@rnmapbox/maps: contentInset is deprecated, use Camera padding instead.',
+        );
+        this.deprecationLogged.contentInset = true;
+      }
     }
 
     if (!Array.isArray(this.props.contentInset)) {
