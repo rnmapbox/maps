@@ -5,14 +5,12 @@ import Turf
 class RCTMGLLineSource: RCTMGLSource {
   @objc var lineString: String? {
     didSet {
-      print("updated lineString")
       refresh()
     }
   }
   
   @objc var startOffset: NSNumber? {
     didSet {
-      print("updated startOffset")
       animateToNewOffset(
         prevOffset: currentStartOffset,
         targetOffset: startOffset?.doubleValue
@@ -22,7 +20,6 @@ class RCTMGLLineSource: RCTMGLSource {
   
   @objc var endOffset: NSNumber? {
     didSet {
-      print("updated endOffset")
       animateToNewOffset(
         prevOffset: currentEndOffset,
         targetOffset: endOffset?.doubleValue
