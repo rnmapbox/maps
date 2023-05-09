@@ -27,7 +27,7 @@ Add the following to your `ios/Podfile`:
   end
 ```
 
-You must set the the `$RNMapboxMapsImpl`. For use with mapbox, set this to `mapbox` aka v10 implementation [see bellow for detailed instructions](#mapbox-maps-sdk-v10)
+Set the `$RNMapboxMapsImpl` to `mapbox` aka v10 implementation [see bellow for detailed instructions](#mapbox-maps-sdk-v10)
 
 Run `pod install` to download the proper mapbox dependency. You may need to run `pod repo update` if you get an error of ` CocoaPods could not find compatible versions for pod "MapboxMaps"`
 
