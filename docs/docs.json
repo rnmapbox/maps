@@ -3113,7 +3113,7 @@
         "required": false,
         "type": "number \\| number[]",
         "default": "none",
-        "description": "The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport."
+        "description": "The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport.\n@deprecated use Camera `padding` instead"
       },
       {
         "name": "projection",

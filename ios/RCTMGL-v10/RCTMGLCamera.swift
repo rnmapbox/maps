@@ -359,6 +359,9 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
   }
   
   private func toUpdateItem(stop: [String: Any]) -> CameraUpdateItem? {
+    if (stop.isEmpty) {
+      return nil
+    }
     var zoom: CGFloat?
     if let z = stop["zoom"] as? Double {
       zoom = CGFloat(z)

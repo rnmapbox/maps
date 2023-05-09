@@ -16,6 +16,7 @@ MapView backed by Mapbox Native GL
 number | number[]
 ```
 The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport.
+@deprecated use Camera `padding` instead
 
 
   
