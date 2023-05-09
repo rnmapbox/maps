@@ -15,21 +15,22 @@ const MapboxGL = NativeModules.MGLModule;
 export const NATIVE_MODULE_NAME = 'RCTMGLLineSource';
 
 export type Props = {
-  /**
-   * A string that uniquely identifies the source.
-   */
+  /** A string that uniquely identifies the source. */
   id: string;
 
-  /**
-   * The contents of the line.
-   */
+  /** The line data. */
   lineString?: GeoJSON.LineString;
 
+  /** The distance in meters to remove from the start of the line. */
   startOffset?: number;
+
+  /** The distance in meters to remove from the end of the line. */
   endOffset?: number;
 
-  duration?: number;
+  /** The duration in milliseconds to animate the offsets. If undefined or 0, changes are instantaneous.  */
+  animationDuration?: number;
 
+  /** One or more components to render with the line data. */
   children?: React.ReactElement | React.ReactElement[];
 };
 
@@ -44,7 +45,7 @@ export class LineSource extends NativeBridgeComponent(
     id: MapboxGL.StyleSource.DefaultSourceID,
     startOffset: 0,
     endOffset: 0,
-    duration: 1000,
+    animationDuration: undefined,
   };
 
   constructor(props: Props) {
@@ -79,7 +80,7 @@ export class LineSource extends NativeBridgeComponent(
       lineString: toJSONString(this.props.lineString),
       startOffset: this.props.startOffset,
       endOffset: this.props.endOffset,
-      duration: this.props.duration,
+      animationDuration: this.props.animationDuration,
     };
 
     return (
@@ -93,7 +94,7 @@ type NativeProps = {
   lineString?: string;
   startOffset?: number;
   endOffset?: number;
-  duration?: number;
+  animationDuration?: number;
 };
 
 const RCTMGLLineSource =

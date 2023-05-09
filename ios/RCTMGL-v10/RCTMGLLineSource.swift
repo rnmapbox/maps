@@ -26,12 +26,20 @@ class RCTMGLLineSource: RCTMGLSource {
       )
     }
   }
+  
+  @objc var animationDuration: NSNumber? {
+    didSet {
+      if let d = animationDuration {
+        duration = d.doubleValue / 1000
+      } else {
+        duration = nil
+      }
+    }
+  }
 
   private var currentStartOffset: Double = 0
   private var currentEndOffset: Double = 0
-  
-  private var duration: TimeInterval = 1
-  
+  private var duration: TimeInterval?
   private var animLoopTimer: Timer?
 
   override init(frame: CGRect) {
@@ -46,17 +54,23 @@ class RCTMGLLineSource: RCTMGLSource {
     guard let targetOffset = targetOffset else {
       return
     }
-    
-    let fps: Double = 30
-    var ratio: Double = 0
-    
+
     self.animLoopTimer?.invalidate()
-    self.animLoopTimer = Timer.scheduledTimer(withTimeInterval: duration / fps, repeats: true, block: { t in
-      ratio += self.duration / fps
-      let progress = (targetOffset - prevOffset) * ratio
-      self.currentStartOffset = prevOffset + progress
+
+    if let duration = duration {
+      let fps: Double = 30
+      var ratio: Double = 0
+      
+      self.animLoopTimer = Timer.scheduledTimer(withTimeInterval: duration / fps, repeats: true, block: { t in
+        ratio += duration / fps
+        let progress = (targetOffset - prevOffset) * ratio
+        self.currentStartOffset = prevOffset + progress
+        self.refresh()
+      })
+    } else {
+      self.currentStartOffset = targetOffset
       self.refresh()
-    })
+    }
   }
   
   func refresh() {

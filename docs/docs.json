@@ -2719,35 +2719,35 @@
         "required": false,
         "type": "GeoJSON.LineString",
         "default": "none",
-        "description": "The contents of the line."
+        "description": "The line data."
       },
       {
         "name": "startOffset",
         "required": false,
         "type": "number",
         "default": "0",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "The distance in meters to remove from the start of the line."
       },
       {
         "name": "endOffset",
         "required": false,
         "type": "number",
         "default": "0",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "The distance in meters to remove from the end of the line."
       },
       {
-        "name": "duration",
+        "name": "animationDuration",
         "required": false,
         "type": "number",
-        "default": "1000",
-        "description": "FIX ME NO DESCRIPTION"
+        "default": "undefined",
+        "description": "The duration in milliseconds to animate the offsets. If undefined or 0, changes are instantaneous."
       },
       {
         "name": "children",
         "required": false,
         "type": "React.ReactElement \\| React.ReactElement[]",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "One or more components to render with the line data."
       }
     ],
     "fileNameWithExt": "LineSource.tsx",

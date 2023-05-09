@@ -25,7 +25,7 @@ A string that uniquely identifies the source.
 ```tsx
 GeoJSON.LineString
 ```
-The contents of the line.
+The line data.
 
 
   
@@ -34,7 +34,7 @@ The contents of the line.
 ```tsx
 number
 ```
-FIX ME NO DESCRIPTION
+The distance in meters to remove from the start of the line.
 
   _defaults to:_ `0`
 
@@ -44,19 +44,19 @@ FIX ME NO DESCRIPTION
 ```tsx
 number
 ```
-FIX ME NO DESCRIPTION
+The distance in meters to remove from the end of the line.
 
   _defaults to:_ `0`
 
   
-### duration
+### animationDuration
 
 ```tsx
 number
 ```
-FIX ME NO DESCRIPTION
+The duration in milliseconds to animate the offsets. If undefined or 0, changes are instantaneous.
 
-  _defaults to:_ `1000`
+  _defaults to:_ `undefined`
 
   
 ### children
@@ -64,7 +64,7 @@ FIX ME NO DESCRIPTION
 ```tsx
 React.ReactElement | React.ReactElement[]
 ```
-FIX ME NO DESCRIPTION
+One or more components to render with the line data.
 
 
   
