@@ -34,10 +34,14 @@ export type Props = {
   children?: React.ReactElement | React.ReactElement[];
 };
 
+type State = {
+  lineStringSerialized: string;
+};
+
 /**
  * LineSource is a map content source that supplies a GeoJSON line string to be shown on the map.
  */
-export class LineSource extends NativeBridgeComponent(
+export class LineSource extends NativeBridgeComponent<Props, State, any>(
   AbstractSource<Props, NativeProps>,
   NATIVE_MODULE_NAME,
 ) {
@@ -50,12 +54,26 @@ export class LineSource extends NativeBridgeComponent(
 
   constructor(props: Props) {
     super(props);
+
+    this.state = {
+      lineStringSerialized: '',
+    };
+  }
+
+  componentDidMount() {
+    this.setLineStringSerialized();
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.lineString !== this.props.lineString) {
+      this.setLineStringSerialized();
+    }
   }
 
   _setNativeRef(
     nativeRef: React.Component<NativeProps> & Readonly<NativeMethods>,
   ) {
-    this.setNativeRef(nativeRef);
+    this._setNativeRef(nativeRef);
     super._runPendingNativeCommands(nativeRef);
   }
 
@@ -64,9 +82,9 @@ export class LineSource extends NativeBridgeComponent(
     super.setNativeProps(shallowProps);
   }
 
-  _getChildren() {
-    return cloneReactChildrenWithProps(this.props.children, {
-      sourceID: this.props.id,
+  setLineStringSerialized() {
+    this.setState({
+      lineStringSerialized: toJSONString(this.props.lineString),
     });
   }
 
@@ -75,16 +93,18 @@ export class LineSource extends NativeBridgeComponent(
       return null;
     }
 
-    const props: NativeProps = {
-      id: this.props.id,
-      lineString: toJSONString(this.props.lineString),
-      startOffset: this.props.startOffset,
-      endOffset: this.props.endOffset,
-      animationDuration: this.props.animationDuration,
-    };
-
     return (
-      <RCTMGLLineSource {...props}>{this._getChildren()}</RCTMGLLineSource>
+      <RCTMGLLineSource
+        id={this.props.id}
+        lineString={this.state.lineStringSerialized}
+        startOffset={this.props.startOffset}
+        endOffset={this.props.endOffset}
+        animationDuration={this.props.animationDuration}
+      >
+        {cloneReactChildrenWithProps(this.props.children, {
+          sourceID: this.props.id,
+        })}
+      </RCTMGLLineSource>
     );
   }
 }
@@ -95,6 +115,7 @@ type NativeProps = {
   startOffset?: number;
   endOffset?: number;
   animationDuration?: number;
+  children?: React.ReactElement | React.ReactElement[];
 };
 
 const RCTMGLLineSource =
