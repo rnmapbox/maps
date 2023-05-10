@@ -34,14 +34,10 @@ export type Props = {
   children?: React.ReactElement | React.ReactElement[];
 };
 
-type State = {
-  lineStringSerialized: string;
-};
-
 /**
  * LineSource is a map content source that supplies a GeoJSON line string to be shown on the map.
  */
-export class LineSource extends NativeBridgeComponent<Props, State, any>(
+export class LineSource extends NativeBridgeComponent(
   AbstractSource<Props, NativeProps>,
   NATIVE_MODULE_NAME,
 ) {
@@ -56,7 +52,7 @@ export class LineSource extends NativeBridgeComponent<Props, State, any>(
     super(props);
 
     this.state = {
-      lineStringSerialized: '',
+      lineStringSerialized: undefined,
     };
   }
 
@@ -65,7 +61,7 @@ export class LineSource extends NativeBridgeComponent<Props, State, any>(
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.lineString !== this.props.lineString) {
+    if (this.props.lineString !== prevProps.lineString) {
       this.setLineStringSerialized();
     }
   }
@@ -89,13 +85,15 @@ export class LineSource extends NativeBridgeComponent<Props, State, any>(
   }
 
   render() {
-    if (!this.props.lineString) {
+    // @ts-expect-error State is not typed.
+    if (!this.state.lineStringSerialized) {
       return null;
     }
 
     return (
       <RCTMGLLineSource
         id={this.props.id}
+        // @ts-expect-error State is not typed.
         lineString={this.state.lineStringSerialized}
         startOffset={this.props.startOffset}
         endOffset={this.props.endOffset}
