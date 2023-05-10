@@ -73,7 +73,7 @@ export class LineSource extends NativeBridgeComponent<Props, State, any>(
   _setNativeRef(
     nativeRef: React.Component<NativeProps> & Readonly<NativeMethods>,
   ) {
-    this._setNativeRef(nativeRef);
+    this.setNativeRef(nativeRef);
     super._runPendingNativeCommands(nativeRef);
   }
 
