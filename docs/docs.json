@@ -2705,7 +2705,15 @@
   "LineSource": {
     "description": "LineSource is a map content source that supplies a GeoJSON line string to be shown on the map.",
     "displayName": "LineSource",
-    "methods": [],
+    "methods": [
+      {
+        "name": "setLineStringSerialized",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      }
+    ],
     "props": [
       {
         "name": "id",

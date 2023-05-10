@@ -73,4 +73,15 @@ One or more components to render with the line data.
 
 
 
+## methods
+### setLineStringSerialized()
+
+
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+
+
+
 
