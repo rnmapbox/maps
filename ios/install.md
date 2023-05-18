@@ -27,9 +27,9 @@ Add the following to your `ios/Podfile`:
   end
 ```
 
-We also recommend setting the `$RNMapboxMapsImpl` to `mapbox` aka v10 implementation [see bellow for detailed instructions](#mapbox-maps-sdk-v10)
+Set the `$RNMapboxMapsImpl` to `mapbox` aka v10 implementation [see bellow for detailed instructions](#mapbox-maps-sdk-v10)
 
-Running `pod install` download the proper mapbox dependency
+Run `pod install` to download the proper mapbox dependency.
 
 ```sh
 # Go to the ios folder
