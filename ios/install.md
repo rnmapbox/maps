@@ -29,7 +29,7 @@ Add the following to your `ios/Podfile`:
 
 Set the `$RNMapboxMapsImpl` to `mapbox` aka v10 implementation [see bellow for detailed instructions](#mapbox-maps-sdk-v10)
 
-Run `pod install` to download the proper mapbox dependency. You may need to run `pod repo update` if you get an error of ` CocoaPods could not find compatible versions for pod "MapboxMaps"`
+Run `pod install` to download the proper mapbox dependency.
 
 ```sh
 # Go to the ios folder
