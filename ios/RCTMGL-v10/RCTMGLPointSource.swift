@@ -6,28 +6,18 @@ class RCTMGLPointSource: RCTMGLSource {
   @objc var point: String? {
     didSet {
       let targetPoint = try? getPointGeometry()
+      var prevPoint = lastUpdatedPoint ?? targetPoint
       
-      if let prevPoint = lastUpdatedPoint, let targetPoint = targetPoint {
+      if let prevPoint = prevPoint, let targetPoint = targetPoint {
         animateToNewOffset(prevPoint: prevPoint, targetPoint: targetPoint)
       }
-      
-      lastUpdatedPoint = targetPoint
     }
   }
   
-  @objc var animationDuration: NSNumber? {
-    didSet {
-      if let d = animationDuration {
-        duration = d.doubleValue
-      } else {
-        duration = nil
-      }
-    }
-  }
+  @objc var animationDuration: NSNumber?
 
   private var lastUpdatedPoint: Point?
-  private var duration: Double?
-  private var animLoopTimer: Timer?
+  private var timer: Timer?
 
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -38,9 +28,9 @@ class RCTMGLPointSource: RCTMGLSource {
   }
   
   func animateToNewOffset(prevPoint: Point, targetPoint: Point) {
-    self.animLoopTimer?.invalidate()
+    self.timer?.invalidate()
 
-    if let duration = duration {
+    if let duration = animationDuration?.doubleValue {
       let fps: Double = 30
       var ratio: Double = 0
 
@@ -54,7 +44,7 @@ class RCTMGLPointSource: RCTMGLSource {
       ])
       let distanceBetween = lineBetween.distance() ?? 0
       
-      self.animLoopTimer = Timer.scheduledTimer(withTimeInterval: period / 1000, repeats: true, block: { t in
+      self.timer = Timer.scheduledTimer(withTimeInterval: period / 1000, repeats: true, block: { t in
         ratio += ratioIncr
         if ratio >= 1 {
           t.invalidate()
@@ -62,7 +52,9 @@ class RCTMGLPointSource: RCTMGLSource {
         }
         
         let coord = lineBetween.coordinateFromStart(distance: distanceBetween * ratio)!
-        self.refresh(currentPoint: Point(coord))
+        let point = Point(coord)
+        self.refresh(currentPoint: point)
+        self.lastUpdatedPoint = point
       })
     } else {
       self.refresh(currentPoint: targetPoint)
