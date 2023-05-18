@@ -67,7 +67,7 @@ class RCTMGLLineSource: RCTMGLSource {
   }
   
   func applyLineGeometry() {
-    let style = try? updateStyle()
+    let style = try? getStyle()
     let geometry = try? getLineGeometry()
 
     guard let style = style, let geometry = geometry else {
@@ -110,7 +110,7 @@ class RCTMGLLineSource: RCTMGLSource {
     }
   }
   
-  func updateStyle() throws -> Style {
+  func getStyle() throws -> Style {
     guard let id = id else {
       throw RCTMGLError.parseError("Update style failed: no id found")
     }
@@ -133,7 +133,7 @@ class RCTMGLLineSource: RCTMGLSource {
   }
   
   func updateSource(property: String, value: Any) {
-    let style = try? updateStyle()
+    let style = try? getStyle()
     try? style?.setSourceProperty(for: id, property: property, value: value)
   }
 }

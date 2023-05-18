@@ -9,7 +9,7 @@ class RCTMGLPointSource: RCTMGLSource {
       let prevPoint = lastUpdatedPoint ?? targetPoint
       
       if let prevPoint = prevPoint, let targetPoint = targetPoint {
-        animateToNewOffset(prevPoint: prevPoint, targetPoint: targetPoint)
+        animateToNewPoint(prevPoint: prevPoint, targetPoint: targetPoint)
       }
     }
   }
@@ -27,7 +27,33 @@ class RCTMGLPointSource: RCTMGLSource {
     fatalError("init(coder:) has not been implemented")
   }
   
-  func animateToNewOffset(prevPoint: Point, targetPoint: Point) {
+  func getPointGeometry() throws -> Point {
+    guard let data = point?.data(using: .utf8) else {
+      throw RCTMGLError.parseError("shape is not utf8")
+    }
+
+    var geometry: Point
+    do {
+      geometry = try JSONDecoder().decode(Point.self, from: data)
+    } catch {
+      throw RCTMGLError.parseError("data cannot be decoded: \(error.localizedDescription)")
+    }
+
+    return geometry
+  }
+  
+  func applyPointGeometry(currentPoint: Point?) {
+    let style = try? getStyle()
+
+    guard let style = style, let geometry = currentPoint else {
+      return
+    }
+    
+    let obj = GeoJSONObject.geometry(.point(geometry))
+    try? style.updateGeoJSONSource(withId: id, geoJSON: obj)
+  }
+
+  func animateToNewPoint(prevPoint: Point, targetPoint: Point) {
     self.timer?.invalidate()
 
     if let duration = animationDuration?.doubleValue {
@@ -53,25 +79,14 @@ class RCTMGLPointSource: RCTMGLSource {
         
         let coord = lineBetween.coordinateFromStart(distance: distanceBetween * ratio)!
         let point = Point(coord)
-        self.refresh(currentPoint: point)
+        self.applyPointGeometry(currentPoint: point)
         self.lastUpdatedPoint = point
       })
     } else {
-      self.refresh(currentPoint: targetPoint)
+      self.applyPointGeometry(currentPoint: targetPoint)
     }
   }
   
-  func refresh(currentPoint: Point?) {
-    let style = try? getStyle()
-
-    guard let style = style, let geometry = currentPoint else {
-      return
-    }
-    
-    let obj = GeoJSONObject.geometry(.point(geometry))
-    try? style.updateGeoJSONSource(withId: id, geoJSON: obj)
-  }
-
   override func makeSource() -> Source {
     var result =  GeoJSONSource()
     if let geometry = try? getPointGeometry() {
@@ -79,22 +94,7 @@ class RCTMGLPointSource: RCTMGLSource {
     }
     return result
   }
-  
-  func getPointGeometry() throws -> Point {
-    guard let data = point?.data(using: .utf8) else {
-      throw RCTMGLError.parseError("shape is not utf8")
-    }
 
-    var geometry: Point
-    do {
-      geometry = try JSONDecoder().decode(Point.self, from: data)
-    } catch {
-      throw RCTMGLError.parseError("data cannot be decoded: \(error.localizedDescription)")
-    }
-
-    return geometry
-  }
-  
   func getStyle() throws -> Style {
     guard let id = id else {
       throw RCTMGLError.parseError("Update style failed: no id found")
