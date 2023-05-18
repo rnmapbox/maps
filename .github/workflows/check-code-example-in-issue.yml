@@ -1,0 +1,31 @@
+name: CheckCodeExampleInIssue
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  check-issue-example-code:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    
+    permissions:
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+
+      - name: run lint-code-example-in-issues.js
+        run: |
+          npm install
+          node lint-code-example-in-issues.js
+        working-directory: ./scripts/actions/lint-code-example-in-issues
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
