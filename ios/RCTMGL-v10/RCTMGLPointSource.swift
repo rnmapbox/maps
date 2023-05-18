@@ -18,7 +18,7 @@ class RCTMGLPointSource: RCTMGLSource {
   @objc var animationDuration: NSNumber? {
     didSet {
       if let d = animationDuration {
-        duration = d.doubleValue / 1000
+        duration = d.doubleValue
       } else {
         duration = nil
       }
@@ -26,8 +26,7 @@ class RCTMGLPointSource: RCTMGLSource {
   }
 
   private var lastUpdatedPoint: Point?
-  private var currentPoint: Point?
-  private var duration: TimeInterval?
+  private var duration: Double?
   private var animLoopTimer: Timer?
 
   override init(frame: CGRect) {
@@ -44,27 +43,34 @@ class RCTMGLPointSource: RCTMGLSource {
     if let duration = duration {
       let fps: Double = 30
       var ratio: Double = 0
-      
+
+      let frameCt = duration / 1000
+      let ratioIncr = 1 / (fps * frameCt)
+      let period = 1000 / fps
+
       let lineBetween = LineString.init([
         prevPoint.coordinates,
         targetPoint.coordinates
       ])
       let distanceBetween = lineBetween.distance() ?? 0
       
-      self.animLoopTimer = Timer.scheduledTimer(withTimeInterval: duration / fps, repeats: true, block: { t in
-        ratio += duration / fps
+      self.animLoopTimer = Timer.scheduledTimer(withTimeInterval: period / 1000, repeats: true, block: { t in
+        ratio += ratioIncr
+        if ratio >= 1 {
+          t.invalidate()
+          return
+        }
+        
         let coord = lineBetween.coordinateFromStart(distance: distanceBetween * ratio)!
-        self.currentPoint = Point(coord)
-        self.refresh()
+        self.refresh(currentPoint: Point(coord))
       })
     } else {
-      self.currentPoint = targetPoint
-      self.refresh()
+      self.refresh(currentPoint: targetPoint)
     }
   }
   
-  func refresh() {
-    let style = try? updateStyle()
+  func refresh(currentPoint: Point?) {
+    let style = try? getStyle()
 
     guard let style = style, let geometry = currentPoint else {
       return
@@ -97,7 +103,7 @@ class RCTMGLPointSource: RCTMGLSource {
     return geometry
   }
   
-  func updateStyle() throws -> Style {
+  func getStyle() throws -> Style {
     guard let id = id else {
       throw RCTMGLError.parseError("Update style failed: no id found")
     }
@@ -111,7 +117,7 @@ class RCTMGLPointSource: RCTMGLSource {
   }
 
   func updateSource(property: String, value: Any) {
-    let style = try? updateStyle()
+    let style = try? getStyle()
     try? style?.setSourceProperty(for: id, property: property, value: value)
   }
 }
