@@ -5,7 +5,12 @@ import Turf
 class RCTMGLLineSource: RCTMGLSource {
   @objc var lineString: String? {
     didSet {
-      refresh()
+      animLoopTimer?.invalidate()
+      animLoopTimer = nil
+      currentStartOffset = 0
+      currentEndOffset = 0
+      
+      applyLineGeometry()
     }
   }
   
@@ -49,51 +54,7 @@ class RCTMGLLineSource: RCTMGLSource {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
-  func animateToNewOffset(prevOffset: Double, targetOffset: Double?) {
-    guard let targetOffset = targetOffset else {
-      return
-    }
 
-    self.animLoopTimer?.invalidate()
-
-    if let duration = duration {
-      let fps: Double = 30
-      var ratio: Double = 0
-      
-      self.animLoopTimer = Timer.scheduledTimer(withTimeInterval: duration / fps, repeats: true, block: { t in
-        ratio += duration / fps
-        let progress = (targetOffset - prevOffset) * ratio
-        self.currentStartOffset = prevOffset + progress
-        self.refresh()
-      })
-    } else {
-      self.currentStartOffset = targetOffset
-      self.refresh()
-    }
-  }
-  
-  func refresh() {
-    let style = try? updateStyle()
-    let geometry = try? getLineGeometry()
-
-    guard let style = style, let geometry = geometry else {
-      return
-    }
-    
-    let obj = GeoJSONObject.geometry(.lineString(geometry))
-    try? style.updateGeoJSONSource(withId: id, geoJSON: obj)
-  }
-
-  override func makeSource() -> Source {
-    var result =  GeoJSONSource()
-    if let geometry = try? getLineGeometry() {
-      result.data = GeoJSONSourceData.geometry(.lineString(geometry))
-    }
-    result.lineMetrics = true
-    return result
-  }
-  
   func getLineGeometry() throws -> LineString {
     guard let data = lineString?.data(using: .utf8) else {
       throw RCTMGLError.parseError("shape is not utf8")
@@ -114,6 +75,41 @@ class RCTMGLLineSource: RCTMGLSource {
     return geometryTrimmed
   }
   
+  func applyLineGeometry() {
+    let style = try? updateStyle()
+    let geometry = try? getLineGeometry()
+
+    guard let style = style, let geometry = geometry else {
+      return
+    }
+    
+    let obj = GeoJSONObject.geometry(.lineString(geometry))
+    try? style.updateGeoJSONSource(withId: id, geoJSON: obj)
+  }
+  
+  func animateToNewOffset(prevOffset: Double, targetOffset: Double?) {
+    guard let targetOffset = targetOffset else {
+      return
+    }
+
+    self.animLoopTimer?.invalidate()
+
+    if let duration = duration {
+      let fps: Double = 30
+      var ratio: Double = 0
+      
+      self.animLoopTimer = Timer.scheduledTimer(withTimeInterval: duration / fps, repeats: true, block: { t in
+        ratio += duration / fps
+        let progress = (targetOffset - prevOffset) * ratio
+        self.currentStartOffset = prevOffset + progress
+        self.applyLineGeometry()
+      })
+    } else {
+      self.currentStartOffset = targetOffset
+      self.applyLineGeometry()
+    }
+  }
+  
   func updateStyle() throws -> Style {
     guard let id = id else {
       throw RCTMGLError.parseError("Update style failed: no id found")
@@ -127,6 +123,15 @@ class RCTMGLLineSource: RCTMGLSource {
     return style
   }
 
+  override func makeSource() -> Source {
+    var result =  GeoJSONSource()
+    if let geometry = try? getLineGeometry() {
+      result.data = GeoJSONSourceData.geometry(.lineString(geometry))
+    }
+    result.lineMetrics = true
+    return result
+  }
+  
   func updateSource(property: String, value: Any) {
     let style = try? updateStyle()
     try? style?.setSourceProperty(for: id, property: property, value: value)
