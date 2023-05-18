@@ -6,9 +6,16 @@ class RCTMGLImage : UIView {
 
   var image: UIImage? = nil
   
-  var sdf: Bool? = nil
+  @objc
+  var sdf: Bool = false
+
+  @objc
   var stretchX: [[NSNumber]] = []
+
+  @objc
   var stretchY: [[NSNumber]] = []
+
+  @objc
   var content: [NSNumber]? = nil
 
   weak var images: RCTMGLImageSetter? = nil {
