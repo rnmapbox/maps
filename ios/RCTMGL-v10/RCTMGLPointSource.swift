@@ -6,7 +6,7 @@ class RCTMGLPointSource: RCTMGLSource {
   @objc var point: String? {
     didSet {
       let targetPoint = try? getPointGeometry()
-      var prevPoint = lastUpdatedPoint ?? targetPoint
+      let prevPoint = lastUpdatedPoint ?? targetPoint
       
       if let prevPoint = prevPoint, let targetPoint = targetPoint {
         animateToNewOffset(prevPoint: prevPoint, targetPoint: targetPoint)
