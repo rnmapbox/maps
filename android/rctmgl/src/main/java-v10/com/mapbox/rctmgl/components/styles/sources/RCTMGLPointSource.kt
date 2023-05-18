@@ -51,17 +51,17 @@ class RCTMGLPointSource(context: Context, private val mManager: RCTMGLPointSourc
             timer!!.cancel()
         }
 
-        val fps = 30.0
-        var ratio = 0.0
-
-        val lineBetween = LineString.fromLngLats(listOf<Point>(prevPoint, targetPoint))
-        val distanceBetween = TurfMeasurement.length(lineBetween, TurfConstants.UNIT_METERS)
-
-        val _mAnimationDuration = mAnimationDuration
+        val _mAnimationDuration = mAnimationDuration?.toLong()
         if (_mAnimationDuration != null && _mAnimationDuration > 0) {
+            val fps = 30.0
+            var ratio = 0.0
+
             val frameCt = _mAnimationDuration / 1000
             val ratioIncr = 1 / (fps * frameCt)
             val period = 1000 / fps
+
+            val lineBetween = LineString.fromLngLats(listOf<Point>(prevPoint, targetPoint))
+            val distanceBetween = TurfMeasurement.length(lineBetween, TurfConstants.UNIT_METERS)
 
             timer = Timer()
             timer?.schedule(
@@ -69,6 +69,10 @@ class RCTMGLPointSource(context: Context, private val mManager: RCTMGLPointSourc
                     override fun run() {
                         runOnUiThread {
                             ratio += ratioIncr
+                            if (ratio >= 1) {
+                                timer?.cancel()
+                                return@runOnUiThread
+                            }
 
                             val coord = TurfMeasurement.along(
                                 lineBetween,
@@ -76,10 +80,6 @@ class RCTMGLPointSource(context: Context, private val mManager: RCTMGLPointSourc
                                 TurfConstants.UNIT_METERS
                             )
                             refresh(coord)
-
-                            if (ratio >= 1) {
-                                timer?.cancel()
-                            }
                         }
                     }
                 }, 0, period.toLong()
