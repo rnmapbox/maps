@@ -21,14 +21,14 @@ class RCTMGLPointSource(context: Context, private val mManager: RCTMGLPointSourc
     private var mPoint: String? = null
     fun setPoint(point: String) {
         mPoint = point
+
         val targetPoint = getPointGeometry(point)
-        val _prevPoint = lastUpdatedPoint
+        var _prevPoint = lastUpdatedPoint ?: targetPoint
         val _targetPoint = targetPoint
+
         if (_prevPoint != null && _targetPoint != null) {
             animateToNewOffset(_prevPoint, _targetPoint)
         }
-
-        lastUpdatedPoint = targetPoint
     }
 
     private var mAnimationDuration: Long? = null
@@ -64,7 +64,7 @@ class RCTMGLPointSource(context: Context, private val mManager: RCTMGLPointSourc
             val distanceBetween = TurfMeasurement.length(lineBetween, TurfConstants.UNIT_METERS)
 
             timer = Timer()
-            timer?.schedule(
+            timer?.scheduleAtFixedRate(
                 object: TimerTask() {
                     override fun run() {
                         runOnUiThread {
@@ -80,6 +80,7 @@ class RCTMGLPointSource(context: Context, private val mManager: RCTMGLPointSourc
                                 TurfConstants.UNIT_METERS
                             )
                             refresh(coord)
+                            lastUpdatedPoint = coord
                         }
                     }
                 }, 0, period.toLong()
