@@ -5,8 +5,8 @@ import Turf
 class RCTMGLLineSource: RCTMGLSource {
   @objc var lineString: String? {
     didSet {
-      animLoopTimer?.invalidate()
-      animLoopTimer = nil
+      timer?.invalidate()
+      timer = nil
       currentStartOffset = 0
       currentEndOffset = 0
       
@@ -32,20 +32,11 @@ class RCTMGLLineSource: RCTMGLSource {
     }
   }
   
-  @objc var animationDuration: NSNumber? {
-    didSet {
-      if let d = animationDuration {
-        duration = d.doubleValue / 1000
-      } else {
-        duration = nil
-      }
-    }
-  }
+  @objc var animationDuration: NSNumber?
 
   private var currentStartOffset: Double = 0
   private var currentEndOffset: Double = 0
-  private var duration: TimeInterval?
-  private var animLoopTimer: Timer?
+  private var timer: Timer?
 
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -92,14 +83,23 @@ class RCTMGLLineSource: RCTMGLSource {
       return
     }
 
-    self.animLoopTimer?.invalidate()
+    self.timer?.invalidate()
 
-    if let duration = duration {
+    if let duration = animationDuration?.doubleValue {
       let fps: Double = 30
       var ratio: Double = 0
+
+      let frameCt = duration / 1000
+      let ratioIncr = 1 / (fps * frameCt)
+      let period = 1000 / fps
       
-      self.animLoopTimer = Timer.scheduledTimer(withTimeInterval: duration / fps, repeats: true, block: { t in
-        ratio += duration / fps
+      self.timer = Timer.scheduledTimer(withTimeInterval: period / 1000, repeats: true, block: { t in
+        ratio += ratioIncr
+        if ratio >= 1 {
+          t.invalidate()
+          return
+        }
+        
         let progress = (targetOffset - prevOffset) * ratio
         self.currentStartOffset = prevOffset + progress
         self.applyLineGeometry()
