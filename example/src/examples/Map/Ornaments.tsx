@@ -6,7 +6,7 @@ import { Divider } from '@rneui/base';
 import sheet from '../../styles/sheet';
 import Page from '../common/Page';
 import Bubble from '../common/Bubble';
-import { Images } from '../../../../javascript';
+import { Images } from '../../../../src';
 import { BaseExampleProps } from '../common/BaseExamplePropTypes';
 
 type CompassImage = 'compass1' | 'compass2';

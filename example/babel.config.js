@@ -22,7 +22,7 @@ module.exports = (api) => {
             'module-resolver',
             {
               alias: {
-                '@rnmapbox/maps': '../javascript',
+                '@rnmapbox/maps': '../src',
                 react: './node_modules/react',
                 'react-native': './node_modules/react-native',
                 '@babel': './node_modules/@babel',

@@ -10,6 +10,7 @@ import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.PuckBearingSource
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.components.AbstractMapFeature
+import com.mapbox.rctmgl.components.RemovalReason
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 
 enum class RenderMode {
@@ -31,11 +32,11 @@ class RCTMGLNativeUserLocation(context: Context) : AbstractMapFeature(context), 
         applyChanges()
     }
 
-    override fun removeFromMap(mapView: RCTMGLMapView) {
+    override fun removeFromMap(mapView: RCTMGLMapView, reason: RemovalReason): Boolean {
         mEnabled = false
         mMapView?.locationComponentManager?.showNativeUserLocation(false)
         mMap?.getStyle(this)
-        super.removeFromMap(mapView)
+        return super.removeFromMap(mapView, reason)
     }
 
     @SuppressLint("MissingPermission")

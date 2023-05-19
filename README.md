@@ -21,11 +21,8 @@ _A community-supported, open-source React Native library for building maps with 
 
 ---
 ## News & Discussions
-#### <span style="color:red">&rarr;</span> Future of this repo: participate in the [discussion thread](https://github.com/rnmapbox/maps/discussions/1680)
-
 #### <span style="color:red">&rarr;</span> Call for additional maintainers [discussion thread](https://github.com/rnmapbox/maps/discussions/1551)
 
-#### <span style="color:red">&rarr;</span> This README is for the unreleased 10* branch. Please see [v8 branch](https://github.com/rnmapbox/maps/tree/v8) for documentation on 8.* releases
 ---
 
 <table>
@@ -76,15 +73,14 @@ _See [iOS](ios/install.md) & [Android](android/install.md) setup guide for more 
 
 ## Prerequisite
 
-1. On Android we support from version 6 (API 23) upwards
-2. Please [Sign Up to Mapbox](https://account.mapbox.com/auth/signup/) to get the Mapbox Access Token.
+1. Please [Sign Up to Mapbox](https://account.mapbox.com/auth/signup/) to get the Mapbox Access Token.
 
 
 ## Dependencies
 
 - [node](https://nodejs.org)
 - [npm](https://www.npmjs.com/)
-- [React Native](https://facebook.github.io/react-native/) (0.60+)
+- [React Native](https://facebook.github.io/react-native/) (0.64+)
 
 
 ## Installation
@@ -94,18 +90,19 @@ _See [iOS](ios/install.md) & [Android](android/install.md) setup guide for more 
 #### Using `yarn`
 Install the latest source from git:
 ```sh
-yarn add rnmapbox/maps#main
+yarn add @rnmapbox/maps
 ``` 
 
 #### Using `npm`
 Install the latest source from git:
 ```sh
-npm install --save rnmapbox/maps#main
+npm install --save @rnmapbox/maps
 ``` 
 
 #### Installing other versions
-Replace `rnmapbox/maps#main` with the following to install other versions:
-- `@rnmapbox/maps` installs the latest release
+
+- `@rnmapbox/maps` installs the latest release from npm
+- to install current `main` from github replace `@rnmapbox/maps` with `rnmapbox/maps#main`. To install specific version use `@rnmapbox/maps@10.0.4`
 
 
 #### Using `expo`
@@ -225,7 +222,7 @@ const styles = StyleSheet.create({
 
 ### Misc
 
-- [MapboxGL](/docs/MapboxGL.md)
+- [Mapbox](/docs/MapboxGL.md)
 - [CustomHttpHeaders](/docs/CustomHttpHeaders.md)
 - [Logger](/docs/Logger.md)
 

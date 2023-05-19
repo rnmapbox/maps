@@ -207,6 +207,7 @@ class RCTMGLPointAnnotation : RCTMGLInteractiveElement {
   // MARK: - RCTMGLMapComponent
   
   override func addToMap(_ map: RCTMGLMapView, style: Style) {
+    super.addToMap(map, style: style)
     self.map = map
     addIfPossible()
   }
@@ -235,7 +236,10 @@ extension RCTMGLPointAnnotation {
   
   @discardableResult
   func addIfPossible() -> Bool {
-    if !added && annotation.point.coordinates.isValid(), let pointAnnotationManager = map?.pointAnnotationManager {
+    if !added
+        && annotation.point.coordinates.isValid()
+        && (logged("PointAnnotation: missing id attribute") { return id }) != nil,
+        let pointAnnotationManager = map?.pointAnnotationManager {
       pointAnnotationManager.add(annotation)
       added = true
       return true

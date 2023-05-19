@@ -25,6 +25,7 @@ RCT_REMAP_VIEW_PROPERTY(rotateEnabled, reactRotateEnabled, BOOL)
 RCT_REMAP_VIEW_PROPERTY(pitchEnabled, reactPitchEnabled, BOOL)
 
 RCT_REMAP_VIEW_PROPERTY(projection, reactProjection, NSString)
+RCT_REMAP_VIEW_PROPERTY(localizeLabels, reactLocalizeLabels, NSDictionary)
 
 RCT_REMAP_VIEW_PROPERTY(styleURL, reactStyleURL, NSString)
 RCT_REMAP_VIEW_PROPERTY(onPress, reactOnPress, RCTBubblingEventBlock)
@@ -88,5 +89,10 @@ RCT_EXTERN_METHOD(setHandledMapChangedEvents:(nonnull NSNumber*)reactTag
                   events:(NSArray<NSString*>*)events
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(clearData: (nonnull NSNumber*)reactTag
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject
+                  )
 
 @end

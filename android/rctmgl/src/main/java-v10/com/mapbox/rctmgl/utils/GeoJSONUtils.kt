@@ -10,7 +10,10 @@ import com.mapbox.maps.CameraBounds
 import com.mapbox.rctmgl.utils.LatLngBounds
 import com.mapbox.turf.TurfMeasurement
 import com.mapbox.rctmgl.utils.LatLngQuad
+import com.mapbox.rctmgl.utils.extensions.toReadableArray
 import java.util.ArrayList
+
+
 
 object GeoJSONUtils {
     @JvmStatic
@@ -21,8 +24,11 @@ object GeoJSONUtils {
         feature.geometry()?.also {
             val geometry = fromGeometry(it)
             map.putMap("geometry", geometry)
-        } ?: {
-            Logger.w(LOG_TAG, "GeoJSONUtils.fromFeature geometry was null for feature: ${feature.toJson()}")
+        } ?: run {
+            Logger.w(
+                LOG_TAG,
+                "GeoJSONUtils.fromFeature geometry was null for feature: ${feature.toJson()}"
+            )
         }
         val properties = ConvertUtils.toWritableMap(feature.properties())
         map.putMap("properties", properties)
@@ -78,7 +84,7 @@ object GeoJSONUtils {
     }
 
     private fun coordinatesL(points: List<Point>): WritableArray {
-        return fromList(points.map { coordinates(it) })
+        return fromList(points.map { it.toReadableArray() })
     }
 
     private fun coordinatesLL(points: List<List<Point>>): WritableArray {

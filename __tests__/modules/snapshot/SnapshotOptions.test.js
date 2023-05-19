@@ -1,10 +1,7 @@
 import { NativeModules } from 'react-native';
 
-import SnapshotOptions from '../../../javascript/modules/snapshot/SnapshotOptions';
-import {
-  makePoint,
-  makeFeatureCollection,
-} from '../../../javascript/utils/geoUtils';
+import SnapshotOptions from '../../../src/modules/snapshot/SnapshotOptions';
+import { makePoint, makeFeatureCollection } from '../../../src/utils/geoUtils';
 
 describe('SnapshotOptions', () => {
   it('should throw error if no centerCoordinate or bounds are provided', () => {

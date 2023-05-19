@@ -217,7 +217,7 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
     }
   }
   
-  func _disableUsetTracking(_ map: MapView) {
+  func _disableUserTracking(_ map: MapView) {
     map.viewport.idle()
   }
   
@@ -263,12 +263,12 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
       let userTrackingMode = UserTrackingMode(rawValue: self.followUserMode ?? UserTrackingMode.normal.rawValue)
       guard let userTrackingMode = userTrackingMode else {
         Logger.error("RCTMGLCamera: Unexpected followUserMode \(optional: self.followUserMode)")
-        self._disableUsetTracking(map)
+        self._disableUserTracking(map)
         return
       }
 
       guard self.followUserLocation && userTrackingMode != .none else {
-        self._disableUsetTracking(map)
+        self._disableUserTracking(map)
         return
       }
 
@@ -290,17 +290,12 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
       case .none:
         Logger.assert("RCTMGLCamera, userTrackingModes should not be none here")
       case .compass:
-        map.location.options.puckBearingEnabled = true
-        map.location.options.puckBearingSource = PuckBearingSource.heading
         followOptions.bearing = FollowPuckViewportStateBearing.heading
         trackingModeChanged = true
       case .course:
-        map.location.options.puckBearingEnabled = true
-        map.location.options.puckBearingSource = PuckBearingSource.course
         followOptions.bearing = FollowPuckViewportStateBearing.course
         trackingModeChanged = true
       case .normal:
-        map.location.options.puckBearingEnabled = false
         followOptions.bearing = nil
         trackingModeChanged = true
       }
@@ -364,6 +359,9 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
   }
   
   private func toUpdateItem(stop: [String: Any]) -> CameraUpdateItem? {
+    if (stop.isEmpty) {
+      return nil
+    }
     var zoom: CGFloat?
     if let z = stop["zoom"] as? Double {
       zoom = CGFloat(z)
@@ -576,7 +574,7 @@ extension RCTMGLCamera : ViewportStatusObserver {
     if reason == .idleRequested {
       return "idleRequested"
     } else if reason == .transitionFailed {
-      return "transitionFailied"
+      return "transitionFailed"
     } else if reason == .transitionStarted {
       return "transitionStarted"
     } else if reason == .transitionSucceeded {

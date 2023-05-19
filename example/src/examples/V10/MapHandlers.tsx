@@ -7,7 +7,14 @@ import {
   MapView,
   ShapeSource,
 } from '@rnmapbox/maps';
-import { Feature, GeoJsonProperties, Geometry, Position } from 'geojson';
+import {
+  Feature,
+  GeoJsonProperties,
+  Geometry,
+  Point,
+  Polygon,
+  Position,
+} from 'geojson';
 import React, { useState } from 'react';
 import { SafeAreaView, View } from 'react-native';
 
@@ -48,7 +55,6 @@ const MapHandlers = (props: BaseExampleProps) => {
     },
     gestures: {
       isGestureActive: false,
-      isAnimatingFromGesture: false,
     },
   });
   const [features, setFeatures] = useState<Feature<Geometry>[]>([]);
@@ -59,11 +65,10 @@ const MapHandlers = (props: BaseExampleProps) => {
   const heading = properties?.heading;
   const gestures = mapState?.gestures;
 
-  const buildShape = (feature: Feature<Geometry>) => {
+  const buildShape = (feature: Feature<Geometry>): Geometry => {
     return {
       type: 'Point',
-      // @ts-expect-error TODO
-      coordinates: feature.geometry.coordinates,
+      coordinates: (feature as Feature<Point>).geometry.coordinates,
     };
   };
 
@@ -107,8 +112,9 @@ const MapHandlers = (props: BaseExampleProps) => {
           animationDuration={0}
         />
         {features.map((f, i) => {
-          // @ts-expect-error TODO
-          const id = JSON.stringify(f.geometry.coordinates);
+          const id = JSON.stringify(
+            (f as Feature<Polygon>).geometry.coordinates,
+          );
           const circleStyle =
             f.properties?.kind === 'press'
               ? {
@@ -120,7 +126,6 @@ const MapHandlers = (props: BaseExampleProps) => {
                   circleRadius: 12,
                 };
           return (
-            // @ts-expect-error TODO
             <ShapeSource key={id} id={`source-${id}`} shape={buildShape(f)}>
               <CircleLayer id={`layer-${id}`} style={circleStyle} />
             </ShapeSource>
@@ -167,11 +172,6 @@ const MapHandlers = (props: BaseExampleProps) => {
             <View>
               <Text style={styles.fadedText}>isGestureActive</Text>
               <Text>{gestures?.isGestureActive ? 'Yes' : 'No'}</Text>
-            </View>
-
-            <View>
-              <Text style={styles.fadedText}>isAnimatingFromGesture</Text>
-              <Text>{gestures?.isAnimatingFromGesture ? 'Yes' : 'No'}</Text>
             </View>
           </View>
         </View>

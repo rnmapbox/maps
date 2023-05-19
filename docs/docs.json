@@ -563,7 +563,7 @@
       {
         "name": "centerCoordinate",
         "required": false,
-        "type": "Position",
+        "type": "number[] \\| [number, number]",
         "default": "none",
         "description": "The location on which the map should center."
       },
@@ -713,14 +713,14 @@
             {
               "name": "ne",
               "required": true,
-              "type": "Position",
+              "type": "union",
               "default": "none",
               "description": "FIX ME NO DESCRIPTION"
             },
             {
               "name": "sw",
               "required": true,
-              "type": "Position",
+              "type": "union",
               "default": "none",
               "description": "FIX ME NO DESCRIPTION"
             }
@@ -744,8 +744,8 @@
             },
             {
               "name": "centerCoordinate",
-              "required": false,
-              "type": "Position",
+              "required": true,
+              "type": "union",
               "default": "none",
               "description": "The location on which the map should center."
             },
@@ -3010,6 +3010,27 @@
         ]
       },
       {
+        "name": "clearData",
+        "docblock": "Clears temporary map data from the data path defined in the given resource\noptions. Useful to reduce the disk usage or in case the disk cache contains\ninvalid data.\n\nv10 only",
+        "modifiers": [
+          "async"
+        ],
+        "params": [],
+        "returns": {
+          "type": {
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "void"
+              }
+            ],
+            "raw": "Promise<void>"
+          }
+        },
+        "description": "Clears temporary map data from the data path defined in the given resource\noptions. Useful to reduce the disk usage or in case the disk cache contains\ninvalid data.\n\nv10 only",
+        "examples": []
+      },
+      {
         "name": "queryTerrainElevation",
         "docblock": "Queries the currently loaded data for elevation at a geographical location.\nThe elevation is returned in meters relative to mean sea-level.\nReturns null if terrain is disabled or if terrain data for the location hasn't been loaded yet.\n\n@param {Array<Number>} coordinate - the coordinates to query elevation at\n@return {Number}",
         "modifiers": [
@@ -3092,7 +3113,7 @@
         "required": false,
         "type": "number \\| number[]",
         "default": "none",
-        "description": "The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport."
+        "description": "The distance from the edges of the map view’s frame to the edges of the map view’s logical viewport.\n@deprecated use Camera `padding` instead"
       },
       {
         "name": "projection",
@@ -3106,7 +3127,7 @@
         "required": false,
         "type": "string",
         "default": "none",
-        "description": "Style URL for map - notice, if non is set it _will_ default to `MapboxGL.StyleURL.Street`"
+        "description": "Style URL for map - notice, if non is set it _will_ default to `Mapbox.StyleURL.Street`"
       },
       {
         "name": "styleJSON",
@@ -3121,13 +3142,6 @@
         "type": "number",
         "default": "none",
         "description": "iOS: The preferred frame rate at which the map view is rendered.\nThe default value for this property is MGLMapViewPreferredFramesPerSecondDefault,\nwhich will adaptively set the preferred frame rate based on the capability of\nthe user’s device to maintain a smooth experience. This property can be set to arbitrary integer values.\n\nAndroid: The maximum frame rate at which the map view is rendered, but it can't exceed the ability of device hardware.\nThis property can be set to arbitrary integer values."
-      },
-      {
-        "name": "localizeLabels",
-        "required": false,
-        "type": "boolean",
-        "default": "false",
-        "description": "Automatically change the language of the map labels to the system’s preferred language,\nthis is not something that can be toggled on/off"
       },
       {
         "name": "zoomEnabled",
@@ -3270,8 +3284,22 @@
         "name": "surfaceView",
         "required": false,
         "type": "boolean",
-        "default": "false",
+        "default": "MGLModule.MapboxV10 ? true : false",
         "description": "[Android only] Enable/Disable use of GLSurfaceView instead of TextureView."
+      },
+      {
+        "name": "requestDisallowInterceptTouchEvent",
+        "required": false,
+        "type": "boolean",
+        "default": "false",
+        "description": "[Android only] Experimental, call requestDisallowInterceptTouchEvent on parent with onTochEvent, this allows touch interaction to work\nwhen embedded into a scroll view"
+      },
+      {
+        "name": "localizeLabels",
+        "required": false,
+        "type": "\\| {\n    /** locale code like `es` or `current` for the device's current locale */\n    locale: string;\n    /** layer id to localize. If not specified, all layers will be localized */\n    layerIds?: string[];\n  }\n\\| true",
+        "default": "none",
+        "description": "[`mapbox` (v10) implementation only]\nSet map's label locale, e.g. { \"locale\": \"es\" } will localize labels to Spanish, { \"locale\": \"current\" } will localize labels to system locale."
       },
       {
         "name": "onPress",
@@ -3328,20 +3356,20 @@
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean, isAnimatingFromGesture: boolean}}) => void"
+          "funcSignature": "(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean}}) => void"
         },
         "default": "none",
-        "description": "iOS, v10 only, deprecated will be removed in next version - please use onRegionIsChanging.\n*signature:*`(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean, isAnimatingFromGesture: boolean}}) => void`"
+        "description": "v10 only, replaces onRegionIsChanging\n*signature:*`(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean}}) => void`"
       },
       {
         "name": "onMapIdle",
         "required": false,
         "type": {
           "name": "func",
-          "funcSignature": "(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean, isAnimatingFromGesture: boolean}}) => void"
+          "funcSignature": "(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean}}) => void"
         },
         "default": "none",
-        "description": "iOS, v10 only, deprecated will be removed in next version - please use onRegionDidChange\n*signature:*`(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean, isAnimatingFromGesture: boolean}}) => void`"
+        "description": "v10 only, replaces onRegionDidChange\n*signature:*`(state:{properties: {center: GeoJSON.Position, bounds: {ne: GeoJSON.Position, sw: GeoJSON.Position}, zoom: number, heading: number, pitch: number}, gestures: {isGestureActive: boolean}}) => void`"
       },
       {
         "name": "onWillStartLoadingMap",
@@ -4775,7 +4803,7 @@
         "required": false,
         "type": "JSX.Element \\| JSX.Element[]",
         "default": "none",
-        "description": "FIX ME NO DESCRIPTION"
+        "description": "@deprecated passed children used to create an image with id of symbol in style and also set the iconImageName property accordingly.\nThis is now deprecated, use Image component instead."
       }
     ],
     "fileNameWithExt": "SymbolLayer.tsx",
@@ -6243,7 +6271,7 @@
       {
         "name": "children",
         "required": false,
-        "type": "ReactElement",
+        "type": "ReactElement \\| ReactElement[]",
         "default": "none",
         "description": "Custom location icon of type mapbox-gl-native components"
       },
@@ -6549,7 +6577,7 @@
           }
         ],
         "examples": [
-          "const progressListener = (offlineRegion, status) => console.log(offlineRegion, status);\nconst errorListener = (offlineRegion, err) => console.log(offlineRegion, err);\n\nawait MapboxGL.offlineManager.createPack({\n  name: 'offlinePack',\n  styleURL: 'mapbox://...',\n  minZoom: 14,\n  maxZoom: 20,\n  bounds: [[neLng, neLat], [swLng, swLat]]\n}, progressListener, errorListener)"
+          "const progressListener = (offlineRegion, status) => console.log(offlineRegion, status);\nconst errorListener = (offlineRegion, err) => console.log(offlineRegion, err);\n\nawait Mapbox.offlineManager.createPack({\n  name: 'offlinePack',\n  styleURL: 'mapbox://...',\n  minZoom: 14,\n  maxZoom: 20,\n  bounds: [[neLng, neLat], [swLng, swLat]]\n}, progressListener, errorListener)"
         ],
         "returns": {
           "description": "",
@@ -6572,7 +6600,7 @@
           }
         ],
         "examples": [
-          "await MapboxGL.offlineManager.invalidatePack('packName')"
+          "await Mapbox.offlineManager.invalidatePack('packName')"
         ],
         "returns": {
           "description": "",
@@ -6595,7 +6623,7 @@
           }
         ],
         "examples": [
-          "await MapboxGL.offlineManager.deletePack('packName')"
+          "await Mapbox.offlineManager.deletePack('packName')"
         ],
         "returns": {
           "description": "",
@@ -6609,7 +6637,7 @@
         "description": "Forces a revalidation of the tiles in the ambient cache and downloads a fresh version of the tiles from the tile server.\nThis is the recommend method for clearing the cache.\nThis is the most efficient method because tiles in the ambient cache are re-downloaded to remove outdated data from a device.\nIt does not erase resources from the ambient cache or delete the database, which can be computationally expensive operations that may carry unintended side effects.",
         "params": [],
         "examples": [
-          "await MapboxGL.offlineManager.invalidateAmbientCache();"
+          "await Mapbox.offlineManager.invalidateAmbientCache();"
         ],
         "returns": {
           "description": "",
@@ -6623,7 +6651,7 @@
         "description": "Erases resources from the ambient cache.\nThis method clears the cache and decreases the amount of space that map resources take up on the device.",
         "params": [],
         "examples": [
-          "await MapboxGL.offlineManager.clearAmbientCache();"
+          "await Mapbox.offlineManager.clearAmbientCache();"
         ],
         "returns": {
           "description": "",
@@ -6637,7 +6665,7 @@
         "description": "Migrates the offline cache from pre-v10 SDKs to the new v10 cache location",
         "params": [],
         "examples": [
-          "await MapboxGL.offlineManager.migrateOfflineCache()"
+          "await Mapbox.offlineManager.migrateOfflineCache()"
         ],
         "returns": {
           "description": "",
@@ -6660,7 +6688,7 @@
           }
         ],
         "examples": [
-          "await MapboxGL.offlineManager.setMaximumAmbientCacheSize(5000000);"
+          "await Mapbox.offlineManager.setMaximumAmbientCacheSize(5000000);"
         ],
         "returns": {
           "description": "",
@@ -6674,7 +6702,7 @@
         "description": "Deletes the existing database, which includes both the ambient cache and offline packs, then reinitializes it.",
         "params": [],
         "examples": [
-          "await MapboxGL.offlineManager.resetDatabase();"
+          "await Mapbox.offlineManager.resetDatabase();"
         ],
         "returns": {
           "description": "",
@@ -6688,7 +6716,7 @@
         "description": "Retrieves all the current offline packs that are stored in the database.",
         "params": [],
         "examples": [
-          "const offlinePacks = await MapboxGL.offlineManager.getPacks();"
+          "const offlinePacks = await Mapbox.offlineManager.getPacks();"
         ],
         "returns": {
           "description": "",
@@ -6711,7 +6739,7 @@
           }
         ],
         "examples": [
-          "const offlinePack = await MapboxGL.offlineManager.getPack();"
+          "const offlinePack = await Mapbox.offlineManager.getPack();"
         ],
         "returns": {
           "description": "",
@@ -6734,7 +6762,7 @@
           }
         ],
         "examples": [
-          "await MapboxGL.offlineManager.mergeOfflineRegions(path);"
+          "await Mapbox.offlineManager.mergeOfflineRegions(path);"
         ],
         "returns": {
           "description": "",
@@ -6757,7 +6785,7 @@
           }
         ],
         "examples": [
-          "MapboxGL.offlineManager.setTileCountLimit(1000);"
+          "Mapbox.offlineManager.setTileCountLimit(1000);"
         ],
         "returns": {
           "description": "",
@@ -6780,7 +6808,7 @@
           }
         ],
         "examples": [
-          "MapboxGL.offlineManager.setProgressEventThrottle(500);"
+          "Mapbox.offlineManager.setProgressEventThrottle(500);"
         ],
         "returns": {
           "description": "",
@@ -6819,7 +6847,7 @@
           }
         ],
         "examples": [
-          "const progressListener = (offlinePack, status) => console.log(offlinePack, status)\nconst errorListener = (offlinePack, err) => console.log(offlinePack, err)\nMapboxGL.offlineManager.subscribe('packName', progressListener, errorListener)"
+          "const progressListener = (offlinePack, status) => console.log(offlinePack, status)\nconst errorListener = (offlinePack, err) => console.log(offlinePack, err)\nMapbox.offlineManager.subscribe('packName', progressListener, errorListener)"
         ],
         "returns": {
           "description": "",
@@ -6842,7 +6870,7 @@
           }
         ],
         "examples": [
-          "MapboxGL.offlineManager.unsubscribe('packName')"
+          "Mapbox.offlineManager.unsubscribe('packName')"
         ],
         "returns": {
           "description": "",

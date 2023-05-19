@@ -5,6 +5,7 @@ import com.facebook.react.bridge.ReadableMap
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.extension.style.terrain.generated.Terrain
 import com.mapbox.maps.extension.style.terrain.generated.removeTerrain
+import com.mapbox.rctmgl.components.RemovalReason
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 import com.mapbox.rctmgl.components.styles.RCTMGLStyle
 import com.mapbox.rctmgl.components.styles.RCTMGLStyleFactory
@@ -44,10 +45,10 @@ class RCTMGLTerrain(context: Context?) : AbstractSourceConsumer(context) {
         mapView.savedStyle?.let { terrain.bindTo(it) }
     }
 
-    override fun removeFromMap(mapView: RCTMGLMapView) {
+    override fun removeFromMap(mapView: RCTMGLMapView, reason: RemovalReason): Boolean {
         mapView.savedStyle?.let { it.removeTerrain() }
         mMap = null
-        super.removeFromMap(mapView)
+        return super.removeFromMap(mapView, reason)
     }
 
     fun makeTerrain(): Terrain {

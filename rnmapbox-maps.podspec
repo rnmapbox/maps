@@ -20,13 +20,14 @@ require 'json'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
 ## Warning: these lines are scanned by autogenerate.js
-rnMapboxMapsDefaultMapboxVersion = '~> 10.11.1'
+rnMapboxMapsDefaultMapboxVersion = '~> 10.13.1'
 rnMapboxMapsDefaultMapboxGLVersion = '~> 5.9.0'
 rnMapboxMapsDefaultMapLibreVersion = 'exactVersion 5.12.1'
 
 rnMapboxMapsDefaultImpl = 'maplibre'
 
 # DEPRECATIONS
+
 
 if ENV["REACT_NATIVE_MAPBOX_GL_USE_FRAMEWORKS"]
   puts "REACT_NATIVE_MAPBOX_GL_USE_FRAMEWORKS is now deprecated!"
@@ -83,16 +84,21 @@ end
 
 # --
 
-$RNMapboxMapsImpl = rnMapboxMapsDefaultImpl unless $RNMapboxMapsImpl
+unless $RNMapboxMapsImpl
+  raise "Setting $RNMapboxMapsImpl is now required - https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Unset#ios"
+end
+# $RNMapboxMapsImpl = rnMapboxMapsDefaultImpl unless $RNMapboxMapsImpl
 
 case $RNMapboxMapsImpl
 when 'mapbox'
   rnMapboxMapsTargetsToChangeToDynamic = ['MapboxMobileEvents', 'Turf', 'MapboxMaps', 'MapboxCoreMaps', 'MapboxCommon']
   MapboxImplVersion = $RNMapboxMapsVersion || rnMapboxMapsDefaultMapboxVersion
 when 'mapbox-gl'
+  puts 'WARNING: mapbox-gl in @rnmapbox/maps is deprecated. Set $RNMapboxMapsImpl=mapbox in your Podfile. See https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-Maplibre#ios'
   rnMapboxMapsTargetsToChangeToDynamic = ['MapboxMobileEvents']
   MapboxImplVersion = $RNMapboxMapsVersion || rnMapboxMapsDefaultMapboxGLVersion
 when 'maplibre'
+  puts 'WARNING: maplibre in @rnmapbox/maps is deprecated. Set $RNMapboxMapsImpl=mapbox in your Podfile. See https://github.com/rnmapbox/maps/wiki/Deprecated-RNMapboxImpl-MapboxGL#ios'
   rnMapboxMapsTargetsToChangeToDynamic = ['MapboxMobileEvents']
 
   spm_version = ($RNMapboxMapsVersion || rnMapboxMapsDefaultMapLibreVersion).split

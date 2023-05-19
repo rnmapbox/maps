@@ -1,5 +1,9 @@
 internal extension DefaultStringInterpolation {
   mutating func appendInterpolation<T>(optional: T?) {
-    appendInterpolation(String(describing: optional))
+    if let optional = optional {
+      appendInterpolation(String(describing: optional))
+    } else {
+      appendInterpolation("nil")
+    }
   }
 }

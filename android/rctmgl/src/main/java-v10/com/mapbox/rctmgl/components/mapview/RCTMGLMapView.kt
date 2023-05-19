@@ -7,6 +7,7 @@ import android.graphics.RectF
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.View.OnLayoutChangeListener
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.lifecycle.Lifecycle
@@ -14,13 +15,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import com.facebook.react.bridge.*
-import com.mapbox.android.gestures.MoveGestureDetector
-import com.mapbox.android.gestures.RotateGestureDetector
-import com.mapbox.android.gestures.StandardScaleGestureDetector
+import com.mapbox.android.gestures.*
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
 import com.mapbox.maps.*
+import com.mapbox.maps.extension.localization.localizeLabels
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.Layer
@@ -44,8 +44,10 @@ import com.mapbox.maps.plugin.logo.generated.LogoSettings
 import com.mapbox.maps.plugin.logo.logo
 import com.mapbox.maps.plugin.scalebar.generated.ScaleBarSettings
 import com.mapbox.maps.plugin.scalebar.scalebar
+import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.mapbox.rctmgl.R
 import com.mapbox.rctmgl.components.AbstractMapFeature
+import com.mapbox.rctmgl.components.RemovalReason
 import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerView
 import com.mapbox.rctmgl.components.annotation.RCTMGLMarkerViewManager
 import com.mapbox.rctmgl.components.annotation.RCTMGLPointAnnotation
@@ -64,10 +66,7 @@ import com.mapbox.rctmgl.events.IEvent
 import com.mapbox.rctmgl.events.MapChangeEvent
 import com.mapbox.rctmgl.events.MapClickEvent
 import com.mapbox.rctmgl.events.constants.EventTypes
-import com.mapbox.rctmgl.utils.BitmapUtils
-import com.mapbox.rctmgl.utils.GeoJSONUtils
-import com.mapbox.rctmgl.utils.LatLng
-import com.mapbox.rctmgl.utils.Logger
+import com.mapbox.rctmgl.utils.*
 import com.mapbox.rctmgl.utils.extensions.toReadableArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -81,7 +80,7 @@ data class OrnamentSettings(
 )
 
 enum class MapGestureType {
-    Move,Scale,Rotate
+    Move,Scale,Rotate,Fling,Shove
 }
 
 /***
@@ -142,7 +141,11 @@ class RCTMGLLifeCycle {
     }
 }
 
-open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapViewManager /*, MapboxMapOptions options*/) : MapView(mContext), OnMapClickListener, OnMapLongClickListener {
+data class FeatureEntry(val feature: AbstractMapFeature?, val view: View?, var addedToMap: Boolean = false) {
+
+}
+
+open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapViewManager, options: MapInitOptions?) : FrameLayout(mContext), OnMapClickListener, OnMapLongClickListener, OnLayoutChangeListener {
     /**
      * `PointAnnotations` are rendered to a canvas, but the React Native `Image` component is
      * implemented on top of Fresco (https://frescolib.org), which does not load images for
@@ -156,37 +159,60 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     private var mPointAnnotationManager: PointAnnotationManager? = null
     private var mActiveMarkerID: Long = -1
     private var mProjection: ProjectionName = ProjectionName.MERCATOR
+    private var mLocaleString: String? = null
+    private var mLocaleLayerIds: List<String>? = null
     private var mStyleURL: String? = null
     val isDestroyed = false
     private var mCamera: RCTMGLCamera? = null
-    private val mFeatures: MutableList<AbstractMapFeature> = ArrayList()
+    private val mFeatures = mutableListOf<FeatureEntry>()
     private var mQueuedFeatures: MutableList<AbstractMapFeature>? = ArrayList()
     private val mPointAnnotations: MutableMap<String, RCTMGLPointAnnotation>
     private val mCameraChangeTracker = CameraChangeTracker()
     private val mMap: MapboxMap?
 
-    // v10todo, style gets null if we add anyhing
+    private val mMapView: MapView
+
     var savedStyle: Style? = null
         private set
-    private val mHandledMapChangedEvents: HashSet<String>? = null
+
+    private var styleLoaded = false
+
+    private var mHandledMapChangedEvents: HashSet<String>? = null
     private var mAnnotationClicked = false
     private var mAnnotationDragged = false
     private var mLocationComponentManager: LocationComponentManager? = null
     var tintColor: Int? = null
         private set
 
+    private var wasGestureActive = false
+    private var isGestureActive = false
+
     val mapView: MapView
-        get() = this
+        get() = this.mMapView
+
+    val viewAnnotationManager: ViewAnnotationManager
+        get() = mapView.viewAnnotationManager
+
+    var requestDisallowInterceptTouchEvent: Boolean = false
+        set(value) {
+            val oldValue = field
+            field = value
+            updateRequestDisallowInterceptTouchEvent(oldValue, value)
+        }
+
+    fun getMapboxMap(): MapboxMap {
+        return mapView.getMapboxMap()
+    }
 
     val pointAnnotationManager: PointAnnotationManager?
         get() {
             if (mPointAnnotationManager == null) {
                 val _this = this
-                val gesturesPlugin: GesturesPlugin = this.gestures
+                val gesturesPlugin: GesturesPlugin = mapView.gestures
                 gesturesPlugin.removeOnMapClickListener(_this)
                 gesturesPlugin.removeOnMapLongClickListener(_this)
 
-                mPointAnnotationManager = annotations.createPointAnnotationManager(AnnotationConfig(layerId = "rctmgl-mapview-annotations"))
+                mPointAnnotationManager = mapView.annotations.createPointAnnotationManager(AnnotationConfig(layerId = "rctmgl-mapview-annotations"))
                 mPointAnnotationManager?.addClickListener(OnPointAnnotationClickListener { pointAnnotation ->
                         onMarkerClick(pointAnnotation)
                         false
@@ -238,28 +264,56 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             return mPointAnnotationManager
         }
 
+    private fun styleLoaded(style: Style) {
+        savedStyle = style
+        styleLoaded = true
+        setUpImage(style)
+        addFeaturesToMap()
+        applyLocalizeLabels()
+        style.setProjection(Projection(mProjection))
+    }
+
     private fun onMapReady(map: MapboxMap) {
         map.getStyle(object : Style.OnStyleLoaded {
             override fun onStyleLoaded(style: Style) {
-                savedStyle = style
-                setUpImage(style)
-                addQueuedFeaturesToMap()
-                setupLocalization(style)
+                styleLoaded(style)
             }
         })
         val _this = this
 
         map.addOnCameraChangeListener(OnCameraChangeListener { cameraChangedEventData ->
             handleMapChangedEvent(EventTypes.REGION_IS_CHANGING)
+            handleMapChangedEvent(EventTypes.CAMERA_CHANGED)
         })
 
         map.addOnMapIdleListener(OnMapIdleListener { mapIdleEventData ->
             sendRegionDidChangeEvent()
+            handleMapChangedEvent(EventTypes.MAP_IDLE);
         })
 
-        val gesturesPlugin: GesturesPlugin = this.gestures
+        val gesturesPlugin: GesturesPlugin = mapView.gestures
         gesturesPlugin.addOnMapLongClickListener(_this)
         gesturesPlugin.addOnMapClickListener(_this)
+
+        gesturesPlugin.addOnFlingListener(object: OnFlingListener {
+            override fun onFling() {
+                mapGesture(MapGestureType.Fling, true)
+            }
+        })
+
+        gesturesPlugin.addOnShoveListener(object: OnShoveListener {
+            override fun onShove(detector: ShoveGestureDetector) {
+                mapGesture(MapGestureType.Shove, detector)
+            }
+
+            override fun onShoveBegin(detector: ShoveGestureDetector) {
+                mapGestureBegin(MapGestureType.Shove, detector)
+            }
+
+            override fun onShoveEnd(detector: ShoveGestureDetector) {
+                mapGestureEnd(MapGestureType.Shove, detector)
+            }
+        })
 
         gesturesPlugin.addOnScaleListener(object: OnScaleListener{
             override fun onScale(detector: StandardScaleGestureDetector) {
@@ -303,6 +357,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     fun<T> mapGestureBegin(type:MapGestureType, gesture: T) {
+        isGestureActive = true
         mCameraChangeTracker.setReason(CameraChangeReason.USER_GESTURE)
         handleMapChangedEvent(EventTypes.REGION_WILL_CHANGE)
     }
@@ -311,7 +366,9 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         handleMapChangedEvent(EventTypes.REGION_IS_CHANGING)
         return false
     }
-    fun<T> mapGestureEnd(type: MapGestureType, gesture: T) {}
+    fun<T> mapGestureEnd(type: MapGestureType, gesture: T) {
+        isGestureActive = false
+    }
 
     fun init() {
         // Required for rendering properly in Android Oreo
@@ -325,7 +382,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         mMap.getStyle(onStyleLoaded)
     }
 
-    // region features
+    // region Features
     fun addFeature(childView: View?, childPosition: Int) {
         var feature: AbstractMapFeature? = null
         if (childView is RCTSource<*>) {
@@ -354,23 +411,26 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             feature = childView as AbstractMapFeature?
         } else if (childView is ViewGroup) {
             val children = childView
+            Logger.w(LOG_TAG, "Adding non map components as a child of a map is deprecated!")
             for (i in 0 until children.childCount) {
-                addFeature(children.getChildAt(i), childPosition)
+                addView(children.getChildAt(i), childPosition)
             }
         }
-        if (feature != null) {
-            if (mQueuedFeatures == null) {
-                feature.addToMap(this)
-                mFeatures.add(childPosition, feature)
-            } else {
-                mQueuedFeatures?.add(childPosition, feature)
-            }
+
+        val addToMap = styleLoaded
+
+
+        var entry = FeatureEntry(feature, childView, false)
+        if (addToMap) {
+            feature?.addToMap(this)
+            entry.addedToMap = true
         }
+        mFeatures.add(childPosition, entry);
     }
 
-    fun removeFeature(childPosition: Int) {
-        val feature = features()[childPosition]
-                ?: return
+    fun removeFeatureAt(childPosition: Int) {
+        val entry = mFeatures[childPosition]
+        val feature = entry.feature
         if (feature is RCTSource<*>) {
             mSources.remove(feature.iD)
         } else if (feature is RCTMGLPointAnnotation) {
@@ -382,67 +442,54 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         } else if (feature is RCTMGLImages) {
             mImages.remove(feature)
         }
-        feature.removeFromMap(this)
-        features().remove(feature)
-    }
-
-    private fun features(): MutableList<AbstractMapFeature> {
-        return if (mQueuedFeatures != null && mQueuedFeatures!!.size > 0) (
-            mQueuedFeatures!!
-        )
-         else {
-            mFeatures
+        if (entry.addedToMap) {
+            if (feature?.removeFromMap(this, RemovalReason.VIEW_REMOVAL) == true) {
+                entry.addedToMap = false
+            }
         }
+        mFeatures.removeAt(childPosition)
     }
 
     val featureCount: Int
-        get() = features().size
+        get() = mFeatures.size
 
-    fun getFeatureAt(i: Int): AbstractMapFeature {
-        return features()[i]
+    fun getFeatureAt(i: Int): View? {
+        return mFeatures[i].view
     }
 
-    fun removeAllFeatures() {
+    fun removeAllFeatureFromMap(reason: RemovalReason) {
         mFeatures.forEach {
-            it.removeFromMap(this)
-        }
-        mFeatures.clear()
-        val queuedFeatures = mQueuedFeatures
-        if (queuedFeatures != null) {
-            queuedFeatures.clear()
+            if (it.feature?.removeFromMap(this, reason) == true) {
+                it.addedToMap = false
+            }
         }
     }
     // endregion
 
     fun sendRegionChangeEvent(isAnimated: Boolean) {
-        val event: IEvent = MapChangeEvent(this, EventTypes.REGION_DID_CHANGE,
+        val didChangeEvent = MapChangeEvent(this, EventTypes.REGION_DID_CHANGE,
                 makeRegionPayload(isAnimated))
-        mManager.handleEvent(event)
+        mManager.handleEvent(didChangeEvent)
         mCameraChangeTracker.setReason(CameraChangeReason.NONE)
     }
 
-    private fun removeAllFeaturesFromMap() {
-        mFeatures.forEach { it -> it.removeFromMap(this) }
-    }
-
-    private fun addQueuedFeaturesToMap() {
-        mQueuedFeatures?.let { queuedFeatures ->
-            queuedFeatures.forEach {
-                it.addToMap(this)
-                mFeatures.add(it)
+    private fun removeAllFeaturesFromMap(reason: RemovalReason) {
+        mFeatures.forEach { it ->
+            if (it.feature?.removeFromMap(this, reason) == true) {
+                it.addedToMap = false
             }
-            queuedFeatures.clear()
         }
-        mQueuedFeatures = null;
     }
 
-    private fun addAllFeaturesToMap() {
-        mQueuedFeatures?.also {
-            this.addQueuedFeaturesToMap()
-        } ?: run {
-            mFeatures.forEach { it.addToMap(this) }
+    private fun addFeaturesToMap() {
+        mFeatures.forEach {
+            if (!it.addedToMap) {
+                it.feature?.addToMap(this)
+                it.addedToMap = true
+            }
         }
     }
+
     
     private val allTouchableSources: List<RCTSource<*>>
         private get() {
@@ -507,23 +554,37 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         }
     }
 
+    fun applyLocalizeLabels() {
+        val localeStr = mLocaleString
+        if (localeStr != null) {
+            val locale = if (localeStr == "current") Locale.getDefault() else Locale(localeStr)
+            savedStyle?.localizeLabels(locale, mLocaleLayerIds)
+        }
+    }
+    fun setReactLocalizeLabels(localeStr: String?, layerIds: List<String>?) {
+        if (localeStr != null) {
+            mLocaleString = localeStr
+            mLocaleLayerIds = layerIds
+        }
+        applyLocalizeLabels()
+    }
+
     fun setReactStyleURL(styleURL: String) {
         mStyleURL = styleURL
         if (mMap != null) {
-            removeAllFeaturesFromMap()
+            removeAllFeatureFromMap(RemovalReason.STYLE_CHANGE)
             if (isJSONValid(mStyleURL)) {
+                styleLoaded = false
                 mMap.loadStyleJson(styleURL, object : Style.OnStyleLoaded {
                     override fun onStyleLoaded(style: Style) {
-                        style.setProjection(Projection(mProjection))
-                        addAllFeaturesToMap()
+                        styleLoaded(style)
                     }
                 })
             } else {
+                styleLoaded = false
                 mMap.loadStyleUri(styleURL, object : Style.OnStyleLoaded {
                     override fun onStyleLoaded(style: Style) {
-                        savedStyle = style
-                        style.setProjection(Projection(mProjection))
-                        addAllFeaturesToMap()
+                        styleLoaded(style)
                     }
                 },
                         object : OnMapLoadErrorListener {
@@ -562,7 +623,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
                     ScreenCoordinate(screenPoint.x + halfWidth,
                             screenPoint.y + halfHeight)
             )
-            getMapboxMap().queryRenderedFeatures(RenderedQueryGeometry(screenBox),
+            mapView.getMapboxMap().queryRenderedFeatures(RenderedQueryGeometry(screenBox),
                     RenderedQueryOptions(
                             source.layerIDs,
                             null
@@ -699,23 +760,62 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         waiters.add(callback)
     }
 
+    // region Events
+
     fun sendRegionDidChangeEvent() {
         handleMapChangedEvent(EventTypes.REGION_DID_CHANGE)
         mCameraChangeTracker.setReason(CameraChangeReason.NONE)
     }
 
     private fun handleMapChangedEvent(eventType: String) {
+        this.wasGestureActive = isGestureActive
         if (!canHandleEvent(eventType)) return
+
         val event: IEvent
         event = when (eventType) {
             EventTypes.REGION_WILL_CHANGE, EventTypes.REGION_DID_CHANGE, EventTypes.REGION_IS_CHANGING -> MapChangeEvent(this, eventType, makeRegionPayload(null))
+            EventTypes.CAMERA_CHANGED, EventTypes.MAP_IDLE -> MapChangeEvent(this, eventType, makeCameraPayload())
             else -> MapChangeEvent(this, eventType)
         }
         mManager.handleEvent(event)
     }
 
+    fun setHandledMapChangedEvents(events: Array<String>) {
+        mHandledMapChangedEvents = HashSet<String>(events.asList())
+    }
+
     private fun canHandleEvent(event: String): Boolean {
-        return mHandledMapChangedEvents == null || mHandledMapChangedEvents.contains(event)
+        val changedEvents = mHandledMapChangedEvents
+        return changedEvents == null || changedEvents.contains(event)
+    }
+
+    private fun makeCameraPayload(): WritableMap {
+        val position = mMap?.cameraState ?: return WritableNativeMap()
+        val properties = WritableNativeMap()
+        properties.putDouble("zoom", position.zoom)
+        properties.putDouble("heading", position.bearing)
+        properties.putDouble("pitch", position.pitch)
+        properties.putArray("center", position.center.toReadableArray())
+        try {
+            val bounds = mMap.coordinateBoundsForCamera(position.toCameraOptions())
+
+            val boundsMap = WritableNativeMap()
+            boundsMap.putArray("ne", bounds.northeast.toReadableArray())
+            boundsMap.putArray("sw", bounds.southwest.toReadableArray())
+            
+            properties.putMap("bounds", boundsMap)
+        } catch (ex: Exception) {
+            Logger.e(LOG_TAG, "An error occurred while attempting to make the region", ex)
+        }
+        val gestures = WritableNativeMap()
+        gestures.putBoolean("isGestureActive", wasGestureActive/*mCameraChangeTracker.isUserInteraction*/)
+        // gestures.putBoolean("isAnimatingFromGesture", if (null == isAnimated) mCameraChangeTracker.isAnimated else isAnimated)
+
+        val state: WritableMap = WritableNativeMap()
+        state.putMap("properties", properties)
+        state.putMap("gestures", gestures)
+
+        return state
     }
 
     private fun makeRegionPayload(isAnimated: Boolean?): WritableMap {
@@ -737,18 +837,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         return GeoJSONUtils.toPointFeature(latLng, properties)
     }
 
-    private fun setupLocalization(style: Style) {
-        /*
-        mLocalizationPlugin = new LocalizationPlugin(RCTMGLMapView.this, mMap, style);
-        if (mLocalizeLabels) {
-            try {
-                mLocalizationPlugin.matchMapLanguageWithDeviceDefault();
-            } catch (Exception e) {
-                final String localeString = Locale.getDefault().toString();
-                Logger.w(LOG_TAG, String.format("Could not find matching locale for %s", localeString));
-            }
-        }*/
-    }
+    // endregion
 
     /**
      * Adds the marker image to the map for use as a SymbolLayer icon
@@ -768,7 +857,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         }
 
     fun getMapAsync(mapReady: OnMapReadyCallback) {
-        mapReady.onMapReady(getMapboxMap())
+        mapReady.onMapReady(mapView.getMapboxMap())
     }
 
     //fun setTintColor(color: Int) {
@@ -892,7 +981,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     fun takeSnap(callbackID: String?, writeToDisk: Boolean) {
-        this.snapshot { snapshot ->
+        mapView.snapshot { snapshot ->
             if (snapshot == null) {
                 Logger.e("takeSnap", "snapshot failed")
 
@@ -916,16 +1005,30 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     fun queryTerrainElevation(callbackID: String?, longitude: Double, latitude: Double) {
         val result = mMap?.getElevation(Point.fromLngLat(longitude, latitude))
 
-        sendResponse(callbackID, {
+        sendResponse(callbackID, {response ->
             if (result != null) {
-                it.putDouble("data", result)
+                response.putDouble("data", result)
             } else {
                 Logger.e("queryTerrainElevation", "no elevation data")
 
-                it.putNull("data")
-                it.putString("error", "no elevation")
+                response.putNull("data")
+                response.putString("error", "no elevation")
             }
         })
+    }
+
+    fun clearData(callbackID: String?) {
+        mapView.getMapboxMap().clearData { expected ->
+            sendResponse(callbackID) { response ->
+                if (expected.isError()) {
+                    response.putNull("data")
+                    response.putString("error", expected.error!!.toString())
+                }   else {
+                    response.putBoolean("data", true)
+                }
+            }
+
+        }
     }
 
     fun match(layer: Layer, sourceId:String, sourceLayerId: String?) : Boolean {
@@ -984,7 +1087,13 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         offscreenAnnotationViewContainer?.setLayoutParams(p)
         addView(offscreenAnnotationViewContainer)
 
-        mMap = getMapboxMap()
+        mMapView = if (options != null) MapView(mContext, options) else MapView(mContext)
+
+        val matchParent = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        mMapView.setLayoutParams(matchParent)
+        addView(mMapView)
+
+        mMap = mapView.getMapboxMap()
         mSources = HashMap()
         mImages = ArrayList()
         mPointAnnotations = HashMap()
@@ -1004,7 +1113,9 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             }
         })
 
-        RCTMGLMarkerViewManager.markerViewContainerSizeFixer(this, this.viewAnnotationManager)
+        RCTMGLMarkerViewManager.markerViewContainerSizeFixer(this, mapView.viewAnnotationManager)
+
+        this.addOnLayoutChangeListener(this)
     }
 
     // region Ornaments
@@ -1089,7 +1200,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     private fun updateCompass() {
-        compass.updateSettings {
+        mapView.compass.updateSettings {
             fadeWhenFacingNorth = mCompassFadeWhenNorth
             updateOrnament("compass", mCompassSettings, this.toGenericOrnamentSettings())
         }
@@ -1134,8 +1245,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         mapView.forceLayout();
 
         mapView.measure(
-            MeasureSpec.makeMeasureSpec(mapView.measuredWidth, MeasureSpec.EXACTLY),
-            MeasureSpec.makeMeasureSpec(mapView.measuredHeight, MeasureSpec.EXACTLY)
+            MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+            MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
         );
         mapView.layout(mapView.left, mapView.top, mapView.right, mapView.bottom)
     }
@@ -1190,7 +1301,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     private fun updateAttribution() {
-        attribution.updateSettings {
+        mapView.attribution.updateSettings {
             updateOrnament("attribution", mAttributionSettings, this.toGenericOrnamentSettings())
         }
         workaroundToRelayoutChildOfMapView()
@@ -1225,7 +1336,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     }
 
     private fun updateLogo() {
-        logo.updateSettings {
+        mapView.logo.updateSettings {
             updateOrnament("logo", mLogoSettings, this.toGenericOrnamentSettings())
         }
         workaroundToRelayoutChildOfMapView()
@@ -1244,18 +1355,21 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         super.onDetachedFromWindow();
     }
 
+    /* FMTODO
     override fun onDestroy() {
-        removeAllFeatures()
-        viewAnnotationManager.removeAllViewAnnotations()
+        this.removeOnLayoutChangeListener(this)
+        removeAllFeaturesFromMap(RemovalReason.ON_DESTROY)
+        mapView.viewAnnotationManager.removeAllViewAnnotations()
         mLocationComponentManager?.onDestroy();
 
         lifecycle.onDestroy()
         super.onDestroy()
     }
+     */
 
     fun onDropViewInstance() {
-        removeAllFeatures()
-        viewAnnotationManager.removeAllViewAnnotations()
+        removeAllFeaturesFromMap(RemovalReason.ON_DESTROY)
+        mapView.viewAnnotationManager.removeAllViewAnnotations()
         lifecycle.onDestroy()
     }
 
@@ -1264,8 +1378,49 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         super.onAttachedToWindow()
     }
 
+    override fun onLayoutChange(
+        v: View?,
+        left: Int,
+        top: Int,
+        right: Int,
+        bottom: Int,
+        oldLeft: Int,
+        oldTop: Int,
+        oldRight: Int,
+        oldBottom: Int
+    ) {
+        mapView.post {
+            mapView.measure(
+                MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
+            )
+            mapView.layout(mapView.left, mapView.top, mapView.right, mapView.bottom)
+        }
+    }
+
+
     // endregion
 }
+
+// region requestDisallowInterceptTouchEvent
+fun RCTMGLMapView.updateRequestDisallowInterceptTouchEvent(oldValue: Boolean, value: Boolean) {
+    if (oldValue == value) {
+        return
+    }
+    if (value) {
+        mapView.setOnTouchListener { view, event ->
+            this.requestDisallowInterceptTouchEvent(true)
+            mapView.onTouchEvent(event)
+            true
+        }
+    } else {
+        mapView.setOnTouchListener { view, event ->
+            mapView.onTouchEvent(event)
+        }
+    }
+}
+// endregion
+
 
 fun OrnamentSettings.setPosAndMargins(posAndMargins: ReadableMap?) {
     if (posAndMargins == null) { return }

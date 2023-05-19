@@ -14,7 +14,9 @@ import com.mapbox.rctmgl.modules.RCTMGLLocationModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.common.MapBuilder
 import com.mapbox.common.*
+import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
+import com.mapbox.maps.plugin.attribution.attribution
 import com.mapbox.rctmgl.components.camera.constants.CameraMode
 import java.util.HashMap
 
@@ -52,8 +54,10 @@ class RCTMGLModule(private val mReactContext: ReactApplicationContext) : ReactCo
         eventTypes["MapClick"] = EventTypes.MAP_CLICK
         eventTypes["MapLongClick"] = EventTypes.MAP_LONG_CLICK
         eventTypes["RegionWillChange"] = EventTypes.REGION_WILL_CHANGE
-        eventTypes["RegionIsChanging"] = EventTypes.REGION_IS_CHANGING
-        eventTypes["RegionDidChange"] = EventTypes.REGION_DID_CHANGE
+        eventTypes["RegionIsChanging"] = EventTypes.REGION_IS_CHANGING // deprecated
+        eventTypes["CameraChanged"] = EventTypes.CAMERA_CHANGED
+        eventTypes["RegionDidChange"] = EventTypes.REGION_DID_CHANGE // deprecated
+        eventTypes["MapIdle"] = EventTypes.MAP_IDLE
         eventTypes["UserLocationUpdated"] = EventTypes.USER_LOCATION_UPDATED
         eventTypes["WillStartLoadingMap"] = EventTypes.WILL_START_LOADING_MAP
         eventTypes["DidFinishLoadingMap"] = EventTypes.DID_FINISH_LOADING_MAP
@@ -85,9 +89,10 @@ class RCTMGLModule(private val mReactContext: ReactApplicationContext) : ReactCo
 
         // offline region download states
         val offlinePackDownloadStates: MutableMap<String, String> = HashMap()
-        offlinePackDownloadStates["Inactive"] = RCTMGLOfflineModule.INACTIVE_REGION_DOWNLOAD_STATE
-        offlinePackDownloadStates["Active"] = RCTMGLOfflineModule.ACTIVE_REGION_DOWNLOAD_STATE
-        offlinePackDownloadStates["Complete"] = RCTMGLOfflineModule.COMPLETE_REGION_DOWNLOAD_STATE
+        offlinePackDownloadStates["Inactive"] = TileRegionPackState.INACTIVE.rawValue
+        offlinePackDownloadStates["Active"] = TileRegionPackState.ACTIVE.rawValue
+        offlinePackDownloadStates["Complete"] = TileRegionPackState.COMPLETE.rawValue
+        offlinePackDownloadStates["Unknown"] = TileRegionPackState.UNKNOWN.rawValue
 
         // offline module callback names
         val offlineModuleCallbackNames: MutableMap<String, String> = HashMap()
@@ -110,6 +115,15 @@ class RCTMGLModule(private val mReactContext: ReactApplicationContext) : ReactCo
             .put("TileServers", tileServers)
             .put("Implementation", impl)
             .build()
+    }
+
+    @ReactMethod
+    fun setTelemetryEnabled(telemetryEnabled: Boolean) {
+        mReactContext.runOnUiQueueThread {
+            val dummyView = MapView(mReactContext)
+            val telemetry = dummyView.attribution.getMapAttributionDelegate().telemetry()
+            telemetry.userTelemetryRequestState = telemetryEnabled
+        }
     }
 
     @ReactMethod

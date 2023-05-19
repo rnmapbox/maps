@@ -1,6 +1,6 @@
 import { featureCollection, point } from '@turf/helpers';
 
-import OfflineCreatePackOptions from '../../../javascript/modules/offline/OfflineCreatePackOptions';
+import OfflineCreatePackOptions from '../../../src/modules/offline/OfflineCreatePackOptions';
 
 describe('OfflineCreatePackOptions', () => {
   const options = {

@@ -45,7 +45,7 @@ function getBlacklist() {
     ),
   ];
   const webSupportSources = [
-    glob(`${path.resolve(__dirname, '..')}/javascript/web/*`),
+    glob(`${path.resolve(__dirname, '..')}/src/web/*`),
   ];
   return blacklist([...nodeModuleDirs, ...webSupportSources]);
 }

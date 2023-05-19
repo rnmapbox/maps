@@ -55,7 +55,6 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
   func addToMap(_ map: RCTMGLMapView, style: Style) {
     self.style = style
     map.images.append(self)
-    map.setupEvents()
     
     self.addNativeImages(style: style, nativeImages: nativeImageInfos)
     self.addRemoteImages(style: style, remoteImages: images)

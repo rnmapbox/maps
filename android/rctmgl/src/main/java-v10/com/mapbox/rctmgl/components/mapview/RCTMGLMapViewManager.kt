@@ -1,5 +1,6 @@
 package com.mapbox.rctmgl.components.mapview
 
+import android.content.Context
 import android.util.Log
 import android.view.View
 import com.facebook.react.bridge.*
@@ -11,6 +12,7 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.mapbox.rctmgl.events.constants.EventKeys
 import com.mapbox.maps.MapboxMap
 import com.facebook.react.common.MapBuilder
+import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.gestures.gestures
@@ -18,13 +20,28 @@ import com.mapbox.maps.plugin.logo.logo
 import com.mapbox.rctmgl.utils.ConvertUtils
 import com.mapbox.rctmgl.utils.ExpressionParser
 import com.mapbox.rctmgl.utils.GeoJSONUtils
+import com.mapbox.rctmgl.utils.Logger
 import com.mapbox.rctmgl.utils.extensions.toCoordinate
+import com.mapbox.rctmgl.utils.extensions.toReadableArray
 import com.mapbox.rctmgl.utils.extensions.toScreenCoordinate
 import java.lang.Exception
 import java.util.HashMap
 
-open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
-    AbstractEventEmitter<RCTMGLMapView?>(context) {
+fun ReadableArray.forEachString(action: (String) -> Unit) {
+    for (i in 0 until size()) {
+        action(getString(i))
+    }
+}
+
+fun ReadableArray.asArrayString(): Array<String> {
+    val result = Array<String>(size()) {
+        getString(it)
+    }
+    return result
+}
+
+open class RCTMGLMapViewManager(context: ReactApplicationContext) :
+    AbstractEventEmitter<RCTMGLMapView>(context) {
     private val mViews: MutableMap<Int, RCTMGLMapView>
     override fun getName(): String {
         return REACT_CLASS
@@ -59,11 +76,16 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
     }
 
     override fun removeViewAt(mapView: RCTMGLMapView?, index: Int) {
-        mapView!!.removeFeature(index)
+        mapView!!.removeFeatureAt(index)
+    }
+
+    fun getMapViewContext(themedReactContext: ThemedReactContext): Context {
+        return activity ?: themedReactContext
     }
 
     override fun createViewInstance(themedReactContext: ThemedReactContext): RCTMGLMapView {
-        return RCTMGLMapView(themedReactContext, this /*, null*/)
+        val context = getMapViewContext(themedReactContext)
+        return RCTMGLMapView(context, this, options=null)
     }
 
     override fun onDropViewInstance(mapView: RCTMGLMapView) {
@@ -85,6 +107,13 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
         mapView.setReactProjection( if (projection == "globe") ProjectionName.GLOBE else ProjectionName.MERCATOR )
     }
 
+    @ReactProp(name = "localizeLabels")
+    fun setLocalizeLabels(mapView: RCTMGLMapView, localeMap: ReadableMap?) {
+        val locale = localeMap?.getString("locale")
+        val layerIds = localeMap?.getArray("layerIds")?.toArrayList()?.mapNotNull {it?.toString()}
+        mapView.setReactLocalizeLabels(locale, layerIds)
+    }
+
     @ReactProp(name = "styleURL")
     fun setStyleURL(mapView: RCTMGLMapView, styleURL: String?) {
         mapView.setReactStyleURL(styleURL!!)
@@ -95,30 +124,29 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
         //mapView.setReactPreferredFramesPerSecond(preferredFramesPerSecond);
     }
 
-    @ReactProp(name = "localizeLabels")
-    fun setLocalizeLabels(mapView: RCTMGLMapView?, localizeLabels: Boolean) {
-        //mapView.setLocalizeLabels(localizeLabels);
-    }
-
     @ReactProp(name = "zoomEnabled")
-    fun setZoomEnabled(mapView: RCTMGLMapView, zoomEnabled: Boolean) {
+    fun setZoomEnabled(map: RCTMGLMapView, zoomEnabled: Boolean) {
+        val mapView = map.mapView
         mapView.gestures.pinchToZoomEnabled = zoomEnabled
         mapView.gestures.doubleTouchToZoomOutEnabled = zoomEnabled
         mapView.gestures.doubleTapToZoomInEnabled = zoomEnabled
     }
 
     @ReactProp(name = "scrollEnabled")
-    fun setScrollEnabled(mapView: RCTMGLMapView, scrollEnabled: Boolean) {
+    fun setScrollEnabled(map: RCTMGLMapView, scrollEnabled: Boolean) {
+        val mapView = map.mapView
         mapView.gestures.scrollEnabled = scrollEnabled
     }
 
     @ReactProp(name = "pitchEnabled")
-    fun setPitchEnabled(mapView: RCTMGLMapView, pitchEnabled: Boolean) {
+    fun setPitchEnabled(map: RCTMGLMapView, pitchEnabled: Boolean) {
+        val mapView = map.mapView
         mapView.gestures.pitchEnabled = pitchEnabled
     }
 
     @ReactProp(name = "rotateEnabled")
-    fun setRotateEnabled(mapView: RCTMGLMapView, rotateEnabled: Boolean) {
+    fun setRotateEnabled(map: RCTMGLMapView, rotateEnabled: Boolean) {
+        val mapView = map.mapView
         mapView.gestures.rotateEnabled = rotateEnabled
     }
 
@@ -207,6 +235,11 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
         //mapView.setTintColor(tintColor);
     }
 
+    @ReactProp(name = "requestDisallowInterceptTouchEvent")
+    fun setRequestDisallowInterceptTouchEvent(mapView: RCTMGLMapView, requestDisallowInterceptTouchEvent: Boolean) {
+        mapView.requestDisallowInterceptTouchEvent = requestDisallowInterceptTouchEvent
+    }
+
     //endregion
     //region Custom Events
     override fun customEvents(): Map<String, String>? {
@@ -221,29 +254,18 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
     }
 
     override fun getCommandsMap(): Map<String, Int>? {
-        return MapBuilder.builder<String, Int>()
-            .put("queryRenderedFeaturesAtPoint", METHOD_QUERY_FEATURES_POINT)
-            .put("queryRenderedFeaturesInRect", METHOD_QUERY_FEATURES_RECT)
-            .put("getVisibleBounds", METHOD_VISIBLE_BOUNDS)
-            .put("getPointInView", METHOD_GET_POINT_IN_VIEW)
-            .put("getCoordinateFromView", METHOD_GET_COORDINATE_FROM_VIEW)
-            .put("takeSnap", METHOD_TAKE_SNAP)
-            .put("getZoom", METHOD_GET_ZOOM)
-            .put("getCenter", METHOD_GET_CENTER)
-            .put("setHandledMapChangedEvents", METHOD_SET_HANDLED_MAP_EVENTS)
-            .put("showAttribution", METHOD_SHOW_ATTRIBUTION)
-            .put("setSourceVisibility", METHOD_SET_SOURCE_VISIBILITY)
-            .put("queryTerrainElevation", METHOD_QUERY_TERRAIN_ELEVATION)
-            .build()
+        return mapOf(
+            "_useCommandName" to 1
+        );
     }
 
-    override fun receiveCommand(mapView: RCTMGLMapView, commandID: Int, args: ReadableArray?) {
+    override fun receiveCommand(mapView: RCTMGLMapView, command: String, args: ReadableArray?) {
         // allows method calls to work with componentDidMount
         val mapboxMap = mapView.getMapboxMap()
             ?: //            mapView.enqueuePreRenderMapMethod(commandID, args);
             return
-        when (commandID) {
-            METHOD_QUERY_TERRAIN_ELEVATION -> {
+        when (command) {
+            "queryTerrainElevation" -> {
                 val coords = args!!.getArray(1)
                 mapView.queryTerrainElevation(
                     args.getString(0),
@@ -251,26 +273,26 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
                     coords.getDouble(1)
                 )
             }
-            METHOD_GET_ZOOM -> {
+            "getZoom" -> {
                 mapView.getZoom(args!!.getString(0));
             }
-            METHOD_GET_CENTER -> {
+            "getCenter" -> {
                 mapView.getCenter(args!!.getString(0));
             }
-            METHOD_GET_POINT_IN_VIEW -> {
+            "getPointInView" -> {
                 mapView.getPointInView(args!!.getString(0), args.getArray(1).toCoordinate())
             }
-            METHOD_GET_COORDINATE_FROM_VIEW -> {
+            "getCoordinateFromView" -> {
                 mapView.getCoordinateFromView(args!!.getString(0), args.getArray(1).toScreenCoordinate());
             }
-            METHOD_SET_SOURCE_VISIBILITY -> {
+            "setSourceVisibility" -> {
                 mapView!!.setSourceVisibility(
                     args!!.getBoolean(1),
                     args!!.getString(2),
                     args!!.getString(3)
                 );
             }
-            METHOD_QUERY_FEATURES_POINT -> {
+            "queryRenderedFeaturesAtPoint" -> {
                 mapView.queryRenderedFeaturesAtPoint(
                     args!!.getString(0),
                     ConvertUtils.toPointF(args!!.getArray(1)),
@@ -278,7 +300,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
                     ConvertUtils.toStringList(args!!.getArray(3))
                 );
             }
-            METHOD_QUERY_FEATURES_RECT -> {
+            "queryRenderedFeaturesInRect" -> {
                 val layerIds = ConvertUtils.toStringList(args!!.getArray(3))
                 mapView.queryRenderedFeaturesInRect(
                         args!!.getString(0),
@@ -287,11 +309,22 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
                         if (layerIds.size == 0) null else layerIds
                 );
             }
-            METHOD_VISIBLE_BOUNDS -> {
+            "getVisibleBounds" -> {
                 mapView.getVisibleBounds(args!!.getString(0));
             }
-            METHOD_TAKE_SNAP -> {
+            "takeSnap" -> {
                 mapView.takeSnap(args!!.getString(0), args!!.getBoolean(1))
+            }
+            "setHandledMapChangedEvents" -> {
+                args?.let {
+                    mapView.setHandledMapChangedEvents(it.getArray(1).asArrayString());
+                }
+            }
+            "clearData" -> {
+                mapView.clearData(args!!.getString(0))
+            }
+            else -> {
+                Logger.w("RCTMGLMapView.receiveCommand", "unexpected command: ${command}")
             }
         }
         /*
@@ -345,21 +378,6 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext?) :
     companion object {
         const val LOG_TAG = "RCTMGLMapViewManager"
         const val REACT_CLASS = "RCTMGLMapView"
-
-        //endregion
-        //region React Methods
-        const val METHOD_QUERY_FEATURES_POINT = 2
-        const val METHOD_QUERY_FEATURES_RECT = 3
-        const val METHOD_VISIBLE_BOUNDS = 4
-        const val METHOD_GET_POINT_IN_VIEW = 5
-        const val METHOD_GET_COORDINATE_FROM_VIEW = 6
-        const val METHOD_TAKE_SNAP = 7
-        const val METHOD_GET_ZOOM = 8
-        const val METHOD_GET_CENTER = 9
-        const val METHOD_SET_HANDLED_MAP_EVENTS = 10
-        const val METHOD_SHOW_ATTRIBUTION = 11
-        const val METHOD_SET_SOURCE_VISIBILITY = 12
-        const val METHOD_QUERY_TERRAIN_ELEVATION = 13
     }
 
     init {

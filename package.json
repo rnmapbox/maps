@@ -1,7 +1,7 @@
 {
   "name": "@rnmapbox/maps",
   "description": "A Mapbox react native module for creating custom maps",
-  "version": "10.0.0-beta.77",
+  "version": "10.0.7-rc.0",
   "publishConfig": {
     "access": "public"
   },
@@ -21,11 +21,11 @@
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/index.d.ts",
-  "browser": "./javascript/index.web.js",
-  "react-native": "javascript/index",
-  "source": "javascript/index",
+  "browser": "./src/index.web.js",
+  "react-native": "src/index",
+  "source": "src/index",
   "files": [
-    "javascript",
+    "src",
     "lib",
     "plugin",
     "assets",
@@ -83,7 +83,7 @@
     "@babel/eslint-parser": "^7.19.1",
     "@babel/plugin-proposal-class-properties": "7.18.6",
     "@babel/runtime": "7.19.0",
-    "@react-native-community/eslint-config": "^3.0.1",
+    "@react-native-community/eslint-config": "^3.2.0",
     "@sinonjs/fake-timers": "^8.0.1",
     "@testing-library/react-native": "^11.0.0",
     "@types/debounce": "^1.2.1",
@@ -97,6 +97,7 @@
     "ejs-lint": "^1.1.0",
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-ft-flow": "^2.0.3",
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-jest": "^27.0.1",
     "expo": "^47.0.0",
@@ -119,7 +120,7 @@
   "jest": {
     "preset": "react-native",
     "collectCoverageFrom": [
-      "javascript/**/*.js"
+      "src/**/*.js"
     ],
     "setupFiles": [
       "./setup-jest.js",
@@ -136,7 +137,7 @@
     "*.{js,jsx,ts,tsx}": "eslint --fix"
   },
   "react-native-builder-bob": {
-    "source": "javascript",
+    "source": "src",
     "output": "lib",
     "targets": [
       "commonjs",

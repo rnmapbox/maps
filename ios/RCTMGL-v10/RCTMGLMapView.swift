@@ -26,6 +26,8 @@ open class RCTMGLMapView : MapView {
   
   var handleMapChangedEvents = Set<RCTMGLEvent.EventType>()
 
+  var eventListeners : [Cancelable] = []
+
   private var isPendingInitialLayout = true
   private var wasGestureActive = false
   private var isGestureActive = false
@@ -129,17 +131,6 @@ open class RCTMGLMapView : MapView {
     }
   }
 
-  public override func updateConstraints() {
-    super.updateConstraints()
-    if let camera = reactCamera {
-      if (isPendingInitialLayout) {
-        isPendingInitialLayout = false;
-
-        camera.initialLayout()
-      }
-    }
-  }
-
   
   // MARK: - React Native properties
 
@@ -147,6 +138,19 @@ open class RCTMGLMapView : MapView {
     if let value = value {
       let projection = StyleProjection(name: value == "globe" ? .globe : .mercator)
       try! self.mapboxMap.style.setProjection(projection)
+    }
+  }
+
+  @objc func setReactLocalizeLabels(_ value: NSDictionary?) {
+    onMapStyleLoaded { _ in
+      if let value = value {
+        logged("RCTMGLMapVIew.setReactLocalizeLabels") {
+          let localeString = value["locale"] as! String
+          let layerIds = value["layerIds"] as! [String]?
+          let locale = localeString == "current" ? Locale.current : Locale(identifier: localeString)
+          try self.mapboxMap.style.localizeLabels(into: locale, forLayerIds: layerIds)
+        }
+      }
     }
   }
   
@@ -345,10 +349,14 @@ open class RCTMGLMapView : MapView {
 
 extension RCTMGLMapView {
   private func onEvery<Payload>(event: MapEvents.Event<Payload>, handler: @escaping  (RCTMGLMapView, MapEvent<Payload>) -> Void) {
-    self.mapView.mapboxMap.onEvery(event: event) { [weak self](mapEvent) in
+    let eventListener = self.mapView.mapboxMap.onEvery(event: event) { [weak self](mapEvent) in
       guard let self = self else { return }
 
       handler(self, mapEvent)
+    }
+    eventListeners.append(eventListener)
+    if eventListeners.count > 20 {
+      Logger.log(level:.warn, message: "RCTMGLMapView.onEvery, too much handler installed");
     }
   }
 

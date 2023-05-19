@@ -8,14 +8,8 @@ const parseJsDoc = require('react-docgen/dist/utils/parseJsDoc').default;
 
 const JSDocNodeTree = require('./JSDocNodeTree');
 
-const COMPONENT_PATH = path.join(
-  __dirname,
-  '..',
-  '..',
-  'javascript',
-  'components',
-);
-const MODULES_PATH = path.join(__dirname, '..', '..', 'javascript', 'modules');
+const COMPONENT_PATH = path.join(__dirname, '..', '..', 'src', 'components');
+const MODULES_PATH = path.join(__dirname, '..', '..', 'src', 'modules');
 
 const OUTPUT_PATH = path.join(__dirname, '..', '..', 'docs', 'docs.json');
 const IGNORE_FILES = [

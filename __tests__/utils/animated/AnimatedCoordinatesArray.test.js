@@ -3,11 +3,8 @@ import { Animated, Easing } from 'react-native';
 import TestRenderer from 'react-test-renderer';
 import React from 'react';
 
-import {
-  AnimatedShape,
-  AnimatedCoordinatesArray,
-} from '../../../javascript/classes';
-import { ShapeSource } from '../../../javascript/components/ShapeSource';
+import { AnimatedShape, AnimatedCoordinatesArray } from '../../../src/classes';
+import { ShapeSource } from '../../../src/components/ShapeSource';
 
 let clock = null;
 let oldNodeEnv = null;

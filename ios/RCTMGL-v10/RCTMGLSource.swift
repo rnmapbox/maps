@@ -8,6 +8,8 @@ class RCTMGLSource : RCTMGLInteractiveElement {
   var source : Source? = nil
 
   var ownsSource : Bool = false
+
+  @objc var existing: Bool = false
   
   override func getLayerIDs() -> [String] {
     layers.compactMap {
@@ -69,8 +71,14 @@ class RCTMGLSource : RCTMGLInteractiveElement {
     self.map = map
 
     if style.sourceExists(withId: self.id) {
+      if (!existing) {
+        Logger.log(level: .warn, message: "Warning source with id:\(optional: id) referred to existing source but `existing` attibute was missing. https://github.com/rnmapbox/maps/wiki/Deprecated-ExistingSourceLayer")
+      }
       self.source = try! style.source(withId: self.id)
     } else {
+      if (existing) {
+        Logger.log(level: .warn, message: "Warning source with id:\(optional: id) marked as existing, but could not find in style, source identifiers: \(style.allSourceIdentifiers.map { [$0.id, $0.type.rawValue] })")
+      }
       let source = self.makeSource()
       self.ownsSource = true
       self.source = source

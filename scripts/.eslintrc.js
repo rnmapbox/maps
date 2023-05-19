@@ -4,6 +4,7 @@ module.exports = {
     pascelCase: true,
     startAtSpace: true,
     replaceNewLine: true,
+    codeQuote: true,
     exists: true,
     androidInputType: true,
     androidOutputType: true,

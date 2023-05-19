@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'react-native';
 import {
+  Images,
   MapView,
   ShapeSource,
   SymbolLayer,
@@ -75,6 +76,7 @@ class BugReportExample extends React.Component {
         />
         <MapView style={styles.mapView}>
           <Camera centerCoordinate={[-74.00597, 40.71427]} zoomLevel={14} />
+          <Images images={{ example: require('../assets/example.png') }} />
           <ShapeSource id={'shape-source-id-0'} shape={features}>
             <CircleLayer id={'circle-layer'} style={circleLayerStyle} />
             <SymbolLayer

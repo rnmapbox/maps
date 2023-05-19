@@ -50,10 +50,26 @@ jobs:
         with:
           node-version: ${{ inputs.NVMRC }}
 
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('**/yarn.lock') }}
+
       - name: Install Yarn Dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --network-timeout 1000000
 
+      - name: Cache Pods
+        uses: actions/cache@v3
+        id: pods-cache
+        with:
+          path: ios/Pods
+          key: pods-${{ hashFiles('**/Podfile.lock') }}
+
       - name: Install Pod Dependencies
+        if: steps.pods-cache.outputs.cache-hit != 'true'
         run: cd ios && pod --version && pod install
         env:
           CI_MAP_IMPL: ${{ inputs.MAP_IMPL }}

@@ -1,5 +1,5 @@
 import React from 'react';
-import MapboxGL from '@rnmapbox/maps';
+import Mapbox from '@rnmapbox/maps';
 import { StyleSheet, Text, View, LogBox, SafeAreaView } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
 });
 
-MapboxGL.setAccessToken(config.get('accessToken'));
+Mapbox.setAccessToken(config.get('accessToken'));
 
 const Stack = createNativeStackNavigator();
 
@@ -58,7 +58,7 @@ class App extends React.Component {
 
   async componentDidMount() {
     if (IS_ANDROID) {
-      const isGranted = await MapboxGL.requestAndroidLocationPermissions();
+      const isGranted = await Mapbox.requestAndroidLocationPermissions();
       this.setState({
         isAndroidPermissionGranted: isGranted,
         isFetchingAndroidPermission: false,

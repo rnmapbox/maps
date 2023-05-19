@@ -4,6 +4,13 @@ import android.content.Context
 import com.facebook.react.views.view.ReactViewGroup
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 
+enum class RemovalReason {
+    VIEW_REMOVAL,
+    STYLE_CHANGE,
+    ON_DESTROY,
+    REORDER
+}
+
 abstract class AbstractMapFeature(context: Context?) : ReactViewGroup(context) {
     protected var mMapView: RCTMGLMapView? = null;
     private var mWithMapViewCallbacks: Array<((RCTMGLMapView) -> Unit)>? = null;
@@ -14,8 +21,10 @@ abstract class AbstractMapFeature(context: Context?) : ReactViewGroup(context) {
         mWithMapViewCallbacks = null;
     }
 
-    open fun removeFromMap(mapView: RCTMGLMapView) {
+    // return false if you don not want to remove this feature based on reason
+    open fun removeFromMap(mapView: RCTMGLMapView,reason: RemovalReason) : Boolean {
         mMapView = null;
+        return true;
     }
 
     internal fun withMapView(callback: (mapView: RCTMGLMapView) -> Unit) {

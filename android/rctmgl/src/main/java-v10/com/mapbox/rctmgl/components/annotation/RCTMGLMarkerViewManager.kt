@@ -14,7 +14,7 @@ import com.mapbox.maps.viewannotation.OnViewAnnotationUpdatedListener
 import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 
-class RCTMGLMarkerViewManager(reactApplicationContext: ReactApplicationContext?) :
+class RCTMGLMarkerViewManager(reactApplicationContext: ReactApplicationContext) :
     AbstractEventEmitter<RCTMGLMarkerView?>(reactApplicationContext) {
     override fun getName(): String {
         return REACT_CLASS

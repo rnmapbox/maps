@@ -5,7 +5,7 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import javax.annotation.Nonnull
 
-class RCTMGLRasterSourceManager(reactApplicationContext: ReactApplicationContext?) :
+class RCTMGLRasterSourceManager(reactApplicationContext: ReactApplicationContext) :
     RCTMGLTileSourceManager<RCTMGLRasterSource?>(reactApplicationContext) {
     @Nonnull
     override fun getName(): String {
