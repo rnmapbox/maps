@@ -62,7 +62,7 @@ async function postComment(issueNumber, message) {
   if (message.includes('error')) {
     await octokit.rest.issues.createComment({
       issue_number: issueNumber,
-      body: marker + '\n' + prelude + message,
+      body: marker + '\n' + prelude + '```eslint\n'+ message + '```',
       ...context,
     });
 
@@ -72,11 +72,17 @@ async function postComment(issueNumber, message) {
       ...context,
     });
   } else {
-    await octokit.rest.issues.removeLabel({
-      issue_number: issueNumber,
-      name: label,
-      ...context,
-    });
+    try {
+      await octokit.rest.issues.removeLabel({
+        issue_number: issueNumber,
+        name: label,
+        ...context,
+      });
+    } catch (error) {
+      if (error.status !== 404) {
+        throw error;
+      }
+    }
   }
 }
 
