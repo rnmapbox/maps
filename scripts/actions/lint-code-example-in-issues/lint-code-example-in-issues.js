@@ -32,17 +32,20 @@ function getCode() {
     throw new Error('Could not find issue in context');
   }
   const { body } = issue;
-  const start = body.indexOf(/^```(jsx?|tsx?)/);
+  const start = body.search(/```(jsx?|tsx?|javascript)/);
   if (start < 0) {
     throw new Error('Could not find code block in issue body');
   }
   const end = body.indexOf('```', start + 1);
   const bodywithprefix = body.substring(start, end);
-  return bodywithprefix.replace(/^```(jsx?|tsx?)/, '');
+  return bodywithprefix.replace(/^```(jsx?|tsx?|javascript)/, '');
 }
 
 async function postComment(issueNumber, message) {
   const token = core.getInput('repo-token') || process.env.GITHUB_TOKEN;
+  if (! token) {
+    console.error("No token found. Wanted to post message: ", message)
+  }
   const octokit = github.getOctokit(token);
 
   const marker = '<!-- lint-action -->';
