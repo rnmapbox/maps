@@ -7,4 +7,5 @@ RCT_EXTERN_REMAP_MODULE(RCTMGLPointSource, RCTMGLPointSourceManager, RCTViewMana
 RCT_EXPORT_VIEW_PROPERTY(id, NSString)
 RCT_EXPORT_VIEW_PROPERTY(point, NSString)
 RCT_EXPORT_VIEW_PROPERTY(animationDuration, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(snapIfDistanceIsGreaterThan, NSNumber)
 @end

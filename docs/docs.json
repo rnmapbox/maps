@@ -3826,8 +3826,15 @@
         "name": "animationDuration",
         "required": false,
         "type": "number",
-        "default": "undefined",
-        "description": "The duration in milliseconds to animate the point. If undefined or 0, changes are instantaneous."
+        "default": "none",
+        "description": "The duration in milliseconds to animate the point. If `undefined` or `0`, changes are instantaneous."
+      },
+      {
+        "name": "snapIfDistanceIsGreaterThan",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "If the distance between the previous `point` and the new `point` is greater than this number in\nmeters, ignore `animationDuration` and move instantly to `point`. If `undefined`, always\nanimates according to `animationDuration`. If `0`, always moves instantly."
       },
       {
         "name": "children",

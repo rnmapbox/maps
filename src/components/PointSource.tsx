@@ -21,8 +21,15 @@ export type Props = {
   /** The point data. */
   point?: GeoJSON.Point;
 
-  /** The duration in milliseconds to animate the point. If undefined or 0, changes are instantaneous.  */
+  /** The duration in milliseconds to animate the point. If `undefined` or `0`, changes are instantaneous.  */
   animationDuration?: number;
+
+  /**
+   * If the distance between the previous `point` and the new `point` is greater than this number in
+   * meters, ignore `animationDuration` and move instantly to `point`. If `undefined`, always
+   * animates according to `animationDuration`. If `0`, always moves instantly.
+   */
+  snapIfDistanceIsGreaterThan?: number;
 
   /** One or more components to render with the point data. */
   children?: React.ReactElement | React.ReactElement[];
@@ -37,7 +44,6 @@ export class PointSource extends NativeBridgeComponent(
 ) {
   static defaultProps = {
     id: MapboxGL.StyleSource.DefaultSourceID,
-    animationDuration: undefined,
   };
 
   constructor(props: Props) {
@@ -71,6 +77,7 @@ export class PointSource extends NativeBridgeComponent(
       id: this.props.id,
       point: toJSONString(this.props.point),
       animationDuration: this.props.animationDuration,
+      snapIfDistanceIsGreaterThan: this.props.snapIfDistanceIsGreaterThan,
     };
 
     return (
@@ -81,8 +88,9 @@ export class PointSource extends NativeBridgeComponent(
 
 type NativeProps = {
   id: string;
-  point?: string;
+  point: string;
   animationDuration?: number;
+  snapIfDistanceIsGreaterThan?: number;
 };
 
 const RCTMGLPointSource =

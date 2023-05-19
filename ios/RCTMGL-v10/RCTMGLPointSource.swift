@@ -15,6 +15,8 @@ class RCTMGLPointSource: RCTMGLSource {
   }
   
   @objc var animationDuration: NSNumber?
+  
+  @objc var snapIfDistanceIsGreaterThan: NSNumber?
 
   private var lastUpdatedPoint: Point?
   private var timer: Timer?
@@ -49,42 +51,49 @@ class RCTMGLPointSource: RCTMGLSource {
       return
     }
     
+    lastUpdatedPoint = currentPoint
+    
     let obj = GeoJSONObject.geometry(.point(geometry))
     try? style.updateGeoJSONSource(withId: id, geoJSON: obj)
   }
 
   func animateToNewPoint(prevPoint: Point, targetPoint: Point) {
     self.timer?.invalidate()
-
-    if let duration = animationDuration?.doubleValue {
-      let fps: Double = 30
-      var ratio: Double = 0
-
-      let frameCt = duration / 1000
-      let ratioIncr = 1 / (fps * frameCt)
-      let period = 1000 / fps
-
-      let lineBetween = LineString.init([
-        prevPoint.coordinates,
-        targetPoint.coordinates
-      ])
-      let distanceBetween = lineBetween.distance() ?? 0
-      
-      self.timer = Timer.scheduledTimer(withTimeInterval: period / 1000, repeats: true, block: { t in
-        ratio += ratioIncr
-        if ratio >= 1 {
-          t.invalidate()
-          return
-        }
-        
-        let coord = lineBetween.coordinateFromStart(distance: distanceBetween * ratio)!
-        let point = Point(coord)
-        self.applyPointGeometry(currentPoint: point)
-        self.lastUpdatedPoint = point
-      })
-    } else {
+    
+    let lineBetween = LineString.init([
+      prevPoint.coordinates,
+      targetPoint.coordinates
+    ])
+    let distanceBetween = lineBetween.distance() ?? 0
+    
+    if let snapThreshold = snapIfDistanceIsGreaterThan?.doubleValue, distanceBetween > snapThreshold {
       self.applyPointGeometry(currentPoint: targetPoint)
+      return
     }
+    
+    guard let animationDuration = animationDuration?.doubleValue, animationDuration > 0 else {
+      self.applyPointGeometry(currentPoint: targetPoint)
+      return
+    }
+
+    let fps: Double = 30
+    var ratio: Double = 0
+
+    let frameCt = animationDuration / 1000
+    let ratioIncr = 1 / (fps * frameCt)
+    let period = 1000 / fps
+
+    self.timer = Timer.scheduledTimer(withTimeInterval: period / 1000, repeats: true, block: { t in
+      ratio += ratioIncr
+      if ratio >= 1 {
+        t.invalidate()
+        return
+      }
+      
+      let coord = lineBetween.coordinateFromStart(distance: distanceBetween * ratio)!
+      let point = Point(coord)
+      self.applyPointGeometry(currentPoint: point)
+    })
   }
   
   override func makeSource() -> Source {
