@@ -1,7 +1,6 @@
 package com.mapbox.rctmgl.components.styles.sources
 
 import android.content.Context
-import android.util.Log
 import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
 import com.mapbox.common.toValue
 import com.mapbox.geojson.LineString
@@ -15,25 +14,28 @@ import com.mapbox.turf.TurfMeasurement
 import java.util.Timer
 import java.util.TimerTask
 
-
-class RCTMGLPointSource(context: Context, private val mManager: RCTMGLPointSourceManager) :
-    RCTSource<GeoJsonSource>(context) {
+class RCTMGLPointSource(context: Context, private val mManager: RCTMGLPointSourceManager): RCTSource<GeoJsonSource>(context) {
     private var mPoint: String? = null
     fun setPoint(point: String) {
         mPoint = point
 
         val targetPoint = getPointGeometry(point)
-        var _prevPoint = lastUpdatedPoint ?: targetPoint
+        val _prevPoint = lastUpdatedPoint ?: targetPoint
         val _targetPoint = targetPoint
 
         if (_prevPoint != null && _targetPoint != null) {
-            animateToNewOffset(_prevPoint, _targetPoint)
+            animateToNewPoint(_prevPoint, _targetPoint)
         }
     }
 
     private var mAnimationDuration: Long? = null
     fun setAnimationDuration(animationDuration: Float) {
         mAnimationDuration = animationDuration.toLong()
+    }
+
+    private var mSnapIfDistanceIsGreaterThan: Long? = null
+    fun setSnapIfDistanceIsGreaterThan(distance: Float) {
+        mSnapIfDistanceIsGreaterThan = distance.toLong()
     }
 
     private var lastUpdatedPoint: Point? = null
@@ -46,62 +48,78 @@ class RCTMGLPointSource(context: Context, private val mManager: RCTMGLPointSourc
         }
     }
 
-    fun animateToNewOffset(prevPoint: Point, targetPoint: Point) {
-        if (timer != null) {
-            timer!!.cancel()
-        }
-
-        val _mAnimationDuration = mAnimationDuration?.toLong()
-        if (_mAnimationDuration != null && _mAnimationDuration > 0) {
-            val fps = 30.0
-            var ratio = 0.0
-
-            val frameCt = _mAnimationDuration / 1000
-            val ratioIncr = 1 / (fps * frameCt)
-            val period = 1000 / fps
-
-            val lineBetween = LineString.fromLngLats(listOf<Point>(prevPoint, targetPoint))
-            val distanceBetween = TurfMeasurement.length(lineBetween, TurfConstants.UNIT_METERS)
-
-            timer = Timer()
-            timer?.scheduleAtFixedRate(
-                object: TimerTask() {
-                    override fun run() {
-                        runOnUiThread {
-                            ratio += ratioIncr
-                            if (ratio >= 1) {
-                                timer?.cancel()
-                                return@runOnUiThread
-                            }
-
-                            val coord = TurfMeasurement.along(
-                                lineBetween,
-                                distanceBetween * ratio,
-                                TurfConstants.UNIT_METERS
-                            )
-                            refresh(coord)
-                            lastUpdatedPoint = coord
-                        }
-                    }
-                }, 0, period.toLong()
-            )
-        } else {
-            refresh(targetPoint)
-        }
+    fun getPointGeometry(pointStr: String): Point? {
+        val _pointStr = pointStr ?: return null
+        val geometry = Point.fromJson(_pointStr)
+        return geometry
     }
 
-    fun refresh(currentPoint: Point?) {
+    fun applyPointGeometry(currentPoint: Point?) {
         val _mSource = mSource ?: return
+        val _style = getStyle()
 
-        if (mMapView == null || mMapView?.isDestroyed == true) {
+        if (mMapView == null || mMapView?.isDestroyed == true || _style == null || currentPoint == null) {
             return
         }
 
-        val geometryStr = currentPoint?.toJson()
-        _mSource.data(geometryStr!!)
+        lastUpdatedPoint = currentPoint
 
-        val style = getStyle()
-        style?.setStyleSourceProperty(iD!!, "data", geometryStr.toValue())
+        val geometryStr = currentPoint.toJson()
+        _mSource.data(geometryStr)
+        _style.setStyleSourceProperty(iD!!, "data", geometryStr.toValue())
+    }
+
+    fun animateToNewPoint(prevPoint: Point, targetPoint: Point) {
+        timer?.cancel()
+
+        val lineBetween = LineString.fromLngLats(
+            listOf<Point>(
+                prevPoint,
+                targetPoint
+            )
+        )
+        val distanceBetween = TurfMeasurement.length(lineBetween, TurfConstants.UNIT_METERS)
+
+        val _mSnapThreshold = mSnapIfDistanceIsGreaterThan?.toLong()
+        if( _mSnapThreshold != null && distanceBetween > _mSnapThreshold) {
+            applyPointGeometry(targetPoint)
+            return
+        }
+
+        val _mAnimationDuration = mAnimationDuration?.toLong()
+        if (_mAnimationDuration == null || _mAnimationDuration <= 0) {
+            applyPointGeometry(targetPoint)
+            return
+        }
+
+        val fps = 30.0
+        var ratio = 0.0
+
+        val frameCt = _mAnimationDuration / 1000
+        val ratioIncr = 1 / (fps * frameCt)
+        val period = 1000 / fps
+
+        timer = Timer()
+        timer?.scheduleAtFixedRate(
+            object : TimerTask() {
+                override fun run() {
+                    runOnUiThread {
+                        ratio += ratioIncr
+                        if (ratio >= 1) {
+                            timer?.cancel()
+                            return@runOnUiThread
+                        }
+
+                        val point = TurfMeasurement.along(
+                            lineBetween,
+                            distanceBetween * ratio,
+                            TurfConstants.UNIT_METERS
+                        )
+                        applyPointGeometry(point)
+                    }
+                }
+            }, 0, period.toLong()
+        )
     }
 
     override fun makeSource(): GeoJsonSource {
@@ -113,12 +131,6 @@ class RCTMGLPointSource(context: Context, private val mManager: RCTMGLPointSourc
         }
 
         return builder.build()
-    }
-
-    private fun getPointGeometry(pointStr: String?): Point? {
-        val _pointStr = pointStr ?: return null
-        val geometry = Point.fromJson(_pointStr)
-        return geometry
     }
 
     private fun getStyle(): Style? {

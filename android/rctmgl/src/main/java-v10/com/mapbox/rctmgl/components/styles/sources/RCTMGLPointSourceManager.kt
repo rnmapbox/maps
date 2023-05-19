@@ -56,6 +56,11 @@ class RCTMGLPointSourceManager(private val mContext: ReactApplicationContext) :
         source.setAnimationDuration(animationDuration)
     }
 
+    @ReactProp(name = "snapIfDistanceIsGreaterThan")
+    fun setSnapIfDistanceIsGreaterThan(source: RCTMGLPointSource, snapIfDistanceIsGreaterThan: Float) {
+        source.setSnapIfDistanceIsGreaterThan(snapIfDistanceIsGreaterThan)
+    }
+
     companion object {
         const val LOG_TAG = "RCTMGLPointSourceMgr"
         const val REACT_CLASS = "RCTMGLPointSource"
