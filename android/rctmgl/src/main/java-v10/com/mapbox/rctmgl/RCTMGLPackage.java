@@ -39,6 +39,7 @@ import com.mapbox.rctmgl.components.styles.sources.RCTMGLRasterSourceManager;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLRasterDemSourceManager;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLShapeSourceManager;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLPointSourceManager;
+import com.mapbox.rctmgl.components.styles.sources.RCTMGLLineSourceManager;
 import com.mapbox.rctmgl.components.styles.sources.RCTMGLVectorSourceManager;
 
 import com.mapbox.rctmgl.modules.RCTMGLLogging;
@@ -91,6 +92,7 @@ public class RCTMGLPackage implements ReactPackage {
         managers.add(new RCTMGLVectorSourceManager(reactApplicationContext));
         managers.add(new RCTMGLShapeSourceManager(reactApplicationContext));
         managers.add(new RCTMGLPointSourceManager(reactApplicationContext));
+        managers.add(new RCTMGLLineSourceManager(reactApplicationContext));
         managers.add(new RCTMGLRasterDemSourceManager(reactApplicationContext));
         managers.add(new RCTMGLRasterSourceManager(reactApplicationContext));
         managers.add(new RCTMGLImageSourceManager());
