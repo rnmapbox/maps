@@ -78,9 +78,7 @@ class RCTMGLLineSource(context: Context, private val mManager: RCTMGLLineSourceM
             TurfConstants.UNIT_METERS
         )
 
-        val geometryStr = geometryTrimmed.toJson()
-        _mSource.data(geometryStr)
-        _style.setStyleSourceProperty(iD!!, "data", geometryStr.toValue())
+        _mSource.geometry(geometryTrimmed)
     }
 
     fun animateToNewStartOffset(prevOffset: Double, targetOffset: Double?) {
@@ -97,9 +95,9 @@ class RCTMGLLineSource(context: Context, private val mManager: RCTMGLLineSourceM
         val fps = 30.0
         var ratio = 0.0
 
-        val durationSec = _mAnimationDuration / 1000
-        val ratioIncr = 1 / (fps * durationSec)
-        val period = 1000 / fps
+        val durationSec = _mAnimationDuration / 1000.0
+        val ratioIncr = 1.0 / (fps * durationSec)
+        val period = 1000.0 / fps
 
         timer = Timer()
         timer?.scheduleAtFixedRate(
