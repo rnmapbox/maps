@@ -95,7 +95,7 @@ class RCTMGLLineSource(context: Context, private val mManager: RCTMGLLineSourceM
         val fps = 30.0
         var ratio = 0.0
 
-        val durationSec = _mAnimationDuration / 1000.0
+        val durationSec = _mAnimationDuration.toDouble() / 1000.0
         val ratioIncr = 1.0 / (fps * durationSec)
         val period = 1000.0 / fps
 
