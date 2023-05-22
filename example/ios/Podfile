@@ -103,6 +103,7 @@ target 'RNMapboxGLExample' do
 
   if !ENV['CI']
     post_install do |installer|
+      # See https://github.com/rnmapbox/maps/pull/2878
       installer.pods_project.targets.each do |target|
         target.build_configurations.each do |config|
           config.build_settings["ONLY_ACTIVE_ARCH"] = "NO"
