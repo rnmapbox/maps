@@ -80,8 +80,8 @@ class RCTMGLPointSource: RCTMGLSource {
     let fps: Double = 30
     var ratio: Double = 0
     
-    let frameCt = animationDuration / 1000
-    let ratioIncr = 1 / (fps * frameCt)
+    let durationSec = animationDuration / 1000
+    let ratioIncr = 1 / (fps * durationSec)
     let period = 1000 / fps
     
     self.timer = Timer.scheduledTimer(withTimeInterval: period / 1000, repeats: true, block: { t in

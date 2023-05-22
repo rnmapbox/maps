@@ -95,8 +95,8 @@ class RCTMGLPointSource(context: Context, private val mManager: RCTMGLPointSourc
         val fps = 30.0
         var ratio = 0.0
 
-        val frameCt = _mAnimationDuration / 1000
-        val ratioIncr = 1 / (fps * frameCt)
+        val durationSec = _mAnimationDuration / 1000
+        val ratioIncr = 1 / (fps * durationSec)
         val period = 1000 / fps
 
         timer = Timer()
