@@ -72,7 +72,7 @@ import SdfIcons from '../examples/SymbolCircleLayer/SdfIcons';
 // USERLOCATION
 import SetDisplacement from '../examples/UserLocation/SetDisplacement';
 import SetTintColor from '../examples/UserLocation/SetTintColor';
-import SetUserLocationRenderMode from '../examples/UserLocation/SetUserLocationRenderMode';
+import UserLocationRenderMode from '../examples/UserLocation/UserLocationRenderMode';
 import UserLocationPadding from '../examples/UserLocation/UserLocationPadding';
 import UserLocationUpdates from '../examples/UserLocation/UserLocationUpdates';
 // MISC
@@ -300,10 +300,10 @@ const Examples = new ExampleGroup('React Native Mapbox', [
     new ExampleItem('Compass View', CompassView),
   ]),
   new ExampleGroup('User Location', [
-    new ExampleItem('User Location Padding', UserLocationPadding),
+    new ExampleItem('User Location Render Mode', UserLocationRenderMode),
     new ExampleItem('User Location Updates', UserLocationUpdates),
+    new ExampleItem('User Location Padding', UserLocationPadding),
     new ExampleItem('Set Displacement', SetDisplacement),
-    new ExampleItem('Set User Location Render Mode', SetUserLocationRenderMode),
   ]),
   new ExampleGroup('Symbol/CircleLayer', [
     new ExampleItem('Custom Icon', CustomIcon),
