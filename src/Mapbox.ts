@@ -16,6 +16,7 @@ export {
   default as UserLocation,
   UserLocationRenderMode,
 } from './components/UserLocation';
+export { UserLocationAndroidRenderMode } from './components/NativeUserLocation';
 export { default as VectorSource } from './components/VectorSource';
 export { ShapeSource } from './components/ShapeSource';
 export { default as RasterSource } from './components/RasterSource';

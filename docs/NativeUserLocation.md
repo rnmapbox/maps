@@ -13,7 +13,7 @@ NativeUserLocation
 ### androidRenderMode
 
 ```tsx
-'normal' | 'compass' | 'gps'
+UserLocationAndroidRenderMode
 ```
 Android render mode.
 
