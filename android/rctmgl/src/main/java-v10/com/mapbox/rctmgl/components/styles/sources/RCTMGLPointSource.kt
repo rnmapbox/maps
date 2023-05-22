@@ -1,6 +1,7 @@
 package com.mapbox.rctmgl.components.styles.sources
 
 import android.content.Context
+import android.util.Log
 import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
 import com.mapbox.common.toValue
 import com.mapbox.geojson.LineString
@@ -64,9 +65,7 @@ class RCTMGLPointSource(context: Context, private val mManager: RCTMGLPointSourc
 
         lastUpdatedPoint = currentPoint
 
-        val geometryStr = currentPoint.toJson()
-        _mSource.data(geometryStr)
-        _style.setStyleSourceProperty(iD!!, "data", geometryStr.toValue())
+        _mSource.geometry(currentPoint)
     }
 
     fun animateToNewPoint(prevPoint: Point, targetPoint: Point) {
@@ -95,9 +94,9 @@ class RCTMGLPointSource(context: Context, private val mManager: RCTMGLPointSourc
         val fps = 30.0
         var ratio = 0.0
 
-        val durationSec = _mAnimationDuration / 1000
-        val ratioIncr = 1 / (fps * durationSec)
-        val period = 1000 / fps
+        val durationSec = _mAnimationDuration / 1000.0
+        val ratioIncr = 1.0 / (fps * durationSec)
+        val period = 1000.0 / fps
 
         timer = Timer()
         timer?.scheduleAtFixedRate(
