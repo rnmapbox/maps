@@ -2,21 +2,41 @@ import MapboxMaps
 
 class RCTMGLImage : UIView {
   @objc
-  var name: String = ""
+  var name: String = "" {
+    didSet {
+      _addImageToStyle()
+    }
+  }
 
   var image: UIImage? = nil
   
   @objc
-  var sdf: Bool = false
+  var sdf: Bool = false {
+    didSet {
+      _addImageToStyle()
+    }
+  }
 
   @objc
-  var stretchX: [[NSNumber]] = []
+  var stretchX: [[NSNumber]] = [] {
+    didSet {
+      _addImageToStyle()
+    }
+  }
 
   @objc
-  var stretchY: [[NSNumber]] = []
+  var stretchY: [[NSNumber]] = [] {
+    didSet {
+      _addImageToStyle()
+    }
+  }
 
   @objc
-  var content: [NSNumber]? = nil
+  var content: [NSNumber]? = nil {
+    didSet {
+      _addImageToStyle()
+    }
+  }
 
   weak var images: RCTMGLImageSetter? = nil {
     didSet {
@@ -48,10 +68,15 @@ class RCTMGLImage : UIView {
   
   // MARK: - view shnapshot
   
-  func changeImage(_ image: UIImage, name: String) {
-    if let images = images {
-      let _ = images.addImage(name: name, image: image, sdf: sdf, stretchX:stretchX, stretchY:stretchY, content:content, log: "RCTMGLImage.addImage")
+  func _addImageToStyle() {
+    if let image = self.image, let images = images {
+      let _ = images.addImage(name: name, image: image, sdf: sdf, stretchX:stretchX, stretchY:stretchY, content:content, log: "RCTMGLImage._addImageToStyle")
     }
+  }
+  
+  func changeImage(_ image: UIImage, name: String) {
+    self.image = image
+    _addImageToStyle()
   }
   
   func setImage() {
