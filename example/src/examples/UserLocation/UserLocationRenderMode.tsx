@@ -11,6 +11,7 @@ import { ButtonGroup, Text } from '@rneui/base';
 import sheet from '../../styles/sheet';
 import TabBarPage from '../common/TabBarPage';
 import { BaseExampleProps } from '../common/BaseExamplePropTypes';
+import { DEFAULT_CENTER_COORDINATE } from '../../utils';
 
 const SettingsGroup = ({
   children,
@@ -91,6 +92,7 @@ const UserLocationRenderMode = (props: BaseExampleProps) => {
         {Platform.OS === 'android' && (
           <SettingsGroup label="Android Render Mode">
             <ButtonGroup
+              disabled={renderMode !== ExampleRenderMode.Native}
               buttons={Object.values(UserLocationAndroidRenderMode)}
               selectedIndex={Object.values(
                 UserLocationAndroidRenderMode,
@@ -106,8 +108,18 @@ const UserLocationRenderMode = (props: BaseExampleProps) => {
       </View>
       <MapboxGL.MapView style={sheet.matchParent} tintColor={'red'}>
         <MapboxGL.Camera
+          defaultSettings={{
+            centerCoordinate: DEFAULT_CENTER_COORDINATE,
+            zoomLevel: 18,
+          }}
           followUserLocation={followUserLocation}
           followUserMode={followUserMode}
+          followZoomLevel={18}
+          onUserTrackingModeChange={(event) => {
+            if (!event.nativeEvent.payload.followUserLocation) {
+              setFollowUserLocation(false);
+            }
+          }}
         />
         <MapboxGL.UserLocation
           visible={renderMode !== ExampleRenderMode.Hidden}
