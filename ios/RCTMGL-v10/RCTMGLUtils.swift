@@ -33,10 +33,10 @@ class RCTMGLUtils {
           let scale = (image["scale"] as? NSNumber)?.floatValue ?? 1.0
           let sdf = (image["sdf"] as? NSNumber)?.boolValue ?? false
           let imageStretchX = image["stretchX"] as? [[NSNumber]]
-          let stretchX: [ImageStretches] = imageStretchX != nil ? RCTMGLImages.convert(stretch: imageStretchX!, scale: scale) : []
+          let stretchX: [ImageStretches] = imageStretchX != nil ? RCTMGLImages.convert(stretch: imageStretchX!, scale: CGFloat(scale)) : []
           let imageStretchY = image["stretchY"] as? [[NSNumber]]
-          let stretchY: [ImageStretches] = imageStretchY != nil ? RCTMGLImages.convert(stretch: imageStretchY!, scale: scale) : []
-          let content: ImageContent? = RCTMGLImages.convert(content: image["content"] as? [NSNumber], scale: scale)
+          let stretchY: [ImageStretches] = imageStretchY != nil ? RCTMGLImages.convert(stretch: imageStretchY!, scale: CGFloat(scale)) : []
+          let content: ImageContent? = RCTMGLImages.convert(content: image["content"] as? [NSNumber], scale: CGFloat(scale))
           
           RCTMGLImageQueue.sharedInstance.addImage(objects[imageName], scale: Double(scale), bridge:bridge) {
             (error,image) in

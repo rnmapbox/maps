@@ -118,29 +118,34 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
     }
   }
   
-  static func convert(stretch: [[NSNumber]], scale: Float = 1.0) -> [(from: Float, to: Float)] {
+  static func convert(stretch: [[NSNumber]], scale: CGFloat = 1.0) -> [(from: Float, to: Float)] {
     return stretch.map{ pair in
-      return (from: pair[0].floatValue * scale, to: pair[1].floatValue * scale)
+      return (from: pair[0].floatValue * Float(scale), to: pair[1].floatValue * Float(scale))
     }
   }
   
-  static func convert(stretch: [(from: Float, to: Float)]) -> [ImageStretches] {
-    return stretch.map { v in ImageStretches(first: v.from, second: v.to) }
+  static func convert(stretch: [(from: Float, to: Float)], scale: CGFloat = 1.0) -> [ImageStretches] {
+    return stretch.map { v in ImageStretches(first: v.from * Float(scale), second: v.to * Float(scale)) }
+  }
+  
+  static func convert(stretch: [[NSNumber]], scale: CGFloat = 1.0) -> [ImageStretches] {
+    return convert(stretch: convert(stretch: stretch, scale: scale))
   }
   
   static func convert(stretch: [[NSNumber]], scale: Float = 1.0) -> [ImageStretches] {
-    return convert(stretch: convert(stretch: stretch, scale: scale))
+    return convert(stretch: stretch, scale: CGFloat(scale))
   }
 
-  static func convert(content: (left:Float, top:Float, right:Float, bottom:Float)?) -> ImageContent? {
+
+  static func convert(content: (left:Float, top:Float, right:Float, bottom:Float)?, scale: CGFloat) -> ImageContent? {
     guard let content = content else {
       return nil
     }
     
-    return ImageContent(left:content.left, top:content.top, right:content.right, bottom:content.bottom)
+    return ImageContent(left:content.left*Float(scale), top:content.top*Float(scale), right:content.right*Float(scale), bottom:content.bottom*Float(scale))
   }
 
-  static func convert(content: [NSNumber]?, scale: Float = 1.0) -> (left:Float,top:Float,right:Float,bottom:Float)? {
+  static func convert(content: [NSNumber]?, scale: CGFloat = 1.0) -> (left:Float,top:Float,right:Float,bottom:Float)? {
     guard let content = content else {
       return nil
     }
@@ -149,15 +154,15 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
       return nil
     }
     return (
-      left: content[0].floatValue*scale,
-      top: content[1].floatValue*scale,
-      right: content[2].floatValue*scale,
-      bottom: content[3].floatValue*scale
+      left: content[0].floatValue*Float(scale),
+      top: content[1].floatValue*Float(scale),
+      right: content[2].floatValue*Float(scale),
+      bottom: content[3].floatValue*Float(scale)
     )
   }
   
-  static func convert(content: [NSNumber]?, scale: Float = 1.0) -> ImageContent? {
-    return convert(content: convert(content: content, scale: scale))
+  static func convert(content: [NSNumber]?, scale: CGFloat = 1.0) -> ImageContent? {
+    return convert(content: convert(content: content, scale: scale), scale: 1.0)
   }
   
   func decodeImage(_ imageNameOrInfo: Any) -> NativeImageInfo? {
@@ -202,9 +207,9 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
         if let image = UIImage(named: imageName) {
           logged("RCTMGLImage.addNativeImage: \(imageName)") {
             try style.addImage(image, id: imageName, sdf: imageInfo.sdf,
-                               stretchX: RCTMGLImages.convert(stretch: imageInfo.stretchX),
-                               stretchY: RCTMGLImages.convert(stretch: imageInfo.stretchY),
-                               content: RCTMGLImages.convert(content: imageInfo.content)
+                               stretchX: RCTMGLImages.convert(stretch: imageInfo.stretchX, scale: image.scale),
+                               stretchY: RCTMGLImages.convert(stretch: imageInfo.stretchY, scale: image.scale),
+                               content: RCTMGLImages.convert(content: imageInfo.content, scale: image.scale)
             )
           }
         } else {
@@ -230,9 +235,9 @@ extension RCTMGLImages : RCTMGLImageSetter {
          try style.addImage(image,
                             id:name,
                             sdf: sdf ?? false,
-                            stretchX: RCTMGLImages.convert(stretch: stretchX),
-                            stretchY: RCTMGLImages.convert(stretch: stretchY),
-                            content: RCTMGLImages.convert(content: content)
+                            stretchX: RCTMGLImages.convert(stretch: stretchX, scale: image.scale),
+                            stretchY: RCTMGLImages.convert(stretch: stretchY, scale: image.scale),
+                            content: RCTMGLImages.convert(content: content, scale: image.scale)
          )
          return true
        } else {
