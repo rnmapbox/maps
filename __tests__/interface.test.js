@@ -47,6 +47,7 @@ describe('Public Interface', () => {
       'UserTrackingModes', // deprecated
       'UserTrackingMode',
       'UserLocationRenderMode',
+      'UserLocationAndroidRenderMode',
       'StyleURL',
       'EventTypes',
       'CameraModes',
