@@ -54,7 +54,6 @@ class RCTMGLPointSource: RCTMGLSource {
     lastUpdatedPoint = currentPoint
     
     let obj = GeoJSONObject.geometry(.point(geometry))
-    // try? style?.setSourceProperty(for: id, property: "data", value: obj)
     try? style.updateGeoJSONSource(withId: id, geoJSON: obj)
   }
   
