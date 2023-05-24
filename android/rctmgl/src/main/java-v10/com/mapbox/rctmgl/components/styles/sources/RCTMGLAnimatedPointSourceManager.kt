@@ -8,31 +8,31 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.common.MapBuilder
 
 
-class RCTMGLPointSourceManager(private val mContext: ReactApplicationContext) :
-    AbstractEventEmitter<RCTMGLPointSource>(
+class RCTMGLAnimatedPointSourceManager(private val mContext: ReactApplicationContext) :
+    AbstractEventEmitter<RCTMGLAnimatedPointSource>(
         mContext
     ) {
     override fun getName(): String {
         return REACT_CLASS
     }
 
-    override fun createViewInstance(reactContext: ThemedReactContext): RCTMGLPointSource {
-        return RCTMGLPointSource(reactContext, this)
+    override fun createViewInstance(reactContext: ThemedReactContext): RCTMGLAnimatedPointSource {
+        return RCTMGLAnimatedPointSource(reactContext, this)
     }
 
-    override fun getChildAt(source: RCTMGLPointSource, childPosition: Int): View {
+    override fun getChildAt(source: RCTMGLAnimatedPointSource, childPosition: Int): View {
         return source.getChildAt(childPosition)
     }
 
-    override fun getChildCount(source: RCTMGLPointSource): Int {
+    override fun getChildCount(source: RCTMGLAnimatedPointSource): Int {
         return source.childCount
     }
 
-    override fun addView(source: RCTMGLPointSource, childView: View, childPosition: Int) {
+    override fun addView(source: RCTMGLAnimatedPointSource, childView: View, childPosition: Int) {
         source.addLayer(childView, getChildCount(source))
     }
 
-    override fun removeViewAt(source: RCTMGLPointSource, childPosition: Int) {
+    override fun removeViewAt(source: RCTMGLAnimatedPointSource, childPosition: Int) {
         source.removeLayer(childPosition)
     }
 
@@ -42,27 +42,27 @@ class RCTMGLPointSourceManager(private val mContext: ReactApplicationContext) :
     }
 
     @ReactProp(name = "id")
-    fun setId(source: RCTMGLPointSource, id: String) {
+    fun setId(source: RCTMGLAnimatedPointSource, id: String) {
         source.iD = id
     }
 
     @ReactProp(name = "point")
-    fun setPoint(source: RCTMGLPointSource, point: String) {
+    fun setPoint(source: RCTMGLAnimatedPointSource, point: String) {
         source.setPoint(point)
     }
 
     @ReactProp(name = "animationDuration")
-    fun setAnimationDuration(source: RCTMGLPointSource, animationDuration: Float) {
+    fun setAnimationDuration(source: RCTMGLAnimatedPointSource, animationDuration: Float) {
         source.setAnimationDuration(animationDuration)
     }
 
     @ReactProp(name = "snapIfDistanceIsGreaterThan")
-    fun setSnapIfDistanceIsGreaterThan(source: RCTMGLPointSource, snapIfDistanceIsGreaterThan: Float) {
+    fun setSnapIfDistanceIsGreaterThan(source: RCTMGLAnimatedPointSource, snapIfDistanceIsGreaterThan: Float) {
         source.setSnapIfDistanceIsGreaterThan(snapIfDistanceIsGreaterThan)
     }
 
     companion object {
-        const val LOG_TAG = "RCTMGLPointSourceMgr"
-        const val REACT_CLASS = "RCTMGLPointSource"
+        const val LOG_TAG = "RCTMGLAnimatedPointSourceMgr"
+        const val REACT_CLASS = "RCTMGLAnimatedPointSource"
     }
 }

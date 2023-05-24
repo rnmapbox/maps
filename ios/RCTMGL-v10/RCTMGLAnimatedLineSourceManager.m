@@ -2,7 +2,7 @@
 #import <React/RCTViewManager.h>
 
 @interface
-RCT_EXTERN_REMAP_MODULE(RCTMGLLineSource, RCTMGLLineSourceManager, RCTViewManager)
+RCT_EXTERN_REMAP_MODULE(RCTMGLAnimatedLineSource, RCTMGLAnimatedLineSourceManager, RCTViewManager)
 
 RCT_EXPORT_VIEW_PROPERTY(id, NSString)
 RCT_EXPORT_VIEW_PROPERTY(lineString, NSString)

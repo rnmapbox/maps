@@ -2,7 +2,7 @@ import MapboxMaps
 import Turf
 
 @objc
-class RCTMGLPointSource: RCTMGLSource {
+class RCTMGLAnimatedPointSource: RCTMGLSource {
   @objc var point: String? {
     didSet {
       let targetPoint = try? getPointGeometry()

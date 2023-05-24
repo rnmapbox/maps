@@ -12,7 +12,7 @@ import NativeBridgeComponent from './NativeBridgeComponent';
 
 const MapboxGL = NativeModules.MGLModule;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLLineSource';
+export const NATIVE_MODULE_NAME = 'RCTMGLAnimatedLineSource';
 
 export type Props = {
   /** A string that uniquely identifies the source. */
@@ -35,9 +35,9 @@ export type Props = {
 };
 
 /**
- * LineSource is a map content source that supplies a GeoJSON line string to be shown on the map.
+ * AnimatedLineSource is a map content source that supplies an animatable GeoJSON line string to be shown on the map.
  */
-export class LineSource extends NativeBridgeComponent(
+export class AnimatedLineSource extends NativeBridgeComponent(
   AbstractSource<Props, NativeProps>,
   NATIVE_MODULE_NAME,
 ) {
@@ -91,7 +91,7 @@ export class LineSource extends NativeBridgeComponent(
     }
 
     return (
-      <RCTMGLLineSource
+      <RCTMGLAnimatedLineSource
         id={this.props.id}
         // @ts-expect-error State is not typed.
         lineString={this.state.lineStringSerialized}
@@ -102,7 +102,7 @@ export class LineSource extends NativeBridgeComponent(
         {cloneReactChildrenWithProps(this.props.children, {
           sourceID: this.props.id,
         })}
-      </RCTMGLLineSource>
+      </RCTMGLAnimatedLineSource>
     );
   }
 }
@@ -116,5 +116,5 @@ type NativeProps = {
   children?: React.ReactElement | React.ReactElement[];
 };
 
-const RCTMGLLineSource =
+const RCTMGLAnimatedLineSource =
   requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);

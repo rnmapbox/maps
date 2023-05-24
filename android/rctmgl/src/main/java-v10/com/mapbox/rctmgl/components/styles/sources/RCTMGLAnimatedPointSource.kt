@@ -5,38 +5,28 @@ import android.util.Log
 import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
 import com.mapbox.common.toValue
 import com.mapbox.geojson.LineString
+import com.mapbox.geojson.Point
 import com.mapbox.maps.Style
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 import com.mapbox.rctmgl.events.FeatureClickEvent
 import com.mapbox.turf.TurfConstants
 import com.mapbox.turf.TurfMeasurement
-import com.mapbox.turf.TurfMisc
 import java.util.Timer
 import java.util.TimerTask
 
-class RCTMGLLineSource(context: Context, private val mManager: RCTMGLLineSourceManager): RCTSource<GeoJsonSource>(context) {
-    private var mLineString: String? = null
-    fun setLineString(lineString: String) {
-        mLineString = lineString
+class RCTMGLAnimatedPointSource(context: Context, private val mManager: RCTMGLAnimatedPointSourceManager): RCTSource<GeoJsonSource>(context) {
+    private var mPoint: String? = null
+    fun setPoint(point: String) {
+        mPoint = point
 
-        timer?.cancel()
-        currentStartOffset = 0.0
-        currentEndOffset = 0.0
+        val targetPoint = getPointGeometry(point)
+        val _prevPoint = lastUpdatedPoint ?: targetPoint
+        val _targetPoint = targetPoint
 
-        applyLineGeometry()
-    }
-
-    private var mStartOffset: Double? = null
-    fun setStartOffset(startOffset: Double) {
-        mStartOffset = startOffset
-        animateToNewStartOffset(currentStartOffset, startOffset)
-    }
-
-    private var mEndOffset: Double? = null
-    fun setEndOffset(endOffset: Double) {
-        mEndOffset = endOffset
-        animateToNewEndOffset(currentStartOffset, endOffset)
+        if (_prevPoint != null && _targetPoint != null) {
+            animateToNewPoint(_prevPoint, _targetPoint)
+        }
     }
 
     private var mAnimationDuration: Long? = null
@@ -44,51 +34,60 @@ class RCTMGLLineSource(context: Context, private val mManager: RCTMGLLineSourceM
         mAnimationDuration = animationDuration.toLong()
     }
 
-    private var currentStartOffset: Double = 0.0
-    private var currentEndOffset: Double = 0.0
+    private var mSnapIfDistanceIsGreaterThan: Long? = null
+    fun setSnapIfDistanceIsGreaterThan(distance: Float) {
+        mSnapIfDistanceIsGreaterThan = distance.toLong()
+    }
+
+    private var lastUpdatedPoint: Point? = null
     private var timer: Timer? = null
 
     override fun addToMap(mapView: RCTMGLMapView) {
         mapView.getMapboxMap().getStyle {
             val map = mapView.getMapboxMap()
-            super@RCTMGLLineSource.addToMap(mapView)
+            super@RCTMGLAnimatedPointSource.addToMap(mapView)
         }
     }
 
-    fun buildLineGeometry(): LineString? {
-        val _lineStr = mLineString ?: return null
-        val geometry = LineString.fromJson(_lineStr)
+    fun getPointGeometry(pointStr: String): Point? {
+        val _pointStr = pointStr ?: return null
+        val geometry = Point.fromJson(_pointStr)
         return geometry
     }
 
-    fun applyLineGeometry() {
+    fun applyPointGeometry(currentPoint: Point?) {
         val _mSource = mSource ?: return
         val _style = getStyle()
-        val _geometry = buildLineGeometry()
 
-        if (mMapView == null || mMapView?.isDestroyed == true || _style == null || _geometry == null) {
+        if (mMapView == null || mMapView?.isDestroyed == true || _style == null || currentPoint == null) {
             return
         }
 
-        val length = TurfMeasurement.length(_geometry, TurfConstants.UNIT_METERS)
-        val geometryTrimmed = TurfMisc.lineSliceAlong(
-            _geometry,
-            currentStartOffset,
-            length - currentEndOffset,
-            TurfConstants.UNIT_METERS
-        )
+        lastUpdatedPoint = currentPoint
 
-        _mSource.geometry(geometryTrimmed)
+        _mSource.geometry(currentPoint)
     }
 
-    fun animateToNewStartOffset(prevOffset: Double, targetOffset: Double?) {
-        val targetOffset = targetOffset ?: return
-
+    fun animateToNewPoint(prevPoint: Point, targetPoint: Point) {
         timer?.cancel()
+
+        val lineBetween = LineString.fromLngLats(
+            listOf<Point>(
+                prevPoint,
+                targetPoint
+            )
+        )
+        val distanceBetween = TurfMeasurement.length(lineBetween, TurfConstants.UNIT_METERS)
+
+        val _mSnapThreshold = mSnapIfDistanceIsGreaterThan?.toLong()
+        if( _mSnapThreshold != null && distanceBetween > _mSnapThreshold) {
+            applyPointGeometry(targetPoint)
+            return
+        }
 
         val _mAnimationDuration = mAnimationDuration?.toLong()
         if (_mAnimationDuration == null || _mAnimationDuration <= 0) {
-            applyLineGeometry()
+            applyPointGeometry(targetPoint)
             return
         }
 
@@ -110,25 +109,24 @@ class RCTMGLLineSource(context: Context, private val mManager: RCTMGLLineSourceM
                             return@runOnUiThread
                         }
 
-                        val progress = (targetOffset - prevOffset) * ratio
-                        currentStartOffset = prevOffset + progress
-                        applyLineGeometry()
+                        val point = TurfMeasurement.along(
+                            lineBetween,
+                            distanceBetween * ratio,
+                            TurfConstants.UNIT_METERS
+                        )
+                        applyPointGeometry(point)
                     }
                 }
             }, 0, period.toLong()
         )
     }
 
-    fun animateToNewEndOffset(prevOffset: Double, targetOffset: Double?) {
-        Log.d("RCTMGLLineSource","animateToNewEndOffset is not implemented")
-    }
-
     override fun makeSource(): GeoJsonSource {
         val builder = GeoJsonSource.Builder(iD.toString())
 
-        val _mLine = mLineString
-        if (_mLine != null) {
-            builder.data(_mLine)
+        val _mPoint = mPoint
+        if (_mPoint != null) {
+            builder.data(_mPoint)
         }
 
         return builder.build()
@@ -139,7 +137,7 @@ class RCTMGLLineSource(context: Context, private val mManager: RCTMGLLineSourceM
     }
 
     override fun hasNoDataSoRefersToExisting(): Boolean {
-        return mLineString == null
+        return mPoint == null
     }
 
     override fun onPress(event: OnPressEvent?) {

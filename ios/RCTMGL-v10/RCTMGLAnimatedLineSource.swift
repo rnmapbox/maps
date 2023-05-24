@@ -2,7 +2,7 @@ import MapboxMaps
 import Turf
 
 @objc
-class RCTMGLLineSource: RCTMGLSource {
+class RCTMGLAnimatedLineSource: RCTMGLSource {
   @objc var lineString: String? {
     didSet {
       timer?.invalidate()

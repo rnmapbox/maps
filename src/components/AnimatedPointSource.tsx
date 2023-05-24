@@ -12,7 +12,7 @@ import NativeBridgeComponent from './NativeBridgeComponent';
 
 const MapboxGL = NativeModules.MGLModule;
 
-export const NATIVE_MODULE_NAME = 'RCTMGLPointSource';
+export const NATIVE_MODULE_NAME = 'RCTMGLAnimatedPointSource';
 
 export type Props = {
   /** A string that uniquely identifies the source. */
@@ -36,9 +36,9 @@ export type Props = {
 };
 
 /**
- * PointSource is a map content source that supplies a GeoJSON point to be shown on the map.
+ * AnimatedPointSource is a map content source that supplies an animatable GeoJSON point to be shown on the map.
  */
-export class PointSource extends NativeBridgeComponent(
+export class AnimatedPointSource extends NativeBridgeComponent(
   AbstractSource<Props, NativeProps>,
   NATIVE_MODULE_NAME,
 ) {
@@ -81,7 +81,9 @@ export class PointSource extends NativeBridgeComponent(
     };
 
     return (
-      <RCTMGLPointSource {...props}>{this._getChildren()}</RCTMGLPointSource>
+      <RCTMGLAnimatedPointSource {...props}>
+        {this._getChildren()}
+      </RCTMGLAnimatedPointSource>
     );
   }
 }
@@ -93,5 +95,5 @@ type NativeProps = {
   snapIfDistanceIsGreaterThan?: number;
 };
 
-const RCTMGLPointSource =
+const RCTMGLAnimatedPointSource =
   requireNativeComponent<NativeProps>(NATIVE_MODULE_NAME);
