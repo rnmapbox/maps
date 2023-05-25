@@ -25,5 +25,5 @@ module.exports = {
         "import/prefer-default-export": ["error"],
         "no-undef": "error",
     },
-    "ignorePatterns": [".eslintrc.js", "lint-code-example-in-issues.js"],
+    "ignorePatterns": [".eslintrc.js", "lint-code-example-in-issues.js", "fetch-issue-for-testing.js"],
 }

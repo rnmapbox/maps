@@ -32,17 +32,20 @@ function getCode() {
     throw new Error('Could not find issue in context');
   }
   const { body } = issue;
-  const start = body.indexOf(/^```(jsx?|tsx?)/);
+  const start = body.search(/```(jsx?|tsx?|javascript)/);
   if (start < 0) {
     throw new Error('Could not find code block in issue body');
   }
   const end = body.indexOf('```', start + 1);
   const bodywithprefix = body.substring(start, end);
-  return bodywithprefix.replace(/^```(jsx?|tsx?)/, '');
+  return bodywithprefix.replace(/^```(jsx?|tsx?|javascript)/, '');
 }
 
 async function postComment(issueNumber, message) {
   const token = core.getInput('repo-token') || process.env.GITHUB_TOKEN;
+  if (! token) {
+    console.error("No token found. Wanted to post message: ", message)
+  }
   const octokit = github.getOctokit(token);
 
   const marker = '<!-- lint-action -->';
@@ -59,7 +62,7 @@ async function postComment(issueNumber, message) {
   if (message.includes('error')) {
     await octokit.rest.issues.createComment({
       issue_number: issueNumber,
-      body: marker + '\n' + prelude + message,
+      body: marker + '\n' + prelude + '```eslint\n'+ message + '```',
       ...context,
     });
 
@@ -69,11 +72,17 @@ async function postComment(issueNumber, message) {
       ...context,
     });
   } else {
-    await octokit.rest.issues.removeLabel({
-      issue_number: issueNumber,
-      name: label,
-      ...context,
-    });
+    try {
+      await octokit.rest.issues.removeLabel({
+        issue_number: issueNumber,
+        name: label,
+        ...context,
+      });
+    } catch (error) {
+      if (error.status !== 404) {
+        throw error;
+      }
+    }
   }
 }
 
