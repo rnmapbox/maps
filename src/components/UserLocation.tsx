@@ -7,9 +7,7 @@ import { CircleLayerStyle } from '../Mapbox';
 import Annotation from './Annotation';
 import CircleLayer from './CircleLayer';
 import HeadingIndicator from './HeadingIndicator';
-import NativeUserLocation, {
-  UserLocationAndroidRenderMode,
-} from './NativeUserLocation';
+import NativeUserLocation from './NativeUserLocation';
 
 const mapboxBlue = 'rgba(51, 181, 229, 100)';
 
@@ -68,13 +66,13 @@ type Props = {
   /**
    * native/android only render mode
    *
-   *  - Normal: just a circle
-   *  - Compass: triangle with heading
-   *  - GPS: large arrow
+   *  - normal: just a circle
+   *  - compass: triangle with heading
+   *  - gps: large arrow
    *
    * @platform android
    */
-  androidRenderMode?: UserLocationAndroidRenderMode;
+  androidRenderMode?: 'normal' | 'compass' | 'gps';
 
   /**
    * Whether location icon is animated between updates

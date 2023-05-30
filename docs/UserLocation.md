@@ -13,13 +13,13 @@ UserLocation
 ### androidRenderMode
 
 ```tsx
-UserLocationAndroidRenderMode
+'normal' | 'compass' | 'gps'
 ```
 native/android only render mode
 
- - Normal: just a circle
- - Compass: triangle with heading
- - GPS: large arrow
+ - normal: just a circle
+ - compass: triangle with heading
+ - gps: large arrow
 
 @platform android
 

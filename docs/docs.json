@@ -3579,7 +3579,7 @@
       {
         "name": "androidRenderMode",
         "required": false,
-        "type": "UserLocationAndroidRenderMode",
+        "type": "'normal' \\| 'compass' \\| 'gps'",
         "default": "none",
         "description": "Android render mode.\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@platform android"
       },
@@ -6257,9 +6257,9 @@
       {
         "name": "androidRenderMode",
         "required": false,
-        "type": "UserLocationAndroidRenderMode",
+        "type": "'normal' \\| 'compass' \\| 'gps'",
         "default": "none",
-        "description": "native/android only render mode\n\n - Normal: just a circle\n - Compass: triangle with heading\n - GPS: large arrow\n\n@platform android"
+        "description": "native/android only render mode\n\n - normal: just a circle\n - compass: triangle with heading\n - gps: large arrow\n\n@platform android"
       },
       {
         "name": "animated",

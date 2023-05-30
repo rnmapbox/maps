@@ -3,12 +3,6 @@ import { requireNativeComponent } from 'react-native';
 
 const NATIVE_MODULE_NAME = 'RCTMGLNativeUserLocation';
 
-export enum UserLocationAndroidRenderMode {
-  Normal = 'normal',
-  Compass = 'compass',
-  GPS = 'gps',
-}
-
 export type Props = {
   /**
    * Android render mode.
@@ -19,7 +13,7 @@ export type Props = {
    *
    * @platform android
    */
-  androidRenderMode?: UserLocationAndroidRenderMode;
+  androidRenderMode?: 'normal' | 'compass' | 'gps';
 
   /**
    * iOS only. A Boolean value indicating whether the user location annotation may display a permanent heading indicator.
