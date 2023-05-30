@@ -3,7 +3,6 @@ import MapboxGL, {
   CircleLayer,
   UserLocationRenderMode as UserLocationRenderModeType,
   UserTrackingMode,
-  UserLocationAndroidRenderMode,
 } from '@rnmapbox/maps';
 import { Button, Platform, View } from 'react-native';
 import { ButtonGroup, Text } from '@rneui/base';
@@ -33,6 +32,12 @@ enum ExampleRenderMode {
   Hidden = 'hidden',
 }
 
+const ANDROID_RENDER_MODES: ('normal' | 'compass' | 'gps')[] = [
+  'normal',
+  'compass',
+  'gps',
+];
+
 const UserLocationRenderMode = (props: BaseExampleProps) => {
   const [renderMode, setRenderMode] = useState<ExampleRenderMode>(
     ExampleRenderMode.Normal,
@@ -41,9 +46,9 @@ const UserLocationRenderMode = (props: BaseExampleProps) => {
   const [followUserMode, setFollowUserMode] = useState(UserTrackingMode.Follow);
   const [showsUserHeadingIndicator, setShowsUserHeadingIndicator] =
     useState(false);
-  const [androidRenderMode, setAndroidRenderMode] = useState(
-    UserLocationAndroidRenderMode.Normal,
-  );
+  const [androidRenderMode, setAndroidRenderMode] = useState<
+    'normal' | 'compass' | 'gps'
+  >('normal');
 
   return (
     <TabBarPage
@@ -93,14 +98,10 @@ const UserLocationRenderMode = (props: BaseExampleProps) => {
           <SettingsGroup label="Android Render Mode">
             <ButtonGroup
               disabled={renderMode !== ExampleRenderMode.Native}
-              buttons={Object.values(UserLocationAndroidRenderMode)}
-              selectedIndex={Object.values(
-                UserLocationAndroidRenderMode,
-              ).indexOf(androidRenderMode)}
+              buttons={ANDROID_RENDER_MODES}
+              selectedIndex={ANDROID_RENDER_MODES.indexOf(androidRenderMode)}
               onPress={(index) => {
-                setAndroidRenderMode(
-                  Object.values(UserLocationAndroidRenderMode)[index],
-                );
+                setAndroidRenderMode(ANDROID_RENDER_MODES[index]);
               }}
             />
           </SettingsGroup>
