@@ -64,6 +64,7 @@ import com.mapbox.rctmgl.components.styles.terrain.RCTMGLTerrain
 import com.mapbox.rctmgl.events.AndroidCallbackEvent
 import com.mapbox.rctmgl.events.IEvent
 import com.mapbox.rctmgl.events.MapChangeEvent
+import com.mapbox.rctmgl.events.CameraChangeEvent
 import com.mapbox.rctmgl.events.MapClickEvent
 import com.mapbox.rctmgl.events.constants.EventTypes
 import com.mapbox.rctmgl.utils.*
@@ -774,7 +775,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         val event: IEvent
         event = when (eventType) {
             EventTypes.REGION_WILL_CHANGE, EventTypes.REGION_DID_CHANGE, EventTypes.REGION_IS_CHANGING -> MapChangeEvent(this, eventType, makeRegionPayload(null))
-            EventTypes.CAMERA_CHANGED, EventTypes.MAP_IDLE -> MapChangeEvent(this, eventType, makeCameraPayload())
+            EventTypes.CAMERA_CHANGED -> CameraChangeEvent(this, eventType, makeCameraPayload())
+            EventTypes.MAP_IDLE -> MapChangeEvent(this, eventType, makeCameraPayload())
             else -> MapChangeEvent(this, eventType)
         }
         mManager.handleEvent(event)
@@ -814,6 +816,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         val state: WritableMap = WritableNativeMap()
         state.putMap("properties", properties)
         state.putMap("gestures", gestures)
+
+        state.putDouble("timestamp", System.currentTimeMillis().toDouble())
 
         return state
     }

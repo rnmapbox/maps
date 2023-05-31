@@ -2,9 +2,39 @@
 import Turf
 import MapKit
 
+class RCTMGLCameraChanged : RCTMGLEvent, RCTEvent {
+  init(type: EventType, payload: [String:Any?]?, reactTag: NSNumber) {
+    super.init(type: type, payload: payload)
+    self.viewTag = reactTag
+    self.eventName = "onCameraChanged"
+  }
+
+  var viewTag: NSNumber!
+
+  var eventName: String!
+
+  func canCoalesce() -> Bool {
+    true
+  }
+
+  func coalesce(with newEvent: RCTEvent!) -> RCTEvent! {
+    return newEvent
+  }
+
+  static func moduleDotMethod() -> String! {
+    "RCTEventEmitter.receiveEvent"
+  }
+
+  func arguments() -> [Any]! {
+    return [self.viewTag, RCTNormalizeInputEventName(self.eventName), self.toJSON()];
+  }
+}
+
 @objc(RCTMGLMapView)
 open class RCTMGLMapView : MapView {
   var tapDelegate: IgnoreRCTMGLMakerViewGestureDelegate? = nil
+
+  var eventDispatcher: RCTEventDispatcherProtocol
 
   var compassEnabled: Bool = false
   var compassFadeWhenNorth: Bool = false
@@ -13,6 +43,9 @@ open class RCTMGLMapView : MapView {
   var reactOnPress : RCTBubblingEventBlock?
   var reactOnLongPress : RCTBubblingEventBlock?
   var reactOnMapChange : RCTBubblingEventBlock?
+
+  @objc
+  var onCameraChanged: RCTDirectEventBlock?
 
   var styleLoaded: Bool = false
   var styleLoadWaiters : [(MapboxMap)->Void] = []
@@ -94,8 +127,9 @@ open class RCTMGLMapView : MapView {
     super.removeReactSubview(subview)
   }
 
-  public required init(frame:CGRect) {
+  public required init(frame:CGRect, eventDispatcher: RCTEventDispatcherProtocol) {
     let resourceOptions = ResourceOptions(accessToken: MGLModule.accessToken!)
+    self.eventDispatcher = eventDispatcher
     super.init(frame: frame, mapInitOptions: MapInitOptions(resourceOptions: resourceOptions))
 
     self.mapView.gestures.delegate = self
@@ -374,11 +408,11 @@ extension RCTMGLMapView {
     self.onEvery(event: .cameraChanged, handler: { (self, cameraEvent) in
       self.wasGestureActive = self.isGestureActive
       if self.handleMapChangedEvents.contains(.regionIsChanging) {
-        let event = RCTMGLEvent(type:.regionIsChanging, payload: self.buildRegionObject());
+        let event = RCTMGLEvent(type:.regionIsChanging, payload: self.buildRegionObject())
         self.fireEvent(event: event, callback: self.reactOnMapChange)
       } else if self.handleMapChangedEvents.contains(.cameraChanged) {
-        let event = RCTMGLEvent(type:.cameraChanged, payload: self.buildStateObject());
-        self.fireEvent(event: event, callback: self.reactOnMapChange)
+        let event = RCTMGLCameraChanged(type:.cameraChanged, payload: self.buildStateObject(), reactTag: self.reactTag)
+        self.eventDispatcher.send(event)
       }
     })
 
@@ -407,7 +441,7 @@ extension RCTMGLMapView {
     callback(event.toJSON())
   }
   
-  private func buildStateObject() -> [String: [String: Any]] {
+  private func buildStateObject() -> [String: Any] {
     let cameraOptions = CameraOptions(cameraState: cameraState)
     let bounds = mapView.mapboxMap.coordinateBounds(for: cameraOptions)
     
@@ -424,10 +458,15 @@ extension RCTMGLMapView {
       ],
       "gestures": [
         "isGestureActive": wasGestureActive
-      ]
+      ],
+      "timestamp": timestamp()
     ]
   }
   
+  private func timestamp(date: Date? = nil) -> Double {
+    return (date ?? Date()).timeIntervalSince1970 * 1000
+  }
+
   private func buildRegionObject() -> [String: Any] {
     let cameraOptions = CameraOptions(cameraState: cameraState)
     let bounds = mapView.mapboxMap.coordinateBounds(for: cameraOptions)

@@ -44,5 +44,4 @@ class RCTMGLEvent : NSObject, RCTMGLEventProtocol {
         self.type = type.rawValue
         self.payload = payload
     }
-    
 }
