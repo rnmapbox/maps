@@ -21,6 +21,7 @@ import com.facebook.imagepipeline.image.CloseableImage
 import com.facebook.imagepipeline.image.CloseableStaticBitmap
 import com.facebook.imagepipeline.request.ImageRequestBuilder
 import com.facebook.react.views.imagehelper.ImageSource
+import com.mapbox.rctmgl.components.images.ImageInfo
 import com.mapbox.rctmgl.components.images.addBitmapImage
 import java.io.File
 import java.lang.ref.WeakReference
@@ -28,8 +29,10 @@ import java.util.AbstractMap
 import java.util.ArrayList
 import java.util.HashMap
 
+data class DownloadedImage(val name: String, val bitmap: Bitmap, val info: ImageInfo)
+
 class DownloadMapImageTask(context: Context, map: MapboxMap, callback: OnAllImagesLoaded?) :
-    AsyncTask<Map.Entry<String, ImageEntry>, Void?, List<Map.Entry<String, Bitmap>>?>() {
+    AsyncTask<Map.Entry<String, ImageEntry>, Void?, List<DownloadedImage>>() {
     private val mContext: WeakReference<Context>
     private val mMap: WeakReference<MapboxMap>
     private val mCallback: OnAllImagesLoaded?
@@ -40,8 +43,8 @@ class DownloadMapImageTask(context: Context, map: MapboxMap, callback: OnAllImag
     }
 
     @SafeVarargs
-    protected override fun doInBackground(vararg objects: Map.Entry<String, ImageEntry>): List<Map.Entry<String, Bitmap>>? {
-        val images: MutableList<Map.Entry<String, Bitmap>> = ArrayList()
+    protected override fun doInBackground(vararg objects: Map.Entry<String, ImageEntry>): List<DownloadedImage> {
+        val images = mutableListOf<DownloadedImage>()
         val context = mContext.get() ?: return images
         val resources = context.resources
         val metrics = resources.displayMetrics
@@ -74,9 +77,7 @@ class DownloadMapImageTask(context: Context, map: MapboxMap, callback: OnAllImag
                                     1.0
                                 )).toInt()
                             images.add(
-                                AbstractMap.SimpleEntry(
-                                    key, bitmap
-                                )
+                                DownloadedImage(name=key, bitmap=bitmap, info=imageEntry.info)
                             )
                         } else {
                             FLog.e(LOG_TAG, "Failed to load bitmap from: $uri")
@@ -97,12 +98,14 @@ class DownloadMapImageTask(context: Context, map: MapboxMap, callback: OnAllImag
                 val bitmap = BitmapUtils.getBitmapFromResource(
                     context,
                     uri,
-                    getBitmapOptions(metrics, imageEntry.scale)
+                    getBitmapOptions(metrics, imageEntry.info.scale)
                 )
                 if (bitmap != null) {
                     images.add(
-                        AbstractMap.SimpleEntry(
-                            key, bitmap
+                        DownloadedImage(
+                            name=key,
+                            bitmap=bitmap,
+                            info=imageEntry.info
                         )
                     )
                 } else {
@@ -113,17 +116,19 @@ class DownloadMapImageTask(context: Context, map: MapboxMap, callback: OnAllImag
         return images
     }
 
-    override fun onPostExecute(images: List<Map.Entry<String, Bitmap>>?) {
+    override fun onPostExecute(images: List<DownloadedImage>) {
         val map = mMap.get()
         if (map != null && images != null && images.size > 0) {
             val style = map.getStyle()
             if (style != null) {
                 val bitmapImages = HashMap<String, Bitmap>()
-                for ((key, value) in images) {
-                    bitmapImages[key] = value
-                    style.addBitmapImage(key, value)
+                for (image in images) {
+                    bitmapImages[image.name] = image.bitmap
+                    val info = image.info
+                    style.addBitmapImage(image.name, image.bitmap,sdf = info.sdf, stretchX = info.stretchX, stretchY = info.stretchY,
+                        content = info.content,scale = info.scale
+                    )
                 }
-                // style.addImages(bitmapImages);
             }
         }
         mCallback?.onAllImagesLoaded()
