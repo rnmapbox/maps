@@ -42,12 +42,15 @@ fun Style.addBitmapImage(imageId: String, bitmap: Bitmap, sdf: Boolean = false, 
 }
 
 fun Style.addBitmapImage(nativeImage: NativeImage) : Expected<String, None> {
-    return addBitmapImage(nativeImage.name, nativeImage.drawable.bitmap, nativeImage.sdf, nativeImage.stretchX, nativeImage.stretchY, nativeImage.content, nativeImage.scale)
+    val info = nativeImage.info
+    return addBitmapImage(info.name, nativeImage.drawable.bitmap, info.sdf, info.stretchX, info.stretchY, info.content, info.scale)
 }
 
-data class NativeImage(val name: String, val drawable: BitmapDrawable, val scale: Double = 1.0, val sdf: Boolean = false, val stretchX: List<ImageStretches> = listOf(),
-                       val stretchY: List<ImageStretches> = listOf(), val content: ImageContent? = null
-);
+data class ImageInfo(val name: String,  val scale: Double = 1.0, val sdf: Boolean = false, val stretchX: List<ImageStretches> = listOf(),
+                     val stretchY: List<ImageStretches> = listOf(), val content: ImageContent? = null)
+{}
+
+data class NativeImage(val info: ImageInfo, val drawable: BitmapDrawable);
 
 interface NativeImageUpdater {
     fun updateImage(imageId: String, bitmap: Bitmap, sdf: Boolean = false, stretchX: List<ImageStretches> = listOf(), stretchY: List<ImageStretches> = listOf(), content: ImageContent? = null, scale: Double = 1.0)
@@ -77,9 +80,10 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
     fun setNativeImages(nativeImages: List<NativeImage>) {
         val newImages: MutableMap<String, NativeImage> = HashMap()
         for (nativeImage in nativeImages) {
-            val oldValue = mNativeImages.put(nativeImage.name, nativeImage)
+            val name = nativeImage.info.name
+            val oldValue = mNativeImages.put(name, nativeImage)
             if (oldValue == null) {
-                newImages[nativeImage.name] = nativeImage
+                newImages[name] = nativeImage
             }
         }
         mMap?.let {
@@ -194,10 +198,11 @@ class RCTMGLImages(context: Context, private val mManager: RCTMGLImagesManager) 
         val style = map.getStyle()
         if (style == null) return
         for (nativeImage in imageEntries) {
-            if (!hasImage(nativeImage.name, map)) {
+            val name = nativeImage.info.name
+            if (!hasImage(name, map)) {
                 val bitmap = nativeImage.drawable
                 style.addBitmapImage(nativeImage)
-                mCurrentImages.add(nativeImage.name)
+                mCurrentImages.add(name)
             }
         }
     }
