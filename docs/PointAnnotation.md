@@ -7,11 +7,12 @@ PointAnnotation
 ```
 PointAnnotation represents a one-dimensional shape located at a single geographical coordinate.
 
-Consider using ShapeSource and SymbolLayer instead, if you have many points and you have static images,
+Consider using ShapeSource and SymbolLayer instead, if you have many points and static images,
 they'll offer much better performance.
 
-If you need interactive views please use MarkerView,
-as with PointAnnotation child views are rendered onto a bitmap
+If you need interactive views please use MarkerView because PointAnnotation will render children onto a bitmap.
+Also disable any kind of animations like `fadeDuration` of `Image`.
+Otherwise, the bitmap might be rendered at an unknown state of the animation.
 
 ## props
 
