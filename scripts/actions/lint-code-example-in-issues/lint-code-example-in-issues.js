@@ -175,6 +175,22 @@ function getCode() {
   ];
 }
 
+async function removeLabelIfExists(octokit, context, label, issueNumber) {
+  log('removing label', label);
+  try {
+    await octokit.rest.issues.removeLabel({
+      ...context,
+      issue_number: issueNumber,
+      name: label,
+    });
+  } catch (error) {
+    if (error.status === 404) {
+      return;
+    }
+    throw error;
+  }
+}
+
 async function processGithubIssue(
   issueNumber,
   message,
@@ -262,17 +278,7 @@ async function processGithubIssue(
       }
     }
   } else {
-    try {
-      await octokit.rest.issues.removeLabel({
-        issue_number: issueNumber,
-        name: label,
-        ...context,
-      });
-    } catch (error) {
-      if (error.status !== 404) {
-        throw error;
-      }
-    }
+    removeLabelIfExists(octokit, context, label, issueNumber);
     if (reopenIssue) {
       await octokit.rest.issues.update({
         issue_number: issueNumber,
@@ -280,11 +286,7 @@ async function processGithubIssue(
         ...context,
       });
       if (closeLabel) {
-        await octokit.rest.issues.removeLabel({
-          issue_number: issueNumber,
-          name: closeLabel,
-          ...context,
-        });
+        removeLabelIfExists(octokit, context, closeLabel, issueNumber);
       }
     }
   }
