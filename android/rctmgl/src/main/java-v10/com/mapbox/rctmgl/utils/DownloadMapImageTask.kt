@@ -126,7 +126,7 @@ class DownloadMapImageTask(context: Context, map: MapboxMap, callback: OnAllImag
                     bitmapImages[image.name] = image.bitmap
                     val info = image.info
                     style.addBitmapImage(image.name, image.bitmap,sdf = info.sdf, stretchX = info.stretchX, stretchY = info.stretchY,
-                        content = info.content,scale = info.scale
+                        content = info.content,scale = if (info.scale == 0.0) 1.0 else info.scale
                     )
                 }
             }
