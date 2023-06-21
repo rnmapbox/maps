@@ -21,6 +21,11 @@ class RCTMGLCameraChanged : RCTMGLEvent, RCTEvent {
     return newEvent
   }
 
+  @objc
+  var coalescingKey: UInt16 {
+    return 0;
+  }
+
   static func moduleDotMethod() -> String! {
     "RCTEventEmitter.receiveEvent"
   }
