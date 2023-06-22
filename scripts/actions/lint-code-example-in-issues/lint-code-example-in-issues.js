@@ -162,7 +162,7 @@ function getCode() {
   const { body } = issue;
   const start = body.search(/```(jsx?|tsx?|javascript|typescript)/i);
   if (start < 0) {
-    return [null, null];
+    return [null, { isTypescript: null }];
   }
   const end = body.indexOf('```', start + 1);
   const bodywithprefix = body.substring(start, end);
