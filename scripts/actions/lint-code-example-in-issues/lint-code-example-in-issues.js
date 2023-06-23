@@ -18,7 +18,7 @@ const Config = {
   noCodeExampleComment:
     'No code example found in issue body - [More info](https://github.com/rnmapbox/maps/wiki/ErrorInExamplesInIssue)',
   /// whether to close the issue if no code example is found
-  closeIssueIfNoCodeExample: false,
+  closeIssueIfNoCodeExample: true,
   /// whether to close the issue when lint fails
   closeIssue: true,
   /// whether to reopen the issue when lint passes
