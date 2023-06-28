@@ -22,6 +22,7 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.localization.localizeLabels
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
+import com.mapbox.maps.extension.observable.getMapLoadingErrorEventData
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.Layer
 import com.mapbox.maps.extension.style.layers.generated.*
@@ -354,7 +355,15 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             }
         })
 
-        map.subscribe({ event -> Logger.e(LOG_TAG, String.format("Map load failed: %s", event.data.toString())) }, Arrays.asList(MapEvents.MAP_LOADING_ERROR))
+        map.subscribe({ event ->
+            Logger.e(LOG_TAG, String.format("Map load failed: %s", event.data.toString()))
+            val errorMessage = event.getMapLoadingErrorEventData().message
+            val event = MapChangeEvent(this, EventTypes.MAP_LOADING_ERROR, writableMapOf(
+                    "error" to errorMessage
+            ))
+            mManager.handleEvent(event)
+
+                      }, Arrays.asList(MapEvents.MAP_LOADING_ERROR))
     }
 
     fun<T> mapGestureBegin(type:MapGestureType, gesture: T) {
