@@ -21,6 +21,7 @@ object EventTypes {
     const val DID_FINISH_RENDERING_MAP = "didfinishrenderingmap"
     const val DID_FINISH_RENDERING_MAP_FULLY = "didfinishrenderingmapfully"
     const val DID_FINISH_LOADING_STYLE = "didfinishloadingstyle"
+    const val MAP_LOADING_ERROR = "maploadingerror"
 
     // point annotation event types
     const val ANNOTATION_SELECTED = "annotationselected"
