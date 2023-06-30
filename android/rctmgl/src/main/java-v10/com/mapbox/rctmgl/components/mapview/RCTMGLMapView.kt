@@ -567,7 +567,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     fun applyLocalizeLabels() {
         val localeStr = mLocaleString
         if (localeStr != null) {
-            val locale = if (localeStr == "current") Locale.getDefault() else Locale(localeStr)
+            val locale = if (localeStr == "current") Locale.getDefault() else Locale.Builder()
+                .setLanguageTag(localeStr).build()
             savedStyle?.localizeLabels(locale, mLocaleLayerIds)
         }
     }
