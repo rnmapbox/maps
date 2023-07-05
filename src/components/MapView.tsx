@@ -812,6 +812,82 @@ class MapView extends NativeBridgeComponent(
   }
 
   /**
+   * Update the state map of a feature within a style source. Update entries in the state map of a given feature within a style source.
+   * Only entries listed in the state map will be updated. An entry in the feature state map that is not listed in state will retain its previous value.
+   *
+   * @example
+   * await this._map.setFeatureState('composite', 'building', 'id-01, { active: true })
+   *
+   * @param {String} sourceId - Identifier of the target source (e.g. 'composite')
+   * @param {String=} sourceLayerId - Identifier of the target source-layer (e.g. 'building')
+   * @param {String} featureId - Identifier of the feature whose state should be updated.
+   * @param
+   */
+  setFeatureState(
+    sourceId: string,
+    sourceLayerId: string | null = null,
+    featureId: string,
+    state: { [key: string]: any },
+  ) {
+    this._runNative<void>('setFeatureState', [
+      sourceId,
+      sourceLayerId,
+      featureId,
+      state,
+    ]);
+  }
+
+  /**
+   * Get the state map of a feature within a style source.
+   *
+   * @example
+   * await this._map.getFeatureState('composite', 'building', 'id')
+   *
+   * @param {String} sourceId - Identifier of the target source (e.g. 'composite')
+   * @param {String=} sourceLayerId - Identifier of the target source-layer (e.g. 'building')
+   * @param {String} featureId - Identifier of the feature whose state should be retrieved.
+   * @return {Promise<{ [key: string]: any }>} Promise that resolves to the feature state object.
+   */
+  async getFeatureState(
+    sourceId: string,
+    sourceLayerId: string | null = null,
+    featureId: string,
+  ): Promise<{ [key: string]: any }> {
+    return await this._runNative<{ [key: string]: any }>('getFeatureState', [
+      sourceId,
+      sourceLayerId,
+      featureId,
+    ]);
+  }
+
+  /**
+   * Removes entries from a feature state object.
+   *
+   * Remove a specified property or all property from a feature’s state object, depending on the value of stateKey.
+   *
+   * @example
+   * this._map.removeFeatureState('composite', 'building', 'id', 'active')
+   *
+   * @param {String} sourceId - The style source identifier
+   * @param {String=} sourceLayerId - Identifier of the target source-layer (e.g. 'building')
+   * @param {String} featureId - Identifier of the feature whose state should be updated.
+   * @param {String} stateKey - The key of the property to remove. If null, all feature’s state object properties are removed. Defaults to null.
+   */
+  removeFeatureState(
+    sourceId: string,
+    sourceLayerId: string | null = null,
+    featureId: string,
+    stateKey: string | null = null,
+  ) {
+    this._runNative<void>('removeFeatureState', [
+      sourceId,
+      sourceLayerId,
+      featureId,
+      stateKey,
+    ]);
+  }
+
+  /**
    * Show the attribution and telemetry action sheet.
    * If you implement a custom attribution button, you should add this action to the button.
    */

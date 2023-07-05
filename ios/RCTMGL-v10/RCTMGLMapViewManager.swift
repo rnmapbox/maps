@@ -102,6 +102,55 @@ extension RCTMGLMapViewManager {
   }
 
   @objc
+  func setFeatureState(_ reactTag: NSNumber,
+                        sourceId: String,
+                        sourceLayerId: String?,
+                        featureId: String,
+                        state: [String: Any],
+                        resolver: @escaping RCTPromiseResolveBlock,
+                        rejecter: @escaping RCTPromiseRejectBlock) -> Void {
+      withMapboxMap(reactTag, name:"setFeatureState", rejecter: rejecter) { mapboxMap in
+        mapboxMap.setFeatureState(sourceId: sourceId, sourceLayerId: sourceLayerId, featureId: featureId, state:state)
+        resolver(nil)
+      }
+    }
+
+  @objc
+  func getFeatureState(_ reactTag: NSNumber,
+                        sourceId: String,
+                        sourceLayerId: String?,
+                        featureId: String,
+                        resolver: @escaping RCTPromiseResolveBlock,
+                        rejecter: @escaping RCTPromiseRejectBlock) -> Void {
+      withMapboxMap(reactTag, name:"getFeatureState", rejecter: rejecter) { mapboxMap in
+         mapboxMap.getFeatureState(sourceId: sourceId, sourceLayerId: sourceLayerId, featureId: featureId) { result in
+             switch result {
+             case .success(let featureState):
+                 // Handle success case, e.g., invoke resolver with the feature state
+                 resolver(featureState)
+             case .failure(let error):
+                 // Handle failure case, e.g., invoke rejecter with the error
+                 rejecter("Error retrieving feature state", error.localizedDescription, error)
+             }
+         }
+      }
+    }
+
+  @objc
+  func removeFeatureState(_ reactTag: NSNumber,
+                        sourceId: String,
+                        sourceLayerId: String?,
+                        featureId: String,
+                        stateKey: String?,
+                        resolver: @escaping RCTPromiseResolveBlock,
+                        rejecter: @escaping RCTPromiseRejectBlock) -> Void {
+      withMapboxMap(reactTag, name:"getFeatureState", rejecter: rejecter) { mapboxMap in
+          mapboxMap.removeFeatureState(sourceId: sourceId, sourceLayerId: sourceLayerId, featureId: featureId, stateKey:stateKey)
+          resolver(nil)
+      }
+    }
+
+  @objc
   func getCenter(_ reactTag: NSNumber,
                  resolver: @escaping RCTPromiseResolveBlock,
                  rejecter: @escaping RCTPromiseRejectBlock) -> Void {
