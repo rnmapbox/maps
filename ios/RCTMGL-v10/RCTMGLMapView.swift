@@ -2,6 +2,18 @@
 import Turf
 import MapKit
 
+class FeatureEntry {
+  let feature: RCTMGLMapComponent
+  let view: UIView
+  var addedToMap: Bool = false
+
+  init(feature:RCTMGLMapComponent, view: UIView, addedToMap: Bool = false) {
+    self.feature = feature
+    self.view = view
+    self.addedToMap = addedToMap
+  }
+}
+
 class RCTMGLCameraChanged : RCTMGLEvent, RCTEvent {
   init(type: EventType, payload: [String:Any?]?, reactTag: NSNumber) {
     super.init(type: type, payload: payload)
@@ -54,9 +66,8 @@ open class RCTMGLMapView : MapView {
 
   var styleLoaded: Bool = false
   var styleLoadWaiters : [(MapboxMap)->Void] = []
-  var onStyleLoadedComponents: [RCTMGLMapComponent] = []
-  
-  var componentsToRefreshOnStyleChange: [RCTMGLMapComponent] = []
+
+  var features: [FeatureEntry] = []
 
   weak var reactCamera : RCTMGLCamera?
   var images : [RCTMGLImages] = []
@@ -89,16 +100,21 @@ open class RCTMGLMapView : MapView {
   func addToMap(_ subview: UIView) {
     if let mapComponent = subview as? RCTMGLMapComponent {
       let style = mapView.mapboxMap.style
+      var addToMap = false
       if mapComponent.waitForStyleLoad() {
-        componentsToRefreshOnStyleChange.append(mapComponent)
         if (self.styleLoaded) {
-          mapComponent.addToMap(self, style: style)
-        } else {
-          onStyleLoadedComponents.append(mapComponent)
+          addToMap = true
         }
       } else {
-        mapComponent.addToMap(self, style: style)
+        addToMap = true
       }
+
+      let entry = FeatureEntry(feature: mapComponent, view: subview, addedToMap: false)
+      if (addToMap) {
+        mapComponent.addToMap(self, style: style)
+        entry.addedToMap = true
+      }
+      features.append(entry)
     } else {
       subview.reactSubviews()?.forEach { addToMap($0) }
     }
@@ -109,11 +125,15 @@ open class RCTMGLMapView : MapView {
   
   func removeFromMap(_ subview: UIView) {
     if let mapComponent = subview as? RCTMGLMapComponent {
-      if mapComponent.waitForStyleLoad() {
-        onStyleLoadedComponents.removeAll { $0 === mapComponent }
-        componentsToRefreshOnStyleChange.removeAll { $0 === mapComponent }
+      var entryIndex = features.firstIndex { $0.view == subview }
+      if let entryIndex = entryIndex {
+        var entry = features[entryIndex]
+        if (entry.addedToMap) {
+            mapComponent.removeFromMap(self, reason: .OnDestory)
+            entry.addedToMap = false
+        }
+        features.remove(at: entryIndex)
       }
-      mapComponent.removeFromMap(self)
     } else {
       subview.reactSubviews()?.forEach { removeFromMap($0) }
     }
@@ -321,17 +341,31 @@ open class RCTMGLMapView : MapView {
   @objc func setReactPitchEnabled(_ value: Bool) {
     self.mapView.gestures.options.pitchEnabled = value
   }
-  
-  func refreshComponentsBeforeStyleChange() {
-    componentsToRefreshOnStyleChange.forEach {
-      $0.removeFromMap(self)
+
+  private func removeAllFeaturesFromMap(reason: RemovalReason) {
+    features.forEach { entry in
+      if (entry.addedToMap) {
+        entry.feature.removeFromMap(self, reason: reason)
+        entry.addedToMap = false
+      }
+    }
+  }
+
+  private func addFeaturesToMap(style: Style) {
+    features.forEach { entry in
+      if (!entry.addedToMap) {
+        entry.feature.addToMap(self, style: style)
+        entry.addedToMap = true
+      }
     }
   }
   
+  func refreshComponentsBeforeStyleChange() {
+    removeAllFeaturesFromMap(reason: .StyleChange)
+  }
+  
   func refreshComponentsAfterStyleChange(style: Style) {
-    componentsToRefreshOnStyleChange.forEach {
-      $0.addToMap(self, style: style)
-    }
+      addFeaturesToMap(style: style)
   }
   
   @objc func setReactStyleURL(_ value: String?) {
@@ -353,7 +387,7 @@ open class RCTMGLMapView : MapView {
       }
       if !initialLoad {
         self.onNext(event: .styleLoaded) {_,_ in
-          self.refreshComponentsAfterStyleChange(style: self.mapboxMap.style)
+          self.addFeaturesToMap(style: self.mapboxMap.style)
         }
       }
     }
@@ -557,9 +591,7 @@ extension RCTMGLMapView {
     })
     
     self.onEvery(event: .styleLoaded, handler: { (self, event) in
-      self.onStyleLoadedComponents.forEach { (component) in
-        component.addToMap(self, style: self.mapboxMap.style)
-      }
+      self.addFeaturesToMap(style: self.mapboxMap.style)
       
       if !self.styleLoaded {
         self.styleLoaded = true

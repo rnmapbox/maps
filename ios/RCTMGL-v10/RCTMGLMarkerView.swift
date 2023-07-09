@@ -108,8 +108,9 @@ class RCTMGLMarkerView: UIView, RCTMGLMapComponent {
     add()
   }
 
-  func removeFromMap(_ map: RCTMGLMapView) {
+  func removeFromMap(_ map: RCTMGLMapView, reason: RemovalReason) -> Bool {
     remove()
+    return true
   }
   
   // MARK: - React methods

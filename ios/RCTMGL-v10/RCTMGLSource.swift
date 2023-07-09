@@ -54,7 +54,7 @@ class RCTMGLSource : RCTMGLInteractiveElement {
       layers.removeAll { $0 as AnyObject === layer }
     } else if let component = subview as? RCTMGLMapComponent {
       if let map = map {
-        component.removeFromMap(map)
+        component.removeFromMap(map, reason: .ViewRemoval)
       }
       layers.removeAll { $0 as AnyObject === component }
     }
@@ -95,7 +95,7 @@ class RCTMGLSource : RCTMGLInteractiveElement {
     }
   }
 
-  override func removeFromMap(_ map: RCTMGLMapView) {
+  override func removeFromMap(_ map: RCTMGLMapView, reason: RemovalReason) -> Bool {
     self.map = nil
 
     for layer in self.layers {
@@ -109,5 +109,6 @@ class RCTMGLSource : RCTMGLInteractiveElement {
       }
       self.ownsSource = false
     }
+    return true
   }
 }
