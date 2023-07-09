@@ -1,8 +1,9 @@
 // Runs eslint on the code example in the issue body and posts a comment with the lint results.
 
+const fs = require('fs');
+
 const core = require('@actions/core');
 const github = require('@actions/github');
-const fs = require('fs');
 const { ESLint } = require('eslint');
 
 const Config = {
@@ -70,8 +71,9 @@ const Config = {
         'error',
         [
           {
-            "name": ['./**', '../**', '!../assets/example.png'],
-            "message": 'Repo example should complete - it should not use files from your project, use ../assets/example.png if you need an example image',
+            name: ['./**', '../**', '!../assets/example.png'],
+            message:
+              'Repo example should complete - it should not use files from your project, use ../assets/example.png if you need an example image',
           },
         ],
       ],
@@ -163,7 +165,7 @@ async function run() {
 
 function getIssueNumber() {
   if (process.env.LINT_FILE) {
-    return 'n/a'
+    return 'n/a';
   }
   const { issue } = github.context.payload;
   if (!issue) {
@@ -174,7 +176,14 @@ function getIssueNumber() {
 
 function getCode() {
   if (process.env.LINT_FILE) {
-    return [fs.readFileSync(process.env.LINT_FILE, 'utf8'), { isTypescript: process.env.LINT_FILE.endsWith('.ts') || process.env.LINT_FILE.endsWith('.tsx') }];
+    return [
+      fs.readFileSync(process.env.LINT_FILE, 'utf8'),
+      {
+        isTypescript:
+          process.env.LINT_FILE.endsWith('.ts') ||
+          process.env.LINT_FILE.endsWith('.tsx'),
+      },
+    ];
   }
   const { issue } = github.context.payload;
   if (!issue) {
