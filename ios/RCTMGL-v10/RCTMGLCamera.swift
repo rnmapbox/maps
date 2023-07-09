@@ -2,9 +2,13 @@ import Foundation
 import MapboxMaps
 import Turf
 
-protocol RCTMGLMapComponent : class {
+enum RemovalReason {
+    case ViewRemoval, StyleChange, OnDestory, ComponentChange, Reorder
+}
+
+protocol RCTMGLMapComponent: AnyObject {
   func addToMap(_ map: RCTMGLMapView, style: Style)
-  func removeFromMap(_ map: RCTMGLMapView)
+  func removeFromMap(_ map: RCTMGLMapView, reason: RemovalReason) -> Bool
   
   func waitForStyleLoad() -> Bool
 }
@@ -98,9 +102,10 @@ open class RCTMGLMapComponentBase : UIView, RCTMGLMapComponent {
     _map = map
   }
   
-  func removeFromMap(_ map: RCTMGLMapView) {
+  func removeFromMap(_ map: RCTMGLMapView, reason: RemovalReason) -> Bool {
     _mapCallbacks = []
     _map = nil
+    return true
   }
 }
 
@@ -506,9 +511,13 @@ class RCTMGLCamera : RCTMGLMapComponentBase {
     map.reactCamera = self
   }
   
-  override func removeFromMap(_ map: RCTMGLMapView) {
+  override func removeFromMap(_ map: RCTMGLMapView, reason: RemovalReason) -> Bool {
+    if (reason == .StyleChange) {
+      return false
+    }
+
     map.viewport.removeStatusObserver(self)
-    super.removeFromMap(map)
+    return super.removeFromMap(map, reason:reason)
   }
 }
 

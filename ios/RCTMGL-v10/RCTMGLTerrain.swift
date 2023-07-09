@@ -22,15 +22,16 @@ class RCTMGLTerrain : RCTMGLSingletonLayer, RCTMGLMapComponent, RCTMGLSourceCons
     addStylesAndUpdate()
   }
   
-  func removeFromMap(_ map: RCTMGLMapView) {
+  func removeFromMap(_ map: RCTMGLMapView, reason: RemovalReason) -> Bool {
     self.map = nil
     
     guard let mapboxMap = map.mapboxMap else {
-      return
+      return true
     }
     
     let style = mapboxMap.style
     removeFromMap(map, style: style)
+    return true
   }
   
   func waitForStyleLoad() -> Bool {

@@ -30,14 +30,16 @@ class RCTMGLNativeUserLocation : UIView, RCTMGLMapComponent {
     _applySettings(map)
   }
 
-  func removeFromMap(_ map: RCTMGLMapView) {
+  func removeFromMap(_ map: RCTMGLMapView, reason: RemovalReason) -> Bool {
     map.location.options.puckType = nil
     guard let mapboxMap = map.mapboxMap else {
-      return
+      return true
     }
     let style = mapboxMap.style
     map.location.options.puckType = .none
     self.map = nil
+
+    return true
   }
   
   func waitForStyleLoad() -> Bool {

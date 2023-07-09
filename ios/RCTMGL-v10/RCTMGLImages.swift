@@ -61,9 +61,10 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
     self.addImageViews(style: style, imageViews: imageViews)
   }
   
-  func removeFromMap(_ map: RCTMGLMapView) {
+  func removeFromMap(_ map: RCTMGLMapView, reason: RemovalReason) -> Bool {
     self.style = nil
     // v10todo
+    return true
   }
   
   func addRemoteImages(style: Style, remoteImages: [String: Any]) {

@@ -212,9 +212,10 @@ class RCTMGLPointAnnotation : RCTMGLInteractiveElement {
     addIfPossible()
   }
 
-  override func removeFromMap(_ map: RCTMGLMapView) {
+  override func removeFromMap(_ map: RCTMGLMapView, reason: RemovalReason) -> Bool {
     removeIfAdded()
     self.map = nil
+    return true
   }
   
   // MARK: - RCTMGLInteractiveElement
