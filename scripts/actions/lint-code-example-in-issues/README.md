@@ -16,3 +16,9 @@ npm install
 node ./fetch-issue-for-testing.js 2871
 GITHUB_EVENT_PATH=./test-issue.json node --inspect lint-code-example-in-issues.js
 ```
+
+To test linting on a js file:
+```sh
+npm install
+LINT_FILE=example.jsx  node lint-code-example-in-issues.js
+```
