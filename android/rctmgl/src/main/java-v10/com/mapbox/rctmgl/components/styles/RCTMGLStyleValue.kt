@@ -18,7 +18,7 @@ class RCTMGLStyleValue(config: ReadableMap) {
     private val mPayload: ReadableMap?
     var imageURI: String? = ""
     private var isAddImage = false
-    var imageScale = ImageEntry.defaultScale
+    var imageScale: Double? = null
     private fun isTokenizedValue(value: String): Boolean {
         return value.startsWith("{") && value.endsWith("}")
     }
@@ -185,7 +185,7 @@ class RCTMGLStyleValue(config: ReadableMap) {
         mPayload = config.getMap("stylevalue")
         isAddImage = false
         if ("image" == type) {
-            imageScale = ImageEntry.defaultScale
+            imageScale = null
             if ("hashmap" == mPayload!!.getString("type")) {
                 val map = map
                 imageURI = map!!.getMap("uri")!!.getString("value")

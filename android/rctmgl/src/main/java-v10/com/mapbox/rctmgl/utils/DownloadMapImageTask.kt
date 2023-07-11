@@ -126,7 +126,7 @@ class DownloadMapImageTask(context: Context, map: MapboxMap, callback: OnAllImag
                     bitmapImages[image.name] = image.bitmap
                     val info = image.info
                     style.addBitmapImage(image.name, image.bitmap,sdf = info.sdf, stretchX = info.stretchX, stretchY = info.stretchY,
-                        content = info.content,scale = info.scale
+                        content = info.content,scale = info.getScaleOr(1.0)
                     )
                 }
             }
@@ -134,11 +134,11 @@ class DownloadMapImageTask(context: Context, map: MapboxMap, callback: OnAllImag
         mCallback?.onAllImagesLoaded()
     }
 
-    private fun getBitmapOptions(metrics: DisplayMetrics, scale: Double): BitmapFactory.Options {
+    private fun getBitmapOptions(metrics: DisplayMetrics, scale: Double?): BitmapFactory.Options {
         val options = BitmapFactory.Options()
         options.inScreenDensity = metrics.densityDpi
         options.inTargetDensity = metrics.densityDpi
-        if (scale != ImageEntry.defaultScale) {
+        if (scale != null) {
             options.inDensity = (DisplayMetrics.DENSITY_DEFAULT.toDouble() * scale).toInt()
         }
         return options
