@@ -30,10 +30,10 @@ class RCTMGLImagesManager(private val mContext: ReactApplicationContext) :
 
     fun imageInfo(name: String, map: ReadableMap): ImageInfo {
         var sdf = false
-        var stretchX = listOf<ImageStretches>();
-        var stretchY = listOf<ImageStretches>();
-        var content : ImageContent? = null;
-        var scale : Double = ImageEntry.defaultScale
+        var stretchX = listOf<ImageStretches>()
+        var stretchY = listOf<ImageStretches>()
+        var content : ImageContent? = null
+        var scale : Double? = null
         if (map.hasKey("sdf")) {
             sdf = map.getBoolean("sdf");
         }

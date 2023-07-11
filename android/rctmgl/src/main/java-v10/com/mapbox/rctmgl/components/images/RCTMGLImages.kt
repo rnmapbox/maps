@@ -43,12 +43,16 @@ fun Style.addBitmapImage(imageId: String, bitmap: Bitmap, sdf: Boolean = false, 
 
 fun Style.addBitmapImage(nativeImage: NativeImage) : Expected<String, None> {
     val info = nativeImage.info
-    return addBitmapImage(info.name, nativeImage.drawable.bitmap, info.sdf, info.stretchX, info.stretchY, info.content, info.scale)
+    return addBitmapImage(info.name, nativeImage.drawable.bitmap, info.sdf, info.stretchX, info.stretchY, info.content, info.getScaleOr(1.0))
 }
 
-data class ImageInfo(val name: String,  val scale: Double = 1.0, val sdf: Boolean = false, val stretchX: List<ImageStretches> = listOf(),
+data class ImageInfo(val name: String,  val scale: Double? = 1.0, val sdf: Boolean = false, val stretchX: List<ImageStretches> = listOf(),
                      val stretchY: List<ImageStretches> = listOf(), val content: ImageContent? = null)
-{}
+{
+    fun getScaleOr(default: Double): Double {
+        return scale ?: default;
+    }
+}
 
 data class NativeImage(val info: ImageInfo, val drawable: BitmapDrawable);
 
