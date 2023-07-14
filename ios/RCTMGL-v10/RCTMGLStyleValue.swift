@@ -362,11 +362,30 @@ class RCTMGLStyleValue {
   func mglStyleValueLineCap() -> Value<LineCap> {
     return mglStyleValueEnum()
   }
+    
+  func parseExpression(_ expression: [Any]) throws -> Expression {
+    let data = try JSONSerialization.data(withJSONObject: expression, options: .prettyPrinted)
+    let decodedExpression = try JSONDecoder().decode(Expression.self, from: data)
+    return decodedExpression
+  }
   
   func mglStyleValueEnum<Enum : RawRepresentable>() -> Value<Enum> where Enum.RawValue == String {
     if let value = value as? Dictionary<String,Any> {
       let value = RCTMGLStyleValue.convert(value["stylevalue"] as! [String:Any])
-      return Value.constant(Enum(rawValue: value as! String)!)
+        if let value = value as? String {
+            return Value.constant(Enum(rawValue: value )!)
+        } else if let value = value as? [Any] {
+            if let parsedExpression = (logged("mglStyleValueEnum: failed to parse expression") {
+                try parseExpression(value)
+            }) {
+                return .expression(parsedExpression)
+            } else {
+                return Value.constant(Enum(rawValue: value[0] as! String)!)
+            }
+        } else {
+            Logger.log(level: .error, message:"Invalid value for enum (nor string, not array): \(value) returning something")
+            return Value.constant(Enum(rawValue: value as! String)!)
+        }
     } else {
       Logger.log(level: .error, message:"Invalid value for enum: \(value) returning something")
       return Value.constant(Enum(rawValue: value as! String)!)
