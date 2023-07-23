@@ -1116,6 +1116,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
         val _this = this
         mMap.addOnMapLoadedListener(OnMapLoadedListener { (begin, end) -> _this.handleMapChangedEvent(EventTypes.DID_FINISH_LOADING_MAP) })
+        mMap.addOnStyleLoadedListener(OnStyleLoadedListener { (begin, end) -> _this.handleMapChangedEvent(EventTypes.DID_FINISH_LOADING_STYLE) })
         mMap.addOnStyleImageMissingListener(OnStyleImageMissingListener { (begin, end, id) ->
             for (images in mImages) {
                 if (images.addMissingImageToStyle(id, mMap)) {
