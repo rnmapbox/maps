@@ -8,7 +8,7 @@ class RCTMGLUtils {
     RCTMGLImageQueue.sharedInstance.addImage(url, scale: scale, bridge: bridge, handler: callback)
   }
   
-  static func fetchImages(_ bridge: RCTBridge, style: Style, objects: [String:Any], forceUpdate: Bool, callback: @escaping ()->Void) {
+  static func fetchImages(_ bridge: RCTBridge, style: Style, objects: [String:Any], forceUpdate: Bool, loaded: @escaping (_ name:String) -> Void, callback: @escaping ()->Void) {
     guard !objects.isEmpty else {
       callback()
       return
@@ -47,8 +47,8 @@ class RCTMGLUtils {
               DispatchQueue.main.async {
                 if let image = image {
                   logged("RCTMGLUtils.fetchImage-\(imageName)") {
-                    print("width=\(image.size.width) height=\(image.size.height) scale=\(image.scale) scale2=\(scale)")
                     try style.addImage(image, id: imageName, sdf:sdf, stretchX: stretchX, stretchY: stretchY, content: content)
+                    loaded(imageName)
                     imageLoadedBlock()
                   }
                 }

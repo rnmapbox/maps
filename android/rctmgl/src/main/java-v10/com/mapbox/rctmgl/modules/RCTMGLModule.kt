@@ -69,6 +69,7 @@ class RCTMGLModule(private val mReactContext: ReactApplicationContext) : ReactCo
         eventTypes["DidFinishRenderingMap"] = EventTypes.DID_FINISH_RENDERING_MAP
         eventTypes["DidFinishRenderingMapFully"] = EventTypes.DID_FINISH_RENDERING_MAP_FULLY
         eventTypes["DidFinishLoadingStyle"] = EventTypes.DID_FINISH_LOADING_STYLE
+        eventTypes["MapLoadingError"] = EventTypes.MAP_LOADING_ERROR
 
         // style source constants
         val styleSourceConsts: MutableMap<String, String> = HashMap()

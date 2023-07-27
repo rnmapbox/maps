@@ -71,6 +71,8 @@ const AnnotationWithRemoteImage = ({
           source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
           style={{ width: ANNOTATION_SIZE, height: ANNOTATION_SIZE }}
           onLoad={() => pointAnnotation.current?.refresh()}
+          // Prevent rendering bitmap at unknown animation state
+          fadeDuration={0}
         />
       </View>
       <Callout title="This is a sample loading a remote image" />

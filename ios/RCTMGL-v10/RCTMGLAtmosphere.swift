@@ -17,15 +17,16 @@ class RCTMGLAtmosphere : RCTMGLSingletonLayer, RCTMGLMapComponent, RCTMGLSourceC
     addStylesAndUpdate()
   }
   
-  func removeFromMap(_ map: RCTMGLMapView) {
+  func removeFromMap(_ map: RCTMGLMapView, reason _: RemovalReason) -> Bool {
     self.map = nil
     
     guard let mapboxMap = map.mapboxMap else {
-      return
+      return false
     }
     
     let style = mapboxMap.style
     removeFromMap(map, style: style)
+    return true
   }
   
   func waitForStyleLoad() -> Bool {

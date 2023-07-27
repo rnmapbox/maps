@@ -3,6 +3,7 @@ package com.mapbox.rctmgl.components.styles
 import android.content.Context
 import com.facebook.react.bridge.ReadableMap
 import com.mapbox.maps.MapboxMap
+import com.mapbox.rctmgl.components.images.ImageInfo
 import com.mapbox.rctmgl.utils.ImageEntry
 import com.mapbox.rctmgl.utils.DownloadMapImageTask
 import com.mapbox.rctmgl.utils.Logger
@@ -36,7 +37,7 @@ class RCTMGLStyle(private val mContext: Context, reactStyle: ReadableMap?, map: 
     }
 
     fun imageEntry(styleValue: RCTMGLStyleValue): ImageEntry {
-        return ImageEntry(styleValue.imageURI, styleValue.imageScale)
+        return ImageEntry(styleValue.imageURI!!, ImageInfo(scale=styleValue.imageScale, name=styleValue.imageURI!!))
     }
 
     @JvmOverloads
@@ -46,7 +47,7 @@ class RCTMGLStyle(private val mContext: Context, reactStyle: ReadableMap?, map: 
             return
         }
         Logger.w(LOG_TAG,"Deprecated: Image in style is deprecated, use images component instead. key: $styleKey [image-in-style-deprecated]")
-        val uriStr = styleValue.imageURI
+        val uriStr = styleValue.imageURI!!
         val images = arrayOf<Map.Entry<String, ImageEntry>>(
             AbstractMap.SimpleEntry<String, ImageEntry>(
                 uriStr,

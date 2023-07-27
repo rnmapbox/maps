@@ -7,7 +7,6 @@ protocol RCTMGLImageSetter : AnyObject {
 class RCTMGLImages : UIView, RCTMGLMapComponent {
   
   weak var bridge : RCTBridge! = nil
-  var remoteImages : [String:String] = [:]
   
   weak var style: Style? = nil
 
@@ -15,7 +14,13 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
   var onImageMissing: RCTBubblingEventBlock? = nil
   
   @objc
-  var images : [String:Any] = [:]
+  var images : [String:Any] = [:] {
+    didSet {
+      updateImages(images: images, oldImages: oldValue)
+    }
+  }
+    
+  var loadedImages : Set<String> = []
   
   var imageViews: [RCTMGLImage] = []
 
@@ -24,7 +29,7 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
     didSet {
       nativeImageInfos = nativeImages.compactMap { decodeImage($0) }
     }
-  };
+  }
 
   typealias NativeImageInfo = (name:String, sdf: Bool, stretchX:[(from:Float, to:Float)], stretchY:[(from:Float, to:Float)], content: (left:Float,top:Float,right:Float,bottom:Float)? );
   var nativeImageInfos: [NativeImageInfo] = []
@@ -57,16 +62,31 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
     map.images.append(self)
     
     self.addNativeImages(style: style, nativeImages: nativeImageInfos)
-    self.addRemoteImages(style: style, remoteImages: images)
+    self.addImages(style: style, images: images, oldImages: [:])
     self.addImageViews(style: style, imageViews: imageViews)
   }
   
-  func removeFromMap(_ map: RCTMGLMapView) {
+  func removeFromMap(_ map: RCTMGLMapView, reason: RemovalReason) -> Bool {
     self.style = nil
     // v10todo
+    return true
   }
   
-  func addRemoteImages(style: Style, remoteImages: [String: Any]) {
+  func sameImage(oldValue: Any?, newValue: Any?) -> Bool {
+    if let oldS = oldValue as? String, let newS = newValue as? String {
+      return oldS == newS
+    } else {
+      return false
+    }
+  }
+
+  func updateImages(images: [String:Any], oldImages: [String:Any]) {
+    if let style = self.style {
+      addImages(style: style, images: images, oldImages: oldImages)
+    }
+  }
+
+  func addImages(style: Style, images: [String: Any], oldImages: [String:Any]) {
     var missingImages : [String:Any] = [:]
     
     // Add image placeholder for images that are not yet available in the style. This way
@@ -77,17 +97,25 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
     //
     // See also: https://github.com/mapbox/mapbox-gl-native/pull/14253#issuecomment-478827792
     
-    for imageName in remoteImages.keys {
-      if style.styleManager.getStyleImage(forImageId: imageName) == nil {
-        logged("RCTMGLImages.addImagePlaceholder") {
-          try? style.addImage(placeholderImage, id: imageName, stretchX: [], stretchY: [])
-          missingImages[imageName] = remoteImages[imageName]
+    for name in images.keys {
+      let newImage = oldImages[name] == nil
+      if oldImages[name] == nil || loadedImages.contains(name) || !sameImage(oldValue: oldImages[name], newValue: images[name]) {
+        let addPlaceholder = oldImages[name] == nil
+        if !sameImage(oldValue: oldImages[name], newValue: images[name]) {
+          missingImages[name] = images[name]
+        } else {
+          if style.styleManager.getStyleImage(forImageId: name) == nil {
+            logged("RCTMGLImages.addImagePlaceholder") {
+              try? style.addImage(placeholderImage, id: name, stretchX: [], stretchY: [])
+              missingImages[name] = images[name]
+            }
+          }
         }
       }
     }
     
     if missingImages.count > 0 {
-      RCTMGLUtils.fetchImages(bridge, style: style, objects: missingImages, forceUpdate: true, callback: { })
+      RCTMGLUtils.fetchImages(bridge, style: style, objects: missingImages, forceUpdate: true, loaded: { name in self.loadedImages.insert(name) } ,callback: { })
     }
   }
   
@@ -103,8 +131,8 @@ class RCTMGLImages : UIView, RCTMGLMapComponent {
       return true
     }
     
-    if let remoteImage = images[imageName] {
-      addRemoteImages(style: style, remoteImages: [imageName: remoteImage])
+    if let image = images[imageName] {
+      addImages(style: style, images: [imageName: image], oldImages: [:])
       return true
     }
     return false

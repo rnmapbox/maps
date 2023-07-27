@@ -22,6 +22,7 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.localization.localizeLabels
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
+import com.mapbox.maps.extension.observable.getMapLoadingErrorEventData
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.Layer
 import com.mapbox.maps.extension.style.layers.generated.*
@@ -64,6 +65,7 @@ import com.mapbox.rctmgl.components.styles.terrain.RCTMGLTerrain
 import com.mapbox.rctmgl.events.AndroidCallbackEvent
 import com.mapbox.rctmgl.events.IEvent
 import com.mapbox.rctmgl.events.MapChangeEvent
+import com.mapbox.rctmgl.events.CameraChangeEvent
 import com.mapbox.rctmgl.events.MapClickEvent
 import com.mapbox.rctmgl.events.constants.EventTypes
 import com.mapbox.rctmgl.utils.*
@@ -353,7 +355,15 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
             }
         })
 
-        map.subscribe({ event -> Logger.e(LOG_TAG, String.format("Map load failed: %s", event.data.toString())) }, Arrays.asList(MapEvents.MAP_LOADING_ERROR))
+        map.subscribe({ event ->
+            Logger.e(LOG_TAG, String.format("Map load failed: %s", event.data.toString()))
+            val errorMessage = event.getMapLoadingErrorEventData().message
+            val event = MapChangeEvent(this, EventTypes.MAP_LOADING_ERROR, writableMapOf(
+                    "error" to errorMessage
+            ))
+            mManager.handleEvent(event)
+
+                      }, Arrays.asList(MapEvents.MAP_LOADING_ERROR))
     }
 
     fun<T> mapGestureBegin(type:MapGestureType, gesture: T) {
@@ -557,7 +567,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
     fun applyLocalizeLabels() {
         val localeStr = mLocaleString
         if (localeStr != null) {
-            val locale = if (localeStr == "current") Locale.getDefault() else Locale(localeStr)
+            val locale = if (localeStr == "current") Locale.getDefault() else Locale.Builder()
+                .setLanguageTag(localeStr).build()
             savedStyle?.localizeLabels(locale, mLocaleLayerIds)
         }
     }
@@ -774,7 +785,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         val event: IEvent
         event = when (eventType) {
             EventTypes.REGION_WILL_CHANGE, EventTypes.REGION_DID_CHANGE, EventTypes.REGION_IS_CHANGING -> MapChangeEvent(this, eventType, makeRegionPayload(null))
-            EventTypes.CAMERA_CHANGED, EventTypes.MAP_IDLE -> MapChangeEvent(this, eventType, makeCameraPayload())
+            EventTypes.CAMERA_CHANGED -> CameraChangeEvent(this, eventType, makeCameraPayload())
+            EventTypes.MAP_IDLE -> MapChangeEvent(this, eventType, makeCameraPayload())
             else -> MapChangeEvent(this, eventType)
         }
         mManager.handleEvent(event)
@@ -814,6 +826,8 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         val state: WritableMap = WritableNativeMap()
         state.putMap("properties", properties)
         state.putMap("gestures", gestures)
+
+        state.putDouble("timestamp", System.currentTimeMillis().toDouble())
 
         return state
     }
@@ -1102,6 +1116,7 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
         val _this = this
         mMap.addOnMapLoadedListener(OnMapLoadedListener { (begin, end) -> _this.handleMapChangedEvent(EventTypes.DID_FINISH_LOADING_MAP) })
+        mMap.addOnStyleLoadedListener(OnStyleLoadedListener { (begin, end) -> _this.handleMapChangedEvent(EventTypes.DID_FINISH_LOADING_STYLE) })
         mMap.addOnStyleImageMissingListener(OnStyleImageMissingListener { (begin, end, id) ->
             for (images in mImages) {
                 if (images.addMissingImageToStyle(id, mMap)) {

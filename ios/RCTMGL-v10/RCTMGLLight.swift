@@ -52,7 +52,8 @@ class RCTMGLLight: UIView, RCTMGLMapComponent {
     }
   }
   
-  func removeFromMap(_ map: RCTMGLMapView) {
+  func removeFromMap(_ map: RCTMGLMapView, reason: RemovalReason) -> Bool  {
     self.map = nil
+    return true
   }
 }

@@ -19,7 +19,7 @@ class RCTMGLInteractiveElement : UIView, RCTMGLMapComponent {
     willSet {
       if id != nil && newValue != id {
         Logger.log(level:.warn, message: "Changing id from: \(optional: id) to \(optional: newValue), changing of id is supported")
-        if let map = map { removeFromMap(map) }
+        if let map = map { removeFromMap(map, reason: .ComponentChange) }
       }
     }
     didSet {
@@ -53,8 +53,9 @@ class RCTMGLInteractiveElement : UIView, RCTMGLMapComponent {
     self.map = map
   }
 
-  func removeFromMap(_ map: RCTMGLMapView) {
+  func removeFromMap(_ map: RCTMGLMapView, reason: RemovalReason) -> Bool {
     self.map = nil
+    return true
   }
   
   func waitForStyleLoad() -> Bool {

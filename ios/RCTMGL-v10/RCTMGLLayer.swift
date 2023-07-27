@@ -276,8 +276,9 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
     }
   }
 
-  func removeFromMap(_ map: RCTMGLMapView) {
+  func removeFromMap(_ map: RCTMGLMapView, reason: RemovalReason) -> Bool {
     removeFromMap(map.mapboxMap.style)
+    return true
   }
   
   private func removeFromMap(_ style: Style) {
