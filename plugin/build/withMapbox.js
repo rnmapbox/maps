@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._addMapboxMavenRepo = exports.addMapboxMavenRepo = exports.setExcludedArchitectures = exports.addMapboxInstallerBlock = exports.applyCocoaPodsModifications = exports.addConstantBlock = exports.addInstallerBlock = void 0;
+exports._addMapboxMavenRepo = exports.addMapboxMavenRepo = exports.addMapboxInstallerBlock = exports.applyCocoaPodsModifications = exports.addConstantBlock = exports.addInstallerBlock = void 0;
 const fs_1 = require("fs");
 const path_1 = __importDefault(require("path"));
 const config_plugins_1 = require("expo/config-plugins");
@@ -119,26 +119,6 @@ const withCocoaPodsInstallerBlocks = (config, { RNMapboxMapsImpl, RNMapboxMapsVe
         return exportedConfig;
     },
 ]);
-/**
- * Exclude building for arm64 on simulator devices in the pbxproj project.
- * Without this, production builds targeting simulators will fail.
- */
-const setExcludedArchitectures = (project) => {
-    const configurations = project.pbxXCBuildConfigurationSection();
-    for (const { buildSettings } of Object.values(configurations || {})) {
-        // Guessing that this is the best way to emulate Xcode.
-        // Using `project.addToBuildSettings` modifies too many targets.
-        if (typeof buildSettings?.PRODUCT_NAME !== 'undefined') {
-            buildSettings['"EXCLUDED_ARCHS[sdk=iphonesimulator*]"'] = '"arm64"';
-        }
-    }
-    return project;
-};
-exports.setExcludedArchitectures = setExcludedArchitectures;
-const withExcludedSimulatorArchitectures = (config) => (0, config_plugins_1.withXcodeProject)(config, (exportedConfig) => {
-    exportedConfig.modResults = (0, exports.setExcludedArchitectures)(exportedConfig.modResults);
-    return exportedConfig;
-});
 const withAndroidPropertiesDownloadToken = (config, { RNMapboxMapsDownloadToken }) => {
     const key = 'MAPBOX_DOWNLOADS_TOKEN';
     if (RNMapboxMapsDownloadToken) {
@@ -269,7 +249,6 @@ const withMapboxAndroid = (config, { RNMapboxMapsImpl, RNMapboxMapsDownloadToken
     return config;
 };
 const withMapbox = (config, { RNMapboxMapsImpl, RNMapboxMapsVersion, RNMapboxMapsDownloadToken }) => {
-    config = withExcludedSimulatorArchitectures(config);
     config = withMapboxAndroid(config, {
         RNMapboxMapsImpl,
         RNMapboxMapsVersion,

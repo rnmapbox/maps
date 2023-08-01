@@ -5,8 +5,6 @@ import {
   ConfigPlugin,
   createRunOncePlugin,
   withDangerousMod,
-  withXcodeProject,
-  XcodeProject,
   withGradleProperties,
   WarningAggregator,
   withProjectBuildGradle,
@@ -184,35 +182,6 @@ const withCocoaPodsInstallerBlocks: ConfigPlugin<MapboxPlugProps> = (
       return exportedConfig;
     },
   ]);
-
-/**
- * Exclude building for arm64 on simulator devices in the pbxproj project.
- * Without this, production builds targeting simulators will fail.
- */
-export const setExcludedArchitectures: (
-  project: XcodeProject,
-) => XcodeProject = (project: XcodeProject): XcodeProject => {
-  const configurations: { buildSettings: Record<string, string> }[] =
-    project.pbxXCBuildConfigurationSection();
-  for (const { buildSettings } of Object.values(configurations || {})) {
-    // Guessing that this is the best way to emulate Xcode.
-    // Using `project.addToBuildSettings` modifies too many targets.
-    if (typeof buildSettings?.PRODUCT_NAME !== 'undefined') {
-      buildSettings['"EXCLUDED_ARCHS[sdk=iphonesimulator*]"'] = '"arm64"';
-    }
-  }
-
-  return project;
-};
-
-const withExcludedSimulatorArchitectures: ConfigPlugin = (config) =>
-  withXcodeProject(config, (exportedConfig) => {
-    exportedConfig.modResults = setExcludedArchitectures(
-      exportedConfig.modResults,
-    );
-
-    return exportedConfig;
-  });
 
 const withAndroidPropertiesDownloadToken: ConfigPlugin<MapboxPlugProps> = (
   config,
@@ -408,7 +377,6 @@ const withMapbox: ConfigPlugin<MapboxPlugProps> = (
   config,
   { RNMapboxMapsImpl, RNMapboxMapsVersion, RNMapboxMapsDownloadToken },
 ) => {
-  config = withExcludedSimulatorArchitectures(config);
   config = withMapboxAndroid(config, {
     RNMapboxMapsImpl,
     RNMapboxMapsVersion,
