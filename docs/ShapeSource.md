@@ -51,6 +51,30 @@ The contents of the source. A shape can represent a GeoJSON geometry, a feature,
 
 
   
+### animationDuration
+
+```tsx
+number
+```
+The duration in milliseconds to animate the shape. If `undefined` or `0`, changes are instantaneous.
+
+Only has an effect if `shape` is of type `Point` or `LineString`.
+
+
+  
+### snapIfDistanceIsGreaterThan
+
+```tsx
+number
+```
+If the distance between the previous `shape` and the new `shape` is greater than this number in
+meters, ignore `animationDuration` and move instantly to the new shape. If `undefined`, always
+animates according to `animationDuration`. If `0`, always moves instantly.
+
+Only has an effect if `shape` is of type `Point` or `LineString`.
+
+
+  
 ### cluster
 
 ```tsx

@@ -53,6 +53,22 @@ export type Props = {
     | GeoJSON.Geometry;
 
   /**
+   * The duration in milliseconds to animate the shape. If `undefined` or `0`, changes are instantaneous.
+   *
+   * Only has an effect if `shape` is of type `Point` or `LineString`.
+   */
+  animationDuration?: number;
+
+  /**
+   * If the distance between the previous `shape` and the new `shape` is greater than this number in
+   * meters, ignore `animationDuration` and move instantly to the new shape. If `undefined`, always
+   * animates according to `animationDuration`. If `0`, always moves instantly.
+   *
+   * Only has an effect if `shape` is of type `Point` or `LineString`.
+   */
+  snapIfDistanceIsGreaterThan?: number;
+
+  /**
    * Enables clustering on the source for point shapes.
    */
   cluster?: boolean;
@@ -372,6 +388,8 @@ export class ShapeSource extends NativeBridgeComponent(
       hitbox: this.props.hitbox,
       hasPressListener: isFunction(this.props.onPress),
       onMapboxShapeSourcePress: this.onPress.bind(this),
+      animationDuration: this.props.animationDuration,
+      snapIfDistanceIsGreaterThan: this.props.snapIfDistanceIsGreaterThan,
       cluster: this.props.cluster ? 1 : 0,
       clusterRadius: this.props.clusterRadius,
       clusterMaxZoomLevel: this.props.clusterMaxZoomLevel,

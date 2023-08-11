@@ -4,7 +4,8 @@ import android.content.Context
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.rctmgl.utils.ImageEntry
 import android.graphics.drawable.BitmapDrawable
-import com.facebook.react.bridge.ReadableMap
+import android.util.Log
+import com.facebook.react.bridge.UiThreadUtil.runOnUiThread
 import com.mapbox.rctmgl.components.mapview.RCTMGLMapView
 import com.mapbox.rctmgl.events.FeatureClickEvent
 import com.facebook.react.bridge.WritableMap
@@ -13,17 +14,25 @@ import com.mapbox.bindgen.Value
 import com.mapbox.geojson.Feature
 import com.mapbox.rctmgl.events.AndroidCallbackEvent
 import com.mapbox.geojson.FeatureCollection
+import com.mapbox.geojson.LineString
+import com.mapbox.geojson.Point
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.rctmgl.utils.Logger
+import com.mapbox.turf.TurfConstants
+import com.mapbox.turf.TurfMeasurement
+import org.json.JSONObject
 import java.net.URL
 import java.util.ArrayList
 import java.util.HashMap
+import java.util.Timer
+import java.util.TimerTask
 
-class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourceManager) :
-    RCTSource<GeoJsonSource>(context) {
+class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourceManager): RCTSource<GeoJsonSource>(context) {
     private var mURL: URL? = null
     private var mShape: String? = null
+    private var mAnimationDuration: Long? = null
+    private var mSnapIfDistanceIsGreaterThan: Long? = null
     private var mCluster: Boolean? = null
     private var mClusterRadius: Long? = null
     private var mClusterMaxZoom: Long? = null
@@ -34,6 +43,10 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
     private var mLineMetrics: Boolean? = null
     private val mImages: List<Map.Entry<String, ImageEntry>>? = null
     private val mNativeImages: List<Map.Entry<String, BitmapDrawable>>? = null
+
+    private var mShapePointCache: String? = null
+    private var mShapeLastUpdatedPointCache: Point? = null
+    private var mTimer: Timer? = null
 
     override fun hasNoDataSoRefersToExisting(): Boolean {
         return (mURL == null) && (mShape == null)
@@ -65,11 +78,34 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
 
     fun setShape(geoJSONStr: String) {
         mShape = geoJSONStr
-        if (mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
-            mSource!!.data(mShape!!)
-            val result = mMap!!.getStyle()!!
-                .setStyleSourceProperty(iD!!, "data", Value.valueOf(mShape!!))
+        val obj = JSONObject(geoJSONStr)
+        val type = obj.get("type")
+
+        if (type == "Point") {
+            val targetPoint = getGeometryAsPoint(geoJSONStr)
+            val _prevPoint = mShapeLastUpdatedPointCache ?: targetPoint
+            val _targetPoint = targetPoint
+
+            if (_prevPoint != null && _targetPoint != null) {
+                animateToNewPoint(_prevPoint, _targetPoint)
+            }
+        } else if (type == "LineString") {
+            Log.d("[ShapeSource]", "TODO: LineString not yet implemented")
+        } else {
+            if (mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
+                mSource!!.data(mShape!!)
+                val value = Value.valueOf(mShape!!)
+                mMap!!.getStyle()!!.setStyleSourceProperty(iD!!, "data", value)
+            }
         }
+    }
+
+    fun setAnimationDuration(animationDuration: Float) {
+        mAnimationDuration = animationDuration.toLong()
+    }
+
+    fun setSnapIfDistanceIsGreaterThan(distance: Float) {
+        mSnapIfDistanceIsGreaterThan = distance.toLong()
     }
 
     fun setCluster(cluster: Boolean) {
@@ -106,6 +142,78 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
 
     fun setLineMetrics(lineMetrics: Boolean) {
         mLineMetrics = lineMetrics
+    }
+
+    private fun getGeometryAsPoint(pointStr: String): Point? {
+        val _pointStr = pointStr ?: return null
+        val geometry = Point.fromJson(_pointStr)
+        return geometry
+    }
+
+    private fun applyGeometryFromPoint(currentPoint: Point?) {
+        val _mSource = mSource ?: return
+        val _style = mMap?.getStyle()
+
+        if (mMapView == null || mMapView?.isDestroyed == true || _style == null || currentPoint == null) {
+            return
+        }
+
+        mShapeLastUpdatedPointCache = currentPoint
+
+        _mSource.geometry(currentPoint)
+    }
+
+    private fun animateToNewPoint(prevPoint: Point, targetPoint: Point) {
+        mTimer?.cancel()
+
+        val lineBetween = LineString.fromLngLats(
+            listOf<Point>(
+                prevPoint,
+                targetPoint
+            )
+        )
+        val distanceBetween = TurfMeasurement.length(lineBetween, TurfConstants.UNIT_METERS)
+
+        val _mSnapThreshold = mSnapIfDistanceIsGreaterThan?.toLong()
+        if( _mSnapThreshold != null && distanceBetween > _mSnapThreshold) {
+            applyGeometryFromPoint(targetPoint)
+            return
+        }
+
+        val _mAnimationDuration = mAnimationDuration?.toLong()
+        if (_mAnimationDuration == null || _mAnimationDuration <= 0) {
+            applyGeometryFromPoint(targetPoint)
+            return
+        }
+
+        val fps = 30.0
+        var ratio = 0.0
+
+        val durationSec = _mAnimationDuration.toDouble() / 1000.0
+        val ratioIncr = 1.0 / (fps * durationSec)
+        val period = 1000.0 / fps
+
+        mTimer = Timer()
+        mTimer?.scheduleAtFixedRate(
+            object : TimerTask() {
+                override fun run() {
+                    runOnUiThread {
+                        ratio += ratioIncr
+                        if (ratio >= 1) {
+                            mTimer?.cancel()
+                            return@runOnUiThread
+                        }
+
+                        val point = TurfMeasurement.along(
+                            lineBetween,
+                            distanceBetween * ratio,
+                            TurfConstants.UNIT_METERS
+                        )
+                        applyGeometryFromPoint(point)
+                    }
+                }
+            }, 0, period.toLong()
+        )
     }
 
     override fun onPress(event: OnPressEvent?) {

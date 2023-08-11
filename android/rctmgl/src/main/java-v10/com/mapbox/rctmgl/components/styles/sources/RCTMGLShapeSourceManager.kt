@@ -1,6 +1,5 @@
 package com.mapbox.rctmgl.components.styles.sources
 
-import android.util.Log
 import android.view.View
 import com.facebook.react.bridge.ReactApplicationContext
 import com.mapbox.rctmgl.components.AbstractEventEmitter
@@ -71,6 +70,16 @@ class RCTMGLShapeSourceManager(private val mContext: ReactApplicationContext) :
     @ReactProp(name = "shape")
     fun setGeometry(source: RCTMGLShapeSource, geoJSONStr: String) {
         source.setShape(geoJSONStr)
+    }
+
+    @ReactProp(name = "animationDuration")
+    fun setAnimationDuration(source: RCTMGLShapeSource, animationDuration: Float) {
+        source.setAnimationDuration(animationDuration)
+    }
+
+    @ReactProp(name = "snapIfDistanceIsGreaterThan")
+    fun setSnapIfDistanceIsGreaterThan(source: RCTMGLShapeSource, snapIfDistanceIsGreaterThan: Float) {
+        source.setSnapIfDistanceIsGreaterThan(snapIfDistanceIsGreaterThan)
     }
 
     @ReactProp(name = "cluster")

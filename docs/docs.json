@@ -4435,6 +4435,20 @@
         "description": "The contents of the source. A shape can represent a GeoJSON geometry, a feature, or a feature collection."
       },
       {
+        "name": "animationDuration",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "The duration in milliseconds to animate the shape. If `undefined` or `0`, changes are instantaneous.\n\nOnly has an effect if `shape` is of type `Point` or `LineString`."
+      },
+      {
+        "name": "snapIfDistanceIsGreaterThan",
+        "required": false,
+        "type": "number",
+        "default": "none",
+        "description": "If the distance between the previous `shape` and the new `shape` is greater than this number in\nmeters, ignore `animationDuration` and move instantly to the new shape. If `undefined`, always\nanimates according to `animationDuration`. If `0`, always moves instantly.\n\nOnly has an effect if `shape` is of type `Point` or `LineString`."
+      },
+      {
         "name": "cluster",
         "required": false,
         "type": "boolean",
