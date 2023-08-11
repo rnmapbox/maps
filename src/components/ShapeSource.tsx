@@ -47,9 +47,9 @@ export type Props = {
    * The contents of the source. A shape can represent a GeoJSON geometry, a feature, or a feature collection.
    */
   shape?:
-    | GeoJSON.GeometryCollection
-    | GeoJSON.Feature
     | GeoJSON.FeatureCollection
+    | GeoJSON.Feature
+    | GeoJSON.GeometryCollection
     | GeoJSON.Geometry;
 
   /**

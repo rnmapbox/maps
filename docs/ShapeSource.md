@@ -42,9 +42,9 @@ An HTTP(S) URL, absolute file URL, or local file URL relative to the current app
 ### shape
 
 ```tsx
-| GeoJSON.GeometryCollection
-| GeoJSON.Feature
 | GeoJSON.FeatureCollection
+| GeoJSON.Feature
+| GeoJSON.GeometryCollection
 | GeoJSON.Geometry
 ```
 The contents of the source. A shape can represent a GeoJSON geometry, a feature, or a feature collection.
