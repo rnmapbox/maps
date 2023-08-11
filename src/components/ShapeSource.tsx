@@ -53,9 +53,23 @@ export type Props = {
     | GeoJSON.Geometry;
 
   /**
+   * The distance in meters to remove from the start of the line.
+   *
+   * Requires `shape` to be of type `LineString`.
+   */
+  lineStartOffset?: number;
+
+  /**
+   * The distance in meters to remove from the end of the line.
+   *
+   * Requires `shape` to be of type `LineString`.
+   */
+  lineEndOffset?: number;
+
+  /**
    * The duration in milliseconds to animate the shape. If `undefined` or `0`, changes are instantaneous.
    *
-   * Only has an effect if `shape` is of type `Point` or `LineString`.
+   * Requires `shape` to be of type `Point` or `LineString`.
    */
   animationDuration?: number;
 
@@ -64,7 +78,7 @@ export type Props = {
    * meters, ignore `animationDuration` and move instantly to the new shape. If `undefined`, always
    * animates according to `animationDuration`. If `0`, always moves instantly.
    *
-   * Only has an effect if `shape` is of type `Point` or `LineString`.
+   * Requires `shape` to be of type `Point` or `LineString`.
    */
   snapIfDistanceIsGreaterThan?: number;
 
@@ -388,6 +402,8 @@ export class ShapeSource extends NativeBridgeComponent(
       hitbox: this.props.hitbox,
       hasPressListener: isFunction(this.props.onPress),
       onMapboxShapeSourcePress: this.onPress.bind(this),
+      lineStartOffset: this.props.lineStartOffset,
+      lineEndOffset: this.props.lineEndOffset,
       animationDuration: this.props.animationDuration,
       snapIfDistanceIsGreaterThan: this.props.snapIfDistanceIsGreaterThan,
       cluster: this.props.cluster ? 1 : 0,

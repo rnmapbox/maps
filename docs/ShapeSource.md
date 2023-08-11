@@ -51,6 +51,28 @@ The contents of the source. A shape can represent a GeoJSON geometry, a feature,
 
 
   
+### lineStartOffset
+
+```tsx
+number
+```
+The distance in meters to remove from the start of the line.
+
+Requires `shape` to be of type `LineString`.
+
+
+  
+### lineEndOffset
+
+```tsx
+number
+```
+The distance in meters to remove from the end of the line.
+
+Requires `shape` to be of type `LineString`.
+
+
+  
 ### animationDuration
 
 ```tsx
@@ -58,7 +80,7 @@ number
 ```
 The duration in milliseconds to animate the shape. If `undefined` or `0`, changes are instantaneous.
 
-Only has an effect if `shape` is of type `Point` or `LineString`.
+Requires `shape` to be of type `Point` or `LineString`.
 
 
   
@@ -71,7 +93,7 @@ If the distance between the previous `shape` and the new `shape` is greater than
 meters, ignore `animationDuration` and move instantly to the new shape. If `undefined`, always
 animates according to `animationDuration`. If `0`, always moves instantly.
 
-Only has an effect if `shape` is of type `Point` or `LineString`.
+Requires `shape` to be of type `Point` or `LineString`.
 
 
   

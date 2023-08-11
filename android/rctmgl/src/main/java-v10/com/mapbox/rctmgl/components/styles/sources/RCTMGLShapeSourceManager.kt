@@ -72,6 +72,16 @@ class RCTMGLShapeSourceManager(private val mContext: ReactApplicationContext) :
         source.setShape(geoJSONStr)
     }
 
+    @ReactProp(name = "lineStartOffset")
+    fun setStartOffset(source: RCTMGLShapeSource, startOffset: Float) {
+        source.setLineStartOffset(startOffset)
+    }
+
+    @ReactProp(name = "lineEndOffset")
+    fun setEndOffset(source: RCTMGLShapeSource, endOffset: Float) {
+        source.setLineEndOffset(endOffset)
+    }
+
     @ReactProp(name = "animationDuration")
     fun setAnimationDuration(source: RCTMGLShapeSource, animationDuration: Float) {
         source.setAnimationDuration(animationDuration)

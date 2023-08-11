@@ -21,6 +21,7 @@ import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.rctmgl.utils.Logger
 import com.mapbox.turf.TurfConstants
 import com.mapbox.turf.TurfMeasurement
+import com.mapbox.turf.TurfMisc
 import org.json.JSONObject
 import java.net.URL
 import java.util.ArrayList
@@ -31,6 +32,8 @@ import java.util.TimerTask
 class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourceManager): RCTSource<GeoJsonSource>(context) {
     private var mURL: URL? = null
     private var mShape: String? = null
+    private var mStartOffset: Double? = null
+    private var mEndffset: Double? = null
     private var mAnimationDuration: Long? = null
     private var mSnapIfDistanceIsGreaterThan: Long? = null
     private var mCluster: Boolean? = null
@@ -44,8 +47,9 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
     private val mImages: List<Map.Entry<String, ImageEntry>>? = null
     private val mNativeImages: List<Map.Entry<String, BitmapDrawable>>? = null
 
-    private var mShapePointCache: String? = null
-    private var mShapeLastUpdatedPointCache: Point? = null
+    private var mShapeLastUpdatedPoint: Point? = null
+    private var mCurrentLineStartOffset: Double = 0.0
+    private var mCurrentLineEndOffset: Double = 0.0
     private var mTimer: Timer? = null
 
     override fun hasNoDataSoRefersToExisting(): Boolean {
@@ -83,14 +87,20 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
 
         if (type == "Point") {
             val targetPoint = getGeometryAsPoint(geoJSONStr)
-            val _prevPoint = mShapeLastUpdatedPointCache ?: targetPoint
+            val _prevPoint = mShapeLastUpdatedPoint ?: targetPoint
             val _targetPoint = targetPoint
 
             if (_prevPoint != null && _targetPoint != null) {
                 animateToNewPoint(_prevPoint, _targetPoint)
             }
         } else if (type == "LineString") {
-            Log.d("[ShapeSource]", "TODO: LineString not yet implemented")
+            val targetLine = getGeometryAsLine(geoJSONStr)
+
+            mTimer?.cancel()
+            mCurrentLineStartOffset = 0.0
+            mCurrentLineEndOffset = 0.0
+
+            applyGeometryFromLine(targetLine)
         } else {
             if (mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
                 mSource!!.data(mShape!!)
@@ -98,6 +108,16 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
                 mMap!!.getStyle()!!.setStyleSourceProperty(iD!!, "data", value)
             }
         }
+    }
+
+    fun setLineStartOffset(startOffset: Float) {
+        mStartOffset = startOffset.toDouble()
+        animateToNewLineStartOffset(mCurrentLineStartOffset, mStartOffset)
+    }
+
+    fun setLineEndOffset(endOffset: Float) {
+        mEndffset = endOffset.toDouble()
+        animateToNewLineStartOffset(mCurrentLineEndOffset, mEndffset)
     }
 
     fun setAnimationDuration(animationDuration: Float) {
@@ -144,7 +164,7 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
         mLineMetrics = lineMetrics
     }
 
-    private fun getGeometryAsPoint(pointStr: String): Point? {
+    private fun getGeometryAsPoint(pointStr: String?): Point? {
         val _pointStr = pointStr ?: return null
         val geometry = Point.fromJson(_pointStr)
         return geometry
@@ -158,7 +178,7 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
             return
         }
 
-        mShapeLastUpdatedPointCache = currentPoint
+        mShapeLastUpdatedPoint = currentPoint
 
         _mSource.geometry(currentPoint)
     }
@@ -214,6 +234,76 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
                 }
             }, 0, period.toLong()
         )
+    }
+
+    private fun getGeometryAsLine(lineStr: String?): LineString? {
+        val _lineStr = lineStr ?: return null
+        val geometry = LineString.fromJson(_lineStr)
+        return geometry
+    }
+
+    fun applyGeometryFromLine(currentLine: LineString?) {
+        val _mSource = mSource ?: return
+        val _style = mMap?.getStyle()
+
+        if (currentLine == null || mMapView == null || mMapView?.isDestroyed == true || _style == null) {
+            return
+        }
+
+        val length = TurfMeasurement.length(currentLine, TurfConstants.UNIT_METERS)
+        val geometryTrimmed = TurfMisc.lineSliceAlong(
+            currentLine,
+            mCurrentLineStartOffset,
+            length - mCurrentLineEndOffset,
+            TurfConstants.UNIT_METERS
+        )
+
+        _mSource.geometry(geometryTrimmed)
+    }
+
+    fun animateToNewLineStartOffset(prevOffset: Double, targetOffset: Double?) {
+        val targetOffset = targetOffset ?: return
+
+        mTimer?.cancel()
+
+        val _mAnimationDuration = mAnimationDuration?.toLong()
+        if (_mAnimationDuration == null || _mAnimationDuration <= 0) {
+            val lineString = getGeometryAsLine(mShape)
+            applyGeometryFromLine(lineString)
+            return
+        }
+
+        val fps = 30.0
+        var ratio = 0.0
+
+        val durationSec = _mAnimationDuration.toDouble() / 1000.0
+        val ratioIncr = 1.0 / (fps * durationSec)
+        val period = 1000.0 / fps
+
+        mTimer = Timer()
+        mTimer?.scheduleAtFixedRate(
+            object : TimerTask() {
+                override fun run() {
+                    runOnUiThread {
+                        ratio += ratioIncr
+                        if (ratio >= 1) {
+                            mTimer?.cancel()
+                            return@runOnUiThread
+                        }
+
+                        val progress = (targetOffset - prevOffset) * ratio
+                        mCurrentLineStartOffset = prevOffset + progress
+
+                        val lineString = getGeometryAsLine(mShape)
+                        applyGeometryFromLine(lineString)
+                    }
+                }
+            }, 0, period.toLong()
+        )
+    }
+
+    fun animateToNewLineEndOffset(prevOffset: Double, targetOffset: Double?) {
+        Log.d("RCTMGLShapeSource","animateToNewLineEndOffset is not implemented")
     }
 
     override fun onPress(event: OnPressEvent?) {
