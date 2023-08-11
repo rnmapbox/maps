@@ -18,8 +18,6 @@ export {
 } from './components/UserLocation';
 export { default as VectorSource } from './components/VectorSource';
 export { ShapeSource } from './components/ShapeSource';
-export { AnimatedPointSource } from './components/AnimatedPointSource';
-export { AnimatedLineSource } from './components/AnimatedLineSource';
 export { default as RasterSource } from './components/RasterSource';
 export { default as RasterDemSource } from './components/RasterDemSource';
 export { default as ImageSource } from './components/ImageSource';
