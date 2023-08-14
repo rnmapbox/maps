@@ -25,17 +25,192 @@ class RCTMGLShapeSource : RCTMGLSource {
 
   @objc var shape : String? {
     didSet {
-      logged("RCTMGLShapeSource.updateShape") {
-        let obj : GeoJSONObject = try parse(shape)
-
-        doUpdate { (style) in
-          logged("RCTMGLShapeSource.setShape") {
-            try style.updateGeoJSONSource(withId: id, geoJSON: obj)
-          }
+      guard
+        let obj = parseAsJSONObject(shape: shape) as? [String: Any],
+        let type = obj["type"] as? String,
+        let geoJSONObj = try? parse(shape)
+      else {
+        Logger.log(level: .error, message: ":: Error - unable to parse new shape")
+        return
+      }
+      
+      if (type == "Point") {
+        let targetPoint = try? getGeometryAsPoint(pointStr: shape)
+        let prevPoint = lastUpdatedPoint ?? targetPoint
+        if let prevPoint = prevPoint, let targetPoint = targetPoint {
+          animateToNewPoint(prevPoint: prevPoint, targetPoint: targetPoint)
         }
+      } else if (type == "LineString") {
+        timer?.invalidate()
+        currentLineStartOffset = 0.0
+        currentLineEndOffset = 0.0
+        let targetLine = try? getGeometryAsLine(lineStr: shape)
+        applyGeometryFromLine(currentLine: targetLine)
+      } else {
+        try? map?.mapboxMap.style.updateGeoJSONSource(withId: id, geoJSON: geoJSONObj)
       }
     }
   }
+  
+  @objc var lineStartOffset: NSNumber? {
+    didSet {
+      animateToNewLineStartOffset(
+        prevOffset: currentLineStartOffset,
+        targetOffset: lineStartOffset?.doubleValue
+      )
+    }
+  }
+  
+  @objc var lineEndOffset: NSNumber? {
+    didSet {
+      animateToNewLineEndOffset(
+        prevOffset: currentLineEndOffset,
+        targetOffset: lineEndOffset?.doubleValue
+      )
+    }
+  }
+  
+  @objc var animationDuration: NSNumber?
+  
+  @objc var snapIfDistanceIsGreaterThan: NSNumber?
+
+  private func getGeometryAsPoint(pointStr: String?) throws -> Point? {
+    guard let data = pointStr?.data(using: .utf8) else {
+      throw RCTMGLError.parseError("shape is not utf8")
+    }
+    
+    var geometry: Point
+    do {
+      geometry = try JSONDecoder().decode(Point.self, from: data)
+    } catch {
+      throw RCTMGLError.parseError("data cannot be decoded: \(error.localizedDescription)")
+    }
+    
+    return geometry
+  }
+
+  private func applyGeometryFromPoint(currentPoint: Point?) {
+    guard let style = map?.mapboxMap.style, let geometry = currentPoint else {
+      return
+    }
+    
+    lastUpdatedPoint = currentPoint
+    
+    let obj = GeoJSONObject.geometry(.point(geometry))
+    try? style.updateGeoJSONSource(withId: id, geoJSON: obj)
+  }
+
+  private func animateToNewPoint(prevPoint: Point, targetPoint: Point) {
+    self.timer?.invalidate()
+    
+    let lineBetween = LineString.init([
+      prevPoint.coordinates,
+      targetPoint.coordinates
+    ])
+    let distanceBetween = lineBetween.distance() ?? 0
+    
+    if let snapThreshold = snapIfDistanceIsGreaterThan?.doubleValue, distanceBetween > snapThreshold {
+      self.applyGeometryFromPoint(currentPoint: targetPoint)
+      return
+    }
+    
+    guard let animationDuration = animationDuration?.doubleValue, animationDuration > 0 else {
+      self.applyGeometryFromPoint(currentPoint: targetPoint)
+      return
+    }
+    
+    let fps: Double = 30
+    var ratio: Double = 0
+    
+    let durationSec = animationDuration / 1000
+    let ratioIncr = 1 / (fps * durationSec)
+    let period = 1000 / fps
+    
+    self.timer = Timer.scheduledTimer(withTimeInterval: period / 1000, repeats: true, block: { t in
+      ratio += ratioIncr
+      if ratio >= 1 {
+        t.invalidate()
+        return
+      }
+      
+      let coord = lineBetween.coordinateFromStart(distance: distanceBetween * ratio)!
+      let point = Point(coord)
+      self.applyGeometryFromPoint(currentPoint: point)
+    })
+  }
+
+  private func getGeometryAsLine(lineStr: String?) throws -> LineString? {
+    guard let data = lineStr?.data(using: .utf8) else {
+      throw RCTMGLError.parseError("line data could not be parsed")
+    }
+    
+    var geometry: LineString
+    do {
+      geometry = try JSONDecoder().decode(LineString.self, from: data)
+    } catch {
+      throw RCTMGLError.parseError("line string could not decoded: \(error.localizedDescription)")
+    }
+    
+    return geometry
+  }
+
+  func applyGeometryFromLine(currentLine: LineString?) {
+    guard let style = map?.mapboxMap.style, let geometry = currentLine else {
+      return
+    }
+    
+    guard let geometryTrimmed = geometry.trimmed(
+      from: currentLineStartOffset,
+      to: geometry.distance()! - currentLineEndOffset
+    ) else {
+      print("[RCTMGLShapeSource] line could not be trimmed")
+      return
+    }
+    
+    let obj = GeoJSONObject.geometry(.lineString(geometryTrimmed))
+    try? style.updateGeoJSONSource(withId: id, geoJSON: obj)
+  }
+
+  func animateToNewLineStartOffset(prevOffset: Double, targetOffset: Double?) {
+    guard let targetOffset = targetOffset else {
+      return
+    }
+
+    self.timer?.invalidate()
+
+    guard let duration = animationDuration?.doubleValue, duration > 0 else {
+      currentLineStartOffset = targetOffset
+      let lineString = try? getGeometryAsLine(lineStr: shape)
+      applyGeometryFromLine(currentLine: lineString)
+      return
+    }
+    
+    let fps: Double = 30
+    var ratio: Double = 0
+
+    let durationSec = duration / 1000
+    let ratioIncr = 1 / (fps * durationSec)
+    let period = 1000 / fps
+    
+    self.timer = Timer.scheduledTimer(withTimeInterval: period / 1000, repeats: true, block: { t in
+      ratio += ratioIncr
+      if ratio >= 1 {
+        t.invalidate()
+        return
+      }
+      
+      let progress = (targetOffset - prevOffset) * ratio
+      self.currentLineStartOffset = prevOffset + progress
+      
+      let lineString = try? self.getGeometryAsLine(lineStr: self.shape)
+      self.applyGeometryFromLine(currentLine: lineString)
+    })
+  }
+
+  func animateToNewLineEndOffset(prevOffset: Double, targetOffset: Double?) {
+      print("[RCTMGLShapeSource] animateToNewLineEndOffset is not implemented")
+  }
+
 
   @objc var cluster : NSNumber?
   @objc var clusterRadius : NSNumber?
@@ -59,6 +234,11 @@ class RCTMGLShapeSource : RCTMGLSource {
   @objc var tolerance : NSNumber?
   @objc var lineMetrics : NSNumber?
 
+  private var lastUpdatedPoint: Point?
+  private var currentLineStartOffset: Double = 0.0
+  private var currentLineEndOffset: Double = 0.0
+  private var timer: Timer?
+  
   override func sourceType() -> Source.Type {
     return GeoJSONSource.self
   }

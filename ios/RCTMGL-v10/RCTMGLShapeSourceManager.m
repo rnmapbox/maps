@@ -8,7 +8,10 @@ RCT_EXPORT_VIEW_PROPERTY(id, NSString)
 RCT_EXPORT_VIEW_PROPERTY(existing, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(url, NSString)
 RCT_EXPORT_VIEW_PROPERTY(shape, NSString)
-
+RCT_EXPORT_VIEW_PROPERTY(lineStartOffset, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(lineEndOffset, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(animationDuration, NSNumber)
+RCT_EXPORT_VIEW_PROPERTY(snapIfDistanceIsGreaterThan, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(cluster, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(clusterRadius, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(clusterMaxZoomLevel, NSNumber)
@@ -22,8 +25,6 @@ RCT_EXPORT_VIEW_PROPERTY(nativeImages, NSArray)
 RCT_EXPORT_VIEW_PROPERTY(hasPressListener, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(hitbox, NSDictionary)
 RCT_REMAP_VIEW_PROPERTY(onMapboxShapeSourcePress, onPress, RCTBubblingEventBlock)
-
-
 
 RCT_EXTERN_METHOD(getClusterExpansionZoom:(nonnull NSNumber*)reactTag
                                 featureJSON:(nonnull NSString*)featureJSON
