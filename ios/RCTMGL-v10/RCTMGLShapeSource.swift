@@ -26,6 +26,7 @@ class RCTMGLShapeSource : RCTMGLSource {
   @objc var shape : String? {
     didSet {
       let type = parseType(shape)
+      print("type: \(type)")
       
       switch type {
       case .FeatureCollection, .Feature, .Geometry:
@@ -40,11 +41,11 @@ class RCTMGLShapeSource : RCTMGLSource {
         let targetLine = try? getGeometryAsLine(shape)
         applyGeometryFromLine(targetLine)
       case .Point:
-          let targetPoint = try? getGeometryAsPoint(shape)
-          let prevPoint = lastUpdatedPoint ?? targetPoint
-          if let prevPoint = prevPoint, let targetPoint = targetPoint {
-            animateToNewPoint(prevPoint: prevPoint, targetPoint: targetPoint)
-          }
+        let targetPoint = try? getGeometryAsPoint(shape)
+        let prevPoint = lastUpdatedPoint ?? targetPoint
+        if let prevPoint = prevPoint, let targetPoint = targetPoint {
+          animateToNewPoint(prevPoint: prevPoint, targetPoint: targetPoint)
+        }
       default:
         break
       }
@@ -78,14 +79,30 @@ class RCTMGLShapeSource : RCTMGLSource {
       throw RCTMGLError.parseError("point data could not be parsed as utf-8")
     }
     
-    var geometry: Point
+    var point: Point?
+    
     do {
-      geometry = try JSONDecoder().decode(Point.self, from: data)
+      let obj = try JSONDecoder().decode(Feature.self, from: data)
+      switch obj.geometry {
+      case .point(let p):
+        point = p
+      default:
+        throw RCTMGLError.parseError("geoJSON object is not of type Feature")
+      }
     } catch {
       throw RCTMGLError.parseError("point data could not be decoded: \(error.localizedDescription)")
     }
     
-    return geometry
+    if point == nil {
+      do {
+        let obj = try JSONDecoder().decode(Point.self, from: data)
+        point = obj
+      } catch {
+        throw RCTMGLError.parseError("point data could not be decoded: \(error.localizedDescription)")
+      }
+    }
+    
+    return point
   }
 
   private func applyGeometryFromPoint(_ point: Point?) {
