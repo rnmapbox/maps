@@ -25,29 +25,28 @@ class RCTMGLShapeSource : RCTMGLSource {
 
   @objc var shape : String? {
     didSet {
-      guard
-        let obj = parseAsJSONObject(shape: shape) as? [String: Any],
-        let type = obj["type"] as? String,
-        let geoJSONObj = try? parse(shape)
-      else {
-        Logger.log(level: .error, message: ":: Error - unable to parse new shape")
-        return
-      }
+      let type = parseType(shape)
       
-      if (type == "Point") {
-        let targetPoint = try? getGeometryAsPoint(pointStr: shape)
-        let prevPoint = lastUpdatedPoint ?? targetPoint
-        if let prevPoint = prevPoint, let targetPoint = targetPoint {
-          animateToNewPoint(prevPoint: prevPoint, targetPoint: targetPoint)
+      switch type {
+      case .FeatureCollection, .Feature, .Geometry:
+        guard let geoJSONObj = try? parse(shape) else {
+          return
         }
-      } else if (type == "LineString") {
+        try? map?.mapboxMap.style.updateGeoJSONSource(withId: id, geoJSON: geoJSONObj)
+      case .LineString:
         timer?.invalidate()
         currentLineStartOffset = 0.0
         currentLineEndOffset = 0.0
-        let targetLine = try? getGeometryAsLine(lineStr: shape)
-        applyGeometryFromLine(currentLine: targetLine)
-      } else {
-        try? map?.mapboxMap.style.updateGeoJSONSource(withId: id, geoJSON: geoJSONObj)
+        let targetLine = try? getGeometryAsLine(shape)
+        applyGeometryFromLine(targetLine)
+      case .Point:
+          let targetPoint = try? getGeometryAsPoint(shape)
+          let prevPoint = lastUpdatedPoint ?? targetPoint
+          if let prevPoint = prevPoint, let targetPoint = targetPoint {
+            animateToNewPoint(prevPoint: prevPoint, targetPoint: targetPoint)
+          }
+      default:
+        break
       }
     }
   }
@@ -74,27 +73,27 @@ class RCTMGLShapeSource : RCTMGLSource {
   
   @objc var snapIfDistanceIsGreaterThan: NSNumber?
 
-  private func getGeometryAsPoint(pointStr: String?) throws -> Point? {
-    guard let data = pointStr?.data(using: .utf8) else {
-      throw RCTMGLError.parseError("shape is not utf8")
+  private func getGeometryAsPoint(_ str: String?) throws -> Point? {
+    guard let data = str?.data(using: .utf8) else {
+      throw RCTMGLError.parseError("point data could not be parsed as utf-8")
     }
     
     var geometry: Point
     do {
       geometry = try JSONDecoder().decode(Point.self, from: data)
     } catch {
-      throw RCTMGLError.parseError("data cannot be decoded: \(error.localizedDescription)")
+      throw RCTMGLError.parseError("point data could not be decoded: \(error.localizedDescription)")
     }
     
     return geometry
   }
 
-  private func applyGeometryFromPoint(currentPoint: Point?) {
-    guard let style = map?.mapboxMap.style, let geometry = currentPoint else {
+  private func applyGeometryFromPoint(_ point: Point?) {
+    guard let style = map?.mapboxMap.style, let geometry = point else {
       return
     }
     
-    lastUpdatedPoint = currentPoint
+    lastUpdatedPoint = point
     
     let obj = GeoJSONObject.geometry(.point(geometry))
     try? style.updateGeoJSONSource(withId: id, geoJSON: obj)
@@ -110,12 +109,12 @@ class RCTMGLShapeSource : RCTMGLSource {
     let distanceBetween = lineBetween.distance() ?? 0
     
     if let snapThreshold = snapIfDistanceIsGreaterThan?.doubleValue, distanceBetween > snapThreshold {
-      self.applyGeometryFromPoint(currentPoint: targetPoint)
+      self.applyGeometryFromPoint(targetPoint)
       return
     }
     
     guard let animationDuration = animationDuration?.doubleValue, animationDuration > 0 else {
-      self.applyGeometryFromPoint(currentPoint: targetPoint)
+      self.applyGeometryFromPoint(targetPoint)
       return
     }
     
@@ -135,27 +134,43 @@ class RCTMGLShapeSource : RCTMGLSource {
       
       let coord = lineBetween.coordinateFromStart(distance: distanceBetween * ratio)!
       let point = Point(coord)
-      self.applyGeometryFromPoint(currentPoint: point)
+      self.applyGeometryFromPoint(point)
     })
   }
 
-  private func getGeometryAsLine(lineStr: String?) throws -> LineString? {
-    guard let data = lineStr?.data(using: .utf8) else {
-      throw RCTMGLError.parseError("line data could not be parsed")
+  private func getGeometryAsLine(_ str: String?) throws -> LineString? {
+    guard let data = str?.data(using: .utf8) else {
+      throw RCTMGLError.parseError("line data could not be parsed as utf-8")
     }
+
+    var lineString: LineString?
     
-    var geometry: LineString
     do {
-      geometry = try JSONDecoder().decode(LineString.self, from: data)
+      let obj = try JSONDecoder().decode(Feature.self, from: data)
+      switch obj.geometry {
+      case .lineString(let ls):
+        lineString = ls
+      default:
+        throw RCTMGLError.parseError("geoJSON object is not of type Feature")
+      }
     } catch {
-      throw RCTMGLError.parseError("line string could not decoded: \(error.localizedDescription)")
+      throw RCTMGLError.parseError("line data could not be decoded: \(error.localizedDescription)")
     }
     
-    return geometry
+    if lineString == nil {
+      do {
+        let obj = try JSONDecoder().decode(LineString.self, from: data)
+        lineString = obj
+      } catch {
+        throw RCTMGLError.parseError("line data could not be decoded: \(error.localizedDescription)")
+      }
+    }
+    
+    return lineString
   }
 
-  func applyGeometryFromLine(currentLine: LineString?) {
-    guard let style = map?.mapboxMap.style, let geometry = currentLine else {
+  func applyGeometryFromLine(_ line: LineString?) {
+    guard let style = map?.mapboxMap.style, let geometry = line else {
       return
     }
     
@@ -180,8 +195,8 @@ class RCTMGLShapeSource : RCTMGLSource {
 
     guard let duration = animationDuration?.doubleValue, duration > 0 else {
       currentLineStartOffset = targetOffset
-      let lineString = try? getGeometryAsLine(lineStr: shape)
-      applyGeometryFromLine(currentLine: lineString)
+      let lineString = try? getGeometryAsLine(shape)
+      applyGeometryFromLine(lineString)
       return
     }
     
@@ -202,8 +217,8 @@ class RCTMGLShapeSource : RCTMGLSource {
       let progress = (targetOffset - prevOffset) * ratio
       self.currentLineStartOffset = prevOffset + progress
       
-      let lineString = try? self.getGeometryAsLine(lineStr: self.shape)
-      self.applyGeometryFromLine(currentLine: lineString)
+      let lineString = try? self.getGeometryAsLine(self.shape)
+      self.applyGeometryFromLine(lineString)
     })
   }
 
@@ -350,8 +365,52 @@ extension RCTMGLShapeSource
 
 // MARK: - parse(shape)
 
+enum ShapeType {
+  case Geometry, LineString, Point, Feature, FeatureCollection, Url, Unknown
+}
+
 extension RCTMGLShapeSource
 {
+  func parseType(_ shape: String?) -> ShapeType {
+    guard let shape = shape else {
+      return .Unknown
+    }
+    
+    let data: GeoJSONSourceData
+    do {
+      data = try parse(shape)
+    } catch {
+      return .Unknown
+    }
+    
+    switch data {
+    case .feature(let feature):
+      switch feature.geometry {
+      case .lineString:
+        return .LineString
+      case .point:
+        return .Point
+      default:
+        return .Feature
+      }
+    case .featureCollection:
+      return .FeatureCollection
+    case .geometry(let geometry):
+      switch geometry {
+      case .lineString:
+        return .LineString
+      case .point:
+        return .Point
+      default:
+        return .Geometry
+      }
+    case .url:
+      return .Url
+    default:
+      return .Unknown
+    }
+  }
+
   func parse(_ shape: String) throws -> GeoJSONSourceData {
     guard let data = shape.data(using: .utf8) else {
       throw RCTMGLError.parseError("shape is not utf8")
