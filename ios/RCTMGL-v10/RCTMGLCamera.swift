@@ -3,7 +3,7 @@ import MapboxMaps
 import Turf
 
 enum RemovalReason {
-    case ViewRemoval, StyleChange, OnDestory, ComponentChange, Reorder
+    case ViewRemoval, StyleChange, OnDestroy, ComponentChange, Reorder
 }
 
 protocol RCTMGLMapComponent: AnyObject {
