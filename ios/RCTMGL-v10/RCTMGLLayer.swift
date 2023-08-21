@@ -159,6 +159,12 @@ class RCTMGLLayer : UIView, RCTMGLMapComponent, RCTMGLSourceConsumer {
 
   func position() -> LayerPosition {
     if let belowLayerID = belowLayerID {
+      if aboveLayerID != nil {
+        Logger.log(level: .warn, message: "Both below layer and above layer is specified => above layer id is ingored")
+      }
+      if layerIndex != nil {
+        Logger.log(level: .warn, message: "Both below layer and layer index is specified => layer index is ignored")
+      }
       return .below(belowLayerID)
     } else if let aboveLayerID = aboveLayerID {
       return .above(aboveLayerID)
