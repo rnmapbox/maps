@@ -25,15 +25,15 @@ class RCTMGLShapeSource : RCTMGLSource {
 
   @objc var shape : String? {
     didSet {
-      let type = parseType(shape)
-      print("type: \(type)")
-      
+      let type = getGeoJSONType(shape)
       switch type {
       case .FeatureCollection, .Feature, .Geometry:
-        guard let geoJSONObj = try? parse(shape) else {
-          return
+        do {
+          let geoJSONObj = try getGeoJSONObject(shape!)
+          try map?.mapboxMap.style.updateGeoJSONSource(withId: id, geoJSON: geoJSONObj)
+        } catch {
+          Logger.log(level: .error, message: ":: Cannot get geoJSON object from shape \(error) \(error.localizedDescription)")
         }
-        try? map?.mapboxMap.style.updateGeoJSONSource(withId: id, geoJSON: geoJSONObj)
       case .LineString:
         timer?.invalidate()
         currentLineStartOffset = 0.0
@@ -80,17 +80,17 @@ class RCTMGLShapeSource : RCTMGLSource {
     }
     
     var point: Point?
-    
+
     do {
       let obj = try JSONDecoder().decode(Feature.self, from: data)
       switch obj.geometry {
       case .point(let p):
         point = p
       default:
-        throw RCTMGLError.parseError("geoJSON object is not of type Feature")
+        throw RCTMGLError.parseError("point data could not be decoded because geometry is not of type Point")
       }
     } catch {
-      throw RCTMGLError.parseError("point data could not be decoded: \(error.localizedDescription)")
+      throw RCTMGLError.parseError("feature data could not be decoded: \(error.localizedDescription)")
     }
     
     if point == nil {
@@ -168,10 +168,10 @@ class RCTMGLShapeSource : RCTMGLSource {
       case .lineString(let ls):
         lineString = ls
       default:
-        throw RCTMGLError.parseError("geoJSON object is not of type Feature")
+        throw RCTMGLError.parseError("line data could not be decoded because geometry is not of type LineString")
       }
     } catch {
-      throw RCTMGLError.parseError("line data could not be decoded: \(error.localizedDescription)")
+      throw RCTMGLError.parseError("feature data could not be decoded: \(error.localizedDescription)")
     }
     
     if lineString == nil {
@@ -195,7 +195,7 @@ class RCTMGLShapeSource : RCTMGLSource {
       from: currentLineStartOffset,
       to: geometry.distance()! - currentLineEndOffset
     ) else {
-      print("[RCTMGLShapeSource] line could not be trimmed")
+      Logger.error("[RCTMGLShapeSource] line could not be trimmed")
       return
     }
     
@@ -281,7 +281,7 @@ class RCTMGLShapeSource : RCTMGLSource {
 
     if let shape = shape {
       do {
-        result.data = try parse(shape)
+        result.data = try getGeoJSONSourceData(shape)
       } catch {
         Logger.log(level: .error, message: "Unable to read shape: \(shape) \(error) setting it to empty")
         result.data = emptyShape()
@@ -386,52 +386,45 @@ enum ShapeType {
   case Geometry, LineString, Point, Feature, FeatureCollection, Url, Unknown
 }
 
-extension RCTMGLShapeSource
-{
-  func parseType(_ shape: String?) -> ShapeType {
-    guard let shape = shape else {
-      return .Unknown
-    }
-    
+extension RCTMGLShapeSource {
+  func getGeoJSONType(_ shape: String?) -> ShapeType {
     let data: GeoJSONSourceData
     do {
-      data = try parse(shape)
+      data = try getGeoJSONSourceData(shape)
     } catch {
       return .Unknown
     }
-    
+
     switch data {
     case .feature(let feature):
-      switch feature.geometry {
-      case .lineString:
-        return .LineString
-      case .point:
-        return .Point
-      default:
-        return .Feature
-      }
+      return getGeometryType(feature.geometry) ?? .Feature
     case .featureCollection:
       return .FeatureCollection
     case .geometry(let geometry):
-      switch geometry {
-      case .lineString:
-        return .LineString
-      case .point:
-        return .Point
-      default:
-        return .Geometry
-      }
+      return getGeometryType(geometry) ?? .Geometry
     case .url:
       return .Url
     default:
       return .Unknown
     }
   }
+  
+  func getGeometryType(_ geometry: Geometry?) -> ShapeType? {
+    switch geometry {
+    case .lineString:
+      return .LineString
+    case .point:
+      return .Point
+    default:
+      return nil
+    }
+  }
 
-  func parse(_ shape: String) throws -> GeoJSONSourceData {
-    guard let data = shape.data(using: .utf8) else {
+  func getGeoJSONSourceData(_ shape: String?) throws -> GeoJSONSourceData {
+    guard let data = shape?.data(using: .utf8) else {
       throw RCTMGLError.parseError("shape is not utf8")
     }
+    
     do {
       return try JSONDecoder().decode(GeoJSONSourceData.self, from: data)
     } catch {
@@ -446,18 +439,12 @@ extension RCTMGLShapeSource
     }
   }
 
-  func parse(_ shape: String) throws -> Feature {
-    guard let data = shape.data(using: .utf8) else {
-      throw RCTMGLError.parseError("shape is not utf8")
-    }
-    return try JSONDecoder().decode(Feature.self, from: data)
-  }
-
-  func parse(_ shape: String?) throws -> GeoJSONObject {
+  func getGeoJSONObject(_ shape: String?) throws -> GeoJSONObject {
     guard let shape = shape else {
       return emptyGeoJSONObject()
     }
-    let data : GeoJSONSourceData = try parse(shape)
+    
+    let data = try getGeoJSONSourceData(shape)
     switch data {
     case .empty:
       return emptyGeoJSONObject()
@@ -472,6 +459,14 @@ extension RCTMGLShapeSource
     }
   }
 
+  func getFeature(_ shape: String) throws -> Feature {
+    guard let data = shape.data(using: .utf8) else {
+      throw RCTMGLError.parseError("shape is not utf8")
+    }
+    
+    return try JSONDecoder().decode(Feature.self, from: data)
+  }
+
   func emptyGeoJSONObject() -> GeoJSONObject {
     return .featureCollection(emptyFeatureCollection())
   }
@@ -483,26 +478,11 @@ extension RCTMGLShapeSource
   func emptyFeatureCollection() -> FeatureCollection {
     return FeatureCollection(features:[])
   }
-
-  func parseAsJSONObject(shape: String?) -> Any? {
-    guard let shape = shape else {
-      return nil
-    }
-    guard let data = shape.data(using: .utf8) else {
-      Logger.log(level: .error, message: "shapeSource.setShape: Shape is not utf8")
-      return nil
-    }
-    let objs = logged("shapeSource.setShape.parseJSON") {
-      try JSONSerialization.jsonObject(with: data)
-    }
-    return objs
-  }
 }
 
 // MARK: - getClusterExpansionZoom/getClusterLeaves
 
-extension RCTMGLShapeSource
-{
+extension RCTMGLShapeSource {
   func getClusterExpansionZoom(
     _ featureJSON: String,
     completion: @escaping (Result<Int, Error>) -> Void)
@@ -515,7 +495,7 @@ extension RCTMGLShapeSource
     logged("RCTMGLShapeSource.getClusterExpansionZoom", rejecter: { (_,_,error) in
       completion(.failure(error!))
     }) {
-      let cluster : Feature = try parse(featureJSON);
+      let cluster: Feature = try getFeature(featureJSON);
 
       mapView.mapboxMap.queryFeatureExtension(for: self.id, feature: cluster, extension: "supercluster", extensionField: "expansion-zoom") { result in
         switch result {
@@ -546,7 +526,7 @@ extension RCTMGLShapeSource
     logged("RCTMGLShapeSource.getClusterLeaves", rejecter: { (_,_,error) in
       completion(.failure(error!))
     }) {
-      let cluster : Feature = try parse(featureJSON);
+      let cluster: Feature = try getFeature(featureJSON);
       mapView.mapboxMap.queryFeatureExtension(for: self.id, feature: cluster,  extension: "supercluster", extensionField: "leaves", args: ["limit": UInt64(number),"offset": UInt64(offset)]) {
         result in
         switch result {
@@ -568,7 +548,7 @@ extension RCTMGLShapeSource
     logged("RCTMGLShapeSource.getClusterChildren", rejecter: { (_,_,error) in
       completion(.failure(error!))
     }) {
-      let cluster : Feature = try parse(featureJSON);
+      let cluster: Feature = try getFeature(featureJSON);
       mapView.mapboxMap.queryFeatureExtension(for: self.id, feature: cluster, extension: "supercluster", extensionField: "children") {
         result in
         switch result {
