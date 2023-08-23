@@ -666,6 +666,62 @@ await this._map.setSourceVisibility(false, 'composite', 'building')
 ```
 
 
+### setFeatureState(sourceId[, sourceLayerId], featureId, state)
+
+Update the state map of a feature within a style source. Update entries in the state map of a given feature within a style source.<br/>Only entries listed in the state map will be updated. An entry in the feature state map that is not listed in state will retain its previous value.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `sourceId` | `string` | `Yes` | Identifier of the target source (e.g. 'composite') |
+| `sourceLayerId` | `String` | `No` | Identifier of the target source-layer (e.g. 'building') |
+| `featureId` | `string` | `Yes` | Identifier of the feature whose state should be updated. |
+| `state` | `{[key:string]:any}` | `Yes` | undefined |
+
+
+
+```javascript
+await this._map.setFeatureState('composite', 'building', 'id-01, { active: true })
+```
+
+
+### getFeatureState(sourceId[, sourceLayerId], featureId)
+
+Get the state map of a feature within a style source.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `sourceId` | `string` | `Yes` | Identifier of the target source (e.g. 'composite') |
+| `sourceLayerId` | `String` | `No` | Identifier of the target source-layer (e.g. 'building') |
+| `featureId` | `string` | `Yes` | Identifier of the feature whose state should be retrieved. |
+
+
+
+```javascript
+await this._map.getFeatureState('composite', 'building', 'id')
+```
+
+
+### removeFeatureState(sourceId[, sourceLayerId], featureId[, stateKey])
+
+Removes entries from a feature state object.<br/><br/>Remove a specified property or all property from a feature’s state object, depending on the value of stateKey.
+
+#### arguments
+| Name | Type | Required | Description  |
+| ---- | :--: | :------: | :----------: |
+| `sourceId` | `string` | `Yes` | The style source identifier |
+| `sourceLayerId` | `String` | `No` | Identifier of the target source-layer (e.g. 'building') |
+| `featureId` | `string` | `Yes` | Identifier of the feature whose state should be updated. |
+| `stateKey` | `String` | `No` | The key of the property to remove. If null, all feature’s state object properties are removed. Defaults to null. |
+
+
+
+```javascript
+this._map.removeFeatureState('composite', 'building', 'id', 'active')
+```
+
+
 ### showAttribution()
 
 Show the attribution and telemetry action sheet.<br/>If you implement a custom attribution button, you should add this action to the button.

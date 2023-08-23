@@ -292,6 +292,30 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
                     args!!.getString(3)
                 );
             }
+            "setFeatureState" -> {
+                mapView!!.setFeatureState(
+                    args!!.getString(1),
+                    args!!.getString(2),
+                    args!!.getString(3),
+                    args!!.getString(4),
+                );
+            }
+            "getFeatureState" -> {
+                mapView!!.getFeatureState(
+                    args!!.getString(0),
+                    args!!.getString(1),
+                    args!!.getString(2),
+                    args!!.getString(3),
+                );
+            }
+            "removeFeatureState" -> {
+                mapView!!.removeFeatureState(
+                    args!!.getString(1),
+                    args!!.getString(2),
+                    args!!.getString(3),
+                    args!!.getString(4)
+                );
+            }
             "queryRenderedFeaturesAtPoint" -> {
                 mapView.queryRenderedFeaturesAtPoint(
                     args!!.getString(0),

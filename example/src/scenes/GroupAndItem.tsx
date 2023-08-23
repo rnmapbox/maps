@@ -86,6 +86,7 @@ import MapHandlers from '../examples/V10/MapHandlers';
 import Markers from '../examples/V10/Markers';
 import QueryTerrainElevation from '../examples/V10/QueryTerrainElevation';
 import TerrainSkyAtmosphere from '../examples/V10/TerrainSkyAtmosphere';
+import SetFeatureState from '../examples/V10/SetFeatureState';
 
 const MostRecentExampleKey = '@recent_example';
 
@@ -265,6 +266,7 @@ const Examples = new ExampleGroup('React Native Mapbox', [
     new ExampleItem('Query Terrain Elevation', QueryTerrainElevation),
     new ExampleItem('Camera Animation', CameraAnimation),
     new ExampleItem('Map Handlers', MapHandlers),
+    new ExampleItem('Set Feature State', SetFeatureState),
   ]),
   new ExampleGroup('Map', [
     new ExampleItem('Show Map', ShowMap),

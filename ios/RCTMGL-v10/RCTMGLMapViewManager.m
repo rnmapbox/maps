@@ -51,6 +51,29 @@ RCT_EXTERN_METHOD(setSourceVisibility:(nonnull NSNumber *)reactTag
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(setFeatureState:(nonnull NSNumber *)reactTag
+                  sourceId:(nonnull NSString*)sourceId
+                  sourceLayerId:(nullable NSString*)sourceLayerId
+                  featureId:(nonnull NSString*)featureId
+                  state:(nonnull NSDictionary<NSString *, id> *)state
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(getFeatureState:(nonnull NSNumber *)reactTag
+                  sourceId:(nonnull NSString*)sourceId
+                  sourceLayerId:(nullable NSString*)sourceLayerId
+                  featureId:(nonnull NSString*)featureId
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(removeFeatureState:(nonnull NSNumber *)reactTag
+                  sourceId:(nonnull NSString*)sourceId
+                  sourceLayerId:(nullable NSString*)sourceLayerId
+                  featureId:(nonnull NSString*)featureId
+                  stateKey:(nullable NSString*)stateKey
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+
 RCT_EXTERN_METHOD(getCenter:(nonnull NSNumber*)reactTag
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)

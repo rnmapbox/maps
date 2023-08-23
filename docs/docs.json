@@ -3098,6 +3098,156 @@
         ]
       },
       {
+        "name": "setFeatureState",
+        "docblock": "Update the state map of a feature within a style source. Update entries in the state map of a given feature within a style source.\nOnly entries listed in the state map will be updated. An entry in the feature state map that is not listed in state will retain its previous value.\n\n@example\nawait this._map.setFeatureState('composite', 'building', 'id-01, { active: true })\n\n@param {String} sourceId - Identifier of the target source (e.g. 'composite')\n@param {String=} sourceLayerId - Identifier of the target source-layer (e.g. 'building')\n@param {String} featureId - Identifier of the feature whose state should be updated.\n@param",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "sourceId",
+            "description": "Identifier of the target source (e.g. 'composite')",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "sourceLayerId",
+            "description": "Identifier of the target source-layer (e.g. 'building')",
+            "type": {
+              "name": "String"
+            },
+            "optional": true
+          },
+          {
+            "name": "featureId",
+            "description": "Identifier of the feature whose state should be updated.",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "state",
+            "optional": false,
+            "type": {
+              "name": "{[key:string]:any}"
+            }
+          }
+        ],
+        "returns": null,
+        "description": "Update the state map of a feature within a style source. Update entries in the state map of a given feature within a style source.\nOnly entries listed in the state map will be updated. An entry in the feature state map that is not listed in state will retain its previous value.",
+        "examples": [
+          "\nawait this._map.setFeatureState('composite', 'building', 'id-01, { active: true })\n\n"
+        ]
+      },
+      {
+        "name": "getFeatureState",
+        "docblock": "Get the state map of a feature within a style source.\n\n@example\nawait this._map.getFeatureState('composite', 'building', 'id')\n\n@param {String} sourceId - Identifier of the target source (e.g. 'composite')\n@param {String=} sourceLayerId - Identifier of the target source-layer (e.g. 'building')\n@param {String} featureId - Identifier of the feature whose state should be retrieved.\n@return {Promise<{ [key: string]: any }>} Promise that resolves to the feature state object.",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "sourceId",
+            "description": "Identifier of the target source (e.g. 'composite')",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "sourceLayerId",
+            "description": "Identifier of the target source-layer (e.g. 'building')",
+            "type": {
+              "name": "String"
+            },
+            "optional": true
+          },
+          {
+            "name": "featureId",
+            "description": "Identifier of the feature whose state should be retrieved.",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "signature",
+                "type": "object",
+                "raw": "{ [key: string]: any }",
+                "signature": {
+                  "properties": [
+                    {
+                      "key": {
+                        "name": "string"
+                      },
+                      "value": {
+                        "name": "any",
+                        "required": true
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "raw": "Promise<{ [key: string]: any }>"
+          }
+        },
+        "description": "Get the state map of a feature within a style source.",
+        "examples": [
+          "\nawait this._map.getFeatureState('composite', 'building', 'id')\n\n"
+        ]
+      },
+      {
+        "name": "removeFeatureState",
+        "docblock": "Removes entries from a feature state object.\n\nRemove a specified property or all property from a feature’s state object, depending on the value of stateKey.\n\n@example\nthis._map.removeFeatureState('composite', 'building', 'id', 'active')\n\n@param {String} sourceId - The style source identifier\n@param {String=} sourceLayerId - Identifier of the target source-layer (e.g. 'building')\n@param {String} featureId - Identifier of the feature whose state should be updated.\n@param {String} stateKey - The key of the property to remove. If null, all feature’s state object properties are removed. Defaults to null.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "sourceId",
+            "description": "The style source identifier",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "sourceLayerId",
+            "description": "Identifier of the target source-layer (e.g. 'building')",
+            "type": {
+              "name": "String"
+            },
+            "optional": true
+          },
+          {
+            "name": "featureId",
+            "description": "Identifier of the feature whose state should be updated.",
+            "type": {
+              "name": "string"
+            },
+            "optional": false
+          },
+          {
+            "name": "stateKey",
+            "description": "The key of the property to remove. If null, all feature’s state object properties are removed. Defaults to null.",
+            "type": {
+              "name": "String"
+            },
+            "optional": true
+          }
+        ],
+        "returns": null,
+        "description": "Removes entries from a feature state object.\n\nRemove a specified property or all property from a feature’s state object, depending on the value of stateKey.",
+        "examples": [
+          "\nthis._map.removeFeatureState('composite', 'building', 'id', 'active')\n\n"
+        ]
+      },
+      {
         "name": "showAttribution",
         "docblock": "Show the attribution and telemetry action sheet.\nIf you implement a custom attribution button, you should add this action to the button.",
         "modifiers": [],

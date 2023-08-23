@@ -1099,6 +1099,45 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
         }
     }
 
+    fun setFeatureState(
+        sourceId: String,
+        sourceLayerId: String?,
+        featureId: String,
+        state: Map<String, Any>
+    ) {
+        if (mMap == null) {
+            Logger.e("MapView", "setFeatureState, map is null")
+            return
+        }
+        mMap.setFeatureState(sourceId, sourceLayerId, featureId, state)
+    }
+
+    fun getFeatureState(
+        callbackID: String?,
+        sourceId: String,
+        sourceLayerId: String?,
+        featureId: String
+    ) {
+        val result = mMap?.getFeatureState(sourceId, sourceLayerId, featureId) { result ->
+            sendResponse(callbackID) { response ->
+                if (result != null) {
+                      response.putString("data", "test")
+                  } else {
+                      response.putNull("data")
+                  }
+            }
+       }
+    }
+
+    fun removeFeatureState(
+        sourceId: String,
+        sourceLayerId: String?,
+        featureId: String,
+        stateKey: String?
+    ) {
+        mMap?.removeFeatureState(sourceId, sourceLayerId, featureId, stateKey)
+    }
+
     // endregion
 
     companion object {
