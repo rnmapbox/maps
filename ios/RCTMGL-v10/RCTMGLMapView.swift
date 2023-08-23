@@ -129,7 +129,7 @@ open class RCTMGLMapView : MapView {
       if let entryIndex = entryIndex {
         var entry = features[entryIndex]
         if (entry.addedToMap) {
-            mapComponent.removeFromMap(self, reason: .OnDestory)
+            mapComponent.removeFromMap(self, reason: .OnDestroy)
             entry.addedToMap = false
         }
         features.remove(at: entryIndex)
