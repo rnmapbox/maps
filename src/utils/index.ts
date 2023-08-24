@@ -71,6 +71,10 @@ export function runNativeCommand<ReturnType = NativeArg>(
   nativeRef: any,
   args: NativeArg[],
 ): Promise<ReturnType> {
+  throw new Error(
+    `TODO: figure out what this method actually does and do it in a way that doesn't instantly crash on the new arch`,
+  );
+
   const handle = findNodeHandle(nativeRef);
   if (!handle) {
     throw new Error(`Could not find handle for native ref ${module}.${name}`);
