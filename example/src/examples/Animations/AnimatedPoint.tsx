@@ -7,6 +7,7 @@ import {
 } from '@rnmapbox/maps';
 import { Position } from 'geojson';
 import React, { memo, useCallback, useMemo, useState } from 'react';
+import { View } from 'react-native';
 import { point } from '@turf/helpers';
 import { Button } from '@rneui/base';
 
@@ -49,9 +50,20 @@ const AnimatedLine = memo((props: BaseExampleProps) => {
             }}
           />
         </ShapeSource>
-
-        <Button title={'Change position'} onPress={onPressButton} />
       </MapView>
+      <View
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          flex: 1,
+          justifyContent: 'flex-end',
+          padding: 10,
+        }}
+        pointerEvents={'box-none'}
+      >
+        <Button title={'Change position'} onPress={onPressButton} />
+      </View>
     </Page>
   );
 });
