@@ -11,6 +11,7 @@ import { lineString } from '@turf/helpers';
 import bbox from '@turf/bbox';
 import { Button } from '@rneui/base';
 import length from '@turf/length';
+import { View } from 'react-native';
 
 import Page from '../common/Page';
 import { BaseExampleProps } from '../common/BaseExamplePropTypes';
@@ -76,9 +77,19 @@ const AnimatedLine = memo((props: BaseExampleProps) => {
             }}
           />
         </ShapeSource>
-
-        <Button title={'Change line offset'} onPress={onPressButton} />
       </MapView>
+      <View
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          flex: 1,
+          justifyContent: 'flex-end',
+          padding: 10,
+        }}
+      >
+        <Button title={'Change line offset'} onPress={onPressButton} />
+      </View>
     </Page>
   );
 });
