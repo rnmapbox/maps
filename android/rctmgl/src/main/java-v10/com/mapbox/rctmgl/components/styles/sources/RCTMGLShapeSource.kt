@@ -60,16 +60,14 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
         // Wait for style before adding the source to the map
         mapView.getMapboxMap().getStyle {
             val map = mapView.getMapboxMap()
-            super@RCTMGLShapeSource.addToMap(mapView)
+            super.addToMap(mapView)
         }
     }
 
     override fun makeSource(): GeoJsonSource {
         val builder = GeoJsonSource.Builder(iD.toString())
         getOptions(builder)
-
         builder.data(mShape ?: mURL.toString())
-
         return builder.build()
     }
 
@@ -80,32 +78,29 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
         }
     }
 
-    fun setShape(geoJSONStr: String) {
-        mShape = geoJSONStr
-        val obj = JSONObject(geoJSONStr)
-        val type = obj.get("type")
-
-        if (type == "Point") {
-            val targetPoint = getGeometryAsPoint(geoJSONStr)
-            val _prevPoint = mShapeLastUpdatedPoint ?: targetPoint
-            val _targetPoint = targetPoint
-
-            if (_prevPoint != null && _targetPoint != null) {
-                animateToNewPoint(_prevPoint, _targetPoint)
-            }
-        } else if (type == "LineString") {
-            val targetLine = getGeometryAsLine(geoJSONStr)
-
-            mTimer?.cancel()
-            mCurrentLineStartOffset = 0.0
-            mCurrentLineEndOffset = 0.0
-
-            applyGeometryFromLine(targetLine)
-        } else {
+    fun setShape(shape: String) {
+        mShape = shape
+        val type = getGeoJSONType(shape)
+        if (type == ShapeType.FEATURE_COLLECTION || type == ShapeType.FEATURE || type == ShapeType.GEOMETRY) {
             if (mSource != null && mMapView != null && !mMapView!!.isDestroyed) {
                 mSource!!.data(mShape!!)
                 val value = Value.valueOf(mShape!!)
                 mMap!!.getStyle()!!.setStyleSourceProperty(iD!!, "data", value)
+            }
+        } else if (type == ShapeType.LINESTRING) {
+            mTimer?.cancel()
+            mCurrentLineStartOffset = 0.0
+            mCurrentLineEndOffset = 0.0
+            val targetLine = getGeometryAsLine(shape)
+            applyGeometryFromLine(targetLine)
+        } else if (type == ShapeType.POINT) {
+            val targetPoint = getGeometryAsPoint(shape)
+            if (mShapeLastUpdatedPoint == null) {
+                mShapeLastUpdatedPoint = targetPoint
+            }
+            val prevPoint = mShapeLastUpdatedPoint ?: targetPoint
+            if (prevPoint != null && targetPoint != null) {
+                animateToNewPoint(prevPoint, targetPoint)
             }
         }
     }
@@ -166,8 +161,18 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
 
     private fun getGeometryAsPoint(pointStr: String?): Point? {
         val _pointStr = pointStr ?: return null
-        val geometry = Point.fromJson(_pointStr)
-        return geometry
+        var point: Point? = null
+
+        try {
+            point = Point.fromJson(_pointStr)
+        } catch (_: Exception) {
+            try {
+                val feature = Feature.fromJson(_pointStr)
+                point = feature.geometry() as Point
+            } catch (_: Exception) {}
+        }
+
+        return point
     }
 
     private fun applyGeometryFromPoint(currentPoint: Point?) {
@@ -195,7 +200,7 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
         val distanceBetween = TurfMeasurement.length(lineBetween, TurfConstants.UNIT_METERS)
 
         val _mSnapThreshold = mSnapIfDistanceIsGreaterThan?.toLong()
-        if( _mSnapThreshold != null && distanceBetween > _mSnapThreshold) {
+        if (_mSnapThreshold != null && distanceBetween > _mSnapThreshold) {
             applyGeometryFromPoint(targetPoint)
             return
         }
@@ -303,7 +308,29 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
     }
 
     fun animateToNewLineEndOffset(prevOffset: Double, targetOffset: Double?) {
-        Log.d("RCTMGLShapeSource","animateToNewLineEndOffset is not implemented")
+        Log.d("RCTMGLShapeSource", "animateToNewLineEndOffset is not implemented")
+    }
+
+    enum class ShapeType {
+        GEOMETRY, LINESTRING, POINT, FEATURE, FEATURE_COLLECTION, URL, UNKNOWN
+    }
+
+    fun getGeoJSONType(geoJSONStr: String?): ShapeType {
+        val obj = JSONObject(geoJSONStr)
+        val type = obj.get("type")
+        val geometryType = obj.getJSONObject("geometry").get("type")
+
+        if (type == "Point" || geometryType == "Point") {
+            return ShapeType.POINT
+        } else if (type == "LineString" || geometryType == "LineString") {
+            return ShapeType.LINESTRING
+        } else if (type == "FeatureCollection") {
+            return ShapeType.FEATURE_COLLECTION
+        } else if (type == "Feature") {
+            return ShapeType.FEATURE
+        } else {
+            return ShapeType.UNKNOWN
+        }
     }
 
     override fun onPress(event: OnPressEvent?) {
