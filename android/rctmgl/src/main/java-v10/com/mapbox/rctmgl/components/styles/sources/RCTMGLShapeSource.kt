@@ -243,8 +243,18 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
 
     private fun getGeometryAsLine(lineStr: String?): LineString? {
         val _lineStr = lineStr ?: return null
-        val geometry = LineString.fromJson(_lineStr)
-        return geometry
+        var line: LineString? = null
+
+        try {
+            line = LineString.fromJson(_lineStr)
+        } catch (_: Exception) {
+            try {
+                val feature = Feature.fromJson(_lineStr)
+                line = feature.geometry() as LineString
+            } catch (_: Exception) {}
+        }
+
+        return line
     }
 
     fun applyGeometryFromLine(currentLine: LineString?) {
