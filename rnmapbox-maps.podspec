@@ -26,6 +26,8 @@ rnMapboxMapsDefaultMapLibreVersion = 'exactVersion 5.12.1'
 
 rnMapboxMapsDefaultImpl = 'maplibre'
 
+new_arch_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
+
 # DEPRECATIONS
 
 
@@ -257,11 +259,15 @@ Pod::Spec.new do |s|
   s.subspec 'DynamicLibrary' do |sp|
     case $RNMapboxMapsImpl
     when 'mapbox'
-      sp.source_files = "ios/RCTMGL-v10/**/*.{h,m,swift}"
+      sp.source_files = "ios/RCTMGL-v10/**/*.{h,m,mm,swift}"
+
+      if new_arch_enabled
+        install_modules_dependencies(sp)
+      end
     when 'mapbox-gl'
-      sp.source_files	= "ios/RCTMGL/**/*.{h,m}"
+      sp.source_files	= "ios/RCTMGL/**/*.{h,m,mm}"
     when 'maplibre'
-      sp.source_files	= "ios/RCTMGL/**/*.{h,m}"
+      sp.source_files	= "ios/RCTMGL/**/*.{h,m,mm}"
       sp.compiler_flags = '-DRNMBGL_USE_MAPLIBRE=1'
     end
   end
