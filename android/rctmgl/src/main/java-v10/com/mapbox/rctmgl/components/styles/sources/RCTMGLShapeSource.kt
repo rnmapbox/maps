@@ -281,7 +281,7 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
 
         mTimer?.cancel()
 
-        val _mAnimationDuration = mAnimationDuration?.toLong()
+        val _mAnimationDuration = mAnimationDuration
         if (_mAnimationDuration == null || _mAnimationDuration <= 0) {
             val lineString = getGeometryAsLine(mShape)
             applyGeometryFromLine(lineString)
