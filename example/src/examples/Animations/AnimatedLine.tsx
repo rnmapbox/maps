@@ -87,6 +87,7 @@ const AnimatedLine = memo((props: BaseExampleProps) => {
           justifyContent: 'flex-end',
           paddingHorizontal: 10,
         }}
+        pointerEvents={'box-none'}
       >
         <Button title={'Change line offset'} onPress={onPressButton} />
       </SafeAreaView>
