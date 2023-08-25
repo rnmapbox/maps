@@ -30,13 +30,7 @@ function readIosVersion() {
 }
 
 function readAndroidVersion() {
-  const buildGradlePath = path.join(
-    __dirname,
-    '..',
-    'android',
-    'rctmgl',
-    'build.gradle',
-  );
+  const buildGradlePath = path.join(__dirname, '..', 'android', 'build.gradle');
   const lines = fs.readFileSync(buildGradlePath, 'utf8').split('\n');
   const mapboxGLLineRegex =
     /^\s+implementation\s+'com.mapbox.mapboxsdk:mapbox-android-sdk:(\d+\.\d+\.\d+)'$/;
@@ -85,7 +79,6 @@ const ANDROID_OUTPUT_PATH = path.join(
   __dirname,
   ...OUTPUT_PREFIX,
   'android',
-  'rctmgl',
   'src',
   'main',
   'java-mapboxgl',
@@ -101,7 +94,6 @@ const ANDROID_V10_OUTPUT_PATH = path.join(
   __dirname,
   ...OUTPUT_PREFIX,
   'android',
-  'rctmgl',
   'src',
   'main',
   'java-v10',
