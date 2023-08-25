@@ -2,6 +2,7 @@
 
 #import "MBXMapViewComponentView.h"
 
+#import <React/RCTUIManager.h>
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 
@@ -10,13 +11,28 @@
 #import <react/renderer/components/rnmapbox_maps/Props.h>
 #import <react/renderer/components/rnmapbox_maps/RCTComponentViewHelpers.h>
 
+#import "MBXMapView.h"
+
 using namespace facebook::react;
 
 @interface MBXMapViewComponentView () <RCTMBXMapViewViewProtocol>
 @end
 
+@interface MBXMapViewEventDispatcher : NSObject<RCTEventDispatcherProtocol>
+@end
+
+@implementation MBXMapViewEventDispatcher
+
+// TODO: figure out how to use this custom dispatcher to bridge the new cpp event emitter and swift impl
+- (void)sendEvent:(id<RCTEvent>)event {
+    NSLog(@"attepmt to send map event: %@", event.eventName);
+}
+
+@end
+
 @implementation MBXMapViewComponentView {
-  UIView *_view;
+  UIView<MBXMapViewProtocol> *_view;
+    MBXMapViewEventDispatcher *_eventDispatcher;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -24,7 +40,8 @@ using namespace facebook::react;
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const MBXMapViewProps>();
     _props = defaultProps;
-    _view = [[UIView alloc] initWithFrame:self.bounds];
+    _eventDispatcher = [[MBXMapViewEventDispatcher alloc] init];
+    _view = [MBXMapViewFactory createWithFrame:frame eventDispatcher:_eventDispatcher];
 
     self.contentView = _view;
   }
@@ -43,7 +60,7 @@ using namespace facebook::react;
 {
   const auto &newProps = *std::static_pointer_cast<const MBXMapViewProps>(props);
 
-    _view.backgroundColor = [UIColor greenColor];
+    [_view setAttributionEnabled:newProps.attributionEnabled];
 
   [super updateProps:props oldProps:oldProps];
 }

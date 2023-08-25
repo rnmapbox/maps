@@ -1,8 +1,7 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTViewManager.h>
 
-// TODO: Change it back to RCTMGLMapView
-@interface RCT_EXTERN_REMAP_MODULE(MBXMapView, RCTMGLMapViewManager, RCTViewManager)
+@interface RCT_EXTERN_REMAP_MODULE(RCTMGLMapView, RCTMGLMapViewManager, RCTViewManager)
 
 RCT_EXPORT_VIEW_PROPERTY(onCameraChanged, RCTDirectEventBlock)
 

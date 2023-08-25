@@ -4,45 +4,122 @@ import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNati
 import {
   WithDefault,
   DirectEventHandler,
+  BubblingEventHandler,
+  Int32,
 } from 'react-native/Libraries/Types/CodegenTypes';
 
-/// see
-// https://github.com/react-native-webview/react-native-webview/blob/681aac4fe7e35834264daa01b67a9893c4a9ebe7/src/RNCWebViewNativeComponent.ts#L4
-// for complex example
-
+type OnCameraChangedEventType = { payload: string };
 type OnPressEventType = { payload: string };
-type OnWillStartLoadingType = { payload: boolean };
+type OnMapChangeEventType = { payload: boolean };
+
+// UnsafeObject is exported from CodegenTypes but parser expects UnsafeMixed?
+type UnsafeObject = UnsafeMixed;
 
 export interface NativeProps extends ViewProps {
-  // add other props here
-  contentInset?: ReadonlyArray<number>;
+  onCameraChanged?: DirectEventHandler<OnCameraChangedEventType>;
+
+  attributionEnabled?: boolean;
+  attributionPosition?: UnsafeObject;
+
+  logoEnabled?: boolean;
+  logoPosition?: UnsafeObject;
+
+  compassEnabled?: boolean;
+  compassFadeWhenNorth?: boolean;
+  compassPosition?: UnsafeObject;
+  compassViewPosition?: Int32;
+  compassViewMargins?: ReadonlyArray<Int32>;
+  compassImage?: string;
+
+  scaleBarEnabled?: boolean;
+  scaleBarPosition?: UnsafeObject;
+
+  zoomEnabled?: boolean;
+  scrollEnabled?: boolean;
+  rotateEnabled?: boolean;
+  pitchEnabled?: boolean;
 
   projection?: WithDefault<'mercator' | 'globe', 'mercator'>;
+  localizeLabels?: UnsafeObject;
 
   styleURL?: string;
 
-  onWillStartLoadingMap?: DirectEventHandler<OnWillStartLoadingType>;
-
-  onPress?: DirectEventHandler<OnPressEventType>;
-  //
+  onPress?: BubblingEventHandler<OnPressEventType>;
+  onLongPress?: BubblingEventHandler<OnPressEventType>;
+  onMapChange?: BubblingEventHandler<OnMapChangeEventType>;
 }
 
-type MapViewViewType = HostComponent<NativeProps>;
+// TODO: figure out how to please the 3 different parsers and native at once
 
-export interface NativeCommands {
-  sayHello: (
-    viewRef: React.ElementRef<MapViewViewType>,
-    message: string,
-  ) => void;
-  setHandledMapChangedEvents: (
-    viewRef: React.ElementRef<MapViewViewType>,
-    events: string, // ReadonlyArray<string>,
-  ) => void;
-}
+// type MapViewViewType = HostComponent<NativeProps>;
 
-export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
-  supportedCommands: ['sayHello', 'setHandledMapChangedEvents'],
-});
+// export interface NativeCommands {
+//   takeSnap: (
+//     viewRef: React.ElementRef<MapViewViewType>,
+//     writeToDisk: boolean,
+//   ) => Promise<UnsafeObject>;
+//   queryTerrainElevation: (
+//     viewRef: React.ElementRef<MapViewViewType>,
+//     coordinates: ReadonlyArray<number>,
+//   ) => Promise<UnsafeObject>;
+//   setSourceVisibility: (
+//     viewRef: React.ElementRef<MapViewViewType>,
+//     visible: boolean,
+//     sourceId: string,
+//     sourceLayerId: string,
+//   ) => Promise<UnsafeObject>;
+//   getCenter: (
+//     viewRef: React.ElementRef<MapViewViewType>,
+//   ) => Promise<UnsafeObject>;
+//   getCoordinateFromView: (
+//     viewRef: React.ElementRef<MapViewViewType>,
+//     atPoint: ReadonlyArray<number>,
+//   ) => Promise<UnsafeObject>;
+//   getPointInView: (
+//     viewRef: React.ElementRef<MapViewViewType>,
+//     atCoordinate: ReadonlyArray<number>,
+//   ) => Promise<UnsafeObject>;
+//   getZoom: (
+//     viewRef: React.ElementRef<MapViewViewType>,
+//   ) => Promise<UnsafeObject>;
+//   getVisibleBounds: (
+//     viewRef: React.ElementRef<MapViewViewType>,
+//   ) => Promise<UnsafeObject>;
+//   queryRenderedFeaturesAtPoint: (
+//     viewRef: React.ElementRef<MapViewViewType>,
+//     atPoint: ReadonlyArray<number>,
+//     withFilter: ReadonlyArray<UnsafeObject>,
+//     withLayerIDs: ReadonlyArray<string>,
+//   ) => Promise<UnsafeObject>;
+//   queryRenderedFeaturesInRect: (
+//     viewRef: React.ElementRef<MapViewViewType>,
+//     withBBox: ReadonlyArray<number>,
+//     withFilter: ReadonlyArray<UnsafeObject>,
+//     withLayerIDs: ReadonlyArray<string>,
+//   ) => Promise<UnsafeObject>;
+//   setHandledMapChangedEvents: (
+//     viewRef: React.ElementRef<MapViewViewType>,
+//     events: ReadonlyArray<string>,
+//   ) => void;
+//   clearData: (viewRef: React.ElementRef<MapViewViewType>) => void;
+// }
+
+// export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
+//   supportedCommands: [
+//     'takeSnap',
+//     'queryTerrainElevation',
+//     'setSourceVisibility',
+//     'getCenter',
+//     'getCoordinateFromView',
+//     'getPointInView',
+//     'getZoom',
+//     'getVisibleBounds',
+//     'queryRenderedFeaturesAtPoint',
+//     'queryRenderedFeaturesInRect',
+//     'setHandledMapChangedEvents',
+//     'clearData',
+//   ],
+// });
 
 export default codegenNativeComponent<NativeProps>(
   'MBXMapView',
