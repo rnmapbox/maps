@@ -9,12 +9,15 @@ import android.view.Gravity
 import android.view.View
 import android.view.View.OnLayoutChangeListener
 import android.view.ViewGroup
+import android.view.ViewParent
 import android.widget.FrameLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.ViewTreeLifecycleOwner
 import com.facebook.react.bridge.*
+import com.facebook.react.views.image.ReactImageView
+import com.facebook.react.views.view.ReactViewGroup
 import com.mapbox.android.gestures.*
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
@@ -405,44 +408,50 @@ open class RCTMGLMapView(private val mContext: Context, var mManager: RCTMGLMapV
 
     // region Features
     fun addFeature(childView: View?, childPosition: Int) {
+        Logger.d(LOG_TAG, "Adding feature to map at position ${childPosition}: ${childView?.javaClass?.kotlin}")
+
         var feature: AbstractMapFeature? = null
         if (childView is RCTSource<*>) {
+            feature = childView
             val source = childView
-            mSources[source.iD.toString()] = source
-            feature = childView as AbstractMapFeature?
+            val sourceId = source.iD.toString()
+            mSources[sourceId] = source
         } else if (childView is RCTMGLImages) {
             mImages.add(childView)
             feature = childView
         } else if (childView is RCTMGLLight) {
             feature = childView
         } else if (childView is RCTMGLTerrain) {
-            feature = childView as AbstractMapFeature?
+            feature = childView
         } else if (childView is RCTMGLNativeUserLocation) {
             feature = childView
         } else if (childView is RCTMGLPointAnnotation) {
-            val annotation = childView
-            mPointAnnotations[annotation.iD.toString()] = annotation
             feature = childView
+            val annotation = childView
+            val annotationId = annotation.iD.toString()
+            mPointAnnotations[annotationId] = annotation
         } else if (childView is RCTMGLMarkerView) {
             feature = childView
         } else if (childView is RCTMGLCamera) {
-            mCamera = childView
             feature = childView
+            mCamera = childView
         } else if (childView is RCTLayer<*>) {
-            feature = childView as AbstractMapFeature?
+            feature = childView
         } else if (childView is ViewGroup) {
             val children = childView
-            Logger.w(LOG_TAG, "Adding non map components as a child of a map is deprecated!")
+            Logger.w(LOG_TAG, "Adding non-map components to the map is deprecated. Please move them outside of MapView.")
             for (i in 0 until children.childCount) {
-                addView(children.getChildAt(i), childPosition)
+                val reactView: ReactViewGroup = children.getChildAt(i) as ReactViewGroup
+                try {
+                    addView(reactView, childPosition)
+                } catch (e: Exception) {
+                    Logger.e(LOG_TAG, "Failed to add non-map components to map: ${e}")
+                }
             }
         }
 
-        val addToMap = styleLoaded
-
-
         var entry = FeatureEntry(feature, childView, false)
-        if (addToMap) {
+        if (styleLoaded) {
             feature?.addToMap(this)
             entry.addedToMap = true
         }
