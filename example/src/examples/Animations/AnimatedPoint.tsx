@@ -41,9 +41,9 @@ const AnimatedLine = memo((props: BaseExampleProps) => {
           centerCoordinate={position}
           zoomLevel={14}
         />
-        <ShapeSource id={'line-shape'} shape={_point} animationDuration={500}>
+        <ShapeSource id={'point-shape'} shape={_point} animationDuration={500}>
           <CircleLayer
-            id={'line-layer'}
+            id={'point-layer'}
             style={{
               circleColor: 'blue',
               circleRadius: 10,
