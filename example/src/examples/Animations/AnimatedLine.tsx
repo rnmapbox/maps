@@ -63,7 +63,7 @@ const AnimatedLine = memo((props: BaseExampleProps) => {
         <ShapeSource
           id={'line-shape'}
           shape={line}
-          animationDuration={800}
+          animationDuration={2000}
           lineStartOffset={startOffset}
           lineEndOffset={0}
         >

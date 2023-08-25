@@ -37,11 +37,11 @@ const AnimatedLine = memo((props: BaseExampleProps) => {
     <Page {...props}>
       <MapView style={{ flex: 1 }}>
         <Camera
-          defaultSettings={{ centerCoordinate: position, zoomLevel: 14 }}
+          defaultSettings={{ centerCoordinate: position, zoomLevel: 15 }}
           centerCoordinate={position}
-          zoomLevel={14}
+          zoomLevel={15}
         />
-        <ShapeSource id={'point-shape'} shape={_point} animationDuration={500}>
+        <ShapeSource id={'point-shape'} shape={_point} animationDuration={2000}>
           <CircleLayer
             id={'point-layer'}
             style={{
