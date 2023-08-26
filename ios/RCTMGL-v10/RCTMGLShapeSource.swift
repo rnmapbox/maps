@@ -2,7 +2,7 @@ import MapboxMaps
 import Turf
 
 @objc
-class RCTMGLShapeSource : RCTMGLSource {
+class RCTMGLShapeSource : RCTMGLSource, AnimatedShapeConsumer {
   @objc var url : String? {
     didSet {
       parseJSON(url) { [weak self] result in
@@ -23,10 +23,12 @@ class RCTMGLShapeSource : RCTMGLSource {
     }
   }
 
+  var shapeObject : GeoJSONObject? = nil
   @objc var shape : String? {
     didSet {
       logged("RCTMGLShapeSource.updateShape") {
         let obj : GeoJSONObject = try parse(shape)
+        shapeObject = obj
 
         doUpdate { (style) in
           logged("RCTMGLShapeSource.setShape") {
@@ -59,6 +61,24 @@ class RCTMGLShapeSource : RCTMGLSource {
   @objc var tolerance : NSNumber?
   @objc var lineMetrics : NSNumber?
 
+  func initialShape(shape: GeoJSONObject) {
+    shapeObject = shape
+    doUpdate { (style) in
+      logged("RCTMGLShapeSource.setShape") {
+        try style.updateGeoJSONSource(withId: id, geoJSON: shape)
+      }
+    }
+  }
+
+  func updateShape(shape: GeoJSONObject) {
+    shapeObject = shape
+    doUpdate { (style) in
+      logged("RCTMGLShapeSource.setShape") {
+        try style.updateGeoJSONSource(withId: id, geoJSON: shape)
+      }
+    }
+  }
+
   override func sourceType() -> Source.Type {
     return GeoJSONSource.self
   }
@@ -67,9 +87,9 @@ class RCTMGLShapeSource : RCTMGLSource {
   {
     var result =  GeoJSONSource()
 
-    if let shape = shape {
+    if let shape = shapeObject {
       do {
-        result.data = try parse(shape)
+        result.data = try toGeoJSONSourceData(shape)
       } catch {
         Logger.log(level: .error, message: "Unable to read shape: \(shape) \(error) setting it to empty")
         result.data = emptyShape()
@@ -172,6 +192,17 @@ extension RCTMGLShapeSource
 
 extension RCTMGLShapeSource
 {
+  func toGeoJSONSourceData(_ shape: GeoJSONObject) -> GeoJSONSourceData {
+    switch shape {
+    case .geometry(let geometry):
+      return .geometry(geometry)
+    case .feature(let feature):
+      return .feature(feature)
+    case .featureCollection(let features):
+      return .featureCollection(features)
+    }
+  }
+
   func parse(_ shape: String) throws -> GeoJSONSourceData {
     guard let data = shape.data(using: .utf8) else {
       throw RCTMGLError.parseError("shape is not utf8")

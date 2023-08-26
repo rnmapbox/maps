@@ -7,6 +7,7 @@ import {
   SymbolLayer,
   CircleLayer,
   Camera,
+  DummyShapeAnimator,
 } from '@rnmapbox/maps';
 
 const styles = {
@@ -14,6 +15,10 @@ const styles = {
   circleLayer: {
     circleRadiusTransition: { duration: 5000, delay: 0 },
     circleColor: '#ff0000',
+  },
+  circleLayerAnimated: {
+    circleRadius: 30,
+    circleColor: '#00ff00',
   },
 };
 
@@ -70,14 +75,18 @@ class BugReportExample extends React.Component {
 
     return (
       <>
-        <Button
-          title="Grow"
-          onPress={() => this.setState({ radius: this.state.radius + 20 })}
-        />
         <MapView style={styles.mapView}>
           <Camera centerCoordinate={[-74.00597, 40.71427]} zoomLevel={14} />
           <Images images={{ example: require('../assets/example.png') }} />
-          <ShapeSource id={'shape-source-id-0'} shape={features}>
+          <DummyShapeAnimator>
+            <ShapeSource id={'shape-source-animated'}>
+              <CircleLayer
+                id={'circle-layer-animated'}
+                style={styles.circleLayerAnimated}
+              />
+            </ShapeSource>
+          </DummyShapeAnimator>
+          <ShapeSource id={'shape-source-static'} shape={features}>
             <CircleLayer id={'circle-layer'} style={circleLayerStyle} />
             <SymbolLayer
               id="symbol-id"

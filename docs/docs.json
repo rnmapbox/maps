@@ -1193,6 +1193,36 @@
       }
     ]
   },
+  "DummyShapeAnimator": {
+    "description": "",
+    "displayName": "DummyShapeAnimator",
+    "methods": [],
+    "props": [
+      {
+        "name": "from",
+        "required": true,
+        "type": "Position",
+        "default": "none",
+        "description": "The center point (specified as a map coordinate) of the annotation."
+      },
+      {
+        "name": "to",
+        "required": true,
+        "type": "Position",
+        "default": "none",
+        "description": "The center point (specified as a map coordinate) of the annotation."
+      },
+      {
+        "name": "children",
+        "required": false,
+        "type": "React.ReactElement \\| React.ReactElement[]",
+        "default": "none",
+        "description": "children components, only accepts ShapeSource"
+      }
+    ],
+    "fileNameWithExt": "DummyShapeAnimator.tsx",
+    "name": "DummyShapeAnimator"
+  },
   "FillExtrusionLayer": {
     "description": "FillExtrusionLayer is a style layer that renders one or more 3D extruded polygons on the map.",
     "displayName": "FillExtrusionLayer",

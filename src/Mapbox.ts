@@ -46,6 +46,9 @@ export {
   type SnapshotOptions,
 } from './modules/snapshot/snapshotManager';
 export { default as MarkerView } from './components/MarkerView';
+
+export { default as DummyShapeAnimator } from './components/shape_animators/DummyShapeAnimator';
+
 export { default as Animated } from './utils/animated/Animated';
 export {
   AnimatedCoordinatesArray,
