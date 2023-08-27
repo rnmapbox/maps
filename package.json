@@ -34,7 +34,6 @@
     "rnmapbox-maps.podspec",
     "ios",
     "android",
-    "react-native.config.js",
     "setup-jest.js",
     "!**/__tests__",
     "!**/__fixtures__",
