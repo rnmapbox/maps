@@ -11,6 +11,10 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.mapbox.rctmgl.events.constants.EventKeys
 import com.facebook.react.common.MapBuilder
+import com.facebook.react.uimanager.ViewManagerDelegate
+import com.facebook.react.viewmanagers.MBXMapViewManagerDelegate
+import com.facebook.react.viewmanagers.MBXMapViewManagerInterface
+import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.logo.logo
@@ -43,8 +47,19 @@ interface CommandResponse {
 }
 
 open class RCTMGLMapViewManager(context: ReactApplicationContext) :
-    AbstractEventEmitter<RCTMGLMapView>(context) {
+    AbstractEventEmitter<RCTMGLMapView>(context), MBXMapViewManagerInterface<RCTMGLMapView> {
     private val mViews: MutableMap<Int, RCTMGLMapView>
+
+    private val mDelegate: ViewManagerDelegate<RCTMGLMapView>
+
+    init {
+        mDelegate = MBXMapViewManagerDelegate<RCTMGLMapView, RCTMGLMapViewManager>(this)
+    }
+
+    override fun getDelegate(): ViewManagerDelegate<RCTMGLMapView>? {
+        return mDelegate
+    }
+
     override fun getName(): String {
         return REACT_CLASS
     }
@@ -105,7 +120,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
 
     // region React Props
     @ReactProp(name = "projection")
-    fun setProjection(mapView: RCTMGLMapView, projection: String?) {
+    override fun setProjection(mapView: RCTMGLMapView, projection: String?) {
         mapView.setReactProjection( if (projection == "globe") ProjectionName.GLOBE else ProjectionName.MERCATOR )
     }
 
@@ -117,7 +132,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
     }
 
     @ReactProp(name = "styleURL")
-    fun setStyleURL(mapView: RCTMGLMapView, styleURL: String?) {
+    override fun setStyleURL(mapView: RCTMGLMapView, styleURL: String?) {
         mapView.setReactStyleURL(styleURL!!)
     }
 
@@ -127,7 +142,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
     }
 
     @ReactProp(name = "zoomEnabled")
-    fun setZoomEnabled(map: RCTMGLMapView, zoomEnabled: Boolean) {
+    override fun setZoomEnabled(map: RCTMGLMapView, zoomEnabled: Boolean) {
         val mapView = map.mapView
         mapView.gestures.pinchToZoomEnabled = zoomEnabled
         mapView.gestures.doubleTouchToZoomOutEnabled = zoomEnabled
@@ -135,66 +150,66 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
     }
 
     @ReactProp(name = "scrollEnabled")
-    fun setScrollEnabled(map: RCTMGLMapView, scrollEnabled: Boolean) {
+    override fun setScrollEnabled(map: RCTMGLMapView, scrollEnabled: Boolean) {
         val mapView = map.mapView
         mapView.gestures.scrollEnabled = scrollEnabled
     }
 
     @ReactProp(name = "pitchEnabled")
-    fun setPitchEnabled(map: RCTMGLMapView, pitchEnabled: Boolean) {
+    override fun setPitchEnabled(map: RCTMGLMapView, pitchEnabled: Boolean) {
         val mapView = map.mapView
         mapView.gestures.pitchEnabled = pitchEnabled
     }
 
     @ReactProp(name = "rotateEnabled")
-    fun setRotateEnabled(map: RCTMGLMapView, rotateEnabled: Boolean) {
+    override fun setRotateEnabled(map: RCTMGLMapView, rotateEnabled: Boolean) {
         val mapView = map.mapView
         mapView.gestures.rotateEnabled = rotateEnabled
     }
 
     @ReactProp(name = "attributionEnabled")
-    fun setAttributionEnabled(mapView: RCTMGLMapView?, attributionEnabled: Boolean?) {
-        mapView!!.setReactAttributionEnabled(attributionEnabled);
+    override fun setAttributionEnabled(mapView: RCTMGLMapView, attributionEnabled: Boolean) {
+        mapView.setReactAttributionEnabled(attributionEnabled)
     }
 
     @ReactProp(name = "attributionPosition")
-    fun setAttributionPosition(mapView: RCTMGLMapView?, attributionPosition: ReadableMap?) {
-        mapView!!.setReactAttributionPosition(attributionPosition);
+    fun setAttributionPosition(mapView: RCTMGLMapView, attributionPosition: ReadableMap) {
+        mapView.setReactAttributionPosition(attributionPosition)
     }
 
     @ReactProp(name = "attributionViewMargins")
-    fun setAttributionViewMargins(mapView: RCTMGLMapView?, scaleBarMargins: ReadableMap?) {
-        mapView!!.setReactAttributionViewMargins(scaleBarMargins!!);
+    fun setAttributionViewMargins(mapView: RCTMGLMapView, scaleBarMargins: ReadableMap) {
+        mapView.setReactAttributionViewMargins(scaleBarMargins)
     }
 
     @ReactProp(name = "attributionViewPosition")
-    fun setAttributionViewPosition(mapView: RCTMGLMapView?, scaleBarPosition: Int) {
-        mapView!!.setReactAttributionViewPosition(scaleBarPosition!!)
+    fun setAttributionViewPosition(mapView: RCTMGLMapView, scaleBarPosition: Int) {
+        mapView.setReactAttributionViewPosition(scaleBarPosition)
     }
 
     @ReactProp(name = "logoEnabled")
-    fun setLogoEnabled(mapView: RCTMGLMapView?, logoEnabled: Boolean?) {
-        mapView!!.setReactLogoEnabled(logoEnabled);
+    override fun setLogoEnabled(mapView: RCTMGLMapView, logoEnabled: Boolean) {
+        mapView.setReactLogoEnabled(logoEnabled)
     }
 
     @ReactProp(name = "logoPosition")
-    fun setLogoPosition(mapView: RCTMGLMapView?, logoPosition: ReadableMap?) {
-        mapView!!.setReactLogoPosition(logoPosition);
+    fun setLogoPosition(mapView: RCTMGLMapView, logoPosition: ReadableMap?) {
+        mapView.setReactLogoPosition(logoPosition)
     }
 
     @ReactProp(name = "scaleBarEnabled")
-    fun setScaleBarEnabled(mapView: RCTMGLMapView?, scaleBarEnabled: Boolean) {
-        mapView!!.setReactScaleBarEnabled(scaleBarEnabled);
+    override fun setScaleBarEnabled(mapView: RCTMGLMapView, scaleBarEnabled: Boolean) {
+        mapView.setReactScaleBarEnabled(scaleBarEnabled)
     }
 
     @ReactProp(name = "scaleBarViewMargins")
-    fun setScaleBarViewMargins(mapView: RCTMGLMapView?, scaleBarMargins: ReadableMap?) {
-        mapView!!.setReactScaleBarViewMargins(scaleBarMargins!!);
+    fun setScaleBarViewMargins(mapView: RCTMGLMapView, scaleBarMargins: ReadableMap) {
+        mapView.setReactScaleBarViewMargins(scaleBarMargins)
     }
 
     @ReactProp(name = "scaleBarViewPosition")
-    fun setScaleBarViewPosition(mapView: RCTMGLMapView?, scaleBarPosition: Int) {
-        mapView!!.setReactScaleBarViewPosition(scaleBarPosition!!)
+    fun setScaleBarViewPosition(mapView: RCTMGLMapView, scaleBarPosition: Int) {
+        mapView.setReactScaleBarViewPosition(scaleBarPosition)
     }
 
     @ReactProp(name = "scaleBarPosition")
@@ -203,43 +218,67 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
     }
 
     @ReactProp(name = "compassEnabled")
-    fun setCompassEnabled(mapView: RCTMGLMapView?, compassEnabled: Boolean) {
-        mapView!!.setReactCompassEnabled(compassEnabled);
+    override fun setCompassEnabled(mapView: RCTMGLMapView, compassEnabled: Boolean) {
+        mapView.setReactCompassEnabled(compassEnabled)
     }
 
     @ReactProp(name = "compassFadeWhenNorth")
-    fun setCompassFadeWhenNorth(mapView: RCTMGLMapView?, compassFadeWhenNorth: Boolean) {
-        mapView!!.setReactCompassFadeWhenNorth(compassFadeWhenNorth!!);
+    override fun setCompassFadeWhenNorth(mapView: RCTMGLMapView, compassFadeWhenNorth: Boolean) {
+        mapView.setReactCompassFadeWhenNorth(compassFadeWhenNorth)
     }
 
     @ReactProp(name = "compassViewMargins")
-    fun setCompassViewMargins(mapView: RCTMGLMapView?, compassViewMargins: ReadableMap?) {
-        mapView!!.setReactCompassViewMargins(compassViewMargins!!);
+    override fun setCompassViewMargins(mapView: RCTMGLMapView, compassViewMargins: ReadableMap?) {
+        mapView.setReactCompassViewMargins(compassViewMargins ?: return)
     }
 
     @ReactProp(name = "compassViewPosition")
-    fun setCompassViewPosition(mapView: RCTMGLMapView?, compassViewPosition: Int) {
-        mapView!!.setReactCompassViewPosition(compassViewPosition!!)
+    override fun setCompassViewPosition(mapView: RCTMGLMapView, compassViewPosition: Int) {
+        mapView.setReactCompassViewPosition(compassViewPosition)
     }
 
     @ReactProp(name = "compassPosition")
-    fun setCompassPosition(mapView: RCTMGLMapView?, compassMargins: ReadableMap) {
-        mapView!!.setReactCompassPosition(compassMargins)
+    fun setCompassPosition(mapView: RCTMGLMapView, compassMargins: ReadableMap) {
+        mapView.setReactCompassPosition(compassMargins)
     }
 
     @ReactProp(name = "contentInset")
-    fun setContentInset(mapView: RCTMGLMapView?, array: ReadableArray?) {
+    fun setContentInset(mapView: RCTMGLMapView, array: ReadableArray) {
         //mapView.setReactContentInset(array);
     }
 
     @ReactProp(name = "tintColor", customType = "Color")
-    fun setTintColor(mapView: RCTMGLMapView?, tintColor: Int?) {
+    fun setTintColor(mapView: RCTMGLMapView, tintColor: Int) {
         //mapView.setTintColor(tintColor);
     }
 
     @ReactProp(name = "requestDisallowInterceptTouchEvent")
-    fun setRequestDisallowInterceptTouchEvent(mapView: RCTMGLMapView, requestDisallowInterceptTouchEvent: Boolean) {
+    override fun setRequestDisallowInterceptTouchEvent(mapView: RCTMGLMapView, requestDisallowInterceptTouchEvent: Boolean) {
         mapView.requestDisallowInterceptTouchEvent = requestDisallowInterceptTouchEvent
+    }
+
+    override fun setAttributionPosition(view: RCTMGLMapView, value: Dynamic) {
+        this.setLocalizeLabels(view, value.asMap())
+    }
+
+    override fun setLogoPosition(view: RCTMGLMapView, value: Dynamic) {
+        this.setLogoPosition(view, value.asMap())
+    }
+
+    override fun setCompassPosition(view: RCTMGLMapView, value: Dynamic) {
+        this.setCompassPosition(view, value.asMap())
+    }
+
+    override fun setCompassImage(view: RCTMGLMapView, value: String?) {
+        // TODO: No-op on Android?
+    }
+
+    override fun setScaleBarPosition(view: RCTMGLMapView, value: Dynamic) {
+        // TODO: should this call setScaleBarViewPosition?
+    }
+
+    override fun setLocalizeLabels(view: RCTMGLMapView, value: Dynamic) {
+        this.setLocalizeLabels(view, value.asMap())
     }
 
     //endregion
@@ -409,7 +448,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
 
     companion object {
         const val LOG_TAG = "RCTMGLMapViewManager"
-        const val REACT_CLASS = "RCTMGLMapView"
+        const val REACT_CLASS = "MBXMapView"
     }
 
     init {
