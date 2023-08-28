@@ -13,6 +13,10 @@ open class MBXMapView : RCTMGLMapView, MBXMapViewProtocol {
   public func setAttributionEnabled(_ enabled: Bool) {
       self.setReactAttributionEnabled(enabled)
   }
+    
+    public func setAttributionPosition(_ position: [String : NSNumber]!) {
+        self.setReactAttributionPosition(position)
+    }
 }
 
 @objc(MBXMapViewFactory)

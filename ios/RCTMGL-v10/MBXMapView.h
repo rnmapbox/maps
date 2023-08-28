@@ -2,6 +2,7 @@
 
 @protocol MBXMapViewProtocol
 - (void)setAttributionEnabled:(BOOL)enabled;
+- (void)setAttributionPosition:(NSDictionary<NSString*, NSNumber*>*)position;
 @end
 
 @interface MBXMapViewFactory

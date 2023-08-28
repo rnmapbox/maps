@@ -56,11 +56,26 @@ using namespace facebook::react;
   return concreteComponentDescriptorProvider<MBXMapViewComponentDescriptor>();
 }
 
+- (NSDictionary*)convertPositionToDictionary:(const folly::dynamic*)position {
+    NSMutableDictionary<NSString*, NSNumber*>* result = [[NSMutableDictionary alloc] init];
+    
+    if (!position->isNull()) {
+        for (auto& pair : position->items()) {
+            NSString* key = [NSString stringWithUTF8String:pair.first.getString().c_str()];
+            NSNumber* value = [[NSNumber alloc] initWithInt:pair.second.getDouble()];
+            [result setValue:value forKey:key];
+        }
+    }
+    
+    return result;
+}
+
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
   const auto &newProps = *std::static_pointer_cast<const MBXMapViewProps>(props);
 
     [_view setAttributionEnabled:newProps.attributionEnabled];
+    [_view setAttributionPosition:[self convertPositionToDictionary:&newProps.attributionPosition]];
 
   [super updateProps:props oldProps:oldProps];
 }
