@@ -41,7 +41,7 @@ if (!MGLModule.MapboxV10) {
   );
 }
 
-export const NATIVE_MODULE_NAME = 'RCTMGLMapView';
+export const NATIVE_MODULE_NAME = 'MBXMapView';
 
 export const ANDROID_TEXTURE_NATIVE_MODULE_NAME = 'RCTMGLAndroidTextureMapView';
 

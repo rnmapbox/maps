@@ -1,7 +1,7 @@
 import MapboxMaps
 
-@objc(RCTMGLMapViewManager)
-class RCTMGLMapViewManager: RCTViewManager {
+@objc(MBXMapViewManager)
+class MBXMapViewManager: RCTViewManager {
     @objc
     override static func requiresMainQueueSetup() -> Bool {
         return true
@@ -19,7 +19,7 @@ class RCTMGLMapViewManager: RCTViewManager {
 
 // MARK: helpers
 
-extension RCTMGLMapViewManager {
+extension MBXMapViewManager {
     func withMapView(
         _ reactTag: NSNumber,
         name: String,
@@ -59,7 +59,7 @@ extension RCTMGLMapViewManager {
 
 // MARK: - react methods
 
-extension RCTMGLMapViewManager {
+extension MBXMapViewManager {
     @objc
     func takeSnap(_ reactTag: NSNumber,
                   writeToDisk: Bool,
@@ -175,7 +175,7 @@ extension RCTMGLMapViewManager {
 
 // MARK: - queryRenderedFeatures
 
-extension RCTMGLMapViewManager {
+extension MBXMapViewManager {
   @objc
   func queryRenderedFeaturesAtPoint(
     _ reactTag: NSNumber,
