@@ -70,12 +70,51 @@ using namespace facebook::react;
     return result;
 }
 
+- (NSDictionary*)convertLocalizeLabels:(const MBXMapViewLocalizeLabelsStruct*)labels {
+    NSMutableDictionary* result = [[NSMutableDictionary alloc] init];
+    NSMutableArray* ids = [[NSMutableArray alloc] init];
+    
+    [result setValue:[NSString stringWithUTF8String:labels->locale.c_str()] forKey:@"locale"];
+    
+    for (auto& layerId : labels->layerIds) {
+        NSString* value = [NSString stringWithUTF8String:layerId.c_str()];
+        [ids addObject:value];
+    }
+    
+    [result setValue:ids forKey:@"layerIds"];
+    
+    return result;
+}
+
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
   const auto &newProps = *std::static_pointer_cast<const MBXMapViewProps>(props);
 
     [_view setAttributionEnabled:newProps.attributionEnabled];
     [_view setAttributionPosition:[self convertPositionToDictionary:&newProps.attributionPosition]];
+    
+    [_view setLogoEnabled:newProps.logoEnabled];
+    [_view setLogoPosition:[self convertPositionToDictionary:&newProps.logoPosition]];
+    
+    [_view setCompassEnabled:newProps.compassEnabled];
+    [_view setCompassFadeWhenNorth:newProps.compassFadeWhenNorth];
+    [_view setCompassPosition:[self convertPositionToDictionary:&newProps.compassPosition]];
+    [_view setCompassViewPosition:newProps.compassViewPosition];
+    [_view setCompassViewMargins:CGPointMake(newProps.compassViewMargins.x, newProps.compassViewMargins.y)];
+    [_view setCompassImage:[NSString stringWithUTF8String:newProps.compassImage.c_str()]];
+    
+    [_view setScaleBarEnabled:newProps.scaleBarEnabled];
+    [_view setScaleBarPosition:[self convertPositionToDictionary:&newProps.scaleBarPosition]];
+    
+    [_view setZoomEnabled:newProps.zoomEnabled];
+    [_view setScrollEnabled:newProps.scrollEnabled];
+    [_view setRotateEnabled:newProps.rotateEnabled];
+    [_view setPitchEnabled:newProps.pitchEnabled];
+    
+    [_view setProjection:newProps.projection == MBXMapViewProjection::Mercator ? @"mercator" : @"globe"];
+    [_view setLocalizeLabels:[self convertLocalizeLabels:&newProps.localizeLabels]];
+    [_view setStyleUrl:[NSString stringWithUTF8String:newProps.styleURL.c_str()]];
+
 
   [super updateProps:props oldProps:oldProps];
 }

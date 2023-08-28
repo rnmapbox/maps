@@ -20,6 +20,11 @@ type Point = {
   y: Int32;
 };
 
+type LocalizeLabels = {
+  locale: string;
+  layerIds?: string[];
+};
+
 export interface NativeProps extends ViewProps {
   onCameraChanged?: DirectEventHandler<OnCameraChangedEventType>;
 
@@ -47,7 +52,7 @@ export interface NativeProps extends ViewProps {
   requestDisallowInterceptTouchEvent?: boolean;
 
   projection?: WithDefault<'mercator' | 'globe', 'mercator'>;
-  localizeLabels?: UnsafeObject;
+  localizeLabels?: LocalizeLabels;
 
   styleURL?: string;
 
