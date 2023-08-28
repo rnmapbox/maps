@@ -15,6 +15,11 @@ type OnMapChangeEventType = { payload: boolean };
 // UnsafeObject is exported from CodegenTypes but parser expects UnsafeMixed?
 type UnsafeObject = UnsafeMixed;
 
+type Point = {
+  x: Int32;
+  y: Int32;
+};
+
 export interface NativeProps extends ViewProps {
   onCameraChanged?: DirectEventHandler<OnCameraChangedEventType>;
 
@@ -28,7 +33,7 @@ export interface NativeProps extends ViewProps {
   compassFadeWhenNorth?: boolean;
   compassPosition?: UnsafeObject;
   compassViewPosition?: Int32;
-  compassViewMargins?: ReadonlyArray<Int32>;
+  compassViewMargins?: Point;
   compassImage?: string;
 
   scaleBarEnabled?: boolean;
@@ -38,6 +43,8 @@ export interface NativeProps extends ViewProps {
   scrollEnabled?: boolean;
   rotateEnabled?: boolean;
   pitchEnabled?: boolean;
+
+  requestDisallowInterceptTouchEvent?: boolean;
 
   projection?: WithDefault<'mercator' | 'globe', 'mercator'>;
   localizeLabels?: UnsafeObject;
