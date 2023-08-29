@@ -16,16 +16,27 @@
 using namespace facebook::react;
 
 @interface MBXMapViewComponentView () <RCTMBXMapViewViewProtocol>
+- (void)dispatchCameraChangedEvent:(NSDictionary*)event;
 @end
 
 @interface MBXMapViewEventDispatcher : NSObject<RCTEventDispatcherProtocol>
 @end
 
-@implementation MBXMapViewEventDispatcher
+@implementation MBXMapViewEventDispatcher {
+    MBXMapViewComponentView* _componentView;
+}
 
-// TODO: figure out how to use this custom dispatcher to bridge the new cpp event emitter and swift impl
+- (instancetype)initWithComponentView:(MBXMapViewComponentView*)componentView {
+    if (self = [super init]) {
+        _componentView = componentView;
+    }
+
+    return self;
+}
+
 - (void)sendEvent:(id<RCTEvent>)event {
-    NSLog(@"attepmt to send map event: %@", event.eventName);
+    NSDictionary* payload = [event arguments][2];
+    [_componentView dispatchCameraChangedEvent:payload];
 }
 
 @end
@@ -40,8 +51,47 @@ using namespace facebook::react;
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const MBXMapViewProps>();
     _props = defaultProps;
-    _eventDispatcher = [[MBXMapViewEventDispatcher alloc] init];
+    _eventDispatcher = [[MBXMapViewEventDispatcher alloc] initWithComponentView:self];
     _view = [MBXMapViewFactory createWithFrame:frame eventDispatcher:_eventDispatcher];
+      
+      // capture weak self reference to prevent retain cycle
+      __weak __typeof__(self) weakSelf = self;
+      
+      [_view setOnPress:^(NSDictionary* event) {
+          __typeof__(self) strongSelf = weakSelf;
+          
+          if (strongSelf != nullptr && strongSelf->_eventEmitter != nullptr) {
+              const auto [type, json] = [MBXMapViewComponentView stringifyEventData:event];
+              std::dynamic_pointer_cast<const facebook::react::MBXMapViewEventEmitter>(strongSelf->_eventEmitter)->onPress({type, json});
+            }
+      }];
+      
+      [_view setOnLongPress:^(NSDictionary* event) {
+          __typeof__(self) strongSelf = weakSelf;
+          
+          if (strongSelf != nullptr && strongSelf->_eventEmitter != nullptr) {
+              const auto [type, json] = [MBXMapViewComponentView stringifyEventData:event];
+              std::dynamic_pointer_cast<const facebook::react::MBXMapViewEventEmitter>(strongSelf->_eventEmitter)->onLongPress({type, json});
+            }
+      }];
+      
+      [_view setOnMapChange:^(NSDictionary* event) {
+          __typeof__(self) strongSelf = weakSelf;
+          
+          if (strongSelf != nullptr && strongSelf->_eventEmitter != nullptr) {
+              const auto [type, json] = [MBXMapViewComponentView stringifyEventData:event];
+              std::dynamic_pointer_cast<const facebook::react::MBXMapViewEventEmitter>(strongSelf->_eventEmitter)->onMapChange({type, json});
+            }
+      }];
+      
+//      [_view setOnCameraChange:^(NSDictionary* event) {
+//          __typeof__(self) strongSelf = weakSelf;
+//
+//          if (strongSelf != nullptr && strongSelf->_eventEmitter != nullptr) {
+//              const auto [type, json] = [MBXMapViewComponentView stringifyEventData:event];
+//              std::dynamic_pointer_cast<const facebook::react::MBXMapViewEventEmitter>(strongSelf->_eventEmitter)->onCameraChanged({type, json});
+//            }
+//      }];
 
     self.contentView = _view;
   }
@@ -49,11 +99,29 @@ using namespace facebook::react;
   return self;
 }
 
-#pragma mark - RCTComponentViewProtocol
+- (void)dispatchCameraChangedEvent:(NSDictionary*)event {
+    const auto [type, json] = [MBXMapViewComponentView stringifyEventData:event];
+    std::dynamic_pointer_cast<const facebook::react::MBXMapViewEventEmitter>(self->_eventEmitter)->onCameraChanged({type, json});
+}
 
-+ (ComponentDescriptorProvider)componentDescriptorProvider
-{
-  return concreteComponentDescriptorProvider<MBXMapViewComponentDescriptor>();
++ (std::tuple<std::string, std::string>)stringifyEventData:(NSDictionary*)event {
+    std::string type = [event valueForKey:@"type"] == nil ? "" : std::string([[event valueForKey:@"type"] UTF8String]);
+    std::string json = "{}";
+    
+    NSError *error;
+    NSData *jsonData = nil;
+    
+    if ([event valueForKey:@"payload"] != nil) {
+        jsonData = [NSJSONSerialization dataWithJSONObject:[event valueForKey:@"payload"]
+                                                           options:0
+                                                             error:&error];
+    }
+    
+    if (jsonData) {
+        json = std::string([[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding] UTF8String]);
+    }
+        
+    return {type, json};
 }
 
 - (NSDictionary*)convertPositionToDictionary:(const folly::dynamic*)position {
@@ -86,10 +154,16 @@ using namespace facebook::react;
     return result;
 }
 
+#pragma mark - RCTComponentViewProtocol
+
++ (ComponentDescriptorProvider)componentDescriptorProvider
+{
+  return concreteComponentDescriptorProvider<MBXMapViewComponentDescriptor>();
+}
+
 - (void)updateProps:(const Props::Shared &)props oldProps:(const Props::Shared &)oldProps
 {
   const auto &newProps = *std::static_pointer_cast<const MBXMapViewProps>(props);
-
     [_view setAttributionEnabled:newProps.attributionEnabled];
     [_view setAttributionPosition:[self convertPositionToDictionary:&newProps.attributionPosition]];
     
@@ -112,10 +186,11 @@ using namespace facebook::react;
     [_view setPitchEnabled:newProps.pitchEnabled];
     
     [_view setProjection:newProps.projection == MBXMapViewProjection::Mercator ? @"mercator" : @"globe"];
-    [_view setLocalizeLabels:[self convertLocalizeLabels:&newProps.localizeLabels]];
     [_view setStyleUrl:[NSString stringWithUTF8String:newProps.styleURL.c_str()]];
-
-
+    
+    if (!newProps.localizeLabels.locale.empty()) {
+        [_view setLocalizeLabels:[self convertLocalizeLabels:&newProps.localizeLabels]];
+    }
   [super updateProps:props oldProps:oldProps];
 }
 @end

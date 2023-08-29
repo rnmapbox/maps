@@ -85,14 +85,29 @@ open class MBXMapView : RCTMGLMapView, MBXMapViewProtocol {
     public func setStyleUrl(_ url: String) {
         self.setReactStyleURL(url)
     }
+    
+    public func setOnPress(_ callback: @escaping RCTBubblingEventBlock) {
+        self.setReactOnPress(callback)
+    }
+    
+    public func setOnLongPress(_ callback: @escaping RCTBubblingEventBlock) {
+        self.setReactOnLongPress(callback)
+    }
+    
+    public func setOnMapChange(_ callback: @escaping RCTBubblingEventBlock) {
+        self.setReactOnMapChange(callback)
+    }
 }
 
 @objc(MBXMapViewFactory)
 open class MBXMapViewFactory : NSObject {
   @objc
   static func create(frame: CGRect, eventDispatcher: RCTEventDispatcherProtocol) -> MBXMapViewProtocol {
-    return MBXMapView(frame: frame, eventDispatcher: eventDispatcher)
+      let view = MBXMapView(frame: frame, eventDispatcher: eventDispatcher)
+      
+      // just need to pass something, it won't really be used on fabric, but it's used to create events (it won't impact sending them)
+      view.reactTag = -1;
+      
+      return view
   }
 }
-
-@objc(MAAAAAAAAAAAAAAAAap) public extension MapView {}

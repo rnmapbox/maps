@@ -25,6 +25,10 @@
 - (void)setLocalizeLabels:(NSDictionary*)labels;
 - (void)setStyleUrl:(NSString*)url;
 
+- (void)setOnPress:(RCTBubblingEventBlock)callback;
+- (void)setOnLongPress:(RCTBubblingEventBlock)callback;
+- (void)setOnMapChange:(RCTBubblingEventBlock)callback;
+
 @end
 
 @interface MBXMapViewFactory

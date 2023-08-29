@@ -851,13 +851,25 @@ class MapView extends NativeBridgeComponent(
 
   _onPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>) {
     if (isFunction(this.props.onPress)) {
-      this.props.onPress(e.nativeEvent.payload);
+      const { payload } = e.nativeEvent;
+
+      if (typeof payload === 'string') {
+        this.props.onPress(JSON.parse(payload));
+      } else {
+        this.props.onPress(payload);
+      }
     }
   }
 
   _onLongPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>) {
     if (isFunction(this.props.onLongPress)) {
-      this.props.onLongPress(e.nativeEvent.payload);
+      const { payload } = e.nativeEvent;
+
+      if (typeof payload === 'string') {
+        this.props.onLongPress(JSON.parse(payload));
+      } else {
+        this.props.onLongPress(payload);
+      }
     }
   }
 
@@ -885,7 +897,13 @@ class MapView extends NativeBridgeComponent(
   }
 
   _onCameraChanged(e: NativeSyntheticEvent<{ payload: MapState }>) {
-    this.props.onCameraChanged?.(e.nativeEvent.payload);
+    const { payload } = e.nativeEvent;
+
+    if (typeof payload === 'string') {
+      this.props.onCameraChanged?.(JSON.parse(payload));
+    } else {
+      this.props.onCameraChanged?.(payload);
+    }
   }
 
   _onChange(
@@ -899,7 +917,12 @@ class MapView extends NativeBridgeComponent(
   ) {
     const { regionWillChangeDebounceTime, regionDidChangeDebounceTime } =
       this.props;
-    const { type, payload } = e.nativeEvent;
+    const { type } = e.nativeEvent;
+    const payload =
+      typeof e.nativeEvent.payload === 'string'
+        ? JSON.parse(e.nativeEvent.payload)
+        : e.nativeEvent.payload;
+
     let propName: CallbablePropKeys | '' = '';
     let deprecatedPropName: CallbablePropKeys | '' = '';
 
