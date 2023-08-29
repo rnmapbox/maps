@@ -4,16 +4,14 @@ import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNati
 import {
   WithDefault,
   DirectEventHandler,
-  BubblingEventHandler,
   Int32,
 } from 'react-native/Libraries/Types/CodegenTypes';
 
-type OnCameraChangedEventType = { payload: string };
-type OnPressEventType = { payload: string };
-type OnMapChangeEventType = { payload: boolean };
+import type { UnsafeMixed } from './codegenUtils';
 
-// UnsafeObject is exported from CodegenTypes but parser expects UnsafeMixed?
-type UnsafeObject = UnsafeMixed;
+type OnCameraChangedEventType = { type: string; payload: string };
+type OnPressEventType = { type: string; payload: string };
+type OnMapChangeEventType = { type: string; payload: string };
 
 type Point = {
   x: Int32;
@@ -29,20 +27,20 @@ export interface NativeProps extends ViewProps {
   onCameraChanged?: DirectEventHandler<OnCameraChangedEventType>;
 
   attributionEnabled?: boolean;
-  attributionPosition?: UnsafeObject;
+  attributionPosition?: UnsafeMixed;
 
   logoEnabled?: boolean;
-  logoPosition?: UnsafeObject;
+  logoPosition?: UnsafeMixed;
 
   compassEnabled?: boolean;
   compassFadeWhenNorth?: boolean;
-  compassPosition?: UnsafeObject;
+  compassPosition?: UnsafeMixed;
   compassViewPosition?: Int32;
   compassViewMargins?: Point;
   compassImage?: string;
 
   scaleBarEnabled?: boolean;
-  scaleBarPosition?: UnsafeObject;
+  scaleBarPosition?: UnsafeMixed;
 
   zoomEnabled?: boolean;
   scrollEnabled?: boolean;
@@ -56,9 +54,9 @@ export interface NativeProps extends ViewProps {
 
   styleURL?: string;
 
-  onPress?: BubblingEventHandler<OnPressEventType>;
-  onLongPress?: BubblingEventHandler<OnPressEventType>;
-  onMapChange?: BubblingEventHandler<OnMapChangeEventType>;
+  onPress?: DirectEventHandler<OnPressEventType>;
+  onLongPress?: DirectEventHandler<OnPressEventType>;
+  onMapChange?: DirectEventHandler<OnMapChangeEventType>;
 }
 
 // TODO: figure out how to please the 3 different parsers and native at once

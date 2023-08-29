@@ -125,7 +125,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
     }
 
     @ReactProp(name = "localizeLabels")
-    fun setLocalizeLabels(mapView: RCTMGLMapView, localeMap: ReadableMap?) {
+    override fun setLocalizeLabels(mapView: RCTMGLMapView, localeMap: ReadableMap?) {
         val locale = localeMap?.getString("locale")
         val layerIds = localeMap?.getArray("layerIds")?.toArrayList()?.mapNotNull {it?.toString()}
         mapView.setReactLocalizeLabels(locale, layerIds)
@@ -258,7 +258,7 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
     }
 
     override fun setAttributionPosition(view: RCTMGLMapView, value: Dynamic) {
-        this.setLocalizeLabels(view, value.asMap())
+        this.setAttributionPosition(view, value.asMap())
     }
 
     override fun setLogoPosition(view: RCTMGLMapView, value: Dynamic) {
@@ -275,10 +275,6 @@ open class RCTMGLMapViewManager(context: ReactApplicationContext) :
 
     override fun setScaleBarPosition(view: RCTMGLMapView, value: Dynamic) {
         // TODO: should this call setScaleBarViewPosition?
-    }
-
-    override fun setLocalizeLabels(view: RCTMGLMapView, value: Dynamic) {
-        this.setLocalizeLabels(view, value.asMap())
     }
 
     //endregion
