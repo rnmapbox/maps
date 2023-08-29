@@ -326,9 +326,16 @@ class RCTMGLShapeSource(context: Context, private val mManager: RCTMGLShapeSourc
     }
 
     fun getGeoJSONType(geoJSONStr: String?): ShapeType {
+        if (geoJSONStr == null) {
+            return ShapeType.UNKNOWN
+        }
+
         val obj = JSONObject(geoJSONStr)
-        val type = obj.get("type")
-        val geometryType = obj.getJSONObject("geometry").get("type")
+        val type = obj.getString("type")
+        var geometryType: String? = null;
+        if (obj.has("geometry")) {
+            geometryType = obj.getJSONObject("geometry").getString("type")
+        }
 
         if (type == "Point" || geometryType == "Point") {
             return ShapeType.POINT
