@@ -2,7 +2,6 @@
 
 #import "MBXMapViewComponentView.h"
 
-#import <React/RCTUIManager.h>
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 
@@ -16,7 +15,6 @@
 using namespace facebook::react;
 
 @interface MBXMapViewComponentView () <RCTMBXMapViewViewProtocol>
-- (void)dispatchCameraChangedEvent:(NSDictionary*)event;
 @end
 
 @interface MBXMapViewEventDispatcher : NSObject<RCTEventDispatcherProtocol>
@@ -154,6 +152,10 @@ using namespace facebook::react;
     return result;
 }
 
+- (void)takeSnap:(BOOL)writeToDisk resolve:(id)resolve {
+    [_view takeSnap:writeToDisk resolve:resolve];
+}
+
 #pragma mark - RCTComponentViewProtocol
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
@@ -193,6 +195,7 @@ using namespace facebook::react;
     }
   [super updateProps:props oldProps:oldProps];
 }
+
 @end
 
 Class<RCTComponentViewProtocol> MBXMapViewCls(void)

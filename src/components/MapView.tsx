@@ -9,10 +9,12 @@ import {
   NativeMethods,
   HostComponent,
   LayoutChangeEvent,
+  findNodeHandle,
 } from 'react-native';
 import { debounce } from 'debounce';
 
 import NativeMapView from '../specs/MBXMapViewNativeComponent';
+import NativeMapViewModule from '../specs/NativeMapViewModule';
 import {
   isFunction,
   isAndroid,
@@ -739,7 +741,7 @@ class MapView extends NativeBridgeComponent(
     methodName: string,
     args: NativeArg[] = [],
   ): Promise<ReturnType> {
-    return super._runNativeCommand<typeof RCTMGLMapView, ReturnType>(
+    return this._runNativeCommand<typeof RCTMGLMapView, ReturnType>(
       methodName,
       this._nativeRef as HostComponent<NativeProps> | undefined,
       args,
@@ -847,6 +849,37 @@ class MapView extends NativeBridgeComponent(
    */
   showAttribution() {
     return this._runNativeCommand('showAttribution', this._nativeRef);
+  }
+
+  _runNativeCommand<RefType, ReturnType = NativeArg>(
+    methodName: string,
+    nativeRef: RefType | undefined,
+    args?: NativeArg[],
+  ): Promise<ReturnType> {
+    if (NativeMapViewModule) {
+      // when this method is called after component mounts, the ref is not yet set
+      // schedule it to be called after a timeout
+      if (!this._nativeRef) {
+        return new Promise((resolve) => setTimeout(resolve, 1)).then(() => {
+          return this._runNativeCommand(methodName, this._nativeRef, args);
+        });
+      }
+
+      const handle = findNodeHandle(nativeRef as any);
+
+      // @ts-expect-error TS says that string cannot be used to index NativeMapViewModule.
+      // It can, it's just not pretty.
+      return NativeMapViewModule[methodName]?.(
+        handle,
+        ...(args ?? []),
+      ) as Promise<ReturnType>;
+    } else {
+      return super._runNativeCommand<RefType, ReturnType>(
+        methodName,
+        nativeRef,
+        args,
+      );
+    }
   }
 
   _onPress(e: NativeSyntheticEvent<{ payload: GeoJSON.Feature }>) {

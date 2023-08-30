@@ -97,6 +97,11 @@ open class MBXMapView : RCTMGLMapView, MBXMapViewProtocol {
     public func setOnMapChange(_ callback: @escaping RCTBubblingEventBlock) {
         self.setReactOnMapChange(callback)
     }
+    
+    public func takeSnap(_ writeToDisk: Bool, resolve: RCTPromiseResolveBlock!) {
+        let uri = self.takeSnap(writeToDisk: writeToDisk)
+        resolve(["uri": uri.absoluteString])
+    }
 }
 
 @objc(MBXMapViewFactory)

@@ -29,6 +29,8 @@
 - (void)setOnLongPress:(RCTBubblingEventBlock)callback;
 - (void)setOnMapChange:(RCTBubblingEventBlock)callback;
 
+- (void)takeSnap:(BOOL)writeToDisk resolve:(RCTPromiseResolveBlock)resolve;
+
 @end
 
 @interface MBXMapViewFactory
