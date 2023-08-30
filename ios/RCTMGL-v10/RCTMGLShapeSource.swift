@@ -17,7 +17,7 @@ class RCTMGLShapeSource : RCTMGLSource {
             }
 
           case .failure(let error):
-            Logger.log(level: .error, message: ":: Error - update url failed \(error) \(error.localizedDescription)")
+            Logger.log(level: .error, message: "[RCTMGLShapeSource] Update url failed \(error) \(error.localizedDescription)")
         }
       }
     }
@@ -32,19 +32,24 @@ class RCTMGLShapeSource : RCTMGLSource {
           let geoJSONObj = try getGeoJSONObject(shape!)
           try map?.mapboxMap.style.updateGeoJSONSource(withId: id, geoJSON: geoJSONObj)
         } catch {
-          Logger.log(level: .error, message: ":: Cannot get geoJSON object from shape \(error) \(error.localizedDescription)")
+          Logger.log(level: .error, message: "[RCTMGLShapeSource] Cannot get geoJSON object from shape \(error.localizedDescription)")
         }
       case .LineString:
         timer?.invalidate()
         currentLineStartOffset = 0.0
         currentLineEndOffset = 0.0
-        let targetLine = try? getGeometryAsLine(shape)
-        applyGeometryFromLine(targetLine)
+        do {
+          let targetLine = try getGeometryAsLine(shape)
+          applyGeometryFromLine(targetLine)
+        } catch {
+          Logger.log(level: .error, message: "[RCTMGLShapeSource] Cannot set line object from shape \(error.localizedDescription)")
+        }
       case .Point:
-        let targetPoint = try? getGeometryAsPoint(shape)
-        let prevPoint = lastUpdatedPoint ?? targetPoint
-        if let prevPoint = prevPoint, let targetPoint = targetPoint {
-          animateToNewPoint(prevPoint: prevPoint, targetPoint: targetPoint)
+        do {
+          let targetPoint = try getGeometryAsPoint(shape)
+          animateToNewPoint(prevPoint: lastUpdatedPoint ?? targetPoint, targetPoint: targetPoint)
+        } catch {
+          Logger.log(level: .error, message: "[RCTMGLShapeSource] Cannot set point from shape \(error.localizedDescription)")
         }
       default:
         break
@@ -74,13 +79,13 @@ class RCTMGLShapeSource : RCTMGLSource {
   
   @objc var snapIfDistanceIsGreaterThan: NSNumber?
 
-  private func getGeometryAsPoint(_ str: String?) throws -> Point? {
+  private func getGeometryAsPoint(_ str: String?) throws -> Point {
     guard let data = str?.data(using: .utf8) else {
       throw RCTMGLError.parseError("point data could not be parsed as utf-8")
     }
     
     var point: Point?
-
+    
     do {
       let obj = try JSONDecoder().decode(Feature.self, from: data)
       switch obj.geometry {
@@ -90,7 +95,7 @@ class RCTMGLShapeSource : RCTMGLSource {
         throw RCTMGLError.parseError("point data could not be decoded because geometry is not of type Point")
       }
     } catch {
-      throw RCTMGLError.parseError("feature data could not be decoded: \(error.localizedDescription)")
+      // Continue and test for Point.
     }
     
     if point == nil {
@@ -102,17 +107,21 @@ class RCTMGLShapeSource : RCTMGLSource {
       }
     }
     
+    guard let point = point else {
+      throw RCTMGLError.parseError("point not found")
+    }
+    
     return point
   }
 
-  private func applyGeometryFromPoint(_ point: Point?) {
-    guard let style = map?.mapboxMap.style, let geometry = point else {
+  private func applyGeometryFromPoint(_ point: Point) {
+    guard let style = map?.mapboxMap.style else {
       return
     }
     
     lastUpdatedPoint = point
     
-    let obj = GeoJSONObject.geometry(.point(geometry))
+    let obj = GeoJSONObject.geometry(.point(point))
     try? style.updateGeoJSONSource(withId: id, geoJSON: obj)
   }
 
@@ -155,7 +164,7 @@ class RCTMGLShapeSource : RCTMGLSource {
     })
   }
 
-  private func getGeometryAsLine(_ str: String?) throws -> LineString? {
+  private func getGeometryAsLine(_ str: String?) throws -> LineString {
     guard let data = str?.data(using: .utf8) else {
       throw RCTMGLError.parseError("line data could not be parsed as utf-8")
     }
@@ -171,7 +180,7 @@ class RCTMGLShapeSource : RCTMGLSource {
         throw RCTMGLError.parseError("line data could not be decoded because geometry is not of type LineString")
       }
     } catch {
-      throw RCTMGLError.parseError("feature data could not be decoded: \(error.localizedDescription)")
+      // Continue and test for LineString.
     }
     
     if lineString == nil {
@@ -183,23 +192,27 @@ class RCTMGLShapeSource : RCTMGLSource {
       }
     }
     
+    guard let lineString = lineString else {
+      throw RCTMGLError.parseError("line not found")
+    }
+    
     return lineString
   }
 
-  func applyGeometryFromLine(_ line: LineString?) {
-    guard let style = map?.mapboxMap.style, let geometry = line else {
+  func applyGeometryFromLine(_ line: LineString) {
+    guard let style = map?.mapboxMap.style else {
       return
     }
     
-    guard let geometryTrimmed = geometry.trimmed(
+    guard let lineTrimmed = line.trimmed(
       from: currentLineStartOffset,
-      to: geometry.distance()! - currentLineEndOffset
+      to: line.distance()! - currentLineEndOffset
     ) else {
-      Logger.error("[RCTMGLShapeSource] line could not be trimmed")
+      Logger.error("[RCTMGLShapeSource] Line could not be trimmed")
       return
     }
     
-    let obj = GeoJSONObject.geometry(.lineString(geometryTrimmed))
+    let obj = GeoJSONObject.geometry(.lineString(lineTrimmed))
     try? style.updateGeoJSONSource(withId: id, geoJSON: obj)
   }
 
@@ -212,8 +225,12 @@ class RCTMGLShapeSource : RCTMGLSource {
 
     guard let duration = animationDuration?.doubleValue, duration > 0 else {
       currentLineStartOffset = targetOffset
-      let lineString = try? getGeometryAsLine(shape)
-      applyGeometryFromLine(lineString)
+      do {
+        let lineString = try getGeometryAsLine(shape)
+        applyGeometryFromLine(lineString)
+      } catch {
+        Logger.log(level: .warn, message: "[RCTMGLShapeSource] Error setting line")
+      }
       return
     }
     
@@ -234,8 +251,12 @@ class RCTMGLShapeSource : RCTMGLSource {
       let progress = (targetOffset - prevOffset) * ratio
       self.currentLineStartOffset = prevOffset + progress
       
-      let lineString = try? self.getGeometryAsLine(self.shape)
-      self.applyGeometryFromLine(lineString)
+      do {
+        let lineString = try self.getGeometryAsLine(self.shape)
+        self.applyGeometryFromLine(lineString)
+      } catch {
+        Logger.log(level: .warn, message: "[RCTMGLShapeSource] Error setting line")
+      }
     })
   }
 
@@ -283,7 +304,7 @@ class RCTMGLShapeSource : RCTMGLSource {
       do {
         result.data = try getGeoJSONSourceData(shape)
       } catch {
-        Logger.log(level: .error, message: "Unable to read shape: \(shape) \(error) setting it to empty")
+        Logger.log(level: .error, message: "[RCTMGLShapeSource] Unable to read shape: \(shape); Error: \(error); setting it to empty")
         result.data = emptyShape()
       }
     }
@@ -314,7 +335,7 @@ class RCTMGLShapeSource : RCTMGLSource {
         }
       }
     } catch {
-      Logger.log(level: .error, message: "RCTMGLShapeSource.parsing clusterProperties failed", error: error)
+      Logger.log(level: .error, message: "[RCTMGLShapeSource] Parsing clusterProperties failed", error: error)
     }
 
     if let maxZoomLevel = maxZoomLevel {
